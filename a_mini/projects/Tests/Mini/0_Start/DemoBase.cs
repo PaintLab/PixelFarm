@@ -52,6 +52,19 @@ namespace Mini
         public virtual void MouseUp(int x, int y) { }
         public int Width { get; set; }
         public int Height { get; set; }
+
+
+        VertexStorePool _vxsPool = new VertexStorePool();
+
+        public VertexStore GetFreeVxs()
+        {
+            return _vxsPool.GetFreeVxs();
+        }
+        public void ReleaseVxs(ref VertexStore vxs)
+        {
+            _vxsPool.Release(ref vxs);
+        }
+
     }
 
     public class DemoConfigAttribute : Attribute

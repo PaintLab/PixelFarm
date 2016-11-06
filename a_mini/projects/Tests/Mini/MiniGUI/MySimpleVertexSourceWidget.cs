@@ -59,6 +59,6 @@ namespace PixelFarm.Agg.UI
 
         public abstract void RewindZero();
         protected abstract RectD CalculateLocalBounds();
-        public abstract VertexStore MakeVxs();
+        public abstract VertexStore MakeVxs(VertexStore output);
     }
 }

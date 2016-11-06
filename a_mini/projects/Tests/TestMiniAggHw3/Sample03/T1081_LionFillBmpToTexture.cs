@@ -38,7 +38,7 @@ namespace OpenTkEssTest
             lionShape.ParseLion();
             RectD lionBounds = lionShape.Bounds;
             //-------------
-            aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.Imaging.PixelFormat.ARGB32);
+            aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
             imgGfx2d = new ImageGraphics2D(aggImage);
             aggPainter = new AggCanvasPainter(imgGfx2d);
 

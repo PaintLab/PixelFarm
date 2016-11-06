@@ -32,6 +32,7 @@ namespace OpenTkEssTest
         {
             //1. create native image
             var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage(imgFileName); 
+            //2. create glbmp from native img
             var glbmp = new PixelFarm.DrawingGL.GLBitmap(nativeImg, false);
             //we load image from myft's image module
             //its already big-endian

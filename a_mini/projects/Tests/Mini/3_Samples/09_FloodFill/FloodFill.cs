@@ -29,12 +29,17 @@ namespace PixelFarm.Agg.Sample_FloodFill
             imageToFillGraphics.Rectangle(20, 50, 210, 280, Color.Black);
             imageToFillGraphics.Rectangle(imageToFillOn.Bounds, Color.Blue);
             Random rand = new Random();
+
+            var stroke1 = new Stroke(1);
+            var v1 = GetFreeVxs();
+            var v2 = GetFreeVxs();
             for (int i = 0; i < 20; i++)
             {
                 Ellipse elipse = new Ellipse(rand.Next(imageToFillOn.Width), rand.Next(imageToFillOn.Height), rand.Next(10, 60), rand.Next(10, 60));
-                imageToFillGraphics.Render(new Stroke(1).MakeVxs(elipse.MakeVxs()), Color.Black);
+                imageToFillGraphics.Render(stroke1.MakeVxs(elipse.MakeVxs(v1), v2), Color.Black);
             }
-
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
             this.PixelSize = 32;
             this.Gamma = 1;
         }
