@@ -459,7 +459,7 @@ namespace PixelFarm.Agg.VertexSource
             int m_allocated_vertices,
             int m_num_vertices,
             double[] m_coord_xy,
-            VertexCmd[] m_CommandAndFlags)
+            byte[] m_CommandAndFlags)
         {
             VertexStore.UnsafeDirectSetData(
                 pathStore.Vxs,
@@ -473,7 +473,7 @@ namespace PixelFarm.Agg.VertexSource
             out int m_allocated_vertices,
             out int m_num_vertices,
             out double[] m_coord_xy,
-            out VertexCmd[] m_CommandAndFlags)
+            out byte[] m_CommandAndFlags)
         {
             VertexStore.UnsafeDirectGetData(
                 pathStore.Vxs,
