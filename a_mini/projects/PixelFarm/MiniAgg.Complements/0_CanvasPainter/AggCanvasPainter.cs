@@ -345,6 +345,11 @@ namespace PixelFarm.Agg
                 pathIndexs,
                 numPath);
         }
+        /// <summary>
+        /// we do NOT store vxs
+        /// </summary>
+        /// <param name="vxs"></param>
+        /// <param name="spanGen"></param>
         public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
             this.sclineRas.AddPath(vxs);
