@@ -226,12 +226,12 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //graphics2D.Render(new Stroke(0.1).MakeVxs(s1), ColorRGBA.Black);
                         p.FillColor = Color.Black;
 
-                        var v1 = GetFreeVxs();
+                        var v1 = GetFreeVxs();                        
                         var v2 = GetFreeVxs();
-                    
+                        var v3 = GetFreeVxs();
 
                         p.Fill(new Stroke(0.1).MakeVxs(s1, v1));
-                        var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs(v1), v2);
+                        var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs(v2), v3);
                         p.FillColor = Color.Make(0.0f, 0.5f, 0.5f, 0.1f);// XUolorRXBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f);
                         p.Fill(stroke_vxs);
                         //graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
@@ -239,8 +239,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
                         ReleaseVxs(ref s1);
                         ReleaseVxs(ref v1);
+                        ReleaseVxs(ref v3);
                         ReleaseVxs(ref v2);
-                       
                     }
                     break;
                 case PolygonExampleSet.SprialAndGlyph:
