@@ -5,7 +5,7 @@ namespace PixelFarm.Drawing
 {
     public abstract class Canvas
     {
-        bool isContentReady;
+      
 #if DEBUG
         public static int dbug_canvasCount = 0;
         public int debug_resetCount = 0;
@@ -13,29 +13,25 @@ namespace PixelFarm.Drawing
         public int debug_canvas_id = 0;
 #endif
 
-
+        
         public abstract void CloseCanvas();
-       
-        public abstract SmoothingMode SmoothingMode { get; set; }
-        //---------------------------------------------------------------------
+
+        ////////////////////////////////////////////////////////////////////////////
+        //drawing properties
+        public abstract SmoothingMode SmoothingMode { get; set; }        
         public abstract float StrokeWidth { get; set; }
         public abstract Color StrokeColor { get; set; }
+        
 
+        ////////////////////////////////////////////////////////////////////////////
         //states
         public abstract void ResetInvalidateArea();
         public abstract void Invalidate(Rectangle rect);
         public abstract Rectangle InvalidateArea { get; }
         public abstract float GetCharWidth(RequestFont f, char c);
-       
-        public bool IsContentReady
-        {
-            get { return isContentReady; }
-            set
-            {
-                this.isContentReady = value;
-            }
-        }
-        //---------------------------------------------------------------------
+
+        
+        ////////////////////////////////////////////////////////////////////////////
         // canvas dimension, canvas origin
         public abstract int Top { get; }
         public abstract int Left { get; }
