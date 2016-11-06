@@ -693,22 +693,14 @@ namespace PixelFarm.DrawingGL
             public bool scaleUp;
         }
 
-        //---------------------------------------------------------------------
-        //
-        Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
+        VertexStorePool _vxsPool = new VertexStorePool();
         VertexStore GetFreeVxs()
         {
-            if (_tempVxsStack.Count == 0)
-            {
-                return new VertexStore();
-            }
-            return _tempVxsStack.Pop();
+            return _vxsPool.GetFreeVxs();
         }
         void ReleaseVxs(ref VertexStore vxs)
         {
-            vxs.Clear();
-            _tempVxsStack.Push(vxs);
-            vxs = null;
+            _vxsPool.Release(ref vxs);
         }
         //---------------------------------------------------------------------
         public void DrawArc(float fromX, float fromY, float endX, float endY,
@@ -776,9 +768,10 @@ namespace PixelFarm.DrawingGL
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-                    var outputVxs = new VertexStore();
-                    mat.TransformToVxs(v1, outputVxs);
-                    v1 = outputVxs;
+                    var v2 = GetFreeVxs();
+                    mat.TransformToVxs(v1, v2);
+                    ReleaseVxs(ref v1);
+                    v1 = v2;
                 }
                 else
                 {

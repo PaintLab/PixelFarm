@@ -117,20 +117,15 @@ namespace PixelFarm.Agg
         }
 
 
-        Stack<VertexStore> _tmpVxsStack = new Stack<VertexStore>();
+        VertexStorePool _vxsPool = new VertexStorePool();
+         
         VertexStore GetFreeVxs()
         {
-            if (_tmpVxsStack.Count > 0)
-            {
-                return _tmpVxsStack.Pop();
-            }
-            return new VertexStore();
+            return _vxsPool.GetFreeVxs();
         }
         void ReleaseVxs(ref VertexStore vxs)
         {
-            vxs.Clear();
-            _tmpVxsStack.Push(vxs);
-            vxs = null;
+            _vxsPool.Release(ref vxs);
         }
         /// <summary>
         /// draw circle

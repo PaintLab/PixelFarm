@@ -76,10 +76,10 @@ namespace PixelFarm.Agg
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
 
-            gx.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1),v2), color);
+            gx.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), color);
 
-            RelaseVxs(v1);
-            RelaseVxs(v2);
+            RelaseVxs(ref v1);
+            RelaseVxs(ref v2);
         }
         public static void Rectangle(this Graphics2D gx, RectD rect, Color color, double strokeWidth = 1)
         {
@@ -119,14 +119,14 @@ namespace PixelFarm.Agg
             simpleRect.SetRect(left, bottom, right, top);
             var v1 = GetFreeVxs();
             gx.Render(simpleRect.MakeVertexSnap(v1), fillColor);
-            RelaseVxs(v1);
+            RelaseVxs(ref v1);
         }
         public static void Circle(this Graphics2D g, double x, double y, double radius, Color color)
         {
             ellipse.Set(x, y, radius, radius);
             var v1 = GetFreeVxs();
             g.Render(ellipse.MakeVxs(v1), color);
-            RelaseVxs(v1);
+            RelaseVxs(ref v1);
         }
         public static void Circle(this Graphics2D g, Vector2 origin, double radius, Color color)
         {
@@ -135,20 +135,15 @@ namespace PixelFarm.Agg
 
 
         //this is not thread safe ****
-        static Stack<VertexStore> s_tmpVxsStack = new Stack<VertexStore>();
+        static VertexStorePool s_vxsPool = new VertexStorePool();
+
         static VertexStore GetFreeVxs()
         {
-            if (s_tmpVxsStack.Count > 0)
-            {
-                return s_tmpVxsStack.Pop();
-            }
-            return new VertexStore();
+            return s_vxsPool.GetFreeVxs();
         }
-        static void RelaseVxs(VertexStore vxs)
+        static void RelaseVxs(ref VertexStore vxs)
         {
-            vxs.Clear();
-            s_tmpVxsStack.Push(vxs);
-
+            s_vxsPool.Release(ref vxs);
         }
 
     }

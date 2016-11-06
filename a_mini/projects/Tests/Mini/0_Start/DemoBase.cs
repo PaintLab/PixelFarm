@@ -54,20 +54,15 @@ namespace Mini
         public int Height { get; set; }
 
 
-        Stack<VertexStore> _tmpVxs = new Stack<VertexStore>();
+        VertexStorePool _vxsPool = new VertexStorePool();
+
         public VertexStore GetFreeVxs()
         {
-            if (_tmpVxs.Count == 0)
-            {
-                return new VertexStore();
-            }
-            return _tmpVxs.Pop();
+            return _vxsPool.GetFreeVxs();
         }
         public void ReleaseVxs(ref VertexStore vxs)
         {
-            vxs.Clear();
-            _tmpVxs.Push(vxs);
-            vxs = null;
+            _vxsPool.Release(ref vxs);
         }
 
     }

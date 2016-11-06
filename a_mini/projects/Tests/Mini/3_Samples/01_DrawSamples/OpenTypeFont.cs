@@ -81,8 +81,8 @@ namespace PixelFarm.Agg.Sample_Draw
         VertexStore BuildVxsForGlyph(GlyphPathBuilderVxs builder, char character, int size, int resolution)
         {
             builder.Build(character, size);
-            var vxs1 = new VertexStore();
-            builder.GetVxs(vxs1);
+
+            VertexStore v0 = builder.GetVxs(_vxsPool.GetFreeVxs());
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                 //translate
                  new PixelFarm.Agg.Transform.AffinePlan(
@@ -91,12 +91,18 @@ namespace PixelFarm.Agg.Sample_Draw
                  new PixelFarm.Agg.Transform.AffinePlan(
                      PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, 1, 1)
                      );
-            VertexStore v1 = new VertexStore();
-            mat.TransformToVxs(vxs1, v1);
+
+            VertexStore v1 = _vxsPool.GetFreeVxs();
             VertexStore v2 = new VertexStore();
-            curveFlattener.MakeVxs(vxs1, v2);
+            mat.TransformToVxs(v0, v1);
+            curveFlattener.MakeVxs(v0, v2);
+
+            _vxsPool.Release(ref v0);
+            _vxsPool.Release(ref v1);
+
             return v2;
         }
+        VertexStorePool _vxsPool = new VertexStorePool();
         [DemoConfig]
         public bool FillBG
         {

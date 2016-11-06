@@ -102,20 +102,15 @@ namespace PixelFarm.Agg.UI
                 parentToChildTransform = value;
             }
         }
-        Stack<VertexStore> _tmpVxs = new Stack<VertexStore>();
+        VertexStorePool _vxsPool = new VertexStorePool();
+
         public VertexStore GetFreeVxs()
         {
-            if (_tmpVxs.Count > 0)
-            {
-                return _tmpVxs.Pop();
-            }
-            return new VertexStore();
+            return _vxsPool.GetFreeVxs();
         }
         public void ReleaseVxs(ref VertexStore vxs)
         {
-            vxs.Clear();
-            _tmpVxs.Push(vxs);
-            vxs = null;
+            _vxsPool.Release(ref vxs);
         }
     }
 }

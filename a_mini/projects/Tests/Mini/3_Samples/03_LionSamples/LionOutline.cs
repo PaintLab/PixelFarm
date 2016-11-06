@@ -117,6 +117,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
         {
             base.Draw(p);
         }
+
         public override void OnDraw(Graphics2D graphics2D)
         {
             //render 
@@ -139,14 +140,14 @@ namespace PixelFarm.Agg.Sample_LionOutline
             //transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
             //transform *= Affine.NewTranslation(width / 2, height / 2);
 
-
+            
             if (RenderAsScanline)
             {
                 var rasterizer = graphics2D.ScanlineRasterizer;
                 rasterizer.SetClipBox(0, 0, width, height);
                 Stroke stroke = new Stroke(strokeWidth);
                 stroke.LineJoin = LineJoin.Round;
-                var vxs = new VertexStore();
+                var vxs = GetFreeVxs();
                 affTx.TransformToVxs(lionShape.Path.Vxs, vxs);
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
                 sclineRasToBmp.RenderSolidAllPaths(
@@ -157,6 +158,9 @@ namespace PixelFarm.Agg.Sample_LionOutline
                     lionShape.Colors,
                     lionShape.PathIndexList,
                     lionShape.NumPaths);
+                Release(ref vxs);
+
+
             }
             else
             {
@@ -169,7 +173,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                     : OutlineAARasterizer.OutlineJoin.Round);
                 rasterizer.RoundCap = true;
                 //VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
-                var vxs = new VertexStore();
+                var vxs = GetFreeVxs();
                 affTx.TransformToVxs(lionShape.Path.Vxs, vxs);// trans.DoTransformToNewVxStorage();
                 int j = lionShape.NumPaths;
                 for (int i = 0; i < j; ++i)
@@ -179,6 +183,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                             lionShape.PathIndexList[i]),
                             lionShape.Colors[i]);
                 }
+                Release(ref vxs);
             }
 
             base.OnDraw(graphics2D);

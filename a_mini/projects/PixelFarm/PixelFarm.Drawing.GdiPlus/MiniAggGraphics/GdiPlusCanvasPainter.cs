@@ -407,20 +407,15 @@ namespace PixelFarm.Drawing.WinGdi
             _gfx.FillRectangle(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
         }
 
-        Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
+        VertexStorePool _vxsPool = new VertexStorePool();
         VertexStore GetFreeVxs()
         {
-            if (_tempVxsStack.Count == 0)
-            {
-                return new VertexStore();
-            }
-            return _tempVxsStack.Pop();
+
+            return _vxsPool.GetFreeVxs();
         }
         void ReleaseVxs(ref VertexStore vxs)
         {
-            vxs.Clear();
-            _tempVxsStack.Push(vxs);
-            vxs = null;
+            _vxsPool.Release(ref vxs);
         }
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
         {
