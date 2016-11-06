@@ -625,6 +625,8 @@ namespace PixelFarm.DrawingGL
         }
         public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
         {
+            //TODO: review here.
+            //
             for (int i = 0; i < numPath; ++i)
             {
                 _canvas.FillGfxPath(colors[i], InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs, pathIndexs[i])));
@@ -652,10 +654,12 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------------------------------------------------------------------------------------
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
+            //store internal gfx path inside render vx
             return new GLRenderVx(InternalGraphicsPath.CreateGraphicsPath(snap));
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
+            //store internal gfx path inside render vx
             return new GLRenderVx(InternalGraphicsPath.CreatePolygonGraphicsPath(xycoords));
         }
 
