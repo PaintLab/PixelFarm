@@ -225,6 +225,11 @@ namespace PixelFarm.Agg
 
         //this is temporary vxs, ***
         VertexStore _tmpVxs = new VertexStore(2);
+        /// <summary>
+        /// we do NOT store vxs/vxsSnap
+        /// </summary>
+        /// <param name="vxsSnap"></param>
+        /// <param name="color"></param>
         public override void Render(VertexStoreSnap vxsSnap, Drawing.Color color)
         {
             //reset rasterizer before render each vertextSnap 

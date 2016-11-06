@@ -1,6 +1,7 @@
 ﻿//2016 MIT, WinterDev
 
 using System;
+using System.Collections.Generic;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 
@@ -406,6 +407,20 @@ namespace PixelFarm.Drawing.WinGdi
             _gfx.FillRectangle(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
         }
 
+        Stack<VertexStore> _tempVxsStack = new Stack<VertexStore>();
+        VertexStore GetFreeVxs()
+        {
+            if (_tempVxsStack.Count == 0)
+            {
+                return new VertexStore();
+            }
+            return _tempVxsStack.Pop();
+        }
+        void ReleaseVxs(VertexStore vxs)
+        {
+            vxs.Clear();
+            _tempVxsStack.Push(vxs);
+        }
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
         {
             if (roundRect == null)
@@ -419,7 +434,10 @@ namespace PixelFarm.Drawing.WinGdi
                 roundRect.SetRadius(radius);
                 roundRect.NormalizeRadius();
             }
-            this.Draw(roundRect.MakeVxs());
+
+            var v1 = GetFreeVxs();
+            this.Draw(roundRect.MakeVxs(v1));
+            ReleaseVxs(v1);
         }
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
@@ -434,7 +452,9 @@ namespace PixelFarm.Drawing.WinGdi
                 roundRect.SetRadius(radius);
                 roundRect.NormalizeRadius();
             }
-            this.Fill(roundRect.MakeVxs());
+            var v1 = GetFreeVxs();
+            this.Fill(roundRect.MakeVxs(v1));
+            ReleaseVxs(v1);
         }
 
 
