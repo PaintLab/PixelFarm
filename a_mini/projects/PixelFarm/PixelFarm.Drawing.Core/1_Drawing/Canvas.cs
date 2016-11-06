@@ -5,7 +5,7 @@ namespace PixelFarm.Drawing
 {
     public abstract class Canvas
     {
-      
+
 #if DEBUG
         public static int dbug_canvasCount = 0;
         public int debug_resetCount = 0;
@@ -13,24 +13,23 @@ namespace PixelFarm.Drawing
         public int debug_canvas_id = 0;
 #endif
 
-        
+
         public abstract void CloseCanvas();
 
         ////////////////////////////////////////////////////////////////////////////
         //drawing properties
-        public abstract SmoothingMode SmoothingMode { get; set; }        
+        public abstract SmoothingMode SmoothingMode { get; set; }
         public abstract float StrokeWidth { get; set; }
         public abstract Color StrokeColor { get; set; }
-        
+
 
         ////////////////////////////////////////////////////////////////////////////
         //states
         public abstract void ResetInvalidateArea();
         public abstract void Invalidate(Rectangle rect);
         public abstract Rectangle InvalidateArea { get; }
-        public abstract float GetCharWidth(RequestFont f, char c);
+       
 
-        
         ////////////////////////////////////////////////////////////////////////////
         // canvas dimension, canvas origin
         public abstract int Top { get; }
@@ -94,7 +93,7 @@ namespace PixelFarm.Drawing
         public abstract void dbug_DrawRuler(int x);
         public abstract void dbug_DrawCrossRect(Color color, Rectangle rect);
 #endif
-        
+
         public void OffsetCanvasOrigin(int dx, int dy)
         {
             this.SetCanvasOrigin(this.CanvasOriginX + dx, this.CanvasOriginY + dy);
@@ -106,16 +105,6 @@ namespace PixelFarm.Drawing
         public void OffsetCanvasOriginY(int dy)
         {
             this.OffsetCanvasOrigin(0, dy);
-        }
-        //-------------------------------------------------------  
-        public void Dispose()
-        {
-        }
-        //for debug
-        public int Note1
-        {
-            get;
-            set;
         }
     }
 }
