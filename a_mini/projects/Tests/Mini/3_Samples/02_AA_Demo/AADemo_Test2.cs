@@ -121,7 +121,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 var v1 = GetFreeVxs();
                 rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs,v1));
                 sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
-                ReleaseVxs(v1);
+                ReleaseVxs(ref v1);
             }
         }
 

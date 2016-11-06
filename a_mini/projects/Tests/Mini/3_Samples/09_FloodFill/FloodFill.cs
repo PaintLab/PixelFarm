@@ -38,8 +38,8 @@ namespace PixelFarm.Agg.Sample_FloodFill
                 Ellipse elipse = new Ellipse(rand.Next(imageToFillOn.Width), rand.Next(imageToFillOn.Height), rand.Next(10, 60), rand.Next(10, 60));
                 imageToFillGraphics.Render(stroke1.MakeVxs(elipse.MakeVxs(v1), v2), Color.Black);
             }
-            ReleaseVxs(v1);
-            ReleaseVxs(v2);
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
             this.PixelSize = 32;
             this.Gamma = 1;
         }

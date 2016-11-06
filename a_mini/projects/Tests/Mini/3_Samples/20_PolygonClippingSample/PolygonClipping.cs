@@ -156,7 +156,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         p.FillColor = Color.Make(0f, 0.6f, 0f, 0.1f);
                         var v1 = GetFreeVxs();
                         p.Fill(stroke.MakeVxs(vxs, v1));
-                        ReleaseVxs(v1);
+                        ReleaseVxs(ref v1);
                         CreateAndRenderCombined(p, ps1.MakeVertexSnap(), new VertexStoreSnap(vxs));
                     }
                     break;
@@ -197,7 +197,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         p.FillColor = Color.Make(0, 0, 0);
                         var v1 = GetFreeVxs();
                         p.Fill(new Stroke(0.1).MakeVxs(trans_gb_poly, v1));
-                        ReleaseVxs(v1);
+                        ReleaseVxs(ref v1);
                         //graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), ColorRGBAf.MakeColorRGBA(0, 0, 0));
                         //graphics2D.Render(trans_arrows, ColorRGBAf.MakeColorRGBA(0f, 0.5f, 0.5f, 0.1f));
                         p.FillColor = Color.Make(0f, 0.5f, 0.5f, 0.1f);
@@ -237,9 +237,9 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
                         CreateAndRenderCombined(p, new VertexStoreSnap(s1), new VertexStoreSnap(stroke_vxs));
 
-                        ReleaseVxs(s1);
-                        ReleaseVxs(v1);
-                        ReleaseVxs(v2);
+                        ReleaseVxs(ref s1);
+                        ReleaseVxs(ref v1);
+                        ReleaseVxs(ref v2);
                        
                     }
                     break;
@@ -320,9 +320,9 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         p.Fill(curveVxs);
                         //graphics2D.Render(curveVxs, ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
 
-                        ReleaseVxs(v1);
-                        ReleaseVxs(v2);
-                        ReleaseVxs(v3);
+                        ReleaseVxs(ref v1);
+                        ReleaseVxs(ref v2);
+                        ReleaseVxs(ref v3);
                     }
                     break;
             }

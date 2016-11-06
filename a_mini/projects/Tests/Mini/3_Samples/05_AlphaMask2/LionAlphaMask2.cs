@@ -82,7 +82,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     //   ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                     var v1 = GetFreeVxs();
                     VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v1), Drawing.Color.Make((int)((float)i / (float)num * 255), 0, 0, 255));
-                    ReleaseVxs(v1);
+                    ReleaseVxs(ref v1);
                 }
                 //the last one
                 ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
@@ -98,7 +98,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
 
                 VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v2), Drawing.Color.Make(255, 0, 0, 255));
 
-                ReleaseVxs(v2);
+                ReleaseVxs(ref v2);
                 //for (i = 0; i < num; i++)
                 //{
                 //    if (i == num - 1)
@@ -185,7 +185,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                        Drawing.Color.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                 }
             }
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
         }
 
 
@@ -375,7 +375,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     }
                 }
             }
-            ReleaseVxs(v1);
+            ReleaseVxs(ref v1);
             ////int x, y; 
             //// Render the lion
             ////VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);

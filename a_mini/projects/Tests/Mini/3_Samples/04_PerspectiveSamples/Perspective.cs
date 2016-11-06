@@ -111,7 +111,7 @@ namespace PixelFarm.Agg.Sample_Perspective
                                      (lionBound.Right - lionBound.Left) * 0.5,
                                      (lionBound.Top - lionBound.Bottom) * 0.5,
                                      200);
-                    ReleaseVxs(v3);
+                    ReleaseVxs(ref v3);
 
                     var v1 = GetFreeVxs();
                     var trans_ell = GetFreeVxs();
@@ -126,8 +126,8 @@ namespace PixelFarm.Agg.Sample_Perspective
                     painter.Draw(trans_ell);
                     painter.StrokeWidth = prevStrokeWidth;
 
-                    ReleaseVxs(v1);
-                    ReleaseVxs(trans_ell);
+                    ReleaseVxs(ref v1);
+                    ReleaseVxs(ref trans_ell);
                 }
             }
             else
@@ -163,9 +163,9 @@ namespace PixelFarm.Agg.Sample_Perspective
                     painter.StrokeColor = Drawing.Color.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(transformedEll);
                     painter.StrokeWidth = prevStrokeW;
-                    ReleaseVxs(v2);
-                    ReleaseVxs(v1);
-                    ReleaseVxs(transformedEll);
+                    ReleaseVxs(ref v2);
+                    ReleaseVxs(ref v1);
+                    ReleaseVxs(ref transformedEll);
                 }
             }
 
@@ -174,7 +174,7 @@ namespace PixelFarm.Agg.Sample_Perspective
             painter.FillColor = Drawing.Color.Make(0f, 0.3f, 0.5f, 0.6f);
             var v4 = GetFreeVxs();
             painter.Fill(quadPolygonControl.MakeVxs(v4));
-            ReleaseVxs(v4);
+            ReleaseVxs(ref v4);
         }
 
         public override void MouseDown(int x, int y, bool isRightButton)

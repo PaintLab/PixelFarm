@@ -72,9 +72,9 @@ namespace PixelFarm.Agg.Sample_Draw
                 p.FillColor = Drawing.Color.Blue;
                 p.Fill(StrokeHelp.MakeVxs(v2, 3, v3));
                 //g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
-                ReleaseVxs(v1);
-                ReleaseVxs(v2);
-                ReleaseVxs(v3);
+                ReleaseVxs(ref v1);
+                ReleaseVxs(ref v2);
+                ReleaseVxs(ref v3);
 
 
             }

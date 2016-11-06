@@ -75,10 +75,9 @@ namespace PixelFarm.Agg
 
                 sclineRas.AddPath(eb.MakeVertexSnap(v1));
                 v1.Clear();
-
                 sclineRasToBmp.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
 
-                ReleaseVxs(v1);
+                ReleaseVxs(ref v1);
             }
             //            else if (graphics2D.DestImageFloat != null)
             //            {

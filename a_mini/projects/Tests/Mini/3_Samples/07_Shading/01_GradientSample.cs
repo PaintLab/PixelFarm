@@ -35,7 +35,7 @@ namespace PixelFarm.Agg.Sample_Gradient
                 SimpleRect srect = new SimpleRect(0, 0, 150, 50);
                 var v1 = GetFreeVxs();
                 p2.Fill(srect.MakeVxs(v1), spanGenGradient);
-                ReleaseVxs(v1);
+                ReleaseVxs(ref v1);
             }
         }
 

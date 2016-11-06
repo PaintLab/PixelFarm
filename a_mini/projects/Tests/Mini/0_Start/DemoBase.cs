@@ -63,9 +63,10 @@ namespace Mini
             }
             return _tmpVxs.Pop();
         }
-        public void ReleaseVxs(VertexStore vxs)
+        public void ReleaseVxs(ref VertexStore vxs)
         {
             _tmpVxs.Push(vxs);
+            vxs = null;
         }
 
     }
