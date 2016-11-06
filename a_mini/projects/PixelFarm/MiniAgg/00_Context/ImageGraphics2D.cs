@@ -233,7 +233,7 @@ namespace PixelFarm.Agg
 
 
                 var v1 = GetFreeVxs();
-                transform.TransformToVxs2(vxsSnap, v1);
+                transform.TransformToVxs(vxsSnap, v1);
                 sclineRas.AddPath(v1);
                 ReleaseVxs(ref v1);
                 //-------------------------

@@ -913,7 +913,6 @@ namespace PixelFarm.Agg.Transform
         public void TransformToVxs(VertexStore src, VertexStore outputVxs)
         {
             int count = src.Count;
-
             VertexCmd cmd;
             double x, y;
             for (int i = 0; i < count; ++i)
@@ -922,10 +921,10 @@ namespace PixelFarm.Agg.Transform
                 this.Transform(ref x, ref y);
                 outputVxs.AddVertex(x, y, cmd);
             }
-
         }
+        
 
-        public void TransformToVxs2(VertexStoreSnap src, VertexStore outputVxs)
+        public void TransformToVxs(VertexStoreSnap src, VertexStore outputVxs)
         {
 
             var snapIter = src.GetVertexSnapIter();
@@ -940,7 +939,7 @@ namespace PixelFarm.Agg.Transform
         //----------------------------------------------------------------------------------------------
         public static VertexStore TranslateToVxs(VertexStore src, double dx, double dy, VertexStore vxs)
         {
-            int count = src.Count; 
+            int count = src.Count;
             VertexCmd cmd;
             double x, y;
             for (int i = 0; i < count; ++i)
