@@ -938,10 +938,9 @@ namespace PixelFarm.Agg.Transform
             }
         }
         //----------------------------------------------------------------------------------------------
-        public static VertexStore TranslateToVxs(VertexStore src, double dx, double dy)
+        public static VertexStore TranslateToVxs(VertexStore src, double dx, double dy, VertexStore vxs)
         {
-            int count = src.Count;
-            VertexStore vxs = new VertexStore(count);
+            int count = src.Count; 
             VertexCmd cmd;
             double x, y;
             for (int i = 0; i < count; ++i)
@@ -953,9 +952,8 @@ namespace PixelFarm.Agg.Transform
             }
             return vxs;
         }
-        public static VertexStore TranslateTransformToVxs(VertexStoreSnap src, double dx, double dy)
+        public static VertexStore TranslateTransformToVxs(VertexStoreSnap src, double dx, double dy, VertexStore vxs)
         {
-            var vxs = new VertexStore();
             var snapIter = src.GetVertexSnapIter();
             VertexCmd cmd;
             double x, y;

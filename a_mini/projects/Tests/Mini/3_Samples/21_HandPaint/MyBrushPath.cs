@@ -81,10 +81,12 @@ namespace PixelFarm.Agg.Samples
         {
             get { return this.boundingRect; }
         }
+
+      
         public void MoveBy(int xdiff, int ydiff)
         {
             //apply translation  
-            this.vxs = Affine.TranslateToVxs(vxs, xdiff, ydiff);
+            this.vxs = Affine.TranslateToVxs(vxs, xdiff, ydiff, new VertexStore());
             boundingRect.Offset(xdiff, ydiff);
         }
         public Drawing.Color StrokeColor

@@ -62,11 +62,11 @@ namespace PixelFarm.Agg
                  PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, 1, 1)
                  );
 
-            var outputVxs1 = new VertexStore();
-            mat.TransformToVxs(ps.Vxs, outputVxs1);
+            var v1 = new VertexStore();
+            mat.TransformToVxs(ps.Vxs, v1);
 
 
-            curveFlattener.MakeVxs(outputVxs1, vxs);
+            curveFlattener.MakeVxs(v1, vxs);
             return vxs;
         }
         public VertexStore GetUnscaledVxs()
