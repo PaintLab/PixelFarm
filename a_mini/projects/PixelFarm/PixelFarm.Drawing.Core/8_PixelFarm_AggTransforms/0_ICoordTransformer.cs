@@ -28,7 +28,9 @@ namespace PixelFarm.Agg.Transform
     {
         public static VertexStoreSnap TransformToVertexSnap(this Affine affine, VertexStore src)
         {
-            return new VertexStoreSnap(affine.TransformToVxs(src));
+            VertexStore newStore = new VertexStore();
+            affine.TransformToVxs(src, newStore);
+            return new VertexStoreSnap(newStore);
         }
 
     }

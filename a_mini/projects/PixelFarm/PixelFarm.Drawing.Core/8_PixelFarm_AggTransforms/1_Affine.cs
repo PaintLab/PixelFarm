@@ -906,19 +906,19 @@ namespace PixelFarm.Agg.Transform
             return Math.Abs(v1 - v2) <= (EPSILON);
         }
 
-        public VertexStore TransformToVxs(VertexStore src)
+        public void TransformToVxs(VertexStore src, VertexStore outputVxs)
         {
             int count = src.Count;
-            VertexStore vxs = new VertexStore(count);
+
             VertexCmd cmd;
             double x, y;
             for (int i = 0; i < count; ++i)
             {
                 cmd = src.GetVertex(i, out x, out y);
                 this.Transform(ref x, ref y);
-                vxs.AddVertex(x, y, cmd);
+                outputVxs.AddVertex(x, y, cmd);
             }
-            return vxs;
+
         }
 
         public void TransformToVxs2(VertexStoreSnap src, VertexStore outputVxs)

@@ -50,7 +50,8 @@ namespace PixelFarm.Agg
                         AffinePlan.Translate(Width / 2, Height / 2)
                 );
                 //create vertextStore again from original path
-                myvxs = transform.TransformToVxs(lionShape.Path.Vxs);
+                myvxs = new VertexStore();
+                transform.TransformToVxs(lionShape.Path.Vxs, myvxs);
 
                 //myvxs = lionShape.Path.Vxs;
             }
@@ -86,7 +87,8 @@ namespace PixelFarm.Agg
                         AffinePlan.Translate(Width / 2, Height / 2)
                 );
                 //create vertextStore again from origiinal path
-                myvxs = transform.TransformToVxs(lionShape.Path.Vxs);
+                myvxs = new VertexStore();
+                transform.TransformToVxs(lionShape.Path.Vxs, myvxs);
             }
             //---------------------------------------------------------------------------------------------
             {

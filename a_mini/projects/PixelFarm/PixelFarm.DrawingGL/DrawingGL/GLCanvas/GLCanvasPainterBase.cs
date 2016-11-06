@@ -20,10 +20,10 @@ namespace PixelFarm.DrawingGL
         Color _fillColor;
         Color _strokeColor;
         RectInt _rectInt;
-       
+
         RoundedRect roundRect;
         Arc arcTool;
-        Ellipse ellipse = new Ellipse(); 
+        Ellipse ellipse = new Ellipse();
         Stroke _aggStroke = new Stroke(1);
 
 
@@ -196,7 +196,7 @@ namespace PixelFarm.DrawingGL
             }
             this.Draw(roundRect.MakeVxs());
         }
-         
+
         TextureFont _currentTextureFont;
         internal void SetCurrentTextureFont(TextureFont textureFont)
         {
@@ -611,7 +611,7 @@ namespace PixelFarm.DrawingGL
             this.Fill(roundRect.MakeVxs());
         }
 
-       
+
 
         public override void Line(double x1, double y1, double x2, double y2)
         {
@@ -690,6 +690,7 @@ namespace PixelFarm.DrawingGL
             arcTool.Init(centerFormArc.cx, centerFormArc.cy, rx, ry,
                 centerFormArc.radStartAngle,
                 (centerFormArc.radStartAngle + centerFormArc.radSweepDiff));
+
             VertexStore vxs = new VertexStore();
             bool stopLoop = false;
             foreach (VertexData vertexData in arcTool.GetVertexIter())
@@ -737,7 +738,9 @@ namespace PixelFarm.DrawingGL
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-                    vxs = mat.TransformToVxs(vxs);
+                    var outputVxs = new VertexStore();
+                    mat.TransformToVxs(vxs, outputVxs);
+                    vxs = outputVxs;
                 }
                 else
                 {
@@ -746,7 +749,9 @@ namespace PixelFarm.DrawingGL
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Rotate, DegToRad(xaxisRotationAngleDec)),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-                    vxs = mat.TransformToVxs(vxs);
+                    var outputVxs = new VertexStore();
+                    mat.TransformToVxs(vxs, outputVxs);
+                    vxs = outputVxs;
                 }
             }
             else
@@ -758,7 +763,9 @@ namespace PixelFarm.DrawingGL
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, -centerFormArc.cx, -centerFormArc.cy),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scaleRatio, scaleRatio),
                             new PixelFarm.Agg.Transform.AffinePlan(PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, centerFormArc.cx, centerFormArc.cy));
-                    vxs = mat.TransformToVxs(vxs);
+                    var outputVxs = new VertexStore();
+                    mat.TransformToVxs(vxs, outputVxs);
+                    vxs = outputVxs;
                 }
             }
             _aggStroke.Width = this.StrokeWidth;

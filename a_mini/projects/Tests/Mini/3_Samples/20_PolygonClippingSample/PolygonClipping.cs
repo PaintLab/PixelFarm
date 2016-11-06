@@ -180,8 +180,14 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         Affine mtx2 = mtx1 * Affine.NewTranslation(m_x - Width / 2, m_y - Height / 2);
                         //VertexSourceApplyTransform trans_gb_poly = new VertexSourceApplyTransform(gb_poly, mtx1);
                         //VertexSourceApplyTransform trans_arrows = new VertexSourceApplyTransform(arrows, mtx2);
-                        var trans_gb_poly = mtx1.TransformToVxs(gb_poly.Vxs);
-                        var trans_arrows = mtx2.TransformToVxs(arrows.Vxs);
+
+                        var trans_gb_poly = new VertexStore();
+                        mtx1.TransformToVxs(gb_poly.Vxs, trans_gb_poly);
+
+                        var trans_arrows = new VertexStore();
+                        mtx2.TransformToVxs(arrows.Vxs, trans_arrows);
+
+
                         p.FillColor = Color.Make(0.5f, 0.5f, 0f, 0.1f);
                         p.Fill(trans_gb_poly);
                         //graphics2D.Render(trans_gb_poly, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
@@ -206,7 +212,8 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         Affine mtx = Affine.NewMatix(
                                 AffinePlan.Translate(-1150, -1150),
                                 AffinePlan.Scale(2));
-                        VertexStore s1 = mtx.TransformToVxs(gb_poly.Vxs);
+                        VertexStore s1 = new VertexStore();
+                        mtx.TransformToVxs(gb_poly.Vxs, s1);
                         p.FillColor = Color.Make(0.5f, 0.5f, 0f, 0.1f);
                         p.Fill(s1);
                         //graphics2D.Render(s1, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
@@ -419,7 +426,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
             VertexCmd cmd;
             double x, y;
-            for (;;)
+            for (; ; )
             {
                 cmd = GetNextVertex(out x, out y);
                 switch (cmd)

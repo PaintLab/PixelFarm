@@ -202,7 +202,9 @@ namespace PixelFarm.Agg
                 Affine sourceRectTransform = destRectTransform.CreateInvert();
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, Drawing.Color.Black, interpolator);
-                Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
+                var outputVxs = new VertexStore();
+                destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
+                Render(outputVxs, imgSpanGen);
                 // this is some debug you can enable to visualize the dest bounding box
                 //LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
                 //LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
@@ -231,8 +233,9 @@ namespace PixelFarm.Agg
                     default:
                         throw new NotImplementedException();
                 }
-
-                Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
+                var outputVxs = new VertexStore();
+                destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
+                Render(outputVxs, imgSpanGen);
                 unchecked { destImageChanged++; };
             }
             ReleaseVxs(imgBoundsPath);
@@ -249,7 +252,9 @@ namespace PixelFarm.Agg
                 source,
                 Drawing.Color.Black,
                 new SpanInterpolatorLinear(sourceRectTransform));
-            Render(destRectTransform.TransformToVxs(tmpImgBoundVxs), imgSpanGen);
+            var outputVxs = new VertexStore();
+            destRectTransform.TransformToVxs(tmpImgBoundVxs, outputVxs);
+            Render(outputVxs, imgSpanGen);
             ReleaseVxs(tmpImgBoundVxs);
         }
         public void Render(IImageReaderWriter source, double destX, double destY)
@@ -344,7 +349,9 @@ namespace PixelFarm.Agg
                     source,
                     Drawing.Color.Black,
                     new SpanInterpolatorLinear(sourceRectTransform));
-                Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
+                var outputVxs = new VertexStore();
+                destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
+                Render(outputVxs, imgSpanGen);
 #if false // this is some debug you can enable to visualize the dest bounding box
 		        LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
 		        LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
@@ -375,8 +382,9 @@ namespace PixelFarm.Agg
                     default:
                         throw new NotImplementedException();
                 }
-
-                Render(destRectTransform.TransformToVxs(imgBoundsPath), imgSpanGen);
+                var outputVxs = new VertexStore();
+                destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
+                Render(outputVxs, imgSpanGen);
                 unchecked { destImageChanged++; };
             }
             ReleaseVxs(imgBoundsPath);

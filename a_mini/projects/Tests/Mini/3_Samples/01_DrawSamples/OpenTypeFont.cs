@@ -34,7 +34,7 @@ namespace PixelFarm.Agg.Sample_Draw
             collection.LoadInstalledFont(win32InstalledFont.GetInstalledFontIter());
             string fontfile = collection.GetFont("tahoma", InstalledFontStyle.Regular).FontPath;
             //------------
-            
+
             var reader = new OpenTypeReader();
             this.FillBG = true;
             int size = 72;
@@ -90,7 +90,8 @@ namespace PixelFarm.Agg.Sample_Draw
                  new PixelFarm.Agg.Transform.AffinePlan(
                      PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, 1, 1)
                      );
-            vxs1 = mat.TransformToVxs(vxs1);
+            VertexStore v1 = new VertexStore();
+            mat.TransformToVxs(vxs1, v1);
             return curveFlattener.MakeVxs(vxs1);
         }
         [DemoConfig]

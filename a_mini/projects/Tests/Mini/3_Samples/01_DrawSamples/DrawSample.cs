@@ -43,7 +43,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
         public override void Init()
         {
-           
+
         }
         public override void Draw(CanvasPainter p)
         {
@@ -59,7 +59,8 @@ namespace PixelFarm.Agg.Sample_Draw
                 var mat = Affine.NewMatix(
                     AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                     AffinePlan.Translate(width / 2, 150));
-                VertexStore sp1 = mat.TransformToVxs(ellipsePro.MakeVxs());
+                VertexStore sp1 = new VertexStore();
+                mat.TransformToVxs(ellipsePro.MakeVxs(), sp1);
                 p.FillColor = Drawing.Color.Yellow;
                 p.Fill(sp1);
                 //g.Render(sp1, ColorRGBA.Yellow);
@@ -81,7 +82,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
             // draw some text
             // draw some text  
-            
+
             //var textPrinter = new TextPrinter();
             //textPrinter.CurrentActualFont = svgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
             //new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
