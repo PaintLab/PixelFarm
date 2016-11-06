@@ -80,18 +80,25 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     //rasterizer.AddPath(ellipseForMask.MakeVxs());
                     //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack,
                     //   ColorRGBA.Make((int)((float)i / (float)num * 255), 0, 0, 255));
-                    VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), Drawing.Color.Make((int)((float)i / (float)num * 255), 0, 0, 255));
+                    var v1 = GetFreeVxs();
+                    VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v1), Drawing.Color.Make((int)((float)i / (float)num * 255), 0, 0, 255));
+                    ReleaseVxs(ref v1);
                 }
                 //the last one
                 ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
                 //fill 
-                VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), Drawing.Color.Make(0, 0, 0, 255));
+                var v2 = GetFreeVxs();
+                VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v2), Drawing.Color.Make(0, 0, 0, 255));
+                v2.Clear();// reuse later
                 //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
                 //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(0, 0, 0, 255));
                 ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
                 //rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
                 //sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new ColorRGBA(255, 0, 0, 255));
-                VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(), Drawing.Color.Make(255, 0, 0, 255));
+
+                VxsHelper.FillVxsSnap(gfxBmp, ellipseForMask.MakeVertexSnap(v2), Drawing.Color.Make(255, 0, 0, 255));
+
+                ReleaseVxs(ref v2);
                 //for (i = 0; i < num; i++)
                 //{
                 //    if (i == num - 1)
@@ -146,16 +153,20 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             System.Random randGenerator = new Random(1432);
             int i;
             int num = (int)maskAlphaSliderValue;
+
+            var v1 = GetFreeVxs();
             for (i = 0; i < num; i++)
             {
                 if (i == num - 1)
                 {
                     //for the last one
                     ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
-                    rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
+                    rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
+                    v1.Clear();
                     sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, Drawing.Color.Make(0, 0, 0, 255));
                     ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
-                    rasterizer.AddPath(ellipseForMask.MakeVertexSnap());
+                    rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
+                    v1.Clear();
                     sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, Drawing.Color.Make(255, 0, 0, 255));
                 }
                 else
@@ -168,11 +179,13 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     // set the color to draw into the alpha channel.
                     // there is not very much reason to set the alpha as you will get the amount of 
                     // transparency based on the color you draw.  (you might want some type of different edeg effect but it will be minor).
-                    rasterizer.AddPath(ellipseForMask.MakeVxs());
+                    rasterizer.AddPath(ellipseForMask.MakeVxs(v1));
+                    v1.Clear();
                     sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack,
                        Drawing.Color.Make((int)((float)i / (float)num * 255), 0, 0, 255));
                 }
             }
+            ReleaseVxs(ref v1);
         }
 
 
@@ -199,6 +212,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             // draw a background to show how the mask is working better
             g.Clear(System.Drawing.Color.White);
             int rect_w = 30;
+
+            var v1 = new VertexStore();//todo; use pool
             for (int i = 0; i < 40; i++)
             {
                 for (int j = 0; j < 40; j++)
@@ -208,10 +223,12 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                         VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
                         rect.NormalizeRadius();
                         // Drawing as an outline
-                        VxsHelper.FillVxsSnap(g, new VertexStoreSnap(rect.MakeVxs()), Drawing.Color.Make(.9f, .9f, .9f));
+                        VxsHelper.FillVxsSnap(g, new VertexStoreSnap(rect.MakeVxs(v1)), Drawing.Color.Make(.9f, .9f, .9f));
+                        v1.Clear();
                     }
                 }
             }
+
             //----------------------------------------------------
             return bmp;
         }
@@ -246,7 +263,8 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 var colors = lionShape.Colors;
                 //var lionVxs = lionShape.Path.Vxs;// transform.TransformToVxs(lionShape.Path.Vxs);
 
-                var lionVxs = transform.TransformToVxs(lionShape.Path.Vxs);
+                var lionVxs = new VertexStore();
+                transform.TransformToVxs(lionShape.Path.Vxs, lionVxs);
                 for (int i = 0; i < n; ++i)
                 {
                     VxsHelper.FillVxsSnap(lionGfx,
@@ -277,7 +295,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             {
                 byte* dest = (byte*)resultScan0;
                 byte* src = (byte*)alphaScan0;
-                for (int i = 0; i < totalByteCount;)
+                for (int i = 0; i < totalByteCount; )
                 {
                     // *(dest + 3) = 150;
                     //replace  alpha channel with data from alphaBmpData
@@ -341,6 +359,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
             // draw a background to show how the mask is working better
             int rect_w = 30;
+            var v1 = GetFreeVxs();
             for (int i = 0; i < 40; i++)
             {
                 for (int j = 0; j < 40; j++)
@@ -350,12 +369,13 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                         VertexSource.RoundedRect rect = new VertexSource.RoundedRect(i * rect_w, j * rect_w, (i + 1) * rect_w, (j + 1) * rect_w, 0);
                         rect.NormalizeRadius();
                         // Drawing as an outline
-                        rasterizer.AddPath(rect.MakeVxs());
+                        rasterizer.AddPath(rect.MakeVxs(v1));
+                        v1.Clear();
                         sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, scline, Drawing.Color.Make(.9f, .9f, .9f));
                     }
                 }
             }
-
+            ReleaseVxs(ref v1);
             ////int x, y; 
             //// Render the lion
             ////VertexSourceApplyTransform trans = new VertexSourceApplyTransform(lionShape.Path, transform);
@@ -363,10 +383,13 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             ////var vxlist = new System.Collections.Generic.List<VertexData>();
             ////trans.DoTransform(vxlist); 
 
+            var tmpVxs1 = new VertexStore();
+            transform.TransformToVxs(lionShape.Path.Vxs, tmpVxs1);
+
             sclineRasToBmp.RenderSolidAllPaths(alphaMaskClippingProxy,
                    rasterizer,
                    scline,
-                   transform.TransformToVxs(lionShape.Path.Vxs),
+                   tmpVxs1,
                    lionShape.Colors,
                    lionShape.PathIndexList,
                    lionShape.NumPaths);

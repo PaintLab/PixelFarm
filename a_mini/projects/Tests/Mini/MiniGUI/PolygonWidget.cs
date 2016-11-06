@@ -80,11 +80,10 @@ namespace PixelFarm.Agg.UI
         }
 
 
-        public VertexStore MakeVxs()
+        public VertexStore MakeVxs(VertexStore vxs)
         {
-            VertexStore vxs = new VertexStore();
             m_vertex = 0;
-            for (;;)
+            for (; ; )
             {
                 double x, y;
                 var cmd = this.GetNextVertex(out x, out y);
@@ -96,9 +95,9 @@ namespace PixelFarm.Agg.UI
             }
             return vxs;
         }
-        public VertexStoreSnap MakeVertexSnap()
+        public VertexStoreSnap MakeVertexSnap(VertexStore vxs)
         {
-            return new VertexStoreSnap(this.MakeVxs());
+            return new VertexStoreSnap(this.MakeVxs(vxs));
         }
     }
 
@@ -187,14 +186,15 @@ namespace PixelFarm.Agg.UI
 #endif
         }
 
-        public override VertexStore MakeVxs()
+        public override VertexStore MakeVxs(VertexStore vxs)
         {
-            var vxs = new VertexStore();
+
             this.RewindZero();
             //this polygon control has  2 subcontrol
             //stroke and ellipse 
-
-            VertexStore s_vxs = this.m_stroke.MakeVxs(this.m_vs.MakeVxs());
+            var v1 = GetFreeVxs();
+            var v2 = GetFreeVxs();
+            VertexStore s_vxs = this.m_stroke.MakeVxs(this.m_vs.MakeVxs(v1), v2);
             int j = s_vxs.Count;
             double x, y;
             for (int i = 0; i < j; ++i)
@@ -209,17 +209,20 @@ namespace PixelFarm.Agg.UI
                     vxs.AddVertex(x, y, cmd);
                 }
             }
-
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
             //------------------------------------------------------------
             //draw each polygon point
             double r = m_point_radius;
             if (m_node >= 0 && m_node == (int)(m_status)) { r *= 1.2; }
 
             int n_count = m_polygon.Length / 2;
+            var v3 = GetFreeVxs();
             for (int m = 0; m < n_count; ++m)
             {
                 m_ellipse.Reset(GetXN(m), GetYN(m), r, r, 32);
-                var ellipseVxs = m_ellipse.MakeVxs();
+
+                var ellipseVxs = m_ellipse.MakeVxs(v3);
                 j = ellipseVxs.Count;
                 for (int i = 0; i < j; ++i)
                 {
@@ -231,7 +234,11 @@ namespace PixelFarm.Agg.UI
                     vxs.AddVertex(x, y, cmd);
                 }
                 m_status++;
+
+                //reuse
+                v3.Clear();
             }
+            ReleaseVxs(ref v3);
             //------------------------------------------------------------
 
             //close with stop
@@ -242,15 +249,19 @@ namespace PixelFarm.Agg.UI
         {
             RectD localBounds = new RectD(double.PositiveInfinity, double.PositiveInfinity, double.NegativeInfinity, double.NegativeInfinity);
             this.RewindZero();
-            var vxs = this.MakeVxs();
-            int j = vxs.Count;
+
+            var v1 = GetFreeVxs();
+            this.MakeVxs(v1);
+            int j = v1.Count;
             for (int i = 0; i < j; ++i)
             {
                 double x, y;
-                vxs.GetVertexXY(i, out x, out y);
+                v1.GetVertexXY(i, out x, out y);
                 localBounds.ExpandToInclude(x, y);
             }
-            return localBounds; throw new NotImplementedException();
+            ReleaseVxs(ref v1);
+            return localBounds;
+            throw new NotImplementedException();
         }
 
 
@@ -516,7 +527,9 @@ namespace PixelFarm.Agg.UI
         public override void OnDraw(CanvasPainter p)
         {
             p.FillColor = LineColor;
-            p.Draw(new VertexStoreSnap(this.MakeVxs()));
+            var v1 = GetFreeVxs();
+            p.Draw(new VertexStoreSnap(this.MakeVxs(v1)));
+            ReleaseVxs(ref v1);
         }
     }
 }

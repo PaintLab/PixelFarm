@@ -210,6 +210,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         double m_dx;
         double m_dy;
         int m_idx;
+        Stroke stroke = new Stroke(2);
         public aa_demo_test3()
         {
             m_idx = -1;
@@ -237,6 +238,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         public override void Draw(CanvasPainter p)
         {
             //specific for agg
+
             if (p is PixelFarm.Agg.AggCanvasPainter)
             {
                 var p2 = (PixelFarm.Agg.AggCanvasPainter)p;
@@ -275,7 +277,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 //Stroke stroke = new Stroke(ps);
                 //stroke.Width = 2;
                 //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
-                rasterizer.AddPath(StrokeHelp.MakeVxs(ps.Vxs, 2));
+                var v1 = GetFreeVxs();
+                rasterizer.AddPath(stroke.MakeVxs(ps.Vxs, v1));
+                ReleaseVxs(ref v1);
                 //----------------------------------------
 
                 sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));

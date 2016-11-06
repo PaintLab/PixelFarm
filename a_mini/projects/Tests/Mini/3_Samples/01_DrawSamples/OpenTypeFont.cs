@@ -34,7 +34,7 @@ namespace PixelFarm.Agg.Sample_Draw
             collection.LoadInstalledFont(win32InstalledFont.GetInstalledFontIter());
             string fontfile = collection.GetFont("tahoma", InstalledFontStyle.Regular).FontPath;
             //------------
-            
+
             var reader = new OpenTypeReader();
             this.FillBG = true;
             int size = 72;
@@ -81,7 +81,8 @@ namespace PixelFarm.Agg.Sample_Draw
         VertexStore BuildVxsForGlyph(GlyphPathBuilderVxs builder, char character, int size, int resolution)
         {
             builder.Build(character, size);
-            VertexStore vxs1 = builder.GetVxs();
+
+            VertexStore v0 = builder.GetVxs(_vxsPool.GetFreeVxs());
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                 //translate
                  new PixelFarm.Agg.Transform.AffinePlan(
@@ -90,9 +91,18 @@ namespace PixelFarm.Agg.Sample_Draw
                  new PixelFarm.Agg.Transform.AffinePlan(
                      PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, 1, 1)
                      );
-            vxs1 = mat.TransformToVxs(vxs1);
-            return curveFlattener.MakeVxs(vxs1);
+
+            VertexStore v1 = _vxsPool.GetFreeVxs();
+            VertexStore v2 = new VertexStore();
+            mat.TransformToVxs(v0, v1);
+            curveFlattener.MakeVxs(v0, v2);
+
+            _vxsPool.Release(ref v0);
+            _vxsPool.Release(ref v1);
+
+            return v2;
         }
+        VertexStorePool _vxsPool = new VertexStorePool();
         [DemoConfig]
         public bool FillBG
         {

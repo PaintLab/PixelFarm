@@ -39,11 +39,11 @@ namespace PixelFarm.Agg.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample02 : DemoBase
     {
-        //SvgFontStore svgFontStore = new SvgFontStore();
 
+        Stroke stroke = new Stroke(1);
         public override void Init()
         {
-           
+
         }
         public override void Draw(CanvasPainter p)
         {
@@ -59,14 +59,23 @@ namespace PixelFarm.Agg.Sample_Draw
                 var mat = Affine.NewMatix(
                     AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                     AffinePlan.Translate(width / 2, 150));
-                VertexStore sp1 = mat.TransformToVxs(ellipsePro.MakeVxs());
+
+                var v1 = GetFreeVxs();
+                var v2 = GetFreeVxs();
+                var v3 = GetFreeVxs();
+                mat.TransformToVxs(ellipsePro.MakeVxs(v1), v2);
                 p.FillColor = Drawing.Color.Yellow;
-                p.Fill(sp1);
+                p.Fill(v2);
+                //------------------------------------
                 //g.Render(sp1, ColorRGBA.Yellow);
                 //Stroke ellipseOutline = new Stroke(sp1, 3);
                 p.FillColor = Drawing.Color.Blue;
-                p.Fill(StrokeHelp.MakeVxs(sp1, 3));
+                stroke.Width = 3;
+                p.Fill(stroke.MakeVxs(v2, v3));
                 //g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
+                ReleaseVxs(ref v1);
+                ReleaseVxs(ref v2);
+                ReleaseVxs(ref v3);
             }
 
             // and a little polygon
@@ -81,7 +90,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //g.Render(littlePoly.MakeVertexSnap(), ColorRGBA.Cyan);
             // draw some text
             // draw some text  
-            
+
             //var textPrinter = new TextPrinter();
             //textPrinter.CurrentActualFont = svgFontStore.LoadFont(SvgFontStore.DEFAULT_SVG_FONTNAME, 30);
             //new TypeFacePrinter("Printing from a printer", 30, justification: Justification.Center);
