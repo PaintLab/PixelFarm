@@ -136,15 +136,5 @@ namespace PixelFarm.Agg
             return vxs;
         }
     }
-    public static class StrokeHelp
-    {
-        public static VertexStore MakeVxs(VertexStore vxs, double w, VertexStore output)
-        {
-            //TODO: review here
-            Stroke stroke = new Stroke(w);
-            stroke.MakeVxs(vxs, output);
-            return output;
-
-        }
-    }
+     
 }

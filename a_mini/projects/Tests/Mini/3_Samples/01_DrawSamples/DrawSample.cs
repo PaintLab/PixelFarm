@@ -39,8 +39,8 @@ namespace PixelFarm.Agg.Sample_Draw
     [Info("from MatterHackers' Agg DrawAndSave")]
     public class DrawSample02 : DemoBase
     {
-        //SvgFontStore svgFontStore = new SvgFontStore();
 
+        Stroke stroke = new Stroke(1);
         public override void Init()
         {
 
@@ -70,13 +70,12 @@ namespace PixelFarm.Agg.Sample_Draw
                 //g.Render(sp1, ColorRGBA.Yellow);
                 //Stroke ellipseOutline = new Stroke(sp1, 3);
                 p.FillColor = Drawing.Color.Blue;
-                p.Fill(StrokeHelp.MakeVxs(v2, 3, v3));
+                stroke.Width = 3;
+                p.Fill(stroke.MakeVxs(v2, v3));
                 //g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
                 ReleaseVxs(ref v1);
                 ReleaseVxs(ref v2);
                 ReleaseVxs(ref v3);
-
-
             }
 
             // and a little polygon

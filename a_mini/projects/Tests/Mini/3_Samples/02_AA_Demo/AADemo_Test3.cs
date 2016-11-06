@@ -210,6 +210,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         double m_dx;
         double m_dy;
         int m_idx;
+        Stroke stroke = new Stroke(2);
         public aa_demo_test3()
         {
             m_idx = -1;
@@ -277,7 +278,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 //stroke.Width = 2;
                 //rasterizer.AddPath(stroke.MakeVxs(ps.MakeVxs()));
                 var v1 = GetFreeVxs();
-                rasterizer.AddPath(StrokeHelp.MakeVxs(ps.Vxs, 2, v1));
+                rasterizer.AddPath(stroke.MakeVxs(ps.Vxs, v1));
                 ReleaseVxs(ref v1);
                 //----------------------------------------
 
