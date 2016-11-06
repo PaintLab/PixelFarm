@@ -68,11 +68,15 @@ namespace PixelFarm.Agg.VertexSource
         Vector2 c4p3;
         SvgPathCommand latestSVGPathCmd;
         int figureCount = 0;
-        VertexStore myvxs = new VertexStore();
+        VertexStore myvxs;
         public PathWriter()
         {
+            myvxs = new VertexStore();
         }
-
+        public PathWriter(VertexStore externalVxs)
+        {
+            myvxs = externalVxs;
+        }
         public int Count
         {
             get { return myvxs.Count; }
@@ -86,9 +90,10 @@ namespace PixelFarm.Agg.VertexSource
             latestSVGPathCmd = SvgPathCommand.MoveTo;
             figureCount = 0;
         }
-        public void ClearAndStartNewVxs()
+        public void ClearAndStartNewVxs(VertexStore newVxsOutput)
         {
-            myvxs = new VertexStore();
+
+            myvxs = newVxsOutput;
             Clear();
         }
         //-------------------------------------------------------------------

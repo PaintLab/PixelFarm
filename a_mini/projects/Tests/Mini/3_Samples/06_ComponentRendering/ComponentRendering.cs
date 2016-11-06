@@ -61,14 +61,24 @@ namespace PixelFarm.Agg
                     new Drawing.Color((byte)(this.AlphaValue), 0, 0, 0);
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
                 VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                sclineRas.AddPath(er.MakeVertexSnap());
+                //
+                var v1 = GetFreeVxs();
+                sclineRas.AddPath(er.MakeVxs(v1));
+                v1.Clear();
                 sclineRasToBmp.RenderWithColor(clippingProxyRed, sclineRas, scline, fillColor);
                 VertexSource.Ellipse eg = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 + 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
-                sclineRas.AddPath(eg.MakeVertexSnap());
+                sclineRas.AddPath(eg.MakeVertexSnap(v1));
+                v1.Clear();
+
                 sclineRasToBmp.RenderWithColor(clippingProxyGreen, sclineRas, scline, fillColor);
                 VertexSource.Ellipse eb = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2, Height / 2 + 50, 100, 100, 100);
-                sclineRas.AddPath(eb.MakeVertexSnap());
+
+                sclineRas.AddPath(eb.MakeVertexSnap(v1));
+                v1.Clear();
+
                 sclineRasToBmp.RenderWithColor(clippingProxyBlue, sclineRas, scline, fillColor);
+
+                ReleaseVxs(v1);
             }
             //            else if (graphics2D.DestImageFloat != null)
             //            {

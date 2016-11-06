@@ -141,12 +141,11 @@ namespace PixelFarm.Agg.Transform
             y = rc01 + rc11 * xy + rc21 * tx + rc31 * ty;
         }
         //-------------------------------------------------------------------------
- 
 
-        public VertexStore TransformToVxs(VertexStore src)
+
+        public VertexStore TransformToVxs(VertexStore src, VertexStore vxs)
         {
             int count = src.Count;
-            var vxs = new VertexStore();
             VertexCmd cmd;
             double x, y;
             for (int i = 0; i < count; ++i)

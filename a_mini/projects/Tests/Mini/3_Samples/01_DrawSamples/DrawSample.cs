@@ -59,15 +59,24 @@ namespace PixelFarm.Agg.Sample_Draw
                 var mat = Affine.NewMatix(
                     AffinePlan.Rotate(MathHelper.DegreesToRadians(angleDegrees)),
                     AffinePlan.Translate(width / 2, 150));
-                VertexStore sp1 = new VertexStore();
-                mat.TransformToVxs(ellipsePro.MakeVxs(), sp1);
+
+                var v1 = GetFreeVxs();
+                var v2 = GetFreeVxs();
+                var v3 = GetFreeVxs();
+                mat.TransformToVxs(ellipsePro.MakeVxs(v1), v2);
                 p.FillColor = Drawing.Color.Yellow;
-                p.Fill(sp1);
+                p.Fill(v2);
+                //------------------------------------
                 //g.Render(sp1, ColorRGBA.Yellow);
                 //Stroke ellipseOutline = new Stroke(sp1, 3);
                 p.FillColor = Drawing.Color.Blue;
-                p.Fill(StrokeHelp.MakeVxs(sp1, 3));
+                p.Fill(StrokeHelp.MakeVxs(v2, 3, v3));
                 //g.Render(StrokeHelp.MakeVxs(sp1, 3), ColorRGBA.Blue);
+                ReleaseVxs(v1);
+                ReleaseVxs(v2);
+                ReleaseVxs(v3);
+
+
             }
 
             // and a little polygon

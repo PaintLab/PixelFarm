@@ -100,7 +100,8 @@ namespace PixelFarm.Agg.Sample_Perspective
                     quadPolygonControl.GetInnerCoords());
                 if (txBilinear.IsValid)
                 {
-                    painter.PaintSeries(txBilinear.TransformToVxs(lionShape.Path.Vxs),
+                    var v3 = GetFreeVxs();
+                    painter.PaintSeries(txBilinear.TransformToVxs(lionShape.Path.Vxs, v3),
                         lionShape.Colors,
                         lionShape.PathIndexList,
                         lionShape.NumPaths);
@@ -110,7 +111,10 @@ namespace PixelFarm.Agg.Sample_Perspective
                                      (lionBound.Right - lionBound.Left) * 0.5,
                                      (lionBound.Top - lionBound.Bottom) * 0.5,
                                      200);
-                    VertexStore trans_ell = txBilinear.TransformToVxs(ell.MakeVxs());
+                    ReleaseVxs(v3);
+                    var v1 = GetFreeVxs();
+                    var trans_ell = GetFreeVxs();
+                    txBilinear.TransformToVxs(ell.MakeVxs(v1), trans_ell);
                     painter.FillColor = Drawing.Color.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(trans_ell);
                     //-------------------------------------------------------------
@@ -120,6 +124,9 @@ namespace PixelFarm.Agg.Sample_Perspective
                     painter.StrokeColor = Drawing.Color.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(trans_ell);
                     painter.StrokeWidth = prevStrokeWidth;
+
+                    ReleaseVxs(v1);
+                    ReleaseVxs(trans_ell);
                 }
             }
             else
@@ -129,7 +136,8 @@ namespace PixelFarm.Agg.Sample_Perspective
                     quadPolygonControl.GetInnerCoords());
                 if (txPerspective.IsValid)
                 {
-                    painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Path.Vxs),
+                    var v1 = GetFreeVxs();
+                    painter.PaintSeries(txPerspective.TransformToVxs(lionShape.Path.Vxs, v1),
                       lionShape.Colors,
                       lionShape.PathIndexList,
                       lionShape.NumPaths);
@@ -142,7 +150,10 @@ namespace PixelFarm.Agg.Sample_Perspective
                                       (lionBound.Right - lionBound.Left) * 0.5,
                                       (lionBound.Top - lionBound.Bottom) * 0.5,
                                       200);
-                    VertexStore transformedEll = txPerspective.TransformToVxs(filledEllipse.MakeVxs());
+
+                    VertexStore v2 = GetFreeVxs();
+                    VertexStore transformedEll = GetFreeVxs();
+                    txPerspective.TransformToVxs(filledEllipse.MakeVxs(v2), transformedEll);
                     painter.FillColor = Drawing.Color.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(transformedEll);
                     //-------------------------------------------------------- 
@@ -151,13 +162,18 @@ namespace PixelFarm.Agg.Sample_Perspective
                     painter.StrokeColor = Drawing.Color.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(transformedEll);
                     painter.StrokeWidth = prevStrokeW;
+                    ReleaseVxs(v2);
+                    ReleaseVxs(v1);
+                    ReleaseVxs(transformedEll);
                 }
             }
 
             //--------------------------
             // Render the "quad" tool and controls
             painter.FillColor = Drawing.Color.Make(0f, 0.3f, 0.5f, 0.6f);
-            painter.Fill(quadPolygonControl.MakeVxs());
+            var v4 = GetFreeVxs();
+            painter.Fill(quadPolygonControl.MakeVxs(v4));
+            ReleaseVxs(v4);
         }
 
         public override void MouseDown(int x, int y, bool isRightButton)

@@ -170,7 +170,7 @@ namespace PixelFarm.DrawingGL
             _aggStroke.Width = this.StrokeWidth;
 
             var v2 = GetFreeVxs(); 
-            _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(_aggStroke.MakeVxs(vxs, v2))));
+            _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(_aggStroke.MakeVxs(v1, v2))));
             ReleaseVxs(v2);
             ReleaseVxs(v1);
         }

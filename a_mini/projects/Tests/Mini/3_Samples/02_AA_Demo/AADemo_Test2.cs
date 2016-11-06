@@ -118,8 +118,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 ps.LineTo(m_x[1], m_y[1]);
                 ps.LineTo(m_x[2], m_y[2]);
                 ps.LineTo(m_x[0], m_y[0]);
-                rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs));
+                var v1 = GetFreeVxs();
+                rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs,v1));
                 sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
+                ReleaseVxs(v1);
             }
         }
 

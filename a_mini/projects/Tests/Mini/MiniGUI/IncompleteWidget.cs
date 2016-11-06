@@ -102,5 +102,19 @@ namespace PixelFarm.Agg.UI
                 parentToChildTransform = value;
             }
         }
+        Stack<VertexStore> _tmpVxs = new Stack<VertexStore>();
+        public VertexStore GetFreeVxs()
+        {
+            if (_tmpVxs.Count > 0)
+            {
+                return _tmpVxs.Pop();
+            }
+            return new VertexStore();
+        }
+        public void ReleaseVxs(VertexStore vxs)
+        {
+            vxs.Clear();
+            _tmpVxs.Push(vxs);
+        }
     }
 }
