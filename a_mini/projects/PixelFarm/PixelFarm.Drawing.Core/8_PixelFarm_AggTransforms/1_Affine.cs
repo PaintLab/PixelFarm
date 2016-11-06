@@ -905,7 +905,11 @@ namespace PixelFarm.Agg.Transform
         {
             return Math.Abs(v1 - v2) <= (EPSILON);
         }
-
+        /// <summary>
+        /// we do NOT store vxs
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="outputVxs"></param>
         public void TransformToVxs(VertexStore src, VertexStore outputVxs)
         {
             int count = src.Count;

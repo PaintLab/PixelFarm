@@ -104,6 +104,11 @@ namespace PixelFarm.Agg
             drawImageRectPath.AddCloseFigure();
             return Affine.NewMatix(affPlans);
         }
+        /// <summary>
+        /// we do NOT store vxs
+        /// </summary>
+        /// <param name="vxs"></param>
+        /// <param name="spanGen"></param>
         void Render(VertexStore vxs, ISpanGenerator spanGen)
         {
             sclineRas.AddPath(vxs);
@@ -316,7 +321,7 @@ namespace PixelFarm.Agg
             }
 
             bool needSourceResampling = isScale || isRotated || destX != (int)destX || destY != (int)destY;
-            var imgBoundsPath = GetFreeVxs();
+            VertexStore imgBoundsPath = GetFreeVxs();
             // this is the fast drawing path
             if (needSourceResampling)
             {
@@ -349,9 +354,10 @@ namespace PixelFarm.Agg
                     source,
                     Drawing.Color.Black,
                     new SpanInterpolatorLinear(sourceRectTransform));
-                var outputVxs = new VertexStore();
+                var outputVxs = GetFreeVxs();
                 destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
                 Render(outputVxs, imgSpanGen);
+                ReleaseVxs(outputVxs);
 #if false // this is some debug you can enable to visualize the dest bounding box
 		        LineFloat(BoundingRect.left, BoundingRect.top, BoundingRect.right, BoundingRect.top, WHITE);
 		        LineFloat(BoundingRect.right, BoundingRect.top, BoundingRect.right, BoundingRect.bottom, WHITE);
@@ -382,9 +388,10 @@ namespace PixelFarm.Agg
                     default:
                         throw new NotImplementedException();
                 }
-                var outputVxs = new VertexStore();
+                var outputVxs = GetFreeVxs();
                 destRectTransform.TransformToVxs(imgBoundsPath, outputVxs);
                 Render(outputVxs, imgSpanGen);
+                ReleaseVxs(outputVxs);
                 unchecked { destImageChanged++; };
             }
             ReleaseVxs(imgBoundsPath);

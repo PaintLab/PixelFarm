@@ -58,7 +58,8 @@ namespace PixelFarm.Drawing.Fonts
                 glyph = new FontGlyph();
                 glyph.originalVxs = characterGlyph;
                 //then flatten it
-                characterGlyph = curveFlattner.MakeVxs(characterGlyph);
+                characterGlyph = new VertexStore();
+                curveFlattner.MakeVxs(characterGlyph, characterGlyph);
                 glyph.flattenVxs = characterGlyph;
                 glyph.horiz_adv_x = originalGlyph.horiz_adv_x;
                 cachedGlyphsByIndex.Add(glyphIndex, glyph);
@@ -78,7 +79,8 @@ namespace PixelFarm.Drawing.Fonts
                 glyph.horiz_adv_x = originalGlyph.horiz_adv_x;
                 glyph.originalVxs = characterGlyph;
                 //then flatten it
-                characterGlyph = curveFlattner.MakeVxs(characterGlyph);
+                characterGlyph = new VertexStore();
+                curveFlattner.MakeVxs(characterGlyph, characterGlyph);
                 glyph.flattenVxs = characterGlyph;
                 cachedGlyphs.Add(c, glyph);
             }

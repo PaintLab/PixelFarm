@@ -26,11 +26,9 @@ namespace PixelFarm.Agg.Transform
     }
     public static class ITransformExtension
     {
-        public static VertexStoreSnap TransformToVertexSnap(this Affine affine, VertexStore src)
+        public static void TransformToVertexSnap(this Affine affine, VertexStore src, VertexStore output)
         {
-            VertexStore newStore = new VertexStore();
-            affine.TransformToVxs(src, newStore);
-            return new VertexStoreSnap(newStore);
+            affine.TransformToVxs(src, output); 
         }
 
     }

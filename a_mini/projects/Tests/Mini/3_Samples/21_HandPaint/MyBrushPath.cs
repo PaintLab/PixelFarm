@@ -157,7 +157,10 @@ namespace PixelFarm.Agg.Samples
                 vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
             }
             vxs.AddCloseFigure();
-            vxs = cflat.MakeVxs(vxs);
+
+            VertexStore v2 = new VertexStore();
+            cflat.MakeVxs(vxs, v2);
+            vxs = v2;
         }
         public void Close()
         {

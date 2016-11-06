@@ -61,10 +61,13 @@ namespace PixelFarm.Agg
              new PixelFarm.Agg.Transform.AffinePlan(
                  PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, 1, 1)
                  );
-            //to flatten here
+
             var outputVxs1 = new VertexStore();
             mat.TransformToVxs(ps.Vxs, outputVxs1);
-            return curveFlattener.MakeVxs(outputVxs1);
+            //
+            var output2 = new VertexStore();
+            curveFlattener.MakeVxs(outputVxs1, output2);
+            return output2;
         }
         public VertexStore GetUnscaledVxs()
         {

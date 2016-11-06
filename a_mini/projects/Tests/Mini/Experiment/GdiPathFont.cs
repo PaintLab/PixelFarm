@@ -39,7 +39,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             throw new NotImplementedException();
         }
-         
+
         public float AscentInPixels
         {
             get { throw new NotImplementedException(); }
@@ -74,7 +74,8 @@ namespace PixelFarm.Drawing.Fonts
                 PixelFarm.Agg.GdiPathConverter.ConvertCharToVertexGlyph(gdiFont, c, vxs);
                 found.originalVxs = vxs;
                 //create flatten version 
-                found.flattenVxs = curveFlattener.MakeVxs(vxs);//?
+                found.flattenVxs = new VertexStore();
+                curveFlattener.MakeVxs(vxs, found.flattenVxs);//?
                 //-------------------------
                 //create bmp version 
                 //find vxs bound 

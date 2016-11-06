@@ -92,7 +92,9 @@ namespace PixelFarm.Agg.Sample_Draw
                      );
             VertexStore v1 = new VertexStore();
             mat.TransformToVxs(vxs1, v1);
-            return curveFlattener.MakeVxs(vxs1);
+            VertexStore v2 = new VertexStore();
+            curveFlattener.MakeVxs(vxs1, v2);
+            return v2;
         }
         [DemoConfig]
         public bool FillBG
