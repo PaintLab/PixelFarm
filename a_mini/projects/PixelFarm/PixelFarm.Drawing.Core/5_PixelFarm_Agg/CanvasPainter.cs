@@ -110,9 +110,7 @@ namespace PixelFarm.Agg
         public abstract void DrawBezierCurve(float startX, float startY, float endX, float endY,
            float controlX1, float controlY1,
            float controlX2, float controlY2);
-        //---------------- 
-        public abstract VertexStore FlattenCurves(VertexStore srcVxs);
-        //---------------- 
+       
         public abstract int Width { get; }
         public abstract int Height { get; }
         //-------------------------------------------------------
