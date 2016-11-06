@@ -91,7 +91,9 @@ namespace Mini
         }
         protected static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.Agg.ActualImage actualImg)
         {
-            return new PixelFarm.DrawingGL.GLBitmap(actualImg.Width, actualImg.Height,PixelFarm.Agg.ActualImage.GetBuffer(actualImg), false);
+            return new PixelFarm.DrawingGL.GLBitmap(actualImg.Width, 
+                actualImg.Height,
+                PixelFarm.Agg.ActualImage.GetBuffer(actualImg), false);
         }
         protected static PixelFarm.DrawingGL.GLBitmap LoadTexture(System.Drawing.Bitmap bmp)
         {
