@@ -245,7 +245,7 @@ namespace Mini
                 int bmpH = 500;
                 using (Bitmap bufferBmp = new Bitmap(bmpW, bmpH))
                 {
-                    ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.Imaging.PixelFormat.ARGB32);
+                    ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.PixelFormat.ARGB32);
                     Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
                     var vxs = new VertexStore();
                     //vxs.AddMoveTo(0, 0);
