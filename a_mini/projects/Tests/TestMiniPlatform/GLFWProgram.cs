@@ -17,31 +17,39 @@ namespace TestGlfw
                 return;
             }
             //---------------------------------------------------
-            //specific OpenGLES
+            //at this, point no opengl func binding
+            //---------------------------------------------------
+            //1. we specific which verision we want,
+            //here => OpenGLES  2.0
             Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
             Glfw.WindowHint(WindowHint.GLFW_CONTEXT_CREATION_API, (int)OpenGLContextCreationAPI.GLFW_EGL_CONTEXT_API);
             Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 2);
             Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MINOR, 0);
             //---------------------------------------------------
-            GlfwMonitorPtr monitor = new GlfwMonitorPtr();
-            GlfwWindowPtr winPtr = new GlfwWindowPtr();
+            GlfwMonitorPtr monitor = new GlfwMonitorPtr();//default monitor
+            GlfwWindowPtr winPtr = new GlfwWindowPtr(); //default window
             GlfwWindowPtr glWindow = Glfw.CreateWindow(800, 600, "Test Glfw", monitor, winPtr);
 
             /* Make the window's context current */
             Glfw.MakeContextCurrent(glWindow);
             Glfw.SwapInterval(1);
-            GlfwWindowPtr currentContext = Glfw.GetCurrentContext();
+            GlfwWindowPtr currentContext = Glfw.GetCurrentContext(); 
+            var contextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr); 
+            //faster: create external context
+            var glfwContext = new GLFWContextForOpenTK(contextHandler);
+            var context = OpenTK.Graphics.GraphicsContext.CreateExternalContext(glfwContext);
+            //---------------------------
+            //slow ... use create dummy context
+            //var context = OpenTK.Graphics.GraphicsContext.CreateDummyContext(contextHandler);  
+            //and you need to load gles2 binding points manaually (below)
 
-
-
-            var contextHandler = new OpenTK.ContextHandle(currentContext.inner_ptr);
-            var context = OpenTK.Graphics.GraphicsContext.CreateDummyContext(contextHandler);
             bool isCurrent = context.IsCurrent;
-            PixelFarm.GlfwWinInfo winInfo = new PixelFarm.GlfwWinInfo(glWindow.inner_ptr);
+            PixelFarm.GlfwWinInfo winInfo = new PixelFarm.GlfwWinInfo(glWindow);
             context.MakeCurrent(winInfo);
             //-------------------------------------- 
             //bind open gl funcs here..
-            new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
+            //this not need if we use glfwcontext for opentk
+            //new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
             //-------------------------------------- 
             //create shader program
             var shaderProgram = new MiniShaderProgram();

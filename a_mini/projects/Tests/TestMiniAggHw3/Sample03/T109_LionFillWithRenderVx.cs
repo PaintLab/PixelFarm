@@ -27,7 +27,8 @@ namespace OpenTkEssTest
             PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(
                  PixelFarm.Agg.Transform.AffinePlan.Scale(1, -1),
                  PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
-            lionVxs = aff.TransformToVxs(lionShape.Path.Vxs);
+            lionVxs = new VertexStore();
+            aff.TransformToVxs(lionShape.Path.Vxs, lionVxs);
             painter = new GLCanvasPainter(canvas2d, max, max);
             //convert lion vxs to renderVx
 

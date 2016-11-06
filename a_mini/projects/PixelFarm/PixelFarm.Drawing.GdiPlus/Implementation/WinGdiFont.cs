@@ -92,10 +92,12 @@ namespace PixelFarm.Drawing.WinGdi
         float emSizeInPixels;
         float ascendInPixels;
         float descentInPixels;
+        float linegapInPixels;
+
         WinGdiFontFace fontFace;
 
         static BasicGdi32FontHelper basGdi32FontHelper = new BasicGdi32FontHelper();
-        static NativeWin32MemoryDc nativeWin32MemDc;
+
 
         int[] charWidths;
         NativeTextWin32.FontABC[] charAbcWidths;
@@ -106,12 +108,7 @@ namespace PixelFarm.Drawing.WinGdi
         Encoding fontEncoding = Encoding.GetEncoding(874);
         FontStyle fontStyle;
 
-        static WinGdiFont()
-        {
-            //share dc for measure font size only
-            nativeWin32MemDc = new NativeWin32MemoryDc(20, 20);
-            nativeWin32MemDc.SetTextColor(0);
-        }
+
         public WinGdiFont(WinGdiFontFace fontFace, float sizeInPoints, FontStyle style)
         {
 
@@ -121,7 +118,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             this.fontSizeInPoints = sizeInPoints;
             this.emSizeInPixels = PixelFarm.Drawing.RequestFont.ConvEmSizeInPointsToPixels(this.fontSizeInPoints);
-            this.hfont = InitFont(fontFace.Name, (int)sizeInPoints);
+            this.hfont = InitFont(fontFace.Name, sizeInPoints, style);
             //------------------------------------------------------------------
             //create gdi font from font data
             //build font matrix
@@ -129,6 +126,7 @@ namespace PixelFarm.Drawing.WinGdi
             float scale = fontFace.GetScale(sizeInPoints);
             ascendInPixels = fontFace.AscentInDzUnit * scale;
             descentInPixels = fontFace.DescentInDzUnit * scale;
+            linegapInPixels = fontFace.LineGapInDzUnit * scale;
 
             //------------------------------------------------------------------
 
@@ -158,18 +156,26 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get { return fontStyle; }
         }
-        static IntPtr InitFont(string fontName, int emHeight)
+        static IntPtr InitFont(string fontName, float emHeight, FontStyle style)
         {
+            //see: MSDN, LOGFONT structure
             //https://msdn.microsoft.com/en-us/library/windows/desktop/dd145037(v=vs.85).aspx
             MyWin32.LOGFONT logFont = new MyWin32.LOGFONT();
             MyWin32.SetFontName(ref logFont, fontName);
             logFont.lfHeight = -(int)PixelFarm.Drawing.RequestFont.ConvEmSizeInPointsToPixels(emHeight);//minus **
             logFont.lfCharSet = 1;//default
             logFont.lfQuality = 0;//default
-            IntPtr hfont = MyWin32.CreateFontIndirect(ref logFont);
-            MyWin32.SelectObject(nativeWin32MemDc.DC, hfont);
-            return hfont;
+            //
+            MyWin32.LOGFONT_FontWeight weight =
+                ((style & FontStyle.Bold) == FontStyle.Bold) ?
+                MyWin32.LOGFONT_FontWeight.FW_BOLD :
+                MyWin32.LOGFONT_FontWeight.FW_REGULAR;
+            logFont.lfWeight = (int)weight;
+            //
+            logFont.lfItalic = (byte)(((style & FontStyle.Italic) == FontStyle.Italic) ? 1 : 0);
+            return MyWin32.CreateFontIndirect(ref logFont);
         }
+
 
         public System.IntPtr ToHfont()
         {   /// <summary>
@@ -218,7 +224,14 @@ namespace PixelFarm.Drawing.WinGdi
                 return ascendInPixels;
             }
         }
-
+        public override float LineGapInPixels
+        {
+            get { return linegapInPixels; }
+        }
+        public override float RecommendedLineSpacingInPixels
+        {
+            get { return AscentInPixels - DescentInPixels + LineGapInPixels; }
+        }
         public override float DescentInPixels
         {
             get
@@ -236,14 +249,23 @@ namespace PixelFarm.Drawing.WinGdi
         }
     }
 
-
+    struct FontFaceKey
+    {
+        public readonly int FontNameIndex;
+        public readonly FontStyle FontStyle;
+        public FontFaceKey(FontKey fontKey)
+        {
+            this.FontNameIndex = fontKey.FontNameIndex;
+            this.FontStyle = fontKey.FontStyle;
+        }
+    }
     class WinGdiFontSystem
     {
 
         static RequestFont latestFont;
         static WinGdiFont latestWinFont;
         static Dictionary<FontKey, WinGdiFont> registerFonts = new Dictionary<FontKey, WinGdiFont>();
-        static Dictionary<string, WinGdiFontFace> winGdiFonFaces = new Dictionary<string, WinGdiFontFace>();
+        static Dictionary<FontFaceKey, WinGdiFontFace> winGdiFonFaces = new Dictionary<FontFaceKey, WinGdiFontFace>();
 
         public static WinGdiFont GetWinGdiFont(RequestFont f)
         {
@@ -263,19 +285,19 @@ namespace PixelFarm.Drawing.WinGdi
             //-----
             //need to create a new one
             //get register font or create the new one
-            FontKey key = new FontKey(f.Name, f.SizeInPoints, f.Style);
+            FontKey key = f.FontKey;
             WinGdiFont found;
             if (!registerFonts.TryGetValue(key, out found))
             {
                 //create the new one and register                  
                 //create fontface
-
+                FontFaceKey fontfaceKey = new FontFaceKey(key);
                 WinGdiFontFace fontface;
-                if (!winGdiFonFaces.TryGetValue(f.Name, out fontface))
+                if (!winGdiFonFaces.TryGetValue(fontfaceKey, out fontface))
                 {
                     //create new 
                     fontface = new WinGdiFontFace(f.Name, f.Style);
-                    winGdiFonFaces.Add(f.Name, fontface);
+                    winGdiFonFaces.Add(fontfaceKey, fontface);
                 }
 
                 found = (WinGdiFont)fontface.GetFontAtPointsSize(f.SizeInPoints);
@@ -289,6 +311,7 @@ namespace PixelFarm.Drawing.WinGdi
 
     public static class WinGdiTextService
     {
+
         static NativeWin32MemoryDc win32MemDc;
 
         //=====================================

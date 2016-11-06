@@ -232,6 +232,34 @@ namespace Win32
         [DllImport("gdi32.dll", CharSet = CharSet.Unicode)] //need -> unicode
         public extern static IntPtr CreateFontIndirect(ref LOGFONT logFont);
 
+
+        const int s_POINTS_PER_INCH = 72;
+        static float ConvEmSizeInPointsToPixels(float emsizeInPoint, float pixels_per_inch)
+        {
+            return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * pixels_per_inch);
+        }
+        public static IntPtr CreateFontHelper(string fontName, float emHeight, bool bold, bool italic, float pixels_per_inch = 96)
+        {
+            //see: MSDN, LOGFONT structure
+            //https://msdn.microsoft.com/en-us/library/windows/desktop/dd145037(v=vs.85).aspx
+            MyWin32.LOGFONT logFont = new MyWin32.LOGFONT();
+            MyWin32.SetFontName(ref logFont, fontName);
+            logFont.lfHeight = -(int)ConvEmSizeInPointsToPixels(emHeight, pixels_per_inch);//minus **
+            logFont.lfCharSet = 1;//default
+            logFont.lfQuality = 0;//default
+            //
+            MyWin32.LOGFONT_FontWeight weight =
+                bold ?
+                MyWin32.LOGFONT_FontWeight.FW_BOLD :
+                MyWin32.LOGFONT_FontWeight.FW_REGULAR;
+            logFont.lfWeight = (int)weight;
+            //
+            logFont.lfItalic = (byte)(italic ? 1 : 0);
+            return MyWin32.CreateFontIndirect(ref logFont);
+        }
+
+
+
         public static unsafe void SetFontName(ref LOGFONT logFont, string fontName)
         {
             //font name not longer than 32 chars
@@ -247,7 +275,25 @@ namespace Win32
                 }
             }
         }
-
+        //LOGFONT's  font weight
+        public enum LOGFONT_FontWeight
+        {
+            FW_DONTCARE = 0,
+            FW_THIN = 100,
+            FW_EXTRALIGHT = 200,
+            FW_ULTRALIGHT = 200,
+            FW_LIGHT = 300,
+            FW_NORMAL = 400,
+            FW_REGULAR = 400,
+            FW_MEDIUM = 500,
+            FW_SEMIBOLD = 600,
+            FW_DEMIBOLD = 600,
+            FW_BOLD = 700,
+            FW_EXTRABOLD = 800,
+            FW_ULTRABOLD = 800,
+            FW_HEAVY = 900,
+            FW_BLACK = 900,
+        }
         public const int TA_LEFT = 0;
         public const int TA_RIGHT = 2;
         public const int TA_CENTER = 6;

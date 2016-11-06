@@ -52,7 +52,7 @@ namespace OpenTkEssTest
             painter.FillColor = PixelFarm.Drawing.Color.Black;
             painter.FillRectLBWH(0, 0, 150, 150);
             GLBitmap glBmp = LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
-            var textureBrush = new TextureBrush(new GLImage(glBmp));
+            var textureBrush = new TextureBrush(glBmp);
             painter.FillRenderVx(textureBrush, polygon1);
             //------------------------------------------------------------------------- 
             var linearGrBrush2 = new LinearGradientBrush(

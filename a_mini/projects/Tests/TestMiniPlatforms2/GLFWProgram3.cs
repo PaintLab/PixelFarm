@@ -13,32 +13,29 @@ namespace TestGlfw
         public static void Start()
         {
 
-            if (!GLPlatforms.Init())
+            if (!GLFWPlatforms.Init())
             {
                 Console.WriteLine("can't init");
             }
-            //---------------------------------------------------
-            //specific OpenGLES
-            Glfw.WindowHint(WindowHint.GLFW_CLIENT_API, (int)OpenGLAPI.OpenGLESAPI);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_CREATION_API, (int)OpenGLContextCreationAPI.GLFW_EGL_CONTEXT_API);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MAJOR, 2);
-            Glfw.WindowHint(WindowHint.GLFW_CONTEXT_VERSION_MINOR, 0);
-            //---------------------------------------------------
-
+            
+            Glfw.SwapInterval(1);
+           
             GlFwForm form1 = GlfwApp.CreateGlfwForm(
                 800,
                 600,
                 "PixelFarm on GLfw and OpenGLES2");
 
             form1.MakeCurrent();
-            Glfw.SwapInterval(1);
-            ////--------------------------------------- 
-
-            form1.CreateOpenGLEsContext();
-
-            //bind open gl funcs here.. ***
-            new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
-            //-------------------------------------- 
+            //------------------------------------
+            //***
+            GLFWPlatforms.CreateGLESContext();
+            //------------------------------------
+            form1.Activate();
+            
+            //----------------
+            //this not need if we use glfwcontext for opentk
+           // new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
+            //----------------
 
             //var demo = new OpenTkEssTest.T52_HelloTriangle2();
             //var demo = new OpenTkEssTest.T107_SampleDrawImage();
@@ -73,9 +70,9 @@ namespace TestGlfw
               800,
               600,
               "Form 2");
-            f2.Show();
+            
             f2.MakeCurrent();
-            f2.CreateOpenGLEsContext();
+            f2.Activate();
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(1, 1, 1, 1);

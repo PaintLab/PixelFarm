@@ -61,6 +61,7 @@ namespace PixelFarm.Drawing.Fonts
         public override int LineGapInDzUnit
         {
             //?
+            //TODO: review here
             get { return (int)(AscentInDzUnit * 0.20); }
         }
         public override string Name
@@ -206,7 +207,9 @@ namespace PixelFarm.Drawing.Fonts
         void BuildOutlineGlyph(FontGlyph fontGlyph, int pxsize)
         {
             NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph);
-            fontGlyph.flattenVxs = NativeFontGlyphBuilder.FlattenVxs(fontGlyph.originalVxs);
+            Agg.VertexStore vxs = new Agg.VertexStore();
+            NativeFontGlyphBuilder.FlattenVxs(fontGlyph.originalVxs, vxs);
+            fontGlyph.flattenVxs = vxs;
         }
     }
 }

@@ -39,20 +39,17 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Implementation.Win32\BasicGdi32FontHelper.cs">
-      <Link>Implementation.Win32\BasicGdi32FontHelper.cs</Link>
+    <Compile Include="..\..\PixelFarm\Win32Utils\BasicGdi32FontHelper.cs">
+      <Link>Win32Utils\BasicGdi32FontHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Implementation.Win32\MyWin32.cs">
-      <Link>Implementation.Win32\MyWin32.cs</Link>
+    <Compile Include="..\..\PixelFarm\Win32Utils\MyWin32.cs">
+      <Link>Win32Utils\MyWin32.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Implementation.Win32\NativeTextWin32.cs">
-      <Link>Implementation.Win32\NativeTextWin32.cs</Link>
+    <Compile Include="..\..\PixelFarm\Win32Utils\NativeTextWin32.cs">
+      <Link>Win32Utils\NativeTextWin32.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Implementation.Win32\NativeWin32MemoryDc.cs">
-      <Link>Implementation.Win32\NativeWin32MemoryDc.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Implementation.Win32\WinGdiFont.cs">
-      <Link>Implementation.Win32\WinGdiFont.cs</Link>
+    <Compile Include="..\..\PixelFarm\Win32Utils\NativeWin32MemoryDc.cs">
+      <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
