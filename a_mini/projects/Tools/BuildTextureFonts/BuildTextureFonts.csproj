@@ -39,9 +39,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm\Win32Utils\BasicGdi32FontHelper.cs">
-      <Link>Win32Utils\BasicGdi32FontHelper.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\Win32Utils\MyWin32.cs">
       <Link>Win32Utils\MyWin32.cs</Link>
     </Compile>
