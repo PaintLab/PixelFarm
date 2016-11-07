@@ -172,10 +172,7 @@ namespace PixelFarm.Drawing.WinGdi
 
 
         public System.IntPtr ToHfont()
-        {   /// <summary>
-            /// Set a resource (e.g. a font) for the specified device context.
-            /// WARNING: Calling Font.ToHfont() many times without releasing the font handle crashes the app.
-            /// </summary>
+        {   
             return this.hfont;
         }
         public override float SizeInPoints
