@@ -159,7 +159,7 @@ namespace PixelFarm.Drawing.WinGdi
             logFont.lfHeight = -(int)PixelFarm.Drawing.RequestFont.ConvEmSizeInPointsToPixels(emHeight);//minus **
             logFont.lfCharSet = 1;//default
             logFont.lfQuality = 0;//default
-            logFont.lfCharSet = 222;//test th
+            
             MyWin32.LOGFONT_FontWeight weight =
                 ((style & FontStyle.Bold) == FontStyle.Bold) ?
                 MyWin32.LOGFONT_FontWeight.FW_BOLD :
