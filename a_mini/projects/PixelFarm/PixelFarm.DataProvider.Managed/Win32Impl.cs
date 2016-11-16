@@ -40,7 +40,8 @@ namespace PixelFarm.Drawing.Win32
     /// </summary>
     public class ImageProviderWin32 : IImageProvider
     {
-        //this use myft lib
+    
+        //use mananged loader?
         public byte[] LoadImageBufferFromFile(string filename)
         {
             //read data  
