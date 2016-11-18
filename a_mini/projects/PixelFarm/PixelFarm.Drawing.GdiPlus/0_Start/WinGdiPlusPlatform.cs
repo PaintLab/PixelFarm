@@ -7,18 +7,17 @@ using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.WinGdi
 {
     public class WinGdiPlusPlatform : GraphicsPlatform
-    {
-        static HarfBuzzShapingService hbShapingService = new HarfBuzzShapingService();
+    { 
         static InstalledFontCollection s_installFontCollection = new InstalledFontCollection();
         static WinGdiPlusPlatform()
         {
             var installFontsWin32 = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
             s_installFontCollection.LoadInstalledFont(installFontsWin32.GetInstalledFontIter());
-            WinGdiFontFace.SetInstalledFontCollection(s_installFontCollection);
-
+            WinGdiFontFace.SetInstalledFontCollection(s_installFontCollection); 
             PixelFarm.Agg.AggBuffMx.SetNaiveBufferImpl(new Win32AggBuffMx());
-            //2. set default shaping service
-            hbShapingService.SetAsCurrentImplementation();
+           
+            //3. set default encoing
+            WinGdiTextService.SetDefaultEncoding(System.Text.Encoding.ASCII);
         }
         public WinGdiPlusPlatform()
         {
@@ -31,6 +30,10 @@ namespace PixelFarm.Drawing.WinGdi
             return new MyGdiPlusCanvas(0, 0, left, top, width, height);
         }
 
+        public static void SetFontEncoding(System.Text.Encoding encoding)
+        {
+            WinGdiTextService.SetDefaultEncoding(encoding);
+        }
         public static void SetFontNotFoundHandler(FontNotFoundHandler fontNotFoundHandler)
         {
             s_installFontCollection.SetFontNotFoundHandler(fontNotFoundHandler);

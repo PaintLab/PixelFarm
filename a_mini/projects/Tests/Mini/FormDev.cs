@@ -303,9 +303,9 @@ namespace Mini
 
         private void cmdTestNativeLib_Click(object sender, EventArgs e)
         {
-#if DEBUG
-            PixelFarm.Drawing.Text.dbugTestMyFtLib.Test1();
-#endif
+//#if DEBUG
+//            PixelFarm.Drawing.Text.dbugTestMyFtLib.Test1();
+//#endif
         }
 
     }
