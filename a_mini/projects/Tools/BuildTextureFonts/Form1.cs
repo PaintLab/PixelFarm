@@ -888,9 +888,9 @@ namespace BuildTextureFonts
 
         private void button9_Click(object sender, EventArgs e)
         {
-#if DEBUG
-            dbugTestMyFtLib.Test2();
-#endif
+//#if DEBUG
+//            dbugTestMyFtLib.Test2();
+//#endif
 
         }
     }

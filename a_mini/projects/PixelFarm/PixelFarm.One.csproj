@@ -8,7 +8,6 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AssemblyName>PixelFarm.One</AssemblyName>
-    <ProjectGuid>{E71BD6D1-211F-4778-9632-77AB9B155BCB}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -191,6 +190,7 @@
     <Compile Include="PixelFarm.DataProvider.Managed\Providers.cs" />
     <Compile Include="PixelFarm.DataProvider.Managed\Win32Impl.cs" />
     <Compile Include="PixelFarm.DataProvider.Native\Bitmap\NativeImage.cs" />
+    <Compile Include="PixelFarm.DataProvider.Native\HarfBuzzShapingService.cs" />
     <Compile Include="PixelFarm.DataProvider.Native\NativeDll.cs" />
     <Compile Include="PixelFarm.DataProvider.Native\NativeFonts\FontLoaderImpls.cs" />
     <Compile Include="PixelFarm.DataProvider.Native\NativeFonts\NativeBridgeFreeType.cs" />
@@ -199,8 +199,6 @@
     <Compile Include="PixelFarm.DataProvider.Native\NativeFonts\NativeFontGlyphBuilder.cs" />
     <Compile Include="PixelFarm.DataProvider.Native\NativeFonts\NativeFonts.cs" />
     <Compile Include="PixelFarm.DataProvider.Native\NativeFonts\SimpleFontAtlas.cs" />
-    <Compile Include="PixelFarm.DataProvider.Native\NativeText\HarfBuzzShapingService.cs" />
-    <Compile Include="PixelFarm.DataProvider.Native\NativeText\NativeTextBreaker.cs" />
     <Compile Include="PixelFarm.Drawing.Core\0_Start\ExtensionAttribute.cs" />
     <Compile Include="PixelFarm.Drawing.Core\0_Start\GraphicsPlatform.cs" />
     <Compile Include="PixelFarm.Drawing.Core\1_Drawing\BasicGeometries.cs" />
@@ -224,7 +222,6 @@
     <Compile Include="PixelFarm.Drawing.Core\3_Drawing_Fonts\FontGlyph.cs" />
     <Compile Include="PixelFarm.Drawing.Core\3_Drawing_Fonts\FontKey.cs" />
     <Compile Include="PixelFarm.Drawing.Core\3_Drawing_Fonts\NativeBridgeHB.cs" />
-    <Compile Include="PixelFarm.Drawing.Core\4_Drawing_Text\TextBreaker.cs" />
     <Compile Include="PixelFarm.Drawing.Core\4_Drawing_Text\TextShapingAndLayoutService.cs" />
     <Compile Include="PixelFarm.Drawing.Core\5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="PixelFarm.Drawing.Core\5_PixelFarm_Agg\CanvasPainter.cs" />
@@ -526,15 +523,11 @@
     <Compile Include="PixelFarm.OpenTKWinForms\Toolkit.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\CarbonGLControl.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\DummyGLControl.cs" />
-    <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\GLControl.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\GLControl.Designer.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\GLControlFactory.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\IGLControl.cs" />
-    <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\MyGLControl.Designer.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\WinGLControl.cs" />
     <Compile Include="PixelFarm.OpenTKWinForms\UserGLControl\X11GLControl.cs" />
@@ -552,9 +545,6 @@
     <Compile Include="Win32Utils\MyWin32.cs" />
     <Compile Include="Win32Utils\NativeTextWin32.cs" />
     <Compile Include="Win32Utils\NativeWin32MemoryDc.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NOpenType\N20\PixelFarm.OpenType\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
