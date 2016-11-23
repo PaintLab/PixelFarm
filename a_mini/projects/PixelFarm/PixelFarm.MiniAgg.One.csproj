@@ -60,8 +60,6 @@
     <Compile Include="MiniAgg\00_Context\Graphics2D.cs" />
     <Compile Include="MiniAgg\00_Context\ImageGraphics2D.cs" />
     <Compile Include="MiniAgg\00_Context\ImageGraphics2D_RenderImages.cs" />
-    <Compile Include="MiniAgg\01_Base\AggMemMx.cs" />
-    <Compile Include="MiniAgg\01_Base\NativeBufferMx.cs" />
     <Compile Include="MiniAgg\02_PixelBuffer\ChildImage.cs" />
     <Compile Include="MiniAgg\02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="MiniAgg\02_PixelBuffer\ColorRGBAf.cs" />
@@ -192,6 +190,8 @@
     <Compile Include="PixelFarm.Drawing.Core\9_PixelFarm_AggVertex_More\VertexSource\SimpleRect.cs" />
     <Compile Include="PixelFarm.Drawing.Core\9_PixelFarm_AggVertex_More\VertexSource\VertexData.cs" />
     <Compile Include="PixelFarm.Drawing.Core\9_PixelFarm_AggVertex_More\VertexSource\VertexStoreBuilder.cs" />
+    <Compile Include="PixelFarm.Drawing.Core\MiniAggGraphics.Buffer\AggMemMx.cs" />
+    <Compile Include="PixelFarm.Drawing.Core\MiniAggGraphics.Buffer\NativeBufferMx.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -65,13 +65,31 @@ namespace Mini
             }
             else
             {
-                painter = new AggCanvasPainter(bitmapBackBuffer.Initialize(myWidth, myHeight, 32));
+                ImageGraphics2D imgGfx2d = Initialize(myWidth, myHeight, 32);
+                painter = new AggCanvasPainter(imgGfx2d);
             }
 
             painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);
             painter.Clear(PixelFarm.Drawing.Color.White);
         }
+        ImageGraphics2D Initialize(int width, int height, int bitDepth)
+        {
+            if (width > 0 && height > 0)
+            {
 
+                if (bitDepth != 32)
+                {
+                    throw new NotImplementedException("Don't support this bit depth yet.");
+                }
+                else
+                {
+                    var actualImage = new ActualImage(width, height, PixelFormat.ARGB32);
+                    bitmapBackBuffer.Initialize(width, height, bitDepth, actualImage);
+                    return Graphics2D.CreateFromImage(actualImage);
+                }
+            }
+            throw new NotSupportedException();
+        }
         public void LoadExample(DemoBase exBase)
         {
             this.exampleBase = exBase;
