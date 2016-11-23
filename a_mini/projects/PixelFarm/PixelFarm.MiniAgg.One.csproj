@@ -57,10 +57,6 @@
     <Compile Include="MiniAgg.Complements\Image\FilterMan.cs" />
     <Compile Include="MiniAgg.Complements\Image\FloodFiller.cs" />
     <Compile Include="MiniAgg.Complements\Image\Transposer.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\ImageClipProxyFloat.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\KDTree.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\SpanSubDivAdapter.cs" />
-    <Compile Include="MiniAgg.Complements\x_notused\x_ImageTgaIO.cs" />
     <Compile Include="MiniAgg\00_Context\Graphics2D.cs" />
     <Compile Include="MiniAgg\00_Context\ImageGraphics2D.cs" />
     <Compile Include="MiniAgg\00_Context\ImageGraphics2D_RenderImages.cs" />
@@ -113,9 +109,6 @@
     <Compile Include="MiniAgg\08_ImageResampling\ImageFreeTransform.cs" />
     <Compile Include="MiniAgg\08_ImageResampling\ImageInterpolationQuality.cs" />
     <Compile Include="MiniAgg\08_ImageResampling\ImageTransform.cs" />
-    <Compile Include="MiniAgg\x_notused\x_ImageHelper2.cs" />
-    <Compile Include="MiniAgg\x_notused\x_ImageSpan.cs" />
-    <Compile Include="MiniAgg\x_notused\x_PixelBlenderFloat.cs" />
     <Compile Include="PixelFarm.Drawing.Core\0_Start\ExtensionAttribute.cs" />
     <Compile Include="PixelFarm.Drawing.Core\0_Start\GraphicsPlatform.cs" />
     <Compile Include="PixelFarm.Drawing.Core\1_Drawing\BasicGeometries.cs" />

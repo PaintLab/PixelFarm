@@ -20,6 +20,9 @@
 
 namespace PixelFarm.Agg
 {
+    /// <summary>
+    /// color order
+    /// </summary>
     public static class CO
     {
         /// <summary>

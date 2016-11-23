@@ -100,6 +100,13 @@
     <Compile Include="Experiment\GdiPlusPlatformFontMx.cs" />
     <Compile Include="Experiment\WinGdiPlusFont.cs" />
     <Compile Include="Experiment\WinGdiPlusFontStore.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\ImageClipProxyFloat.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\KDTree.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\SpanSubDivAdapter.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\x_ImageTgaIO.cs" />
+    <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageHelper2.cs" />
+    <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageSpan.cs" />
+    <Compile Include="Experiment\x_notused_fromMiniAgg\x_PixelBlenderFloat.cs" />
     <Compile Include="Experiment_AggFonts\FontSvg\SvgFont.cs" />
     <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace.cs" />
     <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace_LiberationSans.cs" />

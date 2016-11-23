@@ -58,9 +58,6 @@
     <Compile Include="08_ImageResampling\ImageFreeTransform.cs" />
     <Compile Include="08_ImageResampling\ImageInterpolationQuality.cs" />
     <Compile Include="08_ImageResampling\ImageTransform.cs" />
-    <Compile Include="x_notused\x_ImageHelper2.cs" />
-    <Compile Include="x_notused\x_ImageSpan.cs" />
-    <Compile Include="x_notused\x_PixelBlenderFloat.cs" />
     <Compile Include="03_SpanGenerators\0_ISpanGenerator.cs" />
     <Compile Include="04_Scanline\0_ScanlineSpan.cs" />
     <Compile Include="07_Lines\1.2_PatternFilter.cs" />
