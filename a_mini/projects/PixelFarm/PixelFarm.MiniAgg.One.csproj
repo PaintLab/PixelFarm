@@ -48,10 +48,6 @@
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGenGouraudRGBA.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGradient.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
-    <Compile Include="MiniAgg.Complements\4_Animation\ColorComponentStepup.cs" />
-    <Compile Include="MiniAgg.Complements\4_Animation\GfxProcessorModule.cs" />
-    <Compile Include="MiniAgg.Complements\4_Animation\ParallelTimeline.cs" />
-    <Compile Include="MiniAgg.Complements\4_Animation\Timelines.cs" />
     <Compile Include="MiniAgg.Complements\Filter\ImageFilters.cs" />
     <Compile Include="MiniAgg.Complements\Filter\PatternFilterBilnearColorRGBA.cs" />
     <Compile Include="MiniAgg.Complements\Filter\RecursiveBlur.cs" />

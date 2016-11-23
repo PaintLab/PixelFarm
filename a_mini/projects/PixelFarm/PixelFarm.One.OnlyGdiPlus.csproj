@@ -51,10 +51,6 @@
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGenGouraudRGBA.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGradient.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
-    <Compile Include="MiniAgg.Complements\4_Animation\ColorComponentStepup.cs" />
-    <Compile Include="MiniAgg.Complements\4_Animation\GfxProcessorModule.cs" />
-    <Compile Include="MiniAgg.Complements\4_Animation\ParallelTimeline.cs" />
-    <Compile Include="MiniAgg.Complements\4_Animation\Timelines.cs" />
     <Compile Include="MiniAgg.Complements\Filter\ImageFilters.cs" />
     <Compile Include="MiniAgg.Complements\Filter\PatternFilterBilnearColorRGBA.cs" />
     <Compile Include="MiniAgg.Complements\Filter\RecursiveBlur.cs" />
@@ -182,7 +178,6 @@
     <Compile Include="NOpenType\N20\PixelFarm.OpenType\..\..\NetCore\PixelFarm.OpenType\Tables\Utils.cs" />
     <Compile Include="NOpenType\N20\PixelFarm.OpenType\..\..\NetCore\PixelFarm.OpenType\Typeface.cs" />
     <Compile Include="PixelFarm.DataProvider.Managed\InstalledFontCollection.cs" />
-    <Compile Include="PixelFarm.DataProvider.Managed\ManagedTextBreaker\ManagedTextBreaker.cs" />
     <Compile Include="PixelFarm.DataProvider.Managed\NOpenTypeFonts\GlyphBuilder.cs" />
     <Compile Include="PixelFarm.DataProvider.Managed\NOpenTypeFonts\ManagedShapingService.cs" />
     <Compile Include="PixelFarm.DataProvider.Managed\NOpenTypeFonts\NOpenTypeFont.cs" />
@@ -212,7 +207,6 @@
     <Compile Include="PixelFarm.Drawing.Core\3_Drawing_Fonts\FontGlyph.cs" />
     <Compile Include="PixelFarm.Drawing.Core\3_Drawing_Fonts\FontKey.cs" />
     <Compile Include="PixelFarm.Drawing.Core\3_Drawing_Fonts\NativeBridgeHB.cs" />
-    <Compile Include="PixelFarm.Drawing.Core\4_Drawing_Text\TextBreaker.cs" />
     <Compile Include="PixelFarm.Drawing.Core\4_Drawing_Text\TextShapingAndLayoutService.cs" />
     <Compile Include="PixelFarm.Drawing.Core\5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="PixelFarm.Drawing.Core\5_PixelFarm_Agg\CanvasPainter.cs" />

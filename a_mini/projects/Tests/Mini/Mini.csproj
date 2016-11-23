@@ -88,6 +88,10 @@
     <Compile Include="7_GLES2Test\MyMiniGLES2Control.Designer.cs">
       <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </Compile>
+    <Compile Include="Experiment\4_Animation\ColorComponentStepup.cs" />
+    <Compile Include="Experiment\4_Animation\GfxProcessorModule.cs" />
+    <Compile Include="Experiment\4_Animation\ParallelTimeline.cs" />
+    <Compile Include="Experiment\4_Animation\Timelines.cs" />
     <Compile Include="Experiment\FontSystem.cs" />
     <Compile Include="Experiment\GdiPathConverter.cs" />
     <Compile Include="Experiment\GdiPathFont.cs" />
