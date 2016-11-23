@@ -24,11 +24,11 @@ namespace TestSkia1
 
             using (var paint = new SKPaint())
             {
-                paint.TextSize = 64.0f;
+                paint.TextSize = 36.0f;
                 paint.IsAntialias = true;
                 paint.Color = (SKColor)0xFF4281A4;
                 paint.IsStroke = false; 
-                skCanvas.DrawText("SkiaSharp", 400 / 2f, 64.0f, paint);
+                skCanvas.DrawText("PixelFarm+SkiaSharp", 20, 64.0f, paint);
             } 
 
         }
