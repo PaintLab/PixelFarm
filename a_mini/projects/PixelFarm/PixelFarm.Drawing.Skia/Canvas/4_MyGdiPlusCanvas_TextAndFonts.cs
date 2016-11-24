@@ -1,20 +1,8 @@
 ﻿//BSD, 2014-2016, WinterDev
 //ArthurHub  , Jose Manuel Menendez Poo
 
-// "Therefore those skilled at the unorthodox
-// are infinite as heaven and earth,
-// inexhaustible as the great rivers.
-// When they come to an end,
-// they begin again,
-// like the days and months;
-// they die and are reborn,
-// like the four seasons."
-// 
-// - Sun Tsu,
-// "The Art of War"
 
 using System;
-using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
     partial class MyGdiPlusCanvas
@@ -31,40 +19,18 @@ namespace PixelFarm.Drawing.WinGdi
 
             var clipRect = currentClipRect;
             clipRect.Offset(canvasOriginX, canvasOriginY);
-            //1.
-            win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
-            //2.
-            NativeTextWin32.TextOut(win32MemDc.DC, CanvasOrgX + x, CanvasOrgY + y, buffer, buffer.Length);
-            //3
-            win32MemDc.ClearClipRect();
+            gx.SetClip(clipRect);
+            gx.DrawString(buffer, x, y);
+            gx.ClearClip();
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
 
-
-            var clipRect = System.Drawing.Rectangle.Intersect(logicalTextBox.ToRect(), currentClipRect);
-            //1.
+            var clipRect = currentClipRect;
             clipRect.Offset(canvasOriginX, canvasOriginY);
-            //2.
-            win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
-            //3.
-            NativeTextWin32.TextOut(win32MemDc.DC, CanvasOrgX + logicalTextBox.X, CanvasOrgY + logicalTextBox.Y, buffer, buffer.Length);
-            //4.
-            win32MemDc.ClearClipRect();
-
-            //ReleaseHdc();
-            //IntPtr gxdc = gx.GetHdc();
-            //MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
-            //System.Drawing.Rectangle clipRect =
-            //    System.Drawing.Rectangle.Intersect(logicalTextBox.ToRect(), currentClipRect);
-            //clipRect.Offset(CanvasOrgX, CanvasOrgY);
-            //MyWin32.SetRectRgn(hRgn, clipRect.X, clipRect.Y, clipRect.Right, clipRect.Bottom);
-            //MyWin32.SelectClipRgn(gxdc, hRgn);
-            //NativeTextWin32.TextOut(gxdc, logicalTextBox.X, logicalTextBox.Y, buffer, buffer.Length); 
-            //MyWin32.SelectClipRgn(gxdc, IntPtr.Zero); 
-            //MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero); 
-            //gx.ReleaseHdc();
-
+            gx.SetClip(clipRect);
+            gx.DrawString(buffer, logicalTextBox);
+            gx.ClearClip();
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
@@ -78,28 +44,18 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 //1. find clip rect
                 var clipRect = Rectangle.Intersect(logicalTextBox,
-                    new Rectangle(currentClipRect.Left,
-                        currentClipRect.Top,
-                        currentClipRect.Width,
-                        currentClipRect.Height));
+                    new Rectangle((int)currentClipRect.Left,
+                        (int)currentClipRect.Top,
+                        (int)currentClipRect.Width,
+                        (int)currentClipRect.Height));
                 //2. offset to canvas origin 
                 clipRect.Offset(canvasOriginX, canvasOriginY);
                 //3. set rect rgn
-                win32MemDc.SetClipRect(clipRect);
 
-                unsafe
-                {
-                    fixed (char* startAddr = &str[0])
-                    {
-                        //4.
-                        NativeTextWin32.TextOutUnsafe(originalHdc,
-                            (int)logicalTextBox.X + canvasOriginX,
-                            (int)logicalTextBox.Y + canvasOriginY,
-                            (startAddr + startAt), len);
-                    }
-                }
-                //5. clear rect rgn
-                win32MemDc.ClearClipRect();
+                clipRect.Offset(canvasOriginX, canvasOriginY);
+                gx.SetClip(clipRect);
+                gx.DrawString(str, logicalTextBox);
+                gx.ClearClip();
 #if DEBUG
                 //NativeTextWin32.dbugDrawTextOrigin(tempDc,
                 //        logicalTextBox.X + canvasOriginX,
@@ -110,42 +66,25 @@ namespace PixelFarm.Drawing.WinGdi
             else
             {
 
-                //-------------------------------------------
-                //not support translucent text in this version,
-                //so=> draw opaque (like above)
-                //-------------------------------------------
                 //1. find clip rect
                 var clipRect = Rectangle.Intersect(logicalTextBox,
-                    new Rectangle(currentClipRect.Left,
-                        currentClipRect.Top,
-                        currentClipRect.Width,
-                        currentClipRect.Height));
+                    new Rectangle((int)currentClipRect.Left,
+                        (int)currentClipRect.Top,
+                        (int)currentClipRect.Width,
+                        (int)currentClipRect.Height));
                 //2. offset to canvas origin 
                 clipRect.Offset(canvasOriginX, canvasOriginY);
                 //3. set rect rgn
-                win32MemDc.SetClipRect(clipRect);
 
-                unsafe
-                {
-                    fixed (char* startAddr = &str[0])
-                    {
-                        //4.
-                        NativeTextWin32.TextOutUnsafe(originalHdc,
-                            (int)logicalTextBox.X + canvasOriginX,
-                            (int)logicalTextBox.Y + canvasOriginY,
-                            (startAddr + startAt), len);
-                    }
-                }
-                //5. clear rect rgn
-                win32MemDc.ClearClipRect();
+                clipRect.Offset(canvasOriginX, canvasOriginY);
+                gx.SetClip(clipRect);
+                gx.DrawString(str, logicalTextBox);
+                gx.ClearClip();
 #if DEBUG
                 //NativeTextWin32.dbugDrawTextOrigin(tempDc,
                 //        logicalTextBox.X + canvasOriginX,
                 //        logicalTextBox.Y + canvasOriginY);
-#endif
-
-
-
+#endif 
             }
         }
         //====================================================
@@ -159,7 +98,8 @@ namespace PixelFarm.Drawing.WinGdi
             {
 
                 this.currentTextFont = value;
-                win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).ToHfont());
+                gx.CurrentFont = value;
+                //win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).ToHfont());
             }
         }
         public override Color CurrentTextColor
@@ -171,14 +111,8 @@ namespace PixelFarm.Drawing.WinGdi
             set
             {
                 mycurrentTextColor = value;
-                win32MemDc.SetSolidTextColor(value.R, value.G, value.B);
-                //int rgb = (value.B & 0xFF) << 16 | (value.G & 0xFF) << 8 | value.R;
-                //MyWin32.SetTextColor(originalHdc, rgb); 
-                //SetTextColor(value);
-                //this.currentTextColor = ConvColor(value);
-                //IntPtr hdc = gx.GetHdc();
-                //MyWin32.SetTextColor(hdc, MyWin32.ColorToWin32(value));
-                //gx.ReleaseHdc();
+                //win32MemDc.SetSolidTextColor(value.R, value.G, value.B);
+                gx.CurrentTextColor = value;
             }
         }
     }

@@ -14,8 +14,8 @@ namespace System.Drawing
         Bitmap bufferBmp;
         SkiaSharp.SKBitmap bmp;
         internal SkiaSharp.SKCanvas canvas;
-        SkiaSharp.SKPaint penPainter;
-        SkiaSharp.SKPaint brushPainter;
+        SkiaSharp.SKPaint stroke;
+        SkiaSharp.SKPaint fill;
 
         int w;
         int h;
@@ -28,11 +28,11 @@ namespace System.Drawing
             bmp = new SkiaSharp.SKBitmap(w, h);
             canvas = new SkiaSharp.SKCanvas(bmp);
             //
-            penPainter = new SkiaSharp.SKPaint();
-            penPainter.IsStroke = true;
+            stroke = new SkiaSharp.SKPaint();
+            stroke.IsStroke = true;
             //
-            brushPainter = new SkiaSharp.SKPaint();
-            brushPainter.IsStroke = false;
+            fill = new SkiaSharp.SKPaint();
+            fill.IsStroke = false;
 
         }
         private Graphics()
@@ -86,13 +86,22 @@ namespace System.Drawing
         }
         public void FillPath(SkiaSharp.SKPath path, PixelFarm.Drawing.Color c)
         {
-            brushPainter.Color = new SkiaSharp.SKColor(c.R, c.G, c.B, c.A);
-            canvas.DrawPath(path, brushPainter);
+            var prevColor = fill.Color;
+            fill.Color = new SkiaSharp.SKColor(c.R, c.G, c.B, c.A);
+            canvas.DrawPath(path, fill);
+            fill.Color = prevColor;
         }
         public void DrawPath(SkiaSharp.SKPath path, PixelFarm.Drawing.Color c)
         {
-            penPainter.Color = new SkiaSharp.SKColor(c.R, c.G, c.B, c.A);
-            canvas.DrawPath(path, penPainter);
+            var prevColor = stroke.Color;
+            stroke.Color = new SkiaSharp.SKColor(c.R, c.G, c.B, c.A);
+            canvas.DrawPath(path, stroke);
+            stroke.Color = prevColor;
+        }
+        public void DrawPath(SkiaSharp.SKPath path)
+        {
+
+            canvas.DrawPath(path, stroke);
         }
         public void ClipRect(SkiaSharp.SKRect rect)
         {
@@ -101,6 +110,15 @@ namespace System.Drawing
         public void SetClip(SkiaSharp.SKRect rect)
         {
             canvas.ClipRect(rect);
+        }
+        public void SetClip(PixelFarm.Drawing.Rectangle rect)
+        {
+            canvas.ClipRect(new SkiaSharp.SKRect(rect.Left, rect.Top, rect.Right, rect.Bottom));
+        }
+        public void ClearClip()
+        {
+            //?
+            throw new NotSupportedException();
         }
         PixelFarm.Drawing.Color _penColor;
         public PixelFarm.Drawing.Color PenColor
@@ -112,7 +130,7 @@ namespace System.Drawing
             set
             {
                 _penColor = value;
-                penPainter.Color = new SkiaSharp.SKColor(value.R, value.G, value.B, value.A);
+                stroke.Color = new SkiaSharp.SKColor(value.R, value.G, value.B, value.A);
             }
         }
         float _penWidth;
@@ -122,27 +140,27 @@ namespace System.Drawing
             set
             {
                 _penWidth = value;
-                penPainter.StrokeWidth = value;
+                stroke.StrokeWidth = value;
             }
         }
         public void FillPolygon(PixelFarm.Drawing.Color color, PixelFarm.Drawing.PointF[] points)
         {
             using (var polygon = CreatePolygon(points))
             {
-                var prevColor = brushPainter.Color;//save
-                brushPainter.Color = new SkiaSharp.SKColor(color.R, color.G, color.B, color.A);
-                canvas.DrawPath(polygon, brushPainter);
-                brushPainter.Color = prevColor;
-            } 
+                var prevColor = fill.Color;//save
+                fill.Color = new SkiaSharp.SKColor(color.R, color.G, color.B, color.A);
+                canvas.DrawPath(polygon, fill);
+                fill.Color = prevColor;
+            }
         }
         public void DrawPolygon(PixelFarm.Drawing.Color color, PixelFarm.Drawing.PointF[] points)
         {
             using (var polygon = CreatePolygon(points))
             {
-                var prevColor = penPainter.Color;    //save              
-                penPainter.Color = new SkiaSharp.SKColor(color.R, color.G, color.B, color.A);
-                canvas.DrawPath(polygon, penPainter);
-                penPainter.Color = prevColor; //reset
+                var prevColor = stroke.Color;    //save              
+                stroke.Color = new SkiaSharp.SKColor(color.R, color.G, color.B, color.A);
+                canvas.DrawPath(polygon, stroke);
+                stroke.Color = prevColor; //reset
             }
         }
         static SkiaSharp.SKPath CreatePolygon(PixelFarm.Drawing.PointF[] points)
@@ -174,10 +192,102 @@ namespace System.Drawing
             }
             return p;
         }
+        public void DrawImage(System.Drawing.Image bmp, float x, float y)
+        {
+            canvas.DrawBitmap(bmp.internalBmp, x, y);
+        }
+        public void DrawImage(Image image, PixelFarm.Drawing.RectangleF destRect, PixelFarm.Drawing.RectangleF srcRect)
+        {
+            canvas.DrawBitmap(image.internalBmp,
+                new SkiaSharp.SKRect(srcRect.Left, srcRect.Top, srcRect.Right, srcRect.Bottom),
+                new SkiaSharp.SKRect(destRect.Left, destRect.Top, destRect.Right, destRect.Bottom));
+
+
+        }
+        public void DrawImage(System.Drawing.Image bmp, PixelFarm.Drawing.RectangleF dest)
+        {
+            var destRect = new SkiaSharp.SKRect(dest.X, dest.Y, dest.Right, dest.Bottom);
+            canvas.DrawBitmap(bmp.internalBmp, destRect);
+        }
+        PixelFarm.Drawing.Color _solidBrushColor;
+        public PixelFarm.Drawing.Color SolidBrushColor
+        {
+            get { return _solidBrushColor; }
+            set
+            {
+                _solidBrushColor = value;
+                fill.Color = new SkiaSharp.SKColor(value.R, value.G, value.B, value.A);
+            }
+        }
+        public void FillEllipse(float cx, float cy, float rx, float ry)
+        {
+            canvas.DrawOval(cx, cy, rx, ry, fill);
+        }
+        public void DrawEllipse(float cx, float cy, float rx, float ry)
+        {
+            canvas.DrawOval(cx, cy, rx, ry, stroke);
+        }
+        public void DrawLine(float x0, float y0, float x1, float y1)
+        {
+            canvas.DrawLine(x0, y0, x1, y1, stroke);
+        }
+
+        public void DrawRectLTRB(float left, float top, float right, float bottom)
+        {
+            canvas.DrawRect(new SkiaSharp.SKRect(left, top, right, bottom), stroke);
+        }
+        public void FillRectLTRB(float left, float top, float right, float bottom)
+        {
+            canvas.DrawRect(new SkiaSharp.SKRect(left, top, right, bottom), fill);
+        }
+        public void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
+        {
+            using (SkiaSharp.SKPath p = new SkiaSharp.SKPath())
+            {
+                p.MoveTo(startX, startY);
+                p.CubicTo(controlX1, controlY1,
+                    controlY1, controlY2,
+                    endX, endY);
+                canvas.DrawPath(p, stroke);
+            }
+        }
+        public void DrawString(char[] buffer, int x, int y)
+        {
+            canvas.DrawText(new string(buffer, 0, buffer.Length), x, y, stroke);
+        }
+        public void DrawString(char[] buffer, PixelFarm.Drawing.Rectangle logicalTextBox)
+        {
+
+            //not fully support
+            throw new NotSupportedException();
+        }
+        public PixelFarm.Drawing.RequestFont CurrentFont
+        {
+            get;
+            set;
+        }
+        public PixelFarm.Drawing.Color CurrentTextColor
+        {
+            get;
+            set;        
+        }
     }
-    public class Bitmap
+    public class Image : IDisposable
     {
         internal SkiaSharp.SKBitmap internalBmp;
+        public void Dispose()
+        {
+            if (internalBmp != null)
+            {
+                internalBmp.Dispose();
+                internalBmp = null;
+            }
+        }
+    }
+
+    public class Bitmap : Image
+    {
+
         int w;
         int h;
         public Bitmap(int w, int h)
@@ -186,6 +296,7 @@ namespace System.Drawing
             this.h = h;
             internalBmp = new SkiaSharp.SKBitmap(w, h);
         }
+
         public int Width
         {
             get { return w; }
@@ -193,6 +304,23 @@ namespace System.Drawing
         public int Height
         {
             get { return h; }
+        }
+        //----------------------         
+        public static Bitmap CopyFrom(ActualImage actualImage)
+        {
+
+            Bitmap newBmp = new Drawing.Bitmap(actualImage.Width, actualImage.Height);
+            newBmp.internalBmp.LockPixels();
+            byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
+
+            System.Runtime.InteropServices.Marshal.Copy(
+                 actualImgBuffer,
+                 0,
+                  newBmp.internalBmp.GetPixels(),
+                  actualImgBuffer.Length);
+
+            newBmp.internalBmp.UnlockPixels();
+            return newBmp;
         }
 
     }

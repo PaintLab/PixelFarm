@@ -60,15 +60,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\win32utils\MyWin32.cs">
-      <Link>Win32Utils\MyWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\win32utils\NativeTextWin32.cs">
-      <Link>Win32Utils\NativeTextWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\win32utils\NativeWin32MemoryDc.cs">
-      <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
-    </Compile>
     <Compile Include="0_Start\System.Drawing.cs" />
     <Compile Include="0_Start\WinGdiPlusPlatform.cs" />
     <Compile Include="Canvas\1_MyGdiPlusCanvas_Specific.cs" />

@@ -1,8 +1,7 @@
 ﻿//MIT, 2014-2016, WinterDev
 
 using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System.Drawing; 
 namespace PixelFarm.Agg.Imaging
 {
     public static class BitmapHelper
@@ -41,14 +40,17 @@ namespace PixelFarm.Agg.Imaging
                 //{
                 int h = bitmap.Height;
                 int w = bitmap.Width;
-                BitmapData bitmapData1 = bitmap.LockBits(
-                          new Rectangle(0, 0,
-                              w,
-                              h),
-                              System.Drawing.Imaging.ImageLockMode.ReadWrite,
-                              bitmap.PixelFormat);
-                IntPtr scan0 = bitmapData1.Scan0;
-                int stride = bitmapData1.Stride;
+                SkiaSharp.SKBitmap skBmp = bitmap.internalBmp;
+
+                //BitmapData bitmapData1 = bitmap.LockBits(
+                //          new Rectangle(0, 0,
+                //              w,
+                //              h),
+                //              System.Drawing.Imaging.ImageLockMode.ReadWrite,
+                //              bitmap.PixelFormat); 
+                skBmp.LockPixels();
+                IntPtr scan0 = skBmp.GetPixels();
+                int stride = actualImage.Stride;
                 byte[] srcBuffer = ActualImage.GetBuffer(actualImage);
                 unsafe
                 {
@@ -69,7 +71,7 @@ namespace PixelFarm.Agg.Imaging
                         }
                     }
                 }
-                bitmap.UnlockBits(bitmapData1);
+                skBmp.UnlockPixels();
                 //}
                 //sss.Stop();
                 //long ms = sss.ElapsedMilliseconds;
@@ -150,14 +152,11 @@ namespace PixelFarm.Agg.Imaging
             int h = windowsBitmap.Height;
             int w = windowsBitmap.Width;
             byte[] targetBuffer = ActualImage.GetBuffer(actualImage);
-            BitmapData bitmapData1 = windowsBitmap.LockBits(
-                      new Rectangle(0, 0,
-                          w,
-                          h),
-                          System.Drawing.Imaging.ImageLockMode.ReadWrite,
-                          windowsBitmap.PixelFormat);
-            IntPtr scan0 = bitmapData1.Scan0;
-            int stride = bitmapData1.Stride;
+            SkiaSharp.SKBitmap innerBmp = windowsBitmap.internalBmp;
+
+            innerBmp.LockPixels();
+            IntPtr scan0 = innerBmp.GetPixels();
+            int stride = actualImage.Stride;
 
             //TODO: review here 
             //use buffer copy
@@ -194,7 +193,7 @@ namespace PixelFarm.Agg.Imaging
                 //    }
                 //}
             }
-            windowsBitmap.UnlockBits(bitmapData1);
+            innerBmp.UnlockPixels();
         }
 
 

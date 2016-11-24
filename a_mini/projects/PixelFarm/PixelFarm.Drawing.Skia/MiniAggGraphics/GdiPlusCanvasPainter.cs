@@ -1,11 +1,9 @@
-﻿//2016 MIT, WinterDev
-
+﻿//2016 MIT, WinterDev 
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 
- 
 namespace PixelFarm.Drawing.WinGdi
 {
 
@@ -15,8 +13,6 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Graphics _gfx;
         System.Drawing.Bitmap _gfxBmp;
 
-        System.Drawing.SolidBrush _currentFillBrush;
-        System.Drawing.Pen _currentPen;
         //
         RectInt _clipBox;
         Color _fillColor;
@@ -26,30 +22,25 @@ namespace PixelFarm.Drawing.WinGdi
         bool _useSubPixelRendering;
         BufferBitmapStore _bmpStore;
         RequestFont _currentFont;
-        WinGdiFont _winGdiFont;
+        //WinGdiFont _winGdiFont;
 
         Agg.VertexSource.RoundedRect roundRect;
         SmoothingMode _smoothingMode;
 
         public GdiPlusCanvasPainter(System.Drawing.Bitmap gfxBmp)
         {
-
-
-
-            _width = 800;// gfxBmp.Width;
-            _height = 600;// gfxBmp.Height;
+            _width = 800;// gfxBmp.Width; //?
+            _height = 600;// gfxBmp.Height; ???
             _gfxBmp = gfxBmp;
-
             _gfx = System.Drawing.Graphics.FromImage(_gfxBmp);
-
             //credit:
             //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
             _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
             _gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly            
 
-            _currentFillBrush = new System.Drawing.SolidBrush(SkiaSharp.SKColors.Black);
-            _currentPen = new System.Drawing.Pen(SkiaSharp.SKColors.Black);
 
+            _gfx.SolidBrushColor = Color.Black;
+            _gfx.PenColor = Color.Black;
             //
             _bmpStore = new BufferBitmapStore(_width, _height);
         }
@@ -114,7 +105,7 @@ namespace PixelFarm.Drawing.WinGdi
             set
             {
                 _currentFont = value;
-                _winGdiFont = WinGdiFontSystem.GetWinGdiFont(value);
+                _gfx.CurrentFont = value; 
             }
         }
         public override Color FillColor
@@ -125,8 +116,8 @@ namespace PixelFarm.Drawing.WinGdi
             }
             set
             {
-                _fillColor = value;
-                _currentFillBrush.Color = VxsHelper.ToDrawingColor(value);
+                _gfx.SolidBrushColor = _fillColor = value;
+
             }
         }
 
@@ -146,8 +137,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
             set
             {
-                _strokeColor = value;
-                _currentPen.Color = VxsHelper.ToDrawingColor(value);
+                _gfx.PenColor = _strokeColor = value;
             }
         }
         public override double StrokeWidth
@@ -158,8 +148,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
             set
             {
-                _strokeWidth = value;
-                _currentPen.Width = (float)value;
+                _gfx.PenWidth = (float)(_strokeWidth = value);
             }
         }
 
@@ -255,59 +244,47 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
         {
-
-            _gfx.DrawBezier(_currentPen,
-                 startX, startY,
-                 controlX1, controlY1,
-                 controlX2, controlY2,
-                 endX, endY);
+            _gfx.DrawBezierCurve(startX, startY, endX, endY, controlX1, controlY1, controlX2, controlY2);
         }
 
         public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 
-            using (System.Drawing.Bitmap srcBmp = CreateBmpBRGA(actualImage))
-            {
-                var bmp = _bmpStore.GetFreeBmp();
-                using (var g2 = System.Drawing.Graphics.FromImage(bmp))
-                {
-                    //we can use recycle tmpVxsStore
-                    Affine destRectTransform = Affine.NewMatix(affinePlans);
-                    double x0 = 0, y0 = 0, x1 = bmp.Width, y1 = bmp.Height;
-                    destRectTransform.Transform(ref x0, ref y0);
-                    destRectTransform.Transform(ref x0, ref y1);
-                    destRectTransform.Transform(ref x1, ref y1);
-                    destRectTransform.Transform(ref x1, ref y0);
-                    var matrix = new System.Drawing.Drawing2D.Matrix(
-                       (float)destRectTransform.m11, (float)destRectTransform.m12,
-                       (float)destRectTransform.m21, (float)destRectTransform.m22,
-                       (float)destRectTransform.dx, (float)destRectTransform.dy);
-                    g2.Clear(System.Drawing.Color.Transparent);
-                    g2.Transform = matrix;
-                    //------------------------
-                    g2.DrawImage(srcBmp, new System.Drawing.PointF(0, 0));
-                    this._gfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
-                }
-                _bmpStore.RelaseBmp(bmp);
-            }
+            throw new NotSupportedException();
+            //using (System.Drawing.Bitmap srcBmp = CreateBmpBRGA(actualImage))
+            //{
+            //    var bmp = _bmpStore.GetFreeBmp();
+            //    using (var g2 = System.Drawing.Graphics.FromImage(bmp))
+            //    {
+            //        //we can use recycle tmpVxsStore
+            //        Affine destRectTransform = Affine.NewMatix(affinePlans);
+            //        double x0 = 0, y0 = 0, x1 = bmp.Width, y1 = bmp.Height;
+            //        destRectTransform.Transform(ref x0, ref y0);
+            //        destRectTransform.Transform(ref x0, ref y1);
+            //        destRectTransform.Transform(ref x1, ref y1);
+            //        destRectTransform.Transform(ref x1, ref y0);
+            //        var matrix = new System.Drawing.Drawing2D.Matrix(
+            //           (float)destRectTransform.m11, (float)destRectTransform.m12,
+            //           (float)destRectTransform.m21, (float)destRectTransform.m22,
+            //           (float)destRectTransform.dx, (float)destRectTransform.dy);
+            //        g2.Clear(System.Drawing.Color.Transparent);
+            //        g2.Transform = matrix;
+            //        //------------------------
+            //        g2.DrawImage(srcBmp, new System.Drawing.PointF(0, 0));
+            //        this._gfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
+            //    }
+            //    _bmpStore.RelaseBmp(bmp);
+            //}
         }
 
         static System.Drawing.Bitmap CreateBmpBRGA(ActualImage actualImage)
         {
-            int w = actualImage.Width;
-            int h = actualImage.Height;
-            //copy data to bitmap
-            //bgra  
-            var bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            byte[] acutalBuffer = ActualImage.GetBuffer(actualImage);
-            var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp.PixelFormat);
-            System.Runtime.InteropServices.Marshal.Copy(acutalBuffer, 0, bmpData.Scan0, acutalBuffer.Length);
-            bmp.UnlockBits(bmpData);
-            return bmp;
+            return System.Drawing.Bitmap.CopyFrom(actualImage);
         }
         public void DrawImage(System.Drawing.Bitmap bmp, float x, float y)
         {
             _gfx.DrawImage(bmp, x, y);
+
         }
         public override void DrawImage(ActualImage actualImage, double x, double y)
         {
@@ -319,9 +296,9 @@ namespace PixelFarm.Drawing.WinGdi
                 case Agg.PixelFormat.ARGB32:
                     {
                         //copy data from acutal buffer to internal representation bitmap
-                        using (var bmp = CreateBmpBRGA(actualImage))
+                        using (System.Drawing.Bitmap bmp = System.Drawing.Bitmap.CopyFrom(actualImage))
                         {
-                            this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
+                            _gfx.DrawImage(bmp, (float)x, (float)y);
                         }
                     }
                     break;
@@ -374,44 +351,43 @@ namespace PixelFarm.Drawing.WinGdi
             VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
         }
         public override void FillCircle(double x, double y, double radius)
-        {   
-            
-            _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
+        {
+
+            _gfx.FillEllipse((float)x, (float)y, (float)radius, (float)radius);
         }
 
         public override void FillCircle(double x, double y, double radius, Drawing.Color color)
         {
-            var prevColor = _currentFillBrush.Color;
-            _currentFillBrush.Color = VxsHelper.ToDrawingColor(color);
-            _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
-            _currentFillBrush.Color = prevColor;
+            var prevColor = _gfx.SolidBrushColor;
+            _gfx.SolidBrushColor = color;
+            _gfx.FillEllipse((float)x, (float)y, (float)radius, (float)radius);
+            _gfx.SolidBrushColor = prevColor;
+
         }
 
         public override void FillEllipse(double left, double bottom, double right, double top)
         {
-            
-             
-            _gfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+            _gfx.FillEllipse((float)(right + left) / 2f, (float)(top + bottom) / 2f, (float)(right - left) / 2f, (float)(bottom - top) / 2f);
         }
         public override void DrawEllipse(double left, double bottom, double right, double top)
         {
-            _gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+            _gfx.DrawEllipse((float)(right + left) / 2f, (float)(top + bottom) / 2f, (float)(right - left) / 2f, (float)(bottom - top) / 2f);
         }
 
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
-            _gfx.FillRectangle(_currentFillBrush, System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+            _gfx.FillRectLTRB((float)left, (float)top, (float)right, (float)bottom);
         }
         public override void FillRectangle(double left, double bottom, double right, double top, Color fillColor)
         {
-            System.Drawing.Color prevColor = _currentFillBrush.Color;
-            _currentFillBrush.Color = VxsHelper.ToDrawingColor(fillColor);
-            _gfx.FillRectangle(_currentFillBrush, System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
-            _currentFillBrush.Color = prevColor;
+            var prevColor = _gfx.SolidBrushColor;
+
+            _gfx.FillRectLTRB((float)left, (float)top, (float)right, (float)bottom);
+            _gfx.SolidBrushColor = prevColor;
         }
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {
-            _gfx.FillRectangle(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
+            _gfx.FillRectLTRB((float)left, (float)(bottom - height), (float)(left + width), (float)bottom);
         }
 
         VertexStorePool _vxsPool = new VertexStorePool();
@@ -459,20 +435,16 @@ namespace PixelFarm.Drawing.WinGdi
             this.Fill(roundRect.MakeVxs(v1));
             ReleaseVxs(ref v1);
         }
-
-
-
         public override void Line(double x1, double y1, double x2, double y2)
         {
-            _gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
+            _gfx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
         }
-
         public override void Line(double x1, double y1, double x2, double y2, Color color)
         {
-            var prevColor = _currentPen.Color;
-            _currentPen.Color = VxsHelper.ToDrawingColor(color);
-            _gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
-            _currentPen.Color = prevColor;
+            var prevColor = _gfx.PenColor;
+            _gfx.PenColor = color;
+            _gfx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            _gfx.PenColor = prevColor;
         }
         public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
         {
@@ -484,15 +456,18 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void Rectangle(double left, double bottom, double right, double top)
         {
-            _gfx.DrawRectangle(_currentPen, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
+            _gfx.DrawRectLTRB((float)left, (float)top, (float)right, (float)bottom);
         }
         public override void Rectangle(double left, double bottom, double right, double top, Color color)
         {
-            _gfx.DrawRectangle(_currentPen, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
+            var prevColor = _gfx.PenColor;
+            _gfx.PenColor = color;
+            _gfx.DrawRectLTRB((float)left, (float)top, (float)right, (float)bottom);
+            _gfx.PenColor = prevColor;
         }
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
-            _gfx.SetClip(new System.Drawing.Rectangle(x1, y1, x2 - x1, y2 - y1));
+            _gfx.SetClip(new SkiaSharp.SKRect(x1, y1, x2, y2));
         }
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {

@@ -4,7 +4,7 @@ namespace PixelFarm.Drawing.WinGdi
 {
     class MyRegion : Region
     {
-        System.Drawing.Region rgn = new System.Drawing.Region();
+        SkiaSharp.SKRegion rgn = new SkiaSharp.SKRegion();
         public override object InnerRegion
         {
             get { return this.rgn; }
