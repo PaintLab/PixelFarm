@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2016, WinterDev
+﻿//MIT, 2014-2016, WinterDev
 
 namespace PixelFarm.Drawing.Skia
 {

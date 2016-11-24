@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2016, WinterDev 
+﻿//MIT, 2014-2016, WinterDev
 using System;
 using System.Collections.Generic;
 using SkiaSharp;
@@ -46,7 +46,7 @@ namespace PixelFarm.Drawing.Skia
 
             gx = new System.Drawing.Graphics(width, height);
             this.CurrentFont = new RequestFont("tahoma", 14);
-            this.CurrentTextColor = Color.Black; 
+            this.CurrentTextColor = Color.Black;
         }
 #if DEBUG
         public override string ToString()

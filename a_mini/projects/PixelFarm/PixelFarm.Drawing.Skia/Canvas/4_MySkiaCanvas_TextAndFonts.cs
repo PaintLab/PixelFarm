@@ -1,14 +1,11 @@
-﻿//BSD, 2014-2016, WinterDev
-//ArthurHub  , Jose Manuel Menendez Poo
-
-
+﻿//MIT, 2014-2016, WinterDev
 using System;
 namespace PixelFarm.Drawing.Skia
 {
     partial class MySkiaCanvas
     {
         RequestFont currentTextFont = null;
-        Color mycurrentTextColor = Color.Black; 
+        Color mycurrentTextColor = Color.Black;
         public override void DrawText(char[] buffer, int x, int y)
         {
 
