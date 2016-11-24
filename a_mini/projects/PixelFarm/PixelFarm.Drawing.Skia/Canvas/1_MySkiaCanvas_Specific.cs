@@ -9,16 +9,11 @@ namespace PixelFarm.Drawing.Skia
         int pageNumFlags;
         int pageFlags;
         bool isDisposed;
-
         //-------------------------------
         Stack<SKRect> clipRectStack = new Stack<SKRect>();
-        //-------------------------------
-        SKColor currentTextColor = new SKColor(0, 0, 0);
 
-        //System.Drawing.Pen internalPen;
-        //System.Drawing.SolidBrush internalSolidBrush;
-        //System.Drawing.Rectangle currentClipRect;
-        SKRect currentClipRect; 
+
+        SKRect currentClipRect;
         System.Drawing.Graphics gx;
 
         internal MySkiaCanvas(
@@ -43,29 +38,15 @@ namespace PixelFarm.Drawing.Skia
             this.bottom = top + height;
             currentClipRect = new SKRect(0, 0, width, height);
             CreateGraphicsFromNativeHdc(width, height);
-            //-------------------------------------------------------     
-            //managed object
-            //internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
-            //internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
 
             this.StrokeWidth = 1;
         }
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
-            //win32MemDc = new NativeWin32MemoryDc(width, height, true);
-            //win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
-            //win32MemDc.SetBackTransparent(true);
-            //win32MemDc.SetClipRect(0, 0, width, height);
 
-            //this.originalHdc = win32MemDc.DC;
-            //--------------
-             
             gx = new System.Drawing.Graphics(width, height);
-            //set default font and default text color
             this.CurrentFont = new RequestFont("tahoma", 14);
-            this.CurrentTextColor = Color.Black;
-            //--------------
-
+            this.CurrentTextColor = Color.Black; 
         }
 #if DEBUG
         public override string ToString()
@@ -89,7 +70,7 @@ namespace PixelFarm.Drawing.Skia
             isDisposed = true;
             ReleaseUnManagedResource();
 
-             
+
 
         }
         /// <summary>
