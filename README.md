@@ -16,8 +16,11 @@ Hardware and Software 2D Rendering Library
 
     Big thanks goes to to MatterHackers/agg-sharp
 	
-	2.2 System.Drawing
 	
+	2.2 SkiaSharp
+	
+	
+	2.3 System.Drawing
 	As usual :)	
 
 
