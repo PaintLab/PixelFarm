@@ -70,8 +70,9 @@ namespace BuildMergeProject
             mergePro.LoadSubProject(rootProjectFolders + @"\TypeMirror\TypeMirror.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
             //
-            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj");
 
@@ -111,8 +112,9 @@ namespace BuildMergeProject
             MergeProject mergePro = new MergeProject();
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
             //
-            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");            
 
             return mergePro;
         }
