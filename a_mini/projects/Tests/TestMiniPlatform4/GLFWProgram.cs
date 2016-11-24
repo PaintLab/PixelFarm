@@ -69,17 +69,57 @@ namespace TestGlfw
             {
                 myImg = new TestGlfw.MyNativeRGBA32BitsImage(w, h);
             }
-            // create the surface
-            var info = new SKImageInfo(w, h, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-            using (var surface = SKSurface.Create(info, myImg.Scan0, myImg.Stride))
-            {
-                // start drawing
-                SKCanvas canvas = surface.Canvas;
-                DrawWithSkia(canvas);
-                surface.Canvas.Flush();
-            }
 
-            glBmp = new PixelFarm.DrawingGL.GLBitmap(w, h, myImg.Scan0);
+
+            int testNo = 2;
+            if (testNo == 0)
+            {
+                //test1
+                // create the surface
+                var info = new SKImageInfo(w, h, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
+                using (var surface = SKSurface.Create(info, myImg.Scan0, myImg.Stride))
+                {
+                    // start drawing
+                    SKCanvas canvas = surface.Canvas;
+                    DrawWithSkia(canvas);
+                    surface.Canvas.Flush();
+                }
+                glBmp = new PixelFarm.DrawingGL.GLBitmap(w, h, myImg.Scan0);
+            }
+            else
+            {
+                //---------------------------------------------------------------------------------------
+                //test2
+                var lionShape = new PixelFarm.Agg.SpriteShape();
+                lionShape.ParseLion();
+                var lionBounds = lionShape.Bounds;
+                //-------------
+                var aggImage = new PixelFarm.Agg.ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
+                var imgGfx2d = new PixelFarm.Agg.ImageGraphics2D(aggImage);
+                var aggPainter = new PixelFarm.Agg.AggCanvasPainter(imgGfx2d);
+
+                DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
+                //convert affImage to texture 
+                glBmp = LoadTexture(aggImage);
+
+            }
+        }
+        static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.Agg.ActualImage actualImg)
+        {
+            return new PixelFarm.DrawingGL.GLBitmap(actualImg.Width,
+                actualImg.Height,
+                PixelFarm.Agg.ActualImage.GetBuffer(actualImg), false);
+        }
+        static void DrawLion(PixelFarm.Agg.CanvasPainter p, PixelFarm.Agg.SpriteShape shape, PixelFarm.Agg.VertexStore myvxs)
+        {
+            int j = shape.NumPaths;
+            int[] pathList = shape.PathIndexList;
+            Color[] colors = shape.Colors;
+            for (int i = 0; i < j; ++i)
+            {
+                p.FillColor = colors[i];
+                p.Fill(new PixelFarm.Agg.VertexStoreSnap(myvxs, pathList[i]));
+            }
         }
         static void DrawWithSkia(SKCanvas canvas)
         {
