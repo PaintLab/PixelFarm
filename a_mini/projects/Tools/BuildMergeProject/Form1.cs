@@ -30,12 +30,12 @@ namespace BuildMergeProject
                   "System.Xml",
                });
         }
-        private void cmdMergePixelFarmMiniAgg_Click(object sender, EventArgs e)
+        private void cmdMergePixelFarmMiniAggOne_Click(object sender, EventArgs e)
         {
             //-----------
-            //PixelFarm's MiniAgg
+            //PixelFarm's MiniAgg.One
             //-----------
-            MergeProject mergePro = CreateMergePixelFarmMiniAggProject();
+            MergeProject mergePro = CreateMiniAggOneProject();
             mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.MiniAgg.One.csproj",
                "PixelFarm.MiniAgg.One",
                "v2.0",
@@ -106,7 +106,7 @@ namespace BuildMergeProject
 
             return mergePro;
         }
-        static MergeProject CreateMergePixelFarmMiniAggProject()
+        static MergeProject CreateMiniAggOneProject()
         {
             MergeProject mergePro = new MergeProject();
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
@@ -116,7 +116,13 @@ namespace BuildMergeProject
 
             return mergePro;
         }
-
+        static MergeProject CreateMergePixelFarmMiniAggProject()
+        {
+            MergeProject mergePro = new MergeProject();
+            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
+            return mergePro;
+        }
         static MergeProject CreateMergePixelFarmPortableProject()
         {
             //*** portable project for html renderer ***
@@ -171,7 +177,7 @@ namespace BuildMergeProject
                "v2.0",
                "",//additional define constant
                new string[] {
-                  "System", 
+                  "System",
                   "System.Xml",
                });
         }
@@ -197,11 +203,11 @@ namespace BuildMergeProject
         {
 
             //this copy essential native lib to target folder
-            
+
             //event we select native files from debug folder
             //theses native dll must be in release mode
             //TODO: review here=> //choose file from release folder
-            
+
 
             string srcFolder = @"D:\projects\PixelFarm-dev\a_mini\projects\Tests\Debug\";
 
@@ -249,8 +255,20 @@ namespace BuildMergeProject
                   "System.Xml",
                });
         }
- 
 
-
+        private void cmdBuildMergePixelFarmMiniAgg_Click(object sender, EventArgs e)
+        {
+            //-----------
+            //PixelFarm.MiniAgg
+            //-----------
+            MergeProject mergePro = CreateMergePixelFarmMiniAggProject();
+            mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj",
+               "PixelFarm.MiniAgg",
+               "v2.0",
+               "",//additional define constant
+               new string[] {
+                  "System" ,
+               });
+        }
     }
 }
