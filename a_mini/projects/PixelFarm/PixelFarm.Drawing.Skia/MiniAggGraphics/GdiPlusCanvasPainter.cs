@@ -7,8 +7,7 @@ using PixelFarm.Agg.Transform;
 namespace PixelFarm.Drawing.Skia
 {
 
-
-    public class GdiPlusCanvasPainter : CanvasPainter
+    public class SkiaCanvasPainter : CanvasPainter
     {
         System.Drawing.Graphics _gfx;
         System.Drawing.Bitmap _gfxBmp;
@@ -27,7 +26,7 @@ namespace PixelFarm.Drawing.Skia
         Agg.VertexSource.RoundedRect roundRect;
         SmoothingMode _smoothingMode;
 
-        public GdiPlusCanvasPainter(System.Drawing.Bitmap gfxBmp)
+        public SkiaCanvasPainter(System.Drawing.Bitmap gfxBmp)
         {
             _width = 800;// gfxBmp.Width; //?
             _height = 600;// gfxBmp.Height; ???
@@ -105,7 +104,7 @@ namespace PixelFarm.Drawing.Skia
             set
             {
                 _currentFont = value;
-                _gfx.CurrentFont = value; 
+                _gfx.CurrentFont = value;
             }
         }
         public override Color FillColor

@@ -62,13 +62,12 @@
   <ItemGroup>
     <Compile Include="0_Start\System.Drawing.cs" />
     <Compile Include="0_Start\WinGdiPlusPlatform.cs" />
-    <Compile Include="Canvas\1_MyGdiPlusCanvas_Specific.cs" />
-    <Compile Include="Canvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
-    <Compile Include="Canvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
-    <Compile Include="Canvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
+    <Compile Include="Canvas\1_MySkiaCanvas_Specific.cs" />
+    <Compile Include="Canvas\2_MySkiaCanvas_CoordinateAndClip.cs" />
+    <Compile Include="Canvas\3_MySkiaCanvas_DrawGraphics.cs" />
+    <Compile Include="Canvas\4_MySkiaCanvas_TextAndFonts.cs" />
     <Compile Include="Canvas\Conv.cs" />
     <Compile Include="Implementation\BitmapHelper.cs" />
-    <Compile Include="Implementation\GdiPlusBitmapBackBuffer.cs" />
     <Compile Include="Implementation\Region.cs" />
     <Compile Include="MiniAggGraphics\BufferBitmapStore.cs" />
     <Compile Include="MiniAggGraphics\GdiPlusCanvasPainter.cs" />

@@ -1,10 +1,10 @@
 ﻿//MIT, 2014-2016, WinterDev
 
 using System;
-using System.Drawing; 
+using System.Drawing;
 namespace PixelFarm.Agg.Imaging
 {
-    public static class BitmapHelper
+    static class BitmapHelper
     {
         /// <summary>
         /// copy from actual image direct to hBmpScan0
