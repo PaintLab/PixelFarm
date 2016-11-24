@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,16 +33,57 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj">
+      <Project>{025e536d-53a6-4c5f-aed5-e21960c70763}</Project>
+      <Name>PixelFarm.DataProvider.Managed</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+      <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
+      <Name>PixelFarm.MiniOpenTK</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
       <Name>PixelFarm.SkiaSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tesselate\Tesselate.csproj">
+      <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
+      <Name>Tesselate</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\win32utils\MyWin32.cs">
+      <Link>Win32Utils\MyWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\win32utils\NativeTextWin32.cs">
+      <Link>Win32Utils\NativeTextWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\win32utils\NativeWin32MemoryDc.cs">
+      <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
+    </Compile>
+    <Compile Include="0_Start\System.Drawing.cs" />
+    <Compile Include="0_Start\WinGdiPlusPlatform.cs" />
+    <Compile Include="Canvas\1_MyGdiPlusCanvas_Specific.cs" />
+    <Compile Include="Canvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
+    <Compile Include="Canvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
+    <Compile Include="Canvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
+    <Compile Include="Canvas\Conv.cs" />
+    <Compile Include="Implementation\BitmapHelper.cs" />
+    <Compile Include="Implementation\GdiPlusBitmapBackBuffer.cs" />
+    <Compile Include="Implementation\Region.cs" />
+    <Compile Include="Implementation\WinGdiFont.cs" />
+    <Compile Include="MiniAggGraphics\BufferBitmapStore.cs" />
+    <Compile Include="MiniAggGraphics\GdiPlusCanvasPainter.cs" />
+    <Compile Include="MiniAggGraphics\GdiPlusRenderVx.cs" />
+    <Compile Include="MiniAggGraphics\VxsHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
