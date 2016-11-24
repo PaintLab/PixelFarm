@@ -1,6 +1,6 @@
 ﻿//BSD, 2014-2016, WinterDev  
 
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Skia
 {
     class MyRegion : Region
     {

@@ -3,9 +3,9 @@
 
 
 using System;
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Skia
 {
-    partial class MyGdiPlusCanvas
+    partial class MySkiaCanvas
     {
         RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;

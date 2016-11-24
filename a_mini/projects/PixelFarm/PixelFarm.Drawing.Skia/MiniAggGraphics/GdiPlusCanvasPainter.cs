@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Skia
 {
 
 

@@ -3,9 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Skia
 {
-    partial class MyGdiPlusCanvas
+    partial class MySkiaCanvas
     {
         float strokeWidth = 1f;
         Color fillSolidColor = Color.Transparent;

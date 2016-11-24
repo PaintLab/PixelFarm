@@ -3,7 +3,7 @@
 using System;
 using SkiaSharp;
 using PixelFarm.Agg;
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Skia
 {
     public static class VxsHelper
     {

@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using SkiaSharp;
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Skia
 {
-    public partial class MyGdiPlusCanvas : Canvas, IDisposable
+    public partial class MySkiaCanvas : Canvas, IDisposable
     {
         int pageNumFlags;
         int pageFlags;
@@ -21,7 +21,7 @@ namespace PixelFarm.Drawing.WinGdi
         SKRect currentClipRect; 
         System.Drawing.Graphics gx;
 
-        internal MyGdiPlusCanvas(
+        internal MySkiaCanvas(
             int horizontalPageNum,
             int verticalPageNum,
             int left, int top,

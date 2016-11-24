@@ -1,7 +1,7 @@
 ﻿//MIT, 2016, WinterDev
 
 using PixelFarm.Agg;
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Skia
 {
     class WinGdiRenderVx : RenderVx
     {

@@ -1,10 +1,7 @@
 ﻿//2016 MIT, WinterDev
 
 using System;
-using System.Collections.Generic;
 using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
-
 namespace System.Drawing
 {
     public class Graphics
@@ -269,7 +266,7 @@ namespace System.Drawing
         public PixelFarm.Drawing.Color CurrentTextColor
         {
             get;
-            set;        
+            set;
         }
     }
     public class Image : IDisposable

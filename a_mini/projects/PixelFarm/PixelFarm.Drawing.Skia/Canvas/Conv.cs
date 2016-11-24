@@ -1,6 +1,6 @@
 ﻿//BSD, 2014-2016, WinterDev
 
-namespace PixelFarm.Drawing
+namespace PixelFarm.Drawing.Skia
 {
     /// <summary>
     /// conversion helper

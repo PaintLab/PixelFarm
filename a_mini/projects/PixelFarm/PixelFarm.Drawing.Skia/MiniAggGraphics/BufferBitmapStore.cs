@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Skia
 {
     class BufferBitmapStore
     {
