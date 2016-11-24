@@ -38,7 +38,6 @@
   <ItemGroup>
     <Compile Include="ES2Utils2.cs" />
     <Compile Include="GLFWProgram.cs" />
-    <Compile Include="GLFWProgram3.cs" />
     <Compile Include="LionDataStore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
