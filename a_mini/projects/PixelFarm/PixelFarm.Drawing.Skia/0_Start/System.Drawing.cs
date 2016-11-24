@@ -16,7 +16,7 @@ namespace System.Drawing
 
         int w;
         int h;
-        CompositingMode compositeMode;
+
         PixelFarm.Drawing.SmoothingMode smoothingMode;
         public Graphics(int w, int h)
         {
@@ -61,14 +61,7 @@ namespace System.Drawing
         {
             canvas.ResetMatrix();
         }
-        public CompositingMode CompositingMode
-        {
-            get { return compositeMode; }
-            set
-            {
-                this.compositeMode = value;
-            }
-        }
+     
         public PixelFarm.Drawing.SmoothingMode SmoothMode
         {
             get { return smoothingMode; }
@@ -189,11 +182,11 @@ namespace System.Drawing
             }
             return p;
         }
-        public void DrawImage(System.Drawing.Image bmp, float x, float y)
+        public void DrawImage(System.Drawing.Bitmap bmp, float x, float y)
         {
             canvas.DrawBitmap(bmp.internalBmp, x, y);
         }
-        public void DrawImage(Image image, PixelFarm.Drawing.RectangleF destRect, PixelFarm.Drawing.RectangleF srcRect)
+        public void DrawImage(System.Drawing.Bitmap image, PixelFarm.Drawing.RectangleF destRect, PixelFarm.Drawing.RectangleF srcRect)
         {
             canvas.DrawBitmap(image.internalBmp,
                 new SkiaSharp.SKRect(srcRect.Left, srcRect.Top, srcRect.Right, srcRect.Bottom),
@@ -201,7 +194,7 @@ namespace System.Drawing
 
 
         }
-        public void DrawImage(System.Drawing.Image bmp, PixelFarm.Drawing.RectangleF dest)
+        public void DrawImage(System.Drawing.Bitmap bmp, PixelFarm.Drawing.RectangleF dest)
         {
             var destRect = new SkiaSharp.SKRect(dest.X, dest.Y, dest.Right, dest.Bottom);
             canvas.DrawBitmap(bmp.internalBmp, destRect);
@@ -269,22 +262,10 @@ namespace System.Drawing
             set;
         }
     }
-    public class Image : IDisposable
+
+    public class Bitmap : IDisposable
     {
         internal SkiaSharp.SKBitmap internalBmp;
-        public void Dispose()
-        {
-            if (internalBmp != null)
-            {
-                internalBmp.Dispose();
-                internalBmp = null;
-            }
-        }
-    }
-
-    public class Bitmap : Image
-    {
-
         int w;
         int h;
         public Bitmap(int w, int h)
@@ -293,7 +274,14 @@ namespace System.Drawing
             this.h = h;
             internalBmp = new SkiaSharp.SKBitmap(w, h);
         }
-
+        public void Dispose()
+        {
+            if (internalBmp != null)
+            {
+                internalBmp.Dispose();
+                internalBmp = null;
+            }
+        }
         public int Width
         {
             get { return w; }
@@ -321,49 +309,8 @@ namespace System.Drawing
         }
 
     }
-    public class Pen
-    {
 
-        PixelFarm.Drawing.Color innerColor;
-        public Pen(PixelFarm.Drawing.Color color)
-        {
-            this.innerColor = color;
-        }
-        public float Width
-        {
-            get;
-            set;
-        }
-        public PixelFarm.Drawing.Color Color
-        {
-            get { return innerColor; }
-            set
-            {
-                innerColor = value;
-            }
-        }
 
-    }
-    public class SolidBrush
-    {
-        PixelFarm.Drawing.Color color;
-        public SolidBrush(PixelFarm.Drawing.Color color)
-        {
-            this.color = color;
-        }
-        public PixelFarm.Drawing.Color Color
-        {
-            get { return color; }
-            set
-            {
-                color = value;
-            }
-        }
-    }
 
-    public enum CompositingMode
-    {
-
-    }
 
 }

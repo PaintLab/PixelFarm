@@ -73,11 +73,7 @@ namespace PixelFarm.Drawing.Skia
                 //}
             }
         }
-        public System.Drawing.CompositingMode CompositingMode
-        {
-            get { return _gfx.CompositingMode; }
-            set { _gfx.CompositingMode = value; }
-        }
+       
         public override void Draw(VertexStoreSnap vxs)
         {
             this.Fill(vxs);
