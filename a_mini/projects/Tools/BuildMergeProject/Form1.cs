@@ -19,8 +19,10 @@ namespace BuildMergeProject
             //merge all
             //need Gdi+ and WinForms
             MergeProject mergePro = CreateMergePixelFarmOneProject(MergeOption.All);
-            mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.One.csproj",
-               "PixelFarm.One",
+            string targetProjectName = "PixelFarm.One";
+            string targetProjectFile = targetProjectName + ".csproj";
+            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+               targetProjectName,
                "v2.0",
                "",//additional define constant
                new string[] {
@@ -29,6 +31,13 @@ namespace BuildMergeProject
                   "System.Windows.Forms",
                   "System.Xml",
                });
+            //-----------
+            LinkProjectConverter.ConvertToLinkProject(
+                rootProjectFolders + "\\" + targetProjectFile,
+                rootProjectFolders + "\\autogen",
+                true);//after link project is created, we remove the targetProjectFile
+
+             
         }
         private void cmdMergePixelFarmMiniAggOne_Click(object sender, EventArgs e)
         {
@@ -36,15 +45,23 @@ namespace BuildMergeProject
             //PixelFarm's MiniAgg.One
             //-----------
             MergeProject mergePro = CreateMiniAggOneProject();
-            mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.MiniAgg.One.csproj",
-               "PixelFarm.MiniAgg.One",
+            string targetProjectName = "PixelFarm.MiniAgg.One";
+            string targetProjectFile = targetProjectName + ".csproj";
+            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+               targetProjectName,
                "v2.0",
                "",//additional define constant
                new string[] {
                   "System" ,
                });
+            //-----------
+            LinkProjectConverter.ConvertToLinkProject(
+                rootProjectFolders + "\\" + targetProjectFile,
+                rootProjectFolders + "\\autogen",
+                true);//after link project is created, we remove the targetProjectFile
 
         }
+
         private void cmdBuildMergePixelFarmPortable_Click(object sender, EventArgs e)
         {
             //config as portble library ***
@@ -114,7 +131,7 @@ namespace BuildMergeProject
             //
             //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
             //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");            
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
 
             return mergePro;
         }
