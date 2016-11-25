@@ -299,9 +299,9 @@ namespace BuildMergeProject
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Native\PixelFarm.DataProvider.Native.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DrawingGL\PixelFarm.DrawingGL.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DrawingGL\PixelFarm.DrawingGL.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\NOpenType\NetCore\PixelFarm.OpenType\PixelFarm.OpenType.xproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
@@ -318,11 +318,11 @@ namespace BuildMergeProject
                new string[] {
                   "System" ,
                });
-            //-----------
-            LinkProjectConverter.ConvertToLinkProject(
-                rootProjectFolders + "\\" + targetProjectFile,
-                rootProjectFolders + "\\autogen",
-                true);//after link project is created, we remove the targetProjectFile
+            ////-----------
+            //LinkProjectConverter.ConvertToLinkProject(
+            //    rootProjectFolders + "\\" + targetProjectFile,
+            //    rootProjectFolders + "\\autogen",
+            //    true);//after link project is created, we remove the targetProjectFile
         }
 
     }
