@@ -19,8 +19,10 @@ namespace BuildMergeProject
             //merge all
             //need Gdi+ and WinForms
             MergeProject mergePro = CreateMergePixelFarmOneProject(MergeOption.All);
-            mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.One.csproj",
-               "PixelFarm.One",
+            string targetProjectName = "PixelFarm.One";
+            string targetProjectFile = targetProjectName + ".csproj";
+            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+               targetProjectName,
                "v2.0",
                "",//additional define constant
                new string[] {
@@ -29,22 +31,37 @@ namespace BuildMergeProject
                   "System.Windows.Forms",
                   "System.Xml",
                });
+            //-----------
+            LinkProjectConverter.ConvertToLinkProject(
+                rootProjectFolders + "\\" + targetProjectFile,
+                rootProjectFolders + "\\autogen",
+                true);//after link project is created, we remove the targetProjectFile
+
+             
         }
-        private void cmdMergePixelFarmMiniAgg_Click(object sender, EventArgs e)
+        private void cmdMergePixelFarmMiniAggOne_Click(object sender, EventArgs e)
         {
             //-----------
-            //PixelFarm's MiniAgg
+            //PixelFarm's MiniAgg.One
             //-----------
-            MergeProject mergePro = CreateMergePixelFarmMiniAggProject();
-            mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.MiniAgg.One.csproj",
-               "PixelFarm.MiniAgg.One",
+            MergeProject mergePro = CreateMiniAggOneProject();
+            string targetProjectName = "PixelFarm.MiniAgg.One";
+            string targetProjectFile = targetProjectName + ".csproj";
+            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+               targetProjectName,
                "v2.0",
                "",//additional define constant
                new string[] {
                   "System" ,
                });
+            //-----------
+            LinkProjectConverter.ConvertToLinkProject(
+                rootProjectFolders + "\\" + targetProjectFile,
+                rootProjectFolders + "\\x_autogen",
+                true);//after link project is created, we remove the targetProjectFile
 
         }
+
         private void cmdBuildMergePixelFarmPortable_Click(object sender, EventArgs e)
         {
             //config as portble library ***
@@ -70,8 +87,9 @@ namespace BuildMergeProject
             mergePro.LoadSubProject(rootProjectFolders + @"\TypeMirror\TypeMirror.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
             //
-            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj");
 
@@ -106,17 +124,24 @@ namespace BuildMergeProject
 
             return mergePro;
         }
-        static MergeProject CreateMergePixelFarmMiniAggProject()
+        static MergeProject CreateMiniAggOneProject()
         {
             MergeProject mergePro = new MergeProject();
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
             //
-            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
 
             return mergePro;
         }
-
+        static MergeProject CreateMergePixelFarmMiniAggProject()
+        {
+            MergeProject mergePro = new MergeProject();
+            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
+            return mergePro;
+        }
         static MergeProject CreateMergePixelFarmPortableProject()
         {
             //*** portable project for html renderer ***
@@ -171,7 +196,7 @@ namespace BuildMergeProject
                "v2.0",
                "",//additional define constant
                new string[] {
-                  "System", 
+                  "System",
                   "System.Xml",
                });
         }
@@ -197,11 +222,11 @@ namespace BuildMergeProject
         {
 
             //this copy essential native lib to target folder
-            
+
             //event we select native files from debug folder
             //theses native dll must be in release mode
             //TODO: review here=> //choose file from release folder
-            
+
 
             string srcFolder = @"D:\projects\PixelFarm-dev\a_mini\projects\Tests\Debug\";
 
@@ -249,8 +274,56 @@ namespace BuildMergeProject
                   "System.Xml",
                });
         }
- 
 
+        private void cmdBuildMergePixelFarmMiniAgg_Click(object sender, EventArgs e)
+        {
+            //-----------
+            //PixelFarm.MiniAgg
+            //-----------
+            MergeProject mergePro = CreateMergePixelFarmMiniAggProject();
+            mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj",
+               "PixelFarm.MiniAgg",
+               "v2.0",
+               "",//additional define constant
+               new string[] {
+                  "System" ,
+               });
+        }
+
+        private void cmdMinimalNetCore_Click(object sender, EventArgs e)
+        {
+            //see reference in TestMiniPlatform4
+
+            MergeProject mergePro = new MergeProject();
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Native\PixelFarm.DataProvider.Native.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DrawingGL\PixelFarm.DrawingGL.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\NOpenType\NetCore\PixelFarm.OpenType\PixelFarm.OpenType.xproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj");
+      
+
+            //------------------------------------------------------------------------------
+            string targetProjectName = "PixelFarm.MiniNetCore.One";
+            string targetProjectFile = targetProjectName + ".csproj";
+            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+               targetProjectName,
+               "v2.0",
+               "",//additional define constant
+               new string[] {
+                  "System" ,
+               });
+            ////-----------
+            //LinkProjectConverter.ConvertToLinkProject(
+            //    rootProjectFolders + "\\" + targetProjectFile,
+            //    rootProjectFolders + "\\autogen",
+            //    true);//after link project is created, we remove the targetProjectFile
+        }
 
     }
 }
