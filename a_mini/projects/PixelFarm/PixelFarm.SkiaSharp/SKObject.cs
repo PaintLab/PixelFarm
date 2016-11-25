@@ -98,7 +98,10 @@ namespace SkiaSharp
         static System.Reflection.ConstructorInfo GetSkiaObjectCtor(Type type)
         {
 #if NET20
-            var ctors = type.GetConstructors();
+            var ctors = type.GetConstructors(
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.Public |
+                System.Reflection.BindingFlags.NonPublic);
             for (int i = ctors.Length - 1; i >= 0; --i)
             {
                 var ctor = ctors[i];
