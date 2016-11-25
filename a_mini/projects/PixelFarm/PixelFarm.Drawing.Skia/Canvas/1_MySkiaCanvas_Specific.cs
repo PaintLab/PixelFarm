@@ -11,8 +11,6 @@ namespace PixelFarm.Drawing.Skia
         bool isDisposed;
         //-------------------------------
         Stack<SKRect> clipRectStack = new Stack<SKRect>();
-
-
         SKRect currentClipRect;
         System.Drawing.Graphics gx;
 

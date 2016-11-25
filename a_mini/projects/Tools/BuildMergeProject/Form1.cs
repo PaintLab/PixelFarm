@@ -57,7 +57,7 @@ namespace BuildMergeProject
             //-----------
             LinkProjectConverter.ConvertToLinkProject(
                 rootProjectFolders + "\\" + targetProjectFile,
-                rootProjectFolders + "\\autogen",
+                rootProjectFolders + "\\x_autogen",
                 true);//after link project is created, we remove the targetProjectFile
 
         }
