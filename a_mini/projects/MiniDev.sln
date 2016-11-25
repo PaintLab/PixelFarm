@@ -75,9 +75,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMiniPlatform4", "Tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniAgg", "PixelFarm\PixelFarm.MiniAgg.csproj", "{99A570D0-492A-453D-8B97-7F40489C10E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniAgg.One", "PixelFarm\autogen\PixelFarm.MiniAgg.One.csproj", "{CEE3E6B1-88BB-47BF-BF5D-03AEBA94599C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniAgg.One", "PixelFarm\x_autogen\PixelFarm.MiniAgg.One.csproj", "{CEE3E6B1-88BB-47BF-BF5D-03AEBA94599C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.One", "PixelFarm\autogen\PixelFarm.One.csproj", "{A85BCA44-562C-4034-85EA-7651EF1F3777}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.One", "PixelFarm\x_autogen\PixelFarm.One.csproj", "{A85BCA44-562C-4034-85EA-7651EF1F3777}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{36975572-9D8D-4D2B-B6EE-FD3115D7980C}"
 	ProjectSection(SolutionItems) = preProject

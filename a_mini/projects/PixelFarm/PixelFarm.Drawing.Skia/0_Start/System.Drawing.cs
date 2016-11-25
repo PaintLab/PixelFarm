@@ -2,13 +2,13 @@
 
 using System;
 using PixelFarm.Agg;
-namespace System.Drawing
+namespace PixelFarm.Drawing.Skia
 {
-    public class Graphics
+    class SkGraphics
     {
 
         //TODO: implement IDISPOSE
-        Bitmap bufferBmp;
+        MySkBmp bufferBmp;
         SkiaSharp.SKBitmap bmp;
         internal SkiaSharp.SKCanvas canvas;
         SkiaSharp.SKPaint stroke;
@@ -18,7 +18,7 @@ namespace System.Drawing
         int h;
 
         PixelFarm.Drawing.SmoothingMode smoothingMode;
-        public Graphics(int w, int h)
+        public SkGraphics(int w, int h)
         {
             this.w = w;
             this.h = h;
@@ -32,7 +32,7 @@ namespace System.Drawing
             fill.IsStroke = false;
 
         }
-        private Graphics()
+        private SkGraphics()
         {
 
         }
@@ -40,9 +40,9 @@ namespace System.Drawing
         {
 
         }
-        public static Graphics FromImage(System.Drawing.Bitmap bmp)
+        public static SkGraphics FromImage(MySkBmp bmp)
         {
-            Graphics g = new Drawing.Graphics();
+            SkGraphics g = new SkGraphics();
             g.bufferBmp = bmp;
             g.bmp = bmp.internalBmp;
             g.w = bmp.Width;
@@ -61,7 +61,7 @@ namespace System.Drawing
         {
             canvas.ResetMatrix();
         }
-     
+
         public PixelFarm.Drawing.SmoothingMode SmoothMode
         {
             get { return smoothingMode; }
@@ -182,11 +182,11 @@ namespace System.Drawing
             }
             return p;
         }
-        public void DrawImage(System.Drawing.Bitmap bmp, float x, float y)
+        public void DrawImage(MySkBmp bmp, float x, float y)
         {
             canvas.DrawBitmap(bmp.internalBmp, x, y);
         }
-        public void DrawImage(System.Drawing.Bitmap image, PixelFarm.Drawing.RectangleF destRect, PixelFarm.Drawing.RectangleF srcRect)
+        public void DrawImage(MySkBmp image, PixelFarm.Drawing.RectangleF destRect, PixelFarm.Drawing.RectangleF srcRect)
         {
             canvas.DrawBitmap(image.internalBmp,
                 new SkiaSharp.SKRect(srcRect.Left, srcRect.Top, srcRect.Right, srcRect.Bottom),
@@ -194,7 +194,7 @@ namespace System.Drawing
 
 
         }
-        public void DrawImage(System.Drawing.Bitmap bmp, PixelFarm.Drawing.RectangleF dest)
+        public void DrawImage(MySkBmp bmp, PixelFarm.Drawing.RectangleF dest)
         {
             var destRect = new SkiaSharp.SKRect(dest.X, dest.Y, dest.Right, dest.Bottom);
             canvas.DrawBitmap(bmp.internalBmp, destRect);
@@ -263,12 +263,12 @@ namespace System.Drawing
         }
     }
 
-    public class Bitmap : IDisposable
+    class MySkBmp : IDisposable
     {
         internal SkiaSharp.SKBitmap internalBmp;
         int w;
         int h;
-        public Bitmap(int w, int h)
+        public MySkBmp(int w, int h)
         {
             this.w = w;
             this.h = h;
@@ -291,10 +291,10 @@ namespace System.Drawing
             get { return h; }
         }
         //----------------------         
-        public static Bitmap CopyFrom(ActualImage actualImage)
+        public static MySkBmp CopyFrom(ActualImage actualImage)
         {
 
-            Bitmap newBmp = new Drawing.Bitmap(actualImage.Width, actualImage.Height);
+            MySkBmp newBmp = new MySkBmp(actualImage.Width, actualImage.Height);
             newBmp.internalBmp.LockPixels();
             byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
 

@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing.Skia
         //-------------------------------
         Stack<SKRect> clipRectStack = new Stack<SKRect>();
         SKRect currentClipRect;
-        System.Drawing.Graphics gx;
+        SkGraphics gx;
 
         internal MySkiaCanvas(
             int horizontalPageNum,
@@ -42,7 +42,7 @@ namespace PixelFarm.Drawing.Skia
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
 
-            gx = new System.Drawing.Graphics(width, height);
+            gx = new SkGraphics(width, height);
             this.CurrentFont = new RequestFont("tahoma", 14);
             this.CurrentTextColor = Color.Black;
         }

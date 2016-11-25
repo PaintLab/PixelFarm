@@ -172,18 +172,18 @@ namespace PixelFarm.Drawing.Skia
             //}
         }
 
-        static System.Drawing.Bitmap ResolveInnerBmp(Image image)
+        static MySkBmp ResolveInnerBmp(Image image)
         {
 
             if (image is PixelFarm.Agg.ActualImage)
             {
                 //this is known image
-                var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
+                var cacheBmp = Image.GetCacheInnerImage(image) as MySkBmp;
                 if (cacheBmp == null)
                 {
 
-                    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,
-                        image.Height);
+                    MySkBmp bmp = new MySkBmp(image.Width,
+                       image.Height);
                     //
                     PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
                     //
@@ -199,7 +199,7 @@ namespace PixelFarm.Drawing.Skia
             else
             {
                 //other image
-                return Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
+                return Image.GetCacheInnerImage(image) as MySkBmp;
             }
         }
 
@@ -212,7 +212,7 @@ namespace PixelFarm.Drawing.Skia
         /// <exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception>
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
-            var bmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
+            var bmp = Image.GetCacheInnerImage(image) as MySkBmp;
             if (bmp != null)
             {
                 gx.DrawImage(bmp, destRect, srcRect);
@@ -249,7 +249,7 @@ namespace PixelFarm.Drawing.Skia
         public override void DrawImage(Image image, RectangleF destRect)
         {
 
-            System.Drawing.Bitmap inner = ResolveInnerBmp(image);
+            MySkBmp inner = ResolveInnerBmp(image);
             if (image.IsReferenceImage)
             {
                 gx.DrawImage(inner,

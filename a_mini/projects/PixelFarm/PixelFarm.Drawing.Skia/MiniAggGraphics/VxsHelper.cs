@@ -5,7 +5,7 @@ using SkiaSharp;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Skia
 {
-    public static class VxsHelper
+    static class VxsHelper
     {
         public static SKPath CreateGraphicsPath(VertexStore vxs)
         {
@@ -108,28 +108,28 @@ namespace PixelFarm.Drawing.Skia
             return brushPath;
         }
 
-        public static void FillVxsSnap(System.Drawing.Graphics g, VertexStoreSnap vxsSnap, Color c)
+        public static void FillVxsSnap(SkGraphics g, VertexStoreSnap vxsSnap, Color c)
         {
             using (var p = CreateGraphicsPath(vxsSnap))
             {
                 g.FillPath(p, c);
             }
         }
-        public static void DrawVxsSnap(System.Drawing.Graphics g, VertexStoreSnap vxsSnap, Color c)
+        public static void DrawVxsSnap(SkGraphics g, VertexStoreSnap vxsSnap, Color c)
         {
             using (var p = CreateGraphicsPath(vxsSnap))
             {
                 g.DrawPath(p, c);
             }
         }
-        public static void FillPath(System.Drawing.Graphics g, SkiaSharp.SKPath p, Color c)
+        public static void FillPath(SkGraphics g, SkiaSharp.SKPath p, Color c)
         {
             g.FillPath(p, c);
         }
-        public static void DrawPath(System.Drawing.Graphics g, SkiaSharp.SKPath p, Color c)
+        public static void DrawPath(SkGraphics g, SkiaSharp.SKPath p, Color c)
         {
             g.DrawPath(p, c);
         }
-         
+
     }
 }

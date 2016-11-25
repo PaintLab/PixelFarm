@@ -89,7 +89,7 @@
     <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\autogen\PixelFarm.One.csproj">
+    <ProjectReference Include="..\..\PixelFarm\x_autogen\PixelFarm.One.csproj">
       <Project>{a85bca44-562c-4034-85ea-7651ef1f3777}</Project>
       <Name>PixelFarm.One</Name>
     </ProjectReference>

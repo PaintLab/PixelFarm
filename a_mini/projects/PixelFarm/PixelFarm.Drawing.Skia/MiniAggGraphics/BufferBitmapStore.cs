@@ -6,7 +6,7 @@ namespace PixelFarm.Drawing.Skia
 {
     class BufferBitmapStore
     {
-        Stack<System.Drawing.Bitmap> bmpStack = new Stack<System.Drawing.Bitmap>();
+        Stack<MySkBmp> bmpStack = new Stack<MySkBmp>();
         public BufferBitmapStore(int w, int h)
         {
             this.Width = w;
@@ -15,7 +15,7 @@ namespace PixelFarm.Drawing.Skia
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public System.Drawing.Bitmap GetFreeBmp()
+        public MySkBmp GetFreeBmp()
         {
             if (bmpStack.Count > 0)
             {
@@ -23,10 +23,10 @@ namespace PixelFarm.Drawing.Skia
             }
             else
             {
-                return new System.Drawing.Bitmap(Width, Height);
+                return new MySkBmp(Width, Height);
             }
         }
-        public void RelaseBmp(System.Drawing.Bitmap bmp)
+        public void RelaseBmp(MySkBmp bmp)
         {
             bmpStack.Push(bmp);
         }

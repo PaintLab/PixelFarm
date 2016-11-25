@@ -7,10 +7,10 @@ using PixelFarm.Agg.Transform;
 namespace PixelFarm.Drawing.Skia
 {
 
-    public class SkiaCanvasPainter : CanvasPainter
+    class SkiaCanvasPainter : CanvasPainter
     {
-        System.Drawing.Graphics _gfx;
-        System.Drawing.Bitmap _gfxBmp;
+        SkGraphics _gfx;
+        MySkBmp _gfxBmp;
 
         //
         RectInt _clipBox;
@@ -26,12 +26,12 @@ namespace PixelFarm.Drawing.Skia
         Agg.VertexSource.RoundedRect roundRect;
         SmoothingMode _smoothingMode;
 
-        public SkiaCanvasPainter(System.Drawing.Bitmap gfxBmp)
+        internal SkiaCanvasPainter(MySkBmp gfxBmp)
         {
             _width = 800;// gfxBmp.Width; //?
             _height = 600;// gfxBmp.Height; ???
             _gfxBmp = gfxBmp;
-            _gfx = System.Drawing.Graphics.FromImage(_gfxBmp);
+            _gfx = SkGraphics.FromImage(_gfxBmp);
             //credit:
             //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
             _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
@@ -73,7 +73,7 @@ namespace PixelFarm.Drawing.Skia
                 //}
             }
         }
-       
+
         public override void Draw(VertexStoreSnap vxs)
         {
             this.Fill(vxs);
@@ -272,11 +272,11 @@ namespace PixelFarm.Drawing.Skia
             //}
         }
 
-        static System.Drawing.Bitmap CreateBmpBRGA(ActualImage actualImage)
+        static MySkBmp CreateBmpBRGA(ActualImage actualImage)
         {
-            return System.Drawing.Bitmap.CopyFrom(actualImage);
+            return MySkBmp.CopyFrom(actualImage);
         }
-        public void DrawImage(System.Drawing.Bitmap bmp, float x, float y)
+        public void DrawImage(MySkBmp bmp, float x, float y)
         {
             _gfx.DrawImage(bmp, x, y);
 
@@ -291,7 +291,7 @@ namespace PixelFarm.Drawing.Skia
                 case Agg.PixelFormat.ARGB32:
                     {
                         //copy data from acutal buffer to internal representation bitmap
-                        using (System.Drawing.Bitmap bmp = System.Drawing.Bitmap.CopyFrom(actualImage))
+                        using (MySkBmp bmp = MySkBmp.CopyFrom(actualImage))
                         {
                             _gfx.DrawImage(bmp, (float)x, (float)y);
                         }

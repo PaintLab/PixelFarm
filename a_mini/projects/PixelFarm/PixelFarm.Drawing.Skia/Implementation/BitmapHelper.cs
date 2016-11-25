@@ -1,7 +1,6 @@
 ﻿//MIT, 2014-2016, WinterDev
 
 using System;
-using System.Drawing;
 namespace PixelFarm.Agg.Imaging
 {
     static class BitmapHelper
@@ -27,7 +26,7 @@ namespace PixelFarm.Agg.Imaging
 
         public static void CopyToGdiPlusBitmapSameSize(
             ActualImage actualImage,
-            Bitmap bitmap)
+           PixelFarm.Drawing.Skia.MySkBmp bitmap)
         {
             //agg store image buffer head-down
             //when copy to window bmp we here to flip 
@@ -146,7 +145,7 @@ namespace PixelFarm.Agg.Imaging
         }
 
         public static void CopyFromGdiPlusBitmapSameSize(
-           Bitmap windowsBitmap,
+           PixelFarm.Drawing.Skia.MySkBmp windowsBitmap,
            ActualImage actualImage)
         {
             int h = windowsBitmap.Height;
