@@ -1,6 +1,5 @@
 ﻿//MIT, 2016, WinterDev 
 using System;
-using System.Collections.Generic;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 using SkiaSharp;
@@ -9,20 +8,15 @@ namespace PixelFarm.Drawing.Skia
 
     class SkiaCanvasPainter : CanvasPainter
     {
-        //SkGraphics _gfx;
-        //MySkBmp _gfxBmp;
-
-        //
         RectInt _clipBox;
         Color _fillColor;
         Color _strokeColor;
-        int _width, _height;
         double _strokeWidth;
         bool _useSubPixelRendering;
-        //BufferBitmapStore _bmpStore;
         RequestFont _currentFont;
-        //WinGdiFont _winGdiFont;
 
+        int _height;
+        int _width;
         Agg.VertexSource.RoundedRect roundRect;
         SmoothingMode _smoothingMode;
         //-----------------------
@@ -30,31 +24,15 @@ namespace PixelFarm.Drawing.Skia
         SKPaint _fill;
         SKPaint _stroke;
         //-----------------------
-        internal SkiaCanvasPainter()
+        internal SkiaCanvasPainter(SKCanvas canvas, int w, int h)
         {
+            _skCanvas = canvas;
             _fill = new SKPaint();
             _stroke = new SKPaint();
             _stroke.IsStroke = true;
+            _width = w;
+            _height = h;
         }
-        //internal SkiaCanvasPainter(MySkBmp gfxBmp)
-        //{
-        //    _width = 800;// gfxBmp.Width; //?
-        //    _height = 600;// gfxBmp.Height; ???
-        //    _gfxBmp = gfxBmp;
-        //    _gfx = SkGraphics.FromImage(_gfxBmp);
-        //    //credit:
-        //    //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
-        //    _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
-        //    _gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly            
-
-
-        //    _gfx.SolidBrushColor = Color.Black;
-        //    _gfx.PenColor = Color.Black;
-        //    //
-        //    _bmpStore = new BufferBitmapStore(_width, _height);
-        //}
-
-
         static bool defaultAntiAlias = false;
         public override SmoothingMode SmoothingMode
         {
@@ -64,7 +42,6 @@ namespace PixelFarm.Drawing.Skia
             }
             set
             {
-
                 switch (_smoothingMode = value)
                 {
                     case SmoothingMode.AntiAlias:
@@ -74,29 +51,6 @@ namespace PixelFarm.Drawing.Skia
                         _fill.IsAntialias = _stroke.IsAntialias = defaultAntiAlias;
                         break;
                 }
-
-
-
-
-                //_gfx.SmoothMode = value;
-
-                //?
-                //switch (_smoothingMode = value)
-                //{
-                //    case Drawing.SmoothingMode.AntiAlias:
-                //        _gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                //        break;
-                //    case Drawing.SmoothingMode.HighSpeed:
-                //        _gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
-                //        break;
-                //    case Drawing.SmoothingMode.HighQuality:
-                //        _gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                //        break;
-                //    case Drawing.SmoothingMode.Default:
-                //    default:
-                //        _gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
-                //        break;
-                //}
             }
         }
 
@@ -307,15 +261,6 @@ namespace PixelFarm.Drawing.Skia
             //    _bmpStore.RelaseBmp(bmp);
             //}
         }
-
-        //static MySkBmp CreateBmpBRGA(ActualImage actualImage)
-        //{
-        //    return MySkBmp.CopyFrom(actualImage);
-        //}
-        //public void DrawImage(MySkBmp bmp, float x, float y)
-        //{
-        //    _skCanvas.DrawBitmap(bmp.internalBmp, x, y);
-        //}
         public override void DrawImage(ActualImage actualImage, double x, double y)
         {
             //create Gdi bitmap from actual image
@@ -454,9 +399,7 @@ namespace PixelFarm.Drawing.Skia
             _skCanvas.DrawRect(
               new SKRect((float)left, (float)(bottom - height), (float)(left + width), (float)bottom),
                 _fill);
-
         }
-
 
         VertexStorePool _vxsPool = new VertexStorePool();
         VertexStore GetFreeVxs()

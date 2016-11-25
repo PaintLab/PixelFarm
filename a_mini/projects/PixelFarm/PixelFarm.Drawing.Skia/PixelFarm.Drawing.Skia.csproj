@@ -70,8 +70,6 @@
     <Compile Include="Canvas\4_MySkiaCanvas_TextAndFonts.cs" />
     <Compile Include="Canvas\Conv.cs" />
     <Compile Include="Implementation\BitmapHelper.cs" />
-    <Compile Include="Implementation\Region.cs" />
-    <Compile Include="MiniAggGraphics\BufferBitmapStore.cs" />
     <Compile Include="MiniAggGraphics\SkiaCanvasPainter.cs" />
     <Compile Include="MiniAggGraphics\SkiaRenderVx.cs" />
     <Compile Include="MiniAggGraphics\VxsHelper.cs" />
