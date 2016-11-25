@@ -60,9 +60,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.One.csproj">
-      <Project>{E71BD6D1-211F-4778-9632-77AB9B155BCB}</Project>
-      <Name>PixelFarm.One</Name>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+      <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
+      <Name>PixelFarm.MiniOpenTK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj">
+      <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
+      <Name>PixelFarm.NativeWindows</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
       <Project>{18EC3701-C6A5-429D-8C65-19ED4A2C2FED}</Project>
