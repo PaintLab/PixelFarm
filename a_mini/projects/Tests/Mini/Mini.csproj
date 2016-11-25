@@ -214,6 +214,10 @@
       <Project>{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}</Project>
       <Name>PixelFarm.Drawing.GLES2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj">
+      <Project>{9450c9fb-5a70-4e47-bec3-b0a98a9c7d15}</Project>
+      <Name>PixelFarm.Drawing.Skia</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniAgg.csproj">
       <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
       <Name>PixelFarm.MiniAgg</Name>
@@ -230,6 +234,10 @@
       <Project>{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}</Project>
       <Name>PixelFarm.OpenTKWinForms</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
+      <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
+      <Name>PixelFarm.SkiaSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>
@@ -242,6 +250,9 @@
       <Project>{B9C23586-913D-4EE8-B266-BD58FBD0133B}</Project>
       <Name>Win32Utils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="8_SkiaTest\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
