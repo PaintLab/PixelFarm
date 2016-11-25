@@ -108,27 +108,27 @@ namespace PixelFarm.Drawing.Skia
             return brushPath;
         }
 
-        public static void FillVxsSnap(SkGraphics g, VertexStoreSnap vxsSnap, Color c)
+        public static void FillVxsSnap(SKCanvas g, VertexStoreSnap vxsSnap, SKPaint fill)
         {
             using (var p = CreateGraphicsPath(vxsSnap))
             {
-                g.FillPath(p, c);
+                g.DrawPath(p, fill);
             }
         }
-        public static void DrawVxsSnap(SkGraphics g, VertexStoreSnap vxsSnap, Color c)
+        public static void DrawVxsSnap(SKCanvas g, VertexStoreSnap vxsSnap, SKPaint stroke)
         {
             using (var p = CreateGraphicsPath(vxsSnap))
             {
-                g.DrawPath(p, c);
+                g.DrawPath(p, stroke);
             }
         }
-        public static void FillPath(SkGraphics g, SkiaSharp.SKPath p, Color c)
+        public static void FillPath(SKCanvas g, SKPath p, SKPaint fill)
         {
-            g.FillPath(p, c);
+            g.DrawPath(p, fill);
         }
-        public static void DrawPath(SkGraphics g, SkiaSharp.SKPath p, Color c)
+        public static void DrawPath(SKCanvas g, SKPath p, SKPaint stroke)
         {
-            g.DrawPath(p, c);
+            g.DrawPath(p, stroke);
         }
 
     }

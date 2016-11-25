@@ -12,8 +12,13 @@ namespace PixelFarm.Drawing.Skia
         //-------------------------------
         Stack<SKRect> clipRectStack = new Stack<SKRect>();
         SKRect currentClipRect;
-        SkGraphics gx;
+        //----------------------------
 
+        SKCanvas skCanvas;
+        SKBitmap skBitmap;
+        SKPaint fill;
+        SKPaint stroke;
+        SKPaint textStroke;
         internal MySkiaCanvas(
             int horizontalPageNum,
             int verticalPageNum,
@@ -28,12 +33,14 @@ namespace PixelFarm.Drawing.Skia
             dbug_canvasCount += 1;
 #endif
 
+
             this.pageNumFlags = (horizontalPageNum << 8) | verticalPageNum;
             //2. dimension
             this.left = left;
             this.top = top;
             this.right = left + width;
             this.bottom = top + height;
+
             currentClipRect = new SKRect(0, 0, width, height);
             CreateGraphicsFromNativeHdc(width, height);
 
@@ -42,9 +49,19 @@ namespace PixelFarm.Drawing.Skia
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
 
-            gx = new SkGraphics(width, height);
+            skBitmap = new SKBitmap(width, height);
+            skCanvas = new SKCanvas(skBitmap);
+            //
+            stroke = new SKPaint();
+            stroke.IsStroke = true;
+            //
+            fill = new SKPaint();
+            fill.IsStroke = false;
+            //---------------------------------------
+
             this.CurrentFont = new RequestFont("tahoma", 14);
             this.CurrentTextColor = Color.Black;
+            //---------------------------------------
         }
 #if DEBUG
         public override string ToString()
@@ -67,9 +84,6 @@ namespace PixelFarm.Drawing.Skia
             //}
             isDisposed = true;
             ReleaseUnManagedResource();
-
-
-
         }
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

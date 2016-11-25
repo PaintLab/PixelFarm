@@ -1,28 +1,26 @@
 ﻿//MIT, 2014-2016, WinterDev
-using System;
+using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
 {
     partial class MySkiaCanvas
     {
         RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
+
         public override void DrawText(char[] buffer, int x, int y)
         {
-
-            var clipRect = currentClipRect;
+            SKRect clipRect = currentClipRect;
             clipRect.Offset(canvasOriginX, canvasOriginY);
-            gx.SetClip(clipRect);
-            gx.DrawString(buffer, x, y);
-            gx.ClearClip();
+            skCanvas.ClipRect(clipRect);
+            skCanvas.DrawText(new string(buffer), x, y, textStroke);
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
-
-            var clipRect = currentClipRect;
+            SKRect clipRect = currentClipRect;
             clipRect.Offset(canvasOriginX, canvasOriginY);
-            gx.SetClip(clipRect);
-            gx.DrawString(buffer, logicalTextBox);
-            gx.ClearClip();
+            skCanvas.ClipRect(clipRect);
+            //TODO: review here
+            skCanvas.DrawText(new string(buffer), logicalTextBox.X, logicalTextBox.Y, textStroke);
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
@@ -45,9 +43,9 @@ namespace PixelFarm.Drawing.Skia
                 //3. set rect rgn
 
                 clipRect.Offset(canvasOriginX, canvasOriginY);
-                gx.SetClip(clipRect);
-                gx.DrawString(str, logicalTextBox);
-                gx.ClearClip();
+                //gx.SetClip(clipRect);
+                skCanvas.DrawText(new string(str, startAt, len), logicalTextBox.X, logicalTextBox.Y, textStroke);
+                //gx.ClearClip();
 #if DEBUG
                 //NativeTextWin32.dbugDrawTextOrigin(tempDc,
                 //        logicalTextBox.X + canvasOriginX,
@@ -69,14 +67,16 @@ namespace PixelFarm.Drawing.Skia
                 //3. set rect rgn
 
                 clipRect.Offset(canvasOriginX, canvasOriginY);
-                gx.SetClip(clipRect);
-                gx.DrawString(str, logicalTextBox);
-                gx.ClearClip();
+                //gx.SetClip(clipRect);
+                //gx.DrawString(str, logicalTextBox);
+                skCanvas.DrawText(new string(str, startAt, len), logicalTextBox.X, logicalTextBox.Y, textStroke);
+                //gx.ClearClip();
+
 #if DEBUG
                 //NativeTextWin32.dbugDrawTextOrigin(tempDc,
                 //        logicalTextBox.X + canvasOriginX,
                 //        logicalTextBox.Y + canvasOriginY);
-#endif 
+#endif
             }
         }
         //====================================================
@@ -88,10 +88,7 @@ namespace PixelFarm.Drawing.Skia
             }
             set
             {
-
                 this.currentTextFont = value;
-                gx.CurrentFont = value;
-                //win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).ToHfont());
             }
         }
         public override Color CurrentTextColor
@@ -103,8 +100,6 @@ namespace PixelFarm.Drawing.Skia
             set
             {
                 mycurrentTextColor = value;
-                //win32MemDc.SetSolidTextColor(value.R, value.G, value.B);
-                gx.CurrentTextColor = value;
             }
         }
     }

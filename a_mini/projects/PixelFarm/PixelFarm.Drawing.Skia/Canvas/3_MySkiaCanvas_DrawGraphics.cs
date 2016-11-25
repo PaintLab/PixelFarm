@@ -2,8 +2,26 @@
 
 using System;
 using System.Collections.Generic;
+using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
 {
+
+    static class Conv1
+    {
+        public static SKColor ConvToColor(PixelFarm.Drawing.Color c)
+        {
+            return new SKColor(c.R, c.G, c.B, c.A);
+        }
+        public static SKRect ConvToRect(PixelFarm.Drawing.Rectangle r)
+        {
+            return new SKRect(r.X, r.Y, r.Right, r.Bottom);
+        }
+        public static SKRect ConvToRect(PixelFarm.Drawing.RectangleF r)
+        {
+            return new SKRect(r.X, r.Y, r.Right, r.Bottom);
+        }
+    }
+
     partial class MySkiaCanvas
     {
         float strokeWidth = 1f;
@@ -18,7 +36,7 @@ namespace PixelFarm.Drawing.Skia
             }
             set
             {
-                gx.PenColor = this.strokeColor = value;
+                stroke.Color = Conv1.ConvToColor(this.strokeColor = value);
             }
         }
         public override float StrokeWidth
@@ -29,8 +47,7 @@ namespace PixelFarm.Drawing.Skia
             }
             set
             {
-
-                gx.PenWidth = this.strokeWidth = value;
+                stroke.StrokeWidth = (this.strokeWidth = value);
             }
         }
 
@@ -48,12 +65,15 @@ namespace PixelFarm.Drawing.Skia
         }
         public override void ClearSurface(PixelFarm.Drawing.Color c)
         {
-            gx.Clear(c);
+            skCanvas.Clear(Conv1.ConvToColor(c));
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {
             //convert graphics path to skia path 
-            gx.DrawPath(ResolveGraphicsPath(gfxPath));
+            using (SKPath p = ResolveGraphicsPath(gfxPath))
+            {
+                skCanvas.DrawPath(p, stroke);
+            }
         }
         public override void FillRectangle(Brush brush, float left, float top, float width, float height)
         {
@@ -63,11 +83,14 @@ namespace PixelFarm.Drawing.Skia
                 case BrushKind.Solid:
                     {
                         //use default solid brush
-                        var prevColor = gx.SolidBrushColor;
+
                         SolidBrush solidBrush = (SolidBrush)brush;
-                        gx.SolidBrushColor = solidBrush.Color;
-                        gx.FillRectLTRB(left, top, right - left, top + height);
-                        gx.SolidBrushColor = prevColor;
+                        var prevColor = fill.Color;
+                        fill.Color = Conv1.ConvToColor(solidBrush.Color);
+                        skCanvas.DrawRect(
+                            SKRect.Create(left, top, width, height),
+                            fill);
+                        fill.Color = prevColor;
                     }
                     break;
                 case BrushKind.LinearGradient:
@@ -104,25 +127,37 @@ namespace PixelFarm.Drawing.Skia
         }
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
-            var prevColor = gx.SolidBrushColor;
-            gx.SolidBrushColor = color;
-            gx.FillRectLTRB(left, top, left + width, top + height);
-            gx.SolidBrushColor = prevColor;
+            //var prevColor = gx.SolidBrushColor;
+            //gx.SolidBrushColor = color;
+            //gx.FillRectLTRB(left, top, left + width, top + height);
+            //gx.SolidBrushColor = prevColor;
+
+            var prevColor = fill.Color;
+            fill.Color = Conv1.ConvToColor(color);
+            skCanvas.DrawRect(
+                SKRect.Create(left, top, width, height),
+                fill);
+            fill.Color = prevColor;
+
         }
-
-
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
-            var prevColor = gx.PenColor;
-            gx.PenColor = color;
-            gx.DrawRectLTRB(left, top, left + width, top + height);
-            gx.PenColor = prevColor;
+            //var prevColor = gx.PenColor;
+            //gx.PenColor = color;
+            //gx.DrawRectLTRB(left, top, left + width, top + height);
+            //gx.PenColor = prevColor;
+
+            var prevColor = stroke.Color;
+            stroke.Color = Conv1.ConvToColor(color);
+            skCanvas.DrawRect(
+                SKRect.Create(left, top, width, height),
+                stroke);
+            stroke.Color = prevColor;
         }
 
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
-
-            gx.DrawLine(x1, y1, x2, y2);
+            skCanvas.DrawLine(x1, y1, x2, y2, stroke);
         }
 
 
@@ -172,23 +207,23 @@ namespace PixelFarm.Drawing.Skia
             //}
         }
 
-        static MySkBmp ResolveInnerBmp(Image image)
+        static SKBitmap ResolveInnerBmp(Image image)
         {
 
             if (image is PixelFarm.Agg.ActualImage)
             {
                 //this is known image
-                var cacheBmp = Image.GetCacheInnerImage(image) as MySkBmp;
+                var cacheBmp = Image.GetCacheInnerImage(image) as SKBitmap;
                 if (cacheBmp == null)
                 {
-
-                    MySkBmp bmp = new MySkBmp(image.Width,
-                       image.Height);
+                    var internalBmp = new SKBitmap(image.Width, image.Height);
+                    //MySkBmp bmp = new MySkBmp(image.Width,
+                    //   image.Height);
                     //
-                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
+                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, internalBmp);
                     //
-                    Image.SetCacheInnerImage(image, bmp);
-                    return bmp;
+                    Image.SetCacheInnerImage(image, internalBmp);
+                    return internalBmp;
                 }
                 else
                 {
@@ -199,7 +234,7 @@ namespace PixelFarm.Drawing.Skia
             else
             {
                 //other image
-                return Image.GetCacheInnerImage(image) as MySkBmp;
+                return Image.GetCacheInnerImage(image) as SKBitmap;
             }
         }
 
@@ -212,10 +247,13 @@ namespace PixelFarm.Drawing.Skia
         /// <exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception>
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
-            var bmp = Image.GetCacheInnerImage(image) as MySkBmp;
+            var bmp = Image.GetCacheInnerImage(image) as SkiaSharp.SKBitmap;
             if (bmp != null)
             {
-                gx.DrawImage(bmp, destRect, srcRect);
+                skCanvas.DrawBitmap(
+                    bmp,
+                    Conv1.ConvToRect(srcRect),
+                    Conv1.ConvToRect(destRect));
             }
 
         }
@@ -231,12 +269,16 @@ namespace PixelFarm.Drawing.Skia
                     j -= 1;
                 }
                 //loop draw
-                var inner = ResolveInnerBmp(image);
+                SKBitmap inner = ResolveInnerBmp(image);
                 for (int i = 0; i < j;)
                 {
-                    gx.DrawImage(inner,
-                        destAndSrcPairs[i],
-                        destAndSrcPairs[i + 1]);
+                    //gx.DrawImage(inner,
+                    //    destAndSrcPairs[i],
+                    //    destAndSrcPairs[i + 1]);
+                    skCanvas.DrawBitmap(
+                         inner,
+                         Conv1.ConvToRect(destAndSrcPairs[i]),
+                         Conv1.ConvToRect(destAndSrcPairs[i + 1]));
 
                     i += 2;
                 }
@@ -249,27 +291,27 @@ namespace PixelFarm.Drawing.Skia
         public override void DrawImage(Image image, RectangleF destRect)
         {
 
-            MySkBmp inner = ResolveInnerBmp(image);
+            SKBitmap inner = ResolveInnerBmp(image);
             if (image.IsReferenceImage)
             {
-                gx.DrawImage(inner,
-                    destRect,
-                     new RectangleF(
-                         image.ReferenceX, image.ReferenceY,
-                         image.Width, image.Height));
+                skCanvas.DrawBitmap(inner,
+                   SKRect.Create(
+                        image.ReferenceX, image.ReferenceY,
+                        image.Width, image.Height),
+                    new SKRect(destRect.Left, destRect.Top, destRect.Right, destRect.Bottom));
             }
             else
             {
-                gx.DrawImage(inner, destRect);
+                skCanvas.DrawBitmap(inner,
+                    new SKRect(destRect.Left, destRect.Top, destRect.Right, destRect.Bottom));
             }
         }
         public override void FillPath(Color color, GraphicsPath gfxPath)
         {
             //solid color
-
             //internalSolidBrush.Color = ConvColor(color);
-            var innerPath = ResolveGraphicsPath(gfxPath);
-            gx.FillPath(innerPath, color);
+            SKPath innerPath = ResolveGraphicsPath(gfxPath);
+            skCanvas.DrawPath(innerPath, fill);
         }
         /// <summary>
         /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
@@ -277,6 +319,7 @@ namespace PixelFarm.Drawing.Skia
         /// <param name="brush"><see cref="T:System.Drawing.Brush"/> that determines the characteristics of the fill. </param><param name="path"><see cref="T:System.Drawing.Drawing2D.GraphicsPath"/> that represents the path to fill. </param><exception cref="T:System.ArgumentNullException"><paramref name="brush"/> is null.-or-<paramref name="path"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
         public override void FillPath(Brush brush, GraphicsPath path)
         {
+            throw new NotSupportedException();
 
             switch (brush.BrushKind)
             {
@@ -405,10 +448,14 @@ namespace PixelFarm.Drawing.Skia
             //create polygon path
             if (brush is SolidBrush)
             {
-                var prevColor = gx.SolidBrushColor;
-                gx.SolidBrushColor = ((SolidBrush)brush).Color;
-                gx.FillPolygon(gx.SolidBrushColor, points);
-                gx.SolidBrushColor = prevColor;
+                SolidBrush b = (SolidBrush)brush;
+                var prevColor = b.Color;
+
+
+                //var prevColor = gx.SolidBrushColor;
+                //gx.SolidBrushColor = ((SolidBrush)brush).Color;
+                //gx.FillPolygon(gx.SolidBrushColor, points);
+                //gx.SolidBrushColor = prevColor;
             }
             else
             {
@@ -421,14 +468,48 @@ namespace PixelFarm.Drawing.Skia
         }
         public override void FillPolygon(Color color, PointF[] points)
         {
-
-            var prevColor = gx.SolidBrushColor;
-            gx.SolidBrushColor = color;
-            gx.FillPolygon(gx.SolidBrushColor, points);
-            gx.SolidBrushColor = prevColor;
+            using (SKPath path = CreatePolygon(points))
+            {
+                var prevColor = fill.Color;
+                fill.Color = Conv1.ConvToColor(color);
+                skCanvas.DrawPath(path, fill);
+                fill.Color = prevColor;
+            }
+            //var prevColor = gx.SolidBrushColor;
+            //gx.SolidBrushColor = color;
+            //gx.FillPolygon(gx.SolidBrushColor, points);
+            //gx.SolidBrushColor = prevColor;
 
         }
-
+        static SkiaSharp.SKPath CreatePolygon(PixelFarm.Drawing.PointF[] points)
+        {
+            SkiaSharp.SKPath p = new SkiaSharp.SKPath();
+            int j = points.Length;
+            PixelFarm.Drawing.PointF p0 = new PixelFarm.Drawing.PointF();
+            for (int i = 0; i < j; ++i)
+            {
+                if (i == 0)
+                {
+                    p0 = points[0];
+                    p.MoveTo(p0.X, p0.Y);
+                }
+                else if (i == j - 1)
+                {
+                    //last one
+                    var point = points[i];
+                    p.LineTo(point.X, point.Y);
+                    p.LineTo(p0.X, p0.Y);
+                    p.Close();
+                    break;
+                }
+                else
+                {
+                    var point = points[i];
+                    p.LineTo(point.X, point.Y);
+                }
+            }
+            return p;
+        }
         ////==========================================================
         //public override void CopyFrom(Canvas sourceCanvas, int logicalSrcX, int logicalSrcY, Rectangle destArea)
         //{

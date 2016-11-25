@@ -26,7 +26,7 @@ namespace PixelFarm.Agg.Imaging
 
         public static void CopyToGdiPlusBitmapSameSize(
             ActualImage actualImage,
-           PixelFarm.Drawing.Skia.MySkBmp bitmap)
+            SkiaSharp.SKBitmap skBmp)
         {
             //agg store image buffer head-down
             //when copy to window bmp we here to flip 
@@ -37,9 +37,9 @@ namespace PixelFarm.Agg.Imaging
                 //sss.Start();
                 //for (int i = 0; i < 1000; ++i)
                 //{
-                int h = bitmap.Height;
-                int w = bitmap.Width;
-                SkiaSharp.SKBitmap skBmp = bitmap.internalBmp;
+                int h = skBmp.Height;
+                int w = skBmp.Width;
+                
 
                 //BitmapData bitmapData1 = bitmap.LockBits(
                 //          new Rectangle(0, 0,
@@ -144,56 +144,56 @@ namespace PixelFarm.Agg.Imaging
             //} 
         }
 
-        public static void CopyFromGdiPlusBitmapSameSize(
-           PixelFarm.Drawing.Skia.MySkBmp windowsBitmap,
-           ActualImage actualImage)
-        {
-            int h = windowsBitmap.Height;
-            int w = windowsBitmap.Width;
-            byte[] targetBuffer = ActualImage.GetBuffer(actualImage);
-            SkiaSharp.SKBitmap innerBmp = windowsBitmap.internalBmp;
+        //public static void CopyFromGdiPlusBitmapSameSize(
+        //   PixelFarm.Drawing.Skia.MySkBmp windowsBitmap,
+        //   ActualImage actualImage)
+        //{
+        //    int h = windowsBitmap.Height;
+        //    int w = windowsBitmap.Width;
+        //    byte[] targetBuffer = ActualImage.GetBuffer(actualImage);
+        //    SkiaSharp.SKBitmap innerBmp = windowsBitmap.internalBmp;
 
-            innerBmp.LockPixels();
-            IntPtr scan0 = innerBmp.GetPixels();
-            int stride = actualImage.Stride;
+        //    innerBmp.LockPixels();
+        //    IntPtr scan0 = innerBmp.GetPixels();
+        //    int stride = actualImage.Stride;
 
-            //TODO: review here 
-            //use buffer copy
+        //    //TODO: review here 
+        //    //use buffer copy
 
-            unsafe
-            {
-                //target 
-                int startRowAt = ((h - 1) * stride);
-                byte* src = (byte*)scan0;
-                for (int y = h; y > 0; --y)
-                {
-                    // byte* target = targetH + ((y - 1) * stride);
+        //    unsafe
+        //    {
+        //        //target 
+        //        int startRowAt = ((h - 1) * stride);
+        //        byte* src = (byte*)scan0;
+        //        for (int y = h; y > 0; --y)
+        //        {
+        //            // byte* target = targetH + ((y - 1) * stride);
 
-                    System.Runtime.InteropServices.Marshal.Copy(
-                          (IntPtr)src,//src
-                          targetBuffer, startRowAt, stride);
-                    startRowAt -= stride;
-                    src += stride;
-                }
+        //            System.Runtime.InteropServices.Marshal.Copy(
+        //                  (IntPtr)src,//src
+        //                  targetBuffer, startRowAt, stride);
+        //            startRowAt -= stride;
+        //            src += stride;
+        //        }
 
-                //////////////////////////////////////////////////////////////////
-                //fixed (byte* targetH = &targetBuffer[0])
-                //{
-                //    byte* src = (byte*)scan0;
-                //    for (int y = h; y > 0; --y)
-                //    {
-                //        byte* target = targetH + ((y - 1) * stride);
-                //        for (int n = stride - 1; n >= 0; --n)
-                //        {
-                //            *target = *src;
-                //            target++;
-                //            src++;
-                //        }
-                //    }
-                //}
-            }
-            innerBmp.UnlockPixels();
-        }
+        //        //////////////////////////////////////////////////////////////////
+        //        //fixed (byte* targetH = &targetBuffer[0])
+        //        //{
+        //        //    byte* src = (byte*)scan0;
+        //        //    for (int y = h; y > 0; --y)
+        //        //    {
+        //        //        byte* target = targetH + ((y - 1) * stride);
+        //        //        for (int n = stride - 1; n >= 0; --n)
+        //        //        {
+        //        //            *target = *src;
+        //        //            target++;
+        //        //            src++;
+        //        //        }
+        //        //    }
+        //        //}
+        //    }
+        //    innerBmp.UnlockPixels();
+        //}
 
 
         //public static void CopyToWindowsBitmap(ActualImage backingImageBufferByte,

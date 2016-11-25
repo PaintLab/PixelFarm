@@ -63,7 +63,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="0_Start\System.Drawing.cs" />
     <Compile Include="0_Start\SkiaGraphicsPlatform.cs" />
     <Compile Include="Canvas\1_MySkiaCanvas_Specific.cs" />
     <Compile Include="Canvas\2_MySkiaCanvas_CoordinateAndClip.cs" />
