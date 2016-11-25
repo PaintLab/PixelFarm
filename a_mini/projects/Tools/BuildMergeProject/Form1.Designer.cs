@@ -37,6 +37,7 @@
             this.cmdCopyNativeLibs = new System.Windows.Forms.Button();
             this.cmdForTestWithHtmlRenderer = new System.Windows.Forms.Button();
             this.cmdBuildMergePixelFarmMiniAgg = new System.Windows.Forms.Button();
+            this.cmdMinimalNetCore = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdBuildMergePixelFarm
@@ -129,11 +130,22 @@
             this.cmdBuildMergePixelFarmMiniAgg.UseVisualStyleBackColor = true;
             this.cmdBuildMergePixelFarmMiniAgg.Click += new System.EventHandler(this.cmdBuildMergePixelFarmMiniAgg_Click);
             // 
+            // cmdMinimalNetCore
+            // 
+            this.cmdMinimalNetCore.Location = new System.Drawing.Point(218, 156);
+            this.cmdMinimalNetCore.Name = "cmdMinimalNetCore";
+            this.cmdMinimalNetCore.Size = new System.Drawing.Size(188, 57);
+            this.cmdMinimalNetCore.TabIndex = 9;
+            this.cmdMinimalNetCore.Text = "BuildMerge for MinimumNetCore";
+            this.cmdMinimalNetCore.UseVisualStyleBackColor = true;
+            this.cmdMinimalNetCore.Click += new System.EventHandler(this.cmdMinimalNetCore_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(872, 565);
+            this.Controls.Add(this.cmdMinimalNetCore);
             this.Controls.Add(this.cmdBuildMergePixelFarmMiniAgg);
             this.Controls.Add(this.cmdForTestWithHtmlRenderer);
             this.Controls.Add(this.cmdCopyNativeLibs);
@@ -160,6 +172,7 @@
         private System.Windows.Forms.Button cmdCopyNativeLibs;
         private System.Windows.Forms.Button cmdForTestWithHtmlRenderer;
         private System.Windows.Forms.Button cmdBuildMergePixelFarmMiniAgg;
+        private System.Windows.Forms.Button cmdMinimalNetCore;
     }
 }
 

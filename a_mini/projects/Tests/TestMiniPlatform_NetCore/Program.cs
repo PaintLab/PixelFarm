@@ -1,14 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//MIT, 2016, WinterDev
+using System;
+using System.Runtime.InteropServices;
 
-namespace TestMiniPlatform_NetCore
+namespace TestGlfw
 {
-    public class Program
+    static class Program
     {
-        public static void Main(string[] args)
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
         {
+            //dbugTestStbImages();
+            GLFWProgram2.Start();
         }
+         
     }
+
+
+
+
 }

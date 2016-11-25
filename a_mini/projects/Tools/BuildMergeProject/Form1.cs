@@ -289,5 +289,41 @@ namespace BuildMergeProject
                   "System" ,
                });
         }
+
+        private void cmdMinimalNetCore_Click(object sender, EventArgs e)
+        {
+            //see reference in TestMiniPlatform4
+
+            MergeProject mergePro = new MergeProject();
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Native\PixelFarm.DataProvider.Native.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DrawingGL\PixelFarm.DrawingGL.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj");
+      
+
+            //------------------------------------------------------------------------------
+            string targetProjectName = "PixelFarm.MiniNetCore.One";
+            string targetProjectFile = targetProjectName + ".csproj";
+            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+               targetProjectName,
+               "v2.0",
+               "",//additional define constant
+               new string[] {
+                  "System" ,
+               });
+            //-----------
+            LinkProjectConverter.ConvertToLinkProject(
+                rootProjectFolders + "\\" + targetProjectFile,
+                rootProjectFolders + "\\autogen",
+                true);//after link project is created, we remove the targetProjectFile
+        }
+
     }
 }

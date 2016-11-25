@@ -16,9 +16,6 @@ namespace TestGlfw
             GLFWProgram2.Start();
         }
          
-    }
-
-
-
+    } 
 
 }
