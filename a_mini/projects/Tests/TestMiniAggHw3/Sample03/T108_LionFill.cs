@@ -21,6 +21,7 @@ namespace OpenTkEssTest
             canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
             lionShape = new SpriteShape();
             lionShape.ParseLion();
+
             //flip this lion vertically before use with openGL
             PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(
                  PixelFarm.Agg.Transform.AffinePlan.Scale(1, -1),
@@ -28,6 +29,7 @@ namespace OpenTkEssTest
             lionVxs = new VertexStore();
             aff.TransformToVxs(lionShape.Path.Vxs, lionVxs);
             painter = new GLCanvasPainter(canvas2d, max, max);
+
         }
         protected override void DemoClosing()
         {

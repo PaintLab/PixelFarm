@@ -6,8 +6,63 @@ using System.Collections.Generic;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using System.IO;
+using System.Xml;
+
 namespace BuildMergeProject
 {
+    static class LinkProjectConverter
+    {
+        public static void ConvertToLinkProject(string srcProject, string autoGenFolder, bool removeOriginalSrcProject)
+        {
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(srcProject);
+            var compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+            foreach (XmlElement elem in compileNodes)
+            {
+                XmlAttribute includeAttr = elem.GetAttributeNode("Include");
+                string includeValue = includeAttr.Value;
+                //this version:
+                //auto gen project is lower than original 1 level
+                //so change the original src location
+                //and create linked child node
+                includeAttr.Value = "..\\" + includeAttr.Value;
+                XmlElement linkNode = xmldoc.CreateElement("Link", elem.NamespaceURI);
+                linkNode.InnerText = includeValue;
+                elem.AppendChild(linkNode);
+            }
+
+            string onlyFileName = Path.GetFileName(srcProject);
+            if (!Directory.Exists(autoGenFolder))
+            {
+                Directory.CreateDirectory(autoGenFolder);
+            }
+            xmldoc.Save(autoGenFolder + "\\" + onlyFileName);
+            if (removeOriginalSrcProject)
+            {
+                File.Delete(srcProject);
+            }
+        }
+        static List<XmlElement> SelectCompileNodes(XmlElement projectNode)
+        {
+            //TODO: use xpath ...
+
+            List<XmlElement> compileNodes = new List<XmlElement>();
+            foreach (XmlElement item in projectNode)
+            {
+                if (item.Name == "ItemGroup")
+                {
+                    foreach (XmlElement item2 in item)
+                    {
+                        if (item2.Name == "Compile")
+                        {
+                            compileNodes.Add(item2);
+                        }
+                    }
+                }
+            }
+            return compileNodes;
+        }
+    }
     class MergeProject
     {
         List<ToMergeProject> subProjects = new List<ToMergeProject>();
@@ -148,10 +203,14 @@ namespace BuildMergeProject
         }
         static void AddItems(ProjectRootElement elem, string groupName, params string[] items)
         {
-            var group = elem.AddItemGroup();
+            ProjectItemGroupElement group = elem.AddItemGroup();
             foreach (var item in items)
             {
-                group.AddItem(groupName, item);
+                ProjectItemElement projItem = group.AddItem(groupName, item);
+                //if (groupName == "Compile")
+                //{
+                //    projItem.AddMetadata("Link", item);
+                //}
             }
         }
 
