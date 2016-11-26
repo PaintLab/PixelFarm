@@ -4,7 +4,7 @@ using SkiaSharp;
 
 namespace TestSkia1
 {
-    public partial class Form1 : Form
+    public partial class FormSkia1 : Form
     {
         public enum SkiaBackend
         {
@@ -13,7 +13,7 @@ namespace TestSkia1
         }
 
         SkiaBackend selectedBackend;
-        public Form1()
+        public FormSkia1()
         {
             InitializeComponent();
 
@@ -36,7 +36,7 @@ namespace TestSkia1
                 case SkiaBackend.GLES:
                     canvas.Visible = false;
                     glControl.Visible = true;
-                    break; 
+                    break;
             }
 
         }

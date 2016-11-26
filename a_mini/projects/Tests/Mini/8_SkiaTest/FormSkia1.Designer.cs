@@ -1,6 +1,6 @@
 ﻿namespace TestSkia1
 {
-    partial class Form1
+    partial class FormSkia1
     {
         /// <summary>
         /// Required designer variable.

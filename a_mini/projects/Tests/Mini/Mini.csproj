@@ -88,11 +88,11 @@
     <Compile Include="7_GLES2Test\MyMiniGLES2Control.Designer.cs">
       <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </Compile>
-    <Compile Include="8_SkiaTest\Form1.cs">
+    <Compile Include="8_SkiaTest\FormSkia1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="8_SkiaTest\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="8_SkiaTest\FormSkia1.Designer.cs">
+      <DependentUpon>FormSkia1.cs</DependentUpon>
     </Compile>
     <Compile Include="8_SkiaTest\SkiaControl\SKControl.cs">
       <SubType>Component</SubType>
@@ -170,8 +170,8 @@
     <EmbeddedResource Include="7_GLES2Test\MyMiniGLES2Control.resx">
       <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="8_SkiaTest\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="8_SkiaTest\FormSkia1.resx">
+      <DependentUpon>FormSkia1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>

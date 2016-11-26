@@ -85,15 +85,15 @@ namespace Mini
                         break;
                     case RenderBackendChoice.SkiaMemoryBackend:
                         {
-                            TestSkia1.Form1 formSkia = new TestSkia1.Form1();
-                            formSkia.SelectBackend(TestSkia1.Form1.SkiaBackend.Memory);
+                            TestSkia1.FormSkia1 formSkia = new TestSkia1.FormSkia1();
+                            formSkia.SelectBackend(TestSkia1.FormSkia1.SkiaBackend.Memory);
                             formSkia.Show();
                         }
                         break;
                     case RenderBackendChoice.SkiaGLBackend:
                         {
-                            TestSkia1.Form1 formSkia = new TestSkia1.Form1();
-                            formSkia.SelectBackend(TestSkia1.Form1.SkiaBackend.GLES);
+                            TestSkia1.FormSkia1 formSkia = new TestSkia1.FormSkia1();
+                            formSkia.SelectBackend(TestSkia1.FormSkia1.SkiaBackend.GLES);
                             formSkia.Show();
                         }
                         break;
