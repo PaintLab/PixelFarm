@@ -34,10 +34,10 @@ namespace BuildMergeProject
             //-----------
             LinkProjectConverter.ConvertToLinkProject(
                 rootProjectFolders + "\\" + targetProjectFile,
-                rootProjectFolders + "\\autogen",
+                rootProjectFolders + "\\x_autogen",
                 true);//after link project is created, we remove the targetProjectFile
 
-             
+
         }
         private void cmdMergePixelFarmMiniAggOne_Click(object sender, EventArgs e)
         {
@@ -161,6 +161,7 @@ namespace BuildMergeProject
 
         private void cmd_Windows_OnlyGdiPlus_Click(object sender, EventArgs e)
         {
+
             //Windows:
             //-------------------------
             //no glfw.dll,
@@ -179,6 +180,8 @@ namespace BuildMergeProject
                   "System.Windows.Forms",
                   "System.Xml",
                });
+
+
         }
         private void cmd_Windows_NoGdiPlus_NoWinForms_Click(object sender, EventArgs e)
         {
@@ -306,7 +309,7 @@ namespace BuildMergeProject
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj");
-      
+
 
             //------------------------------------------------------------------------------
             string targetProjectName = "PixelFarm.MiniNetCore.One";

@@ -19,9 +19,7 @@ namespace PixelFarm.Agg.Imaging
             System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
                hBmpScan0, rawBuffer.Length);
         }
-
-
-
+         
         /////////////////////////////////////////////////////////////////////////////////////
 
         public static void CopyToGdiPlusBitmapSameSize(

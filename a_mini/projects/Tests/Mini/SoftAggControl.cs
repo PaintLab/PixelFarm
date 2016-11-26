@@ -31,7 +31,7 @@ namespace Mini
             this.Load += new EventHandler(SoftAggControl_Load);
         }
 
-        public bool UseGdiPlus
+        public bool UseGdiPlusOutput
         {
             get { return _useGdiPlusOutput; }
             set { _useGdiPlusOutput = value; }
@@ -57,10 +57,9 @@ namespace Mini
                 thisGfx = this.CreateGraphics();  //for render to output
                 bufferBmpRect = this.DisplayRectangle;
                 bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
-                var p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bufferBmp);
-                p.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
-
-                painter = p;
+                var gdiPlusCanvasPainter = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bufferBmp);
+                gdiPlusCanvasPainter.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
+                painter = gdiPlusCanvasPainter;
 
             }
             else

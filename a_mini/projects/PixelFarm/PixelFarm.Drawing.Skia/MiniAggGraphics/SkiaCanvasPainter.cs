@@ -6,7 +6,7 @@ using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
 {
 
-    class SkiaCanvasPainter : CanvasPainter
+    public class SkiaCanvasPainter : CanvasPainter
     {
         RectInt _clipBox;
         Color _fillColor;
@@ -24,15 +24,21 @@ namespace PixelFarm.Drawing.Skia
         SKPaint _fill;
         SKPaint _stroke;
         //-----------------------
-        internal SkiaCanvasPainter(SKCanvas canvas, int w, int h)
+        public SkiaCanvasPainter(int w, int h)
         {
-            _skCanvas = canvas;
+
             _fill = new SKPaint();
             _stroke = new SKPaint();
             _stroke.IsStroke = true;
             _width = w;
             _height = h;
         }
+        public SKCanvas Canvas
+        {
+            get { return _skCanvas; }
+            set { _skCanvas = value; }
+        }
+
         static bool defaultAntiAlias = false;
         public override SmoothingMode SmoothingMode
         {
@@ -316,24 +322,25 @@ namespace PixelFarm.Drawing.Skia
         public override void DrawString(string text, double x, double y)
         {
             //use current brush and font
+            _skCanvas.DrawText(text, (float)x, (float)y, _stroke);
 
-            _skCanvas.ResetMatrix();
-            _skCanvas.Translate(0.0F, (float)Height);// Translate the drawing area accordingly   
+            //_skCanvas.ResetMatrix();
+            //_skCanvas.Translate(0.0F, (float)Height);// Translate the drawing area accordingly   
 
 
-            //draw with native win32
-            //------------
+            ////draw with native win32
+            ////------------
 
-            /*_gfx.DrawString(text,
-                _latestWinGdiPlusFont.InnerFont,
-                _currentFillBrush,
-                new System.Drawing.PointF((float)x, (float)y));
-            */
-            //------------
-            //restore back
-            _skCanvas.ResetMatrix();//again
-            _skCanvas.Scale(1f, -1f);// Flip the Y-Axis
-            _skCanvas.Translate(0.0F, -(float)Height);// Translate the drawing area accordingly                             
+            ///*_gfx.DrawString(text,
+            //    _latestWinGdiPlusFont.InnerFont,
+            //    _currentFillBrush,
+            //    new System.Drawing.PointF((float)x, (float)y));
+            //*/
+            ////------------
+            ////restore back
+            //_skCanvas.ResetMatrix();//again
+            //_skCanvas.Scale(1f, -1f);// Flip the Y-Axis
+            //_skCanvas.Translate(0.0F, -(float)Height);// Translate the drawing area accordingly                             
         }
         /// <summary>
         /// we do NOT store snap/vxs
