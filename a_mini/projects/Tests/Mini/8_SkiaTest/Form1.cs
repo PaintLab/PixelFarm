@@ -36,7 +36,7 @@ namespace TestSkia1
                 case SkiaBackend.GLES:
                     canvas.Visible = false;
                     glControl.Visible = true;
-                    break;
+                    break; 
             }
 
         }

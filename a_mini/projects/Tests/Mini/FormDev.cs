@@ -32,7 +32,8 @@ namespace Mini
             PureAgg,
             GdiPlus,
             OpenGLES2,
-            Skia
+            SkiaMemoryBackend,
+            SkiaGLBackend,
         }
         void LoadRenderBackendChoices()
         {
@@ -40,7 +41,8 @@ namespace Mini
             cmbRenderBackend.Items.Add(RenderBackendChoice.PureAgg); //pure software renderer with MiniAgg
             cmbRenderBackend.Items.Add(RenderBackendChoice.GdiPlus);
             cmbRenderBackend.Items.Add(RenderBackendChoice.OpenGLES2);
-            cmbRenderBackend.Items.Add(RenderBackendChoice.Skia);
+            cmbRenderBackend.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
+            cmbRenderBackend.Items.Add(RenderBackendChoice.SkiaGLBackend);
             cmbRenderBackend.SelectedIndex = 0;//set default 
         }
 
@@ -79,6 +81,20 @@ namespace Mini
                             formGLTest.Show();
                             formGLTest.WindowState = FormWindowState.Maximized;
                             formGLTest.LoadExample(exAndDesc);
+                        }
+                        break;
+                    case RenderBackendChoice.SkiaMemoryBackend:
+                        {
+                            TestSkia1.Form1 formSkia = new TestSkia1.Form1();
+                            formSkia.SelectBackend(TestSkia1.Form1.SkiaBackend.Memory);
+                            formSkia.Show();
+                        }
+                        break;
+                    case RenderBackendChoice.SkiaGLBackend:
+                        {
+                            TestSkia1.Form1 formSkia = new TestSkia1.Form1();
+                            formSkia.SelectBackend(TestSkia1.Form1.SkiaBackend.GLES);
+                            formSkia.Show();
                         }
                         break;
                     default:
