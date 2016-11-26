@@ -20,10 +20,10 @@ namespace Mini
         {
             this.softAggControl2.Invalidate();
         }
-        public bool UseGdiPlus
+        public bool UseGdiPlusOutput
         {
-            get { return softAggControl2.UseGdiPlus; }
-            set { softAggControl2.UseGdiPlus = value; }
+            get { return softAggControl2.UseGdiPlusOutput; }
+            set { softAggControl2.UseGdiPlusOutput = value; }
         }
         public bool UseGdiAntiAlias
         {

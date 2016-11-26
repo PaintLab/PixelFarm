@@ -31,7 +31,7 @@ namespace Mini
             this.Load += new EventHandler(SoftAggControl_Load);
         }
 
-        public bool UseGdiPlus
+        public bool UseGdiPlusOutput
         {
             get { return _useGdiPlusOutput; }
             set { _useGdiPlusOutput = value; }

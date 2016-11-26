@@ -16,37 +16,75 @@ namespace Mini
 {
     partial class FormDev : Form
     {
+
         public FormDev()
         {
             InitializeComponent();
             this.Load += new EventHandler(DevForm_Load);
             this.listBox1.DoubleClick += new EventHandler(listBox1_DoubleClick);
             this.Text = "DevForm: Double Click The Example!";
-            //test native font
+            //render backend choices
+            LoadRenderBackendChoices();
         }
+
+        enum RenderBackendChoice
+        {
+            PureAgg,
+            GdiPlus,
+            OpenGLES2,
+            Skia
+        }
+        void LoadRenderBackendChoices()
+        {
+            cmbRenderBackend.Items.Clear();
+            cmbRenderBackend.Items.Add(RenderBackendChoice.PureAgg); //pure software renderer with MiniAgg
+            cmbRenderBackend.Items.Add(RenderBackendChoice.GdiPlus);
+            cmbRenderBackend.Items.Add(RenderBackendChoice.OpenGLES2);
+            cmbRenderBackend.Items.Add(RenderBackendChoice.Skia);
+            cmbRenderBackend.SelectedIndex = 0;//set default 
+        }
+
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
             //load sample form
             ExampleAndDesc exAndDesc = this.listBox1.SelectedItem as ExampleAndDesc;
             if (exAndDesc != null)
             {
-                if (chkUseOpenGLES2.Checked)
+                switch ((RenderBackendChoice)cmbRenderBackend.SelectedItem)
                 {
-                    FormGLTest formGLTest = new FormGLTest();
-                    formGLTest.InitGLControl();
-                    formGLTest.Show();
-                    formGLTest.WindowState = FormWindowState.Maximized;
-                    formGLTest.LoadExample(exAndDesc);
+                    case RenderBackendChoice.PureAgg:
+                        {
+                            FormTestBed1 testBed = new FormTestBed1();
+                            testBed.WindowState = FormWindowState.Maximized;
+                            testBed.UseGdiPlusOutput = false;
+                            testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
+                            testBed.Show();
+                            testBed.LoadExample(exAndDesc);
+                        }
+                        break;
+                    case RenderBackendChoice.GdiPlus:
+                        {
+                            FormTestBed1 testBed = new FormTestBed1();
+                            testBed.WindowState = FormWindowState.Maximized;
+                            testBed.UseGdiPlusOutput = true;
+                            testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
+                            testBed.Show();
+                            testBed.LoadExample(exAndDesc);
+                        }
+                        break;
+                    case RenderBackendChoice.OpenGLES2:
+                        {
+                            FormGLTest formGLTest = new FormGLTest();
+                            formGLTest.InitGLControl();
+                            formGLTest.Show();
+                            formGLTest.WindowState = FormWindowState.Maximized;
+                            formGLTest.LoadExample(exAndDesc);
+                        }
+                        break;
+                    default:
+                        throw new NotSupportedException();
                 }
-                else
-                {
-                    FormTestBed1 testBed = new FormTestBed1();
-                    testBed.WindowState = FormWindowState.Maximized;
-                    testBed.UseGdiPlus = chkUseGdiPlus.Checked;
-                    testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
-                    testBed.Show();
-                    testBed.LoadExample(exAndDesc);
-                }
+
             }
         }
         void DevForm_Load(object sender, EventArgs e)
@@ -265,7 +303,7 @@ namespace Mini
 
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     //test subpixel rendering 
-                     
+
                     vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0, new VertexStore());
                     gfx.UseSubPixelRendering = true;
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
@@ -303,10 +341,12 @@ namespace Mini
 
         private void cmdTestNativeLib_Click(object sender, EventArgs e)
         {
-//#if DEBUG
-//            PixelFarm.Drawing.Text.dbugTestMyFtLib.Test1();
-//#endif
+            //#if DEBUG
+            //            PixelFarm.Drawing.Text.dbugTestMyFtLib.Test1();
+            //#endif
         }
 
     }
 }
+
+

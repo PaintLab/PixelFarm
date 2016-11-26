@@ -35,12 +35,11 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.chkUseGdiPlus = new System.Windows.Forms.CheckBox();
             this.chkGdiAntiAlias = new System.Windows.Forms.CheckBox();
             this.button6 = new System.Windows.Forms.Button();
-            this.chkUseOpenGLES2 = new System.Windows.Forms.CheckBox();
             this.button7 = new System.Windows.Forms.Button();
             this.cmdTestNativeLib = new System.Windows.Forms.Button();
+            this.cmbRenderBackend = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,9 +83,9 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(252, 56);
+            this.pictureBox1.Location = new System.Drawing.Point(252, 39);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(429, 300);
+            this.pictureBox1.Size = new System.Drawing.Size(429, 317);
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
@@ -110,20 +109,10 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
-            // chkUseGdiPlus
-            // 
-            this.chkUseGdiPlus.AutoSize = true;
-            this.chkUseGdiPlus.Location = new System.Drawing.Point(252, 12);
-            this.chkUseGdiPlus.Name = "chkUseGdiPlus";
-            this.chkUseGdiPlus.Size = new System.Drawing.Size(70, 17);
-            this.chkUseGdiPlus.TabIndex = 7;
-            this.chkUseGdiPlus.Text = "Use Gdi+";
-            this.chkUseGdiPlus.UseVisualStyleBackColor = true;
-            // 
             // chkGdiAntiAlias
             // 
             this.chkGdiAntiAlias.AutoSize = true;
-            this.chkGdiAntiAlias.Location = new System.Drawing.Point(267, 33);
+            this.chkGdiAntiAlias.Location = new System.Drawing.Point(596, 14);
             this.chkGdiAntiAlias.Name = "chkGdiAntiAlias";
             this.chkGdiAntiAlias.Size = new System.Drawing.Size(85, 17);
             this.chkGdiAntiAlias.TabIndex = 8;
@@ -139,16 +128,6 @@
             this.button6.Text = "TestGLES2";
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // chkUseOpenGLES2
-            // 
-            this.chkUseOpenGLES2.AutoSize = true;
-            this.chkUseOpenGLES2.Location = new System.Drawing.Point(372, 12);
-            this.chkUseOpenGLES2.Name = "chkUseOpenGLES2";
-            this.chkUseOpenGLES2.Size = new System.Drawing.Size(108, 17);
-            this.chkUseOpenGLES2.TabIndex = 10;
-            this.chkUseOpenGLES2.Text = "Use OpenGLES2";
-            this.chkUseOpenGLES2.UseVisualStyleBackColor = true;
             // 
             // button7
             // 
@@ -170,17 +149,25 @@
             this.cmdTestNativeLib.UseVisualStyleBackColor = true;
             this.cmdTestNativeLib.Click += new System.EventHandler(this.cmdTestNativeLib_Click);
             // 
+            // cmbRenderBackend
+            // 
+            this.cmbRenderBackend.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbRenderBackend.FormattingEnabled = true;
+            this.cmbRenderBackend.Location = new System.Drawing.Point(252, 12);
+            this.cmbRenderBackend.Name = "cmbRenderBackend";
+            this.cmbRenderBackend.Size = new System.Drawing.Size(246, 21);
+            this.cmbRenderBackend.TabIndex = 13;
+            // 
             // FormDev
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(738, 588);
+            this.Controls.Add(this.cmbRenderBackend);
             this.Controls.Add(this.cmdTestNativeLib);
             this.Controls.Add(this.button7);
-            this.Controls.Add(this.chkUseOpenGLES2);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.chkGdiAntiAlias);
-            this.Controls.Add(this.chkUseGdiPlus);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.pictureBox1);
@@ -205,11 +192,10 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.CheckBox chkUseGdiPlus;
         private System.Windows.Forms.CheckBox chkGdiAntiAlias;
         private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.CheckBox chkUseOpenGLES2;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button cmdTestNativeLib;
+        private System.Windows.Forms.ComboBox cmbRenderBackend;
     }
 }
