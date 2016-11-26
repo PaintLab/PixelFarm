@@ -79,11 +79,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniAgg.One", "Pi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.One", "PixelFarm\x_autogen\PixelFarm.One.csproj", "{A85BCA44-562C-4034-85EA-7651EF1F3777}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{36975572-9D8D-4D2B-B6EE-FD3115D7980C}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Compatibility-GLFW2|Any CPU = Compatibility-GLFW2|Any CPU
