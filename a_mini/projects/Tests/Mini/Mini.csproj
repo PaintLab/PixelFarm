@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;__DESKTOP__</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -88,6 +88,21 @@
     <Compile Include="7_GLES2Test\MyMiniGLES2Control.Designer.cs">
       <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </Compile>
+    <Compile Include="8_SkiaTest\FormSkia1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="8_SkiaTest\FormSkia1.Designer.cs">
+      <DependentUpon>FormSkia1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="8_SkiaTest\SkiaControl\SKControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="8_SkiaTest\SkiaControl\SKGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="8_SkiaTest\SkiaControl\SKGLDrawable.cs" />
+    <Compile Include="8_SkiaTest\SkiaControl\SKPaintGLSurfaceEventArgs.cs" />
+    <Compile Include="8_SkiaTest\SkiaControl\SKPaintSurfaceEventArgs.cs" />
     <Compile Include="Experiment\4_Animation\ColorComponentStepup.cs" />
     <Compile Include="Experiment\4_Animation\GfxProcessorModule.cs" />
     <Compile Include="Experiment\4_Animation\ParallelTimeline.cs" />
@@ -154,6 +169,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="7_GLES2Test\MyMiniGLES2Control.resx">
       <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="8_SkiaTest\FormSkia1.resx">
+      <DependentUpon>FormSkia1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
@@ -251,9 +269,7 @@
       <Name>Win32Utils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="8_SkiaTest\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

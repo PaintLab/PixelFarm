@@ -135,28 +135,7 @@ namespace TestGlfw
                 canvas.DrawText("Hello!", 20, 100, p);
             }
         }
-        //---------------------------------
-        //only after gl context is created
-        static int GetServerTextureId(IntPtr scan0, int width, int height)
-        {
-            if (textureId == 0)
-            {
-                //server part
-                //gen texture 
-                GL.GenTextures(1, out textureId);
-                //bind
-                GL.BindTexture(TextureTarget.Texture2D, textureId);
-                GL.TexImage2D(TextureTarget.Texture2D, 0,
-                          PixelInternalFormat.Rgb, width, height, 0,
-                          PixelFormat.Rgba, // 
-                          PixelType.UnsignedByte, scan0);
 
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-                GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            }
-
-            return textureId;
-        }
         static PixelFarm.DrawingGL.CanvasGL2d canvasGL2d;
         public static void Start()
         {

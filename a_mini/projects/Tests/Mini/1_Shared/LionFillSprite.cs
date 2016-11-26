@@ -15,6 +15,11 @@ namespace PixelFarm.Agg
             this.Height = 500;
             AlphaValue = 255;
         }
+        public bool AutoFlipY
+        {
+            get;
+            set;
+        }
         public byte AlphaValue
         {
             get { return this.alpha; }
@@ -37,6 +42,7 @@ namespace PixelFarm.Agg
             myvxs = null;
             return result;
         }
+
         public override void Draw(CanvasPainter p)
         {
             if (myvxs == null)
@@ -53,7 +59,17 @@ namespace PixelFarm.Agg
                 myvxs = new VertexStore();
                 transform.TransformToVxs(lionShape.Path.Vxs, myvxs);
 
-                //myvxs = lionShape.Path.Vxs;
+                if (AutoFlipY)
+                {
+                    //flip the lion
+                    PixelFarm.Agg.Transform.Affine aff = PixelFarm.Agg.Transform.Affine.NewMatix(
+                      PixelFarm.Agg.Transform.AffinePlan.Scale(-1, -1),
+                      PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
+                    //
+                    var v2 = new VertexStore();
+                    myvxs = transform.TransformToVxs(myvxs, v2);
+                }
+
             }
             //---------------------------------------------------------------------------------------------
             {
