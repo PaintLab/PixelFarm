@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Imaging;
+
 namespace Mini
 {
     partial class FormTestBed1 : Form

@@ -32,31 +32,31 @@
             this.canvas = new SkiaSharp.Views.Desktop.SKControl();
             this.SuspendLayout();
             // 
-            // skglControl1
+            // glControl
             // 
             this.glControl.BackColor = System.Drawing.Color.Black;
             this.glControl.Location = new System.Drawing.Point(13, 13);
-            this.glControl.Name = "skglControl1";
-            this.glControl.Size = new System.Drawing.Size(511, 385);
+            this.glControl.Name = "glControl";
+            this.glControl.Size = new System.Drawing.Size(851, 529);
             this.glControl.TabIndex = 0;
             this.glControl.VSync = false;
             // 
-            // skControl1
+            // canvas
             // 
             this.canvas.Location = new System.Drawing.Point(22, 13);
-            this.canvas.Name = "skControl1";
-            this.canvas.Size = new System.Drawing.Size(546, 385);
+            this.canvas.Name = "canvas";
+            this.canvas.Size = new System.Drawing.Size(829, 519);
             this.canvas.TabIndex = 1;
             this.canvas.Text = "skControl1";
             // 
-            // Form1
+            // FormSkia1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(755, 457);
+            this.ClientSize = new System.Drawing.Size(900, 544);
             this.Controls.Add(this.canvas);
             this.Controls.Add(this.glControl);
-            this.Name = "Form1";
+            this.Name = "FormSkia1";
             this.Text = "Form1";
             this.ResumeLayout(false);
 

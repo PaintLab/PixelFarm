@@ -88,6 +88,7 @@ namespace Mini
                             TestSkia1.FormSkia1 formSkia = new TestSkia1.FormSkia1();
                             formSkia.SelectBackend(TestSkia1.FormSkia1.SkiaBackend.Memory);
                             formSkia.Show();
+                            formSkia.LoadExample(exAndDesc);
                         }
                         break;
                     case RenderBackendChoice.SkiaGLBackend:
@@ -95,6 +96,7 @@ namespace Mini
                             TestSkia1.FormSkia1 formSkia = new TestSkia1.FormSkia1();
                             formSkia.SelectBackend(TestSkia1.FormSkia1.SkiaBackend.GLES);
                             formSkia.Show();
+                            formSkia.LoadExample(exAndDesc);
                         }
                         break;
                     default:
