@@ -112,7 +112,7 @@
             // 
             // cmdForTestWithHtmlRenderer
             // 
-            this.cmdForTestWithHtmlRenderer.Location = new System.Drawing.Point(25, 503);
+            this.cmdForTestWithHtmlRenderer.Location = new System.Drawing.Point(25, 93);
             this.cmdForTestWithHtmlRenderer.Name = "cmdForTestWithHtmlRenderer";
             this.cmdForTestWithHtmlRenderer.Size = new System.Drawing.Size(360, 57);
             this.cmdForTestWithHtmlRenderer.TabIndex = 7;
