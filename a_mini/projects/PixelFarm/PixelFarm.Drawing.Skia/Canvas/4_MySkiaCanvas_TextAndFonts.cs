@@ -115,6 +115,7 @@ namespace PixelFarm.Drawing.Skia
                 if (typeFace != null)
                 {
                     textFill.Typeface = typeFace;
+                    textFill.TextSize = value.SizeInPoints;
                 }
                 //textFill.TextSize = value.SizeInPoints;                 
             }
