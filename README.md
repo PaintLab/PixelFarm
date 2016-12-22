@@ -25,7 +25,7 @@ Hardware and Software 2D Rendering Library
 	
     This provides 'classic' (pure) software based rendering technology.
 
-    Big thanks goes to to MatterHackers/agg-sharp
+    Big thanks goes to to MatterHackers/agg-sharp (https://github.com/MatterHackers/agg-sharp)
 	
     ![agg_software](https://cloud.githubusercontent.com/assets/7447159/20637922/0b017956-b3c9-11e6-8c3b-41baad33af67.png)
 	
