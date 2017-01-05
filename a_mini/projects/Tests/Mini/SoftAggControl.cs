@@ -31,7 +31,7 @@ namespace Mini
             this.Load += new EventHandler(SoftAggControl_Load);
         }
 
-        public bool UseGdiPlus
+        public bool UseGdiPlusOutput
         {
             get { return _useGdiPlusOutput; }
             set { _useGdiPlusOutput = value; }
@@ -57,21 +57,38 @@ namespace Mini
                 thisGfx = this.CreateGraphics();  //for render to output
                 bufferBmpRect = this.DisplayRectangle;
                 bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
-                var p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bufferBmp);
-                p.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
-
-                painter = p;
+                var gdiPlusCanvasPainter = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bufferBmp);
+                gdiPlusCanvasPainter.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
+                painter = gdiPlusCanvasPainter;
 
             }
             else
             {
-                painter = new AggCanvasPainter(bitmapBackBuffer.Initialize(myWidth, myHeight, 32));
+                ImageGraphics2D imgGfx2d = Initialize(myWidth, myHeight, 32);
+                painter = new AggCanvasPainter(imgGfx2d);
             }
 
             painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);
             painter.Clear(PixelFarm.Drawing.Color.White);
         }
+        ImageGraphics2D Initialize(int width, int height, int bitDepth)
+        {
+            if (width > 0 && height > 0)
+            {
 
+                if (bitDepth != 32)
+                {
+                    throw new NotImplementedException("Don't support this bit depth yet.");
+                }
+                else
+                {
+                    var actualImage = new ActualImage(width, height, PixelFormat.ARGB32);
+                    bitmapBackBuffer.Initialize(width, height, bitDepth, actualImage);
+                    return Graphics2D.CreateFromImage(actualImage);
+                }
+            }
+            throw new NotSupportedException();
+        }
         public void LoadExample(DemoBase exBase)
         {
             this.exampleBase = exBase;

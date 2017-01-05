@@ -348,10 +348,10 @@
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{83041BCA-82FA-45E9-B547-CD39A847E906}</UniqueIdentifier>
+      <UniqueIdentifier>{56A548F0-01FC-38B9-B37E-5CD09FDF765D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{45E60F22-E6D6-4352-A18C-7D8949C2970D}</UniqueIdentifier>
+      <UniqueIdentifier>{B8AD3F91-E0B4-3BD0-8CCA-E88066EDA4E3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

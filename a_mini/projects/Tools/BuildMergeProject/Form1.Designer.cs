@@ -30,12 +30,14 @@
         {
             this.cmdBuildMergePixelFarm = new System.Windows.Forms.Button();
             this.cmdBuildMergePixelFarmPortable = new System.Windows.Forms.Button();
-            this.cmdBuildMergePixelFarmMiniAgg = new System.Windows.Forms.Button();
+            this.cmdBuildMergePixelFarmMiniAggOne = new System.Windows.Forms.Button();
             this.cmd_Windows_OnlyGdiPlus = new System.Windows.Forms.Button();
             this.cmd_Windows_NoGdiPlus_NoWinForms = new System.Windows.Forms.Button();
             this.cmd_Cross = new System.Windows.Forms.Button();
             this.cmdCopyNativeLibs = new System.Windows.Forms.Button();
             this.cmdForTestWithHtmlRenderer = new System.Windows.Forms.Button();
+            this.cmdBuildMergePixelFarmMiniAgg = new System.Windows.Forms.Button();
+            this.cmdMinimalNetCore = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdBuildMergePixelFarm
@@ -58,15 +60,15 @@
             this.cmdBuildMergePixelFarmPortable.UseVisualStyleBackColor = true;
             this.cmdBuildMergePixelFarmPortable.Click += new System.EventHandler(this.cmdBuildMergePixelFarmPortable_Click);
             // 
-            // cmdBuildMergePixelFarmMiniAgg
+            // cmdBuildMergePixelFarmMiniAggOne
             // 
-            this.cmdBuildMergePixelFarmMiniAgg.Location = new System.Drawing.Point(25, 156);
-            this.cmdBuildMergePixelFarmMiniAgg.Name = "cmdBuildMergePixelFarmMiniAgg";
-            this.cmdBuildMergePixelFarmMiniAgg.Size = new System.Drawing.Size(167, 57);
-            this.cmdBuildMergePixelFarmMiniAgg.TabIndex = 2;
-            this.cmdBuildMergePixelFarmMiniAgg.Text = "BuildMerge PixelFarm.MiniAgg";
-            this.cmdBuildMergePixelFarmMiniAgg.UseVisualStyleBackColor = true;
-            this.cmdBuildMergePixelFarmMiniAgg.Click += new System.EventHandler(this.cmdMergePixelFarmMiniAgg_Click);
+            this.cmdBuildMergePixelFarmMiniAggOne.Location = new System.Drawing.Point(25, 156);
+            this.cmdBuildMergePixelFarmMiniAggOne.Name = "cmdBuildMergePixelFarmMiniAggOne";
+            this.cmdBuildMergePixelFarmMiniAggOne.Size = new System.Drawing.Size(167, 57);
+            this.cmdBuildMergePixelFarmMiniAggOne.TabIndex = 2;
+            this.cmdBuildMergePixelFarmMiniAggOne.Text = "BuildMerge PixelFarm.MiniAgg.One";
+            this.cmdBuildMergePixelFarmMiniAggOne.UseVisualStyleBackColor = true;
+            this.cmdBuildMergePixelFarmMiniAggOne.Click += new System.EventHandler(this.cmdMergePixelFarmMiniAggOne_Click);
             // 
             // cmd_Windows_OnlyGdiPlus
             // 
@@ -110,7 +112,7 @@
             // 
             // cmdForTestWithHtmlRenderer
             // 
-            this.cmdForTestWithHtmlRenderer.Location = new System.Drawing.Point(25, 503);
+            this.cmdForTestWithHtmlRenderer.Location = new System.Drawing.Point(25, 93);
             this.cmdForTestWithHtmlRenderer.Name = "cmdForTestWithHtmlRenderer";
             this.cmdForTestWithHtmlRenderer.Size = new System.Drawing.Size(360, 57);
             this.cmdForTestWithHtmlRenderer.TabIndex = 7;
@@ -118,17 +120,39 @@
             this.cmdForTestWithHtmlRenderer.UseVisualStyleBackColor = true;
             this.cmdForTestWithHtmlRenderer.Click += new System.EventHandler(this.cmdForTestWithHtmlRenderer_Click);
             // 
+            // cmdBuildMergePixelFarmMiniAgg
+            // 
+            this.cmdBuildMergePixelFarmMiniAgg.Location = new System.Drawing.Point(500, 440);
+            this.cmdBuildMergePixelFarmMiniAgg.Name = "cmdBuildMergePixelFarmMiniAgg";
+            this.cmdBuildMergePixelFarmMiniAgg.Size = new System.Drawing.Size(167, 57);
+            this.cmdBuildMergePixelFarmMiniAgg.TabIndex = 8;
+            this.cmdBuildMergePixelFarmMiniAgg.Text = "BuildMerge PixelFarm.MiniAgg";
+            this.cmdBuildMergePixelFarmMiniAgg.UseVisualStyleBackColor = true;
+            this.cmdBuildMergePixelFarmMiniAgg.Click += new System.EventHandler(this.cmdBuildMergePixelFarmMiniAgg_Click);
+            // 
+            // cmdMinimalNetCore
+            // 
+            this.cmdMinimalNetCore.Location = new System.Drawing.Point(218, 156);
+            this.cmdMinimalNetCore.Name = "cmdMinimalNetCore";
+            this.cmdMinimalNetCore.Size = new System.Drawing.Size(188, 57);
+            this.cmdMinimalNetCore.TabIndex = 9;
+            this.cmdMinimalNetCore.Text = "BuildMerge for MinimumNetCore";
+            this.cmdMinimalNetCore.UseVisualStyleBackColor = true;
+            this.cmdMinimalNetCore.Click += new System.EventHandler(this.cmdMinimalNetCore_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(872, 565);
+            this.Controls.Add(this.cmdMinimalNetCore);
+            this.Controls.Add(this.cmdBuildMergePixelFarmMiniAgg);
             this.Controls.Add(this.cmdForTestWithHtmlRenderer);
             this.Controls.Add(this.cmdCopyNativeLibs);
             this.Controls.Add(this.cmd_Cross);
             this.Controls.Add(this.cmd_Windows_NoGdiPlus_NoWinForms);
             this.Controls.Add(this.cmd_Windows_OnlyGdiPlus);
-            this.Controls.Add(this.cmdBuildMergePixelFarmMiniAgg);
+            this.Controls.Add(this.cmdBuildMergePixelFarmMiniAggOne);
             this.Controls.Add(this.cmdBuildMergePixelFarmPortable);
             this.Controls.Add(this.cmdBuildMergePixelFarm);
             this.Name = "Form1";
@@ -141,12 +165,14 @@
 
         private System.Windows.Forms.Button cmdBuildMergePixelFarm;
         private System.Windows.Forms.Button cmdBuildMergePixelFarmPortable;
-        private System.Windows.Forms.Button cmdBuildMergePixelFarmMiniAgg;
+        private System.Windows.Forms.Button cmdBuildMergePixelFarmMiniAggOne;
         private System.Windows.Forms.Button cmd_Windows_OnlyGdiPlus;
         private System.Windows.Forms.Button cmd_Windows_NoGdiPlus_NoWinForms;
         private System.Windows.Forms.Button cmd_Cross;
         private System.Windows.Forms.Button cmdCopyNativeLibs;
         private System.Windows.Forms.Button cmdForTestWithHtmlRenderer;
+        private System.Windows.Forms.Button cmdBuildMergePixelFarmMiniAgg;
+        private System.Windows.Forms.Button cmdMinimalNetCore;
     }
 }
 

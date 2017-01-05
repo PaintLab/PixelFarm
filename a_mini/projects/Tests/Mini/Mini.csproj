@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;__DESKTOP__</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -88,6 +88,25 @@
     <Compile Include="7_GLES2Test\MyMiniGLES2Control.Designer.cs">
       <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </Compile>
+    <Compile Include="8_SkiaTest\FormSkia1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="8_SkiaTest\FormSkia1.Designer.cs">
+      <DependentUpon>FormSkia1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="8_SkiaTest\SkiaControl\SKControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="8_SkiaTest\SkiaControl\SKGLControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="8_SkiaTest\SkiaControl\SKGLDrawable.cs" />
+    <Compile Include="8_SkiaTest\SkiaControl\SKPaintGLSurfaceEventArgs.cs" />
+    <Compile Include="8_SkiaTest\SkiaControl\SKPaintSurfaceEventArgs.cs" />
+    <Compile Include="Experiment\4_Animation\ColorComponentStepup.cs" />
+    <Compile Include="Experiment\4_Animation\GfxProcessorModule.cs" />
+    <Compile Include="Experiment\4_Animation\ParallelTimeline.cs" />
+    <Compile Include="Experiment\4_Animation\Timelines.cs" />
     <Compile Include="Experiment\FontSystem.cs" />
     <Compile Include="Experiment\GdiPathConverter.cs" />
     <Compile Include="Experiment\GdiPathFont.cs" />
@@ -96,6 +115,13 @@
     <Compile Include="Experiment\GdiPlusPlatformFontMx.cs" />
     <Compile Include="Experiment\WinGdiPlusFont.cs" />
     <Compile Include="Experiment\WinGdiPlusFontStore.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\ImageClipProxyFloat.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\KDTree.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\SpanSubDivAdapter.cs" />
+    <Compile Include="Experiment\x_notusedFromComplement\x_ImageTgaIO.cs" />
+    <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageHelper2.cs" />
+    <Compile Include="Experiment\x_notused_fromMiniAgg\x_ImageSpan.cs" />
+    <Compile Include="Experiment\x_notused_fromMiniAgg\x_PixelBlenderFloat.cs" />
     <Compile Include="Experiment_AggFonts\FontSvg\SvgFont.cs" />
     <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace.cs" />
     <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace_LiberationSans.cs" />
@@ -144,6 +170,9 @@
     <EmbeddedResource Include="7_GLES2Test\MyMiniGLES2Control.resx">
       <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="8_SkiaTest\FormSkia1.resx">
+      <DependentUpon>FormSkia1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
@@ -179,14 +208,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\MiniAgg.Complements\MiniAgg.Complements.csproj">
-      <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
-      <Name>MiniAgg.Complements</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\MiniAgg\MiniAgg.csproj">
-      <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
-      <Name>MiniAgg</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj">
       <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
       <Name>PixelFarm.OpenType</Name>
@@ -211,6 +232,14 @@
       <Project>{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}</Project>
       <Name>PixelFarm.Drawing.GLES2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj">
+      <Project>{9450c9fb-5a70-4e47-bec3-b0a98a9c7d15}</Project>
+      <Name>PixelFarm.Drawing.Skia</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniAgg.csproj">
+      <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
+      <Name>PixelFarm.MiniAgg</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
       <Project>{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}</Project>
       <Name>PixelFarm.MiniOpenTK</Name>
@@ -222,6 +251,10 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj">
       <Project>{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}</Project>
       <Name>PixelFarm.OpenTKWinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
+      <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
+      <Name>PixelFarm.SkiaSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
@@ -236,6 +269,7 @@
       <Name>Win32Utils</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

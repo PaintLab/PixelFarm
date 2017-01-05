@@ -44,17 +44,18 @@ namespace PixelFarm.Agg.Samples
         public override void Init()
         {
             lionFill = new LionFillSprite();
+            //lionFill.AutoFlipY = true;           
         }
 
         public override void Draw(CanvasPainter p)
         {
             p.Clear(Drawing.Color.White);
             lionFill.Draw(p);
-           // p.DrawString("hello", 0, 0);
         }
         public override void MouseDrag(int x, int y)
         {
             lionFill.Move(x, y);
+            
         }
 
         [DemoConfig(MaxValue = 255)]
