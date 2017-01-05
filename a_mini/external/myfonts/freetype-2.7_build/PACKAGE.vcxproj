@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{7BEC0204-DF85-46EE-AC2A-83832864F853}</ProjectGUID>
+    <ProjectGUID>{5973539D-D2BD-3CF5-B7CC-8C652A320DCB}</ProjectGUID>
     <Keyword>Win32Proj</Keyword>
     <Platform>Win32</Platform>
     <ProjectName>PACKAGE</ProjectName>
@@ -75,7 +75,7 @@ cd D:\projects\PixelFarm-dev\a_mini\external\myfonts\freetype-2.7_build
 if %errorlevel% neq 0 goto :cmEnd
 D:
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cpack.exe" -C $(Configuration) --config ./CPackConfig.cmake
+"C:\Program Files\CMake\bin\cpack.exe" -C $(Configuration) --config ./CPackConfig.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -101,7 +101,7 @@ cd D:\projects\PixelFarm-dev\a_mini\external\myfonts\freetype-2.7_build
 if %errorlevel% neq 0 goto :cmEnd
 D:
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cpack.exe" -C $(Configuration) --config ./CPackConfig.cmake
+"C:\Program Files\CMake\bin\cpack.exe" -C $(Configuration) --config ./CPackConfig.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -127,7 +127,7 @@ cd D:\projects\PixelFarm-dev\a_mini\external\myfonts\freetype-2.7_build
 if %errorlevel% neq 0 goto :cmEnd
 D:
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cpack.exe" -C $(Configuration) --config ./CPackConfig.cmake
+"C:\Program Files\CMake\bin\cpack.exe" -C $(Configuration) --config ./CPackConfig.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -153,7 +153,7 @@ cd D:\projects\PixelFarm-dev\a_mini\external\myfonts\freetype-2.7_build
 if %errorlevel% neq 0 goto :cmEnd
 D:
 if %errorlevel% neq 0 goto :cmEnd
-"C:\Program Files (x86)\CMake\bin\cpack.exe" -C $(Configuration) --config ./CPackConfig.cmake
+"C:\Program Files\CMake\bin\cpack.exe" -C $(Configuration) --config ./CPackConfig.cmake
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -216,8 +216,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.7_build/ZERO_CHECK.vcxproj">
+      <Project>D37826F0-C646-3B43-A116-1217C4ADBB93</Project>
+    </ProjectReference>
     <ProjectReference Include="D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.7_build/ALL_BUILD.vcxproj">
-      <Project>550BD199-1512-4FDE-9BC5-964686A56088</Project>
+      <Project>82914C8F-0F4D-36AF-AD45-652007BCC458</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
