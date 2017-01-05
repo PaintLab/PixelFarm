@@ -50,7 +50,7 @@
 # define COMPILER_ID "Embarcadero"
 # define COMPILER_VERSION_MAJOR HEX(__CODEGEARC_VERSION__>>24 & 0x00FF)
 # define COMPILER_VERSION_MINOR HEX(__CODEGEARC_VERSION__>>16 & 0x00FF)
-# define COMPILER_VERSION_PATCH HEX(__CODEGEARC_VERSION__     & 0xFFFF)
+# define COMPILER_VERSION_PATCH DEC(__CODEGEARC_VERSION__     & 0xFFFF)
 
 #elif defined(__BORLANDC__)
 # define COMPILER_ID "Borland"
@@ -135,7 +135,7 @@
 
 #elif defined(_CRAYC)
 # define COMPILER_ID "Cray"
-# define COMPILER_VERSION_MAJOR DEC(_RELEASE)
+# define COMPILER_VERSION_MAJOR DEC(_RELEASE_MAJOR)
 # define COMPILER_VERSION_MINOR DEC(_RELEASE_MINOR)
 
 #elif defined(__TI_COMPILER_VERSION__)
@@ -183,7 +183,9 @@
 #elif defined(__GNUC__)
 # define COMPILER_ID "GNU"
 # define COMPILER_VERSION_MAJOR DEC(__GNUC__)
-# define COMPILER_VERSION_MINOR DEC(__GNUC_MINOR__)
+# if defined(__GNUC_MINOR__)
+#  define COMPILER_VERSION_MINOR DEC(__GNUC_MINOR__)
+# endif
 # if defined(__GNUC_PATCHLEVEL__)
 #  define COMPILER_VERSION_PATCH DEC(__GNUC_PATCHLEVEL__)
 # endif
@@ -217,6 +219,21 @@
 
 #elif defined(__IAR_SYSTEMS_ICC__ ) || defined(__IAR_SYSTEMS_ICC)
 # define COMPILER_ID "IAR"
+
+#elif defined(__ARMCC_VERSION)
+# define COMPILER_ID "ARMCC"
+#if __ARMCC_VERSION >= 1000000
+  /* __ARMCC_VERSION = VRRPPPP */
+  # define COMPILER_VERSION_MAJOR DEC(__ARMCC_VERSION/1000000)
+  # define COMPILER_VERSION_MINOR DEC(__ARMCC_VERSION/10000 % 100)
+  # define COMPILER_VERSION_PATCH DEC(__ARMCC_VERSION     % 10000)
+#else
+  /* __ARMCC_VERSION = VRPPPP */
+  # define COMPILER_VERSION_MAJOR DEC(__ARMCC_VERSION/100000)
+  # define COMPILER_VERSION_MINOR DEC(__ARMCC_VERSION/10000 % 10)
+  # define COMPILER_VERSION_PATCH DEC(__ARMCC_VERSION    % 10000)
+#endif
+
 
 #elif defined(_SGI_COMPILER_VERSION) || defined(_COMPILER_VERSION)
 # define COMPILER_ID "MIPSpro"
@@ -257,6 +274,10 @@ char const* info_simulate = "INFO" ":" "simulate[" SIMULATE_ID "]";
 
 #ifdef __QNXNTO__
 char const* qnxnto = "INFO" ":" "qnxnto[]";
+#endif
+
+#if defined(__CRAYXE) || defined(__CRAYXC)
+char const *info_cray = "INFO" ":" "compiler_wrapper[CrayPrgEnv]";
 #endif
 
 #define STRINGIFY_HELPER(X) #X
@@ -352,11 +373,11 @@ char const* qnxnto = "INFO" ":" "qnxnto[]";
 #  define PLATFORM_ID "Windows3x"
 
 # else /* unknown platform */
-#  define PLATFORM_ID ""
+#  define PLATFORM_ID
 # endif
 
 #else /* unknown platform */
-# define PLATFORM_ID ""
+# define PLATFORM_ID
 
 #endif
 
@@ -406,7 +427,7 @@ char const* qnxnto = "INFO" ":" "qnxnto[]";
 # endif
 
 #else
-#  define ARCHITECTURE_ID ""
+#  define ARCHITECTURE_ID
 #endif
 
 /* Convert integer to decimal digit literals.  */
@@ -477,6 +498,16 @@ char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";
 
 
 
+const char* info_language_dialect_default = "INFO" ":" "dialect_default["
+#if __cplusplus >= 201402L
+  "14"
+#elif __cplusplus >= 201103L
+  "11"
+#else
+  "98"
+#endif
+"]";
+
 /*--------------------------------------------------------------------------*/
 
 int main(int argc, char* argv[])
@@ -493,6 +524,10 @@ int main(int argc, char* argv[])
 #ifdef SIMULATE_VERSION_MAJOR
   require += info_simulate_version[argc];
 #endif
+#if defined(__CRAYXE) || defined(__CRAYXC)
+  require += info_cray[argc];
+#endif
+  require += info_language_dialect_default[argc];
   (void)argv;
   return require;
 }

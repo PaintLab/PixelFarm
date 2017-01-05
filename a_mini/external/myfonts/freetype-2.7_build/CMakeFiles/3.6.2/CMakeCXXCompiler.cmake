@@ -2,6 +2,8 @@ set(CMAKE_CXX_COMPILER "C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/b
 set(CMAKE_CXX_COMPILER_ARG1 "")
 set(CMAKE_CXX_COMPILER_ID "MSVC")
 set(CMAKE_CXX_COMPILER_VERSION "16.0.40219.1")
+set(CMAKE_CXX_COMPILER_WRAPPER "")
+set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT "98")
 set(CMAKE_CXX_COMPILE_FEATURES "cxx_auto_type;cxx_decltype;cxx_extended_friend_declarations;cxx_extern_templates;cxx_lambdas;cxx_local_type_template_args;cxx_long_long_type;cxx_nullptr;cxx_override;cxx_right_angle_brackets;cxx_rvalue_references;cxx_static_assert;cxx_template_template_parameters;cxx_trailing_return_types;cxx_variadic_macros")
 set(CMAKE_CXX98_COMPILE_FEATURES "")
 set(CMAKE_CXX11_COMPILE_FEATURES "")
@@ -53,12 +55,14 @@ if(CMAKE_CXX_LIBRARY_ARCHITECTURE)
   set(CMAKE_LIBRARY_ARCHITECTURE "")
 endif()
 
+set(CMAKE_CXX_CL_SHOWINCLUDES_PREFIX "")
+if(CMAKE_CXX_CL_SHOWINCLUDES_PREFIX)
+  set(CMAKE_CL_SHOWINCLUDES_PREFIX "${CMAKE_CXX_CL_SHOWINCLUDES_PREFIX}")
+endif()
+
 
 
 
 set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "")
 set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "")
 set(CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")
-
-
-
