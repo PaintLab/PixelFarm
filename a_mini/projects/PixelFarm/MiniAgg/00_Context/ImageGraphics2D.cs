@@ -1,4 +1,4 @@
-//MIT, 2014-2016, WinterDev
+//MIT, 2014-2017, WinterDev
 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
@@ -49,11 +49,14 @@ namespace PixelFarm.Agg
 
             this.destActualImage = destImage;
             this.destImageReaderWriter = new MyImageReaderWriter();
-            destImageReaderWriter.ReloadImage(destImage);
+            this.destImageReaderWriter.ReloadImage(destImage);
+            //
             this.sclineRas = new ScanlineRasterizer();
             this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
+            //
             this.destWidth = destImage.Width;
             this.destHeight = destImage.Height;
+            //
             this.clipBox = new RectInt(0, 0, destImage.Width, destImage.Height);
             this.sclineRas.SetClipBox(this.clipBox);
             this.sclinePack8 = new ScanlinePacked8();

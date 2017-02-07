@@ -1,4 +1,5 @@
-﻿using System;
+﻿//MIT, 2014-2017, WinterDev
+using System;
 namespace PixelFarm.DrawingGL
 {
     [Flags]
