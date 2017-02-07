@@ -52,6 +52,7 @@
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="1_Shared\LionFillSprite.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
