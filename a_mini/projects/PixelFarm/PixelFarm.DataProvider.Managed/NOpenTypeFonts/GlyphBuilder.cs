@@ -1,6 +1,5 @@
-﻿//MIT, 2016,  WinterDev
-using System;
-using System.Collections.Generic;
+﻿//MIT, 2016-2017, WinterDev
+
 using NOpenType;
 using PixelFarm.Agg.VertexSource;
 
