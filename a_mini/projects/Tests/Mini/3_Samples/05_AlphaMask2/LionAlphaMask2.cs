@@ -1,4 +1,4 @@
-﻿//BSD, 2014-2016, WinterDev
+﻿//BSD, 2014-2017, WinterDev
 //MatterHackers
 
 #define USE_CLIPPING_ALPHA_MASK
