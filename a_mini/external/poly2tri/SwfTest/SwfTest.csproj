@@ -57,7 +57,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="P2T.cs" />
     <Compile Include="TestForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
