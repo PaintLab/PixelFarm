@@ -34,6 +34,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Globalization;
+using Polygon = Poly2Tri.DelaunayTriangle;
+using PolygonPoint = Poly2Tri.TriangulationPoint;
 
 namespace Poly2Tri
 {

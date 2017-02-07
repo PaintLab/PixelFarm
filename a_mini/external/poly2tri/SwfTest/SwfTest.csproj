@@ -57,17 +57,18 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="P2T.cs" />
     <Compile Include="TestForm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\projects\PixelFarm\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj">
+      <Project>{C5E5802D-6A45-4FE9-BAE7-5F0AE91D72C1}</Project>
+      <Name>PixelFarm.Triangulation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ExampleData\ExampleData.csproj">
       <Project>{FC6F045E-7112-44BF-A491-99D987D9C6D2}</Project>
       <Name>ExampleData</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Poly2Tri.csproj">
-      <Project>{C5E5802D-6A45-4FE9-BAE7-5F0AE91D72C1}</Project>
-      <Name>Poly2Tri</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
