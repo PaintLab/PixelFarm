@@ -41,7 +41,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildTextureFonts", "Tools\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.GLES2", "PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj", "{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.OpenType", "PixelFarm\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj", "{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.OpenType", "PixelFarm\Typography\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj", "{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7_AutoGen", "7_AutoGen", "{E7FD80F2-8500-4162-BF68-4EE43AF6DDD5}"
 EndProject

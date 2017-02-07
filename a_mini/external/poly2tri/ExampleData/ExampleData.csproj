@@ -127,9 +127,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Poly2Tri.csproj">
+    <ProjectReference Include="..\..\..\projects\PixelFarm\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj">
       <Project>{C5E5802D-6A45-4FE9-BAE7-5F0AE91D72C1}</Project>
-      <Name>Poly2Tri</Name>
+      <Name>PixelFarm.Triangulation</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
