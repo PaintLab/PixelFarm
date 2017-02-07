@@ -43,6 +43,7 @@ Hardware and Software 2D Rendering Library
     ![gdiplus](https://cloud.githubusercontent.com/assets/7447159/20637923/1d0e1f78-b3c9-11e6-80d2-3c335bbca025.png)
     
 
+---
  
 License:
 
@@ -53,7 +54,7 @@ BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geo
 
 BSD, 2007-2014, Lars Brubaker, agg-sharp, from  https://github.com/MatterHackers/agg-sharp
 
-Apache2, 2016-2017, WinterDev, from  LayoutFarm/Typography (from https://github.com/LayoutFarm/Typography)
+Apache2, 2016-2017, WinterDev, from https://github.com/LayoutFarm/Typography)
 
 Apache2, 2014-2016, Samuel Carlsson, from https://github.com/vidstige/NRasterizer
 
@@ -61,6 +62,6 @@ MIT, 2015, Michael Popoloski MIT, from https://github.com/MikePopoloski/SharpFon
 
 The FreeType Project LICENSE (3-clauses BSD style),2003-2016, David Turner, Robert Wilhelm, and Werner Lemberg and others, from https://www.freetype.org/
 
-BSD, 2009-2010, Poly2Tri Contributors
+BSD, 2009-2010, Poly2Tri Contributors, from https://github.com/PaintLab/poly2tri-cs
 
     
