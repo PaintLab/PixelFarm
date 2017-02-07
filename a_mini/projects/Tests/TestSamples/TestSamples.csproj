@@ -89,9 +89,29 @@
     <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\x_autogen\PixelFarm.One.csproj">
-      <Project>{a85bca44-562c-4034-85ea-7651ef1f3777}</Project>
-      <Name>PixelFarm.One</Name>
+    <ProjectReference Include="..\..\PixelFarm\MiniAgg\MiniAgg.csproj">
+      <Project>{4d5ce655-58fa-4523-8e46-738b941e9e47}</Project>
+      <Name>MiniAgg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
+      <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
+      <Name>PixelFarm.Drawing.GdiPlus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
+      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
+      <Name>PixelFarm.Drawing.GLES2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+      <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
+      <Name>PixelFarm.MiniOpenTK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj">
+      <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
+      <Name>PixelFarm.NativeWindows</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

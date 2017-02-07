@@ -52,6 +52,7 @@
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterSample.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
+    <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
     <Compile Include="1_Shared\LionFillSprite.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
@@ -208,10 +209,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj">
-      <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
-      <Name>PixelFarm.OpenType</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj">
       <Project>{025E536D-53A6-4C5F-AED5-E21960C70763}</Project>
       <Name>PixelFarm.DataProvider.Managed</Name>
@@ -263,6 +260,10 @@
     <ProjectReference Include="..\..\PixelFarm\TypeMirror\TypeMirror.csproj">
       <Project>{68F1DAF6-2B35-476E-B2F8-5EADBC823935}</Project>
       <Name>TypeMirror</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\OpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj">
+      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
+      <Name>PixelFarm.OpenType</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Win32Utils\Win32Utils.csproj">
       <Project>{B9C23586-913D-4EE8-B266-BD58FBD0133B}</Project>

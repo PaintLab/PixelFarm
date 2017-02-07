@@ -10,6 +10,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 {
     class CustomScanlineRasToBmp_EnlargedSubPixelRendering : CustomScanlineRasToDestBitmapRenderer
     {
+        //old idea not corrrect
+
         double m_size;
         Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
