@@ -1,11 +1,13 @@
-﻿//-----------------------------------------------------
+﻿//Apache2, 2017, WinterDev
+//-----------------------------------------------------
 //Apache2, 2014-2016, Samuel Carlsson, WinterDev
 //some logics from FreeType Lib (FTL, BSD-3 clause)
 //-----------------------------------------------------
-using System;
+ 
 
 namespace NOpenType
 {
+    //
     public interface IGlyphRasterizer
     {
         void BeginRead(int countourCount);

@@ -1,14 +1,9 @@
-﻿
-//Apache2,  2016,  WinterDev
+﻿//Apache2, 2016-2017, WinterDev
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
+
 namespace NOpenType.Tables
 {
-
-
-
     static class TagsLookup
     {
 
@@ -21,7 +16,15 @@ namespace NOpenType.Tables
             RegisterFeatureTags();
             RegisterBaselineTags();
         }
-
+#if DEBUG
+        static void debugCheckShortName(string shortname)
+        {
+            if (shortname.Length > 4)
+            {
+                throw new NotSupportedException();
+            }
+        }
+#endif
 
         static void RegisterScriptTags()
         {
@@ -389,21 +392,19 @@ namespace NOpenType.Tables
             //https://www.microsoft.com/typography/otspec/languagetags.htm
 
         }
-        public static TagInfo GetTagInfo(string shortname)
+
+        public static TagInfo GetScriptTagInfo(string shortname)
         {
             TagInfo found;
             registeredScriptTags.TryGetValue(shortname, out found);
             return found;
         }
-#if DEBUG
-        static void debugCheckShortName(string shortname)
+        public static TagInfo GetFeatureTagInfo(string shortname)
         {
-            if (shortname.Length > 4)
-            {
-                throw new NotSupportedException();
-            }
+            TagInfo found;
+            registeredFeatureTags.TryGetValue(shortname, out found);
+            return found;
         }
-#endif
         static void RegisterScriptTag(string fullname, string shortname)
         {
 #if DEBUG
@@ -425,7 +426,7 @@ namespace NOpenType.Tables
 #if DEBUG
             debugCheckShortName(shortname);
 #endif
-            registeredFeatureTags.Add(shortname, new TagInfo(TagKind.Feature, shortname, fullname));             
+            registeredFeatureTags.Add(shortname, new TagInfo(TagKind.Feature, shortname, fullname));
         }
     }
 

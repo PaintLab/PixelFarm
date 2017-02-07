@@ -1,9 +1,7 @@
-﻿//Apache2,  2016, WinterDev
+﻿//Apache2, 2016-2017, WinterDev
 //https://www.microsoft.com/typography/otspec/chapter2.htm
-using System;
-using System.Collections.Generic;
+
 using System.IO;
-using System.Text;
 
 namespace NOpenType.Tables
 {
@@ -61,10 +59,15 @@ namespace NOpenType.Tables
     //USHORT 	FeatureIndex[FeatureCount] 	Array of indices into the FeatureList-in arbitrary order
     class ScriptTable
     {
-
-        LangSysTable[] langSysTables;
-        public short DefaultLangSysOffset;
+        public LangSysTable defaultLang;
+        public LangSysTable[] langSysTables;
         public uint scriptTag;
+        public string ScriptTagName
+        {
+            get { return Utils.TagToString(this.scriptTag); }
+        }
+
+
 
         public static ScriptTable CreateFrom(BinaryReader reader, long beginAt)
         {
@@ -72,17 +75,27 @@ namespace NOpenType.Tables
             //
             //
             ScriptTable scriptTable = new ScriptTable();
+            short defaultLangSysOffset = reader.ReadInt16();
+            //           
 
-            scriptTable.DefaultLangSysOffset = reader.ReadInt16();
             ushort langSysCount = reader.ReadUInt16();
             LangSysTable[] langSysTables = scriptTable.langSysTables = new LangSysTable[langSysCount];
-
             for (int i = 0; i < langSysCount; ++i)
             {
                 langSysTables[i] = new LangSysTable(
                     reader.ReadUInt32(), //langSysTagIdentifier 
                     reader.ReadInt16());//offset
             }
+
+            //-----------
+            if (defaultLangSysOffset > 0)
+            {
+                scriptTable.defaultLang = new LangSysTable(0, defaultLangSysOffset);
+                reader.BaseStream.Seek(beginAt + defaultLangSysOffset, SeekOrigin.Begin);
+                scriptTable.defaultLang.ReadFrom(reader);
+            }
+
+
             //-----------
             //read actual content of each table
             for (int i = 0; i < langSysCount; ++i)
@@ -95,6 +108,8 @@ namespace NOpenType.Tables
             return scriptTable;
         }
 
+
+
 #if DEBUG
         public override string ToString()
         {
@@ -102,7 +117,7 @@ namespace NOpenType.Tables
         }
 #endif
 
-        class LangSysTable
+        public class LangSysTable
         {
             //The Language System table (LangSys) identifies language-system features 
             //used to render the glyphs in a script. (The LookupOrder offset is reserved for future use.)

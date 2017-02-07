@@ -51,7 +51,7 @@ namespace NOpenType.Tables
                     short contoursCount = reader.ReadInt16();
                     if (contoursCount >= 0)
                     {
-                        Bounds bounds = BoundsReader.ReadFrom(reader);
+                        Bounds bounds = Utils.ReadBounds(reader);
                         _glyphs[i] = ReadSimpleGlyph(reader, contoursCount, bounds);
                     }
                     else
@@ -78,11 +78,14 @@ namespace NOpenType.Tables
                 reader.BaseStream.Seek(tableOffset + locations.Offsets[glyphIndex], SeekOrigin.Begin);//reset     
                 //------------------------
                 short contoursCount = reader.ReadInt16();
-                Bounds bounds = BoundsReader.ReadFrom(reader);
+                Bounds bounds = Utils.ReadBounds(reader);
+
+#if DEBUG
                 if (glyphIndex == 7)
                 {
 
                 }
+#endif
                 _glyphs[glyphIndex] = ReadCompositeGlyph(_glyphs, reader, -contoursCount, bounds);
             }
 
@@ -208,13 +211,17 @@ namespace NOpenType.Tables
             short[] xs = ReadCoordinates(reader, pointCount, flags, SimpleGlyphFlag.XByte, SimpleGlyphFlag.XSignOrSame);
             short[] ys = ReadCoordinates(reader, pointCount, flags, SimpleGlyphFlag.YByte, SimpleGlyphFlag.YSignOrSame);
 
-            bool[] onCurves = new bool[flags.Length];
-            for (int i = onCurves.Length - 1; i >= 0; --i)
+            int n = xs.Length;
+            GlyphPointF[] glyphPoints = new GlyphPointF[n];
+            for (int i = n - 1; i >= 0; --i)
             {
-                onCurves[i] = HasFlag(flags[i], SimpleGlyphFlag.OnCurve);
+                bool onCurve = HasFlag(flags[i], SimpleGlyphFlag.OnCurve);
+                glyphPoints[i] = new GlyphPointF(xs[i], ys[i], onCurve);
             }
-
-            return new Glyph(xs, ys, onCurves, endPoints, bounds);
+            //-----------
+            //lets build GlyphPoint set
+            //-----------
+            return new Glyph(glyphPoints, endPoints, bounds, instructions);
         }
 
 
@@ -372,7 +379,7 @@ namespace NOpenType.Tables
                     if (useMatrix)
                     {
                         //use this matrix  
-                        Glyph.Apply2x2Matrix(newGlyph, xscale, scale01, scale10, yscale);
+                        Glyph.TransformNormalWith2x2Matrix(newGlyph, xscale, scale01, scale10, yscale);
                         Glyph.OffsetXY(newGlyph, (short)(arg1), arg2);
                     }
                     else
@@ -385,7 +392,7 @@ namespace NOpenType.Tables
                             }
                             else
                             {
-                                Glyph.Apply2x2Matrix(newGlyph, xscale, 0, 0, yscale);
+                                Glyph.TransformNormalWith2x2Matrix(newGlyph, xscale, 0, 0, yscale);
                             }
                             Glyph.OffsetXY(newGlyph, arg1, arg2);
                         }
@@ -428,7 +435,7 @@ namespace NOpenType.Tables
             {
                 ushort numInstr = reader.ReadUInt16();
                 byte[] insts = reader.ReadBytes(numInstr);
-
+                finalGlyph.GlyphInstructions = insts;
             }
             //F2DOT14 	16-bit signed fixed number with the low 14 bits of fraction (2.14).
             //Transformation Option
