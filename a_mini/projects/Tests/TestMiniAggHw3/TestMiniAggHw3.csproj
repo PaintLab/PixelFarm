@@ -125,7 +125,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\Typography\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj">
+    <ProjectReference Include="..\..\PixelFarm\Typography\OpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj">
       <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
       <Name>PixelFarm.OpenType</Name>
     </ProjectReference>
