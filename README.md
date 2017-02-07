@@ -51,7 +51,7 @@ here...
 
 BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
 
-BSD, 2007-2014, Lars Brubaker, agg-sharp
+BSD, 2007-2014, Lars Brubaker, agg-sharp, from  https://github.com/MatterHackers/agg-sharp
 
 Apache2, 2016-2017, WinterDev, from  LayoutFarm/Typography (from https://github.com/LayoutFarm/Typography)
 
