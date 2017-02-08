@@ -282,24 +282,13 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         }
         void RunSampleD(CanvasPainter p)
         {
-            //version 4:
-            //1. create simple vertical line to test agg's lcd rendernig technique
-            //create gray-scale actual image 
-            //          
-            //
-            //clear surface bg
-            p.Clear(PixelFarm.Drawing.Color.White);            
-            p.UseSubPixelRendering  = true;
+            //version 4: 
+            p.Clear(PixelFarm.Drawing.Color.White);
+            p.UseSubPixelRendering = true;
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
-            p.Line(2, 0, 3, 15);//not need to scale3                        
-            //           
-
-            //var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
-            //BlendWithLcdTechnique(aggPainer.Graphics.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);            
-             
-            //--------------- 
+            p.Line(2, 0, 3, 15);
 
         }
         public override void Draw(CanvasPainter p)
@@ -384,7 +373,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                         //4. read accumulate 'energy' back 
                         forwardBuffer.ReadNext(out e0);
                         //5. blend this pixel to dest image (expand to 5 (sub)pixel)                          
-                        ScanlineSubPixelRasterizer.BlendSpan(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                        ScanlineSubPixelRasterizer.BlendPixel(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                     }
                     //------------------------------------------------------------
                     prev_a = a;
@@ -397,7 +386,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
                 {
 
-                    continue;
+
                     byte e1, e2, e3, e4;
                     forwardBuffer.ReadRemaining4(out e1, out e2, out e3, out e4);
                     int remainingEnergy = Math.Min(srcStride, 4);
@@ -405,22 +394,22 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     {
                         default: throw new NotSupportedException();
                         case 4:
-                            ScanlineSubPixelRasterizer.BlendSpan(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e4 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            ScanlineSubPixelRasterizer.BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            ScanlineSubPixelRasterizer.BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            ScanlineSubPixelRasterizer.BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            ScanlineSubPixelRasterizer.BlendPixel(e4 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 3:
-                            ScanlineSubPixelRasterizer.BlendSpan(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            ScanlineSubPixelRasterizer.BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            ScanlineSubPixelRasterizer.BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            ScanlineSubPixelRasterizer.BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 2:
-                            ScanlineSubPixelRasterizer.BlendSpan(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            ScanlineSubPixelRasterizer.BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            ScanlineSubPixelRasterizer.BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 1:
-                            ScanlineSubPixelRasterizer.BlendSpan(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            ScanlineSubPixelRasterizer.BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 0:
                             //nothing
