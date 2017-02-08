@@ -69,16 +69,16 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             }
             return greyScaleBuffer;
         }
-        void BlendWithLcdSpans(ActualImage destImg, byte[] greyBuff, int greyBufferWidth, int greyBufferHeight)
+        void Blend(ActualImage destImg, byte[] greyBuff, int greyBufferWidth, int greyBufferHeight)
         {
             PixelFarm.Drawing.Color color = PixelFarm.Drawing.Color.Black;
             for (int y = 0; y < greyBufferHeight; ++y)
             {
-                BlendLcdSpan(destImg, greyBuff, color, 0, y, greyBufferWidth);
+                BlendScanline(destImg, greyBuff, color, 0, y, greyBufferWidth);
             }
             //SwapRB(destImg);
         }
-        void BlendLcdSpan(ActualImage destImg, byte[] expandGreyBuffer,
+        void BlendScanline(ActualImage destImg, byte[] expandGreyBuffer,
          PixelFarm.Drawing.Color color, int x, int y, int width)
         {
             byte[] rgb = new byte[3]{
@@ -240,7 +240,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyBuffWidth);
             //blend lcd 
             var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
-            BlendWithLcdSpans(aggPainer.Graphics.DestActualImage, expanedGreyScaleBuffer, newGreyBuffWidth, glyphImg.Height);
+            Blend(aggPainer.Graphics.DestActualImage, expanedGreyScaleBuffer, newGreyBuffWidth, glyphImg.Height);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
         }
