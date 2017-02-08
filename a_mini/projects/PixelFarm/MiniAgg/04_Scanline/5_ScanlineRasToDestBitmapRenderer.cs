@@ -995,7 +995,8 @@ namespace PixelFarm.Agg
         /// <param name="orgLevel"></param>
         /// <returns></returns>
         public byte Convert255ToLevel(byte orgLevel)
-        {
+        {   
+            
             return (byte)((((float)orgLevel + 1) / 256f) * (float)(numLevel - 1));
         }
         public byte Primary(int greyLevelIndex)

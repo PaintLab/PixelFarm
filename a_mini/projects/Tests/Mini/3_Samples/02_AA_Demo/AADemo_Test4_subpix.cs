@@ -219,8 +219,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             AggCanvasPainter painter = new AggCanvasPainter(glyph2d);
 
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
-            painter.StrokeWidth = 2.0f *3;
-            painter.Line(2 * 3, 0, 2 * 3, 15); //scale horizontal 3 times, 
+            painter.StrokeWidth = 2.0f * 3;
+            painter.Line(2 * 3, 0, 3 * 3, 15); //scale horizontal 3 times, 
 
             //painter.Line(2, 0, 2, 15);
             //painter.Line(2, 0, 20, 20);
@@ -236,13 +236,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             byte[] glyphGreyScale = CreateGreyScaleBuffer(glyphImg);
             //
             int newGreyBuffWidth;
-            byte[] greyBuff = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyBuffWidth);
-            //blend lcd
-
-
+            byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyBuffWidth);
+            //blend lcd 
             var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
-
-            BlendWithLcdSpans(aggPainer.Graphics.DestActualImage, greyBuff, newGreyBuffWidth, glyphImg.Height);
+            BlendWithLcdSpans(aggPainer.Graphics.DestActualImage, expanedGreyScaleBuffer, newGreyBuffWidth, glyphImg.Height);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
         }
@@ -258,15 +255,13 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f;
-            painter.Line(2, 0, 2, 20);//not need to scale3
+            painter.Line(2, 0, 3, 15);//not need to scale3
 
             //clear surface bg
             p.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
             var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
             BlendWithLcdTechnique(aggPainer.Graphics.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);
-
-
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
             //--------------- 
@@ -310,7 +305,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
         }
 
-        LcdDistributionLut g8_1_2lcd = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray8, 0.5, 0.25, 0.125);
+        static LcdDistributionLut g8_1_2lcd = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray8, 0.5, 0.25, 0.125);
         void BlendWithLcdTechnique(ActualImage destImg, ActualImage glyphImg, PixelFarm.Drawing.Color color)
         {
             var g8Lut = g8_1_2lcd;
@@ -349,7 +344,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     byte b = glyphBuffer[srcIndex + 2];
                     byte a = glyphBuffer[srcIndex + 3];
                     //2.
-                    //convert to grey scale and convert to 65 level grey scale value
+                    //convert to grey scale and convert to 65 level grey scale value 
                     byte greyScaleValue = g8Lut.Convert255ToLevel(a);
                     //3.
                     //from single grey scale value it is expanded into 5 color component
@@ -364,7 +359,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                         //5. blend this pixel to dest image (expand to 5 (sub)pixel) 
                         //------------------------------------------------------------
                         ScanlineSubPixelRasterizer.BlendSpan(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                        //------------------------------------------------------------
+
                     }
                     srcIndex += 4;
                 }
@@ -421,7 +416,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //agg lcd test
             //lcd_distribution_lut<ggo_gray8> lut(1.0/3.0, 2.0/9.0, 1.0/9.0);
             //lcd_distribution_lut<ggo_gray8> lut(0.5, 0.25, 0.125);
-            LcdDistributionLut lut = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray8, 0.5, 0.25, 0.125);
+            LcdDistributionLut lut = g8_1_2lcd;
             int destImgStride = srcW + 4; //expand the original gray scale 
             newImageStride = destImgStride;
 
