@@ -1,15 +1,16 @@
 ﻿//MIT, 2017, WinterDev 
-using System; 
+using System;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest4
 {
-     
+
     public enum Sample
     {
         A,
         B,
-        C
-    } 
+        C,
+        D
+    }
 
     [Info(OrderCode = "02")]
     [Info("SubPixelRendering_4")]
@@ -219,8 +220,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             AggCanvasPainter painter = new AggCanvasPainter(glyph2d);
 
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
-            painter.StrokeWidth = 2.0f;
-            painter.Line(0, 0, 15 * 3, 15); //scale horizontal 3 times, 
+            painter.StrokeWidth = 2.0f * 3;
+            painter.Line(2 * 3, 0, 3 * 3, 15); //scale horizontal 3 times, 
 
             //painter.Line(2, 0, 2, 15);
             //painter.Line(2, 0, 20, 20);
@@ -236,13 +237,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             byte[] glyphGreyScale = CreateGreyScaleBuffer(glyphImg);
             //
             int newGreyBuffWidth;
-            byte[] greyBuff = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyBuffWidth);
-            //blend lcd
-
-
+            byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyBuffWidth);
+            //blend lcd 
             var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
-
-            BlendWithLcdSpans(aggPainer.Graphics.DestActualImage, greyBuff, newGreyBuffWidth, glyphImg.Height);
+            BlendWithLcdSpans(aggPainer.Graphics.DestActualImage, expanedGreyScaleBuffer, newGreyBuffWidth, glyphImg.Height);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
         }
@@ -255,18 +253,16 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             ActualImage glyphImg = new ActualImage(100, 100, PixelFormat.ARGB32);
             ImageGraphics2D glyph2d = new ImageGraphics2D(glyphImg);
             AggCanvasPainter painter = new AggCanvasPainter(glyph2d);
-
+            //
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
-            painter.StrokeWidth = 1.0f;
-            painter.Line(0, 0, 15, 20);//not need to scale3
-
+            painter.StrokeWidth = 2.0f;
+            painter.Line(2, 0, 3, 15);//not need to scale3                        
+            //
             //clear surface bg
             p.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
             var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
             BlendWithLcdTechnique(aggPainer.Graphics.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);
-
-
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
             //--------------- 
@@ -283,7 +279,27 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //p.UseSubPixelRendering = false;
             //p.Line(30, 0, 45, 20);
             //--------------------------
+        }
+        void RunSampleD(CanvasPainter p)
+        {
+            //version 4:
+            //1. create simple vertical line to test agg's lcd rendernig technique
+            //create gray-scale actual image 
+            //          
+            //
+            //clear surface bg
+            p.Clear(PixelFarm.Drawing.Color.White);            
+            p.UseSubPixelRendering  = true;
+            //--------------------------
+            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+            p.StrokeWidth = 2.0f;
+            p.Line(2, 0, 3, 15);//not need to scale3                        
+            //           
 
+            //var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
+            //BlendWithLcdTechnique(aggPainer.Graphics.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);            
+             
+            //--------------- 
 
         }
         public override void Draw(CanvasPainter p)
@@ -306,11 +322,14 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 case Sample.C:
                     RunSampleC(p);
                     break;
+                case Sample.D:
+                    RunSampleD(p);
+                    break;
             }
 
         }
 
-        LcdDistributionLut g8_1_2lcd = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray8, 0.5, 0.25, 0.125);
+        static LcdDistributionLut g8_1_2lcd = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray8, 0.5, 0.25, 0.125);
         void BlendWithLcdTechnique(ActualImage destImg, ActualImage glyphImg, PixelFarm.Drawing.Color color)
         {
             var g8Lut = g8_1_2lcd;
@@ -340,6 +359,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 int round = 0;
                 forwardBuffer.Reset();
                 byte e0 = 0;
+                int prev_a = 0;
+
                 for (int x = 0; x < glyphW; ++x)
                 {
                     //1.
@@ -348,31 +369,35 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     byte g = glyphBuffer[srcIndex + 1];
                     byte b = glyphBuffer[srcIndex + 2];
                     byte a = glyphBuffer[srcIndex + 3];
+
+
                     //2.
-                    //convert to grey scale and convert to 65 level grey scale value
+                    //convert to grey scale and convert to 65 level grey scale value 
                     byte greyScaleValue = g8Lut.Convert255ToLevel(a);
-                    //3.
-                    //from single grey scale value it is expanded into 5 color component
+
                     for (int n = 0; n < 3; ++n)
                     {
                         forwardBuffer.WriteAccum(
-                            g8Lut.Tertiary(greyScaleValue),
-                            g8Lut.Secondary(greyScaleValue),
-                            g8Lut.Primary(greyScaleValue));
+                         g8Lut.Tertiary(greyScaleValue),
+                         g8Lut.Secondary(greyScaleValue),
+                         g8Lut.Primary(greyScaleValue));
                         //4. read accumulate 'energy' back 
                         forwardBuffer.ReadNext(out e0);
-                        //5. blend this pixel to dest image (expand to 5 (sub)pixel) 
-                        //------------------------------------------------------------
+                        //5. blend this pixel to dest image (expand to 5 (sub)pixel)                          
                         ScanlineSubPixelRasterizer.BlendSpan(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                        //------------------------------------------------------------
                     }
+                    //------------------------------------------------------------
+                    prev_a = a;
                     srcIndex += 4;
                 }
                 //---------
                 //when finish each line
                 //we must draw extened 4 pixels
                 //---------
+
                 {
+
+                    continue;
                     byte e1, e2, e3, e4;
                     forwardBuffer.ReadRemaining4(out e1, out e2, out e3, out e4);
                     int remainingEnergy = Math.Min(srcStride, 4);
@@ -421,7 +446,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //agg lcd test
             //lcd_distribution_lut<ggo_gray8> lut(1.0/3.0, 2.0/9.0, 1.0/9.0);
             //lcd_distribution_lut<ggo_gray8> lut(0.5, 0.25, 0.125);
-            LcdDistributionLut lut = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray8, 0.5, 0.25, 0.125);
+            LcdDistributionLut lut = g8_1_2lcd;
             int destImgStride = srcW + 4; //expand the original gray scale 
             newImageStride = destImgStride;
 
