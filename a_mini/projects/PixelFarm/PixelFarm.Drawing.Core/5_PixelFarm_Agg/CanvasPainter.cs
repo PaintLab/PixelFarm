@@ -34,6 +34,7 @@ namespace PixelFarm.Agg
         public abstract double StrokeWidth { get; set; }
         public abstract SmoothingMode SmoothingMode { get; set; }
         public abstract bool UseSubPixelRendering { get; set; }
+        public abstract bool UseSubPixelRendering2 { get; set; }
         public abstract Color FillColor { get; set; }
         public abstract Color StrokeColor { get; set; }
         //-------------------------------------------------------

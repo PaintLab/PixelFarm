@@ -382,6 +382,18 @@ namespace PixelFarm.Agg
             get { return sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering; }
             set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelRendering : ScanlineRenderMode.Default; }
         }
+        public override bool UseSubPixelRendering2
+        {
+            get
+            {
+                return sclineRas.UseSubPixelRendering2;
+            }
+
+            set
+            {
+                sclineRas.UseSubPixelRendering2 = value;
+            }
+        }
         public override Color FillColor
         {
             get { return fillColor; }

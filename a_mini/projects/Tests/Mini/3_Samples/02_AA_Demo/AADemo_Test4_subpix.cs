@@ -8,7 +8,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
     {
         A,
         B,
-        C
+        C,
+        D
     }
 
     [Info(OrderCode = "02")]
@@ -252,11 +253,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             ActualImage glyphImg = new ActualImage(100, 100, PixelFormat.ARGB32);
             ImageGraphics2D glyph2d = new ImageGraphics2D(glyphImg);
             AggCanvasPainter painter = new AggCanvasPainter(glyph2d);
-
+            //
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f;
-            painter.Line(2, 0, 3, 15);//not need to scale3
-
+            painter.Line(2, 0, 3, 15);//not need to scale3                        
+            //
             //clear surface bg
             p.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
@@ -278,7 +279,27 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //p.UseSubPixelRendering = false;
             //p.Line(30, 0, 45, 20);
             //--------------------------
+        }
+        void RunSampleD(CanvasPainter p)
+        {
+            //version 4:
+            //1. create simple vertical line to test agg's lcd rendernig technique
+            //create gray-scale actual image 
+            //          
+            //
+            //clear surface bg
+            p.Clear(PixelFarm.Drawing.Color.White);            
+            p.UseSubPixelRendering2 = true;
+            //--------------------------
+            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+            p.StrokeWidth = 2.0f;
+            p.Line(2, 0, 3, 15);//not need to scale3                        
+            //           
 
+            //var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
+            //BlendWithLcdTechnique(aggPainer.Graphics.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);            
+             
+            //--------------- 
 
         }
         public override void Draw(CanvasPainter p)
@@ -300,6 +321,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     break;
                 case Sample.C:
                     RunSampleC(p);
+                    break;
+                case Sample.D:
+                    RunSampleD(p);
                     break;
             }
 
@@ -335,6 +359,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 int round = 0;
                 forwardBuffer.Reset();
                 byte e0 = 0;
+                int prev_a = 0;
+
                 for (int x = 0; x < glyphW; ++x)
                 {
                     //1.
@@ -343,31 +369,35 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     byte g = glyphBuffer[srcIndex + 1];
                     byte b = glyphBuffer[srcIndex + 2];
                     byte a = glyphBuffer[srcIndex + 3];
+
+
                     //2.
                     //convert to grey scale and convert to 65 level grey scale value 
                     byte greyScaleValue = g8Lut.Convert255ToLevel(a);
-                    //3.
-                    //from single grey scale value it is expanded into 5 color component
+
                     for (int n = 0; n < 3; ++n)
                     {
                         forwardBuffer.WriteAccum(
-                            g8Lut.Tertiary(greyScaleValue),
-                            g8Lut.Secondary(greyScaleValue),
-                            g8Lut.Primary(greyScaleValue));
+                         g8Lut.Tertiary(greyScaleValue),
+                         g8Lut.Secondary(greyScaleValue),
+                         g8Lut.Primary(greyScaleValue));
                         //4. read accumulate 'energy' back 
                         forwardBuffer.ReadNext(out e0);
-                        //5. blend this pixel to dest image (expand to 5 (sub)pixel) 
-                        //------------------------------------------------------------
+                        //5. blend this pixel to dest image (expand to 5 (sub)pixel)                          
                         ScanlineSubPixelRasterizer.BlendSpan(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-
                     }
+                    //------------------------------------------------------------
+                    prev_a = a;
                     srcIndex += 4;
                 }
                 //---------
                 //when finish each line
                 //we must draw extened 4 pixels
                 //---------
+
                 {
+
+                    continue;
                     byte e1, e2, e3, e4;
                     forwardBuffer.ReadRemaining4(out e1, out e2, out e3, out e4);
                     int remainingEnergy = Math.Min(srcStride, 4);

@@ -257,8 +257,8 @@ namespace PixelFarm.Agg
         /// </summary>
         /// <param name="vxs"></param>
         public void AddPath(VertexStore vxs)
-        { 
-            
+        {
+
             //-----------------------------------------------------
             //*** we extract vertext command and coord(x,y) from
             //the snap but not store the snap inside rasterizer
@@ -266,6 +266,7 @@ namespace PixelFarm.Agg
 
             this.AddPath(new VertexStoreSnap(vxs));
         }
+        public bool UseSubPixelRendering2 { get; set; }
         /// <summary>
         /// we do NOT store snap ***
         /// </summary>
@@ -286,15 +287,33 @@ namespace PixelFarm.Agg
             if (snap.VxsHasMoreThanOnePart)
             {
                 //****
+
                 //render all parts
                 VertexStore vxs = snap.GetInternalVxs();
                 int j = vxs.Count;
-                for (int i = 0; i < j; ++i)
+
+                if (UseSubPixelRendering2)
                 {
-                    var cmd = vxs.GetVertex(i, out x, out y);
-                    if (cmd != VertexCmd.Stop)
+                    for (int i = 0; i < j; ++i)
                     {
-                        AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
+                        var cmd = vxs.GetVertex(i, out x, out y);
+                        if (cmd != VertexCmd.Stop)
+                        {
+                            //AddVertext 1 of 4
+                            AddVertex(cmd, (x + offsetOrgX) * 3, y + offsetOrgY);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < j; ++i)
+                    {
+                        var cmd = vxs.GetVertex(i, out x, out y);
+                        if (cmd != VertexCmd.Stop)
+                        {
+                            //AddVertext 2 of 4
+                            AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
+                        }
                     }
                 }
             }
@@ -305,12 +324,29 @@ namespace PixelFarm.Agg
 #if DEBUG
                 int dbugVertexCount = 0;
 #endif
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
+                if (UseSubPixelRendering2)
                 {
+                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
+                    {
 #if DEBUG
-                    dbugVertexCount++;
+                        dbugVertexCount++;
 #endif
-                    AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
+                        //AddVertext 3 of 4
+                        AddVertex(cmd, (x + offsetOrgX) * 3, y + offsetOrgY);
+                    }
+
+                }
+                else
+                {
+
+                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
+                    {
+#if DEBUG
+                        dbugVertexCount++;
+#endif
+                        //AddVertext 4 of 4
+                        AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
+                    }
                 }
             }
         }
@@ -370,7 +406,7 @@ namespace PixelFarm.Agg
         //--------------------------------------------------------------------
         internal bool SweepScanline(Scanline scline)
         {
-            for (; ; )
+            for (;;)
             {
                 if (m_scan_y > m_cellAARas.MaxY)
                 {
