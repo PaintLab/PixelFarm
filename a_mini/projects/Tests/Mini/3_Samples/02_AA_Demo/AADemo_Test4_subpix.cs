@@ -1,15 +1,15 @@
 ﻿//MIT, 2017, WinterDev 
-using System; 
+using System;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest4
 {
-     
+
     public enum Sample
     {
         A,
         B,
         C
-    } 
+    }
 
     [Info(OrderCode = "02")]
     [Info("SubPixelRendering_4")]
@@ -219,8 +219,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             AggCanvasPainter painter = new AggCanvasPainter(glyph2d);
 
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
-            painter.StrokeWidth = 2.0f;
-            painter.Line(0, 0, 15 * 3, 15); //scale horizontal 3 times, 
+            painter.StrokeWidth = 2.0f *3;
+            painter.Line(2 * 3, 0, 2 * 3, 15); //scale horizontal 3 times, 
 
             //painter.Line(2, 0, 2, 15);
             //painter.Line(2, 0, 20, 20);
@@ -257,8 +257,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             AggCanvasPainter painter = new AggCanvasPainter(glyph2d);
 
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
-            painter.StrokeWidth = 1.0f;
-            painter.Line(0, 0, 15, 20);//not need to scale3
+            painter.StrokeWidth = 2.0f;
+            painter.Line(2, 0, 2, 20);//not need to scale3
 
             //clear surface bg
             p.Clear(PixelFarm.Drawing.Color.White);
