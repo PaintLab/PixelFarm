@@ -79,7 +79,7 @@ namespace PixelFarm.Agg
             //1. ensure single line buffer width
             _grayScaleLine.EnsureLineStride(dest.Width + 4);
             //2. setup vars
-            _currentLcdLut = s_g4_1_3LcdLut;
+            _currentLcdLut = s_g4_1_2LcdLut;// s_g4_1_3LcdLut;
             byte[] dest_buffer = dest.GetBuffer();
             int dest_w = dest.Width;
             int dest_h = dest.Height;
