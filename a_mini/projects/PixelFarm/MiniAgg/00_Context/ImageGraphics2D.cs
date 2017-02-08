@@ -65,8 +65,8 @@ namespace PixelFarm.Agg
 
         public override bool UseSubPixelRendering2
         {
-            get { return ScanlineRasterizer.UseSubPixelRendering2; }
-            set { ScanlineRasterizer.UseSubPixelRendering2 = value; }
+            get { return ScanlineRasterizer.UseSubPixelRendering; }
+            set { ScanlineRasterizer.UseSubPixelRendering = value; }
         }
         public override ScanlinePacked8 ScanlinePacked8
         {

@@ -289,7 +289,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //
             //clear surface bg
             p.Clear(PixelFarm.Drawing.Color.White);            
-            p.UseSubPixelRendering2 = true;
+            p.UseSubPixelRendering  = true;
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;

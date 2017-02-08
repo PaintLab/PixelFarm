@@ -16,18 +16,7 @@ namespace PixelFarm.DrawingGL
         {
             _win32GdiPrinter = new WinGdiFontPrinter(w, h);
         }
-        public override bool UseSubPixelRendering2
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
 
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
         public override RequestFont CurrentFont
         {
             get

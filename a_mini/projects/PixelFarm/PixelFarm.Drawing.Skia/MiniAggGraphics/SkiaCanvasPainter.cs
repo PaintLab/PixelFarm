@@ -33,18 +33,6 @@ namespace PixelFarm.Drawing.Skia
             _width = w;
             _height = h;
         }
-        public override bool UseSubPixelRendering2
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
         public SKCanvas Canvas
         {
             get { return _skCanvas; }

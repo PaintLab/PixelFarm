@@ -266,7 +266,11 @@ namespace PixelFarm.Agg
 
             this.AddPath(new VertexStoreSnap(vxs));
         }
-        public bool UseSubPixelRendering2 { get; set; }
+        /// <summary>
+        /// use subpixel rendering or not
+        /// </summary>
+        public bool UseSubPixelRendering { get; set; }
+
         /// <summary>
         /// we do NOT store snap ***
         /// </summary>
@@ -292,7 +296,7 @@ namespace PixelFarm.Agg
                 VertexStore vxs = snap.GetInternalVxs();
                 int j = vxs.Count;
 
-                if (UseSubPixelRendering2)
+                if (UseSubPixelRendering)
                 {
                     for (int i = 0; i < j; ++i)
                     {
@@ -324,7 +328,7 @@ namespace PixelFarm.Agg
 #if DEBUG
                 int dbugVertexCount = 0;
 #endif
-                if (UseSubPixelRendering2)
+                if (UseSubPixelRendering)
                 {
                     while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
                     {

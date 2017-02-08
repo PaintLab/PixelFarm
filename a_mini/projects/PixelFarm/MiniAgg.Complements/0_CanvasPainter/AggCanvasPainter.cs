@@ -380,20 +380,22 @@ namespace PixelFarm.Agg
         public override bool UseSubPixelRendering
         {
             get { return sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering; }
-            set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelRendering : ScanlineRenderMode.Default; }
-        }
-        public override bool UseSubPixelRendering2
-        {
-            get
-            {
-                return sclineRas.UseSubPixelRendering2;
-            }
-
             set
             {
-                sclineRas.UseSubPixelRendering2 = value;
+                if (value)
+                {
+                    this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelRendering;
+                    this.sclineRas.UseSubPixelRendering = true;
+                }
+                else
+                {
+                    this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.Default;
+                    this.sclineRas.UseSubPixelRendering = false;
+                }
+                this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelRendering : ScanlineRenderMode.Default;
             }
         }
+        
         public override Color FillColor
         {
             get { return fillColor; }

@@ -171,17 +171,7 @@ namespace PixelFarm.Drawing.WinGdi
                 _useSubPixelRendering = value;
             }
         }
-        public override bool UseSubPixelRendering2
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        
         public override int Width
         {
             get
