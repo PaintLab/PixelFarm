@@ -42,8 +42,27 @@ Hardware and Software 2D Rendering Library
     
     ![gdiplus](https://cloud.githubusercontent.com/assets/7447159/20637923/1d0e1f78-b3c9-11e6-80d2-3c335bbca025.png)
     
-
+	
 ---
+3. PixelFarm's Typography :
+   Agg's Subpixel Rendering 
+   
+	![lcd_05](https://cloud.githubusercontent.com/assets/7447159/22738636/ceba4840-ee3a-11e6-8cd6-400b9d356fd7.png)
+   
+    ---
+	![lcd_07](https://cloud.githubusercontent.com/assets/7447159/22779712/6e1512c2-eeee-11e6-9352-8c0c4fc1dc95.png)
+
+	---
+	![lcd_08](https://cloud.githubusercontent.com/assets/7447159/22780442/590abe10-eef1-11e6-93f6-bf4bbcfa3f34.png)
+
+
+	---
+ 
+	![lcd_09](https://cloud.githubusercontent.com/assets/7447159/22780526/a0e65712-eef1-11e6-948a-eca8e8158aaa.png)
+
+
+
+	--
  
 License:
 
