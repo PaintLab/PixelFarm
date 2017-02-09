@@ -267,7 +267,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
-            p.Line(2, 0, 3, 15);
+            p.Line(2, 0, 10, 15);
 
         }
         public override void Draw(CanvasPainter p)
@@ -352,7 +352,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                         //4. read accumulate 'energy' back 
                         forwardBuffer.ReadNext(out e0);
                         //5. blend this pixel to dest image (expand to 5 (sub)pixel)                          
-                        ScanlineSubPixelRasterizer.BlendPixel(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                        BlendPixel(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                     }
                     //------------------------------------------------------------
                     prev_a = a;
@@ -373,22 +373,22 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     {
                         default: throw new NotSupportedException();
                         case 4:
-                            ScanlineSubPixelRasterizer.BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendPixel(e4 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e4 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 3:
-                            ScanlineSubPixelRasterizer.BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 2:
-                            ScanlineSubPixelRasterizer.BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 1:
-                            ScanlineSubPixelRasterizer.BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 0:
                             //nothing
@@ -398,7 +398,37 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             }
         }
 
-
+        static void BlendPixel(int a0, byte[] rgb, ref int color_index, byte[] destImgBuffer, ref int destImgIndex, ref int round)
+        {
+            //a0 = energy * color_alpha
+            byte existingColor = destImgBuffer[destImgIndex];
+            byte newValue = (byte)((((rgb[color_index] - existingColor) * a0) + (existingColor << 16)) >> 16);
+            destImgBuffer[destImgIndex] = newValue;
+            //move to next dest
+            destImgIndex++;
+            color_index++;
+            if ((color_index) > 2)
+            {
+                color_index = 0;//reset
+            }
+            round++;
+            if ((round) > 2)
+            {
+                //this is alpha chanel
+                //so we skip alpha byte to next
+                //and swap rgb of latest write pixel
+                //-------------------------- 
+                //TODO: review here, not correct
+                //in-place swap
+                byte r1 = destImgBuffer[destImgIndex - 1];
+                byte b1 = destImgBuffer[destImgIndex - 3];
+                destImgBuffer[destImgIndex - 3] = r1;
+                destImgBuffer[destImgIndex - 1] = b1;
+                //-------------------------- 
+                destImgIndex++;//skip alpha chanel
+                round = 0;
+            }
+        }
 
         /// <summary>
         /// convert from original grey scale to expand lcd-ready grey scale ***
