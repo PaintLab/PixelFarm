@@ -69,17 +69,20 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             }
             return greyScaleBuffer;
         }
-        void BlendWithLcdSpans(ActualImage destImg, byte[] greyBuff, int greyBufferWidth, int greyBufferHeight)
+        void Blend(ActualImage destImg, byte[] greyBuff, int greyBufferWidth, int greyBufferHeight)
         {
             PixelFarm.Drawing.Color color = PixelFarm.Drawing.Color.Black;
             for (int y = 0; y < greyBufferHeight; ++y)
             {
-                BlendLcdSpan(destImg, greyBuff, color, 0, y, greyBufferWidth);
+                BlendScanline(destImg, greyBuff, color, 0, y, greyBufferWidth);
             }
             //SwapRB(destImg);
         }
-        void BlendLcdSpan(ActualImage destImg, byte[] expandGreyBuffer,
+
+
+        void BlendScanline(ActualImage destImg, byte[] expandGreyBuffer,
          PixelFarm.Drawing.Color color, int x, int y, int width)
+
         {
             byte[] rgb = new byte[3]{
                 color.R,
@@ -93,72 +96,48 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int destImgIndex = (x * 4) + (destImg.Stride * y);
             //start img src
             int srcImgIndex = x + (width * y);
-            int spanIndex = srcImgIndex;
-            int i = x % 3;
-
+            int colorIndex = 0;
             int round = 0;
-
-            do
+            byte color_a = color.alpha;
+            while (width > 3)
             {
-                int a0 = expandGreyBuffer[spanIndex] * color.alpha;
-                byte existingColor = destImgBuffer[destImgIndex];
-                byte newValue = (byte)((((rgb[i] - existingColor) * a0) + (existingColor << 16)) >> 16);
-                destImgBuffer[destImgIndex] = newValue;
-                //move to next dest
-                destImgIndex++;
+                //try
+                //{
+                
+                int a0 = expandGreyBuffer[srcImgIndex] * color_a;
+                int a1 = expandGreyBuffer[srcImgIndex + 1] * color_a;
+                int a2 = expandGreyBuffer[srcImgIndex + 2] * color_a;
 
+                byte ec0 = destImgBuffer[destImgIndex];//existing color
+                byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
+                byte ec2 = destImgBuffer[destImgIndex + 2];//existing color
 
-                i++;
-                if (i > 2)
-                {
-                    i = 0;//reset
-                }
-                round++;
-                if (round > 2)
-                {
-                    //this is alpha chanel
-                    //so we skip alpha byte to next
+                //------------------------------------------------------
+                //please note that we swap a2 and a0 on the fly****
+                //------------------------------------------------------
+                byte n0 = (byte)((((rgb[colorIndex] - ec0) * a2) + (ec0 << 16)) >> 16);
+                byte n1 = (byte)((((rgb[colorIndex + 1] - ec1) * a1) + (ec1 << 16)) >> 16);
+                byte n2 = (byte)((((rgb[colorIndex + 2] - ec2) * a0) + (ec2 << 16)) >> 16);
 
-                    //and swap rgb of latest write pixel
-                    //--------------------------
-                    //in-place swap
-                    byte r = destImgBuffer[destImgIndex - 1];
-                    byte b = destImgBuffer[destImgIndex - 3];
-                    destImgBuffer[destImgIndex - 3] = r;
-                    destImgBuffer[destImgIndex - 1] = b;
-                    //--------------------------
+                destImgBuffer[destImgIndex] = n0;
+                destImgBuffer[destImgIndex + 1] = n1;
+                destImgBuffer[destImgIndex + 2] = n2;
 
-                    destImgIndex++;
-                    round = 0;
-                }
-                spanIndex++;
-                srcImgIndex++;
+                destImgIndex += 4;
+                round = 0;
+                colorIndex = 0;
+                srcImgIndex += 3;
+                width -= 3;
 
+                //}
+                //catch (Exception ex)
+                //{
 
-            } while (--width > 0);
-        }
-        static void SwapRB(ActualImage destImg)
-        {
-            byte[] destImgBuffer = ActualImage.GetBuffer(destImg);
-            int width = destImg.Width;
-            int height = destImg.Height;
-            int destIndex = 0;
-            for (int y = 0; y < height; ++y)
-            {
-                destIndex = (y * destImg.Stride);
-                for (int x = 0; x < width; ++x)
-                {
-                    byte r = destImgBuffer[destIndex];
-                    byte g = destImgBuffer[destIndex + 1];
-                    byte b = destImgBuffer[destIndex + 2];
-                    byte a = destImgBuffer[destIndex + 3];
-                    //swap
-                    destImgBuffer[destIndex + 2] = r;
-                    destImgBuffer[destIndex] = b;
-                    destIndex += 4;
-                }
+                //}
             }
         }
+
+
         // Swap Blue and Red, that is convert RGB->BGR or BGR->RGB
         ////---------------------------------
         //void swap_rb(unsigned char* buf, unsigned width, unsigned height, unsigned stride)
@@ -221,8 +200,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f * 3;
-            painter.Line(2 * 3, 0, 3 * 3, 15); //scale horizontal 3 times, 
+            int x = 10, y = 10;
+            painter.Line(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
+            int lineLen = 4;
 
+
+            //painter.Line(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
             //painter.Line(2, 0, 2, 15);
             //painter.Line(2, 0, 20, 20);
             //painter.Line(2, 0, 30, 15);
@@ -232,15 +215,18 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //draw img into that bg
             //--------------- 
             //convert glyphImg from RGBA to grey Scale buffer
-            //---------------
+            //--------------- 
             //lcd process ...
             byte[] glyphGreyScale = CreateGreyScaleBuffer(glyphImg);
-            //
-            int newGreyBuffWidth;
-            byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyBuffWidth);
+            //---------------
+
+            //swap gray scale 
+            int newGreyImgStride;
+            byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyImgStride);
+
             //blend lcd 
             var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
-            BlendWithLcdSpans(aggPainer.Graphics.DestActualImage, expanedGreyScaleBuffer, newGreyBuffWidth, glyphImg.Height);
+            Blend(aggPainer.Graphics.DestActualImage, expanedGreyScaleBuffer, newGreyImgStride, glyphImg.Height);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
         }
@@ -271,36 +257,46 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         {
             //version 3:  
             p.Clear(PixelFarm.Drawing.Color.White);
-            //--------------------------
+            //---------------------------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 1.0f;
             p.UseSubPixelRendering = true;
             p.Line(0, 0, 15, 20);
-            //p.UseSubPixelRendering = false;
-            //p.Line(30, 0, 45, 20);
-            //--------------------------
+
+
         }
+        static double DegToRad(double degree)
+        {
+            return degree * (Math.PI / 180d);
+        }
+        static double RadToDeg(double degree)
+        {
+            return degree * (180d / Math.PI);
+        }
+
         void RunSampleD(CanvasPainter p)
         {
-            //version 4:
-            //1. create simple vertical line to test agg's lcd rendernig technique
-            //create gray-scale actual image 
-            //          
-            //
-            //clear surface bg
-            p.Clear(PixelFarm.Drawing.Color.White);            
-            p.UseSubPixelRendering  = true;
+            //version 4: 
+            p.Clear(PixelFarm.Drawing.Color.White);
+            p.UseSubPixelRendering = true;
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
-            p.Line(2, 0, 3, 15);//not need to scale3                        
-            //           
+            //p.Line(2, 0, 10, 15);
 
-            //var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
-            //BlendWithLcdTechnique(aggPainer.Graphics.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);            
-             
-            //--------------- 
-
+            int lineLen = 20;
+            int x = 30;
+            int y = 30;
+            for (int i = 0; i < 360; i += 15)
+            {
+                p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+                //y += 5;
+            }
+            //y += 10;
+            //for (int i = 0; i < 360; i += 360)
+            //{
+            //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+            //}
         }
         public override void Draw(CanvasPainter p)
         {
@@ -384,7 +380,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                         //4. read accumulate 'energy' back 
                         forwardBuffer.ReadNext(out e0);
                         //5. blend this pixel to dest image (expand to 5 (sub)pixel)                          
-                        ScanlineSubPixelRasterizer.BlendSpan(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                        BlendPixel(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                     }
                     //------------------------------------------------------------
                     prev_a = a;
@@ -397,7 +393,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
                 {
 
-                    continue;
+
                     byte e1, e2, e3, e4;
                     forwardBuffer.ReadRemaining4(out e1, out e2, out e3, out e4);
                     int remainingEnergy = Math.Min(srcStride, 4);
@@ -405,22 +401,22 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     {
                         default: throw new NotSupportedException();
                         case 4:
-                            ScanlineSubPixelRasterizer.BlendSpan(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e4 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e4 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 3:
-                            ScanlineSubPixelRasterizer.BlendSpan(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 2:
-                            ScanlineSubPixelRasterizer.BlendSpan(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            ScanlineSubPixelRasterizer.BlendSpan(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 1:
-                            ScanlineSubPixelRasterizer.BlendSpan(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                             break;
                         case 0:
                             //nothing
@@ -430,7 +426,37 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             }
         }
 
-
+        static void BlendPixel(int a0, byte[] rgb, ref int color_index, byte[] destImgBuffer, ref int destImgIndex, ref int round)
+        {
+            //a0 = energy * color_alpha
+            byte existingColor = destImgBuffer[destImgIndex];
+            byte newValue = (byte)((((rgb[color_index] - existingColor) * a0) + (existingColor << 16)) >> 16);
+            destImgBuffer[destImgIndex] = newValue;
+            //move to next dest
+            destImgIndex++;
+            color_index++;
+            if ((color_index) > 2)
+            {
+                color_index = 0;//reset
+            }
+            round++;
+            if ((round) > 2)
+            {
+                //this is alpha chanel
+                //so we skip alpha byte to next
+                //and swap rgb of latest write pixel
+                //-------------------------- 
+                //TODO: review here, not correct
+                //in-place swap
+                byte r1 = destImgBuffer[destImgIndex - 1];
+                byte b1 = destImgBuffer[destImgIndex - 3];
+                destImgBuffer[destImgIndex - 3] = r1;
+                destImgBuffer[destImgIndex - 1] = b1;
+                //-------------------------- 
+                destImgIndex++;//skip alpha chanel
+                round = 0;
+            }
+        }
 
         /// <summary>
         /// convert from original grey scale to expand lcd-ready grey scale ***
