@@ -103,6 +103,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             {
                 //try
                 //{
+                
                 int a0 = expandGreyBuffer[srcImgIndex] * color_a;
                 int a1 = expandGreyBuffer[srcImgIndex + 1] * color_a;
                 int a2 = expandGreyBuffer[srcImgIndex + 2] * color_a;
@@ -111,14 +112,16 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
                 byte ec2 = destImgBuffer[destImgIndex + 2];//existing color
 
-
-                byte n0 = (byte)((((rgb[colorIndex] - ec0) * a0) + (ec0 << 16)) >> 16);
+                //------------------------------------------------------
+                //please note that we swap a2 and a0 on the fly****
+                //------------------------------------------------------
+                byte n0 = (byte)((((rgb[colorIndex] - ec0) * a2) + (ec0 << 16)) >> 16);
                 byte n1 = (byte)((((rgb[colorIndex + 1] - ec1) * a1) + (ec1 << 16)) >> 16);
-                byte n2 = (byte)((((rgb[colorIndex + 2] - ec2) * a2) + (ec2 << 16)) >> 16);
+                byte n2 = (byte)((((rgb[colorIndex + 2] - ec2) * a0) + (ec2 << 16)) >> 16);
 
-                destImgBuffer[destImgIndex] = n2;//swap on the fly
+                destImgBuffer[destImgIndex] = n0;
                 destImgBuffer[destImgIndex + 1] = n1;
-                destImgBuffer[destImgIndex + 2] = n0;//swap  on the fly
+                destImgBuffer[destImgIndex + 2] = n2;
 
                 destImgIndex += 4;
                 round = 0;
@@ -197,8 +200,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f * 3;
-            painter.Line(2 * 3, 0, 3 * 3, 15); //scale horizontal 3 times, 
+            int x = 10, y = 10;
+            painter.Line(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
+            int lineLen = 4;
 
+
+            //painter.Line(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
             //painter.Line(2, 0, 2, 15);
             //painter.Line(2, 0, 20, 20);
             //painter.Line(2, 0, 30, 15);
@@ -250,15 +257,23 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         {
             //version 3:  
             p.Clear(PixelFarm.Drawing.Color.White);
-            //--------------------------
+            //---------------------------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 1.0f;
             p.UseSubPixelRendering = true;
             p.Line(0, 0, 15, 20);
-            //p.UseSubPixelRendering = false;
-            //p.Line(30, 0, 45, 20);
-            //--------------------------
+
+
         }
+        static double DegToRad(double degree)
+        {
+            return degree * (Math.PI / 180d);
+        }
+        static double RadToDeg(double degree)
+        {
+            return degree * (180d / Math.PI);
+        }
+
         void RunSampleD(CanvasPainter p)
         {
             //version 4: 
@@ -267,8 +282,21 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
-            p.Line(2, 0, 10, 15);
+            //p.Line(2, 0, 10, 15);
 
+            int lineLen = 20;
+            int x = 30;
+            int y = 30;
+            for (int i = 0; i < 360; i += 15)
+            {
+                p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+                //y += 5;
+            }
+            //y += 10;
+            //for (int i = 0; i < 360; i += 360)
+            //{
+            //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+            //}
         }
         public override void Draw(CanvasPainter p)
         {

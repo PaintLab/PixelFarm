@@ -166,12 +166,14 @@ namespace PixelFarm.Agg
             while (nwidth > 3)
             {
 
+
+                //------------
+                //TODO: add release mode code (optimized version)
                 //1. convert from original grayscale value from lineBuff
                 //to lcd level
                 byte g0 = lcdLut.Convert255ToLevel(lineBuff[srcIndex]);
                 byte g1 = lcdLut.Convert255ToLevel(lineBuff[srcIndex + 1]);
-                byte g2 = lcdLut.Convert255ToLevel(lineBuff[srcIndex + 2]);
-
+                byte g2 = lcdLut.Convert255ToLevel(lineBuff[srcIndex + 2]); 
                 //3.
                 //from single grey scale value it is expanded*** into 5 color-components 
                 byte e_0, e_1, e_2; //energy 01,2,3
@@ -185,18 +187,17 @@ namespace PixelFarm.Agg
                 //4. blend 3 pixels 
                 byte ec0 = destImgBuffer[destImgIndex];//existing color
                 byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
-                byte ec2 = destImgBuffer[destImgIndex + 2];//existing color 
-
+                byte ec2 = destImgBuffer[destImgIndex + 2];//existing color  
                 //--------------------------------------------------------
-                byte n0 = (byte)((((rgb[color_index] - ec0) * (e_0 * color_alpha)) + (ec0 << 16)) >> 16);
+                //note: that we swap e_2 and e_0 on the fly 
+                byte n0 = (byte)((((rgb[color_index] - ec0) * (e_2 * color_alpha)) + (ec0 << 16)) >> 16); //swap on the fly
                 byte n1 = (byte)((((rgb[color_index + 1] - ec1) * (e_1 * color_alpha)) + (ec1 << 16)) >> 16);
-                byte n2 = (byte)((((rgb[color_index + 2] - ec2) * (e_2 * color_alpha)) + (ec2 << 16)) >> 16);
-                //--------------------------------------------------------
-
-                destImgBuffer[destImgIndex] = n2;//swap on the fly
+                byte n2 = (byte)((((rgb[color_index + 2] - ec2) * (e_0 * color_alpha)) + (ec2 << 16)) >> 16);//swap on the fly
+                //-------------------------------------------------------- 
+                destImgBuffer[destImgIndex] = n0;
                 destImgBuffer[destImgIndex + 1] = n1;
-                destImgBuffer[destImgIndex + 2] = n0;//swap  on the fly
-
+                destImgBuffer[destImgIndex + 2] = n2; 
+                //---------------------------------------------------------
                 destImgIndex += 4;
                 round = 0;
                 color_index = 0;
@@ -209,82 +210,82 @@ namespace PixelFarm.Agg
             //---------
             {
 
-                //get remaining energy from _forwaed buffer
-                byte ec_r1, ec_r2, ec_r3, ec_r4;
-                _forwardBuffer.ReadRemaining4(out ec_r1, out ec_r2, out ec_r3, out ec_r4);
+                ////get remaining energy from _forwaed buffer
+                //byte ec_r1, ec_r2, ec_r3, ec_r4;
+                //_forwardBuffer.ReadRemaining4(out ec_r1, out ec_r2, out ec_r3, out ec_r4);
 
-                //we need 2 pixels,  
-                int remaining_dest = Math.Min((srcStride - (destImgIndex + 4)), 5);
-                if (remaining_dest < 1)
-                {
-                    return;
-                }
+                ////we need 2 pixels,  
+                //int remaining_dest = Math.Min((srcStride - (destImgIndex + 4)), 5);
+                //if (remaining_dest < 1)
+                //{
+                //    return;
+                //}
 
-                switch (remaining_dest)
-                {
-                    default: throw new NotSupportedException();
-                    case 5:
-                        {
-                            //first round
-                            byte ec0 = destImgBuffer[destImgIndex];//existing color
-                            byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
-                            byte ec2 = destImgBuffer[destImgIndex + 2];//existing color 
-                            //write 4 byte
-                            //--------------------------------------------------------
-                            byte n0 = (byte)((((rgb[color_index] - ec0) * (ec_r1 * color_alpha)) + (ec0 << 16)) >> 16);
-                            byte n1 = (byte)((((rgb[color_index + 1] - ec1) * (ec_r2 * color_alpha)) + (ec1 << 16)) >> 16);
-                            byte n2 = (byte)((((rgb[color_index + 2] - ec2) * (ec_r3 * color_alpha)) + (ec2 << 16)) >> 16);
-                            //--------------------------------------------------------
+                //switch (remaining_dest)
+                //{
+                //    default: throw new NotSupportedException();
+                //    case 5:
+                //        {
+                //            //first round
+                //            byte ec0 = destImgBuffer[destImgIndex];//existing color
+                //            byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
+                //            byte ec2 = destImgBuffer[destImgIndex + 2];//existing color 
+                //            //write 4 byte
+                //            //--------------------------------------------------------
+                //            byte n0 = (byte)((((rgb[color_index] - ec0) * (ec_r1 * color_alpha)) + (ec0 << 16)) >> 16);
+                //            byte n1 = (byte)((((rgb[color_index + 1] - ec1) * (ec_r2 * color_alpha)) + (ec1 << 16)) >> 16);
+                //            byte n2 = (byte)((((rgb[color_index + 2] - ec2) * (ec_r3 * color_alpha)) + (ec2 << 16)) >> 16);
+                //            //--------------------------------------------------------
 
-                            destImgBuffer[destImgIndex] = n2;//swap on the fly
-                            destImgBuffer[destImgIndex + 1] = n1;
-                            destImgBuffer[destImgIndex + 2] = n0;//swap  on the fly
+                //            destImgBuffer[destImgIndex] = n2;//swap on the fly
+                //            destImgBuffer[destImgIndex + 1] = n1;
+                //            destImgBuffer[destImgIndex + 2] = n0;//swap  on the fly
 
-                            destImgIndex += 4;
-                            round = 0;
-                            color_index = 0;
-                            srcIndex += 3;
-                            nwidth -= 3;
-                            //--------------------------------------------------------
-                            //2nd round
-                            ec0 = destImgBuffer[destImgIndex];//existing color
-                            n0 = (byte)((((rgb[color_index] - ec0) * (ec_r1 * color_alpha)) + (ec0 << 16)) >> 16);
-                            destImgBuffer[destImgIndex + 2] = n0;//swap  on the fly
-                        }
-                        break;
-                    case 4:
-                        {
-                            //write 3 byte
-                            //first round
-                            byte ec0 = destImgBuffer[destImgIndex];//existing color
-                            byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
-                            byte ec2 = destImgBuffer[destImgIndex + 2];//existing color 
-                            //write 4 byte
-                            //--------------------------------------------------------
-                            byte n0 = (byte)((((rgb[color_index] - ec0) * (ec_r1 * color_alpha)) + (ec0 << 16)) >> 16);
-                            byte n1 = (byte)((((rgb[color_index + 1] - ec1) * (ec_r2 * color_alpha)) + (ec1 << 16)) >> 16);
-                            byte n2 = (byte)((((rgb[color_index + 2] - ec2) * (ec_r3 * color_alpha)) + (ec2 << 16)) >> 16);
-                            //--------------------------------------------------------
+                //            destImgIndex += 4;
+                //            round = 0;
+                //            color_index = 0;
+                //            srcIndex += 3;
+                //            nwidth -= 3;
+                //            //--------------------------------------------------------
+                //            //2nd round
+                //            ec0 = destImgBuffer[destImgIndex];//existing color
+                //            n0 = (byte)((((rgb[color_index] - ec0) * (ec_r1 * color_alpha)) + (ec0 << 16)) >> 16);
+                //            destImgBuffer[destImgIndex + 2] = n0;//swap  on the fly
+                //        }
+                //        break;
+                //    case 4:
+                //        {
+                //            //write 3 byte
+                //            //first round
+                //            byte ec0 = destImgBuffer[destImgIndex];//existing color
+                //            byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
+                //            byte ec2 = destImgBuffer[destImgIndex + 2];//existing color 
+                //            //write 4 byte
+                //            //--------------------------------------------------------
+                //            byte n0 = (byte)((((rgb[color_index] - ec0) * (ec_r1 * color_alpha)) + (ec0 << 16)) >> 16);
+                //            byte n1 = (byte)((((rgb[color_index + 1] - ec1) * (ec_r2 * color_alpha)) + (ec1 << 16)) >> 16);
+                //            byte n2 = (byte)((((rgb[color_index + 2] - ec2) * (ec_r3 * color_alpha)) + (ec2 << 16)) >> 16);
+                //            //--------------------------------------------------------
 
-                            destImgBuffer[destImgIndex] = n2;//swap on the fly
-                            destImgBuffer[destImgIndex + 1] = n1;
-                            destImgBuffer[destImgIndex + 2] = n0;//swap  on the fly
+                //            destImgBuffer[destImgIndex] = n2;//swap on the fly
+                //            destImgBuffer[destImgIndex + 1] = n1;
+                //            destImgBuffer[destImgIndex + 2] = n0;//swap  on the fly
 
-                            destImgIndex += 4;
-                            round = 0;
-                            color_index = 0;
-                            srcIndex += 3;
-                            nwidth -= 3;
-                            //--------------------------------------------------------
-                        }
-                        break;
-                    case 3:
-                    case 2:
-                    case 1:
-                    case 0:
-                        //just return  
-                        break;
-                }
+                //            destImgIndex += 4;
+                //            round = 0;
+                //            color_index = 0;
+                //            srcIndex += 3;
+                //            nwidth -= 3;
+                //            //--------------------------------------------------------
+                //        }
+                //        break;
+                //    case 3:
+                //    case 2:
+                //    case 1:
+                //    case 0:
+                //        //just return  
+                //        break;
+                //}
             }
         }
 
