@@ -78,8 +78,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             }
             //SwapRB(destImg);
         }
+
+
         void BlendScanline(ActualImage destImg, byte[] expandGreyBuffer,
          PixelFarm.Drawing.Color color, int x, int y, int width)
+
         {
             byte[] rgb = new byte[3]{
                 color.R,
@@ -93,72 +96,45 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int destImgIndex = (x * 4) + (destImg.Stride * y);
             //start img src
             int srcImgIndex = x + (width * y);
-            int spanIndex = srcImgIndex;
-            int i = x % 3;
-
+            int colorIndex = 0;
             int round = 0;
-
-            do
+            byte color_a = color.alpha;
+            while (width > 3)
             {
-                int a0 = expandGreyBuffer[spanIndex] * color.alpha;
-                byte existingColor = destImgBuffer[destImgIndex];
-                byte newValue = (byte)((((rgb[i] - existingColor) * a0) + (existingColor << 16)) >> 16);
-                destImgBuffer[destImgIndex] = newValue;
-                //move to next dest
-                destImgIndex++;
+                //try
+                //{
+                int a0 = expandGreyBuffer[srcImgIndex] * color_a;
+                int a1 = expandGreyBuffer[srcImgIndex + 1] * color_a;
+                int a2 = expandGreyBuffer[srcImgIndex + 2] * color_a;
+
+                byte ec0 = destImgBuffer[destImgIndex];//existing color
+                byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
+                byte ec2 = destImgBuffer[destImgIndex + 2];//existing color
 
 
-                i++;
-                if (i > 2)
-                {
-                    i = 0;//reset
-                }
-                round++;
-                if (round > 2)
-                {
-                    //this is alpha chanel
-                    //so we skip alpha byte to next
+                byte n0 = (byte)((((rgb[colorIndex] - ec0) * a0) + (ec0 << 16)) >> 16);
+                byte n1 = (byte)((((rgb[colorIndex + 1] - ec1) * a1) + (ec1 << 16)) >> 16);
+                byte n2 = (byte)((((rgb[colorIndex + 2] - ec2) * a2) + (ec2 << 16)) >> 16);
 
-                    //and swap rgb of latest write pixel
-                    //--------------------------
-                    //in-place swap
-                    byte r = destImgBuffer[destImgIndex - 1];
-                    byte b = destImgBuffer[destImgIndex - 3];
-                    destImgBuffer[destImgIndex - 3] = r;
-                    destImgBuffer[destImgIndex - 1] = b;
-                    //--------------------------
+                destImgBuffer[destImgIndex] = n2;//swap on the fly
+                destImgBuffer[destImgIndex + 1] = n1;
+                destImgBuffer[destImgIndex + 2] = n0;//swap  on the fly
 
-                    destImgIndex++;
-                    round = 0;
-                }
-                spanIndex++;
-                srcImgIndex++;
+                destImgIndex += 4;
+                round = 0;
+                colorIndex = 0;
+                srcImgIndex += 3;
+                width -= 3;
 
+                //}
+                //catch (Exception ex)
+                //{
 
-            } while (--width > 0);
-        }
-        static void SwapRB(ActualImage destImg)
-        {
-            byte[] destImgBuffer = ActualImage.GetBuffer(destImg);
-            int width = destImg.Width;
-            int height = destImg.Height;
-            int destIndex = 0;
-            for (int y = 0; y < height; ++y)
-            {
-                destIndex = (y * destImg.Stride);
-                for (int x = 0; x < width; ++x)
-                {
-                    byte r = destImgBuffer[destIndex];
-                    byte g = destImgBuffer[destIndex + 1];
-                    byte b = destImgBuffer[destIndex + 2];
-                    byte a = destImgBuffer[destIndex + 3];
-                    //swap
-                    destImgBuffer[destIndex + 2] = r;
-                    destImgBuffer[destIndex] = b;
-                    destIndex += 4;
-                }
+                //}
             }
         }
+
+
         // Swap Blue and Red, that is convert RGB->BGR or BGR->RGB
         ////---------------------------------
         //void swap_rb(unsigned char* buf, unsigned width, unsigned height, unsigned stride)
@@ -232,15 +208,18 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //draw img into that bg
             //--------------- 
             //convert glyphImg from RGBA to grey Scale buffer
-            //---------------
+            //--------------- 
             //lcd process ...
             byte[] glyphGreyScale = CreateGreyScaleBuffer(glyphImg);
-            //
-            int newGreyBuffWidth;
-            byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyBuffWidth);
+            //---------------
+
+            //swap gray scale 
+            int newGreyImgStride;
+            byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyImgStride);
+
             //blend lcd 
             var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
-            Blend(aggPainer.Graphics.DestActualImage, expanedGreyScaleBuffer, newGreyBuffWidth, glyphImg.Height);
+            Blend(aggPainer.Graphics.DestActualImage, expanedGreyScaleBuffer, newGreyImgStride, glyphImg.Height);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
         }
