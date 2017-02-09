@@ -103,7 +103,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             {
                 //try
                 //{
-                
+
                 int a0 = expandGreyBuffer[srcImgIndex] * color_a;
                 int a1 = expandGreyBuffer[srcImgIndex + 1] * color_a;
                 int a2 = expandGreyBuffer[srcImgIndex + 2] * color_a;
@@ -284,13 +284,13 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             p.StrokeWidth = 2.0f;
             //p.Line(2, 0, 10, 15);
 
-            int lineLen = 20;
+            int lineLen = 10;
             int x = 30;
             int y = 30;
             for (int i = 0; i < 360; i += 15)
             {
                 p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
-                //y += 5;
+                y += 5;
             }
             //y += 10;
             //for (int i = 0; i < 360; i += 360)
@@ -373,12 +373,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
                     for (int n = 0; n < 3; ++n)
                     {
-                        forwardBuffer.WriteAccum(
+                        
+                        forwardBuffer.WriteAccumAndReadBack(
                          g8Lut.Tertiary(greyScaleValue),
                          g8Lut.Secondary(greyScaleValue),
-                         g8Lut.Primary(greyScaleValue));
-                        //4. read accumulate 'energy' back 
-                        forwardBuffer.ReadNext(out e0);
+                         g8Lut.Primary(greyScaleValue), out e0); 
+                       
                         //5. blend this pixel to dest image (expand to 5 (sub)pixel)                          
                         BlendPixel(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                     }
