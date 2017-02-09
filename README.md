@@ -43,7 +43,6 @@ Hardware and Software 2D Rendering Library
     ![gdiplus](https://cloud.githubusercontent.com/assets/7447159/20637923/1d0e1f78-b3c9-11e6-80d2-3c335bbca025.png)
     
 	
----
 
 3. PixelFarm's Typography :
    Agg's Subpixel Rendering 
