@@ -222,11 +222,7 @@ namespace PixelFarm.Forms
             exitingFormList.Add(f);
             return f;
         }
-        internal static void InitGlfwForm(GlFwForm blankForm)
-        {
-
-        }
-
+       
         public static bool ShouldClose()
         {
             for (int i = exitingFormList.Count - 1; i >= 0; --i)
