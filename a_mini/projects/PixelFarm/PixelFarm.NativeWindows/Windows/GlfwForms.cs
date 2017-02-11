@@ -223,6 +223,7 @@ namespace PixelFarm.Forms
             return f;
         }
        
+
         public static bool ShouldClose()
         {
             for (int i = exitingFormList.Count - 1; i >= 0; --i)
