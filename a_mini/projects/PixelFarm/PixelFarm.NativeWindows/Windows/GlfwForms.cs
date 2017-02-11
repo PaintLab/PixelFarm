@@ -164,6 +164,36 @@ namespace PixelFarm.Forms
                 return false;
             }
         }
+
+        internal static void InitGlFwForm(GlFwForm f)
+        {
+            //create pointer
+
+            GlfwWindowPtr glWindowPtr = Glfw.CreateWindow(f.Width, f.Height,
+                f.Title,
+                new GlfwMonitorPtr(),//default monitor
+                new GlfwWindowPtr()); //default top window 
+             
+            f.InitGlFwForm(glWindowPtr, f.Width, f.Height);
+            //-------------------
+            //setup events for glfw window
+            Glfw.SetWindowCloseCallback(glWindowPtr, s_windowCloseCb);
+            Glfw.SetWindowFocusCallback(glWindowPtr, s_windowFocusCb);
+            Glfw.SetWindowIconifyCallback(glWindowPtr, s_windowIconifyCb);
+            Glfw.SetWindowPosCallback(glWindowPtr, s_windowPosCb);
+            Glfw.SetWindowRefreshCallback(glWindowPtr, s_windowRefreshCb);
+            Glfw.SetWindowSizeCallback(glWindowPtr, s_windowSizeCb);
+            Glfw.SetCursorPosCallback(glWindowPtr, s_windowCursorPosCb);
+            Glfw.SetCursorEnterCallback(glWindowPtr, s_windowCursorEnterCb);
+            Glfw.SetMouseButtonCallback(glWindowPtr, s_windowMouseButtonCb);
+            Glfw.SetScrollCallback(glWindowPtr, s_scrollCb);
+            Glfw.SetKeyCallback(glWindowPtr, s_windowKeyCb);
+            Glfw.SetCharCallback(glWindowPtr, s_windowCharCb);
+            ////-------------------
+            existingForms.Add(glWindowPtr, f);
+            exitingFormList.Add(f);
+
+        }
         public static GlFwForm CreateGlfwForm(int w, int h, string title)
         {
             GlfwWindowPtr glWindowPtr = Glfw.CreateWindow(w, h,
@@ -171,6 +201,7 @@ namespace PixelFarm.Forms
                 new GlfwMonitorPtr(),//default monitor
                 new GlfwWindowPtr()); //default top window 
             GlFwForm f = new GlFwForm(glWindowPtr, w, h);
+
             f.Text = title;
             //-------------------
             //setup events for glfw window
@@ -185,13 +216,16 @@ namespace PixelFarm.Forms
             Glfw.SetMouseButtonCallback(glWindowPtr, s_windowMouseButtonCb);
             Glfw.SetScrollCallback(glWindowPtr, s_scrollCb);
             Glfw.SetKeyCallback(glWindowPtr, s_windowKeyCb);
-            Glfw.SetCharCallback(glWindowPtr, s_windowCharCb);            
+            Glfw.SetCharCallback(glWindowPtr, s_windowCharCb);
             ////-------------------
             existingForms.Add(glWindowPtr, f);
             exitingFormList.Add(f);
             return f;
         }
+        internal static void InitGlfwForm(GlFwForm blankForm)
+        {
 
+        }
 
         public static bool ShouldClose()
         {
@@ -227,15 +261,21 @@ namespace PixelFarm.Forms
         GlfwWindowPtr _nativeGlFwWindowPtr;
         IntPtr _nativePlatformHwnd;
         PixelFarm.GlfwWinInfo _winInfo;
-        internal GlFwForm(GlfwWindowPtr glWindowPtr, int w, int h)
+        public GlFwForm()
         {
 
+        }
+        internal GlFwForm(GlfwWindowPtr glWindowPtr, int w, int h)
+        {
+            InitGlFwForm(glWindowPtr, w, h);
+        }
+        internal void InitGlFwForm(GlfwWindowPtr glWindowPtr, int w, int h)
+        {
             base.Width = w;
             base.Height = h;
             _nativeGlFwWindowPtr = glWindowPtr;
             _nativePlatformHwnd = Glfw.GetNativePlatformWinHwnd(glWindowPtr);
             _winInfo = new PixelFarm.GlfwWinInfo(_nativeGlFwWindowPtr);
-
         }
         public GlfwWindowPtr GlfwWindowPtr
         {

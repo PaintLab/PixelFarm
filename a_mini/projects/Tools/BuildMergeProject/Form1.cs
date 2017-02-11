@@ -90,8 +90,9 @@ namespace BuildMergeProject
             //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
             //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\Typography\OpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Triangulation\\PixelFarm.Triangulation.csproj");
 
             switch (mergeOption)
             {
@@ -111,6 +112,7 @@ namespace BuildMergeProject
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj");
+                    
                     break;
 
                 case MergeOption.Windows_NoWinFormNoGdiPlus:
