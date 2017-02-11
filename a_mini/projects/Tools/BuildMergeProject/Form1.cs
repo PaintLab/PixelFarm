@@ -90,7 +90,7 @@ namespace BuildMergeProject
             //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
             //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\NOpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\Typography\OpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj");
 
             switch (mergeOption)
