@@ -1,5 +1,8 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
+using System.Collections.Generic;
+using Pencil.Gaming;
+
 namespace PixelFarm.Forms
 {
     public static class Application
@@ -41,6 +44,7 @@ namespace PixelFarm.Forms
         {
             this._handle = hwnd;
         }
+        public void Hide() { }
         public override IntPtr Handle
         {
             get
@@ -63,11 +67,7 @@ namespace PixelFarm.Forms
             newControl.TopLevelControl = newControl;
             return newControl;
         }
-        public string Title
-        {
-            get;
-            set;
-        }
+        
     }
 
 
@@ -75,19 +75,28 @@ namespace PixelFarm.Forms
     public class ControlCollection
     {
         Control owner;
+        List<Control> children = new List<Control>();
         internal ControlCollection(Control owner)
         {
             this.owner = owner;
         }
         public void Add(Control c)
         {
-        }
-        public void Remove(Control c)
-        {
+            if (owner == c)
+            {
+                throw new NotSupportedException();
+            }
+            //
+            children.Add(c);
 
+        }
+        public bool Remove(Control c)
+        {
+            return children.Remove(c);
         }
         public void Clear()
         {
+            children.Clear();
         }
     }
 
@@ -122,12 +131,17 @@ namespace PixelFarm.Forms
             get;
             set;
         }
+        public void Focus()
+        {
+            //TODO: implement this
+        }
         public virtual int Width
         {
             get { return this._width; }
             set
             {
                 this._width = value;
+                //TODO: implement this
             }
         }
         public virtual int Height
@@ -136,6 +150,7 @@ namespace PixelFarm.Forms
             set
             {
                 this._height = value;
+                //TODO: implement this
             }
         }
         public bool IsHandleCreated { get; set; }
@@ -161,9 +176,14 @@ namespace PixelFarm.Forms
         public Control Parent { get; set; }
         public static Control CreateFromNativeWindowHwnd(IntPtr hwnd)
         {
-            Control newControl = new Control(hwnd);             
+            Control newControl = new Control(hwnd);
             return newControl;
         }
+        protected virtual void OnLoad(EventArgs e)
+        {
+        }
+
+
     }
     public class FormClosingEventArgs : EventArgs
     {
