@@ -200,6 +200,7 @@ namespace SampleWinForms
             if (chkBorder.Checked)
             {
                 //5.4 
+                // p.StrokeWidth = 3;
                 p.StrokeColor = PixelFarm.Drawing.Color.Green;
                 //user can specific border width here...
                 //p.StrokeWidth = 2;
@@ -400,9 +401,9 @@ namespace SampleWinForms
         {
             //render grid 
             p.FillColor = PixelFarm.Drawing.Color.Gray;
-            for (int y = 0; y < height; )
+            for (int y = 0; y < height;)
             {
-                for (int x = 0; x < width; )
+                for (int x = 0; x < width;)
                 {
                     p.FillRectLBWH(x, y, 1, 1);
                     x += sqSize;
@@ -496,7 +497,8 @@ namespace SampleWinForms
                             q.horizontalEdge = edge;
                             q.isUpperSide = edge.IsUpper;
                         }
-                    } break;
+                    }
+                    break;
                 case PixelFarm.Agg.Typography.LineSlopeKind.Vertical:
                     {
                         //both p and q of this edge is part of vertical edge 
@@ -513,7 +515,8 @@ namespace SampleWinForms
 
                             q.AddVerticalEdge(edge);
                         }
-                    } break;
+                    }
+                    break;
             }
 
         }
@@ -1012,6 +1015,6 @@ namespace SampleWinForms
         private void chkLcdTechnique_CheckedChanged(object sender, EventArgs e)
         {
             button1_Click(this, EventArgs.Empty);
-        }
+        } 
     }
 }

@@ -594,7 +594,6 @@ namespace BuildTextureFonts
                     System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
                     bmp.UnlockBits(bmpdata);
                     bmp.Save("d:\\WImageTest\\a001_x1_" + (int)c + ".png");
-
                 }
             }
             //----------------------------------------------------
@@ -696,20 +695,22 @@ namespace BuildTextureFonts
         }
         private void button5_Click(object sender, EventArgs e)
         {
+
             //1. load font
             string fontName = "tahoma";
             string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
-            ActualFont font = GetActualFont(fontName, 28);// nativeFontStore.LoadFont(fontName, fontfile, 28);
+            ActualFont font = GetActualFont(fontfile, 28);// nativeFontStore.LoadFont(fontName, fontfile, 28);
             //2. get glyph 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
             //for (int i = 0; i < 256; ++i)
-            //BuildFontGlyphs(font, atlasBuilder, 0, 255);
+            BuildFontGlyphsByIndex(font, atlasBuilder, 0, 255);
             //BuildFontGlyphs(font, atlasBuilder, 0x0e00, 0x0e5b);
-            BuildFontGlyphsByIndex(font, atlasBuilder, 0, 3417);
+            //BuildFontGlyphsByIndex(font, atlasBuilder, 0, 3417);
             //BuildFontGlyphsByIndex(font, atlasBuilder, 0, 509);
 
             //----------------------------------------------------
+            //GlyphImage totalImg = atlasBuilder.BuildSingleImage();
             GlyphImage totalImg = atlasBuilder.BuildSingleImage();
             using (Bitmap bmp = new Bitmap(totalImg.Width, totalImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
@@ -721,7 +722,9 @@ namespace BuildTextureFonts
                     totalImg.SetImageBuffer(buffer, false);
                 }
 
-                var bmpdata = bmp.LockBits(new Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                var bmpdata = bmp.LockBits(
+                    new Rectangle(0, 0, totalImg.Width, totalImg.Height),
+                    System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
                 System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
                 bmp.UnlockBits(bmpdata);
                 bmp.Save("d:\\WImageTest\\a_total.png");
@@ -740,8 +743,8 @@ namespace BuildTextureFonts
 
             var g1 = font.GetGlyph('C');
             ProperGlyph[] pps = new ProperGlyph[3];
-            PixelFarm.Drawing.Text.TextShapingService.GetGlyphPos(font,"ABC".ToCharArray(), 0, 3, pps);
- 
+            PixelFarm.Drawing.Text.TextShapingService.GetGlyphPos(font, "ABC".ToCharArray(), 0, 3, pps);
+
 
             int[] glyphIndice = new int[] { 1076, 1127, 1164 };
             int j = glyphIndice.Length;
@@ -888,9 +891,153 @@ namespace BuildTextureFonts
 
         private void button9_Click(object sender, EventArgs e)
         {
-//#if DEBUG
-//            dbugTestMyFtLib.Test2();
-//#endif
+            //#if DEBUG
+            //            dbugTestMyFtLib.Test2();
+            //#endif
+
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            //--------------------------------------------
+            Msdfgen.Shape shape = new Msdfgen.Shape();
+            Msdfgen.Contour contour = new Msdfgen.Contour();
+            //contour.AddLine(5, 5, 10, 5);
+            //contour.AddLine(10, 5, 7, 10);
+            //contour.AddLine(7, 10, 5, 5);
+            //MyFtLib.ContourAddLinearSegment(cnt, 10, 10, 25, 25);
+            //MyFtLib.ContourAddLinearSegment(cnt, 25, 25, 15, 10);
+            //MyFtLib.ContourAddLinearSegment(cnt, 15, 10, 10, 10);
+            contour.AddLine(10, 10, 25, 25);
+            contour.AddLine(25, 25, 15, 10);
+            contour.AddLine(15, 10, 10, 10);
+            shape.contours.Add(contour);
+            //-+---------------------------
+
+            Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp(25, 25);
+            double edgeThreshold = 1.00000001;//use default
+            double angleThreshold = 1;
+            Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
+            shape.InverseYAxis = true;
+            Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(), -1);
+            int[] buffer = ConvertToIntBmp(frgbBmp);
+            //MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
+
+            using (Bitmap bmp = new Bitmap(frgbBmp.Width, frgbBmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            {
+                var bmpdata = bmp.LockBits(new Rectangle(0, 0, frgbBmp.Width, frgbBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                bmp.UnlockBits(bmpdata);
+
+                bmp.Save("d:\\WImageTest\\a001_xn2_.png");
+            }
+        }
+        public static int[] ConvertToIntBmp(Msdfgen.FloatRGBBmp input)
+        {
+            int height = input.Height;
+            int width = input.Width;
+            int[] output = new int[input.Width * input.Height];
+
+            for (int y = height - 1; y >= 0; --y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    //a b g r
+                    //----------------------------------
+                    Msdfgen.FloatRGB pixel = input.GetPixel(x, y);
+                    //a b g r
+                    int abgr = (255 << 24) |
+                        (Msdfgen.Vector2.Clamp((int)(pixel.b * 0x100), 0xff) << 16) |
+                        (Msdfgen.Vector2.Clamp((int)(pixel.g * 0x100), 0xff) << 8) |
+                        Msdfgen.Vector2.Clamp((int)(pixel.r * 0x100), 0xff);
+                    output[(y * width) + x] = abgr;
+                    //----------------------------------
+                    /**it++ = clamp(int(bitmap(x, y).r*0x100), 0xff);
+                    *it++ = clamp(int(bitmap(x, y).g*0x100), 0xff);
+                    *it++ = clamp(int(bitmap(x, y).b*0x100), 0xff);*/
+                }
+            }
+            return output;
+        }
+        internal unsafe static GlyphImage BuildMsdfFontImage()
+        {
+            IntPtr shape = MyFtLib.CreateShape();
+            IntPtr cnt = MyFtLib.ShapeAddBlankContour(shape);
+            MyFtLib.ContourAddLinearSegment(cnt, 10, 10, 25, 25);
+            MyFtLib.ContourAddLinearSegment(cnt, 25, 25, 15, 10);
+            MyFtLib.ContourAddLinearSegment(cnt, 15, 10, 10, 10);
+            // 
+
+            double s_left, s_bottom, s_right, s_top;
+            MyFtLib.ShapeFindBounds(shape, out s_left, out s_bottom, out s_right, out s_top);
+            var glyphBounds = new PixelFarm.Drawing.RectangleF((float)s_left, (float)s_top, (float)(s_right - s_left), (float)(s_top - s_bottom));
+            //then create msdf texture
+            if (!MyFtLib.ShapeValidate(shape))
+            {
+                throw new NotSupportedException();
+            }
+            MyFtLib.ShapeNormalize(shape);
+            int borderXY = 0;
+            int w = (int)Math.Ceiling(glyphBounds.Width) + (borderXY + borderXY);
+            int h = (int)(Math.Ceiling(glyphBounds.Height)) + (borderXY + borderXY);
+            if (w == 0)
+            {
+                w = 5;
+                h = 5;
+            }
+            int[] outputBuffer = new int[w * h];
+            GlyphImage glyphImage = new GlyphImage(w, h);
+            glyphImage.BorderXY = borderXY;
+            glyphImage.OriginalGlyphBounds = glyphBounds;
+            unsafe
+            {
+                fixed (int* output_header = &outputBuffer[0])
+                {
+                    float dx = 0;
+                    float dy = 0;
+                    if (s_left < 0)
+                    {
+                        //make it positive
+                        dx = (float)-s_left;
+                    }
+                    else if (s_left > 0)
+                    {
+
+                    }
+                    if (s_bottom < 0)
+                    {
+                        //make it positive
+                        dy = (float)-s_bottom;
+                    }
+                    else if (s_bottom > 0)
+                    {
+
+                    }
+                    //this glyph image has border (for msdf to render correctly)
+                    MyFtLib.MyFtGenerateMsdf(shape, w, h, 4, 1, dx + borderXY, dy + borderXY, -1, 3, output_header);
+                    MyFtLib.DeleteUnmanagedObj(shape);
+                }
+                glyphImage.SetImageBuffer(outputBuffer, true);
+            }
+            return glyphImage;
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            unsafe
+            {
+
+                GlyphImage g1 = BuildMsdfFontImage();
+
+                int[] buffer = g1.GetImageBuffer();
+                using (Bitmap bmp = new Bitmap(g1.Width, g1.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                {
+                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, g1.Width, g1.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                    bmp.UnlockBits(bmpdata);
+                    bmp.Save("d:\\WImageTest\\a001_xn1_.png");
+                }
+            }
 
         }
     }
