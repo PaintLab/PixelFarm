@@ -83,4 +83,5 @@ The FreeType Project LICENSE (3-clauses BSD style),2003-2016, David Turner, Robe
 
 BSD, 2009-2010, Poly2Tri Contributors, from https://github.com/PaintLab/poly2tri-cs
 
+MIT, 2016, Viktor Chlumsky, from https://github.com/Chlumsky/msdfgen
     
