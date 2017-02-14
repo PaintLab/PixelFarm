@@ -364,6 +364,36 @@ namespace Mini
             //#endif
         }
 
+        private void cmdSignedDistance_Click(object sender, EventArgs e)
+        {
+            double d1 = FindDistance(7, 10, 0, 0, 5, 5);
+            double d2 = FindDistance(1, 1, 0, 0, 5, 5);
+            double d3 = FindDistance(3, 1, 0, 0, 5, 5);
+        }
+
+
+        /// <summary>
+        /// find (perpendicular) distance from point(x0,y0) to 
+        /// a line that pass through point (x1,y1) and (x2,y2)
+        /// </summary>
+        /// <param name="x0"></param>
+        /// <param name="y0"></param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <returns></returns>
+        static double FindDistance(double x0, double y0,
+            double x1, double y1,
+            double x2, double y2)
+        {
+            //https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line
+
+            double upperEq = Math.Abs((((y2 - y1) * x0) - ((x2 - x1) * y0) + (x2 * y1) - (y2 * x1)));
+            double lowerEq = Math.Sqrt(((y2 - y1) * (y2 - y1)) + ((x2 - x1) * (x2 - x1)));
+            return upperEq / lowerEq;
+        }
+
     }
 }
 
