@@ -66,6 +66,7 @@ void edgeColoringSimple(Shape &shape, double angleThreshold) {
                 int index = (start+i)%m;
                 if (cornerCount > spline+1 && corners[spline+1] == index)
                     ++spline;
+				auto tmp = spline % 3 - !spline;
                 contour->edges[index]->color = (colors+1)[spline%3-!spline];
             }
         }

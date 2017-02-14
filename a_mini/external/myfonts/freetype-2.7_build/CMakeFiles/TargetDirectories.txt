@@ -1,6 +1,0 @@
-D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.7_build/CMakeFiles/dist.dir
-D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.7_build/CMakeFiles/freetype.dir
-D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.7_build/CMakeFiles/PACKAGE.dir
-D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.7_build/CMakeFiles/INSTALL.dir
-D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.7_build/CMakeFiles/ALL_BUILD.dir
-D:/projects/PixelFarm-dev/a_mini/external/myfonts/freetype-2.7_build/CMakeFiles/ZERO_CHECK.dir
