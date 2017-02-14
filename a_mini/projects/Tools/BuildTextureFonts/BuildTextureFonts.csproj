@@ -54,6 +54,13 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="msdf\EdgeColor.cs" />
+    <Compile Include="msdf\EdgeColoring.cs" />
+    <Compile Include="msdf\EdgeHolder.cs" />
+    <Compile Include="msdf\EdgeSegment.cs" />
+    <Compile Include="msdf\EquationSolver.cs" />
+    <Compile Include="msdf\MsdfGen.cs" />
+    <Compile Include="msdf\SignedDistance.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

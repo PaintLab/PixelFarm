@@ -11,7 +11,7 @@ namespace PixelFarm.Drawing.Fonts
     {
         GlyphImage totalGlyphImage;
         Dictionary<int, TextureFontGlyphData> codePointLocations = new Dictionary<int, TextureFontGlyphData>();
-         
+
         public int Width { get; set; }
         public int Height { get; set; }
 
@@ -19,7 +19,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             codePointLocations.Add(codePoint, glyphData);
         }
-        
+
         public GlyphImage TotalGlyph
         {
             get { return totalGlyphImage; }
@@ -34,7 +34,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             return true;
         }
-        
+
     }
 
     public class TextureFontGlyphData
@@ -79,6 +79,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             return latestGenGlyphImage;
         }
+
         public GlyphImage BuildSingleImage()
         {
             //1. add to list 
@@ -116,9 +117,23 @@ namespace PixelFarm.Drawing.Fonts
                 g.pxArea = new Rectangle(currentX, currentY, g.glyphImage.Width, g.glyphImage.Height);
                 currentX += g.glyphImage.Width;
             }
-
             currentY += maxRowHeight;
             int imgH = currentY;
+
+
+            //-------------------------------
+            //compact image location
+            //TODO: review performance here again***
+            SharpFont.BinPacker binPacker = new SharpFont.BinPacker(totalMaxLim, currentY);
+            for (int i = glyphList.Count - 1; i >= 0; --i)
+            {
+                GlyphData g = glyphList[i];
+                SharpFont.Rect newRect = binPacker.Insert(g.glyphImage.Width, g.glyphImage.Height);
+                g.pxArea = new Rectangle(newRect.X, newRect.Y,
+                    g.glyphImage.Width, g.glyphImage.Height);
+            }
+            //-------------------------------
+
 
 
 
@@ -132,10 +147,12 @@ namespace PixelFarm.Drawing.Fonts
                 CopyToDest(img.GetImageBuffer(), img.Width, img.Height, totalBuffer, g.pxArea.Left, g.pxArea.Top, totalMaxLim);
             }
             //------------------
+
             GlyphImage glyphImage = new Fonts.GlyphImage(totalMaxLim, imgH);
             glyphImage.SetImageBuffer(totalBuffer, true);
             return latestGenGlyphImage = glyphImage;
         }
+
         static void CopyToDest(int[] srcPixels, int srcW, int srcH, int[] targetPixels, int targetX, int targetY, int totalTargetWidth)
         {
             int srcIndex = 0;
@@ -301,7 +318,7 @@ namespace PixelFarm.Drawing.Fonts
                 glyphData.VBearingX = matrix[12];
                 glyphData.VBearingY = matrix[13];
                 //--------------- 
-                simpleFontAtlas.AddGlyph(codepoint, glyphData);                 
+                simpleFontAtlas.AddGlyph(codepoint, glyphData);
             }
             return simpleFontAtlas;
         }
