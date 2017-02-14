@@ -5,7 +5,8 @@
 
 namespace msdfgen {
 
-void generateSDF(Bitmap<float> &output, const Shape &shape, double range, const Vector2 &scale, const Vector2 &translate) {
+void generateSDF(Bitmap<float> &output, const Shape &shape, double range,
+	const Vector2 &scale, const Vector2 &translate) {
     int w = output.width(), h = output.height();
 #ifdef MSDFGEN_USE_OPENMP
     #pragma omp parallel for
