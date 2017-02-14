@@ -45,6 +45,8 @@
     <Compile Include="..\win32utils\NativeWin32MemoryDc.cs">
       <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
+    <Compile Include="FontAtlas\BinPacker.cs" />
+    <Compile Include="FontAtlas\SimpleFontAtlas.cs" />
     <Compile Include="InstalledFontCollection.cs" />
     <Compile Include="NOpenTypeFonts\GlyphAnalysis.cs" />
     <Compile Include="NOpenTypeFonts\GlyphBuilder.cs" />

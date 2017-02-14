@@ -118,7 +118,7 @@ namespace PixelFarm.Drawing.Fonts
                     bool has_dropout = (((vtag >> 2) & 0x1) != 0);
                     int dropoutMode = vtag >> 3;
 
-                    Console.WriteLine(vpoint.ToString() + " " + vtag);
+                   // Console.WriteLine(vpoint.ToString() + " " + vtag);
 
                     if ((vtag & 0x1) != 0)
                     {
