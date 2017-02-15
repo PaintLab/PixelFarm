@@ -247,9 +247,8 @@ namespace Msdfgen
                     break;
                 default:
                     {
-                        Vector2 prev = edges[j - 1].point(0);
-                        int lim = j - 1;
-                        for (int i = 0; i < lim; ++i)
+                        Vector2 prev = edges[j - 1].point(0); 
+                        for (int i = 0; i < j; ++i)
                         {
                             Vector2 cur = edges[i].point(0);
                             total += Vector2.shoelace(prev, cur);
