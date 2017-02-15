@@ -14,6 +14,14 @@ namespace Msdfgen
             this.x = x;
             this.y = y;
         }
+        public static bool IsEq(Vector2 a, Vector2 b)
+        {
+            return a.x == b.x && a.y == b.y;
+        }
+        public bool IsZero()
+        {
+            return x == 0 && y == 0;
+        }
         public Vector2 getOrthoNormal(bool polarity = true, bool allowZero = false)
         {
             double len = Length();
@@ -25,8 +33,8 @@ namespace Msdfgen
         }
         public Vector2 getOrthogonal(bool polarity = true)
         {
-            return polarity ? new Vector2(-y, x) : new Vector2(y, -x); 
-        } 
+            return polarity ? new Vector2(-y, x) : new Vector2(y, -x);
+        }
         public static double dotProduct(Vector2 a, Vector2 b)
         {
             return a.x * b.x + a.y * b.y;
@@ -101,17 +109,31 @@ namespace Msdfgen
         /// </summary>
         /// <returns></returns>
         public static int Clamp(int n, int b)
-        {  
+        {
             if (n > 0)
             {
                 return (n <= b) ? n : b;
             }
             return 0;
         }
+        /// <summary>
+        /// Returns 1 for positive values, -1 for negative values, and 0 for zero.
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static int sign(double n)
+        {
+            return (n == 0) ? 0 : (n > 0) ? 1 : -1;
+        }
+
+        public static double shoelace(Vector2 a, Vector2 b)
+        {
+            return (b.x - a.x) * (a.y + b.y);
+        }
         public override string ToString()
         {
             return x + "," + y;
-        } 
+        }
     }
     public class Shape
     {
@@ -164,7 +186,47 @@ namespace Msdfgen
                new Vector2(x1, y1)
                ));
         }
+        public int winding()
+        {
+            int j = edges.Count;
+            double total = 0;
+            switch (j)
+            {
+                case 0: return 0;
+                case 1:
+                    {
+                        Vector2 a = edges[0].point(0), b = edges[0].point(1 / 3.0), c = edges[0].point(2 / 3.0);
+                        total += Vector2.shoelace(a, b);
+                        total += Vector2.shoelace(b, c);
+                        total += Vector2.shoelace(c, a);
 
+                    }
+                    break;
+                case 2:
+                    {
+                        Vector2 a = edges[0].point(0), b = edges[0].point(0.5), c = edges[1].point(0), d = edges[1].point(0.5);
+                        total += Vector2.shoelace(a, b);
+                        total += Vector2.shoelace(b, c);
+                        total += Vector2.shoelace(c, d);
+                        total += Vector2.shoelace(d, a);
+                    }
+                    break;
+                default:
+                    {
+                        Vector2 prev = edges[j - 1].point(0);
+                        int lim = j - 1;
+                        for (int i = 0; i < lim; ++i)
+                        {
+                            Vector2 cur = edges[i].point(0);
+                            total += Vector2.shoelace(prev, cur);
+                            prev = cur;
+                        }
+                    }
+                    break;
+            }
+            return Vector2.sign(total); 
+
+        }
     }
 
     public static class EdgeColoring

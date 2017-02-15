@@ -30,7 +30,7 @@ namespace Msdfgen
                     double pseudoDistance = Vector2.crossProduct(aq, dir);
                     if (Math.Abs(pseudoDistance) <= Math.Abs(distance.distance))
                     {
-                        distance = new Msdfgen.SignedDistance(pseudoDistance, 0);                         
+                        distance = new Msdfgen.SignedDistance(pseudoDistance, 0);
                     }
                 }
             }
@@ -44,7 +44,7 @@ namespace Msdfgen
                     double pseudoDistance = Vector2.crossProduct(bq, dir);
                     if (Math.Abs(pseudoDistance) <= Math.Abs(distance.distance))
                     {
-                        distance = new Msdfgen.SignedDistance(pseudoDistance, 0); 
+                        distance = new Msdfgen.SignedDistance(pseudoDistance, 0);
                     }
                 }
             }
@@ -70,7 +70,7 @@ namespace Msdfgen
                 (1 - weight) * a.x + (weight * b.x),
                 (1 - weight) * a.y + (weight * b.y));
 
-        } 
+        }
     }
     public class LinearSegment : EdgeSegment
     {
@@ -103,7 +103,7 @@ namespace Msdfgen
                 }
             }
             return new SignedDistance(
-                nonZeroSign(Vector2.crossProduct(aq, ab)) * endpointDistance, 
+                nonZeroSign(Vector2.crossProduct(aq, ab)) * endpointDistance,
                 Math.Abs(Vector2.dotProduct(ab.normalize(), eq.normalize())));
         }
         public override Vector2 direction(double param)
@@ -121,10 +121,17 @@ namespace Msdfgen
         public QuadraticSegment(Vector2 p0, Vector2 p1, Vector2 p2, EdgeColor edgeColor = EdgeColor.WHITE)
             : base(edgeColor)
         {
+
+
             p = new Vector2[3];
+            if (Vector2.IsEq(p1, p0) || Vector2.IsEq(p1, p2))
+            {
+                p1 = 0.5 * (p0 + p2);
+            }
             p[0] = p0;
             p[1] = p1;
             p[2] = p2;
+
         }
         public override void splitInThirds(out EdgeSegment part1, out EdgeSegment part2, out EdgeSegment part3)
         {
@@ -200,16 +207,23 @@ namespace Msdfgen
         }
         public override void splitInThirds(out EdgeSegment part1, out EdgeSegment part2, out EdgeSegment part3)
         {
-            part1 = new CubicSegment(p[0], mix(p[0], p[1], 1 / 3.0), mix(mix(p[0], p[1], 1 / 3.0), mix(p[1], p[2], 1 / 3.0), 1 / 3.0), point(1 / 3.0), color);
+            part1 = new CubicSegment(p[0], Vector2.IsEq(p[0], p[1]) ? p[0] : mix(p[0], p[1], 1 / 3.0), mix(mix(p[0], p[1], 1 / 3.0), mix(p[1], p[2], 1 / 3.0), 1 / 3.0), point(1 / 3.0), color);
             part2 = new CubicSegment(point(1 / 3.0),
                 mix(mix(mix(p[0], p[1], 1 / 3.0), mix(p[1], p[2], 1 / 3.0), 1 / 3.0), mix(mix(p[1], p[2], 1 / 3.0), mix(p[2], p[3], 1 / 3.0), 1 / 3.0), 2 / 3.0),
                 mix(mix(mix(p[0], p[1], 2 / 3.0), mix(p[1], p[2], 2 / 3.0), 2 / 3.0), mix(mix(p[1], p[2], 2 / 3.0), mix(p[2], p[3], 2 / 3.0), 2 / 3.0), 1 / 3.0),
                 point(2 / 3.0), color);
-            part3 = new CubicSegment(point(2 / 3.0), mix(mix(p[1], p[2], 2 / 3.0), mix(p[2], p[3], 2 / 3.0), 2 / 3.0), mix(p[2], p[3], 2 / 3.0), p[3], color);
+            part3 = new CubicSegment(point(2 / 3.0), mix(mix(p[1], p[2], 2 / 3.0), mix(p[2], p[3], 2 / 3.0), 2 / 3.0), Vector2.IsEq(p[2], p[3]) ? p[3] : mix(p[2], p[3], 2 / 3.0), p[3], color);
         }
         public override Vector2 direction(double param)
         {
-            return mix(mix(p[1] - p[0], p[2] - p[1], param), mix(p[2] - p[1], p[3] - p[2], param), param);
+
+            Vector2 tangent = mix(mix(p[1] - p[0], p[2] - p[1], param), mix(p[2] - p[1], p[3] - p[2], param), param);
+            if (!tangent.IsZero())
+            {
+                if (param == 0) return p[2] - p[0];
+                if (param == 1) return p[3] - p[1];
+            }
+            return tangent;
         }
         public override Vector2 point(double param)
         {
@@ -222,15 +236,17 @@ namespace Msdfgen
             Vector2 ab = p[1] - p[0];
             Vector2 br = p[2] - p[1] - ab;
             Vector2 as_ = (p[3] - p[2]) - (p[2] - p[1]) - br;
+            Vector2 epDir = direction(0);
 
-            double minDistance = nonZeroSign(Vector2.crossProduct(ab, qa)) * qa.Length(); // distance from A
-            param = -Vector2.dotProduct(qa, ab) / Vector2.dotProduct(ab, ab);
+            double minDistance = nonZeroSign(Vector2.crossProduct(epDir, qa)) * qa.Length(); // distance from A
+            param = -Vector2.dotProduct(qa, epDir) / Vector2.dotProduct(epDir, epDir);
             {
-                double distance = nonZeroSign(Vector2.crossProduct(p[3] - p[2], p[3] - origin)) * (p[3] - origin).Length(); // distance from B
+                epDir = direction(1);
+                double distance = nonZeroSign(Vector2.crossProduct(epDir, p[3] - origin)) * (p[3] - origin).Length(); // distance from B
                 if (EquationSolver.fabs(distance) < EquationSolver.fabs(minDistance))
                 {
                     minDistance = distance;
-                    param = Vector2.dotProduct(origin - p[2], p[3] - p[2]) / Vector2.dotProduct(p[3] - p[2], p[3] - p[2]);
+                    param = Vector2.dotProduct(origin + epDir - p[3], epDir) / Vector2.dotProduct(epDir, epDir);
                 }
             }
             // Iterative minimum distance search
@@ -262,10 +278,10 @@ namespace Msdfgen
                 return new SignedDistance(minDistance, 0);
             if (param < .5)
                 return new SignedDistance(minDistance,
-                    EquationSolver.fabs(Vector2.dotProduct(ab.normalize(), qa.normalize())));
+                    EquationSolver.fabs(Vector2.dotProduct(direction(0), qa.normalize())));
             else
                 return new SignedDistance(minDistance,
-                    EquationSolver.fabs(Vector2.dotProduct((p[3] - p[2]).normalize(), (p[3] - origin).normalize())));
+                    EquationSolver.fabs(Vector2.dotProduct(direction(1).normalize(), (p[3] - origin).normalize())));
         }
     }
     /// Splits the edge segments into thirds which together represent the original edge.

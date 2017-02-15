@@ -942,8 +942,9 @@ namespace BuildTextureFonts
             Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp(25, 25);
             double edgeThreshold = 1.00000001;//use default
             double angleThreshold = 1;
-            Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
             shape.InverseYAxis = true;
+
+            Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);            
             Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(), -1);
 
             int[] buffer = ConvertToIntBmp(frgbBmp);
