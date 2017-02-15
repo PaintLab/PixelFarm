@@ -145,8 +145,16 @@ namespace Msdfgen
             for (int i = 0; i < j; ++i)
             {
                 Contour contour = contours[i];
-                if (contour.edges.Count == 1)
+                List<EdgeHolder> edges = contour.edges;
+                if (edges.Count == 1)
                 {
+                    //TODO:
+                    EdgeSegment e0, e1, e2;
+                    edges[0].edgeSegment.splitInThirds(out e0, out e1, out e2);
+                    edges.Clear();
+                    edges.Add(new EdgeHolder(e0));
+                    edges.Add(new EdgeHolder(e1));
+                    edges.Add(new EdgeHolder(e2));
 
                 }
             }
@@ -224,7 +232,7 @@ namespace Msdfgen
                     }
                     break;
             }
-            return Vector2.sign(total); 
+            return Vector2.sign(total);
 
         }
     }
