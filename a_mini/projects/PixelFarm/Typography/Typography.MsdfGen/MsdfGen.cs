@@ -301,7 +301,33 @@ namespace Msdfgen
             public EdgeHolder nearEdge;
             public double nearParam;
         }
+        public static int[] ConvertToIntBmp(Msdfgen.FloatRGBBmp input)
+        {
+            int height = input.Height;
+            int width = input.Width;
+            int[] output = new int[input.Width * input.Height];
 
+            for (int y = height - 1; y >= 0; --y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    //a b g r
+                    //----------------------------------
+                    Msdfgen.FloatRGB pixel = input.GetPixel(x, y);
+                    //a b g r
+                    int abgr = (255 << 24) |
+                        (Msdfgen.Vector2.Clamp((int)(pixel.b * 0x100), 0xff) << 16) |
+                        (Msdfgen.Vector2.Clamp((int)(pixel.g * 0x100), 0xff) << 8) |
+                        Msdfgen.Vector2.Clamp((int)(pixel.r * 0x100), 0xff);
+                    output[(y * width) + x] = abgr;
+                    //----------------------------------
+                    /**it++ = clamp(int(bitmap(x, y).r*0x100), 0xff);
+                    *it++ = clamp(int(bitmap(x, y).g*0x100), 0xff);
+                    *it++ = clamp(int(bitmap(x, y).b*0x100), 0xff);*/
+                }
+            }
+            return output;
+        }
         public static void generateMSDF(FloatRGBBmp output, Shape shape, double range, Vector2 scale, Vector2 translate, double edgeThreshold)
         {
             List<Contour> contours = shape.contours;
