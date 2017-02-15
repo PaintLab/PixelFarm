@@ -7,8 +7,8 @@
     <ProjectGuid>{E4A1C3C3-1C1C-4E11-A2E6-A1FAFD6652C7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Typography.Drawing</RootNamespace>
-    <AssemblyName>Typography.Drawing</AssemblyName>
+    <RootNamespace>Typography.Rendering</RootNamespace>
+    <AssemblyName>Typography.Rendering</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,6 +35,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FontAtlas\BinPacker.cs" />
+    <Compile Include="FontAtlas\SimpleFontAtlas.cs" />
     <Compile Include="GlyphAnalysis.cs" />
     <Compile Include="GlyphFitOutline.cs" />
     <Compile Include="GlyphPathBuilderVxs.cs" />

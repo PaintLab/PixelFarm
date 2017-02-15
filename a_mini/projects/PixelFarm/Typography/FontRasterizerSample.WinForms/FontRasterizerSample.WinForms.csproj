@@ -89,9 +89,9 @@
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenType</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Typography.Drawing\Typography.Drawing.csproj">
+    <ProjectReference Include="..\Typography.Rendering\Typography.Rendering.csproj">
       <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
-      <Name>Typography.Drawing</Name>
+      <Name>Typography.Rendering</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
