@@ -13,6 +13,7 @@ using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
 using Typography.TextLayout;
 
+
 namespace SampleWinForms
 {
     public partial class Form1 : Form
@@ -32,6 +33,7 @@ namespace SampleWinForms
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithMiniAgg);
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithPlugableGlyphRasterizer);
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithTextPrinterAndMiniAgg);
+            cmbRenderChoices.Items.Add(RenderChoice.RenderWithMsdfGen);
             cmbRenderChoices.SelectedIndex = 0;
             cmbRenderChoices.SelectedIndexChanged += new EventHandler(cmbRenderChoices_SelectedIndexChanged);
 
@@ -53,8 +55,10 @@ namespace SampleWinForms
         enum RenderChoice
         {
             RenderWithMiniAgg,
-            RenderWithPlugableGlyphRasterizer, //new 
-            RenderWithTextPrinterAndMiniAgg, //new
+            RenderWithPlugableGlyphRasterizer,
+            RenderWithTextPrinterAndMiniAgg,
+            RenderWithMsdfGen, //rendering with multi-channel signed distance field img
+            RenderWithSdfGen//not support sdfgen
         }
 
         void Form1_Load(object sender, EventArgs e)
@@ -126,6 +130,10 @@ namespace SampleWinForms
                     case RenderChoice.RenderWithTextPrinterAndMiniAgg:
                         RenderWithTextPrinterAndMiniAgg(typeFace, this.txtInputChar.Text, fontSizeInPoint, resolution);
                         break;
+                    case RenderChoice.RenderWithMsdfGen:
+                    case RenderChoice.RenderWithSdfGen:
+                        RenderWithMsdfImg(typeFace, testChar, fontSizeInPoint);
+                        break;
                     default:
                         throw new NotSupportedException();
 
@@ -171,8 +179,59 @@ namespace SampleWinForms
         // em = designUnit / unit_per_Em       
         //2. conv font design unit to pixels 
         // float scale = (float)(size * resolution) / (pointsPerInch * _typeface.UnitsPerEm);
+        static Msdfgen.Shape CreateMsdfShape(List<GlyphContour> contours)
+        {
+            var shape = new Msdfgen.Shape();
+            int j = contours.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                var cnt = new Msdfgen.Contour();
+                shape.contours.Add(cnt);
 
+                GlyphContour contour = contours[i];
+                List<GlyphPart> parts = contour.parts;
+                int m = parts.Count;
+                for (int n = 0; n < m; ++n)
+                {
+                    GlyphPart p = parts[n];
+                    switch (p.Kind)
+                    {
+                        default: throw new NotSupportedException();
+                        case GlyphPartKind.Curve3:
+                            {
+                                GlyphCurve3 curve3 = (GlyphCurve3)p;
+                                cnt.AddQuadraticSegment(
+                                    curve3.x0, curve3.y0,
+                                    curve3.p2x, curve3.p2y,
+                                    curve3.x, curve3.y
+                                   );
+                            }
+                            break;
+                        case GlyphPartKind.Curve4:
+                            {
+                                GlyphCurve4 curve4 = (GlyphCurve4)p;
+                                cnt.AddCubicSegment(
+                                    curve4.x0, curve4.y0,
+                                    curve4.p2x, curve4.p2y,
+                                    curve4.p3x, curve4.p3y,
+                                    curve4.x, curve4.y);
+                            }
+                            break;
+                        case GlyphPartKind.Line:
+                            {
+                                GlyphLine line = (GlyphLine)p;
+                                cnt.AddLine(
+                                    line.x0, line.y0,
+                                    line.x1, line.y1);
+                            }
+                            break;
+                    }
+                }
+            }
 
+            return shape;
+
+        }
 
         void RenderWithMiniAgg(Typeface typeface, char testChar, float sizeInPoint)
         {
@@ -275,6 +334,158 @@ namespace SampleWinForms
             g.Clear(Color.White);
             g.DrawImage(winBmp, new Point(30, 20));
         }
+
+        public static int[] ConvertToIntBmp(Msdfgen.FloatRGBBmp input)
+        {
+            int height = input.Height;
+            int width = input.Width;
+            int[] output = new int[input.Width * input.Height];
+
+            for (int y = height - 1; y >= 0; --y)
+            {
+                for (int x = 0; x < width; ++x)
+                {
+                    //a b g r
+                    //----------------------------------
+                    Msdfgen.FloatRGB pixel = input.GetPixel(x, y);
+                    //a b g r
+                    int abgr = (255 << 24) |
+                        (Msdfgen.Vector2.Clamp((int)(pixel.b * 0x100), 0xff) << 16) |
+                        (Msdfgen.Vector2.Clamp((int)(pixel.g * 0x100), 0xff) << 8) |
+                        Msdfgen.Vector2.Clamp((int)(pixel.r * 0x100), 0xff);
+                    output[(y * width) + x] = abgr;
+                    //----------------------------------
+                    /**it++ = clamp(int(bitmap(x, y).r*0x100), 0xff);
+                    *it++ = clamp(int(bitmap(x, y).g*0x100), 0xff);
+                    *it++ = clamp(int(bitmap(x, y).b*0x100), 0xff);*/
+                }
+            }
+            return output;
+        }
+        void RenderWithMsdfImg(Typeface typeface, char testChar, float sizeInPoint)
+        {
+            //2. glyph-to-vxs builder
+            var builder = new GlyphPathBuilderVxs(typeface);
+            builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
+            builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
+            builder.Build(testChar, sizeInPoint);
+            VertexStore vxs = builder.GetVxs();
+            p.UseSubPixelRendering = chkLcdTechnique.Checked;
+            //5. use PixelFarm's Agg to render to bitmap...
+            //5.1 clear background
+            p.Clear(PixelFarm.Drawing.Color.White);
+
+            //master outline analysis
+            {
+                List<GlyphContour> contours = builder.GetContours();
+                int j = contours.Count;
+                var analyzer = new GlyphPartAnalyzer();
+                analyzer.NSteps = 4;
+                analyzer.PixelScale = builder.GetPixelScale();
+                for (int i = 0; i < j; ++i)
+                {
+                    //analyze each contour
+                    contours[i].Analyze(analyzer);
+                }
+                //draw each contour point
+            }
+            float scale = builder.GetPixelScale();
+            PixelFarm.Agg.Typography.GlyphFitOutline glyphOutline = null;
+            {
+                //draw for debug ...
+                //draw control point
+                List<GlyphContour> contours = builder.GetContours();
+                glyphOutline = TessWithPolyTri(contours, scale);
+                int j = contours.Count;
+                List<GlyphContour> newFitContours = new List<GlyphContour>();
+
+                for (int i = 0; i < j; ++i)
+                {
+                    newFitContours.Add(CreateFitContourVxs2(contours[i], scale, chkXGridFitting.Checked, chkYGridFitting.Checked));
+                }
+                p.FillColor = PixelFarm.Drawing.Color.Black;
+                //render with msdf gen 
+                //convert vxs to msdf coord and render
+                Msdfgen.Shape shape = CreateMsdfShape(newFitContours);
+                shape.InverseYAxis = true;
+                Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp(25, 25);
+                Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
+                Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(2, -1), -1);
+                //-----------------------------------
+                int[] buffer = ConvertToIntBmp(frgbBmp);
+                //MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
+
+                using (Bitmap bmp = new Bitmap(frgbBmp.Width, frgbBmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                {
+                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, frgbBmp.Width, frgbBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                    bmp.UnlockBits(bmpdata);
+                    bmp.Save("d:\\WImageTest\\a001_xn2_.png");
+                }
+            }
+
+
+            if (chkShowGrid.Checked)
+            {
+                //render grid
+                RenderGrid(800, 600, _gridSize, p);
+            }
+
+            //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
+            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
+            //--------------- 
+            //7. just render our bitmap
+            g.Clear(Color.White);
+            g.DrawImage(winBmp, new Point(30, 20));
+        }
+        static GlyphContour CreateFitContourVxs2(GlyphContour contour, float pixelScale, bool x_axis, bool y_axis)
+        {
+            GlyphContour newc = new GlyphContour();
+            List<GlyphPart> parts = contour.parts;
+            int m = parts.Count;
+            for (int n = 0; n < m; ++n)
+            {
+                GlyphPart p = parts[n];
+                switch (p.Kind)
+                {
+                    default: throw new NotSupportedException();
+                    case GlyphPartKind.Curve3:
+                        {
+                            GlyphCurve3 curve3 = (GlyphCurve3)p;
+                            newc.AddPart(new GlyphCurve3(
+                                curve3.x0 * pixelScale, curve3.y0 * pixelScale,
+                                curve3.p2x * pixelScale, curve3.p2y * pixelScale,
+                                curve3.x * pixelScale, curve3.y * pixelScale));
+
+                        }
+                        break;
+                    case GlyphPartKind.Curve4:
+                        {
+                            GlyphCurve4 curve4 = (GlyphCurve4)p;
+                            newc.AddPart(new GlyphCurve4(
+                                  curve4.x0 * pixelScale, curve4.y0 * pixelScale,
+                                  curve4.p2x * pixelScale, curve4.p2y * pixelScale,
+                                  curve4.p3x * pixelScale, curve4.p3y * pixelScale,
+                                  curve4.x * pixelScale, curve4.y * pixelScale
+                                ));
+                        }
+                        break;
+                    case GlyphPartKind.Line:
+                        {
+                            GlyphLine line = (GlyphLine)p;
+                            newc.AddPart(new GlyphLine(
+                                line.x0 * pixelScale, line.y0 * pixelScale,
+                                line.x1 * pixelScale, line.y1 * pixelScale
+                                ));
+                        }
+                        break;
+                }
+            }
+
+
+            return newc;
+        }
+
         static void CreateFitContourVxs(VertexStore vxs, GlyphContour contour, float pixelScale, bool x_axis, bool y_axis)
         {
             List<GlyphPoint2D> mergePoints = contour.mergedPoints;

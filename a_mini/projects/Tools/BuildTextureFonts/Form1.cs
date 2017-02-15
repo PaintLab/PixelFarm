@@ -693,6 +693,30 @@ namespace BuildTextureFonts
                 //}
             }
         }
+        static void BuildFontGlyph(ActualFont nativefont, SimpleFontAtlasBuilder atlasBuilder, char c)
+        {
+            //font glyph for specific font face
+
+
+
+            FontGlyph fontGlyph = nativefont.GetGlyph(c);
+            GlyphImage glyphImg = MsdfGen.BuildMsdfFontImage(fontGlyph);
+
+            int w = glyphImg.Width;
+            int h = glyphImg.Height;
+            int[] buffer = glyphImg.GetImageBuffer();
+            MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
+            glyphImg.SetImageBuffer(buffer, false);
+            atlasBuilder.AddGlyph(0, (char)fontGlyph.unicode, fontGlyph, glyphImg);
+            //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            //{
+            //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+            //    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+            //    bmp.UnlockBits(bmpdata);
+            //    bmp.Save("d:\\WImageTest\\a001_x1_" + (int)c + ".png"); 
+            //}
+
+        }
         private void button5_Click(object sender, EventArgs e)
         {
 
@@ -704,11 +728,12 @@ namespace BuildTextureFonts
             //2. get glyph 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
             //for (int i = 0; i < 256; ++i)
-            BuildFontGlyphsByIndex(font, atlasBuilder, 0, 255);
+            //BuildFontGlyphsByIndex(font, atlasBuilder, 0, 255);
             //BuildFontGlyphs(font, atlasBuilder, 0x0e00, 0x0e5b);
             //BuildFontGlyphsByIndex(font, atlasBuilder, 0, 3417);
             //BuildFontGlyphsByIndex(font, atlasBuilder, 0, 509);
-
+            //BuildFontGlyphsByIndex(font, atlasBuilder, 97, 97);
+            BuildFontGlyph(font, atlasBuilder, 'A');
             //----------------------------------------------------
             //GlyphImage totalImg = atlasBuilder.BuildSingleImage();
             GlyphImage totalImg = atlasBuilder.BuildSingleImage();
@@ -920,7 +945,7 @@ namespace BuildTextureFonts
             Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
             shape.InverseYAxis = true;
             Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(), -1);
-            
+
             int[] buffer = ConvertToIntBmp(frgbBmp);
             //MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
 
