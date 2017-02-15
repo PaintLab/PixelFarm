@@ -11,6 +11,7 @@ using NOpenType.Extensions;
 
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
+using Typography.TextLayout;
 
 namespace SampleWinForms
 {
@@ -884,7 +885,7 @@ namespace SampleWinForms
                     GlyphPlan glyphPlan = glyphPlanList[i];
                     cx = glyphPlan.x;
                     p.SetOrigin(cx, cy);
-                    p.Fill(glyphPlan.vxs);
+                    p.Fill((VertexStore)glyphPlan.vxs);
                 }
                 p.SetOrigin(ox, oy);
 
@@ -906,7 +907,7 @@ namespace SampleWinForms
                     GlyphPlan glyphPlan = glyphPlanList[i];
                     cx = glyphPlan.x;
                     p.SetOrigin(cx, cy);
-                    p.Draw(glyphPlan.vxs);
+                    p.Draw((VertexStore)glyphPlan.vxs);
                 }
                 p.SetOrigin(ox, oy);
             }
@@ -1015,6 +1016,6 @@ namespace SampleWinForms
         private void chkLcdTechnique_CheckedChanged(object sender, EventArgs e)
         {
             button1_Click(this, EventArgs.Empty);
-        } 
+        }
     }
 }
