@@ -48,9 +48,6 @@
     <Compile Include="FontAtlas\BinPacker.cs" />
     <Compile Include="FontAtlas\SimpleFontAtlas.cs" />
     <Compile Include="InstalledFontCollection.cs" />
-    <Compile Include="NOpenTypeFonts\GlyphAnalysis.cs" />
-    <Compile Include="NOpenTypeFonts\GlyphBuilder.cs" />
-    <Compile Include="NOpenTypeFonts\GlyphFitOutline.cs" />
     <Compile Include="NOpenTypeFonts\ManagedShapingService.cs" />
     <Compile Include="NOpenTypeFonts\NOpenTypeFont.cs" />
     <Compile Include="NOpenTypeFonts\NOpenTypeFontLoader.cs" />
@@ -68,9 +65,13 @@
       <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
       <Name>PixelFarm.Triangulation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Typography\OpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj">
+    <ProjectReference Include="..\Typography\OpenType\N20\PixelFarm.OpenType\Typography.OpenType.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
-      <Name>PixelFarm.OpenType</Name>
+      <Name>Typography.OpenType</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Typography.Drawing\Typography.Drawing.csproj">
+      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
+      <Name>Typography.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

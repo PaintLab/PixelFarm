@@ -7,8 +7,8 @@
     <ProjectGuid>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.OpenType</RootNamespace>
-    <AssemblyName>PixelFarm.OpenType</AssemblyName>
+    <RootNamespace>Typography.OpenType</RootNamespace>
+    <AssemblyName>Typography.OpenType</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -101,8 +101,7 @@ namespace Msdfgen
         /// </summary>
         /// <returns></returns>
         public static int Clamp(int n, int b)
-        {
-
+        {  
             if (n > 0)
             {
                 return (n <= b) ? n : b;
@@ -112,20 +111,7 @@ namespace Msdfgen
         public override string ToString()
         {
             return x + "," + y;
-        }
-        ///// Clamps the number to the interval from 0 to b.
-        //template<typename T>
-        //inline T clamp(T n, T b)
-        //{
-        //    return n >= T(0) && n <= b ? n : T(n > T(0)) * b;
-        //}
-
-        ///// Clamps the number to the interval from a to b.
-        //template<typename T>
-        //inline T clamp(T n, T a, T b)
-        //{
-        //    return n >= a && n <= b ? n : n < a ? a : b;
-        //}
+        } 
     }
     public class Shape
     {
