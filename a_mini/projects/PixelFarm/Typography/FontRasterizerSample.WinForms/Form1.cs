@@ -380,7 +380,6 @@ namespace SampleWinForms
                 //render with msdf gen 
                 //convert vxs to msdf coord and render
                 Msdfgen.Shape shape = CreateMsdfShape(newFitContours);
-                shape.InverseYAxis = true;
                 double left, bottom, right, top;
                 shape.findBounds(out left, out bottom, out right, out top);
 
@@ -390,7 +389,9 @@ namespace SampleWinForms
                 //-----------------------------------
                 int[] buffer = Msdfgen.MsdfGenerator.ConvertToIntBmp(frgbBmp);
                 //MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
-
+                ActualImage actualImg = ActualImage.CreateFromBuffer(frgbBmp.Width, frgbBmp.Height, PixelFormat.ARGB32, buffer);
+                p.DrawImage(actualImg, 0, 0);
+                //-----------------------------------
                 using (Bitmap bmp = new Bitmap(frgbBmp.Width, frgbBmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 {
                     var bmpdata = bmp.LockBits(new Rectangle(0, 0, frgbBmp.Width, frgbBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
