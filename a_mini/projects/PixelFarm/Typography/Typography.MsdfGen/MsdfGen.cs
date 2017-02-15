@@ -108,15 +108,15 @@ namespace Msdfgen
                     {
                         double dummy = 0;
                         Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
-                        double negDist = -SignedDistance.INFINITE_DISTANCE.distance;
-                        double posDist = SignedDistance.INFINITE_DISTANCE.distance;
+                        double negDist = -SignedDistance.INFINITE.distance;
+                        double posDist = SignedDistance.INFINITE.distance;
                         int winding = 0;
 
 
                         for (int i = 0; i < contourCount; ++i)
                         {
                             Contour contour = contours[i];
-                            SignedDistance minDistance = SignedDistance.INFINITE_DISTANCE;
+                            SignedDistance minDistance = SignedDistance.INFINITE;
                             List<EdgeHolder> edges = contour.edges;
                             int edgeCount = edges.Count;
                             for (int ee = 0; ee < edgeCount; ++ee)
@@ -134,7 +134,7 @@ namespace Msdfgen
                                 negDist = minDistance.distance;
                         }
 
-                        double sd = SignedDistance.INFINITE_DISTANCE.distance;
+                        double sd = SignedDistance.INFINITE.distance;
                         if (posDist >= 0 && Math.Abs(posDist) <= Math.Abs(negDist))
                         {
                             sd = posDist;
@@ -179,7 +179,7 @@ namespace Msdfgen
                 {
                     double dummy = 0;
                     Vector2 p = (new Vector2(x + 0.5f, y + 0.5) * scale) - translate;
-                    SignedDistance minDistance = SignedDistance.INFINITE_DISTANCE;
+                    SignedDistance minDistance = SignedDistance.INFINITE;
                     //TODO: review here
                     List<Contour> contours = shape.contours;
                     int m = contours.Count;
@@ -348,12 +348,12 @@ namespace Msdfgen
                 for (int x = 0; x < w; ++x)
                 {
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
-                    EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE_DISTANCE },
-                        sg = new EdgePoint { minDistance = SignedDistance.INFINITE_DISTANCE },
-                        sb = new EdgePoint { minDistance = SignedDistance.INFINITE_DISTANCE };
-                    double d = Math.Abs(SignedDistance.INFINITE_DISTANCE.distance);
-                    double negDist = -Math.Abs(SignedDistance.INFINITE_DISTANCE.distance);
-                    double posDist = Math.Abs(SignedDistance.INFINITE_DISTANCE.distance);
+                    EdgePoint sr = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                        sg = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                        sb = new EdgePoint { minDistance = SignedDistance.INFINITE };
+                    double d = Math.Abs(SignedDistance.INFINITE.distance);
+                    double negDist = -Math.Abs(SignedDistance.INFINITE.distance);
+                    double posDist = Math.Abs(SignedDistance.INFINITE.distance);
                     int winding = 0;
 
                     for (int n = 0; n < contourCount; ++n)
@@ -363,9 +363,9 @@ namespace Msdfgen
                         int edgeCount = edges.Count;
 
                         //for-each contour
-                        EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE_DISTANCE },
-                        g = new EdgePoint { minDistance = SignedDistance.INFINITE_DISTANCE },
-                        b = new EdgePoint { minDistance = SignedDistance.INFINITE_DISTANCE };
+                        EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                        g = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                        b = new EdgePoint { minDistance = SignedDistance.INFINITE };
                         for (int ee = 0; ee < edgeCount; ++ee)
                         {
                             EdgeHolder edge = edges[ee];
@@ -430,10 +430,10 @@ namespace Msdfgen
                         sb.nearEdge.edgeSegment.distanceToPsedoDistance(ref sb.minDistance, p, sb.nearParam);
 
                     MultiDistance msd;
-                    msd.r = msd.g = msd.b = msd.med = SignedDistance.INFINITE_DISTANCE.distance;
+                    msd.r = msd.g = msd.b = msd.med = SignedDistance.INFINITE.distance;
                     if (posDist >= 0 && Math.Abs(posDist) <= Math.Abs(negDist))
                     {
-                        msd.med = SignedDistance.INFINITE_DISTANCE.distance;
+                        msd.med = SignedDistance.INFINITE.distance;
                         winding = 1;
                         for (int i = 0; i < contourCount; ++i)
                             if (windings[i] > 0 && contourSD[i].med > msd.med && Math.Abs(contourSD[i].med) < Math.Abs(negDist))
@@ -441,7 +441,7 @@ namespace Msdfgen
                     }
                     else if (negDist <= 0 && Math.Abs(negDist) <= Math.Abs(posDist))
                     {
-                        msd.med = -SignedDistance.INFINITE_DISTANCE.distance;
+                        msd.med = -SignedDistance.INFINITE.distance;
                         winding = -1;
                         for (int i = 0; i < contourCount; ++i)
                             if (windings[i] < 0 && contourSD[i].med < msd.med && Math.Abs(contourSD[i].med) < Math.Abs(posDist))
@@ -486,9 +486,9 @@ namespace Msdfgen
                 for (int x = 0; x < w; ++x)
                 {
                     Vector2 p = (new Vector2(x + .5, y + .5) / scale) - translate;
-                    EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE_DISTANCE },
-                        g = new EdgePoint { minDistance = SignedDistance.INFINITE_DISTANCE },
-                        b = new EdgePoint { minDistance = SignedDistance.INFINITE_DISTANCE };
+                    EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                        g = new EdgePoint { minDistance = SignedDistance.INFINITE },
+                        b = new EdgePoint { minDistance = SignedDistance.INFINITE };
                     //r.nearEdge = g.nearEdge = b.nearEdge = null;
                     //r.nearParam = g.nearParam = b.nearParam = 0;
                     List<Contour> contours = shape.contours;

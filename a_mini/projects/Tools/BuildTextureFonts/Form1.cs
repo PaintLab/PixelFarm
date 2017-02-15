@@ -939,7 +939,10 @@ namespace BuildTextureFonts
             shape.contours.Add(contour);
             //-+---------------------------
 
-            Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp(25, 25);
+            double left, bottom, right, top;
+            shape.findBounds(out left, out bottom, out right, out top);
+
+            Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp((int)(right - left), (int)(top - bottom));
             double edgeThreshold = 1.00000001;//use default
             double angleThreshold = 1;
             shape.InverseYAxis = true;

@@ -8,7 +8,7 @@ namespace Msdfgen
         public readonly double distance;
         public readonly double dot;
 
-        public static readonly SignedDistance INFINITE_DISTANCE = new SignedDistance(-1e240, 1);
+        public static readonly SignedDistance INFINITE = new SignedDistance(-1e240, 1);
 
         public SignedDistance(double dist, double d)
         {

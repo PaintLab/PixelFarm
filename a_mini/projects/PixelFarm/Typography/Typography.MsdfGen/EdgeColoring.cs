@@ -134,6 +134,14 @@ namespace Msdfgen
         {
             return x + "," + y;
         }
+        public static void pointBounds(Vector2 p, ref double l, ref double b, ref double r, ref double t)
+        {
+            if (p.x < l) l = p.x;
+            if (p.y < b) b = p.y;
+            if (p.x > r) r = p.x;
+            if (p.y > t) t = p.y;
+        }
+
     }
     public class Shape
     {
@@ -157,6 +165,16 @@ namespace Msdfgen
                     edges.Add(new EdgeHolder(e2));
 
                 }
+            }
+        }
+
+        public void findBounds(out double left, out double bottom, out double right, out double top)
+        {
+            left = top = right = bottom = 0;
+            int j = contours.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                contours[i].findBounds(ref left, ref bottom, ref right, ref top);
             }
         }
     }
@@ -193,6 +211,14 @@ namespace Msdfgen
                new Vector2(ctrl1X, ctrl1Y),
                new Vector2(x1, y1)
                ));
+        }
+        public void findBounds(ref double left, ref double bottom, ref double right, ref double top)
+        {
+            int j = edges.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                edges[i].edgeSegment.findBounds(ref left, ref bottom, ref right, ref top);
+            }
         }
         public int winding()
         {

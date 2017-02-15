@@ -17,7 +17,7 @@ namespace Msdfgen
         {
             this.color = edgeColor;
         }
-
+        public abstract void findBounds(ref double left, ref double bottom, ref double right, ref double top);
         public void distanceToPsedoDistance(ref SignedDistance distance, Vector2 origin, double param)
         {
             if (param < 0)
@@ -81,6 +81,11 @@ namespace Msdfgen
             p[0] = p0;
             p[1] = p1;
         }
+        public override void findBounds(ref double left, ref double bottom, ref double right, ref double top)
+        {
+            Vector2.pointBounds(p[0], ref left, ref bottom, ref right, ref top);
+            Vector2.pointBounds(p[1], ref left, ref bottom, ref right, ref top);
+        }
         public override void splitInThirds(out EdgeSegment part1, out EdgeSegment part2, out EdgeSegment part3)
         {
             part1 = new LinearSegment(p[0], point(1 / 3.0), this.color);
@@ -121,8 +126,6 @@ namespace Msdfgen
         public QuadraticSegment(Vector2 p0, Vector2 p1, Vector2 p2, EdgeColor edgeColor = EdgeColor.WHITE)
             : base(edgeColor)
         {
-
-
             p = new Vector2[3];
             if (Vector2.IsEq(p1, p0) || Vector2.IsEq(p1, p2))
             {
@@ -132,6 +135,24 @@ namespace Msdfgen
             p[1] = p1;
             p[2] = p2;
 
+        }
+        public override void findBounds(ref double left, ref double bottom, ref double right, ref double top)
+        {
+            Vector2.pointBounds(p[0], ref left, ref bottom, ref right, ref top);
+            Vector2.pointBounds(p[2], ref left, ref bottom, ref right, ref top);
+            Vector2 bot = (p[1] - p[0]) - (p[2] - p[1]);
+            if (bot.x != 0)
+            {
+                double param = (p[1].x - p[0].x) / bot.x;
+                if (param > 0 && param < 1)
+                    Vector2.pointBounds(point(param), ref left, ref bottom, ref right, ref top);
+            }
+            if (bot.y != 0)
+            {
+                double param = (p[1].y - p[0].y) / bot.y;
+                if (param > 0 && param < 1)
+                    Vector2.pointBounds(point(param), ref left, ref bottom, ref right, ref top);
+            }
         }
         public override void splitInThirds(out EdgeSegment part1, out EdgeSegment part2, out EdgeSegment part3)
         {
@@ -204,6 +225,24 @@ namespace Msdfgen
             p[1] = p1;
             p[2] = p2;
             p[3] = p3;
+        }
+        public override void findBounds(ref double left, ref double bottom, ref double right, ref double top)
+        {
+            Vector2.pointBounds(p[0], ref left, ref bottom, ref right, ref top);
+            Vector2.pointBounds(p[3], ref left, ref bottom, ref right, ref top);
+            Vector2 a0 = p[1] - p[0];
+            Vector2 a1 = 2 * (p[2] - p[1] - a0);
+            Vector2 a2 = p[3] - 3 * p[2] + 3 * p[1] - p[0];
+            double[] pars = new double[2];
+            int solutions;
+            solutions = EquationSolver.SolveQuadratic(pars, a2.x, a1.x, a0.x);
+            for (int i = 0; i < solutions; ++i)
+                if (pars[i] > 0 && pars[i] < 1)
+                    Vector2.pointBounds(point(pars[i]), ref left, ref bottom, ref right, ref top);
+            solutions = EquationSolver.SolveQuadratic(pars, a2.y, a1.y, a0.y);
+            for (int i = 0; i < solutions; ++i)
+                if (pars[i] > 0 && pars[i] < 1)
+                    Vector2.pointBounds(point(pars[i]), ref left, ref bottom, ref right, ref top);
         }
         public override void splitInThirds(out EdgeSegment part1, out EdgeSegment part2, out EdgeSegment part3)
         {

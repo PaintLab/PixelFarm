@@ -334,7 +334,7 @@ namespace SampleWinForms
             g.Clear(Color.White);
             g.DrawImage(winBmp, new Point(30, 20));
         }
-         
+
         void RenderWithMsdfImg(Typeface typeface, char testChar, float sizeInPoint)
         {
             //2. glyph-to-vxs builder
@@ -381,7 +381,10 @@ namespace SampleWinForms
                 //convert vxs to msdf coord and render
                 Msdfgen.Shape shape = CreateMsdfShape(newFitContours);
                 shape.InverseYAxis = true;
-                Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp(25, 25);
+                double left, bottom, right, top;
+                shape.findBounds(out left, out bottom, out right, out top);
+
+                Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp((int)(right - left), (int)(top - bottom));
                 Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
                 Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(2, -1), -1);
                 //-----------------------------------
