@@ -920,6 +920,7 @@ namespace BuildTextureFonts
             Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
             shape.InverseYAxis = true;
             Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(), -1);
+            
             int[] buffer = ConvertToIntBmp(frgbBmp);
             //MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
 

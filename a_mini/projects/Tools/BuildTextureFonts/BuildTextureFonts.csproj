@@ -54,13 +54,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="msdf\EdgeColor.cs" />
-    <Compile Include="msdf\EdgeColoring.cs" />
-    <Compile Include="msdf\EdgeHolder.cs" />
-    <Compile Include="msdf\EdgeSegment.cs" />
-    <Compile Include="msdf\EquationSolver.cs" />
-    <Compile Include="msdf\MsdfGen.cs" />
-    <Compile Include="msdf\SignedDistance.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -86,14 +79,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\MiniAgg.Complements\MiniAgg.Complements.csproj">
-      <Project>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</Project>
-      <Name>MiniAgg.Complements</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\MiniAgg\MiniAgg.csproj">
-      <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
-      <Name>MiniAgg</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj">
       <Project>{025E536D-53A6-4C5F-AED5-E21960C70763}</Project>
       <Name>PixelFarm.DataProvider.Managed</Name>
@@ -105,6 +90,14 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
       <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniAgg.csproj">
+      <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
+      <Name>PixelFarm.MiniAgg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.Drawing\Typography.Drawing.csproj">
+      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
+      <Name>Typography.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

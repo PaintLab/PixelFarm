@@ -25,10 +25,8 @@ namespace Msdfgen
         }
         public Vector2 getOrthogonal(bool polarity = true)
         {
-            return polarity ? new Vector2(-y, x) : new Vector2(y, -x);
-
-        }
-
+            return polarity ? new Vector2(-y, x) : new Vector2(y, -x); 
+        } 
         public static double dotProduct(Vector2 a, Vector2 b)
         {
             return a.x * b.x + a.y * b.y;
