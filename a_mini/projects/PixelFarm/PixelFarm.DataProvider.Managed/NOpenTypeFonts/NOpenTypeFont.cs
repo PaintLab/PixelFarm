@@ -1,9 +1,7 @@
 ﻿//MIT, 2014-2017, WinterDev 
 using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using NOpenType;
-using System.IO;
+using System.Collections.Generic; 
+using NOpenType; 
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
