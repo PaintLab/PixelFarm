@@ -58,6 +58,10 @@
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenType</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Typography.MsdfGen\Typography.MsdfGen.csproj">
+      <Project>{8f69ab8d-174a-4912-9328-cae8eda5564b}</Project>
+      <Name>Typography.MsdfGen</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
