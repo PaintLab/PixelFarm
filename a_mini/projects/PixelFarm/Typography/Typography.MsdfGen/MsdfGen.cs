@@ -155,7 +155,7 @@ namespace Msdfgen
                             if (windings[i] != winding && Math.Abs(contourSD[i]) < Math.Abs(sd))
                                 sd = contourSD[i];
 
-                        output.SetPixel(x, row, (float)(sd / range + .5));                         
+                        output.SetPixel(x, row, (float)(sd / range + .5));
                     }
                 }
             }
@@ -358,11 +358,10 @@ namespace Msdfgen
 
                     for (int n = 0; n < contourCount; ++n)
                     {
+                        //for-each contour
                         Contour contour = contours[n];
                         List<EdgeHolder> edges = contour.edges;
                         int edgeCount = edges.Count;
-
-                        //for-each contour
                         EdgePoint r = new EdgePoint { minDistance = SignedDistance.INFINITE },
                         g = new EdgePoint { minDistance = SignedDistance.INFINITE },
                         b = new EdgePoint { minDistance = SignedDistance.INFINITE };
