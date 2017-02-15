@@ -1,14 +1,13 @@
-﻿using System;
+﻿//MIT, 2015-2016, Michael Popoloski
 
+using System;
 namespace SharpFont
 {
-    struct Rect
+    public struct Rect
     {
         public int X, Y, Width, Height;
-
         public int Right { get { return X + Width; } }
         public int Bottom { get { return Y + Height; } }
-
         public Rect(int x, int y, int width, int height)
         {
             X = x;
@@ -57,7 +56,7 @@ namespace SharpFont
     }
 
     // based on the "MAXRECTS" method developed by Jukka Jylänki: http://clb.demon.fi/files/RectangleBinPack.pdf
-    struct BinPacker
+    public struct BinPacker
     {
         ResizableArray<Rect> freeList;
 
