@@ -383,9 +383,9 @@ namespace SampleWinForms
                 double left, bottom, right, top;
                 shape.findBounds(out left, out bottom, out right, out top);
 
-                Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp((int)(right - left), (int)(top - bottom));
+                Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp((int)Math.Ceiling((right - left)), (int)Math.Ceiling((top - bottom)));
                 Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
-                Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(2, -1), -1);
+                Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(), -1);
                 //-----------------------------------
                 int[] buffer = Msdfgen.MsdfGenerator.ConvertToIntBmp(frgbBmp);
                 //MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);

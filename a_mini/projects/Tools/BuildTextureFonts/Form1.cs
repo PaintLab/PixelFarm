@@ -926,7 +926,7 @@ namespace BuildTextureFonts
         {
             //--------------------------------------------
             Msdfgen.Shape shape = new Msdfgen.Shape();
-            Msdfgen.Contour contour = new Msdfgen.Contour(); 
+            Msdfgen.Contour contour = new Msdfgen.Contour();
             //contour.AddLine(10, 10, 25, 25);
             //contour.AddLine(25, 25, 15, 10);
             //contour.AddLine(15, 10, 10, 10);
@@ -941,7 +941,7 @@ namespace BuildTextureFonts
             double left, bottom, right, top;
             shape.findBounds(out left, out bottom, out right, out top);
 
-            Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp((int)(right - left), (int)(top - bottom));
+            Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp((int)Math.Ceiling((right - left)), (int)Math.Ceiling((top - bottom)));
             double edgeThreshold = 1.00000001;//use default
             double angleThreshold = 1;
             shape.InverseYAxis = true;
@@ -971,9 +971,9 @@ namespace BuildTextureFonts
             //MyFtLib.ContourAddLinearSegment(cnt, 15, 10, 10, 10);
             // 
 
-            MyFtLib.ContourAddLinearSegment(cnt,10, 10, 25, 25);
+            MyFtLib.ContourAddLinearSegment(cnt, 10, 10, 25, 25);
             MyFtLib.ContourAddQuadraticSegment(cnt, 25, 25, 15, 30, 10, 15);
-            MyFtLib.ContourAddLinearSegment(cnt,10, 15, 10, 10);
+            MyFtLib.ContourAddLinearSegment(cnt, 10, 15, 10, 10);
 
             double s_left, s_bottom, s_right, s_top;
             MyFtLib.ShapeFindBounds(shape, out s_left, out s_bottom, out s_right, out s_top);
