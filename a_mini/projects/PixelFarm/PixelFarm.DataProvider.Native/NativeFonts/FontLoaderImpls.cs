@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using NOpenType;
+using Typography.OpenType.Tables;
 using System.IO;
 namespace PixelFarm.Drawing.Fonts
 {

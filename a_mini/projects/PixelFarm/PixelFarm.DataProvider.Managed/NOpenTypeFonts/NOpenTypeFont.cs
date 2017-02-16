@@ -1,7 +1,8 @@
 ﻿//MIT, 2014-2017, WinterDev 
 using System;
-using System.Collections.Generic; 
-using NOpenType; 
+using System.Collections.Generic;
+using Typography.OpenType;
+using Typography.OpenType.Tables; 
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
@@ -19,7 +20,7 @@ namespace PixelFarm.Drawing.Fonts
             this.name = fontName;
             this.path = fontPath;
             //----
-            glyphPathBuilder = new Agg.GlyphPathBuilderVxs(ntypeface);
+            glyphPathBuilder = new PixelFarm.Agg.GlyphPathBuilderVxs(ntypeface);
         }
         public override string Name
         {

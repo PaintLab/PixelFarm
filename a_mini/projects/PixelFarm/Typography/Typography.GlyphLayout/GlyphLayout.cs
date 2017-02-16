@@ -1,8 +1,9 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
 using System.Collections.Generic;
-using NOpenType;
-using NOpenType.Extensions;
+using Typography.OpenType;
+using Typography.OpenType.Tables;
+using Typography.OpenType.Extensions;
 
 
 namespace Typography.TextLayout
