@@ -1,7 +1,6 @@
 ﻿//MIT, 2016, Viktor Chlumsky, Multi-channel signed distance field generator, from https://github.com/Chlumsky/msdfgen
 //MIT, 2017, WinterDev (C# port)
 using System;
-using System.Collections.Generic;
 
 namespace Msdfgen
 {
@@ -10,8 +9,7 @@ namespace Msdfgen
 
         public const int MSDFGEN_CUBIC_SEARCH_STARTS = 4;
         public const int MSDFGEN_CUBIC_SEARCH_STEPS = 4;
-        //
-        protected Vector2[] p;
+
         public EdgeColor color;
         public EdgeSegment(EdgeColor edgeColor)
         {
@@ -74,6 +72,7 @@ namespace Msdfgen
     }
     public class LinearSegment : EdgeSegment
     {
+        Vector2[] p;
         public LinearSegment(Vector2 p0, Vector2 p1, EdgeColor edgeColor = EdgeColor.WHITE)
             : base(edgeColor)
         {
@@ -123,6 +122,7 @@ namespace Msdfgen
     }
     public class QuadraticSegment : EdgeSegment
     {
+        Vector2[] p;
         public QuadraticSegment(Vector2 p0, Vector2 p1, Vector2 p2, EdgeColor edgeColor = EdgeColor.WHITE)
             : base(edgeColor)
         {
@@ -217,6 +217,7 @@ namespace Msdfgen
     }
     public class CubicSegment : EdgeSegment
     {
+        Vector2[] p;
         public CubicSegment(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, EdgeColor edgeColor = EdgeColor.WHITE)
             : base(edgeColor)
         {

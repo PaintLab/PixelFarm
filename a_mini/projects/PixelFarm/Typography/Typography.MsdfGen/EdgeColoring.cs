@@ -372,7 +372,7 @@ namespace Msdfgen
                         }
 
                         int tmp = (spline % 3 - ((spline == 0) ? 1 : 0));
-                        edges[i].color = colors[tmp + 1];
+                        edges[index].color = colors[tmp + 1];
                         //contour->edges[index]->color = (colors + 1)[spline % 3 - !spline];
                     }
                 }

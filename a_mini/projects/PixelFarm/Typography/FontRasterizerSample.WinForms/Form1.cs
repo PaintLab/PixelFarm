@@ -380,24 +380,25 @@ namespace SampleWinForms
                 //render with msdf gen 
                 //convert vxs to msdf coord and render
                 Msdfgen.Shape shape = CreateMsdfShape(newFitContours);
-                shape.InverseYAxis = true;
                 double left, bottom, right, top;
                 shape.findBounds(out left, out bottom, out right, out top);
 
-                Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp((int)(right - left), (int)(top - bottom));
+                Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp((int)Math.Ceiling((right - left)), (int)Math.Ceiling((top - bottom)));
                 Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
-                Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(2, -1), -1);
+                Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(), -1);
                 //-----------------------------------
                 int[] buffer = Msdfgen.MsdfGenerator.ConvertToIntBmp(frgbBmp);
                 //MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
-
-                using (Bitmap bmp = new Bitmap(frgbBmp.Width, frgbBmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-                {
-                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, frgbBmp.Width, frgbBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
-                    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
-                    bmp.UnlockBits(bmpdata);
-                    bmp.Save("d:\\WImageTest\\a001_xn2_.png");
-                }
+                ActualImage actualImg = ActualImage.CreateFromBuffer(frgbBmp.Width, frgbBmp.Height, PixelFormat.ARGB32, buffer);
+                p.DrawImage(actualImg, 0, 0);
+                //-----------------------------------
+                //using (Bitmap bmp = new Bitmap(frgbBmp.Width, frgbBmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                //{
+                //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, frgbBmp.Width, frgbBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                //    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                //    bmp.UnlockBits(bmpdata);
+                //    bmp.Save("d:\\WImageTest\\a001_xn2_.png");
+                //}
             }
 
 
