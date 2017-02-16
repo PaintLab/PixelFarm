@@ -392,13 +392,13 @@ namespace SampleWinForms
                 ActualImage actualImg = ActualImage.CreateFromBuffer(frgbBmp.Width, frgbBmp.Height, PixelFormat.ARGB32, buffer);
                 p.DrawImage(actualImg, 0, 0);
                 //-----------------------------------
-                using (Bitmap bmp = new Bitmap(frgbBmp.Width, frgbBmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-                {
-                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, frgbBmp.Width, frgbBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
-                    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
-                    bmp.UnlockBits(bmpdata);
-                    bmp.Save("d:\\WImageTest\\a001_xn2_.png");
-                }
+                //using (Bitmap bmp = new Bitmap(frgbBmp.Width, frgbBmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                //{
+                //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, frgbBmp.Width, frgbBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                //    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                //    bmp.UnlockBits(bmpdata);
+                //    bmp.Save("d:\\WImageTest\\a001_xn2_.png");
+                //}
             }
 
 
