@@ -724,7 +724,7 @@ namespace BuildTextureFonts
             string fontName = "tahoma";
             string fontfile = "c:\\Windows\\Fonts\\tahoma.ttf";
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
-            ActualFont font = GetActualFont(fontfile, 28);// nativeFontStore.LoadFont(fontName, fontfile, 28);
+            ActualFont font = GetActualFont(fontfile, 18);// nativeFontStore.LoadFont(fontName, fontfile, 28);
             //2. get glyph 
             SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
             //for (int i = 0; i < 256; ++i)
@@ -733,7 +733,7 @@ namespace BuildTextureFonts
             //BuildFontGlyphsByIndex(font, atlasBuilder, 0, 3417);
             //BuildFontGlyphsByIndex(font, atlasBuilder, 0, 509);
             //BuildFontGlyphsByIndex(font, atlasBuilder, 97, 97);
-            BuildFontGlyph(font, atlasBuilder, 'A');
+            BuildFontGlyph(font, atlasBuilder, 'B');
             //----------------------------------------------------
             //GlyphImage totalImg = atlasBuilder.BuildSingleImage();
             GlyphImage totalImg = atlasBuilder.BuildSingleImage();
@@ -926,16 +926,15 @@ namespace BuildTextureFonts
         {
             //--------------------------------------------
             Msdfgen.Shape shape = new Msdfgen.Shape();
-            Msdfgen.Contour contour = new Msdfgen.Contour();
-            //contour.AddLine(5, 5, 10, 5);
-            //contour.AddLine(10, 5, 7, 10);
-            //contour.AddLine(7, 10, 5, 5);
-            //MyFtLib.ContourAddLinearSegment(cnt, 10, 10, 25, 25);
-            //MyFtLib.ContourAddLinearSegment(cnt, 25, 25, 15, 10);
-            //MyFtLib.ContourAddLinearSegment(cnt, 15, 10, 10, 10);
+            Msdfgen.Contour contour = new Msdfgen.Contour(); 
+            //contour.AddLine(10, 10, 25, 25);
+            //contour.AddLine(25, 25, 15, 10);
+            //contour.AddLine(15, 10, 10, 10);
+
             contour.AddLine(10, 10, 25, 25);
-            contour.AddLine(25, 25, 15, 10);
-            contour.AddLine(15, 10, 10, 10);
+            contour.AddQuadraticSegment(25, 25, 15, 30, 10, 15);
+            contour.AddLine(10, 15, 10, 10);
+
             shape.contours.Add(contour);
             //-+---------------------------
 
@@ -967,10 +966,14 @@ namespace BuildTextureFonts
         {
             IntPtr shape = MyFtLib.CreateShape();
             IntPtr cnt = MyFtLib.ShapeAddBlankContour(shape);
-            MyFtLib.ContourAddLinearSegment(cnt, 10, 10, 25, 25);
-            MyFtLib.ContourAddLinearSegment(cnt, 25, 25, 15, 10);
-            MyFtLib.ContourAddLinearSegment(cnt, 15, 10, 10, 10);
+            //MyFtLib.ContourAddLinearSegment(cnt, 10, 10, 25, 25);
+            //MyFtLib.ContourAddLinearSegment(cnt, 25, 25, 15, 10);
+            //MyFtLib.ContourAddLinearSegment(cnt, 15, 10, 10, 10);
             // 
+
+            MyFtLib.ContourAddLinearSegment(cnt,10, 10, 25, 25);
+            MyFtLib.ContourAddQuadraticSegment(cnt, 25, 25, 15, 30, 10, 15);
+            MyFtLib.ContourAddLinearSegment(cnt,10, 15, 10, 10);
 
             double s_left, s_bottom, s_right, s_top;
             MyFtLib.ShapeFindBounds(shape, out s_left, out s_bottom, out s_right, out s_top);
