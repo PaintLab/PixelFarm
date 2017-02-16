@@ -112,7 +112,7 @@ namespace PixelFarm.Agg
             {
                 fixed (byte* header = &img.pixelBuffer[0])
                 {
-                    System.Runtime.InteropServices.Marshal.Copy((IntPtr)header, buff2, 0,img.pixelBuffer.Length);
+                    System.Runtime.InteropServices.Marshal.Copy((IntPtr)header, buff2, 0, buff2.Length);
                 }
             }
 

@@ -51,6 +51,7 @@
     <Compile Include="NOpenTypeFonts\NOpenTypeFontLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers.cs" />
+    <Compile Include="SimpleFontAtlasBuilder.cs" />
     <Compile Include="Win32Impl.cs" />
     <Compile Include="WinGdiFont.cs" />
   </ItemGroup>

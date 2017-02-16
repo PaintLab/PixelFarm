@@ -37,7 +37,7 @@
   <ItemGroup>
     <Compile Include="FontAtlas\BinPacker.cs" />
     <Compile Include="FontAtlas\SimpleFontAtlas.cs" />
-    <Compile Include="FontAtlas\SimpleFontAtlasBuilder.cs" />
+    <Compile Include="FontAtlas\SimpleFontAtlasBuilder2.cs" />
     <Compile Include="GlyphAnalysis.cs" />
     <Compile Include="GlyphFitOutline.cs" />
     <Compile Include="GlyphPathBuilderVxs.cs" />
