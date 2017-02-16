@@ -70,30 +70,43 @@ namespace PixelFarm.Agg
         /// get processed/scaled vxs
         /// </summary>
         /// <returns></returns>
-        public VertexStore GetVxs(VertexStore vxs1)
+        public VertexStore GetVxs()
         {
-
+            VertexStore vxs1 = new VertexStore();
             if (PassHintInterpreterModule)
             {
                 return curveFlattener.MakeVxs(ps.Vxs, vxs1);
             }
             else
             {
-                //TODO: review here
-                //release vxs2 back
                 VertexStore vxs2 = new VertexStore();
                 float scale = TypeFace.CalculateScale(SizeInPoints);
                 var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                     new PixelFarm.Agg.Transform.AffinePlan(
                         PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scale, scale));
                 //transform -> flatten ->output
-
-                curveFlattener.MakeVxs(mat.TransformToVxs(ps.Vxs, vxs2), vxs1);
-                return vxs1;
-
+                return curveFlattener.MakeVxs(mat.TransformToVxs(ps.Vxs, vxs1), vxs2);
             }
         }
+        public void GetVxs(VertexStore output, VertexStorePool vxsPool)
+        {
 
+            if (PassHintInterpreterModule)
+            {
+                curveFlattener.MakeVxs(ps.Vxs, output);
+            }
+            else
+            {
+                float scale = TypeFace.CalculateScale(SizeInPoints);
+                var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
+                    new PixelFarm.Agg.Transform.AffinePlan(
+                        PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scale, scale));
+                //transform -> flatten ->output
+                VertexStore tmpVxs = vxsPool.GetFreeVxs();
+                curveFlattener.MakeVxs(mat.TransformToVxs(ps.Vxs, tmpVxs), output);
+                vxsPool.Release(ref tmpVxs);
+            }
+        }
         public float GetPixelScale()
         {
             return TypeFace.CalculateScale(SizeInPoints);
@@ -107,7 +120,7 @@ namespace PixelFarm.Agg
         {
             return contours;
         }
-        static CurveFlattener curveFlattener = new CurveFlattener();
+        CurveFlattener curveFlattener = new CurveFlattener();
     }
 
 

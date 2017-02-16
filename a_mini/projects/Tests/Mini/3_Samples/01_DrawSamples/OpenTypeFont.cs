@@ -82,12 +82,13 @@ namespace PixelFarm.Agg.Sample_Draw
         {
             builder.Build(character, size);
 
-            VertexStore v0 = builder.GetVxs(_vxsPool.GetFreeVxs());
+            VertexStore v0 = _vxsPool.GetFreeVxs();
+            builder.GetVxs(v0, _vxsPool);
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
-                //translate
+                 //translate
                  new PixelFarm.Agg.Transform.AffinePlan(
                      PixelFarm.Agg.Transform.AffineMatrixCommand.Translate, 10, 10),
-                //scale
+                 //scale
                  new PixelFarm.Agg.Transform.AffinePlan(
                      PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, 1, 1)
                      );

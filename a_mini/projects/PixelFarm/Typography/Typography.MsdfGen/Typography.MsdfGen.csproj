@@ -1,15 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{821C2F8B-45E4-4242-970D-AE64780970B2}</ProjectGuid>
+    <ProjectGuid>{8F69AB8D-174A-4912-9328-CAE8EDA5564B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.DataProvider.Native</RootNamespace>
-    <AssemblyName>PixelFarm.DataProvider.Native</AssemblyName>
+    <RootNamespace>Typography.MsdfGen</RootNamespace>
+    <AssemblyName>Typography.MsdfGen</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,32 +31,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bitmap\NativeImage.cs" />
-    <Compile Include="HarfBuzzShapingService.cs" />
-    <Compile Include="NativeDll.cs" />
-    <Compile Include="NativeFonts\FontLoaderImpls.cs" />
-    <Compile Include="NativeFonts\NativeBridgeFreeType.cs" />
-    <Compile Include="NativeFonts\NativeFont.cs" />
-    <Compile Include="NativeFonts\NativeFontFace.cs" />
-    <Compile Include="NativeFonts\NativeFontGlyphBuilder.cs" />
-    <Compile Include="NativeFonts\NativeFonts.cs" />
+    <Compile Include="EdgeColor.cs" />
+    <Compile Include="EdgeColoring.cs" />
+    <Compile Include="EdgeHolder.cs" />
+    <Compile Include="EdgeSegment.cs" />
+    <Compile Include="EquationSolver.cs" />
+    <Compile Include="MsdfGen.cs" />
+    <Compile Include="SignedDistance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Typography\OpenType\N20\PixelFarm.OpenType\Typography.OpenType.csproj">
-      <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
+    <ProjectReference Include="..\OpenType\N20\PixelFarm.OpenType\Typography.OpenType.csproj">
+      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenType</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj">
-      <Project>{025E536D-53A6-4C5F-AED5-E21960C70763}</Project>
-      <Name>PixelFarm.DataProvider.Managed</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
-      <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

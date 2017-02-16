@@ -35,6 +35,10 @@ namespace Msdfgen
                 return default(Vector2);
             }
         }
+        public Vector2 point(double param)
+        {
+            return edgeSegment.point(param);
+        }
     }
 
 }

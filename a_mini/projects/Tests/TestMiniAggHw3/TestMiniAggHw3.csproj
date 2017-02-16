@@ -125,17 +125,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\Typography\OpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj">
-      <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
-      <Name>PixelFarm.OpenType</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj">
-      <Project>{025E536D-53A6-4C5F-AED5-E21960C70763}</Project>
+      <Project>{025e536d-53a6-4c5f-aed5-e21960c70763}</Project>
       <Name>PixelFarm.DataProvider.Managed</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.DataProvider.Native\PixelFarm.DataProvider.Native.csproj">
-      <Project>{821C2F8B-45E4-4242-970D-AE64780970B2}</Project>
+      <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>
       <Name>PixelFarm.DataProvider.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\OpenType\N20\PixelFarm.OpenType\Typography.OpenType.csproj">
+      <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
+      <Name>Typography.OpenType</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
       <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
@@ -168,6 +168,10 @@
     <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.Rendering\Typography.Rendering.csproj">
+      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
+      <Name>Typography.Rendering</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,7 +1,6 @@
 ﻿//MIT, 2016, Viktor Chlumsky, Multi-channel signed distance field generator, from https://github.com/Chlumsky/msdfgen
 //MIT, 2017, WinterDev (C# port)
 using System;
-using System.Collections.Generic;
 
 namespace Msdfgen
 {
@@ -10,14 +9,13 @@ namespace Msdfgen
 
         public const int MSDFGEN_CUBIC_SEARCH_STARTS = 4;
         public const int MSDFGEN_CUBIC_SEARCH_STEPS = 4;
-        //
-        protected Vector2[] p;
+
         public EdgeColor color;
         public EdgeSegment(EdgeColor edgeColor)
         {
             this.color = edgeColor;
         }
-
+        public abstract void findBounds(ref double left, ref double bottom, ref double right, ref double top);
         public void distanceToPsedoDistance(ref SignedDistance distance, Vector2 origin, double param)
         {
             if (param < 0)
@@ -30,7 +28,7 @@ namespace Msdfgen
                     double pseudoDistance = Vector2.crossProduct(aq, dir);
                     if (Math.Abs(pseudoDistance) <= Math.Abs(distance.distance))
                     {
-                        distance = new Msdfgen.SignedDistance(pseudoDistance, 0);                         
+                        distance = new Msdfgen.SignedDistance(pseudoDistance, 0);
                     }
                 }
             }
@@ -44,7 +42,7 @@ namespace Msdfgen
                     double pseudoDistance = Vector2.crossProduct(bq, dir);
                     if (Math.Abs(pseudoDistance) <= Math.Abs(distance.distance))
                     {
-                        distance = new Msdfgen.SignedDistance(pseudoDistance, 0); 
+                        distance = new Msdfgen.SignedDistance(pseudoDistance, 0);
                     }
                 }
             }
@@ -70,16 +68,22 @@ namespace Msdfgen
                 (1 - weight) * a.x + (weight * b.x),
                 (1 - weight) * a.y + (weight * b.y));
 
-        } 
+        }
     }
     public class LinearSegment : EdgeSegment
     {
+        Vector2[] p;
         public LinearSegment(Vector2 p0, Vector2 p1, EdgeColor edgeColor = EdgeColor.WHITE)
             : base(edgeColor)
         {
             p = new Vector2[2];
             p[0] = p0;
             p[1] = p1;
+        }
+        public override void findBounds(ref double left, ref double bottom, ref double right, ref double top)
+        {
+            Vector2.pointBounds(p[0], ref left, ref bottom, ref right, ref top);
+            Vector2.pointBounds(p[1], ref left, ref bottom, ref right, ref top);
         }
         public override void splitInThirds(out EdgeSegment part1, out EdgeSegment part2, out EdgeSegment part3)
         {
@@ -103,7 +107,7 @@ namespace Msdfgen
                 }
             }
             return new SignedDistance(
-                nonZeroSign(Vector2.crossProduct(aq, ab)) * endpointDistance, 
+                nonZeroSign(Vector2.crossProduct(aq, ab)) * endpointDistance,
                 Math.Abs(Vector2.dotProduct(ab.normalize(), eq.normalize())));
         }
         public override Vector2 direction(double param)
@@ -118,13 +122,37 @@ namespace Msdfgen
     }
     public class QuadraticSegment : EdgeSegment
     {
+        Vector2[] p;
         public QuadraticSegment(Vector2 p0, Vector2 p1, Vector2 p2, EdgeColor edgeColor = EdgeColor.WHITE)
             : base(edgeColor)
         {
             p = new Vector2[3];
+            if (Vector2.IsEq(p1, p0) || Vector2.IsEq(p1, p2))
+            {
+                p1 = 0.5 * (p0 + p2);
+            }
             p[0] = p0;
             p[1] = p1;
             p[2] = p2;
+
+        }
+        public override void findBounds(ref double left, ref double bottom, ref double right, ref double top)
+        {
+            Vector2.pointBounds(p[0], ref left, ref bottom, ref right, ref top);
+            Vector2.pointBounds(p[2], ref left, ref bottom, ref right, ref top);
+            Vector2 bot = (p[1] - p[0]) - (p[2] - p[1]);
+            if (bot.x != 0)
+            {
+                double param = (p[1].x - p[0].x) / bot.x;
+                if (param > 0 && param < 1)
+                    Vector2.pointBounds(point(param), ref left, ref bottom, ref right, ref top);
+            }
+            if (bot.y != 0)
+            {
+                double param = (p[1].y - p[0].y) / bot.y;
+                if (param > 0 && param < 1)
+                    Vector2.pointBounds(point(param), ref left, ref bottom, ref right, ref top);
+            }
         }
         public override void splitInThirds(out EdgeSegment part1, out EdgeSegment part2, out EdgeSegment part3)
         {
@@ -189,6 +217,7 @@ namespace Msdfgen
     }
     public class CubicSegment : EdgeSegment
     {
+        Vector2[] p;
         public CubicSegment(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, EdgeColor edgeColor = EdgeColor.WHITE)
             : base(edgeColor)
         {
@@ -198,18 +227,43 @@ namespace Msdfgen
             p[2] = p2;
             p[3] = p3;
         }
+        public override void findBounds(ref double left, ref double bottom, ref double right, ref double top)
+        {
+            Vector2.pointBounds(p[0], ref left, ref bottom, ref right, ref top);
+            Vector2.pointBounds(p[3], ref left, ref bottom, ref right, ref top);
+            Vector2 a0 = p[1] - p[0];
+            Vector2 a1 = 2 * (p[2] - p[1] - a0);
+            Vector2 a2 = p[3] - 3 * p[2] + 3 * p[1] - p[0];
+            double[] pars = new double[2];
+            int solutions;
+            solutions = EquationSolver.SolveQuadratic(pars, a2.x, a1.x, a0.x);
+            for (int i = 0; i < solutions; ++i)
+                if (pars[i] > 0 && pars[i] < 1)
+                    Vector2.pointBounds(point(pars[i]), ref left, ref bottom, ref right, ref top);
+            solutions = EquationSolver.SolveQuadratic(pars, a2.y, a1.y, a0.y);
+            for (int i = 0; i < solutions; ++i)
+                if (pars[i] > 0 && pars[i] < 1)
+                    Vector2.pointBounds(point(pars[i]), ref left, ref bottom, ref right, ref top);
+        }
         public override void splitInThirds(out EdgeSegment part1, out EdgeSegment part2, out EdgeSegment part3)
         {
-            part1 = new CubicSegment(p[0], mix(p[0], p[1], 1 / 3.0), mix(mix(p[0], p[1], 1 / 3.0), mix(p[1], p[2], 1 / 3.0), 1 / 3.0), point(1 / 3.0), color);
+            part1 = new CubicSegment(p[0], Vector2.IsEq(p[0], p[1]) ? p[0] : mix(p[0], p[1], 1 / 3.0), mix(mix(p[0], p[1], 1 / 3.0), mix(p[1], p[2], 1 / 3.0), 1 / 3.0), point(1 / 3.0), color);
             part2 = new CubicSegment(point(1 / 3.0),
                 mix(mix(mix(p[0], p[1], 1 / 3.0), mix(p[1], p[2], 1 / 3.0), 1 / 3.0), mix(mix(p[1], p[2], 1 / 3.0), mix(p[2], p[3], 1 / 3.0), 1 / 3.0), 2 / 3.0),
                 mix(mix(mix(p[0], p[1], 2 / 3.0), mix(p[1], p[2], 2 / 3.0), 2 / 3.0), mix(mix(p[1], p[2], 2 / 3.0), mix(p[2], p[3], 2 / 3.0), 2 / 3.0), 1 / 3.0),
                 point(2 / 3.0), color);
-            part3 = new CubicSegment(point(2 / 3.0), mix(mix(p[1], p[2], 2 / 3.0), mix(p[2], p[3], 2 / 3.0), 2 / 3.0), mix(p[2], p[3], 2 / 3.0), p[3], color);
+            part3 = new CubicSegment(point(2 / 3.0), mix(mix(p[1], p[2], 2 / 3.0), mix(p[2], p[3], 2 / 3.0), 2 / 3.0), Vector2.IsEq(p[2], p[3]) ? p[3] : mix(p[2], p[3], 2 / 3.0), p[3], color);
         }
         public override Vector2 direction(double param)
         {
-            return mix(mix(p[1] - p[0], p[2] - p[1], param), mix(p[2] - p[1], p[3] - p[2], param), param);
+
+            Vector2 tangent = mix(mix(p[1] - p[0], p[2] - p[1], param), mix(p[2] - p[1], p[3] - p[2], param), param);
+            if (!tangent.IsZero())
+            {
+                if (param == 0) return p[2] - p[0];
+                if (param == 1) return p[3] - p[1];
+            }
+            return tangent;
         }
         public override Vector2 point(double param)
         {
@@ -222,15 +276,17 @@ namespace Msdfgen
             Vector2 ab = p[1] - p[0];
             Vector2 br = p[2] - p[1] - ab;
             Vector2 as_ = (p[3] - p[2]) - (p[2] - p[1]) - br;
+            Vector2 epDir = direction(0);
 
-            double minDistance = nonZeroSign(Vector2.crossProduct(ab, qa)) * qa.Length(); // distance from A
-            param = -Vector2.dotProduct(qa, ab) / Vector2.dotProduct(ab, ab);
+            double minDistance = nonZeroSign(Vector2.crossProduct(epDir, qa)) * qa.Length(); // distance from A
+            param = -Vector2.dotProduct(qa, epDir) / Vector2.dotProduct(epDir, epDir);
             {
-                double distance = nonZeroSign(Vector2.crossProduct(p[3] - p[2], p[3] - origin)) * (p[3] - origin).Length(); // distance from B
+                epDir = direction(1);
+                double distance = nonZeroSign(Vector2.crossProduct(epDir, p[3] - origin)) * (p[3] - origin).Length(); // distance from B
                 if (EquationSolver.fabs(distance) < EquationSolver.fabs(minDistance))
                 {
                     minDistance = distance;
-                    param = Vector2.dotProduct(origin - p[2], p[3] - p[2]) / Vector2.dotProduct(p[3] - p[2], p[3] - p[2]);
+                    param = Vector2.dotProduct(origin + epDir - p[3], epDir) / Vector2.dotProduct(epDir, epDir);
                 }
             }
             // Iterative minimum distance search
@@ -262,10 +318,10 @@ namespace Msdfgen
                 return new SignedDistance(minDistance, 0);
             if (param < .5)
                 return new SignedDistance(minDistance,
-                    EquationSolver.fabs(Vector2.dotProduct(ab.normalize(), qa.normalize())));
+                    EquationSolver.fabs(Vector2.dotProduct(direction(0), qa.normalize())));
             else
                 return new SignedDistance(minDistance,
-                    EquationSolver.fabs(Vector2.dotProduct((p[3] - p[2]).normalize(), (p[3] - origin).normalize())));
+                    EquationSolver.fabs(Vector2.dotProduct(direction(1).normalize(), (p[3] - origin).normalize())));
         }
     }
     /// Splits the edge segments into thirds which together represent the original edge.

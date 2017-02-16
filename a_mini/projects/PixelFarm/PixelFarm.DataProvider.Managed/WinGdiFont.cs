@@ -4,8 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing.Fonts;
-using Win32;
-
+using Win32; 
 namespace PixelFarm.Drawing.WinGdi
 {
     public class WinGdiFontFace : FontFace
