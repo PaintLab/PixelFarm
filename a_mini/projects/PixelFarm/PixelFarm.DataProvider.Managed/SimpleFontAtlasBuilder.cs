@@ -196,21 +196,7 @@ namespace Typography.Rendering
             //}
             xmldoc.Save(filename);
         }
-        static string ConvertToBase64(int[] buffer)
-        {
-            byte[] copy1 = new byte[buffer.Length * 4];
-            unsafe
-            {
-                fixed (void* buff_h = &buffer[0])
-                {
-                    System.Runtime.InteropServices.Marshal.Copy(
-                         new IntPtr(buff_h), copy1, 0, copy1.Length);
-                }
-            }
-            return Convert.ToBase64String(copy1);
-        }
-
-
+      
 
         //read font info from xml document
         public SimpleFontAtlas LoadFontInfo(string filename)
