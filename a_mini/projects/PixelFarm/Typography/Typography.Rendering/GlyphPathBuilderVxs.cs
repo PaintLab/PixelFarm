@@ -1,7 +1,8 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
 using System.Collections.Generic;
-using NOpenType;
+
+using Typography.OpenType;
 using PixelFarm.Agg.VertexSource;
 
 namespace PixelFarm.Agg
