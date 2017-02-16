@@ -45,6 +45,7 @@
     <Compile Include="..\win32utils\NativeWin32MemoryDc.cs">
       <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
+    <Compile Include="GlyphPathBuilderVxs.cs" />
     <Compile Include="InstalledFontCollection.cs" />
     <Compile Include="NOpenTypeFonts\ManagedShapingService.cs" />
     <Compile Include="NOpenTypeFonts\NOpenTypeFont.cs" />
@@ -63,6 +64,10 @@
     <ProjectReference Include="..\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj">
       <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
       <Name>PixelFarm.Triangulation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Typography.FontProvider\Typography.FontProvider.csproj">
+      <Project>{b431b5f6-c296-4a3e-a1aa-8c6ea5711374}</Project>
+      <Name>Typography.FontProvider</Name>
     </ProjectReference>
     <ProjectReference Include="..\Typography\Typography.OpenType\N20\PixelFarm.OpenType\Typography.OpenType.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>

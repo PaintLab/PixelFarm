@@ -9,8 +9,7 @@ namespace PixelFarm.Agg
 {
     //this is PixelFarm version ***
     //render with MiniAgg
-
-
+     
 
     public class GlyphPathBuilderVxs : GlyphPathBuilderBase
     {
