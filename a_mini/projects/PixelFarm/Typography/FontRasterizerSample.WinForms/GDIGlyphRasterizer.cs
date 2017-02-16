@@ -2,8 +2,9 @@
 
 using System;
 using System.Drawing;
+using Typography.OpenType;
 
-namespace NOpenType.CLI
+namespace SampleWinForms
 {
     public class GDIGlyphRasterizer : IGlyphRasterizer
     {
@@ -12,7 +13,7 @@ namespace NOpenType.CLI
         float lastMoveY;
         float lastX;
         float lastY;
-          
+
         public GDIGlyphRasterizer()
         {
 
@@ -22,14 +23,10 @@ namespace NOpenType.CLI
 
         public void BeginRead(int countourCount)
         {
-            
             ps.Reset();
         }
-
         public void EndRead()
         {
-
-
         }
 
         /// <summary>
@@ -48,19 +45,15 @@ namespace NOpenType.CLI
         {
             g.DrawPath(pen, ps);
         }
-
-
         public void CloseFigure()
         {
             ps.CloseFigure();
         }
-
         public void Curve3(double p2x, double p2y, double x, double y)
         {
             //from http://stackoverflow.com/questions/9485788/convert-quadratic-curve-to-cubic-curve
             //Control1X = StartX + (.66 * (ControlX - StartX))
-            //Control2X = EndX + (.66 * (ControlX - EndX))
-
+            //Control2X = EndX + (.66 * (ControlX - EndX)) 
 
             float c1x = lastX + (float)((2f / 3f) * (p2x - lastX));
             float c1y = lastY + (float)((2f / 3f) * (p2y - lastY));

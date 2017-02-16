@@ -1,8 +1,10 @@
 
 #pragma once
+ 
 
 #include <vector>
 #include "EdgeHolder.h"
+ 
 
 namespace msdfgen {
 
@@ -22,7 +24,9 @@ public:
     EdgeHolder & addEdge();
     /// Computes the bounding box of the contour.
     void bounds(double &l, double &b, double &r, double &t) const;
+    /// Computes the winding of the contour. Returns 1 if positive, -1 if negative.
+    int winding() const;
 
 };
 
-}
+} 

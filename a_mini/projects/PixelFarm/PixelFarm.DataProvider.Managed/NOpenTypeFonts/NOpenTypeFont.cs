@@ -1,9 +1,8 @@
 ﻿//MIT, 2014-2017, WinterDev 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using NOpenType;
-using System.IO;
+using Typography.OpenType;
+using Typography.OpenType.Tables; 
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
@@ -21,7 +20,7 @@ namespace PixelFarm.Drawing.Fonts
             this.name = fontName;
             this.path = fontPath;
             //----
-            glyphPathBuilder = new Agg.GlyphPathBuilderVxs(ntypeface);
+            glyphPathBuilder = new PixelFarm.Agg.GlyphPathBuilderVxs(ntypeface);
         }
         public override string Name
         {
@@ -175,8 +174,8 @@ namespace PixelFarm.Drawing.Fonts
             //then build it
             ownerFace.VxsBuilder.BuildFromGlyphIndex((ushort)codepoint, this.sizeInPoints);
 
-            
-            found = ownerFace.VxsBuilder.GetVxs(new VertexStore());
+
+            found = ownerFace.VxsBuilder.GetVxs();
             glyphVxs.Add(codepoint, found);
             return found;
         }

@@ -261,9 +261,13 @@
       <Project>{68F1DAF6-2B35-476E-B2F8-5EADBC823935}</Project>
       <Name>TypeMirror</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\OpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj">
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.OpenType\N20\PixelFarm.OpenType\Typography.OpenType.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
-      <Name>PixelFarm.OpenType</Name>
+      <Name>Typography.OpenType</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.Rendering\Typography.Rendering.csproj">
+      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
+      <Name>Typography.Rendering</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Win32Utils\Win32Utils.csproj">
       <Project>{B9C23586-913D-4EE8-B266-BD58FBD0133B}</Project>

@@ -48,9 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Typography\OpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj">
+    <ProjectReference Include="..\Typography\Typography.OpenType\N20\PixelFarm.OpenType\Typography.OpenType.csproj">
       <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
-      <Name>PixelFarm.OpenType</Name>
+      <Name>Typography.OpenType</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj">
       <Project>{025E536D-53A6-4C5F-AED5-E21960C70763}</Project>
