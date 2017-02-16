@@ -32,10 +32,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FontAtlas\BinPacker.cs" />
     <Compile Include="FontAtlas\SimpleFontAtlas.cs" />
+    <Compile Include="FontAtlas\SimpleFontAtlasBuilder.cs" />
     <Compile Include="GlyphAnalysis.cs" />
     <Compile Include="GlyphFitOutline.cs" />
     <Compile Include="GlyphPathBuilderVxs.cs" />

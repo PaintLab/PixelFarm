@@ -338,7 +338,7 @@ namespace SampleWinForms
 
         void RenderWithMsdfImg(Typeface typeface, char testChar, float sizeInPoint)
         {
-            //2. glyph-to-vxs builder
+
             var builder = new GlyphPathBuilderVxs(typeface);
             builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
             builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
@@ -1015,7 +1015,7 @@ namespace SampleWinForms
             g.TranslateTransform(0.0F, -(float)300);// Translate the drawing area accordingly  
 
             //2. glyph to gdi path
-            var gdiGlyphRasterizer = new  GDIGlyphRasterizer();
+            var gdiGlyphRasterizer = new GDIGlyphRasterizer();
             var builder = new GlyphPathBuilder(typeface, gdiGlyphRasterizer);
             builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
             builder.Build(testChar, sizeInPoint);
@@ -1205,6 +1205,92 @@ namespace SampleWinForms
         private void chkLcdTechnique_CheckedChanged(object sender, EventArgs e)
         {
             button1_Click(this, EventArgs.Empty);
+        }
+
+        private void cmdBuildMsdfTexture_Click(object sender, EventArgs e)
+        {
+            string sampleFontFile = @"..\..\tahoma.ttf";
+            CreateSampleMsdfTextureFont(
+                sampleFontFile,
+                18,
+                0,
+                255,
+                "d:\\WImageTest\\sample_msdf.png");
+
+        }
+        static void CreateSampleMsdfTextureFont(string fontfile, float sizeInPoint, ushort startGlyphIndex, ushort endGlyphIndex, string outputFile)
+        {
+            //sample
+            var reader = new OpenTypeReader();
+            using (var fs = new FileStream(fontfile, FileMode.Open))
+            {
+                //1. read typeface from font file
+                Typeface typeface = reader.Read(fs);
+
+                //sample: create sample msdf texture 
+                //-------------------------------------------------------------
+                var builder = new GlyphPathBuilderVxs(typeface);
+                //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
+                //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
+                //-------------------------------------------------------------
+                var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder2();
+                for (ushort n = startGlyphIndex; n <= endGlyphIndex; ++n)
+                {
+                    builder.BuildFromGlyphIndex(n, sizeInPoint);
+                    float scale = builder.GetPixelScale();
+                    scale = 1;
+                    List<GlyphContour> contours = builder.GetContours();
+                    int j = contours.Count;
+                    List<GlyphContour> newFitContours = new List<GlyphContour>();
+                    for (int i = 0; i < j; ++i)
+                    {
+                        newFitContours.Add(CreateFitContourVxs2(contours[i], scale, false, false));
+                    }
+
+                    Msdfgen.Shape shape = CreateMsdfShape(newFitContours);
+                    shape.InverseYAxis = true;
+                    double left, bottom, right, top;
+                    shape.findBounds(out left, out bottom, out right, out top);
+
+                    Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp((int)Math.Ceiling((right - left)), (int)Math.Ceiling((top - bottom)));
+                    Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
+                    Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(), -1);
+                    //-----------------------------------
+                    int[] buffer = Msdfgen.MsdfGenerator.ConvertToIntBmp(frgbBmp);
+                    int w = frgbBmp.Width;
+                    int h = frgbBmp.Height;
+                    if (w < 5)
+                    {
+                        w = 5;
+                    }
+                    if (h < 5)
+                    {
+                        h = 5;
+                    }
+                    ActualImage actualImg = ActualImage.CreateFromBuffer(w, h, PixelFormat.ARGB32, buffer);
+                    atlasBuilder.AddGlyph((int)n, actualImg);
+
+                    //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                    //{
+                    //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    //    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                    //    bmp.UnlockBits(bmpdata);
+                    //    bmp.Save("d:\\WImageTest\\a001_xn2_" + n + ".png");
+                    //}
+                }
+
+                var glyphImg2 = atlasBuilder.BuildSingleImage();
+                using (Bitmap bmp = new Bitmap(glyphImg2.Width, glyphImg2.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                {
+                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, glyphImg2.Width, glyphImg2.Height),
+                        System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    int[] intBuffer = glyphImg2.GetImageBuffer();
+
+                    System.Runtime.InteropServices.Marshal.Copy(intBuffer, 0, bmpdata.Scan0, intBuffer.Length);
+                    bmp.UnlockBits(bmpdata);
+                    bmp.Save("d:\\WImageTest\\a_total.png");
+                }
+            }
         }
     }
 }
