@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 using Typography.OpenType;
-using PixelFarm.Agg;
+using PixelFarm.Drawing.Fonts;
 using Typography.TextLayout;
 
 namespace SampleWinForms

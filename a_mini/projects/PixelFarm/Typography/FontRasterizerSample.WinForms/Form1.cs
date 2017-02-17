@@ -7,13 +7,13 @@ using System.IO;
 using System.Windows.Forms;
 
 using Typography.OpenType;
-using Typography.OpenType.Tables;
+using Typography.Rendering;
 using Typography.OpenType.Extensions;
 
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
 using Typography.TextLayout;
-
+using PixelFarm.Drawing.Fonts;
 
 namespace SampleWinForms
 {
@@ -285,7 +285,7 @@ namespace SampleWinForms
             }
             float scale = builder.GetPixelScale();
 
-            PixelFarm.Agg.Typography.GlyphFitOutline glyphOutline = null;
+            GlyphFitOutline glyphOutline = null;
             {
                 //draw for debug ...
                 //draw control point
@@ -364,7 +364,7 @@ namespace SampleWinForms
                 //draw each contour point
             }
             float scale = builder.GetPixelScale();
-            PixelFarm.Agg.Typography.GlyphFitOutline glyphOutline = null;
+            GlyphFitOutline glyphOutline = null;
             {
                 //draw for debug ...
                 //draw control point
@@ -492,7 +492,7 @@ namespace SampleWinForms
                 {
                     float new_x = RoundToNearestHorizontalSide((float)p_x);
                     //adjust right-side vertical edge
-                    PixelFarm.Agg.Typography.EdgeLine rightside = p.GetMatchingVerticalEdge();
+                    EdgeLine rightside = p.GetMatchingVerticalEdge();
                     if (rightside != null)
                     {
 
@@ -601,7 +601,7 @@ namespace SampleWinForms
                 y += sqSize;
             }
         }
-        static void DrawEdge(AggCanvasPainter p, PixelFarm.Agg.Typography.EdgeLine edge, float scale)
+        static void DrawEdge(AggCanvasPainter p, EdgeLine edge, float scale)
         {
             if (edge.IsOutside)
             {
@@ -611,7 +611,7 @@ namespace SampleWinForms
                     default:
                         p.StrokeColor = PixelFarm.Drawing.Color.Green;
                         break;
-                    case PixelFarm.Agg.Typography.LineSlopeKind.Vertical:
+                    case LineSlopeKind.Vertical:
                         if (edge.IsLeftSide)
                         {
                             p.StrokeColor = PixelFarm.Drawing.Color.Blue;
@@ -621,7 +621,7 @@ namespace SampleWinForms
                             p.StrokeColor = PixelFarm.Drawing.Color.LightGray;
                         }
                         break;
-                    case PixelFarm.Agg.Typography.LineSlopeKind.Horizontal:
+                    case LineSlopeKind.Horizontal:
                         if (edge.IsUpper)
                         {
                             p.StrokeColor = PixelFarm.Drawing.Color.Red;
@@ -640,10 +640,10 @@ namespace SampleWinForms
                     default:
                         p.StrokeColor = PixelFarm.Drawing.Color.LightGray;
                         break;
-                    case PixelFarm.Agg.Typography.LineSlopeKind.Vertical:
+                    case LineSlopeKind.Vertical:
                         p.StrokeColor = PixelFarm.Drawing.Color.Blue;
                         break;
-                    case PixelFarm.Agg.Typography.LineSlopeKind.Horizontal:
+                    case LineSlopeKind.Horizontal:
                         p.StrokeColor = PixelFarm.Drawing.Color.Yellow;
                         break;
                 }
@@ -651,7 +651,7 @@ namespace SampleWinForms
             p.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
         }
 
-        static void AssignPointEdgeInvolvement(PixelFarm.Agg.Typography.EdgeLine edge)
+        static void AssignPointEdgeInvolvement(EdgeLine edge)
         {
             if (!edge.IsOutside)
             {
@@ -661,7 +661,7 @@ namespace SampleWinForms
             switch (edge.SlopKind)
             {
 
-                case PixelFarm.Agg.Typography.LineSlopeKind.Horizontal:
+                case LineSlopeKind.Horizontal:
                     {
                         //horiontal edge
                         //must check if this is upper horizontal 
@@ -689,7 +689,7 @@ namespace SampleWinForms
                         }
                     }
                     break;
-                case PixelFarm.Agg.Typography.LineSlopeKind.Vertical:
+                case LineSlopeKind.Vertical:
                     {
                         //both p and q of this edge is part of vertical edge 
                         var p = edge.p.userData as GlyphPoint2D;
@@ -710,7 +710,7 @@ namespace SampleWinForms
             }
 
         }
-        PixelFarm.Agg.Typography.GlyphFitOutline TessWithPolyTri(List<GlyphContour> contours, float pixelScale)
+        GlyphFitOutline TessWithPolyTri(List<GlyphContour> contours, float pixelScale)
         {
             List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
             int cntCount = contours.Count;
@@ -739,18 +739,18 @@ namespace SampleWinForms
 
             //------------------------------------------
             Poly2Tri.P2T.Triangulate(polygon); //that poly is triangulated 
-            PixelFarm.Agg.Typography.GlyphFitOutline glyphFitOutline = new PixelFarm.Agg.Typography.GlyphFitOutline(polygon);
+            GlyphFitOutline glyphFitOutline = new GlyphFitOutline(polygon);
             glyphFitOutline.Analyze();
             //------------------------------------------
 
-            List<PixelFarm.Agg.Typography.GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
+            List<GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
             int triangleCount = triAngles.Count;
 
             bool drawBone = this.chkDrawBone.Checked;
             for (int i = 0; i < triangleCount; ++i)
             {
                 //---------------
-                PixelFarm.Agg.Typography.GlyphTriangle tri = triAngles[i];
+                GlyphTriangle tri = triAngles[i];
                 AssignPointEdgeInvolvement(tri.e0);
                 AssignPointEdgeInvolvement(tri.e1);
                 AssignPointEdgeInvolvement(tri.e2);
@@ -776,10 +776,10 @@ namespace SampleWinForms
         }
 
 #if DEBUG
-        void debugDrawTriangulatedGlyph(PixelFarm.Agg.Typography.GlyphFitOutline glyphFitOutline, float pixelScale)
+        void debugDrawTriangulatedGlyph(GlyphFitOutline glyphFitOutline, float pixelScale)
         {
             p.StrokeColor = PixelFarm.Drawing.Color.Magenta;
-            List<PixelFarm.Agg.Typography.GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
+            List<GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
             int j = triAngles.Count;
             //
             double prev_cx = 0, prev_cy = 0;
@@ -789,10 +789,10 @@ namespace SampleWinForms
             for (int i = 0; i < j; ++i)
             {
                 //---------------
-                PixelFarm.Agg.Typography.GlyphTriangle tri = triAngles[i];
-                PixelFarm.Agg.Typography.EdgeLine e0 = tri.e0;
-                PixelFarm.Agg.Typography.EdgeLine e1 = tri.e1;
-                PixelFarm.Agg.Typography.EdgeLine e2 = tri.e2;
+                GlyphTriangle tri = triAngles[i];
+                EdgeLine e0 = tri.e0;
+                EdgeLine e1 = tri.e1;
+                EdgeLine e2 = tri.e2;
                 //---------------
                 //draw each triangles
                 DrawEdge(p, e0, pixelScale);
@@ -829,11 +829,11 @@ namespace SampleWinForms
             //draw bone 
             if (drawBone)
             {
-                List<PixelFarm.Agg.Typography.GlyphBone> bones = glyphFitOutline.dbugGetBones();
+                List<GlyphBone> bones = glyphFitOutline.dbugGetBones();
                 j = bones.Count;
                 for (int i = 0; i < j; ++i)
                 {
-                    PixelFarm.Agg.Typography.GlyphBone b = bones[i];
+                    GlyphBone b = bones[i];
                     if (i == 0)
                     {
                         //start mark
@@ -1233,7 +1233,7 @@ namespace SampleWinForms
                 //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
                 //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
                 //-------------------------------------------------------------
-                var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder2();
+                var atlasBuilder = new SimpleFontAtlasBuilder2();
                 for (ushort n = startGlyphIndex; n <= endGlyphIndex; ++n)
                 {
                     builder.BuildFromGlyphIndex(n, sizeInPoint);

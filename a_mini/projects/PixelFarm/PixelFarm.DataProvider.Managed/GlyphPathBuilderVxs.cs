@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 
 using Typography.OpenType;
+using Typography.Rendering;
 using PixelFarm.Agg.VertexSource;
 
 namespace PixelFarm.Agg

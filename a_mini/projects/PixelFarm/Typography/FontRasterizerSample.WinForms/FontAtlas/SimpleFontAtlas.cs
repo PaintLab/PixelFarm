@@ -9,7 +9,7 @@ namespace PixelFarm.Drawing.Fonts
 {
 
 
-    public class SimpleFontAtlas
+    class SimpleFontAtlas
     {
         GlyphImage totalGlyphImage;
         Dictionary<int, TextureFontGlyphData> codePointLocations = new Dictionary<int, TextureFontGlyphData>();

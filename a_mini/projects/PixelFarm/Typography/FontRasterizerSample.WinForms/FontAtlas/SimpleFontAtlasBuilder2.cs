@@ -1,14 +1,12 @@
 ﻿//MIT, 2016-2017, WinterDev
 //----------------------------------- 
- 
-using System.Collections.Generic; 
-using PixelFarm.Drawing; 
+
+using System.Collections.Generic;
 using PixelFarm.Agg;
 using System.Xml;
-using PixelFarm.Drawing.Fonts;
-namespace Typography.Rendering
+namespace PixelFarm.Drawing.Fonts
 {
-    public class GlyphImage2
+    class GlyphImage2
     {
         int[] pixelBuffer;
         public GlyphImage2(int w, int h)
@@ -62,7 +60,7 @@ namespace Typography.Rendering
         public int codePoint;
         public GlyphMatrix2 glyphMatrix;
     }
-    public class SimpleFontAtlasBuilder2
+    class SimpleFontAtlasBuilder2
     {
         GlyphImage2 latestGenGlyphImage;
         Dictionary<int, CacheGlyph> glyphs = new Dictionary<int, CacheGlyph>();
@@ -71,7 +69,7 @@ namespace Typography.Rendering
             var glyphCache = new CacheGlyph();
             glyphCache.codePoint = codePoint;
             glyphCache.img = img;
-           
+
             glyphs[codePoint] = glyphCache;
         }
         public GlyphImage2 BuildSingleImage()
@@ -116,11 +114,11 @@ namespace Typography.Rendering
             //-------------------------------
             //compact image location
             //TODO: review performance here again***
-            SharpFont.BinPacker binPacker = new SharpFont.BinPacker(totalMaxLim, currentY);
+            BinPacker binPacker = new BinPacker(totalMaxLim, currentY);
             for (int i = glyphList.Count - 1; i >= 0; --i)
             {
                 CacheGlyph g = glyphList[i];
-                SharpFont.Rect newRect = binPacker.Insert(g.img.Width, g.img.Height);
+                Rect newRect = binPacker.Insert(g.img.Width, g.img.Height);
                 g.area = new Rectangle(newRect.X, newRect.Y,
                     g.img.Width, g.img.Height);
             }
