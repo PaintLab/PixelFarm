@@ -1,13 +1,10 @@
 ﻿//MIT, 2016-2017, WinterDev
 //----------------------------------- 
-
-using System;
-using System.Collections.Generic;
-using System.Xml;
-
-using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
+ 
+using System.Collections.Generic; 
+using PixelFarm.Drawing; 
 using PixelFarm.Agg;
+using System.Xml;
 
 namespace Typography.Rendering
 {
@@ -144,137 +141,137 @@ namespace Typography.Rendering
 
         }
 
-        ///// <summary>
-        ///// save font info into xml document
-        ///// </summary>
-        ///// <param name="filename"></param>
-        //public void SaveFontInfo(string filename)
-        //{
-        //    //save font info as xml 
-        //    //save position of each font
-        //    XmlDocument xmldoc = new XmlDocument();
-        //    XmlElement root = xmldoc.CreateElement("font");
-        //    xmldoc.AppendChild(root);
+        /// <summary>
+        /// save font info into xml document
+        /// </summary>
+        /// <param name="filename"></param>
+        public void SaveFontInfo(string filename)
+        {
+            //save font info as xml 
+            //save position of each font
+            XmlDocument xmldoc = new XmlDocument();
+            XmlElement root = xmldoc.CreateElement("font");
+            xmldoc.AppendChild(root);
 
-        //    if (latestGenGlyphImage == null)
-        //    {
-        //        BuildSingleImage();
-        //    }
+            if (latestGenGlyphImage == null)
+            {
+                BuildSingleImage();
+            }
 
-        //    {
-        //        //total img element
-        //        XmlElement totalImgElem = xmldoc.CreateElement("total_img");
-        //        totalImgElem.SetAttribute("w", latestGenGlyphImage.Width.ToString());
-        //        totalImgElem.SetAttribute("h", latestGenGlyphImage.Height.ToString());
-        //        totalImgElem.SetAttribute("compo", "4");
-        //        root.AppendChild(totalImgElem);
-        //    }
+            {
+                //total img element
+                XmlElement totalImgElem = xmldoc.CreateElement("total_img");
+                totalImgElem.SetAttribute("w", latestGenGlyphImage.Width.ToString());
+                totalImgElem.SetAttribute("h", latestGenGlyphImage.Height.ToString());
+                totalImgElem.SetAttribute("compo", "4");
+                root.AppendChild(totalImgElem);
+            }
 
-        //    foreach (CacheGlyph g in glyphs.Values)
-        //    {
-        //        //XmlElement gElem = xmldoc.CreateElement("glyph");
-        //        ////convert char to hex
-        //        //string unicode = ("0x" + ((int)g.character).ToString("X"));//code point
-        //        //Rectangle area = g.area;
-        //        //gElem.SetAttribute("c", g.codePoint.ToString());
-        //        //gElem.SetAttribute("uc", unicode);//unicode char
-        //        //gElem.SetAttribute("ltwh",
-        //        //    area.Left + " " + area.Top + " " + area.Width + " " + area.Height
-        //        //    );
-        //        //gElem.SetAttribute("borderXY",
-        //        //    g.glyphImage.BorderXY + " " + g.glyphImage.BorderXY
-        //        //    );
-        //        //var mat = g.fontGlyph.glyphMatrix;
-        //        //gElem.SetAttribute("mat",
-        //        //    mat.advanceX + " " + mat.advanceY + " " +
-        //        //    mat.bboxXmin + " " + mat.bboxXmax + " " +
-        //        //    mat.bboxYmin + " " + mat.bboxYmax + " " +
-        //        //    mat.img_width + " " + mat.img_height + " " +
-        //        //    mat.img_horiAdvance + " " + mat.img_horiBearingX + " " +
-        //        //    mat.img_horiBearingY + " " +
-        //        //    //-----------------------------
-        //        //    mat.img_vertAdvance + " " +
-        //        //    mat.img_vertBearingX + " " + mat.img_vertBearingY);
+            foreach (CacheGlyph g in glyphs.Values)
+            {
+                //XmlElement gElem = xmldoc.CreateElement("glyph");
+                ////convert char to hex
+                //string unicode = ("0x" + ((int)g.character).ToString("X"));//code point
+                //Rectangle area = g.area;
+                //gElem.SetAttribute("c", g.codePoint.ToString());
+                //gElem.SetAttribute("uc", unicode);//unicode char
+                //gElem.SetAttribute("ltwh",
+                //    area.Left + " " + area.Top + " " + area.Width + " " + area.Height
+                //    );
+                //gElem.SetAttribute("borderXY",
+                //    g.glyphImage.BorderXY + " " + g.glyphImage.BorderXY
+                //    );
+                //var mat = g.fontGlyph.glyphMatrix;
+                //gElem.SetAttribute("mat",
+                //    mat.advanceX + " " + mat.advanceY + " " +
+                //    mat.bboxXmin + " " + mat.bboxXmax + " " +
+                //    mat.bboxYmin + " " + mat.bboxYmax + " " +
+                //    mat.img_width + " " + mat.img_height + " " +
+                //    mat.img_horiAdvance + " " + mat.img_horiBearingX + " " +
+                //    mat.img_horiBearingY + " " +
+                //    //-----------------------------
+                //    mat.img_vertAdvance + " " +
+                //    mat.img_vertBearingX + " " + mat.img_vertBearingY);
 
-        //        //if (g.character > 50)
-        //        //{
-        //        //    gElem.SetAttribute("example", g.character.ToString());
-        //        //}
-        //        //root.AppendChild(gElem);
-        //    }
-        //    //if (embededGlyphsImage)
-        //    //{
-        //    //    XmlElement glyphImgElem = xmldoc.CreateElement("msdf_img");
-        //    //    glyphImgElem.SetAttribute("w", latestGenGlyphImage.Width.ToString());
-        //    //    glyphImgElem.SetAttribute("h", latestGenGlyphImage.Height.ToString());
-        //    //    int[] imgBuffer = latestGenGlyphImage.GetImageBuffer();
-        //    //    glyphImgElem.SetAttribute("buff_len", (imgBuffer.Length * 4).ToString());
-        //    //    //----------------------------------------------------------------------
-        //    //    glyphImgElem.AppendChild(
-        //    //        xmldoc.CreateTextNode(ConvertToBase64(imgBuffer)));
-        //    //    //----------------------------------------------------------------------
-        //    //    root.AppendChild(glyphImgElem);
-        //    //    latestGenGlyphImage.GetImageBuffer();
-        //    //}
-        //    xmldoc.Save(filename);
-        //}
+                //if (g.character > 50)
+                //{
+                //    gElem.SetAttribute("example", g.character.ToString());
+                //}
+                //root.AppendChild(gElem);
+            }
+            //if (embededGlyphsImage)
+            //{
+            //    XmlElement glyphImgElem = xmldoc.CreateElement("msdf_img");
+            //    glyphImgElem.SetAttribute("w", latestGenGlyphImage.Width.ToString());
+            //    glyphImgElem.SetAttribute("h", latestGenGlyphImage.Height.ToString());
+            //    int[] imgBuffer = latestGenGlyphImage.GetImageBuffer();
+            //    glyphImgElem.SetAttribute("buff_len", (imgBuffer.Length * 4).ToString());
+            //    //----------------------------------------------------------------------
+            //    glyphImgElem.AppendChild(
+            //        xmldoc.CreateTextNode(ConvertToBase64(imgBuffer)));
+            //    //----------------------------------------------------------------------
+            //    root.AppendChild(glyphImgElem);
+            //    latestGenGlyphImage.GetImageBuffer();
+            //}
+            xmldoc.Save(filename);
+        }
 
 
-        ////read font info from xml document
-        //public SimpleFontAtlas LoadFontInfo(string filename)
-        //{
-        //    SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
-        //    XmlDocument xmldoc = new XmlDocument();
-        //    xmldoc.Load(filename);
-        //    //read
-        //    int total_W = 0;
-        //    int total_H = 0;
-        //    {
+        //read font info from xml document
+        public SimpleFontAtlas LoadFontInfo(string filename)
+        {
+            SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(filename);
+            //read
+            int total_W = 0;
+            int total_H = 0;
+            {
 
-        //        foreach (XmlElement xmlelem in xmldoc.GetElementsByTagName("total_img"))
-        //        {
-        //            simpleFontAtlas.Width = total_W = int.Parse(xmlelem.GetAttribute("w"));
-        //            simpleFontAtlas.Height = total_H = int.Parse(xmlelem.GetAttribute("h"));
-        //            //only 1...
+                foreach (XmlElement xmlelem in xmldoc.GetElementsByTagName("total_img"))
+                {
+                    simpleFontAtlas.Width = total_W = int.Parse(xmlelem.GetAttribute("w"));
+                    simpleFontAtlas.Height = total_H = int.Parse(xmlelem.GetAttribute("h"));
+                    //only 1...
 
-        //            break;
-        //        }
-        //    }
-        //    foreach (XmlElement glyphElem in xmldoc.GetElementsByTagName("glyph"))
-        //    {
-        //        //read
-        //        string unicodeHex = glyphElem.GetAttribute("uc");
-        //        int codepoint = int.Parse(glyphElem.GetAttribute("c"));
-        //        char c = (char)int.Parse(unicodeHex.Substring(2), System.Globalization.NumberStyles.HexNumber);
-        //        Rectangle area = ParseRect(glyphElem.GetAttribute("ltwh"));
-        //        var glyphData = new TextureFontGlyphData();
-        //        area.Y += area.Height;//*** 
-        //        glyphData.Rect = area;
-        //        float[] borderXY = ParseFloatArray(glyphElem.GetAttribute("borderXY"));
-        //        float[] matrix = ParseFloatArray(glyphElem.GetAttribute("mat"));
+                    break;
+                }
+            }
+            foreach (XmlElement glyphElem in xmldoc.GetElementsByTagName("glyph"))
+            {
+                //read
+                string unicodeHex = glyphElem.GetAttribute("uc");
+                int codepoint = int.Parse(glyphElem.GetAttribute("c"));
+                char c = (char)int.Parse(unicodeHex.Substring(2), System.Globalization.NumberStyles.HexNumber);
+                Rectangle area = ParseRect(glyphElem.GetAttribute("ltwh"));
+                var glyphData = new TextureFontGlyphData();
+                area.Y += area.Height;//*** 
+                glyphData.Rect = area;
+                float[] borderXY = ParseFloatArray(glyphElem.GetAttribute("borderXY"));
+                float[] matrix = ParseFloatArray(glyphElem.GetAttribute("mat"));
 
-        //        glyphData.BorderX = borderXY[0];
-        //        glyphData.BorderY = borderXY[1];
+                glyphData.BorderX = borderXY[0];
+                glyphData.BorderY = borderXY[1];
 
-        //        glyphData.AdvanceX = matrix[0];
-        //        glyphData.AdvanceY = matrix[1];
-        //        glyphData.BBoxXMin = matrix[2];
-        //        glyphData.BBoxXMax = matrix[3];
-        //        glyphData.BBoxYMin = matrix[4];
-        //        glyphData.BBoxYMax = matrix[5];
-        //        glyphData.ImgWidth = matrix[6];
-        //        glyphData.ImgHeight = matrix[7];
-        //        glyphData.HAdvance = matrix[8];
-        //        glyphData.HBearingX = matrix[9];
-        //        glyphData.HBearingY = matrix[10];
-        //        glyphData.VAdvance = matrix[11];
-        //        glyphData.VBearingX = matrix[12];
-        //        glyphData.VBearingY = matrix[13];
-        //        //--------------- 
-        //        simpleFontAtlas.AddGlyph(codepoint, glyphData);
-        //    }
-        //    return simpleFontAtlas;
-        //}
+                glyphData.AdvanceX = matrix[0];
+                glyphData.AdvanceY = matrix[1];
+                glyphData.BBoxXMin = matrix[2];
+                glyphData.BBoxXMax = matrix[3];
+                glyphData.BBoxYMin = matrix[4];
+                glyphData.BBoxYMax = matrix[5];
+                glyphData.ImgWidth = matrix[6];
+                glyphData.ImgHeight = matrix[7];
+                glyphData.HAdvance = matrix[8];
+                glyphData.HBearingX = matrix[9];
+                glyphData.HBearingY = matrix[10];
+                glyphData.VAdvance = matrix[11];
+                glyphData.VBearingX = matrix[12];
+                glyphData.VBearingY = matrix[13];
+                //--------------- 
+                simpleFontAtlas.AddGlyph(codepoint, glyphData);
+            }
+            return simpleFontAtlas;
+        }
 
         static float[] ParseFloatArray(string str)
         {
