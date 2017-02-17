@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 
 using Typography.OpenType;
+using Typography.Rendering;
 using PixelFarm.Agg.VertexSource;
 
 namespace PixelFarm.Agg
 {
     //this is PixelFarm version ***
     //render with MiniAgg
-
-
+     
 
     public class GlyphPathBuilderVxs : GlyphPathBuilderBase
     {

@@ -34,21 +34,14 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FontAtlas\BinPacker.cs" />
-    <Compile Include="FontAtlas\SimpleFontAtlas.cs" />
     <Compile Include="GlyphAnalysis.cs" />
     <Compile Include="GlyphFitOutline.cs" />
-    <Compile Include="GlyphPathBuilderVxs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm.MiniAgg.csproj">
-      <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
-      <Name>PixelFarm.MiniAgg</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj">
       <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
@@ -57,10 +50,6 @@
     <ProjectReference Include="..\Typography.OpenType\N20\PixelFarm.OpenType\Typography.OpenType.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenType</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Typography.MsdfGen\Typography.MsdfGen.csproj">
-      <Project>{8f69ab8d-174a-4912-9328-cae8eda5564b}</Project>
-      <Name>Typography.MsdfGen</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

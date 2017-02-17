@@ -45,13 +45,17 @@
     <Compile Include="..\win32utils\NativeWin32MemoryDc.cs">
       <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
+    <Compile Include="FontAtlas\BinPacker.cs" />
+    <Compile Include="FontAtlas\SimpleFontAtlas.cs" />
+    <Compile Include="FontAtlas\SimpleFontAtlasBuilder2.cs" />
+    <Compile Include="GlyphPathBuilderVxs.cs" />
     <Compile Include="InstalledFontCollection.cs" />
     <Compile Include="NOpenTypeFonts\ManagedShapingService.cs" />
     <Compile Include="NOpenTypeFonts\NOpenTypeFont.cs" />
     <Compile Include="NOpenTypeFonts\NOpenTypeFontLoader.cs" />
-    <Compile Include="FontAtlas\SimpleFontAtlasBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers.cs" />
+    <Compile Include="SimpleFontAtlasBuilder.cs" />
     <Compile Include="Win32Impl.cs" />
     <Compile Include="WinGdiFont.cs" />
   </ItemGroup>
@@ -64,6 +68,10 @@
       <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
       <Name>PixelFarm.Triangulation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Typography\Typography.FontProvider\Typography.FontProvider.csproj">
+      <Project>{b431b5f6-c296-4a3e-a1aa-8c6ea5711374}</Project>
+      <Name>Typography.FontProvider</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Typography\Typography.OpenType\N20\PixelFarm.OpenType\Typography.OpenType.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenType</Name>
@@ -73,6 +81,7 @@
       <Name>Typography.Rendering</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
