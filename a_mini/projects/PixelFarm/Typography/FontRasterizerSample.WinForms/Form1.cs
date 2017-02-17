@@ -1290,6 +1290,7 @@ namespace SampleWinForms
                     bmp.UnlockBits(bmpdata);
                     bmp.Save("d:\\WImageTest\\a_total.png");
                 }
+                atlasBuilder.SaveFontInfo("d:\\WImageTest\\a_info.xml");
             }
         }
     }

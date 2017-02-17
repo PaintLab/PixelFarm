@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing; 
 using PixelFarm.Agg;
 using System.Xml;
-
+using PixelFarm.Drawing.Fonts;
 namespace Typography.Rendering
 {
     public class GlyphImage2
@@ -54,10 +54,13 @@ namespace Typography.Rendering
 
     class CacheGlyph
     {
+        public int borderX;
+        public int borderY;
         public ActualImage img;
         public Rectangle area;
         public char character;
         public int codePoint;
+        public GlyphMatrix2 glyphMatrix;
     }
     public class SimpleFontAtlasBuilder2
     {
@@ -169,35 +172,35 @@ namespace Typography.Rendering
 
             foreach (CacheGlyph g in glyphs.Values)
             {
-                //XmlElement gElem = xmldoc.CreateElement("glyph");
-                ////convert char to hex
-                //string unicode = ("0x" + ((int)g.character).ToString("X"));//code point
-                //Rectangle area = g.area;
-                //gElem.SetAttribute("c", g.codePoint.ToString());
-                //gElem.SetAttribute("uc", unicode);//unicode char
-                //gElem.SetAttribute("ltwh",
-                //    area.Left + " " + area.Top + " " + area.Width + " " + area.Height
-                //    );
-                //gElem.SetAttribute("borderXY",
-                //    g.glyphImage.BorderXY + " " + g.glyphImage.BorderXY
-                //    );
-                //var mat = g.fontGlyph.glyphMatrix;
-                //gElem.SetAttribute("mat",
-                //    mat.advanceX + " " + mat.advanceY + " " +
-                //    mat.bboxXmin + " " + mat.bboxXmax + " " +
-                //    mat.bboxYmin + " " + mat.bboxYmax + " " +
-                //    mat.img_width + " " + mat.img_height + " " +
-                //    mat.img_horiAdvance + " " + mat.img_horiBearingX + " " +
-                //    mat.img_horiBearingY + " " +
-                //    //-----------------------------
-                //    mat.img_vertAdvance + " " +
-                //    mat.img_vertBearingX + " " + mat.img_vertBearingY);
+                XmlElement gElem = xmldoc.CreateElement("glyph");
+                //convert char to hex
+                string unicode = ("0x" + ((int)g.character).ToString("X"));//code point
+                Rectangle area = g.area;
+                gElem.SetAttribute("c", g.codePoint.ToString());
+                gElem.SetAttribute("uc", unicode);//unicode char
+                gElem.SetAttribute("ltwh",
+                    area.Left + " " + area.Top + " " + area.Width + " " + area.Height
+                    );
+                gElem.SetAttribute("borderXY",
+                    g.borderX + " " + g.borderY
+                    );
+                var mat = g.glyphMatrix;
+                gElem.SetAttribute("mat",
+                    mat.advanceX + " " + mat.advanceY + " " +
+                    mat.bboxXmin + " " + mat.bboxXmax + " " +
+                    mat.bboxYmin + " " + mat.bboxYmax + " " +
+                    mat.img_width + " " + mat.img_height + " " +
+                    mat.img_horiAdvance + " " + mat.img_horiBearingX + " " +
+                    mat.img_horiBearingY + " " +
+                    //-----------------------------
+                    mat.img_vertAdvance + " " +
+                    mat.img_vertBearingX + " " + mat.img_vertBearingY);
 
-                //if (g.character > 50)
-                //{
-                //    gElem.SetAttribute("example", g.character.ToString());
-                //}
-                //root.AppendChild(gElem);
+                if (g.character > 50)
+                {
+                    gElem.SetAttribute("example", g.character.ToString());
+                }
+                root.AppendChild(gElem);
             }
             //if (embededGlyphsImage)
             //{
