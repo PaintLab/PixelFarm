@@ -95,10 +95,6 @@
       <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
       <Name>PixelFarm.MiniAgg</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.FontProvider\Typography.FontProvider.csproj">
-      <Project>{b431b5f6-c296-4a3e-a1aa-8c6ea5711374}</Project>
-      <Name>Typography.FontProvider</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Typography.MsdfGen\Typography.MsdfGen.csproj">
       <Project>{8f69ab8d-174a-4912-9328-cae8eda5564b}</Project>
       <Name>Typography.MsdfGen</Name>
