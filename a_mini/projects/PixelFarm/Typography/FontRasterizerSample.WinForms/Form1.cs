@@ -7,13 +7,12 @@ using System.IO;
 using System.Windows.Forms;
 
 using Typography.OpenType;
-using Typography.OpenType.Tables;
-using Typography.OpenType.Extensions;
+using Typography.Rendering;
 
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
 using Typography.TextLayout;
-
+using PixelFarm.Drawing.Fonts;
 
 namespace SampleWinForms
 {
@@ -31,15 +30,27 @@ namespace SampleWinForms
             InitializeComponent();
             this.Load += new EventHandler(Form1_Load);
 
+            //----------
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithMiniAgg);
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithPlugableGlyphRasterizer);
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithTextPrinterAndMiniAgg);
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithMsdfGen);
-            cmbRenderChoices.SelectedIndex = 0;
-            cmbRenderChoices.SelectedIndexChanged += new EventHandler(cmbRenderChoices_SelectedIndexChanged);
-
-            this.txtInputChar.Text = "i";
-
+            cmbRenderChoices.SelectedIndex = 2;
+            cmbRenderChoices.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
+            //----------
+            cmbPositionTech.Items.Add(PositionTecnhique.OpenType);
+            cmbPositionTech.Items.Add(PositionTecnhique.Kerning);
+            cmbPositionTech.Items.Add(PositionTecnhique.None);
+            cmbPositionTech.SelectedIndex = 0;
+            cmbPositionTech.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
+            //----------
+            cmbHintTechnique.Items.Add(HintTechnique.None);
+            cmbHintTechnique.Items.Add(HintTechnique.TrueTypeInstruction);
+            cmbHintTechnique.Items.Add(HintTechnique.TrueTypeInstruction_VerticalOnly);
+            cmbHintTechnique.Items.Add(HintTechnique.CustomAutoFit);
+            cmbHintTechnique.SelectedIndex = 0;
+            cmbHintTechnique.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
+            //----------
             lstFontSizes.Items.AddRange(
                 new object[]{
                     8, 9,
@@ -50,8 +61,21 @@ namespace SampleWinForms
                     18,20,22,24,26,28,36,48,72,240,300,360
                 });
             this.txtGridSize.KeyDown += TxtGridSize_KeyDown;
+
+            //----------------
+            string inputstr = "fi";
+            //string inputstr = "ก่นกิ่น";
+            //string inputstr = "ญญู";
+            //string inputstr = "ป่า"; //for gpos test 
+            //----------------
+            this.txtInputChar.Text = inputstr;
+            this.chkFillBackground.Checked = true;
         }
 
+        private void CmbPositionTech_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateRenderOutput();
+        }
 
         enum RenderChoice
         {
@@ -71,7 +95,11 @@ namespace SampleWinForms
 
         private void button1_Click(object sender, EventArgs e)
         {
+            UpdateRenderOutput();
+        }
 
+        void UpdateRenderOutput()
+        {
             if (g == null)
             {
                 destImg = new ActualImage(400, 300, PixelFormat.ARGB32);
@@ -81,8 +109,9 @@ namespace SampleWinForms
                 g = this.CreateGraphics();
             }
             //ReadAndRender(@"..\..\segoeui.ttf");
-            ReadAndRender(@"..\..\tahoma.ttf");
-            // ReadAndRender(@"..\..\cambriaz.ttf");
+            //ReadAndRender(@"..\..\tahoma.ttf");
+            //ReadAndRender(@"..\..\cambriaz.ttf");
+            ReadAndRender(@"..\..\pala.ttf");
             //ReadAndRender(@"..\..\CompositeMS2.ttf");
         }
 
@@ -91,6 +120,7 @@ namespace SampleWinForms
         {
             if (string.IsNullOrEmpty(this.txtInputChar.Text))
             {
+                p.Clear(PixelFarm.Drawing.Color.White);
                 return;
             }
             var reader = new OpenTypeReader();
@@ -101,23 +131,6 @@ namespace SampleWinForms
             {
                 //1. read typeface from font file
                 Typeface typeFace = reader.Read(fs);
-
-#if DEBUG
-                //-----
-                //about typeface 
-                //short ascender = typeFace.Ascender;
-                //short descender = typeFace.Descender;
-                //short lineGap = typeFace.LineGap;
-
-                //NOpenType.Tables.UnicodeLangBits test = NOpenType.Tables.UnicodeLangBits.Thai;
-                //NOpenType.Tables.UnicodeRangeInfo rangeInfo = test.ToUnicodeRangeInfo();
-                //bool doseSupport = typeFace.DoseSupportUnicode(test); 
-                ////-----
-                ////string inputstr = "ก่นกิ่น";
-                //string inputstr = "ญญู";
-                //List<int> outputGlyphIndice = new List<int>();
-                //typeFace.Lookup(inputstr.ToCharArray(), outputGlyphIndice);
-#endif
 
                 RenderChoice renderChoice = (RenderChoice)this.cmbRenderChoices.SelectedItem;
                 switch (renderChoice)
@@ -137,7 +150,6 @@ namespace SampleWinForms
                         break;
                     default:
                         throw new NotSupportedException();
-
                 }
             }
         }
@@ -236,10 +248,26 @@ namespace SampleWinForms
 
         void RenderWithMiniAgg(Typeface typeface, char testChar, float sizeInPoint)
         {
-            //2. glyph-to-vxs builder
+            //----------------------------------------------------
             var builder = new GlyphPathBuilderVxs(typeface);
-            builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
-            builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
+            var hintTech = (HintTechnique)cmbHintTechnique.SelectedItem;
+            builder.UseTrueTypeInterpreter = false;//reset
+            builder.UseVerticalHinting = false;//reset
+            switch (hintTech)
+            {
+                case HintTechnique.TrueTypeInstruction:
+                    builder.UseTrueTypeInterpreter = true;
+                    break;
+                case HintTechnique.TrueTypeInstruction_VerticalOnly:
+                    builder.UseTrueTypeInterpreter = true;
+                    builder.UseVerticalHinting = true;
+                    break;
+                case HintTechnique.CustomAutoFit:
+                    //custom agg autofit 
+                    break;
+            }
+            //----------------------------------------------------
+
             builder.Build(testChar, sizeInPoint);
             VertexStore vxs = builder.GetVxs();
             p.UseSubPixelRendering = chkLcdTechnique.Checked;
@@ -285,7 +313,7 @@ namespace SampleWinForms
             }
             float scale = builder.GetPixelScale();
 
-            PixelFarm.Agg.Typography.GlyphFitOutline glyphOutline = null;
+            GlyphFitOutline glyphOutline = null;
             {
                 //draw for debug ...
                 //draw control point
@@ -338,10 +366,25 @@ namespace SampleWinForms
 
         void RenderWithMsdfImg(Typeface typeface, char testChar, float sizeInPoint)
         {
-            //2. glyph-to-vxs builder
+            //----------------------------------------------------
             var builder = new GlyphPathBuilderVxs(typeface);
-            builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
-            builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
+            var hintTech = (HintTechnique)cmbHintTechnique.SelectedItem;
+            builder.UseTrueTypeInterpreter = false;//reset
+            builder.UseVerticalHinting = false;//reset
+            switch (hintTech)
+            {
+                case HintTechnique.TrueTypeInstruction:
+                    builder.UseTrueTypeInterpreter = true;
+                    break;
+                case HintTechnique.TrueTypeInstruction_VerticalOnly:
+                    builder.UseTrueTypeInterpreter = true;
+                    builder.UseVerticalHinting = true;
+                    break;
+                case HintTechnique.CustomAutoFit:
+                    //custom agg autofit 
+                    break;
+            }
+            //----------------------------------------------------
             builder.Build(testChar, sizeInPoint);
             VertexStore vxs = builder.GetVxs();
             p.UseSubPixelRendering = chkLcdTechnique.Checked;
@@ -364,7 +407,7 @@ namespace SampleWinForms
                 //draw each contour point
             }
             float scale = builder.GetPixelScale();
-            PixelFarm.Agg.Typography.GlyphFitOutline glyphOutline = null;
+            GlyphFitOutline glyphOutline = null;
             {
                 //draw for debug ...
                 //draw control point
@@ -416,6 +459,7 @@ namespace SampleWinForms
             g.Clear(Color.White);
             g.DrawImage(winBmp, new Point(30, 20));
         }
+
         static GlyphContour CreateFitContourVxs2(GlyphContour contour, float pixelScale, bool x_axis, bool y_axis)
         {
             GlyphContour newc = new GlyphContour();
@@ -492,7 +536,7 @@ namespace SampleWinForms
                 {
                     float new_x = RoundToNearestHorizontalSide((float)p_x);
                     //adjust right-side vertical edge
-                    PixelFarm.Agg.Typography.EdgeLine rightside = p.GetMatchingVerticalEdge();
+                    EdgeLine rightside = p.GetMatchingVerticalEdge();
                     if (rightside != null)
                     {
 
@@ -601,7 +645,7 @@ namespace SampleWinForms
                 y += sqSize;
             }
         }
-        static void DrawEdge(AggCanvasPainter p, PixelFarm.Agg.Typography.EdgeLine edge, float scale)
+        static void DrawEdge(AggCanvasPainter p, EdgeLine edge, float scale)
         {
             if (edge.IsOutside)
             {
@@ -611,7 +655,7 @@ namespace SampleWinForms
                     default:
                         p.StrokeColor = PixelFarm.Drawing.Color.Green;
                         break;
-                    case PixelFarm.Agg.Typography.LineSlopeKind.Vertical:
+                    case LineSlopeKind.Vertical:
                         if (edge.IsLeftSide)
                         {
                             p.StrokeColor = PixelFarm.Drawing.Color.Blue;
@@ -621,7 +665,7 @@ namespace SampleWinForms
                             p.StrokeColor = PixelFarm.Drawing.Color.LightGray;
                         }
                         break;
-                    case PixelFarm.Agg.Typography.LineSlopeKind.Horizontal:
+                    case LineSlopeKind.Horizontal:
                         if (edge.IsUpper)
                         {
                             p.StrokeColor = PixelFarm.Drawing.Color.Red;
@@ -640,10 +684,10 @@ namespace SampleWinForms
                     default:
                         p.StrokeColor = PixelFarm.Drawing.Color.LightGray;
                         break;
-                    case PixelFarm.Agg.Typography.LineSlopeKind.Vertical:
+                    case LineSlopeKind.Vertical:
                         p.StrokeColor = PixelFarm.Drawing.Color.Blue;
                         break;
-                    case PixelFarm.Agg.Typography.LineSlopeKind.Horizontal:
+                    case LineSlopeKind.Horizontal:
                         p.StrokeColor = PixelFarm.Drawing.Color.Yellow;
                         break;
                 }
@@ -651,7 +695,7 @@ namespace SampleWinForms
             p.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
         }
 
-        static void AssignPointEdgeInvolvement(PixelFarm.Agg.Typography.EdgeLine edge)
+        static void AssignPointEdgeInvolvement(EdgeLine edge)
         {
             if (!edge.IsOutside)
             {
@@ -661,7 +705,7 @@ namespace SampleWinForms
             switch (edge.SlopKind)
             {
 
-                case PixelFarm.Agg.Typography.LineSlopeKind.Horizontal:
+                case LineSlopeKind.Horizontal:
                     {
                         //horiontal edge
                         //must check if this is upper horizontal 
@@ -689,7 +733,7 @@ namespace SampleWinForms
                         }
                     }
                     break;
-                case PixelFarm.Agg.Typography.LineSlopeKind.Vertical:
+                case LineSlopeKind.Vertical:
                     {
                         //both p and q of this edge is part of vertical edge 
                         var p = edge.p.userData as GlyphPoint2D;
@@ -710,7 +754,7 @@ namespace SampleWinForms
             }
 
         }
-        PixelFarm.Agg.Typography.GlyphFitOutline TessWithPolyTri(List<GlyphContour> contours, float pixelScale)
+        GlyphFitOutline TessWithPolyTri(List<GlyphContour> contours, float pixelScale)
         {
             List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
             int cntCount = contours.Count;
@@ -739,18 +783,18 @@ namespace SampleWinForms
 
             //------------------------------------------
             Poly2Tri.P2T.Triangulate(polygon); //that poly is triangulated 
-            PixelFarm.Agg.Typography.GlyphFitOutline glyphFitOutline = new PixelFarm.Agg.Typography.GlyphFitOutline(polygon);
+            GlyphFitOutline glyphFitOutline = new GlyphFitOutline(polygon);
             glyphFitOutline.Analyze();
             //------------------------------------------
 
-            List<PixelFarm.Agg.Typography.GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
+            List<GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
             int triangleCount = triAngles.Count;
 
             bool drawBone = this.chkDrawBone.Checked;
             for (int i = 0; i < triangleCount; ++i)
             {
                 //---------------
-                PixelFarm.Agg.Typography.GlyphTriangle tri = triAngles[i];
+                GlyphTriangle tri = triAngles[i];
                 AssignPointEdgeInvolvement(tri.e0);
                 AssignPointEdgeInvolvement(tri.e1);
                 AssignPointEdgeInvolvement(tri.e2);
@@ -776,10 +820,10 @@ namespace SampleWinForms
         }
 
 #if DEBUG
-        void debugDrawTriangulatedGlyph(PixelFarm.Agg.Typography.GlyphFitOutline glyphFitOutline, float pixelScale)
+        void debugDrawTriangulatedGlyph(GlyphFitOutline glyphFitOutline, float pixelScale)
         {
             p.StrokeColor = PixelFarm.Drawing.Color.Magenta;
-            List<PixelFarm.Agg.Typography.GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
+            List<GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
             int j = triAngles.Count;
             //
             double prev_cx = 0, prev_cy = 0;
@@ -789,10 +833,10 @@ namespace SampleWinForms
             for (int i = 0; i < j; ++i)
             {
                 //---------------
-                PixelFarm.Agg.Typography.GlyphTriangle tri = triAngles[i];
-                PixelFarm.Agg.Typography.EdgeLine e0 = tri.e0;
-                PixelFarm.Agg.Typography.EdgeLine e1 = tri.e1;
-                PixelFarm.Agg.Typography.EdgeLine e2 = tri.e2;
+                GlyphTriangle tri = triAngles[i];
+                EdgeLine e0 = tri.e0;
+                EdgeLine e1 = tri.e1;
+                EdgeLine e2 = tri.e2;
                 //---------------
                 //draw each triangles
                 DrawEdge(p, e0, pixelScale);
@@ -829,11 +873,11 @@ namespace SampleWinForms
             //draw bone 
             if (drawBone)
             {
-                List<PixelFarm.Agg.Typography.GlyphBone> bones = glyphFitOutline.dbugGetBones();
+                List<GlyphBone> bones = glyphFitOutline.dbugGetBones();
                 j = bones.Count;
                 for (int i = 0; i < j; ++i)
                 {
-                    PixelFarm.Agg.Typography.GlyphBone b = bones[i];
+                    GlyphBone b = bones[i];
                     if (i == 0)
                     {
                         //start mark
@@ -1015,9 +1059,26 @@ namespace SampleWinForms
             g.TranslateTransform(0.0F, -(float)300);// Translate the drawing area accordingly  
 
             //2. glyph to gdi path
-            var gdiGlyphRasterizer = new  GDIGlyphRasterizer();
+            var gdiGlyphRasterizer = new GDIGlyphRasterizer();
             var builder = new GlyphPathBuilder(typeface, gdiGlyphRasterizer);
-            builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
+
+            var hintTech = (HintTechnique)cmbHintTechnique.SelectedItem;
+            builder.UseTrueTypeInterpreter = false;//reset
+            builder.UseVerticalHinting = false;//reset
+            switch (hintTech)
+            {
+                case HintTechnique.TrueTypeInstruction:
+                    builder.UseTrueTypeInterpreter = true;
+                    break;
+                case HintTechnique.TrueTypeInstruction_VerticalOnly:
+                    builder.UseTrueTypeInterpreter = true;
+                    builder.UseVerticalHinting = true;
+                    break;
+                case HintTechnique.CustomAutoFit:
+                    //custom agg autofit 
+                    break;
+            }
+            //----------------------------------------------------
             builder.Build(testChar, sizeInPoint);
 
 
@@ -1038,12 +1099,15 @@ namespace SampleWinForms
         {
             //1. 
             TextPrinter printer = new TextPrinter();
-            printer.EnableKerning = this.chkKern.Checked;
-            printer.EnableTrueTypeHint = this.chkTrueTypeHint.Checked;
-            printer.UseAggVerticalHinting = this.chkVerticalHinting.Checked;
 
+            printer.ScriptLang = ScriptLangs.Latin;
+            //
+            printer.PositionTechnique = (PositionTecnhique)cmbPositionTech.SelectedItem;
+            //printer.EnableTrueTypeHint = this.chkTrueTypeHint.Checked;
+            //printer.UseAggVerticalHinting = this.chkVerticalHinting.Checked;
+            //
             int len = str.Length;
-
+            //
             List<GlyphPlan> glyphPlanList = new List<GlyphPlan>(len);
             printer.Print(typeface, sizeInPoint, str, glyphPlanList);
             //--------------------------
@@ -1113,38 +1177,35 @@ namespace SampleWinForms
 
         private void txtInputChar_TextChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
-        void cmbRenderChoices_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            button1_Click(this, EventArgs.Empty);
-        }
+
 
         private void lstFontSizes_SelectedIndexChanged(object sender, EventArgs e)
         {
             //new font size
             fontSizeInPoint = (int)lstFontSizes.SelectedItem;
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
 
         private void chkKern_CheckedChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
 
         private void chkTrueTypeHint_CheckedChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
 
         private void chkShowTess_CheckedChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
 
         private void chkShowGrid_CheckedChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
 
         int _gridSize = 5;//default
@@ -1167,44 +1228,131 @@ namespace SampleWinForms
                 }
                 this._gridSize = result;
                 this.txtGridSize.Text = _gridSize.ToString();
-                button1_Click(this, EventArgs.Empty);
+                UpdateRenderOutput();
             }
 
         }
 
         private void chkVerticalHinting_CheckedChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
 
         private void chkMasterOutlineAnalysis_CheckedChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
 
         private void chkDrawBone_CheckedChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
 
         private void chkYGridFitting_CheckedChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
 
         private void chkXGridFitting_CheckedChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
 
         private void chkFillBackground_CheckedChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
         }
 
         private void chkLcdTechnique_CheckedChanged(object sender, EventArgs e)
         {
-            button1_Click(this, EventArgs.Empty);
+            UpdateRenderOutput();
+        }
+
+        private void cmdBuildMsdfTexture_Click(object sender, EventArgs e)
+        {
+            string sampleFontFile = @"..\..\tahoma.ttf";
+            CreateSampleMsdfTextureFont(
+                sampleFontFile,
+                18,
+                0,
+                255,
+                "d:\\WImageTest\\sample_msdf.png");
+
+        }
+        static void CreateSampleMsdfTextureFont(string fontfile, float sizeInPoint, ushort startGlyphIndex, ushort endGlyphIndex, string outputFile)
+        {
+            //sample
+            var reader = new OpenTypeReader();
+            using (var fs = new FileStream(fontfile, FileMode.Open))
+            {
+                //1. read typeface from font file
+                Typeface typeface = reader.Read(fs);
+
+                //sample: create sample msdf texture 
+                //-------------------------------------------------------------
+                var builder = new GlyphPathBuilderVxs(typeface);
+                //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
+                //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
+                //-------------------------------------------------------------
+                var atlasBuilder = new SimpleFontAtlasBuilder2();
+                for (ushort n = startGlyphIndex; n <= endGlyphIndex; ++n)
+                {
+                    builder.BuildFromGlyphIndex(n, sizeInPoint);
+                    float scale = builder.GetPixelScale();
+                    scale = 1;
+                    List<GlyphContour> contours = builder.GetContours();
+                    int j = contours.Count;
+                    List<GlyphContour> newFitContours = new List<GlyphContour>();
+                    for (int i = 0; i < j; ++i)
+                    {
+                        newFitContours.Add(CreateFitContourVxs2(contours[i], scale, false, false));
+                    }
+
+                    Msdfgen.Shape shape = CreateMsdfShape(newFitContours);
+                    shape.InverseYAxis = true;
+                    double left, bottom, right, top;
+                    shape.findBounds(out left, out bottom, out right, out top);
+
+                    Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp((int)Math.Ceiling((right - left)), (int)Math.Ceiling((top - bottom)));
+                    Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
+                    Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(), -1);
+                    //-----------------------------------
+                    int[] buffer = Msdfgen.MsdfGenerator.ConvertToIntBmp(frgbBmp);
+                    int w = frgbBmp.Width;
+                    int h = frgbBmp.Height;
+                    if (w < 5)
+                    {
+                        w = 5;
+                    }
+                    if (h < 5)
+                    {
+                        h = 5;
+                    }
+                    ActualImage actualImg = ActualImage.CreateFromBuffer(w, h, PixelFormat.ARGB32, buffer);
+                    atlasBuilder.AddGlyph((int)n, actualImg);
+
+                    //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                    //{
+                    //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    //    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                    //    bmp.UnlockBits(bmpdata);
+                    //    bmp.Save("d:\\WImageTest\\a001_xn2_" + n + ".png");
+                    //}
+                }
+
+                var glyphImg2 = atlasBuilder.BuildSingleImage();
+                using (Bitmap bmp = new Bitmap(glyphImg2.Width, glyphImg2.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                {
+                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, glyphImg2.Width, glyphImg2.Height),
+                        System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    int[] intBuffer = glyphImg2.GetImageBuffer();
+
+                    System.Runtime.InteropServices.Marshal.Copy(intBuffer, 0, bmpdata.Scan0, intBuffer.Length);
+                    bmp.UnlockBits(bmpdata);
+                    bmp.Save("d:\\WImageTest\\a_total.png");
+                }
+                atlasBuilder.SaveFontInfo("d:\\WImageTest\\a_info.xml");
+            }
         }
     }
 }

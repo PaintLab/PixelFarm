@@ -571,7 +571,7 @@ namespace BuildTextureFonts
             int j = fontChars.Length;
 
 
-            SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
+            var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
 
 
             for (int i = 0; i < j; ++i)
@@ -622,7 +622,7 @@ namespace BuildTextureFonts
         private void button4_Click(object sender, EventArgs e)
         {
             string fontfilename = "d:\\WImageTest\\a_total.xml";
-            SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
+            var  atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
             SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
 
             using (Bitmap totalImg = new Bitmap("d:\\WImageTest\\a_total.png"))
@@ -639,7 +639,7 @@ namespace BuildTextureFonts
 
 
         static void BuildFontGlyphs(PixelFarm.Drawing.RequestFont font,
-            SimpleFontAtlasBuilder atlasBuilder,
+            Typography.Rendering.SimpleFontAtlasBuilder atlasBuilder,
             int startAt, int endAt)
         {
             //font glyph for specific font face
@@ -668,7 +668,7 @@ namespace BuildTextureFonts
                 //}
             }
         }
-        static void BuildFontGlyphsByIndex(ActualFont nativefont, SimpleFontAtlasBuilder atlasBuilder, int startAtGlyphIndex, int endAtGlyphIndex)
+        static void BuildFontGlyphsByIndex(ActualFont nativefont, Typography.Rendering. SimpleFontAtlasBuilder atlasBuilder, int startAtGlyphIndex, int endAtGlyphIndex)
         {
             //font glyph for specific font face
 
@@ -693,7 +693,7 @@ namespace BuildTextureFonts
                 //}
             }
         }
-        static void BuildFontGlyph(ActualFont nativefont, SimpleFontAtlasBuilder atlasBuilder, char c)
+        static void BuildFontGlyph(ActualFont nativefont, Typography.Rendering.SimpleFontAtlasBuilder atlasBuilder, char c)
         {
             //font glyph for specific font face
 
@@ -726,7 +726,7 @@ namespace BuildTextureFonts
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
             ActualFont font = GetActualFont(fontfile, 18);// nativeFontStore.LoadFont(fontName, fontfile, 28);
             //2. get glyph 
-            SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
+            var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
             //for (int i = 0; i < 256; ++i)
             //BuildFontGlyphsByIndex(font, atlasBuilder, 0, 255);
             //BuildFontGlyphs(font, atlasBuilder, 0x0e00, 0x0e5b);
@@ -774,7 +774,7 @@ namespace BuildTextureFonts
             int[] glyphIndice = new int[] { 1076, 1127, 1164 };
             int j = glyphIndice.Length;
 
-            SimpleFontAtlasBuilder atlasBuilder = new SimpleFontAtlasBuilder();
+            var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
 
             for (int i = 0; i < j; ++i)
             {
