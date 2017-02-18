@@ -72,7 +72,7 @@
       <Project>{b431b5f6-c296-4a3e-a1aa-8c6ea5711374}</Project>
       <Name>Typography.FontProvider</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Typography\Typography.OpenType\N20\PixelFarm.OpenType\Typography.OpenType.csproj">
+    <ProjectReference Include="..\Typography\Typography.OpenType\N20\Typography.OpenType\Typography.OpenType.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenType</Name>
     </ProjectReference>

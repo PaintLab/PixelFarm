@@ -261,7 +261,7 @@
       <Project>{68F1DAF6-2B35-476E-B2F8-5EADBC823935}</Project>
       <Name>TypeMirror</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.OpenType\N20\PixelFarm.OpenType\Typography.OpenType.csproj">
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.OpenType\N20\Typography.OpenType\Typography.OpenType.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenType</Name>
     </ProjectReference>
