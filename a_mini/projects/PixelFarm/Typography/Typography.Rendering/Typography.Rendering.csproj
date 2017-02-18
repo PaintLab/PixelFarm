@@ -43,6 +43,10 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm.MiniAgg.csproj">
+      <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
+      <Name>PixelFarm.MiniAgg</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj">
       <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
       <Name>PixelFarm.Triangulation</Name>
