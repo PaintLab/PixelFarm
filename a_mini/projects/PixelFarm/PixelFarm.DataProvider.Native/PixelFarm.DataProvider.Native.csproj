@@ -48,10 +48,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Typography\Typography.OpenType\N20\Typography.OpenType\Typography.OpenType.csproj">
-      <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
-      <Name>Typography.OpenType</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj">
       <Project>{025E536D-53A6-4C5F-AED5-E21960C70763}</Project>
       <Name>PixelFarm.DataProvider.Managed</Name>
@@ -59,6 +55,10 @@
     <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
       <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
+      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
+      <Name>Typography.OpenFont</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
