@@ -168,7 +168,7 @@ namespace SampleWinForms
                 p.Clear(PixelFarm.Drawing.Color.White);
                 return;
             }
-            var reader = new OpenTypeReader();
+            var reader = new OpenFontReader();
             char testChar = txtInputChar.Text[0];//only 1 char 
             int resolution = 96;
 
@@ -1328,7 +1328,7 @@ namespace SampleWinForms
         static void CreateSampleMsdfTextureFont(string fontfile, float sizeInPoint, ushort startGlyphIndex, ushort endGlyphIndex, string outputFile)
         {
             //sample
-            var reader = new OpenTypeReader();
+            var reader = new OpenFontReader();
             using (var fs = new FileStream(fontfile, FileMode.Open))
             {
                 //1. read typeface from font file

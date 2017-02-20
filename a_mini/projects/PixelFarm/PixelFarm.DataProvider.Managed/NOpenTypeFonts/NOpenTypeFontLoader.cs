@@ -13,7 +13,7 @@ namespace PixelFarm.Drawing.Fonts
         public static FontFace LoadFont(string fontfile, string lang, HBDirection direction, int defaultScriptCode = 0)
         {
             //read font file
-            OpenTypeReader openTypeReader = new OpenTypeReader();
+            OpenFontReader openTypeReader = new OpenFontReader();
             Typeface typeface = null;
             using (FileStream fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read, FileShare.Read))
             {

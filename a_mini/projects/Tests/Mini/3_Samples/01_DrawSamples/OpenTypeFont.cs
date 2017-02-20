@@ -36,7 +36,7 @@ namespace PixelFarm.Agg.Sample_Draw
             string fontfile = collection.GetFont("tahoma", InstalledFontStyle.Regular).FontPath;
             //------------
 
-            var reader = new OpenTypeReader();
+            var reader = new OpenFontReader();
             this.FillBG = true;
             int size = 72;
             int resolution = 72;
