@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-using Typography.OpenType;
+using Typography.OpenFont;
 using Typography.Rendering;
 using PixelFarm.Agg.VertexSource;
 

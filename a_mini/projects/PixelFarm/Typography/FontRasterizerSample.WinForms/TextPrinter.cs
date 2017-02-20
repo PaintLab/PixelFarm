@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-2017, WinterDev
 
 using System.Collections.Generic;
-using Typography.OpenType;
+using Typography.OpenFont;
 using PixelFarm.Drawing.Fonts;
 using Typography.TextLayout;
 
@@ -37,7 +37,11 @@ namespace SampleWinForms
             get;
             set;
         }
-       
+        public bool EnableLigature
+        {
+            get { return _glyphLayout.EnableLigature; }
+            set { this._glyphLayout.EnableLigature = value; }
+        }
 
         public void Print(Typeface typeface, float size, string str, List<GlyphPlan> glyphPlanBuffer)
         {

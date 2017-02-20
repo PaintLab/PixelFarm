@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Typography.OpenType;
-using Typography.OpenType.Tables;
+using Typography.OpenFont;
+using Typography.OpenFont.Tables;
 using System.IO;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
