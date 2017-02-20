@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Typography.OpenType.Tables;
+using Typography.OpenFont.Tables;
 
 namespace PixelFarm.Drawing.Fonts
 {

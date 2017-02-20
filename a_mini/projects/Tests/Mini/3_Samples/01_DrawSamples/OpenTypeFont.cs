@@ -13,8 +13,8 @@ using System.IO;
 
 using Mini;
 using PixelFarm.Drawing.Fonts;
-using Typography.OpenType;
-using Typography.OpenType.Tables; //for read 
+using Typography.OpenFont;
+using Typography.OpenFont.Tables; //for read 
 
 namespace PixelFarm.Agg.Sample_Draw
 {
