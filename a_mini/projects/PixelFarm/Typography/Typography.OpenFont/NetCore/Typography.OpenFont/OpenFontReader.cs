@@ -126,7 +126,7 @@ namespace Typography.OpenFont
                     typeface.PrepProgramBuffer = propProgramTable.programBuffer;
                 }
                 //-------------------------
-                typeface.LoadOpenTypeLayoutInfo(
+                typeface.LoadOpenFontLayoutInfo(
                     gdef,
                     gsub,
                     gpos,

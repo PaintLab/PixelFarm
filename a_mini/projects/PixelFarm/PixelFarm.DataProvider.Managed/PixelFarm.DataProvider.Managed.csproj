@@ -48,8 +48,9 @@
     <Compile Include="FontAtlas\BinPacker.cs" />
     <Compile Include="FontAtlas\SimpleFontAtlas.cs" />
     <Compile Include="FontAtlas\SimpleFontAtlasBuilder2.cs" />
-    <Compile Include="GlyphPathBuilderVxs.cs" />
     <Compile Include="InstalledFontCollection.cs" />
+    <Compile Include="MyGlyphPathBuilder.cs" />
+    <Compile Include="NOpenTypeFonts\GlyphPathBuilderVxs.cs" />
     <Compile Include="NOpenTypeFonts\ManagedShapingService.cs" />
     <Compile Include="NOpenTypeFonts\NOpenTypeFont.cs" />
     <Compile Include="NOpenTypeFonts\NOpenTypeFontLoader.cs" />
