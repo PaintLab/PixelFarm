@@ -1,90 +1,43 @@
 ﻿//MIT, 2016-2017, WinterDev
 //----------------------------------- 
 
+using System;
 using System.Collections.Generic;
-using PixelFarm.Agg;
 using System.Xml;
-namespace PixelFarm.Drawing.Fonts
+
+using PixelFarm.Drawing;
+using PixelFarm.Drawing.Fonts;
+
+
+namespace Typography.Rendering
 {
-    class GlyphImage2
+    public class MySimpleFontAtlasBuilder
     {
-        int[] pixelBuffer;
-        public GlyphImage2(int w, int h)
+        Dictionary<int, GlyphData> glyphs = new Dictionary<int, GlyphData>();
+        GlyphImage latestGenGlyphImage;
+        public void AddGlyph(int codePoint, char c, FontGlyph fontGlyph, GlyphImage glyphImage)
         {
-            this.Width = w;
-            this.Height = h;
+            glyphs[codePoint] = new GlyphData(codePoint, c, fontGlyph, glyphImage);
         }
-        public RectangleF OriginalGlyphBounds
-        {
-            get;
-            set;
-        }
-        public int Width
-        {
-            get;
-            private set;
-        }
-        public int Height
-        {
-            get;
-            private set;
-        }
-        public bool IsBigEndian
-        {
-            get;
-            private set;
-        }
-        public int BorderXY
-        {
-            get;
-            set;
-        }
-        public int[] GetImageBuffer()
-        {
-            return pixelBuffer;
-        }
-        public void SetImageBuffer(int[] pixelBuffer, bool isBigEndian)
-        {
-            this.pixelBuffer = pixelBuffer;
-            this.IsBigEndian = isBigEndian;
-        }
-    }
 
-    class CacheGlyph
-    {
-        public int borderX;
-        public int borderY;
-        public ActualImage img;
-        public Rectangle area;
-        public char character;
-        public int codePoint;
-        public GlyphMatrix2 glyphMatrix;
-    }
-    class SimpleFontAtlasBuilder2
-    {
-        GlyphImage2 latestGenGlyphImage;
-        Dictionary<int, CacheGlyph> glyphs = new Dictionary<int, CacheGlyph>();
-        public void AddGlyph(int codePoint, ActualImage img)
+        public GlyphImage GetLatestGenGlyphImage()
         {
-            var glyphCache = new CacheGlyph();
-            glyphCache.codePoint = codePoint;
-            glyphCache.img = img;
-
-            glyphs[codePoint] = glyphCache;
+            return latestGenGlyphImage;
         }
-        public GlyphImage2 BuildSingleImage()
+
+        public GlyphImage BuildSingleImage()
         {
             //1. add to list 
-            var glyphList = new List<CacheGlyph>(glyphs.Count);
-            foreach (CacheGlyph glyphImg in glyphs.Values)
+            var glyphList = new List<GlyphData>(glyphs.Count);
+            foreach (GlyphData glyphData in glyphs.Values)
             {
                 //sort data
-                glyphList.Add(glyphImg);
+                glyphList.Add(glyphData);
             }
             //2. sort
             glyphList.Sort((a, b) =>
             {
-                return a.img.Width.CompareTo(b.img.Width);
+                return a.glyphImage.Width.CompareTo(b.glyphImage.Width);
             });
             //3. layout
 
@@ -94,53 +47,77 @@ namespace PixelFarm.Drawing.Fonts
             int currentX = 0;
             for (int i = glyphList.Count - 1; i >= 0; --i)
             {
-                CacheGlyph g = glyphList[i];
-                if (g.img.Height > maxRowHeight)
+                GlyphData g = glyphList[i];
+                if (g.glyphImage.Height > maxRowHeight)
                 {
-                    maxRowHeight = g.img.Height;
+                    maxRowHeight = g.glyphImage.Height;
                 }
-                if (currentX + g.img.Width > totalMaxLim)
+                if (currentX + g.glyphImage.Width > totalMaxLim)
                 {
                     //start new row
                     currentY += maxRowHeight;
                     currentX = 0;
                 }
                 //-------------------
-                g.area = new Rectangle(currentX, currentY, g.img.Width, g.img.Height);
-                currentX += g.img.Width;
+                g.pxArea = new PixelFarm.Drawing.Rectangle(currentX, currentY, g.glyphImage.Width, g.glyphImage.Height);
+                currentX += g.glyphImage.Width;
             }
             currentY += maxRowHeight;
             int imgH = currentY;
+
+
             //-------------------------------
             //compact image location
             //TODO: review performance here again***
-            BinPacker binPacker = new BinPacker(totalMaxLim, currentY);
+            SharpFont.BinPacker binPacker = new SharpFont.BinPacker(totalMaxLim, currentY);
             for (int i = glyphList.Count - 1; i >= 0; --i)
             {
-                CacheGlyph g = glyphList[i];
-                Rect newRect = binPacker.Insert(g.img.Width, g.img.Height);
-                g.area = new Rectangle(newRect.X, newRect.Y,
-                    g.img.Width, g.img.Height);
+                GlyphData g = glyphList[i];
+                SharpFont.Rect newRect = binPacker.Insert(g.glyphImage.Width, g.glyphImage.Height);
+                g.pxArea = new PixelFarm.Drawing.Rectangle(newRect.X, newRect.Y,
+                    g.glyphImage.Width, g.glyphImage.Height);
             }
-            //------------------------------- 
+            //-------------------------------
+
+
+
 
             //4. create array that can hold data
             int[] totalBuffer = new int[totalMaxLim * imgH];
             for (int i = glyphList.Count - 1; i >= 0; --i)
             {
-                CacheGlyph g = glyphList[i];
+                GlyphData g = glyphList[i];
                 //copy data to totalBuffer
-                ActualImage img = g.img;
-                CopyToDest(ActualImage.GetBuffer2(img), img.Width, img.Height, totalBuffer, g.area.Left, g.area.Top, totalMaxLim);
+                GlyphImage img = g.glyphImage;
+                CopyToDest(img.GetImageBuffer(), img.Width, img.Height, totalBuffer, g.pxArea.Left, g.pxArea.Top, totalMaxLim);
             }
             //------------------
 
-            GlyphImage2 glyphImage = new GlyphImage2(totalMaxLim, imgH);
+            GlyphImage glyphImage = new PixelFarm.Drawing.Fonts.GlyphImage(totalMaxLim, imgH);
             glyphImage.SetImageBuffer(totalBuffer, true);
-            latestGenGlyphImage = glyphImage;
-            return glyphImage;
-
+            return latestGenGlyphImage = glyphImage;
         }
+
+        static void CopyToDest(int[] srcPixels, int srcW, int srcH, int[] targetPixels, int targetX, int targetY, int totalTargetWidth)
+        {
+            int srcIndex = 0;
+            unsafe
+            {
+
+                for (int r = 0; r < srcH; ++r)
+                {
+                    //for each row 
+                    int targetP = ((targetY + r) * totalTargetWidth) + targetX;
+                    for (int c = 0; c < srcW; ++c)
+                    {
+                        targetPixels[targetP] = srcPixels[srcIndex];
+                        srcIndex++;
+                        targetP++;
+                    }
+                }
+            }
+        }
+
 
         /// <summary>
         /// save font info into xml document
@@ -168,21 +145,21 @@ namespace PixelFarm.Drawing.Fonts
                 root.AppendChild(totalImgElem);
             }
 
-            foreach (CacheGlyph g in glyphs.Values)
+            foreach (GlyphData g in glyphs.Values)
             {
                 XmlElement gElem = xmldoc.CreateElement("glyph");
                 //convert char to hex
                 string unicode = ("0x" + ((int)g.character).ToString("X"));//code point
-                Rectangle area = g.area;
+                PixelFarm.Drawing.Rectangle area = g.pxArea;
                 gElem.SetAttribute("c", g.codePoint.ToString());
                 gElem.SetAttribute("uc", unicode);//unicode char
                 gElem.SetAttribute("ltwh",
                     area.Left + " " + area.Top + " " + area.Width + " " + area.Height
                     );
                 gElem.SetAttribute("borderXY",
-                    g.borderX + " " + g.borderY
+                    g.glyphImage.BorderXY + " " + g.glyphImage.BorderXY
                     );
-                var mat = g.glyphMatrix;
+                var mat = g.fontGlyph.glyphMatrix;
                 gElem.SetAttribute("mat",
                     mat.advanceX + " " + mat.advanceY + " " +
                     mat.bboxXmin + " " + mat.bboxXmax + " " +
@@ -200,6 +177,9 @@ namespace PixelFarm.Drawing.Fonts
                 }
                 root.AppendChild(gElem);
             }
+
+
+
             //if (embededGlyphsImage)
             //{
             //    XmlElement glyphImgElem = xmldoc.CreateElement("msdf_img");
@@ -244,7 +224,7 @@ namespace PixelFarm.Drawing.Fonts
                 string unicodeHex = glyphElem.GetAttribute("uc");
                 int codepoint = int.Parse(glyphElem.GetAttribute("c"));
                 char c = (char)int.Parse(unicodeHex.Substring(2), System.Globalization.NumberStyles.HexNumber);
-                Rectangle area = ParseRect(glyphElem.GetAttribute("ltwh"));
+                PixelFarm.Drawing.Rectangle area = ParseRect(glyphElem.GetAttribute("ltwh"));
                 var glyphData = new TextureFontGlyphData();
                 area.Y += area.Height;//*** 
                 glyphData.Rect = area;
@@ -285,37 +265,15 @@ namespace PixelFarm.Drawing.Fonts
             }
             return f_values;
         }
-        static Rectangle ParseRect(string str)
+        static PixelFarm.Drawing.Rectangle ParseRect(string str)
         {
             string[] ltwh = str.Split(' ');
-            return new Rectangle(
+            return new PixelFarm.Drawing.Rectangle(
                 int.Parse(ltwh[0]),
                 int.Parse(ltwh[1]),
                 int.Parse(ltwh[2]),
                 int.Parse(ltwh[3]));
         }
-
-
-        static void CopyToDest(int[] srcPixels, int srcW, int srcH, int[] targetPixels, int targetX, int targetY, int totalTargetWidth)
-        {
-            int srcIndex = 0;
-            unsafe
-            {
-
-                for (int r = 0; r < srcH; ++r)
-                {
-                    //for each row 
-                    int targetP = ((targetY + r) * totalTargetWidth) + targetX;
-                    for (int c = 0; c < srcW; ++c)
-                    {
-                        targetPixels[targetP] = srcPixels[srcIndex];
-                        srcIndex++;
-                        targetP++;
-                    }
-                }
-            }
-        }
-
     }
 
 
