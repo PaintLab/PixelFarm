@@ -11,7 +11,7 @@ using PixelFarm.Drawing.Fonts;
 
 namespace Typography.Rendering
 { 
-    public class SimpleFontAtlasBuilder
+    public class MySimpleFontAtlasBuilder
     {
         Dictionary<int, GlyphData> glyphs = new Dictionary<int, GlyphData>();
         GlyphImage latestGenGlyphImage;
