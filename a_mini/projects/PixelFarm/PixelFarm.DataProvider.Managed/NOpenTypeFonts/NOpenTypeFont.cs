@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Typography.OpenFont;
-using Typography.OpenFont.Tables; 
+using Typography.OpenFont.Tables;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing.Fonts
     {
         Typeface ntypeface;
         string name, path;
-        PixelFarm.Agg.GlyphPathBuilderVxs glyphPathBuilder;
+        MyGlyphPathBuilder glyphPathBuilder;
 
         public NOpenTypeFontFace(Typeface ntypeface, string fontName, string fontPath)
         {
@@ -20,7 +20,7 @@ namespace PixelFarm.Drawing.Fonts
             this.name = fontName;
             this.path = fontPath;
             //----
-            glyphPathBuilder = new PixelFarm.Agg.GlyphPathBuilderVxs(ntypeface);
+            glyphPathBuilder = new MyGlyphPathBuilder(ntypeface);
         }
         public override string Name
         {
@@ -38,13 +38,13 @@ namespace PixelFarm.Drawing.Fonts
         }
         public Typeface Typeface { get { return this.ntypeface; } }
 
-        internal PixelFarm.Agg.GlyphPathBuilderVxs VxsBuilder
+        internal MyGlyphPathBuilder VxsBuilder
         {
             get { return this.glyphPathBuilder; }
         }
         public override float GetScale(float pointSize)
         {
-            return ntypeface.CalculateScale(pointSize);
+            return ntypeface.CalculateFromPointToPixelScale(pointSize);
         }
         public override int AscentInDzUnit
         {
@@ -75,7 +75,7 @@ namespace PixelFarm.Drawing.Fonts
             this.style = style;
             this.typeFace = ownerFace.Typeface;
             //calculate scale *** 
-            scale = typeFace.CalculateScale(sizeInPoints);
+            scale = typeFace.CalculateFromPointToPixelScale(sizeInPoints);
         }
         public override float SizeInPoints
         {
@@ -156,7 +156,7 @@ namespace PixelFarm.Drawing.Fonts
             FontGlyph fontGlyph = new FontGlyph();
             fontGlyph.flattenVxs = GetGlyphVxs(glyphIndex);
             fontGlyph.horiz_adv_x = typeFace.GetHAdvanceWidthFromGlyphIndex((int)glyphIndex);
-            
+
             return fontGlyph;
         }
         protected override void OnDispose()
@@ -174,8 +174,9 @@ namespace PixelFarm.Drawing.Fonts
             //then build it
             ownerFace.VxsBuilder.BuildFromGlyphIndex((ushort)codepoint, this.sizeInPoints);
 
-
-            found = ownerFace.VxsBuilder.GetVxs();
+            GlyphPathBuilderVxs vxsBuilder = new Fonts.GlyphPathBuilderVxs();
+            ownerFace.VxsBuilder.ReadShapes(vxsBuilder);
+            found = vxsBuilder.GetVxs();
             glyphVxs.Add(codepoint, found);
             return found;
         }

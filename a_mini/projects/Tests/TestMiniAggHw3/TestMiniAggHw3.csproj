@@ -133,7 +133,7 @@
       <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>
       <Name>PixelFarm.DataProvider.Native</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.OpenType\N20\Typography.OpenType\Typography.OpenType.csproj">
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
       <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
       <Name>Typography.OpenType</Name>
     </ProjectReference>

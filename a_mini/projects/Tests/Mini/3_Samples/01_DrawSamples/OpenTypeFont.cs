@@ -36,7 +36,7 @@ namespace PixelFarm.Agg.Sample_Draw
             string fontfile = collection.GetFont("tahoma", InstalledFontStyle.Regular).FontPath;
             //------------
 
-            var reader = new OpenTypeReader();
+            var reader = new OpenFontReader();
             this.FillBG = true;
             int size = 72;
             int resolution = 72;
@@ -45,17 +45,17 @@ namespace PixelFarm.Agg.Sample_Draw
             using (var fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read))
             {
                 //1. read typeface from font file
-                Typeface typeFace = reader.Read(fs);
+                //Typeface typeFace = reader.Read(fs);
 
-                //test left & right that has kern distance
-                ushort left_g_index = (ushort)typeFace.LookupIndex('A');
-                ushort right_g_index = (ushort)typeFace.LookupIndex('Y');
-                short kern_distance = typeFace.GetKernDistance(left_g_index, right_g_index);
+                ////test left & right that has kern distance
+                //ushort left_g_index = (ushort)typeFace.LookupIndex('A');
+                //ushort right_g_index = (ushort)typeFace.LookupIndex('Y');
+                //short kern_distance = typeFace.GetKernDistance(left_g_index, right_g_index);
 
-                //2. glyph-to-vxs builder
-                var builder = new GlyphPathBuilderVxs(typeFace);
-                left_vxs = BuildVxsForGlyph(builder, 'A', size, resolution);
-                right_vxs = BuildVxsForGlyph(builder, 'Y', size, resolution);
+                ////2. glyph-to-vxs builder
+                //var builder = new GlyphPathBuilderVxs(typeFace);
+                //left_vxs = BuildVxsForGlyph(builder, 'A', size, resolution);
+                //right_vxs = BuildVxsForGlyph(builder, 'Y', size, resolution);
 
                 //builder.Build('A', size, resolution);
                 //VertexStore vxs1 = builder.GetVxs();
@@ -79,12 +79,13 @@ namespace PixelFarm.Agg.Sample_Draw
                 //vxs = curveFlattener.MakeVxs(vxs1);
             }
         }
-        VertexStore BuildVxsForGlyph(GlyphPathBuilderVxs builder, char character, int size, int resolution)
+        VertexStore BuildVxsForGlyph(MyGlyphPathBuilder builder, char character, int size, int resolution)
         {
             builder.Build(character, size);
-
+            GlyphPathBuilderVxs vxsBuilder = new GlyphPathBuilderVxs();
+            builder.ReadShapes(vxsBuilder);
             VertexStore v0 = _vxsPool.GetFreeVxs();
-            builder.GetVxs(v0, _vxsPool);
+            vxsBuilder.GetVxs(v0, _vxsPool, builder.GetPixelScale());
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                  //translate
                  new PixelFarm.Agg.Transform.AffinePlan(

@@ -1,5 +1,5 @@
 ﻿//MIT, 2016-2017, WinterDev
- 
+
 using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
 using Typography.OpenFont;
@@ -7,10 +7,10 @@ using Typography.OpenFont;
 
 namespace PixelFarm.Drawing.Fonts
 {
-     
+
     //this is PixelFarm version ***
     //render with MiniAgg 
-    class GlyphPathBuilderVxs : IGlyphPathBuilder
+    public class GlyphPathBuilderVxs : IGlyphPathBuilder
     {
         CurveFlattener curveFlattener = new CurveFlattener();
         PathWriter ps = new PathWriter();

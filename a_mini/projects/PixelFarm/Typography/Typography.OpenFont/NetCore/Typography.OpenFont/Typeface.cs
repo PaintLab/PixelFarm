@@ -42,6 +42,8 @@ namespace Typography.OpenFont
         internal byte[] PrepProgramBuffer { get; set; }
         internal byte[] FpgmProgramBuffer { get; set; }
         internal MaxProfile MaxProfile { get; set; }
+
+        public bool HasPrepProgramBuffer { get { return PrepProgramBuffer != null; } }
         internal Kern KernTable
         {
             get { return _kern; }
@@ -177,7 +179,7 @@ namespace Typography.OpenFont
 
 
         const int pointsPerInch = 72;
-        public float CalculateScale(float sizeInPointUnit, int resolution = 96)
+        public float CalculateFromPointToPixelScale(float sizeInPointUnit, int resolution = 96)
         {
             return ((sizeInPointUnit * resolution) / (pointsPerInch * this.UnitsPerEm));
         }
@@ -227,7 +229,7 @@ namespace Typography.OpenFont
         }
         //-------------------------------------------------------
         //experiment
-        internal void LoadOpenTypeLayoutInfo(GDEF gdefTable, GSUB gsubTable, GPOS gposTable, BASE baseTable)
+        internal void LoadOpenFontLayoutInfo(GDEF gdefTable, GSUB gsubTable, GPOS gposTable, BASE baseTable)
         {
 
             //***
@@ -250,14 +252,15 @@ namespace Typography.OpenFont
     {
         public readonly ushort glyphIndex;
         public readonly ushort advWidth;
-        public GlyphPos(ushort glyphIndex, ushort advWidth)
+        public short xoffset;
+        public short yoffset;
+        public GlyphClassKind _classKind;
+        public GlyphPos(ushort glyphIndex, GlyphClassKind classKind, ushort advWidth)
         {
             this.glyphIndex = glyphIndex;
             this.advWidth = advWidth;
+            this._classKind = classKind;
         }
-
-        public short xoffset;
-        public short yoffset; 
 
 #if DEBUG
         public override string ToString()
@@ -501,7 +504,7 @@ namespace Typography.OpenFont
             public string Lang { get; private set; }
             public void DoGlyphPosition(List<GlyphPos> glyphPositions)
             {
-                
+
                 if (lookupTables == null) { return; } //early exit if no lookup tables
                 //load
                 int j = lookupTables.Count;
