@@ -7,10 +7,10 @@ using System.Xml;
 
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
- 
+
 
 namespace Typography.Rendering
-{ 
+{
     public class MySimpleFontAtlasBuilder
     {
         Dictionary<int, GlyphData> glyphs = new Dictionary<int, GlyphData>();
@@ -59,7 +59,7 @@ namespace Typography.Rendering
                     currentX = 0;
                 }
                 //-------------------
-                g.pxArea = new Rectangle(currentX, currentY, g.glyphImage.Width, g.glyphImage.Height);
+                g.pxArea = new PixelFarm.Drawing.Rectangle(currentX, currentY, g.glyphImage.Width, g.glyphImage.Height);
                 currentX += g.glyphImage.Width;
             }
             currentY += maxRowHeight;
@@ -74,7 +74,7 @@ namespace Typography.Rendering
             {
                 GlyphData g = glyphList[i];
                 SharpFont.Rect newRect = binPacker.Insert(g.glyphImage.Width, g.glyphImage.Height);
-                g.pxArea = new Rectangle(newRect.X, newRect.Y,
+                g.pxArea = new PixelFarm.Drawing.Rectangle(newRect.X, newRect.Y,
                     g.glyphImage.Width, g.glyphImage.Height);
             }
             //-------------------------------
@@ -150,7 +150,7 @@ namespace Typography.Rendering
                 XmlElement gElem = xmldoc.CreateElement("glyph");
                 //convert char to hex
                 string unicode = ("0x" + ((int)g.character).ToString("X"));//code point
-                Rectangle area = g.pxArea;
+                PixelFarm.Drawing.Rectangle area = g.pxArea;
                 gElem.SetAttribute("c", g.codePoint.ToString());
                 gElem.SetAttribute("uc", unicode);//unicode char
                 gElem.SetAttribute("ltwh",
@@ -196,7 +196,7 @@ namespace Typography.Rendering
             //}
             xmldoc.Save(filename);
         }
-      
+
 
         //read font info from xml document
         public SimpleFontAtlas LoadFontInfo(string filename)
@@ -224,7 +224,7 @@ namespace Typography.Rendering
                 string unicodeHex = glyphElem.GetAttribute("uc");
                 int codepoint = int.Parse(glyphElem.GetAttribute("c"));
                 char c = (char)int.Parse(unicodeHex.Substring(2), System.Globalization.NumberStyles.HexNumber);
-                Rectangle area = ParseRect(glyphElem.GetAttribute("ltwh"));
+                PixelFarm.Drawing.Rectangle area = ParseRect(glyphElem.GetAttribute("ltwh"));
                 var glyphData = new TextureFontGlyphData();
                 area.Y += area.Height;//*** 
                 glyphData.Rect = area;
@@ -265,10 +265,10 @@ namespace Typography.Rendering
             }
             return f_values;
         }
-        static Rectangle ParseRect(string str)
+        static PixelFarm.Drawing.Rectangle ParseRect(string str)
         {
             string[] ltwh = str.Split(' ');
-            return new Rectangle(
+            return new PixelFarm.Drawing.Rectangle(
                 int.Parse(ltwh[0]),
                 int.Parse(ltwh[1]),
                 int.Parse(ltwh[2]),

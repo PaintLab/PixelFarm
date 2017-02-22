@@ -246,7 +246,7 @@ namespace Typography.Rendering
                 string unicodeHex = glyphElem.GetAttribute("uc");
                 int codepoint = int.Parse(glyphElem.GetAttribute("c"));
                 char c = (char)int.Parse(unicodeHex.Substring(2), System.Globalization.NumberStyles.HexNumber);
-                Rectangle area = ParseRect(glyphElem.GetAttribute("ltwh"));
+                PixelFarm.Drawing.Rectangle area = ParseRect(glyphElem.GetAttribute("ltwh"));
                 var glyphData = new TextureFontGlyphData();
                 area.Y += area.Height;//*** 
                 glyphData.Rect = area;
@@ -287,10 +287,10 @@ namespace Typography.Rendering
             }
             return f_values;
         }
-        static Rectangle ParseRect(string str)
+        static PixelFarm.Drawing.Rectangle ParseRect(string str)
         {
             string[] ltwh = str.Split(' ');
-            return new Rectangle(
+            return new PixelFarm.Drawing.Rectangle(
                 int.Parse(ltwh[0]),
                 int.Parse(ltwh[1]),
                 int.Parse(ltwh[2]),
