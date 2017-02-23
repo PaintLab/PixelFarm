@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using Typography.OpenFont.Tables;
+using System.Text; 
 
 namespace PixelFarm.Drawing.Fonts
 {
-
+    public interface IInstalledFontProvider
+    {
+        IEnumerable<string> GetInstalledFontIter();
+    }
     //from http://stackoverflow.com/questions/3633000/net-enumerate-winforms-font-styles
     // https://www.microsoft.com/Typography/OTSpec/name.htm
     //MIT, 2016-2017, WinterDev

@@ -4,7 +4,9 @@
 //native dll lib
 //plan?: port  them to C#  :)
 //-----------------------------------
- 
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using PixelFarm.Drawing.Fonts;
 
 namespace PixelFarm.Drawing.Text
