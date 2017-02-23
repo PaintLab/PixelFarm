@@ -50,6 +50,7 @@
     <Compile Include="4_Drawing_Text\TextShapingAndLayoutService.cs" />
     <Compile Include="Canvas\Canvas.cs" />
     <Compile Include="Canvas\CanvasOptions.cs" />
+    <Compile Include="Canvas\CanvasPaintToOutputDelegate.cs" />
     <Compile Include="Canvas\GraphicsPlatform.cs" />
     <Compile Include="Fonts\Fonts.cs" />
     <Compile Include="Fonts\FontStyle.cs" />
