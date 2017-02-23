@@ -48,8 +48,8 @@ namespace PixelFarm.Drawing.GLES2
             s_isInit = true;
             if (!GLES2PlatformFontMx.DidLoadFonts)
             {
-                GLES2PlatformFontMx.LoadInstalledFont(
-                    new PixelFarm.Drawing.Win32.InstallFontsProviderWin32());
+                //GLES2PlatformFontMx.LoadInstalledFont(
+                //    new PixelFarm.Drawing.Win32.InstallFontsProviderWin32());
             }
 
         }

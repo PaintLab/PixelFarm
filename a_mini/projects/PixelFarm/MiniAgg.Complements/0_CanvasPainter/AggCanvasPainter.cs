@@ -50,7 +50,7 @@ namespace PixelFarm.Agg
         RoundedRect roundRect = null;
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
-        AggTextPrinter textPrinter;
+       
         int ellipseGenNSteps = 10;
         SmoothingMode _smoothingMode;
 
@@ -66,11 +66,7 @@ namespace PixelFarm.Agg
         {
             get { return this.gx; }
         }
-        public AggTextPrinter TextPrinter
-        {
-            get { return textPrinter; }
-            set { textPrinter = value; }
-        }
+    
         public override void Clear(Color color)
         {
             gx.Clear(color);

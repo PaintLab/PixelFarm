@@ -12,14 +12,9 @@ namespace PixelFarm.Drawing
             int width,
             int height,
             CanvasInitParameters canvasInitPars = new CanvasInitParameters());
-
-
-
         //----------------------------------------------------------------------
         //set provider delegates before use it from comment graphics platform
-        //----------------------------------------------------------------------
-
-
+        //---------------------------------------------------------------------- 
         //----------------------
         //2. image buffer provider from filename
         static ImageBufferProviderDelegate s_imgBufferProviderDel;
