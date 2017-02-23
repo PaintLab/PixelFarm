@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Bitmap\NativeImage.cs" />
     <Compile Include="HarfBuzzShapingService.cs" />
+    <Compile Include="NativeBridgeHB.cs" />
     <Compile Include="NativeDll.cs" />
     <Compile Include="NativeFonts\FontLoaderImpls.cs" />
     <Compile Include="NativeFonts\NativeBridgeFreeType.cs" />
