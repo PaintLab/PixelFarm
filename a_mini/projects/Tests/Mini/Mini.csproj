@@ -165,6 +165,8 @@
     <Compile Include="SoftAggControl.Designer.cs">
       <DependentUpon>SoftAggControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win32Impl.cs" />
+    <Compile Include="xnotused\TextPrinter.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
       <DependentUpon>FormGLTest.cs</DependentUpon>
     </EmbeddedResource>
@@ -209,14 +211,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj">
-      <Project>{025E536D-53A6-4C5F-AED5-E21960C70763}</Project>
-      <Name>PixelFarm.DataProvider.Managed</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.DataProvider.Native\PixelFarm.DataProvider.Native.csproj">
-      <Project>{821C2F8B-45E4-4242-970D-AE64780970B2}</Project>
-      <Name>PixelFarm.DataProvider.Native</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
       <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
@@ -233,13 +227,21 @@
       <Project>{9450c9fb-5a70-4e47-bec3-b0a98a9c7d15}</Project>
       <Name>PixelFarm.Drawing.Skia</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniAgg.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
+      <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
+      <Name>PixelFarm.DrawingCanvas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.MiniAgg.csproj">
       <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
-      <Name>PixelFarm.MiniAgg</Name>
+      <Name>PixelFarm.Drawing.MiniAgg</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
       <Project>{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}</Project>
       <Name>PixelFarm.MiniOpenTK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj">
+      <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>
+      <Name>PixelFarm.NativeFonts</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj">
       <Project>{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}</Project>
@@ -252,6 +254,10 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
       <Name>PixelFarm.SkiaSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>

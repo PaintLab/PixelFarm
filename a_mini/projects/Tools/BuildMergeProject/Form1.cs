@@ -50,7 +50,7 @@ namespace BuildMergeProject
             mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
                targetProjectName,
                "v2.0",
-               "",//additional define constant
+               " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
                new string[] {
                   "System" ,
                });
@@ -84,6 +84,7 @@ namespace BuildMergeProject
         {
             MergeProject mergePro = new MergeProject();
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\TypeMirror\TypeMirror.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
             //
@@ -123,17 +124,17 @@ namespace BuildMergeProject
                     break;
             }
             // 
-
+          
             return mergePro;
         }
         static MergeProject CreateMiniAggOneProject()
         {
             MergeProject mergePro = new MergeProject();
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
-            //
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj");
             //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
             //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.MiniAgg.csproj");
 
             return mergePro;
         }

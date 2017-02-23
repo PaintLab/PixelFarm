@@ -11,15 +11,15 @@ namespace PixelFarm.DrawingGL
     class TextureFontFace : FontFace
     {
 
-        SimpleFontAtlasBuilder atlasBuilder;
+        MySimpleFontAtlasBuilder atlasBuilder;
         SimpleFontAtlas fontAtlas;
-
         FontFace nOpenTypeFontFace;
+
         public TextureFontFace(FontFace nOpenTypeFontFace, string xmlFontInfo, GlyphImage glyphImg)
         {
             //for msdf font
             //1 font atlas may support mutliple font size 
-            atlasBuilder = new SimpleFontAtlasBuilder();
+            atlasBuilder = new MySimpleFontAtlasBuilder();
             fontAtlas = atlasBuilder.LoadFontInfo(xmlFontInfo);
             fontAtlas.TotalGlyph = glyphImg;
             this.nOpenTypeFontFace = nOpenTypeFontFace; 

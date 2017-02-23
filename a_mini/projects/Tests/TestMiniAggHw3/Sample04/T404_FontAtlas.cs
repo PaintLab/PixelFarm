@@ -24,7 +24,7 @@ namespace OpenTkEssTest
 
             //--------------------- 
             string fontfilename = "d:\\WImageTest\\a_total.xml";
-            var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
+            var atlasBuilder = new Typography.Rendering.MySimpleFontAtlasBuilder();
             fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
 
             totalImg = new System.Drawing.Bitmap("d:\\WImageTest\\a_total.png");
