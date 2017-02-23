@@ -5,8 +5,7 @@
 //plan?: port  them to C#  :)
 //-----------------------------------
 using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Collections.Generic; 
 using PixelFarm.Drawing.Fonts;
 
 namespace PixelFarm.Drawing.Text

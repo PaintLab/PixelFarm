@@ -138,6 +138,10 @@
       <Project>{0f6c821e-2f60-4e60-aec4-e4254d859902}</Project>
       <Name>PixelFarm.FontTools</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
       <Project>{29ED0DFE-373C-4E98-BD4B-43F8E5FB16F6}</Project>
       <Name>Typography.OpenFont</Name>

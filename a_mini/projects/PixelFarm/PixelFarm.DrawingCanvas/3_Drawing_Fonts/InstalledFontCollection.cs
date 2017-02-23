@@ -12,8 +12,7 @@ namespace PixelFarm.Drawing.Fonts
     }
     //from http://stackoverflow.com/questions/3633000/net-enumerate-winforms-font-styles
     // https://www.microsoft.com/Typography/OTSpec/name.htm
-    //MIT, 2016-2017, WinterDev
-
+   
     public class InstalledFont
     {
         string _fontName = string.Empty;

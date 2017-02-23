@@ -254,6 +254,10 @@
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
       <Name>PixelFarm.SkiaSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>

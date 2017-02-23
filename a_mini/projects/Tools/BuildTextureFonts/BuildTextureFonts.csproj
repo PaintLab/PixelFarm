@@ -99,6 +99,10 @@
       <Project>{0f6c821e-2f60-4e60-aec4-e4254d859902}</Project>
       <Name>PixelFarm.FontTools</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Typography.MsdfGen\Typography.MsdfGen.csproj">
       <Project>{8f69ab8d-174a-4912-9328-cae8eda5564b}</Project>
       <Name>Typography.MsdfGen</Name>
