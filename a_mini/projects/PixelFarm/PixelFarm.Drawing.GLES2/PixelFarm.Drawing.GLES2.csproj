@@ -120,12 +120,12 @@
       <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\GLTextPrinter.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\0_Start\GLES2Platform.cs" />
+    <Compile Include="0_Start\GLES2Platform.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\1_MyGLCanvas_Specific.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\2_MyGLCanvas_CoordinateAndClip.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\3_MyGLCanvas_DrawGraphics.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\4_MyGLCanvas_TextAndFonts.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\0_Start\GLES2PlatformFontMx.cs" />
+    <Compile Include="0_Start\GLES2PlatformFontMx.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\GLCanvasPainter.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\PensAndBrushes.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\TextureFontStore.cs" />
