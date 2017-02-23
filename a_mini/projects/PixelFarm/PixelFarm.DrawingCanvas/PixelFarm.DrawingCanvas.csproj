@@ -49,12 +49,12 @@
     <Compile Include="3_Drawing_Fonts\FontKey.cs" />
     <Compile Include="3_Drawing_Fonts\NativeBridgeHB.cs" />
     <Compile Include="4_Drawing_Text\TextShapingAndLayoutService.cs" />
+    <Compile Include="0_Start\GraphicsPlatform.cs" />
     <Compile Include="Canvas\Canvas.cs" />
     <Compile Include="Canvas\CanvasOptions.cs" />
     <Compile Include="Canvas\CanvasPaintToOutputDelegate.cs" />
-    <Compile Include="0_Start\GraphicsPlatform.cs" />
-    <Compile Include="Fonts\Fonts.cs" />
-    <Compile Include="Fonts\FontStyle.cs" />
+    <Compile Include="Canvas\Fonts.cs" />
+    <Compile Include="Canvas\FontStyle.cs" />
     <Compile Include="PixelFarm_Agg\CanvasPainter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
