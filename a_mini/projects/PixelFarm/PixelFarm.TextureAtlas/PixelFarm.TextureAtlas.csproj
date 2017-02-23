@@ -7,8 +7,8 @@
     <ProjectGuid>{0F6C821E-2F60-4E60-AEC4-E4254D859902}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.FontTools</RootNamespace>
-    <AssemblyName>PixelFarm.FontTools</AssemblyName>
+    <RootNamespace>PixelFarm.TextureAtlas</RootNamespace>
+    <AssemblyName>PixelFarm.TextureAtlas</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -91,9 +91,9 @@
       <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
       <Name>PixelFarm.Drawing.MiniAgg</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.FontTools\PixelFarm.FontTools.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.TextureAtlas\PixelFarm.TextureAtlas.csproj">
       <Project>{0f6c821e-2f60-4e60-aec4-e4254d859902}</Project>
-      <Name>PixelFarm.FontTools</Name>
+      <Name>PixelFarm.TextureAtlas</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj">
       <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>

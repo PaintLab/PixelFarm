@@ -8,8 +8,8 @@
     <ProjectGuid>{BFADB269-520E-4A14-9D4A-3D65ED57EB75}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.ImgCodec</RootNamespace>
-    <AssemblyName>PixelFarm.ImgCodec</AssemblyName>
+    <RootNamespace>PixelFarm.ImgCodecs</RootNamespace>
+    <AssemblyName>PixelFarm.ImgCodecs</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -475,6 +475,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
