@@ -57,7 +57,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_Utils", "4_Utils", "{F00A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Win32Utils", "PixelFarm\Win32Utils\Win32Utils.csproj", "{B9C23586-913D-4EE8-B266-BD58FBD0133B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.DataProvider.Native", "PixelFarm\PixelFarm.DataProvider.Native\PixelFarm.DataProvider.Native.csproj", "{821C2F8B-45E4-4242-970D-AE64780970B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.NativeFonts", "PixelFarm\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj", "{821C2F8B-45E4-4242-970D-AE64780970B2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.ImgCodec", "PixelFarm\PixelFarm.ImgCodec\PixelFarm.ImgCodec.csproj", "{BFADB269-520E-4A14-9D4A-3D65ED57EB75}"
 EndProject

@@ -8,8 +8,8 @@
     <ProjectGuid>{821C2F8B-45E4-4242-970D-AE64780970B2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.DataProvider.Native</RootNamespace>
-    <AssemblyName>PixelFarm.DataProvider.Native</AssemblyName>
+    <RootNamespace>PixelFarm.NativeFonts</RootNamespace>
+    <AssemblyName>PixelFarm.NativeFonts</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
