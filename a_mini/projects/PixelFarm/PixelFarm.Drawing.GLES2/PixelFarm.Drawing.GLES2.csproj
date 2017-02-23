@@ -110,6 +110,15 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\TextureFonts\TextureFont.cs">
       <Link>DrawingGL\TextureFonts\TextureFont.cs</Link>
     </Compile>
+    <Compile Include="..\win32utils\MyWin32.cs">
+      <Link>Win32Utils\MyWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\win32utils\NativeTextWin32.cs">
+      <Link>Win32Utils\NativeTextWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\win32utils\NativeWin32MemoryDc.cs">
+      <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
+    </Compile>
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\GLTextPrinter.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\0_Start\GLES2Platform.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\1_MyGLCanvas_Specific.cs" />
@@ -124,12 +133,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj">
-      <Project>{025E536D-53A6-4C5F-AED5-E21960C70763}</Project>
-      <Name>PixelFarm.DataProvider.Managed</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.DataProvider.Native\PixelFarm.DataProvider.Native.csproj">
-      <Project>{821C2F8B-45E4-4242-970D-AE64780970B2}</Project>
+      <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>
       <Name>PixelFarm.DataProvider.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">

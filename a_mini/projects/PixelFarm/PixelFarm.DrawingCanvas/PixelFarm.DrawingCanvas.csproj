@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -53,6 +54,9 @@
     <Compile Include="3_Drawing_Fonts\FontKey.cs" />
     <Compile Include="3_Drawing_Fonts\InstalledFontCollection.cs" />
     <Compile Include="3_Drawing_Fonts\NativeBridgeHB.cs" />
+    <Compile Include="4_Drawing_Text\BinPacker.cs" />
+    <Compile Include="4_Drawing_Text\MySimpleFontAtlasBuilder.cs" />
+    <Compile Include="4_Drawing_Text\SimpleFontAtlas.cs" />
     <Compile Include="4_Drawing_Text\TextShapingAndLayoutService.cs" />
     <Compile Include="0_Start\GraphicsPlatform.cs" />
     <Compile Include="Canvas\Canvas.cs" />
