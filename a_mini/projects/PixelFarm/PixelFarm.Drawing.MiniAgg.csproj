@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyName>PixelFarm.MiniAgg</AssemblyName>
+    <AssemblyName>PixelFarm.Drawing.MiniAgg</AssemblyName>
     <ProjectGuid>{99A570D0-492A-453D-8B97-7F40489C10E0}</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
