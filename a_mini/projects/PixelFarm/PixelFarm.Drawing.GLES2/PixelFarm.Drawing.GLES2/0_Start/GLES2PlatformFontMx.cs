@@ -30,9 +30,9 @@ namespace PixelFarm.Drawing.Fonts
         //
 
         static InstalledFontCollection installFonts;
-        internal static string defaultLang = "en";
-        internal static HBDirection defaultHbDirection = HBDirection.HB_DIRECTION_LTR;
-        internal static int defaultScriptCode = 0;
+        internal static ScriptLang defaultScriptLang = ScriptLangs.Latin;
+        internal static WriteDirection defaultHbDirection = WriteDirection.LTR;
+
         static bool s_didLoadFonts;
         public static void LoadInstalledFont(IInstalledFontProvider provider)
         {
@@ -97,10 +97,7 @@ namespace PixelFarm.Drawing.Fonts
                 }
 
                 InstalledFont installedFont = GLES2PlatformFontMx.GetInstalledFont(font.Name, InstalledFontStyle.Regular);
-                FontFace nOpenTypeFontFace = NOpenTypeFontLoader.LoadFont(installedFont.FontPath,
-                      GLES2PlatformFontMx.defaultLang,
-                      GLES2PlatformFontMx.defaultHbDirection,
-                      GLES2PlatformFontMx.defaultScriptCode);
+                FontFace nOpenTypeFontFace = NOpenTypeFontLoader.LoadFont(installedFont.FontPath, GLES2PlatformFontMx.defaultScriptLang);
 
 
                 textureFontface = new TextureFontFace(nOpenTypeFontFace, lateFontInfo.FontMapFile, glyphImage);
@@ -178,11 +175,20 @@ namespace PixelFarm.Drawing.Fonts
             FontFace fontFace;
             if (!fonts.TryGetValue(found, out fontFace))
             {
+
+                //convert to freetype data
+
+                //TODO: review here
+                //fontFace = FreeTypeFontLoader.LoadFont(found,
+                //    GLES2PlatformFontMx.defaultScriptLang
+                //    GLES2PlatformFontMx.defaultHbDirection,
+                //    GLES2PlatformFontMx.defaultScriptCode);
                 fontFace = FreeTypeFontLoader.LoadFont(found,
-                    GLES2PlatformFontMx.defaultLang,
-                    GLES2PlatformFontMx.defaultHbDirection,
-                    GLES2PlatformFontMx.defaultScriptCode);
+                     "en",
+                     HBDirection.HB_DIRECTION_RTL);
+
                 if (fontFace == null)
+                    if (fontFace == null)
                 {
                     throw new NotSupportedException();
                 }
