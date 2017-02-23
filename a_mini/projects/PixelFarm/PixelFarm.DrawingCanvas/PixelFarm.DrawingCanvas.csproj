@@ -52,10 +52,10 @@
     <Compile Include="0_Start\GraphicsPlatform.cs" />
     <Compile Include="Canvas\Canvas.cs" />
     <Compile Include="Canvas\CanvasOptions.cs" />
+    <Compile Include="Canvas\CanvasPainter.cs" />
     <Compile Include="Canvas\CanvasPaintToOutputDelegate.cs" />
     <Compile Include="Canvas\Fonts.cs" />
     <Compile Include="Canvas\FontStyle.cs" />
-    <Compile Include="PixelFarm_Agg\CanvasPainter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
