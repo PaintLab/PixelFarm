@@ -38,7 +38,6 @@
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\AggRenderVx.cs" />
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\Canvas2dExtension.cs" />
     <Compile Include="MiniAgg.Complements\0_CanvasPainter\dbugVertexSourceIO.cs" />
-    <Compile Include="MiniAgg.Complements\0_CanvasPainter\ITextPrinter.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\BorderDouble.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\ClipProxyImage.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\GammaFuntions.cs" />

@@ -2,10 +2,11 @@
 using System;
 namespace PixelFarm.DrawingGL
 {
+
     /// <summary>
     /// this use win gdi only
     /// </summary>
-    class WinGdiFontPrinter : IDisposable
+    class WinGdiFontPrinter : PixelFarm.Drawing.Fonts.ITextPrinter, IDisposable
     {
 
         int _width;
@@ -14,8 +15,10 @@ namespace PixelFarm.DrawingGL
         IntPtr hfont;
         int bmpWidth = 200;
         int bmpHeight = 50;
-        public WinGdiFontPrinter(int w, int h)
+        CanvasGL2d canvas;
+        public WinGdiFontPrinter(CanvasGL2d canvas, int w, int h)
         {
+            this.canvas = canvas;
             _width = w;
             _height = h;
             bmpWidth = w;
@@ -43,9 +46,8 @@ namespace PixelFarm.DrawingGL
             logFont.lfQuality = 0;//default
             hfont = Win32.MyWin32.CreateFontIndirect(ref logFont);
             Win32.MyWin32.SelectObject(memdc.DC, hfont);
-        }
-
-        public void DrawString(CanvasGL2d canvas, string text, float x, float y)
+        } 
+        public void DrawString(string text, double x, double y)
         {
             char[] textBuffer = text.ToCharArray();
             Win32.MyWin32.PatBlt(memdc.DC, 0, 0, bmpWidth, bmpHeight, Win32.MyWin32.WHITENESS);
@@ -85,7 +87,7 @@ namespace PixelFarm.DrawingGL
             //------------------------------------------------------
             //copy bmp from specific bmp area 
             //and convert to GLBmp   
-            byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImg); 
+            byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImg);
             unsafe
             {
                 byte* header = (byte*)memdc.PPVBits;
@@ -98,7 +100,7 @@ namespace PixelFarm.DrawingGL
                     {
 
                         header = rowHead;
-                        for (int n = 0; n < rowLen; )
+                        for (int n = 0; n < rowLen;)
                         {
                             //move next
                             *(dest + 0) = *(header + 0);
@@ -120,7 +122,6 @@ namespace PixelFarm.DrawingGL
             GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, false);
             canvas.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();
-
         }
     }
 }

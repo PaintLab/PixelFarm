@@ -1,7 +1,7 @@
 ﻿////MIT, 2014-2017, WinterDev
 
 
-namespace PixelFarm.Agg
+namespace PixelFarm.Drawing.Fonts
 {
     public interface ITextPrinter
     {

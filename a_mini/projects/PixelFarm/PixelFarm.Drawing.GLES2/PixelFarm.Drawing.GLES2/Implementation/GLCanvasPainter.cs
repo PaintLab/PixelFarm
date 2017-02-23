@@ -8,15 +8,20 @@ namespace PixelFarm.DrawingGL
 {
     public class GLCanvasPainter : GLCanvasPainterBase
     {
-        WinGdiFontPrinter _win32GdiPrinter;
+
+        ITextPrinter _textPriner;
         RequestFont _requestFont;
         TextureFont _textureFont;
         public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
             : base(canvas, w, h)
         {
-            _win32GdiPrinter = new WinGdiFontPrinter(w, h);
+            //_win32GdiPrinter = new WinGdiFontPrinter(w, h);
         }
-
+        public ITextPrinter TextPrinter
+        {
+            get { return _textPriner; }
+            set { _textPriner = value; }
+        }
         public override RequestFont CurrentFont
         {
             get
@@ -57,7 +62,11 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                _win32GdiPrinter.DrawString(_canvas, text, (float)x, (float)y);
+                if (_textPriner != null)
+                {
+                    _textPriner.DrawString(text, x, y);
+                }
+                
             }
         }
         public bool UseTextureFontIfAvailable { get; set; }
