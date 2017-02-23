@@ -20,7 +20,7 @@ namespace PixelFarm.DrawingGL
         int height;
         byte[] rawBuffer;
         int[] rawIntBuffer;
-        PixelFarm.Drawing.Imaging.NativeImage bmp;
+        //PixelFarm.Drawing.Imaging.NativeImage bmp;
         IntPtr nativeImgMem;
         LazyBitmapBufferProvider lazyProvider;
         bool isInvertImage = false;
@@ -43,13 +43,13 @@ namespace PixelFarm.DrawingGL
             this.rawIntBuffer = rawIntBuffer;
             this.isInvertImage = isInvertImage;
         }
-        public GLBitmap(PixelFarm.Drawing.Imaging.NativeImage bmp, bool isInvertImage)
-        {
-            this.width = bmp.Width;
-            this.height = bmp.Height;
-            this.bmp = bmp;
-            this.isInvertImage = isInvertImage;
-        }
+        //public GLBitmap(PixelFarm.Drawing.Imaging.NativeImage bmp, bool isInvertImage)
+        //{
+        //    this.width = bmp.Width;
+        //    this.height = bmp.Height;
+        //    this.bmp = bmp;
+        //    this.isInvertImage = isInvertImage;
+        //}
         public GLBitmap(int w, int h, IntPtr nativeImgMem)
         {
             this.width = w;
@@ -146,13 +146,13 @@ namespace PixelFarm.DrawingGL
                     }
 
                 }
-                else if (this.bmp != null)
-                {
-                    GL.TexImage2D(TextureTarget.Texture2D, 0,
-                           PixelInternalFormat.Rgba, this.width, this.height, 0,
-                           PixelFormat.Rgba, // 
-                           PixelType.UnsignedByte, bmp.GetNativeImageHandle());
-                }
+                //else if (this.bmp != null)
+                //{
+                //    GL.TexImage2D(TextureTarget.Texture2D, 0,
+                //           PixelInternalFormat.Rgba, this.width, this.height, 0,
+                //           PixelFormat.Rgba, // 
+                //           PixelType.UnsignedByte, bmp.GetNativeImageHandle());
+                //}
                 else
                 {
                     //use lazy provider
