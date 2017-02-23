@@ -5,7 +5,7 @@ using Typography.OpenFont;
 
 namespace PixelFarm.Drawing.Fonts
 {
-    public static class NOpenTypeFontLoader
+    public static class OpenFontLoader
     {
         public static FontFace LoadFont(string fontfile,
             ScriptLang scriptLang,
@@ -24,7 +24,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             //TODO:...
             //set shape engine *** 
-            return new NOpenTypeFontFace(typeface, typeface.Name, fontfile);
+            return new ManagedFontFace(typeface, typeface.Name, fontfile);
         }
     }
 

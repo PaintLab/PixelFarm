@@ -97,7 +97,7 @@ namespace PixelFarm.Drawing.Fonts
                 }
 
                 InstalledFont installedFont = GLES2PlatformFontMx.GetInstalledFont(font.Name, InstalledFontStyle.Regular);
-                FontFace nOpenTypeFontFace = NOpenTypeFontLoader.LoadFont(installedFont.FontPath, GLES2PlatformFontMx.defaultScriptLang);
+                FontFace nOpenTypeFontFace = OpenFontLoader.LoadFont(installedFont.FontPath, GLES2PlatformFontMx.defaultScriptLang);
 
 
                 textureFontface = new TextureFontFace(nOpenTypeFontFace, lateFontInfo.FontMapFile, glyphImage);

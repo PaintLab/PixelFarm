@@ -61,8 +61,8 @@
     <Compile Include="4_Drawing_Text\GlyphPathBuilderVxs.cs" />
     <Compile Include="4_Drawing_Text\ManagedShapingService.cs" />
     <Compile Include="4_Drawing_Text\MyGlyphPathBuilder.cs" />
-    <Compile Include="4_Drawing_Text\NOpenTypeFont.cs" />
-    <Compile Include="4_Drawing_Text\NOpenTypeFontLoader.cs" />
+    <Compile Include="4_Drawing_Text\ManagedFontFace.cs" />
+    <Compile Include="4_Drawing_Text\OpenFontLoader.cs" />
     <Compile Include="4_Drawing_Text\TextShapingAndLayoutService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

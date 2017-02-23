@@ -20,13 +20,14 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
 using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.VertexSource;
 namespace PixelFarm.Agg
 {
+
+
+
     public class AggCanvasPainter : CanvasPainter
     {
         ImageGraphics2D gx;
@@ -50,7 +51,7 @@ namespace PixelFarm.Agg
         RoundedRect roundRect = null;
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
-       
+
         int ellipseGenNSteps = 10;
         SmoothingMode _smoothingMode;
 
@@ -66,7 +67,7 @@ namespace PixelFarm.Agg
         {
             get { return this.gx; }
         }
-    
+
         public override void Clear(Color color)
         {
             gx.Clear(color);
@@ -329,7 +330,7 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v1);
         }
 
-        public override Drawing.RequestFont CurrentFont
+        public override RequestFont CurrentFont
         {
             get
             {
@@ -351,9 +352,25 @@ namespace PixelFarm.Agg
         {
             //TODO: review drawing string  with agg here  
             //textPrinter.Print(this, text.ToString(), x, y);
+            if (_textPrinter != null)
+            {
+                _textPrinter.DrawString(text, x, y);
+            }
         }
+         
+        ITextPrinter _textPrinter; 
+        public ITextPrinter TextPrinter
+        {
+            get
+            {
+                return _textPrinter;
+            }
+            set
+            {
+                _textPrinter = value;
+            }
 
-
+        }
         /// <summary>
         /// fill vertex store, we do NOT store snap
         /// </summary>
@@ -387,7 +404,7 @@ namespace PixelFarm.Agg
                 {
                     this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.Default;
                     this.sclineRas.UseSubPixelRendering = false;
-                } 
+                }
             }
         }
 

@@ -163,8 +163,7 @@ namespace PixelFarm.Drawing
 
     public enum ScriptCode
     {
-        Latin,
-
+        Latin, 
     }
 
 }
