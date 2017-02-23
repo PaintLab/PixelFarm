@@ -1,7 +1,7 @@
 ﻿//BSD, 2014-2017, WinterDev 
 
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 
 using PixelFarm.DrawingGL;
 
@@ -47,7 +47,8 @@ namespace PixelFarm.Drawing.Fonts
             //--------
             //TODO: review here
             //this is platform specific code
-            WinGdi.WinGdiFontFace.SetInstalledFontCollection(installFonts);
+            //WinGdi.WinGdiFontFace.SetInstalledFontCollection(installFonts);
+            throw new NotSupportedException();
         }
         public static bool DidLoadFonts
         {
@@ -148,7 +149,7 @@ namespace PixelFarm.Drawing.Fonts
             public TextureFontFace Fontface { get; set; }
         }
 
-        
+
 
     }
 

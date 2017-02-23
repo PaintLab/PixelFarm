@@ -1,14 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0CC424D5-20AC-4849-993D-3A720DBAE94F}</ProjectGuid>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{821C2F8B-45E4-4242-970D-AE64780970B2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.DrawingCanvas</RootNamespace>
-    <AssemblyName>PixelFarm.DrawingCanvas</AssemblyName>
+    <RootNamespace>PixelFarm.NativeFonts</RootNamespace>
+    <AssemblyName>PixelFarm.NativeFonts</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,32 +35,30 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <Compile Include="Bitmap\NativeImage.cs" />
+    <Compile Include="HarfBuzzShapingService.cs" />
+    <Compile Include="NativeDll.cs" />
+    <Compile Include="NativeFonts\FontLoaderImpls.cs" />
+    <Compile Include="NativeFonts\NativeBridgeFreeType.cs" />
+    <Compile Include="NativeFonts\NativeFont.cs" />
+    <Compile Include="NativeFonts\NativeFontFace.cs" />
+    <Compile Include="NativeFonts\NativeFontGlyphBuilder.cs" />
+    <Compile Include="NativeFonts\NativeFonts.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Typography\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
-      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
-      <Name>Typography.OpenFont</Name>
+    <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
+      <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
+      <Name>PixelFarm.DrawingCanvas</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="3_Drawing_Fonts\ActualFont.cs" />
-    <Compile Include="3_Drawing_Fonts\FontFace.cs" />
-    <Compile Include="3_Drawing_Fonts\FontGlyph.cs" />
-    <Compile Include="3_Drawing_Fonts\FontKey.cs" />
-    <Compile Include="3_Drawing_Fonts\InstalledFontCollection.cs" />
-    <Compile Include="3_Drawing_Fonts\NativeBridgeHB.cs" />
-    <Compile Include="0_Start\GraphicsPlatform.cs" />
-    <Compile Include="1_Canvas\Canvas.cs" />
-    <Compile Include="1_Canvas\CanvasOptions.cs" />
-    <Compile Include="1_Canvas\CanvasPainter.cs" />
-    <Compile Include="1_Canvas\CanvasPaintToOutputDelegate.cs" />
-    <Compile Include="1_Canvas\Fonts.cs" />
-    <Compile Include="1_Canvas\FontStyle.cs" />
+    <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -7,15 +7,15 @@ using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing.WinGdi
 {
     public class WinGdiPlusPlatform : GraphicsPlatform
-    { 
+    {
         static InstalledFontCollection s_installFontCollection = new InstalledFontCollection();
         static WinGdiPlusPlatform()
         {
-            var installFontsWin32 = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            var installFontsWin32 = new InstallFontsProviderWin32();
             s_installFontCollection.LoadInstalledFont(installFontsWin32.GetInstalledFontIter());
-            WinGdiFontFace.SetInstalledFontCollection(s_installFontCollection); 
+            WinGdiFontFace.SetInstalledFontCollection(s_installFontCollection);
             PixelFarm.Agg.AggBuffMx.SetNaiveBufferImpl(new Win32AggBuffMx());
-           
+
             //3. set default encoing
             WinGdiTextService.SetDefaultEncoding(System.Text.Encoding.ASCII);
         }

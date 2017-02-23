@@ -50,7 +50,7 @@ namespace BuildMergeProject
             mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
                targetProjectName,
                "v2.0",
-               "",//additional define constant
+               " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
                new string[] {
                   "System" ,
                });
@@ -124,7 +124,7 @@ namespace BuildMergeProject
                     break;
             }
             // 
-
+          
             return mergePro;
         }
         static MergeProject CreateMiniAggOneProject()
@@ -134,7 +134,7 @@ namespace BuildMergeProject
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj");
             //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
             //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.MiniAgg.csproj");
 
             return mergePro;
         }
