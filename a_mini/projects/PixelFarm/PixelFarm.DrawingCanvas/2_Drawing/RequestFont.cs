@@ -4,7 +4,6 @@ using System;
 using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing
 {
-
     /// <summary>
     ///font specification     
     /// </summary>
@@ -139,31 +138,6 @@ namespace PixelFarm.Drawing
         {
             return r._actualFont;
         }
-    }
-    public enum WriteDirection
-    {
-        Unknown,
-        /// <summary>
-        /// left-to-right
-        /// </summary>
-        LTR = 4,
-        /// <summary>
-        /// left-to-right
-        /// </summary>
-        RTL,
-        /// <summary>
-        /// top-to-bottom
-        /// </summary>
-        TTB,
-        /// <summary>
-        /// bottom-to-top
-        /// </summary>
-        BTT
-    }
-
-    public enum ScriptCode
-    {
-        Latin, 
     }
 
 }

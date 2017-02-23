@@ -1,6 +1,5 @@
 ﻿//MIT, 2016-2017, WinterDev
-using System;
-using System.Collections.Generic;
+
 using PixelFarm.Drawing.Fonts;
 
 namespace PixelFarm.Drawing.Text
