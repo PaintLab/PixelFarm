@@ -22,6 +22,7 @@
 using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
+
     public abstract class CanvasPainter
     {
         public abstract int Width { get; }
@@ -83,10 +84,7 @@ namespace PixelFarm.Agg
         public abstract void DrawString(
            string text,
            double x,
-           double y);
-
-
-
+           double y); 
     }
 
 }

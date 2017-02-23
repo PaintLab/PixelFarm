@@ -13,8 +13,8 @@ namespace PixelFarm.DrawingGL
 
         MySimpleFontAtlasBuilder atlasBuilder;
         SimpleFontAtlas fontAtlas;
-
         FontFace nOpenTypeFontFace;
+
         public TextureFontFace(FontFace nOpenTypeFontFace, string xmlFontInfo, GlyphImage glyphImg)
         {
             //for msdf font
