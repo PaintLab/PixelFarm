@@ -35,17 +35,17 @@ namespace PixelFarm.Drawing.Win32
             }
         }
     }
-    /// <summary>
-    /// provide image buffer from filename, no System.Drawing
-    /// </summary>
-    public class ImageProviderWin32 : IImageProvider
-    {
+    ///// <summary>
+    ///// provide image buffer from filename, no System.Drawing
+    ///// </summary>
+    //public class ImageProviderWin32 : IImageProvider
+    //{
     
-        //use mananged loader?
-        public byte[] LoadImageBufferFromFile(string filename)
-        {
-            //read data  
-            return null;
-        }
-    }
+    //    //use mananged loader?
+    //    public byte[] LoadImageBufferFromFile(string filename)
+    //    {
+    //        //read data  
+    //        return null;
+    //    }
+    //}
 }
