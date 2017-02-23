@@ -8,8 +8,8 @@
     <ProjectGuid>{821C2F8B-45E4-4242-970D-AE64780970B2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.DataProvider.Native</RootNamespace>
-    <AssemblyName>PixelFarm.DataProvider.Native</AssemblyName>
+    <RootNamespace>PixelFarm.NativeFonts</RootNamespace>
+    <AssemblyName>PixelFarm.NativeFonts</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,7 +33,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bitmap\NativeImage.cs" />
@@ -56,9 +55,9 @@
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Typography\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
-      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
-      <Name>Typography.OpenFont</Name>
+    <ProjectReference Include="..\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

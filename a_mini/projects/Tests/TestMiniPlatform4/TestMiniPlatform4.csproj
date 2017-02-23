@@ -69,9 +69,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.DataProvider.Native\PixelFarm.DataProvider.Native.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj">
       <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>
-      <Name>PixelFarm.DataProvider.Native</Name>
+      <Name>PixelFarm.NativeFonts</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>

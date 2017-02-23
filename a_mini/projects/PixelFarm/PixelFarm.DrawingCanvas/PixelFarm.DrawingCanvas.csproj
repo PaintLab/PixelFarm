@@ -32,7 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -54,7 +53,6 @@
     <Compile Include="3_Drawing_Fonts\FontKey.cs" />
     <Compile Include="3_Drawing_Fonts\InstalledFontCollection.cs" />
     <Compile Include="3_Drawing_Fonts\NativeBridgeHB.cs" />
-    <Compile Include="4_Drawing_Text\TextShapingAndLayoutService.cs" />
     <Compile Include="0_Start\GraphicsPlatform.cs" />
     <Compile Include="1_Canvas\Canvas.cs" />
     <Compile Include="1_Canvas\CanvasOptions.cs" />
@@ -62,11 +60,6 @@
     <Compile Include="1_Canvas\CanvasPaintToOutputDelegate.cs" />
     <Compile Include="1_Canvas\Fonts.cs" />
     <Compile Include="1_Canvas\FontStyle.cs" />
-    <Compile Include="NOpenTypeFonts\GlyphPathBuilderVxs.cs" />
-    <Compile Include="4_Drawing_Text\ManagedShapingService.cs" />
-    <Compile Include="NOpenTypeFonts\MyGlyphPathBuilder.cs" />
-    <Compile Include="NOpenTypeFonts\NOpenTypeFont.cs" />
-    <Compile Include="NOpenTypeFonts\NOpenTypeFontLoader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
