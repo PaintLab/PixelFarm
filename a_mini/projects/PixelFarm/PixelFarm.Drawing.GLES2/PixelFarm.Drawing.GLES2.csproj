@@ -110,15 +110,6 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\TextureFonts\TextureFont.cs">
       <Link>DrawingGL\TextureFonts\TextureFont.cs</Link>
     </Compile>
-    <Compile Include="..\win32utils\MyWin32.cs">
-      <Link>PixelFarm.Drawing.GLES2\Win32Utils\MyWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\win32utils\NativeTextWin32.cs">
-      <Link>PixelFarm.Drawing.GLES2\Win32Utils\NativeTextWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\win32utils\NativeWin32MemoryDc.cs">
-      <Link>PixelFarm.Drawing.GLES2\Win32Utils\NativeWin32MemoryDc.cs</Link>
-    </Compile>
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\GLTextPrinter.cs" />
     <Compile Include="0_Start\GLES2Platform.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\1_MyGLCanvas_Specific.cs" />
@@ -129,7 +120,6 @@
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\GLCanvasPainter.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\PensAndBrushes.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\TextureFontStore.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\Implementation\WinGdiFontPrinter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
