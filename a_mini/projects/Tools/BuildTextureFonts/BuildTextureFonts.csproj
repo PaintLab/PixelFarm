@@ -91,6 +91,10 @@
       <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
+      <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
+      <Name>PixelFarm.DrawingCanvas</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniAgg.csproj">
       <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
       <Name>PixelFarm.MiniAgg</Name>
