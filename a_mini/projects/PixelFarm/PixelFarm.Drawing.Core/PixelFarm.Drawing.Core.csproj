@@ -57,6 +57,8 @@
     <Compile Include="..\BurningMineCurve\CurveUtils\VectorHelper.cs">
       <Link>9_PixelFarm_AggVertex_More\BurningMineCurves\VectorHelper.cs</Link>
     </Compile>
+    <Compile Include="5_PixelFarm_Agg\ActualImage.cs" />
+    <Compile Include="5_PixelFarm_Agg\PixelFormat.cs" />
     <Compile Include="ForNet20\ExtensionAttribute.cs" />
     <Compile Include="1_Drawing\RenderVx.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\AggBasics.cs" />

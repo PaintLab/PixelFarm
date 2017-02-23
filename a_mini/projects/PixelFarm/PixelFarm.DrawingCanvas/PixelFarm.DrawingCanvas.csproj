@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -48,8 +49,6 @@
     <Compile Include="3_Drawing_Fonts\FontKey.cs" />
     <Compile Include="3_Drawing_Fonts\NativeBridgeHB.cs" />
     <Compile Include="4_Drawing_Text\TextShapingAndLayoutService.cs" />
-    <Compile Include="5_PixelFarm_Agg\ActualImage.cs" />
-    <Compile Include="5_PixelFarm_Agg\PixelFormat.cs" />
     <Compile Include="Canvas\Canvas.cs" />
     <Compile Include="Canvas\CanvasOptions.cs" />
     <Compile Include="Canvas\CanvasPaintToOutputDelegate.cs" />
