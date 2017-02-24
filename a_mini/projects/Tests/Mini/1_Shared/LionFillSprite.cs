@@ -57,6 +57,7 @@ namespace PixelFarm.Agg
                 );
                 //create vertextStore again from original path
                 myvxs = new VertexStore();
+                
                 transform.TransformToVxs(lionShape.Path.Vxs, myvxs);
 
                 if (AutoFlipY)
@@ -83,7 +84,7 @@ namespace PixelFarm.Agg
                     {
                         p.FillColor = colors[i];
                         p.Fill(new VertexStoreSnap(myvxs, pathList[i]));
-                        //graphics2D.Render(new VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                      
                     }
                 }
                 catch (Exception ex)
