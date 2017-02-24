@@ -33,10 +33,23 @@ namespace Mini
                 int max = Math.Max(this.Width, this.Height);
                 canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
                 canvasPainter = new GLCanvasPainter(canvas2d, max, max);
+                //create text printer for opengl
+
+                //1. win gdi based
+                //var printer = new WinGdiFontPrinter(canvas2d, w, h);
+                //canvasPainter.TextPrinter = printer;
+                //----------------------
+                //2. raw vxs
+                //var printer = new PixelFarm.Drawing.Fonts.TextPrinter(canvasPainter);
+                //canvasPainter.TextPrinter = printer;
+                //----------------------
+                //3. agg texture based font texture
+                var printer = new AggFontPrinter(canvas2d, w, h);
+                canvasPainter.TextPrinter = printer;
             }
             return miniGLControl;
         }
-        
+
         public MyMiniGLES2Control MiniGLControl
         {
             get { return this.miniGLControl; }

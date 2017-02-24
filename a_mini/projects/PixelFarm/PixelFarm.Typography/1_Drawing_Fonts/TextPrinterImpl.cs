@@ -9,7 +9,7 @@ using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
 
-
+    
     public class TextPrinter : ITextPrinter
     {
 
@@ -29,7 +29,7 @@ namespace PixelFarm.Drawing.Fonts
         public void DrawString(string text, double x, double y)
         {
             glyphPlanList.Clear();
-            var currentFont = canvasPainter.CurrentFont;
+            RequestFont currentFont = canvasPainter.CurrentFont;
             vxsTextPrinter.Print(currentFont.SizeInPoints, text, glyphPlanList);
 
             int glyphListLen = glyphPlanList.Count;

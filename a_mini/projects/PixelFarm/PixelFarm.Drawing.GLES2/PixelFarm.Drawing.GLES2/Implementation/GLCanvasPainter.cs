@@ -1,7 +1,6 @@
 ﻿//MIT, 2016-2017, WinterDev
 
-using System;
-using PixelFarm.Agg;
+ 
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.DrawingGL
@@ -15,7 +14,7 @@ namespace PixelFarm.DrawingGL
         public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
             : base(canvas, w, h)
         {
-            //_win32GdiPrinter = new WinGdiFontPrinter(w, h);
+
         }
         public ITextPrinter TextPrinter
         {
@@ -26,19 +25,19 @@ namespace PixelFarm.DrawingGL
         {
             get
             {
-                throw new NotImplementedException();
+                return _canvas.CanvasOriginX;
             }
         }
         public override float OriginY
         {
             get
             {
-                throw new NotImplementedException();
+                return _canvas.CanvasOriginY;
             }
         }
         public override void SetOrigin(float ox, float oy)
         {
-            throw new NotImplementedException();
+            _canvas.SetCanvasOrigin((int)ox, (int)oy);
         }
         public override RequestFont CurrentFont
         {
@@ -84,7 +83,7 @@ namespace PixelFarm.DrawingGL
                 {
                     _textPriner.DrawString(text, x, y);
                 }
-                
+
             }
         }
         public bool UseTextureFontIfAvailable { get; set; }
