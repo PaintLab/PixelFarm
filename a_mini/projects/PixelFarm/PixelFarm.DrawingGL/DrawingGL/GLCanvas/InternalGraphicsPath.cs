@@ -35,6 +35,11 @@ namespace PixelFarm.DrawingGL
             if (areaTess == null)
             {
                 List<Vertex> vertextList = tess.TessPolygon(coordXYs);
+                if (vertextList == null)
+                {
+                    tessAreaTriangleCount = 0;
+                    return null;
+                }
                 //-----------------------------   
                 //switch how to fill polygon
                 int j = vertextList.Count;
@@ -68,6 +73,7 @@ namespace PixelFarm.DrawingGL
         public List<Vertex> TessPolygon(float[] vertex2dCoords)
         {
             int ncoords = vertex2dCoords.Length / 2;
+            if (ncoords == 0) { return null; }
             List<Vertex> vertexts = new List<Vertex>(ncoords);
             int nn = 0;
             for (int i = 0; i < ncoords; ++i)

@@ -351,11 +351,7 @@ namespace PixelFarm.DrawingGL
             sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
             sdfShader.Render(bmp, x, y, bmp.Width * scale, bmp.Height * scale);
         }
-        //public void DrawImageWithSdf(GLBitmap bmp, float x, float y)
-        //{
-        //    sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
-        //    sdfShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        //}
+
         //-------------------------------------------------------------------------------
         public void FillTriangleStrip(Drawing.Color color, float[] coords, int n)
         {
@@ -400,7 +396,11 @@ namespace PixelFarm.DrawingGL
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
-                            this.basicFillShader.FillTriangles(f.GetAreaTess(ref this.tessTool), f.TessAreaTriangleCount, color);
+                            float[] tessArea = f.GetAreaTess(ref this.tessTool);
+                            if (tessArea != null)
+                            {
+                                this.basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);
+                            }
                         }
                     }
                     break;
@@ -415,11 +415,11 @@ namespace PixelFarm.DrawingGL
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
-                            basicFillShader.FillTriangles(f.GetAreaTess(ref this.tessTool), f.TessAreaTriangleCount, color);
-                            int borderCount = f.BorderTriangleStripCount;
-                            if (borderCount > 0)
+                            float[] tessArea = f.GetAreaTess(ref this.tessTool);
+                            if (tessArea != null)
                             {
-                                smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), borderCount);
+                                basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);
+                                smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), f.BorderTriangleStripCount);
                             }
                         }
                         StrokeWidth = prevWidth;
@@ -462,7 +462,10 @@ namespace PixelFarm.DrawingGL
 
                             float[] tessArea = fig.GetAreaTess(ref this.tessTool);
                             //-------------------------------------   
-                            this.basicFillShader.FillTriangles(tessArea, fig.TessAreaTriangleCount, PixelFarm.Drawing.Color.Black);
+                            if (tessArea != null)
+                            {
+                                this.basicFillShader.FillTriangles(tessArea, fig.TessAreaTriangleCount, PixelFarm.Drawing.Color.Black);
+                            }
                             //-------------------------------------- 
                             //render color
                             //--------------------------------------  
