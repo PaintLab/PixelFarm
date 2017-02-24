@@ -65,6 +65,28 @@ namespace PixelFarm.DrawingGL
                 }
             }
         }
+        public override SmoothingMode SmoothingMode
+        {
+            get
+            {
+                return base.SmoothingMode;
+            }
+
+            set
+            {
+                base.SmoothingMode = value;
+                switch (value)
+                {
+                    case SmoothingMode.HighQuality:
+                    case SmoothingMode.AntiAlias:
+                        this.Canvas.SmoothMode = CanvasSmoothMode.Smooth;
+                        break;
+                    default:
+                        this.Canvas.SmoothMode = CanvasSmoothMode.No;
+                        break;
+                }
+            }
+        }
         public override void DrawString(string text, double x, double y)
         {
 
