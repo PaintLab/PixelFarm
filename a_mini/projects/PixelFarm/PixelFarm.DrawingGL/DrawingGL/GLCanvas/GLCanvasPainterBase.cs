@@ -570,7 +570,10 @@ namespace PixelFarm.DrawingGL
         }
         public override void FillRectangle(double left, double bottom, double right, double top, Color fillColor)
         {
+            Color prev_color = FillColor; //store prev value
+            FillColor = fillColor;
             FillRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
+            FillColor = prev_color;
         }
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {
