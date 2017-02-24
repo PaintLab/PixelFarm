@@ -46,7 +46,7 @@ namespace PixelFarm.Agg
         }
 
 
-        internal bool HasMoreThanOnePart { get; set; }
+        //internal bool HasMoreThanOnePart { get; set; }
 
         /// <summary>
         /// num of vertex
@@ -244,21 +244,21 @@ namespace PixelFarm.Agg
         }
         //----------------------------------------------------------
 
-        public void AddSubVertices(VertexStore anotherVxs)
-        {
-            int j = anotherVxs.Count;
-            this.HasMoreThanOnePart = true;
-            for (int i = 0; i < j; ++i)
-            {
-                double x, y;
-                VertexCmd cmd = anotherVxs.GetVertex(i, out x, out y);
-                this.AddVertex(x, y, cmd);
-                if (cmd == VertexCmd.Stop)
-                {
-                    break;
-                }
-            }
-        }
+        //public void AddSubVertices(VertexStore anotherVxs)
+        //{
+        //    int j = anotherVxs.Count;
+        //    this.HasMoreThanOnePart = true;
+        //    for (int i = 0; i < j; ++i)
+        //    {
+        //        double x, y;
+        //        VertexCmd cmd = anotherVxs.GetVertex(i, out x, out y);
+        //        this.AddVertex(x, y, cmd);
+        //        if (cmd == VertexCmd.Stop)
+        //        {
+        //            break;
+        //        }
+        //    }
+        //}
         //internal use only!
         public static void UnsafeDirectSetData(
             VertexStore vstore,

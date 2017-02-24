@@ -131,7 +131,7 @@ namespace PixelFarm.Agg
             }
             strkgen.WriteTo(vxs);
             strkgen.RemoveAll();
-            vxs.HasMoreThanOnePart = hasMoreThanOnePart;
+            //vxs.HasMoreThanOnePart = hasMoreThanOnePart;
 
             return vxs;
         }
