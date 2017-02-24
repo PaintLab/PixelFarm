@@ -33,7 +33,7 @@ namespace PixelFarm.DrawingGL
 
         MyMat4 orthoView;
         MyMat4 flipVerticalView;
-        MyMat4 orthoAndFlip; 
+        MyMat4 orthoAndFlip;
 
         TessTool tessTool;
         FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer 
@@ -627,7 +627,7 @@ namespace PixelFarm.DrawingGL
                 x,y,
                 x+w,y,
                 x+w,y+h,
-                x,x+h
+                x,y+h
             };
         }
     }
