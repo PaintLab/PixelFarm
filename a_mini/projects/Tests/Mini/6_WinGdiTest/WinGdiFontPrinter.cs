@@ -1,12 +1,81 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
+using PixelFarm.Agg;
+using PixelFarm.Drawing;
+using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.DrawingGL
 {
 
+    class AggFontPrinter : ITextPrinter
+    {
+        ActualImage actualImage;
+        ImageGraphics2D imgGfx2d;
+        AggCanvasPainter aggPainter;
+        TextPrinter textPrinter;
+        int bmpWidth;
+        int bmpHeight;
+        CanvasGL2d canvas;
+        GLCanvasPainter canvasPainter;
+       
+        public AggFontPrinter(GLCanvasPainter canvasPainter, int w, int h)
+        {
+            //TODO: review here
+            this.canvasPainter = canvasPainter;
+            this.canvas = canvasPainter.Canvas;
+            bmpWidth = w;
+            bmpHeight = h;
+            actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32);
+
+            imgGfx2d = new ImageGraphics2D(actualImage);
+            aggPainter = new AggCanvasPainter(imgGfx2d);
+            aggPainter.FillColor = Color.Black;
+            aggPainter.StrokeColor = Color.Black;
+
+            //set default1
+            aggPainter.CurrentFont = canvasPainter.CurrentFont;
+            textPrinter = new TextPrinter(aggPainter);
+            aggPainter.TextPrinter = textPrinter;
+        }
+
+        public void DrawString(string text, double x, double y)
+        {
+
+            aggPainter.Clear(Drawing.Color.White);
+            //draw text 
+            textPrinter.DrawString(text, 0, 18);
+
+            byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImage);
+            //------------------------------------------------------
+            GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
+
+            bool isYFliped = canvas.FlipY;
+            if (isYFliped)
+            {
+                canvas.DrawImage(glBmp, (float)x, (float)y);
+            }
+            else
+            {
+                canvas.FlipY = true;
+                canvas.DrawImage(glBmp, (float)x, (float)y);
+                canvas.FlipY = false;
+            }
+            glBmp.Dispose();
+        }
+
+        public void ChangeFont(RequestFont font)
+        {
+            aggPainter.CurrentFont = font;
+        }
+
+        public void ChangeFontColor(Color fontColor)
+        {
+            aggPainter.FillColor = fontColor;
+        }
+    }
     /// <summary>
     /// this use win gdi only
     /// </summary>
-    class WinGdiFontPrinter : PixelFarm.Drawing.Fonts.ITextPrinter, IDisposable
+    class WinGdiFontPrinter : ITextPrinter, IDisposable
     {
 
         int _width;
@@ -30,6 +99,14 @@ namespace PixelFarm.DrawingGL
             InitFont("tahoma", 14);
             memdc.SetTextColor(0);
         }
+        public void ChangeFont(RequestFont font)
+        {
+
+        } 
+        public void ChangeFontColor(Color fontColor)
+        {
+
+        }
         public void Dispose()
         {
             //TODO: review here 
@@ -46,9 +123,10 @@ namespace PixelFarm.DrawingGL
             logFont.lfQuality = 0;//default
             hfont = Win32.MyWin32.CreateFontIndirect(ref logFont);
             Win32.MyWin32.SelectObject(memdc.DC, hfont);
-        } 
+        }
         public void DrawString(string text, double x, double y)
         {
+            //TODO: review performan
             char[] textBuffer = text.ToCharArray();
             Win32.MyWin32.PatBlt(memdc.DC, 0, 0, bmpWidth, bmpHeight, Win32.MyWin32.WHITENESS);
             Win32.NativeTextWin32.TextOut(memdc.DC, 0, 0, textBuffer, textBuffer.Length);

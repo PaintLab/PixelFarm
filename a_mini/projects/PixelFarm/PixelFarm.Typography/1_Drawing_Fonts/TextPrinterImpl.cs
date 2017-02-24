@@ -15,6 +15,8 @@ namespace PixelFarm.Drawing.Fonts
 
         Agg.CanvasPainter canvasPainter;
         VxsTextPrinter vxsTextPrinter = new VxsTextPrinter();
+        List<GlyphPlan> glyphPlanList = new List<GlyphPlan>(20);
+
         public TextPrinter(Agg.CanvasPainter canvasPainter)
         {
             this.canvasPainter = canvasPainter;
@@ -23,27 +25,38 @@ namespace PixelFarm.Drawing.Fonts
             vxsTextPrinter.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;
         }
 
+        public void ChangeFont(RequestFont font)
+        {
+            //change font
+
+        }
+
+        public void ChangeFontColor(Color fontColor)
+        {
+            //change font color
+        }
         public void DrawString(string text, double x, double y)
         {
-            var currentFont = canvasPainter.CurrentFont;
-
-            List<GlyphPlan> glyphPlanList = new List<GlyphPlan>(text.Length);
+            glyphPlanList.Clear();
+            RequestFont currentFont = canvasPainter.CurrentFont;
             vxsTextPrinter.Print(currentFont.SizeInPoints, text, glyphPlanList);
 
             int glyphListLen = glyphPlanList.Count;
 
             float ox = canvasPainter.OriginX;
             float oy = canvasPainter.OriginY;
-          
+
             for (int i = 0; i < glyphListLen; ++i)
             {
-                GlyphPlan glyphPlan = glyphPlanList[i];                 
-                canvasPainter.SetOrigin( (float)(glyphPlan.x + x), (float)(glyphPlan.y + y));
+                GlyphPlan glyphPlan = glyphPlanList[i];
+                canvasPainter.SetOrigin((float)(glyphPlan.x + x), (float)(glyphPlan.y + y));
                 canvasPainter.Fill((VertexStore)glyphPlan.vxs);
             }
             canvasPainter.SetOrigin(ox, oy);
 
         }
+
+
     }
 
     class VxsTextPrinter

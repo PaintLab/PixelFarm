@@ -101,16 +101,15 @@ namespace PixelFarm.DrawingGL
             //expand it
             List<float> expandCoords = new List<float>();
             int lim = coordCount - 2;
-            for (int i = 0; i < lim; )
+            for (int i = 0; i < lim;)
             {
                 CreateLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
                 i += 2;
             }
             //close coord
             CreateLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
-            //we need exact close the polygon
-            CreateLineSegment(expandCoords, coords[0], coords[1], coords[0], coords[1]);
-            borderTriangleStripCount = (coordCount + 2) * 2;
+
+            borderTriangleStripCount = (coordCount) * 2;
             return expandCoords.ToArray();
         }
         static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
@@ -153,7 +152,7 @@ namespace PixelFarm.DrawingGL
             List<float> xylist = new List<float>();
             allXYlist.Add(xylist);
             bool isAddToList = true;
-            for (; ; )
+            for (;;)
             {
                 double x, y;
                 VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);
@@ -194,7 +193,7 @@ namespace PixelFarm.DrawingGL
                         throw new System.NotSupportedException();
                 }
             }
-        EXIT_LOOP:
+            EXIT_LOOP:
 
             int j = allXYlist.Count;
             List<Figure> figures = new List<Figure>(j);

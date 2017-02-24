@@ -25,7 +25,7 @@ namespace PixelFarm.DrawingGL
         Arc arcTool;
         Ellipse ellipse = new Ellipse();
         Stroke _aggStroke = new Stroke(1);
-
+        protected ITextPrinter _textPriner;
 
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
         public GLCanvasPainterBase(CanvasGL2d canvas, int w, int h)
@@ -38,6 +38,7 @@ namespace PixelFarm.DrawingGL
             CurrentFont = new RequestFont("tahoma", 14);
 
         }
+        public CanvasGL2d Canvas { get { return this._canvas; } }
 
         public override RectInt ClipBox
         {
@@ -72,7 +73,11 @@ namespace PixelFarm.DrawingGL
 
             }
         }
-
+        public ITextPrinter TextPrinter
+        {
+            get { return _textPriner; }
+            set { _textPriner = value; }
+        }
         public override Color FillColor
         {
             get
@@ -82,6 +87,10 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _fillColor = value;
+                if (_textPriner != null)
+                {
+                    _textPriner.ChangeFontColor(value);
+                }
             }
         }
         public override int Height
@@ -570,7 +579,10 @@ namespace PixelFarm.DrawingGL
         }
         public override void FillRectangle(double left, double bottom, double right, double top, Color fillColor)
         {
+            Color prev_color = FillColor; //store prev value
+            FillColor = fillColor;
             FillRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
+            FillColor = prev_color;
         }
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {

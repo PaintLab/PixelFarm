@@ -33,7 +33,7 @@ namespace PixelFarm.DrawingGL
 
         MyMat4 orthoView;
         MyMat4 flipVerticalView;
-        MyMat4 orthoAndFlip; 
+        MyMat4 orthoAndFlip;
 
         TessTool tessTool;
         FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer 
@@ -88,17 +88,26 @@ namespace PixelFarm.DrawingGL
             GL.Viewport(0, 0, canvasW, canvasH);
         }
 
-        public void FlipY(bool flip)
+        bool _flipY;
+        public bool FlipY
         {
-            if (flip)
+            get
             {
-                shaderRes.OrthoView = orthoAndFlip;
+                return this._flipY;
             }
-            else
+            set
             {
-                shaderRes.OrthoView = orthoView;
+                if (this._flipY = value)
+                {
+                    shaderRes.OrthoView = orthoAndFlip;
+                }
+                else
+                {
+                    shaderRes.OrthoView = orthoView;
+                }
             }
         }
+
         public void Dispose()
         {
         }
@@ -152,10 +161,7 @@ namespace PixelFarm.DrawingGL
                 ClearBufferMask.DepthBufferBit |
                 ClearBufferMask.StencilBufferBit);
         }
-        public void SetFlipVerticalY(bool flipY)
-        {
 
-        }
         public void ClearColorBuffer()
         {
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -410,7 +416,11 @@ namespace PixelFarm.DrawingGL
                         {
                             Figure f = figures[i];
                             basicFillShader.FillTriangles(f.GetAreaTess(ref this.tessTool), f.TessAreaTriangleCount, color);
-                            smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), f.BorderTriangleStripCount);
+                            int borderCount = f.BorderTriangleStripCount;
+                            if (borderCount > 0)
+                            {
+                                smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), borderCount);
+                            }
                         }
                         StrokeWidth = prevWidth;
                     }
@@ -627,7 +637,7 @@ namespace PixelFarm.DrawingGL
                 x,y,
                 x+w,y,
                 x+w,y+h,
-                x,x+h
+                x,y+h
             };
         }
     }
