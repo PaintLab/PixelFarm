@@ -15,10 +15,13 @@ namespace PixelFarm.DrawingGL
         int bmpWidth;
         int bmpHeight;
         CanvasGL2d canvas;
-        public AggFontPrinter(CanvasGL2d canvas, int w, int h)
+        GLCanvasPainter canvasPainter;
+       
+        public AggFontPrinter(GLCanvasPainter canvasPainter, int w, int h)
         {
             //TODO: review here
-            this.canvas = canvas;
+            this.canvasPainter = canvasPainter;
+            this.canvas = canvasPainter.Canvas;
             bmpWidth = w;
             bmpHeight = h;
             actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32);
@@ -28,17 +31,19 @@ namespace PixelFarm.DrawingGL
             aggPainter.FillColor = Color.Black;
             aggPainter.StrokeColor = Color.Black;
 
-
-            aggPainter.CurrentFont = new Drawing.RequestFont("tahoma", 14);
+            //set default1
+            aggPainter.CurrentFont = canvasPainter.CurrentFont;
             textPrinter = new TextPrinter(aggPainter);
             aggPainter.TextPrinter = textPrinter;
         }
+
         public void DrawString(string text, double x, double y)
         {
-            aggPainter.Clear(Drawing.Color.White);
-            
 
+            aggPainter.Clear(Drawing.Color.White);
+            //draw text 
             textPrinter.DrawString(text, 0, 18);
+
             byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImage);
             //------------------------------------------------------
             GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
@@ -53,9 +58,18 @@ namespace PixelFarm.DrawingGL
                 canvas.FlipY = true;
                 canvas.DrawImage(glBmp, (float)x, (float)y);
                 canvas.FlipY = false;
-            } 
+            }
             glBmp.Dispose();
-          
+        }
+
+        public void ChangeFont(RequestFont font)
+        {
+            aggPainter.CurrentFont = font;
+        }
+
+        public void ChangeFontColor(Color fontColor)
+        {
+            aggPainter.FillColor = fontColor;
         }
     }
     /// <summary>
@@ -84,6 +98,14 @@ namespace PixelFarm.DrawingGL
             //use default font from current platform
             InitFont("tahoma", 14);
             memdc.SetTextColor(0);
+        }
+        public void ChangeFont(RequestFont font)
+        {
+
+        } 
+        public void ChangeFontColor(Color fontColor)
+        {
+
         }
         public void Dispose()
         {

@@ -44,7 +44,7 @@ namespace Mini
                 //canvasPainter.TextPrinter = printer;
                 //----------------------
                 //3. agg texture based font texture
-                var printer = new AggFontPrinter(canvas2d, w, h);
+                var printer = new AggFontPrinter(canvasPainter, w, h);
                 canvasPainter.TextPrinter = printer;
             }
             return miniGLControl;

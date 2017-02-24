@@ -9,7 +9,7 @@ using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
 
-    
+
     public class TextPrinter : ITextPrinter
     {
 
@@ -25,7 +25,16 @@ namespace PixelFarm.Drawing.Fonts
             vxsTextPrinter.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;
         }
 
+        public void ChangeFont(RequestFont font)
+        {
+            //change font
 
+        }
+
+        public void ChangeFontColor(Color fontColor)
+        {
+            //change font color
+        }
         public void DrawString(string text, double x, double y)
         {
             glyphPlanList.Clear();
@@ -46,6 +55,8 @@ namespace PixelFarm.Drawing.Fonts
             canvasPainter.SetOrigin(ox, oy);
 
         }
+
+
     }
 
     class VxsTextPrinter

@@ -1,6 +1,6 @@
 ﻿//MIT, 2016-2017, WinterDev
 
- 
+
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.DrawingGL
@@ -8,19 +8,14 @@ namespace PixelFarm.DrawingGL
     public class GLCanvasPainter : GLCanvasPainterBase
     {
 
-        ITextPrinter _textPriner;
+
         RequestFont _requestFont;
         TextureFont _textureFont;
         public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
             : base(canvas, w, h)
         {
+        }
 
-        }
-        public ITextPrinter TextPrinter
-        {
-            get { return _textPriner; }
-            set { _textPriner = value; }
-        }
         public override float OriginX
         {
             get
@@ -50,7 +45,10 @@ namespace PixelFarm.DrawingGL
 
                 _requestFont = value;
                 _textureFont = null;
-
+                if (_textPriner != null)
+                {
+                    _textPriner.ChangeFont(value);
+                }
                 if (_requestFont.SizeInPoints > 10)
                 {
                     if (UseTextureFontIfAvailable)

@@ -5,6 +5,9 @@ namespace PixelFarm.Drawing.Fonts
 {
     public interface ITextPrinter
     {
+      
         void DrawString(string text, double x, double y);
+        void ChangeFont(RequestFont font);
+        void ChangeFontColor(Color fontColor);
     }
 }
