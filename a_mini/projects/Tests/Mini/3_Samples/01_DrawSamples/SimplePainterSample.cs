@@ -30,8 +30,8 @@ namespace PixelFarm.Agg.SimplePainter
             //// draw a filled box
             p.FillRectangle(60, 260, 200, 280, Drawing.Color.Yellow);
 
-            //// and an outline around it
-            //p.Rectangle(60, 260, 200, 280, Drawing.Color.Magenta);
+            // and an outline around it
+            p.Rectangle(60, 260, 200, 280, Drawing.Color.Magenta);
             p.DrawString("A Simple Example", 20, 400);
             p.DrawString("A Simple Example2", 300, 350);
             p.DrawString("A Simple Example3", 300, 300);
