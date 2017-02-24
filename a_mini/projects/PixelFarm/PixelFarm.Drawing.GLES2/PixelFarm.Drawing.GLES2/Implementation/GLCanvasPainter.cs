@@ -22,6 +22,24 @@ namespace PixelFarm.DrawingGL
             get { return _textPriner; }
             set { _textPriner = value; }
         }
+        public override float OriginX
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public override float OriginY
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public override void SetOrigin(float ox, float oy)
+        {
+            throw new NotImplementedException();
+        }
         public override RequestFont CurrentFont
         {
             get

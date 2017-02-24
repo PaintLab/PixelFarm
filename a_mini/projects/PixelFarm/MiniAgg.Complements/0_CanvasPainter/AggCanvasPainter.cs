@@ -74,15 +74,15 @@ namespace PixelFarm.Agg
         {
             gx.Clear(color);
         }
-        public float OriginX
+        public override float OriginX
         {
             get { return sclineRas.OffsetOriginX; }
         }
-        public float OriginY
+        public override float OriginY
         {
             get { return sclineRas.OffsetOriginY; }
         }
-        public void SetOrigin(float x, float y)
+        public override void SetOrigin(float x, float y)
         {
             sclineRas.OffsetOriginX = x;
             sclineRas.OffsetOriginY = y;
