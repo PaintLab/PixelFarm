@@ -115,12 +115,11 @@ namespace PixelFarm.Agg.Sample_LionOutline
         }
         public override void Draw(CanvasPainter p)
         {
-            base.Draw(p);
-        }
+            var p1 = p as AggCanvasPainter;
+            if (p1 == null) { return; }
 
-        public override void OnDraw(Graphics2D graphics2D)
-        {
-            //render 
+            Graphics2D graphics2D = p1.Graphics;
+
             var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             int width = widgetsSubImage.Width;
             int height = widgetsSubImage.Height;
@@ -140,7 +139,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
             //transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
             //transform *= Affine.NewTranslation(width / 2, height / 2);
 
-            
+
             if (RenderAsScanline)
             {
                 var rasterizer = graphics2D.ScanlineRasterizer;
@@ -185,8 +184,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 }
                 Release(ref vxs);
             }
-
-            base.OnDraw(graphics2D);
-        }
+            base.Draw(p);
+        } 
     }
 }

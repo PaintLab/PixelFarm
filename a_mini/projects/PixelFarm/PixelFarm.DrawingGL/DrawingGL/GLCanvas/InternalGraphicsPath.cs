@@ -158,6 +158,7 @@ namespace PixelFarm.DrawingGL
             List<float> xylist = new List<float>();
             allXYlist.Add(xylist);
             bool isAddToList = true;
+            //bool vxsMoreThan1 =  vxsSnap.VxsHasMoreThanOnePart;
             for (;;)
             {
                 double x, y;
@@ -187,11 +188,17 @@ namespace PixelFarm.DrawingGL
                         xylist.Add((float)prevMoveToY);
                         prevX = prevMoveToX;
                         prevY = prevMoveToY;
-                        //start the new one
-                        xylist = new List<float>();
-                        isAddToList = false;
+                        //start the new one 
+
+                        //if (vxsMoreThan1)
+                        //{
+                        //    xylist = new List<float>();
+                        //    isAddToList = false;
+                        //}
                         break;
                     case PixelFarm.Agg.VertexCmd.EndFigure:
+                        {
+                        }
                         break;
                     case PixelFarm.Agg.VertexCmd.Stop:
                         goto EXIT_LOOP;

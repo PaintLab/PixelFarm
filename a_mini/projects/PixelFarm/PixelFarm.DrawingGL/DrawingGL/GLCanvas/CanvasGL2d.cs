@@ -410,6 +410,7 @@ namespace PixelFarm.DrawingGL
                         List<Figure> figures = igpth.figures;
                         int subPathCount = figures.Count;
                         float prevWidth = StrokeWidth;
+                         
                         StrokeColor = color;
                         StrokeWidth = 0.5f;
                         for (int i = 0; i < subPathCount; ++i)
@@ -418,7 +419,7 @@ namespace PixelFarm.DrawingGL
                             float[] tessArea = f.GetAreaTess(ref this.tessTool);
                             if (tessArea != null)
                             {
-                                basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);
+                                basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);                                 
                                 smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), f.BorderTriangleStripCount);
                             }
                         }

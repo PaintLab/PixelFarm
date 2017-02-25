@@ -106,6 +106,7 @@ namespace PixelFarm.Agg.VertexSource
             if (figureCount > 0)
             {
                 myvxs.AddVertex(0, 0, VertexCmd.Stop);
+                //myvxs.HasMoreThanOnePart = true;
             }
             figureCount++;
             return myvxs.Count;

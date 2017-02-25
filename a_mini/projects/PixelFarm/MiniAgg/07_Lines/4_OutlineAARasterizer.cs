@@ -24,8 +24,10 @@ namespace PixelFarm.Agg.Lines
     {
         public readonly int x;
         public readonly int y;
-        const int SIGDIFF = LineAA.SUBPIXEL_SCALE + (LineAA.SUBPIXEL_SCALE / 2);
         public int len;
+        //
+        const int SIGDIFF = LineAA.SUBPIXEL_SCALE + (LineAA.SUBPIXEL_SCALE / 2);
+
         public LineAAVertex(int x, int y)
         {
             this.x = x;
@@ -34,8 +36,9 @@ namespace PixelFarm.Agg.Lines
         }
         public bool IsDiff(LineAAVertex val)
         {
-            int dx = val.x - x;
-            int dy = val.y - y;
+            //*** NEED 64 bits long
+            long dx = val.x - x;
+            long dy = val.y - y;
             if ((dx + dy) == 0)
             {
                 return false;

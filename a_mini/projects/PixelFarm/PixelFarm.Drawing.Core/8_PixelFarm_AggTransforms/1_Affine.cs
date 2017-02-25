@@ -921,6 +921,8 @@ namespace PixelFarm.Agg.Transform
                 this.Transform(ref x, ref y);
                 outputVxs.AddVertex(x, y, cmd);
             }
+
+            //outputVxs.HasMoreThanOnePart = src.HasMoreThanOnePart;
             return outputVxs;
         }
         /// <summary>
