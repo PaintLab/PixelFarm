@@ -24,8 +24,10 @@ namespace PixelFarm.Agg.Lines
     {
         public readonly int x;
         public readonly int y;
-        const int SIGDIFF = LineAA.SUBPIXEL_SCALE + (LineAA.SUBPIXEL_SCALE / 2);
         public int len;
+        //
+        const int SIGDIFF = LineAA.SUBPIXEL_SCALE + (LineAA.SUBPIXEL_SCALE / 2);
+
         public LineAAVertex(int x, int y)
         {
             this.x = x;
