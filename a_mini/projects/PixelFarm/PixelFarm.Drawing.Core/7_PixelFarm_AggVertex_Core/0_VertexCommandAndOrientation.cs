@@ -18,7 +18,7 @@ namespace PixelFarm.Agg
         NoMore = 0x00,
         //-----------------------        
         /// <summary>
-        /// close polygon and end figure
+        /// close polygon
         /// </summary>
         Close = 0x02,
         //----------------------- 
