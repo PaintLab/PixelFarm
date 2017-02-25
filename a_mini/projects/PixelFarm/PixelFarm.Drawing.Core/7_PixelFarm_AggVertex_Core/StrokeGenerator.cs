@@ -111,10 +111,11 @@ namespace PixelFarm.Agg
                 case VertexCmd.MoveTo:
                     vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
                     break;
+
                 case VertexCmd.Close:
+                case VertexCmd.CloseAndEndFigure:
                     m_closed = true;
-                    break;
-               
+                    break;               
                 default:
                     vertexDistanceList.AddVertex(new VertexDistance(x, y));
                     break;

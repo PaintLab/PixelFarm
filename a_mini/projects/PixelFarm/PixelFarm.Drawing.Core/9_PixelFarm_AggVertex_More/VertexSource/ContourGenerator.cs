@@ -93,6 +93,7 @@ namespace PixelFarm.Agg.VertexSource
                     vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
                     break;
                 case VertexCmd.Close:
+                case VertexCmd.CloseAndEndFigure:
                     {
                         //end and close
                         m_closed = true;
@@ -110,7 +111,7 @@ namespace PixelFarm.Agg.VertexSource
                         }
                     }
                     break;
-                 
+
                 default:
 
                     vertexDistanceList.AddVertex(new VertexDistance(x, y));

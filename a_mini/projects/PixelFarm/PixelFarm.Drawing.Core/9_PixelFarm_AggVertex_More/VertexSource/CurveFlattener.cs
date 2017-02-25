@@ -246,7 +246,9 @@ namespace PixelFarm.Agg.VertexSource
                             //-----------
                         }
                         break;
+
                     case VertexCmd.Close:
+                    case VertexCmd.CloseAndEndFigure:
                         {
                             latestCurveMode = CurvePointMode.NotCurve;
                             vxs.AddVertex(x, y, cmd);

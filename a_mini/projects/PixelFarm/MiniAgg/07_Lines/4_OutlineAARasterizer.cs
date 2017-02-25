@@ -551,11 +551,12 @@ namespace PixelFarm.Agg.Lines
                     Render(false);
                     MoveTo(x, y);
                     break;
+                
                 case VertexCmd.Close:
+                case VertexCmd.CloseAndEndFigure:
                     Render(true);
                     MoveTo(m_start_x, m_start_y);
-                    break;
-                 
+                    break; 
                 default:
                     LineTo(x, y);
                     break;

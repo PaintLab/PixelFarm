@@ -211,21 +211,16 @@ namespace PixelFarm.Agg
             switch (cmd)
             {
                 case VertexCmd.MoveTo:
-                    {
-                        MoveTo(x, y);
-                    }
+                    MoveTo(x, y);
                     break;
                 case VertexCmd.LineTo:
                 case VertexCmd.P2c:
                 case VertexCmd.P3c:
-                    {
-                        LineTo(x, y);
-                    }
+                    LineTo(x, y);
                     break;
                 case VertexCmd.Close:
-                    {
-                        ClosePolygon();
-                    }
+                case VertexCmd.CloseAndEndFigure:
+                    ClosePolygon();
                     break;
                 default:
                     {
@@ -322,71 +317,71 @@ namespace PixelFarm.Agg
 
 
 
-//            if (snap.VxsHasMoreThanOnePart)
-//            {
-//                //****
+            //            if (snap.VxsHasMoreThanOnePart)
+            //            {
+            //                //****
 
-//                //render all parts
-//                VertexStore vxs = snap.GetInternalVxs();
-//                int j = vxs.Count;
+            //                //render all parts
+            //                VertexStore vxs = snap.GetInternalVxs();
+            //                int j = vxs.Count;
 
-//                if (UseSubPixelRendering)
-//                {
-//                    for (int i = 0; i < j; ++i)
-//                    {
-//                        var cmd = vxs.GetVertex(i, out x, out y);
-//                        if (cmd != VertexCmd.Stop)
-//                        {
-//                            //AddVertext 1 of 4
-//                            AddVertex(cmd, (x + offsetOrgX) * 3, y + offsetOrgY);
-//                        }
-//                    }
-//                }
-//                else
-//                {
-//                    for (int i = 0; i < j; ++i)
-//                    {
-//                        var cmd = vxs.GetVertex(i, out x, out y);
-//                        if (cmd != VertexCmd.Stop)
-//                        {
-//                            //AddVertext 2 of 4
-//                            AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
-//                        }
-//                    }
-//                }
-//            }
-//            else
-//            {
-//                VertexSnapIter snapIter = snap.GetVertexSnapIter();
-//                VertexCmd cmd;
-//#if DEBUG
-//                int dbugVertexCount = 0;
-//#endif
-//                if (UseSubPixelRendering)
-//                {
-//                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
-//                    {
-//#if DEBUG
-//                        dbugVertexCount++;
-//#endif
-//                        //AddVertext 3 of 4
-//                        AddVertex(cmd, (x + offsetOrgX) * 3, y + offsetOrgY);
-//                    }
+            //                if (UseSubPixelRendering)
+            //                {
+            //                    for (int i = 0; i < j; ++i)
+            //                    {
+            //                        var cmd = vxs.GetVertex(i, out x, out y);
+            //                        if (cmd != VertexCmd.Stop)
+            //                        {
+            //                            //AddVertext 1 of 4
+            //                            AddVertex(cmd, (x + offsetOrgX) * 3, y + offsetOrgY);
+            //                        }
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    for (int i = 0; i < j; ++i)
+            //                    {
+            //                        var cmd = vxs.GetVertex(i, out x, out y);
+            //                        if (cmd != VertexCmd.Stop)
+            //                        {
+            //                            //AddVertext 2 of 4
+            //                            AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //            else
+            //            {
+            //                VertexSnapIter snapIter = snap.GetVertexSnapIter();
+            //                VertexCmd cmd;
+            //#if DEBUG
+            //                int dbugVertexCount = 0;
+            //#endif
+            //                if (UseSubPixelRendering)
+            //                {
+            //                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
+            //                    {
+            //#if DEBUG
+            //                        dbugVertexCount++;
+            //#endif
+            //                        //AddVertext 3 of 4
+            //                        AddVertex(cmd, (x + offsetOrgX) * 3, y + offsetOrgY);
+            //                    }
 
-//                }
-//                else
-//                {
+            //                }
+            //                else
+            //                {
 
-//                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
-//                    {
-//#if DEBUG
-//                        dbugVertexCount++;
-//#endif
-//                        //AddVertext 4 of 4
-//                        AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
-//                    }
-//                }
-//            }
+            //                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
+            //                    {
+            //#if DEBUG
+            //                        dbugVertexCount++;
+            //#endif
+            //                        //AddVertext 4 of 4
+            //                        AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
+            //                    }
+            //                }
+            //            }
         }
 
         public int MinX { get { return m_cellAARas.MinX; } }

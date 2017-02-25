@@ -17,10 +17,12 @@ namespace PixelFarm.Agg
         /// </summary>
         NoMore = 0x00,
         //-----------------------        
+        EndFigure = 0x01, //end current figure,( may not close eg line)
         /// <summary>
-        /// close polygon
+        /// close current polygon (but may not complete current figure)
         /// </summary>
         Close = 0x02,
+        CloseAndEndFigure = 0x03,//close current polygon + complete end figure
         //----------------------- 
         //start from move to is 
         MoveTo = 0x04,
@@ -52,6 +54,7 @@ namespace PixelFarm.Agg
         public static bool IsEndFigure(VertexCmd c)
         {
             //check only 2 lower bit
+            //TODO: review here
             return ((int)c & 0x3) >= (int)VertexCmd.Close;
         }
         //public static bool IsClose(VertexCmd c)
@@ -155,6 +158,7 @@ namespace PixelFarm.Agg
                     while (end < myvxs_count &&
                           VertexHelper.IsEndFigure(flags = myvxs.GetCommand(end)))
                     {
+                        //TODO: review hhere
                         myvxs.ReplaceVertex(end++, orientFlags, 0);
                         //myvxs.ReplaceCommand(end++, flags | orientFlags);// Path.set_orientation(cmd, orientation));
                     }
