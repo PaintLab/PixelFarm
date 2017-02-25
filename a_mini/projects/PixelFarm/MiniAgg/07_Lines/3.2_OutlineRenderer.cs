@@ -47,14 +47,15 @@ namespace PixelFarm.Agg.Lines
 
         public byte GetProfileValue(int dist)
         {
-#if DEBUG
-            int tmp = dist + SUBPIX_SCALE * 2;
-            if (tmp < 0 || tmp > m_profile.Length)
-            {
-                //?
-                return 255;
-            }
-#endif
+
+            //#if DEBUG
+            //            int tmp = dist + SUBPIX_SCALE * 2;
+            //            if (tmp < 0 || tmp > m_profile.Length)
+            //            {
+            //                //?
+            //                return 255;
+            //            }
+            //#endif
             return m_profile[dist + SUBPIX_SCALE * 2];
         }
 
