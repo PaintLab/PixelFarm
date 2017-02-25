@@ -180,7 +180,7 @@ namespace PixelFarm.Agg.VertexSource
 
                         if (vertexDistanceList.Count < 2 + (m_closed ? 1 : 0))
                         {
-                            cmd = VertexCmd.Stop;
+                            cmd = VertexCmd.NoMore;
                             break;
                         }
                         m_status = StrokeMath.Status.Outline1;
@@ -217,12 +217,12 @@ namespace PixelFarm.Agg.VertexSource
                         break;
                     case StrokeMath.Status.EndPoly1:
 
-                        if (!m_closed) return VertexCmd.Stop;
+                        if (!m_closed) return VertexCmd.NoMore;
                         m_status = StrokeMath.Status.Stop;
                         x = (int)EndVertexOrientation.CCW;
                         return VertexCmd.CloseAndEndFigure;
                     case StrokeMath.Status.Stop:
-                        return VertexCmd.Stop;
+                        return VertexCmd.NoMore;
                 }
             }
             return cmd;

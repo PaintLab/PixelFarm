@@ -18,9 +18,7 @@
 //----------------------------------------------------------------------------
 
 using PixelFarm.Drawing;
-using System;
-using System.Collections.Generic;
-using PixelFarm.Agg.VertexSource;
+using System; 
 using PixelFarm.VectorMath;
 namespace PixelFarm.Agg.UI
 {
@@ -61,7 +59,7 @@ namespace PixelFarm.Agg.UI
             y = 0;
             if (m_vertex > m_num_points)
             {
-                return VertexCmd.Stop;
+                return VertexCmd.NoMore;
             }
             if (m_vertex == m_num_points)
             {
@@ -83,12 +81,12 @@ namespace PixelFarm.Agg.UI
         public VertexStore MakeVxs(VertexStore vxs)
         {
             m_vertex = 0;
-            for (; ; )
+            for (;;)
             {
                 double x, y;
                 var cmd = this.GetNextVertex(out x, out y);
                 vxs.AddVertex(x, y, cmd);
-                if (cmd == VertexCmd.Stop)
+                if (cmd == VertexCmd.NoMore)
                 {
                     break;
                 }
@@ -200,7 +198,7 @@ namespace PixelFarm.Agg.UI
             for (int i = 0; i < j; ++i)
             {
                 var cmd = s_vxs.GetVertex(i, out x, out y);
-                if (cmd == VertexCmd.Stop)
+                if (cmd == VertexCmd.NoMore)
                 {
                     break;
                 }
@@ -227,7 +225,7 @@ namespace PixelFarm.Agg.UI
                 for (int i = 0; i < j; ++i)
                 {
                     var cmd = ellipseVxs.GetVertex(i, out x, out y);
-                    if (cmd == VertexCmd.Stop)
+                    if (cmd == VertexCmd.NoMore)
                     {
                         break;
                     }
@@ -242,7 +240,7 @@ namespace PixelFarm.Agg.UI
             //------------------------------------------------------------
 
             //close with stop
-            vxs.AddVertex(0, 0, VertexCmd.Stop);
+            vxs.AddVertex(0, 0, VertexCmd.NoMore);
             return vxs;
         }
         protected override RectD CalculateLocalBounds()

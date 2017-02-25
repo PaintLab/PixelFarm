@@ -200,7 +200,7 @@ namespace PixelFarm.DrawingGL
                         {
                         }
                         break;
-                    case PixelFarm.Agg.VertexCmd.Stop:
+                    case PixelFarm.Agg.VertexCmd.NoMore:
                         goto EXIT_LOOP;
                     default:
                         throw new System.NotSupportedException();

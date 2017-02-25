@@ -105,7 +105,7 @@ namespace PixelFarm.Agg.VertexSource
         {
             if (figureCount > 0)
             {
-                myvxs.AddVertex(0, 0, VertexCmd.Stop);
+                myvxs.AddVertex(0, 0, VertexCmd.NoMore);
                 //myvxs.HasMoreThanOnePart = true;
             }
             figureCount++;
@@ -113,7 +113,8 @@ namespace PixelFarm.Agg.VertexSource
         }
         public void Stop()
         {
-            myvxs.AddVertex(0, 0, VertexCmd.Stop);
+            //TODO: review stop command again
+            myvxs.AddVertex(0, 0, VertexCmd.NoMore);
         }
         //--------------------------------------------------------------------
         public void MoveTo(double x, double y)
@@ -217,7 +218,7 @@ namespace PixelFarm.Agg.VertexSource
                 case SvgPathCommand.TSmoothQuadraticBezierCurveTo:
                     {
                         //curve3
-                        var newC3 = CreateMirrorPoint(this.c3p2, new Vector2(this.lastX, this.lastY));
+                        Vector2 newC3 = CreateMirrorPoint(this.c3p2, new Vector2(this.lastX, this.lastY));
                         Curve3(newC3.X, newC3.Y, x, y);
                     }
                     break;
@@ -225,7 +226,7 @@ namespace PixelFarm.Agg.VertexSource
                 case SvgPathCommand.SmoothCurveTo:
                     {
                         //curve4
-                        var newC3 = CreateMirrorPoint(this.c4p3, new Vector2(this.lastX, this.lastY));
+                        Vector2 newC3 = CreateMirrorPoint(this.c4p3, new Vector2(this.lastX, this.lastY));
                         Curve3(newC3.X, newC3.Y, x, y);
                     }
                     break;
@@ -279,7 +280,7 @@ namespace PixelFarm.Agg.VertexSource
                 case SvgPathCommand.TSmoothQuadraticBezierCurveTo:
                     {
                         //create c4p1 from c3p1
-                        var c4p2 = CreateMirrorPoint(this.c3p2, new Vector2(this.lastX, this.lastY));
+                        Vector2 c4p2 = CreateMirrorPoint(this.c3p2, new Vector2(this.lastX, this.lastY));
                         Curve4(c4p2.X, c4p2.Y, p3x, p3y, x, y);
                     }
                     break;
@@ -287,7 +288,7 @@ namespace PixelFarm.Agg.VertexSource
                 case SvgPathCommand.SmoothCurveTo:
                     {
                         //curve4
-                        var c4p2 = CreateMirrorPoint(this.c4p3, new Vector2(this.lastX, this.lastY));
+                        Vector2 c4p2 = CreateMirrorPoint(this.c4p3, new Vector2(this.lastX, this.lastY));
                         Curve4(c4p2.X, c4p2.Y, p3x, p3y, x, y);
                     }
                     break;
@@ -400,8 +401,8 @@ namespace PixelFarm.Agg.VertexSource
         {
             double x, y;
             VertexCmd cmd_flags;
-            var snapIter = s.GetVertexSnapIter();
-            while ((cmd_flags = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
+            VertexSnapIter snapIter = s.GetVertexSnapIter();
+            while ((cmd_flags = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
             {
                 myvxs.AddVertex(x, y, cmd_flags);
             }
@@ -414,9 +415,9 @@ namespace PixelFarm.Agg.VertexSource
         public void JoinPath(VertexStoreSnap s)
         {
             double x, y;
-            var snapIter = s.GetVertexSnapIter();
+            VertexSnapIter snapIter = s.GetVertexSnapIter();
             VertexCmd cmd = snapIter.GetNextVertex(out x, out y);
-            if (cmd == VertexCmd.Stop)
+            if (cmd == VertexCmd.NoMore)
             {
                 return;
             }
@@ -442,18 +443,16 @@ namespace PixelFarm.Agg.VertexSource
                     {
                         cmd = VertexCmd.MoveTo;
                     }
-                    else
+                    else if (VertexHelper.IsMoveTo(cmd))
                     {
-                        if (VertexHelper.IsMoveTo(cmd))
-                        {
-                            cmd = VertexCmd.LineTo;
-                        }
+                        cmd = VertexCmd.LineTo;
                     }
+
                     myvxs.AddVertex(x, y, cmd);
                 }
             }
 
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
             {
                 myvxs.AddVertex(x, y, VertexHelper.IsMoveTo(cmd) ? VertexCmd.LineTo : cmd);
             }

@@ -226,7 +226,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //graphics2D.Render(new Stroke(0.1).MakeVxs(s1), ColorRGBA.Black);
                         p.FillColor = Color.Black;
 
-                        var v1 = GetFreeVxs();                        
+                        var v1 = GetFreeVxs();
                         var v2 = GetFreeVxs();
                         var v3 = GetFreeVxs();
 
@@ -453,12 +453,12 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
             VertexCmd cmd;
             double x, y;
-            for (; ; )
+            for (;;)
             {
                 cmd = GetNextVertex(out x, out y);
                 switch (cmd)
                 {
-                    case VertexCmd.Stop:
+                    case VertexCmd.NoMore:
                         {
                             yield return new VertexData(cmd, x, y);
                             yield break;
@@ -492,7 +492,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             y = 0;
             if (m_curr_r > m_r2)
             {
-                return VertexCmd.Stop;
+                return VertexCmd.NoMore;
             }
 
             x = m_x + Math.Cos(m_angle) * m_curr_r;
@@ -531,7 +531,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                 {
                     ++m_contours;
                 }
-            } while (cmd != VertexCmd.Stop);
+            } while (cmd != VertexCmd.NoMore);
         }
     }
 }

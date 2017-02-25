@@ -551,7 +551,7 @@ namespace PixelFarm.DrawingGL
                             npoints++;
                         }
                         break;
-                    case VertexCmd.Stop:
+                    case VertexCmd.NoMore:
                         {
                         }
                         break;
@@ -740,7 +740,7 @@ namespace PixelFarm.DrawingGL
             {
                 switch (vertexData.command)
                 {
-                    case VertexCmd.Stop:
+                    case VertexCmd.NoMore:
                         stopLoop = true;
                         break;
                     default:

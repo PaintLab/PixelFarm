@@ -131,7 +131,7 @@ namespace PixelFarm.Agg
             {
                 var cmd = GetNextVertex(ref x, ref y);
                 outputVxs.AddVertex(x, y, cmd);
-                if (cmd == VertexCmd.Stop)
+                if (cmd == VertexCmd.NoMore)
                 {
                     break;
                 }
@@ -164,7 +164,7 @@ namespace PixelFarm.Agg
 
                         if (vertexDistanceList.Count < 2 + (m_closed ? 1 : 0))
                         {
-                            cmd = VertexCmd.Stop;
+                            cmd = VertexCmd.NoMore;
                             break;
                         }
                         m_status = m_closed ? StrokeMath.Status.Outline1 : StrokeMath.Status.Cap1;
@@ -269,7 +269,7 @@ namespace PixelFarm.Agg
                         x = (int)EndVertexOrientation.CW;
                         return VertexCmd.CloseAndEndFigure;
                     case StrokeMath.Status.Stop:
-                        cmd = VertexCmd.Stop;
+                        cmd = VertexCmd.NoMore;
                         break;
                 }
             }
