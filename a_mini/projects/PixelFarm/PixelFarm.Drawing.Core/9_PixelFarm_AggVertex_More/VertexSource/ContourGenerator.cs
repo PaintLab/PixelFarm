@@ -92,7 +92,7 @@ namespace PixelFarm.Agg.VertexSource
                 case VertexCmd.MoveTo:
                     vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
                     break;
-                case VertexCmd.CloseAndEndFigure:
+                case VertexCmd.Close:
                     {
                         //end and close
                         m_closed = true;
@@ -110,22 +110,7 @@ namespace PixelFarm.Agg.VertexSource
                         }
                     }
                     break;
-                case VertexCmd.EndFigure:
-
-                    //end not close 
-                    if (m_orientation == EndVertexOrientation.Unknown)
-                    {
-                        switch ((int)x)
-                        {
-                            case 1:
-                            case 2:
-                                {
-                                    m_orientation = (EndVertexOrientation)x;
-                                }
-                                break;
-                        }
-                    }
-                    break;
+                 
                 default:
 
                     vertexDistanceList.AddVertex(new VertexDistance(x, y));
@@ -220,7 +205,7 @@ namespace PixelFarm.Agg.VertexSource
                         if (!m_closed) return VertexCmd.NoMore;
                         m_status = StrokeMath.Status.Stop;
                         x = (int)EndVertexOrientation.CCW;
-                        return VertexCmd.CloseAndEndFigure;
+                        return VertexCmd.Close;
                     case StrokeMath.Status.Stop:
                         return VertexCmd.NoMore;
                 }

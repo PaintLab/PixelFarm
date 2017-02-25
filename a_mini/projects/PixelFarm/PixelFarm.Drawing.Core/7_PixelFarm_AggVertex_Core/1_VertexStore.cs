@@ -139,7 +139,7 @@ namespace PixelFarm.Agg
         }
         public void AddCloseFigure()
         {
-            AddVertex(0, 0, VertexCmd.CloseAndEndFigure);
+            AddVertex(0, 0, VertexCmd.Close);
         }
 
         internal void ReplaceVertex(int index, double x, double y)

@@ -182,7 +182,7 @@ namespace PixelFarm.DrawingGL
                         prevX = x;
                         prevY = y;
                         break;
-                    case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
+                    case PixelFarm.Agg.VertexCmd.Close:
                         //from current point 
                         xylist.Add((float)prevMoveToX);
                         xylist.Add((float)prevMoveToY);
@@ -196,10 +196,7 @@ namespace PixelFarm.DrawingGL
                         //    isAddToList = false;
                         //}
                         break;
-                    case PixelFarm.Agg.VertexCmd.EndFigure:
-                        {
-                        }
-                        break;
+                   
                     case PixelFarm.Agg.VertexCmd.NoMore:
                         goto EXIT_LOOP;
                     default:

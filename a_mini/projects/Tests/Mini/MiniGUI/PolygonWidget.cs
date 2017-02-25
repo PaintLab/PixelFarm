@@ -64,7 +64,7 @@ namespace PixelFarm.Agg.UI
             if (m_vertex == m_num_points)
             {
                 ++m_vertex;
-                return m_close ? VertexCmd.CloseAndEndFigure : VertexCmd.EndFigure;
+                return m_close ? VertexCmd.Close : VertexCmd.NoMore;
             }
             x = m_polygon[m_vertex * 2];
             y = m_polygon[m_vertex * 2 + 1];

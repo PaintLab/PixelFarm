@@ -386,14 +386,14 @@ namespace PixelFarm.Agg.VertexSource
         {
             if (VertexHelper.IsVertextCommand(myvxs.GetLastCommand()))
             {
-                myvxs.AddVertex((int)EndVertexOrientation.CCW, 0, VertexCmd.CloseAndEndFigure);
+                myvxs.AddVertex((int)EndVertexOrientation.CCW, 0, VertexCmd.Close);
             }
         }
         public void CloseFigure()
         {
             if (VertexHelper.IsVertextCommand(myvxs.GetLastCommand()))
             {
-                myvxs.AddVertex(0, 0, VertexCmd.CloseAndEndFigure);
+                myvxs.AddVertex(0, 0, VertexCmd.Close);
             }
         }
         //// Concatenate path. The path is added as is.

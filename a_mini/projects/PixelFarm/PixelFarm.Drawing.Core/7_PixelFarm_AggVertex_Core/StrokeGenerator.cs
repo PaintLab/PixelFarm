@@ -111,12 +111,10 @@ namespace PixelFarm.Agg
                 case VertexCmd.MoveTo:
                     vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
                     break;
-                case VertexCmd.CloseAndEndFigure:
+                case VertexCmd.Close:
                     m_closed = true;
                     break;
-                case VertexCmd.EndFigure:
-                    m_closed = false;
-                    break;
+               
                 default:
                     vertexDistanceList.AddVertex(new VertexDistance(x, y));
                     break;
@@ -263,11 +261,11 @@ namespace PixelFarm.Agg
                     case StrokeMath.Status.EndPoly1:
                         m_status = m_prev_status;
                         x = (int)EndVertexOrientation.CCW;
-                        return VertexCmd.CloseAndEndFigure;
+                        return VertexCmd.Close;
                     case StrokeMath.Status.EndPoly2:
                         m_status = m_prev_status;
                         x = (int)EndVertexOrientation.CW;
-                        return VertexCmd.CloseAndEndFigure;
+                        return VertexCmd.Close;
                     case StrokeMath.Status.Stop:
                         cmd = VertexCmd.NoMore;
                         break;

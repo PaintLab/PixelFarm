@@ -36,7 +36,7 @@ namespace PixelFarm.Drawing.Skia
                         prevX = x;
                         prevY = y;
                         break;
-                    case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
+                    case PixelFarm.Agg.VertexCmd.Close:
                         //brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
                         brushPath.LineTo((float)prevMoveToX, (float)prevMoveToY);
 
@@ -44,9 +44,7 @@ namespace PixelFarm.Drawing.Skia
                         prevMoveToY = prevY = y;
                         //brush_path.CloseFigure();
                         brushPath.Close();
-                        break;
-                    case PixelFarm.Agg.VertexCmd.EndFigure:
-                        break;
+                        break; 
                     case PixelFarm.Agg.VertexCmd.NoMore:
                         i = vcount + 1;//exit from loop
                         break;
@@ -87,7 +85,7 @@ namespace PixelFarm.Drawing.Skia
                         prevX = x;
                         prevY = y;
                         break;
-                    case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
+                    case PixelFarm.Agg.VertexCmd.Close:
                         //from current point                         
                         //brushPath.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
                         brushPath.LineTo((float)prevMoveToX, (float)prevMoveToY);
@@ -95,9 +93,7 @@ namespace PixelFarm.Drawing.Skia
                         prevY = prevMoveToY;
                         //brushPath.CloseFigure();
                         brushPath.Close();
-                        break;
-                    case PixelFarm.Agg.VertexCmd.EndFigure:
-                        goto EXIT_LOOP;
+                        break; 
                     case PixelFarm.Agg.VertexCmd.NoMore:
                         goto EXIT_LOOP;
                     default:

@@ -16,14 +16,11 @@ namespace PixelFarm.Agg
         /// no more command
         /// </summary>
         NoMore = 0x00,
-        //-----------------------
-        //end figure command 2 lower bits 
-        //is end command when 2 lower bit > HasMore
-        EndFigure = 0x02,
+        //-----------------------        
         /// <summary>
         /// close polygon and end figure
         /// </summary>
-        CloseAndEndFigure = 0x03,
+        Close = 0x02,
         //----------------------- 
         //start from move to is 
         MoveTo = 0x04,
@@ -55,7 +52,7 @@ namespace PixelFarm.Agg
         public static bool IsEndFigure(VertexCmd c)
         {
             //check only 2 lower bit
-            return ((int)c & 0x3) >= (int)VertexCmd.EndFigure;
+            return ((int)c & 0x3) >= (int)VertexCmd.Close;
         }
         //public static bool IsClose(VertexCmd c)
         //{

@@ -35,14 +35,13 @@ namespace PixelFarm.Drawing.WinGdi
                         prevX = x;
                         prevY = y;
                         break;
-                    case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
+                    case PixelFarm.Agg.VertexCmd.Close:
                         brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
                         prevMoveToX = prevX = x;
                         prevMoveToY = prevY = y;
                         brush_path.CloseFigure();
                         break;
-                    case PixelFarm.Agg.VertexCmd.EndFigure:
-                        break;
+                   
                     case PixelFarm.Agg.VertexCmd.NoMore:
                         i = vcount + 1;//exit from loop
                         break;
@@ -82,15 +81,14 @@ namespace PixelFarm.Drawing.WinGdi
                         prevX = x;
                         prevY = y;
                         break;
-                    case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
+                    case PixelFarm.Agg.VertexCmd.Close:
                         //from current point                         
                         brush_path.AddLine((float)prevX, (float)prevY, (float)prevMoveToX, (float)prevMoveToY);
                         prevX = prevMoveToX;
                         prevY = prevMoveToY;
                         brush_path.CloseFigure();
                         break;
-                    case PixelFarm.Agg.VertexCmd.EndFigure:
-                        goto EXIT_LOOP;
+                     
                     case PixelFarm.Agg.VertexCmd.NoMore:
                         goto EXIT_LOOP;
                     default:
