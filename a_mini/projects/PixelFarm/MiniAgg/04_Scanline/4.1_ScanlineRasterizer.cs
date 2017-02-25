@@ -296,7 +296,7 @@ namespace PixelFarm.Agg
 #endif
             if (UseSubPixelRendering)
             {
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
+                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
                 {
 #if DEBUG
                     dbugVertexCount++;
@@ -309,7 +309,7 @@ namespace PixelFarm.Agg
             else
             {
 
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
+                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
                 {
 #if DEBUG
                     dbugVertexCount++;

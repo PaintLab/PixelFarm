@@ -43,7 +43,7 @@ namespace PixelFarm.Drawing.WinGdi
                         break;
                     case PixelFarm.Agg.VertexCmd.EndFigure:
                         break;
-                    case PixelFarm.Agg.VertexCmd.Stop:
+                    case PixelFarm.Agg.VertexCmd.NoMore:
                         i = vcount + 1;//exit from loop
                         break;
                     default:
@@ -91,7 +91,7 @@ namespace PixelFarm.Drawing.WinGdi
                         break;
                     case PixelFarm.Agg.VertexCmd.EndFigure:
                         goto EXIT_LOOP;
-                    case PixelFarm.Agg.VertexCmd.Stop:
+                    case PixelFarm.Agg.VertexCmd.NoMore:
                         goto EXIT_LOOP;
                     default:
                         throw new NotSupportedException();

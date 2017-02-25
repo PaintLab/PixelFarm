@@ -543,7 +543,7 @@ namespace PixelFarm.Agg.Lines
         {
             switch (cmd)
             {
-                case VertexCmd.Stop:
+                case VertexCmd.NoMore:
                     {
                     }
                     break;
@@ -570,7 +570,7 @@ namespace PixelFarm.Agg.Lines
             double y;
             VertexCmd cmd;
             var snapIter = s.GetVertexSnapIter();
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
             {
                 AddVertex(x, y, cmd);
             }

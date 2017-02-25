@@ -62,7 +62,7 @@ namespace PixelFarm.Agg
                 return GetCommand(m_num_vertices - 1);
             }
 
-            return VertexCmd.Stop;
+            return VertexCmd.NoMore;
         }
         public VertexCmd GetLastVertex(out double x, out double y)
         {
@@ -73,7 +73,7 @@ namespace PixelFarm.Agg
 
             x = 0;
             y = 0;
-            return VertexCmd.Stop;
+            return VertexCmd.NoMore;
         }
 
         public VertexCmd GetVertex(int index, out double x, out double y)
@@ -93,12 +93,11 @@ namespace PixelFarm.Agg
         {
             return (VertexCmd)m_cmds[index];
         }
-        //--------------------------------------------------
-        //mutable properties
+
         public void Clear()
         {
             m_num_vertices = 0;
-            System.Array.Clear(m_cmds, 0, m_cmds.Length); 
+            System.Array.Clear(m_cmds, 0, m_cmds.Length);
         }
         public void AddVertex(double x, double y, VertexCmd cmd)
         {
@@ -142,10 +141,7 @@ namespace PixelFarm.Agg
         {
             AddVertex(0, 0, VertexCmd.CloseAndEndFigure);
         }
-        public void AddStop()
-        {
-            AddVertex(0, 0, VertexCmd.Stop);
-        }
+
         internal void ReplaceVertex(int index, double x, double y)
         {
             m_coord_xy[index << 1] = x;
@@ -287,6 +283,7 @@ namespace PixelFarm.Agg
 
         private VertexStore(VertexStore src)
         {
+            //for copy from src to this instance
 
             this.m_allocated_vertices = src.m_allocated_vertices;
             this.m_num_vertices = src.m_num_vertices;
@@ -326,6 +323,6 @@ namespace PixelFarm.Agg
 
 
 
-    
+
 
 }

@@ -12,11 +12,17 @@ namespace PixelFarm.Agg
         //the order of these fields are significant!
         //---------------------------------
         //first lower 4 bits compact flags
-        Stop = 0x00,
+        /// <summary>
+        /// no more command
+        /// </summary>
+        NoMore = 0x00,
         //-----------------------
         //end figure command 2 lower bits 
         //is end command when 2 lower bit > HasMore
         EndFigure = 0x02,
+        /// <summary>
+        /// close polygon and end figure
+        /// </summary>
         CloseAndEndFigure = 0x03,
         //----------------------- 
         //start from move to is 
@@ -40,7 +46,7 @@ namespace PixelFarm.Agg
         }
         public static bool IsEmpty(VertexCmd c)
         {
-            return c == VertexCmd.Stop;
+            return c == VertexCmd.NoMore;
         }
         public static bool IsMoveTo(VertexCmd c)
         {
