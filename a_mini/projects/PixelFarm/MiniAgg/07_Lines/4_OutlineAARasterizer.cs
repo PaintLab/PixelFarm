@@ -34,8 +34,9 @@ namespace PixelFarm.Agg.Lines
         }
         public bool IsDiff(LineAAVertex val)
         {
-            int dx = val.x - x;
-            int dy = val.y - y;
+            //*** NEED 64 bits long
+            long dx = val.x - x;
+            long dy = val.y - y;
             if ((dx + dy) == 0)
             {
                 return false;
