@@ -48,6 +48,10 @@ namespace PixelFarm.Drawing.Fonts
         }
         public void DrawString(string text, double x, double y)
         {
+            DrawString(text.ToCharArray(), x, y);
+        }
+        public void DrawString(char[] text, double x, double y)
+        {
             glyphPlanList.Clear();
             RequestFont currentFont = canvasPainter.CurrentFont;
             vxsTextPrinter.Print(currentFont.SizeInPoints, text, glyphPlanList);
@@ -64,10 +68,7 @@ namespace PixelFarm.Drawing.Fonts
                 canvasPainter.Fill((VertexStore)glyphPlan.vxs);
             }
             canvasPainter.SetOrigin(ox, oy);
-
         }
-
-
     }
 
     class VxsTextPrinter
@@ -132,6 +133,12 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
         public void Print(float size, string str, List<GlyphPlan> glyphPlanBuffer)
+        {
+            
+            Print(size, str.ToCharArray(), glyphPlanBuffer);
+
+        }
+        public void Print(float size, char[] str, List<GlyphPlan> glyphPlanBuffer)
         {
             if (_currentTypeface == null)
             {

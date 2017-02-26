@@ -267,8 +267,13 @@ namespace PixelFarm.DrawingGL
         //{
         //    _currentTextureFont = textureFont;
         //}
+
         public override void DrawString(string text, double x, double y)
         {
+            if (_textPriner == null) { return; }
+            //--------------------------------
+            _textPriner.DrawString(text, x, y);
+
             //draw with texture printer ***
             //char[] chars = text.ToCharArray();
             //int j = chars.Length;

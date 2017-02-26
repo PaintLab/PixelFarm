@@ -10,60 +10,32 @@ namespace PixelFarm.Drawing.GLES2
 
     public partial class MyGLCanvas : Canvas, IDisposable
     {
-        CanvasGL2d canvasGL2;
+
+        GLCanvasPainter painter1;
         bool isDisposed;
         Stack<Rectangle> clipRectStack = new Stack<Rectangle>();
-        //-------------------------------
-        GLCanvasPainter painter1;
         Rectangle currentClipRect;
         Color currentTextColor;
-  
-        internal MyGLCanvas(
-            CanvasGL2d canvasGL2d,
-            int left, int top,
-            int width,
-            int height)
-        {
-            this.canvasGL2 = canvasGL2d;
-            painter1 = new GLCanvasPainter(canvasGL2d, width, height); 
-            this.left = left;
-            this.top = top;
-            this.right = left + width;
-            this.bottom = top + height;
-            currentClipRect = new Rectangle(0, 0, width, height);
 
-
-            this.CurrentFont = new RequestFont("tahoma", 10);
-            this.CurrentTextColor = Color.Black; 
-#if DEBUG
-            debug_canvas_id = dbug_canvasCount + 1;
-            dbug_canvasCount += 1;
-#endif
-            this.StrokeWidth = 1;
-        }
-        internal MyGLCanvas(
-           CanvasGL2d canvasGL2d,
-           GLCanvasPainter painter,
+        public MyGLCanvas(
+           GLCanvasPainter painter, //*** we wrap around GLCanvasPainter ***
            int left, int top,
            int width,
            int height)
         {
-            this.canvasGL2 = canvasGL2d;
+            //----------------
+            //set painter first
             this.painter1 = painter;
-
-
+            //----------------
             this.left = left;
             this.top = top;
             this.right = left + width;
             this.bottom = top + height;
-            currentClipRect = new Rectangle(0, 0, width, height);
 
+            currentClipRect = new Rectangle(0, 0, width, height);
 
             this.CurrentFont = new RequestFont("tahoma", 10);
             this.CurrentTextColor = Color.Black;
-
-            //internalPen = new InternalPen(Color.Black);
-            //internalBrush = new InternalBrush(Color.Black);
 #if DEBUG
             debug_canvas_id = dbug_canvasCount + 1;
             dbug_canvasCount += 1;
@@ -84,8 +56,6 @@ namespace PixelFarm.Drawing.GLES2
             }
 
             isDisposed = true;
-            //win32MemDc.Dispose();
-            //win32MemDc = null;
             ReleaseUnManagedResource();
         }
         /// <summary>
@@ -102,8 +72,8 @@ namespace PixelFarm.Drawing.GLES2
 
         void ClearPreviousStoredValues()
         {
+            painter1.SetOrigin(0, 0);
 
-            canvasGL2.SetCanvasOrigin(0, 0);
             this.canvasOriginX = 0;
             this.canvasOriginY = 0;
             this.clipRectStack.Clear();

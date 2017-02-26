@@ -42,10 +42,8 @@ namespace PixelFarm.DrawingGL
             textPrinter = new TextPrinter(aggPainter);
             aggPainter.TextPrinter = textPrinter;
         }
-
-        public void DrawString(string text, double x, double y)
+        public void DrawString(char[] text, double x, double y)
         {
-
             aggPainter.Clear(Drawing.Color.White);
             //draw text 
             textPrinter.DrawString(text, 0, 18);
@@ -66,6 +64,10 @@ namespace PixelFarm.DrawingGL
                 canvas.FlipY = false;
             }
             glBmp.Dispose();
+        }
+        public void DrawString(string text, double x, double y)
+        {
+            DrawString(text.ToCharArray(), x, y);
         }
 
         public void ChangeFont(RequestFont font)
@@ -130,10 +132,9 @@ namespace PixelFarm.DrawingGL
             hfont = Win32.MyWin32.CreateFontIndirect(ref logFont);
             Win32.MyWin32.SelectObject(memdc.DC, hfont);
         }
-        public void DrawString(string text, double x, double y)
+        public void DrawString(char[] textBuffer, double x, double y)
         {
-            //TODO: review performan
-            char[] textBuffer = text.ToCharArray();
+            //TODO: review performan 
             Win32.MyWin32.PatBlt(memdc.DC, 0, 0, bmpWidth, bmpHeight, Win32.MyWin32.WHITENESS);
             Win32.NativeTextWin32.TextOut(memdc.DC, 0, 0, textBuffer, textBuffer.Length);
             // Win32.Win32Utils.BitBlt(hdc, 0, 0, bmpWidth, 50, memHdc, 0, 0, Win32.MyWin32.SRCCOPY);
@@ -206,6 +207,12 @@ namespace PixelFarm.DrawingGL
             GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, false);
             canvas.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();
+
+        }
+
+        public void DrawString(string text, double x, double y)
+        {
+            DrawString(text.ToCharArray(), x, y);
         }
     }
 
@@ -217,6 +224,15 @@ namespace PixelFarm.DrawingGL
         Dictionary<InstalledFont, FontFace> fonts = new Dictionary<InstalledFont, FontFace>();
         Dictionary<FontKey, ActualFont> registerFonts = new Dictionary<FontKey, ActualFont>();
         //--------------------------------------------------
+
+
+        //public override float GetCharWidth(RequestFont f, char c)
+        //{
+        //    return GLES2PlatformFontMx.Default.ResolveForGdiFont(f).GetGlyph(c).horiz_adv_x >> 6;
+        //    //NativeFont font = nativeFontStore.GetResolvedNativeFont(f);
+        //    //return font.GetGlyph(c).horiz_adv_x >> 6;
+        //} 
+        //============================================== 
 
         public NativeFontStore()
         {
