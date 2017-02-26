@@ -58,7 +58,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="1_Drawing_Fonts\FontPreview.cs" />
     <Compile Include="1_Drawing_Fonts\GlyphPathBuilderVxs.cs" />
+    <Compile Include="1_Drawing_Fonts\InstalledFontCollection.cs" />
     <Compile Include="2_Drawing_Text\ManagedShapingService.cs" />
     <Compile Include="1_Drawing_Fonts\MyGlyphPathBuilder.cs" />
     <Compile Include="1_Drawing_Fonts\ManagedFontFace.cs" />

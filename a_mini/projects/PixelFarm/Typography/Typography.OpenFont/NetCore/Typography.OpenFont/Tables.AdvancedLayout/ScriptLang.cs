@@ -225,7 +225,7 @@ namespace Typography.OpenFont
         }
 
 
-        internal static ScriptLang GetTagInfo(string shortname)
+        public static ScriptLang GetRegisteredScriptLang(string shortname)
         {
             ScriptLang found;
             registeredScriptTags.TryGetValue(shortname, out found);

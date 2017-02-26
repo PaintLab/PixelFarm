@@ -13,18 +13,28 @@ namespace PixelFarm.Drawing.Fonts
     public class TextPrinter : ITextPrinter
     {
 
-        Agg.CanvasPainter canvasPainter;
+        CanvasPainter canvasPainter;
         VxsTextPrinter vxsTextPrinter = new VxsTextPrinter();
         List<GlyphPlan> glyphPlanList = new List<GlyphPlan>(20);
 
-        public TextPrinter(Agg.CanvasPainter canvasPainter)
+        public TextPrinter(CanvasPainter canvasPainter)
         {
             this.canvasPainter = canvasPainter;
+           
+
+            RequestFont font = canvasPainter.CurrentFont;
+            
+            Typography.OpenFont.ScriptLang scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLang(font.ScriptCode.shortname);
+#if DEBUG
+            if (scLang == null)
+            {
+                throw new NotSupportedException("unknown script lang");
+            }
+#endif
+            vxsTextPrinter.ScriptLang = scLang;
 
             vxsTextPrinter.FontFile = "d:\\WImageTest\\tahoma.ttf";
-            vxsTextPrinter.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;
         }
-
         public void ChangeFont(RequestFont font)
         {
             //change font

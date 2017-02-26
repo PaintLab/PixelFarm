@@ -1,8 +1,10 @@
 ﻿//MIT, 2014-2017, WinterDev 
 using System;
 using System.Collections.Generic;
-using Typography.OpenFont; 
+
 using PixelFarm.Agg;
+using Typography.OpenFont; 
+
 namespace PixelFarm.Drawing.Fonts
 {
 
@@ -32,7 +34,7 @@ namespace PixelFarm.Drawing.Fonts
         protected override void OnDispose() { }
         public override ActualFont GetFontAtPointsSize(float pointSize)
         {
-            NOpenTypeActualFont actualFont = new NOpenTypeActualFont(this, pointSize, FontStyle.Regular);
+            ManagedActualFont actualFont = new ManagedActualFont(this, pointSize, FontStyle.Regular);
             return actualFont;
         }
         public Typeface Typeface { get { return this.ntypeface; } }
@@ -59,7 +61,8 @@ namespace PixelFarm.Drawing.Fonts
         }
 
     }
-    class NOpenTypeActualFont : ActualFont
+
+    class ManagedActualFont : ActualFont
     {
         ManagedFontFace ownerFace;
         float sizeInPoints;
@@ -67,7 +70,7 @@ namespace PixelFarm.Drawing.Fonts
         Typeface typeFace;
         float scale;
         Dictionary<uint, VertexStore> glyphVxs = new Dictionary<uint, VertexStore>();
-        public NOpenTypeActualFont(ManagedFontFace ownerFace, float sizeInPoints, FontStyle style)
+        public ManagedActualFont(ManagedFontFace ownerFace, float sizeInPoints, FontStyle style)
         {
             this.ownerFace = ownerFace;
             this.sizeInPoints = sizeInPoints;

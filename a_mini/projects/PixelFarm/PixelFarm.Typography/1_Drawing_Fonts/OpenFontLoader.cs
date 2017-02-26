@@ -24,7 +24,10 @@ namespace PixelFarm.Drawing.Fonts
             }
             //TODO:...
             //set shape engine *** 
-            return new ManagedFontFace(typeface, typeface.Name, fontfile);
+            var openFont = new ManagedFontFace(typeface, typeface.Name, fontfile);
+            
+
+            return openFont;
         }
     }
 
