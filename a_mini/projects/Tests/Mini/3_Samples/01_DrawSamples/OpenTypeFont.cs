@@ -30,7 +30,7 @@ namespace PixelFarm.Agg.Sample_Draw
         {
 
             //------------
-            var win32InstalledFont = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            var win32InstalledFont = new PixelFarm.Drawing.WinGdi.InstallFontsProviderWin32();
             InstalledFontCollection collection = new InstalledFontCollection();
             collection.LoadInstalledFont(win32InstalledFont.GetInstalledFontIter());
             string fontfile = collection.GetFont("tahoma", InstalledFontStyle.Regular).FontPath;

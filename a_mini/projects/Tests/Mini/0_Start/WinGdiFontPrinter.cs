@@ -2,8 +2,9 @@
 using System;
 using PixelFarm.Agg;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
-namespace PixelFarm.DrawingGL
+using PixelFarm.DrawingGL;
+
+namespace PixelFarm.Drawing.Fonts
 {
 
     class AggFontPrinter : ITextPrinter
@@ -16,7 +17,7 @@ namespace PixelFarm.DrawingGL
         int bmpHeight;
         CanvasGL2d canvas;
         GLCanvasPainter canvasPainter;
-       
+
         public AggFontPrinter(GLCanvasPainter canvasPainter, int w, int h)
         {
             //TODO: review here
@@ -102,7 +103,7 @@ namespace PixelFarm.DrawingGL
         public void ChangeFont(RequestFont font)
         {
 
-        } 
+        }
         public void ChangeFontColor(Color fontColor)
         {
 

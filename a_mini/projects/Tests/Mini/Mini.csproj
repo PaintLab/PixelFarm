@@ -86,7 +86,7 @@
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="5_Samples_3\BitmapRenderSample.cs" />
     <Compile Include="6_WinGdiTest\LionSpriteTool.cs" />
-    <Compile Include="6_WinGdiTest\WinGdiFontPrinter.cs" />
+    <Compile Include="0_Start\WinGdiFontPrinter.cs" />
     <Compile Include="7_GLES2Test\FormGLTest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,7 +175,6 @@
     <Compile Include="SoftAggControl.Designer.cs">
       <DependentUpon>SoftAggControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win32Impl.cs" />
     <Compile Include="xnotused\TextPrinter.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
       <DependentUpon>FormGLTest.cs</DependentUpon>
