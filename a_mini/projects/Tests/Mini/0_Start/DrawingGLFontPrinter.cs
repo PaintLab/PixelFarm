@@ -291,7 +291,7 @@ namespace PixelFarm.DrawingGL
     class GLTextPrinter
     {
 
-        Drawing.RequestFont currentFont;
+        RequestFont currentFont;
         CanvasGL2d canvas2d;
         ProperGlyph[] properGlyphs = null;
         NativeFontStore nativeFontStore = new NativeFontStore();
@@ -299,7 +299,7 @@ namespace PixelFarm.DrawingGL
         {
             this.canvas2d = canvas2d;
         }
-        public Drawing.RequestFont CurrentFont
+        public RequestFont CurrentFont
         {
             get { return this.currentFont; }
             set { this.currentFont = value; }
@@ -344,6 +344,228 @@ namespace PixelFarm.DrawingGL
                 bmp.Dispose(); //temp here 
                 //-------------------------------------------------------------                
             }
+
+
+            //temp here
+
+            //draw with texture printer ***
+            //char[] chars = text.ToCharArray();
+            //int j = chars.Length;
+            //int buffsize = j * 2;
+            ////get kerning list 
+
+            ////get actual font for this canvas 
+            //TextureFont currentFont = _currentTextureFont;
+            //SimpleFontAtlas fontAtlas = currentFont.FontAtlas;
+            //ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
+            //TextShapingService.GetGlyphPos(currentFont, chars, 0, buffsize, properGlyphs);
+            //GLBitmap glBmp = (GLBitmap)currentFont.GLBmp;
+            //if (glBmp == null)
+            //{
+            //    //create glbmp
+            //    GlyphImage glyphImage = fontAtlas.TotalGlyph;
+            //    int[] buffer = glyphImage.GetImageBuffer();
+            //    glBmp = new GLBitmap(glyphImage.Width, glyphImage.Height, buffer, false);
+            //}
+            ////int j = chars.Length;
+            ////
+            //float c_x = (float)x;
+            //float c_y = (float)y;
+
+            ////TODO: review here ***
+            ////-----------------
+            ////1. layout each glyph before render *** 
+            ////
+            //float baseline = c_y - 24;//eg line height= 24 //create a list
+
+            ////--------------
+            //List<float> coords = new List<float>();
+            //float scale = 1f;
+            //for (int i = 0; i < buffsize; ++i)
+            //{
+            //    ProperGlyph glyph1 = properGlyphs[i];
+            //    uint codepoint = properGlyphs[i].codepoint;
+            //    if (codepoint == 0)
+            //    {
+            //        break;
+            //    }
+            //    //--------------------------------
+            //    //if (codepoint == 1173 && i > 1)
+            //    //{
+            //    //    //check prev code point 
+            //    //    codepoint = 1168;
+            //    //}
+            //    //--------------------------------
+            //    TextureFontGlyphData glyphData;
+            //    if (!fontAtlas.GetRectByCodePoint((int)codepoint, out glyphData))
+            //    {
+            //        //Rectangle r = glyphData.Rect;
+            //        //float x_min = glyphData.BBoxXMin / 64;
+            //        ////draw each glyph at specific position                          
+            //        ////_canvas.DrawSubImageWithMsdf(glBmp, ref r, c_x + x_min, (float)(baseline + r.Height));
+            //        //_canvas.DrawSubImageWithMsdf(glBmp, ref r, c_x + x_min, (float)(baseline + r.Height)); 
+            //        ////c_x += r.Width - 10;
+            //        //c_x += (glyphData.AdvanceX / 64);
+            //        continue;
+            //    }
+
+
+
+            //    FontGlyph glyph = currentFont.GetGlyphByIndex(codepoint);
+            //    int left = ((int)(glyph.glyphMatrix.img_horiBearingX * scale) >> 6);
+            //    Rectangle r = glyphData.Rect;
+            //    int adjustX = 0;
+            //    int bboxYMin = glyph.glyphMatrix.bboxYmin >> 6;
+            //    if (bboxYMin > 1 || bboxYMin < -1)
+            //    {
+            //        //  adjustX = 3;
+            //    }
+            //    //scale down 0.8; 
+            //    //_canvas.DrawSubImageWithMsdf(glBmp, ref r, adjustX + c_x + left,
+            //    //    (float)(baseline + ((int)(glyphData.ImgHeight + glyph.glyphMatrix.bboxYmin) >> 6)), 1.1f);
+
+            //    coords.Add(r.Left);
+            //    coords.Add(r.Top);
+            //    coords.Add(r.Width);
+            //    coords.Add(r.Height);
+            //    //-------------------------
+            //    coords.Add(adjustX + c_x + left);
+            //    //coords.Add(baseline + ((int)((glyphData.ImgHeight + glyph.glyphMatrix.bboxYmin) * scale) >> 6));
+            //    coords.Add(baseline + ((int)((glyphData.ImgHeight + glyphData.BBoxYMin) * scale) >> 6));
+            //    //int w = (int)(glyph.glyphMatrix.advanceX * scale) >> 6;
+            //    int w = (int)(glyph.horiz_adv_x * scale) >> 6;
+            //    c_x += w;
+            //}
+            //_canvas.DrawSubImageWithMsdf(glBmp, coords.ToArray(), scale);
+
+            //-----------------------
+            //public override void DrawString(string text, double x, double y)
+            //{
+
+            //    char[] chars = text.ToCharArray();
+            //    int j = chars.Length;
+            //    int buffsize = j * 2;
+            //    //get kerning list 
+            //    TextureFont currentFont = this.CurrentFont as TextureFont;
+            //    SimpleFontAtlas fontAtlas = currentFont.FontAtlas;
+            //    ProperGlyph[] properGlyphs = new ProperGlyph[buffsize];
+            //    currentFont.GetGlyphPos(chars, 0, buffsize, properGlyphs);
+            //    GLBitmap glBmp = currentFont.GLBmp;
+            //    if (glBmp == null)
+            //    {
+            //        //create glbmp
+            //        GlyphImage glyphImage = fontAtlas.TotalGlyph;
+            //        int[] buffer = glyphImage.GetImageBuffer();
+            //        glBmp = new GLBitmap(glyphImage.Width, glyphImage.Height, buffer, false);
+            //    }
+            //    //int j = chars.Length;
+            //    //
+            //    float c_x = (float)x;
+            //    float c_y = (float)y;
+
+            //    //TODO: review here 
+            //    //-----------------
+            //    //1. layout each glyph before render *** 
+            //    float baseline = c_y - 24;//eg line height= 24 
+            //                              //create a list
+
+            //    for (int i = 0; i < buffsize; ++i)
+            //    {
+            //        ProperGlyph glyph1 = properGlyphs[i];
+            //        uint codepoint = properGlyphs[i].codepoint;
+            //        if (codepoint == 0)
+            //        {
+            //            break;
+            //        }
+            //        if (codepoint == 1173 && i > 1)
+            //        {
+            //            //check prev code point 
+            //            codepoint = 1168;
+            //        }
+            //        TextureFontGlyphData glyphData;
+            //        if (!fontAtlas.GetRect((int)codepoint, out glyphData))
+            //        {
+            //            //Rectangle r = glyphData.Rect;
+            //            //float x_min = glyphData.BBoxXMin / 64;
+            //            ////draw each glyph at specific position                          
+            //            ////_canvas.DrawSubImageWithMsdf(glBmp, ref r, c_x + x_min, (float)(baseline + r.Height));
+            //            //_canvas.DrawSubImageWithMsdf(glBmp, ref r, c_x + x_min, (float)(baseline + r.Height)); 
+            //            ////c_x += r.Width - 10;
+            //            //c_x += (glyphData.AdvanceX / 64);
+            //            continue;
+            //        }
+
+            //        //-------------------------------------------------------------
+            //        //FontGlyph glyph = this.currentFont.GetGlyphByIndex(codepoint);
+            //        FontGlyph glyph = currentFont.GetGlyphByIndex(codepoint);
+            //        int left = (glyph.glyphMatrix.img_horiBearingX >> 6);
+            //        Rectangle r = glyphData.Rect;
+            //        int adjustX = 0;
+            //        int bboxYMin = glyph.glyphMatrix.bboxYmin >> 6;
+            //        if (bboxYMin > 1 || bboxYMin < -1)
+            //        {
+            //            //  adjustX = 3;
+            //        }
+            //        //scale down 0.8; 
+            //        _canvas.DrawSubImageWithMsdf(glBmp, ref r, adjustX + c_x + left,
+            //            (float)(baseline + ((int)(glyphData.ImgHeight + glyph.glyphMatrix.bboxYmin) >> 6)), 1.1f);
+            //        int w = (glyph.glyphMatrix.advanceX) >> 6;
+            //        c_x += (w);
+            //    }
+            //}
+            //        public override void DrawString(string text, double x, double y)
+            //        {
+            //            ////in this version we draw string to image
+            //            ////and the write the image back to gl surface
+            //            //_winGfx.Clear(System.Drawing.Color.White);
+            //            //_winGfx.DrawString(text, _winFont, _winGfxBrush, 0, 0);
+            //            ////_winGfxBackBmp.Save("d:\\WImageTest\\a00123.png"); 
+
+            //            //System.Drawing.SizeF textAreaSize = _winGfx.MeasureString(text, _winFont);
+            //            //var bmpData = _winGfxBackBmp.LockBits(new System.Drawing.Rectangle(0, 0, _winGfxBackBmp.Width, _winGfxBackBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, _winGfxBackBmp.PixelFormat);
+            //            //int width = (int)textAreaSize.Width;
+            //            //int height = (int)textAreaSize.Height;
+
+            //            //ActualImage actualImg = new ActualImage(width, height, Agg.Image.PixelFormat.ARGB32);
+            //            ////------------------------------------------------------
+            //            ////copy bmp from specific bmp area 
+            //            ////and convert to GLBmp  
+            //            //int stride = bmpData.Stride;
+            //            //byte[] buffer = actualImg.GetBuffer();
+            //            //unsafe
+            //            //{
+            //            //    byte* header = (byte*)bmpData.Scan0;
+            //            //    fixed (byte* dest0 = &buffer[0])
+            //            //    {
+            //            //        byte* dest = dest0;
+            //            //        byte* rowHead = header;
+            //            //        int rowLen = width * 4;
+            //            //        for (int h = 0; h < height; ++h)
+            //            //        {
+
+            //            //            header = rowHead;
+            //            //            for (int n = 0; n < rowLen;)
+            //            //            {
+            //            //                //move next
+            //            //                *(dest + 0) = *(header + 0);
+            //            //                *(dest + 1) = *(header + 1);
+            //            //                *(dest + 2) = *(header + 2);
+            //            //                *(dest + 3) = *(header + 3);
+            //            //                header += 4;
+            //            //                dest += 4;
+            //            //                n += 4;
+            //            //            }
+            //            //            //finish one row
+            //            //            rowHead += stride;
+            //            //        }
+            //            //    }
+            //            //}
+            //            //_winGfxBackBmp.UnlockBits(bmpData);
+            //            ////------------------------------------------------------
+            //            //GLBitmap glBmp = new GLBitmap(width, height, buffer, false);
+            //            //_canvas.DrawImageWithWhiteTransparent(glBmp, (float)x, (float)y);
+            //            //glBmp.Dispose();
+            //        }
         }
     }
 
