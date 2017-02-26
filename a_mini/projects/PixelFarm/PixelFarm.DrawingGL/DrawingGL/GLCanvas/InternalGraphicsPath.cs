@@ -182,25 +182,26 @@ namespace PixelFarm.DrawingGL
                         prevX = x;
                         prevY = y;
                         break;
-                    case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
+                    case PixelFarm.Agg.VertexCmd.Close:
                         //from current point 
                         xylist.Add((float)prevMoveToX);
                         xylist.Add((float)prevMoveToY);
                         prevX = prevMoveToX;
                         prevY = prevMoveToY;
-                        //start the new one 
-
-                        //if (vxsMoreThan1)
-                        //{
-                        //    xylist = new List<float>();
-                        //    isAddToList = false;
-                        //}
+                        //xylist = new List<float>();
+                        //isAddToList = false;
                         break;
-                    case PixelFarm.Agg.VertexCmd.EndFigure:
-                        {
-                        }
+                    case VertexCmd.CloseAndEndFigure:
+                        //from current point 
+                        xylist.Add((float)prevMoveToX);
+                        xylist.Add((float)prevMoveToY);
+                        prevX = prevMoveToX;
+                        prevY = prevMoveToY;
+                        //
+                        xylist = new List<float>();
+                        isAddToList = false;
                         break;
-                    case PixelFarm.Agg.VertexCmd.Stop:
+                    case PixelFarm.Agg.VertexCmd.NoMore:
                         goto EXIT_LOOP;
                     default:
                         throw new System.NotSupportedException();

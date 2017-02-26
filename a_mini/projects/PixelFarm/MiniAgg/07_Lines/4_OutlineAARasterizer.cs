@@ -543,7 +543,7 @@ namespace PixelFarm.Agg.Lines
         {
             switch (cmd)
             {
-                case VertexCmd.Stop:
+                case VertexCmd.NoMore:
                     {
                     }
                     break;
@@ -551,13 +551,12 @@ namespace PixelFarm.Agg.Lines
                     Render(false);
                     MoveTo(x, y);
                     break;
+                
+                case VertexCmd.Close:
                 case VertexCmd.CloseAndEndFigure:
                     Render(true);
                     MoveTo(m_start_x, m_start_y);
-                    break;
-                case VertexCmd.EndFigure:
-                    Render(false);
-                    break;
+                    break; 
                 default:
                     LineTo(x, y);
                     break;
@@ -570,7 +569,7 @@ namespace PixelFarm.Agg.Lines
             double y;
             VertexCmd cmd;
             var snapIter = s.GetVertexSnapIter();
-            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.Stop)
+            while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
             {
                 AddVertex(x, y, cmd);
             }

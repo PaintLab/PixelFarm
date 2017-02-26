@@ -46,8 +46,6 @@ namespace PixelFarm.Agg
         }
 
 
-        //internal bool HasMoreThanOnePart { get; set; }
-
         /// <summary>
         /// num of vertex
         /// </summary>
@@ -62,7 +60,7 @@ namespace PixelFarm.Agg
                 return GetCommand(m_num_vertices - 1);
             }
 
-            return VertexCmd.Stop;
+            return VertexCmd.NoMore;
         }
         public VertexCmd GetLastVertex(out double x, out double y)
         {
@@ -73,7 +71,7 @@ namespace PixelFarm.Agg
 
             x = 0;
             y = 0;
-            return VertexCmd.Stop;
+            return VertexCmd.NoMore;
         }
 
         public VertexCmd GetVertex(int index, out double x, out double y)
@@ -93,8 +91,7 @@ namespace PixelFarm.Agg
         {
             return (VertexCmd)m_cmds[index];
         }
-        //--------------------------------------------------
-        //mutable properties
+
         public void Clear()
         {
             m_num_vertices = 0;
@@ -140,12 +137,18 @@ namespace PixelFarm.Agg
         }
         public void AddCloseFigure()
         {
-            AddVertex(0, 0, VertexCmd.CloseAndEndFigure);
+            AddVertex(0, 0, VertexCmd.Close);
         }
-        //public void AddStop()
-        //{
-        //    AddVertex(0, 0, VertexCmd.Stop);
-        //}
+
+        public void EndGroup()
+        {
+            if (m_num_vertices > 0)
+            {
+
+                m_cmds[m_num_vertices - 1] = (byte)VertexCmd.CloseAndEndFigure;
+            }
+
+        }
         internal void ReplaceVertex(int index, double x, double y)
         {
             m_coord_xy[index << 1] = x;

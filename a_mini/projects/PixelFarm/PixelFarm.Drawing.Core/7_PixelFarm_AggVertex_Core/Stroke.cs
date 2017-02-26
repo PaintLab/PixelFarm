@@ -95,12 +95,10 @@ namespace PixelFarm.Agg
                 var cmd = sourceVxs.GetVertex(i, out x, out y);
                 switch (cmd)
                 {
-                    case VertexCmd.Stop:
+                    case VertexCmd.NoMore:
                         break;
-                    case VertexCmd.EndFigure:
-                        {
-
-                        }break;
+                    
+                    case VertexCmd.Close:
                     case VertexCmd.CloseAndEndFigure:
                         {
                             strkgen.AddVertex(x, y, cmd);

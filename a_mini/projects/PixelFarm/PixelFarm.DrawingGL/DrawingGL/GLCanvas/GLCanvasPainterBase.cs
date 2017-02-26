@@ -458,7 +458,7 @@ namespace PixelFarm.DrawingGL
         public override void Draw(VertexStoreSnap snap)
         {
             _canvas.DrawGfxPath(
-             this._fillColor,
+             this._strokeColor,
              InternalGraphicsPath.CreateGraphicsPath(snap)
              );
         }
@@ -551,7 +551,7 @@ namespace PixelFarm.DrawingGL
                             npoints++;
                         }
                         break;
-                    case VertexCmd.Stop:
+                    case VertexCmd.NoMore:
                         {
                         }
                         break;
@@ -740,7 +740,7 @@ namespace PixelFarm.DrawingGL
             {
                 switch (vertexData.command)
                 {
-                    case VertexCmd.Stop:
+                    case VertexCmd.NoMore:
                         stopLoop = true;
                         break;
                     default:
