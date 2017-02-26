@@ -1,20 +1,19 @@
 ﻿//MIT, 2014-2017, WinterDev 
 using System;
 using System.Collections.Generic;
-using Typography.OpenFont;
-using Typography.OpenFont.Tables;
+using Typography.OpenFont; 
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
 
 
-    class NOpenTypeFontFace : FontFace
+    class ManagedFontFace : FontFace
     {
         Typeface ntypeface;
         string name, path;
         MyGlyphPathBuilder glyphPathBuilder;
 
-        public NOpenTypeFontFace(Typeface ntypeface, string fontName, string fontPath)
+        public ManagedFontFace(Typeface ntypeface, string fontName, string fontPath)
         {
             this.ntypeface = ntypeface;
             this.name = fontName;
@@ -62,13 +61,13 @@ namespace PixelFarm.Drawing.Fonts
     }
     class NOpenTypeActualFont : ActualFont
     {
-        NOpenTypeFontFace ownerFace;
+        ManagedFontFace ownerFace;
         float sizeInPoints;
         FontStyle style;
         Typeface typeFace;
         float scale;
         Dictionary<uint, VertexStore> glyphVxs = new Dictionary<uint, VertexStore>();
-        public NOpenTypeActualFont(NOpenTypeFontFace ownerFace, float sizeInPoints, FontStyle style)
+        public NOpenTypeActualFont(ManagedFontFace ownerFace, float sizeInPoints, FontStyle style)
         {
             this.ownerFace = ownerFace;
             this.sizeInPoints = sizeInPoints;

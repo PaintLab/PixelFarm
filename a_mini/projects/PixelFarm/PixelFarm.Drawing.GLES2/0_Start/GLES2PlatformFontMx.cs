@@ -86,23 +86,24 @@ namespace PixelFarm.Drawing.Fonts
             TextureFontFace textureFontface = lateFontInfo.Fontface;
             if (textureFontface == null)
             {
-                //load glyh image here
-                GlyphImage glyphImage = null;
-                using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage(lateFontInfo.TextureBitmapFile))
-                {
-                    glyphImage = new GlyphImage(nativeImg.Width, nativeImg.Height);
-                    var buffer = new int[nativeImg.Width * nativeImg.Height];
-                    System.Runtime.InteropServices.Marshal.Copy(nativeImg.GetNativeImageHandle(), buffer, 0, buffer.Length);
-                    glyphImage.SetImageBuffer(buffer, true);
-                }
+                throw new System.NotSupportedException();
+                ////load glyh image here
+                //GlyphImage glyphImage = null;
+                //using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage(lateFontInfo.TextureBitmapFile))
+                //{
+                //    glyphImage = new GlyphImage(nativeImg.Width, nativeImg.Height);
+                //    var buffer = new int[nativeImg.Width * nativeImg.Height];
+                //    System.Runtime.InteropServices.Marshal.Copy(nativeImg.GetNativeImageHandle(), buffer, 0, buffer.Length);
+                //    glyphImage.SetImageBuffer(buffer, true);
+                //}
 
-                InstalledFont installedFont = GLES2PlatformFontMx.GetInstalledFont(font.Name, InstalledFontStyle.Regular);
-                FontFace nOpenTypeFontFace = NOpenTypeFontLoader.LoadFont(installedFont.FontPath, GLES2PlatformFontMx.defaultScriptLang);
+                //InstalledFont installedFont = GLES2PlatformFontMx.GetInstalledFont(font.Name, InstalledFontStyle.Regular);
+                //FontFace nOpenTypeFontFace = OpenFontLoader.LoadFont(installedFont.FontPath, GLES2PlatformFontMx.defaultScriptLang);
 
 
-                textureFontface = new TextureFontFace(nOpenTypeFontFace, lateFontInfo.FontMapFile, glyphImage);
-                lateFontInfo.Fontface = textureFontface;
-                return textureFontface.GetFontAtPointsSize(font.SizeInPoints);
+                //textureFontface = new TextureFontFace(nOpenTypeFontFace, lateFontInfo.FontMapFile, glyphImage);
+                //lateFontInfo.Fontface = textureFontface;
+                //return textureFontface.GetFontAtPointsSize(font.SizeInPoints);
             }
             if (textureFontface != null)
             {
@@ -183,15 +184,15 @@ namespace PixelFarm.Drawing.Fonts
                 //    GLES2PlatformFontMx.defaultScriptLang
                 //    GLES2PlatformFontMx.defaultHbDirection,
                 //    GLES2PlatformFontMx.defaultScriptCode);
-                fontFace = FreeTypeFontLoader.LoadFont(found,
-                     "en",
-                     HBDirection.HB_DIRECTION_RTL);
+                //fontFace = FreeTypeFontLoader.LoadFont(found,
+                //     "en",
+                //     HBDirection.HB_DIRECTION_RTL);
 
                 if (fontFace == null)
                     if (fontFace == null)
-                {
-                    throw new NotSupportedException();
-                }
+                    {
+                        throw new NotSupportedException();
+                    }
                 fonts.Add(found, fontFace);//register
             }
             //-----------

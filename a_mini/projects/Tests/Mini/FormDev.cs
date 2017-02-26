@@ -43,7 +43,7 @@ namespace Mini
             cmbRenderBackend.Items.Add(RenderBackendChoice.OpenGLES2);
             cmbRenderBackend.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
             cmbRenderBackend.Items.Add(RenderBackendChoice.SkiaGLBackend);
-            cmbRenderBackend.SelectedIndex = 0;//set default 
+            cmbRenderBackend.SelectedIndex = 2;//set default 
         }
 
         void listBox1_DoubleClick(object sender, EventArgs e)

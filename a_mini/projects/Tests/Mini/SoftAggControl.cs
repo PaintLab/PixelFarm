@@ -65,7 +65,12 @@ namespace Mini
             else
             {
                 ImageGraphics2D imgGfx2d = Initialize(myWidth, myHeight, 32);
-                painter = new AggCanvasPainter(imgGfx2d);
+                AggCanvasPainter aggPainter = new AggCanvasPainter(imgGfx2d);
+                //set text printer for agg canvas painter
+                TextPrinter textPrinter = new TextPrinter(aggPainter);
+                aggPainter.TextPrinter = textPrinter;
+
+                painter = aggPainter;
             }
 
             painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);

@@ -10,7 +10,7 @@ namespace PixelFarm.Drawing.Fonts
 
     //this is PixelFarm version ***
     //render with MiniAgg 
-    public class GlyphPathBuilderVxs : IGlyphPathBuilder
+   public class GlyphPathBuilderVxs : IGlyphPathBuilder
     {
         CurveFlattener curveFlattener = new CurveFlattener();
         PathWriter ps = new PathWriter();
@@ -107,6 +107,4 @@ namespace PixelFarm.Drawing.Fonts
             return VertexStore.CreateCopy(ps.Vxs);
         }
     }
-
-
 }
