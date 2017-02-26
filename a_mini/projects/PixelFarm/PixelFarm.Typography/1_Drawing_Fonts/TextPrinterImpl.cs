@@ -20,10 +20,7 @@ namespace PixelFarm.Drawing.Fonts
         public TextPrinter(CanvasPainter canvasPainter)
         {
             this.canvasPainter = canvasPainter;
-           
-
             RequestFont font = canvasPainter.CurrentFont;
-            
             Typography.OpenFont.ScriptLang scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLang(font.ScriptCode.shortname);
 #if DEBUG
             if (scLang == null)
@@ -32,18 +29,22 @@ namespace PixelFarm.Drawing.Fonts
             }
 #endif
             vxsTextPrinter.ScriptLang = scLang;
-
+            //1.  resolve actual font file
             vxsTextPrinter.FontFile = "d:\\WImageTest\\tahoma.ttf";
         }
         public void ChangeFont(RequestFont font)
         {
+#if DEBUG
             //change font
-
+            Console.Write("please impl change font");
+#endif
         }
-
         public void ChangeFontColor(Color fontColor)
         {
             //change font color
+#if DEBUG
+            Console.Write("please impl change font color");
+#endif
         }
         public void DrawString(string text, double x, double y)
         {

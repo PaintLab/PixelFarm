@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Agg;
-using Typography.OpenFont; 
+using Typography.OpenFont;
 
 namespace PixelFarm.Drawing.Fonts
 {
@@ -183,5 +183,5 @@ namespace PixelFarm.Drawing.Fonts
             return found;
         }
     }
-
+}
 
