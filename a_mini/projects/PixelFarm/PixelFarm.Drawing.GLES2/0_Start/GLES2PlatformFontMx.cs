@@ -10,24 +10,6 @@ namespace PixelFarm.Drawing.Fonts
     //cross-platform font mx***
     class GLES2PlatformFontMx
     {
-        //gdiplus platform can handle following font       
-        //1. gdi font
-        //2. vector font
-        //3. opentype font
-        //4. texture font
-
-        //public WinGdiPlusFont ResolveForWinGdiPlusFont(RequestFont r)
-        //{
-        //    WinGdiPlusFont winGdiPlusFont = r.ActualFont as WinGdiPlusFont;
-        //    if (winGdiPlusFont != null)
-        //    {
-        //        return winGdiPlusFont;
-        //    }
-        //    //check if 
-        //    throw new NotSupportedException();
-        //}
-        /////////////////////////////////////////
-        //
 
         static InstalledFontCollection installFonts;
         internal static ScriptLang defaultScriptLang = ScriptLangs.Latin;
@@ -188,11 +170,10 @@ namespace PixelFarm.Drawing.Fonts
                 //     "en",
                 //     HBDirection.HB_DIRECTION_RTL);
 
-                if (fontFace == null)
-                    if (fontFace == null)
-                    {
-                        throw new NotSupportedException();
-                    }
+                if (fontFace == null) 
+                {
+                    throw new NotSupportedException();
+                }
                 fonts.Add(found, fontFace);//register
             }
             //-----------

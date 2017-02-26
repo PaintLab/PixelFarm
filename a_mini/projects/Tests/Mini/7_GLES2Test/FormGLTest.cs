@@ -35,6 +35,7 @@ namespace Mini
                 canvasPainter = new GLCanvasPainter(canvas2d, max, max);
                 //create text printer for opengl
 
+                //----------------------
                 //1. win gdi based
                 //var printer = new WinGdiFontPrinter(canvas2d, w, h);
                 //canvasPainter.TextPrinter = printer;
