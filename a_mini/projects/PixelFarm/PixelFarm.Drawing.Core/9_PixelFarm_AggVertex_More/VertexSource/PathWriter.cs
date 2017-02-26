@@ -105,8 +105,8 @@ namespace PixelFarm.Agg.VertexSource
         {
             if (figureCount > 0)
             {
-                myvxs.AddVertex(0, 0, VertexCmd.NoMore);
-                //myvxs.HasMoreThanOnePart = true;
+               
+                myvxs.AddVertex(0, 0, VertexCmd.NoMore);        
             }
             figureCount++;
             return myvxs.Count;
@@ -394,6 +394,13 @@ namespace PixelFarm.Agg.VertexSource
             if (VertexHelper.IsVertextCommand(myvxs.GetLastCommand()))
             {
                 myvxs.AddVertex(0, 0, VertexCmd.Close);
+            }
+        }
+        public void EndGroup()
+        {
+            if (VertexHelper.IsCloseOrEnd(myvxs.GetLastCommand()))
+            {
+                myvxs.EndGroup();
             }
         }
         //// Concatenate path. The path is added as is.

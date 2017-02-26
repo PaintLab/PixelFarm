@@ -46,8 +46,6 @@ namespace PixelFarm.Agg
         }
 
 
-        //internal bool HasMoreThanOnePart { get; set; }
-
         /// <summary>
         /// num of vertex
         /// </summary>
@@ -142,6 +140,15 @@ namespace PixelFarm.Agg
             AddVertex(0, 0, VertexCmd.Close);
         }
 
+        public void EndGroup()
+        {
+            if (m_num_vertices > 0)
+            {
+
+                m_cmds[m_num_vertices - 1] = (byte)VertexCmd.CloseAndEndFigure;
+            }
+
+        }
         internal void ReplaceVertex(int index, double x, double y)
         {
             m_coord_xy[index << 1] = x;

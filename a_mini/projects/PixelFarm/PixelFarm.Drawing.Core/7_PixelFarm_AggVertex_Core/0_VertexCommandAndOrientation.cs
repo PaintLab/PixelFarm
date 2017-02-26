@@ -41,7 +41,8 @@ namespace PixelFarm.Agg
     {
         public static bool IsVertextCommand(VertexCmd c)
         {
-            return c >= VertexCmd.MoveTo;
+            // return c >= VertexCmd.MoveTo;
+            return c > VertexCmd.NoMore;
         }
         public static bool IsEmpty(VertexCmd c)
         {
@@ -51,16 +52,13 @@ namespace PixelFarm.Agg
         {
             return c == VertexCmd.MoveTo;
         }
-        public static bool IsEndFigure(VertexCmd c)
+        public static bool IsCloseOrEnd(VertexCmd c)
         {
             //check only 2 lower bit
             //TODO: review here
             return ((int)c & 0x3) >= (int)VertexCmd.Close;
         }
-        //public static bool IsClose(VertexCmd c)
-        //{
-        //    return c == VertexCmd.CloseAndEndFigure;
-        //}
+        
         public static bool IsNextPoly(VertexCmd c)
         {
             //?
@@ -156,7 +154,7 @@ namespace PixelFarm.Agg
                     int myvxs_count = myvxs.Count;
                     var orientFlags = isCW ? (int)EndVertexOrientation.CW : (int)EndVertexOrientation.CCW;
                     while (end < myvxs_count &&
-                          VertexHelper.IsEndFigure(flags = myvxs.GetCommand(end)))
+                          VertexHelper.IsCloseOrEnd(flags = myvxs.GetCommand(end)))
                     {
                         //TODO: review hhere
                         myvxs.ReplaceVertex(end++, orientFlags, 0);

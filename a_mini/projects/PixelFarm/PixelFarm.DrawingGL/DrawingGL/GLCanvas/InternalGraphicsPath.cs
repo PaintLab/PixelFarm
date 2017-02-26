@@ -188,6 +188,8 @@ namespace PixelFarm.DrawingGL
                         xylist.Add((float)prevMoveToY);
                         prevX = prevMoveToX;
                         prevY = prevMoveToY;
+                        //xylist = new List<float>();
+                        //isAddToList = false;
                         break;
                     case VertexCmd.CloseAndEndFigure:
                         //from current point 
