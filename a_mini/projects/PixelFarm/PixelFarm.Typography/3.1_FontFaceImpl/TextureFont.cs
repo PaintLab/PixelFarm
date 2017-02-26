@@ -1,11 +1,9 @@
 ﻿//MIT, 2016-2017, WinterDev
 //----------------------------------- 
 using System;
-using System.Collections.Generic;
-using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
 using Typography.Rendering;
-namespace PixelFarm.DrawingGL
+
+namespace PixelFarm.Drawing.Fonts
 {
 
     class TextureFontFace : FontFace
@@ -13,40 +11,40 @@ namespace PixelFarm.DrawingGL
 
         MySimpleFontAtlasBuilder atlasBuilder;
         SimpleFontAtlas fontAtlas;
-        FontFace nOpenTypeFontFace;
+        FontFace primFontFace;
 
-        public TextureFontFace(FontFace nOpenTypeFontFace, string xmlFontInfo, GlyphImage glyphImg)
+        public TextureFontFace(FontFace primFontFace, string xmlFontInfo, GlyphImage glyphImg)
         {
             //for msdf font
             //1 font atlas may support mutliple font size 
             atlasBuilder = new MySimpleFontAtlasBuilder();
             fontAtlas = atlasBuilder.LoadFontInfo(xmlFontInfo);
             fontAtlas.TotalGlyph = glyphImg;
-            this.nOpenTypeFontFace = nOpenTypeFontFace; 
+            this.primFontFace = primFontFace; 
         }
         public override float GetScale(float pointSize)
         {
-            return nOpenTypeFontFace.GetScale(pointSize);
+            return primFontFace.GetScale(pointSize);
         }
         public override string FontPath
         {
-            get { return nOpenTypeFontFace.Name; }
+            get { return primFontFace.Name; }
         }
         public override int AscentInDzUnit
         {
-            get { return nOpenTypeFontFace.AscentInDzUnit; }
+            get { return primFontFace.AscentInDzUnit; }
         }
         public override int DescentInDzUnit
         {
-            get { return nOpenTypeFontFace.DescentInDzUnit; }
+            get { return primFontFace.DescentInDzUnit; }
         }
         public override int LineGapInDzUnit
         {
-            get { return nOpenTypeFontFace.LineGapInDzUnit; }
+            get { return primFontFace.LineGapInDzUnit; }
         }
         public FontFace InnerFontFace
         {
-            get { return nOpenTypeFontFace; }
+            get { return primFontFace; }
         }
         public override ActualFont GetFontAtPointsSize(float pointSize)
         {
@@ -59,7 +57,7 @@ namespace PixelFarm.DrawingGL
         }
         public override string Name
         {
-            get { return nOpenTypeFontFace.Name; }
+            get { return primFontFace.Name; }
         }
         public SimpleFontAtlas FontAtlas
         {

@@ -67,11 +67,11 @@
     <Compile Include="1_Drawing_Fonts\InstalledFontCollection.cs" />
     <Compile Include="2_Drawing_Text\ManagedShapingService.cs" />
     <Compile Include="1_Drawing_Fonts\MyGlyphPathBuilder.cs" />
-    <Compile Include="1_Drawing_Fonts\ManagedFontFace.cs" />
+    <Compile Include="3.1_FontFaceImpl\ManagedFontFace.cs" />
     <Compile Include="1_Drawing_Fonts\OpenFontLoader.cs" />
     <Compile Include="2_Drawing_Text\TextShapingAndLayoutService.cs" />
     <Compile Include="1_Drawing_Fonts\TextPrinterImpl.cs" />
-    <Compile Include="TextureFonts\TextureFont.cs" />
+    <Compile Include="3.1_FontFaceImpl\TextureFont.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
