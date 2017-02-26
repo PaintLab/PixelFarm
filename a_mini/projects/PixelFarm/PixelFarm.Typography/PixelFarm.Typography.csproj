@@ -41,6 +41,10 @@
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.TextureAtlas\PixelFarm.TextureAtlas.csproj">
+      <Project>{0f6c821e-2f60-4e60-aec4-e4254d859902}</Project>
+      <Name>PixelFarm.TextureAtlas</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
       <Name>Typography.GlyphLayout</Name>
@@ -67,6 +71,7 @@
     <Compile Include="1_Drawing_Fonts\OpenFontLoader.cs" />
     <Compile Include="2_Drawing_Text\TextShapingAndLayoutService.cs" />
     <Compile Include="1_Drawing_Fonts\TextPrinterImpl.cs" />
+    <Compile Include="TextureFonts\TextureFont.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

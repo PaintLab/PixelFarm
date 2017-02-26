@@ -107,9 +107,6 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLTexture\TextureAtlas.cs">
       <Link>DrawingGL\GLTexture\TextureAtlas.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\TextureFonts\TextureFont.cs">
-      <Link>DrawingGL\TextureFonts\TextureFont.cs</Link>
-    </Compile>
     <Compile Include="PixelFarm.Drawing.GLES2\Implementation\GLTextPrinter.cs" />
     <Compile Include="0_Start\GLES2Platform.cs" />
     <Compile Include="PixelFarm.Drawing.GLES2\Canvas\1_MyGLCanvas_Specific.cs" />
