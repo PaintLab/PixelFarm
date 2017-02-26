@@ -86,7 +86,7 @@
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="5_Samples_3\BitmapRenderSample.cs" />
     <Compile Include="6_WinGdiTest\LionSpriteTool.cs" />
-    <Compile Include="0_Start\WinGdiFontPrinter.cs" />
+    <Compile Include="0_Start\DrawingGLFontPrinter.cs" />
     <Compile Include="7_GLES2Test\FormGLTest.cs">
       <SubType>Form</SubType>
     </Compile>

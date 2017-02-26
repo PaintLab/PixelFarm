@@ -2,9 +2,10 @@
 using System;
 using PixelFarm.Agg;
 using PixelFarm.Drawing;
-using PixelFarm.DrawingGL;
+using PixelFarm.Drawing.Fonts;
+ 
 
-namespace PixelFarm.Drawing.Fonts
+namespace PixelFarm.DrawingGL
 {
 
     class AggFontPrinter : ITextPrinter

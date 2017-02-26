@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
@@ -40,10 +42,6 @@
     <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.TextureAtlas\PixelFarm.TextureAtlas.csproj">
-      <Project>{0f6c821e-2f60-4e60-aec4-e4254d859902}</Project>
-      <Name>PixelFarm.TextureAtlas</Name>
     </ProjectReference>
     <ProjectReference Include="..\Typography\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
@@ -62,6 +60,15 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PixelFarm.TextureAtlas\BinPacker.cs">
+      <Link>4_FontAtlas\BinPacker.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.TextureAtlas\MySimpleFontAtlasBuilder.cs">
+      <Link>4_FontAtlas\MySimpleFontAtlasBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.TextureAtlas\SimpleFontAtlas.cs">
+      <Link>4_FontAtlas\SimpleFontAtlas.cs</Link>
+    </Compile>
     <Compile Include="1_Drawing_Fonts\FontPreview.cs" />
     <Compile Include="1_Drawing_Fonts\GlyphPathBuilderVxs.cs" />
     <Compile Include="1_Drawing_Fonts\InstalledFontCollection.cs" />
