@@ -35,6 +35,11 @@ namespace PixelFarm.DrawingGL
             if (areaTess == null)
             {
                 List<Vertex> vertextList = tess.TessPolygon(coordXYs);
+                if (vertextList == null)
+                {
+                    tessAreaTriangleCount = 0;
+                    return null;
+                }
                 //-----------------------------   
                 //switch how to fill polygon
                 int j = vertextList.Count;
@@ -68,6 +73,7 @@ namespace PixelFarm.DrawingGL
         public List<Vertex> TessPolygon(float[] vertex2dCoords)
         {
             int ncoords = vertex2dCoords.Length / 2;
+            if (ncoords == 0) { return null; }
             List<Vertex> vertexts = new List<Vertex>(ncoords);
             int nn = 0;
             for (int i = 0; i < ncoords; ++i)
@@ -152,6 +158,7 @@ namespace PixelFarm.DrawingGL
             List<float> xylist = new List<float>();
             allXYlist.Add(xylist);
             bool isAddToList = true;
+            //bool vxsMoreThan1 =  vxsSnap.VxsHasMoreThanOnePart;
             for (;;)
             {
                 double x, y;
@@ -175,19 +182,26 @@ namespace PixelFarm.DrawingGL
                         prevX = x;
                         prevY = y;
                         break;
-                    case PixelFarm.Agg.VertexCmd.CloseAndEndFigure:
+                    case PixelFarm.Agg.VertexCmd.Close:
                         //from current point 
                         xylist.Add((float)prevMoveToX);
                         xylist.Add((float)prevMoveToY);
                         prevX = prevMoveToX;
                         prevY = prevMoveToY;
-                        //start the new one
+                        //xylist = new List<float>();
+                        //isAddToList = false;
+                        break;
+                    case VertexCmd.CloseAndEndFigure:
+                        //from current point 
+                        xylist.Add((float)prevMoveToX);
+                        xylist.Add((float)prevMoveToY);
+                        prevX = prevMoveToX;
+                        prevY = prevMoveToY;
+                        //
                         xylist = new List<float>();
                         isAddToList = false;
                         break;
-                    case PixelFarm.Agg.VertexCmd.EndFigure:
-                        break;
-                    case PixelFarm.Agg.VertexCmd.Stop:
+                    case PixelFarm.Agg.VertexCmd.NoMore:
                         goto EXIT_LOOP;
                     default:
                         throw new System.NotSupportedException();

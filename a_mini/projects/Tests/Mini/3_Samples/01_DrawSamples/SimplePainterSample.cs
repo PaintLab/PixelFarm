@@ -15,25 +15,27 @@ namespace PixelFarm.Agg.SimplePainter
     {
         public override void Init()
         {
+
         }
         public override void Draw(CanvasPainter p)
         {
+
             p.Clear(Drawing.Color.White);
             //p.SmoothingMode = Drawing.SmoothingMode.AntiAlias;
             //// draw a circle  
             p.FillColor = Drawing.Color.Blue;
-            //p.FillCircle(50, 50, 30);
+            p.FillCircle(50, 50, 30);
             p.StrokeColor = Drawing.Color.FromArgb(20, 200, 200);
-            //p.Line(10, 100, 520, 50);
-            ////// draw a filled box
-            //p.FillRectangle(60, 260, 200, 280, Drawing.Color.Yellow);
+            p.Line(10, 100, 520, 50);
+            //// draw a filled box
+            p.FillRectangle(60, 260, 200, 280, Drawing.Color.Yellow);
 
-            //// and an outline around it
-            // p.Rectangle(60, 260, 200, 280, Drawing.Color.Magenta);
+            // and an outline around it
+            p.Rectangle(60, 260, 200, 280, Drawing.Color.Magenta);
             p.DrawString("A Simple Example", 20, 400);
-            //p.DrawString("A Simple Example2", 300, 350);
-            //p.DrawString("A Simple Example3", 300, 300);
-            //p.DrawString("A Simple Example4", 300, 250);
+            p.DrawString("A Simple Example2", 300, 350);
+            p.DrawString("A Simple Example3", 300, 300);
+            p.DrawString("A Simple Example4", 300, 250);
         }
     }
 }

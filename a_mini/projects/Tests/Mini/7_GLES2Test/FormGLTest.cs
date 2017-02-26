@@ -40,12 +40,12 @@ namespace Mini
                 //canvasPainter.TextPrinter = printer;
                 //----------------------
                 //2. raw vxs
-                //var printer = new PixelFarm.Drawing.Fonts.TextPrinter(canvasPainter);
-                //canvasPainter.TextPrinter = printer;
+                var printer = new PixelFarm.Drawing.Fonts.TextPrinter(canvasPainter);
+                canvasPainter.TextPrinter = printer;
                 //----------------------
                 //3. agg texture based font texture
-                var printer = new AggFontPrinter(canvasPainter, w, h);
-                canvasPainter.TextPrinter = printer;
+                //var printer = new AggFontPrinter(canvasPainter, w, h);
+                //canvasPainter.TextPrinter = printer;
             }
             return miniGLControl;
         }
