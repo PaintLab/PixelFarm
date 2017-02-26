@@ -1,12 +1,16 @@
 ﻿//MIT, 2016-2017, WinterDev
+
 using System;
 using PixelFarm.Agg;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
- 
-
+using PixelFarm.Drawing.Text;
+using System.Collections.Generic;
 namespace PixelFarm.DrawingGL
 {
+
+    //this provides 3 ITextPrinter for GLES2-based Canvas
+
 
     class AggFontPrinter : ITextPrinter
     {
@@ -204,4 +208,127 @@ namespace PixelFarm.DrawingGL
             glBmp.Dispose();
         }
     }
+
+
+    class NativeFontStore
+    {
+        //TODO: review here again ***
+
+        Dictionary<InstalledFont, FontFace> fonts = new Dictionary<InstalledFont, FontFace>();
+        Dictionary<FontKey, ActualFont> registerFonts = new Dictionary<FontKey, ActualFont>();
+        //--------------------------------------------------
+
+        public NativeFontStore()
+        {
+
+        }
+        public ActualFont LoadFont(string fontName, float fontSizeInPoints)
+        {
+            //find install font from fontname
+            InstalledFont found = PixelFarm.Drawing.GLES2.GLES2Platform.GetInstalledFont(fontName, InstalledFontStyle.Regular);
+            if (found == null)
+            {
+                return null;
+            }
+
+            FontFace fontFace;
+            if (!fonts.TryGetValue(found, out fontFace))
+            {
+
+                //convert to freetype data
+
+                //TODO: review here
+                //fontFace = FreeTypeFontLoader.LoadFont(found,
+                //    GLES2PlatformFontMx.defaultScriptLang
+                //    GLES2PlatformFontMx.defaultHbDirection,
+                //    GLES2PlatformFontMx.defaultScriptCode);
+                //fontFace = FreeTypeFontLoader.LoadFont(found,
+                //     "en",
+                //     HBDirection.HB_DIRECTION_RTL);
+
+                if (fontFace == null)
+                {
+                    throw new NotSupportedException();
+                }
+                fonts.Add(found, fontFace);//register
+            }
+            //-----------
+            //create font at specific size from this fontface
+            FontKey fontKey = new FontKey(fontName, fontSizeInPoints, FontStyle.Regular);
+            ActualFont createdFont;
+            if (!registerFonts.TryGetValue(fontKey, out createdFont))
+            {
+                createdFont = fontFace.GetFontAtPointsSize(fontSizeInPoints);
+            }
+            //-----------
+            return createdFont;
+        }
+
+        public ActualFont GetResolvedNativeFont(RequestFont reqFont)
+        {
+            ActualFont found;
+            registerFonts.TryGetValue(reqFont.FontKey, out found);
+            return found;
+        }
+    }
+
+    class GLTextPrinter
+    {
+
+        Drawing.RequestFont currentFont;
+        CanvasGL2d canvas2d;
+        ProperGlyph[] properGlyphs = null;
+        NativeFontStore nativeFontStore = new NativeFontStore();
+        public GLTextPrinter(CanvasGL2d canvas2d)
+        {
+            this.canvas2d = canvas2d;
+        }
+        public Drawing.RequestFont CurrentFont
+        {
+            get { return this.currentFont; }
+            set { this.currentFont = value; }
+        }
+        public void Print(string t, double x, double y)
+        {
+            Print(t.ToCharArray(), x, y);
+        }
+        public void Print(char[] buffer, double x, double y)
+        {
+            int j = buffer.Length;
+            int buffsize = j * 2;
+            //get kerning list
+            ActualFont fontImp = nativeFontStore.GetResolvedNativeFont(currentFont);
+
+            if (properGlyphs == null)
+            {
+                properGlyphs = new ProperGlyph[buffsize];
+                TextShapingService.GetGlyphPos(fontImp, buffer, 0, buffsize, properGlyphs);
+            }
+
+            double xpos = x;
+            for (int i = 0; i < buffsize; ++i)
+            {
+                uint codepoint = properGlyphs[i].codepoint;
+                if (codepoint == 0)
+                {
+                    break;
+                }
+
+                //-------------------------------------------------------------
+                FontGlyph glyph = fontImp.GetGlyphByIndex(codepoint);
+                //glyph image32 
+                //-------------------------------------------------------------
+                GLBitmap bmp = new GLBitmap(new LazyAggBitmapBufferProvider(glyph.glyphImage32));
+                var left = glyph.glyphMatrix.img_horiBearingX;
+                this.canvas2d.DrawImage(bmp,
+                    (float)(xpos + (left >> 6)),
+                    (float)(y + (glyph.glyphMatrix.bboxYmin >> 6)));
+                int w = (glyph.glyphMatrix.advanceX) >> 6;
+                xpos += (w);
+                bmp.Dispose(); //temp here 
+                //-------------------------------------------------------------                
+            }
+        }
+    }
+
 }

@@ -47,7 +47,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniOpenTK", "Pix
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1_WindowsSystem", "2.1_WindowsSystem", "{D4DC1DFA-C3BB-445F-9689-87889DF12580}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.2_Providers", "2.2_Providers", "{997A4B24-A928-4544-946A-E8F74BC63EED}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_Providers", "3_Providers", "{997A4B24-A928-4544-946A-E8F74BC63EED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMirror", "PixelFarm\TypeMirror\TypeMirror.csproj", "{68F1DAF6-2B35-476E-B2F8-5EADBC823935}"
 EndProject

@@ -54,5 +54,9 @@ namespace PixelFarm.Drawing.GLES2
 
         }
 
+        public static InstalledFont GetInstalledFont(string fontName, InstalledFontStyle style)
+        {   
+            return GLES2PlatformFontMx.GetInstalledFont(fontName, style);
+        }
     }
 }

@@ -17,9 +17,7 @@ namespace PixelFarm.Drawing.GLES2
         GLCanvasPainter painter1;
         Rectangle currentClipRect;
         Color currentTextColor;
-        InternalPen internalPen;
-        InternalBrush internalBrush;
-
+  
         internal MyGLCanvas(
             CanvasGL2d canvasGL2d,
             int left, int top,
@@ -27,10 +25,7 @@ namespace PixelFarm.Drawing.GLES2
             int height)
         {
             this.canvasGL2 = canvasGL2d;
-            painter1 = new GLCanvasPainter(canvasGL2d, width, height);
-
-
-
+            painter1 = new GLCanvasPainter(canvasGL2d, width, height); 
             this.left = left;
             this.top = top;
             this.right = left + width;
@@ -39,10 +34,7 @@ namespace PixelFarm.Drawing.GLES2
 
 
             this.CurrentFont = new RequestFont("tahoma", 10);
-            this.CurrentTextColor = Color.Black;
-
-            internalPen = new InternalPen(Color.Black);
-            internalBrush = new InternalBrush(Color.Black);
+            this.CurrentTextColor = Color.Black; 
 #if DEBUG
             debug_canvas_id = dbug_canvasCount + 1;
             dbug_canvasCount += 1;
@@ -70,8 +62,8 @@ namespace PixelFarm.Drawing.GLES2
             this.CurrentFont = new RequestFont("tahoma", 10);
             this.CurrentTextColor = Color.Black;
 
-            internalPen = new InternalPen(Color.Black);
-            internalBrush = new InternalBrush(Color.Black);
+            //internalPen = new InternalPen(Color.Black);
+            //internalBrush = new InternalBrush(Color.Black);
 #if DEBUG
             debug_canvas_id = dbug_canvasCount + 1;
             dbug_canvasCount += 1;

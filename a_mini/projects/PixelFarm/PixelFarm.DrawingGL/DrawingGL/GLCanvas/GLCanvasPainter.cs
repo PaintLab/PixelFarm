@@ -7,14 +7,13 @@ using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.Drawing.Fonts;
-using PixelFarm.Drawing.Text;
 
 
 namespace PixelFarm.DrawingGL
 {
-    public abstract class GLCanvasPainterBase : CanvasPainter
+    public sealed class GLCanvasPainter : CanvasPainter
     {
-        protected CanvasGL2d _canvas;
+        CanvasGL2d _canvas;
         int _width;
         int _height;
         Color _fillColor;
@@ -25,10 +24,11 @@ namespace PixelFarm.DrawingGL
         Arc arcTool;
         Ellipse ellipse = new Ellipse();
         Stroke _aggStroke = new Stroke(1);
-        protected ITextPrinter _textPriner;
+        RequestFont _requestFont;
+        ITextPrinter _textPriner;
 
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
-        public GLCanvasPainterBase(CanvasGL2d canvas, int w, int h)
+        public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
         {
             _canvas = canvas;
             _width = w;
@@ -36,10 +36,44 @@ namespace PixelFarm.DrawingGL
             _rectInt = new RectInt(0, 0, w, h);
             arcTool = new Arc();
             CurrentFont = new RequestFont("tahoma", 14);
-
+        }
+        public override void SetOrigin(float ox, float oy)
+        {
+            _canvas.SetCanvasOrigin((int)ox, (int)oy);
         }
         public CanvasGL2d Canvas { get { return this._canvas; } }
 
+        public override RequestFont CurrentFont
+        {
+            get
+            {
+                return _requestFont;
+            }
+
+            set
+            {
+                _requestFont = value;
+                //_textureFont = null;
+                //if (_textPriner != null)
+                //{
+                //    _textPriner.ChangeFont(value);
+                //}
+                //if (_requestFont.SizeInPoints > 10)
+                //{
+                //    if (UseTextureFontIfAvailable)
+                //    {
+                //        //try resolve this font
+                //        _textureFont = GLES2PlatformFontMx.Default.ResolveForTextureFont(value) as TextureFont;
+                //        if (_textureFont != null)
+                //        {
+                //            //found and can use
+                //            //this 
+                //            SetCurrentTextureFont(_textureFont);
+                //        }
+                //    }
+                //}
+            }
+        }
         public override RectInt ClipBox
         {
             get
@@ -214,7 +248,20 @@ namespace PixelFarm.DrawingGL
             this.Draw(roundRect.MakeVxs(v1));
             ReleaseVxs(ref v1);
         }
-
+        public override float OriginX
+        {
+            get
+            {
+                return _canvas.CanvasOriginX;
+            }
+        }
+        public override float OriginY
+        {
+            get
+            {
+                return _canvas.CanvasOriginY;
+            }
+        }
         // TextureFont _currentTextureFont;
         //internal void SetCurrentTextureFont(TextureFont textureFont)
         //{
@@ -222,7 +269,7 @@ namespace PixelFarm.DrawingGL
         //}
         public override void DrawString(string text, double x, double y)
         {
-
+            //draw with texture printer ***
             //char[] chars = text.ToCharArray();
             //int j = chars.Length;
             //int buffsize = j * 2;

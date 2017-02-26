@@ -38,7 +38,7 @@
     <Compile Include="DrawingGL\GLCanvas\CanvasGL2d.cs" />
     <Compile Include="DrawingGL\GLCanvas\CanvasSmoothMode.cs" />
     <Compile Include="DrawingGL\GLCanvas\CanvasToShaderSharedResource.cs" />
-    <Compile Include="DrawingGL\GLCanvas\GLCanvasPainterBase.cs" />
+    <Compile Include="DrawingGL\GLCanvas\GLCanvasPainter.cs" />
     <Compile Include="DrawingGL\GLCanvas\GLGradientColorProvider.cs" />
     <Compile Include="DrawingGL\GLCanvas\ImageFillStyle.cs" />
     <Compile Include="DrawingGL\GLCanvas\InternalGraphicsPath.cs" />
