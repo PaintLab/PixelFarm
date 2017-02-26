@@ -458,7 +458,7 @@ namespace PixelFarm.DrawingGL
         public override void Draw(VertexStoreSnap snap)
         {
             _canvas.DrawGfxPath(
-             this._fillColor,
+             this._strokeColor,
              InternalGraphicsPath.CreateGraphicsPath(snap)
              );
         }

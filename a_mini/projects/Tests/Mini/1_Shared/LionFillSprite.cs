@@ -57,7 +57,7 @@ namespace PixelFarm.Agg
                 );
                 //create vertextStore again from original path
                 myvxs = new VertexStore();
-                
+
                 transform.TransformToVxs(lionShape.Path.Vxs, myvxs);
 
                 if (AutoFlipY)
@@ -74,25 +74,21 @@ namespace PixelFarm.Agg
             }
             //---------------------------------------------------------------------------------------------
             {
-                try
+
+                int j = lionShape.NumPaths;
+                int[] pathList = lionShape.PathIndexList;
+                Drawing.Color[] colors = lionShape.Colors;
+                //graphics2D.UseSubPixelRendering = true; 
+                for (int i = 0; i < j; ++i)
                 {
-                    int j = lionShape.NumPaths;
-                    int[] pathList = lionShape.PathIndexList;
-                    Drawing.Color[] colors = lionShape.Colors;
-                    //graphics2D.UseSubPixelRendering = true; 
-                    for (int i = 0; i < j; ++i)
-                    {
-                        p.FillColor = colors[i];
-                        p.Fill(new VertexStoreSnap(myvxs, pathList[i]));
-                      
-                    }
+                    p.FillColor = colors[i];
+                    p.Fill(new VertexStoreSnap(myvxs, pathList[i]));
+
                 }
-                catch (Exception ex)
-                {
-                }
+
             }
         }
-         
+
         public SpriteShape GetSpriteShape()
         {
             return lionShape;

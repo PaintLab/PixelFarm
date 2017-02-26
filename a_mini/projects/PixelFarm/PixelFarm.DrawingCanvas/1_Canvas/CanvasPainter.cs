@@ -25,6 +25,7 @@ namespace PixelFarm.Agg
 
     public abstract class CanvasPainter
     {
+        
         public abstract float OriginX { get; }
         public abstract float OriginY { get; }
         public abstract void SetOrigin(float ox, float oy);
