@@ -43,6 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\pixelfarm\win32utils\MyWin32.cs">
+      <Link>Win32Utils\MyWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\pixelfarm\win32utils\NativeTextWin32.cs">
+      <Link>Win32Utils\NativeTextWin32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\pixelfarm\win32utils\NativeWin32MemoryDc.cs">
+      <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
+    </Compile>
     <Compile Include="0_Start\DemoBase.cs" />
     <Compile Include="1_Shared\dbugVxsDrawPoints.cs" />
     <Compile Include="1_Shared\Square.cs" />
@@ -77,6 +86,7 @@
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="5_Samples_3\BitmapRenderSample.cs" />
     <Compile Include="6_WinGdiTest\LionSpriteTool.cs" />
+    <Compile Include="6_WinGdiTest\WinGdiFontPrinter.cs" />
     <Compile Include="7_GLES2Test\FormGLTest.cs">
       <SubType>Form</SubType>
     </Compile>

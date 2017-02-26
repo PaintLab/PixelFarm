@@ -30,9 +30,9 @@ namespace PixelFarm.Drawing.Fonts
         //
 
         static InstalledFontCollection installFonts;
-        internal static string defaultLang = "en";
-        internal static HBDirection defaultHbDirection = HBDirection.HB_DIRECTION_LTR;
-        internal static int defaultScriptCode = 0;
+        internal static ScriptLang defaultScriptLang = ScriptLangs.Latin;
+        internal static WriteDirection defaultHbDirection = WriteDirection.LTR;
+
         static bool s_didLoadFonts;
         public static void LoadInstalledFont(IInstalledFontProvider provider)
         {
@@ -86,26 +86,24 @@ namespace PixelFarm.Drawing.Fonts
             TextureFontFace textureFontface = lateFontInfo.Fontface;
             if (textureFontface == null)
             {
-                //load glyh image here
-                GlyphImage glyphImage = null;
-                using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage(lateFontInfo.TextureBitmapFile))
-                {
-                    glyphImage = new GlyphImage(nativeImg.Width, nativeImg.Height);
-                    var buffer = new int[nativeImg.Width * nativeImg.Height];
-                    System.Runtime.InteropServices.Marshal.Copy(nativeImg.GetNativeImageHandle(), buffer, 0, buffer.Length);
-                    glyphImage.SetImageBuffer(buffer, true);
-                }
+                throw new System.NotSupportedException();
+                ////load glyh image here
+                //GlyphImage glyphImage = null;
+                //using (var nativeImg = new PixelFarm.Drawing.Imaging.NativeImage(lateFontInfo.TextureBitmapFile))
+                //{
+                //    glyphImage = new GlyphImage(nativeImg.Width, nativeImg.Height);
+                //    var buffer = new int[nativeImg.Width * nativeImg.Height];
+                //    System.Runtime.InteropServices.Marshal.Copy(nativeImg.GetNativeImageHandle(), buffer, 0, buffer.Length);
+                //    glyphImage.SetImageBuffer(buffer, true);
+                //}
 
-                InstalledFont installedFont = GLES2PlatformFontMx.GetInstalledFont(font.Name, InstalledFontStyle.Regular);
-                FontFace nOpenTypeFontFace = NOpenTypeFontLoader.LoadFont(installedFont.FontPath,
-                      GLES2PlatformFontMx.defaultLang,
-                      GLES2PlatformFontMx.defaultHbDirection,
-                      GLES2PlatformFontMx.defaultScriptCode);
+                //InstalledFont installedFont = GLES2PlatformFontMx.GetInstalledFont(font.Name, InstalledFontStyle.Regular);
+                //FontFace nOpenTypeFontFace = OpenFontLoader.LoadFont(installedFont.FontPath, GLES2PlatformFontMx.defaultScriptLang);
 
 
-                textureFontface = new TextureFontFace(nOpenTypeFontFace, lateFontInfo.FontMapFile, glyphImage);
-                lateFontInfo.Fontface = textureFontface;
-                return textureFontface.GetFontAtPointsSize(font.SizeInPoints);
+                //textureFontface = new TextureFontFace(nOpenTypeFontFace, lateFontInfo.FontMapFile, glyphImage);
+                //lateFontInfo.Fontface = textureFontface;
+                //return textureFontface.GetFontAtPointsSize(font.SizeInPoints);
             }
             if (textureFontface != null)
             {
@@ -178,14 +176,23 @@ namespace PixelFarm.Drawing.Fonts
             FontFace fontFace;
             if (!fonts.TryGetValue(found, out fontFace))
             {
-                fontFace = FreeTypeFontLoader.LoadFont(found,
-                    GLES2PlatformFontMx.defaultLang,
-                    GLES2PlatformFontMx.defaultHbDirection,
-                    GLES2PlatformFontMx.defaultScriptCode);
+
+                //convert to freetype data
+
+                //TODO: review here
+                //fontFace = FreeTypeFontLoader.LoadFont(found,
+                //    GLES2PlatformFontMx.defaultScriptLang
+                //    GLES2PlatformFontMx.defaultHbDirection,
+                //    GLES2PlatformFontMx.defaultScriptCode);
+                //fontFace = FreeTypeFontLoader.LoadFont(found,
+                //     "en",
+                //     HBDirection.HB_DIRECTION_RTL);
+
                 if (fontFace == null)
-                {
-                    throw new NotSupportedException();
-                }
+                    if (fontFace == null)
+                    {
+                        throw new NotSupportedException();
+                    }
                 fonts.Add(found, fontFace);//register
             }
             //-----------

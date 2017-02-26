@@ -1,16 +1,15 @@
 ﻿//MIT, 2014-2017, WinterDev 
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Typography.OpenFont;
-using Typography.OpenFont.Tables;
+
 using System.IO;
-using PixelFarm.Agg;
+using Typography.OpenFont;
+
 namespace PixelFarm.Drawing.Fonts
 {
-    public static class NOpenTypeFontLoader
+    public static class OpenFontLoader
     {
-        public static FontFace LoadFont(string fontfile, string lang, HBDirection direction, int defaultScriptCode = 0)
+        public static FontFace LoadFont(string fontfile,
+            ScriptLang scriptLang,
+            WriteDirection writeDirection = WriteDirection.LTR)
         {
             //read font file
             OpenFontReader openTypeReader = new OpenFontReader();
@@ -25,7 +24,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             //TODO:...
             //set shape engine *** 
-            return new NOpenTypeFontFace(typeface, typeface.Name, fontfile);
+            return new ManagedFontFace(typeface, typeface.Name, fontfile);
         }
     }
 

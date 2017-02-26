@@ -25,6 +25,11 @@ namespace PixelFarm.Agg
 
     public abstract class CanvasPainter
     {
+        
+        public abstract float OriginX { get; }
+        public abstract float OriginY { get; }
+        public abstract void SetOrigin(float ox, float oy);
+        //-------------------------------------------------------
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract RectInt ClipBox { get; set; }
@@ -80,6 +85,7 @@ namespace PixelFarm.Agg
         //////////////////////////////////////////////////////////////////////////////
         //text,string
         //TODO: review text drawing funcs 
+        
         public abstract RequestFont CurrentFont { get; set; }
         public abstract void DrawString(
            string text,

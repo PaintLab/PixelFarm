@@ -41,9 +41,7 @@ namespace PixelFarm.Agg
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public virtual void OnDraw(Graphics2D graphics2D)
-        {
-        }
+     
         public virtual void Draw(CanvasPainter p)
         {
         }

@@ -66,7 +66,10 @@ namespace PixelFarm.Drawing.WinGdi
 
             InstalledFont foundInstalledFont = s_installedFonts.GetFont(fontName, installedStyle);
             //TODO: review 
-            this.nopenTypeFontFace = NOpenTypeFontLoader.LoadFont(foundInstalledFont.FontPath, "en", HBDirection.HB_DIRECTION_LTR);
+            this.nopenTypeFontFace = OpenFontLoader.LoadFont(
+                foundInstalledFont.FontPath, ScriptLangs.Latin, WriteDirection.LTR);
+
+
         }
 
         public static void SetInstalledFontCollection(InstalledFontCollection installedFonts)

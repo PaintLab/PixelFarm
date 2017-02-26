@@ -115,32 +115,49 @@ namespace PixelFarm.Agg.Sample_LionOutline
         }
         public override void Draw(CanvasPainter p)
         {
-            base.Draw(p);
-        }
-
-        public override void OnDraw(Graphics2D graphics2D)
-        {
-            //render 
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
-            int width = widgetsSubImage.Width;
-            int height = widgetsSubImage.Height;
             int strokeWidth = 1;
+            int width = p.Width;
+            int height = p.Height;
+
+            Affine affTx = Affine.NewMatix(
+                   AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
+                   AffinePlan.Scale(spriteScale, spriteScale),
+                   AffinePlan.Rotate(angle + Math.PI),
+                   AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
+                   AffinePlan.Translate(width / 2, height / 2));
+
+            var p1 = p as AggCanvasPainter;
+            if (p1 == null)
+            {
+                int j = lionShape.NumPaths;
+                int[] pathList = lionShape.PathIndexList;
+                Drawing.Color[] colors = lionShape.Colors;
+                //graphics2D.UseSubPixelRendering = true; 
+                var vxs = GetFreeVxs();
+                affTx.TransformToVxs(lionShape.Path.Vxs, vxs);
+                p.StrokeWidth = 1;
+                for (int i = 0; i < j; ++i)
+                {
+                    p.StrokeColor = colors[i];
+                    p.Draw(new VertexStoreSnap(vxs, pathList[i]));
+
+                }
+                //not agg   
+                Release(ref vxs);
+                return; //**
+            }
+
+            Graphics2D graphics2D = p1.Graphics;
+            //var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            //int width = widgetsSubImage.Width;
+            //int height = widgetsSubImage.Height; 
+            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+
             var clippedSubImage = new ChildImage(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(PixelFarm.Drawing.Color.White);
-            Affine affTx = Affine.NewMatix(
-                    AffinePlan.Translate(-lionShape.Center.x, -lionShape.Center.y),
-                    AffinePlan.Scale(spriteScale, spriteScale),
-                    AffinePlan.Rotate(angle + Math.PI),
-                    AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
-                    AffinePlan.Translate(width / 2, height / 2));
-            //transform *= Affine.NewTranslation(-lionShape.Center.x, -lionShape.Center.y);
-            //transform *= Affine.NewScaling(spriteScale, spriteScale);
-            //transform *= Affine.NewRotation(angle + Math.PI);
-            //transform *= Affine.NewSkewing(skewX / 1000.0, skewY / 1000.0);
-            //transform *= Affine.NewTranslation(width / 2, height / 2);
 
-            
+
             if (RenderAsScanline)
             {
                 var rasterizer = graphics2D.ScanlineRasterizer;
@@ -159,8 +176,6 @@ namespace PixelFarm.Agg.Sample_LionOutline
                     lionShape.PathIndexList,
                     lionShape.NumPaths);
                 Release(ref vxs);
-
-
             }
             else
             {
@@ -185,8 +200,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 }
                 Release(ref vxs);
             }
-
-            base.OnDraw(graphics2D);
+            base.Draw(p);
         }
     }
 }

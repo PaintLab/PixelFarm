@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using PixelFarm.Drawing;
 namespace Win32
 {
-    public class NativeTextWin32
+    class NativeTextWin32
     {
 
         const string GDI32 = "gdi32.dll";

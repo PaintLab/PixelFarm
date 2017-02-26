@@ -4,8 +4,7 @@ namespace PixelFarm.Drawing
 {
 
     public abstract class GraphicsPlatform
-    {
-
+    { 
         public abstract Canvas CreateCanvas(
             int left,
             int top,
@@ -38,5 +37,6 @@ namespace PixelFarm.Drawing
             return externalCanvas == null && canvasBackEnd == CanvasBackEnd.Software;
         }
     }
+
 
 }

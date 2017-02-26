@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
+using PixelFarm.Drawing.Fonts;
 
 namespace PixelFarm.Drawing.WinGdi
 {
@@ -53,7 +54,24 @@ namespace PixelFarm.Drawing.WinGdi
             _bmpStore = new BufferBitmapStore(_width, _height);
         }
 
-
+        public override float OriginX
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public override float OriginY
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+        public override void SetOrigin(float ox, float oy)
+        {
+            throw new NotImplementedException();
+        }
         public override SmoothingMode SmoothingMode
         {
             get
@@ -171,7 +189,7 @@ namespace PixelFarm.Drawing.WinGdi
                 _useSubPixelRendering = value;
             }
         }
-        
+
         public override int Width
         {
             get
@@ -509,5 +527,6 @@ namespace PixelFarm.Drawing.WinGdi
             WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
             VxsHelper.FillPath(_gfx, wRenderVx.path, this.FillColor);
         }
+        
     }
 }
