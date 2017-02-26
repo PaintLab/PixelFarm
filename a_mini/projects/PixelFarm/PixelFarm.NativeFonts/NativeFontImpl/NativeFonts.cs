@@ -134,10 +134,7 @@ namespace PixelFarm.Drawing.Fonts
         }
     }
 
-
-
-
-
+    
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     unsafe struct ExportFace
     {
