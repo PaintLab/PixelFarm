@@ -108,10 +108,10 @@
       <Link>DrawingGL\GLTexture\TextureAtlas.cs</Link>
     </Compile>
     <Compile Include="0_Start\GLES2Platform.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\Canvas\1_MyGLCanvas_Specific.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\Canvas\2_MyGLCanvas_CoordinateAndClip.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\Canvas\3_MyGLCanvas_DrawGraphics.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\Canvas\4_MyGLCanvas_TextAndFonts.cs" />
+    <Compile Include="PixelFarm.Drawing.GLES2\1_MyGLCanvas_Specific.cs" />
+    <Compile Include="PixelFarm.Drawing.GLES2\2_MyGLCanvas_CoordinateAndClip.cs" />
+    <Compile Include="PixelFarm.Drawing.GLES2\3_MyGLCanvas_DrawGraphics.cs" />
+    <Compile Include="PixelFarm.Drawing.GLES2\4_MyGLCanvas_TextAndFonts.cs" />
     <Compile Include="0_Start\GLES2PlatformFontMx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
