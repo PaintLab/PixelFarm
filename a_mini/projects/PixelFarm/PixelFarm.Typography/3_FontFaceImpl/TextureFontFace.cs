@@ -9,19 +9,18 @@ namespace PixelFarm.Drawing.Fonts
     class TextureFontFace : FontFace
     {
 
-        MySimpleFontAtlasBuilder atlasBuilder;
+       
         SimpleFontAtlas fontAtlas;
         FontFace primFontFace;
 
-        public TextureFontFace(FontFace primFontFace, string xmlFontInfo, GlyphImage glyphImg)
+        public TextureFontFace(FontFace primFontFace, SimpleFontAtlas fontAtlas)
         {
             //for msdf font
-            //1 font atlas may support mutliple font size 
-            atlasBuilder = new MySimpleFontAtlasBuilder();
-            fontAtlas = atlasBuilder.LoadFontInfo(xmlFontInfo);
-            fontAtlas.TotalGlyph = glyphImg;
+            //1 font atlas may support mutliple font size  
+            this.fontAtlas = fontAtlas; 
             this.primFontFace = primFontFace; 
         }
+         
         public override float GetScale(float pointSize)
         {
             return primFontFace.GetScale(pointSize);
