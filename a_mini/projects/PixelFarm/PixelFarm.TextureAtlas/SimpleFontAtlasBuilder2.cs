@@ -7,73 +7,12 @@ using PixelFarm.Drawing.Fonts;
 
 namespace Typography.Rendering
 {
-    //public class GlyphImage2
-    //{
-    //    int[]
-    //    pixelBuffer;
-    //    public GlyphImage2(int w, int h)
-    //    {
-    //        this.Width = w;
-    //        this.Height = h;
-    //    }
-    //    public RectangleF OriginalGlyphBounds
-    //    {
-    //        get;
-    //        set;
-    //    }
-    //    public int Width
-    //    {
-    //        get;
-    //        private set;
-    //    }
-    //    public int Height
-    //    {
-    //        get;
-    //        private set;
-    //    }
-    //    public bool IsBigEndian
-    //    {
-    //        get;
-    //        private set;
-    //    }
-    //    public int BorderXY
-    //    {
-    //        get;
-    //        set;
-    //    }
-    //    public int[] GetImageBuffer()
-    //    {
-    //        return pixelBuffer;
-    //    }
-    //    public void SetImageBuffer(int[] pixelBuffer, bool isBigEndian)
-    //    {
-    //        this.pixelBuffer = pixelBuffer;
-    //        this.IsBigEndian = isBigEndian;
-    //    }
-    //}
-
-    //public class CacheGlyph
-    //{
-    //    public int borderX;
-    //    public int borderY;
-    //    public GlyphImage2 img;
-    //    public Rectangle area;
-    //    public char character;
-    //    public int codePoint;
-    //    public GlyphMatrix2 glyphMatrix;
-    //}
 
     public class SimpleFontAtlasBuilder
     {
         GlyphImage2 latestGenGlyphImage;
         Dictionary<int, CacheGlyph> glyphs = new Dictionary<int, CacheGlyph>();
-        public void AddGlyph(int codePoint, char c, FontGlyph fontGlyph, GlyphImage2 img)
-        {
-            var glyphCache = new CacheGlyph();
-            glyphCache.codePoint = codePoint;
-            glyphCache.img = img;
-            glyphs[codePoint] = glyphCache;
-        }
+
         public void AddGlyph(int codePoint, GlyphImage2 img)
         {
             var glyphCache = new CacheGlyph();
