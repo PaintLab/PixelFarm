@@ -404,7 +404,7 @@ namespace PixelFarm.DrawingGL
             float baseline = c_y - 24;//eg line height= 24 //create a list
             bool isFlipY = canvas2d.FlipY;
             if (!isFlipY)
-            {   
+            {
                 canvas2d.FlipY = true;
             }
             for (int i = 0; i < n; ++i)
@@ -425,8 +425,13 @@ namespace PixelFarm.DrawingGL
                 //found
 
                 Rectangle r = glyphData.Rect;
+                //test draw full msdf gen img
+                //canvas2d.DrawImage(glBmp, c_x + left, (float)(baseline + ((int)(glyphData.ImgHeight))));
+
                 canvas2d.DrawSubImageWithMsdf(glBmp, ref r, c_x + left,
                     (float)(baseline + ((int)(glyphData.ImgHeight))), 1.0f);
+
+                c_x += glyph.advX;
             }
 
             canvas2d.FlipY = isFlipY;
