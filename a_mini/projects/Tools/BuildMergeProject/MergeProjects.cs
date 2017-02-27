@@ -222,6 +222,7 @@ namespace BuildMergeProject
         public void Load(string projectFile)
         {
             this.ProjectFileName = projectFile;
+             
             var pro = new Project(projectFile);
             foreach (ProjectItem item in pro.AllEvaluatedItems)
             {
