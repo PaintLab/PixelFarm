@@ -7,7 +7,7 @@ namespace Mini
 {
     static class Program
     {
-        internal static PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform _winGdiPlatForm;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -19,7 +19,10 @@ namespace Mini
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             RootDemoPath.Path = @"..\Data";
-            _winGdiPlatForm = new PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform();
+            //you can use your font loader
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
+            PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
+
             Application.Run(new FormDev());
         }
     }

@@ -43,7 +43,7 @@ namespace Mini
             cmbRenderBackend.Items.Add(RenderBackendChoice.OpenGLES2);
             cmbRenderBackend.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
             cmbRenderBackend.Items.Add(RenderBackendChoice.SkiaGLBackend);
-            cmbRenderBackend.SelectedIndex = 0;//set default 
+            cmbRenderBackend.SelectedIndex = 2;//set default 
         }
 
         void listBox1_DoubleClick(object sender, EventArgs e)
@@ -227,7 +227,7 @@ namespace Mini
         {
         }
 
-        PixelFarm.Drawing.Fonts.GdiPathFontStore gdiPathFontStore = new PixelFarm.Drawing.Fonts.GdiPathFontStore();
+        //PixelFarm.Drawing.Fonts.GdiPathFontStore gdiPathFontStore = new PixelFarm.Drawing.Fonts.GdiPathFontStore();
         private void button3_Click(object sender, EventArgs e)
         {
             ////----------------------
@@ -350,8 +350,10 @@ namespace Mini
         private void button7_Click(object sender, EventArgs e)
         {
 
-            PixelFarm.Drawing.Win32.InstallFontsProviderWin32 installFontProvider = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            var installFontProvider = new PixelFarm.Drawing.InstallFontsProviderWin32();
             List<PixelFarm.Drawing.Fonts.InstalledFont> fonts = PixelFarm.Drawing.Fonts.InstalledFontCollection.ReadPreviewFontData(installFontProvider.GetInstalledFontIter());
+
+
             System.Drawing.Bitmap bmp1 = new Bitmap(800, 600, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bmp1);
 

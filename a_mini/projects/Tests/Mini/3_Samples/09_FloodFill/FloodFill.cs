@@ -16,7 +16,10 @@ namespace PixelFarm.Agg.Sample_FloodFill
     public class FloodFillDemo : DemoBase
     {
         ActualImage imageToFillOn;
-        Point2D imageOffset = new Point2D(20, 60);
+
+        int imgOffsetX = 20;
+        int imgOffsetY = 60;
+
         public FloodFillDemo()
         {
             BackgroundColor = Color.White;
@@ -63,12 +66,12 @@ namespace PixelFarm.Agg.Sample_FloodFill
 
         public override void Draw(CanvasPainter p)
         {
-            p.DrawImage(imageToFillOn, imageOffset.x, imageOffset.y);
+            p.DrawImage(imageToFillOn, imgOffsetX, imgOffsetY);
         }
         public override void MouseDown(int mx, int my, bool isRightButton)
         {
-            int x = mx - imageOffset.x;
-            int y = my - imageOffset.y;
+            int x = mx - imgOffsetX;
+            int y = my - imgOffsetY;
             FloodFill filler = new FloodFill(Color.Red);
             filler.Fill(imageToFillOn, x, y);
         }

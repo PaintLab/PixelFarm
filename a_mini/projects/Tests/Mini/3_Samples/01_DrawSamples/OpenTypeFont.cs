@@ -29,12 +29,10 @@ namespace PixelFarm.Agg.Sample_Draw
         public override void Init()
         {
 
-            //------------
-            var win32InstalledFont = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
-            InstalledFontCollection collection = new InstalledFontCollection();
-            collection.LoadInstalledFont(win32InstalledFont.GetInstalledFontIter());
-            string fontfile = collection.GetFont("tahoma", InstalledFontStyle.Regular).FontPath;
-            //------------
+
+            string fontfile = YourImplementation.BootStrapWinGdi.myFontLoader.GetFont("tahoma", InstalledFontStyle.Regular).FontPath;
+             
+
 
             var reader = new OpenFontReader();
             this.FillBG = true;

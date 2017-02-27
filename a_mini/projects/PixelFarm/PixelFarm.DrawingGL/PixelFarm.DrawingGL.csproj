@@ -38,7 +38,7 @@
     <Compile Include="DrawingGL\GLCanvas\CanvasGL2d.cs" />
     <Compile Include="DrawingGL\GLCanvas\CanvasSmoothMode.cs" />
     <Compile Include="DrawingGL\GLCanvas\CanvasToShaderSharedResource.cs" />
-    <Compile Include="DrawingGL\GLCanvas\GLCanvasPainterBase.cs" />
+    <Compile Include="DrawingGL\GLCanvas\GLCanvasPainter.cs" />
     <Compile Include="DrawingGL\GLCanvas\GLGradientColorProvider.cs" />
     <Compile Include="DrawingGL\GLCanvas\ImageFillStyle.cs" />
     <Compile Include="DrawingGL\GLCanvas\InternalGraphicsPath.cs" />
@@ -58,7 +58,6 @@
     <Compile Include="DrawingGL\GLTexture\GLBitmapReference.cs" />
     <Compile Include="DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs" />
     <Compile Include="DrawingGL\GLTexture\TextureAtlas.cs" />
-    <Compile Include="DrawingGL\TextureFonts\TextureFont.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,10 +73,6 @@
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.TextureAtlas\PixelFarm.TextureAtlas.csproj">
-      <Project>{0f6c821e-2f60-4e60-aec4-e4254d859902}</Project>
-      <Name>PixelFarm.TextureAtlas</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
       <Project>{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}</Project>
       <Name>PixelFarm.MiniOpenTK</Name>
@@ -89,10 +84,6 @@
     <ProjectReference Include="..\Tesselate\Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Typography\Typography.Rendering\Typography.Rendering.csproj">
-      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
-      <Name>Typography.Rendering</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

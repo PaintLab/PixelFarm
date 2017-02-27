@@ -29,11 +29,11 @@ namespace OpenTkEssTest
             painter = new GLCanvasPainter(canvas2d, max, max);
 
             //----------------------
-            var win32InstallFontProvider = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            var win32InstallFontProvider = new PixelFarm.Drawing.InstallFontsProviderWin32();
             InstalledFontCollection collection = new InstalledFontCollection();
             collection.LoadInstalledFont(win32InstallFontProvider.GetInstalledFontIter());
             InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Regular);
-            FontFace tahomaFace = NOpenTypeFontLoader.LoadFont(tahomaFont.FontPath, "en", HBDirection.HB_DIRECTION_LTR);
+            FontFace tahomaFace = OpenFontLoader.LoadFont(tahomaFont.FontPath, ScriptLangs.Latin);
             ActualFont actualFont = tahomaFace.GetFontAtPointsSize(72);
             FontGlyph glyph = actualFont.GetGlyph('K');
 

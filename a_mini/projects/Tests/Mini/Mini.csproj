@@ -44,9 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\DemoBase.cs" />
-    <Compile Include="1_Shared\dbugVxsDrawPoints.cs" />
-    <Compile Include="1_Shared\Square.cs" />
-    <Compile Include="1_Shared\SpriteShape.cs" />
+    <Compile Include="2_Shared\dbugVxsDrawPoints.cs" />
+    <Compile Include="2_Shared\Square.cs" />
+    <Compile Include="2_Shared\SpriteShape.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
@@ -54,14 +54,13 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
-    <Compile Include="1_Shared\LionFillSprite.cs" />
+    <Compile Include="2_Shared\LionFillSprite.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
     <Compile Include="3_Samples\08_Blur\BlurWithPainterSample.cs" />
     <Compile Include="3_Samples\08_Blur\BlurWithPainterSampleOld.cs" />
     <Compile Include="3_Samples\09_FloodFill\FloodFill.cs" />
-    <Compile Include="1_Shared\Point2D.cs" />
     <Compile Include="3_Samples\10_RoundRect\RoundRectSample.cs" />
     <Compile Include="3_Samples\11_TransCurve\TransCurve.cs" />
     <Compile Include="3_Samples\20_PolygonClippingSample\GreateBritainPathStorage.cs" />
@@ -137,9 +136,9 @@
     </Compile>
     <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
-    <Compile Include="1_Shared\LionDataStore.cs" />
+    <Compile Include="2_Shared\LionDataStore.cs" />
     <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
-    <Compile Include="1_Shared\BasicSprite.cs" />
+    <Compile Include="2_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />
     <Compile Include="6_WinGdiTest\FormGdiTest.cs">
       <SubType>Form</SubType>
@@ -153,7 +152,7 @@
     <Compile Include="FormTestBed1.designer.cs">
       <DependentUpon>FormTestBed1.cs</DependentUpon>
     </Compile>
-    <Compile Include="1_Shared\SimpleSprite.cs" />
+    <Compile Include="2_Shared\SimpleSprite.cs" />
     <Compile Include="MiniGUI\IncompleteWidget.cs" />
     <Compile Include="MiniGUI\MouseEventArgs.cs" />
     <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
@@ -165,7 +164,6 @@
     <Compile Include="SoftAggControl.Designer.cs">
       <DependentUpon>SoftAggControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win32Impl.cs" />
     <Compile Include="xnotused\TextPrinter.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
       <DependentUpon>FormGLTest.cs</DependentUpon>
@@ -267,6 +265,10 @@
       <Project>{68F1DAF6-2B35-476E-B2F8-5EADBC823935}</Project>
       <Name>TypeMirror</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
+      <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
+      <Name>Typography.GlyphLayout</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenFont</Name>
@@ -275,9 +277,9 @@
       <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
       <Name>Typography.Rendering</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Win32Utils\Win32Utils.csproj">
-      <Project>{B9C23586-913D-4EE8-B266-BD58FBD0133B}</Project>
-      <Name>Win32Utils</Name>
+    <ProjectReference Include="..\YourImplementation\YourImplementation.csproj">
+      <Project>{8963dd34-ce0a-42cd-b3b2-d73031b8f0a0}</Project>
+      <Name>YourImplementation</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

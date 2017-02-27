@@ -19,12 +19,12 @@ namespace OpenTkEssTest
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d =PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
             painter = new GLCanvasPainter(canvas2d, max, max);
 
             //--------------------- 
             string fontfilename = "d:\\WImageTest\\a_total.xml";
-            var atlasBuilder = new Typography.Rendering.MySimpleFontAtlasBuilder();
+            var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
             fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
 
             totalImg = new System.Drawing.Bitmap("d:\\WImageTest\\a_total.png");
@@ -33,7 +33,7 @@ namespace OpenTkEssTest
             var buffer = new int[totalImg.Width * totalImg.Height];
             System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
             totalImg.UnlockBits(bmpdata);
-            var glyph = new GlyphImage(totalImg.Width, totalImg.Height);
+            var glyph = new Typography.Rendering.GlyphImage(totalImg.Width, totalImg.Height);
             glyph.SetImageBuffer(buffer, false);
             fontAtlas.TotalGlyph = glyph;
 
@@ -68,22 +68,27 @@ namespace OpenTkEssTest
             //painter.DrawString("hello!", 0, 20);
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 500, 15f);
 
-            TextureFontGlyphData glyphData;
+            Typography.Rendering.TextureFontGlyphData glyphData;
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
             fontAtlas.GetRectByCodePoint(codepoint[0], out glyphData);
-            PixelFarm.Drawing.Rectangle r = glyphData.Rect;
+            PixelFarm.Drawing.Rectangle r = ConvToRect(glyphData.Rect);             
             //canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
             canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
-           
+
             fontAtlas.GetRectByCodePoint(codepoint[1], out glyphData);
-            PixelFarm.Drawing.Rectangle r2 = glyphData.Rect;
+            PixelFarm.Drawing.Rectangle r2 = ConvToRect(glyphData.Rect);
             canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r2, 100 + r.Width - 10, 500);
 
             //full image
             canvas2d.DrawImage(msdf_bmp, 100, 300);
             miniGLControl.SwapBuffers();
         }
+        static PixelFarm.Drawing.Rectangle ConvToRect(Typography.Rendering.Rectangle r)
+        {
+            return PixelFarm.Drawing.Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);
+        }
     }
+ 
 }
 

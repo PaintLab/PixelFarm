@@ -5,8 +5,9 @@
 //plan?: port  them to C#  :)
 //-----------------------------------
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using PixelFarm.Drawing.Fonts;
+using Typography.TextLayout;
 
 namespace PixelFarm.Drawing.Text
 {
@@ -18,7 +19,7 @@ namespace PixelFarm.Drawing.Text
 
         protected override void GetGlyphPosImpl(ActualFont actualFont, char[] buffer,
             int startAt, int len,
-            Fonts.ProperGlyph[] properGlyphs)
+            List<GlyphPlan> glyphPlans)
         {
             NativeFont nativeFont = actualFont as NativeFont;
             if (nativeFont == null)
@@ -28,7 +29,9 @@ namespace PixelFarm.Drawing.Text
 
             unsafe
             {
-                fixed (ProperGlyph* propGlyphH = &properGlyphs[0])
+                //TODO: review proper array size here
+                int lim = len * 2;
+                ProperGlyph* properGlyphArray = stackalloc ProperGlyph[lim];
                 fixed (char* head = &buffer[0])
                 {
                     //we use font shaping engine here
@@ -36,8 +39,24 @@ namespace PixelFarm.Drawing.Text
                        nativeFont.NativeFontFace.HBFont,
                         head,
                         buffer.Length,
-                        propGlyphH);
+                        properGlyphArray);
                 }
+                //copy from proper glyph to 
+                //create glyph plan
+
+                for (int i = 0; i < lim; ++i)
+                {
+                    ProperGlyph propGlyph = properGlyphArray[i];
+                    if (propGlyph.codepoint == 0)
+                    {
+                        //finish , just return
+                        return;
+                    }
+                    GlyphPlan plan = new GlyphPlan((ushort)propGlyph.codepoint);
+                    plan.advX = propGlyph.x_advance;
+                    glyphPlans.Add(plan);
+                }
+
             }
 
         }
