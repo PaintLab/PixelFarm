@@ -42,9 +42,9 @@
             // 
             // cmdBuildMergePixelFarm
             // 
-            this.cmdBuildMergePixelFarm.Location = new System.Drawing.Point(25, 251);
+            this.cmdBuildMergePixelFarm.Location = new System.Drawing.Point(25, 93);
             this.cmdBuildMergePixelFarm.Name = "cmdBuildMergePixelFarm";
-            this.cmdBuildMergePixelFarm.Size = new System.Drawing.Size(360, 57);
+            this.cmdBuildMergePixelFarm.Size = new System.Drawing.Size(167, 57);
             this.cmdBuildMergePixelFarm.TabIndex = 0;
             this.cmdBuildMergePixelFarm.Text = "BuildMerge PixelFarm.One (All)";
             this.cmdBuildMergePixelFarm.UseVisualStyleBackColor = true;
@@ -52,9 +52,9 @@
             // 
             // cmdBuildMergePixelFarmPortable
             // 
-            this.cmdBuildMergePixelFarmPortable.Location = new System.Drawing.Point(327, 22);
+            this.cmdBuildMergePixelFarmPortable.Location = new System.Drawing.Point(441, 30);
             this.cmdBuildMergePixelFarmPortable.Name = "cmdBuildMergePixelFarmPortable";
-            this.cmdBuildMergePixelFarmPortable.Size = new System.Drawing.Size(226, 57);
+            this.cmdBuildMergePixelFarmPortable.Size = new System.Drawing.Size(257, 57);
             this.cmdBuildMergePixelFarmPortable.TabIndex = 1;
             this.cmdBuildMergePixelFarmPortable.Text = "BuildMerge PixelFarm Portable";
             this.cmdBuildMergePixelFarmPortable.UseVisualStyleBackColor = true;
@@ -62,7 +62,7 @@
             // 
             // cmdBuildMergePixelFarmMiniAggOne
             // 
-            this.cmdBuildMergePixelFarmMiniAggOne.Location = new System.Drawing.Point(25, 156);
+            this.cmdBuildMergePixelFarmMiniAggOne.Location = new System.Drawing.Point(25, 30);
             this.cmdBuildMergePixelFarmMiniAggOne.Name = "cmdBuildMergePixelFarmMiniAggOne";
             this.cmdBuildMergePixelFarmMiniAggOne.Size = new System.Drawing.Size(167, 57);
             this.cmdBuildMergePixelFarmMiniAggOne.TabIndex = 2;
@@ -72,9 +72,9 @@
             // 
             // cmd_Windows_OnlyGdiPlus
             // 
-            this.cmd_Windows_OnlyGdiPlus.Location = new System.Drawing.Point(25, 314);
+            this.cmd_Windows_OnlyGdiPlus.Location = new System.Drawing.Point(25, 185);
             this.cmd_Windows_OnlyGdiPlus.Name = "cmd_Windows_OnlyGdiPlus";
-            this.cmd_Windows_OnlyGdiPlus.Size = new System.Drawing.Size(360, 57);
+            this.cmd_Windows_OnlyGdiPlus.Size = new System.Drawing.Size(315, 57);
             this.cmd_Windows_OnlyGdiPlus.TabIndex = 3;
             this.cmd_Windows_OnlyGdiPlus.Text = "BuildMerge PixelFarm.One (Windows, Only GdiPlus)";
             this.cmd_Windows_OnlyGdiPlus.UseVisualStyleBackColor = true;
@@ -82,7 +82,7 @@
             // 
             // cmd_Windows_NoGdiPlus_NoWinForms
             // 
-            this.cmd_Windows_NoGdiPlus_NoWinForms.Location = new System.Drawing.Point(25, 377);
+            this.cmd_Windows_NoGdiPlus_NoWinForms.Location = new System.Drawing.Point(25, 260);
             this.cmd_Windows_NoGdiPlus_NoWinForms.Name = "cmd_Windows_NoGdiPlus_NoWinForms";
             this.cmd_Windows_NoGdiPlus_NoWinForms.Size = new System.Drawing.Size(360, 57);
             this.cmd_Windows_NoGdiPlus_NoWinForms.TabIndex = 4;
@@ -92,7 +92,7 @@
             // 
             // cmd_Cross
             // 
-            this.cmd_Cross.Location = new System.Drawing.Point(25, 440);
+            this.cmd_Cross.Location = new System.Drawing.Point(25, 463);
             this.cmd_Cross.Name = "cmd_Cross";
             this.cmd_Cross.Size = new System.Drawing.Size(360, 57);
             this.cmd_Cross.TabIndex = 5;
@@ -112,9 +112,9 @@
             // 
             // cmdForTestWithHtmlRenderer
             // 
-            this.cmdForTestWithHtmlRenderer.Location = new System.Drawing.Point(25, 93);
+            this.cmdForTestWithHtmlRenderer.Location = new System.Drawing.Point(441, 93);
             this.cmdForTestWithHtmlRenderer.Name = "cmdForTestWithHtmlRenderer";
-            this.cmdForTestWithHtmlRenderer.Size = new System.Drawing.Size(360, 57);
+            this.cmdForTestWithHtmlRenderer.Size = new System.Drawing.Size(257, 57);
             this.cmdForTestWithHtmlRenderer.TabIndex = 7;
             this.cmdForTestWithHtmlRenderer.Text = "TEST BuildMerge PixelFarm.One.HtmlRenderer";
             this.cmdForTestWithHtmlRenderer.UseVisualStyleBackColor = true;
@@ -132,7 +132,7 @@
             // 
             // cmdMinimalNetCore
             // 
-            this.cmdMinimalNetCore.Location = new System.Drawing.Point(218, 156);
+            this.cmdMinimalNetCore.Location = new System.Drawing.Point(496, 167);
             this.cmdMinimalNetCore.Name = "cmdMinimalNetCore";
             this.cmdMinimalNetCore.Size = new System.Drawing.Size(188, 57);
             this.cmdMinimalNetCore.TabIndex = 9;
@@ -144,7 +144,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(872, 565);
+            this.ClientSize = new System.Drawing.Size(1027, 565);
             this.Controls.Add(this.cmdMinimalNetCore);
             this.Controls.Add(this.cmdBuildMergePixelFarmMiniAgg);
             this.Controls.Add(this.cmdForTestWithHtmlRenderer);

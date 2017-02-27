@@ -24,7 +24,7 @@ namespace BuildMergeProject
             mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
                targetProjectName,
                "v2.0",
-               "",//additional define constant
+               ",NET20,PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
                new string[] {
                   "System",
                   "System.Drawing",
@@ -83,17 +83,23 @@ namespace BuildMergeProject
         static MergeProject CreateMergePixelFarmOneProject(MergeOption mergeOption)
         {
             MergeProject mergePro = new MergeProject();
+            //1.0
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj");
+            //1.1
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.MiniAgg.csproj");
+            //1.2
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Typography\PixelFarm.Typography.csproj");
+            //typography
+            mergePro.LoadSubProject(rootProjectFolders + @"\Typography\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\Typography\Typography.Rendering\Typography.Rendering.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\Typography\Typography.GlyphLayout\Typography.GlyphLayout.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\Typography\Typography.MsdfGen\Typography.MsdfGen.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\Typography\FontAtlas\FontAtlas.csproj");
+            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj");
+            //ess utils
             mergePro.LoadSubProject(rootProjectFolders + @"\TypeMirror\TypeMirror.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
-            //
-            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
-            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\Typography\OpenType\N20\PixelFarm.OpenType\PixelFarm.OpenType.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Triangulation\\PixelFarm.Triangulation.csproj");
 
             switch (mergeOption)
             {
@@ -102,28 +108,44 @@ namespace BuildMergeProject
                     throw new NotImplementedException();
                 case MergeOption.Windows_NoCustomNativeDll:
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj");
+                    //no skia, no gles2
                     break;
-
                 case MergeOption.All:
+                    //
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj");
-                    mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
-                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Native\PixelFarm.DataProvider.Native.csproj");
-                    //                                   
+                    //skia
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj");
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj");
+                    // 
+                    //GLES2
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
+
+                    //WindowsSystem
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj");
+                    //native fonts
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj");
+                    //
+                    //util
+                    mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
 
                     break;
-
                 case MergeOption.Windows_NoWinFormNoGdiPlus:
-                    mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
+                    //skia
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj");
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj");
+                    //GLES2
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
-                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
+                    //WindowsSystem
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
+                    //util
+                    mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
                     break;
             }
             // 
+
 
             return mergePro;
         }
@@ -171,18 +193,22 @@ namespace BuildMergeProject
             //no gles libs
             //-------------------------
             MergeProject mergePro = CreateMergePixelFarmOneProject(MergeOption.Windows_NoCustomNativeDll);
-
-            mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.One.OnlyGdiPlus.csproj",
-               "PixelFarm.One.OnlyGdiPlus",
+            string targetProjectName = "PixelFarm.One.OnlyGdiPlus";
+            string targetProjectFile = targetProjectName + ".csproj";
+            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+               targetProjectName,
                "v2.0",
-               "",//additional define constant
+               ",NET20,PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
                new string[] {
                   "System",
                   "System.Drawing",
                   "System.Windows.Forms",
                   "System.Xml",
                });
-
+            LinkProjectConverter.ConvertToLinkProject(
+               rootProjectFolders + "\\" + targetProjectFile,
+               rootProjectFolders + "\\x_autogen",
+                  true);//after link project is created, we remove the targetProjectFile
 
         }
         private void cmd_Windows_NoGdiPlus_NoWinForms_Click(object sender, EventArgs e)
@@ -196,14 +222,20 @@ namespace BuildMergeProject
             //need glfw, myft, gles
 
             MergeProject mergePro = CreateMergePixelFarmOneProject(MergeOption.Windows_NoWinFormNoGdiPlus);
-            mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.One.NoGdiPlusNoWinForms.csproj",
-               "PixelFarm.One.NoGdiPlusNoWinForms",
+            string targetProjectName = "PixelFarm.One.NoGdiPlusNoWinForms";
+            string targetProjectFile = targetProjectName + ".csproj";
+            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+               targetProjectName,
                "v2.0",
-               "",//additional define constant
+               ",NET20,PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
                new string[] {
                   "System",
                   "System.Xml",
                });
+            LinkProjectConverter.ConvertToLinkProject(
+              rootProjectFolders + "\\" + targetProjectFile,
+              rootProjectFolders + "\\x_autogen",
+                 true);//after link project is created, we remove the targetProjectFile
         }
 
         private void cmd_Cross_Click(object sender, EventArgs e)
