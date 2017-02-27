@@ -6,18 +6,19 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using PixelFarm.Drawing.Text;
 using System.Collections.Generic;
+
+
 namespace PixelFarm.DrawingGL
 {
 
     //this provides 3 ITextPrinter for GLES2-based Canvas
-
 
     class AggFontPrinter : ITextPrinter
     {
         ActualImage actualImage;
         ImageGraphics2D imgGfx2d;
         AggCanvasPainter aggPainter;
-        TextPrinter textPrinter;
+        VxsTextPrinter textPrinter;
         int bmpWidth;
         int bmpHeight;
         CanvasGL2d canvas;
@@ -39,7 +40,7 @@ namespace PixelFarm.DrawingGL
 
             //set default1
             aggPainter.CurrentFont = canvasPainter.CurrentFont;
-            textPrinter = new TextPrinter(aggPainter);
+            textPrinter = new VxsTextPrinter(aggPainter);
             aggPainter.TextPrinter = textPrinter;
         }
         public void DrawString(char[] text, double x, double y)
@@ -74,12 +75,13 @@ namespace PixelFarm.DrawingGL
         {
             aggPainter.CurrentFont = font;
         }
-
         public void ChangeFontColor(Color fontColor)
         {
             aggPainter.FillColor = fontColor;
         }
     }
+
+
     /// <summary>
     /// this use win gdi only
     /// </summary>
@@ -288,38 +290,65 @@ namespace PixelFarm.DrawingGL
         }
     }
 
-    class GLTextPrinter
+
+
+    class GLBmpGlyphTextPrinter : ITextPrinter
     {
 
-        RequestFont currentFont;
         CanvasGL2d canvas2d;
+        GLCanvasPainter painter;
         ProperGlyph[] properGlyphs = null;
+        InstalledFontCollection fontCollections;
         NativeFontStore nativeFontStore = new NativeFontStore();
-        public GLTextPrinter(CanvasGL2d canvas2d)
+        public GLBmpGlyphTextPrinter(GLCanvasPainter painter, IInstalledFontProvider installedFontProvider)
         {
-            this.canvas2d = canvas2d;
+            //create text printer for use with canvas painter
+            this.painter = painter;
+            this.canvas2d = painter.Canvas;
+
+            //------
+            fontCollections = new InstalledFontCollection();
+            fontCollections.LoadInstalledFont(installedFontProvider.GetInstalledFontIter());
+
+            //------
+            ChangeFont(painter.CurrentFont);
         }
-        public RequestFont CurrentFont
+        public void ChangeFontColor(Color color)
         {
-            get { return this.currentFont; }
-            set { this.currentFont = value; }
+            //called by owner painter 
+
+
         }
-        public void Print(string t, double x, double y)
+        public void ChangeFont(RequestFont font)
         {
-            Print(t.ToCharArray(), x, y);
+            //from request font
+            //we resolve it to actual font
+            string fontfile = fontCollections.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
+            TextureFontLoader.LoadFont(fontfile, ScriptLangs.Latin, WriteDirection.LTR);
+
+
+
         }
-        public void Print(char[] buffer, double x, double y)
+        public void DrawString(string t, double x, double y)
+        {
+            DrawString(t.ToCharArray(), x, y);
+        }
+        public void DrawString(char[] buffer, double x, double y)
         {
             int j = buffer.Length;
             int buffsize = j * 2;
-            //get kerning list
-            ActualFont fontImp = nativeFontStore.GetResolvedNativeFont(currentFont);
 
+            //resolve font from painter?
+
+            ActualFont fontImp = nativeFontStore.GetResolvedNativeFont(painter.CurrentFont);
             if (properGlyphs == null)
             {
                 properGlyphs = new ProperGlyph[buffsize];
                 TextShapingService.GetGlyphPos(fontImp, buffer, 0, buffsize, properGlyphs);
             }
+
+            //TODO: implement msdf texture
+
 
             double xpos = x;
             for (int i = 0; i < buffsize; ++i)

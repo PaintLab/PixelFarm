@@ -10,14 +10,14 @@ namespace PixelFarm.Drawing.Fonts
 {
 
 
-    public class TextPrinter : ITextPrinter
+    public class VxsTextPrinter : ITextPrinter
     {
 
         CanvasPainter canvasPainter;
-        VxsTextPrinter vxsTextPrinter = new VxsTextPrinter();
+        MyVxsTextPrinter vxsTextPrinter = new MyVxsTextPrinter();
         List<GlyphPlan> glyphPlanList = new List<GlyphPlan>(20);
 
-        public TextPrinter(CanvasPainter canvasPainter)
+        public VxsTextPrinter(CanvasPainter canvasPainter)
         {
             this.canvasPainter = canvasPainter;
             RequestFont font = canvasPainter.CurrentFont;
@@ -71,7 +71,7 @@ namespace PixelFarm.Drawing.Fonts
         }
     }
 
-    class VxsTextPrinter
+    class MyVxsTextPrinter
     {
         Typeface _currentTypeface;
         GlyphLayout _glyphLayout = new GlyphLayout();
@@ -79,7 +79,7 @@ namespace PixelFarm.Drawing.Fonts
 
         string _currentFontFilename = "";
 
-        public VxsTextPrinter()
+        public MyVxsTextPrinter()
         {
             //default         
         }
