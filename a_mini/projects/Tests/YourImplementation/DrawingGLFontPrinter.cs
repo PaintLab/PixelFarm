@@ -305,29 +305,22 @@ namespace PixelFarm.DrawingGL
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         SimpleFontAtlas simpleFontAtlas;
-        InstalledFontCollection fontCollections;
+        IFontLoader _fontLoader;
         FontFace ff;
         RequestFont font;
         NativeFontStore nativeFontStore = new NativeFontStore();
-        public GLBmpGlyphTextPrinter(GLCanvasPainter painter, IInstalledFontProvider installedFontProvider)
+        public GLBmpGlyphTextPrinter(GLCanvasPainter painter, IFontLoader fontLoader)
         {
             //create text printer for use with canvas painter
             this.painter = painter;
             this.canvas2d = painter.Canvas;
-
-            //TODO: review font manager here again
-            //not need to iterate all fonts*** 
-            //------
-            fontCollections = new InstalledFontCollection();
-            fontCollections.LoadInstalledFont(installedFontProvider.GetInstalledFontIter());
-
+            _fontLoader = fontLoader;
             //------
             ChangeFont(painter.CurrentFont);
         }
         public void ChangeFontColor(Color color)
         {
-            //called by owner painter 
-
+            //called by owner painter  
 
         }
         public void ChangeFont(RequestFont font)
@@ -336,7 +329,7 @@ namespace PixelFarm.DrawingGL
             //we resolve it to actual font
             this.font = font;
             //resolve
-            string fontfile = fontCollections.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
+            string fontfile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
             ff = TextureFontLoader.LoadFont(fontfile, ScriptLangs.Latin, WriteDirection.LTR, out simpleFontAtlas);
 
         }

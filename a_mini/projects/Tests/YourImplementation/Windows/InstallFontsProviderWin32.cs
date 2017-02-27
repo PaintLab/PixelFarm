@@ -3,12 +3,12 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.IO;
-//
+using System.IO; 
 using PixelFarm.Drawing.Fonts;
 
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing
 {
+
     /// <summary>
     /// provide installed font from Windows directory
     /// </summary>
@@ -36,5 +36,6 @@ namespace PixelFarm.Drawing.WinGdi
                 }
             }
         }
+
     }
 }

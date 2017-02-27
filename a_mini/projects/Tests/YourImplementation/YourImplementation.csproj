@@ -43,9 +43,12 @@
     <Compile Include="..\..\pixelfarm\win32utils\NativeWin32MemoryDc.cs">
       <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
+    <Compile Include="Bootstrap\BootStrapOpenGLES2.cs" />
+    <Compile Include="Bootstrap\BootStrapWinGdi.cs" />
     <Compile Include="DrawingGLFontPrinter.cs" />
-    <Compile Include="InstallFontsProviderWin32.cs" />
+    <Compile Include="Windows\InstallFontsProviderWin32.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\WindowFontLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
