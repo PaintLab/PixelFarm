@@ -485,11 +485,11 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\CanvasPaintToOutputDelegate.cs">
       <Link>PixelFarm.DrawingCanvas\1_Canvas\CanvasPaintToOutputDelegate.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\Fonts.cs">
-      <Link>PixelFarm.DrawingCanvas\1_Canvas\Fonts.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCanvas\2_Drawing\FontStyle.cs">
+      <Link>PixelFarm.DrawingCanvas\2_Drawing\FontStyle.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\FontStyle.cs">
-      <Link>PixelFarm.DrawingCanvas\1_Canvas\FontStyle.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCanvas\2_Drawing\RequestFont.cs">
+      <Link>PixelFarm.DrawingCanvas\2_Drawing\RequestFont.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ActualFont.cs">
       <Link>PixelFarm.DrawingCanvas\3_Drawing_Fonts\ActualFont.cs</Link>
@@ -503,11 +503,14 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\FontKey.cs">
       <Link>PixelFarm.DrawingCanvas\3_Drawing_Fonts\FontKey.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\InstalledFontCollection.cs">
-      <Link>PixelFarm.DrawingCanvas\3_Drawing_Fonts\InstalledFontCollection.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ITextPrinter.cs">
+      <Link>PixelFarm.DrawingCanvas\3_Drawing_Fonts\ITextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\NativeBridgeHB.cs">
-      <Link>PixelFarm.DrawingCanvas\3_Drawing_Fonts\NativeBridgeHB.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ScriptCode.cs">
+      <Link>PixelFarm.DrawingCanvas\3_Drawing_Fonts\ScriptCode.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\WriteDirection.cs">
+      <Link>PixelFarm.DrawingCanvas\3_Drawing_Fonts\WriteDirection.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

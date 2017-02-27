@@ -113,7 +113,7 @@ namespace BuildMergeProject
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj");
-                    
+
                     break;
 
                 case MergeOption.Windows_NoWinFormNoGdiPlus:
@@ -124,16 +124,15 @@ namespace BuildMergeProject
                     break;
             }
             // 
-          
+
             return mergePro;
         }
         static MergeProject CreateMiniAggOneProject()
         {
+
             MergeProject mergePro = new MergeProject();
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj");
-            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg\MiniAgg.csproj");
-            //mergePro.LoadSubProject(rootProjectFolders + @"\MiniAgg.Complements\MiniAgg.Complements.csproj");
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.MiniAgg.csproj");
 
             return mergePro;
