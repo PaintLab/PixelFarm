@@ -6,61 +6,9 @@ using System.Xml;
 
 namespace Typography.Rendering
 {
-    public class GlyphImage2
-    {
-        int[]
-        pixelBuffer;
-        public GlyphImage2(int w, int h)
-        {
-            this.Width = w;
-            this.Height = h;
-        }
-        public RectangleF OriginalGlyphBounds
-        {
-            get;
-            set;
-        }
-        public int Width
-        {
-            get;
-            private set;
-        }
-        public int Height
-        {
-            get;
-            private set;
-        }
-        public bool IsBigEndian
-        {
-            get;
-            private set;
-        }
-        public int BorderXY
-        {
-            get;
-            set;
-        }
-        public int[] GetImageBuffer()
-        {
-            return pixelBuffer;
-        }
-        public void SetImageBuffer(int[] pixelBuffer, bool isBigEndian)
-        {
-            this.pixelBuffer = pixelBuffer;
-            this.IsBigEndian = isBigEndian;
-        }
-    }
 
-    public class CacheGlyph
-    {
-        public int borderX;
-        public int borderY;
-        public GlyphImage2 img;
-        public Rectangle area;
-        public char character;
-        public int codePoint;
-        public GlyphMatrix2 glyphMatrix;
-    }
+
+
     public class SimpleFontAtlasBuilder2
     {
         GlyphImage2 latestGenGlyphImage;
@@ -248,7 +196,8 @@ namespace Typography.Rendering
                 Rectangle area = ParseRect(glyphElem.GetAttribute("ltwh"));
                 var glyphData = new TextureFontGlyphData();
                 area.Y += area.Height;//*** 
-                glyphData.Rect = new OpenFont.Bounds((short)area.X, (short)area.Bottom, (short)area.Right, (short)area.Top);
+                glyphData.Rect = Rectangle.FromLTRB(area.X, area.Top, area.Right, area.Bottom);
+                //new OpenFont.Bounds((short)area.X, (short)area.Bottom, (short)area.Right, (short)area.Top);
                 float[] borderXY = ParseFloatArray(glyphElem.GetAttribute("borderXY"));
                 float[] matrix = ParseFloatArray(glyphElem.GetAttribute("mat"));
 

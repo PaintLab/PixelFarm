@@ -68,22 +68,27 @@ namespace OpenTkEssTest
             //painter.DrawString("hello!", 0, 20);
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 500, 15f);
 
-            TextureFontGlyphData glyphData;
+            Typography.Rendering.TextureFontGlyphData glyphData;
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
             fontAtlas.GetRectByCodePoint(codepoint[0], out glyphData);
-            PixelFarm.Drawing.Rectangle r = glyphData.Rect;
+            PixelFarm.Drawing.Rectangle r = ConvToRect(glyphData.Rect);             
             //canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
             canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
 
             fontAtlas.GetRectByCodePoint(codepoint[1], out glyphData);
-            PixelFarm.Drawing.Rectangle r2 = glyphData.Rect;
+            PixelFarm.Drawing.Rectangle r2 = ConvToRect(glyphData.Rect);
             canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r2, 100 + r.Width - 10, 500);
 
             //full image
             canvas2d.DrawImage(msdf_bmp, 100, 300);
             miniGLControl.SwapBuffers();
         }
+        static PixelFarm.Drawing.Rectangle ConvToRect(Typography.Rendering.Rectangle r)
+        {
+            return PixelFarm.Drawing.Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);
+        }
     }
+ 
 }
 

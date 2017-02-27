@@ -7,61 +7,61 @@ using PixelFarm.Drawing.Fonts;
 
 namespace Typography.Rendering
 {
-    public class GlyphImage2
-    {
-        int[]
-        pixelBuffer;
-        public GlyphImage2(int w, int h)
-        {
-            this.Width = w;
-            this.Height = h;
-        }
-        public RectangleF OriginalGlyphBounds
-        {
-            get;
-            set;
-        }
-        public int Width
-        {
-            get;
-            private set;
-        }
-        public int Height
-        {
-            get;
-            private set;
-        }
-        public bool IsBigEndian
-        {
-            get;
-            private set;
-        }
-        public int BorderXY
-        {
-            get;
-            set;
-        }
-        public int[] GetImageBuffer()
-        {
-            return pixelBuffer;
-        }
-        public void SetImageBuffer(int[] pixelBuffer, bool isBigEndian)
-        {
-            this.pixelBuffer = pixelBuffer;
-            this.IsBigEndian = isBigEndian;
-        }
-    }
+    //public class GlyphImage2
+    //{
+    //    int[]
+    //    pixelBuffer;
+    //    public GlyphImage2(int w, int h)
+    //    {
+    //        this.Width = w;
+    //        this.Height = h;
+    //    }
+    //    public RectangleF OriginalGlyphBounds
+    //    {
+    //        get;
+    //        set;
+    //    }
+    //    public int Width
+    //    {
+    //        get;
+    //        private set;
+    //    }
+    //    public int Height
+    //    {
+    //        get;
+    //        private set;
+    //    }
+    //    public bool IsBigEndian
+    //    {
+    //        get;
+    //        private set;
+    //    }
+    //    public int BorderXY
+    //    {
+    //        get;
+    //        set;
+    //    }
+    //    public int[] GetImageBuffer()
+    //    {
+    //        return pixelBuffer;
+    //    }
+    //    public void SetImageBuffer(int[] pixelBuffer, bool isBigEndian)
+    //    {
+    //        this.pixelBuffer = pixelBuffer;
+    //        this.IsBigEndian = isBigEndian;
+    //    }
+    //}
 
-    public class CacheGlyph
-    {
-        public int borderX;
-        public int borderY;
-        public GlyphImage2 img;
-        public Rectangle area;
-        public char character;
-        public int codePoint;
-        public GlyphMatrix2 glyphMatrix;
-    }
+    //public class CacheGlyph
+    //{
+    //    public int borderX;
+    //    public int borderY;
+    //    public GlyphImage2 img;
+    //    public Rectangle area;
+    //    public char character;
+    //    public int codePoint;
+    //    public GlyphMatrix2 glyphMatrix;
+    //}
 
     public class SimpleFontAtlasBuilder
     {
@@ -71,7 +71,7 @@ namespace Typography.Rendering
         {
             var glyphCache = new CacheGlyph();
             glyphCache.codePoint = codePoint;
-            glyphCache.img = img; 
+            glyphCache.img = img;
             glyphs[codePoint] = glyphCache;
         }
         public void AddGlyph(int codePoint, GlyphImage2 img)
@@ -239,7 +239,7 @@ namespace Typography.Rendering
                 area.Y += area.Height;//*** 
 
                 //set font matrix to glyph font data
-                glyphData.Rect = PixelFarm.Drawing.Rectangle.FromLTRB(area.X, area.Top, area.Right, area.Bottom);
+                glyphData.Rect = Rectangle.FromLTRB(area.X, area.Top, area.Right, area.Bottom);
                 glyphData.AdvanceY = g.glyphMatrix.advanceY;
                 glyphData.ImgWidth = g.img.Width;
 
@@ -280,7 +280,7 @@ namespace Typography.Rendering
                 var glyphData = new TextureFontGlyphData();
                 area.Y += area.Height;//*** 
                 //glyphData.Rect = Rectangle.c((short)area.X, (short)area.Bottom, (short)area.Right, (short)area.Top);
-                glyphData.Rect = PixelFarm.Drawing.Rectangle.FromLTRB(area.X, area.Top, area.Right, area.Bottom);
+                glyphData.Rect = Rectangle.FromLTRB(area.X, area.Top, area.Right, area.Bottom);
                 float[] borderXY = ParseFloatArray(glyphElem.GetAttribute("borderXY"));
                 float[] matrix = ParseFloatArray(glyphElem.GetAttribute("mat"));
 
