@@ -11,6 +11,15 @@ using System.Runtime.InteropServices;
 
 namespace PixelFarm.Drawing.Fonts
 {
+    class NativeFontGlyph : FontGlyph
+    {
+        /// <summary>
+        /// original 8bpp image buffer
+        /// </summary>
+        public byte[] glyImgBuffer8;
+        public IntPtr nativeOutlinePtr;
+        public IntPtr nativeBmpPtr;
+    }
 
     class NativeFontFace : FontFace
     {
@@ -186,8 +195,10 @@ namespace PixelFarm.Drawing.Fonts
 
             //--------------------------------------------------
 
-            var fontGlyph = new FontGlyph();
-            NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, out fontGlyph.glyphMatrix);
+            var fontGlyph = new NativeFontGlyph();
+            NativeGlyphMatrix nativeGlyphMatrix;
+            NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, out nativeGlyphMatrix);
+            fontGlyph.glyphMatrix = nativeGlyphMatrix.matrixData;
             BuildOutlineGlyph(fontGlyph, pixelSize);
             return fontGlyph;
         }
@@ -199,16 +210,21 @@ namespace PixelFarm.Drawing.Fonts
                 NativeMyFontsLib.MyFtSetPixelSizes(this.ftFaceHandle, pixelSize);
             }
             //-------------------------------------------------- 
-            var fontGlyph = new FontGlyph();
-            NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, out fontGlyph.glyphMatrix);
+            var fontGlyph = new NativeFontGlyph();
+            NativeGlyphMatrix nativeGlyphMatrix;
+            NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, out nativeGlyphMatrix);
+            fontGlyph.glyphMatrix = nativeGlyphMatrix.matrixData;
+            fontGlyph.nativeBmpPtr = nativeGlyphMatrix.bitmap;
+            fontGlyph.nativeOutlinePtr = nativeGlyphMatrix.outline;
+            //-------------------------------------------------- 
             BuildOutlineGlyph(fontGlyph, pixelSize);
             return fontGlyph;
         }
-        void BuildBitmapGlyph(FontGlyph fontGlyph, int pxsize)
+        void BuildBitmapGlyph(NativeFontGlyph fontGlyph, int pxsize)
         {
             NativeFontGlyphBuilder.CopyGlyphBitmap(fontGlyph);
         }
-        void BuildOutlineGlyph(FontGlyph fontGlyph, int pxsize)
+        void BuildOutlineGlyph(NativeFontGlyph fontGlyph, int pxsize)
         {
             NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph);
             Agg.VertexStore vxs = new Agg.VertexStore();

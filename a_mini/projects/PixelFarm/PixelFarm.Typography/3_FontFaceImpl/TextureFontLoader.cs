@@ -20,12 +20,12 @@ namespace PixelFarm.Drawing.Fonts
             //2. build texture font on the fly! OR load from prebuilt file
             //
             //2.1 test build texture on the fly
-            SimpleFontAtlasBuilder2 atlas1 = CreateSampleMsdfTextureFont(fontfile, 14, 0, 255);
-            GlyphImage2 glyphImg2 = atlas1.BuildSingleImage();
+            SimpleFontAtlasBuilder atlas1 = CreateSampleMsdfTextureFont(fontfile, 14, 0, 255);
+            GlyphImage glyphImg2 = atlas1.BuildSingleImage();
             fontAtlas = atlas1.CreateSimpleFontAtlas();
-            GlyphImage glyphImg = new GlyphImage(glyphImg2.Width, glyphImg2.Height);
-            glyphImg.SetImageBuffer(glyphImg2.GetImageBuffer(), glyphImg2.IsBigEndian);
-            fontAtlas.TotalGlyph = glyphImg;
+            //GlyphImage glyphImg = new GlyphImage(glyphImg2.Width, glyphImg2.Height);
+            //glyphImg.SetImageBuffer(glyphImg2.GetImageBuffer(), glyphImg2.IsBigEndian);
+            fontAtlas.TotalGlyph = glyphImg2;
 
             //string xmlFontFileInfo = "";
             //GlyphImage glyphImg = null; 
@@ -38,7 +38,7 @@ namespace PixelFarm.Drawing.Fonts
             var textureFontFace = new TextureFontFace(openFont, fontAtlas);
             return textureFontFace;
         }
-        static SimpleFontAtlasBuilder2 CreateSampleMsdfTextureFont(string fontfile,
+        static SimpleFontAtlasBuilder CreateSampleMsdfTextureFont(string fontfile,
             float sizeInPoint,
             ushort startGlyphIndex, ushort endGlyphIndex)
         {
@@ -55,7 +55,7 @@ namespace PixelFarm.Drawing.Fonts
                 //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
                 //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
                 //-------------------------------------------------------------
-                var atlasBuilder = new SimpleFontAtlasBuilder2();
+                var atlasBuilder = new SimpleFontAtlasBuilder();
                 var msdfBuilder = new MsdfGlyphGen();
 
                 for (ushort n = startGlyphIndex; n <= endGlyphIndex; ++n)

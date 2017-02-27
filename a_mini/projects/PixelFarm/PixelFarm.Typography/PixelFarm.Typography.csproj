@@ -60,23 +60,20 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\PixelFarm.TextureAtlas\BinPacker.cs">
+    <Compile Include="..\Typography\FontAtlas\BinPacker.cs">
       <Link>4_FontAtlas\BinPacker.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.TextureAtlas\MsdfGlyphGen.cs">
+    <Compile Include="..\Typography\FontAtlas\MsdfGlyphGen.cs">
       <Link>4_FontAtlas\MsdfGlyphGen.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.TextureAtlas\MsdfGlyphGenExtension.cs">
+    <Compile Include="..\Typography\FontAtlas\MsdfGlyphGenExtension.cs">
       <Link>4_FontAtlas\MsdfGlyphGenExtension.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.TextureAtlas\MySimpleFontAtlasBuilder.cs">
-      <Link>4_FontAtlas\MySimpleFontAtlasBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.TextureAtlas\SimpleFontAtlas.cs">
+    <Compile Include="..\Typography\FontAtlas\SimpleFontAtlas.cs">
       <Link>4_FontAtlas\SimpleFontAtlas.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.TextureAtlas\SimpleFontAtlasBuilder2.cs">
-      <Link>4_FontAtlas\SimpleFontAtlasBuilder2.cs</Link>
+    <Compile Include="..\Typography\FontAtlas\SimpleFontAtlasBuilder.cs">
+      <Link>4_FontAtlas\SimpleFontAtlasBuilder.cs</Link>
     </Compile>
     <Compile Include="..\Typography\Typography.MsdfGen\EdgeColor.cs">
       <Link>5_Msdf\EdgeColor.cs</Link>

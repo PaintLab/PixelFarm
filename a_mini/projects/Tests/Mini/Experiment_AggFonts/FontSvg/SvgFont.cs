@@ -84,17 +84,17 @@ namespace PixelFarm.Drawing.Fonts
             }
             return glyph;
         }
-        public void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
-        {
-            //find proper position for each glyph
-            int j = buffer.Length;
-            for (int i = 0; i < j; ++i)
-            {
-                FontGlyph f = this.GetGlyph(buffer[i]);
-                properGlyphs[i].x_advance = f.horiz_adv_x >> 6; //64
-                properGlyphs[i].codepoint = (uint)buffer[i];
-            }
-        }
+        //public void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
+        //{
+        //    //find proper position for each glyph
+        //    int j = buffer.Length;
+        //    for (int i = 0; i < j; ++i)
+        //    {
+        //        FontGlyph f = this.GetGlyph(buffer[i]);
+        //        properGlyphs[i].x_advance = f.horiz_adv_x >> 6; //64
+        //        properGlyphs[i].codepoint = (uint)buffer[i];
+        //    }
+        //}
         protected void OnDispose()
         {
         }

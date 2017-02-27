@@ -6,6 +6,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using PixelFarm.Drawing.Text;
 using Typography.TextLayout;
+
 using System.Collections.Generic;
 
 
@@ -343,6 +344,10 @@ namespace PixelFarm.DrawingGL
         {
             DrawString(t.ToCharArray(), x, y);
         }
+        static PixelFarm.Drawing.Rectangle ConvToRect(Typography.Rendering.Rectangle r)
+        {
+            return Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);
+        }
         public void DrawString(char[] buffer, double x, double y)
         {
             int j = buffer.Length;
@@ -392,7 +397,7 @@ namespace PixelFarm.DrawingGL
             double xpos = x;
             int n = glyphPlans.Count;
 
-            GlyphImage glyphImage = simpleFontAtlas.TotalGlyph;
+            Typography.Rendering.GlyphImage glyphImage = simpleFontAtlas.TotalGlyph;
             GLBitmap glBmp = new GLBitmap(glyphImage.Width, glyphImage.Height, glyphImage.GetImageBuffer(), false);
 
             float c_x = (float)x;
@@ -410,7 +415,7 @@ namespace PixelFarm.DrawingGL
             for (int i = 0; i < n; ++i)
             {
                 GlyphPlan glyph = glyphPlans[i];
-                TextureFontGlyphData glyphData;
+                Typography.Rendering.TextureFontGlyphData glyphData;
                 if (!simpleFontAtlas.GetRectByCodePoint(glyph.glyphIndex, out glyphData))
                 {
                     //Rectangle r = glyphData.Rect;
@@ -424,7 +429,7 @@ namespace PixelFarm.DrawingGL
                 }
                 //found
 
-                Rectangle r = glyphData.Rect;
+                PixelFarm.Drawing.Rectangle r = ConvToRect(glyphData.Rect); 
                 //test draw full msdf gen img
                 //canvas2d.DrawImage(glBmp, c_x + left, (float)(baseline + ((int)(glyphData.ImgHeight))));
 
