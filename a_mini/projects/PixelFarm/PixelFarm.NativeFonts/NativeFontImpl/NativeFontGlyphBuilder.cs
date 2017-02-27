@@ -15,7 +15,7 @@ namespace PixelFarm.Drawing.Fonts
     static class NativeFontGlyphBuilder
     {
         static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
-        unsafe internal static void CopyGlyphBitmap(FontGlyph fontGlyph)
+        unsafe internal static void CopyGlyphBitmap(NativeFontGlyph fontGlyph)
         {
             FT_Bitmap* ftBmp = (FT_Bitmap*)fontGlyph.nativeBmpPtr;
             //image is 8 bits grayscale
@@ -92,7 +92,7 @@ namespace PixelFarm.Drawing.Fonts
                 (v1.y + (double)v2.y) / 2d);
         }
 
-        unsafe internal static void BuildGlyphOutline(FontGlyph fontGlyph)
+        unsafe internal static void BuildGlyphOutline(NativeFontGlyph fontGlyph)
         {
             FT_Outline outline = (*(FT_Outline*)fontGlyph.nativeOutlinePtr);
             //outline version
@@ -120,7 +120,7 @@ namespace PixelFarm.Drawing.Fonts
                     bool has_dropout = (((vtag >> 2) & 0x1) != 0);
                     int dropoutMode = vtag >> 3;
 
-                   // Console.WriteLine(vpoint.ToString() + " " + vtag);
+                    // Console.WriteLine(vpoint.ToString() + " " + vtag);
 
                     if ((vtag & 0x1) != 0)
                     {
@@ -268,7 +268,7 @@ namespace PixelFarm.Drawing.Fonts
 
 
         const double FT_RESIZE = 64; //essential to be floating point
-        internal unsafe static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
+        internal unsafe static GlyphImage BuildMsdfFontImage(NativeFontGlyph fontGlyph)
         {
             IntPtr shape = MyFtLib.CreateShape();
             FT_Outline outline = (*(FT_Outline*)fontGlyph.nativeOutlinePtr);            //outline version
@@ -525,7 +525,7 @@ namespace PixelFarm.Drawing.Fonts
         //---------------------------------------------------------------------------
         public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
         {
-            return NativeFontGlyphBuilder.BuildMsdfFontImage(fontGlyph);
+            return NativeFontGlyphBuilder.BuildMsdfFontImage((NativeFontGlyph)fontGlyph);
         }
 
         public static void SwapColorComponentFromBigEndianToWinGdi(int[] bitbuffer)
