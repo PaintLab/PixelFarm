@@ -43,7 +43,7 @@ namespace PixelFarm.Drawing.WinGdi
     {
         FontFace nopenTypeFontFace;
         FontStyle style;
-        
+
         static InstalledFontCollection s_installedFonts;
 
         public WinGdiFontFace(string fontName, FontStyle style)
@@ -70,8 +70,8 @@ namespace PixelFarm.Drawing.WinGdi
             InstalledFont foundInstalledFont = s_installedFonts.GetFont(fontName, installedStyle);
             //TODO: review 
             this.nopenTypeFontFace = OpenFontLoader.LoadFont(
-                foundInstalledFont.FontPath, 
-                ScriptLangs.Latin, 
+                foundInstalledFont.FontPath,
+                ScriptLangs.Latin,
                 WriteDirection.LTR);
         }
 

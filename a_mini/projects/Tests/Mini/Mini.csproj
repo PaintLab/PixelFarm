@@ -53,9 +53,9 @@
       <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
     <Compile Include="0_Start\DemoBase.cs" />
-    <Compile Include="1_Shared\dbugVxsDrawPoints.cs" />
-    <Compile Include="1_Shared\Square.cs" />
-    <Compile Include="1_Shared\SpriteShape.cs" />
+    <Compile Include="2_Shared\dbugVxsDrawPoints.cs" />
+    <Compile Include="2_Shared\Square.cs" />
+    <Compile Include="2_Shared\SpriteShape.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
@@ -63,7 +63,7 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
-    <Compile Include="1_Shared\LionFillSprite.cs" />
+    <Compile Include="2_Shared\LionFillSprite.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
@@ -85,7 +85,7 @@
     <Compile Include="4_Samples_2\31_ScanlineBoolean\ScanlineBooleanSample.cs" />
     <Compile Include="5_Samples_3\BitmapRenderSample.cs" />
     <Compile Include="6_WinGdiTest\LionSpriteTool.cs" />
-    <Compile Include="0_Start\DrawingGLFontPrinter.cs" />
+    <Compile Include="1_FineImpl\DrawingGLFontPrinter.cs" />
     <Compile Include="7_GLES2Test\FormGLTest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,9 +146,9 @@
     </Compile>
     <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
-    <Compile Include="1_Shared\LionDataStore.cs" />
+    <Compile Include="2_Shared\LionDataStore.cs" />
     <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
-    <Compile Include="1_Shared\BasicSprite.cs" />
+    <Compile Include="2_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />
     <Compile Include="6_WinGdiTest\FormGdiTest.cs">
       <SubType>Form</SubType>
@@ -162,7 +162,7 @@
     <Compile Include="FormTestBed1.designer.cs">
       <DependentUpon>FormTestBed1.cs</DependentUpon>
     </Compile>
-    <Compile Include="1_Shared\SimpleSprite.cs" />
+    <Compile Include="2_Shared\SimpleSprite.cs" />
     <Compile Include="MiniGUI\IncompleteWidget.cs" />
     <Compile Include="MiniGUI\MouseEventArgs.cs" />
     <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
