@@ -769,8 +769,9 @@ namespace BuildTextureFonts
             //2. get glyph
 
             var g1 = font.GetGlyph('C');
-            ProperGlyph[] pps = new ProperGlyph[3];
-            PixelFarm.Drawing.Text.TextShapingService.GetGlyphPos(font, "ABC".ToCharArray(), 0, 3, pps);
+
+            var plans = new List<Typography.TextLayout.GlyphPlan>();
+            PixelFarm.Drawing.Text.TextShapingService.GetGlyphPos(font, "ABC".ToCharArray(), 0, 3, plans);
 
 
             int[] glyphIndice = new int[] { 1076, 1127, 1164 };

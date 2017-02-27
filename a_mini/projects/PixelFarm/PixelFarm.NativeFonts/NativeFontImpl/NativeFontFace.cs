@@ -187,7 +187,9 @@ namespace PixelFarm.Drawing.Fonts
             //--------------------------------------------------
 
             var fontGlyph = new FontGlyph();
-            NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, out fontGlyph.glyphMatrix);
+            NativeGlyphMatrix nativeGlyphMatrix;
+            NativeMyFontsLib.MyFtLoadGlyph(ftFaceHandle, glyphIndex, out nativeGlyphMatrix);
+            fontGlyph.glyphMatrix = nativeGlyphMatrix.matrixData;
             BuildOutlineGlyph(fontGlyph, pixelSize);
             return fontGlyph;
         }
@@ -200,7 +202,12 @@ namespace PixelFarm.Drawing.Fonts
             }
             //-------------------------------------------------- 
             var fontGlyph = new FontGlyph();
-            NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, out fontGlyph.glyphMatrix);
+            NativeGlyphMatrix nativeGlyphMatrix;
+            NativeMyFontsLib.MyFtLoadChar(ftFaceHandle, unicodeChar, out nativeGlyphMatrix);
+            fontGlyph.glyphMatrix = nativeGlyphMatrix.matrixData;
+            fontGlyph.nativeBmpPtr = nativeGlyphMatrix.bitmap;
+            fontGlyph.nativeOutlinePtr = nativeGlyphMatrix.outline;
+            //-------------------------------------------------- 
             BuildOutlineGlyph(fontGlyph, pixelSize);
             return fontGlyph;
         }

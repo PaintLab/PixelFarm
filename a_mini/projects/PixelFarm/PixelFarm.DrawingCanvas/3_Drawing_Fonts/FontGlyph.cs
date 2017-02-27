@@ -10,6 +10,9 @@ using System.Runtime.InteropServices;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
+    /// <summary>
+    /// provide information about a glyph
+    /// </summary>
     public class FontGlyph
     {
         public FontGlyph()
@@ -43,18 +46,12 @@ namespace PixelFarm.Drawing.Fonts
         /// code point/glyph index?
         /// </summary>
         public int codePoint;
+
+        public IntPtr nativeOutlinePtr;
+        public IntPtr nativeBmpPtr;
     }
 
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ProperGlyph
-    {
-        public uint codepoint;
-        public int x_advance;
-        public int y_advance;
-        public int x_offset;
-        public int y_offset;
-    }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct GlyphMatrix
@@ -79,7 +76,7 @@ namespace PixelFarm.Drawing.Fonts
         public int img_vertAdvance;
         public int bitmap_left;
         public int bitmap_top;
-        public IntPtr bitmap;
-        public IntPtr outline;
+        //public IntPtr bitmap;
+        //public IntPtr outline;
     }
 }

@@ -82,10 +82,10 @@ namespace PixelFarm.Drawing.Fonts
             }
             return found;
         }
-        public void GetGlyphPos(char[] buffer, int start, int len, ProperGlyph[] properGlyphs)
-        {
-            throw new NotImplementedException();
-        }
+        //public void GetGlyphPos(char[] buffer, int start, int len, Ls[] properGlyphs)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         protected void OnDispose()
         {

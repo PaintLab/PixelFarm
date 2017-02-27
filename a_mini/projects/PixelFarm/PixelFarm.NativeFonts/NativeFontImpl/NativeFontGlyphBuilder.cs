@@ -17,7 +17,7 @@ namespace PixelFarm.Drawing.Fonts
         static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
         unsafe internal static void CopyGlyphBitmap(FontGlyph fontGlyph)
         {
-            FT_Bitmap* ftBmp = (FT_Bitmap*)fontGlyph.glyphMatrix.bitmap;
+            FT_Bitmap* ftBmp = (FT_Bitmap*)fontGlyph.nativeBmpPtr;
             //image is 8 bits grayscale
             int h = ftBmp->rows;
             int w = ftBmp->width;
@@ -94,7 +94,7 @@ namespace PixelFarm.Drawing.Fonts
 
         unsafe internal static void BuildGlyphOutline(FontGlyph fontGlyph)
         {
-            FT_Outline outline = (*(FT_Outline*)fontGlyph.glyphMatrix.outline);
+            FT_Outline outline = (*(FT_Outline*)fontGlyph.nativeOutlinePtr);
             //outline version
             //------------------------------
             int npoints = outline.n_points;
@@ -271,7 +271,7 @@ namespace PixelFarm.Drawing.Fonts
         internal unsafe static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
         {
             IntPtr shape = MyFtLib.CreateShape();
-            FT_Outline outline = (*(FT_Outline*)fontGlyph.glyphMatrix.outline);            //outline version
+            FT_Outline outline = (*(FT_Outline*)fontGlyph.nativeOutlinePtr);            //outline version
             //------------------------------
             int npoints = outline.n_points;
             List<PixelFarm.VectorMath.Vector2> points = new List<PixelFarm.VectorMath.Vector2>(npoints);
