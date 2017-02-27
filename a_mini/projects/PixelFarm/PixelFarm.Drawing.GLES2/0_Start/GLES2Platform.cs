@@ -18,7 +18,11 @@ namespace PixelFarm.Drawing.GLES2
             int top, int width, int height,
             CanvasInitParameters reqPars = new CanvasInitParameters())
         {
-            return new MyGLCanvas(CreateCanvasGL2d(width, height), 0, 0, width, height);
+
+            var painter1 = new GLCanvasPainter(CreateCanvasGL2d(width, height), width, height);
+            return new MyGLCanvas(
+                painter1,
+                0, 0, width, height);
         }
         public static Canvas CreateCanvas2(int left,
             int top, int width, int height,
@@ -26,7 +30,7 @@ namespace PixelFarm.Drawing.GLES2
             GLCanvasPainter painter1,
             CanvasInitParameters reqPars = new CanvasInitParameters())
         {
-            return new MyGLCanvas(canvas, painter1, 0, 0, width, height);
+            return new MyGLCanvas(painter1, 0, 0, width, height);
         }
         public static void AddTextureFont(string fontName, string xmlGlyphPos, string glypBitmap)
         {
@@ -34,25 +38,17 @@ namespace PixelFarm.Drawing.GLES2
         }
 
         public static CanvasGL2d CreateCanvasGL2d(int w, int h)
-        {
-            Init();
+        { 
             return new CanvasGL2d(w, h);
         }
-        static bool s_isInit;
-        static void Init()
+        
+        public static void SetFontLoader(IFontLoader fontLoader)
         {
-            if (s_isInit)
-            {
-                return;
-            }
-            s_isInit = true;
-            if (!GLES2PlatformFontMx.DidLoadFonts)
-            {
-                //GLES2PlatformFontMx.LoadInstalledFont(
-                //    new PixelFarm.Drawing.Win32.InstallFontsProviderWin32());
-            }
-
+            GLES2PlatformFontMx.SetFontLoader(fontLoader);
         }
-
+        public static InstalledFont GetInstalledFont(string fontName, InstalledFontStyle style)
+        {
+            return GLES2PlatformFontMx.GetInstalledFont(fontName, style);
+        }
     }
 }

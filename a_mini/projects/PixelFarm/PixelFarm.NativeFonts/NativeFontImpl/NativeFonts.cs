@@ -14,10 +14,28 @@ using System.IO;
 namespace PixelFarm.Drawing.Fonts
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct ExportTypeFaceInfo
+    struct ProperGlyph
+    {
+        public uint codepoint;
+        public int x_advance;
+        public int y_advance;
+        public int x_offset;
+        public int y_offset;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    struct ExportTypeFaceInfo
     {
         public bool hasKerning;
         public IntPtr hb_font;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    struct NativeGlyphMatrix
+    {
+        public GlyphMatrix matrixData;
+        public IntPtr bitmap; //unmanage 
+        public IntPtr outline;
     }
 
 
@@ -53,7 +71,7 @@ namespace PixelFarm.Drawing.Fonts
 
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
         public static extern void MyFtLibGetFullVersion(out int major, out int minor, out int revision);
-        
+
         [DllImport(myfontLib)]
         public static extern int MyFtInitLib();
         [DllImport(myfontLib)]
@@ -72,9 +90,9 @@ namespace PixelFarm.Drawing.Fonts
             int h_device_resolution,
             int v_device_resolution);
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int MyFtLoadChar(IntPtr faceHandle, int charcode, out GlyphMatrix ftOutline);
+        public static extern int MyFtLoadChar(IntPtr faceHandle, int charcode, out NativeGlyphMatrix ftOutline);
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int MyFtLoadGlyph(IntPtr faceHandle, uint codepoint, out GlyphMatrix ftOutline);
+        public static extern int MyFtLoadGlyph(IntPtr faceHandle, uint codepoint, out NativeGlyphMatrix ftOutline);
         [DllImport(myfontLib, CallingConvention = CallingConvention.Cdecl)]
         public static unsafe extern void MyFtGetFaceData(IntPtr faceHandle, ExportFace* exportFace);
 
@@ -133,9 +151,6 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
     }
-
-
-
 
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]

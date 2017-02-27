@@ -1,25 +1,27 @@
 ﻿//MIT, 2014-2017, WinterDev 
 using System;
 using System.Collections.Generic;
-using Typography.OpenFont; 
+
 using PixelFarm.Agg;
+using Typography.OpenFont;
+
 namespace PixelFarm.Drawing.Fonts
 {
 
 
     class ManagedFontFace : FontFace
     {
-        Typeface ntypeface;
-        string name, path;
+        readonly string name, path;
+        Typeface typeface;
         MyGlyphPathBuilder glyphPathBuilder;
 
-        public ManagedFontFace(Typeface ntypeface, string fontName, string fontPath)
+        public ManagedFontFace(Typeface typeface, string fontName, string fontPath)
         {
-            this.ntypeface = ntypeface;
+            this.typeface = typeface;
             this.name = fontName;
             this.path = fontPath;
             //----
-            glyphPathBuilder = new MyGlyphPathBuilder(ntypeface);
+            glyphPathBuilder = new MyGlyphPathBuilder(typeface);
         }
         public override string Name
         {
@@ -32,34 +34,41 @@ namespace PixelFarm.Drawing.Fonts
         protected override void OnDispose() { }
         public override ActualFont GetFontAtPointsSize(float pointSize)
         {
-            NOpenTypeActualFont actualFont = new NOpenTypeActualFont(this, pointSize, FontStyle.Regular);
+            ManagedActualFont actualFont = new ManagedActualFont(this, pointSize, FontStyle.Regular);
             return actualFont;
         }
-        public Typeface Typeface { get { return this.ntypeface; } }
+        public Typeface Typeface { get { return this.typeface; } }
 
         internal MyGlyphPathBuilder VxsBuilder
         {
-            get { return this.glyphPathBuilder; }
+            get
+            {
+                return this.glyphPathBuilder;
+            }
         }
         public override float GetScale(float pointSize)
         {
-            return ntypeface.CalculateFromPointToPixelScale(pointSize);
+            return typeface.CalculateFromPointToPixelScale(pointSize);
         }
         public override int AscentInDzUnit
         {
-            get { return ntypeface.Ascender; }
+            get { return typeface.Ascender; }
         }
         public override int DescentInDzUnit
         {
-            get { return ntypeface.Descender; }
+            get { return typeface.Descender; }
         }
         public override int LineGapInDzUnit
         {
-            get { return ntypeface.LineGap; }
+            get { return typeface.LineGap; }
         }
-
+        public override object GetInternalTypeface()
+        {
+            return typeface;
+        }
     }
-    class NOpenTypeActualFont : ActualFont
+
+    class ManagedActualFont : ActualFont
     {
         ManagedFontFace ownerFace;
         float sizeInPoints;
@@ -67,7 +76,7 @@ namespace PixelFarm.Drawing.Fonts
         Typeface typeFace;
         float scale;
         Dictionary<uint, VertexStore> glyphVxs = new Dictionary<uint, VertexStore>();
-        public NOpenTypeActualFont(ManagedFontFace ownerFace, float sizeInPoints, FontStyle style)
+        public ManagedActualFont(ManagedFontFace ownerFace, float sizeInPoints, FontStyle style)
         {
             this.ownerFace = ownerFace;
             this.sizeInPoints = sizeInPoints;
@@ -180,6 +189,5 @@ namespace PixelFarm.Drawing.Fonts
             return found;
         }
     }
-
-
 }
+

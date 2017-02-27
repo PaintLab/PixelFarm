@@ -4,7 +4,9 @@ using System;
 using System.Runtime.InteropServices;
 using PixelFarm.Drawing;
 namespace Win32
-{
+{ 
+
+
     class NativeTextWin32
     {
 

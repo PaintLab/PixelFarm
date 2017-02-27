@@ -1,42 +1,59 @@
-﻿//MIT, 2016-2017, WinterDev
-//----------------------------------- 
-
-using System;
-using System.Collections.Generic;
-
-
-namespace PixelFarm.Drawing.Fonts
+﻿using System;
+namespace Typography.Rendering
 {
-
-
-    public class SimpleFontAtlas
+    public class GlyphImage
     {
-        GlyphImage totalGlyphImage;
-        Dictionary<int, TextureFontGlyphData> codePointLocations = new Dictionary<int, TextureFontGlyphData>();
-
-        public int Width { get; set; }
-        public int Height { get; set; }
-
-        public void AddGlyph(int codePoint, TextureFontGlyphData glyphData)
+        int[] pixelBuffer;
+        public GlyphImage(int w, int h)
         {
-            codePointLocations.Add(codePoint, glyphData);
+            this.Width = w;
+            this.Height = h;
         }
-
-        public GlyphImage TotalGlyph
+        public RectangleF OriginalGlyphBounds
         {
-            get { return totalGlyphImage; }
-            set { totalGlyphImage = value; }
+            get;
+            set;
         }
-        public bool GetRectByCodePoint(int codepoint, out TextureFontGlyphData glyphdata)
+        public int Width
         {
-            if (!codePointLocations.TryGetValue(codepoint, out glyphdata))
-            {
-                glyphdata = null;
-                return false;
-            }
-            return true;
+            get;
+            private set;
         }
+        public int Height
+        {
+            get;
+            private set;
+        }
+        public bool IsBigEndian
+        {
+            get;
+            private set;
+        }
+        public int BorderXY
+        {
+            get;
+            set;
+        }
+        public int[] GetImageBuffer()
+        {
+            return pixelBuffer;
+        }
+        public void SetImageBuffer(int[] pixelBuffer, bool isBigEndian)
+        {
+            this.pixelBuffer = pixelBuffer;
+            this.IsBigEndian = isBigEndian;
+        }
+    }
 
+    public class CacheGlyph
+    {
+        public int borderX;
+        public int borderY;
+        public GlyphImage img;
+        public Rectangle area;
+        public char character;
+        public int codePoint;
+        public GlyphMatrix2 glyphMatrix;
     }
 
     public class TextureFontGlyphData
@@ -60,7 +77,6 @@ namespace PixelFarm.Drawing.Fonts
         public float VBearingX { get; set; }
         public float VBearingY { get; set; }
 
-
         public Rectangle Rect
         {
             get;
@@ -68,22 +84,7 @@ namespace PixelFarm.Drawing.Fonts
         }
 
     }
-    public class GlyphData
-    {
-        public FontGlyph fontGlyph;
-        public GlyphImage glyphImage;
-        public Rectangle pxArea;
-        public char character;
-        public int codePoint;
-        public GlyphData(int codePoint, char c, FontGlyph fontGlyph, GlyphImage glyphImage)
-        {
-            this.codePoint = codePoint;
-            this.character = c;
-            this.fontGlyph = fontGlyph;
-            this.glyphImage = glyphImage;
 
-        }
-    }
     public struct GlyphMatrix2
     {
         public short unit_per_em;
@@ -106,8 +107,7 @@ namespace PixelFarm.Drawing.Fonts
         public int img_vertAdvance;
         public int bitmap_left;
         public int bitmap_top;
-        public IntPtr bitmap;
-        public IntPtr outline;
+        //public IntPtr bitmap;
+        //public IntPtr outline;
     }
-
 }

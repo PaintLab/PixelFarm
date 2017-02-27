@@ -8,14 +8,16 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg;
+using Typography.Rendering;
+
 namespace PixelFarm.Drawing.Fonts
 {
     static class NativeFontGlyphBuilder
     {
         static Agg.VertexSource.CurveFlattener curveFlattener = new Agg.VertexSource.CurveFlattener();
-        unsafe internal static void CopyGlyphBitmap(FontGlyph fontGlyph)
+        unsafe internal static void CopyGlyphBitmap(NativeFontGlyph fontGlyph)
         {
-            FT_Bitmap* ftBmp = (FT_Bitmap*)fontGlyph.glyphMatrix.bitmap;
+            FT_Bitmap* ftBmp = (FT_Bitmap*)fontGlyph.nativeBmpPtr;
             //image is 8 bits grayscale
             int h = ftBmp->rows;
             int w = ftBmp->width;
@@ -90,9 +92,9 @@ namespace PixelFarm.Drawing.Fonts
                 (v1.y + (double)v2.y) / 2d);
         }
 
-        unsafe internal static void BuildGlyphOutline(FontGlyph fontGlyph)
+        unsafe internal static void BuildGlyphOutline(NativeFontGlyph fontGlyph)
         {
-            FT_Outline outline = (*(FT_Outline*)fontGlyph.glyphMatrix.outline);
+            FT_Outline outline = (*(FT_Outline*)fontGlyph.nativeOutlinePtr);
             //outline version
             //------------------------------
             int npoints = outline.n_points;
@@ -118,7 +120,7 @@ namespace PixelFarm.Drawing.Fonts
                     bool has_dropout = (((vtag >> 2) & 0x1) != 0);
                     int dropoutMode = vtag >> 3;
 
-                   // Console.WriteLine(vpoint.ToString() + " " + vtag);
+                    // Console.WriteLine(vpoint.ToString() + " " + vtag);
 
                     if ((vtag & 0x1) != 0)
                     {
@@ -266,10 +268,10 @@ namespace PixelFarm.Drawing.Fonts
 
 
         const double FT_RESIZE = 64; //essential to be floating point
-        internal unsafe static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
+        internal unsafe static GlyphImage BuildMsdfFontImage(NativeFontGlyph fontGlyph)
         {
             IntPtr shape = MyFtLib.CreateShape();
-            FT_Outline outline = (*(FT_Outline*)fontGlyph.glyphMatrix.outline);            //outline version
+            FT_Outline outline = (*(FT_Outline*)fontGlyph.nativeOutlinePtr);            //outline version
             //------------------------------
             int npoints = outline.n_points;
             List<PixelFarm.VectorMath.Vector2> points = new List<PixelFarm.VectorMath.Vector2>(npoints);
@@ -478,7 +480,12 @@ namespace PixelFarm.Drawing.Fonts
             int[] outputBuffer = new int[w * h];
             GlyphImage glyphImage = new GlyphImage(w, h);
             glyphImage.BorderXY = borderXY;
-            glyphImage.OriginalGlyphBounds = glyphBounds;
+            glyphImage.OriginalGlyphBounds = Typography.Rendering.RectangleF.FromLTRB(
+                glyphBounds.Left,
+                glyphBounds.Top,
+                glyphBounds.Right,
+                glyphBounds.Bottom);
+
             unsafe
             {
                 fixed (int* output_header = &outputBuffer[0])
@@ -513,12 +520,12 @@ namespace PixelFarm.Drawing.Fonts
         }
     }
     //--------
-    public static class MsdfGen
+    public static class NativeMsdfGen
     {
         //---------------------------------------------------------------------------
         public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
         {
-            return NativeFontGlyphBuilder.BuildMsdfFontImage(fontGlyph);
+            return NativeFontGlyphBuilder.BuildMsdfFontImage((NativeFontGlyph)fontGlyph);
         }
 
         public static void SwapColorComponentFromBigEndianToWinGdi(int[] bitbuffer)

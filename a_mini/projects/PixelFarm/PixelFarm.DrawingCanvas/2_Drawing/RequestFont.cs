@@ -5,7 +5,7 @@ using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing
 {
     /// <summary>
-    ///font specification     
+    /// user request for font
     /// </summary>
     public sealed class RequestFont
     {
@@ -119,16 +119,19 @@ namespace PixelFarm.Drawing
             }
         }
         //--------------------------
-        //font shaping info (for native font/shaping engine)
+        //data for shaping engine
+
         public WriteDirection WriteDirection { get; set; }
         public ScriptLang ScriptCode { get; set; }
-        //public string Lang { get; set; }
         public static float ConvEmSizeInPointsToPixels(float emsizeInPoint)
         {
             return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
         }
 
         //-------------
+        /// <summary>
+        /// resolved actual font
+        /// </summary>
         ActualFont _actualFont;
         internal static void SetCacheActualFont(RequestFont r, ActualFont f)
         {

@@ -1,14 +1,16 @@
-﻿//MIT, 2016-2017, WinterDev
+﻿//MIT, 2014-2017, WinterDev   
+
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using Microsoft.Win32;
+using System.IO; 
 using PixelFarm.Drawing.Fonts;
 
-namespace PixelFarm.Drawing.Win32
+namespace PixelFarm.Drawing
 {
+
     /// <summary>
-    /// provide install font from Windows directory
+    /// provide installed font from Windows directory
     /// </summary>
     public class InstallFontsProviderWin32 : IInstalledFontProvider
     {
@@ -34,18 +36,6 @@ namespace PixelFarm.Drawing.Win32
                 }
             }
         }
+
     }
-    ///// <summary>
-    ///// provide image buffer from filename, no System.Drawing
-    ///// </summary>
-    //public class ImageProviderWin32 : IImageProvider
-    //{
-    
-    //    //use mananged loader?
-    //    public byte[] LoadImageBufferFromFile(string filename)
-    //    {
-    //        //read data  
-    //        return null;
-    //    }
-    //}
 }

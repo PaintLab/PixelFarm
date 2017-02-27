@@ -9,33 +9,47 @@ using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
 
-
-    public class TextPrinter : ITextPrinter
+    public class VxsTextPrinter : ITextPrinter
     {
 
-        Agg.CanvasPainter canvasPainter;
-        VxsTextPrinter vxsTextPrinter = new VxsTextPrinter();
+        CanvasPainter canvasPainter;
+        MyVxsTextPrinter vxsTextPrinter = new MyVxsTextPrinter();
         List<GlyphPlan> glyphPlanList = new List<GlyphPlan>(20);
 
-        public TextPrinter(Agg.CanvasPainter canvasPainter)
+        public VxsTextPrinter(CanvasPainter canvasPainter)
         {
             this.canvasPainter = canvasPainter;
-
+            RequestFont font = canvasPainter.CurrentFont;
+            Typography.OpenFont.ScriptLang scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLang(font.ScriptCode.shortname);
+#if DEBUG
+            if (scLang == null)
+            {
+                throw new NotSupportedException("unknown script lang");
+            }
+#endif
+            vxsTextPrinter.ScriptLang = scLang;
+            //1.  resolve actual font file
             vxsTextPrinter.FontFile = "d:\\WImageTest\\tahoma.ttf";
-            vxsTextPrinter.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;
         }
-
         public void ChangeFont(RequestFont font)
         {
+#if DEBUG
             //change font
-
+            Console.Write("please impl change font");
+#endif
         }
-
         public void ChangeFontColor(Color fontColor)
         {
             //change font color
+#if DEBUG
+            Console.Write("please impl change font color");
+#endif
         }
         public void DrawString(string text, double x, double y)
+        {
+            DrawString(text.ToCharArray(), x, y);
+        }
+        public void DrawString(char[] text, double x, double y)
         {
             glyphPlanList.Clear();
             RequestFont currentFont = canvasPainter.CurrentFont;
@@ -53,13 +67,10 @@ namespace PixelFarm.Drawing.Fonts
                 canvasPainter.Fill((VertexStore)glyphPlan.vxs);
             }
             canvasPainter.SetOrigin(ox, oy);
-
         }
-
-
     }
 
-    class VxsTextPrinter
+    class MyVxsTextPrinter
     {
         Typeface _currentTypeface;
         GlyphLayout _glyphLayout = new GlyphLayout();
@@ -67,7 +78,7 @@ namespace PixelFarm.Drawing.Fonts
 
         string _currentFontFilename = "";
 
-        public VxsTextPrinter()
+        public MyVxsTextPrinter()
         {
             //default         
         }
@@ -122,10 +133,16 @@ namespace PixelFarm.Drawing.Fonts
         }
         public void Print(float size, string str, List<GlyphPlan> glyphPlanBuffer)
         {
+
+            Print(size, str.ToCharArray(), glyphPlanBuffer);
+
+        }
+        public void Print(float size, char[] str, List<GlyphPlan> glyphPlanBuffer)
+        {
             if (_currentTypeface == null)
             {
                 OpenFontReader reader = new OpenFontReader();
-                using (FileStream fs = new FileStream(_currentFontFilename, FileMode.Open))
+                using (FileStream fs = new FileStream(_currentFontFilename, FileMode.Open, FileAccess.Read))
                 {
                     _currentTypeface = reader.Read(fs);
                 }

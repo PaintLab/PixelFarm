@@ -26,12 +26,12 @@ namespace PixelFarm.Agg.SimplePainter
             font1 = new Drawing.RequestFont(fontName, 48);
             font2 = new Drawing.RequestFont(fontName, 10);
 
-            //------------
-            var win32InstalledFont = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
-            InstalledFontCollection collection = new InstalledFontCollection();
-            collection.LoadInstalledFont(win32InstalledFont.GetInstalledFontIter());
-            //test 
-            InstalledFont installedFont = collection.GetFont(fontName, InstalledFontStyle.Regular);
+            ////------------
+            //var win32InstalledFont = new PixelFarm.Drawing.WinGdi.InstallFontsProviderWin32();
+            //InstalledFontCollection collection = new InstalledFontCollection();
+            //collection.LoadInstalledFont(win32InstalledFont.GetInstalledFontIter());
+            ////test 
+            //InstalledFont installedFont = collection.GetFont(fontName, InstalledFontStyle.Regular);
 
         }
 

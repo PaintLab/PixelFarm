@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
@@ -58,13 +60,53 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Typography\FontAtlas\BinPacker.cs">
+      <Link>4_FontAtlas\BinPacker.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography\FontAtlas\MsdfGlyphGen.cs">
+      <Link>4_FontAtlas\MsdfGlyphGen.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography\FontAtlas\MsdfGlyphGenExtension.cs">
+      <Link>4_FontAtlas\MsdfGlyphGenExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography\FontAtlas\SimpleFontAtlas.cs">
+      <Link>4_FontAtlas\SimpleFontAtlas.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography\FontAtlas\SimpleFontAtlasBuilder.cs">
+      <Link>4_FontAtlas\SimpleFontAtlasBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography\Typography.MsdfGen\EdgeColor.cs">
+      <Link>5_Msdf\EdgeColor.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography\Typography.MsdfGen\EdgeColoring.cs">
+      <Link>5_Msdf\EdgeColoring.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography\Typography.MsdfGen\EdgeHolder.cs">
+      <Link>5_Msdf\EdgeHolder.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography\Typography.MsdfGen\EdgeSegment.cs">
+      <Link>5_Msdf\EdgeSegment.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography\Typography.MsdfGen\EquationSolver.cs">
+      <Link>5_Msdf\EquationSolver.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography\Typography.MsdfGen\MsdfGen.cs">
+      <Link>5_Msdf\MsdfGen.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography\Typography.MsdfGen\SignedDistance.cs">
+      <Link>5_Msdf\SignedDistance.cs</Link>
+    </Compile>
+    <Compile Include="1_Drawing_Fonts\FontPreview.cs" />
     <Compile Include="1_Drawing_Fonts\GlyphPathBuilderVxs.cs" />
+    <Compile Include="1_Drawing_Fonts\InstalledFontCollection.cs" />
     <Compile Include="2_Drawing_Text\ManagedShapingService.cs" />
     <Compile Include="1_Drawing_Fonts\MyGlyphPathBuilder.cs" />
-    <Compile Include="1_Drawing_Fonts\ManagedFontFace.cs" />
-    <Compile Include="1_Drawing_Fonts\OpenFontLoader.cs" />
+    <Compile Include="3_FontFaceImpl\ManagedFontFace.cs" />
+    <Compile Include="3_FontFaceImpl\OpenFontLoader.cs" />
     <Compile Include="2_Drawing_Text\TextShapingAndLayoutService.cs" />
     <Compile Include="1_Drawing_Fonts\TextPrinterImpl.cs" />
+    <Compile Include="3_FontFaceImpl\TextureFontFace.cs" />
+    <Compile Include="3_FontFaceImpl\TextureFontLoader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

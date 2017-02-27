@@ -29,7 +29,7 @@ namespace OpenTkEssTest
             painter = new GLCanvasPainter(canvas2d, max, max);
 
             //----------------------
-            var win32InstallFontProvider = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            var win32InstallFontProvider = new PixelFarm.Drawing.InstallFontsProviderWin32();
             InstalledFontCollection collection = new InstalledFontCollection();
             collection.LoadInstalledFont(win32InstallFontProvider.GetInstalledFontIter());
             InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Regular);

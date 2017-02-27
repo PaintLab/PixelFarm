@@ -12,35 +12,23 @@
 // 
 // - Sun Tsu,
 // "The Art of War"
- 
+
 namespace PixelFarm.Drawing.GLES2
 {
     partial class MyGLCanvas
     {
+        //TODO: review drawstring again ***
 
-        RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
-
-
-        //public override float GetCharWidth(RequestFont f, char c)
-        //{
-        //    return GLES2PlatformFontMx.Default.ResolveForGdiFont(f).GetGlyph(c).horiz_adv_x >> 6;
-        //    //NativeFont font = nativeFontStore.GetResolvedNativeFont(f);
-        //    //return font.GetGlyph(c).horiz_adv_x >> 6;
-        //}
-
-
-        //============================================== 
-
         public override RequestFont CurrentFont
         {
             get
             {
-                return currentTextFont;
+                return painter1.CurrentFont;
             }
             set
             {
-                this.currentTextFont = value;
+                painter1.CurrentFont = value;
             }
         }
         public override Color CurrentTextColor
@@ -56,6 +44,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawText(char[] buffer, int x, int y)
         {
+            painter1.TextPrinter.DrawString(buffer, x, y);
             //var tmpColor = this.internalSolidBrush.Color;
             //internalSolidBrush.Color = this.currentTextColor;
             //gx.DrawString(new string(buffer),
@@ -65,6 +54,8 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
+            //TODO: review again
+            painter1.TextPrinter.DrawString(buffer, logicalTextBox.X, logicalTextBox.Y);
             //var tmpColor = this.internalSolidBrush.Color;
             //internalSolidBrush.Color = this.currentTextColor;
             //gx.DrawString(new string(buffer),
@@ -79,8 +70,10 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
+            //TODO: review again
+            painter1.TextPrinter.DrawString(str, logicalTextBox.X, logicalTextBox.Y);
             //TODO: review here
-            painter1.FillRectangle(0, 0, 20, 20, Color.Red);
+            //painter1.FillRectangle(0, 0, 20, 20, Color.Red);
 
             //painter1.FillColor = Color.Blue;
             //painter1.FillRectangle(0, 0, 20, 20);

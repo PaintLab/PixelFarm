@@ -229,12 +229,7 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
-        internal static ScriptLang GetTagInfo(string shortname)
-        {
-            ScriptLang found;
-            registeredScriptTags.TryGetValue(shortname, out found);
-            return found;
-        }
+     
     }
 
 

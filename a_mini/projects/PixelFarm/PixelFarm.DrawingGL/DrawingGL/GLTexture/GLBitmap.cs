@@ -43,20 +43,14 @@ namespace PixelFarm.DrawingGL
             this.rawIntBuffer = rawIntBuffer;
             this.isInvertImage = isInvertImage;
         }
-        //public GLBitmap(PixelFarm.Drawing.Imaging.NativeImage bmp, bool isInvertImage)
-        //{
-        //    this.width = bmp.Width;
-        //    this.height = bmp.Height;
-        //    this.bmp = bmp;
-        //    this.isInvertImage = isInvertImage;
-        //}
+     
         public GLBitmap(int w, int h, IntPtr nativeImgMem)
         {
             this.width = w;
             this.height = h;
             this.nativeImgMem = nativeImgMem;
         }
-        internal GLBitmap(LazyBitmapBufferProvider lazyProvider)
+        public GLBitmap(LazyBitmapBufferProvider lazyProvider)
         {
             this.width = lazyProvider.Width;
             this.height = lazyProvider.Height;
