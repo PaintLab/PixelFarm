@@ -62,10 +62,18 @@ namespace Typography.Rendering
         public int codePoint;
         public GlyphMatrix2 glyphMatrix;
     }
-    public class SimpleFontAtlasBuilder2
+
+    public class SimpleFontAtlasBuilder
     {
         GlyphImage2 latestGenGlyphImage;
         Dictionary<int, CacheGlyph> glyphs = new Dictionary<int, CacheGlyph>();
+        public void AddGlyph(int codePoint, char c, FontGlyph fontGlyph, GlyphImage2 img)
+        {
+            var glyphCache = new CacheGlyph();
+            glyphCache.codePoint = codePoint;
+            glyphCache.img = img; 
+            glyphs[codePoint] = glyphCache;
+        }
         public void AddGlyph(int codePoint, GlyphImage2 img)
         {
             var glyphCache = new CacheGlyph();
@@ -120,7 +128,7 @@ namespace Typography.Rendering
             for (int i = glyphList.Count - 1; i >= 0; --i)
             {
                 CacheGlyph g = glyphList[i];
-                Rect newRect = binPacker.Insert(g.img.Width, g.img.Height);
+                BinPackRect newRect = binPacker.Insert(g.img.Width, g.img.Height);
                 g.area = new Rectangle(newRect.X, newRect.Y,
                     g.img.Width, g.img.Height);
             }
@@ -223,7 +231,7 @@ namespace Typography.Rendering
         {
             SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
             foreach (CacheGlyph g in glyphs.Values)
-            { 
+            {
                 //convert char to hex
                 string unicode = ("0x" + ((int)g.character).ToString("X"));//code point
                 Rectangle area = g.area;
@@ -235,7 +243,7 @@ namespace Typography.Rendering
                 glyphData.AdvanceY = g.glyphMatrix.advanceY;
                 glyphData.ImgWidth = g.img.Width;
 
-                simpleFontAtlas.AddGlyph(g.codePoint, glyphData); 
+                simpleFontAtlas.AddGlyph(g.codePoint, glyphData);
 
             }
 

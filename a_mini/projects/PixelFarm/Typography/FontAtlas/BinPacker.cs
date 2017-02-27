@@ -4,9 +4,8 @@ using System;
 namespace Typography.Rendering
 {
     public struct Rect
-    { 
-        //TODO: review here 
-     
+    {
+        //TODO: review here  
         public int X, Y, Width, Height;
         public int Right { get { return X + Width; } }
         public int Bottom { get { return Y + Height; } }

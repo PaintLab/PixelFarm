@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using PixelFarm.Drawing.Fonts;
-using PixelFarm.Drawing.Text;
+using Typography.Rendering;
 
 namespace BuildTextureFonts
 {
@@ -48,7 +47,7 @@ namespace BuildTextureFonts
             //and analyze each pixel : 
             bmp1.Save("d:\\WImageTest\\a001_m.png");
             //copy pixel data
-            var bmpdata = bmp1.LockBits(new Rectangle(0, 0, (int)size.Width, (int)size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly,
+            var bmpdata = bmp1.LockBits(new System.Drawing.Rectangle(0, 0, (int)size.Width, (int)size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly,
                 bmp1.PixelFormat);
             int bmpHeight = bmpdata.Height;
             int bmpWidth = bmpdata.Width;
@@ -66,7 +65,7 @@ namespace BuildTextureFonts
             {
                 //test output
                 var outputBmp = new Bitmap(bmpWidth, bmpHeight);
-                var outputBmpData = outputBmp.LockBits(new Rectangle(0, 0, (int)size.Width, (int)size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                var outputBmpData = outputBmp.LockBits(new System.Drawing.Rectangle(0, 0, (int)size.Width, (int)size.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly,
                     bmp1.PixelFormat);
                 System.Runtime.InteropServices.Marshal.Copy(distanceBuffer, 0, outputBmpData.Scan0, distanceBuffer.Length);
                 outputBmp.UnlockBits(outputBmpData);
@@ -545,7 +544,7 @@ namespace BuildTextureFonts
                 //save to bmp
                 using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 {
-                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
                     System.Runtime.InteropServices.Marshal.Copy(output, 0, bmpdata.Scan0, output.Length);
                     bmp.UnlockBits(bmpdata);
                     bmp.Save("d:\\WImageTest\\a001_x1.png");
@@ -571,7 +570,7 @@ namespace BuildTextureFonts
             int j = fontChars.Length;
 
 
-            var atlasBuilder = new Typography.Rendering.MySimpleFontAtlasBuilder();
+            var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
 
 
             for (int i = 0; i < j; ++i)
@@ -579,36 +578,38 @@ namespace BuildTextureFonts
                 char c = fontChars[i];
 
                 FontGlyph fontGlyph = font.GetGlyph(c);
-                GlyphImage glyphImg = MsdfGen.BuildMsdfFontImage(fontGlyph);
+                GlyphImage glyphImg = NativeMsdfGen.BuildMsdfFontImage(fontGlyph);
 
                 int w = glyphImg.Width;
                 int h = glyphImg.Height;
                 int[] buffer = glyphImg.GetImageBuffer();
-                MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
-                atlasBuilder.AddGlyph(0, (char)fontGlyph.unicode, fontGlyph, glyphImg);
+                atlasBuilder.AddGlyph(0, (char)fontGlyph.unicode, fontGlyph, CreateGlyphImage2(glyphImg));
 
                 using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 {
-                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    var bmpdata = bmp.LockBits(
+                        new System.Drawing.Rectangle(0, 0, w, h),
+                        System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
                     System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
                     bmp.UnlockBits(bmpdata);
                     bmp.Save("d:\\WImageTest\\a001_x1_" + (int)c + ".png");
                 }
             }
             //----------------------------------------------------
-            GlyphImage totalImg = atlasBuilder.BuildSingleImage();
+            GlyphImage2 totalImg = atlasBuilder.BuildSingleImage();
             using (Bitmap bmp = new Bitmap(totalImg.Width, totalImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
 
                 int[] buffer = totalImg.GetImageBuffer();
                 if (totalImg.IsBigEndian)
                 {
-                    MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                    NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                     totalImg.SetImageBuffer(buffer, false);
                 }
 
-                var bmpdata = bmp.LockBits(new Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
                 System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
                 bmp.UnlockBits(bmpdata);
                 bmp.Save("d:\\WImageTest\\a_total.png");
@@ -622,12 +623,12 @@ namespace BuildTextureFonts
         private void button4_Click(object sender, EventArgs e)
         {
             string fontfilename = "d:\\WImageTest\\a_total.xml";
-            var  atlasBuilder = new Typography.Rendering.MySimpleFontAtlasBuilder();
+            var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
             SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
 
             using (Bitmap totalImg = new Bitmap("d:\\WImageTest\\a_total.png"))
             {
-                var bmpdata = totalImg.LockBits(new Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
+                var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
                 var buffer = new int[totalImg.Width * totalImg.Height];
                 System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
                 totalImg.UnlockBits(bmpdata);
@@ -639,7 +640,7 @@ namespace BuildTextureFonts
 
 
         static void BuildFontGlyphs(PixelFarm.Drawing.RequestFont font,
-            Typography.Rendering.MySimpleFontAtlasBuilder atlasBuilder,
+            Typography.Rendering.SimpleFontAtlasBuilder atlasBuilder,
             int startAt, int endAt)
         {
             //font glyph for specific font face
@@ -649,14 +650,14 @@ namespace BuildTextureFonts
                 char c = (char)i;
                 FontGlyph fontGlyph = nativeFont.GetGlyph(c);
                 //-------------------
-                GlyphImage glyphImg = MsdfGen.BuildMsdfFontImage(fontGlyph);
+                GlyphImage glyphImg = NativeMsdfGen.BuildMsdfFontImage(fontGlyph);
 
                 // Console.WriteLine(c.ToString() + " ox,oy" + glyphImg.OffsetX + "," + glyphImg.OffsetY);
 
                 int w = glyphImg.Width;
                 int h = glyphImg.Height;
                 int[] buffer = glyphImg.GetImageBuffer();
-                MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
                 // atlasBuilder.AddGlyph(fontGlyph.glyphMatrix.u c, fontGlyph, glyphImg);
                 //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
@@ -668,7 +669,7 @@ namespace BuildTextureFonts
                 //}
             }
         }
-        static void BuildFontGlyphsByIndex(ActualFont nativefont, Typography.Rendering. MySimpleFontAtlasBuilder atlasBuilder, int startAtGlyphIndex, int endAtGlyphIndex)
+        static void BuildFontGlyphsByIndex(ActualFont nativefont, Typography.Rendering.SimpleFontAtlasBuilder atlasBuilder, int startAtGlyphIndex, int endAtGlyphIndex)
         {
             //font glyph for specific font face
 
@@ -676,14 +677,14 @@ namespace BuildTextureFonts
             {
 
                 FontGlyph fontGlyph = nativefont.GetGlyphByIndex((uint)i);
-                GlyphImage glyphImg = MsdfGen.BuildMsdfFontImage(fontGlyph);
+                GlyphImage glyphImg = NativeMsdfGen.BuildMsdfFontImage(fontGlyph);
 
                 int w = glyphImg.Width;
                 int h = glyphImg.Height;
                 int[] buffer = glyphImg.GetImageBuffer();
-                MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
-                atlasBuilder.AddGlyph(i, (char)fontGlyph.unicode, fontGlyph, glyphImg);
+                atlasBuilder.AddGlyph(i, (char)fontGlyph.unicode, fontGlyph, CreateGlyphImage2(glyphImg));
                 //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 //{
                 //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
@@ -693,21 +694,27 @@ namespace BuildTextureFonts
                 //}
             }
         }
-        static void BuildFontGlyph(ActualFont nativefont, Typography.Rendering.MySimpleFontAtlasBuilder atlasBuilder, char c)
+        static GlyphImage2 CreateGlyphImage2(GlyphImage glyphImg)
+        {
+            GlyphImage2 glyphImg2 = new GlyphImage2(glyphImg.Width, glyphImg.Height);
+            glyphImg2.SetImageBuffer(glyphImg.GetImageBuffer(), glyphImg.IsBigEndian);
+            return glyphImg2;
+        }
+        static void BuildFontGlyph(ActualFont nativefont, Typography.Rendering.SimpleFontAtlasBuilder atlasBuilder, char c)
         {
             //font glyph for specific font face
 
 
 
             FontGlyph fontGlyph = nativefont.GetGlyph(c);
-            GlyphImage glyphImg = MsdfGen.BuildMsdfFontImage(fontGlyph);
+            GlyphImage glyphImg = NativeMsdfGen.BuildMsdfFontImage(fontGlyph);
 
             int w = glyphImg.Width;
             int h = glyphImg.Height;
             int[] buffer = glyphImg.GetImageBuffer();
-            MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
+            NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
             glyphImg.SetImageBuffer(buffer, false);
-            atlasBuilder.AddGlyph(0, (char)fontGlyph.unicode, fontGlyph, glyphImg);
+            atlasBuilder.AddGlyph(0, (char)fontGlyph.unicode, fontGlyph, CreateGlyphImage2(glyphImg));
             //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             //{
             //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
@@ -726,7 +733,7 @@ namespace BuildTextureFonts
             //string fontfile = @"D:\WImageTest\THSarabunNew\THSarabunNew.ttf";
             ActualFont font = GetActualFont(fontfile, 18);// nativeFontStore.LoadFont(fontName, fontfile, 28);
             //2. get glyph 
-            var atlasBuilder = new Typography.Rendering.MySimpleFontAtlasBuilder();
+            var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
             //for (int i = 0; i < 256; ++i)
             //BuildFontGlyphsByIndex(font, atlasBuilder, 0, 255);
             //BuildFontGlyphs(font, atlasBuilder, 0x0e00, 0x0e5b);
@@ -736,19 +743,19 @@ namespace BuildTextureFonts
             BuildFontGlyph(font, atlasBuilder, 'B');
             //----------------------------------------------------
             //GlyphImage totalImg = atlasBuilder.BuildSingleImage();
-            GlyphImage totalImg = atlasBuilder.BuildSingleImage();
+            GlyphImage2 totalImg = atlasBuilder.BuildSingleImage();
             using (Bitmap bmp = new Bitmap(totalImg.Width, totalImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
 
                 int[] buffer = totalImg.GetImageBuffer();
                 if (totalImg.IsBigEndian)
                 {
-                    MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                    NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                     totalImg.SetImageBuffer(buffer, false);
                 }
 
                 var bmpdata = bmp.LockBits(
-                    new Rectangle(0, 0, totalImg.Width, totalImg.Height),
+                    new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height),
                     System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
                 System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
                 bmp.UnlockBits(bmpdata);
@@ -774,7 +781,7 @@ namespace BuildTextureFonts
             int[] glyphIndice = new int[] { 1076, 1127, 1164 };
             int j = glyphIndice.Length;
 
-            var atlasBuilder = new Typography.Rendering.MySimpleFontAtlasBuilder();
+            var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
 
             for (int i = 0; i < j; ++i)
             {
@@ -782,35 +789,35 @@ namespace BuildTextureFonts
                 int codepoint = glyphIndice[i];
                 FontGlyph fontGlyph = font.GetGlyphByIndex((uint)codepoint);
 
-                GlyphImage glyphImg = MsdfGen.BuildMsdfFontImage(fontGlyph);
+                GlyphImage glyphImg = NativeMsdfGen.BuildMsdfFontImage(fontGlyph);
                 int w = glyphImg.Width;
                 int h = glyphImg.Height;
                 int[] buffer = glyphImg.GetImageBuffer();
-                MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
-                atlasBuilder.AddGlyph(codepoint, (char)fontGlyph.unicode, fontGlyph, glyphImg);
+                atlasBuilder.AddGlyph(codepoint, (char)fontGlyph.unicode, fontGlyph, CreateGlyphImage2(glyphImg));
 
                 using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 {
-                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
                     System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
                     bmp.UnlockBits(bmpdata);
                     bmp.Save("d:\\WImageTest\\a001_y1_" + codepoint + ".png");
                 }
             }
             //----------------------------------------------------
-            GlyphImage totalImg = atlasBuilder.BuildSingleImage();
+            GlyphImage2 totalImg = atlasBuilder.BuildSingleImage();
             using (Bitmap bmp = new Bitmap(totalImg.Width, totalImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
 
                 int[] buffer = totalImg.GetImageBuffer();
                 if (totalImg.IsBigEndian)
                 {
-                    MsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
+                    NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                     totalImg.SetImageBuffer(buffer, false);
                 }
 
-                var bmpdata = bmp.LockBits(new Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
                 System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
                 bmp.UnlockBits(bmpdata);
                 bmp.Save("d:\\WImageTest\\a_total.png");
@@ -885,7 +892,7 @@ namespace BuildTextureFonts
             int stride = 4 * ((bmpWidth * 32 + 31) / 32);
 
             Bitmap newBmp = new Bitmap(bmpWidth, 50, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            var bmpData = newBmp.LockBits(new Rectangle(0, 0, bmpWidth, 50), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bmpData = newBmp.LockBits(new System.Drawing.Rectangle(0, 0, bmpWidth, 50), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             byte[] tmp1 = new byte[stride * 50];
 
             System.Runtime.InteropServices.Marshal.Copy(ppvBits, tmp1, 0, tmp1.Length);
@@ -954,7 +961,7 @@ namespace BuildTextureFonts
 
             using (Bitmap bmp = new Bitmap(frgbBmp.Width, frgbBmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
-                var bmpdata = bmp.LockBits(new Rectangle(0, 0, frgbBmp.Width, frgbBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, frgbBmp.Width, frgbBmp.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
                 System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
                 bmp.UnlockBits(bmpdata);
 
@@ -1039,7 +1046,7 @@ namespace BuildTextureFonts
                 int[] buffer = g1.GetImageBuffer();
                 using (Bitmap bmp = new Bitmap(g1.Width, g1.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 {
-                    var bmpdata = bmp.LockBits(new Rectangle(0, 0, g1.Width, g1.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, g1.Width, g1.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
                     System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
                     bmp.UnlockBits(bmpdata);
                     bmp.Save("d:\\WImageTest\\a001_xn1_.png");

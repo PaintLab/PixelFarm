@@ -19,12 +19,12 @@ namespace OpenTkEssTest
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d =PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
             painter = new GLCanvasPainter(canvas2d, max, max);
 
             //--------------------- 
             string fontfilename = "d:\\WImageTest\\a_total.xml";
-            var atlasBuilder = new Typography.Rendering.MySimpleFontAtlasBuilder();
+            var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
             fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
 
             totalImg = new System.Drawing.Bitmap("d:\\WImageTest\\a_total.png");
@@ -75,7 +75,7 @@ namespace OpenTkEssTest
             PixelFarm.Drawing.Rectangle r = glyphData.Rect;
             //canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
             canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
-           
+
             fontAtlas.GetRectByCodePoint(codepoint[1], out glyphData);
             PixelFarm.Drawing.Rectangle r2 = glyphData.Rect;
             canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r2, 100 + r.Width - 10, 500);

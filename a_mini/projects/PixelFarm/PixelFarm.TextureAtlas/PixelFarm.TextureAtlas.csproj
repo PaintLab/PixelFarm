@@ -67,7 +67,6 @@
     <Compile Include="BinPacker.cs" />
     <Compile Include="MsdfGlyphGen.cs" />
     <Compile Include="MsdfGlyphGenExtension.cs" />
-    <Compile Include="MySimpleFontAtlasBuilder.cs" />
     <Compile Include="SimpleFontAtlas.cs" />
     <Compile Include="SimpleFontAtlasBuilder2.cs" />
   </ItemGroup>

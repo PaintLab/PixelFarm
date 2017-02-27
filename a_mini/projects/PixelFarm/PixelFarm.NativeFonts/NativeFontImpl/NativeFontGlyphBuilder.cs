@@ -513,7 +513,7 @@ namespace PixelFarm.Drawing.Fonts
         }
     }
     //--------
-    public static class MsdfGen
+    public static class NativeMsdfGen
     {
         //---------------------------------------------------------------------------
         public static GlyphImage BuildMsdfFontImage(FontGlyph fontGlyph)
