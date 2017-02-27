@@ -33,7 +33,7 @@ namespace OpenTkEssTest
             var buffer = new int[totalImg.Width * totalImg.Height];
             System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
             totalImg.UnlockBits(bmpdata);
-            var glyph = new Typography.Rendering.GlyphImage2(totalImg.Width, totalImg.Height);
+            var glyph = new Typography.Rendering.GlyphImage(totalImg.Width, totalImg.Height);
             glyph.SetImageBuffer(buffer, false);
             fontAtlas.TotalGlyph = glyph;
 

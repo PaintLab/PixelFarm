@@ -10,10 +10,10 @@ namespace Typography.Rendering
 
     public class SimpleFontAtlasBuilder
     {
-        GlyphImage2 latestGenGlyphImage;
+        GlyphImage latestGenGlyphImage;
         Dictionary<int, CacheGlyph> glyphs = new Dictionary<int, CacheGlyph>();
 
-        public void AddGlyph(int codePoint, GlyphImage2 img)
+        public void AddGlyph(int codePoint, GlyphImage img)
         {
             var glyphCache = new CacheGlyph();
             glyphCache.codePoint = codePoint;
@@ -21,7 +21,7 @@ namespace Typography.Rendering
 
             glyphs[codePoint] = glyphCache;
         }
-        public GlyphImage2 BuildSingleImage()
+        public GlyphImage BuildSingleImage()
         {
             //1. add to list 
             var glyphList = new List<CacheGlyph>(glyphs.Count);
@@ -79,12 +79,12 @@ namespace Typography.Rendering
             {
                 CacheGlyph g = glyphList[i];
                 //copy data to totalBuffer
-                GlyphImage2 img = g.img;
+                GlyphImage img = g.img;
                 CopyToDest(img.GetImageBuffer(), img.Width, img.Height, totalBuffer, g.area.Left, g.area.Top, totalMaxLim);
             }
             //------------------
 
-            GlyphImage2 glyphImage = new GlyphImage2(totalMaxLim, imgH);
+            GlyphImage glyphImage = new GlyphImage(totalMaxLim, imgH);
             glyphImage.SetImageBuffer(totalBuffer, true);
             latestGenGlyphImage = glyphImage;
             return glyphImage;

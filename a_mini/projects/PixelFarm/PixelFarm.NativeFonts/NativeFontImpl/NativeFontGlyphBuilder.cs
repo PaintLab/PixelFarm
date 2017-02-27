@@ -8,6 +8,8 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg;
+using Typography.Rendering;
+
 namespace PixelFarm.Drawing.Fonts
 {
     static class NativeFontGlyphBuilder
@@ -478,7 +480,12 @@ namespace PixelFarm.Drawing.Fonts
             int[] outputBuffer = new int[w * h];
             GlyphImage glyphImage = new GlyphImage(w, h);
             glyphImage.BorderXY = borderXY;
-            glyphImage.OriginalGlyphBounds = glyphBounds;
+            glyphImage.OriginalGlyphBounds = Typography.Rendering.RectangleF.FromLTRB(
+                glyphBounds.Left,
+                glyphBounds.Top,
+                glyphBounds.Right,
+                glyphBounds.Bottom);
+
             unsafe
             {
                 fixed (int* output_header = &outputBuffer[0])

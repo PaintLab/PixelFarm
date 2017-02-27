@@ -397,7 +397,7 @@ namespace PixelFarm.DrawingGL
             double xpos = x;
             int n = glyphPlans.Count;
 
-            Typography.Rendering.GlyphImage2 glyphImage = simpleFontAtlas.TotalGlyph;
+            Typography.Rendering.GlyphImage glyphImage = simpleFontAtlas.TotalGlyph;
             GLBitmap glBmp = new GLBitmap(glyphImage.Width, glyphImage.Height, glyphImage.GetImageBuffer(), false);
 
             float c_x = (float)x;

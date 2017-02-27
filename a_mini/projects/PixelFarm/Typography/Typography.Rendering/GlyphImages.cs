@@ -1,10 +1,10 @@
 ﻿using System;
 namespace Typography.Rendering
 {
-    public class GlyphImage2
+    public class GlyphImage
     {
         int[] pixelBuffer;
-        public GlyphImage2(int w, int h)
+        public GlyphImage(int w, int h)
         {
             this.Width = w;
             this.Height = h;
@@ -49,7 +49,7 @@ namespace Typography.Rendering
     {
         public int borderX;
         public int borderY;
-        public GlyphImage2 img;
+        public GlyphImage img;
         public Rectangle area;
         public char character;
         public int codePoint;
@@ -107,7 +107,7 @@ namespace Typography.Rendering
         public int img_vertAdvance;
         public int bitmap_left;
         public int bitmap_top;
-        public IntPtr bitmap;
-        public IntPtr outline;
+        //public IntPtr bitmap;
+        //public IntPtr outline;
     }
 }

@@ -585,7 +585,7 @@ namespace BuildTextureFonts
                 int[] buffer = glyphImg.GetImageBuffer();
                 NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
-                atlasBuilder.AddGlyph(0, CreateGlyphImage2(glyphImg));
+                atlasBuilder.AddGlyph(0, glyphImg);
 
                 using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 {
@@ -598,7 +598,7 @@ namespace BuildTextureFonts
                 }
             }
             //----------------------------------------------------
-            GlyphImage2 totalImg = atlasBuilder.BuildSingleImage();
+            GlyphImage totalImg = atlasBuilder.BuildSingleImage();
             using (Bitmap bmp = new Bitmap(totalImg.Width, totalImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
 
@@ -632,7 +632,7 @@ namespace BuildTextureFonts
                 var buffer = new int[totalImg.Width * totalImg.Height];
                 System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
                 totalImg.UnlockBits(bmpdata);
-                var glyImage = new GlyphImage2(totalImg.Width, totalImg.Height);
+                var glyImage = new GlyphImage(totalImg.Width, totalImg.Height);
                 glyImage.SetImageBuffer(buffer, false);
                 fontAtlas.TotalGlyph = glyImage;
             }
@@ -684,7 +684,7 @@ namespace BuildTextureFonts
                 int[] buffer = glyphImg.GetImageBuffer();
                 NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
-                atlasBuilder.AddGlyph(i, CreateGlyphImage2(glyphImg));
+                atlasBuilder.AddGlyph(i, glyphImg);
                 //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 //{
                 //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
@@ -694,12 +694,7 @@ namespace BuildTextureFonts
                 //}
             }
         }
-        static GlyphImage2 CreateGlyphImage2(GlyphImage glyphImg)
-        {
-            GlyphImage2 glyphImg2 = new GlyphImage2(glyphImg.Width, glyphImg.Height);
-            glyphImg2.SetImageBuffer(glyphImg.GetImageBuffer(), glyphImg.IsBigEndian);
-            return glyphImg2;
-        }
+
         static void BuildFontGlyph(ActualFont nativefont, Typography.Rendering.SimpleFontAtlasBuilder atlasBuilder, char c)
         {
             //font glyph for specific font face
@@ -714,7 +709,7 @@ namespace BuildTextureFonts
             int[] buffer = glyphImg.GetImageBuffer();
             NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
             glyphImg.SetImageBuffer(buffer, false);
-            atlasBuilder.AddGlyph(0, CreateGlyphImage2(glyphImg));
+            atlasBuilder.AddGlyph(0, glyphImg);
             //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             //{
             //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
@@ -743,7 +738,7 @@ namespace BuildTextureFonts
             BuildFontGlyph(font, atlasBuilder, 'B');
             //----------------------------------------------------
             //GlyphImage totalImg = atlasBuilder.BuildSingleImage();
-            GlyphImage2 totalImg = atlasBuilder.BuildSingleImage();
+            GlyphImage totalImg = atlasBuilder.BuildSingleImage();
             using (Bitmap bmp = new Bitmap(totalImg.Width, totalImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
 
@@ -795,7 +790,7 @@ namespace BuildTextureFonts
                 int[] buffer = glyphImg.GetImageBuffer();
                 NativeMsdfGen.SwapColorComponentFromBigEndianToWinGdi(buffer);
                 glyphImg.SetImageBuffer(buffer, false);
-                atlasBuilder.AddGlyph(codepoint, CreateGlyphImage2(glyphImg));
+                atlasBuilder.AddGlyph(codepoint, glyphImg);
 
                 using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
                 {
@@ -806,7 +801,7 @@ namespace BuildTextureFonts
                 }
             }
             //----------------------------------------------------
-            GlyphImage2 totalImg = atlasBuilder.BuildSingleImage();
+            GlyphImage totalImg = atlasBuilder.BuildSingleImage();
             using (Bitmap bmp = new Bitmap(totalImg.Width, totalImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
 
@@ -1002,7 +997,11 @@ namespace BuildTextureFonts
             int[] outputBuffer = new int[w * h];
             GlyphImage glyphImage = new GlyphImage(w, h);
             glyphImage.BorderXY = borderXY;
-            glyphImage.OriginalGlyphBounds = glyphBounds;
+            glyphImage.OriginalGlyphBounds = Typography.Rendering.RectangleF.FromLTRB(
+                glyphBounds.Left,
+                glyphBounds.Top,
+                glyphBounds.Right,
+                glyphBounds.Bottom);
             unsafe
             {
                 fixed (int* output_header = &outputBuffer[0])

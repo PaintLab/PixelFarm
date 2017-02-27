@@ -10,7 +10,7 @@ namespace PixelFarm.Drawing.Fonts
 
     public class SimpleFontAtlas
     {
-        GlyphImage2 totalGlyphImage;
+        GlyphImage totalGlyphImage;
         Dictionary<int, TextureFontGlyphData> codePointLocations = new Dictionary<int, TextureFontGlyphData>();
 
         public int Width { get; set; }
@@ -21,7 +21,7 @@ namespace PixelFarm.Drawing.Fonts
             codePointLocations.Add(codePoint, glyphData);
         }
 
-        public GlyphImage2 TotalGlyph
+        public GlyphImage TotalGlyph
         {
             get { return totalGlyphImage; }
             set { totalGlyphImage = value; }

@@ -21,7 +21,7 @@ namespace PixelFarm.Drawing.Fonts
             //
             //2.1 test build texture on the fly
             SimpleFontAtlasBuilder atlas1 = CreateSampleMsdfTextureFont(fontfile, 14, 0, 255);
-            GlyphImage2 glyphImg2 = atlas1.BuildSingleImage();
+            GlyphImage glyphImg2 = atlas1.BuildSingleImage();
             fontAtlas = atlas1.CreateSimpleFontAtlas();
             //GlyphImage glyphImg = new GlyphImage(glyphImg2.Width, glyphImg2.Height);
             //glyphImg.SetImageBuffer(glyphImg2.GetImageBuffer(), glyphImg2.IsBigEndian);
