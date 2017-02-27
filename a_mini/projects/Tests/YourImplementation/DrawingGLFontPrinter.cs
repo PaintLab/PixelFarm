@@ -15,7 +15,7 @@ namespace PixelFarm.DrawingGL
 
     //this provides 3 ITextPrinter for GLES2-based Canvas
 
-    class AggFontPrinter : ITextPrinter
+    public class AggFontPrinter : ITextPrinter
     {
         ActualImage actualImage;
         ImageGraphics2D imgGfx2d;
@@ -92,7 +92,7 @@ namespace PixelFarm.DrawingGL
     /// <summary>
     /// this use win gdi only
     /// </summary>
-    class WinGdiFontPrinter : ITextPrinter, IDisposable
+    public class WinGdiFontPrinter : ITextPrinter, IDisposable
     {
 
         int _width;
@@ -226,7 +226,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class NativeFontStore
+    public class NativeFontStore
     {
         //TODO: review here again ***
 
@@ -299,7 +299,7 @@ namespace PixelFarm.DrawingGL
 
 
 
-    class GLBmpGlyphTextPrinter : ITextPrinter
+    public class GLBmpGlyphTextPrinter : ITextPrinter
     {
         GlyphLayout _glyphLayout = new GlyphLayout();
         CanvasGL2d canvas2d;
@@ -429,7 +429,7 @@ namespace PixelFarm.DrawingGL
                 }
                 //found
 
-                PixelFarm.Drawing.Rectangle r = ConvToRect(glyphData.Rect); 
+                PixelFarm.Drawing.Rectangle r = ConvToRect(glyphData.Rect);
                 //test draw full msdf gen img
                 //canvas2d.DrawImage(glBmp, c_x + left, (float)(baseline + ((int)(glyphData.ImgHeight))));
 
