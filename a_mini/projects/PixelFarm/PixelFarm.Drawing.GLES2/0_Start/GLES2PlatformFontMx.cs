@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 
-using PixelFarm.DrawingGL;
 
 namespace PixelFarm.Drawing.Fonts
 {
@@ -45,12 +44,10 @@ namespace PixelFarm.Drawing.Fonts
         }
         /////////////////////////////////////////
         //
-        public ActualFont ResolveForGdiFont(RequestFont font)
-        {
-            return null;
-        }
+
         public ActualFont ResolveForTextureFont(RequestFont font)
         {
+
             return null;
 
             ////check if we have texture font fot this font 
@@ -136,6 +133,6 @@ namespace PixelFarm.Drawing.Fonts
 
     }
 
- 
-    
+
+
 }
