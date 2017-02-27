@@ -89,7 +89,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Typography", "Pix
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.TextureAtlas", "PixelFarm\PixelFarm.TextureAtlas\PixelFarm.TextureAtlas.csproj", "{0F6C821E-2F60-4E60-AEC4-E4254D859902}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.1_MiniAgg", "1.1_MiniAgg", "{682F4E60-6F63-482D-9716-6F83461D6FA5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.1_Agg_PureSoftwarePixelRenderer", "1.1_Agg_PureSoftwarePixelRenderer", "{682F4E60-6F63-482D-9716-6F83461D6FA5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.2_Typography", "1.2_Typography", "{8A756339-0941-48A2-B5E8-5371FFB24AF9}"
 EndProject
