@@ -402,6 +402,11 @@ namespace PixelFarm.DrawingGL
             int left = 0;
             //float baseline = c_y - 24;//eg line height= 24 //create a list
             float baseline = c_y - 24;//eg line height= 24 //create a list
+            bool isFlipY = canvas2d.FlipY;
+            if (!isFlipY)
+            {   
+                canvas2d.FlipY = true;
+            }
             for (int i = 0; i < n; ++i)
             {
                 GlyphPlan glyph = glyphPlans[i];
@@ -424,6 +429,7 @@ namespace PixelFarm.DrawingGL
                     (float)(baseline + ((int)(glyphData.ImgHeight))), 1.0f);
             }
 
+            canvas2d.FlipY = isFlipY;
             glBmp.Dispose();
             //temp here
 
