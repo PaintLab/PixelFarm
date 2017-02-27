@@ -142,8 +142,8 @@ namespace PixelFarm.Drawing.Fonts
         {
             if (_currentTypeface == null)
             {
-                OpenFontReader reader = new OpenFontReader();
-                using (FileStream fs = new FileStream(_currentFontFilename, FileMode.Open))
+                OpenFontReader reader = new OpenFontReader();                 
+                using (FileStream fs = new FileStream(_currentFontFilename, FileMode.Open, FileAccess.Read))
                 {
                     _currentTypeface = reader.Read(fs);
                 }
