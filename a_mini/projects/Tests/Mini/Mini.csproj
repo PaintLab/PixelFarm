@@ -43,15 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\pixelfarm\win32utils\MyWin32.cs">
-      <Link>Win32Utils\MyWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\pixelfarm\win32utils\NativeTextWin32.cs">
-      <Link>Win32Utils\NativeTextWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\pixelfarm\win32utils\NativeWin32MemoryDc.cs">
-      <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
-    </Compile>
     <Compile Include="0_Start\DemoBase.cs" />
     <Compile Include="2_Shared\dbugVxsDrawPoints.cs" />
     <Compile Include="2_Shared\Square.cs" />

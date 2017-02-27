@@ -9,6 +9,7 @@ namespace PixelFarm.Drawing.WinGdi
         static InstalledFontCollection s_installFontCollection = new InstalledFontCollection();
         static WinGdiPlusPlatform()
         {
+
             //var installFontsWin32 = new InstallFontsProviderWin32();
             //s_installFontCollection.LoadInstalledFont(installFontsWin32.GetInstalledFontIter());
             //WinGdiFontFace.SetInstalledFontCollection(s_installFontCollection);
