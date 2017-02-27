@@ -8,11 +8,14 @@ namespace PixelFarm.Drawing.Fonts
     {
         IEnumerable<string> GetInstalledFontIter();
     }
+    public interface IFontLoader
+    {
+        InstalledFont GetFont(string fontName, InstalledFontStyle style);
+    }
 
-   
     public class InstalledFont
     {
-        
+
         public InstalledFont(string fontName, string fontSubFamily, string fontPath)
         {
             FontName = fontName;
@@ -41,7 +44,7 @@ namespace PixelFarm.Drawing.Fonts
 
     public delegate InstalledFont FontNotFoundHandler(InstalledFontCollection fontCollection, string fontName, InstalledFontStyle style);
 
-    public class InstalledFontCollection
+    public class InstalledFontCollection 
     {
 
         Dictionary<string, InstalledFont> regular_Fonts = new Dictionary<string, InstalledFont>();
@@ -52,7 +55,6 @@ namespace PixelFarm.Drawing.Fonts
         Dictionary<string, InstalledFont> grasItalic_Fonts = new Dictionary<string, InstalledFont>();
 
         List<InstalledFont> installedFonts;
-
         FontNotFoundHandler fontNotFoundHandler;
 
         public InstalledFontCollection()
@@ -192,7 +194,7 @@ namespace PixelFarm.Drawing.Fonts
         }
     }
 
-   
+
 
 
 }

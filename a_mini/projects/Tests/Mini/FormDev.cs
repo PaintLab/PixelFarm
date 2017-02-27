@@ -227,7 +227,7 @@ namespace Mini
         {
         }
 
-        PixelFarm.Drawing.Fonts.GdiPathFontStore gdiPathFontStore = new PixelFarm.Drawing.Fonts.GdiPathFontStore();
+        //PixelFarm.Drawing.Fonts.GdiPathFontStore gdiPathFontStore = new PixelFarm.Drawing.Fonts.GdiPathFontStore();
         private void button3_Click(object sender, EventArgs e)
         {
             ////----------------------
@@ -350,8 +350,10 @@ namespace Mini
         private void button7_Click(object sender, EventArgs e)
         {
 
-            var installFontProvider = new PixelFarm.Drawing.WinGdi.InstallFontsProviderWin32();
+            var installFontProvider = new PixelFarm.Drawing.InstallFontsProviderWin32();
             List<PixelFarm.Drawing.Fonts.InstalledFont> fonts = PixelFarm.Drawing.Fonts.InstalledFontCollection.ReadPreviewFontData(installFontProvider.GetInstalledFontIter());
+
+
             System.Drawing.Bitmap bmp1 = new Bitmap(800, 600, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bmp1);
 

@@ -3,53 +3,20 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.IO;
-using Microsoft.Win32;
-//
 using PixelFarm.Drawing.Fonts;
 using Win32;
+
 namespace PixelFarm.Drawing.WinGdi
 {
-    /// <summary>
-    /// provide install font from Windows directory
-    /// </summary>
-    public class InstallFontsProviderWin32 : IInstalledFontProvider
-    {
-        public IEnumerable<string> GetInstalledFontIter()
-        {
-            //-------------------------------------------------
-            //TODO: review here, this is not platform depend
-            //-------------------------------------------------
-            //check if MAC or linux font folder too
-            //-------------------------------------------------
-            string[] localMachineFonts = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts", false).GetValueNames();
-            // get parent of System folder to have Windows folder
-            DirectoryInfo dirWindowsFolder = Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.System));
-            string strFontsFolder = Path.Combine(dirWindowsFolder.FullName, "Fonts");
-            RegistryKey regKey = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts");
-            //---------------------------------------- 
-            foreach (string winFontName in localMachineFonts)
-            {
-                string f = (string)regKey.GetValue(winFontName);
-                if (f.EndsWith(".ttf") || f.EndsWith(".otf"))
-                {
-                    yield return Path.Combine(strFontsFolder, f);
-                }
-            }
-        }
-    }
+
 
     public class WinGdiFontFace : FontFace
     {
         FontFace nopenTypeFontFace;
         FontStyle style;
-        
-        static InstalledFontCollection s_installedFonts;
-
+        static IFontLoader s_fontLoader;
         public WinGdiFontFace(string fontName, FontStyle style)
         {
-
-
             this.style = style;
             InstalledFontStyle installedStyle = InstalledFontStyle.Regular;
             switch (style)
@@ -67,26 +34,26 @@ namespace PixelFarm.Drawing.WinGdi
             }
 
             //resolve
-            InstalledFont foundInstalledFont = s_installedFonts.GetFont(fontName, installedStyle);
+            InstalledFont foundInstalledFont = s_fontLoader.GetFont(fontName, installedStyle);
             //TODO: review 
             this.nopenTypeFontFace = OpenFontLoader.LoadFont(
-                foundInstalledFont.FontPath, 
-                ScriptLangs.Latin, 
+                foundInstalledFont.FontPath,
+                ScriptLangs.Latin,
                 WriteDirection.LTR);
         }
 
-        public static void SetInstalledFontCollection(InstalledFontCollection installedFonts)
+        public static void SetFontLoader(IFontLoader fontLoader)
         {
             //set once
-            if (s_installedFonts != null)
+            if (s_fontLoader != null)
             {
                 throw new NotSupportedException();
             }
-            s_installedFonts = installedFonts;
+            s_fontLoader = fontLoader;
         }
         protected override void OnDispose()
         {
-            s_installedFonts = null;
+            s_fontLoader = null;
         }
         public override string FontPath
         {

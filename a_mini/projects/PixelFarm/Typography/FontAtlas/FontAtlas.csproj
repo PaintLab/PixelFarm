@@ -40,7 +40,7 @@
     <Compile Include="MsdfGlyphGenExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleFontAtlas.cs" />
-    <Compile Include="SimpleFontAtlasBuilder2.cs" />
+    <Compile Include="SimpleFontAtlasBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Typography.MsdfGen\Typography.MsdfGen.csproj">
