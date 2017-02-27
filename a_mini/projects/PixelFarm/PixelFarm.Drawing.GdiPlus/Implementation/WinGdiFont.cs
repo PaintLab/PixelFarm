@@ -117,6 +117,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get { return nopenTypeFontFace.LineGapInDzUnit; }
         }
+        public override object GetInternalTypeface()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class WinGdiFont : ActualFont

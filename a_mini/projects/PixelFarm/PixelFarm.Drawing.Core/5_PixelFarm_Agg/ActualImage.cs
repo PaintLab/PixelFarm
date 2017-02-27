@@ -29,7 +29,7 @@ namespace PixelFarm.Drawing.Fonts
             this.Width = w;
             this.Height = h;
         }
-        public PixelFarm.Drawing.RectangleF OriginalGlyphBounds
+        public RectangleF OriginalGlyphBounds
         {
             get;
             set;
@@ -67,7 +67,7 @@ namespace PixelFarm.Drawing.Fonts
 }
 namespace PixelFarm.Agg
 {
-   
+
     public sealed class ActualImage : PixelFarm.Drawing.Image
     {
         int width;

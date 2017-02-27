@@ -1,15 +1,13 @@
 ﻿//MIT, 2016-2017, WinterDev
 //----------------------------------- 
 using System;
-using Typography.Rendering;
-
 namespace PixelFarm.Drawing.Fonts
 {
 
     class TextureFontFace : FontFace
     {
 
-       
+
         SimpleFontAtlas fontAtlas;
         FontFace primFontFace;
 
@@ -17,10 +15,10 @@ namespace PixelFarm.Drawing.Fonts
         {
             //for msdf font
             //1 font atlas may support mutliple font size  
-            this.fontAtlas = fontAtlas; 
-            this.primFontFace = primFontFace; 
+            this.fontAtlas = fontAtlas;
+            this.primFontFace = primFontFace;
         }
-         
+
         public override float GetScale(float pointSize)
         {
             return primFontFace.GetScale(pointSize);
@@ -61,6 +59,10 @@ namespace PixelFarm.Drawing.Fonts
         public SimpleFontAtlas FontAtlas
         {
             get { return fontAtlas; }
+        }
+        public override object GetInternalTypeface()
+        {
+            return primFontFace.GetInternalTypeface();
         }
 
     }

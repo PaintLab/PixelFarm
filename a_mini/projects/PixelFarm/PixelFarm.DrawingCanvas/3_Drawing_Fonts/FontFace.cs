@@ -27,6 +27,7 @@ namespace PixelFarm.Drawing.Fonts
         public abstract int AscentInDzUnit { get; }
         public abstract int DescentInDzUnit { get; }
         public abstract int LineGapInDzUnit { get; }
+        public abstract object GetInternalTypeface();
     }
 
     /// <summary>

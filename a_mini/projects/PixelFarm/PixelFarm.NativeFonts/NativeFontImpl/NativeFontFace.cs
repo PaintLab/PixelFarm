@@ -146,6 +146,10 @@ namespace PixelFarm.Drawing.Fonts
             set { this.hb_font = value; }
         }
 
+        public override object GetInternalTypeface()
+        {
+            throw new NotImplementedException();
+        }
 
         //internal NativeFont GetFontAtPixelSize(int pixelSize)
         //{

@@ -9,7 +9,6 @@ using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
 
-
     public class VxsTextPrinter : ITextPrinter
     {
 
@@ -134,7 +133,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public void Print(float size, string str, List<GlyphPlan> glyphPlanBuffer)
         {
-            
+
             Print(size, str.ToCharArray(), glyphPlanBuffer);
 
         }
@@ -142,7 +141,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             if (_currentTypeface == null)
             {
-                OpenFontReader reader = new OpenFontReader();                 
+                OpenFontReader reader = new OpenFontReader();
                 using (FileStream fs = new FileStream(_currentFontFilename, FileMode.Open, FileAccess.Read))
                 {
                     _currentTypeface = reader.Read(fs);

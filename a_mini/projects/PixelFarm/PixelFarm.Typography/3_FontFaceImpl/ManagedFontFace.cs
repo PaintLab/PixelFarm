@@ -59,7 +59,10 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return ntypeface.LineGap; }
         }
-
+        public override object GetInternalTypeface()
+        {
+            return ntypeface;
+        }
     }
 
     class ManagedActualFont : ActualFont

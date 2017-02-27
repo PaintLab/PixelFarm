@@ -219,7 +219,29 @@ namespace Typography.Rendering
             xmldoc.Save(filename);
         }
 
+        public SimpleFontAtlas CreateSimpleFontAtlas()
+        {
+            SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
+            foreach (CacheGlyph g in glyphs.Values)
+            { 
+                //convert char to hex
+                string unicode = ("0x" + ((int)g.character).ToString("X"));//code point
+                Rectangle area = g.area;
+                var glyphData = new TextureFontGlyphData();
+                area.Y += area.Height;//*** 
 
+                //set font matrix to glyph font data
+                glyphData.Rect = PixelFarm.Drawing.Rectangle.FromLTRB(area.X, area.Top, area.Right, area.Bottom);
+                glyphData.AdvanceY = g.glyphMatrix.advanceY;
+                glyphData.ImgWidth = g.img.Width;
+
+                simpleFontAtlas.AddGlyph(g.codePoint, glyphData); 
+
+            }
+
+
+            return simpleFontAtlas;
+        }
         //read font info from xml document
         public SimpleFontAtlas LoadFontInfo(string filename)
         {
