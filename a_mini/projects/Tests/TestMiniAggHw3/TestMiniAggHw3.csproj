@@ -39,6 +39,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Mini\1_FineImpl\InstallFontsProviderWin32.cs">
+      <Link>1_FineImpl\InstallFontsProviderWin32.cs</Link>
+    </Compile>
     <Compile Include="00_DemoBase\DemoBase.cs" />
     <Compile Include="00_DemoBase\ES2Utils2.cs" />
     <Compile Include="00_DemoBase\FormDev.cs">
@@ -144,10 +147,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
       <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
-      <Project>{1AA171E3-523C-4DD5-A169-DE6322991FF5}</Project>
-      <Name>PixelFarm.Drawing.GdiPlus</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
       <Project>{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}</Project>

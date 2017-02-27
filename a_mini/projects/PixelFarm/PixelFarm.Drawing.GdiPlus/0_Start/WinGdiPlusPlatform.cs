@@ -9,11 +9,10 @@ namespace PixelFarm.Drawing.WinGdi
         static InstalledFontCollection s_installFontCollection = new InstalledFontCollection();
         static WinGdiPlusPlatform()
         {
-            var installFontsWin32 = new InstallFontsProviderWin32();
-            s_installFontCollection.LoadInstalledFont(installFontsWin32.GetInstalledFontIter());
-            WinGdiFontFace.SetInstalledFontCollection(s_installFontCollection);
+            //var installFontsWin32 = new InstallFontsProviderWin32();
+            //s_installFontCollection.LoadInstalledFont(installFontsWin32.GetInstalledFontIter());
+            //WinGdiFontFace.SetInstalledFontCollection(s_installFontCollection);
             PixelFarm.Agg.AggBuffMx.SetNaiveBufferImpl(new Win32AggBuffMx());
-
             //3. set default encoing
             WinGdiTextService.SetDefaultEncoding(System.Text.Encoding.ASCII);
         }
