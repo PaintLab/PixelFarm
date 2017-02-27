@@ -1,10 +1,12 @@
 ﻿//MIT, 2015-2016, Michael Popoloski
 
 using System;
-namespace SharpFont
+namespace Typography.Rendering
 {
     public struct Rect
     {
+        //TODO: review here 
+
         public int X, Y, Width, Height;
         public int Right { get { return X + Width; } }
         public int Bottom { get { return Y + Height; } }
@@ -27,6 +29,9 @@ namespace SharpFont
 
     struct ResizableArray<T>
     {
+        //TODO: review here 
+        //use List<T>
+
         public T[] Data;
         public int Count;
 

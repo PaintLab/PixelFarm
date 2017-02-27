@@ -91,10 +91,6 @@
       <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
       <Name>PixelFarm.Drawing.MiniAgg</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.TextureAtlas\PixelFarm.TextureAtlas.csproj">
-      <Project>{0f6c821e-2f60-4e60-aec4-e4254d859902}</Project>
-      <Name>PixelFarm.TextureAtlas</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj">
       <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>
       <Name>PixelFarm.NativeFonts</Name>
@@ -102,10 +98,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
       <Name>PixelFarm.Typography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.MsdfGen\Typography.MsdfGen.csproj">
-      <Project>{8f69ab8d-174a-4912-9328-cae8eda5564b}</Project>
-      <Name>Typography.MsdfGen</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Typography.Rendering\Typography.Rendering.csproj">
       <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>

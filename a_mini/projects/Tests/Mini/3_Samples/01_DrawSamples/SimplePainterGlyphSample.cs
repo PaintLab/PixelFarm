@@ -27,7 +27,7 @@ namespace PixelFarm.Agg.SimplePainter
             font2 = new Drawing.RequestFont(fontName, 10);
 
             //------------
-            var win32InstalledFont = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            var win32InstalledFont = new PixelFarm.Drawing.WinGdi.InstallFontsProviderWin32();
             InstalledFontCollection collection = new InstalledFontCollection();
             collection.LoadInstalledFont(win32InstalledFont.GetInstalledFontIter());
             //test 

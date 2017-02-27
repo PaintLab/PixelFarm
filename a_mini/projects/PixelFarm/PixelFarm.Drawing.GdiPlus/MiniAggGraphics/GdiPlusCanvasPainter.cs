@@ -1,10 +1,8 @@
 ﻿//MIT, 2016-2017, WinterDev
 
 using System;
-using System.Collections.Generic;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
-using PixelFarm.Drawing.Fonts;
 
 namespace PixelFarm.Drawing.WinGdi
 {
@@ -527,6 +525,6 @@ namespace PixelFarm.Drawing.WinGdi
             WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
             VxsHelper.FillPath(_gfx, wRenderVx.path, this.FillColor);
         }
-        
+
     }
 }

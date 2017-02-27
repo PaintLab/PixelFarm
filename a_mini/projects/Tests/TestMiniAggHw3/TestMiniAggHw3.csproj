@@ -95,7 +95,6 @@
     <Compile Include="Sample03\T114_FrameBufferWithConvFilterEffect.cs" />
     <Compile Include="Sample04\T404_FontAtlas.cs" />
     <Compile Include="Sample04\T405_DrawString.cs" />
-    <Compile Include="Win32Impl.cs" />
     <EmbeddedResource Include="00_DemoBase\FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
@@ -129,10 +128,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.TextureAtlas\PixelFarm.TextureAtlas.csproj">
-      <Project>{0f6c821e-2f60-4e60-aec4-e4254d859902}</Project>
-      <Name>PixelFarm.TextureAtlas</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj">
       <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>

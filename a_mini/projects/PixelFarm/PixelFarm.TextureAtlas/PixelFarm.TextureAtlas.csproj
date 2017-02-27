@@ -65,8 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinPacker.cs" />
+    <Compile Include="MsdfGlyphGen.cs" />
+    <Compile Include="MsdfGlyphGenExtension.cs" />
     <Compile Include="MySimpleFontAtlasBuilder.cs" />
     <Compile Include="SimpleFontAtlas.cs" />
+    <Compile Include="SimpleFontAtlasBuilder2.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
