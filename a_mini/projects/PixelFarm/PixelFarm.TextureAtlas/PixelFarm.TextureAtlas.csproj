@@ -76,8 +76,8 @@
     <Compile Include="..\Typography\FontAtlas\SimpleFontAtlas.cs">
       <Link>FontAtlas\SimpleFontAtlas.cs</Link>
     </Compile>
-    <Compile Include="..\Typography\FontAtlas\SimpleFontAtlasBuilder2.cs">
-      <Link>FontAtlas\SimpleFontAtlasBuilder2.cs</Link>
+    <Compile Include="..\Typography\FontAtlas\SimpleFontAtlasBuilder.cs">
+      <Link>FontAtlas\SimpleFontAtlasBuilder.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

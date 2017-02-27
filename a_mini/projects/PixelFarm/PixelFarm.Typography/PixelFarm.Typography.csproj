@@ -72,8 +72,8 @@
     <Compile Include="..\Typography\FontAtlas\SimpleFontAtlas.cs">
       <Link>4_FontAtlas\SimpleFontAtlas.cs</Link>
     </Compile>
-    <Compile Include="..\Typography\FontAtlas\SimpleFontAtlasBuilder2.cs">
-      <Link>4_FontAtlas\SimpleFontAtlasBuilder2.cs</Link>
+    <Compile Include="..\Typography\FontAtlas\SimpleFontAtlasBuilder.cs">
+      <Link>4_FontAtlas\SimpleFontAtlasBuilder.cs</Link>
     </Compile>
     <Compile Include="..\Typography\Typography.MsdfGen\EdgeColor.cs">
       <Link>5_Msdf\EdgeColor.cs</Link>
