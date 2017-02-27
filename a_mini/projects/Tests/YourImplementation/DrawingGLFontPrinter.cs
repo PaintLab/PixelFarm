@@ -15,7 +15,7 @@ namespace PixelFarm.DrawingGL
 
     //this provides 3 ITextPrinter for GLES2-based Canvas
 
-    class AggFontPrinter : ITextPrinter
+    public class AggFontPrinter : ITextPrinter
     {
         ActualImage actualImage;
         ImageGraphics2D imgGfx2d;
@@ -92,7 +92,7 @@ namespace PixelFarm.DrawingGL
     /// <summary>
     /// this use win gdi only
     /// </summary>
-    class WinGdiFontPrinter : ITextPrinter, IDisposable
+    public class WinGdiFontPrinter : ITextPrinter, IDisposable
     {
 
         int _width;
@@ -226,7 +226,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    class NativeFontStore
+    public class NativeFontStore
     {
         //TODO: review here again ***
 
@@ -299,35 +299,28 @@ namespace PixelFarm.DrawingGL
 
 
 
-    class GLBmpGlyphTextPrinter : ITextPrinter
+    public class GLBmpGlyphTextPrinter : ITextPrinter
     {
         GlyphLayout _glyphLayout = new GlyphLayout();
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         SimpleFontAtlas simpleFontAtlas;
-        InstalledFontCollection fontCollections;
+        IFontLoader _fontLoader;
         FontFace ff;
         RequestFont font;
         NativeFontStore nativeFontStore = new NativeFontStore();
-        public GLBmpGlyphTextPrinter(GLCanvasPainter painter, IInstalledFontProvider installedFontProvider)
+        public GLBmpGlyphTextPrinter(GLCanvasPainter painter, IFontLoader fontLoader)
         {
             //create text printer for use with canvas painter
             this.painter = painter;
             this.canvas2d = painter.Canvas;
-
-            //TODO: review font manager here again
-            //not need to iterate all fonts*** 
-            //------
-            fontCollections = new InstalledFontCollection();
-            fontCollections.LoadInstalledFont(installedFontProvider.GetInstalledFontIter());
-
+            _fontLoader = fontLoader;
             //------
             ChangeFont(painter.CurrentFont);
         }
         public void ChangeFontColor(Color color)
         {
-            //called by owner painter 
-
+            //called by owner painter  
 
         }
         public void ChangeFont(RequestFont font)
@@ -336,7 +329,7 @@ namespace PixelFarm.DrawingGL
             //we resolve it to actual font
             this.font = font;
             //resolve
-            string fontfile = fontCollections.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
+            string fontfile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
             ff = TextureFontLoader.LoadFont(fontfile, ScriptLangs.Latin, WriteDirection.LTR, out simpleFontAtlas);
 
         }
@@ -429,7 +422,7 @@ namespace PixelFarm.DrawingGL
                 }
                 //found
 
-                PixelFarm.Drawing.Rectangle r = ConvToRect(glyphData.Rect); 
+                PixelFarm.Drawing.Rectangle r = ConvToRect(glyphData.Rect);
                 //test draw full msdf gen img
                 //canvas2d.DrawImage(glBmp, c_x + left, (float)(baseline + ((int)(glyphData.ImgHeight))));
 

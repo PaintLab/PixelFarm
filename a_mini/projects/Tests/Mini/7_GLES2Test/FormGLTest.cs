@@ -53,9 +53,9 @@ namespace Mini
 
                 //------------
                 //resolve request font
-                var win32InstalledFont = new PixelFarm.Drawing.WinGdi.InstallFontsProviderWin32();
-                
-                var printer = new GLBmpGlyphTextPrinter(canvasPainter, win32InstalledFont);
+
+
+                var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
                 canvasPainter.TextPrinter = printer;
             }
             return miniGLControl;

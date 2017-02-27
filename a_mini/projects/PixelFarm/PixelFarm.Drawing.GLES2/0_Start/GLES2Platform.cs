@@ -38,26 +38,14 @@ namespace PixelFarm.Drawing.GLES2
         }
 
         public static CanvasGL2d CreateCanvasGL2d(int w, int h)
-        {
-            Init();
+        { 
             return new CanvasGL2d(w, h);
         }
-        static bool s_isInit;
-        static void Init()
+        
+        public static void SetFontLoader(IFontLoader fontLoader)
         {
-            if (s_isInit)
-            {
-                return;
-            }
-            s_isInit = true;
-            if (!GLES2PlatformFontMx.DidLoadFonts)
-            {
-                //GLES2PlatformFontMx.LoadInstalledFont(
-                //    new PixelFarm.Drawing.Win32.InstallFontsProviderWin32());
-            }
-
+            GLES2PlatformFontMx.SetFontLoader(fontLoader);
         }
-
         public static InstalledFont GetInstalledFont(string fontName, InstalledFontStyle style)
         {
             return GLES2PlatformFontMx.GetInstalledFont(fontName, style);
