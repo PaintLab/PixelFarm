@@ -122,23 +122,5 @@ namespace PixelFarm.Drawing.Fonts
         public int bitmap_top;
         public IntPtr bitmap;
         public IntPtr outline;
-    }
-
-
-
-    struct CharAndGlyphMap
-    {
-        public readonly uint glyphIndex;
-        public readonly char charcode;
-        public CharAndGlyphMap(uint glyphIndex, char charcode)
-        {
-            this.charcode = charcode;
-            this.glyphIndex = glyphIndex;
-        }
-        public override string ToString()
-        {
-            return glyphIndex + ":" + charcode.ToString() + "(" + ((int)charcode).ToString() + ")";
-        }
-
-    }
+    } 
 }
