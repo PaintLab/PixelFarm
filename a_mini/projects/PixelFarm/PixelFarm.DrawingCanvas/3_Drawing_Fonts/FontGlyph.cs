@@ -15,15 +15,8 @@ namespace PixelFarm.Drawing.Fonts
     /// </summary>
     public class FontGlyph
     {
-        public FontGlyph()
-        {
 
-        }
-        public GlyphMatrix glyphMatrix;
-        /// <summary>
-        /// original 8bpp image buffer
-        /// </summary>
-        public byte[] glyImgBuffer8;
+        public GlyphMatrix glyphMatrix; 
         /// <summary>
         /// 32 bpp image for render
         /// </summary>
@@ -46,9 +39,6 @@ namespace PixelFarm.Drawing.Fonts
         /// code point/glyph index?
         /// </summary>
         public int codePoint;
-
-        public IntPtr nativeOutlinePtr;
-        public IntPtr nativeBmpPtr;
     }
 
 
@@ -76,7 +66,5 @@ namespace PixelFarm.Drawing.Fonts
         public int img_vertAdvance;
         public int bitmap_left;
         public int bitmap_top;
-        //public IntPtr bitmap;
-        //public IntPtr outline;
     }
 }
