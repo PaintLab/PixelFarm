@@ -67,7 +67,7 @@ namespace Mini
                 ImageGraphics2D imgGfx2d = Initialize(myWidth, myHeight, 32);
                 AggCanvasPainter aggPainter = new AggCanvasPainter(imgGfx2d);
                 //set text printer for agg canvas painter
-                TextPrinter textPrinter = new TextPrinter(aggPainter);
+                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter);
                 aggPainter.TextPrinter = textPrinter;
 
                 painter = aggPainter;

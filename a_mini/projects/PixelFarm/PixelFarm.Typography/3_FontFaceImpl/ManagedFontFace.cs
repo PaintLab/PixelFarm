@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 using PixelFarm.Agg;
-using Typography.OpenFont; 
+using Typography.OpenFont;
 
 namespace PixelFarm.Drawing.Fonts
 {
@@ -59,7 +59,10 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return ntypeface.LineGap; }
         }
-
+        public override object GetInternalTypeface()
+        {
+            return ntypeface;
+        }
     }
 
     class ManagedActualFont : ActualFont
@@ -183,6 +186,5 @@ namespace PixelFarm.Drawing.Fonts
             return found;
         }
     }
-
-
 }
+

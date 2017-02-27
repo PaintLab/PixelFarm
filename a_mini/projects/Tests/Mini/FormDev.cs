@@ -350,7 +350,7 @@ namespace Mini
         private void button7_Click(object sender, EventArgs e)
         {
 
-            PixelFarm.Drawing.Win32.InstallFontsProviderWin32 installFontProvider = new PixelFarm.Drawing.Win32.InstallFontsProviderWin32();
+            var installFontProvider = new PixelFarm.Drawing.WinGdi.InstallFontsProviderWin32();
             List<PixelFarm.Drawing.Fonts.InstalledFont> fonts = PixelFarm.Drawing.Fonts.InstalledFontCollection.ReadPreviewFontData(installFontProvider.GetInstalledFontIter());
             System.Drawing.Bitmap bmp1 = new Bitmap(800, 600, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bmp1);

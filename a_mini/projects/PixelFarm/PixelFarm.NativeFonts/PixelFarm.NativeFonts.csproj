@@ -39,12 +39,11 @@
     <Compile Include="HarfBuzzShapingService.cs" />
     <Compile Include="NativeBridgeHB.cs" />
     <Compile Include="NativeDll.cs" />
-    <Compile Include="NativeFonts\FontLoaderImpls.cs" />
-    <Compile Include="NativeFonts\NativeBridgeFreeType.cs" />
-    <Compile Include="NativeFonts\NativeFont.cs" />
-    <Compile Include="NativeFonts\NativeFontFace.cs" />
-    <Compile Include="NativeFonts\NativeFontGlyphBuilder.cs" />
-    <Compile Include="NativeFonts\NativeFonts.cs" />
+    <Compile Include="NativeFontImpl\FontLoaderImpls.cs" />
+    <Compile Include="NativeFontImpl\NativeBridgeFreeType.cs" />
+    <Compile Include="NativeFontImpl\NativeFontFace.cs" />
+    <Compile Include="NativeFontImpl\NativeFontGlyphBuilder.cs" />
+    <Compile Include="NativeFontImpl\NativeFonts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

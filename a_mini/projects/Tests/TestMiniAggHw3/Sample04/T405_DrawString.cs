@@ -31,8 +31,7 @@ namespace OpenTkEssTest
             hbShapingService = new HarfBuzzShapingService();
             hbShapingService.SetAsCurrentImplementation();
 
-            painter = new GLCanvasPainter(canvas2d, max, max);
-            painter.UseTextureFontIfAvailable = true;
+            painter = new GLCanvasPainter(canvas2d, max, max); 
             painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 24);
             //------------------------------------------------
             
