@@ -1,9 +1,5 @@
 ﻿//MIT, 2014-2017, WinterDev
-//-----------------------------------
-//use FreeType and HarfBuzz wrapper
-//native dll lib
-//plan?: port  them to C#  :)
-//-----------------------------------
+//----------------------------------- 
 
 using System;
 using System.Runtime.InteropServices;
