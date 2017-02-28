@@ -4,24 +4,24 @@ namespace Mini
 {
     public partial class FormTestBed : Form
     {
-        MyMiniGLES2Control miniGLControl;
+        OpenTK.MyGLControl miniGLControl;
         public FormTestBed()
         {
             InitializeComponent();
         }
-        public MyMiniGLES2Control InitMiniGLControl(int w, int h)
+        public OpenTK.MyGLControl InitMiniGLControl(int w, int h)
         {
             if (miniGLControl == null)
             {
-                miniGLControl = new MyMiniGLES2Control();
+                miniGLControl = new OpenTK.MyGLControl();
                 miniGLControl.Width = w;
                 miniGLControl.Height = h;
-                miniGLControl.ClearColor = PixelFarm.Drawing.Color.Blue;
+               // miniGLControl.ClearColor = PixelFarm.Drawing.Color.Blue;
                 this.Controls.Add(miniGLControl);
             }
             return miniGLControl;
         }
-        public MyMiniGLES2Control MiniGLControl
+        public OpenTK.MyGLControl MiniGLControl
         {
             get { return this.miniGLControl; }
         }
