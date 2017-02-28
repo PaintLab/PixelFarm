@@ -82,12 +82,6 @@
     <Compile Include="7_GLES2Test\FormGLTest.Designer.cs">
       <DependentUpon>FormGLTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="7_GLES2Test\MyMiniGLES2Control.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="7_GLES2Test\MyMiniGLES2Control.Designer.cs">
-      <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
-    </Compile>
     <Compile Include="8_SkiaTest\FormSkia1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,9 +161,6 @@
     <Compile Include="xnotused\TextPrinter.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
       <DependentUpon>FormGLTest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="7_GLES2Test\MyMiniGLES2Control.resx">
-      <DependentUpon>MyMiniGLES2Control.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="8_SkiaTest\FormSkia1.resx">
       <DependentUpon>FormSkia1.cs</DependentUpon>

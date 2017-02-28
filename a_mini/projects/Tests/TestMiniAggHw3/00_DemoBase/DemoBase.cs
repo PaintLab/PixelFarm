@@ -136,7 +136,7 @@ namespace Mini
         }
         //-------------------------------
         protected FormTestBed formTestBed;
-        protected MyMiniGLES2Control miniGLControl;
+        protected OpenTK.MyGLControl miniGLControl;
         //-------------------------------
         protected IntPtr getDisplay()
         {
