@@ -10,7 +10,7 @@ namespace OpenTK
     public partial class MyGLControl : GLControl
     {
         OpenTK.Graphics.Color4 clearColor;
-        EventHandler glPaintHandler;  
+        EventHandler glPaintHandler;
         static OpenTK.Graphics.GraphicsMode gfxmode = new OpenTK.Graphics.GraphicsMode(
              DisplayDevice.Default.BitsPerPixel,//default 32 bits color
              16,//depth buffer => 24
@@ -57,10 +57,13 @@ namespace OpenTK
                 }
             }
         }
+        public void InitSetup2d(int x, int y, int w, int h)
+        {
 
+        }
         protected override void OnPaint(PaintEventArgs e)
         {
-          
+
             base.OnPaint(e);
             if (!this.DesignMode)
             {
