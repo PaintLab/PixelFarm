@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AssemblyName>PixelFarm.One.HtmlRenderer</AssemblyName>
+    <AssemblyName>PixelFarm.Drawing</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -30,8 +30,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -181,25 +179,6 @@
     <Compile Include="PixelFarm.Drawing.Core\ForNet20\ExtensionAttribute.cs" />
     <Compile Include="PixelFarm.Drawing.Core\MiniAggGraphics.Buffer\AggMemMx.cs" />
     <Compile Include="PixelFarm.Drawing.Core\MiniAggGraphics.Buffer\NativeBufferMx.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\..\win32utils\MyWin32.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\..\win32utils\NativeTextWin32.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\..\win32utils\NativeWin32MemoryDc.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\0_Start\WinGdiPlusPlatform.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\1_MyGdiPlusCanvas_Specific.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Canvas\Conv.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Implementation\BitmapHelper.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Implementation\GdiPlusBitmapBackBuffer.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Implementation\Region.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Implementation\WinGdiFont.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\MiniAggGraphics\BufferBitmapStore.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\MiniAggGraphics\GdiPlusCanvasPainter.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\MiniAggGraphics\GdiPlusRenderVx.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\MiniAggGraphics\VxsHelper.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Properties\Resources.Designer.cs" />
-    <Compile Include="PixelFarm.Drawing.GdiPlus\Properties\Settings.Designer.cs" />
     <Compile Include="PixelFarm.DrawingCanvas\0_Start\GraphicsPlatform.cs" />
     <Compile Include="PixelFarm.DrawingCanvas\1_Canvas\Canvas.cs" />
     <Compile Include="PixelFarm.DrawingCanvas\1_Canvas\CanvasOptions.cs" />
@@ -347,9 +326,6 @@
     <Compile Include="Typography\Typography.Rendering\GlyphFitOutline.cs" />
     <Compile Include="Typography\Typography.Rendering\GlyphImages.cs" />
     <Compile Include="Typography\Typography.Rendering\Rect.cs" />
-    <Compile Include="Win32Utils\MyWin32.cs" />
-    <Compile Include="Win32Utils\NativeTextWin32.cs" />
-    <Compile Include="Win32Utils\NativeWin32MemoryDc.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
