@@ -38,6 +38,7 @@
             this.cmdForTestWithHtmlRenderer = new System.Windows.Forms.Button();
             this.cmdBuildMergePixelFarmMiniAgg = new System.Windows.Forms.Button();
             this.cmdMinimalNetCore = new System.Windows.Forms.Button();
+            this.cmdBuild_PixelFarm_Drawing = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdBuildMergePixelFarm
@@ -92,7 +93,7 @@
             // 
             // cmd_Cross
             // 
-            this.cmd_Cross.Location = new System.Drawing.Point(25, 463);
+            this.cmd_Cross.Location = new System.Drawing.Point(25, 496);
             this.cmd_Cross.Name = "cmd_Cross";
             this.cmd_Cross.Size = new System.Drawing.Size(360, 57);
             this.cmd_Cross.TabIndex = 5;
@@ -112,7 +113,7 @@
             // 
             // cmdForTestWithHtmlRenderer
             // 
-            this.cmdForTestWithHtmlRenderer.Location = new System.Drawing.Point(68, 333);
+            this.cmdForTestWithHtmlRenderer.Location = new System.Drawing.Point(25, 337);
             this.cmdForTestWithHtmlRenderer.Name = "cmdForTestWithHtmlRenderer";
             this.cmdForTestWithHtmlRenderer.Size = new System.Drawing.Size(257, 57);
             this.cmdForTestWithHtmlRenderer.TabIndex = 7;
@@ -140,11 +141,22 @@
             this.cmdMinimalNetCore.UseVisualStyleBackColor = true;
             this.cmdMinimalNetCore.Click += new System.EventHandler(this.cmdMinimalNetCore_Click);
             // 
+            // cmdBuild_PixelFarm_Drawing
+            // 
+            this.cmdBuild_PixelFarm_Drawing.Location = new System.Drawing.Point(25, 416);
+            this.cmdBuild_PixelFarm_Drawing.Name = "cmdBuild_PixelFarm_Drawing";
+            this.cmdBuild_PixelFarm_Drawing.Size = new System.Drawing.Size(167, 57);
+            this.cmdBuild_PixelFarm_Drawing.TabIndex = 10;
+            this.cmdBuild_PixelFarm_Drawing.Text = "Build PixelFarm.Drawing";
+            this.cmdBuild_PixelFarm_Drawing.UseVisualStyleBackColor = true;
+            this.cmdBuild_PixelFarm_Drawing.Click += new System.EventHandler(this.cmdBuild_PixelFarm_Drawing_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1027, 565);
+            this.Controls.Add(this.cmdBuild_PixelFarm_Drawing);
             this.Controls.Add(this.cmdMinimalNetCore);
             this.Controls.Add(this.cmdBuildMergePixelFarmMiniAgg);
             this.Controls.Add(this.cmdForTestWithHtmlRenderer);
@@ -173,6 +185,7 @@
         private System.Windows.Forms.Button cmdForTestWithHtmlRenderer;
         private System.Windows.Forms.Button cmdBuildMergePixelFarmMiniAgg;
         private System.Windows.Forms.Button cmdMinimalNetCore;
+        private System.Windows.Forms.Button cmdBuild_PixelFarm_Drawing;
     }
 }
 

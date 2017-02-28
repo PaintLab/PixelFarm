@@ -76,6 +76,7 @@ namespace BuildMergeProject
         enum MergeOption
         {
             All,
+            PixelFarm_Drawing,
             Windows_NoCustomNativeDll,
             Windows_NoWinFormNoGdiPlus,
             Cross,
@@ -99,18 +100,24 @@ namespace BuildMergeProject
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj");
             //ess utils
             mergePro.LoadSubProject(rootProjectFolders + @"\TypeMirror\TypeMirror.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
+           
 
             switch (mergeOption)
             {
                 default:
+
                 case MergeOption.Cross:
                     throw new NotImplementedException();
+                case MergeOption.PixelFarm_Drawing:
+                    //left  blank here
+                    break;
                 case MergeOption.Windows_NoCustomNativeDll:
+                    mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj");
                     //no skia, no gles2
                     break;
                 case MergeOption.All:
+                    mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
                     //
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj");
                     //skia
@@ -132,6 +139,7 @@ namespace BuildMergeProject
 
                     break;
                 case MergeOption.Windows_NoWinFormNoGdiPlus:
+                    mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
                     //skia
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj");
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj");
@@ -337,31 +345,31 @@ namespace BuildMergeProject
         private void cmdMinimalNetCore_Click(object sender, EventArgs e)
         {
             //see reference in TestMiniPlatform4
+            throw new NotSupportedException();
 
-            MergeProject mergePro = new MergeProject();
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Native\PixelFarm.DataProvider.Native.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
-            //mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DrawingGL\PixelFarm.DrawingGL.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\NOpenType\NetCore\PixelFarm.OpenType\PixelFarm.OpenType.xproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
-            mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj");
+            //MergeProject mergePro = new MergeProject();
+            //mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Managed\PixelFarm.DataProvider.Managed.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DataProvider.Native\PixelFarm.DataProvider.Native.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj"); 
+            //mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\NOpenType\NetCore\PixelFarm.OpenType\PixelFarm.OpenType.xproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj");
+            //mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj");
 
 
-            //------------------------------------------------------------------------------
-            string targetProjectName = "PixelFarm.MiniNetCore.One";
-            string targetProjectFile = targetProjectName + ".csproj";
-            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
-               targetProjectName,
-               "v2.0",
-               "",//additional define constant
-               new string[] {
-                  "System" ,
-               });
+            ////------------------------------------------------------------------------------
+            //string targetProjectName = "PixelFarm.MiniNetCore.One";
+            //string targetProjectFile = targetProjectName + ".csproj";
+            //mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+            //   targetProjectName,
+            //   "v2.0",
+            //   "",//additional define constant
+            //   new string[] {
+            //      "System" ,
+            //   });
             ////-----------
             //LinkProjectConverter.ConvertToLinkProject(
             //    rootProjectFolders + "\\" + targetProjectFile,
@@ -369,5 +377,41 @@ namespace BuildMergeProject
             //    true);//after link project is created, we remove the targetProjectFile
         }
 
+        private void cmdBuild_PixelFarm_Drawing_Click(object sender, EventArgs e)
+        {
+
+            //PixelFarm.Drawing is auto gen project
+            //It is composed of ...
+            //--------------------------------------------------
+            //1.0: PixelFarm's Core
+            //   1) PixelFarm.Drawing.Core
+            //   2) PixelFarm.Drawing.Canvas
+            //1.1: Agg_PureSoftwarePixelRenderer
+            //  1)  PixelFarm.Drawing.MiniAgg
+            //1.2: Typography  : OpenFont Glyph/Layout/Rendering
+            //  1) PixelFarm.Typography 
+            //--------------------------------------------------
+
+            //merge all
+            //need Gdi+ and WinForms
+            MergeProject mergePro = CreateMergePixelFarmOneProject(MergeOption.PixelFarm_Drawing);
+            string targetProjectName = "PixelFarm.Drawing";
+            string targetProjectFile = targetProjectName + ".csproj";
+            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+               targetProjectName,
+               "v2.0",
+               ",NET20,PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
+               new string[] {
+                  "System", 
+                  "System.Xml",
+               });
+            ////-----------
+            //LinkProjectConverter.ConvertToLinkProject(
+            //    rootProjectFolders + "\\" + targetProjectFile,
+            //    rootProjectFolders + "\\x_autogen",
+            //    true);//after link project is created, we remove the targetProjectFile
+
+
+        }
     }
 }
