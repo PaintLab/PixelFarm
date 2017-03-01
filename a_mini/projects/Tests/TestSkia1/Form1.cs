@@ -17,12 +17,22 @@ namespace TestSkia1
         {
             InitializeComponent();
 
-            //glControl.Visible = false;
-            //canvas.Visible = true; 
-            canvas.Visible = false;
-            glControl.Visible = true;
+
+            //init
+            canvas.Visible = true;
+            glControl.Visible = false;
+
             glControl.PaintSurface += GlControl_PaintSurface;
             canvas.PaintSurface += Canvas_PaintSurface;
+
+            //
+            cmbBackEnd.Items.Add(SkiaBackend.Memory);
+            cmbBackEnd.Items.Add(SkiaBackend.GLES);
+            cmbBackEnd.SelectedIndex = 0;//init
+            cmbBackEnd.SelectedIndexChanged += (s, e) =>
+            {
+                SelectBackend((SkiaBackend)cmbBackEnd.SelectedItem);
+            };
         }
         public void SelectBackend(SkiaBackend backend)
         {
@@ -31,11 +41,11 @@ namespace TestSkia1
                 default: throw new NotSupportedException();
                 case SkiaBackend.Memory:
                     glControl.Visible = false;
-                    canvas.Visible = true;
+                    canvas.Visible = true;//show memory canvas
                     break;
                 case SkiaBackend.GLES:
                     canvas.Visible = false;
-                    glControl.Visible = true;
+                    glControl.Visible = true; //show glcanvas
                     break;
             }
 
@@ -51,7 +61,7 @@ namespace TestSkia1
                 paint.IsAntialias = true;
                 paint.Color = (SKColor)0xFF4281A4;
                 paint.IsStroke = false;
-                skCanvas.DrawText("PixelFarm+SkiaSharp", 20, 64.0f, paint);
+                skCanvas.DrawText("PixelFarm+SkiaSharp MemoryCanvas", 20, 64.0f, paint);
                 paint.StrokeWidth = 3;
                 skCanvas.DrawLine(0, 0, 100, 80, paint);
             }
@@ -70,7 +80,7 @@ namespace TestSkia1
                 paint.IsAntialias = true;
                 paint.Color = (SKColor)0xFF4281A4;
                 paint.IsStroke = false;
-                skCanvas.DrawText("PixelFarm+SkiaSharp", 20, 64.0f, paint);
+                skCanvas.DrawText("PixelFarm+SkiaSharp GLCanvas", 20, 64.0f, paint);
                 paint.StrokeWidth = 3;
                 skCanvas.DrawLine(0, 0, 100, 80, paint);
             }
