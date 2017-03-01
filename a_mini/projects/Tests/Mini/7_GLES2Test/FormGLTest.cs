@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
 using PixelFarm.DrawingGL;
-using PixelFarm.Drawing.Fonts;
+using OpenTK;
 
 namespace Mini
 {
     partial class FormGLTest : Form
     {
-        MyMiniGLES2Control miniGLControl;
+        MyGLControl miniGLControl;
         IntPtr hh1;
         CanvasGL2d canvas2d;
         DemoBase exampleBase;
@@ -20,14 +20,14 @@ namespace Mini
         {
             InitMiniGLControl(800, 600);
         }
-        MyMiniGLES2Control InitMiniGLControl(int w, int h)
+        MyGLControl InitMiniGLControl(int w, int h)
         {
             if (miniGLControl == null)
             {
-                miniGLControl = new MyMiniGLES2Control();
+                miniGLControl = new MyGLControl();
                 miniGLControl.Width = w;
                 miniGLControl.Height = h;
-                miniGLControl.ClearColor = PixelFarm.Drawing.Color.Blue;
+                //miniGLControl.ClearColor = PixelFarm.Drawing.Color.Blue;
                 this.Controls.Add(miniGLControl);
                 miniGLControl.SetGLPaintHandler(HandleGLPaint);
                 hh1 = miniGLControl.Handle;
@@ -61,7 +61,7 @@ namespace Mini
             return miniGLControl;
         }
 
-        public MyMiniGLES2Control MiniGLControl
+        public MyGLControl MiniGLControl
         {
             get { return this.miniGLControl; }
         }

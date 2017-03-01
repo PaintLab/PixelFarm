@@ -4,7 +4,7 @@ using System;
 using PixelFarm.Agg;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
-using PixelFarm.Drawing.Text;
+ 
 using Typography.TextLayout;
 
 using System.Collections.Generic;
