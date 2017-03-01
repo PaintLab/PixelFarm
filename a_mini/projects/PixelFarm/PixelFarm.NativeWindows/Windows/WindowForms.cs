@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 
-
 namespace PixelFarm.Forms
 {
     public static class Application
