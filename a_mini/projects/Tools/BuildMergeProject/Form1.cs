@@ -113,8 +113,21 @@ namespace BuildMergeProject
                     break;
                 case MergeOption.Windows_NoCustomNativeDll:
                     mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
+                    //
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj");
-                    //no skia, no gles2
+                    //-----------------------------------------------------------------------------------------------
+                    //skia
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj");
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj");
+                    // 
+                    //GLES2
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj");
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.DrawingGL\PixelFarm.DrawingGL.csproj");
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj");
+                    //
+                    mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj");
+                    //util
+                    mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
                     break;
                 case MergeOption.All:
                     mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
@@ -134,9 +147,7 @@ namespace BuildMergeProject
                     //native fonts
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj");
                     //
-                    //util
-                    mergePro.LoadSubProject(rootProjectFolders + @"\Tesselate\Tesselate.csproj");
-
+                  
                     break;
                 case MergeOption.Windows_NoWinFormNoGdiPlus:
                     mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
