@@ -1,7 +1,5 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
-using System.Runtime.InteropServices;
-
 namespace TestGlfw
 {
     static class Program
@@ -12,13 +10,9 @@ namespace TestGlfw
         [STAThread]
         static void Main()
         {
-            //dbugTestStbImages();
+
             GLFWProgram.Start();
         }
-         
     }
-
-
-
 
 }

@@ -50,7 +50,7 @@ namespace TestGlfw
     {
         public GlFwForm form;
     }
-    class GLFWProgram2
+    class GLFWProgram
     {
         static bool needUpdateContent = false;
         static MyNativeRGBA32BitsImage myImg;

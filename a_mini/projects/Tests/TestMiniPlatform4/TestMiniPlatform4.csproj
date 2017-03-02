@@ -42,7 +42,6 @@
     <Compile Include="..\SharedModule\LionDataStore.cs">
       <Link>LionDataStore.cs</Link>
     </Compile>
-    <Compile Include="ES2Utils2.cs" />
     <Compile Include="GLFWProgram.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

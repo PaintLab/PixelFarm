@@ -26,15 +26,18 @@ namespace OpenTkEssTest
             PixelFarm.Drawing.GLES2.GLES2Platform.AddTextureFont("tahoma",
                  "d:\\WImageTest\\a_total.xml",
                  "d:\\WImageTest\\a_total.png");
-            //temp comment 
+            
             ////------------------------------------------------
             hbShapingService = new HarfBuzzShapingService();
             hbShapingService.SetAsCurrentImplementation();
 
-            painter = new GLCanvasPainter(canvas2d, max, max); 
-            painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 24);
+            painter = new GLCanvasPainter(canvas2d, max, max);
+            painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+            //choose printer type
+            //1. agg 
+            painter.TextPrinter = new AggFontPrinter(painter, 200, 20);
             //------------------------------------------------
-            
+
             //string fontName = "tahoma";
             //float fontSize = 24;
             //GlyphImage glypImage = null;
@@ -71,7 +74,8 @@ namespace OpenTkEssTest
             painter.Clear(PixelFarm.Drawing.Color.White);
             //painter.DrawString("hello world!", 100, 100);            
             //painter.DrawString("กิ่น", 100, 100);
-            string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้";
+            //string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้";
+            string test_str = "AAAAA";
             //string test_str = "กิน";
             painter.DrawString(test_str, 100, 100);
             //painter.DrawString("hello world! กิ่น", 100, 100);
