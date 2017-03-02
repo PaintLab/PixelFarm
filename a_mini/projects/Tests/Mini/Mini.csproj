@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharedModule\DemoBase1.cs">
+      <Link>0_Start\DemoBase1.cs</Link>
+    </Compile>
     <Compile Include="..\SharedModule\LionDataStore.cs">
       <Link>2_Shared\LionDataStore.cs</Link>
     </Compile>

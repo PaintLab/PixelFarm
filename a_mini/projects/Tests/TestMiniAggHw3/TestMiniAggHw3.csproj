@@ -39,6 +39,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharedModule\DemoBase1.cs">
+      <Link>00_DemoBase\DemoBase1.cs</Link>
+    </Compile>
     <Compile Include="..\SharedModule\LionDataStore.cs">
       <Link>Sample03\LionDataStore.cs</Link>
     </Compile>

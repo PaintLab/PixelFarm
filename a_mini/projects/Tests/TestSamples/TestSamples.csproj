@@ -32,7 +32,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="00_DemoBase\DemoBase.cs" />
+    <Compile Include="..\SharedModule\DemoBase1.cs">
+      <Link>00_DemoBase\DemoBase1.cs</Link>
+    </Compile>
     <Compile Include="00_DemoBase\ES2Utils2.cs" />
     <Compile Include="00_DemoBase\SampleBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

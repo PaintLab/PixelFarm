@@ -1,9 +1,44 @@
 ﻿//MIT, 2014-2017, WinterDev
-
 using System;
 using System.Collections.Generic;
+
+
+using PixelFarm.Agg;
+
 namespace Mini
 {
+    public abstract class DemoBase
+    {
+        public DemoBase()
+        {
+            this.Width = 800;
+            this.Height = 600;
+        }
+        public abstract void Draw(CanvasPainter p);
+        public virtual void Init() { }
+
+        public virtual void MouseDrag(int x, int y) { }
+        public virtual void MouseDown(int x, int y, bool isRightButton) { }
+        public virtual void MouseUp(int x, int y) { }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        VertexStorePool _vxsPool = new VertexStorePool();
+        public VertexStore GetFreeVxs()
+        {
+            return _vxsPool.GetFreeVxs();
+        }
+        public void ReleaseVxs(ref VertexStore vxs)
+        {
+            _vxsPool.Release(ref vxs);
+        }
+        protected virtual void OnInitGLProgram(object sender, EventArgs args)
+        {
+        }
+        protected virtual void OnGLRender(object sender, EventArgs args)
+        {
+        }
+    }
+
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class InfoAttribute : Attribute
     {
@@ -38,29 +73,15 @@ namespace Mini
         public static string Path = "";
     }
 
-    public abstract class DemoBase
+    enum DemoConfigPresentaionHint
     {
-        public DemoBase()
-        {
-            this.Width = 800;
-            this.Height = 600;
-        }
-        public virtual void Init() { }
-        public virtual void MouseDrag(int x, int y) { }
-        public virtual void MouseDown(int x, int y, bool isRightButton) { }
-        public virtual void MouseUp(int x, int y) { }
-        public int Width { get; set; }
-        public int Height { get; set; }
-
-        protected virtual void OnInitGLProgram(object sender, EventArgs args)
-        {
-        }
-        protected virtual void OnGLRender(object sender, EventArgs args)
-        {
-        }
+        TextBox,
+        CheckBox,
+        OptionBoxes,
+        SlideBarDiscrete,
+        SlideBarContinuous_R4,
+        SlideBarContinuous_R8,
     }
-
-
     public class DemoConfigAttribute : Attribute
     {
         public DemoConfigAttribute()
@@ -76,18 +97,6 @@ namespace Mini
         public int MinValue { get; set; }
         public int MaxValue { get; set; }
     }
-    enum DemoConfigPresentaionHint
-    {
-        TextBox,
-        CheckBox,
-        OptionBoxes,
-        SlideBarDiscrete,
-        SlideBarContinuous_R4,
-        SlideBarContinuous_R8,
-    }
-
-
-
 
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     public class NoteAttribute : Attribute
@@ -280,4 +289,5 @@ namespace Mini
             this.property.GetSetMethod().Invoke(target, new object[] { ValueAsInt32 });
         }
     }
+
 }

@@ -25,9 +25,5 @@ namespace Mini
 
             Application.Run(new FormDev());
         }
-    }
-    public static class RootDemoPath
-    {
-        public static string Path = "";
-    }
+    } 
 }
