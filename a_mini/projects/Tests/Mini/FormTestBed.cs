@@ -5,11 +5,11 @@ using System.Windows.Forms;
 
 namespace Mini
 {
-    partial class FormTestBed1 : Form
+    partial class FormTestBed : Form
     {
         DemoBase exampleBase;
         List<ExampleConfigDesc> configList;
-        public FormTestBed1()
+        public FormTestBed()
         {
             InitializeComponent();
         }

@@ -56,7 +56,7 @@ namespace Mini
                 {
                     case RenderBackendChoice.PureAgg:
                         {
-                            FormTestBed1 testBed = new FormTestBed1();
+                            FormTestBed testBed = new FormTestBed();
                             testBed.WindowState = FormWindowState.Maximized;
                             testBed.UseGdiPlusOutput = false;
                             testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
@@ -66,7 +66,7 @@ namespace Mini
                         break;
                     case RenderBackendChoice.GdiPlus:
                         {
-                            FormTestBed1 testBed = new FormTestBed1();
+                            FormTestBed testBed = new FormTestBed();
                             testBed.WindowState = FormWindowState.Maximized;
                             testBed.UseGdiPlusOutput = true;
                             testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;

@@ -1,6 +1,6 @@
 ﻿namespace Mini
 {
-    partial class FormTestBed1
+    partial class FormTestBed
     {
         /// <summary>
         /// Required designer variable.
