@@ -2,16 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+using System.Drawing; 
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using System.Text;
-
-using PixelFarm.Agg;
-using System.IO;
-using Microsoft.Win32;
-
+using System.Windows.Forms; 
 namespace Mini
 {
     partial class FormDev : Form

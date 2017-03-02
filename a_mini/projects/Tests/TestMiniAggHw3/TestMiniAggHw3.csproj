@@ -40,11 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Mini\7_GLES2Test\FormGLTest.cs">
-      <Link>FormGLTest.cs</Link>
+      <Link>00_DemoBase\FormGLTest.cs</Link>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\Mini\7_GLES2Test\FormGLTest.Designer.cs">
-      <Link>FormGLTest.Designer.cs</Link>
+      <Link>00_DemoBase\FormGLTest.Designer.cs</Link>
     </Compile>
     <Compile Include="..\SharedModule\DemoBase1.cs">
       <Link>00_DemoBase\DemoBase1.cs</Link>
@@ -101,7 +101,7 @@
     <Compile Include="Sample04\T404_FontAtlas.cs" />
     <Compile Include="Sample04\T405_DrawString.cs" />
     <EmbeddedResource Include="..\Mini\7_GLES2Test\FormGLTest.resx">
-      <Link>FormGLTest.resx</Link>
+      <Link>00_DemoBase\FormGLTest.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="00_DemoBase\FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
