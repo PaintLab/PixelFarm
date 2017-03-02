@@ -23,19 +23,19 @@ namespace OpenTkEssTest
             int max = Math.Max(this.Width, this.Height);
             canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
 
-            PixelFarm.Drawing.GLES2.GLES2Platform.AddTextureFont("tahoma",
-                 "d:\\WImageTest\\a_total.xml",
-                 "d:\\WImageTest\\a_total.png");
+            //PixelFarm.Drawing.GLES2.GLES2Platform.AddTextureFont("tahoma",
+            //     "d:\\WImageTest\\a_total.xml",
+            //     "d:\\WImageTest\\a_total.png");
             
-            ////------------------------------------------------
-            hbShapingService = new HarfBuzzShapingService();
-            hbShapingService.SetAsCurrentImplementation();
+            //////------------------------------------------------
+            //hbShapingService = new HarfBuzzShapingService();
+            //hbShapingService.SetAsCurrentImplementation();
 
             painter = new GLCanvasPainter(canvas2d, max, max);
             painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             //choose printer type
             //1. agg 
-            painter.TextPrinter = new AggFontPrinter(painter, 200, 20);
+            painter.TextPrinter = new AggFontPrinter(painter, 200, 50);
             //------------------------------------------------
 
             //string fontName = "tahoma";
