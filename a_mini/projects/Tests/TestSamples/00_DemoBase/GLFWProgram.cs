@@ -14,12 +14,19 @@ namespace TestGlfw
     //WITHOUT WinForms.
     //This demonstrate how to draw with 1) Skia  or 2) Glfw
     //-------------------------------------------------------------------------
-
+    public enum BackEnd
+    {
+        GLES2,
+        SKIA
+    }
     class GLFWProgram
     {
         static bool needUpdateContent = false;
-        static MyNativeRGBA32BitsImage myImg; 
+        static MyNativeRGBA32BitsImage myImg;
         static GLBitmap glBmp;
+
+
+        static BackEnd selectedBackEnd = BackEnd.SKIA;
 
         static void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
@@ -32,11 +39,9 @@ namespace TestGlfw
             if (myImg == null)
             {
                 myImg = new TestGlfw.MyNativeRGBA32BitsImage(w, h);
-            }
+            } 
 
-
-            int testNo = 2;
-            if (testNo == 0)
+            if (selectedBackEnd == BackEnd.SKIA)
             {
                 //test1
                 // create the surface
