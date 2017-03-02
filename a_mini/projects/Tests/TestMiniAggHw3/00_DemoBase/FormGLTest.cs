@@ -26,10 +26,8 @@ namespace Mini
             {
                 miniGLControl = new MyGLControl();
                 miniGLControl.Width = w;
-                miniGLControl.Height = h;
-                //miniGLControl.ClearColor = PixelFarm.Drawing.Color.Blue;
-                this.Controls.Add(miniGLControl);
-
+                miniGLControl.Height = h;                 
+                this.Controls.Add(miniGLControl); 
 
                 //miniGLControl.SetGLPaintHandler(HandleGLPaint);
                 //hh1 = miniGLControl.Handle;
@@ -63,10 +61,7 @@ namespace Mini
             return miniGLControl;
         }
 
-        //public MyGLControl MiniGLControl
-        //{
-        //    get { return this.miniGLControl; }
-        //}
+        
         void HandleGLPaint(object sender, System.EventArgs e)
         {
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
