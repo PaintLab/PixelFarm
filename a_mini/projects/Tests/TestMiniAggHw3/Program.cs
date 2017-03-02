@@ -14,9 +14,11 @@ namespace OpenTkEssTest
         [STAThread]
         static void Main()
         {
+            OpenTK.Toolkit.Init();
+
             Application.EnableVisualStyles();
             //----------------------------
-            OpenTK.Toolkit.Init();
+           
             RootDemoPath.Path = @"..\Data";
 
             var formDev = new FormDev();

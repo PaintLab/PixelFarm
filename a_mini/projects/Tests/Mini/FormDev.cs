@@ -6,12 +6,10 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Text;
+using PixelFarm.DrawingGL;
+using OpenTK;
 
 using PixelFarm.Agg;
-using System.IO;
-using Microsoft.Win32;
-
 namespace Mini
 {
     partial class FormDev : Form
@@ -46,6 +44,72 @@ namespace Mini
             cmbRenderBackend.SelectedIndex = 2;//set default 
         }
 
+
+        class GLBasedDemo
+        {
+            DemoBase demobase;
+            OpenTK.MyGLControl glControl;
+            IntPtr hh1;
+            CanvasGL2d canvas2d;
+            GLCanvasPainter canvasPainter;
+            public void LoadGLControl(OpenTK.MyGLControl glControl)
+            {
+                this.glControl = glControl;
+
+                glControl.SetGLPaintHandler(HandleGLPaint);
+                hh1 = glControl.Handle;
+                glControl.MakeCurrent();
+                int max = Math.Max(glControl.Width, glControl.Height);
+                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+                canvasPainter = new GLCanvasPainter(canvas2d, max, max);
+                //create text printer for opengl 
+                //----------------------
+                //1. win gdi based
+                //var printer = new WinGdiFontPrinter(canvas2d, w, h);
+                //canvasPainter.TextPrinter = printer;
+                //----------------------
+                //2. raw vxs
+                //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
+                //canvasPainter.TextPrinter = printer;
+                //----------------------
+                //3. agg texture based font texture
+                //var printer = new AggFontPrinter(canvasPainter, w, h);
+                //canvasPainter.TextPrinter = printer;
+                //----------------------
+                //4. texture atlas based font texture
+
+                //------------
+                //resolve request font
+
+
+                var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
+                canvasPainter.TextPrinter = printer;
+
+            }
+            public void LoadSample(DemoBase demobase)
+            {
+                this.demobase = demobase;
+                demobase.Init();
+            }
+            void HandleGLPaint(object sender, System.EventArgs e)
+            {
+                canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
+                canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
+                canvas2d.ClearColorBuffer();
+                //example
+                canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
+                canvasPainter.FillRectLBWH(20, 20, 150, 150);
+                //load bmp image 
+                //------------------------------------------------------------------------- 
+                if (demobase != null)
+                {
+                    demobase.Draw(canvasPainter);
+                }
+                glControl.SwapBuffers();
+            }
+
+        }
+
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
             //load sample form
@@ -77,10 +141,24 @@ namespace Mini
                     case RenderBackendChoice.OpenGLES2:
                         {
                             FormGLTest formGLTest = new FormGLTest();
-                            formGLTest.InitGLControl();
+                            OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                            //----------
+                            GLBasedDemo glbaseDemo = new GLBasedDemo();
+                            glbaseDemo.LoadGLControl(control);
+                            //----------
+                            //load
+                            DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
+                            if (exBase == null)
+                            {
+                                return;
+                            }
+
+                            formGLTest.Text = exAndDesc.ToString();
+                            //----------------------------------------------------------------------------
+                            
                             formGLTest.Show();
                             formGLTest.WindowState = FormWindowState.Maximized;
-                            formGLTest.LoadExample(exAndDesc);
+                            glbaseDemo.LoadSample(exBase);
                         }
                         break;
                     case RenderBackendChoice.SkiaMemoryBackend:
@@ -343,7 +421,7 @@ namespace Mini
         private void button6_Click(object sender, EventArgs e)
         {
             FormGLTest formGLTest = new FormGLTest();
-            formGLTest.InitGLControl();
+            formGLTest.InitMiniGLControl(800, 600);
             formGLTest.Show();
             formGLTest.WindowState = FormWindowState.Maximized;
         }

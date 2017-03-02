@@ -1,4 +1,5 @@
-﻿using System;
+﻿//MIT, 2014-2017, WinterDev
+using System;
 using System.Windows.Forms;
 using PixelFarm.DrawingGL;
 using OpenTK;
@@ -16,10 +17,7 @@ namespace Mini
         {
             InitializeComponent();
         }
-        public void InitGLControl()
-        {
-            InitMiniGLControl(800, 600);
-        }
+        
         public MyGLControl InitMiniGLControl(int w, int h)
         {
             if (miniGLControl == null)

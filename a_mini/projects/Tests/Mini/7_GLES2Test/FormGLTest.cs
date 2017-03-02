@@ -1,4 +1,6 @@
-﻿using System;
+﻿//MIT, 2014-2017, WinterDev
+using System;
+
 using System.Windows.Forms;
 using PixelFarm.DrawingGL;
 using OpenTK;
@@ -16,51 +18,31 @@ namespace Mini
         {
             InitializeComponent();
         }
-        public void InitGLControl()
+        public void LoadExample(ExampleAndDesc exAndDesc)
         {
-            InitMiniGLControl(800, 600);
+            DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
+            if (exBase == null)
+            {
+                return;
+            }
+
+            this.Text = exAndDesc.ToString();
+            //----------------------------------------------------------------------------
+            this.exampleBase = exBase;
+            exampleBase.Init();
         }
-        MyGLControl InitMiniGLControl(int w, int h)
+        public MyGLControl InitMiniGLControl(int w, int h)
         {
             if (miniGLControl == null)
             {
                 miniGLControl = new MyGLControl();
                 miniGLControl.Width = w;
                 miniGLControl.Height = h;
-                //miniGLControl.ClearColor = PixelFarm.Drawing.Color.Blue;
-                this.Controls.Add(miniGLControl);
-                miniGLControl.SetGLPaintHandler(HandleGLPaint);
-                hh1 = miniGLControl.Handle;
-                miniGLControl.MakeCurrent();
-                int max = Math.Max(this.Width, this.Height);
-                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-                canvasPainter = new GLCanvasPainter(canvas2d, max, max);
-                //create text printer for opengl 
-                //----------------------
-                //1. win gdi based
-                //var printer = new WinGdiFontPrinter(canvas2d, w, h);
-                //canvasPainter.TextPrinter = printer;
-                //----------------------
-                //2. raw vxs
-                //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
-                //canvasPainter.TextPrinter = printer;
-                //----------------------
-                //3. agg texture based font texture
-                //var printer = new AggFontPrinter(canvasPainter, w, h);
-                //canvasPainter.TextPrinter = printer;
-                //----------------------
-                //4. texture atlas based font texture
-
-                //------------
-                //resolve request font
-
-
-                var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
-                canvasPainter.TextPrinter = printer;
+                this.Controls.Add(miniGLControl); 
             }
             return miniGLControl;
         }
-         
+
         void HandleGLPaint(object sender, System.EventArgs e)
         {
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
@@ -77,18 +59,6 @@ namespace Mini
             }
             miniGLControl.SwapBuffers();
         }
-        public void LoadExample(ExampleAndDesc exAndDesc)
-        {
-            DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
-            if (exBase == null)
-            {
-                return;
-            }
-
-            this.Text = exAndDesc.ToString();
-            //----------------------------------------------------------------------------
-            this.exampleBase = exBase;
-            exampleBase.Init();
-        }
+        
     }
 }

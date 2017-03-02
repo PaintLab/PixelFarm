@@ -37,6 +37,7 @@ namespace Mini
         protected virtual void OnGLRender(object sender, EventArgs args)
         {
         }
+        
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
