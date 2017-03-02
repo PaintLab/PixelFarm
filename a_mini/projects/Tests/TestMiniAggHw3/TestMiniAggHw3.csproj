@@ -48,14 +48,14 @@
     <Compile Include="..\SharedModule\SpriteShape.cs">
       <Link>Sample03\SpriteShape.cs</Link>
     </Compile>
-    <Compile Include="00_DemoBase\PrebuiltGLControlDemoBase.cs" />
-    <Compile Include="00_DemoBase\ES2Utils2.cs" />
-    <Compile Include="00_DemoBase\FormDev2.cs">
+    <Compile Include="00_DemoBase\FormGLTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="00_DemoBase\FormDev2.Designer.cs">
-      <DependentUpon>FormDev2.cs</DependentUpon>
+    <Compile Include="00_DemoBase\FormGLTest.Designer.cs">
+      <DependentUpon>FormGLTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="00_DemoBase\PrebuiltGLControlDemoBase.cs" />
+    <Compile Include="00_DemoBase\ES2Utils2.cs" />
     <Compile Include="00_DemoBase\FormTestBed.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,8 +103,8 @@
     <Compile Include="Sample03\T114_FrameBufferWithConvFilterEffect.cs" />
     <Compile Include="Sample04\T404_FontAtlas.cs" />
     <Compile Include="Sample04\T405_DrawString.cs" />
-    <EmbeddedResource Include="00_DemoBase\FormDev2.resx">
-      <DependentUpon>FormDev2.cs</DependentUpon>
+    <EmbeddedResource Include="00_DemoBase\FormGLTest.resx">
+      <DependentUpon>FormGLTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="00_DemoBase\FormTestBed.resx">
       <DependentUpon>FormTestBed.cs</DependentUpon>

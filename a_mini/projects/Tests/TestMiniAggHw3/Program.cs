@@ -19,7 +19,7 @@ namespace OpenTkEssTest
             OpenTK.Toolkit.Init();
             RootDemoPath.Path = @"..\Data";
 
-            var formDev = new FormDev2();
+            var formDev = new FormDev();
             Application.Run(formDev);
         }
     }

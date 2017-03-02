@@ -76,11 +76,27 @@ namespace Mini
                         break;
                     case RenderBackendChoice.OpenGLES2:
                         {
+                            //ExampleAndDesc exAndDesc = this.listBox1.SelectedItem as ExampleAndDesc;
+                            if (exAndDesc != null)
+                            {
+                                DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
+                                if (exBase == null)
+                                {
+                                    return;
+                                }
+                                exBase.Init();
+                                //FormTestBed1 testBed = new FormTestBed1();
+                                //testBed.WindowState = FormWindowState.Maximized;
+                                //testBed.Show();
+                                //testBed.LoadExample(exAndDesc);
+                            }
+
                             //FormGLTest formGLTest = new FormGLTest();
                             //formGLTest.InitGLControl();
                             //formGLTest.Show();
                             //formGLTest.WindowState = FormWindowState.Maximized;
                             //formGLTest.LoadExample(exAndDesc);
+                            //------------------------------
                         }
                         break;
                     case RenderBackendChoice.SkiaMemoryBackend:

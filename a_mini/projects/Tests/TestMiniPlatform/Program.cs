@@ -10,7 +10,6 @@ namespace TestGlfw
         [STAThread]
         static void Main()
         {
-
             GLFWProgram.Start();
         }
     }
