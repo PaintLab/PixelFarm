@@ -45,6 +45,9 @@
     <Compile Include="..\SharedModule\LionDataStore.cs">
       <Link>Sample03\LionDataStore.cs</Link>
     </Compile>
+    <Compile Include="..\SharedModule\SpriteShape.cs">
+      <Link>Sample03\SpriteShape.cs</Link>
+    </Compile>
     <Compile Include="00_DemoBase\PrebuiltGLControlDemoBase.cs" />
     <Compile Include="00_DemoBase\ES2Utils2.cs" />
     <Compile Include="00_DemoBase\FormDev.cs">
@@ -75,7 +78,7 @@
     <Compile Include="Sample02\T54_Lines.cs" />
     <Compile Include="Sample02\T55_Line2.cs" />
     <Compile Include="Sample03\T1081_LionFillBmpToTexture.cs" />
-    <Compile Include="Sample03\SpriteShape.cs" />
+    <Compile Include="Sample03\xSpriteShape.cs" />
     <Compile Include="Sample04\T403_MsdfGenTest2.cs" />
     <Compile Include="Sample04\T402_BrushTest2.cs" />
     <Compile Include="Sample04\T401_MsdfTest1.cs" />
