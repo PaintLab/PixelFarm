@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharedModule\LionDataStore.cs">
+      <Link>2_Shared\LionDataStore.cs</Link>
+    </Compile>
     <Compile Include="0_Start\DemoBase.cs" />
     <Compile Include="2_Shared\dbugVxsDrawPoints.cs" />
     <Compile Include="2_Shared\Square.cs" />
@@ -130,7 +133,6 @@
     </Compile>
     <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
-    <Compile Include="2_Shared\LionDataStore.cs" />
     <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
     <Compile Include="2_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />

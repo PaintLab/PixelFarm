@@ -39,9 +39,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharedModule\LionDataStore.cs">
+      <Link>LionDataStore.cs</Link>
+    </Compile>
     <Compile Include="ES2Utils2.cs" />
     <Compile Include="GLFWProgram.cs" />
-    <Compile Include="LionDataStore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleBase.cs" />

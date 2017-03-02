@@ -1,6 +1,5 @@
 ﻿//MIT, 2016-2017, WinterDev
-using System;
-using System.Runtime.InteropServices;
+using System; 
 namespace TestGlfw
 {
     static class Program
