@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="dbugVxsDrawPoints.cs" />
     <Compile Include="DemoBase1.cs" />
+    <Compile Include="ES2Utils2.cs" />
     <Compile Include="LionDataStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteShape.cs" />
@@ -51,6 +52,10 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+      <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
+      <Name>PixelFarm.MiniOpenTK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
