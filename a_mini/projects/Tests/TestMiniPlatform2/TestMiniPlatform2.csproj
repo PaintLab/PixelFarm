@@ -70,7 +70,7 @@
       <Name>PixelFarm.NativeWindows</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
-      <Project>{18EC3701-C6A5-429D-8C65-19ED4A2C2FED}</Project>
+      <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
       <Name>TestSamples</Name>
     </ProjectReference>
   </ItemGroup>
