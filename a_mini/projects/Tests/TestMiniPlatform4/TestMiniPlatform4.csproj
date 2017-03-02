@@ -39,15 +39,24 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SharedModule\DemoBase1.cs">
+      <Link>DemoBase1.cs</Link>
+    </Compile>
     <Compile Include="..\SharedModule\LionDataStore.cs">
       <Link>LionDataStore.cs</Link>
+    </Compile>
+    <Compile Include="..\TestSamples\00_DemoBase\SampleBase.cs">
+      <Link>SampleBase.cs</Link>
+    </Compile>
+    <Compile Include="..\TestSamples\Sample03\SpriteShape.cs">
+      <Link>SpriteShape.cs</Link>
+    </Compile>
+    <Compile Include="..\TestSamples\Sample03\T108_LionFill.cs">
+      <Link>T108_LionFill.cs</Link>
     </Compile>
     <Compile Include="GLFWProgram.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleBase.cs" />
-    <Compile Include="SpriteShape.cs" />
-    <Compile Include="T108_LionFill.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
