@@ -39,6 +39,13 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Mini\7_GLES2Test\FormGLTest.cs">
+      <Link>FormGLTest.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\Mini\7_GLES2Test\FormGLTest.Designer.cs">
+      <Link>FormGLTest.Designer.cs</Link>
+    </Compile>
     <Compile Include="..\SharedModule\DemoBase1.cs">
       <Link>00_DemoBase\DemoBase1.cs</Link>
     </Compile>
@@ -50,12 +57,6 @@
     </Compile>
     <Compile Include="..\SharedModule\SpriteShape.cs">
       <Link>Sample03\SpriteShape.cs</Link>
-    </Compile>
-    <Compile Include="00_DemoBase\FormGLTest.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="00_DemoBase\FormGLTest.Designer.cs">
-      <DependentUpon>FormGLTest.cs</DependentUpon>
     </Compile>
     <Compile Include="00_DemoBase\PrebuiltGLControlDemoBase.cs" />
     <Compile Include="00_DemoBase\FormDev.cs">
@@ -99,8 +100,8 @@
     <Compile Include="Sample03\T114_FrameBufferWithConvFilterEffect.cs" />
     <Compile Include="Sample04\T404_FontAtlas.cs" />
     <Compile Include="Sample04\T405_DrawString.cs" />
-    <EmbeddedResource Include="00_DemoBase\FormGLTest.resx">
-      <DependentUpon>FormGLTest.cs</DependentUpon>
+    <EmbeddedResource Include="..\Mini\7_GLES2Test\FormGLTest.resx">
+      <Link>FormGLTest.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="00_DemoBase\FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
