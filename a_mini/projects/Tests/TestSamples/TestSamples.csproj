@@ -39,6 +39,12 @@
     <Compile Include="..\SharedModule\DemoBase1.cs">
       <Link>00_DemoBase\DemoBase1.cs</Link>
     </Compile>
+    <Compile Include="..\SharedModule\LionDataStore.cs">
+      <Link>Sample03\LionDataStore.cs</Link>
+    </Compile>
+    <Compile Include="..\SharedModule\SpriteShape.cs">
+      <Link>Sample03\SpriteShape.cs</Link>
+    </Compile>
     <Compile Include="00_DemoBase\GLFWProgram.cs" />
     <Compile Include="00_DemoBase\Program.cs" />
     <Compile Include="Sample01\ES2Utils2.cs" />
@@ -58,8 +64,6 @@
     <Compile Include="Sample02\T53_Viewport.cs" />
     <Compile Include="Sample02\T54_Lines.cs" />
     <Compile Include="Sample02\T55_Line2.cs" />
-    <Compile Include="Sample03\LionDataStore.cs" />
-    <Compile Include="Sample03\SpriteShape.cs" />
     <Compile Include="Sample03\T101_BlankCanvas.cs" />
     <Compile Include="Sample03\T102_BasicDraw.cs" />
     <Compile Include="Sample03\T105_Stencil.cs" />
