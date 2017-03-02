@@ -7,8 +7,8 @@
     <ProjectGuid>{8072FC36-EBC4-4E59-A092-1B9AE9EE4F9C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestMiniPlatforms2</RootNamespace>
-    <AssemblyName>TestMiniPlatforms2</AssemblyName>
+    <RootNamespace>TestMiniPlatform2</RootNamespace>
+    <AssemblyName>TestMiniPlatform2</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -48,6 +48,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

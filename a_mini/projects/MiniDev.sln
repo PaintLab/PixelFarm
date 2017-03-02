@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMiniPlatform", "Tests\T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.OpenTKWinForms", "PixelFarm\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj", "{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMiniPlatforms2", "Tests\TestMiniPlatforms2\TestMiniPlatforms2.csproj", "{8072FC36-EBC4-4E59-A092-1B9AE9EE4F9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMiniPlatform2", "Tests\TestMiniPlatform2\TestMiniPlatform2.csproj", "{8072FC36-EBC4-4E59-A092-1B9AE9EE4F9C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSamples", "Tests\TestSamples\TestSamples.csproj", "{18EC3701-C6A5-429D-8C65-19ED4A2C2FED}"
 EndProject
