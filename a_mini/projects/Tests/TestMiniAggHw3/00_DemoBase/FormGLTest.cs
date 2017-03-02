@@ -20,7 +20,7 @@ namespace Mini
         {
             InitMiniGLControl(800, 600);
         }
-        MyGLControl InitMiniGLControl(int w, int h)
+        public MyGLControl InitMiniGLControl(int w, int h)
         {
             if (miniGLControl == null)
             {
@@ -29,42 +29,44 @@ namespace Mini
                 miniGLControl.Height = h;
                 //miniGLControl.ClearColor = PixelFarm.Drawing.Color.Blue;
                 this.Controls.Add(miniGLControl);
-                miniGLControl.SetGLPaintHandler(HandleGLPaint);
-                hh1 = miniGLControl.Handle;
-                miniGLControl.MakeCurrent();
-                int max = Math.Max(this.Width, this.Height);
-                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-                canvasPainter = new GLCanvasPainter(canvas2d, max, max);
-                //create text printer for opengl 
-                //----------------------
-                //1. win gdi based
-                //var printer = new WinGdiFontPrinter(canvas2d, w, h);
-                //canvasPainter.TextPrinter = printer;
-                //----------------------
-                //2. raw vxs
-                //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
-                //canvasPainter.TextPrinter = printer;
-                //----------------------
-                //3. agg texture based font texture
-                //var printer = new AggFontPrinter(canvasPainter, w, h);
-                //canvasPainter.TextPrinter = printer;
-                //----------------------
-                //4. texture atlas based font texture
-
-                //------------
-                //resolve request font
 
 
-                var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
-                canvasPainter.TextPrinter = printer;
+                //miniGLControl.SetGLPaintHandler(HandleGLPaint);
+                //hh1 = miniGLControl.Handle;
+                //miniGLControl.MakeCurrent();
+                //int max = Math.Max(this.Width, this.Height);
+                //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+                //canvasPainter = new GLCanvasPainter(canvas2d, max, max);
+                ////create text printer for opengl 
+                ////----------------------
+                ////1. win gdi based
+                ////var printer = new WinGdiFontPrinter(canvas2d, w, h);
+                ////canvasPainter.TextPrinter = printer;
+                ////----------------------
+                ////2. raw vxs
+                ////var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
+                ////canvasPainter.TextPrinter = printer;
+                ////----------------------
+                ////3. agg texture based font texture
+                ////var printer = new AggFontPrinter(canvasPainter, w, h);
+                ////canvasPainter.TextPrinter = printer;
+                ////----------------------
+                ////4. texture atlas based font texture
+
+                ////------------
+                ////resolve request font
+
+
+                //var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
+                //canvasPainter.TextPrinter = printer;
             }
             return miniGLControl;
         }
 
-        public MyGLControl MiniGLControl
-        {
-            get { return this.miniGLControl; }
-        }
+        //public MyGLControl MiniGLControl
+        //{
+        //    get { return this.miniGLControl; }
+        //}
         void HandleGLPaint(object sender, System.EventArgs e)
         {
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;

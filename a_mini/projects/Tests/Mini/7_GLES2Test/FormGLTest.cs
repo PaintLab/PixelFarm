@@ -60,11 +60,7 @@ namespace Mini
             }
             return miniGLControl;
         }
-
-        public MyGLControl MiniGLControl
-        {
-            get { return this.miniGLControl; }
-        }
+         
         void HandleGLPaint(object sender, System.EventArgs e)
         {
             canvas2d.SmoothMode = CanvasSmoothMode.Smooth;

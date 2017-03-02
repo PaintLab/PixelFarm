@@ -56,12 +56,6 @@
     </Compile>
     <Compile Include="00_DemoBase\PrebuiltGLControlDemoBase.cs" />
     <Compile Include="00_DemoBase\ES2Utils2.cs" />
-    <Compile Include="00_DemoBase\FormTestBed.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="00_DemoBase\FormTestBed.Designer.cs">
-      <DependentUpon>FormTestBed.cs</DependentUpon>
-    </Compile>
     <Compile Include="00_DemoBase\FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -105,9 +99,6 @@
     <Compile Include="Sample04\T405_DrawString.cs" />
     <EmbeddedResource Include="00_DemoBase\FormGLTest.resx">
       <DependentUpon>FormGLTest.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="00_DemoBase\FormTestBed.resx">
-      <DependentUpon>FormTestBed.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="00_DemoBase\FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>

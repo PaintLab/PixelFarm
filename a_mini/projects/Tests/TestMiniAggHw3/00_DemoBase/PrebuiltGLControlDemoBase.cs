@@ -15,22 +15,28 @@ namespace Mini
         }
         public override void Init()
         {
-            formTestBed = new FormTestBed();
-            this.miniGLControl = formTestBed.InitMiniGLControl(this.Width, this.Height);//1276,720 
+            UseFormGLTest();
+        }
+        void UseFormGLTest()
+        {
+            formTestBed = new FormGLTest();
             this.aniTimer = new System.Windows.Forms.Timer();
             //this.formTestBed.Load += this.OnInitGLProgram;
             this.formTestBed.FormClosing += formTestBed_FormClosing;
             this.formTestBed.Text = this.GetType().Name;
+            //
+            FormGLTest frmGLTest = (FormGLTest)this.formTestBed;
+            this.miniGLControl = frmGLTest.InitMiniGLControl(this.Width, this.Height);//1276,720 
             miniGLControl.SetGLPaintHandler(this.OnGLRender);
             formTestBed.Show();
             hh1 = miniGLControl.Handle;
-            miniGLControl.MakeCurrent();
+            miniGLControl.MakeCurrent();//*** make current before use
             this.OnInitGLProgram(null, EventArgs.Empty);
             formTestBed.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             //this.aniTimer.Interval = 200;//ms
             //this.aniTimer.Tick += TimerTick;
-
         }
+
         protected static PixelFarm.DrawingGL.GLBitmap LoadTexture(string imgFileName)
         {
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(imgFileName))
@@ -84,7 +90,7 @@ namespace Mini
             set { this.aniTimer.Enabled = value; }
         }
         //-------------------------------
-        protected FormTestBed formTestBed;
+        protected System.Windows.Forms.Form formTestBed;
         protected OpenTK.MyGLControl miniGLControl;
         //-------------------------------
         protected IntPtr getDisplay()
