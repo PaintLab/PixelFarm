@@ -1,0 +1,81 @@
+﻿//BSD, 2014-2017, WinterDev
+
+using System;
+using PixelFarm.DrawingGL;
+
+namespace Mini
+{
+    class GLDemoContext
+    {
+        DemoBase demobase;
+        OpenTK.MyGLControl glControl;
+        IntPtr hh1;
+        CanvasGL2d canvas2d;
+        GLCanvasPainter canvasPainter;
+
+        public void LoadGLControl(OpenTK.MyGLControl glControl, System.EventHandler paintHandler = null)
+        {
+            this.glControl = glControl;
+
+            if (paintHandler == null)
+            {
+                glControl.SetGLPaintHandler(HandleGLPaint);
+            }
+            else
+            {
+                glControl.SetGLPaintHandler(paintHandler);
+            }
+            hh1 = glControl.Handle;
+            glControl.MakeCurrent();
+            int max = Math.Max(glControl.Width, glControl.Height);
+            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+            canvasPainter = new GLCanvasPainter(canvas2d, max, max);
+            //create text printer for opengl 
+            //----------------------
+            //1. win gdi based
+            //var printer = new WinGdiFontPrinter(canvas2d, w, h);
+            //canvasPainter.TextPrinter = printer;
+            //----------------------
+            //2. raw vxs
+            //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
+            //canvasPainter.TextPrinter = printer;
+            //----------------------
+            //3. agg texture based font texture
+            //var printer = new AggFontPrinter(canvasPainter, w, h);
+            //canvasPainter.TextPrinter = printer;
+            //----------------------
+            //4. texture atlas based font texture
+
+            //------------
+            //resolve request font
+
+
+            var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
+            canvasPainter.TextPrinter = printer;
+
+        }
+        public void LoadSample(DemoBase demobase)
+        {
+            this.demobase = demobase;
+            demobase.Init();
+        }
+        void HandleGLPaint(object sender, System.EventArgs e)
+        {
+            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
+            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
+            canvas2d.ClearColorBuffer();
+            //example
+            canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
+            canvasPainter.FillRectLBWH(20, 20, 150, 150);
+            //load bmp image 
+            //------------------------------------------------------------------------- 
+            if (demobase != null)
+            {
+                demobase.Draw(canvasPainter);
+            }
+            glControl.SwapBuffers();
+        }
+
+    }
+
+}
