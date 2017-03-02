@@ -47,7 +47,6 @@
       <Link>2_Shared\LionDataStore.cs</Link>
     </Compile>
     <Compile Include="0_Start\DemoBase.cs" />
-    <Compile Include="2_Shared\dbugVxsDrawPoints.cs" />
     <Compile Include="2_Shared\Square.cs" />
     <Compile Include="2_Shared\SpriteShape.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
@@ -160,7 +159,7 @@
     <Compile Include="SoftAggControl.Designer.cs">
       <DependentUpon>SoftAggControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="xnotused\TextPrinter.cs" />
+    <Compile Include="Experiment\xnotused\TextPrinter.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
       <DependentUpon>FormGLTest.cs</DependentUpon>
     </EmbeddedResource>
