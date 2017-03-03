@@ -30,7 +30,7 @@ namespace OpenTkEssTest
     [Info("T42_HelloTriangle")]
     public class T42_ES2HelloTriangleDemo : DemoBase
     {
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             //----------------
             //vertex shader source

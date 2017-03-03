@@ -28,7 +28,7 @@ namespace OpenTkEssTest
     [Info("T43_MiniControl_SampleTexture2dDemo")]
     public class T43_MiniControl_SampleTexture2dDemo : DemoBase
     {
-        protected override void OnInitGLProgram(object sender, EventArgs handler)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             //--------------------------------------------------------------------------
             string vs = @"

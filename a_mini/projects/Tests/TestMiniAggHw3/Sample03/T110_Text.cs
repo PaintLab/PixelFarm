@@ -11,12 +11,13 @@ namespace OpenTkEssTest
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        public override void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
-            //convert lion vxs to renderVx 
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
         }
         protected override void DemoClosing()
         {

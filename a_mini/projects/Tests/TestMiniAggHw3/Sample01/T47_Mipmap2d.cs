@@ -29,7 +29,7 @@ namespace OpenTkEssTest
     public class T47_Mipmap2d : DemoBase
     {
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                  uniform float u_offset;

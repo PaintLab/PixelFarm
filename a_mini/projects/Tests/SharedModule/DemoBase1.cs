@@ -24,7 +24,6 @@ namespace Mini
         GLSwapBufferDelegate _swapBufferDelegate;
         GetGLControlDisplay _getGLControlDisplay;
         GetGLSurface _getGLSurface;
-        PrebuiltContext _prebuiltContext;
 
         public virtual void Draw(CanvasPainter p) { }
         public void CloseDemo()
@@ -36,10 +35,17 @@ namespace Mini
             OnGLRender(this, EventArgs.Empty);
         }
         public virtual void Init() { }
-        public void SetGLPrebuiltContext(PrebuiltContext prebuiltContext)
+
+        public virtual void BuildCustomDemoGLContext(out CanvasGL2d canvasGL, out GLCanvasPainter painter)
         {
-            this._prebuiltContext = prebuiltContext;
-            OnInitGLProgram(prebuiltContext, EventArgs.Empty);
+            canvasGL = null;
+            painter = null;
+        }
+        GLCanvasPainter _painter;
+        public virtual void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+            this._painter = painter;
+            OnReadyForInitGLShaderProgram();
         }
 
         public virtual void MouseDrag(int x, int y) { }
@@ -56,13 +62,13 @@ namespace Mini
         {
             _vxsPool.Release(ref vxs);
         }
-        protected virtual void OnInitGLProgram(object sender, EventArgs args)
+        protected virtual void OnReadyForInitGLShaderProgram()
         {
-        }
-
+            //this method is called when the demo is ready for create GLES shader program
+        } 
         protected virtual void OnGLRender(object sender, EventArgs args)
         {
-            this.Draw(_prebuiltContext.glCanvasPainter); 
+            this.Draw(_painter);
         }
 
 
@@ -101,11 +107,7 @@ namespace Mini
             return _getGLSurface();
         }
     }
-    public class PrebuiltContext
-    {
-        public CanvasGL2d gl2dCanvas;
-        public GLCanvasPainter glCanvasPainter;
-    }
+
 
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]

@@ -30,7 +30,7 @@ namespace OpenTkEssTest
     public class T44_SimpleVertexShader : DemoBase
     {
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                 uniform mat4 u_mvpMatrix;

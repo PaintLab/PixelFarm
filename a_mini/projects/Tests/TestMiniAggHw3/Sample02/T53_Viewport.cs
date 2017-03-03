@@ -31,7 +31,7 @@ namespace OpenTkEssTest
         ShaderUniformVar1 u_useSolidColor;
         ShaderUniformVar4 u_solidColor;
         MyMat4 orthoView;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             //----------------
             //vertex shader source

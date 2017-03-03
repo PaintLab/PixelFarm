@@ -31,8 +31,12 @@ namespace OpenTkEssTest
         GLCanvasPainter painter;
 
         GLBitmap glBmp;
-
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        public override void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
         {
             lionShape = new SpriteShape();
             lionShape.ParseLion();
@@ -42,14 +46,10 @@ namespace OpenTkEssTest
             imgGfx2d = new ImageGraphics2D(aggImage);
             aggPainter = new AggCanvasPainter(imgGfx2d);
 
+            
             DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
             //convert affImage to texture 
-            glBmp = DemoHelper.LoadTexture(aggImage);
-
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-            //------------------------- 
-            painter = new GLCanvasPainter(canvas2d, max, max);
+            glBmp = DemoHelper.LoadTexture(aggImage); 
         }
         protected override void DemoClosing()
         {

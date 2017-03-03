@@ -24,7 +24,7 @@ namespace OpenTkEssTest
     public class T52_HelloTriangle2 : DemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             //----------------
             //vertex shader source

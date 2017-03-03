@@ -29,7 +29,7 @@ namespace OpenTkEssTest
     public class T46_StencilOperations : DemoBase
     {
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                  attribute vec4 a_position;

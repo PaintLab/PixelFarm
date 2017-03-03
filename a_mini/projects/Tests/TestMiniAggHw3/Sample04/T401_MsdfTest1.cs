@@ -13,10 +13,13 @@ namespace OpenTkEssTest
         bool resInit;
         GLBitmap msdf_bmp;
         GLBitmap sdf_bmp;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        public override void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+            this.canvas2d = canvasGL;
+
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
         }
         protected override void DemoClosing()
         {

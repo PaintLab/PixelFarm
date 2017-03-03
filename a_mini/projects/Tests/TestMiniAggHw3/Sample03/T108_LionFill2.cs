@@ -15,20 +15,14 @@ namespace OpenTkEssTest
         SpriteShape lionShape;
         VertexStore lionVxs;
         GLCanvasPainter painter;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        public override void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            var prebuiltContext = sender as PrebuiltContext;
-            if (prebuiltContext != null)
-            {
-                canvas2d = prebuiltContext.gl2dCanvas;
-                painter = prebuiltContext.glCanvasPainter;
-            }
-            else
-            {
-                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-                painter = new GLCanvasPainter(canvas2d, max, max);
-            }
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
+           
             lionShape = new SpriteShape();
             lionShape.ParseLion();
 
@@ -38,7 +32,7 @@ namespace OpenTkEssTest
                  PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
             lionVxs = new VertexStore();
             aff.TransformToVxs(lionShape.Path.Vxs, lionVxs);
-           
+
 
         }
         protected override void DemoClosing()

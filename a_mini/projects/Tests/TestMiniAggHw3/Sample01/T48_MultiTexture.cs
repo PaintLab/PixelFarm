@@ -30,7 +30,7 @@ namespace OpenTkEssTest
     public class T48_MultiTexture : DemoBase
     {
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                  attribute vec4 a_position;

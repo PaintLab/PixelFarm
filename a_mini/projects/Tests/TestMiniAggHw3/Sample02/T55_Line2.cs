@@ -19,7 +19,7 @@ namespace OpenTkEssTest
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
         MyMat4 orthoView;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"                   
             attribute vec4 a_position; 

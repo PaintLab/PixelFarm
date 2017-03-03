@@ -14,11 +14,14 @@ namespace OpenTkEssTest
         GLCanvasPainter painter;
         PixelFarm.Drawing.RenderVx stencilPolygon;
         PixelFarm.Drawing.RenderVx rectPolygon;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        public override void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
+
             stencilPolygon = painter.CreatePolygonRenderVx(new float[]
                 {
                     20,20,

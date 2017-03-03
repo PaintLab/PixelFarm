@@ -15,13 +15,15 @@ namespace OpenTkEssTest
         GLCanvasPainter painter;
         FrameBuffer frameBuffer;
         bool isInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        public override void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
         {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
             frameBuffer = canvas2d.CreateFrameBuffer(max, max);
-            //------------ 
         }
         protected override void DemoClosing()
         {

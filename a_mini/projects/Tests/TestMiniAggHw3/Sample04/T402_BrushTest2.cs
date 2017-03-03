@@ -3,8 +3,8 @@
 using System;
 using PixelFarm.Drawing;
 using Mini;
-using PixelFarm.DrawingGL; 
-using PixelFarm.Drawing.Fonts; 
+using PixelFarm.DrawingGL;
+using PixelFarm.Drawing.Fonts;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "402")]
@@ -17,12 +17,13 @@ namespace OpenTkEssTest
         LinearGradientBrush linearGrBrush2;
         PixelFarm.Agg.VertexStoreSnap tempSnap1;
         //  PixelFarm.Drawing.Fonts.SvgFontStore svgFontStore = new PixelFarm.Drawing.Fonts.SvgFontStore();
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        public override void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            //temp***
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
 
             //----------------------
             var win32InstallFontProvider = new PixelFarm.Drawing.InstallFontsProviderWin32();
@@ -58,7 +59,7 @@ namespace OpenTkEssTest
 
             linearGrBrush2 = new LinearGradientBrush(
                new PointF(0, 0), Color.Red,
-               new PointF(100,100), Color.Black);
+               new PointF(100, 100), Color.Black);
             //----------------------
         }
         //PixelFarm.Agg.VertexStore MergeFontSubFigures(PixelFarm.Agg.VertexStore vxs)
