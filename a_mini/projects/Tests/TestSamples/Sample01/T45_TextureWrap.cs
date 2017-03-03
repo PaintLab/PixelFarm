@@ -15,21 +15,21 @@
 
 
 
-#region Using Directives
+
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
+
 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "045")]
     [Info("T45_TextureWrap")]
-    public class T45_TextureWrap : SampleBase
+    public class T45_TextureWrap : DemoBase
     {
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                 uniform float u_offset;
@@ -171,7 +171,7 @@ namespace OpenTkEssTest
             GL.Uniform1(mOffsetLoc, 0.7f);
             //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
-            SwapBuffer();
+            SwapBuffers();
         }
         protected override void DemoClosing()
         {

@@ -108,6 +108,7 @@
     <Compile Include="OpenTK\Platform\INativeWindow.cs" />
     <Compile Include="OpenTK\Platform\IPlatformFactory.cs" />
     <Compile Include="OpenTK\Serialization\XmlIgnoreAttribute.cs" />
+    <Compile Include="Platform_Egl\Egl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

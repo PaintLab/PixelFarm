@@ -15,21 +15,21 @@
 
 
 
-#region Using Directives
+
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
+
 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "046")]
     [Info("T46_StencilOperations")]
-    public class T46_StencilOperations : SampleBase
+    public class T46_StencilOperations : DemoBase
     {
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                  attribute vec4 a_position;
@@ -284,7 +284,7 @@ namespace OpenTkEssTest
             //      // Reset the stencil mask
             //      glStencilMask(0xFF);
             GL.StencilMask(0xFF);
-            SwapBuffer();
+            SwapBuffers();
         }
         protected override void DemoClosing()
         {

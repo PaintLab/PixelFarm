@@ -2,6 +2,8 @@
 
 using System;
 using OpenTK.Graphics.ES20;
+using PixelFarm.Drawing;
+
 namespace PixelFarm.DrawingGL
 {
     public abstract class LazyBitmapBufferProvider
@@ -169,6 +171,14 @@ namespace PixelFarm.DrawingGL
             GL.DeleteTextures(1, ref textureId);
         }
 
+        //public override BitmapData LockBits()
+        //{
+        //    throw new NotImplementedException();
+        //}
+        //public override void UnlockBits(BitmapData bmpdata)
+        //{
+        //    throw new NotImplementedException();
+        //}
 #if DEBUG
 
         public readonly int dbugId = dbugIdTotal++;

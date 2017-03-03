@@ -14,23 +14,20 @@
 //            http://www.opengles-book.com
 
 
-#region Using Directives
+
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
 
-
-
-
+ 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "042")]
     [Info("T42_HelloTriangle")]
-    public class T42_ES2HelloTriangleDemo : SampleBase
+    public class T42_ES2HelloTriangleDemo : DemoBase
     {
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             //----------------
             //vertex shader source
@@ -64,14 +61,15 @@ namespace OpenTkEssTest
         protected override void OnGLRender(object sender, EventArgs args)
         {
             //------------------------------------------------------------------------------------------------
-
+            int width = this.Width;
+            int height = this.Height;
             float[] vertices =
                 {
                      0.0f,  0.5f, 0.0f,
                     -0.5f, -0.5f, 0.0f,
                      0.5f, -0.5f, 0.0f,
                 };
-            GL.Viewport(0, 0, Width, Height);
+            GL.Viewport(0, 0, width, height);
             // Set the viewport
             //glViewport(0, 0, getWindow()->getWidth(), getWindow()->getHeight());
             GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -87,7 +85,7 @@ namespace OpenTkEssTest
             //glEnableVertexAttribArray(0);
             GL.DrawArrays(BeginMode.Triangles, 0, 3);
             //glDrawArrays(GL_TRIANGLES, 0, 3); 
-            SwapBuffer();
+            SwapBuffers();
         }
         //-------------------------------
         int mProgram;

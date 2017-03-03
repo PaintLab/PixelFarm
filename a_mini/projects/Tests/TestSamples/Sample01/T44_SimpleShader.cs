@@ -15,22 +15,22 @@
 
 
 
-#region Using Directives
+
 
 using System;
 using OpenTK;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
+
 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "044")]
     [Info("T44_SimpleVertexShader")]
-    public class T44_SimpleVertexShader : SampleBase
+    public class T44_SimpleVertexShader : DemoBase
     {
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                 uniform mat4 u_mvpMatrix;
@@ -101,7 +101,7 @@ namespace OpenTkEssTest
             //// Draw the cube
             //glDrawElements(GL_TRIANGLES, mCube.indices.size(), GL_UNSIGNED_SHORT, mCube.indices.data());
             GL.DrawElements(BeginMode.Triangles, cube.indices.Length, DrawElementsType.UnsignedShort, cube.indices);
-            SwapBuffer();
+            SwapBuffers();
         }
 
         static double fmod(double numer, double denom)

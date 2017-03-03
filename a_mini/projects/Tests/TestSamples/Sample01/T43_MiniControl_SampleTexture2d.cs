@@ -14,21 +14,21 @@
 //            http://www.opengles-book.com
 
 
-#region Using Directives
+
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
+
 
 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "043")]
     [Info("T43_MiniControl_SampleTexture2dDemo")]
-    public class T43_MiniControl_SampleTexture2dDemo : SampleBase
+    public class T43_MiniControl_SampleTexture2dDemo : DemoBase
     {
-        protected override void OnInitGLProgram(object sender, EventArgs handler)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             //--------------------------------------------------------------------------
             string vs = @"
@@ -128,7 +128,7 @@ namespace OpenTkEssTest
             GL.Uniform1(mSamplerLoc, 0);
             //    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
-            SwapBuffer();
+            SwapBuffers();
         }
         protected override void DemoClosing()
         {

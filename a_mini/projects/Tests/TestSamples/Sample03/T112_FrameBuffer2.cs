@@ -8,7 +8,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "112")]
     [Info("T112_FrameBuffer")]
-    public class T112_FrameBuffer : SampleBase
+    public class T112_FrameBuffer : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
@@ -16,11 +16,14 @@ namespace OpenTkEssTest
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
+
             frameBuffer = canvas2d.CreateFrameBuffer(this.Width, this.Height);
             frameBufferNeedUpdate = true;
             //------------ 
@@ -38,7 +41,7 @@ namespace OpenTkEssTest
             //-------------------------------
             if (!isInit)
             {
-                glbmp = LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
+                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
                 isInit = true;
             }
             if (frameBuffer.FrameBufferId > 0)
@@ -64,7 +67,7 @@ namespace OpenTkEssTest
                 canvas2d.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
-            SwapBuffer();
+            SwapBuffers();
         }
     }
 }

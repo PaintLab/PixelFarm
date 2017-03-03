@@ -8,17 +8,20 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "105")]
     [Info("T105_Stencil")]
-    public class T105_Stencil : SampleBase
+    public class T105_Stencil : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         PixelFarm.Drawing.RenderVx stencilPolygon;
         PixelFarm.Drawing.RenderVx rectPolygon;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
+
             stencilPolygon = painter.CreatePolygonRenderVx(new float[]
                 {
                     20,20,
@@ -71,7 +74,7 @@ namespace OpenTkEssTest
             painter.FillRenderVx(rectPolygon);
             GL.Disable(EnableCap.StencilTest);
             //-----------------------------------------------------------
-            SwapBuffer();
+            SwapBuffers();
         }
     }
 }

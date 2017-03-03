@@ -1,26 +1,28 @@
 ﻿//MIT, 2014-2016,WinterDev
 
 using System;
-using PixelFarm.Drawing;
-using OpenTK.Graphics.ES20;
+using PixelFarm.Drawing; 
 using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "106")]
     [Info("T106_SampleBrushes")]
-    public class T106_SampleBrushes : SampleBase
+    public class T106_SampleBrushes : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         RenderVx polygon1;
         RenderVx polygon2;
         RenderVx polygon3;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {   
             polygon1 = painter.CreatePolygonRenderVx(new float[]
                 {
                     0,50,
@@ -51,7 +53,7 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             painter.FillColor = PixelFarm.Drawing.Color.Black;
             painter.FillRectLBWH(0, 0, 150, 150);
-            GLBitmap glBmp = LoadTexture(RootDemoPath.Path + "\\logo-dark.jpg");
+            GLBitmap glBmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
             var textureBrush = new TextureBrush(glBmp);
             painter.FillRenderVx(textureBrush, polygon1);
             //------------------------------------------------------------------------- 
@@ -64,15 +66,13 @@ namespace OpenTkEssTest
             painter.FillRenderVx(linearGrBrush2, polygon2);
             painter.FillColor = Color.Black;
             painter.FillRectLBWH(400, 0, 150, 150);
-            //------------------------------------------------------------------------- 
-
-            //another  ...                
-
+            //-------------------------------------------------------------------------  
+            //another  ...                 
             painter.FillRenderVx(linearGrBrush2, polygon3);
             //------------------------------------------------------------------------- 
 
 
-            SwapBuffer();
+            SwapBuffers();
         }
     }
 }

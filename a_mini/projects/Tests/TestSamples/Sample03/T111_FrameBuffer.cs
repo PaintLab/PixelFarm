@@ -9,19 +9,21 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "111")]
     [Info("T111_FrameBuffer")]
-    public class T111_FrameBuffer : SampleBase
+    public class T111_FrameBuffer : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         FrameBuffer frameBuffer;
         bool isInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
         {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
             frameBuffer = canvas2d.CreateFrameBuffer(max, max);
-            //------------ 
         }
         protected override void DemoClosing()
         {
@@ -66,7 +68,7 @@ namespace OpenTkEssTest
                 canvas2d.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
-            SwapBuffer();
+            SwapBuffers();
         }
     }
 }

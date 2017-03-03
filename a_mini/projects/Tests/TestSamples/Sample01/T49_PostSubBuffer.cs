@@ -14,22 +14,20 @@
 //            http://www.opengles-book.com
 
 
-
-#region Using Directives
+ 
 
 using System;
 using OpenTK;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
-
+ 
 namespace OpenTkEssTest
 {
     using EGLDisplay = IntPtr;
     using EGLSurface = IntPtr;
     [Info(OrderCode = "049")]
     [Info("T49_PostSubBuffer")]
-    public class T49_PostSubBuffer : SampleBase
+    public class T49_PostSubBuffer : DemoBase
     {
         //EGLBoolean (EGLAPIENTRYP PFNEGLPOSTSUBBUFFERNVPROC) (EGLDisplay dpy, EGLSurface surface, EGLint x, EGLint y, EGLint width, EGLint height);
 
@@ -41,9 +39,9 @@ namespace OpenTkEssTest
         }
 
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
-            IntPtr eglPostSubBufferNVFuncPtr = Pencil.Gaming.Glfw.GetProcAddress("eglPostSubBufferNV");
+            IntPtr eglPostSubBufferNVFuncPtr = OpenTK.Platform.Egl.EglFuncs.GetProcAddress("eglPostSubBufferNV");
             if (eglPostSubBufferNVFuncPtr == IntPtr.Zero)
             {
                 throw new NotSupportedException();
@@ -119,25 +117,14 @@ namespace OpenTkEssTest
             isGLInit = true;
             this.EnableAnimationTimer = true;
         }
-        IntPtr getDisplay()
-        {
-            //TODO: implement this
-            throw new NotSupportedException();
-            //return this.miniGLControl.GetEglDisplay();
-        }
-        IntPtr getSurface()
-        {
-            //TODO: implement this
-            throw new NotSupportedException();
-            //return this.miniGLControl.GetEglSurface();
-        }
+
         void CustomSwap()
         {
             // Instead of letting the application call eglSwapBuffers, call eglPostSubBufferNV here instead
             int windowWidth = this.Width;
             int windowHeight = this.Height;
-            EGLDisplay display = getDisplay();
-            EGLSurface surface = getSurface();
+            EGLDisplay display = getGLControlDisplay();
+            EGLSurface surface = getGLSurface();
             //test drop draw target to (60,200) and resize 
             mPostSubBufferNV(display, surface, 60, 200, windowWidth - 120, windowHeight - 120);
         }
