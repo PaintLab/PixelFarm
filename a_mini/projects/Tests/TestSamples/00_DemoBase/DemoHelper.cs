@@ -74,10 +74,18 @@ namespace Mini
     public static class DemoHelper
     {
         static LoadImageDelegate s_LoadImgDel;
-
+        static PixelFarm.Drawing.Fonts.IInstalledFontProvider s_fontProvider;
+        public static void RegisterFontProvider(PixelFarm.Drawing.Fonts.IInstalledFontProvider fontProvider)
+        {
+            s_fontProvider = fontProvider;
+        }
         public static void RegisterImageLoader(LoadImageDelegate loadImgDel)
         {
             s_LoadImgDel = loadImgDel;
+        }
+        public static PixelFarm.Drawing.Fonts.IInstalledFontProvider GetRegisterInstalledFontProvider()
+        {
+            return s_fontProvider;
         }
         public static PixelFarm.Agg.ActualImage LoadImage(string imgFileName)
         {

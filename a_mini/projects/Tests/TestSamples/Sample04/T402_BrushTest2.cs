@@ -25,8 +25,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            //----------------------
-            var win32InstallFontProvider = new PixelFarm.Drawing.InstallFontsProviderWin32();
+            var win32InstallFontProvider = DemoHelper.GetRegisterInstalledFontProvider();
             InstalledFontCollection collection = new InstalledFontCollection();
             collection.LoadInstalledFont(win32InstallFontProvider.GetInstalledFontIter());
             InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Regular);
