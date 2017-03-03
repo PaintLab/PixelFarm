@@ -14,14 +14,10 @@
 //            http://www.opengles-book.com
 
 
-#region Using Directives
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
-
-
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "050")]
@@ -70,8 +66,11 @@ namespace OpenTkEssTest
             // Get the sampler location
             mSamplerLoc = GL.GetUniformLocation(mProgram, "s_texture");
             //// Load the texture
+
             //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap("d:\\WImageTest\\test001.png");
             System.Drawing.Bitmap bmp = new System.Drawing.Bitmap("d:\\WImageTest\\test001.png");
+
+
             int bmpW = bmp.Width;
             int bmpH = bmp.Height;
             mTexture = LoadTexture(bmp);

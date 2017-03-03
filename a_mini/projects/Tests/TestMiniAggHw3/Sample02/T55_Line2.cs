@@ -2,7 +2,6 @@
 //we use concept from https://www.mapbox.com/blog/drawing-antialiased-lines/
 
 using System;
-using OpenTK;
 using OpenTK.Graphics.ES20;
 using Mini;
 namespace OpenTkEssTest

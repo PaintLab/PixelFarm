@@ -1,9 +1,5 @@
 ﻿//MIT, 2014-2017, WinterDev
-
-using System;
-using PixelFarm.Agg;
-using PixelFarm.DrawingGL;
-
+ 
 namespace Mini
 {
 
@@ -38,9 +34,6 @@ namespace Mini
             //---------------------------
             return new PixelFarm.DrawingGL.GLBitmap(bmp.Width, bmp.Height, buffer, false);
         }
-    }
-
-
-
+    } 
 
 }

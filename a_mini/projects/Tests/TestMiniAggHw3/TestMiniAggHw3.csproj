@@ -39,11 +39,11 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Mini\0_Start\DemoHelper.cs">
+      <Link>00_DemoBase\DemoHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Mini\0_Start\GLDemoContext.cs">
       <Link>00_DemoBase\GLDemoContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Mini\0_Start\PrebuiltGLControlDemoBase.cs">
-      <Link>00_DemoBase\PrebuiltGLControlDemoBase.cs</Link>
     </Compile>
     <Compile Include="..\Mini\2_Shared\BasicSprite.cs">
       <Link>00_DemoBase\BasicSprite.cs</Link>
@@ -89,6 +89,7 @@
     <Compile Include="Sample01\T47_Mipmap2d.cs" />
     <Compile Include="Sample01\T48_MultiTexture.cs" />
     <Compile Include="Sample01\T49_PostSubBuffer.cs" />
+    <Compile Include="Sample01\T50_SampleTexture2dDemo2.cs" />
     <Compile Include="Sample02\T51_View2d.cs" />
     <Compile Include="Sample02\T52_HelloTriangle2.cs" />
     <Compile Include="Sample02\T53_Viewport.cs" />
@@ -105,7 +106,6 @@
     <Compile Include="Sample03\T105_Stencil.cs" />
     <Compile Include="Sample03\T106_SampleBrushes.cs" />
     <Compile Include="Sample03\T107_DrawImage.cs" />
-    <Compile Include="Sample01\T50_SampleTexture2dDemo2.cs" />
     <Compile Include="Sample03\T108_LionFill2.cs" />
     <Compile Include="Sample03\T111_FrameBuffer.cs" />
     <Compile Include="Sample03\T112_FrameBuffer2.cs" />

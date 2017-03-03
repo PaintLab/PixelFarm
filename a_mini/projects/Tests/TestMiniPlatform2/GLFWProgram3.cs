@@ -10,6 +10,7 @@ namespace TestGlfw
     class GLFWProgram3
     {
 
+
         public static void Start()
         {
 
@@ -17,9 +18,9 @@ namespace TestGlfw
             {
                 Console.WriteLine("can't init");
             }
-            
+
             Glfw.SwapInterval(1);
-           
+
             GlFwForm form1 = GlfwApp.CreateGlfwForm(
                 800,
                 600,
@@ -31,19 +32,19 @@ namespace TestGlfw
             GLFWPlatforms.CreateGLESContext();
             //------------------------------------
             form1.Activate();
-            
+
             //----------------
             //this not need if we use glfwcontext for opentk
-           // new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
+            // new OpenTK.Graphics.ES20.GL().LoadEntryPoints();
             //----------------
 
             //var demo = new OpenTkEssTest.T52_HelloTriangle2();
             //var demo = new OpenTkEssTest.T107_SampleDrawImage();
             //var demo = new OpenTkEssTest.T107_SampleDrawImage();
-            var demo = new OpenTkEssTest.T108_LionFill();
-            demo.Width = 800;
-            demo.Height = 600;
-            demo.InitGLProgram();
+            var demoContext = new Mini.GLDemoContext2(800, 600);
+            demoContext.LoadDemo(new OpenTkEssTest.T108_LionFill());
+
+
             //var demo = new OpenTkEssTest.T107_SampleDrawImage();
             //demo.Width = 800;
             //demo.Height = 600;
@@ -62,7 +63,8 @@ namespace TestGlfw
             //--------------------------------------------------------------------------------
             form1.SetDrawFrameDelegate(() =>
             {
-                demo.Render();
+                demoContext.Render();
+                //demo.Render();
             });
 
             //---------------------------------
@@ -70,7 +72,7 @@ namespace TestGlfw
               800,
               600,
               "Form 2");
-            
+
             f2.MakeCurrent();
             f2.Activate();
             GL.Enable(EnableCap.Blend);
@@ -91,7 +93,7 @@ namespace TestGlfw
                 /* Poll for and process events */
                 Glfw.PollEvents();
             }
-            demo.Close();
+            demoContext.Close();
             Glfw.Terminate();
         }
     }

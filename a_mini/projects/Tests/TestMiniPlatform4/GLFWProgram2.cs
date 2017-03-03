@@ -19,18 +19,16 @@ namespace TestGlfw
         GLES2,
         SKIA
     }
-
-
-
-
     class GLFWProgram
     {
         static bool needUpdateContent = false;
         static MyNativeRGBA32BitsImage myImg;
         static GLBitmap glBmp;
-        static BackEnd selectedBackEnd = BackEnd.GLES2;
-        static Mini.GLDemoContext2 demoContext2 = null;
 
+
+        static BackEnd selectedBackEnd = BackEnd.GLES2;
+
+        
         static void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
 
@@ -61,29 +59,20 @@ namespace TestGlfw
             else
             {
 
-                if (demoContext2 == null)
-                {
-                    //var demo = new OpenTkEssTest.T44_SimpleVertexShader(); 
-                    //var demo = new OpenTkEssTest.T42_ES2HelloTriangleDemo();
-                    demoContext2 = new Mini.GLDemoContext2(w, h);
-                    demoContext2.LoadDemo(new OpenTkEssTest.T45_TextureWrap());
-                }
+              
+                //---------------------------------------------------------------------------------------
+                //test2
+                var lionShape = new PixelFarm.Agg.SpriteShape();
+                lionShape.ParseLion();
+                var lionBounds = lionShape.Bounds;
+                //-------------
+                var aggImage = new PixelFarm.Agg.ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
+                var imgGfx2d = new PixelFarm.Agg.ImageGraphics2D(aggImage);
+                var aggPainter = new PixelFarm.Agg.AggCanvasPainter(imgGfx2d);
 
-                demoContext2.Render();
-
-                ////---------------------------------------------------------------------------------------
-                ////test2
-                //var lionShape = new PixelFarm.Agg.SpriteShape();
-                //lionShape.ParseLion();
-                //var lionBounds = lionShape.Bounds;
-                ////-------------
-                //var aggImage = new PixelFarm.Agg.ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
-                //var imgGfx2d = new PixelFarm.Agg.ImageGraphics2D(aggImage);
-                //var aggPainter = new PixelFarm.Agg.AggCanvasPainter(imgGfx2d);
-
-                //DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
-                ////convert affImage to texture 
-                //glBmp = LoadTexture(aggImage);
+                DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
+                //convert affImage to texture 
+                glBmp = LoadTexture(aggImage);
 
             }
         }
@@ -171,12 +160,12 @@ namespace TestGlfw
 
             form1.SetDrawFrameDelegate(() =>
             {
-                //if (needUpdateContent)
-                //{
-                UpdateViewContent(formRenderUpdateEventArgs);
-                //}
-                //canvasGL2d.Clear(Color.Blue);
-                //canvasGL2d.DrawImage(glBmp, 0, 600);
+                if (needUpdateContent)
+                {
+                    UpdateViewContent(formRenderUpdateEventArgs);
+                }
+                canvasGL2d.Clear(Color.Blue);
+                canvasGL2d.DrawImage(glBmp, 0, 600);
             });
 
 
