@@ -5,8 +5,7 @@
 // it still follows the originall agg function names.  I have been cleaning these up over time
 // and intend to do much more refactoring of these things over the long term.
 
-using System;
-using PixelFarm.Drawing.Fonts;
+
 using Mini;
 namespace PixelFarm.Agg.SimplePainter
 {
@@ -37,7 +36,7 @@ namespace PixelFarm.Agg.SimplePainter
 
         public override void Draw(CanvasPainter p)
         {
-             
+
             //1.
             // clear the image to white 
             p.Clear(Drawing.Color.White);

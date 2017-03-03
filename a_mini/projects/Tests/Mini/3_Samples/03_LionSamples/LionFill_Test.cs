@@ -30,7 +30,6 @@ either expressed or implied, of the FreeBSD Project.
 using System;
 using PixelFarm.Agg.Transform;
 using Mini;
-using LayoutFarm.MiniCinema;
 namespace PixelFarm.Agg.Sample_LionFill_Test
 {
     [Info(OrderCode = "03")]
