@@ -9,8 +9,6 @@ namespace TestGlfw
 {
     class GLFWProgram3
     {
-
-
         public static void Start()
         {
 

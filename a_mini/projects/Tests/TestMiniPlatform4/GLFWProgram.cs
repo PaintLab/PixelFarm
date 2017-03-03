@@ -2,8 +2,6 @@
 using System;
 using Pencil.Gaming;
 using PixelFarm;
-using PixelFarm.Drawing;
-using PixelFarm.DrawingGL;
 using PixelFarm.Forms;
 using OpenTK.Graphics.ES20;
 using SkiaSharp;
@@ -23,47 +21,42 @@ namespace TestGlfw
     }
 
 
-
-
     class GLFWProgram
     {
-        static bool needUpdateContent = false;
-        static MyNativeRGBA32BitsImage myImg;
-        static GLBitmap glBmp;
         static BackEnd selectedBackEnd = BackEnd.GLES2;
+
+        static MyNativeRGBA32BitsImage myImg;
         static Mini.GLDemoContext demoContext2 = null;
 
         static void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
-
-            needUpdateContent = false;
             //1. create platform bitmap 
             // create the surface
             int w = 800;
             int h = 600;
-
-
             if (selectedBackEnd == BackEnd.SKIA)
             {
                 if (myImg == null)
                 {
                     myImg = new TestGlfw.MyNativeRGBA32BitsImage(w, h);
+                    //test1
+                    // create the surface
+                    var info = new SKImageInfo(w, h, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
+                    using (var surface = SKSurface.Create(info, myImg.Scan0, myImg.Stride))
+                    {
+                        // start drawing
+                        SKCanvas canvas = surface.Canvas;
+                        DrawWithSkia(canvas);
+                        surface.Canvas.Flush();
+                    }
                 }
-                //test1
-                // create the surface
-                var info = new SKImageInfo(w, h, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-                using (var surface = SKSurface.Create(info, myImg.Scan0, myImg.Stride))
-                {
-                    // start drawing
-                    SKCanvas canvas = surface.Canvas;
-                    DrawWithSkia(canvas);
-                    surface.Canvas.Flush();
-                }
-                glBmp = new PixelFarm.DrawingGL.GLBitmap(w, h, myImg.Scan0);
+
+                var glBmp = new PixelFarm.DrawingGL.GLBitmap(w, h, myImg.Scan0);
+                canvasGL2d.DrawImage(glBmp, 0, 600);
+                glBmp.Dispose();
             }
             else
             {
-
                 if (demoContext2 == null)
                 {
                     //var demo = new T44_SimpleVertexShader(); 
@@ -74,40 +67,7 @@ namespace TestGlfw
                     //demoContext2.LoadDemo(new T48_MultiTexture());
                     demoContext2.LoadDemo(new T107_SampleDrawImage());
                 }
-
                 demoContext2.Render();
-
-                ////---------------------------------------------------------------------------------------
-                ////test2
-                //var lionShape = new PixelFarm.Agg.SpriteShape();
-                //lionShape.ParseLion();
-                //var lionBounds = lionShape.Bounds;
-                ////-------------
-                //var aggImage = new PixelFarm.Agg.ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
-                //var imgGfx2d = new PixelFarm.Agg.ImageGraphics2D(aggImage);
-                //var aggPainter = new PixelFarm.Agg.AggCanvasPainter(imgGfx2d);
-
-                //DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
-                ////convert affImage to texture 
-                //glBmp = LoadTexture(aggImage);
-
-            }
-        }
-        static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.Agg.ActualImage actualImg)
-        {
-            return new PixelFarm.DrawingGL.GLBitmap(actualImg.Width,
-                actualImg.Height,
-                PixelFarm.Agg.ActualImage.GetBuffer(actualImg), false);
-        }
-        static void DrawLion(PixelFarm.Agg.CanvasPainter p, PixelFarm.Agg.SpriteShape shape, PixelFarm.Agg.VertexStore myvxs)
-        {
-            int j = shape.NumPaths;
-            int[] pathList = shape.PathIndexList;
-            Color[] colors = shape.Colors;
-            for (int i = 0; i < j; ++i)
-            {
-                p.FillColor = colors[i];
-                p.Fill(new PixelFarm.Agg.VertexStoreSnap(myvxs, pathList[i]));
             }
         }
         static void DrawWithSkia(SKCanvas canvas)
@@ -126,9 +86,6 @@ namespace TestGlfw
         }
 
         static PixelFarm.DrawingGL.CanvasGL2d canvasGL2d;
-
-
-
         static PixelFarm.Agg.ActualImage LoadImage(string filename)
         {
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
@@ -213,8 +170,7 @@ namespace TestGlfw
             GL.ClearColor(1, 1, 1, 1);
             //--------------------------------------------------------------------------------
             //setup viewport size
-            //set up canvas
-            needUpdateContent = true;
+            //set up canvas 
 
             //GL.Viewport(0, 0, 800, 600);
             GL.Viewport(0, 0, max, max);
@@ -224,12 +180,9 @@ namespace TestGlfw
 
             form1.SetDrawFrameDelegate(() =>
             {
-                //if (needUpdateContent)
-                //{
                 UpdateViewContent(formRenderUpdateEventArgs);
-                //}
-                //canvasGL2d.Clear(Color.Blue);
-                //canvasGL2d.DrawImage(glBmp, 0, 600);
+
+
             });
 
 
