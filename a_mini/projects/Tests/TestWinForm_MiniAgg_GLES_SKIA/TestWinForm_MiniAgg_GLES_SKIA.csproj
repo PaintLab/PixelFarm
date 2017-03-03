@@ -8,8 +8,8 @@
     <ProjectGuid>{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mini</RootNamespace>
-    <AssemblyName>Mini</AssemblyName>
+    <RootNamespace>TestWinForm_MiniAgg_GLES_SKIA</RootNamespace>
+    <AssemblyName>TestWinForm_MiniAgg_GLES_SKIA</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>

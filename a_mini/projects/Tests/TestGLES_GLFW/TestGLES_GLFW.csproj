@@ -7,8 +7,8 @@
     <ProjectGuid>{8072FC36-EBC4-4E59-A092-1B9AE9EE4F9C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestMiniPlatform2</RootNamespace>
-    <AssemblyName>TestMiniPlatform2</AssemblyName>
+    <RootNamespace>TestGLES_GLFW</RootNamespace>
+    <AssemblyName>TestGLES_GLFW</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
