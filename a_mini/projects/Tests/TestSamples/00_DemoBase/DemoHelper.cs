@@ -4,11 +4,11 @@ using PixelFarm.DrawingGL;
 
 namespace Mini
 {
-    public class GLDemoContext2
+    public class GLDemoContext
     {
         Mini.DemoBase demo;
         int w, h;
-        public GLDemoContext2(int w, int h)
+        public GLDemoContext(int w, int h)
         {
             this.w = w;
             this.h = h;

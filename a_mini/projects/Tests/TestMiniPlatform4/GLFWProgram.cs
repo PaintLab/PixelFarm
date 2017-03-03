@@ -31,7 +31,7 @@ namespace TestGlfw
         static MyNativeRGBA32BitsImage myImg;
         static GLBitmap glBmp;
         static BackEnd selectedBackEnd = BackEnd.GLES2;
-        static Mini.GLDemoContext2 demoContext2 = null;
+        static Mini.GLDemoContext demoContext2 = null;
 
         static void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
@@ -68,7 +68,7 @@ namespace TestGlfw
                 {
                     //var demo = new T44_SimpleVertexShader(); 
                     //var demo = new T42_ES2HelloTriangleDemo();
-                    demoContext2 = new Mini.GLDemoContext2(w, h);
+                    demoContext2 = new Mini.GLDemoContext(w, h);
 
                     //demoContext2.LoadDemo(new T45_TextureWrap());
                     //demoContext2.LoadDemo(new T48_MultiTexture());

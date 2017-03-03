@@ -88,7 +88,7 @@ namespace Mini
                             //---------------------- 
                             //get target control that used to present the example
                             OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
-                            GLDemoContext glbaseDemo = new GLDemoContext();
+                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
                             glbaseDemo.LoadGLControl(control);
                             glbaseDemo.LoadSample(exBase);
                             //----------------------
