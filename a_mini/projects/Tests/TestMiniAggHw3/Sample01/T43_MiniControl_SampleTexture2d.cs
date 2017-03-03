@@ -14,12 +14,12 @@
 //            http://www.opengles-book.com
 
 
-#region Using Directives
+
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
+
 
 
 namespace OpenTkEssTest

@@ -28,7 +28,7 @@ namespace TestGlfw
 
         static BackEnd selectedBackEnd = BackEnd.GLES2;
 
-        static Mini.DemoBase selectedDemo = null;
+        
         static void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
 
@@ -58,72 +58,21 @@ namespace TestGlfw
             }
             else
             {
-                GlFwForm glFwForm = formRenderUpdateEventArgs.form;
-                if (selectedDemo == null)
-                {
-                    //if this is the first time
-                    //create new
-                    //var demo = new OpenTkEssTest.T44_SimpleVertexShader(); 
-                    //var demo = new OpenTkEssTest.T42_ES2HelloTriangleDemo();
-                    var demo = new OpenTkEssTest.T45_TextureWrap();
-                    demo.Init();
-                    CanvasGL2d canvas2d;
-                    GLCanvasPainter canvasPainter;
-                    demo.BuildCustomDemoGLContext(out canvas2d, out canvasPainter);
-                    if (canvasGL2d == null)
-                    {
-                        //if demo not create canvas and painter
-                        //the we create for it
-                        int max = Math.Max(w, h);
-                        canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-                        canvasPainter = new GLCanvasPainter(canvas2d, max, max);
-                        //create text printer for opengl 
-                        //----------------------
-                        //1. win gdi based
-                        //var printer = new WinGdiFontPrinter(canvas2d, w, h);
-                        //canvasPainter.TextPrinter = printer;
-                        //----------------------
-                        //2. raw vxs
-                        //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
-                        //canvasPainter.TextPrinter = printer;
-                        //----------------------
-                        //3. agg texture based font texture
-                        //var printer = new AggFontPrinter(canvasPainter, w, h);
-                        //canvasPainter.TextPrinter = printer;
-                        //----------------------
-                        //4. texture atlas based font texture 
-                        //------------
-                        //resolve request font 
-                        //var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
-                        //canvasPainter.TextPrinter = printer;
-                    }
 
-                    demo.SetEssentialGLHandlers(
-                        () => { },
-                        () => IntPtr.Zero,
-                        () => IntPtr.Zero);
+              
+                //---------------------------------------------------------------------------------------
+                //test2
+                var lionShape = new PixelFarm.Agg.SpriteShape();
+                lionShape.ParseLion();
+                var lionBounds = lionShape.Bounds;
+                //-------------
+                var aggImage = new PixelFarm.Agg.ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
+                var imgGfx2d = new PixelFarm.Agg.ImageGraphics2D(aggImage);
+                var aggPainter = new PixelFarm.Agg.AggCanvasPainter(imgGfx2d);
 
-                    Mini.DemoBase.InvokeGLContextReady(demo, canvas2d, canvasPainter);
-
-                    selectedDemo = demo;
-                }
-
-                glFwForm.MakeCurrent();
-                selectedDemo.InvokeGLPaint();
-
-                ////---------------------------------------------------------------------------------------
-                ////test2
-                //var lionShape = new PixelFarm.Agg.SpriteShape();
-                //lionShape.ParseLion();
-                //var lionBounds = lionShape.Bounds;
-                ////-------------
-                //var aggImage = new PixelFarm.Agg.ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
-                //var imgGfx2d = new PixelFarm.Agg.ImageGraphics2D(aggImage);
-                //var aggPainter = new PixelFarm.Agg.AggCanvasPainter(imgGfx2d);
-
-                //DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
-                ////convert affImage to texture 
-                //glBmp = LoadTexture(aggImage);
+                DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
+                //convert affImage to texture 
+                glBmp = LoadTexture(aggImage);
 
             }
         }
@@ -211,12 +160,12 @@ namespace TestGlfw
 
             form1.SetDrawFrameDelegate(() =>
             {
-                //if (needUpdateContent)
-                //{
-                UpdateViewContent(formRenderUpdateEventArgs);
-                //}
-                //canvasGL2d.Clear(Color.Blue);
-                //canvasGL2d.DrawImage(glBmp, 0, 600);
+                if (needUpdateContent)
+                {
+                    UpdateViewContent(formRenderUpdateEventArgs);
+                }
+                canvasGL2d.Clear(Color.Blue);
+                canvasGL2d.DrawImage(glBmp, 0, 600);
             });
 
 

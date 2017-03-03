@@ -15,13 +15,13 @@
 
 
 
-#region Using Directives
+ 
 
 using System;
 using System.Drawing;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
+ 
 
 namespace OpenTkEssTest
 {
