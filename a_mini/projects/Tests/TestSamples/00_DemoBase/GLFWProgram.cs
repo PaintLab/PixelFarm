@@ -26,7 +26,7 @@ namespace TestGlfw
         static GLBitmap glBmp;
 
 
-        static BackEnd selectedBackEnd = BackEnd.SKIA;
+        static BackEnd selectedBackEnd = BackEnd.GLES2;
 
         static void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
@@ -39,7 +39,7 @@ namespace TestGlfw
             if (myImg == null)
             {
                 myImg = new TestGlfw.MyNativeRGBA32BitsImage(w, h);
-            } 
+            }
 
             if (selectedBackEnd == BackEnd.SKIA)
             {

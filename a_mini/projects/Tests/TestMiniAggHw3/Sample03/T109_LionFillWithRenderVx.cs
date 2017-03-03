@@ -10,17 +10,22 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "109")]
     [Info("T109_LionFillWithRenderVx")]
-    public class T109_LionFillWithRenderVx : PrebuiltGLControlDemoBase
+    public class T109_LionFillWithRenderVx : DemoBase
     {
         CanvasGL2d canvas2d;
         SpriteShape lionShape;
         VertexStore lionVxs;
         GLCanvasPainter painter;
         List<RenderVx> lionRenderVxList = new List<RenderVx>();
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
         {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+           
             lionShape = new SpriteShape();
             lionShape.ParseLion();
             //flip this lion vertically before use with openGL
@@ -28,8 +33,7 @@ namespace OpenTkEssTest
                  PixelFarm.Agg.Transform.AffinePlan.Scale(1, -1),
                  PixelFarm.Agg.Transform.AffinePlan.Translate(0, 600));
             lionVxs = new VertexStore();
-            aff.TransformToVxs(lionShape.Path.Vxs, lionVxs);
-            painter = new GLCanvasPainter(canvas2d, max, max);
+            aff.TransformToVxs(lionShape.Path.Vxs, lionVxs); 
             //convert lion vxs to renderVx
 
             int j = lionShape.NumPaths;

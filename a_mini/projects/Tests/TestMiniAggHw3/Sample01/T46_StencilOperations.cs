@@ -26,10 +26,10 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "046")]
     [Info("T46_StencilOperations")]
-    public class T46_StencilOperations : PrebuiltGLControlDemoBase
+    public class T46_StencilOperations : DemoBase
     {
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                  attribute vec4 a_position;

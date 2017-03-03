@@ -9,19 +9,21 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "111")]
     [Info("T111_FrameBuffer")]
-    public class T111_FrameBuffer : PrebuiltGLControlDemoBase
+    public class T111_FrameBuffer : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         FrameBuffer frameBuffer;
         bool isInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
         {
             int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
             frameBuffer = canvas2d.CreateFrameBuffer(max, max);
-            //------------ 
         }
         protected override void DemoClosing()
         {

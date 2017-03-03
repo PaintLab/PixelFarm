@@ -26,10 +26,10 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "050")]
     [Info("T50_SampleTexture2dDemo2")]
-    public class T50_SampleTexture2dDemo2 : PrebuiltGLControlDemoBase
+    public class T50_SampleTexture2dDemo2 : DemoBase
     {
         int u_matrix;
-        protected override void OnInitGLProgram(object sender, EventArgs handler)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             //--------------------------------------------------------------------------
             string vs = @"

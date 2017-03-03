@@ -21,7 +21,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "054")]
     [Info("T54_Lines")]
-    public class T54_Lines : PrebuiltGLControlDemoBase
+    public class T54_Lines : DemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib2f a_position;
@@ -30,7 +30,7 @@ namespace OpenTkEssTest
         ShaderUniformVar1 u_useSolidColor;
         ShaderUniformVar4 u_solidColor;
         MyMat4 orthoView;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             //----------------
             //vertex shader source

@@ -8,7 +8,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "114")]
     [Info("T114_FrameBuffer")]
-    public class T114_FrameBufferWithConvFilterEffect : PrebuiltGLControlDemoBase
+    public class T114_FrameBufferWithConvFilterEffect : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
@@ -17,11 +17,14 @@ namespace OpenTkEssTest
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
+
             frameBuffer = canvas2d.CreateFrameBuffer(this.Width, this.Height);
             frameBufferNeedUpdate = true;
             //------------ 

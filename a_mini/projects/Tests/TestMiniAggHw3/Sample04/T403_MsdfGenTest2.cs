@@ -7,26 +7,17 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "403")]
     [Info("T403_MsdfGenTest2")]
-    public class T403_MsdfGenTest2 : PrebuiltGLControlDemoBase
+    public class T403_MsdfGenTest2 : DemoBase
     {
         CanvasGL2d canvas2d;
         bool resInit;
-        GLBitmap msdf_bmp; 
-        protected override void OnInitGLProgram(object sender, EventArgs args)
-        {
-            int max = Math.Max(this.Width, this.Height); 
-            var prebuiltContext = sender as PrebuiltContext;
-            if (prebuiltContext != null)
-            {
-                canvas2d = prebuiltContext.gl2dCanvas; 
-            }
-            else
-            {
-                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-                
-            }
+        GLBitmap msdf_bmp;
 
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+            this.canvas2d = canvasGL;
         }
+
         protected override void DemoClosing()
         {
             canvas2d.Dispose();
@@ -38,7 +29,7 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             if (!resInit)
             {
-                msdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\msdf_75.png"); 
+                msdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\msdf_75.png");
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1.png");
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\msdf_65.png");
                 resInit = true;

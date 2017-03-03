@@ -13,60 +13,72 @@ namespace Mini
         CanvasGL2d canvas2d;
         GLCanvasPainter canvasPainter;
 
-        public void LoadGLControl(OpenTK.MyGLControl glControl, System.EventHandler paintHandler = null)
+        public void LoadGLControl(OpenTK.MyGLControl glControl)
         {
+            //----------------------
             this.glControl = glControl;
-
-            if (paintHandler == null)
-            {
-                glControl.SetGLPaintHandler(HandleGLPaint);
-            }
-            else
-            {
-                glControl.SetGLPaintHandler(paintHandler);
-            }
-            hh1 = glControl.Handle;
+            glControl.SetGLPaintHandler(HandleGLPaint);
+            hh1 = glControl.Handle; //ensure that contrl handler is created
             glControl.MakeCurrent();
-            int max = Math.Max(glControl.Width, glControl.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-            canvasPainter = new GLCanvasPainter(canvas2d, max, max);
-            //create text printer for opengl 
-            //----------------------
-            //1. win gdi based
-            //var printer = new WinGdiFontPrinter(canvas2d, w, h);
-            //canvasPainter.TextPrinter = printer;
-            //----------------------
-            //2. raw vxs
-            //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
-            //canvasPainter.TextPrinter = printer;
-            //----------------------
-            //3. agg texture based font texture
-            //var printer = new AggFontPrinter(canvasPainter, w, h);
-            //canvasPainter.TextPrinter = printer;
-            //----------------------
-            //4. texture atlas based font texture
-
-            //------------
-            //resolve request font
-
-
-            var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
-            canvasPainter.TextPrinter = printer;
-
         }
         public void LoadSample(DemoBase demobase)
         {
             this.demobase = demobase;
+            //1.
+            //note:when we init,
+            //no glcanvas/ painter are created
             demobase.Init();
-            if (demobase is PrebuiltGLControlDemoBase)
-            {
-                var prebuiltGLControl = (PrebuiltGLControlDemoBase)demobase;
-                var preBuiltContext = new Mini.PrebuiltContext();
-                preBuiltContext.gl2dCanvas = this.canvas2d;
-                preBuiltContext.glCanvasPainter = this.canvasPainter;
-                prebuiltGLControl.SetGLControl(this.glControl, preBuiltContext);
+            //-----------------------------------------------
+            //2. check if demo will create canvas/painter context
+            //or let this GLDemoContext create for it
 
+            hh1 = glControl.Handle; //ensure that contrl handler is created
+            glControl.MakeCurrent();
+
+            demobase.BuildCustomDemoGLContext(out this.canvas2d, out this.canvasPainter);
+            //
+            if (this.canvas2d == null)
+            {
+                //if demo not create canvas and painter
+                //the we create for it
+                int max = Math.Max(glControl.Width, glControl.Height);
+                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+                canvasPainter = new GLCanvasPainter(canvas2d, max, max);
+                //create text printer for opengl 
+                //----------------------
+                //1. win gdi based
+                //var printer = new WinGdiFontPrinter(canvas2d, w, h);
+                //canvasPainter.TextPrinter = printer;
+                //----------------------
+                //2. raw vxs
+                //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
+                //canvasPainter.TextPrinter = printer;
+                //----------------------
+                //3. agg texture based font texture
+                //var printer = new AggFontPrinter(canvasPainter, w, h);
+                //canvasPainter.TextPrinter = printer;
+                //----------------------
+                //4. texture atlas based font texture 
+                //------------
+                //resolve request font 
+                var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
+                canvasPainter.TextPrinter = printer;
             }
+
+            //-----------------------------------------------
+            demobase.SetEssentialGLHandlers(
+                () => this.glControl.SwapBuffers(),
+                () => this.glControl.GetEglDisplay(),
+                () => this.glControl.GetEglSurface()
+            );
+            //-----------------------------------------------
+            this.glControl.SetGLPaintHandler((s, e) =>
+            {
+                demobase.InvokeGLPaint();
+            });
+
+
+            DemoBase.InvokeGLContextReady(demobase, this.canvas2d, this.canvasPainter);
         }
         void HandleGLPaint(object sender, System.EventArgs e)
         {
@@ -83,6 +95,10 @@ namespace Mini
                 demobase.Draw(canvasPainter);
             }
             glControl.SwapBuffers();
+        }
+        public void CloseDemo()
+        {
+            demobase.CloseDemo();
         }
 
     }

@@ -51,6 +51,7 @@ namespace PixelFarm.Agg.Samples
         {
             p.Clear(Drawing.Color.White);
             lionFill.Draw(p);
+            SwapBuffers();
         }
         public override void MouseDrag(int x, int y)
         {

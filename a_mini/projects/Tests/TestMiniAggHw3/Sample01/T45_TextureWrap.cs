@@ -26,10 +26,10 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "045")]
     [Info("T45_TextureWrap")]
-    public class T45_TextureWrap : PrebuiltGLControlDemoBase
+    public class T45_TextureWrap : DemoBase
     {
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                 uniform float u_offset;

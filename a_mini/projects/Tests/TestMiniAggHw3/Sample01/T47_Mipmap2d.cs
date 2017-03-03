@@ -26,10 +26,10 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "047")]
     [Info("T47_TextureWrap")]
-    public class T47_Mipmap2d : PrebuiltGLControlDemoBase
+    public class T47_Mipmap2d : DemoBase
     {
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                  uniform float u_offset;

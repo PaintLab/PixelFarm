@@ -39,9 +39,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedModule\DemoBase1.cs">
-      <Link>DemoBase1.cs</Link>
-    </Compile>
     <Compile Include="..\SharedModule\LionDataStore.cs">
       <Link>LionDataStore.cs</Link>
     </Compile>
@@ -53,12 +50,6 @@
     </Compile>
     <Compile Include="..\TestSamples\00_DemoBase\Program.cs">
       <Link>Program.cs</Link>
-    </Compile>
-    <Compile Include="..\TestSamples\00_DemoBase\SampleBase.cs">
-      <Link>SampleBase.cs</Link>
-    </Compile>
-    <Compile Include="..\TestSamples\Sample03\T108_LionFill.cs">
-      <Link>T108_LionFill.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

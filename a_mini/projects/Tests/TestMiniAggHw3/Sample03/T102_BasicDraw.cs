@@ -7,17 +7,20 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "102")]
     [Info("T102_BasicDraw")]
-    public class T102_BasicDraw : PrebuiltGLControlDemoBase
+    public class T102_BasicDraw : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         PixelFarm.Drawing.RenderVx polygon1;
         PixelFarm.Drawing.RenderVx polygon2;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
+            int max = Math.Max(this.Width, this.Height); 
             polygon1 = painter.CreatePolygonRenderVx(new float[]
             {
                 50,200,

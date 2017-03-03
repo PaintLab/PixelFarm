@@ -22,10 +22,10 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "051")]
     [Info("T51_View2d")]
-    public class T51_View2d : PrebuiltGLControlDemoBase
+    public class T51_View2d : DemoBase
     {
         MiniShaderProgram shaderProgram;
-        protected override void OnInitGLProgram(object sender, EventArgs handler)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             shaderProgram = new MiniShaderProgram();
             string vs = @"

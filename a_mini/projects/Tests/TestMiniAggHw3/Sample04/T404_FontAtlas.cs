@@ -8,7 +8,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "404")]
     [Info("T404_FontAtlas")]
-    public class T404_FontAtlas : PrebuiltGLControlDemoBase
+    public class T404_FontAtlas : DemoBase
     {
         CanvasGL2d canvas2d;
         bool resInit;
@@ -16,11 +16,18 @@ namespace OpenTkEssTest
         GLCanvasPainter painter;
         System.Drawing.Bitmap totalImg;
         SimpleFontAtlas fontAtlas;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        public override void Init()
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
+            base.Init();
+        }
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
+             
 
             //--------------------- 
             string fontfilename = "d:\\WImageTest\\a_total.xml";
@@ -36,11 +43,6 @@ namespace OpenTkEssTest
             var glyph = new Typography.Rendering.GlyphImage(totalImg.Width, totalImg.Height);
             glyph.SetImageBuffer(buffer, false);
             fontAtlas.TotalGlyph = glyph;
-
-
-
-
-            //---------------------
         }
         protected override void DemoClosing()
         {
@@ -72,7 +74,7 @@ namespace OpenTkEssTest
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
             fontAtlas.GetRectByCodePoint(codepoint[0], out glyphData);
-            PixelFarm.Drawing.Rectangle r = ConvToRect(glyphData.Rect);             
+            PixelFarm.Drawing.Rectangle r = ConvToRect(glyphData.Rect);
             //canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
             canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
 
@@ -89,6 +91,6 @@ namespace OpenTkEssTest
             return PixelFarm.Drawing.Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);
         }
     }
- 
+
 }
 
