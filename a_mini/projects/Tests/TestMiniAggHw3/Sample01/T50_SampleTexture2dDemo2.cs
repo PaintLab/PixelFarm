@@ -68,8 +68,8 @@ namespace OpenTkEssTest
             //// Load the texture
 
             //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap("d:\\WImageTest\\test001.png");
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap("d:\\WImageTest\\test001.png");
-
+            //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap("d:\\WImageTest\\test001.png");
+            PixelFarm.Agg.ActualImage bmp = DemoHelper.LoadImage("d:\\WImageTest\\test001.png");
 
             int bmpW = bmp.Width;
             int bmpH = bmp.Height;
@@ -134,7 +134,7 @@ namespace OpenTkEssTest
             GL.DeleteTexture(mTexture);
             mProgram = mTexture = 0;
         }
-        static int LoadTexture(System.Drawing.Bitmap bmp)
+        static int LoadTexture(PixelFarm.Agg.ActualImage bmp)
         {
             int texture = GL.GenTexture();
             GL.BindTexture(TextureTarget.Texture2D, texture);
@@ -146,11 +146,20 @@ namespace OpenTkEssTest
             //GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
             //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, static_cast<GLsizei>(image.width), static_cast<GLsizei>(image.height), 0,
             //             GL_RGBA, GL_UNSIGNED_BYTE, image.data.data());
-            var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, bmpdata.Scan0);
-            bmp.UnlockBits(bmpdata);
+            //var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
+            //    System.Drawing.Imaging.ImageLockMode.ReadOnly,
+            //    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //var bmpdata = bmp.LockBits();
+
+            var lazyImgProvider = new PixelFarm.DrawingGL.LazyAggBitmapBufferProvider(bmp);
+            IntPtr ptr = lazyImgProvider.GetRawBufferHead();
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
+            //bmp.UnlockBits(bmpdata);
             //glGenerateMipmap(GL_TEXTURE_2D);
             GL.GenerateMipmap(TextureTarget.Texture2D);
+            lazyImgProvider.ReleaseBufferHead();
+
             return texture;
         }
         int mProgram;

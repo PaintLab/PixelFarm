@@ -39,16 +39,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SharedModule\LionDataStore.cs">
-      <Link>LionDataStore.cs</Link>
-    </Compile>
-    <Compile Include="..\SharedModule\SpriteShape.cs">
-      <Link>SpriteShape.cs</Link>
-    </Compile>
-    <Compile Include="..\TestSamples\00_DemoBase\Program.cs">
-      <Link>Program.cs</Link>
-    </Compile>
-    <Compile Include="GLFWProgram2.cs" />
+    <Compile Include="GLFWProgram.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -72,6 +64,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>PixelFarm.ImgCodecs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj">
       <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>
       <Name>PixelFarm.NativeFonts</Name>
@@ -103,6 +99,10 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
       <Name>PixelFarm.SkiaSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestSamples\TestSamples.csproj">
+      <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
+      <Name>TestSamples</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

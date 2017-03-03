@@ -2,9 +2,20 @@
  
 namespace Mini
 {
+    public delegate PixelFarm.Agg.ActualImage LoadImageDelegate(string filename);
 
     static class DemoHelper
     {
+        static LoadImageDelegate s_LoadImgDel;
+
+        public static void RegisterImageLoader(LoadImageDelegate loadImgDel)
+        {
+            s_LoadImgDel = loadImgDel;
+        }
+        public static PixelFarm.Agg.ActualImage LoadImage(string imgFileName)
+        {
+            return s_LoadImgDel(imgFileName);
+        }
 
         public static PixelFarm.DrawingGL.GLBitmap LoadTexture(string imgFileName)
         {

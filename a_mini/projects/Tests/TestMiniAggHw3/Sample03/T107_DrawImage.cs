@@ -1,6 +1,6 @@
 ﻿//MIT, 2014-2016,WinterDev
 
-using System; 
+using System;
 using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
@@ -15,9 +15,9 @@ namespace OpenTkEssTest
         protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
-            
+
         }
-      
+
         protected override void DemoClosing()
         {
             canvas2d.Dispose();
@@ -31,6 +31,7 @@ namespace OpenTkEssTest
             {
                 //glbmp = LoadTexture(@"..\logo-dark.jpg");
                 glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
+               
                 resInit = true;
             }
 

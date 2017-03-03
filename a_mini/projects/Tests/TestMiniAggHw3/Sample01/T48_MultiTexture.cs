@@ -15,13 +15,12 @@
 
 
 
- 
+
 
 using System;
-using System.Drawing;
 using OpenTK.Graphics.ES20;
 using Mini;
- 
+
 
 namespace OpenTkEssTest
 {
@@ -83,7 +82,10 @@ namespace OpenTkEssTest
 
         int LoadTexture(string imgFileName)
         {
-            Bitmap bmp = new Bitmap(imgFileName);
+
+
+            //Bitmap bmp = new Bitmap(imgFileName);
+            PixelFarm.Agg.ActualImage bmp = DemoHelper.LoadImage(imgFileName);
             int texture;
             GL.GenTextures(1, out texture);
             GL.BindTexture(TextureTarget.Texture2D, texture);
@@ -95,9 +97,19 @@ namespace OpenTkEssTest
             GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
             //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, static_cast<GLsizei>(image.width), static_cast<GLsizei>(image.height), 0,
             //             GL_RGBA, GL_UNSIGNED_BYTE, image.data.data());
-            var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, bmpdata.Scan0);
-            bmp.UnlockBits(bmpdata);
+
+            //var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0,
+            //    bmp.Width, bmp.Height),
+            //    System.Drawing.Imaging.ImageLockMode.ReadOnly,
+            //    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var lazyImgProvider = new PixelFarm.DrawingGL.LazyAggBitmapBufferProvider(bmp);
+            IntPtr ptr = lazyImgProvider.GetRawBufferHead();
+            //var bmpdata = bmp.LockBits();
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
+            // bmp.UnlockBits(bmpdata);
+            lazyImgProvider.ReleaseBufferHead();
+
+
             //glGenerateMipmap(GL_TEXTURE_2D);
             GL.GenerateMipmap(TextureTarget.Texture2D);
             return texture;

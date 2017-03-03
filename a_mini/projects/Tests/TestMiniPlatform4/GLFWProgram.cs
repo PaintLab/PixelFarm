@@ -7,9 +7,11 @@ using PixelFarm.DrawingGL;
 using PixelFarm.Forms;
 using OpenTK.Graphics.ES20;
 using SkiaSharp;
+using OpenTkEssTest;
 
 namespace TestGlfw
 {
+
     //-------------------------------------------------------------------------
     //WITHOUT WinForms.
     //This demonstrate how to draw with 1) Skia  or 2) Glfw
@@ -39,13 +41,14 @@ namespace TestGlfw
             // create the surface
             int w = 800;
             int h = 600;
-            if (myImg == null)
-            {
-                myImg = new TestGlfw.MyNativeRGBA32BitsImage(w, h);
-            }
+
 
             if (selectedBackEnd == BackEnd.SKIA)
             {
+                if (myImg == null)
+                {
+                    myImg = new TestGlfw.MyNativeRGBA32BitsImage(w, h);
+                }
                 //test1
                 // create the surface
                 var info = new SKImageInfo(w, h, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
@@ -63,10 +66,13 @@ namespace TestGlfw
 
                 if (demoContext2 == null)
                 {
-                    //var demo = new OpenTkEssTest.T44_SimpleVertexShader(); 
-                    //var demo = new OpenTkEssTest.T42_ES2HelloTriangleDemo();
+                    //var demo = new T44_SimpleVertexShader(); 
+                    //var demo = new T42_ES2HelloTriangleDemo();
                     demoContext2 = new Mini.GLDemoContext2(w, h);
-                    demoContext2.LoadDemo(new OpenTkEssTest.T45_TextureWrap());
+
+                    //demoContext2.LoadDemo(new T45_TextureWrap());
+                    //demoContext2.LoadDemo(new T48_MultiTexture());
+                    demoContext2.LoadDemo(new T107_SampleDrawImage());
                 }
 
                 demoContext2.Render();
@@ -120,9 +126,36 @@ namespace TestGlfw
         }
 
         static PixelFarm.DrawingGL.CanvasGL2d canvasGL2d;
+
+
+
+        static PixelFarm.Agg.ActualImage LoadImage(string filename)
+        {
+            ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
+            using (var fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            {
+                //var decoder = new ImageTools.IO.Png.PngDecoder();
+                var decoder = new ImageTools.IO.Jpeg.JpegDecoder();
+                extendedImg.Load(fs, decoder);
+            }
+            //assume 32 bit 
+
+            PixelFarm.Agg.ActualImage actualImg = PixelFarm.Agg.ActualImage.CreateFromBuffer(
+                extendedImg.PixelWidth,
+                extendedImg.PixelHeight,
+                PixelFarm.Agg.PixelFormat.ARGB32,
+                extendedImg.Pixels
+                );
+            //the imgtools load data as BigEndian
+            actualImg.IsBigEndian = true;
+            return actualImg;
+        }
         public static void Start()
         {
-
+            //---------------------------------------------------
+            //register image loader
+            Mini.DemoHelper.RegisterImageLoader(LoadImage);
+            //---------------------------------------------------
             if (!Glfw.Init())
             {
                 Console.WriteLine("can't init glfw");
