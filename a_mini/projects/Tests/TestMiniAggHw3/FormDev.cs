@@ -2,9 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing; 
+using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms; 
+using System.Windows.Forms;
 namespace Mini
 {
     partial class FormDev : Form
@@ -78,11 +78,11 @@ namespace Mini
                             FormGLTest formGLTest = new FormGLTest();
                             OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
                             //----------
-                            GLDemoContext glbaseDemo = new GLDemoContext();
+                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
                             glbaseDemo.LoadGLControl(control);
                             //----------
                             //create demo
-                           
+
 
                             formGLTest.Text = exAndDesc.ToString();
                             //----------------------------------------------------------------------------
@@ -128,7 +128,8 @@ namespace Mini
         void DevForm_Load(object sender, EventArgs e)
         {
             //load examples
-            Type[] allTypes = this.GetType().Assembly.GetTypes();
+            Type[] allTypes = typeof(GLDemoContext).Assembly.GetTypes();
+
             Type exBase = typeof(Mini.DemoBase);
             int j = allTypes.Length;
             List<ExampleAndDesc> exlist = new List<ExampleAndDesc>();

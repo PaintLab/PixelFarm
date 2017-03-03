@@ -31,7 +31,7 @@ namespace TestGlfw
         static MyNativeRGBA32BitsImage myImg;
         static GLBitmap glBmp;
         static BackEnd selectedBackEnd = BackEnd.GLES2;
-        static Mini.GLDemoContext2 demoContext2 = null;
+        static Mini.GLDemoContext demoContext2 = null;
 
         static void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
@@ -68,7 +68,7 @@ namespace TestGlfw
                 {
                     //var demo = new T44_SimpleVertexShader(); 
                     //var demo = new T42_ES2HelloTriangleDemo();
-                    demoContext2 = new Mini.GLDemoContext2(w, h);
+                    demoContext2 = new Mini.GLDemoContext(w, h);
 
                     //demoContext2.LoadDemo(new T45_TextureWrap());
                     //demoContext2.LoadDemo(new T48_MultiTexture());
@@ -134,9 +134,29 @@ namespace TestGlfw
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
             using (var fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
+                //TODO: review img loading, we should not use only its extension
+                //
+                string fileExt = System.IO.Path.GetExtension(filename).ToLower();
+                switch (fileExt)
+                {
+                    case ".png":
+                        {
+                            var decoder = new ImageTools.IO.Png.PngDecoder();
+                            extendedImg.Load(fs, decoder);
+                        }
+                        break;
+                    case ".jpg":
+                        {
+                            var decoder = new ImageTools.IO.Jpeg.JpegDecoder();
+                            extendedImg.Load(fs, decoder);
+                        }
+                        break;
+                    default:
+                        throw new System.NotSupportedException();
+
+                }
                 //var decoder = new ImageTools.IO.Png.PngDecoder();
-                var decoder = new ImageTools.IO.Jpeg.JpegDecoder();
-                extendedImg.Load(fs, decoder);
+
             }
             //assume 32 bit 
 

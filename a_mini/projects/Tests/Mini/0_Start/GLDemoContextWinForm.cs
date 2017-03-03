@@ -5,7 +5,7 @@ using PixelFarm.DrawingGL;
 
 namespace Mini
 {
-    class GLDemoContext
+    class GLDemoContextWinForm
     {
         //this context is for WinForm
 

@@ -39,84 +39,28 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Mini\0_Start\DemoHelper.cs">
-      <Link>00_DemoBase\DemoHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Mini\0_Start\GLDemoContext.cs">
-      <Link>00_DemoBase\GLDemoContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Mini\2_Shared\BasicSprite.cs">
-      <Link>00_DemoBase\BasicSprite.cs</Link>
-    </Compile>
-    <Compile Include="..\Mini\2_Shared\LionFillSprite.cs">
-      <Link>00_DemoBase\LionFillSprite.cs</Link>
-    </Compile>
-    <Compile Include="..\Mini\3_Samples\03_LionSamples\LionFill.cs">
-      <Link>Sample03\LionFill.cs</Link>
+    <Compile Include="..\Mini\0_Start\GLDemoContextWinForm.cs">
+      <Link>GLDemoContextWinForm.cs</Link>
     </Compile>
     <Compile Include="..\Mini\7_GLES2Test\FormGLTest.cs">
-      <Link>00_DemoBase\FormGLTest.cs</Link>
+      <Link>FormGLTest.cs</Link>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\Mini\7_GLES2Test\FormGLTest.Designer.cs">
-      <Link>00_DemoBase\FormGLTest.Designer.cs</Link>
+      <Link>FormGLTest.Designer.cs</Link>
     </Compile>
-    <Compile Include="..\SharedModule\DemoBase1.cs">
-      <Link>00_DemoBase\DemoBase1.cs</Link>
-    </Compile>
-    <Compile Include="..\SharedModule\ES2Utils2.cs">
-      <Link>00_DemoBase\ES2Utils2.cs</Link>
-    </Compile>
-    <Compile Include="..\SharedModule\LionDataStore.cs">
-      <Link>Sample03\LionDataStore.cs</Link>
-    </Compile>
-    <Compile Include="..\SharedModule\SpriteShape.cs">
-      <Link>Sample03\SpriteShape.cs</Link>
-    </Compile>
-    <Compile Include="00_DemoBase\FormDev.cs">
+    <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="00_DemoBase\FormDev.Designer.cs">
+    <Compile Include="FormDev.Designer.cs">
       <DependentUpon>FormDev.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sample01\T42_MiniGLControl_HelloTrinagle.cs" />
-    <Compile Include="Sample01\T43_MiniControl_SampleTexture2d.cs" />
-    <Compile Include="Sample01\T44_SimpleShader.cs" />
-    <Compile Include="Sample01\T45_TextureWrap.cs" />
-    <Compile Include="Sample01\T46_StencilOperations.cs" />
-    <Compile Include="Sample01\T47_Mipmap2d.cs" />
-    <Compile Include="Sample01\T48_MultiTexture.cs" />
-    <Compile Include="Sample01\T49_PostSubBuffer.cs" />
-    <Compile Include="Sample01\T50_SampleTexture2dDemo2.cs" />
-    <Compile Include="Sample02\T51_View2d.cs" />
-    <Compile Include="Sample02\T52_HelloTriangle2.cs" />
-    <Compile Include="Sample02\T53_Viewport.cs" />
-    <Compile Include="Sample02\T54_Lines.cs" />
-    <Compile Include="Sample02\T55_Line2.cs" />
-    <Compile Include="Sample03\T1081_LionFillBmpToTexture.cs" />
-    <Compile Include="Sample04\T403_MsdfGenTest2.cs" />
-    <Compile Include="Sample04\T402_BrushTest2.cs" />
-    <Compile Include="Sample04\T401_MsdfTest1.cs" />
-    <Compile Include="Sample03\T109_LionFillWithRenderVx.cs" />
-    <Compile Include="Sample03\T110_Text.cs" />
-    <Compile Include="Sample03\T101_BlankCanvas.cs" />
-    <Compile Include="Sample03\T102_BasicDraw.cs" />
-    <Compile Include="Sample03\T105_Stencil.cs" />
-    <Compile Include="Sample03\T106_SampleBrushes.cs" />
-    <Compile Include="Sample03\T107_DrawImage.cs" />
-    <Compile Include="Sample03\T108_LionFill2.cs" />
-    <Compile Include="Sample03\T111_FrameBuffer.cs" />
-    <Compile Include="Sample03\T112_FrameBuffer2.cs" />
-    <Compile Include="Sample03\T113_FrameBufferWithBlur.cs" />
-    <Compile Include="Sample03\T114_FrameBufferWithConvFilterEffect.cs" />
-    <Compile Include="Sample04\T404_FontAtlas.cs" />
-    <Compile Include="Sample04\T405_DrawString.cs" />
     <EmbeddedResource Include="..\Mini\7_GLES2Test\FormGLTest.resx">
-      <Link>00_DemoBase\FormGLTest.resx</Link>
+      <Link>FormGLTest.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="00_DemoBase\FormDev.resx">
+    <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -143,6 +87,10 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj">
+      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
+      <Name>PixelFarm.ImgCodecs</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj">
       <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>
@@ -188,11 +136,16 @@
       <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
       <Name>Typography.Rendering</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestSamples\TestSamples.csproj">
+      <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
+      <Name>TestSamples</Name>
+    </ProjectReference>
     <ProjectReference Include="..\YourImplementation\YourImplementation.csproj">
       <Project>{8963dd34-ce0a-42cd-b3b2-d73031b8f0a0}</Project>
       <Name>YourImplementation</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

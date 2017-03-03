@@ -14,7 +14,7 @@ namespace OpenTkEssTest
         bool resInit;
         GLBitmap msdf_bmp;
         GLCanvasPainter painter;
-        System.Drawing.Bitmap totalImg;
+        PixelFarm.Agg.ActualImage totalImg;
         SimpleFontAtlas fontAtlas;
         public override void Init()
         {
@@ -27,21 +27,21 @@ namespace OpenTkEssTest
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-             
 
-            //--------------------- 
-            string fontfilename = "d:\\WImageTest\\a_total.xml";
+
+            //---------------------  
             var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
-            fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
+            fontAtlas = atlasBuilder.LoadFontInfo(RootDemoPath.Path + @"\a_total.xml");
 
-            totalImg = new System.Drawing.Bitmap("d:\\WImageTest\\a_total.png");
 
-            var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
-            var buffer = new int[totalImg.Width * totalImg.Height];
-            System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
-            totalImg.UnlockBits(bmpdata);
+            var actualImg = DemoHelper.LoadImage(RootDemoPath.Path + @"\a_total.png");
+
+            //var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
+            //var buffer = new int[totalImg.Width * totalImg.Height];
+            //System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
+            //totalImg.UnlockBits(bmpdata);
             var glyph = new Typography.Rendering.GlyphImage(totalImg.Width, totalImg.Height);
-            glyph.SetImageBuffer(buffer, false);
+            glyph.SetImageBuffer(PixelFarm.Agg.ActualImage.GetBuffer2(actualImg), false);
             fontAtlas.TotalGlyph = glyph;
         }
         protected override void DemoClosing()

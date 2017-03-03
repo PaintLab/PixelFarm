@@ -40,7 +40,7 @@ namespace PixelFarm.Agg.Samples
       + "to draw funny looking “lions”. Change window size to clear the window.")]
     public class LionFillExample : DemoBase
     {
-        PixelFarm.Agg.LionFillSprite lionFill;
+        LionFillSprite lionFill;
         public override void Init()
         {
             lionFill = new LionFillSprite();
@@ -56,7 +56,7 @@ namespace PixelFarm.Agg.Samples
         public override void MouseDrag(int x, int y)
         {
             lionFill.Move(x, y);
-            
+
         }
 
         [DemoConfig(MaxValue = 255)]

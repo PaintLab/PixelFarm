@@ -67,10 +67,7 @@ namespace OpenTkEssTest
             mSamplerLoc = GL.GetUniformLocation(mProgram, "s_texture");
             //// Load the texture
 
-            //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap("d:\\WImageTest\\test001.png");
-            //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap("d:\\WImageTest\\test001.png");
-            PixelFarm.Agg.ActualImage bmp = DemoHelper.LoadImage("d:\\WImageTest\\test001.png");
-
+            PixelFarm.Agg.ActualImage bmp = DemoHelper.LoadImage(RootDemoPath.Path + @"\test001.png");
             int bmpW = bmp.Width;
             int bmpH = bmp.Height;
             mTexture = LoadTexture(bmp);

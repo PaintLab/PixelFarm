@@ -6,9 +6,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using PixelFarm.DrawingGL;
-using OpenTK;
-
 using PixelFarm.Agg;
 namespace Mini
 {
@@ -91,7 +88,7 @@ namespace Mini
                             //---------------------- 
                             //get target control that used to present the example
                             OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
-                            GLDemoContext glbaseDemo = new GLDemoContext();
+                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
                             glbaseDemo.LoadGLControl(control);
                             glbaseDemo.LoadSample(exBase);
                             //----------------------
@@ -242,7 +239,6 @@ namespace Mini
                 bmp.Save("d:\\WImageTest\\test002_2.png");
             }
         }
-
         private void cmdTestRasterImage_Click(object sender, EventArgs e)
         {
         }

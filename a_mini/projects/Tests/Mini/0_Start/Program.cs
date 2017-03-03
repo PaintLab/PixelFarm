@@ -1,7 +1,6 @@
 ﻿//MIT, 2014-2017, WinterDev
 
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 namespace Mini
 {
@@ -25,5 +24,5 @@ namespace Mini
 
             Application.Run(new FormDev());
         }
-    } 
+    }
 }

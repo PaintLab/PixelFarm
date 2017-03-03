@@ -30,12 +30,8 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
-using PixelFarm.Agg;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
-namespace LayoutFarm.MiniCinema
+using PixelFarm.Agg; 
+namespace Mini
 {
     public abstract class SimpleSprite
     {

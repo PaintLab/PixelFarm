@@ -36,101 +36,22 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\SharedModule\DemoBase1.cs">
-      <Link>00_DemoBase\DemoBase1.cs</Link>
-    </Compile>
-    <Compile Include="..\SharedModule\ES2Utils2.cs">
-      <Link>00_DemoBase\ES2Utils2.cs</Link>
-    </Compile>
-    <Compile Include="..\SharedModule\LionDataStore.cs">
-      <Link>Sample03\LionDataStore.cs</Link>
-    </Compile>
-    <Compile Include="..\SharedModule\SpriteShape.cs">
-      <Link>Sample03\SpriteShape.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample01\T42_MiniGLControl_HelloTrinagle.cs">
-      <Link>Sample01\T42_MiniGLControl_HelloTrinagle.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample01\T43_MiniControl_SampleTexture2d.cs">
-      <Link>Sample01\T43_MiniControl_SampleTexture2d.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample01\T44_SimpleShader.cs">
-      <Link>Sample01\T44_SimpleShader.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample01\T45_TextureWrap.cs">
-      <Link>Sample01\T45_TextureWrap.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample01\T46_StencilOperations.cs">
-      <Link>Sample01\T46_StencilOperations.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample01\T47_Mipmap2d.cs">
-      <Link>Sample01\T47_Mipmap2d.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample01\T48_MultiTexture.cs">
-      <Link>Sample01\T48_MultiTexture.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample01\T49_PostSubBuffer.cs">
-      <Link>Sample01\T49_PostSubBuffer.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample01\T50_SampleTexture2dDemo2.cs">
-      <Link>Sample01\T50_SampleTexture2dDemo2.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample02\T51_View2d.cs">
-      <Link>Sample02\T51_View2d.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample02\T52_HelloTriangle2.cs">
-      <Link>Sample02\T52_HelloTriangle2.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample02\T53_Viewport.cs">
-      <Link>Sample02\T53_Viewport.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample02\T54_Lines.cs">
-      <Link>Sample02\T54_Lines.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample02\T55_Line2.cs">
-      <Link>Sample02\T55_Line2.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T101_BlankCanvas.cs">
-      <Link>Sample03\T101_BlankCanvas.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T102_BasicDraw.cs">
-      <Link>Sample03\T102_BasicDraw.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T105_Stencil.cs">
-      <Link>Sample03\T105_Stencil.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T106_SampleBrushes.cs">
-      <Link>Sample03\T106_SampleBrushes.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T107_DrawImage.cs">
-      <Link>Sample03\T107_DrawImage.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T1081_LionFillBmpToTexture.cs">
-      <Link>Sample03\T1081_LionFillBmpToTexture.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T108_LionFill2.cs">
-      <Link>Sample03\T108_LionFill2.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T109_LionFillWithRenderVx.cs">
-      <Link>Sample03\T109_LionFillWithRenderVx.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T110_Text.cs">
-      <Link>Sample03\T110_Text.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T111_FrameBuffer.cs">
-      <Link>Sample03\T111_FrameBuffer.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T112_FrameBuffer2.cs">
-      <Link>Sample03\T112_FrameBuffer2.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T113_FrameBufferWithBlur.cs">
-      <Link>Sample03\T113_FrameBufferWithBlur.cs</Link>
-    </Compile>
-    <Compile Include="..\TestMiniAggHw3\Sample03\T114_FrameBufferWithConvFilterEffect.cs">
-      <Link>Sample03\T114_FrameBufferWithConvFilterEffect.cs</Link>
-    </Compile>
+    <Compile Include="00_DemoBase\BasicSprite.cs" />
+    <Compile Include="00_DemoBase\dbugVxsDrawPoints.cs" />
+    <Compile Include="00_DemoBase\DemoBase1.cs" />
     <Compile Include="00_DemoBase\DemoHelper.cs" />
+    <Compile Include="00_DemoBase\ES2Utils2.cs" />
+    <Compile Include="00_DemoBase\LionDataStore.cs" />
+    <Compile Include="00_DemoBase\LionFillSprite.cs" />
+    <Compile Include="00_DemoBase\SimpleSprite.cs" />
+    <Compile Include="00_DemoBase\SpriteShape.cs" />
+    <Compile Include="00_DemoBase\Square.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sample04\T401_MsdfTest1.cs" />
+    <Compile Include="Sample04\T402_BrushTest2.cs" />
+    <Compile Include="Sample04\T403_MsdfGenTest2.cs" />
+    <Compile Include="Sample04\T404_FontAtlas.cs" />
+    <Compile Include="Sample04\T405_DrawString.cs" />
     <Compile Include="Shapes\Base\DrawableShape.cs" />
     <Compile Include="Shapes\Base\VertexStructs.cs" />
     <Compile Include="Shapes\Capsule.cs" />
@@ -150,6 +71,33 @@
     <Compile Include="Shapes\SlicedSphere.cs" />
     <Compile Include="Shapes\TorusKnot.cs" />
     <Compile Include="Shapes\VertexPositionColor.cs" />
+    <Compile Include="Sample01\T42_MiniGLControl_HelloTrinagle.cs" />
+    <Compile Include="Sample01\T43_MiniControl_SampleTexture2d.cs" />
+    <Compile Include="Sample01\T44_SimpleShader.cs" />
+    <Compile Include="Sample01\T45_TextureWrap.cs" />
+    <Compile Include="Sample01\T46_StencilOperations.cs" />
+    <Compile Include="Sample01\T47_Mipmap2d.cs" />
+    <Compile Include="Sample01\T48_MultiTexture.cs" />
+    <Compile Include="Sample01\T49_PostSubBuffer.cs" />
+    <Compile Include="Sample01\T50_SampleTexture2dDemo2.cs" />
+    <Compile Include="Sample02\T51_View2d.cs" />
+    <Compile Include="Sample02\T52_HelloTriangle2.cs" />
+    <Compile Include="Sample02\T53_Viewport.cs" />
+    <Compile Include="Sample02\T54_Lines.cs" />
+    <Compile Include="Sample02\T55_Line2.cs" />
+    <Compile Include="Sample03\T101_BlankCanvas.cs" />
+    <Compile Include="Sample03\T102_BasicDraw.cs" />
+    <Compile Include="Sample03\T105_Stencil.cs" />
+    <Compile Include="Sample03\T106_SampleBrushes.cs" />
+    <Compile Include="Sample03\T107_DrawImage.cs" />
+    <Compile Include="Sample03\T1081_LionFillBmpToTexture.cs" />
+    <Compile Include="Sample03\T108_LionFill2.cs" />
+    <Compile Include="Sample03\T109_LionFillWithRenderVx.cs" />
+    <Compile Include="Sample03\T110_Text.cs" />
+    <Compile Include="Sample03\T111_FrameBuffer.cs" />
+    <Compile Include="Sample03\T112_FrameBuffer2.cs" />
+    <Compile Include="Sample03\T113_FrameBufferWithBlur.cs" />
+    <Compile Include="Sample03\T114_FrameBufferWithConvFilterEffect.cs" />
     <Compile Include="Utilities\LoaderDDS.cs" />
     <Compile Include="Utilities\LoaderGDI.cs" />
     <Compile Include="Utilities\LoaderStatics.cs" />
@@ -176,6 +124,10 @@
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
       <Name>PixelFarm.MiniOpenTK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj">
+      <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>
+      <Name>PixelFarm.NativeFonts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj">
       <Project>{198d20b3-0dbd-4c8c-8f0d-0d0fd9c61d43}</Project>
       <Name>PixelFarm.NativeWindows</Name>
@@ -184,7 +136,16 @@
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
       <Name>PixelFarm.SkiaSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.Rendering\Typography.Rendering.csproj">
+      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
+      <Name>Typography.Rendering</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

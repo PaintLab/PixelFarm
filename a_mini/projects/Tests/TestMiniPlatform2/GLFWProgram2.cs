@@ -41,7 +41,7 @@ namespace TestGlfw
             //var demo = new OpenTkEssTest.T107_SampleDrawImage();
             //var demo = new OpenTkEssTest.T107_SampleDrawImage();
 
-            var demoContext = new Mini.GLDemoContext2(800, 600);
+            var demoContext = new Mini.GLDemoContext(800, 600);
             demoContext.LoadDemo(new OpenTkEssTest.T108_LionFill());
 
 

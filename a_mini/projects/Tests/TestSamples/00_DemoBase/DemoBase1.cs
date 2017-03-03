@@ -31,7 +31,7 @@ namespace Mini
         {
             DemoClosing();
         }
-       
+
         public virtual void Init() { }
 
         public virtual void MouseDrag(int x, int y) { }
@@ -50,7 +50,7 @@ namespace Mini
         }
 
 
-     
+
         protected virtual void DemoClosing()
         {
         }
@@ -152,7 +152,7 @@ namespace Mini
         public static string Path = "";
     }
 
-    enum DemoConfigPresentaionHint
+    public enum DemoConfigPresentaionHint
     {
         TextBox,
         CheckBox,
@@ -187,7 +187,7 @@ namespace Mini
         public string Desc { get; set; }
     }
 
-    class ExampleConfigDesc
+    public class ExampleConfigDesc
     {
         System.Reflection.PropertyInfo property;
         List<ExampleConfigValue> optionFields;
@@ -279,7 +279,7 @@ namespace Mini
             return this.optionFields;
         }
     }
-    class ExampleAndDesc
+    public class ExampleAndDesc
     {
         static Type exConfig = typeof(DemoConfigAttribute);
         static Type exInfoAttrType = typeof(InfoAttribute);
@@ -349,7 +349,7 @@ namespace Mini
             set;
         }
     }
-    class ExampleConfigValue
+    public class ExampleConfigValue
     {
         System.Reflection.FieldInfo fieldInfo;
         System.Reflection.PropertyInfo property;
