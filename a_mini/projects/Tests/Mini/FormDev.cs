@@ -122,29 +122,39 @@ namespace Mini
 
             }
         }
-        void DevForm_Load(object sender, EventArgs e)
+
+
+        static void LoadSamplesFromAssembly(Type srcType, List<ExampleAndDesc> outputList)
         {
             //load examples
-            Type[] allTypes = this.GetType().Assembly.GetTypes();
+            Type[] allTypes = srcType.Assembly.GetTypes();
             Type exBase = typeof(Mini.DemoBase);
             int j = allTypes.Length;
-            List<ExampleAndDesc> exlist = new List<ExampleAndDesc>();
             for (int i = 0; i < j; ++i)
             {
                 Type t = allTypes[i];
                 if (exBase.IsAssignableFrom(t) && t != exBase)
                 {
                     ExampleAndDesc ex = new ExampleAndDesc(t, t.Name);
-                    exlist.Add(ex);
+                    outputList.Add(ex);
                 }
             }
+        }
+
+        void DevForm_Load(object sender, EventArgs e)
+        {
+
+            List<ExampleAndDesc> exlist = new List<ExampleAndDesc>();
+            LoadSamplesFromAssembly(this.GetType(), exlist);
+            LoadSamplesFromAssembly(typeof(GLDemoContext), exlist);
+
             //-------
             exlist.Sort((ex1, ex2) =>
             {
                 return ex1.OrderCode.CompareTo(ex2.OrderCode);
             });
             this.listBox1.Items.Clear();
-            j = exlist.Count;
+            int j = exlist.Count;
             for (int i = 0; i < j; ++i)
             {
                 this.listBox1.Items.Add(exlist[i]);
