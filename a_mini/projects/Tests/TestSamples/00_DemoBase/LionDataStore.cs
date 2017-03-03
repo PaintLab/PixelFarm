@@ -8,7 +8,7 @@ using System.Globalization;
 using PixelFarm.Agg.VertexSource;
 namespace PixelFarm.Agg
 {
-    class LionDataStore
+    public class LionDataStore
     {
         static string g_lion =
         "f2cc99\n" +
