@@ -29,13 +29,13 @@ namespace OpenTkEssTest
         {
 
 
-            //--------------------- 
-            string fontfilename = "d:\\WImageTest\\a_total.xml";
+            //---------------------  
             var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
-            fontAtlas = atlasBuilder.LoadFontInfo(fontfilename);
+            fontAtlas = atlasBuilder.LoadFontInfo(RootDemoPath.Path + @"\a_total.xml");
 
-            //totalImg = new System.Drawing.Bitmap("d:\\WImageTest\\a_total.png");
-            var actualImg = DemoHelper.LoadImage("d:\\WImageTest\\a_total.png");
+
+            var actualImg = DemoHelper.LoadImage(RootDemoPath.Path + @"\a_total.png");
+
             //var bmpdata = totalImg.LockBits(new System.Drawing.Rectangle(0, 0, totalImg.Width, totalImg.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, totalImg.PixelFormat);
             //var buffer = new int[totalImg.Width * totalImg.Height];
             //System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
