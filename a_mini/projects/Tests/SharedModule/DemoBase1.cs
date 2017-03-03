@@ -116,7 +116,64 @@ namespace Mini
         }
     }
 
+    class GLDemoContext2
+    {
+        Mini.DemoBase demo;
+        int w, h;
+        public GLDemoContext2(int w, int h)
+        {
+            this.w = w;
+            this.h = h;
+        }
 
+        public void LoadDemo(Mini.DemoBase demo)
+        {
+            this.demo = demo;
+            demo.Init();
+            demo.Init();
+            CanvasGL2d canvas2d;
+            GLCanvasPainter canvasPainter;
+            demo.BuildCustomDemoGLContext(out canvas2d, out canvasPainter);
+            if (canvas2d == null)
+            {
+                //if demo not create canvas and painter
+                //the we create for it
+                int max = Math.Max(w, h);
+                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+                canvasPainter = new GLCanvasPainter(canvas2d, max, max);
+                //create text printer for opengl 
+                //----------------------
+                //1. win gdi based
+                //var printer = new WinGdiFontPrinter(canvas2d, w, h);
+                //canvasPainter.TextPrinter = printer;
+                //----------------------
+                //2. raw vxs
+                //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
+                //canvasPainter.TextPrinter = printer;
+                //----------------------
+                //3. agg texture based font texture
+                //var printer = new AggFontPrinter(canvasPainter, w, h);
+                //canvasPainter.TextPrinter = printer;
+                //----------------------
+                //4. texture atlas based font texture 
+                //------------
+                //resolve request font 
+                //var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
+                //canvasPainter.TextPrinter = printer;
+            }
+
+            demo.SetEssentialGLHandlers(
+                () => { },
+                () => IntPtr.Zero,
+                () => IntPtr.Zero);
+
+            Mini.DemoBase.InvokeGLContextReady(demo, canvas2d, canvasPainter);
+        }
+        public void Render()
+        {
+            demo.InvokeGLPaint();
+        }
+    }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class InfoAttribute : Attribute

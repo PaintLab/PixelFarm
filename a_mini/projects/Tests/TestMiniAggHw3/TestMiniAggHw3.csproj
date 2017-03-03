@@ -39,11 +39,11 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Mini\0_Start\DemoHelper.cs">
+      <Link>00_DemoBase\DemoHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Mini\0_Start\GLDemoContext.cs">
       <Link>00_DemoBase\GLDemoContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Mini\0_Start\PrebuiltGLControlDemoBase.cs">
-      <Link>00_DemoBase\PrebuiltGLControlDemoBase.cs</Link>
     </Compile>
     <Compile Include="..\Mini\2_Shared\BasicSprite.cs">
       <Link>00_DemoBase\BasicSprite.cs</Link>

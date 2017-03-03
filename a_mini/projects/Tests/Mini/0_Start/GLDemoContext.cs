@@ -7,6 +7,8 @@ namespace Mini
 {
     class GLDemoContext
     {
+        //this context is for WinForm
+
         DemoBase demobase;
         OpenTK.MyGLControl glControl;
         IntPtr hh1;

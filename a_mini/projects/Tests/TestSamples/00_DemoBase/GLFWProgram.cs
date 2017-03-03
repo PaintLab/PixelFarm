@@ -19,16 +19,18 @@ namespace TestGlfw
         GLES2,
         SKIA
     }
+
+
+
+
     class GLFWProgram
     {
         static bool needUpdateContent = false;
         static MyNativeRGBA32BitsImage myImg;
         static GLBitmap glBmp;
-
-
         static BackEnd selectedBackEnd = BackEnd.GLES2;
+        static Mini.GLDemoContext2 demoContext2 = null;
 
-        static Mini.DemoBase selectedDemo = null;
         static void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
 
@@ -58,58 +60,16 @@ namespace TestGlfw
             }
             else
             {
-                GlFwForm glFwForm = formRenderUpdateEventArgs.form;
-                if (selectedDemo == null)
+
+                if (demoContext2 == null)
                 {
-                    //if this is the first time
-                    //create new
                     //var demo = new OpenTkEssTest.T44_SimpleVertexShader(); 
                     //var demo = new OpenTkEssTest.T42_ES2HelloTriangleDemo();
-                    var demo = new OpenTkEssTest.T45_TextureWrap();
-                    demo.Init();
-                    CanvasGL2d canvas2d;
-                    GLCanvasPainter canvasPainter;
-                    demo.BuildCustomDemoGLContext(out canvas2d, out canvasPainter);
-                    if (canvasGL2d == null)
-                    {
-                        //if demo not create canvas and painter
-                        //the we create for it
-                        int max = Math.Max(w, h);
-                        canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-                        canvasPainter = new GLCanvasPainter(canvas2d, max, max);
-                        //create text printer for opengl 
-                        //----------------------
-                        //1. win gdi based
-                        //var printer = new WinGdiFontPrinter(canvas2d, w, h);
-                        //canvasPainter.TextPrinter = printer;
-                        //----------------------
-                        //2. raw vxs
-                        //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
-                        //canvasPainter.TextPrinter = printer;
-                        //----------------------
-                        //3. agg texture based font texture
-                        //var printer = new AggFontPrinter(canvasPainter, w, h);
-                        //canvasPainter.TextPrinter = printer;
-                        //----------------------
-                        //4. texture atlas based font texture 
-                        //------------
-                        //resolve request font 
-                        //var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
-                        //canvasPainter.TextPrinter = printer;
-                    }
-
-                    demo.SetEssentialGLHandlers(
-                        () => { },
-                        () => IntPtr.Zero,
-                        () => IntPtr.Zero);
-
-                    Mini.DemoBase.InvokeGLContextReady(demo, canvas2d, canvasPainter);
-
-                    selectedDemo = demo;
+                    demoContext2 = new Mini.GLDemoContext2(w, h);
+                    demoContext2.LoadDemo(new OpenTkEssTest.T45_TextureWrap());
                 }
 
-                glFwForm.MakeCurrent();
-                selectedDemo.InvokeGLPaint();
+                demoContext2.Render();
 
                 ////---------------------------------------------------------------------------------------
                 ////test2
