@@ -57,9 +57,6 @@
     <Compile Include="..\TestSamples\00_DemoBase\SampleBase.cs">
       <Link>SampleBase.cs</Link>
     </Compile>
-    <Compile Include="..\TestSamples\Sample03\T108_LionFill.cs">
-      <Link>T108_LionFill.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
