@@ -39,8 +39,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Mini\0_Start\GLDemoContext.cs">
-      <Link>GLDemoContext.cs</Link>
+    <Compile Include="..\Mini\0_Start\GLDemoContextWinForm.cs">
+      <Link>GLDemoContextWinForm.cs</Link>
     </Compile>
     <Compile Include="..\Mini\7_GLES2Test\FormGLTest.cs">
       <Link>FormGLTest.cs</Link>
