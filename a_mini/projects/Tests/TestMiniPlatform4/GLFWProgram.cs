@@ -134,9 +134,29 @@ namespace TestGlfw
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
             using (var fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
+                //TODO: review img loading, we should not use only its extension
+                //
+                string fileExt = System.IO.Path.GetExtension(filename).ToLower();
+                switch (fileExt)
+                {
+                    case ".png":
+                        {
+                            var decoder = new ImageTools.IO.Png.PngDecoder();
+                            extendedImg.Load(fs, decoder);
+                        }
+                        break;
+                    case ".jpg":
+                        {
+                            var decoder = new ImageTools.IO.Jpeg.JpegDecoder();
+                            extendedImg.Load(fs, decoder);
+                        }
+                        break;
+                    default:
+                        throw new System.NotSupportedException();
+
+                }
                 //var decoder = new ImageTools.IO.Png.PngDecoder();
-                var decoder = new ImageTools.IO.Jpeg.JpegDecoder();
-                extendedImg.Load(fs, decoder);
+
             }
             //assume 32 bit 
 
