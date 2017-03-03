@@ -84,4 +84,11 @@ The FreeType Project LICENSE (3-clauses BSD style),2003-2016, David Turner, Robe
 BSD, 2009-2010, Poly2Tri Contributors, from https://github.com/PaintLab/poly2tri-cs
 
 MIT, 2016, Viktor Chlumsky, from https://github.com/Chlumsky/msdfgen
-    
+
+MIT, 2015-2015, Xamarin, Inc., from https://github.com/mono/SkiaSharp
+
+MIT, 2006-2009,  Stefanos Apostolopoulos and other Open Tool Kit Contributors, from https://github.com/opentk/opentk
+
+MIT, 2013, Antonie Blom, from  https://github.com/andykorth/Pencil.Gaming
+
+
