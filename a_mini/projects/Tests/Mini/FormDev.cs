@@ -6,9 +6,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using PixelFarm.DrawingGL;
-using OpenTK;
-
 using PixelFarm.Agg;
 namespace Mini
 {

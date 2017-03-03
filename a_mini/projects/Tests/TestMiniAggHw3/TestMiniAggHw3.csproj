@@ -40,36 +40,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Mini\0_Start\GLDemoContext.cs">
-      <Link>00_DemoBase\GLDemoContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Mini\2_Shared\BasicSprite.cs">
-      <Link>00_DemoBase\BasicSprite.cs</Link>
-    </Compile>
-    <Compile Include="..\Mini\2_Shared\LionFillSprite.cs">
-      <Link>00_DemoBase\LionFillSprite.cs</Link>
+      <Link>GLDemoContext.cs</Link>
     </Compile>
     <Compile Include="..\Mini\7_GLES2Test\FormGLTest.cs">
-      <Link>00_DemoBase\FormGLTest.cs</Link>
+      <Link>FormGLTest.cs</Link>
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="..\Mini\7_GLES2Test\FormGLTest.Designer.cs">
-      <Link>00_DemoBase\FormGLTest.Designer.cs</Link>
+      <Link>FormGLTest.Designer.cs</Link>
     </Compile>
-    <Compile Include="..\SharedModule\ES2Utils2.cs">
-      <Link>00_DemoBase\ES2Utils2.cs</Link>
-    </Compile>
-    <Compile Include="00_DemoBase\FormDev.cs">
+    <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="00_DemoBase\FormDev.Designer.cs">
+    <Compile Include="FormDev.Designer.cs">
       <DependentUpon>FormDev.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="..\Mini\7_GLES2Test\FormGLTest.resx">
-      <Link>00_DemoBase\FormGLTest.resx</Link>
+      <Link>FormGLTest.resx</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="00_DemoBase\FormDev.resx">
+    <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
