@@ -28,7 +28,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "042")]
     [Info("T42_HelloTriangle")]
-    public class T42_ES2HelloTriangleDemo : PrebuiltGLControlDemoBase
+    public class T42_ES2HelloTriangleDemo : DemoBase
     {
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
@@ -64,8 +64,8 @@ namespace OpenTkEssTest
         protected override void OnGLRender(object sender, EventArgs args)
         {
             //------------------------------------------------------------------------------------------------
-            int width = ControlWidth;
-            int height = ControlHeight;
+            int width = this.Width;
+            int height = this.Height;
             float[] vertices =
                 {
                      0.0f,  0.5f, 0.0f,

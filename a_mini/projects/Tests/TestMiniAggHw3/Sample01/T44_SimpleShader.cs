@@ -27,7 +27,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "044")]
     [Info("T44_SimpleVertexShader")]
-    public class T44_SimpleVertexShader : PrebuiltGLControlDemoBase
+    public class T44_SimpleVertexShader : DemoBase
     {
         bool isGLInit;
         protected override void OnInitGLProgram(object sender, EventArgs args)

@@ -95,7 +95,6 @@
     <Compile Include="Sample02\T54_Lines.cs" />
     <Compile Include="Sample02\T55_Line2.cs" />
     <Compile Include="Sample03\T1081_LionFillBmpToTexture.cs" />
-    <Compile Include="Sample03\xSpriteShape.cs" />
     <Compile Include="Sample04\T403_MsdfGenTest2.cs" />
     <Compile Include="Sample04\T402_BrushTest2.cs" />
     <Compile Include="Sample04\T401_MsdfTest1.cs" />

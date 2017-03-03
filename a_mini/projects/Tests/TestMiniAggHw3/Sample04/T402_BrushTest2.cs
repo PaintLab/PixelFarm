@@ -3,17 +3,13 @@
 using System;
 using PixelFarm.Drawing;
 using Mini;
-using PixelFarm.DrawingGL;
-using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.Drawing.Fonts;
-using PixelFarm.Drawing.Text;
-
+using PixelFarm.DrawingGL; 
+using PixelFarm.Drawing.Fonts; 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "402")]
     [Info("T402_BrushTest2")]
-    public class T402_BrushTest2 : PrebuiltGLControlDemoBase
+    public class T402_BrushTest2 : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;

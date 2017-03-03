@@ -8,7 +8,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "113")]
     [Info("T113_FrameBuffer")]
-    public class T113_FrameBufferWithBlur : PrebuiltGLControlDemoBase
+    public class T113_FrameBufferWithBlur : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;

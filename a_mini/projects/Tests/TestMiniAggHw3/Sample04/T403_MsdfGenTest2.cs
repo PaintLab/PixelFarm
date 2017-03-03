@@ -7,7 +7,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "403")]
     [Info("T403_MsdfGenTest2")]
-    public class T403_MsdfGenTest2 : PrebuiltGLControlDemoBase
+    public class T403_MsdfGenTest2 : DemoBase
     {
         CanvasGL2d canvas2d;
         bool resInit;
@@ -22,8 +22,7 @@ namespace OpenTkEssTest
             }
             else
             {
-                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-                
+                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max); 
             }
 
         }

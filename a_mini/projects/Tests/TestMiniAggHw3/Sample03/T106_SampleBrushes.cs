@@ -1,15 +1,14 @@
 ﻿//MIT, 2014-2016,WinterDev
 
 using System;
-using PixelFarm.Drawing;
-using OpenTK.Graphics.ES20;
+using PixelFarm.Drawing; 
 using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "106")]
     [Info("T106_SampleBrushes")]
-    public class T106_SampleBrushes : PrebuiltGLControlDemoBase
+    public class T106_SampleBrushes : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
@@ -64,10 +63,8 @@ namespace OpenTkEssTest
             painter.FillRenderVx(linearGrBrush2, polygon2);
             painter.FillColor = Color.Black;
             painter.FillRectLBWH(400, 0, 150, 150);
-            //------------------------------------------------------------------------- 
-
-            //another  ...                
-
+            //-------------------------------------------------------------------------  
+            //another  ...                 
             painter.FillRenderVx(linearGrBrush2, polygon3);
             //------------------------------------------------------------------------- 
 

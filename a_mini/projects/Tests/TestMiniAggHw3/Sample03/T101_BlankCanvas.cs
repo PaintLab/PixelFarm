@@ -8,7 +8,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "101")]
     [Info("T101_BlankCanvas")]
-    public class T101_BlankCanvas : PrebuiltGLControlDemoBase
+    public class T101_BlankCanvas : DemoBase
     {
         CanvasGL2d canvas2d;
         protected override void OnInitGLProgram(object sender, EventArgs args)

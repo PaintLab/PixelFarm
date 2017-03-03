@@ -1,15 +1,13 @@
 ﻿//MIT, 2014-2016,WinterDev
 
-using System;
-using PixelFarm.Drawing;
-using OpenTK.Graphics.ES20;
+using System; 
 using Mini;
 using PixelFarm.DrawingGL;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "107")]
     [Info("T107_SampleDrawImage")]
-    public class T107_SampleDrawImage : PrebuiltGLControlDemoBase
+    public class T107_SampleDrawImage : DemoBase
     {
         CanvasGL2d canvas2d;
         bool resInit;

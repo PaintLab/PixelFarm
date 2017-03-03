@@ -21,7 +21,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "052")]
     [Info("T52_HelloTriangle2")]
-    public class T52_HelloTriangle2 : PrebuiltGLControlDemoBase
+    public class T52_HelloTriangle2 : DemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         protected override void OnInitGLProgram(object sender, EventArgs args)
@@ -71,8 +71,8 @@ namespace OpenTkEssTest
         protected override void OnGLRender(object sender, EventArgs args)
         {
             //------------------------------------------------------------------------------------------------
-            int width = ControlWidth;
-            int height = ControlHeight;
+            int width = this.Width;
+            int height = this.Height;
             float[] vertices =
             {
                      0.0f,  0.5f, //2d coord

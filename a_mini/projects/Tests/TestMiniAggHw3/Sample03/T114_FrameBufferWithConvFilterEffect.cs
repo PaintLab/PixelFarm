@@ -8,7 +8,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "114")]
     [Info("T114_FrameBuffer")]
-    public class T114_FrameBufferWithConvFilterEffect : PrebuiltGLControlDemoBase
+    public class T114_FrameBufferWithConvFilterEffect : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;

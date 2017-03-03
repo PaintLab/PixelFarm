@@ -7,7 +7,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "401")]
     [Info("T401_MsdfTest1")]
-    public class T401_MsdfTest1 : PrebuiltGLControlDemoBase
+    public class T401_MsdfTest1 : DemoBase
     {
         CanvasGL2d canvas2d;
         bool resInit;

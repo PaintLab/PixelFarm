@@ -13,18 +13,11 @@ namespace Mini
         CanvasGL2d canvas2d;
         GLCanvasPainter canvasPainter;
 
-        public void LoadGLControl(OpenTK.MyGLControl glControl, System.EventHandler paintHandler = null)
+        public void LoadGLControl(OpenTK.MyGLControl glControl)
         {
             this.glControl = glControl;
+            glControl.SetGLPaintHandler(HandleGLPaint);
 
-            if (paintHandler == null)
-            {
-                glControl.SetGLPaintHandler(HandleGLPaint);
-            }
-            else
-            {
-                glControl.SetGLPaintHandler(paintHandler);
-            }
             hh1 = glControl.Handle;
             glControl.MakeCurrent();
             int max = Math.Max(glControl.Width, glControl.Height);
@@ -58,15 +51,21 @@ namespace Mini
         {
             this.demobase = demobase;
             demobase.Init();
-            if (demobase is PrebuiltGLControlDemoBase)
+            demobase.SetEssentialGLHandlers(
+                () => this.glControl.SwapBuffers(),
+                () => this.glControl.GetEglDisplay(),
+                () => this.glControl.GetEglSurface()
+            );
+            //-----
+            this.glControl.SetGLPaintHandler((s, e) =>
             {
-                var prebuiltGLControl = (PrebuiltGLControlDemoBase)demobase;
-                var preBuiltContext = new Mini.PrebuiltContext();
-                preBuiltContext.gl2dCanvas = this.canvas2d;
-                preBuiltContext.glCanvasPainter = this.canvasPainter;
-                prebuiltGLControl.SetGLControl(this.glControl, preBuiltContext);
+                demobase.InvokeGLPaint();
+            });
 
-            }
+            var preBuiltContext = new Mini.PrebuiltContext();
+            preBuiltContext.gl2dCanvas = this.canvas2d;
+            preBuiltContext.glCanvasPainter = this.canvasPainter;
+            demobase.SetGLPrebuiltContext(preBuiltContext);
         }
         void HandleGLPaint(object sender, System.EventArgs e)
         {
@@ -83,6 +82,10 @@ namespace Mini
                 demobase.Draw(canvasPainter);
             }
             glControl.SwapBuffers();
+        }
+        public void CloseDemo()
+        {
+            demobase.CloseDemo();
         }
 
     }

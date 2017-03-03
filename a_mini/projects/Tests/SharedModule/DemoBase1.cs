@@ -1,12 +1,17 @@
 ﻿//MIT, 2014-2017, WinterDev
 using System;
 using System.Collections.Generic;
-
+using PixelFarm.DrawingGL;
 
 using PixelFarm.Agg;
 
 namespace Mini
 {
+
+    public delegate void GLSwapBufferDelegate();
+    public delegate IntPtr GetGLControlDisplay();
+    public delegate IntPtr GetGLSurface();
+
     public abstract class DemoBase
     {
         public DemoBase()
@@ -14,14 +19,34 @@ namespace Mini
             this.Width = 800;
             this.Height = 600;
         }
-        public abstract void Draw(CanvasPainter p);
+
+        //when we use with opengl
+        GLSwapBufferDelegate _swapBufferDelegate;
+        GetGLControlDisplay _getGLControlDisplay;
+        GetGLSurface _getGLSurface;
+        PrebuiltContext _prebuiltContext;
+
+        public virtual void Draw(CanvasPainter p) { }
+        public void CloseDemo()
+        {
+            DemoClosing();
+        }
+        public void InvokeGLPaint()
+        {
+            OnGLRender(this, EventArgs.Empty);
+        }
         public virtual void Init() { }
+        public void SetGLPrebuiltContext(PrebuiltContext prebuiltContext)
+        {
+            this._prebuiltContext = prebuiltContext;
+            OnInitGLProgram(prebuiltContext, EventArgs.Empty);
+        }
 
         public virtual void MouseDrag(int x, int y) { }
         public virtual void MouseDown(int x, int y, bool isRightButton) { }
         public virtual void MouseUp(int x, int y) { }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public virtual int Width { get; set; }
+        public virtual int Height { get; set; }
         VertexStorePool _vxsPool = new VertexStorePool();
         public VertexStore GetFreeVxs()
         {
@@ -34,11 +59,54 @@ namespace Mini
         protected virtual void OnInitGLProgram(object sender, EventArgs args)
         {
         }
+
         protected virtual void OnGLRender(object sender, EventArgs args)
         {
+            this.Draw(_prebuiltContext.glCanvasPainter); 
         }
-        
+
+
+        protected virtual void DemoClosing()
+        {
+        }
+        protected virtual void OnTimerTick(object sender, EventArgs e)
+        {
+        }
+        protected virtual bool EnableAnimationTimer
+        {
+            get { return false; }
+            set { }
+        }
+
+
+        protected void SwapBuffers()
+        {
+            //manual swap buffer
+            _swapBufferDelegate();
+        }
+        public void SetEssentialGLHandlers(GLSwapBufferDelegate swapBufferDelegate,
+            GetGLControlDisplay getGLControlDisplay,
+            GetGLSurface getGLSurface)
+        {
+            _swapBufferDelegate = swapBufferDelegate;
+            _getGLControlDisplay = getGLControlDisplay;
+            _getGLSurface = getGLSurface;
+        }
+        protected IntPtr getGLControlDisplay()
+        {
+            return _getGLControlDisplay();
+        }
+        protected IntPtr getGLSurface()
+        {
+            return _getGLSurface();
+        }
     }
+    public class PrebuiltContext
+    {
+        public CanvasGL2d gl2dCanvas;
+        public GLCanvasPainter glCanvasPainter;
+    }
+
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class InfoAttribute : Attribute

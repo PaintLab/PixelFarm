@@ -21,7 +21,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "053")]
     [Info("T53_Viewport")]
-    public class T53_Viewport : PrebuiltGLControlDemoBase
+    public class T53_Viewport : DemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib2f a_position;

@@ -10,7 +10,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "109")]
     [Info("T109_LionFillWithRenderVx")]
-    public class T109_LionFillWithRenderVx : PrebuiltGLControlDemoBase
+    public class T109_LionFillWithRenderVx : DemoBase
     {
         CanvasGL2d canvas2d;
         SpriteShape lionShape;

@@ -8,7 +8,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "404")]
     [Info("T404_FontAtlas")]
-    public class T404_FontAtlas : PrebuiltGLControlDemoBase
+    public class T404_FontAtlas : DemoBase
     {
         CanvasGL2d canvas2d;
         bool resInit;
@@ -16,6 +16,10 @@ namespace OpenTkEssTest
         GLCanvasPainter painter;
         System.Drawing.Bitmap totalImg;
         SimpleFontAtlas fontAtlas;
+        public override void Init()
+        {
+            base.Init();
+        }
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
             int max = Math.Max(this.Width, this.Height);
@@ -35,12 +39,7 @@ namespace OpenTkEssTest
             totalImg.UnlockBits(bmpdata);
             var glyph = new Typography.Rendering.GlyphImage(totalImg.Width, totalImg.Height);
             glyph.SetImageBuffer(buffer, false);
-            fontAtlas.TotalGlyph = glyph;
-
-
-
-
-            //---------------------
+            fontAtlas.TotalGlyph = glyph; 
         }
         protected override void DemoClosing()
         {

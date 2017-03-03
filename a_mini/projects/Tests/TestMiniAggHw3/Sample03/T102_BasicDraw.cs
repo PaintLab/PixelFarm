@@ -7,7 +7,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "102")]
     [Info("T102_BasicDraw")]
-    public class T102_BasicDraw : PrebuiltGLControlDemoBase
+    public class T102_BasicDraw : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;

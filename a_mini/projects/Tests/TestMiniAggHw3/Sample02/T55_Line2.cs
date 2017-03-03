@@ -9,7 +9,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "055")]
     [Info("T55_Lines")]
-    public class T55_Lines2 : PrebuiltGLControlDemoBase
+    public class T55_Lines2 : DemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib4f a_position;

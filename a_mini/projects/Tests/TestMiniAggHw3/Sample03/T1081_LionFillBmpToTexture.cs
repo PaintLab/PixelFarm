@@ -9,7 +9,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "108.1")]
     [Info("T1081_LionFillBmpToTexture")]
-    public class T1081_LionFillBmpToTexture : PrebuiltGLControlDemoBase
+    public class T1081_LionFillBmpToTexture : DemoBase
     {
         //***
         //software-based bitmap cache

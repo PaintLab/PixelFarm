@@ -8,7 +8,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "105")]
     [Info("T105_Stencil")]
-    public class T105_Stencil : PrebuiltGLControlDemoBase
+    public class T105_Stencil : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;

@@ -8,7 +8,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "112")]
     [Info("T112_FrameBuffer")]
-    public class T112_FrameBuffer : PrebuiltGLControlDemoBase
+    public class T112_FrameBuffer : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;

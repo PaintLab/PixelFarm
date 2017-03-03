@@ -85,7 +85,7 @@ namespace Mini
                             }
 
                             //create form
-                            FormGLTest formGLTest = new FormGLTest(); 
+                            FormGLTest formGLTest = new FormGLTest();
                             formGLTest.Text = exAndDesc.ToString();
                             formGLTest.Show();
                             //---------------------- 
@@ -95,7 +95,11 @@ namespace Mini
                             glbaseDemo.LoadGLControl(control);
                             glbaseDemo.LoadSample(exBase);
                             //----------------------
-                           
+                            formGLTest.FormClosing += (s2, e2) =>
+                            {
+                                glbaseDemo.CloseDemo();
+                            };
+
                             formGLTest.WindowState = FormWindowState.Maximized;
                         }
                         break;

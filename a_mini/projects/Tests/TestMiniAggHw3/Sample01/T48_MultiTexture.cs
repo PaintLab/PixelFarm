@@ -27,7 +27,7 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "048")]
     [Info("T48_MultiTexture")]
-    public class T48_MultiTexture : PrebuiltGLControlDemoBase
+    public class T48_MultiTexture : DemoBase
     {
         bool isGLInit;
         protected override void OnInitGLProgram(object sender, EventArgs args)
