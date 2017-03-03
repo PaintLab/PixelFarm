@@ -66,6 +66,12 @@
     <Compile Include="..\TestMiniAggHw3\Sample01\T47_Mipmap2d.cs">
       <Link>Sample01\T47_Mipmap2d.cs</Link>
     </Compile>
+    <Compile Include="..\TestMiniAggHw3\Sample01\T48_MultiTexture.cs">
+      <Link>Sample01\T48_MultiTexture.cs</Link>
+    </Compile>
+    <Compile Include="..\TestMiniAggHw3\Sample01\T50_SampleTexture2dDemo2.cs">
+      <Link>Sample01\T50_SampleTexture2dDemo2.cs</Link>
+    </Compile>
     <Compile Include="..\TestMiniAggHw3\Sample02\T51_View2d.cs">
       <Link>Sample02\T51_View2d.cs</Link>
     </Compile>
