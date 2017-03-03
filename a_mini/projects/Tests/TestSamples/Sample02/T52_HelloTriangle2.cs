@@ -21,10 +21,10 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "052")]
     [Info("T52_HelloTriangle2")]
-    public class T52_HelloTriangle2 : SampleBase
+    public class T52_HelloTriangle2 : DemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             //----------------
             //vertex shader source
@@ -71,8 +71,8 @@ namespace OpenTkEssTest
         protected override void OnGLRender(object sender, EventArgs args)
         {
             //------------------------------------------------------------------------------------------------
-            int width = Width;
-            int height = Height;
+            int width = this.Width;
+            int height = this.Height;
             float[] vertices =
             {
                      0.0f,  0.5f, //2d coord
@@ -97,7 +97,7 @@ namespace OpenTkEssTest
             }
 
             GL.DrawArrays(BeginMode.Triangles, 0, 3);
-            SwapBuffer();
+            SwapBuffers();
         }
         //-------------------------------
         ShaderVtxAttrib2f a_position;

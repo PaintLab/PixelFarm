@@ -8,19 +8,23 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "114")]
     [Info("T114_FrameBuffer")]
-    public class T114_FrameBufferWithConvFilterEffect : SampleBase
+    public class T114_FrameBufferWithConvFilterEffect : DemoBase
     {
         CanvasGL2d canvas2d;
-       
+        GLCanvasPainter painter;
         FrameBuffer frameBuffer;
 
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = CreateCanvasGL2d(max, max);
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
+
             frameBuffer = canvas2d.CreateFrameBuffer(this.Width, this.Height);
             frameBufferNeedUpdate = true;
             //------------ 
@@ -39,7 +43,7 @@ namespace OpenTkEssTest
             //-------------------------------
             if (!isInit)
             {
-                glbmp = LoadTexture(RootDemoPath.Path+ @"\leaves.jpg");
+                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\leaves.jpg");
                 isInit = true;
             }
             if (frameBuffer.FrameBufferId > 0)
@@ -52,7 +56,7 @@ namespace OpenTkEssTest
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
-                    canvas2d.Clear(PixelFarm.Drawing.Color.Red); 
+                    canvas2d.Clear(PixelFarm.Drawing.Color.Red);
                     canvas2d.DrawImageWithConv3x3(glbmp, Mat3x3ConvGen.emboss, 0, 300);
                     canvas2d.DetachFrameBuffer();
 
@@ -67,7 +71,7 @@ namespace OpenTkEssTest
                 canvas2d.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
-            SwapBuffer();
+            SwapBuffers();
         }
     }
 }

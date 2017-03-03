@@ -7,16 +7,17 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "110")]
     [Info("T110_DrawText")]
-    public class T110_DrawText : SampleBase
+    public class T110_DrawText : DemoBase
     {
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-            painter = new GLCanvasPainter(canvas2d, max, max);
-            //convert lion vxs to renderVx 
+            this.canvas2d = canvasGL;
+            this.painter = painter;
+        }
+        protected override void OnReadyForInitGLShaderProgram()
+        {
         }
         protected override void DemoClosing()
         {
@@ -32,7 +33,7 @@ namespace OpenTkEssTest
             painter.DrawString("OK", 0, 17);
             painter.DrawString("1234567890", 0, 17 * 3);
             //-------------------------------
-            SwapBuffer();
+            SwapBuffers();
         }
     }
 }

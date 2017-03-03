@@ -43,10 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="0_Start\DemoBase.cs" />
-    <Compile Include="2_Shared\dbugVxsDrawPoints.cs" />
-    <Compile Include="2_Shared\Square.cs" />
-    <Compile Include="2_Shared\SpriteShape.cs" />
+    <Compile Include="0_Start\GLDemoContextWinForm.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
     <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />
@@ -54,7 +51,6 @@
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test3.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test4_subpix.cs" />
     <Compile Include="3_Samples\02_AA_Demo\AADemo_Test2.cs" />
-    <Compile Include="2_Shared\LionFillSprite.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionFill_Test.cs" />
     <Compile Include="3_Samples\06_ComponentRendering\ComponentRendering.cs" />
     <Compile Include="3_Samples\07_Shading\01_GradientSample.cs" />
@@ -130,9 +126,7 @@
     </Compile>
     <Compile Include="3_Samples\03_LionSamples\LionFill.cs" />
     <Compile Include="3_Samples\03_LionSamples\LionOutline.cs" />
-    <Compile Include="2_Shared\LionDataStore.cs" />
     <Compile Include="3_Samples\04_PerspectiveSamples\Perspective.cs" />
-    <Compile Include="2_Shared\BasicSprite.cs" />
     <Compile Include="0_Start\Program.cs" />
     <Compile Include="6_WinGdiTest\FormGdiTest.cs">
       <SubType>Form</SubType>
@@ -140,13 +134,12 @@
     <Compile Include="6_WinGdiTest\FormGdiTest.Designer.cs">
       <DependentUpon>FormGdiTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormTestBed1.cs">
+    <Compile Include="FormTestBed.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormTestBed1.designer.cs">
-      <DependentUpon>FormTestBed1.cs</DependentUpon>
+    <Compile Include="FormTestBed.designer.cs">
+      <DependentUpon>FormTestBed.cs</DependentUpon>
     </Compile>
-    <Compile Include="2_Shared\SimpleSprite.cs" />
     <Compile Include="MiniGUI\IncompleteWidget.cs" />
     <Compile Include="MiniGUI\MouseEventArgs.cs" />
     <Compile Include="MiniGUI\MySimpleVertexSourceWidget.cs" />
@@ -158,7 +151,7 @@
     <Compile Include="SoftAggControl.Designer.cs">
       <DependentUpon>SoftAggControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="xnotused\TextPrinter.cs" />
+    <Compile Include="Experiment\xnotused\TextPrinter.cs" />
     <EmbeddedResource Include="7_GLES2Test\FormGLTest.resx">
       <DependentUpon>FormGLTest.cs</DependentUpon>
     </EmbeddedResource>
@@ -171,8 +164,8 @@
     <EmbeddedResource Include="6_WinGdiTest\FormGdiTest.resx">
       <DependentUpon>FormGdiTest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormTestBed1.resx">
-      <DependentUpon>FormTestBed1.cs</DependentUpon>
+    <EmbeddedResource Include="FormTestBed.resx">
+      <DependentUpon>FormTestBed.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -267,6 +260,10 @@
     <ProjectReference Include="..\..\PixelFarm\Typography\Typography.Rendering\Typography.Rendering.csproj">
       <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
       <Name>Typography.Rendering</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestSamples\TestSamples.csproj">
+      <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
+      <Name>TestSamples</Name>
     </ProjectReference>
     <ProjectReference Include="..\YourImplementation\YourImplementation.csproj">
       <Project>{8963dd34-ce0a-42cd-b3b2-d73031b8f0a0}</Project>

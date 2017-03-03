@@ -15,21 +15,21 @@
 
 
 
-#region Using Directives
+ 
 
 using System;
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
+ 
 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "047")]
     [Info("T47_TextureWrap")]
-    public class T47_Mipmap2d : SampleBase
+    public class T47_Mipmap2d : DemoBase
     {
         bool isGLInit;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                  uniform float u_offset;
@@ -163,7 +163,7 @@ namespace OpenTkEssTest
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
             //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
             GL.TexParameter(TextureTarget.Texture2D, (TextureParameterName)(ExtTextureFilterAnisotropic.TEXTURE_MAX_ANISOTROPY), 1f);
-            SwapBuffer();
+            SwapBuffers();
         }
         protected override void DemoClosing()
         {

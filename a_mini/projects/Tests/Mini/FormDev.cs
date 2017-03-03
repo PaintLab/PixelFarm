@@ -1,4 +1,4 @@
-﻿//2014-2016 BSD, WinterDev
+﻿//BSD, 2014-2017, WinterDev
 
 using System;
 using System.Collections.Generic;
@@ -6,12 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Text;
-
 using PixelFarm.Agg;
-using System.IO;
-using Microsoft.Win32;
-
 namespace Mini
 {
     partial class FormDev : Form
@@ -46,6 +41,9 @@ namespace Mini
             cmbRenderBackend.SelectedIndex = 2;//set default 
         }
 
+
+
+
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
             //load sample form
@@ -56,7 +54,7 @@ namespace Mini
                 {
                     case RenderBackendChoice.PureAgg:
                         {
-                            FormTestBed1 testBed = new FormTestBed1();
+                            FormTestBed testBed = new FormTestBed();
                             testBed.WindowState = FormWindowState.Maximized;
                             testBed.UseGdiPlusOutput = false;
                             testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
@@ -66,7 +64,7 @@ namespace Mini
                         break;
                     case RenderBackendChoice.GdiPlus:
                         {
-                            FormTestBed1 testBed = new FormTestBed1();
+                            FormTestBed testBed = new FormTestBed();
                             testBed.WindowState = FormWindowState.Maximized;
                             testBed.UseGdiPlusOutput = true;
                             testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
@@ -76,11 +74,30 @@ namespace Mini
                         break;
                     case RenderBackendChoice.OpenGLES2:
                         {
+                            //create demo
+                            DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
+                            if (exBase == null)
+                            {
+                                return;
+                            }
+
+                            //create form
                             FormGLTest formGLTest = new FormGLTest();
-                            formGLTest.InitGLControl();
+                            formGLTest.Text = exAndDesc.ToString();
                             formGLTest.Show();
+                            //---------------------- 
+                            //get target control that used to present the example
+                            OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                            glbaseDemo.LoadGLControl(control);
+                            glbaseDemo.LoadSample(exBase);
+                            //----------------------
+                            formGLTest.FormClosing += (s2, e2) =>
+                            {
+                                glbaseDemo.CloseDemo();
+                            };
+
                             formGLTest.WindowState = FormWindowState.Maximized;
-                            formGLTest.LoadExample(exAndDesc);
                         }
                         break;
                     case RenderBackendChoice.SkiaMemoryBackend:
@@ -105,29 +122,39 @@ namespace Mini
 
             }
         }
-        void DevForm_Load(object sender, EventArgs e)
+
+
+        static void LoadSamplesFromAssembly(Type srcType, List<ExampleAndDesc> outputList)
         {
             //load examples
-            Type[] allTypes = this.GetType().Assembly.GetTypes();
+            Type[] allTypes = srcType.Assembly.GetTypes();
             Type exBase = typeof(Mini.DemoBase);
             int j = allTypes.Length;
-            List<ExampleAndDesc> exlist = new List<ExampleAndDesc>();
             for (int i = 0; i < j; ++i)
             {
                 Type t = allTypes[i];
                 if (exBase.IsAssignableFrom(t) && t != exBase)
                 {
                     ExampleAndDesc ex = new ExampleAndDesc(t, t.Name);
-                    exlist.Add(ex);
+                    outputList.Add(ex);
                 }
             }
+        }
+
+        void DevForm_Load(object sender, EventArgs e)
+        {
+
+            List<ExampleAndDesc> exlist = new List<ExampleAndDesc>();
+            LoadSamplesFromAssembly(this.GetType(), exlist);
+            LoadSamplesFromAssembly(typeof(GLDemoContext), exlist);
+
             //-------
             exlist.Sort((ex1, ex2) =>
             {
                 return ex1.OrderCode.CompareTo(ex2.OrderCode);
             });
             this.listBox1.Items.Clear();
-            j = exlist.Count;
+            int j = exlist.Count;
             for (int i = 0; i < j; ++i)
             {
                 this.listBox1.Items.Add(exlist[i]);
@@ -222,7 +249,6 @@ namespace Mini
                 bmp.Save("d:\\WImageTest\\test002_2.png");
             }
         }
-
         private void cmdTestRasterImage_Click(object sender, EventArgs e)
         {
         }
@@ -343,7 +369,7 @@ namespace Mini
         private void button6_Click(object sender, EventArgs e)
         {
             FormGLTest formGLTest = new FormGLTest();
-            formGLTest.InitGLControl();
+            formGLTest.InitMiniGLControl(800, 600);
             formGLTest.Show();
             formGLTest.WindowState = FormWindowState.Maximized;
         }

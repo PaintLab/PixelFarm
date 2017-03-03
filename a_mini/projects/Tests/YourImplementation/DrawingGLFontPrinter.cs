@@ -54,7 +54,7 @@ namespace PixelFarm.DrawingGL
         {
             aggPainter.Clear(Drawing.Color.White);
             //draw text 
-            textPrinter.DrawString(text, 0, 18);
+            textPrinter.DrawString(text, 0, 0);
 
             byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImage);
             //------------------------------------------------------

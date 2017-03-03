@@ -15,25 +15,21 @@
 
 
 
-#region Using Directives
+
 
 using System;
-
 using OpenTK.Graphics.ES20;
 using Mini;
-#endregion
 
 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "048")]
     [Info("T48_MultiTexture")]
-    public class T48_MultiTexture : SampleBase
+    public class T48_MultiTexture : DemoBase
     {
         bool isGLInit;
-        PixelFarm.DrawingGL.GLBitmap baseMapBmp;
-        PixelFarm.DrawingGL.GLBitmap lightMapBmp;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"
                  attribute vec4 a_position;
@@ -72,17 +68,52 @@ namespace OpenTkEssTest
             mBaseMapLoc = GL.GetUniformLocation(mProgram, "s_baseMap");
             mLightMapLoc = GL.GetUniformLocation(mProgram, "s_lightMap");
             // Load the textures
-            baseMapBmp = LoadTexture(RootDemoPath.Path + @"\SampleImages\basemap01.png");
-            lightMapBmp = LoadTexture(RootDemoPath.Path + @"\SampleImages\lightmap01.png");
+            mBaseMapTexID = LoadTexture(RootDemoPath.Path + @"\SampleImages\basemap01.png");
+            mLightMapTexID = LoadTexture(RootDemoPath.Path + @"\SampleImages\lightmap01.png");
             if (mBaseMapTexID == 0 || mLightMapTexID == 0)
             {
                 throw new NotSupportedException();
             }
 
+
             isGLInit = true;
             this.EnableAnimationTimer = true;
         }
 
+        int LoadTexture(string imgFileName)
+        {
+
+
+            //Bitmap bmp = new Bitmap(imgFileName);
+            PixelFarm.Agg.ActualImage bmp = DemoHelper.LoadImage(imgFileName);
+            int texture;
+            GL.GenTextures(1, out texture);
+            GL.BindTexture(TextureTarget.Texture2D, texture);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.LinearMipmapLinear);
+            //     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            //glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            GL.PixelStore(PixelStoreParameter.UnpackAlignment, 1);
+            //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, static_cast<GLsizei>(image.width), static_cast<GLsizei>(image.height), 0,
+            //             GL_RGBA, GL_UNSIGNED_BYTE, image.data.data());
+
+            //var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0,
+            //    bmp.Width, bmp.Height),
+            //    System.Drawing.Imaging.ImageLockMode.ReadOnly,
+            //    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var lazyImgProvider = new PixelFarm.DrawingGL.LazyAggBitmapBufferProvider(bmp);
+            IntPtr ptr = lazyImgProvider.GetRawBufferHead();
+            //var bmpdata = bmp.LockBits();
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
+            // bmp.UnlockBits(bmpdata);
+            lazyImgProvider.ReleaseBufferHead();
+
+
+            //glGenerateMipmap(GL_TEXTURE_2D);
+            GL.GenerateMipmap(TextureTarget.Texture2D);
+            return texture;
+        }
         enum ExtTextureFilterAnisotropic
         {
             TEXTURE_MAX_ANISOTROPY = 0x84FE,
@@ -161,7 +192,7 @@ namespace OpenTkEssTest
             GL.Uniform1(mLightMapLoc, 1);
             //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices);
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
-            SwapBuffer();
+            SwapBuffers();
         }
 
         protected override void DemoClosing()

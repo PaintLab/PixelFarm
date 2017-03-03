@@ -22,10 +22,10 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "051")]
     [Info("T51_View2d")]
-    public class T51_View2d : SampleBase
+    public class T51_View2d : DemoBase
     {
         MiniShaderProgram shaderProgram;
-        protected override void OnInitGLProgram(object sender, EventArgs handler)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             shaderProgram = new MiniShaderProgram();
             string vs = @"
@@ -34,7 +34,7 @@ namespace OpenTkEssTest
                 varying vec2 v_texCoord;
                 void main()
                 {
-                    gl_Position = a_position;
+                    gl_Position = vec4(a_position[0],a_position[1],0,1);
                     v_texCoord = a_texCoord;
                  }	 
                 ";
@@ -47,7 +47,10 @@ namespace OpenTkEssTest
                          gl_FragColor = texture2D(s_texture, v_texCoord);
                       }
                 ";
-            shaderProgram.Build(vs, fs);
+            if (!shaderProgram.Build(vs, fs))
+            {
+            }
+
             //-------------------------------------------
 
             // Get the attribute locations
@@ -90,8 +93,7 @@ namespace OpenTkEssTest
             GL.BindTexture(TextureTarget.Texture2D, mTexture);
             s_texture.SetValue(0);
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
-
-            SwapBuffer();
+            SwapBuffers();
         }
         protected override void DemoClosing()
         {

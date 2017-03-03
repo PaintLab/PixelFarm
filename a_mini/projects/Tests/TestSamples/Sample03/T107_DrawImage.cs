@@ -7,16 +7,17 @@ namespace OpenTkEssTest
 {
     [Info(OrderCode = "107")]
     [Info("T107_SampleDrawImage")]
-    public class T107_SampleDrawImage : SampleBase
+    public class T107_SampleDrawImage : DemoBase
     {
         CanvasGL2d canvas2d;
         bool resInit;
         GLBitmap glbmp;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = CreateCanvasGL2d(max, max);
+            this.canvas2d = canvasGL;
+
         }
+
         protected override void DemoClosing()
         {
             canvas2d.Dispose();
@@ -28,13 +29,16 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             if (!resInit)
             {
-                //glbmp = LoadTexture(@"..\a00124.png");
-                glbmp = LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
+                //glbmp = LoadTexture(@"..\logo-dark.jpg");
+                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
+               
                 resInit = true;
             }
 
+            canvas2d.DrawSubImage(glbmp, 10, 10, 100, 100, 200, 400);
             canvas2d.DrawImage(glbmp, 0, 300);
             canvas2d.DrawImageWithBlurX(glbmp, 0, 600);
+            SwapBuffers();
         }
     }
 }

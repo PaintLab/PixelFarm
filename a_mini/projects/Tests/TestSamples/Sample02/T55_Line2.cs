@@ -2,14 +2,13 @@
 //we use concept from https://www.mapbox.com/blog/drawing-antialiased-lines/
 
 using System;
-using OpenTK;
 using OpenTK.Graphics.ES20;
 using Mini;
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "055")]
     [Info("T55_Lines")]
-    public class T55_Lines2 : SampleBase
+    public class T55_Lines2 : DemoBase
     {
         MiniShaderProgram shaderProgram = new MiniShaderProgram();
         ShaderVtxAttrib4f a_position;
@@ -19,7 +18,7 @@ namespace OpenTkEssTest
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
         MyMat4 orthoView;
-        protected override void OnInitGLProgram(object sender, EventArgs args)
+        protected override void OnReadyForInitGLShaderProgram()
         {
             string vs = @"                   
             attribute vec4 a_position; 
@@ -139,7 +138,7 @@ namespace OpenTkEssTest
             DrawLine(300, 200, 100, 150);
             DrawLine(100, 150, 110, 100);
             //--------------------------------------------------------- 
-            SwapBuffer();
+            SwapBuffers();
         }
         void DrawLine(float x1, float y1, float x2, float y2)
         {
