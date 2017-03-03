@@ -57,7 +57,7 @@ namespace OpenTkEssTest
                 canvas2d.FillRenderVx(colors[i], lionRenderVxList[i]);
             }
             //-------------------------------
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

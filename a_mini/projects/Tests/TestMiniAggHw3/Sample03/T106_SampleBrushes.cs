@@ -51,7 +51,7 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             painter.FillColor = PixelFarm.Drawing.Color.Black;
             painter.FillRectLBWH(0, 0, 150, 150);
-            GLBitmap glBmp = LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
+            GLBitmap glBmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
             var textureBrush = new TextureBrush(glBmp);
             painter.FillRenderVx(textureBrush, polygon1);
             //------------------------------------------------------------------------- 
@@ -72,7 +72,7 @@ namespace OpenTkEssTest
             //------------------------------------------------------------------------- 
 
 
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

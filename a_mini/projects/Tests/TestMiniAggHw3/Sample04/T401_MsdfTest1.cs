@@ -30,8 +30,8 @@ namespace OpenTkEssTest
             if (!resInit)
             {
 
-                msdf_bmp = LoadTexture(RootDemoPath.Path + @"\msdf_75.png");
-                sdf_bmp = LoadTexture(RootDemoPath.Path + @"\sdf_75.png");
+                msdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\msdf_75.png");
+                sdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\sdf_75.png");
                 resInit = true;
             }
             canvas2d.Clear(PixelFarm.Drawing.Color.White);
@@ -54,7 +54,7 @@ namespace OpenTkEssTest
             canvas2d.DrawImageWithMsdf(sdf_bmp, 400, 550, 0.3f);
             canvas2d.DrawImage(sdf_bmp, 400, 300);
 
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

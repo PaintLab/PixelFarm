@@ -69,27 +69,38 @@ namespace Mini
                         break;
                     case RenderBackendChoice.OpenGLES2:
                         {
-                            //ExampleAndDesc exAndDesc = this.listBox1.SelectedItem as ExampleAndDesc;
-                            if (exAndDesc != null)
+                            DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
+                            if (exBase == null)
                             {
-                                DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
-                                if (exBase == null)
-                                {
-                                    return;
-                                }
-                                exBase.Init();
-                                //FormTestBed1 testBed = new FormTestBed1();
-                                //testBed.WindowState = FormWindowState.Maximized;
-                                //testBed.Show();
-                                //testBed.LoadExample(exAndDesc);
+                                return;
                             }
 
-                            //FormGLTest formGLTest = new FormGLTest();
-                            //formGLTest.InitGLControl();
-                            //formGLTest.Show();
-                            //formGLTest.WindowState = FormWindowState.Maximized;
-                            //formGLTest.LoadExample(exAndDesc);
-                            //------------------------------
+                            FormGLTest formGLTest = new FormGLTest();
+                            OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                            //----------
+                            GLDemoContext glbaseDemo = new GLDemoContext();
+                            glbaseDemo.LoadGLControl(control);
+                            //----------
+                            //create demo
+                           
+
+                            formGLTest.Text = exAndDesc.ToString();
+                            //----------------------------------------------------------------------------
+
+                            formGLTest.Show();
+                            formGLTest.WindowState = FormWindowState.Maximized;
+                            glbaseDemo.LoadSample(exBase);
+
+                            ////ExampleAndDesc exAndDesc = this.listBox1.SelectedItem as ExampleAndDesc;
+                            //if (exAndDesc != null)
+                            //{
+                            //    DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
+                            //    if (exBase == null)
+                            //    {
+                            //        return;
+                            //    }
+                            //    exBase.Init(); 
+                            //} 
                         }
                         break;
                     case RenderBackendChoice.SkiaMemoryBackend:

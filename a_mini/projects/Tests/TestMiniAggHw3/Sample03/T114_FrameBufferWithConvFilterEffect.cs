@@ -40,7 +40,7 @@ namespace OpenTkEssTest
             //-------------------------------
             if (!isInit)
             {
-                glbmp = LoadTexture(RootDemoPath.Path + @"\leaves.jpg");
+                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\leaves.jpg");
                 isInit = true;
             }
             if (frameBuffer.FrameBufferId > 0)
@@ -68,7 +68,7 @@ namespace OpenTkEssTest
                 canvas2d.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

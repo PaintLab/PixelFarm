@@ -101,7 +101,7 @@ namespace OpenTkEssTest
             //// Draw the cube
             //glDrawElements(GL_TRIANGLES, mCube.indices.size(), GL_UNSIGNED_SHORT, mCube.indices.data());
             GL.DrawElements(BeginMode.Triangles, cube.indices.Length, DrawElementsType.UnsignedShort, cube.indices);
-            this.miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
 
         static double fmod(double numer, double denom)

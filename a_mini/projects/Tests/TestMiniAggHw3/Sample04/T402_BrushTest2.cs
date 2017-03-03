@@ -138,7 +138,7 @@ namespace OpenTkEssTest
             //-------------------------------------------------------------------------  
 
 
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

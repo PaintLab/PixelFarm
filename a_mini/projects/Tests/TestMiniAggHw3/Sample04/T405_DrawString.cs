@@ -79,7 +79,7 @@ namespace OpenTkEssTest
             //string test_str = "กิน";
             painter.DrawString(test_str, 100, 100);
             //painter.DrawString("hello world! กิ่น", 100, 100);
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

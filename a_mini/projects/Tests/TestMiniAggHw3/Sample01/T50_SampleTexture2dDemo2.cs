@@ -127,7 +127,7 @@ namespace OpenTkEssTest
             // Set the texture sampler to texture unit to 0             
             GL.Uniform1(mSamplerLoc, 0);
             GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
         protected override void DemoClosing()
         {

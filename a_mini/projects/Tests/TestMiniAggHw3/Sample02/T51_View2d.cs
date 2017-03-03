@@ -93,7 +93,7 @@ namespace OpenTkEssTest
             GL.BindTexture(TextureTarget.Texture2D, mTexture);
             s_texture.SetValue(0);
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
         protected override void DemoClosing()
         {

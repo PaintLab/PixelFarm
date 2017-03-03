@@ -284,7 +284,7 @@ namespace OpenTkEssTest
             //      // Reset the stencil mask
             //      glStencilMask(0xFF);
             GL.StencilMask(0xFF);
-            this.miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
         protected override void DemoClosing()
         {

@@ -72,7 +72,7 @@ namespace OpenTkEssTest
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.OrangeRed;
             painter.DrawEllipse(200, 400, 225, 450);
             //-------------------------------------------
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

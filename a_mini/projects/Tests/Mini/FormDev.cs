@@ -45,7 +45,7 @@ namespace Mini
         }
 
 
-   
+
 
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
@@ -77,12 +77,6 @@ namespace Mini
                         break;
                     case RenderBackendChoice.OpenGLES2:
                         {
-                            FormGLTest formGLTest = new FormGLTest();
-                            OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
-                            //----------
-                            GLDemoContext glbaseDemo = new GLDemoContext();
-                            glbaseDemo.LoadGLControl(control);
-                            //----------
                             //create demo
                             DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
                             if (exBase == null)
@@ -90,12 +84,19 @@ namespace Mini
                                 return;
                             }
 
+                            //create form
+                            FormGLTest formGLTest = new FormGLTest(); 
                             formGLTest.Text = exAndDesc.ToString();
-                            //----------------------------------------------------------------------------
-                            
                             formGLTest.Show();
-                            formGLTest.WindowState = FormWindowState.Maximized;
+                            //---------------------- 
+                            //get target control that used to present the example
+                            OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                            GLDemoContext glbaseDemo = new GLDemoContext();
+                            glbaseDemo.LoadGLControl(control);
                             glbaseDemo.LoadSample(exBase);
+                            //----------------------
+                           
+                            formGLTest.WindowState = FormWindowState.Maximized;
                         }
                         break;
                     case RenderBackendChoice.SkiaMemoryBackend:

@@ -139,7 +139,7 @@ namespace OpenTkEssTest
             DrawLine(300, 200, 100, 150);
             DrawLine(100, 150, 110, 100);
             //--------------------------------------------------------- 
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
         void DrawLine(float x1, float y1, float x2, float y2)
         {

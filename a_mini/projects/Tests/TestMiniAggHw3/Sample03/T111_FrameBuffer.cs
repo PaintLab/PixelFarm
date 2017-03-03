@@ -66,7 +66,7 @@ namespace OpenTkEssTest
                 canvas2d.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

@@ -44,7 +44,7 @@ namespace OpenTkEssTest
 
             DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
             //convert affImage to texture 
-            glBmp = LoadTexture(aggImage);
+            glBmp = DemoHelper.LoadTexture(aggImage);
 
             int max = Math.Max(this.Width, this.Height);
             canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
@@ -73,7 +73,7 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             //-------------------------------
             canvas2d.DrawImage(glBmp, 0, 600);
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

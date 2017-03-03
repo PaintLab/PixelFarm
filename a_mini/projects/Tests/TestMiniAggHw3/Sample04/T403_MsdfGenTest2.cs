@@ -14,8 +14,18 @@ namespace OpenTkEssTest
         GLBitmap msdf_bmp; 
         protected override void OnInitGLProgram(object sender, EventArgs args)
         {
-            int max = Math.Max(this.Width, this.Height);
-            canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+            int max = Math.Max(this.Width, this.Height); 
+            var prebuiltContext = sender as PrebuiltContext;
+            if (prebuiltContext != null)
+            {
+                canvas2d = prebuiltContext.gl2dCanvas; 
+            }
+            else
+            {
+                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+                
+            }
+
         }
         protected override void DemoClosing()
         {
@@ -28,7 +38,7 @@ namespace OpenTkEssTest
             canvas2d.ClearColorBuffer();
             if (!resInit)
             {
-                msdf_bmp = LoadTexture(RootDemoPath.Path + @"\msdf_75.png"); 
+                msdf_bmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\msdf_75.png"); 
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1.png");
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\msdf_65.png");
                 resInit = true;
@@ -53,7 +63,7 @@ namespace OpenTkEssTest
             //canvas2d.DrawImageWithMsdf(sdf_bmp, 400, 550, 0.3f);
             canvas2d.DrawImage(msdf_bmp, 100, 300);
 
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

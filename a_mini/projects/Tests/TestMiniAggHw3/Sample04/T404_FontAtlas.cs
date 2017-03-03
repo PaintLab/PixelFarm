@@ -55,7 +55,7 @@ namespace OpenTkEssTest
             {
                 // msdf_bmp = LoadTexture(@"..\msdf_75.png");
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1_66.png");
-                msdf_bmp = LoadTexture(totalImg);
+                msdf_bmp = DemoHelper.LoadTexture(totalImg);
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\a001_x1.png");
                 //msdf_bmp = LoadTexture(@"d:\\WImageTest\\msdf_65.png");
 
@@ -82,7 +82,7 @@ namespace OpenTkEssTest
 
             //full image
             canvas2d.DrawImage(msdf_bmp, 100, 300);
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
         static PixelFarm.Drawing.Rectangle ConvToRect(Typography.Rendering.Rectangle r)
         {

@@ -112,7 +112,7 @@ namespace OpenTkEssTest
             FillPolygonWithSolidColor(rect, rect.Length / 2, PixelFarm.Drawing.Color.Black);
             //---------------------------------------------------------
 
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
 
         //-------------------------------

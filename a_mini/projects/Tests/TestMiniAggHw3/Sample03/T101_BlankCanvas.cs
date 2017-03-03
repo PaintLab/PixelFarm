@@ -22,7 +22,7 @@ namespace OpenTkEssTest
         protected override void OnGLRender(object sender, EventArgs args)
         {
             canvas2d.ClearColorBuffer();
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

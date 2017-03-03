@@ -58,6 +58,15 @@ namespace Mini
         {
             this.demobase = demobase;
             demobase.Init();
+            if (demobase is PrebuiltGLControlDemoBase)
+            {
+                var prebuiltGLControl = (PrebuiltGLControlDemoBase)demobase;
+                var preBuiltContext = new Mini.PrebuiltContext();
+                preBuiltContext.gl2dCanvas = this.canvas2d;
+                preBuiltContext.glCanvasPainter = this.canvasPainter;
+                prebuiltGLControl.SetGLControl(this.glControl, preBuiltContext);
+
+            }
         }
         void HandleGLPaint(object sender, System.EventArgs e)
         {

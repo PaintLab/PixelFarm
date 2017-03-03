@@ -42,6 +42,18 @@
     <Compile Include="..\Mini\0_Start\GLDemoContext.cs">
       <Link>00_DemoBase\GLDemoContext.cs</Link>
     </Compile>
+    <Compile Include="..\Mini\0_Start\PrebuiltGLControlDemoBase.cs">
+      <Link>00_DemoBase\PrebuiltGLControlDemoBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Mini\2_Shared\BasicSprite.cs">
+      <Link>00_DemoBase\BasicSprite.cs</Link>
+    </Compile>
+    <Compile Include="..\Mini\2_Shared\LionFillSprite.cs">
+      <Link>00_DemoBase\LionFillSprite.cs</Link>
+    </Compile>
+    <Compile Include="..\Mini\3_Samples\03_LionSamples\LionFill.cs">
+      <Link>Sample03\LionFill.cs</Link>
+    </Compile>
     <Compile Include="..\Mini\7_GLES2Test\FormGLTest.cs">
       <Link>00_DemoBase\FormGLTest.cs</Link>
       <SubType>Form</SubType>
@@ -61,7 +73,6 @@
     <Compile Include="..\SharedModule\SpriteShape.cs">
       <Link>Sample03\SpriteShape.cs</Link>
     </Compile>
-    <Compile Include="00_DemoBase\PrebuiltGLControlDemoBase.cs" />
     <Compile Include="00_DemoBase\FormDev.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,7 +107,7 @@
     <Compile Include="Sample03\T106_SampleBrushes.cs" />
     <Compile Include="Sample03\T107_DrawImage.cs" />
     <Compile Include="Sample01\T50_SampleTexture2dDemo2.cs" />
-    <Compile Include="Sample03\T108_LionFill.cs" />
+    <Compile Include="Sample03\T108_LionFill2.cs" />
     <Compile Include="Sample03\T111_FrameBuffer.cs" />
     <Compile Include="Sample03\T112_FrameBuffer2.cs" />
     <Compile Include="Sample03\T113_FrameBufferWithBlur.cs" />

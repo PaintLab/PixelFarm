@@ -164,7 +164,7 @@ namespace OpenTkEssTest
             // DrawLines(0, 0, 300, 300);
             //---------------------------------------------------------
 
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
 
         //-------------------------------

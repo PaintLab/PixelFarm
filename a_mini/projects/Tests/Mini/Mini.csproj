@@ -50,6 +50,7 @@
       <Link>2_Shared\LionDataStore.cs</Link>
     </Compile>
     <Compile Include="0_Start\GLDemoContext.cs" />
+    <Compile Include="0_Start\PrebuiltGLControlDemoBase.cs" />
     <Compile Include="2_Shared\Square.cs" />
     <Compile Include="2_Shared\SpriteShape.cs" />
     <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />

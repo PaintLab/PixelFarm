@@ -163,7 +163,7 @@ namespace OpenTkEssTest
             GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedShort, indices);
             //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0f);
             GL.TexParameter(TextureTarget.Texture2D, (TextureParameterName)(ExtTextureFilterAnisotropic.TEXTURE_MAX_ANISOTROPY), 1f);
-            this.miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
         protected override void DemoClosing()
         {

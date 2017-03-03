@@ -71,8 +71,8 @@ namespace OpenTkEssTest
         protected override void OnGLRender(object sender, EventArgs args)
         {
             //------------------------------------------------------------------------------------------------
-            int width = miniGLControl.Width;
-            int height = miniGLControl.Height;
+            int width = ControlWidth;
+            int height = ControlHeight;
             float[] vertices =
             {
                      0.0f,  0.5f, //2d coord
@@ -97,7 +97,7 @@ namespace OpenTkEssTest
             }
 
             GL.DrawArrays(BeginMode.Triangles, 0, 3);
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
         //-------------------------------
         ShaderVtxAttrib2f a_position;

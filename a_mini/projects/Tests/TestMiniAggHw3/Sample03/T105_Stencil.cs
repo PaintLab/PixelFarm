@@ -71,7 +71,7 @@ namespace OpenTkEssTest
             painter.FillRenderVx(rectPolygon);
             GL.Disable(EnableCap.StencilTest);
             //-----------------------------------------------------------
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }

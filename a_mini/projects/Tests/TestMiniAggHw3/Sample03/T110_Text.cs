@@ -32,7 +32,7 @@ namespace OpenTkEssTest
             painter.DrawString("OK", 0, 17);
             painter.DrawString("1234567890", 0, 17 * 3);
             //-------------------------------
-            miniGLControl.SwapBuffers();
+            SwapBuffers();
         }
     }
 }
