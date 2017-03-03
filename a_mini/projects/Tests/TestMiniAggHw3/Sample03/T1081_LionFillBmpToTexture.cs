@@ -31,7 +31,7 @@ namespace OpenTkEssTest
         GLCanvasPainter painter;
 
         GLBitmap glBmp;
-        public override void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter;
@@ -46,10 +46,10 @@ namespace OpenTkEssTest
             imgGfx2d = new ImageGraphics2D(aggImage);
             aggPainter = new AggCanvasPainter(imgGfx2d);
 
-            
+
             DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
             //convert affImage to texture 
-            glBmp = DemoHelper.LoadTexture(aggImage); 
+            glBmp = DemoHelper.LoadTexture(aggImage);
         }
         protected override void DemoClosing()
         {

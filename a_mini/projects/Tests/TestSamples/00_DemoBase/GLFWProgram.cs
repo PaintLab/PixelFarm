@@ -39,7 +39,7 @@ namespace TestGlfw
             if (myImg == null)
             {
                 myImg = new TestGlfw.MyNativeRGBA32BitsImage(w, h);
-            } 
+            }
 
             if (selectedBackEnd == BackEnd.SKIA)
             {

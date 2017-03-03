@@ -20,7 +20,7 @@ namespace OpenTkEssTest
         {
             base.Init();
         }
-        public override void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter;

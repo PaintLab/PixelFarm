@@ -77,8 +77,8 @@ namespace Mini
                 demobase.InvokeGLPaint();
             });
 
-            demobase.OnSetupDemoGLContext(this.canvas2d, this.canvasPainter); 
 
+            DemoBase.InvokeGLContextReady(demobase, this.canvas2d, this.canvasPainter);
         }
         void HandleGLPaint(object sender, System.EventArgs e)
         {

@@ -16,7 +16,7 @@ namespace OpenTkEssTest
         RenderVx polygon2;
         RenderVx polygon3;
 
-        public override void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter;

@@ -24,29 +24,15 @@ namespace Mini
         GLSwapBufferDelegate _swapBufferDelegate;
         GetGLControlDisplay _getGLControlDisplay;
         GetGLSurface _getGLSurface;
+        GLCanvasPainter _painter;
 
         public virtual void Draw(CanvasPainter p) { }
         public void CloseDemo()
         {
             DemoClosing();
         }
-        public void InvokeGLPaint()
-        {
-            OnGLRender(this, EventArgs.Empty);
-        }
+       
         public virtual void Init() { }
-
-        public virtual void BuildCustomDemoGLContext(out CanvasGL2d canvasGL, out GLCanvasPainter painter)
-        {
-            canvasGL = null;
-            painter = null;
-        }
-        GLCanvasPainter _painter;
-        public virtual void OnSetupDemoGLContext(CanvasGL2d canvasGL, GLCanvasPainter painter)
-        {
-            this._painter = painter;
-            OnReadyForInitGLShaderProgram();
-        }
 
         public virtual void MouseDrag(int x, int y) { }
         public virtual void MouseDown(int x, int y, bool isRightButton) { }
@@ -62,16 +48,9 @@ namespace Mini
         {
             _vxsPool.Release(ref vxs);
         }
-        protected virtual void OnReadyForInitGLShaderProgram()
-        {
-            //this method is called when the demo is ready for create GLES shader program
-        } 
-        protected virtual void OnGLRender(object sender, EventArgs args)
-        {
-            this.Draw(_painter);
-        }
 
 
+     
         protected virtual void DemoClosing()
         {
         }
@@ -84,6 +63,35 @@ namespace Mini
             set { }
         }
 
+        //----------------------------------------------------
+        //for GL
+        public virtual void BuildCustomDemoGLContext(out CanvasGL2d canvasGL, out GLCanvasPainter painter)
+        {
+            canvasGL = null;
+            painter = null;
+        }
+        public static void InvokeGLContextReady(DemoBase demo, CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+            demo._painter = painter;
+            demo.OnGLContextReady(canvasGL, painter);
+            demo.OnReadyForInitGLShaderProgram();
+        }
+        protected virtual void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+
+        }
+        protected virtual void OnReadyForInitGLShaderProgram()
+        {
+            //this method is called when the demo is ready for create GLES shader program
+        }
+        protected virtual void OnGLRender(object sender, EventArgs args)
+        {
+            this.Draw(_painter);
+        }
+        public void InvokeGLPaint()
+        {
+            OnGLRender(this, EventArgs.Empty);
+        }
 
         protected void SwapBuffers()
         {
