@@ -76,7 +76,15 @@ namespace Mini
             demo.OnGLContextReady(canvasGL, painter);
             demo.OnReadyForInitGLShaderProgram();
         }
+        public static void InvokePainterReady(DemoBase demo, CanvasPainter painter)
+        {
+            demo.OnPainterReady(painter);
+        }
         protected virtual void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+
+        }
+        protected virtual void OnPainterReady(CanvasPainter painter)
         {
 
         }
