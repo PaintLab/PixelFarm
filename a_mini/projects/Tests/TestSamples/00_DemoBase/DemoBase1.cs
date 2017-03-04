@@ -76,7 +76,15 @@ namespace Mini
             demo.OnGLContextReady(canvasGL, painter);
             demo.OnReadyForInitGLShaderProgram();
         }
+        public static void InvokePainterReady(DemoBase demo, CanvasPainter painter)
+        {
+            demo.OnPainterReady(painter);
+        }
         protected virtual void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        {
+
+        }
+        protected virtual void OnPainterReady(CanvasPainter painter)
         {
 
         }
@@ -96,7 +104,10 @@ namespace Mini
         protected void SwapBuffers()
         {
             //manual swap buffer
-            _swapBufferDelegate();
+            if (_swapBufferDelegate != null)
+            {
+                _swapBufferDelegate();
+            }
         }
         public void SetEssentialGLHandlers(GLSwapBufferDelegate swapBufferDelegate,
             GetGLControlDisplay getGLControlDisplay,

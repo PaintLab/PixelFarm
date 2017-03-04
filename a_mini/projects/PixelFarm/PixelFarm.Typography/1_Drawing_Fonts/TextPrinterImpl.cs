@@ -15,32 +15,35 @@ namespace PixelFarm.Drawing.Fonts
         CanvasPainter canvasPainter;
         MyVxsTextPrinter vxsTextPrinter = new MyVxsTextPrinter();
         List<GlyphPlan> glyphPlanList = new List<GlyphPlan>(20);
-
-        public VxsTextPrinter(CanvasPainter canvasPainter)
+        IFontLoader _fontLoader;
+        RequestFont _font;
+        public VxsTextPrinter(CanvasPainter canvasPainter, IFontLoader fontLoader)
         {
             this.canvasPainter = canvasPainter;
-            RequestFont font = canvasPainter.CurrentFont;
-            Typography.OpenFont.ScriptLang scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLang(font.ScriptCode.shortname);
+            this._fontLoader = fontLoader;
+            this._font = canvasPainter.CurrentFont;
 #if DEBUG
+
+            Typography.OpenFont.ScriptLang scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLang(_font.ScriptCode.shortname);
             if (scLang == null)
             {
                 throw new NotSupportedException("unknown script lang");
             }
 #endif
             vxsTextPrinter.ScriptLang = scLang;
-            //1.  resolve actual font file
-            vxsTextPrinter.FontFile = "d:\\WImageTest\\tahoma.ttf";
+            vxsTextPrinter.FontFile = fontLoader.GetFont(_font.Name, InstalledFontStyle.Regular).FontPath;
+
         }
         public void ChangeFont(RequestFont font)
         {
-#if DEBUG
-            //change font
-            Console.Write("please impl change font");
-#endif
+            //1.  resolve actual font file
+            this._font = font;
+            vxsTextPrinter.FontFile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
         }
         public void ChangeFontColor(Color fontColor)
         {
             //change font color
+
 #if DEBUG
             Console.Write("please impl change font color");
 #endif
@@ -52,8 +55,7 @@ namespace PixelFarm.Drawing.Fonts
         public void DrawString(char[] text, double x, double y)
         {
             glyphPlanList.Clear();
-            RequestFont currentFont = canvasPainter.CurrentFont;
-            vxsTextPrinter.Print(currentFont.SizeInPoints, text, glyphPlanList);
+            vxsTextPrinter.Print(_font.SizeInPoints, text, glyphPlanList);
 
             int glyphListLen = glyphPlanList.Count;
 
