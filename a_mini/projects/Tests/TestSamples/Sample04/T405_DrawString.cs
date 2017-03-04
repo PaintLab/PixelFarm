@@ -2,7 +2,6 @@
 
 using System;
 using Mini;
-using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.Text;
 using PixelFarm.Agg;
 

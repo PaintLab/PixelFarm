@@ -353,7 +353,7 @@ namespace PixelFarm.DrawingGL
         public void DrawString(char[] buffer, double x, double y)
         {
             int j = buffer.Length;
-            int buffsize = j * 2;
+            //int buffsize = j * 2;
 
             //resolve font from painter? 
 
