@@ -96,7 +96,10 @@ namespace Mini
         protected void SwapBuffers()
         {
             //manual swap buffer
-            _swapBufferDelegate();
+            if (_swapBufferDelegate != null)
+            {
+                _swapBufferDelegate();
+            }
         }
         public void SetEssentialGLHandlers(GLSwapBufferDelegate swapBufferDelegate,
             GetGLControlDisplay getGLControlDisplay,
