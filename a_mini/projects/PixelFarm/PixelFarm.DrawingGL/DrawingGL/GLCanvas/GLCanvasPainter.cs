@@ -94,7 +94,14 @@ namespace PixelFarm.DrawingGL
         public ITextPrinter TextPrinter
         {
             get { return _textPriner; }
-            set { _textPriner = value; }
+            set
+            {
+                _textPriner = value;
+                if (value != null && _requestFont != null)
+                {
+                    _textPriner.ChangeFont(this._requestFont);
+                }
+            }
         }
         public override Color FillColor
         {

@@ -47,7 +47,7 @@ namespace PixelFarm.DrawingGL
 
             //set default1
             aggPainter.CurrentFont = canvasPainter.CurrentFont;
-            textPrinter = new VxsTextPrinter(aggPainter);
+            textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
             aggPainter.TextPrinter = textPrinter;
         }
         public void DrawString(char[] text, double x, double y)

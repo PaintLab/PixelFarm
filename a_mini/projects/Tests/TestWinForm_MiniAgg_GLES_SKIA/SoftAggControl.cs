@@ -60,15 +60,15 @@ namespace Mini
                 var gdiPlusCanvasPainter = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bufferBmp);
                 gdiPlusCanvasPainter.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
                 painter = gdiPlusCanvasPainter;
-                painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);
+                painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             }
             else
             {
                 ImageGraphics2D imgGfx2d = Initialize(myWidth, myHeight, 32);
                 AggCanvasPainter aggPainter = new AggCanvasPainter(imgGfx2d);
                 //set text printer for agg canvas painter
-                aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);
-                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter);
+                aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
                 aggPainter.TextPrinter = textPrinter;
 
                 painter = aggPainter;
