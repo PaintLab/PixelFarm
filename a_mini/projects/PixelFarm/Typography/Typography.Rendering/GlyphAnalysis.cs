@@ -24,7 +24,7 @@ namespace Typography.Rendering
             //start with blank contour
             cntBuilder = new GlyphContourBuilder();
         }
-        public void CloseFigure()
+        public void CloseContour()
         {
             cntBuilder.CloseFigure();
             GlyphContour cntContour = cntBuilder.CurrentContour;
