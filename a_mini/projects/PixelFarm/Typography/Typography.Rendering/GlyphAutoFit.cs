@@ -56,7 +56,7 @@ namespace Typography.Rendering
             {
                 //new contour
                 CreateFitShape(reader, contours[i], this.pxScale, false, true);
-                reader.CloseFigure();
+                reader.CloseContour();
             }
             reader.EndRead();
         }
