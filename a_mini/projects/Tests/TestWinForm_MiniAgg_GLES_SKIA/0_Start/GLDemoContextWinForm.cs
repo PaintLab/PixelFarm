@@ -45,6 +45,7 @@ namespace Mini
                 //the we create for it
                 int max = Math.Max(glControl.Width, glControl.Height);
                 canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+                canvas2d.SmoothMode = CanvasSmoothMode.Smooth;//set anti-alias  
                 canvasPainter = new GLCanvasPainter(canvas2d, max, max);
                 //create text printer for opengl 
                 //----------------------
