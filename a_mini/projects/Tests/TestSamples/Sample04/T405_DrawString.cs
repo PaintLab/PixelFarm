@@ -32,6 +32,7 @@ namespace OpenTkEssTest
             //painter.DrawString("hello world!", 100, 100);            
             //painter.DrawString("กิ่น", 100, 100);
             //string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้"; 
+            p.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 10); 
             p.Clear(PixelFarm.Drawing.Color.White);
 
             string test_str = "012345";
@@ -45,6 +46,7 @@ namespace OpenTkEssTest
                 float y_pos = i * 10;
                 p.FillRectangle(x_pos, y_pos, x_pos + 5, y_pos + 5);
             }
+
             p.FillColor = PixelFarm.Drawing.Color.Black;
             for (int i = 0; i < n; i++)
             {

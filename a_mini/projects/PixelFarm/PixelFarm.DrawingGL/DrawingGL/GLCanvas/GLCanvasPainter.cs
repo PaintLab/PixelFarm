@@ -52,6 +52,10 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _requestFont = value;
+                if (_textPriner != null)
+                {
+                    _textPriner.ChangeFont(value);
+                }
             }
         }
         public override RectInt ClipBox
