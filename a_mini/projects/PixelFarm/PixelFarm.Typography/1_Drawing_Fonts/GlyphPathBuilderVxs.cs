@@ -10,7 +10,7 @@ namespace PixelFarm.Drawing.Fonts
 
     //this is PixelFarm version ***
     //render with MiniAgg 
-   public class GlyphPathBuilderVxs : IGlyphPathBuilder
+    public class GlyphPathBuilderVxs : IGlyphPathBuilder
     {
         CurveFlattener curveFlattener = new CurveFlattener();
         PathWriter ps = new PathWriter();
@@ -25,14 +25,12 @@ namespace PixelFarm.Drawing.Fonts
         {
 
         }
-        public void CloseFigure()
+        public void CloseContour()
         {
-
             ps.CloseFigure();
         }
         public void Curve3(float p2x, float p2y, float x, float y)
         {
-
             ps.Curve3(p2x, p2y, x, y);
         }
         public void Curve4(float p2x, float p2y, float p3x, float p3y, float x, float y)
