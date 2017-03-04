@@ -215,7 +215,7 @@ namespace Typography.Rendering
             GlyphFitOutline glyphFitOutline = new GlyphFitOutline(polygon);
             glyphFitOutline.Analyze();
             //------------------------------------------
-
+#if DEBUG
             List<GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
             int triangleCount = triAngles.Count;
 
@@ -227,6 +227,7 @@ namespace Typography.Rendering
                 AssignPointEdgeInvolvement(tri.e1);
                 AssignPointEdgeInvolvement(tri.e2);
             }
+#endif
             return glyphFitOutline;
         }
 
