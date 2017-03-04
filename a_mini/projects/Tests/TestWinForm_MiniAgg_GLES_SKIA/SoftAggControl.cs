@@ -73,8 +73,6 @@ namespace Mini
 
                 painter = aggPainter;
             }
-
-            
             painter.Clear(PixelFarm.Drawing.Color.White);
         }
         ImageGraphics2D Initialize(int width, int height, int bitDepth)
@@ -98,6 +96,10 @@ namespace Mini
         public void LoadExample(DemoBase exBase)
         {
             this.exampleBase = exBase;
+            if (painter != null)
+            {
+                DemoBase.InvokePainterReady(exBase, painter);
+            }
             //exBase.RequestNewGfx2d += () => this.bitmapBackBuffer.CreateNewGraphic2D();
         }
 

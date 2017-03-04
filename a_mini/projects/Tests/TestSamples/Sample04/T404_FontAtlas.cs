@@ -16,10 +16,7 @@ namespace OpenTkEssTest
         GLCanvasPainter painter;
         PixelFarm.Agg.ActualImage totalImg;
         SimpleFontAtlas fontAtlas;
-        public override void Init()
-        {
-            base.Init();
-        }
+        
         protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;

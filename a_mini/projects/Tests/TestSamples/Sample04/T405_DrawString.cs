@@ -19,6 +19,11 @@ namespace OpenTkEssTest
         {
 
         }
+     
+        protected override void OnPainterReady(CanvasPainter painter)
+        {
+            painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);
+        }
         public override void Draw(CanvasPainter p)
         {
             //canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
@@ -32,7 +37,7 @@ namespace OpenTkEssTest
             //painter.DrawString("hello world!", 100, 100);            
             //painter.DrawString("กิ่น", 100, 100);
             //string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้"; 
-            //p.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 10); 
+            
             p.Clear(PixelFarm.Drawing.Color.White);
 
             string test_str = "012345";

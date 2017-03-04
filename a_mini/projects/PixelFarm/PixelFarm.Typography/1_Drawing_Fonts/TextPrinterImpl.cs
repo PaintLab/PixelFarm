@@ -37,12 +37,13 @@ namespace PixelFarm.Drawing.Fonts
         public void ChangeFont(RequestFont font)
         {
             //1.  resolve actual font file
-            vxsTextPrinter.FontFile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath; 
+            this._font = font;
+            vxsTextPrinter.FontFile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
         }
         public void ChangeFontColor(Color fontColor)
         {
             //change font color
-            
+
 #if DEBUG
             Console.Write("please impl change font color");
 #endif
@@ -54,8 +55,7 @@ namespace PixelFarm.Drawing.Fonts
         public void DrawString(char[] text, double x, double y)
         {
             glyphPlanList.Clear();
-            RequestFont currentFont = _font
-;            vxsTextPrinter.Print(currentFont.SizeInPoints, text, glyphPlanList);
+            vxsTextPrinter.Print(_font.SizeInPoints, text, glyphPlanList);
 
             int glyphListLen = glyphPlanList.Count;
 
