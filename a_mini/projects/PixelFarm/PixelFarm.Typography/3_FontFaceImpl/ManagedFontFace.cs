@@ -13,7 +13,7 @@ namespace PixelFarm.Drawing.Fonts
     {
         readonly string name, path;
         Typeface typeface;
-        MyGlyphPathBuilder glyphPathBuilder;
+        GlyphPathBuilder glyphPathBuilder;
 
         public ManagedFontFace(Typeface typeface, string fontName, string fontPath)
         {
@@ -21,7 +21,7 @@ namespace PixelFarm.Drawing.Fonts
             this.name = fontName;
             this.path = fontPath;
             //----
-            glyphPathBuilder = new MyGlyphPathBuilder(typeface);
+            glyphPathBuilder = new GlyphPathBuilder(typeface);
         }
         public override string Name
         {
@@ -39,7 +39,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public Typeface Typeface { get { return this.typeface; } }
 
-        internal MyGlyphPathBuilder VxsBuilder
+        internal GlyphPathBuilder VxsBuilder
         {
             get
             {
@@ -183,12 +183,12 @@ namespace PixelFarm.Drawing.Fonts
             //then build it
             ownerFace.VxsBuilder.BuildFromGlyphIndex((ushort)codepoint, this.sizeInPoints);
 
-            GlyphPathBuilderVxs vxsBuilder = new Fonts.GlyphPathBuilderVxs();
-            ownerFace.VxsBuilder.ReadShapes(vxsBuilder);
+            var glyphReader = new Fonts.GlyphReaderVxs();
+            ownerFace.VxsBuilder.ReadShapes(glyphReader);
             //
             //create new one
             found = new VertexStore();
-            vxsBuilder.WriteOutput(found, vxsPool);
+            glyphReader.WriteOutput(found, vxsPool);
             glyphVxs.Add(codepoint, found);
             return found;
         }
