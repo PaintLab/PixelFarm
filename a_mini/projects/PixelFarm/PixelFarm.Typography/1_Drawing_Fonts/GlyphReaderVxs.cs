@@ -55,7 +55,12 @@ namespace PixelFarm.Drawing.Fonts
         {
             ps.Clear();
         }
-
+        /// <summary>
+        /// write output to vxs
+        /// </summary>
+        /// <param name="output"></param>
+        /// <param name="vxsPool"></param>
+        /// <param name="scale"></param>
         public void WriteOutput(VertexStore output, VertexStorePool vxsPool, float scale = 1)
         {
             if (scale == 1)

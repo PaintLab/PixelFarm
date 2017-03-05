@@ -75,17 +75,15 @@ namespace PixelFarm.Drawing.Fonts
         {
 
             //1. update current type face
-            Typeface typeface = UpdateCurrentTypefaceAndGlyphBuilder();
+            Typeface typeface = UpdateTypefaceAndGlyphBuilder();
 
-            //2. layout glyph with selected layout techniue 
-
+            //2. layout glyphs with selected layout techniue 
             glyphPlanList.Clear();
-
 
             //TODO: review this again, we should use pixel?
             float fontSizePoint = _font.SizeInPoints;//font size in point unit,
 
-            _glyphLayout.Layout(typeface, _font.SizeInPoints, text, glyphPlanList);
+            _glyphLayout.Layout(typeface, fontSizePoint, text, glyphPlanList);
 
             float pxScale = typeface.CalculateFromPointToPixelScale(fontSizePoint);
             int j = glyphPlanList.Count;
@@ -106,12 +104,13 @@ namespace PixelFarm.Drawing.Fonts
                 _glyphPathBuilder.ReadShapes(_glyphReader);
 
                 //TODO: review here, 
+
                 VertexStore outputVxs = _vxsPool.GetFreeVxs();
                 _glyphReader.WriteOutput(outputVxs, _vxsPool, pxScale);
-
                 canvasPainter.SetOrigin((float)(glyphPlan.x + x), (float)(glyphPlan.y + y));
                 canvasPainter.Fill(outputVxs);
                 _vxsPool.Release(ref outputVxs);
+
             }
             //restore prev origin
             canvasPainter.SetOrigin(ox, oy);
@@ -149,7 +148,7 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
-        Typeface UpdateCurrentTypefaceAndGlyphBuilder()
+        Typeface UpdateTypefaceAndGlyphBuilder()
         {
             //1. update _glyphPathBuilder for current typeface
 
@@ -171,7 +170,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 return _glyphPathBuilder.Typeface;
             }
-        } 
+        }
     }
 
 
