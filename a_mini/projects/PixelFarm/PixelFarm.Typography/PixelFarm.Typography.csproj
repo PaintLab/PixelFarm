@@ -105,7 +105,7 @@
     <Compile Include="3_FontFaceImpl\ManagedFontFace.cs" />
     <Compile Include="3_FontFaceImpl\OpenFontLoader.cs" />
     <Compile Include="2_Drawing_Text\TextShapingAndLayoutService.cs" />
-    <Compile Include="1_Drawing_Fonts\TextPrinterImpl.cs" />
+    <Compile Include="1_Drawing_Fonts\VxsTextPrinter.cs" />
     <Compile Include="3_FontFaceImpl\TextureFontFace.cs" />
     <Compile Include="3_FontFaceImpl\TextureFontLoader.cs" />
   </ItemGroup>

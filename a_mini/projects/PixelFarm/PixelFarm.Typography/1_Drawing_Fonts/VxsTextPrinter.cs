@@ -171,10 +171,7 @@ namespace PixelFarm.Drawing.Fonts
             {
                 return _glyphPathBuilder.Typeface;
             }
-        }
-
-
-
+        } 
     }
 
 
