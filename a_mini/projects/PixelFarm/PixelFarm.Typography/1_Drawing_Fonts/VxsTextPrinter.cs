@@ -21,7 +21,7 @@ namespace PixelFarm.Drawing.Fonts
 
         GlyphPathBuilder _glyphPathBuilder;
         GlyphLayout _glyphLayout = new GlyphLayout();
-        Dictionary<string, GlyphPathBuilder> _cacheGlyphPathBuilder = new Dictionary<string, GlyphPathBuilder>();
+        Dictionary<string, GlyphPathBuilder> _cacheGlyphPathBuilders = new Dictionary<string, GlyphPathBuilder>();
 
 
         public VxsTextPrinter(CanvasPainter canvasPainter, IFontLoader fontLoader)
@@ -48,13 +48,13 @@ namespace PixelFarm.Drawing.Fonts
             {
                 //switch to another font  
                 //store current typeface to cache
-                if (_glyphPathBuilder != null && !_cacheGlyphPathBuilder.ContainsKey(resolvedFontFilename))
+                if (_glyphPathBuilder != null && !_cacheGlyphPathBuilders.ContainsKey(resolvedFontFilename))
                 {
-                    _cacheGlyphPathBuilder[_currentFontFilename] = _glyphPathBuilder;
+                    _cacheGlyphPathBuilders[_currentFontFilename] = _glyphPathBuilder;
                 }
                 //check if we have this in cache ?
                 //if we don't have it, this _currentTypeface will set to null                   
-                _cacheGlyphPathBuilder.TryGetValue(resolvedFontFilename, out _glyphPathBuilder);
+                _cacheGlyphPathBuilders.TryGetValue(resolvedFontFilename, out _glyphPathBuilder);
             }
             this._currentFontFilename = resolvedFontFilename;
 
