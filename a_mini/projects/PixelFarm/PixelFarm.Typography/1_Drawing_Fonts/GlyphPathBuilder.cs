@@ -8,7 +8,7 @@ namespace PixelFarm.Drawing.Fonts
     //for your flexiblity of glyph path builder.
     //-----------------------------------
 
-    public class MyGlyphPathBuilder
+    public class GlyphPathBuilder
     {
         readonly Typeface _typeface;
         TrueTypeInterpreter _trueTypeInterpreter;
@@ -18,7 +18,7 @@ namespace PixelFarm.Drawing.Fonts
         bool _useInterpreter;
         bool _passInterpreterModule;
 
-        public MyGlyphPathBuilder(Typeface typeface)
+        public GlyphPathBuilder(Typeface typeface)
         {
             _typeface = typeface;
             this.UseTrueTypeInstructions = false;//default?

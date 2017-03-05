@@ -19,9 +19,9 @@ namespace PixelFarm.Drawing.Fonts
         IFontLoader _fontLoader;
         RequestFont _font;
 
-        MyGlyphPathBuilder _glyphPathBuilder;
+        GlyphPathBuilder _glyphPathBuilder;
         GlyphLayout _glyphLayout = new GlyphLayout();
-        Dictionary<string, MyGlyphPathBuilder> _cacheGlyphPathBuilder = new Dictionary<string, MyGlyphPathBuilder>();
+        Dictionary<string, GlyphPathBuilder> _cacheGlyphPathBuilder = new Dictionary<string, GlyphPathBuilder>();
 
 
         public VxsTextPrinter(CanvasPainter canvasPainter, IFontLoader fontLoader)
@@ -164,7 +164,7 @@ namespace PixelFarm.Drawing.Fonts
                     typeface = reader.Read(fs);
                 }
                 //2. and create
-                _glyphPathBuilder = new MyGlyphPathBuilder(typeface);
+                _glyphPathBuilder = new GlyphPathBuilder(typeface);
                 return typeface;
             }
             else

@@ -75,7 +75,7 @@ namespace PixelFarm.Agg.Sample_Draw
                 //vxs = curveFlattener.MakeVxs(vxs1);
             }
         }
-        VertexStore BuildVxsForGlyph(MyGlyphPathBuilder builder, char character, int size, int resolution)
+        VertexStore BuildVxsForGlyph(GlyphPathBuilder builder, char character, int size, int resolution)
         {
             builder.Build(character, size);
             var glyphReader = new GlyphReaderVxs();
