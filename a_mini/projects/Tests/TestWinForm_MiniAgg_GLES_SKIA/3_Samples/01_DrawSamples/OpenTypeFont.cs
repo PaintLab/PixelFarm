@@ -31,7 +31,7 @@ namespace PixelFarm.Agg.Sample_Draw
              
 
 
-            var reader = new OpenFontReader();
+           
             this.FillBG = true;
             int size = 72;
             int resolution = 72;
@@ -39,6 +39,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
             using (var fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read))
             {
+                var reader = new OpenFontReader();
                 //1. read typeface from font file
                 //Typeface typeFace = reader.Read(fs);
 
@@ -80,7 +81,7 @@ namespace PixelFarm.Agg.Sample_Draw
             GlyphPathBuilderVxs vxsBuilder = new GlyphPathBuilderVxs();
             builder.ReadShapes(vxsBuilder);
             VertexStore v0 = _vxsPool.GetFreeVxs();
-            vxsBuilder.GetVxs(v0, _vxsPool, builder.GetPixelScale());
+            vxsBuilder.WriteOutput(v0, _vxsPool, builder.GetPixelScale());
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                  //translate
                  new PixelFarm.Agg.Transform.AffinePlan(

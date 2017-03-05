@@ -76,6 +76,7 @@ namespace PixelFarm.Drawing.Fonts
         Typeface typeFace;
         float scale;
         Dictionary<uint, VertexStore> glyphVxs = new Dictionary<uint, VertexStore>();
+        VertexStorePool vxsPool = new VertexStorePool();
         public ManagedActualFont(ManagedFontFace ownerFace, float sizeInPoints, FontStyle style)
         {
             this.ownerFace = ownerFace;
@@ -184,10 +185,14 @@ namespace PixelFarm.Drawing.Fonts
 
             GlyphPathBuilderVxs vxsBuilder = new Fonts.GlyphPathBuilderVxs();
             ownerFace.VxsBuilder.ReadShapes(vxsBuilder);
-            found = vxsBuilder.GetVxs();
+            //
+            //create new one
+            found = new VertexStore();
+            vxsBuilder.WriteOutput(found, vxsPool);
             glyphVxs.Add(codepoint, found);
             return found;
         }
+
     }
 }
 

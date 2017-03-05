@@ -24,8 +24,8 @@ namespace PixelFarm.Drawing.Fonts
             this.UseTrueTypeInstructions = false;//default?
             _trueTypeInterpreter = new TrueTypeInterpreter();
             _trueTypeInterpreter.SetTypeFace(typeface);
-
         }
+        public Typeface Typeface { get { return _typeface; } }
         /// <summary>
         /// specific output glyph size (in points)
         /// </summary>
