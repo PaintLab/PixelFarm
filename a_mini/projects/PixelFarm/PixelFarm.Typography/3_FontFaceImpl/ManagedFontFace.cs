@@ -183,12 +183,12 @@ namespace PixelFarm.Drawing.Fonts
             //then build it
             ownerFace.VxsBuilder.BuildFromGlyphIndex((ushort)codepoint, this.sizeInPoints);
 
-            GlyphPathBuilderVxs vxsBuilder = new Fonts.GlyphPathBuilderVxs();
-            ownerFace.VxsBuilder.ReadShapes(vxsBuilder);
+            var glyphReader = new Fonts.GlyphReaderVxs();
+            ownerFace.VxsBuilder.ReadShapes(glyphReader);
             //
             //create new one
             found = new VertexStore();
-            vxsBuilder.WriteOutput(found, vxsPool);
+            glyphReader.WriteOutput(found, vxsPool);
             glyphVxs.Add(codepoint, found);
             return found;
         }

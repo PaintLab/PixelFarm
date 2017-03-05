@@ -102,24 +102,24 @@ namespace PixelFarm.Drawing.Fonts
                 //-----------------------------------  
                 _glyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, fontSizePoint);
                 //-----------------------------------  
-                vxsBuilder.Reset();
-                _glyphPathBuilder.ReadShapes(vxsBuilder);
+                _glyphReader.Reset();
+                _glyphPathBuilder.ReadShapes(_glyphReader);
 
                 //TODO: review here, 
-                VertexStore outputVxs = vxsPool.GetFreeVxs();
-                vxsBuilder.WriteOutput(outputVxs, vxsPool, pxScale);
+                VertexStore outputVxs = _vxsPool.GetFreeVxs();
+                _glyphReader.WriteOutput(outputVxs, _vxsPool, pxScale);
 
                 canvasPainter.SetOrigin((float)(glyphPlan.x + x), (float)(glyphPlan.y + y));
                 canvasPainter.Fill(outputVxs);
-                vxsPool.Release(ref outputVxs);
+                _vxsPool.Release(ref outputVxs);
             }
             //restore prev origin
             canvasPainter.SetOrigin(ox, oy);
         }
 
         //-----------------------
-        VertexStorePool vxsPool = new VertexStorePool();
-        GlyphPathBuilderVxs vxsBuilder = new GlyphPathBuilderVxs();
+        VertexStorePool _vxsPool = new VertexStorePool();
+        GlyphReaderVxs _glyphReader = new GlyphReaderVxs();
         string _currentFontFilename = "";
         public PositionTecnhique PositionTechnique
         {

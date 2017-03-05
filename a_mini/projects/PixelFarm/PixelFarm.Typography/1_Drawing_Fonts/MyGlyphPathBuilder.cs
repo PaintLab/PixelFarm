@@ -53,8 +53,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return this._passInterpreterModule; }
         }
-
-
+        
         public void Build(char c, float sizeInPoints)
         {
             BuildFromGlyphIndex((ushort)_typeface.LookupIndex(c), sizeInPoints);
@@ -90,13 +89,12 @@ namespace PixelFarm.Drawing.Fonts
 
                 //not use interperter so we need to scale it with our machnism
                 //this demonstrate our auto hint engine ***
-                //you can change this to your own hint engine***
-
+                //you can change this to your own hint engine*** 
             }
         }
-        public void ReadShapes(IGlyphPathBuilder shapeReader)
+        public void ReadShapes(IGlyphReader glyphReader)
         {
-            shapeReader.Read(this._outputGlyphPoints, this._outputContours);
+            glyphReader.Read(this._outputGlyphPoints, this._outputContours);
         }
 
         public float GetPixelScale()
