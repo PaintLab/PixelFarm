@@ -14,15 +14,14 @@ namespace PixelFarm.Drawing.Fonts
         /// <summary>
         /// target canvas
         /// </summary>
-        CanvasPainter canvasPainter;
-        List<GlyphPlan> glyphPlanList = new List<GlyphPlan>(20);
+        CanvasPainter canvasPainter;        
         IFontLoader _fontLoader;
         RequestFont _font;
 
         GlyphPathBuilder _glyphPathBuilder;
         GlyphLayout _glyphLayout = new GlyphLayout();
         Dictionary<string, GlyphPathBuilder> _cacheGlyphPathBuilders = new Dictionary<string, GlyphPathBuilder>();
-
+        List<GlyphPlan> glyphPlanList = new List<GlyphPlan>(20);
 
         public VxsTextPrinter(CanvasPainter canvasPainter, IFontLoader fontLoader)
         {
