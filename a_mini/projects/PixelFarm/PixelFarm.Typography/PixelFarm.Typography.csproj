@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="1_Drawing_Fonts\FontPreview.cs" />
     <Compile Include="1_Drawing_Fonts\GlyphReaderVxs.cs" />
+    <Compile Include="1_Drawing_Fonts\HintTechnique.cs" />
     <Compile Include="1_Drawing_Fonts\InstalledFontCollection.cs" />
     <Compile Include="2_Drawing_Text\ManagedShapingService.cs" />
     <Compile Include="1_Drawing_Fonts\GlyphPathBuilder.cs" />
