@@ -14,15 +14,14 @@ namespace PixelFarm.Drawing.Fonts
         /// <summary>
         /// target canvas
         /// </summary>
-        CanvasPainter canvasPainter;
-        List<GlyphPlan> glyphPlanList = new List<GlyphPlan>(20);
+        CanvasPainter canvasPainter;        
         IFontLoader _fontLoader;
         RequestFont _font;
 
         GlyphPathBuilder _glyphPathBuilder;
         GlyphLayout _glyphLayout = new GlyphLayout();
-        Dictionary<string, GlyphPathBuilder> _cacheGlyphPathBuilder = new Dictionary<string, GlyphPathBuilder>();
-
+        Dictionary<string, GlyphPathBuilder> _cacheGlyphPathBuilders = new Dictionary<string, GlyphPathBuilder>();
+        List<GlyphPlan> glyphPlanList = new List<GlyphPlan>(20);
 
         public VxsTextPrinter(CanvasPainter canvasPainter, IFontLoader fontLoader)
         {
@@ -48,13 +47,13 @@ namespace PixelFarm.Drawing.Fonts
             {
                 //switch to another font  
                 //store current typeface to cache
-                if (_glyphPathBuilder != null && !_cacheGlyphPathBuilder.ContainsKey(resolvedFontFilename))
+                if (_glyphPathBuilder != null && !_cacheGlyphPathBuilders.ContainsKey(resolvedFontFilename))
                 {
-                    _cacheGlyphPathBuilder[_currentFontFilename] = _glyphPathBuilder;
+                    _cacheGlyphPathBuilders[_currentFontFilename] = _glyphPathBuilder;
                 }
                 //check if we have this in cache ?
                 //if we don't have it, this _currentTypeface will set to null                   
-                _cacheGlyphPathBuilder.TryGetValue(resolvedFontFilename, out _glyphPathBuilder);
+                _cacheGlyphPathBuilders.TryGetValue(resolvedFontFilename, out _glyphPathBuilder);
             }
             this._currentFontFilename = resolvedFontFilename;
 
@@ -75,17 +74,15 @@ namespace PixelFarm.Drawing.Fonts
         {
 
             //1. update current type face
-            Typeface typeface = UpdateCurrentTypefaceAndGlyphBuilder();
+            Typeface typeface = UpdateTypefaceAndGlyphBuilder();
 
-            //2. layout glyph with selected layout techniue 
-
+            //2. layout glyphs with selected layout techniue 
             glyphPlanList.Clear();
-
 
             //TODO: review this again, we should use pixel?
             float fontSizePoint = _font.SizeInPoints;//font size in point unit,
 
-            _glyphLayout.Layout(typeface, _font.SizeInPoints, text, glyphPlanList);
+            _glyphLayout.Layout(typeface, fontSizePoint, text, glyphPlanList);
 
             float pxScale = typeface.CalculateFromPointToPixelScale(fontSizePoint);
             int j = glyphPlanList.Count;
@@ -102,16 +99,17 @@ namespace PixelFarm.Drawing.Fonts
                 //-----------------------------------  
                 _glyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, fontSizePoint);
                 //-----------------------------------  
-                _glyphReader.Reset();
-                _glyphPathBuilder.ReadShapes(_glyphReader);
+                _txToVxs.Reset();
+                _glyphPathBuilder.ReadShapes(_txToVxs);
 
                 //TODO: review here, 
-                VertexStore outputVxs = _vxsPool.GetFreeVxs();
-                _glyphReader.WriteOutput(outputVxs, _vxsPool, pxScale);
 
+                VertexStore outputVxs = _vxsPool.GetFreeVxs();
+                _txToVxs.WriteOutput(outputVxs, _vxsPool, pxScale);
                 canvasPainter.SetOrigin((float)(glyphPlan.x + x), (float)(glyphPlan.y + y));
                 canvasPainter.Fill(outputVxs);
                 _vxsPool.Release(ref outputVxs);
+
             }
             //restore prev origin
             canvasPainter.SetOrigin(ox, oy);
@@ -119,9 +117,9 @@ namespace PixelFarm.Drawing.Fonts
 
         //-----------------------
         VertexStorePool _vxsPool = new VertexStorePool();
-        GlyphReaderVxs _glyphReader = new GlyphReaderVxs();
+        GlyphTranslatorToVxs _txToVxs = new GlyphTranslatorToVxs();
         string _currentFontFilename = "";
-        public PositionTecnhique PositionTechnique
+        public PositionTechnique PositionTechnique
         {
             get { return _glyphLayout.PositionTechnique; }
             set { _glyphLayout.PositionTechnique = value; }
@@ -149,7 +147,7 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
-        Typeface UpdateCurrentTypefaceAndGlyphBuilder()
+        Typeface UpdateTypefaceAndGlyphBuilder()
         {
             //1. update _glyphPathBuilder for current typeface
 
@@ -172,31 +170,9 @@ namespace PixelFarm.Drawing.Fonts
                 return _glyphPathBuilder.Typeface;
             }
         }
-
-
-
     }
 
 
 
 
-    public enum HintTechnique
-    {
-        /// <summary>
-        /// no hinting
-        /// </summary>
-        None,
-        /// <summary>
-        /// truetype instruction
-        /// </summary>
-        TrueTypeInstruction,
-        /// <summary>
-        /// truetype instruction vertical only
-        /// </summary>
-        TrueTypeInstruction_VerticalOnly,
-        /// <summary>
-        /// custom hint
-        /// </summary>
-        CustomAutoFit
-    }
 }
