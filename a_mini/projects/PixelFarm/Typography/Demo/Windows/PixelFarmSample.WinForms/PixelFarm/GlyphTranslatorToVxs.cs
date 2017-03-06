@@ -13,11 +13,11 @@ namespace PixelFarm.Drawing.Fonts
     /// <summary>
     /// read glyph and write the result to target vxs
     /// </summary>
-    public class GlyphReaderVxs : IGlyphReader
+    public class GlyphTranslatorToVxs : IGlyphTranslator
     {
         CurveFlattener curveFlattener = new CurveFlattener();
         PathWriter ps = new PathWriter();
-        public GlyphReaderVxs()
+        public GlyphTranslatorToVxs()
         {
         }
         public void BeginRead(int countourCount)
@@ -55,12 +55,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             ps.Clear();
         }
-        /// <summary>
-        /// write output to vxs
-        /// </summary>
-        /// <param name="output"></param>
-        /// <param name="vxsPool"></param>
-        /// <param name="scale"></param>
+
         public void WriteOutput(VertexStore output, VertexStorePool vxsPool, float scale = 1)
         {
             if (scale == 1)
