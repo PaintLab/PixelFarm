@@ -5,13 +5,13 @@
 // it still follows the originall agg function names.  I have been cleaning these up over time
 // and intend to do much more refactoring of these things over the long term.
 
- 
-using PixelFarm.Agg.VertexSource; 
+
+using PixelFarm.Agg.VertexSource;
 using System.IO;
 
 using Mini;
 using PixelFarm.Drawing.Fonts;
-using Typography.OpenFont; 
+using Typography.OpenFont;
 
 namespace PixelFarm.Agg.Sample_Draw
 {
@@ -28,10 +28,10 @@ namespace PixelFarm.Agg.Sample_Draw
 
 
             string fontfile = YourImplementation.BootStrapWinGdi.myFontLoader.GetFont("tahoma", InstalledFontStyle.Regular).FontPath;
-             
 
 
-            var reader = new OpenFontReader();
+
+
             this.FillBG = true;
             int size = 72;
             int resolution = 72;
@@ -39,6 +39,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
             using (var fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read))
             {
+                var reader = new OpenFontReader();
                 //1. read typeface from font file
                 //Typeface typeFace = reader.Read(fs);
 
@@ -74,13 +75,13 @@ namespace PixelFarm.Agg.Sample_Draw
                 //vxs = curveFlattener.MakeVxs(vxs1);
             }
         }
-        VertexStore BuildVxsForGlyph(MyGlyphPathBuilder builder, char character, int size, int resolution)
+        VertexStore BuildVxsForGlyph(GlyphPathBuilder builder, char character, int size, int resolution)
         {
             builder.Build(character, size);
-            GlyphPathBuilderVxs vxsBuilder = new GlyphPathBuilderVxs();
-            builder.ReadShapes(vxsBuilder);
+            var txToVxs = new GlyphTranslatorToVxs();
+            builder.ReadShapes(txToVxs);
             VertexStore v0 = _vxsPool.GetFreeVxs();
-            vxsBuilder.GetVxs(v0, _vxsPool, builder.GetPixelScale());
+            txToVxs.WriteOutput(v0, _vxsPool, builder.GetPixelScale());
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                  //translate
                  new PixelFarm.Agg.Transform.AffinePlan(
