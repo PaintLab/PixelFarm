@@ -78,10 +78,10 @@ namespace PixelFarm.Agg.Sample_Draw
         VertexStore BuildVxsForGlyph(GlyphPathBuilder builder, char character, int size, int resolution)
         {
             builder.Build(character, size);
-            var glyphReader = new GlyphReaderVxs();
-            builder.ReadShapes(glyphReader);
+            var txToVxs = new GlyphTranslatorToVxs();
+            builder.ReadShapes(txToVxs);
             VertexStore v0 = _vxsPool.GetFreeVxs();
-            glyphReader.WriteOutput(v0, _vxsPool, builder.GetPixelScale());
+            txToVxs.WriteOutput(v0, _vxsPool, builder.GetPixelScale());
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                  //translate
                  new PixelFarm.Agg.Transform.AffinePlan(
