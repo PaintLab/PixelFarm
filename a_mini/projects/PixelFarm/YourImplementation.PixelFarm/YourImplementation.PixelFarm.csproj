@@ -7,8 +7,8 @@
     <ProjectGuid>{8963DD34-CE0A-42CD-B3B2-D73031B8F0A0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YourImplementation</RootNamespace>
-    <AssemblyName>YourImplementation</AssemblyName>
+    <RootNamespace>YourImplementation.PixelFarm</RootNamespace>
+    <AssemblyName>YourImplementation.PixelFarm</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
