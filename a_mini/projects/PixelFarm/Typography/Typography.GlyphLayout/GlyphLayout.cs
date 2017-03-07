@@ -104,6 +104,7 @@ namespace Typography.TextLayout
             //glyph substitution            
             if (len > 1)
             {
+                //TODO: review perf here
                 var glyphSubstitution = new GlyphSubStitution(typeface, this.ScriptLang.shortname);
                 glyphSubstitution.EnableLigation = this.EnableLigature;
                 glyphSubstitution.DoSubstitution(_inputGlyphs);
@@ -129,6 +130,7 @@ namespace Typography.TextLayout
             PositionTechnique posTech = this.PositionTechnique;
             if (len > 1 && posTech == PositionTechnique.OpenFont)
             {
+                //TODO: review perf here
                 GlyphSetPosition glyphSetPos = new GlyphSetPosition(typeface, ScriptLang.shortname);
                 glyphSetPos.DoGlyphPosition(_glyphPositions);
             }
