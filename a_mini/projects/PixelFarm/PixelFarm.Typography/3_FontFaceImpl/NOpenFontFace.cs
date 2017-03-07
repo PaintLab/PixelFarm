@@ -34,7 +34,7 @@ namespace PixelFarm.Drawing.Fonts
         protected override void OnDispose() { }
         public override ActualFont GetFontAtPointsSize(float pointSize)
         {
-            ManagedActualFont actualFont = new ManagedActualFont(this, pointSize, FontStyle.Regular);
+            NOpenFont actualFont = new NOpenFont(this, pointSize, FontStyle.Regular);
             return actualFont;
         }
         public Typeface Typeface { get { return this.typeface; } }
@@ -68,7 +68,7 @@ namespace PixelFarm.Drawing.Fonts
         }
     }
 
-    class ManagedActualFont : ActualFont
+    class NOpenFont : ActualFont
     {
         NOpenFontFace ownerFace;
         float sizeInPoints;
@@ -77,7 +77,7 @@ namespace PixelFarm.Drawing.Fonts
         float scale;
         Dictionary<uint, VertexStore> glyphVxs = new Dictionary<uint, VertexStore>();
         VertexStorePool vxsPool = new VertexStorePool();
-        public ManagedActualFont(NOpenFontFace ownerFace, float sizeInPoints, FontStyle style)
+        public NOpenFont(NOpenFontFace ownerFace, float sizeInPoints, FontStyle style)
         {
             this.ownerFace = ownerFace;
             this.sizeInPoints = sizeInPoints;
