@@ -1,21 +1,20 @@
 ﻿//MIT, 2016-2017, WinterDev
 
 using System;
+using System.Collections.Generic;
+//
 using PixelFarm.Agg;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
-
 using Typography.TextLayout;
-
-using System.Collections.Generic;
 
 
 namespace PixelFarm.DrawingGL
 {
 
-    //this provides 3 ITextPrinter for GLES2-based Canvas
 
-    public class AggFontPrinter : ITextPrinter
+
+    public class AggTextSpanPrinter : ITextPrinter
     {
         ActualImage actualImage;
         ImageGraphics2D imgGfx2d;
@@ -26,7 +25,7 @@ namespace PixelFarm.DrawingGL
         CanvasGL2d canvas;
         GLCanvasPainter canvasPainter;
 
-        public AggFontPrinter(GLCanvasPainter canvasPainter, int w, int h)
+        public AggTextSpanPrinter(GLCanvasPainter canvasPainter, int w, int h)
         {
             //this class print long text into agg canvas
             //then copy pixel buffer from aff canvas to gl-bmp
@@ -52,28 +51,18 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawString(char[] text, int startAt, int len, double x, double y)
         {
-            aggPainter.Clear(Drawing.Color.Transparent);
-            //draw text 
-            textPrinter.DrawString(text, startAt, len, 0, 0);
 
+            //1. clear prev drawing result
+            aggPainter.Clear(Drawing.Color.Transparent);
+            //2. print text span into Agg Canvas
+            textPrinter.DrawString(text, startAt, len, 0, 0);
+            //3.copy to gl bitmap
             byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImage);
             //------------------------------------------------------
             GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
             glBmp.IsInvert = false;
+            //TODO: review font height
             canvas.DrawImage(glBmp, (float)x, (float)y + 40);
-
-            //bool isYFliped = canvas.FlipY;
-            //if (isYFliped)
-            //{
-
-            //}
-            //else
-            //{
-            //    canvas.FlipY = true;
-            //    canvas.DrawImage(glBmp, (float)x, (float)y);
-            //    canvas.FlipY = false;
-            //}
-
             glBmp.Dispose();
         }
         public void DrawString(string text, double x, double y)
@@ -94,8 +83,6 @@ namespace PixelFarm.DrawingGL
 
 
 
-    
-
     public class GLBmpGlyphTextPrinter : ITextPrinter
     {
         GlyphLayout _glyphLayout = new GlyphLayout();
@@ -105,8 +92,6 @@ namespace PixelFarm.DrawingGL
         IFontLoader _fontLoader;
         FontFace ff;
         RequestFont font;
-
-
 
         public GLBmpGlyphTextPrinter(GLCanvasPainter painter, IFontLoader fontLoader)
         {
@@ -130,6 +115,7 @@ namespace PixelFarm.DrawingGL
             //TODO: each font should be loaded once ...
             //resolve
             string fontfile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
+            //TODO: review
             ff = TextureFontLoader.LoadFont(fontfile, ScriptLangs.Latin, WriteDirection.LTR, out simpleFontAtlas);
             //resolve typeface**
             ActualFont fontImp = ff.GetFontAtPointsSize(font.SizeInPoints);

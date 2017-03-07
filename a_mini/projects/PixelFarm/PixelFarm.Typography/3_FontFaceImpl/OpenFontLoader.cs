@@ -25,7 +25,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             //TODO:...
             //set shape engine *** 
-            var openFont = new ManagedFontFace(typeface, typeface.Name, fontfile);
+            var openFont = new NOpenFontFace(typeface, typeface.Name, fontfile);
             return openFont;
         }
     }

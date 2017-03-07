@@ -15,7 +15,7 @@ namespace PixelFarm.Drawing.Fonts
         {
 
             //1. read font info
-            ManagedFontFace openFont = (ManagedFontFace)OpenFontLoader.LoadFont(fontfile, scriptLang, writeDirection);
+            NOpenFontFace openFont = (NOpenFontFace)OpenFontLoader.LoadFont(fontfile, scriptLang, writeDirection);
 
             //2. build texture font on the fly! OR load from prebuilt file
             //

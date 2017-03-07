@@ -9,13 +9,13 @@ namespace PixelFarm.Drawing.Fonts
 {
 
 
-    class ManagedFontFace : FontFace
+    class NOpenFontFace : FontFace
     {
         readonly string name, path;
         Typeface typeface;
         GlyphPathBuilder glyphPathBuilder;
 
-        public ManagedFontFace(Typeface typeface, string fontName, string fontPath)
+        public NOpenFontFace(Typeface typeface, string fontName, string fontPath)
         {
             this.typeface = typeface;
             this.name = fontName;
@@ -70,14 +70,14 @@ namespace PixelFarm.Drawing.Fonts
 
     class ManagedActualFont : ActualFont
     {
-        ManagedFontFace ownerFace;
+        NOpenFontFace ownerFace;
         float sizeInPoints;
         FontStyle style;
         Typeface typeFace;
         float scale;
         Dictionary<uint, VertexStore> glyphVxs = new Dictionary<uint, VertexStore>();
         VertexStorePool vxsPool = new VertexStorePool();
-        public ManagedActualFont(ManagedFontFace ownerFace, float sizeInPoints, FontStyle style)
+        public ManagedActualFont(NOpenFontFace ownerFace, float sizeInPoints, FontStyle style)
         {
             this.ownerFace = ownerFace;
             this.sizeInPoints = sizeInPoints;
