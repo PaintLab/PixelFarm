@@ -53,10 +53,12 @@ namespace PixelFarm.Drawing.Fonts
         {
             get { return this._passInterpreterModule; }
         }
-        
-        public void Build(char c, float sizeInPoints)
+
+        public ushort Build(char c, float sizeInPoints)
         {
-            BuildFromGlyphIndex((ushort)_typeface.LookupIndex(c), sizeInPoints);
+            ushort glyphIndex = (ushort)_typeface.LookupIndex(c);
+            BuildFromGlyphIndex(glyphIndex, sizeInPoints);
+            return glyphIndex;
         }
         public void BuildFromGlyphIndex(ushort glyphIndex, float sizeInPoints)
         {

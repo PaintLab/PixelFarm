@@ -3,6 +3,8 @@
 using System.IO;
 using Typography.OpenFont;
 using Typography.Rendering;
+using Typography.OpenFont.Tables;
+using Typography.OpenFont.Extensions;
 
 namespace PixelFarm.Drawing.Fonts
 {
@@ -11,7 +13,7 @@ namespace PixelFarm.Drawing.Fonts
         public static FontFace LoadFont(string fontfile,
             ScriptLang scriptLang,
             WriteDirection writeDirection,
-             out SimpleFontAtlas fontAtlas)
+            out SimpleFontAtlas fontAtlas)
         {
 
             //1. read font info
@@ -20,7 +22,20 @@ namespace PixelFarm.Drawing.Fonts
             //2. build texture font on the fly! OR load from prebuilt file
             //
             //2.1 test build texture on the fly
-            SimpleFontAtlasBuilder atlas1 = CreateSampleMsdfTextureFont(fontfile, 14, 0, 255);
+
+            //0-127
+            UnicodeRangeInfo basicLatinRange = UnicodeLangBits.BasicLatin.ToUnicodeRangeInfo();
+            //128-255
+            UnicodeRangeInfo extendLatinRange = UnicodeLangBits.Latin1Supplement.ToUnicodeRangeInfo();
+            //test... specific other
+            //eg. Thai, for test with complex script, you can change to your own
+            UnicodeRangeInfo thaiRange = UnicodeLangBits.Thai.ToUnicodeRangeInfo();
+
+            SimpleFontAtlasBuilder atlas1 = CreateSampleMsdfTextureFont(fontfile, 14, new UnicodeRangeInfo[] {
+                basicLatinRange,
+                extendLatinRange,
+                thaiRange
+            });
             GlyphImage glyphImg2 = atlas1.BuildSingleImage();
             fontAtlas = atlas1.CreateSimpleFontAtlas();
             fontAtlas.TotalGlyph = glyphImg2;
@@ -38,8 +53,7 @@ namespace PixelFarm.Drawing.Fonts
         }
 
         static SimpleFontAtlasBuilder CreateSampleMsdfTextureFont(string fontfile,
-            float sizeInPoint,
-            ushort startGlyphIndex, ushort endGlyphIndex)
+            float sizeInPoint, UnicodeRangeInfo[] ranges)
         {
 
             //read type face from file
@@ -59,26 +73,35 @@ namespace PixelFarm.Drawing.Fonts
             var atlasBuilder = new SimpleFontAtlasBuilder();
             var msdfBuilder = new MsdfGlyphGen();
 
-            for (ushort n = startGlyphIndex; n <= endGlyphIndex; ++n)
+            int rangeCount = ranges.Length;
+            for (int r = 0; r < rangeCount; ++r)
             {
-                //build glyph
-                builder.BuildFromGlyphIndex(n, sizeInPoint);
+                UnicodeRangeInfo rangeInfo = ranges[r];
+                char startAtUnicode = (char)rangeInfo.StartAt;
+                char endAtUnicode = (char)rangeInfo.EndAt;
+                for (char c = startAtUnicode; c <= endAtUnicode; ++c)
+                {
+                    //build glyph
+                    ushort glyphIndex = builder.Build(c, sizeInPoint);
+                    //builder.BuildFromGlyphIndex(n, sizeInPoint);
 
-                var msdfGlyphGen = new MsdfGlyphGen();
-                var actualImg = msdfGlyphGen.CreateMsdfImage(
-                    builder.GetOutputPoints(),
-                    builder.GetOutputContours(),
-                    builder.GetPixelScale());
-                atlasBuilder.AddGlyph((int)n, actualImg);
+                    var msdfGlyphGen = new MsdfGlyphGen();
+                    var actualImg = msdfGlyphGen.CreateMsdfImage(
+                        builder.GetOutputPoints(),
+                        builder.GetOutputContours(),
+                        builder.GetPixelScale());
 
-                //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-                //{
-                //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
-                //    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
-                //    bmp.UnlockBits(bmpdata);
-                //    bmp.Save("d:\\WImageTest\\a001_xn2_" + n + ".png");
-                //}
+                    atlasBuilder.AddGlyph((int)glyphIndex, actualImg);
+                    //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                    //{
+                    //    var bmpdata = bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                    //    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                    //    bmp.UnlockBits(bmpdata);
+                    //    bmp.Save("d:\\WImageTest\\a001_xn2_" + n + ".png");
+                    //}
+                }
             }
+
 
             return atlasBuilder;
             //var glyphImg2 = atlasBuilder.BuildSingleImage();
@@ -92,8 +115,7 @@ namespace PixelFarm.Drawing.Fonts
             //    bmp.UnlockBits(bmpdata);
             //    bmp.Save("d:\\WImageTest\\a_total.png");
             //}
-            //atlasBuilder.SaveFontInfo("d:\\WImageTest\\a_info.xml");
-
+            //atlasBuilder.SaveFontInfo("d:\\WImageTest\\a_info.xml"); 
         }
     }
 

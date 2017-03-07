@@ -100,7 +100,9 @@ namespace PixelFarm.DrawingGL
             this.canvas2d = painter.Canvas;
             _fontLoader = fontLoader;
             //------
-            ChangeFont(painter.CurrentFont);
+            ChangeFont(painter.CurrentFont); 
+            this._glyphLayout.ScriptLang = painter.CurrentFont.GetOpenFontScriptLang();
+
         }
         public void ChangeFontColor(Color color)
         {
@@ -112,6 +114,7 @@ namespace PixelFarm.DrawingGL
             //from request font
             //we resolve it to actual font
             this.font = font;
+            this._glyphLayout.ScriptLang = font.GetOpenFontScriptLang();
             //TODO: each font should be loaded once ...
             //resolve
             string fontfile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
@@ -125,7 +128,7 @@ namespace PixelFarm.DrawingGL
             //scale at request
             float targetTextureScale = _typeface.CalculateFromPointToPixelScale(font.SizeInPoints);
             _finalTextureScale = targetTextureScale / srcTextureScale;
-
+           
         }
 
         //-----------
@@ -184,17 +187,17 @@ namespace PixelFarm.DrawingGL
             {
                 glBmp.IsInvert = false;
 
-                float c_x = (float)x;
+                //float c_x = (float)x;
                 //int left = ((int)(glyph.glyphMatrix.img_horiBearingX * scale) >> 6);
-                int x_adjust = 0; //minor offset
-                                  //float baseline = c_y - 24;//eg line height= 24 //create a list
-                                  //TODO: review here
-                float baseline = (float)y;//eg line height= 24 //create a list
-                                          //bool isFlipY = canvas2d.FlipY;
-                                          //if (!isFlipY)
-                                          //{
-                                          //    canvas2d.FlipY = true;
-                                          //}
+                //int x_adjust = 0; //minor offset
+                //                  //float baseline = c_y - 24;//eg line height= 24 //create a list
+                //                  //TODO: review here
+                //float baseline = (float)y;//eg line height= 24 //create a list
+                //bool isFlipY = canvas2d.FlipY;
+                //if (!isFlipY)
+                //{
+                //    canvas2d.FlipY = true;
+                //}
                 float scaleFromTexture = _finalTextureScale;
 
                 for (int i = 0; i < n; ++i)
@@ -224,10 +227,12 @@ namespace PixelFarm.DrawingGL
                     //
 
                     canvas2d.DrawSubImageWithMsdf(glBmp,
-                        ref srcRect, c_x + x_adjust,
-                        (float)(baseline + ((int)(srcRect.Height))), scaleFromTexture);
+                        ref srcRect,
+                        (float)(x + glyph.x * scaleFromTexture),
+                        (float)(y + glyph.y * scaleFromTexture + ((int)(srcRect.Height * scaleFromTexture))),
+                        scaleFromTexture);
 
-                    c_x += (glyph.advX * scaleFromTexture);
+                    //c_x += (glyph.advX * scaleFromTexture);
                 }
 
                 //canvas2d.FlipY = isFlipY;

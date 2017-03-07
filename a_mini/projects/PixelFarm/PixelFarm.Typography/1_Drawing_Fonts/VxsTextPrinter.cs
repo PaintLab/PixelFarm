@@ -27,15 +27,9 @@ namespace PixelFarm.Drawing.Fonts
         {
             this.canvasPainter = canvasPainter;
             this._fontLoader = fontLoader;
-#if DEBUG
-
             Typography.OpenFont.ScriptLang scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLang(canvasPainter.CurrentFont.ScriptCode.shortname);
-            if (scLang == null)
-            {
-                throw new NotSupportedException("unknown script lang");
-            }
-#endif
-            this.ScriptLang = scLang;
+
+            this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
             ChangeFont(canvasPainter.CurrentFont);
         }
         public void ChangeFont(RequestFont font)
