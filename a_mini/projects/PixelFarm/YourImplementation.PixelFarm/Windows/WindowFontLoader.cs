@@ -1,5 +1,5 @@
 ﻿//MIT, 2014-2017, WinterDev   
- 
+
 using PixelFarm.Drawing.Fonts;
 
 namespace PixelFarm.Drawing
@@ -12,6 +12,7 @@ namespace PixelFarm.Drawing
             //iterate
             var installFontsWin32 = new InstallFontsProviderWin32();
             installFontCollection.LoadInstalledFont(installFontsWin32.GetInstalledFontIter());
+            //TODO: review font not found handler here
         }
         public InstalledFont GetFont(string fontName, InstalledFontStyle style)
         {
