@@ -11,17 +11,14 @@ namespace OpenTkEssTest
     [Info("T405_DrawString")]
     public class T405_DrawString : DemoBase
     {
-
-
         HarfBuzzShapingService hbShapingService;
         protected override void OnReadyForInitGLShaderProgram()
         {
 
         }
-     
         protected override void OnPainterReady(CanvasPainter painter)
         {
-            painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 10);
+            painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 20);
         }
         public override void Draw(CanvasPainter p)
         {
@@ -36,7 +33,7 @@ namespace OpenTkEssTest
             //painter.DrawString("hello world!", 100, 100);            
             //painter.DrawString("กิ่น", 100, 100);
             //string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้"; 
-            
+
             p.Clear(PixelFarm.Drawing.Color.White);
 
             string test_str = "012345";
@@ -54,7 +51,6 @@ namespace OpenTkEssTest
             p.FillColor = PixelFarm.Drawing.Color.Black;
             for (int i = 0; i < n; i++)
             {
-
                 float x_pos = i * 10;
                 float y_pos = i * 10;
                 p.DrawString("(" + x_pos + "," + y_pos + ")", x_pos, y_pos);
