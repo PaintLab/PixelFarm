@@ -1,21 +1,20 @@
 ﻿//MIT, 2016-2017, WinterDev
 
 using System;
+using System.Collections.Generic;
+//
 using PixelFarm.Agg;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
-
 using Typography.TextLayout;
-
-using System.Collections.Generic;
 
 
 namespace PixelFarm.DrawingGL
 {
 
-    //this provides 3 ITextPrinter for GLES2-based Canvas
 
-    public class AggFontPrinter : ITextPrinter
+
+    public class AggTextSpanPrinter : ITextPrinter
     {
         ActualImage actualImage;
         ImageGraphics2D imgGfx2d;
@@ -26,7 +25,7 @@ namespace PixelFarm.DrawingGL
         CanvasGL2d canvas;
         GLCanvasPainter canvasPainter;
 
-        public AggFontPrinter(GLCanvasPainter canvasPainter, int w, int h)
+        public AggTextSpanPrinter(GLCanvasPainter canvasPainter, int w, int h)
         {
             //this class print long text into agg canvas
             //then copy pixel buffer from aff canvas to gl-bmp
@@ -50,32 +49,25 @@ namespace PixelFarm.DrawingGL
             textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
             aggPainter.TextPrinter = textPrinter;
         }
-        public void DrawString(char[] text, double x, double y)
+        public void DrawString(char[] text, int startAt, int len, double x, double y)
         {
-            aggPainter.Clear(Drawing.Color.White);
-            //draw text 
-            textPrinter.DrawString(text, 0, 0);
 
+            //1. clear prev drawing result
+            aggPainter.Clear(Drawing.Color.Transparent);
+            //2. print text span into Agg Canvas
+            textPrinter.DrawString(text, startAt, len, 0, 0);
+            //3.copy to gl bitmap
             byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImage);
             //------------------------------------------------------
             GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
-
-            bool isYFliped = canvas.FlipY;
-            if (isYFliped)
-            {
-                canvas.DrawImage(glBmp, (float)x, (float)y);
-            }
-            else
-            {
-                canvas.FlipY = true;
-                canvas.DrawImage(glBmp, (float)x, (float)y);
-                canvas.FlipY = false;
-            }
+            glBmp.IsInvert = false;
+            //TODO: review font height
+            canvas.DrawImage(glBmp, (float)x, (float)y + 40);
             glBmp.Dispose();
         }
         public void DrawString(string text, double x, double y)
         {
-            DrawString(text.ToCharArray(), x, y);
+            DrawString(text.ToCharArray(), 0, text.Length, x, y);
         }
 
         public void ChangeFont(RequestFont font)
@@ -84,218 +76,10 @@ namespace PixelFarm.DrawingGL
         }
         public void ChangeFontColor(Color fontColor)
         {
-            aggPainter.FillColor = fontColor;
+            aggPainter.FillColor = Color.Black;
         }
     }
 
-
-    /// <summary>
-    /// this use win gdi only
-    /// </summary>
-    public class WinGdiFontPrinter : ITextPrinter, IDisposable
-    {
-
-        int _width;
-        int _height;
-        Win32.NativeWin32MemoryDc memdc;
-        IntPtr hfont;
-        int bmpWidth = 200;
-        int bmpHeight = 50;
-        CanvasGL2d canvas;
-        public WinGdiFontPrinter(CanvasGL2d canvas, int w, int h)
-        {
-            this.canvas = canvas;
-            _width = w;
-            _height = h;
-            bmpWidth = w;
-            bmpHeight = h;
-
-            memdc = new Win32.NativeWin32MemoryDc(bmpWidth, bmpHeight);
-            //TODO: review here
-            //use default font from current platform
-            InitFont("tahoma", 14);
-            memdc.SetTextColor(0);
-        }
-        public void ChangeFont(RequestFont font)
-        {
-
-        }
-        public void ChangeFontColor(Color fontColor)
-        {
-
-        }
-        public void Dispose()
-        {
-            //TODO: review here 
-            Win32.MyWin32.DeleteObject(hfont);
-            hfont = IntPtr.Zero;
-            memdc.Dispose();
-        }
-        void InitFont(string fontName, int emHeight)
-        {
-            Win32.MyWin32.LOGFONT logFont = new Win32.MyWin32.LOGFONT();
-            Win32.MyWin32.SetFontName(ref logFont, fontName);
-            logFont.lfHeight = emHeight;
-            logFont.lfCharSet = 1;//default
-            logFont.lfQuality = 0;//default
-            hfont = Win32.MyWin32.CreateFontIndirect(ref logFont);
-            Win32.MyWin32.SelectObject(memdc.DC, hfont);
-        }
-        public void DrawString(char[] textBuffer, double x, double y)
-        {
-            //TODO: review performan 
-            Win32.MyWin32.PatBlt(memdc.DC, 0, 0, bmpWidth, bmpHeight, Win32.MyWin32.WHITENESS);
-            Win32.NativeTextWin32.TextOut(memdc.DC, 0, 0, textBuffer, textBuffer.Length);
-            // Win32.Win32Utils.BitBlt(hdc, 0, 0, bmpWidth, 50, memHdc, 0, 0, Win32.MyWin32.SRCCOPY);
-            //---------------
-            int stride = 4 * ((bmpWidth * 32 + 31) / 32);
-
-            //Bitmap newBmp = new Bitmap(bmpWidth, 50, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            //var bmpData = newBmp.LockBits(new Rectangle(0, 0, bmpWidth, 50), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            byte[] tmp1 = new byte[stride * 50];
-            System.Runtime.InteropServices.Marshal.Copy(memdc.PPVBits, tmp1, 0, tmp1.Length);
-            //---------------
-            int pos = 3;
-            for (int r = 0; r < 50; ++r)
-            {
-                for (int c = 0; c < stride; ++c)
-                {
-                    tmp1[pos] = 255;
-                    pos += 4;
-                    c += 4;
-                }
-            }
-
-            Win32.NativeTextWin32.WIN32SIZE win32Size;
-            unsafe
-            {
-                fixed (char* bufferHead = &textBuffer[0])
-                {
-                    Win32.NativeTextWin32.GetTextExtentPoint32Char(memdc.DC, bufferHead, textBuffer.Length, out win32Size);
-                }
-            }
-            bmpWidth = win32Size.Width;
-            bmpHeight = win32Size.Height;
-
-            var actualImg = new Agg.ActualImage(bmpWidth, bmpHeight, Agg.PixelFormat.ARGB32);
-            //------------------------------------------------------
-            //copy bmp from specific bmp area 
-            //and convert to GLBmp   
-            byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImg);
-            unsafe
-            {
-                byte* header = (byte*)memdc.PPVBits;
-                fixed (byte* dest0 = &buffer[0])
-                {
-                    byte* dest = dest0;
-                    byte* rowHead = header;
-                    int rowLen = bmpWidth * 4;
-                    for (int h = 0; h < bmpHeight; ++h)
-                    {
-
-                        header = rowHead;
-                        for (int n = 0; n < rowLen;)
-                        {
-                            //move next
-                            *(dest + 0) = *(header + 0);
-                            *(dest + 1) = *(header + 1);
-                            *(dest + 2) = *(header + 2);
-                            //*(dest + 3) = *(header + 3);
-                            *(dest + 3) = 255;
-                            header += 4;
-                            dest += 4;
-                            n += 4;
-                        }
-                        //finish one row
-                        rowHead += stride;
-                    }
-                }
-            }
-
-            //------------------------------------------------------
-            GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, false);
-            canvas.DrawImage(glBmp, (float)x, (float)y);
-            glBmp.Dispose();
-
-        }
-
-        public void DrawString(string text, double x, double y)
-        {
-            DrawString(text.ToCharArray(), x, y);
-        }
-    }
-
-
-    public class NativeFontStore
-    {
-        //TODO: review here again ***
-
-        Dictionary<InstalledFont, FontFace> fonts = new Dictionary<InstalledFont, FontFace>();
-        Dictionary<FontKey, ActualFont> registerFonts = new Dictionary<FontKey, ActualFont>();
-        //--------------------------------------------------
-
-
-        //public override float GetCharWidth(RequestFont f, char c)
-        //{
-        //    return GLES2PlatformFontMx.Default.ResolveForGdiFont(f).GetGlyph(c).horiz_adv_x >> 6;
-        //    //NativeFont font = nativeFontStore.GetResolvedNativeFont(f);
-        //    //return font.GetGlyph(c).horiz_adv_x >> 6;
-        //} 
-        //============================================== 
-
-        public NativeFontStore()
-        {
-
-        }
-        public ActualFont LoadFont(string fontName, float fontSizeInPoints)
-        {
-            //find install font from fontname
-            InstalledFont found = PixelFarm.Drawing.GLES2.GLES2Platform.GetInstalledFont(fontName, InstalledFontStyle.Regular);
-            if (found == null)
-            {
-                return null;
-            }
-
-            FontFace fontFace;
-            if (!fonts.TryGetValue(found, out fontFace))
-            {
-                throw new NotSupportedException("revisit freetype impl");
-                //convert to freetype data
-
-                //TODO: review here
-                //fontFace = FreeTypeFontLoader.LoadFont(found,
-                //    GLES2PlatformFontMx.defaultScriptLang
-                //    GLES2PlatformFontMx.defaultHbDirection,
-                //    GLES2PlatformFontMx.defaultScriptCode);
-                //fontFace = FreeTypeFontLoader.LoadFont(found,
-                //     "en",
-                //     HBDirection.HB_DIRECTION_RTL);
-
-                if (fontFace == null)
-                {
-                    throw new NotSupportedException();
-                }
-                fonts.Add(found, fontFace);//register
-            }
-            //-----------
-            //create font at specific size from this fontface
-            FontKey fontKey = new FontKey(fontName, fontSizeInPoints, FontStyle.Regular);
-            ActualFont createdFont;
-            if (!registerFonts.TryGetValue(fontKey, out createdFont))
-            {
-                createdFont = fontFace.GetFontAtPointsSize(fontSizeInPoints);
-            }
-            //-----------
-            return createdFont;
-        }
-
-        public ActualFont GetResolvedNativeFont(RequestFont reqFont)
-        {
-            ActualFont found;
-            registerFonts.TryGetValue(reqFont.FontKey, out found);
-            return found;
-        }
-    }
 
 
 
@@ -308,8 +92,6 @@ namespace PixelFarm.DrawingGL
         IFontLoader _fontLoader;
         FontFace ff;
         RequestFont font;
-        NativeFontStore nativeFontStore = new NativeFontStore();
-
 
         public GLBmpGlyphTextPrinter(GLCanvasPainter painter, IFontLoader fontLoader)
         {
@@ -319,6 +101,8 @@ namespace PixelFarm.DrawingGL
             _fontLoader = fontLoader;
             //------
             ChangeFont(painter.CurrentFont);
+            this._glyphLayout.ScriptLang = painter.CurrentFont.GetOpenFontScriptLang();
+
         }
         public void ChangeFontColor(Color color)
         {
@@ -330,9 +114,13 @@ namespace PixelFarm.DrawingGL
             //from request font
             //we resolve it to actual font
             this.font = font;
+            this._glyphLayout.ScriptLang = font.GetOpenFontScriptLang();
             //TODO: each font should be loaded once ...
             //resolve
             string fontfile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
+            //optimize here
+
+            //TODO: review
             ff = TextureFontLoader.LoadFont(fontfile, ScriptLangs.Latin, WriteDirection.LTR, out simpleFontAtlas);
             //resolve typeface**
             ActualFont fontImp = ff.GetFontAtPointsSize(font.SizeInPoints);
@@ -350,15 +138,14 @@ namespace PixelFarm.DrawingGL
         Typography.OpenFont.Typeface _typeface;
         float _finalTextureScale = 1;
         //-----------
-        public void DrawString(char[] buffer, double x, double y)
+        public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
             int j = buffer.Length;
             //int buffsize = j * 2;
 
-            //resolve font from painter? 
-
+            //resolve font from painter?  
             glyphPlans.Clear();
-            _glyphLayout.Layout(_typeface, font.SizeInPoints, buffer, glyphPlans);
+            _glyphLayout.Layout(_typeface, font.SizeInPoints, buffer, startAt, len, glyphPlans);
 
             //
             //un-test version
@@ -397,29 +184,31 @@ namespace PixelFarm.DrawingGL
 
             int n = glyphPlans.Count;
 
-            Typography.Rendering.GlyphImage glyphImage = simpleFontAtlas.TotalGlyph;
-            using (GLBitmap glBmp = new GLBitmap(glyphImage.Width, glyphImage.Height, glyphImage.GetImageBuffer(), false))
+            Typography.Rendering.GlyphImage totoalGlyphImg = simpleFontAtlas.TotalGlyph;
+            using (GLBitmap glBmp = new GLBitmap(totoalGlyphImg.Width, totoalGlyphImg.Height, totoalGlyphImg.GetImageBuffer(), false))
             {
                 glBmp.IsInvert = false;
 
-                float c_x = (float)x;
+                //float c_x = (float)x;
                 //int left = ((int)(glyph.glyphMatrix.img_horiBearingX * scale) >> 6);
-                int x_adjust = 0; //minor offset
-                                  //float baseline = c_y - 24;//eg line height= 24 //create a list
-                                  //TODO: review here
-                float baseline = (float)y;//eg line height= 24 //create a list
-                                          //bool isFlipY = canvas2d.FlipY;
-                                          //if (!isFlipY)
-                                          //{
-                                          //    canvas2d.FlipY = true;
-                                          //}
+                //int x_adjust = 0; //minor offset
+                //                  //float baseline = c_y - 24;//eg line height= 24 //create a list
+                //                  //TODO: review here
+                //float baseline = (float)y;//eg line height= 24 //create a list
+                //bool isFlipY = canvas2d.FlipY;
+                //if (!isFlipY)
+                //{
+                //    canvas2d.FlipY = true;
+                //}
                 float scaleFromTexture = _finalTextureScale;
+
+                Typography.Rendering.TextureKind textureKind = simpleFontAtlas.TextureKind;
 
                 for (int i = 0; i < n; ++i)
                 {
                     GlyphPlan glyph = glyphPlans[i];
                     Typography.Rendering.TextureFontGlyphData glyphData;
-                    if (!simpleFontAtlas.GetRectByCodePoint(glyph.glyphIndex, out glyphData))
+                    if (!simpleFontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
                     {
                         //
                         //Rectangle r = glyphData.Rect;
@@ -440,12 +229,33 @@ namespace PixelFarm.DrawingGL
                     //canvas2d.DrawSubImageWithMsdf(glBmp, ref r, c_x + left,
                     //    (float)(baseline + ((int)(glyphData.ImgHeight))), 1.0f);
                     //
+                    switch (textureKind)
+                    {
+                        case Typography.Rendering.TextureKind.Msdf:
+                            {
+                                canvas2d.DrawSubImageWithMsdf(glBmp,
+                                    ref srcRect,
+                                    (float)(x + (glyph.x - glyphData.TextureXOffset) * scaleFromTexture), // -glyphData.TextureXOffset => restore to original pos
+                                    (float)(y + (glyph.y - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture),// -glyphData.TextureYOffset => restore to original pos
+                                    scaleFromTexture);
+                            }
+                            break;
+                        case Typography.Rendering.TextureKind.AggGrayScale:
+                            {
+                                canvas2d.DrawSubImage(glBmp,
+                                  ref srcRect,
+                                  (float)(x + (glyph.x - glyphData.TextureXOffset) * scaleFromTexture), // -glyphData.TextureXOffset => restore to original pos
+                                  (float)(y + (glyph.y - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture),// -glyphData.TextureYOffset => restore to original pos
+                                  scaleFromTexture);
 
-                    canvas2d.DrawSubImageWithMsdf(glBmp,
-                        ref srcRect, c_x + x_adjust,
-                        (float)(baseline + ((int)(srcRect.Height))), scaleFromTexture);
+                            }
+                            break;
+                        case Typography.Rendering.TextureKind.AggSubPixel:
+                            throw new NotSupportedException();
+                    }
 
-                    c_x += (glyph.advX * scaleFromTexture);
+
+                    //c_x += (glyph.advX * scaleFromTexture);
                 }
 
                 //canvas2d.FlipY = isFlipY;
@@ -674,7 +484,7 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawString(string t, double x, double y)
         {
-            DrawString(t.ToCharArray(), x, y);
+            DrawString(t.ToCharArray(), 0, t.Length, x, y);
         }
 
         static PixelFarm.Drawing.Rectangle ConvToRect(Typography.Rendering.Rectangle r)

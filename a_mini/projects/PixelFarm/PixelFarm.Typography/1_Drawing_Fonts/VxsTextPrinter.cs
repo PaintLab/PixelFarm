@@ -14,7 +14,7 @@ namespace PixelFarm.Drawing.Fonts
         /// <summary>
         /// target canvas
         /// </summary>
-        CanvasPainter canvasPainter;        
+        CanvasPainter canvasPainter;
         IFontLoader _fontLoader;
         RequestFont _font;
 
@@ -27,15 +27,8 @@ namespace PixelFarm.Drawing.Fonts
         {
             this.canvasPainter = canvasPainter;
             this._fontLoader = fontLoader;
-#if DEBUG
-
-            Typography.OpenFont.ScriptLang scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLang(canvasPainter.CurrentFont.ScriptCode.shortname);
-            if (scLang == null)
-            {
-                throw new NotSupportedException("unknown script lang");
-            }
-#endif
-            this.ScriptLang = scLang;
+             
+            this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
             ChangeFont(canvasPainter.CurrentFont);
         }
         public void ChangeFont(RequestFont font)
@@ -68,9 +61,9 @@ namespace PixelFarm.Drawing.Fonts
         }
         public void DrawString(string text, double x, double y)
         {
-            DrawString(text.ToCharArray(), x, y);
+            DrawString(text.ToCharArray(), 0, text.Length, x, y);
         }
-        public void DrawString(char[] text, double x, double y)
+        public void DrawString(char[] text, int startAt, int len, double x, double y)
         {
 
             //1. update current type face
@@ -82,7 +75,7 @@ namespace PixelFarm.Drawing.Fonts
             //TODO: review this again, we should use pixel?
             float fontSizePoint = _font.SizeInPoints;//font size in point unit,
 
-            _glyphLayout.Layout(typeface, fontSizePoint, text, glyphPlanList);
+            _glyphLayout.Layout(typeface, fontSizePoint, text, startAt, len, glyphPlanList);
 
             float pxScale = typeface.CalculateFromPointToPixelScale(fontSizePoint);
             int j = glyphPlanList.Count;

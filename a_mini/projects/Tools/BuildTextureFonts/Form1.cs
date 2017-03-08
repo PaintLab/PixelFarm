@@ -571,7 +571,7 @@ namespace BuildTextureFonts
 
 
             var atlasBuilder = new Typography.Rendering.SimpleFontAtlasBuilder();
-
+            atlasBuilder.TextureKind = TextureKind.Msdf;
 
             for (int i = 0; i < j; ++i)
             {

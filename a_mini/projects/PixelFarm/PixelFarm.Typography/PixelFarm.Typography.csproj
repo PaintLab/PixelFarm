@@ -40,6 +40,10 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing.MiniAgg.csproj">
+      <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
+      <Name>PixelFarm.Drawing.MiniAgg</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
@@ -103,12 +107,14 @@
     <Compile Include="1_Drawing_Fonts\InstalledFontCollection.cs" />
     <Compile Include="2_Drawing_Text\ManagedShapingService.cs" />
     <Compile Include="1_Drawing_Fonts\GlyphPathBuilder.cs" />
-    <Compile Include="3_FontFaceImpl\ManagedFontFace.cs" />
+    <Compile Include="3_FontFaceImpl\NOpenFontFace.cs" />
     <Compile Include="3_FontFaceImpl\OpenFontLoader.cs" />
     <Compile Include="2_Drawing_Text\TextShapingAndLayoutService.cs" />
     <Compile Include="1_Drawing_Fonts\VxsTextPrinter.cs" />
+    <Compile Include="3_FontFaceImpl\ScriptLangConv.cs" />
     <Compile Include="3_FontFaceImpl\TextureFontFace.cs" />
     <Compile Include="3_FontFaceImpl\TextureFontLoader.cs" />
+    <Compile Include="6_AggTexture\AggGlyphTextureGen.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
