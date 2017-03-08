@@ -26,11 +26,18 @@ namespace Typography.Rendering
                 h = 5;
             }
 
-            Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp(w, h);
 
+            int borderW = (int)((float)w / 5f);
+            var translate = new Msdfgen.Vector2(left < 0 ? -left + borderW : borderW, bottom < 0 ? -bottom + borderW : borderW);
+            w += borderW * 2; //borders,left- right
+            h += borderW * 2; //borders, top- bottom
+
+
+
+            Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp(w, h);
             Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
 
-            var translate = new Msdfgen.Vector2(left < 0 ? -left : 0, bottom < 0 ? -bottom : 0);
+
             Msdfgen.MsdfGenerator.generateMSDF(frgbBmp,
                 shape,
                 4,
@@ -39,6 +46,7 @@ namespace Typography.Rendering
                 -1);
             //-----------------------------------
             int[] buffer = Msdfgen.MsdfGenerator.ConvertToIntBmp(frgbBmp);
+
             GlyphImage img = new GlyphImage(w, h);
             img.TextureOffsetX = translate.x;
             img.TextureOffsetY = translate.y;

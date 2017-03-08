@@ -42,7 +42,7 @@ namespace PixelFarm.Drawing.Fonts
 
 
             SimpleFontAtlasBuilder atlas1 = CreateSampleMsdfTextureFont(
-                typeface, 14, GetGlyphIndexIter(typeface,
+                typeface, 16, GetGlyphIndexIter(typeface,
                 UnicodeLangBits.BasicLatin,     //0-127 
                 UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
                 ));
@@ -78,7 +78,7 @@ namespace PixelFarm.Drawing.Fonts
                     startChar++;
                     startGlyphIndex = typeface.LookupIndex((char)startChar);
                 }
-                for (int gindex = startGlyphIndex; gindex < startGlyphIndex + 255; ++gindex)
+                for (int gindex = startGlyphIndex; gindex < startGlyphIndex + 125; ++gindex)
                 {
                     yield return (ushort)gindex;
                 }
