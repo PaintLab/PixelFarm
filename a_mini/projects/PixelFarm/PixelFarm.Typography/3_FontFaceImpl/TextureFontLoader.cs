@@ -49,11 +49,22 @@ namespace PixelFarm.Drawing.Fonts
             //    UnicodeLangBits.BasicLatin,     //0-127 
             //    UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
             //    ));
+            //SimpleFontAtlasBuilder atlas1 = CreateAggTextureFont(
+            //   typeface, 16, GetGlyphIndexIter(typeface,
+            //   UnicodeLangBits.BasicLatin,     //0-127 
+            //   UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
+            //   ));
+            //SimpleFontAtlasBuilder atlas1 = CreateAggSubPixelRenderingTextureFont(
+            //   typeface, 16, GetGlyphIndexIter(typeface,
+            //   UnicodeLangBits.BasicLatin,     //0-127 
+            //   UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
+            //   ));
             SimpleFontAtlasBuilder atlas1 = CreateAggTextureFont(
-               typeface, 16, GetGlyphIndexIter(typeface,
-               UnicodeLangBits.BasicLatin,     //0-127 
-               UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
-               ));
+              typeface, 16, GetGlyphIndexIter(typeface,
+              UnicodeLangBits.BasicLatin,     //0-127 
+              UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
+              ));
+
             GlyphImage glyphImg2 = atlas1.BuildSingleImage();
             fontAtlas = atlas1.CreateSimpleFontAtlas();
             fontAtlas.TotalGlyph = glyphImg2;
@@ -95,16 +106,21 @@ namespace PixelFarm.Drawing.Fonts
                 //}
             }
         }
-        //static IEnumerable<ushort> GetGlyphIndexIterFromSampleChar(Typeface typeface, params char[] sampleChars)
-        //{
-        //    GlyphIndexCollector collector = new GlyphIndexCollector();
-        //    int j = sampleChars.Length;
-        //    for (int i = 0; i < j; ++i)
-        //    {
-        //        typeface.CollectGlyphIndexListFromSampleChar(sampleChars[i], collector);
-        //    }
-        //    return collector.GetGlyphIndexIter();
-        //}
+        static IEnumerable<ushort> GetGlyphIndexIterFromSampleChar(Typeface typeface, params char[] sampleChars)
+        {
+            //GlyphIndexCollector collector = new GlyphIndexCollector();
+            //int j = sampleChars.Length;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    typeface.CollectGlyphIndexListFromSampleChar(sampleChars[i], collector);
+            //}
+            //return collector.GetGlyphIndexIter();
+            int j = sampleChars.Length;
+            for (int i = 0; i < j; ++i)
+            {
+                yield return (ushort)typeface.LookupIndex(sampleChars[i]);
+            }
+        }
         static IEnumerable<ushort> GetGlyphIndexIter(Typeface typeface, params char[] chars)
         {
             int j = chars.Length;
@@ -218,8 +234,7 @@ namespace PixelFarm.Drawing.Fonts
                 txToVxs.WriteOutput(glyphVxs, vxsPool, pxScale);
                 //find bound
 
-                //-------------------------------------------- 
-                //GlyphImage glyphImg = new GlyphImage()
+
                 RectD bounds = new Agg.RectD();
                 BoundingRect.GetBoundingRect(new VertexStoreSnap(glyphVxs), ref bounds);
 
@@ -293,6 +308,116 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
+        static SimpleFontAtlasBuilder CreateAggSubPixelRenderingTextureFont(
+            Typeface typeface, float sizeInPoint, IEnumerable<ushort> glyphIndexIter)
+        {
+
+            ////read type face from file
+            //Typeface typeface;
+            //using (var fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read))
+            //{
+            //    var reader = new OpenFontReader();
+            //    //1. read typeface from font file
+            //    typeface = reader.Read(fs);
+            //}
+            //sample: create sample msdf texture 
+            //-------------------------------------------------------------
+            var builder = new GlyphPathBuilder(typeface);
+            //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
+            //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
+            //-------------------------------------------------------------
+            var atlasBuilder = new SimpleFontAtlasBuilder();
+            atlasBuilder.TextureKind = TextureKind.AggGrayScale;
+            VertexStorePool vxsPool = new VertexStorePool();
+            //create agg cavnas
+
+            foreach (ushort gindex in glyphIndexIter)
+            {
+                //build glyph
+
+                builder.BuildFromGlyphIndex(gindex, sizeInPoint);
+                float pxScale = builder.GetPixelScale();
+
+                var txToVxs = new GlyphTranslatorToVxs();
+                builder.ReadShapes(txToVxs);
+                //
+                //create new one
+                var glyphVxs = new VertexStore();
+                txToVxs.WriteOutput(glyphVxs, vxsPool, pxScale);
+                //find bound
+
+                //-------------------------------------------- 
+                //GlyphImage glyphImg = new GlyphImage()
+                RectD bounds = new Agg.RectD();
+                BoundingRect.GetBoundingRect(new VertexStoreSnap(glyphVxs), ref bounds);
+
+                //-------------------------------------------- 
+                int w = (int)System.Math.Ceiling(bounds.Width);
+                int h = (int)System.Math.Ceiling(bounds.Height);
+                if (w < 5)
+                {
+                    w = 5;
+                }
+                if (h < 5)
+                {
+                    h = 5;
+                }
+                //translate to positive quadrant 
+                double dx = (bounds.Left < 0) ? -bounds.Left : 0;
+                double dy = (bounds.Bottom < 0) ? -bounds.Bottom : 0;
+                w = w * 4;
+
+                if (dx != 0 || dy != 0)
+                {
+                    Agg.Transform.Affine transformMat = Agg.Transform.Affine.NewTranslation(dx, dy);
+                    VertexStore vxs2 = new VertexStore();
+                    Agg.Transform.Affine.TranslateToVxs(glyphVxs, dx, dy, vxs2);
+                    glyphVxs = vxs2;
+                }
+                //-------------------------------------------- 
+                //create glyph img 
+                ActualImage img = new Agg.ActualImage(w, h, PixelFormat.ARGB32);
+                ImageGraphics2D imgCanvas2d = new Agg.ImageGraphics2D(img);
+                AggCanvasPainter painter = new Agg.AggCanvasPainter(imgCanvas2d);
+                painter.FillColor = Color.Black;
+                painter.StrokeColor = Color.Black;
+                painter.UseSubPixelRendering = true;
+                painter.Clear(Color.White);
+                //
+                painter.Fill(glyphVxs);
+                //-------------------------------------------- 
+                var glyphImage = new GlyphImage(w, h);
+                glyphImage.TextureOffsetX = dx;
+                glyphImage.TextureOffsetY = dy;
+                glyphImage.SetImageBuffer(ActualImage.GetBuffer2(img), false);
+                //copy data from agg canvas to glyph image
+                atlasBuilder.AddGlyph(gindex, glyphImage);
+
+                //int[] buffer = glyphImage.GetImageBuffer();
+                //using (var bmp = new System.Drawing.Bitmap(glyphImage.Width, glyphImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                //{
+                //    var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, glyphImage.Width, glyphImage.Height),
+                //        System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+                //    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, buffer.Length);
+                //    bmp.UnlockBits(bmpdata);
+                //    bmp.Save("d:\\WImageTest\\a001_subpix_xn2_" + gindex + ".png");
+                //}
+            }
+            //var glyphImg2 = atlasBuilder.BuildSingleImage();
+            //using (var bmp = new System.Drawing.Bitmap(glyphImg2.Width, glyphImg2.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            //{
+            //    var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, glyphImg2.Width, glyphImg2.Height),
+            //        System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+            //    int[] intBuffer = glyphImg2.GetImageBuffer();
+
+            //    System.Runtime.InteropServices.Marshal.Copy(intBuffer, 0, bmpdata.Scan0, intBuffer.Length);
+            //    bmp.UnlockBits(bmpdata);
+            //    bmp.Save("d:\\WImageTest\\a_total.png");
+            //}
+            //atlasBuilder.SaveFontInfo("d:\\WImageTest\\a_info.xml");
+
+            return atlasBuilder;
+        }
         //static SimpleFontAtlasBuilder CreateSampleMsdfTextureFont(string fontfile,
         //    float sizeInPoint, UnicodeRangeInfo[] ranges)
         //{

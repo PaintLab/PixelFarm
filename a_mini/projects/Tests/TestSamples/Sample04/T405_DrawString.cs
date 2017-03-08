@@ -38,6 +38,7 @@ namespace OpenTkEssTest
             //string test_str = "ปู่";
             //string test_str = "ก็";
             //string test_str = "abcd";
+            //string test_str = "A";
 
             p.Clear(PixelFarm.Drawing.Color.White);
 
