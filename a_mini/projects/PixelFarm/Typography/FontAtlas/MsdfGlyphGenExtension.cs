@@ -27,16 +27,23 @@ namespace Typography.Rendering
             }
 
             Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp(w, h);
+
             Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
-            Msdfgen.MsdfGenerator.generateMSDF(frgbBmp, shape, 4, new Msdfgen.Vector2(1, 1), new Msdfgen.Vector2(), -1);
+
+            var translate = new Msdfgen.Vector2(left < 0 ? -left : 0, bottom < 0 ? -bottom : 0);
+            Msdfgen.MsdfGenerator.generateMSDF(frgbBmp,
+                shape,
+                4,
+                new Msdfgen.Vector2(1, 1), //scale                 
+                translate,//translate to positive quadrant
+                -1);
             //-----------------------------------
             int[] buffer = Msdfgen.MsdfGenerator.ConvertToIntBmp(frgbBmp);
-            GlyphImage img = new Typography.Rendering.GlyphImage(w, h);
+            GlyphImage img = new GlyphImage(w, h);
+            img.TextureOffsetX = translate.x;
+            img.TextureOffsetY = translate.y;
             img.SetImageBuffer(buffer, false);
             return img;
         }
-
-
-
     }
 }

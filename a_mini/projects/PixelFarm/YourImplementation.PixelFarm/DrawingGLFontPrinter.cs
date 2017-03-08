@@ -100,7 +100,7 @@ namespace PixelFarm.DrawingGL
             this.canvas2d = painter.Canvas;
             _fontLoader = fontLoader;
             //------
-            ChangeFont(painter.CurrentFont); 
+            ChangeFont(painter.CurrentFont);
             this._glyphLayout.ScriptLang = painter.CurrentFont.GetOpenFontScriptLang();
 
         }
@@ -118,6 +118,8 @@ namespace PixelFarm.DrawingGL
             //TODO: each font should be loaded once ...
             //resolve
             string fontfile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
+            //optimize here
+            
             //TODO: review
             ff = TextureFontLoader.LoadFont(fontfile, ScriptLangs.Latin, WriteDirection.LTR, out simpleFontAtlas);
             //resolve typeface**
@@ -128,7 +130,7 @@ namespace PixelFarm.DrawingGL
             //scale at request
             float targetTextureScale = _typeface.CalculateFromPointToPixelScale(font.SizeInPoints);
             _finalTextureScale = targetTextureScale / srcTextureScale;
-           
+
         }
 
         //-----------
@@ -182,8 +184,8 @@ namespace PixelFarm.DrawingGL
 
             int n = glyphPlans.Count;
 
-            Typography.Rendering.GlyphImage glyphImage = simpleFontAtlas.TotalGlyph;
-            using (GLBitmap glBmp = new GLBitmap(glyphImage.Width, glyphImage.Height, glyphImage.GetImageBuffer(), false))
+            Typography.Rendering.GlyphImage totoalGlyphImg = simpleFontAtlas.TotalGlyph;
+            using (GLBitmap glBmp = new GLBitmap(totoalGlyphImg.Width, totoalGlyphImg.Height, totoalGlyphImg.GetImageBuffer(), false))
             {
                 glBmp.IsInvert = false;
 
@@ -204,7 +206,7 @@ namespace PixelFarm.DrawingGL
                 {
                     GlyphPlan glyph = glyphPlans[i];
                     Typography.Rendering.TextureFontGlyphData glyphData;
-                    if (!simpleFontAtlas.GetRectByCodePoint(glyph.glyphIndex, out glyphData))
+                    if (!simpleFontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
                     {
                         //
                         //Rectangle r = glyphData.Rect;
@@ -228,8 +230,8 @@ namespace PixelFarm.DrawingGL
 
                     canvas2d.DrawSubImageWithMsdf(glBmp,
                         ref srcRect,
-                        (float)(x + glyph.x * scaleFromTexture),
-                        (float)(y + glyph.y * scaleFromTexture + ((int)(srcRect.Height * scaleFromTexture))),
+                        (float)(x + (glyph.x - glyphData.TextureXOffset) * scaleFromTexture), // -glyphData.TextureXOffset => restore to original pos
+                        (float)(y + (glyph.y - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture),// -glyphData.TextureYOffset => restore to original pos
                         scaleFromTexture);
 
                     //c_x += (glyph.advX * scaleFromTexture);

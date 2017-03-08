@@ -26,7 +26,7 @@ namespace PixelFarm.Drawing.Fonts
             get { return totalGlyphImage; }
             set { totalGlyphImage = value; }
         }
-        public bool GetRectByCodePoint(int codepoint, out TextureFontGlyphData glyphdata)
+        public bool TryGetGlyphDataByCodePoint(int codepoint, out TextureFontGlyphData glyphdata)
         {
             if (!codePointLocations.TryGetValue(codepoint, out glyphdata))
             {

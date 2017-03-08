@@ -20,7 +20,7 @@ namespace PixelFarm.Drawing.Fonts
             this.typeface = typeface;
             this.name = fontName;
             this.path = fontPath;
-            //----
+            
             glyphPathBuilder = new GlyphPathBuilder(typeface);
         }
         public override string Name

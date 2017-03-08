@@ -20,7 +20,7 @@ namespace OpenTkEssTest
         {
             var font = new PixelFarm.Drawing.RequestFont("tahoma", 14);
             font.ScriptCode = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
-            painter.CurrentFont = font; 
+            painter.CurrentFont = font;
         }
         public override void Draw(CanvasPainter p)
         {
@@ -35,7 +35,9 @@ namespace OpenTkEssTest
             //painter.DrawString("hello world!", 100, 100);            
             //painter.DrawString("กิ่น", 100, 100);
             //string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้";
-            string test_str = "ก็";
+            string test_str = "ปู่";
+            //string test_str = "ก็";
+            //string test_str = "abcd";
 
             p.Clear(PixelFarm.Drawing.Color.White);
 
