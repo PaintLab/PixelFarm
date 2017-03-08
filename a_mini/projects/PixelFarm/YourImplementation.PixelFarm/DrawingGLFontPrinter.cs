@@ -119,7 +119,7 @@ namespace PixelFarm.DrawingGL
             //resolve
             string fontfile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
             //optimize here
-            
+
             //TODO: review
             ff = TextureFontLoader.LoadFont(fontfile, ScriptLangs.Latin, WriteDirection.LTR, out simpleFontAtlas);
             //resolve typeface**
@@ -202,6 +202,8 @@ namespace PixelFarm.DrawingGL
                 //}
                 float scaleFromTexture = _finalTextureScale;
 
+                Typography.Rendering.TextureKind textureKind = simpleFontAtlas.TextureKind;
+
                 for (int i = 0; i < n; ++i)
                 {
                     GlyphPlan glyph = glyphPlans[i];
@@ -227,12 +229,31 @@ namespace PixelFarm.DrawingGL
                     //canvas2d.DrawSubImageWithMsdf(glBmp, ref r, c_x + left,
                     //    (float)(baseline + ((int)(glyphData.ImgHeight))), 1.0f);
                     //
+                    switch (textureKind)
+                    {
+                        case Typography.Rendering.TextureKind.Msdf:
+                            {
+                                canvas2d.DrawSubImageWithMsdf(glBmp,
+                                    ref srcRect,
+                                    (float)(x + (glyph.x - glyphData.TextureXOffset) * scaleFromTexture), // -glyphData.TextureXOffset => restore to original pos
+                                    (float)(y + (glyph.y - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture),// -glyphData.TextureYOffset => restore to original pos
+                                    scaleFromTexture);
+                            }
+                            break;
+                        case Typography.Rendering.TextureKind.AggGrayScale:
+                            {
+                                canvas2d.DrawSubImage(glBmp,
+                                  ref srcRect,
+                                  (float)(x + (glyph.x - glyphData.TextureXOffset) * scaleFromTexture), // -glyphData.TextureXOffset => restore to original pos
+                                  (float)(y + (glyph.y - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture),// -glyphData.TextureYOffset => restore to original pos
+                                  scaleFromTexture);
 
-                    canvas2d.DrawSubImageWithMsdf(glBmp,
-                        ref srcRect,
-                        (float)(x + (glyph.x - glyphData.TextureXOffset) * scaleFromTexture), // -glyphData.TextureXOffset => restore to original pos
-                        (float)(y + (glyph.y - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture),// -glyphData.TextureYOffset => restore to original pos
-                        scaleFromTexture);
+                            }
+                            break;
+                        case Typography.Rendering.TextureKind.AggSubPixel:
+                            throw new NotSupportedException();
+                    }
+
 
                     //c_x += (glyph.advX * scaleFromTexture);
                 }

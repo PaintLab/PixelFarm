@@ -7,7 +7,12 @@ using PixelFarm.Drawing.Fonts;
 
 namespace Typography.Rendering
 {
-
+    public enum TextureKind
+    {
+        AggGrayScale,
+        AggSubPixel,
+        Msdf
+    }
     public class SimpleFontAtlasBuilder
     {
         GlyphImage latestGenGlyphImage;
@@ -21,6 +26,7 @@ namespace Typography.Rendering
 
             glyphs[codePoint] = glyphCache;
         }
+        public TextureKind TextureKind { get; set; }
         public GlyphImage BuildSingleImage()
         {
             //1. add to list 
@@ -169,6 +175,7 @@ namespace Typography.Rendering
         public SimpleFontAtlas CreateSimpleFontAtlas()
         {
             SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
+            simpleFontAtlas.TextureKind = this.TextureKind;
             foreach (CacheGlyph cacheGlyph in glyphs.Values)
             {
                 //convert char to hex
@@ -193,6 +200,7 @@ namespace Typography.Rendering
         public SimpleFontAtlas LoadFontInfo(string filename)
         {
             SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
+            simpleFontAtlas.TextureKind = this.TextureKind;
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(filename);
             //read
