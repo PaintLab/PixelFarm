@@ -10,7 +10,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         B,
         C,
         D,
-        E
+        E, F,
+
     }
 
     [Info(OrderCode = "02")]
@@ -312,16 +313,53 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int lineLen = 10;
             int x = 30;
             int y = 30;
+            p.FillColor = PixelFarm.Drawing.Color.Black;
+
+            p.FillRectangle(0, 0, 20, 20);
+
             for (int i = 0; i < 360; i += 30)
             {
                 p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
 
             }
-            //y += 10;
-            //for (int i = 0; i < 360; i += 360)
-            //{
-            //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
-            //}
+            y += 10;
+            for (int i = 0; i < 360; i += 360)
+            {
+                p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+            }
+        }
+        void RunSampleF(CanvasPainter p)
+        {
+            //version 4: 
+            p.Clear(PixelFarm.Drawing.Color.White);
+            p.UseSubPixelRendering = true;
+            //--------------------------
+            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+            p.StrokeWidth = 2.0f;
+            //p.Line(2, 0, 10, 15);
+
+            int lineLen = 10;
+            int x = 30;
+            int y = 30;
+            p.FillColor = PixelFarm.Drawing.Color.Black;
+
+            VertexStorePool pool = new VertexStorePool();
+            using (System.IO.FileStream fs = new System.IO.FileStream("d:\\WImageTest\\tahoma.ttf", System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            {
+                Typography.OpenFont.OpenFontReader reader = new Typography.OpenFont.OpenFontReader();
+                Typography.OpenFont.Typeface typeface = reader.Read(fs);
+
+
+                PixelFarm.Drawing.Fonts.GlyphPathBuilder builder = new Drawing.Fonts.GlyphPathBuilder(typeface);
+                builder.BuildFromGlyphIndex((ushort)typeface.LookupIndex('C'), 16);
+                PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs tovxs = new Drawing.Fonts.GlyphTranslatorToVxs();
+                builder.ReadShapes(tovxs);
+                VertexStore vxs = new VertexStore();
+                tovxs.WriteOutput(vxs, pool, builder.GetPixelScale());
+                p.Fill(vxs);
+            }
+            //p.FillRectangle(0, 0, 20, 20);
+
         }
         public override void Draw(CanvasPainter p)
         {
@@ -348,6 +386,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     break;
                 case Sample.E:
                     RunSampleE(p);
+                    break;
+                case Sample.F:
+                    RunSampleF(p);
                     break;
             }
 
