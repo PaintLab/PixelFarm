@@ -150,11 +150,11 @@ namespace Typography.OpenFont
             // TODO: What if there are none or several tables?
             return _cmaps[0].CharacterToGlyphIndex(character);
         }
-        public void CollectGlyphIndexListFromSampleChar(char sampleChar, GlyphIndexCollector collector)
-        {
-            // TODO: What if there are none or several tables?
-            _cmaps[0].CollectGlyphIndexListFromSampleChar(sampleChar, collector);
-        }
+        //public void CollectGlyphIndexListFromSampleChar(char starAt, char endAt, GlyphIndexCollector collector)
+        //{
+        //    // TODO: What if there are none or several tables?
+        //    _cmaps[0].CollectGlyphIndexListFromSampleChar(sampleChar, collector);
+        //}
         public Glyph Lookup(char character)
         {
             return _glyphs[LookupIndex(character)];
@@ -163,7 +163,7 @@ namespace Typography.OpenFont
         {
             return _glyphs[glyphIndex];
         }
-       
+
         public ushort GetAdvanceWidth(char character)
         {
             return _horizontalMetrics.GetAdvanceWidth(LookupIndex(character));

@@ -41,22 +41,12 @@ namespace PixelFarm.Drawing.Fonts
             //2.1 test build texture on the fly
 
 
-            //SimpleFontAtlasBuilder atlas1 = CreateSampleMsdfTextureFont(
-            //    typeface, 14, GetGlyphIndexIter(typeface,
-            //    UnicodeLangBits.BasicLatin,     //0-127
-            //    UnicodeLangBits.Latin1Supplement,//128-255
-            //    UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
-            //    ));
             SimpleFontAtlasBuilder atlas1 = CreateSampleMsdfTextureFont(
-              typeface, 14, GetGlyphIndexIterFromSampleChar(typeface,
-              'A',     //0-127
-              'ก' //eg. Thai, for test with complex script, you can change to your own 
-              ));
+                typeface, 14, GetGlyphIndexIter(typeface,
+                UnicodeLangBits.BasicLatin,     //0-127 
+                UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
+                ));
 
-            //SimpleFontAtlasBuilder atlas1 = CreateSampleMsdfTextureFont(fontfile, 14,
-            //    new char[] { '็', 'ก' }
-            //);
-            //
             GlyphImage glyphImg2 = atlas1.BuildSingleImage();
             fontAtlas = atlas1.CreateSimpleFontAtlas();
             fontAtlas.TotalGlyph = glyphImg2;
@@ -74,27 +64,41 @@ namespace PixelFarm.Drawing.Fonts
         }
         static IEnumerable<ushort> GetGlyphIndexIter(Typeface typeface, params UnicodeLangBits[] rangeBits)
         {
+            //temp fixed
             GlyphIndexCollector collector = new GlyphIndexCollector();
             int j = rangeBits.Length;
             for (int i = 0; i < j; ++i)
             {
                 UnicodeRangeInfo rangeInfo = rangeBits[i].ToUnicodeRangeInfo();
                 //get start and end bit
-                typeface.CollectGlyphIndexListFromSampleChar((char)rangeInfo.StartAt, collector);
-                typeface.CollectGlyphIndexListFromSampleChar((char)rangeInfo.EndAt, collector);
+                int startChar = rangeInfo.StartAt;
+                int startGlyphIndex = typeface.LookupIndex((char)startChar);
+                while (startGlyphIndex < 1)
+                {
+                    startChar++;
+                    startGlyphIndex = typeface.LookupIndex((char)startChar);
+                }
+                for (int gindex = startGlyphIndex; gindex < startGlyphIndex + 255; ++gindex)
+                {
+                    yield return (ushort)gindex;
+                }
+                //char endAt = (char)rangeInfo.EndAt;
+                //for (char c = (char)rangeInfo.StartAt; c <= endAt; ++c)
+                //{
+                //    typeface.CollectGlyphIndexListFromSampleChar(c, collector);
+                //}
             }
-            return collector.GetGlyphIndexIter();
         }
-        static IEnumerable<ushort> GetGlyphIndexIterFromSampleChar(Typeface typeface, params char[] sampleChars)
-        {
-            GlyphIndexCollector collector = new GlyphIndexCollector();
-            int j = sampleChars.Length;
-            for (int i = 0; i < j; ++i)
-            {
-                typeface.CollectGlyphIndexListFromSampleChar(sampleChars[i], collector);
-            }
-            return collector.GetGlyphIndexIter();
-        }
+        //static IEnumerable<ushort> GetGlyphIndexIterFromSampleChar(Typeface typeface, params char[] sampleChars)
+        //{
+        //    GlyphIndexCollector collector = new GlyphIndexCollector();
+        //    int j = sampleChars.Length;
+        //    for (int i = 0; i < j; ++i)
+        //    {
+        //        typeface.CollectGlyphIndexListFromSampleChar(sampleChars[i], collector);
+        //    }
+        //    return collector.GetGlyphIndexIter();
+        //}
         static IEnumerable<ushort> GetGlyphIndexIter(Typeface typeface, params char[] chars)
         {
             int j = chars.Length;
