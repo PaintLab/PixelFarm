@@ -150,17 +150,17 @@ namespace PixelFarm.Drawing.Fonts
             //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
-            var msdfGlyphGen = new MsdfGlyphGen();
             atlasBuilder.TextureKind = TextureKind.Msdf;
             foreach (ushort gindex in glyphIndexIter)
             {
                 //build glyph 
                 builder.BuildFromGlyphIndex(gindex, sizeInPoint);
-                GlyphImage glyphImage = msdfGlyphGen.CreateMsdfImage(
-                    builder.GetOutputPoints(),
-                    builder.GetOutputContours(),
-                    builder.GetPixelScale());
-                atlasBuilder.AddGlyph(gindex, glyphImage);
+                var glyphToContour = new GlyphTranslatorToContour();
+                //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
+                builder.ReadShapes(glyphToContour);
+                GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour);
+                atlasBuilder.AddGlyph(gindex, glyphImg);
+
 
                 //int[] buffer = glyphImage.GetImageBuffer();
                 //using (var bmp = new System.Drawing.Bitmap(glyphImage.Width, glyphImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
@@ -224,14 +224,13 @@ namespace PixelFarm.Drawing.Fonts
                 //build glyph
 
                 builder.BuildFromGlyphIndex(gindex, sizeInPoint);
-                float pxScale = builder.GetPixelScale();
 
                 var txToVxs = new GlyphTranslatorToVxs();
                 builder.ReadShapes(txToVxs);
                 //
                 //create new one
                 var glyphVxs = new VertexStore();
-                txToVxs.WriteOutput(glyphVxs, vxsPool, pxScale);
+                txToVxs.WriteOutput(glyphVxs, vxsPool);
                 //find bound
 
 
@@ -336,14 +335,14 @@ namespace PixelFarm.Drawing.Fonts
                 //build glyph
 
                 builder.BuildFromGlyphIndex(gindex, sizeInPoint);
-                float pxScale = builder.GetPixelScale();
+
 
                 var txToVxs = new GlyphTranslatorToVxs();
                 builder.ReadShapes(txToVxs);
                 //
                 //create new one
                 var glyphVxs = new VertexStore();
-                txToVxs.WriteOutput(glyphVxs, vxsPool, pxScale);
+                txToVxs.WriteOutput(glyphVxs, vxsPool);
                 //find bound
 
                 //-------------------------------------------- 

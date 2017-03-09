@@ -350,12 +350,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 Typography.OpenFont.Typeface typeface = reader.Read(fs);
 
 
-                PixelFarm.Drawing.Fonts.GlyphPathBuilder builder = new Drawing.Fonts.GlyphPathBuilder(typeface);
+                Typography.Rendering.GlyphPathBuilder builder = new Typography.Rendering.GlyphPathBuilder(typeface);
                 builder.BuildFromGlyphIndex((ushort)typeface.LookupIndex('C'), 16);
                 PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs tovxs = new Drawing.Fonts.GlyphTranslatorToVxs();
                 builder.ReadShapes(tovxs);
                 VertexStore vxs = new VertexStore();
-                tovxs.WriteOutput(vxs, pool, builder.GetPixelScale());
+                tovxs.WriteOutput(vxs, pool);
                 p.Fill(vxs);
             }
             //p.FillRectangle(0, 0, 20, 20);

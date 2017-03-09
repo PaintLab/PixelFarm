@@ -71,9 +71,6 @@
     <Compile Include="..\Typography\FontAtlas\MsdfGlyphGen.cs">
       <Link>4_FontAtlas\MsdfGlyphGen.cs</Link>
     </Compile>
-    <Compile Include="..\Typography\FontAtlas\MsdfGlyphGenExtension.cs">
-      <Link>4_FontAtlas\MsdfGlyphGenExtension.cs</Link>
-    </Compile>
     <Compile Include="..\Typography\FontAtlas\SimpleFontAtlas.cs">
       <Link>4_FontAtlas\SimpleFontAtlas.cs</Link>
     </Compile>
@@ -102,11 +99,12 @@
       <Link>5_Msdf\SignedDistance.cs</Link>
     </Compile>
     <Compile Include="1_Drawing_Fonts\FontPreview.cs" />
+    <Compile Include="1_Drawing_Fonts\GlyphPathBuilder.cs" />
     <Compile Include="1_Drawing_Fonts\GlyphTranslatorToVxs.cs" />
+    <Compile Include="1_Drawing_Fonts\HintedVxsGlyphCollection.cs" />
     <Compile Include="1_Drawing_Fonts\HintTechnique.cs" />
     <Compile Include="1_Drawing_Fonts\InstalledFontCollection.cs" />
     <Compile Include="2_Drawing_Text\ManagedShapingService.cs" />
-    <Compile Include="1_Drawing_Fonts\GlyphPathBuilder.cs" />
     <Compile Include="3_FontFaceImpl\NOpenFontFace.cs" />
     <Compile Include="3_FontFaceImpl\OpenFontLoader.cs" />
     <Compile Include="2_Drawing_Text\TextShapingAndLayoutService.cs" />

@@ -6,12 +6,14 @@
 // and intend to do much more refactoring of these things over the long term.
 
 
-using PixelFarm.Agg.VertexSource;
-using System.IO;
 
+using System.IO;
+//
 using Mini;
+using PixelFarm.Agg.VertexSource;
 using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
+using Typography.Rendering;
 
 namespace PixelFarm.Agg.Sample_Draw
 {
@@ -28,10 +30,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
 
             string fontfile = YourImplementation.BootStrapWinGdi.myFontLoader.GetFont("tahoma", InstalledFontStyle.Regular).FontPath;
-
-
-
-
+             
             this.FillBG = true;
             int size = 72;
             int resolution = 72;
@@ -77,11 +76,12 @@ namespace PixelFarm.Agg.Sample_Draw
         }
         VertexStore BuildVxsForGlyph(GlyphPathBuilder builder, char character, int size, int resolution)
         {
+            //TODO: review here
             builder.Build(character, size);
             var txToVxs = new GlyphTranslatorToVxs();
             builder.ReadShapes(txToVxs);
             VertexStore v0 = _vxsPool.GetFreeVxs();
-            txToVxs.WriteOutput(v0, _vxsPool, builder.GetPixelScale());
+            txToVxs.WriteOutput(v0, _vxsPool);
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                  //translate
                  new PixelFarm.Agg.Transform.AffinePlan(
