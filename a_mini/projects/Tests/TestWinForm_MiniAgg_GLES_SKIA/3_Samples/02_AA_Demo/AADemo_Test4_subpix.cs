@@ -9,7 +9,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         A,
         B,
         C,
-        D
+        D,
+        E, F,
+
     }
 
     [Info(OrderCode = "02")]
@@ -298,6 +300,67 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
             //}
         }
+        void RunSampleE(CanvasPainter p)
+        {
+            //version 4: 
+            p.Clear(PixelFarm.Drawing.Color.White);
+            p.UseSubPixelRendering = true;
+            //--------------------------
+            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+            p.StrokeWidth = 2.0f;
+            //p.Line(2, 0, 10, 15);
+
+            int lineLen = 10;
+            int x = 30;
+            int y = 30;
+            p.FillColor = PixelFarm.Drawing.Color.Black;
+
+            p.FillRectangle(0, 0, 20, 20);
+
+            for (int i = 0; i < 360; i += 30)
+            {
+                p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+
+            }
+            y += 10;
+            for (int i = 0; i < 360; i += 360)
+            {
+                p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+            }
+        }
+        void RunSampleF(CanvasPainter p)
+        {
+            //version 4: 
+            p.Clear(PixelFarm.Drawing.Color.White);
+            p.UseSubPixelRendering = true;
+            //--------------------------
+            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+            p.StrokeWidth = 2.0f;
+            //p.Line(2, 0, 10, 15);
+
+            int lineLen = 10;
+            int x = 30;
+            int y = 30;
+            p.FillColor = PixelFarm.Drawing.Color.Black;
+
+            VertexStorePool pool = new VertexStorePool();
+            using (System.IO.FileStream fs = new System.IO.FileStream("d:\\WImageTest\\tahoma.ttf", System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            {
+                Typography.OpenFont.OpenFontReader reader = new Typography.OpenFont.OpenFontReader();
+                Typography.OpenFont.Typeface typeface = reader.Read(fs);
+
+
+                Typography.Rendering.GlyphPathBuilder builder = new Typography.Rendering.GlyphPathBuilder(typeface);
+                builder.BuildFromGlyphIndex((ushort)typeface.LookupIndex('C'), 16);
+                PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs tovxs = new Drawing.Fonts.GlyphTranslatorToVxs();
+                builder.ReadShapes(tovxs);
+                VertexStore vxs = new VertexStore();
+                tovxs.WriteOutput(vxs, pool);
+                p.Fill(vxs);
+            }
+            //p.FillRectangle(0, 0, 20, 20);
+
+        }
         public override void Draw(CanvasPainter p)
         {
             //specific for agg
@@ -320,6 +383,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     break;
                 case Sample.D:
                     RunSampleD(p);
+                    break;
+                case Sample.E:
+                    RunSampleE(p);
+                    break;
+                case Sample.F:
+                    RunSampleF(p);
                     break;
             }
 
@@ -373,12 +442,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
                     for (int n = 0; n < 3; ++n)
                     {
-                        
+
                         forwardBuffer.WriteAccumAndReadBack(
                          g8Lut.Tertiary(greyScaleValue),
                          g8Lut.Secondary(greyScaleValue),
-                         g8Lut.Primary(greyScaleValue), out e0); 
-                       
+                         g8Lut.Primary(greyScaleValue), out e0);
+
                         //5. blend this pixel to dest image (expand to 5 (sub)pixel)                          
                         BlendPixel(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
                     }

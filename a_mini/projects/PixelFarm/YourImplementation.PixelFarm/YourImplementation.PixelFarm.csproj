@@ -7,8 +7,8 @@
     <ProjectGuid>{8963DD34-CE0A-42CD-B3B2-D73031B8F0A0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YourImplementation</RootNamespace>
-    <AssemblyName>YourImplementation</AssemblyName>
+    <RootNamespace>YourImplementation.PixelFarm</RootNamespace>
+    <AssemblyName>YourImplementation.PixelFarm</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,18 +35,20 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\pixelfarm\win32utils\MyWin32.cs">
+    <Compile Include="..\Win32Utils\MyWin32.cs">
       <Link>Win32Utils\MyWin32.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\win32utils\NativeTextWin32.cs">
+    <Compile Include="..\Win32Utils\NativeTextWin32.cs">
       <Link>Win32Utils\NativeTextWin32.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\win32utils\NativeWin32MemoryDc.cs">
+    <Compile Include="..\Win32Utils\NativeWin32MemoryDc.cs">
       <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
     <Compile Include="Bootstrap\BootStrapOpenGLES2.cs" />
     <Compile Include="Bootstrap\BootStrapWinGdi.cs" />
     <Compile Include="DrawingGLFontPrinter.cs" />
+    <Compile Include="DrawingGLFontPrinter.Gdi.cs" />
+    <Compile Include="NativeFontStore.cs" />
     <Compile Include="Windows\InstallFontsProviderWin32.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windows\WindowFontLoader.cs" />
