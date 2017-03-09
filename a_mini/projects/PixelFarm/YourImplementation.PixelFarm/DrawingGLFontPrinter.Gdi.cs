@@ -136,10 +136,7 @@ namespace PixelFarm.DrawingGL
 
         }
 
-        public void DrawString(string text, double x, double y)
-        {
-            DrawString(text.ToCharArray(), 0, text.Length, x, y);
-        }
+
     }
 
 }
