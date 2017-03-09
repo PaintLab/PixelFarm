@@ -65,11 +65,7 @@ namespace PixelFarm.DrawingGL
             canvas.DrawImage(glBmp, (float)x, (float)y + 40);
             glBmp.Dispose();
         }
-        public void DrawString(string text, double x, double y)
-        {
-            DrawString(text.ToCharArray(), 0, text.Length, x, y);
-        }
-
+         
         public void ChangeFont(RequestFont font)
         {
             aggPainter.CurrentFont = font;
@@ -482,10 +478,7 @@ namespace PixelFarm.DrawingGL
             //            //glBmp.Dispose();
             //        }
         }
-        public void DrawString(string t, double x, double y)
-        {
-            DrawString(t.ToCharArray(), 0, t.Length, x, y);
-        }
+        
 
         static PixelFarm.Drawing.Rectangle ConvToRect(Typography.Rendering.Rectangle r)
         {

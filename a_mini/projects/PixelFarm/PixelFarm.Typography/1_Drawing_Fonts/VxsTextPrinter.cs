@@ -59,10 +59,7 @@ namespace PixelFarm.Drawing.Fonts
             Console.Write("please impl change font color");
 #endif
         }
-        public void DrawString(string text, double x, double y)
-        {
-            DrawString(text.ToCharArray(), 0, text.Length, x, y);
-        }
+         
         public void DrawString(char[] text, int startAt, int len, double x, double y)
         {
 
