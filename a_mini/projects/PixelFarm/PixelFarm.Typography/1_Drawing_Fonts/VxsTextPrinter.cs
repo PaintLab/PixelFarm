@@ -40,7 +40,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             //1.  resolve actual font file
             this._font = font;
-            string resolvedFontFilename = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
+            string resolvedFontFilename = _fontLoader.GetFont(font.Name, font.Style.ConvToInstalledFontStyle()).FontPath;
             if (resolvedFontFilename != _currentFontFilename)
             {
                 //switch to another font  
@@ -127,7 +127,7 @@ namespace PixelFarm.Drawing.Fonts
         }
 
         //-----------------------
-    
+
         string _currentFontFilename = "";
         public PositionTechnique PositionTechnique
         {
