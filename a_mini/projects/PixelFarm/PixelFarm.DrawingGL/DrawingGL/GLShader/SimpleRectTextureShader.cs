@@ -403,4 +403,126 @@ namespace PixelFarm.DrawingGL
             BuildProgram(vs, fs);
         }
     }
+
+    class GdiImageTextureWithSubPixelRenderingShader : SimpleRectTextureShader
+    {
+        float toDrawImgW = 1, toDrawImgH = 1;
+        ShaderUniformVar1 _isBigEndian;
+        ShaderUniformVar2 _onepix_xy;
+        public GdiImageTextureWithSubPixelRenderingShader(CanvasToShaderSharedResource canvasShareResource)
+            : base(canvasShareResource)
+        {
+            //string vs = @"
+            //    attribute vec4 a_position;
+            //    attribute vec2 a_texCoord;
+            //    uniform mat4 u_mvpMatrix; 
+            //    varying vec2 v_texCoord;
+            //    void main()
+            //    {
+            //        gl_Position = u_mvpMatrix* a_position;
+            //        v_texCoord =  a_texCoord;
+            //     }	 
+            //    ";
+            ////in fs, angle on windows 
+            ////we need to switch color component
+            ////because we store value in memory as BGRA
+            ////and gl expect input in RGBA
+            //string fs = @"
+            //          precision mediump float;
+            //          varying vec2 v_texCoord;
+            //          uniform sampler2D s_texture;
+            //          void main()
+            //          {
+            //             vec4 c = texture2D(s_texture, v_texCoord); 
+            //             if((c[2] ==1.0) && (c[1]==1.0) && (c[0]== 1.0) && (c[3] == 1.0)){
+            //                discard;
+            //             }else{                                                   
+            //                gl_FragColor =  vec4(c[2],c[1],c[0],c[3]);  
+            //             }
+            //          }
+            //    ";
+            //BuildProgram(vs, fs);
+
+            string vs = @"
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+                uniform mat4 u_mvpMatrix; 
+                varying vec2 v_texCoord;
+                void main()
+                {
+                    gl_Position = u_mvpMatrix* a_position;
+                    v_texCoord =  a_texCoord;
+                 }	 
+                ";
+            //in fs, angle on windows 
+            //we need to switch color component
+            //because we store value in memory as BGRA
+            //and gl expect input in RGBA
+            string fs = @"
+                      precision mediump float;
+
+                      uniform sampler2D s_texture;
+                      uniform int isBigEndian;  
+                      uniform vec2 onepix_xy;
+
+                      varying vec2 v_texCoord; 
+                      void main()
+                      {                         
+
+
+                        float v_texCoord0 =v_texCoord[0]*3.0;
+                        float v_texCoord1= v_texCoord[1];
+
+                        float one_x=onepix_xy[0];               
+                        float one_y=onepix_xy[1];
+
+                        vec4 c0= texture2D(s_texture,vec2(v_texCoord0             ,v_texCoord1));
+                        vec4 c1= texture2D(s_texture,vec2(v_texCoord0 +  one_x    ,v_texCoord1));
+                        vec4 c2= texture2D(s_texture,vec2(v_texCoord0 + (one_x*2.0) ,v_texCoord1)); 
+
+                        vec4 c3= texture2D(s_texture,vec2(v_texCoord0 + (one_x*3.0) ,v_texCoord1)); 
+                        vec4 c4= texture2D(s_texture,vec2(v_texCoord0 + (one_x*4.0) ,v_texCoord1)); 
+                        vec4 c5= texture2D(s_texture,vec2(v_texCoord0 + (one_x*5.0) ,v_texCoord1));
+
+                        vec4 c6= texture2D(s_texture,vec2(v_texCoord0 + (one_x*6.0) ,v_texCoord1)); 
+                        vec4 c7= texture2D(s_texture,vec2(v_texCoord0 + (one_x*7.0) ,v_texCoord1)); 
+                        vec4 c8= texture2D(s_texture,vec2(v_texCoord0 + (one_x*8.0) ,v_texCoord1));
+
+ 
+                        if(isBigEndian ==1){
+                            gl_FragColor = vec4(
+                                        (c0[0]+c1[1]+c2[2])/3.0,
+                                        (c3[0]+c4[1]+c5[2])/3.0,
+                                        (c6[0]+c7[1]+c8[2])/3.0,
+                                        c0[3]);
+                        }else{
+                           gl_FragColor = vec4(
+                                        (c0[0]+c1[1]+c2[2])/3.0,
+                                        (c3[0]+c4[1]+c5[2])/3.0,
+                                        (c6[0]+c7[1]+c8[2])/3.0,
+                                        c0[3]);
+                        }
+                      }
+                ";
+            BuildProgram(vs, fs);
+        }
+        public bool IsBigEndian { get; set; }
+        public void SetBitmapSize(int w, int h)
+        {
+            this.toDrawImgW = w;
+            this.toDrawImgH = h;
+        }
+        protected override void OnProgramBuilt()
+        {
+            _isBigEndian = shaderProgram.GetUniform1("isBigEndian");
+            _onepix_xy = shaderProgram.GetUniform2("onepix_xy");
+        }
+        protected override void OnSetVarsBeforeRenderer()
+        {
+            _isBigEndian.SetValue(IsBigEndian ? 1 : 0);
+            _onepix_xy.SetValue(1f / toDrawImgW, 1f / toDrawImgH);
+        }
+
+    }
+
 }

@@ -398,7 +398,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         void BlendWithLcdTechnique(ActualImage destImg, ActualImage glyphImg, PixelFarm.Drawing.Color color)
         {
             var g8Lut = g8_1_2lcd;
-            var forwardBuffer = new ScanlineSubPixelRasterizer.ForwardTemporaryBuffer();
+            var forwardBuffer = new ScanlineSubPixelRasterizer.TempForwardAccumBuffer();
             int glyphH = glyphImg.Height;
             int glyphW = glyphImg.Width;
             byte[] glyphBuffer = ActualImage.GetBuffer(glyphImg);
