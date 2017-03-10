@@ -12,58 +12,69 @@ using Typography.OpenFont.Extensions;
 
 namespace PixelFarm.Drawing.Fonts
 {
+    public struct TextureFontCreationParams
+    {
+        public ScriptLang scriptLang;
+        public TextureKind textureKind;
+        public WriteDirection writeDirection;
+        public float originalFontSizeInPoint;
+        public UnicodeLangBits[] langBits;
 
+    }
     public static class TextureFontLoader
     {
 
 
-        public static FontFace LoadFont(string fontfile, ScriptLang scriptLang,
-            WriteDirection writeDirection,
+        public static FontFace LoadFont(
+            string fontfile,
+            TextureFontCreationParams creationParams,
             out SimpleFontAtlas fontAtlas)
         {
             using (FileStream fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read))
             {
                 var reader = new OpenFontReader();
                 Typeface typeface = reader.Read(fs);
-                return LoadFont(typeface, fontfile, scriptLang, writeDirection, out fontAtlas);
+                return LoadFont(typeface, fontfile, creationParams, out fontAtlas);
             }
         }
+
         public static FontFace LoadFont(
             Typeface typeface,
-            string fontfile,
-            ScriptLang scriptLang,
-            WriteDirection writeDirection,
+            string fontFile,
+            TextureFontCreationParams creationParams,
             out SimpleFontAtlas fontAtlas)
         {
 
             //1. read font info
-            NOpenFontFace openFont = (NOpenFontFace)OpenFontLoader.LoadFont(typeface, scriptLang, writeDirection);
-
-            //2. build texture font on the fly! OR load from prebuilt file
-            //
-            //2.1 test build texture on the fly
-
-
-            //SimpleFontAtlasBuilder atlas1 = CreateSampleMsdfTextureFont(
-            //    typeface, 16, GetGlyphIndexIter(typeface,
-            //    UnicodeLangBits.BasicLatin,     //0-127 
-            //    UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
-            //    ));
-            //SimpleFontAtlasBuilder atlas1 = CreateAggTextureFont(
-            //   typeface, 16, GetGlyphIndexIter(typeface,
-            //   UnicodeLangBits.BasicLatin,     //0-127 
-            //   UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
-            //   ));
-            //SimpleFontAtlasBuilder atlas1 = CreateAggSubPixelRenderingTextureFont(
-            //   typeface, 16, GetGlyphIndexIter(typeface,
-            //   UnicodeLangBits.BasicLatin,     //0-127 
-            //   UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
-            //   ));
-            SimpleFontAtlasBuilder atlas1 = CreateAggTextureFont(
-              typeface, 16, GetGlyphIndexIter(typeface,
-              UnicodeLangBits.BasicLatin,     //0-127 
-              UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
-              ));
+            NOpenFontFace openFont = (NOpenFontFace)OpenFontLoader.LoadFont(typeface, creationParams.scriptLang, creationParams.writeDirection);
+          
+            //------------------------
+            SimpleFontAtlasBuilder atlas1 = null;
+            switch (creationParams.textureKind)
+            {
+                default: throw new System.NotSupportedException();
+                case TextureKind.AggSubPixel:
+                    atlas1 = CreateAggSubPixelRenderingTextureFont(
+                           typeface,
+                           creationParams.originalFontSizeInPoint,
+                           GetGlyphIndexIter(typeface, creationParams.langBits)
+                           );
+                    break;
+                case TextureKind.AggGrayScale:
+                    atlas1 = CreateAggTextureFont(
+                           typeface,
+                           creationParams.originalFontSizeInPoint,
+                           GetGlyphIndexIter(typeface, creationParams.langBits)
+                           );
+                    break;
+                case TextureKind.Msdf:
+                    atlas1 = CreateSampleMsdfTextureFont(
+                            typeface,
+                            creationParams.originalFontSizeInPoint,
+                            GetGlyphIndexIter(typeface, creationParams.langBits)
+                            );
+                    break;
+            }
 
             GlyphImage glyphImg2 = atlas1.BuildSingleImage();
             fontAtlas = atlas1.CreateSimpleFontAtlas();
@@ -76,8 +87,9 @@ namespace PixelFarm.Drawing.Fonts
             //glyphImg = atlasBuilder.BuildSingleImage(); //we can create a new glyph or load from prebuilt file
             //fontAtlas.TotalGlyph = glyphImg; 
 
-            var textureFontFace = new TextureFontFace(openFont, fontAtlas);
-            return textureFontFace;
+            return openFont;
+            //var textureFontFace = new TextureFontFace(openFont, fontAtlas);
+            //return textureFontFace;
         }
         static IEnumerable<ushort> GetGlyphIndexIter(Typeface typeface, params UnicodeLangBits[] rangeBits)
         {
