@@ -4,7 +4,6 @@ using System.IO;
 using System.Collections.Generic;
 
 using PixelFarm.Agg;
-using PixelFarm.Drawing;
 using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.OpenFont.Tables;
@@ -19,7 +18,7 @@ namespace PixelFarm.Drawing.Fonts
         public WriteDirection writeDirection;
         public float originalFontSizeInPoint;
         public UnicodeLangBits[] langBits;
-
+        public HintTechnique hintTechnique;
     }
     public static class TextureFontLoader
     {
@@ -47,7 +46,7 @@ namespace PixelFarm.Drawing.Fonts
 
             //1. read font info
             NOpenFontFace openFont = (NOpenFontFace)OpenFontLoader.LoadFont(typeface, creationParams.scriptLang, creationParams.writeDirection);
-          
+
             //------------------------
             SimpleFontAtlasBuilder atlas1 = null;
             switch (creationParams.textureKind)
@@ -57,6 +56,7 @@ namespace PixelFarm.Drawing.Fonts
                     atlas1 = CreateAggSubPixelRenderingTextureFont(
                            typeface,
                            creationParams.originalFontSizeInPoint,
+                           creationParams.hintTechnique,
                            GetGlyphIndexIter(typeface, creationParams.langBits)
                            );
                     break;
@@ -64,6 +64,7 @@ namespace PixelFarm.Drawing.Fonts
                     atlas1 = CreateAggTextureFont(
                            typeface,
                            creationParams.originalFontSizeInPoint,
+                           creationParams.hintTechnique,
                            GetGlyphIndexIter(typeface, creationParams.langBits)
                            );
                     break;
@@ -71,6 +72,7 @@ namespace PixelFarm.Drawing.Fonts
                     atlas1 = CreateSampleMsdfTextureFont(
                             typeface,
                             creationParams.originalFontSizeInPoint,
+                            creationParams.hintTechnique,
                             GetGlyphIndexIter(typeface, creationParams.langBits)
                             );
                     break;
@@ -144,7 +146,10 @@ namespace PixelFarm.Drawing.Fonts
         }
 
         static SimpleFontAtlasBuilder CreateSampleMsdfTextureFont(
-            Typeface typeface, float sizeInPoint, IEnumerable<ushort> glyphIndexIter)
+            Typeface typeface,
+            float sizeInPoint,
+            HintTechnique hintTech,
+            IEnumerable<ushort> glyphIndexIter)
         {
 
             ////read type face from file
@@ -158,9 +163,8 @@ namespace PixelFarm.Drawing.Fonts
             //sample: create sample msdf texture 
             //-------------------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
-            //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
-            //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
-            //-------------------------------------------------------------
+            builder.SetHintTechnique(hintTech);
+
             var atlasBuilder = new SimpleFontAtlasBuilder();
             atlasBuilder.SetAtlasInfo(TextureKind.Msdf, sizeInPoint);
             foreach (ushort gindex in glyphIndexIter)
@@ -208,7 +212,7 @@ namespace PixelFarm.Drawing.Fonts
 
 
         static SimpleFontAtlasBuilder CreateAggTextureFont(
-            Typeface typeface, float sizeInPoint, IEnumerable<ushort> glyphIndexIter)
+            Typeface typeface, float sizeInPoint, HintTechnique hintTech, IEnumerable<ushort> glyphIndexIter)
         {
 
             ////read type face from file
@@ -222,8 +226,7 @@ namespace PixelFarm.Drawing.Fonts
             //sample: create sample msdf texture 
             //-------------------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
-            //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
-            //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
+            builder.SetHintTechnique(hintTech);
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
             atlasBuilder.SetAtlasInfo(TextureKind.AggGrayScale, sizeInPoint);
@@ -232,8 +235,7 @@ namespace PixelFarm.Drawing.Fonts
 
             foreach (ushort gindex in glyphIndexIter)
             {
-                //build glyph
-
+                //build glyph 
                 builder.BuildFromGlyphIndex(gindex, sizeInPoint);
 
                 var txToVxs = new GlyphTranslatorToVxs();
@@ -319,7 +321,7 @@ namespace PixelFarm.Drawing.Fonts
 
 
         static SimpleFontAtlasBuilder CreateAggSubPixelRenderingTextureFont(
-            Typeface typeface, float sizeInPoint, IEnumerable<ushort> glyphIndexIter)
+            Typeface typeface, float sizeInPoint, HintTechnique hintTech, IEnumerable<ushort> glyphIndexIter)
         {
 
             ////read type face from file
@@ -333,8 +335,7 @@ namespace PixelFarm.Drawing.Fonts
             //sample: create sample msdf texture 
             //-------------------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
-            //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
-            //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
+            builder.SetHintTechnique(hintTech);
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
             atlasBuilder.SetAtlasInfo(TextureKind.AggGrayScale, sizeInPoint);

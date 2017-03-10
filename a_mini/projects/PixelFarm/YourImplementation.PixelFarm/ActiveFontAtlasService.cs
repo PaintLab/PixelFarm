@@ -39,9 +39,6 @@ namespace PixelFarm.DrawingGL
             key.scriptLang = font.ScriptLang.shortname;
             key.sizeInPoint = font.SizeInPoints;
             key.fontStyle = font.Style;
-
-
-
             //------------------------
             TextureAtlasCache found;
             FontFace ff = null;
@@ -54,14 +51,19 @@ namespace PixelFarm.DrawingGL
                 TextureFontCreationParams creationParams = new TextureFontCreationParams();
                 creationParams.originalFontSizeInPoint = font.SizeInPoints;
                 creationParams.scriptLang = font.ScriptLang;
-                creationParams.writeDirection = WriteDirection.RTL;//default
-                creationParams.textureKind = Typography.Rendering.TextureKind.AggGrayScale;
+                creationParams.writeDirection = WriteDirection.RTL;//default 
                 //TODO: review here, langBits can be created with scriptLang ?
                 creationParams.langBits = new Typography.OpenFont.Tables.UnicodeLangBits[]
                 {
                     Typography.OpenFont.Tables.UnicodeLangBits.BasicLatin,     //0-127 
                     Typography.OpenFont.Tables.UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
                 };
+                //
+                creationParams.textureKind = Typography.Rendering.TextureKind.AggGrayScale;
+                if (font.SizeInPoints >= 4 && font.SizeInPoints <= 14)
+                {
+                    creationParams.hintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction_VerticalOnly;
+                }
                 //
                 ff = TextureFontLoader.LoadFont(fontfile, creationParams, out fontAtlas);
 
