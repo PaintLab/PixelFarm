@@ -557,7 +557,7 @@ namespace BuildTextureFonts
         {
             //in the case that we want to use FreeType
             FontFace face = FreeTypeFontLoader.LoadFont(fontName, "en", HBDirection.HB_DIRECTION_LTR);
-            return face.GetFontAtPointsSize(size);
+            return face.GetFontAtPointSize(size);
         }
         private void button3_Click(object sender, EventArgs e)
         {
