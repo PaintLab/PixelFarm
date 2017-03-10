@@ -19,7 +19,7 @@ namespace OpenTkEssTest
         protected override void OnPainterReady(CanvasPainter painter)
         {
             var font = new PixelFarm.Drawing.RequestFont("tahoma", 14);
-            font.ScriptCode = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
+            font.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
             painter.CurrentFont = font;
         }
         public override void Draw(CanvasPainter p)

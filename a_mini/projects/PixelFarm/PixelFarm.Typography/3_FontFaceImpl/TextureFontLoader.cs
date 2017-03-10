@@ -12,11 +12,11 @@ using Typography.OpenFont.Extensions;
 
 namespace PixelFarm.Drawing.Fonts
 {
-
-
-
+    
     public static class TextureFontLoader
     {
+
+
         public static FontFace LoadFont(string fontfile, ScriptLang scriptLang,
             WriteDirection writeDirection,
             out SimpleFontAtlas fontAtlas)

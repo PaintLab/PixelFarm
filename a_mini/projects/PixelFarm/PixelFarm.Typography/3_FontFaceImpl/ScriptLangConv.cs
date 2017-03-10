@@ -6,7 +6,7 @@ namespace PixelFarm.Drawing.Fonts
     {
         public static Typography.OpenFont.ScriptLang GetOpenFontScriptLang(this RequestFont reqFont)
         {
-            return Typography.OpenFont.ScriptLangs.GetRegisteredScriptLang(reqFont.ScriptCode.shortname);
+            return Typography.OpenFont.ScriptLangs.GetRegisteredScriptLang(reqFont.ScriptLang.shortname);
         }
     }
 }
