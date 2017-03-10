@@ -12,15 +12,21 @@ namespace OpenTkEssTest
     public class T405_DrawString : DemoBase
     {
         HarfBuzzShapingService hbShapingService;
+        PixelFarm.Drawing.RequestFont font1;
+        PixelFarm.Drawing.RequestFont font2;
         protected override void OnReadyForInitGLShaderProgram()
         {
 
         }
         protected override void OnPainterReady(CanvasPainter painter)
         {
-            var font = new PixelFarm.Drawing.RequestFont("tahoma", 14);
-            font.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
-            painter.CurrentFont = font;
+            font1 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
+            font1.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
+            //
+            font2 = new PixelFarm.Drawing.RequestFont("tahoma", 16);
+            font2.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
+
+            painter.CurrentFont = font1;
         }
         public override void Draw(CanvasPainter p)
         {
@@ -34,17 +40,16 @@ namespace OpenTkEssTest
             //painter.Clear(PixelFarm.Drawing.Color.White);
             //painter.DrawString("hello world!", 100, 100);            
             //painter.DrawString("กิ่น", 100, 100);
-            string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้";
+           // string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้";
             //string test_str = "ปู่";
             //string test_str = "ก็";
-            //string test_str = "abcd";
+            string test_str = "abcd";
             //string test_str = "A";
-
-            p.Clear(PixelFarm.Drawing.Color.White);
-
             //string test_str = "012345";
-            p.FillColor = PixelFarm.Drawing.Color.Red;
             //string test_str = "กิน";
+            p.Clear(PixelFarm.Drawing.Color.White); 
+            p.FillColor = PixelFarm.Drawing.Color.Red;
+         
             int n = 50;
             for (int i = 0; i < n; i++)
             {
@@ -60,6 +65,14 @@ namespace OpenTkEssTest
                 float x_pos = i * 20;
                 float y_pos = i * 20;
                 //p.DrawString("(" + x_pos + "," + y_pos + ")", x_pos, y_pos);
+                if ((i % 2) == 0)
+                {
+                    p.CurrentFont = font1;
+                }
+                else
+                {
+                    p.CurrentFont = font2;
+                }
                 p.DrawString(test_str, x_pos, y_pos);
             }
             //PixelFarm.Drawing.GLES2.GLES2Platform.AddTextureFont("tahoma",
