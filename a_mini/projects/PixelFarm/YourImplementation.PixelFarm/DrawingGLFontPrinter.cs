@@ -75,7 +75,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-
+    
 
     public class GLBmpGlyphTextPrinter : ITextPrinter
     {
@@ -107,21 +107,23 @@ namespace PixelFarm.DrawingGL
         {
             //from request font
             //we resolve it to actual font
+            
             this.font = font;
             this._glyphLayout.ScriptLang = font.GetOpenFontScriptLang();
+
             //TODO: each font should be loaded once ...
             //resolve
             string fontfile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
-            //optimize here
-             
-
+            //ptimize here
             //TODO: review
             ff = TextureFontLoader.LoadFont(fontfile, font.ScriptLang, font.WriteDirection, out simpleFontAtlas);
             //resolve typeface**
             ActualFont fontImp = ff.GetFontAtPointSize(font.SizeInPoints);
             _typeface = (Typography.OpenFont.Typeface)ff.GetInternalTypeface();
 
-            float srcTextureScale = _typeface.CalculateFromPointToPixelScale(14);
+
+
+            float srcTextureScale = _typeface.CalculateFromPointToPixelScale(simpleFontAtlas.OriginalFontSizePts);
             //scale at request
             float targetTextureScale = _typeface.CalculateFromPointToPixelScale(font.SizeInPoints);
             _finalTextureScale = targetTextureScale / srcTextureScale;
