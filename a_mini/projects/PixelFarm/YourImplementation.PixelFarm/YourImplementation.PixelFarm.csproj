@@ -48,6 +48,7 @@
     <Compile Include="Bootstrap\BootStrapWinGdi.cs" />
     <Compile Include="DrawingGLFontPrinter.cs" />
     <Compile Include="DrawingGLFontPrinter.Gdi.cs" />
+    <Compile Include="ActiveFontAtlasService.cs" />
     <Compile Include="NativeFontStore.cs" />
     <Compile Include="Windows\InstallFontsProviderWin32.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

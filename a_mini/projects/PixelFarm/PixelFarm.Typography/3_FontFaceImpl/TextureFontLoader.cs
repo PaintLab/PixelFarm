@@ -4,7 +4,6 @@ using System.IO;
 using System.Collections.Generic;
 
 using PixelFarm.Agg;
-using PixelFarm.Drawing;
 using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.OpenFont.Tables;
@@ -12,58 +11,72 @@ using Typography.OpenFont.Extensions;
 
 namespace PixelFarm.Drawing.Fonts
 {
-
-
-
+    public struct TextureFontCreationParams
+    {
+        public ScriptLang scriptLang;
+        public TextureKind textureKind;
+        public WriteDirection writeDirection;
+        public float originalFontSizeInPoint;
+        public UnicodeLangBits[] langBits;
+        public HintTechnique hintTechnique;
+    }
     public static class TextureFontLoader
     {
-        public static FontFace LoadFont(string fontfile, ScriptLang scriptLang,
-            WriteDirection writeDirection,
+
+
+        public static FontFace LoadFont(
+            string fontfile,
+            TextureFontCreationParams creationParams,
             out SimpleFontAtlas fontAtlas)
         {
             using (FileStream fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read))
             {
                 var reader = new OpenFontReader();
                 Typeface typeface = reader.Read(fs);
-                return LoadFont(typeface, fontfile, scriptLang, writeDirection, out fontAtlas);
+                return LoadFont(typeface, fontfile, creationParams, out fontAtlas);
             }
         }
+
         public static FontFace LoadFont(
             Typeface typeface,
-            string fontfile,
-            ScriptLang scriptLang,
-            WriteDirection writeDirection,
+            string fontFile,
+            TextureFontCreationParams creationParams,
             out SimpleFontAtlas fontAtlas)
         {
 
             //1. read font info
-            NOpenFontFace openFont = (NOpenFontFace)OpenFontLoader.LoadFont(typeface, scriptLang, writeDirection);
+            NOpenFontFace openFont = (NOpenFontFace)OpenFontLoader.LoadFont(typeface, creationParams.scriptLang, creationParams.writeDirection);
 
-            //2. build texture font on the fly! OR load from prebuilt file
-            //
-            //2.1 test build texture on the fly
-
-
-            //SimpleFontAtlasBuilder atlas1 = CreateSampleMsdfTextureFont(
-            //    typeface, 16, GetGlyphIndexIter(typeface,
-            //    UnicodeLangBits.BasicLatin,     //0-127 
-            //    UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
-            //    ));
-            //SimpleFontAtlasBuilder atlas1 = CreateAggTextureFont(
-            //   typeface, 16, GetGlyphIndexIter(typeface,
-            //   UnicodeLangBits.BasicLatin,     //0-127 
-            //   UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
-            //   ));
-            //SimpleFontAtlasBuilder atlas1 = CreateAggSubPixelRenderingTextureFont(
-            //   typeface, 16, GetGlyphIndexIter(typeface,
-            //   UnicodeLangBits.BasicLatin,     //0-127 
-            //   UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
-            //   ));
-            SimpleFontAtlasBuilder atlas1 = CreateAggTextureFont(
-              typeface, 16, GetGlyphIndexIter(typeface,
-              UnicodeLangBits.BasicLatin,     //0-127 
-              UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
-              ));
+            //------------------------
+            SimpleFontAtlasBuilder atlas1 = null;
+            switch (creationParams.textureKind)
+            {
+                default: throw new System.NotSupportedException();
+                case TextureKind.AggSubPixel:
+                    atlas1 = CreateAggSubPixelRenderingTextureFont(
+                           typeface,
+                           creationParams.originalFontSizeInPoint,
+                           creationParams.hintTechnique,
+                           GetGlyphIndexIter(typeface, creationParams.langBits)
+                           );
+                    break;
+                case TextureKind.AggGrayScale:
+                    atlas1 = CreateAggTextureFont(
+                           typeface,
+                           creationParams.originalFontSizeInPoint,
+                           creationParams.hintTechnique,
+                           GetGlyphIndexIter(typeface, creationParams.langBits)
+                           );
+                    break;
+                case TextureKind.Msdf:
+                    atlas1 = CreateSampleMsdfTextureFont(
+                            typeface,
+                            creationParams.originalFontSizeInPoint,
+                            creationParams.hintTechnique,
+                            GetGlyphIndexIter(typeface, creationParams.langBits)
+                            );
+                    break;
+            }
 
             GlyphImage glyphImg2 = atlas1.BuildSingleImage();
             fontAtlas = atlas1.CreateSimpleFontAtlas();
@@ -76,8 +89,9 @@ namespace PixelFarm.Drawing.Fonts
             //glyphImg = atlasBuilder.BuildSingleImage(); //we can create a new glyph or load from prebuilt file
             //fontAtlas.TotalGlyph = glyphImg; 
 
-            var textureFontFace = new TextureFontFace(openFont, fontAtlas);
-            return textureFontFace;
+            return openFont;
+            //var textureFontFace = new TextureFontFace(openFont, fontAtlas);
+            //return textureFontFace;
         }
         static IEnumerable<ushort> GetGlyphIndexIter(Typeface typeface, params UnicodeLangBits[] rangeBits)
         {
@@ -132,7 +146,10 @@ namespace PixelFarm.Drawing.Fonts
         }
 
         static SimpleFontAtlasBuilder CreateSampleMsdfTextureFont(
-            Typeface typeface, float sizeInPoint, IEnumerable<ushort> glyphIndexIter)
+            Typeface typeface,
+            float sizeInPoint,
+            HintTechnique hintTech,
+            IEnumerable<ushort> glyphIndexIter)
         {
 
             ////read type face from file
@@ -146,11 +163,10 @@ namespace PixelFarm.Drawing.Fonts
             //sample: create sample msdf texture 
             //-------------------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
-            //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
-            //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
-            //-------------------------------------------------------------
+            builder.SetHintTechnique(hintTech);
+
             var atlasBuilder = new SimpleFontAtlasBuilder();
-            atlasBuilder.TextureKind = TextureKind.Msdf;
+            atlasBuilder.SetAtlasInfo(TextureKind.Msdf, sizeInPoint);
             foreach (ushort gindex in glyphIndexIter)
             {
                 //build glyph 
@@ -196,7 +212,7 @@ namespace PixelFarm.Drawing.Fonts
 
 
         static SimpleFontAtlasBuilder CreateAggTextureFont(
-            Typeface typeface, float sizeInPoint, IEnumerable<ushort> glyphIndexIter)
+            Typeface typeface, float sizeInPoint, HintTechnique hintTech, IEnumerable<ushort> glyphIndexIter)
         {
 
             ////read type face from file
@@ -210,19 +226,16 @@ namespace PixelFarm.Drawing.Fonts
             //sample: create sample msdf texture 
             //-------------------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
-            //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
-            //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
+            builder.SetHintTechnique(hintTech);
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
-            atlasBuilder.TextureKind = TextureKind.AggGrayScale;
+            atlasBuilder.SetAtlasInfo(TextureKind.AggGrayScale, sizeInPoint);
             VertexStorePool vxsPool = new VertexStorePool();
             //create agg cavnas
 
-
             foreach (ushort gindex in glyphIndexIter)
             {
-                //build glyph
-
+                //build glyph 
                 builder.BuildFromGlyphIndex(gindex, sizeInPoint);
 
                 var txToVxs = new GlyphTranslatorToVxs();
@@ -308,7 +321,7 @@ namespace PixelFarm.Drawing.Fonts
 
 
         static SimpleFontAtlasBuilder CreateAggSubPixelRenderingTextureFont(
-            Typeface typeface, float sizeInPoint, IEnumerable<ushort> glyphIndexIter)
+            Typeface typeface, float sizeInPoint, HintTechnique hintTech, IEnumerable<ushort> glyphIndexIter)
         {
 
             ////read type face from file
@@ -322,11 +335,10 @@ namespace PixelFarm.Drawing.Fonts
             //sample: create sample msdf texture 
             //-------------------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
-            //builder.UseTrueTypeInterpreter = this.chkTrueTypeHint.Checked;
-            //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
+            builder.SetHintTechnique(hintTech);
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
-            atlasBuilder.TextureKind = TextureKind.AggGrayScale;
+            atlasBuilder.SetAtlasInfo(TextureKind.AggGrayScale, sizeInPoint);
             VertexStorePool vxsPool = new VertexStorePool();
             //create agg cavnas
 
@@ -491,5 +503,13 @@ namespace PixelFarm.Drawing.Fonts
         //}
     }
 
+    public static class IFontLoaderTextureFontExtensions
+    {
+
+        public static SimpleFontAtlas LoadFont(IFontLoader fontLoader, RequestFont r)
+        {
+            throw new System.NotSupportedException();
+        }
+    }
 
 }
