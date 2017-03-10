@@ -12,7 +12,7 @@ using Typography.OpenFont.Extensions;
 
 namespace PixelFarm.Drawing.Fonts
 {
-    
+
     public static class TextureFontLoader
     {
 
@@ -150,7 +150,7 @@ namespace PixelFarm.Drawing.Fonts
             //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
-            atlasBuilder.TextureKind = TextureKind.Msdf;
+            atlasBuilder.SetAtlasInfo(TextureKind.Msdf, sizeInPoint);
             foreach (ushort gindex in glyphIndexIter)
             {
                 //build glyph 
@@ -214,10 +214,9 @@ namespace PixelFarm.Drawing.Fonts
             //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
-            atlasBuilder.TextureKind = TextureKind.AggGrayScale;
+            atlasBuilder.SetAtlasInfo(TextureKind.AggGrayScale, sizeInPoint);
             VertexStorePool vxsPool = new VertexStorePool();
             //create agg cavnas
-
 
             foreach (ushort gindex in glyphIndexIter)
             {
@@ -326,7 +325,7 @@ namespace PixelFarm.Drawing.Fonts
             //builder.UseVerticalHinting = this.chkVerticalHinting.Checked;
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
-            atlasBuilder.TextureKind = TextureKind.AggGrayScale;
+            atlasBuilder.SetAtlasInfo(TextureKind.AggGrayScale, sizeInPoint);
             VertexStorePool vxsPool = new VertexStorePool();
             //create agg cavnas
 
@@ -491,5 +490,13 @@ namespace PixelFarm.Drawing.Fonts
         //}
     }
 
+    public static class IFontLoaderTextureFontExtensions
+    {
+
+        public static SimpleFontAtlas LoadFont(IFontLoader fontLoader, RequestFont r)
+        {
+            throw new System.NotSupportedException();
+        }
+    }
 
 }
