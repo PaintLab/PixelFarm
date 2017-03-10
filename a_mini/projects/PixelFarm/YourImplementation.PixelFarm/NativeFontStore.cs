@@ -67,7 +67,7 @@ namespace PixelFarm.DrawingGL
             ActualFont createdFont;
             if (!registerFonts.TryGetValue(fontKey, out createdFont))
             {
-                createdFont = fontFace.GetFontAtPointsSize(fontSizeInPoints);
+                createdFont = fontFace.GetFontAtPointSize(fontSizeInPoints);
             }
             //-----------
             return createdFont;

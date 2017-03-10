@@ -30,7 +30,7 @@ namespace OpenTkEssTest
             collection.LoadInstalledFont(win32InstallFontProvider.GetInstalledFontIter());
             InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Regular);
             FontFace tahomaFace = OpenFontLoader.LoadFont(tahomaFont.FontPath, ScriptLangs.Latin);
-            ActualFont actualFont = tahomaFace.GetFontAtPointsSize(72);
+            ActualFont actualFont = tahomaFace.GetFontAtPointSize(72);
             FontGlyph glyph = actualFont.GetGlyph('K');
 
             //var svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);

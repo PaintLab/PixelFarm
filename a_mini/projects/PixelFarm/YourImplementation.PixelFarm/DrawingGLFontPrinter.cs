@@ -12,8 +12,6 @@ using Typography.TextLayout;
 namespace PixelFarm.DrawingGL
 {
 
-
-
     public class AggTextSpanPrinter : ITextPrinter
     {
         ActualImage actualImage;
@@ -65,7 +63,7 @@ namespace PixelFarm.DrawingGL
             canvas.DrawImage(glBmp, (float)x, (float)y + 40);
             glBmp.Dispose();
         }
-         
+
         public void ChangeFont(RequestFont font)
         {
             aggPainter.CurrentFont = font;
@@ -85,8 +83,7 @@ namespace PixelFarm.DrawingGL
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         SimpleFontAtlas simpleFontAtlas;
-        IFontLoader _fontLoader;
-        FontFace ff;
+        IFontLoader _fontLoader; 
         RequestFont font;
 
         public GLBmpGlyphTextPrinter(GLCanvasPainter painter, IFontLoader fontLoader)
@@ -109,24 +106,15 @@ namespace PixelFarm.DrawingGL
         {
             //from request font
             //we resolve it to actual font
+
             this.font = font;
-            this._glyphLayout.ScriptLang = font.GetOpenFontScriptLang();
-            //TODO: each font should be loaded once ...
-            //resolve
-            string fontfile = _fontLoader.GetFont(font.Name, InstalledFontStyle.Regular).FontPath;
-            //optimize here
-
-            //TODO: review
-            ff = TextureFontLoader.LoadFont(fontfile, ScriptLangs.Latin, WriteDirection.LTR, out simpleFontAtlas);
-            //resolve typeface**
-            ActualFont fontImp = ff.GetFontAtPointsSize(font.SizeInPoints);
-            _typeface = (Typography.OpenFont.Typeface)ff.GetInternalTypeface();
-
-            float srcTextureScale = _typeface.CalculateFromPointToPixelScale(14);
+            this._glyphLayout.ScriptLang = font.GetOpenFontScriptLang(); 
+            ActualFont fontImp = ActiveFontAtlasService.GetTextureFontAtlasOrCreateNew(_fontLoader, font, out simpleFontAtlas);
+            _typeface = (Typography.OpenFont.Typeface)fontImp.FontFace.GetInternalTypeface();
+            float srcTextureScale = _typeface.CalculateFromPointToPixelScale(simpleFontAtlas.OriginalFontSizePts);
             //scale at request
             float targetTextureScale = _typeface.CalculateFromPointToPixelScale(font.SizeInPoints);
             _finalTextureScale = targetTextureScale / srcTextureScale;
-
         }
 
         //-----------
@@ -137,65 +125,23 @@ namespace PixelFarm.DrawingGL
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
             int j = buffer.Length;
-            //int buffsize = j * 2;
 
             //resolve font from painter?  
             glyphPlans.Clear();
             _glyphLayout.Layout(_typeface, font.SizeInPoints, buffer, startAt, len, glyphPlans);
 
-            //
-            //un-test version
-            //ActualFont fontImp = nativeFontStore.GetResolvedNativeFont(painter.CurrentFont);
-            //if (properGlyphs == null)
-            //{
-            //    properGlyphs = new ProperGlyph[buffsize];
-            //    TextShapingService.GetGlyphPos(fontImp, buffer, 0, buffsize, properGlyphs);
-            //} 
-            //TODO: implement msdf texture  
-            //double xpos = x;
-            //for (int i = 0; i < buffsize; ++i)
-            //{
-            //    uint codepoint = properGlyphs[i].codepoint;
-            //    if (codepoint == 0)
-            //    {
-            //        break;
-            //    }
-
-            //    //-------------------------------------------------------------
-            //    FontGlyph glyph = fontImp.GetGlyphByIndex(codepoint);
-            //    //glyph image32 
-            //    //-------------------------------------------------------------
-            //    GLBitmap bmp = new GLBitmap(new LazyAggBitmapBufferProvider(glyph.glyphImage32));
-            //    var left = glyph.glyphMatrix.img_horiBearingX;
-            //    this.canvas2d.DrawImage(bmp,
-            //        (float)(xpos + (left >> 6)),
-            //        (float)(y + (glyph.glyphMatrix.bboxYmin >> 6)));
-            //    int w = (glyph.glyphMatrix.advanceX) >> 6;
-            //    xpos += (w);
-            //    bmp.Dispose(); //temp here 
-            //    //-------------------------------------------------------------                
-            //}
-            //-------------------------------------
-            //msdf texture version
 
             int n = glyphPlans.Count;
 
             Typography.Rendering.GlyphImage totoalGlyphImg = simpleFontAtlas.TotalGlyph;
+
+            //PERF:
+            //TODO: review here, can we cache the glbmp for later use
+            //not to create it every time
             using (GLBitmap glBmp = new GLBitmap(totoalGlyphImg.Width, totoalGlyphImg.Height, totoalGlyphImg.GetImageBuffer(), false))
             {
                 glBmp.IsInvert = false;
 
-                //float c_x = (float)x;
-                //int left = ((int)(glyph.glyphMatrix.img_horiBearingX * scale) >> 6);
-                //int x_adjust = 0; //minor offset
-                //                  //float baseline = c_y - 24;//eg line height= 24 //create a list
-                //                  //TODO: review here
-                //float baseline = (float)y;//eg line height= 24 //create a list
-                //bool isFlipY = canvas2d.FlipY;
-                //if (!isFlipY)
-                //{
-                //    canvas2d.FlipY = true;
-                //}
                 float scaleFromTexture = _finalTextureScale;
 
                 Typography.Rendering.TextureKind textureKind = simpleFontAtlas.TextureKind;
@@ -206,25 +152,10 @@ namespace PixelFarm.DrawingGL
                     Typography.Rendering.TextureFontGlyphData glyphData;
                     if (!simpleFontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
                     {
-                        //
-                        //Rectangle r = glyphData.Rect;
-                        //float x_min = glyphData.BBoxXMin / 64;
-                        ////draw each glyph at specific position                          
-                        ////_canvas.DrawSubImageWithMsdf(glBmp, ref r, c_x + x_min, (float)(baseline + r.Height));
-                        //_canvas.DrawSubImageWithMsdf(glBmp, ref r, c_x + x_min, (float)(baseline + r.Height)); 
-                        ////c_x += r.Width - 10;
-                        //c_x += (glyphData.AdvanceX / 64);
                         continue;
                     }
-                    //found
-
                     PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
-                    //test draw full msdf gen img
-                    //canvas2d.DrawImage(glBmp, c_x + left, (float)(baseline + ((int)(glyphData.ImgHeight))));
 
-                    //canvas2d.DrawSubImageWithMsdf(glBmp, ref r, c_x + left,
-                    //    (float)(baseline + ((int)(glyphData.ImgHeight))), 1.0f);
-                    //
                     switch (textureKind)
                     {
                         case Typography.Rendering.TextureKind.Msdf:
@@ -249,16 +180,9 @@ namespace PixelFarm.DrawingGL
                         case Typography.Rendering.TextureKind.AggSubPixel:
                             throw new NotSupportedException();
                     }
-
-
-                    //c_x += (glyph.advX * scaleFromTexture);
                 }
-
-                //canvas2d.FlipY = isFlipY;
-                //glBmp.Dispose();
             }
-            //temp here
-
+            //temp here 
             //draw with texture printer ***
             //char[] chars = text.ToCharArray();
             //int j = chars.Length;
@@ -478,7 +402,7 @@ namespace PixelFarm.DrawingGL
             //            //glBmp.Dispose();
             //        }
         }
-        
+
 
         static PixelFarm.Drawing.Rectangle ConvToRect(Typography.Rendering.Rectangle r)
         {

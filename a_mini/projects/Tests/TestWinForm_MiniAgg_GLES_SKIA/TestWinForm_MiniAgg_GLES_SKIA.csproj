@@ -105,6 +105,7 @@
     <Compile Include="Experiment\GdiPlusPlatformFontMx.cs" />
     <Compile Include="Experiment\WinGdiPlusFont.cs" />
     <Compile Include="Experiment\WinGdiPlusFontStore.cs" />
+    <Compile Include="Experiment\xnotused\xTextureFontFace.cs" />
     <Compile Include="Experiment\x_notusedFromComplement\ImageClipProxyFloat.cs" />
     <Compile Include="Experiment\x_notusedFromComplement\KDTree.cs" />
     <Compile Include="Experiment\x_notusedFromComplement\SpanSubDivAdapter.cs" />
