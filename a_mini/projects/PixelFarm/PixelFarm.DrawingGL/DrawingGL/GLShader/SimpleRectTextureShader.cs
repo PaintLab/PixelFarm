@@ -412,6 +412,66 @@ namespace PixelFarm.DrawingGL
         public GdiImageTextureWithSubPixelRenderingShader(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
         {
+            string vs = @"
+                attribute vec4 a_position;
+                attribute vec2 a_texCoord;
+                uniform mat4 u_mvpMatrix; 
+                varying vec2 v_texCoord;
+                void main()
+                {
+                    gl_Position = u_mvpMatrix* a_position;
+                    v_texCoord =  a_texCoord;
+                 }	 
+                ";
+            //in fs, angle on windows 
+            //we need to switch color component
+            //because we store value in memory as BGRA
+            //and gl expect input in RGBA
+            string fs = @"
+                      precision mediump float;
+                      varying vec2 v_texCoord;
+                      uniform sampler2D s_texture;
+                      uniform int isBigEndian;  
+                      uniform vec2 onepix_xy; 
+                      void main()
+                      {
+                         vec4 c = texture2D(s_texture, v_texCoord);   
+                         if((c[2] ==1.0) && (c[1]==1.0) && (c[0]== 1.0) && (c[3] == 1.0)){
+                            discard;
+                         }else{                                                   
+                            gl_FragColor =  vec4(1.0-c[2],1.0-c[1],1.0-c[0], 1.0);  
+                         }
+                      }
+                ";
+            BuildProgram(vs, fs); 
+        }
+        public bool IsBigEndian { get; set; }
+        public void SetBitmapSize(int w, int h)
+        {
+            this.toDrawImgW = w;
+            this.toDrawImgH = h;
+        }
+        protected override void OnProgramBuilt()
+        {
+            _isBigEndian = shaderProgram.GetUniform1("isBigEndian");
+            _onepix_xy = shaderProgram.GetUniform2("onepix_xy");
+        }
+        protected override void OnSetVarsBeforeRenderer()
+        {
+            _isBigEndian.SetValue(IsBigEndian ? 1 : 0);
+            _onepix_xy.SetValue(1f / toDrawImgW, 1f / toDrawImgH);
+        }
+
+    }
+
+    class GdiImageTextureWithSubPixelRenderingShader2 : SimpleRectTextureShader
+    {
+        float toDrawImgW = 1, toDrawImgH = 1;
+        ShaderUniformVar1 _isBigEndian;
+        ShaderUniformVar2 _onepix_xy;
+        public GdiImageTextureWithSubPixelRenderingShader2(CanvasToShaderSharedResource canvasShareResource)
+            : base(canvasShareResource)
+        {
             //string vs = @"
             //    attribute vec4 a_position;
             //    attribute vec2 a_texCoord;

@@ -327,7 +327,21 @@ namespace PixelFarm.DrawingGL
             //TODO: review to render width again ***
             gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, 0, bmp.Height, 100, bmp.Height, x, y);
         }
-
+        public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
+        {
+            if (bmp.IsBigEndianPixel)
+            {
+                gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
+                gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
+                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+            }
+            else
+            {
+                gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
+                gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
+                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+            }
+        }
         public void DrawImage(GLBitmapReference bmp, float x, float y)
         {
             this.DrawImage(bmp.OwnerBitmap,

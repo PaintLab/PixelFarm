@@ -211,11 +211,15 @@ namespace PixelFarm.DrawingGL
                                   (float)(x + (glyph.x - glyphData.TextureXOffset) * scaleFromTexture), // -glyphData.TextureXOffset => restore to original pos
                                   (float)(y + (glyph.y - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture),// -glyphData.TextureYOffset => restore to original pos
                                   scaleFromTexture);
-
                             }
                             break;
                         case Typography.Rendering.TextureKind.AggSubPixel:
-                            throw new NotSupportedException();
+                            canvas2d.DrawGlyphImageWithSubPixelRenderingTechnique(glBmp,
+                                     ref srcRect,
+                                     (float)(x + (glyph.x - glyphData.TextureXOffset) * scaleFromTexture), // -glyphData.TextureXOffset => restore to original pos
+                                     (float)(y + (glyph.y - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture),// -glyphData.TextureYOffset => restore to original pos
+                                     scaleFromTexture);
+                            break;
                     }
                 }
             }

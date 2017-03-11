@@ -338,7 +338,7 @@ namespace PixelFarm.Drawing.Fonts
             builder.SetHintTechnique(hintTech);
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
-            atlasBuilder.SetAtlasInfo(TextureKind.AggGrayScale, sizeInPoint);
+            atlasBuilder.SetAtlasInfo(TextureKind.AggSubPixel, sizeInPoint);
             VertexStorePool vxsPool = new VertexStorePool();
             //create agg cavnas
 
@@ -393,7 +393,7 @@ namespace PixelFarm.Drawing.Fonts
                 painter.FillColor = Color.Black;
                 painter.StrokeColor = Color.Black;
                 painter.UseSubPixelRendering = true;
-                painter.Clear(Color.White);
+                //painter.Clear(Color.Black);
                 //
                 painter.Fill(glyphVxs);
                 //-------------------------------------------- 
