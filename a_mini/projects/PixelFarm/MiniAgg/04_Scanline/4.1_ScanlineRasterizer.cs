@@ -303,7 +303,7 @@ namespace PixelFarm.Agg
                         //NOTE: we scale horizontal 3 times.
                         //subpixel renderer will shrink it to 1 
                         //---------------------------------------------
-                        AddVertex(cmd, (x + offsetOrgX) * 3, y + offsetOrgY);
+                        AddVertex(cmd, (x + offsetOrgX), y + offsetOrgY);
                     }
                     break;
                 default:

@@ -533,7 +533,7 @@ namespace PixelFarm.DrawingGL
                         float one_y=onepix_xy[1]; 
 
                         vec4 c0= texture2D(s_texture,vec2(v_texCoord0             ,v_texCoord1));
-                        gl_FragColor =  vec4(c0[2],c0[1],c0[0],c0[3]);  
+                        gl_FragColor = vec4(c0[2],c0[1],c0[0],c0[3]);  
                        
                       }
                 ";

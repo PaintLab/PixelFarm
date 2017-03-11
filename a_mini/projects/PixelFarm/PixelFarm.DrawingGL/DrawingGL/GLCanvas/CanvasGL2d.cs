@@ -348,11 +348,11 @@ namespace PixelFarm.DrawingGL
                 gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
                 gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
                 //gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
-                GL.ColorMask(false, false, true, false);//b                                
+                GL.ColorMask(false, false, true, true);//b                                
                 gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
-                GL.ColorMask(false, true, false, false);//g
+                GL.ColorMask(false, true, false, true);//g
                 gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft + 1, targetTop);
-                GL.ColorMask(true, false, false, false);//r
+                GL.ColorMask(true, false, false, true);//r
                 gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft + 2, targetTop);
                 GL.ColorMask(true, true, true, true);
             }
