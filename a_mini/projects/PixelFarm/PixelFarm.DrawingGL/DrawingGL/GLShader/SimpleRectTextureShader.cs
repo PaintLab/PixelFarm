@@ -435,12 +435,8 @@ namespace PixelFarm.DrawingGL
                       uniform vec2 onepix_xy; 
                       void main()
                       {
-                         vec4 c = texture2D(s_texture, v_texCoord);   
-                         if((c[2] ==1.0) && (c[1]==1.0) && (c[0]== 1.0) && (c[3] == 1.0)){
-                            discard;
-                         }else{                                                   
-                            gl_FragColor =  vec4(1.0-c[2],1.0-c[1],1.0-c[0], 1.0);  
-                         }
+                         vec4 c = texture2D(s_texture, v_texCoord);  
+                         gl_FragColor=vec4(1.0-c[2],1.0-c[1],1.0-c[0],c[3]); //white -on -black    
                       }
                 ";
             BuildProgram(vs, fs); 

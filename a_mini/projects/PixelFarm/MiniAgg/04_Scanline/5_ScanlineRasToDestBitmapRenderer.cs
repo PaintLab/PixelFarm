@@ -317,11 +317,11 @@ namespace PixelFarm.Agg
             int destImgIndex = 0;
             int destX = 0;
             //-----------------
+            //eg white on black bg
             byte color_alpha = 255;// _color.alpha;
             byte color_c0 = 255; //_color.red;
             byte color_c1 = 255; //_color.green;
-            byte color_c2 = 255;  //_color.blue;
-
+            byte color_c2 = 255;  //_color.blue;  
             //-----------------
             //single line 
             srcIndex = 0;
@@ -397,7 +397,18 @@ namespace PixelFarm.Agg
                 destImgBuffer[destImgIndex] = (byte)(e_2); //swap on the fly
                 destImgBuffer[destImgIndex + 1] = (byte)(e_1);
                 destImgBuffer[destImgIndex + 2] = (byte)(e_0);//swap on the fly
-                destImgBuffer[destImgIndex + 3] = (byte)((e_2 + e_1 + e_0) / 3.0f);//alpha
+
+                byte a = (byte)((e_2 + e_1 + e_0) / 3.0f);
+                if (a > 0)
+                {
+                    //coverage
+                    //destImgBuffer[destImgIndex + 3] = (byte)((e_2 + e_1 + e_0) / 3.0f);//alpha
+                    destImgBuffer[destImgIndex + 3] = 255;
+                }
+                else
+                {
+                    destImgBuffer[destImgIndex + 3] = 0;
+                }
                 //---------------------------------------------------------
                 destImgIndex += 4;
 
@@ -449,6 +460,7 @@ namespace PixelFarm.Agg
                     case 4:
                         {
                             //1st round
+
                             byte ec0 = destImgBuffer[destImgIndex];//existing color
                             byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
                             byte ec2 = destImgBuffer[destImgIndex + 2];//existing color 

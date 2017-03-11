@@ -41,6 +41,7 @@
             this.cmdTestNativeLib = new System.Windows.Forms.Button();
             this.cmbRenderBackend = new System.Windows.Forms.ComboBox();
             this.cmdSignedDistance = new System.Windows.Forms.Button();
+            this.cmdTestColorBlend = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -169,11 +170,22 @@
             this.cmdSignedDistance.UseVisualStyleBackColor = true;
             this.cmdSignedDistance.Click += new System.EventHandler(this.cmdSignedDistance_Click);
             // 
+            // cmdTestColorBlend
+            // 
+            this.cmdTestColorBlend.Location = new System.Drawing.Point(417, 527);
+            this.cmdTestColorBlend.Name = "cmdTestColorBlend";
+            this.cmdTestColorBlend.Size = new System.Drawing.Size(150, 32);
+            this.cmdTestColorBlend.TabIndex = 15;
+            this.cmdTestColorBlend.Text = "Test Color Blend";
+            this.cmdTestColorBlend.UseVisualStyleBackColor = true;
+            this.cmdTestColorBlend.Click += new System.EventHandler(this.cmdTestColorBlend_Click);
+            // 
             // FormDev
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(738, 588);
+            this.Controls.Add(this.cmdTestColorBlend);
             this.Controls.Add(this.cmdSignedDistance);
             this.Controls.Add(this.cmbRenderBackend);
             this.Controls.Add(this.cmdTestNativeLib);
@@ -210,5 +222,6 @@
         private System.Windows.Forms.Button cmdTestNativeLib;
         private System.Windows.Forms.ComboBox cmbRenderBackend;
         private System.Windows.Forms.Button cmdSignedDistance;
+        private System.Windows.Forms.Button cmdTestColorBlend;
     }
 }

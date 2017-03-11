@@ -47,7 +47,8 @@ namespace OpenTkEssTest
             //string test_str = "A";
             //string test_str = "012345";
             //string test_str = "กิน";
-            p.Clear(PixelFarm.Drawing.Color.White); 
+            //p.Clear(PixelFarm.Drawing.Color.White); 
+            p.Clear(PixelFarm.Drawing.Color.Blue);
             p.FillColor = PixelFarm.Drawing.Color.Red;
          
             int n = 50;
