@@ -954,31 +954,31 @@ namespace PixelFarm.Agg
 
                     break;
                 case Agg.ScanlineRenderMode.SubPixelRendering:
-                    scSubPixRas.RenderScanline(dest, sclineRas, scline, color);
-                    //while (sclineRas.SweepScanline(scline))
-                    //{
-                    //    //render solid single scanline
-                    //    int y = scline.Y;
-                    //    int num_spans = scline.SpanCount;
-                    //    byte[] covers = scline.GetCovers();
-                    //    //render each span in the scanline
-                    //    for (int i = 1; i <= num_spans; ++i)
-                    //    {
-                    //        ScanlineSpan span = scline.GetSpan(i);
-                    //        if (span.len > 0)
-                    //        {
-                    //            //positive len 
-                    //            dest.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
-                    //        }
-                    //        else
-                    //        {
-                    //            //fill the line, same coverage area
-                    //            int x = span.x;
-                    //            int x2 = (x - span.len - 1);
-                    //            dest.BlendHL(x, y, x2, color, covers[span.cover_index]);
-                    //        }
-                    //    }
-                    //}
+                    //scSubPixRas.RenderScanline(dest, sclineRas, scline, color);
+                    while (sclineRas.SweepScanline(scline))
+                    {
+                        //render solid single scanline
+                        int y = scline.Y;
+                        int num_spans = scline.SpanCount;
+                        byte[] covers = scline.GetCovers();
+                        //render each span in the scanline
+                        for (int i = 1; i <= num_spans; ++i)
+                        {
+                            ScanlineSpan span = scline.GetSpan(i);
+                            if (span.len > 0)
+                            {
+                                //positive len 
+                                dest.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
+                            }
+                            else
+                            {
+                                //fill the line, same coverage area
+                                int x = span.x;
+                                int x2 = (x - span.len - 1);
+                                dest.BlendHL(x, y, x2, color, covers[span.cover_index]);
+                            }
+                        }
+                    }
                     break;
                 case ScanlineRenderMode.SubPixelRenderingOfGLES:
                     scSubPixRas.RenderScanline(dest, sclineRas, scline, color);
