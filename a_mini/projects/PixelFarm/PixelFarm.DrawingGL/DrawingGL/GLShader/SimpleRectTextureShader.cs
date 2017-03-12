@@ -27,34 +27,15 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        public void RenderSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
-        {
-            //TODO: review float array here,use buffer instead
-            RenderSubImages(bmp, new float[]{
-                srcLeft,srcTop,
-                srcW,srcH,
-                targetLeft,
-                targetTop
-            }, 1);
-        }
-
-
-        public void RenderSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop, float scale)
-        {
-            //TODO: review float array here,use buffer instead
-            RenderSubImages(bmp, new float[]{
-                srcLeft,srcTop,
-                srcW,srcH,
-                targetLeft,
-                targetTop
-            }, scale);
-        }
-
 
         //-----------------------------------------
         float _latestBmpW;
         float _latestBmpH;
         bool _latestBmpInverted;
+        /// <summary>
+        /// load glbmp before draw
+        /// </summary>
+        /// <param name="bmp"></param>
         public void LoadGLBitmap(GLBitmap bmp)
         {
             //load before use with RenderSubImage
@@ -70,16 +51,15 @@ namespace PixelFarm.DrawingGL
             this._latestBmpH = bmp.Height;
             this._latestBmpInverted = bmp.IsInvert;
         }
-        public void DrawSubImages(float[] srcDestList, float scale)
+        internal unsafe void UnsafeDrawSubImages(float* srcDestList, int arrLen, float scale)
         {
+
             //-------------------------------------------------------------------------------------
             OnSetVarsBeforeRenderer();
-            //-------------------------------------------------------------------------------------
-            int j = srcDestList.Length;
+            //-------------------------------------------------------------------------------------          
             float orgBmpW = _latestBmpW;
             float orgBmpH = _latestBmpH;
-
-            for (int i = 0; i < j;)
+            for (int i = 0; i < arrLen;)
             {
 
                 float srcLeft = srcDestList[i];
@@ -145,28 +125,12 @@ namespace PixelFarm.DrawingGL
                 GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
             }
         }
-        public void DrawSubImage(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
-        {
-            //TODO: review float array here,use buffer instead
-            DrawSubImages(new float[]{
-                srcLeft,srcTop,
-                srcW,srcH,
-                targetLeft,
-                targetTop
-            }, 1);
-        }
-        //-----------------------------------------
-        public void RenderSubImages(GLBitmap bmp, float[] srcDestList, float scale)
-        {
-            LoadGLBitmap(bmp);
-            DrawSubImages(srcDestList, scale);
-        }
+
+
         public void Render(GLBitmap bmp, float left, float top, float w, float h)
         {
             unsafe
             {
-
-
                 if (bmp.IsInvert)
                 {
 
@@ -468,6 +432,67 @@ namespace PixelFarm.DrawingGL
             _c_compo.SetValue(this._use_color_compo);
         }
 
+    }
+
+
+    //--------------------------------------------------------
+    static class SimpleRectTextureShaderExtensions
+    {
+        public static void DrawSubImage(this SimpleRectTextureShader shader, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        {
+            //TODO: review float array here,use buffer instead
+            unsafe
+            {
+                float* srcDestList = stackalloc float[6];
+                {
+                    srcDestList[0] = srcLeft;
+                    srcDestList[1] = srcTop;
+                    srcDestList[2] = srcW;
+                    srcDestList[3] = srcH;
+                    srcDestList[4] = targetLeft;
+                    srcDestList[5] = targetTop;
+                }
+                shader.UnsafeDrawSubImages(srcDestList, 6, 1);
+            }
+        }
+        public static void RenderSubImage(this SimpleRectTextureShader shader, GLBitmap bmp,
+            float srcLeft, float srcTop,
+            float srcW, float srcH,
+            float targetLeft, float targetTop,
+            float scale = 1)
+        {
+
+            //TODO: review float array here,use buffer instead
+            unsafe
+            {
+                float* srcDestList = stackalloc float[6];
+                {
+                    srcDestList[0] = srcLeft;
+                    srcDestList[1] = srcTop;
+                    srcDestList[2] = srcW;
+                    srcDestList[3] = srcH;
+                    srcDestList[4] = targetLeft;
+                    srcDestList[5] = targetTop;
+                }
+                shader.LoadGLBitmap(bmp);
+                shader.UnsafeDrawSubImages(srcDestList, 6, scale);
+            }
+        }
+        public static void DrawSubImages(this SimpleRectTextureShader shader, float[] srcDestList, float scale)
+        {
+            unsafe
+            {
+                fixed (float* head = &srcDestList[0])
+                {
+                    shader.UnsafeDrawSubImages(head, srcDestList.Length, scale);
+                }
+            }
+        }
+        public static void RenderSubImages(this SimpleRectTextureShader shader, GLBitmap bmp, float[] srcDestList, float scale)
+        {
+            shader.LoadGLBitmap(bmp);
+            shader.DrawSubImages(srcDestList, scale);
+        }
     }
 
 }
