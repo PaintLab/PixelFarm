@@ -23,7 +23,7 @@ namespace PixelFarm.Agg
     {
         Default,
         Custom,
-        SubPixelRendering 
+        SubPixelRendering
     }
 
 
@@ -115,8 +115,8 @@ namespace PixelFarm.Agg
                         _grayScaleLine.BlendHL(x, x2, color_alpha, covers[span.cover_index]);
                     }
                 }
+                //
                 BlendScanlineForAggSubPix(dest_buffer, dest_stride, scline.Y, src_w, src_stride, lineBuff); //for agg subpixel rendering
-
 #if DEBUG
                 dbugMinScanlineCount++;
 #endif
@@ -1110,7 +1110,7 @@ namespace PixelFarm.Agg
                     break;
                 case Agg.ScanlineRenderMode.SubPixelRendering:
                     scSubPixRas.RenderScanline(dest, sclineRas, scline, color);
-                    break;  
+                    break;
                 case Agg.ScanlineRenderMode.Custom:
                     while (sclineRas.SweepScanline(scline))
                     {
