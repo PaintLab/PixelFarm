@@ -12,6 +12,8 @@ using Typography.TextLayout;
 namespace PixelFarm.DrawingGL
 {
 
+  
+
     public class AggTextSpanPrinter : ITextPrinter
     {
         ActualImage actualImage;
@@ -312,29 +314,13 @@ namespace PixelFarm.DrawingGL
                         break;
                 }
             }
-
         }
 
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
         {
-            int j = buffer.Length;
-            //resolve font from painter?  
             glyphPlans.Clear();
             _glyphLayout.Layout(_typeface, font.SizeInPoints, buffer, startAt, len, glyphPlans);
-            int n = glyphPlans.Count;
-            //copy 
-            var renderVxGlyphPlans = new RenderVxGlyphPlan[n];
-            for (int i = 0; i < n; ++i)
-            {
-                GlyphPlan glyphPlan = glyphPlans[i];
-                renderVxGlyphPlans[i] = new RenderVxGlyphPlan(
-                    glyphPlan.glyphIndex,
-                    glyphPlan.x,
-                    glyphPlan.y,
-                    glyphPlan.advX
-                    );
-            }
-            renderVx.glyphList = renderVxGlyphPlans;
+            TextPrinterHelper.CopyGlyphPlans(renderVx, glyphPlans);
         }
     }
 

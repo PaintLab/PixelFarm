@@ -127,11 +127,7 @@ namespace OpenTkEssTest
             font2.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
             painter.UseSubPixelRendering = true;
             painter.CurrentFont = font1;
-            //--------------
-
-
-
-            //--------------
+            //-------------- 
         }
         RenderVxFormattedString _strRenderVx_1;
         RenderVxFormattedString _strRenderVx_2;
@@ -189,7 +185,7 @@ namespace OpenTkEssTest
                     //we can convert it to a 'freezed' visual object (RenderVx) 
                     p.CurrentFont = font2;
                     p.DrawString(_strRenderVx_2, x_pos, y_pos);
-                }             
+                }
             }
         }
     }

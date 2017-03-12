@@ -30,7 +30,7 @@ namespace PixelFarm.Drawing.Fonts
         void DrawString(RenderVxFormattedString renderVx, double x, double y);
 
 
-        void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int start, int len);
+        void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int startAt, int len);
 
         void ChangeFont(RequestFont font);
         void ChangeFontColor(Color fontColor);

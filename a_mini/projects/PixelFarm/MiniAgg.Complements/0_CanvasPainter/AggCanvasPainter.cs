@@ -379,13 +379,20 @@ namespace PixelFarm.Agg
             //draw string from render vx
             if (_textPrinter != null)
             {
-                _textPrinter.DrawString(renderVx.OriginalString, x, y);
+                _textPrinter.DrawString(renderVx, x, y);
             }
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {
 
-            return new AggRenderVxFormattedString(textspan);
+            var renderVxFmtStr = new AggRenderVxFormattedString(textspan); 
+            if (_textPrinter != null)
+            {
+                char[] buffer = textspan.ToCharArray();
+                _textPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+
+            }
+            return renderVxFmtStr;
         }
 
         ITextPrinter _textPrinter;
