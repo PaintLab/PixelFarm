@@ -531,11 +531,11 @@ namespace PixelFarm.DrawingGL
                          float v_texCoord1= v_texCoord[1]; 
                          vec4 c0= texture2D(s_texture,vec2(v_texCoord0 ,v_texCoord1));                          
                          if(_c_compo==0){
-                            gl_FragColor = vec4(0,0,0,c0[0]);
+                            gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],c0[0]* d_color[3]);
                          }else if(_c_compo==1){
-                            gl_FragColor = vec4(0,0,0,c0[1]);
+                            gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],c0[1]* d_color[3]);
                          }else{
-                            gl_FragColor = vec4(0,0,0,c0[2]);
+                            gl_FragColor = vec4(d_color[0],d_color[1],d_color[2],c0[2]* d_color[3]);
                          }
                       }
                 ";
@@ -550,10 +550,12 @@ namespace PixelFarm.DrawingGL
         int _use_color_compo;//0,1,2
         public void SetColor(PixelFarm.Drawing.Color c)
         {
-            this._color_a = c.A / 256f;
-            this._color_r = c.R / 256f;
-            this._color_g = c.G / 256f;
-            this._color_b = c.B / 256f;
+            //for this shader,
+            //we change c to pre-multiply format 
+            this._color_a = c.A / 255f;
+            this._color_r = c.R / 255f;
+            this._color_g = c.G / 255f;
+            this._color_b = c.B / 255f;
         }
         public void SetCompo(int compo)
         {
@@ -567,7 +569,7 @@ namespace PixelFarm.DrawingGL
         }
         protected override void OnSetVarsBeforeRenderer()
         {
-            _isBigEndian.SetValue(IsBigEndian ? 1 : 0);
+            _isBigEndian.SetValue(IsBigEndian);
             _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
             _c_compo.SetValue(this._use_color_compo);
         }
