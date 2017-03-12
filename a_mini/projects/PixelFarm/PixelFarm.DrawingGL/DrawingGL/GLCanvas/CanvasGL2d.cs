@@ -287,11 +287,11 @@ namespace PixelFarm.DrawingGL
         {
             if (bmp.IsBigEndianPixel)
             {
-                msdfShader.RenderSubImage(bmp, coords, scale);
+                msdfShader.RenderSubImages(bmp, coords, scale);
             }
             else
             {
-                msdfShader.RenderSubImage(bmp, coords, scale);
+                msdfShader.RenderSubImages(bmp, coords, scale);
             }
         }
         public void DrawImage(GLBitmap bmp,
@@ -325,28 +325,19 @@ namespace PixelFarm.DrawingGL
         /// <param name="y"></param>
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, float x, float y)
         {
-
-            gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
-            //gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
-            //gdiImageTextureWithSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-            //TODO: review to render width again ***
-            gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, 0, bmp.Height, 100, bmp.Height, x, y);
+            PixelFarm.Drawing.Rectangle r = new Drawing.Rectangle(0, bmp.Height, bmp.Width, bmp.Height);
+            DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref r, x, y, 1);
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
         {
 
             if (bmp.IsBigEndianPixel)
             {
-
-                gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
-                //gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
-                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
-
+                throw new NotSupportedException(); 
             }
             else
             {
                 gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
-                //gdiImageTextureWithSubPixelRenderingShader.SetColor(PixelFarm.Drawing.Color.FromArgb(50, Drawing.Color.Black));
                 gdiImageTextureWithSubPixelRenderingShader.SetColor(Drawing.Color.Black);
                 gdiImageTextureWithSubPixelRenderingShader.SetCompo(1);
 
