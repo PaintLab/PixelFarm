@@ -285,7 +285,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             p.Clear(PixelFarm.Drawing.Color.White);
             p.UseSubPixelRendering = true;
             //--------------------------
-            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+            p.StrokeColor = PixelFarm.Drawing.Color.Blue;
             p.StrokeWidth = 2.0f;
             //p.Line(2, 0, 10, 15);
 

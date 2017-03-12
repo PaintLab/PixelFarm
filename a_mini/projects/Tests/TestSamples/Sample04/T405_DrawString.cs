@@ -50,7 +50,7 @@ namespace OpenTkEssTest
             p.Clear(PixelFarm.Drawing.Color.White);
             // p.Clear(PixelFarm.Drawing.Color.Blue);
 
-            p.FillColor = PixelFarm.Drawing.Color.Blue;
+            p.FillColor = PixelFarm.Drawing.Color.Red;
             p.UseSubPixelRendering = false;
             p.UseSubPixelRendering = true;
             int n = 50;

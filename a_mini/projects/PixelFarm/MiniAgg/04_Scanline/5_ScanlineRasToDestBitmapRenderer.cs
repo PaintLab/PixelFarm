@@ -151,11 +151,12 @@ namespace PixelFarm.Agg
             int destImgIndex = 0;
             int destX = 0;
             //-----------------
-            byte color_alpha = _color.alpha;
-            byte color_c0 = _color.red;
+            //TODO: review color order here
+            //B-G-R-A?   
+            byte color_c0 = _color.blue;
             byte color_c1 = _color.green;
-            byte color_c2 = _color.blue;
-
+            byte color_c2 = _color.red;
+            byte color_alpha = _color.alpha;
             //-----------------
             //single line 
             srcIndex = 0;
@@ -308,7 +309,7 @@ namespace PixelFarm.Agg
         /// <param name="srcW"></param>
         /// <param name="srcStride"></param>
         /// <param name="grayScaleLineBuffer"></param>
-        void BlendScanlineInvertBWForGLES2(byte[] destImgBuffer, int destStride, int y, int srcW, int srcStride, byte[] grayScaleLineBuffer)
+        void dbugBlendScanlineInvertBWForGLES2(byte[] destImgBuffer, int destStride, int y, int srcW, int srcStride, byte[] grayScaleLineBuffer)
         {
             //backup
             LcdDistributionLut lcdLut = _currentLcdLut;
@@ -465,7 +466,7 @@ namespace PixelFarm.Agg
         /// <param name="srcW"></param>
         /// <param name="srcStride"></param>
         /// <param name="grayScaleLineBuffer"></param>
-        void BlendScanlineInvertBWForGLES2_backup(byte[] destImgBuffer, int destStride, int y, int srcW, int srcStride, byte[] grayScaleLineBuffer)
+        void dbugBlendScanlineInvertBWForGLES2_backup(byte[] destImgBuffer, int destStride, int y, int srcW, int srcStride, byte[] grayScaleLineBuffer)
         {
             LcdDistributionLut lcdLut = _currentLcdLut;
             _tempForwardAccumBuffer.Reset();
