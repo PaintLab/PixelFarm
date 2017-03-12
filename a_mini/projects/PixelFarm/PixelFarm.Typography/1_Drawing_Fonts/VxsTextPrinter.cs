@@ -77,12 +77,10 @@ namespace PixelFarm.Drawing.Fonts
         public void DrawString(char[] text, int startAt, int len, double x, double y)
         {
 
-            //1. update some props..
-
+            //1. update some props.. 
             //2. update current type face
             UpdateTypefaceAndGlyphBuilder();
-            Typeface typeface = _glyphPathBuilder.Typeface;
-
+            Typeface typeface = _glyphPathBuilder.Typeface; 
             //3. layout glyphs with selected layout technique
             //TODO: review this again, we should use pixel?
 
@@ -130,9 +128,14 @@ namespace PixelFarm.Drawing.Fonts
             //restore prev origin
             canvasPainter.SetOrigin(ox, oy);
         }
-
-        //-----------------------
-
+        public void DrawString(RenderVxFormattedString renderVx,double x,double y)
+        {
+            throw new NotImplementedException();
+        }
+        public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int start, int len)
+        {
+            throw new NotImplementedException();
+        }
         string _currentFontFilename = "";
         public PositionTechnique PositionTechnique
         {
@@ -181,6 +184,8 @@ namespace PixelFarm.Drawing.Fonts
                 return _glyphPathBuilder.Typeface;
             }
         }
+
+        
     }
 
 

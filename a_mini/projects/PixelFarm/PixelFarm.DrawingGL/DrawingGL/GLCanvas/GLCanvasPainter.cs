@@ -261,12 +261,23 @@ namespace PixelFarm.DrawingGL
             }
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
-        {   
-            return new GLRenderVxFormattedString(textspan);
+        {
+            var renderVxFmtStr = new GLRenderVxFormattedString(textspan);
+            if (_textPriner != null)
+            {
+                char[] buffer = textspan.ToCharArray();
+                _textPriner.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+
+            }
+            return renderVxFmtStr;
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            throw new NotImplementedException();
+            //
+            if (_textPriner != null)
+            {
+                _textPriner.DrawString(renderVx, x, y);
+            }
         }
         public override void Fill(VertexStore vxs)
         {

@@ -374,14 +374,20 @@ namespace PixelFarm.Agg
                 _textPrinter.DrawString(text, x, y);
             }
         }
-        public override RenderVxFormattedString CreateRenderVx(string textspan)
-        {   
-            return new AggRenderVxFormattedString(textspan);
-        }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            throw new NotImplementedException();
+            //draw string from render vx
+            if (_textPrinter != null)
+            {
+                _textPrinter.DrawString(renderVx.OriginalString, x, y);
+            }
         }
+        public override RenderVxFormattedString CreateRenderVx(string textspan)
+        {
+
+            return new AggRenderVxFormattedString(textspan);
+        }
+
         ITextPrinter _textPrinter;
         public ITextPrinter TextPrinter
         {
@@ -555,5 +561,7 @@ namespace PixelFarm.Agg
             AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
             Fill(aggRenderVx.snap);
         }
+
+
     }
 }

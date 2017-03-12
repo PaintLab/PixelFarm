@@ -361,7 +361,8 @@ namespace PixelFarm.Drawing.Skia
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            throw new NotImplementedException();
+            //TODO: review here again 
+            _skCanvas.DrawText(renderVx.OriginalString, (float)x, (float)y, _stroke);
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {

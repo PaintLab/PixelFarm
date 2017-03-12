@@ -2,6 +2,7 @@
 
 using System;
 using Mini;
+using PixelFarm.Drawing;
 using PixelFarm.Drawing.Text;
 using PixelFarm.Agg;
 
@@ -126,7 +127,14 @@ namespace OpenTkEssTest
             font2.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
             painter.UseSubPixelRendering = true;
             painter.CurrentFont = font1;
+            //--------------
+
+
+
+            //--------------
         }
+        RenderVxFormattedString _strRenderVx_1;
+        RenderVxFormattedString _strRenderVx_2;
         public override void Draw(CanvasPainter p)
         {
 
@@ -152,7 +160,17 @@ namespace OpenTkEssTest
             }
             p.FillColor = PixelFarm.Drawing.Color.Black;
 
-            PixelFarm.Drawing.RenderVxFormattedString strRenderVx = p.CreateRenderVx(test_str);
+            if (_strRenderVx_1 == null)
+            {
+                p.CurrentFont = font1;
+                _strRenderVx_1 = p.CreateRenderVx(test_str);
+            }
+            if (_strRenderVx_2 == null)
+            {
+                p.CurrentFont = font2;
+                _strRenderVx_2 = p.CreateRenderVx(test_str);
+            }
+            //
             for (int i = 0; i < n; i++)
             {
                 float x_pos = i * 20;
@@ -160,15 +178,18 @@ namespace OpenTkEssTest
                 //p.DrawString("(" + x_pos + "," + y_pos + ")", x_pos, y_pos);
                 if ((i % 2) == 0)
                 {
-                    p.CurrentFont = font1;
+                    //since draw string may be slow
+                    //we can convert it to a 'freezed' visual object (RenderVx) 
+                    //p.CurrentFont = font1;
+                    //p.DrawString(_strRenderVx_1, x_pos, y_pos);
                 }
                 else
                 {
+                    //since draw string may be slow
+                    //we can convert it to a 'freezed' visual object (RenderVx) 
                     p.CurrentFont = font2;
-                }
-                //since draw string may be slow
-                //we can convert it to a 'freezed' visual object (RenderVx) 
-                p.DrawString(strRenderVx, x_pos, y_pos);
+                    p.DrawString(_strRenderVx_2, x_pos, y_pos);
+                }             
             }
         }
     }
