@@ -9,5 +9,6 @@ namespace PixelFarm.Drawing
     public abstract class RenderVxFormattedString
     {
         public string OriginalString { get; set; }
+        public int[] glyphList { get; set; }
     }
 }
