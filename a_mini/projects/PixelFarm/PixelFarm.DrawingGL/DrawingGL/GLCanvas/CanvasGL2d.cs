@@ -346,13 +346,15 @@ namespace PixelFarm.DrawingGL
             else
             {
                 gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
-                gdiImageTextureWithSubPixelRenderingShader.SetColor(PixelFarm.Drawing.Color.Black);
-                
-                GL.ColorMask(false, false, true, false);//b  
+                //gdiImageTextureWithSubPixelRenderingShader.SetColor(PixelFarm.Drawing.Color.FromArgb(50, Drawing.Color.Black));
+                gdiImageTextureWithSubPixelRenderingShader.SetColor(Drawing.Color.Black);
+                gdiImageTextureWithSubPixelRenderingShader.SetCompo(1);
+
+                GL.ColorMask(false, false, true, false);//b , cyan                  
                 gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft - (1 / 3f), targetTop);
-                GL.ColorMask(false, true, false, false);//g 
+                GL.ColorMask(false, true, false, false);//g , margenta                 
                 gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
-                GL.ColorMask(true, false, false, false);//r 
+                GL.ColorMask(true, false, false, false);//r , yellow                 
                 gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft + (1 / 3f), targetTop);
                 //enable all color component
                 GL.ColorMask(true, true, true, true);
