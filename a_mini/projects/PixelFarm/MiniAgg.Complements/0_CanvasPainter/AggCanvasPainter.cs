@@ -385,7 +385,7 @@ namespace PixelFarm.Agg
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {
 
-            var renderVxFmtStr = new AggRenderVxFormattedString(textspan); 
+            var renderVxFmtStr = new AggRenderVxFormattedString(textspan);
             if (_textPrinter != null)
             {
                 char[] buffer = textspan.ToCharArray();
@@ -568,7 +568,21 @@ namespace PixelFarm.Agg
             AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
             Fill(aggRenderVx.snap);
         }
-
-
+        public LineJoin LineJoin
+        {
+            get { return stroke.LineJoin; }
+            set
+            {
+                stroke.LineJoin = value;
+            }
+        }
+        public LineCap LineCap
+        {
+            get { return stroke.LineCap; }
+            set
+            {
+                stroke.LineCap = value;
+            }
+        }
     }
 }
