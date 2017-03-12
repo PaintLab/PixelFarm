@@ -49,8 +49,10 @@ namespace OpenTkEssTest
             //string test_str = "กิน";
             p.Clear(PixelFarm.Drawing.Color.White);
             // p.Clear(PixelFarm.Drawing.Color.Blue);
-            p.FillColor = PixelFarm.Drawing.Color.Red;
 
+            p.FillColor = PixelFarm.Drawing.Color.Blue;
+            p.UseSubPixelRendering = false;
+            p.UseSubPixelRendering = true;
             int n = 50;
             for (int i = 0; i < n; i++)
             {
@@ -59,7 +61,7 @@ namespace OpenTkEssTest
                 float y_pos = i * 20;
                 p.FillRectangle(x_pos, y_pos, x_pos + 5, y_pos + 5);
             }
-
+            
             p.FillColor = PixelFarm.Drawing.Color.Black;
             for (int i = 0; i < n; i++)
             {

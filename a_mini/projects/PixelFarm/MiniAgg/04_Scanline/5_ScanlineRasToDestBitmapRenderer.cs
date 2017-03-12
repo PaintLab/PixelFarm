@@ -23,8 +23,7 @@ namespace PixelFarm.Agg
     {
         Default,
         Custom,
-        SubPixelRendering,
-        SubPixelRenderingOfGLES,
+        SubPixelRendering
     }
 
 
@@ -64,7 +63,7 @@ namespace PixelFarm.Agg
             IImageReaderWriter dest,
             ScanlineRasterizer sclineRas,
             Scanline scline,
-            Color color, bool invertBlackWhite)
+            Color color)
         {
 
 #if DEBUG
@@ -116,15 +115,8 @@ namespace PixelFarm.Agg
                         _grayScaleLine.BlendHL(x, x2, color_alpha, covers[span.cover_index]);
                     }
                 }
-
-                if (invertBlackWhite)
-                {
-                    BlendScanlineInvertBWForGLES2(dest_buffer, dest_stride, scline.Y, src_w, src_stride, lineBuff);
-                }
-                else
-                {
-                    BlendScanlineForAggSubPix(dest_buffer, dest_stride, scline.Y, src_w, src_stride, lineBuff); //for agg subpixel rendering
-                }
+                //
+                BlendScanlineForAggSubPix(dest_buffer, dest_stride, scline.Y, src_w, src_stride, lineBuff); //for agg subpixel rendering
 #if DEBUG
                 dbugMinScanlineCount++;
 #endif
@@ -306,9 +298,9 @@ namespace PixelFarm.Agg
             //opengl es2 mix function              
             return farColor * (1f - weight) + (nearColor * weight);
         }
-#endif
+
         /// <summary>
-        /// blend gray-scale line buffer to destImgBuffer, with the subpixel rendering technique
+        /// create black bg and white glyph
         /// </summary>
         /// <param name="destImgBuffer"></param>
         /// <param name="destStride"></param>
@@ -317,6 +309,163 @@ namespace PixelFarm.Agg
         /// <param name="srcStride"></param>
         /// <param name="grayScaleLineBuffer"></param>
         void BlendScanlineInvertBWForGLES2(byte[] destImgBuffer, int destStride, int y, int srcW, int srcStride, byte[] grayScaleLineBuffer)
+        {
+            //backup
+            LcdDistributionLut lcdLut = _currentLcdLut;
+            _tempForwardAccumBuffer.Reset();
+            int srcIndex = 0;
+            //start pixel
+            int destImgIndex = 0;
+            int destX = 0;
+            //-----------------
+            //white glyph
+            byte color_alpha = 255;
+            byte color_c0 = 255;
+            byte color_c1 = 255;
+            byte color_c2 = 255;
+            //-----------------
+            //single line 
+            srcIndex = 0;
+            destImgIndex = (destStride * y) + (destX * 4); //4 color component
+
+
+            int nwidth = srcW;
+            while (nwidth > 3)
+            {
+                //------------
+                //TODO: add release mode code (optimized version)
+                //1. convert from original grayscale value from lineBuff to lcd level
+                //and 
+                //2.
+                //from single grey scale value,
+                //it is expanded*** into 5 color-components 
+
+                byte e_0, e_1, e_2; //energy 0,1,2 
+                {
+                    byte write0 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex]);
+                    byte write1 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 1]);
+                    byte write2 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 2]);
+
+                    //0
+                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                        lcdLut.Tertiary(write0),
+                        lcdLut.Secondary(write0),
+                        lcdLut.Primary(write0),
+                        out e_0);
+                    //1
+                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                        lcdLut.Tertiary(write1),
+                        lcdLut.Secondary(write1),
+                        lcdLut.Primary(write1),
+                        out e_1);
+                    //2
+                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                        lcdLut.Tertiary(write2),
+                        lcdLut.Secondary(write2),
+                        lcdLut.Primary(write2),
+                        out e_2);
+                }
+
+                //4. blend 3 pixels 
+                byte exc0 = destImgBuffer[destImgIndex];//existing color
+                byte exc1 = destImgBuffer[destImgIndex + 1];//existing color
+                byte exc2 = destImgBuffer[destImgIndex + 2];//existing color  
+                //byte exc0 = 255;// destImgBuffer[destImgIndex];//existing color
+                //byte exc1 = 255;// destImgBuffer[destImgIndex + 1];//existing color
+                //byte exc2 = 255;// destImgBuffer[destImgIndex + 2];//existing color  
+                //--------------------------------------------------------
+                //note: that we swap e_2 and e_0 on the fly***
+                //-------------------------------------------------------- 
+                //write the 3 color-component of current pixel.
+                destImgBuffer[destImgIndex] = (byte)((((color_c0 - exc0) * (e_2 * color_alpha)) + (exc0 << 16)) >> 16); //swap on the fly
+                destImgBuffer[destImgIndex + 1] = (byte)((((color_c1 - exc1) * (e_1 * color_alpha)) + (exc1 << 16)) >> 16);
+                destImgBuffer[destImgIndex + 2] = (byte)((((color_c2 - exc2) * (e_0 * color_alpha)) + (exc2 << 16)) >> 16);//swap on the fly
+                //---------------------------------------------------------
+                destImgIndex += 4;
+
+                srcIndex += 3;
+                nwidth -= 3;
+            }
+            //---------
+            //when finish each line
+            //we must draw extened 4 pixels
+            //---------
+            {
+                //get remaining energy from _forward buffer
+                byte ec_r1, ec_r2, ec_r3, ec_r4;
+                _tempForwardAccumBuffer.ReadRemaining4(out ec_r1, out ec_r2, out ec_r3, out ec_r4);
+
+                //we need 2 pixels,  
+                int remaining_dest = Math.Min((srcStride - (destImgIndex + 4)), 5);
+                if (remaining_dest < 1)
+                {
+                    return;
+                }
+
+                switch (remaining_dest)
+                {
+                    default: throw new NotSupportedException();
+                    case 5:
+                        {
+                            //1st round
+                            byte exc0 = destImgBuffer[destImgIndex];//existing color
+                            byte exc1 = destImgBuffer[destImgIndex + 1];//existing color
+                            byte exc2 = destImgBuffer[destImgIndex + 2];//existing color 
+
+                            //--------------------------------------------------------
+                            //note: that we swap ec_r3 and ec_r1 on the fly***
+
+                            destImgBuffer[destImgIndex] = (byte)((((color_c0 - exc0) * (ec_r3 * color_alpha)) + (exc0 << 16)) >> 16); //swap on the fly
+                            destImgBuffer[destImgIndex + 1] = (byte)((((color_c1 - exc1) * (ec_r2 * color_alpha)) + (exc1 << 16)) >> 16);
+                            destImgBuffer[destImgIndex + 2] = (byte)((((color_c2 - exc2) * (ec_r1 * color_alpha)) + (exc2 << 16)) >> 16);//swap on the fly
+                            destImgIndex += 4;
+
+
+                            srcIndex += 3;
+                            //--------------------------------------------------------
+                            //2nd round
+                            exc0 = destImgBuffer[destImgIndex];//existing color 
+                            destImgBuffer[destImgIndex] = (byte)((((color_c0 - exc0) * (ec_r4 * color_alpha)) + (exc0 << 16)) >> 16);
+                        }
+                        break;
+                    case 4:
+                        {
+                            //1st round
+                            byte ec0 = destImgBuffer[destImgIndex];//existing color
+                            byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
+                            byte ec2 = destImgBuffer[destImgIndex + 2];//existing color 
+
+                            //--------------------------------------------------------
+                            //note: that we swap e_2 and e_0 on the fly 
+
+                            destImgBuffer[destImgIndex] = (byte)((((color_c0 - ec0) * (ec_r3 * color_alpha)) + (ec0 << 16)) >> 16); //swap on the fly
+                            destImgBuffer[destImgIndex + 1] = (byte)((((color_c1 - ec1) * (ec_r2 * color_alpha)) + (ec1 << 16)) >> 16);
+                            destImgBuffer[destImgIndex + 2] = (byte)((((color_c2 - ec2) * (ec_r1 * color_alpha)) + (ec2 << 16)) >> 16);//swap on the fly
+
+                            destImgIndex += 4;
+                            srcIndex += 3;
+                        }
+                        break;
+                    case 3:
+                    case 2:
+                    case 1:
+                    case 0:
+                        //just return  
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// create black bg and white glyph
+        /// </summary>
+        /// <param name="destImgBuffer"></param>
+        /// <param name="destStride"></param>
+        /// <param name="y"></param>
+        /// <param name="srcW"></param>
+        /// <param name="srcStride"></param>
+        /// <param name="grayScaleLineBuffer"></param>
+        void BlendScanlineInvertBWForGLES2_backup(byte[] destImgBuffer, int destStride, int y, int srcW, int srcStride, byte[] grayScaleLineBuffer)
         {
             LcdDistributionLut lcdLut = _currentLcdLut;
             _tempForwardAccumBuffer.Reset();
@@ -493,8 +642,7 @@ namespace PixelFarm.Agg
                 }
             }
         }
-
-
+#endif
         //void SubPixRender(IImageReaderWriter dest, Scanline scanline, Color color)
         //{
         //    byte[] covers = scanline.GetCovers();
@@ -961,10 +1109,7 @@ namespace PixelFarm.Agg
                     }
                     break;
                 case Agg.ScanlineRenderMode.SubPixelRendering:
-                    scSubPixRas.RenderScanline(dest, sclineRas, scline, color, false);
-                    break;
-                case ScanlineRenderMode.SubPixelRenderingOfGLES:
-                    scSubPixRas.RenderScanline(dest, sclineRas, scline, color, true);
+                    scSubPixRas.RenderScanline(dest, sclineRas, scline, color);
                     break;
                 case Agg.ScanlineRenderMode.Custom:
                     while (sclineRas.SweepScanline(scline))

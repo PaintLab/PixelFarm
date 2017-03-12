@@ -400,27 +400,20 @@ namespace PixelFarm.Agg
             sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
 
-        bool _useSubPixelRendering;
+
         public override bool UseSubPixelRendering
         {
             get
             {
-                return _useSubPixelRendering;
+                return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering;
             }
             set
             {
-                if (this._useSubPixelRendering = value)
+                if (value)
                 {
-                    //TODO: review here again
+                    //TODO: review here again             
                     this.sclineRas.ExtendX3ForSubPixelRendering = true;
-                    if (this.ScanlineRenderMode == ScanlineRenderMode.Default)
-                    {
-                        this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelRendering;
-                    }
-                    else
-                    {
-                        this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelRenderingOfGLES;
-                    }
+                    this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelRendering;
                 }
                 else
                 {
@@ -429,7 +422,7 @@ namespace PixelFarm.Agg
                 }
             }
         }
-        public ScanlineRenderMode ScanlineRenderMode { get; set; }
+    
 
         public override Color FillColor
         {

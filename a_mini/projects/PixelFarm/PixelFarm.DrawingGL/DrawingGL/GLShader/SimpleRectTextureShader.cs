@@ -462,44 +462,16 @@ namespace PixelFarm.DrawingGL
 
     }
 
-    class GdiImageTextureWithSubPixelRenderingShader : SimpleRectTextureShader
+    class ImageTextureWithSubPixelRenderingShader : SimpleRectTextureShader
     {
+        //this shader is designed for subpixel shader
+
         ShaderUniformVar1 _c_compo;
         ShaderUniformVar1 _isBigEndian;
         ShaderUniformVar4 _d_color; //drawing color
-        public GdiImageTextureWithSubPixelRenderingShader(CanvasToShaderSharedResource canvasShareResource)
+        public ImageTextureWithSubPixelRenderingShader(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
         {
-            //string vs = @"
-            //    attribute vec4 a_position;
-            //    attribute vec2 a_texCoord;
-            //    uniform mat4 u_mvpMatrix; 
-            //    varying vec2 v_texCoord;
-            //    void main()
-            //    {
-            //        gl_Position = u_mvpMatrix* a_position;
-            //        v_texCoord =  a_texCoord;
-            //     }	 
-            //    ";
-            ////in fs, angle on windows 
-            ////we need to switch color component
-            ////because we store value in memory as BGRA
-            ////and gl expect input in RGBA
-            //string fs = @"
-            //          precision mediump float;
-            //          varying vec2 v_texCoord;
-            //          uniform sampler2D s_texture;
-            //          void main()
-            //          {
-            //             vec4 c = texture2D(s_texture, v_texCoord); 
-            //             if((c[2] ==1.0) && (c[1]==1.0) && (c[0]== 1.0) && (c[3] == 1.0)){
-            //                discard;
-            //             }else{                                                   
-            //                gl_FragColor =  vec4(c[2],c[1],c[0],c[3]);  
-            //             }
-            //          }
-            //    ";
-            //BuildProgram(vs, fs);
 
             string vs = @"
                 attribute vec4 a_position;
@@ -549,9 +521,7 @@ namespace PixelFarm.DrawingGL
         float _color_b;
         int _use_color_compo;//0,1,2
         public void SetColor(PixelFarm.Drawing.Color c)
-        {
-            //for this shader,
-            //we change c to pre-multiply format 
+        {   
             this._color_a = c.A / 255f;
             this._color_r = c.R / 255f;
             this._color_g = c.G / 255f;
