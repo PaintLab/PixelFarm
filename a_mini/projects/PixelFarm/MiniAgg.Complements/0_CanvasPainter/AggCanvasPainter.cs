@@ -69,7 +69,19 @@ namespace PixelFarm.Agg
         {
             get { return this.gx; }
         }
-
+        public override int Width
+        {
+            get
+            {
+                //TODO: review here
+                return 800;
+            }
+        }
+        public override int Height
+        {
+            //TODO: review here
+            get { return 600; }
+        }
         public override void Clear(Color color)
         {
             gx.Clear(color);
@@ -362,6 +374,26 @@ namespace PixelFarm.Agg
                 _textPrinter.DrawString(text, x, y);
             }
         }
+        public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
+        {
+            //draw string from render vx
+            if (_textPrinter != null)
+            {
+                _textPrinter.DrawString(renderVx, x, y);
+            }
+        }
+        public override RenderVxFormattedString CreateRenderVx(string textspan)
+        {
+
+            var renderVxFmtStr = new AggRenderVxFormattedString(textspan); 
+            if (_textPrinter != null)
+            {
+                char[] buffer = textspan.ToCharArray();
+                _textPrinter.PrepareStringForRenderVx(renderVxFmtStr, buffer, 0, buffer.Length);
+
+            }
+            return renderVxFmtStr;
+        }
 
         ITextPrinter _textPrinter;
         public ITextPrinter TextPrinter
@@ -422,7 +454,7 @@ namespace PixelFarm.Agg
                 }
             }
         }
-    
+
 
         public override Color FillColor
         {
@@ -504,19 +536,7 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v2);
         }
 
-        public override int Width
-        {
-            get
-            {
-                //TODO: review here
-                return 800;
-            }
-        }
-        public override int Height
-        {
-            //TODO: review here
-            get { return 600; }
-        }
+
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
             return new AggRenderVx(snap);
@@ -548,5 +568,7 @@ namespace PixelFarm.Agg
             AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
             Fill(aggRenderVx.snap);
         }
+
+
     }
 }

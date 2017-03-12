@@ -58,6 +58,8 @@ namespace PixelFarm.DrawingGL
             hfont = Win32.MyWin32.CreateFontIndirect(ref logFont);
             Win32.MyWin32.SelectObject(memdc.DC, hfont);
         }
+
+
         public void DrawString(char[] textBuffer, int startAt, int len, double x, double y)
         {
             //TODO: review performan 
@@ -128,15 +130,21 @@ namespace PixelFarm.DrawingGL
                     }
                 }
             }
-
             //------------------------------------------------------
             GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, false);
             canvas.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();
-
         }
 
+        public void DrawString(RenderVxFormattedString renderVx, double x, double y)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }
