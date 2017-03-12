@@ -64,7 +64,7 @@ namespace PixelFarm.Agg
             IImageReaderWriter dest,
             ScanlineRasterizer sclineRas,
             Scanline scline,
-            Color color)
+            Color color, bool invertBlackWhite)
         {
 
 #if DEBUG
@@ -116,9 +116,15 @@ namespace PixelFarm.Agg
                         _grayScaleLine.BlendHL(x, x2, color_alpha, covers[span.cover_index]);
                     }
                 }
-                //
-                BlendScanlineInvertBWForGLES2(dest_buffer, dest_stride, scline.Y, src_w, src_stride, lineBuff);
-                //BlendScanlineForAggSubPix(dest_buffer, dest_stride, scline.Y, src_w, src_stride, lineBuff); //for agg subpixel rendering
+
+                if (invertBlackWhite)
+                {
+                    BlendScanlineInvertBWForGLES2(dest_buffer, dest_stride, scline.Y, src_w, src_stride, lineBuff);
+                }
+                else
+                {
+                    BlendScanlineForAggSubPix(dest_buffer, dest_stride, scline.Y, src_w, src_stride, lineBuff); //for agg subpixel rendering
+                }
 #if DEBUG
                 dbugMinScanlineCount++;
 #endif
@@ -133,6 +139,7 @@ namespace PixelFarm.Agg
                 _currentLcdLut = value;
             }
         }
+
         /// <summary>
         /// blend gray-scale line buffer to destImgBuffer, with the subpixel rendering technique
         /// </summary>
@@ -952,45 +959,18 @@ namespace PixelFarm.Agg
                             }
                         }
                     }
-
                     break;
                 case Agg.ScanlineRenderMode.SubPixelRendering:
-                    scSubPixRas.RenderScanline(dest, sclineRas, scline, color);
-                    //while (sclineRas.SweepScanline(scline))
-                    //{
-                    //    //render solid single scanline
-                    //    int y = scline.Y;
-                    //    int num_spans = scline.SpanCount;
-                    //    byte[] covers = scline.GetCovers();
-                    //    //render each span in the scanline
-                    //    for (int i = 1; i <= num_spans; ++i)
-                    //    {
-                    //        ScanlineSpan span = scline.GetSpan(i);
-                    //        if (span.len > 0)
-                    //        {
-                    //            //positive len 
-                    //            dest.BlendSolidHSpan(span.x, y, span.len, color, covers, span.cover_index);
-                    //        }
-                    //        else
-                    //        {
-                    //            //fill the line, same coverage area
-                    //            int x = span.x;
-                    //            int x2 = (x - span.len - 1);
-                    //            dest.BlendHL(x, y, x2, color, covers[span.cover_index]);
-                    //        }
-                    //    }
-                    //}
+                    scSubPixRas.RenderScanline(dest, sclineRas, scline, color, false);
                     break;
                 case ScanlineRenderMode.SubPixelRenderingOfGLES:
-                    scSubPixRas.RenderScanline(dest, sclineRas, scline, color);
+                    scSubPixRas.RenderScanline(dest, sclineRas, scline, color, true);
                     break;
                 case Agg.ScanlineRenderMode.Custom:
-
                     while (sclineRas.SweepScanline(scline))
                     {
                         CustomRenderSingleScanLine(dest, scline, color);
                     }
-
                     break;
             }
         }
