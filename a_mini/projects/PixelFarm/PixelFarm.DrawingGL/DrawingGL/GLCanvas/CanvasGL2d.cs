@@ -327,7 +327,7 @@ namespace PixelFarm.DrawingGL
         {
 
             gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
-            gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
+            //gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
             //gdiImageTextureWithSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
             //TODO: review to render width again ***
             gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, 0, bmp.Height, 100, bmp.Height, x, y);
@@ -339,21 +339,22 @@ namespace PixelFarm.DrawingGL
             {
 
                 gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
-                gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
+                //gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
                 gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
 
             }
             else
             {
                 gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
-                gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
-                //gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
-                GL.ColorMask(false, false, true, true);//b                                
+                gdiImageTextureWithSubPixelRenderingShader.SetColor(PixelFarm.Drawing.Color.Black);
+                
+                GL.ColorMask(false, false, true, false);//b  
+                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft - (1 / 3f), targetTop);
+                GL.ColorMask(false, true, false, false);//g 
                 gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
-                GL.ColorMask(false, true, false, true);//g
-                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft + 1, targetTop);
-                GL.ColorMask(true, false, false, true);//r
-                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft + 2, targetTop);
+                GL.ColorMask(true, false, false, false);//r 
+                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft + (1 / 3f), targetTop);
+                //enable all color component
                 GL.ColorMask(true, true, true, true);
             }
 

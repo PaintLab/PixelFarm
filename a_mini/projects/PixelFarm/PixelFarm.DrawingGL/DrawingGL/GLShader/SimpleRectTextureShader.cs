@@ -464,9 +464,10 @@ namespace PixelFarm.DrawingGL
 
     class GdiImageTextureWithSubPixelRenderingShader : SimpleRectTextureShader
     {
-        float toDrawImgW = 1, toDrawImgH = 1;
+
         ShaderUniformVar1 _isBigEndian;
-        ShaderUniformVar2 _onepix_xy;
+        //ShaderUniformVar2 _onepix_xy;
+        ShaderUniformVar4 _d_color; //drawing color
         public GdiImageTextureWithSubPixelRenderingShader(CanvasToShaderSharedResource canvasShareResource)
             : base(canvasShareResource)
         {
@@ -521,7 +522,7 @@ namespace PixelFarm.DrawingGL
 
                       uniform sampler2D s_texture;
                       uniform int isBigEndian;  
-                      uniform vec2 onepix_xy;
+                      uniform vec4 d_color;
 
                       varying vec2 v_texCoord; 
                       void main()
@@ -529,31 +530,39 @@ namespace PixelFarm.DrawingGL
                         float v_texCoord0 =v_texCoord[0];
                         float v_texCoord1= v_texCoord[1];
 
-                        float one_x=onepix_xy[0];               
-                        float one_y=onepix_xy[1]; 
+                        //float one_x=onepix_xy[0];               
+                        //float one_y=onepix_xy[1]; 
 
-                        vec4 c0= texture2D(s_texture,vec2(v_texCoord0             ,v_texCoord1));
-                        gl_FragColor = vec4(c0[2],c0[1],c0[0],c0[3]);  
-                       
+                        vec4 c0= texture2D(s_texture,vec2(v_texCoord0 ,v_texCoord1));
+                        //gl_FragColor = vec4(c0[2]* one_x,c0[1] * one_x,c0[0] * one_x,c0[3]);   
+                        //gl_FragColor = vec4(c0[3]* one_x,c0[3] * one_x,c0[3] * one_x,c0[3]);   
+                        gl_FragColor = vec4( (d_color[0]/c0[3]), (d_color[1]/c0[3]),(d_color[2]/c0[3]),c0[3]);   
                       }
                 ";
             BuildProgram(vs, fs);
         }
         public bool IsBigEndian { get; set; }
-        public void SetBitmapSize(int w, int h)
+
+        float _color_a = 1f;
+        float _color_r;
+        float _color_g;
+        float _color_b; 
+        public void SetColor(PixelFarm.Drawing.Color c)
         {
-            this.toDrawImgW = w;
-            this.toDrawImgH = h;
+            this._color_a = c.A / 256f;
+            this._color_r = c.R / 256f;
+            this._color_g = c.G / 256f;
+            this._color_b = c.B / 256f;
         }
         protected override void OnProgramBuilt()
         {
             _isBigEndian = shaderProgram.GetUniform1("isBigEndian");
-            _onepix_xy = shaderProgram.GetUniform2("onepix_xy");
+            _d_color = shaderProgram.GetUniform4("d_color");
         }
         protected override void OnSetVarsBeforeRenderer()
         {
             _isBigEndian.SetValue(IsBigEndian ? 1 : 0);
-            _onepix_xy.SetValue(1f / toDrawImgW, 1f / toDrawImgH);
+            _d_color.SetValue(_color_r, _color_g, _color_b, _color_a);
         }
 
     }
