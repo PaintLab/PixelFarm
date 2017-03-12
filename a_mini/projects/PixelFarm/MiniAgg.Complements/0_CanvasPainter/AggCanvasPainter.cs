@@ -411,6 +411,7 @@ namespace PixelFarm.Agg
             {
                 if (this._useSubPixelRendering = value)
                 {
+                    //TODO: review here again
                     this.sclineRas.ExtendX3ForSubPixelRendering = true;
                     if (this.ScanlineRenderMode == ScanlineRenderMode.Default)
                     {
@@ -418,7 +419,6 @@ namespace PixelFarm.Agg
                     }
                     else
                     {
-
                         this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelRenderingOfGLES;
                     }
                 }
