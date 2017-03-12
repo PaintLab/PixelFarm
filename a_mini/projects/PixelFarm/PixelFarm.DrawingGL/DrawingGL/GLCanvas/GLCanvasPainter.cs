@@ -260,7 +260,14 @@ namespace PixelFarm.DrawingGL
                 _textPriner.DrawString(text, x, y);
             }
         }
-
+        public override RenderVxFormattedString CreateRenderVx(string textspan)
+        {   
+            return new GLRenderVxFormattedString(textspan);
+        }
+        public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
+        {
+            throw new NotImplementedException();
+        }
         public override void Fill(VertexStore vxs)
         {
             _canvas.FillGfxPath(

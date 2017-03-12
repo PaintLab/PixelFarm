@@ -6,4 +6,8 @@ namespace PixelFarm.Drawing
     public abstract class RenderVx
     {
     }
+    public abstract class RenderVxFormattedString
+    {
+        public string OriginalString { get; set; }
+    }
 }

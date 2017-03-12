@@ -69,7 +69,19 @@ namespace PixelFarm.Agg
         {
             get { return this.gx; }
         }
-
+        public override int Width
+        {
+            get
+            {
+                //TODO: review here
+                return 800;
+            }
+        }
+        public override int Height
+        {
+            //TODO: review here
+            get { return 600; }
+        }
         public override void Clear(Color color)
         {
             gx.Clear(color);
@@ -362,7 +374,14 @@ namespace PixelFarm.Agg
                 _textPrinter.DrawString(text, x, y);
             }
         }
-
+        public override RenderVxFormattedString CreateRenderVx(string textspan)
+        {   
+            return new AggRenderVxFormattedString(textspan);
+        }
+        public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
+        {
+            throw new NotImplementedException();
+        }
         ITextPrinter _textPrinter;
         public ITextPrinter TextPrinter
         {
@@ -422,7 +441,7 @@ namespace PixelFarm.Agg
                 }
             }
         }
-    
+
 
         public override Color FillColor
         {
@@ -504,19 +523,7 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v2);
         }
 
-        public override int Width
-        {
-            get
-            {
-                //TODO: review here
-                return 800;
-            }
-        }
-        public override int Height
-        {
-            //TODO: review here
-            get { return 600; }
-        }
+
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
             return new AggRenderVx(snap);
