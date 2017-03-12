@@ -151,11 +151,12 @@ namespace PixelFarm.Agg
             int destImgIndex = 0;
             int destX = 0;
             //-----------------
-            byte color_alpha = _color.alpha;
-            byte color_c0 = _color.red;
+            //TODO: review color order here
+            //B-G-R-A?   
+            byte color_c0 = _color.blue;
             byte color_c1 = _color.green;
-            byte color_c2 = _color.blue;
-
+            byte color_c2 = _color.red;
+            byte color_alpha = _color.alpha;
             //-----------------
             //single line 
             srcIndex = 0;
