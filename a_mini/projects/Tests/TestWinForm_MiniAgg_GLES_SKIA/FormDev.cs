@@ -422,6 +422,12 @@ namespace Mini
             return upperEq / lowerEq;
         }
 
+        private void cmdTestColorBlend_Click(object sender, EventArgs e)
+        {
+            FormTestColorBlend formTestColorBlend = new Mini.FormTestColorBlend();
+            formTestColorBlend.Show();
+
+        }
     }
 }
 

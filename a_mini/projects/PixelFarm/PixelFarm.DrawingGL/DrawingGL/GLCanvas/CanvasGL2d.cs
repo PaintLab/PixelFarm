@@ -16,7 +16,7 @@ namespace PixelFarm.DrawingGL
         RectFillShader rectFillShader;
         GdiImageTextureShader gdiImgTextureShader;
         GdiImageTextureWithWhiteTransparentShader gdiImgTextureWithWhiteTransparentShader;
-        GdiImageTextureWithSubPixelRenderingShader gdiImageTextureWithSubPixelRenderingShader;
+        ImageTextureWithSubPixelRenderingShader gdiImageTextureWithSubPixelRenderingShader;
         OpenGLESTextureShader glesTextureShader;
         BlurShader blurShader;
         Conv3x3TextureShader conv3x3TextureShader;
@@ -59,7 +59,7 @@ namespace PixelFarm.DrawingGL
             rectFillShader = new RectFillShader(shaderRes);
             gdiImgTextureShader = new GdiImageTextureShader(shaderRes);
             gdiImgTextureWithWhiteTransparentShader = new GdiImageTextureWithWhiteTransparentShader(shaderRes);
-            gdiImageTextureWithSubPixelRenderingShader = new GdiImageTextureWithSubPixelRenderingShader(shaderRes);
+            gdiImageTextureWithSubPixelRenderingShader = new ImageTextureWithSubPixelRenderingShader(shaderRes);
             blurShader = new BlurShader(shaderRes);
             glesTextureShader = new OpenGLESTextureShader(shaderRes);
             invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(shaderRes); //used with stencil  ***
@@ -83,10 +83,15 @@ namespace PixelFarm.DrawingGL
             //GL.CullFace(CullFaceMode.Back); 
 
             GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);//original **
+
+            //GL.BlendFunc(BlendingFactorSrc.SrcColor, BlendingFactorDest.One);// not apply alpha to src
+            //GL.BlendFuncSeparate(BlendingFactorSrc.SrcColor, BlendingFactorDest.OneMinusSrcAlpha,
+            //                     BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            //GL.BlendFuncSeparate(BlendingFactorSrc.SrcColor, BlendingFactorDest.OneMinusSrcColor, BlendingFactorSrc.SrcAlpha, BlendingFactorDest.Zero);
+
             GL.ClearColor(1, 1, 1, 1);
             //-------------------------------------------------------------------------------
-
             GL.Viewport(0, 0, canvasW, canvasH);
         }
 
@@ -322,25 +327,39 @@ namespace PixelFarm.DrawingGL
         {
 
             gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
-            gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
+            //gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
             //gdiImageTextureWithSubPixelRenderingShader.Render(bmp, x, y, bmp.Width, bmp.Height);
             //TODO: review to render width again ***
             gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, 0, bmp.Height, 100, bmp.Height, x, y);
         }
         public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
         {
+
             if (bmp.IsBigEndianPixel)
             {
+
                 gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
-                gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
+                //gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
                 gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+
             }
             else
             {
                 gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
-                gdiImageTextureWithSubPixelRenderingShader.SetBitmapSize(bmp.Width, bmp.Height);
+                //gdiImageTextureWithSubPixelRenderingShader.SetColor(PixelFarm.Drawing.Color.FromArgb(50, Drawing.Color.Black));
+                gdiImageTextureWithSubPixelRenderingShader.SetColor(Drawing.Color.Black);
+                gdiImageTextureWithSubPixelRenderingShader.SetCompo(1);
+
+                GL.ColorMask(false, false, true, false);//b , cyan                  
+                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft - (1 / 3f), targetTop);
+                GL.ColorMask(false, true, false, false);//g , margenta                 
                 gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                GL.ColorMask(true, false, false, false);//r , yellow                 
+                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft + (1 / 3f), targetTop);
+                //enable all color component
+                GL.ColorMask(true, true, true, true);
             }
+
         }
         public void DrawImage(GLBitmapReference bmp, float x, float y)
         {

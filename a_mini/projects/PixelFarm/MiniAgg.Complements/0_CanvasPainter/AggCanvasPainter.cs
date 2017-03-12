@@ -399,25 +399,30 @@ namespace PixelFarm.Agg
             sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithColor(this.gx.DestImage, sclineRas, scline, fillColor);
         }
+
+
         public override bool UseSubPixelRendering
         {
-            get { return sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering; }
+            get
+            {
+                return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering;
+            }
             set
             {
                 if (value)
                 {
-                    this.sclineRas.ScanlineRenderMode = ScanlineRenderMode.SubPixelRendering;
+                    //TODO: review here again             
+                    this.sclineRas.ExtendX3ForSubPixelRendering = true;
                     this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.SubPixelRendering;
-                    
                 }
                 else
                 {
-                    this.sclineRas.ScanlineRenderMode = ScanlineRenderMode.Default;
+                    this.sclineRas.ExtendX3ForSubPixelRendering = false;
                     this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.Default;
-                    
                 }
             }
         }
+    
 
         public override Color FillColor
         {
