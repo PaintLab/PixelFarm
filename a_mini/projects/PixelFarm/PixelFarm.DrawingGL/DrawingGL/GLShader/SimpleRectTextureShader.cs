@@ -38,6 +38,7 @@ namespace PixelFarm.DrawingGL
             }, 1);
         }
 
+
         public void RenderSubImage(GLBitmap bmp, float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop, float scale)
         {
             //TODO: review float array here,use buffer instead
@@ -92,7 +93,7 @@ namespace PixelFarm.DrawingGL
                 //-------------------------------
                 float srcBottom = srcTop - srcH;
                 float srcRight = srcLeft + srcW;
-              
+
                 unsafe
                 {
                     if (_latestBmpInverted)
@@ -143,6 +144,16 @@ namespace PixelFarm.DrawingGL
                 }
                 GL.DrawElements(BeginMode.TriangleStrip, 4, DrawElementsType.UnsignedShort, indices);
             }
+        }
+        public void DrawSubImage(float srcLeft, float srcTop, float srcW, float srcH, float targetLeft, float targetTop)
+        {
+            //TODO: review float array here,use buffer instead
+            DrawSubImages(new float[]{
+                srcLeft,srcTop,
+                srcW,srcH,
+                targetLeft,
+                targetTop
+            }, 1);
         }
         //-----------------------------------------
         public void RenderSubImages(GLBitmap bmp, float[] srcDestList, float scale)

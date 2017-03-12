@@ -16,7 +16,7 @@ namespace PixelFarm.DrawingGL
         RectFillShader rectFillShader;
         GdiImageTextureShader gdiImgTextureShader;
         GdiImageTextureWithWhiteTransparentShader gdiImgTextureWithWhiteTransparentShader;
-        ImageTextureWithSubPixelRenderingShader gdiImageTextureWithSubPixelRenderingShader;
+        ImageTextureWithSubPixelRenderingShader textureSubPixRendering;
         OpenGLESTextureShader glesTextureShader;
         BlurShader blurShader;
         Conv3x3TextureShader conv3x3TextureShader;
@@ -59,7 +59,7 @@ namespace PixelFarm.DrawingGL
             rectFillShader = new RectFillShader(shaderRes);
             gdiImgTextureShader = new GdiImageTextureShader(shaderRes);
             gdiImgTextureWithWhiteTransparentShader = new GdiImageTextureWithWhiteTransparentShader(shaderRes);
-            gdiImageTextureWithSubPixelRenderingShader = new ImageTextureWithSubPixelRenderingShader(shaderRes);
+            textureSubPixRendering = new ImageTextureWithSubPixelRenderingShader(shaderRes);
             blurShader = new BlurShader(shaderRes);
             glesTextureShader = new OpenGLESTextureShader(shaderRes);
             invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(shaderRes); //used with stencil  ***
@@ -333,20 +333,27 @@ namespace PixelFarm.DrawingGL
 
             if (bmp.IsBigEndianPixel)
             {
-                throw new NotSupportedException(); 
+                throw new NotSupportedException();
             }
             else
             {
-                gdiImageTextureWithSubPixelRenderingShader.IsBigEndian = bmp.IsBigEndianPixel;
-                gdiImageTextureWithSubPixelRenderingShader.SetColor(Drawing.Color.Black);
-                gdiImageTextureWithSubPixelRenderingShader.SetCompo(1);
+                textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
+                textureSubPixRendering.SetColor(Drawing.Color.Black);
+                textureSubPixRendering.SetCompo(1);
 
-                GL.ColorMask(false, false, true, false);//b , cyan                  
-                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft - (1 / 3f), targetTop);
-                GL.ColorMask(false, true, false, false);//g , margenta                 
-                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
-                GL.ColorMask(true, false, false, false);//r , yellow                 
-                gdiImageTextureWithSubPixelRenderingShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft + (1 / 3f), targetTop);
+                //draw a serie of image***
+                //-------------------------
+                //1. load once
+                textureSubPixRendering.LoadGLBitmap(bmp);
+                //2. b , cyan result
+                GL.ColorMask(false, false, true, false);
+                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - (1 / 3f), targetTop);
+                //3. g , magenta result
+                GL.ColorMask(false, true, false, false);
+                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                //4. r , yellow result
+                GL.ColorMask(true, false, false, false);//             
+                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + (1 / 3f), targetTop);
                 //enable all color component
                 GL.ColorMask(true, true, true, true);
             }
