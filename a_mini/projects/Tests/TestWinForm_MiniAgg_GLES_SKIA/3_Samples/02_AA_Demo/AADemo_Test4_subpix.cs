@@ -282,10 +282,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         void RunSampleD(CanvasPainter p)
         {
             //version 4: 
-            p.Clear(PixelFarm.Drawing.Color.Blue);
+            p.Clear(PixelFarm.Drawing.Color.White);
             p.UseSubPixelRendering = true;
             //--------------------------
-            p.StrokeColor = PixelFarm.Drawing.Color.White;
+            p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
             //p.Line(2, 0, 10, 15);
 
