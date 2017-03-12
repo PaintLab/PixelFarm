@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -118,6 +119,18 @@
     <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace_LiberationSans.cs" />
     <Compile Include="Experiment_AggFonts\FontSvg\SvgFontStore.cs" />
     <Compile Include="Experiment_AggFonts\Font\MyTypeFacePrinter.cs" />
+    <Compile Include="Experiment_ColorBlend\ColorCompoBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Experiment_ColorBlend\ColorCompoBox.Designer.cs">
+      <DependentUpon>ColorCompoBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Experiment_ColorBlend\FormTestColorBlend.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Experiment_ColorBlend\FormTestColorBlend.Designer.cs">
+      <DependentUpon>FormTestColorBlend.cs</DependentUpon>
+    </Compile>
     <Compile Include="MiniGUI\PixelTools.cs" />
     <Compile Include="FormDev.cs">
       <SubType>Form</SubType>
@@ -159,6 +172,9 @@
     <EmbeddedResource Include="8_SkiaTest\FormSkia1.resx">
       <DependentUpon>FormSkia1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Experiment_ColorBlend\ColorCompoBox.resx">
+      <DependentUpon>ColorCompoBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>
     </EmbeddedResource>
@@ -167,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormTestBed.resx">
       <DependentUpon>FormTestBed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Experiment_ColorBlend\FormTestColorBlend.resx">
+      <DependentUpon>FormTestColorBlend.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -191,6 +191,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             get;
             set;
         }
+
+
+
         void RunSampleA(CanvasPainter p)
         {
 
@@ -282,7 +285,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             p.Clear(PixelFarm.Drawing.Color.White);
             p.UseSubPixelRendering = true;
             //--------------------------
-            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+            p.StrokeColor = PixelFarm.Drawing.Color.Blue;
             p.StrokeWidth = 2.0f;
             //p.Line(2, 0, 10, 15);
 
@@ -398,7 +401,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         void BlendWithLcdTechnique(ActualImage destImg, ActualImage glyphImg, PixelFarm.Drawing.Color color)
         {
             var g8Lut = g8_1_2lcd;
-            var forwardBuffer = new ScanlineSubPixelRasterizer.ForwardTemporaryBuffer();
+            var forwardBuffer = new ScanlineSubPixelRasterizer.TempForwardAccumBuffer();
             int glyphH = glyphImg.Height;
             int glyphW = glyphImg.Width;
             byte[] glyphBuffer = ActualImage.GetBuffer(glyphImg);
