@@ -96,7 +96,7 @@ namespace PixelFarm.Agg
             set { this.m_shorten = value; }
         }
         // Vertex Generator Interface
-        public void RemoveAll()
+        public void Reset()
         {
             vertexDistanceList.Clear();
             m_closed = false;
