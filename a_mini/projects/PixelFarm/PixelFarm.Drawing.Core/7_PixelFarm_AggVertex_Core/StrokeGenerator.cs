@@ -109,8 +109,7 @@ namespace PixelFarm.Agg
             switch (cmd)
             {
                 case VertexCmd.MoveTo:
-                    vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
-                    //vertexDistanceList.AddVertex(new VertexDistance(x, y));
+                    vertexDistanceList.ReplaceLast(new VertexDistance(x, y)); 
                     break;
                 case VertexCmd.Close:
                 case VertexCmd.CloseAndEndFigure:

@@ -234,7 +234,7 @@ namespace PixelFarm.Agg
         }
 
         //-------------------------------------------------------calc_polygon_area
-        public static double CalculatePolygonArea(VertexDistanceList st)
+        internal static double CalculatePolygonArea(VertexDistanceList st)
         {
             int i;
             double sum = 0.0;

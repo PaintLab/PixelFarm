@@ -62,7 +62,7 @@ namespace PixelFarm.Agg
     // Function close() calls this operator and removes the last vertex if 
     // necessary.
     //------------------------------------------------------------------------
-    public class VertexDistanceList : ArrayList<VertexDistance>
+    class VertexDistanceList : ArrayList<VertexDistance>
     {
         public override void AddVertex(VertexDistance val)
         {

@@ -58,14 +58,14 @@ namespace PixelFarm.Agg
             //TODO: review here
             return ((int)c & 0x3) >= (int)VertexCmd.Close;
         }
-        
+
         public static bool IsNextPoly(VertexCmd c)
         {
             //?
             return c <= VertexCmd.MoveTo;
         }
 
-        public static void ShortenPath(VertexDistanceList vertexDistanceList, double s, bool closed)
+        internal static void ShortenPath(VertexDistanceList vertexDistanceList, double s, bool closed)
         {
             if (s > 0.0 && vertexDistanceList.Count > 1)
             {
