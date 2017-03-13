@@ -17,18 +17,79 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Agg.VertexSource;
-namespace PixelFarm.Agg
+
+namespace PixelFarm.Agg.VertexSource
 {
-    public class DashGenerator
+
+    public delegate void LineSegmentDelegate(VertexStore vxs, VertexCmd cmd, double x, double y);
+
+    public class LineWalkerMark
     {
-        LineMarker lineMarker = new LineMarker();
-        public void AddDashMark(double len)
+        readonly internal LineSegmentDelegate lineSegDel;
+        public LineWalkerMark(double len, LineSegmentDelegate lineSegDel)
         {
-            lineMarker.AddSegmentMark(len);
+            this.Len = len;
+            this.lineSegDel = lineSegDel;
+        }
+        public double Len { get; set; }
+    }
+
+    public enum LineWalkDashStyle
+    {
+        Blank,
+        Solid,
+    }
+    public static class LineWalkerExtensions
+    {
+        public static void AddMark(this LineWalker walker, double len, LineSegmentDelegate segDel)
+        {
+            var mark = new LineWalkerMark(len, segDel);
+            walker.AddWalkMark(mark);
+        }
+        public static void AddMark(this LineWalker walker, double len, LineWalkDashStyle daskStyle)
+        {
+            switch (daskStyle)
+            {
+                default: throw new NotSupportedException();
+                case LineWalkDashStyle.Solid:
+                    {
+                        walker.AddWalkMark(new LineWalkerMark(len, SimpleSolidLine));
+                    }
+                    break;
+                case LineWalkDashStyle.Blank:
+                    {
+                        walker.AddWalkMark(new LineWalkerMark(len, SimpleBlankLine));
+                    }
+                    break;
+            }
+        }
+        static void SimpleSolidLine(VertexStore outputVxs, VertexCmd cmd, double x, double y)
+        {
+            //solid               
+            switch (cmd)
+            {
+                case VertexCmd.MoveTo:
+                    outputVxs.AddMoveTo(x, y);
+                    break;
+                case VertexCmd.LineTo:
+                    outputVxs.AddLineTo(x, y);
+                    break;
+            }
+        }
+        static void SimpleBlankLine(VertexStore outputVxs, VertexCmd cmd, double x, double y)
+        {
+
+        }
+    }
+    public class LineWalker
+    {
+        WalkStateManager lineMarker = new WalkStateManager();
+        public void AddWalkMark(LineWalkerMark walkerMark)
+        {
+            lineMarker.AddSegmentMark(walkerMark);
         }
 
-        public void MakeVxs(VertexStore src, VertexStore output)
+        public void Walk(VertexStore src, VertexStore output)
         {
             //
             //we do not flatten the curve 
@@ -54,7 +115,6 @@ namespace PixelFarm.Agg
                     case VertexCmd.P2c:
                     case VertexCmd.P3c:
                         throw new NotSupportedException();
-                        break;
                     case VertexCmd.Close:
                     case VertexCmd.CloseAndEndFigure:
                         lineMarker.CloseFigure();
@@ -63,39 +123,33 @@ namespace PixelFarm.Agg
             }
 
         }
-        enum DashState
+        enum WalkState
         {
             Init,
             PolyLine,
         }
 
-        class LineSegmentMark
-        {
-            public readonly double len;
-            public LineSegmentMark(double len)
-            {
-                this.len = len;
-            }
-        }
 
-        class LineMarker
+
+
+        class WalkStateManager
         {
 
-            List<LineSegmentMark> _segmentMarks = new List<LineSegmentMark>();
-            LineSegmentMark _currentMarker;
+            List<LineWalkerMark> _segmentMarks = new List<LineWalkerMark>();
+            LineWalkerMark _currentMarker;
             int _nextMarkNo;
 
             double _expectedSegmentLen;
-            DashState _state;
+            WalkState _state;
             double _latest_X, _latest_Y;
             double _latest_moveto_X, _lastest_moveto_Y;
 
             //-------------------------------
             internal VertexStore _output;
 
-            public void AddSegmentMark(double markSegmentLen)
+            public void AddSegmentMark(LineWalkerMark segMark)
             {
-                _segmentMarks.Add(new LineSegmentMark(markSegmentLen));
+                _segmentMarks.Add(segMark);
             }
             public void Clear()
             {
@@ -107,7 +161,7 @@ namespace PixelFarm.Agg
             void StepToNextMarkerSegment()
             {
                 _currentMarker = _segmentMarks[_nextMarkNo];
-                _expectedSegmentLen = _currentMarker.len;
+                _expectedSegmentLen = _currentMarker.Len;
                 if (_nextMarkNo + 1 < _segmentMarks.Count)
                 {
                     _nextMarkNo++;
@@ -120,21 +174,73 @@ namespace PixelFarm.Agg
             public void CloseFigure()
             {
                 LineTo(_latest_moveto_X, _lastest_moveto_Y);
+                //close current figure
+                //***                      
+                double tmp_expectedLen;
+                ClearCollectedTmpPoints(out _expectedSegmentLen);
+            }
+            void ClearCollectedTmpPoints(out double tmp_expectedLen)
+            {
+                //clear all previous collected points
+                int j = _tempPoints.Count;
+                tmp_expectedLen = 0;
+                if (j > 0)
+                {
+                    tmp_expectedLen = _expectedSegmentLen;
+                    for (int i = 0; i < j;)
+                    {
+                        //p0-p1
+                        TmpPoint p0 = _tempPoints[i];
+                        TmpPoint p1 = _tempPoints[i + 1];
+                        //-------------------------------
+                        //a series of connected line
+                        //if ((_nextMarkNo % 2) == 1)
+                        //{
+                        //    if (i == 0)
+                        //    {
+                        //        //move to
+                        //        _output.AddMoveTo(p0.x, p0.y);
+                        //    }
+                        //    _output.AddLineTo(p1.x, p1.y);
+                        //}
+                        if (i == 0)
+                        {
+                            //1st move to
+                            _currentMarker.lineSegDel(_output, VertexCmd.MoveTo, p0.x, p0.y);
+                        }
+                        _currentMarker.lineSegDel(_output, VertexCmd.LineTo, p1.x, p1.y);
+
+                        //-------------------------------
+                        double len = AggMath.calc_distance(p0.x, p0.y, p1.x, p1.y);
+                        tmp_expectedLen -= len;
+                        i += 2;
+                        _latest_X = p1.x;
+                        _latest_Y = p1.y;
+                    }
+                    //------------
+
+
+
+                    _tempPoints.Clear();
+                }
+                //-----------------
             }
             public void MoveTo(double x0, double y0)
             {
                 switch (_state)
                 {
                     default: throw new NotSupportedException();
-                    case DashState.Init:
+                    case WalkState.Init:
                         _latest_moveto_X = _latest_X = x0;
                         _lastest_moveto_Y = _latest_Y = y0;
                         StepToNextMarkerSegment();//start read
                         OnMoveTo();
                         break;
-                    case DashState.PolyLine:
+                    case WalkState.PolyLine:
                         //stop current line 
+                        {
 
+                        }
                         break;
                 }
             }
@@ -143,18 +249,16 @@ namespace PixelFarm.Agg
                 switch (_state)
                 {
                     default: throw new NotSupportedException();
-                    case DashState.Init:
+                    case WalkState.Init:
 
-                        _state = DashState.PolyLine;
-                        goto case DashState.PolyLine;
-                    case DashState.PolyLine:
+                        _state = WalkState.PolyLine;
+                        goto case WalkState.PolyLine;
+                    case WalkState.PolyLine:
                         {
 
                             //clear prev segment len  
                             //find line segment length 
                             double new_remaining_len = AggMath.calc_distance(_latest_X, _latest_Y, x1, y1);
-
-
                             //check current gen state
                             //find angle
                             double angle = Math.Atan2(y1 - _latest_Y, x1 - _latest_X);
@@ -193,27 +297,8 @@ namespace PixelFarm.Agg
                     {
                         //***                        
                         //clear all previous collected points
-                        int j = _tempPoints.Count;
-                        double tmp_expectedLen = _expectedSegmentLen;
-                        for (int i = 0; i < j;)
-                        {
-                            //p0-p1
-                            TmpPoint p0 = _tempPoints[i];
-                            TmpPoint p1 = _tempPoints[i + 1];
-
-                            if (i == 0)
-                            {
-                                //move to
-                                _output.AddMoveTo(p0.x, p0.y);
-                            }
-                            _output.AddLineTo(p1.x, p1.y);
-                            double len = AggMath.calc_distance(p0.x, p0.y, p1.x, p1.y);
-                            tmp_expectedLen -= len;
-                            i += 2;
-                            _latest_X = p1.x;
-                            _latest_Y = p1.y;
-                        }
-                        _tempPoints.Clear();
+                        double tmp_expectedLen;
+                        ClearCollectedTmpPoints(out tmp_expectedLen);
                         //-----------------
                         //begin
                         if (tmp_expectedLen > 0)
@@ -224,7 +309,7 @@ namespace PixelFarm.Agg
                             new_remaining_len -= _expectedSegmentLen;
                             //each segment has its own line production procedure
                             //eg.  
-                            _output.AddLineTo(this._latest_X = new_x, this._latest_Y = new_y);
+                            _currentMarker.lineSegDel(_output, VertexCmd.LineTo, this._latest_X = new_x, this._latest_Y = new_y);
                             StepToNextMarkerSegment();
                         }
                         //-----------------   
@@ -247,6 +332,12 @@ namespace PixelFarm.Agg
                     this.x = x;
                     this.y = y;
                 }
+#if DEBUG
+                public override string ToString()
+                {
+                    return "(" + x + "," + y + ")";
+                }
+#endif
             }
 
 
@@ -261,10 +352,9 @@ namespace PixelFarm.Agg
                     _total_accum_len += remainingLen;
                     _tempPoints.Add(new TmpPoint(_latest_X, _latest_Y));
                     _tempPoints.Add(new TmpPoint(x, y));
-
-
                 }
-
+                _latest_X = x;
+                _latest_Y = y;
             }
             protected virtual void OnMoveTo()
             {
@@ -276,18 +366,18 @@ namespace PixelFarm.Agg
             {
                 //on complete segment ***
                 //user can config
-                //what todo on complete segment
+                //what todo on complete segment 
+                //if ((_nextMarkNo % 2) == 1)
+                //{
+                //    _output.AddMoveTo(_latest_X, _latest_Y);
+                //    _output.AddLineTo(new_x, new_y);
+                //}
+                //else
+                //{
 
-
-                if ((_nextMarkNo % 2) == 1)
-                {
-                    _output.AddMoveTo(_latest_X, _latest_Y);
-                    _output.AddLineTo(new_x, new_y);
-                }
-                else
-                {
-
-                }
+                //}
+                _currentMarker.lineSegDel(_output, VertexCmd.MoveTo, _latest_X, _latest_Y);
+                _currentMarker.lineSegDel(_output, VertexCmd.LineTo, new_x, new_y);
                 _total_accum_len = 0;
                 StepToNextMarkerSegment();
             }
