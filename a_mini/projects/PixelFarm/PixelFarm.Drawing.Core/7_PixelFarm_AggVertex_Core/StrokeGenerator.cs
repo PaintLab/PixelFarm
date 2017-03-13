@@ -142,8 +142,7 @@ namespace PixelFarm.Agg
             double x = 0, y = 0;
             for (;;)
             {
-                VertexCmd cmd = GetNextVertex(ref x, ref y);
-                outputVxs.AddVertex(x, y, cmd);
+                VertexCmd cmd = GetNextVertex(ref x, ref y); 
                 if (cmd == VertexCmd.NoMore)
                 {
                     if (_vertextDistanceListQueue.Count > 0)
@@ -157,9 +156,10 @@ namespace PixelFarm.Agg
                     }
                     else
                     {
-                        break;
+                        break;//exit from loop
                     }
                 }
+                outputVxs.AddVertex(x, y, cmd);
             }
         }
         void Rewind()

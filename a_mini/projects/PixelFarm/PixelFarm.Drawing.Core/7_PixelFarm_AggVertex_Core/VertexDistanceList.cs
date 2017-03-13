@@ -66,14 +66,32 @@ namespace PixelFarm.Agg
     {
         public override void AddVertex(VertexDistance val)
         {
-            if (base.Count > 1)
+
+            switch (base.Count)
             {
-                //check if not duplicated vertex
-                if (!Array[base.Count - 2].IsEqual(Array[base.Count - 1]))
-                {
-                    base.RemoveLast();
-                }
+                case 0:break;
+                case 1:
+                    {
+                        //check if not duplicated vertex
+                        if (!Array[base.Count - 1].IsEqual(val))
+                        {
+                            base.RemoveLast();
+                        }
+                    }
+                    break;
+                default:
+                    {
+                        //check if not duplicated vertex
+                        if (!Array[base.Count - 2].IsEqual(Array[base.Count - 1]))
+                        {
+                            base.RemoveLast();
+                        }
+                    }
+                    break;
             }
+        
+         
+            
             base.AddVertex(val);
         }
 
