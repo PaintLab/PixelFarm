@@ -26,70 +26,71 @@ namespace PixelFarm.Agg
 {
     public sealed class Stroke
     {
-        StrokeGenerator strokeGen;
+        StrokeGenerator _strokeGen;
         public Stroke(double inWidth)
         {
-            this.strokeGen = new StrokeGenerator();
+            this._strokeGen = new StrokeGenerator();
             this.Width = inWidth;
         }
 
         public LineCap LineCap
         {
-            get { return strokeGen.LineCap; }
-            set { strokeGen.LineCap = value; }
+            get { return _strokeGen.LineCap; }
+            set { _strokeGen.LineCap = value; }
         }
         public LineJoin LineJoin
         {
-            get { return strokeGen.LineJoin; }
-            set { strokeGen.LineJoin = value; }
+            get { return _strokeGen.LineJoin; }
+            set { _strokeGen.LineJoin = value; }
         }
         public InnerJoin InnerJoin
         {
-            get { return strokeGen.InnerJoin; }
-            set { strokeGen.InnerJoin = value; }
+            get { return _strokeGen.InnerJoin; }
+            set { _strokeGen.InnerJoin = value; }
         }
         public double MiterLimit
         {
-            get { return strokeGen.MiterLimit; }
-            set { strokeGen.MiterLimit = value; }
+            get { return _strokeGen.MiterLimit; }
+            set { _strokeGen.MiterLimit = value; }
         }
         public double InnerMiterLimit
         {
-            get { return strokeGen.InnerMiterLimit; }
-            set { strokeGen.InnerMiterLimit = value; }
+            get { return _strokeGen.InnerMiterLimit; }
+            set { _strokeGen.InnerMiterLimit = value; }
         }
         public double Width
         {
-            get { return strokeGen.Width; }
-            set { strokeGen.Width = value; }
+            get { return _strokeGen.Width; }
+            set { _strokeGen.Width = value; }
         }
 
         public void SetMiterLimitTheta(double t)
         {
-            strokeGen.SetMiterLimitTheta(t);
+            _strokeGen.SetMiterLimitTheta(t);
         }
         public double ApproximateScale
         {
-            get { return strokeGen.ApproximateScale; }
-            set { strokeGen.ApproximateScale = value; }
+            get { return _strokeGen.ApproximateScale; }
+            set { _strokeGen.ApproximateScale = value; }
         }
         public double Shorten
         {
-            get { return strokeGen.Shorten; }
-            set { strokeGen.Shorten = value; }
+            get { return _strokeGen.Shorten; }
+            set { _strokeGen.Shorten = value; }
         }
         public VertexStore MakeVxs(VertexStore sourceVxs, VertexStore vxs)
         {
-            StrokeGenerator strkgen = strokeGen;
+            StrokeGenerator strkgen = _strokeGen;
             int j = sourceVxs.Count;
-            double x, y;
-            strkgen.RemoveAll();
+            strkgen.Reset();
             //1st vertex
 
+            double x, y;
             sourceVxs.GetVertex(0, out x, out y);
-            strkgen.AddVertex(x, y, VertexCmd.MoveTo);
+            strkgen.AddVertex(x, y, VertexCmd.MoveTo); //always start with move to?
+
             double startX = x, startY = y;
-           
+
             for (int i = 0; i < j; ++i)
             {
                 var cmd = sourceVxs.GetVertex(i, out x, out y);
@@ -97,7 +98,7 @@ namespace PixelFarm.Agg
                 {
                     case VertexCmd.NoMore:
                         break;
-                    
+
                     case VertexCmd.Close:
                     case VertexCmd.CloseAndEndFigure:
                         {
@@ -106,14 +107,14 @@ namespace PixelFarm.Agg
                             {
                                 strkgen.AddVertex(startX, startY, VertexCmd.LineTo);
                                 strkgen.WriteTo(vxs);
-                                strkgen.RemoveAll(); 
+                                strkgen.Reset();
                             }
                             //end this polygon 
                         }
                         break;
                     case VertexCmd.LineTo:
-                    case VertexCmd.P2c:
-                    case VertexCmd.P3c:
+                    case VertexCmd.P2c://user must flatten the curve before do stroke
+                    case VertexCmd.P3c://user must flatten the curve before do stroke
                         {
                             strkgen.AddVertex(x, y, cmd);
                         }
@@ -129,10 +130,10 @@ namespace PixelFarm.Agg
                 }
             }
             strkgen.WriteTo(vxs);
-            strkgen.RemoveAll();
-             
+            strkgen.Reset();
+
             return vxs;
         }
     }
-     
+
 }
