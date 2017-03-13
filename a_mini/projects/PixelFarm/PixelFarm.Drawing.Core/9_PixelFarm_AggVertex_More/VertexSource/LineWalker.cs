@@ -52,14 +52,10 @@ namespace PixelFarm.Agg.VertexSource
             {
                 default: throw new NotSupportedException();
                 case LineWalkDashStyle.Solid:
-                    {
-                        walker.AddWalkMark(new LineWalkerMark(len, SimpleSolidLine));
-                    }
+                    walker.AddWalkMark(new LineWalkerMark(len, SimpleSolidLine));
                     break;
                 case LineWalkDashStyle.Blank:
-                    {
-                        walker.AddWalkMark(new LineWalkerMark(len, SimpleBlankLine));
-                    }
+                    walker.AddWalkMark(new LineWalkerMark(len, SimpleBlankLine));
                     break;
             }
         }
@@ -68,6 +64,8 @@ namespace PixelFarm.Agg.VertexSource
             //solid               
             switch (cmd)
             {
+                default: throw new NotSupportedException();
+               
                 case VertexCmd.MoveTo:
                     outputVxs.AddMoveTo(x, y);
                     break;
@@ -154,7 +152,7 @@ namespace PixelFarm.Agg.VertexSource
             }
             public void Reset()
             {
-                _segmentMarks.Clear();
+
                 _currentMarker = null;
                 _nextMarkNo = 0;
                 _total_accum_len = 0;
@@ -371,20 +369,9 @@ namespace PixelFarm.Agg.VertexSource
             double _total_accum_len;
             protected virtual void OnSegment(double new_x, double new_y)
             {
-                //on complete segment ***
-                //user can config
-                //what todo on complete segment 
-                //if ((_nextMarkNo % 2) == 1)
-                //{
-                //    _output.AddMoveTo(_latest_X, _latest_Y);
-                //    _output.AddLineTo(new_x, new_y);
-                //}
-                //else
-                //{
-
-                //}
                 _currentMarker.lineSegDel(_output, VertexCmd.MoveTo, _latest_X, _latest_Y);
                 _currentMarker.lineSegDel(_output, VertexCmd.LineTo, new_x, new_y);
+              
                 _total_accum_len = 0;
                 StepToNextMarkerSegment();
             }

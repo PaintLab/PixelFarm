@@ -110,8 +110,8 @@ namespace PixelFarm.Agg
             {
                 case VertexCmd.MoveTo:
                     vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
+                    //vertexDistanceList.AddVertex(new VertexDistance(x, y));
                     break;
-
                 case VertexCmd.Close:
                 case VertexCmd.CloseAndEndFigure:
                     m_closed = true;
@@ -123,7 +123,7 @@ namespace PixelFarm.Agg
         }
 
         public void WriteTo(VertexStore outputVxs)
-        {
+         {
             this.Rewind();
             double x = 0, y = 0;
             for (;;)

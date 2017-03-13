@@ -67,7 +67,7 @@ namespace PixelFarm.Agg.Sample_Draw
                     break;
             }
         }
-        void DrawA(PixelFarm.Agg.AggCanvasPainter aggPainter)
+        void DrawB(PixelFarm.Agg.AggCanvasPainter aggPainter)
         {
 
             aggPainter.Clear(PixelFarm.Drawing.Color.White);
@@ -95,7 +95,7 @@ namespace PixelFarm.Agg.Sample_Draw
             LineWalker dashGenLineWalker = new LineWalker();
             //***
             //you can customize what happend with the line segment
-            dashGenLineWalker.AddMark(4, (outputVxs, cmd, x, y) =>
+            dashGenLineWalker.AddMark(10, (outputVxs, cmd, x, y) =>
             {
                 //solid               
                 switch (cmd)
@@ -108,7 +108,7 @@ namespace PixelFarm.Agg.Sample_Draw
                         break;
                 }
             });
-            dashGenLineWalker.AddMark(2, (outputVxs, cmd, x, y) =>
+            dashGenLineWalker.AddMark(10, (outputVxs, cmd, x, y) =>
             {
                 //whitespace, do nothing
             });
@@ -142,14 +142,14 @@ namespace PixelFarm.Agg.Sample_Draw
             }
             //aggPainter.Draw(newvxs);
         }
-        void DrawB(PixelFarm.Agg.AggCanvasPainter aggPainter)
+        void DrawA(PixelFarm.Agg.AggCanvasPainter aggPainter)
         {
 
             aggPainter.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
             aggPainter.StrokeColor = PixelFarm.Drawing.Color.Black;
             aggPainter.StrokeWidth = 2.0f;
-
+            aggPainter.FillColor = PixelFarm.Drawing.Color.Black;
             //
             VertexStore vxs = new VertexStore();
             PathWriter writer = new PathWriter(vxs);
@@ -170,39 +170,37 @@ namespace PixelFarm.Agg.Sample_Draw
             LineWalker dashGenLineWalker = new LineWalker();
             //***
             //you can customize what happend with the line segment
-            dashGenLineWalker.AddMark(6, LineWalkDashStyle.Solid);
-            dashGenLineWalker.AddMark(2, LineWalkDashStyle.Blank);
-            dashGenLineWalker.AddMark(2, LineWalkDashStyle.Solid);
-            dashGenLineWalker.AddMark(2, LineWalkDashStyle.Blank);
+            dashGenLineWalker.AddMark(10, LineWalkDashStyle.Solid);
+            dashGenLineWalker.AddMark(10, LineWalkDashStyle.Blank);
+            //dashGenLineWalker.AddMark(2, LineWalkDashStyle.Solid);
+            //dashGenLineWalker.AddMark(2, LineWalkDashStyle.Blank);
 
             dashGenLineWalker.Walk(vxs, newvxs);
-            //aggPainter.Draw(vxs);
 
-            //test drawline
-            int n = newvxs.Count;
-            double px = 0, py = 0;
+            ////test drawline
+            //int n = newvxs.Count;
+            //double px = 0, py = 0;
+            //for (int i = 0; i < n; ++i)
+            //{
+            //    double x, y;
+            //    VertexCmd cmd = newvxs.GetVertex(i, out x, out y);
+            //    switch (cmd)
+            //    {
+            //        case VertexCmd.MoveTo:
+            //            px = x;
+            //            py = y;
 
-            for (int i = 0; i < n; ++i)
-            {
-                double x, y;
-                VertexCmd cmd = newvxs.GetVertex(i, out x, out y);
+            //            break;
+            //        case VertexCmd.LineTo:
+            //            aggPainter.Line(px, py, x, y);
 
-                switch (cmd)
-                {
-                    case VertexCmd.MoveTo:
-                        px = x;
-                        py = y;
+            //            break;
+            //    }
+            //    px = x;
+            //    py = y;
+            //}
 
-                        break;
-                    case VertexCmd.LineTo:
-                        aggPainter.Line(px, py, x, y);
-
-                        break;
-                }
-                px = x;
-                py = y;
-            }
-            //aggPainter.Draw(newvxs);
+            aggPainter.Draw(newvxs);
         }
         void DrawC(PixelFarm.Agg.AggCanvasPainter aggPainter)
         {
@@ -211,7 +209,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //--------------------------
             aggPainter.StrokeColor = PixelFarm.Drawing.Color.Black;
             aggPainter.StrokeWidth = 2.0f;
-            aggPainter.SetLineDashPattern(1);
+            //aggPainter.SetLineDashPattern(1);
             //
             VertexStore vxs = new VertexStore();
             PathWriter writer = new PathWriter(vxs);
@@ -222,6 +220,7 @@ namespace PixelFarm.Agg.Sample_Draw
             writer.CloseFigure();
 
             aggPainter.Draw(vxs);
+            aggPainter.SetLineDashPattern(0);
         }
     }
 }

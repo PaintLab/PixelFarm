@@ -247,13 +247,21 @@ namespace PixelFarm.Agg
             }
             else
             {
-                //create dash 
                 var v1 = GetFreeVxs();
-                _lineDashGen.CreateDash(vxs, v1);
                 var v2 = GetFreeVxs();
-                gx.Render(stroke.MakeVxs(v1, v2), this.strokeColor);
+                _lineDashGen.CreateDash(vxs, v1);
+                stroke.MakeVxs(v1, v2);
+                gx.Render(v2, this.strokeColor);
+
                 ReleaseVxs(ref v1);
                 ReleaseVxs(ref v2);
+                ////create dash 
+                //var v1 = GetFreeVxs();
+                //_lineDashGen.CreateDash(vxs, v1);
+                //var v2 = GetFreeVxs();
+                //gx.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
+                //ReleaseVxs(ref v1);
+                //ReleaseVxs(ref v2);
             }
         }
 
