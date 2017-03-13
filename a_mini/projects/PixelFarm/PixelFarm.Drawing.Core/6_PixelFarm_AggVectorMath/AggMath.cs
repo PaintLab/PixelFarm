@@ -484,5 +484,14 @@ namespace PixelFarm.Agg
                 m2 += 3;
             }
         }
+
+        public static double DegToRad(double degree)
+        {
+            return degree * (Math.PI / 180d);
+        }
+        public static double RadToDeg(double degree)
+        {
+            return degree * (180d / Math.PI);
+        }
     }
 }
