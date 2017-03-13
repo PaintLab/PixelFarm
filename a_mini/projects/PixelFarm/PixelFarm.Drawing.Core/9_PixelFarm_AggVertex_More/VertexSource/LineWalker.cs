@@ -95,6 +95,7 @@ namespace PixelFarm.Agg.VertexSource
             //we do not flatten the curve 
             // 
             lineMarker._output = output;
+            lineMarker.Reset();
             int count = src.Count;
             VertexCmd cmd;
             double x, y;
@@ -142,7 +143,7 @@ namespace PixelFarm.Agg.VertexSource
             double _expectedSegmentLen;
             WalkState _state;
             double _latest_X, _latest_Y;
-            double _latest_moveto_X, _lastest_moveto_Y;
+            double _latest_moveto_X, _latest_moveto_Y;
 
             //-------------------------------
             internal VertexStore _output;
@@ -151,11 +152,17 @@ namespace PixelFarm.Agg.VertexSource
             {
                 _segmentMarks.Add(segMark);
             }
-            public void Clear()
+            public void Reset()
             {
-                _total_accum_len = 0;
                 _segmentMarks.Clear();
+                _currentMarker = null;
                 _nextMarkNo = 0;
+                _total_accum_len = 0;
+                _expectedSegmentLen = 0;
+                _state = WalkState.Init;
+                _nextMarkNo = 0;
+                _latest_X = _latest_Y =
+                    _latest_moveto_Y = _latest_moveto_Y = 0;
             }
             //-----------------------------------------------------
             void StepToNextMarkerSegment()
@@ -173,7 +180,7 @@ namespace PixelFarm.Agg.VertexSource
             }
             public void CloseFigure()
             {
-                LineTo(_latest_moveto_X, _lastest_moveto_Y);
+                LineTo(_latest_moveto_X, _latest_moveto_Y);
                 //close current figure
                 //***                      
                 double tmp_expectedLen;
@@ -232,7 +239,7 @@ namespace PixelFarm.Agg.VertexSource
                     default: throw new NotSupportedException();
                     case WalkState.Init:
                         _latest_moveto_X = _latest_X = x0;
-                        _lastest_moveto_Y = _latest_Y = y0;
+                        _latest_moveto_Y = _latest_Y = y0;
                         StepToNextMarkerSegment();//start read
                         OnMoveTo();
                         break;

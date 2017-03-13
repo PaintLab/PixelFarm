@@ -5,6 +5,7 @@
 // it still follows the originall agg function names.  I have been cleaning these up over time
 // and intend to do much more refactoring of these things over the long term.
 
+using PixelFarm.Agg;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
@@ -60,6 +61,9 @@ namespace PixelFarm.Agg.Sample_Draw
                     break;
                 case DrawStrokeSample.B:
                     DrawB(aggPainter);
+                    break;
+                case DrawStrokeSample.C:
+                    DrawC(aggPainter);
                     break;
             }
         }
@@ -199,6 +203,25 @@ namespace PixelFarm.Agg.Sample_Draw
                 py = y;
             }
             //aggPainter.Draw(newvxs);
+        }
+        void DrawC(PixelFarm.Agg.AggCanvasPainter aggPainter)
+        {
+
+            aggPainter.Clear(PixelFarm.Drawing.Color.White);
+            //--------------------------
+            aggPainter.StrokeColor = PixelFarm.Drawing.Color.Black;
+            aggPainter.StrokeWidth = 2.0f;
+            aggPainter.SetLineDashPattern(1);
+            //
+            VertexStore vxs = new VertexStore();
+            PathWriter writer = new PathWriter(vxs);
+
+            writer.MoveTo(20, 10);
+            writer.LineTo(60, 10);
+            writer.LineTo(20, 200);
+            writer.CloseFigure();
+
+            aggPainter.Draw(vxs);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// 2016 ,BSD, WinterDev
+﻿//BSD, 2016-2017, WinterDev
 
 //----------------------------------------------------------------------------
 // Anti-Grain Geometry - Version 2.4
@@ -53,7 +53,7 @@ namespace PixelFarm.Agg
         RoundedRect roundRect = null;
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
-
+        LineDashGenerator _lineDashGen = new LineDashGenerator();
         int ellipseGenNSteps = 10;
         SmoothingMode _smoothingMode;
 
@@ -64,6 +64,9 @@ namespace PixelFarm.Agg
             this.stroke = new Stroke(1);//default
             this.scline = graphic2d.ScanlinePacked8;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
+
+            _lineDashGen.CreatePattern(4, 4);
+            _lineDashGen.CreatePattern(4, 2, 2, 2);
         }
         public Graphics2D Graphics
         {
@@ -235,9 +238,23 @@ namespace PixelFarm.Agg
         }
         public override void Draw(VertexStore vxs)
         {
-            var v1 = GetFreeVxs();
-            gx.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
-            ReleaseVxs(ref v1);
+            if (_lineDashGen.CurrentPatternNum == 0)
+            {
+                //no line dash
+                var v1 = GetFreeVxs();
+                gx.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
+                ReleaseVxs(ref v1);
+            }
+            else
+            {
+                //create dash 
+                var v1 = GetFreeVxs();
+                _lineDashGen.CreateDash(vxs, v1);
+                var v2 = GetFreeVxs();
+                gx.Render(stroke.MakeVxs(v1, v2), this.strokeColor);
+                ReleaseVxs(ref v1);
+                ReleaseVxs(ref v2);
+            }
         }
 
         /// <summary>
@@ -583,6 +600,10 @@ namespace PixelFarm.Agg
             {
                 stroke.LineCap = value;
             }
+        }
+        public void SetLineDashPattern(int patternNum)
+        {
+            _lineDashGen.SetCurrentPattern(patternNum);
         }
     }
 }
