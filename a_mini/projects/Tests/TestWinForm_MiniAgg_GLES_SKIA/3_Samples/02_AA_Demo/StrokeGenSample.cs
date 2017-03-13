@@ -54,10 +54,9 @@ namespace PixelFarm.Agg.Sample_Draw
             VertexStore vxs = new VertexStore();
             PathWriter writer = new PathWriter(vxs);
 
-            writer.MoveTo(20, 0);
-            writer.LineTo(100, 100);
+            writer.MoveTo(20, 10);
+            writer.LineTo(60, 10);
             writer.LineTo(20, 200);
-            writer.MoveTo(20, 0);
             writer.CloseFigure();
 
             //writer.MoveTo(100, 100);
@@ -66,7 +65,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //aggPainter.LineCap = this.LineCap;
             //
             DashGenerator dashGen = new DashGenerator();
-            dashGen.AddDashMark(50); //solid
+            dashGen.AddDashMark(15); //solid
             dashGen.AddDashMark(2); //blank
 
             VertexStore newvxs = new VertexStore();
