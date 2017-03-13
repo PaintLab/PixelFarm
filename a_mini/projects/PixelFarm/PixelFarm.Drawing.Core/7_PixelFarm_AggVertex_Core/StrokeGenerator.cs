@@ -109,12 +109,13 @@ namespace PixelFarm.Agg
             switch (cmd)
             {
                 case VertexCmd.MoveTo:
-                    vertexDistanceList.ReplaceLast(new VertexDistance(x, y)); 
+                    //vertexDistanceList.ReplaceLast(new VertexDistance(x, y));
+                    vertexDistanceList.AddVertex(new VertexDistance(x, y, true));
                     break;
                 case VertexCmd.Close:
                 case VertexCmd.CloseAndEndFigure:
                     m_closed = true;
-                    break;               
+                    break;
                 default:
                     vertexDistanceList.AddVertex(new VertexDistance(x, y));
                     break;
@@ -122,12 +123,12 @@ namespace PixelFarm.Agg
         }
 
         public void WriteTo(VertexStore outputVxs)
-         {
+        {
             this.Rewind();
             double x = 0, y = 0;
             for (;;)
             {
-                var cmd = GetNextVertex(ref x, ref y);
+                VertexCmd cmd = GetNextVertex(ref x, ref y);
                 outputVxs.AddVertex(x, y, cmd);
                 if (cmd == VertexCmd.NoMore)
                 {
@@ -151,7 +152,7 @@ namespace PixelFarm.Agg
         VertexCmd GetNextVertex(ref double x, ref double y)
         {
             VertexCmd cmd = VertexCmd.LineTo;
-            while (!VertexHelper.IsEmpty(cmd))
+            do
             {
                 switch (m_status)
                 {
@@ -270,7 +271,8 @@ namespace PixelFarm.Agg
                         cmd = VertexCmd.NoMore;
                         break;
                 }
-            }
+
+            } while (!VertexHelper.IsEmpty(cmd));
             return cmd;
         }
     }
