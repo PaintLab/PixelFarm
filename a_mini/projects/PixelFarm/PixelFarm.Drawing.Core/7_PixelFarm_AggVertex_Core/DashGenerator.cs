@@ -89,6 +89,7 @@ namespace PixelFarm.Agg
             DashState _state;
             double _latest_X, _latest_Y;
             double _latest_moveto_X, _lastest_moveto_Y;
+            double _total_remaining_len = 0;
             //-------------------------------
             internal VertexStore _output;
 
@@ -101,6 +102,7 @@ namespace PixelFarm.Agg
 
                 _segmentMarks.Clear();
                 _nextMarkNo = 0;
+                _total_remaining_len = 0;
             }
             //-----------------------------------------------------
             public void MoveTo(double x0, double y0)
@@ -150,19 +152,25 @@ namespace PixelFarm.Agg
                         goto case DashState.PolyLine;
                     case DashState.PolyLine:
                         {
+
+                            //clear prev segment len
+
+
+
+
                             //find line segment length 
-                            double newlineLen = AggMath.calc_distance(_latest_X, _latest_Y, x1, y1);
+                            double new_remaining_len = AggMath.calc_distance(_latest_X, _latest_Y, x1, y1) + _total_remaining_len;
                             //check current gen state
                             //find angle
                             double angle = Math.Atan2(y1 - _latest_Y, x1 - _latest_X);
                             double cos = Math.Cos(angle);
                             double sin = Math.Sin(angle);
-                            while (newlineLen > _currentSegLen)
+                            while (new_remaining_len > _currentSegLen)
                             {
                                 //we can create a new segment
                                 double new_x = _latest_X + (_currentSegLen * cos);
                                 double new_y = _latest_Y + (_currentSegLen * sin);
-                                newlineLen -= _currentSegLen;
+                                new_remaining_len -= _currentSegLen;
                                 //each segment has its own line production procedure
                                 //eg. 
                                 if ((_nextMarkNo % 2) == 1)
@@ -180,6 +188,9 @@ namespace PixelFarm.Agg
                                 _latest_Y = new_y;
                                 _latest_X = new_x;
                             }
+
+                            _total_remaining_len = new_remaining_len; //this is 
+                            
                         }
                         break;
                 }

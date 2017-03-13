@@ -66,8 +66,8 @@ namespace PixelFarm.Agg.Sample_Draw
             //aggPainter.LineCap = this.LineCap;
             //
             DashGenerator dashGen = new DashGenerator();
-            dashGen.AddDashMark(40); //solid
-            dashGen.AddDashMark(5); //blank
+            dashGen.AddDashMark(50); //solid
+            dashGen.AddDashMark(2); //blank
 
             VertexStore newvxs = new VertexStore();
             dashGen.MakeVxs(vxs, newvxs);
