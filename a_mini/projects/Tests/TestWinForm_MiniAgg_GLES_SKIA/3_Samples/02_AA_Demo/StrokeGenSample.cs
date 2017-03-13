@@ -154,10 +154,14 @@ namespace PixelFarm.Agg.Sample_Draw
             VertexStore vxs = new VertexStore();
             PathWriter writer = new PathWriter(vxs);
 
-            writer.MoveTo(20, 10);
+            writer.MoveTo(30, 10);
             writer.LineTo(60, 10);
-            writer.LineTo(20, 200);
-            writer.CloseFigure();
+
+
+            writer.MoveTo(10, 100);
+            writer.LineTo(10, 50);
+
+            aggPainter.Draw(vxs);
 
             //writer.MoveTo(100, 100);
             //writer.LineTo(20, 200);
@@ -165,18 +169,21 @@ namespace PixelFarm.Agg.Sample_Draw
             //aggPainter.LineCap = this.LineCap;
             //
             //----------------------------------------------------
-            //create a dash line 
-            VertexStore newvxs = new VertexStore();
-            LineWalker dashGenLineWalker = new LineWalker();
-            //***
-            //you can customize what happend with the line segment
-            dashGenLineWalker.AddMark(10, LineWalkDashStyle.Solid);
-            dashGenLineWalker.AddMark(10, LineWalkDashStyle.Blank);
-            //dashGenLineWalker.AddMark(2, LineWalkDashStyle.Solid);
-            //dashGenLineWalker.AddMark(2, LineWalkDashStyle.Blank);
+            ////create a dash line 
+            //VertexStore dashOutputVxs = new VertexStore();
+            //LineWalker dashGenLineWalker = new LineWalker();
+            ////***
+            ////you can customize what happend with the line segment
+            //dashGenLineWalker.AddMark(10, LineWalkDashStyle.Solid);
+            //dashGenLineWalker.AddMark(10, LineWalkDashStyle.Blank);
+            ////dashGenLineWalker.AddMark(2, LineWalkDashStyle.Solid);
+            ////dashGenLineWalker.AddMark(2, LineWalkDashStyle.Blank);
+            //dashGenLineWalker.Walk(vxs, dashOutputVxs);
+            ////----------------------------------------------------
 
-            dashGenLineWalker.Walk(vxs, newvxs);
 
+
+            //aggPainter.Draw(dashOutputVxs);
             ////test drawline
             //int n = newvxs.Count;
             //double px = 0, py = 0;
@@ -200,7 +207,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //    py = y;
             //}
 
-            aggPainter.Draw(newvxs);
+
         }
         void DrawC(PixelFarm.Agg.AggCanvasPainter aggPainter)
         {

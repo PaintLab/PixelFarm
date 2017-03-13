@@ -83,17 +83,14 @@ namespace PixelFarm.Agg
             StrokeGenerator strkgen = _strokeGen;
             int j = sourceVxs.Count;
             strkgen.Reset();
-            //1st vertex
-
-            double x, y;
-            sourceVxs.GetVertex(0, out x, out y);
-            strkgen.AddVertex(x, y, VertexCmd.MoveTo); //always start with move to?
-
-            double startX = x, startY = y;
+            //
+            //
+            VertexCmd cmd;
+            double x = 0, y = 0, startX = 0, startY = 0;
 
             for (int i = 0; i < j; ++i)
             {
-                var cmd = sourceVxs.GetVertex(i, out x, out y);
+                cmd = sourceVxs.GetVertex(i, out x, out y);
                 switch (cmd)
                 {
                     case VertexCmd.NoMore:
@@ -101,30 +98,30 @@ namespace PixelFarm.Agg
 
                     case VertexCmd.Close:
                     case VertexCmd.CloseAndEndFigure:
+
+                        strkgen.AddVertex(x, y, cmd);
+                        if (i < j - 2)
                         {
-                            strkgen.AddVertex(x, y, cmd);
-                            if (i < j - 2)
-                            {
-                                strkgen.AddVertex(startX, startY, VertexCmd.LineTo);
-                                strkgen.WriteTo(vxs);
-                                strkgen.Reset();
-                            }
-                            //end this polygon 
+                            strkgen.AddVertex(startX, startY, VertexCmd.LineTo);
+                            strkgen.WriteTo(vxs);
+                            strkgen.Reset();
                         }
+                        //end this polygon 
+
                         break;
                     case VertexCmd.LineTo:
                     case VertexCmd.P2c://user must flatten the curve before do stroke
                     case VertexCmd.P3c://user must flatten the curve before do stroke
-                        {
-                            strkgen.AddVertex(x, y, cmd);
-                        }
+
+                        strkgen.AddVertex(x, y, cmd);
+
                         break;
                     case VertexCmd.MoveTo:
-                        {
-                            strkgen.AddVertex(x, y, cmd);
-                            startX = x;
-                            startY = y;
-                        }
+
+                        strkgen.AddVertex(x, y, cmd);
+                        startX = x;
+                        startY = y;
+
                         break;
                     default: throw new System.NotSupportedException();
                 }

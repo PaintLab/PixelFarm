@@ -92,8 +92,7 @@ namespace PixelFarm.Agg
                     d = (prev.dist - s) / prev.dist;
                     double x = prev.x + (last.x - prev.x) * d;
                     double y = prev.y + (last.y - prev.y) * d;
-                    last.x = x;
-                    last.y = y;
+                    last = new VertexDistance(x, y);
                     if (!prev.IsEqual(last))
                     {
                         vertexDistanceList.RemoveLast();

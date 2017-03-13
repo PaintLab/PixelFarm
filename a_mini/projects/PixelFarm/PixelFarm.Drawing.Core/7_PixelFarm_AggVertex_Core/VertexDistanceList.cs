@@ -68,6 +68,7 @@ namespace PixelFarm.Agg
         {
             if (base.Count > 1)
             {
+                //check if not duplicated vertex
                 if (!Array[base.Count - 2].IsEqual(Array[base.Count - 1]))
                 {
                     base.RemoveLast();
@@ -111,21 +112,14 @@ namespace PixelFarm.Agg
                     snapSize--;
                 }
             }
-        }
-
-        public VertexDistance prev(int idx)
+        } 
+    
+        public void GetTripleVertices(int idx, out VertexDistance prev, out VertexDistance cur, out VertexDistance next)
         {
-            return this[(idx + this.Count - 1) % Count];
-        }
-
-        public VertexDistance curr(int idx)
-        {
-            return this[idx];
-        }
-
-        public VertexDistance next(int idx)
-        {
-            return this[(idx + 1) % Count];
+            int count = this.Count;
+            prev = this[(idx + count - 1) % count];
+            cur = this[idx];
+            next = this[(idx + 1) % count];
         }
     }
 
@@ -135,15 +129,18 @@ namespace PixelFarm.Agg
     // and 0.0 if it's a polyline.
     public struct VertexDistance
     {
-        public double x;
-        public double y;
+        
+        public readonly double x;
+        public readonly double y;
         public double dist;
-        public VertexDistance(double x_, double y_)
+
+        public VertexDistance(double x, double y)
         {
-            x = x_;
-            y = y_;
-            dist = 0; //lazy calculate 
-        }
+            this.x = x;
+            this.y = y;
+            dist = 0; //lazy calculate ?
+
+        } 
         public bool IsEqual(VertexDistance val)
         {
             bool ret = (dist = AggMath.calc_distance(x, y, val.x, val.y)) > AggMath.VERTEX_DISTANCE_EPSILON;
