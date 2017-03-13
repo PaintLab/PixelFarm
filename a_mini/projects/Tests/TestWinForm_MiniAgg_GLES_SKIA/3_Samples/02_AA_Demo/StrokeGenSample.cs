@@ -48,7 +48,7 @@ namespace PixelFarm.Agg.Sample_Draw
             aggPainter.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
             aggPainter.StrokeColor = PixelFarm.Drawing.Color.Black;
-            aggPainter.StrokeWidth = 30.0f;
+            aggPainter.StrokeWidth = 2.0f;
 
             //
             VertexStore vxs = new VertexStore();
@@ -57,11 +57,47 @@ namespace PixelFarm.Agg.Sample_Draw
             writer.MoveTo(20, 0);
             writer.LineTo(100, 100);
             writer.LineTo(20, 200);
+            writer.MoveTo(20, 0);
 
-            aggPainter.LineJoin = this.LineJoin;
-            aggPainter.LineCap = this.LineCap;
+            //writer.MoveTo(100, 100);
+            //writer.LineTo(20, 200);
+            //aggPainter.LineJoin = this.LineJoin;
+            //aggPainter.LineCap = this.LineCap;
             //
-            aggPainter.Draw(vxs);
+            DashGenerator dashGen = new DashGenerator();
+            dashGen.AddDashMark(10); //solid
+            dashGen.AddDashMark(5); //blank
+
+            VertexStore newvxs = new VertexStore();
+            dashGen.MakeVxs(vxs, newvxs);
+            //aggPainter.Draw(vxs);
+
+            //test drawline
+            int n = newvxs.Count;
+            double px = 0, py = 0;
+
+            for (int i = 0; i < n; ++i)
+            {
+                double x, y;
+                VertexCmd cmd = newvxs.GetVertex(i, out x, out y);
+
+                switch (cmd)
+                {
+                    case VertexCmd.MoveTo:
+                        px = x;
+                        py = y;
+
+                        break;
+                    case VertexCmd.LineTo:
+                        aggPainter.Line(px, py, x, y);
+
+                        break;
+                }
+                px = x;
+                py = y;
+            }
+
+            //aggPainter.Draw(newvxs);
         }
     }
 }
