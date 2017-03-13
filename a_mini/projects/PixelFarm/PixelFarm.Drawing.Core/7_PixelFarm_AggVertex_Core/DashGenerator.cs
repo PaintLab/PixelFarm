@@ -57,7 +57,7 @@ namespace PixelFarm.Agg
                         break;
                     case VertexCmd.Close:
                     case VertexCmd.CloseAndEndFigure:
-
+                        lineMarker.CloseFigure();
                         break;
                 }
             }
@@ -68,7 +68,6 @@ namespace PixelFarm.Agg
             Init,
             PolyLine,
         }
-
 
         class LineSegmentMark
         {
@@ -84,11 +83,12 @@ namespace PixelFarm.Agg
 
             List<LineSegmentMark> _segmentMarks = new List<LineSegmentMark>();
             LineSegmentMark _currentMarker;
-            int _currentMarkNo;
+            int _nextMarkNo;
 
             double _currentSegLen;
             DashState _state;
             double _latest_X, _latest_Y;
+            double _latest_moveto_X, _lastest_moveto_Y;
             //-------------------------------
             internal VertexStore _output;
 
@@ -100,7 +100,7 @@ namespace PixelFarm.Agg
             {
 
                 _segmentMarks.Clear();
-                _currentMarkNo = 0;
+                _nextMarkNo = 0;
             }
             //-----------------------------------------------------
             public void MoveTo(double x0, double y0)
@@ -109,10 +109,10 @@ namespace PixelFarm.Agg
                 {
                     default: throw new NotSupportedException();
                     case DashState.Init:
-                        _latest_X = x0;
-                        _latest_Y = y0; 
+                        _latest_moveto_X = _latest_X = x0;
+                        _lastest_moveto_Y = _latest_Y = y0;
 
-                        StepToNextMarkerSegment(); 
+                        StepToNextMarkerSegment();
 
                         break;
                     case DashState.PolyLine:
@@ -124,16 +124,20 @@ namespace PixelFarm.Agg
             }
             void StepToNextMarkerSegment()
             {
-                _currentMarker = _segmentMarks[_currentMarkNo];
+                _currentMarker = _segmentMarks[_nextMarkNo];
                 _currentSegLen = _currentMarker.len;
-                if (_currentMarkNo + 1 < _segmentMarks.Count)
+                if (_nextMarkNo + 1 < _segmentMarks.Count)
                 {
-                    _currentMarkNo++;
+                    _nextMarkNo++;
                 }
                 else
                 {
-                    _currentMarkNo = 0;
+                    _nextMarkNo = 0;
                 }
+            }
+            public void CloseFigure()
+            {
+                LineTo(_latest_moveto_X, _lastest_moveto_Y);
             }
             public void LineTo(double x1, double y1)
             {
@@ -161,7 +165,7 @@ namespace PixelFarm.Agg
                                 newlineLen -= _currentSegLen;
                                 //each segment has its own line production procedure
                                 //eg. 
-                                if ((_currentMarkNo % 2) == 0)
+                                if ((_nextMarkNo % 2) == 1)
                                 {
                                     _output.AddMoveTo(_latest_X, _latest_Y);
                                     _output.AddLineTo(new_x, new_y);

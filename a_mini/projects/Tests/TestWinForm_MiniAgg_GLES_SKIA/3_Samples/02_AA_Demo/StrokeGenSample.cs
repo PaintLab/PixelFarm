@@ -58,6 +58,7 @@ namespace PixelFarm.Agg.Sample_Draw
             writer.LineTo(100, 100);
             writer.LineTo(20, 200);
             writer.MoveTo(20, 0);
+            writer.CloseFigure();
 
             //writer.MoveTo(100, 100);
             //writer.LineTo(20, 200);
@@ -65,7 +66,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //aggPainter.LineCap = this.LineCap;
             //
             DashGenerator dashGen = new DashGenerator();
-            dashGen.AddDashMark(10); //solid
+            dashGen.AddDashMark(40); //solid
             dashGen.AddDashMark(5); //blank
 
             VertexStore newvxs = new VertexStore();

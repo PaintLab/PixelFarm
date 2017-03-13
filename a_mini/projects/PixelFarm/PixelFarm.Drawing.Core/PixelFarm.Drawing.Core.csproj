@@ -60,7 +60,6 @@
     <Compile Include="5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="5_PixelFarm_Agg\PixelFormat.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\DashGenerator.cs" />
-    <Compile Include="7_PixelFarm_AggVertex_Core\DashMaker2.cs" />
     <Compile Include="ForNet20\ExtensionAttribute.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\AggBasics.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\AggMath.cs" />
