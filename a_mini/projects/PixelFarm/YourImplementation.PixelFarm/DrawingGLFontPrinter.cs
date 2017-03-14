@@ -155,8 +155,8 @@ namespace PixelFarm.DrawingGL
         }
         public void ChangeFillColor(Color color)
         {
-            //called by owner painter  
-
+            //called by owner painter   
+            canvas2d.FontFillColor = color;
         }
         public void ChangeStrokeColor(Color strokeColor)
         {

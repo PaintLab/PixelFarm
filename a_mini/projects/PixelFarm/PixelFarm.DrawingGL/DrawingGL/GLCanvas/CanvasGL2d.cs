@@ -328,7 +328,13 @@ namespace PixelFarm.DrawingGL
             PixelFarm.Drawing.Rectangle r = new Drawing.Rectangle(0, bmp.Height, bmp.Width, bmp.Height);
             DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref r, x, y, 1);
         }
-        public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
+        public PixelFarm.Drawing.Color FontFillColor { get; set; }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique(
+            GLBitmap bmp,
+            ref PixelFarm.Drawing.Rectangle r,
+            float targetLeft,
+            float targetTop,
+            float scale)
         {
 
             if (bmp.IsBigEndianPixel)
@@ -338,7 +344,7 @@ namespace PixelFarm.DrawingGL
             else
             {
                 textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
-                textureSubPixRendering.SetColor(Drawing.Color.Black);
+                textureSubPixRendering.SetColor(this.FontFillColor);
                 textureSubPixRendering.SetCompo(1);
 
                 //draw a serie of image***
