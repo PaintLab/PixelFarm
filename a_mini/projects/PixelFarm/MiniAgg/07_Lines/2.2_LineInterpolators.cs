@@ -19,7 +19,7 @@ using PixelFarm.Agg.Transform;
 namespace PixelFarm.Agg.Lines
 {
     //================================================line_interpolator_aa_base
-    sealed class LineInterpolatorAAData
+    struct LineInterpolatorAAData
     {
         public LineParameters m_lp;
         public LineInterpolatorDDA2 m_li;
@@ -33,11 +33,14 @@ namespace PixelFarm.Agg.Lines
         public int m_width;
         public int m_max_extent;
         public int m_step;
-        public int[] m_dist = new int[MAX_HALF_WIDTH + 1];
-        public byte[] m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
+        public int[] m_dist;
+        public byte[] m_covers;
         public const int MAX_HALF_WIDTH = 64;
         public LineInterpolatorAAData(OutlineRenderer ren, LineParameters lp)
         {
+            m_dist = new int[MAX_HALF_WIDTH + 1];
+            m_covers = new byte[MAX_HALF_WIDTH * 2 + 4];
+
             m_lp = lp;
             m_li = new LineInterpolatorDDA2(lp.vertical ? LineAA.DblHr(lp.x2 - lp.x1) : LineAA.DblHr(lp.y2 - lp.y1),
                 lp.vertical ? Math.Abs(lp.y2 - lp.y1) : Math.Abs(lp.x2 - lp.x1) + 1);

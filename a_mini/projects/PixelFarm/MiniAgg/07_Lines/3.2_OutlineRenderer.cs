@@ -31,6 +31,7 @@ namespace PixelFarm.Agg.Lines
         const int AA_SHIFT = 8;
         const int AA_SCALE = 1 << AA_SHIFT;
         const int AA_MASK = AA_SCALE - 1;
+
         byte[] m_profile = new byte[64];
         byte[] m_gamma;
         int m_subpixel_width;
