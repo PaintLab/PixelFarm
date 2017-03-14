@@ -177,8 +177,8 @@ namespace OpenTkEssTest
                 {
                     //since draw string may be slow
                     //we can convert it to a 'freezed' visual object (RenderVx) 
-                    //p.CurrentFont = font1;
-                    //p.DrawString(_strRenderVx_1, x_pos, y_pos);
+                    p.CurrentFont = font1;
+                    p.DrawString(_strRenderVx_1, x_pos, y_pos);
                 }
                 else
                 {
