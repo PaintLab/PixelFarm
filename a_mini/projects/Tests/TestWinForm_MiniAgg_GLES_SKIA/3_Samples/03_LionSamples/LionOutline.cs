@@ -150,13 +150,14 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 return; //**
             }
 
+            //-----------------------
             Graphics2D graphics2D = p1.Graphics;
             //var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             //int width = widgetsSubImage.Width;
             //int height = widgetsSubImage.Height; 
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            var clippedSubImage = new ChildImage(widgetsSubImage, new PixelBlenderBGRA());
+            ChildImage widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            ChildImage clippedSubImage = new ChildImage(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(PixelFarm.Drawing.Color.White);
 
@@ -182,8 +183,9 @@ namespace PixelFarm.Agg.Sample_LionOutline
             }
             else
             {
-                double w = strokeWidth * affTx.GetScale();
-                LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(w, new GammaNone());
+
+                //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone());
+                LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), null);
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
                 rasterizer.LineJoin = (RenderAccurateJoins ?
