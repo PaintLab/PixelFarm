@@ -100,6 +100,8 @@
     <Compile Include="Experiment\4_Animation\GfxProcessorModule.cs" />
     <Compile Include="Experiment\4_Animation\ParallelTimeline.cs" />
     <Compile Include="Experiment\4_Animation\Timelines.cs" />
+    <Compile Include="Experiment\Contour.cs" />
+    <Compile Include="Experiment\ContourGenerator.cs" />
     <Compile Include="Experiment\FontSystem.cs" />
     <Compile Include="Experiment\GdiPathConverter.cs" />
     <Compile Include="Experiment\GdiPathFont.cs" />
