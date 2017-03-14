@@ -28,12 +28,12 @@ namespace PixelFarm.Drawing.Fonts
         /// <param name="x"></param>
         /// <param name="y"></param>
         void DrawString(RenderVxFormattedString renderVx, double x, double y);
-
-
+        //-------------
         void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int startAt, int len);
-
         void ChangeFont(RequestFont font);
-        void ChangeFontColor(Color fontColor);
+        //-------------
+        void ChangeFillColor(Color fillColor);
+        void ChangeStrokeColor(Color strokColor);
     }
 
     public static class ITextPrinterExtensions

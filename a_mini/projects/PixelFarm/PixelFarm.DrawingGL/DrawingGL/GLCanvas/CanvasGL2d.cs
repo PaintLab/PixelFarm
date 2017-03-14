@@ -178,7 +178,7 @@ namespace PixelFarm.DrawingGL
             get { return shaderRes._strokeWidth; }
             set
             {
-                shaderRes._strokeWidth = value / 2;
+                shaderRes._strokeWidth = value;
             }
         }
         public Drawing.Color StrokeColor
@@ -204,7 +204,7 @@ namespace PixelFarm.DrawingGL
                         else
                         {
                             //TODO: review stroke with for smooth line shader again
-                            shaderRes._strokeWidth = this.StrokeWidth / 2;
+                            shaderRes._strokeWidth = this.StrokeWidth;
                             this.smoothLineShader.DrawLine(x1, y1, x2, y2);
                         }
                     }
@@ -328,7 +328,13 @@ namespace PixelFarm.DrawingGL
             PixelFarm.Drawing.Rectangle r = new Drawing.Rectangle(0, bmp.Height, bmp.Width, bmp.Height);
             DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref r, x, y, 1);
         }
-        public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
+        public PixelFarm.Drawing.Color FontFillColor { get; set; }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique(
+            GLBitmap bmp,
+            ref PixelFarm.Drawing.Rectangle r,
+            float targetLeft,
+            float targetTop,
+            float scale)
         {
 
             if (bmp.IsBigEndianPixel)
@@ -338,7 +344,7 @@ namespace PixelFarm.DrawingGL
             else
             {
                 textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
-                textureSubPixRendering.SetColor(Drawing.Color.Black);
+                textureSubPixRendering.SetColor(this.FontFillColor);
                 textureSubPixRendering.SetCompo(1);
 
                 //draw a serie of image***

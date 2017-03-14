@@ -12,13 +12,13 @@ using Typography.TextLayout;
 namespace PixelFarm.DrawingGL
 {
 
-  
+
 
     public class AggTextSpanPrinter : ITextPrinter
     {
         ActualImage actualImage;
         ImageGraphics2D imgGfx2d;
-        AggCanvasPainter aggPainter;
+        AggCanvasPainter _aggPainter;
         VxsTextPrinter textPrinter;
         int bmpWidth;
         int bmpHeight;
@@ -40,14 +40,14 @@ namespace PixelFarm.DrawingGL
             actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32);
 
             imgGfx2d = new ImageGraphics2D(actualImage);
-            aggPainter = new AggCanvasPainter(imgGfx2d);
-            aggPainter.FillColor = Color.Black;
-            aggPainter.StrokeColor = Color.Black;
+            _aggPainter = new AggCanvasPainter(imgGfx2d);
+            _aggPainter.FillColor = Color.Black;
+            _aggPainter.StrokeColor = Color.Black;
 
             //set default1
-            aggPainter.CurrentFont = canvasPainter.CurrentFont;
-            textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
-            aggPainter.TextPrinter = textPrinter;
+            _aggPainter.CurrentFont = canvasPainter.CurrentFont;
+            textPrinter = new VxsTextPrinter(_aggPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
+            _aggPainter.TextPrinter = textPrinter;
         }
         public Typography.Rendering.HintTechnique HintTechnique
         {
@@ -56,21 +56,29 @@ namespace PixelFarm.DrawingGL
         }
         public bool UseSubPixelRendering
         {
-            get { return aggPainter.UseSubPixelRendering; }
+            get { return _aggPainter.UseSubPixelRendering; }
             set
             {
-                aggPainter.UseSubPixelRendering = value;
+                _aggPainter.UseSubPixelRendering = value;
             }
         }
         public void ChangeFont(RequestFont font)
         {
-            aggPainter.CurrentFont = font;
-        }
-        public void ChangeFontColor(Color fontColor)
-        {
-            aggPainter.FillColor = Color.Black;
-        }
 
+            _aggPainter.CurrentFont = font;
+        }
+        public void ChangeFillColor(Color fillColor)
+        {
+            //we use agg canvas to draw a font glyph
+            //so we must set fill color for this
+            _aggPainter.FillColor = fillColor;
+        }
+        public void ChangeStrokeColor(Color strokeColor)
+        {
+            //we use agg canvas to draw a font glyph
+            //so we must set fill color for this
+            _aggPainter.StrokeColor = strokeColor;
+        }
         public void DrawString(char[] text, int startAt, int len, double x, double y)
         {
 
@@ -78,7 +86,7 @@ namespace PixelFarm.DrawingGL
             if (this.UseSubPixelRendering)
             {
                 //1. clear prev drawing result
-                aggPainter.Clear(Drawing.Color.FromArgb(0, 0, 0, 0));
+                _aggPainter.Clear(Drawing.Color.FromArgb(0, 0, 0, 0));
                 //aggPainter.Clear(Drawing.Color.White);
                 //aggPainter.Clear(Drawing.Color.FromArgb(0, 0, 0, 0));
                 //2. print text span into Agg Canvas
@@ -96,7 +104,7 @@ namespace PixelFarm.DrawingGL
             {
 
                 //1. clear prev drawing result
-                aggPainter.Clear(Drawing.Color.FromArgb(0, 0, 0, 0));
+                _aggPainter.Clear(Drawing.Color.FromArgb(0, 0, 0, 0));
                 //2. print text span into Agg Canvas
                 textPrinter.DrawString(text, startAt, len, 0, 0);
                 //3.copy to gl bitmap
@@ -145,9 +153,13 @@ namespace PixelFarm.DrawingGL
             this._glyphLayout.ScriptLang = painter.CurrentFont.GetOpenFontScriptLang();
 
         }
-        public void ChangeFontColor(Color color)
+        public void ChangeFillColor(Color color)
         {
-            //called by owner painter  
+            //called by owner painter   
+            canvas2d.FontFillColor = color;
+        }
+        public void ChangeStrokeColor(Color strokeColor)
+        {
 
         }
         public void ChangeFont(RequestFont font)

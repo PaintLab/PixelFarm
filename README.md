@@ -69,7 +69,7 @@ License:
 Source code from multiple projects,
 here...
 
-1. Geometry
+**Geometry**
 
 BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
 
@@ -84,7 +84,7 @@ BSD, 2009-2010, Poly2Tri Contributors, from https://github.com/PaintLab/poly2tri
 SGI, 2000, Eric Veach, Tesselate.
 
 
-2. Fonts
+**Fonts**
 
 Apache2, 2016-2017, WinterDev, from https://github.com/LayoutFarm/Typography
 
@@ -96,7 +96,7 @@ The FreeType Project LICENSE (3-clauses BSD style),2003-2016, David Turner, Robe
 
 MIT, 2016, Viktor Chlumsky, from https://github.com/Chlumsky/msdfgen
 
-3. Platforms
+**Platforms**
 
 MIT, 2015-2015, Xamarin, Inc., from https://github.com/mono/SkiaSharp
 

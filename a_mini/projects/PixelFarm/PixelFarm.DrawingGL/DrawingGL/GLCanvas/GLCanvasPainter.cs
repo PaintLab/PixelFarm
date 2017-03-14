@@ -111,11 +111,7 @@ namespace PixelFarm.DrawingGL
             }
             set
             {
-                _fillColor = value;
-                if (_textPrinter != null)
-                {
-                    _textPrinter.ChangeFontColor(value);
-                }
+                _fillColor = value; 
             }
         }
         public override int Height
