@@ -1,6 +1,9 @@
 ﻿//MIT, 2017, WinterDev 
 using System;
 using Mini;
+using PixelFarm.Agg;
+using PixelFarm.Agg.VertexSource;
+
 namespace PixelFarm.Agg.Sample_AADemoTest4
 {
 
@@ -10,9 +13,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         B,
         C,
         D,
-        E, F,
+        E, F, 
 
     }
+
+
+
 
     [Info(OrderCode = "02")]
     [Info("SubPixelRendering_4")]
@@ -364,6 +370,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //p.FillRectangle(0, 0, 20, 20);
 
         }
+        
         public override void Draw(CanvasPainter p)
         {
             //specific for agg
@@ -393,6 +400,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 case Sample.F:
                     RunSampleF(p);
                     break;
+              
             }
 
         }

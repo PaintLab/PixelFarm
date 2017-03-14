@@ -1,23 +1,4 @@
-﻿// 2016 ,BSD, WinterDev
-
-//----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.4
-//
-// C# Port port by: Lars Brubaker
-//                  larsbrubaker@gmail.com
-// Copyright (C) 2007-2011
-//
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
-// This software is provided "as is" without express or implied
-// warranty, and with no claim as to its suitability for any purpose.
-//
-//----------------------------------------------------------------------------
-//
-// Class StringPrinter.cs
-// 
-// Class to output the vertex source of a string as a run of glyphs.
-//----------------------------------------------------------------------------
+﻿//MIT, 2016-2017, WinterDev
 
 using System;
 using PixelFarm.Drawing;
@@ -27,9 +8,6 @@ using PixelFarm.Agg.VertexSource;
 
 namespace PixelFarm.Agg
 {
-
-
-
     public class AggCanvasPainter : CanvasPainter
     {
         ImageGraphics2D gx;
@@ -53,7 +31,7 @@ namespace PixelFarm.Agg
         RoundedRect roundRect = null;
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
-
+        LineDashGenerator _lineDashGen = new LineDashGenerator();
         int ellipseGenNSteps = 10;
         SmoothingMode _smoothingMode;
 
@@ -64,6 +42,9 @@ namespace PixelFarm.Agg
             this.stroke = new Stroke(1);//default
             this.scline = graphic2d.ScanlinePacked8;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
+
+            _lineDashGen.CreatePattern(8, 8);
+            _lineDashGen.CreatePattern(4, 2, 2, 2);
         }
         public Graphics2D Graphics
         {
@@ -235,9 +216,31 @@ namespace PixelFarm.Agg
         }
         public override void Draw(VertexStore vxs)
         {
-            var v1 = GetFreeVxs();
-            gx.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
-            ReleaseVxs(ref v1);
+            if (_lineDashGen.CurrentPatternNum == 0)
+            {
+                //no line dash
+                var v1 = GetFreeVxs();
+                gx.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
+                ReleaseVxs(ref v1);
+            }
+            else
+            {
+                var v1 = GetFreeVxs();
+                var v2 = GetFreeVxs();
+                _lineDashGen.CreateDash(vxs, v1);
+                stroke.MakeVxs(v1, v2);
+                gx.Render(v2, this.strokeColor);
+
+                ReleaseVxs(ref v1);
+                ReleaseVxs(ref v2);
+                ////create dash 
+                //var v1 = GetFreeVxs();
+                //_lineDashGen.CreateDash(vxs, v1);
+                //var v2 = GetFreeVxs();
+                //gx.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
+                //ReleaseVxs(ref v1);
+                //ReleaseVxs(ref v2);
+            }
         }
 
         /// <summary>
@@ -385,7 +388,7 @@ namespace PixelFarm.Agg
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {
 
-            var renderVxFmtStr = new AggRenderVxFormattedString(textspan); 
+            var renderVxFmtStr = new AggRenderVxFormattedString(textspan);
             if (_textPrinter != null)
             {
                 char[] buffer = textspan.ToCharArray();
@@ -568,7 +571,25 @@ namespace PixelFarm.Agg
             AggRenderVx aggRenderVx = (AggRenderVx)renderVx;
             Fill(aggRenderVx.snap);
         }
-
-
+        public LineJoin LineJoin
+        {
+            get { return stroke.LineJoin; }
+            set
+            {
+                stroke.LineJoin = value;
+            }
+        }
+        public LineCap LineCap
+        {
+            get { return stroke.LineCap; }
+            set
+            {
+                stroke.LineCap = value;
+            }
+        }
+        public void SetLineDashPattern(int patternNum)
+        {
+            _lineDashGen.SetCurrentPattern(patternNum);
+        }
     }
 }
