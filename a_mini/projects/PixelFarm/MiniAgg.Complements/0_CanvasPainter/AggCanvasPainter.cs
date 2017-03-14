@@ -65,7 +65,7 @@ namespace PixelFarm.Agg
             this.scline = graphic2d.ScanlinePacked8;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
 
-            _lineDashGen.CreatePattern(4, 4);
+            _lineDashGen.CreatePattern(8, 8);
             _lineDashGen.CreatePattern(4, 2, 2, 2);
         }
         public Graphics2D Graphics

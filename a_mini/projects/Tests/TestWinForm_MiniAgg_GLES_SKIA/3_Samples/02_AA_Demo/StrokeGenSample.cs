@@ -216,15 +216,21 @@ namespace PixelFarm.Agg.Sample_Draw
             //--------------------------
             aggPainter.StrokeColor = PixelFarm.Drawing.Color.Black;
             aggPainter.StrokeWidth = 2.0f;
-            //aggPainter.SetLineDashPattern(1);
+            aggPainter.SetLineDashPattern(1);
             //
             VertexStore vxs = new VertexStore();
             PathWriter writer = new PathWriter(vxs);
 
             writer.MoveTo(20, 10);
             writer.LineTo(60, 10);
-            writer.LineTo(20, 200);
-            writer.CloseFigure();
+            writer.LineTo(20, 200); 
+            writer.LineTo(20, 0);
+
+
+
+            //writer.MoveTo(20, 100);
+            //writer.LineTo(20, 15);
+            //writer.CloseFigure();
 
             aggPainter.Draw(vxs);
             aggPainter.SetLineDashPattern(0);
