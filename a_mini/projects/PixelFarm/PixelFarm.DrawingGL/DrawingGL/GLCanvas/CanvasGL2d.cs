@@ -178,7 +178,7 @@ namespace PixelFarm.DrawingGL
             get { return shaderRes._strokeWidth; }
             set
             {
-                shaderRes._strokeWidth = value / 2;
+                shaderRes._strokeWidth = value;
             }
         }
         public Drawing.Color StrokeColor
@@ -204,7 +204,7 @@ namespace PixelFarm.DrawingGL
                         else
                         {
                             //TODO: review stroke with for smooth line shader again
-                            shaderRes._strokeWidth = this.StrokeWidth / 2;
+                            shaderRes._strokeWidth = this.StrokeWidth;
                             this.smoothLineShader.DrawLine(x1, y1, x2, y2);
                         }
                     }
