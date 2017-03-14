@@ -31,6 +31,7 @@ namespace PixelFarm.Agg.Lines
         const int AA_SHIFT = 8;
         const int AA_SCALE = 1 << AA_SHIFT;
         const int AA_MASK = AA_SCALE - 1;
+
         byte[] m_profile = new byte[64];
         byte[] m_gamma;
         int m_subpixel_width;
@@ -386,17 +387,8 @@ namespace PixelFarm.Agg.Lines
             }
 
             LineInterpolatorAA0 li = new LineInterpolatorAA0(this, lp);
-            if (li.Count != 0)
-            {
-                if (li.IsVertical)
-                {
-                    while (li.StepV()) ;
-                }
-                else
-                {
-                    while (li.StepH()) ;
-                }
-            }
+            li.Loop();
+            
         }
 
         public override void Line0(LineParameters lp)
@@ -441,14 +433,7 @@ namespace PixelFarm.Agg.Lines
 
             LineAA.FixDegenBisectrixStart(lp, ref sx, ref sy);
             LineInterpolatorAA1 li = new LineInterpolatorAA1(this, lp, sx, sy);
-            if (li.IsVertical)
-            {
-                while (li.StepV()) ;
-            }
-            else
-            {
-                while (li.StepH()) ;
-            }
+            li.Loop();
         }
 
         public override void Line1(LineParameters lp, int sx, int sy)
@@ -506,14 +491,7 @@ namespace PixelFarm.Agg.Lines
 
             LineAA.FixDegenBisectrixEnd(lp, ref ex, ref ey);
             LineInterpolatorAA2 li = new LineInterpolatorAA2(this, lp, ex, ey);
-            if (li.IsVertical)
-            {
-                while (li.StepV()) ;
-            }
-            else
-            {
-                while (li.StepH()) ;
-            }
+            li.Loop();
         }
 
         public override void Line2(LineParameters lp, int ex, int ey)
@@ -575,14 +553,7 @@ namespace PixelFarm.Agg.Lines
             LineAA.FixDegenBisectrixStart(lp, ref sx, ref sy);
             LineAA.FixDegenBisectrixEnd(lp, ref ex, ref ey);
             LineInterpolatorAA3 li = new LineInterpolatorAA3(this, lp, sx, sy, ex, ey);
-            if (li.IsVertical)
-            {
-                while (li.StepV()) ;
-            }
-            else
-            {
-                while (li.StepH()) ;
-            }
+            li.Loop(); 
         }
 
         public override void Line3(LineParameters lp,
