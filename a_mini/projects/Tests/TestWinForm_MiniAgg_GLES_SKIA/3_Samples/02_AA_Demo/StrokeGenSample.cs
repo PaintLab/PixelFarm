@@ -209,6 +209,9 @@ namespace PixelFarm.Agg.Sample_Draw
 
 
         }
+
+
+        LineDashGenerator lineDashGen;
         void DrawC(PixelFarm.Agg.AggCanvasPainter aggPainter)
         {
 
@@ -216,14 +219,22 @@ namespace PixelFarm.Agg.Sample_Draw
             //--------------------------
             aggPainter.StrokeColor = PixelFarm.Drawing.Color.Black;
             aggPainter.StrokeWidth = 2.0f;
-            aggPainter.SetLineDashPattern(1);
+
+            if (lineDashGen == null)
+            {
+                //create line dash gen
+                lineDashGen = new LineDashGenerator();
+                lineDashGen.SetDashPattern(4, 2, 2, 2);
+            }
+
+            aggPainter.LineDashGen = lineDashGen;
             //
             VertexStore vxs = new VertexStore();
             PathWriter writer = new PathWriter(vxs);
 
             writer.MoveTo(20, 10);
             writer.LineTo(60, 10);
-            writer.LineTo(20, 200); 
+            writer.LineTo(20, 200);
             writer.LineTo(20, 0);
 
 
@@ -233,7 +244,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //writer.CloseFigure();
 
             aggPainter.Draw(vxs);
-            aggPainter.SetLineDashPattern(0);
+            aggPainter.LineDashGen = null;
         }
     }
 }
