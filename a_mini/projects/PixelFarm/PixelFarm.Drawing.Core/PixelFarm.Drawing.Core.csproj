@@ -109,8 +109,6 @@
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\BezireCurve.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\BoundingRect.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\BSpline.cs" />
-    <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\Contour.cs" />
-    <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\ContourGenerator.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\CurveFlattener.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\Curves.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\Ellipse.cs" />

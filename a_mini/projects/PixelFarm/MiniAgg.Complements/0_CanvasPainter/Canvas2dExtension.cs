@@ -29,7 +29,7 @@ namespace PixelFarm.Agg
         //helper tools, run in render thread***
         //not thread safe ***
 
-        //static MyTypeFacePrinter stringPrinter;
+      
         static Stroke stroke = new Stroke(1);
         static RoundedRect roundRect = new RoundedRect();
         static SimpleRect simpleRect = new SimpleRect();

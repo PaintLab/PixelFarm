@@ -1,23 +1,4 @@
-﻿//BSD, 2016-2017, WinterDev
-
-//----------------------------------------------------------------------------
-// Anti-Grain Geometry - Version 2.4
-//
-// C# Port port by: Lars Brubaker
-//                  larsbrubaker@gmail.com
-// Copyright (C) 2007-2011
-//
-// Permission to copy, use, modify, sell and distribute this software 
-// is granted provided this copyright notice appears in all copies. 
-// This software is provided "as is" without express or implied
-// warranty, and with no claim as to its suitability for any purpose.
-//
-//----------------------------------------------------------------------------
-//
-// Class StringPrinter.cs
-// 
-// Class to output the vertex source of a string as a run of glyphs.
-//----------------------------------------------------------------------------
+﻿//MIT, 2016-2017, WinterDev
 
 using System;
 using PixelFarm.Drawing;
@@ -27,9 +8,6 @@ using PixelFarm.Agg.VertexSource;
 
 namespace PixelFarm.Agg
 {
-
-
-
     public class AggCanvasPainter : CanvasPainter
     {
         ImageGraphics2D gx;
@@ -65,7 +43,7 @@ namespace PixelFarm.Agg
             this.scline = graphic2d.ScanlinePacked8;
             this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
 
-            _lineDashGen.CreatePattern(4, 4);
+            _lineDashGen.CreatePattern(8, 8);
             _lineDashGen.CreatePattern(4, 2, 2, 2);
         }
         public Graphics2D Graphics

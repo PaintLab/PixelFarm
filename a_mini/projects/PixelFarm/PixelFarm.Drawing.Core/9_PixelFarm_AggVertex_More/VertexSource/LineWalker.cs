@@ -65,7 +65,7 @@ namespace PixelFarm.Agg.VertexSource
             switch (cmd)
             {
                 default: throw new NotSupportedException();
-               
+
                 case VertexCmd.MoveTo:
                     outputVxs.AddMoveTo(x, y);
                     break;
@@ -350,10 +350,13 @@ namespace PixelFarm.Agg.VertexSource
             protected virtual void OnEndLineSegment(double x, double y, double remainingLen)
             {
                 //remainingLen of current segment
-                if (remainingLen > 0)
+                if (remainingLen >= 0.5) 
                 {
+                    //TODO: review here, if remainingLen is too small,
+                    //but what about _total_accum_len
+
                     //there are remaining segment that can be complete at this state
-                    //so we just collect it
+                    //so we just collect it                                        
                     _total_accum_len += remainingLen;
                     _tempPoints.Add(new TmpPoint(_latest_X, _latest_Y));
                     _tempPoints.Add(new TmpPoint(x, y));
@@ -371,7 +374,7 @@ namespace PixelFarm.Agg.VertexSource
             {
                 _currentMarker.lineSegDel(_output, VertexCmd.MoveTo, _latest_X, _latest_Y);
                 _currentMarker.lineSegDel(_output, VertexCmd.LineTo, new_x, new_y);
-              
+
                 _total_accum_len = 0;
                 StepToNextMarkerSegment();
             }
