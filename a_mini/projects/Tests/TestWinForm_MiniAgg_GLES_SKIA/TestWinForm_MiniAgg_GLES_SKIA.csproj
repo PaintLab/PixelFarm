@@ -112,6 +112,7 @@
     <Compile Include="Experiment\WinGdiPlusFontStore.cs" />
     <Compile Include="Experiment\xnotused\xDrawingGLFontPrinter.cs" />
     <Compile Include="Experiment\xnotused\xTextureFontFace.cs" />
+    <Compile Include="Experiment\xStrokeGen.cs" />
     <Compile Include="Experiment\x_notusedFromComplement\ImageClipProxyFloat.cs" />
     <Compile Include="Experiment\x_notusedFromComplement\KDTree.cs" />
     <Compile Include="Experiment\x_notusedFromComplement\SpanSubDivAdapter.cs" />
