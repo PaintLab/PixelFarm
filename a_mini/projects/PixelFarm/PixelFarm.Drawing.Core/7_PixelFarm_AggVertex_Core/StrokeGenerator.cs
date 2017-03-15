@@ -27,20 +27,40 @@ namespace PixelFarm.Agg
 
     class StrokeGenerator
     {
+
+        /// <summary>
+        /// stroke generator's status
+        /// </summary>
+        public enum Status
+        {
+            Init,
+            Ready,
+            Cap1,
+            Cap2,
+            Outline1,
+            CloseFirst,
+            Outline2,
+            OutVertices,
+            EndPoly1,
+            EndPoly2,
+            Stop
+        }
+
+
         StrokeMath m_stroker;
         MultipartVerextDistanceList multipartVertexDistanceList = new MultipartVerextDistanceList();
         VertexStore m_out_vertices;
         double m_shorten;
         bool m_closed;
-        StrokeMath.Status m_status;
-        StrokeMath.Status m_prev_status;
+        Status m_status;
+        Status m_prev_status;
         int m_src_vertex;
         int m_out_vertex;
         public StrokeGenerator()
         {
             m_stroker = new StrokeMath();
             m_out_vertices = new VertexStore();
-            m_status = StrokeMath.Status.Init;
+            m_status = Status.Init;
         }
 
         public LineCap LineCap
@@ -97,13 +117,13 @@ namespace PixelFarm.Agg
         {
             multipartVertexDistanceList.Clear();
             m_closed = false;
-            m_status = StrokeMath.Status.Init;
+            m_status = Status.Init;
 
         }
         public void AddVertex(double x, double y, VertexCmd cmd)
         {
             //TODO: review 
-            m_status = StrokeMath.Status.Init;
+            m_status = Status.Init;
             switch (cmd)
             {
                 case VertexCmd.MoveTo:
@@ -139,7 +159,7 @@ namespace PixelFarm.Agg
                         multipartVertexDistanceList.SetRangeIndex(currentRangeIndex + 1);
                         currentRangeIndex++;
 
-                        m_status = StrokeMath.Status.Ready;
+                        m_status = Status.Ready;
                         m_src_vertex = 0;
                         m_out_vertex = 0;
                         continue;
@@ -161,7 +181,7 @@ namespace PixelFarm.Agg
         }
         void Rewind()
         {
-            if (m_status == StrokeMath.Status.Init)
+            if (m_status == Status.Init)
             {
                 multipartVertexDistanceList.Rewind();
                 if (multipartVertexDistanceList.CurrentRangeLen < 3)
@@ -173,7 +193,7 @@ namespace PixelFarm.Agg
                 //VertexHelper.ShortenPath(_curCurtexDistanceList, m_shorten, m_closed);
                 //if (_curCurtexDistanceList.Count < 3) { m_closed = false; }
             }
-            m_status = StrokeMath.Status.Ready;
+            m_status = Status.Ready;
             m_src_vertex = 0;
             m_out_vertex = 0;
             //if (_vertextDistanceListQueue.Count > 0)
@@ -192,22 +212,22 @@ namespace PixelFarm.Agg
             {
                 switch (m_status)
                 {
-                    case StrokeMath.Status.Init:
+                    case Status.Init:
                         this.Rewind();
-                        goto case StrokeMath.Status.Ready;
-                    case StrokeMath.Status.Ready:
+                        goto case Status.Ready;
+                    case Status.Ready:
 
                         if (multipartVertexDistanceList.CurrentRangeLen < 2 + (m_closed ? 1 : 0))
                         {
                             cmd = VertexCmd.NoMore;
                             break;
                         }
-                        m_status = m_closed ? StrokeMath.Status.Outline1 : StrokeMath.Status.Cap1;
+                        m_status = m_closed ? Status.Outline1 : Status.Cap1;
                         cmd = VertexCmd.MoveTo;
                         m_src_vertex = 0;
                         m_out_vertex = 0;
                         break;
-                    case StrokeMath.Status.Cap1:
+                    case Status.Cap1:
                         {
                             Vertex2d v0, v1;
 
@@ -219,12 +239,12 @@ namespace PixelFarm.Agg
                                 v0.CalLen(v1));
 
                             m_src_vertex = 1;
-                            m_prev_status = StrokeMath.Status.Outline1;
-                            m_status = StrokeMath.Status.OutVertices;
+                            m_prev_status = Status.Outline1;
+                            m_status = Status.OutVertices;
                             m_out_vertex = 0;
                         }
                         break;
-                    case StrokeMath.Status.Cap2:
+                    case Status.Cap2:
                         {
                             Vertex2d beforeLast, last;
                             multipartVertexDistanceList.GetLast2(out beforeLast, out last);
@@ -232,19 +252,19 @@ namespace PixelFarm.Agg
                                 last,
                                 beforeLast,
                                 beforeLast.CalLen(last));
-                            m_prev_status = StrokeMath.Status.Outline2;
-                            m_status = StrokeMath.Status.OutVertices;
+                            m_prev_status = Status.Outline2;
+                            m_status = Status.OutVertices;
                             m_out_vertex = 0;
                         }
                         break;
-                    case StrokeMath.Status.Outline1:
+                    case Status.Outline1:
                         {
                             if (m_closed)
                             {
                                 if (m_src_vertex >= multipartVertexDistanceList.CurrentRangeLen)
                                 {
-                                    m_prev_status = StrokeMath.Status.CloseFirst;
-                                    m_status = StrokeMath.Status.EndPoly1;
+                                    m_prev_status = Status.CloseFirst;
+                                    m_status = Status.EndPoly1;
                                     break;
                                 }
                             }
@@ -252,7 +272,7 @@ namespace PixelFarm.Agg
                             {
                                 if (m_src_vertex >= multipartVertexDistanceList.CurrentRangeLen - 1)
                                 {
-                                    m_status = StrokeMath.Status.Cap2;
+                                    m_status = Status.Cap2;
                                     break;
                                 }
                             }
@@ -274,21 +294,21 @@ namespace PixelFarm.Agg
 
                             ++m_src_vertex;
                             m_prev_status = m_status;
-                            m_status = StrokeMath.Status.OutVertices;
+                            m_status = Status.OutVertices;
                             m_out_vertex = 0;
 
                         }
                         break;
-                    case StrokeMath.Status.CloseFirst:
-                        m_status = StrokeMath.Status.Outline2;
+                    case Status.CloseFirst:
+                        m_status = Status.Outline2;
                         cmd = VertexCmd.MoveTo;
-                        goto case StrokeMath.Status.Outline2;
-                    case StrokeMath.Status.Outline2:
+                        goto case Status.Outline2;
+                    case Status.Outline2:
                         {
                             if (m_src_vertex <= (!m_closed ? 1 : 0))
                             {
-                                m_status = StrokeMath.Status.EndPoly2;
-                                m_prev_status = StrokeMath.Status.Stop;
+                                m_status = Status.EndPoly2;
+                                m_prev_status = Status.Stop;
                                 break;
                             }
 
@@ -307,12 +327,12 @@ namespace PixelFarm.Agg
                               cur.CalLen(next),
                               prev.CalLen(cur));
                             m_prev_status = m_status;
-                            m_status = StrokeMath.Status.OutVertices;
+                            m_status = Status.OutVertices;
                             m_out_vertex = 0;
 
                         }
                         break;
-                    case StrokeMath.Status.OutVertices:
+                    case Status.OutVertices:
                         if (m_out_vertex >= m_out_vertices.Count)
                         {
                             m_status = m_prev_status;
@@ -320,21 +340,18 @@ namespace PixelFarm.Agg
                         else
                         {
                             m_out_vertices.GetVertex(m_out_vertex++, out x, out y);
-                            //Vector2 c = m_out_vertices[(int)m_out_vertex++];
-                            //x = c.x;
-                            //y = c.y;
                             return cmd;
                         }
                         break;
-                    case StrokeMath.Status.EndPoly1:
+                    case Status.EndPoly1:
                         m_status = m_prev_status;
                         x = (int)EndVertexOrientation.CCW;
                         return VertexCmd.Close;
-                    case StrokeMath.Status.EndPoly2:
+                    case Status.EndPoly2:
                         m_status = m_prev_status;
                         x = (int)EndVertexOrientation.CW;
                         return VertexCmd.Close;
-                    case StrokeMath.Status.Stop:
+                    case Status.Stop:
                         cmd = VertexCmd.NoMore;
                         break;
                 }

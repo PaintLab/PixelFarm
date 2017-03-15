@@ -61,21 +61,7 @@ namespace PixelFarm.Agg
 
     public class StrokeMath
     {
-        public enum Status
-        {
-            Init,
-            Ready,
-            Cap1,
-            Cap2,
-            Outline1,
-            CloseFirst,
-            Outline2,
-            OutVertices,
-            EndPoly1,
-            EndPoly2,
-            Stop
-        }
-
+       
         double m_width;
         double m_width_abs;
         double m_width_eps;
