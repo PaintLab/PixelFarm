@@ -37,7 +37,11 @@ namespace PixelFarm.DrawingGL
         {
 
         }
-        public void ChangeFontColor(Color fontColor)
+        public void ChangeFillColor(Color fillColor)
+        {
+
+        }
+        public void ChangeStrokeColor(Color strokeColor)
         {
 
         }

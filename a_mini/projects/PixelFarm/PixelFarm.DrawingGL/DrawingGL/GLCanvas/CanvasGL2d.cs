@@ -178,7 +178,7 @@ namespace PixelFarm.DrawingGL
             get { return shaderRes._strokeWidth; }
             set
             {
-                shaderRes._strokeWidth = value / 2;
+                shaderRes._strokeWidth = value;
             }
         }
         public Drawing.Color StrokeColor
@@ -204,7 +204,7 @@ namespace PixelFarm.DrawingGL
                         else
                         {
                             //TODO: review stroke with for smooth line shader again
-                            shaderRes._strokeWidth = this.StrokeWidth / 2;
+                            shaderRes._strokeWidth = this.StrokeWidth;
                             this.smoothLineShader.DrawLine(x1, y1, x2, y2);
                         }
                     }
@@ -328,7 +328,13 @@ namespace PixelFarm.DrawingGL
             PixelFarm.Drawing.Rectangle r = new Drawing.Rectangle(0, bmp.Height, bmp.Width, bmp.Height);
             DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref r, x, y, 1);
         }
-        public void DrawGlyphImageWithSubPixelRenderingTechnique(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
+        public PixelFarm.Drawing.Color FontFillColor { get; set; }
+        public void DrawGlyphImageWithSubPixelRenderingTechnique(
+            GLBitmap bmp,
+            ref PixelFarm.Drawing.Rectangle r,
+            float targetLeft,
+            float targetTop,
+            float scale)
         {
 
             if (bmp.IsBigEndianPixel)
@@ -337,23 +343,31 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
+                textureSubPixRendering.LoadGLBitmap(bmp);
                 textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
-                textureSubPixRendering.SetColor(Drawing.Color.Black);
-                textureSubPixRendering.SetCompo(1);
-
+                textureSubPixRendering.SetColor(this.FontFillColor);
+                textureSubPixRendering.SetIntensity(1.15f);
+                //-------------------------
                 //draw a serie of image***
                 //-------------------------
-                //1. load once
-                textureSubPixRendering.LoadGLBitmap(bmp);
-                //2. b , cyan result
+
+                //1. B , cyan result
                 GL.ColorMask(false, false, true, false);
-                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - (1 / 3f), targetTop);
-                //3. g , magenta result
-                GL.ColorMask(false, true, false, false);
+                textureSubPixRendering.SetCompo(0); 
                 textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
-                //4. r , yellow result
+                //float subpixel_shift = 1 / 9f;
+                //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
+                //---------------------------------------------------
+                //2. G , magenta result
+                GL.ColorMask(false, true, false, false);
+                textureSubPixRendering.SetCompo(1); 
+                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
+                //1. R , yellow result 
+                textureSubPixRendering.SetCompo(2);
                 GL.ColorMask(true, false, false, false);//             
-                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + (1 / 3f), targetTop);
+                textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft + subpixel_shift, targetTop); //TODO: review this option
                 //enable all color component
                 GL.ColorMask(true, true, true, true);
             }

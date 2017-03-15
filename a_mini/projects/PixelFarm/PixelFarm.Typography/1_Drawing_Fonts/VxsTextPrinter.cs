@@ -56,13 +56,17 @@ namespace PixelFarm.Drawing.Fonts
             this._currentFontFilename = resolvedFontFilename;
 
         }
-        public void ChangeFontColor(Color fontColor)
+        public void ChangeFillColor(Color fontColor)
         {
             //change font color
 
 #if DEBUG
             Console.Write("please impl change font color");
 #endif
+        }
+        public void ChangeStrokeColor(Color strokeColor)
+        {
+
         }
         public HintTechnique HintTechnique
         {

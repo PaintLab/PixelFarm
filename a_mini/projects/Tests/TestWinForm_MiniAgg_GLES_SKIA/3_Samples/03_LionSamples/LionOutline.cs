@@ -55,6 +55,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
         public override void Draw(CanvasPainter p)
         {
             lionFill.Draw(p);
+
         }
         public override void MouseDrag(int x, int y)
         {
@@ -86,6 +87,8 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 this.lionFill.RenderAccurateJoins = value;
             }
         }
+
+
     }
     //--------------------------------------------------
     public class LionOutlineSprite : BasicSprite
@@ -147,13 +150,14 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 return; //**
             }
 
+            //-----------------------
             Graphics2D graphics2D = p1.Graphics;
             //var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             //int width = widgetsSubImage.Width;
             //int height = widgetsSubImage.Height; 
-            var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
 
-            var clippedSubImage = new ChildImage(widgetsSubImage, new PixelBlenderBGRA());
+            ChildImage widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            ChildImage clippedSubImage = new ChildImage(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(PixelFarm.Drawing.Color.White);
 
@@ -162,8 +166,8 @@ namespace PixelFarm.Agg.Sample_LionOutline
             {
                 var rasterizer = graphics2D.ScanlineRasterizer;
                 rasterizer.SetClipBox(0, 0, width, height);
-                Stroke stroke = new Stroke(strokeWidth);
-                stroke.LineJoin = LineJoin.Round;
+                //Stroke stroke = new Stroke(strokeWidth);
+                //stroke.LineJoin = LineJoin.Round;
                 var vxs = GetFreeVxs();
                 affTx.TransformToVxs(lionShape.Path.Vxs, vxs);
                 ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
@@ -179,8 +183,9 @@ namespace PixelFarm.Agg.Sample_LionOutline
             }
             else
             {
-                double w = strokeWidth * affTx.GetScale();
-                LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(w, new GammaNone());
+
+                //LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), new GammaNone());
+                LineProfileAnitAlias lineProfile = new LineProfileAnitAlias(strokeWidth * affTx.GetScale(), null);
                 OutlineRenderer outlineRenderer = new OutlineRenderer(imageClippingProxy, new PixelBlenderBGRA(), lineProfile);
                 OutlineAARasterizer rasterizer = new OutlineAARasterizer(outlineRenderer);
                 rasterizer.LineJoin = (RenderAccurateJoins ?

@@ -145,6 +145,7 @@ namespace OpenTkEssTest
             //string test_str = "กิน";
             p.Clear(PixelFarm.Drawing.Color.White);
             p.FillColor = PixelFarm.Drawing.Color.Red;
+            
             p.UseSubPixelRendering = true;
             int n = 50;
             for (int i = 0; i < n; i++)
@@ -155,7 +156,7 @@ namespace OpenTkEssTest
                 p.FillRectangle(x_pos, y_pos, x_pos + 5, y_pos + 5);
             }
             p.FillColor = PixelFarm.Drawing.Color.Black;
-
+            
             if (_strRenderVx_1 == null)
             {
                 p.CurrentFont = font1;
@@ -176,8 +177,8 @@ namespace OpenTkEssTest
                 {
                     //since draw string may be slow
                     //we can convert it to a 'freezed' visual object (RenderVx) 
-                    //p.CurrentFont = font1;
-                    //p.DrawString(_strRenderVx_1, x_pos, y_pos);
+                    p.CurrentFont = font1;
+                    p.DrawString(_strRenderVx_1, x_pos, y_pos);
                 }
                 else
                 {
