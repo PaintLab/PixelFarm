@@ -163,10 +163,14 @@ namespace PixelFarm.Agg
         {
             if ((dist = AggMath.calc_distance(x, y, val.x, val.y)) > AggMath.VERTEX_DISTANCE_EPSILON)
             {
+                //diff enough=> this is NOT equal with val
+                return false;
             }
             else
             {
+                //not diff enough => this is equal (with val)
                 dist = 1.0 / AggMath.VERTEX_DISTANCE_EPSILON;
+                return true;
             }
         }
     }
