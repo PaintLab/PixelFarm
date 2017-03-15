@@ -26,6 +26,39 @@
 using System;
 namespace PixelFarm.Agg
 {
+    public struct Vertex2d
+    {
+        //TODO: change this to common Vector2
+
+        public readonly double x;
+        public readonly double y;
+        public Vertex2d(double x, double y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+        public double CalLen(Vertex2d another)
+        {
+            return AggMath.calc_distance(x, y, another.x, another.y);
+        }
+        public bool IsEqual(Vertex2d val)
+        {
+            return AggMath.calc_distance(x, y, val.x, val.y) <= AggMath.VERTEX_DISTANCE_EPSILON;
+            //if ((dist = AggMath.calc_distance(x, y, val.x, val.y)) > AggMath.VERTEX_DISTANCE_EPSILON)
+            //{
+            //    //diff enough=> this is NOT equal with val
+            //    return false;
+            //}
+            //else
+            //{
+            //    //not diff enough => this is equal (with val)
+            //    dist = 1.0 / AggMath.VERTEX_DISTANCE_EPSILON;
+            //    return true;
+            //}
+        }
+    }
+
+
     public class StrokeMath
     {
         public enum Status
@@ -130,7 +163,7 @@ namespace PixelFarm.Agg
             set { this.m_approx_scale = value; }
         }
 
-        public void CreateCap(VertexStore output, VertexDistance v0, VertexDistance v1, double len)
+        public void CreateCap(VertexStore output, Vertex2d v0, Vertex2d v1, double len)
         {
             output.Clear();
             double dx1 = (v1.y - v0.y) / len;
@@ -184,9 +217,9 @@ namespace PixelFarm.Agg
         }
 
         public void CreateJoin(VertexStore output,
-                               VertexDistance v0,
-                               VertexDistance v1,
-                               VertexDistance v2,
+                               Vertex2d v0,
+                               Vertex2d v1,
+                               Vertex2d v2,
                                double len1,
                                double len2)
         {
@@ -361,9 +394,9 @@ namespace PixelFarm.Agg
         }
 
         void CreateMiter(VertexStore output,
-                        VertexDistance v0,
-                        VertexDistance v1,
-                        VertexDistance v2,
+                        Vertex2d v0,
+                        Vertex2d v1,
+                        Vertex2d v2,
                         double dx1, double dy1,
                         double dx2, double dy2,
                         LineJoin lj,
