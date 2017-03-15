@@ -173,6 +173,10 @@ namespace PixelFarm.Agg
                 return true;
             }
         }
+        public void UpdateLen(VertexDistance val)
+        {
+            IsEqual(val);
+        }
     }
 
     /*
