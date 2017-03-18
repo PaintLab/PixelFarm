@@ -92,7 +92,7 @@ namespace PixelFarm.Drawing.Fonts
 
             float fontSizePoint = this.FontSizeInPoints;
             _outputGlyphPlans.Clear();
-            _glyphLayout.Layout(typeface, fontSizePoint, text, startAt, len, _outputGlyphPlans);
+            _glyphLayout.Layout(typeface, text, startAt, len, _outputGlyphPlans);
             //4. render each glyph 
             int j = _outputGlyphPlans.Count;
             //---------------------------------------------------
@@ -193,7 +193,7 @@ namespace PixelFarm.Drawing.Fonts
 
             float fontSizePoint = this.FontSizeInPoints;
             _outputGlyphPlans.Clear();
-            _glyphLayout.Layout(typeface, fontSizePoint, text, startAt, len, _outputGlyphPlans);
+            _glyphLayout.Layout(typeface,  text, startAt, len, _outputGlyphPlans);
             TextPrinterHelper.CopyGlyphPlans(renderVx, _outputGlyphPlans);
 
         }
