@@ -12,7 +12,7 @@ namespace LayoutFarm.UI
             InnerViewportKind internalViewportKind,
             out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
         {
-
+            
             MyRootGraphic myRootGfx = new MyRootGraphic(
                 LayoutFarm.UI.UIPlatformWinForm.platform,
                 LayoutFarm.UI.UIPlatformWinForm.platform.GetIFonts(),

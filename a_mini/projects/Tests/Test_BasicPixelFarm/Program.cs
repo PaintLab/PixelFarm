@@ -1,20 +1,35 @@
-﻿using System;
+﻿//Apache2, 2014-2017, WinterDev
+
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
-namespace Test_BasicPixelFarm
+namespace TestGraphicPackage2
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
+        static LayoutFarm.Dev.FormDemoList formDemoList;
         [STAThread]
         static void Main()
         {
+
+
+            //-------------------------------
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            //temp
+            //TODO: fix this , 
+            //LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
+            //LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyNativeTextBreaker();
+
+            ////------------------------------- 
+            formDemoList = new LayoutFarm.Dev.FormDemoList();
+            formDemoList.LoadDemoList(typeof(Program));
+
+            Application.Run(formDemoList);
         }
+
+
     }
+
+
 }
