@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -37,6 +37,15 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Demo3\3.1_Demo_Visible.cs" />
+    <Compile Include="Demo3\3.2_Demo_ControllerBox.cs" />
+    <Compile Include="Demo3\3.3_Demo_ControllerBox2.cs" />
+    <Compile Include="Demo3\3.4_CompartmentBox.cs" />
+    <Compile Include="Demo3\3.5_Demo_CompartmentBox2.cs" />
+    <Compile Include="Demo3\3.6_Demo_DragSelectionBox.cs" />
+    <Compile Include="Demo3\3.7_Compartment_withSpliter.cs" />
+    <Compile Include="Demo3\3.8_Compartment_withSpliter2.cs" />
+    <Compile Include="Demo3\3.9_Compartment_withSpliter3.cs" />
     <Compile Include="Demo1\1.1_Demo_SingleButton.cs" />
     <Compile Include="Demo1\1.2_Demo_MultipleBoxes.cs" />
     <Compile Include="Demo1\1.3_Demo_SampleGrid.cs" />
@@ -57,6 +66,12 @@
     <Compile Include="SampleViewportExtension.cs" />
     <Compile Include="x_unused\x_MyGlfwForm.cs" />
     <Compile Include="x_unused\x_notusedOpenGLPortal.cs" />
+    <Compile Include="Demo2\2.1_Demo_SingleLineTextBox.cs" />
+    <Compile Include="Demo2\2.2_Demo_MultilineTextBox.cs" />
+    <Compile Include="Demo2\2.3_Demo_SingleLineTextBox_WithSuggestion.cs" />
+    <Compile Include="Demo2\2.4_Demo_SingleTextLine_With_Compartment.cs" />
+    <Compile Include="Demo2\2.5_Demo_MultiLineTextBox_WithSugggestion.cs" />
+    <Compile Include="Demo2\2.6_Demo_MultiLineTextBox_WithSugggestion.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -104,6 +119,10 @@
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\LayoutFarm.Platforms.WinForms.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
       <Name>LayoutFarm.Platforms.WinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.TextEdit\LayoutFarm.TextEdit.csproj">
+      <Project>{cfb41c52-614e-476c-8bbe-d07c26fb582d}</Project>
+      <Name>LayoutFarm.TextEdit</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
