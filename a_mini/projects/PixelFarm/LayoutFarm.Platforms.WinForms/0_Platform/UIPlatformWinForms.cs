@@ -7,6 +7,13 @@ namespace LayoutFarm.UI
         public readonly static UIPlatformWinForm platform;
         static UIPlatformWinForm()
         {
+            //--------------------------------------------------------------------
+            //TODO: review here again
+            //NOTE: this class load native dll images (GLES2)
+            //since GLES2 that we use is x86, 
+            //so we must specific the file type to x86 ***
+            //else this will error on TypeInitializer ( from BadImageFormatException);
+            //--------------------------------------------------------------------
             platform = new UI.UIPlatformWinForm();
         }
         private UIPlatformWinForm()
@@ -31,8 +38,8 @@ namespace LayoutFarm.UI
                 PixelFarm.Drawing.Skia.SkiaGraphicsPlatform.SetFontLoader(YourImplementation.BootStrapSkia.myFontLoader);
             }
             _gdiPlusIFonts = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
-
         }
+
         public override UITimer CreateUITimer()
         {
             return new MyUITimer();
