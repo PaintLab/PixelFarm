@@ -5,10 +5,6 @@ using System.Collections.Generic;
 
 namespace Typography.Rendering
 {
-    //-----------------------------------
-    //sample GlyphPathBuilder :
-    //for your flexiblity of glyph path builder.
-    //-----------------------------------
 
 
     public class GlyphPathBuilder : GlyphPathBuilderBase
@@ -16,8 +12,6 @@ namespace Typography.Rendering
         GlyphFitOutlineAnalyzer _fitShapeAnalyzer = new GlyphFitOutlineAnalyzer();
         Dictionary<ushort, GlyphFitOutline> _fitoutlineCollection = new Dictionary<ushort, GlyphFitOutline>();
         GlyphFitOutline _fitOutline;
-        bool _useAutoHint;
-
         public GlyphPathBuilder(Typeface typeface)
             : base(typeface)
         {
@@ -26,10 +20,9 @@ namespace Typography.Rendering
         {
             //not use interperter so we need to scale it with our machnism
             //this demonstrate our auto hint engine ***
-            //you can change this to your own hint engine***  
+            //you can change this to your own hint engine***   
             if (this.UseVerticalHinting)
             {
-                _useAutoHint = true;
                 if (!_fitoutlineCollection.TryGetValue(glyphIndex, out _fitOutline))
                 {
                     _fitOutline = _fitShapeAnalyzer.Analyze(
@@ -39,14 +32,18 @@ namespace Typography.Rendering
                 }
             }
         }
-
         public override void ReadShapes(IGlyphTranslator tx)
         {
-            if (_useAutoHint)
+            if (this.UseVerticalHinting)
             {
                 //read from our auto hint fitoutline
                 //need scale from original.
-                _fitOutline.ReadOutput(tx, this.RecentPixelScale);
+                float toPixelScale = Typeface.CalculateToPixelScale(this.RecentFontSizeInPixels);
+                if (toPixelScale < 0)
+                {
+                    toPixelScale = 1;
+                }
+                _fitOutline.ReadOutput(tx, toPixelScale);
             }
             else
             {
@@ -54,6 +51,4 @@ namespace Typography.Rendering
             }
         }
     }
-
-
 }
