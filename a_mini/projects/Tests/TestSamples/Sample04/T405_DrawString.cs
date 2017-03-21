@@ -44,7 +44,7 @@ namespace OpenTkEssTest
             // string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้";
             //string test_str = "ปู่";
             //string test_str = "ก็";
-            string test_str = "abcd";
+            string test_str = "s";
             //string test_str = "A";
             //string test_str = "012345";
             //string test_str = "กิน";
@@ -52,19 +52,25 @@ namespace OpenTkEssTest
             // p.Clear(PixelFarm.Drawing.Color.Blue); 
             p.FillColor = PixelFarm.Drawing.Color.Red;
             p.UseSubPixelRendering = true;
+
             int n = 50;
+
+            float xpos2 = 0;
             for (int i = 0; i < n; i++)
             {
+                xpos2 += 1f;
                 //  p.DrawString(test_str, i * 10, i * 10);
-                float x_pos = i * 20;
+                float x_pos = xpos2;
                 float y_pos = i * 20;
                 p.FillRectangle(x_pos, y_pos, x_pos + 5, y_pos + 5);
             }
 
             p.FillColor = PixelFarm.Drawing.Color.Black;
+            xpos2 = 0;
             for (int i = 0; i < n; i++)
             {
-                float x_pos = i * 20;
+                xpos2 += 1f;
+                float x_pos = xpos2;//i + .1f;
                 float y_pos = i * 20;
                 //p.DrawString("(" + x_pos + "," + y_pos + ")", x_pos, y_pos);
                 if ((i % 2) == 0)
@@ -145,7 +151,7 @@ namespace OpenTkEssTest
             //string test_str = "กิน";
             p.Clear(PixelFarm.Drawing.Color.White);
             p.FillColor = PixelFarm.Drawing.Color.Red;
-            
+
             p.UseSubPixelRendering = true;
             int n = 50;
             for (int i = 0; i < n; i++)
@@ -156,7 +162,7 @@ namespace OpenTkEssTest
                 p.FillRectangle(x_pos, y_pos, x_pos + 5, y_pos + 5);
             }
             p.FillColor = PixelFarm.Drawing.Color.Black;
-            
+
             if (_strRenderVx_1 == null)
             {
                 p.CurrentFont = font1;
