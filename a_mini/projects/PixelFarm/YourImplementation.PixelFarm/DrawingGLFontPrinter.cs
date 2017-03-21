@@ -270,10 +270,6 @@ namespace PixelFarm.DrawingGL
         }
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
-            
-
-
-
             int j = buffer.Length;
             //resolve font from painter?  
             glyphPlans.Clear();
@@ -325,9 +321,10 @@ namespace PixelFarm.DrawingGL
                         break;
                     case Typography.Rendering.TextureKind.AggSubPixel:
                         {
+                            //1. adjust ideal_x
                             float ideal_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture);
-                            //adjust ideal_x
 
+                            //2. half pixel
                             int floor_int = (int)ideal_x;
                             if (ideal_x - floor_int >= (2f / 3f))
                             {
@@ -342,7 +339,10 @@ namespace PixelFarm.DrawingGL
                                 ideal_x = floor_int;
                             }
 
+                            //round to int
                             ideal_x = (int)Math.Round(ideal_x);
+
+
                             canvas2d.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
                                  ref srcRect,
                                  (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture), // -glyphData.TextureXOffset => restore to original pos
