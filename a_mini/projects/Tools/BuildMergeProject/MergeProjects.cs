@@ -188,6 +188,7 @@ namespace BuildMergeProject
             string fullProjectName = GetFullProjectPath(projectFile);
             List<ProjectAsmReference> asmReferenceList = new List<ProjectAsmReference>();
             Project pro = GlobalLoadedProject.LoadProject(fullProjectName);
+
             foreach (ProjectItem item in pro.AllEvaluatedItems)
             {
                 switch (item.ItemType)
@@ -264,7 +265,7 @@ namespace BuildMergeProject
             {
                 Directory.CreateDirectory(targetSaveDir);
             }
-            
+
             xmldoc.Save(saveFileName);
             if (removeOriginalSrcProject)
             {
@@ -325,6 +326,8 @@ namespace BuildMergeProject
     class MergeProject
     {
         List<ToMergeProject> subProjects = new List<ToMergeProject>();
+        public List<string> _asmReferences = new List<string>();
+
         bool portable;
         public MergeProject(bool portable = false)
         {
@@ -336,6 +339,8 @@ namespace BuildMergeProject
             pro.Load(projectFile);
             subProjects.Add(pro);
         }
+        public string DefineConstants { get; set; }
+        public string TargetFrameworkVersion { get; set; }
 
         static ProjectPropertyGroupElement CreatePropertyGroup(ProjectRootElement root,
            string targetFrameworkVersion,
@@ -478,11 +483,29 @@ namespace BuildMergeProject
     {
         List<ProjectItem> allItems = new List<ProjectItem>();
         public string ProjectFileName { get; set; }
+        public string DefineConstants { get; set; }
+        public string TargetFrameworkVersion { get; set; }
+
         public void Load(string projectFile)
         {
             this.ProjectFileName = projectFile;
 
             Project pro = GlobalLoadedProject.LoadProject(projectFile);
+
+            foreach (var item in pro.AllEvaluatedProperties)
+            {
+                //select some our interest features
+                switch (item.Name)
+                {
+                    case "DefineConstants":
+                        DefineConstants = item.EvaluatedValue;
+                        break;
+                    case "TargetFrameworkVersion":
+                        TargetFrameworkVersion = item.EvaluatedValue;
+                        break;
+                }
+            }
+
             foreach (ProjectItem item in pro.AllEvaluatedItems)
             {
                 switch (item.ItemType)

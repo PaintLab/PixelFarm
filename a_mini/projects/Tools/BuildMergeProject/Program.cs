@@ -180,24 +180,45 @@ namespace BuildMergeProject
 
             MergeProject mergePro = new MergeProject();
             List<ProjectAsmReference> asmRefs = _solutionMx.GetReferenceAsmList(project.RelativePath);
+            string fullProjectDir = System.IO.Path.GetDirectoryName(_solutionMx.SolutionDir + "\\" + project.RelativePath);
+            string projFilename = System.IO.Path.GetFileName(project.RelativePath);
+
             int j = asmRefs.Count;
             for (int i = 0; i < j; ++i)
             {
                 ProjectAsmReference asmRef = asmRefs[i];
-                if (asmRef.Kind == ProjectAsmReferenceKind.ProjectReference)
+                switch (asmRef.Kind)
                 {
-                    //only this kind***
-                    //string proDirName = System.IO.Path.GetDirectoryName(asmRef.Name);
-                    //string proFilename = System.IO.Path.GetFileName(asmRef.Name); 
-                    //string projectPath = project.RelativePath;
-                    string fullProjectDir = System.IO.Path.GetDirectoryName(_solutionMx.SolutionDir + "\\" + project.RelativePath);
-                    string result = System.IO.Path.Combine(fullProjectDir, asmRef.Name);
+                    case ProjectAsmReferenceKind.ProjectReference:
+                        string result = System.IO.Path.Combine(fullProjectDir, asmRef.Name);
+                        if (!System.IO.File.Exists(result))
+                        {
 
-                    if (!System.IO.File.Exists(result))
-                    {
+                        }
+                        mergePro.LoadSubProject(result);
 
-                    }
-                    mergePro.LoadSubProject(result);
+                        break;
+                    case ProjectAsmReferenceKind.Reference:
+
+                        mergePro._asmReferences.Add(asmRef.Name);
+
+                        break;
+                }
+            }
+            //----------
+            //find 
+            var pro = GlobalLoadedProject.LoadProject(fullProjectDir + "\\" + projFilename);
+            foreach (var item in pro.AllEvaluatedProperties)
+            {
+                //select some our interest features
+                switch (item.Name)
+                {
+                    case "DefineConstants":
+                        mergePro.DefineConstants = item.EvaluatedValue;
+                        break;
+                    case "TargetFrameworkVersion":
+                        mergePro.TargetFrameworkVersion = item.EvaluatedValue;
+                        break;
                 }
             }
             return mergePro;
@@ -206,8 +227,9 @@ namespace BuildMergeProject
         {
             if (_currentSelectedMergePro == null) return;
             //--- 
-            MergeProject mergePro = CreateMergeProjectPlan(_currentSelectedMergePro);
 
+
+            MergeProject mergePro = CreateMergeProjectPlan(_currentSelectedMergePro);
             //BY_CONVENTION:
             //set target to build output, set to x_autogen_projects dir
             //-----------------------------------
@@ -218,13 +240,21 @@ namespace BuildMergeProject
             string targetProjectName = _currentSelectedMergePro.ProjectName;//  "PixelFarm.MiniAgg.One";
             string targetProjectFile = targetProjectName + ".csproj";
             string saveProjectName = beginAt + "x_autogen\\" + targetProjectName + "\\" + targetProjectFile;
+            string[] asmReferences = mergePro._asmReferences.ToArray();
+
+            //mergePro.MergeAndSave(saveProjectName,
+            //   targetProjectName,
+            //   "v2.0",
+            //   " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
+            //   asmReferences);
+
+            //-----------
             mergePro.MergeAndSave(saveProjectName,
                targetProjectName,
-                "v2.0",
-                " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
-                new string[] {
-                  "System" ,
-               });
+               mergePro.TargetFrameworkVersion,
+               mergePro.DefineConstants,//additional define constant
+               asmReferences);
+
             //-----------
             LinkProjectConverter.ConvertToLinkProject2(
                 _solutionMx,
