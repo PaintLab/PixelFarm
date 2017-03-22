@@ -340,20 +340,6 @@ namespace BuildMergeProject
 
         }
 
-        private void cmdBuildMergePixelFarmMiniAgg_Click(object sender, EventArgs e)
-        {
-            //-----------
-            //PixelFarm.MiniAgg
-            //-----------
-            MergeProject mergePro = CreateMergePixelFarmMiniAggProject();
-            mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj",
-               "PixelFarm.MiniAgg",
-               "v2.0",
-               "",//additional define constant
-               new string[] {
-                  "System" ,
-               });
-        }
 
         private void cmdMinimalNetCore_Click(object sender, EventArgs e)
         {

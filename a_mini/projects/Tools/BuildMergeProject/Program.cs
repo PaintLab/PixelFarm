@@ -220,8 +220,8 @@ namespace BuildMergeProject
             string saveProjectName = beginAt + "x_autogen\\" + targetProjectName + "\\" + targetProjectFile;
             mergePro.MergeAndSave(saveProjectName,
                targetProjectName,
-               "v2.0",
-               " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
+                "v2.0",
+                " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
                 new string[] {
                   "System" ,
                });

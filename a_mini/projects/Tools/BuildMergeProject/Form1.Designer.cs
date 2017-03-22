@@ -36,7 +36,6 @@
             this.cmd_Cross = new System.Windows.Forms.Button();
             this.cmdCopyNativeLibs = new System.Windows.Forms.Button();
             this.cmdForTestWithHtmlRenderer = new System.Windows.Forms.Button();
-            this.cmdBuildMergePixelFarmMiniAgg = new System.Windows.Forms.Button();
             this.cmdMinimalNetCore = new System.Windows.Forms.Button();
             this.cmdBuild_PixelFarm_Drawing = new System.Windows.Forms.Button();
             this.cmdReadSln = new System.Windows.Forms.Button();
@@ -127,16 +126,6 @@
             this.cmdForTestWithHtmlRenderer.UseVisualStyleBackColor = true;
             this.cmdForTestWithHtmlRenderer.Click += new System.EventHandler(this.cmdForTestWithHtmlRenderer_Click);
             // 
-            // cmdBuildMergePixelFarmMiniAgg
-            // 
-            this.cmdBuildMergePixelFarmMiniAgg.Location = new System.Drawing.Point(300, 387);
-            this.cmdBuildMergePixelFarmMiniAgg.Name = "cmdBuildMergePixelFarmMiniAgg";
-            this.cmdBuildMergePixelFarmMiniAgg.Size = new System.Drawing.Size(167, 57);
-            this.cmdBuildMergePixelFarmMiniAgg.TabIndex = 8;
-            this.cmdBuildMergePixelFarmMiniAgg.Text = "BuildMerge PixelFarm.MiniAgg";
-            this.cmdBuildMergePixelFarmMiniAgg.UseVisualStyleBackColor = true;
-            this.cmdBuildMergePixelFarmMiniAgg.Click += new System.EventHandler(this.cmdBuildMergePixelFarmMiniAgg_Click);
-            // 
             // cmdMinimalNetCore
             // 
             this.cmdMinimalNetCore.Location = new System.Drawing.Point(229, 90);
@@ -225,7 +214,6 @@
             this.Controls.Add(this.cmdReadSln);
             this.Controls.Add(this.cmdBuild_PixelFarm_Drawing);
             this.Controls.Add(this.cmdMinimalNetCore);
-            this.Controls.Add(this.cmdBuildMergePixelFarmMiniAgg);
             this.Controls.Add(this.cmdForTestWithHtmlRenderer);
             this.Controls.Add(this.cmdCopyNativeLibs);
             this.Controls.Add(this.cmd_Cross);
@@ -251,7 +239,6 @@
         private System.Windows.Forms.Button cmd_Cross;
         private System.Windows.Forms.Button cmdCopyNativeLibs;
         private System.Windows.Forms.Button cmdForTestWithHtmlRenderer;
-        private System.Windows.Forms.Button cmdBuildMergePixelFarmMiniAgg;
         private System.Windows.Forms.Button cmdMinimalNetCore;
         private System.Windows.Forms.Button cmdBuild_PixelFarm_Drawing;
         private System.Windows.Forms.Button cmdReadSln;
