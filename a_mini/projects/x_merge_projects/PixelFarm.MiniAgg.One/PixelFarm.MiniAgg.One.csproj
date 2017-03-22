@@ -7,8 +7,8 @@
     <ProjectGuid>{82BB20F2-D26D-4617-BDFD-9679A3AAAE25}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.Mini.One</RootNamespace>
-    <AssemblyName>PixelFarm.Mini.One</AssemblyName>
+    <RootNamespace>PixelFarm.MiniAgg.One</RootNamespace>
+    <AssemblyName>PixelFarm.MiniAgg.One</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

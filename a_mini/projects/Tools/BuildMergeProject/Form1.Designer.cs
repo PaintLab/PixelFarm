@@ -98,7 +98,7 @@
             // 
             // cmd_Cross
             // 
-            this.cmd_Cross.Location = new System.Drawing.Point(25, 496);
+            this.cmd_Cross.Location = new System.Drawing.Point(25, 476);
             this.cmd_Cross.Name = "cmd_Cross";
             this.cmd_Cross.Size = new System.Drawing.Size(360, 57);
             this.cmd_Cross.TabIndex = 5;
@@ -168,7 +168,7 @@
             // lstPreset
             // 
             this.lstPreset.FormattingEnabled = true;
-            this.lstPreset.Location = new System.Drawing.Point(410, 450);
+            this.lstPreset.Location = new System.Drawing.Point(423, 438);
             this.lstPreset.Name = "lstPreset";
             this.lstPreset.Size = new System.Drawing.Size(167, 82);
             this.lstPreset.TabIndex = 13;

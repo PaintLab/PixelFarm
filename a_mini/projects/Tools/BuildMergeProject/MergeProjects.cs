@@ -259,10 +259,12 @@ namespace BuildMergeProject
                 elem.AppendChild(linkNode);
             }
 
-            if (!Directory.Exists(autoGenFolder))
+            string targetSaveDir = System.IO.Path.GetDirectoryName(saveFileName);
+            if (!Directory.Exists(targetSaveDir))
             {
-                Directory.CreateDirectory(autoGenFolder);
+                Directory.CreateDirectory(targetSaveDir);
             }
+            
             xmldoc.Save(saveFileName);
             if (removeOriginalSrcProject)
             {

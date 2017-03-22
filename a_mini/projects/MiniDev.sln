@@ -129,7 +129,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutFarm.TextBreak.Icu", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "x_merge_projects", "x_merge_projects", "{601D2DDA-967A-4913-A957-76CAC82ADD93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Mini.One", "x_merge_projects\PixelFarm.Mini.One\PixelFarm.Mini.One.csproj", "{82BB20F2-D26D-4617-BDFD-9679A3AAAE25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniAgg.One", "x_merge_projects\PixelFarm.MiniAgg.One\PixelFarm.MiniAgg.One.csproj", "{82BB20F2-D26D-4617-BDFD-9679A3AAAE25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
