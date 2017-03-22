@@ -10,8 +10,265 @@ using System.Xml;
 
 namespace BuildMergeProject
 {
+    enum ProjectAsmReferenceKind
+    {
+        ProjectReference,
+        Reference
+    }
+    class ProjectAsmReference
+    {
+
+        public ProjectAsmReference(ProjectItem proItem, ProjectAsmReferenceKind kind)
+        {
+            this.Name = proItem.EvaluatedInclude;
+            this.Kind = kind;
+            this.Item = proItem;
+        }
+        public ProjectItem Item { get; set; }
+        public ProjectAsmReferenceKind Kind { get; set; }
+        public string Name { get; set; }
+
+        public override string ToString()
+        {
+            return Kind + " : " + Name;
+        }
+
+    }
+
+
+    static class GlobalLoadedProject
+    {
+        static Dictionary<string, Project> s_loadedProjects = new Dictionary<string, Project>();
+        public static Project LoadProject(string projectFilename)
+        {
+            Project found;
+            if (!s_loadedProjects.TryGetValue(projectFilename, out found))
+            {
+                found = new Project(projectFilename);
+                return s_loadedProjects[projectFilename] = found;
+            }
+            return found;
+        }
+    }
+    class SolutionMx
+    {
+        public Solution _currentSolution;
+        public string SolutionDir { get; set; }
+        public string FullPath { get; set; }
+
+        public void ReadSolution(string path)
+        {
+            this.FullPath = path;
+            this.SolutionDir = Path.GetDirectoryName(path);
+            //--------------
+            //since this should be run on .net4,
+            //so we read 
+            //we just read what project are in the solution
+            //easy!
+            //--------------
+            _currentSolution = new Solution(path);
+            //foreach (SolutionProject pro in solution.Projects)
+            //{
+            //    string proName = pro.ProjectName;
+            //    string relPath = pro.RelativePath; 
+            //}
+        }
+        public string CombineRelativePath(string exePath)
+        {
+            string[] sub_paths = exePath.Split('\\');
+            List<string> totals = new List<string>();
+            int j = sub_paths.Length;
+
+            for (int i = 0; i < j; ++i)
+            {
+                string p = sub_paths[i];
+                if (p == "..")
+                {
+                    //remove latest data in str
+                    if (totals.Count > 0)
+                    {
+                        //remove the last one
+                        totals.RemoveAt(totals.Count - 1);
+                    }
+                    else
+                    {
+
+                    }
+                }
+                else
+                {
+
+                    totals.Add(p);
+                }
+            }
+
+
+            System.Text.StringBuilder stbuilder = new System.Text.StringBuilder();
+            j = totals.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                stbuilder.Append(totals[i]);
+                if (i != j - 1)
+                {
+                    stbuilder.Append("\\");
+                }
+            }
+
+            return stbuilder.ToString();
+        }
+        public string BuildPathRelativeToSolution(string subpath, out string rightPart)
+        {
+            //-----------------------------------
+            string rootSlnFolder = this.SolutionDir;
+            //exe dir 
+            if (!subpath.StartsWith(rootSlnFolder))
+            {
+                throw new NotSupportedException();
+            }
+            string sub = subpath.Substring(rootSlnFolder.Length);
+            string[] sub_steps = sub.Split('\\');
+            //step up to reach solution folder
+            int nsteps = sub_steps.Length - 2;
+            string beginAt = "";
+            for (int i = 0; i < nsteps; ++i)
+            {
+                beginAt += "..\\";
+            }
+            rightPart = sub;
+            return beginAt;
+        }
+        static int FindFirstDiff(string s0, string s1)
+        {
+            //s1.Length must >= s0.Length
+            int j = 0;
+            if ((j = s1.Length) >= s0.Length)
+            {
+                char[] s0_buff = s0.ToCharArray();
+                char[] s1_buff = s1.ToCharArray();
+                for (int i = 0; i < j; ++i)
+                {
+                    char c0 = s0_buff[i];
+                    char c1 = s1_buff[i];
+                    if (c0 != c1)
+                    {
+                        return i;
+                    }
+                }
+                return j - 1;
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+        public string BuildPathRelativeToOther(string mainPath, string subpath, out string rightPart)
+        {
+
+            int diffPos = FindFirstDiff(mainPath, subpath);
+            string sub = subpath.Substring(diffPos);
+            string[] sub_steps = sub.Split('\\');
+            //step up to reach solution folder
+            int nsteps = sub_steps.Length - 2;
+            string beginAt = "";
+            for (int i = 0; i < nsteps; ++i)
+            {
+                beginAt += "..\\";
+            }
+            rightPart = sub;
+            return beginAt;
+        }
+        public string GetFullProjectPath(string projectRelativePath)
+        {
+            string result = Path.Combine(this.SolutionDir, projectRelativePath);
+            return result;
+        }
+
+        public List<ProjectAsmReference> GetReferenceAsmList(string projectFile)
+        {
+            string fullProjectName = GetFullProjectPath(projectFile);
+            List<ProjectAsmReference> asmReferenceList = new List<ProjectAsmReference>();
+            Project pro = GlobalLoadedProject.LoadProject(fullProjectName);
+            foreach (ProjectItem item in pro.AllEvaluatedItems)
+            {
+                switch (item.ItemType)
+                {
+                    default:
+                        {
+
+                        }
+                        break;
+                    case "BootstrapperPackage":
+                    case "None":
+                        break;
+                    case "Compile":
+                        //skip
+                        break;
+                    //    {
+                    //        string onlyFileName = Path.GetFileName(item.EvaluatedInclude);
+                    //        if (onlyFileName != "AssemblyInfo.cs") //special case ***no include this file
+                    //        {
+                    //            allItems.Add(item);
+                    //        }
+                    //    }
+                    //    break;
+                    case "ProjectReference":
+                        asmReferenceList.Add(new ProjectAsmReference(item, ProjectAsmReferenceKind.ProjectReference));
+                        break;
+                    case "Reference":
+                        asmReferenceList.Add(new ProjectAsmReference(item, ProjectAsmReferenceKind.Reference));
+                        break;
+                }
+            }
+            return asmReferenceList;
+        }
+    }
+
+
+
+
     static class LinkProjectConverter
     {
+        public static void ConvertToLinkProject2(SolutionMx slnMx, string srcProject, string autoGenFolder, bool removeOriginalSrcProject)
+        {
+            XmlDocument xmldoc = new XmlDocument();
+            xmldoc.Load(srcProject);
+            var compileNodes = SelectCompileNodes(xmldoc.DocumentElement);
+            string onlyFileName = Path.GetFileName(srcProject);
+            string saveFileName = slnMx.SolutionDir + "\\" + autoGenFolder + "\\" + onlyFileName;
+            string targetSaveFolder = slnMx.SolutionDir + "\\" + autoGenFolder;
+            string rightPart;
+
+            string beginAt = slnMx.BuildPathRelativeToSolution(targetSaveFolder, out rightPart);
+            foreach (XmlElement elem in compileNodes)
+            {
+                XmlAttribute includeAttr = elem.GetAttributeNode("Include");
+                string includeValue = includeAttr.Value;
+                string combinedPath = slnMx.CombineRelativePath(includeValue);
+
+
+                string b2 = slnMx.BuildPathRelativeToOther(targetSaveFolder, combinedPath, out rightPart);
+                //this version:
+                //auto gen project is lower than original 1 level
+                //so change the original src location
+                //and create linked child node
+                includeAttr.Value = "..\\" + beginAt + rightPart;
+
+
+                XmlElement linkNode = xmldoc.CreateElement("Link", elem.NamespaceURI);
+                linkNode.InnerText = rightPart;
+                elem.AppendChild(linkNode);
+            }
+
+            if (!Directory.Exists(autoGenFolder))
+            {
+                Directory.CreateDirectory(autoGenFolder);
+            }
+            xmldoc.Save(saveFileName);
+            if (removeOriginalSrcProject)
+            {
+                File.Delete(srcProject);
+            }
+        }
         public static void ConvertToLinkProject(string srcProject, string autoGenFolder, bool removeOriginalSrcProject)
         {
             XmlDocument xmldoc = new XmlDocument();
@@ -222,8 +479,8 @@ namespace BuildMergeProject
         public void Load(string projectFile)
         {
             this.ProjectFileName = projectFile;
-             
-            var pro = new Project(projectFile);
+
+            Project pro = GlobalLoadedProject.LoadProject(projectFile);
             foreach (ProjectItem item in pro.AllEvaluatedItems)
             {
                 switch (item.ItemType)
@@ -253,6 +510,94 @@ namespace BuildMergeProject
             }
 
             return absFilenames;
+        }
+    }
+}
+namespace BuildMergeProject
+{
+    //from http://stackoverflow.com/questions/707107/parsing-visual-studio-solution-files
+    using System.Diagnostics;
+    using System.Reflection;
+    public class Solution
+    {
+        //internal class SolutionParser
+        //Name: Microsoft.Build.Construction.SolutionParser
+        //Assembly: Microsoft.Build, Version=4.0.0.0
+
+        static readonly Type s_SolutionParser;
+        static readonly PropertyInfo s_SolutionParser_solutionReader;
+        static readonly MethodInfo s_SolutionParser_parseSolution;
+        static readonly PropertyInfo s_SolutionParser_projects;
+
+        static Solution()
+        {
+            s_SolutionParser = Type.GetType("Microsoft.Build.Construction.SolutionParser, Microsoft.Build, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false, false);
+            if (s_SolutionParser != null)
+            {
+                s_SolutionParser_solutionReader = s_SolutionParser.GetProperty("SolutionReader", BindingFlags.NonPublic | BindingFlags.Instance);
+                s_SolutionParser_projects = s_SolutionParser.GetProperty("Projects", BindingFlags.NonPublic | BindingFlags.Instance);
+                s_SolutionParser_parseSolution = s_SolutionParser.GetMethod("ParseSolution", BindingFlags.NonPublic | BindingFlags.Instance);
+            }
+        }
+
+        public List<SolutionProject> Projects { get; private set; }
+
+        public Solution(string solutionFileName)
+        {
+            if (s_SolutionParser == null)
+            {
+                throw new InvalidOperationException("Can not find type 'Microsoft.Build.Construction.SolutionParser' are you missing a assembly reference to 'Microsoft.Build.dll'?");
+            }
+            var solutionParser = s_SolutionParser.GetConstructors(BindingFlags.Instance | BindingFlags.NonPublic)[0].Invoke(null);
+            using (var streamReader = new StreamReader(solutionFileName))
+            {
+                s_SolutionParser_solutionReader.SetValue(solutionParser, streamReader, null);
+                s_SolutionParser_parseSolution.Invoke(solutionParser, null);
+            }
+            var projects = new List<SolutionProject>();
+            var array = (Array)s_SolutionParser_projects.GetValue(solutionParser, null);
+            for (int i = 0; i < array.Length; i++)
+            {
+                projects.Add(new SolutionProject(array.GetValue(i)));
+            }
+            this.Projects = projects;
+        }
+    }
+
+
+    [DebuggerDisplay("{ProjectName}, {RelativePath}, {ProjectGuid}")]
+    public class SolutionProject
+    {
+        static readonly Type s_ProjectInSolution;
+        static readonly PropertyInfo s_ProjectInSolution_ProjectName;
+        static readonly PropertyInfo s_ProjectInSolution_RelativePath;
+        static readonly PropertyInfo s_ProjectInSolution_ProjectGuid;
+        static readonly PropertyInfo s_ProjectInSolution_ProjectType;
+
+        static SolutionProject()
+        {
+            s_ProjectInSolution = Type.GetType("Microsoft.Build.Construction.ProjectInSolution, Microsoft.Build, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", false, false);
+            if (s_ProjectInSolution != null)
+            {
+                s_ProjectInSolution_ProjectName = s_ProjectInSolution.GetProperty("ProjectName", BindingFlags.NonPublic | BindingFlags.Instance);
+                s_ProjectInSolution_RelativePath = s_ProjectInSolution.GetProperty("RelativePath", BindingFlags.NonPublic | BindingFlags.Instance);
+                s_ProjectInSolution_ProjectGuid = s_ProjectInSolution.GetProperty("ProjectGuid", BindingFlags.NonPublic | BindingFlags.Instance);
+                s_ProjectInSolution_ProjectType = s_ProjectInSolution.GetProperty("ProjectType", BindingFlags.NonPublic | BindingFlags.Instance);
+            }
+        }
+
+        public string ProjectName { get; private set; }
+        public string RelativePath { get; private set; }
+        public string ProjectGuid { get; private set; }
+        public string ProjectType { get; private set; }
+
+        public SolutionProject(object solutionProject)
+        {
+            this.ProjectName = s_ProjectInSolution_ProjectName.GetValue(solutionProject, null) as string;
+            this.RelativePath = s_ProjectInSolution_RelativePath.GetValue(solutionProject, null) as string;
+            this.ProjectGuid = s_ProjectInSolution_ProjectGuid.GetValue(solutionProject, null) as string;
+            object o = s_ProjectInSolution_ProjectType.GetValue(solutionProject, null);
+            this.ProjectType = s_ProjectInSolution_ProjectType.GetValue(solutionProject, null).ToString();
         }
     }
 }
