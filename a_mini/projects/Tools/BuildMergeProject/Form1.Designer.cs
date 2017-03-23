@@ -30,7 +30,6 @@
         {
             this.cmdBuildMergePixelFarm = new System.Windows.Forms.Button();
             this.cmdBuildMergePixelFarmPortable = new System.Windows.Forms.Button();
-            this.cmdBuildMergePixelFarmMiniAggOne = new System.Windows.Forms.Button();
             this.cmd_Windows_OnlyGdiPlus = new System.Windows.Forms.Button();
             this.cmd_Windows_NoGdiPlus_NoWinForms = new System.Windows.Forms.Button();
             this.cmd_Cross = new System.Windows.Forms.Button();
@@ -65,16 +64,6 @@
             this.cmdBuildMergePixelFarmPortable.Text = "BuildMerge PixelFarm Portable";
             this.cmdBuildMergePixelFarmPortable.UseVisualStyleBackColor = true;
             this.cmdBuildMergePixelFarmPortable.Click += new System.EventHandler(this.cmdBuildMergePixelFarmPortable_Click);
-            // 
-            // cmdBuildMergePixelFarmMiniAggOne
-            // 
-            this.cmdBuildMergePixelFarmMiniAggOne.Location = new System.Drawing.Point(25, 27);
-            this.cmdBuildMergePixelFarmMiniAggOne.Name = "cmdBuildMergePixelFarmMiniAggOne";
-            this.cmdBuildMergePixelFarmMiniAggOne.Size = new System.Drawing.Size(167, 57);
-            this.cmdBuildMergePixelFarmMiniAggOne.TabIndex = 2;
-            this.cmdBuildMergePixelFarmMiniAggOne.Text = "BuildMerge PixelFarm.MiniAgg.One";
-            this.cmdBuildMergePixelFarmMiniAggOne.UseVisualStyleBackColor = true;
-            this.cmdBuildMergePixelFarmMiniAggOne.Click += new System.EventHandler(this.cmdMergePixelFarmMiniAggOne_Click);
             // 
             // cmd_Windows_OnlyGdiPlus
             // 
@@ -219,7 +208,6 @@
             this.Controls.Add(this.cmd_Cross);
             this.Controls.Add(this.cmd_Windows_NoGdiPlus_NoWinForms);
             this.Controls.Add(this.cmd_Windows_OnlyGdiPlus);
-            this.Controls.Add(this.cmdBuildMergePixelFarmMiniAggOne);
             this.Controls.Add(this.cmdBuildMergePixelFarmPortable);
             this.Controls.Add(this.cmdBuildMergePixelFarm);
             this.Name = "Form1";
@@ -233,7 +221,6 @@
 
         private System.Windows.Forms.Button cmdBuildMergePixelFarm;
         private System.Windows.Forms.Button cmdBuildMergePixelFarmPortable;
-        private System.Windows.Forms.Button cmdBuildMergePixelFarmMiniAggOne;
         private System.Windows.Forms.Button cmd_Windows_OnlyGdiPlus;
         private System.Windows.Forms.Button cmd_Windows_NoGdiPlus_NoWinForms;
         private System.Windows.Forms.Button cmd_Cross;

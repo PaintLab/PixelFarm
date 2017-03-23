@@ -73,7 +73,7 @@ namespace BuildMergeProject
             //    string relPath = pro.RelativePath; 
             //}
         }
-        public string CombineRelativePath(string exePath)
+        public static string CombineRelativePath(string exePath)
         {
             string[] sub_paths = exePath.Split('\\');
             List<string> totals = new List<string>();
@@ -137,21 +137,24 @@ namespace BuildMergeProject
             rightPart = sub;
             return beginAt;
         }
-        static int FindFirstDiff(string s0, string s1)
+        static int FindFirstDiff(string[] s0_splits, string[] s1_splits)
         {
-            //s1.Length must >= s0.Length
             int j = 0;
-            if ((j = s1.Length) >= s0.Length)
+            if ((j = s0_splits.Length) <= s1_splits.Length)
             {
-                char[] s0_buff = s0.ToCharArray();
-                char[] s1_buff = s1.ToCharArray();
                 for (int i = 0; i < j; ++i)
                 {
-                    char c0 = s0_buff[i];
-                    char c1 = s1_buff[i];
-                    if (c0 != c1)
+                    //compare part by part
+                    string s0_p = s0_splits[i];
+                    string s1_p = s1_splits[i];
+                    if (s0_p != s1_p)
                     {
+                        //stop at this part
                         return i;
+                    }
+                    else
+                    {
+                        //next
                     }
                 }
                 return j - 1;
@@ -163,18 +166,33 @@ namespace BuildMergeProject
         }
         public string BuildPathRelativeToOther(string mainPath, string subpath, out string rightPart)
         {
+            //s1.Length must >= s0.Length
 
-            int diffPos = FindFirstDiff(mainPath, subpath);
-            string sub = subpath.Substring(diffPos);
-            string[] sub_steps = sub.Split('\\');
-            //step up to reach solution folder
-            int nsteps = sub_steps.Length - 2;
+            string[] s0_splits = mainPath.Split('\\');
+            string[] s1_splits = subpath.Split('\\');
+
+            int diffPos = FindFirstDiff(s0_splits, s1_splits);
+            //same at diffPos-1
+
+            int nsteps = diffPos - 1;
             string beginAt = "";
             for (int i = 0; i < nsteps; ++i)
             {
                 beginAt += "..\\";
             }
-            rightPart = sub;
+            rightPart = "";
+            int j = s1_splits.Length;
+            int m = 0;
+            for (int n = diffPos; n < j; ++n)
+            {
+                if (m > 0 && m < j - 1)
+                {
+                    rightPart += '\\';
+                }
+                rightPart += s1_splits[n];
+                m++;
+
+            }
             return beginAt;
         }
         public string GetFullProjectPath(string projectRelativePath)
@@ -244,7 +262,7 @@ namespace BuildMergeProject
             {
                 XmlAttribute includeAttr = elem.GetAttributeNode("Include");
                 string includeValue = includeAttr.Value;
-                string combinedPath = slnMx.CombineRelativePath(includeValue);
+                string combinedPath = SolutionMx.CombineRelativePath(includeValue);
 
 
                 string b2 = slnMx.BuildPathRelativeToOther(targetSaveFolder, combinedPath, out rightPart);
@@ -424,16 +442,20 @@ namespace BuildMergeProject
                 AddItems(root, "Reference", references);
             }
             List<string> allList = new List<string>();
+            Dictionary<string, bool> uniqueFileList = new Dictionary<string, bool>();
             string onlyProjPath = Path.GetDirectoryName(csprojFilename) + "\\";
             int onlyProjPathLength = onlyProjPath.Length;
             //TODO: review here
             //special for support .net20
             bool foundFirstExtensionAttributeFile = false;
-            foreach (var toMergePro in subProjects)
+            foreach (ToMergeProject toMergePro in subProjects)
             {
-                var allAbsFiles = toMergePro.GetAllAbsoluteFilenames();
-                foreach (var filename in allAbsFiles)
+                List<string> allAbsFiles = toMergePro.GetAllAbsoluteFilenames();
+                foreach (string filename in allAbsFiles)
                 {
+
+
+
                     string onlyFileName = Path.GetFileName(filename);
                     if (onlyFileName == "ExtensionAttribute.cs")
                     {
@@ -446,6 +468,13 @@ namespace BuildMergeProject
                             foundFirstExtensionAttributeFile = true;
                         }
                     }
+
+                    string combindedFilename = SolutionMx.CombineRelativePath(filename).ToUpper();
+                    if (uniqueFileList.ContainsKey(combindedFilename))
+                    {
+                        continue;
+                    }
+                    uniqueFileList[combindedFilename] = true;//
                     if (filename.StartsWith(onlyProjPath))
                     {
                         allList.Add(filename.Substring(onlyProjPathLength));

@@ -43,24 +43,24 @@ namespace BuildMergeProject
         }
         private void cmdMergePixelFarmMiniAggOne_Click(object sender, EventArgs e)
         {
-            //-----------
-            //PixelFarm's MiniAgg.One
-            //-----------
-            MergeProject mergePro = CreateMiniAggOneProject();
-            string targetProjectName = "PixelFarm.MiniAgg.One";
-            string targetProjectFile = targetProjectName + ".csproj";
-            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
-               targetProjectName,
-               "v2.0",
-               " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
-               new string[] {
-                  "System" ,
-               });
-            //-----------
-            LinkProjectConverter.ConvertToLinkProject(
-                rootProjectFolders + "\\" + targetProjectFile,
-                rootProjectFolders + "\\x_autogen",
-                true);//after link project is created, we remove the targetProjectFile
+            ////-----------
+            ////PixelFarm's MiniAgg.One
+            ////-----------
+            //MergeProject mergePro = CreateMiniAggOneProject();
+            //string targetProjectName = "PixelFarm.MiniAgg.One";
+            //string targetProjectFile = targetProjectName + ".csproj";
+            //mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+            //   targetProjectName,
+            //   "v2.0",
+            //   " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
+            //   new string[] {
+            //      "System" ,
+            //   });
+            ////-----------
+            //LinkProjectConverter.ConvertToLinkProject(
+            //    rootProjectFolders + "\\" + targetProjectFile,
+            //    rootProjectFolders + "\\x_autogen",
+            //    true);//after link project is created, we remove the targetProjectFile
 
         }
 
@@ -312,7 +312,7 @@ namespace BuildMergeProject
 
         private void cmdForTestWithHtmlRenderer_Click(object sender, EventArgs e)
         {
-            ////this for test ****
+            //this for test ****
             //Windows:
             //-------------------------
             //no glfw.dll,
