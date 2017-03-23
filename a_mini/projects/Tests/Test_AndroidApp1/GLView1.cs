@@ -19,7 +19,8 @@ namespace Test_AndroidApp1
         {
 
         }
-
+        int view_width;
+        int view_height;
         // This gets called when the drawing surface is ready
         protected override void OnLoad(EventArgs e)
         {
@@ -174,8 +175,7 @@ namespace Test_AndroidApp1
 
             return true;
         }
-        int view_width;
-        int view_height;
+        
         void SetupGL()
         {
 
@@ -198,18 +198,6 @@ namespace Test_AndroidApp1
             //-------------------------------------------------------------------------------- 
             shaderProgram.UseProgram();
         }
-        //float[] square_vertices = {
-        //    -0.5f, -0.5f,
-        //    0.5f, -0.5f,
-        //    -0.5f, 0.5f,
-        //    0.5f, 0.5f,
-        //};
-
-        //byte[] square_colors = {
-        //    255, 255,   0, 255,
-        //    0,   255, 255, 255,
-        //    0,     0,    0,  0,
-        //    255,   0,  255, 255,
-        //};
+        
     }
 }
