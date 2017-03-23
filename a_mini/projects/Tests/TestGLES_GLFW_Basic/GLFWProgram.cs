@@ -129,9 +129,9 @@ namespace TestGlfw
             //load image
 
             /* Loop until the user closes the window */
-            int width, height;
-            Glfw.GetFramebufferSize(glWindow, out width, out height);
-            float ratio = (float)width / (float)height;
+            //int width, height;
+            //Glfw.GetFramebufferSize(glWindow, out width, out height);
+            //float ratio = (float)width / (float)height;
 
             GL.Viewport(0, 0, 800, 600);
             shaderProgram.UseProgram();
