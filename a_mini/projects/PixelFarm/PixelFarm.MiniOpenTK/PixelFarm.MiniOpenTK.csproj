@@ -42,9 +42,6 @@
     <Compile Include="OpenTK\ContextHandle.cs" />
     <Compile Include="OpenTK\DisplayDevice.cs" />
     <Compile Include="OpenTK\DisplayResolution.cs" />
-    <Compile Include="OpenTK\Es2Utils\ES2Utils.cs" />
-    <Compile Include="OpenTK\Es2Utils\GeometryUtils.cs" />
-    <Compile Include="OpenTK\Es2Utils\MiniShaderProgram.cs" />
     <Compile Include="OpenTK\GameWindowFlags.cs" />
     <Compile Include="OpenTK\Graphics\Color4.cs" />
     <Compile Include="OpenTK\Graphics\ColorFormat.cs" />

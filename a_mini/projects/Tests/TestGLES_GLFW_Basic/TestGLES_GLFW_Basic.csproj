@@ -36,6 +36,15 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\Es2Utils\ES2Utils.cs">
+      <Link>Es2Utils\ES2Utils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\Es2Utils\GeometryUtils.cs">
+      <Link>Es2Utils\GeometryUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\Es2Utils\MiniShaderProgram.cs">
+      <Link>Es2Utils\MiniShaderProgram.cs</Link>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GLFWProgram.cs" />
