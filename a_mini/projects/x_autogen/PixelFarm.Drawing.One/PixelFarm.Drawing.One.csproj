@@ -17,7 +17,7 @@
     <Optimize>false</Optimize>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG; TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
+    <DefineConstants>DEBUG; TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20,NETSTANDARD</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -26,7 +26,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <DefineConstants> TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20</DefineConstants>
+    <DefineConstants> TRACETRACE;DEBUG; PIXEL_FARM, PIXEL_FARM_NET20,NET20,NETSTANDARD</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -224,150 +224,6 @@
     <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ITextPrinter.cs" />
     <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ScriptCode.cs" />
     <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.DrawingCanvas\3_Drawing_Fonts\WriteDirection.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\Color.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\ExtendedImage.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\ExtraImageInfo.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\FlippingType.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\Helpers\ForNet20.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\Helpers\Guard.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\ImageFormatException.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\ImageFrameCollection.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\ImageProperty.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\ImagePropertyCollection.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\ImgExtensionMethods.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\IO\Decoders.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\IO\Encoders.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\IO\IImageDecoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\IO\IImageEncoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\IO\UnsupportedImageFormatException.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\Rectangle.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\RotationType.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Core\SimpleImage.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Gif\DisposalMethod.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Gif\GifDecoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Gif\GifGraphicsControlExtension.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Gif\GifImageDescriptor.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Gif\GifLogicalScreenDescriptor.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Gif\LZWDecoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\DCT.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\DecodedJpeg.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\HuffmanTable.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegComponent.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegDecoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegFrame.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegHuffmanTable.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegQuantizationTable.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\Decoder\JpegScan.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\Encoder\JpegEncoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\FDCT.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\Image.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryReader.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\IO\BinaryWriter.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\IO\JpegBinaryReader.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\JpegMarker.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\YCbCr.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\FluxJpeg.Core\ZigZag.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\JpegDecoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Jpeg\JpegEncoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\GrayscaleReader.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\IColorReader.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\CRC32.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\Deflate.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\DeflateStream.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\GZipStream.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\Inflate.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\InfTree.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\ParallelDeflateOutputStream.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\Tree.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\Zlib.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\ZlibBaseStream.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\ZlibCodec.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\ZlibConstants.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\Ionic.Zlib\ZlibStream.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\MyCrc32.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\PaletteIndexReader.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\PngChunk.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\PngColorTypeInformation.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\PngDecoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\PngEncoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\PngHeader.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\ImgCodec.Png\TruecolorReader.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\BitmapDestination.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\BitStream.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\DensityUnit.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\arith_entropy_decoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\arith_entropy_encoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\bitread_perm_state.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\bitread_working_state.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\ComponentBuffer.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\d_derived_tbl.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\huff_entropy_decoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\huff_entropy_encoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\JpegUtils.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_color_converter.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_color_deconverter.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_color_quantizer.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_comp_master.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_c_coef_controller.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_c_main_controller.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_c_prep_controller.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_decomp_master.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_downsampler.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_d_coef_controller.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_d_main_controller.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_d_post_controller.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_entropy_decoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_entropy_encoder.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_forward_dct.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_input_controller.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_inverse_dct.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_marker_reader.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_marker_writer.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_scan_info.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\jpeg_upsampler.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\J_BUF_MODE.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\my_1pass_cquantizer.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\my_2pass_cquantizer.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\my_c_coef_controller.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\my_destination_mgr.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\my_merged_upsampler.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\my_source_mgr.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\my_trans_c_coef_controller.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\Internal\my_upsampler.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\JBLOCK.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\JHUFF_TBL.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\JpegConstants.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\jpeg_common_struct.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\jpeg_component_info.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\jpeg_compress_struct.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\jpeg_decompress_struct.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\jpeg_destination_mgr.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\jpeg_error_mgr.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\JPEG_MARKER.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\jpeg_marker_struct.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\jpeg_progress_mgr.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\jpeg_source_mgr.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\JQUANT_TBL.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\jvirt_array.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\J_COLOR_SPACE.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\J_COLOR_TRANSFORM.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\J_DCT_METHOD.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\J_DITHER_MODE.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\J_MESSAGE_CODE.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Classic\ReadResult.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\CompressionParameters.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\DecompressionParameters.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\DecompressorToJpegImage.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Enumerations.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\IDecompressDestination.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\IRawImage.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Jpeg.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\JpegImage.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\RawImage.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\SampleRow.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\..\LibJpeg\Utils.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\Properties\Resources.Designer.cs" />
-    <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.ImgCodecs\Properties\Settings.Designer.cs" />
     <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\AutoGeneratedAttribute.cs" />
     <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\BindingsBase.cs" />
     <Compile Include="D:\projects\PixelFarm-dev\a_mini\projects\x_merge_projects\PixelFarm.Drawing.One\..\..\PixelFarm\PixelFarm.MiniOpenTK\OpenTK\BlittableValueType.cs" />

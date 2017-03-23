@@ -53,10 +53,6 @@
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.ImgCodecs\PixelFarm.ImgCodecs.csproj">
-      <Project>{bfadb269-520e-4a14-9d4a-3d65ed57eb75}</Project>
-      <Name>PixelFarm.ImgCodecs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
       <Name>PixelFarm.MiniOpenTK</Name>
