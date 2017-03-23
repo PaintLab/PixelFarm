@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_iOSApp1", "..\..\Tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_AndroidApp1", "..\..\Tests\Test_AndroidApp1\Test_AndroidApp1.csproj", "{E4DD4215-1E53-420E-89CB-9FCA7B3882FF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0_PixelFarm.One", "0_PixelFarm.One", "{60A4A16C-95DE-4145-80BD-639726009A5E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1_VeryBasicTest", "1_VeryBasicTest", "{F186A1AB-01A5-436D-AB67-0B1E5058277E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
@@ -134,5 +138,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{20471A76-56D4-43E6-8D56-7011EBADD238} = {60A4A16C-95DE-4145-80BD-639726009A5E}
+		{5D404942-0730-4D7E-8DCB-97951E7174A3} = {60A4A16C-95DE-4145-80BD-639726009A5E}
+		{25E0C57A-157E-47E9-B143-46BCB60ED69A} = {F186A1AB-01A5-436D-AB67-0B1E5058277E}
+		{E4DD4215-1E53-420E-89CB-9FCA7B3882FF} = {F186A1AB-01A5-436D-AB67-0B1E5058277E}
 	EndGlobalSection
 EndGlobal
