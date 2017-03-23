@@ -35,6 +35,15 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\Es2Utils\ES2Utils.cs">
+      <Link>DrawingGL\Es2Utils\ES2Utils.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\Es2Utils\GeometryUtils.cs">
+      <Link>DrawingGL\Es2Utils\GeometryUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\Es2Utils\MiniShaderProgram.cs">
+      <Link>DrawingGL\Es2Utils\MiniShaderProgram.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\CanvasGL2d.cs">
       <Link>DrawingGL\GLCanvas\CanvasGL2d.cs</Link>
     </Compile>

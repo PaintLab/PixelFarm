@@ -59,6 +59,9 @@
     <Compile Include="DrawingGL\GLTexture\GLBitmapReference.cs" />
     <Compile Include="DrawingGL\GLTexture\LazyAggBitmapBufferProvider.cs" />
     <Compile Include="DrawingGL\GLTexture\TextureAtlas.cs" />
+    <Compile Include="DrawingGL\Es2Utils\ES2Utils.cs" />
+    <Compile Include="DrawingGL\Es2Utils\GeometryUtils.cs" />
+    <Compile Include="DrawingGL\Es2Utils\MiniShaderProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
