@@ -2,8 +2,8 @@
 
 using System;
 using System.IO;
-
 using System.Windows.Forms;
+
 namespace BuildMergeProject
 {
     public partial class Form1 : Form
@@ -13,6 +13,8 @@ namespace BuildMergeProject
         public Form1()
         {
             InitializeComponent();
+
+
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -41,24 +43,24 @@ namespace BuildMergeProject
         }
         private void cmdMergePixelFarmMiniAggOne_Click(object sender, EventArgs e)
         {
-            //-----------
-            //PixelFarm's MiniAgg.One
-            //-----------
-            MergeProject mergePro = CreateMiniAggOneProject();
-            string targetProjectName = "PixelFarm.MiniAgg.One";
-            string targetProjectFile = targetProjectName + ".csproj";
-            mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
-               targetProjectName,
-               "v2.0",
-               " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
-               new string[] {
-                  "System" ,
-               });
-            //-----------
-            LinkProjectConverter.ConvertToLinkProject(
-                rootProjectFolders + "\\" + targetProjectFile,
-                rootProjectFolders + "\\x_autogen",
-                true);//after link project is created, we remove the targetProjectFile
+            ////-----------
+            ////PixelFarm's MiniAgg.One
+            ////-----------
+            //MergeProject mergePro = CreateMiniAggOneProject();
+            //string targetProjectName = "PixelFarm.MiniAgg.One";
+            //string targetProjectFile = targetProjectName + ".csproj";
+            //mergePro.MergeAndSave(rootProjectFolders + "\\" + targetProjectFile,
+            //   targetProjectName,
+            //   "v2.0",
+            //   " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
+            //   new string[] {
+            //      "System" ,
+            //   });
+            ////-----------
+            //LinkProjectConverter.ConvertToLinkProject(
+            //    rootProjectFolders + "\\" + targetProjectFile,
+            //    rootProjectFolders + "\\x_autogen",
+            //    true);//after link project is created, we remove the targetProjectFile
 
         }
 
@@ -100,7 +102,7 @@ namespace BuildMergeProject
             mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj");
             //ess utils
             mergePro.LoadSubProject(rootProjectFolders + @"\TypeMirror\TypeMirror.csproj");
-           
+
 
             switch (mergeOption)
             {
@@ -147,7 +149,7 @@ namespace BuildMergeProject
                     //native fonts
                     mergePro.LoadSubProject(rootProjectFolders + @"\PixelFarm.NativeFonts\PixelFarm.NativeFonts.csproj");
                     //
-                  
+
                     break;
                 case MergeOption.Windows_NoWinFormNoGdiPlus:
                     mergePro.LoadSubProject(rootProjectFolders + @"\Win32Utils\Win32Utils.csproj");
@@ -310,7 +312,7 @@ namespace BuildMergeProject
 
         private void cmdForTestWithHtmlRenderer_Click(object sender, EventArgs e)
         {
-            ////this for test ****
+            //this for test ****
             //Windows:
             //-------------------------
             //no glfw.dll,
@@ -338,20 +340,6 @@ namespace BuildMergeProject
 
         }
 
-        private void cmdBuildMergePixelFarmMiniAgg_Click(object sender, EventArgs e)
-        {
-            //-----------
-            //PixelFarm.MiniAgg
-            //-----------
-            MergeProject mergePro = CreateMergePixelFarmMiniAggProject();
-            mergePro.MergeAndSave(rootProjectFolders + @"\PixelFarm.MiniAgg.csproj",
-               "PixelFarm.MiniAgg",
-               "v2.0",
-               "",//additional define constant
-               new string[] {
-                  "System" ,
-               });
-        }
 
         private void cmdMinimalNetCore_Click(object sender, EventArgs e)
         {
@@ -413,16 +401,37 @@ namespace BuildMergeProject
                "v2.0",
                ",NET20,PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
                new string[] {
-                  "System", 
+                  "System",
                   "System.Xml",
                });
             ////-----------
             //LinkProjectConverter.ConvertToLinkProject(
             //    rootProjectFolders + "\\" + targetProjectFile,
             //    rootProjectFolders + "\\x_autogen",
-            //    true);//after link project is created, we remove the targetProjectFile
+            //    true);//after link project is created, we remove the targetProjectFile 
+        }
+        SolutionMx slnMx;
+        SolutionListViewController _slnListViewController;
+        private void cmdReadSln_Click(object sender, EventArgs e)
+        {
+            //read sln file 
+            slnMx = new SolutionMx();
+            slnMx.ReadSolution(@"D:\projects\PixelFarm-dev\a_mini\projects\MiniDev.sln");
+            _slnListViewController = new SolutionListViewController();
+            _slnListViewController.SetSolutionListView(this.listView1);
+            _slnListViewController.SetMergePlanListView(this.listView2);
+            _slnListViewController.SetProjectReferenceListView(this.lstAsmReferenceList);
+            _slnListViewController.LoadSolutionMx(slnMx);
+        }
 
+        private void cmdBuildSelectedMergePro_Click(object sender, EventArgs e)
+        {
+            _slnListViewController.BuildMergeProjectFromSelectedItem();
+        }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            cmdReadSln_Click(null, EventArgs.Empty);
         }
     }
 }
