@@ -97,7 +97,7 @@
             // 
             // cmdCopyNativeLibs
             // 
-            this.cmdCopyNativeLibs.Location = new System.Drawing.Point(317, 324);
+            this.cmdCopyNativeLibs.Location = new System.Drawing.Point(385, 163);
             this.cmdCopyNativeLibs.Name = "cmdCopyNativeLibs";
             this.cmdCopyNativeLibs.Size = new System.Drawing.Size(184, 57);
             this.cmdCopyNativeLibs.TabIndex = 6;
@@ -182,7 +182,7 @@
             // 
             // cmdBuildSelectedMergePro
             // 
-            this.cmdBuildSelectedMergePro.Location = new System.Drawing.Point(473, 226);
+            this.cmdBuildSelectedMergePro.Location = new System.Drawing.Point(488, 269);
             this.cmdBuildSelectedMergePro.Name = "cmdBuildSelectedMergePro";
             this.cmdBuildSelectedMergePro.Size = new System.Drawing.Size(102, 37);
             this.cmdBuildSelectedMergePro.TabIndex = 16;
