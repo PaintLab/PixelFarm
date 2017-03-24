@@ -55,16 +55,18 @@
     <Compile Include="..\test0_winneutral\LionDataStore.cs">
       <Link>App\LionDataStore.cs</Link>
     </Compile>
-    <Compile Include="..\test0_winneutral\MyNativeRGBA32BitsImage.cs">
-      <Link>App\MyNativeRGBA32BitsImage.cs</Link>
-    </Compile>
     <Compile Include="..\test0_winneutral\SpriteShape.cs">
       <Link>App\SpriteShape.cs</Link>
     </Compile>
-    <Compile Include="App\DemoBase.cs" />
-    <Compile Include="App\GLDemoContext.cs" />
-    <Compile Include="App\LionFill.cs" />
-    <Compile Include="App\SampleBase2.cs" />
+    <Compile Include="..\testsamples\00_demobase\DemoBase1.cs">
+      <Link>App\DemoBase1.cs</Link>
+    </Compile>
+    <Compile Include="..\testsamples\00_demobase\DemoHelper.cs">
+      <Link>App\DemoHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\testsamples\sample03\T108_LionFill2.cs">
+      <Link>App\T108_LionFill2.cs</Link>
+    </Compile>
     <Compile Include="MainActivity.cs" />
     <Compile Include="GLView1.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

@@ -87,16 +87,18 @@
     <Compile Include="..\Test0_WinNeutral\LionDataStore.cs">
       <Link>App\LionDataStore.cs</Link>
     </Compile>
-    <Compile Include="..\Test0_WinNeutral\MyNativeRGBA32BitsImage.cs">
-      <Link>App\MyNativeRGBA32BitsImage.cs</Link>
-    </Compile>
     <Compile Include="..\Test0_WinNeutral\SpriteShape.cs">
       <Link>App\SpriteShape.cs</Link>
     </Compile>
-    <Compile Include="App\DemoBase.cs" />
-    <Compile Include="App\GLDemoContext.cs" />
-    <Compile Include="App\LionFill.cs" />
-    <Compile Include="App\SampleBase2.cs" />
+    <Compile Include="..\TestSamples\00_DemoBase\DemoBase1.cs">
+      <Link>App\DemoBase1.cs</Link>
+    </Compile>
+    <Compile Include="..\TestSamples\00_DemoBase\DemoHelper.cs">
+      <Link>App\DemoHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\TestSamples\Sample03\T108_LionFill2.cs">
+      <Link>App\T108_LionFill2.cs</Link>
+    </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <None Include="GettingStarted.Xamarin" />
