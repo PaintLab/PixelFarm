@@ -15,8 +15,10 @@ namespace Test_Android_BasicLion
         public GLView1(Context context) : base(context)
         {
         }
+
         int view_width;
         int view_height;
+        int max;
         // This gets called when the drawing surface is ready
         protected override void OnLoad(EventArgs e)
         {
@@ -34,14 +36,15 @@ namespace Test_Android_BasicLion
         }
 
         Mini.GLDemoContext demoContext;
+
         void SetupGL()
         {
             MakeCurrent();
 
             int ww_w = view_width;
             int ww_h = view_height;
-            int max = Math.Max(ww_w, ww_h);
-            demoContext = new Mini.GLDemoContext(max, max);
+            max = Math.Max(ww_w, ww_h);
+            demoContext = new Mini.GLDemoContext(800, 600);
             demoContext.LoadDemo(new OpenTkEssTest.T108_LionFill());
             //--------------------------------------------------------------------------------
             GL.Enable(EnableCap.Blend);
@@ -101,7 +104,7 @@ namespace Test_Android_BasicLion
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
-
+            GL.Viewport(0, 0, max, max);
             //set clear color to white
             GL.ClearColor(1f, 1, 1, 1);
             GL.Clear(ClearBufferMask.ColorBufferBit);

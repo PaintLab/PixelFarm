@@ -81,24 +81,21 @@ namespace Tests_iOS_BasicLion
 
         int view_width;
         int view_height;
+        int max;
+       
         Mini.GLDemoContext demoContext;
         void SetupGL()
         {
-            EAGLContext.SetCurrentContext(context);
-            int ww_w = view_width;
-            int ww_h = view_height;
-            int max = Math.Max(ww_w, ww_h);
-            demoContext = new Mini.GLDemoContext(max, max);
+            EAGLContext.SetCurrentContext(context); 
+            max = Math.Max(view_width, view_height);
+            demoContext = new Mini.GLDemoContext(800, 600);
             demoContext.LoadDemo(new OpenTkEssTest.T108_LionFill());
             //--------------------------------------------------------------------------------
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             GL.ClearColor(1, 1, 1, 1);
-            //setup viewport size 
-
-            //square viewport
-            GL.Viewport(0, 0, max, max);
-
+            //setup viewport size  
+            //square viewport 
         }
         void TearDownGL()
         {
@@ -107,6 +104,8 @@ namespace Tests_iOS_BasicLion
         }
         public override void Update()
         {
+           
+            GL.Viewport(0, 0, max, max);
             demoContext.Render();
         }
 
