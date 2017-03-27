@@ -16,7 +16,7 @@ using Xamarin.OpenGL;
 
 namespace Test_Android_Glyph
 {
-    //MIT, 2016-2017, WinterDev
+
 
     struct Color
     {
@@ -165,7 +165,7 @@ namespace Test_Android_Glyph
             }
         }
         //--------------------------------------------
-        public unsafe void FillTriangles(float[] polygon2dVertices, int nelements, Color color)
+        public void FillTriangles(float[] polygon2dVertices, int nelements, Color color)
         {
             SetCurrent();
             CheckViewMatrix();
@@ -231,15 +231,19 @@ namespace Test_Android_Glyph
 
         Typography.Rendering.TextMesh textMesh;
         PixelFarm.DrawingGL.TessTool tessTool;
-        PixelFarm.DrawingGL.SimpleCurveFlattener curFlattener;
-
+        PixelFarm.DrawingGL.SimpleCurveFlattener curveFlattener;
+        System.Collections.Generic.List<float[]> vxsList = new System.Collections.Generic.List<float[]>();
+        //
         public void Setup(int canvasW, int canvasH)
         {
 
             this.view_width = canvasW;
             this.view_height = canvasH;
-            tessTool = new PixelFarm.DrawingGL.TessTool();
-            curFlattener = new PixelFarm.DrawingGL.SimpleCurveFlattener();
+
+            Tesselate.Tesselator tt = new Tesselate.Tesselator();
+            tessTool = new PixelFarm.DrawingGL.TessTool(tt);
+
+            curveFlattener = new PixelFarm.DrawingGL.SimpleCurveFlattener();
 
             int max = Math.Max(canvasW, canvasH);
             ////square viewport 
@@ -257,7 +261,7 @@ namespace Test_Android_Glyph
             GL.ClearColor(1, 1, 1, 1);
             //setup viewport size  
             //--------------------------------------------------------------------------
-            var text = "#12Typography34!";
+            var text = "T";
 
             //optional ....
             //var directory = AndroidOS.Environment.ExternalStorageDirectory;
@@ -279,12 +283,38 @@ namespace Test_Android_Glyph
             //textContext.Build(0, 0, textMesh);
             textMesh = new Typography.Rendering.TextMesh();
             textContext.Build(0, 0, textMesh);
-           // textMesh.Tess(curFlattener, tessTool);
+            System.Collections.Generic.List<Typography.Rendering.GlyphMesh> glyphs = textMesh._glyphs;
+            int j = glyphs.Count;
+            for (int i = 0; i < 1; ++i)
+            {
+                Typography.Rendering.GlyphMesh glyph = glyphs[i];
+                Typography.Rendering.WritablePath path = glyph.path;
+                float[] flattenPoints = curveFlattener.Flatten(path._points);
+                System.Collections.Generic.List<PixelFarm.DrawingGL.Vertex> vertextList = tessTool.TessPolygon(flattenPoints);
 
+                //-----------------------------   
+                //switch how to fill polygon
+                int vxcount = vertextList.Count;
+                float[] vtx = new float[vxcount * 2];
+                int n = 0;
+                for (int p = 0; p < vxcount; ++p)
+                {
+                    var v = vertextList[p];
+                    vtx[n] = (float)v.m_X;
+                    vtx[n + 1] = (float)v.m_Y;
+                    n += 2;
+                }
+                ////triangle list
+                //int tessAreaTriangleCount = vxcount;
+                //-------------------------------------     
+                vxsList.Add(vtx);
+            }
+
+
+
+            // textMesh.Tess(curFlattener, tessTool);
             //-------------------------------------
             //create a tess version of the text mesh
-
-
             //textMesh.PathTessPolygon(Typography.Rendering.Color.Black); 
             ////create vertex and index buffer
             //TriangleBuffer.Fill(textMesh.IndexBuffer, textMesh.VertexBuffer);
@@ -298,19 +328,26 @@ namespace Test_Android_Glyph
             GL.ClearColor(1f, 1, 1, 1);
             GL.Clear(ClearBufferMask.ColorBufferBit);
             Color color = new Color();
-            color.A = 255;
-            fillShader.DrawLine(0, 0, 700, 700, color);
-            //float[] triangles = new float[]
-            //{
-            //    10,10,
-            //    100,50,
-            //    50,
+            color.A = 255;//black
 
-            //};
-            //fillShader.FillTriangles()
+            fillShader.DrawLine(0, 0, 700, 700, color);
+            int n = vxsList.Count;
+            for (int i = 0; i < n; ++i)
+            {
+
+                float[] vxPoints = vxsList[i];
+                fillShader.FillTriangles(vxPoints, vxPoints.Length / 2, color);
+                //float[] triangles = new float[]
+                //{
+                //    10,10,
+                //    100,50,
+                //    50,
+
+                //};
+                //fillShader.FillTriangles()
+            }
         }
     }
-
     class GLView1 : AndroidGameView
     {
         int view_width;

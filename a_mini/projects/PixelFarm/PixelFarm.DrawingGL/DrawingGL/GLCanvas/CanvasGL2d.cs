@@ -353,14 +353,14 @@ namespace PixelFarm.DrawingGL
 
                 //1. B , cyan result
                 GL.ColorMask(false, false, true, false);
-                textureSubPixRendering.SetCompo(0); 
+                textureSubPixRendering.SetCompo(0);
                 textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
                 //float subpixel_shift = 1 / 9f;
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
                 //---------------------------------------------------
                 //2. G , magenta result
                 GL.ColorMask(false, true, false, false);
-                textureSubPixRendering.SetCompo(1); 
+                textureSubPixRendering.SetCompo(1);
                 textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
                 //1. R , yellow result 
@@ -501,7 +501,7 @@ namespace PixelFarm.DrawingGL
                         float prevWidth = StrokeWidth;
 
                         StrokeColor = color;
-                        StrokeWidth = 0.5f;
+                        StrokeWidth = 0.5f; //TODO: review this ***
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];

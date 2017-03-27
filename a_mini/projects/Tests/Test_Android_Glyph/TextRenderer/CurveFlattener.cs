@@ -121,6 +121,7 @@ namespace PixelFarm.DrawingGL
                 Typography.Rendering.PathPoint p = points[i];
                 switch (p.kind)
                 {
+                    default: throw new System.NotSupportedException();
                     case Typography.Rendering.PathPointKind.Point:
                         {
                             pointList.Add(latest_x = p.x);
@@ -149,6 +150,7 @@ namespace PixelFarm.DrawingGL
                         }
                         break;
                 }
+                //close 
             }
             return pointList.ToArray();
         }

@@ -37,6 +37,7 @@ namespace Typography.Rendering
         float _latestY;
         float _lastMoveX;
         float _lastMoveY;
+        bool _addMoveTo;
 
         public WritablePath()
         {
@@ -44,12 +45,19 @@ namespace Typography.Rendering
         }
         public void MoveTo(float x0, float y0)
         {
-            _lastMoveX = x0;
-            _lastMoveY = y0;
-            _points.Add(new PathPoint(_latestX = x0, _latestY = y0, PathPointKind.Point));
+            _latestX = _lastMoveX = x0;
+            _latestY = _lastMoveY = y0;
+            _addMoveTo = true;
+
+            //_points.Add(new PathPoint(_latestX = x0, _latestY = y0, PathPointKind.Point));
         }
         public void BezireTo(float x1, float y1, float x2, float y2, float x3, float y3)
         {
+            if (_addMoveTo)
+            {
+                _points.Add(new PathPoint(_latestX, _latestY, PathPointKind.Point));
+                _addMoveTo = false;
+            }
             _points.Add(new PathPoint(x1, y1, PathPointKind.CurveControl));
             _points.Add(new PathPoint(x2, y2, PathPointKind.CurveControl));
             _points.Add(new PathPoint(_latestX = x3, _latestY = y3, PathPointKind.Point));
@@ -59,13 +67,18 @@ namespace Typography.Rendering
             if (_lastMoveX != _latestX ||
                 _lastMoveY != _latestY)
             {
-                _points.Add(new PathPoint(_latestX, _latestY, PathPointKind.Point));
+                _points.Add(new PathPoint(_lastMoveX, _lastMoveY, PathPointKind.Point));
             }
             _lastMoveX = _latestX;
             _lastMoveY = _latestY;
         }
         public void LineTo(float x1, float y1)
         {
+            if (_addMoveTo)
+            {
+                _points.Add(new PathPoint(_latestX, _latestY, PathPointKind.Point));
+                _addMoveTo = false;
+            }
             _points.Add(new PathPoint(_latestX = x1, _latestY = y1, PathPointKind.Point));
         }
         //-------------------- 
@@ -74,17 +87,19 @@ namespace Typography.Rendering
 
     struct GlyphMesh
     {
-        WritablePath path;
-         
+        public WritablePath path;
+        public GlyphMesh(WritablePath path)
+        {
+            this.path = path;
+        }
     }
     class TextMesh
     {
-        List<GlyphMesh> _glyphs = new List<GlyphMesh>();
-
+        internal List<GlyphMesh> _glyphs = new List<GlyphMesh>();
         public void AddGlyph(GlyphMesh glyph)
         {
             _glyphs.Add(glyph);
         }
-       
+
     }
 }

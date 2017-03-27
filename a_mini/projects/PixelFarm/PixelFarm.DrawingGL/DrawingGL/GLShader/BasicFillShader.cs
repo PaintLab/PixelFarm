@@ -66,7 +66,7 @@ namespace PixelFarm.DrawingGL
             }
         }
         //--------------------------------------------
-        public unsafe void FillTriangles(float[] polygon2dVertices, int nelements, Drawing.Color color)
+        public void FillTriangles(float[] polygon2dVertices, int nelements, Drawing.Color color)
         {
             SetCurrent();
             CheckViewMatrix();

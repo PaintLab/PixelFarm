@@ -37,7 +37,7 @@ namespace Typography.Rendering
         float lastMoveX;
         float lastMoveY;
         float lastX;
-        float lastY; 
+        float lastY;
         System.Text.StringBuilder _stbuilder = null;
 
         public GlyphTranslatorToPath()
@@ -61,7 +61,7 @@ namespace Typography.Rendering
 
             lastX = lastMoveX = (float)x0;
             lastY = lastMoveY = (float)y0;
-
+            ps.MoveTo(x0, y0);
             if (_stbuilder != null)
             {
                 _stbuilder.AppendLine(string.Format("move_to ({0:0.00}, {1:0.00})", x0, y0));

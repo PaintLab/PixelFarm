@@ -116,10 +116,11 @@ namespace Typography.Rendering
                 currentGlyphPathBuilder.ReadShapes(pathTranslator);
                 //---------- 
                 //create glyph mesh
-
+                GlyphMesh glyphMesh = new GlyphMesh(writablePath);
+                
 
                 //----------
-                //textMesh.AddGlyph(writablePath);
+                textMesh.AddGlyph(glyphMesh);
             }
         }
 
