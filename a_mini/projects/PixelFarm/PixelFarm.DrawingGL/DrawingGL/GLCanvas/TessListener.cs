@@ -146,11 +146,12 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    public class TessTool
+    class TessTool
     {
         internal readonly Tesselate.Tesselator tess;
         internal readonly TessListener2 tessListener;
         List<Vertex> vertexts = new List<Vertex>();
+        public TessTool() : this(new Tesselator()) { }
         public TessTool(Tesselate.Tesselator tess)
         {
             this.tess = tess;
