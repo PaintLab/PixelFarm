@@ -71,10 +71,9 @@ namespace PixelFarm.DrawingGL
 
             msdfSubPixelRenderingShader = new DrawingGL.MultiChannelSubPixelRenderingSdf(shaderRes);
             sdfShader = new DrawingGL.SingleChannelSdf(shaderRes);
-            //----
-            Tesselator tess = new Tesselator();
-            tess.WindingRule = Tesselator.WindingRuleType.Odd;
-            tessTool = new TessTool(tess);
+            //-----------------------------------------------------------------------
+
+            tessTool = new TessTool();
             //-----------------------------------------------------------------------
 
 
@@ -485,7 +484,7 @@ namespace PixelFarm.DrawingGL
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
-                            float[] tessArea = f.GetAreaTess(ref this.tessTool);
+                            float[] tessArea = f.GetAreaTess(this.tessTool);
                             if (tessArea != null)
                             {
                                 this.basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);
@@ -505,7 +504,7 @@ namespace PixelFarm.DrawingGL
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
-                            float[] tessArea = f.GetAreaTess(ref this.tessTool);
+                            float[] tessArea = f.GetAreaTess(this.tessTool);
                             if (tessArea != null)
                             {
                                 basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);
@@ -550,7 +549,7 @@ namespace PixelFarm.DrawingGL
                             //render  to stencill buffer
                             //-----------------
 
-                            float[] tessArea = fig.GetAreaTess(ref this.tessTool);
+                            float[] tessArea = fig.GetAreaTess(this.tessTool);
                             //-------------------------------------   
                             if (tessArea != null)
                             {

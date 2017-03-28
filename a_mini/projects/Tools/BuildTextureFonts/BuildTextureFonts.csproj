@@ -35,10 +35,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLCanvas\TessListener.cs">
+      <Link>SimpleDrawingGL\TessListener.cs</Link>
+    </Compile>
     <Compile Include="..\..\PixelFarm\Win32Utils\MyWin32.cs">
       <Link>Win32Utils\MyWin32.cs</Link>
     </Compile>
@@ -54,10 +59,23 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormTess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTess.Designer.cs">
+      <DependentUpon>FormTess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SimpleDrawingGL\GlyphTranslatorToPath.cs" />
+    <Compile Include="SimpleDrawingGL\Path.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleDrawingGL\CurveFlattener.cs" />
+    <Compile Include="SimpleDrawingGL\Primitive.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTess.resx">
+      <DependentUpon>FormTess.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -98,6 +116,10 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
       <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
+      <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
+      <Name>Tesselate</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>

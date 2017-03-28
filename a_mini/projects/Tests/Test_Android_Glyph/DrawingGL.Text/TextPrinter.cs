@@ -145,30 +145,13 @@ namespace DrawingGL.Text
                 GlyphRun glyphRun = new GlyphRun(writablePath, glyphPlan);
                 //-----------------
                 //do tess  
+                int[] endContours;
+                float[] flattenPoints = _curveFlattener.Flatten(writablePath._points, out endContours);
 
-                float[] flattenPoints = _curveFlattener.Flatten(writablePath._points);
-                List<PixelFarm.DrawingGL.Vertex> vertextList = _tessTool.TessPolygon(flattenPoints);
-                //-----------------------------   
-                //switch how to fill polygon
-                int vxcount = vertextList.Count;
-                float[] vtx = new float[vxcount * 2];
-                int n = 0;
-                for (int p = 0; p < vxcount; ++p)
-                {
-                    var v = vertextList[p];
-                    vtx[n] = (float)v.m_X;
-                    vtx[n + 1] = (float)v.m_Y;
-                    n += 2;
-                }
-
-                //-------------------------------------     
-                glyphRun.nTessElements = vxcount;
-                glyphRun.tessData = vtx;
+                glyphRun.tessData = _tessTool.TessPolygon(flattenPoints, endContours, out glyphRun.nTessElements);
                 outputTextRun.AddGlyph(glyphRun);
                 //------------ 
             }
         }
-
-
     }
 }

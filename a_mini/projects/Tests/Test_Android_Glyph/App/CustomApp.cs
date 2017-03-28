@@ -32,7 +32,7 @@ namespace Test_Android_Glyph
 
             //--------------------------------------
             simpleCanvas = new SimpleCanvas(canvasW, canvasH);
-            var text = "Glyph";
+            var text = "Typography";
             //optional ....
             //var directory = AndroidOS.Environment.ExternalStorageDirectory;
             //var fullFileName = Path.Combine(directory.ToString(), "TypographyTest.txt");
@@ -45,7 +45,7 @@ namespace Test_Android_Glyph
             textContext = new TypographyTextContext()
             {
                 FontFamily = "DroidSans.ttf", //corresponding to font file Assets/DroidSans.ttf
-                FontSize = 128,//size in Points
+                FontSize = 64,//size in Points
                 FontStretch = FontStretch.Normal,
                 FontStyle = FontStyle.Normal,
                 FontWeight = FontWeight.Normal,
