@@ -7,7 +7,8 @@ namespace DrawingGL
     enum PathPointKind : byte
     {
         Point,
-        CurveControl
+        CurveControl,
+        CloseFigure,
     }
     struct PathPoint
     {
@@ -49,6 +50,7 @@ namespace DrawingGL
     {
         //record all cmd 
         internal List<PathPoint> _points = new List<PathPoint>();
+
         float _latestX;
         float _latestY;
         float _lastMoveX;
@@ -87,6 +89,10 @@ namespace DrawingGL
             }
             _lastMoveX = _latestX;
             _lastMoveY = _latestY;
+
+            //add curve
+            _points.Add(new PathPoint(_lastMoveX, _lastMoveY, PathPointKind.CloseFigure));
+
         }
         public void LineTo(float x1, float y1)
         {

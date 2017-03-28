@@ -18,6 +18,8 @@ namespace BuildTextureFonts
     {
         Graphics g;
         float[] glyphPoints2;
+        int[] endContours;
+
         TessTool tessTool = new TessTool();
         public FormTess()
         {
@@ -37,7 +39,7 @@ namespace BuildTextureFonts
                 GlyphPointF[] glyphPoints = glyph.GlyphPoints;
                 //--
                 var builder = new Typography.Rendering.GlyphPathBuilder(typeface);
-                builder.BuildFromGlyphIndex(typeface.LookupIndex('G'), 256);
+                builder.BuildFromGlyphIndex(typeface.LookupIndex('b'), 256);
 
                 var txToPath = new GlyphTranslatorToPath();
                 var writablePath = new WritablePath();
@@ -45,8 +47,7 @@ namespace BuildTextureFonts
                 builder.ReadShapes(txToPath);
                 //from contour to  
                 var curveFlattener = new SimpleCurveFlattener();
-                float[] flattenPoints = curveFlattener.Flatten(writablePath._points);
-
+                float[] flattenPoints = curveFlattener.Flatten(writablePath._points, out endContours);
                 glyphPoints2 = flattenPoints;
                 ////--------------------------------------
                 ////raw glyph points
@@ -117,24 +118,22 @@ namespace BuildTextureFonts
 
                 //-------
             }
+            int areaCount;
+            float[] tessData = tessTool.TessPolygon(polygon1, endContours, out areaCount);
+            //draw tess 
+            int j = tessData.Length;
+            for (int i = 0; i < j;)
+            {
+                var p0 = new PointF(tessData[i], tessData[i + 1]);
+                var p1 = new PointF(tessData[i + 2], tessData[i + 3]);
+                var p2 = new PointF(tessData[i + 4], tessData[i + 5]);
 
+                g.DrawLine(Pens.Red, p0, p1);
+                g.DrawLine(Pens.Red, p1, p2);
+                g.DrawLine(Pens.Red, p2, p0);
 
-            //int areaCount;
-            //float[] tessData = tessTool.TessPolygon(polygon1, out areaCount);
-            ////draw tess 
-            //int j = tessData.Length;
-            //for (int i = 0; i < j;)
-            //{
-            //    var p0 = new PointF(tessData[i], tessData[i + 1]);
-            //    var p1 = new PointF(tessData[i + 2], tessData[i + 3]);
-            //    var p2 = new PointF(tessData[i + 4], tessData[i + 5]);
-
-            //    g.DrawLine(Pens.Red, p0, p1);
-            //    g.DrawLine(Pens.Red, p1, p2);
-            //    g.DrawLine(Pens.Red, p2, p0);
-
-            //    i += 6;
-            //}
+                i += 6;
+            }
         }
 
 

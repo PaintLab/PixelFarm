@@ -6,6 +6,9 @@ namespace PixelFarm.DrawingGL
 {
     class Figure
     {
+        //TODO: review here again***
+
+        int[] contourEnds = new int[0];
         public float[] coordXYs; //this is user provide coord
         //---------
         //system tess ...
@@ -35,14 +38,14 @@ namespace PixelFarm.DrawingGL
             if (areaTess == null)
             {
                 //triangle list
-                return areaTess = tess.TessPolygon(coordXYs, out this.tessAreaTriangleCount);
-
+                contourEnds[0] = coordXYs.Length - 1;
+                return areaTess = tess.TessPolygon(coordXYs, contourEnds, out this.tessAreaTriangleCount);
             }
             return areaTess;
         }
     }
 
-    
+
 
     static class SmoothBorderBuilder
     {

@@ -76,7 +76,9 @@ namespace DrawingGL
     class SimpleCurveFlattener
     {
 
-        int nsteps = 1;
+        int nsteps = 3;
+        List<float> pointList = new List<float>();
+        List<int> endPointList = new List<int>();
 
         void FlattenBezire(
           List<float> pointList,
@@ -100,7 +102,9 @@ namespace DrawingGL
 
                 float eachstep = (float)1 / nsteps;
                 float stepSum = eachstep;//start
-                for (int i = 1; i < nsteps; ++i)
+
+                int n = nsteps - 1;
+                for (int i = 1; i < n; ++i)
                 {
                     Vector2 vector2 = curve.CalculatePoint(stepSum);
                     pointList.Add(vector2.X); pointList.Add(vector2.Y);
@@ -109,11 +113,16 @@ namespace DrawingGL
             }
             pointList.Add(x3); pointList.Add(y3);
         }
-        public float[] Flatten(List<PathPoint> points)
+
+        public float[] Flatten(List<PathPoint> points, out int[] endContours)
         {
-            List<float> pointList = new List<float>();
+
+            //reset
+            endPointList.Clear();
+            pointList.Clear();
+            //----------
             int j = points.Count;
-            if (j == 0) { return null; }
+            if (j == 0) { endContours = null; return null; }
             //----------
             //first 
 
@@ -132,6 +141,12 @@ namespace DrawingGL
                         {
                             pointList.Add(latest_x = p1.x);
                             pointList.Add(latest_y = p1.y);
+                        }
+                        break;
+                    case PathPointKind.CloseFigure:
+                        {
+                            //add stop mark point
+                            endPointList.Add(pointList.Count - 1);
                         }
                         break;
                     case PathPointKind.CurveControl:
@@ -156,6 +171,7 @@ namespace DrawingGL
                 }
                 //close 
             }
+            endContours = endPointList.ToArray();
             return pointList.ToArray();
         }
     }

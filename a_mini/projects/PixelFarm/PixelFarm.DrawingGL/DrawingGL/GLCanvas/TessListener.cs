@@ -158,7 +158,7 @@ namespace PixelFarm.DrawingGL
             this.tessListener = new TessListener2();
             tessListener.Connect(tess, true);
         }
-        public float[] TessPolygon(float[] vertex2dCoords, out int areaCount)
+        public float[] TessPolygon(float[] vertex2dCoords, int[] contourEndPoints, out int areaCount)
         {
             vertexts.Clear();//reset
             //
@@ -174,20 +174,29 @@ namespace PixelFarm.DrawingGL
             tessListener.Reset(vertexts);
             //-----------------------
             tess.BeginPolygon();
-            tess.BeginContour();
-            int j = vertexts.Count;
-            for (int i = 0; i < j; ++i)
+
+            int nContourCount = contourEndPoints.Length;
+            int beginAt = 0;
+            for (int m = 0; m < nContourCount; ++m)
             {
-                Vertex v = vertexts[i];
-                tess.AddVertex(v.m_X, v.m_Y, 0, i);
+                int thisContourEndAt = (contourEndPoints[m] + 1) / 2;
+                tess.BeginContour();
+                for (int i = beginAt; i < thisContourEndAt; ++i)
+                {
+                    Vertex v = vertexts[i];
+                    tess.AddVertex(v.m_X, v.m_Y, 0, i);
+                }
+                beginAt = thisContourEndAt + 1;
+                tess.EndContour();
             }
-            tess.EndContour();
+
+
             tess.EndPolygon();
             //-----------------------
             List<Vertex> vertextList = tessListener.resultVertexList;
             //-----------------------------   
             //switch how to fill polygon
-            j = vertextList.Count;
+            int j = vertextList.Count;
             float[] vtx = new float[j * 2];
             int n = 0;
             for (int p = 0; p < j; ++p)

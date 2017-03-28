@@ -98,7 +98,7 @@ namespace DrawingGL.Text
         {
             _textPrinter.FontSizeInPoints = this.FontSize;
             _textPrinter.GenerateGlyphRuns(textRun, charBuffer, startAt, len); 
-            System.Collections.Generic.List<GlyphRun> glyphs = textRun._glyphs; 
+            //System.Collections.Generic.List<GlyphRun> glyphs = textRun._glyphs; 
 
         }
         public Size Measure(char[] charBuffer, int startAt, int len)
