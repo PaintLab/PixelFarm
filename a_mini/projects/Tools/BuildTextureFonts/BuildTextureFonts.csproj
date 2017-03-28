@@ -69,7 +69,7 @@
     <Compile Include="SimpleDrawingGL\Path.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CurveFlattener.cs" />
+    <Compile Include="SimpleDrawingGL\CurveFlattener.cs" />
     <Compile Include="SimpleDrawingGL\Primitive.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

@@ -119,22 +119,22 @@ namespace BuildTextureFonts
             }
 
 
-            int areaCount;
-            float[] tessData = tessTool.TessPolygon(polygon1, out areaCount);
-            //draw tess 
-            int j = tessData.Length;
-            for (int i = 0; i < j;)
-            {
-                var p0 = new PointF(tessData[i], tessData[i + 1]);
-                var p1 = new PointF(tessData[i + 2], tessData[i + 3]);
-                var p2 = new PointF(tessData[i + 4], tessData[i + 5]);
+            //int areaCount;
+            //float[] tessData = tessTool.TessPolygon(polygon1, out areaCount);
+            ////draw tess 
+            //int j = tessData.Length;
+            //for (int i = 0; i < j;)
+            //{
+            //    var p0 = new PointF(tessData[i], tessData[i + 1]);
+            //    var p1 = new PointF(tessData[i + 2], tessData[i + 3]);
+            //    var p2 = new PointF(tessData[i + 4], tessData[i + 5]);
 
-                g.DrawLine(Pens.Red, p0, p1);
-                g.DrawLine(Pens.Red, p1, p2);
-                g.DrawLine(Pens.Red, p2, p0);
+            //    g.DrawLine(Pens.Red, p0, p1);
+            //    g.DrawLine(Pens.Red, p1, p2);
+            //    g.DrawLine(Pens.Red, p2, p0);
 
-                i += 6;
-            }
+            //    i += 6;
+            //}
         }
 
 

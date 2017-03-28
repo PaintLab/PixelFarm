@@ -76,7 +76,7 @@ namespace DrawingGL
     class SimpleCurveFlattener
     {
 
-        int nsteps = 0;
+        int nsteps = 3;
 
         void FlattenBezire(
           List<float> pointList,
@@ -96,13 +96,15 @@ namespace DrawingGL
                     new Vector2(x0, y0),
                     new Vector2(x3, y3),
                     new Vector2(x1, y1),
-                    new Vector2(x2, y2)); 
+                    new Vector2(x2, y2));
 
                 float eachstep = (float)1 / nsteps;
                 float stepSum = eachstep;//start
-                for (int i = 1; i < nsteps; ++i)
+
+                int n = nsteps - 1;
+                for (int i = 1; i < n; ++i)
                 {
-                    var vector2 = curve.CalculatePoint(stepSum);
+                    Vector2 vector2 = curve.CalculatePoint(stepSum);
                     pointList.Add(vector2.X); pointList.Add(vector2.Y);
                     stepSum += eachstep;
                 }
@@ -124,14 +126,14 @@ namespace DrawingGL
             {
                 //we have point or curve4
                 //no curve 3
-                PathPoint p = points[i];
-                switch (p.kind)
+                PathPoint p1 = points[i];
+                switch (p1.kind)
                 {
                     default: throw new System.NotSupportedException();
                     case PathPointKind.Point:
                         {
-                            pointList.Add(latest_x = p.x);
-                            pointList.Add(latest_x = p.y);
+                            pointList.Add(latest_x = p1.x);
+                            pointList.Add(latest_y = p1.y);
                         }
                         break;
                     case PathPointKind.CurveControl:
@@ -139,15 +141,13 @@ namespace DrawingGL
                             //read next curve
                             //curve4
 
-                            PathPoint p2 =
-                               points[i + 1];
-                            PathPoint p3 =
-                                 points[i + 2];
+                            PathPoint p2 = points[i + 1];
+                            PathPoint p3 = points[i + 2];
                             //--------------
                             FlattenBezire(
                                 pointList,
                                 latest_x, latest_y,
-                                p.x, p.y,
+                                p1.x, p1.y,
                                 p2.x, p2.y,
                                 latest_x = p3.x, latest_y = p3.y
                                 );

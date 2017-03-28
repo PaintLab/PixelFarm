@@ -76,7 +76,7 @@ namespace DrawingGL
     class SimpleCurveFlattener
     {
 
-        int nsteps = 2;
+        int nsteps = 1;
 
         void FlattenBezire(
           List<float> pointList,
@@ -102,7 +102,7 @@ namespace DrawingGL
                 float stepSum = eachstep;//start
                 for (int i = 1; i < nsteps; ++i)
                 {
-                    var vector2 = curve.CalculatePoint(stepSum);
+                    Vector2 vector2 = curve.CalculatePoint(stepSum);
                     pointList.Add(vector2.X); pointList.Add(vector2.Y);
                     stepSum += eachstep;
                 }
@@ -124,14 +124,14 @@ namespace DrawingGL
             {
                 //we have point or curve4
                 //no curve 3
-                PathPoint p = points[i];
-                switch (p.kind)
+                PathPoint p1 = points[i];
+                switch (p1.kind)
                 {
                     default: throw new System.NotSupportedException();
                     case PathPointKind.Point:
                         {
-                            pointList.Add(latest_x = p.x);
-                            pointList.Add(latest_x = p.y);
+                            pointList.Add(latest_x = p1.x);
+                            pointList.Add(latest_y = p1.y);
                         }
                         break;
                     case PathPointKind.CurveControl:
@@ -147,7 +147,7 @@ namespace DrawingGL
                             FlattenBezire(
                                 pointList,
                                 latest_x, latest_y,
-                                p.x, p.y,
+                                p1.x, p1.y,
                                 p2.x, p2.y,
                                 latest_x = p3.x, latest_y = p3.y
                                 );

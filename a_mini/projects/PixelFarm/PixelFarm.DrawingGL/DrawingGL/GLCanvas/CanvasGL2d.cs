@@ -72,9 +72,8 @@ namespace PixelFarm.DrawingGL
             msdfSubPixelRenderingShader = new DrawingGL.MultiChannelSubPixelRenderingSdf(shaderRes);
             sdfShader = new DrawingGL.SingleChannelSdf(shaderRes);
             //-----------------------------------------------------------------------
-            Tesselator tess = new Tesselator();
-            tess.WindingRule = Tesselator.WindingRuleType.Odd;
-            tessTool = new TessTool(tess);
+
+            tessTool = new TessTool();
             //-----------------------------------------------------------------------
 
 
