@@ -139,10 +139,8 @@ namespace DrawingGL
                             //read next curve
                             //curve4
 
-                            PathPoint p2 =
-                               points[i + 1];
-                            PathPoint p3 =
-                                 points[i + 2];
+                            PathPoint p2 = points[i + 1];
+                            PathPoint p3 = points[i + 2];
                             //--------------
                             FlattenBezire(
                                 pointList,
