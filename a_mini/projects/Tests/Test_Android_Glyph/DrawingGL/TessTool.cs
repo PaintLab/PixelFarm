@@ -1,13 +1,14 @@
-﻿//MIT, 2016-2017, WinterDev
+﻿//MIT, 2014-2017, WinterDev  
 
 using System.Collections.Generic;
- 
-namespace PixelFarm.DrawingGL
+using PixelFarm.DrawingGL;
+namespace DrawingGL
 {
-    struct TessTool
+    class TessTool
     {
         internal readonly Tesselate.Tesselator tess;
         internal readonly TessListener2 tessListener;
+        public TessTool() : this(new Tesselate.Tesselator()) { }
         public TessTool(Tesselate.Tesselator tess)
         {
             this.tess = tess;

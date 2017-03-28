@@ -26,7 +26,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public void EndRead()
         {
-
+            
         }
         public void CloseContour()
         {

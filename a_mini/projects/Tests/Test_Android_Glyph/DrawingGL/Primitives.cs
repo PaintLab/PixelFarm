@@ -1,6 +1,19 @@
-﻿//MIT, 2017, Zou Wei(github/zwcloud)
-namespace PixelFarm.DrawingGL
+﻿//MIT, 2017, Zou Wei(github/zwcloud), WinterDev
+namespace DrawingGL
 {
+    struct Size
+    {
+        private float x, y;
+        private float width;
+        private float height;
+
+        public Size(float width, float height) : this()
+        {
+            this.width = width;
+            this.height = height;
+        }
+    }
+    
     public struct Vector2
     {
         private float x;

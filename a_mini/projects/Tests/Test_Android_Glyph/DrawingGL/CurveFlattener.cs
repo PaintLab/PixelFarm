@@ -2,13 +2,13 @@
 
 using System.Collections.Generic;
 
-namespace PixelFarm.DrawingGL
+namespace DrawingGL
 {
     /// <summary>
     /// Represents a cubic bezier curve with two anchor and two control points.
     /// </summary>
     //[Serializable]
-    public struct BezierCurveCubic
+    struct BezierCurveCubic
     {
         #region Fields
 
@@ -103,7 +103,7 @@ namespace PixelFarm.DrawingGL
             }
             pointList.Add(x3); pointList.Add(y3);
         }
-        public float[] Flatten(List<Typography.Rendering.PathPoint> points)
+        public float[] Flatten(List<PathPoint> points)
         {
             List<float> pointList = new List<float>();
             int j = points.Count;
@@ -118,25 +118,25 @@ namespace PixelFarm.DrawingGL
             {
                 //we have point or curve4
                 //no curve 3
-                Typography.Rendering.PathPoint p = points[i];
+                PathPoint p = points[i];
                 switch (p.kind)
                 {
                     default: throw new System.NotSupportedException();
-                    case Typography.Rendering.PathPointKind.Point:
+                    case PathPointKind.Point:
                         {
                             pointList.Add(latest_x = p.x);
                             pointList.Add(latest_x = p.y);
                         }
                         break;
-                    case Typography.Rendering.PathPointKind.CurveControl:
+                    case PathPointKind.CurveControl:
                         {
                             //read next curve
                             //curve4
 
-                            Typography.Rendering.PathPoint p2 =
-                                points[i + 1];
-                            Typography.Rendering.PathPoint p3 =
-                                points[i + 2];
+                            PathPoint p2 =
+                               points[i + 1];
+                            PathPoint p3 =
+                                 points[i + 2];
                             //--------------
                             FlattenBezire(
                                 pointList,

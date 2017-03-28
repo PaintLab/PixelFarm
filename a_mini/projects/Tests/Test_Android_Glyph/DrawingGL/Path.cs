@@ -1,7 +1,8 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
 using System.Collections.Generic;
-namespace Typography.Rendering
+using Typography.OpenFont;
+namespace DrawingGL
 {
     enum PathPointKind : byte
     {
@@ -27,7 +28,22 @@ namespace Typography.Rendering
         }
 #endif
     }
-
+    interface IWritablePath
+    {
+        void CloseFigure();
+        /// <summary>
+        /// add curve4 from latest point (x0,y0)
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="x3"></param>
+        /// <param name="y3"></param>
+        void BezireTo(float x1, float y1, float x2, float y2, float x3, float y3);
+        void LineTo(float x1, float y1);
+        void MoveTo(float x0, float y0);
+    }
 
     class WritablePath : IWritablePath
     {
@@ -84,21 +100,51 @@ namespace Typography.Rendering
         //-------------------- 
     }
 
-
-    struct GlyphMesh
+    public class GlyphRun
     {
-        public WritablePath path;
-        public GlyphMesh(WritablePath path)
+        //glyph run contains...
+        //1.
+        Typography.TextLayout.GlyphPlan glyphPlan;
+        //2. (optional) original path
+        internal WritablePath path;
+        //3. (optional) tessData and nTessElement
+        public float[] tessData;
+        public int nTessElements;
+
+        internal GlyphRun(WritablePath path, Typography.TextLayout.GlyphPlan glyphPlan)
         {
+            this.glyphPlan = glyphPlan;
             this.path = path;
         }
+        public float OffsetX
+        {
+            get { return glyphPlan.x; }
+        }
+        public float OffsetY
+        {
+            get { return glyphPlan.y; }
+        }
+
     }
-    class TextMesh
+    public class TextRun
     {
-        internal List<GlyphMesh> _glyphs = new List<GlyphMesh>();
-        public void AddGlyph(GlyphMesh glyph)
+        //each text run has TextFormat information
+
+        internal List<GlyphRun> _glyphs = new List<GlyphRun>();
+        internal Typeface typeface;
+        internal float sizeInPoints;
+
+        public TextRun()
+        {
+
+        }
+        public void AddGlyph(GlyphRun glyph)
         {
             _glyphs.Add(glyph);
+        }
+        public float CalculateToPixelScaleFromPointSize(float sizeInPoint)
+        {
+            return typeface.CalculateToPixelScaleFromPointSize(sizeInPoint);
         }
 
     }
