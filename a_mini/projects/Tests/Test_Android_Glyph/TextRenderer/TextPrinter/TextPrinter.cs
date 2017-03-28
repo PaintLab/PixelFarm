@@ -92,7 +92,7 @@ namespace Typography.Rendering
             glyphLayout.Typeface = this.CurrentTypeFace;
             glyphLayout.GenerateGlyphPlans(text.ToCharArray(), 0, text.Length, outputGlyphPlans, null);
             // render each glyph
-            float scale = CurrentTypeFace.CalculateToPixelScaleFromPointSize(sizeInPoints);
+          
             int planCount = outputGlyphPlans.Count;
 
             for (var i = 0; i < planCount; ++i)
@@ -100,8 +100,7 @@ namespace Typography.Rendering
 
                 pathTranslator.Reset();
                 //----
-                //glyph path
-
+                //glyph path 
                 //---- 
                 GlyphPlan glyphPlan = outputGlyphPlans[i];
                 //
@@ -112,12 +111,13 @@ namespace Typography.Rendering
                 pathTranslator.SetOutput(writablePath);
 
                 currentGlyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, sizeInPoints);
+
                 //currentGlyphPathBuilder.ReadShapes(pathTranslator, sizeInPoints, x + glyphPlan.x * scale, y + glyphPlan.y * scale);
                 currentGlyphPathBuilder.ReadShapes(pathTranslator);
                 //---------- 
                 //create glyph mesh
-                GlyphMesh glyphMesh = new GlyphMesh(writablePath);
-                
+                GlyphMesh glyphMesh = new GlyphMesh(writablePath, glyphPlan);
+
 
                 //----------
                 textMesh.AddGlyph(glyphMesh);

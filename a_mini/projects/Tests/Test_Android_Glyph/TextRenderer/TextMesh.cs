@@ -85,12 +85,26 @@ namespace Typography.Rendering
     }
 
 
-    struct GlyphMesh
+    class GlyphMesh
     {
         public WritablePath path;
-        public GlyphMesh(WritablePath path)
+        Typography.TextLayout.GlyphPlan glyphPlan;
+        public float[] tessData;
+        public int nElements;
+
+        public GlyphMesh(WritablePath path, Typography.TextLayout.GlyphPlan glyphPlan)
         {
+            this.glyphPlan = glyphPlan;
             this.path = path;
+        }
+
+        public float OffsetX
+        {
+            get { return glyphPlan.x; }
+        }
+        public float OffsetY
+        {
+            get { return glyphPlan.y; }
         }
     }
     class TextMesh

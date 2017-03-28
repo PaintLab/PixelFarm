@@ -23,10 +23,7 @@ namespace Typography.Rendering
         void MoveTo(float x0, float y0);
     }
 
-    //------------------
-    //this is Gdi+ version ***
-    //render with System.Drawing.Drawing2D.GraphicsPath
-    //------------------
+     
     /// <summary>
     /// read result as Gdi+ GraphicsPath
     /// </summary>

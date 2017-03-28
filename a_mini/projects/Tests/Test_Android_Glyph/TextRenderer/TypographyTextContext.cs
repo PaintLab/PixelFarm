@@ -16,6 +16,7 @@ namespace Xamarin.OpenGL
             int maxWidth, int maxHeight,
             TextAlignment alignment)
         {
+            //TODO: impl font family
             thePrinter.FontFilename = fontFamily;//This is inaccurate and just a temp hack: Font-family hasn't been implemented by Typography.
 
             this.FontSize = fontSize;
@@ -24,7 +25,7 @@ namespace Xamarin.OpenGL
             this.MaxHeight = maxHeight;
             this.Text = text;
         }
-
+        public Typography.OpenFont.Typeface Typeface { get { return thePrinter.CurrentTypeFace; } }
         #region Implementation of ITextContext
 
         #region TODO Implement those when Typography is ready.
