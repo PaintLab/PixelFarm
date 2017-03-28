@@ -1,15 +1,12 @@
 ﻿//MIT, 2017, Zou Wei(github/zwcloud)
 //MIT, 2017, WinterDev (modified from Xamarin's Android code template)
-using System;
-using System.Collections.Generic;
-using Android.Views;
+
+using System.IO;
 using DrawingGL;
 using DrawingGL.Text;
 
 namespace Test_Android_Glyph
 {
-
-
     class CustomApp
     {
 
@@ -19,7 +16,21 @@ namespace Test_Android_Glyph
 
         public void Setup(int canvasW, int canvasH)
         {
+            //--------------------------------------
+            //TODO: review here again
 
+            DrawingGL.Text.Utility.SetLoadFontDel(
+                fontfile =>
+                {
+                    using (Stream s = MainActivity.AssetManager.Open(fontfile))
+                    using (var ms = new MemoryStream())// This is a simple hack because on Xamarin.Android, a `Stream` created by `AssetManager.Open` is not seekable.
+                    {
+                        s.CopyTo(ms);
+                        return new MemoryStream(ms.ToArray());
+                    }
+                });
+
+            //--------------------------------------
             simpleCanvas = new SimpleCanvas(canvasW, canvasH);
             var text = "Glyph";
             //optional ....
@@ -34,7 +45,7 @@ namespace Test_Android_Glyph
             textContext = new TypographyTextContext()
             {
                 FontFamily = "DroidSans.ttf", //corresponding to font file Assets/DroidSans.ttf
-                FontSize = 36,//size in Points
+                FontSize = 48,//size in Points
                 FontStretch = FontStretch.Normal,
                 FontStyle = FontStyle.Normal,
                 FontWeight = FontWeight.Normal,
@@ -58,7 +69,10 @@ namespace Test_Android_Glyph
             simpleCanvas.StrokeColor = Color.Black;
             simpleCanvas.DrawLine(0, 0, 700, 700);
             //
-            simpleCanvas.FillTextRun(textRun, 0, 0);
+            for (int i = 0; i < 10; ++i)
+            {
+                simpleCanvas.FillTextRun(textRun, i * 100, i * 100);
+            }
             //-----------
         }
     }
