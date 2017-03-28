@@ -1,18 +1,6 @@
-﻿//MIT, 2017, Zou Wei(github/zwcloud)
-//MIT, 2017, WinterDev (modified from Xamarin's Android code template)
+﻿//MIT, 2014-2017, WinterDev  
 using System;
-using System.IO;
-using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.ES20;
-using OpenTK.Platform;
-using OpenTK.Platform.Android;
-using Android.Views;
-using Android.Content;
-using Android.Util;
-using AndroidOS = Android.OS;
-
-using Xamarin.OpenGL;
 
 namespace Test_Android_Glyph
 {
