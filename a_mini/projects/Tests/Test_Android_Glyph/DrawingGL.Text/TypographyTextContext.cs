@@ -80,12 +80,7 @@ namespace DrawingGL.Text
             get;
             set;
         }
-
-        public Rect Rect
-        {
-            get;
-            set;
-        }
+ 
 
 
         public void Update()

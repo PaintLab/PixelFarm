@@ -13,10 +13,7 @@ namespace DrawingGL
             this.height = height;
         }
     }
-    struct Rect
-    {
-        private float x, y, width, height;
-    }
+    
     public struct Vector2
     {
         private float x;

@@ -23,11 +23,9 @@ namespace DrawingGL.Text
         private string currentFontFile;
         private GlyphPathBuilder currentGlyphPathBuilder;
 
-
         //
         // for tess
-        //
-
+        // 
         SimpleCurveFlattener _curveFlattener;
         TessTool _tessTool;
 
@@ -38,9 +36,9 @@ namespace DrawingGL.Text
 
             //
             _curveFlattener = new SimpleCurveFlattener();
+
             _tessTool = new TessTool();
         }
-
 
         public void Measure(char[] textBuffer, int startAt, int len, out float width, out float height)
         {
@@ -51,6 +49,7 @@ namespace DrawingGL.Text
             width = strBox.width;
             height = strBox.CalculateLineHeight();
         }
+
         /// <summary>
         /// Font file path
         /// </summary>
@@ -63,10 +62,11 @@ namespace DrawingGL.Text
                 {
                     currentFontFile = value;
 
-                    using (var fs = Xamarin.OpenGL.Utility.ReadFile(currentFontFile))
+                    //TODO: review here
+                    using (var stream = Utility.ReadFile(value))
                     {
                         var reader = new OpenFontReader();
-                        CurrentTypeFace = reader.Read(fs);
+                        CurrentTypeFace = reader.Read(stream);
                     }
 
                     //2. glyph builder
@@ -138,7 +138,7 @@ namespace DrawingGL.Text
                 WritablePath writablePath = new WritablePath();
                 pathTranslator.SetOutput(writablePath);
                 currentGlyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, sizeInPoints);
-                currentGlyphPathBuilder.ReadShapes(pathTranslator);                
+                currentGlyphPathBuilder.ReadShapes(pathTranslator);
                 //---------- 
                 //create glyph mesh
                 //TODO: review performance here

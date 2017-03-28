@@ -4,8 +4,6 @@ using OpenTK.Graphics.ES20;
 
 namespace DrawingGL
 {
-  
-
     /// <summary>
     /// sharing data between canvas and shaders
     /// </summary>

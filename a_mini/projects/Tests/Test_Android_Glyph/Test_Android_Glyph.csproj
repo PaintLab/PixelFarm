@@ -70,7 +70,6 @@
     <Compile Include="DrawingGL.Text\GlyphTranslatorToPath.cs" />
     <Compile Include="DrawingGL.Text\TextPrinter.cs" />
     <Compile Include="DrawingGL.Text\TypographyTextContext.cs" />
-    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\DroidSans.ttf" />
