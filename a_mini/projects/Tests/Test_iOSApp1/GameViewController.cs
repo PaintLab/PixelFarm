@@ -1,4 +1,6 @@
-﻿using System;
+﻿//MIT, 2017, WinterDev (modified from Xamarin's iOS code template)
+
+using System;
 using System.Diagnostics;
 
 using Foundation;

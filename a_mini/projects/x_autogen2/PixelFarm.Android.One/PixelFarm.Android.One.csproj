@@ -1048,7 +1048,6 @@
     <Compile Include="..\..\pixelfarm\win32utils\NativeWin32MemoryDc.cs">
       <Link>PixelFarm\Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
-    <Compile Include="Class1.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -21,6 +21,9 @@ namespace Mini
         {
             this.demo = demo;
             demo.Init();
+
+            int max = Math.Max(w, h);
+
             demo.Width = w;
             demo.Height = h;
             CanvasGL2d canvas2d;
@@ -30,9 +33,13 @@ namespace Mini
             {
                 //if demo not create canvas and painter
                 //the we create for it
-                int max = Math.Max(w, h);
-                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
-                canvasPainter = new GLCanvasPainter(canvas2d, max, max);
+                //int max = Math.Max(w, h);
+                //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+                //canvasPainter = new GLCanvasPainter(canvas2d, max, max);
+          
+                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
+                canvasPainter = new GLCanvasPainter(canvas2d, w, h);
+
                 //create text printer for opengl 
                 //----------------------
                 //1. win gdi based

@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
-    <ProjectGuid>{25E0C57A-157E-47E9-B143-46BCB60ED69A}</ProjectGuid>
+    <ProjectGuid>{BCA724D5-764C-44B8-B29F-EC8882F4837C}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Test_iOSApp1</RootNamespace>
+    <RootNamespace>Tests_iOS_BasicLion</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>Test_iOSApp1</AssemblyName>
+    <AssemblyName>Tests_iOS_BasicLion</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -84,6 +84,21 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\Test0_WinNeutral\LionDataStore.cs">
+      <Link>App\LionDataStore.cs</Link>
+    </Compile>
+    <Compile Include="..\Test0_WinNeutral\SpriteShape.cs">
+      <Link>App\SpriteShape.cs</Link>
+    </Compile>
+    <Compile Include="..\TestSamples\00_DemoBase\DemoBase1.cs">
+      <Link>App\DemoBase1.cs</Link>
+    </Compile>
+    <Compile Include="..\TestSamples\00_DemoBase\DemoHelper.cs">
+      <Link>App\DemoHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\TestSamples\Sample03\T108_LionFill2.cs">
+      <Link>App\T108_LionFill2.cs</Link>
+    </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <None Include="GettingStarted.Xamarin" />
