@@ -76,7 +76,7 @@ namespace DrawingGL
     class SimpleCurveFlattener
     {
 
-        int nsteps = 20;
+        int nsteps = 2;
 
         void FlattenBezire(
           List<float> pointList,
@@ -85,21 +85,27 @@ namespace DrawingGL
           float x2, float y2,
           float x3, float y3)
         {
-            var curve = new BezierCurveCubic(
-                new Vector2(x0, y0),
-                new Vector2(x3, y3),
-                new Vector2(x1, y1),
-                new Vector2(x2, y2));
-
-            pointList.Add(x0); pointList.Add(y0);
-
-            float eachstep = (float)1 / nsteps;
-            float stepSum = eachstep;//start
-            for (int i = 1; i < nsteps; ++i)
+            if (nsteps > 0)
             {
-                var vector2 = curve.CalculatePoint(stepSum);
-                pointList.Add(vector2.X); pointList.Add(vector2.Y);
-                stepSum += eachstep;
+                //--------------------------------
+                //don't add 1st point (x0, y0)
+                //because we've added it.
+                //--------------------------------
+
+                var curve = new BezierCurveCubic(
+                    new Vector2(x0, y0),
+                    new Vector2(x3, y3),
+                    new Vector2(x1, y1),
+                    new Vector2(x2, y2));
+
+                float eachstep = (float)1 / nsteps;
+                float stepSum = eachstep;//start
+                for (int i = 1; i < nsteps; ++i)
+                {
+                    var vector2 = curve.CalculatePoint(stepSum);
+                    pointList.Add(vector2.X); pointList.Add(vector2.Y);
+                    stepSum += eachstep;
+                }
             }
             pointList.Add(x3); pointList.Add(y3);
         }

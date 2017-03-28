@@ -1,12 +1,16 @@
 ﻿//MIT, 2017, WinterDev
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using PixelFarm.DrawingGL;
-
 using System.IO;
+using System.Windows.Forms;
+//
+using PixelFarm.DrawingGL;
 using Typography.OpenFont;
+using Typography.Rendering;
+using DrawingGL;
+using DrawingGL.Text;
 
 namespace BuildTextureFonts
 {
@@ -27,27 +31,38 @@ namespace BuildTextureFonts
             using (FileStream fs = new FileStream(testFont, FileMode.Open, FileAccess.Read))
             {
                 OpenFontReader reader = new OpenFontReader();
-                Typeface t = reader.Read(fs);
-                Glyph glyph = t.GetGlyphByIndex(t.LookupIndex('G'));
+                Typeface typeface = reader.Read(fs);
+                Glyph glyph = typeface.GetGlyphByIndex(typeface.LookupIndex('G'));
                 //--
                 GlyphPointF[] glyphPoints = glyph.GlyphPoints;
                 //--
+                var builder = new Typography.Rendering.GlyphPathBuilder(typeface);
+                builder.BuildFromGlyphIndex(typeface.LookupIndex('G'), 256);
 
+                var txToPath = new GlyphTranslatorToPath();
+                var writablePath = new WritablePath();
+                txToPath.SetOutput(writablePath);
+                builder.ReadShapes(txToPath);
+                //from contour to  
+                var curveFlattener = new SimpleCurveFlattener();
+                float[] flattenPoints = curveFlattener.Flatten(writablePath._points);
 
-
-                //--
-                int j = glyphPoints.Length;
-                float scale = t.CalculateToPixelScaleFromPointSize(256);
-                glyphPoints2 = new float[j * 2];
-                int n = 0;
-                for (int i = 0; i < j; ++i)
-                {
-                    GlyphPointF pp = glyphPoints[i];
-                    glyphPoints2[n] = pp.X * scale;
-                    n++;
-                    glyphPoints2[n] = pp.Y * scale;
-                    n++;
-                }
+                glyphPoints2 = flattenPoints;
+                ////--------------------------------------
+                ////raw glyph points
+                //int j = glyphPoints.Length;
+                //float scale = typeface.CalculateToPixelScaleFromPointSize(256);
+                //glyphPoints2 = new float[j * 2];
+                //int n = 0;
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    GlyphPointF pp = glyphPoints[i];
+                //    glyphPoints2[n] = pp.X * scale;
+                //    n++;
+                //    glyphPoints2[n] = pp.Y * scale;
+                //    n++;
+                //}
+                ////--------------------------------------
             }
         }
 
