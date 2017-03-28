@@ -30,51 +30,36 @@ namespace PixelFarm.DrawingGL
             return smoothBorderTess;
         }
 
-        public float[] GetAreaTess(ref TessTool tess)
+        public float[] GetAreaTess(TessTool tess)
         {
             if (areaTess == null)
             {
-                List<Vertex> vertextList = tess.TessPolygon(coordXYs);
-                if (vertextList == null)
-                {
-                    tessAreaTriangleCount = 0;
-                    return null;
-                }
-                //-----------------------------   
-                //switch how to fill polygon
-                int j = vertextList.Count;
-                float[] vtx = new float[j * 2];
-                int n = 0;
-                for (int p = 0; p < j; ++p)
-                {
-                    var v = vertextList[p];
-                    vtx[n] = (float)v.m_X;
-                    vtx[n + 1] = (float)v.m_Y;
-                    n += 2;
-                }
                 //triangle list
-                tessAreaTriangleCount = j;
-                //-------------------------------------                              
-                return this.areaTess = vtx;
+                return areaTess = tess.TessPolygon(coordXYs, out this.tessAreaTriangleCount);
+
             }
             return areaTess;
         }
     }
-    struct TessTool
+
+    class TessTool
     {
         internal readonly Tesselate.Tesselator tess;
         internal readonly TessListener2 tessListener;
+        List<Vertex> vertexts = new List<Vertex>();
         public TessTool(Tesselate.Tesselator tess)
         {
             this.tess = tess;
             this.tessListener = new TessListener2();
             tessListener.Connect(tess, true);
         }
-        public List<Vertex> TessPolygon(float[] vertex2dCoords)
+        public float[] TessPolygon(float[] vertex2dCoords, out int areaCount)
         {
+            vertexts.Clear();//reset
+            //
             int ncoords = vertex2dCoords.Length / 2;
-            if (ncoords == 0) { return null; }
-            List<Vertex> vertexts = new List<Vertex>(ncoords);
+            if (ncoords == 0) { areaCount = 0; return null; }
+
             int nn = 0;
             for (int i = 0; i < ncoords; ++i)
             {
@@ -93,7 +78,23 @@ namespace PixelFarm.DrawingGL
             }
             tess.EndContour();
             tess.EndPolygon();
-            return tessListener.resultVertexList;
+            //-----------------------
+            List<Vertex> vertextList = tessListener.resultVertexList;
+            //-----------------------------   
+            //switch how to fill polygon
+            j = vertextList.Count;
+            float[] vtx = new float[j * 2];
+            int n = 0;
+            for (int p = 0; p < j; ++p)
+            {
+                var v = vertextList[p];
+                vtx[n] = (float)v.m_X;
+                vtx[n + 1] = (float)v.m_Y;
+                n += 2;
+            }
+            //triangle list
+            areaCount = j;
+            return vtx;
         }
     }
 
