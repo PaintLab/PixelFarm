@@ -45,7 +45,7 @@ namespace Test_Android_Glyph
             textContext = new TypographyTextContext()
             {
                 FontFamily = "DroidSans.ttf", //corresponding to font file Assets/DroidSans.ttf
-                FontSize = 48,//size in Points
+                FontSize = 128,//size in Points
                 FontStretch = FontStretch.Normal,
                 FontStyle = FontStyle.Normal,
                 FontWeight = FontWeight.Normal,
