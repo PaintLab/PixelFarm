@@ -2,15 +2,9 @@
 using System;
 using OpenTK.Graphics.ES20;
 
-namespace Test_Android_Glyph
+namespace DrawingGL
 {
-    struct Color
-    {
-        public byte R;
-        public byte G;
-        public byte B;
-        public byte A;
-    }
+  
 
     /// <summary>
     /// sharing data between canvas and shaders

@@ -17,21 +17,6 @@ namespace Xamarin.OpenGL
                 return new MemoryStream(ms.ToArray());
             }
         }
-
-        public static void CheckGLESError(
-            [CallerFilePath] string fileName = null,
-            [CallerLineNumber] int lineNumber = 0,
-            [CallerMemberName] string memberName = null)
-        {
-            var error = GL.GetError();
-
-            if (error != All.NoError)
-            {
-                string errorStr = error.ToString();
-                Log.Debug("GLES Error","{0}({1}): glError: 0x{2:X} ({3}) in {4}",
-                    fileName, lineNumber, error, errorStr, memberName);
-            }
-        }
-
+         
     }
 }

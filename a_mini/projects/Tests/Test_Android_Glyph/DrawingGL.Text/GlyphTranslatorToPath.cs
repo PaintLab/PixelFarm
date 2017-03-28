@@ -3,33 +3,14 @@
 
 using System;
 using Typography.OpenFont;
-namespace Typography.Rendering
+namespace DrawingGL.Text
 {
 
-    interface IWritablePath
-    {
-        void CloseFigure();
-        /// <summary>
-        /// add curve4 from latest point (x0,y0)
-        /// </summary>
-        /// <param name="x1"></param>
-        /// <param name="y1"></param>
-        /// <param name="x2"></param>
-        /// <param name="y2"></param>
-        /// <param name="x3"></param>
-        /// <param name="y3"></param>
-        void BezireTo(float x1, float y1, float x2, float y2, float x3, float y3);
-        void LineTo(float x1, float y1);
-        void MoveTo(float x0, float y0);
-    }
-
-     
     /// <summary>
-    /// read result as Gdi+ GraphicsPath
+    /// for translate raw glyph data to target path
     /// </summary>
     class GlyphTranslatorToPath : IGlyphTranslator
     {
-        //this gdi+ version
         IWritablePath ps;
         float lastMoveX;
         float lastMoveY;

@@ -1,8 +1,8 @@
 ﻿//MIT, 2014-2017, WinterDev  
 
 using System.Collections.Generic;
- 
-namespace PixelFarm.DrawingGL
+using PixelFarm.DrawingGL;
+namespace DrawingGL
 {
     struct TessTool
     {
