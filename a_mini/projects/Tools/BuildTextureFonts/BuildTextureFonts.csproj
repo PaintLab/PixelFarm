@@ -42,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingGL\DrawingGL\GLCanvas\TessListener.cs">
-      <Link>TessListener.cs</Link>
+      <Link>SimpleDrawingGL\TessListener.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\Win32Utils\MyWin32.cs">
       <Link>Win32Utils\MyWin32.cs</Link>
@@ -65,8 +65,12 @@
     <Compile Include="FormTess.Designer.cs">
       <DependentUpon>FormTess.cs</DependentUpon>
     </Compile>
+    <Compile Include="SimpleDrawingGL\GlyphTranslatorToPath.cs" />
+    <Compile Include="SimpleDrawingGL\Path.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CurveFlattener.cs" />
+    <Compile Include="SimpleDrawingGL\Primitive.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

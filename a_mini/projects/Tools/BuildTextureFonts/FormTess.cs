@@ -28,11 +28,16 @@ namespace BuildTextureFonts
             {
                 OpenFontReader reader = new OpenFontReader();
                 Typeface t = reader.Read(fs);
-                Glyph glyph = t.GetGlyphByIndex(t.LookupIndex('T'));
+                Glyph glyph = t.GetGlyphByIndex(t.LookupIndex('G'));
                 //--
                 GlyphPointF[] glyphPoints = glyph.GlyphPoints;
+                //--
+
+
+
+                //--
                 int j = glyphPoints.Length;
-                float scale = t.CalculateToPixelScaleFromPointSize(128);
+                float scale = t.CalculateToPixelScaleFromPointSize(256);
                 glyphPoints2 = new float[j * 2];
                 int n = 0;
                 for (int i = 0; i < j; ++i)
