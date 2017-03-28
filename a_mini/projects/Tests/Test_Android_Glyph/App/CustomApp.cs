@@ -32,7 +32,7 @@ namespace Test_Android_Glyph
 
             //--------------------------------------
             simpleCanvas = new SimpleCanvas(canvasW, canvasH);
-            var text = "paoq";
+            var text = "Typography";
             //optional ....
             //var directory = AndroidOS.Environment.ExternalStorageDirectory;
             //var fullFileName = Path.Combine(directory.ToString(), "TypographyTest.txt");
