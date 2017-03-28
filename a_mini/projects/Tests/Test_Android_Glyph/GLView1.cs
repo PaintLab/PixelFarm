@@ -15,8 +15,8 @@ using DrawingGL.Text;
 namespace Test_Android_Glyph
 {
     class GLView1 : AndroidGameView
-    { 
-        CustomApp customApp = new CustomApp();
+    {
+        CustomApp customApp;
         public GLView1(Context context) : base(context)
         {
 
@@ -26,6 +26,10 @@ namespace Test_Android_Glyph
         {
             base.OnLoad(e);
 
+
+            //-----------
+            customApp = new CustomApp();
+            //-----------
             Android.Graphics.Point sc_size = new Android.Graphics.Point();
             Display.GetSize(sc_size);
 

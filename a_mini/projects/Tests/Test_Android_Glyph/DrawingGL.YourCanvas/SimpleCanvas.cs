@@ -100,7 +100,7 @@ namespace DrawingGL
         public void FillTextRun(TextRun textRun, float x, float y)
         {
             //fill text run at spefic pos
-            fillShader.SetOffset(x, y);
+
             List<GlyphRun> glyphs = textRun._glyphs;
             int j = glyphs.Count;
 
@@ -112,8 +112,8 @@ namespace DrawingGL
                 GlyphRun run = glyphs[i];
                 //
                 fillShader.SetOffset(
-                     run.OffsetX * scale,
-                     run.OffsetY * scale);
+                   x + run.OffsetX * scale,
+                   y + run.OffsetY * scale);
                 //
                 fillShader.FillTriangles(
                     run.tessData,
