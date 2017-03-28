@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using PixelFarm.DrawingGL;
 namespace DrawingGL
 {
-    struct TessTool
+    class TessTool
     {
         internal readonly Tesselate.Tesselator tess;
         internal readonly TessListener2 tessListener;
+        public TessTool() : this(new Tesselate.Tesselator()) { }
         public TessTool(Tesselate.Tesselator tess)
         {
             this.tess = tess;
