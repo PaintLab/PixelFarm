@@ -16,12 +16,12 @@ namespace DrawingGL.Text
         //2. measure glyph
         //3. generate glyph runs into textrun
 
-        private readonly GlyphLayout glyphLayout = new GlyphLayout();
 
-        private readonly List<GlyphPlan> outputGlyphPlans = new List<GlyphPlan>();
-        private GlyphTranslatorToPath pathTranslator;
-        private string currentFontFile;
-        private GlyphPathBuilder currentGlyphPathBuilder;
+        readonly GlyphLayout glyphLayout = new GlyphLayout();
+        readonly List<GlyphPlan> outputGlyphPlans = new List<GlyphPlan>();
+        GlyphTranslatorToPath pathTranslator;
+        string currentFontFile;
+        GlyphPathBuilder currentGlyphPathBuilder;
 
         //
         // for tess
@@ -29,6 +29,19 @@ namespace DrawingGL.Text
         SimpleCurveFlattener _curveFlattener;
         TessTool _tessTool;
 
+        //-------------
+        struct ProcessedGlyph
+        {
+            public readonly float[] tessData;
+            public readonly ushort tessNElements;
+            public ProcessedGlyph(float[] tessData, ushort tessNElements)
+            {
+                this.tessData = tessData;
+                this.tessNElements = tessNElements;
+            }
+        }
+        GlyphMeshCollection<ProcessedGlyph> _glyphMeshCollection = new GlyphMeshCollection<ProcessedGlyph>();
+        //-------------
         public TextPrinter()
         {
             FontSizeInPoints = 14;
@@ -105,6 +118,9 @@ namespace DrawingGL.Text
         public bool EnableLigature { get; set; }
         public Typeface CurrentTypeFace { get; private set; }
 
+
+
+
         /// <summary>
         /// generate glyph run into a given textRun
         /// </summary>
@@ -118,7 +134,11 @@ namespace DrawingGL.Text
             float sizeInPoints = this.FontSizeInPoints;
             outputTextRun.typeface = this.CurrentTypeFace;
             outputTextRun.sizeInPoints = sizeInPoints;
-            //
+
+            //in this version we store original glyph into the mesh collection
+            //and then we scale it later, so I just specific font size=0 (you can use any value)
+            _glyphMeshCollection.SetCacheInfo(this.CurrentTypeFace, 0, this.HintTechnique);
+
             outputGlyphPlans.Clear();
             glyphLayout.Typeface = this.CurrentTypeFace;
             glyphLayout.GenerateGlyphPlans(charBuffer, start, len, outputGlyphPlans, null);
@@ -135,22 +155,32 @@ namespace DrawingGL.Text
                 //
                 //1. check if we have this glyph in cache?
                 //if yes, not need to build it again 
-                WritablePath writablePath = new WritablePath();
-                pathTranslator.SetOutput(writablePath);
-                currentGlyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, sizeInPoints);
-                currentGlyphPathBuilder.ReadShapes(pathTranslator);
-                //---------- 
-                //create glyph mesh
-                //TODO: review performance here
-                GlyphRun glyphRun = new GlyphRun(writablePath, glyphPlan);
-                //-----------------
-                //do tess  
-                int[] endContours;
-                float[] flattenPoints = _curveFlattener.Flatten(writablePath._points, out endContours);
+                ProcessedGlyph processGlyph;
+                float[] tessData = null;
 
-                glyphRun.tessData = _tessTool.TessPolygon(flattenPoints, endContours, out glyphRun.nTessElements);
-                outputTextRun.AddGlyph(glyphRun);
-                //------------ 
+                if (!_glyphMeshCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out processGlyph))
+                {
+                    //if not found the  create a new one and register it
+                    var writablePath = new WritablePath();
+                    pathTranslator.SetOutput(writablePath);
+                    currentGlyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, sizeInPoints);
+                    currentGlyphPathBuilder.ReadShapes(pathTranslator);
+
+                    //-------
+                    //do tess  
+                    int[] endContours;
+                    float[] flattenPoints = _curveFlattener.Flatten(writablePath._points, out endContours);
+                    int nTessElems;
+                    tessData = _tessTool.TessPolygon(flattenPoints, endContours, out nTessElems);
+                    //-------
+                    processGlyph = new ProcessedGlyph(tessData, (ushort)nTessElems);
+                    _glyphMeshCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, processGlyph);
+                }
+
+                outputTextRun.AddGlyph(
+                    new GlyphRun(glyphPlan,
+                        processGlyph.tessData,
+                        processGlyph.tessNElements));
             }
         }
     }

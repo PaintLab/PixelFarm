@@ -106,21 +106,19 @@ namespace DrawingGL
         //-------------------- 
     }
 
-    public class GlyphRun
+    public struct GlyphRun
     {
         //glyph run contains...
         //1.
-        Typography.TextLayout.GlyphPlan glyphPlan;
-        //2. (optional) original path
-        internal WritablePath path;
-        //3. (optional) tessData and nTessElement
-        public float[] tessData;
-        public int nTessElements;
-
-        internal GlyphRun(WritablePath path, Typography.TextLayout.GlyphPlan glyphPlan)
+        Typography.TextLayout.GlyphPlan glyphPlan; //10 bytes        
+        public float[] tessData; //4
+        public ushort nTessElements;//2
+        internal GlyphRun(Typography.TextLayout.GlyphPlan glyphPlan, float[] tessData, ushort nTessElements)
         {
             this.glyphPlan = glyphPlan;
-            this.path = path;
+            this.tessData = tessData;
+            this.nTessElements = nTessElements;
+
         }
         public float OffsetX
         {

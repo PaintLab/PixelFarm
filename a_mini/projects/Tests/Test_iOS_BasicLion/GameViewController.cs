@@ -97,17 +97,18 @@ namespace Tests_iOS_BasicLion
             //setup viewport size  
             //square viewport 
         }
+        public override void Update()
+        {
+
+            GL.Viewport(0, 0, max, max);
+            demoContext.Render();
+        }
+
         void TearDownGL()
         {
             EAGLContext.SetCurrentContext(context);
             demoContext.Close();
         }
-        public override void Update()
-        {
-           
-            GL.Viewport(0, 0, max, max);
-            demoContext.Render();
-        }
-
+       
     }
 }

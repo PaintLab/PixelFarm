@@ -53,87 +53,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Shared\DrawingGL.Text\FontEnums.cs">
-      <Link>DrawingGL.Text\FontEnums.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
-      <Link>DrawingGL.Text\GlyphTranslatorToPath.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL.Text\TextPrinter.cs">
-      <Link>DrawingGL.Text\TextPrinter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL.Text\TypographyTextContext.cs">
-      <Link>DrawingGL.Text\TypographyTextContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL.Text\Utils.cs">
-      <Link>DrawingGL.Text\Utils.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL\CurveFlattener.cs">
-      <Link>DrawingGL\CurveFlattener.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL\Path.cs">
-      <Link>DrawingGL\Path.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL\Primitives.cs">
-      <Link>DrawingGL\Primitives.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL\TessTool.cs">
-      <Link>DrawingGL\TessTool.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\Es2Utils\ES2Utils.cs">
-      <Link>Es2Utils\ES2Utils.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\Es2Utils\GeometryUtils.cs">
-      <Link>Es2Utils\GeometryUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\Es2Utils\MiniShaderProgram.cs">
-      <Link>Es2Utils\MiniShaderProgram.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
-      <Link>GlyphBuilder\GlyphPathBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilderBase.cs">
-      <Link>GlyphBuilder\GlyphPathBuilderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\HintTechnique.cs">
-      <Link>GlyphBuilder\HintTechnique.cs</Link>
-    </Compile>
-    <Compile Include="..\..\shared\tesselate\ActiveRegion.cs">
-      <Link>Tess\ActiveRegion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\shared\tesselate\ContourVertex.cs">
-      <Link>Tess\ContourVertex.cs</Link>
-    </Compile>
-    <Compile Include="..\..\shared\tesselate\Dictionary.cs">
-      <Link>Tess\Dictionary.cs</Link>
-    </Compile>
-    <Compile Include="..\..\shared\tesselate\Face.cs">
-      <Link>Tess\Face.cs</Link>
-    </Compile>
-    <Compile Include="..\..\shared\tesselate\HalfEdge.cs">
-      <Link>Tess\HalfEdge.cs</Link>
-    </Compile>
-    <Compile Include="..\..\shared\tesselate\MaxFirstList.cs">
-      <Link>Tess\MaxFirstList.cs</Link>
-    </Compile>
-    <Compile Include="..\..\shared\tesselate\mesh.cs">
-      <Link>Tess\mesh.cs</Link>
-    </Compile>
-    <Compile Include="..\..\shared\tesselate\Tesselator.cs">
-      <Link>Tess\Tesselator.cs</Link>
-    </Compile>
     <Compile Include="App\CustomApp.cs" />
     <Compile Include="App\Color.cs" />
-    <Compile Include="DrawingGL.YourCanvas\Shaders.cs" />
-    <Compile Include="DrawingGL.YourCanvas\SimpleCanvas.cs" />
+    <Compile Include="App\Shaders.cs" />
     <Compile Include="GLView1.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="App\SimpleCanvas.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\DroidSans.ttf" />
-    <None Include="GettingStarted.Xamarin" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
@@ -152,15 +82,16 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
-      <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
+    <ProjectReference Include="..\..\..\Build\Android\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
+      <Project>{6abd1c6e-866d-42a8-99d0-7780b4ad08d3}</Project>
       <Name>Typography.GlyphLayout</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
-      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
+    <ProjectReference Include="..\..\..\Build\Android\Typography.OpenFont\Typography.OpenFont\Typography.OpenFont.csproj">
+      <Project>{9e204a4b-f9b8-4f7f-a792-184260b3494d}</Project>
       <Name>Typography.OpenFont</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\..\Shared\DrawingGL.Common.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
