@@ -53,31 +53,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Windows\Shared\DrawingGL.Text\FontEnums.cs">
+    <Compile Include="..\..\Shared\DrawingGL.Text\FontEnums.cs">
       <Link>DrawingGL.Text\FontEnums.cs</Link>
     </Compile>
-    <Compile Include="..\..\Windows\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
+    <Compile Include="..\..\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
       <Link>DrawingGL.Text\GlyphTranslatorToPath.cs</Link>
     </Compile>
-    <Compile Include="..\..\Windows\Shared\DrawingGL.Text\TextPrinter.cs">
+    <Compile Include="..\..\Shared\DrawingGL.Text\TextPrinter.cs">
       <Link>DrawingGL.Text\TextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\..\Windows\Shared\DrawingGL.Text\TypographyTextContext.cs">
+    <Compile Include="..\..\Shared\DrawingGL.Text\TypographyTextContext.cs">
       <Link>DrawingGL.Text\TypographyTextContext.cs</Link>
     </Compile>
-    <Compile Include="..\..\Windows\Shared\DrawingGL.Text\Utils.cs">
+    <Compile Include="..\..\Shared\DrawingGL.Text\Utils.cs">
       <Link>DrawingGL.Text\Utils.cs</Link>
     </Compile>
-    <Compile Include="..\..\Windows\Shared\DrawingGL\CurveFlattener.cs">
+    <Compile Include="..\..\Shared\DrawingGL\CurveFlattener.cs">
       <Link>DrawingGL\CurveFlattener.cs</Link>
     </Compile>
-    <Compile Include="..\..\Windows\Shared\DrawingGL\Path.cs">
+    <Compile Include="..\..\Shared\DrawingGL\Path.cs">
       <Link>DrawingGL\Path.cs</Link>
     </Compile>
-    <Compile Include="..\..\Windows\Shared\DrawingGL\Primitives.cs">
+    <Compile Include="..\..\Shared\DrawingGL\Primitives.cs">
       <Link>DrawingGL\Primitives.cs</Link>
     </Compile>
-    <Compile Include="..\..\Windows\Shared\DrawingGL\TessTool.cs">
+    <Compile Include="..\..\Shared\DrawingGL\TessTool.cs">
       <Link>DrawingGL\TessTool.cs</Link>
     </Compile>
     <Compile Include="App\CustomApp.cs" />

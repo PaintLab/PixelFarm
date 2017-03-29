@@ -36,64 +36,64 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Shared\DrawingGL.Text\FontEnums.cs">
+    <Compile Include="..\..\Shared\DrawingGL.Text\FontEnums.cs">
       <Link>DrawingGL.Text\FontEnums.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
+    <Compile Include="..\..\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
       <Link>DrawingGL.Text\GlyphTranslatorToPath.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\DrawingGL.Text\TextPrinter.cs">
+    <Compile Include="..\..\Shared\DrawingGL.Text\TextPrinter.cs">
       <Link>DrawingGL.Text\TextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\DrawingGL.Text\TypographyTextContext.cs">
+    <Compile Include="..\..\Shared\DrawingGL.Text\TypographyTextContext.cs">
       <Link>DrawingGL.Text\TypographyTextContext.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\DrawingGL.Text\Utils.cs">
+    <Compile Include="..\..\Shared\DrawingGL.Text\Utils.cs">
       <Link>DrawingGL.Text\Utils.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\DrawingGL\CurveFlattener.cs">
+    <Compile Include="..\..\Shared\DrawingGL\CurveFlattener.cs">
       <Link>DrawingGL\CurveFlattener.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\DrawingGL\Path.cs">
+    <Compile Include="..\..\Shared\DrawingGL\Path.cs">
       <Link>DrawingGL\Path.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\DrawingGL\Primitives.cs">
+    <Compile Include="..\..\Shared\DrawingGL\Primitives.cs">
       <Link>DrawingGL\Primitives.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\DrawingGL\TessTool.cs">
+    <Compile Include="..\..\Shared\DrawingGL\TessTool.cs">
       <Link>DrawingGL\TessTool.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
+    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
       <Link>GlyphPathBuilder\GlyphPathBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\GlyphPathBuilder\GlyphPathBuilderBase.cs">
+    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilderBase.cs">
       <Link>GlyphPathBuilder\GlyphPathBuilderBase.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\GlyphPathBuilder\HintTechnique.cs">
+    <Compile Include="..\..\Shared\GlyphPathBuilder\HintTechnique.cs">
       <Link>GlyphPathBuilder\HintTechnique.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\Tesselate\ActiveRegion.cs">
+    <Compile Include="..\..\Shared\Tesselate\ActiveRegion.cs">
       <Link>Tess\ActiveRegion.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\Tesselate\ContourVertex.cs">
+    <Compile Include="..\..\Shared\Tesselate\ContourVertex.cs">
       <Link>Tess\ContourVertex.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\Tesselate\Dictionary.cs">
+    <Compile Include="..\..\Shared\Tesselate\Dictionary.cs">
       <Link>Tess\Dictionary.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\Tesselate\Face.cs">
+    <Compile Include="..\..\Shared\Tesselate\Face.cs">
       <Link>Tess\Face.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\Tesselate\HalfEdge.cs">
+    <Compile Include="..\..\Shared\Tesselate\HalfEdge.cs">
       <Link>Tess\HalfEdge.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\Tesselate\MaxFirstList.cs">
+    <Compile Include="..\..\Shared\Tesselate\MaxFirstList.cs">
       <Link>Tess\MaxFirstList.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\Tesselate\mesh.cs">
+    <Compile Include="..\..\Shared\Tesselate\mesh.cs">
       <Link>Tess\mesh.cs</Link>
     </Compile>
-    <Compile Include="..\Shared\Tesselate\Tesselator.cs">
+    <Compile Include="..\..\Shared\Tesselate\Tesselator.cs">
       <Link>Tess\Tesselator.cs</Link>
     </Compile>
     <Compile Include="Form1.cs">
