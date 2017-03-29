@@ -834,188 +834,191 @@
     <Compile Include="..\..\pixelfarm\typography\typography.msdfgen\SignedDistance.cs">
       <Link>PixelFarm\Typography\Typography.MsdfGen\SignedDistance.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\Bounds.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Bounds.cs</Link>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\Bounds.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Bounds.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\CharacterMap.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\CharacterMap.cs</Link>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\CharacterMap.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\CharacterMap.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\fontcollection\InstalledFont.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\fontcollection\InstalledFont.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\fontcollection\InstalledFont.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\FontCollection\InstalledFont.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\Geometry.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Geometry.cs</Link>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\Geometry.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Geometry.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\Glyph.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Glyph.cs</Link>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\Glyph.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Glyph.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\IGlyphTranslator.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\IGlyphTranslator.cs</Link>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\IGlyphTranslator.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\IGlyphTranslator.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\io\ByteOrderSwappingBinaryReader.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\IO\ByteOrderSwappingBinaryReader.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\io\ByteOrderSwappingBinaryReader.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\IO\ByteOrderSwappingBinaryReader.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\OpenFontReader.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\OpenFontReader.cs</Link>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\OpenFontReader.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\OpenFontReader.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\AttachmentListTable.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\AttachmentListTable.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\AttachmentListTable.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\AttachmentListTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\Base.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\Base.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\Base.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\Base.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\ClassDefTable.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\ClassDefTable.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\ClassDefTable.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\ClassDefTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\CoverageTable.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\CoverageTable.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\CoverageTable.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\CoverageTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\FeatureInfo.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\FeatureInfo.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\FeatureInfo.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\FeatureInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\FeatureList.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\FeatureList.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\FeatureList.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\FeatureList.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\GDEF.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\GDEF.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\GDEF.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\GDEF.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\GPOS.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\GPOS.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\GPOS.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\GPOS.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\GPOS.Others.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\GPOS.Others.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\GPOS.Others.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\GPOS.Others.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\GSUB.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\GSUB.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\GSUB.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\GSUB.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\GSUB.SubTables.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\GSUB.SubTables.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\GSUB.SubTables.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\GSUB.SubTables.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\JustificationTable.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\JustificationTable.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\JustificationTable.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\JustificationTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\LigatureCaretListTable.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\LigatureCaretListTable.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\LigatureCaretListTable.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\LigatureCaretListTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\MathTable.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\MathTable.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\MathTable.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\MathTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\ScriptLang.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\ScriptLang.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\ScriptLang.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\ScriptLang.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\ScriptList.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\ScriptList.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\ScriptList.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\ScriptList.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.advancedlayout\ScriptTable.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.AdvancedLayout\ScriptTable.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.advancedlayout\ScriptTable.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.AdvanceLayout\ScriptTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.others\EBLCTable.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Others\EBLCTable.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.others\EBLCTable.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Others\EBLCTable.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.others\HorizontalDeviceMatrics.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Others\HorizontalDeviceMatrics.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.others\HorizontalDeviceMatrics.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Others\HorizontalDeviceMatrics.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.others\Kern.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Others\Kern.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.others\Kern.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Others\Kern.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.others\LinearThreashold.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Others\LinearThreashold.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.others\LinearThreashold.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Others\LinearThreashold.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.others\Merge.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Others\Merge.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.others\Merge.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Others\Merge.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.others\Meta.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Others\Meta.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.others\Meta.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Others\Meta.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.others\STAT.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Others\STAT.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.others\STAT.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Others\STAT.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.others\VerticalDeviceMatrics.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Others\VerticalDeviceMatrics.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.others\VerticalDeviceMatrics.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Others\VerticalDeviceMatrics.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.others\VerticalMatrics.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Others\VerticalMatrics.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.others\VerticalMatrics.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Others\VerticalMatrics.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.others\VerticalMatricsHeader.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Others\VerticalMatricsHeader.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.others\VerticalMatricsHeader.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Others\VerticalMatricsHeader.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.truetype\Cvt_Programs.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.TrueType\Cvt_Programs.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.truetype\Cvt_Programs.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.TrueType\Cvt_Programs.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.truetype\Gasp.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.TrueType\Gasp.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.truetype\Gasp.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.TrueType\Gasp.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.truetype\Glyf.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.TrueType\Glyf.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.truetype\Glyf.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.TrueType\Glyf.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.truetype\GlyphLocations.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.TrueType\GlyphLocations.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.truetype\GlyphLocations.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.TrueType\GlyphLocations.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.variations\AVar.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Variations\AVar.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.variations\AVar.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Variations\AVar.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.variations\FVar.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Variations\FVar.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.variations\FVar.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Variations\FVar.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.variations\GVar.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Variations\GVar.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.variations\GVar.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Variations\GVar.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.variations\HVar.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Variations\HVar.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.variations\HVar.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Variations\HVar.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.variations\MVar.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Variations\MVar.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.variations\MVar.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Variations\MVar.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables.variations\VVar.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables.Variations\VVar.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables.variations\VVar.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables.Variations\VVar.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\Cmap.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\Cmap.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\BoundsReader.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\BoundsReader.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\Head.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\Head.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\Cmap.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\Cmap.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\HorizontalHeader.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\HorizontalHeader.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\Head.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\Head.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\HorizontalMetrics.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\HorizontalMetrics.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\HorizontalHeader.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\HorizontalHeader.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\MaxProfile.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\MaxProfile.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\HorizontalMetrics.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\HorizontalMetrics.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\NameEntry.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\NameEntry.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\MaxProfile.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\MaxProfile.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\OS2.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\OS2.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\NameEntry.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\NameEntry.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\Post.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\Post.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\OS2.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\OS2.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\TableEntry.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\TableEntry.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\Post.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\Post.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\TableEntryCollection.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\TableEntryCollection.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\TableEntry.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\TableEntry.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\TableHeader.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\TableHeader.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\TableEntryCollection.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\TableEntryCollection.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\tables\Utils.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Tables\Utils.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\TableHeader.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\TableHeader.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\truetypeinterperter\ForNet20.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\TrueTypeInterperter\ForNet20.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\tables\Utils.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Tables\Utils.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\truetypeinterperter\Interpreter.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\TrueTypeInterperter\Interpreter.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\truetypeinterperter\ForNet20.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\TrueTypeInterpreter\ForNet20.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\truetypeinterperter\InvalidFontException.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\TrueTypeInterperter\InvalidFontException.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\truetypeinterperter\Interpreter.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\TrueTypeInterpreter\Interpreter.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\typography\typography.openfont\netcore\typography.openfont\Typeface.cs">
-      <Link>PixelFarm\Typography\Typography.OpenFont\NetCore\Typography.OpenFont\Typeface.cs</Link>
+    <Compile Include="..\..\pixelfarm\typography\typography.openfont\truetypeinterperter\InvalidFontException.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\TrueTypeInterpreter\InvalidFontException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.OpenFont\Typeface.cs">
+      <Link>PixelFarm\Typography\Typography.OpenFont\Typeface.cs</Link>
     </Compile>
     <Compile Include="..\..\pixelfarm\typography\typography.rendering\CurveGen.cs">
       <Link>PixelFarm\Typography\Typography.Rendering\CurveGen.cs</Link>
@@ -1044,6 +1047,7 @@
     <Compile Include="..\..\pixelfarm\win32utils\NativeWin32MemoryDc.cs">
       <Link>PixelFarm\Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
+    <Compile Include="PixelFarm\Typography\Typography.OpenFont\ExtensionAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

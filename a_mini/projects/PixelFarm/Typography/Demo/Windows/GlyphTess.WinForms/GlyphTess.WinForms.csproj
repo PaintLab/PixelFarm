@@ -36,20 +36,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Shared\DrawingGL.Text\FontEnums.cs">
-      <Link>DrawingGL.Text\FontEnums.cs</Link>
-    </Compile>
     <Compile Include="..\..\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
       <Link>DrawingGL.Text\GlyphTranslatorToPath.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL.Text\TextPrinter.cs">
-      <Link>DrawingGL.Text\TextPrinter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL.Text\TypographyTextContext.cs">
-      <Link>DrawingGL.Text\TypographyTextContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL.Text\Utils.cs">
-      <Link>DrawingGL.Text\Utils.cs</Link>
     </Compile>
     <Compile Include="..\..\Shared\DrawingGL\CurveFlattener.cs">
       <Link>DrawingGL\CurveFlattener.cs</Link>
@@ -127,12 +115,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
-      <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
+    <ProjectReference Include="..\..\..\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
+      <Project>{c6807d05-09be-4313-9f8b-bd2d51c55819}</Project>
       <Name>Typography.GlyphLayout</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
-      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
+    <ProjectReference Include="..\..\..\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
+      <Project>{f7d71e61-9342-4dd7-9afd-69045f2ec98b}</Project>
       <Name>Typography.OpenFont</Name>
     </ProjectReference>
   </ItemGroup>
