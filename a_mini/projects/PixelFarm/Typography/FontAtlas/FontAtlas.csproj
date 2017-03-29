@@ -47,7 +47,7 @@
       <Project>{8f69ab8d-174a-4912-9328-cae8eda5564b}</Project>
       <Name>Typography.MsdfGen</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
+    <ProjectReference Include="..\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenFont</Name>
     </ProjectReference>

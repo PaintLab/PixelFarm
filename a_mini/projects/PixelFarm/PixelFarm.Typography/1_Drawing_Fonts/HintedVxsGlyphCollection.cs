@@ -8,7 +8,9 @@ using Typography.Rendering;
 
 namespace PixelFarm.Drawing.Fonts
 {
-
+    //----------
+    //TODO: review here 
+    //----------
     class HintedVxsGlyphCollection
     {
         //hint glyph collection        
