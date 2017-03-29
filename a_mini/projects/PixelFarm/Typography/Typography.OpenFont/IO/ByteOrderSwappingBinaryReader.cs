@@ -68,15 +68,11 @@ namespace Typography.OpenFont.IO
 
         protected override void Dispose(bool disposing)
         {
-            Dispose(true);
+
             GC.SuppressFinalize(this);
             base.Dispose(disposing);
         }
-        //public void Dispose()
-        //{
-        //    Dispose(true);
-        //    GC.SuppressFinalize(this);
-        //}
-         
+
+
     }
 }
