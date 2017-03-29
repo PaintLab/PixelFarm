@@ -42,7 +42,6 @@
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
-            this.cmdTestTess = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdBuild
@@ -64,9 +63,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(90, 12);
+            this.button1.Location = new System.Drawing.Point(22, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(59, 34);
+            this.button1.Size = new System.Drawing.Size(127, 34);
             this.button1.TabIndex = 2;
             this.button1.Text = "Orginal MsdfGen";
             this.button1.UseVisualStyleBackColor = true;
@@ -179,22 +178,11 @@
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
-            // cmdTestTess
-            // 
-            this.cmdTestTess.Location = new System.Drawing.Point(22, 12);
-            this.cmdTestTess.Name = "cmdTestTess";
-            this.cmdTestTess.Size = new System.Drawing.Size(62, 34);
-            this.cmdTestTess.TabIndex = 13;
-            this.cmdTestTess.Text = "TestTess";
-            this.cmdTestTess.UseVisualStyleBackColor = true;
-            this.cmdTestTess.Click += new System.EventHandler(this.cmdTestTess_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1280, 655);
-            this.Controls.Add(this.cmdTestTess);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.button9);
@@ -231,7 +219,6 @@
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Button cmdTestTess;
     }
 }
 

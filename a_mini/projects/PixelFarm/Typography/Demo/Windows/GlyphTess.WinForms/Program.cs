@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace SampleWinForms
+namespace Test_WinForm_TessGlyph
 {
     static class Program
     {
@@ -14,7 +14,7 @@ namespace SampleWinForms
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-             Application.Run(new Form1());
+            Application.Run(new FormTess());
         }
     }
 }
