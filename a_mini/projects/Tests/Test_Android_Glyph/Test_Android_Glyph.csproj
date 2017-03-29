@@ -55,7 +55,7 @@
   <ItemGroup>
     <Compile Include="App\CustomApp.cs" />
     <Compile Include="App\Utils.cs" />
-    <Compile Include="DrawingGL\Color.cs" />
+    <Compile Include="App\Color.cs" />
     <Compile Include="DrawingGL\Primitives.cs" />
     <Compile Include="DrawingGL.YourCanvas\Shaders.cs" />
     <Compile Include="DrawingGL.YourCanvas\SimpleCanvas.cs" />

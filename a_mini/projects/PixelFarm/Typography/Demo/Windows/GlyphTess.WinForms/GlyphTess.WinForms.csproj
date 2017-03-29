@@ -36,48 +36,66 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\PixelFarm\Tesselate\ActiveRegion.cs">
+    <Compile Include="..\Shared\DrawingGL.Text\FontEnums.cs">
+      <Link>DrawingGL.Text\FontEnums.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
+      <Link>DrawingGL.Text\GlyphTranslatorToPath.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\DrawingGL.Text\TextPrinter.cs">
+      <Link>DrawingGL.Text\TextPrinter.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\DrawingGL.Text\TypographyTextContext.cs">
+      <Link>DrawingGL.Text\TypographyTextContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\DrawingGL.Text\Utils.cs">
+      <Link>DrawingGL.Text\Utils.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\DrawingGL\CurveFlattener.cs">
+      <Link>DrawingGL\CurveFlattener.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\DrawingGL\Path.cs">
+      <Link>DrawingGL\Path.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\DrawingGL\Primitives.cs">
+      <Link>DrawingGL\Primitives.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\DrawingGL\TessTool.cs">
+      <Link>DrawingGL\TessTool.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
+      <Link>GlyphPathBuilder\GlyphPathBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\GlyphPathBuilder\GlyphPathBuilderBase.cs">
+      <Link>GlyphPathBuilder\GlyphPathBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\GlyphPathBuilder\HintTechnique.cs">
+      <Link>GlyphPathBuilder\HintTechnique.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\Tesselate\ActiveRegion.cs">
       <Link>Tess\ActiveRegion.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Tesselate\Collections\MaxFirstList.cs">
-      <Link>Tess\MaxFirstList.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\Tesselate\ContourVertex.cs">
+    <Compile Include="..\Shared\Tesselate\ContourVertex.cs">
       <Link>Tess\ContourVertex.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Tesselate\Dictionary.cs">
+    <Compile Include="..\Shared\Tesselate\Dictionary.cs">
       <Link>Tess\Dictionary.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Tesselate\Face.cs">
+    <Compile Include="..\Shared\Tesselate\Face.cs">
       <Link>Tess\Face.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Tesselate\HalfEdge.cs">
+    <Compile Include="..\Shared\Tesselate\HalfEdge.cs">
       <Link>Tess\HalfEdge.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Tesselate\mesh.cs">
+    <Compile Include="..\Shared\Tesselate\MaxFirstList.cs">
+      <Link>Tess\MaxFirstList.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\Tesselate\mesh.cs">
       <Link>Tess\mesh.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Tesselate\Tesselator.cs">
+    <Compile Include="..\Shared\Tesselate\Tesselator.cs">
       <Link>Tess\Tesselator.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\Demo\Windows\GdiPlusSample.WinForms\GlyphPathBuilder.cs">
-      <Link>AppSpecific\GlyphPathBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\Demo\Windows\GdiPlusSample.WinForms\GlyphPathBuilderBase.cs">
-      <Link>AppSpecific\GlyphPathBuilderBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\Typography\Demo\Windows\GdiPlusSample.WinForms\HintTechnique.cs">
-      <Link>AppSpecific\HintTechnique.cs</Link>
-    </Compile>
-    <Compile Include="DrawingGL.Text\Utils.cs" />
-    <Compile Include="DrawingGL.Text\FontEnums.cs" />
-    <Compile Include="DrawingGL.Text\GlyphTranslatorToPath.cs" />
-    <Compile Include="DrawingGL.Text\TextPrinter.cs" />
-    <Compile Include="DrawingGL.Text\TypographyTextContext.cs" />
-    <Compile Include="DrawingGL\CurveFlattener.cs" />
-    <Compile Include="DrawingGL\Path.cs" />
-    <Compile Include="DrawingGL\Primitives.cs" />
-    <Compile Include="DrawingGL\TessTool.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,11 +127,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
+    <ProjectReference Include="..\..\..\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
       <Name>Typography.GlyphLayout</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
+    <ProjectReference Include="..\..\..\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenFont</Name>
     </ProjectReference>
