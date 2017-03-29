@@ -36,20 +36,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Shared\DrawingGL.Text\FontEnums.cs">
-      <Link>DrawingGL.Text\FontEnums.cs</Link>
-    </Compile>
     <Compile Include="..\..\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
       <Link>DrawingGL.Text\GlyphTranslatorToPath.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL.Text\TextPrinter.cs">
-      <Link>DrawingGL.Text\TextPrinter.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL.Text\TypographyTextContext.cs">
-      <Link>DrawingGL.Text\TypographyTextContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DrawingGL.Text\Utils.cs">
-      <Link>DrawingGL.Text\Utils.cs</Link>
     </Compile>
     <Compile Include="..\..\Shared\DrawingGL\CurveFlattener.cs">
       <Link>DrawingGL\CurveFlattener.cs</Link>
