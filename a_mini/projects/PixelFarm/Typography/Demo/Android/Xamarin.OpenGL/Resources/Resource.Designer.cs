@@ -26,8 +26,6 @@ namespace Xamarin_OpenGL
 		
 		public static void UpdateIdValues()
 		{
-			global::PixelFarm.Android.One.Resource.String.ApplicationName = global::Xamarin_OpenGL.Resource.String.ApplicationName;
-			global::PixelFarm.Android.One.Resource.String.Hello = global::Xamarin_OpenGL.Resource.String.Hello;
 		}
 		
 		public partial class Attribute

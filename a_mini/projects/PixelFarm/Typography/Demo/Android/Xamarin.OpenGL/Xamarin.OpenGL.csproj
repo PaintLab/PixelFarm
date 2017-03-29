@@ -80,6 +80,48 @@
     <Compile Include="..\..\Shared\DrawingGL\TessTool.cs">
       <Link>DrawingGL\TessTool.cs</Link>
     </Compile>
+    <Compile Include="..\..\Shared\Es2Utils\ES2Utils.cs">
+      <Link>Es2Utils\ES2Utils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\Es2Utils\GeometryUtils.cs">
+      <Link>Es2Utils\GeometryUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\Es2Utils\MiniShaderProgram.cs">
+      <Link>Es2Utils\MiniShaderProgram.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
+      <Link>GlyphBuilder\GlyphPathBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilderBase.cs">
+      <Link>GlyphBuilder\GlyphPathBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\GlyphPathBuilder\HintTechnique.cs">
+      <Link>GlyphBuilder\HintTechnique.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\ActiveRegion.cs">
+      <Link>Tess\ActiveRegion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\ContourVertex.cs">
+      <Link>Tess\ContourVertex.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\Dictionary.cs">
+      <Link>Tess\Dictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\Face.cs">
+      <Link>Tess\Face.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\HalfEdge.cs">
+      <Link>Tess\HalfEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\MaxFirstList.cs">
+      <Link>Tess\MaxFirstList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\mesh.cs">
+      <Link>Tess\mesh.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\Tesselator.cs">
+      <Link>Tess\Tesselator.cs</Link>
+    </Compile>
     <Compile Include="App\CustomApp.cs" />
     <Compile Include="App\Color.cs" />
     <Compile Include="DrawingGL.YourCanvas\Shaders.cs" />
@@ -110,12 +152,15 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\x_autogen2\PixelFarm.Android.One\PixelFarm.Android.One.csproj">
-      <Project>{5d404942-0730-4d7e-8dcb-97951e7174a3}</Project>
-      <Name>PixelFarm.Android.One</Name>
+    <ProjectReference Include="..\..\..\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
+      <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
+      <Name>Typography.GlyphLayout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
+      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
+      <Name>Typography.OpenFont</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.
