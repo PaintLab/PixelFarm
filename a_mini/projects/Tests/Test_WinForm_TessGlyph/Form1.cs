@@ -1,15 +1,18 @@
 ﻿//MIT, 2017, WinterDev
-using System; 
-using System.Drawing; 
+using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+
 //
-using PixelFarm.DrawingGL;
-using Typography.OpenFont; 
+using Typography.OpenFont;
+//
 using DrawingGL;
 using DrawingGL.Text;
+//
 
-namespace BuildTextureFonts
+
+namespace Test_WinForm_TessGlyph
 {
     public partial class FormTess : Form
     {
@@ -24,19 +27,19 @@ namespace BuildTextureFonts
         }
         private void FormTess_Load(object sender, EventArgs e)
         {
-            g = CreateGraphics();
+            g = this.pnlGlyph.CreateGraphics();
 
             string testFont = "d:\\WImageTest\\DroidSans.ttf";
             using (FileStream fs = new FileStream(testFont, FileMode.Open, FileAccess.Read))
             {
                 OpenFontReader reader = new OpenFontReader();
                 Typeface typeface = reader.Read(fs);
-                Glyph glyph = typeface.GetGlyphByIndex(typeface.LookupIndex('G'));
-                //--
-                GlyphPointF[] glyphPoints = glyph.GlyphPoints;
+                //Glyph glyph = typeface.GetGlyphByIndex(typeface.LookupIndex('G'));
+                ////--
+                //GlyphPointF[] glyphPoints = glyph.GlyphPoints;
                 //--
                 var builder = new Typography.Rendering.GlyphPathBuilder(typeface);
-                builder.BuildFromGlyphIndex(typeface.LookupIndex('b'), 256);
+                builder.BuildFromGlyphIndex(typeface.LookupIndex('a'), 256);
 
                 var txToPath = new GlyphTranslatorToPath();
                 var writablePath = new WritablePath();
@@ -68,6 +71,9 @@ namespace BuildTextureFonts
         {
             return glyphPoints2;
 
+            //--
+            //for test
+
             return new float[]
             {
                     10,10,
@@ -78,8 +84,20 @@ namespace BuildTextureFonts
                     50,100
             };
         }
-        private void button1_Click(object sender, EventArgs e)
+        void DrawOutput()
         {
+            //-----------
+            //for GDI+ only
+            bool drawInvert = chkInvert.Checked;
+            int viewHeight = this.pnlGlyph.Height;
+            if (drawInvert)
+            {
+                g.ScaleTransform(1, -1);
+                g.TranslateTransform(0, -viewHeight);
+            }
+            //-----------
+
+
             //show tess
             g.Clear(Color.White);
 
@@ -96,11 +114,24 @@ namespace BuildTextureFonts
 
                     p0 = new PointF(polygon1[m - 2], polygon1[m - 1]);
                     p1 = new PointF(polygon1[m], polygon1[m + 1]);
-
                     g.DrawLine(pen1, p0, p1);
 
                     //-----
+                    //gdi+ only
+                    //if (drawInvert)
+                    //{
+                    //    g.ResetTransform();
+                    //    g.DrawString(a.ToString(), this.Font, Brushes.Black, new PointF(p0.X, p0.Y));
+                    //    g.ScaleTransform(1, -1);
+                    //    g.TranslateTransform(0, -viewHeight);
+
+                    //}
+                    //else
+                    //{
+                    //    g.DrawString(a.ToString(), this.Font, Brushes.Black, p0);
+                    //}
                     g.DrawString(a.ToString(), this.Font, Brushes.Black, p0);
+                    //-----
 
 
                     m += 2;
@@ -131,6 +162,20 @@ namespace BuildTextureFonts
 
                 i += 6;
             }
-        } 
+
+            //-----------
+            //for GDI+ only
+            g.ResetTransform();
+            //-----------
+        }
+        private void cmdDrawGlyph_Click(object sender, EventArgs e)
+        {
+            DrawOutput();
+        }
+
+        private void chkInvert_CheckedChanged(object sender, EventArgs e)
+        {
+            DrawOutput();
+        }
     }
 }
