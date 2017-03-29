@@ -33,8 +33,8 @@ namespace Typography.OpenFont
         /// <summary>
         /// begin read a glyph
         /// </summary>
-        /// <param name="countourCount"></param>
-        void BeginRead(int countourCount);
+        /// <param name="contourCount"></param>
+        void BeginRead(int contourCount);
         /// <summary>
         /// end read a glyph
         /// </summary>

@@ -71,10 +71,9 @@ namespace PixelFarm.DrawingGL
 
             msdfSubPixelRenderingShader = new DrawingGL.MultiChannelSubPixelRenderingSdf(shaderRes);
             sdfShader = new DrawingGL.SingleChannelSdf(shaderRes);
-            //----
-            Tesselator tess = new Tesselator();
-            tess.WindingRule = Tesselator.WindingRuleType.Odd;
-            tessTool = new TessTool(tess);
+            //-----------------------------------------------------------------------
+
+            tessTool = new TessTool();
             //-----------------------------------------------------------------------
 
 
@@ -353,14 +352,14 @@ namespace PixelFarm.DrawingGL
 
                 //1. B , cyan result
                 GL.ColorMask(false, false, true, false);
-                textureSubPixRendering.SetCompo(0); 
+                textureSubPixRendering.SetCompo(0);
                 textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
                 //float subpixel_shift = 1 / 9f;
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft - subpixel_shift, targetTop); //TODO: review this option
                 //---------------------------------------------------
                 //2. G , magenta result
                 GL.ColorMask(false, true, false, false);
-                textureSubPixRendering.SetCompo(1); 
+                textureSubPixRendering.SetCompo(1);
                 textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
                 //textureSubPixRendering.DrawSubImage(r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop); //TODO: review this option
                 //1. R , yellow result 
@@ -485,7 +484,7 @@ namespace PixelFarm.DrawingGL
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
-                            float[] tessArea = f.GetAreaTess(ref this.tessTool);
+                            float[] tessArea = f.GetAreaTess(this.tessTool);
                             if (tessArea != null)
                             {
                                 this.basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);
@@ -501,11 +500,11 @@ namespace PixelFarm.DrawingGL
                         float prevWidth = StrokeWidth;
 
                         StrokeColor = color;
-                        StrokeWidth = 0.5f;
+                        StrokeWidth = 0.5f; //TODO: review this ***
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
-                            float[] tessArea = f.GetAreaTess(ref this.tessTool);
+                            float[] tessArea = f.GetAreaTess(this.tessTool);
                             if (tessArea != null)
                             {
                                 basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);
@@ -550,7 +549,7 @@ namespace PixelFarm.DrawingGL
                             //render  to stencill buffer
                             //-----------------
 
-                            float[] tessArea = fig.GetAreaTess(ref this.tessTool);
+                            float[] tessArea = fig.GetAreaTess(this.tessTool);
                             //-------------------------------------   
                             if (tessArea != null)
                             {

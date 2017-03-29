@@ -1055,5 +1055,10 @@ namespace BuildTextureFonts
             }
 
         }
+
+        private void cmdTestTess_Click(object sender, EventArgs e)
+        {
+           
+        }
     }
 }
