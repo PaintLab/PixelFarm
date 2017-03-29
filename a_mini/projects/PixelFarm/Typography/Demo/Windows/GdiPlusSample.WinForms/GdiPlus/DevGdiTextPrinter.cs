@@ -1,6 +1,7 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System.IO;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Collections.Generic;
 //
 using Typography.OpenFont;
@@ -10,12 +11,6 @@ using Typography.Rendering;
 
 namespace SampleWinForms
 {
-    class GlyphCache
-    {
-
-
-
-    }
 
 
     /// <summary>
@@ -29,7 +24,7 @@ namespace SampleWinForms
         GlyphLayout _glyphLayout = new GlyphLayout();
         SolidBrush _fillBrush = new SolidBrush(Color.Black);
         Pen _outlinePen = new Pen(Color.Green);
-
+        
         string _currentSelectedFontFile;
 
         public DevGdiTextPrinter()
@@ -116,11 +111,9 @@ namespace SampleWinForms
             UpdateGlyphLayoutSettings();
             _outputGlyphPlans.Clear();
             this._glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _outputGlyphPlans, null);
-            //2. draw
-            GenerateGlyphPlanList(_outputGlyphPlans, xpos, ypos);
-        }
-
-
+       
+            DrawFromGlyphPlans(_outputGlyphPlans, xpos, ypos);
+        } 
         void UpdateGlyphLayoutSettings()
         {
             _glyphLayout.Typeface = this.Typeface;
@@ -134,9 +127,7 @@ namespace SampleWinForms
             _fillBrush.Color = this.FillColor;
             _outlinePen.Color = this.OutlineColor;
         }
-
-
-        public override void GenerateGlyphPlanList(List<GlyphPlan> glyphPlanList, int startAt, int len, float x, float y)
+        public override void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, int startAt, int len, float x, float y)
         {
             UpdateVisualOutputSettings();
 
