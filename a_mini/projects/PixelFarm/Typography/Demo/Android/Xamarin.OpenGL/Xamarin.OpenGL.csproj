@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B824FFB2-D057-490A-8967-892C0E20C0B6}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Xamarin_OpenGL</RootNamespace>
+    <AssemblyName>Xamarin_OpenGL</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidApplication>True</AndroidApplication>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>PdbOnly</DebugType>
+    <DebugSymbols>True</DebugSymbols>
+    <Optimize>True</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="OpenTK-1.0" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Shared\DrawingGL.Text\FontEnums.cs">
+      <Link>DrawingGL.Text\FontEnums.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
+      <Link>DrawingGL.Text\GlyphTranslatorToPath.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\DrawingGL.Text\TextPrinter.cs">
+      <Link>DrawingGL.Text\TextPrinter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\DrawingGL.Text\TypographyTextContext.cs">
+      <Link>DrawingGL.Text\TypographyTextContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\DrawingGL.Text\Utils.cs">
+      <Link>DrawingGL.Text\Utils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\DrawingGL\CurveFlattener.cs">
+      <Link>DrawingGL\CurveFlattener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\DrawingGL\Path.cs">
+      <Link>DrawingGL\Path.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\DrawingGL\Primitives.cs">
+      <Link>DrawingGL\Primitives.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\DrawingGL\TessTool.cs">
+      <Link>DrawingGL\TessTool.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\Es2Utils\ES2Utils.cs">
+      <Link>Es2Utils\ES2Utils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\Es2Utils\GeometryUtils.cs">
+      <Link>Es2Utils\GeometryUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\Es2Utils\MiniShaderProgram.cs">
+      <Link>Es2Utils\MiniShaderProgram.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
+      <Link>GlyphBuilder\GlyphPathBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilderBase.cs">
+      <Link>GlyphBuilder\GlyphPathBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\GlyphPathBuilder\HintTechnique.cs">
+      <Link>GlyphBuilder\HintTechnique.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\ActiveRegion.cs">
+      <Link>Tess\ActiveRegion.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\ContourVertex.cs">
+      <Link>Tess\ContourVertex.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\Dictionary.cs">
+      <Link>Tess\Dictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\Face.cs">
+      <Link>Tess\Face.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\HalfEdge.cs">
+      <Link>Tess\HalfEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\MaxFirstList.cs">
+      <Link>Tess\MaxFirstList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\mesh.cs">
+      <Link>Tess\mesh.cs</Link>
+    </Compile>
+    <Compile Include="..\..\shared\tesselate\Tesselator.cs">
+      <Link>Tess\Tesselator.cs</Link>
+    </Compile>
+    <Compile Include="App\CustomApp.cs" />
+    <Compile Include="App\Color.cs" />
+    <Compile Include="DrawingGL.YourCanvas\Shaders.cs" />
+    <Compile Include="DrawingGL.YourCanvas\SimpleCanvas.cs" />
+    <Compile Include="GLView1.cs" />
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\DroidSans.ttf" />
+    <None Include="GettingStarted.Xamarin" />
+    <None Include="Resources\AboutResources.txt" />
+    <None Include="Assets\AboutAssets.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\Main.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
+      <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
+      <Name>Typography.GlyphLayout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
+      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
+      <Name>Typography.OpenFont</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+     Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

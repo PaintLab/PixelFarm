@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-
 using System.Windows.Forms;
 
-namespace BuildTextureFonts
+namespace SampleWinForms
 {
     static class Program
     {
@@ -16,7 +14,7 @@ namespace BuildTextureFonts
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Form2());
         }
-    } 
+    }
 }
