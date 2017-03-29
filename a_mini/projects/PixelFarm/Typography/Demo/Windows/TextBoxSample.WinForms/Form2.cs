@@ -11,14 +11,15 @@ using Typography.Rendering;
 
 namespace SampleWinForms
 {
-    public partial class Form1 : Form
+    public partial class Form2 : Form
     {
         Graphics g;
         //for this sample code,
         //create text printer env for developer.
         DevGdiTextPrinter _currentTextPrinter = new DevGdiTextPrinter();
-       
-        public Form1()
+        SampleWinForms.UI.SampleTextBoxControllerForGdi _textBoxControllerForGdi = new UI.SampleTextBoxControllerForGdi();
+
+        public Form2()
         {
             InitializeComponent();
 
@@ -46,7 +47,13 @@ namespace SampleWinForms
             lstHintList.SelectedIndex = 0;
             lstHintList.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
 
-         
+            //---------- 
+            //share text printer to our sample textbox
+            //but you can create another text printer that specific to text textbox control
+            _textBoxControllerForGdi.TextPrinter = _currentTextPrinter;
+            _textBoxControllerForGdi.BindHostGraphics(this.sampleTextBox1.CreateGraphics());
+            //---------- 
+            this.sampleTextBox1.SetController(_textBoxControllerForGdi);
 
             //---------- 
             txtInputChar.TextChanged += (s, e) => UpdateRenderOutput();
@@ -99,6 +106,7 @@ namespace SampleWinForms
             lstFontSizes.SelectedIndex = 0;
             this.Text = "Gdi+ Sample";
             //------ 
+           
         }
         void UpdateRenderOutput()
         {
@@ -149,7 +157,10 @@ namespace SampleWinForms
             g.TranslateTransform(0.0F, -(float)300);// Translate the drawing area accordingly            
             //-----------------------  
 
-            
+            if (sampleTextBox1.Visible)
+            {
+                sampleTextBox1.Refresh();
+            }
         }
 
         ////=========================================================================
@@ -281,6 +292,16 @@ namespace SampleWinForms
             g.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis 
             g.TranslateTransform(0.0F, -(float)300);// Translate the drawing area accordingly   
         }
-       
+        private void chkShowSampleTextBox_CheckedChanged(object sender, System.EventArgs e)
+        {
+            if (sampleTextBox1.Visible = chkShowSampleTextBox.Visible)
+            {
+                sampleTextBox1.Focus();
+            }
+        }
+        private void Form2_Load(object sender, System.EventArgs e)
+        {
+            this.chkShowSampleTextBox.Checked = true;
+        }
     }
 }

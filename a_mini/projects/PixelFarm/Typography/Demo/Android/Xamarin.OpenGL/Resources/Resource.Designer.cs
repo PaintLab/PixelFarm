@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("Test_Android_Glyph.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("Xamarin_OpenGL.Resource", IsApplication=true)]
 
-namespace Test_Android_Glyph
+namespace Xamarin_OpenGL
 {
 	
 	
@@ -26,8 +26,8 @@ namespace Test_Android_Glyph
 		
 		public static void UpdateIdValues()
 		{
-			global::PixelFarm.Android.One.Resource.String.ApplicationName = global::Test_Android_Glyph.Resource.String.ApplicationName;
-			global::PixelFarm.Android.One.Resource.String.Hello = global::Test_Android_Glyph.Resource.String.Hello;
+			global::PixelFarm.Android.One.Resource.String.ApplicationName = global::Xamarin_OpenGL.Resource.String.ApplicationName;
+			global::PixelFarm.Android.One.Resource.String.Hello = global::Xamarin_OpenGL.Resource.String.Hello;
 		}
 		
 		public partial class Attribute

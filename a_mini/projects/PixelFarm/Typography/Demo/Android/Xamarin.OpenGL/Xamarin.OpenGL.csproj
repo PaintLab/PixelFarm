@@ -9,8 +9,8 @@
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test_Android_Glyph</RootNamespace>
-    <AssemblyName>Test_Android_Glyph</AssemblyName>
+    <RootNamespace>Xamarin_OpenGL</RootNamespace>
+    <AssemblyName>Xamarin_OpenGL</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
@@ -53,23 +53,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Windows\Shared\DrawingGL.Text\FontEnums.cs">
+      <Link>DrawingGL.Text\FontEnums.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
+      <Link>DrawingGL.Text\GlyphTranslatorToPath.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\Shared\DrawingGL.Text\TextPrinter.cs">
+      <Link>DrawingGL.Text\TextPrinter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\Shared\DrawingGL.Text\TypographyTextContext.cs">
+      <Link>DrawingGL.Text\TypographyTextContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\Shared\DrawingGL.Text\Utils.cs">
+      <Link>DrawingGL.Text\Utils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\Shared\DrawingGL\CurveFlattener.cs">
+      <Link>DrawingGL\CurveFlattener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\Shared\DrawingGL\Path.cs">
+      <Link>DrawingGL\Path.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\Shared\DrawingGL\Primitives.cs">
+      <Link>DrawingGL\Primitives.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Windows\Shared\DrawingGL\TessTool.cs">
+      <Link>DrawingGL\TessTool.cs</Link>
+    </Compile>
     <Compile Include="App\CustomApp.cs" />
-    <Compile Include="App\Utils.cs" />
     <Compile Include="App\Color.cs" />
-    <Compile Include="DrawingGL\Primitives.cs" />
     <Compile Include="DrawingGL.YourCanvas\Shaders.cs" />
     <Compile Include="DrawingGL.YourCanvas\SimpleCanvas.cs" />
     <Compile Include="GLView1.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DrawingGL\CurveFlattener.cs" />
-    <Compile Include="DrawingGL\TessTool.cs" />
-    <Compile Include="DrawingGL.Text\FontEnums.cs" />
-    <Compile Include="DrawingGL\Path.cs" />
-    <Compile Include="DrawingGL.Text\GlyphTranslatorToPath.cs" />
-    <Compile Include="DrawingGL.Text\TextPrinter.cs" />
-    <Compile Include="DrawingGL.Text\TypographyTextContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\DroidSans.ttf" />
@@ -92,7 +110,7 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\x_autogen2\PixelFarm.Android.One\PixelFarm.Android.One.csproj">
+    <ProjectReference Include="..\..\..\..\..\x_autogen2\PixelFarm.Android.One\PixelFarm.Android.One.csproj">
       <Project>{5d404942-0730-4d7e-8dcb-97951e7174a3}</Project>
       <Name>PixelFarm.Android.One</Name>
     </ProjectReference>
