@@ -89,7 +89,7 @@ namespace Typography.Rendering
         {
             DrawString(textBuffer, 0, textBuffer.Length, xpos, ypos);
         }
-        public void DrawGlyphPlanList(List<GlyphPlan> glyphPlanList, float xpos, float ypos)
+        public void GenerateGlyphPlanList(List<GlyphPlan> glyphPlanList, float xpos, float ypos)
         {
             GenerateGlyphPlanList(glyphPlanList, 0, glyphPlanList.Count, xpos, ypos);
         }

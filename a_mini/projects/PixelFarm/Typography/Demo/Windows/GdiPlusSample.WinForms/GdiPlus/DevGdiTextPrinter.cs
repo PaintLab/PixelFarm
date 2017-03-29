@@ -10,6 +10,13 @@ using Typography.Rendering;
 
 namespace SampleWinForms
 {
+    class GlyphCache
+    {
+
+
+
+    }
+
 
     /// <summary>
     /// developer's version, Gdi+ text printer
@@ -110,7 +117,7 @@ namespace SampleWinForms
             _outputGlyphPlans.Clear();
             this._glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _outputGlyphPlans, null);
             //2. draw
-            DrawGlyphPlanList(_outputGlyphPlans, xpos, ypos);
+            GenerateGlyphPlanList(_outputGlyphPlans, xpos, ypos);
         }
 
 
@@ -153,12 +160,12 @@ namespace SampleWinForms
                 // 
 
 
-               scaleMat = new System.Drawing.Drawing2D.Matrix(
-                   1, 0, //scale x
-                   0, 1, //scale y
-                   x + glyphPlan.x * scale,
-                   y + glyphPlan.y * scale //xpos,ypos
-               );
+                scaleMat = new System.Drawing.Drawing2D.Matrix(
+                    1, 0, //scale x
+                    0, 1, //scale y
+                    x + glyphPlan.x * scale,
+                    y + glyphPlan.y * scale //xpos,ypos
+                );
 
                 //
                 _txToGdiPath.Reset();

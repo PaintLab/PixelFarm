@@ -709,7 +709,7 @@ namespace SampleWinForms.UI
             if (glyphPlans.Count > 0)
             {
 
-                _printer.DrawGlyphPlanList(glyphPlans, X, Y);
+                _printer.GenerateGlyphPlanList(glyphPlans, X, Y);
                 //draw caret 
                 //not blink in this version
                 int caret_index = _line.CaretCharIndex;
