@@ -1,6 +1,4 @@
-﻿//MIT, 2017, WinterDev (modified from Xamarin's iOS code template)
-
-using System;
+﻿using System;
 using System.Diagnostics;
 
 using Foundation;
@@ -9,17 +7,21 @@ using OpenGLES;
 using OpenTK;
 using OpenTK.Graphics.ES20;
 
-namespace Tests_iOS_BasicLion
+//
+using DrawingGL;
+namespace Xamarin.iOS.GLES2
 {
     [Register("GameViewController")]
     public class GameViewController : GLKViewController, IGLKViewDelegate
     {
-        EAGLContext context { get; set; }
 
+
+        EAGLContext context { get; set; }
         [Export("initWithCoder:")]
         public GameViewController(NSCoder coder) : base(coder)
         {
         }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
@@ -29,7 +31,6 @@ namespace Tests_iOS_BasicLion
 			Xamarin.Calabash.Start();
 #endif
 
-            //create gl context 
             context = new EAGLContext(EAGLRenderingAPI.OpenGLES2);
 
             if (context == null)
@@ -79,36 +80,34 @@ namespace Tests_iOS_BasicLion
             return true;
         }
 
-        int view_width;
-        int view_height;
+
+        CustomApp customApp;
         int max;
-       
-        Mini.GLDemoContext demoContext;
+        int view_width;
+        int view_height; 
         void SetupGL()
         {
-            EAGLContext.SetCurrentContext(context); 
+            
+            EAGLContext.SetCurrentContext(context);
             max = Math.Max(view_width, view_height);
-            demoContext = new Mini.GLDemoContext(800, 600);
-            demoContext.LoadDemo(new OpenTkEssTest.T108_LionFill());
-            //--------------------------------------------------------------------------------
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.ClearColor(1, 1, 1, 1);
-            //setup viewport size  
-            //square viewport 
+            customApp = new CustomApp();
+            customApp.Setup(800, 600); 
         }
         public override void Update()
         {
-
             GL.Viewport(0, 0, max, max);
-            demoContext.Render();
-        }
+            customApp.RenderFrame();
 
+        }
+        //----------------
         void TearDownGL()
         {
-            EAGLContext.SetCurrentContext(context);
-            demoContext.Close();
-        }
-       
+            
+        } 
+        string LoadResource(string name, string type)
+        {
+            var path = NSBundle.MainBundle.PathForResource(name, type);
+            return System.IO.File.ReadAllText(path);
+        } 
     }
 }
