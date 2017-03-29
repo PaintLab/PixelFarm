@@ -41,6 +41,9 @@
     <Compile Include="..\..\Shared\DevTextPrinter\DevTextPrinterBase.cs">
       <Link>DevTextPrinter\DevTextPrinterBase.cs</Link>
     </Compile>
+    <Compile Include="..\..\Shared\DevTextPrinter\GlyphMeshCollection.cs">
+      <Link>DevTextPrinter\GlyphMeshCollection.cs</Link>
+    </Compile>
     <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
       <Link>GlyphPathBuilder\GlyphPathBuilder.cs</Link>
     </Compile>
