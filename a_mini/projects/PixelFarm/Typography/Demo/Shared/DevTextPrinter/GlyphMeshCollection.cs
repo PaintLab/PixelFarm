@@ -7,6 +7,8 @@ namespace Typography.Rendering
 
     //see also: PixelFarm's  class HintedVxsGlyphCollection 
 
+    //TODO: review this class name again 
+
     public class GlyphMeshCollection<T>
     {
         //hint glyph collection        
