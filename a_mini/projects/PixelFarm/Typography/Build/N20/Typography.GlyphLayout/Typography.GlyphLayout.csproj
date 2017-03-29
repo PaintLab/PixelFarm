@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C48F2C17-3C32-4F27-A96C-60A9D86DF9CF}</ProjectGuid>
+    <ProjectGuid>{C6807D05-09BE-4313-9F8B-BD2D51C55819}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Typography.GlyphLayout</RootNamespace>
     <AssemblyName>Typography.GlyphLayout</AssemblyName>
