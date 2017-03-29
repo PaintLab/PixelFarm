@@ -57,7 +57,7 @@
     <Compile Include="App\Utils.cs" />
     <Compile Include="DrawingGL\Color.cs" />
     <Compile Include="DrawingGL\Primitives.cs" />
-    <Compile Include="DrawingGL\Shaders.cs" />
+    <Compile Include="DrawingGL.YourCanvas\Shaders.cs" />
     <Compile Include="DrawingGL.YourCanvas\SimpleCanvas.cs" />
     <Compile Include="GLView1.cs" />
     <Compile Include="MainActivity.cs" />
