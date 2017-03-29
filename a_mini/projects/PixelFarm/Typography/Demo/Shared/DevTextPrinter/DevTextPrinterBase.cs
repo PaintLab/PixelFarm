@@ -21,7 +21,7 @@ namespace Typography.Rendering
             get;
             set;
         }
-        public abstract GlyphLayout GlyphLayoutMan { get; }
+        public abstract Typography.TextLayout.GlyphLayout GlyphLayoutMan { get; }
         public abstract Typography.OpenFont.Typeface Typeface { get; }
         public bool FillBackground { get; set; }
         public bool DrawOutline { get; set; }

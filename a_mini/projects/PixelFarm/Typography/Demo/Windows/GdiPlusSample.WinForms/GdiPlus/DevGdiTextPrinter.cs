@@ -59,7 +59,7 @@ namespace SampleWinForms
                     _currentTypeface = reader.Read(fs);
                 }
                 //2. glyph builder
-                _currentGlyphPathBuilder = new GlyphPathBuilder(_currentTypeface); 
+                _currentGlyphPathBuilder = new GlyphPathBuilder(_currentTypeface);
                 //for gdi path***
                 //3. glyph reader,output as Gdi+ GraphicsPath
                 _txToGdiPath = new GlyphTranslatorToGdiPath();
@@ -145,9 +145,15 @@ namespace SampleWinForms
             for (int i = startAt; i < endBefore; ++i)
             {
                 GlyphPlan glyphPlan = glyphPlanList[i];
+
+                //check if we have a cache of this glyph
+                //if not -> create it
+
                 _currentGlyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, sizeInPoints);
                 // 
-                scaleMat = new System.Drawing.Drawing2D.Matrix(
+
+
+               scaleMat = new System.Drawing.Drawing2D.Matrix(
                    1, 0, //scale x
                    0, 1, //scale y
                    x + glyphPlan.x * scale,
