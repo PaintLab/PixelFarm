@@ -73,7 +73,7 @@ namespace Typography.Rendering
         /// <param name="glyphPlanList"></param>
         /// <param name="xpos"></param>
         /// <param name="ypos"></param>
-        public abstract void DrawGlyphPlanList(List<GlyphPlan> glyphPlanList, int startAt, int len, float xpos, float ypos);
+        public abstract void GenerateGlyphPlanList(List<GlyphPlan> glyphPlanList, int startAt, int len, float xpos, float ypos);
 
         /// <summary>
         /// draw caret at xpos,ypos (sample only)
@@ -91,7 +91,7 @@ namespace Typography.Rendering
         }
         public void DrawGlyphPlanList(List<GlyphPlan> glyphPlanList, float xpos, float ypos)
         {
-            DrawGlyphPlanList(glyphPlanList, 0, glyphPlanList.Count, xpos, ypos);
+            GenerateGlyphPlanList(glyphPlanList, 0, glyphPlanList.Count, xpos, ypos);
         }
 
     }

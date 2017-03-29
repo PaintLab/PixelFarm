@@ -302,6 +302,7 @@ namespace SampleWinForms
         private void Form2_Load(object sender, System.EventArgs e)
         {
             this.chkShowSampleTextBox.Checked = true;
+            this.chkShowSampleTextBox.Enabled = false;
         }
     }
 }

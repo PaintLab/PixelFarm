@@ -129,7 +129,7 @@ namespace SampleWinForms
         }
 
 
-        public override void DrawGlyphPlanList(List<GlyphPlan> glyphPlanList, int startAt, int len, float x, float y)
+        public override void GenerateGlyphPlanList(List<GlyphPlan> glyphPlanList, int startAt, int len, float x, float y)
         {
             UpdateVisualOutputSettings();
 
