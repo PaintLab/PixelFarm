@@ -12,17 +12,18 @@ namespace Typography.Rendering
         //hint glyph collection        
         //per typeface
         Dictionary<ushort, T> _currentGlyphDic = null;
-        Dictionary<HintedVxsConvtextKey, Dictionary<ushort, T>> _hintedGlyphs = new Dictionary<HintedVxsConvtextKey, Dictionary<ushort, T>>();
+        Dictionary<GlyphKey, Dictionary<ushort, T>> _registerGlyphCollection = new Dictionary<GlyphKey, Dictionary<ushort, T>>();
+
         public void SetCacheInfo(Typeface typeface, float sizeInPts, HintTechnique hintTech)
         {
             //check if we have create the context for this request parameters?
-            var key = new HintedVxsConvtextKey() { hintTech = hintTech, sizeInPts = sizeInPts, typeface = typeface };
-            if (!_hintedGlyphs.TryGetValue(key, out _currentGlyphDic))
+            var key = new GlyphKey() { hintTech = hintTech, sizeInPts = sizeInPts, typeface = typeface };
+            if (!_registerGlyphCollection.TryGetValue(key, out _currentGlyphDic))
             {
                 //if not found 
                 //create new
                 _currentGlyphDic = new Dictionary<ushort, T>();
-                _hintedGlyphs.Add(key, _currentGlyphDic);
+                _registerGlyphCollection.Add(key, _currentGlyphDic);
             }
         }
         public bool TryGetCacheGlyph(ushort glyphIndex, out T vxs)
@@ -33,7 +34,34 @@ namespace Typography.Rendering
         {
             _currentGlyphDic[glyphIndex] = vxs;
         }
-        struct HintedVxsConvtextKey
+        public void ClearAll()
+        {
+            _currentGlyphDic = null;
+            _registerGlyphCollection.Clear();
+        }
+
+        List<GlyphKey> tempKeys = new List<GlyphKey>();
+
+        public void Clear(Typeface typeface)
+        {
+            //clear all registered typeface glyph
+            tempKeys.Clear();
+            foreach (var k in _registerGlyphCollection.Keys)
+            {
+                //collect ...
+                if (k.typeface == typeface)
+                {
+                    tempKeys.Add(k);
+                }
+            }
+            //
+            for (int i = tempKeys.Count - 1; i >= 0; --i)
+            {
+                _registerGlyphCollection.Remove(tempKeys[i]);
+            }
+            tempKeys.Clear();
+        }
+        struct GlyphKey
         {
             public HintTechnique hintTech;
             public Typeface typeface;
