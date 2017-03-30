@@ -1,8 +1,24 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System.Collections.Generic;
 using Typography.TextLayout;
+using Typography.FontManagement;
+
 namespace Typography.Rendering
 {
+
+    public interface IFontface
+    {
+        string FontName { get; }
+        string FontSubFamily { get; }
+    }
+
+    public class FontRequest
+    {
+        public string FontName { get; set; }
+        public InstalledFontStyle Style { get; set; }
+
+    }
+
     /// <summary>
     /// base TextPrinter class for developer only, 
     /// </summary>
@@ -10,17 +26,26 @@ namespace Typography.Rendering
     {
         HintTechnique _hintTech;
 
+
         public DevTextPrinterBase()
         {
             FontSizeInPoints = 14;//
             ScriptLang = Typography.OpenFont.ScriptLangs.Latin;//default?
         }
 
-        public abstract string FontFilename
+        /// <summary>
+        /// directly set request font stream to current printer
+        /// </summary>
+        public abstract FontStreamSource FontStreamSource
         {
             get;
             set;
         }
+        /// <summary>
+        /// set font request, let this printer resolve for font 
+        /// </summary>
+        public abstract FontRequest FontRequest { get; set; }
+
         public abstract Typography.TextLayout.GlyphLayout GlyphLayoutMan { get; }
         public abstract Typography.OpenFont.Typeface Typeface { get; }
         public bool FillBackground { get; set; }

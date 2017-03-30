@@ -14,7 +14,7 @@ namespace Typography.OpenFont
             FontSubFamily = fontSubFamily;
             FontPath = fontPath;
         }
-         
+
         public string FontName { get; set; }
         public string FontSubFamily { get; set; }
         public string FontPath { get; set; }
@@ -22,7 +22,7 @@ namespace Typography.OpenFont
 #if DEBUG
         public override string ToString()
         {
-            return FontName;
+            return FontName + " " + FontSubFamily;
         }
 #endif
     }

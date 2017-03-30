@@ -67,22 +67,22 @@ namespace SampleWinForms
 
             foreach (string file in Directory.GetFiles("..\\..\\..\\TestFonts", "*.ttf"))
             {
-                var tmpLocalFile = new TempLocalFontFile(file);
-                lstFontList.Items.Add(tmpLocalFile);
-                if (selectedFileIndex < 0 && tmpLocalFile.OnlyFileName == selectedFontFileName)
-                {
-                    selectedFileIndex = fileIndexCount;
-                    _currentTextPrinter.FontFilename = file;
-                    //sample text box
+                //var tmpLocalFile = new TempLocalFontFile(file);
+                //lstFontList.Items.Add(tmpLocalFile);
+                //if (selectedFileIndex < 0 && tmpLocalFile.OnlyFileName == selectedFontFileName)
+                //{
+                //    selectedFileIndex = fileIndexCount;
+                //    _currentTextPrinter.FontFilename = file;
+                //    //sample text box
 
-                }
-                fileIndexCount++;
+                //}
+                //fileIndexCount++;
             }
             if (selectedFileIndex < 0) { selectedFileIndex = 0; }
             lstFontList.SelectedIndex = selectedFileIndex;
             lstFontList.SelectedIndexChanged += (s, e) =>
             {
-                _currentTextPrinter.FontFilename = ((TempLocalFontFile)lstFontList.SelectedItem).actualFileName;
+                //_currentTextPrinter.FontFilename = ((TempLocalFontFile)lstFontList.SelectedItem).actualFileName;
                 //sample text box 
                 UpdateRenderOutput();
 

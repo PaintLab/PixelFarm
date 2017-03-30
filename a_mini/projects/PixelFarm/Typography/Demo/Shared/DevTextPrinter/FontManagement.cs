@@ -125,7 +125,7 @@ namespace Typography.FontManagement
             else
             {
                 selectedFontGroup.Add(fontNameUpper, f);
-            } 
+            }
 
         }
         public void LoadInstalledFont(IEnumerable<string> getFontFileIter)
@@ -214,6 +214,37 @@ namespace Typography.FontManagement
             }
             return installedFonts;
         }
+
+        public IEnumerable<InstalledFont> GetInstalledFontIter()
+        {
+            foreach (InstalledFont f in regular_Fonts.Values)
+            {
+                yield return f;
+            }
+            //
+            foreach (InstalledFont f in italic_Fonts.Values)
+            {
+                yield return f;
+            }
+            //
+            foreach (InstalledFont f in bold_Fonts.Values)
+            {
+                yield return f;
+            }
+            foreach (InstalledFont f in boldItalic_Fonts.Values)
+            {
+                yield return f;
+            }
+            //
+            foreach (InstalledFont f in gras_Fonts.Values)
+            {
+                yield return f;
+            }
+            foreach (InstalledFont f in grasItalic_Fonts.Values)
+            {
+                yield return f;
+            }
+        }
     }
 
 
@@ -232,5 +263,5 @@ namespace Typography.FontManagement
         {
             //implement
         }
-    } 
+    }
 }

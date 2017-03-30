@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Typography.OpenFont;
 using Typography.TextLayout;
 using Typography.Rendering;
-
+using Typography.FontManagement;
 
 namespace SampleWinForms
 {
@@ -17,7 +17,7 @@ namespace SampleWinForms
         //for this sample code,
         //create text printer env for developer.
         DevGdiTextPrinter _currentTextPrinter = new DevGdiTextPrinter();
-       
+        InstalledFontCollection installedFontCollection;
         public Form1()
         {
             InitializeComponent();
@@ -45,9 +45,6 @@ namespace SampleWinForms
             lstHintList.Items.Add(HintTechnique.CustomAutoFit);
             lstHintList.SelectedIndex = 0;
             lstHintList.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
-
-         
-
             //---------- 
             txtInputChar.TextChanged += (s, e) => UpdateRenderOutput();
             //
@@ -56,29 +53,49 @@ namespace SampleWinForms
             string selectedFontFileName = "tahoma.ttf";
             //string selectedFontFileName="cambriaz.ttf";
             //string selectedFontFileName="CompositeMS2.ttf"; 
-            int fileIndexCount = 0;
 
+            //1. create font collection             
+            installedFontCollection = new InstalledFontCollection();
+            //2. add 'font stream provider' to the collection
+
+
+            int fileIndexCount = 0;
+            string selectedFontFileName2 = "";
             foreach (string file in Directory.GetFiles("..\\..\\..\\TestFonts", "*.ttf"))
             {
-                var tmpLocalFile = new TempLocalFontFile(file);
-                lstFontList.Items.Add(tmpLocalFile);
-                if (selectedFileIndex < 0 && tmpLocalFile.OnlyFileName == selectedFontFileName)
-                {
-                    selectedFileIndex = fileIndexCount;
-                    _currentTextPrinter.FontFilename = file;
-                    //sample text box
+                //eg. this is our custom font folder  
+                installedFontCollection.AddFont(new FontFileStreamProvider(file));
 
-                }
-                fileIndexCount++;
+                //var tmpLocalFile = new TempLocalFontFile(file);
+                //lstFontList.Items.Add(tmpLocalFile);
+                //if (selectedFileIndex < 0 && tmpLocalFile.OnlyFileName == selectedFontFileName)
+                //{
+                //    selectedFileIndex = fileIndexCount;
+                //    //_currentTextPrinter.FontFilename = file;
+                //    selectedFontFileName2 = file;
+                //    //sample text box 
+                //}
+                //fileIndexCount++;
             }
+            //---------- 
+            //show result
+            foreach (InstalledFont ff in installedFontCollection.GetInstalledFontIter())
+            {
+                lstFontList.Items.Add(ff);
+            }
+
+
+
+            //---------- 
+
             if (selectedFileIndex < 0) { selectedFileIndex = 0; }
             lstFontList.SelectedIndex = selectedFileIndex;
             lstFontList.SelectedIndexChanged += (s, e) =>
             {
-                _currentTextPrinter.FontFilename = ((TempLocalFontFile)lstFontList.SelectedItem).actualFileName;
+
+                //_currentTextPrinter.FontFilename = ((TempLocalFontFile)lstFontList.SelectedItem).actualFileName;
                 //sample text box 
                 UpdateRenderOutput();
-
             };
             //----------
             lstFontSizes.Items.AddRange(
@@ -147,9 +164,9 @@ namespace SampleWinForms
             //transform back
             g.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis 
             g.TranslateTransform(0.0F, -(float)300);// Translate the drawing area accordingly            
-            //-----------------------  
+                                                    //-----------------------  
 
-            
+
         }
 
         ////=========================================================================
@@ -281,6 +298,6 @@ namespace SampleWinForms
             g.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis 
             g.TranslateTransform(0.0F, -(float)300);// Translate the drawing area accordingly   
         }
-       
+
     }
 }

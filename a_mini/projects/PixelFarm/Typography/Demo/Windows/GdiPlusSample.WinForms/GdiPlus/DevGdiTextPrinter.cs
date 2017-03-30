@@ -7,7 +7,8 @@ using System.Collections.Generic;
 using Typography.OpenFont;
 using Typography.TextLayout;
 using Typography.Rendering;
-
+using System;
+using Typography.FontManagement;
 
 namespace SampleWinForms
 {
@@ -26,7 +27,9 @@ namespace SampleWinForms
         Pen _outlinePen = new Pen(Color.Green);
         GlyphMeshCollection<GraphicsPath> _glyphMeshCollections = new GlyphMeshCollection<GraphicsPath>();
 
-        string _currentSelectedFontFile;
+
+        FontRequest _currentFontRequest;
+        FontStreamSource _currentFontStreamSource;
 
         public DevGdiTextPrinter()
         {
@@ -34,15 +37,22 @@ namespace SampleWinForms
             FillColor = Color.Black;
             OutlineColor = Color.Green;
         }
-        public override string FontFilename
+        public override FontRequest FontRequest
         {
-            get
-            {
-                return _currentSelectedFontFile;
-            }
+            get { return _currentFontRequest; }
             set
             {
-                if (value == this._currentSelectedFontFile)
+                _currentFontRequest = value;
+                //resolve the request font
+
+            }
+        }
+        public override FontStreamSource FontStreamSource
+        {
+            get { return _currentFontStreamSource; }
+            set
+            {
+                if (value == this._currentFontStreamSource)
                 {
                     return;
                 }
@@ -51,15 +61,19 @@ namespace SampleWinForms
                 //reset 
                 _currentTypeface = null;
                 _currentGlyphPathBuilder = null;
-                _currentSelectedFontFile = value;
+                _currentFontStreamSource = value;
                 //load new typeface 
-
+                if (value == null)
+                {
+                    return;
+                }
+                //--------------------------------
                 //1. read typeface from font file
                 //TODO: review how to read font data again ***
-                using (var fs = new FileStream(_currentSelectedFontFile, FileMode.Open))
+                using (Stream fontstream = value.ReadFontStream())
                 {
                     var reader = new OpenFontReader();
-                    _currentTypeface = reader.Read(fs);
+                    _currentTypeface = reader.Read(fontstream);
                 }
                 //2. glyph builder
                 _currentGlyphPathBuilder = new GlyphPathBuilder(_currentTypeface);
@@ -70,6 +84,7 @@ namespace SampleWinForms
                 OnFontSizeChanged();
             }
         }
+
         public override GlyphLayout GlyphLayoutMan
         {
             get
@@ -163,7 +178,7 @@ namespace SampleWinForms
 
                     //register
                     _glyphMeshCollections.RegisterCachedGlyph(glyphPlan.glyphIndex, foundPath);
-                } 
+                }
                 //------
                 //then move pen point to the position we want to draw a glyph
                 float tx = x + glyphPlan.x * scale;
