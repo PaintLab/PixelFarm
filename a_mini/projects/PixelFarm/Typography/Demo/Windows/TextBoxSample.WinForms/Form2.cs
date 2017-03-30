@@ -18,7 +18,7 @@ namespace SampleWinForms
         //create text printer env for developer.
         DevGdiTextPrinter _currentTextPrinter = new DevGdiTextPrinter();
         SampleWinForms.UI.SampleTextBoxControllerForGdi _textBoxControllerForGdi = new UI.SampleTextBoxControllerForGdi();
-
+        InstalledFontCollection installedFontCollection;
         public Form2()
         {
             InitializeComponent();
@@ -57,37 +57,47 @@ namespace SampleWinForms
 
             //---------- 
             txtInputChar.TextChanged += (s, e) => UpdateRenderOutput();
-            //
-            int selectedFileIndex = -1;
-            //string selectedFontFileName = "pala.ttf";
-            string selectedFontFileName = "tahoma.ttf";
-            //string selectedFontFileName="cambriaz.ttf";
-            //string selectedFontFileName="CompositeMS2.ttf"; 
-            int fileIndexCount = 0;
-
+            //1. create font collection             
+            installedFontCollection = new InstalledFontCollection();
             foreach (string file in Directory.GetFiles("..\\..\\..\\TestFonts", "*.ttf"))
             {
-                //var tmpLocalFile = new TempLocalFontFile(file);
-                //lstFontList.Items.Add(tmpLocalFile);
-                //if (selectedFileIndex < 0 && tmpLocalFile.OnlyFileName == selectedFontFileName)
-                //{
-                //    selectedFileIndex = fileIndexCount;
-                //    _currentTextPrinter.FontFilename = file;
-                //    //sample text box
-
-                //}
-                //fileIndexCount++;
+                //eg. this is our custom font folder  
+                installedFontCollection.AddFont(new FontFileStreamProvider(file));
             }
-            if (selectedFileIndex < 0) { selectedFileIndex = 0; }
-            lstFontList.SelectedIndex = selectedFileIndex;
+            //---------- 
+            //show result
+            InstalledFont selectedFF = null;
+            int selected_index = 0;
+            int ffcount = 0;
+            bool found = false;
+            foreach (InstalledFont ff in installedFontCollection.GetInstalledFontIter())
+            {
+                if (!found && ff.FontName == "Tahoma")
+                {
+                    selectedFF = ff;
+                    selected_index = ffcount;
+                    found = true;
+                }
+                lstFontList.Items.Add(ff);
+                ffcount++;
+            }
+            //set default font for current text printer
+            _currentTextPrinter.FontStreamSource = new FontFileStreamProvider(selectedFF.FontPath);
+
+            //---------- 
+
+            if (selected_index < 0) { selected_index = 0; }
+            lstFontList.SelectedIndex = selected_index;
             lstFontList.SelectedIndexChanged += (s, e) =>
             {
-                //_currentTextPrinter.FontFilename = ((TempLocalFontFile)lstFontList.SelectedItem).actualFileName;
-                //sample text box 
-                UpdateRenderOutput();
-
+                InstalledFont ff = lstFontList.SelectedItem as InstalledFont;
+                if (ff != null)
+                {
+                    _currentTextPrinter.FontStreamSource = new FontFileStreamProvider(ff.FontPath);
+                    //sample text box 
+                    UpdateRenderOutput();
+                }
             };
-            //----------
             lstFontSizes.Items.AddRange(
                 new object[]{
                     8, 9,

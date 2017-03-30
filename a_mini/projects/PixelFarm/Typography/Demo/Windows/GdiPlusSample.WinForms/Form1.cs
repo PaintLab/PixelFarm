@@ -3,8 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-//
-using Typography.OpenFont;
+// 
 using Typography.TextLayout;
 using Typography.Rendering; 
 
@@ -47,7 +46,7 @@ namespace SampleWinForms
             //---------- 
             txtInputChar.TextChanged += (s, e) => UpdateRenderOutput();
             //
-            int selectedFileIndex = -1;
+            
             //1. create font collection             
             installedFontCollection = new InstalledFontCollection();
             foreach (string file in Directory.GetFiles("..\\..\\..\\TestFonts", "*.ttf"))
@@ -77,8 +76,8 @@ namespace SampleWinForms
 
             //---------- 
 
-            if (selectedFileIndex < 0) { selectedFileIndex = 0; }
-            lstFontList.SelectedIndex = selectedFileIndex;
+            if (selected_index < 0) { selected_index = 0; }
+            lstFontList.SelectedIndex = selected_index;
             lstFontList.SelectedIndexChanged += (s, e) =>
             {
                 InstalledFont ff = lstFontList.SelectedItem as InstalledFont;
