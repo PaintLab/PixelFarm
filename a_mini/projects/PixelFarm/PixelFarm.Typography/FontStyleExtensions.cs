@@ -1,11 +1,6 @@
 ﻿//MIT, 2016-2017, WinterDev 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Typography.OpenFont;
-using PixelFarm.Drawing;
-namespace Typography.FontManagement
+ 
+namespace PixelFarm.Drawing.Fonts
 {
     public static class FontStyleExtensions
     {

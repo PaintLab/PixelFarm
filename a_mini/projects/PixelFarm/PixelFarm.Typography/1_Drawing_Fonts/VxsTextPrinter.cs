@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using Typography.OpenFont;
 using Typography.TextLayout;
-using Typography.Rendering;
+using Typography.Rendering; 
+
 using PixelFarm.Agg;
 
 namespace PixelFarm.Drawing.Fonts

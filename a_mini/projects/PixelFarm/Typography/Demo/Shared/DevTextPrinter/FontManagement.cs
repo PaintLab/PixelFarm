@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using Typography.OpenFont;
 
-namespace Typography.FontManagement
+namespace Typography.Rendering
 {
     public interface IInstalledFontProvider
     {
@@ -20,19 +20,21 @@ namespace Typography.FontManagement
     public interface FontStreamSource
     {
         Stream ReadFontStream();
+        string PathName { get; }
     }
 
     public class FontFileStreamProvider : FontStreamSource
     {
         public FontFileStreamProvider(string filename)
         {
-            this.FileName = filename;
+            this.PathName = filename;
         }
-        public string FileName { get; private set; }
+        public string PathName { get; private set; }
         public Stream ReadFontStream()
         {
-            FileStream fs = new FileStream(this.FileName, FileMode.Open, FileAccess.Read);
-            return fs;
+            //TODO: don't forget to dispose this stream when not use
+            return new FileStream(this.PathName, FileMode.Open, FileAccess.Read);
+
         }
     }
 
@@ -92,10 +94,10 @@ namespace Typography.FontManagement
             using (Stream stream = src.ReadFontStream())
             {
                 var reader = new OpenFontReader();
-                RegisterFont(reader.ReadPreview(stream));
+                PreviewFontInfo previewFont = reader.ReadPreview(stream);
+                RegisterFont(new InstalledFont(previewFont.fontName, previewFont.fontSubFamily, src.PathName));
             }
         }
-
 
         void RegisterFont(InstalledFont f)
         {
@@ -126,6 +128,7 @@ namespace Typography.FontManagement
             {
                 selectedFontGroup.Add(fontNameUpper, f);
             }
+
 
         }
         public void LoadInstalledFont(IEnumerable<string> getFontFileIter)
@@ -208,7 +211,11 @@ namespace Typography.FontManagement
                 using (Stream stream = new FileStream(fontFilename, FileMode.Open, FileAccess.Read))
                 {
                     var reader = new OpenFontReader();
-                    InstalledFont installedFont = reader.ReadPreview(stream);
+                    PreviewFontInfo previewInfo = reader.ReadPreview(stream);
+                    InstalledFont installedFont =
+                        new InstalledFont(previewInfo.fontName, previewInfo.fontSubFamily, fontFilename);
+
+                    installedFont.FontPath = fontFilename;
                     installedFonts.Add(installedFont);
                 }
             }

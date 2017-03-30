@@ -1,10 +1,31 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System.Collections.Generic;
 using Typography.TextLayout;
-using Typography.FontManagement;
 
 namespace Typography.Rendering
 {
+    public class InstalledFont
+    {
+
+        public InstalledFont(string fontName, string fontSubFamily, string fontPath)
+        {
+            FontName = fontName;
+            FontSubFamily = fontSubFamily;
+            FontPath = fontPath;
+        }
+
+        public string FontName { get; set; }
+        public string FontSubFamily { get; set; }
+        public string FontPath { get; set; }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return FontName + " " + FontSubFamily;
+        }
+#endif
+    }
+
 
     public interface IFontface
     {

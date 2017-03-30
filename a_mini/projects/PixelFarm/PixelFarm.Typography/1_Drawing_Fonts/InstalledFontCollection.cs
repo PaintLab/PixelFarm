@@ -1,12 +1,37 @@
 ﻿//MIT, 2016-2017, WinterDev 
+//from http://stackoverflow.com/questions/3633000/net-enumerate-winforms-font-styles
+// https://www.microsoft.com/Typography/OTSpec/name.htm
+//MIT, 2016-2016, WinterDev
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Typography.OpenFont;
 
-namespace Typography.FontManagement
+namespace PixelFarm.Drawing.Fonts
 {
+    public class InstalledFont
+    {
+
+        public InstalledFont(string fontName, string fontSubFamily, string fontPath)
+        {
+            FontName = fontName;
+            FontSubFamily = fontSubFamily;
+            FontPath = fontPath;
+        }
+
+        public string FontName { get; set; }
+        public string FontSubFamily { get; set; }
+        public string FontPath { get; set; }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return FontName + " " + FontSubFamily;
+        }
+#endif
+    }
+
+
     public interface IInstalledFontProvider
     {
         IEnumerable<string> GetInstalledFontIter();
@@ -20,19 +45,19 @@ namespace Typography.FontManagement
     public interface FontStreamSource
     {
         Stream ReadFontStream();
+        string PathName { get; }
     }
 
     public class FontFileStreamProvider : FontStreamSource
     {
         public FontFileStreamProvider(string filename)
         {
-            this.FileName = filename;
+            this.PathName = filename;
         }
-        public string FileName { get; private set; }
+        public string PathName { get; private set; }
         public Stream ReadFontStream()
         {
-            FileStream fs = new FileStream(this.FileName, FileMode.Open, FileAccess.Read);
-            return fs;
+            return new FileStream(this.PathName, FileMode.Open, FileAccess.Read);
         }
     }
 
@@ -92,7 +117,11 @@ namespace Typography.FontManagement
             using (Stream stream = src.ReadFontStream())
             {
                 var reader = new OpenFontReader();
-                RegisterFont(reader.ReadPreview(stream));
+                PreviewFontInfo previewInfo = reader.ReadPreview(stream);
+                RegisterFont(new InstalledFont(
+                    previewInfo.fontName,
+                    previewInfo.fontSubFamily,
+                    src.PathName));
             }
         }
 
@@ -125,7 +154,7 @@ namespace Typography.FontManagement
             else
             {
                 selectedFontGroup.Add(fontNameUpper, f);
-            } 
+            }
 
         }
         public void LoadInstalledFont(IEnumerable<string> getFontFileIter)
@@ -208,8 +237,9 @@ namespace Typography.FontManagement
                 using (Stream stream = new FileStream(fontFilename, FileMode.Open, FileAccess.Read))
                 {
                     var reader = new OpenFontReader();
-                    InstalledFont installedFont = reader.ReadPreview(stream);
-                    installedFonts.Add(installedFont);
+                    PreviewFontInfo preview = reader.ReadPreview(stream);
+                    installedFonts.Add(new InstalledFont(preview.fontName, preview.fontSubFamily,
+                        fontFilename));
                 }
             }
             return installedFonts;
@@ -232,5 +262,5 @@ namespace Typography.FontManagement
         {
             //implement
         }
-    } 
+    }
 }

@@ -7,8 +7,7 @@ using System.Collections.Generic;
 using Typography.OpenFont;
 using Typography.TextLayout;
 using Typography.Rendering;
-using System;
-using Typography.FontManagement;
+using System; 
 
 namespace SampleWinForms
 {
