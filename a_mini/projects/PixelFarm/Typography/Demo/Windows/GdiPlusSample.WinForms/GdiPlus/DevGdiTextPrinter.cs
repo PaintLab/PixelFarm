@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Typography.OpenFont;
 using Typography.TextLayout;
 using Typography.Rendering;
-using System;
+
 
 namespace SampleWinForms
 {
@@ -25,6 +25,7 @@ namespace SampleWinForms
         SolidBrush _fillBrush = new SolidBrush(Color.Black);
         Pen _outlinePen = new Pen(Color.Green);
         //
+        //for optimization
         GlyphMeshCollection<GraphicsPath> _glyphMeshCollections = new GlyphMeshCollection<GraphicsPath>();
 
 
