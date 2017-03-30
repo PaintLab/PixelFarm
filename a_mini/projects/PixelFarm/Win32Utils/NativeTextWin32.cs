@@ -484,7 +484,6 @@ namespace PixelFarm.Drawing.WinGdi
 
         public static void SetFontLoader(IFontLoader fontLoader)
         {
-
             //warning if duplicate
             if (s_fontLoader != null)
             {
