@@ -37,8 +37,8 @@ namespace Typography.Rendering
     {
         public string FontName { get; set; }
         public InstalledFontStyle Style { get; set; }
-
     }
+
 
     /// <summary>
     /// base TextPrinter class for developer only, 
@@ -46,29 +46,24 @@ namespace Typography.Rendering
     public abstract class DevTextPrinterBase
     {
         HintTechnique _hintTech;
-
-
         public DevTextPrinterBase()
         {
             FontSizeInPoints = 14;//
             ScriptLang = Typography.OpenFont.ScriptLangs.Latin;//default?
         }
 
-        /// <summary>
-        /// directly set request font stream to current printer
-        /// </summary>
-        public abstract FontStreamSource FontStreamSource
-        {
-            get;
-            set;
-        }
-        /// <summary>
-        /// set font request, let this printer resolve for font 
-        /// </summary>
-        public abstract FontRequest FontRequest { get; set; }
+        ///// <summary>
+        ///// directly set request font stream to current printer
+        ///// </summary>
+        //public abstract FontStreamSource FontStreamSource
+        //{
+        //    get;
+        //    set;
+        //}
+
 
         public abstract Typography.TextLayout.GlyphLayout GlyphLayoutMan { get; }
-        public abstract Typography.OpenFont.Typeface Typeface { get; }
+        public abstract Typography.OpenFont.Typeface Typeface { get; set; }
         public bool FillBackground { get; set; }
         public bool DrawOutline { get; set; }
         public float FontAscendingPx { get; set; }

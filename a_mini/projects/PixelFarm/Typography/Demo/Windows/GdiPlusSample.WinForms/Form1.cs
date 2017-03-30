@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 // 
 using Typography.TextLayout;
-using Typography.Rendering; 
+using Typography.Rendering;
 
 namespace SampleWinForms
 {
@@ -16,6 +16,7 @@ namespace SampleWinForms
         //create text printer env for developer.
         DevGdiTextPrinter _currentTextPrinter = new DevGdiTextPrinter();
         InstalledFontCollection installedFontCollection;
+        TypefaceStore _typefaceStore;
         public Form1()
         {
             InitializeComponent();
@@ -46,9 +47,11 @@ namespace SampleWinForms
             //---------- 
             txtInputChar.TextChanged += (s, e) => UpdateRenderOutput();
             //
-            
+
             //1. create font collection             
             installedFontCollection = new InstalledFontCollection();
+            //2. set some essential handler
+            installedFontCollection.SetFontNameDuplicatedHandler((f1, f2) => FontNameDuplicatedDecision.Skip);
             foreach (string file in Directory.GetFiles("..\\..\\..\\TestFonts", "*.ttf"))
             {
                 //eg. this is our custom font folder  
@@ -72,8 +75,12 @@ namespace SampleWinForms
                 ffcount++;
             }
             //set default font for current text printer
-            _currentTextPrinter.FontStreamSource = new FontFileStreamProvider(selectedFF.FontPath);
-
+            //
+            _typefaceStore = new TypefaceStore();
+            _typefaceStore.FontCollection = installedFontCollection;
+            //set default font for current text printer
+            _currentTextPrinter.Typeface = _typefaceStore.GetTypeface("tahoma", InstalledFontStyle.Regular);
+            //---------- 
             //---------- 
 
             if (selected_index < 0) { selected_index = 0; }
@@ -83,10 +90,10 @@ namespace SampleWinForms
                 InstalledFont ff = lstFontList.SelectedItem as InstalledFont;
                 if (ff != null)
                 {
-                    _currentTextPrinter.FontStreamSource = new FontFileStreamProvider(ff.FontPath);
+                    _currentTextPrinter.Typeface = _typefaceStore.GetTypeface(ff.FontName, InstalledFontStyle.Regular);
                     //sample text box 
                     UpdateRenderOutput();
-                }         
+                }
             };
             //----------
             lstFontSizes.Items.AddRange(

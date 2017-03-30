@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Typography.OpenFont;
 using Typography.TextLayout;
 using Typography.Rendering;
-using System; 
+using System;
 
 namespace SampleWinForms
 {
@@ -24,64 +24,15 @@ namespace SampleWinForms
         GlyphLayout _glyphLayout = new GlyphLayout();
         SolidBrush _fillBrush = new SolidBrush(Color.Black);
         Pen _outlinePen = new Pen(Color.Green);
+        //
         GlyphMeshCollection<GraphicsPath> _glyphMeshCollections = new GlyphMeshCollection<GraphicsPath>();
 
-
-        FontRequest _currentFontRequest;
-        FontStreamSource _currentFontStreamSource;
 
         public DevGdiTextPrinter()
         {
             FillBackground = true;
             FillColor = Color.Black;
             OutlineColor = Color.Green;
-        }
-        public override FontRequest FontRequest
-        {
-            get { return _currentFontRequest; }
-            set
-            {
-                _currentFontRequest = value;
-                //resolve the request font
-
-            }
-        }
-        public override FontStreamSource FontStreamSource
-        {
-            get { return _currentFontStreamSource; }
-            set
-            {
-                if (value == this._currentFontStreamSource)
-                {
-                    return;
-                }
-
-                //--------------------------------
-                //reset 
-                _currentTypeface = null;
-                _currentGlyphPathBuilder = null;
-                _currentFontStreamSource = value;
-                //load new typeface 
-                if (value == null)
-                {
-                    return;
-                }
-                //--------------------------------
-                //1. read typeface from font file
-                //TODO: review how to read font data again ***
-                using (Stream fontstream = value.ReadFontStream())
-                {
-                    var reader = new OpenFontReader();
-                    _currentTypeface = reader.Read(fontstream);
-                }
-                //2. glyph builder
-                _currentGlyphPathBuilder = new GlyphPathBuilder(_currentTypeface);
-                //for gdi path***
-                //3. glyph reader,output as Gdi+ GraphicsPath
-                _txToGdiPath = new GlyphTranslatorToGdiPath();
-                //4.
-                OnFontSizeChanged();
-            }
         }
 
         public override GlyphLayout GlyphLayoutMan
@@ -97,6 +48,30 @@ namespace SampleWinForms
             {
                 return _currentTypeface;
             }
+            set
+            {
+                //check if we change it or not
+                if (value == _currentTypeface) return;
+                //change ...
+                //check if we have used this typeface before?
+                //if not, create a proper glyph builder for it
+                //--------------------------------
+                //reset 
+                _currentTypeface = value;
+                _currentGlyphPathBuilder = null;
+                //--------------------------------
+                if (value == null) return;
+                //--------------------------------
+
+                //2. glyph builder
+                _currentGlyphPathBuilder = new GlyphPathBuilder(_currentTypeface);
+                //for gdi path***
+                //3. glyph reader,output as Gdi+ GraphicsPath
+                _txToGdiPath = new GlyphTranslatorToGdiPath();
+                //4.
+                OnFontSizeChanged();
+            }
+
         }
         protected override void OnFontSizeChanged()
         {

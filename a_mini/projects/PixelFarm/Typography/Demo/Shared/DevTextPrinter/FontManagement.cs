@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Typography.OpenFont;
 
 namespace Typography.Rendering
@@ -49,6 +48,48 @@ namespace Typography.Rendering
     }
 
     public delegate InstalledFont FontNotFoundHandler(InstalledFontCollection fontCollection, string fontName, InstalledFontStyle style);
+    public delegate FontNameDuplicatedDecision FontNameDuplicatedHandler(InstalledFont existing, InstalledFont newAddedFont);
+    public enum FontNameDuplicatedDecision
+    {
+        /// <summary>
+        /// use existing, skip latest font
+        /// </summary>
+        Skip,
+        /// <summary>
+        /// replace with existing with the new one
+        /// </summary>
+        Replace
+    }
+
+
+    public class TypefaceStore
+    {
+        /// <summary>
+        /// font collection of the store
+        /// </summary>
+        public InstalledFontCollection FontCollection { get; set; }
+
+
+        //check if we have create this typeface or not
+
+
+
+        public Typeface GetTypeface(string fontname, InstalledFontStyle style)
+        {
+            InstalledFont installFont = FontCollection.GetFont(fontname, style);
+            if (installFont == null) { return null; }
+            //---------------
+            //load 
+
+            Typeface typeface = null;
+            using (var fs = new FileStream(installFont.FontPath, FileMode.Open, FileAccess.Read))
+            {
+                var reader = new OpenFontReader();
+                typeface = reader.Read(fs);
+            }
+            return typeface;
+        }
+    }
 
     public class InstalledFontCollection
     {
@@ -62,8 +103,11 @@ namespace Typography.Rendering
         Dictionary<string, InstalledFont> grasItalic_Fonts = new Dictionary<string, InstalledFont>();
         //
         Dictionary<string, Dictionary<string, InstalledFont>> _fontGroups = new Dictionary<string, Dictionary<string, InstalledFont>>();
+
+        FontNameDuplicatedHandler fontNameDuplicatedHandler;
         FontNotFoundHandler fontNotFoundHandler;
         //
+
         public InstalledFontCollection()
         {
             regular_Fonts = CreateNewFontGroup("normal", "regular");
@@ -88,26 +132,28 @@ namespace Typography.Rendering
         {
             fontNotFoundHandler = handler;
         }
-        public void AddFont(FontStreamSource src)
+        public void SetFontNameDuplicatedHandler(FontNameDuplicatedHandler handler)
+        {
+            fontNameDuplicatedHandler = handler;
+        }
+        public bool AddFont(FontStreamSource src)
         {
             //preview data of font
             using (Stream stream = src.ReadFontStream())
             {
                 var reader = new OpenFontReader();
                 PreviewFontInfo previewFont = reader.ReadPreview(stream);
-                RegisterFont(new InstalledFont(previewFont.fontName, previewFont.fontSubFamily, src.PathName));
+                if (previewFont.fontName == "" || previewFont.fontName.StartsWith("\0"))
+                {
+                    //err!
+                    return false;
+                }
+                return RegisterFont(new InstalledFont(previewFont.fontName, previewFont.fontSubFamily, src.PathName));
             }
         }
 
-        void RegisterFont(InstalledFont f)
+        bool RegisterFont(InstalledFont f)
         {
-            if (f == null || f.FontName == "" || f.FontName.StartsWith("\0"))
-            {
-                //no font name?
-                return;
-            }
-
-
             Dictionary<string, InstalledFont> selectedFontGroup;
             if (!_fontGroups.TryGetValue(f.FontSubFamily.ToUpper(), out selectedFontGroup))
             {
@@ -116,30 +162,27 @@ namespace Typography.Rendering
             }
 
             string fontNameUpper = f.FontName.ToUpper();
-            if (selectedFontGroup.ContainsKey(fontNameUpper))
+            InstalledFont found;
+            if (selectedFontGroup.TryGetValue(fontNameUpper, out found))
             {
                 //TODO:
                 //we already have this font name
                 //(but may be different file
                 //we let user to handle it        
-
+                switch (fontNameDuplicatedHandler(found, f))
+                {
+                    default: throw new NotSupportedException();
+                    case FontNameDuplicatedDecision.Skip:
+                        return false;
+                    case FontNameDuplicatedDecision.Replace:
+                        selectedFontGroup[fontNameUpper] = f;
+                        return true;
+                }
             }
             else
             {
                 selectedFontGroup.Add(fontNameUpper, f);
-            }
-
-
-        }
-        public void LoadInstalledFont(IEnumerable<string> getFontFileIter)
-        {
-            List<InstalledFont> installedFonts = ReadPreviewFontData(getFontFileIter);
-            //classify
-            //do 
-            int j = installedFonts.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                RegisterFont(installedFonts[i]);
+                return true;
             }
         }
 

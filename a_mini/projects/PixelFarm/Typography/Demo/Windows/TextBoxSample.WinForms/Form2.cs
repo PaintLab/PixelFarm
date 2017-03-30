@@ -19,6 +19,7 @@ namespace SampleWinForms
         DevGdiTextPrinter _currentTextPrinter = new DevGdiTextPrinter();
         SampleWinForms.UI.SampleTextBoxControllerForGdi _textBoxControllerForGdi = new UI.SampleTextBoxControllerForGdi();
         InstalledFontCollection installedFontCollection;
+        TypefaceStore _typefaceStore;
         public Form2()
         {
             InitializeComponent();
@@ -59,11 +60,17 @@ namespace SampleWinForms
             txtInputChar.TextChanged += (s, e) => UpdateRenderOutput();
             //1. create font collection             
             installedFontCollection = new InstalledFontCollection();
+            //set some essential handler
+            installedFontCollection.SetFontNameDuplicatedHandler((f1, f2) => FontNameDuplicatedDecision.Skip);
             foreach (string file in Directory.GetFiles("..\\..\\..\\TestFonts", "*.ttf"))
             {
                 //eg. this is our custom font folder  
                 installedFontCollection.AddFont(new FontFileStreamProvider(file));
             }
+            //
+            _typefaceStore = new TypefaceStore();
+            _typefaceStore.FontCollection = installedFontCollection;
+
             //---------- 
             //show result
             InstalledFont selectedFF = null;
@@ -82,8 +89,7 @@ namespace SampleWinForms
                 ffcount++;
             }
             //set default font for current text printer
-            _currentTextPrinter.FontStreamSource = new FontFileStreamProvider(selectedFF.FontPath);
-
+            _currentTextPrinter.Typeface = _typefaceStore.GetTypeface("tahoma", InstalledFontStyle.Regular);
             //---------- 
 
             if (selected_index < 0) { selected_index = 0; }
@@ -93,7 +99,8 @@ namespace SampleWinForms
                 InstalledFont ff = lstFontList.SelectedItem as InstalledFont;
                 if (ff != null)
                 {
-                    _currentTextPrinter.FontStreamSource = new FontFileStreamProvider(ff.FontPath);
+                    //direct set
+                    _currentTextPrinter.Typeface = _typefaceStore.GetTypeface(ff.FontName, InstalledFontStyle.Regular);
                     //sample text box 
                     UpdateRenderOutput();
                 }
@@ -106,7 +113,7 @@ namespace SampleWinForms
                     14,
                     16,
                     18,20,22,24,26,28,36,48,72,240,300,360
-                });
+            });
             lstFontSizes.SelectedIndexChanged += (s, e) =>
             {
                 //new font size
@@ -116,7 +123,7 @@ namespace SampleWinForms
             lstFontSizes.SelectedIndex = 0;
             this.Text = "Gdi+ Sample";
             //------ 
-           
+
         }
         void UpdateRenderOutput()
         {
