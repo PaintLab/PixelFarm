@@ -38,8 +38,14 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GdiPlusSample.WinForms\DevTextPrinterBase.cs">
-      <Link>DevTextPrinterBase.cs</Link>
+    <Compile Include="..\..\Shared\DevTextPrinter\DevTextPrinterBase.cs">
+      <Link>DevTextPrinter\DevTextPrinterBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\DevTextPrinter\FontManagement.cs">
+      <Link>DevTextPrinter\FontManagement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Shared\DevTextPrinter\GlyphMeshCollection.cs">
+      <Link>DevTextPrinter\GlyphMeshCollection.cs</Link>
     </Compile>
     <Compile Include="..\GdiPlusSample.WinForms\GdiPlus\DevGdiTextPrinter.cs">
       <Link>GdiPlus\DevGdiTextPrinter.cs</Link>
@@ -47,27 +53,24 @@
     <Compile Include="..\GdiPlusSample.WinForms\GdiPlus\GlyphTranslatorToGdiPath.cs">
       <Link>GdiPlus\GlyphTranslatorToGdiPath.cs</Link>
     </Compile>
-    <Compile Include="..\GdiPlusSample.WinForms\GdiPlus\SampleTextBoxController.cs">
+    <Compile Include="..\TextBoxSample.WinForms\TextBoxController\SampleTextBoxController.cs">
       <Link>GdiPlus\SampleTextBoxController.cs</Link>
     </Compile>
-    <Compile Include="..\GdiPlusSample.WinForms\GdiPlus\SampleTextBoxLineModel.cs">
+    <Compile Include="..\TextBoxSample.WinForms\TextBoxController\SampleTextBoxLineModel.cs">
       <Link>GdiPlus\SampleTextBoxLineModel.cs</Link>
     </Compile>
-    <Compile Include="..\GdiPlusSample.WinForms\GlyphPathBuilder.cs">
-      <Link>GlyphPathBuilder.cs</Link>
+    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
+      <Link>GlyphPathBuilder\GlyphPathBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\GdiPlusSample.WinForms\HintTechnique.cs">
-      <Link>HintTechnique.cs</Link>
+    <Compile Include="..\..\Shared\GlyphPathBuilder\HintTechnique.cs">
+      <Link>GlyphPathBuilder\HintTechnique.cs</Link>
     </Compile>
-    <Compile Include="..\GdiPlusSample.WinForms\SampleTextBox.cs">
+    <Compile Include="..\TextBoxSample.WinForms\SampleTextBox.cs">
       <Link>SampleTextBox.cs</Link>
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="..\GdiPlusSample.WinForms\SampleTextBox.Designer.cs">
+    <Compile Include="..\TextBoxSample.WinForms\SampleTextBox.Designer.cs">
       <Link>SampleTextBox.Designer.cs</Link>
-    </Compile>
-    <Compile Include="..\GdiPlusSample.WinForms\Workspace\TempLocalFontFile.cs">
-      <Link>Workspace\TempLocalFontFile.cs</Link>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -82,7 +85,7 @@
     <Compile Include="PixelFarm\SampleTextBoxControllerForPixelFarm.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="..\GdiPlusSample.WinForms\SampleTextBox.resx">
+    <EmbeddedResource Include="..\TextBoxSample.WinForms\SampleTextBox.resx">
       <Link>SampleTextBox.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
@@ -113,15 +116,11 @@
       <Project>{64c28aab-e2ef-45c1-a674-5660d462882f}</Project>
       <Name>FontAtlas</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\PixelFarmMiniAgg\x_autogen\PixelFarm.MiniAgg.One.csproj">
-      <Project>{1088370f-1a7e-421b-bbcb-400a8eda5f1f}</Project>
-      <Name>PixelFarm.MiniAgg.One</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Typography.OpenFont\N20\Typography.OpenFont\Typography.OpenFont.csproj">
+    <ProjectReference Include="..\..\..\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenFont</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
+    <ProjectReference Include="..\..\..\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
       <Name>Typography.GlyphLayout</Name>
     </ProjectReference>
