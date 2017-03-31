@@ -34,7 +34,7 @@ namespace PixelFarm.DrawingGL
         public ActualFont LoadFont(string fontName, float fontSizeInPoints)
         {
             //find install font from fontname
-            InstalledFont found = PixelFarm.Drawing.GLES2.GLES2Platform.GetInstalledFont(fontName, InstalledFontStyle.Regular);
+            InstalledFont found = PixelFarm.Drawing.GLES2.GLES2Platform.GetInstalledFont(fontName, InstalledFontStyle.Normal);
             if (found == null)
             {
                 return null;

@@ -376,12 +376,13 @@ namespace Mini
         private void button7_Click(object sender, EventArgs e)
         {
 
-            var installFontProvider = new PixelFarm.Drawing.InstallFontsProviderWin32();
-            List<PixelFarm.Drawing.Fonts.InstalledFont> fonts = PixelFarm.Drawing.Fonts.InstalledFontCollection.ReadPreviewFontData(installFontProvider.GetInstalledFontIter());
+            //var installFontProvider = new PixelFarm.Drawing.InstallFontsProviderWin32();
+            //List<PixelFarm.Drawing.Fonts.InstalledFont> fonts = 
+            //    PixelFarm.Drawing.Fonts.InstalledFontCollection.ReadPreviewFontData(installFontProvider.GetInstalledFontIter());
 
 
-            System.Drawing.Bitmap bmp1 = new Bitmap(800, 600, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bmp1);
+            //System.Drawing.Bitmap bmp1 = new Bitmap(800, 600, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter p = new PixelFarm.Drawing.WinGdi.GdiPlusCanvasPainter(bmp1);
 
         }
 

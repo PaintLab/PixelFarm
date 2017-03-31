@@ -1,4 +1,5 @@
 ﻿//MIT, 2016-2017, WinterDev 
+
  
 namespace PixelFarm.Drawing.Fonts
 {
@@ -6,7 +7,7 @@ namespace PixelFarm.Drawing.Fonts
     {
         public static InstalledFontStyle ConvToInstalledFontStyle(this FontStyle style)
         {
-            InstalledFontStyle installedStyle = InstalledFontStyle.Regular;//regular
+            InstalledFontStyle installedStyle = InstalledFontStyle.Normal;//regular
             switch (style)
             {
                 default: break;

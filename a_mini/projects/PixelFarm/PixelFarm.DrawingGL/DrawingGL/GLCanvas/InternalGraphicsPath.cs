@@ -8,7 +8,7 @@ namespace PixelFarm.DrawingGL
     {
         //TODO: review here again***
 
-        int[] contourEnds = new int[0];
+        int[] contourEnds = new int[1];
         public float[] coordXYs; //this is user provide coord
         //---------
         //system tess ...
