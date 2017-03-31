@@ -1,8 +1,7 @@
 ﻿//MIT, 2017, WinterDev
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
-using Typography.Rendering;
+using PixelFarm.Drawing.Fonts; 
 namespace YourImplementation
 {
 
