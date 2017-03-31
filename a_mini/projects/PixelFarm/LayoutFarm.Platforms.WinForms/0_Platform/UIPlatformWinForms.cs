@@ -35,9 +35,6 @@ namespace LayoutFarm.UI
                 //set up winform platform 
                 ////gdi+
                 PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontloader);
-                //PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
-
-
                 LayoutFarm.UI.Clipboard.SetUIPlatform(this);
             }
             catch (System.Exception ex)

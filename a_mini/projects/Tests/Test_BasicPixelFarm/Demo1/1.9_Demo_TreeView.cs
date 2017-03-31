@@ -15,7 +15,7 @@ namespace LayoutFarm
             //prepare node icon
 
             ImageBinder nodeOpen = new ClientImageBinder(null);
-            nodeOpen.SetImage(LoadBitmap("../../Demo/arrow_open.png"));
+            nodeOpen.SetImage(LoadBitmap("../../Data/imgs/arrow_open.png"));
 
             //add 
             for (int i = 0; i < 10; ++i)
