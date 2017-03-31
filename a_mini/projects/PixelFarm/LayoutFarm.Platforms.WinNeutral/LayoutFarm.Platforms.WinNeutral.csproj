@@ -62,9 +62,6 @@
     <Compile Include="..\LayoutFarm.PlatformBase\SkiaCanvasViewport.cs">
       <Link>4_Skia\SkiaCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.PlatformBase\Windows\InstallFontsProviderWin32.cs">
-      <Link>5_Shared\InstallFontsProviderWin32.cs</Link>
-    </Compile>
     <Compile Include="..\LayoutFarm.PlatformBase\Windows\WindowFontLoader.cs">
       <Link>5_Shared\WindowFontLoader.cs</Link>
     </Compile>

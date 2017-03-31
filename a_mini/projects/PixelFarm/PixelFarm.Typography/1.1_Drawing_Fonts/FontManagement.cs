@@ -262,6 +262,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             //
             string fontNameUpper = newfont.FontName.ToUpper();
+             
             InstalledFont found;
             if (selectedFontGroup.TryGetValue(fontNameUpper, out found))
             {

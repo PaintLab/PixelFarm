@@ -1,7 +1,7 @@
 ﻿//MIT, 2014-2017, WinterDev   
 
 using PixelFarm.Drawing.Fonts;
-using Typography.Rendering;
+
 namespace PixelFarm.Drawing
 {
     class WindowsFontLoader : IFontLoader
@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing
         public WindowsFontLoader()
         {
             //iterate
-            var installFontsWin32 = new InstallFontsProviderWin32();
+            installFontCollection.SetFontNameDuplicatedHandler((f0, f1) => FontNameDuplicatedDecision.Skip);
             installFontCollection.LoadWindowsSystemFonts();
             _defaultFontNotFoundHandler = (fontCollection, fontName, subfamName, style) =>
              {
