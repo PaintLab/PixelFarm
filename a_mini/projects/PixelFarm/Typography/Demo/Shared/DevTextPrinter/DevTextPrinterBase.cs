@@ -4,42 +4,6 @@ using Typography.TextLayout;
 
 namespace Typography.Rendering
 {
-    public class InstalledFont
-    {
-
-        public InstalledFont(string fontName, string fontSubFamily, string fontPath)
-        {
-            FontName = fontName;
-            FontSubFamily = fontSubFamily;
-            FontPath = fontPath;
-        }
-
-        public string FontName { get; set; }
-        public string FontSubFamily { get; set; }
-        public string FontPath { get; set; }
-
-#if DEBUG
-        public override string ToString()
-        {
-            return FontName + " " + FontSubFamily;
-        }
-#endif
-    }
-
-
-    public interface IFontface
-    {
-        string FontName { get; }
-        string FontSubFamily { get; }
-    }
-
-    public class FontRequest
-    {
-        public string FontName { get; set; }
-        public InstalledFontStyle Style { get; set; }
-    }
-
-
     /// <summary>
     /// base TextPrinter class for developer only, 
     /// </summary>
@@ -51,16 +15,6 @@ namespace Typography.Rendering
             FontSizeInPoints = 14;//
             ScriptLang = Typography.OpenFont.ScriptLangs.Latin;//default?
         }
-
-        ///// <summary>
-        ///// directly set request font stream to current printer
-        ///// </summary>
-        //public abstract FontStreamSource FontStreamSource
-        //{
-        //    get;
-        //    set;
-        //}
-
 
         public abstract Typography.TextLayout.GlyphLayout GlyphLayoutMan { get; }
         public abstract Typography.OpenFont.Typeface Typeface { get; set; }
@@ -79,7 +33,6 @@ namespace Typography.Rendering
                 this._hintTech = value;
             }
         }
-
 
         float _fontSizeInPoints;
         public float FontSizeInPoints
