@@ -2,6 +2,9 @@
 
 namespace PixelFarm.Drawing
 {
+    /// <summary>
+    /// review this name again
+    /// </summary>
     public interface IFonts
     {
         float MeasureWhitespace(RequestFont f);
