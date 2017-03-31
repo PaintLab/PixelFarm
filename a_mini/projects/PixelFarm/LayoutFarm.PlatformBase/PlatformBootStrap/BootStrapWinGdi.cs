@@ -2,7 +2,6 @@
 
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
-
 namespace YourImplementation
 {
     public static class BootStrapWinGdi

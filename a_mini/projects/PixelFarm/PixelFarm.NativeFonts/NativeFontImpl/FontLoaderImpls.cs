@@ -6,7 +6,7 @@
 //-----------------------------------
 
 using System;
-using System.Runtime.InteropServices; 
+using System.Runtime.InteropServices;
 using System.IO;
 namespace PixelFarm.Drawing.Fonts
 {
@@ -21,7 +21,8 @@ namespace PixelFarm.Drawing.Fonts
         }
         public static FontFace LoadFont(string fontfile, string lang, HBDirection direction, int defaultScriptCode = 0)
         {
-            return LoadFont(FontPreview.GetFontDetails(fontfile), lang, direction, defaultScriptCode);
+            throw new NotSupportedException();
+            //return LoadFont(FontPreview.GetFontDetails(fontfile), lang, direction, defaultScriptCode);
         }
         public static FontFace LoadFont(InstalledFont installedFont, string lang, HBDirection direction, int defaultScriptCode = 0)
         {

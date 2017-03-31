@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using Typography.OpenFont;
 using Typography.TextLayout;
-using Typography.Rendering;
+using Typography.Rendering; 
+
 using PixelFarm.Agg;
 
 namespace PixelFarm.Drawing.Fonts
@@ -24,7 +25,7 @@ namespace PixelFarm.Drawing.Fonts
         Dictionary<string, GlyphPathBuilder> _cacheGlyphPathBuilders = new Dictionary<string, GlyphPathBuilder>();
         List<GlyphPlan> _outputGlyphPlans = new List<GlyphPlan>();
         //         
-        HintedVxsGlyphCollection hintGlyphCollection = new HintedVxsGlyphCollection();
+        GlyphMeshCollection<VertexStore> hintGlyphCollection = new GlyphMeshCollection<VertexStore>();
         VertexStorePool _vxsPool = new VertexStorePool();
         GlyphTranslatorToVxs _tovxs = new GlyphTranslatorToVxs();
 

@@ -11,6 +11,7 @@ namespace PixelFarm.Drawing.WinGdi
     using System.Text;
     using PixelFarm.Drawing.Fonts;
     using System.Collections.Generic;
+
     static class WinGdiTextService
     {
         //TODO: consider use uniscribe
@@ -484,7 +485,6 @@ namespace PixelFarm.Drawing.WinGdi
 
         public static void SetFontLoader(IFontLoader fontLoader)
         {
-
             //warning if duplicate
             if (s_fontLoader != null)
             {

@@ -1,7 +1,7 @@
 ﻿//MIT, 2014-2017, WinterDev   
 
 using PixelFarm.Drawing.Fonts;
-
+using Typography.OpenFont;
 namespace PixelFarm.Drawing
 {
     class WindowsFontLoader : IFontLoader

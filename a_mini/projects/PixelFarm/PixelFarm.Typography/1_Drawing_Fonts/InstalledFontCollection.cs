@@ -1,18 +1,14 @@
-﻿//MIT, 2016-2017, WinterDev
+﻿//MIT, 2016-2017, WinterDev 
+//from http://stackoverflow.com/questions/3633000/net-enumerate-winforms-font-styles
+// https://www.microsoft.com/Typography/OTSpec/name.htm
+//MIT, 2016-2016, WinterDev
 using System;
 using System.Collections.Generic;
+using System.IO;
+using Typography.OpenFont;
 
 namespace PixelFarm.Drawing.Fonts
 {
-    public interface IInstalledFontProvider
-    {
-        IEnumerable<string> GetInstalledFontIter();
-    }
-    public interface IFontLoader
-    {
-        InstalledFont GetFont(string fontName, InstalledFontStyle style);
-    }
-
     public class InstalledFont
     {
 
@@ -22,6 +18,7 @@ namespace PixelFarm.Drawing.Fonts
             FontSubFamily = fontSubFamily;
             FontPath = fontPath;
         }
+
         public string FontName { get; set; }
         public string FontSubFamily { get; set; }
         public string FontPath { get; set; }
@@ -29,10 +26,42 @@ namespace PixelFarm.Drawing.Fonts
 #if DEBUG
         public override string ToString()
         {
-            return FontName;
+            return FontName + " " + FontSubFamily;
         }
 #endif
     }
+
+
+    public interface IInstalledFontProvider
+    {
+        IEnumerable<string> GetInstalledFontIter();
+    }
+    public interface IFontLoader
+    {
+        InstalledFont GetFont(string fontName, InstalledFontStyle style);
+    }
+
+
+    public interface FontStreamSource
+    {
+        Stream ReadFontStream();
+        string PathName { get; }
+    }
+
+    public class FontFileStreamProvider : FontStreamSource
+    {
+        public FontFileStreamProvider(string filename)
+        {
+            this.PathName = filename;
+        }
+        public string PathName { get; private set; }
+        public Stream ReadFontStream()
+        {
+            return new FileStream(this.PathName, FileMode.Open, FileAccess.Read);
+        }
+    }
+
+
 
     [Flags]
     public enum InstalledFontStyle
@@ -48,76 +77,96 @@ namespace PixelFarm.Drawing.Fonts
     {
 
         Dictionary<string, InstalledFont> regular_Fonts = new Dictionary<string, InstalledFont>();
-        Dictionary<string, InstalledFont> bold_Fonts = new Dictionary<string, InstalledFont>();
         Dictionary<string, InstalledFont> italic_Fonts = new Dictionary<string, InstalledFont>();
+        Dictionary<string, InstalledFont> bold_Fonts = new Dictionary<string, InstalledFont>();
+
         Dictionary<string, InstalledFont> boldItalic_Fonts = new Dictionary<string, InstalledFont>();
         Dictionary<string, InstalledFont> gras_Fonts = new Dictionary<string, InstalledFont>();
         Dictionary<string, InstalledFont> grasItalic_Fonts = new Dictionary<string, InstalledFont>();
-
-        List<InstalledFont> installedFonts;
+        //
+        Dictionary<string, Dictionary<string, InstalledFont>> _fontGroups = new Dictionary<string, Dictionary<string, InstalledFont>>();
         FontNotFoundHandler fontNotFoundHandler;
-
+        //
         public InstalledFontCollection()
         {
-
+            regular_Fonts = CreateNewFontGroup("normal", "regular");
+            italic_Fonts = CreateNewFontGroup("italic", "italique");
+            bold_Fonts = CreateNewFontGroup("bold");
+            boldItalic_Fonts = CreateNewFontGroup("bold italic");
+            gras_Fonts = CreateNewFontGroup("gras");
+            grasItalic_Fonts = CreateNewFontGroup("gras italique");
         }
+        Dictionary<string, InstalledFont> CreateNewFontGroup(params string[] names)
+        {
+            //single dic may be called by many names
+            var fontGroup = new Dictionary<string, InstalledFont>();
+            foreach (string name in names)
+            {
+                _fontGroups.Add(name.ToUpper(), fontGroup);
+            }
+            return fontGroup;
+        }
+
         public void SetFontNotFoundHandler(FontNotFoundHandler handler)
         {
             fontNotFoundHandler = handler;
         }
+        public void AddFont(FontStreamSource src)
+        {
+            //preview data of font
+            using (Stream stream = src.ReadFontStream())
+            {
+                var reader = new OpenFontReader();
+                PreviewFontInfo previewInfo = reader.ReadPreview(stream);
+                RegisterFont(new InstalledFont(
+                    previewInfo.fontName,
+                    previewInfo.fontSubFamily,
+                    src.PathName));
+            }
+        }
+
+
+        void RegisterFont(InstalledFont f)
+        {
+            if (f == null || f.FontName == "" || f.FontName.StartsWith("\0"))
+            {
+                //no font name?
+                return;
+            }
+
+
+            Dictionary<string, InstalledFont> selectedFontGroup;
+            if (!_fontGroups.TryGetValue(f.FontSubFamily.ToUpper(), out selectedFontGroup))
+            {
+                throw new NotSupportedException();
+                //TODO: implement a mising group
+            }
+
+            string fontNameUpper = f.FontName.ToUpper();
+            if (selectedFontGroup.ContainsKey(fontNameUpper))
+            {
+                //TODO:
+                //we already have this font name
+                //(but may be different file
+                //we let user to handle it        
+
+            }
+            else
+            {
+                selectedFontGroup.Add(fontNameUpper, f);
+            }
+
+        }
         public void LoadInstalledFont(IEnumerable<string> getFontFileIter)
         {
-            installedFonts = ReadPreviewFontData(getFontFileIter);
+            List<InstalledFont> installedFonts = ReadPreviewFontData(getFontFileIter);
             //classify
             //do 
             int j = installedFonts.Count;
             for (int i = 0; i < j; ++i)
             {
-                InstalledFont f = installedFonts[i];
-                if (f == null || f.FontName == "" || f.FontName.StartsWith("\0"))
-                {
-                    //no font name?
-                    continue;
-                }
-                switch (f.FontSubFamily)
-                {
-                    case "Normal":
-                    case "Regular":
-                        {
-                            regular_Fonts.Add(f.FontName.ToUpper(), f);
-                        }
-                        break;
-                    case "Italic":
-                    case "Italique":
-                        {
-                            italic_Fonts.Add(f.FontName.ToUpper(), f);
-                        }
-                        break;
-                    case "Bold":
-                        {
-                            bold_Fonts.Add(f.FontName.ToUpper(), f);
-                        }
-                        break;
-                    case "Bold Italic":
-                        {
-                            boldItalic_Fonts.Add(f.FontName.ToUpper(), f);
-                        }
-                        break;
-                    case "Gras":
-                        {
-                            gras_Fonts.Add(f.FontName.ToUpper(), f);
-                        }
-                        break;
-                    case "Gras Italique":
-                        {
-                            grasItalic_Fonts.Add(f.FontName.ToUpper(), f);
-                        }
-                        break;
-                    default:
-                        throw new NotSupportedException();
-                }
+                RegisterFont(installedFonts[i]);
             }
-
         }
 
         public InstalledFont GetFont(string fontName, InstalledFontStyle style)
@@ -181,40 +230,37 @@ namespace PixelFarm.Drawing.Fonts
             //TODO: review here, this is not platform depend
             //-------------------------------------------------
             //check if MAC or linux font folder too
-            //-------------------------------------------------
-
+            //------------------------------------------------- 
             List<InstalledFont> installedFonts = new List<InstalledFont>();
-
             foreach (string fontFilename in getFontFileIter)
             {
-                InstalledFont installedFont = FontPreview.GetFontDetails(fontFilename);
-                installedFonts.Add(installedFont);
+                using (Stream stream = new FileStream(fontFilename, FileMode.Open, FileAccess.Read))
+                {
+                    var reader = new OpenFontReader();
+                    PreviewFontInfo preview = reader.ReadPreview(stream);
+                    installedFonts.Add(new InstalledFont(preview.fontName, preview.fontSubFamily,
+                        fontFilename));
+                }
             }
             return installedFonts;
         }
     }
 
 
-    public static class FontStyleExtensions
+    public static class InstalledFontCollectionExtension
     {
-        public static InstalledFontStyle ConvToInstalledFontStyle(this FontStyle style)
+
+        public static void LoadWinSystemFonts(this InstalledFontCollection fontCollection)
         {
-            InstalledFontStyle installedStyle = InstalledFontStyle.Regular;//regular
-            switch (style)
-            {
-                default: break;
-                case FontStyle.Bold:
-                    installedStyle = InstalledFontStyle.Bold;
-                    break;
-                case FontStyle.Italic:
-                    installedStyle = InstalledFontStyle.Italic;
-                    break;
-                case FontStyle.Bold | FontStyle.Italic:
-                    installedStyle = InstalledFontStyle.Italic;
-                    break;
-            }
-            return installedStyle;
+            //implement
+        }
+        public static void LoadMacSystemFonts(this InstalledFontCollection fontCollection)
+        {
+            //implement
+        }
+        public static void LoadLinuxSystemFonts(this InstalledFontCollection fontCollection)
+        {
+            //implement
         }
     }
-
 }

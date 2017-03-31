@@ -1,43 +1,69 @@
 ﻿//MIT, 2016-2017, WinterDev
-using System;
 using System.Collections.Generic;
-//
-using PixelFarm.Agg;
 using Typography.OpenFont;
-using Typography.Rendering;
 
-namespace PixelFarm.Drawing.Fonts
+namespace Typography.Rendering
 {
-    //----------
-    //TODO: review here 
-    //----------
-    class HintedVxsGlyphCollection
+
+    //see also: PixelFarm's  class HintedVxsGlyphCollection 
+
+    //TODO: review this class name again 
+
+    public class GlyphMeshCollection<T>
     {
         //hint glyph collection        
         //per typeface
-        Dictionary<ushort, VertexStore> _currentGlyphDic = null;
-        Dictionary<HintedVxsConvtextKey, Dictionary<ushort, VertexStore>> _hintedGlyphs = new Dictionary<HintedVxsConvtextKey, Dictionary<ushort, VertexStore>>();
+        Dictionary<ushort, T> _currentGlyphDic = null;
+        Dictionary<GlyphKey, Dictionary<ushort, T>> _registerGlyphCollection = new Dictionary<GlyphKey, Dictionary<ushort, T>>();
+
         public void SetCacheInfo(Typeface typeface, float sizeInPts, HintTechnique hintTech)
         {
             //check if we have create the context for this request parameters?
-            var key = new HintedVxsConvtextKey() { hintTech = hintTech, sizeInPts = sizeInPts, typeface = typeface };
-            if (!_hintedGlyphs.TryGetValue(key, out _currentGlyphDic))
+            var key = new GlyphKey() { hintTech = hintTech, sizeInPts = sizeInPts, typeface = typeface };
+            if (!_registerGlyphCollection.TryGetValue(key, out _currentGlyphDic))
             {
                 //if not found 
                 //create new
-                _currentGlyphDic = new Dictionary<ushort, VertexStore>();
-                _hintedGlyphs.Add(key, _currentGlyphDic);
+                _currentGlyphDic = new Dictionary<ushort, T>();
+                _registerGlyphCollection.Add(key, _currentGlyphDic);
             }
         }
-        public bool TryGetCacheGlyph(ushort glyphIndex, out VertexStore vxs)
+        public bool TryGetCacheGlyph(ushort glyphIndex, out T vxs)
         {
             return _currentGlyphDic.TryGetValue(glyphIndex, out vxs);
         }
-        public void RegisterCachedGlyph(ushort glyphIndex, VertexStore vxs)
+        public void RegisterCachedGlyph(ushort glyphIndex, T vxs)
         {
             _currentGlyphDic[glyphIndex] = vxs;
         }
-        struct HintedVxsConvtextKey
+        public void ClearAll()
+        {
+            _currentGlyphDic = null;
+            _registerGlyphCollection.Clear();
+        }
+
+        List<GlyphKey> tempKeys = new List<GlyphKey>();
+
+        public void Clear(Typeface typeface)
+        {
+            //clear all registered typeface glyph
+            tempKeys.Clear();
+            foreach (var k in _registerGlyphCollection.Keys)
+            {
+                //collect ...
+                if (k.typeface == typeface)
+                {
+                    tempKeys.Add(k);
+                }
+            }
+            //
+            for (int i = tempKeys.Count - 1; i >= 0; --i)
+            {
+                _registerGlyphCollection.Remove(tempKeys[i]);
+            }
+            tempKeys.Clear();
+        }
+        struct GlyphKey
         {
             public HintTechnique hintTech;
             public Typeface typeface;

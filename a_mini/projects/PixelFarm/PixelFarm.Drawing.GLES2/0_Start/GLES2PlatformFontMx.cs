@@ -2,8 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-
-
+using Typography.OpenFont;
 namespace PixelFarm.Drawing.Fonts
 {
     //cross-platform font mx***
@@ -13,7 +12,7 @@ namespace PixelFarm.Drawing.Fonts
         //static InstalledFontCollection installFonts;
         internal static ScriptLang defaultScriptLang = ScriptLangs.Latin;
         internal static WriteDirection defaultHbDirection = WriteDirection.LTR;
-         
+
         static IFontLoader s_fontLoader;
         public static void SetFontLoader(IFontLoader fontLoader)
         {
