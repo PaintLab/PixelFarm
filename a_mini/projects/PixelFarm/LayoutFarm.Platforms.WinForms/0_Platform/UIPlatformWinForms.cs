@@ -4,8 +4,16 @@ namespace LayoutFarm.UI
 {
     public class UIPlatformWinForm : UIPlatform
     {
-        public readonly static UIPlatformWinForm platform;
+        static UIPlatformWinForm platform;
         static UIPlatformWinForm()
+        {
+
+        }
+        public static UIPlatformWinForm GetDefault()
+        {
+            return platform;
+        }
+        public UIPlatformWinForm()
         {
             //--------------------------------------------------------------------
             //TODO: review here again
@@ -14,30 +22,42 @@ namespace LayoutFarm.UI
             //so we must specific the file type to x86 ***
             //else this will error on TypeInitializer ( from BadImageFormatException);
             //--------------------------------------------------------------------
-            platform = new UI.UIPlatformWinForm();
-        }
-        private UIPlatformWinForm()
-        {
-            //set up winform platform 
-            LayoutFarm.UI.Clipboard.SetUIPlatform(this);
-            //gdi+
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
-            PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
 
-            //gles2
-            OpenTK.Toolkit.Init();
-            PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
-            //skia 
-            if (!YourImplementation.BootStrapSkia.IsNativeLibAvailable())
+            if (platform == null)
             {
-                //handle  when native dll is not ready
+                platform = this;
             }
-            else
+
+            var fontloader = new PixelFarm.Drawing.WindowsFontLoader();
+
+            try
             {
-                //when ready
-                PixelFarm.Drawing.Skia.SkiaGraphicsPlatform.SetFontLoader(YourImplementation.BootStrapSkia.myFontLoader);
+                //set up winform platform 
+                ////gdi+
+                PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontloader);
+                //PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
+
+
+                LayoutFarm.UI.Clipboard.SetUIPlatform(this);
             }
-            _gdiPlusIFonts = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
+            catch (System.Exception ex)
+            {
+
+            }
+            ////gles2
+            //OpenTK.Toolkit.Init();
+            //PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
+            ////skia 
+            //if (!YourImplementation.BootStrapSkia.IsNativeLibAvailable())
+            //{
+            //    //handle  when native dll is not ready
+            //}
+            //else
+            //{
+            //    //when ready
+            //    PixelFarm.Drawing.Skia.SkiaGraphicsPlatform.SetFontLoader(YourImplementation.BootStrapSkia.myFontLoader);
+            //}
+            //_gdiPlusIFonts = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
         }
 
         public override UITimer CreateUITimer()
