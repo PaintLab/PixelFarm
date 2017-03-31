@@ -6,16 +6,28 @@ namespace LayoutFarm.UI
 {
     public static class FormCanvasHelper
     {
+        static LayoutFarm.UI.UIPlatformWinForm s_platform;
 
+        static void InitWinform()
+        {
+            if (s_platform == null)
+            {
+                s_platform = new LayoutFarm.UI.UIPlatformWinForm();
+            }
+
+        }
         public static Form CreateNewFormCanvas(
             int w, int h,
             InnerViewportKind internalViewportKind,
             out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
         {
-            
+            InitWinform();
+
+
+            LayoutFarm.UI.UIPlatformWinForm platform = s_platform;
             MyRootGraphic myRootGfx = new MyRootGraphic(
-                LayoutFarm.UI.UIPlatformWinForm.platform,
-                LayoutFarm.UI.UIPlatformWinForm.platform.GetIFonts(),
+                platform,
+               platform.GetIFonts(),
                 w, h);
 
             Form form1 = new Form();

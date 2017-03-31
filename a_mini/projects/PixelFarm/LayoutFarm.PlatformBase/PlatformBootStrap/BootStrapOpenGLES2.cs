@@ -1,14 +1,18 @@
 ﻿//MIT, 2017, WinterDev
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts; 
+using PixelFarm.Drawing.Fonts;
+using Typography.Rendering;
 namespace YourImplementation
 {
 
-
     public static class BootStrapOpenGLES2
     {
-        public static readonly IFontLoader myFontLoader = WindowsFontLoader.Default;
+        public static readonly IFontLoader myFontLoader;
+        static BootStrapOpenGLES2()
+        {
+            myFontLoader = new WindowsFontLoader();
+        }
     }
 
 

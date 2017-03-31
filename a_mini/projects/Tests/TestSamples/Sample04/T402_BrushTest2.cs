@@ -27,8 +27,8 @@ namespace OpenTkEssTest
 
             var win32InstallFontProvider = DemoHelper.GetRegisterInstalledFontProvider();
             InstalledFontCollection collection = new InstalledFontCollection();
-            collection.LoadInstalledFont(win32InstallFontProvider.GetInstalledFontIter());
-            InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Regular);
+            collection.LoadWindowsSystemFonts();
+            InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Normal);
             FontFace tahomaFace = OpenFontLoader.LoadFont(tahomaFont.FontPath, ScriptLangs.Latin);
             ActualFont actualFont = tahomaFace.GetFontAtPointSize(72);
             FontGlyph glyph = actualFont.GetGlyph('K');

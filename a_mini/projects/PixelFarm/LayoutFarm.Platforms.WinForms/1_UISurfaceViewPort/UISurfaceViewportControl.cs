@@ -16,9 +16,7 @@ namespace LayoutFarm.UI
         List<Form> subForms = new List<Form>();
 
 
-        //init once***
-        static readonly UIPlatformWinForm winPlatform = UIPlatformWinForm.platform;
-
+      
         public UISurfaceViewportControl()
         {
             InitializeComponent();
@@ -27,7 +25,7 @@ namespace LayoutFarm.UI
         {
             get
             {
-                return winPlatform;
+                return UIPlatformWinForm.GetDefault();
             }
         }
 
