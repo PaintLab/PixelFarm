@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing
         public WindowsFontLoader()
         {
             //iterate
-            var installFontsWin32 = new InstallFontsProviderWin32();
+            
             installFontCollection.LoadWindowsSystemFonts();
             _defaultFontNotFoundHandler = (fontCollection, fontName, subfamName, style) =>
              {

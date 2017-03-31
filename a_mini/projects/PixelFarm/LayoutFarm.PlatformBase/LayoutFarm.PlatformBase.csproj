@@ -42,7 +42,6 @@
     <Compile Include="PlatformBootStrap\BootStrapOpenGLES2.cs" />
     <Compile Include="PlatformBootStrap\BootStrapSkia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Windows\InstallFontsProviderWin32.cs" />
     <Compile Include="Windows\WindowFontLoader.cs" />
   </ItemGroup>
   <ItemGroup>
