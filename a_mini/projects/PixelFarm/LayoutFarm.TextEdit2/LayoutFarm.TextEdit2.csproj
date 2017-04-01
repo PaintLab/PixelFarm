@@ -74,7 +74,7 @@
     <Compile Include="1.2_Lines\TextLineReaderWriter.cs" />
     <Compile Include="1.3_Layer\1_EditableTextFlowLayer.cs" />
     <Compile Include="1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs" />
-    <Compile Include="1.3_Layer\1_EditableTextFlowLayer_Relocator_Feeder.cs" />
+    <Compile Include="x_notused\1_EditableTextFlowLayer_Relocator_Feeder.cs" />
     <Compile Include="2.1_MultiLineController\DocumentActions.cs" />
     <Compile Include="2.2_TextRenderBox\CustomRenderSurface.cs" />
     <Compile Include="2.2_TextRenderBox\GlobalCaretController.cs" />
@@ -128,6 +128,7 @@
       <Name>LayoutFarm.ClientPlatforms</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

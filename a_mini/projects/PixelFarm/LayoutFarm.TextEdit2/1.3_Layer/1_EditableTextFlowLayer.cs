@@ -237,121 +237,149 @@ namespace LayoutFarm.Text
                 return Size.Empty;
             }
 
-            FlowFeeder flowFeeder = FlowFeeder.GetNewFlowFeeder();
-            flowFeeder.Load(layer);
+            //only one line
+            EditableTextLine line = (EditableTextLine)layer.lineCollection;
+            LinkedListNode<EditableRun> c_node = line.First;
+            //--------
             int curX = 0;
             int curY = 0;
-            bool lastestIsBlock = false;
             int maxHeightInRow = 0;
             int maxWidth = 0;
-            int curY_fromTop = 0;
-            bool isFirstRunOfLine = true;
-            int childCount = 0;
-            EditableRun lastNotNullElement = null;
-            while (flowFeeder.Read())
+            while (c_node != null)
             {
-                EditableRun currentRun = flowFeeder.CurrentRun;
-                if (currentRun != null)
+                EditableRun run = c_node.Value;
+                int runHeight = run.Height;
+                if (runHeight > maxHeightInRow)
                 {
-#if DEBUG
-                    vinv_dbug_BeginSetElementBound(currentRun);
-#endif
-
-                    lastNotNullElement = currentRun;
-                    childCount++;
-                    if (lastestIsBlock || currentRun.IsBlockElement)
-                    {
-                        curX = 0;
-                        if (!isFirstRunOfLine)
-                        {
-                            if (maxWidth < curX)
-                            {
-                                maxWidth = curX;
-                            }
-
-                            curY = curY_fromTop + maxHeightInRow;
-                            curY_fromTop = curY;
-                            maxHeightInRow = 0;
-                        }
-                        lastestIsBlock = currentRun.IsBlockElement;
-                        if (lastestIsBlock)
-                        {
-                        }
-                        if (!currentRun.HasCalculatedSize)
-                        {
-                            EditableRun.InnerTextRunTopDownReCalculateContentSize(currentRun);
-                        }
-#if DEBUG
-                        else
-                        {
-                            vinv_dbug_WriteInfo(dbugVisitorMessage.SKIP, currentRun);
-                        }
-#endif
-                        int v_ds_height = currentRun.Height;
-                        if (v_ds_height > maxHeightInRow)
-                        {
-                            maxHeightInRow = v_ds_height;
-                        }
-                        curX += currentRun.Width;
-                        if (curX > maxWidth)
-                        {
-                            maxWidth = curX;
-                        }
-                        isFirstRunOfLine = false;
-                    }
-                    else
-                    {
-                        lastestIsBlock = currentRun.IsBlockElement;
-                        if (!currentRun.HasCalculatedSize)
-                        {
-                            EditableRun.InnerTextRunTopDownReCalculateContentSize(currentRun);
-                        }
-#if DEBUG
-                        else
-                        {
-                            vinv_dbug_WriteInfo(dbugVisitorMessage.SKIP, currentRun);
-                        }
-#endif
-                        int v_ds_height = currentRun.Height;
-                        if (v_ds_height > maxHeightInRow)
-                        {
-                            maxHeightInRow = v_ds_height;
-                        }
-                        curX += currentRun.Width;
-                        if (curX > maxWidth)
-                        {
-                            maxWidth = curX;
-                        }
-                        isFirstRunOfLine = false;
-                    }
-#if DEBUG
-                    vinv_dbug_EndSetElementBound(currentRun);
-#endif
+                    maxHeightInRow = runHeight;
                 }
-                else
+                curX += run.Width;
+                if (curX > maxWidth)
                 {
-                    if (flowFeeder.ReadState == 1)
-                    {
-                        curX = 0;
-                        curY = curY_fromTop + maxHeightInRow;
-                        curY_fromTop = curY;
-                        maxHeightInRow = 0;
-                    }
-                    else
-                    {
-                    }
+                    maxWidth = curX;
                 }
+
+
+                //next
+                c_node = c_node.Next;
             }
 
+            return new Size(maxWidth, maxHeightInRow);
 
-            if (curX > maxWidth)
-            {
-                maxWidth = curX;
-            }
+            //            FlowFeeder flowFeeder = FlowFeeder.GetNewFlowFeeder();
+            //            flowFeeder.Load(layer);
+            //            int curX = 0;
+            //            int curY = 0;
+            //            bool lastestIsBlock = false;
 
-            int finalHeight = curY_fromTop + maxHeightInRow;
-            FlowFeeder.FreeFlowFeeder(flowFeeder);
-            return new Size(maxWidth, finalHeight);
+            //            int curY_fromTop = 0;
+            //            bool isFirstRunOfLine = true;
+            //            int childCount = 0;
+            //            EditableRun lastNotNullElement = null;
+            //            while (flowFeeder.Read())
+            //            {
+            //                EditableRun currentRun = flowFeeder.CurrentRun;
+            //                if (currentRun != null)
+            //                {
+            //#if DEBUG
+            //                    vinv_dbug_BeginSetElementBound(currentRun);
+            //#endif
+
+            //                    lastNotNullElement = currentRun;
+            //                    childCount++;
+            //                    if (lastestIsBlock || currentRun.IsBlockElement)
+            //                    {
+            //                        curX = 0;
+            //                        if (!isFirstRunOfLine)
+            //                        {
+            //                            if (maxWidth < curX)
+            //                            {
+            //                                maxWidth = curX;
+            //                            }
+
+            //                            curY = curY_fromTop + maxHeightInRow;
+            //                            curY_fromTop = curY;
+            //                            maxHeightInRow = 0;
+            //                        }
+            //                        lastestIsBlock = currentRun.IsBlockElement;
+            //                        if (lastestIsBlock)
+            //                        {
+            //                        }
+            //                        if (!currentRun.HasCalculatedSize)
+            //                        {
+            //                            EditableRun.InnerTextRunTopDownReCalculateContentSize(currentRun);
+            //                        }
+            //#if DEBUG
+            //                        else
+            //                        {
+            //                            vinv_dbug_WriteInfo(dbugVisitorMessage.SKIP, currentRun);
+            //                        }
+            //#endif
+            //                        int v_ds_height = currentRun.Height;
+            //                        if (v_ds_height > maxHeightInRow)
+            //                        {
+            //                            maxHeightInRow = v_ds_height;
+            //                        }
+            //                        curX += currentRun.Width;
+            //                        if (curX > maxWidth)
+            //                        {
+            //                            maxWidth = curX;
+            //                        }
+            //                        isFirstRunOfLine = false;
+            //                    }
+            //                    else
+            //                    {
+            //                        lastestIsBlock = currentRun.IsBlockElement;
+            //                        if (!currentRun.HasCalculatedSize)
+            //                        {
+            //                            EditableRun.InnerTextRunTopDownReCalculateContentSize(currentRun);
+            //                        }
+            //#if DEBUG
+            //                        else
+            //                        {
+            //                            vinv_dbug_WriteInfo(dbugVisitorMessage.SKIP, currentRun);
+            //                        }
+            //#endif
+            //                        int v_ds_height = currentRun.Height;
+            //                        if (v_ds_height > maxHeightInRow)
+            //                        {
+            //                            maxHeightInRow = v_ds_height;
+            //                        }
+            //                        curX += currentRun.Width;
+            //                        if (curX > maxWidth)
+            //                        {
+            //                            maxWidth = curX;
+            //                        }
+            //                        isFirstRunOfLine = false;
+            //                    }
+            //#if DEBUG
+            //                    vinv_dbug_EndSetElementBound(currentRun);
+            //#endif
+            //                }
+            //                else
+            //                {
+            //                    if (flowFeeder.ReadState == 1)
+            //                    {
+            //                        curX = 0;
+            //                        curY = curY_fromTop + maxHeightInRow;
+            //                        curY_fromTop = curY;
+            //                        maxHeightInRow = 0;
+            //                    }
+            //                    else
+            //                    {
+            //                    }
+            //                }
+            //            }
+
+
+            //            if (curX > maxWidth)
+            //            {
+            //                maxWidth = curX;
+            //            }
+
+            //int finalHeight = curY_fromTop + maxHeightInRow;
+            //FlowFeeder.FreeFlowFeeder(flowFeeder);
+            //return new Size(maxWidth, finalHeight);
         }
 
         public override void TopDownReArrangeContent()
@@ -394,6 +422,8 @@ namespace LayoutFarm.Text
             }
             else
             {
+                //re-calculate content size 
+                //of a single line
                 SetPostCalculateLayerContentSize(ReCalculateContentSizeHorizontalFlow(this));
             }
 #if DEBUG
@@ -600,11 +630,8 @@ namespace LayoutFarm.Text
                 curY = curY_fromTop + maxHeightInRow;
                 curY_fromTop = curY;
             }
-
             ValidateArrangement();
         }
-
-
         void PerformHorizontalFlowArrange(
             int ownerClientLeft, int ownerClientWidth,
             int ownerClientTop)
@@ -613,136 +640,148 @@ namespace LayoutFarm.Text
             {
                 return;
             }
-            if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
-            {
-                PerformHorizontalFlowArrangeForMultilineText(ownerClientLeft,
-                ownerClientWidth, ownerClientTop);
-                return;
-            }
-            int ownerClientRight = ownerClientLeft + ownerClientWidth;
-            int default_line_height = EditableTextLine.DEFAULT_LINE_HEIGHT;
-            int curX = 0;
-            int curY = 0;
-            bool lastestIsBlock = false;
-            int maxHeightInRow = 2;
-            int maxWidth = 0;
-            int curY_fromTop = ownerClientTop;
-#if DEBUG
-            long startTick = DateTime.Now.Ticks;
-#endif
+            //
+            //if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+            //{
+            //go multi line mode
+            PerformHorizontalFlowArrangeForMultilineText(
+                ownerClientLeft,
+                ownerClientWidth,
+                ownerClientTop);
+            return;
+            //            //}
+            //#if DEBUG
+            //            long startTick = DateTime.Now.Ticks;
+            //#endif
 
 
-            FlowReLocator flowRelocator = FlowReLocator.GetNewFlowRelocator();
-            flowRelocator.Load(this);
-            EditableRun lastNotNullElement = null;
-            int childCount = 0;
-            while (flowRelocator.ReadNextRun())
-            {
-                EditableRun currentRun = flowRelocator.CurrentRun;
-                if (currentRun != null)
-                {
-                    lastNotNullElement = currentRun;
-                    childCount++;
-#if DEBUG
-                    vinv_dbug_BeginSetElementBound(currentRun);
-#endif
+            //            //----------------------
+            //            //single line mode
+            //            int ownerClientRight = ownerClientLeft + ownerClientWidth;
+            //            int default_line_height = EditableTextLine.DEFAULT_LINE_HEIGHT;
+            //            int curX = 0;
+            //            int curY = 0;
+            //            bool lastestIsBlock = false;
+            //            int maxHeightInRow = 2;
+            //            int maxWidth = 0;
+            //            int curY_fromTop = ownerClientTop;
 
-                    int v_desired_width = currentRun.Width;
-                    int v_desired_height = currentRun.Height;
-                    if (lastestIsBlock || currentRun.IsBlockElement ||
-                       (curX + v_desired_width > ownerClientRight))
-                    {
-                        if (!flowRelocator.IsFirstRunOfLine)
-                        {
-                            flowRelocator.CloseCurrentLine(curX, maxHeightInRow);
-                            if (maxWidth < curX)
-                            {
-                                maxWidth = curX;
-                            }
-                            curY = curY_fromTop + maxHeightInRow;
-                            curY_fromTop = curY;
-                            maxHeightInRow = default_line_height;
-                            flowRelocator.SetCurrentLineTop(curY);
-                        }
-
-                        curX = ownerClientLeft;
-                        flowRelocator.Accept();
-                        lastestIsBlock = currentRun.IsBlockElement;
-                        if (v_desired_height > maxHeightInRow)
-                        {
-                            maxHeightInRow = v_desired_height;
-                        }
-                        EditableRun.DirectSetLocation(currentRun, curX, 0);
-                        if (lastestIsBlock)
-                        {
-                            v_desired_width = flowRelocator.OwnerElementWidth;
-                        }
-
-                        EditableRun.DirectSetSize(currentRun,
-                            v_desired_width, v_desired_height);
-                        curX += v_desired_width;
-                    }
-                    else
-                    {
-                        flowRelocator.Accept();
-                        lastestIsBlock = currentRun.IsBlockElement;
-                        if (v_desired_height > maxHeightInRow)
-                        {
-                            maxHeightInRow = v_desired_height;
-                        }
-                        EditableRun.DirectSetLocation(currentRun, curX, 0);
-                        EditableRun.DirectSetSize(
-                            currentRun,
-                            v_desired_width,
-                            v_desired_height);
-                        curX += v_desired_width;
-                    }
-#if DEBUG
-                    vinv_dbug_EndSetElementBound(currentRun);
-#endif
-                }
-                else
-                {
-                    switch (flowRelocator.FeederState)
-                    {
-                        case 1:
-                            {
-                                if (maxWidth < curX)
-                                {
-                                    maxWidth = curX;
-                                }
-                                flowRelocator.CloseCurrentLineWithLineBreak(curX, maxHeightInRow);
-                                curX = ownerClientLeft;
-                                curY = curY_fromTop + maxHeightInRow;
-                                curY_fromTop = curY;
-                                maxHeightInRow = default_line_height;
-                                flowRelocator.SetCurrentLineTop(curY);
-                            }
-                            break;
-                        case 4:
-                            {
-                                if (maxWidth < curX)
-                                {
-                                    maxWidth = curX;
-                                }
-                                flowRelocator.SetCurrentLineSize(curX, maxHeightInRow);
-                                curX = ownerClientLeft;
-                            }
-                            break;
-                    }
-                }
-            }
+            //            //----------------------
 
 
-            if (curX > maxWidth)
-            {
-                maxWidth = curX;
-            }
 
 
-            int finalHeight = curY_fromTop + maxHeightInRow;
-            ValidateArrangement();
-            FlowReLocator.FreeFlowRelocator(flowRelocator);
+            //            FlowReLocator flowRelocator = FlowReLocator.GetNewFlowRelocator();
+            //            flowRelocator.Load(this);
+            //            EditableRun lastNotNullElement = null;
+            //            int childCount = 0;
+            //            while (flowRelocator.ReadNextRun())
+            //            {
+            //                EditableRun currentRun = flowRelocator.CurrentRun;
+            //                if (currentRun != null)
+            //                {
+            //                    lastNotNullElement = currentRun;
+            //                    childCount++;
+            //#if DEBUG
+            //                    vinv_dbug_BeginSetElementBound(currentRun);
+            //#endif
+
+            //                    int v_desired_width = currentRun.Width;
+            //                    int v_desired_height = currentRun.Height;
+            //                    if (lastestIsBlock || currentRun.IsBlockElement ||
+            //                       (curX + v_desired_width > ownerClientRight))
+            //                    {
+            //                        if (!flowRelocator.IsFirstRunOfLine)
+            //                        {
+            //                            flowRelocator.CloseCurrentLine(curX, maxHeightInRow);
+            //                            if (maxWidth < curX)
+            //                            {
+            //                                maxWidth = curX;
+            //                            }
+            //                            curY = curY_fromTop + maxHeightInRow;
+            //                            curY_fromTop = curY;
+            //                            maxHeightInRow = default_line_height;
+            //                            flowRelocator.SetCurrentLineTop(curY);
+            //                        }
+
+            //                        curX = ownerClientLeft;
+            //                        flowRelocator.Accept();
+            //                        lastestIsBlock = currentRun.IsBlockElement;
+            //                        if (v_desired_height > maxHeightInRow)
+            //                        {
+            //                            maxHeightInRow = v_desired_height;
+            //                        }
+            //                        EditableRun.DirectSetLocation(currentRun, curX, 0);
+            //                        if (lastestIsBlock)
+            //                        {
+            //                            v_desired_width = flowRelocator.OwnerElementWidth;
+            //                        }
+
+            //                        EditableRun.DirectSetSize(currentRun,
+            //                            v_desired_width, v_desired_height);
+            //                        curX += v_desired_width;
+            //                    }
+            //                    else
+            //                    {
+            //                        flowRelocator.Accept();
+            //                        lastestIsBlock = currentRun.IsBlockElement;
+            //                        if (v_desired_height > maxHeightInRow)
+            //                        {
+            //                            maxHeightInRow = v_desired_height;
+            //                        }
+            //                        EditableRun.DirectSetLocation(currentRun, curX, 0);
+            //                        EditableRun.DirectSetSize(
+            //                            currentRun,
+            //                            v_desired_width,
+            //                            v_desired_height);
+            //                        curX += v_desired_width;
+            //                    }
+            //#if DEBUG
+            //                    vinv_dbug_EndSetElementBound(currentRun);
+            //#endif
+            //                }
+            //                else
+            //                {
+            //                    switch (flowRelocator.FeederState)
+            //                    {
+            //                        case 1:
+            //                            {
+            //                                if (maxWidth < curX)
+            //                                {
+            //                                    maxWidth = curX;
+            //                                }
+            //                                flowRelocator.CloseCurrentLineWithLineBreak(curX, maxHeightInRow);
+            //                                curX = ownerClientLeft;
+            //                                curY = curY_fromTop + maxHeightInRow;
+            //                                curY_fromTop = curY;
+            //                                maxHeightInRow = default_line_height;
+            //                                flowRelocator.SetCurrentLineTop(curY);
+            //                            }
+            //                            break;
+            //                        case 4:
+            //                            {
+            //                                if (maxWidth < curX)
+            //                                {
+            //                                    maxWidth = curX;
+            //                                }
+            //                                flowRelocator.SetCurrentLineSize(curX, maxHeightInRow);
+            //                                curX = ownerClientLeft;
+            //                            }
+            //                            break;
+            //                    }
+            //                }
+            //            }
+
+
+            //            if (curX > maxWidth)
+            //            {
+            //                maxWidth = curX;
+            //            }
+
+
+            //            int finalHeight = curY_fromTop + maxHeightInRow;
+            //            ValidateArrangement();
+            //            FlowReLocator.FreeFlowRelocator(flowRelocator);
         }
 
 
