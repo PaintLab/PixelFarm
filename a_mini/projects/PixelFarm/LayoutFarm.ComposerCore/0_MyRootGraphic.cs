@@ -17,18 +17,20 @@ namespace LayoutFarm.UI
         readonly TopWindowEventRoot topWindowEventRoot;
         readonly RenderBoxBase topWindowRenderBox;
 
-        UIPlatform uiPlatform;
+
         RequestFont _defaultTextEditFont; //TODO: review here
         IFonts _ifonts;
+        UITimer _timer;
         public MyRootGraphic(
-            UIPlatform uiPlatform,
+            int width, int height,
             IFonts ifonts,
-            int width, int height)
+            UITimer timer)
             : base(width, height)
         {
-            this.uiPlatform = uiPlatform;
+
+            this._timer = timer;
             this._ifonts = ifonts;
-            this.graphicTimerTaskMan = new GraphicsTimerTaskManager(this, uiPlatform);
+            this.graphicTimerTaskMan = new GraphicsTimerTaskManager(this, timer);
             _defaultTextEditFont = new RequestFont("tahoma", 10);
 
 #if DEBUG
@@ -55,10 +57,10 @@ namespace LayoutFarm.UI
                 return this._ifonts;
             }
         }
-       
+
         public override RootGraphic CreateNewOne(int w, int h)
         {
-            return new MyRootGraphic(this.uiPlatform, this._ifonts, w, h);
+            return new MyRootGraphic(w, h, this._ifonts, this._timer);
         }
         public ITopWindowEventRoot TopWinEventPortal
         {

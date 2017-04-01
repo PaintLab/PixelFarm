@@ -25,18 +25,21 @@ namespace LayoutFarm.UI
             InitWinform();
             PixelFarm.Drawing.Fonts.IFontLoader fontLoader = s_fontstore;
             //2. 
+            PixelFarm.Drawing.IFonts ifont = null;
             //OpenFontIFonts ifonts = new OpenFontIFonts(fontLoader);
             PixelFarm.Drawing.WinGdi.Gdi32IFonts ifonts2 = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
             PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(fontLoader);
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontLoader);
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontEncoding(System.Text.Encoding.ASCII);
             //
-
-            MyRootGraphic myRootGfx = new MyRootGraphic(
-               s_platform,
-               ifonts2,
-               w, h);
-
+            ifont = ifonts2;
+            //---------------------------------------------------------------------------
+            UITimer timer = s_platform.CreateUITimer();
+            MyRootGraphic myRootGfx = new MyRootGraphic(               
+               w, h,
+               ifont,
+               timer);
+            //---------------------------------------------------------------------------
             Form form1 = new Form();
             var innerViewport = canvasViewport = new LayoutFarm.UI.UISurfaceViewportControl();
             Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
