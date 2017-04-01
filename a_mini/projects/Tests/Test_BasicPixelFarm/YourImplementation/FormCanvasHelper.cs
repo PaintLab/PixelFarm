@@ -40,7 +40,7 @@ namespace LayoutFarm.UI
                ifont,
                timer);
             //---------------------------------------------------------------------------
-            Form form1 = new Form();
+          
             var innerViewport = canvasViewport = new LayoutFarm.UI.UISurfaceViewportControl();
             Rectangle screenClientAreaRect = Conv.ToRect(Screen.PrimaryScreen.WorkingArea);
 
@@ -50,6 +50,7 @@ namespace LayoutFarm.UI
                     screenClientAreaRect.Width,
                     screenClientAreaRect.Height);
             //---------------------- 
+            Form form1 = new Form();
             form1.Controls.Add(canvasViewport);
             //----------------------
             MakeFormCanvas(form1, canvasViewport);
