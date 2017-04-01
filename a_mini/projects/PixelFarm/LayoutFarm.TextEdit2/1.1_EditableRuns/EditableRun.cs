@@ -7,22 +7,27 @@ namespace LayoutFarm.Text
 {
     public abstract class EditableRun : RenderElement
     {
+        //1. owner is a textline
         EditableTextLine ownerTextLine;
+        //TODO: review this again -> change to list,
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
         public EditableRun(RootGraphic gfx)
             : base(gfx, 10, 10)
         {
 
         }
+        public abstract char GetChar(int index);
         internal bool IsLineBreak { get; set; }
         internal abstract bool IsInsertable { get; }
         public abstract string Text { get; }
         public abstract int CharacterCount { get; }
-        public abstract TextSpanStyle SpanStyle { get; }
         //--------------------
-        public abstract void SetStyle(TextSpanStyle spanStyle);
-        public abstract char GetChar(int index);
+        //model
         public abstract EditableRunCharLocation GetCharacterFromPixelOffset(int pixelOffset);
+
+
+        
+        
         /// <summary>
         /// get run width from start (left**) to charOffset
         /// </summary>
@@ -117,6 +122,15 @@ namespace LayoutFarm.Text
             dbug_ExitTopDownReCalculateContent(ve);
 #endif
         }
+        
+        
+        
+        
+        //--------------------
+        //presentation of this run
+        public abstract TextSpanStyle SpanStyle { get; }
+        public abstract void SetStyle(TextSpanStyle spanStyle);
+
 
 #if DEBUG
         public override string dbug_FullElementDescription()

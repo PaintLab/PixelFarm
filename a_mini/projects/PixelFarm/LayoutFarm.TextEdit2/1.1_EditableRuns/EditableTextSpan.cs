@@ -8,8 +8,8 @@ namespace LayoutFarm.Text
     class EditableTextRun : EditableRun
     {
         TextSpanStyle spanStyle;
-        char[] mybuffer;
-        int[] glyphPositions = null;
+        char[] mybuffer; //each editable run has it own (dynamic) char buffer
+        int[] glyphPositions = null;//TODO: review here-> change this to caret stop position
         public EditableTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
             : base(gfx)
         {   //check line break? 
@@ -49,6 +49,7 @@ namespace LayoutFarm.Text
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
+            //change root graphics after create
             DirectSetRootGraphics(this, rootgfx);
         }
         public override EditableRun Clone()
@@ -111,7 +112,7 @@ namespace LayoutFarm.Text
 
 
                 int len = mybuffer.Length;
-                size = CalculateDrawingStringSize(this.mybuffer, len); 
+                size = CalculateDrawingStringSize(this.mybuffer, len);
                 //when we update run width we should store
                 //cache of each char x-advance?
                 //or calculate it every time ? 
@@ -298,25 +299,34 @@ namespace LayoutFarm.Text
             }
         }
 
-
+        /// <summary>
+        /// find charactor from pixel offset (pixel offset starts at the begining of this run)
+        /// </summary>
+        /// <param name="pixelOffset"></param>
+        /// <returns></returns>
         public override EditableRunCharLocation GetCharacterFromPixelOffset(int pixelOffset)
         {
             if (pixelOffset < Width)
             {
-
                 int j = glyphPositions.Length;
                 int accWidth = 0;
                 for (int i = 0; i < j; i++)
                 {
+
                     int charW = glyphPositions[i];
                     if (accWidth + charW > pixelOffset)
                     {
+                        //stop at this
                         if (pixelOffset - accWidth > 3)
                         {
+                            //select this run
                             return new EditableRunCharLocation(accWidth + charW, i);
                         }
                         else
                         {
+                            //select prev run
+                            //if i=0=> this is first run
+                            //
                             return new EditableRunCharLocation(accWidth, i - 1);
                         }
                     }
@@ -324,23 +334,6 @@ namespace LayoutFarm.Text
                     {
                         accWidth += charW;
                     }
-                    //char c = myBuffer[i];
-                    //int charW = GetCharacterWidth(c);
-                    //if (accWidth + charW > pixelOffset)
-                    //{
-                    //    if (pixelOffset - accWidth > 3)
-                    //    {
-                    //        return new EditableRunCharLocation(accWidth + charW, i);
-                    //    }
-                    //    else
-                    //    {
-                    //        return new EditableRunCharLocation(accWidth, i - 1);
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    accWidth += charW;
-                    //}
                 }
                 return new EditableRunCharLocation(accWidth, j - 1);
             }

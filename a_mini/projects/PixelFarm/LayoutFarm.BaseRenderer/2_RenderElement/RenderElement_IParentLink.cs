@@ -10,6 +10,7 @@ namespace LayoutFarm
         internal LinkedListNode<RenderElement> internalLinkedNode;
         protected virtual bool _MayHasOverlapChild()
         {
+
             return true;
         }
 

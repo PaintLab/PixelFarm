@@ -11,13 +11,14 @@ namespace LayoutFarm.Text
     {
         object lineCollection;
         public event EventHandler Reflow;
-        TextEditRenderBox owner;
+        new TextEditRenderBox owner;
+
         public EditableTextFlowLayer(TextEditRenderBox owner)
             : base(owner)
         {
             this.owner = owner;
             //start with single line per layer
-            //and can change to multiline
+            //and can be changed to multiline
             lineCollection = new EditableTextLine(this);
         }
         public TextSpanStyle CurrentTextSpanStyle
