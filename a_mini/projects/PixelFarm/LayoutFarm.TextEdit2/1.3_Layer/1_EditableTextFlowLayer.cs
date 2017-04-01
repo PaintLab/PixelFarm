@@ -242,7 +242,7 @@ namespace LayoutFarm.Text
             LinkedListNode<EditableRun> c_node = line.First;
             //--------
             int curX = 0;
-            int curY = 0;
+
             int maxHeightInRow = 0;
             int maxWidth = 0;
             while (c_node != null)

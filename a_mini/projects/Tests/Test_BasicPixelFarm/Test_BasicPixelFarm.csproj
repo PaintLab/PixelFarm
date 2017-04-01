@@ -180,6 +180,14 @@
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+      <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
+      <Name>PixelFarm.MiniOpenTK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj">
+      <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
+      <Name>PixelFarm.OpenTKWinForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
       <Name>PixelFarm.Typography</Name>
@@ -191,6 +199,10 @@
     <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenFont</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\YourImplementation.PixelFarm\YourImplementation.PixelFarm.csproj">
+      <Project>{8963dd34-ce0a-42cd-b3b2-d73031b8f0a0}</Project>
+      <Name>YourImplementation.PixelFarm</Name>
     </ProjectReference>
     <ProjectReference Include="..\Test0_Dev\Test0_Dev.csproj">
       <Project>{3b23a8fc-89f0-415d-b5d3-2740bc86d09c}</Project>

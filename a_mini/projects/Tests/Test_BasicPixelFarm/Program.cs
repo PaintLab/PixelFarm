@@ -11,7 +11,7 @@ namespace TestGraphicPackage2
         static void Main()
         {
 
-
+            OpenTK.Toolkit.Init();
             //-------------------------------
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -20,9 +20,11 @@ namespace TestGraphicPackage2
             //set data dir before load
             LayoutFarm.TextBreak.CustomBreakerBuilder.DataDir = @"../../Deps_I18N/LayoutFarm.TextBreak/icu58/brkitr_src/dictionaries";
             LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
+            //RootDemoPath.Path = @"..\Data";
+            //you can use your font loader
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
+            PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
 
-
-            //LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyNativeTextBreaker();
 
             ////------------------------------- 
             formDemoList = new LayoutFarm.Dev.FormDemoList();
