@@ -12,7 +12,9 @@ namespace LayoutFarm.Text
         int[] glyphPositions = null;//TODO: review here-> change this to caret stop position
         public EditableTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
             : base(gfx)
-        {   //check line break? 
+        {
+            //we need font info (in style) for evaluating the size fo this span
+            //without font info we can't measure the size of this span
             this.spanStyle = style;
             this.mybuffer = copyBuffer;
             UpdateRunWidth();
@@ -24,6 +26,7 @@ namespace LayoutFarm.Text
             mybuffer = new char[] { c };
             if (c == '\n')
             {
+                //TODO: review line break span
                 this.IsLineBreak = true;
             }
             //check line break?

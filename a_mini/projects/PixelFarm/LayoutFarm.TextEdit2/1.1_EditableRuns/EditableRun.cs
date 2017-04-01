@@ -11,6 +11,7 @@ namespace LayoutFarm.Text
         EditableTextLine ownerTextLine;
         //TODO: review this again -> change to list,
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
+
         public EditableRun(RootGraphic gfx)
             : base(gfx, 10, 10)
         {

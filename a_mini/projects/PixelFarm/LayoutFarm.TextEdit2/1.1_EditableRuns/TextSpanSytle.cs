@@ -1,6 +1,5 @@
 ﻿//Apache2, 2014-2017, WinterDev
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
 namespace LayoutFarm.Text
 {
     public struct TextSpanStyle

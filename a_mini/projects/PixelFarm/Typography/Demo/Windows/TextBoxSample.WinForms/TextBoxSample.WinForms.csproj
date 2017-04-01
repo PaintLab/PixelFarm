@@ -74,6 +74,7 @@
     <Compile Include="SampleTextBox.Designer.cs">
       <DependentUpon>SampleTextBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="TextBoxController\MouseButtonsAndKeys.cs" />
     <Compile Include="TextBoxController\SampleTextBoxController.cs" />
     <Compile Include="TextBoxController\SampleTextBoxLineModel.cs" />
     <EmbeddedResource Include="Form2.resx">
