@@ -1,4 +1,4 @@
-﻿using Typography.Rendering;
+﻿//MIT, 2017, WinterDev
 namespace PixelFarm.Drawing.Fonts
 {
     public interface IFontLoader

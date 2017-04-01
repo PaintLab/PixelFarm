@@ -125,9 +125,11 @@ namespace TestGlfw
     {
 
         static Mini.GLDemoContext demoContext2 = null;
+        static PixelFarm.Drawing.Fonts.OpenFontStore s_fontstore;
+
         public GlfwGLES2()
         {
-
+            s_fontstore = new PixelFarm.Drawing.Fonts.OpenFontStore();
         }
         public override void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
@@ -148,7 +150,7 @@ namespace TestGlfw
 
                     var printer = new PixelFarm.DrawingGL.GLBmpGlyphTextPrinter(
                         painter,
-                        YourImplementation.BootStrapOpenGLES2.myFontLoader);
+                        s_fontstore);
                     painter.TextPrinter = printer;
                     //create text printer for opengl 
                     //----------------------
@@ -274,7 +276,7 @@ namespace TestGlfw
             FormRenderUpdateEventArgs formRenderUpdateEventArgs = new FormRenderUpdateEventArgs();
             formRenderUpdateEventArgs.form = form1;
 
-            GlfwGLES2 glfwApp = new GlfwGLES2(); 
+            GlfwGLES2 glfwApp = new GlfwGLES2();
 
             form1.SetDrawFrameDelegate(() =>
             {

@@ -14,7 +14,7 @@ namespace PixelFarm.Drawing
             out int charFitWidth);
         void CalculateGlyphAdvancePos(char[] str, int startAt,
             int len, RequestFont font, int[] glyphXAdvances);
-        void Dispose();
+         
     }
 
 }

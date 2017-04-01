@@ -55,10 +55,7 @@ namespace LayoutFarm.UI
                 return this._ifonts;
             }
         }
-        public void ChangeIFonts(IFonts ifonts)
-        {
-            this._ifonts = ifonts;
-        }
+       
         public override RootGraphic CreateNewOne(int w, int h)
         {
             return new MyRootGraphic(this.uiPlatform, this._ifonts, w, h);

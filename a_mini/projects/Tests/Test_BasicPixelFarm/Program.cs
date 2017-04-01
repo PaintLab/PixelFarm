@@ -17,7 +17,11 @@ namespace TestGraphicPackage2
             Application.SetCompatibleTextRenderingDefault(false);
             //temp
             //TODO: fix this , 
-            //LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
+            //set data dir before load
+            LayoutFarm.TextBreak.CustomBreakerBuilder.DataDir = @"../../Deps_I18N/LayoutFarm.TextBreak/icu58/brkitr_src/dictionaries";
+            LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
+
+
             //LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyNativeTextBreaker();
 
             ////------------------------------- 

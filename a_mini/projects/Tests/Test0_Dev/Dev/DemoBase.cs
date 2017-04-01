@@ -5,7 +5,6 @@ using PixelFarm.Drawing;
 namespace LayoutFarm
 {
 
-
     public abstract class DemoBase
     {
         public void StartDemo(SampleViewport viewport)
@@ -25,8 +24,8 @@ namespace LayoutFarm
             DemoBitmap bmp = new DemoBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
             return bmp;
         }
-  
-      
+
+
     }
     sealed class DemoBitmap : Image
     {

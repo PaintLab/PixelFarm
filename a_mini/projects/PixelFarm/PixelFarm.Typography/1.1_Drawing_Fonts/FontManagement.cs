@@ -64,6 +64,8 @@ namespace PixelFarm.Drawing.Fonts
         Italic = 1 << 3,
     }
 
+    public delegate void FirstInitFontCollection(InstalledFontCollection fontCollection);
+
     public delegate InstalledFont FontNotFoundHandler(InstalledFontCollection fontCollection, string fontName, string fontSubFam, InstalledFontStyle wellknownStyle);
     public delegate FontNameDuplicatedDecision FontNameDuplicatedHandler(InstalledFont existing, InstalledFont newAddedFont);
     public enum FontNameDuplicatedDecision
@@ -84,6 +86,10 @@ namespace PixelFarm.Drawing.Fonts
 
         FontNotFoundHandler _fontNotFoundHandler;
         Dictionary<InstalledFont, Typeface> _loadedTypefaces = new Dictionary<InstalledFont, Typeface>();
+        public TypefaceStore()
+        {
+
+        }
         /// <summary>
         /// font collection of the store
         /// </summary>
@@ -195,6 +201,23 @@ namespace PixelFarm.Drawing.Fonts
             _bold_italic = CreateNewFontGroup(InstalledFontStyle.Bold | InstalledFontStyle.Italic, "bold italic");
             //
         }
+
+
+        static InstalledFontCollection s_sharedFontCollection;
+        public static InstalledFontCollection GetSharedFontCollection(FirstInitFontCollection initdel)
+        {
+            if (s_sharedFontCollection == null)
+            {
+                //first time
+                s_sharedFontCollection = new InstalledFontCollection();
+                initdel(s_sharedFontCollection);
+            }
+            return s_sharedFontCollection;
+        }
+
+
+
+
         public InstalledFontStyle GetWellknownFontStyle(string subFamName)
         {
             switch (subFamName.ToUpper())
@@ -262,7 +285,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             //
             string fontNameUpper = newfont.FontName.ToUpper();
-             
+
             InstalledFont found;
             if (selectedFontGroup.TryGetValue(fontNameUpper, out found))
             {

@@ -107,13 +107,14 @@ namespace LayoutFarm.Text
             else
             {
                 //TODO: review here again
-                int len = mybuffer.Length;
-                size = CalculateDrawingStringSize(this.mybuffer, len);
 
+
+
+                int len = mybuffer.Length;
+                size = CalculateDrawingStringSize(this.mybuffer, len); 
                 //when we update run width we should store
                 //cache of each char x-advance?
-                //or calculate it every time ?
-
+                //or calculate it every time ? 
                 //TODO: review this,
                 //if we have enough length, -> we don't need to alloc every time. 
                 glyphPositions = new int[len];

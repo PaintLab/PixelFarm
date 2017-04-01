@@ -629,6 +629,13 @@ namespace LayoutFarm.Text
                     throw new NotSupportedException("index out of range");
                 }
 
+#if DEBUG
+                if (value > 10)
+                {
+
+                }
+#endif
+
                 if (value == -1)
                 {
                     charIndex = -1;

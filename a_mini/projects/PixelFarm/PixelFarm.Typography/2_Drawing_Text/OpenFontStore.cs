@@ -1,19 +1,20 @@
-﻿//MIT, 2014-2017, WinterDev   
-
-using PixelFarm.Drawing.Fonts;
-
-namespace PixelFarm.Drawing
+﻿//MIT, 2014-2017, WinterDev    
+namespace PixelFarm.Drawing.Fonts
 {
-    class WindowsFontLoader : IFontLoader
+    public class OpenFontStore : IFontLoader
     {
         FontNotFoundHandler fontNotFoundHandler;
-        InstalledFontCollection installFontCollection = new InstalledFontCollection();
+        InstalledFontCollection installFontCollection;
         FontNotFoundHandler _defaultFontNotFoundHandler;
-        public WindowsFontLoader()
+        public OpenFontStore()
         {
-            //iterate
-            installFontCollection.SetFontNameDuplicatedHandler((f0, f1) => FontNameDuplicatedDecision.Skip);
-            installFontCollection.LoadWindowsSystemFonts();
+            installFontCollection = InstalledFontCollection.GetSharedFontCollection(fontCollection =>
+            {
+                fontCollection.SetFontNameDuplicatedHandler((f0, f1) => FontNameDuplicatedDecision.Skip);
+                fontCollection.LoadWindowsSystemFonts();
+            });
+
+
             _defaultFontNotFoundHandler = (fontCollection, fontName, subfamName, style) =>
              {
                  //TODO: implement font not found mapping here

@@ -39,12 +39,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\pixelfarm\layoutfarm.platformbase\platformbootstrap\BootStrapOpenGLES2.cs">
-      <Link>Impl\DrawingGL\BootStrapOpenGLES2.cs</Link>
-    </Compile>
-    <Compile Include="..\..\pixelfarm\layoutfarm.platformbase\windows\WindowFontLoader.cs">
-      <Link>Impl\5_Shared\WindowFontLoader.cs</Link>
-    </Compile>
     <Compile Include="..\..\pixelfarm\yourimplementation.pixelfarm\ActiveFontAtlasService.cs">
       <Link>Impl\DrawingGL\ActiveFontAtlasService.cs</Link>
     </Compile>

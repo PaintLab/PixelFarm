@@ -46,7 +46,8 @@ namespace PixelFarm.DrawingGL
 
             //set default1
             _aggPainter.CurrentFont = canvasPainter.CurrentFont;
-            textPrinter = new VxsTextPrinter(_aggPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
+            var openFontStore = new PixelFarm.Drawing.Fonts.OpenFontStore();
+            textPrinter = new VxsTextPrinter(_aggPainter, openFontStore);
             _aggPainter.TextPrinter = textPrinter;
         }
         public Typography.Rendering.HintTechnique HintTechnique

@@ -58,17 +58,11 @@
     <Compile Include="..\LayoutFarm.PlatformBase\OpenGLCanvasViewport.cs">
       <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.PlatformBase\PlatformBootStrap\BootStrapOpenGLES2.cs">
-      <Link>0_Platform\BootStrapOpenGLES2.cs</Link>
-    </Compile>
     <Compile Include="..\LayoutFarm.PlatformBase\PlatformBootStrap\BootStrapSkia.cs">
       <Link>0_Platform\BootStrapSkia.cs</Link>
     </Compile>
     <Compile Include="..\LayoutFarm.PlatformBase\SkiaCanvasViewport.cs">
       <Link>4_Skia\SkiaCanvasViewport.cs</Link>
-    </Compile>
-    <Compile Include="..\LayoutFarm.PlatformBase\Windows\WindowFontLoader.cs">
-      <Link>5_Shared\WindowFontLoader.cs</Link>
     </Compile>
     <Compile Include="..\Win32Utils\MyWin32.cs">
       <Link>Win32Utils\MyWin32.cs</Link>

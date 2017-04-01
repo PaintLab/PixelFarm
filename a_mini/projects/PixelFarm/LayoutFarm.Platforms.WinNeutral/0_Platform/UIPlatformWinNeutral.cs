@@ -4,21 +4,24 @@ namespace LayoutFarm.UI
 {
     public class UIPlatformWinNeutral : UIPlatform
     {
+        PixelFarm.Drawing.Fonts.OpenFontStore s_fontStore;
         private UIPlatformWinNeutral()
         {
             LayoutFarm.UI.Clipboard.SetUIPlatform(this);
 
+            s_fontStore = new PixelFarm.Drawing.Fonts.OpenFontStore();
+
             //no gdi+
-            PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
+            PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(s_fontStore);
             //gles2 
             //
-            PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
+            PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(s_fontStore);
             //skia
 
             if (!YourImplementation.BootStrapSkia.IsNativeLibAvailable())
             {
                 //set font not found handler
-                PixelFarm.Drawing.Skia.SkiaGraphicsPlatform.SetFontLoader(YourImplementation.BootStrapSkia.myFontLoader);
+                PixelFarm.Drawing.Skia.SkiaGraphicsPlatform.SetFontLoader(s_fontStore);
 
             }
         }
