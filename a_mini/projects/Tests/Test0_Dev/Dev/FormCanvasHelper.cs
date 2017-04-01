@@ -1,34 +1,41 @@
 ﻿//Apache2, 2014-2017, WinterDev
+using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
 
 namespace LayoutFarm.UI
 {
-    public static class FormCanvasHelper
+    public static partial class FormCanvasHelper
     {
         static LayoutFarm.UI.UIPlatformWinForm s_platform;
-
+        static PixelFarm.Drawing.Fonts.IFontLoader s_fontstore;
         static void InitWinform()
         {
-            if (s_platform == null)
-            {
-                s_platform = new LayoutFarm.UI.UIPlatformWinForm();
-            }
-
+            if (s_platform != null) return;
+            //----------------------------------------------------
+            s_platform = new LayoutFarm.UI.UIPlatformWinForm();
+            s_fontstore = new PixelFarm.Drawing.Fonts.OpenFontStore();
         }
         public static Form CreateNewFormCanvas(
             int w, int h,
             InnerViewportKind internalViewportKind,
             out LayoutFarm.UI.UISurfaceViewportControl canvasViewport)
         {
+            //1. init
             InitWinform();
+            PixelFarm.Drawing.Fonts.IFontLoader fontLoader = s_fontstore;
+            //2. 
+            //OpenFontIFonts ifonts = new OpenFontIFonts(fontLoader);
+            PixelFarm.Drawing.WinGdi.Gdi32IFonts ifonts2 = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
+            PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(fontLoader);
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontLoader);
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontEncoding(System.Text.Encoding.ASCII);
+            //
 
-
-            LayoutFarm.UI.UIPlatformWinForm platform = s_platform;
             MyRootGraphic myRootGfx = new MyRootGraphic(
-                platform,
-               platform.GetIFonts(),
-                w, h);
+               s_platform,
+               ifonts2,
+               w, h);
 
             Form form1 = new Form();
             var innerViewport = canvasViewport = new LayoutFarm.UI.UISurfaceViewportControl();
@@ -84,5 +91,7 @@ namespace LayoutFarm.UI
             }
             return Screen.PrimaryScreen;
         }
+
+
     }
 }
