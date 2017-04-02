@@ -98,6 +98,7 @@
     <Compile Include="..\Typography.MsdfGen\SignedDistance.cs">
       <Link>5_Msdf\SignedDistance.cs</Link>
     </Compile>
+    <Compile Include="1.1_Drawing_Fonts\xVxsTextPrinter.cs" />
     <Compile Include="1.1_Drawing_Fonts\GlyphPathBuilder.cs" />
     <Compile Include="1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs" />
     <Compile Include="1.1_Drawing_Fonts\GlyphMeshCollection.cs" />

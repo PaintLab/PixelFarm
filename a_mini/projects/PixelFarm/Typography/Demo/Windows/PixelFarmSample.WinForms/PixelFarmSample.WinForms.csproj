@@ -60,11 +60,9 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="PixelFarm\BitmapHelper.cs" />
-    <Compile Include="PixelFarm\DevVxsTextPrinter.cs" />
-    <Compile Include="PixelFarm\GlyphTranslatorToVxs.cs" />
-    <Compile Include="PixelFarm\HintedVxsGlyphCollection.cs" />
     <Compile Include="PixelFarm\MouseButtonsAndKeys.cs" />
     <Compile Include="PixelFarm\SampleTextBoxControllerForPixelFarm.cs" />
+    <Compile Include="PixelFarm\VisualLine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleTextBox.cs">

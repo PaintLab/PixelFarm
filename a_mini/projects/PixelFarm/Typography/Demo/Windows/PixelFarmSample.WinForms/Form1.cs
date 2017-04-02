@@ -23,14 +23,15 @@ namespace SampleWinForms
         ActualImage destImg;
         Bitmap winBmp;
 
+        OpenFontStore _openFontStore;
 
         DevTextPrinterBase selectedTextPrinter = null;
-        DevVxsTextPrinter _devVxsTextPrinter = null;
+        VxsTextPrinter _devVxsTextPrinter = null;
         DevGdiTextPrinter _devGdiTextPrinter = null;
 
-        SampleWinForms.UI.SampleTextBoxControllerForGdi _controllerForGdi = new UI.SampleTextBoxControllerForGdi();
+        UI.SampleTextBoxControllerForGdi _controllerForGdi = new UI.SampleTextBoxControllerForGdi();
         //
-        SampleWinForms.UI.SampleTextBoxControllerForPixelFarm _controllerForPixelFarm = new UI.SampleTextBoxControllerForPixelFarm();
+        UI.SampleTextBoxControllerForPixelFarm _controllerForPixelFarm = new UI.SampleTextBoxControllerForPixelFarm();
 
         InstalledFontCollection installedFontCollection;
         TypefaceStore _typefaceStore;
@@ -42,16 +43,17 @@ namespace SampleWinForms
             InitializeComponent();
 
 
-            _devVxsTextPrinter = new DevVxsTextPrinter();
+
             _devGdiTextPrinter = new DevGdiTextPrinter();
             this.sampleTextBox1.Visible = false;
+            _openFontStore = new OpenFontStore();
 
-            selectedTextPrinter = _devVxsTextPrinter;
             //default
             //set script lang,
             //test with Thai for 'complex script' 
-            _devGdiTextPrinter.ScriptLang = _devVxsTextPrinter.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;
-            _devGdiTextPrinter.PositionTechnique = _devVxsTextPrinter.PositionTechnique = PositionTechnique.OpenFont;
+
+            _devGdiTextPrinter.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;
+            _devGdiTextPrinter.PositionTechnique = PositionTechnique.OpenFont;
 
 
             this.Load += new EventHandler(Form1_Load);
@@ -238,8 +240,13 @@ namespace SampleWinForms
                 winBmp = new Bitmap(400, 300, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 g = this.CreateGraphics();
 
-                _devVxsTextPrinter.TargetCanvasPainter = p;
+                _devVxsTextPrinter = new VxsTextPrinter(p, _openFontStore);
+                _devVxsTextPrinter.ScriptLang = _devGdiTextPrinter.ScriptLang;
+                _devVxsTextPrinter.PositionTechnique = _devGdiTextPrinter.PositionTechnique;
+
+
                 _devGdiTextPrinter.TargetGraphics = g;
+
             }
 
             if (string.IsNullOrEmpty(this.txtInputChar.Text))
@@ -261,7 +268,7 @@ namespace SampleWinForms
                         selectedTextPrinter.FontSizeInPoints = _fontSizeInPts;
                         selectedTextPrinter.HintTechnique = hintTech;
                         selectedTextPrinter.PositionTechnique = (PositionTechnique)cmbPositionTech.SelectedItem;
-                        
+
                         selectedTextPrinter.GlyphPosPixelSnapX = (GlyphPosPixelSnapKind)this.lstGlyphSnapX.SelectedItem;
                         selectedTextPrinter.GlyphPosPixelSnapY = (GlyphPosPixelSnapKind)this.lstGlyphSnapY.SelectedItem;
                         //
@@ -276,7 +283,7 @@ namespace SampleWinForms
                         p.UseSubPixelRendering = chkLcdTechnique.Checked;
                         p.FillColor = PixelFarm.Drawing.Color.Black;
 
-                        selectedTextPrinter = _devVxsTextPrinter;
+
                         selectedTextPrinter.Typeface = _typefaceStore.GetTypeface(_selectedInstallFont);
                         selectedTextPrinter.FontSizeInPoints = _fontSizeInPts;
                         selectedTextPrinter.HintTechnique = hintTech;
