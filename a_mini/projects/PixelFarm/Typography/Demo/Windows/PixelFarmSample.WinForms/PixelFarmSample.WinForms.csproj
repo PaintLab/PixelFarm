@@ -41,15 +41,6 @@
     <Compile Include="..\..\Shared\DevTextPrinter\DevTextPrinterBase.cs">
       <Link>DevTextPrinter\DevTextPrinterBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\DevTextPrinter\FontManagement.cs">
-      <Link>DevTextPrinter\FontManagement.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DevTextPrinter\GlyphMeshCollection.cs">
-      <Link>DevTextPrinter\GlyphMeshCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilderBase.cs">
-      <Link>GlyphPathBuilder\GlyphPathBuilderBase.cs</Link>
-    </Compile>
     <Compile Include="..\GdiPlusSample.WinForms\GdiPlus\DevGdiTextPrinter.cs">
       <Link>GdiPlus\DevGdiTextPrinter.cs</Link>
     </Compile>
@@ -62,16 +53,12 @@
     <Compile Include="..\TextBoxSample.WinForms\TextBoxController\SampleTextBoxLineModel.cs">
       <Link>GdiPlus\SampleTextBoxLineModel.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\HintTechnique.cs">
-      <Link>GlyphPathBuilder\HintTechnique.cs</Link>
-    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="GlyphPathBuilder\GlyphPathBuilder2.cs" />
     <Compile Include="PixelFarm\BitmapHelper.cs" />
     <Compile Include="PixelFarm\DevVxsTextPrinter.cs" />
     <Compile Include="PixelFarm\GlyphTranslatorToVxs.cs" />
@@ -129,10 +116,6 @@
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\FontAtlas\FontAtlas.csproj">
-      <Project>{64c28aab-e2ef-45c1-a674-5660d462882f}</Project>
-      <Name>FontAtlas</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenFont</Name>
@@ -140,6 +123,10 @@
     <ProjectReference Include="..\..\..\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
       <Name>Typography.GlyphLayout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Typography.MsdfGen\Typography.MsdfGen.csproj">
       <Project>{8f69ab8d-174a-4912-9328-cae8eda5564b}</Project>
