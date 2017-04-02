@@ -16,6 +16,10 @@ namespace Typography.Rendering
             : base(typeface)
         {
         }
+#if DEBUG
+        public bool dbugAlwaysDoCurveAnalysis;
+
+#endif 
         protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph)
         {
             //not use interperter so we need to scale it with our machnism
@@ -32,6 +36,7 @@ namespace Typography.Rendering
                 {
                     if (!_fitoutlineCollection.TryGetValue(glyphIndex, out _fitOutline))
                     {
+
                         _fitOutline = _fitShapeAnalyzer.Analyze(
                             this._outputGlyphPoints,
                             this._outputContours);
@@ -39,6 +44,16 @@ namespace Typography.Rendering
                     }
                 }
             }
+
+#if DEBUG
+            if (dbugAlwaysDoCurveAnalysis && _fitOutline == null)
+            {
+                _fitOutline = _fitShapeAnalyzer.Analyze(
+                         this._outputGlyphPoints,
+                         this._outputContours);
+            }
+#endif
+
         }
         public override void ReadShapes(IGlyphTranslator tx)
         {

@@ -348,6 +348,9 @@ namespace SampleWinForms
             //----------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
             builder.SetHintTechnique((HintTechnique)lstHintList.SelectedItem);
+#if DEBUG
+            builder.dbugAlwaysDoCurveAnalysis = true;
+#endif
             //----------------------------------------------------
             builder.Build(testChar, sizeInPoint);
 
@@ -399,7 +402,9 @@ namespace SampleWinForms
 
             }
             //--------------------------
-
+#if DEBUG
+            builder.dbugAlwaysDoCurveAnalysis = false;
+#endif
             if (chkShowGrid.Checked)
             {
                 //render grid
