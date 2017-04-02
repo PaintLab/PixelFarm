@@ -49,7 +49,7 @@
             this.chkGsubEnableLigature = new System.Windows.Forms.CheckBox();
             this.lstHintList = new System.Windows.Forms.ListBox();
             this.chkShowSampleTextBox = new System.Windows.Forms.CheckBox();
-            this.sampleTextBox1 = new SampleWinForms.SampleTextBox();
+            //this.sampleTextBox1 = new SampleWinForms.SampleTextBox();
             this.SuspendLayout();
             // 
             // button1
@@ -259,18 +259,14 @@
             // 
             // sampleTextBox1
             // 
-            this.sampleTextBox1.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.sampleTextBox1.Location = new System.Drawing.Point(12, 122);
-            this.sampleTextBox1.Name = "sampleTextBox1";
-            this.sampleTextBox1.Size = new System.Drawing.Size(492, 296);
-            this.sampleTextBox1.TabIndex = 40;
+          
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1086, 526);
-            this.Controls.Add(this.sampleTextBox1);
+             
             this.Controls.Add(this.chkShowSampleTextBox);
             this.Controls.Add(this.lstHintList);
             this.Controls.Add(this.chkGsubEnableLigature);
