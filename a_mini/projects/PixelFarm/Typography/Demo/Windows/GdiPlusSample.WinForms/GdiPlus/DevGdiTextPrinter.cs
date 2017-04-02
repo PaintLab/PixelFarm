@@ -97,13 +97,13 @@ namespace SampleWinForms
         }
 
         List<GlyphPlan> _outputGlyphPlans = new List<GlyphPlan>();//for internal use
-        public override void DrawString(char[] textBuffer, int startAt, int len, float xpos, float ypos)
+        public override void DrawString(char[] textBuffer, int startAt, int len, float x, float y)
         {
             UpdateGlyphLayoutSettings();
             _outputGlyphPlans.Clear();
             this._glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _outputGlyphPlans, null);
 
-            DrawFromGlyphPlans(_outputGlyphPlans, xpos, ypos);
+            DrawFromGlyphPlans(_outputGlyphPlans, x, y);
         }
         void UpdateGlyphLayoutSettings()
         {
@@ -124,7 +124,7 @@ namespace SampleWinForms
 
             //draw data in glyph plan 
             //3. render each glyph 
-            System.Drawing.Drawing2D.Matrix scaleMat = null;
+            
             float sizeInPoints = this.FontSizeInPoints;
             float scale = _currentTypeface.CalculateToPixelScaleFromPointSize(sizeInPoints);
             //

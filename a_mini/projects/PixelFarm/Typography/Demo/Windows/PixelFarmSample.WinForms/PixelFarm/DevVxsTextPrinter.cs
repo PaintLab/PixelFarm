@@ -96,20 +96,16 @@ namespace PixelFarm.Drawing.Fonts
             p.Line(xpos, ypos, xpos, ypos + this.FontAscendingPx);
             p.StrokeColor = prevColor;
         }
-        public override void DrawString(char[] textBuffer, int startAt, int len, float xpos, float ypos)
+        public override void DrawString(char[] textBuffer, int startAt, int len, float x, float y)
         {
             UpdateGlyphLayoutSettings();
             _outputGlyphPlans.Clear();
             _glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _outputGlyphPlans, null);
-            DrawFromGlyphPlans(_outputGlyphPlans, xpos, ypos);
+            DrawFromGlyphPlans(_outputGlyphPlans, x, y);
 
         }
-        //
-        public GlyphPosPixelSnapKind GlyphPosPixelSnapX { get; set; }
-        public GlyphPosPixelSnapKind GlyphPosPixelSnapY { get; set; }
-        //
-
-        public override void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, int startAt, int len, float xpos, float ypos)
+     
+        public override void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, int startAt, int len, float x, float y)
         {
             CanvasPainter canvasPainter = this.TargetCanvasPainter;
             Typeface typeface = _glyphPathBuilder.Typeface;
@@ -129,6 +125,13 @@ namespace PixelFarm.Drawing.Fonts
             //consider use cached glyph, to increase performance 
             hintGlyphCollection.SetCacheInfo(typeface, fontSizePoint, this.HintTechnique);
             //---------------------------------------------------
+            GlyphPosPixelSnapKind x_snap = this.GlyphPosPixelSnapX;
+            GlyphPosPixelSnapKind y_snap = this.GlyphPosPixelSnapY;
+
+
+            float g_x = 0;
+            float g_y = 0;
+            float baseY = (int)y;
             for (int i = startAt; i < endBefore; ++i)
             {
                 GlyphPlan glyphPlan = glyphPlanList[i];
@@ -153,7 +156,39 @@ namespace PixelFarm.Drawing.Fonts
                     //
                     hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphVxs);
                 }
-                canvasPainter.SetOrigin((float)(glyphPlan.x * scale + xpos), (float)(glyphPlan.y * scale + ypos));
+
+                g_x = (glyphPlan.x * scale + x);
+                g_y = glyphPlan.y * scale;
+
+                switch (x_snap)
+                {
+                    default: throw new NotSupportedException();
+                    case GlyphPosPixelSnapKind.Integer:
+                        g_x = GlyphLayoutExtensions.SnapInteger(g_x);
+                        break;
+                    case GlyphPosPixelSnapKind.Half:
+                        g_x = GlyphLayoutExtensions.SnapHalf(g_x);
+                        break;
+                    case GlyphPosPixelSnapKind.None:
+                        break;
+                }
+                switch (y_snap)
+                {
+                    default: throw new NotSupportedException();
+                    case GlyphPosPixelSnapKind.Integer:
+                        g_y = baseY + GlyphLayoutExtensions.SnapInteger(g_y);   //use baseY not y
+                        break;
+                    case GlyphPosPixelSnapKind.Half:
+                        g_y = baseY + GlyphLayoutExtensions.SnapHalf(g_y);
+                        break;
+                    case GlyphPosPixelSnapKind.None:
+                        //use Y not baseY
+                        g_y = (float)y + g_y;
+                        break;
+                }
+
+
+                canvasPainter.SetOrigin(g_x, g_y);
                 canvasPainter.Fill(glyphVxs);
             }
             //restore prev origin

@@ -80,7 +80,20 @@ namespace SampleWinForms
             lstHintList.SelectedIndex = 0;
             lstHintList.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
             //---------- 
+            //snapX
 
+            lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.None);
+            lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Half);
+            lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Integer);
+            lstGlyphSnapX.SelectedIndex = 2;//integer             
+            lstGlyphSnapX.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
+            //---------- 
+            //snapY  
+            lstGlyphSnapY.Items.Add(GlyphPosPixelSnapKind.None);
+            lstGlyphSnapY.Items.Add(GlyphPosPixelSnapKind.Half);
+            lstGlyphSnapY.Items.Add(GlyphPosPixelSnapKind.Integer);
+            lstGlyphSnapY.SelectedIndex = 2;//integer
+            lstGlyphSnapY.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
             //---------- 
             //share text printer to our sample textbox
             //but you can create another text printer that specific to text textbox control
@@ -248,6 +261,9 @@ namespace SampleWinForms
                         selectedTextPrinter.FontSizeInPoints = _fontSizeInPts;
                         selectedTextPrinter.HintTechnique = hintTech;
                         selectedTextPrinter.PositionTechnique = (PositionTechnique)cmbPositionTech.SelectedItem;
+                        
+                        selectedTextPrinter.GlyphPosPixelSnapX = (GlyphPosPixelSnapKind)this.lstGlyphSnapX.SelectedItem;
+                        selectedTextPrinter.GlyphPosPixelSnapY = (GlyphPosPixelSnapKind)this.lstGlyphSnapY.SelectedItem;
                         //
                         selectedTextPrinter.DrawString(this.txtInputChar.Text.ToCharArray(), 0, 0);
 
@@ -265,7 +281,8 @@ namespace SampleWinForms
                         selectedTextPrinter.FontSizeInPoints = _fontSizeInPts;
                         selectedTextPrinter.HintTechnique = hintTech;
                         selectedTextPrinter.PositionTechnique = (PositionTechnique)cmbPositionTech.SelectedItem;
-
+                        selectedTextPrinter.GlyphPosPixelSnapX = (GlyphPosPixelSnapKind)this.lstGlyphSnapX.SelectedItem;
+                        selectedTextPrinter.GlyphPosPixelSnapY = (GlyphPosPixelSnapKind)this.lstGlyphSnapY.SelectedItem;
                         //test print 3 lines
 
                         char[] printTextBuffer = this.txtInputChar.Text.ToCharArray();
@@ -285,7 +302,6 @@ namespace SampleWinForms
 
                     }
                     break;
-
 
                 //==============================================
                 //render 1 glyph for debug and test

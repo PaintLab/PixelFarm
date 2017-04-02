@@ -50,6 +50,8 @@
             this.lstHintList = new System.Windows.Forms.ListBox();
             this.chkShowSampleTextBox = new System.Windows.Forms.CheckBox();
             this.sampleTextBox1 = new SampleWinForms.SampleTextBox();
+            this.lstGlyphSnapX = new System.Windows.Forms.ListBox();
+            this.lstGlyphSnapY = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // button1
@@ -266,11 +268,29 @@
             this.sampleTextBox1.TabIndex = 40;
             this.sampleTextBox1.Visible = false;
             // 
+            // lstGlyphSnapX
+            // 
+            this.lstGlyphSnapX.FormattingEnabled = true;
+            this.lstGlyphSnapX.Location = new System.Drawing.Point(938, 289);
+            this.lstGlyphSnapX.Name = "lstGlyphSnapX";
+            this.lstGlyphSnapX.Size = new System.Drawing.Size(120, 95);
+            this.lstGlyphSnapX.TabIndex = 43;
+            // 
+            // lstGlyphSnapY
+            // 
+            this.lstGlyphSnapY.FormattingEnabled = true;
+            this.lstGlyphSnapY.Location = new System.Drawing.Point(938, 390);
+            this.lstGlyphSnapY.Name = "lstGlyphSnapY";
+            this.lstGlyphSnapY.Size = new System.Drawing.Size(120, 95);
+            this.lstGlyphSnapY.TabIndex = 44;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1086, 526);
+            this.ClientSize = new System.Drawing.Size(1117, 526);
+            this.Controls.Add(this.lstGlyphSnapY);
+            this.Controls.Add(this.lstGlyphSnapX);
             this.Controls.Add(this.sampleTextBox1);
             this.Controls.Add(this.chkShowSampleTextBox);
             this.Controls.Add(this.lstHintList);
@@ -325,6 +345,8 @@
         private System.Windows.Forms.ListBox lstHintList;
         private System.Windows.Forms.CheckBox chkShowSampleTextBox;
         private SampleTextBox sampleTextBox1;
+        private System.Windows.Forms.ListBox lstGlyphSnapX;
+        private System.Windows.Forms.ListBox lstGlyphSnapY;
     }
 }
 

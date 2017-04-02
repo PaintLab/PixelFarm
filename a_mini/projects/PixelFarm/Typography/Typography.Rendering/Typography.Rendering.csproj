@@ -37,7 +37,6 @@
   <ItemGroup>
     <Compile Include="CurveGen.cs" />
     <Compile Include="GlyphFitOutlineAnalyzer.cs" />
-    <Compile Include="GlyphPosPixelSnapKind.cs" />
     <Compile Include="GlyphTranslatorToContour.cs" />
     <Compile Include="GlyphFitOutline.cs" />
     <Compile Include="GlyphImages.cs" />

@@ -262,11 +262,7 @@ namespace PixelFarm.DrawingGL
             return PixelFarm.Drawing.Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);
         }
 
-        /// <summary>
-        /// describe how to adjust pixel snaping
-        /// </summary>
-        public GlyphPosPixelSnapKind GlyphPosPixelSnapX { get; set; }
-        public GlyphPosPixelSnapKind GlyphPosPixelSnapY { get; set; }
+
         //-----------
         List<GlyphPlan> glyphPlans = new List<GlyphPlan>();
         Typography.OpenFont.Typeface _typeface;
@@ -280,19 +276,25 @@ namespace PixelFarm.DrawingGL
                 _glBmp = _loadedGlyphs.GetOrCreateNewOne(simpleFontAtlas);
             }
         }
-        static float SnapInteger(float value)
-        {
-            int floor_value = (int)value;
-            return (value - floor_value >= (1f / 2f)) ? floor_value + 1 : floor_value;
-        }
-        static float SnapHalf(float value)
-        {
-            int floor_value = (int)value;
-            //round to int 0, 0.5,1.0
-            return (value - floor_value >= (2f / 3f)) ? floor_value + 1 : //else->
-                   (value - floor_value >= (1f / 3f)) ? floor_value + 0.5f : floor_value;
+        /// <summary>
+        /// describe how to adjust pixel snaping
+        /// </summary>
+        public GlyphPosPixelSnapKind GlyphPosPixelSnapX { get; set; }
+        public GlyphPosPixelSnapKind GlyphPosPixelSnapY { get; set; }
 
-        }
+        //static float SnapInteger(float value)
+        //{
+        //    int floor_value = (int)value;
+        //    return (value - floor_value >= (1f / 2f)) ? floor_value + 1 : floor_value;
+        //}
+        //static float SnapHalf(float value)
+        //{
+        //    int floor_value = (int)value;
+        //    //round to int 0, 0.5,1.0
+        //    return (value - floor_value >= (2f / 3f)) ? floor_value + 1 : //else->
+        //           (value - floor_value >= (1f / 3f)) ? floor_value + 0.5f : floor_value;
+
+        //}
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
 
@@ -347,10 +349,10 @@ namespace PixelFarm.DrawingGL
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_x = SnapInteger(g_x);
+                        g_x = GlyphLayoutExtensions.SnapInteger(g_x);
                         break;
                     case GlyphPosPixelSnapKind.Half:
-                        g_x = SnapHalf(g_x);
+                        g_x = GlyphLayoutExtensions.SnapHalf(g_x);
                         break;
                     case GlyphPosPixelSnapKind.None:
                         break;
@@ -359,10 +361,10 @@ namespace PixelFarm.DrawingGL
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_y = baseY + SnapInteger(g_y);   //use baseY not y
+                        g_y = baseY + GlyphLayoutExtensions.SnapInteger(g_y);   //use baseY not y
                         break;
                     case GlyphPosPixelSnapKind.Half:
-                        g_y = baseY + SnapHalf(g_y);
+                        g_y = baseY + GlyphLayoutExtensions.SnapHalf(g_y);
                         break;
                     case GlyphPosPixelSnapKind.None:
                         //use Y not baseY
@@ -446,10 +448,10 @@ namespace PixelFarm.DrawingGL
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_x = SnapInteger(g_x);
+                        g_x = GlyphLayoutExtensions.SnapInteger(g_x);
                         break;
                     case GlyphPosPixelSnapKind.Half:
-                        g_x = SnapHalf(g_x);
+                        g_x = GlyphLayoutExtensions.SnapHalf(g_x);
                         break;
                     case GlyphPosPixelSnapKind.None:
                         break;
@@ -458,10 +460,10 @@ namespace PixelFarm.DrawingGL
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_y = baseY + SnapInteger(g_y);   //use baseY not y
+                        g_y = baseY + GlyphLayoutExtensions.SnapInteger(g_y);   //use baseY not y
                         break;
                     case GlyphPosPixelSnapKind.Half:
-                        g_y = baseY + SnapHalf(g_y);
+                        g_y = baseY + GlyphLayoutExtensions.SnapHalf(g_y);
                         break;
                     case GlyphPosPixelSnapKind.None:
                         //use Y not baseY

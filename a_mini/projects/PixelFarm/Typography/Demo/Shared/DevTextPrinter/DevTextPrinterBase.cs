@@ -24,6 +24,10 @@ namespace Typography.Rendering
         public float FontDescedingPx { get; set; }
         public float FontLineGapPx { get; set; }
         public float FontLineSpacingPx { get; set; }
+        //
+        public GlyphPosPixelSnapKind GlyphPosPixelSnapX { get; set; }
+        public GlyphPosPixelSnapKind GlyphPosPixelSnapY { get; set; }
+        //
 
         public HintTechnique HintTechnique
         {
@@ -58,16 +62,16 @@ namespace Typography.Rendering
         /// <param name="textBuffer"></param>
         /// <param name="startAt"></param>
         /// <param name="len"></param>
-        /// <param name="xpos"></param>
-        /// <param name="ypos"></param>
-        public abstract void DrawString(char[] textBuffer, int startAt, int len, float xpos, float ypos);
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public abstract void DrawString(char[] textBuffer, int startAt, int len, float x, float y);
         /// <summary>
         /// draw glyph plan list at (xpos,ypos) of baseline
         /// </summary>
         /// <param name="glyphPlanList"></param>
-        /// <param name="xpos"></param>
-        /// <param name="ypos"></param>
-        public abstract void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, int startAt, int len, float xpos, float ypos);
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public abstract void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, int startAt, int len, float x, float y);
 
         /// <summary>
         /// draw caret at xpos,ypos (sample only)
