@@ -83,9 +83,9 @@
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
       <Name>PixelFarm.Typography</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Typography\Typography.Rendering\Typography.Rendering.csproj">
+    <ProjectReference Include="..\Typography\Typography.AutoFit\Typography.AutoFit.csproj">
       <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
-      <Name>Typography.Rendering</Name>
+      <Name>Typography.AutoFit</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

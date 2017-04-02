@@ -67,7 +67,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.MiniAgg",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Triangulation", "PixelFarm\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj", "{C5E5802D-6A45-4FE9-BAE7-5F0AE91D72C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.Rendering", "PixelFarm\Typography\Typography.Rendering\Typography.Rendering.csproj", "{E4A1C3C3-1C1C-4E11-A2E6-A1FAFD6652C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.AutoFit", "PixelFarm\Typography\Typography.AutoFit\Typography.AutoFit.csproj", "{E4A1C3C3-1C1C-4E11-A2E6-A1FAFD6652C7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5_Typography", "5_Typography", "{C1FD503F-59E2-4016-8AEA-831AC3231430}"
 EndProject
