@@ -8,17 +8,21 @@ namespace Typography.Rendering
     //NOT FREE TYPE AUTO FIT***
     public class GlyphFitOutlineAnalyzer
     {
+        GlyphPartAnalyzer analyzer = new GlyphPartAnalyzer();
+        GlyphTranslatorToContour glyphToCountor = new GlyphTranslatorToContour();
+        public GlyphFitOutlineAnalyzer()
+        {
 
+        }
         public GlyphFitOutline Analyze(GlyphPointF[] glyphPoints, ushort[] glyphContours)
         {
-            var glyphToCountor = new GlyphTranslatorToContour();
+
             glyphToCountor.Read(glyphPoints, glyphContours);
             //master outline analysis 
             List<GlyphContour> contours = glyphToCountor.GetContours(); //analyzed contour             
             int j = contours.Count;
-            var analyzer = new GlyphPartAnalyzer();
-            analyzer.NSteps = 4;
 
+            analyzer.NSteps = 4;
             for (int i = 0; i < j; ++i)
             {
                 contours[i].Analyze(analyzer);
@@ -32,11 +36,7 @@ namespace Typography.Rendering
             {
                 return null;
             }
-
         }
-
-
-
         static GlyphFitOutline TessWithPolyTri(List<GlyphContour> contours)
         {
             List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();

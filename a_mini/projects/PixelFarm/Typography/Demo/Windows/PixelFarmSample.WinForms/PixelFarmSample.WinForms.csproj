@@ -62,9 +62,6 @@
     <Compile Include="..\TextBoxSample.WinForms\TextBoxController\SampleTextBoxLineModel.cs">
       <Link>GdiPlus\SampleTextBoxLineModel.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
-      <Link>GlyphPathBuilder\GlyphPathBuilder.cs</Link>
-    </Compile>
     <Compile Include="..\..\Shared\GlyphPathBuilder\HintTechnique.cs">
       <Link>GlyphPathBuilder\HintTechnique.cs</Link>
     </Compile>
@@ -74,6 +71,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GlyphPathBuilder\GlyphPathBuilder2.cs" />
     <Compile Include="PixelFarm\BitmapHelper.cs" />
     <Compile Include="PixelFarm\DevVxsTextPrinter.cs" />
     <Compile Include="PixelFarm\GlyphTranslatorToVxs.cs" />

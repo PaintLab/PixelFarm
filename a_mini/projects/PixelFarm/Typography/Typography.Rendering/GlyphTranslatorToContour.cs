@@ -12,17 +12,18 @@ namespace Typography.Rendering
     public class GlyphTranslatorToContour : OpenFont.IGlyphTranslator
     {
         List<GlyphContour> contours;
-        GlyphContourBuilder cntBuilder;
+        GlyphContourBuilder cntBuilder = new GlyphContourBuilder();
         public GlyphTranslatorToContour()
         {
 
         }
         public void BeginRead(int countourCount)
         {
+            cntBuilder.Reset();
             //-----------------------------------
             contours = new List<GlyphContour>();
             //start with blank contour
-            cntBuilder = new GlyphContourBuilder();
+            
         }
         public void CloseContour()
         {
@@ -256,7 +257,7 @@ namespace Typography.Rendering
             this.NSteps = 20;
         }
         public int NSteps { get; set; }
-        
+
 
         public void CreateBezierVxs4(
             int nsteps,
