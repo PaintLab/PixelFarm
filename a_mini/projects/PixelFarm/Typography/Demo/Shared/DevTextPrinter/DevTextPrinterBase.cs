@@ -76,20 +76,20 @@ namespace Typography.Rendering
         /// <summary>
         /// draw caret at xpos,ypos (sample only)
         /// </summary>
-        /// <param name="xpos"></param>
-        /// <param name="ypos"></param>
-        public abstract void DrawCaret(float xpos, float ypos);
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public abstract void DrawCaret(float x, float y);
 
 
         //----------------------------------------------------
         //helper methods
-        public void DrawString(char[] textBuffer, float xpos, float ypos)
+        public void DrawString(char[] textBuffer, float x, float y)
         {
-            DrawString(textBuffer, 0, textBuffer.Length, xpos, ypos);
+            DrawString(textBuffer, 0, textBuffer.Length, x, y);
         }
-        public void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, float xpos, float ypos)
+        public void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, float x, float y)
         {
-            DrawFromGlyphPlans(glyphPlanList, 0, glyphPlanList.Count, xpos, ypos);
+            DrawFromGlyphPlans(glyphPlanList, 0, glyphPlanList.Count, x, y);
         }
 
     }

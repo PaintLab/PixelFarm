@@ -91,9 +91,9 @@ namespace SampleWinForms
         public Color OutlineColor { get; set; }
         public Graphics TargetGraphics { get; set; }
 
-        public override void DrawCaret(float xpos, float ypos)
+        public override void DrawCaret(float x, float y)
         {
-            this.TargetGraphics.DrawLine(Pens.Red, xpos, ypos, xpos, ypos + this.FontAscendingPx);
+            this.TargetGraphics.DrawLine(Pens.Red, x, y, x, y + this.FontAscendingPx);
         }
 
         List<GlyphPlan> _outputGlyphPlans = new List<GlyphPlan>();//for internal use
