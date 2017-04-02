@@ -18,7 +18,7 @@ namespace SampleWinForms
     public partial class Form1 : Form
     {
         Graphics g;
-        AggCanvasPainter p;
+        AggCanvasPainter painter;
         ImageGraphics2D imgGfx2d;
         ActualImage destImg;
         Bitmap winBmp;
@@ -100,11 +100,12 @@ namespace SampleWinForms
             //share text printer to our sample textbox
             //but you can create another text printer that specific to text textbox control
             Graphics gx = this.sampleTextBox1.CreateGraphics();
-            _controllerForGdi.TextPrinter = _devGdiTextPrinter;
             _controllerForGdi.BindHostGraphics(gx);
+            _controllerForGdi.TextPrinter = _devGdiTextPrinter;
             //---------- 
-            _controllerForPixelFarm.TextPrinter = _devVxsTextPrinter;
             _controllerForPixelFarm.BindHostGraphics(gx);
+            _controllerForPixelFarm.TextPrinter = _devVxsTextPrinter;
+
             //---------- 
             this.sampleTextBox1.SetController(_controllerForPixelFarm);
 
@@ -156,7 +157,7 @@ namespace SampleWinForms
             _typefaceStore = new TypefaceStore();
             _typefaceStore.FontCollection = installedFontCollection;
             //set default font for current text printer
-            selectedTextPrinter.Typeface = _typefaceStore.GetTypeface(selectedFF);
+            // selectedTextPrinter.Typeface = _typefaceStore.GetTypeface(selectedFF);
             //---------- 
 
 
@@ -236,16 +237,19 @@ namespace SampleWinForms
             {
                 destImg = new ActualImage(400, 300, PixelFormat.ARGB32);
                 imgGfx2d = new ImageGraphics2D(destImg); //no platform
-                p = new AggCanvasPainter(imgGfx2d);
+                painter = new AggCanvasPainter(imgGfx2d);
                 winBmp = new Bitmap(400, 300, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 g = this.CreateGraphics();
 
-                _devVxsTextPrinter = new VxsTextPrinter(p, _openFontStore);
+                painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
+
+
+                _devVxsTextPrinter = new VxsTextPrinter(painter, _openFontStore);
+                _devVxsTextPrinter.TargetCanvasPainter = painter;
                 _devVxsTextPrinter.ScriptLang = _devGdiTextPrinter.ScriptLang;
                 _devVxsTextPrinter.PositionTechnique = _devGdiTextPrinter.PositionTechnique;
-
-
                 _devGdiTextPrinter.TargetGraphics = g;
+
 
             }
 
@@ -279,11 +283,11 @@ namespace SampleWinForms
                 case RenderChoice.RenderWithTextPrinterAndMiniAgg:
                     {
                         //clear previous draw
-                        p.Clear(PixelFarm.Drawing.Color.White);
-                        p.UseSubPixelRendering = chkLcdTechnique.Checked;
-                        p.FillColor = PixelFarm.Drawing.Color.Black;
+                        painter.Clear(PixelFarm.Drawing.Color.White);
+                        painter.UseSubPixelRendering = chkLcdTechnique.Checked;
+                        painter.FillColor = PixelFarm.Drawing.Color.Black;
 
-
+                        selectedTextPrinter = _devVxsTextPrinter;
                         selectedTextPrinter.Typeface = _typefaceStore.GetTypeface(_selectedInstallFont);
                         selectedTextPrinter.FontSizeInPoints = _fontSizeInPts;
                         selectedTextPrinter.HintTechnique = hintTech;
@@ -353,28 +357,28 @@ namespace SampleWinForms
             txToVxs1.WriteOutput(vxs, _vxsPool);
 
             //----------------------------------------------------
-            p.UseSubPixelRendering = chkLcdTechnique.Checked;
+            painter.UseSubPixelRendering = chkLcdTechnique.Checked;
 
             //5. use PixelFarm's Agg to render to bitmap...
             //5.1 clear background
-            p.Clear(PixelFarm.Drawing.Color.White);
+            painter.Clear(PixelFarm.Drawing.Color.White);
 
             if (chkFillBackground.Checked)
             {
                 //5.2 
-                p.FillColor = PixelFarm.Drawing.Color.Black;
+                painter.FillColor = PixelFarm.Drawing.Color.Black;
                 //5.3
-                p.Fill(vxs);
+                painter.Fill(vxs);
             }
             if (chkBorder.Checked)
             {
                 //5.4 
                 // p.StrokeWidth = 3;
-                p.StrokeColor = PixelFarm.Drawing.Color.Green;
+                painter.StrokeColor = PixelFarm.Drawing.Color.Green;
                 //user can specific border width here...
                 //p.StrokeWidth = 2;
                 //5.5 
-                p.Draw(vxs);
+                painter.Draw(vxs);
             }
 
 
@@ -383,7 +387,7 @@ namespace SampleWinForms
             if (chkShowGrid.Checked)
             {
                 //render grid
-                RenderGrid(800, 600, _gridSize, p);
+                RenderGrid(800, 600, _gridSize, painter);
             }
 
 
@@ -398,9 +402,9 @@ namespace SampleWinForms
 
         void RenderWithMsdfImg(Typeface typeface, char testChar, float sizeInPoint)
         {
-            p.FillColor = PixelFarm.Drawing.Color.Black;
+            painter.FillColor = PixelFarm.Drawing.Color.Black;
             //p.UseSubPixelRendering = chkLcdTechnique.Checked;
-            p.Clear(PixelFarm.Drawing.Color.White);
+            painter.Clear(PixelFarm.Drawing.Color.White);
             //----------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
             builder.SetHintTechnique((HintTechnique)lstHintList.SelectedItem);
@@ -413,7 +417,7 @@ namespace SampleWinForms
             //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
             GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour);
             var actualImg = ActualImage.CreateFromBuffer(glyphImg.Width, glyphImg.Height, PixelFormat.ARGB32, glyphImg.GetImageBuffer());
-            p.DrawImage(actualImg, 0, 0);
+            painter.DrawImage(actualImg, 0, 0);
 
             //using (Bitmap bmp = new Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             //{
@@ -426,7 +430,7 @@ namespace SampleWinForms
             if (chkShowGrid.Checked)
             {
                 //render grid
-                RenderGrid(800, 600, _gridSize, p);
+                RenderGrid(800, 600, _gridSize, painter);
             }
 
             //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
@@ -506,7 +510,7 @@ namespace SampleWinForms
 #if DEBUG
         void debugDrawTriangulatedGlyph(GlyphFitOutline glyphFitOutline, float pixelScale)
         {
-            p.StrokeColor = PixelFarm.Drawing.Color.Magenta;
+            painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
             List<GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
             int j = triAngles.Count;
             //
@@ -523,29 +527,29 @@ namespace SampleWinForms
                 EdgeLine e2 = tri.e2;
                 //---------------
                 //draw each triangles
-                DrawEdge(p, e0, pixelScale);
-                DrawEdge(p, e1, pixelScale);
-                DrawEdge(p, e2, pixelScale);
+                DrawEdge(painter, e0, pixelScale);
+                DrawEdge(painter, e1, pixelScale);
+                DrawEdge(painter, e2, pixelScale);
                 //---------------
                 //draw centroid
                 double cen_x = tri.CentroidX;
                 double cen_y = tri.CentroidY;
                 //---------------
-                p.FillColor = PixelFarm.Drawing.Color.Yellow;
-                p.FillRectLBWH(cen_x * pixelScale, cen_y * pixelScale, 2, 2);
+                painter.FillColor = PixelFarm.Drawing.Color.Yellow;
+                painter.FillRectLBWH(cen_x * pixelScale, cen_y * pixelScale, 2, 2);
                 if (!drawBone)
                 {
                     //if not draw bone then draw connected lines
                     if (i == 0)
                     {
                         //start mark
-                        p.FillColor = PixelFarm.Drawing.Color.Yellow;
-                        p.FillRectLBWH(cen_x * pixelScale, cen_y * pixelScale, 7, 7);
+                        painter.FillColor = PixelFarm.Drawing.Color.Yellow;
+                        painter.FillRectLBWH(cen_x * pixelScale, cen_y * pixelScale, 7, 7);
                     }
                     else
                     {
-                        p.StrokeColor = PixelFarm.Drawing.Color.Red;
-                        p.Line(
+                        painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+                        painter.Line(
                             prev_cx * pixelScale, prev_cy * pixelScale,
                            cen_x * pixelScale, cen_y * pixelScale);
                     }
@@ -565,12 +569,12 @@ namespace SampleWinForms
                     if (i == 0)
                     {
                         //start mark
-                        p.FillColor = PixelFarm.Drawing.Color.Yellow;
-                        p.FillRectLBWH(b.p.CentroidX * pixelScale, b.p.CentroidY * pixelScale, 7, 7);
+                        painter.FillColor = PixelFarm.Drawing.Color.Yellow;
+                        painter.FillRectLBWH(b.p.CentroidX * pixelScale, b.p.CentroidY * pixelScale, 7, 7);
                     }
                     //draw each bone
-                    p.StrokeColor = PixelFarm.Drawing.Color.Red;
-                    p.Line(
+                    painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+                    painter.Line(
                         b.p.CentroidX * pixelScale, b.p.CentroidY * pixelScale,
                         b.q.CentroidX * pixelScale, b.q.CentroidY * pixelScale);
                 }

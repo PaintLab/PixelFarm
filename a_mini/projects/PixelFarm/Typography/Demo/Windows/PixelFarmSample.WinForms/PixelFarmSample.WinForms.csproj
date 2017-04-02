@@ -38,9 +38,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Shared\DevTextPrinter\DevTextPrinterBase.cs">
-      <Link>DevTextPrinter\DevTextPrinterBase.cs</Link>
-    </Compile>
     <Compile Include="..\GdiPlusSample.WinForms\GdiPlus\DevGdiTextPrinter.cs">
       <Link>GdiPlus\DevGdiTextPrinter.cs</Link>
     </Compile>

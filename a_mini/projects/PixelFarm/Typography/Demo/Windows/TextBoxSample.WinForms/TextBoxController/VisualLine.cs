@@ -26,10 +26,7 @@ namespace SampleWinForms.UI
         {
             _printer = printer;
         }
-        public void BindPrinter(object printer)
-        {
-            // _printer = printer;
-        }
+        
         public float X { get; set; }
         public float Y { get; set; }
         public void SetCharIndexFromPos(float x, float y)
