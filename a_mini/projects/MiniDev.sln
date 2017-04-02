@@ -79,7 +79,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontAtlas", "PixelFarm\Typo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.DrawingCanvas", "PixelFarm\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj", "{0CC424D5-20AC-4849-993D-3A720DBAE94F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Typography", "PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj", "{540A2EA6-DAE3-4625-8951-B2C3118603A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Typography", "PixelFarm\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj", "{540A2EA6-DAE3-4625-8951-B2C3118603A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.TextureAtlas", "PixelFarm\PixelFarm.TextureAtlas\PixelFarm.TextureAtlas.csproj", "{0F6C821E-2F60-4E60-AEC4-E4254D859902}"
 EndProject
