@@ -177,7 +177,8 @@ namespace SampleWinForms
 
             //----------------
             //string inputstr = "ก้า";
-            string inputstr = "น้ำน้ำ";
+            //string inputstr = "น้ำน้ำ";
+            string inputstr = "example";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
             //string inputstr = "ญญู";
@@ -697,10 +698,10 @@ namespace SampleWinForms
 
         private void chkShowSampleTextBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.sampleTextBox1.Visible = chkShowSampleTextBox.Visible)
-            {
-                this.sampleTextBox1.Focus();
-            }
+            //if (this.sampleTextBox1.Visible = chkShowSampleTextBox.Visible)
+            //{
+            //    this.sampleTextBox1.Focus();
+            //}
         }
     }
 }

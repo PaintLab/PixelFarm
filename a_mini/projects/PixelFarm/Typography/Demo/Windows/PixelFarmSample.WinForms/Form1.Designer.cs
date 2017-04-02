@@ -49,7 +49,7 @@
             this.chkGsubEnableLigature = new System.Windows.Forms.CheckBox();
             this.lstHintList = new System.Windows.Forms.ListBox();
             this.chkShowSampleTextBox = new System.Windows.Forms.CheckBox();
-            //this.sampleTextBox1 = new SampleWinForms.SampleTextBox();
+            this.sampleTextBox1 = new SampleWinForms.SampleTextBox();
             this.SuspendLayout();
             // 
             // button1
@@ -249,7 +249,7 @@
             // chkShowSampleTextBox
             // 
             this.chkShowSampleTextBox.AutoSize = true;
-            this.chkShowSampleTextBox.Location = new System.Drawing.Point(12, 99);
+            this.chkShowSampleTextBox.Location = new System.Drawing.Point(373, 14);
             this.chkShowSampleTextBox.Name = "chkShowSampleTextBox";
             this.chkShowSampleTextBox.Size = new System.Drawing.Size(133, 17);
             this.chkShowSampleTextBox.TabIndex = 39;
@@ -259,14 +259,19 @@
             // 
             // sampleTextBox1
             // 
-          
+            this.sampleTextBox1.BackColor = System.Drawing.Color.Silver;
+            this.sampleTextBox1.Location = new System.Drawing.Point(12, 71);
+            this.sampleTextBox1.Name = "sampleTextBox1";
+            this.sampleTextBox1.Size = new System.Drawing.Size(505, 443);
+            this.sampleTextBox1.TabIndex = 40;
+            this.sampleTextBox1.Visible = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1086, 526);
-             
+            this.Controls.Add(this.sampleTextBox1);
             this.Controls.Add(this.chkShowSampleTextBox);
             this.Controls.Add(this.lstHintList);
             this.Controls.Add(this.chkGsubEnableLigature);

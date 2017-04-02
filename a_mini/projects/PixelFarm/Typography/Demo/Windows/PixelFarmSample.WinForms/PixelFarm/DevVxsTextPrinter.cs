@@ -104,6 +104,10 @@ namespace PixelFarm.Drawing.Fonts
             DrawFromGlyphPlans(_outputGlyphPlans, xpos, ypos);
 
         }
+        //
+        public GlyphPosPixelSnapKind GlyphPosPixelSnapX { get; set; }
+        public GlyphPosPixelSnapKind GlyphPosPixelSnapY { get; set; }
+        //
 
         public override void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, int startAt, int len, float xpos, float ypos)
         {
