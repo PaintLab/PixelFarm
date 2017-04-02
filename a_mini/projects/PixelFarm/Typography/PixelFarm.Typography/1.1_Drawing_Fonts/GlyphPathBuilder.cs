@@ -21,6 +21,7 @@ namespace Typography.Rendering
             //not use interperter so we need to scale it with our machnism
             //this demonstrate our auto hint engine ***
             //you can change this to your own hint engine***   
+            _fitOutline = null;//reset
             if (this.UseTrueTypeInstructions)
             {
                 base.FitCurrentGlyph(glyphIndex, glyph);
@@ -62,5 +63,14 @@ namespace Typography.Rendering
                 base.ReadShapes(tx);
             }
         }
+
+        public GlyphFitOutline LatestGlyphFitOutline
+        {
+            get
+            {
+                return _fitOutline;
+            }
+        }
+
     }
 }

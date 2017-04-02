@@ -261,7 +261,7 @@ namespace PixelFarm.Drawing.Fonts
                 this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
                 ChangeFont(canvasPainter.CurrentFont);
             }
-            
+
             //2.1 
             _glyphPathBuilder.SetHintTechnique(this.HintTechnique);
             //2.2
@@ -312,10 +312,9 @@ namespace PixelFarm.Drawing.Fonts
                 VertexStore glyphVxs;
                 if (!hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphVxs))
                 {
+                    _tovxs.Reset();
                     //if not found then create new glyph vxs and cache it
                     _glyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, fontSizePoint);
-                    //-----------------------------------  
-                    _tovxs.Reset();
                     _glyphPathBuilder.ReadShapes(_tovxs);
 
                     //TODO: review here, 

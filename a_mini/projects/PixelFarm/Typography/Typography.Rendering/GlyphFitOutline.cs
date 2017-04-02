@@ -2,10 +2,9 @@
 using System;
 using System.Collections.Generic;
 using Poly2Tri;
+using Typography.OpenFont;
 namespace Typography.Rendering
 {
-
-    using Typography.OpenFont;
 
     public class GlyphFitOutline
     {

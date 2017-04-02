@@ -12,6 +12,8 @@ namespace PixelFarm.Drawing.Fonts
     {
         readonly string name, path;
         Typeface typeface;
+        //TODO: review again,
+        //remove ...
         GlyphPathBuilder glyphPathBuilder;
 
         public NOpenFontFace(Typeface typeface, string fontName, string fontPath)
@@ -42,6 +44,8 @@ namespace PixelFarm.Drawing.Fonts
         {
             get
             {
+                //TODO: review again,
+                //remove ...
                 return this.glyphPathBuilder;
             }
         }

@@ -330,7 +330,7 @@ namespace SampleWinForms
                         //for test only 1 char
                         char testChar = this.txtInputChar.Text[0];
                         Typeface typeFace = _typefaceStore.GetTypeface(_selectedInstallFont);
-                        RenderWithMiniAgg(typeFace, testChar, _fontSizeInPts);
+                        RenderSingleCharWithMiniAgg(typeFace, testChar, _fontSizeInPts);
 
                     }
                     break;
@@ -343,15 +343,18 @@ namespace SampleWinForms
 
         VertexStorePool _vxsPool = new VertexStorePool();
 
-        void RenderWithMiniAgg(Typeface typeface, char testChar, float sizeInPoint)
+        void RenderSingleCharWithMiniAgg(Typeface typeface, char testChar, float sizeInPoint)
         {
             //----------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
             builder.SetHintTechnique((HintTechnique)lstHintList.SelectedItem);
             //----------------------------------------------------
             builder.Build(testChar, sizeInPoint);
+
             var txToVxs1 = new GlyphTranslatorToVxs();
             builder.ReadShapes(txToVxs1);
+
+
 
             VertexStore vxs = new VertexStore();
             txToVxs1.WriteOutput(vxs, _vxsPool);
@@ -381,8 +384,21 @@ namespace SampleWinForms
                 painter.Draw(vxs);
             }
 
+            //--------------------------
+            if (chkShowTess.Checked)
+            {
+                //
+#if DEBUG
+                float scale = typeface.CalculateToPixelScaleFromPointSize(sizeInPoint);
+                GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
+                if (fitOutline != null)
+                {
+                    debugDrawTriangulatedGlyph(fitOutline, scale);
+                }
+#endif
 
-
+            }
+            //--------------------------
 
             if (chkShowGrid.Checked)
             {
