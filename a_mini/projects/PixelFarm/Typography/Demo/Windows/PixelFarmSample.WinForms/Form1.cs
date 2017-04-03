@@ -194,7 +194,8 @@ namespace SampleWinForms
             //----------------
             //string inputstr = "ก้า";
             //string inputstr = "น้ำน้ำ";
-            string inputstr = "example";
+            //string inputstr = "example";
+            string inputstr = "i";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
             //string inputstr = "ญญู";
@@ -594,7 +595,8 @@ namespace SampleWinForms
                         painter.FillRectLBWH(b.p.CentroidX * pixelScale, b.p.CentroidY * pixelScale, 7, 7);
                     }
                     //draw each bone
-                    painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+
+                    painter.StrokeColor = b.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Red;
                     painter.Line(
                         b.p.CentroidX * pixelScale, b.p.CentroidY * pixelScale,
                         b.q.CentroidX * pixelScale, b.q.CentroidY * pixelScale);

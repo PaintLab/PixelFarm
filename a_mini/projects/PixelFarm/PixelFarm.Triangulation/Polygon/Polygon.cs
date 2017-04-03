@@ -70,10 +70,14 @@ namespace Poly2Tri
             }
         }
 
+
+
         private Polygon()
         {
             //for clean clone
         }
+
+   
         public Polygon CleanClone()
         {
             //recursive
