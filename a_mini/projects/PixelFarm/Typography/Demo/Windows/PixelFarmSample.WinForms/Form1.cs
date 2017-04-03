@@ -666,7 +666,8 @@ namespace SampleWinForms
                         {
                             GlyphLine line = (GlyphLine)part;
                             p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(line.x0, line.y0, 2, 2);
+                            var p0 = line.FirstPoint;
+                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
                             p.FillRectLBWH(line.x1, line.y1, 2, 2);
                         }
                         break;
@@ -674,7 +675,8 @@ namespace SampleWinForms
                         {
                             GlyphCurve3 c = (GlyphCurve3)part;
                             p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x0, c.y0, 2, 2);
+                            var p0 = c.FirstPoint;
+                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
                             p.FillColor = PixelFarm.Drawing.Color.Blue;
                             p.FillRectLBWH(c.x1, c.y1, 2, 2);
                             p.FillColor = PixelFarm.Drawing.Color.Red;
@@ -685,7 +687,8 @@ namespace SampleWinForms
                         {
                             GlyphCurve4 c = (GlyphCurve4)part;
                             p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x0, c.y0, 2, 2);
+                            var p0 = c.FirstPoint;
+                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
                             p.FillColor = PixelFarm.Drawing.Color.Blue;
                             p.FillRectLBWH(c.x1, c.y1, 2, 2);
                             p.FillRectLBWH(c.x2, c.y2, 2, 2);

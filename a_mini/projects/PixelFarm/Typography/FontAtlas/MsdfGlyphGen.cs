@@ -44,8 +44,9 @@ namespace Typography.Rendering
                         case GlyphPartKind.Curve3:
                             {
                                 GlyphCurve3 curve3 = (GlyphCurve3)p;
+                                var p0 = curve3.FirstPoint;
                                 cnt.AddQuadraticSegment(
-                                    curve3.x0, curve3.y0,
+                                    p0.X, p0.Y,
                                     curve3.x1, curve3.y1,
                                     curve3.x2, curve3.y2
                                    );
@@ -54,8 +55,9 @@ namespace Typography.Rendering
                         case GlyphPartKind.Curve4:
                             {
                                 GlyphCurve4 curve4 = (GlyphCurve4)p;
+                                var p0 = curve4.FirstPoint;
                                 cnt.AddCubicSegment(
-                                    curve4.x0, curve4.y0,
+                                    p0.X, p0.Y,
                                     curve4.x1, curve4.y1,
                                     curve4.x2, curve4.y2,
                                     curve4.x3, curve4.y3);
@@ -64,8 +66,9 @@ namespace Typography.Rendering
                         case GlyphPartKind.Line:
                             {
                                 GlyphLine line = (GlyphLine)p;
+                                var p0 = line.FirstPoint;
                                 cnt.AddLine(
-                                    line.x0, line.y0,
+                                    p0.X, p0.Y,
                                     line.x1, line.y1);
                             }
                             break;
