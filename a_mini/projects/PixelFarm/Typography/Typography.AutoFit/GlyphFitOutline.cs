@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using Poly2Tri;
-using Typography.OpenFont;
 namespace Typography.Rendering
 {
 
@@ -168,180 +167,6 @@ namespace Typography.Rendering
     }
 
 
-    public static class GlyphFitOutlineExtensions
-    {
-        /// <summary>
-        /// read fitting output
-        /// </summary>
-        /// <param name="tx">glyph translator</param>
-        public static void ReadOutput(this GlyphFitOutline glyphOutline, IGlyphTranslator tx, float pxScale)
-        {
-            if (glyphOutline == null) return;
-            //
-            //-----------------------------------------------------------            
-            //create fit contour
-            //this version use only Agg's vertical hint only ****
-            //(ONLY vertical fitting , NOT apply horizontal fit)
-            //-----------------------------------------------------------     
-            //create outline
-            //then create     
-            List<GlyphContour> contours = glyphOutline.Contours;
-            int j = contours.Count;
-            tx.BeginRead(j);
-            for (int i = 0; i < j; ++i)
-            {
-                //new contour
-                CreateFitShape(tx, contours[i], pxScale, false, true, false);
-                tx.CloseContour();
-            }
-            tx.EndRead();
-        }
-        const int GRID_SIZE = 1;
-        const float GRID_SIZE_25 = 1f / 4f;
-        const float GRID_SIZE_50 = 2f / 4f;
-        const float GRID_SIZE_75 = 3f / 4f;
-
-        const float GRID_SIZE_33 = 1f / 3f;
-        const float GRID_SIZE_66 = 2f / 3f;
-
-
-        static float RoundToNearestVerticalSide(float org, bool useHalfPixel)
-        {
-            float actual1 = org;
-            float integer1 = (int)(actual1);//floor 
-            float remaining = actual1 - integer1;
-            if (useHalfPixel)
-            {
-                if (remaining > GRID_SIZE_66)
-                {
-                    return (integer1 + 1f);
-                }
-                else if (remaining > (GRID_SIZE_33))
-                {
-                    return (integer1 + 0.5f);
-                }
-                else
-                {
-                    return integer1;
-                }
-            }
-            else
-            {
-                if (remaining > GRID_SIZE_50)
-                {
-                    return (integer1 + 1f);
-                }
-                else
-                {
-                    return integer1;
-                }
-            }
-        }
-        static float RoundToNearestHorizontalSide(float org)
-        {
-            float actual1 = org;
-            float integer1 = (int)(actual1);//lower
-            float floatModulo = actual1 - integer1;
-
-            if (floatModulo >= (GRID_SIZE_50))
-            {
-                return (integer1 + 1);
-            }
-            else
-            {
-                return integer1;
-            }
-        }
-        static void CreateFitShape(IGlyphTranslator tx,
-            GlyphContour contour,
-            float pixelScale,
-            bool x_axis,
-            bool y_axis,
-            bool useHalfPixel)
-        {
-            List<GlyphPoint2D> mergePoints = contour.mergedPoints;
-            int j = mergePoints.Count;
-            //merge 0 = start
-            double prev_px = 0;
-            double prev_py = 0;
-            double p_x = 0;
-            double p_y = 0;
-            double first_px = 0;
-            double first_py = 0;
-
-            {
-                GlyphPoint2D p = mergePoints[0];
-                p_x = p.x * pixelScale;
-                p_y = p.y * pixelScale;
-
-                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide && p_y > 3) //TODO: review here
-                {
-                    //vertical fitting
-                    //fit p_y to grid
-                    p_y = RoundToNearestVerticalSide((float)p_y, useHalfPixel);
-                }
-
-                if (x_axis && p.IsPartOfVerticalEdge && p.IsLeftSide)
-                {
-                    float new_x = RoundToNearestHorizontalSide((float)p_x);
-                    //adjust right-side vertical edge
-                    EdgeLine rightside = p.GetMatchingVerticalEdge();
-                    if (rightside != null)
-                    {
-
-                    }
-                    p_x = new_x;
-                }
-                tx.MoveTo((float)p_x, (float)p_y);
-                //-------------
-                first_px = prev_px = p_x;
-                first_py = prev_py = p_y;
-            }
-
-            for (int i = 1; i < j; ++i)
-            {
-                //all merge point is polygon point
-                GlyphPoint2D p = mergePoints[i];
-                p_x = p.x * pixelScale;
-                p_y = p.y * pixelScale;
-
-                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide && p_y > 3)
-                {
-                    //vertical fitting
-                    //fit p_y to grid
-                    p_y = RoundToNearestVerticalSide((float)p_y, useHalfPixel);
-                }
-
-                if (x_axis && p.IsPartOfVerticalEdge && p.IsLeftSide)
-                {
-                    //horizontal fitting
-                    //fix p_x to grid
-                    float new_x = RoundToNearestHorizontalSide((float)p_x);
-                    ////adjust right-side vertical edge
-                    //PixelFarm.Agg.Typography.EdgeLine rightside = p.GetMatchingVerticalEdge();
-                    //if (rightside != null && !rightside.IsLeftSide && rightside.IsOutside)
-                    //{
-                    //    var rightSideP = rightside.p.userData as GlyphPoint2D;
-                    //    var rightSideQ = rightside.q.userData as GlyphPoint2D;
-                    //    //find move diff
-                    //    float movediff = (float)p_x - new_x;
-                    //    //adjust right side edge
-                    //    rightSideP.x = rightSideP.x + movediff;
-                    //    rightSideQ.x = rightSideQ.x + movediff;
-                    //}
-                    p_x = new_x;
-                }
-                //                 
-                tx.LineTo((float)p_x, (float)p_y);
-                //
-                prev_px = p_x;
-                prev_py = p_y;
-            }
-
-            tx.LineTo((float)first_px, (float)first_py);
-        }
-    }
-
 
     static class MyMath
     {
@@ -391,7 +216,7 @@ namespace Typography.Rendering
             this.boneLength = Math.Sqrt(
                 (dy * dy) + (dx * dx)
                 );
-        } 
+        }
         public double SlopAngle { get; private set; }
         public bool IsLongBone { get; set; }
 
@@ -402,7 +227,7 @@ namespace Typography.Rendering
             midX = (e.x0 + e.x1) / 2;
             midY = (e.y0 + e.y1) / 2;
         }
-        
+
         public void Analyze()
         {
 
@@ -791,12 +616,12 @@ namespace Typography.Rendering
         static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
 
-        public Poly2Tri.TriangulationPoint p;
-        public Poly2Tri.TriangulationPoint q;
+        public TriangulationPoint p;
+        public TriangulationPoint q;
 
         Dictionary<EdgeLine, bool> matchingEdges;
 
-        public EdgeLine(Poly2Tri.TriangulationPoint p, Poly2Tri.TriangulationPoint q)
+        public EdgeLine(TriangulationPoint p, TriangulationPoint q)
         {
             this.p = p;
             this.q = q;

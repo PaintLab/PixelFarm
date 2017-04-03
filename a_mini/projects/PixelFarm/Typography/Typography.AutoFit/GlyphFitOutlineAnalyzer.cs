@@ -1,12 +1,12 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
 using System.Collections.Generic;
-using Typography.OpenFont;
+
 namespace Typography.Rendering
 {
     //This is PixelFarm's AutoFit
     //NOT FREE TYPE AUTO FIT***
-    public class GlyphFitOutlineAnalyzer
+    public partial class GlyphFitOutlineAnalyzer
     {
         GlyphPartAnalyzer analyzer = new GlyphPartAnalyzer();
         GlyphTranslatorToContour glyphToCountor = new GlyphTranslatorToContour();
@@ -14,12 +14,13 @@ namespace Typography.Rendering
         {
 
         }
-        public GlyphFitOutline Analyze(GlyphPointF[] glyphPoints, ushort[] glyphContours)
+#if DEBUG
+        public GlyphFitOutline dbugAnalyze(GlyphContour testContour, ushort[] glyphContours)
         {
 
-            glyphToCountor.Read(glyphPoints, glyphContours);
+
             //master outline analysis 
-            List<GlyphContour> contours = glyphToCountor.GetContours(); //analyzed contour             
+            List<GlyphContour> contours = new List<GlyphContour>() { testContour };
             int j = contours.Count;
             analyzer.NSteps = 2;
             for (int i = 0; i < j; ++i)
@@ -36,6 +37,7 @@ namespace Typography.Rendering
                 return null;
             }
         }
+#endif
         static GlyphFitOutline CreateFitOutline(List<GlyphContour> contours)
         {
 
@@ -59,20 +61,10 @@ namespace Typography.Rendering
                 }
                 else
                 {
-                    //this is not a hole
-                    //eg i j has 2 part
-                    //                    
+                    //TODO: review here
+                    //the is a complete separate part                   
+                    //eg i j has 2 part (dot over i and j etc)
                 }
-                 
-                //if (cnt.IsClockwise == isHoleIf)
-                //{
-                //     polygon.AddHole(CreatePolygon2(cnt));
-                //}
-                //else
-                //{
-                //    //eg i
-                //    //the is a complete separate dot  (i head) over i body 
-                //}
             }
             //------------------------------------------
             //2. tri angulaet 
@@ -205,9 +197,9 @@ namespace Typography.Rendering
                         {
                             //ensure no duplicated point
                             tmpPoints.Add(tmp_point, true);
-                            var userTriangulationPoint = new Poly2Tri.TriangulationPoint(x, y) { userData = p };
-                            p.triangulationPoint = userTriangulationPoint;
-                            points.Add(userTriangulationPoint);
+                            //var userTriangulationPoint = new Poly2Tri.TriangulationPoint(x, y) { userData = p };
+                            //p.triangulationPoint = userTriangulationPoint;
+                            points.Add(p.triangulationPoint = new Poly2Tri.TriangulationPoint(x, y) { userData = p });
                         }
                         else
                         {
@@ -283,6 +275,33 @@ namespace Typography.Rendering
 
         }
     }
+}
+namespace Typography.Rendering
+{
+    using Typography.OpenFont;
+    partial class GlyphFitOutlineAnalyzer
+    {
+        public GlyphFitOutline Analyze(GlyphPointF[] glyphPoints, ushort[] glyphContours)
+        {
 
+            glyphToCountor.Read(glyphPoints, glyphContours);
+            //master outline analysis 
+            List<GlyphContour> contours = glyphToCountor.GetContours(); //analyzed contour             
+            int j = contours.Count;
+            analyzer.NSteps = 2;
+            for (int i = 0; i < j; ++i)
+            {
+                contours[i].Analyze(analyzer);
+            }
 
+            if (j > 0)
+            {
+                return CreateFitOutline(contours);
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
 }

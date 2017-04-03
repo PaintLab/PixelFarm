@@ -29,7 +29,7 @@ namespace Typography.Rendering
         {
             cntBuilder.CloseFigure();
             GlyphContour cntContour = cntBuilder.CurrentContour;
-            cntContour.allPoints = cntBuilder.GetAllPoints();
+            //  cntContour.allPoints = cntBuilder.GetAllPoints();
             cntBuilder.Reset();
             contours.Add(cntContour);
         }
@@ -166,8 +166,8 @@ namespace Typography.Rendering
 
     public class GlyphContour
     {
+        // public List<float> allPoints;
         public List<GlyphPart> parts = new List<GlyphPart>();
-        public List<float> allPoints;
         public List<GlyphPoint2D> mergedPoints;
         bool analyzed;
         bool analyzedClockDirection;
@@ -351,7 +351,7 @@ namespace Typography.Rendering
         //
         public Poly2Tri.TriangulationPoint triangulationPoint;
         public double adjustedX;
-        public double adjustedY;
+
         //
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
@@ -369,7 +369,23 @@ namespace Typography.Rendering
             return x == another.x && y == another.y;
         }
 
+        double _adjY;
+        public double AdjustedY
+        {
+            get { return _adjY; }
+            set
+            {
+                if (value != 0)
+                {
+                    value = value * 3;
+                }
+                if (_adjY != 0)
+                {
 
+                }
+                _adjY = value;
+            }
+        }
         public void AddVerticalEdge(EdgeLine v_edge)
         {
             //associated 

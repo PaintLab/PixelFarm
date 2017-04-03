@@ -38,6 +38,7 @@
     <Compile Include="CurveGen.cs" />
     <Compile Include="GlyphFitOutlineAnalyzer.cs" />
     <Compile Include="GlyphImages.cs" />
+    <Compile Include="GlyphLayoutExtension.cs" />
     <Compile Include="GlyphTranslatorToContour.cs" />
     <Compile Include="GlyphFitOutline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

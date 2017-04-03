@@ -168,6 +168,7 @@ namespace SampleWinForms
                 InstalledFont ff = lstFontList.SelectedItem as InstalledFont;
                 if (ff != null)
                 {
+                    _selectedInstallFont = ff;
                     selectedTextPrinter.Typeface = _typefaceStore.GetTypeface(ff);
                     //sample text box 
                     UpdateRenderOutput();
@@ -195,7 +196,8 @@ namespace SampleWinForms
             //string inputstr = "ก้า";
             //string inputstr = "น้ำน้ำ";
             //string inputstr = "example";
-            string inputstr = "i";
+            //string inputstr = "i";
+            string inputstr = "e";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
             //string inputstr = "ญญู";
@@ -222,8 +224,8 @@ namespace SampleWinForms
         void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "Render with PixelFarm";
-            //this.lstFontSizes.SelectedIndex = lstFontSizes.Items.Count - 1;//select last one  
-            this.lstFontSizes.SelectedIndex = 0;//select last one  
+            this.lstFontSizes.SelectedIndex = lstFontSizes.Items.Count - 3;
+            //this.lstFontSizes.SelectedIndex = 0; 
             var installedFont = lstFontList.SelectedItem as InstalledFont;
             if (installedFont != null)
             {
@@ -362,7 +364,7 @@ namespace SampleWinForms
 
             VertexStore vxs = new VertexStore();
             txToVxs1.WriteOutput(vxs, _vxsPool);
-
+            painter.SetOrigin(20, 20);
             //----------------------------------------------------
             painter.UseSubPixelRendering = chkLcdTechnique.Checked;
 
@@ -411,7 +413,7 @@ namespace SampleWinForms
                 //render grid
                 RenderGrid(800, 600, _gridSize, painter);
             }
-
+            painter.SetOrigin(0, 0);
 
 
             //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
@@ -479,34 +481,76 @@ namespace SampleWinForms
                 y += sqSize;
             }
         }
-        static void DrawEdge(AggCanvasPainter p, EdgeLine edge, float scale)
+        static void DrawPointKind(AggCanvasPainter painter, GlyphPoint2D point, float scale)
+        {
+            switch (point.kind)
+            {
+                case PointKind.C3Start:
+                case PointKind.C3End:
+                case PointKind.C4Start:
+                case PointKind.C4End:
+                case PointKind.LineStart:
+                case PointKind.LineStop:
+                    {
+
+                        var prevColor = painter.FillColor;
+                        painter.FillColor = PixelFarm.Drawing.Color.Red;
+                        if (point.AdjustedY != 0)
+                        {
+                            painter.FillRectLBWH(point.x * scale, point.y * scale, 5, 5);
+                        }
+                        else
+                        {
+                            painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2);
+                        }
+                        painter.FillColor = prevColor;
+                    }
+                    break;
+
+            }
+        }
+        static void DrawEdge(AggCanvasPainter painter, EdgeLine edge, float scale)
         {
             if (edge.IsOutside)
             {
-                //free side                
+                //free side     
+
+                Poly2Tri.TriangulationPoint p = edge.p;
+                Poly2Tri.TriangulationPoint q = edge.q;
+
+                var u_data_p = p.userData as GlyphPoint2D;
+                var u_data_q = q.userData as GlyphPoint2D;
+
+                //if show control point
+                DrawPointKind(painter, u_data_p, scale);
+                DrawPointKind(painter, u_data_q, scale);
+
+
                 switch (edge.SlopKind)
                 {
                     default:
-                        p.StrokeColor = PixelFarm.Drawing.Color.Green;
+                        painter.StrokeColor = PixelFarm.Drawing.Color.Green;
                         break;
                     case LineSlopeKind.Vertical:
                         if (edge.IsLeftSide)
                         {
-                            p.StrokeColor = PixelFarm.Drawing.Color.Blue;
+                            painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
                         }
                         else
                         {
-                            p.StrokeColor = PixelFarm.Drawing.Color.LightGray;
+                            painter.StrokeColor = PixelFarm.Drawing.Color.LightGray;
                         }
                         break;
                     case LineSlopeKind.Horizontal:
+
                         if (edge.IsUpper)
                         {
-                            p.StrokeColor = PixelFarm.Drawing.Color.Red;
+                            painter.StrokeColor = PixelFarm.Drawing.Color.Red;
                         }
                         else
                         {
-                            p.StrokeColor = PixelFarm.Drawing.Color.LightGray;
+                            //lower edge
+                            painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
                         }
                         break;
                 }
@@ -516,17 +560,17 @@ namespace SampleWinForms
                 switch (edge.SlopKind)
                 {
                     default:
-                        p.StrokeColor = PixelFarm.Drawing.Color.LightGray;
+                        painter.StrokeColor = PixelFarm.Drawing.Color.LightGray;
                         break;
                     case LineSlopeKind.Vertical:
-                        p.StrokeColor = PixelFarm.Drawing.Color.Blue;
+                        painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
                         break;
                     case LineSlopeKind.Horizontal:
-                        p.StrokeColor = PixelFarm.Drawing.Color.Yellow;
+                        painter.StrokeColor = PixelFarm.Drawing.Color.Yellow;
                         break;
                 }
             }
-            p.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
+            painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
         }
 
 #if DEBUG
@@ -561,7 +605,7 @@ namespace SampleWinForms
                 painter.FillRectLBWH(cen_x * pixelScale, cen_y * pixelScale, 2, 2);
                 if (!drawBone)
                 {
-                    //if not draw bone then draw connected lines
+
                     if (i == 0)
                     {
                         //start mark
@@ -573,7 +617,7 @@ namespace SampleWinForms
                         painter.StrokeColor = PixelFarm.Drawing.Color.Red;
                         painter.Line(
                             prev_cx * pixelScale, prev_cy * pixelScale,
-                           cen_x * pixelScale, cen_y * pixelScale);
+                            cen_x * pixelScale, cen_y * pixelScale);
                     }
                     prev_cx = cen_x;
                     prev_cy = cen_y;

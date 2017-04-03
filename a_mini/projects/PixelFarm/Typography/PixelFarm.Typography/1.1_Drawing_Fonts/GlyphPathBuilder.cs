@@ -28,7 +28,7 @@ namespace Typography.Rendering
             _fitOutline = null;//reset
             if (this.UseTrueTypeInstructions)
             {
-                base.FitCurrentGlyph(glyphIndex, glyph);
+                //base.FitCurrentGlyph(glyphIndex, glyph);
             }
             else
             {
@@ -37,6 +37,22 @@ namespace Typography.Rendering
                     if (!_fitoutlineCollection.TryGetValue(glyphIndex, out _fitOutline))
                     {
 
+                        //---------------------------------------------
+                        //test code
+
+                        //GlyphContourBuilder contBuilder = new GlyphContourBuilder();
+                        //contBuilder.Reset();
+                        //int x = 100, y = 120, w = 700, h = 200;
+
+                        //contBuilder.MoveTo(x, y);
+                        //contBuilder.LineTo(x + w, y);
+                        //contBuilder.LineTo(x + w, y + h);
+                        //contBuilder.LineTo(x, y + h);
+                        //contBuilder.CloseFigure();
+
+                        //_fitOutline = _fitShapeAnalyzer.dbugAnalyze(contBuilder.CurrentContour, new ushort[] { 3 });
+
+                        //---------------------------------------------
                         _fitOutline = _fitShapeAnalyzer.Analyze(
                             this._outputGlyphPoints,
                             this._outputContours);
@@ -48,6 +64,21 @@ namespace Typography.Rendering
 #if DEBUG
             if (dbugAlwaysDoCurveAnalysis && _fitOutline == null)
             {
+                //---------------------------------------------
+                //test code 
+                //GlyphContourBuilder contBuilder = new GlyphContourBuilder();
+                //contBuilder.Reset();
+                //int x = 100, y = 120, w = 700, h = 200;
+
+                //contBuilder.MoveTo(x, y);
+                //contBuilder.LineTo(x + w, y);
+                //contBuilder.LineTo(x + w, y + h);
+                //contBuilder.LineTo(x, y + h);
+                //contBuilder.CloseFigure();
+
+                //_fitOutline = _fitShapeAnalyzer.dbugAnalyze(contBuilder.CurrentContour, new ushort[] { 3 }); 
+         
+
                 _fitOutline = _fitShapeAnalyzer.Analyze(
                          this._outputGlyphPoints,
                          this._outputContours);
