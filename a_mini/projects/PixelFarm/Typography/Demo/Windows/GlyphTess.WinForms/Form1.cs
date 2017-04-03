@@ -164,5 +164,31 @@ namespace Test_WinForm_TessGlyph
         {
             DrawOutput();
         }
+
+        private void cmdTestDrawCurve_Click(object sender, EventArgs e)
+        {
+            //
+            
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            for (int i = 0; i < 10; ++i)
+            {
+                Point p0 = new Point(0, 0);
+                Point p1 = new Point(20, 50);
+                Point p2 = new Point(80, 50);
+                Point p3 = new Point(100, i * 10);
+               
+                g.DrawRectangle(Pens.Red, new Rectangle(p0, new System.Drawing.Size(1, 1)));
+                g.DrawRectangle(Pens.Green, new Rectangle(p1, new System.Drawing.Size(1, 1)));
+                g.DrawRectangle(Pens.Green, new Rectangle(p2, new System.Drawing.Size(1, 1)));
+                g.DrawRectangle(Pens.Red, new Rectangle(p3, new System.Drawing.Size(1, 1)));
+
+                System.Drawing.Drawing2D.GraphicsPath p = new System.Drawing.Drawing2D.GraphicsPath();
+                p.AddBezier(p0, p1, p2, p3);
+                g.DrawPath(Pens.Black, p);
+            }
+
+          
+        }
     }
 }
