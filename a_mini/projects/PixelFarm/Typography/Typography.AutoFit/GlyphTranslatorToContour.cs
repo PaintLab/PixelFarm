@@ -169,6 +169,8 @@ namespace Typography.Rendering
         // public List<float> allPoints;
         public List<GlyphPart> parts = new List<GlyphPart>();
         public List<GlyphPoint2D> mergedPoints;
+        public List<GlyphPoint2D> flattenPoints;
+
         bool analyzed;
         bool analyzedClockDirection;
         bool isClockwise;
@@ -179,7 +181,7 @@ namespace Typography.Rendering
         {
             parts.Add(part);
         }
-        public void Analyze(GlyphPartAnalyzer analyzer)
+        public void Analyze(GlyphPartFlattener flattener)
         {
             if (analyzed) return;
             //flatten each part ...
@@ -187,10 +189,15 @@ namespace Typography.Rendering
 
             int j = parts.Count;
             //---------------
+            flattenPoints = flattener.Results = new List<GlyphPoint2D>();
             for (int i = 0; i < j; ++i)
             {
-                parts[i].Flatten(analyzer);
+                //flatten each part
+                parts[i].Flatten(flattener);
             }
+
+
+
             analyzed = true;
         }
         public bool IsClosewise()
@@ -258,9 +265,9 @@ namespace Typography.Rendering
         Curve4
     }
 
-    public class GlyphPartAnalyzer
+    public class GlyphPartFlattener
     {
-        public GlyphPartAnalyzer()
+        public GlyphPartFlattener()
         {
             this.NSteps = 2;//default
         }
@@ -305,14 +312,17 @@ namespace Typography.Rendering
             }
             points.Add(new GlyphPoint2D(end.X, end.Y, PointKind.C3End));
         }
+
+
+        public List<GlyphPoint2D> Results;
     }
     public abstract class GlyphPart
     {
         public abstract GlyphPartKind Kind { get; }
         public GlyphPart NextPart { get; set; }
         public GlyphPart PrevPart { get; set; }
-        public abstract void Flatten(GlyphPartAnalyzer analyzer);
-        public abstract List<GlyphPoint2D> GetFlattenPoints();
+        public abstract void Flatten(GlyphPartFlattener flattener);
+
 
 #if DEBUG
         static int dbugTotalId;
@@ -437,27 +447,24 @@ namespace Typography.Rendering
         public float y0;
         public float x1;
         public float y1;
-
-        List<GlyphPoint2D> points;
+       
         public GlyphLine(float x0, float y0, float x1, float y1)
         {
             this.x0 = x0;
             this.y0 = y0;
+
             this.x1 = x1;
             this.y1 = y1;
         }
 
 
-        public override void Flatten(GlyphPartAnalyzer analyzer)
+        public override void Flatten(GlyphPartFlattener flattener)
         {
-            points = new List<GlyphPoint2D>();
-            points.Add(new GlyphPoint2D(x0, y0, PointKind.LineStart));
-            points.Add(new GlyphPoint2D(x1, y1, PointKind.LineStop));
+
+            flattener.Results.Add(new GlyphPoint2D(x0, y0, PointKind.LineStart));
+            flattener.Results.Add(new GlyphPoint2D(x1, y1, PointKind.LineStop));
         }
-        public override List<GlyphPoint2D> GetFlattenPoints()
-        {
-            return points;
-        }
+
         public override GlyphPartKind Kind { get { return GlyphPartKind.Line; } }
 
 #if DEBUG
@@ -469,78 +476,71 @@ namespace Typography.Rendering
     }
     public class GlyphCurve3 : GlyphPart
     {
-        public float x0, y0, p2x, p2y, x, y;
-        List<GlyphPoint2D> points;
-        public GlyphCurve3(float x0, float y0, float p2x, float p2y, float x, float y)
+        public float x0, y0, x1, y1, x2, y2;
+        public GlyphCurve3(float x0, float y0, float x1, float y1, float x2, float y2)
         {
             this.x0 = x0;
             this.y0 = y0;
-            this.p2x = p2x;
-            this.p2y = p2y;
-            this.x = x;
-            this.y = y;
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
         }
 
-        public override void Flatten(GlyphPartAnalyzer analyzer)
+        public override void Flatten(GlyphPartFlattener flattener)
         {
-            points = new List<GlyphPoint2D>();
-            analyzer.GeneratePointsFromCurve3(
-                analyzer.NSteps,
-                points,
+
+            flattener.GeneratePointsFromCurve3(
+                flattener.NSteps,
+                flattener.Results,
                 new Vector2(x0, y0),
-                new Vector2(x, y),
-                new Vector2(p2x, p2y));
+                new Vector2(x2, y2),
+                new Vector2(x1, y1));
         }
-        public override List<GlyphPoint2D> GetFlattenPoints()
-        {
-            return points;
-        }
+
         public override GlyphPartKind Kind { get { return GlyphPartKind.Curve3; } }
 #if DEBUG
         public override string ToString()
         {
-            return "C3(" + x0 + "," + y0 + "), (" + p2x + "," + p2y + "),(" + x + "," + y + ")";
+            return "C3(" + x0 + "," + y0 + "), (" + x1 + "," + y1 + "),(" + x2 + "," + y2 + ")";
         }
 #endif
     }
     public class GlyphCurve4 : GlyphPart
     {
-        public float x0, y0, p2x, p2y, p3x, p3y, x, y;
-        List<GlyphPoint2D> points;
-        public GlyphCurve4(float x0, float y0, float p2x, float p2y,
-            float p3x, float p3y,
-            float x, float y)
+        public float x0, y0, x1, y1, x2, y2, x3, y3;
+
+        public GlyphCurve4(float x0, float y0, float x1, float y1,
+            float x2, float y2,
+            float x3, float y3)
         {
             this.x0 = x0;
             this.y0 = y0;
-            this.p2x = p2x;
-            this.p2y = p2y;
-            this.p3x = p3x;
-            this.p3y = p3y;
-            this.x = x;
-            this.y = y;
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
+            this.x3 = x3;
+            this.y3 = y3;
         }
-        public override void Flatten(GlyphPartAnalyzer analyzer)
+        public override void Flatten(GlyphPartFlattener flattener)
         {
-            points = new List<GlyphPoint2D>();
-            analyzer.GeneratePointsFromCurve4(
-                analyzer.NSteps,
-                points,
+
+            flattener.GeneratePointsFromCurve4(
+                flattener.NSteps,
+                flattener.Results,
                 new Vector2(x0, y0),
-                new Vector2(x, y),
-                new Vector2(p2x, p2y),
-                new Vector2(p3x, p3y)
+                new Vector2(x3, y3),
+                new Vector2(x1, y1),
+                new Vector2(x2, y2)
                 );
         }
-        public override List<GlyphPoint2D> GetFlattenPoints()
-        {
-            return points;
-        }
+
         public override GlyphPartKind Kind { get { return GlyphPartKind.Curve4; } }
 #if DEBUG
         public override string ToString()
         {
-            return "C4(" + x0 + "," + y0 + "), (" + p2x + "," + p2y + "),(" + p3x + "," + p3y + "), (" + x + "," + y + ")";
+            return "C4(" + x0 + "," + y0 + "), (" + x1 + "," + y1 + "),(" + x2 + "," + y2 + "), (" + x3 + "," + y3 + ")";
         }
 #endif
 

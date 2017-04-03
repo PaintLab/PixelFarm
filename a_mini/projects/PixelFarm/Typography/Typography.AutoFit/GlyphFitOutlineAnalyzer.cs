@@ -8,7 +8,7 @@ namespace Typography.Rendering
     //NOT FREE TYPE AUTO FIT***
     public partial class GlyphFitOutlineAnalyzer
     {
-        GlyphPartAnalyzer analyzer = new GlyphPartAnalyzer();
+        GlyphPartFlattener analyzer = new GlyphPartFlattener();
         GlyphTranslatorToContour glyphToCountor = new GlyphTranslatorToContour();
         public GlyphFitOutlineAnalyzer()
         {
@@ -118,58 +118,58 @@ namespace Typography.Rendering
             //---------------------------------------
             //merge all generated points
             //also remove duplicated point too! 
-            List<GlyphPoint2D> mergedPoints = new List<GlyphPoint2D>();
+            List<GlyphPoint2D> mergedPoints = cnt.flattenPoints;
             cnt.mergedPoints = mergedPoints;
             //---------------------------------------
-            {
-                int tt = 0;
-                int j = allParts.Count;
+            //{
+            //    int tt = 0;
+            //    int j = allParts.Count;
 
-                //TODO: review here
-                for (int i = 0; i < j; ++i)
-                {
-                    GlyphPart p = allParts[i];
-                    List<GlyphPoint2D> fpoints = p.GetFlattenPoints();
-                    if (tt == 0)
-                    {
-                        //first part 
-                        int n = fpoints.Count;
-                        for (int m = 0; m < n; ++m) //first part we start at m=0
-                        {
-                            //GlyphPoint2D fp = fpoints[m];
-                            mergedPoints.Add(fpoints[m]);
-                            //allPoints.Add((float)fp.x);
-                            //allPoints.Add((float)fp.y);
-                        }
-                        tt++;
-                    }
-                    else
-                    {
-                        //except first point, other part we start at m=1
-                        int n = fpoints.Count;
-                        for (int m = 1; m < n; ++m)
-                        {
-                            //GlyphPoint2D fp = fpoints[m];
-                            mergedPoints.Add(fpoints[m]);
-                            //allPoints.Add((float)fp.x);
-                            //allPoints.Add((float)fp.y);
-                        }
-                    }
-                }
+            //    //TODO: review here
+            //    for (int i = 0; i < j; ++i)
+            //    {
+            //        GlyphPart p = allParts[i];
+            //        List<GlyphPoint2D> fpoints = p.GetFlattenPoints();
+            //        if (tt == 0)
+            //        {
+            //            //first part 
+            //            int n = fpoints.Count;
+            //            for (int m = 0; m < n; ++m) //first part we start at m=0
+            //            {
+            //                //GlyphPoint2D fp = fpoints[m];
+            //                mergedPoints.Add(fpoints[m]);
+            //                //allPoints.Add((float)fp.x);
+            //                //allPoints.Add((float)fp.y);
+            //            }
+            //            tt++;
+            //        }
+            //        else
+            //        {
+            //            //except first point, other part we start at m=1
+            //            int n = fpoints.Count;
+            //            for (int m = 1; m < n; ++m)
+            //            {
+            //                //GlyphPoint2D fp = fpoints[m];
+            //                mergedPoints.Add(fpoints[m]);
+            //                //allPoints.Add((float)fp.x);
+            //                //allPoints.Add((float)fp.y);
+            //            }
+            //        }
+            //    }
 
-            }
+            //}
             //---------------------------------------
             {
-                //check last (x,y) and first (x,y)
+                ////check last (x,y) and first (x,y)
                 int lim = mergedPoints.Count - 1;
-                {
-                    if (mergedPoints[lim].IsEqualValues(mergedPoints[0]))
-                    {
-                        //remove last (x,y)
-                        mergedPoints.RemoveAt(lim);
-                        lim -= 1;
-                    }
-                }
+                //{
+                //    if (mergedPoints[lim].IsEqualValues(mergedPoints[0]))
+                //    {
+                //        //remove last (x,y)
+                //        mergedPoints.RemoveAt(lim);
+                //        lim -= 1;
+                //    }
+                //}
 
                 //limitation: poly tri not accept duplicated points!
                 double prevX = 0;
