@@ -46,8 +46,8 @@ namespace Typography.Rendering
                                 GlyphCurve3 curve3 = (GlyphCurve3)p;
                                 cnt.AddQuadraticSegment(
                                     curve3.x0, curve3.y0,
-                                    curve3.p2x, curve3.p2y,
-                                    curve3.x, curve3.y
+                                    curve3.x1, curve3.y1,
+                                    curve3.x2, curve3.y2
                                    );
                             }
                             break;
@@ -56,9 +56,9 @@ namespace Typography.Rendering
                                 GlyphCurve4 curve4 = (GlyphCurve4)p;
                                 cnt.AddCubicSegment(
                                     curve4.x0, curve4.y0,
-                                    curve4.p2x, curve4.p2y,
-                                    curve4.p3x, curve4.p3y,
-                                    curve4.x, curve4.y);
+                                    curve4.x1, curve4.y1,
+                                    curve4.x2, curve4.y2,
+                                    curve4.x3, curve4.y3);
                             }
                             break;
                         case GlyphPartKind.Line:
@@ -90,8 +90,8 @@ namespace Typography.Rendering
                             GlyphCurve3 curve3 = (GlyphCurve3)p;
                             newc.AddPart(new GlyphCurve3(
                                 curve3.x0 * pixelScale, curve3.y0 * pixelScale,
-                                curve3.p2x * pixelScale, curve3.p2y * pixelScale,
-                                curve3.x * pixelScale, curve3.y * pixelScale));
+                                curve3.x1 * pixelScale, curve3.y1 * pixelScale,
+                                curve3.x2 * pixelScale, curve3.y2 * pixelScale));
 
                         }
                         break;
@@ -100,9 +100,9 @@ namespace Typography.Rendering
                             GlyphCurve4 curve4 = (GlyphCurve4)p;
                             newc.AddPart(new GlyphCurve4(
                                   curve4.x0 * pixelScale, curve4.y0 * pixelScale,
-                                  curve4.p2x * pixelScale, curve4.p2y * pixelScale,
-                                  curve4.p3x * pixelScale, curve4.p3y * pixelScale,
-                                  curve4.x * pixelScale, curve4.y * pixelScale
+                                  curve4.x1 * pixelScale, curve4.y1 * pixelScale,
+                                  curve4.x2 * pixelScale, curve4.y2 * pixelScale,
+                                  curve4.x3 * pixelScale, curve4.y3 * pixelScale
                                 ));
                         }
                         break;

@@ -676,9 +676,9 @@ namespace SampleWinForms
                             p.FillColor = PixelFarm.Drawing.Color.Red;
                             p.FillRectLBWH(c.x0, c.y0, 2, 2);
                             p.FillColor = PixelFarm.Drawing.Color.Blue;
-                            p.FillRectLBWH(c.p2x, c.p2y, 2, 2);
+                            p.FillRectLBWH(c.x1, c.y1, 2, 2);
                             p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x, c.y, 2, 2);
+                            p.FillRectLBWH(c.x2, c.y2, 2, 2);
                         }
                         break;
                     case GlyphPartKind.Curve4:
@@ -687,10 +687,10 @@ namespace SampleWinForms
                             p.FillColor = PixelFarm.Drawing.Color.Red;
                             p.FillRectLBWH(c.x0, c.y0, 2, 2);
                             p.FillColor = PixelFarm.Drawing.Color.Blue;
-                            p.FillRectLBWH(c.p2x, c.p2y, 2, 2);
-                            p.FillRectLBWH(c.p3x, c.p3y, 2, 2);
+                            p.FillRectLBWH(c.x1, c.y1, 2, 2);
+                            p.FillRectLBWH(c.x2, c.y2, 2, 2);
                             p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x, c.y, 2, 2);
+                            p.FillRectLBWH(c.x3, c.y3, 2, 2);
                         }
                         break;
                 }
