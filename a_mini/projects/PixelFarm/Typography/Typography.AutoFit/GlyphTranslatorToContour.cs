@@ -189,7 +189,7 @@ namespace Typography.Rendering
             //---------------
             for (int i = 0; i < j; ++i)
             {
-                parts[i].Analyze(analyzer);
+                parts[i].Flatten(analyzer);
             }
             analyzed = true;
         }
@@ -309,7 +309,9 @@ namespace Typography.Rendering
     public abstract class GlyphPart
     {
         public abstract GlyphPartKind Kind { get; }
-        public abstract void Analyze(GlyphPartAnalyzer analyzer);
+        public GlyphPart NextPart { get; set; }
+        public GlyphPart PrevPart { get; set; }
+        public abstract void Flatten(GlyphPartAnalyzer analyzer);
         public abstract List<GlyphPoint2D> GetFlattenPoints();
 
 #if DEBUG
@@ -446,7 +448,7 @@ namespace Typography.Rendering
         }
 
 
-        public override void Analyze(GlyphPartAnalyzer analyzer)
+        public override void Flatten(GlyphPartAnalyzer analyzer)
         {
             points = new List<GlyphPoint2D>();
             points.Add(new GlyphPoint2D(x0, y0, PointKind.LineStart));
@@ -479,7 +481,7 @@ namespace Typography.Rendering
             this.y = y;
         }
 
-        public override void Analyze(GlyphPartAnalyzer analyzer)
+        public override void Flatten(GlyphPartAnalyzer analyzer)
         {
             points = new List<GlyphPoint2D>();
             analyzer.GeneratePointsFromCurve3(
@@ -518,7 +520,7 @@ namespace Typography.Rendering
             this.x = x;
             this.y = y;
         }
-        public override void Analyze(GlyphPartAnalyzer analyzer)
+        public override void Flatten(GlyphPartAnalyzer analyzer)
         {
             points = new List<GlyphPoint2D>();
             analyzer.GeneratePointsFromCurve4(
