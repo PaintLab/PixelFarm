@@ -12,6 +12,9 @@ namespace Typography.Rendering
 
         Polygon _polygon;
         List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
+        List<GlyphBone> bones;
+        List<GlyphBone> boneList2;
+
         public GlyphFitOutline(Polygon polygon, List<GlyphContour> contours)
         {
             this.Contours = contours;
@@ -23,7 +26,7 @@ namespace Typography.Rendering
             }
         }
         internal List<GlyphContour> Contours { get; set; }
-        List<GlyphBone> bones;
+
         public void Analyze()
         {
             //we analyze each triangle here 
@@ -66,10 +69,15 @@ namespace Typography.Rendering
                     bones.Add(new GlyphBone(lastTri, firstTri));
                 }
             }
-
-
             //----------------------------------------
             int boneCount = bones.Count;
+            //do bone length histogram
+            boneList2 = new List<GlyphBone>(boneCount);
+            boneList2.AddRange(bones);
+            //----------------------------------------
+            AnalyzeBoneLength();
+
+            //----------------------------------------
             for (int i = 0; i < boneCount; ++i)
             {
                 //each bone has 2 triangles at its ends
@@ -80,7 +88,59 @@ namespace Typography.Rendering
                 GlyphBone bone = bones[i];
                 bone.Analyze();
             }
-            //----------------------------------------
+            //---------------------------------------- 
+        }
+        void AnalyzeBoneLength()
+        {
+            //sort by bone len
+            int j = boneList2.Count;
+            boneList2.Sort((b0, b1) => b0.boneLength.CompareTo(b1.boneLength));
+
+            ////find length of the 1st percentile
+            ////avg 
+            //double total = 0;
+            //for (int i = j - 1; i >= 0; --i)
+            //{
+            //    total += boneList2[i].boneLength;
+            //}
+            //double avg = total / j;
+            //we use 
+
+            if (j >= 10)
+            {
+                //find 1st 10
+                int group_n = j / 10;
+                double total = 0;
+                int index = j - 1;
+                for (int i = group_n - 1; i >= 0; --i)
+                {
+                    //avg of first group
+                    total += boneList2[index].boneLength;
+                    index--;
+                }
+                //
+                double maxgroup_avg = total / group_n;
+
+                int mid = (j - 1) / 2;
+                double median = boneList2[mid].boneLength;
+                //assign long bone
+                double median_x2 = median + median;
+                //
+                for (int i = j - 1; i >= 0; --i)
+                {
+                    GlyphBone bone = boneList2[i];
+                    if (bone.boneLength > median_x2)
+                    {
+                        bone.IsLongBone = true;
+                    }
+                }
+
+            }
+            else
+            {
+
+            }
+
         }
         int FindLatestConnectedTri(List<GlyphTriangle> usedTriList, GlyphTriangle tri)
         {
@@ -214,7 +274,7 @@ namespace Typography.Rendering
                 p_x = p.x * pixelScale;
                 p_y = p.y * pixelScale;
 
-                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide && p_y > 3)
+                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide && p_y > 3) //TODO: review here
                 {
                     //vertical fitting
                     //fit p_y to grid
@@ -283,6 +343,21 @@ namespace Typography.Rendering
     }
 
 
+    static class MyMath
+    {
+
+        /// <summary>
+        /// Convert degrees to radians
+        /// </summary>
+        /// <param name="degrees">An angle in degrees</param>
+        /// <returns>The angle expressed in radians</returns>
+        public static double DegreesToRadians(double degrees)
+        {
+            const double degToRad = System.Math.PI / 180.0f;
+            return degrees * degToRad;
+        }
+
+    }
 
     public enum BoneDirection : byte
     {
@@ -298,31 +373,54 @@ namespace Typography.Rendering
         D270,
         D315
     }
+    /// <summary>
+    /// a line that connects between centroid of 2 GlyphTriangle(p => q)
+    /// </summary>
     public class GlyphBone
     {
         public readonly GlyphTriangle p, q;
+        public readonly double boneLength;
+
         public GlyphBone(GlyphTriangle p, GlyphTriangle q)
         {
             this.p = p;
             this.q = q;
-        }
-        static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
-        static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
-        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
 
+            double dy = q.CentroidY - p.CentroidY;
+            double dx = q.CentroidX - p.CentroidX;
+            this.boneLength = Math.Sqrt(
+                (dy * dy) + (dx * dx)
+                );
+        } 
         public double SlopAngle { get; private set; }
+        public bool IsLongBone { get; set; }
+
         public LineSlopeKind SlopKind { get; private set; }
+
         static void CalculateMidPoint(EdgeLine e, out double midX, out double midY)
         {
             midX = (e.x0 + e.x1) / 2;
             midY = (e.y0 + e.y1) / 2;
         }
+        
         public void Analyze()
         {
+
+            //
+            //p => (x0,y0)
+            //q => (x1,y1)
+            //line move from p to q 
+            //...
+            //tasks:
+            //1. find slop angle
+            //2. find slope kind
+
+
+
             //check if q is upper or lower when compare with p
             //check if q is on left side or right side of p
             //then we know the direction
-
+            //....
             //p
             double x0 = p.CentroidX;
             double y0 = p.CentroidY;
@@ -352,18 +450,20 @@ namespace Typography.Rendering
                 }
             }
             //--------------------------------------
+            //for p and q, count number of outside edge
+            //if outsideEdgeCount of triangle >=2 -> this triangle is tip part
 
-            int p_outsideCount = OutSideCount(p);
-            int q_outsideCount = OutSideCount(q);
+            int p_outsideEdgeCount = OutSideEdgeCount(p);
+            int q_outsideEdgeCount = OutSideEdgeCount(q);
             bool p_isTip = false;
             bool q_isTip = false;
 
-            if (p_outsideCount >= 2)
+            if (p_outsideEdgeCount >= 2)
             {
                 //tip bone
                 p_isTip = true;
             }
-            if (q_outsideCount >= 2)
+            if (q_outsideEdgeCount >= 2)
             {
                 //tipbone
                 q_isTip = true;
@@ -371,8 +471,9 @@ namespace Typography.Rendering
             //-------------------------------------- 
             //p_isTip && q_isTip is possible eg. dot or dot of  i etc.
             //-------------------------------------- 
-            //find matching side 
-
+            //find matching side:
+            //the bone connects between triangle p and q (via centroid)
+            //
             if (p.e0.IsOutside)
             {
                 //find matching side on q
@@ -536,7 +637,12 @@ namespace Typography.Rendering
                 return minAt;
             }
         }
-        static int OutSideCount(GlyphTriangle t)
+        /// <summary>
+        /// count number of outside edge
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        static int OutSideEdgeCount(GlyphTriangle t)
         {
             int n = 0;
             n += t.e0.IsOutside ? 1 : 0;
@@ -544,28 +650,32 @@ namespace Typography.Rendering
             n += t.e2.IsOutside ? 1 : 0;
             return n;
         }
-
+        static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
+        static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
+        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
         public override string ToString()
         {
             return p + " -> " + q;
         }
     }
 
-    public enum GlyphTrianglePart : byte
-    {
-        Unknown,
-        VericalStem,
-        HorizontalStem,
-        Other,
-    }
+    //public enum GlyphTrianglePart : byte
+    //{
+    //    Unknown,
+    //    VericalStem,
+    //    HorizontalStem,
+    //    Other,
+    //}
     public class GlyphTriangle
     {
+
 
         DelaunayTriangle _tri;
         public EdgeLine e0;
         public EdgeLine e1;
         public EdgeLine e2;
 
+        //centroid of edge mass
         double centroidX;
         double centroidY;
 
@@ -584,52 +694,52 @@ namespace Typography.Rendering
             e1.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P1, tri.P2));
             e2.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P2, tri.P0));
         }
-        static int RoundToNearestSide(float org, int gridsize)
-        {
-            float actual1 = org / (float)gridsize;
-            int integer1 = (int)(actual1);
-            float floatModulo = actual1 - integer1;
-            if (floatModulo > (gridsize / 2))
-            {
-                return (integer1 + 1) + gridsize;
-            }
-            else
-            {
-                return integer1 * gridsize;
-            }
-        }
-        public void Analyze(int pixelWidth, int pixelHeight)
-        {
-            //check if triangle is part of vertical/horizontal stem or not
-            //snap some edge to match with pixel size            
-            //1. outside count
+        //static int RoundToNearestSide(float org, int gridsize)
+        //{
+        //    float actual1 = org / (float)gridsize;
+        //    int integer1 = (int)(actual1);
+        //    float floatModulo = actual1 - integer1;
+        //    if (floatModulo > (gridsize / 2))
+        //    {
+        //        return (integer1 + 1) + gridsize;
+        //    }
+        //    else
+        //    {
+        //        return integer1 * gridsize;
+        //    }
+        //}
+        //public void Analyze(int pixelWidth, int pixelHeight)
+        //{
+        //    //check if triangle is part of vertical/horizontal stem or not
+        //    //snap some edge to match with pixel size            
+        //    //1. outside count
 
-            int outside_count =
-                ((e0.IsOutside) ? 1 : 0) +
-                ((e1.IsOutside) ? 1 : 0) +
-                ((e2.IsOutside) ? 1 : 0);
-            switch (outside_count)
-            {
-                case 0:
-                    break;
-                case 1:
-                    {
-                        //check this
-                    }
-                    break;
-                case 2:
-                    {
-                        //have 2 outside
-                        //usu
-                    }
-                    break;
-                default:
+        //    int outside_count =
+        //        ((e0.IsOutside) ? 1 : 0) +
+        //        ((e1.IsOutside) ? 1 : 0) +
+        //        ((e2.IsOutside) ? 1 : 0);
+        //    switch (outside_count)
+        //    {
+        //        case 0:
+        //            break;
+        //        case 1:
+        //            {
+        //                //check this
+        //            }
+        //            break;
+        //        case 2:
+        //            {
+        //                //have 2 outside
+        //                //usu
+        //            }
+        //            break;
+        //        default:
 
-                    break;
+        //            break;
 
-            }
+        //    }
 
-        }
+        //}
         public double CentroidX
         {
             get { return centroidX; }
@@ -666,23 +776,12 @@ namespace Typography.Rendering
         Other
     }
 
-    static class MyMath
-    {
-
-        /// <summary>
-        /// Convert degrees to radians
-        /// </summary>
-        /// <param name="degrees">An angle in degrees</param>
-        /// <returns>The angle expressed in radians</returns>
-        public static double DegreesToRadians(double degrees)
-        {
-            const double degToRad = System.Math.PI / 180.0f;
-            return degrees * degToRad;
-        }
-
-    }
+    /// <summary>
+    /// edge of GlyphTriangle
+    /// </summary>
     public class EdgeLine
     {
+
         public double x0;
         public double y0;
         public double x1;

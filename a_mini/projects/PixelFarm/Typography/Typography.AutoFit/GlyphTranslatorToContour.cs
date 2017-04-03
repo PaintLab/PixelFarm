@@ -23,7 +23,7 @@ namespace Typography.Rendering
             //-----------------------------------
             contours = new List<GlyphContour>();
             //start with blank contour
-            
+
         }
         public void CloseContour()
         {
@@ -168,12 +168,10 @@ namespace Typography.Rendering
     {
         public List<GlyphPart> parts = new List<GlyphPart>();
         public List<float> allPoints;
-
-        //result of analysis
         public List<GlyphPoint2D> mergedPoints;
         bool analyzed;
+        bool analyzedClockDirection;
         bool isClockwise;
-
         public GlyphContour()
         {
         }
@@ -181,14 +179,33 @@ namespace Typography.Rendering
         {
             parts.Add(part);
         }
-
-        public bool IsClockwise
-        {
-            get { return this.isClockwise; }
-        }
         public void Analyze(GlyphPartAnalyzer analyzer)
         {
             if (analyzed) return;
+            //flatten each part ...
+            //-------------------------------
+
+            int j = parts.Count;
+            //---------------
+            for (int i = 0; i < j; ++i)
+            {
+                parts[i].Analyze(analyzer);
+            }
+            analyzed = true;
+        }
+        public bool IsClosewise()
+        {
+            if (analyzedClockDirection)
+            {
+                return isClockwise;
+            }
+
+            //we find direction from merge
+            if (mergedPoints == null)
+            {
+                throw new NotSupportedException();
+            }
+            analyzedClockDirection = true;
             // 
             //---------------
             //http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
@@ -201,44 +218,35 @@ namespace Typography.Rendering
                 //Sum over the edges, (x2 − x1)(y2 + y1). 
                 //If the result is positive the curve is clockwise,
                 //if it's negative the curve is counter-clockwise. (The result is twice the enclosed area, with a +/- convention.)
-                int j = allPoints.Count;
-                float total = 0;
-                for (int i = 3; i < j; ++i)
+                int j = mergedPoints.Count;
+                double total = 0;
+                for (int i = 1; i < j; ++i)
                 {
-                    float x0 = allPoints[i - 3];
-                    float y0 = allPoints[i - 2];
-                    float x1 = allPoints[i - 1];
-                    float y1 = allPoints[i];
+                    GlyphPoint2D p0 = mergedPoints[i - 1];
+                    GlyphPoint2D p1 = mergedPoints[i];
+
+                    double x0 = p0.x;
+                    double y0 = p0.y;
+                    double x1 = p1.x;
+                    double y1 = p1.y;
 
                     total += (x1 - x0) * (y1 + y0);
                     i += 2;
                 }
                 //the last one
                 {
-                    float x0 = allPoints[j - 2];
-                    float y0 = allPoints[j - 1];
-                    float x1 = allPoints[0];
-                    float y1 = allPoints[1];
+                    GlyphPoint2D p0 = mergedPoints[j - 1];
+                    GlyphPoint2D p1 = mergedPoints[0];
+
+                    double x0 = p0.x;
+                    double y0 = p0.y;
+                    double x1 = p1.x;
+                    double y1 = p1.y;
                     total += (x1 - x0) * (y1 + y0);
                 }
-
                 isClockwise = total >= 0;
-
             }
-
-            //flatten each part ...
-            //-------------------------------
-            {
-                int j = parts.Count;
-                //---------------
-                for (int i = 0; i < j; ++i)
-                {
-                    parts[i].Analyze(analyzer);
-                }
-            }
-
-
-            analyzed = true;
+            return isClockwise;
         }
     }
 
@@ -254,18 +262,16 @@ namespace Typography.Rendering
     {
         public GlyphPartAnalyzer()
         {
-            this.NSteps = 20;
+            this.NSteps = 2;//default
         }
         public int NSteps { get; set; }
-
-
-        public void CreateBezierVxs4(
+        public void GeneratePointsFromCurve4(
             int nsteps,
             List<GlyphPoint2D> points,
             Vector2 start, Vector2 end,
             Vector2 control1, Vector2 control2)
         {
-            var curve = new BezierCurveCubic(
+            var curve = new BezierCurveCubic( //Cubic curve -> curve4
                 start, end,
                 control1, control2);
             points.Add(new GlyphPoint2D(start.X, start.Y, PointKind.C4Start));
@@ -279,13 +285,13 @@ namespace Typography.Rendering
             }
             points.Add(new GlyphPoint2D(end.X, end.Y, PointKind.C4End));
         }
-        public void CreateBezierVxs3(
+        public void GeneratePointsFromCurve3(
             int nsteps,
             List<GlyphPoint2D> points,
             Vector2 start, Vector2 end,
             Vector2 control1)
         {
-            var curve = new BezierCurveQuadric(
+            var curve = new BezierCurveQuadric( //Quadric curve-> curve3
                 start, end,
                 control1);
             points.Add(new GlyphPoint2D(start.X, start.Y, PointKind.C3Start));
@@ -460,7 +466,7 @@ namespace Typography.Rendering
         public override void Analyze(GlyphPartAnalyzer analyzer)
         {
             points = new List<GlyphPoint2D>();
-            analyzer.CreateBezierVxs3(
+            analyzer.GeneratePointsFromCurve3(
                 analyzer.NSteps,
                 points,
                 new Vector2(x0, y0),
@@ -499,7 +505,7 @@ namespace Typography.Rendering
         public override void Analyze(GlyphPartAnalyzer analyzer)
         {
             points = new List<GlyphPoint2D>();
-            analyzer.CreateBezierVxs4(
+            analyzer.GeneratePointsFromCurve4(
                 analyzer.NSteps,
                 points,
                 new Vector2(x0, y0),

@@ -21,8 +21,7 @@ namespace Typography.Rendering
             //master outline analysis 
             List<GlyphContour> contours = glyphToCountor.GetContours(); //analyzed contour             
             int j = contours.Count;
-
-            analyzer.NSteps = 4;
+            analyzer.NSteps = 2;
             for (int i = 0; i < j; ++i)
             {
                 contours[i].Analyze(analyzer);
@@ -30,28 +29,41 @@ namespace Typography.Rendering
 
             if (j > 0)
             {
-                return TessWithPolyTri(contours);
+                return CreateFitOutline(contours);
             }
             else
             {
                 return null;
             }
         }
-        static GlyphFitOutline TessWithPolyTri(List<GlyphContour> contours)
+        static GlyphFitOutline CreateFitOutline(List<GlyphContour> contours)
         {
-            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
+
             int cntCount = contours.Count;
             GlyphContour cnt = contours[0];
-            Poly2Tri.Polygon polygon = CreatePolygon2(contours[0]);//first contour            
-            bool isHoleIf = !cnt.IsClockwise;
-            //if (cntCount > 0)
-            //{
-            //    //debug only
+            //--------------------------
+            //1. create polygon 
+            Poly2Tri.Polygon mainPolygon = CreatePolygon(cnt);//first contour        
+            bool isClockWise = cnt.IsClosewise();
+            //review is hole or not here
+            //eg i
+            //-------------------------- 
             for (int n = 1; n < cntCount; ++n)
             {
                 cnt = contours[n];
                 //IsHole is correct after we Analyze() the glyph contour
-                polygon.AddHole(CreatePolygon2(cnt));
+                Poly2Tri.Polygon subPolygon = CreatePolygon(cnt);
+                if (cnt.IsClosewise())
+                {
+                    mainPolygon.AddHole(subPolygon);
+                }
+                else
+                {
+                    //this is not a hole
+                    //eg i j has 2 part
+                    //                    
+                }
+                 
                 //if (cnt.IsClockwise == isHoleIf)
                 //{
                 //     polygon.AddHole(CreatePolygon2(cnt));
@@ -62,17 +74,17 @@ namespace Typography.Rendering
                 //    //the is a complete separate dot  (i head) over i body 
                 //}
             }
-            //}
-
             //------------------------------------------
-            Poly2Tri.P2T.Triangulate(polygon); //that poly is triangulated 
-            GlyphFitOutline glyphFitOutline = new GlyphFitOutline(polygon, contours);
+            //2. tri angulaet 
+            Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
+            //3. create fit outline
+            GlyphFitOutline glyphFitOutline = new GlyphFitOutline(mainPolygon, contours);
+            //4. analyze
             glyphFitOutline.Analyze();
             //------------------------------------------
-#if DEBUG
+
             List<GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
             int triangleCount = triAngles.Count;
-
             for (int i = 0; i < triangleCount; ++i)
             {
                 //---------------
@@ -81,7 +93,7 @@ namespace Typography.Rendering
                 AssignPointEdgeInvolvement(tri.e1);
                 AssignPointEdgeInvolvement(tri.e2);
             }
-#endif
+
             return glyphFitOutline;
         }
 
@@ -107,7 +119,7 @@ namespace Typography.Rendering
         /// </summary>
         /// <param name="cnt"></param>
         /// <returns></returns>
-        static Poly2Tri.Polygon CreatePolygon2(GlyphContour cnt)
+        static Poly2Tri.Polygon CreatePolygon(GlyphContour cnt)
         {
             List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
             List<GlyphPart> allParts = cnt.parts;
@@ -121,15 +133,16 @@ namespace Typography.Rendering
                 int tt = 0;
                 int j = allParts.Count;
 
+                //TODO: review here
                 for (int i = 0; i < j; ++i)
                 {
                     GlyphPart p = allParts[i];
-
                     List<GlyphPoint2D> fpoints = p.GetFlattenPoints();
                     if (tt == 0)
                     {
+                        //first part 
                         int n = fpoints.Count;
-                        for (int m = 0; m < n; ++m)
+                        for (int m = 0; m < n; ++m) //first part we start at m=0
                         {
                             //GlyphPoint2D fp = fpoints[m];
                             mergedPoints.Add(fpoints[m]);
@@ -140,7 +153,7 @@ namespace Typography.Rendering
                     }
                     else
                     {
-                        //except first point
+                        //except first point, other part we start at m=1
                         int n = fpoints.Count;
                         for (int m = 1; m < n; ++m)
                         {
@@ -150,7 +163,6 @@ namespace Typography.Rendering
                             //allPoints.Add((float)fp.y);
                         }
                     }
-
                 }
 
             }
