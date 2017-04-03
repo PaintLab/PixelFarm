@@ -69,25 +69,34 @@ namespace Typography.Rendering
         float latestMoveToY;
         GlyphContour currentCnt;
         List<float> allPoints = new List<float>();
+        GlyphPart _latestPart;
 
         public GlyphContourBuilder()
         {
 
             Reset();
         }
-        public void MoveTo(float x, float y)
+        public void MoveTo(float x0, float y0)
         {
-            this.latestMoveToX = this.curX = x;
-            this.latestMoveToY = this.curY = y;
+            this.latestMoveToX = this.curX = x0;
+            this.latestMoveToY = this.curY = y0;
+            _latestPart = null;
         }
-        public void LineTo(float x, float y)
+        public void LineTo(float x1, float y1)
         {
-            currentCnt.AddPart(new GlyphLine(curX, curY, x, y));
-            this.curX = x;
-            this.curY = y;
+            if (_latestPart != null)
+            {
+                currentCnt.AddPart(_latestPart = new GlyphLine(_latestPart, x1, y1));
+            }
+            else
+            {
+                currentCnt.AddPart(_latestPart = new GlyphLine(curX, curY, x1, y1));
+            }
+            this.curX = x1;
+            this.curY = y1;
 
-            allPoints.Add(x);
-            allPoints.Add(y);
+            allPoints.Add(x1);
+            allPoints.Add(y1);
 
         }
         public void CloseFigure()
@@ -97,7 +106,18 @@ namespace Typography.Rendering
             {
                 return;
             }
-            currentCnt.AddPart(new GlyphLine(curX, curY, latestMoveToX, latestMoveToY));
+
+
+            if (_latestPart != null)
+            {
+                currentCnt.AddPart(_latestPart = new GlyphLine(_latestPart, latestMoveToX, latestMoveToY));
+            }
+            else
+            {
+                currentCnt.AddPart(_latestPart = new GlyphLine(curX, curY, latestMoveToX, latestMoveToY));
+            }
+
+
 
             allPoints.Add(latestMoveToX);
             allPoints.Add(latestMoveToY);
@@ -106,50 +126,65 @@ namespace Typography.Rendering
             this.curY = latestMoveToY;
         }
 
-        public void Reset()
+
+        public void Curve3(float x1, float y1, float x2, float y2)
         {
-            currentCnt = new GlyphContour();
-            this.latestMoveToX = this.curX = this.latestMoveToY = this.curY = 0;
-            allPoints = new List<float>();
+            if (_latestPart != null)
+            {
+                currentCnt.AddPart(_latestPart = new GlyphCurve3(
+                 _latestPart,
+                  x1, y1,
+                  x2, y2));
+            }
+            else
+            {
+                currentCnt.AddPart(new GlyphCurve3(
+                    curX, curY,
+                    x1, y1,
+                    x2, y2));
+            }
+            //
+            allPoints.Add(curX);
+            allPoints.Add(curY);
+            allPoints.Add(x1);
+            allPoints.Add(y1);
+            allPoints.Add(x2);
+            allPoints.Add(y2);
+
+            this.curX = x2;
+            this.curY = y2;
         }
-        public void Curve3(float p2x, float p2y, float x, float y)
+        public void Curve4(float x1, float y1, float x2, float y2, float x3, float y3)
         {
-            currentCnt.AddPart(new GlyphCurve3(
-                curX, curY,
-                p2x, p2y,
-                x, y));
+            if (_latestPart != null)
+            {
+                currentCnt.AddPart(_latestPart = new GlyphCurve4(
+                   _latestPart,
+                    x1, y1,
+                    x2, y2,
+                    x3, y3));
+            }
+            else
+            {
+                currentCnt.AddPart(_latestPart = new GlyphCurve4(
+                   curX, curY,
+                   x1, y1,
+                   x2, y2,
+                   x3, y3));
+            }
 
             allPoints.Add(curX);
             allPoints.Add(curY);
-            allPoints.Add(p2x);
-            allPoints.Add(p2y);
-            allPoints.Add(x);
-            allPoints.Add(y);
-
-            this.curX = x;
-            this.curY = y;
-        }
-        public void Curve4(float p2x, float p2y, float p3x, float p3y, float x, float y)
-        {
-            currentCnt.AddPart(new GlyphCurve4(
-                curX, curY,
-                p2x, p2y,
-                p3x, p3y,
-                x, y));
+            allPoints.Add(x1);
+            allPoints.Add(y1);
+            allPoints.Add(x2);
+            allPoints.Add(y2);
+            allPoints.Add(x3);
+            allPoints.Add(y3);
 
 
-            allPoints.Add(curX);
-            allPoints.Add(curY);
-            allPoints.Add(p2x);
-            allPoints.Add(p2y);
-            allPoints.Add(p3x);
-            allPoints.Add(p3y);
-            allPoints.Add(x);
-            allPoints.Add(y);
-
-
-            this.curX = x;
-            this.curY = y;
+            this.curX = x3;
+            this.curY = y3;
         }
         public GlyphContour CurrentContour
         {
@@ -158,15 +193,22 @@ namespace Typography.Rendering
                 return currentCnt;
             }
         }
-        public List<float> GetAllPoints()
+        //public List<float> GetAllPoints()
+        //{
+        //    return this.allPoints;
+        //}
+        public void Reset()
         {
-            return this.allPoints;
+            _latestPart = null;
+            currentCnt = new GlyphContour();
+            this.latestMoveToX = this.curX = this.latestMoveToY = this.curY = 0;
+            allPoints = new List<float>();
         }
     }
 
     public class GlyphContour
     {
-        // public List<float> allPoints;
+
         public List<GlyphPart> parts = new List<GlyphPart>();
         public List<GlyphPoint2D> mergedPoints;
         public List<GlyphPoint2D> flattenPoints;
@@ -189,13 +231,13 @@ namespace Typography.Rendering
 
             int j = parts.Count;
             //---------------
+            //start ...
             flattenPoints = flattener.Results = new List<GlyphPoint2D>();
             for (int i = 0; i < j; ++i)
             {
                 //flatten each part
                 parts[i].Flatten(flattener);
             }
-
 
 
             analyzed = true;
@@ -323,6 +365,8 @@ namespace Typography.Rendering
         public GlyphPart PrevPart { get; set; }
         public abstract void Flatten(GlyphPartFlattener flattener);
 
+        public abstract Vector2 GetLastPoint();
+
 
 #if DEBUG
         static int dbugTotalId;
@@ -447,7 +491,7 @@ namespace Typography.Rendering
         public float y0;
         public float x1;
         public float y1;
-       
+
         public GlyphLine(float x0, float y0, float x1, float y1)
         {
             this.x0 = x0;
@@ -456,8 +500,18 @@ namespace Typography.Rendering
             this.x1 = x1;
             this.y1 = y1;
         }
+        public GlyphLine(GlyphPart prevPart, float x1, float y1)
+        {
+            //this.x0 = x0;
+            //this.y0 = y0;
 
-
+            this.x1 = x1;
+            this.y1 = y1;
+        }
+        public override Vector2 GetLastPoint()
+        {
+            return new Vector2(x1, y1);
+        }
         public override void Flatten(GlyphPartFlattener flattener)
         {
 
@@ -486,7 +540,20 @@ namespace Typography.Rendering
             this.x2 = x2;
             this.y2 = y2;
         }
-
+        public GlyphCurve3(GlyphPart prevPart, float x1, float y1, float x2, float y2)
+        {
+            this.PrevPart = prevPart;
+            //this.x0 = x0;
+            //this.y0 = y0;
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
+        }
+        public override Vector2 GetLastPoint()
+        {
+            return new Vector2(x2, y2);
+        }
         public override void Flatten(GlyphPartFlattener flattener)
         {
 
@@ -522,6 +589,24 @@ namespace Typography.Rendering
             this.y2 = y2;
             this.x3 = x3;
             this.y3 = y3;
+        }
+        public GlyphCurve4(GlyphPart prevPart, float x1, float y1,
+         float x2, float y2,
+         float x3, float y3)
+        {
+            //this.x0 = x0;
+            //this.y0 = y0;
+            this.PrevPart = prevPart;
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
+            this.x3 = x3;
+            this.y3 = y3;
+        }
+        public override Vector2 GetLastPoint()
+        {
+            return new Vector2(x3, y3);
         }
         public override void Flatten(GlyphPartFlattener flattener)
         {

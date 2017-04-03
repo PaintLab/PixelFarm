@@ -79,6 +79,7 @@ namespace Typography.Rendering
             GlyphContour newc = new GlyphContour();
             List<GlyphPart> parts = contour.parts;
             int m = parts.Count;
+            GlyphPart latestPart = null;
             for (int n = 0; n < m; ++n)
             {
                 GlyphPart p = parts[n];
@@ -88,18 +89,19 @@ namespace Typography.Rendering
                     case GlyphPartKind.Curve3:
                         {
                             GlyphCurve3 curve3 = (GlyphCurve3)p;
-                            newc.AddPart(new GlyphCurve3(
-                                curve3.x0 * pixelScale, curve3.y0 * pixelScale,
+                            newc.AddPart(latestPart = new GlyphCurve3(
+                                //curve3.x0 * pixelScale, curve3.y0 * pixelScale,
+                                latestPart,
                                 curve3.x1 * pixelScale, curve3.y1 * pixelScale,
                                 curve3.x2 * pixelScale, curve3.y2 * pixelScale));
-
                         }
                         break;
                     case GlyphPartKind.Curve4:
                         {
                             GlyphCurve4 curve4 = (GlyphCurve4)p;
-                            newc.AddPart(new GlyphCurve4(
-                                  curve4.x0 * pixelScale, curve4.y0 * pixelScale,
+                            newc.AddPart(latestPart = new GlyphCurve4(
+                                  //curve4.x0 * pixelScale, curve4.y0 * pixelScale,
+                                  latestPart,
                                   curve4.x1 * pixelScale, curve4.y1 * pixelScale,
                                   curve4.x2 * pixelScale, curve4.y2 * pixelScale,
                                   curve4.x3 * pixelScale, curve4.y3 * pixelScale
@@ -109,8 +111,9 @@ namespace Typography.Rendering
                     case GlyphPartKind.Line:
                         {
                             GlyphLine line = (GlyphLine)p;
-                            newc.AddPart(new GlyphLine(
-                                line.x0 * pixelScale, line.y0 * pixelScale,
+                            newc.AddPart(latestPart = new GlyphLine(
+                                //line.x0 * pixelScale, line.y0 * pixelScale,
+                                latestPart,
                                 line.x1 * pixelScale, line.y1 * pixelScale
                                 ));
                         }
