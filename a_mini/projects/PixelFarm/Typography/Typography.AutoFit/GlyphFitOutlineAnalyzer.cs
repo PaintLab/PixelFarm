@@ -55,16 +55,22 @@ namespace Typography.Rendering
                 cnt = contours[n];
                 //IsHole is correct after we Analyze() the glyph contour
                 Poly2Tri.Polygon subPolygon = CreatePolygon(cnt);
-                if (cnt.IsClosewise())
-                {
-                    mainPolygon.AddHole(subPolygon);
-                }
-                else
-                {
-                    //TODO: review here
-                    //the is a complete separate part                   
-                    //eg i j has 2 part (dot over i and j etc)
-                }
+                mainPolygon.AddHole(subPolygon);
+                //if (cnt.IsClosewise())
+                //{
+
+                //}
+
+                //if (cnt.IsClosewise())
+                //{
+                //    mainPolygon.AddHole(subPolygon);
+                //}
+                //else
+                //{
+                //    //TODO: review here
+                //    //the is a complete separate part                   
+                //    //eg i j has 2 part (dot over i and j etc)
+                //}
             }
             //------------------------------------------
             //2. tri angulaet 
@@ -113,107 +119,55 @@ namespace Typography.Rendering
         /// <returns></returns>
         static Poly2Tri.Polygon CreatePolygon(GlyphContour cnt)
         {
-            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
-            List<GlyphPart> allParts = cnt.parts;
-            //---------------------------------------
-            //merge all generated points
-            //also remove duplicated point too! 
-            List<GlyphPoint2D> mergedPoints = cnt.flattenPoints;
-            cnt.mergedPoints = mergedPoints;
-            //---------------------------------------
-            //{
-            //    int tt = 0;
-            //    int j = allParts.Count;
+            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>(); 
+            List<GlyphPoint2D> flattenPoints = cnt.flattenPoints;
 
-            //    //TODO: review here
-            //    for (int i = 0; i < j; ++i)
-            //    {
-            //        GlyphPart p = allParts[i];
-            //        List<GlyphPoint2D> fpoints = p.GetFlattenPoints();
-            //        if (tt == 0)
-            //        {
-            //            //first part 
-            //            int n = fpoints.Count;
-            //            for (int m = 0; m < n; ++m) //first part we start at m=0
-            //            {
-            //                //GlyphPoint2D fp = fpoints[m];
-            //                mergedPoints.Add(fpoints[m]);
-            //                //allPoints.Add((float)fp.x);
-            //                //allPoints.Add((float)fp.y);
-            //            }
-            //            tt++;
-            //        }
-            //        else
-            //        {
-            //            //except first point, other part we start at m=1
-            //            int n = fpoints.Count;
-            //            for (int m = 1; m < n; ++m)
-            //            {
-            //                //GlyphPoint2D fp = fpoints[m];
-            //                mergedPoints.Add(fpoints[m]);
-            //                //allPoints.Add((float)fp.x);
-            //                //allPoints.Add((float)fp.y);
-            //            }
-            //        }
-            //    }
+            //limitation: poly tri not accept duplicated points! ***
 
-            //}
-            //---------------------------------------
+            double prevX = 0;
+            double prevY = 0;
+            Dictionary<TmpPoint, bool> tmpPoints = new Dictionary<TmpPoint, bool>();
+            int lim = flattenPoints.Count - 1;
+
+            for (int i = 0; i < lim; ++i)
             {
-                ////check last (x,y) and first (x,y)
-                int lim = mergedPoints.Count - 1;
-                //{
-                //    if (mergedPoints[lim].IsEqualValues(mergedPoints[0]))
-                //    {
-                //        //remove last (x,y)
-                //        mergedPoints.RemoveAt(lim);
-                //        lim -= 1;
-                //    }
-                //}
+                GlyphPoint2D p = flattenPoints[i];
+                double x = p.x;
+                double y = p.y;
 
-                //limitation: poly tri not accept duplicated points!
-                double prevX = 0;
-                double prevY = 0;
-                Dictionary<TmpPoint, bool> tmpPoints = new Dictionary<TmpPoint, bool>();
-                lim = mergedPoints.Count;
-
-                for (int i = 0; i < lim; ++i)
+                if (x == prevX && y == prevY)
                 {
-                    GlyphPoint2D p = mergedPoints[i];
-                    double x = p.x;
-                    double y = p.y;
-
-                    if (x == prevX && y == prevY)
+                    if (i > 0)
                     {
-                        if (i > 0)
+                        throw new NotSupportedException();
+                    }
+                }
+                else
+                {
+                    TmpPoint tmp_point = new TmpPoint(x, y);
+                    if (!tmpPoints.ContainsKey(tmp_point))
+                    {
+                        //ensure no duplicated point
+                        tmpPoints.Add(tmp_point, true);
+                        if (p.triangulationPoint != null)
                         {
-                            throw new NotSupportedException();
+
                         }
+                        points.Add(p.triangulationPoint = new Poly2Tri.TriangulationPoint(x, y) { userData = p });
                     }
                     else
                     {
-                        TmpPoint tmp_point = new TmpPoint(x, y);
-                        if (!tmpPoints.ContainsKey(tmp_point))
-                        {
-                            //ensure no duplicated point
-                            tmpPoints.Add(tmp_point, true);
-                            //var userTriangulationPoint = new Poly2Tri.TriangulationPoint(x, y) { userData = p };
-                            //p.triangulationPoint = userTriangulationPoint;
-                            points.Add(p.triangulationPoint = new Poly2Tri.TriangulationPoint(x, y) { userData = p });
-                        }
-                        else
-                        {
-                            throw new NotSupportedException();
-                        }
-
-                        prevX = x;
-                        prevY = y;
+                        throw new NotSupportedException();
                     }
-                }
 
-                Poly2Tri.Polygon polygon = new Poly2Tri.Polygon(points.ToArray());
-                return polygon;
+                    prevX = x;
+                    prevY = y;
+                }
             }
+
+            Poly2Tri.Polygon polygon = new Poly2Tri.Polygon(points.ToArray());
+            return polygon;
+
         }
         static void AssignPointEdgeInvolvement(EdgeLine edge)
         {

@@ -24,14 +24,37 @@ namespace Typography.Rendering
             //then create     
             List<GlyphContour> contours = glyphOutline.Contours;
             int j = contours.Count;
-            tx.BeginRead(j);
+
             for (int i = 0; i < j; ++i)
             {
                 //new contour
-                CreateFitShape(tx, contours[i], pxScale, false, true, false);
-                tx.CloseContour();
+                contours[i].ClearAllAdjustValues();
+            }
+
+#if DEBUG
+            s_dbugAffectedPoints.Clear();
+            s_dbugAff2.Clear();
+#endif
+            List<List<Point2d>> genPointList = new List<List<Point2d>>();
+            for (int i = 0; i < j; ++i)
+            {
+                //new contour
+                List<Point2d> genPoints = new List<Point2d>();
+                CreateFitShape(genPoints, contours[i], pxScale, false, true, false);
+                genPointList.Add(genPoints);
+            }
+
+            //-------------
+            tx.BeginRead(j);
+            for (int i = 0; i < j; ++i)
+            {
+                CreateFitShape3(tx, genPointList[i], contours[i]);
             }
             tx.EndRead();
+            //-------------
+
+
+            //reset all adjust
         }
         const int GRID_SIZE = 1;
         const float GRID_SIZE_25 = 1f / 4f;
@@ -84,7 +107,12 @@ namespace Typography.Rendering
                             GlyphPoint2D a_glyph_p = (GlyphPoint2D)a_p.userData;
                             a_glyph_p.AdjustedY = -remaining;
 #if DEBUG
-                            s_affectedPoints.Add(a_glyph_p);
+                            if (!s_dbugAff2.ContainsKey(a_glyph_p))
+                            {
+                                s_dbugAff2.Add(a_glyph_p, true);
+                                s_dbugAffectedPoints.Add(a_glyph_p);
+                            }
+
 #endif
                         }
                         if (a_q != null && a_q.userData is GlyphPoint2D)
@@ -92,7 +120,12 @@ namespace Typography.Rendering
                             GlyphPoint2D a_glyph_q = (GlyphPoint2D)a_q.userData;
                             a_glyph_q.AdjustedY = -remaining;
 #if DEBUG
-                            s_affectedPoints.Add(a_glyph_q);
+                            if (!s_dbugAff2.ContainsKey(a_glyph_q))
+                            {
+                                s_dbugAff2.Add(a_glyph_q, true);
+                                s_dbugAffectedPoints.Add(a_glyph_q);
+                            }
+
 #endif
                         }
                     }
@@ -125,19 +158,212 @@ namespace Typography.Rendering
                 this.x = x;
                 this.y = y;
             }
+#if DEBUG
+            public override string ToString()
+            {
+                return "(" + x + "," + y + ")";
+            }
+#endif
         }
 #if DEBUG
-        static List<GlyphPoint2D> s_affectedPoints = new List<GlyphPoint2D>();
+        public static List<GlyphPoint2D> s_dbugAffectedPoints = new List<GlyphPoint2D>();
+        public static Dictionary<GlyphPoint2D, bool> s_dbugAff2 = new Dictionary<GlyphPoint2D, bool>();
+
 #endif
-        static void CreateFitShape(IGlyphTranslator tx,
-            GlyphContour contour,
-            float pixelScale,
-            bool x_axis,
-            bool y_axis,
-            bool useHalfPixel)
+        //        static void CreateFitShape2(IGlyphTranslator tx,
+        //            GlyphContour contour,
+        //            float pixelScale,
+        //            bool x_axis,
+        //            bool y_axis,
+        //            bool useHalfPixel)
+        //        {
+        //            List<GlyphPoint2D> flattenPoints = contour.flattenPoints;
+
+        //            int j = flattenPoints.Count;
+        //            //merge 0 = start
+        //            //double prev_px = 0;
+        //            //double prev_py = 0;
+        //            double p_x = 0;
+        //            double p_y = 0;
+        //            double first_px = 0;
+        //            double first_py = 0;
+
+        //            //---------------
+        //            //1st round for value adjustment
+        //            //---------------
+        //            List<Point2d> genPoints = new List<Point2d>();
+        //            //find adjust y
+        //#if DEBUG
+        //            s_affectedPoints.Clear();
+        //#endif
+        //            {
+        //                GlyphPoint2D p = flattenPoints[0];
+        //                p_x = p.x * pixelScale;
+        //                p_y = p.y * pixelScale;
+        //                p.AdjustedY = 0; //clear
+
+        //                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide) //TODO: review here
+        //                {
+        //                    //vertical fitting, fit p_y to grid
+        //                    p_y = RoundToNearestY(p, (float)p_y, useHalfPixel);
+
+        //                }
+        //                if (x_axis && p.IsPartOfVerticalEdge && p.IsLeftSide)
+        //                {
+        //                    //horizontal fitting, fix p_x to grid
+        //                    float new_x = RoundToNearestX((float)p_x);
+        //                    p_x = new_x;
+        //                    //adjust right-side vertical edge
+        //                    EdgeLine rightside = p.GetMatchingVerticalEdge();
+        //                }
+        //                //tx.MoveTo((float)p_x, (float)p_y);
+        //                genPoints.Add(new Point2d((float)p_x, (float)p_y));
+        //                //-------------
+        //                first_px = p_x;
+        //                first_py = p_y;
+        //            }
+        //            for (int i = 1; i < j; ++i)
+        //            {
+        //                flattenPoints[i].AdjustedY = 0;//reset
+        //            }
+        //            for (int i = 1; i < j; ++i)
+        //            {
+        //                //all merge point is polygon point
+        //                GlyphPoint2D p = flattenPoints[i];
+        //                p_x = p.x * pixelScale;
+        //                p_y = p.y * pixelScale;
+
+
+        //                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide)  //TODO: review here
+        //                {
+        //                    //vertical fitting, fit p_y to grid
+        //                    p_y = RoundToNearestY(p, (float)p_y, useHalfPixel);
+        //                }
+
+        //                if (x_axis && p.IsPartOfVerticalEdge && p.IsLeftSide)
+        //                {
+        //                    //horizontal fitting, fix p_x to grid
+        //                    float new_x = RoundToNearestX((float)p_x);
+        //                    p_x = new_x;
+        //                }
+
+        //                genPoints.Add(new Point2d((float)p_x, (float)p_y));
+        //                //tx.LineTo((float)p_x, (float)p_y);
+        //            }
+
+        //            //close
+        //            //tx.LineTo((float)first_px, (float)first_py);
+        //            //genPoints.Add(new Point2d((float)first_px, (float)p_y));
+        //            //------------------------------------------------
+
+        //            //adjust value again
+
+        //            int adj_count = 0;
+        //            for (int i = 0; i < j; ++i)
+        //            {
+        //                //all merge point is polygon point
+        //                GlyphPoint2D glyphPoint = flattenPoints[i];
+        //                Point2d p = genPoints[i];
+
+        //                if (glyphPoint.AdjustedY != 0)
+        //                {
+        //                    //  p = new Point2d(p.x, (float)(p.y + glyphPoint.AdjustedY * 3));
+        //                    p = new Point2d(p.x, (float)(p.y + 30));
+        //                    genPoints[i] = p;
+        //                    adj_count++;
+        //                }
+        //            }
+        //            //------------------------------------------------
+        //            if (adj_count != s_affectedPoints.Count)
+        //            {
+
+        //            }
+        //            for (int i = 0; i < j; ++i)
+        //            {
+        //                Point2d p = genPoints[i];
+        //                if (i == 0)
+        //                {
+        //                    tx.MoveTo((float)p.x, (float)p.y);
+        //                }
+        //                else
+        //                {
+        //                    tx.LineTo((float)p.x, (float)p.y);
+        //                }
+        //            }
+        //            //------------------------------------------------
+        //            tx.CloseContour();
+        //        }
+
+
+        static void CreateFitShape3(IGlyphTranslator tx,
+            List<Point2d> genPoints,
+            GlyphContour contour)
         {
-            List<GlyphPoint2D> mergePoints = contour.mergedPoints;
-            int j = mergePoints.Count;
+
+            int j = genPoints.Count;
+            //merge 0 = start
+            //double prev_px = 0;
+            //double prev_py = 0; 
+            float first_px = 0;
+            float first_py = 0;
+
+            //---------------
+            //1st round for value adjustment
+            //---------------
+
+            //find adjust y
+            List<GlyphPoint2D> flattenPoints = contour.flattenPoints;
+            //---------------
+            if (j != flattenPoints.Count)
+            {
+                throw new NotSupportedException();
+            }
+            //---------------
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphPoint2D glyphPoint = flattenPoints[i];
+                Point2d p = genPoints[i];
+
+                if (glyphPoint.AdjustedY != 0)
+                {
+                    if (i == 0)
+                    {
+                        //first point
+                        tx.MoveTo(first_px = p.x, first_py = (float)(p.y + glyphPoint.AdjustedY));
+                    }
+                    else
+                    {
+                        tx.LineTo(p.x, (float)(p.y + glyphPoint.AdjustedY));
+                    }
+                }
+                else
+                {
+                    if (i == 0)
+                    {
+                        //first point
+                        tx.MoveTo(first_px = p.x, first_py = p.y);
+                    }
+                    else
+                    {
+                        tx.LineTo(p.x, p.y);
+                    }
+                }
+            }
+            //close
+            //tx.LineTo(first_px, first_py);
+            tx.CloseContour();
+        }
+        static void CreateFitShape(
+        List<Point2d> genPoints,
+        GlyphContour contour,
+        float pixelScale,
+        bool x_axis,
+        bool y_axis,
+        bool useHalfPixel)
+        {
+            List<GlyphPoint2D> flattenPoints = contour.flattenPoints;
+
+            int j = flattenPoints.Count;
             //merge 0 = start
             //double prev_px = 0;
             //double prev_py = 0;
@@ -149,16 +375,13 @@ namespace Typography.Rendering
             //---------------
             //1st round for value adjustment
             //---------------
-            List<Point2d> genPoints = new List<Point2d>();
+
             //find adjust y
-#if DEBUG
-            s_affectedPoints.Clear();
-#endif
+
             {
-                GlyphPoint2D p = mergePoints[0];
+                GlyphPoint2D p = flattenPoints[0];
                 p_x = p.x * pixelScale;
                 p_y = p.y * pixelScale;
-                p.AdjustedY = 0; //clear
 
                 if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide) //TODO: review here
                 {
@@ -180,14 +403,11 @@ namespace Typography.Rendering
                 first_px = p_x;
                 first_py = p_y;
             }
-            for (int i = 1; i < j; ++i)
-            {
-                mergePoints[i].AdjustedY = 0;//reset
-            }
+
             for (int i = 1; i < j; ++i)
             {
                 //all merge point is polygon point
-                GlyphPoint2D p = mergePoints[i];
+                GlyphPoint2D p = flattenPoints[i];
                 p_x = p.x * pixelScale;
                 p_y = p.y * pixelScale;
 
@@ -216,38 +436,40 @@ namespace Typography.Rendering
 
             //adjust value again
 
-            int adj_count = 0;
-            for (int i = 0; i < j; ++i)
-            {
-                //all merge point is polygon point
-                GlyphPoint2D glyphPoint = mergePoints[i];
-                Point2d p = genPoints[i];
-                if (glyphPoint.AdjustedY != 0)
-                {
-                    p = new Point2d(p.x, (float)(p.y + glyphPoint.AdjustedY));
-                    genPoints[i] = p;
-                    adj_count++;
-                }
-            }
-            //------------------------------------------------
-            if (adj_count != s_affectedPoints.Count)
-            {
+            //int adj_count = 0;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    //all merge point is polygon point
+            //    GlyphPoint2D glyphPoint = flattenPoints[i];
+            //    Point2d p = genPoints[i];
 
-            }
-            for (int i = 0; i < j; ++i)
-            {
-                Point2d p = genPoints[i];
-                if (i == 0)
-                {
-                    tx.MoveTo((float)p.x, (float)p.y);
-                }
-                else
-                {
-                    tx.LineTo((float)p.x, (float)p.y);
-                }
-            }
-            //------------------------------------------------
-            tx.CloseContour();
+            //    if (glyphPoint.AdjustedY != 0)
+            //    {
+            //        //  p = new Point2d(p.x, (float)(p.y + glyphPoint.AdjustedY * 3));
+            //        p = new Point2d(p.x, (float)(p.y + 30));
+            //        genPoints[i] = p;
+            //        adj_count++;
+            //    }
+            //}
+            ////------------------------------------------------
+            //if (adj_count != s_affectedPoints.Count)
+            //{
+
+            //}
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    Point2d p = genPoints[i];
+            //    if (i == 0)
+            //    {
+            //        tx.MoveTo((float)p.x, (float)p.y);
+            //    }
+            //    else
+            //    {
+            //        tx.LineTo((float)p.x, (float)p.y);
+            //    }
+            //}
+            ////------------------------------------------------
+            //tx.CloseContour();
         }
     }
 

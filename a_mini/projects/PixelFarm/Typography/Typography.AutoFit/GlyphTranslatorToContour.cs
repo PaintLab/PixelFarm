@@ -210,7 +210,6 @@ namespace Typography.Rendering
     {
 
         public List<GlyphPart> parts = new List<GlyphPart>();
-        public List<GlyphPoint2D> mergedPoints;
         public List<GlyphPoint2D> flattenPoints;
 
         bool analyzed;
@@ -219,6 +218,17 @@ namespace Typography.Rendering
         public GlyphContour()
         {
         }
+        public void ClearAllAdjustValues()
+        {
+            int j = flattenPoints.Count;
+            for (int i = flattenPoints.Count - 1; i >= 0; --i)
+            {
+                GlyphPoint2D p = flattenPoints[i];
+                p.adjustedX = 0;
+                p.AdjustedY = 0;
+            }
+        }
+         
         public void AddPart(GlyphPart part)
         {
             parts.Add(part);
@@ -250,7 +260,7 @@ namespace Typography.Rendering
             }
 
             //we find direction from merge
-            if (mergedPoints == null)
+            if (flattenPoints == null)
             {
                 throw new NotSupportedException();
             }
@@ -267,12 +277,12 @@ namespace Typography.Rendering
                 //Sum over the edges, (x2 − x1)(y2 + y1). 
                 //If the result is positive the curve is clockwise,
                 //if it's negative the curve is counter-clockwise. (The result is twice the enclosed area, with a +/- convention.)
-                int j = mergedPoints.Count;
+                int j = flattenPoints.Count;
                 double total = 0;
                 for (int i = 1; i < j; ++i)
                 {
-                    GlyphPoint2D p0 = mergedPoints[i - 1];
-                    GlyphPoint2D p1 = mergedPoints[i];
+                    GlyphPoint2D p0 = flattenPoints[i - 1];
+                    GlyphPoint2D p1 = flattenPoints[i];
 
                     double x0 = p0.x;
                     double y0 = p0.y;
@@ -284,8 +294,8 @@ namespace Typography.Rendering
                 }
                 //the last one
                 {
-                    GlyphPoint2D p0 = mergedPoints[j - 1];
-                    GlyphPoint2D p1 = mergedPoints[0];
+                    GlyphPoint2D p0 = flattenPoints[j - 1];
+                    GlyphPoint2D p1 = flattenPoints[0];
 
                     double x0 = p0.x;
                     double y0 = p0.y;
@@ -317,7 +327,10 @@ namespace Typography.Rendering
         public void GeneratePointsFromLine(List<GlyphPoint2D> points,
            Vector2 start, Vector2 end)
         {
-            points.Add(new GlyphPoint2D(start.X, start.Y, PointKind.LineStart));
+            if (points.Count == 0)
+            {
+                points.Add(new GlyphPoint2D(start.X, start.Y, PointKind.LineStart));
+            }
             points.Add(new GlyphPoint2D(end.X, end.Y, PointKind.LineStop));
         }
 
@@ -330,7 +343,10 @@ namespace Typography.Rendering
             var curve = new BezierCurveCubic( //Cubic curve -> curve4
                 start, end,
                 control1, control2);
-            points.Add(new GlyphPoint2D(start.X, start.Y, PointKind.C4Start));
+            if (points.Count == 0)
+            {
+                points.Add(new GlyphPoint2D(start.X, start.Y, PointKind.C4Start));
+            }
             float eachstep = (float)1 / nsteps;
             float stepSum = eachstep;//start
             for (int i = 1; i < nsteps; ++i)
@@ -350,7 +366,10 @@ namespace Typography.Rendering
             var curve = new BezierCurveQuadric( //Quadric curve-> curve3
                 start, end,
                 control1);
-            points.Add(new GlyphPoint2D(start.X, start.Y, PointKind.C3Start));
+            if (points.Count == 0)
+            {
+                points.Add(new GlyphPoint2D(start.X, start.Y, PointKind.C3Start));
+            }
             float eachstep = (float)1 / nsteps;
             float stepSum = eachstep;//start
             for (int i = 1; i < nsteps; ++i)
@@ -361,7 +380,7 @@ namespace Typography.Rendering
             }
             points.Add(new GlyphPoint2D(end.X, end.Y, PointKind.C3End));
         }
-       
+
         public List<GlyphPoint2D> Results;
     }
     public abstract class GlyphPart
@@ -442,6 +461,10 @@ namespace Typography.Rendering
         public EdgeLine horizontalEdge;
         // 
         List<EdgeLine> _edges;
+#if DEBUG
+        static int dbugTotalId;
+        public readonly int dbugId = dbugTotalId++;
+#endif
         public GlyphPoint2D(double x, double y, PointKind kind)
         {
             this.x = x;
@@ -459,10 +482,10 @@ namespace Typography.Rendering
             get { return _adjY; }
             set
             {
-                if (value != 0)
-                {
-                    value = value * 3;
-                }
+                //if (value != 0)
+                //{
+                //    value = value * 3;
+                //}
                 if (_adjY != 0)
                 {
 
@@ -508,7 +531,8 @@ namespace Typography.Rendering
 #if DEBUG
         public override string ToString()
         {
-            return x + "," + y + " " + kind.ToString();
+            return dbugId + " :" + ((AdjustedY != 0) ? "***" : "") +
+                    (x + "," + y + " " + kind.ToString());
         }
 #endif
 

@@ -56,7 +56,7 @@ namespace Typography.Rendering
                         _fitOutline = _fitShapeAnalyzer.Analyze(
                             this._outputGlyphPoints,
                             this._outputContours);
-                        _fitoutlineCollection.Add(glyphIndex, _fitOutline);
+                        //_fitoutlineCollection.Add(glyphIndex, _fitOutline);
                     }
                 }
             }
