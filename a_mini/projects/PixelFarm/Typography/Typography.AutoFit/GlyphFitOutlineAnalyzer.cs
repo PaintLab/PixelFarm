@@ -1,13 +1,45 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
 using System.Collections.Generic;
-
+using Typography.OpenFont;
 namespace Typography.Rendering
 {
     //This is PixelFarm's AutoFit
     //NOT FREE TYPE AUTO FIT***
-    public partial class GlyphFitOutlineAnalyzer
+
+    public class GlyphFitOutlineAnalyzer
     {
+        /// <summary>
+        /// calculate and create GlyphFitOutline
+        /// </summary>
+        /// <param name="glyphPoints"></param>
+        /// <param name="glyphContours"></param>
+        /// <returns></returns>
+        public GlyphFitOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
+        {
+            //1. convert original glyph point to contour
+            _glyphToCountor.Read(glyphPoints, glyphContours);
+            //2. get result as list of contour
+            List<GlyphContour> contours = _glyphToCountor.GetContours();
+            //
+            //3. flatten each contour with the flattener
+            int j = contours.Count;
+            _glyhFlattener.NSteps = 2;
+            for (int i = 0; i < j; ++i)
+            {
+                contours[i].Flatten(_glyhFlattener);
+            }
+            //4. after flatten, the we can create fit outline
+            if (j > 0)
+            {
+                return CreateFitOutline(contours);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         GlyphPartFlattener _glyhFlattener = new GlyphPartFlattener();
         GlyphTranslatorToContour _glyphToCountor = new GlyphTranslatorToContour();
         public GlyphFitOutlineAnalyzer()
@@ -69,22 +101,8 @@ namespace Typography.Rendering
             return glyphFitOutline;
         }
 
-        struct TmpPoint
-        {
-            public readonly double x;
-            public readonly double y;
-            public TmpPoint(double x, double y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-#if DEBUG
-            public override string ToString()
-            {
-                return x + "," + y;
-            }
-#endif
-        }
+
+
 
         /// <summary>
         /// create polygon from flatten curve outline point
@@ -95,14 +113,21 @@ namespace Typography.Rendering
         {
             List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
             List<GlyphPoint2D> flattenPoints = cnt.flattenPoints;
-
-            //limitation: poly tri not accept duplicated points! ***
-
+            //limitation: poly tri not accept duplicated points! *** 
             double prevX = 0;
             double prevY = 0;
-            Dictionary<TmpPoint, bool> tmpPoints = new Dictionary<TmpPoint, bool>();
-            int lim = flattenPoints.Count - 1;
 
+#if DEBUG
+            //dbug check if all point is unique 
+            dbugCheckAllGlyphsAreUnique(flattenPoints);
+#endif
+
+            //1st point
+
+            //TODO: review here -> about last point
+            //
+            int lim = flattenPoints.Count - 1;
+            //pass
             for (int i = 0; i < lim; ++i)
             {
                 GlyphPoint2D p = flattenPoints[i];
@@ -118,29 +143,13 @@ namespace Typography.Rendering
                 }
                 else
                 {
-                    TmpPoint tmp_point = new TmpPoint(x, y);
-                    if (!tmpPoints.ContainsKey(tmp_point))
-                    {
-                        //ensure no duplicated point
-                        tmpPoints.Add(tmp_point, true);
-                        if (p.triangulationPoint != null)
-                        {
+                    points.Add(p.triangulationPoint =
+                        new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = p });
 
-                        }
-                        points.Add(p.triangulationPoint = new Poly2Tri.TriangulationPoint(x, y) { userData = p });
-                    }
-                    else
-                    {
-                        throw new NotSupportedException();
-                    }
-
-                    prevX = x;
-                    prevY = y;
                 }
             }
 
-            Poly2Tri.Polygon polygon = new Poly2Tri.Polygon(points.ToArray());
-            return polygon;
+            return new Poly2Tri.Polygon(points.ToArray());
 
         }
         static void AssignPointEdgeInvolvement(EdgeLine edge)
@@ -202,42 +211,71 @@ namespace Typography.Rendering
             }
 
         }
-    }
-}
-namespace Typography.Rendering
-{
-    using Typography.OpenFont;
-    partial class GlyphFitOutlineAnalyzer
-    {
-        /// <summary>
-        /// calculate and create GlyphFitOutline
-        /// </summary>
-        /// <param name="glyphPoints"></param>
-        /// <param name="glyphContours"></param>
-        /// <returns></returns>
-        public GlyphFitOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
+        //============================
+
+#if DEBUG
+        struct TmpPoint
         {
-            //1. convert original glyph point to contour
-            _glyphToCountor.Read(glyphPoints, glyphContours);
-            //2. get result as list of contour
-            List<GlyphContour> contours = _glyphToCountor.GetContours();
-            //
-            //3. flatten each contour with the flattener
-            int j = contours.Count;
-            _glyhFlattener.NSteps = 2;
-            for (int i = 0; i < j; ++i)
+            public readonly double x;
+            public readonly double y;
+            public TmpPoint(double x, double y)
             {
-                contours[i].Flatten(_glyhFlattener);
+                this.x = x;
+                this.y = y;
             }
-            //4. after flatten, the we can create fit outline
-            if (j > 0)
+            public override string ToString()
             {
-                return CreateFitOutline(contours);
-            }
-            else
-            {
-                return null;
+                return x + "," + y;
             }
         }
+        static Dictionary<TmpPoint, bool> s_debugTmpPoints = new Dictionary<TmpPoint, bool>();
+        static void dbugCheckAllGlyphsAreUnique(List<GlyphPoint2D> flattenPoints)
+        {
+            double prevX = 0;
+            double prevY = 0;
+            s_debugTmpPoints = new Dictionary<TmpPoint, bool>();
+            int lim = flattenPoints.Count - 1;
+            for (int i = 0; i < lim; ++i)
+            {
+                GlyphPoint2D p = flattenPoints[i];
+                double x = p.x;
+                double y = p.y;
+
+                if (x == prevX && y == prevY)
+                {
+                    if (i > 0)
+                    {
+                        throw new NotSupportedException();
+                    }
+                }
+                else
+                {
+                    TmpPoint tmp_point = new TmpPoint(x, y);
+                    if (!s_debugTmpPoints.ContainsKey(tmp_point))
+                    {
+                        //ensure no duplicated point
+                        s_debugTmpPoints.Add(tmp_point, true);
+                        if (p.triangulationPoint != null)
+                        {
+                        }
+                    }
+                    else
+                    {
+                        throw new NotSupportedException();
+                    }
+                    prevX = x;
+                    prevY = y;
+                }
+            }
+
+        }
+#endif
+
+
+
+
+
+
+
     }
 }

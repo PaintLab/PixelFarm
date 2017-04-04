@@ -77,7 +77,7 @@ namespace Typography.Rendering
                 //contBuilder.CloseFigure();
 
                 //_fitOutline = _fitShapeAnalyzer.dbugAnalyze(contBuilder.CurrentContour, new ushort[] { 3 }); 
-         
+
 
                 _fitOutline = _fitShapeAnalyzer.CreateGlyphFitOutline(
                          this._outputGlyphPoints,
@@ -102,6 +102,7 @@ namespace Typography.Rendering
                 {
                     toPixelScale = 1;
                 }
+                //config outline before gen output
                 _fitOutline.ReadOutput(tx, toPixelScale);
             }
             else
