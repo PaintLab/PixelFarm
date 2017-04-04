@@ -53,10 +53,10 @@ namespace Typography.Rendering
                         //_fitOutline = _fitShapeAnalyzer.dbugAnalyze(contBuilder.CurrentContour, new ushort[] { 3 });
 
                         //---------------------------------------------
-                        _fitOutline = _fitShapeAnalyzer.Analyze(
+                        _fitOutline = _fitShapeAnalyzer.CreateGlyphFitOutline(
                             this._outputGlyphPoints,
                             this._outputContours);
-                        _fitoutlineCollection.Add(glyphIndex, _fitOutline);
+                        //_fitoutlineCollection.Add(glyphIndex, _fitOutline);
                     }
                 }
             }
@@ -77,9 +77,9 @@ namespace Typography.Rendering
                 //contBuilder.CloseFigure();
 
                 //_fitOutline = _fitShapeAnalyzer.dbugAnalyze(contBuilder.CurrentContour, new ushort[] { 3 }); 
-         
 
-                _fitOutline = _fitShapeAnalyzer.Analyze(
+
+                _fitOutline = _fitShapeAnalyzer.CreateGlyphFitOutline(
                          this._outputGlyphPoints,
                          this._outputContours);
             }
@@ -102,6 +102,7 @@ namespace Typography.Rendering
                 {
                     toPixelScale = 1;
                 }
+                //config outline before gen output
                 _fitOutline.ReadOutput(tx, toPixelScale);
             }
             else

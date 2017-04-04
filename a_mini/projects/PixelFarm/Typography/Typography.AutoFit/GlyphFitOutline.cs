@@ -1,32 +1,35 @@
 ﻿//MIT, 2017, WinterDev
 using System;
 using System.Collections.Generic;
+using Typography.OpenFont;
 using Poly2Tri;
 namespace Typography.Rendering
 {
 
     public class GlyphFitOutline
     {
-        //this class store result of poly2tri
 
-        Polygon _polygon;
         List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
+        List<GlyphContour> _contours;
+        Polygon _polygon;
         List<GlyphBone> bones;
         List<GlyphBone> boneList2;
 
-        public GlyphFitOutline(Polygon polygon, List<GlyphContour> contours)
+        internal GlyphFitOutline(Polygon polygon, List<GlyphContour> contours)
         {
-            this.Contours = contours;
+            this._contours = contours;
             this._polygon = polygon;
             foreach (DelaunayTriangle tri in polygon.Triangles)
             {
                 tri.MarkAsActualTriangle();
                 _triangles.Add(new GlyphTriangle(tri));
             }
-        }
-        internal List<GlyphContour> Contours { get; set; }
 
-        public void Analyze()
+            Analyze();
+        }
+
+
+        void Analyze()
         {
             //we analyze each triangle here 
             int j = _triangles.Count;
@@ -141,587 +144,336 @@ namespace Typography.Rendering
             }
 
         }
-        int FindLatestConnectedTri(List<GlyphTriangle> usedTriList, GlyphTriangle tri)
+
+        static int FindLatestConnectedTri(List<GlyphTriangle> usedTriList, GlyphTriangle tri)
         {
             //search back ***
             for (int i = usedTriList.Count - 1; i >= 0; --i)
             {
-                GlyphTriangle t = usedTriList[i];
-                if (t.IsConnectedWith(tri))
+                if (usedTriList[i].IsConnectedWith(tri))
                 {
                     return i;
                 }
             }
             return -1;
         }
-#if DEBUG
-        public List<GlyphTriangle> dbugGetTriangles()
+        public List<GlyphTriangle> GetTriangles()
         {
             return _triangles;
         }
-        public List<GlyphBone> dbugGetBones()
+        public List<GlyphBone> GetBones()
         {
             return bones;
         }
-#endif
-    }
 
 
-
-    static class MyMath
-    {
-
+        //=======================================================================================
         /// <summary>
-        /// Convert degrees to radians
+        /// read fitting output
         /// </summary>
-        /// <param name="degrees">An angle in degrees</param>
-        /// <returns>The angle expressed in radians</returns>
-        public static double DegreesToRadians(double degrees)
+        /// <param name="tx">glyph translator</param>
+        public void ReadOutput(IGlyphTranslator tx, float pxScale)
         {
-            const double degToRad = System.Math.PI / 180.0f;
-            return degrees * degToRad;
-        }
-
-    }
-
-    public enum BoneDirection : byte
-    {
-        /// <summary>
-        /// 0 degree direction (horizontal left to right)
-        /// </summary>
-        D0,
-        D45,
-        D90,
-        D135,
-        D180,
-        D225,
-        D270,
-        D315
-    }
-    /// <summary>
-    /// a line that connects between centroid of 2 GlyphTriangle(p => q)
-    /// </summary>
-    public class GlyphBone
-    {
-        public readonly GlyphTriangle p, q;
-        public readonly double boneLength;
-
-        public GlyphBone(GlyphTriangle p, GlyphTriangle q)
-        {
-            this.p = p;
-            this.q = q;
-
-            double dy = q.CentroidY - p.CentroidY;
-            double dx = q.CentroidX - p.CentroidX;
-            this.boneLength = Math.Sqrt(
-                (dy * dy) + (dx * dx)
-                );
-        }
-        public double SlopAngle { get; private set; }
-        public bool IsLongBone { get; set; }
-
-        public LineSlopeKind SlopKind { get; private set; }
-
-        static void CalculateMidPoint(EdgeLine e, out double midX, out double midY)
-        {
-            midX = (e.x0 + e.x1) / 2;
-            midY = (e.y0 + e.y1) / 2;
-        }
-
-        public void Analyze()
-        {
-
+            //TODO: review here
             //
-            //p => (x0,y0)
-            //q => (x1,y1)
-            //line move from p to q 
-            //...
-            //tasks:
-            //1. find slop angle
-            //2. find slope kind
-
-
-
-            //check if q is upper or lower when compare with p
-            //check if q is on left side or right side of p
-            //then we know the direction
-            //....
-            //p
-            double x0 = p.CentroidX;
-            double y0 = p.CentroidY;
-            //q
-            double x1 = q.CentroidX;
-            double y1 = q.CentroidY;
-
-            if (x1 == x0)
+            //-----------------------------------------------------------            
+            //create fit contour
+            //this version use only Agg's vertical hint only ****
+            //(ONLY vertical fitting , NOT apply horizontal fit)
+            //-----------------------------------------------------------     
+            //create outline
+            //then create     
+            List<GlyphContour> contours = this._contours;
+            int j = contours.Count;
+            for (int i = 0; i < j; ++i)
             {
-                this.SlopKind = LineSlopeKind.Vertical;
-                SlopAngle = 1;
+                //new contour
+                contours[i].ClearAllAdjustValues();
             }
-            else
+
+#if DEBUG
+            s_dbugAffectedPoints.Clear();
+            s_dbugAff2.Clear();
+#endif
+            List<List<Point2d>> genPointList = new List<List<Point2d>>();
+            for (int i = 0; i < j; ++i)
             {
-                SlopAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-                if (SlopAngle > _85degreeToRad)
+                //new contour
+                List<Point2d> genPoints = new List<Point2d>();
+                GenerateNewFitPoints(genPoints,
+                    contours[i], pxScale,
+                    false, true, false);
+                genPointList.Add(genPoints);
+            }
+
+            //-------------
+            tx.BeginRead(j);
+            for (int i = 0; i < j; ++i)
+            {
+                GenerateFitOutput(tx, genPointList[i], contours[i]);
+            }
+            tx.EndRead();
+            //-------------
+        }
+        const int GRID_SIZE = 1;
+        const float GRID_SIZE_25 = 1f / 4f;
+        const float GRID_SIZE_50 = 2f / 4f;
+        const float GRID_SIZE_75 = 3f / 4f;
+
+        const float GRID_SIZE_33 = 1f / 3f;
+        const float GRID_SIZE_66 = 2f / 3f;
+
+
+        static float RoundToNearestY(GlyphPoint2D p, float org, bool useHalfPixel)
+        {
+            float floo_int = (int)org;//floor 
+            float remaining = org - floo_int;
+            if (useHalfPixel)
+            {
+                if (remaining > GRID_SIZE_66)
                 {
-                    SlopKind = LineSlopeKind.Vertical;
+                    return (floo_int + 1f);
                 }
-                else if (SlopAngle < _15degreeToRad)
+                else if (remaining > (GRID_SIZE_33))
                 {
-                    SlopKind = LineSlopeKind.Horizontal;
+                    return (floo_int + 0.5f);
                 }
                 else
                 {
-                    SlopKind = LineSlopeKind.Other;
+                    return floo_int;
                 }
-            }
-            //--------------------------------------
-            //for p and q, count number of outside edge
-            //if outsideEdgeCount of triangle >=2 -> this triangle is tip part
-
-            int p_outsideEdgeCount = OutSideEdgeCount(p);
-            int q_outsideEdgeCount = OutSideEdgeCount(q);
-            bool p_isTip = false;
-            bool q_isTip = false;
-
-            if (p_outsideEdgeCount >= 2)
-            {
-                //tip bone
-                p_isTip = true;
-            }
-            if (q_outsideEdgeCount >= 2)
-            {
-                //tipbone
-                q_isTip = true;
-            }
-            //-------------------------------------- 
-            //p_isTip && q_isTip is possible eg. dot or dot of  i etc.
-            //-------------------------------------- 
-            //find matching side:
-            //the bone connects between triangle p and q (via centroid)
-            //
-            if (p.e0.IsOutside)
-            {
-                //find matching side on q
-                MarkMatchingEdge(p.e0, q);
-            }
-            if (p.e1.IsOutside)
-            {
-                //find matching side on q   
-                MarkMatchingEdge(p.e1, q);
-            }
-            if (p.e2.IsOutside)
-            {
-                //find matching side on q
-                MarkMatchingEdge(p.e2, q);
-            }
-
-
-            if (q.e0.IsOutside)
-            {
-                //find matching side on q
-                MarkMatchingEdge(q.e0, p);
-            }
-            if (q.e1.IsOutside)
-            {
-                //find matching side on q   
-                MarkMatchingEdge(q.e1, p);
-            }
-            if (q.e2.IsOutside)
-            {
-                //find matching side on q
-                MarkMatchingEdge(q.e2, p);
-            }
-        }
-        static void MarkMatchingEdge(EdgeLine targetEdge, GlyphTriangle q)
-        {
-
-            EdgeLine matchingEdgeLine;
-            int matchingEdgeSideNo;
-            if (FindMatchingOuterSide(targetEdge, q, out matchingEdgeLine, out matchingEdgeSideNo))
-            {
-                //assign matching edge line   
-                //mid point of each edge
-                //p-triangle's edge midX,midY
-                double pe_midX, pe_midY;
-                CalculateMidPoint(targetEdge, out pe_midX, out pe_midY);
-                //q-triangle's edge midX,midY
-                double qe_midX, qe_midY;
-                CalculateMidPoint(matchingEdgeLine, out qe_midX, out qe_midY);
-
-                if (targetEdge.SlopKind == LineSlopeKind.Vertical)
-                {
-                    //TODO: review same side edge (Fan shape)
-                    if (pe_midX < qe_midX)
-                    {
-                        targetEdge.IsLeftSide = true;
-                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopKind == LineSlopeKind.Vertical)
-                        {
-                            targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                        }
-                    }
-                    else
-                    {
-                        //matchingEdgeLine.IsLeftSide = true;
-                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopKind == LineSlopeKind.Vertical)
-                        {
-                            targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                        }
-                    }
-                }
-                else if (targetEdge.SlopKind == LineSlopeKind.Horizontal)
-                {
-                    //TODO: review same side edge (Fan shape)
-
-                    if (pe_midY > qe_midY)
-                    {
-                        //p side is upper , q side is lower
-                        if (targetEdge.SlopKind == LineSlopeKind.Horizontal)
-                        {
-                            targetEdge.IsUpper = true;
-                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopKind == LineSlopeKind.Horizontal)
-                            {
-                                targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (matchingEdgeLine.SlopKind == LineSlopeKind.Horizontal)
-                        {
-                            // matchingEdgeLine.IsUpper = true;
-                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopKind == LineSlopeKind.Horizontal)
-                            {
-                                targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        static bool FindMatchingOuterSide(EdgeLine compareEdge, GlyphTriangle another, out EdgeLine result, out int edgeIndex)
-        {
-            //compare by radian of edge line
-            double compareSlope = Math.Abs(compareEdge.SlopAngle);
-            double diff0 = double.MaxValue;
-            double diff1 = double.MaxValue;
-            double diff2 = double.MaxValue;
-
-            diff0 = Math.Abs(Math.Abs(another.e0.SlopAngle) - compareSlope);
-
-            diff1 = Math.Abs(Math.Abs(another.e1.SlopAngle) - compareSlope);
-
-            diff2 = Math.Abs(Math.Abs(another.e2.SlopAngle) - compareSlope);
-
-            //find min
-            int minDiffSide = FindMinIndex(diff0, diff1, diff2);
-            if (minDiffSide > -1)
-            {
-                edgeIndex = minDiffSide;
-                switch (minDiffSide)
-                {
-                    default: throw new NotSupportedException();
-                    case 0:
-                        result = another.e0;
-                        break;
-                    case 1:
-                        result = another.e1;
-                        break;
-                    case 2:
-                        result = another.e2;
-                        break;
-                }
-                return true;
             }
             else
             {
-                edgeIndex = -1;
-                result = null;
-                return false;
-            }
-        }
-        static int FindMinIndex(double d0, double d1, double d2)
-        {
-            unsafe
-            {
-                double* tmpArr = stackalloc double[3];
-                tmpArr[0] = d0;
-                tmpArr[1] = d1;
-                tmpArr[2] = d2;
-
-                int minAt = -1;
-                double currentMin = double.MaxValue;
-                for (int i = 0; i < 3; ++i)
+                if (remaining > GRID_SIZE_50)
                 {
-                    double d = tmpArr[i];
-                    if (d < currentMin)
-                    {
-                        currentMin = d;
-                        minAt = i;
-                    }
+                    return (floo_int + 1f);
                 }
-                return minAt;
+                else
+                {
+                    //we we move this point down
+                    //the upper part point may affect the other(lower side)
+                    //1.horizontal edge
+
+                    EdgeLine h_edge = p.horizontalEdge;
+                    EdgeLine matching_anotherSide = h_edge.GetMatchingOutsideEdge();
+                    if (matching_anotherSide != null)
+                    {
+                        Poly2Tri.TriangulationPoint a_p = matching_anotherSide.p;
+                        Poly2Tri.TriangulationPoint a_q = matching_anotherSide.q;
+                        if (a_p != null && a_p.userData is GlyphPoint2D)
+                        {
+                            GlyphPoint2D a_glyph_p = (GlyphPoint2D)a_p.userData;
+                            a_glyph_p.AdjustedY = -remaining;
+#if DEBUG
+                            if (!s_dbugAff2.ContainsKey(a_glyph_p))
+                            {
+                                s_dbugAff2.Add(a_glyph_p, true);
+                                s_dbugAffectedPoints.Add(a_glyph_p);
+                            }
+
+#endif
+                        }
+                        if (a_q != null && a_q.userData is GlyphPoint2D)
+                        {
+                            GlyphPoint2D a_glyph_q = (GlyphPoint2D)a_q.userData;
+                            a_glyph_q.AdjustedY = -remaining;
+#if DEBUG
+                            if (!s_dbugAff2.ContainsKey(a_glyph_q))
+                            {
+                                s_dbugAff2.Add(a_glyph_q, true);
+                                s_dbugAffectedPoints.Add(a_glyph_q);
+                            }
+
+#endif
+                        }
+                    }
+
+                    return floo_int;
+                }
             }
         }
-        /// <summary>
-        /// count number of outside edge
-        /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
-        static int OutSideEdgeCount(GlyphTriangle t)
+        static float RoundToNearestX(float org)
         {
-            int n = 0;
-            n += t.e0.IsOutside ? 1 : 0;
-            n += t.e1.IsOutside ? 1 : 0;
-            n += t.e2.IsOutside ? 1 : 0;
-            return n;
+            float actual1 = org;
+            float integer1 = (int)(actual1);//lower
+            float floatModulo = actual1 - integer1;
+
+            if (floatModulo >= (GRID_SIZE_50))
+            {
+                return (integer1 + 1);
+            }
+            else
+            {
+                return integer1;
+            }
         }
-        static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
-        static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
-        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
-        public override string ToString()
+        struct Point2d
         {
-            return p + " -> " + q;
+            public float x;
+            public float y;
+            public Point2d(float x, float y)
+            {
+
+                this.x = x;
+                this.y = y;
+            }
+#if DEBUG
+            public override string ToString()
+            {
+                return "(" + x + "," + y + ")";
+            }
+#endif
         }
-    }
+#if DEBUG
+        public static List<GlyphPoint2D> s_dbugAffectedPoints = new List<GlyphPoint2D>();
+        public static Dictionary<GlyphPoint2D, bool> s_dbugAff2 = new Dictionary<GlyphPoint2D, bool>();
 
-    //public enum GlyphTrianglePart : byte
-    //{
-    //    Unknown,
-    //    VericalStem,
-    //    HorizontalStem,
-    //    Other,
-    //}
-    public class GlyphTriangle
-    {
+#endif
 
 
-        DelaunayTriangle _tri;
-        public EdgeLine e0;
-        public EdgeLine e1;
-        public EdgeLine e2;
-
-        //centroid of edge mass
-        double centroidX;
-        double centroidY;
-
-        public GlyphTriangle(DelaunayTriangle tri)
+        static void GenerateNewFitPoints(
+            List<Point2d> genPoints,
+            GlyphContour contour,
+            float pixelScale,
+            bool x_axis,
+            bool y_axis,
+            bool useHalfPixel)
         {
-            this._tri = tri;
-            TriangulationPoint p0 = _tri.P0;
-            TriangulationPoint p1 = _tri.P1;
-            TriangulationPoint p2 = _tri.P2;
-            e0 = new EdgeLine(p0, p1);
-            e1 = new EdgeLine(p1, p2);
-            e2 = new EdgeLine(p2, p0);
-            tri.Centroid2(out centroidX, out centroidY);
+            List<GlyphPoint2D> flattenPoints = contour.flattenPoints;
 
-            e0.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P0, tri.P1));
-            e1.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P1, tri.P2));
-            e2.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P2, tri.P0));
+            int j = flattenPoints.Count;
+            //merge 0 = start
+            //double prev_px = 0;
+            //double prev_py = 0;
+            double p_x = 0;
+            double p_y = 0;
+            double first_px = 0;
+            double first_py = 0;
+
+            //---------------
+            //1st round for value adjustment
+            //---------------
+
+            //find adjust y
+
+            {
+                GlyphPoint2D p = flattenPoints[0];
+                p_x = p.x * pixelScale;
+                p_y = p.y * pixelScale;
+
+                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide) //TODO: review here
+                {
+                    //vertical fitting, fit p_y to grid
+                    //adjust if p is not part of curve
+                    switch (p.kind)
+                    {
+                        case PointKind.LineStart:
+                        case PointKind.LineStop:
+                            p_y = RoundToNearestY(p, (float)p_y, useHalfPixel);
+                            break;
+                    }
+
+                }
+                if (x_axis && p.IsPartOfVerticalEdge && p.IsLeftSide)
+                {
+                    //horizontal fitting, fix p_x to grid
+                    float new_x = RoundToNearestX((float)p_x);
+                    p_x = new_x;
+                    //adjust right-side vertical edge
+                    EdgeLine rightside = p.GetMatchingVerticalEdge();
+                }
+                //tx.MoveTo((float)p_x, (float)p_y);
+                genPoints.Add(new Point2d((float)p_x, (float)p_y));
+                //-------------
+                first_px = p_x;
+                first_py = p_y;
+            }
+
+            for (int i = 1; i < j; ++i)
+            {
+                //all merge point is polygon point
+                GlyphPoint2D p = flattenPoints[i];
+                p_x = p.x * pixelScale;
+                p_y = p.y * pixelScale;
+
+
+                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide)  //TODO: review here
+                {
+                    //vertical fitting, fit p_y to grid
+                    p_y = RoundToNearestY(p, (float)p_y, useHalfPixel);
+                }
+
+                if (x_axis && p.IsPartOfVerticalEdge && p.IsLeftSide)
+                {
+                    //horizontal fitting, fix p_x to grid
+                    float new_x = RoundToNearestX((float)p_x);
+                    p_x = new_x;
+                }
+
+                genPoints.Add(new Point2d((float)p_x, (float)p_y));
+            }
         }
-        //static int RoundToNearestSide(float org, int gridsize)
-        //{
-        //    float actual1 = org / (float)gridsize;
-        //    int integer1 = (int)(actual1);
-        //    float floatModulo = actual1 - integer1;
-        //    if (floatModulo > (gridsize / 2))
-        //    {
-        //        return (integer1 + 1) + gridsize;
-        //    }
-        //    else
-        //    {
-        //        return integer1 * gridsize;
-        //    }
-        //}
-        //public void Analyze(int pixelWidth, int pixelHeight)
-        //{
-        //    //check if triangle is part of vertical/horizontal stem or not
-        //    //snap some edge to match with pixel size            
-        //    //1. outside count
 
-        //    int outside_count =
-        //        ((e0.IsOutside) ? 1 : 0) +
-        //        ((e1.IsOutside) ? 1 : 0) +
-        //        ((e2.IsOutside) ? 1 : 0);
-        //    switch (outside_count)
-        //    {
-        //        case 0:
-        //            break;
-        //        case 1:
-        //            {
-        //                //check this
-        //            }
-        //            break;
-        //        case 2:
-        //            {
-        //                //have 2 outside
-        //                //usu
-        //            }
-        //            break;
-        //        default:
 
-        //            break;
-
-        //    }
-
-        //}
-        public double CentroidX
+        static void GenerateFitOutput(IGlyphTranslator tx,
+            List<Point2d> genPoints,
+            GlyphContour contour)
         {
-            get { return centroidX; }
-        }
-        public double CentroidY
-        {
-            get { return centroidY; }
-        }
-        public bool IsConnectedWith(GlyphTriangle anotherTri)
-        {
-            DelaunayTriangle t2 = anotherTri._tri;
-            if (t2 == this._tri)
+
+            int j = genPoints.Count;
+            //merge 0 = start
+            //double prev_px = 0;
+            //double prev_py = 0; 
+            float first_px = 0;
+            float first_py = 0;
+            //---------------
+            //1st round for value adjustment
+            //---------------
+
+            //find adjust y
+            List<GlyphPoint2D> flattenPoints = contour.flattenPoints;
+            //---------------
+            if (j != flattenPoints.Count)
             {
                 throw new NotSupportedException();
             }
-            //else 
-            return this._tri.N0 == t2 ||
-                   this._tri.N1 == t2 ||
-                   this._tri.N2 == t2;
-        }
-
-#if DEBUG
-        public override string ToString()
-        {
-            return this._tri.ToString();
-        }
-#endif
-    }
-
-    public enum LineSlopeKind : byte
-    {
-        Vertical,
-        Horizontal,
-        Other
-    }
-
-    /// <summary>
-    /// edge of GlyphTriangle
-    /// </summary>
-    public class EdgeLine
-    {
-
-        public double x0;
-        public double y0;
-        public double x1;
-        public double y1;
-
-        static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
-        static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
-        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
-
-        public TriangulationPoint p;
-        public TriangulationPoint q;
-
-        Dictionary<EdgeLine, bool> matchingEdges;
-
-        public EdgeLine(TriangulationPoint p, TriangulationPoint q)
-        {
-            this.p = p;
-            this.q = q;
-
-            x0 = p.X;
-            y0 = p.Y;
-            x1 = q.X;
-            y1 = q.Y;
-            //-------------------
-            if (x1 == x0)
+            //---------------
+            for (int i = 0; i < j; ++i)
             {
-                this.SlopKind = LineSlopeKind.Vertical;
-                SlopAngle = 1;
-            }
-            else
-            {
-                SlopAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-                if (SlopAngle > _85degreeToRad)
+                GlyphPoint2D glyphPoint = flattenPoints[i];
+                Point2d p = genPoints[i];
+
+                if (glyphPoint.AdjustedY != 0)
                 {
-                    SlopKind = LineSlopeKind.Vertical;
-                }
-                else if (SlopAngle < _15degreeToRad)
-                {
-                    SlopKind = LineSlopeKind.Horizontal;
+                    if (i == 0)
+                    {
+                        //first point
+                        tx.MoveTo(first_px = p.x, first_py = (float)(p.y + glyphPoint.AdjustedY));
+                    }
+                    else
+                    {
+                        tx.LineTo(p.x, (float)(p.y + glyphPoint.AdjustedY));
+                    }
                 }
                 else
                 {
-                    SlopKind = LineSlopeKind.Other;
+                    if (i == 0)
+                    {
+                        //first point
+                        tx.MoveTo(first_px = p.x, first_py = p.y);
+                    }
+                    else
+                    {
+                        tx.LineTo(p.x, p.y);
+                    }
                 }
             }
-        }
-        public LineSlopeKind SlopKind
-        {
-            get;
-            private set;
-        }
-        public bool IsOutside
-        {
-            get;
-            internal set;
-        }
-        public double SlopAngle
-        {
-            get;
-            private set;
-        }
-        public bool IsUpper
-        {
-            get;
-            internal set;
-        }
-        public bool IsLeftSide
-        {
-            get;
-            internal set;
+            //close
+            //tx.LineTo(first_px, first_py);
+            tx.CloseContour();
         }
 
-        public override string ToString()
-        {
-            return SlopKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
-        }
-
-        public EdgeLine GetMatchingOutsideEdge()
-        {
-            if (matchingEdges == null) { return null; }
-
-            if (matchingEdges.Count == 1)
-            {
-                foreach (EdgeLine line in matchingEdges.Keys)
-                {
-                    return line;
-                }
-                return null;
-            }
-            else
-            {
-                return null;
-            }
-
-        }
-        public void AddMatchingOutsideEdge(EdgeLine edgeLine)
-        {
-#if DEBUG
-            if (edgeLine == this) { throw new NotSupportedException(); }
-#endif
-            if (matchingEdges == null)
-            {
-                matchingEdges = new Dictionary<EdgeLine, bool>();
-            }
-            if (!matchingEdges.ContainsKey(edgeLine))
-            {
-                matchingEdges.Add(edgeLine, true);
-            }
-#if DEBUG
-            if (matchingEdges.Count > 1)
-            {
-
-            }
-#endif
-        }
     }
 
 }

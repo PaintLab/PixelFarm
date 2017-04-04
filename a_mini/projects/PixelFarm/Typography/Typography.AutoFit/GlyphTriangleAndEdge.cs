@@ -1,0 +1,217 @@
+﻿//MIT, 2017, WinterDev
+using System;
+using System.Collections.Generic;
+using Poly2Tri;
+namespace Typography.Rendering
+{
+
+
+
+
+    static class MyMath
+    {
+
+        /// <summary>
+        /// Convert degrees to radians
+        /// </summary>
+        /// <param name="degrees">An angle in degrees</param>
+        /// <returns>The angle expressed in radians</returns>
+        public static double DegreesToRadians(double degrees)
+        {
+            const double degToRad = System.Math.PI / 180.0f;
+            return degrees * degToRad;
+        }
+
+    }
+
+
+
+    public class GlyphTriangle
+    {
+
+
+        DelaunayTriangle _tri;
+        public EdgeLine e0;
+        public EdgeLine e1;
+        public EdgeLine e2;
+
+        //centroid of edge mass
+        double centroidX;
+        double centroidY;
+
+        public GlyphTriangle(DelaunayTriangle tri)
+        {
+            this._tri = tri;
+            TriangulationPoint p0 = _tri.P0;
+            TriangulationPoint p1 = _tri.P1;
+            TriangulationPoint p2 = _tri.P2;
+            e0 = new EdgeLine(p0, p1);
+            e1 = new EdgeLine(p1, p2);
+            e2 = new EdgeLine(p2, p0);
+            tri.Centroid2(out centroidX, out centroidY);
+
+            e0.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P0, tri.P1));
+            e1.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P1, tri.P2));
+            e2.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P2, tri.P0));
+        }
+
+        public double CentroidX
+        {
+            get { return centroidX; }
+        }
+        public double CentroidY
+        {
+            get { return centroidY; }
+        }
+        public bool IsConnectedWith(GlyphTriangle anotherTri)
+        {
+            DelaunayTriangle t2 = anotherTri._tri;
+            if (t2 == this._tri)
+            {
+                throw new NotSupportedException();
+            }
+            //else 
+            return this._tri.N0 == t2 ||
+                   this._tri.N1 == t2 ||
+                   this._tri.N2 == t2;
+        }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return this._tri.ToString();
+        }
+#endif
+    }
+
+    public enum LineSlopeKind : byte
+    {
+        Vertical,
+        Horizontal,
+        Other
+    }
+
+    /// <summary>
+    /// edge of GlyphTriangle
+    /// </summary>
+    public class EdgeLine
+    {
+
+        public double x0;
+        public double y0;
+        public double x1;
+        public double y1;
+
+        static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
+        static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
+        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+
+        public TriangulationPoint p;
+        public TriangulationPoint q;
+
+        Dictionary<EdgeLine, bool> matchingEdges;
+
+        public EdgeLine(TriangulationPoint p, TriangulationPoint q)
+        {
+            this.p = p;
+            this.q = q;
+
+            x0 = p.X;
+            y0 = p.Y;
+            x1 = q.X;
+            y1 = q.Y;
+            //-------------------
+            if (x1 == x0)
+            {
+                this.SlopKind = LineSlopeKind.Vertical;
+                SlopAngle = 1;
+            }
+            else
+            {
+                SlopAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
+                if (SlopAngle > _85degreeToRad)
+                {
+                    SlopKind = LineSlopeKind.Vertical;
+                }
+                else if (SlopAngle < _15degreeToRad)
+                {
+                    SlopKind = LineSlopeKind.Horizontal;
+                }
+                else
+                {
+                    SlopKind = LineSlopeKind.Other;
+                }
+            }
+        }
+        public LineSlopeKind SlopKind
+        {
+            get;
+            private set;
+        }
+        public bool IsOutside
+        {
+            get;
+            internal set;
+        }
+        public double SlopAngle
+        {
+            get;
+            private set;
+        }
+        public bool IsUpper
+        {
+            get;
+            internal set;
+        }
+        public bool IsLeftSide
+        {
+            get;
+            internal set;
+        }
+
+        public override string ToString()
+        {
+            return SlopKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
+        }
+
+        public EdgeLine GetMatchingOutsideEdge()
+        {
+            if (matchingEdges == null) { return null; }
+
+            if (matchingEdges.Count == 1)
+            {
+                foreach (EdgeLine line in matchingEdges.Keys)
+                {
+                    return line;
+                }
+                return null;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+        public void AddMatchingOutsideEdge(EdgeLine edgeLine)
+        {
+#if DEBUG
+            if (edgeLine == this) { throw new NotSupportedException(); }
+#endif
+            if (matchingEdges == null)
+            {
+                matchingEdges = new Dictionary<EdgeLine, bool>();
+            }
+            if (!matchingEdges.ContainsKey(edgeLine))
+            {
+                matchingEdges.Add(edgeLine, true);
+            }
+#if DEBUG
+            if (matchingEdges.Count > 1)
+            {
+
+            }
+#endif
+        }
+    }
+
+}

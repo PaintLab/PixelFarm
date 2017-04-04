@@ -360,8 +360,6 @@ namespace SampleWinForms
             var txToVxs1 = new GlyphTranslatorToVxs();
             builder.ReadShapes(txToVxs1);
 
-
-
             VertexStore vxs = new VertexStore();
             txToVxs1.WriteOutput(vxs, _vxsPool);
             painter.SetOrigin(20, 20);
@@ -483,6 +481,19 @@ namespace SampleWinForms
         }
         static void DrawPointKind(AggCanvasPainter painter, GlyphPoint2D point, float scale)
         {
+            //var prevColor = painter.FillColor;
+            //painter.FillColor = PixelFarm.Drawing.Color.Red;
+            //if (point.AdjustedY != 0)
+            //{
+            //    painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5);
+            //}
+            //else
+            //{
+            //    painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2);
+            //}
+            //painter.FillColor = prevColor;
+
+
             switch (point.kind)
             {
                 case PointKind.C3Start:
@@ -497,7 +508,7 @@ namespace SampleWinForms
                         painter.FillColor = PixelFarm.Drawing.Color.Red;
                         if (point.AdjustedY != 0)
                         {
-                            painter.FillRectLBWH(point.x * scale, point.y * scale, 5, 5);
+                            painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5);
                         }
                         else
                         {
@@ -577,7 +588,7 @@ namespace SampleWinForms
         void debugDrawTriangulatedGlyph(GlyphFitOutline glyphFitOutline, float pixelScale)
         {
             painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
-            List<GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
+            List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
             int j = triAngles.Count;
             //
             double prev_cx = 0, prev_cy = 0;
@@ -627,7 +638,7 @@ namespace SampleWinForms
             //draw bone 
             if (drawBone)
             {
-                List<GlyphBone> bones = glyphFitOutline.dbugGetBones();
+                List<GlyphBone> bones = glyphFitOutline.GetBones();
                 j = bones.Count;
                 for (int i = 0; i < j; ++i)
                 {
@@ -666,7 +677,8 @@ namespace SampleWinForms
                         {
                             GlyphLine line = (GlyphLine)part;
                             p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(line.x0, line.y0, 2, 2);
+                            var p0 = line.FirstPoint;
+                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
                             p.FillRectLBWH(line.x1, line.y1, 2, 2);
                         }
                         break;
@@ -674,23 +686,25 @@ namespace SampleWinForms
                         {
                             GlyphCurve3 c = (GlyphCurve3)part;
                             p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x0, c.y0, 2, 2);
+                            var p0 = c.FirstPoint;
+                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
                             p.FillColor = PixelFarm.Drawing.Color.Blue;
-                            p.FillRectLBWH(c.p2x, c.p2y, 2, 2);
+                            p.FillRectLBWH(c.x1, c.y1, 2, 2);
                             p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x, c.y, 2, 2);
+                            p.FillRectLBWH(c.x2, c.y2, 2, 2);
                         }
                         break;
                     case GlyphPartKind.Curve4:
                         {
                             GlyphCurve4 c = (GlyphCurve4)part;
                             p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x0, c.y0, 2, 2);
+                            var p0 = c.FirstPoint;
+                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
                             p.FillColor = PixelFarm.Drawing.Color.Blue;
-                            p.FillRectLBWH(c.p2x, c.p2y, 2, 2);
-                            p.FillRectLBWH(c.p3x, c.p3y, 2, 2);
+                            p.FillRectLBWH(c.x1, c.y1, 2, 2);
+                            p.FillRectLBWH(c.x2, c.y2, 2, 2);
                             p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x, c.y, 2, 2);
+                            p.FillRectLBWH(c.x3, c.y3, 2, 2);
                         }
                         break;
                 }
