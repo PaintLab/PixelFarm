@@ -330,6 +330,7 @@ namespace SampleWinForms
                     break;
                 case RenderChoice.RenderWithMiniAgg_SingleGlyph:
                     {
+                        selectedTextPrinter = _devVxsTextPrinter;
                         //for test only 1 char
                         char testChar = this.txtInputChar.Text[0];
                         Typeface typeFace = _typefaceStore.GetTypeface(_selectedInstallFont);
@@ -586,16 +587,14 @@ namespace SampleWinForms
 
 
             //contact edge
-            if (edge.contactToEdge != null)
-            {
-                //has contact edge. this edge is inside edge
-                //draw marker 
-
-                double midX = (edge.x1 + edge.x0) / 2;
-                double midY = (edge.y1 + edge.y0) / 2;
-                painter.FillRectLBWH(midX * scale, midY * scale, 4, 4);
-
-            }
+            //if (edge.contactToEdge != null)
+            //{
+            //    //has contact edge. this edge is inside edge
+            //    //draw marker  
+            //    double midX = (edge.x1 + edge.x0) / 2;
+            //    double midY = (edge.y1 + edge.y0) / 2;
+            //    painter.FillRectLBWH(midX * scale, midY * scale, 4, 4); 
+            //}
         }
 
 #if DEBUG
@@ -663,12 +662,23 @@ namespace SampleWinForms
                         painter.FillColor = PixelFarm.Drawing.Color.Yellow;
                         painter.FillRectLBWH(b.p.CentroidX * pixelScale, b.p.CentroidY * pixelScale, 7, 7);
                     }
-                    //draw each bone
+                    //draw each bone 
 
                     painter.StrokeColor = b.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Red;
                     painter.Line(
                         b.p.CentroidX * pixelScale, b.p.CentroidY * pixelScale,
                         b.q.CentroidX * pixelScale, b.q.CentroidY * pixelScale);
+
+
+                    EdgeLine p_contactEdge = b.ContactEdgeP;
+                    //mid point
+                    double mid_x = (p_contactEdge.x0 + p_contactEdge.x1) / 2;
+                    double mid_y = (p_contactEdge.y0 + p_contactEdge.y1) / 2;
+
+                    var prevFillColor = painter.FillColor;
+                    painter.FillColor = PixelFarm.Drawing.Color.Yellow;
+                    painter.FillRectLBWH(mid_x * pixelScale, mid_y * pixelScale, 4, 4);
+                    painter.FillColor = prevFillColor;
                 }
             }
             //---------------

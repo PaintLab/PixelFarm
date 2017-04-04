@@ -16,13 +16,24 @@ namespace Typography.Rendering
         D270,
         D315
     }
+
+
+
     /// <summary>
     /// a line that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
     public class GlyphBone
     {
+
+
+
+
         public readonly GlyphTriangle p, q;
         public readonly double boneLength;
+
+        EdgeLine _p_contact_edge;
+        EdgeLine _q_contact_edge;
+
 
         public GlyphBone(GlyphTriangle p, GlyphTriangle q)
         {
@@ -35,6 +46,10 @@ namespace Typography.Rendering
                 (dy * dy) + (dx * dx)
                 );
         }
+
+        public EdgeLine ContactEdgeP { get { return _p_contact_edge; } }
+        public EdgeLine ContactEdgeQ { get { return _q_contact_edge; } }
+
         public double SlopAngle { get; private set; }
         public bool IsLongBone { get; set; }
 
@@ -46,7 +61,8 @@ namespace Typography.Rendering
             midY = (e.y0 + e.y1) / 2;
         }
 
-        public void Analyze()
+
+        internal void Analyze()
         {
 
             //
@@ -57,7 +73,7 @@ namespace Typography.Rendering
             //tasks:
             //1. find slop angle
             //2. find slope kind
-
+            //3. mark edge info
 
 
             //check if q is upper or lower when compare with p
@@ -118,56 +134,16 @@ namespace Typography.Rendering
             //the bone connects between triangle p and q (via centroid)
             //
 
-            MarkEdgeSide(p.e0, q);
-            MarkEdgeSide(p.e1, q);
-            MarkEdgeSide(p.e2, q);
+            MarkEdgeSides(p.e0, q);
+            MarkEdgeSides(p.e1, q);
+            MarkEdgeSides(p.e2, q);
             //
-            MarkEdgeSide(q.e0, p);
-            MarkEdgeSide(q.e1, p);
-            MarkEdgeSide(q.e2, p);
+            MarkEdgeSides(q.e0, p);
+            MarkEdgeSides(q.e1, p);
+            MarkEdgeSides(q.e2, p);
 
-
-            //if (p.e0.IsOutside)
-            //{
-            //    //find matching side on q
-            //    MarkMatchingOutsideEdge(p.e0, q);
-            //}
-            //else
-            //{
-            //    //e0 is inside
-            //    foundMatchingInside = MarkMatchingInsideEdge(p.e0, q);
-            //}
-
-            //if (p.e1.IsOutside)
-            //{
-            //    //find matching side on q   
-            //    MarkMatchingOutsideEdge(p.e1, q);
-            //}
-            //if (p.e2.IsOutside)
-            //{
-            //    //find matching side on q
-            //    MarkMatchingOutsideEdge(p.e2, q);
-            //}
-            ////-------------------------------------- 
-
-            //if (q.e0.IsOutside)
-            //{
-            //    //find matching side on q
-            //    MarkMatchingOutsideEdge(q.e0, p);
-            //}
-            //if (q.e1.IsOutside)
-            //{
-            //    //find matching side on q   
-            //    MarkMatchingOutsideEdge(q.e1, p);
-            //}
-            //if (q.e2.IsOutside)
-            //{
-            //    //find matching side on q
-            //    MarkMatchingOutsideEdge(q.e2, p);
-            //}
-            ////--------------------------------------  
         }
-        static void MarkEdgeSide(EdgeLine edgeLine, GlyphTriangle another)
+        void MarkEdgeSides(EdgeLine edgeLine, GlyphTriangle another)
         {
             if (edgeLine.IsOutside)
             {
@@ -176,14 +152,21 @@ namespace Typography.Rendering
             else
             {
                 //inside
-                MarkMatchingInsideEdge(edgeLine, another);
+                if (_p_contact_edge == null)
+                {
+                    if (MarkMatchingInsideEdge(edgeLine, another))
+                    {
+
+                        _p_contact_edge = edgeLine;
+                        _q_contact_edge = edgeLine.contactToEdge;
+                    }
+                }
             }
         }
         static bool MarkMatchingInsideEdge(EdgeLine insideEdge, GlyphTriangle another)
         {
-             
-            //side-by-side 
 
+            //side-by-side  
             if (another.e0.IsInside && MarkMatchingInsideEdge(insideEdge, another.e0))
             {
                 //inside                 
@@ -205,14 +188,14 @@ namespace Typography.Rendering
         static bool MarkMatchingInsideEdge(EdgeLine p_edge, EdgeLine q_edge)
         {
 
-            bool x_axis = false;
+
             if (p_edge.x0 == q_edge.x0 && p_edge.x1 == q_edge.x1)
             {
-                x_axis = true;
+
             }
             else if (p_edge.x0 == q_edge.x1 && p_edge.x1 == q_edge.x0)
             {
-                x_axis = true;
+
             }
             else
             {

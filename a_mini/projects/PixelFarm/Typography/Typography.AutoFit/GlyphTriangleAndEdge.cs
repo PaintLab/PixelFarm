@@ -202,8 +202,8 @@ namespace Typography.Rendering
             {
                 return null;
             }
-
         }
+        
         public void AddMatchingOutsideEdge(EdgeLine edgeLine)
         {
 #if DEBUG
