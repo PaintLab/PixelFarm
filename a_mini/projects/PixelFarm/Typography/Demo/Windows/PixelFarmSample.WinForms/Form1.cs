@@ -66,7 +66,7 @@ namespace SampleWinForms
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithGdiPlusPath);
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithTextPrinterAndMiniAgg);
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithMsdfGen);
-            cmbRenderChoices.SelectedIndex = 2;
+            cmbRenderChoices.SelectedIndex = 0;
             cmbRenderChoices.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
             //----------
             cmbPositionTech.Items.Add(PositionTechnique.OpenFont);
@@ -79,7 +79,7 @@ namespace SampleWinForms
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction);
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction_VerticalOnly);
             lstHintList.Items.Add(HintTechnique.CustomAutoFit);
-            lstHintList.SelectedIndex = 0;
+            lstHintList.SelectedIndex = 3;
             lstHintList.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
             //---------- 
             //snapX
@@ -133,7 +133,7 @@ namespace SampleWinForms
                 installedFontCollection.AddFont(new FontFileStreamProvider(file));
             }
             //3.
-            installedFontCollection.LoadWindowsSystemFonts();
+            //installedFontCollection.LoadWindowsSystemFonts();
             //---------- 
             //show result
             InstalledFont selectedFF = null;
@@ -175,7 +175,7 @@ namespace SampleWinForms
                 }
             };
             //----------
-            //----------
+
             lstFontSizes.Items.AddRange(
               new object[]{
                     8, 9,
@@ -196,7 +196,7 @@ namespace SampleWinForms
             //string inputstr = "ก้า";
             //string inputstr = "น้ำน้ำ";
             //string inputstr = "example";
-            //string inputstr = "i";
+            //string inputstr = "lllll";
             string inputstr = "e";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
@@ -224,7 +224,7 @@ namespace SampleWinForms
         void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "Render with PixelFarm";
-            this.lstFontSizes.SelectedIndex = lstFontSizes.Items.Count - 3;
+            this.lstFontSizes.SelectedIndex = lstFontSizes.Items.Count - 2;
             //this.lstFontSizes.SelectedIndex = 0; 
             var installedFont = lstFontList.SelectedItem as InstalledFont;
             if (installedFont != null)
@@ -362,7 +362,7 @@ namespace SampleWinForms
 
             VertexStore vxs = new VertexStore();
             txToVxs1.WriteOutput(vxs, _vxsPool);
-            painter.SetOrigin(20, 20);
+            painter.SetOrigin(20, 10);
             //----------------------------------------------------
             painter.UseSubPixelRendering = chkLcdTechnique.Checked;
 
@@ -581,7 +581,21 @@ namespace SampleWinForms
                         break;
                 }
             }
+
             painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
+
+
+            //contact edge
+            if (edge.contactToEdge != null)
+            {
+                //has contact edge. this edge is inside edge
+                //draw marker 
+
+                double midX = (edge.x1 + edge.x0) / 2;
+                double midY = (edge.y1 + edge.y0) / 2;
+                painter.FillRectLBWH(midX * scale, midY * scale, 4, 4);
+
+            }
         }
 
 #if DEBUG

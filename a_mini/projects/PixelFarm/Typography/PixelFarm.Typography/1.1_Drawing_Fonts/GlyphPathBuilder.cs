@@ -102,8 +102,8 @@ namespace Typography.Rendering
                 {
                     toPixelScale = 1;
                 }
-                //config outline before gen output
-                _fitOutline.ReadOutput(tx, toPixelScale);
+               
+                _fitOutline.GenerateOutput(tx, toPixelScale);
             }
             else
             {

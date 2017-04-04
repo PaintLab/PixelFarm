@@ -111,6 +111,13 @@ namespace Typography.Rendering
 
         Dictionary<EdgeLine, bool> matchingEdges;
 
+        //------------------------------
+        /// <summary>
+        /// contact to 
+        /// </summary>
+        public EdgeLine contactToEdge;
+        //------------------------------
+
         public EdgeLine(TriangulationPoint p, TriangulationPoint q)
         {
             this.p = p;
@@ -152,6 +159,11 @@ namespace Typography.Rendering
         {
             get;
             internal set;
+        }
+        public bool IsInside
+        {
+            get { return !this.IsOutside; }
+
         }
         public double SlopAngle
         {

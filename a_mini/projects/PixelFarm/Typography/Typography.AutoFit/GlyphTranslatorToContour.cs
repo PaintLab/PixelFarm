@@ -68,7 +68,6 @@ namespace Typography.Rendering
         float latestMoveToX;
         float latestMoveToY;
         GlyphContour currentCnt;
-        //List<float> allPoints = new List<float>();
         GlyphPart _latestPart;
 
         public GlyphContourBuilder()
@@ -94,10 +93,6 @@ namespace Typography.Rendering
             }
             this.curX = x1;
             this.curY = y1;
-
-            //allPoints.Add(x1);
-            //allPoints.Add(y1);
-
         }
         public void CloseFigure()
         {
@@ -116,12 +111,6 @@ namespace Typography.Rendering
             {
                 currentCnt.AddPart(_latestPart = new GlyphLine(curX, curY, latestMoveToX, latestMoveToY));
             }
-
-
-
-            //allPoints.Add(latestMoveToX);
-            //allPoints.Add(latestMoveToY);
-
             this.curX = latestMoveToX;
             this.curY = latestMoveToY;
         }
@@ -143,13 +132,6 @@ namespace Typography.Rendering
                     x1, y1,
                     x2, y2));
             }
-            ////
-            //allPoints.Add(curX);
-            //allPoints.Add(curY);
-            //allPoints.Add(x1);
-            //allPoints.Add(y1);
-            //allPoints.Add(x2);
-            //allPoints.Add(y2);
 
             this.curX = x2;
             this.curY = y2;
@@ -172,17 +154,6 @@ namespace Typography.Rendering
                    x2, y2,
                    x3, y3));
             }
-
-            //allPoints.Add(curX);
-            //allPoints.Add(curY);
-            //allPoints.Add(x1);
-            //allPoints.Add(y1);
-            //allPoints.Add(x2);
-            //allPoints.Add(y2);
-            //allPoints.Add(x3);
-            //allPoints.Add(y3);
-
-
             this.curX = x3;
             this.curY = y3;
         }
@@ -193,16 +164,12 @@ namespace Typography.Rendering
                 return currentCnt;
             }
         }
-        //public List<float> GetAllPoints()
-        //{
-        //    return this.allPoints;
-        //}
         public void Reset()
         {
             _latestPart = null;
             currentCnt = new GlyphContour();
             this.latestMoveToX = this.curX = this.latestMoveToY = this.curY = 0;
-            //allPoints = new List<float>();
+
         }
     }
 
@@ -210,7 +177,7 @@ namespace Typography.Rendering
     {
 
         public List<GlyphPart> parts = new List<GlyphPart>();
-        public List<GlyphPoint2D> flattenPoints;
+        internal List<GlyphPoint2D> flattenPoints;
 
         bool analyzed;
         bool analyzedClockDirection;

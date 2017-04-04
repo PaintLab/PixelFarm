@@ -117,40 +117,125 @@ namespace Typography.Rendering
             //find matching side:
             //the bone connects between triangle p and q (via centroid)
             //
-            if (p.e0.IsOutside)
-            {
-                //find matching side on q
-                MarkMatchingEdge(p.e0, q);
-            }
-            if (p.e1.IsOutside)
-            {
-                //find matching side on q   
-                MarkMatchingEdge(p.e1, q);
-            }
-            if (p.e2.IsOutside)
-            {
-                //find matching side on q
-                MarkMatchingEdge(p.e2, q);
-            }
+
+            MarkEdgeSide(p.e0, q);
+            MarkEdgeSide(p.e1, q);
+            MarkEdgeSide(p.e2, q);
+            //
+            MarkEdgeSide(q.e0, p);
+            MarkEdgeSide(q.e1, p);
+            MarkEdgeSide(q.e2, p);
 
 
-            if (q.e0.IsOutside)
+            //if (p.e0.IsOutside)
+            //{
+            //    //find matching side on q
+            //    MarkMatchingOutsideEdge(p.e0, q);
+            //}
+            //else
+            //{
+            //    //e0 is inside
+            //    foundMatchingInside = MarkMatchingInsideEdge(p.e0, q);
+            //}
+
+            //if (p.e1.IsOutside)
+            //{
+            //    //find matching side on q   
+            //    MarkMatchingOutsideEdge(p.e1, q);
+            //}
+            //if (p.e2.IsOutside)
+            //{
+            //    //find matching side on q
+            //    MarkMatchingOutsideEdge(p.e2, q);
+            //}
+            ////-------------------------------------- 
+
+            //if (q.e0.IsOutside)
+            //{
+            //    //find matching side on q
+            //    MarkMatchingOutsideEdge(q.e0, p);
+            //}
+            //if (q.e1.IsOutside)
+            //{
+            //    //find matching side on q   
+            //    MarkMatchingOutsideEdge(q.e1, p);
+            //}
+            //if (q.e2.IsOutside)
+            //{
+            //    //find matching side on q
+            //    MarkMatchingOutsideEdge(q.e2, p);
+            //}
+            ////--------------------------------------  
+        }
+        static void MarkEdgeSide(EdgeLine edgeLine, GlyphTriangle another)
+        {
+            if (edgeLine.IsOutside)
             {
-                //find matching side on q
-                MarkMatchingEdge(q.e0, p);
+                MarkMatchingOutsideEdge(edgeLine, another);
             }
-            if (q.e1.IsOutside)
+            else
             {
-                //find matching side on q   
-                MarkMatchingEdge(q.e1, p);
-            }
-            if (q.e2.IsOutside)
-            {
-                //find matching side on q
-                MarkMatchingEdge(q.e2, p);
+                //inside
+                MarkMatchingInsideEdge(edgeLine, another);
             }
         }
-        static void MarkMatchingEdge(EdgeLine targetEdge, GlyphTriangle q)
+        static bool MarkMatchingInsideEdge(EdgeLine insideEdge, GlyphTriangle another)
+        {
+             
+            //side-by-side 
+
+            if (another.e0.IsInside && MarkMatchingInsideEdge(insideEdge, another.e0))
+            {
+                //inside                 
+                return true;
+            }
+            //
+            if (another.e1.IsInside && MarkMatchingInsideEdge(insideEdge, another.e1))
+            {
+                return true;
+            }
+            //
+            if (another.e2.IsInside && MarkMatchingInsideEdge(insideEdge, another.e2))
+            {
+                //check matching slope and coord?
+                return true;
+            }
+            return false;
+        }
+        static bool MarkMatchingInsideEdge(EdgeLine p_edge, EdgeLine q_edge)
+        {
+
+            bool x_axis = false;
+            if (p_edge.x0 == q_edge.x0 && p_edge.x1 == q_edge.x1)
+            {
+                x_axis = true;
+            }
+            else if (p_edge.x0 == q_edge.x1 && p_edge.x1 == q_edge.x0)
+            {
+                x_axis = true;
+            }
+            else
+            {
+                return false; //no match in x-axis
+            }
+            //--------------------------------
+            //y_axis
+            if (p_edge.y0 == q_edge.y0 && p_edge.y1 == q_edge.y1)
+            {
+                p_edge.contactToEdge = q_edge;
+            }
+            else if (p_edge.y0 == q_edge.y1 && p_edge.y1 == q_edge.y0)
+            {
+                p_edge.contactToEdge = q_edge;
+            }
+            else
+            {
+                return false; //no match in y-axis
+            }
+            //--------------------------------
+            return true;
+        }
+        static void MarkMatchingOutsideEdge(EdgeLine targetEdge, GlyphTriangle q)
         {
 
             EdgeLine matchingEdgeLine;
@@ -216,7 +301,14 @@ namespace Typography.Rendering
                 }
             }
         }
-        static bool FindMatchingOuterSide(EdgeLine compareEdge, GlyphTriangle another, out EdgeLine result, out int edgeIndex)
+
+
+
+
+        static bool FindMatchingOuterSide(EdgeLine compareEdge,
+            GlyphTriangle another,
+            out EdgeLine result,
+            out int edgeIndex)
         {
             //compare by radian of edge line
             double compareSlope = Math.Abs(compareEdge.SlopAngle);

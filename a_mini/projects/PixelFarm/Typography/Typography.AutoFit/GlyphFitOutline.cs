@@ -167,15 +167,10 @@ namespace Typography.Rendering
         }
 
 
-        //=======================================================================================
-        /// <summary>
-        /// read fitting output
-        /// </summary>
-        /// <param name="tx">glyph translator</param>
-        public void ReadOutput(IGlyphTranslator tx, float pxScale)
+
+        public void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
-            //TODO: review here
-            //
+            //TODO: review here 
             //-----------------------------------------------------------            
             //create fit contour
             //this version use only Agg's vertical hint only ****
