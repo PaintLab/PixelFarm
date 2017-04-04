@@ -651,11 +651,11 @@ namespace SampleWinForms
             //draw bone 
             if (drawBone)
             {
-                List<GlyphBone> bones = glyphFitOutline.GetBones();
+                List<GlyphCentroidBone> bones = glyphFitOutline.GetBones();
                 j = bones.Count;
                 for (int i = 0; i < j; ++i)
                 {
-                    GlyphBone b = bones[i];
+                    GlyphCentroidBone b = bones[i];
                     if (i == 0)
                     {
                         //start mark

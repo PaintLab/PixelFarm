@@ -15,18 +15,12 @@ namespace Typography.Rendering
         D225,
         D270,
         D315
-    }
-
-
-
+    } 
     /// <summary>
     /// a line that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
-    public class GlyphBone
+    public class GlyphCentroidBone
     {
-
-
-
 
         public readonly GlyphTriangle p, q;
         public readonly double boneLength;
@@ -35,7 +29,7 @@ namespace Typography.Rendering
         EdgeLine _q_contact_edge;
 
 
-        public GlyphBone(GlyphTriangle p, GlyphTriangle q)
+        public GlyphCentroidBone(GlyphTriangle p, GlyphTriangle q)
         {
             this.p = p;
             this.q = q;
@@ -99,7 +93,7 @@ namespace Typography.Rendering
                 {
                     SlopKind = LineSlopeKind.Vertical;
                 }
-                else if (SlopAngle < _8degreeToRad) //_15degreeToRad
+                else if (SlopAngle < _03degreeToRad) //_15degreeToRad
                 {
                     SlopKind = LineSlopeKind.Horizontal;
                 }
@@ -370,7 +364,7 @@ namespace Typography.Rendering
         }
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
-        static readonly double _8degreeToRad = MyMath.DegreesToRadians(8);
+        static readonly double _03degreeToRad = MyMath.DegreesToRadians(3);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
         public override string ToString()
         {

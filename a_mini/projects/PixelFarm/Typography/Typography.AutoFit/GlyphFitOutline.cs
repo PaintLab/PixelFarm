@@ -12,8 +12,8 @@ namespace Typography.Rendering
         List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
         List<GlyphContour> _contours;
         Polygon _polygon;
-        List<GlyphBone> bones;
-        List<GlyphBone> boneList2;
+        List<GlyphCentroidBone> bones;
+        List<GlyphCentroidBone> boneList2;
 
         internal GlyphFitOutline(Polygon polygon, List<GlyphContour> contours)
         {
@@ -33,7 +33,7 @@ namespace Typography.Rendering
         {
             //we analyze each triangle here 
             int j = _triangles.Count;
-            bones = new List<GlyphBone>();
+            bones = new List<GlyphCentroidBone>();
             List<GlyphTriangle> usedTriList = new List<GlyphTriangle>();
             for (int i = 0; i < j; ++i)
             {
@@ -45,7 +45,7 @@ namespace Typography.Rendering
                     if (foundIndex > -1)
                     {
                         usedTriList.Add(tri);
-                        bones.Add(new GlyphBone(usedTriList[foundIndex], tri));
+                        bones.Add(new GlyphCentroidBone(usedTriList[foundIndex], tri));
                     }
                     else
                     {
@@ -68,13 +68,13 @@ namespace Typography.Rendering
                 GlyphTriangle lastTri = _triangles[j - 1];
                 if (firstTri.IsConnectedWith(lastTri))
                 {
-                    bones.Add(new GlyphBone(lastTri, firstTri));
+                    bones.Add(new GlyphCentroidBone(lastTri, firstTri));
                 }
             }
             //----------------------------------------
             int boneCount = bones.Count;
             //do bone length histogram
-            boneList2 = new List<GlyphBone>(boneCount);
+            boneList2 = new List<GlyphCentroidBone>(boneCount);
             boneList2.AddRange(bones);
             //----------------------------------------
             AnalyzeBoneLength();
@@ -87,7 +87,7 @@ namespace Typography.Rendering
                 //eg...
                 //left -right 
                 //top-bottom
-                GlyphBone bone = bones[i];
+                GlyphCentroidBone bone = bones[i];
                 bone.Analyze();
             }
             //---------------------------------------- 
@@ -130,7 +130,7 @@ namespace Typography.Rendering
                 //
                 for (int i = j - 1; i >= 0; --i)
                 {
-                    GlyphBone bone = boneList2[i];
+                    GlyphCentroidBone bone = boneList2[i];
                     if (bone.boneLength > median_x2)
                     {
                         bone.IsLongBone = true;
@@ -161,7 +161,7 @@ namespace Typography.Rendering
         {
             return _triangles;
         }
-        public List<GlyphBone> GetBones()
+        public List<GlyphCentroidBone> GetBones()
         {
             return bones;
         }
