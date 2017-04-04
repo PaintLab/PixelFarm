@@ -669,8 +669,9 @@ namespace SampleWinForms
                         b.p.CentroidX * pixelScale, b.p.CentroidY * pixelScale,
                         b.q.CentroidX * pixelScale, b.q.CentroidY * pixelScale);
 
+                    GlyphEdgeContactSite contactSite = b.ContactSite;
 
-                    EdgeLine p_contactEdge = b.ContactEdgeP;
+                    EdgeLine p_contactEdge = contactSite._p_contact_edge;
                     //mid point
                     double mid_x = (p_contactEdge.x0 + p_contactEdge.x1) / 2;
                     double mid_y = (p_contactEdge.y0 + p_contactEdge.y1) / 2;

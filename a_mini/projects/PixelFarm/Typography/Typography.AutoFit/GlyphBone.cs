@@ -15,7 +15,31 @@ namespace Typography.Rendering
         D225,
         D270,
         D315
-    } 
+    }
+
+    /// <summary>
+    /// line link between 2 centroid contact point
+    /// </summary>
+    public class GlyphVirtualBone
+    {
+        //TODO: rename to glyph bone
+
+
+    }
+
+    public class GlyphEdgeContactSite
+    {
+        public EdgeLine _p_contact_edge;
+        public EdgeLine _q_contact_edge;
+        GlyphCentroidBone owner;
+        public GlyphEdgeContactSite(GlyphCentroidBone owner, EdgeLine p_contact_edge, EdgeLine q_contact_edge)
+        {
+            this._p_contact_edge = p_contact_edge;
+            this._q_contact_edge = q_contact_edge;
+            this.owner = owner;
+        }
+
+    }
     /// <summary>
     /// a line that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
@@ -25,8 +49,8 @@ namespace Typography.Rendering
         public readonly GlyphTriangle p, q;
         public readonly double boneLength;
 
-        EdgeLine _p_contact_edge;
-        EdgeLine _q_contact_edge;
+
+        GlyphEdgeContactSite _contactSite; //1L1
 
 
         public GlyphCentroidBone(GlyphTriangle p, GlyphTriangle q)
@@ -41,8 +65,7 @@ namespace Typography.Rendering
                 );
         }
 
-        public EdgeLine ContactEdgeP { get { return _p_contact_edge; } }
-        public EdgeLine ContactEdgeQ { get { return _q_contact_edge; } }
+        public GlyphEdgeContactSite ContactSite { get { return _contactSite; } }
 
         public double SlopAngle { get; private set; }
         public bool IsLongBone { get; set; }
@@ -146,13 +169,14 @@ namespace Typography.Rendering
             else
             {
                 //inside
-                if (_p_contact_edge == null)
+                if (_contactSite == null)
                 {
                     if (MarkMatchingInsideEdge(edgeLine, another))
                     {
-
-                        _p_contact_edge = edgeLine;
-                        _q_contact_edge = edgeLine.contactToEdge;
+                        _contactSite = new GlyphEdgeContactSite(
+                            this,
+                            edgeLine,
+                            edgeLine.contactToEdge);
                     }
                 }
             }
