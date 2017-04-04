@@ -52,6 +52,8 @@
             this.sampleTextBox1 = new SampleWinForms.SampleTextBox();
             this.lstGlyphSnapX = new System.Windows.Forms.ListBox();
             this.lstGlyphSnapY = new System.Windows.Forms.ListBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -103,7 +105,7 @@
             // lstFontSizes
             // 
             this.lstFontSizes.FormattingEnabled = true;
-            this.lstFontSizes.Location = new System.Drawing.Point(800, 162);
+            this.lstFontSizes.Location = new System.Drawing.Point(528, 167);
             this.lstFontSizes.Name = "lstFontSizes";
             this.lstFontSizes.Size = new System.Drawing.Size(121, 212);
             this.lstFontSizes.TabIndex = 8;
@@ -111,7 +113,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(797, 146);
+            this.label2.Location = new System.Drawing.Point(525, 151);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 13);
             this.label2.TabIndex = 9;
@@ -132,7 +134,7 @@
             // chkShowTess
             // 
             this.chkShowTess.AutoSize = true;
-            this.chkShowTess.Location = new System.Drawing.Point(936, 122);
+            this.chkShowTess.Location = new System.Drawing.Point(811, 173);
             this.chkShowTess.Name = "chkShowTess";
             this.chkShowTess.Size = new System.Drawing.Size(110, 17);
             this.chkShowTess.TabIndex = 13;
@@ -142,7 +144,7 @@
             // chkShowGrid
             // 
             this.chkShowGrid.AutoSize = true;
-            this.chkShowGrid.Location = new System.Drawing.Point(937, 168);
+            this.chkShowGrid.Location = new System.Drawing.Point(665, 173);
             this.chkShowGrid.Name = "chkShowGrid";
             this.chkShowGrid.Size = new System.Drawing.Size(75, 17);
             this.chkShowGrid.TabIndex = 14;
@@ -151,7 +153,7 @@
             // 
             // txtGridSize
             // 
-            this.txtGridSize.Location = new System.Drawing.Point(1007, 168);
+            this.txtGridSize.Location = new System.Drawing.Point(735, 173);
             this.txtGridSize.Name = "txtGridSize";
             this.txtGridSize.Size = new System.Drawing.Size(51, 20);
             this.txtGridSize.TabIndex = 15;
@@ -162,7 +164,7 @@
             this.chkYGridFitting.AutoSize = true;
             this.chkYGridFitting.Checked = true;
             this.chkYGridFitting.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkYGridFitting.Location = new System.Drawing.Point(939, 220);
+            this.chkYGridFitting.Location = new System.Drawing.Point(667, 225);
             this.chkYGridFitting.Name = "chkYGridFitting";
             this.chkYGridFitting.Size = new System.Drawing.Size(111, 17);
             this.chkYGridFitting.TabIndex = 16;
@@ -174,7 +176,7 @@
             this.chkDrawBone.AutoSize = true;
             this.chkDrawBone.Checked = true;
             this.chkDrawBone.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDrawBone.Location = new System.Drawing.Point(937, 145);
+            this.chkDrawBone.Location = new System.Drawing.Point(665, 150);
             this.chkDrawBone.Name = "chkDrawBone";
             this.chkDrawBone.Size = new System.Drawing.Size(76, 17);
             this.chkDrawBone.TabIndex = 19;
@@ -184,7 +186,7 @@
             // chkXGridFitting
             // 
             this.chkXGridFitting.AutoSize = true;
-            this.chkXGridFitting.Location = new System.Drawing.Point(939, 243);
+            this.chkXGridFitting.Location = new System.Drawing.Point(667, 248);
             this.chkXGridFitting.Name = "chkXGridFitting";
             this.chkXGridFitting.Size = new System.Drawing.Size(111, 17);
             this.chkXGridFitting.TabIndex = 20;
@@ -194,7 +196,7 @@
             // chkLcdTechnique
             // 
             this.chkLcdTechnique.AutoSize = true;
-            this.chkLcdTechnique.Location = new System.Drawing.Point(939, 266);
+            this.chkLcdTechnique.Location = new System.Drawing.Point(667, 271);
             this.chkLcdTechnique.Name = "chkLcdTechnique";
             this.chkLcdTechnique.Size = new System.Drawing.Size(95, 17);
             this.chkLcdTechnique.TabIndex = 21;
@@ -203,7 +205,7 @@
             // 
             // cmdBuildMsdfTexture
             // 
-            this.cmdBuildMsdfTexture.Location = new System.Drawing.Point(800, 379);
+            this.cmdBuildMsdfTexture.Location = new System.Drawing.Point(528, 384);
             this.cmdBuildMsdfTexture.Name = "cmdBuildMsdfTexture";
             this.cmdBuildMsdfTexture.Size = new System.Drawing.Size(121, 37);
             this.cmdBuildMsdfTexture.TabIndex = 22;
@@ -271,24 +273,44 @@
             // lstGlyphSnapX
             // 
             this.lstGlyphSnapX.FormattingEnabled = true;
-            this.lstGlyphSnapX.Location = new System.Drawing.Point(938, 289);
+            this.lstGlyphSnapX.Location = new System.Drawing.Point(666, 320);
             this.lstGlyphSnapX.Name = "lstGlyphSnapX";
-            this.lstGlyphSnapX.Size = new System.Drawing.Size(120, 95);
+            this.lstGlyphSnapX.Size = new System.Drawing.Size(120, 69);
             this.lstGlyphSnapX.TabIndex = 43;
             // 
             // lstGlyphSnapY
             // 
             this.lstGlyphSnapY.FormattingEnabled = true;
-            this.lstGlyphSnapY.Location = new System.Drawing.Point(938, 390);
+            this.lstGlyphSnapY.Location = new System.Drawing.Point(666, 421);
             this.lstGlyphSnapY.Name = "lstGlyphSnapY";
-            this.lstGlyphSnapY.Size = new System.Drawing.Size(120, 95);
+            this.lstGlyphSnapY.Size = new System.Drawing.Size(120, 69);
             this.lstGlyphSnapY.TabIndex = 44;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(664, 306);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(39, 13);
+            this.label1.TabIndex = 45;
+            this.label1.Text = "SnapX";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(664, 405);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(39, 13);
+            this.label3.TabIndex = 46;
+            this.label3.Text = "SnapY";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 526);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.lstGlyphSnapY);
             this.Controls.Add(this.lstGlyphSnapX);
             this.Controls.Add(this.sampleTextBox1);
@@ -347,6 +369,8 @@
         private SampleTextBox sampleTextBox1;
         private System.Windows.Forms.ListBox lstGlyphSnapX;
         private System.Windows.Forms.ListBox lstGlyphSnapY;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
     }
 }
 
