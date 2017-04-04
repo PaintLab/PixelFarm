@@ -481,44 +481,44 @@ namespace SampleWinForms
         }
         static void DrawPointKind(AggCanvasPainter painter, GlyphPoint2D point, float scale)
         {
-            var prevColor = painter.FillColor;
-            painter.FillColor = PixelFarm.Drawing.Color.Red;
-            if (point.AdjustedY != 0)
-            {
-                painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5);
-            }
-            else
-            {
-                painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2);
-            }
-            painter.FillColor = prevColor;
-
-
-            //switch (point.kind)
+            //var prevColor = painter.FillColor;
+            //painter.FillColor = PixelFarm.Drawing.Color.Red;
+            //if (point.AdjustedY != 0)
             //{
-            //    case PointKind.C3Start:
-            //    case PointKind.C3End:
-            //    case PointKind.C4Start:
-            //    case PointKind.C4End:
-            //    case PointKind.LineStart:
-            //    case PointKind.LineStop:
-            //        {
-
-            //            var prevColor = painter.FillColor;
-            //            painter.FillColor = PixelFarm.Drawing.Color.Red;
-            //            if (point.AdjustedY != 0)
-            //            {
-            //                painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5);
-            //            }
-            //            else
-            //            {
-            //                painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2);
-            //            }
-            //            painter.FillColor = prevColor;
-            //        }
-            //        break;
-
+            //    painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5);
             //}
+            //else
+            //{
+            //    painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2);
+            //}
+            //painter.FillColor = prevColor;
+
+
+            switch (point.kind)
+            {
+                case PointKind.C3Start:
+                case PointKind.C3End:
+                case PointKind.C4Start:
+                case PointKind.C4End:
+                case PointKind.LineStart:
+                case PointKind.LineStop:
+                    {
+
+                        var prevColor = painter.FillColor;
+                        painter.FillColor = PixelFarm.Drawing.Color.Red;
+                        if (point.AdjustedY != 0)
+                        {
+                            painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5);
+                        }
+                        else
+                        {
+                            painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2);
+                        }
+                        painter.FillColor = prevColor;
+                    }
+                    break;
+
+            }
         }
         static void DrawEdge(AggCanvasPainter painter, EdgeLine edge, float scale)
         {
@@ -588,7 +588,7 @@ namespace SampleWinForms
         void debugDrawTriangulatedGlyph(GlyphFitOutline glyphFitOutline, float pixelScale)
         {
             painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
-            List<GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
+            List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
             int j = triAngles.Count;
             //
             double prev_cx = 0, prev_cy = 0;
@@ -638,7 +638,7 @@ namespace SampleWinForms
             //draw bone 
             if (drawBone)
             {
-                List<GlyphBone> bones = glyphFitOutline.dbugGetBones();
+                List<GlyphBone> bones = glyphFitOutline.GetBones();
                 j = bones.Count;
                 for (int i = 0; i < j; ++i)
                 {

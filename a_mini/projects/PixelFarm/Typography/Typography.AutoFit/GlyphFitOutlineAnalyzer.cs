@@ -8,41 +8,17 @@ namespace Typography.Rendering
     //NOT FREE TYPE AUTO FIT***
     public partial class GlyphFitOutlineAnalyzer
     {
-        GlyphPartFlattener analyzer = new GlyphPartFlattener();
-        GlyphTranslatorToContour glyphToCountor = new GlyphTranslatorToContour();
+        GlyphPartFlattener _glyhFlattener = new GlyphPartFlattener();
+        GlyphTranslatorToContour _glyphToCountor = new GlyphTranslatorToContour();
         public GlyphFitOutlineAnalyzer()
         {
 
         }
-#if DEBUG
-        public GlyphFitOutline dbugAnalyze(GlyphContour testContour, ushort[] glyphContours)
-        {
-
-
-            //master outline analysis 
-            List<GlyphContour> contours = new List<GlyphContour>() { testContour };
-            int j = contours.Count;
-            analyzer.NSteps = 2;
-            for (int i = 0; i < j; ++i)
-            {
-                contours[i].Analyze(analyzer);
-            }
-
-            if (j > 0)
-            {
-                return CreateFitOutline(contours);
-            }
-            else
-            {
-                return null;
-            }
-        }
-#endif
         static GlyphFitOutline CreateFitOutline(List<GlyphContour> contours)
         {
 
             int cntCount = contours.Count;
-            GlyphContour cnt = contours[0];
+            GlyphContour cnt = contours[0]; //first contour
             //--------------------------
             //1. create polygon 
             Poly2Tri.Polygon mainPolygon = CreatePolygon(cnt);//first contour        
@@ -55,6 +31,7 @@ namespace Typography.Rendering
                 cnt = contours[n];
                 //IsHole is correct after we Analyze() the glyph contour
                 Poly2Tri.Polygon subPolygon = CreatePolygon(cnt);
+                //TODO: review here
                 mainPolygon.AddHole(subPolygon);
                 //if (cnt.IsClosewise())
                 //{
@@ -73,15 +50,12 @@ namespace Typography.Rendering
                 //}
             }
             //------------------------------------------
-            //2. tri angulaet 
+            //2. tri angulate 
             Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
             //3. create fit outline
             GlyphFitOutline glyphFitOutline = new GlyphFitOutline(mainPolygon, contours);
-            //4. analyze
-            glyphFitOutline.Analyze();
-            //------------------------------------------
 
-            List<GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
+            List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
             int triangleCount = triAngles.Count;
             for (int i = 0; i < triangleCount; ++i)
             {
@@ -119,7 +93,7 @@ namespace Typography.Rendering
         /// <returns></returns>
         static Poly2Tri.Polygon CreatePolygon(GlyphContour cnt)
         {
-            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>(); 
+            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
             List<GlyphPoint2D> flattenPoints = cnt.flattenPoints;
 
             //limitation: poly tri not accept duplicated points! ***
@@ -235,19 +209,27 @@ namespace Typography.Rendering
     using Typography.OpenFont;
     partial class GlyphFitOutlineAnalyzer
     {
-        public GlyphFitOutline Analyze(GlyphPointF[] glyphPoints, ushort[] glyphContours)
+        /// <summary>
+        /// calculate and create GlyphFitOutline
+        /// </summary>
+        /// <param name="glyphPoints"></param>
+        /// <param name="glyphContours"></param>
+        /// <returns></returns>
+        public GlyphFitOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
         {
-
-            glyphToCountor.Read(glyphPoints, glyphContours);
-            //master outline analysis 
-            List<GlyphContour> contours = glyphToCountor.GetContours(); //analyzed contour             
+            //1. convert original glyph point to contour
+            _glyphToCountor.Read(glyphPoints, glyphContours);
+            //2. get result as list of contour
+            List<GlyphContour> contours = _glyphToCountor.GetContours();
+            //
+            //3. flatten each contour with the flattener
             int j = contours.Count;
-            analyzer.NSteps = 2;
+            _glyhFlattener.NSteps = 2;
             for (int i = 0; i < j; ++i)
             {
-                contours[i].Analyze(analyzer);
+                contours[i].Flatten(_glyhFlattener);
             }
-
+            //4. after flatten, the we can create fit outline
             if (j > 0)
             {
                 return CreateFitOutline(contours);

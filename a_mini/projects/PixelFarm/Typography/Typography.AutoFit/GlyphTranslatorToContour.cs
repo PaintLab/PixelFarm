@@ -218,27 +218,24 @@ namespace Typography.Rendering
         public GlyphContour()
         {
         }
-        public void ClearAllAdjustValues()
-        {
-            int j = flattenPoints.Count;
-            for (int i = flattenPoints.Count - 1; i >= 0; --i)
-            {
-                GlyphPoint2D p = flattenPoints[i];
-                p.adjustedX = 0;
-                p.AdjustedY = 0;
-            }
-        }
-         
+
         public void AddPart(GlyphPart part)
         {
             parts.Add(part);
         }
-        public void Analyze(GlyphPartFlattener flattener)
+        internal void ClearAllAdjustValues()
+        {
+            for (int i = flattenPoints.Count - 1; i >= 0; --i)
+            {
+                flattenPoints[i].ClearAdjustValues();
+            }
+        }
+
+        public void Flatten(GlyphPartFlattener flattener)
         {
             if (analyzed) return;
             //flatten each part ...
             //-------------------------------
-
             int j = parts.Count;
             //---------------
             //start ...
@@ -443,18 +440,19 @@ namespace Typography.Rendering
 
         CurveInbetween,
     }
+
     public class GlyphPoint2D
     {
         //glyph point 
         //for analysis
         public readonly double x;
         public readonly double y;
-        public PointKind kind;
+        public readonly PointKind kind;
 
         //
         public Poly2Tri.TriangulationPoint triangulationPoint;
-        public double adjustedX;
-
+        double _adjX;
+        double _adjY;
         //
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
@@ -476,22 +474,26 @@ namespace Typography.Rendering
             return x == another.x && y == another.y;
         }
 
-        double _adjY;
+
         public double AdjustedY
         {
             get { return _adjY; }
-            set
+            internal set
             {
-                //if (value != 0)
-                //{
-                //    value = value * 3;
-                //}
-                if (_adjY != 0)
-                {
-
-                }
                 _adjY = value;
             }
+        }
+        public double AdjustedX
+        {
+            get { return _adjX; }
+            internal set
+            {
+                _adjX = value;
+            }
+        }
+        internal void ClearAdjustValues()
+        {
+            _adjX = _adjY = 0;
         }
         public void AddVerticalEdge(EdgeLine v_edge)
         {

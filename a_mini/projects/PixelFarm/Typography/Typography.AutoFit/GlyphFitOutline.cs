@@ -9,12 +9,13 @@ namespace Typography.Rendering
     {
         //this class store result of poly2tri
 
-        Polygon _polygon;
+
         List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
+        Polygon _polygon;
         List<GlyphBone> bones;
         List<GlyphBone> boneList2;
 
-        public GlyphFitOutline(Polygon polygon, List<GlyphContour> contours)
+        internal GlyphFitOutline(Polygon polygon, List<GlyphContour> contours)
         {
             this.Contours = contours;
             this._polygon = polygon;
@@ -23,10 +24,12 @@ namespace Typography.Rendering
                 tri.MarkAsActualTriangle();
                 _triangles.Add(new GlyphTriangle(tri));
             }
+
+            Analyze();
         }
         internal List<GlyphContour> Contours { get; set; }
 
-        public void Analyze()
+        void Analyze()
         {
             //we analyze each triangle here 
             int j = _triangles.Count;
@@ -141,29 +144,27 @@ namespace Typography.Rendering
             }
 
         }
-        int FindLatestConnectedTri(List<GlyphTriangle> usedTriList, GlyphTriangle tri)
+
+        static int FindLatestConnectedTri(List<GlyphTriangle> usedTriList, GlyphTriangle tri)
         {
             //search back ***
             for (int i = usedTriList.Count - 1; i >= 0; --i)
             {
-                GlyphTriangle t = usedTriList[i];
-                if (t.IsConnectedWith(tri))
+                if (usedTriList[i].IsConnectedWith(tri))
                 {
                     return i;
                 }
             }
             return -1;
         }
-#if DEBUG
-        public List<GlyphTriangle> dbugGetTriangles()
+        public List<GlyphTriangle> GetTriangles()
         {
             return _triangles;
         }
-        public List<GlyphBone> dbugGetBones()
+        public List<GlyphBone> GetBones()
         {
             return bones;
         }
-#endif
     }
 
 
@@ -265,7 +266,7 @@ namespace Typography.Rendering
                 {
                     SlopKind = LineSlopeKind.Vertical;
                 }
-                else if (SlopAngle < _15degreeToRad)
+                else if (SlopAngle < _8degreeToRad) //_15degreeToRad
                 {
                     SlopKind = LineSlopeKind.Horizontal;
                 }
@@ -477,6 +478,7 @@ namespace Typography.Rendering
         }
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
+        static readonly double _8degreeToRad = MyMath.DegreesToRadians(8);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
         public override string ToString()
         {
@@ -484,13 +486,6 @@ namespace Typography.Rendering
         }
     }
 
-    //public enum GlyphTrianglePart : byte
-    //{
-    //    Unknown,
-    //    VericalStem,
-    //    HorizontalStem,
-    //    Other,
-    //}
     public class GlyphTriangle
     {
 
@@ -519,52 +514,7 @@ namespace Typography.Rendering
             e1.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P1, tri.P2));
             e2.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P2, tri.P0));
         }
-        //static int RoundToNearestSide(float org, int gridsize)
-        //{
-        //    float actual1 = org / (float)gridsize;
-        //    int integer1 = (int)(actual1);
-        //    float floatModulo = actual1 - integer1;
-        //    if (floatModulo > (gridsize / 2))
-        //    {
-        //        return (integer1 + 1) + gridsize;
-        //    }
-        //    else
-        //    {
-        //        return integer1 * gridsize;
-        //    }
-        //}
-        //public void Analyze(int pixelWidth, int pixelHeight)
-        //{
-        //    //check if triangle is part of vertical/horizontal stem or not
-        //    //snap some edge to match with pixel size            
-        //    //1. outside count
 
-        //    int outside_count =
-        //        ((e0.IsOutside) ? 1 : 0) +
-        //        ((e1.IsOutside) ? 1 : 0) +
-        //        ((e2.IsOutside) ? 1 : 0);
-        //    switch (outside_count)
-        //    {
-        //        case 0:
-        //            break;
-        //        case 1:
-        //            {
-        //                //check this
-        //            }
-        //            break;
-        //        case 2:
-        //            {
-        //                //have 2 outside
-        //                //usu
-        //            }
-        //            break;
-        //        default:
-
-        //            break;
-
-        //    }
-
-        //}
         public double CentroidX
         {
             get { return centroidX; }
