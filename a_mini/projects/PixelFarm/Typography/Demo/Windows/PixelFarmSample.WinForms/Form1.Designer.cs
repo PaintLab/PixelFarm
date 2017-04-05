@@ -40,7 +40,7 @@
             this.chkShowGrid = new System.Windows.Forms.CheckBox();
             this.txtGridSize = new System.Windows.Forms.TextBox();
             this.chkYGridFitting = new System.Windows.Forms.CheckBox();
-            this.chkDrawBone = new System.Windows.Forms.CheckBox();
+            this.chkDrawCentroidBone = new System.Windows.Forms.CheckBox();
             this.chkXGridFitting = new System.Windows.Forms.CheckBox();
             this.chkLcdTechnique = new System.Windows.Forms.CheckBox();
             this.cmdBuildMsdfTexture = new System.Windows.Forms.Button();
@@ -54,6 +54,7 @@
             this.lstGlyphSnapY = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.chkDrawGlyphBone = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -171,17 +172,18 @@
             this.chkYGridFitting.Text = "Y Grid Auto Fitting";
             this.chkYGridFitting.UseVisualStyleBackColor = true;
             // 
-            // chkDrawBone
+            // chkDrawCentroidBone
             // 
-            this.chkDrawBone.AutoSize = true;
-            this.chkDrawBone.Checked = true;
-            this.chkDrawBone.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDrawBone.Location = new System.Drawing.Point(665, 150);
-            this.chkDrawBone.Name = "chkDrawBone";
-            this.chkDrawBone.Size = new System.Drawing.Size(76, 17);
-            this.chkDrawBone.TabIndex = 19;
-            this.chkDrawBone.Text = "DrawBone";
-            this.chkDrawBone.UseVisualStyleBackColor = true;
+            this.chkDrawCentroidBone.AutoSize = true;
+            this.chkDrawCentroidBone.Checked = true;
+            this.chkDrawCentroidBone.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDrawCentroidBone.Location = new System.Drawing.Point(828, 196);
+            this.chkDrawCentroidBone.Name = "chkDrawCentroidBone";
+            this.chkDrawCentroidBone.Size = new System.Drawing.Size(121, 17);
+            this.chkDrawCentroidBone.TabIndex = 19;
+            this.chkDrawCentroidBone.Text = "Draw Centroid Bone";
+            this.chkDrawCentroidBone.UseVisualStyleBackColor = true;
+         
             // 
             // chkXGridFitting
             // 
@@ -304,11 +306,25 @@
             this.label3.TabIndex = 46;
             this.label3.Text = "SnapY";
             // 
+            // chkDrawGlyphBone
+            // 
+            this.chkDrawGlyphBone.AutoSize = true;
+            this.chkDrawGlyphBone.Checked = true;
+            this.chkDrawGlyphBone.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDrawGlyphBone.Location = new System.Drawing.Point(828, 225);
+            this.chkDrawGlyphBone.Name = "chkDrawGlyphBone";
+            this.chkDrawGlyphBone.Size = new System.Drawing.Size(109, 17);
+            this.chkDrawGlyphBone.TabIndex = 47;
+            this.chkDrawGlyphBone.Text = "Draw Glyph Bone";
+            this.chkDrawGlyphBone.UseVisualStyleBackColor = true;
+          
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 526);
+            this.Controls.Add(this.chkDrawGlyphBone);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lstGlyphSnapY);
@@ -322,7 +338,7 @@
             this.Controls.Add(this.cmdBuildMsdfTexture);
             this.Controls.Add(this.chkLcdTechnique);
             this.Controls.Add(this.chkXGridFitting);
-            this.Controls.Add(this.chkDrawBone);
+            this.Controls.Add(this.chkDrawCentroidBone);
             this.Controls.Add(this.chkYGridFitting);
             this.Controls.Add(this.txtGridSize);
             this.Controls.Add(this.chkShowGrid);
@@ -356,7 +372,7 @@
         private System.Windows.Forms.CheckBox chkShowGrid;
         private System.Windows.Forms.TextBox txtGridSize;
         private System.Windows.Forms.CheckBox chkYGridFitting;
-        private System.Windows.Forms.CheckBox chkDrawBone;
+        private System.Windows.Forms.CheckBox chkDrawCentroidBone;
         private System.Windows.Forms.CheckBox chkXGridFitting;
         private System.Windows.Forms.CheckBox chkLcdTechnique;
         private System.Windows.Forms.Button cmdBuildMsdfTexture;
@@ -371,6 +387,7 @@
         private System.Windows.Forms.ListBox lstGlyphSnapY;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.CheckBox chkDrawGlyphBone;
     }
 }
 

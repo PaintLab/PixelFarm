@@ -1,5 +1,7 @@
 ﻿//MIT, 2017, WinterDev
 using System;
+using System.Numerics;
+
 namespace Typography.Rendering
 {
     public enum BoneDirection : byte
@@ -32,12 +34,54 @@ namespace Typography.Rendering
         public EdgeLine _p_contact_edge;
         public EdgeLine _q_contact_edge;
         GlyphCentroidBone owner;
-        public GlyphEdgeContactSite(GlyphCentroidBone owner, EdgeLine p_contact_edge, EdgeLine q_contact_edge)
+
+
+        public GlyphEdgeContactSite(GlyphCentroidBone owner,
+            EdgeLine p_contact_edge,
+            EdgeLine q_contact_edge)
         {
             this._p_contact_edge = p_contact_edge;
             this._q_contact_edge = q_contact_edge;
             this.owner = owner;
         }
+        public Vector2 GetContactPoint()
+        {
+            return new Vector2(
+                (float)((_p_contact_edge.x0 + _p_contact_edge.x1) / 2),
+                (float)((_p_contact_edge.y0 + _p_contact_edge.y1) / 2));
+        }
+        public double GetSqrDistance(Vector2 v)
+        {
+            //get distance^2 from contact point 
+            //to speicific point
+            Vector2 contactPoint = this.GetContactPoint();
+            float xdiff = contactPoint.X - v.X;
+            float ydiff = contactPoint.Y - v.Y;
+
+            return (xdiff * xdiff) + (ydiff * ydiff);
+        }
+
+
+        short _selEdgePointCount;
+        Vector2 _selectedEdgePoint_A, _selectedEdgePoint_B;
+        public void AddSelectedEdgePoint(Vector2 vec)
+        {
+            switch (_selEdgePointCount)
+            {
+                //not more thar2
+                default: throw new NotSupportedException();
+                case 0:
+                    _selectedEdgePoint_A = vec;
+                    break;
+                case 1:
+                    _selectedEdgePoint_B = vec;
+                    break;
+            }
+            _selEdgePointCount++;
+        }
+        public short SelectedEdgePointCount { get { return _selEdgePointCount; } }
+        public Vector2 SelectedEdgeA { get { return _selectedEdgePoint_A; } }
+        public Vector2 SelectedEdgeB { get { return _selectedEdgePoint_B; } }
 
     }
     /// <summary>
@@ -185,10 +229,12 @@ namespace Typography.Rendering
                 return 2;
             }
         }
+
         void MarkProperOpositeEdge(GlyphTriangle triangle, GlyphEdgeContactSite contactSite, EdgeLine edge)
         {
-            //the 'tip' part may has up to 2 tri that can be outlet
-            //in that case we choose  edge that more perpendicular to this bone direction
+            //find shortest part from contactsite to edge or to corner
+            //draw perpendicular line to outside edge
+            //and to the  corner of current edge 
             EdgeLine edgeA = null;
             EdgeLine edgeB = null;
             int count = 0;
@@ -204,7 +250,7 @@ namespace Typography.Rendering
             {
                 count = AssignResult(triangle.e2, ref edgeA, ref edgeB);
             }
-
+            //-------------------------------------------------------------------------------------
             switch (count)
             {
                 default: throw new NotSupportedException();
@@ -212,22 +258,63 @@ namespace Typography.Rendering
                     break;
                 case 1:
                     {
-                        //
-                        //find a perpendicular point(x3,y3) on the selected edge(((x0,y0), (x1,y1))
-                        //from mid point (x2,y2) of contact site
-                        
+                        Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(
+                             new Vector2((float)edgeA.x0, (float)edgeA.y0),
+                             new Vector2((float)edgeA.x1, (float)edgeA.y1),
+                             contactSite.GetContactPoint());
+                        Vector2 corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
+                        //find distance from contactSite to specific point 
+                        double sqDistanceToEdgeA = contactSite.GetSqrDistance(perpend_A);
+                        double sqDistanceTo_P = contactSite.GetSqrDistance(corner);
 
+                        if (sqDistanceToEdgeA < sqDistanceTo_P)
+                        {
+                            contactSite.AddSelectedEdgePoint(perpend_A);
+                        }
+                        else
+                        {
+                            contactSite.AddSelectedEdgePoint(corner);
+                        }
                     }
                     break;
                 case 2:
                     {
 
+                        Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(
+                           new Vector2((float)edgeA.x0, (float)edgeA.y0),
+                           new Vector2((float)edgeA.x1, (float)edgeA.y1),
+                           contactSite.GetContactPoint());
+                        Vector2 perpend_B = MyMath.FindPerpendicularCutPoint(
+                          new Vector2((float)edgeB.x0, (float)edgeB.y0),
+                          new Vector2((float)edgeB.x1, (float)edgeB.y1),
+                          contactSite.GetContactPoint());
+
+                        Vector2 corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
+                        //find distance from contactSite to specific point 
+                        double sqDistanceToEdgeA = contactSite.GetSqrDistance(perpend_A);
+                        double sqDistanceToEdgeB = contactSite.GetSqrDistance(perpend_B);
+                        double sqDistanceTo_P = contactSite.GetSqrDistance(corner);
+
+                        int minAt = MyMath.Min(sqDistanceToEdgeA, sqDistanceToEdgeB, sqDistanceTo_P);
+                        switch (minAt)
+                        {
+                            default: throw new NotSupportedException();
+                            case 0:
+                                contactSite.AddSelectedEdgePoint(perpend_A);
+                                break;
+                            case 1:
+                                contactSite.AddSelectedEdgePoint(perpend_B);
+                                break;
+                            case 2:
+                                contactSite.AddSelectedEdgePoint(corner);
+                                break;
+                        }
+
                     }
                     break;
             }
-
-
         }
+
         void MarkEdgeSides(EdgeLine edgeLine, GlyphTriangle anotherTriangle)
         {
             if (edgeLine.IsOutside)
@@ -245,8 +332,6 @@ namespace Typography.Rendering
                             this,
                             edgeLine,
                             edgeLine.contactToEdge);
-                        //
-
                     }
                 }
             }

@@ -203,59 +203,79 @@ namespace Test_WinForm_TessGlyph
             g.Clear(Color.White);
             //
             PointF p0 = new PointF(50, 50);
-            PointF p1 = new PointF(100, 120);
+            //PointF p1 = new PointF(100, 120);
+            PointF p1 = new PointF(50, 120);
+            //PointF p1 = new PointF(120, 50);
+
             g.DrawLine(Pens.Red, p0, p1);
-            //
-
+            // 
             //find slope 
-            double m1 = (p1.Y - p0.Y) / (p1.X - p0.X);
-            double b1 = FindB(p0, p1);
-            //-------------------------------------
+            double xdiff = p1.X - p0.X;
+            if (xdiff == 0)
+            {
 
-            //y = mx+b
-            for (int i = 30; i < 200; i++)
-            {
-                PointF testY = new PointF(i, (float)((m1 * i) + b1));
-                g.FillRectangle(Brushes.Blue, new RectangleF(testY, new SizeF(2, 2)));
+                PointF cutP = FindPerpendicularCutPoint(p0, p1, new PointF(mdown_x, mdown_y));
+                g.FillRectangle(Brushes.Magenta,
+                     new RectangleF((float)cutP.X, (float)cutP.Y, 5, 5));
+
+                g.DrawLine(Pens.Red, new PointF((float)cutP.X, (float)cutP.Y),
+                    new PointF(mdown_x, mdown_y));
+
             }
-            //-------------------------------------
-            //perpendicular line
-            double m2 = -1 / m1;
-            for (int n = 1; n <= 3; ++n)
+            else
             {
+                double m1 = (p1.Y - p0.Y) / (xdiff);
+
+                double b1 = FindB(p0, p1);
+                //-------------------------------------
+
+                //y = mx+b
                 for (int i = 30; i < 200; i++)
                 {
-                    PointF testY = new PointF(i, (float)(((m2) * i) + b1 + n * 100));
+                    PointF testY = new PointF(i, (float)((m1 * i) + b1));
                     g.FillRectangle(Brushes.Blue, new RectangleF(testY, new SizeF(2, 2)));
                 }
-            }
-            //-------------------------------------
-            g.FillRectangle(Brushes.Red, new RectangleF(mdown_x, mdown_y, 3, 3));
-            //-------------------------------------
-            //
-            //find b2
-            //
-            double b2 = mdown_y - (m2) * mdown_x;
-            for (int i = 30; i < 200; i++)
-            {
-                PointF testY = new PointF(i, (float)(((m2) * i) + b2));
-                g.FillRectangle(Brushes.Green, new RectangleF(testY, new SizeF(2, 2)));
-            }
-            //find cut point
-            double cutx = (b2 - b1) / (m1 - m2);
-            //g.DrawLine(Pens.DeepPink,
-            //    new PointF((float)cutx, 0),
-            //    new PointF((float)cutx, 400));
-            double cuty = (m2 * cutx) + b2;
-            //g.DrawLine(Pens.DeepPink,
-            //  new PointF((float)0, (float)cuty),
-            //  new PointF((float)400, (float)cuty));
-            //g.FillRectangle(Brushes.Magenta,
-            //    new RectangleF((float)cutx, (float)cuty, 5, 5));
+                //-------------------------------------
+                //perpendicular line
+                double m2 = -1 / m1;
+                for (int n = 1; n <= 3; ++n)
+                {
+                    for (int i = 30; i < 200; i++)
+                    {
+                        PointF testY = new PointF(i, (float)(((m2) * i) + b1 + n * 100));
+                        g.FillRectangle(Brushes.Blue, new RectangleF(testY, new SizeF(2, 2)));
+                    }
+                }
+                //-------------------------------------
 
-            PointF cutP = FindPerpendicularCutPoint(p0, p1, new PointF(mdown_x, mdown_y));
-            g.FillRectangle(Brushes.Magenta,
-                 new RectangleF((float)cutP.X, (float)cutP.Y, 5, 5));
+                g.FillRectangle(Brushes.Red, new RectangleF(mdown_x, mdown_y, 3, 3));
+                //-------------------------------------
+                //
+                //find b2
+                //
+                double b2 = mdown_y - (m2) * mdown_x;
+                for (int i = 30; i < 200; i++)
+                {
+                    PointF testY = new PointF(i, (float)(((m2) * i) + b2));
+                    g.FillRectangle(Brushes.Green, new RectangleF(testY, new SizeF(2, 2)));
+                }
+                //find cut point
+                double cutx = (b2 - b1) / (m1 - m2);
+                //g.DrawLine(Pens.DeepPink,
+                //    new PointF((float)cutx, 0),
+                //    new PointF((float)cutx, 400));
+                double cuty = (m2 * cutx) + b2;
+                //g.DrawLine(Pens.DeepPink,
+                //  new PointF((float)0, (float)cuty),
+                //  new PointF((float)400, (float)cuty));
+                //g.FillRectangle(Brushes.Magenta,
+                //    new RectangleF((float)cutx, (float)cuty, 5, 5));
+
+                PointF cutP = FindPerpendicularCutPoint(p0, p1, new PointF(mdown_x, mdown_y));
+                g.FillRectangle(Brushes.Magenta,
+                     new RectangleF((float)cutP.X, (float)cutP.Y, 5, 5));
+
+            }
 
 
         }
@@ -265,7 +285,12 @@ namespace Test_WinForm_TessGlyph
             //a line from p0 to p1
             //p2 is any point
             //return p3 -> cutpoint on p0,p1
-
+            double xdiff = p1.X - p0.X;
+            if (xdiff == 0)
+            {
+                //90 or 180 degree
+                return new PointF(p1.X, p2.Y);
+            }
             //find slope 
             double m1 = (p1.Y - p0.Y) / (p1.X - p0.X);
             double b1 = FindB(p0, p1);

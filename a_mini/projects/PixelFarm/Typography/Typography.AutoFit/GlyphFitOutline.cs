@@ -378,7 +378,7 @@ namespace Typography.Rendering
                     //adjust right-side vertical edge
                     EdgeLine rightside = p.GetMatchingVerticalEdge();
                 }
-                //tx.MoveTo((float)p_x, (float)p_y);
+                 
                 genPoints.Add(new Point2d((float)p_x, (float)p_y));
                 //-------------
                 first_px = p_x;
@@ -465,7 +465,7 @@ namespace Typography.Rendering
                 }
             }
             //close
-            //tx.LineTo(first_px, first_py);
+          
             tx.CloseContour();
         }
 

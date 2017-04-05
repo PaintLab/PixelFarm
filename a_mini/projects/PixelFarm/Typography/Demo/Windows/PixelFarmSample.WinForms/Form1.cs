@@ -117,9 +117,11 @@ namespace SampleWinForms
             chkYGridFitting.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkFillBackground.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkLcdTechnique.CheckedChanged += (s, e) => UpdateRenderOutput();
-            chkDrawBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkGsubEnableLigature.CheckedChanged += (s, e) => UpdateRenderOutput();
+            //----------
             chkShowTess.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDrawCentroidBone.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDrawGlyphBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             //----------
 
 
@@ -598,15 +600,16 @@ namespace SampleWinForms
         }
 
 #if DEBUG
-        void debugDrawTriangulatedGlyph(GlyphFitOutline glyphFitOutline, float pixelScale)
+        void debugDrawTriangulatedGlyph(GlyphFitOutline glyphFitOutline, float pxscale)
         {
             painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
             List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
             int j = triAngles.Count;
             //
-            double prev_cx = 0, prev_cy = 0;
+
             // 
-            bool drawBone = this.chkDrawBone.Checked;
+            bool drawCentroidBone = this.chkDrawCentroidBone.Checked;
+            bool drawGlyphBone = this.chkDrawGlyphBone.Checked;
 
             for (int i = 0; i < j; ++i)
             {
@@ -617,73 +620,100 @@ namespace SampleWinForms
                 EdgeLine e2 = tri.e2;
                 //---------------
                 //draw each triangles
-                DrawEdge(painter, e0, pixelScale);
-                DrawEdge(painter, e1, pixelScale);
-                DrawEdge(painter, e2, pixelScale);
-                //---------------
-                //draw centroid
-                double cen_x = tri.CentroidX;
-                double cen_y = tri.CentroidY;
-                //---------------
-                painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-                painter.FillRectLBWH(cen_x * pixelScale, cen_y * pixelScale, 2, 2);
-                if (!drawBone)
-                {
+                DrawEdge(painter, e0, pxscale);
+                DrawEdge(painter, e1, pxscale);
+                DrawEdge(painter, e2, pxscale);
 
-                    if (i == 0)
-                    {
-                        //start mark
-                        painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-                        painter.FillRectLBWH(cen_x * pixelScale, cen_y * pixelScale, 7, 7);
-                    }
-                    else
-                    {
-                        painter.StrokeColor = PixelFarm.Drawing.Color.Red;
-                        painter.Line(
-                            prev_cx * pixelScale, prev_cy * pixelScale,
-                            cen_x * pixelScale, cen_y * pixelScale);
-                    }
-                    prev_cx = cen_x;
-                    prev_cy = cen_y;
-                }
             }
             //---------------
             //draw bone 
-            if (drawBone)
+            if (!drawCentroidBone && !drawGlyphBone)
             {
-                List<GlyphCentroidBone> bones = glyphFitOutline.GetBones();
-                j = bones.Count;
-                for (int i = 0; i < j; ++i)
+                return;
+            }
+            //---------------
+
+
+            List<GlyphCentroidBone> bones = glyphFitOutline.GetBones();
+            j = bones.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphCentroidBone b = bones[i];
+                if (drawCentroidBone)
                 {
-                    GlyphCentroidBone b = bones[i];
                     if (i == 0)
                     {
                         //start mark
                         painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-                        painter.FillRectLBWH(b.p.CentroidX * pixelScale, b.p.CentroidY * pixelScale, 7, 7);
+                        painter.FillRectLBWH(b.p.CentroidX * pxscale, b.p.CentroidY * pxscale, 7, 7);
                     }
                     //draw each bone 
 
                     painter.StrokeColor = b.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Red;
                     painter.Line(
-                        b.p.CentroidX * pixelScale, b.p.CentroidY * pixelScale,
-                        b.q.CentroidX * pixelScale, b.q.CentroidY * pixelScale);
+                        b.p.CentroidX * pxscale, b.p.CentroidY * pxscale,
+                        b.q.CentroidX * pxscale, b.q.CentroidY * pxscale);
 
+                    var prevColor1 = painter.FillColor;
+                    painter.FillColor = PixelFarm.Drawing.Color.Yellow;
+
+                    painter.FillRectLBWH(b.p.CentroidX * pxscale, b.p.CentroidY * pxscale, 2, 2);
+                    painter.FillRectLBWH(b.q.CentroidX * pxscale, b.q.CentroidY * pxscale, 2, 2);
+
+                    painter.FillColor = prevColor1;
+                }
+                //
+                if (drawGlyphBone)
+                {
                     //--------------
                     GlyphEdgeContactSite contactSite = b.ContactSite;
-
                     EdgeLine p_contactEdge = contactSite._p_contact_edge;
                     //mid point
-                    double mid_x = (p_contactEdge.x0 + p_contactEdge.x1) / 2;
-                    double mid_y = (p_contactEdge.y0 + p_contactEdge.y1) / 2;
+                    var contactPoint = contactSite.GetContactPoint();
+                    double mid_x = contactPoint.X;
+                    double mid_y = contactPoint.Y;
 
                     var prevFillColor = painter.FillColor;
                     painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-                    painter.FillRectLBWH(mid_x * pixelScale, mid_y * pixelScale, 4, 4);
+                    painter.FillRectLBWH(mid_x * pxscale, mid_y * pxscale, 4, 4);
                     painter.FillColor = prevFillColor;
+
+                    switch (contactSite.SelectedEdgePointCount)
+                    {
+                        default: throw new NotSupportedException();
+                        case 0: break;
+                        case 1:
+                            FillContactSite(painter, contactSite.SelectedEdgeA, contactSite, pxscale);
+                            break;
+                        case 2:
+
+                            FillContactSite(painter, contactSite.SelectedEdgeA, contactSite, pxscale);
+                            FillContactSite(painter, contactSite.SelectedEdgeB, contactSite, pxscale);
+                            break;
+                    }
                 }
             }
+
             //---------------
+        }
+        void FillContactSite(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphEdgeContactSite contactSite, float pixelScale)
+        {
+            var contactPoint = contactSite.GetContactPoint();
+            double mid_x = contactPoint.X;
+            double mid_y = contactPoint.Y;
+
+            //
+            PixelFarm.Drawing.Color prevFillColor = painter.FillColor;
+            painter.FillColor = PixelFarm.Drawing.Color.Green;
+            painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4);
+            //------------------------------------------------------------------
+            var prevColor = painter.StrokeColor;
+            painter.StrokeColor = PixelFarm.Drawing.Color.White;
+            painter.Line(mid_x * pixelScale, mid_y * pixelScale,
+                vec.X * pixelScale,
+                vec.Y * pixelScale);
+            painter.StrokeColor = prevColor;
+            painter.FillColor = prevFillColor;
         }
 
 #endif
@@ -837,5 +867,6 @@ namespace SampleWinForms
             //    this.sampleTextBox1.Focus();
             //}
         }
+
     }
 }
