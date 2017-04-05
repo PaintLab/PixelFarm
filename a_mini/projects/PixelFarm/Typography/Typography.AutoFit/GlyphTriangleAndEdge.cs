@@ -6,26 +6,6 @@ namespace Typography.Rendering
 {
 
 
-
-
-    static class MyMath
-    {
-
-        /// <summary>
-        /// Convert degrees to radians
-        /// </summary>
-        /// <param name="degrees">An angle in degrees</param>
-        /// <returns>The angle expressed in radians</returns>
-        public static double DegreesToRadians(double degrees)
-        {
-            const double degToRad = System.Math.PI / 180.0f;
-            return degrees * degToRad;
-        }
-
-    }
-
-
-
     public class GlyphTriangle
     {
 
@@ -203,7 +183,7 @@ namespace Typography.Rendering
                 return null;
             }
         }
-        
+
         public void AddMatchingOutsideEdge(EdgeLine edgeLine)
         {
 #if DEBUG
