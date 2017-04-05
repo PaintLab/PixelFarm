@@ -158,25 +158,95 @@ namespace Typography.Rendering
             MarkEdgeSides(q.e0, p);
             MarkEdgeSides(q.e1, p);
             MarkEdgeSides(q.e2, p);
+            //-------------------------------------- 
+
+
+            if (_contactSite != null)
+            {
+                //add more information
+                //find proper 'outside' edge
+                MarkProperOpositeEdge(p, _contactSite, _contactSite._p_contact_edge);
+                MarkProperOpositeEdge(q, _contactSite, _contactSite._q_contact_edge);
+            }
+        }
+
+
+        static int AssignResult(EdgeLine result, ref EdgeLine edgeA, ref EdgeLine edgeB)
+        {
+            if (edgeA == null)
+            {
+                edgeA = result;
+                return 1;
+            }
+            else
+            {
+
+                edgeB = result;
+                return 2;
+            }
+        }
+        void MarkProperOpositeEdge(GlyphTriangle triangle, GlyphEdgeContactSite contactSite, EdgeLine edge)
+        {
+            //the 'tip' part may has up to 2 tri that can be outlet
+            //in that case we choose  edge that more perpendicular to this bone direction
+            EdgeLine edgeA = null;
+            EdgeLine edgeB = null;
+            int count = 0;
+            if (triangle.e0 != edge && triangle.e0.IsOutside)
+            {
+                count = AssignResult(triangle.e0, ref edgeA, ref edgeB);
+            }
+            if (triangle.e1 != edge && triangle.e1.IsOutside)
+            {
+                count = AssignResult(triangle.e1, ref edgeA, ref edgeB);
+            }
+            if (triangle.e2 != edge && triangle.e2.IsOutside)
+            {
+                count = AssignResult(triangle.e2, ref edgeA, ref edgeB);
+            }
+
+            switch (count)
+            {
+                default: throw new NotSupportedException();
+                case 0:
+                    break;
+                case 1:
+                    {
+                        //
+                        //find a perpendicular point(x3,y3) on the selected edge(((x0,y0), (x1,y1))
+                        //from mid point (x2,y2) of contact site
+                        
+
+                    }
+                    break;
+                case 2:
+                    {
+
+                    }
+                    break;
+            }
+
 
         }
-        void MarkEdgeSides(EdgeLine edgeLine, GlyphTriangle another)
+        void MarkEdgeSides(EdgeLine edgeLine, GlyphTriangle anotherTriangle)
         {
             if (edgeLine.IsOutside)
             {
-                MarkMatchingOutsideEdge(edgeLine, another);
+                MarkMatchingOutsideEdge(edgeLine, anotherTriangle);
             }
             else
             {
                 //inside
                 if (_contactSite == null)
                 {
-                    if (MarkMatchingInsideEdge(edgeLine, another))
+                    if (MarkMatchingInsideEdge(edgeLine, anotherTriangle))
                     {
                         _contactSite = new GlyphEdgeContactSite(
                             this,
                             edgeLine,
                             edgeLine.contactToEdge);
+                        //
+
                     }
                 }
             }

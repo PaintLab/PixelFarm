@@ -669,6 +669,7 @@ namespace SampleWinForms
                         b.p.CentroidX * pixelScale, b.p.CentroidY * pixelScale,
                         b.q.CentroidX * pixelScale, b.q.CentroidY * pixelScale);
 
+                    //--------------
                     GlyphEdgeContactSite contactSite = b.ContactSite;
 
                     EdgeLine p_contactEdge = contactSite._p_contact_edge;
