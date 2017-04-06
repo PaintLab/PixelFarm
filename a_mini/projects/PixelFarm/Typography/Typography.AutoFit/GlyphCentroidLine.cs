@@ -1,9 +1,193 @@
 ﻿//MIT, 2017, WinterDev
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Typography.Rendering
 {
+
+    public class GlyphCentroidBranch
+    {
+        public List<GlyphCentroidLine> lines = new List<GlyphCentroidLine>();
+        public List<GlyphBone> bones = new List<GlyphBone>();
+        public readonly GlyphTriangle tri;
+        public GlyphCentroidBranch(GlyphTriangle tri)
+        {
+            this.tri = tri;
+        }
+        public void AddCentroidLine(GlyphCentroidLine line)
+        {
+            lines.Add(line);
+        }
+        public Vector2 GetHeadPosition()
+        {
+            if (bones.Count == 0)
+            {
+                return Vector2.Zero;
+            }
+            else
+            {
+
+
+
+                return bones[0].JointA.Position;
+            }
+        }
+    }
+
+    public class CentroidLineHub
+    {
+        readonly GlyphTriangle mainTri;
+        Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = new Dictionary<GlyphTriangle, GlyphCentroidBranch>();
+        GlyphCentroidBranch currentBranchList;
+        GlyphTriangle currentBranchTri;
+
+
+        public CentroidLineHub(GlyphTriangle mainTri)
+        {
+            this.mainTri = mainTri;
+        }
+        public GlyphTriangle MainTriangle
+        {
+            get { return mainTri; }
+        }
+        public Vector2 GetCenterPos()
+        {
+            int j = branches.Count;
+            if (j == 0) return Vector2.Zero;
+            //---------------------------------
+            double cx = 0;
+            double cy = 0;
+            foreach (GlyphCentroidBranch branch in branches.Values)
+            {
+                Vector2 headpos = branch.GetHeadPosition();
+                cx += headpos.X;
+                cy += headpos.Y;
+            }
+            return new Vector2((float)(cx / j), (float)(cy / j));
+        }
+        public void SetBranch(GlyphTriangle tri)
+        {
+            if (currentBranchTri != tri)
+            {
+                //check if we have already create it
+                if (!branches.TryGetValue(tri, out currentBranchList))
+                {
+                    //if not found then create new
+                    currentBranchList = new GlyphCentroidBranch(tri);
+                    branches.Add(tri, currentBranchList);
+                }
+                currentBranchTri = tri;
+            }
+        }
+        public int BranchCount
+        {
+            get
+            {
+                return branches.Count;
+            }
+        }
+        public void AddChild(GlyphCentroidLine centroidLine)
+        {
+            //add centroid line to current branch
+            currentBranchList.AddCentroidLine(centroidLine);
+        }
+
+        public void AnalyzeCentroidLines()
+        {
+            foreach (GlyphCentroidBranch branch in branches.Values)
+            {
+                List<GlyphCentroidLine> lineList = branch.lines;
+                int j = lineList.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    //for each centroid line
+                    //analyze for its bone joint
+                    lineList[i].Analyze();
+                }
+            }
+        }
+
+        public void CreateBones()
+        {
+            //int centroidLineCount = _centroidLines.Count;
+            ////do bone length histogram
+            ////boneList2 = new List<GlyphCentroidBone>(boneCount);
+            ////boneList2.AddRange(bones);
+            //////----------------------------------------
+            ////AnalyzeBoneLength();
+
+            ////----------------------------------------
+            //for (int i = 0; i < centroidLineCount; ++i)
+            //{
+            //    //each bone has 2 triangles at its ends
+            //    //we analyze both triangles' roles
+            //    //eg...
+            //    //left -right 
+            //    //top-bottom
+            //    _centroidLines[i].Analyze();
+            //}
+            ////---------------------------------------- 
+            ////collect bone joint, along centroid line?
+
+            foreach (GlyphCentroidBranch branch in branches.Values)
+            {
+                List<GlyphCentroidLine> lineList = branch.lines;
+                List<GlyphBone> glyphBones = branch.bones;
+                int j = lineList.Count;
+                if (j > 1)
+                {
+
+                }
+                for (int i = 0; i < j; ++i)
+                {
+                    //for each centroid line
+                    //create bone that link the joint
+                    GlyphCentroidLine line = lineList[i];
+                    GlyphBoneJoint joint = line.BoneJoint;
+                    //first one
+                    if (joint.TipEdge != null)
+                    {
+                        //has tip point
+                        //create bone that link this joint 
+                        //and the edge
+                        if (i != j - 1)
+                        {
+                            //not the last one
+                            GlyphBone bone = new GlyphBone(joint, joint.TipEdge);
+                            glyphBones.Add(bone);
+                        }
+                    }
+                    if (i < j - 1)
+                    {
+                        //not the last one
+
+                        GlyphCentroidLine nextline = lineList[i + 1];
+                        GlyphBoneJoint nextJoint = nextline.BoneJoint;
+                        GlyphBone bone = new GlyphBone(joint, nextJoint);
+                        glyphBones.Add(bone);
+                    }
+                    else
+                    {
+                        //last one
+                        if (joint.TipEdge != null)
+                        { 
+                            //not the last one
+                            GlyphBone bone = new GlyphBone(joint, joint.TipEdge);
+                            glyphBones.Add(bone); 
+                        }
+                    }
+                }
+            }
+        }
+
+        public Dictionary<GlyphTriangle, GlyphCentroidBranch> GetAllBranches()
+        {
+            return branches;
+        }
+    }
+
+
     /// <summary>
     /// a line that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
@@ -14,7 +198,7 @@ namespace Typography.Rendering
         public readonly double boneLength;
 
 
-        GlyphBoneJoint _contactSite; //1L1
+        GlyphBoneJoint _boneJoint; //1L1
 
 
         public GlyphCentroidLine(GlyphTriangle p, GlyphTriangle q)
@@ -29,10 +213,10 @@ namespace Typography.Rendering
                 );
         }
 
-        public GlyphBoneJoint ContactSite { get { return _contactSite; } }
+        public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
 
         public double SlopAngle { get; private set; }
-        public bool IsLongBone { get; set; }
+
 
         public LineSlopeKind SlopKind { get; private set; }
 
@@ -120,12 +304,12 @@ namespace Typography.Rendering
             //-------------------------------------- 
 
 
-            if (_contactSite != null)
+            if (_boneJoint != null)
             {
                 //add more information
                 //find proper 'outside' edge
-                MarkProperOpositeEdge(p, _contactSite, _contactSite._p_contact_edge);
-                MarkProperOpositeEdge(q, _contactSite, _contactSite._q_contact_edge);
+                MarkProperOpositeEdge(p, _boneJoint, _boneJoint._p_contact_edge);
+                MarkProperOpositeEdge(q, _boneJoint, _boneJoint._q_contact_edge);
             }
         }
 
@@ -172,7 +356,7 @@ namespace Typography.Rendering
                     break;
                 case 1:
                     {
-                        Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, boneJoint.GetPos());
+                        Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, boneJoint.Position);
                         Vector2 corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
                         //find distance from contactSite to specific point 
                         double sqDistanceToEdgeA = boneJoint.CalculateSqrDistance(perpend_A);
@@ -191,8 +375,8 @@ namespace Typography.Rendering
                 case 2:
                     {
 
-                        Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, boneJoint.GetPos());
-                        Vector2 perpend_B = MyMath.FindPerpendicularCutPoint(edgeB, boneJoint.GetPos());
+                        Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, boneJoint.Position);
+                        Vector2 perpend_B = MyMath.FindPerpendicularCutPoint(edgeB, boneJoint.Position);
 
                         Vector2 corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
                         //find distance from contactSite to specific point 
@@ -235,12 +419,12 @@ namespace Typography.Rendering
             else
             {
                 //inside
-                if (_contactSite == null)
+                if (_boneJoint == null)
                 {
 
                     if (MarkMatchingInsideEdge(edgeLine, anotherTriangle))
                     {
-                        _contactSite = new GlyphBoneJoint(
+                        _boneJoint = new GlyphBoneJoint(
                             this,
                             edgeLine,
                             edgeLine.contactToEdge);
