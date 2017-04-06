@@ -61,38 +61,43 @@ namespace Typography.Rendering
         }
 
 
-        short _selEdgePointCount;
-        Vector2 _selectedEdgePoint_A, _selectedEdgePoint_B, _tip;
+        short _ribCount;
+
+        Vector2 _ribEndPoint_A, _ribEndPoint_B;
+        /// <summary>
+        /// tip point (mid of tip edge)
+        /// </summary>
+        Vector2 _tipPoint;
+
         EdgeLine _selectedEdgeA, _selectedEdgeB, _selectedTipEdge;
 
-        public void AddSelectedEdgePoint(EdgeLine edgeLine, Vector2 vec)
-        {   
-            
-            switch (_selEdgePointCount)
+        public void AddRibEndAt(EdgeLine edgeLine, Vector2 vec)
+        {
+            switch (_ribCount)
             {
                 //not more thar2
                 default: throw new NotSupportedException();
                 case 0:
                     _selectedEdgeA = edgeLine;
-                    _selectedEdgePoint_A = vec;
+                    _ribEndPoint_A = vec;
                     break;
                 case 1:
                     _selectedEdgeB = edgeLine;
-                    _selectedEdgePoint_B = vec;
+                    _ribEndPoint_B = vec;
                     break;
             }
-            _selEdgePointCount++;
+            _ribCount++;
         }
         public void SetTipEdge(EdgeLine tipEdge)
         {
             this._selectedTipEdge = tipEdge;
-            this._tip = tipEdge.GetMidPoint();
+            this._tipPoint = tipEdge.GetMidPoint();
         }
 
-        public short SelectedEdgePointCount { get { return _selEdgePointCount; } }
-        public Vector2 SelectedEdgeA { get { return _selectedEdgePoint_A; } }
-        public Vector2 SelectedEdgeB { get { return _selectedEdgePoint_B; } }
-        public Vector2 TipPoint { get { return _tip; } }
+        public short SelectedEdgePointCount { get { return _ribCount; } }
+        public Vector2 RibEndPointA { get { return _ribEndPoint_A; } }
+        public Vector2 RibEndPointB { get { return _ribEndPoint_B; } }
+        public Vector2 TipPoint { get { return _tipPoint; } }
     }
 
 

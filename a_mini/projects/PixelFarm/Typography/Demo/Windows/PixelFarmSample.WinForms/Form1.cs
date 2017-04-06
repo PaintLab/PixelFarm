@@ -682,12 +682,12 @@ namespace SampleWinForms
                         default: throw new NotSupportedException();
                         case 0: break;
                         case 1:
-                            DrawContactEdge(painter, contactSite.SelectedEdgeA, contactSite, pxscale);
+                            DrawContactEdge(painter, contactSite.RibEndPointA, contactSite, pxscale);
                             break;
                         case 2:
 
-                            DrawContactEdge(painter, contactSite.SelectedEdgeA, contactSite, pxscale);
-                            DrawContactEdge(painter, contactSite.SelectedEdgeB, contactSite, pxscale);
+                            DrawContactEdge(painter, contactSite.RibEndPointA, contactSite, pxscale);
+                            DrawContactEdge(painter, contactSite.RibEndPointB, contactSite, pxscale);
                             break;
                     }
                     if (contactSite.TipPoint != System.Numerics.Vector2.Zero)

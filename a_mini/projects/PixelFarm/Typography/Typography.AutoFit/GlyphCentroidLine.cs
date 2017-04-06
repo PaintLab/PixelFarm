@@ -180,11 +180,11 @@ namespace Typography.Rendering
 
                         if (sqDistanceToEdgeA < sqDistanceTo_P)
                         {
-                            boneJoint.AddSelectedEdgePoint(edgeA, perpend_A);
+                            boneJoint.AddRibEndAt(edgeA, perpend_A);
                         }
                         else
                         {
-                            boneJoint.AddSelectedEdgePoint(edge, corner);
+                            boneJoint.AddRibEndAt(edge, corner);
                         }
                     }
                     break;
@@ -205,16 +205,16 @@ namespace Typography.Rendering
                         {
                             default: throw new NotSupportedException();
                             case 0:
-                                boneJoint.AddSelectedEdgePoint(edgeA, perpend_A);
+                                boneJoint.AddRibEndAt(edgeA, perpend_A);
                                 //check if B side is tip part
                                 boneJoint.SetTipEdge(edgeB);
                                 break;
                             case 1:
-                                boneJoint.AddSelectedEdgePoint(edgeB, perpend_B);
+                                boneJoint.AddRibEndAt(edgeB, perpend_B);
                                 boneJoint.SetTipEdge(edgeA);
                                 break;
                             case 2:
-                                boneJoint.AddSelectedEdgePoint(edge, corner);
+                                boneJoint.AddRibEndAt(edge, corner);
                                 break;
                         }
                         //-------
