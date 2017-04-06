@@ -40,6 +40,13 @@ namespace Typography.Rendering
             }
 
         }
+        public static Vector2 FindPerpendicularCutPoint(EdgeLine edge, Vector2 p2)
+        {
+            return FindPerpendicularCutPoint(
+                new Vector2((float)edge.x0, (float)edge.y0),
+                new Vector2((float)edge.x1, (float)edge.y1),
+                p2);
+        }
         public static Vector2 FindPerpendicularCutPoint(Vector2 p0, Vector2 p1, Vector2 p2)
         {
             //a line from p0 to p1

@@ -665,10 +665,10 @@ namespace SampleWinForms
                 if (drawGlyphBone)
                 {
                     //--------------
-                    GlyphEdgeContactSite contactSite = b.ContactSite;
+                    GlyphBoneJoint contactSite = b.ContactSite;
                     EdgeLine p_contactEdge = contactSite._p_contact_edge;
                     //mid point
-                    var contactPoint = contactSite.GetContactPoint();
+                    var contactPoint = contactSite.GetPos();
                     double mid_x = contactPoint.X;
                     double mid_y = contactPoint.Y;
 
@@ -702,9 +702,9 @@ namespace SampleWinForms
                 }
             }
         }
-        void DrawContactEdge(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphEdgeContactSite contactSite, float pixelScale)
+        void DrawContactEdge(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphBoneJoint contactSite, float pixelScale)
         {
-            var contactPoint = contactSite.GetContactPoint();
+            var contactPoint = contactSite.GetPos();
             double mid_x = contactPoint.X;
             double mid_y = contactPoint.Y;
 

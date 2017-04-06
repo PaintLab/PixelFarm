@@ -87,8 +87,7 @@ namespace Typography.Rendering
                 //eg...
                 //left -right 
                 //top-bottom
-                GlyphCentroidLine bone = bones[i];
-                bone.Analyze();
+                bones[i].Analyze();
             }
             //---------------------------------------- 
         }
