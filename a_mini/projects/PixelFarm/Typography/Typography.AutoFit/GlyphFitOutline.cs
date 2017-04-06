@@ -12,8 +12,7 @@ namespace Typography.Rendering
         List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
         List<GlyphContour> _contours;
         Polygon _polygon;
-        List<GlyphCentroidLine> bones;
-        List<GlyphCentroidLine> boneList2;
+        List<GlyphCentroidLine> _centroidLines;
 
         internal GlyphFitOutline(Polygon polygon, List<GlyphContour> contours)
         {
@@ -33,7 +32,7 @@ namespace Typography.Rendering
         {
             //we analyze each triangle here 
             int j = _triangles.Count;
-            bones = new List<GlyphCentroidLine>();
+            _centroidLines = new List<GlyphCentroidLine>();
             List<GlyphTriangle> usedTriList = new List<GlyphTriangle>();
             for (int i = 0; i < j; ++i)
             {
@@ -49,7 +48,7 @@ namespace Typography.Rendering
                     if (foundIndex > -1)
                     {
                         usedTriList.Add(tri);
-                        bones.Add(new GlyphCentroidLine(usedTriList[foundIndex], tri));
+                        _centroidLines.Add(new GlyphCentroidLine(usedTriList[foundIndex], tri));
                     }
                     else
                     {
@@ -68,11 +67,11 @@ namespace Typography.Rendering
                 GlyphTriangle lastTri = _triangles[j - 1];
                 if (firstTri.IsConnectedWith(lastTri))
                 {
-                    bones.Add(new GlyphCentroidLine(lastTri, firstTri));
+                    _centroidLines.Add(new GlyphCentroidLine(lastTri, firstTri));
                 }
             }
             //----------------------------------------
-            int boneCount = bones.Count;
+            int boneCount = _centroidLines.Count;
             //do bone length histogram
             //boneList2 = new List<GlyphCentroidBone>(boneCount);
             //boneList2.AddRange(bones);
@@ -87,9 +86,12 @@ namespace Typography.Rendering
                 //eg...
                 //left -right 
                 //top-bottom
-                bones[i].Analyze();
+                _centroidLines[i].Analyze();
             }
             //---------------------------------------- 
+            //create glyph bone
+
+
         }
         void AnalyzeBoneLength()
         {
@@ -162,7 +164,7 @@ namespace Typography.Rendering
         }
         public List<GlyphCentroidLine> GetBones()
         {
-            return bones;
+            return _centroidLines;
         }
 
 
