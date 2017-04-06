@@ -633,11 +633,11 @@ namespace SampleWinForms
                 return;
             }
             //--------------- 
-            List<GlyphCentroidBone> bones = glyphFitOutline.GetBones();
+            List<GlyphCentroidLine> bones = glyphFitOutline.GetBones();
             j = bones.Count;
             for (int i = 0; i < j; ++i)
             {
-                GlyphCentroidBone b = bones[i];
+                GlyphCentroidLine b = bones[i];
                 if (drawCentroidBone)
                 {
                     if (i == 0)

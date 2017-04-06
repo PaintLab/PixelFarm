@@ -33,10 +33,10 @@ namespace Typography.Rendering
     {
         public EdgeLine _p_contact_edge;
         public EdgeLine _q_contact_edge;
-        GlyphCentroidBone _owner;
+        GlyphCentroidLine _owner;
 
 
-        public GlyphEdgeContactSite(GlyphCentroidBone owner,
+        public GlyphEdgeContactSite(GlyphCentroidLine owner,
             EdgeLine p_contact_edge,
             EdgeLine q_contact_edge)
         {
@@ -46,11 +46,10 @@ namespace Typography.Rendering
         }
         public Vector2 GetContactPoint()
         {
-            return new Vector2(
-                (float)((_p_contact_edge.x0 + _p_contact_edge.x1) / 2),
-                (float)((_p_contact_edge.y0 + _p_contact_edge.y1) / 2));
+            //mid point of the edge line
+            return _p_contact_edge.GetMidPoint();
         }
-        public GlyphCentroidBone OwnerCentroidBone
+        public GlyphCentroidLine OwnerCentroidBone
         {
             get { return _owner; }
         }
@@ -89,10 +88,12 @@ namespace Typography.Rendering
         public Vector2 SelectedEdgeB { get { return _selectedEdgePoint_B; } }
         public Vector2 TipPoint { get { return _tip; } set { _tip = value; } }
     }
+
+
     /// <summary>
     /// a line that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
-    public class GlyphCentroidBone
+    public class GlyphCentroidLine
     {
 
         public readonly GlyphTriangle p, q;
@@ -102,7 +103,7 @@ namespace Typography.Rendering
         GlyphEdgeContactSite _contactSite; //1L1
 
 
-        public GlyphCentroidBone(GlyphTriangle p, GlyphTriangle q)
+        public GlyphCentroidLine(GlyphTriangle p, GlyphTriangle q)
         {
             this.p = p;
             this.q = q;
@@ -120,12 +121,6 @@ namespace Typography.Rendering
         public bool IsLongBone { get; set; }
 
         public LineSlopeKind SlopKind { get; private set; }
-
-        static void CalculateMidPoint(EdgeLine e, out double midX, out double midY)
-        {
-            midX = (e.x0 + e.x1) / 2;
-            midY = (e.y0 + e.y1) / 2;
-        }
 
 
         internal void Analyze()
@@ -319,7 +314,7 @@ namespace Typography.Rendering
                         }
                         //-------
                         //find which edge is end edge
-                        GlyphCentroidBone owner = contactSite.OwnerCentroidBone;
+                        GlyphCentroidLine owner = contactSite.OwnerCentroidBone;
 
                     }
                     break;
@@ -412,11 +407,14 @@ namespace Typography.Rendering
                 //assign matching edge line   
                 //mid point of each edge
                 //p-triangle's edge midX,midY
-                double pe_midX, pe_midY;
-                CalculateMidPoint(targetEdge, out pe_midX, out pe_midY);
+
+                var pe = targetEdge.GetMidPoint();
+                double pe_midX = pe.X, pe_midY = pe.Y;
+
                 //q-triangle's edge midX,midY
-                double qe_midX, qe_midY;
-                CalculateMidPoint(matchingEdgeLine, out qe_midX, out qe_midY);
+                var qe = matchingEdgeLine.GetMidPoint();
+                double qe_midX = qe.X, qe_midY = qe.Y;
+
 
                 if (targetEdge.SlopKind == LineSlopeKind.Vertical)
                 {
