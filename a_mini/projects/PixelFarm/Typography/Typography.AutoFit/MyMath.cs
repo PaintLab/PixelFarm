@@ -16,6 +16,7 @@ namespace Typography.Rendering
             const double degToRad = System.Math.PI / 180.0f;
             return degrees * degToRad;
         }
+      
         public static int Min(double v0, double v1, double v2)
         {
             //find min of 3

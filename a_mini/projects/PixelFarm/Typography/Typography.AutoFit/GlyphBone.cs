@@ -6,7 +6,7 @@ namespace Typography.Rendering
 {
 
     /// <summary>
-    /// link between 2 GlyphBoneJoint
+    /// link between 2 GlyphBoneJoint or Joint and tipEdge
     /// </summary>
     public class GlyphBone
     {
@@ -16,10 +16,12 @@ namespace Typography.Rendering
 
         public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
         {
+#if DEBUG
             if (a == b)
             {
-
+                throw new NotSupportedException();
             }
+#endif
             JointA = a;
             JointB = b;
         }
@@ -32,10 +34,9 @@ namespace Typography.Rendering
 
     public class GlyphBoneJoint
     {
-        //Bone joint is create by 2 connected (contact) 'inside' EdgeLines
+        //Bone joint connects (contact) 'inside' EdgeLines
         //(_p_contact_edge, _q_contact_edge)
-
-
+         
         public EdgeLine _p_contact_edge;
         public EdgeLine _q_contact_edge;
         GlyphCentroidLine _owner;

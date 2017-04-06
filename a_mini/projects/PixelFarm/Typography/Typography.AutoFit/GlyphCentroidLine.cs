@@ -171,10 +171,10 @@ namespace Typography.Rendering
                     {
                         //last one
                         if (joint.TipEdge != null)
-                        { 
+                        {
                             //not the last one
                             GlyphBone bone = new GlyphBone(joint, joint.TipEdge);
-                            glyphBones.Add(bone); 
+                            glyphBones.Add(bone);
                         }
                     }
                 }
@@ -389,21 +389,141 @@ namespace Typography.Rendering
                         {
                             default: throw new NotSupportedException();
                             case 0:
-                                boneJoint.AddRibEndAt(edgeA, perpend_A);
-                                //check if B side is tip part
-                                boneJoint.SetTipEdge(edgeB);
+                                {
+                                    switch (boneJoint.OwnerCentroidLine.SlopKind)
+                                    {
+                                        case LineSlopeKind.Horizontal:
+                                            {
+                                                //centroid horizontal, tip-> vertical
+                                                if (edgeA.SlopKind == LineSlopeKind.Vertical)
+                                                {
+                                                    boneJoint.SetTipEdge(edgeA);
+                                                    boneJoint.AddRibEndAt(edgeB, perpend_B);
+
+                                                }
+                                                else if (edgeB.SlopKind == LineSlopeKind.Vertical)
+                                                {
+                                                    //b
+                                                    boneJoint.SetTipEdge(edgeB);
+                                                    boneJoint.AddRibEndAt(edgeA, perpend_A);
+                                                }
+                                                else
+                                                {
+                                                    goto default;
+                                                }
+                                            }
+                                            break;
+                                        case LineSlopeKind.Vertical:
+                                            {
+                                                //centroid vertical, -> tip horizontal
+                                                if (edgeA.SlopKind == LineSlopeKind.Horizontal)
+                                                {
+                                                    boneJoint.SetTipEdge(edgeA);
+                                                    boneJoint.AddRibEndAt(edgeB, perpend_B);
+
+                                                }
+                                                else if (edgeB.SlopKind == LineSlopeKind.Horizontal)
+                                                {
+                                                    //b
+                                                    boneJoint.SetTipEdge(edgeB);
+                                                    boneJoint.AddRibEndAt(edgeA, perpend_A);
+
+                                                }
+                                                else
+                                                {
+                                                    goto default;
+                                                }
+                                            }
+                                            break;
+                                        default:
+                                            {
+                                                boneJoint.AddRibEndAt(edgeA, perpend_A);
+                                                //check if B side is tip part
+                                                boneJoint.SetTipEdge(edgeB);
+                                            }
+                                            break;
+                                    }
+                                }
                                 break;
                             case 1:
-                                boneJoint.AddRibEndAt(edgeB, perpend_B);
-                                boneJoint.SetTipEdge(edgeA);
+                                {
+                                    switch (boneJoint.OwnerCentroidLine.SlopKind)
+                                    {
+                                        case LineSlopeKind.Horizontal:
+                                            {
+                                                //centroid horizontal, tip-> vertical
+                                                if (edgeA.SlopKind == LineSlopeKind.Vertical)
+                                                {
+                                                    boneJoint.SetTipEdge(edgeA);
+                                                    boneJoint.AddRibEndAt(edgeB, perpend_B);
+                                                 
+                                                }
+                                                else if (edgeB.SlopKind == LineSlopeKind.Vertical)
+                                                {
+                                                    //b
+                                                    boneJoint.SetTipEdge(edgeB);
+                                                    boneJoint.AddRibEndAt(edgeA, perpend_A); 
+                                                }
+                                                else
+                                                {
+                                                    goto default;
+                                                }
+                                            }
+                                            break;
+                                        case LineSlopeKind.Vertical:
+                                            {
+                                                //centroid vertical, -> tip horizontal
+                                                if (edgeA.SlopKind == LineSlopeKind.Horizontal)
+                                                {
+                                                    boneJoint.SetTipEdge(edgeA);
+                                                    boneJoint.AddRibEndAt(edgeB, perpend_B);
+                          
+                                                }
+                                                else if (edgeB.SlopKind == LineSlopeKind.Horizontal)
+                                                {
+                                                    //b
+                                                    boneJoint.SetTipEdge(edgeB);
+                                                    boneJoint.AddRibEndAt(edgeA, perpend_A);
+                                                   
+                                                }
+                                                else
+                                                {
+                                                    goto default;
+                                                }
+                                            }
+                                            break;
+                                        default:
+                                            {
+                                                boneJoint.AddRibEndAt(edgeB, perpend_B);
+                                                boneJoint.SetTipEdge(edgeA);
+                                            }
+                                            break;
+                                    }
+                                }
                                 break;
+                            //    {
+
+
+                            //    }
+                            //    boneJoint.AddRibEndAt(edgeA, perpend_A);
+                            //    //check if B side is tip part
+                            //    boneJoint.SetTipEdge(edgeB);
+                            //    break;
+                            //case 1:
+                            //    {
+
+                            //    }
+                            //    boneJoint.AddRibEndAt(edgeB, perpend_B);
+                            //    boneJoint.SetTipEdge(edgeA);
+                            //    break;
                             case 2:
                                 boneJoint.AddRibEndAt(edge, corner);
                                 break;
                         }
-                        //-------
-                        //find which edge is end edge
-                        GlyphCentroidLine owner = boneJoint.OwnerCentroidLine;
+
+
+
+
 
                     }
                     break;
