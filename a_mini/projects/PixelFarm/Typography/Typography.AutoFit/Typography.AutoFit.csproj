@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="CurveGen.cs" />
     <Compile Include="GlyphBone.cs" />
+    <Compile Include="GlyphCentroidLine.cs" />
     <Compile Include="GlyphFitOutlineAnalyzer.cs" />
     <Compile Include="GlyphImages.cs" />
     <Compile Include="GlyphFitOutline.cs" />
