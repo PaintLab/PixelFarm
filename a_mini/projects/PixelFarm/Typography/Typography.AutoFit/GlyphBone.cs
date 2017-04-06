@@ -33,7 +33,7 @@ namespace Typography.Rendering
     {
         public EdgeLine _p_contact_edge;
         public EdgeLine _q_contact_edge;
-        GlyphCentroidBone owner;
+        GlyphCentroidBone _owner;
 
 
         public GlyphEdgeContactSite(GlyphCentroidBone owner,
@@ -42,13 +42,17 @@ namespace Typography.Rendering
         {
             this._p_contact_edge = p_contact_edge;
             this._q_contact_edge = q_contact_edge;
-            this.owner = owner;
+            this._owner = owner;
         }
         public Vector2 GetContactPoint()
         {
             return new Vector2(
                 (float)((_p_contact_edge.x0 + _p_contact_edge.x1) / 2),
                 (float)((_p_contact_edge.y0 + _p_contact_edge.y1) / 2));
+        }
+        public GlyphCentroidBone OwnerCentroidBone
+        {
+            get { return _owner; }
         }
         public double GetSqrDistance(Vector2 v)
         {
@@ -63,7 +67,8 @@ namespace Typography.Rendering
 
 
         short _selEdgePointCount;
-        Vector2 _selectedEdgePoint_A, _selectedEdgePoint_B;
+        Vector2 _selectedEdgePoint_A, _selectedEdgePoint_B, _tip;
+
         public void AddSelectedEdgePoint(Vector2 vec)
         {
             switch (_selEdgePointCount)
@@ -82,7 +87,7 @@ namespace Typography.Rendering
         public short SelectedEdgePointCount { get { return _selEdgePointCount; } }
         public Vector2 SelectedEdgeA { get { return _selectedEdgePoint_A; } }
         public Vector2 SelectedEdgeB { get { return _selectedEdgePoint_B; } }
-
+        public Vector2 TipPoint { get { return _tip; } set { _tip = value; } }
     }
     /// <summary>
     /// a line that connects between centroid of 2 GlyphTriangle(p => q)
@@ -175,19 +180,20 @@ namespace Typography.Rendering
 
             int p_outsideEdgeCount = OutSideEdgeCount(p);
             int q_outsideEdgeCount = OutSideEdgeCount(q);
-            bool p_isTip = false;
-            bool q_isTip = false;
+            //bool p_isTip = false;
+            //bool q_isTip = false;
 
-            if (p_outsideEdgeCount >= 2)
-            {
-                //tip bone
-                p_isTip = true;
-            }
-            if (q_outsideEdgeCount >= 2)
-            {
-                //tipbone
-                q_isTip = true;
-            }
+            //if (p_outsideEdgeCount >= 2)
+            //{
+            //    //tip bone
+            //    p_isTip = true;
+            //}
+            //if (q_outsideEdgeCount >= 2)
+            //{
+            //    //tipbone
+            //    q_isTip = true;
+            //}
+
             //-------------------------------------- 
             //p_isTip && q_isTip is possible eg. dot or dot of  i etc.
             //-------------------------------------- 
@@ -224,7 +230,6 @@ namespace Typography.Rendering
             }
             else
             {
-
                 edgeB = result;
                 return 2;
             }
@@ -301,14 +306,20 @@ namespace Typography.Rendering
                             default: throw new NotSupportedException();
                             case 0:
                                 contactSite.AddSelectedEdgePoint(perpend_A);
+                                //check if B side is tip part
+                                contactSite.TipPoint = edgeB.GetMidPoint();
                                 break;
                             case 1:
                                 contactSite.AddSelectedEdgePoint(perpend_B);
+                                contactSite.TipPoint = edgeA.GetMidPoint();
                                 break;
                             case 2:
                                 contactSite.AddSelectedEdgePoint(corner);
                                 break;
                         }
+                        //-------
+                        //find which edge is end edge
+                        GlyphCentroidBone owner = contactSite.OwnerCentroidBone;
 
                     }
                     break;

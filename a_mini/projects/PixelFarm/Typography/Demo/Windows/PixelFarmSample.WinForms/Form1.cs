@@ -365,7 +365,7 @@ namespace SampleWinForms
 
             VertexStore vxs = new VertexStore();
             txToVxs1.WriteOutput(vxs, _vxsPool);
-            painter.SetOrigin(20, 10);
+            painter.SetOrigin(0, 10);
             //----------------------------------------------------
             painter.UseSubPixelRendering = chkLcdTechnique.Checked;
 
@@ -423,6 +423,7 @@ namespace SampleWinForms
             //7. just render our bitmap
             g.Clear(Color.White);
             g.DrawImage(winBmp, new Point(30, 20));
+            g.DrawRectangle(Pens.Black, new System.Drawing.Rectangle(30, 20, winBmp.Width, winBmp.Height));
         }
 
         void RenderWithMsdfImg(Typeface typeface, char testChar, float sizeInPoint)
@@ -631,9 +632,7 @@ namespace SampleWinForms
             {
                 return;
             }
-            //---------------
-
-
+            //--------------- 
             List<GlyphCentroidBone> bones = glyphFitOutline.GetBones();
             j = bones.Count;
             for (int i = 0; i < j; ++i)
@@ -683,20 +682,27 @@ namespace SampleWinForms
                         default: throw new NotSupportedException();
                         case 0: break;
                         case 1:
-                            FillContactSite(painter, contactSite.SelectedEdgeA, contactSite, pxscale);
+                            DrawContactEdge(painter, contactSite.SelectedEdgeA, contactSite, pxscale);
                             break;
                         case 2:
 
-                            FillContactSite(painter, contactSite.SelectedEdgeA, contactSite, pxscale);
-                            FillContactSite(painter, contactSite.SelectedEdgeB, contactSite, pxscale);
+                            DrawContactEdge(painter, contactSite.SelectedEdgeA, contactSite, pxscale);
+                            DrawContactEdge(painter, contactSite.SelectedEdgeB, contactSite, pxscale);
                             break;
+                    }
+                    if (contactSite.TipPoint != System.Numerics.Vector2.Zero)
+                    {
+                        var prev_color = painter.StrokeColor;
+                        painter.StrokeColor = PixelFarm.Drawing.Color.White;
+                        painter.Line(
+                           contactPoint.X * pxscale, contactPoint.Y * pxscale,
+                           contactSite.TipPoint.X * pxscale, contactSite.TipPoint.Y * pxscale);
+                        painter.StrokeColor = prev_color;
                     }
                 }
             }
-
-            //---------------
         }
-        void FillContactSite(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphEdgeContactSite contactSite, float pixelScale)
+        void DrawContactEdge(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphEdgeContactSite contactSite, float pixelScale)
         {
             var contactPoint = contactSite.GetContactPoint();
             double mid_x = contactPoint.X;

@@ -38,7 +38,11 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 GlyphTriangle tri = _triangles[i];
-                if (i > 0)
+                if (i == 0)
+                {
+                    usedTriList.Add(tri);
+                }
+                else
                 {
                     //check the new tri is connected with latest tri or not?
                     int foundIndex = FindLatestConnectedTri(usedTriList, tri);
@@ -53,10 +57,6 @@ namespace Typography.Rendering
                         //?
 
                     }
-                }
-                else
-                {
-                    usedTriList.Add(tri);
                 }
             }
 
@@ -74,10 +74,10 @@ namespace Typography.Rendering
             //----------------------------------------
             int boneCount = bones.Count;
             //do bone length histogram
-            boneList2 = new List<GlyphCentroidBone>(boneCount);
-            boneList2.AddRange(bones);
-            //----------------------------------------
-            AnalyzeBoneLength();
+            //boneList2 = new List<GlyphCentroidBone>(boneCount);
+            //boneList2.AddRange(bones);
+            ////----------------------------------------
+            //AnalyzeBoneLength();
 
             //----------------------------------------
             for (int i = 0; i < boneCount; ++i)
@@ -378,7 +378,7 @@ namespace Typography.Rendering
                     //adjust right-side vertical edge
                     EdgeLine rightside = p.GetMatchingVerticalEdge();
                 }
-                 
+
                 genPoints.Add(new Point2d((float)p_x, (float)p_y));
                 //-------------
                 first_px = p_x;
@@ -465,7 +465,7 @@ namespace Typography.Rendering
                 }
             }
             //close
-          
+
             tx.CloseContour();
         }
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Poly2Tri;
+using System.Numerics;
 namespace Typography.Rendering
 {
 
@@ -160,7 +161,10 @@ namespace Typography.Rendering
             get;
             internal set;
         }
-
+        public Vector2 GetMidPoint()
+        {
+            return new Vector2((float)((x0 + x1) / 2), (float)((y0 + y1) / 2));
+        }
         public override string ToString()
         {
             return SlopKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
