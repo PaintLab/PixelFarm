@@ -55,11 +55,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.chkDrawGlyphBone = new System.Windows.Forms.CheckBox();
+            this.txtGlyphBoneStartAt = new System.Windows.Forms.TextBox();
+            this.txtGlyphBoneCount = new System.Windows.Forms.TextBox();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(186, 3);
+            this.button1.Location = new System.Drawing.Point(436, 11);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(81, 37);
             this.button1.TabIndex = 0;
@@ -68,7 +71,7 @@
             // 
             // txtInputChar
             // 
-            this.txtInputChar.Location = new System.Drawing.Point(12, 11);
+            this.txtInputChar.Location = new System.Drawing.Point(0, -2);
             this.txtInputChar.Name = "txtInputChar";
             this.txtInputChar.Size = new System.Drawing.Size(168, 20);
             this.txtInputChar.TabIndex = 1;
@@ -183,7 +186,6 @@
             this.chkDrawCentroidBone.TabIndex = 19;
             this.chkDrawCentroidBone.Text = "Draw Centroid Bone";
             this.chkDrawCentroidBone.UseVisualStyleBackColor = true;
-         
             // 
             // chkXGridFitting
             // 
@@ -255,7 +257,7 @@
             // chkShowSampleTextBox
             // 
             this.chkShowSampleTextBox.AutoSize = true;
-            this.chkShowSampleTextBox.Location = new System.Drawing.Point(373, 14);
+            this.chkShowSampleTextBox.Location = new System.Drawing.Point(665, 146);
             this.chkShowSampleTextBox.Name = "chkShowSampleTextBox";
             this.chkShowSampleTextBox.Size = new System.Drawing.Size(133, 17);
             this.chkShowSampleTextBox.TabIndex = 39;
@@ -317,13 +319,39 @@
             this.chkDrawGlyphBone.TabIndex = 47;
             this.chkDrawGlyphBone.Text = "Draw Glyph Bone";
             this.chkDrawGlyphBone.UseVisualStyleBackColor = true;
-          
+            // 
+            // txtGlyphBoneStartAt
+            // 
+            this.txtGlyphBoneStartAt.Location = new System.Drawing.Point(943, 223);
+            this.txtGlyphBoneStartAt.Name = "txtGlyphBoneStartAt";
+            this.txtGlyphBoneStartAt.Size = new System.Drawing.Size(20, 20);
+            this.txtGlyphBoneStartAt.TabIndex = 48;
+            this.txtGlyphBoneStartAt.Text = "0";
+            // 
+            // txtGlyphBoneCount
+            // 
+            this.txtGlyphBoneCount.Location = new System.Drawing.Point(974, 223);
+            this.txtGlyphBoneCount.Name = "txtGlyphBoneCount";
+            this.txtGlyphBoneCount.Size = new System.Drawing.Size(20, 20);
+            this.txtGlyphBoneCount.TabIndex = 49;
+            this.txtGlyphBoneCount.Text = "-1";
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(1009, 173);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(96, 290);
+            this.listBox1.TabIndex = 50;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 526);
+            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.txtGlyphBoneCount);
+            this.Controls.Add(this.txtGlyphBoneStartAt);
             this.Controls.Add(this.chkDrawGlyphBone);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
@@ -388,6 +416,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox chkDrawGlyphBone;
+        private System.Windows.Forms.TextBox txtGlyphBoneStartAt;
+        private System.Windows.Forms.TextBox txtGlyphBoneCount;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }
 

@@ -123,8 +123,15 @@ namespace SampleWinForms
             chkDrawCentroidBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawGlyphBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             //----------
-
-
+            txtGlyphBoneCount.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
+            };
+            txtGlyphBoneStartAt.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
+            };
+            //---------- 
             //1. create font collection             
             installedFontCollection = new InstalledFontCollection();
             //2. set some essential handler
@@ -185,7 +192,7 @@ namespace SampleWinForms
                     12,
                     14,
                     16,
-                    18,20,22,24,26,28,36,48,72,240,300,360
+                    18,20,22,24,26,28,36,48,72,240,280,300,360
               });
             lstFontSizes.SelectedIndexChanged += (s, e) =>
             {
@@ -199,7 +206,8 @@ namespace SampleWinForms
             //string inputstr = "น้ำน้ำ";
             //string inputstr = "example";
             //string inputstr = "lllll";
-            string inputstr = "e";
+            //string inputstr = "e";
+            string inputstr = "T";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
             //string inputstr = "ญญู";
@@ -400,7 +408,7 @@ namespace SampleWinForms
                 GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
                 if (fitOutline != null)
                 {
-                    debugDrawTriangulatedGlyph(fitOutline, scale);
+                    dbugDrawTriangulatedGlyph(fitOutline, scale);
                 }
 #endif
 
@@ -601,13 +609,136 @@ namespace SampleWinForms
         }
 
 #if DEBUG
-        void debugDrawTriangulatedGlyph(GlyphFitOutline glyphFitOutline, float pxscale)
+
+        void dbugDrawCentroidLine(CanvasPainter painter, GlyphCentroidLine line, float pxscale)
+        {
+            painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+            painter.Line(
+                line.p.CentroidX * pxscale, line.p.CentroidY * pxscale,
+                line.q.CentroidX * pxscale, line.q.CentroidY * pxscale);
+
+            var prevColor1 = painter.FillColor;
+            painter.FillColor = PixelFarm.Drawing.Color.Yellow;
+
+            painter.FillRectLBWH(line.p.CentroidX * pxscale, line.p.CentroidY * pxscale, 2, 2);
+            painter.FillRectLBWH(line.q.CentroidX * pxscale, line.q.CentroidY * pxscale, 2, 2);
+
+            painter.FillColor = prevColor1;
+
+        }
+        void dbugDrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)
+        {
+            //-------------- 
+            EdgeLine p_contactEdge = joint._p_contact_edge;
+            //mid point
+            var contactPoint = joint.Position;
+            double mid_x = contactPoint.X;
+            double mid_y = contactPoint.Y;
+
+            var prevFillColor = painter.FillColor;
+            painter.FillColor = PixelFarm.Drawing.Color.Yellow;
+            painter.FillRectLBWH(mid_x * pxscale, mid_y * pxscale, 4, 4);
+            painter.FillColor = prevFillColor;
+
+            switch (joint.SelectedEdgePointCount)
+            {
+                default: throw new NotSupportedException();
+                case 0: break;
+                case 1:
+                    DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
+                    break;
+                case 2:
+
+                    DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
+                    DrawBoneRib(painter, joint.RibEndPointB, joint, pxscale);
+                    break;
+            }
+            if (joint.TipPoint != System.Numerics.Vector2.Zero)
+            {
+                var prev_color1 = painter.StrokeColor;
+                painter.StrokeColor = PixelFarm.Drawing.Color.White;
+                painter.Line(
+                   contactPoint.X * pxscale, contactPoint.Y * pxscale,
+                   joint.TipPoint.X * pxscale, joint.TipPoint.Y * pxscale);
+                painter.StrokeColor = prev_color1;
+            }
+        }
+        void dbugDrawBoneLinks(CanvasPainter painter, GlyphCentroidBranch branch, float pxscale)
+        {
+            List<GlyphBone> glyphBones = branch.bones;
+            int glyphBoneCount = glyphBones.Count;
+            var prev_color = painter.StrokeColor;
+            int startAt = 0;
+            //--------------------
+            //read user input from ui ...
+            //int startAt = int.Parse(txtGlyphBoneStartAt.Text);
+            //int reqGlyphBoneCount = int.Parse(txtGlyphBoneCount.Text);
+            //if (reqGlyphBoneCount >= 0)
+            //{
+            //    //reset to all 
+            //    glyphBoneCount = Math.Min(reqGlyphBoneCount, glyphBoneCount);
+            //    txtGlyphBoneCount.Text = glyphBoneCount.ToString();
+            //}
+            //else
+            //{
+            //    txtGlyphBoneCount.Text = glyphBoneCount.ToString();
+            //}
+            //--------------------
+            int endAt = startAt + glyphBoneCount;
+            for (int i = startAt; i < endAt; ++i)
+            {
+                //draw line
+                GlyphBone bone = glyphBones[i];
+                GlyphBoneJoint jointA = bone.JointA;
+                GlyphBoneJoint jointB = bone.JointB;
+                bool valid = false;
+                if (jointA != null && jointB != null)
+                {
+
+                    var jointAPoint = jointA.Position;
+                    var jointBPoint = jointB.Position;
+                    painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
+                    painter.Line(
+                        jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
+                        jointBPoint.X * pxscale, jointBPoint.Y * pxscale
+                        );
+                    valid = true;
+                }
+                if (jointA != null && bone.TipEdge != null)
+                {
+
+                    var jointAPoint = jointA.Position;
+                    var mid = bone.TipEdge.GetMidPoint();
+
+                    painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
+                    painter.Line(
+                        jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
+                        mid.X * pxscale, mid.Y * pxscale
+                        );
+                    valid = true;
+                }
+                if (i == 0)
+                {
+                    var headpos = branch.GetHeadPosition();
+                    var prevColor = painter.FillColor;
+                    painter.FillColor = PixelFarm.Drawing.Color.DeepPink;
+                    painter.FillRectLBWH(headpos.X * pxscale, headpos.Y * pxscale, 5, 5);
+                    painter.FillColor = prevColor;
+
+                }
+                if (!valid)
+                {
+                    throw new NotSupportedException();
+                }
+
+            }
+            painter.StrokeColor = prev_color;
+        }
+        void dbugDrawTriangulatedGlyph(GlyphFitOutline glyphFitOutline, float pxscale)
         {
             painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
             List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
             int j = triAngles.Count;
-            //
-
             // 
             bool drawCentroidBone = this.chkDrawCentroidBone.Checked;
             bool drawGlyphBone = this.chkDrawGlyphBone.Checked;
@@ -633,80 +764,69 @@ namespace SampleWinForms
                 return;
             }
             //--------------- 
-            List<GlyphCentroidLine> bones = glyphFitOutline.GetBones();
-            j = bones.Count;
-            for (int i = 0; i < j; ++i)
+            Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHub = glyphFitOutline.GetCentroidLineHubs();
+            foreach (CentroidLineHub lineHub in centroidLineHub.Values)
             {
-                GlyphCentroidLine b = bones[i];
-                if (drawCentroidBone)
+                Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
+                var hubCenter = lineHub.GetCenterPos();
+                foreach (GlyphCentroidBranch branch in branches.Values)
                 {
-                    if (i == 0)
+                    int lineCount = branch.lines.Count;
+                    for (int i = 0; i < lineCount; ++i)
                     {
-                        //start mark
-                        painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-                        painter.FillRectLBWH(b.p.CentroidX * pxscale, b.p.CentroidY * pxscale, 7, 7);
+                        GlyphCentroidLine line = branch.lines[i];
+                        if (drawCentroidBone)
+                        {
+                            dbugDrawCentroidLine(painter, line, pxscale);
+                        }
+                        if (drawGlyphBone)
+                        {
+                            dbugDrawBoneJoint(painter, line.BoneJoint, pxscale);
+                        }
                     }
-                    //draw each bone 
-
-                    painter.StrokeColor = b.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Red;
-                    painter.Line(
-                        b.p.CentroidX * pxscale, b.p.CentroidY * pxscale,
-                        b.q.CentroidX * pxscale, b.q.CentroidY * pxscale);
-
-                    var prevColor1 = painter.FillColor;
-                    painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-
-                    painter.FillRectLBWH(b.p.CentroidX * pxscale, b.p.CentroidY * pxscale, 2, 2);
-                    painter.FillRectLBWH(b.q.CentroidX * pxscale, b.q.CentroidY * pxscale, 2, 2);
-
-                    painter.FillColor = prevColor1;
-                }
-                //
-                if (drawGlyphBone)
-                {
-                    //--------------
-                    GlyphBoneJoint contactSite = b.ContactSite;
-                    EdgeLine p_contactEdge = contactSite._p_contact_edge;
-                    //mid point
-                    var contactPoint = contactSite.GetPos();
-                    double mid_x = contactPoint.X;
-                    double mid_y = contactPoint.Y;
-
-                    var prevFillColor = painter.FillColor;
-                    painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-                    painter.FillRectLBWH(mid_x * pxscale, mid_y * pxscale, 4, 4);
-                    painter.FillColor = prevFillColor;
-
-                    switch (contactSite.SelectedEdgePointCount)
+                    //----------------
+                    if (lineCount > 1)
                     {
-                        default: throw new NotSupportedException();
-                        case 0: break;
-                        case 1:
-                            DrawContactEdge(painter, contactSite.RibEndPointA, contactSite, pxscale);
-                            break;
-                        case 2:
 
-                            DrawContactEdge(painter, contactSite.RibEndPointA, contactSite, pxscale);
-                            DrawContactEdge(painter, contactSite.RibEndPointB, contactSite, pxscale);
-                            break;
                     }
-                    if (contactSite.TipPoint != System.Numerics.Vector2.Zero)
+                    if (drawGlyphBone)
                     {
-                        var prev_color = painter.StrokeColor;
-                        painter.StrokeColor = PixelFarm.Drawing.Color.White;
+                        //draw bone list
+                        dbugDrawBoneLinks(painter, branch, pxscale);
+
+                        //draw link between each branch to center of hub
+                        var brHead = branch.GetHeadPosition();
                         painter.Line(
-                           contactPoint.X * pxscale, contactPoint.Y * pxscale,
-                           contactSite.TipPoint.X * pxscale, contactSite.TipPoint.Y * pxscale);
-                        painter.StrokeColor = prev_color;
+                            hubCenter.X * pxscale, hubCenter.Y * pxscale,
+                            brHead.X * pxscale, brHead.Y * pxscale);
+
+                        //double cx = lineHub.MainTriangle.CentroidX;
+                        //double cy = lineHub.MainTriangle.CentroidY;
+
+
+                        //draw  a line link to centroid of target triangle
+                        var prevStrokeColor = painter.StrokeColor;
+                        painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+                        painter.Line(
+                            (float)brHead.X * pxscale, (float)brHead.Y * pxscale,
+                             hubCenter.X * pxscale, hubCenter.Y * pxscale);
+                        painter.StrokeColor = prevStrokeColor;
                     }
                 }
+                var prevFill = painter.FillColor;
+                painter.FillColor = PixelFarm.Drawing.Color.White;
+                painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 7, 7);
+                painter.FillColor = prevFill;
+
             }
+            //draw link between hub
+
         }
-        void DrawContactEdge(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphBoneJoint contactSite, float pixelScale)
+        void DrawBoneRib(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphBoneJoint joint, float pixelScale)
         {
-            var contactPoint = contactSite.GetPos();
-            double mid_x = contactPoint.X;
-            double mid_y = contactPoint.Y;
+            var jointPos = joint.Position;
+            double mid_x = jointPos.X;
+            double mid_y = jointPos.Y;
 
             //
             PixelFarm.Drawing.Color prevFillColor = painter.FillColor;
