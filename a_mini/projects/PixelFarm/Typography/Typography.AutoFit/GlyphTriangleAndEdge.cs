@@ -82,7 +82,7 @@ namespace Typography.Rendering
 
         static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
-        static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
+        static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
 
         public TriangulationPoint p;
@@ -119,7 +119,7 @@ namespace Typography.Rendering
                 {
                     SlopeKind = LineSlopeKind.Vertical;
                 }
-                else if (SlopAngle < _15degreeToRad)
+                else if (SlopAngle < _01degreeToRad)
                 {
                     SlopeKind = LineSlopeKind.Horizontal;
                 }
