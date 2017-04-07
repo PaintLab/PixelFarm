@@ -290,7 +290,7 @@ namespace SampleWinForms.UI
             foreach (CentroidLineHub lineHub in centroidLineHub.Values)
             {
                 Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
-                var hubCenter = lineHub.GetCenterPos();
+                System.Numerics.Vector2 hubCenter = lineHub.GetCenterPos();
                 foreach (GlyphCentroidBranch branch in branches.Values)
                 {
                     int lineCount = branch.lines.Count;
@@ -306,11 +306,7 @@ namespace SampleWinForms.UI
                             dbugDrawBoneJoint(painter, line.BoneJoint, pxscale);
                         }
                     }
-                    //----------------
-                    if (lineCount > 1)
-                    {
 
-                    }
                     if (drawGlyphBone)
                     {
                         //draw bone list
@@ -322,11 +318,8 @@ namespace SampleWinForms.UI
                             hubCenter.X * pxscale, hubCenter.Y * pxscale,
                             brHead.X * pxscale, brHead.Y * pxscale);
 
-                        //double cx = lineHub.MainTriangle.CentroidX;
-                        //double cy = lineHub.MainTriangle.CentroidY;
-
-
                         //draw  a line link to centroid of target triangle
+
                         var prevStrokeColor = painter.StrokeColor;
                         painter.StrokeColor = PixelFarm.Drawing.Color.Red;
                         painter.Line(

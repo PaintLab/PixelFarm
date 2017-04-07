@@ -34,18 +34,18 @@ namespace Typography.Rendering
         /// <summary>
         /// analyze this branch
         /// </summary>
-        public void Analyze()
+        public void AnalyzeEdges()
         {
-            //for rach branch
+            //for each branch
             List<GlyphCentroidLine> lineList = this.lines;
             int j = lineList.Count;
             for (int i = 0; i < j; ++i)
             {
                 //for each centroid line
                 //analyze for its bone joint
-                lineList[i].Analyze();
+                lineList[i].AnalyzeAndMarkEdges();
             }
-           
+
         }
     }
 
@@ -106,14 +106,14 @@ namespace Typography.Rendering
             //add centroid line to current branch
             currentBranchList.AddCentroidLine(centroidLine);
         }
-
-        public void AnalyzeCentroidLines()
+        /// <summary>
+        /// analyze each branch for edge information
+        /// </summary>
+        public void AnalyzeEachBranch()
         {
             foreach (GlyphCentroidBranch branch in branches.Values)
             {
-                branch.Analyze();
-
-
+                branch.AnalyzeEdges();
             }
         }
 
@@ -229,7 +229,7 @@ namespace Typography.Rendering
         public LineSlopeKind SlopKind { get; private set; }
 
 
-        internal void Analyze()
+        internal void AnalyzeAndMarkEdges()
         {
 
             //

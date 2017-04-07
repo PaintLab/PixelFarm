@@ -36,13 +36,17 @@ namespace Typography.Rendering
             int triCount = _triangles.Count;
 
             //-------------------------------------------------
+            //1. create a list of CentroidLineHub (and its members)
+            //-------------------------------------------------
             List<GlyphTriangle> usedTriList = new List<GlyphTriangle>();
             centroidLineHubs = new Dictionary<GlyphTriangle, CentroidLineHub>();
             GlyphTriangle latestTri = null;
-
             CentroidLineHub currentCentroidLineHub = null;
+
             for (int i = 0; i < triCount; ++i)
             {
+                //next tri
+                //TODO: review here
                 GlyphTriangle tri = _triangles[i];
                 if (i == 0)
                 {
@@ -76,19 +80,23 @@ namespace Typography.Rendering
                             {
                                 //start new branch from mutli
                             }
+
                             currentCentroidLineHub = lineHub;
+                            //ensure start triangle of the branch
                             lineHub.SetBranch(tri);
+                            //create centroid line and add to currrent hub
                             var centroidLine = new GlyphCentroidLine(connectWithPrevTri, tri);
                             currentCentroidLineHub.AddChild(centroidLine);
-
                         }
                         else
                         {
                             //add centroid line to current multifacet joint 
                             if (currentCentroidLineHub.BranchCount == 0)
                             {
+                                //ensure start triangle of the branch
                                 currentCentroidLineHub.SetBranch(tri);
                             }
+                            //create centroid line and add to currrent hub
                             currentCentroidLineHub.AddChild(new GlyphCentroidLine(connectWithPrevTri, tri));
                         }
 
@@ -118,7 +126,7 @@ namespace Typography.Rendering
 
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
-                hub.AnalyzeCentroidLines();
+                hub.AnalyzeEachBranch();
             }
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
