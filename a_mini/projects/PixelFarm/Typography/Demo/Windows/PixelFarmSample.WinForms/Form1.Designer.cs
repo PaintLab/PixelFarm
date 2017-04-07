@@ -59,6 +59,8 @@
             this.txtGlyphBoneCount = new System.Windows.Forms.TextBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.chkDynamicOutline = new System.Windows.Forms.CheckBox();
+            this.txtLeftXControl = new System.Windows.Forms.TextBox();
+            this.chkMinorOffset = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -355,11 +357,31 @@
             this.chkDynamicOutline.Text = "Show DyanmicOutline";
             this.chkDynamicOutline.UseVisualStyleBackColor = true;
             // 
+            // txtLeftXControl
+            // 
+            this.txtLeftXControl.Location = new System.Drawing.Point(792, 320);
+            this.txtLeftXControl.Name = "txtLeftXControl";
+            this.txtLeftXControl.Size = new System.Drawing.Size(217, 20);
+            this.txtLeftXControl.TabIndex = 52;
+            this.txtLeftXControl.Text = "0";
+            // 
+            // chkMinorOffset
+            // 
+            this.chkMinorOffset.AutoSize = true;
+            this.chkMinorOffset.Location = new System.Drawing.Point(792, 297);
+            this.chkMinorOffset.Name = "chkMinorOffset";
+            this.chkMinorOffset.Size = new System.Drawing.Size(80, 17);
+            this.chkMinorOffset.TabIndex = 53;
+            this.chkMinorOffset.Text = "Offset to Fit";
+            this.chkMinorOffset.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 526);
+            this.Controls.Add(this.chkMinorOffset);
+            this.Controls.Add(this.txtLeftXControl);
             this.Controls.Add(this.chkDynamicOutline);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.txtGlyphBoneCount);
@@ -432,6 +454,8 @@
         private System.Windows.Forms.TextBox txtGlyphBoneCount;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.CheckBox chkDynamicOutline;
+        private System.Windows.Forms.TextBox txtLeftXControl;
+        private System.Windows.Forms.CheckBox chkMinorOffset;
     }
 }
 

@@ -6,11 +6,8 @@ using System.Numerics;
 namespace Typography.Rendering
 {
 
-
     public class GlyphTriangle
     {
-
-
         DelaunayTriangle _tri;
         public EdgeLine e0;
         public EdgeLine e1;

@@ -29,7 +29,9 @@ namespace Typography.Rendering
             var bpos = b.Position;
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
             EvaluteSlope(a.Position, bpos);
+            //------  
         }
+
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
         {
             JointA = a;
@@ -38,6 +40,9 @@ namespace Typography.Rendering
             var midPoint = tipEdge.GetMidPoint();
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluteSlope(a.Position, midPoint);
+            //------
+
+
         }
         void EvaluteSlope(Vector2 p, Vector2 q)
         {
@@ -80,6 +85,52 @@ namespace Typography.Rendering
             }
         }
         public bool IsLongBone { get; internal set; }
+
+        internal double CalculateAvgBoneWidth()
+        {
+            //avg bone width
+            //(for this bone only) is calculated by avg of 4 ribs 
+            //around 2 joints
+
+            //this only ...
+            double a_side = Math.Sqrt(JointA.CalculateSqrDistance(JointA.RibEndPointA));
+            double b_side = Math.Sqrt(JointA.CalculateSqrDistance(JointA.RibEndPointB));
+            return (a_side + b_side) / 2;
+        }
+        //--------
+        public float LeftMostPoint()
+        {
+            if (JointB != null)
+            {
+                //compare joint A and B 
+                if (JointA.Position.X < JointB.Position.X)
+                {
+                    return JointA.GetLeftMostRib();
+                }
+                else
+                {
+                    return JointB.GetLeftMostRib();
+                }
+            }
+            else
+            {
+                return JointA.GetLeftMostRib();
+            }
+        }
+
+#if DEBUG
+        public override string ToString()
+        {
+            if (TipEdge != null)
+            {
+                return JointA.ToString() + "->" + TipEdge.GetMidPoint().ToString();
+            }
+            else
+            {
+                return JointA.ToString() + "->" + JointB.ToString();
+            }
+        }
+#endif
     }
 
     public class GlyphBoneJoint
@@ -114,6 +165,26 @@ namespace Typography.Rendering
         public GlyphCentroidLine OwnerCentroidLine
         {
             get { return _owner; }
+        }
+        public float GetLeftMostRib()
+        {
+            float a_x = this.RibEndPointA.X;
+            if (this._selectedEdgeB != null)
+            {
+                float b_x = this.RibEndPointB.X;
+                if (a_x < b_x)
+                {
+                    return a_x;
+                }
+                else
+                {
+                    return b_x;
+                }
+            }
+            else
+            {
+                return a_x;
+            }
         }
         /// <summary>
         /// calculate distance^2 from contact point to specific point v
@@ -171,6 +242,14 @@ namespace Typography.Rendering
         public EdgeLine RibEndEdgeA { get { return _selectedEdgeA; } }
         public EdgeLine RibEndEdgeB { get { return _selectedEdgeB; } }
         public EdgeLine TipEdge { get { return _selectedTipEdge; } }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return this.Position.ToString();
+        }
+#endif
+
     }
 
 

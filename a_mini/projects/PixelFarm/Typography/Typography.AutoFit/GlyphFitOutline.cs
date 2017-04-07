@@ -13,9 +13,7 @@ namespace Typography.Rendering
         List<GlyphContour> _contours;
 #if DEBUG
         Polygon _dbugpolygon;
-#endif
-
-
+#endif 
         internal GlyphFitOutline(Polygon polygon, List<GlyphContour> contours)
         {
             this._contours = contours;
@@ -40,6 +38,8 @@ namespace Typography.Rendering
 
         Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs;
         List<CentroidLineHub> lineHubs;
+        List<GlyphBone> outputVerticalLongBones;
+
 
         void Analyze()
         {
@@ -156,9 +156,18 @@ namespace Typography.Rendering
                 //link each hub to proper bone
                 FindStartHubLinkConnection(lineHubs[i], lineHubs);
             }
-            List<GlyphBone> outputVerticalLongBones = new List<GlyphBone>();
+            //-------------
+            outputVerticalLongBones = new List<GlyphBone>();
             AnalyzeBoneLength(newBones, outputVerticalLongBones);
+            //-------------
+            outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
+
         }
+        public List<GlyphBone> LongVerticalBones
+        {
+            get { return this.outputVerticalLongBones; }
+        }
+
         static void FindStartHubLinkConnection(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
         {
             int j = hubs.Count;
@@ -280,6 +289,36 @@ namespace Typography.Rendering
             }
 
             //-------------
+            //TEST:
+            //fit make the glyph look sharp
+            //we try to adjust the vertical bone to fit 
+            //the pixel (prevent blur) 
+
+            j = genPointList.Count;
+            double minorOffset = 0;
+            LeftControlPosX = 0;
+            if (this.LongVerticalBones != null && this.LongVerticalBones.Count > 0)
+            {
+                ////only longest bone
+                int longBoneCount = this.LongVerticalBones.Count;
+                //the first one is the longest bone.
+                GlyphBone longVertBone = LongVerticalBones[0];
+                var leftTouchPos = longVertBone.LeftMostPoint();
+                LeftControlPosX = leftTouchPos;
+                //double avgWidth = longVertBone.CalculateAvgBoneWidth();
+                //System.Numerics.Vector2 midBone = longVertBone.JointA.Position;
+
+                ////left side
+                //double newLeftAndScale = (midBone.X - (avgWidth / 2)) * pxScale;
+                ////then move to fit int
+                //minorOffset = MyMath.FindDiffToFitInteger((float)newLeftAndScale);
+                //for (int m = 0; m < j; ++m)
+                //{
+                //    OffsetPoints(genPointList[m], minorOffset);
+                //}
+            }
+            //-------------
+
             tx.BeginRead(j);
             for (int i = 0; i < j; ++i)
             {
@@ -288,6 +327,8 @@ namespace Typography.Rendering
             tx.EndRead();
             //-------------
         }
+        public float LeftControlPosX { get; set; }
+
         const int GRID_SIZE = 1;
         const float GRID_SIZE_25 = 1f / 4f;
         const float GRID_SIZE_50 = 2f / 4f;
@@ -488,7 +529,16 @@ namespace Typography.Rendering
             }
         }
 
+        static void OffsetPoints(List<Point2d> genPoints, double offset)
+        {
 
+            int j = genPoints.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                Point2d oldValue = genPoints[i];
+                genPoints[i] = new Point2d((float)(oldValue.x + offset), oldValue.y);
+            }
+        }
         static void GenerateFitOutput(IGlyphTranslator tx,
             List<Point2d> genPoints,
             GlyphContour contour)

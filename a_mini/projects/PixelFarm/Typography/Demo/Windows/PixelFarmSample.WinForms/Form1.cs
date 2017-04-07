@@ -126,6 +126,7 @@ namespace SampleWinForms
             chkDrawCentroidBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawGlyphBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDynamicOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkMinorOffset.CheckedChanged += (s, e) => UpdateRenderOutput();
             //----------
             txtGlyphBoneCount.KeyDown += (s, e) =>
             {
@@ -212,7 +213,8 @@ namespace SampleWinForms
             //string inputstr = "lllll";
             //string inputstr = "e";
             //string inputstr = "T";
-            string inputstr = "u";
+            //string inputstr = "u";
+            string inputstr = "t";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
             //string inputstr = "ญญู";
@@ -376,9 +378,28 @@ namespace SampleWinForms
             var txToVxs1 = new GlyphTranslatorToVxs();
             builder.ReadShapes(txToVxs1);
 
+            float scale = typeface.CalculateToPixelScaleFromPointSize(sizeInPoint);
+            var leftControl = builder.LeftXControl;
+            var left2 = leftControl * scale;
+            int floor_1 = (int)left2;
+            float diff = left2 - floor_1;
+
+            if (chkMinorOffset.Checked)
+            {
+                if (diff > 0.5)
+                {
+                    diff = 0;
+                }
+                this.txtLeftXControl.Text = left2.ToString() + " =>" + floor_1 + ",diff=" + diff;
+            }
+            else
+            {
+                this.txtLeftXControl.Text = left2.ToString();
+            }
+
             VertexStore vxs = new VertexStore();
             txToVxs1.WriteOutput(vxs, _vxsPool);
-            painter.SetOrigin(0, 10);
+
             //----------------------------------------------------
             painter.UseSubPixelRendering = chkLcdTechnique.Checked;
 
@@ -386,12 +407,27 @@ namespace SampleWinForms
             //5.1 clear background
             painter.Clear(PixelFarm.Drawing.Color.White);
 
+            RectD bounds = new RectD();
+            BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref bounds);
+
+
             if (chkFillBackground.Checked)
             {
                 //5.2 
                 painter.FillColor = PixelFarm.Drawing.Color.Black;
                 //5.3
+                //painter.Fill(vxs);
+
+                float xpos = 0;// - diff;
+                if (chkMinorOffset.Checked)
+                {
+                    xpos -= diff;
+                }
+                //for (float i = 0; i < 20; ++i)
+                //{
+                painter.SetOrigin(xpos, 10);
                 painter.Fill(vxs);
+                //}
             }
             if (chkBorder.Checked)
             {
@@ -402,6 +438,8 @@ namespace SampleWinForms
                 //p.StrokeWidth = 2;
                 //5.5 
                 painter.Draw(vxs);
+
+
             }
 
             //--------------------------
@@ -409,7 +447,7 @@ namespace SampleWinForms
             {
                 //
 #if DEBUG
-                float scale = typeface.CalculateToPixelScaleFromPointSize(sizeInPoint);
+
                 GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
                 if (fitOutline != null)
                 {
@@ -439,7 +477,7 @@ namespace SampleWinForms
             //7. just render our bitmap
             g.Clear(Color.White);
             g.DrawImage(winBmp, new Point(30, 20));
-            g.DrawRectangle(Pens.Black, new System.Drawing.Rectangle(30, 20, winBmp.Width, winBmp.Height));
+            //g.DrawRectangle(Pens.White, new System.Drawing.Rectangle(30, 20, winBmp.Width, winBmp.Height));
         }
 
         void RenderWithMsdfImg(Typeface typeface, char testChar, float sizeInPoint)

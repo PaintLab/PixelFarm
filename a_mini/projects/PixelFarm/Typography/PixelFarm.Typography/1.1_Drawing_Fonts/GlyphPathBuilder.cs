@@ -20,6 +20,7 @@ namespace Typography.Rendering
         public bool dbugAlwaysDoCurveAnalysis;
 
 #endif 
+        public float LeftXControl { get; set; }
         protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph)
         {
             //not use interperter so we need to scale it with our machnism
@@ -57,6 +58,7 @@ namespace Typography.Rendering
                             this._outputGlyphPoints,
                             this._outputContours);
                         _fitoutlineCollection.Add(glyphIndex, _fitOutline);
+                        this.LeftXControl = _fitOutline.LeftControlPosX;
                     }
                 }
             }
@@ -102,8 +104,9 @@ namespace Typography.Rendering
                 {
                     toPixelScale = 1;
                 }
-               
+
                 _fitOutline.GenerateOutput(tx, toPixelScale);
+                this.LeftXControl = _fitOutline.LeftControlPosX;
             }
             else
             {
