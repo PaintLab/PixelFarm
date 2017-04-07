@@ -12,8 +12,6 @@ namespace Typography.Rendering
         List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
         List<GlyphContour> _contours;
         Polygon _polygon;
-        List<GlyphBone> bones;
-        List<GlyphBone> boneList2;
 
         internal GlyphFitOutline(Polygon polygon, List<GlyphContour> contours)
         {
@@ -29,119 +27,200 @@ namespace Typography.Rendering
         }
 
 
+
+
+        Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs;
         void Analyze()
         {
             //we analyze each triangle here 
-            int j = _triangles.Count;
-            bones = new List<GlyphBone>();
+            int triCount = _triangles.Count;
+
+            //-------------------------------------------------
+            //1. create a list of CentroidLineHub (and its members)
+            //-------------------------------------------------
             List<GlyphTriangle> usedTriList = new List<GlyphTriangle>();
-            for (int i = 0; i < j; ++i)
+            centroidLineHubs = new Dictionary<GlyphTriangle, CentroidLineHub>();
+            GlyphTriangle latestTri = null;
+            CentroidLineHub currentCentroidLineHub = null;
+
+            for (int i = 0; i < triCount; ++i)
             {
+                //next tri
+                //TODO: review here
                 GlyphTriangle tri = _triangles[i];
-                if (i > 0)
+                if (i == 0)
                 {
-                    //check the new tri is connected with latest tri or not?
+                    CentroidLineHub lineHub = new CentroidLineHub(tri);
+                    currentCentroidLineHub = lineHub;
+                    centroidLineHubs[tri] = lineHub;
+                    usedTriList.Add(latestTri = tri);
+                }
+                else
+                {
+                    //at a branch 
+                    //one tri may connect with 3 NB triangle
                     int foundIndex = FindLatestConnectedTri(usedTriList, tri);
                     if (foundIndex > -1)
                     {
+
                         usedTriList.Add(tri);
-                        bones.Add(new GlyphBone(usedTriList[foundIndex], tri));
+                        GlyphTriangle connectWithPrevTri = usedTriList[foundIndex];
+                        if (connectWithPrevTri != latestTri)
+                        {
+                            //branch
+                            CentroidLineHub lineHub;
+                            if (!centroidLineHubs.TryGetValue(connectWithPrevTri, out lineHub))
+                            {
+                                lineHub = new CentroidLineHub(connectWithPrevTri);
+                                centroidLineHubs[connectWithPrevTri] = lineHub;
+
+                                //start new facet 
+                            }
+                            else
+                            {
+                                //start new branch from mutli
+                            }
+
+                            currentCentroidLineHub = lineHub;
+                            //ensure start triangle of the branch
+                            lineHub.SetBranch(tri);
+                            //create centroid line and add to currrent hub
+                            var centroidLine = new GlyphCentroidLine(connectWithPrevTri, tri);
+                            currentCentroidLineHub.AddChild(centroidLine);
+                        }
+                        else
+                        {
+                            //add centroid line to current multifacet joint 
+                            if (currentCentroidLineHub.BranchCount == 0)
+                            {
+                                //ensure start triangle of the branch
+                                currentCentroidLineHub.SetBranch(tri);
+                            }
+                            //create centroid line and add to currrent hub
+                            currentCentroidLineHub.AddChild(new GlyphCentroidLine(connectWithPrevTri, tri));
+                        }
+
+                        latestTri = tri;
                     }
                     else
                     {
                         //not found
                         //?
-
                     }
                 }
-                else
-                {
-                    usedTriList.Add(tri);
-                }
             }
+            //-------------------------------------------------
 
-            if (j > 1)
+            if (triCount > 1)
             {
                 //connect the last tri to the first tri
                 //if it is connected
                 GlyphTriangle firstTri = _triangles[0];
-                GlyphTriangle lastTri = _triangles[j - 1];
+                GlyphTriangle lastTri = _triangles[triCount - 1];
                 if (firstTri.IsConnectedWith(lastTri))
                 {
-                    bones.Add(new GlyphBone(lastTri, firstTri));
+                    currentCentroidLineHub.AddChild(new GlyphCentroidLine(lastTri, firstTri));
                 }
             }
             //----------------------------------------
-            int boneCount = bones.Count;
-            //do bone length histogram
-            boneList2 = new List<GlyphBone>(boneCount);
-            boneList2.AddRange(bones);
-            //----------------------------------------
-            AnalyzeBoneLength();
-
-            //----------------------------------------
-            for (int i = 0; i < boneCount; ++i)
+            List<CentroidLineHub> lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values.Count);
+            foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
-                //each bone has 2 triangles at its ends
-                //we analyze both triangles' roles
-                //eg...
-                //left -right 
-                //top-bottom
-                GlyphBone bone = bones[i];
-                bone.Analyze();
+                hub.AnalyzeEachBranchForEdgeInfo();
+                lineHubs.Add(hub);
             }
-            //---------------------------------------- 
+            //----------------------------------------
+            //link each hub start point
+            //----------------------------------------
+            foreach (CentroidLineHub hub in centroidLineHubs.Values)
+            {
+                hub.CreateBones();
+            }
+            //----------------------------------------
+            int lineHubCount = lineHubs.Count;
+            for (int i = 0; i < lineHubCount; ++i)
+            {
+                //after create bone
+                //link each hub to proper bone
+                FindStartHubLinkConnection(lineHubs[i], lineHubs);
+            }
+            //----------------------------------------
+        }
+        static void FindStartHubLinkConnection(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
+        {
+            int j = hubs.Count;
+            System.Numerics.Vector2 hubHeadPos = analyzingHub.GetCenterPos();
+            for (int i = 0; i < j; ++i)
+            {
+
+                CentroidLineHub hub = hubs[i];
+                if (hub == analyzingHub)
+                {
+                    continue;
+                }
+                GlyphCentroidBranch foundOnBr;
+                GlyphBoneJoint foundOnJoint;
+
+                if (hub.FindBoneJoint(analyzingHub.MainTriangle, hubHeadPos, out foundOnBr, out foundOnJoint))
+                {
+                    //found
+                    hub.AddLineHubConnection(analyzingHub);
+                    //
+                    analyzingHub.SetHeadConnnection(foundOnBr, foundOnJoint);
+                    return;
+                }
+            }
         }
         void AnalyzeBoneLength()
         {
-            //sort by bone len
-            int j = boneList2.Count;
-            boneList2.Sort((b0, b1) => b0.boneLength.CompareTo(b1.boneLength));
+            ////sort by bone len
+            //int j = boneList2.Count;
+            //boneList2.Sort((b0, b1) => b0.boneLength.CompareTo(b1.boneLength));
 
-            ////find length of the 1st percentile
-            ////avg 
-            //double total = 0;
-            //for (int i = j - 1; i >= 0; --i)
+            //////find length of the 1st percentile
+            //////avg 
+            ////double total = 0;
+            ////for (int i = j - 1; i >= 0; --i)
+            ////{
+            ////    total += boneList2[i].boneLength;
+            ////}
+            ////double avg = total / j;
+            ////we use 
+
+            //if (j >= 10)
             //{
-            //    total += boneList2[i].boneLength;
+            //    //find 1st 10
+            //    int group_n = j / 10;
+            //    double total = 0;
+            //    int index = j - 1;
+            //    for (int i = group_n - 1; i >= 0; --i)
+            //    {
+            //        //avg of first group
+            //        total += boneList2[index].boneLength;
+            //        index--;
+            //    }
+            //    //
+            //    double maxgroup_avg = total / group_n;
+
+            //    int mid = (j - 1) / 2;
+            //    double median = boneList2[mid].boneLength;
+            //    //assign long bone
+            //    double median_x2 = median + median;
+            //    //
+            //    for (int i = j - 1; i >= 0; --i)
+            //    {
+            //        GlyphCentroidLine bone = boneList2[i];
+            //        if (bone.boneLength > median_x2)
+            //        {
+            //            bone.IsLongBone = true;
+            //        }
+            //    }
+
             //}
-            //double avg = total / j;
-            //we use 
+            //else
+            //{
 
-            if (j >= 10)
-            {
-                //find 1st 10
-                int group_n = j / 10;
-                double total = 0;
-                int index = j - 1;
-                for (int i = group_n - 1; i >= 0; --i)
-                {
-                    //avg of first group
-                    total += boneList2[index].boneLength;
-                    index--;
-                }
-                //
-                double maxgroup_avg = total / group_n;
-
-                int mid = (j - 1) / 2;
-                double median = boneList2[mid].boneLength;
-                //assign long bone
-                double median_x2 = median + median;
-                //
-                for (int i = j - 1; i >= 0; --i)
-                {
-                    GlyphBone bone = boneList2[i];
-                    if (bone.boneLength > median_x2)
-                    {
-                        bone.IsLongBone = true;
-                    }
-                }
-
-            }
-            else
-            {
-
-            }
+            //}
 
         }
 
@@ -161,21 +240,16 @@ namespace Typography.Rendering
         {
             return _triangles;
         }
-        public List<GlyphBone> GetBones()
+        public Dictionary<GlyphTriangle, CentroidLineHub> GetCentroidLineHubs()
         {
-            return bones;
+            return this.centroidLineHubs;
         }
 
 
-        //=======================================================================================
-        /// <summary>
-        /// read fitting output
-        /// </summary>
-        /// <param name="tx">glyph translator</param>
-        public void ReadOutput(IGlyphTranslator tx, float pxScale)
+
+        public void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
-            //TODO: review here
-            //
+            //TODO: review here 
             //-----------------------------------------------------------            
             //create fit contour
             //this version use only Agg's vertical hint only ****
@@ -383,7 +457,7 @@ namespace Typography.Rendering
                     //adjust right-side vertical edge
                     EdgeLine rightside = p.GetMatchingVerticalEdge();
                 }
-                //tx.MoveTo((float)p_x, (float)p_y);
+
                 genPoints.Add(new Point2d((float)p_x, (float)p_y));
                 //-------------
                 first_px = p_x;
@@ -470,7 +544,7 @@ namespace Typography.Rendering
                 }
             }
             //close
-            //tx.LineTo(first_px, first_py);
+
             tx.CloseContour();
         }
 

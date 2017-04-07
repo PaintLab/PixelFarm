@@ -316,12 +316,18 @@ namespace PixelFarm.Drawing.Fonts
                     //if not found then create new glyph vxs and cache it
                     _glyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, fontSizePoint);
                     _glyphPathBuilder.ReadShapes(_tovxs);
-
-                    //TODO: review here, 
-                    //float pxScale = _glyphPathBuilder.GetPixelScale();
+                    //------------------
+                    //TODO: review here,  
                     glyphVxs = new VertexStore();
                     _tovxs.WriteOutput(glyphVxs, _vxsPool);
                     //
+                    ////------------------
+                    ////find bounding box
+                    //RectD boundingRect = new RectD();
+                    //PixelFarm.Agg.BoundingRect.GetBoundingRect(new VertexStoreSnap(glyphVxs), ref boundingRect);
+                      
+
+                    //------------------
                     hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphVxs);
                 }
 

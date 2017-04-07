@@ -2,28 +2,9 @@
 using System;
 using System.Collections.Generic;
 using Poly2Tri;
+using System.Numerics;
 namespace Typography.Rendering
 {
-
-
-
-
-    static class MyMath
-    {
-
-        /// <summary>
-        /// Convert degrees to radians
-        /// </summary>
-        /// <param name="degrees">An angle in degrees</param>
-        /// <returns>The angle expressed in radians</returns>
-        public static double DegreesToRadians(double degrees)
-        {
-            const double degToRad = System.Math.PI / 180.0f;
-            return degrees * degToRad;
-        }
-
-    }
-
 
 
     public class GlyphTriangle
@@ -111,6 +92,13 @@ namespace Typography.Rendering
 
         Dictionary<EdgeLine, bool> matchingEdges;
 
+        //------------------------------
+        /// <summary>
+        /// contact to 
+        /// </summary>
+        public EdgeLine contactToEdge;
+        //------------------------------
+
         public EdgeLine(TriangulationPoint p, TriangulationPoint q)
         {
             this.p = p;
@@ -153,6 +141,11 @@ namespace Typography.Rendering
             get;
             internal set;
         }
+        public bool IsInside
+        {
+            get { return !this.IsOutside; }
+
+        }
         public double SlopAngle
         {
             get;
@@ -168,7 +161,10 @@ namespace Typography.Rendering
             get;
             internal set;
         }
-
+        public Vector2 GetMidPoint()
+        {
+            return new Vector2((float)((x0 + x1) / 2), (float)((y0 + y1) / 2));
+        }
         public override string ToString()
         {
             return SlopKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
@@ -190,8 +186,8 @@ namespace Typography.Rendering
             {
                 return null;
             }
-
         }
+
         public void AddMatchingOutsideEdge(EdgeLine edgeLine)
         {
 #if DEBUG
