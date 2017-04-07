@@ -50,6 +50,7 @@
     <Compile Include="..\TextBoxSample.WinForms\TextBoxController\SampleTextBoxLineModel.cs">
       <Link>GdiPlus\SampleTextBoxLineModel.cs</Link>
     </Compile>
+    <Compile Include="DebugGlyphVisualizer.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
