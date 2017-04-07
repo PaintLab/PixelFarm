@@ -31,6 +31,22 @@ namespace Typography.Rendering
                 return bones[0].JointA.Position;
             }
         }
+        /// <summary>
+        /// analyze this branch
+        /// </summary>
+        public void Analyze()
+        {
+            //for rach branch
+            List<GlyphCentroidLine> lineList = this.lines;
+            int j = lineList.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //for each centroid line
+                //analyze for its bone joint
+                lineList[i].Analyze();
+            }
+           
+        }
     }
 
     public class CentroidLineHub
@@ -95,14 +111,9 @@ namespace Typography.Rendering
         {
             foreach (GlyphCentroidBranch branch in branches.Values)
             {
-                List<GlyphCentroidLine> lineList = branch.lines;
-                int j = lineList.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    //for each centroid line
-                    //analyze for its bone joint
-                    lineList[i].Analyze();
-                }
+                branch.Analyze();
+
+
             }
         }
 
@@ -498,30 +509,10 @@ namespace Typography.Rendering
                                     }
                                 }
                                 break;
-                            //    {
-
-
-                            //    }
-                            //    boneJoint.AddRibEndAt(edgeA, perpend_A);
-                            //    //check if B side is tip part
-                            //    boneJoint.SetTipEdge(edgeB);
-                            //    break;
-                            //case 1:
-                            //    {
-
-                            //    }
-                            //    boneJoint.AddRibEndAt(edgeB, perpend_B);
-                            //    boneJoint.SetTipEdge(edgeA);
-                            //    break;
                             case 2:
                                 boneJoint.AddRibEndAt(edge, corner);
                                 break;
                         }
-
-
-
-
-
                     }
                     break;
             }
