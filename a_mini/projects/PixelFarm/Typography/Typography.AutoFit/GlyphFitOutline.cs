@@ -123,17 +123,50 @@ namespace Typography.Rendering
                 }
             }
             //----------------------------------------
-
+            List<CentroidLineHub> lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values.Count);
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
-                hub.AnalyzeEachBranch();
+                hub.AnalyzeEachBranchForEdgeInfo();
+                lineHubs.Add(hub);
             }
+            //----------------------------------------
+            //link each hub start point
+
+            int lineHubCount = lineHubs.Count;
+            for (int i = 0; i < lineHubCount; ++i)
+            {
+
+                FindStartHubLinkConnection(lineHubs[i], lineHubs);
+            }
+            //----------------------------------------
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
                 hub.CreateBones();
             }
         }
+        static void FindStartHubLinkConnection(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
+        {
+            int j = hubs.Count;
+            for (int i = 0; i < j; ++i)
+            {
 
+                CentroidLineHub hub = hubs[i];
+                if (hub == analyzingHub)
+                {
+                    continue;
+                }
+                GlyphCentroidBranch foundOnBr;
+                int foundAt;
+                bool is_pside;
+                if (hub.FindTriangle(analyzingHub.MainTriangle, out foundOnBr, out foundAt, out is_pside))
+                {
+                    //found
+                    hub.AddLineHubConnection(analyzingHub);
+                    analyzingHub.SetHeadConnnection(foundOnBr, foundAt, is_pside);
+                    return;
+                }
+            }
+        }
         void AnalyzeBoneLength()
         {
             ////sort by bone len

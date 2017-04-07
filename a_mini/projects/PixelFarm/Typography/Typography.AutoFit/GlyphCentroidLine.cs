@@ -45,18 +45,49 @@ namespace Typography.Rendering
                 //analyze for its bone joint
                 lineList[i].AnalyzeAndMarkEdges();
             }
+        }
+        public int FindTriangle(GlyphTriangle tri, out bool is_pside)
+        {
+            int j = lines.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphCentroidLine line = lines[i];
+                if (line.p == tri)
+                {
+                    is_pside = true;
+                    return i;
+                }
+                else if (line.q == tri)
+                {
+                    is_pside = false;
+                    return i;
+                }
+            }
+            is_pside = false;
+            return -1; //not found
+        }
+
+        public GlyphTriangle GetTriangle(int cenroidLine, bool is_pside)
+        {
+            GlyphCentroidLine line = lines[cenroidLine];
+            return is_pside ? line.p : line.q;
 
         }
     }
 
+
+
+
+    /// <summary>
+    /// a collection of centroid line
+    /// </summary>
     public class CentroidLineHub
     {
         readonly GlyphTriangle mainTri;
         Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = new Dictionary<GlyphTriangle, GlyphCentroidBranch>();
+        List<CentroidLineHub> connectedLineHubs;
         GlyphCentroidBranch currentBranchList;
         GlyphTriangle currentBranchTri;
-
-
         public CentroidLineHub(GlyphTriangle mainTri)
         {
             this.mainTri = mainTri;
@@ -65,6 +96,7 @@ namespace Typography.Rendering
         {
             get { return mainTri; }
         }
+
         public Vector2 GetCenterPos()
         {
             int j = branches.Count;
@@ -109,7 +141,7 @@ namespace Typography.Rendering
         /// <summary>
         /// analyze each branch for edge information
         /// </summary>
-        public void AnalyzeEachBranch()
+        public void AnalyzeEachBranchForEdgeInfo()
         {
             foreach (GlyphCentroidBranch branch in branches.Values)
             {
@@ -193,6 +225,56 @@ namespace Typography.Rendering
         {
             return branches;
         }
+
+
+        //--------------------------------------------------------
+        public bool FindTriangle(GlyphTriangle tri, out GlyphCentroidBranch foundOnBranch, out int foundAt, out bool is_pside)
+        {
+            foreach (GlyphCentroidBranch br in branches.Values)
+            {
+                int foundAtCentroidLine = br.FindTriangle(tri, out is_pside);
+                if (foundAtCentroidLine > -1)
+                {
+                    //found tri  on this branch
+                    foundAt = foundAtCentroidLine;
+                    foundOnBranch = br;
+                    return true;
+                }
+            }
+            //not found
+            is_pside = false;
+            foundAt = -1;
+            foundOnBranch = null;
+            return false;
+
+        }
+        public void AddLineHubConnection(CentroidLineHub anotherHub)
+        {
+            if (connectedLineHubs == null)
+            {
+                connectedLineHubs = new List<CentroidLineHub>();
+            }
+            connectedLineHubs.Add(anotherHub);
+        }
+
+
+        GlyphCentroidBranch anotherCentroidBranch;
+        int foundAtLineIndex;
+        bool is_pside;
+        public void SetHeadConnnection(GlyphCentroidBranch anotherCentroidBranch, int foundAtLineIndex, bool is_pside)
+        {
+
+            this.anotherCentroidBranch = anotherCentroidBranch;
+            this.foundAtLineIndex = foundAtLineIndex;
+            this.is_pside = is_pside;
+        }
+        public GlyphTriangle GetHeadConnectedTriangle()
+        {
+            if (anotherCentroidBranch == null) { return null; }
+            return anotherCentroidBranch.GetTriangle(foundAtLineIndex, is_pside);
+        }
+
+
     }
 
 
