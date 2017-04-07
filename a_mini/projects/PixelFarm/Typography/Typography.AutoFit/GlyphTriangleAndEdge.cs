@@ -6,11 +6,8 @@ using System.Numerics;
 namespace Typography.Rendering
 {
 
-
     public class GlyphTriangle
     {
-
-
         DelaunayTriangle _tri;
         public EdgeLine e0;
         public EdgeLine e1;
@@ -83,6 +80,7 @@ namespace Typography.Rendering
         public double x1;
         public double y1;
 
+        static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
@@ -111,7 +109,7 @@ namespace Typography.Rendering
             //-------------------
             if (x1 == x0)
             {
-                this.SlopKind = LineSlopeKind.Vertical;
+                this.SlopeKind = LineSlopeKind.Vertical;
                 SlopAngle = 1;
             }
             else
@@ -119,19 +117,19 @@ namespace Typography.Rendering
                 SlopAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
                 if (SlopAngle > _85degreeToRad)
                 {
-                    SlopKind = LineSlopeKind.Vertical;
+                    SlopeKind = LineSlopeKind.Vertical;
                 }
                 else if (SlopAngle < _15degreeToRad)
                 {
-                    SlopKind = LineSlopeKind.Horizontal;
+                    SlopeKind = LineSlopeKind.Horizontal;
                 }
                 else
                 {
-                    SlopKind = LineSlopeKind.Other;
+                    SlopeKind = LineSlopeKind.Other;
                 }
             }
         }
-        public LineSlopeKind SlopKind
+        public LineSlopeKind SlopeKind
         {
             get;
             private set;
@@ -167,7 +165,7 @@ namespace Typography.Rendering
         }
         public override string ToString()
         {
-            return SlopKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
+            return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
         }
 
         public EdgeLine GetMatchingOutsideEdge()

@@ -102,5 +102,29 @@ namespace Typography.Rendering
 
             return p0.Y - (m1) * p0.X;
         }
+
+
+        internal static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
+        internal static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
+        internal static readonly double _03degreeToRad = MyMath.DegreesToRadians(3);
+        internal static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+
+
+
+        internal static float FindDiffToFitInteger(float actualValue)
+        {
+            int floor = (int)actualValue;
+            float diff = actualValue - floor;
+            if (diff >= 0.5)
+            {
+                //move up
+                return (floor + 1) - actualValue;
+            }
+            else
+            {
+                //move down
+                return actualValue - floor;
+            }
+        }
     }
 }

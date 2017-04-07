@@ -11,6 +11,7 @@ namespace SampleWinForms.UI
 
         public bool DrawCentroidBone { get; set; }
         public bool DrawGlyphBone { get; set; }
+        public bool GenDynamicOutline { get; set; }
 #if DEBUG
         static void DrawPointKind(CanvasPainter painter, GlyphPoint2D point, float scale)
         {
@@ -70,7 +71,7 @@ namespace SampleWinForms.UI
                 DrawPointKind(painter, u_data_q, scale);
 
 
-                switch (edge.SlopKind)
+                switch (edge.SlopeKind)
                 {
                     default:
                         painter.StrokeColor = PixelFarm.Drawing.Color.Green;
@@ -101,7 +102,7 @@ namespace SampleWinForms.UI
             }
             else
             {
-                switch (edge.SlopKind)
+                switch (edge.SlopeKind)
                 {
                     default:
                         painter.StrokeColor = PixelFarm.Drawing.Color.LightGray;
@@ -218,7 +219,7 @@ namespace SampleWinForms.UI
 
                     var jointAPoint = jointA.Position;
                     var jointBPoint = jointB.Position;
-                    painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
+                    painter.StrokeColor = bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta;
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
                         jointBPoint.X * pxscale, jointBPoint.Y * pxscale
@@ -231,7 +232,7 @@ namespace SampleWinForms.UI
                     var jointAPoint = jointA.Position;
                     var mid = bone.TipEdge.GetMidPoint();
 
-                    painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
+                    painter.StrokeColor = bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta;
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
                         mid.X * pxscale, mid.Y * pxscale
@@ -240,6 +241,7 @@ namespace SampleWinForms.UI
                 }
                 if (i == 0)
                 {
+                    //for first bone
                     var headpos = branch.GetHeadPosition();
                     var prevColor = painter.FillColor;
                     painter.FillColor = PixelFarm.Drawing.Color.DeepPink;
@@ -287,6 +289,14 @@ namespace SampleWinForms.UI
             }
             //--------------- 
             Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHub = glyphFitOutline.GetCentroidLineHubs();
+            //--------------- 
+
+            if (this.GenDynamicOutline)
+            {
+                GlyphDynamicOutline dynamicOutline = glyphFitOutline.CreateGlyphDynamicOutline();
+
+            }
+
             foreach (CentroidLineHub lineHub in centroidLineHub.Values)
             {
                 Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
