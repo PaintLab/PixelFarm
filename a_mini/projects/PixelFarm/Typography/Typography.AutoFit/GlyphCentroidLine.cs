@@ -10,10 +10,10 @@ namespace Typography.Rendering
     {
         public List<GlyphCentroidLine> lines = new List<GlyphCentroidLine>();
         public List<GlyphBone> bones = new List<GlyphBone>();
-        public readonly GlyphTriangle tri;
-        public GlyphCentroidBranch(GlyphTriangle tri)
+        public readonly GlyphTriangle startTri;
+        public GlyphCentroidBranch(GlyphTriangle startTri)
         {
-            this.tri = tri;
+            this.startTri = startTri;
         }
         public void AddCentroidLine(GlyphCentroidLine line)
         {
@@ -21,15 +21,13 @@ namespace Typography.Rendering
         }
         public Vector2 GetHeadPosition()
         {
+            //after create bone process
             if (bones.Count == 0)
             {
                 return Vector2.Zero;
             }
             else
             {
-
-
-
                 return bones[0].JointA.Position;
             }
         }
@@ -130,15 +128,14 @@ namespace Typography.Rendering
             ////---------------------------------------- 
             ////collect bone joint, along centroid line?
 
+
+
             foreach (GlyphCentroidBranch branch in branches.Values)
             {
                 List<GlyphCentroidLine> lineList = branch.lines;
                 List<GlyphBone> glyphBones = branch.bones;
                 int j = lineList.Count;
-                if (j > 1)
-                {
 
-                }
                 for (int i = 0; i < j; ++i)
                 {
                     //for each centroid line
@@ -271,8 +268,8 @@ namespace Typography.Rendering
             //for p and q, count number of outside edge
             //if outsideEdgeCount of triangle >=2 -> this triangle is tip part
 
-            int p_outsideEdgeCount = OutSideEdgeCount(p);
-            int q_outsideEdgeCount = OutSideEdgeCount(q);
+            //int p_outsideEdgeCount = OutSideEdgeCount(p);
+            //int q_outsideEdgeCount = OutSideEdgeCount(q);
             //bool p_isTip = false;
             //bool q_isTip = false;
 
@@ -456,13 +453,13 @@ namespace Typography.Rendering
                                                 {
                                                     boneJoint.SetTipEdge(edgeA);
                                                     boneJoint.AddRibEndAt(edgeB, perpend_B);
-                                                 
+
                                                 }
                                                 else if (edgeB.SlopKind == LineSlopeKind.Vertical)
                                                 {
                                                     //b
                                                     boneJoint.SetTipEdge(edgeB);
-                                                    boneJoint.AddRibEndAt(edgeA, perpend_A); 
+                                                    boneJoint.AddRibEndAt(edgeA, perpend_A);
                                                 }
                                                 else
                                                 {
@@ -477,14 +474,14 @@ namespace Typography.Rendering
                                                 {
                                                     boneJoint.SetTipEdge(edgeA);
                                                     boneJoint.AddRibEndAt(edgeB, perpend_B);
-                          
+
                                                 }
                                                 else if (edgeB.SlopKind == LineSlopeKind.Horizontal)
                                                 {
                                                     //b
                                                     boneJoint.SetTipEdge(edgeB);
                                                     boneJoint.AddRibEndAt(edgeA, perpend_A);
-                                                   
+
                                                 }
                                                 else
                                                 {

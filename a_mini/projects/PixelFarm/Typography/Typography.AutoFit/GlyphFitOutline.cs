@@ -69,7 +69,7 @@ namespace Typography.Rendering
                             {
                                 lineHub = new CentroidLineHub(connectWithPrevTri);
                                 centroidLineHubs[connectWithPrevTri] = lineHub;
-                              
+
                                 //start new facet 
                             }
                             else
@@ -111,7 +111,7 @@ namespace Typography.Rendering
                 GlyphTriangle lastTri = _triangles[triCount - 1];
                 if (firstTri.IsConnectedWith(lastTri))
                 {
-                    //_centroidLines.Add(new GlyphCentroidLine(lastTri, firstTri));
+                    currentCentroidLineHub.AddChild(new GlyphCentroidLine(lastTri, firstTri));
                 }
             }
             //----------------------------------------
