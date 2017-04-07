@@ -219,7 +219,7 @@ namespace SampleWinForms.UI
 
                     var jointAPoint = jointA.Position;
                     var jointBPoint = jointB.Position;
-                    painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
+                    painter.StrokeColor = bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta;
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
                         jointBPoint.X * pxscale, jointBPoint.Y * pxscale
@@ -232,7 +232,7 @@ namespace SampleWinForms.UI
                     var jointAPoint = jointA.Position;
                     var mid = bone.TipEdge.GetMidPoint();
 
-                    painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
+                    painter.StrokeColor = bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta;
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
                         mid.X * pxscale, mid.Y * pxscale
@@ -241,6 +241,7 @@ namespace SampleWinForms.UI
                 }
                 if (i == 0)
                 {
+                    //for first bone
                     var headpos = branch.GetHeadPosition();
                     var prevColor = painter.FillColor;
                     painter.FillColor = PixelFarm.Drawing.Color.DeepPink;

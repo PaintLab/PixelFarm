@@ -209,7 +209,8 @@ namespace Typography.Rendering
             }
         }
 
-        public void CreateBones()
+
+        internal void CreateBones(List<GlyphBone> newlyCreatedBones)
         {
             //int centroidLineCount = _centroidLines.Count;
             ////do bone length histogram
@@ -255,6 +256,7 @@ namespace Typography.Rendering
                         {
                             //not the last one
                             GlyphBone bone = new GlyphBone(joint, joint.TipEdge);
+                            newlyCreatedBones.Add(bone);
                             glyphBones.Add(bone);
                         }
                     }
@@ -265,6 +267,7 @@ namespace Typography.Rendering
                         GlyphCentroidLine nextline = lineList[i + 1];
                         GlyphBoneJoint nextJoint = nextline.BoneJoint;
                         GlyphBone bone = new GlyphBone(joint, nextJoint);
+                        newlyCreatedBones.Add(bone);
                         glyphBones.Add(bone);
                     }
                     else
@@ -274,6 +277,7 @@ namespace Typography.Rendering
                         {
                             //not the last one
                             GlyphBone bone = new GlyphBone(joint, joint.TipEdge);
+                            newlyCreatedBones.Add(bone);
                             glyphBones.Add(bone);
                         }
                     }
@@ -363,10 +367,10 @@ namespace Typography.Rendering
 
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
 
-        public double SlopAngle { get; private set; }
+        public double SlopeAngle { get; private set; }
 
 
-        public LineSlopeKind SlopKind { get; private set; }
+        public LineSlopeKind SlopeKind { get; private set; }
 
 
         internal void AnalyzeAndMarkEdges()
@@ -396,23 +400,23 @@ namespace Typography.Rendering
 
             if (x1 == x0)
             {
-                this.SlopKind = LineSlopeKind.Vertical;
-                SlopAngle = 1;
+                this.SlopeKind = LineSlopeKind.Vertical;
+                SlopeAngle = 1;
             }
             else
             {
-                SlopAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-                if (SlopAngle > _85degreeToRad)
+                SlopeAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
+                if (SlopeAngle > MyMath._85degreeToRad)
                 {
-                    SlopKind = LineSlopeKind.Vertical;
+                    SlopeKind = LineSlopeKind.Vertical;
                 }
-                else if (SlopAngle < _03degreeToRad) //_15degreeToRad
+                else if (SlopeAngle < MyMath._03degreeToRad) //_15degreeToRad
                 {
-                    SlopKind = LineSlopeKind.Horizontal;
+                    SlopeKind = LineSlopeKind.Horizontal;
                 }
                 else
                 {
-                    SlopKind = LineSlopeKind.Other;
+                    SlopeKind = LineSlopeKind.Other;
                 }
             }
             //--------------------------------------
@@ -538,7 +542,7 @@ namespace Typography.Rendering
                             default: throw new NotSupportedException();
                             case 0:
                                 {
-                                    switch (boneJoint.OwnerCentroidLine.SlopKind)
+                                    switch (boneJoint.OwnerCentroidLine.SlopeKind)
                                     {
                                         case LineSlopeKind.Horizontal:
                                             {
@@ -595,7 +599,7 @@ namespace Typography.Rendering
                                 break;
                             case 1:
                                 {
-                                    switch (boneJoint.OwnerCentroidLine.SlopKind)
+                                    switch (boneJoint.OwnerCentroidLine.SlopeKind)
                                     {
                                         case LineSlopeKind.Horizontal:
                                             {
@@ -875,23 +879,20 @@ namespace Typography.Rendering
                 return minAt;
             }
         }
-        /// <summary>
-        /// count number of outside edge
-        /// </summary>
-        /// <param name="t"></param>
-        /// <returns></returns>
-        static int OutSideEdgeCount(GlyphTriangle t)
-        {
-            int n = 0;
-            n += t.e0.IsOutside ? 1 : 0;
-            n += t.e1.IsOutside ? 1 : 0;
-            n += t.e2.IsOutside ? 1 : 0;
-            return n;
-        }
-        static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
-        static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
-        static readonly double _03degreeToRad = MyMath.DegreesToRadians(3);
-        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+        ///// <summary>
+        ///// count number of outside edge
+        ///// </summary>
+        ///// <param name="t"></param>
+        ///// <returns></returns>
+        //static int OutSideEdgeCount(GlyphTriangle t)
+        //{
+        //    int n = 0;
+        //    n += t.e0.IsOutside ? 1 : 0;
+        //    n += t.e1.IsOutside ? 1 : 0;
+        //    n += t.e2.IsOutside ? 1 : 0;
+        //    return n;
+        //}
+
         public override string ToString()
         {
             return p + " -> " + q;

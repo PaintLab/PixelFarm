@@ -14,6 +14,7 @@ namespace Typography.Rendering
         public readonly GlyphBoneJoint JointA;
         public readonly GlyphBoneJoint JointB;
 
+        double _len;
         public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
         {
 #if DEBUG
@@ -24,19 +25,68 @@ namespace Typography.Rendering
 #endif
             JointA = a;
             JointB = b;
+
+            var bpos = b.Position;
+            _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
+            EvaluteSlope(a.Position, bpos);
         }
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
         {
             JointA = a;
             TipEdge = tipEdge;
+
+            var midPoint = tipEdge.GetMidPoint();
+            _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
+            EvaluteSlope(a.Position, midPoint);
         }
+        void EvaluteSlope(Vector2 p, Vector2 q)
+        {
+
+            double x0 = p.X;
+            double y0 = p.Y;
+            //q
+            double x1 = q.X;
+            double y1 = q.Y;
+
+            if (x1 == x0)
+            {
+                this.SlopeKind = LineSlopeKind.Vertical;
+                SlopeAngle = 1;
+            }
+            else
+            {
+                SlopeAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
+                if (SlopeAngle > MyMath._85degreeToRad)
+                {
+                    SlopeKind = LineSlopeKind.Vertical;
+                }
+                else if (SlopeAngle < MyMath._03degreeToRad) //_15degreeToRad
+                {
+                    SlopeKind = LineSlopeKind.Horizontal;
+                }
+                else
+                {
+                    SlopeKind = LineSlopeKind.Other;
+                }
+            }
+        }
+        internal double SlopeAngle { get; set; }
+        public LineSlopeKind SlopeKind { get; set; }
+        internal double Length
+        {
+            get
+            {
+                return _len;
+            }
+        }
+        public bool IsLongBone { get; internal set; }
     }
 
     public class GlyphBoneJoint
     {
         //Bone joint connects (contact) 'inside' EdgeLines
         //(_p_contact_edge, _q_contact_edge)
-         
+
         public EdgeLine _p_contact_edge;
         public EdgeLine _q_contact_edge;
         GlyphCentroidLine _owner;

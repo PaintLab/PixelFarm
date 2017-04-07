@@ -102,5 +102,11 @@ namespace Typography.Rendering
 
             return p0.Y - (m1) * p0.X;
         }
+
+
+        internal static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
+        internal static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
+        internal static readonly double _03degreeToRad = MyMath.DegreesToRadians(3);
+        internal static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
     }
 }

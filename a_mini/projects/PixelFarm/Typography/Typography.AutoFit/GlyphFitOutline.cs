@@ -39,6 +39,8 @@ namespace Typography.Rendering
 
 
         Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs;
+        List<CentroidLineHub> lineHubs;
+
         void Analyze()
         {
             //we analyze each triangle here 
@@ -132,7 +134,7 @@ namespace Typography.Rendering
                 }
             }
             //----------------------------------------
-            List<CentroidLineHub> lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values.Count);
+            lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values.Count);
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
                 hub.AnalyzeEachBranchForEdgeInfo();
@@ -141,9 +143,10 @@ namespace Typography.Rendering
             //----------------------------------------
             //link each hub start point
             //----------------------------------------
+            List<GlyphBone> newBones = new List<GlyphBone>();
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
-                hub.CreateBones();
+                hub.CreateBones(newBones);
             }
             //----------------------------------------
             int lineHubCount = lineHubs.Count;
@@ -153,11 +156,8 @@ namespace Typography.Rendering
                 //link each hub to proper bone
                 FindStartHubLinkConnection(lineHubs[i], lineHubs);
             }
-            //----------------------------------------
-            //find exact glyph bounding box
-
-
-            //----------------------------------------
+            List<GlyphBone> outputVerticalLongBones = new List<GlyphBone>();
+            AnalyzeBoneLength(newBones, outputVerticalLongBones);
         }
         static void FindStartHubLinkConnection(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
         {
@@ -184,57 +184,43 @@ namespace Typography.Rendering
                 }
             }
         }
-        void AnalyzeBoneLength()
+
+        static void AnalyzeBoneLength(List<GlyphBone> newBones, List<GlyphBone> outputVerticalLongBones)
         {
-            ////sort by bone len
-            //int j = boneList2.Count;
-            //boneList2.Sort((b0, b1) => b0.boneLength.CompareTo(b1.boneLength));
+            //----------------------------------------
+            //collect major bones
+            newBones.Sort((b0, b1) => b0.Length.CompareTo(b1.Length));
+            //----------------------------------------
+            //find exact glyph bounding box
+            //median
+            int n = newBones.Count;
+            GlyphBone medianBone = newBones[n / 2];
+            //classify bone len
 
-            //////find length of the 1st percentile
-            //////avg 
-            ////double total = 0;
-            ////for (int i = j - 1; i >= 0; --i)
-            ////{
-            ////    total += boneList2[i].boneLength;
-            ////}
-            ////double avg = total / j;
-            ////we use 
+            double medianLen = medianBone.Length;
+            double median_x2 = medianLen + medianLen;
+            //----------------------------------------
 
-            //if (j >= 10)
-            //{
-            //    //find 1st 10
-            //    int group_n = j / 10;
-            //    double total = 0;
-            //    int index = j - 1;
-            //    for (int i = group_n - 1; i >= 0; --i)
-            //    {
-            //        //avg of first group
-            //        total += boneList2[index].boneLength;
-            //        index--;
-            //    }
-            //    //
-            //    double maxgroup_avg = total / group_n;
-
-            //    int mid = (j - 1) / 2;
-            //    double median = boneList2[mid].boneLength;
-            //    //assign long bone
-            //    double median_x2 = median + median;
-            //    //
-            //    for (int i = j - 1; i >= 0; --i)
-            //    {
-            //        GlyphCentroidLine bone = boneList2[i];
-            //        if (bone.boneLength > median_x2)
-            //        {
-            //            bone.IsLongBone = true;
-            //        }
-            //    }
-
-            //}
-            //else
-            //{
-
-            //}
-
+            int boneCount = newBones.Count;
+            for (int i = boneCount - 1; i >= 0; --i)
+            {
+                GlyphBone b = newBones[i];
+                if (b.Length >= median_x2)
+                {
+                    b.IsLongBone = true;
+                    if (b.SlopeKind == LineSlopeKind.Vertical)
+                    {
+                        outputVerticalLongBones.Add(b);
+                    }
+                }
+                else
+                {
+                    //since all bones are sorted
+                    //not need to go more
+                    break;
+                }
+            }
+            //----------------------------------------
         }
 
         static int FindLatestConnectedTri(List<GlyphTriangle> usedTriList, GlyphTriangle tri)
