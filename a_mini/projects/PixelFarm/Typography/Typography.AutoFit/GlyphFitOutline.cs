@@ -11,12 +11,17 @@ namespace Typography.Rendering
 
         List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
         List<GlyphContour> _contours;
-        Polygon _polygon;
+#if DEBUG
+        Polygon _dbugpolygon;
+#endif
+
 
         internal GlyphFitOutline(Polygon polygon, List<GlyphContour> contours)
         {
             this._contours = contours;
-            this._polygon = polygon;
+#if DEBUG
+            this._dbugpolygon = polygon; //for debug only ***
+#endif
             //generate triangle from poly2 tri
             foreach (DelaunayTriangle tri in polygon.Triangles)
             {
@@ -148,6 +153,10 @@ namespace Typography.Rendering
                 //link each hub to proper bone
                 FindStartHubLinkConnection(lineHubs[i], lineHubs);
             }
+            //----------------------------------------
+            //find exact glyph bounding box
+
+
             //----------------------------------------
         }
         static void FindStartHubLinkConnection(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)

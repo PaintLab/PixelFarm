@@ -133,12 +133,6 @@ namespace Typography.Rendering
             }
             return false;
         }
-        public GlyphTriangle GetTriangle(int cenroidLine, bool is_pside)
-        {
-            GlyphCentroidLine line = lines[cenroidLine];
-            return is_pside ? line.p : line.q;
-
-        }
     }
 
 
@@ -328,11 +322,16 @@ namespace Typography.Rendering
             this.anotherCentroidBranch = anotherCentroidBranch;
             this.foundOnJoint = foundOnJoint;
         }
+
+
         public GlyphBoneJoint GetHeadConnectedJoint()
         {
             return foundOnJoint;
         }
-
+        public List<CentroidLineHub> GetConnectedLineHubs()
+        {
+            return this.connectedLineHubs;
+        }
 
     }
 

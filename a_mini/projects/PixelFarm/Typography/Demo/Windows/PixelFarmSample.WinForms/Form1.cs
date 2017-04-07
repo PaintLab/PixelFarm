@@ -125,6 +125,7 @@ namespace SampleWinForms
             chkShowTess.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawCentroidBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawGlyphBone.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDynamicOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             //----------
             txtGlyphBoneCount.KeyDown += (s, e) =>
             {
@@ -414,6 +415,7 @@ namespace SampleWinForms
                 {
                     debugGlyphVisualizer.DrawCentroidBone = this.chkDrawCentroidBone.Checked;
                     debugGlyphVisualizer.DrawGlyphBone = this.chkDrawGlyphBone.Checked;
+                    debugGlyphVisualizer.GenDynamicOutline = this.chkDynamicOutline.Checked;
                     debugGlyphVisualizer.dbugDrawTriangulatedGlyph(painter, fitOutline, scale);
                 }
 #endif
