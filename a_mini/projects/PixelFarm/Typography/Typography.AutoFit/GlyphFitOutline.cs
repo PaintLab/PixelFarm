@@ -131,18 +131,20 @@ namespace Typography.Rendering
             }
             //----------------------------------------
             //link each hub start point
-
-            int lineHubCount = lineHubs.Count;
-            for (int i = 0; i < lineHubCount; ++i)
-            {
-
-                FindStartHubLinkConnection(lineHubs[i], lineHubs);
-            }
             //----------------------------------------
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
                 hub.CreateBones();
             }
+            //----------------------------------------
+            int lineHubCount = lineHubs.Count;
+            for (int i = 0; i < lineHubCount; ++i)
+            {
+                //after create bone
+                //link each hub to proper bone
+                FindStartHubLinkConnection(lineHubs[i], lineHubs);
+            }
+            //----------------------------------------
         }
         static void FindStartHubLinkConnection(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
         {

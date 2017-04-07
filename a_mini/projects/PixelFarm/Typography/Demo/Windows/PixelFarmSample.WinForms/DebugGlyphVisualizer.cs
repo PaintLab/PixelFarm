@@ -333,17 +333,19 @@ namespace SampleWinForms.UI
                 painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 7, 7);
                 painter.FillColor = prevFill;
 
-                GlyphTriangle head = lineHub.GetHeadConnectedTriangle();
-                if (head != null)
+                if (drawGlyphBone)
                 {
-                    var cent_x = head.CentroidX;
-                    var cent_y = head.CentroidY;
-                    painter.Line(
-                            cent_x * pxscale, cent_y * pxscale,
-                            hubCenter.X * pxscale, hubCenter.Y * pxscale,
-                            PixelFarm.Drawing.Color.Magenta);
+                    GlyphTriangle head = lineHub.GetHeadConnectedTriangle();
+                    if (head != null)
+                    {
+                        var cent_x = head.CentroidX;
+                        var cent_y = head.CentroidY;
+                        painter.Line(
+                                cent_x * pxscale, cent_y * pxscale,
+                                hubCenter.X * pxscale, hubCenter.Y * pxscale,
+                                PixelFarm.Drawing.Color.Magenta);
+                    }
                 }
-
             }
             //draw link between hub
 
