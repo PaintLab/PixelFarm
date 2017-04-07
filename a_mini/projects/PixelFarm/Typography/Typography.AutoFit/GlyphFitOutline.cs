@@ -17,6 +17,7 @@ namespace Typography.Rendering
         {
             this._contours = contours;
             this._polygon = polygon;
+            //generate triangle from poly2 tri
             foreach (DelaunayTriangle tri in polygon.Triangles)
             {
                 tri.MarkAsActualTriangle();
@@ -26,7 +27,10 @@ namespace Typography.Rendering
             Analyze();
         }
 
-
+        public GlyphDynamicOutline CreateGlyphDynamicOutline()
+        {
+            return new GlyphDynamicOutline(this.centroidLineHubs);
+        }
 
 
         Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs;
