@@ -149,6 +149,7 @@ namespace Typography.Rendering
         static void FindStartHubLinkConnection(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
         {
             int j = hubs.Count;
+            System.Numerics.Vector2 hubHeadPos = analyzingHub.GetCenterPos();
             for (int i = 0; i < j; ++i)
             {
 
@@ -158,13 +159,14 @@ namespace Typography.Rendering
                     continue;
                 }
                 GlyphCentroidBranch foundOnBr;
-                int foundAt;
-                bool is_pside;
-                if (hub.FindTriangle(analyzingHub.MainTriangle, out foundOnBr, out foundAt, out is_pside))
+                GlyphBoneJoint foundOnJoint;
+
+                if (hub.FindBoneJoint(analyzingHub.MainTriangle, hubHeadPos, out foundOnBr, out foundOnJoint))
                 {
                     //found
                     hub.AddLineHubConnection(analyzingHub);
-                    analyzingHub.SetHeadConnnection(foundOnBr, foundAt, is_pside);
+                    //
+                    analyzingHub.SetHeadConnnection(foundOnBr, foundOnJoint);
                     return;
                 }
             }

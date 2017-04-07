@@ -16,7 +16,17 @@ namespace Typography.Rendering
             const double degToRad = System.Math.PI / 180.0f;
             return degrees * degToRad;
         }
-      
+        public static bool MinDistanceFirst(Vector2 baseVec, Vector2 compare0, Vector2 compare1)
+        {
+            return (SquareDistance(baseVec, compare0) < SquareDistance(baseVec, compare1)) ? true : false;
+        }
+
+        static double SquareDistance(Vector2 v0, Vector2 v1)
+        {
+            double xdiff = v1.X - v0.X;
+            double ydiff = v1.Y - v0.Y;
+            return (xdiff * xdiff) + (ydiff * ydiff);
+        }
         public static int Min(double v0, double v1, double v2)
         {
             //find min of 3

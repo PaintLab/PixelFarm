@@ -46,27 +46,93 @@ namespace Typography.Rendering
                 lineList[i].AnalyzeAndMarkEdges();
             }
         }
-        public int FindTriangle(GlyphTriangle tri, out bool is_pside)
+
+        /// <summary>
+        /// find nearest joint that contains tri 
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="tri"></param>
+        /// <returns></returns>
+        public GlyphBoneJoint FindNearestJoint(Vector2 pos, GlyphTriangle tri)
         {
-            int j = lines.Count;
-            for (int i = 0; i < j; ++i)
+            for (int i = bones.Count - 1; i >= 0; --i)
             {
-                GlyphCentroidLine line = lines[i];
-                if (line.p == tri)
+                GlyphBoneJoint joint1 = FindJoint(bones[i], pos, tri);
+                if (joint1 != null)
                 {
-                    is_pside = true;
-                    return i;
-                }
-                else if (line.q == tri)
-                {
-                    is_pside = false;
-                    return i;
+                    if (i == 0)
+                    {
+                        //this is the last one 
+                        //so just return
+                        return joint1;
+                    }
+                    else
+                    {
+                        //not the last one
+                        //compare again with sibling joint
+                        GlyphBoneJoint joint2 = FindJoint(bones[i - 1], pos, tri);
+                        if (joint2 == null)
+                        {
+                            return joint1;
+                        }
+                        else
+                        {
+                            //compare distance again
+                            return MyMath.MinDistanceFirst(pos, joint1.Position, joint2.Position) ? joint1 : joint2;
+                        }
+                    }
                 }
             }
-            is_pside = false;
-            return -1; //not found
+            //not found
+            return null;
         }
+        static GlyphBoneJoint FindJoint(GlyphBone b, Vector2 pos, GlyphTriangle tri)
+        {
+            //bone link 2 joint
+            //find what joint 
 
+            GlyphBoneJoint foundOnA = null;
+            GlyphBoneJoint foundOnB = null;
+            if (b.JointA != null && FoundTriOnJoint(b.JointA, tri))
+            {
+                foundOnA = b.JointA;
+            }
+            if (b.JointB != null && FoundTriOnJoint(b.JointB, tri))
+            {
+                foundOnB = b.JointB;
+            }
+
+            if (b.TipEdge != null)
+            {
+
+            }
+
+            if (foundOnA != null && foundOnB != null)
+            {
+                //select 1
+                //nearest distance (pos to joint a) or (pos to joint b) 
+                return MyMath.MinDistanceFirst(pos, foundOnA.Position, foundOnB.Position) ? foundOnA : foundOnB;
+            }
+            else if (foundOnA != null)
+            {
+                return foundOnA;
+            }
+            else if (foundOnB != null)
+            {
+                return foundOnB;
+            }
+            return null;
+        }
+        static bool FoundTriOnJoint(GlyphBoneJoint joint, GlyphTriangle tri)
+        {
+            GlyphCentroidLine ownerCentroidLine = joint.OwnerCentroidLine;
+            if (ownerCentroidLine.p == tri || ownerCentroidLine.q == tri)
+            {
+                //found
+                return true;
+            }
+            return false;
+        }
         public GlyphTriangle GetTriangle(int cenroidLine, bool is_pside)
         {
             GlyphCentroidLine line = lines[cenroidLine];
@@ -228,23 +294,19 @@ namespace Typography.Rendering
 
 
         //--------------------------------------------------------
-        public bool FindTriangle(GlyphTriangle tri, out GlyphCentroidBranch foundOnBranch, out int foundAt, out bool is_pside)
+        public bool FindBoneJoint(GlyphTriangle tri, Vector2 pos, out GlyphCentroidBranch foundOnBranch, out GlyphBoneJoint foundOnJoint)
         {
             foreach (GlyphCentroidBranch br in branches.Values)
             {
-                int foundAtCentroidLine = br.FindTriangle(tri, out is_pside);
-                if (foundAtCentroidLine > -1)
+                foundOnJoint = br.FindNearestJoint(pos, tri);
+                if (foundOnJoint != null)
                 {
-                    //found tri  on this branch
-                    foundAt = foundAtCentroidLine;
                     foundOnBranch = br;
                     return true;
                 }
             }
-            //not found
-            is_pside = false;
-            foundAt = -1;
             foundOnBranch = null;
+            foundOnJoint = null;
             return false;
 
         }
@@ -259,19 +321,16 @@ namespace Typography.Rendering
 
 
         GlyphCentroidBranch anotherCentroidBranch;
-        int foundAtLineIndex;
-        bool is_pside;
-        public void SetHeadConnnection(GlyphCentroidBranch anotherCentroidBranch, int foundAtLineIndex, bool is_pside)
-        {
+        GlyphBoneJoint foundOnJoint;
 
-            this.anotherCentroidBranch = anotherCentroidBranch;
-            this.foundAtLineIndex = foundAtLineIndex;
-            this.is_pside = is_pside;
-        }
-        public GlyphTriangle GetHeadConnectedTriangle()
+        public void SetHeadConnnection(GlyphCentroidBranch anotherCentroidBranch, GlyphBoneJoint foundOnJoint)
         {
-            if (anotherCentroidBranch == null) { return null; }
-            return anotherCentroidBranch.GetTriangle(foundAtLineIndex, is_pside);
+            this.anotherCentroidBranch = anotherCentroidBranch;
+            this.foundOnJoint = foundOnJoint;
+        }
+        public GlyphBoneJoint GetHeadConnectedJoint()
+        {
+            return foundOnJoint;
         }
 
 

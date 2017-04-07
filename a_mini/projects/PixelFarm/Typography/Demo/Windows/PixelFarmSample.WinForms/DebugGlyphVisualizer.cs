@@ -335,13 +335,12 @@ namespace SampleWinForms.UI
 
                 if (drawGlyphBone)
                 {
-                    GlyphTriangle head = lineHub.GetHeadConnectedTriangle();
-                    if (head != null)
+                    GlyphBoneJoint joint = lineHub.GetHeadConnectedJoint();
+                    if (joint != null)
                     {
-                        var cent_x = head.CentroidX;
-                        var cent_y = head.CentroidY;
+                        var joint_pos = joint.Position;
                         painter.Line(
-                                cent_x * pxscale, cent_y * pxscale,
+                                joint_pos.X * pxscale, joint_pos.Y * pxscale,
                                 hubCenter.X * pxscale, hubCenter.Y * pxscale,
                                 PixelFarm.Drawing.Color.Magenta);
                     }
