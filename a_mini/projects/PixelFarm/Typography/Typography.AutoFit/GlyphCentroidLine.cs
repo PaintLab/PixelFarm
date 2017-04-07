@@ -547,13 +547,13 @@ namespace Typography.Rendering
                                         case LineSlopeKind.Horizontal:
                                             {
                                                 //centroid horizontal, tip-> vertical
-                                                if (edgeA.SlopKind == LineSlopeKind.Vertical)
+                                                if (edgeA.SlopeKind == LineSlopeKind.Vertical)
                                                 {
                                                     boneJoint.SetTipEdge(edgeA);
                                                     boneJoint.AddRibEndAt(edgeB, perpend_B);
 
                                                 }
-                                                else if (edgeB.SlopKind == LineSlopeKind.Vertical)
+                                                else if (edgeB.SlopeKind == LineSlopeKind.Vertical)
                                                 {
                                                     //b
                                                     boneJoint.SetTipEdge(edgeB);
@@ -568,13 +568,13 @@ namespace Typography.Rendering
                                         case LineSlopeKind.Vertical:
                                             {
                                                 //centroid vertical, -> tip horizontal
-                                                if (edgeA.SlopKind == LineSlopeKind.Horizontal)
+                                                if (edgeA.SlopeKind == LineSlopeKind.Horizontal)
                                                 {
                                                     boneJoint.SetTipEdge(edgeA);
                                                     boneJoint.AddRibEndAt(edgeB, perpend_B);
 
                                                 }
-                                                else if (edgeB.SlopKind == LineSlopeKind.Horizontal)
+                                                else if (edgeB.SlopeKind == LineSlopeKind.Horizontal)
                                                 {
                                                     //b
                                                     boneJoint.SetTipEdge(edgeB);
@@ -604,13 +604,13 @@ namespace Typography.Rendering
                                         case LineSlopeKind.Horizontal:
                                             {
                                                 //centroid horizontal, tip-> vertical
-                                                if (edgeA.SlopKind == LineSlopeKind.Vertical)
+                                                if (edgeA.SlopeKind == LineSlopeKind.Vertical)
                                                 {
                                                     boneJoint.SetTipEdge(edgeA);
                                                     boneJoint.AddRibEndAt(edgeB, perpend_B);
 
                                                 }
-                                                else if (edgeB.SlopKind == LineSlopeKind.Vertical)
+                                                else if (edgeB.SlopeKind == LineSlopeKind.Vertical)
                                                 {
                                                     //b
                                                     boneJoint.SetTipEdge(edgeB);
@@ -625,13 +625,13 @@ namespace Typography.Rendering
                                         case LineSlopeKind.Vertical:
                                             {
                                                 //centroid vertical, -> tip horizontal
-                                                if (edgeA.SlopKind == LineSlopeKind.Horizontal)
+                                                if (edgeA.SlopeKind == LineSlopeKind.Horizontal)
                                                 {
                                                     boneJoint.SetTipEdge(edgeA);
                                                     boneJoint.AddRibEndAt(edgeB, perpend_B);
 
                                                 }
-                                                else if (edgeB.SlopKind == LineSlopeKind.Horizontal)
+                                                else if (edgeB.SlopeKind == LineSlopeKind.Horizontal)
                                                 {
                                                     //b
                                                     boneJoint.SetTipEdge(edgeB);
@@ -758,13 +758,13 @@ namespace Typography.Rendering
                 double qe_midX = qe.X, qe_midY = qe.Y;
 
 
-                if (targetEdge.SlopKind == LineSlopeKind.Vertical)
+                if (targetEdge.SlopeKind == LineSlopeKind.Vertical)
                 {
                     //TODO: review same side edge (Fan shape)
                     if (pe_midX < qe_midX)
                     {
                         targetEdge.IsLeftSide = true;
-                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopKind == LineSlopeKind.Vertical)
+                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
                         {
                             targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                         }
@@ -772,23 +772,23 @@ namespace Typography.Rendering
                     else
                     {
                         //matchingEdgeLine.IsLeftSide = true;
-                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopKind == LineSlopeKind.Vertical)
+                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
                         {
                             targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                         }
                     }
                 }
-                else if (targetEdge.SlopKind == LineSlopeKind.Horizontal)
+                else if (targetEdge.SlopeKind == LineSlopeKind.Horizontal)
                 {
                     //TODO: review same side edge (Fan shape)
 
                     if (pe_midY > qe_midY)
                     {
                         //p side is upper , q side is lower
-                        if (targetEdge.SlopKind == LineSlopeKind.Horizontal)
+                        if (targetEdge.SlopeKind == LineSlopeKind.Horizontal)
                         {
                             targetEdge.IsUpper = true;
-                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopKind == LineSlopeKind.Horizontal)
+                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
                             {
                                 targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                             }
@@ -796,10 +796,10 @@ namespace Typography.Rendering
                     }
                     else
                     {
-                        if (matchingEdgeLine.SlopKind == LineSlopeKind.Horizontal)
+                        if (matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
                         {
                             // matchingEdgeLine.IsUpper = true;
-                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopKind == LineSlopeKind.Horizontal)
+                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
                             {
                                 targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                             }

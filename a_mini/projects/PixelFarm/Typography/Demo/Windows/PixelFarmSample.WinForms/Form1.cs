@@ -386,10 +386,7 @@ namespace SampleWinForms
 
             if (chkMinorOffset.Checked)
             {
-                if (diff > 0.5)
-                {
-                    diff = 0;
-                }
+                
                 this.txtLeftXControl.Text = left2.ToString() + " =>" + floor_1 + ",diff=" + diff;
             }
             else
@@ -418,7 +415,7 @@ namespace SampleWinForms
                 //5.3
                 //painter.Fill(vxs);
 
-                float xpos = 0;// - diff;
+                float xpos = 5;// - diff;
                 if (chkMinorOffset.Checked)
                 {
                     xpos -= diff;

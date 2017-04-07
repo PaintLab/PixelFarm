@@ -159,7 +159,7 @@ namespace Typography.Rendering
                 return;
             }
 
-            switch (edge.SlopKind)
+            switch (edge.SlopeKind)
             {
 
                 case LineSlopeKind.Horizontal:

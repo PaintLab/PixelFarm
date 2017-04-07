@@ -71,7 +71,7 @@ namespace SampleWinForms.UI
                 DrawPointKind(painter, u_data_q, scale);
 
 
-                switch (edge.SlopKind)
+                switch (edge.SlopeKind)
                 {
                     default:
                         painter.StrokeColor = PixelFarm.Drawing.Color.Green;
@@ -102,7 +102,7 @@ namespace SampleWinForms.UI
             }
             else
             {
-                switch (edge.SlopKind)
+                switch (edge.SlopeKind)
                 {
                     default:
                         painter.StrokeColor = PixelFarm.Drawing.Color.LightGray;
