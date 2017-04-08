@@ -146,7 +146,7 @@ namespace PixelFarm.Agg
             //backup
             LcdDistributionLut lcdLut = _currentLcdLut;
             _tempForwardAccumBuffer.Reset();
-            int srcIndex = 0;
+
             //start pixel
             int destImgIndex = 0;
             int destX = 0;
@@ -159,11 +159,43 @@ namespace PixelFarm.Agg
             byte color_alpha = _color.alpha;
             //-----------------
             //single line 
-            srcIndex = 0;
+            int srcIndex = 0;
             destImgIndex = (destStride * y) + (destX * 4); //4 color component
 
 
             int nwidth = srcW;
+
+            {
+                //start with pre-accum ***
+                byte e_0, e_1, e_2; //energy 0,1,2 
+                {
+                    byte write0 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex]);
+                    byte write1 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 1]);
+                    byte write2 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 2]);
+
+                    //0
+                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                        lcdLut.Tertiary(write0),
+                        lcdLut.Secondary(write0),
+                        lcdLut.Primary(write0),
+                        out e_0);
+                    //1
+                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                        lcdLut.Tertiary(write1),
+                        lcdLut.Secondary(write1),
+                        lcdLut.Primary(write1),
+                        out e_1);
+                    //2
+                    _tempForwardAccumBuffer.WriteAccumAndReadBack(
+                        lcdLut.Tertiary(write2),
+                        lcdLut.Secondary(write2),
+                        lcdLut.Primary(write2),
+                        out e_2);
+                }
+                srcIndex += 3;
+                nwidth -= 3;
+            }
+
             while (nwidth > 3)
             {
                 //------------

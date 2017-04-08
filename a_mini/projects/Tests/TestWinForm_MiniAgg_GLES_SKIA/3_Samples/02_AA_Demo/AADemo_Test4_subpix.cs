@@ -13,7 +13,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         B,
         C,
         D,
-        E, F, 
+        E, F,
 
     }
 
@@ -26,6 +26,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
     {
         public AADemoTest4_subpix()
         {
+            this.EnableSubPix = true;
         }
         static byte[] CreateGreyScaleBuffer(ActualImage img)
         {
@@ -190,6 +191,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         //    while(--width);
         //}
 
+        [DemoConfig]
+        public bool EnableSubPix
+        {
+            get; set;
+        }
 
         [DemoConfig]
         public Sample Sample
@@ -197,8 +203,6 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             get;
             set;
         }
-
-
 
         void RunSampleA(CanvasPainter p)
         {
@@ -271,10 +275,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //---------------------------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 1.0f;
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelRendering = this.EnableSubPix;
             p.Line(0, 0, 15, 20);
-
-
         }
         static double DegToRad(double degree)
         {
@@ -289,7 +291,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelRendering = this.EnableSubPix;
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Blue;
             p.StrokeWidth = 2.0f;
@@ -313,7 +315,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelRendering = this.EnableSubPix;
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
@@ -322,26 +324,25 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int lineLen = 10;
             int x = 30;
             int y = 30;
-            p.FillColor = PixelFarm.Drawing.Color.Black;
+            p.FillColor = PixelFarm.Drawing.Color.Black; 
+            p.FillRectangle(0, 0, 1, 1);
 
-            p.FillRectangle(0, 0, 20, 20);
+            //for (int i = 0; i < 360; i += 30)
+            //{
+            //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
 
-            for (int i = 0; i < 360; i += 30)
-            {
-                p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
-
-            }
-            y += 10;
-            for (int i = 0; i < 360; i += 360)
-            {
-                p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
-            }
+            //}
+            //y += 10;
+            //for (int i = 0; i < 360; i += 360)
+            //{
+            //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+            //}
         }
         void RunSampleF(CanvasPainter p)
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelRendering = this.EnableSubPix;
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
@@ -370,7 +371,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //p.FillRectangle(0, 0, 20, 20);
 
         }
-        
+
         public override void Draw(CanvasPainter p)
         {
             //specific for agg
@@ -400,7 +401,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 case Sample.F:
                     RunSampleF(p);
                     break;
-              
+
             }
 
         }
