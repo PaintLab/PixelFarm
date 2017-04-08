@@ -456,9 +456,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     {
 
                         forwardBuffer.WriteAccumAndReadBack(
-                         g8Lut.Tertiary(greyScaleValue),
-                         g8Lut.Secondary(greyScaleValue),
-                         g8Lut.Primary(greyScaleValue), out e0);
+                         g8Lut.TertiaryFromLevel(greyScaleValue),
+                         g8Lut.SecondaryFromLevel(greyScaleValue),
+                         g8Lut.PrimaryFromLevel(greyScaleValue), out e0);
 
                         //5. blend this pixel to dest image (expand to 5 (sub)pixel)                          
                         BlendPixel(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
@@ -573,11 +573,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     //convert to grey scale  
                     int v = src[srcImgIndex];// (int)((greyScaleValue / 255f) * 65f);
                     //----------------------------------
-                    destBuffer[destImgIndex] += lut.Tertiary(v);
-                    destBuffer[destImgIndex + 1] += lut.Secondary(v);
-                    destBuffer[destImgIndex + 2] += lut.Primary(v);
-                    destBuffer[destImgIndex + 3] += lut.Secondary(v);
-                    destBuffer[destImgIndex + 4] += lut.Tertiary(v);
+                    destBuffer[destImgIndex] += lut.TertiaryFromLevel(v);
+                    destBuffer[destImgIndex + 1] += lut.SecondaryFromLevel(v);
+                    destBuffer[destImgIndex + 2] += lut.PrimaryFromLevel(v);
+                    destBuffer[destImgIndex + 3] += lut.SecondaryFromLevel(v);
+                    destBuffer[destImgIndex + 4] += lut.TertiaryFromLevel(v);
                     destImgIndex++;
                     srcImgIndex++;
                 }

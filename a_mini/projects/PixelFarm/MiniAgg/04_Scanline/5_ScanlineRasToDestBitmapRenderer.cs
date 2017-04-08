@@ -174,21 +174,21 @@ namespace PixelFarm.Agg
 
                     //0
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write0),
-                        lcdLut.Secondary(write0),
-                        lcdLut.Primary(write0),
+                        lcdLut.TertiaryFromLevel(write0),
+                        lcdLut.SecondaryFromLevel(write0),
+                        lcdLut.PrimaryFromLevel(write0),
                         out e_0);
                     //1
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write1),
-                        lcdLut.Secondary(write1),
-                        lcdLut.Primary(write1),
+                        lcdLut.TertiaryFromLevel(write1),
+                        lcdLut.SecondaryFromLevel(write1),
+                        lcdLut.PrimaryFromLevel(write1),
                         out e_1);
                     //2
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write2),
-                        lcdLut.Secondary(write2),
-                        lcdLut.Primary(write2),
+                        lcdLut.TertiaryFromLevel(write2),
+                        lcdLut.SecondaryFromLevel(write2),
+                        lcdLut.PrimaryFromLevel(write2),
                         out e_2);
                 }
                 srcIndex += 3;
@@ -213,21 +213,21 @@ namespace PixelFarm.Agg
 
                     //0
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write0),
-                        lcdLut.Secondary(write0),
-                        lcdLut.Primary(write0),
+                        lcdLut.TertiaryFromLevel(write0),
+                        lcdLut.SecondaryFromLevel(write0),
+                        lcdLut.PrimaryFromLevel(write0),
                         out e_0);
                     //1
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write1),
-                        lcdLut.Secondary(write1),
-                        lcdLut.Primary(write1),
+                        lcdLut.TertiaryFromLevel(write1),
+                        lcdLut.SecondaryFromLevel(write1),
+                        lcdLut.PrimaryFromLevel(write1),
                         out e_1);
                     //2
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write2),
-                        lcdLut.Secondary(write2),
-                        lcdLut.Primary(write2),
+                        lcdLut.TertiaryFromLevel(write2),
+                        lcdLut.SecondaryFromLevel(write2),
+                        lcdLut.PrimaryFromLevel(write2),
                         out e_2);
                 }
 
@@ -380,21 +380,21 @@ namespace PixelFarm.Agg
 
                     //0
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write0),
-                        lcdLut.Secondary(write0),
-                        lcdLut.Primary(write0),
+                        lcdLut.TertiaryFromLevel(write0),
+                        lcdLut.SecondaryFromLevel(write0),
+                        lcdLut.PrimaryFromLevel(write0),
                         out e_0);
                     //1
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write1),
-                        lcdLut.Secondary(write1),
-                        lcdLut.Primary(write1),
+                        lcdLut.TertiaryFromLevel(write1),
+                        lcdLut.SecondaryFromLevel(write1),
+                        lcdLut.PrimaryFromLevel(write1),
                         out e_1);
                     //2
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write2),
-                        lcdLut.Secondary(write2),
-                        lcdLut.Primary(write2),
+                        lcdLut.TertiaryFromLevel(write2),
+                        lcdLut.SecondaryFromLevel(write2),
+                        lcdLut.PrimaryFromLevel(write2),
                         out e_2);
                 }
 
@@ -536,21 +536,21 @@ namespace PixelFarm.Agg
 
                     //0
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write0),
-                        lcdLut.Secondary(write0),
-                        lcdLut.Primary(write0),
+                        lcdLut.TertiaryFromLevel(write0),
+                        lcdLut.SecondaryFromLevel(write0),
+                        lcdLut.PrimaryFromLevel(write0),
                         out e_0);
                     //1
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write1),
-                        lcdLut.Secondary(write1),
-                        lcdLut.Primary(write1),
+                        lcdLut.TertiaryFromLevel(write1),
+                        lcdLut.SecondaryFromLevel(write1),
+                        lcdLut.PrimaryFromLevel(write1),
                         out e_1);
                     //2
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.Tertiary(write2),
-                        lcdLut.Secondary(write2),
-                        lcdLut.Primary(write2),
+                        lcdLut.TertiaryFromLevel(write2),
+                        lcdLut.SecondaryFromLevel(write2),
+                        lcdLut.PrimaryFromLevel(write2),
                         out e_2);
                 }
 
@@ -1289,6 +1289,11 @@ namespace PixelFarm.Agg
         byte[] m_secondary;
         byte[] m_tertiary;
 
+        byte[] _primary_255;
+        byte[] _secondary_255;
+        byte[] _tertiary_255;
+
+
         int _nLevel;
         public LcdDistributionLut(GrayLevels grayLevel, double prim, double second, double tert)
         {
@@ -1315,6 +1320,23 @@ namespace PixelFarm.Agg
                 m_secondary[i] = (byte)Math.Floor(second * i);
                 m_tertiary[i] = (byte)Math.Floor(tert * i);
             }
+
+
+            _primary_255 = new byte[256];
+            _secondary_255 = new byte[256];
+            _tertiary_255 = new byte[256];
+            //--------------------------------
+
+            int n_level = _nLevel;
+            for (int i = 0; i < 256; ++i)
+            {
+                //convert to level;
+                //(byte)((orgLevel / 255f) * _nLevel);
+                byte level = (byte)((i / 255f) * n_level); //TODO: review here
+                _primary_255[i] = m_primary[level];
+                _secondary_255[i] = m_secondary[level];
+                _tertiary_255[i] = m_tertiary[level];
+            }
         }
 
         /// <summary>
@@ -1324,36 +1346,21 @@ namespace PixelFarm.Agg
         /// <returns></returns>
         public byte Convert255ToLevel(byte orgLevel)
         {
-            return (byte)((orgLevel / 255f) * _nLevel);
-            //return (byte)(((orgLevel + 1f) / 256f) * _nLevel);
+            return (byte)(((orgLevel + 1f) / 256f) * _nLevel);
         }
-        public byte Primary(int greyLevelIndex)
+        public byte PrimaryFromLevel(int greyLevelIndex)
         {
             return m_primary[greyLevelIndex];
         }
-        public byte Secondary(int greyLevelIndex)
+        public byte SecondaryFromLevel(int greyLevelIndex)
         {
             return m_secondary[greyLevelIndex];
         }
-        public byte Tertiary(int greyLevelIndex)
+        public byte TertiaryFromLevel(int greyLevelIndex)
         {
             return m_tertiary[greyLevelIndex];
         }
 
-        ////
-        //public byte PrimaryFromCoverage(int coverage)
-        //{
-        //    return coverage_primary[coverage];
-        //}
-
-        //public byte SecondayFromCoverage(int coverage)
-        //{
-        //    return coverage_secondary[coverage];
-        //}
-        //public byte TertiaryFromCoverage(int coverage)
-        //{
-        //    return coverage_tertiary[coverage];
-        //}
     }
 
 
