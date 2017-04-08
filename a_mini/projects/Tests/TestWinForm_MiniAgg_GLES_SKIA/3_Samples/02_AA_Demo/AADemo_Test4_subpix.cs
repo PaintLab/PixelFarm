@@ -324,8 +324,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int lineLen = 10;
             int x = 30;
             int y = 30;
-            p.FillColor = PixelFarm.Drawing.Color.Black; 
-            p.FillRectangle(0, 0, 1, 1);
+            p.FillColor = PixelFarm.Drawing.Color.Black;
+            p.FillRectLBWH(3, 3, 1, 1);
 
             //for (int i = 0; i < 360; i += 30)
             //{
@@ -406,10 +406,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
         }
 
-        static LcdDistributionLut g8_1_2lcd = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 0.5, 0.25, 0.125);
+        static LcdDistributionLut g8_4_2_1 = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 4 / 8f, 2 / 8f, 1 / 8f);
         void BlendWithLcdTechnique(ActualImage destImg, ActualImage glyphImg, PixelFarm.Drawing.Color color)
         {
-            var g8Lut = g8_1_2lcd;
+            var g8Lut = g8_4_2_1;
             var forwardBuffer = new ScanlineSubPixelRasterizer.TempForwardAccumBuffer();
             int glyphH = glyphImg.Height;
             int glyphW = glyphImg.Width;
@@ -553,7 +553,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //agg lcd test
             //lcd_distribution_lut<ggo_gray8> lut(1.0/3.0, 2.0/9.0, 1.0/9.0);
             //lcd_distribution_lut<ggo_gray8> lut(0.5, 0.25, 0.125);
-            LcdDistributionLut lut = g8_1_2lcd;
+            LcdDistributionLut lut = g8_4_2_1;
             int destImgStride = srcW + 4; //expand the original gray scale 
             newImageStride = destImgStride;
 

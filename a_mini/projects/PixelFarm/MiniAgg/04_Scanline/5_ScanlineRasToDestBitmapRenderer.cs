@@ -33,11 +33,23 @@ namespace PixelFarm.Agg
         TempForwardAccumBuffer _forwardTempBuff = new TempForwardAccumBuffer();
         /// grey scale 4, 1/9 lcd lookup table
         /// </summary> 
-        static readonly LcdDistributionLut s_g8_9parts_3_2_1_LcdLut = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 3f / 9f, 2f / 9f, 1f / 9f);
+        static readonly LcdDistributionLut s_g9_3_2_1 = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 3f / 9f, 2f / 9f, 1f / 9f);
+
+        //---------------------------------
+        //Mixim's:
+        // Try to play with different coefficients for the primary,
+        // secondary, and tertiary distribution weights.
+        // Steve Gibson recommends 1/3, 2/9, and 1/9, but it produces 
+        // too blur edges. It's better to increase the weight of the 
+        // primary and secondary pixel, then the text looks much crisper 
+        // with inconsiderably increased "color fringing".
+        //---------------------------------
         /// <summary>
         /// grey scale 4, 1/8 lcd lookup table
         /// </summary>
-        static readonly LcdDistributionLut s_g8_8parts_4_2_1_LcdLut = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 4f / 8f, 2f / 8f, 1f / 8f);
+        static readonly LcdDistributionLut s_g8_4_2_1 = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 4f / 8f, 2f / 8f, 1f / 8f);
+
+
 
         Color _color;
         const int BASE_MASK = 255;
@@ -56,7 +68,7 @@ namespace PixelFarm.Agg
         internal ScanlineSubPixelRasterizer()
         {
             //default
-            _currentLcdLut = s_g8_9parts_3_2_1_LcdLut;// s_g4_1_2LcdLut;
+            _currentLcdLut = s_g8_4_2_1;
         }
         public void RenderScanline(
             IImageReaderWriter dest,
@@ -1261,6 +1273,9 @@ namespace PixelFarm.Agg
 
 
 
+
+
+
     public class LcdDistributionLut
     {
 
@@ -1368,7 +1383,7 @@ namespace PixelFarm.Agg
                 m_tertiary[i] = (byte)Math.Floor(tert * i);
             }
 
-
+            //0-255
             _primary_255 = new byte[256];
             _secondary_255 = new byte[256];
             _tertiary_255 = new byte[256];
@@ -1421,6 +1436,9 @@ namespace PixelFarm.Agg
         {
             return _tertiary_255[raw];
         }
+
+
+         
     }
 
 
