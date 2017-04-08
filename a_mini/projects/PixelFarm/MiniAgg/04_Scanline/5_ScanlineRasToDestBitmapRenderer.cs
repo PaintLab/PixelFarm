@@ -168,27 +168,50 @@ namespace PixelFarm.Agg
                 //start with pre-accum ***
                 byte e_0, e_1, e_2; //energy 0,1,2 
                 {
-                    byte write0 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex]);
-                    byte write1 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 1]);
-                    byte write2 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 2]);
+                    //byte write0 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex]);
+                    //byte write1 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 1]);
+                    //byte write2 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 2]);
+
+                    ////0
+                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    //    lcdLut.TertiaryFromLevel(write0),
+                    //    lcdLut.SecondaryFromLevel(write0),
+                    //    lcdLut.PrimaryFromLevel(write0),
+                    //    out e_0);
+                    ////1
+                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    //    lcdLut.TertiaryFromLevel(write1),
+                    //    lcdLut.SecondaryFromLevel(write1),
+                    //    lcdLut.PrimaryFromLevel(write1),
+                    //    out e_1);
+                    ////2
+                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    //    lcdLut.TertiaryFromLevel(write2),
+                    //    lcdLut.SecondaryFromLevel(write2),
+                    //    lcdLut.PrimaryFromLevel(write2),
+                    //    out e_2);
+
+                    byte write0 = grayScaleLineBuffer[srcIndex];
+                    byte write1 = grayScaleLineBuffer[srcIndex + 1];
+                    byte write2 = grayScaleLineBuffer[srcIndex + 2];
 
                     //0
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.TertiaryFromLevel(write0),
-                        lcdLut.SecondaryFromLevel(write0),
-                        lcdLut.PrimaryFromLevel(write0),
+                        lcdLut.TertiaryFromRaw255(write0),
+                        lcdLut.SecondaryFromRaw255(write0),
+                        lcdLut.PrimaryFromRaw255(write0),
                         out e_0);
                     //1
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.TertiaryFromLevel(write1),
-                        lcdLut.SecondaryFromLevel(write1),
-                        lcdLut.PrimaryFromLevel(write1),
+                        lcdLut.TertiaryFromRaw255(write1),
+                        lcdLut.SecondaryFromRaw255(write1),
+                        lcdLut.PrimaryFromRaw255(write1),
                         out e_1);
                     //2
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.TertiaryFromLevel(write2),
-                        lcdLut.SecondaryFromLevel(write2),
-                        lcdLut.PrimaryFromLevel(write2),
+                        lcdLut.TertiaryFromRaw255(write2),
+                        lcdLut.SecondaryFromRaw255(write2),
+                        lcdLut.PrimaryFromRaw255(write2),
                         out e_2);
                 }
                 srcIndex += 3;
@@ -207,28 +230,52 @@ namespace PixelFarm.Agg
 
                 byte e_0, e_1, e_2; //energy 0,1,2 
                 {
-                    byte write0 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex]);
-                    byte write1 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 1]);
-                    byte write2 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 2]);
+                    //byte write0 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex]);
+                    //byte write1 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 1]);
+                    //byte write2 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 2]);
+
+                    ////0
+                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    //    lcdLut.TertiaryFromLevel(write0),
+                    //    lcdLut.SecondaryFromLevel(write0),
+                    //    lcdLut.PrimaryFromLevel(write0),
+                    //    out e_0);
+                    ////1
+                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    //    lcdLut.TertiaryFromLevel(write1),
+                    //    lcdLut.SecondaryFromLevel(write1),
+                    //    lcdLut.PrimaryFromLevel(write1),
+                    //    out e_1);
+                    ////2
+                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+                    //    lcdLut.TertiaryFromLevel(write2),
+                    //    lcdLut.SecondaryFromLevel(write2),
+                    //    lcdLut.PrimaryFromLevel(write2),
+                    //    out e_2);
+
+                    byte write0 = grayScaleLineBuffer[srcIndex];
+                    byte write1 = grayScaleLineBuffer[srcIndex + 1];
+                    byte write2 = grayScaleLineBuffer[srcIndex + 2];
 
                     //0
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.TertiaryFromLevel(write0),
-                        lcdLut.SecondaryFromLevel(write0),
-                        lcdLut.PrimaryFromLevel(write0),
+                        lcdLut.TertiaryFromRaw255(write0),
+                        lcdLut.SecondaryFromRaw255(write0),
+                        lcdLut.PrimaryFromRaw255(write0),
                         out e_0);
                     //1
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.TertiaryFromLevel(write1),
-                        lcdLut.SecondaryFromLevel(write1),
-                        lcdLut.PrimaryFromLevel(write1),
+                        lcdLut.TertiaryFromRaw255(write1),
+                        lcdLut.SecondaryFromRaw255(write1),
+                        lcdLut.PrimaryFromRaw255(write1),
                         out e_1);
                     //2
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
-                        lcdLut.TertiaryFromLevel(write2),
-                        lcdLut.SecondaryFromLevel(write2),
-                        lcdLut.PrimaryFromLevel(write2),
+                        lcdLut.TertiaryFromRaw255(write2),
+                        lcdLut.SecondaryFromRaw255(write2),
+                        lcdLut.PrimaryFromRaw255(write2),
                         out e_2);
+
                 }
 
                 //4. blend 3 pixels 
@@ -1348,6 +1395,7 @@ namespace PixelFarm.Agg
         {
             return (byte)(((orgLevel + 1f) / 256f) * _nLevel);
         }
+        //
         public byte PrimaryFromLevel(int greyLevelIndex)
         {
             return m_primary[greyLevelIndex];
@@ -1360,7 +1408,19 @@ namespace PixelFarm.Agg
         {
             return m_tertiary[greyLevelIndex];
         }
-
+        //-----------------------------------------------
+        public byte PrimaryFromRaw255(byte raw)
+        {
+            return _primary_255[raw];
+        }
+        public byte SecondaryFromRaw255(byte raw)
+        {
+            return _secondary_255[raw];
+        }
+        public byte TertiaryFromRaw255(byte raw)
+        {
+            return _tertiary_255[raw];
+        }
     }
 
 
