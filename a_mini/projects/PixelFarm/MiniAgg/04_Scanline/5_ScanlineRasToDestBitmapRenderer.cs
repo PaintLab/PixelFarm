@@ -13,7 +13,6 @@
 // Contact: mcseem@antigrain.com
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
-//----------------------------------------------------------------------------
 
 using System;
 using PixelFarm.Drawing;
@@ -34,13 +33,13 @@ namespace PixelFarm.Agg
         TempForwardAccumBuffer _forwardTempBuff = new TempForwardAccumBuffer();
         /// grey scale 4, 1/9 lcd lookup table
         /// </summary> 
-        static readonly LcdDistributionLut s_g4_1_3LcdLut = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray4, 1f / 3f, 2f / 9f, 1f / 9f);
+        static readonly LcdDistributionLut s_g8_9parts_3_2_1_LcdLut = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 3f / 9f, 2f / 9f, 1f / 9f);
         /// <summary>
         /// grey scale 4, 1/8 lcd lookup table
         /// </summary>
-        static readonly LcdDistributionLut s_g4_1_2LcdLut = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray4, 1f / 2f, 1f / 4f, 1f / 8f);
-        Color _color;
+        static readonly LcdDistributionLut s_g8_8parts_4_2_1_LcdLut = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 4f / 8f, 2f / 8f, 1f / 8f);
 
+        Color _color;
         const int BASE_MASK = 255;
         //in this case EXISTING_A (existing alpha always 0) 
         //const int EXISTING_A = 0; 
@@ -57,7 +56,7 @@ namespace PixelFarm.Agg
         internal ScanlineSubPixelRasterizer()
         {
             //default
-            _currentLcdLut = s_g4_1_2LcdLut;
+            _currentLcdLut = s_g8_8parts_4_2_1_LcdLut;// s_g4_1_2LcdLut;
         }
         public void RenderScanline(
             IImageReaderWriter dest,
@@ -1218,6 +1217,9 @@ namespace PixelFarm.Agg
     public class LcdDistributionLut
     {
 
+        //----------------------------------------------------------------------------
+        //port from original soure: http://antigrain.com/stuff/lcd_font.zip (MIT) 
+        //----------------------------------------------------------------------------
         // Sub-pixel energy distribution lookup table.
         // See description by Steve Gibson: http://grc.com/cttech.htm
         // The class automatically normalizes the coefficients
@@ -1265,73 +1267,56 @@ namespace PixelFarm.Agg
         //struct ggo_gray8 { enum { num_levels = 65, format = GGO_GRAY8_BITMAP }; };
 
 
-        public enum GrayLevels
+        public enum GrayLevels : byte
         {
             /// <summary>
             /// 4 level grey scale (0-3)
             /// </summary>
-            Gray2,
+            Gray4 = 4,
             /// <summary>
             /// 16 levels grey scale (0-15)
             /// </summary>
-            Gray4,
+            Gray16 = 16,
             /// <summary>
             /// 65 levels grey scale (0-64)
             /// </summary>
-            Gray8
+            Gray64 = 64
         }
 
         GrayLevels grayLevel;
+        //look up table 
         byte[] m_primary;
         byte[] m_secondary;
         byte[] m_tertiary;
 
-        //--------------------------------
-        //coverage to primary,seconday,tertiary
-        //this is my extension
-        byte[] coverage_primary;
-        byte[] coverage_secondary;
-        byte[] coverage_tertiary;
-        //--------------------------------
-        int numLevel;
-
-        public LcdDistributionLut(LcdDistributionLut.GrayLevels grayLevel, double prim, double second, double tert)
+        int _nLevel;
+        public LcdDistributionLut(GrayLevels grayLevel, double prim, double second, double tert)
         {
             this.grayLevel = grayLevel;
-
             switch (grayLevel)
             {
                 default: throw new System.NotSupportedException();
-                case GrayLevels.Gray2: numLevel = 5; break;
-                case GrayLevels.Gray4: numLevel = 17; break;
-                case GrayLevels.Gray8: numLevel = 65; break;
+                case GrayLevels.Gray4: _nLevel = (byte)grayLevel; break;
+                case GrayLevels.Gray16: _nLevel = (byte)grayLevel; break;
+                case GrayLevels.Gray64: _nLevel = (byte)grayLevel; break;
             }
-            m_primary = new byte[numLevel];
-            m_secondary = new byte[numLevel];
-            m_tertiary = new byte[numLevel];
-
-            double norm = (255.0 / (numLevel - 1)) / (prim + second * 2 + tert * 2);
+            //---------------------------------------------------------
+            m_primary = new byte[_nLevel + 1];
+            m_secondary = new byte[_nLevel + 1];
+            m_tertiary = new byte[_nLevel + 1];
+            //---------------------------------------------------------
+            double norm = (255.0 / (_nLevel)) / (prim + second * 2 + tert * 2);
             prim *= norm;
             second *= norm;
             tert *= norm;
-            for (int i = 0; i < numLevel; ++i)
+            for (int i = _nLevel; i >= 0; --i)
             {
                 m_primary[i] = (byte)Math.Floor(prim * i);
                 m_secondary[i] = (byte)Math.Floor(second * i);
                 m_tertiary[i] = (byte)Math.Floor(tert * i);
             }
-
-            coverage_primary = new byte[256];
-            coverage_secondary = new byte[256];
-            coverage_tertiary = new byte[256];
-            for (int i = 0; i < 256; ++i)
-            {
-                int toGreyScaleLevel = (byte)(((float)(i + 1) / 256f) * ((float)numLevel - 1));
-                coverage_primary[i] = m_primary[toGreyScaleLevel];
-                coverage_secondary[i] = m_secondary[toGreyScaleLevel];
-                coverage_tertiary[i] = m_tertiary[toGreyScaleLevel];
-            }
         }
+
         /// <summary>
         /// convert from original 0-255 to level for this lut
         /// </summary>
@@ -1339,7 +1324,8 @@ namespace PixelFarm.Agg
         /// <returns></returns>
         public byte Convert255ToLevel(byte orgLevel)
         {
-            return (byte)((((float)orgLevel + 1) / 256f) * (float)(numLevel - 1));
+
+            return (byte)(((orgLevel + 1f) / 256f) * _nLevel);
         }
         public byte Primary(int greyLevelIndex)
         {
@@ -1354,20 +1340,20 @@ namespace PixelFarm.Agg
             return m_tertiary[greyLevelIndex];
         }
 
-        //
-        public byte PrimaryFromCoverage(int coverage)
-        {
-            return coverage_primary[coverage];
-        }
+        ////
+        //public byte PrimaryFromCoverage(int coverage)
+        //{
+        //    return coverage_primary[coverage];
+        //}
 
-        public byte SecondayFromCoverage(int coverage)
-        {
-            return coverage_secondary[coverage];
-        }
-        public byte TertiaryFromCoverage(int coverage)
-        {
-            return coverage_tertiary[coverage];
-        }
+        //public byte SecondayFromCoverage(int coverage)
+        //{
+        //    return coverage_secondary[coverage];
+        //}
+        //public byte TertiaryFromCoverage(int coverage)
+        //{
+        //    return coverage_tertiary[coverage];
+        //}
     }
 
 
