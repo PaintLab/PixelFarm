@@ -56,7 +56,7 @@ namespace PixelFarm.Agg
         internal ScanlineSubPixelRasterizer()
         {
             //default
-            _currentLcdLut = s_g8_8parts_4_2_1_LcdLut;// s_g4_1_2LcdLut;
+            _currentLcdLut = s_g8_9parts_3_2_1_LcdLut;// s_g4_1_2LcdLut;
         }
         public void RenderScanline(
             IImageReaderWriter dest,
@@ -1324,8 +1324,8 @@ namespace PixelFarm.Agg
         /// <returns></returns>
         public byte Convert255ToLevel(byte orgLevel)
         {
-
-            return (byte)(((orgLevel + 1f) / 256f) * _nLevel);
+            return (byte)((orgLevel / 255f) * _nLevel);
+            //return (byte)(((orgLevel + 1f) / 256f) * _nLevel);
         }
         public byte Primary(int greyLevelIndex)
         {
