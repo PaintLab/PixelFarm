@@ -47,9 +47,12 @@ namespace PixelFarm.Agg
         /// <summary>
         /// grey scale 4, 1/8 lcd lookup table
         /// </summary>
+        //static readonly LcdDistributionLut s_g8_4_2_1 = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 4f / 8f, 2f / 8f, 0.0001f / 8f);
         static readonly LcdDistributionLut s_g8_4_2_1 = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 4f / 8f, 2f / 8f, 1f / 8f);
 
-
+        //more color fringe
+        //static readonly LcdDistributionLut s_g8_4_2_1q = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 5f / 8f, 2.5f / 8f, 0.5f / 8f);
+        //static readonly LcdDistributionLut s_g8_4_2_1q = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 6f / 5f, 1f / 8f, 0.5f / 8f);
 
         Color _color;
         const int BASE_MASK = 255;
@@ -68,7 +71,7 @@ namespace PixelFarm.Agg
         internal ScanlineSubPixelRasterizer()
         {
             //default
-            _currentLcdLut = s_g8_4_2_1;
+            _currentLcdLut = s_g9_3_2_1;
         }
         public void RenderScanline(
             IImageReaderWriter dest,
