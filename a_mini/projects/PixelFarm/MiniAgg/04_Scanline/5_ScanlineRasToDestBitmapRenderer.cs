@@ -26,6 +26,7 @@ namespace PixelFarm.Agg
     }
 
 
+
     public partial class ScanlineSubPixelRasterizer
     {
         //this class design for render 32 bits RGBA  
@@ -71,13 +72,14 @@ namespace PixelFarm.Agg
         /// </summary>
         SingleLineBuffer _grayScaleLine = new SingleLineBuffer();
         LcdDistributionLut _currentLcdLut = null;
-
+        InternalBrightnessAndContrastAdjustment _contrastAdjustment = new InternalBrightnessAndContrastAdjustment();
 
 
         internal ScanlineSubPixelRasterizer()
         {
             //default
             _currentLcdLut = s_g9_3_2_1;
+            _contrastAdjustment.SetParameters(0, 30);
         }
 
         public LcdDistributionLut LcdLut
@@ -511,13 +513,14 @@ namespace PixelFarm.Agg
                 //--------------------------------------------------------
                 //note: that we swap e_2 and e_0 on the fly***
                 //-------------------------------------------------------- 
+                _contrastAdjustment.ApplyBytes(e_2, e_1, e_0, out e_2, out e_1, out e_0);
+
                 //write the 3 color-component of current pixel.
                 destImgBuffer[destImgIndex] = (byte)((((color_c0 - exc0) * (e_2 * color_alpha)) + (exc0 << 16)) >> 16); //swap on the fly
                 destImgBuffer[destImgIndex + 1] = (byte)((((color_c1 - exc1) * (e_1 * color_alpha)) + (exc1 << 16)) >> 16);
                 destImgBuffer[destImgIndex + 2] = (byte)((((color_c2 - exc2) * (e_0 * color_alpha)) + (exc2 << 16)) >> 16);//swap on the fly
                 //---------------------------------------------------------
                 destImgIndex += 4;
-
                 srcIndex += 3;
                 srcW -= 3;
             }
@@ -1742,9 +1745,6 @@ namespace PixelFarm.Agg
 
 
 
-
-
-
     public class LcdDistributionLut
     {
 
@@ -1868,6 +1868,13 @@ namespace PixelFarm.Agg
                 _secondary_255[i] = m_secondary[level];
                 _tertiary_255[i] = m_tertiary[level];
             }
+            //--------------------------------
+            //send lut to our contrast filter
+            //_contrastAdjustment.SetParameters(0, 30);
+            //_contrastAdjustment.ApplyGrayScale(_primary_255, _primary_255);
+            //_contrastAdjustment.ApplyGrayScale(_secondary_255, _secondary_255);
+            //_contrastAdjustment.ApplyGrayScale(_tertiary_255, _tertiary_255);
+            //--------------------------------
         }
 
         /// <summary>
