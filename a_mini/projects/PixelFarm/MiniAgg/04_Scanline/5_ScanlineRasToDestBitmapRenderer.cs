@@ -70,12 +70,24 @@ namespace PixelFarm.Agg
         SingleLineBuffer _grayScaleLine = new SingleLineBuffer();
         LcdDistributionLut _currentLcdLut = null;
 
+
+
         internal ScanlineSubPixelRasterizer()
         {
             //default
             _currentLcdLut = s_g8_4_2_1;
         }
-        public void RenderScanline(
+
+        public LcdDistributionLut LcdLut
+        {
+            get { return _currentLcdLut; }
+            set
+            {
+                _currentLcdLut = value;
+            }
+        }
+
+        public void RenderScanlines(
             IImageReaderWriter dest,
             ScanlineRasterizer sclineRas,
             Scanline scline,
@@ -131,21 +143,15 @@ namespace PixelFarm.Agg
                         _grayScaleLine.BlendHL(x, x2, color_alpha, covers[span.cover_index]);
                     }
                 }
+
                 //
-                BlendScanlineForAggSubPix(dest_buffer, dest_stride, scline.Y,
+                BlendScanlineForAggSubPix(
+                    dest_buffer,
+                    (dest_stride * scline.Y) + (0 * 4), //4 color component, TODO: review destX again, this version we write entire a scanline                 
                     src_w, src_stride, lineBuff, sclineRas.MinX, sclineRas.MaxX); //for agg subpixel rendering
 #if DEBUG
                 dbugMinScanlineCount++;
 #endif
-            }
-        }
-
-        public LcdDistributionLut LcdLut
-        {
-            get { return _currentLcdLut; }
-            set
-            {
-                _currentLcdLut = value;
             }
         }
 
@@ -158,8 +164,8 @@ namespace PixelFarm.Agg
         /// <param name="srcW"></param>
         /// <param name="srcStride"></param>
         /// <param name="grayScaleLineBuffer"></param>
-        void BlendScanlineForAggSubPix(byte[] destImgBuffer, int destStride,
-            int y,
+        void BlendScanlineForAggSubPix(byte[] destImgBuffer,
+            int destImgIndex,
             int srcW,
             int srcStride,
             byte[] grayScaleLineBuffer,
@@ -170,8 +176,6 @@ namespace PixelFarm.Agg
             LcdDistributionLut lcdLut = _currentLcdLut;
             _tempForwardAccumBuffer.Reset();
 
-            //TODO: review destX again, this version we write entire a scanline
-            int destX = 0;
             //-----------------
             //TODO: review color order here
             //B-G-R-A?   
@@ -181,8 +185,10 @@ namespace PixelFarm.Agg
             byte color_alpha = _color.alpha;
             //-----------------
             //single line 
+            //from tripple width (x3) grayScaleLineBuffer
+            //scale (merge) down to x1 destIndex 
+            //-----------------
             int srcIndex = 0;
-            int destImgIndex = (destStride * y) + (destX * 4); //4 color component
             int nwidth = srcW;
 
             {
@@ -1420,7 +1426,7 @@ namespace PixelFarm.Agg
                     }
                     break;
                 case Agg.ScanlineRenderMode.SubPixelRendering:
-                    scSubPixRas.RenderScanline(dest, sclineRas, scline, color);
+                    scSubPixRas.RenderScanlines(dest, sclineRas, scline, color);
                     break;
                 case Agg.ScanlineRenderMode.Custom:
                     while (sclineRas.SweepScanline(scline))

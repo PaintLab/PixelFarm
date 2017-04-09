@@ -324,7 +324,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int x = 30;
             int y = 30;
             p.FillColor = PixelFarm.Drawing.Color.Black;
-            p.FillRectLBWH(3, 3, 1, 1);
+            p.FillRectLBWH(3, 0, 1, 1);
 
             //for (int i = 0; i < 360; i += 30)
             //{
