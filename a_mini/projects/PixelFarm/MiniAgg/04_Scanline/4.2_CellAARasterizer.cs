@@ -454,16 +454,17 @@ namespace PixelFarm.Agg
 
             void RenderHLine(int ey, int x1, int y1, int x2, int y2)
             {
-                int ex1 = x1 >> poly_subpix.SHIFT;
-                int ex2 = x2 >> poly_subpix.SHIFT;
+               
                 //trivial case. Happens often
                 if (y1 == y2)
                 {
                     //***
-                    AddNewCell(ex2, ey);
+                    AddNewCell(x2 >> poly_subpix.SHIFT, ey);
                     //***
                     return;
                 }
+                int ex1 = x1 >> poly_subpix.SHIFT;
+                int ex2 = x2 >> poly_subpix.SHIFT;
 
                 int fx1 = x1 & (int)poly_subpix.MASK;
                 int fx2 = x2 & (int)poly_subpix.MASK;
