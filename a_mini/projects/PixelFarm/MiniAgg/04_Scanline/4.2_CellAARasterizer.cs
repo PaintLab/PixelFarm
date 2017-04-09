@@ -118,8 +118,10 @@ namespace PixelFarm.Agg
             int cCell_cover;
             int cCell_area;
             //------------------
+#if DEBUG
             int cCell_left;
             int cCell_right;
+#endif
             //------------------
             int m_min_x;
             int m_min_y;
@@ -203,7 +205,9 @@ namespace PixelFarm.Agg
                 if (ex2 > m_max_x) m_max_x = ex2;
                 if (ey2 < m_min_y) m_min_y = ey2;
                 if (ey2 > m_max_y) m_max_y = ey2;
+                //***
                 AddNewCell(ex1, ey1);
+                //***
                 //everything is on a single horizontal line
                 if (ey1 == ey2)
                 {
@@ -233,7 +237,9 @@ namespace PixelFarm.Agg
                     cCell_cover += delta;
                     cCell_area += two_fx * delta;
                     ey1 += incr;
+                    //***
                     AddNewCell(ex, ey1);
+                    //***
                     delta = first + first - POLY_SUBPIXEL_SCALE;
                     area = two_fx * delta;
                     while (ey1 != ey2)
@@ -241,7 +247,9 @@ namespace PixelFarm.Agg
                         cCell_cover = delta;
                         cCell_area = area;
                         ey1 += incr;
+                        //***
                         AddNewCell(ex, ey1);
+                        //***
                     }
                     delta = fy2 - POLY_SUBPIXEL_SCALE + first;
                     cCell_cover += delta;
@@ -271,7 +279,9 @@ namespace PixelFarm.Agg
                 x_from = x1 + delta;
                 RenderHLine(ey1, x1, fy1, x_from, first);
                 ey1 += incr;
+                //***
                 AddNewCell(x_from >> POLY_SUBPIXEL_SHIFT, ey1);
+                //***
                 if (ey1 != ey2)
                 {
                     p = POLY_SUBPIXEL_SCALE * dx;
@@ -294,10 +304,14 @@ namespace PixelFarm.Agg
                         }
 
                         x_to = x_from + delta;
+                        //***
                         RenderHLine(ey1, x_from, POLY_SUBPIXEL_SCALE - first, x_to, first);
+                        //***
                         x_from = x_to;
                         ey1 += incr;
+                        //***
                         AddNewCell(x_from >> POLY_SUBPIXEL_SHIFT, ey1);
+                        //***
                     }
                 }
                 RenderHLine(ey1, x_from, POLY_SUBPIXEL_SCALE - first, x2, fy2);
@@ -400,6 +414,7 @@ namespace PixelFarm.Agg
                 WriteCurrentCell();
                 cCell_x = x;
                 cCell_y = y;
+                //reset area and coverage after add new cell
                 cCell_cover = 0;
                 cCell_area = 0;
             }
@@ -429,9 +444,9 @@ namespace PixelFarm.Agg
                      cCell_x, cCell_y,
                      cCell_cover, cCell_area));
 #else
-                    m_cells.SetData(m_num_used_cells, CellAA.Create(
-                    cCell_x, cCell_y,
-                    cCell_cover, cCell_area));
+                     m_cells.SetData(m_num_used_cells, CellAA.Create(
+                     cCell_x, cCell_y,
+                     cCell_cover, cCell_area));
 #endif
                     m_num_used_cells++;
                 }
@@ -444,7 +459,9 @@ namespace PixelFarm.Agg
                 //trivial case. Happens often
                 if (y1 == y2)
                 {
+                    //***
                     AddNewCell(ex2, ey);
+                    //***
                     return;
                 }
 
@@ -485,7 +502,9 @@ namespace PixelFarm.Agg
                 cCell_cover += delta;
                 cCell_area += (fx1 + first) * delta;
                 ex1 += incr;
+                //***
                 AddNewCell(ex1, ey);
+                //***
                 y1 += delta;
                 if (ex1 != ex2)
                 {
@@ -513,7 +532,9 @@ namespace PixelFarm.Agg
                         cCell_area += (int)poly_subpix.SCALE * delta;
                         y1 += delta;
                         ex1 += incr;
+                        //***
                         AddNewCell(ex1, ey);
+                        //***
                     }
                 }
                 delta = y2 - y1;
