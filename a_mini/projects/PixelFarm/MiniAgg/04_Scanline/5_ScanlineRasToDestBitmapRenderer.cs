@@ -73,7 +73,7 @@ namespace PixelFarm.Agg
         internal ScanlineSubPixelRasterizer()
         {
             //default
-            _currentLcdLut = s_g9_3_2_1;
+            _currentLcdLut = s_g8_4_2_1;
         }
         public void RenderScanline(
             IImageReaderWriter dest,
