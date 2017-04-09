@@ -50,36 +50,49 @@ namespace PixelFarm.Agg
         // array of cells. ***
         struct CellAA
         {
-            public int x;
-            public int y;
-            public int cover;
-            public int area;
+            public readonly int x;
+            public readonly int y;
+            public readonly int cover;
+            public readonly int area;
 #if DEBUG
             public int dbugLeft;
             public int dbugRight;
 #endif
+            private CellAA(int x, int y, int cover, int area)
+            {
+                this.x = x;
+                this.y = y;
+                this.cover = cover;
+                this.area = area;
+#if DEBUG
+                dbugLeft = 0;
+                dbugRight = 0;
+#endif
+            }
+
             public static CellAA Create(int x, int y, int cover, int area)
             {
-                CellAA cell = new CellAA();
-                cell.x = x;
-                cell.y = y;
-                cell.cover = cover;
-                cell.area = area;
-                return cell;
+                return new CellAA(x, y, cover, area);
+                //CellAA cell = new CellAA();
+                //cell.x = x;
+                //cell.y = y;
+                //cell.cover = cover;
+                //cell.area = area;
+                //return cell;
             }
+#if DEBUG
             public static CellAA dbugCreate(int x, int y, int cover, int area, int left, int right)
             {
-                CellAA cell = new CellAA();
-                cell.x = x;
-                cell.y = y;
-                cell.cover = cover;
-                cell.area = area;
-#if DEBUG
+                CellAA cell = new CellAA(x, y, cover, area);
+                //cell.x = x;
+                //cell.y = y;
+                //cell.cover = cover;
+                //cell.area = area;
                 cell.dbugLeft = left;
                 cell.dbugRight = right;
-#endif
                 return cell;
             }
+#endif
 #if DEBUG
             public override string ToString()
             {
