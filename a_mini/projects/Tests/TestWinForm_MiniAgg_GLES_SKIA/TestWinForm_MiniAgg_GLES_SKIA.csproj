@@ -124,6 +124,7 @@
     <Compile Include="Experiment_AggFonts\FontSvg\SvgFontFace_LiberationSans.cs" />
     <Compile Include="Experiment_AggFonts\FontSvg\SvgFontStore.cs" />
     <Compile Include="Experiment_AggFonts\Font\MyTypeFacePrinter.cs" />
+    <Compile Include="Experiment_ColorBlend\BrightnessAndContrastAdjustment.cs" />
     <Compile Include="Experiment_ColorBlend\ColorCompoBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
