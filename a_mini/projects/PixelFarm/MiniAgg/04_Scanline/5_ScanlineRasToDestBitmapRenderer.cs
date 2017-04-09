@@ -163,8 +163,7 @@ namespace PixelFarm.Agg
             LcdDistributionLut lcdLut = _currentLcdLut;
             _tempForwardAccumBuffer.Reset();
 
-            //start pixel
-            int destImgIndex = 0;
+            //TODO: review destX again, this version we write entire a scanline
             int destX = 0;
             //-----------------
             //TODO: review color order here
@@ -176,37 +175,13 @@ namespace PixelFarm.Agg
             //-----------------
             //single line 
             int srcIndex = 0;
-            destImgIndex = (destStride * y) + (destX * 4); //4 color component
-
-
+            int destImgIndex = (destStride * y) + (destX * 4); //4 color component
             int nwidth = srcW;
 
             {
                 //start with pre-accum ***
                 byte e_0, e_1, e_2; //energy 0,1,2 
                 {
-                    //byte write0 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex]);
-                    //byte write1 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 1]);
-                    //byte write2 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 2]);
-
-                    ////0
-                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
-                    //    lcdLut.TertiaryFromLevel(write0),
-                    //    lcdLut.SecondaryFromLevel(write0),
-                    //    lcdLut.PrimaryFromLevel(write0),
-                    //    out e_0);
-                    ////1
-                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
-                    //    lcdLut.TertiaryFromLevel(write1),
-                    //    lcdLut.SecondaryFromLevel(write1),
-                    //    lcdLut.PrimaryFromLevel(write1),
-                    //    out e_1);
-                    ////2
-                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
-                    //    lcdLut.TertiaryFromLevel(write2),
-                    //    lcdLut.SecondaryFromLevel(write2),
-                    //    lcdLut.PrimaryFromLevel(write2),
-                    //    out e_2);
 
                     byte write0 = grayScaleLineBuffer[srcIndex];
                     byte write1 = grayScaleLineBuffer[srcIndex + 1];
@@ -247,28 +222,6 @@ namespace PixelFarm.Agg
 
                 byte e_0, e_1, e_2; //energy 0,1,2 
                 {
-                    //byte write0 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex]);
-                    //byte write1 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 1]);
-                    //byte write2 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 2]);
-
-                    ////0
-                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
-                    //    lcdLut.TertiaryFromLevel(write0),
-                    //    lcdLut.SecondaryFromLevel(write0),
-                    //    lcdLut.PrimaryFromLevel(write0),
-                    //    out e_0);
-                    ////1
-                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
-                    //    lcdLut.TertiaryFromLevel(write1),
-                    //    lcdLut.SecondaryFromLevel(write1),
-                    //    lcdLut.PrimaryFromLevel(write1),
-                    //    out e_1);
-                    ////2
-                    //_tempForwardAccumBuffer.WriteAccumAndReadBack(
-                    //    lcdLut.TertiaryFromLevel(write2),
-                    //    lcdLut.SecondaryFromLevel(write2),
-                    //    lcdLut.PrimaryFromLevel(write2),
-                    //    out e_2);
 
                     byte write0 = grayScaleLineBuffer[srcIndex];
                     byte write1 = grayScaleLineBuffer[srcIndex + 1];
@@ -385,6 +338,233 @@ namespace PixelFarm.Agg
             }
         }
 
+        //void BlendScanlineForAggSubPix2(byte[] destImgBuffer, int destStride, int y, int srcW, int srcStride, byte[] grayScaleLineBuffer)
+        //{
+        //    //backup
+        //    LcdDistributionLut lcdLut = _currentLcdLut;
+        //    _tempForwardAccumBuffer.Reset();
+
+        //    //start pixel
+
+        //    int destX = 0;
+        //    //-----------------
+        //    //TODO: review color order here
+        //    //B-G-R-A?   
+        //    byte color_c0 = _color.blue;
+        //    byte color_c1 = _color.green;
+        //    byte color_c2 = _color.red;
+        //    byte color_alpha = _color.alpha;
+        //    //-----------------
+        //    //single line 
+        //    int srcIndex = 0;
+        //   int destImgIndex =   destImgIndex = (destStride * y) + (destX * 4); //4 color component
+
+
+        //    int nwidth = srcW;
+
+        //    {
+        //        //start with pre-accum ***
+        //        byte e_0, e_1, e_2; //energy 0,1,2 
+        //        {
+        //            //byte write0 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex]);
+        //            //byte write1 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 1]);
+        //            //byte write2 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 2]);
+
+        //            ////0
+        //            //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //            //    lcdLut.TertiaryFromLevel(write0),
+        //            //    lcdLut.SecondaryFromLevel(write0),
+        //            //    lcdLut.PrimaryFromLevel(write0),
+        //            //    out e_0);
+        //            ////1
+        //            //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //            //    lcdLut.TertiaryFromLevel(write1),
+        //            //    lcdLut.SecondaryFromLevel(write1),
+        //            //    lcdLut.PrimaryFromLevel(write1),
+        //            //    out e_1);
+        //            ////2
+        //            //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //            //    lcdLut.TertiaryFromLevel(write2),
+        //            //    lcdLut.SecondaryFromLevel(write2),
+        //            //    lcdLut.PrimaryFromLevel(write2),
+        //            //    out e_2);
+
+        //            byte write0 = grayScaleLineBuffer[srcIndex];
+        //            byte write1 = grayScaleLineBuffer[srcIndex + 1];
+        //            byte write2 = grayScaleLineBuffer[srcIndex + 2];
+
+        //            //0
+        //            _tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //                lcdLut.TertiaryFromRaw255(write0),
+        //                lcdLut.SecondaryFromRaw255(write0),
+        //                lcdLut.PrimaryFromRaw255(write0),
+        //                out e_0);
+        //            //1
+        //            _tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //                lcdLut.TertiaryFromRaw255(write1),
+        //                lcdLut.SecondaryFromRaw255(write1),
+        //                lcdLut.PrimaryFromRaw255(write1),
+        //                out e_1);
+        //            //2
+        //            _tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //                lcdLut.TertiaryFromRaw255(write2),
+        //                lcdLut.SecondaryFromRaw255(write2),
+        //                lcdLut.PrimaryFromRaw255(write2),
+        //                out e_2);
+        //        }
+        //        srcIndex += 3;
+        //        nwidth -= 3;
+        //    }
+
+        //    while (nwidth > 3)
+        //    {
+        //        //------------
+        //        //TODO: add release mode code (optimized version)
+        //        //1. convert from original grayscale value from lineBuff to lcd level
+        //        //and 
+        //        //2.
+        //        //from single grey scale value,
+        //        //it is expanded*** into 5 color-components 
+
+        //        byte e_0, e_1, e_2; //energy 0,1,2 
+        //        {
+        //            //byte write0 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex]);
+        //            //byte write1 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 1]);
+        //            //byte write2 = lcdLut.Convert255ToLevel(grayScaleLineBuffer[srcIndex + 2]);
+
+        //            ////0
+        //            //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //            //    lcdLut.TertiaryFromLevel(write0),
+        //            //    lcdLut.SecondaryFromLevel(write0),
+        //            //    lcdLut.PrimaryFromLevel(write0),
+        //            //    out e_0);
+        //            ////1
+        //            //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //            //    lcdLut.TertiaryFromLevel(write1),
+        //            //    lcdLut.SecondaryFromLevel(write1),
+        //            //    lcdLut.PrimaryFromLevel(write1),
+        //            //    out e_1);
+        //            ////2
+        //            //_tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //            //    lcdLut.TertiaryFromLevel(write2),
+        //            //    lcdLut.SecondaryFromLevel(write2),
+        //            //    lcdLut.PrimaryFromLevel(write2),
+        //            //    out e_2);
+
+        //            byte write0 = grayScaleLineBuffer[srcIndex];
+        //            byte write1 = grayScaleLineBuffer[srcIndex + 1];
+        //            byte write2 = grayScaleLineBuffer[srcIndex + 2];
+
+        //            //0
+        //            _tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //                lcdLut.TertiaryFromRaw255(write0),
+        //                lcdLut.SecondaryFromRaw255(write0),
+        //                lcdLut.PrimaryFromRaw255(write0),
+        //                out e_0);
+        //            //1
+        //            _tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //                lcdLut.TertiaryFromRaw255(write1),
+        //                lcdLut.SecondaryFromRaw255(write1),
+        //                lcdLut.PrimaryFromRaw255(write1),
+        //                out e_1);
+        //            //2
+        //            _tempForwardAccumBuffer.WriteAccumAndReadBack(
+        //                lcdLut.TertiaryFromRaw255(write2),
+        //                lcdLut.SecondaryFromRaw255(write2),
+        //                lcdLut.PrimaryFromRaw255(write2),
+        //                out e_2);
+
+        //        }
+
+        //        //4. blend 3 pixels 
+        //        byte exc0 = destImgBuffer[destImgIndex];//existing color
+        //        byte exc1 = destImgBuffer[destImgIndex + 1];//existing color
+        //        byte exc2 = destImgBuffer[destImgIndex + 2];//existing color  
+        //        //byte exc0 = 255;// destImgBuffer[destImgIndex];//existing color
+        //        //byte exc1 = 255;// destImgBuffer[destImgIndex + 1];//existing color
+        //        //byte exc2 = 255;// destImgBuffer[destImgIndex + 2];//existing color  
+        //        //--------------------------------------------------------
+        //        //note: that we swap e_2 and e_0 on the fly***
+        //        //-------------------------------------------------------- 
+        //        //write the 3 color-component of current pixel.
+        //        destImgBuffer[destImgIndex] = (byte)((((color_c0 - exc0) * (e_2 * color_alpha)) + (exc0 << 16)) >> 16); //swap on the fly
+        //        destImgBuffer[destImgIndex + 1] = (byte)((((color_c1 - exc1) * (e_1 * color_alpha)) + (exc1 << 16)) >> 16);
+        //        destImgBuffer[destImgIndex + 2] = (byte)((((color_c2 - exc2) * (e_0 * color_alpha)) + (exc2 << 16)) >> 16);//swap on the fly
+        //        //---------------------------------------------------------
+        //        destImgIndex += 4;
+
+        //        srcIndex += 3;
+        //        nwidth -= 3;
+        //    }
+        //    //---------
+        //    //when finish each line
+        //    //we must draw extened 4 pixels
+        //    //---------
+        //    {
+        //        //get remaining energy from _forward buffer
+        //        byte ec_r1, ec_r2, ec_r3, ec_r4;
+        //        _tempForwardAccumBuffer.ReadRemaining4(out ec_r1, out ec_r2, out ec_r3, out ec_r4);
+
+        //        //we need 2 pixels,  
+        //        int remaining_dest = Math.Min((srcStride - (destImgIndex + 4)), 5);
+        //        if (remaining_dest < 1)
+        //        {
+        //            return;
+        //        }
+
+        //        switch (remaining_dest)
+        //        {
+        //            default: throw new NotSupportedException();
+        //            case 5:
+        //                {
+        //                    //1st round
+        //                    byte exc0 = destImgBuffer[destImgIndex];//existing color
+        //                    byte exc1 = destImgBuffer[destImgIndex + 1];//existing color
+        //                    byte exc2 = destImgBuffer[destImgIndex + 2];//existing color 
+
+        //                    //--------------------------------------------------------
+        //                    //note: that we swap ec_r3 and ec_r1 on the fly***
+
+        //                    destImgBuffer[destImgIndex] = (byte)((((color_c0 - exc0) * (ec_r3 * color_alpha)) + (exc0 << 16)) >> 16); //swap on the fly
+        //                    destImgBuffer[destImgIndex + 1] = (byte)((((color_c1 - exc1) * (ec_r2 * color_alpha)) + (exc1 << 16)) >> 16);
+        //                    destImgBuffer[destImgIndex + 2] = (byte)((((color_c2 - exc2) * (ec_r1 * color_alpha)) + (exc2 << 16)) >> 16);//swap on the fly
+        //                    destImgIndex += 4;
+
+
+        //                    srcIndex += 3;
+        //                    //--------------------------------------------------------
+        //                    //2nd round
+        //                    exc0 = destImgBuffer[destImgIndex];//existing color 
+        //                    destImgBuffer[destImgIndex] = (byte)((((color_c0 - exc0) * (ec_r4 * color_alpha)) + (exc0 << 16)) >> 16);
+        //                }
+        //                break;
+        //            case 4:
+        //                {
+        //                    //1st round
+        //                    byte ec0 = destImgBuffer[destImgIndex];//existing color
+        //                    byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
+        //                    byte ec2 = destImgBuffer[destImgIndex + 2];//existing color 
+
+        //                    //--------------------------------------------------------
+        //                    //note: that we swap e_2 and e_0 on the fly 
+
+        //                    destImgBuffer[destImgIndex] = (byte)((((color_c0 - ec0) * (ec_r3 * color_alpha)) + (ec0 << 16)) >> 16); //swap on the fly
+        //                    destImgBuffer[destImgIndex + 1] = (byte)((((color_c1 - ec1) * (ec_r2 * color_alpha)) + (ec1 << 16)) >> 16);
+        //                    destImgBuffer[destImgIndex + 2] = (byte)((((color_c2 - ec2) * (ec_r1 * color_alpha)) + (ec2 << 16)) >> 16);//swap on the fly
+
+        //                    destImgIndex += 4;
+        //                    srcIndex += 3;
+        //                }
+        //                break;
+        //            case 3:
+        //            case 2:
+        //            case 1:
+        //            case 0:
+        //                //just return  
+        //                break;
+        //        }
+        //    }
+        //}
 
 
 #if DEBUG
@@ -1171,6 +1351,12 @@ namespace PixelFarm.Agg
             }
         }
     }
+
+
+
+
+
+
 
     /// <summary>
     /// scanline rasterizer TO DESTINATION bitmap
