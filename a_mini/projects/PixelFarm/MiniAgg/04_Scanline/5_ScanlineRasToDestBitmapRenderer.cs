@@ -132,7 +132,8 @@ namespace PixelFarm.Agg
                     }
                 }
                 //
-                BlendScanlineForAggSubPix(dest_buffer, dest_stride, scline.Y, src_w, src_stride, lineBuff); //for agg subpixel rendering
+                BlendScanlineForAggSubPix(dest_buffer, dest_stride, scline.Y,
+                    src_w, src_stride, lineBuff, sclineRas.MinX, sclineRas.MaxX); //for agg subpixel rendering
 #if DEBUG
                 dbugMinScanlineCount++;
 #endif
@@ -157,7 +158,13 @@ namespace PixelFarm.Agg
         /// <param name="srcW"></param>
         /// <param name="srcStride"></param>
         /// <param name="grayScaleLineBuffer"></param>
-        void BlendScanlineForAggSubPix(byte[] destImgBuffer, int destStride, int y, int srcW, int srcStride, byte[] grayScaleLineBuffer)
+        void BlendScanlineForAggSubPix(byte[] destImgBuffer, int destStride,
+            int y,
+            int srcW,
+            int srcStride,
+            byte[] grayScaleLineBuffer,
+            int srcMinX,
+            int srcMaxX)
         {
             //backup
             LcdDistributionLut lcdLut = _currentLcdLut;

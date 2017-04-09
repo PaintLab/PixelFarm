@@ -1,8 +1,6 @@
 ﻿//MIT, 2017, WinterDev 
 using System;
 using Mini;
-using PixelFarm.Agg;
-using PixelFarm.Agg.VertexSource;
 
 namespace PixelFarm.Agg.Sample_AADemoTest4
 {
@@ -13,7 +11,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         B,
         C,
         D,
-        E, F,
+        E,
+        F,
 
     }
 
@@ -26,7 +25,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
     {
         public AADemoTest4_subpix()
         {
-            this.EnableSubPix = true;
+            this.EnableSubPix = false;
         }
         static byte[] CreateGreyScaleBuffer(ActualImage img)
         {
