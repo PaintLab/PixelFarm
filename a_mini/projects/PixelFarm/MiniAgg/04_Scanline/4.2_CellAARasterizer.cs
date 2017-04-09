@@ -454,7 +454,7 @@ namespace PixelFarm.Agg
 
             void RenderHLine(int ey, int x1, int y1, int x2, int y2)
             {
-               
+
                 //trivial case. Happens often
                 if (y1 == y2)
                 {
@@ -468,8 +468,7 @@ namespace PixelFarm.Agg
 
                 int fx1 = x1 & (int)poly_subpix.MASK;
                 int fx2 = x2 & (int)poly_subpix.MASK;
-                int delta, p, first, dx;
-                int incr, lift, mod, rem;
+                int delta;
                 //everything is located in a single cell.  That is easy!
                 if (ex1 == ex2)
                 {
@@ -478,6 +477,11 @@ namespace PixelFarm.Agg
                     cCell_area += (fx1 + fx2) * delta;
                     return;
                 }
+                //----------------------------
+                int p, first, dx;
+                int incr, lift, mod, rem;
+                //----------------------------
+
 
                 //ok, we'll have to render a run of adjacent cells on the same hline...
                 p = ((int)poly_subpix.SCALE - fx1) * (y2 - y1);
