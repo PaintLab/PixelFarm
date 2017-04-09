@@ -275,7 +275,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 1.0f;
             p.UseSubPixelRendering = this.EnableSubPix;
-            p.Line(0, 0, 15, 20);
+            p.Line(0, 1, 15, 2);
         }
         static double DegToRad(double degree)
         {

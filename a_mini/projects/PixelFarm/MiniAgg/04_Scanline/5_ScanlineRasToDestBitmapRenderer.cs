@@ -102,11 +102,11 @@ namespace PixelFarm.Agg
             _grayScaleLine.EnsureLineStride(dest.Width + 4);
             //2. setup vars
             byte[] dest_buffer = dest.GetBuffer();
-            int dest_w = dest.Width;
-            int dest_h = dest.Height;
-            int dest_stride = dest.Stride;
-            int src_w = dest_w;
-            int src_stride = dest_stride;
+            //int dest_w = dest.Width;
+            //int dest_h = dest.Height;
+            int dest_stride = this._destImgStride = dest.Stride;
+            int src_w = _grayScaleLine.Stride;
+
             //*** set color before call Blend()
             this._color = color;
 
@@ -148,12 +148,14 @@ namespace PixelFarm.Agg
                 BlendScanlineForAggSubPix(
                     dest_buffer,
                     (dest_stride * scline.Y) + (0 * 4), //4 color component, TODO: review destX again, this version we write entire a scanline                 
-                    src_w, src_stride, lineBuff, sclineRas.MinX, sclineRas.MaxX); //for agg subpixel rendering
+                    src_w, lineBuff, sclineRas.MinX, sclineRas.MaxX); //for agg subpixel rendering
 #if DEBUG
                 dbugMinScanlineCount++;
 #endif
             }
         }
+
+        int _destImgStride;
 
         /// <summary>
         /// blend gray-scale line buffer to destImgBuffer, with the subpixel rendering technique
@@ -165,9 +167,8 @@ namespace PixelFarm.Agg
         /// <param name="srcStride"></param>
         /// <param name="grayScaleLineBuffer"></param>
         void BlendScanlineForAggSubPix(byte[] destImgBuffer,
-            int destImgIndex,
+            int destImgIndex, //dest index or write buffer
             int srcW,
-            int srcStride,
             byte[] grayScaleLineBuffer,
             int srcMinX,
             int srcMaxX)
@@ -189,10 +190,11 @@ namespace PixelFarm.Agg
             //scale (merge) down to x1 destIndex 
             //-----------------
             int srcIndex = 0;
-            int nwidth = srcW;
-
+#if DEBUG
+            int dbugSrcW = srcW; //temp store this for debug
+#endif 
             {
-                //start with pre-accum ***
+                //start with pre-accum ***, no writing occurs
                 byte e_0, e_1, e_2; //energy 0,1,2 
                 {
 
@@ -220,10 +222,10 @@ namespace PixelFarm.Agg
                         out e_2);
                 }
                 srcIndex += 3;
-                nwidth -= 3;
+                srcW -= 3;
             }
 
-            while (nwidth > 3)
+            while (srcW > 3)
             {
                 //------------
                 //TODO: add release mode code (optimized version)
@@ -239,6 +241,7 @@ namespace PixelFarm.Agg
                     byte write0 = grayScaleLineBuffer[srcIndex];
                     byte write1 = grayScaleLineBuffer[srcIndex + 1];
                     byte write2 = grayScaleLineBuffer[srcIndex + 2];
+
 
                     //0
                     _tempForwardAccumBuffer.WriteAccumAndReadBack(
@@ -279,7 +282,7 @@ namespace PixelFarm.Agg
                 destImgIndex += 4;
 
                 srcIndex += 3;
-                nwidth -= 3;
+                srcW -= 3;
             }
             //---------
             //when finish each line
@@ -291,7 +294,7 @@ namespace PixelFarm.Agg
                 _tempForwardAccumBuffer.ReadRemaining4(out ec_r1, out ec_r2, out ec_r3, out ec_r4);
 
                 //we need 2 pixels,  
-                int remaining_dest = Math.Min((srcStride - (destImgIndex + 4)), 5);
+                int remaining_dest = Math.Min((this._destImgStride - (destImgIndex + 4)), 5);
                 if (remaining_dest < 1)
                 {
                     return;
@@ -1129,6 +1132,10 @@ namespace PixelFarm.Agg
             {
                 //default
                 EnsureLineStride(4);
+            }
+            public int Stride
+            {
+                get { return this.stride; }
             }
             public void EnsureLineStride(int stride8Bits)
             {
