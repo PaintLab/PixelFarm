@@ -33,7 +33,9 @@ namespace PixelFarm.Agg
         TempForwardAccumBuffer _forwardTempBuff = new TempForwardAccumBuffer();
         /// grey scale 4, 1/9 lcd lookup table
         /// </summary> 
-        static readonly LcdDistributionLut s_g9_3_2_1 = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 3f / 9f, 2f / 9f, 1f / 9f);
+        static readonly LcdDistributionLut s_g9_3_2_1 = LcdDistributionLut.EasyLut(4, 3, 2, 1);
+        //static readonly LcdDistributionLut s_g9_3_2_1 = LcdDistributionLut.EasyLut(4, 5, 2, 0.5f);
+        //LcdDistributionLut.eas  new LcdDistributionLut(4, 3f / 9f, 2f / 9f, 1f / 9f);
 
         //---------------------------------
         //Mixim's:
@@ -48,7 +50,7 @@ namespace PixelFarm.Agg
         /// grey scale 4, 1/8 lcd lookup table
         /// </summary>
         //static readonly LcdDistributionLut s_g8_4_2_1 = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 4f / 8f, 2f / 8f, 0.0001f / 8f);
-        static readonly LcdDistributionLut s_g8_4_2_1 = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 4f / 8f, 2f / 8f, 1f / 8f);
+        static readonly LcdDistributionLut s_g8_4_2_1 = new LcdDistributionLut(4, 4f / 8f, 2f / 8f, 1f / 8f);
 
         //more color fringe
         //static readonly LcdDistributionLut s_g8_4_2_1q = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 5f / 8f, 2.5f / 8f, 0.5f / 8f);
@@ -1332,23 +1334,23 @@ namespace PixelFarm.Agg
         //struct ggo_gray8 { enum { num_levels = 65, format = GGO_GRAY8_BITMAP }; };
 
 
-        public enum GrayLevels : byte
-        {
-            /// <summary>
-            /// 4 level grey scale (0-3)
-            /// </summary>
-            Gray4 = 4,
-            /// <summary>
-            /// 16 levels grey scale (0-15)
-            /// </summary>
-            Gray16 = 16,
-            /// <summary>
-            /// 65 levels grey scale (0-64)
-            /// </summary>
-            Gray64 = 64
-        }
+        //public enum GrayLevels : byte
+        //{
+        //    /// <summary>
+        //    /// 4 level grey scale (0-3)
+        //    /// </summary>
+        //    Gray4 = 4,
+        //    /// <summary>
+        //    /// 16 levels grey scale (0-15)
+        //    /// </summary>
+        //    Gray16 = 16,
+        //    /// <summary>
+        //    /// 65 levels grey scale (0-64)
+        //    /// </summary>
+        //    Gray64 = 64
+        //}
 
-        GrayLevels grayLevel;
+
         //look up table 
         byte[] m_primary;
         byte[] m_secondary;
@@ -1360,16 +1362,16 @@ namespace PixelFarm.Agg
 
 
         int _nLevel;
-        public LcdDistributionLut(GrayLevels grayLevel, double prim, double second, double tert)
+        public LcdDistributionLut(byte grayLevel, double prim, double second, double tert)
         {
-            this.grayLevel = grayLevel;
-            switch (grayLevel)
-            {
-                default: throw new System.NotSupportedException();
-                case GrayLevels.Gray4: _nLevel = (byte)grayLevel; break;
-                case GrayLevels.Gray16: _nLevel = (byte)grayLevel; break;
-                case GrayLevels.Gray64: _nLevel = (byte)grayLevel; break;
-            }
+            this._nLevel = grayLevel;
+            //switch (grayLevel)
+            //{
+            //    default: throw new System.NotSupportedException();
+            //    case GrayLevels.Gray4: _nLevel = (byte)grayLevel; break;
+            //    case GrayLevels.Gray16: _nLevel = (byte)grayLevel; break;
+            //    case GrayLevels.Gray64: _nLevel = (byte)grayLevel; break;
+            //}
             //---------------------------------------------------------
             m_primary = new byte[_nLevel + 1];
             m_secondary = new byte[_nLevel + 1];
@@ -1440,8 +1442,13 @@ namespace PixelFarm.Agg
             return _tertiary_255[raw];
         }
 
+        public static LcdDistributionLut EasyLut(byte nlevel, float prim, float second, float tert)
+        {
+            float total = prim + (2 * second) + (2 * tert);
+            return new LcdDistributionLut(nlevel, prim / total, second / total, tert / total);
+        }
 
-         
+
     }
 
 

@@ -406,7 +406,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
         }
 
-        static LcdDistributionLut g8_4_2_1 = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 4 / 8f, 2 / 8f, 1 / 8f);
+        static LcdDistributionLut g8_4_2_1 = new LcdDistributionLut(64, 4 / 8f, 2 / 8f, 1 / 8f);
         void BlendWithLcdTechnique(ActualImage destImg, ActualImage glyphImg, PixelFarm.Drawing.Color color)
         {
             var g8Lut = g8_4_2_1;
