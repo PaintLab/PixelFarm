@@ -14,15 +14,36 @@ namespace PixelFarm.Agg
 
     class InternalBrightnessAndContrastAdjustment
     {
+
+        byte[] rgbTable;
         int brightness;
         int contrast;
-        byte[] rgbTable;
-
         public InternalBrightnessAndContrastAdjustment()
         {
         }
+        public int Brightness { get { return brightness; } }
+        public int Contrast { get { return contrast; } }
+        //
         public void SetParameters(int brightness, int contrast)
         {
+            if (contrast > 100)
+            {
+                contrast = 100;
+            }
+            else if (contrast < -100)
+            {
+                contrast = -100;
+            }
+            if (brightness > 100)
+            {
+                brightness = 100;
+            }
+            else if (brightness < -100)
+            {
+                brightness = -100;
+            }
+
+            //---------------------------------------
             int multiply;
             int divide;
             this.brightness = brightness;
@@ -47,6 +68,8 @@ namespace PixelFarm.Agg
             {
                 this.rgbTable = new byte[65536];//256*256
             }
+            //-------------------------------------------------------
+            //built table
             if (divide == 0)
             {
                 unsafe
@@ -107,48 +130,7 @@ namespace PixelFarm.Agg
                     }
                 }
             }
-
-
-            //if (divide == 0)
-            //{
-            //    for (int intensity = 0; intensity < 256; ++intensity)
-            //    {
-            //        if (intensity + brightness < 128)
-            //        {
-            //            this.rgbTable[intensity] = 0;
-            //        }
-            //        else
-            //        {
-            //            this.rgbTable[intensity] = 255;
-            //        }
-            //    }
-            //}
-            //else if (divide == 100)
-            //{
-            //    for (int intensity = 0; intensity < 256; ++intensity)
-            //    {
-            //        int shift = (intensity - 127) * multiply / divide + 127 - intensity + brightness;
-
-            //        for (int col = 0; col < 256; ++col)
-            //        {
-            //            int index = (intensity * 256) + col;
-            //            this.rgbTable[index] = PixelUtils.ClampToByte(col + shift);
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    for (int intensity = 0; intensity < 256; ++intensity)
-            //    {
-            //        int shift = (intensity - 127 + brightness) * multiply / divide + 127 - intensity;
-
-            //        for (int col = 0; col < 256; ++col)
-            //        {
-            //            int index = (intensity * 256) + col;
-            //            this.rgbTable[index] = PixelUtils.ClampToByte(col + shift);
-            //        }
-            //    }
-            //}
+            //------------------------------------------------------- 
         }
         public void ApplyBytes(byte r0, byte g0, byte b0, out byte r1, out byte g1, out byte b1)
         {
@@ -160,24 +142,9 @@ namespace PixelFarm.Agg
             r1 = this.rgbTable[shiftIndex + r0];
             g1 = this.rgbTable[shiftIndex + g0];
             b1 = this.rgbTable[shiftIndex + b0];
-
-
         }
-        public void ApplyGrayScale(byte[] srcBuffer, byte[] destBuffer)
-        {
-            //this is my extension, to subpixel lut 
-
-            int j = srcBuffer.Length;
-            for (int i = 0; i < j; ++i)
-            {
-                byte level = srcBuffer[i];
-                int intensity = GetIntensityByte(level, level, level);
-                int shiftIndex = intensity * 256;
-                destBuffer[i] = rgbTable[shiftIndex + level];
-            }
-
-        }
-        public void Apply32BGRA(byte[] srcBuffer, byte[] destBuffer, int stride, int h)
+#if DEBUG
+        public void dbugApply32BGRA(byte[] srcBuffer, byte[] destBuffer, int stride, int h)
         {
 
 
@@ -212,6 +179,7 @@ namespace PixelFarm.Agg
                 }
             }
         }
+#endif
         static byte GetIntensityByte(byte b, byte g, byte r)
         {
             return (byte)((7471 * b + 38470 * g + 19595 * r) >> 16);
