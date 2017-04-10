@@ -132,16 +132,17 @@ namespace PixelFarm.Agg
             }
             //------------------------------------------------------- 
         }
-        public void ApplyBytes(byte r0, byte g0, byte b0, out byte r1, out byte g1, out byte b1)
+        public void ApplyBytes(ref byte r0, ref byte g0, ref byte b0)
         {
             //this is my extension, to subpixel lut  
 
-            int intensity = GetIntensityByte(b0, g0, r0);
-            int shiftIndex = intensity * 256;
+            //int intensity = GetIntensityByte(b0, g0, r0);
+            //int shiftIndex = intensity * 256;2
 
-            r1 = this.rgbTable[shiftIndex + r0];
-            g1 = this.rgbTable[shiftIndex + g0];
-            b1 = this.rgbTable[shiftIndex + b0];
+            int shiftIndex = GetIntensityByte(b0, g0, r0) << 8;
+            r0 = this.rgbTable[shiftIndex + r0];
+            g0 = this.rgbTable[shiftIndex + g0];
+            b0 = this.rgbTable[shiftIndex + b0];
         }
 #if DEBUG
         public void dbugApply32BGRA(byte[] srcBuffer, byte[] destBuffer, int stride, int h)

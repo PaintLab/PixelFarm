@@ -275,7 +275,7 @@ namespace PixelFarm.Agg
 
                 if (useContrastFilter)
                 {
-                    _contrastAdjustment.ApplyBytes(e_2, e_1, e_0, out e_2, out e_1, out e_0);
+                    _contrastAdjustment.ApplyBytes(ref e_2, ref e_1, ref e_0);
                 }
 
                 //
@@ -325,7 +325,7 @@ namespace PixelFarm.Agg
 
                             if (useContrastFilter)
                             {
-                                _contrastAdjustment.ApplyBytes(ec_r3, ec_r2, ec_r1, out ec_r3, out ec_r2, out ec_r1);
+                                _contrastAdjustment.ApplyBytes(ref ec_r3, ref ec_r2, ref ec_r1);
                             }
 
                             //1st round
@@ -354,7 +354,7 @@ namespace PixelFarm.Agg
                         {
                             if (useContrastFilter)
                             {
-                                _contrastAdjustment.ApplyBytes(ec_r3, ec_r2, ec_r1, out ec_r3, out ec_r2, out ec_r1);
+                                _contrastAdjustment.ApplyBytes(ref ec_r3, ref ec_r2, ref ec_r1);
                             }
 
                             //1st round
