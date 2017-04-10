@@ -35,11 +35,6 @@ namespace PixelFarm.Agg
         /// grey scale 4, 1/9 lcd lookup table
         /// </summary> 
         static readonly LcdDistributionLut s_g9_3_2_1 = LcdDistributionLut.EasyLut(255, 3, 2, 1);
-        //static readonly LcdDistributionLut s_g9_3_2_1a = LcdDistributionLut.EasyLut(4, 4, 2f, 0.5f);
-        static readonly LcdDistributionLut s_g9_3_2_1a = LcdDistributionLut.EasyLut(4, 3, 2, 1);
-        //static readonly LcdDistributionLut s_g9_3_2_1 = LcdDistributionLut.EasyLut(4, 5, 2, 0.5f);
-        //LcdDistributionLut.eas  new LcdDistributionLut(4, 3f / 9f, 2f / 9f, 1f / 9f);
-
         //---------------------------------
         //Mixim's:
         // Try to play with different coefficients for the primary,
@@ -54,11 +49,6 @@ namespace PixelFarm.Agg
         /// </summary>
         //static readonly LcdDistributionLut s_g8_4_2_1 = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 4f / 8f, 2f / 8f, 0.0001f / 8f);
         static readonly LcdDistributionLut s_g8_4_2_1 = new LcdDistributionLut(255, 4f / 8f, 2f / 8f, 1f / 8f);
-
-        //more color fringe
-        //static readonly LcdDistributionLut s_g8_4_2_1q = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 5f / 8f, 2.5f / 8f, 0.5f / 8f);
-        //static readonly LcdDistributionLut s_g8_4_2_1q = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 6f / 5f, 1f / 8f, 0.5f / 8f);
-
         Color _color;
         const int BASE_MASK = 255;
         //in this case EXISTING_A (existing alpha always 0) 
@@ -72,6 +62,7 @@ namespace PixelFarm.Agg
         /// </summary>
         SingleLineBuffer _grayScaleLine = new SingleLineBuffer();
         LcdDistributionLut _currentLcdLut = null;
+
         InternalBrightnessAndContrastAdjustment _contrastAdjustment = new InternalBrightnessAndContrastAdjustment();
 
 
@@ -79,6 +70,8 @@ namespace PixelFarm.Agg
         {
             //default
             _currentLcdLut = s_g9_3_2_1;
+            //
+            //I try adjust color distribution with img filter
             _contrastAdjustment.SetParameters(0, 30);
         }
 
