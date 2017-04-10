@@ -49,41 +49,61 @@ namespace PixelFarm.Agg
             }
             if (divide == 0)
             {
-                for (int intensity = 0; intensity < 256; ++intensity)
+                unsafe
                 {
-                    if (intensity + brightness < 128)
+                    fixed (byte* table_ptr = &this.rgbTable[0])
                     {
-                        this.rgbTable[intensity] = 0;
-                    }
-                    else
-                    {
-                        this.rgbTable[intensity] = 255;
+
+                        for (int intensity = 0; intensity < 256; ++intensity)
+                        {
+                            if (intensity + brightness < 128)
+                            {
+                                table_ptr[intensity] = 0;
+                            }
+                            else
+                            {
+                                table_ptr[intensity] = 255;
+                            }
+                        }
                     }
                 }
+
             }
             else if (divide == 100)
             {
-                for (int intensity = 0; intensity < 256; ++intensity)
+                unsafe
                 {
-                    int shift = (intensity - 127) * multiply / divide + 127 - intensity + brightness;
-
-                    for (int col = 0; col < 256; ++col)
+                    fixed (byte* table_ptr = &this.rgbTable[0])
                     {
-                        int index = (intensity * 256) + col;
-                        this.rgbTable[index] = PixelUtils.ClampToByte(col + shift);
+                        for (int intensity = 0; intensity < 256; ++intensity)
+                        {
+                            int shift = (intensity - 127) * multiply / divide + 127 - intensity + brightness;
+
+                            for (int col = 0; col < 256; ++col)
+                            {
+                                int index = (intensity * 256) + col;
+                                table_ptr[index] = PixelUtils.ClampToByte(col + shift);
+                            }
+                        }
                     }
                 }
             }
             else
             {
-                for (int intensity = 0; intensity < 256; ++intensity)
+                unsafe
                 {
-                    int shift = (intensity - 127 + brightness) * multiply / divide + 127 - intensity;
-
-                    for (int col = 0; col < 256; ++col)
+                    fixed (byte* table_ptr = &this.rgbTable[0])
                     {
-                        int index = (intensity * 256) + col;
-                        this.rgbTable[index] = PixelUtils.ClampToByte(col + shift);
+                        for (int intensity = 0; intensity < 256; ++intensity)
+                        {
+                            int shift = (intensity - 127 + brightness) * multiply / divide + 127 - intensity;
+
+                            for (int col = 0; col < 256; ++col)
+                            {
+                                int index = (intensity * 256) + col;
+                                table_ptr[index] = PixelUtils.ClampToByte(col + shift);
+                            }
+                        }
                     }
                 }
             }

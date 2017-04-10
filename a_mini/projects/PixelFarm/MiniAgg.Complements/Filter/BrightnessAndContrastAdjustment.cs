@@ -30,74 +30,93 @@
     }
     public class BrightnessAndContrastAdjustment
     {
-        private int brightness;
-        private int contrast;
-        private int multiply;
-        private int divide;
-        private byte[] rgbTable;
+        int brightness;
+        int contrast;
+        byte[] rgbTable;
 
         public void SetParameters(int brightness, int contrast)
         {
+            int multiply;
+            int divide;
             this.brightness = brightness;
             this.contrast = contrast;
             if (this.contrast < 0)
             {
-                this.multiply = this.contrast + 100;
-                this.divide = 100;
+                multiply = this.contrast + 100;
+                divide = 100;
             }
             else if (this.contrast > 0)
             {
-                this.multiply = 100;
-                this.divide = 100 - this.contrast;
+                multiply = 100;
+                divide = 100 - this.contrast;
             }
             else
             {
-                this.multiply = 1;
-                this.divide = 1;
+                multiply = 1;
+                divide = 1;
             }
 
             if (this.rgbTable == null)
             {
-                this.rgbTable = new byte[65536];
+                this.rgbTable = new byte[65536];//256*256
             }
-
-            if (this.divide == 0)
+            if (divide == 0)
             {
-                for (int intensity = 0; intensity < 256; ++intensity)
+                unsafe
                 {
-                    if (intensity + this.brightness < 128)
+                    fixed (byte* table_ptr = &this.rgbTable[0])
                     {
-                        this.rgbTable[intensity] = 0;
-                    }
-                    else
-                    {
-                        this.rgbTable[intensity] = 255;
+
+                        for (int intensity = 0; intensity < 256; ++intensity)
+                        {
+                            if (intensity + brightness < 128)
+                            {
+                                table_ptr[intensity] = 0;
+                            }
+                            else
+                            {
+                                table_ptr[intensity] = 255;
+                            }
+                        }
                     }
                 }
-            }
-            else if (this.divide == 100)
-            {
-                for (int intensity = 0; intensity < 256; ++intensity)
-                {
-                    int shift = (intensity - 127) * this.multiply / this.divide + 127 - intensity + this.brightness;
 
-                    for (int col = 0; col < 256; ++col)
+            }
+            else if (divide == 100)
+            {
+                unsafe
+                {
+                    fixed (byte* table_ptr = &this.rgbTable[0])
                     {
-                        int index = (intensity * 256) + col;
-                        this.rgbTable[index] = PixelUtils.ClampToByte(col + shift);
+                        for (int intensity = 0; intensity < 256; ++intensity)
+                        {
+                            int shift = (intensity - 127) * multiply / divide + 127 - intensity + brightness;
+
+                            for (int col = 0; col < 256; ++col)
+                            {
+                                int index = (intensity * 256) + col;
+                                table_ptr[index] = PixelUtils.ClampToByte(col + shift);
+                            }
+                        }
                     }
                 }
             }
             else
             {
-                for (int intensity = 0; intensity < 256; ++intensity)
+                unsafe
                 {
-                    int shift = (intensity - 127 + this.brightness) * this.multiply / this.divide + 127 - intensity;
-
-                    for (int col = 0; col < 256; ++col)
+                    fixed (byte* table_ptr = &this.rgbTable[0])
                     {
-                        int index = (intensity * 256) + col;
-                        this.rgbTable[index] = PixelUtils.ClampToByte(col + shift);
+                        for (int intensity = 0; intensity < 256; ++intensity)
+                        {
+                            int shift = (intensity - 127 + brightness) * multiply / divide + 127 - intensity;
+
+                            for (int col = 0; col < 256; ++col)
+                            {
+                                int index = (intensity * 256) + col;
+                                table_ptr[index] = PixelUtils.ClampToByte(col + shift);
+                            }
+                        }
                     }
                 }
             }
@@ -106,8 +125,7 @@
 
         public void Apply(byte[] srcBuffer, byte[] destBuffer, int stride, int h)
         {
-            //apply to a single line
-            //***
+            //this version srcBuffer and destBuffer must have the same size
 
             int p = 0;
             for (int row = 0; row < h; ++row)
