@@ -11,7 +11,8 @@ namespace SampleWinForms.UI
 
         public bool DrawCentroidBone { get; set; }
         public bool DrawGlyphBone { get; set; }
-        public bool GenDynamicOutline { get; set; }
+
+        public bool DrawTrianglesAndEdges { get; set; }
 #if DEBUG
         static void DrawPointKind(CanvasPainter painter, GlyphPoint2D point, float scale)
         {
@@ -267,19 +268,21 @@ namespace SampleWinForms.UI
             bool drawCentroidBone = this.DrawCentroidBone;
             bool drawGlyphBone = this.DrawGlyphBone;
 
-            for (int i = 0; i < j; ++i)
+            if (DrawTrianglesAndEdges)
             {
-                //---------------
-                GlyphTriangle tri = triAngles[i];
-                EdgeLine e0 = tri.e0;
-                EdgeLine e1 = tri.e1;
-                EdgeLine e2 = tri.e2;
-                //---------------
-                //draw each triangles
-                DrawEdge(painter, e0, pxscale);
-                DrawEdge(painter, e1, pxscale);
-                DrawEdge(painter, e2, pxscale);
-
+                for (int i = 0; i < j; ++i)
+                {
+                    //---------------
+                    GlyphTriangle tri = triAngles[i];
+                    EdgeLine e0 = tri.e0;
+                    EdgeLine e1 = tri.e1;
+                    EdgeLine e2 = tri.e2;
+                    //---------------
+                    //draw each triangles
+                    DrawEdge(painter, e0, pxscale);
+                    DrawEdge(painter, e1, pxscale);
+                    DrawEdge(painter, e2, pxscale);
+                }
             }
             //---------------
             //draw bone 
@@ -291,11 +294,7 @@ namespace SampleWinForms.UI
             Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHub = glyphFitOutline.GetCentroidLineHubs();
             //--------------- 
 
-            if (this.GenDynamicOutline)
-            {
-                GlyphDynamicOutline dynamicOutline = glyphFitOutline.CreateGlyphDynamicOutline();
 
-            }
 
             foreach (CentroidLineHub lineHub in centroidLineHub.Values)
             {
@@ -356,8 +355,14 @@ namespace SampleWinForms.UI
                     }
                 }
             }
-            //draw link between hub
-
+        }
+        public void dbugDynamicOutline(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale)
+        {
+            GlyphDynamicOutline dynamicOutline = new GlyphDynamicOutline(glyphFitOutline);
+#if DEBUG
+            dynamicOutline.dbugSetCanvasPainter(painter, pxscale);
+#endif
+            dynamicOutline.Analyze();
         }
         void DrawBoneRib(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphBoneJoint joint, float pixelScale)
         {

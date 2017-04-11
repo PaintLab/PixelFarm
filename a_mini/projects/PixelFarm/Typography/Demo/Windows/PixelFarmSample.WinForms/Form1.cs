@@ -127,6 +127,7 @@ namespace SampleWinForms
             chkDrawGlyphBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDynamicOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkMinorOffset.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDrawTriangles.CheckedChanged += (s, e) => UpdateRenderOutput();
             //----------
             txtGlyphBoneCount.KeyDown += (s, e) =>
             {
@@ -386,7 +387,7 @@ namespace SampleWinForms
 
             if (chkMinorOffset.Checked)
             {
-                
+
                 this.txtLeftXControl.Text = left2.ToString() + " =>" + floor_1 + ",diff=" + diff;
             }
             else
@@ -448,13 +449,17 @@ namespace SampleWinForms
                 GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
                 if (fitOutline != null)
                 {
+                    debugGlyphVisualizer.DrawTrianglesAndEdges = this.chkDrawTriangles.Checked;
                     debugGlyphVisualizer.DrawCentroidBone = this.chkDrawCentroidBone.Checked;
                     debugGlyphVisualizer.DrawGlyphBone = this.chkDrawGlyphBone.Checked;
-                    debugGlyphVisualizer.GenDynamicOutline = this.chkDynamicOutline.Checked;
                     debugGlyphVisualizer.dbugDrawTriangulatedGlyph(painter, fitOutline, scale);
                 }
-#endif
-
+#endif  
+            }
+            if (chkDynamicOutline.Checked)
+            {
+                GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
+                debugGlyphVisualizer.dbugDynamicOutline(painter, fitOutline, scale);
             }
             //--------------------------
 #if DEBUG
