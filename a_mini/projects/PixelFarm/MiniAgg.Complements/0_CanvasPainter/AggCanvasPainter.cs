@@ -91,6 +91,8 @@ namespace PixelFarm.Agg
                 {
                     case Drawing.SmoothingMode.HighQuality:
                     case Drawing.SmoothingMode.AntiAlias:
+                        //TODO: review here
+                        //anti alias != lcd technique 
                         gx.UseSubPixelRendering = true;
                         break;
                     case Drawing.SmoothingMode.HighSpeed:
@@ -580,13 +582,13 @@ namespace PixelFarm.Agg
                 stroke.LineCap = value;
             }
         }
-         
+
         //--------------------------------------------------
         public LineDashGenerator LineDashGen
         {
             get { return this._lineDashGen; }
             set { this._lineDashGen = value; }
         }
-        
+
     }
 }

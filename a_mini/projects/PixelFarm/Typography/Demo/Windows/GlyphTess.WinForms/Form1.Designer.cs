@@ -31,6 +31,7 @@
             this.cmdDrawGlyph = new System.Windows.Forms.Button();
             this.pnlGlyph = new System.Windows.Forms.Panel();
             this.chkInvert = new System.Windows.Forms.CheckBox();
+            this.cmdTestDrawCurve = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // cmdDrawGlyph
@@ -61,11 +62,22 @@
             this.chkInvert.UseVisualStyleBackColor = true;
             this.chkInvert.CheckedChanged += new System.EventHandler(this.chkInvert_CheckedChanged);
             // 
+            // cmdTestDrawCurve
+            // 
+            this.cmdTestDrawCurve.Location = new System.Drawing.Point(540, 127);
+            this.cmdTestDrawCurve.Name = "cmdTestDrawCurve";
+            this.cmdTestDrawCurve.Size = new System.Drawing.Size(144, 39);
+            this.cmdTestDrawCurve.TabIndex = 3;
+            this.cmdTestDrawCurve.Text = "TestDrawCurve";
+            this.cmdTestDrawCurve.UseVisualStyleBackColor = true;
+            this.cmdTestDrawCurve.Click += new System.EventHandler(this.cmdTestDrawCurve_Click);
+            // 
             // FormTess
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(695, 387);
+            this.Controls.Add(this.cmdTestDrawCurve);
             this.Controls.Add(this.chkInvert);
             this.Controls.Add(this.pnlGlyph);
             this.Controls.Add(this.cmdDrawGlyph);
@@ -82,6 +94,7 @@
         private System.Windows.Forms.Button cmdDrawGlyph;
         private System.Windows.Forms.Panel pnlGlyph;
         private System.Windows.Forms.CheckBox chkInvert;
+        private System.Windows.Forms.Button cmdTestDrawCurve;
     }
 }
 

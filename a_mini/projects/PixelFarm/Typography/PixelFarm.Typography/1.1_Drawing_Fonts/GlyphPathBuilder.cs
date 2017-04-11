@@ -20,6 +20,7 @@ namespace Typography.Rendering
         public bool dbugAlwaysDoCurveAnalysis;
 
 #endif 
+        public float LeftXControl { get; set; }
         protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph)
         {
             //not use interperter so we need to scale it with our machnism
@@ -37,22 +38,54 @@ namespace Typography.Rendering
                     if (!_fitoutlineCollection.TryGetValue(glyphIndex, out _fitOutline))
                     {
 
-                        _fitOutline = _fitShapeAnalyzer.Analyze(
+                        //---------------------------------------------
+                        //test code
+
+                        //GlyphContourBuilder contBuilder = new GlyphContourBuilder();
+                        //contBuilder.Reset();
+                        //int x = 100, y = 120, w = 700, h = 200;
+
+                        //contBuilder.MoveTo(x, y);
+                        //contBuilder.LineTo(x + w, y);
+                        //contBuilder.LineTo(x + w, y + h);
+                        //contBuilder.LineTo(x, y + h);
+                        //contBuilder.CloseFigure();
+
+                        //_fitOutline = _fitShapeAnalyzer.dbugAnalyze(contBuilder.CurrentContour, new ushort[] { 3 });
+
+                        //---------------------------------------------
+                        _fitOutline = _fitShapeAnalyzer.CreateGlyphFitOutline(
                             this._outputGlyphPoints,
                             this._outputContours);
                         _fitoutlineCollection.Add(glyphIndex, _fitOutline);
+                        this.LeftXControl = _fitOutline.LeftControlPosX;
                     }
                 }
             }
 
-#if DEBUG
-            if (dbugAlwaysDoCurveAnalysis && _fitOutline == null)
-            {
-                _fitOutline = _fitShapeAnalyzer.Analyze(
-                         this._outputGlyphPoints,
-                         this._outputContours);
-            }
-#endif
+            //#if DEBUG
+            //            if (dbugAlwaysDoCurveAnalysis && _fitOutline == null)
+            //            {
+            //                //---------------------------------------------
+            //                //test code 
+            //                //GlyphContourBuilder contBuilder = new GlyphContourBuilder();
+            //                //contBuilder.Reset();
+            //                //int x = 100, y = 120, w = 700, h = 200;
+
+            //                //contBuilder.MoveTo(x, y);
+            //                //contBuilder.LineTo(x + w, y);
+            //                //contBuilder.LineTo(x + w, y + h);
+            //                //contBuilder.LineTo(x, y + h);
+            //                //contBuilder.CloseFigure();
+
+            //                //_fitOutline = _fitShapeAnalyzer.dbugAnalyze(contBuilder.CurrentContour, new ushort[] { 3 }); 
+
+
+            //                _fitOutline = _fitShapeAnalyzer.CreateGlyphFitOutline(
+            //                         this._outputGlyphPoints,
+            //                         this._outputContours);
+            //            }
+            //#endif
 
         }
         public override void ReadShapes(IGlyphTranslator tx)
@@ -71,7 +104,9 @@ namespace Typography.Rendering
                 {
                     toPixelScale = 1;
                 }
-                _fitOutline.ReadOutput(tx, toPixelScale);
+
+                _fitOutline.GenerateOutput(tx, toPixelScale);
+                this.LeftXControl = _fitOutline.LeftControlPosX;
             }
             else
             {

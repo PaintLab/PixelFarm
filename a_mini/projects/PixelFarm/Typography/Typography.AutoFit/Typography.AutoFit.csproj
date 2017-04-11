@@ -36,10 +36,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CurveGen.cs" />
+    <Compile Include="GlyphBone.cs" />
+    <Compile Include="GlyphCentroidLine.cs" />
+    <Compile Include="GlyphDynamicOutline.cs" />
     <Compile Include="GlyphFitOutlineAnalyzer.cs" />
-    <Compile Include="GlyphTranslatorToContour.cs" />
-    <Compile Include="GlyphFitOutline.cs" />
     <Compile Include="GlyphImages.cs" />
+    <Compile Include="GlyphFitOutline.cs" />
+    <Compile Include="GlyphTranslatorToContour.cs" />
+    <Compile Include="GlyphTriangleAndEdge.cs" />
+    <Compile Include="MyMath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rect.cs" />
   </ItemGroup>

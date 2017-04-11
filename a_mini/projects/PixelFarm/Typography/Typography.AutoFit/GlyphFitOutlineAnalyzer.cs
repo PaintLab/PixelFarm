@@ -6,73 +6,89 @@ namespace Typography.Rendering
 {
     //This is PixelFarm's AutoFit
     //NOT FREE TYPE AUTO FIT***
+
     public class GlyphFitOutlineAnalyzer
     {
-        GlyphPartAnalyzer analyzer = new GlyphPartAnalyzer();
-        GlyphTranslatorToContour glyphToCountor = new GlyphTranslatorToContour();
-        public GlyphFitOutlineAnalyzer()
+        /// <summary>
+        /// calculate and create GlyphFitOutline
+        /// </summary>
+        /// <param name="glyphPoints"></param>
+        /// <param name="glyphContours"></param>
+        /// <returns></returns>
+        public GlyphFitOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
         {
-
-        }
-        public GlyphFitOutline Analyze(GlyphPointF[] glyphPoints, ushort[] glyphContours)
-        {
-
-            glyphToCountor.Read(glyphPoints, glyphContours);
-            //master outline analysis 
-            List<GlyphContour> contours = glyphToCountor.GetContours(); //analyzed contour             
+            //1. convert original glyph point to contour
+            _glyphToCountor.Read(glyphPoints, glyphContours);
+            //2. get result as list of contour
+            List<GlyphContour> contours = _glyphToCountor.GetContours();
+            //
+            //3. flatten each contour with the flattener
             int j = contours.Count;
-
-            analyzer.NSteps = 4;
+            _glyhFlattener.NSteps = 2;
             for (int i = 0; i < j; ++i)
             {
-                contours[i].Analyze(analyzer);
+                contours[i].Flatten(_glyhFlattener);
             }
-
+            //4. after flatten, the we can create fit outline
             if (j > 0)
             {
-                return TessWithPolyTri(contours);
+                return CreateFitOutline(contours);
             }
             else
             {
                 return null;
             }
         }
-        static GlyphFitOutline TessWithPolyTri(List<GlyphContour> contours)
+
+        GlyphPartFlattener _glyhFlattener = new GlyphPartFlattener();
+        GlyphTranslatorToContour _glyphToCountor = new GlyphTranslatorToContour();
+        public GlyphFitOutlineAnalyzer()
         {
-            List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
+
+        }
+        static GlyphFitOutline CreateFitOutline(List<GlyphContour> contours)
+        {
+
             int cntCount = contours.Count;
-            GlyphContour cnt = contours[0];
-            Poly2Tri.Polygon polygon = CreatePolygon2(contours[0]);//first contour            
-            bool isHoleIf = !cnt.IsClockwise;
-            //if (cntCount > 0)
-            //{
-            //    //debug only
+            GlyphContour cnt = contours[0]; //first contour
+            //--------------------------
+            //1. create polygon 
+            Poly2Tri.Polygon mainPolygon = CreatePolygon(cnt);//first contour        
+            bool isClockWise = cnt.IsClosewise();
+            //review is hole or not here
+            //eg i
+            //-------------------------- 
             for (int n = 1; n < cntCount; ++n)
             {
                 cnt = contours[n];
                 //IsHole is correct after we Analyze() the glyph contour
-                polygon.AddHole(CreatePolygon2(cnt));
-                //if (cnt.IsClockwise == isHoleIf)
+                Poly2Tri.Polygon subPolygon = CreatePolygon(cnt);
+                //TODO: review here
+                mainPolygon.AddHole(subPolygon);
+                //if (cnt.IsClosewise())
                 //{
-                //     polygon.AddHole(CreatePolygon2(cnt));
+
+                //}
+
+                //if (cnt.IsClosewise())
+                //{
+                //    mainPolygon.AddHole(subPolygon);
                 //}
                 //else
                 //{
-                //    //eg i
-                //    //the is a complete separate dot  (i head) over i body 
+                //    //TODO: review here
+                //    //the is a complete separate part                   
+                //    //eg i j has 2 part (dot over i and j etc)
                 //}
             }
-            //}
+            //------------------------------------------
+            //2. tri angulate 
+            Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
+            //3. create fit outline
+            GlyphFitOutline glyphFitOutline = new GlyphFitOutline(mainPolygon, contours);
 
-            //------------------------------------------
-            Poly2Tri.P2T.Triangulate(polygon); //that poly is triangulated 
-            GlyphFitOutline glyphFitOutline = new GlyphFitOutline(polygon, contours);
-            glyphFitOutline.Analyze();
-            //------------------------------------------
-#if DEBUG
-            List<GlyphTriangle> triAngles = glyphFitOutline.dbugGetTriangles();
+            List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
             int triangleCount = triAngles.Count;
-
             for (int i = 0; i < triangleCount; ++i)
             {
                 //---------------
@@ -81,135 +97,60 @@ namespace Typography.Rendering
                 AssignPointEdgeInvolvement(tri.e1);
                 AssignPointEdgeInvolvement(tri.e2);
             }
-#endif
+
             return glyphFitOutline;
         }
 
-        struct TmpPoint
-        {
-            public readonly double x;
-            public readonly double y;
-            public TmpPoint(double x, double y)
-            {
-                this.x = x;
-                this.y = y;
-            }
-#if DEBUG
-            public override string ToString()
-            {
-                return x + "," + y;
-            }
-#endif
-        }
+
+
 
         /// <summary>
         /// create polygon from flatten curve outline point
         /// </summary>
         /// <param name="cnt"></param>
         /// <returns></returns>
-        static Poly2Tri.Polygon CreatePolygon2(GlyphContour cnt)
+        static Poly2Tri.Polygon CreatePolygon(GlyphContour cnt)
         {
             List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
-            List<GlyphPart> allParts = cnt.parts;
-            //---------------------------------------
-            //merge all generated points
-            //also remove duplicated point too! 
-            List<GlyphPoint2D> mergedPoints = new List<GlyphPoint2D>();
-            cnt.mergedPoints = mergedPoints;
-            //---------------------------------------
+            List<GlyphPoint2D> flattenPoints = cnt.flattenPoints;
+            //limitation: poly tri not accept duplicated points! *** 
+            double prevX = 0;
+            double prevY = 0;
+
+#if DEBUG
+            //dbug check if all point is unique 
+            dbugCheckAllGlyphsAreUnique(flattenPoints);
+#endif
+
+            //1st point
+
+            //TODO: review here -> about last point
+            //
+            int lim = flattenPoints.Count - 1;
+            //pass
+            for (int i = 0; i < lim; ++i)
             {
-                int tt = 0;
-                int j = allParts.Count;
+                GlyphPoint2D p = flattenPoints[i];
+                double x = p.x;
+                double y = p.y;
 
-                for (int i = 0; i < j; ++i)
+                if (x == prevX && y == prevY)
                 {
-                    GlyphPart p = allParts[i];
-
-                    List<GlyphPoint2D> fpoints = p.GetFlattenPoints();
-                    if (tt == 0)
+                    if (i > 0)
                     {
-                        int n = fpoints.Count;
-                        for (int m = 0; m < n; ++m)
-                        {
-                            //GlyphPoint2D fp = fpoints[m];
-                            mergedPoints.Add(fpoints[m]);
-                            //allPoints.Add((float)fp.x);
-                            //allPoints.Add((float)fp.y);
-                        }
-                        tt++;
+                        throw new NotSupportedException();
                     }
-                    else
-                    {
-                        //except first point
-                        int n = fpoints.Count;
-                        for (int m = 1; m < n; ++m)
-                        {
-                            //GlyphPoint2D fp = fpoints[m];
-                            mergedPoints.Add(fpoints[m]);
-                            //allPoints.Add((float)fp.x);
-                            //allPoints.Add((float)fp.y);
-                        }
-                    }
+                }
+                else
+                {
+                    points.Add(p.triangulationPoint =
+                        new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = p });
 
                 }
-
             }
-            //---------------------------------------
-            {
-                //check last (x,y) and first (x,y)
-                int lim = mergedPoints.Count - 1;
-                {
-                    if (mergedPoints[lim].IsEqualValues(mergedPoints[0]))
-                    {
-                        //remove last (x,y)
-                        mergedPoints.RemoveAt(lim);
-                        lim -= 1;
-                    }
-                }
 
-                //limitation: poly tri not accept duplicated points!
-                double prevX = 0;
-                double prevY = 0;
-                Dictionary<TmpPoint, bool> tmpPoints = new Dictionary<TmpPoint, bool>();
-                lim = mergedPoints.Count;
+            return new Poly2Tri.Polygon(points.ToArray());
 
-                for (int i = 0; i < lim; ++i)
-                {
-                    GlyphPoint2D p = mergedPoints[i];
-                    double x = p.x;
-                    double y = p.y;
-
-                    if (x == prevX && y == prevY)
-                    {
-                        if (i > 0)
-                        {
-                            throw new NotSupportedException();
-                        }
-                    }
-                    else
-                    {
-                        TmpPoint tmp_point = new TmpPoint(x, y);
-                        if (!tmpPoints.ContainsKey(tmp_point))
-                        {
-                            //ensure no duplicated point
-                            tmpPoints.Add(tmp_point, true);
-                            var userTriangulationPoint = new Poly2Tri.TriangulationPoint(x, y) { userData = p };
-                            p.triangulationPoint = userTriangulationPoint;
-                            points.Add(userTriangulationPoint);
-                        }
-                        else
-                        {
-                            throw new NotSupportedException();
-                        }
-
-                        prevX = x;
-                        prevY = y;
-                    }
-                }
-
-                Poly2Tri.Polygon polygon = new Poly2Tri.Polygon(points.ToArray());
-                return polygon;
-            }
         }
         static void AssignPointEdgeInvolvement(EdgeLine edge)
         {
@@ -218,7 +159,7 @@ namespace Typography.Rendering
                 return;
             }
 
-            switch (edge.SlopKind)
+            switch (edge.SlopeKind)
             {
 
                 case LineSlopeKind.Horizontal:
@@ -270,7 +211,71 @@ namespace Typography.Rendering
             }
 
         }
+        //============================
+
+#if DEBUG
+        struct TmpPoint
+        {
+            public readonly double x;
+            public readonly double y;
+            public TmpPoint(double x, double y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+            public override string ToString()
+            {
+                return x + "," + y;
+            }
+        }
+        static Dictionary<TmpPoint, bool> s_debugTmpPoints = new Dictionary<TmpPoint, bool>();
+        static void dbugCheckAllGlyphsAreUnique(List<GlyphPoint2D> flattenPoints)
+        {
+            double prevX = 0;
+            double prevY = 0;
+            s_debugTmpPoints = new Dictionary<TmpPoint, bool>();
+            int lim = flattenPoints.Count - 1;
+            for (int i = 0; i < lim; ++i)
+            {
+                GlyphPoint2D p = flattenPoints[i];
+                double x = p.x;
+                double y = p.y;
+
+                if (x == prevX && y == prevY)
+                {
+                    if (i > 0)
+                    {
+                        throw new NotSupportedException();
+                    }
+                }
+                else
+                {
+                    TmpPoint tmp_point = new TmpPoint(x, y);
+                    if (!s_debugTmpPoints.ContainsKey(tmp_point))
+                    {
+                        //ensure no duplicated point
+                        s_debugTmpPoints.Add(tmp_point, true);
+                        if (p.triangulationPoint != null)
+                        {
+                        }
+                    }
+                    else
+                    {
+                        throw new NotSupportedException();
+                    }
+                    prevX = x;
+                    prevY = y;
+                }
+            }
+
+        }
+#endif
+
+
+
+
+
+
+
     }
-
-
 }
