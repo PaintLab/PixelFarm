@@ -63,7 +63,8 @@ namespace PixelFarm.Agg
         SingleLineBuffer _grayScaleLine = new SingleLineBuffer();
         LcdDistributionLut _currentLcdLut = null;
 
-        InternalBrightnessAndContrastAdjustment _contrastAdjustment = new InternalBrightnessAndContrastAdjustment();
+        //----------------
+        InternalBrightnessAndContrastAdjustment _brightnessAndContrast = new InternalBrightnessAndContrastAdjustment();
 
 
         internal ScanlineSubPixelRasterizer()
@@ -72,7 +73,7 @@ namespace PixelFarm.Agg
             _currentLcdLut = s_g9_3_2_1;
             //
             //I try adjust color distribution with img filter
-            _contrastAdjustment.SetParameters(0, 0);
+            _brightnessAndContrast.SetParameters(0, 0);
         }
         public LcdDistributionLut LcdLut
         {
@@ -82,15 +83,19 @@ namespace PixelFarm.Agg
                 _currentLcdLut = value;
             }
         }
-
         public int ContrastAdjustmentValue
         {
-            get { return _contrastAdjustment.Contrast; }
-            set
-            {
-                _contrastAdjustment.SetParameters(_contrastAdjustment.Brightness, value);
-            }
+            get { return _brightnessAndContrast.Contrast; }
+            set { _brightnessAndContrast.Contrast = value; }
+
         }
+        public int BrightnessAdjustmentValue
+        {
+            get { return _brightnessAndContrast.Brightness; }
+            set { _brightnessAndContrast.Brightness = value; }
+
+        }
+
         public void RenderScanlines(
             IImageReaderWriter dest,
             ScanlineRasterizer sclineRas,
@@ -101,19 +106,17 @@ namespace PixelFarm.Agg
 #if DEBUG
             int dbugMinScanlineCount = 0;
 #endif
+            //----------------------------------------------------------------------------
+            _brightnessAndContrast.UpdateIfNeed(); //update values if need
+            //----------------------------------------------------------------------------
 
             //1. ensure single line buffer width
             _grayScaleLine.EnsureLineStride(dest.Width + 4);
             //2. setup vars
             byte[] dest_buffer = dest.GetBuffer();
-            //int dest_w = dest.Width;
-            //int dest_h = dest.Height;
             int dest_stride = this._destImgStride = dest.Stride;
-
-
             //*** set color before call Blend()
             this._color = color;
-
             byte color_alpha = color.alpha;
             //---------------------------
             //3. loop, render single scanline with subpixel rendering 
@@ -152,7 +155,8 @@ namespace PixelFarm.Agg
                 BlendScanlineForAggSubPix(
                     dest_buffer,
                     (dest_stride * scline.Y) + (0 * 4), //4 color component, TODO: review destX again, this version we write entire a scanline                 
-                    lineBuff, sclineRas.MaxX); //for agg subpixel rendering
+                    lineBuff,
+                    sclineRas.MaxX); //for agg subpixel rendering
 #if DEBUG
                 dbugMinScanlineCount++;
 #endif
@@ -273,7 +277,7 @@ namespace PixelFarm.Agg
 
                 if (useContrastFilter)
                 {
-                    _contrastAdjustment.ApplyBytes(ref e_2, ref e_1, ref e_0);
+                    _brightnessAndContrast.ApplyBytes(ref e_2, ref e_1, ref e_0);
                 }
 
                 //
@@ -323,7 +327,7 @@ namespace PixelFarm.Agg
 
                             if (useContrastFilter)
                             {
-                                _contrastAdjustment.ApplyBytes(ref ec_r3, ref ec_r2, ref ec_r1);
+                                _brightnessAndContrast.ApplyBytes(ref ec_r3, ref ec_r2, ref ec_r1);
                             }
 
                             //1st round
@@ -352,7 +356,7 @@ namespace PixelFarm.Agg
                         {
                             if (useContrastFilter)
                             {
-                                _contrastAdjustment.ApplyBytes(ref ec_r3, ref ec_r2, ref ec_r1);
+                                _brightnessAndContrast.ApplyBytes(ref ec_r3, ref ec_r2, ref ec_r1);
                             }
 
                             //1st round

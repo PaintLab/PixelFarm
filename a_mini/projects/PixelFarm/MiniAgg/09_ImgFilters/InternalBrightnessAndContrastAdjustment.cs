@@ -18,30 +18,60 @@ namespace PixelFarm.Agg
         byte[] rgbTable;
         int brightness;
         int contrast;
+        bool _needUpdate;
         public InternalBrightnessAndContrastAdjustment()
         {
         }
-        public int Brightness { get { return brightness; } }
-        public int Contrast { get { return contrast; } }
-        //
-        public void SetParameters(int brightness, int contrast)
+
+        static void Clamp(int minAt, int maxAt, ref int value)
         {
-            if (contrast > 100)
+            if (value < minAt)
             {
-                contrast = 100;
+                value = minAt;
             }
-            else if (contrast < -100)
+            else if (value > maxAt)
             {
-                contrast = -100;
+                value = maxAt;
             }
-            if (brightness > 100)
+        }
+        public int Brightness
+        {
+            get { return brightness; }
+            set
             {
-                brightness = 100;
+                Clamp(-100, 100, ref value);
+                if (value != brightness)
+                {
+                    brightness = value;
+                    _needUpdate = true;
+                }
+
             }
-            else if (brightness < -100)
+        }
+        public int Contrast
+        {
+            get { return contrast; }
+            set
             {
-                brightness = -100;
+                Clamp(-100, 100, ref value);
+                if (value != contrast)
+                {
+                    contrast = value;
+                    _needUpdate = true;
+                }
             }
+        }
+
+        public void UpdateIfNeed()
+        {
+            if (_needUpdate)
+            {                
+                SetParameters(this.brightness, this.contrast);
+                _needUpdate = false;
+            }
+        }
+        void SetParameters(int brightness, int contrast)
+        {
 
             //---------------------------------------
             int multiply;
