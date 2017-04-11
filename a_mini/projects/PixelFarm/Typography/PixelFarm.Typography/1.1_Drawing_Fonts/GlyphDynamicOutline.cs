@@ -4,6 +4,8 @@ using System.Numerics;
 using System.Collections.Generic;
 using Typography.OpenFont;
 
+using PixelFarm.Agg;
+
 namespace Typography.Rendering
 {
 
@@ -14,7 +16,7 @@ namespace Typography.Rendering
     public class GlyphDynamicOutline
     {
 #if DEBUG
-        PixelFarm.Agg.CanvasPainter painter;
+        CanvasPainter painter;
         float pxscale;
 #endif
         GlyphFitOutline fitOutline;
@@ -40,7 +42,6 @@ namespace Typography.Rendering
                 //
                 Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
                 Vector2 hubCenter = lineHub.GetCenterPos();
-                
 
                 foreach (GlyphCentroidBranch branch in branches.Values)
                 {
@@ -72,6 +73,7 @@ namespace Typography.Rendering
             painter.FillColor = PixelFarm.Drawing.Color.Red;
             painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 5, 5);
             painter.FillColor = prevColor;
+
 #endif
 
         }
@@ -79,22 +81,18 @@ namespace Typography.Rendering
         {
 
             painter.Line(
-                hubCenter.X * pxscale, hubCenter.Y * pxscale,
-                brHead.X * pxscale, brHead.Y * pxscale);
+                 brHead.X * pxscale, brHead.Y * pxscale,
+                 hubCenter.X * pxscale, hubCenter.Y * pxscale,
+                 PixelFarm.Drawing.Color.Red);
 
-            //draw  a line link to centroid of target triangle
-
-            var prevStrokeColor = painter.StrokeColor;
-            painter.StrokeColor = PixelFarm.Drawing.Color.Red;
-            painter.Line(
-                (float)brHead.X * pxscale, (float)brHead.Y * pxscale,
-                 hubCenter.X * pxscale, hubCenter.Y * pxscale);
-            painter.StrokeColor = prevStrokeColor;
         }
         void WalkFromHubCenterToJoint(Vector2 joint_pos, Vector2 hubCenter)
         {
             //this is a line that link from head of lineHub to ANOTHER branch (at specific joint)
-
+            painter.Line(
+                    joint_pos.X * pxscale, joint_pos.Y * pxscale,
+                    hubCenter.X * pxscale, hubCenter.Y * pxscale,
+                    PixelFarm.Drawing.Color.Magenta);
         }
 
         void WalkBoneJoint(GlyphBoneJoint joint)
@@ -129,10 +127,7 @@ namespace Typography.Rendering
         }
         void WalkToCenterOfBoneJoint(Vector2 jointCenter)
         {
-            var prevFillColor = painter.FillColor;
-            painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-            painter.FillRectLBWH(jointCenter.X * pxscale, jointCenter.Y * pxscale, 4, 4);
-            painter.FillColor = prevFillColor;
+            painter.FillRectLBWH(jointCenter.X * pxscale, jointCenter.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
 
         }
         void WalkFromJointToTip(Vector2 contactPoint, Vector2 tipPoint)

@@ -121,6 +121,13 @@ namespace PixelFarm.Agg
             p.FillRectangle(left, bottom, right, top);
             p.FillColor = prevColor;
         }
+        public static void FillRectLBWH(this CanvasPainter p, double left, double bottom, double width, double height, Color color)
+        {
+            Color prevColor = p.FillColor;
+            p.FillColor = color;
+            p.FillRectLBWH(left, bottom, width, height);
+            p.FillColor = prevColor;
+        }
 
     }
 
