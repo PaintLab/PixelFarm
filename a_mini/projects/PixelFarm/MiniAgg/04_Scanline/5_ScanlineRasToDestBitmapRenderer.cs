@@ -203,7 +203,7 @@ namespace PixelFarm.Agg
 #endif
 
 
-            int srcW = (srcMaxX + 8);
+            int srcW = Math.Min(srcMaxX + 8, grayScaleLineBuffer.Length);
             {
                 //start with pre-accum ***, no writing occurs
                 byte e_0, e_1, e_2; //energy 0,1,2 
