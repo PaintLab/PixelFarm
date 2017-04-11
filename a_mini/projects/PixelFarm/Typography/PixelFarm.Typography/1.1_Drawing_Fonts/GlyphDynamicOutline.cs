@@ -12,45 +12,93 @@ namespace Typography.Rendering
     public class GlyphDynamicOutline
     {
 
-        class BoneJoint
+
+        class StrokeLine
         {
+            //a collection of connected stroke segment
+            public Vector2 _head;
+            public List<StrokeSegment> _segments;
+        }
+        class StrokeSegment
+        {
+            //segment link from joint a to b
+            public StrokeJoint a;
+            public StrokeJoint b;
+            public StrokeSegment(StrokeJoint a, StrokeJoint b)
+            {
+                this.a = a;
+                this.b = b;
+            }
+        }
+        class StrokeJoint
+        {
+            public Vector2 _position;
+            public Vector2 _ribA_endAt;
+            public Vector2 _ribB_endAt;
+            public Vector2 _tip_endAt;
+
+            public bool hasRibA;
+            public bool hasRibB;
+            public bool hasTip;
+#if DEBUG
+            static int dbugTotalId;
+            public readonly int dbugId = dbugTotalId++;
+#endif
+            public StrokeJoint(Vector2 pos)
+            {
+                this._position = pos;
+#if DEBUG
+
+#endif
+            }
 
         }
-        class InternalLineHub
+        class StrokeLinHub
         {
-            public Vector2 _hubCenterPos;
+            public Vector2 _center;
             public GlyphBoneJoint _headConnectedJoint;
-            public List<GlyphCentroidBranch> _branches;
+            public List<StrokeLine> _branches;
         }
 
 #if DEBUG
         CanvasPainter painter;
         float pxscale;
 #endif
-        GlyphFitOutline fitOutline;
-        List<InternalLineHub> _lineHubs;
+
+        List<StrokeLinHub> _strokeLineHub;
         public GlyphDynamicOutline(GlyphFitOutline fitOutline)
         {
-            this.fitOutline = fitOutline;
+
 
             Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs = fitOutline.GetCentroidLineHubs();
-            _lineHubs = new List<InternalLineHub>(centroidLineHubs.Count);
+            _strokeLineHub = new List<StrokeLinHub>(centroidLineHubs.Count);
+
             foreach (CentroidLineHub lineHub in centroidLineHubs.Values)
             {
                 Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
 
                 //a line hub contains many centriod branches                                 
-                InternalLineHub internalLineHub = new InternalLineHub();
-                var branchList = new List<GlyphCentroidBranch>(branches.Count);
+                StrokeLinHub internalLineHub = new StrokeLinHub();
+                var branchList = new List<StrokeLine>(branches.Count);
                 foreach (GlyphCentroidBranch branch in branches.Values)
                 {
-                    branchList.Add(branch);
+                    //create a stroke line
+                    StrokeLine strokeLine = new StrokeLine();
+                    //head of this branch
+                    Vector2 brHead = branch.GetHeadPosition();
+                    strokeLine._head = brHead;
+
+                    //a branch contains small centroid line segments.
+                    CreateStrokeSegments(branch, strokeLine);
+                    //draw  a line link to centroid of target triangle
+                    //WalkFromBranchHeadToHubCenter(brHead, hubCenter);
+
+                    branchList.Add(strokeLine);
                 }
                 internalLineHub._branches = branchList;
-                internalLineHub._hubCenterPos = lineHub.GetCenterPos();
+                internalLineHub._center = lineHub.GetCenterPos();
                 internalLineHub._headConnectedJoint = lineHub.GetHeadConnectedJoint();
-
-                _lineHubs.Add(internalLineHub);
+                _strokeLineHub.Add(internalLineHub);
             }
 
         }
@@ -64,18 +112,18 @@ namespace Typography.Rendering
         public void Analyze()
         {
             //each centroid hub 
-            foreach (InternalLineHub lineHub in _lineHubs)
+            foreach (StrokeLinHub lineHub in _strokeLineHub)
             {
                 //a line hub contains many centriod branches
                 //
-                List<GlyphCentroidBranch> branches = lineHub._branches;
-                Vector2 hubCenter = lineHub._hubCenterPos;
-                foreach (GlyphCentroidBranch branch in branches)
+                List<StrokeLine> branches = lineHub._branches;
+                Vector2 hubCenter = lineHub._center;
+                foreach (StrokeLine branch in branches)
                 {
                     //head of this branch
-                    Vector2 brHead = branch.GetHeadPosition();
-                    //a branch contains small centroid line segments.
-                    WalkBoneLinks(branch);
+                    Vector2 brHead = branch._head;
+                    //a branch contains small centroid line segments.                     
+                    WalkStrokeLine(branch);
                     //draw  a line link to centroid of target triangle
                     WalkFromBranchHeadToHubCenter(brHead, hubCenter);
                 }
@@ -116,36 +164,58 @@ namespace Typography.Rendering
         {
             //this is a line that link from head of lineHub to ANOTHER branch (at specific joint)
             painter.Line(
-                    joint_pos.X * pxscale, joint_pos.Y * pxscale,
-                    hubCenter.X * pxscale, hubCenter.Y * pxscale,
-                    PixelFarm.Drawing.Color.Magenta);
+               joint_pos.X * pxscale, joint_pos.Y * pxscale,
+               hubCenter.X * pxscale, hubCenter.Y * pxscale,
+               PixelFarm.Drawing.Color.Magenta);
         }
-
-        void WalkBoneJoint(GlyphBoneJoint joint)
+        void SetJointDetail(GlyphBoneJoint joint, StrokeJoint strokeJoint)
         {
-
-            //mid point
-            Vector2 jointPos = joint.Position;
-            //mid bone point***  
-            WalkToCenterOfBoneJoint(jointPos);
             switch (joint.SelectedEdgePointCount)
             {
                 default: throw new NotSupportedException();
                 case 0: break;
                 case 1:
-                    WalkBoneRib(joint.RibEndPointA, joint);
+                    strokeJoint._ribA_endAt = joint.RibEndPointA;
+                    strokeJoint.hasRibA = true;
                     break;
                 case 2:
-
-                    WalkBoneRib(joint.RibEndPointA, joint);
-                    WalkBoneRib(joint.RibEndPointB, joint);
+                    strokeJoint._ribA_endAt = joint.RibEndPointA;
+                    strokeJoint._ribB_endAt = joint.RibEndPointB;
+                    strokeJoint.hasRibA = true;
+                    strokeJoint.hasRibB = true;//TODO: review here
                     break;
             }
             if (joint.TipPoint != System.Numerics.Vector2.Zero)
             {
-                //if we have tip point 
-                WalkFromJointToTip(jointPos, joint.TipPoint);
+                //TODO: review here, tip point
+                strokeJoint.hasTip = true;
+                strokeJoint._tip_endAt = joint.TipPoint;
             }
+        }
+
+        void WalkBoneJoint(StrokeJoint joint)
+        {
+
+            //mid point
+            Vector2 jointPos = joint._position;
+            //mid bone point***  
+            WalkToCenterOfBoneJoint(jointPos);
+            //a
+            if (joint.hasRibA)
+            {
+                WalkBoneRib(joint._ribA_endAt, jointPos);
+            }
+            //b
+            if (joint.hasRibB)
+            {
+                WalkBoneRib(joint._ribB_endAt, jointPos);
+            }
+            //
+            if (joint.hasTip)
+            {
+                WalkFromJointToTip(jointPos, joint._tip_endAt);
+            }
+
         }
         void WalkToCenterOfBoneJoint(Vector2 jointCenter)
         {
@@ -161,46 +231,40 @@ namespace Typography.Rendering
                PixelFarm.Drawing.Color.White);
 
         }
-        void WalkBoneRib(System.Numerics.Vector2 vec, GlyphBoneJoint joint)
+        void WalkBoneRib(System.Numerics.Vector2 vec, System.Numerics.Vector2 jointPos)
         {
-            var jointPos = joint.Position;
-            double mid_x = jointPos.X;
-            double mid_y = jointPos.Y;
-
-            //rib attach point            
-
+            if (vec == Vector2.Zero)
+            {
+            }
+            //rib attach point         
             painter.FillRectLBWH(vec.X * pxscale, vec.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Green);
 
             //------------------------------------------------------------------
             //rib line
             painter.Line(
-                mid_x * pxscale, mid_y * pxscale,
+                jointPos.X * pxscale, jointPos.Y * pxscale,
                 vec.X * pxscale, vec.Y * pxscale);
             //------------------------------------------------------------------
         }
-        void WalkBoneLinks(GlyphCentroidBranch branch)
+        void WalkStrokeLine(StrokeLine branch)
         {
+            List<StrokeSegment> segments = branch._segments;
+            int count = segments.Count;
 
-            List<GlyphBone> glyphBones = branch.bones;
-            int glyphBoneCount = glyphBones.Count;
             int startAt = 0;
-            int endAt = startAt + glyphBoneCount;
-
+            int endAt = startAt + count;
             var prevColor = painter.StrokeColor;
             painter.StrokeColor = PixelFarm.Drawing.Color.White;
             for (int i = startAt; i < endAt; ++i)
             {
-                //draw line
-
-                GlyphBone bone = glyphBones[i];
-                GlyphBoneJoint jointA = bone.JointA;
-                GlyphBoneJoint jointB = bone.JointB;
+                StrokeSegment segment = segments[i];
+                StrokeJoint jointA = segment.a;
+                StrokeJoint jointB = segment.b;
                 bool valid = false;
                 if (jointA != null && jointB != null)
                 {
-
-                    var jointAPoint = jointA.Position;
-                    var jointBPoint = jointB.Position;
+                    var jointAPoint = jointA._position;
+                    var jointBPoint = jointB._position;
 
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
@@ -210,16 +274,13 @@ namespace Typography.Rendering
                     WalkBoneJoint(jointB);
                     valid = true;
                 }
-                if (jointA != null && bone.TipEdge != null)
+                if (jointA != null && jointA.hasTip)
                 {
-
-                    var jointAPoint = jointA.Position;
-                    var mid = bone.TipEdge.GetMidPoint();
-
-
+                    var jointAPoint = jointA._position;
+                    Vector2 tipEnd = jointA._tip_endAt;
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
-                        mid.X * pxscale, mid.Y * pxscale
+                        tipEnd.X * pxscale, tipEnd.Y * pxscale
                         );
                     WalkBoneJoint(jointA);
                     valid = true;
@@ -227,7 +288,7 @@ namespace Typography.Rendering
                 if (i == 0)
                 {
                     //for first bone
-                    var headpos = branch.GetHeadPosition();
+                    var headpos = branch._head;
                     painter.FillRectLBWH(headpos.X * pxscale, headpos.Y * pxscale, 5, 5);
 
                 }
@@ -237,7 +298,52 @@ namespace Typography.Rendering
                 }
             }
             painter.StrokeColor = prevColor;
-
         }
+        void CreateStrokeSegments(GlyphCentroidBranch branch, StrokeLine strokeLine)
+        {
+
+            List<GlyphBone> glyphBones = branch.bones;
+            int glyphBoneCount = glyphBones.Count;
+
+            List<StrokeSegment> strokeSegments = new List<StrokeSegment>(glyphBoneCount);
+            strokeLine._segments = strokeSegments;
+
+            int startAt = 0;
+            int endAt = startAt + glyphBoneCount;
+
+            for (int i = startAt; i < endAt; ++i)
+            {
+                //draw line
+                GlyphBone bone = glyphBones[i];
+                GlyphBoneJoint jointA = bone.JointA;
+                GlyphBoneJoint jointB = bone.JointB;
+                bool valid = false;
+                if (jointA != null && jointB != null)
+                {
+                    StrokeJoint a = new StrokeJoint(jointA.Position);
+                    StrokeJoint b = new StrokeJoint(jointB.Position);
+                    //position of joint
+                    SetJointDetail(jointA, a);
+                    SetJointDetail(jointB, b);
+                    //
+                    StrokeSegment seg = new StrokeSegment(a, b);
+                    strokeSegments.Add(seg);
+                    valid = true;
+                }
+                if (jointA != null && bone.TipEdge != null)
+                {
+                    StrokeJoint a = new StrokeJoint(jointA.Position);
+                    SetJointDetail(jointA, a);
+                    StrokeSegment seg = new StrokeSegment(a, null);
+                    strokeSegments.Add(seg);
+                    valid = true;
+                }
+                if (!valid)
+                {
+                    throw new NotSupportedException();
+                }
+            }
+        }
+
     }
 }
