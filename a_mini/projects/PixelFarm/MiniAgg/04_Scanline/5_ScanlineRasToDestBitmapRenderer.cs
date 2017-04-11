@@ -73,7 +73,8 @@ namespace PixelFarm.Agg
             _currentLcdLut = s_g9_3_2_1;
             //
             //I try adjust color distribution with img filter
-            _brightnessAndContrast.SetParameters(0, 0);
+            //set contrast =0 => disable this filter
+            _brightnessAndContrast.Contrast = 30;
         }
         public LcdDistributionLut LcdLut
         {
