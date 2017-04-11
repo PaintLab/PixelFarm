@@ -398,13 +398,13 @@ namespace PixelFarm.Drawing.WinGdi
             _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
         }
 
-        public override void FillCircle(double x, double y, double radius, Drawing.Color color)
-        {
-            var prevColor = _currentFillBrush.Color;
-            _currentFillBrush.Color = VxsHelper.ToDrawingColor(color);
-            _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
-            _currentFillBrush.Color = prevColor;
-        }
+        //public override void FillCircle(double x, double y, double radius, Drawing.Color color)
+        //{
+        //    var prevColor = _currentFillBrush.Color;
+        //    _currentFillBrush.Color = VxsHelper.ToDrawingColor(color);
+        //    _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
+        //    _currentFillBrush.Color = prevColor;
+        //}
 
         public override void FillEllipse(double left, double bottom, double right, double top)
         {
@@ -417,15 +417,10 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
-            _gfx.FillRectangle(_currentFillBrush, System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+            _gfx.FillRectangle(_currentFillBrush,
+                System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
         }
-        public override void FillRectangle(double left, double bottom, double right, double top, Color fillColor)
-        {
-            System.Drawing.Color prevColor = _currentFillBrush.Color;
-            _currentFillBrush.Color = VxsHelper.ToDrawingColor(fillColor);
-            _gfx.FillRectangle(_currentFillBrush, System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
-            _currentFillBrush.Color = prevColor;
-        }
+
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {
             _gfx.FillRectangle(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
@@ -484,13 +479,6 @@ namespace PixelFarm.Drawing.WinGdi
             _gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
         }
 
-        public override void Line(double x1, double y1, double x2, double y2, Color color)
-        {
-            var prevColor = _currentPen.Color;
-            _currentPen.Color = VxsHelper.ToDrawingColor(color);
-            _gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
-            _currentPen.Color = prevColor;
-        }
         public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
         {
             for (int i = 0; i < numPath; ++i)
@@ -501,12 +489,9 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void Rectangle(double left, double bottom, double right, double top)
         {
-            _gfx.DrawRectangle(_currentPen, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
+            _gfx.DrawRectangle(_currentPen, (float)left, (float)top, (float)(right - left), (float)(top - bottom));
         }
-        public override void Rectangle(double left, double bottom, double right, double top, Color color)
-        {
-            _gfx.DrawRectangle(_currentPen, System.Drawing.Rectangle.FromLTRB((int)left, (int)top, (int)right, (int)bottom));
-        }
+
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
             _gfx.SetClip(new System.Drawing.Rectangle(x1, y1, x2 - x1, y2 - y1));
