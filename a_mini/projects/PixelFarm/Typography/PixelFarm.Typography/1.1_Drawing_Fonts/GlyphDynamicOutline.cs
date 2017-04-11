@@ -11,14 +11,48 @@ namespace Typography.Rendering
 
     public class GlyphDynamicOutline
     {
+
+        class BoneJoint
+        {
+
+        }
+        class InternalLineHub
+        {
+            public Vector2 _hubCenterPos;
+            public GlyphBoneJoint _headConnectedJoint;
+            public List<GlyphCentroidBranch> _branches;
+        }
+
 #if DEBUG
         CanvasPainter painter;
         float pxscale;
 #endif
         GlyphFitOutline fitOutline;
+        List<InternalLineHub> _lineHubs;
         public GlyphDynamicOutline(GlyphFitOutline fitOutline)
         {
             this.fitOutline = fitOutline;
+
+            Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs = fitOutline.GetCentroidLineHubs();
+            _lineHubs = new List<InternalLineHub>(centroidLineHubs.Count);
+            foreach (CentroidLineHub lineHub in centroidLineHubs.Values)
+            {
+                Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
+
+                //a line hub contains many centriod branches                                 
+                InternalLineHub internalLineHub = new InternalLineHub();
+                var branchList = new List<GlyphCentroidBranch>(branches.Count);
+                foreach (GlyphCentroidBranch branch in branches.Values)
+                {
+                    branchList.Add(branch);
+                }
+                internalLineHub._branches = branchList;
+                internalLineHub._hubCenterPos = lineHub.GetCenterPos();
+                internalLineHub._headConnectedJoint = lineHub.GetHeadConnectedJoint();
+
+                _lineHubs.Add(internalLineHub);
+            }
+
         }
 #if DEBUG
         public void dbugSetCanvasPainter(CanvasPainter painter, float pxscale)
@@ -29,17 +63,14 @@ namespace Typography.Rendering
 #endif
         public void Analyze()
         {
-            //each centroid hub
-
-            Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs = fitOutline.GetCentroidLineHubs();
-            foreach (CentroidLineHub lineHub in centroidLineHubs.Values)
+            //each centroid hub 
+            foreach (InternalLineHub lineHub in _lineHubs)
             {
                 //a line hub contains many centriod branches
                 //
-                Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
-                Vector2 hubCenter = lineHub.GetCenterPos();
-
-                foreach (GlyphCentroidBranch branch in branches.Values)
+                List<GlyphCentroidBranch> branches = lineHub._branches;
+                Vector2 hubCenter = lineHub._hubCenterPos;
+                foreach (GlyphCentroidBranch branch in branches)
                 {
                     //head of this branch
                     Vector2 brHead = branch.GetHeadPosition();
@@ -51,7 +82,7 @@ namespace Typography.Rendering
 
                 WalkHubCenter(hubCenter);
 
-                GlyphBoneJoint joint = lineHub.GetHeadConnectedJoint();
+                GlyphBoneJoint joint = lineHub._headConnectedJoint;
                 if (joint != null)
                 {
                     WalkFromHubCenterToJoint(joint.Position, hubCenter);
@@ -60,6 +91,9 @@ namespace Typography.Rendering
         }
         public void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
+
+
+
 
         }
         void WalkHubCenter(Vector2 hubCenter)
