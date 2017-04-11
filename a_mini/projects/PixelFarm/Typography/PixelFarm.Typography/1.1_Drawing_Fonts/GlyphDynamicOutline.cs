@@ -25,7 +25,7 @@ namespace Typography.Rendering
             this.fitOutline = fitOutline;
         }
 #if DEBUG
-        public void dbugSetCanvasPainter(PixelFarm.Agg.CanvasPainter painter, float pxscale)
+        public void dbugSetCanvasPainter(CanvasPainter painter, float pxscale)
         {
             this.painter = painter;
             this.pxscale = pxscale;
@@ -68,12 +68,8 @@ namespace Typography.Rendering
         }
         void WalkHubCenter(Vector2 hubCenter)
         {
-#if DEBUG
-            var prevColor = painter.FillColor;
-            painter.FillColor = PixelFarm.Drawing.Color.Red;
-            painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 5, 5);
-            painter.FillColor = prevColor;
-
+#if DEBUG   
+            painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
 #endif
 
         }
@@ -141,10 +137,8 @@ namespace Typography.Rendering
             double mid_y = jointPos.Y;
 
             //rib attach point            
-            var prevColor = painter.FillColor;
-            painter.FillColor = PixelFarm.Drawing.Color.Green;
-            painter.FillRectLBWH(vec.X * pxscale, vec.Y * pxscale, 4, 4);
-            painter.FillColor = prevColor;
+
+            painter.FillRectLBWH(vec.X * pxscale, vec.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Green);
 
             //------------------------------------------------------------------
             //rib line
