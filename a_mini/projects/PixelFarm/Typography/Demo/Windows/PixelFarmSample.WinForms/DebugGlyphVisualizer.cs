@@ -38,18 +38,15 @@ namespace SampleWinForms.UI
                 case PointKind.LineStart:
                 case PointKind.LineStop:
                     {
-
-                        var prevColor = painter.FillColor;
-                        painter.FillColor = PixelFarm.Drawing.Color.Red;
                         if (point.AdjustedY != 0)
                         {
-                            painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5);
+                            painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5, PixelFarm.Drawing.Color.Red);
                         }
                         else
                         {
-                            painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2);
+                            painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2, PixelFarm.Drawing.Color.Red);
                         }
-                        painter.FillColor = prevColor;
+
                     }
                     break;
 
@@ -130,23 +127,16 @@ namespace SampleWinForms.UI
             //    painter.FillRectLBWH(midX * scale, midY * scale, 4, 4); 
             //}
         }
-
-
-
         void dbugDrawCentroidLine(CanvasPainter painter, GlyphCentroidLine line, float pxscale)
         {
-            painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+
             painter.Line(
                 line.p.CentroidX * pxscale, line.p.CentroidY * pxscale,
-                line.q.CentroidX * pxscale, line.q.CentroidY * pxscale);
+                line.q.CentroidX * pxscale, line.q.CentroidY * pxscale,
+                PixelFarm.Drawing.Color.Red);
 
-            var prevColor1 = painter.FillColor;
-            painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-
-            painter.FillRectLBWH(line.p.CentroidX * pxscale, line.p.CentroidY * pxscale, 2, 2);
-            painter.FillRectLBWH(line.q.CentroidX * pxscale, line.q.CentroidY * pxscale, 2, 2);
-
-            painter.FillColor = prevColor1;
+            painter.FillRectLBWH(line.p.CentroidX * pxscale, line.p.CentroidY * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
+            painter.FillRectLBWH(line.q.CentroidX * pxscale, line.q.CentroidY * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
 
         }
         void dbugDrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)
@@ -154,14 +144,8 @@ namespace SampleWinForms.UI
             //-------------- 
             EdgeLine p_contactEdge = joint._p_contact_edge;
             //mid point
-            var contactPoint = joint.Position;
-            double mid_x = contactPoint.X;
-            double mid_y = contactPoint.Y;
-
-            var prevFillColor = painter.FillColor;
-            painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-            painter.FillRectLBWH(mid_x * pxscale, mid_y * pxscale, 4, 4);
-            painter.FillColor = prevFillColor;
+            var jointPos = joint.Position;
+            painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
 
             switch (joint.SelectedEdgePointCount)
             {
@@ -178,12 +162,10 @@ namespace SampleWinForms.UI
             }
             if (joint.TipPoint != System.Numerics.Vector2.Zero)
             {
-                var prev_color1 = painter.StrokeColor;
-                painter.StrokeColor = PixelFarm.Drawing.Color.White;
                 painter.Line(
-                   contactPoint.X * pxscale, contactPoint.Y * pxscale,
-                   joint.TipPoint.X * pxscale, joint.TipPoint.Y * pxscale);
-                painter.StrokeColor = prev_color1;
+                   jointPos.X * pxscale, jointPos.Y * pxscale,
+                   joint.TipPoint.X * pxscale, joint.TipPoint.Y * pxscale,
+                   PixelFarm.Drawing.Color.White);
             }
         }
         void dbugDrawBoneLinks(CanvasPainter painter, GlyphCentroidBranch branch, float pxscale)
@@ -220,34 +202,29 @@ namespace SampleWinForms.UI
 
                     var jointAPoint = jointA.Position;
                     var jointBPoint = jointB.Position;
-                    painter.StrokeColor = bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta;
+
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
-                        jointBPoint.X * pxscale, jointBPoint.Y * pxscale
-                        );
+                        jointBPoint.X * pxscale, jointBPoint.Y * pxscale,
+                        bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta);
                     valid = true;
                 }
                 if (jointA != null && bone.TipEdge != null)
                 {
-
                     var jointAPoint = jointA.Position;
                     var mid = bone.TipEdge.GetMidPoint();
 
-                    painter.StrokeColor = bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta;
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
-                        mid.X * pxscale, mid.Y * pxscale
-                        );
+                        mid.X * pxscale, mid.Y * pxscale,
+                        bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta);
                     valid = true;
                 }
                 if (i == 0)
                 {
                     //for first bone
                     var headpos = branch.GetHeadPosition();
-                    var prevColor = painter.FillColor;
-                    painter.FillColor = PixelFarm.Drawing.Color.DeepPink;
-                    painter.FillRectLBWH(headpos.X * pxscale, headpos.Y * pxscale, 5, 5);
-                    painter.FillColor = prevColor;
+                    painter.FillRectLBWH(headpos.X * pxscale, headpos.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.DeepPink);
 
                 }
                 if (!valid)
@@ -258,7 +235,6 @@ namespace SampleWinForms.UI
             }
             painter.StrokeColor = prev_color;
         }
-
         public void dbugDrawTriangulatedGlyph(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale)
         {
             painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
@@ -329,18 +305,16 @@ namespace SampleWinForms.UI
 
                         //draw  a line link to centroid of target triangle
 
-                        var prevStrokeColor = painter.StrokeColor;
-                        painter.StrokeColor = PixelFarm.Drawing.Color.Red;
                         painter.Line(
                             (float)brHead.X * pxscale, (float)brHead.Y * pxscale,
-                             hubCenter.X * pxscale, hubCenter.Y * pxscale);
-                        painter.StrokeColor = prevStrokeColor;
+                             hubCenter.X * pxscale, hubCenter.Y * pxscale,
+                             PixelFarm.Drawing.Color.Red);
+
                     }
                 }
-                var prevFill = painter.FillColor;
-                painter.FillColor = PixelFarm.Drawing.Color.White;
-                painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 7, 7);
-                painter.FillColor = prevFill;
+
+                painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 7, 7,
+                    PixelFarm.Drawing.Color.White);
 
                 if (drawGlyphBone)
                 {
@@ -367,21 +341,10 @@ namespace SampleWinForms.UI
         void DrawBoneRib(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphBoneJoint joint, float pixelScale)
         {
             var jointPos = joint.Position;
-            double mid_x = jointPos.X;
-            double mid_y = jointPos.Y;
-
-            //
-            PixelFarm.Drawing.Color prevFillColor = painter.FillColor;
-            painter.FillColor = PixelFarm.Drawing.Color.Green;
-            painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4);
-            //------------------------------------------------------------------
-            var prevColor = painter.StrokeColor;
-            painter.StrokeColor = PixelFarm.Drawing.Color.White;
-            painter.Line(mid_x * pixelScale, mid_y * pixelScale,
+            painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4, PixelFarm.Drawing.Color.Green);
+            painter.Line(jointPos.X * pixelScale, jointPos.Y * pixelScale,
                 vec.X * pixelScale,
-                vec.Y * pixelScale);
-            painter.StrokeColor = prevColor;
-            painter.FillColor = prevFillColor;
+                vec.Y * pixelScale, PixelFarm.Drawing.Color.White);
         }
 
 #endif

@@ -9,10 +9,6 @@ using PixelFarm.Agg;
 namespace Typography.Rendering
 {
 
-
-
-
-
     public class GlyphDynamicOutline
     {
 #if DEBUG
@@ -93,15 +89,11 @@ namespace Typography.Rendering
 
         void WalkBoneJoint(GlyphBoneJoint joint)
         {
-            //-------------- 
-            EdgeLine p_contactEdge = joint._p_contact_edge;
-            //mid point
-            var contactPoint = joint.Position;
-            double mid_x = contactPoint.X;
-            double mid_y = contactPoint.Y;
 
+            //mid point
+            Vector2 jointPos = joint.Position;
             //mid bone point***  
-            WalkToCenterOfBoneJoint(contactPoint);
+            WalkToCenterOfBoneJoint(jointPos);
             switch (joint.SelectedEdgePointCount)
             {
                 default: throw new NotSupportedException();
@@ -118,7 +110,7 @@ namespace Typography.Rendering
             if (joint.TipPoint != System.Numerics.Vector2.Zero)
             {
                 //if we have tip point 
-                WalkFromJointToTip(contactPoint, joint.TipPoint);
+                WalkFromJointToTip(jointPos, joint.TipPoint);
             }
         }
         void WalkToCenterOfBoneJoint(Vector2 jointCenter)
@@ -128,6 +120,11 @@ namespace Typography.Rendering
         }
         void WalkFromJointToTip(Vector2 contactPoint, Vector2 tipPoint)
         {
+
+            painter.Line(
+               contactPoint.X * pxscale, contactPoint.Y * pxscale,
+               tipPoint.X * pxscale, tipPoint.Y * pxscale,
+               PixelFarm.Drawing.Color.White);
 
         }
         void WalkBoneRib(System.Numerics.Vector2 vec, GlyphBoneJoint joint)
