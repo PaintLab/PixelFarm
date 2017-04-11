@@ -317,6 +317,13 @@ namespace Typography.Rendering
                 //    OffsetPoints(genPointList[m], minorOffset);
                 //}
             }
+            else
+            {
+                //no vertical long bone
+                //so we need left most point
+                float leftmostX = FindLeftMost(genPointList);
+                LeftControlPosX = leftmostX;
+            }
             //-------------
 
             tx.BeginRead(j);
@@ -326,6 +333,25 @@ namespace Typography.Rendering
             }
             tx.EndRead();
             //-------------
+        }
+        static float FindLeftMost(List<List<Point2d>> genPointList)
+        {
+            //find left most x value
+            float min = float.MaxValue;
+            for (int i = genPointList.Count - 1; i >= 0; --i)
+            {
+                //new contour
+                List<Point2d> genPoints = genPointList[i];
+                for (int m = genPoints.Count - 1; m >= 0; --m)
+                {
+                    Point2d p = genPoints[m];
+                    if (p.x < min)
+                    {
+                        min = p.x;
+                    }
+                }
+            }
+            return min;
         }
         public float LeftControlPosX { get; set; }
 
@@ -539,7 +565,15 @@ namespace Typography.Rendering
                 genPoints[i] = new Point2d((float)(oldValue.x + offset), oldValue.y);
             }
         }
-        static void GenerateFitOutput(IGlyphTranslator tx,
+
+        /// <summary>
+        /// gernate glyph path from genPoints, adjust vertical value to fit the grid
+        /// </summary>
+        /// <param name="tx"></param>
+        /// <param name="genPoints"></param>
+        /// <param name="contour"></param>
+        static void GenerateFitOutput(
+            IGlyphTranslator tx,
             List<Point2d> genPoints,
             GlyphContour contour)
         {
