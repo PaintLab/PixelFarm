@@ -34,6 +34,9 @@ namespace PixelFarm.Agg
                 value = maxAt;
             }
         }
+        /// <summary>
+        /// value -100 to 100, 
+        /// </summary>
         public int Brightness
         {
             get { return brightness; }
@@ -48,6 +51,9 @@ namespace PixelFarm.Agg
 
             }
         }
+        /// <summary>
+        /// value -100 to 100
+        /// </summary>
         public int Contrast
         {
             get { return contrast; }
