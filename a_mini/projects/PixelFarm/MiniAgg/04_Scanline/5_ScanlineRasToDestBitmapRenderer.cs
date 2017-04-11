@@ -72,8 +72,7 @@ namespace PixelFarm.Agg
             _currentLcdLut = s_g9_3_2_1;
             //
             //I try adjust color distribution with img filter
-            _contrastAdjustment.SetParameters(0, 30);
-            this.EnableContrastAdjustment = true;
+            _contrastAdjustment.SetParameters(0, 0);
         }
         public LcdDistributionLut LcdLut
         {
@@ -83,11 +82,7 @@ namespace PixelFarm.Agg
                 _currentLcdLut = value;
             }
         }
-        public bool EnableContrastAdjustment
-        {
-            get;
-            set;
-        }
+
         public int ContrastAdjustmentValue
         {
             get { return _contrastAdjustment.Contrast; }
@@ -114,7 +109,7 @@ namespace PixelFarm.Agg
             //int dest_w = dest.Width;
             //int dest_h = dest.Height;
             int dest_stride = this._destImgStride = dest.Stride;
-            int src_w = _grayScaleLine.Stride;
+
 
             //*** set color before call Blend()
             this._color = color;
@@ -157,7 +152,7 @@ namespace PixelFarm.Agg
                 BlendScanlineForAggSubPix(
                     dest_buffer,
                     (dest_stride * scline.Y) + (0 * 4), //4 color component, TODO: review destX again, this version we write entire a scanline                 
-                    src_w, lineBuff, sclineRas.MinX, sclineRas.MaxX); //for agg subpixel rendering
+                    lineBuff, sclineRas.MaxX); //for agg subpixel rendering
 #if DEBUG
                 dbugMinScanlineCount++;
 #endif
@@ -176,10 +171,8 @@ namespace PixelFarm.Agg
         /// <param name="srcStride"></param>
         /// <param name="grayScaleLineBuffer"></param>
         void BlendScanlineForAggSubPix(byte[] destImgBuffer,
-            int destImgIndex, //dest index or write buffer
-            int srcW,
+            int destImgIndex, //dest index or write buffer 
             byte[] grayScaleLineBuffer,
-            int srcMinX,
             int srcMaxX)
         {
             //backup
@@ -200,8 +193,12 @@ namespace PixelFarm.Agg
             //-----------------
             int srcIndex = 0;
 #if DEBUG
-            int dbugSrcW = srcW; //temp store this for debug
-#endif 
+            int dbugDestImgIndex = destImgIndex;
+            //int dbugSrcW = srcW; //temp store this for debug
+#endif
+
+
+            int srcW = (srcMaxX + 8);
             {
                 //start with pre-accum ***, no writing occurs
                 byte e_0, e_1, e_2; //energy 0,1,2 
@@ -232,9 +229,10 @@ namespace PixelFarm.Agg
                 }
                 srcIndex += 3;
                 srcW -= 3;
+
             }
 
-            bool useContrastFilter = this.EnableContrastAdjustment;
+            bool useContrastFilter = this.ContrastAdjustmentValue != 0;
             while (srcW > 3)
             {
                 //------------
