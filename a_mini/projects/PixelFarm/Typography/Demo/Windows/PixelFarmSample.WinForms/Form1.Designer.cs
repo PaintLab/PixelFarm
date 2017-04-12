@@ -62,6 +62,7 @@
             this.txtLeftXControl = new System.Windows.Forms.TextBox();
             this.chkMinorOffset = new System.Windows.Forms.CheckBox();
             this.chkDrawTriangles = new System.Windows.Forms.CheckBox();
+            this.chkDrawRegenerateOutline = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -351,7 +352,7 @@
             // chkDynamicOutline
             // 
             this.chkDynamicOutline.AutoSize = true;
-            this.chkDynamicOutline.Location = new System.Drawing.Point(807, 320);
+            this.chkDynamicOutline.Location = new System.Drawing.Point(806, 306);
             this.chkDynamicOutline.Name = "chkDynamicOutline";
             this.chkDynamicOutline.Size = new System.Drawing.Size(130, 17);
             this.chkDynamicOutline.TabIndex = 51;
@@ -388,11 +389,22 @@
             this.chkDrawTriangles.Text = "DrawTriangles";
             this.chkDrawTriangles.UseVisualStyleBackColor = true;
             // 
+            // chkDrawRegenerateOutline
+            // 
+            this.chkDrawRegenerateOutline.AutoSize = true;
+            this.chkDrawRegenerateOutline.Location = new System.Drawing.Point(826, 329);
+            this.chkDrawRegenerateOutline.Name = "chkDrawRegenerateOutline";
+            this.chkDrawRegenerateOutline.Size = new System.Drawing.Size(157, 17);
+            this.chkDrawRegenerateOutline.TabIndex = 55;
+            this.chkDrawRegenerateOutline.Text = "Draw Regenerated Outlines";
+            this.chkDrawRegenerateOutline.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 526);
+            this.Controls.Add(this.chkDrawRegenerateOutline);
             this.Controls.Add(this.chkDrawTriangles);
             this.Controls.Add(this.chkMinorOffset);
             this.Controls.Add(this.txtLeftXControl);
@@ -471,6 +483,7 @@
         private System.Windows.Forms.TextBox txtLeftXControl;
         private System.Windows.Forms.CheckBox chkMinorOffset;
         private System.Windows.Forms.CheckBox chkDrawTriangles;
+        private System.Windows.Forms.CheckBox chkDrawRegenerateOutline;
     }
 }
 

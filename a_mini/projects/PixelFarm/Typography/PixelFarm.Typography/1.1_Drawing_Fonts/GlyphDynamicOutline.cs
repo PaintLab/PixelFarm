@@ -30,20 +30,6 @@ namespace Typography.Rendering
                 this.a = a;
                 this.b = b;
 
-                if (b == null)
-                {
-                    //from a joint to tip
-                    Vector2 tipEndAt = a._tip_endAt;
-                    double atan = Math.Atan2(
-                        a._tip_endAt.Y - a._position.Y,
-                        a._tip_endAt.X - a._position.X);
-                }
-                else
-                {
-                    //
-                    double atan = StrokeJoint.Atan(a, b);
-                }
-
             }
         }
         class StrokeJoint
@@ -85,6 +71,7 @@ namespace Typography.Rendering
 #if DEBUG
         CanvasPainter painter;
         float pxscale;
+        public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif
 
         List<StrokeLinHub> _strokeLineHub;
@@ -310,46 +297,73 @@ namespace Typography.Rendering
             //------------------------------------------------------------------
 #endif
         }
-        void WalkStrokeLine(StrokeLine branch)
+
+        static void GeneratePerpendicularLines(
+             float x0, float y0, float x1, float y1, float len,
+             out PixelFarm.VectorMath.Vector delta)
         {
-            List<StrokeSegment> segments = branch._segments;
-            int count = segments.Count;
+            PixelFarm.VectorMath.Vector v0 = new PixelFarm.VectorMath.Vector(x0, y0);
+            PixelFarm.VectorMath.Vector v1 = new PixelFarm.VectorMath.Vector(x1, y1);
 
-            int startAt = 0;
-            int endAt = startAt + count;
-#if DEBUG
-            var prevColor = painter.StrokeColor;
-            painter.StrokeColor = PixelFarm.Drawing.Color.White;
-#endif
+            delta = (v1 - v0) / 2;
+            delta = delta.NewLength(len);
+            delta.Rotate(90);
 
+        }
+        static void GeneratePerpendicularLines(
+          Vector2 p0, Vector2 p1, float len,
+          out PixelFarm.VectorMath.Vector delta)
+        {
+            PixelFarm.VectorMath.Vector v0 = new PixelFarm.VectorMath.Vector(p0.X, p0.Y);
+            PixelFarm.VectorMath.Vector v1 = new PixelFarm.VectorMath.Vector(p1.X, p1.Y);
+
+            delta = (v1 - v0) / 2;
+            delta = delta.NewLength(len);
+            delta.Rotate(90);
+
+        }
+        void RegenerateBorders(List<StrokeSegment> segments, int startAt, int endAt)
+        {
             //regenerate stroke border
-            List<Vector2> newBorder = new List<Vector2>();
+            List<Vector2> newBorders = new List<Vector2>();
             for (int i = startAt; i < endAt; ++i)
             {
                 StrokeSegment segment = segments[i];
                 StrokeJoint jointA = segment.a;
                 StrokeJoint jointB = segment.b;
+
+
                 if (jointA != null && jointB != null)
                 {
-                    Vector2 jointAPoint = jointA._position;
-                    Vector2 jointBPoint = jointB._position;
-                    WalkToJoint2(jointA, newBorder, pxscale);
-                    WalkToJoint2(jointB, newBorder, pxscale);
 
+                    //create perpendicular 
+                    PixelFarm.VectorMath.Vector delta;
+                    GeneratePerpendicularLines(jointA._position, jointB._position, 5 / pxscale, out delta);
+                    //upper and lower
+                    newBorders.Insert(0, (jointA._position + new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
+                    newBorders.Add((jointA._position - new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
+                    //
+                    newBorders.Insert(0, (jointB._position + new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
+                    newBorders.Add((jointB._position - new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
                 }
                 if (jointA != null && jointA.hasTip)
                 {
                     Vector2 jointAPoint = jointA._position;
-                    Vector2 tipEnd = jointA._tip_endAt;
-                    WalkToJoint2(jointA, newBorder, pxscale);
+                    PixelFarm.VectorMath.Vector delta;
+                    GeneratePerpendicularLines(jointA._position, jointA._tip_endAt, 5 / pxscale, out delta);
+                    newBorders.Insert(0, (jointA._position + new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
+                    newBorders.Add((jointA._position - new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
+                    //
+                    newBorders.Insert(0, (jointA._tip_endAt + new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
+                    newBorders.Add((jointA._tip_endAt - new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
                 }
             }
             //---------------------------------------------------
-            int newBorderSegmentCount = newBorder.Count;
+            int newBorderSegmentCount = newBorders.Count;
             VertexStore vxs = new VertexStore();
             for (int n = 0; n < newBorderSegmentCount; ++n)
             {
-                Vector2 borderSegment = newBorder[n];
+                Vector2 borderSegment = newBorders[n];
                 if (n == 0)
                 {
                     vxs.AddMoveTo(borderSegment.X, borderSegment.Y);
@@ -363,6 +377,24 @@ namespace Typography.Rendering
             //---------------------------------------------------
             painter.Fill(vxs, PixelFarm.Drawing.Color.Red);
             //---------------------------------------------------
+        }
+        void WalkStrokeLine(StrokeLine branch)
+        {
+            List<StrokeSegment> segments = branch._segments;
+            int count = segments.Count;
+
+            int startAt = 0;
+            int endAt = startAt + count;
+#if DEBUG
+            var prevColor = painter.StrokeColor;
+            painter.StrokeColor = PixelFarm.Drawing.Color.White;
+#endif
+
+            if (dbugDrawRegeneratedOutlines)
+            {
+                RegenerateBorders(segments, startAt, endAt);
+            }
+
             for (int i = startAt; i < endAt; ++i)
             {
                 StrokeSegment segment = segments[i];

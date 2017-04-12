@@ -128,6 +128,8 @@ namespace SampleWinForms
             chkDynamicOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkMinorOffset.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawTriangles.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
+
             //----------
             txtGlyphBoneCount.KeyDown += (s, e) =>
             {
@@ -459,7 +461,7 @@ namespace SampleWinForms
             if (chkDynamicOutline.Checked)
             {
                 GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
-                debugGlyphVisualizer.dbugDynamicOutline(painter, fitOutline, scale);
+                debugGlyphVisualizer.dbugDynamicOutline(painter, fitOutline, scale, chkDrawRegenerateOutline.Checked);
             }
             //--------------------------
 #if DEBUG

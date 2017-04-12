@@ -330,11 +330,12 @@ namespace SampleWinForms.UI
                 }
             }
         }
-        public void dbugDynamicOutline(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale)
+        public void dbugDynamicOutline(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale, bool withRegenerateOutlines)
         {
             GlyphDynamicOutline dynamicOutline = new GlyphDynamicOutline(glyphFitOutline);
 #if DEBUG
             dynamicOutline.dbugSetCanvasPainter(painter, pxscale);
+            dynamicOutline.dbugDrawRegeneratedOutlines = withRegenerateOutlines;
 #endif
             dynamicOutline.Walk();
         }
