@@ -57,6 +57,48 @@
     <Compile Include="..\BurningMineCurve\CurveUtils\VectorHelper.cs">
       <Link>9_PixelFarm_AggVertex_More\BurningMineCurves\VectorHelper.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\AggBasics.cs">
+      <Link>6_VectorMath\AggBasics.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\AggMath.cs">
+      <Link>6_VectorMath\AggMath.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\AxisAlignedBoundingBox.cs">
+      <Link>6_VectorMath\AxisAlignedBoundingBox.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\BezierCurve.cs">
+      <Link>6_VectorMath\BezierCurve.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\BezierCurveCubic.cs">
+      <Link>6_VectorMath\BezierCurveCubic.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\BezierCurveQuadric.cs">
+      <Link>6_VectorMath\BezierCurveQuadric.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\MathHelper.cs">
+      <Link>6_VectorMath\MathHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\Matrix4x4.cs">
+      <Link>6_VectorMath\Matrix4x4.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\Quaternion.cs">
+      <Link>6_VectorMath\Quaternion.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\Ray.cs">
+      <Link>6_VectorMath\Ray.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\Vector2.cs">
+      <Link>6_VectorMath\Vector2.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\Vector3.cs">
+      <Link>6_VectorMath\Vector3.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\Vector3Float.cs">
+      <Link>6_VectorMath\Vector3Float.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\Vector4.cs">
+      <Link>6_VectorMath\Vector4.cs</Link>
+    </Compile>
     <Compile Include="5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="5_PixelFarm_Agg\PixelFormat.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\LineWalker.cs" />
