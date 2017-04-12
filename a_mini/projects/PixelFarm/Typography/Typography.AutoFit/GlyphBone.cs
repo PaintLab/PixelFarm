@@ -212,11 +212,14 @@ namespace Typography.Rendering
 
         EdgeLine _selectedEdgeA, _selectedEdgeB, _selectedTipEdge;
 
+       
+        bool _dbugSwap;
+
         public void AddRibEndAt(EdgeLine edgeLine, Vector2 vec)
         {
             switch (_ribCount)
             {
-                //not more thar2
+                //not more than 2
                 default: throw new NotSupportedException();
                 case 0:
                     _selectedEdgeA = edgeLine;
@@ -225,8 +228,22 @@ namespace Typography.Rendering
                 case 1:
                     _selectedEdgeB = edgeLine;
                     _ribEndPoint_B = vec;
+
+                    //swap edge if need
+                    //if (_ribEndPoint_A.X > _ribEndPoint_B.X)
+                    //{
+                    //    EdgeLine tmpA = _selectedEdgeA;
+                    //    _selectedEdgeA = _selectedEdgeB;
+                    //    _selectedEdgeB = tmpA;
+                    //    Vector2 tmpAEndPoint = _ribEndPoint_A;
+                    //    _ribEndPoint_A = _ribEndPoint_B;
+                    //    _ribEndPoint_B = tmpAEndPoint;
+                    //    _dbugSwap = true;
+                    //}
                     break;
             }
+
+
             _ribCount++;
         }
         public void SetTipEdge(EdgeLine tipEdge)
@@ -242,6 +259,25 @@ namespace Typography.Rendering
         public EdgeLine RibEndEdgeA { get { return _selectedEdgeA; } }
         public EdgeLine RibEndEdgeB { get { return _selectedEdgeB; } }
         public EdgeLine TipEdge { get { return _selectedTipEdge; } }
+        //public double RibA_ArcTan()
+        //{
+        //    Vector2 jointPos = this.Position;
+        //    return Math.Atan2(_ribEndPoint_A.Y - jointPos.Y,
+        //        _ribEndPoint_A.X - jointPos.X);
+        //}
+        //public double RibB_ArcTan()
+        //{
+        //    Vector2 jointPos = this.Position;
+        //    return Math.Atan2(_ribEndPoint_B.Y - jointPos.Y,
+        //        _ribEndPoint_B.X - jointPos.X);
+        //}
+        //public double Tip_ArcTan()
+        //{
+        //    Vector2 jointPos = this.Position;
+        //    return Math.Atan2(_tipPoint.Y - jointPos.Y,
+        //        _tipPoint.X - jointPos.X);
+        //}
+
 
 #if DEBUG
         public override string ToString()

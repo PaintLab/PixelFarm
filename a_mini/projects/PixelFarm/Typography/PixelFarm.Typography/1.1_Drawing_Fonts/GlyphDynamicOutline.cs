@@ -24,10 +24,26 @@ namespace Typography.Rendering
             //segment link from joint a to b
             public StrokeJoint a;
             public StrokeJoint b;
+
             public StrokeSegment(StrokeJoint a, StrokeJoint b)
             {
                 this.a = a;
                 this.b = b;
+
+                if (b == null)
+                {
+                    //from a joint to tip
+                    Vector2 tipEndAt = a._tip_endAt;
+                    double atan = Math.Atan2(
+                        a._tip_endAt.Y - a._position.Y,
+                        a._tip_endAt.X - a._position.X);
+                }
+                else
+                {
+                    //
+                    double atan = StrokeJoint.Atan(a, b);
+                }
+
             }
         }
         class StrokeJoint
@@ -52,6 +68,12 @@ namespace Typography.Rendering
 #endif
             }
 
+            public static double Atan(StrokeJoint j0, StrokeJoint j1)
+            {
+                return Math.Atan2(
+                       j1._position.Y - j0._position.Y,
+                       j1._position.X - j0._position.X);
+            }
         }
         class StrokeLinHub
         {
@@ -125,7 +147,7 @@ namespace Typography.Rendering
                 {
                     //head of this branch
                     Vector2 brHead = branch._head;
-                    //a branch contains small centroid line segments.                     
+
                     WalkStrokeLine(branch);
                     //draw  a line link to centroid of target triangle
                     WalkFromBranchHeadToHubCenter(brHead, hubCenter);
@@ -149,7 +171,7 @@ namespace Typography.Rendering
         {
 
 #if DEBUG   
-            //painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
+            painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
 #endif
 
         }
@@ -187,8 +209,21 @@ namespace Typography.Rendering
                     strokeJoint._ribB_endAt = joint.RibEndPointB;
                     strokeJoint.hasRibA = true;
                     strokeJoint.hasRibB = true;//TODO: review here
+
+                    //if (
+                    //    Math.Abs((joint.RibA_ArcTan() - joint.RibB_ArcTan())) <
+                    //    Math.Atan2(1,1))
+                    //{
+                    //    strokeJoint.hasRibB = false ;//TODO: review here
+                    //}
+
                     break;
             }
+            //check if ribB and A angle
+            //if less than 90 degree
+            //remove this rib
+
+
             if (joint.TipPoint != System.Numerics.Vector2.Zero)
             {
                 //TODO: review here, tip point
@@ -218,6 +253,31 @@ namespace Typography.Rendering
             if (joint.hasTip)
             {
                 WalkFromJointToTip(jointPos, joint._tip_endAt);
+            }
+
+        }
+        void WalkToJoint2(StrokeJoint joint, List<Vector2> output, float pxscale)
+        {
+
+            //mid point
+            Vector2 jointPos = joint._position;
+            ////mid bone point***  
+            //WalkToCenterOfJoint(jointPos);
+            //a
+            if (joint.hasRibA)
+            {
+
+                output.Insert(0, joint._ribA_endAt * pxscale);
+            }
+            //b
+            if (joint.hasRibB)
+            {
+                output.Add(joint._ribB_endAt * pxscale);
+            }
+            //
+            if (joint.hasTip)
+            {
+                output.Add(joint._tip_endAt * pxscale);
             }
 
         }
@@ -262,6 +322,47 @@ namespace Typography.Rendering
             painter.StrokeColor = PixelFarm.Drawing.Color.White;
 #endif
 
+            //regenerate stroke border
+            List<Vector2> newBorder = new List<Vector2>();
+            for (int i = startAt; i < endAt; ++i)
+            {
+                StrokeSegment segment = segments[i];
+                StrokeJoint jointA = segment.a;
+                StrokeJoint jointB = segment.b;
+                if (jointA != null && jointB != null)
+                {
+                    Vector2 jointAPoint = jointA._position;
+                    Vector2 jointBPoint = jointB._position;
+                    WalkToJoint2(jointA, newBorder, pxscale);
+                    WalkToJoint2(jointB, newBorder, pxscale);
+
+                }
+                if (jointA != null && jointA.hasTip)
+                {
+                    Vector2 jointAPoint = jointA._position;
+                    Vector2 tipEnd = jointA._tip_endAt;
+                    WalkToJoint2(jointA, newBorder, pxscale);
+                }
+            }
+            //---------------------------------------------------
+            int newBorderSegmentCount = newBorder.Count;
+            VertexStore vxs = new VertexStore();
+            for (int n = 0; n < newBorderSegmentCount; ++n)
+            {
+                Vector2 borderSegment = newBorder[n];
+                if (n == 0)
+                {
+                    vxs.AddMoveTo(borderSegment.X, borderSegment.Y);
+                }
+                else
+                {
+                    vxs.AddLineTo(borderSegment.X, borderSegment.Y);
+                }
+            }
+            vxs.AddCloseFigure();
+            //---------------------------------------------------
+            painter.Fill(vxs, PixelFarm.Drawing.Color.Red);
+            //---------------------------------------------------
             for (int i = startAt; i < endAt; ++i)
             {
                 StrokeSegment segment = segments[i];
@@ -270,8 +371,8 @@ namespace Typography.Rendering
                 bool valid = false;
                 if (jointA != null && jointB != null)
                 {
-                    var jointAPoint = jointA._position;
-                    var jointBPoint = jointB._position;
+                    Vector2 jointAPoint = jointA._position;
+                    Vector2 jointBPoint = jointB._position;
 
 #if DEBUG
                     painter.Line(
@@ -285,7 +386,7 @@ namespace Typography.Rendering
                 }
                 if (jointA != null && jointA.hasTip)
                 {
-                    var jointAPoint = jointA._position;
+                    Vector2 jointAPoint = jointA._position;
                     Vector2 tipEnd = jointA._tip_endAt;
 #if DEBUG
                     painter.Line(
@@ -296,11 +397,12 @@ namespace Typography.Rendering
                     WalkToJoint(jointA);
                     valid = true;
                 }
+
                 if (i == 0)
                 {
                     //for first bone
 #if DEBUG
-                    var headpos = branch._head;
+                    Vector2 headpos = branch._head;
                     painter.FillRectLBWH(headpos.X * pxscale, headpos.Y * pxscale, 5, 5);
 #endif
                 }

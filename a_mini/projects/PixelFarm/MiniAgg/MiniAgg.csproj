@@ -45,6 +45,7 @@
     <Compile Include="02_PixelBuffer\ImageHelper.cs" />
     <Compile Include="03_SpanGenerators\1_ImgSpanGen.cs" />
     <Compile Include="03_SpanGenerators\ISpanInterpolator.cs" />
+    <Compile Include="04_Scanline\SubPixConst.cs" />
     <Compile Include="07_ISpanInterpolator\LineInterpolators.cs" />
     <Compile Include="07_ISpanInterpolator\SpanInterpolatorLinear.cs" />
     <Compile Include="07_ISpanInterpolator\SpanInterpolatorPerspectiveLerp.cs" />
@@ -92,7 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
-      <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
     </ProjectReference>
   </ItemGroup>

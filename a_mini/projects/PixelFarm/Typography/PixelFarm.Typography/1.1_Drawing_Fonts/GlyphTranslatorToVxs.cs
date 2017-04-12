@@ -26,7 +26,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public void EndRead()
         {
-            
+
         }
         public void CloseContour()
         {
@@ -74,9 +74,10 @@ namespace PixelFarm.Drawing.Fonts
                     new PixelFarm.Agg.Transform.AffinePlan(
                         PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scale, scale));
                 //transform -> flatten ->output
-                VertexStore tmpVxs = vxsPool.GetFreeVxs();
-                curveFlattener.MakeVxs(mat.TransformToVxs(ps.Vxs, tmpVxs), output);
-                vxsPool.Release(ref tmpVxs);
+                //TODO: review here again***d
+                //VertexStore tmpVxs = vxsPool.GetFreeVxs();
+                curveFlattener.MakeVxs(ps.Vxs, output);
+               // vxsPool.Release(ref tmpVxs);
             }
         }
     }

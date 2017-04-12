@@ -348,7 +348,8 @@ namespace Mini
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     //test subpixel rendering 
 
-                    vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0, new VertexStore());
+
+                    vxs = vxs.TranslateToNewVxs(15, 0, new VertexStore());
                     gfx.UseSubPixelRendering = true;
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(

@@ -132,8 +132,10 @@ namespace PixelFarm.Agg.Sample_Perspective
             }
             else
             {
+                RectD r = lionShape.Bounds;
+            
                 var txPerspective = new Perspective(
-                    lionShape.Bounds,
+                   r.Left, r.Bottom, r.Right, r.Top,
                     quadPolygonControl.GetInnerCoords());
                 if (txPerspective.IsValid)
                 {

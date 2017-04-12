@@ -45,7 +45,7 @@ namespace PixelFarm.VectorMath
     /// </summary>
     public static class MathHelper
     {
-        #region Fields
+
 
         /// <summary>
         /// Defines the value of Pi as a <see cref="System.Single"/>.
@@ -88,11 +88,7 @@ namespace PixelFarm.VectorMath
         /// Defines the base-2 logarithm of E.
         /// </summary>
         public const double Log2E = 1.442695041f;
-        #endregion
 
-        #region Public Members
-
-        #region NextPowerOfTwo
 
         /// <summary>
         /// Returns the next power of two that is larger than the specified number.
@@ -138,9 +134,6 @@ namespace PixelFarm.VectorMath
             return System.Math.Pow(2, System.Math.Ceiling(System.Math.Log((double)n, 2)));
         }
 
-        #endregion
-
-        #region Factorial
 
         /// <summary>Calculates the factorial of a given natural number.
         /// </summary>
@@ -154,9 +147,6 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-        #endregion
-
-        #region BinomialCoefficient
 
         /// <summary>
         /// Calculates the binomial coefficient <paramref name="n"/> above <paramref name="k"/>.
@@ -169,7 +159,6 @@ namespace PixelFarm.VectorMath
             return Factorial(n) / (Factorial(k) * Factorial(n - k));
         }
 
-        #endregion
 
         static public double Range0ToTau(double Value)
         {
@@ -206,7 +195,6 @@ namespace PixelFarm.VectorMath
             return DeltaAngle;
         }
 
-        #region DegreesToRadians
 
         /// <summary>
         /// Convert degrees to radians
@@ -229,10 +217,6 @@ namespace PixelFarm.VectorMath
             const double radToDeg = 180.0f / System.Math.PI;
             return radians * radToDeg;
         }
-
-        #endregion
-
-        #region Swap
 
         /// <summary>
         /// Swaps two double values.
@@ -258,9 +242,6 @@ namespace PixelFarm.VectorMath
             b = temp;
         }
 
-        #endregion
-
-        #endregion
 
         public static bool AlmostEqual(double a, double b, double differenceAllowed)
         {
