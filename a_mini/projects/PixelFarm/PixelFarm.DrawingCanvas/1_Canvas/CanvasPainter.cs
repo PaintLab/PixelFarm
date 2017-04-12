@@ -128,6 +128,34 @@ namespace PixelFarm.Agg
             p.FillRectLBWH(left, bottom, width, height);
             p.FillColor = prevColor;
         }
+        public static void Fill(this CanvasPainter p, VertexStoreSnap snap, Color color)
+        {
+            Color prevColor = p.FillColor;
+            p.FillColor = color;
+            p.Fill(snap);
+            p.FillColor = prevColor;
+        }
+        public static void Fill(this CanvasPainter p, VertexStore vxs, Color color)
+        {
+            Color prevColor = p.FillColor;
+            p.FillColor = color;
+            p.Fill(vxs);
+            p.FillColor = prevColor;
+        }
+        public static void Draw(this CanvasPainter p, VertexStore vxs, Color color)
+        {
+            Color prevColor = p.StrokeColor;
+            p.StrokeColor = color;
+            p.Draw(vxs);
+            p.StrokeColor = prevColor;
+        }
+        public static void Draw(this CanvasPainter p, VertexStoreSnap vxs, Color color)
+        {
+            Color prevColor = p.StrokeColor;
+            p.StrokeColor = color;
+            p.Draw(vxs);
+            p.StrokeColor = prevColor;
+        }
 
     }
 
