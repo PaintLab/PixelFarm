@@ -120,7 +120,7 @@ namespace Typography.Rendering
                 //a line hub contains many centriod branches
                 //
                 List<StrokeLine> branches = lineHub._branches;
-               
+
                 foreach (StrokeLine branch in branches)
                 {
                     //head of this branch
@@ -129,7 +129,7 @@ namespace Typography.Rendering
                     WalkStrokeLine(branch);
                     //draw  a line link to centroid of target triangle
                     WalkFromBranchHeadToHubCenter(brHead, hubCenter);
-                } 
+                }
 
                 GlyphBoneJoint joint = lineHub._headConnectedJoint;
                 if (joint != null)
@@ -147,27 +147,30 @@ namespace Typography.Rendering
         }
         void WalkHubCenter(Vector2 hubCenter)
         {
+
 #if DEBUG   
-            painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
+            //painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
 #endif
 
         }
         void WalkFromBranchHeadToHubCenter(Vector2 brHead, Vector2 hubCenter)
         {
-
+#if DEBUG
             painter.Line(
                  brHead.X * pxscale, brHead.Y * pxscale,
                  hubCenter.X * pxscale, hubCenter.Y * pxscale,
                  PixelFarm.Drawing.Color.Red);
-
+#endif
         }
         void WalkFromHubCenterToJoint(Vector2 joint_pos, Vector2 hubCenter)
         {
             //this is a line that link from head of lineHub to ANOTHER branch (at specific joint)
+#if DEBUG
             painter.Line(
                joint_pos.X * pxscale, joint_pos.Y * pxscale,
                hubCenter.X * pxscale, hubCenter.Y * pxscale,
                PixelFarm.Drawing.Color.Magenta);
+#endif
         }
         void SetJointDetail(GlyphBoneJoint joint, StrokeJoint strokeJoint)
         {
@@ -194,22 +197,22 @@ namespace Typography.Rendering
             }
         }
 
-        void WalkBoneJoint(StrokeJoint joint)
+        void WalkToJoint(StrokeJoint joint)
         {
 
             //mid point
             Vector2 jointPos = joint._position;
             //mid bone point***  
-            WalkToCenterOfBoneJoint(jointPos);
+            WalkToCenterOfJoint(jointPos);
             //a
             if (joint.hasRibA)
             {
-                WalkBoneRib(joint._ribA_endAt, jointPos);
+                WalkRib(joint._ribA_endAt, jointPos);
             }
             //b
             if (joint.hasRibB)
             {
-                WalkBoneRib(joint._ribB_endAt, jointPos);
+                WalkRib(joint._ribB_endAt, jointPos);
             }
             //
             if (joint.hasTip)
@@ -218,25 +221,24 @@ namespace Typography.Rendering
             }
 
         }
-        void WalkToCenterOfBoneJoint(Vector2 jointCenter)
+        void WalkToCenterOfJoint(Vector2 jointCenter)
         {
+#if DEBUG
             painter.FillRectLBWH(jointCenter.X * pxscale, jointCenter.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
-
+#endif
         }
         void WalkFromJointToTip(Vector2 contactPoint, Vector2 tipPoint)
         {
-
+#if DEBUG
             painter.Line(
                contactPoint.X * pxscale, contactPoint.Y * pxscale,
                tipPoint.X * pxscale, tipPoint.Y * pxscale,
                PixelFarm.Drawing.Color.White);
-
+#endif
         }
-        void WalkBoneRib(System.Numerics.Vector2 vec, System.Numerics.Vector2 jointPos)
+        void WalkRib(System.Numerics.Vector2 vec, System.Numerics.Vector2 jointPos)
         {
-            if (vec == Vector2.Zero)
-            {
-            }
+#if DEBUG
             //rib attach point         
             painter.FillRectLBWH(vec.X * pxscale, vec.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Green);
 
@@ -246,6 +248,7 @@ namespace Typography.Rendering
                 jointPos.X * pxscale, jointPos.Y * pxscale,
                 vec.X * pxscale, vec.Y * pxscale);
             //------------------------------------------------------------------
+#endif
         }
         void WalkStrokeLine(StrokeLine branch)
         {
@@ -254,8 +257,11 @@ namespace Typography.Rendering
 
             int startAt = 0;
             int endAt = startAt + count;
+#if DEBUG
             var prevColor = painter.StrokeColor;
             painter.StrokeColor = PixelFarm.Drawing.Color.White;
+#endif
+
             for (int i = startAt; i < endAt; ++i)
             {
                 StrokeSegment segment = segments[i];
@@ -267,38 +273,45 @@ namespace Typography.Rendering
                     var jointAPoint = jointA._position;
                     var jointBPoint = jointB._position;
 
+#if DEBUG
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
                         jointBPoint.X * pxscale, jointBPoint.Y * pxscale
                         );
-                    WalkBoneJoint(jointA);
-                    WalkBoneJoint(jointB);
+#endif
+                    WalkToJoint(jointA);
+                    WalkToJoint(jointB);
                     valid = true;
                 }
                 if (jointA != null && jointA.hasTip)
                 {
                     var jointAPoint = jointA._position;
                     Vector2 tipEnd = jointA._tip_endAt;
+#if DEBUG
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
                         tipEnd.X * pxscale, tipEnd.Y * pxscale
                         );
-                    WalkBoneJoint(jointA);
+#endif
+                    WalkToJoint(jointA);
                     valid = true;
                 }
                 if (i == 0)
                 {
                     //for first bone
+#if DEBUG
                     var headpos = branch._head;
                     painter.FillRectLBWH(headpos.X * pxscale, headpos.Y * pxscale, 5, 5);
-
+#endif
                 }
                 if (!valid)
                 {
                     throw new NotSupportedException();
                 }
             }
+#if DEBUG
             painter.StrokeColor = prevColor;
+#endif
         }
         void CreateStrokeSegments(GlyphCentroidBranch branch, StrokeLine strokeLine)
         {
