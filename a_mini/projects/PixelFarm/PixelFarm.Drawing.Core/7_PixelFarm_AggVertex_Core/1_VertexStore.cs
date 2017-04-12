@@ -305,11 +305,26 @@ namespace PixelFarm.Agg
             vxs.AddVertex(x1, y1, VertexCmd.P3c);
             vxs.AddVertex(x2, y2, VertexCmd.P3c);
             vxs.AddVertex(x3, y3, VertexCmd.LineTo);
-             
+
         }
         public static void AddCloseFigure(this VertexStore vxs)
         {
             vxs.AddVertex(0, 0, VertexCmd.Close);
+        }
+
+        public static VertexStore TranslateToNewVxs(this VertexStore src, double dx, double dy, VertexStore outputVxs)
+        {
+            int count = src.Count;
+            VertexCmd cmd;
+            double x, y;
+            for (int i = 0; i < count; ++i)
+            {
+                cmd = src.GetVertex(i, out x, out y);
+                x += dx;
+                y += dy;
+                outputVxs.AddVertex(x, y, cmd);
+            }
+            return outputVxs;
         }
     }
 

@@ -143,12 +143,10 @@ namespace PixelFarm.Agg.Samples
                 }
                 //-------------------------------
                 //close
+                //TODO: we not need this AddLineTo()
                 vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
-
-
             }
             vxs.AddCloseFigure();
-
             VertexStore v2 = new VertexStore();
             cflat.MakeVxs(vxs, v2);
             vxs = v2;
