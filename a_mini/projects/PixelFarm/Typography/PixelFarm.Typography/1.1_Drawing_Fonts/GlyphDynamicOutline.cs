@@ -109,15 +109,18 @@ namespace Typography.Rendering
             this.pxscale = pxscale;
         }
 #endif
-        public void Analyze()
+        public void Walk()
         {
             //each centroid hub 
             foreach (StrokeLinHub lineHub in _strokeLineHub)
             {
+                Vector2 hubCenter = lineHub._center;
+                WalkHubCenter(hubCenter);
+
                 //a line hub contains many centriod branches
                 //
                 List<StrokeLine> branches = lineHub._branches;
-                Vector2 hubCenter = lineHub._center;
+               
                 foreach (StrokeLine branch in branches)
                 {
                     //head of this branch
@@ -126,9 +129,7 @@ namespace Typography.Rendering
                     WalkStrokeLine(branch);
                     //draw  a line link to centroid of target triangle
                     WalkFromBranchHeadToHubCenter(brHead, hubCenter);
-                }
-
-                WalkHubCenter(hubCenter);
+                } 
 
                 GlyphBoneJoint joint = lineHub._headConnectedJoint;
                 if (joint != null)

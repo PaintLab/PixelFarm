@@ -336,7 +336,7 @@ namespace SampleWinForms.UI
 #if DEBUG
             dynamicOutline.dbugSetCanvasPainter(painter, pxscale);
 #endif
-            dynamicOutline.Analyze();
+            dynamicOutline.Walk();
         }
         void DrawBoneRib(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphBoneJoint joint, float pixelScale)
         {
