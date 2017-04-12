@@ -85,7 +85,8 @@ namespace PixelFarm.Agg.Samples
         public void MoveBy(int xdiff, int ydiff)
         {
             //apply translation  
-            this.vxs = Affine.TranslateToVxs(vxs, xdiff, ydiff, new VertexStore());
+            //TODO: review here again, not to use new VertexStore()
+            this.vxs = vxs.TranslateToNewVxs(xdiff, ydiff, new VertexStore());
             boundingRect.Offset(xdiff, ydiff);
         }
         public Drawing.Color StrokeColor

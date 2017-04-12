@@ -99,10 +99,7 @@ namespace PixelFarm.Agg.Transform
         Translate,
         Invert
     }
-    public interface ICoordTransformer
-    {
-        void Transform(ref double x, ref double y);
-    }
+ 
     public struct AffinePlan
     {
         public readonly AffineMatrixCommand cmd;

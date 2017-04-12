@@ -312,6 +312,14 @@ namespace PixelFarm.Agg
             vxs.AddVertex(0, 0, VertexCmd.Close);
         }
 
+        /// <summary>
+        /// copy + translate vertext data from src to outputVxs
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="dx"></param>
+        /// <param name="dy"></param>
+        /// <param name="outputVxs"></param>
+        /// <returns></returns>
         public static VertexStore TranslateToNewVxs(this VertexStore src, double dx, double dy, VertexStore outputVxs)
         {
             int count = src.Count;

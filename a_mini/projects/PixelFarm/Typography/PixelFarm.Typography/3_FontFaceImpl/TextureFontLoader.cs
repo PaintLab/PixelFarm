@@ -8,7 +8,7 @@ using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.OpenFont.Tables;
 using Typography.OpenFont.Extensions;
- 
+
 
 namespace PixelFarm.Drawing.Fonts
 {
@@ -269,7 +269,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     Agg.Transform.Affine transformMat = Agg.Transform.Affine.NewTranslation(dx, dy);
                     VertexStore vxs2 = new VertexStore();
-                    Agg.Transform.Affine.TranslateToVxs(glyphVxs, dx, dy, vxs2);
+                    glyphVxs.TranslateToNewVxs(dx, dy, vxs2);
                     glyphVxs = vxs2;
                 }
                 //-------------------------------------------- 
@@ -382,7 +382,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     Agg.Transform.Affine transformMat = Agg.Transform.Affine.NewTranslation(dx, dy);
                     VertexStore vxs2 = new VertexStore();
-                    Agg.Transform.Affine.TranslateToVxs(glyphVxs, dx, dy, vxs2);
+                    glyphVxs.TranslateToNewVxs(dx, dy, vxs2);
                     glyphVxs = vxs2;
                 }
                 //-------------------------------------------- 

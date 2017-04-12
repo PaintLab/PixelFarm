@@ -27,13 +27,11 @@
 //#include <math.h>
 //#include "agg_basics.h"
 
-using System;
-using PixelFarm.VectorMath;
-namespace PixelFarm.Agg.Transform
+using PixelFarm.Agg.Transform;
+namespace PixelFarm.Agg
 {
 
-
-    public static class AffineExtensions
+    public static class TransformExtensions
     {
         public static void TransformToVertexSnap(this Affine affine, VertexStore src, VertexStore output)
         {
@@ -77,7 +75,45 @@ namespace PixelFarm.Agg.Transform
             }
             return outputVxs;
         }
-       
+        public static VertexStore TransformToVxs(this Bilinear bilinearTx, VertexStore src, VertexStore vxs)
+        {
+            int count = src.Count;
+            VertexCmd cmd;
+            double x, y;
+            for (int i = 0; i < count; ++i)
+            {
+                cmd = src.GetVertex(i, out x, out y);
+                bilinearTx.Transform(ref x, ref y);
+                vxs.AddVertex(x, y, cmd);
+            }
+            return vxs;
+        }
+        public static VertexStore TransformToVxs(this Perspective perspecitveTx, VertexStoreSnap snap, VertexStore vxs)
+        {
+            var vsnapIter = snap.GetVertexSnapIter();
+            double x, y;
+            VertexCmd cmd;
+            do
+            {
+                cmd = vsnapIter.GetNextVertex(out x, out y);
+                perspecitveTx.Transform(ref x, ref y);
+                vxs.AddVertex(x, y, cmd);
+            } while (!VertexHelper.IsEmpty(cmd));
+            return vxs;
+        }
+        public static VertexStore TransformToVxs(this Perspective perspecitveTx, VertexStore src, VertexStore vxs)
+        {
+            VertexCmd cmd;
+            double x, y;
+            int count = src.Count;
+            for (int i = 0; i < count; ++i)
+            {
+                cmd = src.GetVertex(i, out x, out y);
+                perspecitveTx.Transform(ref x, ref y);
+                vxs.AddVertex(x, y, cmd);
+            }
+            return vxs;
+        }
     }
 
 
