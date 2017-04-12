@@ -29,7 +29,7 @@ namespace PixelFarm.Agg.VertexSource
             Div
         }
 
-        static readonly double CURVE_DISTANCE_EPSILON = 1e-30;
+        //static readonly double CURVE_DISTANCE_EPSILON = 1e-30;
         internal static readonly double CURVE_COLLINEARITY_EPSILON = 1e-30;
         internal static readonly double CURVE_ANGLE_TOLERANCE_EPSILON = 0.01;
         internal static readonly int CURVE_RECURSION_LIMIT = 32;

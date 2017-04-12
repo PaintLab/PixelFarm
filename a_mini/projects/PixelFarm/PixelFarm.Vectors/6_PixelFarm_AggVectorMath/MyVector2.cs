@@ -1,7 +1,72 @@
 ﻿//MIT, 2017, WinterDev
 using System;
-namespace PixelFarm.Vectors
-{   
+namespace PixelFarm.VectorMath
+{
+    public struct PointF
+    {
+        public float X;
+        public float Y;
+        public PointF(float x, float y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+        public void Offset(float dx, float dy)
+        {
+            this.X += dx;
+            this.Y += dy;
+        }
+    }
+    public struct Point
+    {
+        public int x;
+        public int y;
+        public Point(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+        public void Offset(int dx, int dy)
+        {
+            this.x += dx;
+            this.y += dy;
+        }
+#if DEBUG
+        public override string ToString()
+        {
+            return "(" + x + "," + y + ")";
+        }
+#endif
+    }
+
+
+    public static class MyVectorHelper
+    {
+        public static Vector NewFromPoint(PointF p)
+        {
+            return new Vector(p.X, p.Y);
+        }
+        public static Vector NewFromTwoPoints(PointF start, PointF end)
+        {
+            return new Vector(end.X - start.X, end.Y - start.Y);
+        }
+
+        public static bool IsClockwise(PointF pt1, PointF pt2, PointF pt3)
+        {
+            Vector V21 = NewFromTwoPoints(pt2, pt1);
+            Vector v23 = NewFromTwoPoints(pt2, pt3);
+            return V21.CrossProduct(v23) < 0; // sin(angle pt1 pt2 pt3) > 0, 0<angle pt1 pt2 pt3 <180
+        }
+
+        public static bool IsCCW(PointF pt1, PointF pt2, PointF pt3)
+        {
+            Vector V21 = NewFromTwoPoints(pt2, pt1);
+            Vector v23 = NewFromTwoPoints(pt2, pt3);
+            return V21.CrossProduct(v23) > 0;  // sin(angle pt2 pt1 pt3) < 0, 180<angle pt2 pt1 pt3 <360
+        }
+
+    }
+
     public struct Vector
     {
         double _x, _y;

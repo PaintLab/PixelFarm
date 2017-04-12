@@ -41,13 +41,13 @@
     <Compile Include="6_PixelFarm_AggVectorMath\BezierCurveQuadric.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\MathHelper.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\Matrix4x4.cs" />
+    <Compile Include="6_PixelFarm_AggVectorMath\MyVector2.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\Quaternion.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\Ray.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\Vector2.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\Vector3.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\Vector3Float.cs" />
     <Compile Include="6_PixelFarm_AggVectorMath\Vector4.cs" />
-    <Compile Include="MyVector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

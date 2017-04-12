@@ -81,6 +81,9 @@
     <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\Matrix4x4.cs">
       <Link>6_VectorMath\Matrix4x4.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\MyVector2.cs">
+      <Link>6_VectorMath\MyVector2.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.Vectors\6_PixelFarm_AggVectorMath\Quaternion.cs">
       <Link>6_VectorMath\Quaternion.cs</Link>
     </Compile>
