@@ -44,7 +44,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\MyVector.cs" />
     <Compile Include="Tests\TestCases.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -67,6 +66,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Vectors\PixelFarm.Vectors.csproj">
+      <Project>{680463ff-7656-4b1c-853c-a820dc59bc87}</Project>
+      <Name>PixelFarm.Vectors</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,8 +1,7 @@
 ﻿//MIT, 2017, WinterDev
 using System;
-using System.Drawing;
-namespace TestFoundamentalVectors
-{
+namespace PixelFarm.Vectors
+{   
     public struct Vector
     {
         double _x, _y;
@@ -10,12 +9,12 @@ namespace TestFoundamentalVectors
         {
             _x = x; _y = y;
         }
-        public Vector(PointF pt)
+        public Vector(Vector pt)
         {
             _x = pt.X;
             _y = pt.Y;
         }
-        public Vector(PointF st, PointF end)
+        public Vector(Vector st, Vector end)
         {
             _x = end.X - st.X;
             _y = end.Y - st.Y;
@@ -80,31 +79,28 @@ namespace TestFoundamentalVectors
             return _x * v.X + _y * v.Y;
         }
 
-        public static bool IsClockwise(PointF pt1, PointF pt2, PointF pt3)
+        public static bool IsClockwise(Vector pt1, Vector pt2, Vector pt3)
         {
             Vector V21 = new Vector(pt2, pt1);
             Vector v23 = new Vector(pt2, pt3);
             return V21.CrossProduct(v23) < 0; // sin(angle pt1 pt2 pt3) > 0, 0<angle pt1 pt2 pt3 <180
         }
 
-        public static bool IsCCW(PointF pt1, PointF pt2, PointF pt3)
+        public static bool IsCCW(Vector pt1, Vector pt2, Vector pt3)
         {
             Vector V21 = new Vector(pt2, pt1);
             Vector v23 = new Vector(pt2, pt3);
             return V21.CrossProduct(v23) > 0;  // sin(angle pt2 pt1 pt3) < 0, 180<angle pt2 pt1 pt3 <360
         }
 
-        public static double DistancePointLine(PointF pt, PointF lnA, PointF lnB)
+        public static double DistancePointLine(Vector pt, Vector lnA, Vector lnB)
         {
             Vector v1 = new Vector(lnA, lnB);
             Vector v2 = new Vector(lnA, pt);
             v1 /= v1.Magnitude;
             return Math.Abs(v2.CrossProduct(v1));
         }
-        public PointF ToPointF()
-        {
-            return new PointF((float)_x, (float)_y);
-        }
+
         public void Rotate(int Degree)
         {
             double radian = Degree * Math.PI / 180.0;
