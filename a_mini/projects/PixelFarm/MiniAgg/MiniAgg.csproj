@@ -45,6 +45,7 @@
     <Compile Include="02_PixelBuffer\ImageHelper.cs" />
     <Compile Include="03_SpanGenerators\1_ImgSpanGen.cs" />
     <Compile Include="03_SpanGenerators\ISpanInterpolator.cs" />
+    <Compile Include="04_Scanline\SubPixConst.cs" />
     <Compile Include="07_ISpanInterpolator\LineInterpolators.cs" />
     <Compile Include="07_ISpanInterpolator\SpanInterpolatorLinear.cs" />
     <Compile Include="07_ISpanInterpolator\SpanInterpolatorPerspectiveLerp.cs" />

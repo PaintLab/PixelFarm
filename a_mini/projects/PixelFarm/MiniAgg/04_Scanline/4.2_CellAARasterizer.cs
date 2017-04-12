@@ -33,7 +33,7 @@
 //----------------------------------------------------------------------------
 
 
-using poly_subpix = PixelFarm.Agg.AggBasics.PolySubPix;
+using poly_subpix = PixelFarm.Agg.PolySubPix;
 namespace PixelFarm.Agg
 {
     partial class ScanlineRasterizer
@@ -173,10 +173,10 @@ namespace PixelFarm.Agg
             }
 
 
-            const int DX_LIMIT = (16384 << AggBasics.PolySubPix.SHIFT);
-            const int POLY_SUBPIXEL_SHIFT = AggBasics.PolySubPix.SHIFT;
-            const int POLY_SUBPIXEL_MASK = AggBasics.PolySubPix.MASK;
-            const int POLY_SUBPIXEL_SCALE = AggBasics.PolySubPix.SCALE;
+            const int DX_LIMIT = (16384 << PolySubPix.SHIFT);
+            const int POLY_SUBPIXEL_SHIFT = PolySubPix.SHIFT;
+            const int POLY_SUBPIXEL_MASK = PolySubPix.MASK;
+            const int POLY_SUBPIXEL_SCALE = PolySubPix.SCALE;
             public void DrawLine(int x1, int y1, int x2, int y2)
             {
                 int dx = x2 - x1;

@@ -88,6 +88,7 @@
     <Compile Include="MiniAgg\04_Scanline\4.3_VectorClipper.cs" />
     <Compile Include="MiniAgg\04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="MiniAgg\04_Scanline\6_ClipLiangBarsky.cs" />
+    <Compile Include="MiniAgg\04_Scanline\SubPixConst.cs" />
     <Compile Include="MiniAgg\07_ISpanInterpolator\LineInterpolators.cs" />
     <Compile Include="MiniAgg\07_ISpanInterpolator\SpanInterpolatorLinear.cs" />
     <Compile Include="MiniAgg\07_ISpanInterpolator\SpanInterpolatorPerspectiveLerp.cs" />
