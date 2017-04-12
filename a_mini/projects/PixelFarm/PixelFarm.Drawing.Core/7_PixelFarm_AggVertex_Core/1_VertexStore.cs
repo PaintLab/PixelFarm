@@ -18,7 +18,7 @@
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
 
-#define UNSAFE_VER
+#define UNSAFE_VER 
 
 namespace PixelFarm.Agg
 {

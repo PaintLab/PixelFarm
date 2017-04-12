@@ -55,6 +55,17 @@
     <Compile Include="Agg_Transform\ICoordTransformer.cs" />
     <Compile Include="Agg_Transform\1_Affine.cs" />
     <Compile Include="Agg_Transform\Viewport.cs" />
+    <Compile Include="Geometry\Arc.cs" />
+    <Compile Include="Geometry\BasicGeometries.cs" />
+    <Compile Include="Geometry\BezireCurve.cs" />
+    <Compile Include="Geometry\BSpline.cs" />
+    <Compile Include="Geometry\Collections.cs" />
+    <Compile Include="Geometry\Curves.cs" />
+    <Compile Include="Geometry\Ellipse.cs" />
+    <Compile Include="Geometry\Rectangle.cs" />
+    <Compile Include="Geometry\RectangleF.cs" />
+    <Compile Include="Geometry\RectD.cs" />
+    <Compile Include="Geometry\RectInt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

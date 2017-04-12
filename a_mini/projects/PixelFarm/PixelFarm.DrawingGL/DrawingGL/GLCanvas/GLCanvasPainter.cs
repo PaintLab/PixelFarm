@@ -193,7 +193,7 @@ namespace PixelFarm.DrawingGL
         public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
         {
             var v1 = GetFreeVxs();
-            BezierCurve.CreateBezierVxs4(v1,
+            VertexSourceExtensions.CreateBezierVxs4(v1,
                 new PixelFarm.VectorMath.Vector2(startX, startY),
                 new PixelFarm.VectorMath.Vector2(endX, endY),
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),

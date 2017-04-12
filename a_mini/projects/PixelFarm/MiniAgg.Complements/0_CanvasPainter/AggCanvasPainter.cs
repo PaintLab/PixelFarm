@@ -457,7 +457,7 @@ namespace PixelFarm.Agg
            float controlX2, float controlY2)
         {
             var v1 = GetFreeVxs();
-            PixelFarm.Agg.VertexSource.BezierCurve.CreateBezierVxs4(v1,
+            VertexSourceExtensions.CreateBezierVxs4(v1,
                 new PixelFarm.VectorMath.Vector2(startX, startY),
                 new PixelFarm.VectorMath.Vector2(endX, endY),
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
