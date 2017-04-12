@@ -115,7 +115,6 @@ namespace PixelFarm.Agg
         {
             if (m_num_vertices > 0)
             {
-
                 m_cmds[m_num_vertices - 1] = (byte)VertexCmd.CloseAndEndFigure;
             }
 
@@ -277,7 +276,7 @@ namespace PixelFarm.Agg
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public static void AddP2c(this VertexStore vxs, double x, double y)
+        internal static void AddP2c(this VertexStore vxs, double x, double y)
         {
             vxs.AddVertex(x, y, VertexCmd.P2c);
         }
@@ -286,7 +285,7 @@ namespace PixelFarm.Agg
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        public static void AddP3c(this VertexStore vxs, double x, double y)
+        internal static void AddP3c(this VertexStore vxs, double x, double y)
         {
             vxs.AddVertex(x, y, VertexCmd.P3c);
         }
@@ -297,6 +296,16 @@ namespace PixelFarm.Agg
         public static void AddLineTo(this VertexStore vxs, double x1, double y1)
         {
             vxs.AddVertex(x1, y1, VertexCmd.LineTo);
+        }
+        public static void AddCurve4To(this VertexStore vxs,
+            double x1, double y1,
+            double x2, double y2,
+            double x3, double y3)
+        {
+            vxs.AddVertex(x1, y1, VertexCmd.P3c);
+            vxs.AddVertex(x2, y2, VertexCmd.P3c);
+            vxs.AddVertex(x3, y3, VertexCmd.LineTo);
+             
         }
         public static void AddCloseFigure(this VertexStore vxs)
         {

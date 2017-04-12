@@ -80,8 +80,8 @@ namespace PixelFarm.Agg.Samples
         public RectD BoundingRect
         {
             get { return this.boundingRect; }
-        } 
-      
+        }
+
         public void MoveBy(int xdiff, int ydiff)
         {
             //apply translation  
@@ -118,21 +118,6 @@ namespace PixelFarm.Agg.Samples
             //var data2 = CurvePreprocess.RdpReduce(contPoints, 2);
             var data2 = contPoints;
             CubicBezier[] cubicBzs = CurveFit.Fit(data2, 8);
-            //PathWriter pWriter = new PathWriter();
-            //pWriter.StartFigure();
-
-            //int j = cubicBzs.Length;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    CubicBezier bz = cubicBzs[i];
-            //    pWriter.MoveTo(bz.p0.x, bz.p0.y);
-            //    pWriter.LineTo(bz.p0.x, bz.p0.y);
-
-            //    pWriter.Curve4(bz.p1.x, bz.p1.y,
-            //            bz.p2.x, bz.p2.y,
-            //            bz.p3.x, bz.p3.y);
-            //}
-            //pWriter.CloseFigureCCW();  
             vxs = new VertexStore();
             int j = cubicBzs.Length;
             //1. 
@@ -142,20 +127,25 @@ namespace PixelFarm.Agg.Samples
                 CubicBezier bz0 = cubicBzs[0];
                 vxs.AddMoveTo(bz0.p0.x, bz0.p0.y);
                 vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
-                vxs.AddP3c(bz0.p1.x, bz0.p1.y);
-                vxs.AddP3c(bz0.p2.x, bz0.p2.y);
-                vxs.AddLineTo(bz0.p3.x, bz0.p3.y);
+                vxs.AddCurve4To(
+                    bz0.p1.x, bz0.p1.y,
+                    bz0.p2.x, bz0.p2.y,
+                    bz0.p3.x, bz0.p3.y);
+
                 //-------------------------------
                 for (int i = 1; i < j; ++i) //start at 1
                 {
                     CubicBezier bz = cubicBzs[i];
-                    vxs.AddP3c(bz.p1.x, bz.p1.y);
-                    vxs.AddP3c(bz.p2.x, bz.p2.y);
-                    vxs.AddLineTo(bz.p3.x, bz.p3.y);
+                    vxs.AddCurve4To(
+                        bz.p1.x, bz.p1.y,
+                        bz.p2.x, bz.p2.y,
+                        bz.p3.x, bz.p3.y);
                 }
                 //-------------------------------
                 //close
                 vxs.AddLineTo(bz0.p0.x, bz0.p0.y);
+
+
             }
             vxs.AddCloseFigure();
 
