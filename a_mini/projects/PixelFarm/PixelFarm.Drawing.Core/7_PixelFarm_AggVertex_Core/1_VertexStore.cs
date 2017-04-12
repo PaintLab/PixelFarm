@@ -109,36 +109,7 @@ namespace PixelFarm.Agg
             m_num_vertices++;
         }
         //--------------------------------------------------
-        /// <summary>
-        /// add 2nd curve point (for C3,C4 curve)
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void AddP2c(double x, double y)
-        {
-            AddVertex(x, y, VertexCmd.P2c);
-        }
-        /// <summary>
-        /// add 3rd curve point (for C4 curve)
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void AddP3c(double x, double y)
-        {
-            AddVertex(x, y, VertexCmd.P3c);
-        }
-        public void AddMoveTo(double x, double y)
-        {
-            AddVertex(x, y, VertexCmd.MoveTo);
-        }
-        public void AddLineTo(double x, double y)
-        {
-            AddVertex(x, y, VertexCmd.LineTo);
-        }
-        public void AddCloseFigure()
-        {
-            AddVertex(0, 0, VertexCmd.Close);
-        }
+
 
         public void EndGroup()
         {
@@ -226,42 +197,12 @@ namespace PixelFarm.Agg
                                 m_num_vertices);
                         }
                     }
-                    //------------------------------------
-                    //line by line version
-                    //for (int i = actualLen - 1; i >= 0; )
-                    //{
-                    //    new_xy[i] = m_coord_xy[i];
-                    //    i--;
-                    //    new_xy[i] = m_coord_xy[i];
-                    //    i--;
-                    //}
-                    //for (int i = m_num_vertices - 1; i >= 0; --i)
-                    //{
-                    //    newCmd[i] = m_cmds[i];
-                    //}
                 }
                 m_coord_xy = new_xy;
                 m_cmds = newCmd;
                 m_allocated_vertices = newSize;
             }
         }
-        //----------------------------------------------------------
-
-        //public void AddSubVertices(VertexStore anotherVxs)
-        //{
-        //    int j = anotherVxs.Count;
-        //    this.HasMoreThanOnePart = true;
-        //    for (int i = 0; i < j; ++i)
-        //    {
-        //        double x, y;
-        //        VertexCmd cmd = anotherVxs.GetVertex(i, out x, out y);
-        //        this.AddVertex(x, y, cmd);
-        //        if (cmd == VertexCmd.Stop)
-        //        {
-        //            break;
-        //        }
-        //    }
-        //}
         //internal use only!
         public static void UnsafeDirectSetData(
             VertexStore vstore,
@@ -329,7 +270,39 @@ namespace PixelFarm.Agg
     }
 
 
-
+    public static class VertexStoreExtensions
+    {
+        /// <summary>
+        /// add 2nd curve point (for C3,C4 curve)
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public static void AddP2c(this VertexStore vxs, double x, double y)
+        {
+            vxs.AddVertex(x, y, VertexCmd.P2c);
+        }
+        /// <summary>
+        /// add 3rd curve point (for C4 curve)
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public static void AddP3c(this VertexStore vxs, double x, double y)
+        {
+            vxs.AddVertex(x, y, VertexCmd.P3c);
+        }
+        public static void AddMoveTo(this VertexStore vxs, double x0, double y0)
+        {
+            vxs.AddVertex(x0, y0, VertexCmd.MoveTo);
+        }
+        public static void AddLineTo(this VertexStore vxs, double x1, double y1)
+        {
+            vxs.AddVertex(x1, y1, VertexCmd.LineTo);
+        }
+        public static void AddCloseFigure(this VertexStore vxs)
+        {
+            vxs.AddVertex(0, 0, VertexCmd.Close);
+        }
+    }
 
 
 }
