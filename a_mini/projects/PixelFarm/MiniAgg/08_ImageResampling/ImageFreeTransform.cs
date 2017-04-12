@@ -1,5 +1,4 @@
 ﻿//MIT, 2014-2017, WinterDev
-
 //---------------------------------------------
 //some code from CodeProject: 'Free Image Transformation'
 //YLS CS 
@@ -144,7 +143,10 @@ namespace PixelFarm.Agg.Imaging
             v1 /= v1.Magnitude;
             return Math.Abs(v2.CrossProduct(v1));
         }
-
+        public PointF ToPointF()
+        {
+            return new PointF((float)_x, (float)_y);
+        }
         public void Rotate(int Degree)
         {
             double radian = Degree * Math.PI / 180.0;
@@ -154,13 +156,7 @@ namespace PixelFarm.Agg.Imaging
             double ny = _x * sin + _y * cos;
             _x = nx;
             _y = ny;
-        }
-
-        public PointF ToPointF()
-        {
-            return new PointF((float)_x, (float)_y);
-        }
-
+        } 
         public Vector NewLength(double newLength)
         {
             //radian

@@ -1,45 +1,136 @@
 ﻿//MIT, 2017, WinterDev
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-using System.Windows.Forms;
-using PixelFarm.Agg.Imaging;
-
-namespace Mini
+namespace TestFoundamentalVectors
 {
-    public partial class FormTestColorBlend : Form
+    public struct Vector
     {
-        Graphics g;
-        Bitmap bmp_src;
-        Bitmap bmp_result;
-        BrightnessAndContrastAdjustment brightnessAndContrastAdjustment;
-        public FormTestColorBlend()
+        double _x, _y;
+        public Vector(double x, double y)
         {
-            InitializeComponent();
+            _x = x; _y = y;
+        }
+        public Vector(PointF pt)
+        {
+            _x = pt.X;
+            _y = pt.Y;
+        }
+        public Vector(PointF st, PointF end)
+        {
+            _x = end.X - st.X;
+            _y = end.Y - st.Y;
         }
 
-        private void FormTestColorBlend_Load(object sender, EventArgs e)
+        public double X
         {
-            this.colorCompoBox1.SetColor(System.Drawing.Color.FromArgb(255, 125, 125, 125));
-            brightnessAndContrastAdjustment = new BrightnessAndContrastAdjustment();
-            brightnessAndContrastAdjustment.SetParameters(0, 30);
+            get { return _x; }
+            set { _x = value; }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        public double Y
         {
-            //test img contrast
-            //TestBrightnessAndContrast();
-            TestLines();
-
+            get { return _y; }
+            set { _y = value; }
         }
-        void TestLines()
+
+        public double Magnitude
         {
-            if (g == null)
-            {
-                g = panel1.CreateGraphics();
-            }
+            get { return Math.Sqrt(X * X + Y * Y); }
+        }
+
+        public static Vector operator +(Vector v1, Vector v2)
+        {
+            return new Vector(v1.X + v2.X, v1.Y + v2.Y);
+        }
+
+        public static Vector operator -(Vector v1, Vector v2)
+        {
+            return new Vector(v1.X - v2.X, v1.Y - v2.Y);
+        }
+
+        public static Vector operator -(Vector v)
+        {
+            return new Vector(-v.X, -v.Y);
+        }
+
+        public static Vector operator *(double c, Vector v)
+        {
+            return new Vector(c * v.X, c * v.Y);
+        }
+
+        public static Vector operator *(Vector v, double c)
+        {
+            return new Vector(c * v.X, c * v.Y);
+        }
+
+        public static Vector operator /(Vector v, double c)
+        {
+            return new Vector(v.X / c, v.Y / c);
+        }
+
+        // A * B =|A|.|B|.sin(angle AOB)
+        public double CrossProduct(Vector v)
+        {
+            return _x * v.Y - v.X * _y;
+        }
+
+        // A. B=|A|.|B|.cos(angle AOB)
+        public double DotProduct(Vector v)
+        {
+            return _x * v.X + _y * v.Y;
+        }
+
+        public static bool IsClockwise(PointF pt1, PointF pt2, PointF pt3)
+        {
+            Vector V21 = new Vector(pt2, pt1);
+            Vector v23 = new Vector(pt2, pt3);
+            return V21.CrossProduct(v23) < 0; // sin(angle pt1 pt2 pt3) > 0, 0<angle pt1 pt2 pt3 <180
+        }
+
+        public static bool IsCCW(PointF pt1, PointF pt2, PointF pt3)
+        {
+            Vector V21 = new Vector(pt2, pt1);
+            Vector v23 = new Vector(pt2, pt3);
+            return V21.CrossProduct(v23) > 0;  // sin(angle pt2 pt1 pt3) < 0, 180<angle pt2 pt1 pt3 <360
+        }
+
+        public static double DistancePointLine(PointF pt, PointF lnA, PointF lnB)
+        {
+            Vector v1 = new Vector(lnA, lnB);
+            Vector v2 = new Vector(lnA, pt);
+            v1 /= v1.Magnitude;
+            return Math.Abs(v2.CrossProduct(v1));
+        }
+        public PointF ToPointF()
+        {
+            return new PointF((float)_x, (float)_y);
+        }
+        public void Rotate(int Degree)
+        {
+            double radian = Degree * Math.PI / 180.0;
+            double sin = Math.Sin(radian);
+            double cos = Math.Cos(radian);
+            double nx = _x * cos - _y * sin;
+            double ny = _x * sin + _y * cos;
+            _x = nx;
+            _y = ny;
+        }
+        public Vector NewLength(double newLength)
+        {
+            //radian
+            double atan = Math.Atan2(_y, _x);
+            return new Vector(Math.Cos(atan) * newLength,
+                        Math.Sin(atan) * newLength);
+        }
+    }
+
+
+    class TestCases
+    {
+        public void TestLines(Graphics g)
+        {
 
             int lineLen = 10;
             int x0 = 30;
@@ -58,8 +149,8 @@ namespace Mini
                         (float)(x0 + lineLen * Math.Cos(DegToRad(i))),
                         (float)(y0 + lineLen * Math.Sin(DegToRad(i))));
                     y0 += 5; //increse y in each steps
-                    //
-                    //we need to draw separate line
+                             //
+                             //we need to draw separate line
                     gxPath.CloseFigure();
                 }
 
@@ -152,35 +243,6 @@ namespace Mini
             delta.Rotate(90);
 
         }
-        void TestBrightnessAndContrast()
-        {
-            if (g == null)
-            {
-                g = panel1.CreateGraphics();
-                bmp_src = new Bitmap("d:\\WimageTest\\subpix_29_1.png");
-                bmp_result = new Bitmap(bmp_src.Width, bmp_src.Height, bmp_src.PixelFormat);
-                //--------
-                var bmp_src_data = bmp_src.LockBits(new Rectangle(0, 0, bmp_src.Width, bmp_src.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp_src.PixelFormat);
-                var bmp_dest_data = bmp_result.LockBits(new Rectangle(0, 0, bmp_result.Width, bmp_result.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp_result.PixelFormat);
-                byte[] srcBuffer = new byte[bmp_src_data.Stride * bmp_src_data.Height];
-                byte[] destBuffer = new byte[bmp_dest_data.Stride * bmp_dest_data.Height];
-                System.Runtime.InteropServices.Marshal.Copy(bmp_src_data.Scan0, srcBuffer, 0, srcBuffer.Length);
-                //--------
-
-                brightnessAndContrastAdjustment.Apply(srcBuffer, destBuffer, bmp_src_data.Stride, bmp_src_data.Height);
-                //--------
-                System.Runtime.InteropServices.Marshal.Copy(destBuffer, 0, bmp_dest_data.Scan0, destBuffer.Length);
-                //--------
-                bmp_src.UnlockBits(bmp_src_data);
-                bmp_result.UnlockBits(bmp_dest_data);
-            }
-            g.DrawImage(bmp_src, 0, 0);
-            g.DrawImage(bmp_result, 0, bmp_src.Height);
-
-        }
-
     }
-
-
 
 }
