@@ -1,20 +1,174 @@
 ﻿//MIT, 2014-2017, WinterDev
 using System;
 using System.Collections.Generic;
-using Typography.Rendering;
+
 using PixelFarm.Agg;
+using PixelFarm.Drawing.Fonts;
+using Typography.OpenFont;
+using Typography.Rendering;
 namespace SampleWinForms.UI
 {
 
     class DebugGlyphVisualizer
     {
+        DebugGlyphVisualizerInfoView _infoView;
 
+        //
+
+        Typeface _typeface;
+        float _sizeInPoint;
+        GlyphPathBuilder builder;
+        VertexStorePool _vxsPool = new VertexStorePool();
+        CanvasPainter painter;
+        float _pxscale;
+        HintTechnique _latestHint;
+        char _testChar;
+        public CanvasPainter CanvasPainter { get { return painter; } set { painter = value; } }
+        public void SetFont(Typeface typeface, float sizeInPoint)
+        {
+            _typeface = typeface;
+            _sizeInPoint = sizeInPoint;
+            builder = new GlyphPathBuilder(typeface);
+            FillBackGround = true;//default 
+
+        }
+
+        public bool UseLcdTechnique { get; set; }
+        public bool FillBackGround { get; set; }
+        public bool DrawBorder { get; set; }
+        public bool OffsetMinorX { get; set; }
+        public bool ShowTess { get; set; }
+
+        public string MinorOffsetInfo { get; set; }
+        public DebugGlyphVisualizerInfoView VisualizeInfoView
+        {
+            get { return _infoView; }
+            set
+            {
+                _infoView = value;
+                value.RequestGlyphRender += (s, e) =>
+                {
+                    //refresh render output
+                   
+                    RenderChar(_testChar, _latestHint);
+                     
+                };
+            }
+        }
+        
+        public void RenderChar(char testChar, HintTechnique hint)
+        {
+            builder.SetHintTechnique(hint);
+#if DEBUG
+            builder.dbugAlwaysDoCurveAnalysis = true;
+#endif
+            _infoView.Clear();
+            _latestHint = hint;
+            _testChar = testChar;
+            //----------------------------------------------------
+            builder.Build(testChar, _sizeInPoint);
+            var txToVxs1 = new GlyphTranslatorToVxs();
+            builder.ReadShapes(txToVxs1);
+            VertexStore vxs = new VertexStore();
+            txToVxs1.WriteOutput(vxs, _vxsPool);
+            //----------------------------------------------------
+            painter.UseSubPixelRendering = this.UseLcdTechnique;
+            //5. use PixelFarm's Agg to render to bitmap...
+            //5.1 clear background
+            painter.Clear(PixelFarm.Drawing.Color.White);
+
+            RectD bounds = new RectD();
+            BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref bounds);
+            //----------------------------------------------------
+            float scale = _typeface.CalculateToPixelScaleFromPointSize(_sizeInPoint);
+            _pxscale = scale;
+            var leftControl = this.LeftXControl;
+            var left2 = leftControl * scale;
+            int floor_1 = (int)left2;
+            float diff = left2 - floor_1;
+            //----------------------------------------------------
+            if (OffsetMinorX)
+            {
+                MinorOffsetInfo = left2.ToString() + " =>" + floor_1 + ",diff=" + diff;
+            }
+            else
+            {
+                MinorOffsetInfo = left2.ToString();
+            }
+
+
+            //5. use PixelFarm's Agg to render to bitmap...
+            //5.1 clear background
+            painter.Clear(PixelFarm.Drawing.Color.White);
+
+            if (FillBackGround)
+            {
+                //5.2 
+                painter.FillColor = PixelFarm.Drawing.Color.Black;
+                //5.3
+                //painter.Fill(vxs);
+
+                float xpos = 5;// - diff;
+                if (OffsetMinorX)
+                {
+                    xpos -= diff;
+                }
+                //for (float i = 0; i < 20; ++i)
+                //{
+                painter.SetOrigin(xpos, 10);
+                painter.Fill(vxs);
+                //}
+            }
+            if (DrawBorder)
+            {
+                //5.4 
+                // p.StrokeWidth = 3;
+                painter.StrokeColor = PixelFarm.Drawing.Color.Green;
+                //user can specific border width here...
+                //p.StrokeWidth = 2;
+                //5.5 
+                painter.Draw(vxs);
+            }
+#if DEBUG
+            builder.dbugAlwaysDoCurveAnalysis = false;
+#endif
+
+            if (ShowTess)
+            {
+                RenderTessTesult();
+            }
+
+            if (DrawDynamicOutline)
+            {
+                GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
+                dbugDynamicOutline(painter, fitOutline, scale, true);
+            }
+
+        }
+        public void RenderTessTesult()
+        {
+#if DEBUG
+
+            GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
+            if (fitOutline != null)
+            {
+                dbugDrawTriangulatedGlyph(painter, fitOutline, _pxscale);
+
+            }
+#endif
+        }
+        public float LeftXControl
+        {
+            get { return builder.LeftXControl; }
+        }
         public bool DrawCentroidBone { get; set; }
         public bool DrawGlyphBone { get; set; }
-
         public bool DrawTrianglesAndEdges { get; set; }
+        public bool DrawDynamicOutline { get; set; }
+        public bool DrawRegenerateOutline { get; set; }
+        //
 #if DEBUG
-        static void DrawPointKind(CanvasPainter painter, GlyphPoint2D point, float scale)
+        void DrawPointKind(CanvasPainter painter, GlyphPoint2D point, float scale)
         {
             //var prevColor = painter.FillColor;
             //painter.FillColor = PixelFarm.Drawing.Color.Red;
@@ -38,21 +192,22 @@ namespace SampleWinForms.UI
                 case PointKind.LineStart:
                 case PointKind.LineStop:
                     {
-                        if (point.AdjustedY != 0)
-                        {
-                            painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5, PixelFarm.Drawing.Color.Red);
-                        }
-                        else
-                        {
-                            painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2, PixelFarm.Drawing.Color.Red);
-                        }
+                        painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2, PixelFarm.Drawing.Color.Red);
+                        //if (point.AdjustedY != 0)
+                        //{
+                        //    painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5, PixelFarm.Drawing.Color.Red);
+                        //}
+                        //else
+                        //{
+                        //    painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2, PixelFarm.Drawing.Color.Red);
+                        //}
 
                     }
                     break;
 
             }
         }
-        static void DrawEdge(CanvasPainter painter, EdgeLine edge, float scale)
+        void DrawEdge(CanvasPainter painter, EdgeLine edge, float scale)
         {
             if (edge.IsOutside)
             {
@@ -64,11 +219,13 @@ namespace SampleWinForms.UI
                 var u_data_p = p.userData as GlyphPoint2D;
                 var u_data_q = q.userData as GlyphPoint2D;
 
-                //if show control point
+
                 DrawPointKind(painter, u_data_p, scale);
                 DrawPointKind(painter, u_data_q, scale);
 
-
+                
+                 _infoView.ShowEdge(edge);
+                
                 switch (edge.SlopeKind)
                 {
                     default:
@@ -97,6 +254,20 @@ namespace SampleWinForms.UI
                         }
                         break;
                 }
+
+                //show info: => edge point
+                if (_infoView.HasDebugMark)
+                {
+                    double prevWidth = painter.StrokeWidth;
+                    painter.StrokeWidth = 3;
+                    painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale, PixelFarm.Drawing.Color.Yellow);
+                    painter.StrokeWidth = prevWidth;
+                }
+                else
+                {
+                    painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
+                }
+
             }
             else
             {
@@ -112,9 +283,10 @@ namespace SampleWinForms.UI
                         painter.StrokeColor = PixelFarm.Drawing.Color.Yellow;
                         break;
                 }
+                painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
             }
 
-            painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
+
 
 
             //contact edge
@@ -235,6 +407,8 @@ namespace SampleWinForms.UI
             }
             painter.StrokeColor = prev_color;
         }
+
+
         public void dbugDrawTriangulatedGlyph(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale)
         {
             painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;

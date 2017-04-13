@@ -57,12 +57,12 @@
             this.chkDrawGlyphBone = new System.Windows.Forms.CheckBox();
             this.txtGlyphBoneStartAt = new System.Windows.Forms.TextBox();
             this.txtGlyphBoneCount = new System.Windows.Forms.TextBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.chkDynamicOutline = new System.Windows.Forms.CheckBox();
             this.txtLeftXControl = new System.Windows.Forms.TextBox();
             this.chkMinorOffset = new System.Windows.Forms.CheckBox();
             this.chkDrawTriangles = new System.Windows.Forms.CheckBox();
             this.chkDrawRegenerateOutline = new System.Windows.Forms.CheckBox();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.SuspendLayout();
             // 
             // button1
@@ -275,7 +275,7 @@
             this.sampleTextBox1.BackColor = System.Drawing.Color.Silver;
             this.sampleTextBox1.Location = new System.Drawing.Point(12, 71);
             this.sampleTextBox1.Name = "sampleTextBox1";
-            this.sampleTextBox1.Size = new System.Drawing.Size(505, 443);
+            this.sampleTextBox1.Size = new System.Drawing.Size(505, 774);
             this.sampleTextBox1.TabIndex = 40;
             this.sampleTextBox1.Visible = false;
             // 
@@ -341,14 +341,6 @@
             this.txtGlyphBoneCount.TabIndex = 49;
             this.txtGlyphBoneCount.Text = "-1";
             // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(1009, 173);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(96, 290);
-            this.listBox1.TabIndex = 50;
-            // 
             // chkDynamicOutline
             // 
             this.chkDynamicOutline.AutoSize = true;
@@ -399,17 +391,24 @@
             this.chkDrawRegenerateOutline.Text = "Draw Regenerated Outlines";
             this.chkDrawRegenerateOutline.UseVisualStyleBackColor = true;
             // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(528, 496);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(393, 349);
+            this.treeView1.TabIndex = 56;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1117, 526);
+            this.ClientSize = new System.Drawing.Size(1117, 857);
+            this.Controls.Add(this.treeView1);
             this.Controls.Add(this.chkDrawRegenerateOutline);
             this.Controls.Add(this.chkDrawTriangles);
             this.Controls.Add(this.chkMinorOffset);
             this.Controls.Add(this.txtLeftXControl);
             this.Controls.Add(this.chkDynamicOutline);
-            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.txtGlyphBoneCount);
             this.Controls.Add(this.txtGlyphBoneStartAt);
             this.Controls.Add(this.chkDrawGlyphBone);
@@ -478,12 +477,12 @@
         private System.Windows.Forms.CheckBox chkDrawGlyphBone;
         private System.Windows.Forms.TextBox txtGlyphBoneStartAt;
         private System.Windows.Forms.TextBox txtGlyphBoneCount;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.CheckBox chkDynamicOutline;
         private System.Windows.Forms.TextBox txtLeftXControl;
         private System.Windows.Forms.CheckBox chkMinorOffset;
         private System.Windows.Forms.CheckBox chkDrawTriangles;
         private System.Windows.Forms.CheckBox chkDrawRegenerateOutline;
+        private System.Windows.Forms.TreeView treeView1;
     }
 }
 
