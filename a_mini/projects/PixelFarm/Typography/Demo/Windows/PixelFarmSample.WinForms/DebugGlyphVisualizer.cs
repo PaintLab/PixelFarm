@@ -49,13 +49,13 @@ namespace SampleWinForms.UI
                 value.RequestGlyphRender += (s, e) =>
                 {
                     //refresh render output
-                   
+
                     RenderChar(_testChar, _latestHint);
-                     
+
                 };
             }
         }
-        
+
         public void RenderChar(char testChar, HintTechnique hint)
         {
             builder.SetHintTechnique(hint);
@@ -71,6 +71,10 @@ namespace SampleWinForms.UI
             builder.ReadShapes(txToVxs1);
             VertexStore vxs = new VertexStore();
             txToVxs1.WriteOutput(vxs, _vxsPool);
+            //----------------------------------------------------
+
+
+
             //----------------------------------------------------
             painter.UseSubPixelRendering = this.UseLcdTechnique;
             //5. use PixelFarm's Agg to render to bitmap...
@@ -105,29 +109,31 @@ namespace SampleWinForms.UI
             {
                 //5.2 
                 painter.FillColor = PixelFarm.Drawing.Color.Black;
-                //5.3
-                //painter.Fill(vxs);
 
                 float xpos = 5;// - diff;
                 if (OffsetMinorX)
                 {
                     xpos -= diff;
                 }
-                //for (float i = 0; i < 20; ++i)
-                //{
+
                 painter.SetOrigin(xpos, 10);
                 painter.Fill(vxs);
-                //}
             }
             if (DrawBorder)
             {
-                //5.4 
-                // p.StrokeWidth = 3;
+                //5.4  
                 painter.StrokeColor = PixelFarm.Drawing.Color.Green;
-                //user can specific border width here...
-                //p.StrokeWidth = 2;
+                //user can specific border width here... 
                 //5.5 
                 painter.Draw(vxs);
+                //--------------
+                int markOnVertexNo = _infoView.DebugMarkVertexCommand;
+                double x, y;
+                vxs.GetVertex(markOnVertexNo, out x, out y);
+                painter.FillRectLBWH(x, y, 4, 4, PixelFarm.Drawing.Color.Red);
+                //--------------
+                _infoView.ShowBorderInfo(vxs);
+                //--------------
             }
 #if DEBUG
             builder.dbugAlwaysDoCurveAnalysis = false;
@@ -153,7 +159,6 @@ namespace SampleWinForms.UI
             if (fitOutline != null)
             {
                 dbugDrawTriangulatedGlyph(painter, fitOutline, _pxscale);
-
             }
 #endif
         }
@@ -222,10 +227,8 @@ namespace SampleWinForms.UI
 
                 DrawPointKind(painter, u_data_p, scale);
                 DrawPointKind(painter, u_data_q, scale);
+                _infoView.ShowEdge(edge);
 
-                
-                 _infoView.ShowEdge(edge);
-                
                 switch (edge.SlopeKind)
                 {
                     default:
