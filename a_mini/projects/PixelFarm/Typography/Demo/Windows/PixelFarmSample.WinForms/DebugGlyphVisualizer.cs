@@ -72,9 +72,7 @@ namespace SampleWinForms.UI
             VertexStore vxs = new VertexStore();
             txToVxs1.WriteOutput(vxs, _vxsPool);
             //----------------------------------------------------
-
-
-
+             
             //----------------------------------------------------
             painter.UseSubPixelRendering = this.UseLcdTechnique;
             //5. use PixelFarm's Agg to render to bitmap...

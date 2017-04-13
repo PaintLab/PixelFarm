@@ -25,19 +25,28 @@ namespace SampleWinForms.UI
         SimpleAction _flushOutput;
         bool _clearInfoView;
         int _testEdgeCount;
+        TreeNode _latestSelectedTreeNode;
 
         public void SetTreeView(TreeView treeView)
         {
             _treeView = treeView;
 
-            _treeView.NodeMouseClick += (s, e) => DrawMarkedNode(e.Node);
+            _treeView.NodeMouseClick += (s, e) =>
+            {
+                _clearInfoView = false;
+                DrawMarkedNode(e.Node);
+                _clearInfoView = true;
+            };
             _treeView.KeyDown += (s, e) =>
             {
+                _clearInfoView = false;
                 TreeNode selectedNode = _treeView.SelectedNode;
-                if (selectedNode != null)
+                if (selectedNode != null && _latestSelectedTreeNode != selectedNode)
                 {
+                    _latestSelectedTreeNode = selectedNode; 
                     DrawMarkedNode(selectedNode);
                 }
+                _clearInfoView = true;
             };
 
 
@@ -162,9 +171,10 @@ namespace SampleWinForms.UI
         }
         public void ShowBorderInfo(VertexStore vxs)
         {
+            if (!_clearInfoView) { return; }
             _borderNode.Nodes.Clear();
             _treeView.SuspendLayout();
-           
+
             int count = vxs.Count;
             VertexCmd cmd;
             double x, y;
