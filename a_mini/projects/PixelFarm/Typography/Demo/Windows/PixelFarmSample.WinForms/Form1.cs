@@ -129,7 +129,7 @@ namespace SampleWinForms
             chkMinorOffset.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawTriangles.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
-
+            chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
             //----------
             txtGlyphBoneCount.KeyDown += (s, e) =>
             {
@@ -157,9 +157,13 @@ namespace SampleWinForms
             int selected_index = 0;
             int ffcount = 0;
             bool found = false;
+
+            //string defaultFont = "Tahoma";
+            string defaultFont = "Alef";
+
             foreach (InstalledFont ff in installedFontCollection.GetInstalledFontIter())
             {
-                if (!found && ff.FontName == "Tahoma")
+                if (!found && ff.FontName == defaultFont)
                 {
                     selectedFF = ff;
                     selected_index = ffcount;
@@ -274,8 +278,6 @@ namespace SampleWinForms
                 _devVxsTextPrinter.ScriptLang = _devGdiTextPrinter.ScriptLang;
                 _devVxsTextPrinter.PositionTechnique = _devGdiTextPrinter.PositionTechnique;
                 _devGdiTextPrinter.TargetGraphics = g;
-
-
             }
 
             if (string.IsNullOrEmpty(this.txtInputChar.Text))
