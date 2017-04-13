@@ -159,7 +159,7 @@ namespace SampleWinForms
             bool found = false;
 
             //string defaultFont = "Tahoma";
-            string defaultFont = "Alef";
+            string defaultFont = "Alef"; //test hebrew
 
             foreach (InstalledFont ff in installedFontCollection.GetInstalledFontIter())
             {
@@ -225,6 +225,7 @@ namespace SampleWinForms
             //string inputstr = "u";
             //string inputstr = "t";
             string inputstr = "2";
+            //string inputstr = "Å";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
             //string inputstr = "ญญู";
