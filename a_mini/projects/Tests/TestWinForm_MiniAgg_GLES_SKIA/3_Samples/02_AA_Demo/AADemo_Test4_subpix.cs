@@ -37,9 +37,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             ps.Clear();
             ps.MoveTo(10, 10);
             ps.LineTo(50, 10);
-            ps.LineTo(50, 50);
-            //ps.LineTo(10, 50);
-            //ps.CloseFigure();
+            //ps.LineTo(50, 50);
+            //ps.LineTo(10, 10);
+            ps.CloseFigure();
             ////p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
             p.Draw(ps.Vxs, PixelFarm.Drawing.Color.Red);
         }

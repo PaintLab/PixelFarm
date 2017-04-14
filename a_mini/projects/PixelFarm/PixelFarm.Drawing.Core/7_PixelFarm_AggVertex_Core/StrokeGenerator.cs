@@ -207,7 +207,7 @@ namespace PixelFarm.Agg
 
         VertexCmd GetNextVertex(out double x, out double y)
         {
-            x = 0;y = 0;
+            x = 0; y = 0;
             VertexCmd cmd = VertexCmd.LineTo;
             do
             {
@@ -401,10 +401,7 @@ namespace PixelFarm.Agg
             {
                 _ranges[_ranges.Count - 1].SetEndAt(_vertextDistanceList.Count);
             }
-            //if (_ranges.Count >= 83)
-            //{
 
-            //}
             _ranges.Add(_range = new Range(_vertextDistanceList.Count));
             AddVertex(new Agg.Vertex2d(x, y));
         }
@@ -421,7 +418,10 @@ namespace PixelFarm.Agg
         }
         public int CurrentRangeLen
         {
-            get { return _range.len; }
+            get
+            {
+                return (_range == null) ? 0 : _range.len;                 
+            }
         }
         public void AddLineTo(double x, double y)
         {
@@ -452,6 +452,7 @@ namespace PixelFarm.Agg
             _vertextDistanceList.Clear();
             _latest = new Agg.Vertex2d();
             _rangeIndex = 0;
+            _range = null;
         }
         public void Rewind()
         {

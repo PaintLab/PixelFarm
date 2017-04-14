@@ -76,16 +76,16 @@ namespace PixelFarm.Agg
 
         public VertexCmd GetVertex(int index, out double x, out double y)
         {
-            int i = index << 1;
-            x = m_coord_xy[i];
-            y = m_coord_xy[i + 1];
+             
+            x = m_coord_xy[index << 1];
+            y = m_coord_xy[(index << 1) + 1];
             return (VertexCmd)m_cmds[index];
         }
         public void GetVertexXY(int index, out double x, out double y)
         {
-            int i = index << 1;
-            x = m_coord_xy[i];
-            y = m_coord_xy[i + 1];
+           
+            x = m_coord_xy[index << 1];
+            y = m_coord_xy[(index << 1) + 1];
         }
         public VertexCmd GetCommand(int index)
         {
