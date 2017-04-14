@@ -1,9 +1,6 @@
 ﻿//MIT, 2017, WinterDev 
 using System;
 using Mini;
-using PixelFarm.Drawing;
-using PixelFarm.Agg;
-using PixelFarm.Agg.VertexSource;
 namespace PixelFarm.Agg.Sample_AADemoTest4
 {
 
@@ -17,7 +14,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         F,
     }
 
-    
+
     [Info(OrderCode = "02")]
     [Info("SubPixelRendering_4")]
     public class AADemoTest4_subpix : DemoBase
