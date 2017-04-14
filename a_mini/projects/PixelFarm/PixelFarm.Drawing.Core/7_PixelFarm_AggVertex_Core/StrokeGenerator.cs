@@ -133,7 +133,7 @@ namespace PixelFarm.Agg
                     break;
                 case VertexCmd.Close:
                 case VertexCmd.CloseAndEndFigure:
-                    m_closed = true;
+                    //m_closed = true;
                     break;
                 default:
                     multipartVertexDistanceList.AddVertex(new Vertex2d(x, y));
@@ -228,6 +228,10 @@ namespace PixelFarm.Agg
                         m_src_vertex = 0;
                         m_out_vertex = 0;
                         break;
+                    case Status.CloseFirst:
+                        m_status = Status.Outline2;
+                        cmd = VertexCmd.MoveTo;
+                        goto case Status.Outline2;
                     case Status.Cap1:
                         {
                             Vertex2d v0, v1;
@@ -285,25 +289,22 @@ namespace PixelFarm.Agg
                                 out next);
                             //check if we should join or not ?
 
-                            //don't join it
-                            m_stroker.CreateJoin(m_out_vertices,
-                           prev,
-                           cur,
-                           next,
-                           prev.CalLen(cur),
-                           cur.CalLen(next));
+                                //don't join it
+                                m_stroker.CreateJoin(m_out_vertices,
+                               prev,
+                               cur,
+                               next,
+                               prev.CalLen(cur),
+                               cur.CalLen(next));
 
-                            ++m_src_vertex;
-                            m_prev_status = m_status;
-                            m_status = Status.OutVertices;
-                            m_out_vertex = 0;
+                                ++m_src_vertex;
+                                m_prev_status = m_status;
+                                m_status = Status.OutVertices;
+                                m_out_vertex = 0;
 
                         }
                         break;
-                    case Status.CloseFirst:
-                        m_status = Status.Outline2;
-                        cmd = VertexCmd.MoveTo;
-                        goto case Status.Outline2;
+                   
                     case Status.Outline2:
                         {
                             if (m_src_vertex <= (!m_closed ? 1 : 0))
@@ -420,7 +421,7 @@ namespace PixelFarm.Agg
         {
             get
             {
-                return (_range == null) ? 0 : _range.len;                 
+                return (_range == null) ? 0 : _range.len;
             }
         }
         public void AddLineTo(double x, double y)
