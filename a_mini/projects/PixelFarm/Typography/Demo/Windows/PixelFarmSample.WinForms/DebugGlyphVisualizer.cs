@@ -46,16 +46,18 @@ namespace SampleWinForms.UI
             set
             {
                 _infoView = value;
+                value.Owner = this;
                 value.RequestGlyphRender += (s, e) =>
                 {
-                    //refresh render output
-
+                    //refresh render output 
                     RenderChar(_testChar, _latestHint);
-
                 };
             }
         }
-
+        public void DrawMarker(float x, float y, PixelFarm.Drawing.Color color)
+        {
+            painter.FillRectLBWH(x, y, 4, 4, color);
+        }
         public void RenderChar(char testChar, HintTechnique hint)
         {
             builder.SetHintTechnique(hint);
@@ -69,10 +71,15 @@ namespace SampleWinForms.UI
             builder.Build(testChar, _sizeInPoint);
             var txToVxs1 = new GlyphTranslatorToVxs();
             builder.ReadShapes(txToVxs1);
+
+#if DEBUG 
+            var ps = txToVxs1.dbugGetPathWriter();
+            _infoView.ShowOrgBorderInfo(ps.Vxs);
+#endif
             VertexStore vxs = new VertexStore();
             txToVxs1.WriteOutput(vxs, _vxsPool);
             //----------------------------------------------------
-             
+
             //----------------------------------------------------
             painter.UseSubPixelRendering = this.UseLcdTechnique;
             //5. use PixelFarm's Agg to render to bitmap...
@@ -130,7 +137,7 @@ namespace SampleWinForms.UI
                 vxs.GetVertex(markOnVertexNo, out x, out y);
                 painter.FillRectLBWH(x, y, 4, 4, PixelFarm.Drawing.Color.Red);
                 //--------------
-                _infoView.ShowBorderInfo(vxs);
+                _infoView.ShowFlatternBorderInfo(vxs);
                 //--------------
             }
 #if DEBUG

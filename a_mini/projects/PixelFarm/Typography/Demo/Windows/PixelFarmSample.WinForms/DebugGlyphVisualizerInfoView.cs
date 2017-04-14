@@ -14,8 +14,11 @@ namespace SampleWinForms.UI
 
         TreeView _treeView;
         TreeNode _rootNode;
-        TreeNode _borderNode;
+        TreeNode _orgVxsNode;
+        TreeNode _flattenVxsNode;
         TreeNode _tessEdgeNode;
+        VertexStore _orgVxs;
+        VertexStore _flattenVxs;
 
         List<EdgeLine> _edgeLines = new List<EdgeLine>();
         int _addDebugMarkOnEdgeNo = 0;
@@ -26,7 +29,10 @@ namespace SampleWinForms.UI
         bool _clearInfoView;
         int _testEdgeCount;
         TreeNode _latestSelectedTreeNode;
-
+        public DebugGlyphVisualizer Owner
+        {
+            get; set;
+        }
         public void SetTreeView(TreeView treeView)
         {
             _treeView = treeView;
@@ -43,7 +49,7 @@ namespace SampleWinForms.UI
                 TreeNode selectedNode = _treeView.SelectedNode;
                 if (selectedNode != null && _latestSelectedTreeNode != selectedNode)
                 {
-                    _latestSelectedTreeNode = selectedNode; 
+                    _latestSelectedTreeNode = selectedNode;
                     DrawMarkedNode(selectedNode);
                 }
                 _clearInfoView = true;
@@ -55,10 +61,16 @@ namespace SampleWinForms.UI
             _rootNode.Text = "root";
             _treeView.Nodes.Add(_rootNode);
             //
-            //original edges
-            _borderNode = new TreeNode();
-            _borderNode.Text = "borders";
-            _rootNode.Nodes.Add(_borderNode);
+            //original
+            _orgVxsNode = new TreeNode();
+            _orgVxsNode.Text = "org";
+            _rootNode.Nodes.Add(_orgVxsNode);
+
+            //
+            //flatten borders 
+            _flattenVxsNode = new TreeNode();
+            _flattenVxsNode.Text = "flattenBorders";
+            _rootNode.Nodes.Add(_flattenVxsNode);
             //
             //edges
             _tessEdgeNode = new TreeNode();
@@ -106,7 +118,7 @@ namespace SampleWinForms.UI
                         }
                     }
                     break;
-                case NodeInfoKind.VertexCommand:
+                case NodeInfoKind.FlattenVertexCommand:
                     {
                         _addDebugVertexCmd = nodeinfo.VertexCommandNo;
                         if (RequestGlyphRender != null)
@@ -122,7 +134,25 @@ namespace SampleWinForms.UI
                             }
                             _clearInfoView = true;
                         }
-
+                    }
+                    break;
+                case NodeInfoKind.OrgVertexCommand:
+                    {
+                        if (RequestGlyphRender != null)
+                        {
+                            _clearInfoView = false;
+                            RequestGlyphRender(this, EventArgs.Empty);
+                            //
+                            double x, y;
+                            _orgVxs.GetVertex(nodeinfo.VertexCommandNo, out x, out y);
+                            Owner.DrawMarker((float)x, (float)y, PixelFarm.Drawing.Color.Red);
+                            if (_flushOutput != null)
+                            {
+                                //TODO: review here
+                                _flushOutput();
+                            }
+                            _clearInfoView = true;
+                        }
                     }
                     break;
             }
@@ -169,11 +199,33 @@ namespace SampleWinForms.UI
 
             _edgeLines.Add(edge);
         }
-        public void ShowBorderInfo(VertexStore vxs)
+        public void ShowFlatternBorderInfo(VertexStore vxs)
         {
             if (!_clearInfoView) { return; }
-            _borderNode.Nodes.Clear();
+            _flattenVxsNode.Nodes.Clear();
             _treeView.SuspendLayout();
+            _flattenVxs = vxs;
+            int count = vxs.Count;
+            VertexCmd cmd;
+            double x, y;
+            int index = 0;
+            while ((cmd = vxs.GetVertex(index, out x, out y)) != VertexCmd.NoMore)
+            {
+                NodeInfo nodeInfo = new NodeInfo(NodeInfoKind.FlattenVertexCommand, index);
+                TreeNode node = new TreeNode();
+                node.Tag = nodeInfo;
+                node.Text = (index) + " " + cmd + ": (" + x + "," + y + ")";
+                _flattenVxsNode.Nodes.Add(node);
+                index++;
+            }
+            _treeView.ResumeLayout();
+        }
+        public void ShowOrgBorderInfo(VertexStore vxs)
+        {
+            if (!_clearInfoView) { return; }
+            _orgVxsNode.Nodes.Clear();
+            _treeView.SuspendLayout();
+            _orgVxs = vxs;
 
             int count = vxs.Count;
             VertexCmd cmd;
@@ -181,11 +233,11 @@ namespace SampleWinForms.UI
             int index = 0;
             while ((cmd = vxs.GetVertex(index, out x, out y)) != VertexCmd.NoMore)
             {
-                NodeInfo nodeInfo = new NodeInfo(NodeInfoKind.VertexCommand, index);
+                NodeInfo nodeInfo = new NodeInfo(NodeInfoKind.OrgVertexCommand, index);
                 TreeNode node = new TreeNode();
                 node.Tag = nodeInfo;
                 node.Text = (index) + " " + cmd + ": (" + x + "," + y + ")";
-                _borderNode.Nodes.Add(node);
+                _orgVxsNode.Nodes.Add(node);
                 index++;
             }
             _treeView.ResumeLayout();
@@ -203,7 +255,8 @@ namespace SampleWinForms.UI
 
         enum NodeInfoKind
         {
-            VertexCommand,
+            OrgVertexCommand,
+            FlattenVertexCommand,
             TessEdge,
         }
         class NodeInfo
