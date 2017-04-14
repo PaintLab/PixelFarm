@@ -150,7 +150,7 @@ namespace PixelFarm.Agg
             //int n = 0;
             for (;;)
             {
-                VertexCmd cmd = GetNextVertex(ref x, ref y);
+                VertexCmd cmd = GetNextVertex(out x, out y);
                 if (cmd == VertexCmd.NoMore)
                 {
                     if (currentRangeIndex + 1 < multipartVertexDistanceList.RangeCount)
@@ -205,8 +205,9 @@ namespace PixelFarm.Agg
             multipartVertexDistanceList.Rewind();
         }
 
-        VertexCmd GetNextVertex(ref double x, ref double y)
+        VertexCmd GetNextVertex(out double x, out double y)
         {
+            x = 0;y = 0;
             VertexCmd cmd = VertexCmd.LineTo;
             do
             {
@@ -346,10 +347,12 @@ namespace PixelFarm.Agg
                     case Status.EndPoly1:
                         m_status = m_prev_status;
                         x = (int)EndVertexOrientation.CCW;
+                        y = 0;
                         return VertexCmd.Close;
                     case Status.EndPoly2:
                         m_status = m_prev_status;
                         x = (int)EndVertexOrientation.CW;
+                        y = 0;
                         return VertexCmd.Close;
                     case Status.Stop:
                         cmd = VertexCmd.NoMore;
@@ -398,10 +401,10 @@ namespace PixelFarm.Agg
             {
                 _ranges[_ranges.Count - 1].SetEndAt(_vertextDistanceList.Count);
             }
-            if (_ranges.Count >= 83)
-            {
+            //if (_ranges.Count >= 83)
+            //{
 
-            }
+            //}
             _ranges.Add(_range = new Range(_vertextDistanceList.Count));
             AddVertex(new Agg.Vertex2d(x, y));
         }
@@ -467,7 +470,7 @@ namespace PixelFarm.Agg
         public void GetTripleVertices(int idx, out Vertex2d prev, out Vertex2d cur, out Vertex2d next)
         {
             //we want 3 vertices
-            if (idx > 1 && idx + 2 <= _range.Count)
+            if (idx > 0 && idx + 2 <= _range.Count)
             {
                 prev = _vertextDistanceList[_range.beginAt + idx - 1];
                 cur = _vertextDistanceList[_range.beginAt + idx];
