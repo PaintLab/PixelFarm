@@ -32,7 +32,7 @@
 // 
 //----------------------------------------------------------------------------
 
-using poly_subpix = PixelFarm.Agg.AggBasics.PolySubPix;
+using poly_subpix = PixelFarm.Agg.PolySubPix;
 namespace PixelFarm.Agg
 {
     //==================================================rasterizer_scanline_aa

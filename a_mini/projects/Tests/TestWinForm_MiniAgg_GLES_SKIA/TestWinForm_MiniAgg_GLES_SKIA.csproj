@@ -130,6 +130,12 @@
     <Compile Include="Experiment_ColorBlend\ColorCompoBox.Designer.cs">
       <DependentUpon>ColorCompoBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Experiment_ColorBlend\FormVectorTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Experiment_ColorBlend\Form1.Designer.cs">
+      <DependentUpon>FormVectorTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Experiment_ColorBlend\FormTestColorBlend.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,6 +185,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Experiment_ColorBlend\ColorCompoBox.resx">
       <DependentUpon>ColorCompoBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Experiment_ColorBlend\Form1.resx">
+      <DependentUpon>FormVectorTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormDev.resx">
       <DependentUpon>FormDev.cs</DependentUpon>

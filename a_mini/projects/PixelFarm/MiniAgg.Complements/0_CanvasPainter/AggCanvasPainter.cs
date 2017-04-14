@@ -123,20 +123,7 @@ namespace PixelFarm.Agg
         {
             _vxsPool.Release(ref vxs);
         }
-        /// <summary>
-        /// draw circle
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="radius"></param>
-        /// <param name="color"></param>
-        public override void FillCircle(double x, double y, double radius, Color color)
-        {
-            ellipse.Reset(x, y, radius, radius);
-            var v1 = GetFreeVxs();
-            gx.Render(ellipse.MakeVxs(v1), color);
-            ReleaseVxs(ref v1);
-        }
+         
         public override void FillCircle(double x, double y, double radius)
         {
             ellipse.Reset(x, y, radius, radius);
@@ -174,24 +161,7 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v2);
         }
 
-        /// <summary>
-        /// draw line
-        /// </summary>
-        /// <param name="x1"></param>
-        /// <param name="y1"></param>
-        /// <param name="x2"></param>
-        /// <param name="y2"></param>
-        /// <param name="color"></param>
-        public override void Line(double x1, double y1, double x2, double y2, Color color)
-        {
-            lines.Clear();
-            lines.MoveTo(x1, y1);
-            lines.LineTo(x2, y2);
-
-            var v1 = GetFreeVxs();
-            gx.Render(stroke.MakeVxs(lines.Vxs, v1), color);
-            ReleaseVxs(ref v1);
-        }
+        
         /// <summary>
         /// draw line
         /// </summary>
@@ -238,28 +208,7 @@ namespace PixelFarm.Agg
 
         }
 
-        /// <summary>
-        /// draw rectangle
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="bottom"></param>
-        /// <param name="right"></param>
-        /// <param name="top"></param>
-        /// <param name="color"></param>
-        /// <param name="strokeWidth"></param>
-        public override void Rectangle(double left, double bottom, double right, double top, Color color)
-        {
-            simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
-
-            var v1 = GetFreeVxs();
-            var v2 = GetFreeVxs();
-
-
-            gx.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), color);
-
-            ReleaseVxs(ref v1);
-            ReleaseVxs(ref v2);
-        }
+        
         public override void Rectangle(double left, double bottom, double right, double top)
         {
             simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
@@ -271,18 +220,7 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v1);
             ReleaseVxs(ref v2);
         }
-        public override void FillRectangle(double left, double bottom, double right, double top, Color fillColor)
-        {
-            if (right < left || top < bottom)
-            {
-                throw new ArgumentException();
-            }
-            simpleRect.SetRect(left, bottom, right, top);
-            var v1 = GetFreeVxs();
-            simpleRect.MakeVertexSnap(v1);
-            gx.Render(v1, fillColor);
-            ReleaseVxs(ref v1);
-        }
+         
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
             if (right < left || top < bottom)
@@ -519,7 +457,7 @@ namespace PixelFarm.Agg
            float controlX2, float controlY2)
         {
             var v1 = GetFreeVxs();
-            PixelFarm.Agg.VertexSource.BezierCurve.CreateBezierVxs4(v1,
+            VertexSourceExtensions.CreateBezierVxs4(v1,
                 new PixelFarm.VectorMath.Vector2(startX, startY),
                 new PixelFarm.VectorMath.Vector2(endX, endY),
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),

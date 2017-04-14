@@ -48,13 +48,14 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             }
         }
     }
-
+  
+    //---------------------------
     [Info(OrderCode = "02")]
     [Info("Demonstration of the Anti-Aliasing principle with Subpixel Accuracy. The triangle "
-                    + "is rendered two times, with its “natural” size (at the bottom-left) and enlarged. "
-                    + "To draw the enlarged version there is a special scanline renderer written (see "
-                    + "class renderer_enlarged in the source code). You can drag the whole triangle as well "
-                    + "as each vertex of it. Also change “Gamma” to see how it affects the quality of Anti-Aliasing.")]
+                + "is rendered two times, with its “natural” size (at the bottom-left) and enlarged. "
+                + "To draw the enlarged version there is a special scanline renderer written (see "
+                + "class renderer_enlarged in the source code). You can drag the whole triangle as well "
+                + "as each vertex of it. Also change “Gamma” to see how it affects the quality of Anti-Aliasing.")]
     public class aa_demo_test2 : DemoBase
     {
         double[] m_x = new double[3];
@@ -119,7 +120,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 ps.LineTo(m_x[2], m_y[2]);
                 ps.LineTo(m_x[0], m_y[0]);
                 var v1 = GetFreeVxs();
-                rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs,v1));
+                rasterizer.AddPath((new Stroke(2)).MakeVxs(ps.Vxs, v1));
                 sclineRasToBmp.RenderWithColor(clippingProxyNormal, rasterizer, sl, new Color(200, 0, 150, 160));
                 ReleaseVxs(ref v1);
             }

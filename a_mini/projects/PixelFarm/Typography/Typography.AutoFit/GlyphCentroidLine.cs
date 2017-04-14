@@ -350,7 +350,7 @@ namespace Typography.Rendering
         public readonly double boneLength;
 
 
-        GlyphBoneJoint _boneJoint; //1L1
+        GlyphBoneJoint _boneJoint;
 
 
         public GlyphCentroidLine(GlyphTriangle p, GlyphTriangle q)

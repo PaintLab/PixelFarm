@@ -30,10 +30,7 @@ namespace Typography.Rendering
             Analyze();
         }
 
-        public GlyphDynamicOutline CreateGlyphDynamicOutline()
-        {
-            return new GlyphDynamicOutline(this.centroidLineHubs);
-        }
+      
 
 
         Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs;
@@ -317,6 +314,13 @@ namespace Typography.Rendering
                 //    OffsetPoints(genPointList[m], minorOffset);
                 //}
             }
+            else
+            {
+                //no vertical long bone
+                //so we need left most point
+                float leftmostX = FindLeftMost(genPointList);
+                LeftControlPosX = leftmostX;
+            }
             //-------------
 
             tx.BeginRead(j);
@@ -326,6 +330,25 @@ namespace Typography.Rendering
             }
             tx.EndRead();
             //-------------
+        }
+        static float FindLeftMost(List<List<Point2d>> genPointList)
+        {
+            //find left most x value
+            float min = float.MaxValue;
+            for (int i = genPointList.Count - 1; i >= 0; --i)
+            {
+                //new contour
+                List<Point2d> genPoints = genPointList[i];
+                for (int m = genPoints.Count - 1; m >= 0; --m)
+                {
+                    Point2d p = genPoints[m];
+                    if (p.x < min)
+                    {
+                        min = p.x;
+                    }
+                }
+            }
+            return min;
         }
         public float LeftControlPosX { get; set; }
 
@@ -529,6 +552,90 @@ namespace Typography.Rendering
             }
         }
 
+
+
+        static void GenerateNewFitPoints2(
+            List<Point2d> genPoints,
+            GlyphContour contour,
+            float pixelScale,
+            bool x_axis,
+            bool y_axis,
+            bool useHalfPixel)
+        {
+            List<GlyphPoint2D> flattenPoints = contour.flattenPoints;
+
+            int j = flattenPoints.Count;
+            //merge 0 = start
+            //double prev_px = 0;
+            //double prev_py = 0;
+            double p_x = 0;
+            double p_y = 0;
+            double first_px = 0;
+            double first_py = 0;
+
+            //---------------
+            //1st round for value adjustment
+            //---------------
+
+            //find adjust y
+
+            {
+                GlyphPoint2D p = flattenPoints[0];
+                p_x = p.x * pixelScale;
+                p_y = p.y * pixelScale;
+
+                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide) //TODO: review here
+                {
+                    //vertical fitting, fit p_y to grid
+                    //adjust if p is not part of curve
+                    switch (p.kind)
+                    {
+                        case PointKind.LineStart:
+                        case PointKind.LineStop:
+                            p_y = RoundToNearestY(p, (float)p_y, useHalfPixel);
+                            break;
+                    }
+
+                }
+                if (x_axis && p.IsPartOfVerticalEdge && p.IsLeftSide)
+                {
+                    //horizontal fitting, fix p_x to grid
+                    float new_x = RoundToNearestX((float)p_x);
+                    p_x = new_x;
+                    //adjust right-side vertical edge
+                    EdgeLine rightside = p.GetMatchingVerticalEdge();
+                }
+
+                genPoints.Add(new Point2d((float)p_x, (float)p_y));
+                //-------------
+                first_px = p_x;
+                first_py = p_y;
+            }
+
+            for (int i = 1; i < j; ++i)
+            {
+                //all merge point is polygon point
+                GlyphPoint2D p = flattenPoints[i];
+                p_x = p.x * pixelScale;
+                p_y = p.y * pixelScale;
+
+
+                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide)  //TODO: review here
+                {
+                    //vertical fitting, fit p_y to grid
+                    p_y = RoundToNearestY(p, (float)p_y, useHalfPixel);
+                }
+
+                if (x_axis && p.IsPartOfVerticalEdge && p.IsLeftSide)
+                {
+                    //horizontal fitting, fix p_x to grid
+                    float new_x = RoundToNearestX((float)p_x);
+                    p_x = new_x;
+                }
+
+                genPoints.Add(new Point2d((float)p_x, (float)p_y));
+            }
+        }
         static void OffsetPoints(List<Point2d> genPoints, double offset)
         {
 
@@ -539,7 +646,15 @@ namespace Typography.Rendering
                 genPoints[i] = new Point2d((float)(oldValue.x + offset), oldValue.y);
             }
         }
-        static void GenerateFitOutput(IGlyphTranslator tx,
+
+        /// <summary>
+        /// gernate glyph path from genPoints, adjust vertical value to fit the grid
+        /// </summary>
+        /// <param name="tx"></param>
+        /// <param name="genPoints"></param>
+        /// <param name="contour"></param>
+        static void GenerateFitOutput(
+            IGlyphTranslator tx,
             List<Point2d> genPoints,
             GlyphContour contour)
         {

@@ -1,19 +1,184 @@
 ﻿//MIT, 2014-2017, WinterDev
 using System;
 using System.Collections.Generic;
-using Typography.Rendering;
+
 using PixelFarm.Agg;
+using PixelFarm.Drawing.Fonts;
+using Typography.OpenFont;
+using Typography.Rendering;
 namespace SampleWinForms.UI
 {
 
     class DebugGlyphVisualizer
     {
+        DebugGlyphVisualizerInfoView _infoView;
 
+        //
+
+        Typeface _typeface;
+        float _sizeInPoint;
+        GlyphPathBuilder builder;
+        VertexStorePool _vxsPool = new VertexStorePool();
+        CanvasPainter painter;
+        float _pxscale;
+        HintTechnique _latestHint;
+        char _testChar;
+        public CanvasPainter CanvasPainter { get { return painter; } set { painter = value; } }
+        public void SetFont(Typeface typeface, float sizeInPoint)
+        {
+            _typeface = typeface;
+            _sizeInPoint = sizeInPoint;
+            builder = new GlyphPathBuilder(typeface);
+            FillBackGround = true;//default 
+
+        }
+
+        public bool UseLcdTechnique { get; set; }
+        public bool FillBackGround { get; set; }
+        public bool DrawBorder { get; set; }
+        public bool OffsetMinorX { get; set; }
+        public bool ShowTess { get; set; }
+
+        public string MinorOffsetInfo { get; set; }
+        public DebugGlyphVisualizerInfoView VisualizeInfoView
+        {
+            get { return _infoView; }
+            set
+            {
+                _infoView = value;
+                value.Owner = this;
+                value.RequestGlyphRender += (s, e) =>
+                {
+                    //refresh render output 
+                    RenderChar(_testChar, _latestHint);
+                };
+            }
+        }
+        public void DrawMarker(float x, float y, PixelFarm.Drawing.Color color)
+        {
+            painter.FillRectLBWH(x, y, 4, 4, color);
+        }
+        public void RenderChar(char testChar, HintTechnique hint)
+        {
+            builder.SetHintTechnique(hint);
+#if DEBUG
+            builder.dbugAlwaysDoCurveAnalysis = true;
+#endif
+            _infoView.Clear();
+            _latestHint = hint;
+            _testChar = testChar;
+            //----------------------------------------------------
+            builder.Build(testChar, _sizeInPoint);
+            var txToVxs1 = new GlyphTranslatorToVxs();
+            builder.ReadShapes(txToVxs1);
+
+#if DEBUG 
+            var ps = txToVxs1.dbugGetPathWriter();
+            _infoView.ShowOrgBorderInfo(ps.Vxs);
+#endif
+            VertexStore vxs = new VertexStore();
+            txToVxs1.WriteOutput(vxs, _vxsPool);
+            //----------------------------------------------------
+
+            //----------------------------------------------------
+            painter.UseSubPixelRendering = this.UseLcdTechnique;
+            //5. use PixelFarm's Agg to render to bitmap...
+            //5.1 clear background
+            painter.Clear(PixelFarm.Drawing.Color.White);
+
+            RectD bounds = new RectD();
+            BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref bounds);
+            //----------------------------------------------------
+            float scale = _typeface.CalculateToPixelScaleFromPointSize(_sizeInPoint);
+            _pxscale = scale;
+            var leftControl = this.LeftXControl;
+            var left2 = leftControl * scale;
+            int floor_1 = (int)left2;
+            float diff = left2 - floor_1;
+            //----------------------------------------------------
+            if (OffsetMinorX)
+            {
+                MinorOffsetInfo = left2.ToString() + " =>" + floor_1 + ",diff=" + diff;
+            }
+            else
+            {
+                MinorOffsetInfo = left2.ToString();
+            }
+
+
+            //5. use PixelFarm's Agg to render to bitmap...
+            //5.1 clear background
+            painter.Clear(PixelFarm.Drawing.Color.White);
+
+            if (FillBackGround)
+            {
+                //5.2 
+                painter.FillColor = PixelFarm.Drawing.Color.Black;
+
+                float xpos = 5;// - diff;
+                if (OffsetMinorX)
+                {
+                    xpos -= diff;
+                }
+
+                painter.SetOrigin(xpos, 10);
+                painter.Fill(vxs);
+            }
+            if (DrawBorder)
+            {
+                //5.4  
+                painter.StrokeColor = PixelFarm.Drawing.Color.Green;
+                //user can specific border width here... 
+                //5.5 
+                painter.Draw(vxs);
+                //--------------
+                int markOnVertexNo = _infoView.DebugMarkVertexCommand;
+                double x, y;
+                vxs.GetVertex(markOnVertexNo, out x, out y);
+                painter.FillRectLBWH(x, y, 4, 4, PixelFarm.Drawing.Color.Red);
+                //--------------
+                _infoView.ShowFlatternBorderInfo(vxs);
+                //--------------
+            }
+#if DEBUG
+            builder.dbugAlwaysDoCurveAnalysis = false;
+#endif
+
+            if (ShowTess)
+            {
+                RenderTessTesult();
+            }
+
+            if (DrawDynamicOutline)
+            {
+                GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
+                dbugDynamicOutline(painter, fitOutline, scale, true);
+            }
+
+        }
+        public void RenderTessTesult()
+        {
+#if DEBUG
+
+            GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
+            if (fitOutline != null)
+            {
+                dbugDrawTriangulatedGlyph(painter, fitOutline, _pxscale);
+            }
+#endif
+        }
+        public float LeftXControl
+        {
+            get { return builder.LeftXControl; }
+        }
         public bool DrawCentroidBone { get; set; }
         public bool DrawGlyphBone { get; set; }
-        public bool GenDynamicOutline { get; set; }
+        public bool DrawTrianglesAndEdges { get; set; }
+        public bool DrawDynamicOutline { get; set; }
+        public bool DrawRegenerateOutline { get; set; }
+        //
 #if DEBUG
-        static void DrawPointKind(CanvasPainter painter, GlyphPoint2D point, float scale)
+        void DrawPointKind(CanvasPainter painter, GlyphPoint2D point, float scale)
         {
             //var prevColor = painter.FillColor;
             //painter.FillColor = PixelFarm.Drawing.Color.Red;
@@ -37,24 +202,22 @@ namespace SampleWinForms.UI
                 case PointKind.LineStart:
                 case PointKind.LineStop:
                     {
+                        painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2, PixelFarm.Drawing.Color.Red);
+                        //if (point.AdjustedY != 0)
+                        //{
+                        //    painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5, PixelFarm.Drawing.Color.Red);
+                        //}
+                        //else
+                        //{
+                        //    painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2, PixelFarm.Drawing.Color.Red);
+                        //}
 
-                        var prevColor = painter.FillColor;
-                        painter.FillColor = PixelFarm.Drawing.Color.Red;
-                        if (point.AdjustedY != 0)
-                        {
-                            painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5);
-                        }
-                        else
-                        {
-                            painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2);
-                        }
-                        painter.FillColor = prevColor;
                     }
                     break;
 
             }
         }
-        static void DrawEdge(CanvasPainter painter, EdgeLine edge, float scale)
+        void DrawEdge(CanvasPainter painter, EdgeLine edge, float scale)
         {
             if (edge.IsOutside)
             {
@@ -66,10 +229,10 @@ namespace SampleWinForms.UI
                 var u_data_p = p.userData as GlyphPoint2D;
                 var u_data_q = q.userData as GlyphPoint2D;
 
-                //if show control point
+
                 DrawPointKind(painter, u_data_p, scale);
                 DrawPointKind(painter, u_data_q, scale);
-
+                _infoView.ShowEdge(edge);
 
                 switch (edge.SlopeKind)
                 {
@@ -99,6 +262,20 @@ namespace SampleWinForms.UI
                         }
                         break;
                 }
+
+                //show info: => edge point
+                if (_infoView.HasDebugMark)
+                {
+                    double prevWidth = painter.StrokeWidth;
+                    painter.StrokeWidth = 3;
+                    painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale, PixelFarm.Drawing.Color.Yellow);
+                    painter.StrokeWidth = prevWidth;
+                }
+                else
+                {
+                    painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
+                }
+
             }
             else
             {
@@ -114,9 +291,10 @@ namespace SampleWinForms.UI
                         painter.StrokeColor = PixelFarm.Drawing.Color.Yellow;
                         break;
                 }
+                painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
             }
 
-            painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
+
 
 
             //contact edge
@@ -129,23 +307,16 @@ namespace SampleWinForms.UI
             //    painter.FillRectLBWH(midX * scale, midY * scale, 4, 4); 
             //}
         }
-
-
-
         void dbugDrawCentroidLine(CanvasPainter painter, GlyphCentroidLine line, float pxscale)
         {
-            painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+
             painter.Line(
                 line.p.CentroidX * pxscale, line.p.CentroidY * pxscale,
-                line.q.CentroidX * pxscale, line.q.CentroidY * pxscale);
+                line.q.CentroidX * pxscale, line.q.CentroidY * pxscale,
+                PixelFarm.Drawing.Color.Red);
 
-            var prevColor1 = painter.FillColor;
-            painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-
-            painter.FillRectLBWH(line.p.CentroidX * pxscale, line.p.CentroidY * pxscale, 2, 2);
-            painter.FillRectLBWH(line.q.CentroidX * pxscale, line.q.CentroidY * pxscale, 2, 2);
-
-            painter.FillColor = prevColor1;
+            painter.FillRectLBWH(line.p.CentroidX * pxscale, line.p.CentroidY * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
+            painter.FillRectLBWH(line.q.CentroidX * pxscale, line.q.CentroidY * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
 
         }
         void dbugDrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)
@@ -153,14 +324,8 @@ namespace SampleWinForms.UI
             //-------------- 
             EdgeLine p_contactEdge = joint._p_contact_edge;
             //mid point
-            var contactPoint = joint.Position;
-            double mid_x = contactPoint.X;
-            double mid_y = contactPoint.Y;
-
-            var prevFillColor = painter.FillColor;
-            painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-            painter.FillRectLBWH(mid_x * pxscale, mid_y * pxscale, 4, 4);
-            painter.FillColor = prevFillColor;
+            var jointPos = joint.Position;
+            painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
 
             switch (joint.SelectedEdgePointCount)
             {
@@ -177,12 +342,10 @@ namespace SampleWinForms.UI
             }
             if (joint.TipPoint != System.Numerics.Vector2.Zero)
             {
-                var prev_color1 = painter.StrokeColor;
-                painter.StrokeColor = PixelFarm.Drawing.Color.White;
                 painter.Line(
-                   contactPoint.X * pxscale, contactPoint.Y * pxscale,
-                   joint.TipPoint.X * pxscale, joint.TipPoint.Y * pxscale);
-                painter.StrokeColor = prev_color1;
+                   jointPos.X * pxscale, jointPos.Y * pxscale,
+                   joint.TipPoint.X * pxscale, joint.TipPoint.Y * pxscale,
+                   PixelFarm.Drawing.Color.White);
             }
         }
         void dbugDrawBoneLinks(CanvasPainter painter, GlyphCentroidBranch branch, float pxscale)
@@ -219,34 +382,29 @@ namespace SampleWinForms.UI
 
                     var jointAPoint = jointA.Position;
                     var jointBPoint = jointB.Position;
-                    painter.StrokeColor = bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta;
+
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
-                        jointBPoint.X * pxscale, jointBPoint.Y * pxscale
-                        );
+                        jointBPoint.X * pxscale, jointBPoint.Y * pxscale,
+                        bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta);
                     valid = true;
                 }
                 if (jointA != null && bone.TipEdge != null)
                 {
-
                     var jointAPoint = jointA.Position;
                     var mid = bone.TipEdge.GetMidPoint();
 
-                    painter.StrokeColor = bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta;
                     painter.Line(
                         jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
-                        mid.X * pxscale, mid.Y * pxscale
-                        );
+                        mid.X * pxscale, mid.Y * pxscale,
+                        bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta);
                     valid = true;
                 }
                 if (i == 0)
                 {
                     //for first bone
                     var headpos = branch.GetHeadPosition();
-                    var prevColor = painter.FillColor;
-                    painter.FillColor = PixelFarm.Drawing.Color.DeepPink;
-                    painter.FillRectLBWH(headpos.X * pxscale, headpos.Y * pxscale, 5, 5);
-                    painter.FillColor = prevColor;
+                    painter.FillRectLBWH(headpos.X * pxscale, headpos.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.DeepPink);
 
                 }
                 if (!valid)
@@ -258,6 +416,7 @@ namespace SampleWinForms.UI
             painter.StrokeColor = prev_color;
         }
 
+
         public void dbugDrawTriangulatedGlyph(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale)
         {
             painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
@@ -267,19 +426,21 @@ namespace SampleWinForms.UI
             bool drawCentroidBone = this.DrawCentroidBone;
             bool drawGlyphBone = this.DrawGlyphBone;
 
-            for (int i = 0; i < j; ++i)
+            if (DrawTrianglesAndEdges)
             {
-                //---------------
-                GlyphTriangle tri = triAngles[i];
-                EdgeLine e0 = tri.e0;
-                EdgeLine e1 = tri.e1;
-                EdgeLine e2 = tri.e2;
-                //---------------
-                //draw each triangles
-                DrawEdge(painter, e0, pxscale);
-                DrawEdge(painter, e1, pxscale);
-                DrawEdge(painter, e2, pxscale);
-
+                for (int i = 0; i < j; ++i)
+                {
+                    //---------------
+                    GlyphTriangle tri = triAngles[i];
+                    EdgeLine e0 = tri.e0;
+                    EdgeLine e1 = tri.e1;
+                    EdgeLine e2 = tri.e2;
+                    //---------------
+                    //draw each triangles
+                    DrawEdge(painter, e0, pxscale);
+                    DrawEdge(painter, e1, pxscale);
+                    DrawEdge(painter, e2, pxscale);
+                }
             }
             //---------------
             //draw bone 
@@ -291,11 +452,7 @@ namespace SampleWinForms.UI
             Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHub = glyphFitOutline.GetCentroidLineHubs();
             //--------------- 
 
-            if (this.GenDynamicOutline)
-            {
-                GlyphDynamicOutline dynamicOutline = glyphFitOutline.CreateGlyphDynamicOutline();
 
-            }
 
             foreach (CentroidLineHub lineHub in centroidLineHub.Values)
             {
@@ -330,18 +487,16 @@ namespace SampleWinForms.UI
 
                         //draw  a line link to centroid of target triangle
 
-                        var prevStrokeColor = painter.StrokeColor;
-                        painter.StrokeColor = PixelFarm.Drawing.Color.Red;
                         painter.Line(
                             (float)brHead.X * pxscale, (float)brHead.Y * pxscale,
-                             hubCenter.X * pxscale, hubCenter.Y * pxscale);
-                        painter.StrokeColor = prevStrokeColor;
+                             hubCenter.X * pxscale, hubCenter.Y * pxscale,
+                             PixelFarm.Drawing.Color.Red);
+
                     }
                 }
-                var prevFill = painter.FillColor;
-                painter.FillColor = PixelFarm.Drawing.Color.White;
-                painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 7, 7);
-                painter.FillColor = prevFill;
+
+                painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 7, 7,
+                    PixelFarm.Drawing.Color.White);
 
                 if (drawGlyphBone)
                 {
@@ -356,27 +511,23 @@ namespace SampleWinForms.UI
                     }
                 }
             }
-            //draw link between hub
-
+        }
+        public void dbugDynamicOutline(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale, bool withRegenerateOutlines)
+        {
+            GlyphDynamicOutline dynamicOutline = new GlyphDynamicOutline(glyphFitOutline);
+#if DEBUG
+            dynamicOutline.dbugSetCanvasPainter(painter, pxscale);
+            dynamicOutline.dbugDrawRegeneratedOutlines = withRegenerateOutlines;
+#endif
+            dynamicOutline.Walk();
         }
         void DrawBoneRib(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphBoneJoint joint, float pixelScale)
         {
             var jointPos = joint.Position;
-            double mid_x = jointPos.X;
-            double mid_y = jointPos.Y;
-
-            //
-            PixelFarm.Drawing.Color prevFillColor = painter.FillColor;
-            painter.FillColor = PixelFarm.Drawing.Color.Green;
-            painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4);
-            //------------------------------------------------------------------
-            var prevColor = painter.StrokeColor;
-            painter.StrokeColor = PixelFarm.Drawing.Color.White;
-            painter.Line(mid_x * pixelScale, mid_y * pixelScale,
+            painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4, PixelFarm.Drawing.Color.Green);
+            painter.Line(jointPos.X * pixelScale, jointPos.Y * pixelScale,
                 vec.X * pixelScale,
-                vec.Y * pixelScale);
-            painter.StrokeColor = prevColor;
-            painter.FillColor = prevFillColor;
+                vec.Y * pixelScale, PixelFarm.Drawing.Color.White);
         }
 
 #endif

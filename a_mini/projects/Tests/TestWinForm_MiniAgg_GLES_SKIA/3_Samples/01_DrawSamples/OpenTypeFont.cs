@@ -14,6 +14,7 @@ using PixelFarm.Agg.VertexSource;
 using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
 using Typography.Rendering;
+using PixelFarm.Agg;
 
 namespace PixelFarm.Agg.Sample_Draw
 {

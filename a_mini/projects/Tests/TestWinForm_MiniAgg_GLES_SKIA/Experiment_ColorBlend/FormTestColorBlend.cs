@@ -17,23 +17,24 @@ namespace Mini
         BrightnessAndContrastAdjustment brightnessAndContrastAdjustment;
         public FormTestColorBlend()
         {
-            InitializeComponent(); 
+            InitializeComponent();
         }
 
         private void FormTestColorBlend_Load(object sender, EventArgs e)
         {
             this.colorCompoBox1.SetColor(System.Drawing.Color.FromArgb(255, 125, 125, 125));
             brightnessAndContrastAdjustment = new BrightnessAndContrastAdjustment();
-            brightnessAndContrastAdjustment.SetParameters(0,30);
+            brightnessAndContrastAdjustment.SetParameters(0, 30);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             //test img contrast
-
-            UpdateOutput();
+            TestBrightnessAndContrast(); 
         }
-        void UpdateOutput()
+         
+       
+        void TestBrightnessAndContrast()
         {
             if (g == null)
             {
@@ -59,6 +60,7 @@ namespace Mini
             g.DrawImage(bmp_result, 0, bmp_src.Height);
 
         }
+
     }
 
 

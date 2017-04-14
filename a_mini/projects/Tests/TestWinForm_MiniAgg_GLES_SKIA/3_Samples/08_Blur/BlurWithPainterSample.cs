@@ -26,7 +26,7 @@ namespace PixelFarm.Agg.Sample_Blur2
     point arithmetic and works slower. But it is true Gaussian filter, with theoretically 
     infinite impulse response. The radius (actually 2*sigma value) can be fractional 
     and the filter produces quite adequate result.")]
-    public class BlurWithPainter  : DemoBase
+    public class BlurWithPainter : DemoBase
     {
         PolygonEditWidget m_shadow_ctrl;
         VertexStore m_pathVxs;
@@ -146,9 +146,10 @@ namespace PixelFarm.Agg.Sample_Blur2
             p.Clear(Drawing.Color.White);
             //-----------------------------------------------------------------------
             //green glyph
-            Perspective shadow_persp = new Perspective(
-                            m_shape_bounds,
-                            m_shadow_ctrl.GetInnerCoords());
+            RectD r = m_shape_bounds;
+            var txPerspective = new Perspective(
+                    r.Left, r.Bottom, r.Right, r.Top,
+                    m_shadow_ctrl.GetInnerCoords());
             VertexStore s2 = this.m_pathVxs2;
             //if (FlattenCurveChecked)
             //{

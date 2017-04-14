@@ -82,7 +82,7 @@ namespace SampleWinForms
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction);
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction_VerticalOnly);
             lstHintList.Items.Add(HintTechnique.CustomAutoFit);
-            lstHintList.SelectedIndex = 3;
+            lstHintList.SelectedIndex = 0;
             lstHintList.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
             //---------- 
             //snapX
@@ -127,6 +127,9 @@ namespace SampleWinForms
             chkDrawGlyphBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDynamicOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkMinorOffset.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDrawTriangles.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
             //----------
             txtGlyphBoneCount.KeyDown += (s, e) =>
             {
@@ -154,9 +157,13 @@ namespace SampleWinForms
             int selected_index = 0;
             int ffcount = 0;
             bool found = false;
+
+            //string defaultFont = "Tahoma";
+            //string defaultFont = "Alef"; //test hebrew
+            string defaultFont = "Century";
             foreach (InstalledFont ff in installedFontCollection.GetInstalledFontIter())
             {
-                if (!found && ff.FontName == "Tahoma")
+                if (!found && ff.FontName == defaultFont)
                 {
                     selectedFF = ff;
                     selected_index = ffcount;
@@ -197,7 +204,9 @@ namespace SampleWinForms
                     12,
                     14,
                     16,
-                    18,20,22,24,26,28,36,48,72,240,280,300,360
+                    18,20,22,24,26,28,36,48,72,
+                    240,280,300,360,400,420,460,
+                    620,720
               });
             lstFontSizes.SelectedIndexChanged += (s, e) =>
             {
@@ -214,7 +223,9 @@ namespace SampleWinForms
             //string inputstr = "e";
             //string inputstr = "T";
             //string inputstr = "u";
-            string inputstr = "t";
+            //string inputstr = "t";
+            string inputstr = "2";
+            //string inputstr = "Å";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
             //string inputstr = "ญญู";
@@ -269,8 +280,6 @@ namespace SampleWinForms
                 _devVxsTextPrinter.ScriptLang = _devGdiTextPrinter.ScriptLang;
                 _devVxsTextPrinter.PositionTechnique = _devGdiTextPrinter.PositionTechnique;
                 _devGdiTextPrinter.TargetGraphics = g;
-
-
             }
 
             if (string.IsNullOrEmpty(this.txtInputChar.Text))
@@ -348,126 +357,70 @@ namespace SampleWinForms
                 case RenderChoice.RenderWithMiniAgg_SingleGlyph:
                     {
                         selectedTextPrinter = _devVxsTextPrinter;
-                        //for test only 1 char
-                        char testChar = this.txtInputChar.Text[0];
-                        Typeface typeFace = _typefaceStore.GetTypeface(_selectedInstallFont);
-                        RenderSingleCharWithMiniAgg(typeFace, testChar, _fontSizeInPts);
-
+                        //for test only 1 char 
+                        RenderSingleCharWithMiniAgg(
+                            _typefaceStore.GetTypeface(_selectedInstallFont),
+                            this.txtInputChar.Text[0],
+                            _fontSizeInPts);
                     }
                     break;
                 default:
                     throw new NotSupportedException();
             }
-
-
         }
-
-        VertexStorePool _vxsPool = new VertexStorePool();
 
         void RenderSingleCharWithMiniAgg(Typeface typeface, char testChar, float sizeInPoint)
         {
-            //----------------------------------------------------
-            var builder = new GlyphPathBuilder(typeface);
-            builder.SetHintTechnique((HintTechnique)lstHintList.SelectedItem);
-#if DEBUG
-            builder.dbugAlwaysDoCurveAnalysis = true;
-#endif
-            //----------------------------------------------------
-            builder.Build(testChar, sizeInPoint);
 
-            var txToVxs1 = new GlyphTranslatorToVxs();
-            builder.ReadShapes(txToVxs1);
+            //---------------
+            //set up vinfo
+            UI.DebugGlyphVisualizerInfoView vinfo = debugGlyphVisualizer.VisualizeInfoView;
 
-            float scale = typeface.CalculateToPixelScaleFromPointSize(sizeInPoint);
-            var leftControl = builder.LeftXControl;
-            var left2 = leftControl * scale;
-            int floor_1 = (int)left2;
-            float diff = left2 - floor_1;
-
-            if (chkMinorOffset.Checked)
+            if (vinfo == null)
             {
-                
-                this.txtLeftXControl.Text = left2.ToString() + " =>" + floor_1 + ",diff=" + diff;
-            }
-            else
-            {
-                this.txtLeftXControl.Text = left2.ToString();
-            }
-
-            VertexStore vxs = new VertexStore();
-            txToVxs1.WriteOutput(vxs, _vxsPool);
-
-            //----------------------------------------------------
-            painter.UseSubPixelRendering = chkLcdTechnique.Checked;
-
-            //5. use PixelFarm's Agg to render to bitmap...
-            //5.1 clear background
-            painter.Clear(PixelFarm.Drawing.Color.White);
-
-            RectD bounds = new RectD();
-            BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref bounds);
-
-
-            if (chkFillBackground.Checked)
-            {
-                //5.2 
-                painter.FillColor = PixelFarm.Drawing.Color.Black;
-                //5.3
-                //painter.Fill(vxs);
-
-                float xpos = 5;// - diff;
-                if (chkMinorOffset.Checked)
+                vinfo = new UI.DebugGlyphVisualizerInfoView();
+                vinfo.SetTreeView(this.treeView1);
+                vinfo.SetFlushOutputHander(() =>
                 {
-                    xpos -= diff;
-                }
-                //for (float i = 0; i < 20; ++i)
-                //{
-                painter.SetOrigin(xpos, 10);
-                painter.Fill(vxs);
-                //}
-            }
-            if (chkBorder.Checked)
-            {
-                //5.4 
-                // p.StrokeWidth = 3;
-                painter.StrokeColor = PixelFarm.Drawing.Color.Green;
-                //user can specific border width here...
-                //p.StrokeWidth = 2;
-                //5.5 
-                painter.Draw(vxs);
+                    painter.SetOrigin(0, 0);
+                    //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
+                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
+                    //--------------- 
+                    //7. just render our bitmap
+                    g.Clear(Color.White);
+                    g.DrawImage(winBmp, new Point(30, 20));
 
-
+                });
+                debugGlyphVisualizer.VisualizeInfoView = vinfo;
             }
+
+            //---------------
+            //we use the debugGlyphVisualize the render it
+            this.debugGlyphVisualizer.SetFont(typeface, sizeInPoint);
+
+            debugGlyphVisualizer.UseLcdTechnique = this.chkLcdTechnique.Checked;
+            debugGlyphVisualizer.CanvasPainter = painter;
+            debugGlyphVisualizer.FillBackGround = chkFillBackground.Checked;
+            debugGlyphVisualizer.DrawBorder = chkBorder.Checked;
+            debugGlyphVisualizer.OffsetMinorX = chkMinorOffset.Checked;
+            debugGlyphVisualizer.ShowTess = chkShowTess.Checked;
+            debugGlyphVisualizer.DrawTrianglesAndEdges = this.chkDrawTriangles.Checked;
+            debugGlyphVisualizer.DrawCentroidBone = this.chkDrawCentroidBone.Checked;
+            debugGlyphVisualizer.DrawGlyphBone = this.chkDrawGlyphBone.Checked;
+            debugGlyphVisualizer.DrawDynamicOutline = chkDynamicOutline.Checked;
+            debugGlyphVisualizer.DrawRegenerateOutline = chkDrawRegenerateOutline.Checked;
+            //------------------------------------------------------
+            debugGlyphVisualizer.RenderChar(testChar, (HintTechnique)lstHintList.SelectedItem);
+            //---------------------------------------------------- 
+            this.txtLeftXControl.Text = debugGlyphVisualizer.MinorOffsetInfo;
 
             //--------------------------
-            if (chkShowTess.Checked)
-            {
-                //
-#if DEBUG
-
-                GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
-                if (fitOutline != null)
-                {
-                    debugGlyphVisualizer.DrawCentroidBone = this.chkDrawCentroidBone.Checked;
-                    debugGlyphVisualizer.DrawGlyphBone = this.chkDrawGlyphBone.Checked;
-                    debugGlyphVisualizer.GenDynamicOutline = this.chkDynamicOutline.Checked;
-                    debugGlyphVisualizer.dbugDrawTriangulatedGlyph(painter, fitOutline, scale);
-                }
-#endif
-
-            }
-            //--------------------------
-#if DEBUG
-            builder.dbugAlwaysDoCurveAnalysis = false;
-#endif
             if (chkShowGrid.Checked)
             {
                 //render grid
                 RenderGrid(800, 600, _gridSize, painter);
             }
             painter.SetOrigin(0, 0);
-
-
             //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
             PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
             //--------------- 

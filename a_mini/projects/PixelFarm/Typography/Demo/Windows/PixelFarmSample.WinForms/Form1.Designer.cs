@@ -57,10 +57,12 @@
             this.chkDrawGlyphBone = new System.Windows.Forms.CheckBox();
             this.txtGlyphBoneStartAt = new System.Windows.Forms.TextBox();
             this.txtGlyphBoneCount = new System.Windows.Forms.TextBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.chkDynamicOutline = new System.Windows.Forms.CheckBox();
             this.txtLeftXControl = new System.Windows.Forms.TextBox();
             this.chkMinorOffset = new System.Windows.Forms.CheckBox();
+            this.chkDrawTriangles = new System.Windows.Forms.CheckBox();
+            this.chkDrawRegenerateOutline = new System.Windows.Forms.CheckBox();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.SuspendLayout();
             // 
             // button1
@@ -183,7 +185,7 @@
             this.chkDrawCentroidBone.AutoSize = true;
             this.chkDrawCentroidBone.Checked = true;
             this.chkDrawCentroidBone.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDrawCentroidBone.Location = new System.Drawing.Point(828, 196);
+            this.chkDrawCentroidBone.Location = new System.Drawing.Point(827, 223);
             this.chkDrawCentroidBone.Name = "chkDrawCentroidBone";
             this.chkDrawCentroidBone.Size = new System.Drawing.Size(121, 17);
             this.chkDrawCentroidBone.TabIndex = 19;
@@ -212,9 +214,9 @@
             // 
             // cmdBuildMsdfTexture
             // 
-            this.cmdBuildMsdfTexture.Location = new System.Drawing.Point(528, 384);
+            this.cmdBuildMsdfTexture.Location = new System.Drawing.Point(937, 135);
             this.cmdBuildMsdfTexture.Name = "cmdBuildMsdfTexture";
-            this.cmdBuildMsdfTexture.Size = new System.Drawing.Size(121, 37);
+            this.cmdBuildMsdfTexture.Size = new System.Drawing.Size(121, 28);
             this.cmdBuildMsdfTexture.TabIndex = 22;
             this.cmdBuildMsdfTexture.Text = "Make MsdfTexture";
             this.cmdBuildMsdfTexture.UseVisualStyleBackColor = true;
@@ -273,7 +275,7 @@
             this.sampleTextBox1.BackColor = System.Drawing.Color.Silver;
             this.sampleTextBox1.Location = new System.Drawing.Point(12, 71);
             this.sampleTextBox1.Name = "sampleTextBox1";
-            this.sampleTextBox1.Size = new System.Drawing.Size(505, 443);
+            this.sampleTextBox1.Size = new System.Drawing.Size(505, 774);
             this.sampleTextBox1.TabIndex = 40;
             this.sampleTextBox1.Visible = false;
             // 
@@ -316,7 +318,7 @@
             this.chkDrawGlyphBone.AutoSize = true;
             this.chkDrawGlyphBone.Checked = true;
             this.chkDrawGlyphBone.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDrawGlyphBone.Location = new System.Drawing.Point(828, 225);
+            this.chkDrawGlyphBone.Location = new System.Drawing.Point(827, 252);
             this.chkDrawGlyphBone.Name = "chkDrawGlyphBone";
             this.chkDrawGlyphBone.Size = new System.Drawing.Size(109, 17);
             this.chkDrawGlyphBone.TabIndex = 47;
@@ -325,7 +327,7 @@
             // 
             // txtGlyphBoneStartAt
             // 
-            this.txtGlyphBoneStartAt.Location = new System.Drawing.Point(943, 223);
+            this.txtGlyphBoneStartAt.Location = new System.Drawing.Point(943, 246);
             this.txtGlyphBoneStartAt.Name = "txtGlyphBoneStartAt";
             this.txtGlyphBoneStartAt.Size = new System.Drawing.Size(20, 20);
             this.txtGlyphBoneStartAt.TabIndex = 48;
@@ -333,24 +335,16 @@
             // 
             // txtGlyphBoneCount
             // 
-            this.txtGlyphBoneCount.Location = new System.Drawing.Point(974, 223);
+            this.txtGlyphBoneCount.Location = new System.Drawing.Point(974, 246);
             this.txtGlyphBoneCount.Name = "txtGlyphBoneCount";
             this.txtGlyphBoneCount.Size = new System.Drawing.Size(20, 20);
             this.txtGlyphBoneCount.TabIndex = 49;
             this.txtGlyphBoneCount.Text = "-1";
             // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(1009, 173);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(96, 290);
-            this.listBox1.TabIndex = 50;
-            // 
             // chkDynamicOutline
             // 
             this.chkDynamicOutline.AutoSize = true;
-            this.chkDynamicOutline.Location = new System.Drawing.Point(811, 260);
+            this.chkDynamicOutline.Location = new System.Drawing.Point(806, 306);
             this.chkDynamicOutline.Name = "chkDynamicOutline";
             this.chkDynamicOutline.Size = new System.Drawing.Size(130, 17);
             this.chkDynamicOutline.TabIndex = 51;
@@ -359,7 +353,7 @@
             // 
             // txtLeftXControl
             // 
-            this.txtLeftXControl.Location = new System.Drawing.Point(792, 320);
+            this.txtLeftXControl.Location = new System.Drawing.Point(788, 380);
             this.txtLeftXControl.Name = "txtLeftXControl";
             this.txtLeftXControl.Size = new System.Drawing.Size(217, 20);
             this.txtLeftXControl.TabIndex = 52;
@@ -368,22 +362,53 @@
             // chkMinorOffset
             // 
             this.chkMinorOffset.AutoSize = true;
-            this.chkMinorOffset.Location = new System.Drawing.Point(792, 297);
+            this.chkMinorOffset.Location = new System.Drawing.Point(788, 357);
             this.chkMinorOffset.Name = "chkMinorOffset";
             this.chkMinorOffset.Size = new System.Drawing.Size(80, 17);
             this.chkMinorOffset.TabIndex = 53;
             this.chkMinorOffset.Text = "Offset to Fit";
             this.chkMinorOffset.UseVisualStyleBackColor = true;
             // 
+            // chkDrawTriangles
+            // 
+            this.chkDrawTriangles.AutoSize = true;
+            this.chkDrawTriangles.Checked = true;
+            this.chkDrawTriangles.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDrawTriangles.Location = new System.Drawing.Point(827, 196);
+            this.chkDrawTriangles.Name = "chkDrawTriangles";
+            this.chkDrawTriangles.Size = new System.Drawing.Size(94, 17);
+            this.chkDrawTriangles.TabIndex = 54;
+            this.chkDrawTriangles.Text = "DrawTriangles";
+            this.chkDrawTriangles.UseVisualStyleBackColor = true;
+            // 
+            // chkDrawRegenerateOutline
+            // 
+            this.chkDrawRegenerateOutline.AutoSize = true;
+            this.chkDrawRegenerateOutline.Location = new System.Drawing.Point(826, 329);
+            this.chkDrawRegenerateOutline.Name = "chkDrawRegenerateOutline";
+            this.chkDrawRegenerateOutline.Size = new System.Drawing.Size(157, 17);
+            this.chkDrawRegenerateOutline.TabIndex = 55;
+            this.chkDrawRegenerateOutline.Text = "Draw Regenerated Outlines";
+            this.chkDrawRegenerateOutline.UseVisualStyleBackColor = true;
+            // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(528, 496);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(393, 349);
+            this.treeView1.TabIndex = 56;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1117, 526);
+            this.ClientSize = new System.Drawing.Size(1117, 857);
+            this.Controls.Add(this.treeView1);
+            this.Controls.Add(this.chkDrawRegenerateOutline);
+            this.Controls.Add(this.chkDrawTriangles);
             this.Controls.Add(this.chkMinorOffset);
             this.Controls.Add(this.txtLeftXControl);
             this.Controls.Add(this.chkDynamicOutline);
-            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.txtGlyphBoneCount);
             this.Controls.Add(this.txtGlyphBoneStartAt);
             this.Controls.Add(this.chkDrawGlyphBone);
@@ -452,10 +477,12 @@
         private System.Windows.Forms.CheckBox chkDrawGlyphBone;
         private System.Windows.Forms.TextBox txtGlyphBoneStartAt;
         private System.Windows.Forms.TextBox txtGlyphBoneCount;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.CheckBox chkDynamicOutline;
         private System.Windows.Forms.TextBox txtLeftXControl;
         private System.Windows.Forms.CheckBox chkMinorOffset;
+        private System.Windows.Forms.CheckBox chkDrawTriangles;
+        private System.Windows.Forms.CheckBox chkDrawRegenerateOutline;
+        private System.Windows.Forms.TreeView treeView1;
     }
 }
 
