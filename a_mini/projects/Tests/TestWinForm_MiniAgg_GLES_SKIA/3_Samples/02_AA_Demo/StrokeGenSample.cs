@@ -19,6 +19,8 @@ namespace PixelFarm.Agg.Sample_Draw
         A,
         B,
         C,
+        D,
+
     }
 
     [Info(OrderCode = "02")]
@@ -64,6 +66,9 @@ namespace PixelFarm.Agg.Sample_Draw
                     break;
                 case DrawStrokeSample.C:
                     DrawC(aggPainter);
+                    break;
+                case DrawStrokeSample.D:
+                    DrawD(aggPainter);
                     break;
             }
         }
@@ -245,6 +250,32 @@ namespace PixelFarm.Agg.Sample_Draw
 
             aggPainter.Draw(vxs);
             aggPainter.LineDashGen = null;
+        }
+        void DrawD(CanvasPainter painter)
+        {
+            PathWriter ps = new PathWriter();
+            painter.Clear(PixelFarm.Drawing.Color.White);
+            painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+            //p.Line(10, 10, 50, 10);
+            //p.Line(50, 10, 50, 50);
+            //p.Line(50, 50, 10, 50);
+            //p.Line(50, 10, 10, 10);
+
+            ps.Clear();
+            ps.MoveTo(10, 10);
+            ps.LineTo(50, 10);
+            ps.LineTo(50, 50);
+            ps.LineTo(10, 50);
+            ps.CloseFigure();
+            //
+            ps.MoveTo(15, 15);
+            ps.LineTo(15, 45);
+            ps.LineTo(45, 45);
+            ps.LineTo(45, 15);
+            ps.CloseFigure();
+            //
+            //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
+            painter.Draw(ps.Vxs, PixelFarm.Drawing.Color.Red);
         }
     }
 }
