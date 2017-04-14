@@ -20,6 +20,12 @@ namespace PixelFarm.Drawing.Fonts
         public GlyphTranslatorToVxs()
         {
         }
+#if DEBUG
+        public PathWriter dbugGetPathWriter()
+        {
+            return ps;
+        }
+#endif
         public void BeginRead(int countourCount)
         {
             ps.Clear();
@@ -77,7 +83,7 @@ namespace PixelFarm.Drawing.Fonts
                 //TODO: review here again***d
                 //VertexStore tmpVxs = vxsPool.GetFreeVxs();
                 curveFlattener.MakeVxs(ps.Vxs, output);
-               // vxsPool.Release(ref tmpVxs);
+                // vxsPool.Release(ref tmpVxs);
             }
         }
     }

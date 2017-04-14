@@ -1,7 +1,9 @@
 ﻿//MIT, 2017, WinterDev 
 using System;
 using Mini;
-
+using PixelFarm.Drawing;
+using PixelFarm.Agg;
+using PixelFarm.Agg.VertexSource;
 namespace PixelFarm.Agg.Sample_AADemoTest4
 {
 
@@ -17,7 +19,31 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
     }
 
 
+    [Info(OrderCode = "02")]
+    [Info("AADemoTest5_Stroke")]
+    public class AADemoTest5_Stroke : DemoBase
+    {
 
+
+        public override void Draw(CanvasPainter p)
+        {
+            PathWriter ps = new PathWriter();
+            p.StrokeColor = Color.Black;
+            //p.Line(10, 10, 50, 10);
+            //p.Line(50, 10, 50, 50);
+            //p.Line(50, 50, 10, 50);
+            //p.Line(50, 10, 10, 10);
+
+            ps.Clear();
+            ps.MoveTo(10, 10);
+            ps.LineTo(50, 10);
+            ps.LineTo(50, 50);
+            //ps.LineTo(10, 50);
+            //ps.CloseFigure();
+            ////p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
+            p.Draw(ps.Vxs, PixelFarm.Drawing.Color.Red);
+        }
+    }
 
     [Info(OrderCode = "02")]
     [Info("SubPixelRendering_4")]

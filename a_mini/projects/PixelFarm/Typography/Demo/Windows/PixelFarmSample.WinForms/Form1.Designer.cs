@@ -214,9 +214,9 @@
             // 
             // cmdBuildMsdfTexture
             // 
-            this.cmdBuildMsdfTexture.Location = new System.Drawing.Point(528, 384);
+            this.cmdBuildMsdfTexture.Location = new System.Drawing.Point(937, 135);
             this.cmdBuildMsdfTexture.Name = "cmdBuildMsdfTexture";
-            this.cmdBuildMsdfTexture.Size = new System.Drawing.Size(121, 37);
+            this.cmdBuildMsdfTexture.Size = new System.Drawing.Size(121, 28);
             this.cmdBuildMsdfTexture.TabIndex = 22;
             this.cmdBuildMsdfTexture.Text = "Make MsdfTexture";
             this.cmdBuildMsdfTexture.UseVisualStyleBackColor = true;
