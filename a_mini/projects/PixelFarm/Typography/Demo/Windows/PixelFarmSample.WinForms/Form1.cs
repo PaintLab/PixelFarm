@@ -82,7 +82,7 @@ namespace SampleWinForms
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction);
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction_VerticalOnly);
             lstHintList.Items.Add(HintTechnique.CustomAutoFit);
-            lstHintList.SelectedIndex = 0;
+            lstHintList.SelectedIndex = 3;
             lstHintList.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
             //---------- 
             //snapX
@@ -158,9 +158,9 @@ namespace SampleWinForms
             int ffcount = 0;
             bool found = false;
 
-            //string defaultFont = "Tahoma";
+            string defaultFont = "Tahoma";
             //string defaultFont = "Alef"; //test hebrew
-            string defaultFont = "Century";
+            //string defaultFont = "Century";
             foreach (InstalledFont ff in installedFontCollection.GetInstalledFontIter())
             {
                 if (!found && ff.FontName == defaultFont)

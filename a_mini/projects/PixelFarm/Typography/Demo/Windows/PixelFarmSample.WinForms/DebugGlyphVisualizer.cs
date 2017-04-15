@@ -152,7 +152,7 @@ namespace SampleWinForms.UI
             if (DrawDynamicOutline)
             {
                 GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
-                dbugDynamicOutline(painter, fitOutline, scale, true);
+                dbugDynamicOutline(painter, fitOutline, scale, DrawRegenerateOutline);
             }
 
         }
