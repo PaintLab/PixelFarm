@@ -8,7 +8,7 @@ namespace Typography.Rendering
 {
     public static class MsdfGlyphGen
     {
-        public static Msdfgen.Shape CreateMsdfShape(GlyphTranslatorToContour glyphToContour, float pxScale = 1)
+        public static Msdfgen.Shape CreateMsdfShape(GlyphContourBuilder glyphToContour, float pxScale = 1)
         {
             List<GlyphContour> cnts = glyphToContour.GetContours();
             List<GlyphContour> newFitContours = new List<GlyphContour>();
@@ -127,8 +127,7 @@ namespace Typography.Rendering
         }
         //---------------------------------------------------------------------
 
-        public static GlyphImage CreateMsdfImage(
-             GlyphTranslatorToContour glyphToContour)
+        public static GlyphImage CreateMsdfImage(GlyphContourBuilder glyphToContour)
         {
             // create msdf shape , then convert to actual image
             return CreateMsdfImage(CreateMsdfShape(glyphToContour, 1));

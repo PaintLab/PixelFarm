@@ -17,6 +17,9 @@ namespace Typography.Rendering
         /// <returns></returns>
         public GlyphFitOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
         {
+            
+
+
             //1. convert original glyph point to contour
             _glyphToCountor.Read(glyphPoints, glyphContours);
             //2. get result as list of contour
@@ -41,7 +44,7 @@ namespace Typography.Rendering
         }
 
         GlyphPartFlattener _glyhFlattener = new GlyphPartFlattener();
-        GlyphTranslatorToContour _glyphToCountor = new GlyphTranslatorToContour();
+        GlyphContourBuilder _glyphToCountor = new GlyphContourBuilder();
         public GlyphFitOutlineAnalyzer()
         {
 

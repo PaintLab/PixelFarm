@@ -443,7 +443,7 @@ namespace SampleWinForms
             //----------------------------------------------------
             builder.Build(testChar, sizeInPoint);
             //----------------------------------------------------
-            var glyphToContour = new GlyphTranslatorToContour();
+            var glyphToContour = new GlyphContourBuilder();
             builder.ReadShapes(glyphToContour);
             //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
             GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour);
@@ -602,7 +602,7 @@ namespace SampleWinForms
                     //build glyph
                     builder.BuildFromGlyphIndex(gindex, sizeInPoint);
 
-                    var glyphToContour = new GlyphTranslatorToContour();
+                    var glyphToContour = new GlyphContourBuilder();
                     //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
                     builder.ReadShapes(glyphToContour);
                     GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour);

@@ -7,79 +7,33 @@ namespace Typography.Rendering
 {
 
     //this is PixelFarm version ***
-    //render with MiniAgg
+    //render with MiniAgg 
 
-    public class GlyphTranslatorToContour : OpenFont.IGlyphTranslator
+    public class GlyphContourBuilder : OpenFont.IGlyphTranslator
     {
+
         List<GlyphContour> contours;
-        GlyphContourBuilder cntBuilder = new GlyphContourBuilder();
-        public GlyphTranslatorToContour()
-        {
-
-        }
-        public void BeginRead(int countourCount)
-        {
-            cntBuilder.Reset();
-            //-----------------------------------
-            contours = new List<GlyphContour>();
-            //start with blank contour
-
-        }
-        public void CloseContour()
-        {
-            cntBuilder.CloseFigure();
-            GlyphContour cntContour = cntBuilder.CurrentContour;
-            //  cntContour.allPoints = cntBuilder.GetAllPoints();
-            cntBuilder.Reset();
-            contours.Add(cntContour);
-        }
-        public void Curve3(float x1, float y1, float x2, float y2)
-        {
-            cntBuilder.Curve3(x1, y1, x2, y2);
-        }
-        public void LineTo(float x1, float y1)
-        {
-            cntBuilder.LineTo(x1, y1);
-        }
-        public void Curve4(float x1, float y1, float x2, float y2, float x3, float y3)
-        {
-            cntBuilder.Curve4(x1, y1, x2, y2, x3, y3);
-        }
-        public void MoveTo(float x0, float y0)
-        {
-            cntBuilder.MoveTo(x0, y0);
-        }
-        public void EndRead()
-        {
-            //do nothing
-        }
-        public List<GlyphContour> GetContours()
-        {
-            return contours;
-        }
-    }
-
-
-
-    public class GlyphContourBuilder
-    {
         float curX;
         float curY;
         float latestMoveToX;
         float latestMoveToY;
         GlyphContour currentCnt;
         GlyphPart _latestPart;
-
         public GlyphContourBuilder()
         {
 
-            Reset();
+        }
+        public List<GlyphContour> GetContours()
+        {
+            return contours;
         }
         public void MoveTo(float x0, float y0)
         {
             this.latestMoveToX = this.curX = x0;
             this.latestMoveToY = this.curY = y0;
             _latestPart = null;
+            //----------------------------
+
         }
         public void LineTo(float x1, float y1)
         {
@@ -93,26 +47,6 @@ namespace Typography.Rendering
             }
             this.curX = x1;
             this.curY = y1;
-        }
-        public void CloseFigure()
-        {
-            if (curX == latestMoveToX &&
-                curY == latestMoveToY)
-            {
-                return;
-            }
-
-
-            if (_latestPart != null)
-            {
-                currentCnt.AddPart(_latestPart = new GlyphLine(_latestPart, latestMoveToX, latestMoveToY));
-            }
-            else
-            {
-                currentCnt.AddPart(_latestPart = new GlyphLine(curX, curY, latestMoveToX, latestMoveToY));
-            }
-            this.curX = latestMoveToX;
-            this.curY = latestMoveToY;
         }
 
 
@@ -157,20 +91,51 @@ namespace Typography.Rendering
             this.curX = x3;
             this.curY = y3;
         }
-        public GlyphContour CurrentContour
+
+        public void CloseContour()
         {
-            get
+            if (curX == latestMoveToX && curY == latestMoveToY)
             {
-                return currentCnt;
+                //we not need to close 
             }
-        }
-        public void Reset()
-        {
-            _latestPart = null;
+            else
+            {
+                if (_latestPart != null)
+                {
+                    currentCnt.AddPart(_latestPart = new GlyphLine(_latestPart, latestMoveToX, latestMoveToY));
+                }
+                else
+                {
+                    currentCnt.AddPart(_latestPart = new GlyphLine(curX, curY, latestMoveToX, latestMoveToY));
+                }
+            }
+
+            this.curX = latestMoveToX;
+            this.curY = latestMoveToY;
+
+            if (currentCnt != null)
+            {
+                this.contours.Add(currentCnt);
+                currentCnt = null;
+            }
+            //
             currentCnt = new GlyphContour();
+        }
+        public void BeginRead(int contourCount)
+        {
+            //reset all
+            contours = new List<GlyphContour>();
+            _latestPart = null;
             this.latestMoveToX = this.curX = this.latestMoveToY = this.curY = 0;
+            //
+            currentCnt = new GlyphContour();
+            //new contour, but not add
+        }
+        public void EndRead()
+        {
 
         }
+       
     }
 
     public class GlyphContour
@@ -205,8 +170,9 @@ namespace Typography.Rendering
             //-------------------------------
             int j = parts.Count;
             //---------------
-            //start ...
+            //
             flattenPoints = flattener.Results = new List<GlyphPoint2D>();
+            //start ...
             for (int i = 0; i < j; ++i)
             {
                 //flatten each part
