@@ -56,7 +56,7 @@ namespace SampleWinForms.UI
         }
         public void DrawMarker(float x, float y, PixelFarm.Drawing.Color color)
         {
-            painter.FillRectLBWH(x, y, 4, 4, color);
+            painter.FillRectLBWH(x, y, 8, 8, color);
         }
         public void RenderChar(char testChar, HintTechnique hint)
         {

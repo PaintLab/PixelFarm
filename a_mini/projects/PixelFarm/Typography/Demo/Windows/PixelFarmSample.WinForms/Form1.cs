@@ -389,7 +389,7 @@ namespace SampleWinForms
                     //--------------- 
                     //7. just render our bitmap
                     g.Clear(Color.White);
-                    g.DrawImage(winBmp, new Point(30, 20));
+                    g.DrawImage(winBmp, new Point(30, 100));
 
                 });
                 debugGlyphVisualizer.VisualizeInfoView = vinfo;
