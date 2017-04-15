@@ -200,19 +200,8 @@ namespace SampleWinForms.UI
                 case PointKind.C4Start:
                 case PointKind.C4End:
                 case PointKind.LineStart:
-                case PointKind.LineStop:
-                    {
-                        painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2, PixelFarm.Drawing.Color.Red);
-                        //if (point.AdjustedY != 0)
-                        //{
-                        //    painter.FillRectLBWH(point.x * scale, point.y * scale + 30, 5, 5, PixelFarm.Drawing.Color.Red);
-                        //}
-                        //else
-                        //{
-                        //    painter.FillRectLBWH(point.x * scale, point.y * scale, 2, 2, PixelFarm.Drawing.Color.Red);
-                        //}
-
-                    }
+                case PointKind.LineStop: 
+                    painter.FillRectLBWH(point.x * scale, point.y * scale, 5, 5, PixelFarm.Drawing.Color.Red); 
                     break;
 
             }

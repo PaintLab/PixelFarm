@@ -16,9 +16,7 @@ namespace Typography.Rendering
         /// <param name="glyphContours"></param>
         /// <returns></returns>
         public GlyphFitOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
-        {
-            
-
+        { 
 
             //1. convert original glyph point to contour
             _glyphToCountor.Read(glyphPoints, glyphContours);

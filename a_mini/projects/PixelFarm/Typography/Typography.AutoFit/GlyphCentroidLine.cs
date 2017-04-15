@@ -528,8 +528,7 @@ namespace Typography.Rendering
                     {
 
                         Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, boneJoint.Position);
-                        Vector2 perpend_B = MyMath.FindPerpendicularCutPoint(edgeB, boneJoint.Position);
-
+                        Vector2 perpend_B = MyMath.FindPerpendicularCutPoint(edgeB, boneJoint.Position); 
                         Vector2 corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
                         //find distance from contactSite to specific point 
                         double sqDistanceToEdgeA = boneJoint.CalculateSqrDistance(perpend_A);
@@ -542,6 +541,8 @@ namespace Typography.Rendering
                             default: throw new NotSupportedException();
                             case 0:
                                 {
+                                    //min at pos 0 => sqDistanceToEdgeA
+
                                     switch (boneJoint.OwnerCentroidLine.SlopeKind)
                                     {
                                         case LineSlopeKind.Horizontal:

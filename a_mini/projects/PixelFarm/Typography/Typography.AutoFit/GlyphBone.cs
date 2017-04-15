@@ -210,10 +210,8 @@ namespace Typography.Rendering
         /// </summary>
         Vector2 _tipPoint;
 
+        //connection to edges
         EdgeLine _selectedEdgeA, _selectedEdgeB, _selectedTipEdge;
-
-       
-        bool _dbugSwap;
 
         public void AddRibEndAt(EdgeLine edgeLine, Vector2 vec)
         {
@@ -227,19 +225,7 @@ namespace Typography.Rendering
                     break;
                 case 1:
                     _selectedEdgeB = edgeLine;
-                    _ribEndPoint_B = vec;
-
-                    //swap edge if need
-                    //if (_ribEndPoint_A.X > _ribEndPoint_B.X)
-                    //{
-                    //    EdgeLine tmpA = _selectedEdgeA;
-                    //    _selectedEdgeA = _selectedEdgeB;
-                    //    _selectedEdgeB = tmpA;
-                    //    Vector2 tmpAEndPoint = _ribEndPoint_A;
-                    //    _ribEndPoint_A = _ribEndPoint_B;
-                    //    _ribEndPoint_B = tmpAEndPoint;
-                    //    _dbugSwap = true;
-                    //}
+                    _ribEndPoint_B = vec; 
                     break;
             }
 

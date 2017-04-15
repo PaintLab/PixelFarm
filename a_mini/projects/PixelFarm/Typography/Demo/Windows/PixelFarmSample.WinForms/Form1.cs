@@ -267,10 +267,10 @@ namespace SampleWinForms
         {
             if (g == null)
             {
-                destImg = new ActualImage(400, 300, PixelFormat.ARGB32);
+                destImg = new ActualImage(800, 600, PixelFormat.ARGB32);
                 imgGfx2d = new ImageGraphics2D(destImg); //no platform
                 painter = new AggCanvasPainter(imgGfx2d);
-                winBmp = new Bitmap(400, 300, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                winBmp = new Bitmap(destImg.Width, destImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 g = this.CreateGraphics();
 
                 painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
@@ -427,7 +427,7 @@ namespace SampleWinForms
             //--------------- 
             //7. just render our bitmap
             g.Clear(Color.White);
-            g.DrawImage(winBmp, new Point(30, 20));
+            g.DrawImage(winBmp, new Point(30, 100));
             //g.DrawRectangle(Pens.White, new System.Drawing.Rectangle(30, 20, winBmp.Width, winBmp.Height));
         }
 

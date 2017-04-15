@@ -30,7 +30,7 @@ namespace Typography.Rendering
             Analyze();
         }
 
-      
+
 
 
         Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs;
@@ -158,6 +158,11 @@ namespace Typography.Rendering
             AnalyzeBoneLength(newBones, outputVerticalLongBones);
             //-------------
             outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
+            //----------------------------------------
+
+
+            //connect glyph part/contour with bone
+            //----------------------------------------
 
         }
         public List<GlyphBone> LongVerticalBones
