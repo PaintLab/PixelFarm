@@ -119,7 +119,7 @@ namespace Typography.Rendering
             }
             //-------------------------------------------------
 
-            if (triCount > 1)
+            if (triCount > 2)
             {
                 //connect the last tri to the first tri
                 //if it is connected
