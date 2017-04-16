@@ -360,9 +360,7 @@ namespace Typography.Rendering
 
             double dy = q.CentroidY - p.CentroidY;
             double dx = q.CentroidX - p.CentroidX;
-            this.boneLength = Math.Sqrt(
-                (dy * dy) + (dx * dx)
-                );
+            this.boneLength = Math.Sqrt((dy * dy) + (dx * dx));
         }
 
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
@@ -421,24 +419,7 @@ namespace Typography.Rendering
             }
             //--------------------------------------
             //for p and q, count number of outside edge
-            //if outsideEdgeCount of triangle >=2 -> this triangle is tip part
-
-            //int p_outsideEdgeCount = OutSideEdgeCount(p);
-            //int q_outsideEdgeCount = OutSideEdgeCount(q);
-            //bool p_isTip = false;
-            //bool q_isTip = false;
-
-            //if (p_outsideEdgeCount >= 2)
-            //{
-            //    //tip bone
-            //    p_isTip = true;
-            //}
-            //if (q_outsideEdgeCount >= 2)
-            //{
-            //    //tipbone
-            //    q_isTip = true;
-            //}
-
+            //if outsideEdgeCount of triangle >=2 -> this triangle is tip part 
             //-------------------------------------- 
             //p_isTip && q_isTip is possible eg. dot or dot of  i etc.
             //-------------------------------------- 

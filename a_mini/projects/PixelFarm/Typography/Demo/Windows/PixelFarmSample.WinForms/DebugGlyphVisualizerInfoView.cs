@@ -276,7 +276,7 @@ namespace SampleWinForms.UI
                 //   jointPos.X * pxscale, jointPos.Y * pxscale,
                 //   joint.TipPoint.X * pxscale, joint.TipPoint.Y * pxscale,
                 //   PixelFarm.Drawing.Color.White);
-                jointNode.Nodes.Add(new TreeNode() { Text = "tip:" + joint.TipPoint });
+                jointNode.Nodes.Add(new TreeNode() { Text = "tip:" + joint.TipPoint, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPoint) });
                 if (!added)
                 {
                     _jointsNode.Nodes.Add(jointNode);
