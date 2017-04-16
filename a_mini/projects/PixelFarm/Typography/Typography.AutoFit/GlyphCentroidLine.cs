@@ -45,8 +45,115 @@ namespace Typography.Rendering
                 //analyze for its bone joint
                 lineList[i].AnalyzeAndMarkEdges();
             }
+            if (j > 1)
+            {
+
+                //add special tip
+                //get first line and last 
+                //check if this is loop
+
+                GlyphCentroidLine first_line = lineList[0];
+                GlyphCentroidLine last_line = lineList[j - 1];
+
+                //open end or close end
+
+
+            }
+            else if (j == 1)
+            {
+                //single line
+                //eg 'l' letter
+
+                GlyphCentroidLine line = lineList[0];
+
+                var joint = line.BoneJoint;
+                //get another edge for endtip
+
+                if (IsOwnerOf(line.p, joint.TipEdge))
+                {
+                    //tip edge is from p side
+                    //so another side is q.
+
+
+                    var tipPoint = joint.TipPoint;
+                    GlyphTip tip = new GlyphTip(line, tipPoint, joint.TipEdge);
+                    line.P_Tip = tip;
+
+
+
+                    //find proper tip edge
+                    EdgeLine tipEdge = FindTip(line, line.q);
+                    if (tipEdge == null) throw new NotSupportedException();
+                    //-----
+                    tip = new GlyphTip(line, tipEdge.GetMidPoint(), tipEdge);
+                    line.Q_Tip = tip;
+                }
+                else if (IsOwnerOf(line.q, joint.TipEdge))
+                {
+
+                    var tipPoint = joint.TipPoint;
+                    GlyphTip tip = new GlyphTip(line, tipPoint, joint.TipEdge);
+                    line.Q_Tip = tip;
+
+
+                    //tip edge is from q side
+                    //so another side is p.
+
+                    //find proper tip edge
+                    EdgeLine tipEdge = FindTip(line, line.p);
+                    if (tipEdge == null) throw new NotSupportedException();
+                    //-----
+                    tip = new GlyphTip(line, tipEdge.GetMidPoint(), tipEdge);
+                    line.P_Tip = tip;
+
+                }
+                else
+                {
+                    throw new NotSupportedException();
+                }
+            }
+
         }
 
+        static EdgeLine FindTip(GlyphCentroidLine line, GlyphTriangle triangle)
+        {
+            GlyphBoneJoint boneJoint = line.BoneJoint;
+            if (CanbeTipEdge(triangle.e0, boneJoint))
+            {
+                return triangle.e0;
+            }
+            if (CanbeTipEdge(triangle.e1, boneJoint))
+            {
+                return triangle.e1;
+            }
+            if (CanbeTipEdge(triangle.e2, boneJoint))
+            {
+                return triangle.e2;
+            }
+            //not found
+            return null;
+        }
+        static bool CanbeTipEdge(EdgeLine edge, GlyphBoneJoint compareJoint)
+        {
+            //
+            if (edge.IsOutside &&
+                edge != compareJoint.RibEndEdgeA &&
+                edge != compareJoint.RibEndEdgeB)
+            {
+                return true;
+            }
+            return false;
+        }
+        static bool IsOwnerOf(GlyphTriangle p, EdgeLine edge)
+        {
+            if (p.e0 == edge ||
+                p.e1 == edge ||
+                p.e2 == edge)
+            {
+                return true;
+            }
+            return false;
+        }
         /// <summary>
         /// find nearest joint that contains tri 
         /// </summary>
@@ -340,6 +447,18 @@ namespace Typography.Rendering
     }
 
 
+    public class GlyphTip
+    {
+        public GlyphTip(GlyphCentroidLine ownerLine, Vector2 pos, EdgeLine edge)
+        {
+            this.OwnerLine = ownerLine;
+            this.Pos = pos;
+            this.Edge = edge;
+        }
+        public GlyphCentroidLine OwnerLine { get; set; }
+        public Vector2 Pos { get; set; }
+        public EdgeLine Edge { get; set; }
+    }
     /// <summary>
     /// a line that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
@@ -348,10 +467,7 @@ namespace Typography.Rendering
 
         public readonly GlyphTriangle p, q;
         public readonly double boneLength;
-
-
         GlyphBoneJoint _boneJoint;
-
 
         public GlyphCentroidLine(GlyphTriangle p, GlyphTriangle q)
         {
@@ -435,7 +551,6 @@ namespace Typography.Rendering
             MarkEdgeSides(q.e1, p);
             MarkEdgeSides(q.e2, p);
             //-------------------------------------- 
-
             //a centroid line links 2 tringles (p and q triangle) together
 
 
@@ -443,13 +558,16 @@ namespace Typography.Rendering
             {
                 //add more information
                 //find proper 'outside' edge
-
                 MarkProperOppositeEdge(p, _boneJoint, _boneJoint._p_contact_edge);
                 MarkProperOppositeEdge(q, _boneJoint, _boneJoint._q_contact_edge);
             }
+
+
+
         }
 
-
+        public GlyphTip P_Tip { get; set; }
+        public GlyphTip Q_Tip { get; set; }
         static int AssignResult(EdgeLine result, ref EdgeLine edgeA, ref EdgeLine edgeB)
         {
             if (edgeA == null)

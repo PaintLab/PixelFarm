@@ -146,6 +146,9 @@ namespace Typography.Rendering
                 hub.CreateBones(newBones);
             }
             //----------------------------------------
+            
+
+
             int lineHubCount = lineHubs.Count;
             for (int i = 0; i < lineHubCount; ++i)
             {

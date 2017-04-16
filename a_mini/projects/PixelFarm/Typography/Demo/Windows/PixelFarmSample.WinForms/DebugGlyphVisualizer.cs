@@ -311,6 +311,22 @@ namespace SampleWinForms.UI
             painter.FillRectLBWH(line.p.CentroidX * pxscale, line.p.CentroidY * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
             painter.FillRectLBWH(line.q.CentroidX * pxscale, line.q.CentroidY * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
 
+            //---------------
+            if (line.P_Tip != null)
+            {
+                var pos = line.P_Tip.Pos * pxscale;
+                painter.Line(
+                    line.p.CentroidX * pxscale, line.p.CentroidY * pxscale,
+                    pos.X, pos.Y,
+                    PixelFarm.Drawing.Color.Blue);
+            }
+            if (line.Q_Tip != null)
+            {
+                var pos = line.Q_Tip.Pos * pxscale;
+                painter.Line(
+                    line.q.CentroidX * pxscale, line.q.CentroidY * pxscale, pos.X, pos.Y,
+                    PixelFarm.Drawing.Color.Blue);
+            }
         }
         void dbugDrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)
         {
