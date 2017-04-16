@@ -51,7 +51,6 @@ namespace Typography.Rendering
                 //add special tip
                 //get first line and last 
                 //check if this is loop
-
                 GlyphCentroidLine first_line = lineList[0];
                 GlyphCentroidLine last_line = lineList[j - 1];
 
@@ -349,6 +348,7 @@ namespace Typography.Rendering
 
                 for (int i = 0; i < j; ++i)
                 {
+                    
                     //for each centroid line
                     //create bone that link the joint
                     GlyphCentroidLine line = lineList[i];
@@ -387,8 +387,20 @@ namespace Typography.Rendering
                             newlyCreatedBones.Add(bone);
                             glyphBones.Add(bone);
                         }
+                        else
+                        {
+                            //glyph 'o' -> no tip point
+                            if (j > 1)
+                            {
+                                GlyphCentroidLine nextline = lineList[0];
+                                GlyphBone bone = new GlyphBone(joint, nextline.BoneJoint);
+                                newlyCreatedBones.Add(bone);
+                                glyphBones.Add(bone);
+                            }
+                        }
                     }
                 }
+                //----------------
             }
         }
 
