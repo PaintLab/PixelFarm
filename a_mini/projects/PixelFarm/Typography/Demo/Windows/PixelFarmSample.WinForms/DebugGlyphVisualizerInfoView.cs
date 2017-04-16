@@ -248,11 +248,15 @@ namespace SampleWinForms.UI
             switch (joint.SelectedEdgePointCount)
             {
                 default: throw new NotSupportedException();
-                case 0: break;
-                case 1:
-                    //rib                     
+                case 0:
+                    //no rib
                     jointNode.Text = "j:" + joint.ToString();
-                    //rib 
+                    _jointsNode.Nodes.Add(jointNode);
+                    added = true;
+                    break;
+                case 1:
+                                 
+                    jointNode.Text = "j:" + joint.ToString(); 
                     jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
                     //
                     _jointsNode.Nodes.Add(jointNode);
@@ -260,9 +264,8 @@ namespace SampleWinForms.UI
 
                     break;
                 case 2:
-                    //rib 
-                    jointNode.Text = "j:" + joint.ToString();
-                    //rib 
+                 
+                    jointNode.Text = "j:" + joint.ToString(); 
                     jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
                     jointNode.Nodes.Add(new TreeNode() { Text = "rib_b:" + joint.RibEndPointB, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointB) });
                     //
