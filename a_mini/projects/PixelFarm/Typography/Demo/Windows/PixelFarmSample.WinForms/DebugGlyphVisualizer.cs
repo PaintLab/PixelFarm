@@ -352,10 +352,25 @@ namespace SampleWinForms.UI
             }
             if (joint.TipPoint != System.Numerics.Vector2.Zero)
             {
+                EdgeLine tipEdge = joint.TipEdge;
+                var p_x = tipEdge.p.X * pxscale;
+                var p_y = tipEdge.p.Y * pxscale;
+                var q_x = tipEdge.q.X * pxscale;
+                var q_y = tipEdge.q.Y * pxscale;
+
+
                 painter.Line(
                    jointPos.X * pxscale, jointPos.Y * pxscale,
-                   joint.TipPoint.X * pxscale, joint.TipPoint.Y * pxscale,
+                   p_x, p_y,
                    PixelFarm.Drawing.Color.White);
+                painter.FillRectLBWH(p_x, p_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
+                //
+
+                painter.Line(
+                jointPos.X * pxscale, jointPos.Y * pxscale,
+                q_x, q_y,
+                PixelFarm.Drawing.Color.White);
+                painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
             }
         }
         void dbugDrawBoneLinks(CanvasPainter painter, GlyphCentroidBranch branch, float pxscale)

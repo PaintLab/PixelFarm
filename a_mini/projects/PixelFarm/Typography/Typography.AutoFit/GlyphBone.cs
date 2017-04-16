@@ -214,6 +214,9 @@ namespace Typography.Rendering
         /// </summary>
         Vector2 _tipPoint;
 
+        //one bone joint can have up to 2 tips
+
+
         //connection to edges
         EdgeLine _selectedEdgeA, _selectedEdgeB, _selectedTipEdge;
 
@@ -246,28 +249,10 @@ namespace Typography.Rendering
         public Vector2 RibEndPointA { get { return _ribEndPoint_A; } }
         public Vector2 RibEndPointB { get { return _ribEndPoint_B; } }
         public Vector2 TipPoint { get { return _tipPoint; } }
+
         public EdgeLine RibEndEdgeA { get { return _selectedEdgeA; } }
         public EdgeLine RibEndEdgeB { get { return _selectedEdgeB; } }
         public EdgeLine TipEdge { get { return _selectedTipEdge; } }
-        //public double RibA_ArcTan()
-        //{
-        //    Vector2 jointPos = this.Position;
-        //    return Math.Atan2(_ribEndPoint_A.Y - jointPos.Y,
-        //        _ribEndPoint_A.X - jointPos.X);
-        //}
-        //public double RibB_ArcTan()
-        //{
-        //    Vector2 jointPos = this.Position;
-        //    return Math.Atan2(_ribEndPoint_B.Y - jointPos.Y,
-        //        _ribEndPoint_B.X - jointPos.X);
-        //}
-        //public double Tip_ArcTan()
-        //{
-        //    Vector2 jointPos = this.Position;
-        //    return Math.Atan2(_tipPoint.Y - jointPos.Y,
-        //        _tipPoint.X - jointPos.X);
-        //}
-
 
 #if DEBUG
         public override string ToString()
