@@ -565,13 +565,13 @@ namespace Typography.Rendering
                                 //select p
                                 p_corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
                                 // boneJoint.AddRibEndAt(edge, p_corner);
-                                //return;
+                                return;
                                 break;
                             case 1:
                                 //select q
                                 p_corner = new Vector2((float)edge.q.X, (float)edge.q.Y);
                                 //boneJoint.AddRibEndAt(edge, p_corner);
-                                //return;
+                                return;
                                 break;
                         }
 

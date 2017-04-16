@@ -198,14 +198,7 @@ namespace SampleWinForms.UI
             }
             _testEdgeCount = 0;
         }
-        //void DrawBoneRib(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphBoneJoint joint, float pixelScale)
-        //{
-        //    var jointPos = joint.Position;
-        //    painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4, PixelFarm.Drawing.Color.Green);
-        //    painter.Line(jointPos.X * pixelScale, jointPos.Y * pixelScale,
-        //        vec.X * pixelScale,
-        //        vec.Y * pixelScale, PixelFarm.Drawing.Color.White);
-        //}
+       
         public void ShowJoint(GlyphBoneJoint joint)
         {
             if (!_clearInfoView) { return; }
