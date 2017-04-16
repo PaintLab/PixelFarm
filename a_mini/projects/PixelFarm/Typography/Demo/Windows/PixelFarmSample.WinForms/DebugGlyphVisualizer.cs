@@ -275,7 +275,7 @@ namespace SampleWinForms.UI
                 switch (edge.SlopeKind)
                 {
                     default:
-                        painter.StrokeColor = PixelFarm.Drawing.Color.LightGray;
+                        painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
                         break;
                     case LineSlopeKind.Vertical:
                         painter.StrokeColor = PixelFarm.Drawing.Color.Blue;

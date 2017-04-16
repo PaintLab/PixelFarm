@@ -611,29 +611,23 @@ namespace Typography.Rendering
             }
         }
 
-        int MostProperGlyphPoint(GlyphPoint2D p, GlyphPoint2D q)
+        static int MostProperGlyphPoint(GlyphPoint2D p, GlyphPoint2D q)
         {
-            if (p.kind != PointKind.CurveInbetween)
+            if (p.kind != PointKind.CurveInbetween && q.kind != PointKind.CurveInbetween)
             {
-                if (q.kind != PointKind.CurveInbetween)
-                {
-                    return -1;
-                }
-                else
-                {
-                    return 0;
-                }
+                return 2;
+            }
+            else if (p.kind != PointKind.CurveInbetween)
+            {
+                return 0;
+            }
+            else if (q.kind != PointKind.CurveInbetween)
+            {
+                return 1;
             }
             else
             {
-                if (q.kind != PointKind.CurveInbetween)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return -1;
-                }
+                return -1;
             }
         }
 
@@ -677,25 +671,23 @@ namespace Typography.Rendering
                         switch (mostProperEnd)
                         {
                             default: throw new NotSupportedException();
-                            case -1:
-                                //can't decide
-                                p_corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
-                                boneJoint.AddRibEndAt(edge, p_corner);
-
+                            case 2:
+                                //both connect with ON-curve point 
+                                boneJoint.AddRibEndAt(edge, new Vector2((float)edge.p.X, (float)edge.p.Y));
                                 return;
-                                break;
                             case 0:
-                                //select p
-                                p_corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
-                                // boneJoint.AddRibEndAt(edge, p_corner);
-                                // return;
-                                break;
+                                //select p 
+                                boneJoint.AddRibEndAt(edge, new Vector2((float)edge.p.X, (float)edge.p.Y));
+                                return;
+                            //break;
                             case 1:
-                                //select q
-                                p_corner = new Vector2((float)edge.q.X, (float)edge.q.Y);
-                                //boneJoint.AddRibEndAt(edge, p_corner);
-                                // return;
-                                break;
+                                //select q 
+                                boneJoint.AddRibEndAt(edge, new Vector2((float)edge.q.X, (float)edge.q.Y));
+                                return;
+                            //break;
+                            case -1:
+                                //both p and q are curve in between
+                                return;
                         }
 
 
