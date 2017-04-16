@@ -54,14 +54,15 @@ namespace SampleWinForms.UI
                 };
             }
         }
-        public void DrawMarker(float x, float y, PixelFarm.Drawing.Color color)
+        public void DrawMarker(float x, float y, PixelFarm.Drawing.Color color, float sizeInPx = 8)
         {
-            painter.FillRectLBWH(x, y, 8, 8, color);
+            painter.FillRectLBWH(x, y, sizeInPx, sizeInPx, color);
         }
         public void RenderChar(char testChar, HintTechnique hint)
         {
             builder.SetHintTechnique(hint);
 #if DEBUG
+            GlyphBoneJoint.dbugTotalId = 0;//reset
             builder.dbugAlwaysDoCurveAnalysis = true;
 #endif
             _infoView.Clear();
@@ -158,7 +159,7 @@ namespace SampleWinForms.UI
             }
 
         }
-       
+
         public void RenderTessTesult()
         {
 #if DEBUG
@@ -425,6 +426,7 @@ namespace SampleWinForms.UI
                 {
                     //---------------
                     GlyphTriangle tri = triAngles[i];
+                    _infoView.ShowTriangles(tri);
                     EdgeLine e0 = tri.e0;
                     EdgeLine e1 = tri.e1;
                     EdgeLine e2 = tri.e2;

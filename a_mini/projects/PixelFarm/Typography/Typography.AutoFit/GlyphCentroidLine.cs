@@ -535,9 +535,6 @@ namespace Typography.Rendering
             //-------------------------------------------------------------------------------------
 
 
-
-
-
             switch (count)
             {
                 default: throw new NotSupportedException();
@@ -565,13 +562,13 @@ namespace Typography.Rendering
                                 //select p
                                 p_corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
                                 // boneJoint.AddRibEndAt(edge, p_corner);
-                                return;
+                                // return;
                                 break;
                             case 1:
                                 //select q
                                 p_corner = new Vector2((float)edge.q.X, (float)edge.q.Y);
                                 //boneJoint.AddRibEndAt(edge, p_corner);
-                                return;
+                                // return;
                                 break;
                         }
 
@@ -593,7 +590,8 @@ namespace Typography.Rendering
                     break;
                 case 2:
                     {
-                        //tip side
+                        //tip end
+
 
                         Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, boneJoint.Position);
                         Vector2 perpend_B = MyMath.FindPerpendicularCutPoint(edgeB, boneJoint.Position);

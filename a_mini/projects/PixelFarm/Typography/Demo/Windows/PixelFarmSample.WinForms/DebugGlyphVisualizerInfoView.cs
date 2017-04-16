@@ -18,6 +18,7 @@ namespace SampleWinForms.UI
         TreeNode _flattenVxsNode;
         TreeNode _tessEdgeNode;
         TreeNode _jointsNode;
+        TreeNode _trianglesNode;
         //
         VertexStore _orgVxs;
         VertexStore _flattenVxs;
@@ -86,6 +87,11 @@ namespace SampleWinForms.UI
             _jointsNode.Text = "joints";
             _rootNode.Nodes.Add(_jointsNode);
             _clearInfoView = true;//default
+            //triangles
+            _trianglesNode = new TreeNode();
+            _trianglesNode.Text = "triangles";
+            _rootNode.Nodes.Add(_trianglesNode);
+
         }
         public void SetFlushOutputHander(SimpleAction flushOutput)
         {
@@ -110,6 +116,29 @@ namespace SampleWinForms.UI
             switch (nodeinfo.NodeKind)
             {
                 default: throw new NotSupportedException();
+                case NodeInfoKind.Tri:
+                    {
+
+                        //draw glyph triangle
+                        if (RequestGlyphRender != null)
+                        {
+                            _clearInfoView = false;
+                            RequestGlyphRender(this, EventArgs.Empty);
+
+                            GlyphTriangle tri = nodeinfo.GlyphTri;
+                            var cen_x = (float)(tri.CentroidX * PxScale);
+                            var cen_y = (float)(tri.CentroidY * PxScale);
+
+                            Owner.DrawMarker(cen_x, cen_y, PixelFarm.Drawing.Color.Yellow);
+                            if (_flushOutput != null)
+                            {
+                                //TODO: review here
+                                _flushOutput();
+                            }
+                            _clearInfoView = true;
+                        }
+                    }
+                    break;
                 case NodeInfoKind.RibEndPoint:
                 case NodeInfoKind.Joint:
                     {
@@ -194,11 +223,17 @@ namespace SampleWinForms.UI
                 _tessEdgeNode.Nodes.Clear();
                 _edgeLines.Clear();
                 _jointsNode.Nodes.Clear();
-
+                _trianglesNode.Nodes.Clear();
             }
             _testEdgeCount = 0;
         }
-       
+        public void ShowTriangles(GlyphTriangle tri)
+        {
+            if (!_clearInfoView) { return; }
+            //-----------------------------
+            TreeNode triangleNode = new TreeNode() { Text = "tri:" + tri.ToString(), Tag = new NodeInfo(tri) };
+            _trianglesNode.Nodes.Add(triangleNode);
+        }
         public void ShowJoint(GlyphBoneJoint joint)
         {
             if (!_clearInfoView) { return; }
@@ -216,7 +251,7 @@ namespace SampleWinForms.UI
                 case 0: break;
                 case 1:
                     //rib                     
-                    jointNode.Text = "j:" + joint.Position;
+                    jointNode.Text = "j:" + joint.ToString();
                     //rib 
                     jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
                     //
@@ -226,7 +261,7 @@ namespace SampleWinForms.UI
                     break;
                 case 2:
                     //rib 
-                    jointNode.Text = "j:" + joint.Position;
+                    jointNode.Text = "j:" + joint.ToString();
                     //rib 
                     jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
                     jointNode.Nodes.Add(new TreeNode() { Text = "rib_b:" + joint.RibEndPointB, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointB) });
@@ -342,12 +377,15 @@ namespace SampleWinForms.UI
             TessEdge,
             Joint,
             RibEndPoint,
+            Tri,
         }
         class NodeInfo
         {
             EdgeLine edge;
             GlyphBoneJoint joint;
             System.Numerics.Vector2 pos;
+            GlyphTriangle tri;
+
             public NodeInfo(NodeInfoKind nodeKind, EdgeLine edge, int edgeNo)
             {
                 this.edge = edge;
@@ -365,6 +403,12 @@ namespace SampleWinForms.UI
                 this.pos = joint.Position;
                 this.NodeKind = NodeInfoKind.Joint;
             }
+            public NodeInfo(GlyphTriangle tri)
+            {
+                this.tri = tri;
+                this.pos = new System.Numerics.Vector2((float)tri.CentroidX, (float)tri.CentroidY);
+                this.NodeKind = NodeInfoKind.Tri;
+            }
             public NodeInfo(NodeInfoKind nodeKind, System.Numerics.Vector2 pos)
             {
                 this.pos = pos;
@@ -376,6 +420,7 @@ namespace SampleWinForms.UI
             {
                 get; set;
             }
+            public GlyphTriangle GlyphTri { get { return tri; } }
             public System.Numerics.Vector2 Pos { get { return pos; } }
         }
     }

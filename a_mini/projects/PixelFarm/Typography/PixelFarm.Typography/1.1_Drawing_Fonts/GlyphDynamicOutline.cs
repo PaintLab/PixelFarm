@@ -149,7 +149,7 @@ namespace Typography.Rendering
         }
         public void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
-             
+
         }
         void WalkHubCenter(Vector2 hubCenter)
         {
@@ -388,7 +388,8 @@ namespace Typography.Rendering
 #endif
 
             if (dbugDrawRegeneratedOutlines)
-            {
+            { 
+                //old 
                 RegenerateBorders(segments, startAt, endAt);
             }
 

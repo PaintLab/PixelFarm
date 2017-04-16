@@ -141,6 +141,10 @@ namespace Typography.Rendering
         public EdgeLine _p_contact_edge;
         public EdgeLine _q_contact_edge;
         GlyphCentroidLine _owner;
+#if DEBUG
+        public readonly int dbugId = dbugTotalId++;
+        public static int dbugTotalId;
+#endif
         public GlyphBoneJoint(GlyphCentroidLine owner,
             EdgeLine p_contact_edge,
             EdgeLine q_contact_edge)
@@ -225,7 +229,7 @@ namespace Typography.Rendering
                     break;
                 case 1:
                     _selectedEdgeB = edgeLine;
-                    _ribEndPoint_B = vec; 
+                    _ribEndPoint_B = vec;
                     break;
             }
 
@@ -268,7 +272,7 @@ namespace Typography.Rendering
 #if DEBUG
         public override string ToString()
         {
-            return this.Position.ToString();
+            return "id:" + dbugId + " " + this.Position.ToString();
         }
 #endif
 
