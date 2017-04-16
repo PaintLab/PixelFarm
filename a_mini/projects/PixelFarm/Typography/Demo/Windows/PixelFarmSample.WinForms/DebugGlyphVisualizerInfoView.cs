@@ -17,8 +17,11 @@ namespace SampleWinForms.UI
         TreeNode _orgVxsNode;
         TreeNode _flattenVxsNode;
         TreeNode _tessEdgeNode;
+        TreeNode _jointsNode;
+        //
         VertexStore _orgVxs;
         VertexStore _flattenVxs;
+
 
         List<EdgeLine> _edgeLines = new List<EdgeLine>();
         int _addDebugMarkOnEdgeNo = 0;
@@ -31,7 +34,8 @@ namespace SampleWinForms.UI
         TreeNode _latestSelectedTreeNode;
         public DebugGlyphVisualizer Owner
         {
-            get; set;
+            get;
+            set;
         }
         public void SetTreeView(TreeView treeView)
         {
@@ -77,7 +81,10 @@ namespace SampleWinForms.UI
             _tessEdgeNode.Text = "tess_edges";
             _rootNode.Nodes.Add(_tessEdgeNode);
             //
-
+            //joints
+            _jointsNode = new TreeNode();
+            _jointsNode.Text = "joints";
+            _rootNode.Nodes.Add(_jointsNode);
             _clearInfoView = true;//default
         }
         public void SetFlushOutputHander(SimpleAction flushOutput)
@@ -102,6 +109,26 @@ namespace SampleWinForms.UI
 
             switch (nodeinfo.NodeKind)
             {
+                default: throw new NotSupportedException();
+                case NodeInfoKind.RibEndPoint:
+                case NodeInfoKind.Joint:
+                    {
+                        if (RequestGlyphRender != null)
+                        {
+                            _clearInfoView = false;
+                            RequestGlyphRender(this, EventArgs.Empty);
+
+                            var pos = nodeinfo.Pos * PxScale;
+                            Owner.DrawMarker(pos.X, pos.Y, PixelFarm.Drawing.Color.Red);
+                            if (_flushOutput != null)
+                            {
+                                //TODO: review here
+                                _flushOutput();
+                            }
+                            _clearInfoView = true;
+                        }
+                    }
+                    break;
                 case NodeInfoKind.TessEdge:
                     {
                         _addDebugMarkOnEdgeNo = nodeinfo.TessEdgeNo;
@@ -155,6 +182,7 @@ namespace SampleWinForms.UI
                         }
                     }
                     break;
+
             }
 
         }
@@ -165,8 +193,69 @@ namespace SampleWinForms.UI
             {
                 _tessEdgeNode.Nodes.Clear();
                 _edgeLines.Clear();
+                _jointsNode.Nodes.Clear();
+
             }
             _testEdgeCount = 0;
+        }
+        //void DrawBoneRib(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphBoneJoint joint, float pixelScale)
+        //{
+        //    var jointPos = joint.Position;
+        //    painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4, PixelFarm.Drawing.Color.Green);
+        //    painter.Line(jointPos.X * pixelScale, jointPos.Y * pixelScale,
+        //        vec.X * pixelScale,
+        //        vec.Y * pixelScale, PixelFarm.Drawing.Color.White);
+        //}
+        public void ShowJoint(GlyphBoneJoint joint)
+        {
+            if (!_clearInfoView) { return; }
+            //-------------- 
+            EdgeLine p_contactEdge = joint._p_contact_edge;
+            //mid point
+            var jointPos = joint.Position;
+            //painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
+
+            TreeNode jointNode = new TreeNode() { Tag = new NodeInfo(joint) };
+            bool added = false;
+            switch (joint.SelectedEdgePointCount)
+            {
+                default: throw new NotSupportedException();
+                case 0: break;
+                case 1:
+                    //rib                     
+                    jointNode.Text = "j:" + joint.Position;
+                    //rib 
+                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
+                    //
+                    _jointsNode.Nodes.Add(jointNode);
+                    added = true;
+
+                    break;
+                case 2:
+                    //rib 
+                    jointNode.Text = "j:" + joint.Position;
+                    //rib 
+                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
+                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_b:" + joint.RibEndPointB, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointB) });
+                    //
+                    _jointsNode.Nodes.Add(jointNode);
+                    added = true;
+                    break;
+            }
+            if (joint.TipPoint != System.Numerics.Vector2.Zero)
+            {
+                //painter.Line(
+                //   jointPos.X * pxscale, jointPos.Y * pxscale,
+                //   joint.TipPoint.X * pxscale, joint.TipPoint.Y * pxscale,
+                //   PixelFarm.Drawing.Color.White);
+                jointNode.Nodes.Add(new TreeNode() { Text = "tip:" + joint.TipPoint });
+                if (!added)
+                {
+                    _jointsNode.Nodes.Add(jointNode);
+                    added = true;
+                }
+            }
+
         }
         public void ShowEdge(EdgeLine edge)
         {
@@ -258,11 +347,14 @@ namespace SampleWinForms.UI
             OrgVertexCommand,
             FlattenVertexCommand,
             TessEdge,
+            Joint,
+            RibEndPoint,
         }
         class NodeInfo
         {
             EdgeLine edge;
-
+            GlyphBoneJoint joint;
+            System.Numerics.Vector2 pos;
             public NodeInfo(NodeInfoKind nodeKind, EdgeLine edge, int edgeNo)
             {
                 this.edge = edge;
@@ -274,12 +366,24 @@ namespace SampleWinForms.UI
                 this.VertexCommandNo = borderNo;
                 this.NodeKind = nodeKind;
             }
+            public NodeInfo(GlyphBoneJoint joint)
+            {
+                this.joint = joint;
+                this.pos = joint.Position;
+                this.NodeKind = NodeInfoKind.Joint;
+            }
+            public NodeInfo(NodeInfoKind nodeKind, System.Numerics.Vector2 pos)
+            {
+                this.pos = pos;
+                this.NodeKind = NodeInfoKind.Joint;
+            }
             public int VertexCommandNo { get; set; }
             public NodeInfoKind NodeKind { get; set; }
             public int TessEdgeNo
             {
                 get; set;
             }
+            public System.Numerics.Vector2 Pos { get { return pos; } }
         }
     }
 }

@@ -91,6 +91,8 @@ namespace SampleWinForms.UI
             //----------------------------------------------------
             float scale = _typeface.CalculateToPixelScaleFromPointSize(_sizeInPoint);
             _pxscale = scale;
+            this._infoView.PxScale = scale;
+
             var leftControl = this.LeftXControl;
             var left2 = leftControl * scale;
             int floor_1 = (int)left2;
@@ -156,6 +158,7 @@ namespace SampleWinForms.UI
             }
 
         }
+       
         public void RenderTessTesult()
         {
 #if DEBUG
@@ -200,8 +203,8 @@ namespace SampleWinForms.UI
                 case PointKind.C4Start:
                 case PointKind.C4End:
                 case PointKind.LineStart:
-                case PointKind.LineStop: 
-                    painter.FillRectLBWH(point.x * scale, point.y * scale, 5, 5, PixelFarm.Drawing.Color.Red); 
+                case PointKind.LineStop:
+                    painter.FillRectLBWH(point.x * scale, point.y * scale, 5, 5, PixelFarm.Drawing.Color.Red);
                     break;
 
             }
@@ -315,6 +318,7 @@ namespace SampleWinForms.UI
             //mid point
             var jointPos = joint.Position;
             painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
+
 
             switch (joint.SelectedEdgePointCount)
             {
@@ -460,6 +464,7 @@ namespace SampleWinForms.UI
                         if (drawGlyphBone)
                         {
                             dbugDrawBoneJoint(painter, line.BoneJoint, pxscale);
+                            _infoView.ShowJoint(line.BoneJoint);
                         }
                     }
 

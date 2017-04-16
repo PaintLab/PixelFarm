@@ -455,13 +455,16 @@ namespace Typography.Rendering
             MarkEdgeSides(q.e2, p);
             //-------------------------------------- 
 
+            //a centroid line links 2 tringles (p and q triangle) together
+
 
             if (_boneJoint != null)
             {
                 //add more information
                 //find proper 'outside' edge
-                MarkProperOpositeEdge(p, _boneJoint, _boneJoint._p_contact_edge);
-                MarkProperOpositeEdge(q, _boneJoint, _boneJoint._q_contact_edge);
+
+                MarkProperOppositeEdge(p, _boneJoint, _boneJoint._p_contact_edge);
+                MarkProperOppositeEdge(q, _boneJoint, _boneJoint._q_contact_edge);
             }
         }
 
@@ -470,21 +473,50 @@ namespace Typography.Rendering
         {
             if (edgeA == null)
             {
+                //assign a first
                 edgeA = result;
                 return 1;
             }
             else
             {
+                //if a is assigned, then assign to b
                 edgeB = result;
                 return 2;
             }
         }
 
-        void MarkProperOpositeEdge(GlyphTriangle triangle, GlyphBoneJoint boneJoint, EdgeLine edge)
+        int MostProperGlyphPoint(GlyphPoint2D p, GlyphPoint2D q)
         {
-            //find shortest part from contactsite to edge or to corner
+            if (p.kind != PointKind.CurveInbetween)
+            {
+                if (q.kind != PointKind.CurveInbetween)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                if (q.kind != PointKind.CurveInbetween)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+        }
+
+        void MarkProperOppositeEdge(GlyphTriangle triangle, GlyphBoneJoint boneJoint, EdgeLine edge)
+        {
+            //find shortest part from boneJoint to  edge or to corner.
             //draw perpendicular line to outside edge
-            //and to the  corner of current edge 
+            //and to the  corner of current edge.
+
             EdgeLine edgeA = null;
             EdgeLine edgeB = null;
             int count = 0;
@@ -501,6 +533,11 @@ namespace Typography.Rendering
                 count = AssignResult(triangle.e2, ref edgeA, ref edgeB);
             }
             //-------------------------------------------------------------------------------------
+
+
+
+
+
             switch (count)
             {
                 default: throw new NotSupportedException();
@@ -509,31 +546,66 @@ namespace Typography.Rendering
                 case 1:
                     {
                         Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, boneJoint.Position);
-                        Vector2 corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
+                        GlyphPoint2D p_ = edge.GlyphPoint_P;
+                        GlyphPoint2D q_ = edge.GlyphPoint_Q;
+
+                        Vector2 p_corner = Vector2.Zero;//empty
+                        int mostProperEnd = MostProperGlyphPoint(p_, q_);
+                        switch (mostProperEnd)
+                        {
+                            default: throw new NotSupportedException();
+                            case -1:
+                                //can't decide
+                                p_corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
+                                boneJoint.AddRibEndAt(edge, p_corner);
+
+                                return;
+                                break;
+                            case 0:
+                                //select p
+                                p_corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
+                                // boneJoint.AddRibEndAt(edge, p_corner);
+                                //return;
+                                break;
+                            case 1:
+                                //select q
+                                p_corner = new Vector2((float)edge.q.X, (float)edge.q.Y);
+                                //boneJoint.AddRibEndAt(edge, p_corner);
+                                //return;
+                                break;
+                        }
+
+
+                        //connect to corener q? 
                         //find distance from contactSite to specific point 
                         double sqDistanceToEdgeA = boneJoint.CalculateSqrDistance(perpend_A);
-                        double sqDistanceTo_P = boneJoint.CalculateSqrDistance(corner);
+                        double sqDistanceTo_corner_P = boneJoint.CalculateSqrDistance(p_corner);
 
-                        if (sqDistanceToEdgeA < sqDistanceTo_P)
+                        if (sqDistanceToEdgeA < sqDistanceTo_corner_P)
                         {
                             boneJoint.AddRibEndAt(edgeA, perpend_A);
                         }
                         else
                         {
-                            boneJoint.AddRibEndAt(edge, corner);
+                            boneJoint.AddRibEndAt(edge, p_corner);
                         }
                     }
                     break;
                 case 2:
                     {
+                        //tip side
 
                         Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, boneJoint.Position);
-                        Vector2 perpend_B = MyMath.FindPerpendicularCutPoint(edgeB, boneJoint.Position); 
-                        Vector2 corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
+                        Vector2 perpend_B = MyMath.FindPerpendicularCutPoint(edgeB, boneJoint.Position);
+                        Vector2 p_corner = new Vector2((float)edge.p.X, (float)edge.p.Y);
+                        GlyphPoint2D p_ = edge.GlyphPoint_P;
+                        GlyphPoint2D q_ = edge.GlyphPoint_Q;
+
+
                         //find distance from contactSite to specific point 
                         double sqDistanceToEdgeA = boneJoint.CalculateSqrDistance(perpend_A);
                         double sqDistanceToEdgeB = boneJoint.CalculateSqrDistance(perpend_B);
-                        double sqDistanceTo_P = boneJoint.CalculateSqrDistance(corner);
+                        double sqDistanceTo_P = boneJoint.CalculateSqrDistance(p_corner);
 
                         int minAt = MyMath.Min(sqDistanceToEdgeA, sqDistanceToEdgeB, sqDistanceTo_P);
                         switch (minAt)
@@ -655,7 +727,7 @@ namespace Typography.Rendering
                                 }
                                 break;
                             case 2:
-                                boneJoint.AddRibEndAt(edge, corner);
+                                boneJoint.AddRibEndAt(edge, p_corner);
                                 break;
                         }
                     }
