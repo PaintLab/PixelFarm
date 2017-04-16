@@ -127,7 +127,7 @@ namespace Typography.Rendering
                 GlyphTriangle lastTri = _triangles[triCount - 1];
                 if (firstTri.IsConnectedWith(lastTri))
                 {
-                    currentCentroidLineHub.AddChild(new GlyphCentroidLine(lastTri, firstTri));
+                    currentCentroidLineHub.AddChild(new GlyphCentroidLine(lastTri, firstTri) { SpecialConnectFromLastToFirst = true });
                 }
             }
             //----------------------------------------
@@ -146,7 +146,7 @@ namespace Typography.Rendering
                 hub.CreateBones(newBones);
             }
             //----------------------------------------
-            
+
 
 
             int lineHubCount = lineHubs.Count;

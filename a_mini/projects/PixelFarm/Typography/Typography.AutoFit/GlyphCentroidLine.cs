@@ -53,10 +53,23 @@ namespace Typography.Rendering
                 //check if this is loop
                 GlyphCentroidLine first_line = lineList[0];
                 GlyphCentroidLine last_line = lineList[j - 1];
-
                 //open end or close end
 
-
+                if (!last_line.SpecialConnectFromLastToFirst)
+                {
+                    //no connection from last to first (eg. o)
+                    //one side is tip edge
+                    if (first_line.BoneJoint.TipEdge != null)
+                    {
+                        //create tip info
+                        AssignTipInfo(first_line, false);
+                    }
+                    if (last_line.BoneJoint.TipEdge != null)
+                    {
+                        //create tip info
+                        AssignTipInfo(last_line, false);
+                    }
+                }
             }
             else if (j == 1)
             {
@@ -64,56 +77,58 @@ namespace Typography.Rendering
                 //eg 'l' letter
 
                 GlyphCentroidLine line = lineList[0];
+                AssignTipInfo(line, true);
+            }
+        }
+        static void AssignTipInfo(GlyphCentroidLine line, bool twoside)
+        {
+            GlyphBoneJoint joint = line.BoneJoint;
+            //get another edge for endtip
 
-                var joint = line.BoneJoint;
-                //get another edge for endtip
+            if (IsOwnerOf(line.p, joint.TipEdge))
+            {
+                //tip edge is from p side
+                //so another side is q.
 
-                if (IsOwnerOf(line.p, joint.TipEdge))
+                var tipPoint = joint.TipPoint;
+                GlyphTip tip = new GlyphTip(line, tipPoint, joint.TipEdge);
+                line.P_Tip = tip;
+
+                if (twoside)
                 {
-                    //tip edge is from p side
-                    //so another side is q.
-
-
-                    var tipPoint = joint.TipPoint;
-                    GlyphTip tip = new GlyphTip(line, tipPoint, joint.TipEdge);
-                    line.P_Tip = tip;
-
-
-
-                    //find proper tip edge
                     EdgeLine tipEdge = FindTip(line, line.q);
                     if (tipEdge == null) throw new NotSupportedException();
                     //-----
                     tip = new GlyphTip(line, tipEdge.GetMidPoint(), tipEdge);
                     line.Q_Tip = tip;
                 }
-                else if (IsOwnerOf(line.q, joint.TipEdge))
+            }
+            else if (IsOwnerOf(line.q, joint.TipEdge))
+            {
+
+                var tipPoint = joint.TipPoint;
+                GlyphTip tip = new GlyphTip(line, tipPoint, joint.TipEdge);
+                line.Q_Tip = tip;
+
+
+                //tip edge is from q side
+                //so another side is p.
+
+                if (twoside)
                 {
-
-                    var tipPoint = joint.TipPoint;
-                    GlyphTip tip = new GlyphTip(line, tipPoint, joint.TipEdge);
-                    line.Q_Tip = tip;
-
-
-                    //tip edge is from q side
-                    //so another side is p.
-
                     //find proper tip edge
                     EdgeLine tipEdge = FindTip(line, line.p);
                     if (tipEdge == null) throw new NotSupportedException();
                     //-----
                     tip = new GlyphTip(line, tipEdge.GetMidPoint(), tipEdge);
                     line.P_Tip = tip;
-
-                }
-                else
-                {
-                    throw new NotSupportedException();
                 }
             }
-
+            else
+            {
+                throw new NotSupportedException();
+            }
         }
-
         static EdgeLine FindTip(GlyphCentroidLine line, GlyphTriangle triangle)
         {
             GlyphBoneJoint boneJoint = line.BoneJoint;
@@ -348,7 +363,7 @@ namespace Typography.Rendering
 
                 for (int i = 0; i < j; ++i)
                 {
-                    
+
                     //for each centroid line
                     //create bone that link the joint
                     GlyphCentroidLine line = lineList[i];
@@ -490,7 +505,7 @@ namespace Typography.Rendering
             double dx = q.CentroidX - p.CentroidX;
             this.boneLength = Math.Sqrt((dy * dy) + (dx * dx));
         }
-
+        public bool SpecialConnectFromLastToFirst { get; set; }
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
 
         public double SlopeAngle { get; private set; }
