@@ -237,38 +237,74 @@ namespace Typography.Rendering
                             }
 
 
-                            //---------
+
                             double shortest = double.MaxValue;
                             TempSqLengthResult shortestResult = new TempSqLengthResult();
                             bool foundSomeResult = false;
                             foreach (TempSqLengthResult r in tempSqLenDic.Values)
                             {
-                                if (r.sq_distance < shortest)
+                                //find 
+                                //if (r.sq_distance < shortest)
+                                //{
+                                //    shortest = r.sq_distance;
+                                //    shortestResult = r;
+                                //    foundSomeResult = true;
+                                //}
+
+                                //if (shortestResult.joint != null)
+                                //{
+                                //    //if shortest is joint
+                                //    shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
+
+                                //}
+                                //else
+                                //{
+                                //    //if shortest is bone, 
+                                //    //we collect all perpendicular bones
+                                //    foreach (TempSqLengthResult r in tempSqLenDic.Values)
+                                //    {
+                                //        if (r.bone != null)
+                                //        {
+                                //            shortestResult.bone.AddPerpendicularPoint(glyphPoint, shortestResult.cutPoint);
+                                //        }
+                                //    }
+                                //}
+                                if (r.joint != null)
                                 {
-                                    shortest = r.sq_distance;
-                                    shortestResult = r;
-                                    foundSomeResult = true;
+                                    r.joint.AddAssociatedGlyphPoint(glyphPoint);
                                 }
+                                else if (r.bone != null)
+                                {
+                                    r. bone.AddPerpendicularPoint(glyphPoint, r.cutPoint);
+                                }
+
                             }
-                            //---------
-                            if (!foundSomeResult)
-                            {
-                                throw new NotSupportedException();
-                            }
-                            //---------
-                            //found, create a perpedicular line from glyph point to a bone
-                            //---------
-                            if (shortestResult.joint != null)
-                            {
-                                //connect to joint to glyphPoint
-                                shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
-                                 
-                            }
-                            else
-                            {
-                                //connect to joint to glyphPoint
-                                shortestResult.bone.AddPerpendicularPoint(glyphPoint, shortestResult.cutPoint);
-                            }
+                            ////---------
+                            //if (!foundSomeResult)
+                            //{
+                            //    throw new NotSupportedException();
+                            //}
+                            ////---------
+                            ////found, create a perpedicular line from glyph point to a bone
+                            ////---------
+                            //if (shortestResult.joint != null)
+                            //{
+                            //    //if shortest is joint
+                            //    shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
+
+                            //}
+                            //else
+                            //{
+                            //    //if shortest is bone, 
+                            //    //we collect all perpendicular bones
+                            //    foreach (TempSqLengthResult r in tempSqLenDic.Values)
+                            //    {
+                            //        if (r.bone != null)
+                            //        {
+                            //            shortestResult.bone.AddPerpendicularPoint(glyphPoint, shortestResult.cutPoint);
+                            //        }
+                            //    }                                
+                            //}
                         }
 
                     }

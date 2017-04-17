@@ -436,6 +436,8 @@ namespace SampleWinForms.UI
             //}
             //--------------------
             int endAt = startAt + glyphBoneCount;
+
+            float newRelativeLen = 0.5f;
             for (int i = startAt; i < endAt; ++i)
             {
                 //draw line
@@ -462,12 +464,12 @@ namespace SampleWinForms.UI
                     if (jointA._assocGlyphPoints != null)
                     {
                         DrawAssocGlyphPoint(jointA.Position, jointA._assocGlyphPoints);
-                        DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, 0.5f);
+                        DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, newRelativeLen);
                     }
                     if (jointB._assocGlyphPoints != null)
                     {
                         DrawAssocGlyphPoint(jointB.Position, jointB._assocGlyphPoints);
-                        DrawAssocGlyphPoint2(jointB.Position, jointB._assocGlyphPoints, 0.5f);
+                        DrawAssocGlyphPoint2(jointB.Position, jointB._assocGlyphPoints, newRelativeLen);
                     }
                 }
                 if (jointA != null && bone.TipEdge != null)
@@ -487,7 +489,7 @@ namespace SampleWinForms.UI
 
                         DrawAssocGlyphPoint(jointA.Position, jointA._assocGlyphPoints);
 
-                        DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, 0.5f);
+                        DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, newRelativeLen);
 
                     }
                 }
@@ -510,7 +512,7 @@ namespace SampleWinForms.UI
                         DrawAssocGlyphPoint2(link.bonePoint, link.glyphPoint, 0.5f);
                     }
                 }
-                 
+
                 //--------
                 if (i == 0)
                 {
