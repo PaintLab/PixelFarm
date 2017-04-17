@@ -387,21 +387,25 @@ namespace SampleWinForms.UI
                       PixelFarm.Drawing.Color.Yellow);
             }
         }
-        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, List<GlyphPoint2D> points, float len)
+        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, List<GlyphPoint2D> points, float newRelativeLen)
         {
             int j = points.Count;
             for (int i = 0; i < j; ++i)
             {
-                DrawAssocGlyphPoint2(pos, points[i], len);
+                DrawAssocGlyphPoint2(pos, points[i], newRelativeLen);
             }
         }
-        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, GlyphPoint2D p, float len)
+        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, GlyphPoint2D p, float newRelativeLen)
         {
             //test draw marker on different len....
-            //create 
+            //create  
+
             PixelFarm.VectorMath.Vector delta = new PixelFarm.VectorMath.Vector(
                 new PixelFarm.VectorMath.Vector(pos.X, pos.Y),
-                new PixelFarm.VectorMath.Vector(p.x, p.y)).NewLength(len);
+                new PixelFarm.VectorMath.Vector(p.x, p.y));
+
+            double currentLen = delta.Magnitude;
+            delta = delta.NewLength(currentLen * newRelativeLen);
             //
             PixelFarm.VectorMath.Vector v2 = new PixelFarm.VectorMath.Vector((float)pos.X, (float)pos.Y) + delta;
             painter.Line(
@@ -458,12 +462,12 @@ namespace SampleWinForms.UI
                     if (jointA._assocGlyphPoints != null)
                     {
                         DrawAssocGlyphPoint(jointA.Position, jointA._assocGlyphPoints);
-                        DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, pxscale * 100);
+                        DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, 0.5f);
                     }
                     if (jointB._assocGlyphPoints != null)
                     {
                         DrawAssocGlyphPoint(jointB.Position, jointB._assocGlyphPoints);
-                        DrawAssocGlyphPoint2(jointB.Position, jointB._assocGlyphPoints, pxscale * 100);
+                        DrawAssocGlyphPoint2(jointB.Position, jointB._assocGlyphPoints, 0.5f);
                     }
                 }
                 if (jointA != null && bone.TipEdge != null)
@@ -483,7 +487,7 @@ namespace SampleWinForms.UI
 
                         DrawAssocGlyphPoint(jointA.Position, jointA._assocGlyphPoints);
 
-                        DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, pxscale * 100);
+                        DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, 0.5f);
 
                     }
                 }
@@ -502,13 +506,11 @@ namespace SampleWinForms.UI
                           link.bonePoint.X * pxscale, link.bonePoint.Y * pxscale,
                           PixelFarm.Drawing.Color.Yellow);
 
-                        DrawAssocGlyphPoint2(link.bonePoint, link.glyphPoint, pxscale * 100);
+                        //test
+                        DrawAssocGlyphPoint2(link.bonePoint, link.glyphPoint, 0.5f);
                     }
                 }
-
-
-
-
+                 
                 //--------
                 if (i == 0)
                 {
