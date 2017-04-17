@@ -155,7 +155,7 @@ namespace SampleWinForms.UI
             if (DrawDynamicOutline)
             {
                 GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
-                dbugDynamicOutline(painter, fitOutline, scale, DrawRegenerateOutline);
+                DynamicOutline(painter, fitOutline, scale, DrawRegenerateOutline);
             }
 
         }
@@ -167,7 +167,7 @@ namespace SampleWinForms.UI
             GlyphFitOutline fitOutline = builder.LatestGlyphFitOutline;
             if (fitOutline != null)
             {
-                dbugDrawTriangulatedGlyph(painter, fitOutline, _pxscale);
+                DrawTriangulatedGlyph(painter, fitOutline, _pxscale);
             }
 #endif
         }
@@ -287,10 +287,7 @@ namespace SampleWinForms.UI
                 }
                 painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
             }
-
-
-
-
+             
             //contact edge
             //if (edge.contactToEdge != null)
             //{
@@ -301,7 +298,7 @@ namespace SampleWinForms.UI
             //    painter.FillRectLBWH(midX * scale, midY * scale, 4, 4); 
             //}
         }
-        void dbugDrawCentroidLine(CanvasPainter painter, GlyphCentroidLine line, float pxscale)
+        void DrawCentroidLine(CanvasPainter painter, GlyphCentroidLine line, float pxscale)
         {
 
             painter.Line(
@@ -329,7 +326,7 @@ namespace SampleWinForms.UI
                     PixelFarm.Drawing.Color.Blue);
             }
         }
-        void dbugDrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)
+        void DrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)
         {
             //-------------- 
             EdgeLine p_contactEdge = joint._p_contact_edge;
@@ -392,7 +389,7 @@ namespace SampleWinForms.UI
             }
 
         }
-        void dbugDrawBoneLinks(CanvasPainter painter, GlyphCentroidBranch branch, float pxscale)
+        void DrawBoneLinks(CanvasPainter painter, GlyphCentroidBranch branch, float pxscale)
         {
             List<GlyphBone> glyphBones = branch.bones;
             int glyphBoneCount = glyphBones.Count;
@@ -500,7 +497,7 @@ namespace SampleWinForms.UI
         }
 
 
-        public void dbugDrawTriangulatedGlyph(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale)
+        public void DrawTriangulatedGlyph(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale)
         {
             painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
             List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
@@ -550,11 +547,11 @@ namespace SampleWinForms.UI
                         GlyphCentroidLine line = branch.lines[i];
                         if (drawCentroidBone)
                         {
-                            dbugDrawCentroidLine(painter, line, pxscale);
+                            DrawCentroidLine(painter, line, pxscale);
                         }
                         if (drawGlyphBone)
                         {
-                            dbugDrawBoneJoint(painter, line.BoneJoint, pxscale);
+                            DrawBoneJoint(painter, line.BoneJoint, pxscale);
                             _infoView.ShowJoint(line.BoneJoint);
                         }
                     }
@@ -562,7 +559,7 @@ namespace SampleWinForms.UI
                     if (drawGlyphBone)
                     {
                         //draw bone list
-                        dbugDrawBoneLinks(painter, branch, pxscale);
+                        DrawBoneLinks(painter, branch, pxscale);
 
                         //draw link between each branch to center of hub
                         var brHead = branch.GetHeadPosition();
@@ -599,7 +596,7 @@ namespace SampleWinForms.UI
                 }
             }
         }
-        public void dbugDynamicOutline(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale, bool withRegenerateOutlines)
+        public void DynamicOutline(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale, bool withRegenerateOutlines)
         {
             GlyphDynamicOutline dynamicOutline = new GlyphDynamicOutline(glyphFitOutline);
 #if DEBUG
