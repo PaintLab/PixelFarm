@@ -177,6 +177,7 @@ namespace SampleWinForms.UI
         }
         public bool DrawCentroidBone { get; set; }
         public bool DrawGlyphBone { get; set; }
+        public bool DrawRibs { get; set; }
         public bool DrawTrianglesAndEdges { get; set; }
         public bool DrawDynamicOutline { get; set; }
         public bool DrawRegenerateOutline { get; set; }
@@ -336,20 +337,23 @@ namespace SampleWinForms.UI
             var jointPos = joint.Position;
             painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
 
-
-            switch (joint.SelectedEdgePointCount)
+            if (DrawRibs)
             {
-                default: throw new NotSupportedException();
-                case 0: break;
-                case 1:
-                    DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
-                    break;
-                case 2:
+                switch (joint.SelectedEdgePointCount)
+                {
+                    default: throw new NotSupportedException();
+                    case 0: break;
+                    case 1:
+                        DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
+                        break;
+                    case 2:
 
-                    DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
-                    DrawBoneRib(painter, joint.RibEndPointB, joint, pxscale);
-                    break;
+                        DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
+                        DrawBoneRib(painter, joint.RibEndPointB, joint, pxscale);
+                        break;
+                }
             }
+
             if (joint.TipPoint != System.Numerics.Vector2.Zero)
             {
                 EdgeLine tipEdge = joint.TipEdge;
@@ -372,6 +376,21 @@ namespace SampleWinForms.UI
                 PixelFarm.Drawing.Color.White);
                 painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
             }
+        }
+        void DrawAssocGlyphPoint(System.Numerics.Vector2 pos, List<GlyphPoint2D> points)
+        {
+
+
+            int j = points.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphPoint2D p = points[i];
+                painter.Line(
+                      pos.X * _pxscale, pos.Y * _pxscale,
+                      p.x * _pxscale, p.y * _pxscale,
+                      PixelFarm.Drawing.Color.Yellow);
+            }
+
         }
         void dbugDrawBoneLinks(CanvasPainter painter, GlyphCentroidBranch branch, float pxscale)
         {
@@ -401,6 +420,7 @@ namespace SampleWinForms.UI
                 GlyphBone bone = glyphBones[i];
                 GlyphBoneJoint jointA = bone.JointA;
                 GlyphBoneJoint jointB = bone.JointB;
+
                 bool valid = false;
                 if (jointA != null && jointB != null)
                 {
@@ -413,6 +433,18 @@ namespace SampleWinForms.UI
                         jointBPoint.X * pxscale, jointBPoint.Y * pxscale,
                         bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta);
                     valid = true;
+
+                    _infoView.ShowBone(bone, jointA, jointB);
+
+
+                    if (jointA._assocGlyphPoints != null)
+                    {
+                        DrawAssocGlyphPoint(jointA.Position, jointA._assocGlyphPoints);
+                    }
+                    if (jointB._assocGlyphPoints != null)
+                    {
+                        DrawAssocGlyphPoint(jointB.Position, jointB._assocGlyphPoints);
+                    }
                 }
                 if (jointA != null && bone.TipEdge != null)
                 {
@@ -424,13 +456,39 @@ namespace SampleWinForms.UI
                         mid.X * pxscale, mid.Y * pxscale,
                         bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta);
                     valid = true;
+                    _infoView.ShowBone(bone, jointA, bone.TipEdge);
+
+                    if (jointA._assocGlyphPoints != null)
+                    {
+                        DrawAssocGlyphPoint(jointA.Position, jointA._assocGlyphPoints);
+                    }
                 }
+
+                //--------
+                //draw a perpendicular line from bone to associated glyph point
+                List<GlyphPointToBoneLink> linkToGlyphPoints = bone._perpendiculatPoints;
+                if (linkToGlyphPoints != null)
+                {
+                    int n = linkToGlyphPoints.Count;
+                    for (int m = 0; m < n; ++m)
+                    {
+                        GlyphPointToBoneLink link = linkToGlyphPoints[m];
+                        painter.Line(
+                          link.glyphPoint.x * pxscale, link.glyphPoint.y * pxscale,
+                          link.bonePoint.X * pxscale, link.bonePoint.Y * pxscale,
+                          PixelFarm.Drawing.Color.Yellow);
+                    }
+                }
+
+
+
+
+                //--------
                 if (i == 0)
                 {
                     //for first bone
                     var headpos = branch.GetHeadPosition();
                     painter.FillRectLBWH(headpos.X * pxscale, headpos.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.DeepPink);
-
                 }
                 if (!valid)
                 {
@@ -518,6 +576,8 @@ namespace SampleWinForms.UI
                             (float)brHead.X * pxscale, (float)brHead.Y * pxscale,
                              hubCenter.X * pxscale, hubCenter.Y * pxscale,
                              PixelFarm.Drawing.Color.Red);
+
+
 
                     }
                 }

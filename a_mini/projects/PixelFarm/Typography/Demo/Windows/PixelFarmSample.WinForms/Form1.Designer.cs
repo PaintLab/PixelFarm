@@ -63,6 +63,7 @@
             this.chkDrawTriangles = new System.Windows.Forms.CheckBox();
             this.chkDrawRegenerateOutline = new System.Windows.Forms.CheckBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.chkDrawRib = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -398,11 +399,24 @@
             this.treeView1.Size = new System.Drawing.Size(393, 349);
             this.treeView1.TabIndex = 56;
             // 
+            // chkDrawRib
+            // 
+            this.chkDrawRib.AutoSize = true;
+            this.chkDrawRib.Checked = true;
+            this.chkDrawRib.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDrawRib.Location = new System.Drawing.Point(854, 275);
+            this.chkDrawRib.Name = "chkDrawRib";
+            this.chkDrawRib.Size = new System.Drawing.Size(75, 17);
+            this.chkDrawRib.TabIndex = 57;
+            this.chkDrawRib.Text = "Draw Ribs";
+            this.chkDrawRib.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 857);
+            this.Controls.Add(this.chkDrawRib);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.chkDrawRegenerateOutline);
             this.Controls.Add(this.chkDrawTriangles);
@@ -483,6 +497,7 @@
         private System.Windows.Forms.CheckBox chkDrawTriangles;
         private System.Windows.Forms.CheckBox chkDrawRegenerateOutline;
         private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.CheckBox chkDrawRib;
     }
 }
 

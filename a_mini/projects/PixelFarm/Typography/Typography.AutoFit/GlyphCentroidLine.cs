@@ -333,28 +333,6 @@ namespace Typography.Rendering
 
         internal void CreateBones(List<GlyphBone> newlyCreatedBones)
         {
-            //int centroidLineCount = _centroidLines.Count;
-            ////do bone length histogram
-            ////boneList2 = new List<GlyphCentroidBone>(boneCount);
-            ////boneList2.AddRange(bones);
-            //////----------------------------------------
-            ////AnalyzeBoneLength();
-
-            ////----------------------------------------
-            //for (int i = 0; i < centroidLineCount; ++i)
-            //{
-            //    //each bone has 2 triangles at its ends
-            //    //we analyze both triangles' roles
-            //    //eg...
-            //    //left -right 
-            //    //top-bottom
-            //    _centroidLines[i].Analyze();
-            //}
-            ////---------------------------------------- 
-            ////collect bone joint, along centroid line?
-
-
-
             foreach (GlyphCentroidBranch branch in branches.Values)
             {
                 List<GlyphCentroidLine> lineList = branch.lines;
@@ -662,7 +640,7 @@ namespace Typography.Rendering
                     break;
                 case 1:
                     {
-                        Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, boneJoint.Position);
+
                         GlyphPoint2D p_ = edge.GlyphPoint_P;
                         GlyphPoint2D q_ = edge.GlyphPoint_Q;
 
@@ -673,15 +651,19 @@ namespace Typography.Rendering
                             default: throw new NotSupportedException();
                             case 2:
                                 //both connect with ON-curve point 
+                                //select p?
+                                p_.AddAssociatedBoneJoint(boneJoint);
                                 boneJoint.AddRibEndAt(edge, new Vector2((float)edge.p.X, (float)edge.p.Y));
                                 return;
                             case 0:
                                 //select p 
+                                p_.AddAssociatedBoneJoint(boneJoint);
                                 boneJoint.AddRibEndAt(edge, new Vector2((float)edge.p.X, (float)edge.p.Y));
                                 return;
                             //break;
                             case 1:
                                 //select q 
+                                q_.AddAssociatedBoneJoint(boneJoint);
                                 boneJoint.AddRibEndAt(edge, new Vector2((float)edge.q.X, (float)edge.q.Y));
                                 return;
                             //break;
@@ -690,20 +672,20 @@ namespace Typography.Rendering
                                 return;
                         }
 
+                        //Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, boneJoint.Position);
+                        ////connect to corener q? 
+                        ////find distance from contactSite to specific point 
+                        //double sqDistanceToEdgeA = boneJoint.CalculateSqrDistance(perpend_A);
+                        //double sqDistanceTo_corner_P = boneJoint.CalculateSqrDistance(p_corner);
 
-                        //connect to corener q? 
-                        //find distance from contactSite to specific point 
-                        double sqDistanceToEdgeA = boneJoint.CalculateSqrDistance(perpend_A);
-                        double sqDistanceTo_corner_P = boneJoint.CalculateSqrDistance(p_corner);
-
-                        if (sqDistanceToEdgeA < sqDistanceTo_corner_P)
-                        {
-                            boneJoint.AddRibEndAt(edgeA, perpend_A);
-                        }
-                        else
-                        {
-                            boneJoint.AddRibEndAt(edge, p_corner);
-                        }
+                        //if (sqDistanceToEdgeA < sqDistanceTo_corner_P)
+                        //{
+                        //    boneJoint.AddRibEndAt(edgeA, perpend_A);
+                        //}
+                        //else
+                        //{
+                        //    boneJoint.AddRibEndAt(edge, p_corner);
+                        //}
                     }
                     break;
                 case 2:

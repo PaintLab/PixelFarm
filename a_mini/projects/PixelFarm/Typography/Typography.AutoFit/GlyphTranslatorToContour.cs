@@ -399,7 +399,10 @@ namespace Typography.Rendering
         public EdgeLine horizontalEdge;
         // 
         List<EdgeLine> _edges;
+        public List<GlyphBoneJoint> _assocJoints; //associatedJoints
+
 #if DEBUG
+        Dictionary<GlyphBoneJoint, bool> dbug_jointDic;
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
@@ -468,6 +471,34 @@ namespace Typography.Rendering
                 return null;
             }
         }
+
+
+        public void AddAssociatedBoneJoint(GlyphBoneJoint joint)
+        {
+            if (_assocJoints == null)
+            {
+                _assocJoints = new List<GlyphBoneJoint>();
+#if DEBUG
+                dbug_jointDic = new Dictionary<GlyphBoneJoint, bool>();
+#endif
+            }
+            //
+            if (_assocJoints.Count > 0)
+            {
+
+            }
+#if DEBUG
+            if (dbug_jointDic.ContainsKey(joint))
+            {
+                return;
+            }
+            dbug_jointDic.Add(joint, true);
+#endif
+
+            _assocJoints.Add(joint);
+
+        }
+
         public bool IsLeftSide { get; private set; }
         public bool IsPartOfVerticalEdge { get; private set; }
 #if DEBUG

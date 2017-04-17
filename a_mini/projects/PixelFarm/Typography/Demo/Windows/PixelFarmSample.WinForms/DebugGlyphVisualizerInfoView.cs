@@ -19,6 +19,8 @@ namespace SampleWinForms.UI
         TreeNode _tessEdgeNode;
         TreeNode _jointsNode;
         TreeNode _trianglesNode;
+        TreeNode _bonesNode;
+
         //
         VertexStore _orgVxs;
         VertexStore _flattenVxs;
@@ -86,12 +88,18 @@ namespace SampleWinForms.UI
             _jointsNode = new TreeNode();
             _jointsNode.Text = "joints";
             _rootNode.Nodes.Add(_jointsNode);
-            _clearInfoView = true;//default
+
             //triangles
             _trianglesNode = new TreeNode();
             _trianglesNode.Text = "triangles";
             _rootNode.Nodes.Add(_trianglesNode);
+            //
+            _bonesNode = new TreeNode();
+            _bonesNode.Text = "bones";
+            _rootNode.Nodes.Add(_bonesNode);
 
+            //
+            _clearInfoView = true;//default
         }
         public void SetFlushOutputHander(SimpleAction flushOutput)
         {
@@ -116,6 +124,25 @@ namespace SampleWinForms.UI
             switch (nodeinfo.NodeKind)
             {
                 default: throw new NotSupportedException();
+                case NodeInfoKind.Bone:
+                    {
+                        if (RequestGlyphRender != null)
+                        {
+                            _clearInfoView = false;
+                            RequestGlyphRender(this, EventArgs.Empty);
+
+                            GlyphBone bone = nodeinfo.Bone;
+                            var midPoint = bone.GetMidPoint() * PxScale;
+                            Owner.DrawMarker(midPoint.X, midPoint.Y, PixelFarm.Drawing.Color.Yellow);
+                            if (_flushOutput != null)
+                            {
+                                //TODO: review here
+                                _flushOutput();
+                            }
+                            _clearInfoView = true;
+                        }
+                    }
+                    break;
                 case NodeInfoKind.Tri:
                     {
 
@@ -224,6 +251,7 @@ namespace SampleWinForms.UI
                 _edgeLines.Clear();
                 _jointsNode.Nodes.Clear();
                 _trianglesNode.Nodes.Clear();
+                _bonesNode.Nodes.Clear();
             }
             _testEdgeCount = 0;
         }
@@ -233,6 +261,24 @@ namespace SampleWinForms.UI
             //-----------------------------
             TreeNode triangleNode = new TreeNode() { Text = "tri:" + tri.ToString(), Tag = new NodeInfo(tri) };
             _trianglesNode.Nodes.Add(triangleNode);
+        }
+        public void ShowBone(GlyphBone bone, GlyphBoneJoint jointA, GlyphBoneJoint jointB)
+        {
+            if (!_clearInfoView) { return; }
+            _treeView.SuspendLayout();
+            TreeNode jointNode = new TreeNode() { Text = bone.ToString(), Tag = new NodeInfo(bone, jointA, jointB) };
+            _bonesNode.Nodes.Add(jointNode);
+
+            _treeView.ResumeLayout();
+        }
+        public void ShowBone(GlyphBone bone, GlyphBoneJoint jointA, EdgeLine tipEdge)
+        {
+            if (!_clearInfoView) { return; }
+            _treeView.SuspendLayout();
+            TreeNode jointNode = new TreeNode() { Text = bone.ToString(), Tag = new NodeInfo(bone, jointA, tipEdge) };
+            _bonesNode.Nodes.Add(jointNode);
+
+            _treeView.ResumeLayout();
         }
         public void ShowJoint(GlyphBoneJoint joint)
         {
@@ -255,8 +301,8 @@ namespace SampleWinForms.UI
                     added = true;
                     break;
                 case 1:
-                                 
-                    jointNode.Text = "j:" + joint.ToString(); 
+
+                    jointNode.Text = "j:" + joint.ToString();
                     jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
                     //
                     _jointsNode.Nodes.Add(jointNode);
@@ -264,8 +310,8 @@ namespace SampleWinForms.UI
 
                     break;
                 case 2:
-                 
-                    jointNode.Text = "j:" + joint.ToString(); 
+
+                    jointNode.Text = "j:" + joint.ToString();
                     jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
                     jointNode.Nodes.Add(new TreeNode() { Text = "rib_b:" + joint.RibEndPointB, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointB) });
                     //
@@ -381,11 +427,13 @@ namespace SampleWinForms.UI
             Joint,
             RibEndPoint,
             Tri,
+            Bone,
         }
         class NodeInfo
         {
             EdgeLine edge;
             GlyphBoneJoint joint;
+            GlyphBone bone;
             System.Numerics.Vector2 pos;
             GlyphTriangle tri;
 
@@ -406,6 +454,17 @@ namespace SampleWinForms.UI
                 this.pos = joint.Position;
                 this.NodeKind = NodeInfoKind.Joint;
             }
+            public NodeInfo(GlyphBone bone, GlyphBoneJoint a, GlyphBoneJoint b)
+            {
+                this.bone = bone;
+                this.NodeKind = NodeInfoKind.Bone;
+            }
+
+            public NodeInfo(GlyphBone bone, GlyphBoneJoint a, EdgeLine tipEdge)
+            {
+                this.bone = bone;
+                this.NodeKind = NodeInfoKind.Bone;
+            }
             public NodeInfo(GlyphTriangle tri)
             {
                 this.tri = tri;
@@ -424,6 +483,8 @@ namespace SampleWinForms.UI
                 get; set;
             }
             public GlyphTriangle GlyphTri { get { return tri; } }
+            public GlyphBone Bone { get { return this.bone; } }
+
             public System.Numerics.Vector2 Pos { get { return pos; } }
         }
     }
