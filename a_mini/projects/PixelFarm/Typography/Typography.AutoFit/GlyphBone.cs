@@ -150,6 +150,7 @@ namespace Typography.Rendering
         public List<GlyphPointToBoneLink> _perpendiculatPoints;
         public void AddPerpendicularPoint(GlyphPoint2D p, Vector2 bonePoint)
         {
+            //add a perpendicular glyph point to bones
             if (_perpendiculatPoints == null) { _perpendiculatPoints = new List<GlyphPointToBoneLink>(); }
             GlyphPointToBoneLink pointToBoneLink = new GlyphPointToBoneLink();
             pointToBoneLink.bonePoint = bonePoint;
@@ -211,7 +212,7 @@ namespace Typography.Rendering
         public EdgeLine _q_contact_edge;
         GlyphCentroidLine _owner;
 
-
+       
 #if DEBUG
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;
@@ -291,6 +292,7 @@ namespace Typography.Rendering
         //connection to edges
         EdgeLine _selectedEdgeA, _selectedEdgeB, _selectedTipEdge;
 
+ 
 
         public List<GlyphBone> _assocBones;
         public List<GlyphPoint2D> _assocGlyphPoints;

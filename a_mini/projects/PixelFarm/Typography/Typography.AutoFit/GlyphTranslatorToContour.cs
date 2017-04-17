@@ -472,7 +472,6 @@ namespace Typography.Rendering
             }
         }
 
-
         public void AddAssociatedBoneJoint(GlyphBoneJoint joint)
         {
             if (_assocJoints == null)
@@ -483,10 +482,10 @@ namespace Typography.Rendering
 #endif
             }
             //
-            if (_assocJoints.Count > 0)
-            {
+            //if (_assocJoints.Count > 0)
+            //{
 
-            }
+            //}
 #if DEBUG
             if (dbug_jointDic.ContainsKey(joint))
             {
@@ -508,7 +507,7 @@ namespace Typography.Rendering
                     (x + "," + y + " " + kind.ToString());
         }
 #endif
-
+ 
     }
     public class GlyphLine : GlyphPart
     {

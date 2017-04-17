@@ -180,12 +180,14 @@ namespace Typography.Rendering
                 int p_count = flattenPoints.Count;
                 for (int n = 0; n < p_count; ++n)
                 {
-                    GlyphPoint2D p = flattenPoints[n];
-                    System.Numerics.Vector2 glyph_point_xy = new System.Numerics.Vector2((float)p.x, (float)p.y);
-                    if (p.kind != PointKind.CurveInbetween)
+                    //from point, add assoc joint
+
+                    GlyphPoint2D glyphPoint = flattenPoints[n];
+                    System.Numerics.Vector2 glyph_point_xy = new System.Numerics.Vector2((float)glyphPoint.x, (float)glyphPoint.y);
+                    if (glyphPoint.kind != PointKind.CurveInbetween)
                     {
                         tempSqLenDic.Clear();
-                        List<GlyphBoneJoint> assocJoints = p._assocJoints;
+                        List<GlyphBoneJoint> assocJoints = glyphPoint._assocJoints;
                         if (assocJoints != null)
                         {
                             //create a perpendicular line to 
@@ -255,14 +257,17 @@ namespace Typography.Rendering
                             }
                             //---------
                             //found, create a perpedicular line from glyph point to a bone
+                            //---------
                             if (shortestResult.joint != null)
                             {
-                                //connect to joint
-                                shortestResult.joint.AddAssociatedGlyphPoint(p);
+                                //connect to joint to glyphPoint
+                                shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
+                                 
                             }
                             else
                             {
-                                shortestResult.bone.AddPerpendicularPoint(p, shortestResult.cutPoint);
+                                //connect to joint to glyphPoint
+                                shortestResult.bone.AddPerpendicularPoint(glyphPoint, shortestResult.cutPoint);
                             }
                         }
 

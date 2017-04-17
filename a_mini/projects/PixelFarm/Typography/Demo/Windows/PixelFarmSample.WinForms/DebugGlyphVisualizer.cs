@@ -287,7 +287,7 @@ namespace SampleWinForms.UI
                 }
                 painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
             }
-             
+
             //contact edge
             //if (edge.contactToEdge != null)
             //{
@@ -368,25 +368,46 @@ namespace SampleWinForms.UI
                 //
 
                 painter.Line(
-                jointPos.X * pxscale, jointPos.Y * pxscale,
-                q_x, q_y,
-                PixelFarm.Drawing.Color.White);
+                    jointPos.X * pxscale, jointPos.Y * pxscale,
+                    q_x, q_y,
+                    PixelFarm.Drawing.Color.White);
                 painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
             }
         }
         void DrawAssocGlyphPoint(System.Numerics.Vector2 pos, List<GlyphPoint2D> points)
         {
-
-
             int j = points.Count;
             for (int i = 0; i < j; ++i)
             {
                 GlyphPoint2D p = points[i];
+
                 painter.Line(
                       pos.X * _pxscale, pos.Y * _pxscale,
                       p.x * _pxscale, p.y * _pxscale,
                       PixelFarm.Drawing.Color.Yellow);
             }
+        }
+        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, List<GlyphPoint2D> points, float len)
+        {
+            int j = points.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                DrawAssocGlyphPoint2(pos, points[i], len);
+            }
+        }
+        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, GlyphPoint2D p, float len)
+        {
+            //test draw marker on different len....
+            //create 
+            PixelFarm.VectorMath.Vector delta = new PixelFarm.VectorMath.Vector(
+                new PixelFarm.VectorMath.Vector(pos.X, pos.Y),
+                new PixelFarm.VectorMath.Vector(p.x, p.y)).NewLength(len);
+            //
+            PixelFarm.VectorMath.Vector v2 = new PixelFarm.VectorMath.Vector((float)pos.X, (float)pos.Y) + delta;
+            painter.Line(
+                pos.X * _pxscale, pos.Y * _pxscale,
+                v2.X * _pxscale, v2.Y * _pxscale,
+                PixelFarm.Drawing.Color.Red);
 
         }
         void DrawBoneLinks(CanvasPainter painter, GlyphCentroidBranch branch, float pxscale)
@@ -437,10 +458,12 @@ namespace SampleWinForms.UI
                     if (jointA._assocGlyphPoints != null)
                     {
                         DrawAssocGlyphPoint(jointA.Position, jointA._assocGlyphPoints);
+                        DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, pxscale * 100);
                     }
                     if (jointB._assocGlyphPoints != null)
                     {
                         DrawAssocGlyphPoint(jointB.Position, jointB._assocGlyphPoints);
+                        DrawAssocGlyphPoint2(jointB.Position, jointB._assocGlyphPoints, pxscale * 100);
                     }
                 }
                 if (jointA != null && bone.TipEdge != null)
@@ -457,7 +480,11 @@ namespace SampleWinForms.UI
 
                     if (jointA._assocGlyphPoints != null)
                     {
+
                         DrawAssocGlyphPoint(jointA.Position, jointA._assocGlyphPoints);
+
+                        DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, pxscale * 100);
+
                     }
                 }
 
@@ -474,6 +501,8 @@ namespace SampleWinForms.UI
                           link.glyphPoint.x * pxscale, link.glyphPoint.y * pxscale,
                           link.bonePoint.X * pxscale, link.bonePoint.Y * pxscale,
                           PixelFarm.Drawing.Color.Yellow);
+
+                        DrawAssocGlyphPoint2(link.bonePoint, link.glyphPoint, pxscale * 100);
                     }
                 }
 
