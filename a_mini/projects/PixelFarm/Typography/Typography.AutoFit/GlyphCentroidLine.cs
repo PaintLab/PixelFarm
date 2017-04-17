@@ -118,7 +118,11 @@ namespace Typography.Rendering
                 {
                     //find proper tip edge
                     EdgeLine tipEdge = FindTip(line, line.p);
-                    if (tipEdge == null) throw new NotSupportedException();
+                    if (tipEdge == null)
+                    {
+                        //some time no tip found ***
+                        return; 
+                    }
                     //-----
                     tip = new GlyphTip(line, tipEdge.GetMidPoint(), tipEdge);
                     line.P_Tip = tip;
