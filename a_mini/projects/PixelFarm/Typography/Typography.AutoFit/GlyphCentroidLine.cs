@@ -367,10 +367,10 @@ namespace Typography.Rendering
                             glyphBones.Add(bone);
                         }
                     }
+
                     if (i < j - 1)
                     {
-                        //not the last one
-
+                        //not the last one 
                         GlyphCentroidLine nextline = lineList[i + 1];
                         GlyphBoneJoint nextJoint = nextline.BoneJoint;
                         GlyphBone bone = new GlyphBone(joint, nextJoint);
@@ -858,27 +858,27 @@ namespace Typography.Rendering
                                 //both p and q are curve in between
                                 break;
                         }
-                        //----------------------------------------------------------------------------
-                        //seconday ribs: a perpendicular line from edge to the abstract glyph bone
-                        //only 1 outside
-                        //other is (outside1,2) is inside edge
-                        //create a line between mid point of contactEdge (inside) and newly found anotherInsideEdge
-                        //this call 'abstract glyph-bone'
-#if DEBUG
-                        if (anotherInsideEdge == contactEdge)
-                        {
-                            //should not occur
-                            throw new NotSupportedException();
-                        }
-#endif
-                        //create a perpedicular line from midpoint of contact edge to the outside        
-                        Vector2 cut1;
-                        if (MyMath.FindPerpendicularCutPoint(outside0, contactEdge.GetMidPoint(), out cut1))
-                        {
-                            outside0.AddCutPoints(
-                                cut1,
-                                contactEdge.GetMidPoint());
-                        }
+                        //                        //----------------------------------------------------------------------------
+                        //                        //seconday ribs: a perpendicular line from edge to the abstract glyph bone
+                        //                        //only 1 outside
+                        //                        //other is (outside1,2) is inside edge
+                        //                        //create a line between mid point of contactEdge (inside) and newly found anotherInsideEdge
+                        //                        //this call 'abstract glyph-bone'
+                        //#if DEBUG
+                        //                        if (anotherInsideEdge == contactEdge)
+                        //                        {
+                        //                            //should not occur
+                        //                            throw new NotSupportedException();
+                        //                        }
+                        //#endif
+                        //                        //create a perpedicular line from midpoint of contact edge to the outside        
+                        //                        Vector2 cut1;
+                        //                        if (MyMath.FindPerpendicularCutPoint(outside0, contactEdge.GetMidPoint(), out cut1))
+                        //                        {
+                        //                            outside0.AddCutPoints(
+                        //                                cut1,
+                        //                                contactEdge.GetMidPoint());
+                        //                        }
                     }
                     break;
                 case 2:
@@ -1081,7 +1081,7 @@ namespace Typography.Rendering
                     }
                 }
             }
-        } 
+        }
         static bool FindMatchingOuterSide(EdgeLine compareEdge,
             GlyphTriangle another,
             out EdgeLine result,

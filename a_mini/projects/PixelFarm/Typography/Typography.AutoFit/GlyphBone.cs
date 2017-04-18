@@ -21,6 +21,10 @@ namespace Typography.Rendering
         public readonly GlyphBoneJoint JointB;
 
         double _len;
+
+        public Vector2 cutPoint_onEdge;
+        public bool hasCutPointOnEdge;
+
         public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
         {
 #if DEBUG
@@ -37,12 +41,53 @@ namespace Typography.Rendering
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
             EvaluteSlope(a.Position, bpos);
             //------  
-            
+
             //for analysis in later step
             a.AddAssociatedBone(this);
             b.AddAssociatedBone(this);
             //------  
-           
+
+            //find common triangle between  2 joint
+            GlyphCentroidLine ownerCentroid_A = a.OwnerCentroidLine;
+            GlyphCentroidLine ownerCentroid_B = b.OwnerCentroidLine;
+            if (ownerCentroid_A.p == ownerCentroid_B.p)
+            {
+
+            }
+            else if (ownerCentroid_A.p == ownerCentroid_B.q)
+            {
+
+            }
+            else if (ownerCentroid_A.q == ownerCentroid_B.p)
+            {
+                //share the same edge
+                //find outside edge 
+                GlyphTriangle commonTri = ownerCentroid_A.q;
+                Vector2 mid = GetMidPoint();
+
+                if (commonTri.e0.IsOutside)
+                {
+                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(commonTri.e0, mid, out cutPoint_onEdge);
+                }
+                else if (commonTri.e1.IsOutside)
+                {
+                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(commonTri.e1, mid, out cutPoint_onEdge);
+                }
+                else if (commonTri.e2.IsOutside)
+                {
+                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(commonTri.e2, mid, out cutPoint_onEdge);
+                }
+
+            }
+            else if (ownerCentroid_A.q == ownerCentroid_B.q)
+            {
+
+
+            }
+            else
+            {
+                //no 
+            }
         }
 
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)

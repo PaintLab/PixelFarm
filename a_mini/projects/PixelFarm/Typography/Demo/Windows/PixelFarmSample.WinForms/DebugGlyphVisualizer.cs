@@ -285,7 +285,7 @@ namespace SampleWinForms.UI
                     }
 
                 }
-             
+
             }
             else
             {
@@ -510,6 +510,15 @@ namespace SampleWinForms.UI
                     }
                 }
 
+                if (bone.hasCutPointOnEdge)
+                {
+                    var midBone = bone.GetMidPoint();
+                    painter.Line(
+                        bone.cutPoint_onEdge.X * pxscale, bone.cutPoint_onEdge.Y * pxscale,
+                        midBone.X * pxscale, midBone.Y * pxscale,
+                        PixelFarm.Drawing.Color.White);
+                }
+
                 //--------
                 //draw a perpendicular line from bone to associated glyph point
                 List<GlyphPointToBoneLink> linkToGlyphPoints = bone._perpendiculatPoints;
@@ -604,6 +613,7 @@ namespace SampleWinForms.UI
                             _infoView.ShowJoint(line.BoneJoint);
                         }
                     }
+
 
                     if (drawGlyphBone)
                     {

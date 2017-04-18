@@ -23,9 +23,9 @@ namespace Typography.Rendering
             TriangulationPoint p0 = _tri.P0;
             TriangulationPoint p1 = _tri.P1;
             TriangulationPoint p2 = _tri.P2;
-            e0 = new EdgeLine(p0, p1);
-            e1 = new EdgeLine(p1, p2);
-            e2 = new EdgeLine(p2, p0);
+            e0 = new EdgeLine(this, p0, p1);
+            e1 = new EdgeLine(this, p1, p2);
+            e2 = new EdgeLine(this, p2, p0);
             tri.Centroid2(out centroidX, out centroidY);
 
             e0.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P0, tri.P1));
@@ -101,8 +101,9 @@ namespace Typography.Rendering
         public static int s_dbugTotalId;
         public readonly int dbugId = s_dbugTotalId++;
 #endif
-        public EdgeLine(TriangulationPoint p, TriangulationPoint q)
+        public EdgeLine(GlyphTriangle owner, TriangulationPoint p, TriangulationPoint q)
         {
+            this.OwnerTriangle = owner;
             this.p = p;
             this.q = q;
 
@@ -133,12 +134,13 @@ namespace Typography.Rendering
                 }
             }
         }
+        public GlyphTriangle OwnerTriangle { get; private set; }
         public LineSlopeKind SlopeKind
         {
             get;
             private set;
         }
-       
+
         public bool IsOutside
         {
             get;
@@ -226,6 +228,7 @@ namespace Typography.Rendering
             }
 #endif
         }
+
         public List<CutLine> cutLines;
         public void AddCutPoints(
             Vector2 cutPointOnBone,
