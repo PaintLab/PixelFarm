@@ -638,6 +638,75 @@ namespace Typography.Rendering
                 return -1;
             }
         }
+
+
+        static void ClassifyTriangleEdges(
+            GlyphTriangle triangle,
+            EdgeLine knownInsideEdge,
+            out EdgeLine anotherInsideEdge,
+            out EdgeLine outside0,
+            out EdgeLine outside1,
+            out EdgeLine outside2,
+            out int outsideCount)
+        {
+            outsideCount = 0;
+            outside0 = outside1 = outside2 = anotherInsideEdge = null;
+            //
+            if (triangle.e0.IsOutside)
+            {
+                switch (outsideCount)
+                {
+                    case 0: outside0 = triangle.e0; break;
+                    case 1: outside1 = triangle.e0; break;
+                    case 2: outside2 = triangle.e0; break;
+                }
+                outsideCount++;
+            }
+            else
+            {
+                //e0 is not known inside edge
+                if (triangle.e0 != knownInsideEdge)
+                {
+                    anotherInsideEdge = triangle.e0;
+                }
+            }
+            //
+            if (triangle.e1.IsOutside)
+            {
+                switch (outsideCount)
+                {
+                    case 0: outside0 = triangle.e1; break;
+                    case 1: outside1 = triangle.e1; break;
+                    case 2: outside2 = triangle.e1; break;
+                }
+                outsideCount++;
+            }
+            else
+            {
+                if (triangle.e1 != knownInsideEdge)
+                {
+                    anotherInsideEdge = triangle.e1;
+                }
+            }
+            //
+            if (triangle.e2.IsOutside)
+            {
+                switch (outsideCount)
+                {
+                    case 0: outside0 = triangle.e2; break;
+                    case 1: outside1 = triangle.e2; break;
+                    case 2: outside2 = triangle.e2; break;
+                }
+                outsideCount++;
+            }
+            else
+            {
+                if (triangle.e2 != knownInsideEdge)
+                {
+                    anotherInsideEdge = triangle.e2;
+                }
+            }
+        }
         /// <summary>
         /// add information about other edge compare to the contactEdge of a ownerEdgeJoint
         /// </summary>
@@ -647,6 +716,35 @@ namespace Typography.Rendering
         void MarkProperOppositeOutsideEdges(GlyphTriangle triangle, GlyphBoneJoint ownerEdgeJoint, EdgeLine contactEdge)
         {
 
+            int outsideCount;
+            EdgeLine outside0, outside1, outside2, anotherInsideEdge;
+            ClassifyTriangleEdges(triangle, contactEdge, out anotherInsideEdge, out outside0, out outside1, out outside2, out outsideCount);
+            switch (outsideCount)
+            {
+                default: throw new NotSupportedException();
+                case 0: return; //no outside edge
+                case 1:
+                    {
+                        //only 1 outside
+                        //other is (outside1,2) is inside edge
+                        //create a line between mid point of contactEdge (inside) and newly found anotherInsideEdge
+                        //this call 'abstract glyph-bone'
+
+                    }
+                    break;
+                case 2:
+                    {
+                        //this is tip
+
+
+                    }
+                    break;
+                case 3:
+                    //rare case, 3 outside edges
+                    throw new NotSupportedException();
+            }
+
+            //-------------------------------------------------------------------------------------------------------
             //1. check each edge of triangle 
             //if an edge is outside  edge (since it is outside edge, it is not the contactEdge)
             EdgeLine firstEdge = null;
@@ -664,15 +762,16 @@ namespace Typography.Rendering
 
                 if (triangle.e1.IsOutside)
                 {
-
-
+                    //this is tip 
                 }
                 else if (triangle.e2.IsOutside)
                 {
-
+                    //this is tip 
                 }
                 else
                 {
+
+
                     //only e0 is outside
                     //edge, (e1 and e2 is inside edge)
                 }
