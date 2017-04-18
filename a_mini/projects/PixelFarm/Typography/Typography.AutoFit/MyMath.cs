@@ -67,10 +67,21 @@ namespace Typography.Rendering
             //also check if result cutpoiny is on current line segment or not
 
             Vector2 min, max;
-            edge.GetMinMax(out min, out max);
+            GetMinMax(edge, out min, out max);
             return (cutResult.X >= min.X && cutResult.X <= max.X && cutResult.Y >= min.Y && cutResult.Y <= max.Y);
         }
-
+        /// <summary>
+        /// which one is min,max
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        static void GetMinMax(EdgeLine edge, out Vector2 min, out Vector2 max)
+        {
+            Vector2 a_pos = new Vector2((float)edge.x0, (float)edge.y0);
+            Vector2 b_pos = new Vector2((float)edge.x1, (float)edge.y1);
+            min = Vector2.Min(a_pos, b_pos);
+            max = Vector2.Max(a_pos, b_pos);
+        }
         public static int FindMin(Vector2 a, Vector2 b)
         {
             if (a.X < b.X)

@@ -138,18 +138,7 @@ namespace Typography.Rendering
             get;
             private set;
         }
-        /// <summary>
-        /// which one is min,max
-        /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        public void GetMinMax(out Vector2 min, out Vector2 max)
-        {
-            Vector2 a_pos = new Vector2((float)x0, (float)y0);
-            Vector2 b_pos = new Vector2((float)x1, (float)y1);
-            min = Vector2.Min(a_pos, b_pos);
-            max = Vector2.Max(a_pos, b_pos);
-        }
+       
         public bool IsOutside
         {
             get;
