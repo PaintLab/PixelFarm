@@ -20,23 +20,20 @@ namespace Typography.Rendering
 #if DEBUG
             this._dbugpolygon = polygon; //for debug only ***
 #endif
-            //generate triangle from poly2 tri
-            foreach (DelaunayTriangle tri in polygon.Triangles)
-            {
-                tri.MarkAsActualTriangle();
-                _triangles.Add(new GlyphTriangle(tri));
-            }
 
+            //1.Generate GlyphTriangle triangle from DelaunayTriangle 
+            foreach (DelaunayTriangle delnTri in polygon.Triangles)
+            {
+
+                delnTri.MarkAsActualTriangle();
+                _triangles.Add(new GlyphTriangle(delnTri));
+            }
+            //2.
             Analyze();
         }
-
-
-
-
         Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs;
         List<CentroidLineHub> lineHubs;
         List<GlyphBone> outputVerticalLongBones;
-
 
         void Analyze()
         {
@@ -45,11 +42,15 @@ namespace Typography.Rendering
 
             //-------------------------------------------------
             //1. create a list of CentroidLineHub (and its members)
-            //-------------------------------------------------
-            List<GlyphTriangle> usedTriList = new List<GlyphTriangle>();
+            //-------------------------------------------------           
             centroidLineHubs = new Dictionary<GlyphTriangle, CentroidLineHub>();
-            GlyphTriangle latestTri = null;
             CentroidLineHub currentCentroidLineHub = null;
+            //2. 
+            List<GlyphTriangle> usedTriList = new List<GlyphTriangle>();
+            GlyphTriangle latestTri = null;
+
+            //we may walk forward and backward on each tri
+            //so we record the used triangle into a usedTriList.
 
             for (int i = 0; i < triCount; ++i)
             {
@@ -58,9 +59,8 @@ namespace Typography.Rendering
                 GlyphTriangle tri = _triangles[i];
                 if (i == 0)
                 {
-                    CentroidLineHub lineHub = new CentroidLineHub(tri);
-                    currentCentroidLineHub = lineHub;
-                    centroidLineHubs[tri] = lineHub;
+
+                    centroidLineHubs[tri] = currentCentroidLineHub = new CentroidLineHub(tri);
                     usedTriList.Add(latestTri = tri);
                 }
                 else
@@ -68,10 +68,16 @@ namespace Typography.Rendering
                     //at a branch 
                     //one tri may connect with 3 NB triangle
                     int foundIndex = FindLatestConnectedTri(usedTriList, tri);
-                    if (foundIndex > -1)
+                    if (foundIndex < 0)
                     {
-
+                        //?
+                        throw new NotSupportedException();
+                    }
+                    else
+                    {
+                        //record used triangle
                         usedTriList.Add(tri);
+
                         GlyphTriangle connectWithPrevTri = usedTriList[foundIndex];
                         if (connectWithPrevTri != latestTri)
                         {
@@ -79,14 +85,12 @@ namespace Typography.Rendering
                             CentroidLineHub lineHub;
                             if (!centroidLineHubs.TryGetValue(connectWithPrevTri, out lineHub))
                             {
-                                lineHub = new CentroidLineHub(connectWithPrevTri);
-                                centroidLineHubs[connectWithPrevTri] = lineHub;
-
-                                //start new facet 
+                                //if not found then=> //start new CentroidLineHub 
+                                centroidLineHubs[connectWithPrevTri] = lineHub = new CentroidLineHub(connectWithPrevTri);
                             }
                             else
                             {
-                                //start new branch from mutli
+                                //this is multiple facets triangle for  CentroidLineHub
                             }
 
                             currentCentroidLineHub = lineHub;
@@ -107,13 +111,7 @@ namespace Typography.Rendering
                             //create centroid line and add to currrent hub
                             currentCentroidLineHub.AddChild(new GlyphCentroidLine(connectWithPrevTri, tri));
                         }
-
                         latestTri = tri;
-                    }
-                    else
-                    {
-                        //not found
-                        //?
                     }
                 }
             }
@@ -131,6 +129,7 @@ namespace Typography.Rendering
                 }
             }
             //----------------------------------------
+            //collect all line hub into a lineHubs list
             lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values.Count);
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
@@ -285,7 +284,7 @@ namespace Typography.Rendering
                             foreach (TempSqLengthResult r in tempSqLenDic.Values)
                             {
 
-                                if(r.bone != null)
+                                if (r.bone != null)
                                 {
                                     r.bone.AddPerpendicularPoint(glyphPoint, r.cutPoint);
                                 }

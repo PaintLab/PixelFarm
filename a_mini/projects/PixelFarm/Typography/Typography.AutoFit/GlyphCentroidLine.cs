@@ -36,7 +36,7 @@ namespace Typography.Rendering
         /// </summary>
         public void AnalyzeEdges()
         {
-            //for each branch
+
             List<GlyphCentroidLine> lineList = this.lines;
             int j = lineList.Count;
             for (int i = 0; i < j; ++i)
@@ -121,7 +121,7 @@ namespace Typography.Rendering
                     if (tipEdge == null)
                     {
                         //some time no tip found ***
-                        return; 
+                        return;
                     }
                     //-----
                     tip = new GlyphTip(line, tipEdge.GetMidPoint(), tipEdge);
@@ -498,18 +498,22 @@ namespace Typography.Rendering
 
         internal void AnalyzeAndMarkEdges()
         {
-
+            //[A]
+            //each triangle has 1 centroid point
+            //a centrod line connects between 2 adjacent triangles via centroid 
             //
-            //p => (x0,y0)
-            //q => (x1,y1)
-            //line move from p to q 
+            //
+            //
+            //p triangle=> (x0,y0)  (centroid of p)
+            //q triangle=> (x1,y1)  (centroid of q)
+            //a centroid line  move from p to q 
             //...
             //tasks:
             //1. find slop angle
             //2. find slope kind
             //3. mark edge info
 
-
+            //[B]
             //check if q is upper or lower when compare with p
             //check if q is on left side or right side of p
             //then we know the direction
@@ -531,10 +535,12 @@ namespace Typography.Rendering
                 SlopeAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
                 if (SlopeAngle > MyMath._85degreeToRad)
                 {
+                    //assume
                     SlopeKind = LineSlopeKind.Vertical;
                 }
                 else if (SlopeAngle < MyMath._03degreeToRad) //_15degreeToRad
                 {
+                    //assume
                     SlopeKind = LineSlopeKind.Horizontal;
                 }
                 else
@@ -542,16 +548,13 @@ namespace Typography.Rendering
                     SlopeKind = LineSlopeKind.Other;
                 }
             }
-            //--------------------------------------
-            //for p and q, count number of outside edge
-            //if outsideEdgeCount of triangle >=2 -> this triangle is tip part 
-            //-------------------------------------- 
-            //p_isTip && q_isTip is possible eg. dot or dot of  i etc.
-            //-------------------------------------- 
-            //find matching side:
-            //the bone connects between triangle p and q (via centroid)
-            //
 
+            //-------------------------------------- 
+            //[C]
+            //Find relation between edges of 2 triangle p and q
+            //....
+            //pick up a edge of p and compare to all edge of q
+            //do until complete
             MarkEdgeSides(p.e0, q);
             MarkEdgeSides(p.e1, q);
             MarkEdgeSides(p.e2, q);
@@ -559,9 +562,8 @@ namespace Typography.Rendering
             MarkEdgeSides(q.e0, p);
             MarkEdgeSides(q.e1, p);
             MarkEdgeSides(q.e2, p);
-            //-------------------------------------- 
-            //a centroid line links 2 tringles (p and q triangle) together
-
+            //after this process, a boneJoint should be created
+            //------------------------------------
 
             if (_boneJoint != null)
             {
@@ -570,9 +572,6 @@ namespace Typography.Rendering
                 MarkProperOppositeEdge(p, _boneJoint, _boneJoint._p_contact_edge);
                 MarkProperOppositeEdge(q, _boneJoint, _boneJoint._q_contact_edge);
             }
-
-
-
         }
 
         public GlyphTip P_Tip { get; set; }
@@ -841,6 +840,8 @@ namespace Typography.Rendering
         {
             if (edgeLine.IsOutside)
             {
+                //if edgeLine is outside edge,
+                //mark the relation of this to anotherTriangle.
                 MarkMatchingOutsideEdge(edgeLine, anotherTriangle);
             }
             else
@@ -859,73 +860,100 @@ namespace Typography.Rendering
                 }
             }
         }
-        static bool MarkMatchingInsideEdge(EdgeLine insideEdge, GlyphTriangle another)
+        /// <summary>
+        /// from a knownInsideEdge, find a matching-inside-edge on another triangle.
+        /// </summary>
+        /// <param name="knownInsideEdge"></param>
+        /// <param name="another"></param>
+        /// <returns></returns>
+        static bool MarkMatchingInsideEdge(EdgeLine knownInsideEdge, GlyphTriangle another)
         {
 
-            //side-by-side  
-            if (another.e0.IsInside && MarkMatchingInsideEdge(insideEdge, another.e0))
-            {
-                //inside                 
+            //evalute side-by-side
+            //
+            //if the two contact together
+            //it must have only 1  contact edge.
+            //so ... find side-by-side
+
+            if (MarkMatchingInsideEdge(knownInsideEdge, another.e0))
+            {   
+                //found!
                 return true;
             }
             //
-            if (another.e1.IsInside && MarkMatchingInsideEdge(insideEdge, another.e1))
+            if (MarkMatchingInsideEdge(knownInsideEdge, another.e1))
             {
                 return true;
             }
             //
-            if (another.e2.IsInside && MarkMatchingInsideEdge(insideEdge, another.e2))
+            if (MarkMatchingInsideEdge(knownInsideEdge, another.e2))
             {
                 //check matching slope and coord?
                 return true;
             }
             return false;
         }
-        static bool MarkMatchingInsideEdge(EdgeLine p_edge, EdgeLine q_edge)
+        /// <summary>
+        /// check if 
+        /// </summary>
+        /// <param name="knownInsideEdge"></param>
+        /// <param name="anotherEdge"></param>
+        /// <returns></returns>
+        static bool MarkMatchingInsideEdge(EdgeLine knownInsideEdge, EdgeLine anotherEdge)
         {
-
-
-            if (p_edge.x0 == q_edge.x0 && p_edge.x1 == q_edge.x1)
-            {
-
-            }
-            else if (p_edge.x0 == q_edge.x1 && p_edge.x1 == q_edge.x0)
-            {
-
+            //another edge must be inside edge too, then check if the two is matching or not
+            if (anotherEdge.IsInside && IsMatchingEdge(knownInsideEdge, anotherEdge))
+            {   //if yes                
+                //mark contact toEdge
+                knownInsideEdge.contactToEdge = anotherEdge;
+                return true;
             }
             else
             {
-                return false; //no match in x-axis
+                return false;
             }
-            //--------------------------------
-            //y_axis
-            if (p_edge.y0 == q_edge.y0 && p_edge.y1 == q_edge.y1)
-            {
-                p_edge.contactToEdge = q_edge;
-            }
-            else if (p_edge.y0 == q_edge.y1 && p_edge.y1 == q_edge.y0)
-            {
-                p_edge.contactToEdge = q_edge;
-            }
-            else
-            {
-                return false; //no match in y-axis
-            }
-            //--------------------------------
-            return true;
         }
-        static void MarkMatchingOutsideEdge(EdgeLine targetEdge, GlyphTriangle q)
+        /// <summary>
+        /// check if the 2 triangle is matching or not
+        /// </summary>
+        /// <param name="a_edge"></param>
+        /// <param name="b_edge"></param>
+        /// <returns></returns>
+        static bool IsMatchingEdge(EdgeLine a_edge, EdgeLine b_edge)
+        {
+            //x-axis
+            if ((a_edge.x0 == b_edge.x0 && a_edge.x1 == b_edge.x1) ||
+                (a_edge.x0 == b_edge.x1 && a_edge.x1 == b_edge.x0))
+            {
+                //pass x-axis
+                //
+                //y_axis
+                if ((a_edge.y0 == b_edge.y0 && a_edge.y1 == b_edge.y1) ||
+                    (a_edge.y0 == b_edge.y1 && a_edge.y1 == b_edge.y0))
+                {
+                    return true;
+                }
+            }
+            //otherwise...
+            return false;
+        }
+        /// <summary>
+        /// analyze relation between each edge of q and knownOutsideEdge.
+        /// </summary>
+        /// <param name="knownOutsideEdge"></param>
+        /// <param name="q"></param>
+        static void MarkMatchingOutsideEdge(EdgeLine knownOutsideEdge, GlyphTriangle q)
         {
 
             EdgeLine matchingEdgeLine;
             int matchingEdgeSideNo;
-            if (FindMatchingOuterSide(targetEdge, q, out matchingEdgeLine, out matchingEdgeSideNo))
+            if (FindMatchingOuterSide(knownOutsideEdge, q, out matchingEdgeLine, out matchingEdgeSideNo))
             {
                 //assign matching edge line   
                 //mid point of each edge
                 //p-triangle's edge midX,midY
 
-                var pe = targetEdge.GetMidPoint();
+                var pe = knownOutsideEdge.GetMidPoint();
                 double pe_midX = pe.X, pe_midY = pe.Y;
 
                 //q-triangle's edge midX,midY
@@ -933,15 +961,15 @@ namespace Typography.Rendering
                 double qe_midX = qe.X, qe_midY = qe.Y;
 
 
-                if (targetEdge.SlopeKind == LineSlopeKind.Vertical)
+                if (knownOutsideEdge.SlopeKind == LineSlopeKind.Vertical)
                 {
                     //TODO: review same side edge (Fan shape)
                     if (pe_midX < qe_midX)
                     {
-                        targetEdge.IsLeftSide = true;
+                        knownOutsideEdge.IsLeftSide = true;
                         if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
                         {
-                            targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                         }
                     }
                     else
@@ -949,23 +977,23 @@ namespace Typography.Rendering
                         //matchingEdgeLine.IsLeftSide = true;
                         if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
                         {
-                            targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                         }
                     }
                 }
-                else if (targetEdge.SlopeKind == LineSlopeKind.Horizontal)
+                else if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
                 {
                     //TODO: review same side edge (Fan shape)
 
                     if (pe_midY > qe_midY)
                     {
                         //p side is upper , q side is lower
-                        if (targetEdge.SlopeKind == LineSlopeKind.Horizontal)
+                        if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
                         {
-                            targetEdge.IsUpper = true;
+                            knownOutsideEdge.IsUpper = true;
                             if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
                             {
-                                targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                                knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                             }
                         }
                     }
@@ -976,7 +1004,7 @@ namespace Typography.Rendering
                             // matchingEdgeLine.IsUpper = true;
                             if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
                             {
-                                targetEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                                knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                             }
                         }
                     }
