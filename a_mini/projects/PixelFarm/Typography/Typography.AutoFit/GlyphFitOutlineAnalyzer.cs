@@ -23,7 +23,7 @@ namespace Typography.Rendering
         /// <param name="glyphContours"></param>
         /// <returns></returns>
         public GlyphFitOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
-        { 
+        {
 
             //1. convert original glyph point to contour
             _glyphToCountor.Read(glyphPoints, glyphContours);
@@ -48,7 +48,7 @@ namespace Typography.Rendering
             }
         }
 
-      
+
         static GlyphFitOutline CreateFitOutline(List<GlyphContour> contours)
         {
 
@@ -66,11 +66,10 @@ namespace Typography.Rendering
                 cnt = contours[n];
                 //IsHole is correct after we Analyze() the glyph contour
                 Poly2Tri.Polygon subPolygon = CreatePolygon(cnt);
-                //TODO: review here
+                //TODO: review here 
                 mainPolygon.AddHole(subPolygon);
                 //if (cnt.IsClosewise())
-                //{
-
+                //{ 
                 //}
 
                 //if (cnt.IsClosewise())

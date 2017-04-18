@@ -25,7 +25,6 @@ namespace Typography.Rendering
             //1.Generate GlyphTriangle triangle from DelaunayTriangle 
             foreach (DelaunayTriangle delnTri in polygon.Triangles)
             {
-
                 delnTri.MarkAsActualTriangle();
                 _triangles.Add(new GlyphTriangle(delnTri));
             }
