@@ -478,17 +478,23 @@ namespace Typography.Rendering
     {
 
         public readonly GlyphTriangle p, q;
-        public readonly double boneLength;
+
         GlyphBoneJoint _boneJoint;
 
         public GlyphCentroidLine(GlyphTriangle p, GlyphTriangle q)
         {
+            //[A]
+            //each triangle has 1 centroid point
+            //a centrod line connects between 2 adjacent triangles via centroid 
+            //
+            //
+            //
+            //p triangle=> (x0,y0)  (centroid of p)
+            //q triangle=> (x1,y1)  (centroid of q)
+            //a centroid line  move from p to q 
+
             this.p = p;
             this.q = q;
-
-            double dy = q.CentroidY - p.CentroidY;
-            double dx = q.CentroidX - p.CentroidX;
-            this.boneLength = Math.Sqrt((dy * dy) + (dx * dx));
         }
         public bool SpecialConnectFromLastToFirst { get; set; }
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
@@ -503,20 +509,10 @@ namespace Typography.Rendering
         /// </summary>
         internal void AnalyzeAndMarkEdges()
         {
-            //[A]
-            //each triangle has 1 centroid point
-            //a centrod line connects between 2 adjacent triangles via centroid 
-            //
-            //
-            //
-            //p triangle=> (x0,y0)  (centroid of p)
-            //q triangle=> (x1,y1)  (centroid of q)
-            //a centroid line  move from p to q 
+
             //...
-            //tasks:
-            //1. find slop angle
-            //2. find slope kind
-            //3. mark edge info
+            //tasks: 
+            // mark edge info
 
             //[B]
             //check if q is upper or lower when compare with p
@@ -530,29 +526,6 @@ namespace Typography.Rendering
             double x1 = q.CentroidX;
             double y1 = q.CentroidY;
 
-            if (x1 == x0)
-            {
-                this.SlopeKind = LineSlopeKind.Vertical;
-                SlopeAngle = 1;
-            }
-            else
-            {
-                SlopeAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-                if (SlopeAngle > MyMath._85degreeToRad)
-                {
-                    //assume
-                    SlopeKind = LineSlopeKind.Vertical;
-                }
-                else if (SlopeAngle < MyMath._03degreeToRad) //_15degreeToRad
-                {
-                    //assume
-                    SlopeKind = LineSlopeKind.Horizontal;
-                }
-                else
-                {
-                    SlopeKind = LineSlopeKind.Other;
-                }
-            }
 
 #if DEBUG
             if (p == q)
