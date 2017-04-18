@@ -154,23 +154,23 @@ namespace Typography.Rendering
         static bool CanbeTipEdge(EdgeLine edge, GlyphBoneJoint compareJoint)
         {
             //
-            if (edge.IsOutside &&
-                edge != compareJoint.RibEndEdgeA &&
-                edge != compareJoint.RibEndEdgeB)
-            {
-                return true;
-            }
-            return false;
+            return (edge.IsOutside &&
+                    edge != compareJoint.RibEndEdgeA &&
+                    edge != compareJoint.RibEndEdgeB);
+            //{
+            //    return true;
+            //}
+            //return false;
         }
         static bool IsOwnerOf(GlyphTriangle p, EdgeLine edge)
         {
-            if (p.e0 == edge ||
-                p.e1 == edge ||
-                p.e2 == edge)
-            {
-                return true;
-            }
-            return false;
+            return (p.e0 == edge ||
+                    p.e1 == edge ||
+                    p.e2 == edge);
+            //{
+            //    return true;
+            //}
+            //return false;
         }
         /// <summary>
         /// find nearest joint that contains tri 
@@ -334,7 +334,10 @@ namespace Typography.Rendering
             }
         }
 
-
+        /// <summary>
+        /// create a set of GlyphBone bone
+        /// </summary>
+        /// <param name="newlyCreatedBones"></param>
         internal void CreateBones(List<GlyphBone> newlyCreatedBones)
         {
             foreach (GlyphCentroidBranch branch in branches.Values)
@@ -495,7 +498,9 @@ namespace Typography.Rendering
 
         public LineSlopeKind SlopeKind { get; private set; }
 
-
+        /// <summary>
+        /// add information about edges to each triangle
+        /// </summary>
         internal void AnalyzeAndMarkEdges()
         {
             //[A]
@@ -607,11 +612,17 @@ namespace Typography.Rendering
             }
 
         }
-
-        static int MostProperGlyphPoint(GlyphPoint2D p, GlyphPoint2D q)
+        /// <summary>
+        /// get on curve points 
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="q"></param>
+        /// <returns>0 =p, 1= q, none = -1, both=2</returns>
+        static int GetOnCurvePoints(GlyphPoint2D p, GlyphPoint2D q)
         {
             if (p.kind != PointKind.CurveInbetween && q.kind != PointKind.CurveInbetween)
             {
+                //both are ONCurve point
                 return 2;
             }
             else if (p.kind != PointKind.CurveInbetween)
@@ -638,29 +649,49 @@ namespace Typography.Rendering
 
             //1. check each edge of triangle 
             //if an edge is outside  edge (since it is outside edge, it is not the contactEdge)
-            EdgeLine edgeA = null;
-            EdgeLine edgeB = null;
+            EdgeLine firstEdge = null;
+            EdgeLine secondEdge = null;
             int count = 0;
+
             if (triangle.e0.IsOutside)
             {
 #if DEBUG
                 if (triangle.e0 == contactEdge) { throw new NotSupportedException(); }
 #endif
-                count = AssignResult(triangle.e0, ref edgeA, ref edgeB);
+                //find another outside edge
+                //find a perpedicular line from the outside edge
+                //to abstract glyph bone ***
+
+                if (triangle.e1.IsOutside)
+                {
+
+
+                }
+                else if (triangle.e2.IsOutside)
+                {
+
+                }
+                else
+                {
+                    //only e0 is outside
+                    //edge, (e1 and e2 is inside edge)
+                }
+                count = AssignResult(triangle.e0, ref firstEdge, ref secondEdge);
             }
             if (triangle.e1.IsOutside)
             {
 #if DEBUG
                 if (triangle.e1 == contactEdge) { throw new NotSupportedException(); }
 #endif
-                count = AssignResult(triangle.e1, ref edgeA, ref edgeB);
+
+                count = AssignResult(triangle.e1, ref firstEdge, ref secondEdge);
             }
             if (triangle.e2.IsOutside)
             {
 #if DEBUG
                 if (triangle.e2 == contactEdge) { throw new NotSupportedException(); }
 #endif
-                count = AssignResult(triangle.e2, ref edgeA, ref edgeB);
+                count = AssignResult(triangle.e2, ref firstEdge, ref secondEdge);
             }
             //-------------------------------------------------------------------------------------
 
@@ -670,6 +701,11 @@ namespace Typography.Rendering
             //count==2, => this is tip of the centroid branch, ***
 
 
+            //a contact edge has 2 glyph points
+            //a GlyphPoint from p triangle=> GlyphPoint_P
+            //and
+            //a GlyphPoint from q triangle=> GlyphPoint_Q
+
             switch (count)
             {
                 default: throw new NotSupportedException();
@@ -677,8 +713,7 @@ namespace Typography.Rendering
                     break;
                 case 1:
                     {
-                        //found one outside edge
-                        //then 
+
 
                         //find shortest part from boneJoint to  edge or to corner.
                         //draw perpendicular line to outside edge
@@ -687,8 +722,10 @@ namespace Typography.Rendering
                         GlyphPoint2D q_ = contactEdge.GlyphPoint_Q;
 
                         Vector2 p_corner = Vector2.Zero;//empty
-                        int mostProperEnd = MostProperGlyphPoint(p_, q_);
-                        switch (mostProperEnd)
+
+                        int foundAt = GetOnCurvePoints(p_, q_);
+
+                        switch (foundAt)
                         {
                             default: throw new NotSupportedException();
                             case 2:
@@ -735,8 +772,8 @@ namespace Typography.Rendering
                         //tip end
 
 
-                        Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, ownerEdgeJoint.Position);
-                        Vector2 perpend_B = MyMath.FindPerpendicularCutPoint(edgeB, ownerEdgeJoint.Position);
+                        Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(firstEdge, ownerEdgeJoint.Position);
+                        Vector2 perpend_B = MyMath.FindPerpendicularCutPoint(secondEdge, ownerEdgeJoint.Position);
                         Vector2 p_corner = new Vector2((float)contactEdge.p.X, (float)contactEdge.p.Y);
                         GlyphPoint2D p_ = contactEdge.GlyphPoint_P;
                         GlyphPoint2D q_ = contactEdge.GlyphPoint_Q;
@@ -760,17 +797,17 @@ namespace Typography.Rendering
                                         case LineSlopeKind.Horizontal:
                                             {
                                                 //centroid horizontal, tip-> vertical
-                                                if (edgeA.SlopeKind == LineSlopeKind.Vertical)
+                                                if (firstEdge.SlopeKind == LineSlopeKind.Vertical)
                                                 {
-                                                    ownerEdgeJoint.SetTipEdge(edgeA);
-                                                    ownerEdgeJoint.AddRibEndAt(edgeB, perpend_B);
+                                                    ownerEdgeJoint.SetTipEdge(firstEdge);
+                                                    ownerEdgeJoint.AddRibEndAt(secondEdge, perpend_B);
 
                                                 }
-                                                else if (edgeB.SlopeKind == LineSlopeKind.Vertical)
+                                                else if (secondEdge.SlopeKind == LineSlopeKind.Vertical)
                                                 {
                                                     //b
-                                                    ownerEdgeJoint.SetTipEdge(edgeB);
-                                                    ownerEdgeJoint.AddRibEndAt(edgeA, perpend_A);
+                                                    ownerEdgeJoint.SetTipEdge(secondEdge);
+                                                    ownerEdgeJoint.AddRibEndAt(firstEdge, perpend_A);
                                                 }
                                                 else
                                                 {
@@ -781,17 +818,17 @@ namespace Typography.Rendering
                                         case LineSlopeKind.Vertical:
                                             {
                                                 //centroid vertical, -> tip horizontal
-                                                if (edgeA.SlopeKind == LineSlopeKind.Horizontal)
+                                                if (firstEdge.SlopeKind == LineSlopeKind.Horizontal)
                                                 {
-                                                    ownerEdgeJoint.SetTipEdge(edgeA);
-                                                    ownerEdgeJoint.AddRibEndAt(edgeB, perpend_B);
+                                                    ownerEdgeJoint.SetTipEdge(firstEdge);
+                                                    ownerEdgeJoint.AddRibEndAt(secondEdge, perpend_B);
 
                                                 }
-                                                else if (edgeB.SlopeKind == LineSlopeKind.Horizontal)
+                                                else if (secondEdge.SlopeKind == LineSlopeKind.Horizontal)
                                                 {
                                                     //b
-                                                    ownerEdgeJoint.SetTipEdge(edgeB);
-                                                    ownerEdgeJoint.AddRibEndAt(edgeA, perpend_A);
+                                                    ownerEdgeJoint.SetTipEdge(secondEdge);
+                                                    ownerEdgeJoint.AddRibEndAt(firstEdge, perpend_A);
 
                                                 }
                                                 else
@@ -802,9 +839,9 @@ namespace Typography.Rendering
                                             break;
                                         default:
                                             {
-                                                ownerEdgeJoint.AddRibEndAt(edgeA, perpend_A);
+                                                ownerEdgeJoint.AddRibEndAt(firstEdge, perpend_A);
                                                 //check if B side is tip part
-                                                ownerEdgeJoint.SetTipEdge(edgeB);
+                                                ownerEdgeJoint.SetTipEdge(secondEdge);
                                             }
                                             break;
                                     }
@@ -817,17 +854,17 @@ namespace Typography.Rendering
                                         case LineSlopeKind.Horizontal:
                                             {
                                                 //centroid horizontal, tip-> vertical
-                                                if (edgeA.SlopeKind == LineSlopeKind.Vertical)
+                                                if (firstEdge.SlopeKind == LineSlopeKind.Vertical)
                                                 {
-                                                    ownerEdgeJoint.SetTipEdge(edgeA);
-                                                    ownerEdgeJoint.AddRibEndAt(edgeB, perpend_B);
+                                                    ownerEdgeJoint.SetTipEdge(firstEdge);
+                                                    ownerEdgeJoint.AddRibEndAt(secondEdge, perpend_B);
 
                                                 }
-                                                else if (edgeB.SlopeKind == LineSlopeKind.Vertical)
+                                                else if (secondEdge.SlopeKind == LineSlopeKind.Vertical)
                                                 {
                                                     //b
-                                                    ownerEdgeJoint.SetTipEdge(edgeB);
-                                                    ownerEdgeJoint.AddRibEndAt(edgeA, perpend_A);
+                                                    ownerEdgeJoint.SetTipEdge(secondEdge);
+                                                    ownerEdgeJoint.AddRibEndAt(firstEdge, perpend_A);
                                                 }
                                                 else
                                                 {
@@ -838,17 +875,17 @@ namespace Typography.Rendering
                                         case LineSlopeKind.Vertical:
                                             {
                                                 //centroid vertical, -> tip horizontal
-                                                if (edgeA.SlopeKind == LineSlopeKind.Horizontal)
+                                                if (firstEdge.SlopeKind == LineSlopeKind.Horizontal)
                                                 {
-                                                    ownerEdgeJoint.SetTipEdge(edgeA);
-                                                    ownerEdgeJoint.AddRibEndAt(edgeB, perpend_B);
+                                                    ownerEdgeJoint.SetTipEdge(firstEdge);
+                                                    ownerEdgeJoint.AddRibEndAt(secondEdge, perpend_B);
 
                                                 }
-                                                else if (edgeB.SlopeKind == LineSlopeKind.Horizontal)
+                                                else if (secondEdge.SlopeKind == LineSlopeKind.Horizontal)
                                                 {
                                                     //b
-                                                    ownerEdgeJoint.SetTipEdge(edgeB);
-                                                    ownerEdgeJoint.AddRibEndAt(edgeA, perpend_A);
+                                                    ownerEdgeJoint.SetTipEdge(secondEdge);
+                                                    ownerEdgeJoint.AddRibEndAt(firstEdge, perpend_A);
 
                                                 }
                                                 else
@@ -859,8 +896,8 @@ namespace Typography.Rendering
                                             break;
                                         default:
                                             {
-                                                ownerEdgeJoint.AddRibEndAt(edgeB, perpend_B);
-                                                ownerEdgeJoint.SetTipEdge(edgeA);
+                                                ownerEdgeJoint.AddRibEndAt(secondEdge, perpend_B);
+                                                ownerEdgeJoint.SetTipEdge(firstEdge);
                                             }
                                             break;
                                     }

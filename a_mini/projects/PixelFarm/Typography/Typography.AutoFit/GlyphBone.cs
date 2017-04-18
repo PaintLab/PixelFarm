@@ -205,14 +205,17 @@ namespace Typography.Rendering
 
     public class GlyphBoneJoint
     {
-        //Bone joint connects (contact) 'inside' EdgeLines
+
+        //A GlyphBoneJoint is on a midpoint of 2 inside adjacent edge
+        //(2 contact edge)
+        //of 2 triangles,      
         //(_p_contact_edge, _q_contact_edge)
 
         public EdgeLine _p_contact_edge;
         public EdgeLine _q_contact_edge;
         GlyphCentroidLine _owner;
 
-       
+
 #if DEBUG
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;
@@ -292,7 +295,7 @@ namespace Typography.Rendering
         //connection to edges
         EdgeLine _selectedEdgeA, _selectedEdgeB, _selectedTipEdge;
 
- 
+
 
         public List<GlyphBone> _assocBones;
         public List<GlyphPoint2D> _assocGlyphPoints;
