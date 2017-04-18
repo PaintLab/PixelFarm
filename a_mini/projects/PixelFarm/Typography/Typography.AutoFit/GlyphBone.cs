@@ -11,7 +11,7 @@ namespace Typography.Rendering
         public GlyphPoint2D glyphPoint;
         public Vector2 bonePoint;
     }
-   
+
 
     public class GlyphBoneJoint
     {
@@ -201,46 +201,21 @@ namespace Typography.Rendering
             //------  
 
             //find common triangle between  2 joint
-            GlyphCentroidLine ownerCentroid_A = a.OwnerCentroidLine;
-            GlyphCentroidLine ownerCentroid_B = b.OwnerCentroidLine;
-            if (ownerCentroid_A.p == ownerCentroid_B.p)
+            GlyphTriangle commonTri = FindCommonTriangle(a, b);
+            if (commonTri != null)
             {
-
-            }
-            else if (ownerCentroid_A.p == ownerCentroid_B.q)
-            {
-
-            }
-            else if (ownerCentroid_A.q == ownerCentroid_B.p)
-            {
-                //share the same edge
-                //find outside edge 
-                GlyphTriangle commonTri = ownerCentroid_A.q;
-                Vector2 mid = GetMidPoint();
-
-                if (commonTri.e0.IsOutside)
+                //found common triangle 
+                EdgeLine outsideEdge = GetFirstFoundOutsidEdge(commonTri);
+                if (outsideEdge != null)
                 {
-                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(commonTri.e0, mid, out cutPoint_onEdge);
+                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
                 }
-                else if (commonTri.e1.IsOutside)
-                {
-                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(commonTri.e1, mid, out cutPoint_onEdge);
-                }
-                else if (commonTri.e2.IsOutside)
-                {
-                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(commonTri.e2, mid, out cutPoint_onEdge);
-                }
-
-            }
-            else if (ownerCentroid_A.q == ownerCentroid_B.q)
-            {
-
-
             }
             else
             {
-                //no 
-            }
+                //not found?=>
+            } 
+
         }
 
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
@@ -258,8 +233,30 @@ namespace Typography.Rendering
         }
 
 
-
-
+        static GlyphTriangle FindCommonTriangle(GlyphBoneJoint a, GlyphBoneJoint b)
+        {
+            GlyphCentroidLine ownerCentroid_A = a.OwnerCentroidLine;
+            GlyphCentroidLine ownerCentroid_B = b.OwnerCentroidLine;
+            if (ownerCentroid_A.p == ownerCentroid_B.p || ownerCentroid_A.p == ownerCentroid_B.q)
+            {
+                return ownerCentroid_A.p;
+            }
+            else if (ownerCentroid_A.q == ownerCentroid_B.p || ownerCentroid_A.q == ownerCentroid_B.q)
+            {
+                return ownerCentroid_A.q;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        static EdgeLine GetFirstFoundOutsidEdge(GlyphTriangle tri)
+        {
+            if (tri.e0.IsOutside) { return tri.e0; }
+            if (tri.e1.IsOutside) { return tri.e1; }
+            if (tri.e2.IsOutside) { return tri.e2; }
+            return null; //not found               
+        }
         void EvaluteSlope(Vector2 p, Vector2 q)
         {
 
