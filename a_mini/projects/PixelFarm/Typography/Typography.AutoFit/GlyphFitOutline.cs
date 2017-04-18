@@ -197,10 +197,6 @@ namespace Typography.Rendering
                             for (int m = 0; m < jointCount; ++m)
                             {
                                 GlyphBoneJoint joint = assocJoints[m];
-                                //if (joint.dbugId == 19)
-                                //{
-
-                                //}
                                 if (tempSqLenDic.ContainsKey(joint))
                                 {
                                     continue;
@@ -227,7 +223,7 @@ namespace Typography.Rendering
                                     }
                                     TempSqLengthResult result = new TempSqLengthResult();
                                     result.bone = bone;
-                                 
+
                                     if (MyMath.FindPerpendicularCutPoint(bone, glyph_point_xy, out result.cutPoint))
                                     {
                                         result.sq_distance = MyMath.SquareDistance(result.cutPoint, glyph_point_xy);
@@ -240,11 +236,11 @@ namespace Typography.Rendering
 
                             double shortest = double.MaxValue;
                             TempSqLengthResult shortestResult = new TempSqLengthResult();
-                            bool foundSomeResult = false;
 
+                            bool foundSomeResult = false; //for debug
                             foreach (TempSqLengthResult r in tempSqLenDic.Values)
                             {
-
+                                //find shortest  
                                 if (r.sq_distance < shortest)
                                 {
                                     shortest = r.sq_distance;
@@ -282,6 +278,13 @@ namespace Typography.Rendering
                                 //}
 
                             }
+                            //---------
+                            if (!foundSomeResult)
+                            {
+                                throw new NotSupportedException();
+                            }
+                            //---------
+
                             foreach (TempSqLengthResult r in tempSqLenDic.Values)
                             {
 
@@ -289,23 +292,12 @@ namespace Typography.Rendering
                                 {
                                     r.bone.AddPerpendicularPoint(glyphPoint, r.cutPoint);
                                 }
-                                if (shortestResult.joint != null)
-                                {
-                                    shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
-
-                                }
-                                //else if (r.bone != null)
-                                //{
-                                //    r.bone.AddPerpendicularPoint(glyphPoint, r.cutPoint);
-                                //}
-
                             }
-                            //---------
-                            if (!foundSomeResult)
+                            if (shortestResult.joint != null)
                             {
-                                throw new NotSupportedException();
+                                shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
                             }
-                            //---------
+
                             //found, create a perpedicular line from glyph point to a bone
                             //---------
                             //if (shortestResult.joint != null)
