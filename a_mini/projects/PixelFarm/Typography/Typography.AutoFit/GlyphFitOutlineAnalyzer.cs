@@ -9,6 +9,13 @@ namespace Typography.Rendering
 
     public class GlyphFitOutlineAnalyzer
     {
+        GlyphPartFlattener _glyhFlattener = new GlyphPartFlattener();
+        GlyphContourBuilder _glyphToCountor = new GlyphContourBuilder();
+        public GlyphFitOutlineAnalyzer()
+        {
+
+        }
+
         /// <summary>
         /// calculate and create GlyphFitOutline
         /// </summary>
@@ -41,12 +48,7 @@ namespace Typography.Rendering
             }
         }
 
-        GlyphPartFlattener _glyhFlattener = new GlyphPartFlattener();
-        GlyphContourBuilder _glyphToCountor = new GlyphContourBuilder();
-        public GlyphFitOutlineAnalyzer()
-        {
-
-        }
+      
         static GlyphFitOutline CreateFitOutline(List<GlyphContour> contours)
         {
 
