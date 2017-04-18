@@ -37,11 +37,12 @@ namespace Typography.Rendering
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
             EvaluteSlope(a.Position, bpos);
             //------  
-
-
+            
             //for analysis in later step
             a.AddAssociatedBone(this);
             b.AddAssociatedBone(this);
+            //------  
+           
         }
 
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)

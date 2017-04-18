@@ -19,6 +19,7 @@ namespace Typography.Rendering
             this._contours = contours;
 #if DEBUG
             this._dbugpolygon = polygon; //for debug only ***
+            EdgeLine.s_dbugTotalId = 0;//reset
 #endif
 
             //1.Generate GlyphTriangle triangle from DelaunayTriangle 
@@ -133,6 +134,7 @@ namespace Typography.Rendering
             lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values.Count);
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
+
                 hub.AnalyzeEachBranchForEdgeInfo();
                 lineHubs.Add(hub);
             }

@@ -270,6 +270,22 @@ namespace SampleWinForms.UI
                     painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
                 }
 
+                //create a perpedicular line to abstract glyphbone cutpoint
+                if (edge.cutLines != null)
+                {
+                    int j = edge.cutLines.Count;
+                    for (int i = 0; i < j; ++i)
+                    {
+                        CutLine line = edge.cutLines[i];
+                        //painter.FillRectLBWH(edge.cutPointOnBone.X * scale, edge.cutPointOnBone.Y * scale, 3, 3, PixelFarm.Drawing.Color.Red);
+                        painter.Line(
+                            line.x0 * scale, line.y0 * scale,
+                            line.x1 * scale, line.y1 * scale,
+                            PixelFarm.Drawing.Color.White);
+                    }
+
+                }
+             
             }
             else
             {

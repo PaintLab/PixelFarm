@@ -118,14 +118,13 @@ namespace Typography.Rendering
                     throw new System.NotSupportedException();
                 }
             }
-
         }
         public static Vector2 FindPerpendicularCutPoint(Vector2 p0, Vector2 p1, Vector2 p2)
         {
             //a line from p0 to p1
             //p2 is any point
             //return p3 -> cutpoint on p0,p1 
-            //find slope 
+            
 
             double xdiff = p1.X - p0.X;
             double ydiff = p1.Y - p0.Y;

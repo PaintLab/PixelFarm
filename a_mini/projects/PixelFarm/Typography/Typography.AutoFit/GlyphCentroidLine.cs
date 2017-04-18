@@ -554,6 +554,12 @@ namespace Typography.Rendering
                 }
             }
 
+#if DEBUG
+            if (p == q)
+            {
+                throw new NotSupportedException();
+            }
+#endif
             //-------------------------------------- 
             //[C]
             //Find relation between edges of 2 triangle p and q
@@ -576,7 +582,13 @@ namespace Typography.Rendering
                 //we add 'information' about other edge compare to the contact edges
                 //---
                 //both contact edge is INSIDE edge***
-                //then, we mark outside edge compare to the known inside edge                 
+                //then, we mark outside edge compare to the known inside edge          
+#if DEBUG
+                if (_boneJoint._p_contact_edge == _boneJoint._q_contact_edge)
+                {
+                    throw new NotSupportedException();
+                }
+#endif
                 MarkProperOppositeOutsideEdges(p, _boneJoint, _boneJoint._p_contact_edge);
                 MarkProperOppositeOutsideEdges(q, _boneJoint, _boneJoint._q_contact_edge);
             }
@@ -651,9 +663,18 @@ namespace Typography.Rendering
         {
             outsideCount = 0;
             outside0 = outside1 = outside2 = anotherInsideEdge = null;
-            //
+
+            //if (triangle.e0.dbugId == 45 ||
+            //    triangle.e1.dbugId == 45 ||
+            //    triangle.e2.dbugId == 45)
+            //{
+
+            //}
+
+
             if (triangle.e0.IsOutside)
             {
+
                 switch (outsideCount)
                 {
                     case 0: outside0 = triangle.e0; break;
@@ -730,6 +751,33 @@ namespace Typography.Rendering
                         //create a line between mid point of contactEdge (inside) and newly found anotherInsideEdge
                         //this call 'abstract glyph-bone'
 
+#if DEBUG
+                        if (anotherInsideEdge == contactEdge)
+                        {
+                            //should not occur
+                            throw new NotSupportedException();
+                        }
+#endif
+                        //create a perpedicular line from midpoint of contact edge to the outside                          
+
+                        //find min /max
+                        //Vector2 min, max;
+
+                        //bone.GetMinMax(out min, out max);
+                        //pointIsOnTheBone = cutPoint.X >= min.X && cutPoint.X <= max.X && cutPoint.Y >= min.Y && cutPoint.Y <= max.Y;
+                        //return cutPoint;
+
+                        Vector2 cut1 = MyMath.FindPerpendicularCutPoint(outside0, contactEdge.GetMidPoint());
+                        //check if cut1 is on the edge on not
+
+                        Vector2 min, max; //TODO: review here
+                        outside0.GetMinMax(out min, out max);
+                        if (cut1.X >= min.X && cut1.X <= max.X && cut1.Y >= min.Y && cut1.Y <= max.Y)
+                        {
+                            outside0.AddCutPoints(
+                               cut1,
+                               contactEdge.GetMidPoint());
+                        }
                     }
                     break;
                 case 2:
@@ -814,41 +862,41 @@ namespace Typography.Rendering
                     {
 
 
-                        //find shortest part from boneJoint to  edge or to corner.
-                        //draw perpendicular line to outside edge
-                        //and to the  corner of current edge.
-                        GlyphPoint2D p_ = contactEdge.GlyphPoint_P;
-                        GlyphPoint2D q_ = contactEdge.GlyphPoint_Q;
+                        ////find shortest part from boneJoint to  edge or to corner.
+                        ////draw perpendicular line to outside edge
+                        ////and to the  corner of current edge.
+                        //GlyphPoint2D p_ = contactEdge.GlyphPoint_P;
+                        //GlyphPoint2D q_ = contactEdge.GlyphPoint_Q;
 
-                        Vector2 p_corner = Vector2.Zero;//empty
+                        //Vector2 p_corner = Vector2.Zero;//empty
 
-                        int foundAt = GetOnCurvePoints(p_, q_);
+                        //int foundAt = GetOnCurvePoints(p_, q_);
 
-                        switch (foundAt)
-                        {
-                            default: throw new NotSupportedException();
-                            case 2:
-                                //both connect with ON-curve point 
-                                //select p?
-                                p_.AddAssociatedBoneJoint(ownerEdgeJoint);
-                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2((float)contactEdge.p.X, (float)contactEdge.p.Y));
-                                return;
-                            case 0:
-                                //select p 
-                                p_.AddAssociatedBoneJoint(ownerEdgeJoint);
-                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2((float)contactEdge.p.X, (float)contactEdge.p.Y));
-                                return;
-                            //break;
-                            case 1:
-                                //select q 
-                                q_.AddAssociatedBoneJoint(ownerEdgeJoint);
-                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2((float)contactEdge.q.X, (float)contactEdge.q.Y));
-                                return;
-                            //break;
-                            case -1:
-                                //both p and q are curve in between
-                                return;
-                        }
+                        //switch (foundAt)
+                        //{
+                        //    default: throw new NotSupportedException();
+                        //    case 2:
+                        //        //both connect with ON-curve point 
+                        //        //select p?
+                        //        p_.AddAssociatedBoneJoint(ownerEdgeJoint);
+                        //        ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2((float)contactEdge.p.X, (float)contactEdge.p.Y));
+                        //        return;
+                        //    case 0:
+                        //        //select p 
+                        //        p_.AddAssociatedBoneJoint(ownerEdgeJoint);
+                        //        ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2((float)contactEdge.p.X, (float)contactEdge.p.Y));
+                        //        return;
+                        //    //break;
+                        //    case 1:
+                        //        //select q 
+                        //        q_.AddAssociatedBoneJoint(ownerEdgeJoint);
+                        //        ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2((float)contactEdge.q.X, (float)contactEdge.q.Y));
+                        //        return;
+                        //    //break;
+                        //    case -1:
+                        //        //both p and q are curve in between
+                        //        return;
+                        //}
 
                         //Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(edgeA, boneJoint.Position);
                         ////connect to corener q? 

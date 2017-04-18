@@ -97,6 +97,10 @@ namespace Typography.Rendering
         public EdgeLine contactToEdge;
         //------------------------------
 
+#if DEBUG
+        public static int s_dbugTotalId;
+        public readonly int dbugId = s_dbugTotalId++;
+#endif
         public EdgeLine(TriangulationPoint p, TriangulationPoint q)
         {
             this.p = p;
@@ -133,6 +137,18 @@ namespace Typography.Rendering
         {
             get;
             private set;
+        }
+        /// <summary>
+        /// which one is min,max
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        public void GetMinMax(out Vector2 min, out Vector2 max)
+        {
+            Vector2 a_pos = new Vector2((float)x0, (float)y0);
+            Vector2 b_pos = new Vector2((float)x1, (float)y1);
+            min = Vector2.Min(a_pos, b_pos);
+            max = Vector2.Max(a_pos, b_pos);
         }
         public bool IsOutside
         {
@@ -221,6 +237,30 @@ namespace Typography.Rendering
             }
 #endif
         }
-    }
+        public List<CutLine> cutLines;
+        public void AddCutPoints(
+            Vector2 cutPointOnBone,
+            Vector2 glyphBoneJoint)
+        {
+            if (cutLines == null) { cutLines = new List<CutLine>(); }
+            var cutLine = new CutLine();
+            cutLine.x0 = cutPointOnBone.X;
+            cutLine.y0 = cutPointOnBone.Y;
+            cutLine.x1 = glyphBoneJoint.X;
+            cutLine.y1 = glyphBoneJoint.Y;
 
+            cutLines.Add(cutLine);
+        }
+    }
+    public struct CutLine
+    {
+        public float x0, y0, x1, y1;
+        public CutLine(float x0, float y0, float x1, float y1)
+        {
+            this.x0 = x0;
+            this.y0 = y0;
+            this.x1 = x1;
+            this.y1 = y1;
+        }
+    }
 }
