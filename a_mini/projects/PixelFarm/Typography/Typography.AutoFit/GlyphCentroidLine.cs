@@ -692,6 +692,91 @@ namespace Typography.Rendering
                 }
             }
         }
+
+
+        static void SelectMostProperTipEdge(GlyphBoneJoint ownerEdgeJoint,
+            EdgeLine outside0,
+            EdgeLine outside1,
+            out EdgeLine tipEdge,
+            out EdgeLine notTipEdge)
+        {
+            GlyphCentroidLine ownerCentroidLine = ownerEdgeJoint.OwnerCentroidLine;
+            //p
+            double x0 = ownerCentroidLine.p.CentroidX;
+            double y0 = ownerCentroidLine.p.CentroidY;
+            //q
+            double x1 = ownerCentroidLine.q.CentroidX;
+            double y1 = ownerCentroidLine.q.CentroidY;
+
+            LineSlopeKind centroidLineSlope = LineSlopeKind.Other;
+            double slopeAngle = 0;
+            if (x1 == x0)
+            {
+                centroidLineSlope = LineSlopeKind.Vertical;
+                slopeAngle = 1;
+            }
+            else
+            {
+                slopeAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
+                if (slopeAngle > MyMath._85degreeToRad)
+                {
+                    //assume
+                    centroidLineSlope = LineSlopeKind.Vertical;
+                }
+                else if (slopeAngle < MyMath._03degreeToRad) //_15degreeToRad
+                {
+                    //assume
+                    centroidLineSlope = LineSlopeKind.Horizontal;
+                }
+                else
+                {
+                    centroidLineSlope = LineSlopeKind.Other;
+                }
+            }
+            //---------------------
+            switch (centroidLineSlope)
+            {
+                default: throw new NotSupportedException();
+                case LineSlopeKind.Horizontal:
+                    if (outside0.SlopeKind == LineSlopeKind.Vertical)
+                    {
+                        tipEdge = outside0;
+                        notTipEdge = outside1;
+                    }
+                    else
+                    {
+                        tipEdge = outside1;
+                        notTipEdge = outside0;
+                    }
+                    break;
+                case LineSlopeKind.Vertical:
+                    if (outside0.SlopeKind == LineSlopeKind.Horizontal)
+                    {
+                        tipEdge = outside0;
+                        notTipEdge = outside1;
+                    }
+                    else
+                    {
+                        tipEdge = outside1;
+                        notTipEdge = outside0;
+                    }
+                    break;
+                case LineSlopeKind.Other:
+                    //select 1
+                    //choose the horizontal one 
+                    if (outside0.SlopeKind == LineSlopeKind.Horizontal)
+                    {
+                        tipEdge = outside0;
+                        notTipEdge = outside1;
+                    }
+                    else
+                    {
+                        tipEdge = outside1;
+                        notTipEdge = outside0;
+                    }
+                    break;
+            }
+        }
         /// <summary>
         /// add information about each edge of a triangle, compare to the contactEdge of a ownerEdgeJoint
         /// </summary>
@@ -716,8 +801,6 @@ namespace Typography.Rendering
             //-------------------------------------------------------------------------------------------------------
             //1. check each edge of triangle 
             //if an edge is outside  edge (since it is outside edge, it is not the contactEdge)
-            EdgeLine firstEdge = outside0;
-            EdgeLine secondEdge = outside1;
 
 
             //count represent OUTSIDE edge count, compare to the contactEdge
@@ -735,27 +818,25 @@ namespace Typography.Rendering
             switch (outsideCount)
             {
                 default: throw new NotSupportedException();
-                case 0:
-                    break;
-
+                case 0: break;
+                case 3: throw new NotImplementedException();//TODO: implement this 
                 case 1:
                     {
 
-
+                        //----------------------------------------------------------------------------
+                        //primary ribs
                         //find shortest part from boneJoint to  edge or to corner.
                         //draw perpendicular line to outside edge
                         //and to the  corner of current edge.
                         GlyphPoint2D p_ = contactEdge.GlyphPoint_P;
                         GlyphPoint2D q_ = contactEdge.GlyphPoint_Q;
 
-                        Vector2 p_corner = Vector2.Zero;//empty
-
-                        int foundAt = GetOnCurvePoints(p_, q_);
-
-                        switch (foundAt)
+                        //TODO: review 
+                        switch (GetOnCurvePoints(p_, q_))
                         {
                             default: throw new NotSupportedException();
                             case 2:
+
                                 //both connect with ON-curve point 
                                 //select p?
                                 p_.AddAssociatedBoneJoint(ownerEdgeJoint);
@@ -777,14 +858,12 @@ namespace Typography.Rendering
                                 //both p and q are curve in between
                                 break;
                         }
-
+                        //----------------------------------------------------------------------------
                         //seconday ribs: a perpendicular line from edge to the abstract glyph bone
                         //only 1 outside
                         //other is (outside1,2) is inside edge
                         //create a line between mid point of contactEdge (inside) and newly found anotherInsideEdge
                         //this call 'abstract glyph-bone'
-
-
 #if DEBUG
                         if (anotherInsideEdge == contactEdge)
                         {
@@ -805,143 +884,25 @@ namespace Typography.Rendering
                 case 2:
                     {
                         //tip end 
-                        //TODO: review when a perpendicular line is not on  the edge.
+                        //find which edge should be 'tip edge'                         
+                        //in this version we compare each edge slope to centroid line slope.
+                        //the most diff angle should be opposite edge (to the centroid) => tip edge
+                        //-------------------------------------------------------------------------
 
-                        Vector2 perpend_A, perpend_B;
-                        MyMath.FindPerpendicularCutPoint(firstEdge, ownerEdgeJoint.Position, out perpend_A);
-                        MyMath.FindPerpendicularCutPoint(secondEdge, ownerEdgeJoint.Position, out perpend_B);
-                        Vector2 p_corner = new Vector2((float)contactEdge.p.X, (float)contactEdge.p.Y);
-                        GlyphPoint2D p_ = contactEdge.GlyphPoint_P;
-                        GlyphPoint2D q_ = contactEdge.GlyphPoint_Q;
+                        EdgeLine tipEdge, notTipEdge;
+                        SelectMostProperTipEdge(ownerEdgeJoint,
+                            outside0,
+                            outside1,
+                            out tipEdge,
+                            out notTipEdge);
+                        //for TipEdge
+                        ownerEdgeJoint.SetTipEdge(tipEdge);
 
-
-                        //find distance from contactSite to specific point 
-                        double sqDistanceToEdgeA = ownerEdgeJoint.CalculateSqrDistance(perpend_A);
-                        double sqDistanceToEdgeB = ownerEdgeJoint.CalculateSqrDistance(perpend_B);
-                        double sqDistanceTo_P = ownerEdgeJoint.CalculateSqrDistance(p_corner);
-
-                        int minAt = MyMath.Min(sqDistanceToEdgeA, sqDistanceToEdgeB, sqDistanceTo_P);
-                        switch (minAt)
+                        //fot notTipEdge 
+                        Vector2 perpend_B;
+                        if (MyMath.FindPerpendicularCutPoint(notTipEdge, ownerEdgeJoint.Position, out perpend_B))
                         {
-                            default: throw new NotSupportedException();
-                            case 0:
-                                {
-                                    //min at pos 0 => sqDistanceToEdgeA
-
-                                    switch (ownerEdgeJoint.OwnerCentroidLine.SlopeKind)
-                                    {
-                                        case LineSlopeKind.Horizontal:
-                                            {
-                                                //centroid horizontal, tip-> vertical
-                                                if (firstEdge.SlopeKind == LineSlopeKind.Vertical)
-                                                {
-                                                    ownerEdgeJoint.SetTipEdge(firstEdge);
-                                                    ownerEdgeJoint.AddRibEndAt(secondEdge, perpend_B);
-
-                                                }
-                                                else if (secondEdge.SlopeKind == LineSlopeKind.Vertical)
-                                                {
-                                                    //b
-                                                    ownerEdgeJoint.SetTipEdge(secondEdge);
-                                                    ownerEdgeJoint.AddRibEndAt(firstEdge, perpend_A);
-                                                }
-                                                else
-                                                {
-                                                    goto default;
-                                                }
-                                            }
-                                            break;
-                                        case LineSlopeKind.Vertical:
-                                            {
-                                                //centroid vertical, -> tip horizontal
-                                                if (firstEdge.SlopeKind == LineSlopeKind.Horizontal)
-                                                {
-                                                    ownerEdgeJoint.SetTipEdge(firstEdge);
-                                                    ownerEdgeJoint.AddRibEndAt(secondEdge, perpend_B);
-
-                                                }
-                                                else if (secondEdge.SlopeKind == LineSlopeKind.Horizontal)
-                                                {
-                                                    //b
-                                                    ownerEdgeJoint.SetTipEdge(secondEdge);
-                                                    ownerEdgeJoint.AddRibEndAt(firstEdge, perpend_A);
-
-                                                }
-                                                else
-                                                {
-                                                    goto default;
-                                                }
-                                            }
-                                            break;
-                                        default:
-                                            {
-                                                ownerEdgeJoint.AddRibEndAt(firstEdge, perpend_A);
-                                                //check if B side is tip part
-                                                ownerEdgeJoint.SetTipEdge(secondEdge);
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case 1:
-                                {
-                                    switch (ownerEdgeJoint.OwnerCentroidLine.SlopeKind)
-                                    {
-                                        case LineSlopeKind.Horizontal:
-                                            {
-                                                //centroid horizontal, tip-> vertical
-                                                if (firstEdge.SlopeKind == LineSlopeKind.Vertical)
-                                                {
-                                                    ownerEdgeJoint.SetTipEdge(firstEdge);
-                                                    ownerEdgeJoint.AddRibEndAt(secondEdge, perpend_B);
-
-                                                }
-                                                else if (secondEdge.SlopeKind == LineSlopeKind.Vertical)
-                                                {
-                                                    //b
-                                                    ownerEdgeJoint.SetTipEdge(secondEdge);
-                                                    ownerEdgeJoint.AddRibEndAt(firstEdge, perpend_A);
-                                                }
-                                                else
-                                                {
-                                                    goto default;
-                                                }
-                                            }
-                                            break;
-                                        case LineSlopeKind.Vertical:
-                                            {
-                                                //centroid vertical, -> tip horizontal
-                                                if (firstEdge.SlopeKind == LineSlopeKind.Horizontal)
-                                                {
-                                                    ownerEdgeJoint.SetTipEdge(firstEdge);
-                                                    ownerEdgeJoint.AddRibEndAt(secondEdge, perpend_B);
-
-                                                }
-                                                else if (secondEdge.SlopeKind == LineSlopeKind.Horizontal)
-                                                {
-                                                    //b
-                                                    ownerEdgeJoint.SetTipEdge(secondEdge);
-                                                    ownerEdgeJoint.AddRibEndAt(firstEdge, perpend_A);
-
-                                                }
-                                                else
-                                                {
-                                                    goto default;
-                                                }
-                                            }
-                                            break;
-                                        default:
-                                            {
-                                                ownerEdgeJoint.AddRibEndAt(secondEdge, perpend_B);
-                                                ownerEdgeJoint.SetTipEdge(firstEdge);
-                                            }
-                                            break;
-                                    }
-                                }
-                                break;
-                            case 2:
-                                ownerEdgeJoint.AddRibEndAt(contactEdge, p_corner);
-                                break;
+                            ownerEdgeJoint.AddRibEndAt(notTipEdge, perpend_B);
                         }
                     }
                     break;
@@ -1120,11 +1081,7 @@ namespace Typography.Rendering
                     }
                 }
             }
-        }
-
-
-
-
+        } 
         static bool FindMatchingOuterSide(EdgeLine compareEdge,
             GlyphTriangle another,
             out EdgeLine result,
