@@ -103,6 +103,10 @@ namespace Typography.Rendering
             //for analysis in later step
             a.AddAssociatedBone(this);
         }
+
+
+
+
         void EvaluteSlope(Vector2 p, Vector2 q)
         {
 
@@ -206,34 +210,7 @@ namespace Typography.Rendering
 
 
 
-        /// <summary>
-        /// which one is min,max
-        /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        public void GetMinMax(out Vector2 min, out Vector2 max)
-        {
-            if (JointB != null)
-            {
-                var a_pos = JointA.Position;
-                var b_pos = JointB.Position;
-
-                min = Vector2.Min(a_pos, b_pos);
-                max = Vector2.Max(a_pos, b_pos);
-
-            }
-            else if (TipEdge != null)
-            {
-                var a_pos = JointA.Position;
-                var tip_pos = TipEdge.GetMidPoint();
-                min = Vector2.Min(a_pos, tip_pos);
-                max = Vector2.Max(a_pos, tip_pos);
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
-        }
+        
 #if DEBUG
         public override string ToString()
         {
