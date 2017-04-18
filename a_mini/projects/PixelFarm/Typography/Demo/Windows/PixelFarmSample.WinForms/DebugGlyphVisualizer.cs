@@ -509,7 +509,7 @@ namespace SampleWinForms.UI
                           PixelFarm.Drawing.Color.Yellow);
 
                         //test
-                        DrawAssocGlyphPoint2(link.bonePoint, link.glyphPoint, 0.5f);
+                        DrawAssocGlyphPoint2(link.bonePoint, link.glyphPoint, newRelativeLen);
                     }
                 }
 
