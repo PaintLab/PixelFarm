@@ -82,7 +82,7 @@ namespace SampleWinForms
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction);
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction_VerticalOnly);
             lstHintList.Items.Add(HintTechnique.CustomAutoFit);
-            lstHintList.SelectedIndex = 0;
+            lstHintList.SelectedIndex = 3;
             lstHintList.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
             //---------- 
             //snapX
@@ -130,6 +130,8 @@ namespace SampleWinForms
             chkDrawTriangles.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDrawRib.CheckedChanged += (s, e) => UpdateRenderOutput();
+
             //----------
             txtGlyphBoneCount.KeyDown += (s, e) =>
             {
@@ -158,9 +160,9 @@ namespace SampleWinForms
             int ffcount = 0;
             bool found = false;
 
-            //string defaultFont = "Tahoma";
+            string defaultFont = "Tahoma";
             //string defaultFont = "Alef"; //test hebrew
-            string defaultFont = "Century";
+            //string defaultFont = "Century";
             foreach (InstalledFont ff in installedFontCollection.GetInstalledFontIter())
             {
                 if (!found && ff.FontName == defaultFont)
@@ -226,6 +228,7 @@ namespace SampleWinForms
             //string inputstr = "t";
             //string inputstr = "2";
             string inputstr = "o";
+            //string inputstr = "l";
             //string inputstr = "Å";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
@@ -267,10 +270,10 @@ namespace SampleWinForms
         {
             if (g == null)
             {
-                destImg = new ActualImage(400, 300, PixelFormat.ARGB32);
+                destImg = new ActualImage(800, 600, PixelFormat.ARGB32);
                 imgGfx2d = new ImageGraphics2D(destImg); //no platform
                 painter = new AggCanvasPainter(imgGfx2d);
-                winBmp = new Bitmap(400, 300, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                winBmp = new Bitmap(destImg.Width, destImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 g = this.CreateGraphics();
 
                 painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
@@ -389,7 +392,7 @@ namespace SampleWinForms
                     //--------------- 
                     //7. just render our bitmap
                     g.Clear(Color.White);
-                    g.DrawImage(winBmp, new Point(30, 20));
+                    g.DrawImage(winBmp, new Point(30, 100));
 
                 });
                 debugGlyphVisualizer.VisualizeInfoView = vinfo;
@@ -408,6 +411,7 @@ namespace SampleWinForms
             debugGlyphVisualizer.DrawTrianglesAndEdges = this.chkDrawTriangles.Checked;
             debugGlyphVisualizer.DrawCentroidBone = this.chkDrawCentroidBone.Checked;
             debugGlyphVisualizer.DrawGlyphBone = this.chkDrawGlyphBone.Checked;
+            debugGlyphVisualizer.DrawRibs = this.chkDrawRib.Checked;
             debugGlyphVisualizer.DrawDynamicOutline = chkDynamicOutline.Checked;
             debugGlyphVisualizer.DrawRegenerateOutline = chkDrawRegenerateOutline.Checked;
             //------------------------------------------------------
@@ -427,7 +431,7 @@ namespace SampleWinForms
             //--------------- 
             //7. just render our bitmap
             g.Clear(Color.White);
-            g.DrawImage(winBmp, new Point(30, 20));
+            g.DrawImage(winBmp, new Point(30, 100));
             //g.DrawRectangle(Pens.White, new System.Drawing.Rectangle(30, 20, winBmp.Width, winBmp.Height));
         }
 
@@ -443,7 +447,7 @@ namespace SampleWinForms
             //----------------------------------------------------
             builder.Build(testChar, sizeInPoint);
             //----------------------------------------------------
-            var glyphToContour = new GlyphTranslatorToContour();
+            var glyphToContour = new GlyphContourBuilder();
             builder.ReadShapes(glyphToContour);
             //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
             GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour);
@@ -602,7 +606,7 @@ namespace SampleWinForms
                     //build glyph
                     builder.BuildFromGlyphIndex(gindex, sizeInPoint);
 
-                    var glyphToContour = new GlyphTranslatorToContour();
+                    var glyphToContour = new GlyphContourBuilder();
                     //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
                     builder.ReadShapes(glyphToContour);
                     GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour);

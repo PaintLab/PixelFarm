@@ -1,10 +1,16 @@
 ﻿//MIT, 2017, WinterDev
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Typography.Rendering
 {
 
+    public struct GlyphPointToBoneLink
+    {
+        public GlyphPoint2D glyphPoint;
+        public Vector2 bonePoint;
+    }
     /// <summary>
     /// link between 2 GlyphBoneJoint or Joint and tipEdge
     /// </summary>
@@ -26,10 +32,16 @@ namespace Typography.Rendering
             JointA = a;
             JointB = b;
 
-            var bpos = b.Position;
+
+            Vector2 bpos = b.Position;
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
             EvaluteSlope(a.Position, bpos);
             //------  
+
+
+            //for analysis in later step
+            a.AddAssociatedBone(this);
+            b.AddAssociatedBone(this);
         }
 
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
@@ -42,7 +54,8 @@ namespace Typography.Rendering
             EvaluteSlope(a.Position, midPoint);
             //------
 
-
+            //for analysis in later step
+            a.AddAssociatedBone(this);
         }
         void EvaluteSlope(Vector2 p, Vector2 q)
         {
@@ -118,6 +131,63 @@ namespace Typography.Rendering
             }
         }
 
+        public Vector2 GetMidPoint()
+        {
+            if (JointB != null)
+            {
+                return (JointA.Position + JointB.Position) / 2;
+            }
+            else if (TipEdge != null)
+            {
+                Vector2 edge = TipEdge.GetMidPoint();
+                return (edge + JointA.Position) / 2;
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
+        public List<GlyphPointToBoneLink> _perpendiculatPoints;
+        public void AddPerpendicularPoint(GlyphPoint2D p, Vector2 bonePoint)
+        {
+            //add a perpendicular glyph point to bones
+            if (_perpendiculatPoints == null) { _perpendiculatPoints = new List<GlyphPointToBoneLink>(); }
+            GlyphPointToBoneLink pointToBoneLink = new GlyphPointToBoneLink();
+            pointToBoneLink.bonePoint = bonePoint;
+            pointToBoneLink.glyphPoint = p;
+            _perpendiculatPoints.Add(pointToBoneLink);
+        }
+
+
+
+        /// <summary>
+        /// which one is min,max
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        public void GetMinMax(out Vector2 min, out Vector2 max)
+        {
+            if (JointB != null)
+            {
+                var a_pos = JointA.Position;
+                var b_pos = JointB.Position;
+
+                min = Vector2.Min(a_pos, b_pos);
+                max = Vector2.Max(a_pos, b_pos);
+
+            }
+            else if (TipEdge != null)
+            {
+                var a_pos = JointA.Position;
+                var tip_pos = TipEdge.GetMidPoint();
+                min = Vector2.Min(a_pos, tip_pos);
+                max = Vector2.Max(a_pos, tip_pos);
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
 #if DEBUG
         public override string ToString()
         {
@@ -141,6 +211,12 @@ namespace Typography.Rendering
         public EdgeLine _p_contact_edge;
         public EdgeLine _q_contact_edge;
         GlyphCentroidLine _owner;
+
+       
+#if DEBUG
+        public readonly int dbugId = dbugTotalId++;
+        public static int dbugTotalId;
+#endif
         public GlyphBoneJoint(GlyphCentroidLine owner,
             EdgeLine p_contact_edge,
             EdgeLine q_contact_edge)
@@ -210,11 +286,16 @@ namespace Typography.Rendering
         /// </summary>
         Vector2 _tipPoint;
 
+        //one bone joint can have up to 2 tips
+
+
+        //connection to edges
         EdgeLine _selectedEdgeA, _selectedEdgeB, _selectedTipEdge;
 
-       
-        bool _dbugSwap;
+ 
 
+        public List<GlyphBone> _assocBones;
+        public List<GlyphPoint2D> _assocGlyphPoints;
         public void AddRibEndAt(EdgeLine edgeLine, Vector2 vec)
         {
             switch (_ribCount)
@@ -228,18 +309,6 @@ namespace Typography.Rendering
                 case 1:
                     _selectedEdgeB = edgeLine;
                     _ribEndPoint_B = vec;
-
-                    //swap edge if need
-                    //if (_ribEndPoint_A.X > _ribEndPoint_B.X)
-                    //{
-                    //    EdgeLine tmpA = _selectedEdgeA;
-                    //    _selectedEdgeA = _selectedEdgeB;
-                    //    _selectedEdgeB = tmpA;
-                    //    Vector2 tmpAEndPoint = _ribEndPoint_A;
-                    //    _ribEndPoint_A = _ribEndPoint_B;
-                    //    _ribEndPoint_B = tmpAEndPoint;
-                    //    _dbugSwap = true;
-                    //}
                     break;
             }
 
@@ -256,33 +325,26 @@ namespace Typography.Rendering
         public Vector2 RibEndPointA { get { return _ribEndPoint_A; } }
         public Vector2 RibEndPointB { get { return _ribEndPoint_B; } }
         public Vector2 TipPoint { get { return _tipPoint; } }
+
         public EdgeLine RibEndEdgeA { get { return _selectedEdgeA; } }
         public EdgeLine RibEndEdgeB { get { return _selectedEdgeB; } }
         public EdgeLine TipEdge { get { return _selectedTipEdge; } }
-        //public double RibA_ArcTan()
-        //{
-        //    Vector2 jointPos = this.Position;
-        //    return Math.Atan2(_ribEndPoint_A.Y - jointPos.Y,
-        //        _ribEndPoint_A.X - jointPos.X);
-        //}
-        //public double RibB_ArcTan()
-        //{
-        //    Vector2 jointPos = this.Position;
-        //    return Math.Atan2(_ribEndPoint_B.Y - jointPos.Y,
-        //        _ribEndPoint_B.X - jointPos.X);
-        //}
-        //public double Tip_ArcTan()
-        //{
-        //    Vector2 jointPos = this.Position;
-        //    return Math.Atan2(_tipPoint.Y - jointPos.Y,
-        //        _tipPoint.X - jointPos.X);
-        //}
 
+        public void AddAssociatedGlyphPoint(GlyphPoint2D glyphPoint)
+        {
+            if (_assocGlyphPoints == null) { _assocGlyphPoints = new List<GlyphPoint2D>(); }
+            _assocGlyphPoints.Add(glyphPoint);
+        }
+        public void AddAssociatedBone(GlyphBone bone)
+        {
+            if (_assocBones == null) { _assocBones = new List<GlyphBone>(); }
+            _assocBones.Add(bone);
+        }
 
 #if DEBUG
         public override string ToString()
         {
-            return this.Position.ToString();
+            return "id:" + dbugId + " " + this.Position.ToString();
         }
 #endif
 

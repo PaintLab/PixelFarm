@@ -30,7 +30,7 @@ namespace Typography.Rendering
             Analyze();
         }
 
-      
+
 
 
         Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs;
@@ -119,7 +119,7 @@ namespace Typography.Rendering
             }
             //-------------------------------------------------
 
-            if (triCount > 1)
+            if (triCount > 2)
             {
                 //connect the last tri to the first tri
                 //if it is connected
@@ -127,7 +127,7 @@ namespace Typography.Rendering
                 GlyphTriangle lastTri = _triangles[triCount - 1];
                 if (firstTri.IsConnectedWith(lastTri))
                 {
-                    currentCentroidLineHub.AddChild(new GlyphCentroidLine(lastTri, firstTri));
+                    currentCentroidLineHub.AddChild(new GlyphCentroidLine(lastTri, firstTri) { SpecialConnectFromLastToFirst = true });
                 }
             }
             //----------------------------------------
@@ -143,8 +143,12 @@ namespace Typography.Rendering
             List<GlyphBone> newBones = new List<GlyphBone>();
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
+                //create bone and add into newBones list
                 hub.CreateBones(newBones);
             }
+            //----------------------------------------
+
+
             //----------------------------------------
             int lineHubCount = lineHubs.Count;
             for (int i = 0; i < lineHubCount; ++i)
@@ -153,13 +157,188 @@ namespace Typography.Rendering
                 //link each hub to proper bone
                 FindStartHubLinkConnection(lineHubs[i], lineHubs);
             }
-            //-------------
+            //------------- 
             outputVerticalLongBones = new List<GlyphBone>();
             AnalyzeBoneLength(newBones, outputVerticalLongBones);
-            //-------------
-            outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
+            //------------- 
+            //create perpendicular line link from control nodes to glyph bone
 
+
+
+            //----------------------------------------
+            outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
+            //----------------------------------------
+
+            //connect glyph part/contour with bone
+            //----------------------------------------
+            int j = _contours.Count;
+            Dictionary<object, TempSqLengthResult> tempSqLenDic = new Dictionary<object, TempSqLengthResult>();
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphContour cont = _contours[i];
+                List<GlyphPoint2D> flattenPoints = cont.flattenPoints;
+                int p_count = flattenPoints.Count;
+                for (int n = 0; n < p_count; ++n)
+                {
+                    //from point, add assoc joint
+
+                    GlyphPoint2D glyphPoint = flattenPoints[n];
+                    System.Numerics.Vector2 glyph_point_xy = new System.Numerics.Vector2((float)glyphPoint.x, (float)glyphPoint.y);
+                    if (glyphPoint.kind != PointKind.CurveInbetween)
+                    {
+                        tempSqLenDic.Clear();
+                        List<GlyphBoneJoint> assocJoints = glyphPoint._assocJoints;
+                        if (assocJoints != null)
+                        {
+                            //create a perpendicular line to 
+                            //shortest glyph bone 
+                            int jointCount = assocJoints.Count;
+                            for (int m = 0; m < jointCount; ++m)
+                            {
+                                GlyphBoneJoint joint = assocJoints[m];
+                                //if (joint.dbugId == 19)
+                                //{
+
+                                //}
+                                if (tempSqLenDic.ContainsKey(joint))
+                                {
+                                    continue;
+                                }
+                                //-----------
+                                //distance to joint
+                                {
+                                    TempSqLengthResult result = new TempSqLengthResult();
+                                    result.joint = joint;
+                                    result.cutPoint = joint.Position;
+                                    result.sq_distance = MyMath.SquareDistance(result.cutPoint, glyph_point_xy);
+                                    tempSqLenDic.Add(joint, result);
+                                }
+                                //-----------
+                                //distance to associate bone
+                                List<GlyphBone> bones = joint._assocBones;
+                                int b_count = bones.Count;
+                                for (int b = 0; b < b_count; ++b)
+                                {
+                                    GlyphBone bone = bones[b];
+                                    if (tempSqLenDic.ContainsKey(bone))
+                                    {
+                                        continue;
+                                    }
+                                    TempSqLengthResult result = new TempSqLengthResult();
+                                    result.bone = bone;
+                                    bool pointIsOnBone;
+                                    result.cutPoint = MyMath.FindPerpendicularCutPoint(bone, glyph_point_xy, out pointIsOnBone);
+                                    if (pointIsOnBone)
+                                    {
+                                        result.sq_distance = MyMath.SquareDistance(result.cutPoint, glyph_point_xy);
+                                        tempSqLenDic.Add(bone, result);
+                                    }
+                                }
+                            }
+
+
+
+                            double shortest = double.MaxValue;
+                            TempSqLengthResult shortestResult = new TempSqLengthResult();
+                            bool foundSomeResult = false;
+
+                            foreach (TempSqLengthResult r in tempSqLenDic.Values)
+                            {
+
+                                if (r.sq_distance < shortest)
+                                {
+                                    shortest = r.sq_distance;
+                                    shortestResult = r;
+                                    foundSomeResult = true;
+                                }
+
+                                //if (shortestResult.joint != null)
+                                //{
+                                //    //if shortest is joint
+                                //    shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
+                                //}
+                                //else
+                                //{
+                                //    //if shortest is bone, 
+                                //    //we collect all perpendicular bones
+                                //    foreach (TempSqLengthResult r in tempSqLenDic.Values)
+                                //    {
+                                //        if (r.bone != null)
+                                //        {
+                                //            shortestResult.bone.AddPerpendicularPoint(glyphPoint, shortestResult.cutPoint);
+                                //        }
+                                //    }
+                                //}
+
+
+                                //if (r.joint != null)
+                                //{
+                                //    r.joint.AddAssociatedGlyphPoint(glyphPoint);
+
+                                //}
+                                //else if (r.bone != null)
+                                //{
+                                //    r.bone.AddPerpendicularPoint(glyphPoint, r.cutPoint);
+                                //}
+
+                            }
+                            foreach (TempSqLengthResult r in tempSqLenDic.Values)
+                            {
+
+                                if(r.bone != null)
+                                {
+                                    r.bone.AddPerpendicularPoint(glyphPoint, r.cutPoint);
+                                }
+                                if (shortestResult.joint != null)
+                                {
+                                    shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
+
+                                }
+                                //else if (r.bone != null)
+                                //{
+                                //    r.bone.AddPerpendicularPoint(glyphPoint, r.cutPoint);
+                                //}
+
+                            }
+                            //---------
+                            if (!foundSomeResult)
+                            {
+                                throw new NotSupportedException();
+                            }
+                            //---------
+                            //found, create a perpedicular line from glyph point to a bone
+                            //---------
+                            //if (shortestResult.joint != null)
+                            //{
+                            //    //if shortest is joint
+                            //    shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
+
+                            //}
+
+                            ////if shortest is bone, 
+                            ////we collect all perpendicular bones
+                            //foreach (TempSqLengthResult r in tempSqLenDic.Values)
+                            //{
+                            //    if (r.bone != null)
+                            //    {
+                            //        shortestResult.bone.AddPerpendicularPoint(glyphPoint, shortestResult.cutPoint);
+                            //    }
+                            //}
+
+                        }
+
+                    }
+                }
+            }
         }
+        struct TempSqLengthResult
+        {
+            public System.Numerics.Vector2 cutPoint;
+            public double sq_distance;
+            public GlyphBone bone;
+            public GlyphBoneJoint joint;
+        }
+
         public List<GlyphBone> LongVerticalBones
         {
             get { return this.outputVerticalLongBones; }

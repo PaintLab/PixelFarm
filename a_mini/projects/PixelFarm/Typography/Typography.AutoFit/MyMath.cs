@@ -21,7 +21,7 @@ namespace Typography.Rendering
             return (SquareDistance(baseVec, compare0) < SquareDistance(baseVec, compare1)) ? true : false;
         }
 
-        static double SquareDistance(Vector2 v0, Vector2 v1)
+        public static double SquareDistance(Vector2 v0, Vector2 v1)
         {
             double xdiff = v1.X - v0.X;
             double ydiff = v1.Y - v0.Y;
@@ -57,6 +57,68 @@ namespace Typography.Rendering
                 new Vector2((float)edge.x0, (float)edge.y0),
                 new Vector2((float)edge.x1, (float)edge.y1),
                 p2);
+        }
+
+        public static int FindMin(Vector2 a, Vector2 b)
+        {
+            if (a.X < b.X)
+            {
+                return 0;
+            }
+            else if (a.X > b.X)
+            {
+                return 1;
+            }
+            else
+            {
+                if (a.Y < b.Y)
+                {
+                    return 0;
+                }
+                else if (a.Y > b.Y)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return -1;//eq
+                }
+            }
+        }
+        public static Vector2 FindPerpendicularCutPoint(GlyphBone bone, Vector2 p, out bool pointIsOnTheBone)
+        {
+            if (bone.JointB != null)
+            {
+                Vector2 cutPoint = FindPerpendicularCutPoint(
+                  bone.JointA.Position,
+                  bone.JointB.Position,
+                  p);
+                //find min /max
+                Vector2 min, max;
+                bone.GetMinMax(out min, out max);
+                pointIsOnTheBone = cutPoint.X >= min.X && cutPoint.X <= max.X && cutPoint.Y >= min.Y && cutPoint.Y <= max.Y;
+                return cutPoint;
+            }
+            else
+            {
+                //to tip
+                if (bone.TipEdge != null)
+                {
+                    Vector2 cutPoint = FindPerpendicularCutPoint(
+                        bone.JointA.Position,
+                        bone.TipEdge.GetMidPoint(),
+                        p);
+                    Vector2 min, max;
+                    bone.GetMinMax(out min, out max);
+                    pointIsOnTheBone = cutPoint.X >= min.X && cutPoint.X <= max.X && cutPoint.Y >= min.Y && cutPoint.Y <= max.Y;
+                    return cutPoint;
+                }
+                else
+                {
+                    throw new System.NotSupportedException();
+                }
+            }
+
         }
         public static Vector2 FindPerpendicularCutPoint(Vector2 p0, Vector2 p1, Vector2 p2)
         {

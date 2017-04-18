@@ -61,7 +61,7 @@ namespace Typography.Rendering
                        j1._position.X - j0._position.X);
             }
         }
-        class StrokeLinHub
+        class StrokeLineHub
         {
             public Vector2 _center;
             public GlyphBoneJoint _headConnectedJoint;
@@ -74,20 +74,20 @@ namespace Typography.Rendering
         public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif
 
-        List<StrokeLinHub> _strokeLineHub;
+        List<StrokeLineHub> _strokeLineHub;
         public GlyphDynamicOutline(GlyphFitOutline fitOutline)
         {
 
 
             Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs = fitOutline.GetCentroidLineHubs();
-            _strokeLineHub = new List<StrokeLinHub>(centroidLineHubs.Count);
+            _strokeLineHub = new List<StrokeLineHub>(centroidLineHubs.Count);
 
             foreach (CentroidLineHub lineHub in centroidLineHubs.Values)
             {
                 Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
 
                 //a line hub contains many centriod branches                                 
-                StrokeLinHub internalLineHub = new StrokeLinHub();
+                StrokeLineHub internalLineHub = new StrokeLineHub();
                 var branchList = new List<StrokeLine>(branches.Count);
                 foreach (GlyphCentroidBranch branch in branches.Values)
                 {
@@ -121,7 +121,7 @@ namespace Typography.Rendering
         public void Walk()
         {
             //each centroid hub 
-            foreach (StrokeLinHub lineHub in _strokeLineHub)
+            foreach (StrokeLineHub lineHub in _strokeLineHub)
             {
                 Vector2 hubCenter = lineHub._center;
                 WalkHubCenter(hubCenter);
@@ -149,9 +149,6 @@ namespace Typography.Rendering
         }
         public void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
-
-
-
 
         }
         void WalkHubCenter(Vector2 hubCenter)
@@ -308,7 +305,6 @@ namespace Typography.Rendering
             delta = (v1 - v0) / 2;
             delta = delta.NewLength(len);
             delta.Rotate(90);
-
         }
         static void GeneratePerpendicularLines(
           Vector2 p0, Vector2 p1, float len,
@@ -391,7 +387,8 @@ namespace Typography.Rendering
 #endif
 
             if (dbugDrawRegeneratedOutlines)
-            {
+            { 
+                //old 
                 RegenerateBorders(segments, startAt, endAt);
             }
 

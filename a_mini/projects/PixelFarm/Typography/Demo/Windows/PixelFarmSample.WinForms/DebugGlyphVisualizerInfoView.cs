@@ -17,8 +17,14 @@ namespace SampleWinForms.UI
         TreeNode _orgVxsNode;
         TreeNode _flattenVxsNode;
         TreeNode _tessEdgeNode;
+        TreeNode _jointsNode;
+        TreeNode _trianglesNode;
+        TreeNode _bonesNode;
+
+        //
         VertexStore _orgVxs;
         VertexStore _flattenVxs;
+
 
         List<EdgeLine> _edgeLines = new List<EdgeLine>();
         int _addDebugMarkOnEdgeNo = 0;
@@ -31,7 +37,8 @@ namespace SampleWinForms.UI
         TreeNode _latestSelectedTreeNode;
         public DebugGlyphVisualizer Owner
         {
-            get; set;
+            get;
+            set;
         }
         public void SetTreeView(TreeView treeView)
         {
@@ -77,7 +84,21 @@ namespace SampleWinForms.UI
             _tessEdgeNode.Text = "tess_edges";
             _rootNode.Nodes.Add(_tessEdgeNode);
             //
+            //joints
+            _jointsNode = new TreeNode();
+            _jointsNode.Text = "joints";
+            _rootNode.Nodes.Add(_jointsNode);
 
+            //triangles
+            _trianglesNode = new TreeNode();
+            _trianglesNode.Text = "triangles";
+            _rootNode.Nodes.Add(_trianglesNode);
+            //
+            _bonesNode = new TreeNode();
+            _bonesNode.Text = "bones";
+            _rootNode.Nodes.Add(_bonesNode);
+
+            //
             _clearInfoView = true;//default
         }
         public void SetFlushOutputHander(SimpleAction flushOutput)
@@ -102,6 +123,68 @@ namespace SampleWinForms.UI
 
             switch (nodeinfo.NodeKind)
             {
+                default: throw new NotSupportedException();
+                case NodeInfoKind.Bone:
+                    {
+                        if (RequestGlyphRender != null)
+                        {
+                            _clearInfoView = false;
+                            RequestGlyphRender(this, EventArgs.Empty);
+
+                            GlyphBone bone = nodeinfo.Bone;
+                            var midPoint = bone.GetMidPoint() * PxScale;
+                            Owner.DrawMarker(midPoint.X, midPoint.Y, PixelFarm.Drawing.Color.Yellow);
+                            if (_flushOutput != null)
+                            {
+                                //TODO: review here
+                                _flushOutput();
+                            }
+                            _clearInfoView = true;
+                        }
+                    }
+                    break;
+                case NodeInfoKind.Tri:
+                    {
+
+                        //draw glyph triangle
+                        if (RequestGlyphRender != null)
+                        {
+                            _clearInfoView = false;
+                            RequestGlyphRender(this, EventArgs.Empty);
+
+                            GlyphTriangle tri = nodeinfo.GlyphTri;
+                            var cen_x = (float)(tri.CentroidX * PxScale);
+                            var cen_y = (float)(tri.CentroidY * PxScale);
+
+                            Owner.DrawMarker(cen_x, cen_y, PixelFarm.Drawing.Color.Yellow);
+                            if (_flushOutput != null)
+                            {
+                                //TODO: review here
+                                _flushOutput();
+                            }
+                            _clearInfoView = true;
+                        }
+                    }
+                    break;
+                case NodeInfoKind.RibEndPoint:
+                case NodeInfoKind.Joint:
+                    {
+                        if (RequestGlyphRender != null)
+                        {
+                            _clearInfoView = false;
+                            RequestGlyphRender(this, EventArgs.Empty);
+
+                            var pos = nodeinfo.Pos * PxScale;
+                            Owner.DrawMarker(pos.X, pos.Y, PixelFarm.Drawing.Color.Red);
+                            if (_flushOutput != null)
+                            {
+                                //TODO: review here
+                                _flushOutput();
+                            }
+                            _clearInfoView = true;
+                        }
+                    }
+                    break;
                 case NodeInfoKind.TessEdge:
                     {
                         _addDebugMarkOnEdgeNo = nodeinfo.TessEdgeNo;
@@ -155,6 +238,7 @@ namespace SampleWinForms.UI
                         }
                     }
                     break;
+
             }
 
         }
@@ -165,8 +249,90 @@ namespace SampleWinForms.UI
             {
                 _tessEdgeNode.Nodes.Clear();
                 _edgeLines.Clear();
+                _jointsNode.Nodes.Clear();
+                _trianglesNode.Nodes.Clear();
+                _bonesNode.Nodes.Clear();
             }
             _testEdgeCount = 0;
+        }
+        public void ShowTriangles(GlyphTriangle tri)
+        {
+            if (!_clearInfoView) { return; }
+            //-----------------------------
+            TreeNode triangleNode = new TreeNode() { Text = "tri:" + tri.ToString(), Tag = new NodeInfo(tri) };
+            _trianglesNode.Nodes.Add(triangleNode);
+        }
+        public void ShowBone(GlyphBone bone, GlyphBoneJoint jointA, GlyphBoneJoint jointB)
+        {
+            if (!_clearInfoView) { return; }
+            _treeView.SuspendLayout();
+            TreeNode jointNode = new TreeNode() { Text = bone.ToString(), Tag = new NodeInfo(bone, jointA, jointB) };
+            _bonesNode.Nodes.Add(jointNode);
+
+            _treeView.ResumeLayout();
+        }
+        public void ShowBone(GlyphBone bone, GlyphBoneJoint jointA, EdgeLine tipEdge)
+        {
+            if (!_clearInfoView) { return; }
+            _treeView.SuspendLayout();
+            TreeNode jointNode = new TreeNode() { Text = bone.ToString(), Tag = new NodeInfo(bone, jointA, tipEdge) };
+            _bonesNode.Nodes.Add(jointNode);
+
+            _treeView.ResumeLayout();
+        }
+        public void ShowJoint(GlyphBoneJoint joint)
+        {
+            if (!_clearInfoView) { return; }
+            //-------------- 
+            EdgeLine p_contactEdge = joint._p_contact_edge;
+            //mid point
+            var jointPos = joint.Position;
+            //painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
+
+            TreeNode jointNode = new TreeNode() { Tag = new NodeInfo(joint) };
+            bool added = false;
+            switch (joint.SelectedEdgePointCount)
+            {
+                default: throw new NotSupportedException();
+                case 0:
+                    //no rib
+                    jointNode.Text = "j:" + joint.ToString();
+                    _jointsNode.Nodes.Add(jointNode);
+                    added = true;
+                    break;
+                case 1:
+
+                    jointNode.Text = "j:" + joint.ToString();
+                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
+                    //
+                    _jointsNode.Nodes.Add(jointNode);
+                    added = true;
+
+                    break;
+                case 2:
+
+                    jointNode.Text = "j:" + joint.ToString();
+                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
+                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_b:" + joint.RibEndPointB, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointB) });
+                    //
+                    _jointsNode.Nodes.Add(jointNode);
+                    added = true;
+                    break;
+            }
+            if (joint.TipPoint != System.Numerics.Vector2.Zero)
+            {
+                //painter.Line(
+                //   jointPos.X * pxscale, jointPos.Y * pxscale,
+                //   joint.TipPoint.X * pxscale, joint.TipPoint.Y * pxscale,
+                //   PixelFarm.Drawing.Color.White);
+                jointNode.Nodes.Add(new TreeNode() { Text = "tip:" + joint.TipPoint, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPoint) });
+                if (!added)
+                {
+                    _jointsNode.Nodes.Add(jointNode);
+                    added = true;
+                }
+            }
+
         }
         public void ShowEdge(EdgeLine edge)
         {
@@ -258,10 +424,18 @@ namespace SampleWinForms.UI
             OrgVertexCommand,
             FlattenVertexCommand,
             TessEdge,
+            Joint,
+            RibEndPoint,
+            Tri,
+            Bone,
         }
         class NodeInfo
         {
             EdgeLine edge;
+            GlyphBoneJoint joint;
+            GlyphBone bone;
+            System.Numerics.Vector2 pos;
+            GlyphTriangle tri;
 
             public NodeInfo(NodeInfoKind nodeKind, EdgeLine edge, int edgeNo)
             {
@@ -274,12 +448,44 @@ namespace SampleWinForms.UI
                 this.VertexCommandNo = borderNo;
                 this.NodeKind = nodeKind;
             }
+            public NodeInfo(GlyphBoneJoint joint)
+            {
+                this.joint = joint;
+                this.pos = joint.Position;
+                this.NodeKind = NodeInfoKind.Joint;
+            }
+            public NodeInfo(GlyphBone bone, GlyphBoneJoint a, GlyphBoneJoint b)
+            {
+                this.bone = bone;
+                this.NodeKind = NodeInfoKind.Bone;
+            }
+
+            public NodeInfo(GlyphBone bone, GlyphBoneJoint a, EdgeLine tipEdge)
+            {
+                this.bone = bone;
+                this.NodeKind = NodeInfoKind.Bone;
+            }
+            public NodeInfo(GlyphTriangle tri)
+            {
+                this.tri = tri;
+                this.pos = new System.Numerics.Vector2((float)tri.CentroidX, (float)tri.CentroidY);
+                this.NodeKind = NodeInfoKind.Tri;
+            }
+            public NodeInfo(NodeInfoKind nodeKind, System.Numerics.Vector2 pos)
+            {
+                this.pos = pos;
+                this.NodeKind = NodeInfoKind.Joint;
+            }
             public int VertexCommandNo { get; set; }
             public NodeInfoKind NodeKind { get; set; }
             public int TessEdgeNo
             {
                 get; set;
             }
+            public GlyphTriangle GlyphTri { get { return tri; } }
+            public GlyphBone Bone { get { return this.bone; } }
+
+            public System.Numerics.Vector2 Pos { get { return pos; } }
         }
     }
 }
