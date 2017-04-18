@@ -760,29 +760,29 @@ namespace Typography.Rendering
 #endif
                         //create a perpedicular line from midpoint of contact edge to the outside                          
 
-                        //find min /max
-                        //Vector2 min, max;
 
-                        //bone.GetMinMax(out min, out max);
-                        //pointIsOnTheBone = cutPoint.X >= min.X && cutPoint.X <= max.X && cutPoint.Y >= min.Y && cutPoint.Y <= max.Y;
-                        //return cutPoint;
-
-                        Vector2 cut1 = MyMath.FindPerpendicularCutPoint(outside0, contactEdge.GetMidPoint());
-                        //check if cut1 is on the edge on not
-
-                        Vector2 min, max; //TODO: review here
-                        outside0.GetMinMax(out min, out max);
-                        if (cut1.X >= min.X && cut1.X <= max.X && cut1.Y >= min.Y && cut1.Y <= max.Y)
+                        Vector2 cut1;
+                        if (MyMath.FindPerpendicularCutPoint(outside0, contactEdge.GetMidPoint(), out cut1))
                         {
+
                             outside0.AddCutPoints(
-                               cut1,
-                               contactEdge.GetMidPoint());
+                              cut1,
+                              contactEdge.GetMidPoint());
                         }
+
                     }
                     break;
                 case 2:
                     {
                         //this is tip
+
+
+
+
+
+
+
+
 
 
                     }
@@ -919,8 +919,11 @@ namespace Typography.Rendering
                         //tip end
 
 
-                        Vector2 perpend_A = MyMath.FindPerpendicularCutPoint(firstEdge, ownerEdgeJoint.Position);
-                        Vector2 perpend_B = MyMath.FindPerpendicularCutPoint(secondEdge, ownerEdgeJoint.Position);
+                        //TODO: review when a perpendicular line is not on  the edge.
+
+                        Vector2 perpend_A, perpend_B;
+                        MyMath.FindPerpendicularCutPoint(firstEdge, ownerEdgeJoint.Position, out perpend_A);
+                        MyMath.FindPerpendicularCutPoint(secondEdge, ownerEdgeJoint.Position, out perpend_B);
                         Vector2 p_corner = new Vector2((float)contactEdge.p.X, (float)contactEdge.p.Y);
                         GlyphPoint2D p_ = contactEdge.GlyphPoint_P;
                         GlyphPoint2D q_ = contactEdge.GlyphPoint_Q;

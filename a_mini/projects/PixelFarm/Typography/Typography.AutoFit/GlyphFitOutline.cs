@@ -227,9 +227,8 @@ namespace Typography.Rendering
                                     }
                                     TempSqLengthResult result = new TempSqLengthResult();
                                     result.bone = bone;
-                                    bool pointIsOnBone;
-                                    result.cutPoint = MyMath.FindPerpendicularCutPoint(bone, glyph_point_xy, out pointIsOnBone);
-                                    if (pointIsOnBone)
+                                 
+                                    if (MyMath.FindPerpendicularCutPoint(bone, glyph_point_xy, out result.cutPoint))
                                     {
                                         result.sq_distance = MyMath.SquareDistance(result.cutPoint, glyph_point_xy);
                                         tempSqLenDic.Add(bone, result);
