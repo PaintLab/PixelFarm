@@ -16,7 +16,7 @@ namespace SampleWinForms.UI
         TreeNode _rootNode;
         TreeNode _orgVxsNode;
         TreeNode _flattenVxsNode;
-        TreeNode _tessEdgeNode;
+        TreeNode _tessEdgesNode;
         TreeNode _jointsNode;
         TreeNode _trianglesNode;
         TreeNode _bonesNode;
@@ -80,9 +80,9 @@ namespace SampleWinForms.UI
             _rootNode.Nodes.Add(_flattenVxsNode);
             //
             //edges
-            _tessEdgeNode = new TreeNode();
-            _tessEdgeNode.Text = "tess_edges";
-            _rootNode.Nodes.Add(_tessEdgeNode);
+            _tessEdgesNode = new TreeNode();
+            _tessEdgesNode.Text = "tess_edges";
+            _rootNode.Nodes.Add(_tessEdgesNode);
             //
             //joints
             _jointsNode = new TreeNode();
@@ -247,7 +247,7 @@ namespace SampleWinForms.UI
         {
             if (_clearInfoView)
             {
-                _tessEdgeNode.Nodes.Clear();
+                _tessEdgesNode.Nodes.Clear();
                 _edgeLines.Clear();
                 _jointsNode.Nodes.Clear();
                 _trianglesNode.Nodes.Clear();
@@ -359,8 +359,14 @@ namespace SampleWinForms.UI
             NodeInfo nodeInfo = new NodeInfo(NodeInfoKind.TessEdge, edge, _edgeLines.Count);
             TreeNode nodeEdge = new TreeNode();
             nodeEdge.Tag = nodeInfo;
-            nodeEdge.Text = "e " + _testEdgeCount + " :(" + p.X + "," + p.Y + ")" + "=>(" + q.X + "," + q.Y + ")";
-            _tessEdgeNode.Nodes.Add(nodeEdge);
+            nodeEdge.Text = "e id=" + edge.dbugId + ",count="
+                + _testEdgeCount + " :(" + p.X + "," + p.Y + ")" + "=>(" + q.X + "," + q.Y + ") ";
+            //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
+            //{
+            //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;
+            //}
+
+            _tessEdgesNode.Nodes.Add(nodeEdge);
             //------------------------------- 
 
             _edgeLines.Add(edge);

@@ -97,6 +97,10 @@ namespace Typography.Rendering
         public EdgeLine contactToEdge;
         //------------------------------
 
+#if DEBUG
+        public static int s_dbugTotalId;
+        public readonly int dbugId = s_dbugTotalId++;
+#endif
         public EdgeLine(TriangulationPoint p, TriangulationPoint q)
         {
             this.p = p;
@@ -134,6 +138,7 @@ namespace Typography.Rendering
             get;
             private set;
         }
+       
         public bool IsOutside
         {
             get;
@@ -221,6 +226,30 @@ namespace Typography.Rendering
             }
 #endif
         }
-    }
+        public List<CutLine> cutLines;
+        public void AddCutPoints(
+            Vector2 cutPointOnBone,
+            Vector2 glyphBoneJoint)
+        {
+            if (cutLines == null) { cutLines = new List<CutLine>(); }
+            var cutLine = new CutLine();
+            cutLine.x0 = cutPointOnBone.X;
+            cutLine.y0 = cutPointOnBone.Y;
+            cutLine.x1 = glyphBoneJoint.X;
+            cutLine.y1 = glyphBoneJoint.Y;
 
+            cutLines.Add(cutLine);
+        }
+    }
+    public struct CutLine
+    {
+        public float x0, y0, x1, y1;
+        public CutLine(float x0, float y0, float x1, float y1)
+        {
+            this.x0 = x0;
+            this.y0 = y0;
+            this.x1 = x1;
+            this.y1 = y1;
+        }
+    }
 }
