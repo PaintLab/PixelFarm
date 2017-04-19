@@ -404,17 +404,14 @@ namespace Typography.Rendering
     }
 
     public class GlyphPoint2D
-    {
-
-        //glyph point 
-        //for analysis
-        public readonly double x;
-        public readonly double y;
+    {       
+        public readonly float x;
+        public readonly float y;
         public readonly PointKind kind;
 
         // 
-        double _adjX;
-        double _adjY;
+        float _adjX;
+        float _adjY;
         //
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
@@ -432,7 +429,7 @@ namespace Typography.Rendering
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
-        public GlyphPoint2D(double x, double y, PointKind kind)
+        public GlyphPoint2D(float x, float y, PointKind kind)
         {
             this.x = x;
             this.y = y;
@@ -442,7 +439,7 @@ namespace Typography.Rendering
         {
             return x == another.x && y == another.y;
         }
-        public double AdjustedY
+        public float AdjustedY
         {
             get { return _adjY; }
             internal set
@@ -450,7 +447,7 @@ namespace Typography.Rendering
                 _adjY = value;
             }
         }
-        public double AdjustedX
+        public float AdjustedX
         {
             get { return _adjX; }
             internal set
@@ -530,9 +527,12 @@ namespace Typography.Rendering
             return dbugId + " :" + ((AdjustedY != 0) ? "***" : "") +
                     (x + "," + y + " " + kind.ToString());
         }
-#endif
-
+#endif 
     }
+
+
+
+
     public class GlyphLine : GlyphPart
     {
 
