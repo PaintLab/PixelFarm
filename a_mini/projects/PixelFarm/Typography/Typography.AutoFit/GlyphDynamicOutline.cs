@@ -7,9 +7,8 @@ using Typography.OpenFont;
 namespace Typography.Rendering
 {
 
-    public class GlyphDynamicOutline3
+    public class GlyphDynamicOutline
     {
-
 
         class StrokeLine
         {
@@ -66,19 +65,28 @@ namespace Typography.Rendering
             public List<StrokeLine> _branches;
         }
 
-#if DEBUG 
-        float pxscale;
+
+        List<GlyphContour> _contours;
+#if DEBUG
+        GlyphIntermediateOutline _dbugTempIntermediateOutline;
+
         public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif
 
+        public float LeftControlPosX { get; set; }
         List<StrokeLineHub> _strokeLineHub;
-        public GlyphDynamicOutline3(GlyphIntermediateOutline fitOutline)
+        internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
 
+#if DEBUG
+            _dbugTempIntermediateOutline = intermediateOutline;
+#endif
 
-            Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs = fitOutline.GetCentroidLineHubs();
+            _contours = intermediateOutline.GetContours();
+            //
+            Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs = intermediateOutline.GetCentroidLineHubs();
             _strokeLineHub = new List<StrokeLineHub>(centroidLineHubs.Count);
-
+            //
             foreach (CentroidLineHub lineHub in centroidLineHubs.Values)
             {
                 Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
@@ -109,6 +117,22 @@ namespace Typography.Rendering
 
         }
 
+#if DEBUG
+        public List<GlyphTriangle> dbugGetGlyphTriangles()
+        {
+            return _dbugTempIntermediateOutline.GetTriangles();
+        }
+        public Dictionary<GlyphTriangle, CentroidLineHub> dbugGetCentroidLineHubs()
+        {
+            return _dbugTempIntermediateOutline.GetCentroidLineHubs();
+        }
+#endif
+#if DEBUG
+        public static List<GlyphPoint2D> s_dbugAffectedPoints = new List<GlyphPoint2D>();
+        public static Dictionary<GlyphPoint2D, bool> s_dbugAff2 = new Dictionary<GlyphPoint2D, bool>();
+
+#endif
+
         public void Walk()
         {
             //each centroid hub 
@@ -138,9 +162,334 @@ namespace Typography.Rendering
                 }
             }
         }
+        float pxScale;
         public void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
+            this.pxScale = pxScale;
 
+            List<GlyphContour> contours = this._contours;
+            int j = contours.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //new contour
+                contours[i].ClearAllAdjustValues();
+            }
+#if DEBUG
+            s_dbugAffectedPoints.Clear();
+            s_dbugAff2.Clear();
+#endif
+            List<List<Vector2>> genPointList = new List<List<Vector2>>();
+            for (int i = 0; i < j; ++i)
+            {
+                //new contour
+                List<Vector2> genPoints = new List<Vector2>();
+                GenerateNewFitPoints(genPoints,
+                    contours[i], pxScale,
+                    false, true, false);
+                genPointList.Add(genPoints);
+            }
+
+            //-------------
+            //TEST:
+            //fit make the glyph look sharp
+            //we try to adjust the vertical bone to fit 
+            //the pixel (prevent blur) 
+
+            j = genPointList.Count;
+            double minorOffset = 0;
+            LeftControlPosX = 0;
+            int longBoneCount = 0;
+            if (_dbugTempIntermediateOutline.LongVerticalBones != null && (longBoneCount = _dbugTempIntermediateOutline.LongVerticalBones.Count) > 0)
+            {
+                ////only longest bone
+
+                //the first one is the longest bone.
+                GlyphBone longVertBone = _dbugTempIntermediateOutline.LongVerticalBones[0];
+                var leftTouchPos = longVertBone.LeftMostPoint();
+                LeftControlPosX = leftTouchPos;
+                //double avgWidth = longVertBone.CalculateAvgBoneWidth();
+                //System.Numerics.Vector2 midBone = longVertBone.JointA.Position;
+
+                ////left side
+                //double newLeftAndScale = (midBone.X - (avgWidth / 2)) * pxScale;
+                ////then move to fit int
+                //minorOffset = MyMath.FindDiffToFitInteger((float)newLeftAndScale);
+                //for (int m = 0; m < j; ++m)
+                //{
+                //    OffsetPoints(genPointList[m], minorOffset);
+                //}
+            }
+            else
+            {
+                //no vertical long bone
+                //so we need left most point
+                float leftmostX = FindLeftMost(genPointList);
+                LeftControlPosX = leftmostX;
+            }
+            //-------------
+
+            tx.BeginRead(j);
+            for (int i = 0; i < j; ++i)
+            {
+                GenerateFitOutput(tx, genPointList[i], contours[i]);
+            }
+            tx.EndRead();
+            //-------------
+        }
+
+
+        const int GRID_SIZE = 1;
+        const float GRID_SIZE_25 = 1f / 4f;
+        const float GRID_SIZE_50 = 2f / 4f;
+        const float GRID_SIZE_75 = 3f / 4f;
+
+        const float GRID_SIZE_33 = 1f / 3f;
+        const float GRID_SIZE_66 = 2f / 3f;
+
+        static float FindLeftMost(List<List<Vector2>> genPointList)
+        {
+            //find left most x value
+            float min = float.MaxValue;
+            for (int i = genPointList.Count - 1; i >= 0; --i)
+            {
+                //new contour
+                List<Vector2> genPoints = genPointList[i];
+                for (int m = genPoints.Count - 1; m >= 0; --m)
+                {
+                    Vector2 p = genPoints[m];
+                    if (p.X < min)
+                    {
+                        min = p.X;
+                    }
+                }
+            }
+            return min;
+        }
+        static float RoundToNearestY(GlyphPoint2D p, float org, bool useHalfPixel)
+        {
+            float floo_int = (int)org;//floor 
+            float remaining = org - floo_int;
+            if (useHalfPixel)
+            {
+                if (remaining > GRID_SIZE_66)
+                {
+                    return (floo_int + 1f);
+                }
+                else if (remaining > (GRID_SIZE_33))
+                {
+                    return (floo_int + 0.5f);
+                }
+                else
+                {
+                    return floo_int;
+                }
+            }
+            else
+            {
+                if (remaining > GRID_SIZE_50)
+                {
+                    return (floo_int + 1f);
+                }
+                else
+                {
+                    //we we move this point down
+                    //the upper part point may affect the other(lower side)
+                    //1.horizontal edge
+
+                    EdgeLine h_edge = p.horizontalEdge;
+                    EdgeLine matching_anotherSide = h_edge.GetMatchingOutsideEdge();
+                    if (matching_anotherSide != null)
+                    {
+                        Poly2Tri.TriangulationPoint a_p = matching_anotherSide.p;
+                        Poly2Tri.TriangulationPoint a_q = matching_anotherSide.q;
+                        if (a_p != null && a_p.userData is GlyphPoint2D)
+                        {
+                            GlyphPoint2D a_glyph_p = (GlyphPoint2D)a_p.userData;
+                            a_glyph_p.AdjustedY = -remaining;
+#if DEBUG
+                            if (!s_dbugAff2.ContainsKey(a_glyph_p))
+                            {
+                                s_dbugAff2.Add(a_glyph_p, true);
+                                s_dbugAffectedPoints.Add(a_glyph_p);
+                            }
+
+#endif
+                        }
+                        if (a_q != null && a_q.userData is GlyphPoint2D)
+                        {
+                            GlyphPoint2D a_glyph_q = (GlyphPoint2D)a_q.userData;
+                            a_glyph_q.AdjustedY = -remaining;
+#if DEBUG
+                            if (!s_dbugAff2.ContainsKey(a_glyph_q))
+                            {
+                                s_dbugAff2.Add(a_glyph_q, true);
+                                s_dbugAffectedPoints.Add(a_glyph_q);
+                            }
+
+#endif
+                        }
+                    }
+
+                    return floo_int;
+                }
+            }
+        }
+        static float RoundToNearestX(float org)
+        {
+            float actual1 = org;
+            float integer1 = (int)(actual1);//lower
+            float floatModulo = actual1 - integer1;
+
+            if (floatModulo >= (GRID_SIZE_50))
+            {
+                return (integer1 + 1);
+            }
+            else
+            {
+                return integer1;
+            }
+        }
+        static void GenerateNewFitPoints(
+            List<Vector2> genPoints,
+            GlyphContour contour,
+            float pixelScale,
+            bool x_axis,
+            bool y_axis,
+            bool useHalfPixel)
+        {
+            List<GlyphPoint2D> flattenPoints = contour.flattenPoints;
+
+            int j = flattenPoints.Count;
+            //merge 0 = start
+            //double prev_px = 0;
+            //double prev_py = 0;
+            double p_x = 0;
+            double p_y = 0;
+            double first_px = 0;
+            double first_py = 0;
+
+            //---------------
+            //1st round for value adjustment
+            //---------------
+
+            //find adjust y
+
+            {
+                GlyphPoint2D p = flattenPoints[0];
+                p_x = p.x * pixelScale;
+                p_y = p.y * pixelScale;
+
+                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide) //TODO: review here
+                {
+                    //vertical fitting, fit p_y to grid
+                    //adjust if p is not part of curve
+                    switch (p.kind)
+                    {
+                        case PointKind.LineStart:
+                        case PointKind.LineStop:
+                            p_y = RoundToNearestY(p, (float)p_y, useHalfPixel);
+                            break;
+                    }
+
+                }
+                if (x_axis && p.IsPartOfVerticalEdge && p.IsLeftSide)
+                {
+                    //horizontal fitting, fix p_x to grid
+                    float new_x = RoundToNearestX((float)p_x);
+                    p_x = new_x;
+                    //adjust right-side vertical edge
+                    EdgeLine rightside = p.GetMatchingVerticalEdge();
+                }
+
+                genPoints.Add(new Vector2((float)p_x, (float)p_y));
+                //-------------
+                first_px = p_x;
+                first_py = p_y;
+            }
+
+            for (int i = 1; i < j; ++i)
+            {
+                //all merge point is polygon point
+                GlyphPoint2D p = flattenPoints[i];
+                p_x = p.x * pixelScale;
+                p_y = p.y * pixelScale;
+
+
+                if (y_axis && p.isPartOfHorizontalEdge && p.isUpperSide)  //TODO: review here
+                {
+                    //vertical fitting, fit p_y to grid
+                    p_y = RoundToNearestY(p, (float)p_y, useHalfPixel);
+                }
+
+                if (x_axis && p.IsPartOfVerticalEdge && p.IsLeftSide)
+                {
+                    //horizontal fitting, fix p_x to grid
+                    float new_x = RoundToNearestX((float)p_x);
+                    p_x = new_x;
+                }
+
+                genPoints.Add(new Vector2((float)p_x, (float)p_y));
+            }
+        }
+
+
+        static void GenerateFitOutput(
+          IGlyphTranslator tx,
+          List<Vector2> genPoints,
+          GlyphContour contour)
+        {
+
+            int j = genPoints.Count;
+            //merge 0 = start
+            //double prev_px = 0;
+            //double prev_py = 0; 
+            float first_px = 0;
+            float first_py = 0;
+            //---------------
+            //1st round for value adjustment
+            //---------------
+
+            //find adjust y
+            List<GlyphPoint2D> flattenPoints = contour.flattenPoints;
+            //---------------
+            if (j != flattenPoints.Count)
+            {
+                throw new NotSupportedException();
+            }
+            //---------------
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphPoint2D glyphPoint = flattenPoints[i];
+                Vector2 p = genPoints[i];
+
+                if (glyphPoint.AdjustedY != 0)
+                {
+                    if (i == 0)
+                    {
+                        //first point
+                        tx.MoveTo(first_px = p.X, first_py = (float)(p.Y + glyphPoint.AdjustedY));
+                    }
+                    else
+                    {
+                        tx.LineTo(p.X, (float)(p.Y + glyphPoint.AdjustedY));
+                    }
+                }
+                else
+                {
+                    if (i == 0)
+                    {
+                        //first point
+                        tx.MoveTo(first_px = p.X, first_py = p.Y);
+                    }
+                    else
+                    {
+                        tx.LineTo(p.X, p.Y);
+                    }
+                }
+            }
+            //close
+
+            tx.CloseContour();
         }
         void WalkHubCenter(Vector2 hubCenter)
         {
@@ -325,24 +674,24 @@ namespace Typography.Rendering
 
                     //create perpendicular 
                     Vector2 delta;
-                    GeneratePerpendicularLines(jointA._position, jointB._position, 5 / pxscale, out delta);
+                    GeneratePerpendicularLines(jointA._position, jointB._position, 5 / pxScale, out delta);
                     //upper and lower
-                    newBorders.Insert(0, (jointA._position + new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
-                    newBorders.Add((jointA._position - new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
+                    newBorders.Insert(0, (jointA._position + new Vector2((float)delta.X, (float)delta.Y)) * pxScale);
+                    newBorders.Add((jointA._position - new Vector2((float)delta.X, (float)delta.Y)) * pxScale);
                     //
-                    newBorders.Insert(0, (jointB._position + new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
-                    newBorders.Add((jointB._position - new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
+                    newBorders.Insert(0, (jointB._position + new Vector2((float)delta.X, (float)delta.Y)) * pxScale);
+                    newBorders.Add((jointB._position - new Vector2((float)delta.X, (float)delta.Y)) * pxScale);
                 }
                 if (jointA != null && jointA.hasTip)
                 {
                     Vector2 jointAPoint = jointA._position;
                     Vector2 delta;
-                    GeneratePerpendicularLines(jointA._position, jointA._tip_endAt, 5 / pxscale, out delta);
-                    newBorders.Insert(0, (jointA._position + new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
-                    newBorders.Add((jointA._position - new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
+                    GeneratePerpendicularLines(jointA._position, jointA._tip_endAt, 5 / pxScale, out delta);
+                    newBorders.Insert(0, (jointA._position + new Vector2((float)delta.X, (float)delta.Y)) * pxScale);
+                    newBorders.Add((jointA._position - new Vector2((float)delta.X, (float)delta.Y)) * pxScale);
                     //
-                    newBorders.Insert(0, (jointA._tip_endAt + new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
-                    newBorders.Add((jointA._tip_endAt - new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
+                    newBorders.Insert(0, (jointA._tip_endAt + new Vector2((float)delta.X, (float)delta.Y)) * pxScale);
+                    newBorders.Add((jointA._tip_endAt - new Vector2((float)delta.X, (float)delta.Y)) * pxScale);
                 }
             }
             ////---------------------------------------------------
