@@ -154,8 +154,8 @@ namespace SampleWinForms.UI
 
             if (DrawDynamicOutline)
             {
-                GlyphIntermediateOutline fitOutline = builder.LatestGlyphFitOutline;
-                DynamicOutline(painter, fitOutline, scale, DrawRegenerateOutline);
+                GlyphDynamicOutline dynamicOutline = builder.LatestGlyphFitOutline;
+                DynamicOutline(painter, dynamicOutline, scale, DrawRegenerateOutline);
             }
 
         }
@@ -164,10 +164,10 @@ namespace SampleWinForms.UI
         {
 #if DEBUG
 
-            GlyphIntermediateOutline fitOutline = builder.LatestGlyphFitOutline;
-            if (fitOutline != null)
+            GlyphDynamicOutline dynamicOutline = builder.LatestGlyphFitOutline;
+            if (dynamicOutline != null)
             {
-                DrawTriangulatedGlyph(painter, fitOutline, _pxscale);
+                DrawTriangulatedGlyph(painter, dynamicOutline, _pxscale);
             }
 #endif
         }
@@ -555,10 +555,10 @@ namespace SampleWinForms.UI
         }
 
 
-        public void DrawTriangulatedGlyph(CanvasPainter painter, GlyphIntermediateOutline glyphFitOutline, float pxscale)
+        public void DrawTriangulatedGlyph(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale)
         {
             painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
-            List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
+            List<GlyphTriangle> triAngles = dynamicOutline.dbugGetGlyphTriangles();
             int j = triAngles.Count;
             // 
             bool drawCentroidBone = this.DrawCentroidBone;
@@ -588,7 +588,7 @@ namespace SampleWinForms.UI
                 return;
             }
             //--------------- 
-            Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHub = glyphFitOutline.GetCentroidLineHubs();
+            Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHub = dynamicOutline.dbugGetCentroidLineHubs();
             //--------------- 
 
 
@@ -655,11 +655,11 @@ namespace SampleWinForms.UI
                 }
             }
         }
-        public void DynamicOutline(CanvasPainter painter, GlyphIntermediateOutline glyphFitOutline, float pxscale, bool withRegenerateOutlines)
+        public void DynamicOutline(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale, bool withRegenerateOutlines)
         {
-            GlyphDynamicOutline2 dynamicOutline = new GlyphDynamicOutline2(glyphFitOutline);
+
 #if DEBUG
-            dynamicOutline.dbugSetCanvasPainter(painter, pxscale);
+            //dynamicOutline.dbugSetCanvasPainter(painter, pxscale);
             dynamicOutline.dbugDrawRegeneratedOutlines = withRegenerateOutlines;
 #endif
             dynamicOutline.Walk();

@@ -7,8 +7,8 @@ using Typography.OpenFont;
 namespace Typography.Rendering
 {
 
-    public class GlyphDynamicOutline3
-    { 
+    public class GlyphDynamicOutline
+    {
 
         class StrokeLine
         {
@@ -66,15 +66,17 @@ namespace Typography.Rendering
         }
 
 #if DEBUG 
+        Internal.GlyphIntermediateOutline _fitOutline;
         float pxscale;
         public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif
 
+        public float LeftControlPosX { get; set; }
         List<StrokeLineHub> _strokeLineHub;
-        public GlyphDynamicOutline3(GlyphIntermediateOutline fitOutline)
+        internal GlyphDynamicOutline(Internal.GlyphIntermediateOutline fitOutline)
         {
 
-
+            _fitOutline = fitOutline;
             Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs = fitOutline.GetCentroidLineHubs();
             _strokeLineHub = new List<StrokeLineHub>(centroidLineHubs.Count);
 
@@ -108,6 +110,16 @@ namespace Typography.Rendering
 
         }
 
+#if DEBUG
+        public List<GlyphTriangle> dbugGetGlyphTriangles()
+        {
+            return _fitOutline.GetTriangles();
+        }
+        public Dictionary<GlyphTriangle, CentroidLineHub> dbugGetCentroidLineHubs()
+        {
+            return _fitOutline.GetCentroidLineHubs();
+        }
+#endif
         public void Walk()
         {
             //each centroid hub 

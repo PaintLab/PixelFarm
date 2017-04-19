@@ -9,9 +9,9 @@ namespace Typography.Rendering
 
     public class GlyphPathBuilder : GlyphPathBuilderBase
     {
-        GlyphFitOutlineAnalyzer _fitShapeAnalyzer = new GlyphFitOutlineAnalyzer();
-        Dictionary<ushort, GlyphIntermediateOutline> _fitoutlineCollection = new Dictionary<ushort, GlyphIntermediateOutline>();
-        GlyphIntermediateOutline _fitOutline;
+        GlyphOutlineAnalyzer _fitShapeAnalyzer = new GlyphOutlineAnalyzer();
+        Dictionary<ushort, GlyphDynamicOutline> _fitoutlineCollection = new Dictionary<ushort, GlyphDynamicOutline>();
+        GlyphDynamicOutline _latestDynamicOutline;
         public GlyphPathBuilder(Typeface typeface)
             : base(typeface)
         {
@@ -26,7 +26,7 @@ namespace Typography.Rendering
             //not use interperter so we need to scale it with our machnism
             //this demonstrate our auto hint engine ***
             //you can change this to your own hint engine***   
-            _fitOutline = null;//reset
+            _latestDynamicOutline = null;//reset
             if (this.UseTrueTypeInstructions)
             {
                 base.FitCurrentGlyph(glyphIndex, glyph);
@@ -35,7 +35,7 @@ namespace Typography.Rendering
             {
                 if (this.UseVerticalHinting)
                 {
-                    if (!_fitoutlineCollection.TryGetValue(glyphIndex, out _fitOutline))
+                    if (!_fitoutlineCollection.TryGetValue(glyphIndex, out _latestDynamicOutline))
                     {
 
                         //---------------------------------------------
@@ -54,11 +54,11 @@ namespace Typography.Rendering
                         //_fitOutline = _fitShapeAnalyzer.dbugAnalyze(contBuilder.CurrentContour, new ushort[] { 3 });
 
                         //---------------------------------------------
-                        _fitOutline = _fitShapeAnalyzer.CreateGlyphFitOutline(
+                        _latestDynamicOutline = _fitShapeAnalyzer.CreateGlyphFitOutline(
                             this._outputGlyphPoints,
                             this._outputContours);
-                        _fitoutlineCollection.Add(glyphIndex, _fitOutline);
-                        this.LeftXControl = _fitOutline.LeftControlPosX;
+                        _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
+                        this.LeftXControl = _latestDynamicOutline.LeftControlPosX;
                     }
                 }
             }
@@ -105,8 +105,8 @@ namespace Typography.Rendering
                     toPixelScale = 1;
                 }
 
-                _fitOutline.GenerateOutput(tx, toPixelScale);
-                this.LeftXControl = _fitOutline.LeftControlPosX;
+                _latestDynamicOutline.GenerateOutput(tx, toPixelScale);
+                this.LeftXControl = _latestDynamicOutline.LeftControlPosX;
             }
             else
             {
@@ -114,11 +114,11 @@ namespace Typography.Rendering
             }
         }
 
-        public GlyphIntermediateOutline LatestGlyphFitOutline
+        public GlyphDynamicOutline LatestGlyphFitOutline
         {
             get
             {
-                return _fitOutline;
+                return _latestDynamicOutline;
             }
         }
 

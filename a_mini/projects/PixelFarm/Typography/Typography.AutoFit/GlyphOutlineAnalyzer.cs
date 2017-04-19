@@ -7,11 +7,11 @@ namespace Typography.Rendering
     //This is PixelFarm's AutoFit
     //NOT FREE TYPE AUTO FIT***
 
-    public class GlyphFitOutlineAnalyzer
+    public class GlyphOutlineAnalyzer
     {
         GlyphPartFlattener _glyhFlattener = new GlyphPartFlattener();
         GlyphContourBuilder _glyphToCountor = new GlyphContourBuilder();
-        public GlyphFitOutlineAnalyzer()
+        public GlyphOutlineAnalyzer()
         {
 
         }
@@ -22,7 +22,7 @@ namespace Typography.Rendering
         /// <param name="glyphPoints"></param>
         /// <param name="glyphContours"></param>
         /// <returns></returns>
-        public GlyphIntermediateOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
+        public GlyphDynamicOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
         {
 
             //1. convert original glyph point to contour
@@ -49,7 +49,7 @@ namespace Typography.Rendering
         }
 
 
-        static GlyphIntermediateOutline CreateDynamicOutline(List<GlyphContour> contours)
+        static GlyphDynamicOutline CreateDynamicOutline(List<GlyphContour> contours)
         {
 
             int cntCount = contours.Count;
@@ -86,10 +86,10 @@ namespace Typography.Rendering
             //------------------------------------------
             //2. tri angulate 
             Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
-            
-            //3. intermediate outline is used inside this lib
-            GlyphIntermediateOutline glyphFitOutline = new GlyphIntermediateOutline(mainPolygon, contours);
 
+            //3. intermediate outline is used inside this lib
+
+            Internal.GlyphIntermediateOutline glyphFitOutline = new Internal.GlyphIntermediateOutline(mainPolygon, contours);
             List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
             int triangleCount = triAngles.Count;
             for (int i = 0; i < triangleCount; ++i)
@@ -104,8 +104,7 @@ namespace Typography.Rendering
 
             //convert intermediate outline to dynamic outline
 
-
-            return glyphFitOutline;
+            return new GlyphDynamicOutline(glyphFitOutline);
         }
 
 

@@ -5,7 +5,7 @@ using Typography.OpenFont;
 using Poly2Tri;
 using System.Numerics;
 
-namespace Typography.Rendering
+namespace Typography.Rendering.Internal
 {
 
     public class GlyphIntermediateOutline
