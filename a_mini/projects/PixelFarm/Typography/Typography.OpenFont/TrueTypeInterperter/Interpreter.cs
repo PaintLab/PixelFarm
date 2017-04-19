@@ -653,158 +653,157 @@ namespace Typography.OpenFont
                             break;
                         }
 
-                        {
+                        //{
 
-                            //WinterDev's new managed version
+                        //    //WinterDev's new managed version
+                        //    GlyphPointF[] currentPnts = points.Current;
+                        //    GlyphPointF[] originalPnts = points.Original;
 
-                            GlyphPointF[] currentPnts = points.Current;
-                            GlyphPointF[] originalPnts = points.Original;
+                        //    int cnt_count = contours.Length;
+                        //    int point = 0;
+                        //    // opcode controls whether we care about X or Y direction
+                        //    // do some pointer trickery so we can operate on the
+                        //    // points in a direction-agnostic manner
+                        //    TouchState touchMask;
 
-                            int cnt_count = contours.Length;
-                            int point = 0;
-                            // opcode controls whether we care about X or Y direction
-                            // do some pointer trickery so we can operate on the
-                            // points in a direction-agnostic manner
-                            TouchState touchMask;
+                        //    if (opcode == OpCode.IUP0)
+                        //    {
+                        //        //y -axis
+                        //        touchMask = TouchState.Y;
 
-                            if (opcode == OpCode.IUP0)
-                            {
-                                //y -axis
-                                touchMask = TouchState.Y;
+                        //        //
+                        //        for (int i = 0; i < cnt_count; ++i)
+                        //        {
+                        //            int endPoint = contours[i];
+                        //            int firstPoint = point;
+                        //            int firstTouched = -1;
+                        //            int lastTouched = -1;
 
-                                //
-                                for (int i = 0; i < cnt_count; ++i)
-                                {
-                                    int endPoint = contours[i];
-                                    int firstPoint = point;
-                                    int firstTouched = -1;
-                                    int lastTouched = -1;
+                        //            for (; point <= endPoint; point++)
+                        //            {
+                        //                // check whether this point has been touched
+                        //                if ((points.TouchState[point] & touchMask) != 0)
+                        //                {
+                        //                    // if this is the first touched point in the contour, note it and continue
+                        //                    if (firstTouched < 0)
+                        //                    {
+                        //                        firstTouched = point;
+                        //                        lastTouched = point;
+                        //                        continue;
+                        //                    }
 
-                                    for (; point <= endPoint; point++)
-                                    {
-                                        // check whether this point has been touched
-                                        if ((points.TouchState[point] & touchMask) != 0)
-                                        {
-                                            // if this is the first touched point in the contour, note it and continue
-                                            if (firstTouched < 0)
-                                            {
-                                                firstTouched = point;
-                                                lastTouched = point;
-                                                continue;
-                                            }
+                        //                    // otherwise, interpolate all untouched points
+                        //                    // between this point and our last touched point
+                        //                    InterpolatePointsYAxis(currentPnts, originalPnts, lastTouched + 1, point - 1, lastTouched, point);
+                        //                    lastTouched = point;
+                        //                }
+                        //            }
 
-                                            // otherwise, interpolate all untouched points
-                                            // between this point and our last touched point
-                                            InterpolatePointsYAxis(currentPnts, originalPnts, lastTouched + 1, point - 1, lastTouched, point);
-                                            lastTouched = point;
-                                        }
-                                    }
+                        //            // check if we had any touched points at all in this contour
+                        //            if (firstTouched >= 0)
+                        //            {
+                        //                // there are two cases left to handle:
+                        //                // 1. there was only one touched point in the whole contour, in
+                        //                //    which case we want to shift everything relative to that one
+                        //                // 2. several touched points, in which case handle the gap from the
+                        //                //    beginning to the first touched point and the gap from the last
+                        //                //    touched point to the end of the contour
+                        //                if (lastTouched == firstTouched)
+                        //                {
+                        //                    float delta = currentPnts[lastTouched].Y - originalPnts[lastTouched].Y;
+                        //                    if (delta != 0.0f)
+                        //                    {
+                        //                        for (int n = firstPoint; n < lastTouched; n++)
+                        //                        {
+                        //                            currentPnts[n].OffsetY(delta);
+                        //                        }
+                        //                        for (int n = lastTouched + 1; n <= endPoint; n++)
+                        //                        {
+                        //                            currentPnts[n].OffsetY(delta);
+                        //                        }
 
-                                    // check if we had any touched points at all in this contour
-                                    if (firstTouched >= 0)
-                                    {
-                                        // there are two cases left to handle:
-                                        // 1. there was only one touched point in the whole contour, in
-                                        //    which case we want to shift everything relative to that one
-                                        // 2. several touched points, in which case handle the gap from the
-                                        //    beginning to the first touched point and the gap from the last
-                                        //    touched point to the end of the contour
-                                        if (lastTouched == firstTouched)
-                                        {
-                                            float delta = currentPnts[lastTouched].Y - originalPnts[lastTouched].Y;
-                                            if (delta != 0.0f)
-                                            {
-                                                for (int n = firstPoint; n < lastTouched; n++)
-                                                {
-                                                    currentPnts[n].OffsetY(delta);
-                                                }
-                                                for (int n = lastTouched + 1; n <= endPoint; n++)
-                                                {
-                                                    currentPnts[n].OffsetY(delta); 
-                                                }
+                        //                    }
+                        //                }
+                        //                else
+                        //                {
+                        //                    InterpolatePointsYAxis(currentPnts, originalPnts, lastTouched + 1, endPoint, lastTouched, firstTouched);
+                        //                    if (firstTouched > 0)
+                        //                    {
+                        //                        InterpolatePointsYAxis(currentPnts, originalPnts, firstPoint, firstTouched - 1, lastTouched, firstTouched);
+                        //                    }
+                        //                }
+                        //            }
 
-                                            }
-                                        }
-                                        else
-                                        {
-                                            InterpolatePointsYAxis(currentPnts, originalPnts, lastTouched + 1, endPoint, lastTouched, firstTouched);
-                                            if (firstTouched > 0)
-                                            {
-                                                InterpolatePointsYAxis(currentPnts, originalPnts, firstPoint, firstTouched - 1, lastTouched, firstTouched);
-                                            }
-                                        }
-                                    }
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //        //x-axis
+                        //        touchMask = TouchState.X;
+                        //        //
+                        //        for (int i = 0; i < cnt_count; ++i)
+                        //        {
+                        //            int endPoint = contours[i];
+                        //            int firstPoint = point;
+                        //            int firstTouched = -1;
+                        //            int lastTouched = -1;
 
-                                }
-                            }
-                            else
-                            {
-                                //x-axis
-                                touchMask = TouchState.X;
-                                //
-                                for (int i = 0; i < cnt_count; ++i)
-                                {
-                                    int endPoint = contours[i];
-                                    int firstPoint = point;
-                                    int firstTouched = -1;
-                                    int lastTouched = -1;
+                        //            for (; point <= endPoint; point++)
+                        //            {
+                        //                // check whether this point has been touched
+                        //                if ((points.TouchState[point] & touchMask) != 0)
+                        //                {
+                        //                    // if this is the first touched point in the contour, note it and continue
+                        //                    if (firstTouched < 0)
+                        //                    {
+                        //                        firstTouched = point;
+                        //                        lastTouched = point;
+                        //                        continue;
+                        //                    }
 
-                                    for (; point <= endPoint; point++)
-                                    {
-                                        // check whether this point has been touched
-                                        if ((points.TouchState[point] & touchMask) != 0)
-                                        {
-                                            // if this is the first touched point in the contour, note it and continue
-                                            if (firstTouched < 0)
-                                            {
-                                                firstTouched = point;
-                                                lastTouched = point;
-                                                continue;
-                                            }
+                        //                    // otherwise, interpolate all untouched points
+                        //                    // between this point and our last touched point
+                        //                    InterpolatePointsXAxis(currentPnts, originalPnts, lastTouched + 1, point - 1, lastTouched, point);
+                        //                    lastTouched = point;
+                        //                }
+                        //            }
 
-                                            // otherwise, interpolate all untouched points
-                                            // between this point and our last touched point
-                                            InterpolatePointsXAxis(currentPnts, originalPnts, lastTouched + 1, point - 1, lastTouched, point);
-                                            lastTouched = point;
-                                        }
-                                    }
-
-                                    // check if we had any touched points at all in this contour
-                                    if (firstTouched >= 0)
-                                    {
-                                        // there are two cases left to handle:
-                                        // 1. there was only one touched point in the whole contour, in
-                                        //    which case we want to shift everything relative to that one
-                                        // 2. several touched points, in which case handle the gap from the
-                                        //    beginning to the first touched point and the gap from the last
-                                        //    touched point to the end of the contour
-                                        if (lastTouched == firstTouched)
-                                        {
-                                            float delta = currentPnts[lastTouched].X - originalPnts[lastTouched].X;
-                                            if (delta != 0.0f)
-                                            {
-                                                for (int n = firstPoint; n < lastTouched; ++n)
-                                                {
-                                                    currentPnts[n].OffsetX(delta);
-                                                }
-                                                for (int n = lastTouched + 1; n <= endPoint; ++n)
-                                                {
-                                                    currentPnts[n].OffsetX(delta);
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            InterpolatePointsXAxis(currentPnts, originalPnts, lastTouched + 1, endPoint, lastTouched, firstTouched);
-                                            if (firstTouched > 0)
-                                            {
-                                                InterpolatePointsXAxis(currentPnts, originalPnts, firstPoint, firstTouched - 1, lastTouched, firstTouched);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        //            // check if we had any touched points at all in this contour
+                        //            if (firstTouched >= 0)
+                        //            {
+                        //                // there are two cases left to handle:
+                        //                // 1. there was only one touched point in the whole contour, in
+                        //                //    which case we want to shift everything relative to that one
+                        //                // 2. several touched points, in which case handle the gap from the
+                        //                //    beginning to the first touched point and the gap from the last
+                        //                //    touched point to the end of the contour
+                        //                if (lastTouched == firstTouched)
+                        //                {
+                        //                    float delta = currentPnts[lastTouched].X - originalPnts[lastTouched].X;
+                        //                    if (delta != 0.0f)
+                        //                    {
+                        //                        for (int n = firstPoint; n < lastTouched; ++n)
+                        //                        {
+                        //                            currentPnts[n].OffsetX(delta);
+                        //                        }
+                        //                        for (int n = lastTouched + 1; n <= endPoint; ++n)
+                        //                        {
+                        //                            currentPnts[n].OffsetX(delta);
+                        //                        }
+                        //                    }
+                        //                }
+                        //                else
+                        //                {
+                        //                    InterpolatePointsXAxis(currentPnts, originalPnts, lastTouched + 1, endPoint, lastTouched, firstTouched);
+                        //                    if (firstTouched > 0)
+                        //                    {
+                        //                        InterpolatePointsXAxis(currentPnts, originalPnts, firstPoint, firstTouched - 1, lastTouched, firstTouched);
+                        //                    }
+                        //                }
+                        //            }
+                        //        }
+                        //    }
+                        //}
                         //-----------------------------------------
                         unsafe
                         {
