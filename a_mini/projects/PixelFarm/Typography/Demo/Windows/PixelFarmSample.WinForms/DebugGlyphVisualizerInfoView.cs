@@ -152,7 +152,7 @@ namespace SampleWinForms.UI
                             _clearInfoView = false;
                             RequestGlyphRender(this, EventArgs.Empty);
 
-                            IGlyphTriangle tri = nodeinfo.GlyphTri;
+                            GlyphTriangleInfo tri = nodeinfo.GlyphTri;
                             var cen_x = (float)(tri.CentroidX * PxScale);
                             var cen_y = (float)(tri.CentroidY * PxScale);
 
@@ -238,10 +238,13 @@ namespace SampleWinForms.UI
                         }
                     }
                     break;
-
             }
-
         }
+
+         
+
+        
+
         public float PxScale { get; set; }
         public void Clear()
         {
@@ -255,7 +258,7 @@ namespace SampleWinForms.UI
             }
             _testEdgeCount = 0;
         }
-        public void ShowTriangles(IGlyphTriangle tri)
+        public void ShowTriangles(GlyphTriangleInfo tri)
         {
             if (!_clearInfoView) { return; }
             //-----------------------------
@@ -440,7 +443,7 @@ namespace SampleWinForms.UI
             GlyphBoneJoint joint;
             GlyphBone bone;
             System.Numerics.Vector2 pos;
-            IGlyphTriangle tri;
+            GlyphTriangleInfo tri;
 
             public NodeInfo(NodeInfoKind nodeKind, EdgeLine edge, int edgeNo)
             {
@@ -470,7 +473,7 @@ namespace SampleWinForms.UI
                 this.bone = bone;
                 this.NodeKind = NodeInfoKind.Bone;
             }
-            public NodeInfo(IGlyphTriangle tri)
+            public NodeInfo(GlyphTriangleInfo tri)
             {
                 this.tri = tri;
                 this.pos = new System.Numerics.Vector2((float)tri.CentroidX, (float)tri.CentroidY);
@@ -487,7 +490,7 @@ namespace SampleWinForms.UI
             {
                 get; set;
             }
-            public IGlyphTriangle GlyphTri { get { return tri; } }
+            public GlyphTriangleInfo GlyphTri { get { return tri; } }
             public GlyphBone Bone { get { return this.bone; } }
 
             public System.Numerics.Vector2 Pos { get { return pos; } }

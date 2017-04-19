@@ -8,6 +8,24 @@ using Typography.OpenFont;
 using Typography.Rendering;
 namespace SampleWinForms.UI
 {
+    class GlyphTriangleInfo
+    {
+        public GlyphTriangleInfo(int triangleId, EdgeLine e0, EdgeLine e1, EdgeLine e2, double centroidX, double centroidY)
+        {
+            this.Id = triangleId;
+            this.E0 = e0;
+            this.E1 = e1;
+            this.E2 = e2;
+            this.CentroidX = centroidX;
+            this.CentroidY = centroidY;
+        }
+        public int Id { get; private set; }
+        public double CentroidX { get; set; }
+        public double CentroidY { get; set; }
+        public EdgeLine E0 { get; set; }
+        public EdgeLine E1 { get; set; }
+        public EdgeLine E2 { get; set; }
+    }
 
     class DebugGlyphVisualizer : GlyphOutlineWalker
     {
@@ -495,18 +513,16 @@ namespace SampleWinForms.UI
             }
         }
 
-        protected override void OnTriangle(IGlyphTriangle tri)
+
+        protected override void OnTriangle(int triAngleId, EdgeLine e0, EdgeLine e1, EdgeLine e2, double centroidX, double centroidY)
         {
             if (DrawTrianglesAndEdges)
             {
-                _infoView.ShowTriangles(tri);
-            }
-        }
-        protected override void OnTriangleEdge(EdgeLine edgeLine, int n)
-        {
-            if (DrawTrianglesAndEdges)
-            {
-                DrawEdge(painter, edgeLine, _pxscale);
+                DrawEdge(painter, e0, _pxscale);
+                DrawEdge(painter, e1, _pxscale);
+                DrawEdge(painter, e2, _pxscale);
+
+                _infoView.ShowTriangles(new GlyphTriangleInfo(triAngleId, e0, e1, e2, centroidX, centroidY));
             }
         }
         protected override void OnCentroidLine(GlyphCentroidLine line)

@@ -23,12 +23,10 @@ namespace Typography.Rendering
         {
             this._dynamicOutline = dynamicOutline;
 
+            int triNumber = 0;
             foreach (GlyphTriangle tri in _dynamicOutline.dbugGetGlyphTriangles())
             {
-                OnTriangle(tri);
-                OnTriangleEdge(tri.E0, 0);
-                OnTriangleEdge(tri.E1, 1);
-                OnTriangleEdge(tri.E2, 2);
+                OnTriangle(triNumber++, tri.e0, tri.e1, tri.e2, tri.CentroidX, tri.CentroidY);
             }
             //--------------- 
             Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHub = _dynamicOutline.dbugGetCentroidLineHubs();
@@ -97,8 +95,8 @@ namespace Typography.Rendering
 
         }
         //
-        protected abstract void OnTriangle(IGlyphTriangle tri);
-        protected abstract void OnTriangleEdge(EdgeLine edgeLine, int n);
+        protected abstract void OnTriangle(int triAngleId, EdgeLine e0, EdgeLine e1, EdgeLine e2, double centroidX, double centroidY);
+
         protected abstract void OnCentroidLine(GlyphCentroidLine line);
         protected abstract void OnBoneJoint(GlyphBoneJoint joint);
         protected abstract void OnBeginDrawingBoneLinks(Vector2 branchHeadPos, int startAt, int endAt);

@@ -3,16 +3,8 @@ using System;
 using Poly2Tri;
 namespace Typography.Rendering
 {
-    public interface IGlyphTriangle
-    {
-        double CentroidX { get; }
-        double CentroidY { get; }
-        EdgeLine E0 { get; }
-        EdgeLine E1 { get; }
-        EdgeLine E2 { get; }
-    }
 
-    class GlyphTriangle : IGlyphTriangle
+    class GlyphTriangle 
     {
         DelaunayTriangle _tri;
         public readonly EdgeLine e0;
@@ -23,7 +15,7 @@ namespace Typography.Rendering
         float centroidX;
         float centroidY;
 
-        internal GlyphTriangle(DelaunayTriangle tri)
+        public GlyphTriangle(DelaunayTriangle tri)
         {
             this._tri = tri;
             TriangulationPoint p0 = _tri.P0;
