@@ -75,10 +75,10 @@ namespace Typography.Rendering
     public class EdgeLine
     {
 
-        public double x0;
-        public double y0;
-        public double x1;
-        public double y1;
+        public readonly double x0;
+        public readonly double y0;
+        public readonly double x1;
+        public readonly double y1;
 
         static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
