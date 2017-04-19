@@ -298,18 +298,7 @@ namespace Typography.Rendering
             }
         }
         public bool IsLongBone { get; internal set; }
-
-        internal double CalculateAvgBoneWidth()
-        {
-            //avg bone width
-            //(for this bone only) is calculated by avg of 4 ribs 
-            //around 2 joints
-
-            //this only ...
-            double a_side = Math.Sqrt(JointA.CalculateSqrDistance(JointA.RibEndPointA));
-            double b_side = Math.Sqrt(JointA.CalculateSqrDistance(JointA.RibEndPointB));
-            return (a_side + b_side) / 2;
-        }
+ 
         //--------
         public float LeftMostPoint()
         {
