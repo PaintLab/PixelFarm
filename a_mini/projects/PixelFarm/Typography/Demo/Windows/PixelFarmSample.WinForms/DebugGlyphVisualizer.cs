@@ -378,7 +378,7 @@ namespace SampleWinForms.UI
         }
 
 
-        System.Numerics.Vector2 _branchHeadPos;
+        Vector2 _branchHeadPos;
         protected override void OnBeginDrawingBoneLinks(System.Numerics.Vector2 branchHeadPos, int startAt, int endAt)
         {
             _branchHeadPos = branchHeadPos;
@@ -447,10 +447,13 @@ namespace SampleWinForms.UI
             if (bone.hasCutPointOnEdge)
             {
                 Vector2 midBone = bone.GetMidPoint();
+                Vector2 cut_point = bone.cutPoint_onEdge * pxscale;
                 painter.Line(
-                    bone.cutPoint_onEdge.X * pxscale, bone.cutPoint_onEdge.Y * pxscale,
+                    cut_point.X, cut_point.Y,
                     midBone.X * pxscale, midBone.Y * pxscale,
                     PixelFarm.Drawing.Color.White);
+
+
             }
 
             //--------

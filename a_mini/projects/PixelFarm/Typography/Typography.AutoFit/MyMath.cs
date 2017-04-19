@@ -109,7 +109,7 @@ namespace Typography.Rendering
             }
         }
 
-       
+
         /// <summary>
         /// which one is min,max
         /// </summary>
