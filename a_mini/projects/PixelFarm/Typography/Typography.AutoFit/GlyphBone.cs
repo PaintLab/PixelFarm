@@ -90,8 +90,10 @@ namespace Typography.Rendering
         }
 
 
-        short _ribCount;
 
+
+
+        short _ribCount;
         Vector2 _ribEndPoint_A, _ribEndPoint_B;
         /// <summary>
         /// tip point (mid of tip edge)
@@ -101,13 +103,12 @@ namespace Typography.Rendering
         //one bone joint can have up to 2 tips
 
 
-        //connection to edges
+
         EdgeLine _selectedEdgeA, _selectedEdgeB, _selectedTipEdge;
-
-
-
         public List<GlyphBone> _assocBones;
         public List<GlyphPoint> _assocGlyphPoints;
+
+
         public void AddRibEndAt(EdgeLine edgeLine, Vector2 vec)
         {
             switch (_ribCount)

@@ -1,7 +1,7 @@
 ﻿//MIT, 2014-2017, WinterDev
 using System;
 using System.Collections.Generic;
-
+using System.Numerics;
 using PixelFarm.Agg;
 using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
@@ -295,8 +295,8 @@ namespace SampleWinForms.UI
             //-------------- 
             EdgeLine p_contactEdge = joint._p_contact_edge;
             //mid point
-            var jointPos = joint.Position;
-            painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
+            Vector2 jointPos = joint.Position * pxscale;//scaled joint pos
+            painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);
 
             if (DrawRibs)
             {
@@ -315,43 +315,42 @@ namespace SampleWinForms.UI
                 }
             }
 
-            if (joint.TipPoint != System.Numerics.Vector2.Zero)
+            if (joint.TipPoint != Vector2.Zero)
             {
                 EdgeLine tipEdge = joint.TipEdge;
-                var p_x = tipEdge.GlyphPoint_P.x * pxscale;
-                var p_y = tipEdge.GlyphPoint_P.y * pxscale;
-                var q_x = tipEdge.GlyphPoint_Q.x * pxscale;
-                var q_y = tipEdge.GlyphPoint_Q.y * pxscale;
+                float p_x = tipEdge.GlyphPoint_P.x * pxscale;
+                float p_y = tipEdge.GlyphPoint_P.y * pxscale;
+                float q_x = tipEdge.GlyphPoint_Q.x * pxscale;
+                float q_y = tipEdge.GlyphPoint_Q.y * pxscale;
 
-
+                //
                 painter.Line(
-                   jointPos.X * pxscale, jointPos.Y * pxscale,
+                   jointPos.X, jointPos.Y,
                    p_x, p_y,
                    PixelFarm.Drawing.Color.White);
                 painter.FillRectLBWH(p_x, p_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
-                //
 
+                //
                 painter.Line(
-                    jointPos.X * pxscale, jointPos.Y * pxscale,
+                    jointPos.X, jointPos.Y,
                     q_x, q_y,
                     PixelFarm.Drawing.Color.White);
                 painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
             }
         }
-        void DrawAssocGlyphPoint(System.Numerics.Vector2 pos, List<GlyphPoint> points)
+        void DrawAssocGlyphPoints(Vector2 pos, List<GlyphPoint> points)
         {
             int j = points.Count;
             for (int i = 0; i < j; ++i)
             {
                 GlyphPoint p = points[i];
-
                 painter.Line(
                       pos.X * _pxscale, pos.Y * _pxscale,
                       p.x * _pxscale, p.y * _pxscale,
                       PixelFarm.Drawing.Color.Yellow);
             }
         }
-        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, List<GlyphPoint> points, float newRelativeLen)
+        void DrawAssocGlyphPoint2(Vector2 pos, List<GlyphPoint> points, float newRelativeLen)
         {
             int j = points.Count;
             for (int i = 0; i < j; ++i)
@@ -359,7 +358,7 @@ namespace SampleWinForms.UI
                 DrawAssocGlyphPoint2(pos, points[i], newRelativeLen);
             }
         }
-        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, GlyphPoint p, float newRelativeLen)
+        void DrawAssocGlyphPoint2(Vector2 pos, GlyphPoint p, float newRelativeLen)
         {
             //test draw marker on different len....
             //create  
@@ -402,8 +401,8 @@ namespace SampleWinForms.UI
             if (jointA != null && jointB != null)
             {
 
-                var jointAPoint = jointA.Position;
-                var jointBPoint = jointB.Position;
+                Vector2 jointAPoint = jointA.Position;
+                Vector2 jointBPoint = jointB.Position;
 
                 painter.Line(
                     jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
@@ -416,19 +415,19 @@ namespace SampleWinForms.UI
 
                 if (jointA._assocGlyphPoints != null)
                 {
-                    DrawAssocGlyphPoint(jointA.Position, jointA._assocGlyphPoints);
+                    DrawAssocGlyphPoints(jointA.Position, jointA._assocGlyphPoints);
                     DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, newRelativeLen);
                 }
                 if (jointB._assocGlyphPoints != null)
                 {
-                    DrawAssocGlyphPoint(jointB.Position, jointB._assocGlyphPoints);
+                    DrawAssocGlyphPoints(jointB.Position, jointB._assocGlyphPoints);
                     DrawAssocGlyphPoint2(jointB.Position, jointB._assocGlyphPoints, newRelativeLen);
                 }
             }
             if (jointA != null && bone.TipEdge != null)
             {
-                var jointAPoint = jointA.Position;
-                var mid = bone.TipEdge.GetMidPoint();
+                Vector2 jointAPoint = jointA.Position;
+                Vector2 mid = bone.TipEdge.GetMidPoint();
 
                 painter.Line(
                     jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
@@ -440,14 +439,14 @@ namespace SampleWinForms.UI
                 if (jointA._assocGlyphPoints != null)
                 {
 
-                    DrawAssocGlyphPoint(jointA.Position, jointA._assocGlyphPoints);
+                    DrawAssocGlyphPoints(jointA.Position, jointA._assocGlyphPoints);
                     DrawAssocGlyphPoint2(jointA.Position, jointA._assocGlyphPoints, newRelativeLen);
                 }
             }
 
             if (bone.hasCutPointOnEdge)
             {
-                var midBone = bone.GetMidPoint();
+                Vector2 midBone = bone.GetMidPoint();
                 painter.Line(
                     bone.cutPoint_onEdge.X * pxscale, bone.cutPoint_onEdge.Y * pxscale,
                     midBone.X * pxscale, midBone.Y * pxscale,
@@ -485,7 +484,7 @@ namespace SampleWinForms.UI
         }
 
 
-        protected override void OnTriangle(int triAngleId, EdgeLine e0, EdgeLine e1, EdgeLine e2, double centroidX, double centroidY)
+        protected override void OnTriangle(int triangleId, EdgeLine e0, EdgeLine e1, EdgeLine e2, double centroidX, double centroidY)
         {
             if (DrawTrianglesAndEdges)
             {
@@ -493,7 +492,7 @@ namespace SampleWinForms.UI
                 DrawEdge(painter, e1, _pxscale);
                 DrawEdge(painter, e2, _pxscale);
 
-                _infoView.ShowTriangles(new GlyphTriangleInfo(triAngleId, e0, e1, e2, centroidX, centroidY));
+                _infoView.ShowTriangles(new GlyphTriangleInfo(triangleId, e0, e1, e2, centroidX, centroidY));
             }
         }
         protected override void OnCentroidLine(double px, double py, double qx, double qy)
@@ -506,7 +505,7 @@ namespace SampleWinForms.UI
                 PixelFarm.Drawing.Color.Red);
 
             painter.FillRectLBWH(px * pxscale, py * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
-            painter.FillRectLBWH(qx * pxscale, qy * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow); 
+            painter.FillRectLBWH(qx * pxscale, qy * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
         }
         protected override void OnCentroidLineTip_P(double px, double py, double tip_px, double tip_py)
         {
@@ -545,7 +544,7 @@ namespace SampleWinForms.UI
 
             if (joint != null)
             {
-                var joint_pos = joint.Position;
+                Vector2 joint_pos = joint.Position;
                 painter.Line(
                         joint_pos.X * _pxscale, joint_pos.Y * _pxscale,
                         centerX * _pxscale, centerY * _pxscale,
@@ -556,15 +555,14 @@ namespace SampleWinForms.UI
         public void DynamicOutline(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale, bool withRegenerateOutlines)
         {
 
-#if DEBUG
-            //dynamicOutline.dbugSetCanvasPainter(painter, pxscale);
+#if DEBUG 
             dynamicOutline.dbugDrawRegeneratedOutlines = withRegenerateOutlines;
 #endif
             dynamicOutline.Walk();
         }
         void DrawBoneRib(CanvasPainter painter, System.Numerics.Vector2 vec, GlyphBoneJoint joint, float pixelScale)
         {
-            var jointPos = joint.Position;
+            Vector2 jointPos = joint.Position;
             painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4, PixelFarm.Drawing.Color.Green);
             painter.Line(jointPos.X * pixelScale, jointPos.Y * pixelScale,
                 vec.X * pixelScale,
