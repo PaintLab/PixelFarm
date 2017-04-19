@@ -167,7 +167,7 @@ namespace Typography.Rendering
 
             //connect glyph part/contour with bone
             //----------------------------------------
-            //this is optional ?
+            //this is optional ?...
             //AnalyzeLinksToGlyphJoints();
             //----------------------------------------
         }
