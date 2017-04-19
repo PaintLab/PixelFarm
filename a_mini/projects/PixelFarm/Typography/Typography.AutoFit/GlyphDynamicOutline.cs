@@ -287,11 +287,11 @@ namespace Typography.Rendering
                     EdgeLine matching_anotherSide = h_edge.GetMatchingOutsideEdge();
                     if (matching_anotherSide != null)
                     {
-                        Poly2Tri.TriangulationPoint a_p = matching_anotherSide.p;
-                        Poly2Tri.TriangulationPoint a_q = matching_anotherSide.q;
-                        if (a_p != null && a_p.userData is GlyphPoint)
+                        GlyphPoint a_glyph_p = matching_anotherSide.GlyphPoint_P;
+                        GlyphPoint a_glyph_q = matching_anotherSide.GlyphPoint_Q;
+                        if (a_glyph_p != null)
                         {
-                            GlyphPoint a_glyph_p = (GlyphPoint)a_p.userData;
+
                             a_glyph_p.AdjustedY = -remaining;
 #if DEBUG
                             if (!s_dbugAff2.ContainsKey(a_glyph_p))
@@ -302,9 +302,9 @@ namespace Typography.Rendering
 
 #endif
                         }
-                        if (a_q != null && a_q.userData is GlyphPoint)
+                        if (a_glyph_q != null)
                         {
-                            GlyphPoint a_glyph_q = (GlyphPoint)a_q.userData;
+                             
                             a_glyph_q.AdjustedY = -remaining;
 #if DEBUG
                             if (!s_dbugAff2.ContainsKey(a_glyph_q))

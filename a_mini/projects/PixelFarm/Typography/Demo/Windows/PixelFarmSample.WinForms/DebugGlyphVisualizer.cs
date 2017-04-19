@@ -217,11 +217,10 @@ namespace SampleWinForms.UI
             {
                 //free side     
 
-                Poly2Tri.TriangulationPoint p = edge.p;
-                Poly2Tri.TriangulationPoint q = edge.q;
 
-                var u_data_p = p.userData as GlyphPoint;
-                var u_data_q = q.userData as GlyphPoint;
+
+                GlyphPoint u_data_p = edge.GlyphPoint_P;
+                GlyphPoint u_data_q = edge.GlyphPoint_Q;
 
 
                 DrawPointKind(painter, u_data_p, scale);
@@ -370,10 +369,10 @@ namespace SampleWinForms.UI
             if (joint.TipPoint != System.Numerics.Vector2.Zero)
             {
                 EdgeLine tipEdge = joint.TipEdge;
-                var p_x = tipEdge.p.X * pxscale;
-                var p_y = tipEdge.p.Y * pxscale;
-                var q_x = tipEdge.q.X * pxscale;
-                var q_y = tipEdge.q.Y * pxscale;
+                var p_x = tipEdge.GlyphPoint_P.x * pxscale;
+                var p_y = tipEdge.GlyphPoint_P.y * pxscale;
+                var q_x = tipEdge.GlyphPoint_Q.x * pxscale;
+                var q_y = tipEdge.GlyphPoint_Q.y * pxscale;
 
 
                 painter.Line(

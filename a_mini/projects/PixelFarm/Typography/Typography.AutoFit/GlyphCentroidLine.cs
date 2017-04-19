@@ -477,8 +477,8 @@ namespace Typography.Rendering
     public class GlyphCentroidLine
     {
 
-        public readonly GlyphTriangle p, q; 
-        GlyphBoneJoint _boneJoint; 
+        public readonly GlyphTriangle p, q;
+        GlyphBoneJoint _boneJoint;
         public GlyphCentroidLine(GlyphTriangle p, GlyphTriangle q)
         {
             //[A]
@@ -495,7 +495,7 @@ namespace Typography.Rendering
             this.q = q;
         }
         public bool SpecialConnectFromLastToFirst { get; set; }
-        public GlyphBoneJoint BoneJoint { get { return _boneJoint; } } 
+        public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
         /// <summary>
         /// add information about edges to each triangle
         /// </summary>
@@ -805,25 +805,25 @@ namespace Typography.Rendering
                                 //both connect with ON-curve point 
                                 //select p?
                                 p_.AddAssociatedBoneJoint(ownerEdgeJoint);
-                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2((float)contactEdge.p.X, (float)contactEdge.p.Y));
+                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(p_.x, p_.y));
                                 break;
                             case 0:
                                 //select p 
                                 p_.AddAssociatedBoneJoint(ownerEdgeJoint);
-                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2((float)contactEdge.p.X, (float)contactEdge.p.Y));
+                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(p_.x, p_.y));
                                 break;
                             //break;
                             case 1:
                                 //select q 
                                 q_.AddAssociatedBoneJoint(ownerEdgeJoint);
-                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2((float)contactEdge.q.X, (float)contactEdge.q.Y));
+                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(q_.x, q_.y));
                                 break;
                             //break;
                             case -1:
                                 //both p and q are curve in between
                                 break;
                         }
-                       
+
                     }
                     break;
                 case 2:

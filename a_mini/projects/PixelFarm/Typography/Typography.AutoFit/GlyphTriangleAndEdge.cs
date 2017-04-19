@@ -23,16 +23,26 @@ namespace Typography.Rendering
             TriangulationPoint p0 = _tri.P0;
             TriangulationPoint p1 = _tri.P1;
             TriangulationPoint p2 = _tri.P2;
-            e0 = new EdgeLine(this, p0, p1);
-            e1 = new EdgeLine(this, p1, p2);
-            e2 = new EdgeLine(this, p2, p0);
+
+
+            e0 = NewEdgeLine(p0, p1);
+            e1 = NewEdgeLine(p1, p2);
+            e2 = NewEdgeLine(p2, p0);
+
+#if DEBUG
+            e0.dbugOwner = e1.dbugOwner = e2.dbugOwner = this;
+#endif
+
             tri.Centroid2(out centroidX, out centroidY);
 
             e0.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P0, tri.P1));
             e1.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P1, tri.P2));
             e2.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P2, tri.P0));
         }
-
+        static EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q)
+        {
+            return new EdgeLine(p.userData as GlyphPoint, q.userData as GlyphPoint);
+        }
         public double CentroidX
         {
             get { return centroidX; }
@@ -85,11 +95,8 @@ namespace Typography.Rendering
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
 
-        public TriangulationPoint p;
-        public TriangulationPoint q;
 
         Dictionary<EdgeLine, bool> matchingEdges;
-
         //------------------------------
         /// <summary>
         /// contact to 
@@ -97,20 +104,25 @@ namespace Typography.Rendering
         public EdgeLine contactToEdge;
         //------------------------------
 
+        readonly GlyphPoint _glyphPoint_P;
+        readonly GlyphPoint _glyphPoint_Q;
 #if DEBUG
         public static int s_dbugTotalId;
         public readonly int dbugId = s_dbugTotalId++;
+        public GlyphTriangle dbugOwner;
 #endif
-        public EdgeLine(GlyphTriangle owner, TriangulationPoint p, TriangulationPoint q)
-        {
-            this.OwnerTriangle = owner;
-            this.p = p;
-            this.q = q;
 
-            x0 = p.X;
-            y0 = p.Y;
-            x1 = q.X;
-            y1 = q.Y;
+        public EdgeLine(GlyphPoint p, GlyphPoint q)
+        {
+
+            this._glyphPoint_P = p;
+            this._glyphPoint_Q = q;
+
+
+            x0 = p.x;
+            y0 = p.y;
+            x1 = q.x;
+            y1 = q.y;
             //-------------------
             if (x1 == x0)
             {
@@ -134,12 +146,15 @@ namespace Typography.Rendering
                 }
             }
         }
-        public GlyphTriangle OwnerTriangle { get; private set; }
+
+
         public LineSlopeKind SlopeKind
         {
             get;
             private set;
         }
+
+
 
         public bool IsOutside
         {
@@ -197,7 +212,7 @@ namespace Typography.Rendering
         {
             get
             {
-                return p.userData as GlyphPoint;
+                return _glyphPoint_P;
             }
 
         }
@@ -205,7 +220,7 @@ namespace Typography.Rendering
         {
             get
             {
-                return q.userData as GlyphPoint;
+                return _glyphPoint_Q;
             }
         }
         public void AddMatchingOutsideEdge(EdgeLine edgeLine)
@@ -227,6 +242,6 @@ namespace Typography.Rendering
 
             }
 #endif
-        } 
-    } 
+        }
+    }
 }

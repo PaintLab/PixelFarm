@@ -348,11 +348,9 @@ namespace SampleWinForms.UI
             {
                 return;
             }
-            //---------------
-            Poly2Tri.TriangulationPoint p = edge.p;
-            Poly2Tri.TriangulationPoint q = edge.q;
-            var u_data_p = p.userData as GlyphPoint;
-            var u_data_q = q.userData as GlyphPoint;
+
+            GlyphPoint u_data_p = edge.GlyphPoint_P;
+            GlyphPoint u_data_q = edge.GlyphPoint_Q;
 
             //-------------------------------
 
@@ -360,7 +358,8 @@ namespace SampleWinForms.UI
             TreeNode nodeEdge = new TreeNode();
             nodeEdge.Tag = nodeInfo;
             nodeEdge.Text = "e id=" + edge.dbugId + ",count="
-                + _testEdgeCount + " :(" + p.X + "," + p.Y + ")" + "=>(" + q.X + "," + q.Y + ") ";
+                + _testEdgeCount + " :(" + u_data_p.x + "," + u_data_p.y + ")" + 
+                "=>(" + u_data_q.x + "," + u_data_q.y + ") ";
             //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
             //{
             //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;
