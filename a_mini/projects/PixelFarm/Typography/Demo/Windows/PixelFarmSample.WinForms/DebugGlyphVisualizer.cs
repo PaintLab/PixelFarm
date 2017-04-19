@@ -657,7 +657,7 @@ namespace SampleWinForms.UI
         }
         public void DynamicOutline(CanvasPainter painter, GlyphFitOutline glyphFitOutline, float pxscale, bool withRegenerateOutlines)
         {
-            GlyphDynamicOutline dynamicOutline = new GlyphDynamicOutline(glyphFitOutline);
+            GlyphDynamicOutline2 dynamicOutline = new GlyphDynamicOutline2(glyphFitOutline);
 #if DEBUG
             dynamicOutline.dbugSetCanvasPainter(painter, pxscale);
             dynamicOutline.dbugDrawRegeneratedOutlines = withRegenerateOutlines;

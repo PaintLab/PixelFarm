@@ -9,7 +9,7 @@ using PixelFarm.Agg;
 namespace Typography.Rendering
 {
 
-    public class GlyphDynamicOutline
+    public class GlyphDynamicOutline2
     {
 
 
@@ -75,7 +75,7 @@ namespace Typography.Rendering
 #endif
 
         List<StrokeLineHub> _strokeLineHub;
-        public GlyphDynamicOutline(GlyphFitOutline fitOutline)
+        public GlyphDynamicOutline2(GlyphFitOutline fitOutline)
         {
 
 
