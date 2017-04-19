@@ -66,18 +66,20 @@ namespace Typography.Rendering
         }
 
 #if DEBUG 
-        Internal.GlyphIntermediateOutline _fitOutline;
+        Internal.GlyphIntermediateOutline _dbugTempIntermediateOutline;
         float pxscale;
         public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif
 
         public float LeftControlPosX { get; set; }
         List<StrokeLineHub> _strokeLineHub;
-        internal GlyphDynamicOutline(Internal.GlyphIntermediateOutline fitOutline)
+        internal GlyphDynamicOutline(Internal.GlyphIntermediateOutline intermediateOutline)
         {
 
-            _fitOutline = fitOutline;
-            Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs = fitOutline.GetCentroidLineHubs();
+#if DEBUG
+            _dbugTempIntermediateOutline = intermediateOutline;
+#endif
+            Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs = intermediateOutline.GetCentroidLineHubs();
             _strokeLineHub = new List<StrokeLineHub>(centroidLineHubs.Count);
 
             foreach (CentroidLineHub lineHub in centroidLineHubs.Values)
@@ -113,11 +115,11 @@ namespace Typography.Rendering
 #if DEBUG
         public List<GlyphTriangle> dbugGetGlyphTriangles()
         {
-            return _fitOutline.GetTriangles();
+            return _dbugTempIntermediateOutline.GetTriangles();
         }
         public Dictionary<GlyphTriangle, CentroidLineHub> dbugGetCentroidLineHubs()
         {
-            return _fitOutline.GetCentroidLineHubs();
+            return _dbugTempIntermediateOutline.GetCentroidLineHubs();
         }
 #endif
         public void Walk()

@@ -54,7 +54,7 @@ namespace Typography.Rendering
                         //_fitOutline = _fitShapeAnalyzer.dbugAnalyze(contBuilder.CurrentContour, new ushort[] { 3 });
 
                         //---------------------------------------------
-                        _latestDynamicOutline = _fitShapeAnalyzer.CreateGlyphFitOutline(
+                        _latestDynamicOutline = _fitShapeAnalyzer.CreateDynamicOutline(
                             this._outputGlyphPoints,
                             this._outputContours);
                         _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);

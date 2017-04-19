@@ -22,7 +22,7 @@ namespace Typography.Rendering
         /// <param name="glyphPoints"></param>
         /// <param name="glyphContours"></param>
         /// <returns></returns>
-        public GlyphDynamicOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
+        public GlyphDynamicOutline CreateDynamicOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
         {
 
             //1. convert original glyph point to contour
@@ -89,8 +89,8 @@ namespace Typography.Rendering
 
             //3. intermediate outline is used inside this lib
 
-            Internal.GlyphIntermediateOutline glyphFitOutline = new Internal.GlyphIntermediateOutline(mainPolygon, contours);
-            List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
+            var intermediateOutline = new Internal.GlyphIntermediateOutline(mainPolygon, contours);
+            List<GlyphTriangle> triAngles = intermediateOutline.GetTriangles();
             int triangleCount = triAngles.Count;
             for (int i = 0; i < triangleCount; ++i)
             {
@@ -104,7 +104,7 @@ namespace Typography.Rendering
 
             //convert intermediate outline to dynamic outline
 
-            return new GlyphDynamicOutline(glyphFitOutline);
+            return new GlyphDynamicOutline(intermediateOutline);
         }
 
 
