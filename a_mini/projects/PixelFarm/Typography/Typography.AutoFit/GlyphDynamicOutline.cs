@@ -119,6 +119,7 @@ namespace Typography.Rendering
         }
 
 
+
         public float LeftControlPosX { get; set; }
         public void Walk()
         {
@@ -304,7 +305,7 @@ namespace Typography.Rendering
                         }
                         if (a_glyph_q != null)
                         {
-                             
+
                             a_glyph_q.AdjustedY = -remaining;
 #if DEBUG
                             if (!s_dbugAff2.ContainsKey(a_glyph_q))
@@ -818,11 +819,11 @@ namespace Typography.Rendering
         }
 
 #if DEBUG
-        public List<GlyphTriangle> dbugGetGlyphTriangles()
+        internal List<GlyphTriangle> dbugGetGlyphTriangles()
         {
             return _dbugTempIntermediateOutline.GetTriangles();
         }
-        public Dictionary<GlyphTriangle, CentroidLineHub> dbugGetCentroidLineHubs()
+        internal Dictionary<GlyphTriangle, CentroidLineHub> dbugGetCentroidLineHubs()
         {
             return _dbugTempIntermediateOutline.GetCentroidLineHubs();
         }

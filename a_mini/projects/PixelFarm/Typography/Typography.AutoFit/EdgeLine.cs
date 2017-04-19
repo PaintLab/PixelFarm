@@ -1,9 +1,183 @@
 ﻿//MIT, 2017, WinterDev
 using System;
 using System.Collections.Generic;
-using Poly2Tri;
 using System.Numerics;
 namespace Typography.Rendering
 {
+    public enum LineSlopeKind : byte
+    {
+        Vertical,
+        Horizontal,
+        Other
+    }
 
+    /// <summary>
+    /// edge of GlyphTriangle
+    /// </summary>
+    public class EdgeLine
+    {
+
+        public readonly double x0;
+        public readonly double y0;
+        public readonly double x1;
+        public readonly double y1;
+
+
+        Dictionary<EdgeLine, bool> matchingEdges; //TODO: remove this
+        //------------------------------
+        /// <summary>
+        /// contact to 
+        /// </summary>
+        public EdgeLine contactToEdge;
+        //------------------------------
+
+        readonly GlyphPoint _glyphPoint_P;
+        readonly GlyphPoint _glyphPoint_Q;
+#if DEBUG
+        public static int s_dbugTotalId;
+        public readonly int dbugId = s_dbugTotalId++;
+        internal GlyphTriangle dbugOwner;
+#endif
+
+        public EdgeLine(GlyphPoint p, GlyphPoint q)
+        {
+
+            //edge  line connect 2 glyph point
+
+            this._glyphPoint_P = p;
+            this._glyphPoint_Q = q;
+
+
+            x0 = p.x;
+            y0 = p.y;
+            x1 = q.x;
+            y1 = q.y;
+            //-------------------
+            if (x1 == x0)
+            {
+                this.SlopeKind = LineSlopeKind.Vertical;
+                SlopAngle = 1;
+            }
+            else
+            {
+                SlopAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
+                if (SlopAngle > _85degreeToRad)
+                {
+                    SlopeKind = LineSlopeKind.Vertical;
+                }
+                else if (SlopAngle < _01degreeToRad)
+                {
+                    SlopeKind = LineSlopeKind.Horizontal;
+                }
+                else
+                {
+                    SlopeKind = LineSlopeKind.Other;
+                }
+            }
+        }
+
+
+        public LineSlopeKind SlopeKind
+        {
+            get;
+            private set;
+        }
+
+
+
+        public bool IsOutside
+        {
+            get;
+            internal set;
+        }
+        public bool IsInside
+        {
+            get { return !this.IsOutside; }
+
+        }
+        public double SlopAngle
+        {
+            get;
+            private set;
+        }
+        public bool IsUpper
+        {
+            get;
+            internal set;
+        }
+        public bool IsLeftSide
+        {
+            get;
+            internal set;
+        }
+        public Vector2 GetMidPoint()
+        {
+            return new Vector2((float)((x0 + x1) / 2), (float)((y0 + y1) / 2));
+        }
+        public override string ToString()
+        {
+            return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
+        }
+
+        public EdgeLine GetMatchingOutsideEdge()
+        {
+            if (matchingEdges == null) { return null; }
+
+            if (matchingEdges.Count == 1)
+            {
+                foreach (EdgeLine line in matchingEdges.Keys)
+                {
+                    return line;
+                }
+                return null;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public GlyphPoint GlyphPoint_P
+        {
+            get
+            {
+                return _glyphPoint_P;
+            }
+
+        }
+        public GlyphPoint GlyphPoint_Q
+        {
+            get
+            {
+                return _glyphPoint_Q;
+            }
+        }
+        public void AddMatchingOutsideEdge(EdgeLine edgeLine)
+        {
+#if DEBUG
+            if (edgeLine == this) { throw new NotSupportedException(); }
+#endif
+            if (matchingEdges == null)
+            {
+                matchingEdges = new Dictionary<EdgeLine, bool>();
+            }
+            if (!matchingEdges.ContainsKey(edgeLine))
+            {
+                matchingEdges.Add(edgeLine, true);
+            }
+#if DEBUG
+            if (matchingEdges.Count > 1)
+            {
+
+            }
+#endif
+        }
+
+        static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
+        static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
+        static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
+        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+
+
+    }
 }

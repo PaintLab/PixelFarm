@@ -409,8 +409,8 @@ namespace SampleWinForms
             debugGlyphVisualizer.OffsetMinorX = chkMinorOffset.Checked;
             debugGlyphVisualizer.ShowTess = chkShowTess.Checked;
             debugGlyphVisualizer.DrawTrianglesAndEdges = this.chkDrawTriangles.Checked;
-            debugGlyphVisualizer.DrawCentroidBone = this.chkDrawCentroidBone.Checked;
-            debugGlyphVisualizer.DrawGlyphBone = this.chkDrawGlyphBone.Checked;
+            debugGlyphVisualizer.WalkCentroidBone = this.chkDrawCentroidBone.Checked;
+            debugGlyphVisualizer.WalkGlyphBone = this.chkDrawGlyphBone.Checked;
             debugGlyphVisualizer.DrawRibs = this.chkDrawRib.Checked;
             debugGlyphVisualizer.DrawDynamicOutline = chkDynamicOutline.Checked;
             debugGlyphVisualizer.DrawRegenerateOutline = chkDrawRegenerateOutline.Checked;

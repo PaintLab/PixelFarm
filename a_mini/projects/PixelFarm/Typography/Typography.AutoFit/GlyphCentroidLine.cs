@@ -6,12 +6,12 @@ using System.Numerics;
 namespace Typography.Rendering
 {
 
-    public class GlyphCentroidBranch
+    class GlyphCentroidBranch
     {
         public List<GlyphCentroidLine> lines = new List<GlyphCentroidLine>();
         public List<GlyphBone> bones = new List<GlyphBone>();
-        public readonly GlyphTriangle startTri;
-        public GlyphCentroidBranch(GlyphTriangle startTri)
+        internal readonly GlyphTriangle startTri;
+        internal GlyphCentroidBranch(GlyphTriangle startTri)
         {
             this.startTri = startTri;
         }
@@ -266,7 +266,7 @@ namespace Typography.Rendering
     /// <summary>
     /// a collection of centroid line
     /// </summary>
-    public class CentroidLineHub
+    class CentroidLineHub
     {
         readonly GlyphTriangle mainTri;
         Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = new Dictionary<GlyphTriangle, GlyphCentroidBranch>();
@@ -459,7 +459,7 @@ namespace Typography.Rendering
     }
 
 
-    public class GlyphTip
+    class GlyphTip
     {
         public GlyphTip(GlyphCentroidLine ownerLine, Vector2 pos, EdgeLine edge)
         {
@@ -474,12 +474,12 @@ namespace Typography.Rendering
     /// <summary>
     /// a line that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
-    public class GlyphCentroidLine
+    class GlyphCentroidLine
     {
 
-        public readonly GlyphTriangle p, q;
+        internal readonly GlyphTriangle p, q;
         GlyphBoneJoint _boneJoint;
-        public GlyphCentroidLine(GlyphTriangle p, GlyphTriangle q)
+        internal GlyphCentroidLine(GlyphTriangle p, GlyphTriangle q)
         {
             //[A]
             //each triangle has 1 centroid point
@@ -588,7 +588,6 @@ namespace Typography.Rendering
                 return -1;
             }
         }
-
 
         static void ClassifyTriangleEdges(
             GlyphTriangle triangle,
@@ -885,6 +884,26 @@ namespace Typography.Rendering
                 }
             }
         }
+
+
+        /// <summary>
+        ///helper method for debug,  read px,py, qx,qy, 
+        /// </summary>
+        /// <param name="px"></param>
+        /// <param name="py"></param>
+        /// <param name="qx"></param>
+        /// <param name="qy"></param>
+        public void GetLineCoords(out double px, out double py, out double qx, out double qy)
+        {
+            px = p.CentroidX;
+            py = p.CentroidY;
+            //
+            qx = q.CentroidX;
+            qy = q.CentroidY;
+        }
+
+
+
         /// <summary>
         /// from a knownInsideEdge, find a matching-inside-edge on another triangle.
         /// </summary>

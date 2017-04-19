@@ -726,11 +726,11 @@ namespace Poly2Tri
             return Math.Abs((b * h * 0.5f));
         }
 
-     
-        public void Centroid2(out double cx, out double cy)
+
+        public void GetCentroid(out float cx, out float cy)
         {
-            cx = (P0.X + P1.X + P2.X) / 3f;
-            cy = (P0.Y + P1.Y + P2.Y) / 3f;
+            cx = (float)((P0.X + P1.X + P2.X) / 3f);
+            cy = (float)((P0.Y + P1.Y + P2.Y) / 3f);
         }
         /// <summary>
         /// Get the index of the neighbor that shares this edge (or -1 if it isn't shared)

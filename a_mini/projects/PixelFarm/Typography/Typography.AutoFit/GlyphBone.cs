@@ -25,12 +25,11 @@ namespace Typography.Rendering
         public EdgeLine _q_contact_edge;
         GlyphCentroidLine _owner;
 
-
 #if DEBUG
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;
 #endif
-        public GlyphBoneJoint(GlyphCentroidLine owner,
+        internal GlyphBoneJoint(GlyphCentroidLine owner,
             EdgeLine p_contact_edge,
             EdgeLine q_contact_edge)
         {
@@ -51,7 +50,7 @@ namespace Typography.Rendering
                 return _p_contact_edge.GetMidPoint();
             }
         }
-        public GlyphCentroidLine OwnerCentroidLine
+        internal GlyphCentroidLine OwnerCentroidLine
         {
             get { return _owner; }
         }
@@ -214,7 +213,7 @@ namespace Typography.Rendering
             else
             {
                 //not found?=>
-            } 
+            }
 
         }
 
@@ -298,7 +297,7 @@ namespace Typography.Rendering
             }
         }
         public bool IsLongBone { get; internal set; }
- 
+
         //--------
         public float LeftMostPoint()
         {
