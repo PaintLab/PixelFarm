@@ -22,12 +22,7 @@ namespace Typography.Rendering
         public readonly double x1;
         public readonly double y1;
 
-        static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
-        static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
-        static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
-        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
-
-
+     
         Dictionary<EdgeLine, bool> matchingEdges;
         //------------------------------
         /// <summary>
@@ -175,5 +170,12 @@ namespace Typography.Rendering
             }
 #endif
         }
+
+        static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
+        static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
+        static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
+        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+
+
     }
 }
