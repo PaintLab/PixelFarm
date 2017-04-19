@@ -29,6 +29,7 @@ namespace Typography.Rendering
             _glyphToCountor.Read(glyphPoints, glyphContours);
             //2. get result as list of contour
             List<GlyphContour> contours = _glyphToCountor.GetContours();
+            _glyphFlattener.Result = new List<GlyphPoint2D>(); //start with blank output list
             //
             //3. flatten each contour with the flattener
             int j = contours.Count;
@@ -147,8 +148,11 @@ namespace Typography.Rendering
                 }
                 else
                 {
-                    points.Add(p.triangulationPoint =
-                        new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = p });
+                    var triPoint = new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = p };
+#if DEBUG
+                    p.dbugTriangulationPoint = triPoint;
+#endif
+                    points.Add(triPoint);
 
                 }
             }
@@ -259,9 +263,7 @@ namespace Typography.Rendering
                     {
                         //ensure no duplicated point
                         s_debugTmpPoints.Add(tmp_point, true);
-                        if (p.triangulationPoint != null)
-                        {
-                        }
+
                     }
                     else
                     {

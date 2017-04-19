@@ -65,16 +65,11 @@ namespace Typography.Rendering
             public List<StrokeLine> _branches;
         }
 
-
-        List<GlyphContour> _contours;
-#if DEBUG
-        GlyphIntermediateOutline _dbugTempIntermediateOutline;
-
-        public bool dbugDrawRegeneratedOutlines { get; set; }
-#endif
-
-        public float LeftControlPosX { get; set; }
         List<StrokeLineHub> _strokeLineHub;
+        List<GlyphContour> _contours;
+        List<GlyphBone> _longVerticalBones;
+
+
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
 
@@ -82,7 +77,13 @@ namespace Typography.Rendering
             _dbugTempIntermediateOutline = intermediateOutline;
 #endif
 
+            //we convert data from GlyphIntermediateOutline to newform (lightweight form).
+            //and save it here.
+
             _contours = intermediateOutline.GetContours();
+            _longVerticalBones = intermediateOutline.LongVerticalBones;
+            LeftControlPosX = intermediateOutline.LeftControlPosX;
+
             //
             Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs = intermediateOutline.GetCentroidLineHubs();
             _strokeLineHub = new List<StrokeLineHub>(centroidLineHubs.Count);
@@ -117,22 +118,8 @@ namespace Typography.Rendering
 
         }
 
-#if DEBUG
-        public List<GlyphTriangle> dbugGetGlyphTriangles()
-        {
-            return _dbugTempIntermediateOutline.GetTriangles();
-        }
-        public Dictionary<GlyphTriangle, CentroidLineHub> dbugGetCentroidLineHubs()
-        {
-            return _dbugTempIntermediateOutline.GetCentroidLineHubs();
-        }
-#endif
-#if DEBUG
-        public static List<GlyphPoint2D> s_dbugAffectedPoints = new List<GlyphPoint2D>();
-        public static Dictionary<GlyphPoint2D, bool> s_dbugAff2 = new Dictionary<GlyphPoint2D, bool>();
 
-#endif
-
+        public float LeftControlPosX { get; set; }
         public void Walk()
         {
             //each centroid hub 
@@ -199,12 +186,12 @@ namespace Typography.Rendering
             double minorOffset = 0;
             LeftControlPosX = 0;
             int longBoneCount = 0;
-            if (_dbugTempIntermediateOutline.LongVerticalBones != null && (longBoneCount = _dbugTempIntermediateOutline.LongVerticalBones.Count) > 0)
+            if (_longVerticalBones != null && (longBoneCount = _longVerticalBones.Count) > 0)
             {
                 ////only longest bone
 
                 //the first one is the longest bone.
-                GlyphBone longVertBone = _dbugTempIntermediateOutline.LongVerticalBones[0];
+                GlyphBone longVertBone = _longVerticalBones[0];
                 var leftTouchPos = longVertBone.LeftMostPoint();
                 LeftControlPosX = leftTouchPos;
                 //double avgWidth = longVertBone.CalculateAvgBoneWidth();
@@ -829,6 +816,21 @@ namespace Typography.Rendering
                 }
             }
         }
+
+#if DEBUG
+        public List<GlyphTriangle> dbugGetGlyphTriangles()
+        {
+            return _dbugTempIntermediateOutline.GetTriangles();
+        }
+        public Dictionary<GlyphTriangle, CentroidLineHub> dbugGetCentroidLineHubs()
+        {
+            return _dbugTempIntermediateOutline.GetCentroidLineHubs();
+        }
+        public static List<GlyphPoint2D> s_dbugAffectedPoints = new List<GlyphPoint2D>();
+        public static Dictionary<GlyphPoint2D, bool> s_dbugAff2 = new Dictionary<GlyphPoint2D, bool>();
+        GlyphIntermediateOutline _dbugTempIntermediateOutline;
+        public bool dbugDrawRegeneratedOutlines { get; set; }
+#endif
 
     }
 }
