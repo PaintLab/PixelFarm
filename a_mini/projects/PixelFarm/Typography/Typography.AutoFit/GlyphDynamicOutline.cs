@@ -119,7 +119,6 @@ namespace Typography.Rendering
         }
 
 
-
         public float LeftControlPosX { get; set; }
         public void Walk()
         {
@@ -479,6 +478,8 @@ namespace Typography.Rendering
 
             tx.CloseContour();
         }
+
+
         void WalkHubCenter(Vector2 hubCenter)
         {
 
