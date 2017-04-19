@@ -4,12 +4,10 @@ using System.Numerics;
 using System.Collections.Generic;
 using Typography.OpenFont;
 
-using PixelFarm.Agg;
-
 namespace Typography.Rendering
 {
 
-    public class GlyphDynamicOutline2
+    public class GlyphDynamicOutline3
     {
 
 
@@ -68,14 +66,13 @@ namespace Typography.Rendering
             public List<StrokeLine> _branches;
         }
 
-#if DEBUG
-        CanvasPainter painter;
+#if DEBUG 
         float pxscale;
         public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif
 
         List<StrokeLineHub> _strokeLineHub;
-        public GlyphDynamicOutline2(GlyphIntermediateOutline fitOutline)
+        public GlyphDynamicOutline3(GlyphIntermediateOutline fitOutline)
         {
 
 
@@ -111,13 +108,7 @@ namespace Typography.Rendering
             }
 
         }
-#if DEBUG
-        public void dbugSetCanvasPainter(CanvasPainter painter, float pxscale)
-        {
-            this.painter = painter;
-            this.pxscale = pxscale;
-        }
-#endif
+
         public void Walk()
         {
             //each centroid hub 
@@ -154,29 +145,29 @@ namespace Typography.Rendering
         void WalkHubCenter(Vector2 hubCenter)
         {
 
-#if DEBUG   
-            painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
-#endif
+            //#if DEBUG   
+            //            painter.FillRectLBWH(hubCenter.X * pxscale, hubCenter.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
+            //#endif
 
         }
         void WalkFromBranchHeadToHubCenter(Vector2 brHead, Vector2 hubCenter)
         {
-#if DEBUG
-            painter.Line(
-                 brHead.X * pxscale, brHead.Y * pxscale,
-                 hubCenter.X * pxscale, hubCenter.Y * pxscale,
-                 PixelFarm.Drawing.Color.Red);
-#endif
+            //#if DEBUG
+            //            painter.Line(
+            //                 brHead.X * pxscale, brHead.Y * pxscale,
+            //                 hubCenter.X * pxscale, hubCenter.Y * pxscale,
+            //                 PixelFarm.Drawing.Color.Red);
+            //#endif
         }
         void WalkFromHubCenterToJoint(Vector2 joint_pos, Vector2 hubCenter)
         {
             //this is a line that link from head of lineHub to ANOTHER branch (at specific joint)
-#if DEBUG
-            painter.Line(
-               joint_pos.X * pxscale, joint_pos.Y * pxscale,
-               hubCenter.X * pxscale, hubCenter.Y * pxscale,
-               PixelFarm.Drawing.Color.Magenta);
-#endif
+            //#if DEBUG
+            //            painter.Line(
+            //               joint_pos.X * pxscale, joint_pos.Y * pxscale,
+            //               hubCenter.X * pxscale, hubCenter.Y * pxscale,
+            //               PixelFarm.Drawing.Color.Magenta);
+            //#endif
         }
         void SetJointDetail(GlyphBoneJoint joint, StrokeJoint strokeJoint)
         {
@@ -267,40 +258,40 @@ namespace Typography.Rendering
         }
         void WalkToCenterOfJoint(Vector2 jointCenter)
         {
-#if DEBUG
-            painter.FillRectLBWH(jointCenter.X * pxscale, jointCenter.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
-#endif
+            //#if DEBUG
+            //            painter.FillRectLBWH(jointCenter.X * pxscale, jointCenter.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
+            //#endif
         }
         void WalkFromJointToTip(Vector2 contactPoint, Vector2 tipPoint)
         {
-#if DEBUG
-            painter.Line(
-               contactPoint.X * pxscale, contactPoint.Y * pxscale,
-               tipPoint.X * pxscale, tipPoint.Y * pxscale,
-               PixelFarm.Drawing.Color.White);
-#endif
+            //#if DEBUG
+            //            painter.Line(
+            //               contactPoint.X * pxscale, contactPoint.Y * pxscale,
+            //               tipPoint.X * pxscale, tipPoint.Y * pxscale,
+            //               PixelFarm.Drawing.Color.White);
+            //#endif
         }
         void WalkRib(System.Numerics.Vector2 vec, System.Numerics.Vector2 jointPos)
         {
-#if DEBUG
-            //rib attach point         
-            painter.FillRectLBWH(vec.X * pxscale, vec.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Green);
+            //#if DEBUG
+            //            //rib attach point         
+            //            painter.FillRectLBWH(vec.X * pxscale, vec.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Green);
 
-            //------------------------------------------------------------------
-            //rib line
-            painter.Line(
-                jointPos.X * pxscale, jointPos.Y * pxscale,
-                vec.X * pxscale, vec.Y * pxscale);
-            //------------------------------------------------------------------
-#endif
+            //            //------------------------------------------------------------------
+            //            //rib line
+            //            painter.Line(
+            //                jointPos.X * pxscale, jointPos.Y * pxscale,
+            //                vec.X * pxscale, vec.Y * pxscale);
+            //            //------------------------------------------------------------------
+            //#endif
         }
 
         static void GeneratePerpendicularLines(
              float x0, float y0, float x1, float y1, float len,
-             out PixelFarm.VectorMath.Vector delta)
+             out Vector2 delta)
         {
-            PixelFarm.VectorMath.Vector v0 = new PixelFarm.VectorMath.Vector(x0, y0);
-            PixelFarm.VectorMath.Vector v1 = new PixelFarm.VectorMath.Vector(x1, y1);
+            Vector2 v0 = new Vector2(x0, y0);
+            Vector2 v1 = new Vector2(x1, y1);
 
             delta = (v1 - v0) / 2;
             delta = delta.NewLength(len);
@@ -308,10 +299,10 @@ namespace Typography.Rendering
         }
         static void GeneratePerpendicularLines(
           Vector2 p0, Vector2 p1, float len,
-          out PixelFarm.VectorMath.Vector delta)
+          out Vector2 delta)
         {
-            PixelFarm.VectorMath.Vector v0 = new PixelFarm.VectorMath.Vector(p0.X, p0.Y);
-            PixelFarm.VectorMath.Vector v1 = new PixelFarm.VectorMath.Vector(p1.X, p1.Y);
+            Vector2 v0 = new Vector2(p0.X, p0.Y);
+            Vector2 v1 = new Vector2(p1.X, p1.Y);
 
             delta = (v1 - v0) / 2;
             delta = delta.NewLength(len);
@@ -333,7 +324,7 @@ namespace Typography.Rendering
                 {
 
                     //create perpendicular 
-                    PixelFarm.VectorMath.Vector delta;
+                    Vector2 delta;
                     GeneratePerpendicularLines(jointA._position, jointB._position, 5 / pxscale, out delta);
                     //upper and lower
                     newBorders.Insert(0, (jointA._position + new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
@@ -345,7 +336,7 @@ namespace Typography.Rendering
                 if (jointA != null && jointA.hasTip)
                 {
                     Vector2 jointAPoint = jointA._position;
-                    PixelFarm.VectorMath.Vector delta;
+                    Vector2 delta;
                     GeneratePerpendicularLines(jointA._position, jointA._tip_endAt, 5 / pxscale, out delta);
                     newBorders.Insert(0, (jointA._position + new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
                     newBorders.Add((jointA._position - new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
@@ -354,25 +345,25 @@ namespace Typography.Rendering
                     newBorders.Add((jointA._tip_endAt - new Vector2((float)delta.X, (float)delta.Y)) * pxscale);
                 }
             }
-            //---------------------------------------------------
-            int newBorderSegmentCount = newBorders.Count;
-            VertexStore vxs = new VertexStore();
-            for (int n = 0; n < newBorderSegmentCount; ++n)
-            {
-                Vector2 borderSegment = newBorders[n];
-                if (n == 0)
-                {
-                    vxs.AddMoveTo(borderSegment.X, borderSegment.Y);
-                }
-                else
-                {
-                    vxs.AddLineTo(borderSegment.X, borderSegment.Y);
-                }
-            }
-            vxs.AddCloseFigure();
-            //---------------------------------------------------
-            painter.Fill(vxs, PixelFarm.Drawing.Color.Red);
-            //---------------------------------------------------
+            ////---------------------------------------------------
+            //int newBorderSegmentCount = newBorders.Count;
+            //VertexStore vxs = new VertexStore();
+            //for (int n = 0; n < newBorderSegmentCount; ++n)
+            //{
+            //    Vector2 borderSegment = newBorders[n];
+            //    if (n == 0)
+            //    {
+            //        vxs.AddMoveTo(borderSegment.X, borderSegment.Y);
+            //    }
+            //    else
+            //    {
+            //        vxs.AddLineTo(borderSegment.X, borderSegment.Y);
+            //    }
+            //}
+            //vxs.AddCloseFigure();
+            ////---------------------------------------------------
+            //painter.Fill(vxs, PixelFarm.Drawing.Color.Red);
+            ////---------------------------------------------------
         }
         void WalkStrokeLine(StrokeLine branch)
         {
@@ -381,13 +372,13 @@ namespace Typography.Rendering
 
             int startAt = 0;
             int endAt = startAt + count;
-#if DEBUG
-            var prevColor = painter.StrokeColor;
-            painter.StrokeColor = PixelFarm.Drawing.Color.White;
-#endif
+            //#if DEBUG
+            //            var prevColor = painter.StrokeColor;
+            //            painter.StrokeColor = PixelFarm.Drawing.Color.White;
+            //#endif
 
             if (dbugDrawRegeneratedOutlines)
-            { 
+            {
                 //old 
                 RegenerateBorders(segments, startAt, endAt);
             }
@@ -403,12 +394,12 @@ namespace Typography.Rendering
                     Vector2 jointAPoint = jointA._position;
                     Vector2 jointBPoint = jointB._position;
 
-#if DEBUG
-                    painter.Line(
-                        jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
-                        jointBPoint.X * pxscale, jointBPoint.Y * pxscale
-                        );
-#endif
+                    //#if DEBUG
+                    //                    painter.Line(
+                    //                        jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
+                    //                        jointBPoint.X * pxscale, jointBPoint.Y * pxscale
+                    //                        );
+                    //#endif
                     WalkToJoint(jointA);
                     WalkToJoint(jointB);
                     valid = true;
@@ -417,12 +408,12 @@ namespace Typography.Rendering
                 {
                     Vector2 jointAPoint = jointA._position;
                     Vector2 tipEnd = jointA._tip_endAt;
-#if DEBUG
-                    painter.Line(
-                        jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
-                        tipEnd.X * pxscale, tipEnd.Y * pxscale
-                        );
-#endif
+                    //#if DEBUG
+                    //                    painter.Line(
+                    //                        jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
+                    //                        tipEnd.X * pxscale, tipEnd.Y * pxscale
+                    //                        );
+                    //#endif
                     WalkToJoint(jointA);
                     valid = true;
                 }
@@ -430,19 +421,19 @@ namespace Typography.Rendering
                 if (i == 0)
                 {
                     //for first bone
-#if DEBUG
-                    Vector2 headpos = branch._head;
-                    painter.FillRectLBWH(headpos.X * pxscale, headpos.Y * pxscale, 5, 5);
-#endif
+                    //#if DEBUG
+                    //                    Vector2 headpos = branch._head;
+                    //                    painter.FillRectLBWH(headpos.X * pxscale, headpos.Y * pxscale, 5, 5);
+                    //#endif
                 }
                 if (!valid)
                 {
                     throw new NotSupportedException();
                 }
             }
-#if DEBUG
-            painter.StrokeColor = prevColor;
-#endif
+            //#if DEBUG
+            //            painter.StrokeColor = prevColor;
+            //#endif
         }
         void CreateStrokeSegments(GlyphCentroidBranch branch, StrokeLine strokeLine)
         {

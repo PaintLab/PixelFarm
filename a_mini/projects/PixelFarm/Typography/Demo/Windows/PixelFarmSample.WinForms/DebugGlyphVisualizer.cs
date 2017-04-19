@@ -154,7 +154,7 @@ namespace SampleWinForms.UI
 
             if (DrawDynamicOutline)
             {
-                GlyphDynamicOutline fitOutline = builder.LatestGlyphFitOutline;
+                GlyphIntermediateOutline fitOutline = builder.LatestGlyphFitOutline;
                 DynamicOutline(painter, fitOutline, scale, DrawRegenerateOutline);
             }
 
@@ -164,7 +164,7 @@ namespace SampleWinForms.UI
         {
 #if DEBUG
 
-            GlyphDynamicOutline fitOutline = builder.LatestGlyphFitOutline;
+            GlyphIntermediateOutline fitOutline = builder.LatestGlyphFitOutline;
             if (fitOutline != null)
             {
                 DrawTriangulatedGlyph(painter, fitOutline, _pxscale);
@@ -555,7 +555,7 @@ namespace SampleWinForms.UI
         }
 
 
-        public void DrawTriangulatedGlyph(CanvasPainter painter, GlyphDynamicOutline glyphFitOutline, float pxscale)
+        public void DrawTriangulatedGlyph(CanvasPainter painter, GlyphIntermediateOutline glyphFitOutline, float pxscale)
         {
             painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
             List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
@@ -655,7 +655,7 @@ namespace SampleWinForms.UI
                 }
             }
         }
-        public void DynamicOutline(CanvasPainter painter, GlyphDynamicOutline glyphFitOutline, float pxscale, bool withRegenerateOutlines)
+        public void DynamicOutline(CanvasPainter painter, GlyphIntermediateOutline glyphFitOutline, float pxscale, bool withRegenerateOutlines)
         {
             GlyphDynamicOutline2 dynamicOutline = new GlyphDynamicOutline2(glyphFitOutline);
 #if DEBUG

@@ -8,7 +8,7 @@ using System.Numerics;
 namespace Typography.Rendering
 {
 
-    public class GlyphDynamicOutline
+    public class GlyphIntermediateOutline
     {
 
         List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
@@ -16,7 +16,7 @@ namespace Typography.Rendering
 #if DEBUG
         Polygon _dbugpolygon;
 #endif 
-        internal GlyphDynamicOutline(Polygon polygon, List<GlyphContour> contours)
+        internal GlyphIntermediateOutline(Polygon polygon, List<GlyphContour> contours)
         {
             this._contours = contours;
 #if DEBUG

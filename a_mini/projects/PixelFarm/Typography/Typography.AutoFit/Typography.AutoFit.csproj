@@ -38,9 +38,10 @@
     <Compile Include="CurveGen.cs" />
     <Compile Include="GlyphBone.cs" />
     <Compile Include="GlyphCentroidLine.cs" />
+    <Compile Include="GlyphDynamicOutline2.cs" />
     <Compile Include="GlyphFitOutlineAnalyzer.cs" />
     <Compile Include="GlyphImages.cs" />
-    <Compile Include="GlyphDynamicOutline.cs" />
+    <Compile Include="GlyphIntermediateOutline.cs" />
     <Compile Include="GlyphTranslatorToContour.cs" />
     <Compile Include="GlyphTriangleAndEdge.cs" />
     <Compile Include="MyMath.cs" />
