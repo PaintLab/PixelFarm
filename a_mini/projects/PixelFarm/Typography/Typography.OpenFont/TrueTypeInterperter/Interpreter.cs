@@ -1472,8 +1472,8 @@ namespace Typography.OpenFont
             // figure out how much the two reference points
             // have been shifted from their original positions
             float delta1, delta2;
-            var lower = *GetPoint(original, ref1);
-            var upper = *GetPoint(original, ref2);
+            float lower = *GetPoint(original, ref1);
+            float upper = *GetPoint(original, ref2);
             if (lower > upper)
             {
                 var temp = lower;
@@ -1489,22 +1489,28 @@ namespace Typography.OpenFont
                 delta2 = *GetPoint(current, ref2) - upper;
             }
 
-            var lowerCurrent = delta1 + lower;
-            var upperCurrent = delta2 + upper;
-            var scale = (upperCurrent - lowerCurrent) / (upper - lower);
+            float lowerCurrent = delta1 + lower;
+            float upperCurrent = delta2 + upper;
+            float scale = (upperCurrent - lowerCurrent) / (upper - lower);
 
             for (int i = start; i <= end; i++)
             {
                 // three cases: if it's to the left of the lower reference point or to
                 // the right of the upper reference point, do a shift based on that ref point.
                 // otherwise, interpolate between the two of them
-                var pos = *GetPoint(original, i);
+                float pos = *GetPoint(original, i);
                 if (pos <= lower)
+                {
                     pos += delta1;
+                }
                 else if (pos >= upper)
+                {
                     pos += delta2;
+                }
                 else
+                {
                     pos = lowerCurrent + (pos - lower) * scale;
+                }
                 *GetPoint(current, i) = pos;
             }
         }
