@@ -446,14 +446,23 @@ namespace SampleWinForms.UI
 
             if (bone.hasCutPointOnEdge)
             {
-                Vector2 midBone = bone.GetMidPoint();
+                Vector2 midBone = bone.GetMidPoint() * pxscale;
                 Vector2 cut_point = bone.cutPoint_onEdge * pxscale;
                 painter.Line(
                     cut_point.X, cut_point.Y,
-                    midBone.X * pxscale, midBone.Y * pxscale,
+                    midBone.X, midBone.Y,
                     PixelFarm.Drawing.Color.White);
 
-
+                //draw new line
+                Vector2 delta = bone.cutPoint_onEdge - bone.GetMidPoint();
+                double currentLen = delta.Length(); //unscale version
+                delta = delta.NewLength(currentLen * newRelativeLen);
+                //
+                Vector2 v2 = midBone + (delta * pxscale);
+                painter.Line(
+                    midBone.X, midBone.Y,
+                    v2.X, v2.Y,
+                    PixelFarm.Drawing.Color.Red);
             }
 
             //--------
