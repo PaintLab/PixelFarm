@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using Typography.OpenFont;
 using Poly2Tri;
+using System.Numerics;
+
 namespace Typography.Rendering
 {
 
@@ -22,13 +24,13 @@ namespace Typography.Rendering
             EdgeLine.s_dbugTotalId = 0;//reset
 #endif
 
-            //1.Generate GlyphTriangle triangle from DelaunayTriangle 
+            //1. Generate GlyphTriangle triangle from DelaunayTriangle 
             foreach (DelaunayTriangle delnTri in polygon.Triangles)
             {
                 delnTri.MarkAsActualTriangle();
                 _triangles.Add(new GlyphTriangle(delnTri));
             }
-            //2.
+            //2. 
             Analyze();
         }
         Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs;
@@ -54,12 +56,9 @@ namespace Typography.Rendering
 
             for (int i = 0; i < triCount; ++i)
             {
-                //next tri
-                //TODO: review here
                 GlyphTriangle tri = _triangles[i];
                 if (i == 0)
                 {
-
                     centroidLineHubs[tri] = currentCentroidLineHub = new CentroidLineHub(tri);
                     usedTriList.Add(latestTri = tri);
                 }
@@ -161,16 +160,20 @@ namespace Typography.Rendering
             outputVerticalLongBones = new List<GlyphBone>();
             AnalyzeBoneLength(newBones, outputVerticalLongBones);
             //------------- 
-            //create perpendicular line link from control nodes to glyph bone
-
-
-
+            //create perpendicular line link from control nodes to glyph bone 
             //----------------------------------------
             outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
             //----------------------------------------
 
             //connect glyph part/contour with bone
             //----------------------------------------
+            //this is optional ?...
+            //AnalyzeLinksToGlyphJoints();
+            //----------------------------------------
+        }
+        void AnalyzeLinksToGlyphJoints()
+        {
+
             int j = _contours.Count;
             Dictionary<object, TempSqLengthResult> tempSqLenDic = new Dictionary<object, TempSqLengthResult>();
             for (int i = 0; i < j; ++i)
@@ -247,43 +250,13 @@ namespace Typography.Rendering
                                     foundSomeResult = true;
                                 }
 
-                                //if (shortestResult.joint != null)
-                                //{
-                                //    //if shortest is joint
-                                //    shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
-                                //}
-                                //else
-                                //{
-                                //    //if shortest is bone, 
-                                //    //we collect all perpendicular bones
-                                //    foreach (TempSqLengthResult r in tempSqLenDic.Values)
-                                //    {
-                                //        if (r.bone != null)
-                                //        {
-                                //            shortestResult.bone.AddPerpendicularPoint(glyphPoint, shortestResult.cutPoint);
-                                //        }
-                                //    }
-                                //}
-
-
-                                //if (r.joint != null)
-                                //{
-                                //    r.joint.AddAssociatedGlyphPoint(glyphPoint);
-
-                                //}
-                                //else if (r.bone != null)
-                                //{
-                                //    r.bone.AddPerpendicularPoint(glyphPoint, r.cutPoint);
-                                //}
-
                             }
                             //---------
                             if (!foundSomeResult)
                             {
                                 throw new NotSupportedException();
                             }
-                            //---------
-
+                            //--------- 
                             foreach (TempSqLengthResult r in tempSqLenDic.Values)
                             {
 
@@ -296,26 +269,6 @@ namespace Typography.Rendering
                             {
                                 shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
                             }
-
-                            //found, create a perpedicular line from glyph point to a bone
-                            //---------
-                            //if (shortestResult.joint != null)
-                            //{
-                            //    //if shortest is joint
-                            //    shortestResult.joint.AddAssociatedGlyphPoint(glyphPoint);
-
-                            //}
-
-                            ////if shortest is bone, 
-                            ////we collect all perpendicular bones
-                            //foreach (TempSqLengthResult r in tempSqLenDic.Values)
-                            //{
-                            //    if (r.bone != null)
-                            //    {
-                            //        shortestResult.bone.AddPerpendicularPoint(glyphPoint, shortestResult.cutPoint);
-                            //    }
-                            //}
-
                         }
 
                     }
@@ -444,11 +397,11 @@ namespace Typography.Rendering
             s_dbugAffectedPoints.Clear();
             s_dbugAff2.Clear();
 #endif
-            List<List<Point2d>> genPointList = new List<List<Point2d>>();
+            List<List<Vector2>> genPointList = new List<List<Vector2>>();
             for (int i = 0; i < j; ++i)
             {
                 //new contour
-                List<Point2d> genPoints = new List<Point2d>();
+                List<Vector2> genPoints = new List<Vector2>();
                 GenerateNewFitPoints(genPoints,
                     contours[i], pxScale,
                     false, true, false);
@@ -501,20 +454,20 @@ namespace Typography.Rendering
             tx.EndRead();
             //-------------
         }
-        static float FindLeftMost(List<List<Point2d>> genPointList)
+        static float FindLeftMost(List<List<Vector2>> genPointList)
         {
             //find left most x value
             float min = float.MaxValue;
             for (int i = genPointList.Count - 1; i >= 0; --i)
             {
                 //new contour
-                List<Point2d> genPoints = genPointList[i];
+                List<Vector2> genPoints = genPointList[i];
                 for (int m = genPoints.Count - 1; m >= 0; --m)
                 {
-                    Point2d p = genPoints[m];
-                    if (p.x < min)
+                    Vector2 p = genPoints[m];
+                    if (p.X < min)
                     {
-                        min = p.x;
+                        min = p.X;
                     }
                 }
             }
@@ -615,23 +568,7 @@ namespace Typography.Rendering
                 return integer1;
             }
         }
-        struct Point2d
-        {
-            public float x;
-            public float y;
-            public Point2d(float x, float y)
-            {
 
-                this.x = x;
-                this.y = y;
-            }
-#if DEBUG
-            public override string ToString()
-            {
-                return "(" + x + "," + y + ")";
-            }
-#endif
-        }
 #if DEBUG
         public static List<GlyphPoint2D> s_dbugAffectedPoints = new List<GlyphPoint2D>();
         public static Dictionary<GlyphPoint2D, bool> s_dbugAff2 = new Dictionary<GlyphPoint2D, bool>();
@@ -640,7 +577,7 @@ namespace Typography.Rendering
 
 
         static void GenerateNewFitPoints(
-            List<Point2d> genPoints,
+            List<Vector2> genPoints,
             GlyphContour contour,
             float pixelScale,
             bool x_axis,
@@ -691,7 +628,7 @@ namespace Typography.Rendering
                     EdgeLine rightside = p.GetMatchingVerticalEdge();
                 }
 
-                genPoints.Add(new Point2d((float)p_x, (float)p_y));
+                genPoints.Add(new Vector2((float)p_x, (float)p_y));
                 //-------------
                 first_px = p_x;
                 first_py = p_y;
@@ -718,14 +655,14 @@ namespace Typography.Rendering
                     p_x = new_x;
                 }
 
-                genPoints.Add(new Point2d((float)p_x, (float)p_y));
+                genPoints.Add(new Vector2((float)p_x, (float)p_y));
             }
         }
 
 
 
         static void GenerateNewFitPoints2(
-            List<Point2d> genPoints,
+            List<Vector2> genPoints,
             GlyphContour contour,
             float pixelScale,
             bool x_axis,
@@ -776,7 +713,7 @@ namespace Typography.Rendering
                     EdgeLine rightside = p.GetMatchingVerticalEdge();
                 }
 
-                genPoints.Add(new Point2d((float)p_x, (float)p_y));
+                genPoints.Add(new Vector2((float)p_x, (float)p_y));
                 //-------------
                 first_px = p_x;
                 first_py = p_y;
@@ -803,17 +740,17 @@ namespace Typography.Rendering
                     p_x = new_x;
                 }
 
-                genPoints.Add(new Point2d((float)p_x, (float)p_y));
+                genPoints.Add(new Vector2((float)p_x, (float)p_y));
             }
         }
-        static void OffsetPoints(List<Point2d> genPoints, double offset)
+        static void OffsetPoints(List<Vector2> genPoints, double offset)
         {
 
             int j = genPoints.Count;
             for (int i = 0; i < j; ++i)
             {
-                Point2d oldValue = genPoints[i];
-                genPoints[i] = new Point2d((float)(oldValue.x + offset), oldValue.y);
+                Vector2 oldValue = genPoints[i];
+                genPoints[i] = new Vector2((float)(oldValue.X + offset), oldValue.Y);
             }
         }
 
@@ -825,7 +762,7 @@ namespace Typography.Rendering
         /// <param name="contour"></param>
         static void GenerateFitOutput(
             IGlyphTranslator tx,
-            List<Point2d> genPoints,
+            List<Vector2> genPoints,
             GlyphContour contour)
         {
 
@@ -850,18 +787,18 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 GlyphPoint2D glyphPoint = flattenPoints[i];
-                Point2d p = genPoints[i];
+                Vector2 p = genPoints[i];
 
                 if (glyphPoint.AdjustedY != 0)
                 {
                     if (i == 0)
                     {
                         //first point
-                        tx.MoveTo(first_px = p.x, first_py = (float)(p.y + glyphPoint.AdjustedY));
+                        tx.MoveTo(first_px = p.X, first_py = (float)(p.Y + glyphPoint.AdjustedY));
                     }
                     else
                     {
-                        tx.LineTo(p.x, (float)(p.y + glyphPoint.AdjustedY));
+                        tx.LineTo(p.X, (float)(p.Y + glyphPoint.AdjustedY));
                     }
                 }
                 else
@@ -869,11 +806,11 @@ namespace Typography.Rendering
                     if (i == 0)
                     {
                         //first point
-                        tx.MoveTo(first_px = p.x, first_py = p.y);
+                        tx.MoveTo(first_px = p.X, first_py = p.Y);
                     }
                     else
                     {
-                        tx.LineTo(p.x, p.y);
+                        tx.LineTo(p.X, p.Y);
                     }
                 }
             }

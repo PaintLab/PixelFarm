@@ -477,10 +477,8 @@ namespace Typography.Rendering
     public class GlyphCentroidLine
     {
 
-        public readonly GlyphTriangle p, q;
-
-        GlyphBoneJoint _boneJoint;
-
+        public readonly GlyphTriangle p, q; 
+        GlyphBoneJoint _boneJoint; 
         public GlyphCentroidLine(GlyphTriangle p, GlyphTriangle q)
         {
             //[A]
@@ -497,13 +495,7 @@ namespace Typography.Rendering
             this.q = q;
         }
         public bool SpecialConnectFromLastToFirst { get; set; }
-        public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
-
-        public double SlopeAngle { get; private set; }
-
-
-        public LineSlopeKind SlopeKind { get; private set; }
-
+        public GlyphBoneJoint BoneJoint { get { return _boneJoint; } } 
         /// <summary>
         /// add information about edges to each triangle
         /// </summary>
@@ -831,27 +823,7 @@ namespace Typography.Rendering
                                 //both p and q are curve in between
                                 break;
                         }
-                        //                        //----------------------------------------------------------------------------
-                        //                        //seconday ribs: a perpendicular line from edge to the abstract glyph bone
-                        //                        //only 1 outside
-                        //                        //other is (outside1,2) is inside edge
-                        //                        //create a line between mid point of contactEdge (inside) and newly found anotherInsideEdge
-                        //                        //this call 'abstract glyph-bone'
-                        //#if DEBUG
-                        //                        if (anotherInsideEdge == contactEdge)
-                        //                        {
-                        //                            //should not occur
-                        //                            throw new NotSupportedException();
-                        //                        }
-                        //#endif
-                        //                        //create a perpedicular line from midpoint of contact edge to the outside        
-                        //                        Vector2 cut1;
-                        //                        if (MyMath.FindPerpendicularCutPoint(outside0, contactEdge.GetMidPoint(), out cut1))
-                        //                        {
-                        //                            outside0.AddCutPoints(
-                        //                                cut1,
-                        //                                contactEdge.GetMidPoint());
-                        //                        }
+                       
                     }
                     break;
                 case 2:
@@ -960,20 +932,20 @@ namespace Typography.Rendering
         /// <summary>
         /// check if the 2 triangle is matching or not
         /// </summary>
-        /// <param name="a_edge"></param>
-        /// <param name="b_edge"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         /// <returns></returns>
-        static bool IsMatchingEdge(EdgeLine a_edge, EdgeLine b_edge)
+        static bool IsMatchingEdge(EdgeLine a, EdgeLine b)
         {
             //x-axis
-            if ((a_edge.x0 == b_edge.x0 && a_edge.x1 == b_edge.x1) ||
-                (a_edge.x0 == b_edge.x1 && a_edge.x1 == b_edge.x0))
+            if ((a.x0 == b.x0 && a.x1 == b.x1) ||
+                (a.x0 == b.x1 && a.x1 == b.x0))
             {
                 //pass x-axis
                 //
                 //y_axis
-                if ((a_edge.y0 == b_edge.y0 && a_edge.y1 == b_edge.y1) ||
-                    (a_edge.y0 == b_edge.y1 && a_edge.y1 == b_edge.y0))
+                if ((a.y0 == b.y0 && a.y1 == b.y1) ||
+                    (a.y0 == b.y1 && a.y1 == b.y0))
                 {
                     return true;
                 }

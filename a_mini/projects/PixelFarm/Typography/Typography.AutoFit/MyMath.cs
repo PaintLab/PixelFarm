@@ -108,6 +108,36 @@ namespace Typography.Rendering
                 }
             }
         }
+
+       
+        /// <summary>
+        /// which one is min,max
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        static void GetMinMax(GlyphBone bone, out Vector2 min, out Vector2 max)
+        {
+            if (bone.JointB != null)
+            {
+                var a_pos = bone.JointA.Position;
+                var b_pos = bone.JointB.Position;
+
+                min = Vector2.Min(a_pos, b_pos);
+                max = Vector2.Max(a_pos, b_pos);
+
+            }
+            else if (bone.TipEdge != null)
+            {
+                var a_pos = bone.JointA.Position;
+                var tip_pos = bone.TipEdge.GetMidPoint();
+                min = Vector2.Min(a_pos, tip_pos);
+                max = Vector2.Max(a_pos, tip_pos);
+            }
+            else
+            {
+                throw new System.NotSupportedException();
+            }
+        }
         public static bool FindPerpendicularCutPoint(GlyphBone bone, Vector2 p, out Vector2 cutPoint)
         {
             if (bone.JointB != null)
@@ -118,7 +148,7 @@ namespace Typography.Rendering
                   p);
                 //find min /max
                 Vector2 min, max;
-                bone.GetMinMax(out min, out max);
+                GetMinMax(bone, out min, out max);
                 return cutPoint.X >= min.X && cutPoint.X <= max.X && cutPoint.Y >= min.Y && cutPoint.Y <= max.Y;
             }
             else
@@ -131,7 +161,7 @@ namespace Typography.Rendering
                         bone.TipEdge.GetMidPoint(),
                         p);
                     Vector2 min, max;
-                    bone.GetMinMax(out min, out max);
+                    GetMinMax(bone, out min, out max);
                     return cutPoint.X >= min.X && cutPoint.X <= max.X && cutPoint.Y >= min.Y && cutPoint.Y <= max.Y;
                 }
                 else

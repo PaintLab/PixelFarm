@@ -11,249 +11,13 @@ namespace Typography.Rendering
         public GlyphPoint2D glyphPoint;
         public Vector2 bonePoint;
     }
-    /// <summary>
-    /// link between 2 GlyphBoneJoint or Joint and tipEdge
-    /// </summary>
-    public class GlyphBone
-    {
-        public readonly EdgeLine TipEdge;
-        public readonly GlyphBoneJoint JointA;
-        public readonly GlyphBoneJoint JointB;
 
-        double _len;
-
-        public Vector2 cutPoint_onEdge;
-        public bool hasCutPointOnEdge;
-
-        public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
-        {
-#if DEBUG
-            if (a == b)
-            {
-                throw new NotSupportedException();
-            }
-#endif
-            JointA = a;
-            JointB = b;
-
-
-            Vector2 bpos = b.Position;
-            _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
-            EvaluteSlope(a.Position, bpos);
-            //------  
-
-            //for analysis in later step
-            a.AddAssociatedBone(this);
-            b.AddAssociatedBone(this);
-            //------  
-
-            //find common triangle between  2 joint
-            GlyphCentroidLine ownerCentroid_A = a.OwnerCentroidLine;
-            GlyphCentroidLine ownerCentroid_B = b.OwnerCentroidLine;
-            if (ownerCentroid_A.p == ownerCentroid_B.p)
-            {
-
-            }
-            else if (ownerCentroid_A.p == ownerCentroid_B.q)
-            {
-
-            }
-            else if (ownerCentroid_A.q == ownerCentroid_B.p)
-            {
-                //share the same edge
-                //find outside edge 
-                GlyphTriangle commonTri = ownerCentroid_A.q;
-                Vector2 mid = GetMidPoint();
-
-                if (commonTri.e0.IsOutside)
-                {
-                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(commonTri.e0, mid, out cutPoint_onEdge);
-                }
-                else if (commonTri.e1.IsOutside)
-                {
-                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(commonTri.e1, mid, out cutPoint_onEdge);
-                }
-                else if (commonTri.e2.IsOutside)
-                {
-                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(commonTri.e2, mid, out cutPoint_onEdge);
-                }
-
-            }
-            else if (ownerCentroid_A.q == ownerCentroid_B.q)
-            {
-
-
-            }
-            else
-            {
-                //no 
-            }
-        }
-
-        public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
-        {
-            JointA = a;
-            TipEdge = tipEdge;
-
-            var midPoint = tipEdge.GetMidPoint();
-            _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
-            EvaluteSlope(a.Position, midPoint);
-            //------
-
-            //for analysis in later step
-            a.AddAssociatedBone(this);
-        }
-        void EvaluteSlope(Vector2 p, Vector2 q)
-        {
-
-            double x0 = p.X;
-            double y0 = p.Y;
-            //q
-            double x1 = q.X;
-            double y1 = q.Y;
-
-            if (x1 == x0)
-            {
-                this.SlopeKind = LineSlopeKind.Vertical;
-                SlopeAngle = 1;
-            }
-            else
-            {
-                SlopeAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-                if (SlopeAngle > MyMath._85degreeToRad)
-                {
-                    SlopeKind = LineSlopeKind.Vertical;
-                }
-                else if (SlopeAngle < MyMath._03degreeToRad) //_15degreeToRad
-                {
-                    SlopeKind = LineSlopeKind.Horizontal;
-                }
-                else
-                {
-                    SlopeKind = LineSlopeKind.Other;
-                }
-            }
-        }
-        internal double SlopeAngle { get; set; }
-        public LineSlopeKind SlopeKind { get; set; }
-        internal double Length
-        {
-            get
-            {
-                return _len;
-            }
-        }
-        public bool IsLongBone { get; internal set; }
-
-        internal double CalculateAvgBoneWidth()
-        {
-            //avg bone width
-            //(for this bone only) is calculated by avg of 4 ribs 
-            //around 2 joints
-
-            //this only ...
-            double a_side = Math.Sqrt(JointA.CalculateSqrDistance(JointA.RibEndPointA));
-            double b_side = Math.Sqrt(JointA.CalculateSqrDistance(JointA.RibEndPointB));
-            return (a_side + b_side) / 2;
-        }
-        //--------
-        public float LeftMostPoint()
-        {
-            if (JointB != null)
-            {
-                //compare joint A and B 
-                if (JointA.Position.X < JointB.Position.X)
-                {
-                    return JointA.GetLeftMostRib();
-                }
-                else
-                {
-                    return JointB.GetLeftMostRib();
-                }
-            }
-            else
-            {
-                return JointA.GetLeftMostRib();
-            }
-        }
-
-        public Vector2 GetMidPoint()
-        {
-            if (JointB != null)
-            {
-                return (JointA.Position + JointB.Position) / 2;
-            }
-            else if (TipEdge != null)
-            {
-                Vector2 edge = TipEdge.GetMidPoint();
-                return (edge + JointA.Position) / 2;
-            }
-            else
-            {
-                return Vector2.Zero;
-            }
-        }
-        public List<GlyphPointToBoneLink> _perpendiculatPoints;
-        public void AddPerpendicularPoint(GlyphPoint2D p, Vector2 bonePoint)
-        {
-            //add a perpendicular glyph point to bones
-            if (_perpendiculatPoints == null) { _perpendiculatPoints = new List<GlyphPointToBoneLink>(); }
-            GlyphPointToBoneLink pointToBoneLink = new GlyphPointToBoneLink();
-            pointToBoneLink.bonePoint = bonePoint;
-            pointToBoneLink.glyphPoint = p;
-            _perpendiculatPoints.Add(pointToBoneLink);
-        }
-
-
-
-        /// <summary>
-        /// which one is min,max
-        /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
-        public void GetMinMax(out Vector2 min, out Vector2 max)
-        {
-            if (JointB != null)
-            {
-                var a_pos = JointA.Position;
-                var b_pos = JointB.Position;
-
-                min = Vector2.Min(a_pos, b_pos);
-                max = Vector2.Max(a_pos, b_pos);
-
-            }
-            else if (TipEdge != null)
-            {
-                var a_pos = JointA.Position;
-                var tip_pos = TipEdge.GetMidPoint();
-                min = Vector2.Min(a_pos, tip_pos);
-                max = Vector2.Max(a_pos, tip_pos);
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
-        }
-#if DEBUG
-        public override string ToString()
-        {
-            if (TipEdge != null)
-            {
-                return JointA.ToString() + "->" + TipEdge.GetMidPoint().ToString();
-            }
-            else
-            {
-                return JointA.ToString() + "->" + JointB.ToString();
-            }
-        }
-#endif
-    }
 
     public class GlyphBoneJoint
     {
 
-        //A GlyphBoneJoint is on a midpoint of 2 inside adjacent edge
-        //(2 contact edge)
+        //A GlyphBoneJoint is on a midpoint of two 'inside' adjacent edges.
+        //(2 contact edges)
         //of 2 triangles,      
         //(_p_contact_edge, _q_contact_edge)
 
@@ -400,5 +164,204 @@ namespace Typography.Rendering
     }
 
 
+    /// <summary>
+    /// link between 2 GlyphBoneJoint or Joint and tipEdge
+    /// </summary>
+    public class GlyphBone
+    {
+        public readonly EdgeLine TipEdge;
+        public readonly GlyphBoneJoint JointA;
+        public readonly GlyphBoneJoint JointB;
 
+        double _len;
+
+        public Vector2 cutPoint_onEdge;
+        public bool hasCutPointOnEdge;
+
+        public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
+        {
+#if DEBUG
+            if (a == b)
+            {
+                throw new NotSupportedException();
+            }
+#endif
+            JointA = a;
+            JointB = b;
+
+
+            Vector2 bpos = b.Position;
+            _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
+            EvaluteSlope(a.Position, bpos);
+            //------  
+
+            //for analysis in later step
+            a.AddAssociatedBone(this);
+            b.AddAssociatedBone(this);
+            //------  
+
+            //find common triangle between  2 joint
+            GlyphTriangle commonTri = FindCommonTriangle(a, b);
+            if (commonTri != null)
+            {
+                //found common triangle 
+                EdgeLine outsideEdge = GetFirstFoundOutsidEdge(commonTri);
+                if (outsideEdge != null)
+                {
+                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
+                }
+            }
+            else
+            {
+                //not found?=>
+            } 
+
+        }
+
+        public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
+        {
+            JointA = a;
+            TipEdge = tipEdge;
+
+            var midPoint = tipEdge.GetMidPoint();
+            _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
+            EvaluteSlope(a.Position, midPoint);
+            //------
+
+            //for analysis in later step
+            a.AddAssociatedBone(this);
+        }
+
+
+        static GlyphTriangle FindCommonTriangle(GlyphBoneJoint a, GlyphBoneJoint b)
+        {
+            GlyphCentroidLine ownerCentroid_A = a.OwnerCentroidLine;
+            GlyphCentroidLine ownerCentroid_B = b.OwnerCentroidLine;
+            if (ownerCentroid_A.p == ownerCentroid_B.p || ownerCentroid_A.p == ownerCentroid_B.q)
+            {
+                return ownerCentroid_A.p;
+            }
+            else if (ownerCentroid_A.q == ownerCentroid_B.p || ownerCentroid_A.q == ownerCentroid_B.q)
+            {
+                return ownerCentroid_A.q;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        static EdgeLine GetFirstFoundOutsidEdge(GlyphTriangle tri)
+        {
+            if (tri.e0.IsOutside) { return tri.e0; }
+            if (tri.e1.IsOutside) { return tri.e1; }
+            if (tri.e2.IsOutside) { return tri.e2; }
+            return null; //not found               
+        }
+        void EvaluteSlope(Vector2 p, Vector2 q)
+        {
+
+            double x0 = p.X;
+            double y0 = p.Y;
+            //q
+            double x1 = q.X;
+            double y1 = q.Y;
+
+            if (x1 == x0)
+            {
+                this.SlopeKind = LineSlopeKind.Vertical;
+                SlopeAngle = 1;
+            }
+            else
+            {
+                SlopeAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
+                if (SlopeAngle > MyMath._85degreeToRad)
+                {
+                    SlopeKind = LineSlopeKind.Vertical;
+                }
+                else if (SlopeAngle < MyMath._03degreeToRad) //_15degreeToRad
+                {
+                    SlopeKind = LineSlopeKind.Horizontal;
+                }
+                else
+                {
+                    SlopeKind = LineSlopeKind.Other;
+                }
+            }
+        }
+        internal double SlopeAngle { get; set; }
+        public LineSlopeKind SlopeKind { get; set; }
+        internal double Length
+        {
+            get
+            {
+                return _len;
+            }
+        }
+        public bool IsLongBone { get; internal set; }
+ 
+        //--------
+        public float LeftMostPoint()
+        {
+            if (JointB != null)
+            {
+                //compare joint A and B 
+                if (JointA.Position.X < JointB.Position.X)
+                {
+                    return JointA.GetLeftMostRib();
+                }
+                else
+                {
+                    return JointB.GetLeftMostRib();
+                }
+            }
+            else
+            {
+                return JointA.GetLeftMostRib();
+            }
+        }
+
+        public Vector2 GetMidPoint()
+        {
+            if (JointB != null)
+            {
+                return (JointA.Position + JointB.Position) / 2;
+            }
+            else if (TipEdge != null)
+            {
+                Vector2 edge = TipEdge.GetMidPoint();
+                return (edge + JointA.Position) / 2;
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
+        public List<GlyphPointToBoneLink> _perpendiculatPoints;
+        public void AddPerpendicularPoint(GlyphPoint2D p, Vector2 bonePoint)
+        {
+            //add a perpendicular glyph point to bones
+            if (_perpendiculatPoints == null) { _perpendiculatPoints = new List<GlyphPointToBoneLink>(); }
+            GlyphPointToBoneLink pointToBoneLink = new GlyphPointToBoneLink();
+            pointToBoneLink.bonePoint = bonePoint;
+            pointToBoneLink.glyphPoint = p;
+            _perpendiculatPoints.Add(pointToBoneLink);
+        }
+
+
+
+
+#if DEBUG
+        public override string ToString()
+        {
+            if (TipEdge != null)
+            {
+                return JointA.ToString() + "->" + TipEdge.GetMidPoint().ToString();
+            }
+            else
+            {
+                return JointA.ToString() + "->" + JointB.ToString();
+            }
+        }
+#endif
+    }
 }

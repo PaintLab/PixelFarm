@@ -227,32 +227,6 @@ namespace Typography.Rendering
 
             }
 #endif
-        }
-
-        public List<CutLine> cutLines;
-        public void AddCutPoints(
-            Vector2 cutPointOnBone,
-            Vector2 glyphBoneJoint)
-        {
-            if (cutLines == null) { cutLines = new List<CutLine>(); }
-            var cutLine = new CutLine();
-            cutLine.x0 = cutPointOnBone.X;
-            cutLine.y0 = cutPointOnBone.Y;
-            cutLine.x1 = glyphBoneJoint.X;
-            cutLine.y1 = glyphBoneJoint.Y;
-
-            cutLines.Add(cutLine);
-        }
-    }
-    public struct CutLine
-    {
-        public float x0, y0, x1, y1;
-        public CutLine(float x0, float y0, float x1, float y1)
-        {
-            this.x0 = x0;
-            this.y0 = y0;
-            this.x1 = x1;
-            this.y1 = y1;
-        }
-    }
+        } 
+    } 
 }
