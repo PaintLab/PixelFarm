@@ -8,8 +8,7 @@ namespace Typography.Rendering
 {
 
     public class GlyphDynamicOutline3
-    {
-
+    { 
 
         class StrokeLine
         {

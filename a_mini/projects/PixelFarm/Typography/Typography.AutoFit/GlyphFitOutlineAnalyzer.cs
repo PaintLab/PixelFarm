@@ -40,7 +40,7 @@ namespace Typography.Rendering
             //4. after flatten, the we can create fit outline
             if (j > 0)
             {
-                return CreateFitOutline(contours);
+                return CreateDynamicOutline(contours);
             }
             else
             {
@@ -49,7 +49,7 @@ namespace Typography.Rendering
         }
 
 
-        static GlyphIntermediateOutline CreateFitOutline(List<GlyphContour> contours)
+        static GlyphIntermediateOutline CreateDynamicOutline(List<GlyphContour> contours)
         {
 
             int cntCount = contours.Count;
@@ -86,7 +86,8 @@ namespace Typography.Rendering
             //------------------------------------------
             //2. tri angulate 
             Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
-            //3. create fit outline
+            
+            //3. intermediate outline is used inside this lib
             GlyphIntermediateOutline glyphFitOutline = new GlyphIntermediateOutline(mainPolygon, contours);
 
             List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
@@ -99,6 +100,10 @@ namespace Typography.Rendering
                 AssignPointEdgeInvolvement(tri.e1);
                 AssignPointEdgeInvolvement(tri.e2);
             }
+
+
+            //convert intermediate outline to dynamic outline
+
 
             return glyphFitOutline;
         }
