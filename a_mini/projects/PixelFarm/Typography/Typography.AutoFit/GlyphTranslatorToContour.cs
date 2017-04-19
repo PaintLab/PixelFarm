@@ -405,15 +405,14 @@ namespace Typography.Rendering
 
     public class GlyphPoint2D
     {
-        public readonly GlyphPart OwnerPart; //link back to owner part
+
         //glyph point 
         //for analysis
         public readonly double x;
         public readonly double y;
         public readonly PointKind kind;
 
-        //
-
+        // 
         double _adjX;
         double _adjY;
         //
@@ -427,7 +426,7 @@ namespace Typography.Rendering
 
 #if DEBUG
         //for debug only
-        public GlyphPart dbugOwnerPart;
+        public GlyphPart dbugOwnerPart;  //link back to owner part
         public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
         Dictionary<GlyphBoneJoint, bool> dbug_jointDic;
         static int dbugTotalId;
@@ -435,8 +434,6 @@ namespace Typography.Rendering
 #endif
         public GlyphPoint2D(double x, double y, PointKind kind)
         {
-            //need to link pacl to owner part for glyph analysis
-
             this.x = x;
             this.y = y;
             this.kind = kind;
@@ -465,7 +462,7 @@ namespace Typography.Rendering
         {
             _adjX = _adjY = 0;
         }
-        public void AddVerticalEdge(EdgeLine v_edge)
+        internal void AddVerticalEdge(EdgeLine v_edge)
         {
             //associated 
             if (!this.IsPartOfVerticalEdge)
@@ -483,7 +480,7 @@ namespace Typography.Rendering
             }
             _edges.Add(v_edge);
         }
-        public EdgeLine GetMatchingVerticalEdge()
+        internal EdgeLine GetMatchingVerticalEdge()
         {
             if (_edges == null)
             {
@@ -499,7 +496,7 @@ namespace Typography.Rendering
             }
         }
 
-        public void AddAssociatedBoneJoint(GlyphBoneJoint joint)
+        internal void AddAssociatedBoneJoint(GlyphBoneJoint joint)
         {
             if (_assocJoints == null)
             {
