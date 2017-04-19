@@ -22,8 +22,8 @@ namespace Typography.Rendering
         public readonly double x1;
         public readonly double y1;
 
-     
-        Dictionary<EdgeLine, bool> matchingEdges;
+
+        Dictionary<EdgeLine, bool> matchingEdges; //TODO: remove this
         //------------------------------
         /// <summary>
         /// contact to 
@@ -41,6 +41,8 @@ namespace Typography.Rendering
 
         public EdgeLine(GlyphPoint p, GlyphPoint q)
         {
+
+            //edge  line connect 2 glyph point
 
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;

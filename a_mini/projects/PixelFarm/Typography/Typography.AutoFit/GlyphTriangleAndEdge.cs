@@ -1,8 +1,6 @@
 ﻿//MIT, 2017, WinterDev
-using System;
-using System.Collections.Generic;
-using Poly2Tri;
-using System.Numerics;
+using System; 
+using Poly2Tri; 
 namespace Typography.Rendering
 {
 

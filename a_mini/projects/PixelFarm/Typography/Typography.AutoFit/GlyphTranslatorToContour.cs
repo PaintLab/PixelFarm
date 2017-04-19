@@ -404,7 +404,7 @@ namespace Typography.Rendering
     }
 
     public class GlyphPoint
-    {       
+    {
         public readonly float x;
         public readonly float y;
         public readonly PointKind kind;
@@ -416,7 +416,9 @@ namespace Typography.Rendering
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
         public EdgeLine horizontalEdge;
-        // 
+
+
+        //TODO: remove this
         List<EdgeLine> _edges;
         public List<GlyphBoneJoint> _assocJoints; //associatedJoints
 
