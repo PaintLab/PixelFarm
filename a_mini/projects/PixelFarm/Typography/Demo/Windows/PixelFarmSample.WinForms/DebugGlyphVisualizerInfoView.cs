@@ -351,8 +351,8 @@ namespace SampleWinForms.UI
             //---------------
             Poly2Tri.TriangulationPoint p = edge.p;
             Poly2Tri.TriangulationPoint q = edge.q;
-            var u_data_p = p.userData as GlyphPoint2D;
-            var u_data_q = q.userData as GlyphPoint2D;
+            var u_data_p = p.userData as GlyphPoint;
+            var u_data_q = q.userData as GlyphPoint;
 
             //-------------------------------
 

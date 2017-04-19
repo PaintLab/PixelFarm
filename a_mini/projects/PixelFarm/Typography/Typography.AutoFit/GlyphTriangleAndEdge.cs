@@ -193,19 +193,19 @@ namespace Typography.Rendering
             }
         }
 
-        public GlyphPoint2D GlyphPoint_P
+        public GlyphPoint GlyphPoint_P
         {
             get
             {
-                return p.userData as GlyphPoint2D;
+                return p.userData as GlyphPoint;
             }
 
         }
-        public GlyphPoint2D GlyphPoint_Q
+        public GlyphPoint GlyphPoint_Q
         {
             get
             {
-                return q.userData as GlyphPoint2D;
+                return q.userData as GlyphPoint;
             }
         }
         public void AddMatchingOutsideEdge(EdgeLine edgeLine)

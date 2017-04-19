@@ -142,7 +142,7 @@ namespace Typography.Rendering
     {
 
         public List<GlyphPart> parts = new List<GlyphPart>();
-        internal List<GlyphPoint2D> flattenPoints;
+        internal List<GlyphPoint> flattenPoints;
 
         bool analyzed;
         bool analyzedClockDirection;
@@ -171,8 +171,8 @@ namespace Typography.Rendering
             //-------------------------------
             int j = parts.Count;
             //---------------
-            List<GlyphPoint2D> prevResult = flattener.Result;
-            flattenPoints = flattener.Result = new List<GlyphPoint2D>();
+            List<GlyphPoint> prevResult = flattener.Result;
+            flattenPoints = flattener.Result = new List<GlyphPoint>();
             //start ...
             for (int i = 0; i < j; ++i)
             {
@@ -191,7 +191,7 @@ namespace Typography.Rendering
                 return isClockwise;
             }
 
-            List<GlyphPoint2D> f_points = this.flattenPoints;
+            List<GlyphPoint> f_points = this.flattenPoints;
             if (f_points == null)
             {
                 throw new NotSupportedException();
@@ -215,8 +215,8 @@ namespace Typography.Rendering
                 double total = 0;
                 for (int i = 1; i < j; ++i)
                 {
-                    GlyphPoint2D p0 = f_points[i - 1];
-                    GlyphPoint2D p1 = f_points[i];
+                    GlyphPoint p0 = f_points[i - 1];
+                    GlyphPoint p1 = f_points[i];
 
                     double x0 = p0.x;
                     double y0 = p0.y;
@@ -228,8 +228,8 @@ namespace Typography.Rendering
                 }
                 //the last one
                 {
-                    GlyphPoint2D p0 = f_points[j - 1];
-                    GlyphPoint2D p1 = f_points[0];
+                    GlyphPoint p0 = f_points[j - 1];
+                    GlyphPoint p1 = f_points[0];
 
                     double x0 = p0.x;
                     double y0 = p0.y;
@@ -253,13 +253,13 @@ namespace Typography.Rendering
 
     public class GlyphPartFlattener
     {
-        List<GlyphPoint2D> points;
+        List<GlyphPoint> points;
 
         public GlyphPartFlattener()
         {
             this.NSteps = 2;//default
         }
-        public List<GlyphPoint2D> Result
+        public List<GlyphPoint> Result
         {
             get { return points; }
             set { points = value; }
@@ -268,7 +268,7 @@ namespace Typography.Rendering
 
         void AddPoint(float x, float y, PointKind kind)
         {
-            var p = new GlyphPoint2D(x, y, kind);
+            var p = new GlyphPoint(x, y, kind);
 #if DEBUG
             p.dbugOwnerPart = dbug_ownerPart;
 #endif
@@ -403,7 +403,7 @@ namespace Typography.Rendering
         CurveInbetween,
     }
 
-    public class GlyphPoint2D
+    public class GlyphPoint
     {       
         public readonly float x;
         public readonly float y;
@@ -429,13 +429,13 @@ namespace Typography.Rendering
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
-        public GlyphPoint2D(float x, float y, PointKind kind)
+        public GlyphPoint(float x, float y, PointKind kind)
         {
             this.x = x;
             this.y = y;
             this.kind = kind;
         }
-        public bool IsEqualValues(GlyphPoint2D another)
+        public bool IsEqualValues(GlyphPoint another)
         {
             return x == another.x && y == another.y;
         }

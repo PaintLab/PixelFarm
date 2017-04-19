@@ -568,7 +568,7 @@ namespace Typography.Rendering
         /// <param name="p"></param>
         /// <param name="q"></param>
         /// <returns>0 =p, 1= q, none = -1, both=2</returns>
-        static int GetOnCurvePoints(GlyphPoint2D p, GlyphPoint2D q)
+        static int GetOnCurvePoints(GlyphPoint p, GlyphPoint q)
         {
             if (p.kind != PointKind.CurveInbetween && q.kind != PointKind.CurveInbetween)
             {
@@ -793,8 +793,8 @@ namespace Typography.Rendering
                         //find shortest part from boneJoint to  edge or to corner.
                         //draw perpendicular line to outside edge
                         //and to the  corner of current edge.
-                        GlyphPoint2D p_ = contactEdge.GlyphPoint_P;
-                        GlyphPoint2D q_ = contactEdge.GlyphPoint_Q;
+                        GlyphPoint p_ = contactEdge.GlyphPoint_P;
+                        GlyphPoint q_ = contactEdge.GlyphPoint_Q;
 
                         //TODO: review 
                         switch (GetOnCurvePoints(p_, q_))

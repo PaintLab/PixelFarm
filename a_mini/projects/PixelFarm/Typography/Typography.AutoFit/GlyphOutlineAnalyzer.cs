@@ -119,7 +119,7 @@ namespace Typography.Rendering
         /// </summary>
         /// <param name="cnt"></param>
         /// <returns></returns>
-        static Poly2Tri.Polygon CreatePolygon(List<GlyphPoint2D> flattenPoints)
+        static Poly2Tri.Polygon CreatePolygon(List<GlyphPoint> flattenPoints)
         {
             List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
 
@@ -140,7 +140,7 @@ namespace Typography.Rendering
             //pass
             for (int i = 0; i < lim; ++i)
             {
-                GlyphPoint2D p = flattenPoints[i];
+                GlyphPoint p = flattenPoints[i];
                 double x = p.x;
                 double y = p.y;
 
@@ -184,7 +184,7 @@ namespace Typography.Rendering
 
                         //------------
                         //both p and q of this edge is part of horizontal edge 
-                        var p = edge.p.userData as GlyphPoint2D;
+                        var p = edge.p.userData as GlyphPoint;
                         if (p != null)
                         {
                             //TODO: review here
@@ -193,7 +193,7 @@ namespace Typography.Rendering
                             p.horizontalEdge = edge;
                         }
 
-                        var q = edge.q.userData as GlyphPoint2D;
+                        var q = edge.q.userData as GlyphPoint;
                         if (q != null)
                         {
                             //TODO: review here
@@ -206,14 +206,14 @@ namespace Typography.Rendering
                 case LineSlopeKind.Vertical:
                     {
                         //both p and q of this edge is part of vertical edge 
-                        var p = edge.p.userData as GlyphPoint2D;
+                        var p = edge.p.userData as GlyphPoint;
                         if (p != null)
                         {
                             //TODO: review here 
                             p.AddVerticalEdge(edge);
                         }
 
-                        var q = edge.q.userData as GlyphPoint2D;
+                        var q = edge.q.userData as GlyphPoint;
                         if (q != null)
                         {   //TODO: review here
 
@@ -242,7 +242,7 @@ namespace Typography.Rendering
             }
         }
         static Dictionary<TmpPoint, bool> s_debugTmpPoints = new Dictionary<TmpPoint, bool>();
-        static void dbugCheckAllGlyphsAreUnique(List<GlyphPoint2D> flattenPoints)
+        static void dbugCheckAllGlyphsAreUnique(List<GlyphPoint> flattenPoints)
         {
             double prevX = 0;
             double prevY = 0;
@@ -250,7 +250,7 @@ namespace Typography.Rendering
             int lim = flattenPoints.Count - 1;
             for (int i = 0; i < lim; ++i)
             {
-                GlyphPoint2D p = flattenPoints[i];
+                GlyphPoint p = flattenPoints[i];
                 double x = p.x;
                 double y = p.y;
 

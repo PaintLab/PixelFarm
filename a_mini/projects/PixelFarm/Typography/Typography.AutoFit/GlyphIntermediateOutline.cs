@@ -180,13 +180,13 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 GlyphContour cont = _contours[i];
-                List<GlyphPoint2D> flattenPoints = cont.flattenPoints;
+                List<GlyphPoint> flattenPoints = cont.flattenPoints;
                 int p_count = flattenPoints.Count;
                 for (int n = 0; n < p_count; ++n)
                 {
                     //from point, add assoc joint
 
-                    GlyphPoint2D glyphPoint = flattenPoints[n];
+                    GlyphPoint glyphPoint = flattenPoints[n];
                     System.Numerics.Vector2 glyph_point_xy = new System.Numerics.Vector2((float)glyphPoint.x, (float)glyphPoint.y);
                     if (glyphPoint.kind != PointKind.CurveInbetween)
                     {

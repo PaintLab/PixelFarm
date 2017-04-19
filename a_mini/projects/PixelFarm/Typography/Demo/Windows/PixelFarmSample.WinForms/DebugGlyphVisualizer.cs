@@ -183,7 +183,7 @@ namespace SampleWinForms.UI
         public bool DrawRegenerateOutline { get; set; }
         //
 #if DEBUG
-        void DrawPointKind(CanvasPainter painter, GlyphPoint2D point, float scale)
+        void DrawPointKind(CanvasPainter painter, GlyphPoint point, float scale)
         {
             //var prevColor = painter.FillColor;
             //painter.FillColor = PixelFarm.Drawing.Color.Red;
@@ -220,8 +220,8 @@ namespace SampleWinForms.UI
                 Poly2Tri.TriangulationPoint p = edge.p;
                 Poly2Tri.TriangulationPoint q = edge.q;
 
-                var u_data_p = p.userData as GlyphPoint2D;
-                var u_data_q = q.userData as GlyphPoint2D;
+                var u_data_p = p.userData as GlyphPoint;
+                var u_data_q = q.userData as GlyphPoint;
 
 
                 DrawPointKind(painter, u_data_p, scale);
@@ -390,12 +390,12 @@ namespace SampleWinForms.UI
                 painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
             }
         }
-        void DrawAssocGlyphPoint(System.Numerics.Vector2 pos, List<GlyphPoint2D> points)
+        void DrawAssocGlyphPoint(System.Numerics.Vector2 pos, List<GlyphPoint> points)
         {
             int j = points.Count;
             for (int i = 0; i < j; ++i)
             {
-                GlyphPoint2D p = points[i];
+                GlyphPoint p = points[i];
 
                 painter.Line(
                       pos.X * _pxscale, pos.Y * _pxscale,
@@ -403,7 +403,7 @@ namespace SampleWinForms.UI
                       PixelFarm.Drawing.Color.Yellow);
             }
         }
-        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, List<GlyphPoint2D> points, float newRelativeLen)
+        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, List<GlyphPoint> points, float newRelativeLen)
         {
             int j = points.Count;
             for (int i = 0; i < j; ++i)
@@ -411,7 +411,7 @@ namespace SampleWinForms.UI
                 DrawAssocGlyphPoint2(pos, points[i], newRelativeLen);
             }
         }
-        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, GlyphPoint2D p, float newRelativeLen)
+        void DrawAssocGlyphPoint2(System.Numerics.Vector2 pos, GlyphPoint p, float newRelativeLen)
         {
             //test draw marker on different len....
             //create  
