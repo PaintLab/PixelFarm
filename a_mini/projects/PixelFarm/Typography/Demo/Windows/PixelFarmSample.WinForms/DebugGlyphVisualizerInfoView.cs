@@ -152,7 +152,7 @@ namespace SampleWinForms.UI
                             _clearInfoView = false;
                             RequestGlyphRender(this, EventArgs.Empty);
 
-                            GlyphTriangle tri = nodeinfo.GlyphTri;
+                            GlyphTriangleInfo tri = nodeinfo.GlyphTri;
                             var cen_x = (float)(tri.CentroidX * PxScale);
                             var cen_y = (float)(tri.CentroidY * PxScale);
 
@@ -238,10 +238,13 @@ namespace SampleWinForms.UI
                         }
                     }
                     break;
-
             }
-
         }
+
+         
+
+        
+
         public float PxScale { get; set; }
         public void Clear()
         {
@@ -255,7 +258,7 @@ namespace SampleWinForms.UI
             }
             _testEdgeCount = 0;
         }
-        public void ShowTriangles(GlyphTriangle tri)
+        public void ShowTriangles(GlyphTriangleInfo tri)
         {
             if (!_clearInfoView) { return; }
             //-----------------------------
@@ -348,11 +351,9 @@ namespace SampleWinForms.UI
             {
                 return;
             }
-            //---------------
-            Poly2Tri.TriangulationPoint p = edge.p;
-            Poly2Tri.TriangulationPoint q = edge.q;
-            var u_data_p = p.userData as GlyphPoint2D;
-            var u_data_q = q.userData as GlyphPoint2D;
+
+            GlyphPoint u_data_p = edge.GlyphPoint_P;
+            GlyphPoint u_data_q = edge.GlyphPoint_Q;
 
             //-------------------------------
 
@@ -360,7 +361,8 @@ namespace SampleWinForms.UI
             TreeNode nodeEdge = new TreeNode();
             nodeEdge.Tag = nodeInfo;
             nodeEdge.Text = "e id=" + edge.dbugId + ",count="
-                + _testEdgeCount + " :(" + p.X + "," + p.Y + ")" + "=>(" + q.X + "," + q.Y + ") ";
+                + _testEdgeCount + " :(" + u_data_p.x + "," + u_data_p.y + ")" +
+                "=>(" + u_data_q.x + "," + u_data_q.y + ") ";
             //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
             //{
             //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;
@@ -441,7 +443,7 @@ namespace SampleWinForms.UI
             GlyphBoneJoint joint;
             GlyphBone bone;
             System.Numerics.Vector2 pos;
-            GlyphTriangle tri;
+            GlyphTriangleInfo tri;
 
             public NodeInfo(NodeInfoKind nodeKind, EdgeLine edge, int edgeNo)
             {
@@ -471,7 +473,7 @@ namespace SampleWinForms.UI
                 this.bone = bone;
                 this.NodeKind = NodeInfoKind.Bone;
             }
-            public NodeInfo(GlyphTriangle tri)
+            public NodeInfo(GlyphTriangleInfo tri)
             {
                 this.tri = tri;
                 this.pos = new System.Numerics.Vector2((float)tri.CentroidX, (float)tri.CentroidY);
@@ -488,7 +490,7 @@ namespace SampleWinForms.UI
             {
                 get; set;
             }
-            public GlyphTriangle GlyphTri { get { return tri; } }
+            public GlyphTriangleInfo GlyphTri { get { return tri; } }
             public GlyphBone Bone { get { return this.bone; } }
 
             public System.Numerics.Vector2 Pos { get { return pos; } }

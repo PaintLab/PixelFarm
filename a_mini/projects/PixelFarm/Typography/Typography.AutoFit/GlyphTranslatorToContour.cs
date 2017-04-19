@@ -142,7 +142,7 @@ namespace Typography.Rendering
     {
 
         public List<GlyphPart> parts = new List<GlyphPart>();
-        internal List<GlyphPoint2D> flattenPoints;
+        internal List<GlyphPoint> flattenPoints;
 
         bool analyzed;
         bool analyzedClockDirection;
@@ -155,6 +155,7 @@ namespace Typography.Rendering
         {
             parts.Add(part);
         }
+
         internal void ClearAllAdjustValues()
         {
             for (int i = flattenPoints.Count - 1; i >= 0; --i)
@@ -162,16 +163,16 @@ namespace Typography.Rendering
                 flattenPoints[i].ClearAdjustValues();
             }
         }
-
-        public void Flatten(GlyphPartFlattener flattener)
+        internal void Flatten(GlyphPartFlattener flattener)
         {
+            //flatten once
             if (analyzed) return;
             //flatten each part ...
             //-------------------------------
             int j = parts.Count;
             //---------------
-            //
-            flattenPoints = flattener.Results = new List<GlyphPoint2D>();
+            List<GlyphPoint> prevResult = flattener.Result;
+            flattenPoints = flattener.Result = new List<GlyphPoint>();
             //start ...
             for (int i = 0; i < j; ++i)
             {
@@ -179,23 +180,26 @@ namespace Typography.Rendering
                 parts[i].Flatten(flattener);
             }
 
-
+            flattener.Result = prevResult;
             analyzed = true;
         }
         public bool IsClosewise()
         {
+            //after flatten
             if (analyzedClockDirection)
             {
                 return isClockwise;
             }
 
-            //we find direction from merge
-            if (flattenPoints == null)
+            List<GlyphPoint> f_points = this.flattenPoints;
+            if (f_points == null)
             {
                 throw new NotSupportedException();
             }
             analyzedClockDirection = true;
-            // 
+
+
+
             //---------------
             //http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
             //check if hole or not
@@ -211,8 +215,8 @@ namespace Typography.Rendering
                 double total = 0;
                 for (int i = 1; i < j; ++i)
                 {
-                    GlyphPoint2D p0 = flattenPoints[i - 1];
-                    GlyphPoint2D p1 = flattenPoints[i];
+                    GlyphPoint p0 = f_points[i - 1];
+                    GlyphPoint p1 = f_points[i];
 
                     double x0 = p0.x;
                     double y0 = p0.y;
@@ -224,8 +228,8 @@ namespace Typography.Rendering
                 }
                 //the last one
                 {
-                    GlyphPoint2D p0 = flattenPoints[j - 1];
-                    GlyphPoint2D p1 = flattenPoints[0];
+                    GlyphPoint p0 = f_points[j - 1];
+                    GlyphPoint p1 = f_points[0];
 
                     double x0 = p0.x;
                     double y0 = p0.y;
@@ -249,27 +253,40 @@ namespace Typography.Rendering
 
     public class GlyphPartFlattener
     {
+        List<GlyphPoint> points;
+
         public GlyphPartFlattener()
         {
             this.NSteps = 2;//default
         }
+        public List<GlyphPoint> Result
+        {
+            get { return points; }
+            set { points = value; }
+        }
         public int NSteps { get; set; }
+
+        void AddPoint(float x, float y, PointKind kind)
+        {
+            var p = new GlyphPoint(x, y, kind);
+#if DEBUG
+            p.dbugOwnerPart = dbug_ownerPart;
+#endif
+            points.Add(p);
+        }
+
         public void GeneratePointsFromLine(
-           GlyphPart ownerPart,
-           List<GlyphPoint2D> points,
            Vector2 start, Vector2 end)
         {
             if (points.Count == 0)
             {
-                points.Add(new GlyphPoint2D(ownerPart, start.X, start.Y, PointKind.LineStart));
+                AddPoint(start.X, start.Y, PointKind.LineStart);
             }
-            points.Add(new GlyphPoint2D(ownerPart, end.X, end.Y, PointKind.LineStop));
+            AddPoint(end.X, end.Y, PointKind.LineStop);
         }
 
         public void GeneratePointsFromCurve4(
-            GlyphPart ownerPart,
             int nsteps,
-            List<GlyphPoint2D> points,
             Vector2 start, Vector2 end,
             Vector2 control1, Vector2 control2)
         {
@@ -278,7 +295,7 @@ namespace Typography.Rendering
                 control1, control2);
             if (points.Count == 0)
             {
-                points.Add(new GlyphPoint2D(ownerPart, start.X, start.Y, PointKind.C4Start));
+                AddPoint(start.X, start.Y, PointKind.C4Start);
             }
             float eachstep = (float)1 / nsteps;
             float stepSum = eachstep;//start
@@ -286,15 +303,14 @@ namespace Typography.Rendering
             {
                 //start at i=1, this will not include the last step that stepSum=1
                 Vector2 vector2 = curve.CalculatePoint(stepSum);
-                points.Add(new GlyphPoint2D(ownerPart, vector2.X, vector2.Y, PointKind.CurveInbetween));
+                AddPoint(vector2.X, vector2.Y, PointKind.CurveInbetween);
                 stepSum += eachstep;
             }
-            points.Add(new GlyphPoint2D(ownerPart, end.X, end.Y, PointKind.C4End));
+
+            AddPoint(end.X, end.Y, PointKind.C4End);
         }
         public void GeneratePointsFromCurve3(
-            GlyphPart ownerPart,
             int nsteps,
-            List<GlyphPoint2D> points,
             Vector2 start, Vector2 end,
             Vector2 control1)
         {
@@ -303,7 +319,7 @@ namespace Typography.Rendering
                 control1);
             if (points.Count == 0)
             {
-                points.Add(new GlyphPoint2D(ownerPart, start.X, start.Y, PointKind.C3Start));
+                AddPoint(start.X, start.Y, PointKind.C3Start);
             }
             float eachstep = (float)1 / nsteps;
             float stepSum = eachstep;//start
@@ -311,18 +327,26 @@ namespace Typography.Rendering
             {
                 //start at i=1, this will not include the last step that stepSum=1
                 Vector2 vector2 = curve.CalculatePoint(stepSum);
-                points.Add(new GlyphPoint2D(ownerPart, vector2.X, vector2.Y, PointKind.CurveInbetween));
+                AddPoint(vector2.X, vector2.Y, PointKind.CurveInbetween);
                 stepSum += eachstep;
             }
-            points.Add(new GlyphPoint2D(ownerPart, end.X, end.Y, PointKind.C3End));
+            AddPoint(end.X, end.Y, PointKind.C3End);
         }
 
-        public List<GlyphPoint2D> Results;
+
+
+
+#if DEBUG
+        GlyphPart dbug_ownerPart;
+        public void dbugSetCurrentOwnerPart(GlyphPart dbug_ownerPart)
+        {
+            this.dbug_ownerPart = dbug_ownerPart;
+        }
+#endif
     }
     public abstract class GlyphPart
     {
         float _x0, _y0;
-
         public Vector2 FirstPoint
         {
             get
@@ -342,7 +366,6 @@ namespace Typography.Rendering
                 this._y0 = value.Y;
             }
         }
-
         public abstract GlyphPartKind Kind { get; }
         public GlyphPart NextPart { get; set; }
         public GlyphPart PrevPart { get; set; }
@@ -380,45 +403,45 @@ namespace Typography.Rendering
         CurveInbetween,
     }
 
-    public class GlyphPoint2D
+    public class GlyphPoint
     {
-        public readonly GlyphPart OwnerPart; //link back to owner part
-        //glyph point 
-        //for analysis
-        public readonly double x;
-        public readonly double y;
+        public readonly float x;
+        public readonly float y;
         public readonly PointKind kind;
 
-        //
-        public Poly2Tri.TriangulationPoint triangulationPoint;
-        double _adjX;
-        double _adjY;
+        // 
+        float _adjX;
+        float _adjY;
         //
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
         public EdgeLine horizontalEdge;
-        // 
+
+
+        //TODO: remove this
         List<EdgeLine> _edges;
-        public List<GlyphBoneJoint> _assocJoints; //associatedJoints
+        internal List<GlyphBoneJoint> _assocJoints; //associatedJoints
+
 
 #if DEBUG
+        //for debug only
+        public GlyphPart dbugOwnerPart;  //link back to owner part
+        public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
         Dictionary<GlyphBoneJoint, bool> dbug_jointDic;
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
-        public GlyphPoint2D(GlyphPart ownerPart, double x, double y, PointKind kind)
+        public GlyphPoint(float x, float y, PointKind kind)
         {
-            //need to link pacl to owner part for glyph analysis
-            this.OwnerPart = ownerPart;
             this.x = x;
             this.y = y;
             this.kind = kind;
         }
-        public bool IsEqualValues(GlyphPoint2D another)
+        public bool IsEqualValues(GlyphPoint another)
         {
             return x == another.x && y == another.y;
         }
-        public double AdjustedY
+        public float AdjustedY
         {
             get { return _adjY; }
             internal set
@@ -426,7 +449,7 @@ namespace Typography.Rendering
                 _adjY = value;
             }
         }
-        public double AdjustedX
+        public float AdjustedX
         {
             get { return _adjX; }
             internal set
@@ -438,7 +461,7 @@ namespace Typography.Rendering
         {
             _adjX = _adjY = 0;
         }
-        public void AddVerticalEdge(EdgeLine v_edge)
+        internal void AddVerticalEdge(EdgeLine v_edge)
         {
             //associated 
             if (!this.IsPartOfVerticalEdge)
@@ -456,7 +479,7 @@ namespace Typography.Rendering
             }
             _edges.Add(v_edge);
         }
-        public EdgeLine GetMatchingVerticalEdge()
+        internal EdgeLine GetMatchingVerticalEdge()
         {
             if (_edges == null)
             {
@@ -472,7 +495,7 @@ namespace Typography.Rendering
             }
         }
 
-        public void AddAssociatedBoneJoint(GlyphBoneJoint joint)
+        internal void AddAssociatedBoneJoint(GlyphBoneJoint joint)
         {
             if (_assocJoints == null)
             {
@@ -506,9 +529,12 @@ namespace Typography.Rendering
             return dbugId + " :" + ((AdjustedY != 0) ? "***" : "") +
                     (x + "," + y + " " + kind.ToString());
         }
-#endif
- 
+#endif 
     }
+
+
+
+
     public class GlyphLine : GlyphPart
     {
 
@@ -535,9 +561,10 @@ namespace Typography.Rendering
         }
         public override void Flatten(GlyphPartFlattener flattener)
         {
+#if DEBUG
+            flattener.dbugSetCurrentOwnerPart(this);
+#endif
             flattener.GeneratePointsFromLine(
-                this,
-                flattener.Results,
                 this.FirstPoint,
                 new Vector2(x1, y1));
         }
@@ -578,11 +605,11 @@ namespace Typography.Rendering
         }
         public override void Flatten(GlyphPartFlattener flattener)
         {
-
+#if DEBUG
+            flattener.dbugSetCurrentOwnerPart(this);
+#endif
             flattener.GeneratePointsFromCurve3(
-                this,
                 flattener.NSteps,
-                flattener.Results,
                 this.FirstPoint, //first
                 new Vector2(x2, y2), //end
                 new Vector2(x1, y1)); //control1
@@ -632,11 +659,11 @@ namespace Typography.Rendering
         }
         public override void Flatten(GlyphPartFlattener flattener)
         {
-
+#if DEBUG
+            flattener.dbugSetCurrentOwnerPart(this);
+#endif
             flattener.GeneratePointsFromCurve4(
-                this,
                 flattener.NSteps,
-                flattener.Results,
                 this.FirstPoint,    //first
                 new Vector2(x3, y3), //end
                 new Vector2(x1, y1), //control1

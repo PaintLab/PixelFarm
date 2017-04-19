@@ -7,33 +7,42 @@ namespace Typography.Rendering
     //This is PixelFarm's AutoFit
     //NOT FREE TYPE AUTO FIT***
 
-    public class GlyphFitOutlineAnalyzer
+    public class GlyphOutlineAnalyzer
     {
+        GlyphPartFlattener _glyphFlattener = new GlyphPartFlattener();
+        GlyphContourBuilder _glyphToCountor = new GlyphContourBuilder();
+        public GlyphOutlineAnalyzer()
+        {
+
+        }
+
         /// <summary>
         /// calculate and create GlyphFitOutline
         /// </summary>
         /// <param name="glyphPoints"></param>
         /// <param name="glyphContours"></param>
         /// <returns></returns>
-        public GlyphFitOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
-        { 
+        public GlyphDynamicOutline CreateDynamicOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
+        {
 
             //1. convert original glyph point to contour
             _glyphToCountor.Read(glyphPoints, glyphContours);
             //2. get result as list of contour
             List<GlyphContour> contours = _glyphToCountor.GetContours();
+
+            int cnt_count = contours.Count;
             //
-            //3. flatten each contour with the flattener
-            int j = contours.Count;
-            _glyhFlattener.NSteps = 2;
-            for (int i = 0; i < j; ++i)
+            if (cnt_count > 0)
             {
-                contours[i].Flatten(_glyhFlattener);
-            }
-            //4. after flatten, the we can create fit outline
-            if (j > 0)
-            {
-                return CreateFitOutline(contours);
+                //3.before create dynamic contour we must flatten data inside the contour 
+                _glyphFlattener.NSteps = 2;
+                for (int i = 0; i < cnt_count; ++i)
+                {
+                    // (flatten each contour with the flattener)    
+                    contours[i].Flatten(_glyphFlattener);
+                }
+                //4. after flatten, the we can create fit outline
+                return CreateDynamicOutline(contours);
             }
             else
             {
@@ -41,36 +50,34 @@ namespace Typography.Rendering
             }
         }
 
-        GlyphPartFlattener _glyhFlattener = new GlyphPartFlattener();
-        GlyphContourBuilder _glyphToCountor = new GlyphContourBuilder();
-        public GlyphFitOutlineAnalyzer()
+        /// <summary>
+        /// create GlyphDynamicOutline from flatten contours
+        /// </summary>
+        /// <param name="flattenContours"></param>
+        /// <returns></returns>
+        static GlyphDynamicOutline CreateDynamicOutline(List<GlyphContour> flattenContours)
         {
 
-        }
-        static GlyphFitOutline CreateFitOutline(List<GlyphContour> contours)
-        {
-
-            int cntCount = contours.Count;
-            GlyphContour cnt = contours[0]; //first contour
+            int cntCount = flattenContours.Count;
+            GlyphContour cnt = flattenContours[0]; //first contour
             //--------------------------
-            //1. create polygon 
-            Poly2Tri.Polygon mainPolygon = CreatePolygon(cnt);//first contour        
+            //TODO: review here, add hole or not 
+            //first polygon
+            Poly2Tri.Polygon mainPolygon = CreatePolygon(cnt.flattenPoints);//first contour        
             bool isClockWise = cnt.IsClosewise();
             //review is hole or not here
             //eg i
             //-------------------------- 
             for (int n = 1; n < cntCount; ++n)
             {
-                cnt = contours[n];
+                cnt = flattenContours[n];
                 //IsHole is correct after we Analyze() the glyph contour
-                Poly2Tri.Polygon subPolygon = CreatePolygon(cnt);
-                //TODO: review here
+                Poly2Tri.Polygon subPolygon = CreatePolygon(cnt.flattenPoints);
+                //TODO: review here 
                 mainPolygon.AddHole(subPolygon);
                 //if (cnt.IsClosewise())
-                //{
-
+                //{ 
                 //}
-
                 //if (cnt.IsClosewise())
                 //{
                 //    mainPolygon.AddHole(subPolygon);
@@ -85,10 +92,11 @@ namespace Typography.Rendering
             //------------------------------------------
             //2. tri angulate 
             Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
-            //3. create fit outline
-            GlyphFitOutline glyphFitOutline = new GlyphFitOutline(mainPolygon, contours);
 
-            List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
+            //3. intermediate outline is used inside this lib
+
+            var intermediateOutline = new GlyphIntermediateOutline(mainPolygon, flattenContours);
+            List<GlyphTriangle> triAngles = intermediateOutline.GetTriangles();
             int triangleCount = triAngles.Count;
             for (int i = 0; i < triangleCount; ++i)
             {
@@ -99,21 +107,22 @@ namespace Typography.Rendering
                 AssignPointEdgeInvolvement(tri.e2);
             }
 
-            return glyphFitOutline;
+
+            //convert intermediate outline to dynamic outline
+
+            return new GlyphDynamicOutline(intermediateOutline);
         }
 
 
-
-
         /// <summary>
-        /// create polygon from flatten curve outline point
+        /// create polygon from GlyphContour
         /// </summary>
         /// <param name="cnt"></param>
         /// <returns></returns>
-        static Poly2Tri.Polygon CreatePolygon(GlyphContour cnt)
+        static Poly2Tri.Polygon CreatePolygon(List<GlyphPoint> flattenPoints)
         {
             List<Poly2Tri.TriangulationPoint> points = new List<Poly2Tri.TriangulationPoint>();
-            List<GlyphPoint2D> flattenPoints = cnt.flattenPoints;
+
             //limitation: poly tri not accept duplicated points! *** 
             double prevX = 0;
             double prevY = 0;
@@ -131,7 +140,7 @@ namespace Typography.Rendering
             //pass
             for (int i = 0; i < lim; ++i)
             {
-                GlyphPoint2D p = flattenPoints[i];
+                GlyphPoint p = flattenPoints[i];
                 double x = p.x;
                 double y = p.y;
 
@@ -144,8 +153,11 @@ namespace Typography.Rendering
                 }
                 else
                 {
-                    points.Add(p.triangulationPoint =
-                        new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = p });
+                    var triPoint = new Poly2Tri.TriangulationPoint(prevX = x, prevY = y) { userData = p };
+#if DEBUG
+                    p.dbugTriangulationPoint = triPoint;
+#endif
+                    points.Add(triPoint);
 
                 }
             }
@@ -172,7 +184,7 @@ namespace Typography.Rendering
 
                         //------------
                         //both p and q of this edge is part of horizontal edge 
-                        var p = edge.p.userData as GlyphPoint2D;
+                        GlyphPoint p = edge.GlyphPoint_P;
                         if (p != null)
                         {
                             //TODO: review here
@@ -181,7 +193,7 @@ namespace Typography.Rendering
                             p.horizontalEdge = edge;
                         }
 
-                        var q = edge.q.userData as GlyphPoint2D;
+                        GlyphPoint q = edge.GlyphPoint_Q;
                         if (q != null)
                         {
                             //TODO: review here
@@ -194,14 +206,14 @@ namespace Typography.Rendering
                 case LineSlopeKind.Vertical:
                     {
                         //both p and q of this edge is part of vertical edge 
-                        var p = edge.p.userData as GlyphPoint2D;
+                        GlyphPoint p = edge.GlyphPoint_P;
                         if (p != null)
                         {
                             //TODO: review here 
                             p.AddVerticalEdge(edge);
                         }
 
-                        var q = edge.q.userData as GlyphPoint2D;
+                        GlyphPoint q = edge.GlyphPoint_Q;
                         if (q != null)
                         {   //TODO: review here
 
@@ -230,7 +242,7 @@ namespace Typography.Rendering
             }
         }
         static Dictionary<TmpPoint, bool> s_debugTmpPoints = new Dictionary<TmpPoint, bool>();
-        static void dbugCheckAllGlyphsAreUnique(List<GlyphPoint2D> flattenPoints)
+        static void dbugCheckAllGlyphsAreUnique(List<GlyphPoint> flattenPoints)
         {
             double prevX = 0;
             double prevY = 0;
@@ -238,7 +250,7 @@ namespace Typography.Rendering
             int lim = flattenPoints.Count - 1;
             for (int i = 0; i < lim; ++i)
             {
-                GlyphPoint2D p = flattenPoints[i];
+                GlyphPoint p = flattenPoints[i];
                 double x = p.x;
                 double y = p.y;
 
@@ -256,9 +268,7 @@ namespace Typography.Rendering
                     {
                         //ensure no duplicated point
                         s_debugTmpPoints.Add(tmp_point, true);
-                        if (p.triangulationPoint != null)
-                        {
-                        }
+
                     }
                     else
                     {
@@ -270,13 +280,7 @@ namespace Typography.Rendering
             }
 
         }
-#endif
-
-
-
-
-
-
+#endif 
 
     }
 }

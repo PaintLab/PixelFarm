@@ -1,67 +1,9 @@
 ﻿//MIT, 2017, WinterDev
 using System;
 using System.Collections.Generic;
-using Poly2Tri;
 using System.Numerics;
 namespace Typography.Rendering
 {
-
-    public class GlyphTriangle
-    {
-        DelaunayTriangle _tri;
-        public EdgeLine e0;
-        public EdgeLine e1;
-        public EdgeLine e2;
-
-        //centroid of edge mass
-        double centroidX;
-        double centroidY;
-
-        public GlyphTriangle(DelaunayTriangle tri)
-        {
-            this._tri = tri;
-            TriangulationPoint p0 = _tri.P0;
-            TriangulationPoint p1 = _tri.P1;
-            TriangulationPoint p2 = _tri.P2;
-            e0 = new EdgeLine(p0, p1);
-            e1 = new EdgeLine(p1, p2);
-            e2 = new EdgeLine(p2, p0);
-            tri.Centroid2(out centroidX, out centroidY);
-
-            e0.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P0, tri.P1));
-            e1.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P1, tri.P2));
-            e2.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P2, tri.P0));
-        }
-
-        public double CentroidX
-        {
-            get { return centroidX; }
-        }
-        public double CentroidY
-        {
-            get { return centroidY; }
-        }
-        public bool IsConnectedWith(GlyphTriangle anotherTri)
-        {
-            DelaunayTriangle t2 = anotherTri._tri;
-            if (t2 == this._tri)
-            {
-                throw new NotSupportedException();
-            }
-            //else 
-            return this._tri.N0 == t2 ||
-                   this._tri.N1 == t2 ||
-                   this._tri.N2 == t2;
-        }
-
-#if DEBUG
-        public override string ToString()
-        {
-            return this._tri.ToString();
-        }
-#endif
-    }
-
     public enum LineSlopeKind : byte
     {
         Vertical,
@@ -75,21 +17,13 @@ namespace Typography.Rendering
     public class EdgeLine
     {
 
-        public double x0;
-        public double y0;
-        public double x1;
-        public double y1;
+        public readonly double x0;
+        public readonly double y0;
+        public readonly double x1;
+        public readonly double y1;
 
-        static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
-        static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
-        static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
-        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
 
-        public TriangulationPoint p;
-        public TriangulationPoint q;
-
-        Dictionary<EdgeLine, bool> matchingEdges;
-
+        Dictionary<EdgeLine, bool> matchingEdges; //TODO: remove this
         //------------------------------
         /// <summary>
         /// contact to 
@@ -97,19 +31,27 @@ namespace Typography.Rendering
         public EdgeLine contactToEdge;
         //------------------------------
 
+        readonly GlyphPoint _glyphPoint_P;
+        readonly GlyphPoint _glyphPoint_Q;
 #if DEBUG
         public static int s_dbugTotalId;
         public readonly int dbugId = s_dbugTotalId++;
+        internal GlyphTriangle dbugOwner;
 #endif
-        public EdgeLine(TriangulationPoint p, TriangulationPoint q)
-        {
-            this.p = p;
-            this.q = q;
 
-            x0 = p.X;
-            y0 = p.Y;
-            x1 = q.X;
-            y1 = q.Y;
+        public EdgeLine(GlyphPoint p, GlyphPoint q)
+        {
+
+            //edge  line connect 2 glyph point
+
+            this._glyphPoint_P = p;
+            this._glyphPoint_Q = q;
+
+
+            x0 = p.x;
+            y0 = p.y;
+            x1 = q.x;
+            y1 = q.y;
             //-------------------
             if (x1 == x0)
             {
@@ -133,12 +75,16 @@ namespace Typography.Rendering
                 }
             }
         }
+
+
         public LineSlopeKind SlopeKind
         {
             get;
             private set;
         }
-       
+
+
+
         public bool IsOutside
         {
             get;
@@ -191,19 +137,19 @@ namespace Typography.Rendering
             }
         }
 
-        public GlyphPoint2D GlyphPoint_P
+        public GlyphPoint GlyphPoint_P
         {
             get
             {
-                return p.userData as GlyphPoint2D;
+                return _glyphPoint_P;
             }
 
         }
-        public GlyphPoint2D GlyphPoint_Q
+        public GlyphPoint GlyphPoint_Q
         {
             get
             {
-                return q.userData as GlyphPoint2D;
+                return _glyphPoint_Q;
             }
         }
         public void AddMatchingOutsideEdge(EdgeLine edgeLine)
@@ -226,30 +172,12 @@ namespace Typography.Rendering
             }
 #endif
         }
-        public List<CutLine> cutLines;
-        public void AddCutPoints(
-            Vector2 cutPointOnBone,
-            Vector2 glyphBoneJoint)
-        {
-            if (cutLines == null) { cutLines = new List<CutLine>(); }
-            var cutLine = new CutLine();
-            cutLine.x0 = cutPointOnBone.X;
-            cutLine.y0 = cutPointOnBone.Y;
-            cutLine.x1 = glyphBoneJoint.X;
-            cutLine.y1 = glyphBoneJoint.Y;
 
-            cutLines.Add(cutLine);
-        }
-    }
-    public struct CutLine
-    {
-        public float x0, y0, x1, y1;
-        public CutLine(float x0, float y0, float x1, float y1)
-        {
-            this.x0 = x0;
-            this.y0 = y0;
-            this.x1 = x1;
-            this.y1 = y1;
-        }
+        static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
+        static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
+        static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
+        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+
+
     }
 }
