@@ -533,10 +533,7 @@ namespace SampleWinForms.UI
         }
         protected override void OnEndLineHub(float centerX, float centerY, GlyphBoneJoint joint)
         {
-            painter.Line(
-                      (float)_branchHeadPos.X * _pxscale, (float)_branchHeadPos.Y * _pxscale,
-                      centerX * _pxscale, centerX * _pxscale,
-                       PixelFarm.Drawing.Color.Red);
+
 
             painter.FillRectLBWH(centerX * _pxscale, centerY * _pxscale, 7, 7,
                    PixelFarm.Drawing.Color.White);
