@@ -463,6 +463,7 @@ namespace SampleWinForms.UI
                     midBone.X, midBone.Y,
                     v2.X, v2.Y,
                     PixelFarm.Drawing.Color.Red);
+                //create a new perpendicular line
             }
 
             //--------

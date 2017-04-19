@@ -633,7 +633,7 @@ namespace Typography.Rendering
 
             delta = (v1 - v0) / 2;
             delta = delta.NewLength(len);
-            delta.Rotate(90);
+            delta = delta.Rotate(90);
         }
         static void GeneratePerpendicularLines(
           Vector2 p0, Vector2 p1, float len,
@@ -644,8 +644,7 @@ namespace Typography.Rendering
 
             delta = (v1 - v0) / 2;
             delta = delta.NewLength(len);
-            delta.Rotate(90);
-
+            delta = delta.Rotate(90);
         }
         void RegenerateBorders(List<StrokeSegment> segments, int startAt, int endAt)
         {
