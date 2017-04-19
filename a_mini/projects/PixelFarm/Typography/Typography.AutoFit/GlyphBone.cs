@@ -90,8 +90,10 @@ namespace Typography.Rendering
         }
 
 
-        short _ribCount;
 
+
+
+        short _ribCount;
         Vector2 _ribEndPoint_A, _ribEndPoint_B;
         /// <summary>
         /// tip point (mid of tip edge)
@@ -101,13 +103,12 @@ namespace Typography.Rendering
         //one bone joint can have up to 2 tips
 
 
-        //connection to edges
+
         EdgeLine _selectedEdgeA, _selectedEdgeB, _selectedTipEdge;
-
-
-
         public List<GlyphBone> _assocBones;
         public List<GlyphPoint> _assocGlyphPoints;
+
+
         public void AddRibEndAt(EdgeLine edgeLine, Vector2 vec)
         {
             switch (_ribCount)
@@ -214,7 +215,6 @@ namespace Typography.Rendering
             {
                 //not found?=>
             }
-
         }
 
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
@@ -226,12 +226,41 @@ namespace Typography.Rendering
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluteSlope(a.Position, midPoint);
             //------
-
             //for analysis in later step
             a.AddAssociatedBone(this);
+
+            //tip bone, no common triangle
+            //
+            EdgeLine outsideEdge = FindOutsideEdge(a, tipEdge);
+            if (outsideEdge != null)
+            {
+                hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
+            }
         }
-
-
+        static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
+        {
+            GlyphCentroidLine ownerCentroid_A = a.OwnerCentroidLine;
+            if (ContainsEdge(ownerCentroid_A.p, tipEdge))
+            {
+                return FindAnotherOutsideEdge(ownerCentroid_A.p, tipEdge);
+            }
+            else if (ContainsEdge(ownerCentroid_A.q, tipEdge))
+            {
+                return FindAnotherOutsideEdge(ownerCentroid_A.q, tipEdge);
+            }
+            return null;
+        }
+        static EdgeLine FindAnotherOutsideEdge(GlyphTriangle tri, EdgeLine knownOutsideEdge)
+        {
+            if (tri.e0.IsOutside && tri.e0 != knownOutsideEdge) { return tri.e0; }
+            if (tri.e1.IsOutside && tri.e1 != knownOutsideEdge) { return tri.e1; }
+            if (tri.e2.IsOutside && tri.e2 != knownOutsideEdge) { return tri.e2; }
+            return null;
+        }
+        static bool ContainsEdge(GlyphTriangle tri, EdgeLine edge)
+        {
+            return tri.e0 == edge || tri.e1 == edge || tri.e2 == edge;
+        }
         static GlyphTriangle FindCommonTriangle(GlyphBoneJoint a, GlyphBoneJoint b)
         {
             GlyphCentroidLine ownerCentroid_A = a.OwnerCentroidLine;

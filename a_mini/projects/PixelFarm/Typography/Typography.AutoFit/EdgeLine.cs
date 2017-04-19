@@ -26,9 +26,9 @@ namespace Typography.Rendering
         Dictionary<EdgeLine, bool> matchingEdges; //TODO: remove this
         //------------------------------
         /// <summary>
-        /// contact to 
+        /// contact to another edge
         /// </summary>
-        public EdgeLine contactToEdge;
+        internal EdgeLine contactToEdge;
         //------------------------------
 
         readonly GlyphPoint _glyphPoint_P;
