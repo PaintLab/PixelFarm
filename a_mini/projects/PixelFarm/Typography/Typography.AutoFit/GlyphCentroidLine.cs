@@ -459,7 +459,7 @@ namespace Typography.Rendering
     }
 
 
-    public class GlyphTip
+    class GlyphTip
     {
         public GlyphTip(GlyphCentroidLine ownerLine, Vector2 pos, EdgeLine edge)
         {
@@ -474,7 +474,7 @@ namespace Typography.Rendering
     /// <summary>
     /// a line that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
-    public class GlyphCentroidLine
+    class GlyphCentroidLine
     {
 
         internal readonly GlyphTriangle p, q;

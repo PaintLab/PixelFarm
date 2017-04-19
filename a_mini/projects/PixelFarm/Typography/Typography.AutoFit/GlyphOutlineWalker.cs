@@ -2,7 +2,7 @@
 using System;
 using System.Numerics;
 using System.Collections.Generic;
-using Typography.OpenFont;
+
 
 namespace Typography.Rendering
 {
@@ -46,7 +46,22 @@ namespace Typography.Rendering
                         GlyphCentroidLine line = branch.lines[i];
                         if (WalkCentroidBone)
                         {
-                            OnCentroidLine(line);
+                            double px, py, qx, qy;
+                            line.GetLineCoords(out px, out py, out qx, out qy);
+                            OnCentroidLine(px, py, qx, qy);
+
+
+                            if (line.P_Tip != null)
+                            {
+                                var pos = line.P_Tip.Pos;
+                                OnCentroidLineTip_P(px, py, pos.X, pos.Y);
+                            }
+                            if (line.Q_Tip != null)
+                            {
+                                var pos = line.Q_Tip.Pos;
+                                OnCentroidLineTip_Q(qx, qy, pos.X, pos.Y);
+                            }
+
                         }
                         if (WalkGlyphBone)
                         {
@@ -97,7 +112,9 @@ namespace Typography.Rendering
         //
         protected abstract void OnTriangle(int triAngleId, EdgeLine e0, EdgeLine e1, EdgeLine e2, double centroidX, double centroidY);
 
-        protected abstract void OnCentroidLine(GlyphCentroidLine line);
+        protected abstract void OnCentroidLine(double px, double py, double qx, double qy);
+        protected abstract void OnCentroidLineTip_P(double px, double py, double tip_px, double tip_py);
+        protected abstract void OnCentroidLineTip_Q(double qx, double qy, double tip_qx, double tip_qy);
         protected abstract void OnBoneJoint(GlyphBoneJoint joint);
         protected abstract void OnBeginDrawingBoneLinks(Vector2 branchHeadPos, int startAt, int endAt);
         protected abstract void OnEndDrawingBoneLinks();

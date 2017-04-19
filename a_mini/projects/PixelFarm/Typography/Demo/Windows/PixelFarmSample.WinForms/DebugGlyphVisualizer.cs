@@ -288,37 +288,8 @@ namespace SampleWinForms.UI
                 }
                 painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
             }
-
         }
-        void DrawCentroidLine(CanvasPainter painter, GlyphCentroidLine line, float pxscale)
-        {
-            double px, py, qx, qy;
-            line.GetLineCoords(out px, out py, out qx, out qy);
-            painter.Line(
-                px * pxscale, py * pxscale,
-                qx * pxscale, qy * pxscale,
-                PixelFarm.Drawing.Color.Red);
 
-            painter.FillRectLBWH(px * pxscale, py * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
-            painter.FillRectLBWH(qx * pxscale, qy * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
-
-            //---------------
-            if (line.P_Tip != null)
-            {
-                var pos = line.P_Tip.Pos * pxscale;
-                painter.Line(
-                    px * pxscale, py * pxscale,
-                    pos.X, pos.Y,
-                    PixelFarm.Drawing.Color.Blue);
-            }
-            if (line.Q_Tip != null)
-            {
-                var pos = line.Q_Tip.Pos * pxscale;
-                painter.Line(
-                    qx * pxscale, qy * pxscale, pos.X, pos.Y,
-                    PixelFarm.Drawing.Color.Blue);
-            }
-        }
         void DrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)
         {
             //-------------- 
@@ -525,9 +496,31 @@ namespace SampleWinForms.UI
                 _infoView.ShowTriangles(new GlyphTriangleInfo(triAngleId, e0, e1, e2, centroidX, centroidY));
             }
         }
-        protected override void OnCentroidLine(GlyphCentroidLine line)
+        protected override void OnCentroidLine(double px, double py, double qx, double qy)
         {
-            DrawCentroidLine(painter, line, _pxscale);
+
+            float pxscale = this._pxscale;
+            painter.Line(
+                px * pxscale, py * pxscale,
+                qx * pxscale, qy * pxscale,
+                PixelFarm.Drawing.Color.Red);
+
+            painter.FillRectLBWH(px * pxscale, py * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
+            painter.FillRectLBWH(qx * pxscale, qy * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow); 
+        }
+        protected override void OnCentroidLineTip_P(double px, double py, double tip_px, double tip_py)
+        {
+            float pxscale = this._pxscale;
+            painter.Line(px * pxscale, py * pxscale,
+                         tip_px * pxscale, tip_py * pxscale,
+                         PixelFarm.Drawing.Color.Blue);
+        }
+        protected override void OnCentroidLineTip_Q(double qx, double qy, double tip_qx, double tip_qy)
+        {
+            float pxscale = this._pxscale;
+            painter.Line(qx * pxscale, qy * pxscale,
+                         tip_qx * pxscale, tip_qy * pxscale,
+                         PixelFarm.Drawing.Color.Blue);
         }
         protected override void OnBoneJoint(GlyphBoneJoint joint)
         {
