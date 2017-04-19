@@ -171,7 +171,7 @@ namespace Typography.Rendering
             int j = parts.Count;
             //---------------
             //
-            flattenPoints = flattener.Results = new List<GlyphPoint2D>();
+            flattenPoints = flattener.Result = new List<GlyphPoint2D>();
             //start ...
             for (int i = 0; i < j; ++i)
             {
@@ -249,27 +249,40 @@ namespace Typography.Rendering
 
     public class GlyphPartFlattener
     {
+        List<GlyphPoint2D> points;
+
         public GlyphPartFlattener()
         {
             this.NSteps = 2;//default
         }
+        public List<GlyphPoint2D> Result
+        {
+            get { return points; }
+            set { points = value; }
+        }
         public int NSteps { get; set; }
+
+        void AddPoint(float x, float y, PointKind kind)
+        {
+            var p = new GlyphPoint2D(x, y, kind);
+#if DEBUG
+            p.dbugOwnerPart = dbug_ownerPart;
+#endif
+            points.Add(p);
+        }
+
         public void GeneratePointsFromLine(
-           GlyphPart ownerPart,
-           List<GlyphPoint2D> points,
            Vector2 start, Vector2 end)
         {
             if (points.Count == 0)
             {
-                points.Add(new GlyphPoint2D(ownerPart, start.X, start.Y, PointKind.LineStart));
+                AddPoint(start.X, start.Y, PointKind.LineStart);
             }
-            points.Add(new GlyphPoint2D(ownerPart, end.X, end.Y, PointKind.LineStop));
+            AddPoint(end.X, end.Y, PointKind.LineStop);
         }
 
         public void GeneratePointsFromCurve4(
-            GlyphPart ownerPart,
             int nsteps,
-            List<GlyphPoint2D> points,
             Vector2 start, Vector2 end,
             Vector2 control1, Vector2 control2)
         {
@@ -278,7 +291,7 @@ namespace Typography.Rendering
                 control1, control2);
             if (points.Count == 0)
             {
-                points.Add(new GlyphPoint2D(ownerPart, start.X, start.Y, PointKind.C4Start));
+                AddPoint(start.X, start.Y, PointKind.C4Start);
             }
             float eachstep = (float)1 / nsteps;
             float stepSum = eachstep;//start
@@ -286,15 +299,14 @@ namespace Typography.Rendering
             {
                 //start at i=1, this will not include the last step that stepSum=1
                 Vector2 vector2 = curve.CalculatePoint(stepSum);
-                points.Add(new GlyphPoint2D(ownerPart, vector2.X, vector2.Y, PointKind.CurveInbetween));
+                AddPoint(vector2.X, vector2.Y, PointKind.CurveInbetween);
                 stepSum += eachstep;
             }
-            points.Add(new GlyphPoint2D(ownerPart, end.X, end.Y, PointKind.C4End));
+
+            AddPoint(end.X, end.Y, PointKind.C4End);
         }
         public void GeneratePointsFromCurve3(
-            GlyphPart ownerPart,
             int nsteps,
-            List<GlyphPoint2D> points,
             Vector2 start, Vector2 end,
             Vector2 control1)
         {
@@ -303,7 +315,7 @@ namespace Typography.Rendering
                 control1);
             if (points.Count == 0)
             {
-                points.Add(new GlyphPoint2D(ownerPart, start.X, start.Y, PointKind.C3Start));
+                AddPoint(start.X, start.Y, PointKind.C3Start);
             }
             float eachstep = (float)1 / nsteps;
             float stepSum = eachstep;//start
@@ -311,18 +323,26 @@ namespace Typography.Rendering
             {
                 //start at i=1, this will not include the last step that stepSum=1
                 Vector2 vector2 = curve.CalculatePoint(stepSum);
-                points.Add(new GlyphPoint2D(ownerPart, vector2.X, vector2.Y, PointKind.CurveInbetween));
+                AddPoint(vector2.X, vector2.Y, PointKind.CurveInbetween);
                 stepSum += eachstep;
             }
-            points.Add(new GlyphPoint2D(ownerPart, end.X, end.Y, PointKind.C3End));
+            AddPoint(end.X, end.Y, PointKind.C3End);
         }
 
-        public List<GlyphPoint2D> Results;
+
+
+
+#if DEBUG
+        GlyphPart dbug_ownerPart;
+        public void dbugSetCurrentOwnerPart(GlyphPart dbug_ownerPart)
+        {
+            this.dbug_ownerPart = dbug_ownerPart;
+        }
+#endif
     }
     public abstract class GlyphPart
     {
         float _x0, _y0;
-
         public Vector2 FirstPoint
         {
             get
@@ -342,7 +362,6 @@ namespace Typography.Rendering
                 this._y0 = value.Y;
             }
         }
-
         public abstract GlyphPartKind Kind { get; }
         public GlyphPart NextPart { get; set; }
         public GlyphPart PrevPart { get; set; }
@@ -390,7 +409,7 @@ namespace Typography.Rendering
         public readonly PointKind kind;
 
         //
-        public Poly2Tri.TriangulationPoint triangulationPoint;
+
         double _adjX;
         double _adjY;
         //
@@ -401,15 +420,19 @@ namespace Typography.Rendering
         List<EdgeLine> _edges;
         public List<GlyphBoneJoint> _assocJoints; //associatedJoints
 
+
 #if DEBUG
+        //for debug only
+        public GlyphPart dbugOwnerPart;
+        public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
         Dictionary<GlyphBoneJoint, bool> dbug_jointDic;
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
-        public GlyphPoint2D(GlyphPart ownerPart, double x, double y, PointKind kind)
+        public GlyphPoint2D(double x, double y, PointKind kind)
         {
             //need to link pacl to owner part for glyph analysis
-            this.OwnerPart = ownerPart;
+
             this.x = x;
             this.y = y;
             this.kind = kind;
@@ -507,7 +530,7 @@ namespace Typography.Rendering
                     (x + "," + y + " " + kind.ToString());
         }
 #endif
- 
+
     }
     public class GlyphLine : GlyphPart
     {
@@ -535,9 +558,10 @@ namespace Typography.Rendering
         }
         public override void Flatten(GlyphPartFlattener flattener)
         {
+#if DEBUG
+            flattener.dbugSetCurrentOwnerPart(this);
+#endif
             flattener.GeneratePointsFromLine(
-                this,
-                flattener.Results,
                 this.FirstPoint,
                 new Vector2(x1, y1));
         }
@@ -578,11 +602,11 @@ namespace Typography.Rendering
         }
         public override void Flatten(GlyphPartFlattener flattener)
         {
-
+#if DEBUG
+            flattener.dbugSetCurrentOwnerPart(this);
+#endif
             flattener.GeneratePointsFromCurve3(
-                this,
                 flattener.NSteps,
-                flattener.Results,
                 this.FirstPoint, //first
                 new Vector2(x2, y2), //end
                 new Vector2(x1, y1)); //control1
@@ -632,11 +656,11 @@ namespace Typography.Rendering
         }
         public override void Flatten(GlyphPartFlattener flattener)
         {
-
+#if DEBUG
+            flattener.dbugSetCurrentOwnerPart(this);
+#endif
             flattener.GeneratePointsFromCurve4(
-                this,
                 flattener.NSteps,
-                flattener.Results,
                 this.FirstPoint,    //first
                 new Vector2(x3, y3), //end
                 new Vector2(x1, y1), //control1
