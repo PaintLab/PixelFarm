@@ -819,12 +819,9 @@ namespace Typography.Rendering
         }
 
 #if DEBUG
-        public IEnumerable<IGlyphTriangle> dbugGetGlyphTriangles()
+        internal List<GlyphTriangle> dbugGetGlyphTriangles()
         {
-            foreach (var t in _dbugTempIntermediateOutline.GetTriangles())
-            {
-                yield return t;
-            }
+            return _dbugTempIntermediateOutline.GetTriangles();
         }
         internal Dictionary<GlyphTriangle, CentroidLineHub> dbugGetCentroidLineHubs()
         {

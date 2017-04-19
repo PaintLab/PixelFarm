@@ -23,7 +23,7 @@ namespace Typography.Rendering
         {
             this._dynamicOutline = dynamicOutline;
 
-            foreach (IGlyphTriangle tri in _dynamicOutline.dbugGetGlyphTriangles())
+            foreach (GlyphTriangle tri in _dynamicOutline.dbugGetGlyphTriangles())
             {
                 OnTriangle(tri);
                 OnTriangleEdge(tri.E0, 0);
