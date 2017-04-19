@@ -22,7 +22,7 @@ namespace Typography.Rendering
         /// <param name="glyphPoints"></param>
         /// <param name="glyphContours"></param>
         /// <returns></returns>
-        public GlyphFitOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
+        public GlyphDynamicOutline CreateGlyphFitOutline(GlyphPointF[] glyphPoints, ushort[] glyphContours)
         {
 
             //1. convert original glyph point to contour
@@ -49,7 +49,7 @@ namespace Typography.Rendering
         }
 
 
-        static GlyphFitOutline CreateFitOutline(List<GlyphContour> contours)
+        static GlyphDynamicOutline CreateFitOutline(List<GlyphContour> contours)
         {
 
             int cntCount = contours.Count;
@@ -87,7 +87,7 @@ namespace Typography.Rendering
             //2. tri angulate 
             Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
             //3. create fit outline
-            GlyphFitOutline glyphFitOutline = new GlyphFitOutline(mainPolygon, contours);
+            GlyphDynamicOutline glyphFitOutline = new GlyphDynamicOutline(mainPolygon, contours);
 
             List<GlyphTriangle> triAngles = glyphFitOutline.GetTriangles();
             int triangleCount = triAngles.Count;

@@ -10,8 +10,8 @@ namespace Typography.Rendering
     public class GlyphPathBuilder : GlyphPathBuilderBase
     {
         GlyphFitOutlineAnalyzer _fitShapeAnalyzer = new GlyphFitOutlineAnalyzer();
-        Dictionary<ushort, GlyphFitOutline> _fitoutlineCollection = new Dictionary<ushort, GlyphFitOutline>();
-        GlyphFitOutline _fitOutline;
+        Dictionary<ushort, GlyphDynamicOutline> _fitoutlineCollection = new Dictionary<ushort, GlyphDynamicOutline>();
+        GlyphDynamicOutline _fitOutline;
         public GlyphPathBuilder(Typeface typeface)
             : base(typeface)
         {
@@ -114,7 +114,7 @@ namespace Typography.Rendering
             }
         }
 
-        public GlyphFitOutline LatestGlyphFitOutline
+        public GlyphDynamicOutline LatestGlyphFitOutline
         {
             get
             {

@@ -75,7 +75,7 @@ namespace Typography.Rendering
 #endif
 
         List<StrokeLineHub> _strokeLineHub;
-        public GlyphDynamicOutline2(GlyphFitOutline fitOutline)
+        public GlyphDynamicOutline2(GlyphDynamicOutline fitOutline)
         {
 
 

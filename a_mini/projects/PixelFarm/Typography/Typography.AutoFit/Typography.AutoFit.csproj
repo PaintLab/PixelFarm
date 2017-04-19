@@ -40,7 +40,7 @@
     <Compile Include="GlyphCentroidLine.cs" />
     <Compile Include="GlyphFitOutlineAnalyzer.cs" />
     <Compile Include="GlyphImages.cs" />
-    <Compile Include="GlyphFitOutline.cs" />
+    <Compile Include="GlyphDynamicOutline.cs" />
     <Compile Include="GlyphTranslatorToContour.cs" />
     <Compile Include="GlyphTriangleAndEdge.cs" />
     <Compile Include="MyMath.cs" />
