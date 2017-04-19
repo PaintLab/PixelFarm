@@ -420,7 +420,7 @@ namespace Typography.Rendering
 
         //TODO: remove this
         List<EdgeLine> _edges;
-        public List<GlyphBoneJoint> _assocJoints; //associatedJoints
+        internal List<GlyphBoneJoint> _assocJoints; //associatedJoints
 
 
 #if DEBUG

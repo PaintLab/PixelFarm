@@ -36,7 +36,7 @@ namespace Typography.Rendering
 #if DEBUG
         public static int s_dbugTotalId;
         public readonly int dbugId = s_dbugTotalId++;
-        public GlyphTriangle dbugOwner;
+        internal GlyphTriangle dbugOwner;
 #endif
 
         public EdgeLine(GlyphPoint p, GlyphPoint q)

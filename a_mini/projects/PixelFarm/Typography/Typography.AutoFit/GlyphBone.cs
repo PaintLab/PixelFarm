@@ -214,7 +214,7 @@ namespace Typography.Rendering
             else
             {
                 //not found?=>
-            } 
+            }
 
         }
 
@@ -298,7 +298,7 @@ namespace Typography.Rendering
             }
         }
         public bool IsLongBone { get; internal set; }
- 
+
         //--------
         public float LeftMostPoint()
         {

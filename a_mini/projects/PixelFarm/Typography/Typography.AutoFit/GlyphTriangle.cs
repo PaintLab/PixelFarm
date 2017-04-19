@@ -1,21 +1,29 @@
 ﻿//MIT, 2017, WinterDev
-using System; 
-using Poly2Tri; 
+using System;
+using Poly2Tri;
 namespace Typography.Rendering
 {
+    public interface IGlyphTriangle
+    {
+        double CentroidX { get; }
+        double CentroidY { get; }
+        EdgeLine E0 { get; }
+        EdgeLine E1 { get; }
+        EdgeLine E2 { get; }
+    }
 
-    public class GlyphTriangle
+    class GlyphTriangle : IGlyphTriangle
     {
         DelaunayTriangle _tri;
-        public EdgeLine e0;
-        public EdgeLine e1;
-        public EdgeLine e2;
+        public readonly EdgeLine e0;
+        public readonly EdgeLine e1;
+        public readonly EdgeLine e2;
 
         //centroid of edge mass
-        double centroidX;
-        double centroidY;
+        float centroidX;
+        float centroidY;
 
-        public GlyphTriangle(DelaunayTriangle tri)
+        internal GlyphTriangle(DelaunayTriangle tri)
         {
             this._tri = tri;
             TriangulationPoint p0 = _tri.P0;
@@ -31,7 +39,7 @@ namespace Typography.Rendering
             e0.dbugOwner = e1.dbugOwner = e2.dbugOwner = this;
 #endif
 
-            tri.Centroid2(out centroidX, out centroidY);
+            tri.GetCentroid(out centroidX, out centroidY);
 
             e0.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P0, tri.P1));
             e1.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P1, tri.P2));
@@ -49,14 +57,18 @@ namespace Typography.Rendering
         {
             get { return centroidY; }
         }
-        public bool IsConnectedWith(GlyphTriangle anotherTri)
+        public EdgeLine E0 { get { return e0; } }
+        public EdgeLine E1 { get { return e1; } }
+        public EdgeLine E2 { get { return e2; } }
+        //
+        internal bool IsConnectedWith(GlyphTriangle anotherTri)
         {
             DelaunayTriangle t2 = anotherTri._tri;
             if (t2 == this._tri)
             {
                 throw new NotSupportedException();
             }
-            //else 
+            //compare each neighbor 
             return this._tri.N0 == t2 ||
                    this._tri.N1 == t2 ||
                    this._tri.N2 == t2;
@@ -65,10 +77,10 @@ namespace Typography.Rendering
 #if DEBUG
         public override string ToString()
         {
-            return this._tri.ToString();
+            return "centroid:" + centroidX + "," + centroidY;
         }
 #endif
     }
 
- 
+
 }

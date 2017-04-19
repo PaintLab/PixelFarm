@@ -43,6 +43,7 @@
     <Compile Include="GlyphOutlineAnalyzer.cs" />
     <Compile Include="GlyphImages.cs" />
     <Compile Include="GlyphIntermediateOutline.cs" />
+    <Compile Include="GlyphOutlineWalker.cs" />
     <Compile Include="GlyphTranslatorToContour.cs" />
     <Compile Include="GlyphTriangle.cs" />
     <Compile Include="MyMath.cs" />
