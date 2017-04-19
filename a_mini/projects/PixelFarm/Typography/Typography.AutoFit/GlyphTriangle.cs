@@ -6,6 +6,10 @@ namespace Typography.Rendering
 
     class GlyphTriangle 
     {
+
+
+        //TODO: review here...
+        //if we not use the 
         DelaunayTriangle _tri;
         public readonly EdgeLine e0;
         public readonly EdgeLine e1;
