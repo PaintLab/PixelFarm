@@ -67,7 +67,7 @@ namespace Typography.Rendering
 
 #if DEBUG
         GlyphIntermediateOutline _dbugTempIntermediateOutline;
-        float pxscale;
+
         public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif
 
@@ -151,9 +151,10 @@ namespace Typography.Rendering
                 }
             }
         }
-        public void GenerateOutput(IGlyphTranslator tx, float pxScale)
+        float pxscale;
+        public void GenerateOutput(IGlyphTranslator tx, float pxscale)
         {
-
+            _dbugTempIntermediateOutline.GenerateOutput(tx, this.pxscale = pxscale);
         }
         void WalkHubCenter(Vector2 hubCenter)
         {
