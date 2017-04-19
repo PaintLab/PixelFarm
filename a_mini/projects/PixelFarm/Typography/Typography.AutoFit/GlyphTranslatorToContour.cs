@@ -155,6 +155,7 @@ namespace Typography.Rendering
         {
             parts.Add(part);
         }
+
         internal void ClearAllAdjustValues()
         {
             for (int i = flattenPoints.Count - 1; i >= 0; --i)
@@ -162,15 +163,15 @@ namespace Typography.Rendering
                 flattenPoints[i].ClearAdjustValues();
             }
         }
-
-        public void Flatten(GlyphPartFlattener flattener)
+        internal void Flatten(GlyphPartFlattener flattener)
         {
+            //flatten once
             if (analyzed) return;
             //flatten each part ...
             //-------------------------------
             int j = parts.Count;
             //---------------
-            //
+            List<GlyphPoint2D> prevResult = flattener.Result;
             flattenPoints = flattener.Result = new List<GlyphPoint2D>();
             //start ...
             for (int i = 0; i < j; ++i)
@@ -179,23 +180,26 @@ namespace Typography.Rendering
                 parts[i].Flatten(flattener);
             }
 
-
+            flattener.Result = prevResult;
             analyzed = true;
         }
         public bool IsClosewise()
         {
+            //after flatten
             if (analyzedClockDirection)
             {
                 return isClockwise;
             }
 
-            //we find direction from merge
-            if (flattenPoints == null)
+            List<GlyphPoint2D> f_points = this.flattenPoints;
+            if (f_points == null)
             {
                 throw new NotSupportedException();
             }
             analyzedClockDirection = true;
-            // 
+
+
+
             //---------------
             //http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
             //check if hole or not
@@ -211,8 +215,8 @@ namespace Typography.Rendering
                 double total = 0;
                 for (int i = 1; i < j; ++i)
                 {
-                    GlyphPoint2D p0 = flattenPoints[i - 1];
-                    GlyphPoint2D p1 = flattenPoints[i];
+                    GlyphPoint2D p0 = f_points[i - 1];
+                    GlyphPoint2D p1 = f_points[i];
 
                     double x0 = p0.x;
                     double y0 = p0.y;
@@ -224,8 +228,8 @@ namespace Typography.Rendering
                 }
                 //the last one
                 {
-                    GlyphPoint2D p0 = flattenPoints[j - 1];
-                    GlyphPoint2D p1 = flattenPoints[0];
+                    GlyphPoint2D p0 = f_points[j - 1];
+                    GlyphPoint2D p1 = f_points[0];
 
                     double x0 = p0.x;
                     double y0 = p0.y;
