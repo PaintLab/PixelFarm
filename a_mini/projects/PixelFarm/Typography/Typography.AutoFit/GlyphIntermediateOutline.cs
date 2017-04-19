@@ -5,10 +5,10 @@ using Typography.OpenFont;
 using Poly2Tri;
 using System.Numerics;
 
-namespace Typography.Rendering.Internal
+namespace Typography.Rendering
 {
 
-    public class GlyphIntermediateOutline
+    class GlyphIntermediateOutline
     {
 
         List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
@@ -16,7 +16,7 @@ namespace Typography.Rendering.Internal
 #if DEBUG
         Polygon _dbugpolygon;
 #endif 
-        internal GlyphIntermediateOutline(Polygon polygon, List<GlyphContour> contours)
+        public GlyphIntermediateOutline(Polygon polygon, List<GlyphContour> contours)
         {
             this._contours = contours;
 #if DEBUG

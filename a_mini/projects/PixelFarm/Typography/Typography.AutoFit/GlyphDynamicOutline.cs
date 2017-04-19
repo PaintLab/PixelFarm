@@ -65,15 +65,15 @@ namespace Typography.Rendering
             public List<StrokeLine> _branches;
         }
 
-#if DEBUG 
-        Internal.GlyphIntermediateOutline _dbugTempIntermediateOutline;
+#if DEBUG
+        GlyphIntermediateOutline _dbugTempIntermediateOutline;
         float pxscale;
         public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif
 
         public float LeftControlPosX { get; set; }
         List<StrokeLineHub> _strokeLineHub;
-        internal GlyphDynamicOutline(Internal.GlyphIntermediateOutline intermediateOutline)
+        internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
 
 #if DEBUG

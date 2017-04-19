@@ -89,7 +89,7 @@ namespace Typography.Rendering
 
             //3. intermediate outline is used inside this lib
 
-            var intermediateOutline = new Internal.GlyphIntermediateOutline(mainPolygon, contours);
+            var intermediateOutline = new GlyphIntermediateOutline(mainPolygon, contours);
             List<GlyphTriangle> triAngles = intermediateOutline.GetTriangles();
             int triangleCount = triAngles.Count;
             for (int i = 0; i < triangleCount; ++i)
