@@ -252,7 +252,7 @@ namespace Typography.Rendering
             }
             return min;
         }
-        static float RoundToNearestY(GlyphPoint2D p, float org, bool useHalfPixel)
+        static float RoundToNearestY(GlyphPoint p, float org, bool useHalfPixel)
         {
             float floo_int = (int)org;//floor 
             float remaining = org - floo_int;
@@ -287,11 +287,11 @@ namespace Typography.Rendering
                     EdgeLine matching_anotherSide = h_edge.GetMatchingOutsideEdge();
                     if (matching_anotherSide != null)
                     {
-                        Poly2Tri.TriangulationPoint a_p = matching_anotherSide.p;
-                        Poly2Tri.TriangulationPoint a_q = matching_anotherSide.q;
-                        if (a_p != null && a_p.userData is GlyphPoint2D)
+                        GlyphPoint a_glyph_p = matching_anotherSide.GlyphPoint_P;
+                        GlyphPoint a_glyph_q = matching_anotherSide.GlyphPoint_Q;
+                        if (a_glyph_p != null)
                         {
-                            GlyphPoint2D a_glyph_p = (GlyphPoint2D)a_p.userData;
+
                             a_glyph_p.AdjustedY = -remaining;
 #if DEBUG
                             if (!s_dbugAff2.ContainsKey(a_glyph_p))
@@ -302,9 +302,9 @@ namespace Typography.Rendering
 
 #endif
                         }
-                        if (a_q != null && a_q.userData is GlyphPoint2D)
+                        if (a_glyph_q != null)
                         {
-                            GlyphPoint2D a_glyph_q = (GlyphPoint2D)a_q.userData;
+                             
                             a_glyph_q.AdjustedY = -remaining;
 #if DEBUG
                             if (!s_dbugAff2.ContainsKey(a_glyph_q))
@@ -344,7 +344,7 @@ namespace Typography.Rendering
             bool y_axis,
             bool useHalfPixel)
         {
-            List<GlyphPoint2D> flattenPoints = contour.flattenPoints;
+            List<GlyphPoint> flattenPoints = contour.flattenPoints;
 
             int j = flattenPoints.Count;
             //merge 0 = start
@@ -362,7 +362,7 @@ namespace Typography.Rendering
             //find adjust y
 
             {
-                GlyphPoint2D p = flattenPoints[0];
+                GlyphPoint p = flattenPoints[0];
                 p_x = p.x * pixelScale;
                 p_y = p.y * pixelScale;
 
@@ -397,7 +397,7 @@ namespace Typography.Rendering
             for (int i = 1; i < j; ++i)
             {
                 //all merge point is polygon point
-                GlyphPoint2D p = flattenPoints[i];
+                GlyphPoint p = flattenPoints[i];
                 p_x = p.x * pixelScale;
                 p_y = p.y * pixelScale;
 
@@ -437,7 +437,7 @@ namespace Typography.Rendering
             //---------------
 
             //find adjust y
-            List<GlyphPoint2D> flattenPoints = contour.flattenPoints;
+            List<GlyphPoint> flattenPoints = contour.flattenPoints;
             //---------------
             if (j != flattenPoints.Count)
             {
@@ -446,7 +446,7 @@ namespace Typography.Rendering
             //---------------
             for (int i = 0; i < j; ++i)
             {
-                GlyphPoint2D glyphPoint = flattenPoints[i];
+                GlyphPoint glyphPoint = flattenPoints[i];
                 Vector2 p = genPoints[i];
 
                 if (glyphPoint.AdjustedY != 0)
@@ -826,8 +826,8 @@ namespace Typography.Rendering
         {
             return _dbugTempIntermediateOutline.GetCentroidLineHubs();
         }
-        public static List<GlyphPoint2D> s_dbugAffectedPoints = new List<GlyphPoint2D>();
-        public static Dictionary<GlyphPoint2D, bool> s_dbugAff2 = new Dictionary<GlyphPoint2D, bool>();
+        public static List<GlyphPoint> s_dbugAffectedPoints = new List<GlyphPoint>();
+        public static Dictionary<GlyphPoint, bool> s_dbugAff2 = new Dictionary<GlyphPoint, bool>();
         GlyphIntermediateOutline _dbugTempIntermediateOutline;
         public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif

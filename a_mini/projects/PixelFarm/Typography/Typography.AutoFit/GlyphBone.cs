@@ -8,7 +8,7 @@ namespace Typography.Rendering
 
     public struct GlyphPointToBoneLink
     {
-        public GlyphPoint2D glyphPoint;
+        public GlyphPoint glyphPoint;
         public Vector2 bonePoint;
     }
 
@@ -108,7 +108,7 @@ namespace Typography.Rendering
 
 
         public List<GlyphBone> _assocBones;
-        public List<GlyphPoint2D> _assocGlyphPoints;
+        public List<GlyphPoint> _assocGlyphPoints;
         public void AddRibEndAt(EdgeLine edgeLine, Vector2 vec)
         {
             switch (_ribCount)
@@ -143,9 +143,9 @@ namespace Typography.Rendering
         public EdgeLine RibEndEdgeB { get { return _selectedEdgeB; } }
         public EdgeLine TipEdge { get { return _selectedTipEdge; } }
 
-        public void AddAssociatedGlyphPoint(GlyphPoint2D glyphPoint)
+        public void AddAssociatedGlyphPoint(GlyphPoint glyphPoint)
         {
-            if (_assocGlyphPoints == null) { _assocGlyphPoints = new List<GlyphPoint2D>(); }
+            if (_assocGlyphPoints == null) { _assocGlyphPoints = new List<GlyphPoint>(); }
             _assocGlyphPoints.Add(glyphPoint);
         }
         public void AddAssociatedBone(GlyphBone bone)
@@ -337,7 +337,7 @@ namespace Typography.Rendering
             }
         }
         public List<GlyphPointToBoneLink> _perpendiculatPoints;
-        public void AddPerpendicularPoint(GlyphPoint2D p, Vector2 bonePoint)
+        public void AddPerpendicularPoint(GlyphPoint p, Vector2 bonePoint)
         {
             //add a perpendicular glyph point to bones
             if (_perpendiculatPoints == null) { _perpendiculatPoints = new List<GlyphPointToBoneLink>(); }

@@ -142,7 +142,7 @@ namespace Typography.Rendering
     {
 
         public List<GlyphPart> parts = new List<GlyphPart>();
-        internal List<GlyphPoint2D> flattenPoints;
+        internal List<GlyphPoint> flattenPoints;
 
         bool analyzed;
         bool analyzedClockDirection;
@@ -155,6 +155,7 @@ namespace Typography.Rendering
         {
             parts.Add(part);
         }
+
         internal void ClearAllAdjustValues()
         {
             for (int i = flattenPoints.Count - 1; i >= 0; --i)
@@ -162,16 +163,16 @@ namespace Typography.Rendering
                 flattenPoints[i].ClearAdjustValues();
             }
         }
-
-        public void Flatten(GlyphPartFlattener flattener)
+        internal void Flatten(GlyphPartFlattener flattener)
         {
+            //flatten once
             if (analyzed) return;
             //flatten each part ...
             //-------------------------------
             int j = parts.Count;
             //---------------
-            //
-            flattenPoints = flattener.Result = new List<GlyphPoint2D>();
+            List<GlyphPoint> prevResult = flattener.Result;
+            flattenPoints = flattener.Result = new List<GlyphPoint>();
             //start ...
             for (int i = 0; i < j; ++i)
             {
@@ -179,23 +180,26 @@ namespace Typography.Rendering
                 parts[i].Flatten(flattener);
             }
 
-
+            flattener.Result = prevResult;
             analyzed = true;
         }
         public bool IsClosewise()
         {
+            //after flatten
             if (analyzedClockDirection)
             {
                 return isClockwise;
             }
 
-            //we find direction from merge
-            if (flattenPoints == null)
+            List<GlyphPoint> f_points = this.flattenPoints;
+            if (f_points == null)
             {
                 throw new NotSupportedException();
             }
             analyzedClockDirection = true;
-            // 
+
+
+
             //---------------
             //http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
             //check if hole or not
@@ -211,8 +215,8 @@ namespace Typography.Rendering
                 double total = 0;
                 for (int i = 1; i < j; ++i)
                 {
-                    GlyphPoint2D p0 = flattenPoints[i - 1];
-                    GlyphPoint2D p1 = flattenPoints[i];
+                    GlyphPoint p0 = f_points[i - 1];
+                    GlyphPoint p1 = f_points[i];
 
                     double x0 = p0.x;
                     double y0 = p0.y;
@@ -224,8 +228,8 @@ namespace Typography.Rendering
                 }
                 //the last one
                 {
-                    GlyphPoint2D p0 = flattenPoints[j - 1];
-                    GlyphPoint2D p1 = flattenPoints[0];
+                    GlyphPoint p0 = f_points[j - 1];
+                    GlyphPoint p1 = f_points[0];
 
                     double x0 = p0.x;
                     double y0 = p0.y;
@@ -249,13 +253,13 @@ namespace Typography.Rendering
 
     public class GlyphPartFlattener
     {
-        List<GlyphPoint2D> points;
+        List<GlyphPoint> points;
 
         public GlyphPartFlattener()
         {
             this.NSteps = 2;//default
         }
-        public List<GlyphPoint2D> Result
+        public List<GlyphPoint> Result
         {
             get { return points; }
             set { points = value; }
@@ -264,7 +268,7 @@ namespace Typography.Rendering
 
         void AddPoint(float x, float y, PointKind kind)
         {
-            var p = new GlyphPoint2D(x, y, kind);
+            var p = new GlyphPoint(x, y, kind);
 #if DEBUG
             p.dbugOwnerPart = dbug_ownerPart;
 #endif
@@ -399,19 +403,15 @@ namespace Typography.Rendering
         CurveInbetween,
     }
 
-    public class GlyphPoint2D
-    {
-        public readonly GlyphPart OwnerPart; //link back to owner part
-        //glyph point 
-        //for analysis
-        public readonly double x;
-        public readonly double y;
+    public class GlyphPoint
+    {       
+        public readonly float x;
+        public readonly float y;
         public readonly PointKind kind;
 
-        //
-
-        double _adjX;
-        double _adjY;
+        // 
+        float _adjX;
+        float _adjY;
         //
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
@@ -423,25 +423,23 @@ namespace Typography.Rendering
 
 #if DEBUG
         //for debug only
-        public GlyphPart dbugOwnerPart;
+        public GlyphPart dbugOwnerPart;  //link back to owner part
         public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
         Dictionary<GlyphBoneJoint, bool> dbug_jointDic;
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
-        public GlyphPoint2D(double x, double y, PointKind kind)
+        public GlyphPoint(float x, float y, PointKind kind)
         {
-            //need to link pacl to owner part for glyph analysis
-
             this.x = x;
             this.y = y;
             this.kind = kind;
         }
-        public bool IsEqualValues(GlyphPoint2D another)
+        public bool IsEqualValues(GlyphPoint another)
         {
             return x == another.x && y == another.y;
         }
-        public double AdjustedY
+        public float AdjustedY
         {
             get { return _adjY; }
             internal set
@@ -449,7 +447,7 @@ namespace Typography.Rendering
                 _adjY = value;
             }
         }
-        public double AdjustedX
+        public float AdjustedX
         {
             get { return _adjX; }
             internal set
@@ -461,7 +459,7 @@ namespace Typography.Rendering
         {
             _adjX = _adjY = 0;
         }
-        public void AddVerticalEdge(EdgeLine v_edge)
+        internal void AddVerticalEdge(EdgeLine v_edge)
         {
             //associated 
             if (!this.IsPartOfVerticalEdge)
@@ -479,7 +477,7 @@ namespace Typography.Rendering
             }
             _edges.Add(v_edge);
         }
-        public EdgeLine GetMatchingVerticalEdge()
+        internal EdgeLine GetMatchingVerticalEdge()
         {
             if (_edges == null)
             {
@@ -495,7 +493,7 @@ namespace Typography.Rendering
             }
         }
 
-        public void AddAssociatedBoneJoint(GlyphBoneJoint joint)
+        internal void AddAssociatedBoneJoint(GlyphBoneJoint joint)
         {
             if (_assocJoints == null)
             {
@@ -529,9 +527,12 @@ namespace Typography.Rendering
             return dbugId + " :" + ((AdjustedY != 0) ? "***" : "") +
                     (x + "," + y + " " + kind.ToString());
         }
-#endif
-
+#endif 
     }
+
+
+
+
     public class GlyphLine : GlyphPart
     {
 
