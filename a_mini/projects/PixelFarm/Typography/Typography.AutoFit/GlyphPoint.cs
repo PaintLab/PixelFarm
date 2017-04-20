@@ -68,6 +68,12 @@ namespace Typography.Rendering
             {
                 throw new System.NotSupportedException();
             }
+#if DEBUG
+            if (_edgeLine1 == _edgeLine2)
+            {
+                throw new System.NotSupportedException();
+            }
+#endif
         }
         public float AdjustedY
         {
