@@ -167,11 +167,7 @@ namespace Typography.Rendering
         {
             return (p.e0 == edge ||
                     p.e1 == edge ||
-                    p.e2 == edge);
-            //{
-            //    return true;
-            //}
-            //return false;
+                    p.e2 == edge); 
         }
         /// <summary>
         /// find nearest joint that contains tri 

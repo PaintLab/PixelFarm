@@ -76,34 +76,25 @@ namespace Typography.Rendering
         }
 
 
-         
+
         /// <summary>
         /// tip point (mid of tip edge)
         /// </summary>
         Vector2 _tipPoint;
 
-        //one bone joint can have up to 2 tips
+        //one bone joint can have up to 2 tips 
 
-
-
-        EdgeLine  _selectedTipEdge;
+        EdgeLine _selectedTipEdge;
         public List<GlyphBone> _assocBones;
         public List<GlyphPoint> _assocGlyphPoints;
 
-         
+
         public void SetTipEdge(EdgeLine tipEdge)
         {
             this._selectedTipEdge = tipEdge;
             this._tipPoint = tipEdge.GetMidPoint();
-        }
-
-        //public short SelectedEdgePointCount { get { return _ribCount; } }
-        //public Vector2 RibEndPointA { get { return _ribEndPoint_A; } }
-        //public Vector2 RibEndPointB { get { return _ribEndPoint_B; } }
-        public Vector2 TipPoint { get { return _tipPoint; } }
-
-        //public EdgeLine RibEndEdgeA { get { return _selectedEdgeA; } }
-        //public EdgeLine RibEndEdgeB { get { return _selectedEdgeB; } }
+        } 
+        public Vector2 TipPoint { get { return _tipPoint; } } 
         public EdgeLine TipEdge { get { return _selectedTipEdge; } }
 
         public void AddAssociatedGlyphPoint(GlyphPoint glyphPoint)
