@@ -214,11 +214,11 @@ namespace Typography.Rendering
 
             GlyphBoneJoint foundOnA = null;
             GlyphBoneJoint foundOnB = null;
-            if (b.JointA != null && FoundTriOnJoint(b.JointA, tri))
+            if (b.JointA != null && ContainsTri(b.JointA, tri))
             {
                 foundOnA = b.JointA;
             }
-            if (b.JointB != null && FoundTriOnJoint(b.JointB, tri))
+            if (b.JointB != null && ContainsTri(b.JointB, tri))
             {
                 foundOnB = b.JointB;
             }
@@ -244,7 +244,13 @@ namespace Typography.Rendering
             }
             return null;
         }
-        static bool FoundTriOnJoint(GlyphBoneJoint joint, GlyphTriangle tri)
+        /// <summary>
+        /// check if the joint contains this triangle
+        /// </summary>
+        /// <param name="joint"></param>
+        /// <param name="tri"></param>
+        /// <returns></returns>
+        static bool ContainsTri(GlyphBoneJoint joint, GlyphTriangle tri)
         {
             GlyphCentroidPair ownerPair = joint.OwnerCentrodPair;
             if (ownerPair.p == tri || ownerPair.q == tri)
