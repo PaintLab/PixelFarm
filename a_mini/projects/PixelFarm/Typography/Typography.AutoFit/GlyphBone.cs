@@ -23,13 +23,13 @@ namespace Typography.Rendering
 
         public EdgeLine _p_contact_edge;
         public EdgeLine _q_contact_edge;
-        GlyphCentroidLine _owner;
+        GlyphCentroidPair _owner;
 
 #if DEBUG
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;
 #endif
-        internal GlyphBoneJoint(GlyphCentroidLine owner,
+        internal GlyphBoneJoint(GlyphCentroidPair owner,
             EdgeLine p_contact_edge,
             EdgeLine q_contact_edge)
         {
@@ -50,7 +50,7 @@ namespace Typography.Rendering
                 return _p_contact_edge.GetMidPoint();
             }
         }
-        internal GlyphCentroidLine OwnerCentroidLine
+        internal GlyphCentroidPair OwnerCentroidLine
         {
             get { return _owner; }
         }
@@ -193,7 +193,7 @@ namespace Typography.Rendering
         }
         static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
         {
-            GlyphCentroidLine ownerCentroid_A = a.OwnerCentroidLine;
+            GlyphCentroidPair ownerCentroid_A = a.OwnerCentroidLine;
             if (ContainsEdge(ownerCentroid_A.p, tipEdge))
             {
                 return FindAnotherOutsideEdge(ownerCentroid_A.p, tipEdge);
@@ -217,8 +217,8 @@ namespace Typography.Rendering
         }
         static GlyphTriangle FindCommonTriangle(GlyphBoneJoint a, GlyphBoneJoint b)
         {
-            GlyphCentroidLine ownerCentroid_A = a.OwnerCentroidLine;
-            GlyphCentroidLine ownerCentroid_B = b.OwnerCentroidLine;
+            GlyphCentroidPair ownerCentroid_A = a.OwnerCentroidLine;
+            GlyphCentroidPair ownerCentroid_B = b.OwnerCentroidLine;
             if (ownerCentroid_A.p == ownerCentroid_B.p || ownerCentroid_A.p == ownerCentroid_B.q)
             {
                 return ownerCentroid_A.p;

@@ -92,12 +92,12 @@ namespace Typography.Rendering
             //
             foreach (CentroidLineHub lineHub in centroidLineHubs.Values)
             {
-                Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
+                Dictionary<GlyphTriangle, GlyphCentroidLine> branches = lineHub.GetAllBranches();
 
                 //a line hub contains many centriod branches                                 
                 StrokeLineHub internalLineHub = new StrokeLineHub();
                 var branchList = new List<StrokeLine>(branches.Count);
-                foreach (GlyphCentroidBranch branch in branches.Values)
+                foreach (GlyphCentroidLine branch in branches.Values)
                 {
                     //create a stroke line
                     StrokeLine strokeLine = new StrokeLine();
@@ -784,7 +784,7 @@ namespace Typography.Rendering
             //            painter.StrokeColor = prevColor;
             //#endif
         }
-        void CreateStrokeSegments(GlyphCentroidBranch branch, StrokeLine strokeLine)
+        void CreateStrokeSegments(GlyphCentroidLine branch, StrokeLine strokeLine)
         {
 
             List<GlyphBone> glyphBones = branch.bones;

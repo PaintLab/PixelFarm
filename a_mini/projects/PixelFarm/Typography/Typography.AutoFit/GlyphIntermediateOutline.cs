@@ -95,8 +95,8 @@ namespace Typography.Rendering
                             //ensure start triangle of the branch
                             lineHub.SetBranch(tri);
                             //create centroid line and add to currrent hub
-                            var centroidLine = new GlyphCentroidLine(connectWithPrevTri, tri);
-                            currentCentroidLineHub.AddChild(centroidLine);
+                            var pair = new GlyphCentroidPair(connectWithPrevTri, tri);
+                            currentCentroidLineHub.AddChild(pair);
                         }
                         else
                         {
@@ -107,7 +107,7 @@ namespace Typography.Rendering
                                 currentCentroidLineHub.SetBranch(tri);
                             }
                             //create centroid line and add to currrent hub
-                            currentCentroidLineHub.AddChild(new GlyphCentroidLine(connectWithPrevTri, tri));
+                            currentCentroidLineHub.AddChild(new GlyphCentroidPair(connectWithPrevTri, tri));
                         }
                         latestTri = tri;
                     }
@@ -123,7 +123,7 @@ namespace Typography.Rendering
                 GlyphTriangle lastTri = _triangles[triCount - 1];
                 if (firstTri.IsConnectedWith(lastTri))
                 {
-                    currentCentroidLineHub.AddChild(new GlyphCentroidLine(lastTri, firstTri) { SpecialConnectFromLastToFirst = true });
+                    currentCentroidLineHub.AddChild(new GlyphCentroidPair(lastTri, firstTri) { SpecialConnectFromLastToFirst = true });
                 }
             }
             //----------------------------------------
@@ -182,7 +182,7 @@ namespace Typography.Rendering
                 {
                     continue;
                 }
-                GlyphCentroidBranch foundOnBr;
+                GlyphCentroidLine foundOnBr;
                 GlyphBoneJoint foundOnJoint;
 
                 if (hub.FindBoneJoint(analyzingHub.MainTriangle, hubHeadPos, out foundOnBr, out foundOnJoint))

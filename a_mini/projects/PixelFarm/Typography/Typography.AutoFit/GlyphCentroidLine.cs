@@ -6,18 +6,18 @@ using System.Numerics;
 namespace Typography.Rendering
 {
 
-    class GlyphCentroidBranch
+    class GlyphCentroidLine
     {
-        public List<GlyphCentroidLine> lines = new List<GlyphCentroidLine>();
+        public List<GlyphCentroidPair> pairs = new List<GlyphCentroidPair>();
         public List<GlyphBone> bones = new List<GlyphBone>();
         internal readonly GlyphTriangle startTri;
-        internal GlyphCentroidBranch(GlyphTriangle startTri)
+        internal GlyphCentroidLine(GlyphTriangle startTri)
         {
             this.startTri = startTri;
         }
-        public void AddCentroidLine(GlyphCentroidLine line)
+        public void AddCentroidLine(GlyphCentroidPair pair)
         {
-            lines.Add(line);
+            pairs.Add(pair);
         }
         public Vector2 GetHeadPosition()
         {
@@ -32,18 +32,17 @@ namespace Typography.Rendering
             }
         }
         /// <summary>
-        /// analyze this branch
+        /// analyze edges of this line
         /// </summary>
         public void AnalyzeEdges()
         {
-
-            List<GlyphCentroidLine> lineList = this.lines;
-            int j = lineList.Count;
+            List<GlyphCentroidPair> pairList = this.pairs;
+            int j = pairList.Count;
             for (int i = 0; i < j; ++i)
             {
                 //for each centroid line
                 //analyze for its bone joint
-                lineList[i].AnalyzeAndMarkEdges();
+                pairList[i].AnalyzeEdges();
             }
             if (j > 1)
             {
@@ -51,8 +50,8 @@ namespace Typography.Rendering
                 //add special tip
                 //get first line and last 
                 //check if this is loop
-                GlyphCentroidLine first_line = lineList[0];
-                GlyphCentroidLine last_line = lineList[j - 1];
+                GlyphCentroidPair first_line = pairList[0];
+                GlyphCentroidPair last_line = pairList[j - 1];
                 //open end or close end
 
                 if (!last_line.SpecialConnectFromLastToFirst)
@@ -76,39 +75,39 @@ namespace Typography.Rendering
                 //single line
                 //eg 'l' letter
 
-                GlyphCentroidLine line = lineList[0];
+                GlyphCentroidPair line = pairList[0];
                 AssignTipInfo(line, true);
             }
         }
-        static void AssignTipInfo(GlyphCentroidLine line, bool twoside)
+        static void AssignTipInfo(GlyphCentroidPair pair, bool twoside)
         {
-            GlyphBoneJoint joint = line.BoneJoint;
+            GlyphBoneJoint joint = pair.BoneJoint;
             //get another edge for endtip
 
-            if (IsOwnerOf(line.p, joint.TipEdge))
+            if (IsOwnerOf(pair.p, joint.TipEdge))
             {
                 //tip edge is from p side
                 //so another side is q.
 
                 var tipPoint = joint.TipPoint;
-                GlyphTip tip = new GlyphTip(line, tipPoint, joint.TipEdge);
-                line.P_Tip = tip;
+                GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdge);
+                pair.P_Tip = tip;
 
                 if (twoside)
                 {
-                    EdgeLine tipEdge = FindTip(line, line.q);
+                    EdgeLine tipEdge = FindTip(pair, pair.q);
                     if (tipEdge == null) throw new NotSupportedException();
                     //-----
-                    tip = new GlyphTip(line, tipEdge.GetMidPoint(), tipEdge);
-                    line.Q_Tip = tip;
+                    tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
+                    pair.Q_Tip = tip;
                 }
             }
-            else if (IsOwnerOf(line.q, joint.TipEdge))
+            else if (IsOwnerOf(pair.q, joint.TipEdge))
             {
 
                 var tipPoint = joint.TipPoint;
-                GlyphTip tip = new GlyphTip(line, tipPoint, joint.TipEdge);
-                line.Q_Tip = tip;
+                GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdge);
+                pair.Q_Tip = tip;
 
 
                 //tip edge is from q side
@@ -117,15 +116,15 @@ namespace Typography.Rendering
                 if (twoside)
                 {
                     //find proper tip edge
-                    EdgeLine tipEdge = FindTip(line, line.p);
+                    EdgeLine tipEdge = FindTip(pair, pair.p);
                     if (tipEdge == null)
                     {
                         //some time no tip found ***
                         return;
                     }
                     //-----
-                    tip = new GlyphTip(line, tipEdge.GetMidPoint(), tipEdge);
-                    line.P_Tip = tip;
+                    tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
+                    pair.P_Tip = tip;
                 }
             }
             else
@@ -133,9 +132,9 @@ namespace Typography.Rendering
                 throw new NotSupportedException();
             }
         }
-        static EdgeLine FindTip(GlyphCentroidLine line, GlyphTriangle triangle)
+        static EdgeLine FindTip(GlyphCentroidPair pair, GlyphTriangle triangle)
         {
-            GlyphBoneJoint boneJoint = line.BoneJoint;
+            GlyphBoneJoint boneJoint = pair.BoneJoint;
             if (CanbeTipEdge(triangle.e0, boneJoint))
             {
                 return triangle.e0;
@@ -167,7 +166,7 @@ namespace Typography.Rendering
         {
             return (p.e0 == edge ||
                     p.e1 == edge ||
-                    p.e2 == edge); 
+                    p.e2 == edge);
         }
         /// <summary>
         /// find nearest joint that contains tri 
@@ -247,7 +246,7 @@ namespace Typography.Rendering
         }
         static bool FoundTriOnJoint(GlyphBoneJoint joint, GlyphTriangle tri)
         {
-            GlyphCentroidLine ownerCentroidLine = joint.OwnerCentroidLine;
+            GlyphCentroidPair ownerCentroidLine = joint.OwnerCentroidLine;
             if (ownerCentroidLine.p == tri || ownerCentroidLine.q == tri)
             {
                 //found
@@ -266,9 +265,9 @@ namespace Typography.Rendering
     class CentroidLineHub
     {
         readonly GlyphTriangle mainTri;
-        Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = new Dictionary<GlyphTriangle, GlyphCentroidBranch>();
+        Dictionary<GlyphTriangle, GlyphCentroidLine> _lines = new Dictionary<GlyphTriangle, GlyphCentroidLine>();
         List<CentroidLineHub> connectedLineHubs;
-        GlyphCentroidBranch currentBranchList;
+        GlyphCentroidLine currentLine;
         GlyphTriangle currentBranchTri;
         public CentroidLineHub(GlyphTriangle mainTri)
         {
@@ -281,12 +280,12 @@ namespace Typography.Rendering
 
         public Vector2 GetCenterPos()
         {
-            int j = branches.Count;
+            int j = _lines.Count;
             if (j == 0) return Vector2.Zero;
             //---------------------------------
             double cx = 0;
             double cy = 0;
-            foreach (GlyphCentroidBranch branch in branches.Values)
+            foreach (GlyphCentroidLine branch in _lines.Values)
             {
                 Vector2 headpos = branch.GetHeadPosition();
                 cx += headpos.X;
@@ -299,11 +298,11 @@ namespace Typography.Rendering
             if (currentBranchTri != tri)
             {
                 //check if we have already create it
-                if (!branches.TryGetValue(tri, out currentBranchList))
+                if (!_lines.TryGetValue(tri, out currentLine))
                 {
                     //if not found then create new
-                    currentBranchList = new GlyphCentroidBranch(tri);
-                    branches.Add(tri, currentBranchList);
+                    currentLine = new GlyphCentroidLine(tri);
+                    _lines.Add(tri, currentLine);
                 }
                 currentBranchTri = tri;
             }
@@ -312,22 +311,22 @@ namespace Typography.Rendering
         {
             get
             {
-                return branches.Count;
+                return _lines.Count;
             }
         }
-        public void AddChild(GlyphCentroidLine centroidLine)
+        public void AddChild(GlyphCentroidPair pair)
         {
             //add centroid line to current branch
-            currentBranchList.AddCentroidLine(centroidLine);
+            currentLine.AddCentroidLine(pair);
         }
         /// <summary>
         /// analyze each branch for edge information
         /// </summary>
         public void AnalyzeEachBranchForEdgeInfo()
         {
-            foreach (GlyphCentroidBranch branch in branches.Values)
+            foreach (GlyphCentroidLine line in _lines.Values)
             {
-                branch.AnalyzeEdges();
+                line.AnalyzeEdges();
             }
         }
 
@@ -337,10 +336,10 @@ namespace Typography.Rendering
         /// <param name="newlyCreatedBones"></param>
         internal void CreateBones(List<GlyphBone> newlyCreatedBones)
         {
-            foreach (GlyphCentroidBranch branch in branches.Values)
+            foreach (GlyphCentroidLine line in _lines.Values)
             {
-                List<GlyphCentroidLine> lineList = branch.lines;
-                List<GlyphBone> glyphBones = branch.bones;
+                List<GlyphCentroidPair> lineList = line.pairs;
+                List<GlyphBone> glyphBones = line.bones;
                 int j = lineList.Count;
 
                 for (int i = 0; i < j; ++i)
@@ -348,7 +347,7 @@ namespace Typography.Rendering
 
                     //for each centroid line
                     //create bone that link the joint
-                    GlyphCentroidLine line = lineList[i];
+                    GlyphCentroidPair line = lineList[i];
                     GlyphBoneJoint joint = line.BoneJoint;
                     //first one
                     if (joint.TipEdge != null)
@@ -368,7 +367,7 @@ namespace Typography.Rendering
                     if (i < j - 1)
                     {
                         //not the last one 
-                        GlyphCentroidLine nextline = lineList[i + 1];
+                        GlyphCentroidPair nextline = lineList[i + 1];
                         GlyphBoneJoint nextJoint = nextline.BoneJoint;
                         GlyphBone bone = new GlyphBone(joint, nextJoint);
                         newlyCreatedBones.Add(bone);
@@ -389,7 +388,7 @@ namespace Typography.Rendering
                             //glyph 'o' -> no tip point
                             if (j > 1)
                             {
-                                GlyphCentroidLine nextline = lineList[0];
+                                GlyphCentroidPair nextline = lineList[0];
                                 GlyphBone bone = new GlyphBone(joint, nextline.BoneJoint);
                                 newlyCreatedBones.Add(bone);
                                 glyphBones.Add(bone);
@@ -401,21 +400,21 @@ namespace Typography.Rendering
             }
         }
 
-        public Dictionary<GlyphTriangle, GlyphCentroidBranch> GetAllBranches()
+        public Dictionary<GlyphTriangle, GlyphCentroidLine> GetAllBranches()
         {
-            return branches;
+            return _lines;
         }
 
 
         //--------------------------------------------------------
-        public bool FindBoneJoint(GlyphTriangle tri, Vector2 pos, out GlyphCentroidBranch foundOnBranch, out GlyphBoneJoint foundOnJoint)
+        public bool FindBoneJoint(GlyphTriangle tri, Vector2 pos, out GlyphCentroidLine foundOnBranch, out GlyphBoneJoint foundOnJoint)
         {
-            foreach (GlyphCentroidBranch br in branches.Values)
+            foreach (GlyphCentroidLine line in _lines.Values)
             {
-                foundOnJoint = br.FindNearestJoint(pos, tri);
+                foundOnJoint = line.FindNearestJoint(pos, tri);
                 if (foundOnJoint != null)
                 {
-                    foundOnBranch = br;
+                    foundOnBranch = line;
                     return true;
                 }
             }
@@ -434,12 +433,12 @@ namespace Typography.Rendering
         }
 
 
-        GlyphCentroidBranch anotherCentroidBranch;
+        GlyphCentroidLine anotherCentroidLine;
         GlyphBoneJoint foundOnJoint;
 
-        public void SetHeadConnnection(GlyphCentroidBranch anotherCentroidBranch, GlyphBoneJoint foundOnJoint)
+        public void SetHeadConnnection(GlyphCentroidLine anotherCentroidLine, GlyphBoneJoint foundOnJoint)
         {
-            this.anotherCentroidBranch = anotherCentroidBranch;
+            this.anotherCentroidLine = anotherCentroidLine;
             this.foundOnJoint = foundOnJoint;
         }
 
@@ -458,25 +457,26 @@ namespace Typography.Rendering
 
     class GlyphTip
     {
-        public GlyphTip(GlyphCentroidLine ownerLine, Vector2 pos, EdgeLine edge)
+        public GlyphTip(GlyphCentroidPair ownerLine, Vector2 pos, EdgeLine edge)
         {
             this.OwnerLine = ownerLine;
             this.Pos = pos;
             this.Edge = edge;
         }
-        public GlyphCentroidLine OwnerLine { get; set; }
+        public GlyphCentroidPair OwnerLine { get; set; }
         public Vector2 Pos { get; set; }
         public EdgeLine Edge { get; set; }
     }
+
     /// <summary>
-    /// a line that connects between centroid of 2 GlyphTriangle(p => q)
+    /// a link (line) that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
-    class GlyphCentroidLine
+    class GlyphCentroidPair
     {
 
         internal readonly GlyphTriangle p, q;
         GlyphBoneJoint _boneJoint;
-        internal GlyphCentroidLine(GlyphTriangle p, GlyphTriangle q)
+        internal GlyphCentroidPair(GlyphTriangle p, GlyphTriangle q)
         {
             //[A]
             //each triangle has 1 centroid point
@@ -490,13 +490,15 @@ namespace Typography.Rendering
 
             this.p = p;
             this.q = q;
+
+
         }
         public bool SpecialConnectFromLastToFirst { get; set; }
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
         /// <summary>
         /// add information about edges to each triangle
         /// </summary>
-        internal void AnalyzeAndMarkEdges()
+        internal void AnalyzeEdges()
         {
 
             //...
@@ -661,7 +663,7 @@ namespace Typography.Rendering
             out EdgeLine tipEdge,
             out EdgeLine notTipEdge)
         {
-            GlyphCentroidLine ownerCentroidLine = ownerEdgeJoint.OwnerCentroidLine;
+            GlyphCentroidPair ownerCentroidLine = ownerEdgeJoint.OwnerCentroidLine;
             //p
             double x0 = ownerCentroidLine.p.CentroidX;
             double y0 = ownerCentroidLine.p.CentroidY;
@@ -897,9 +899,6 @@ namespace Typography.Rendering
             qx = q.CentroidX;
             qy = q.CentroidY;
         }
-
-
-
         /// <summary>
         /// from a knownInsideEdge, find a matching-inside-edge on another triangle.
         /// </summary>

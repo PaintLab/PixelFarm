@@ -34,16 +34,16 @@ namespace Typography.Rendering
 
             foreach (CentroidLineHub lineHub in centroidLineHub.Values)
             {
-                Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
+                Dictionary<GlyphTriangle, GlyphCentroidLine> branches = lineHub.GetAllBranches();
                 System.Numerics.Vector2 hubCenter = lineHub.GetCenterPos();
 
                 OnBegingLineHub(hubCenter.X, hubCenter.Y);
-                foreach (GlyphCentroidBranch branch in branches.Values)
+                foreach (GlyphCentroidLine branch in branches.Values)
                 {
-                    int lineCount = branch.lines.Count;
+                    int lineCount = branch.pairs.Count;
                     for (int i = 0; i < lineCount; ++i)
                     {
-                        GlyphCentroidLine line = branch.lines[i];
+                        GlyphCentroidPair line = branch.pairs[i];
                         if (WalkCentroidBone)
                         {
                             double px, py, qx, qy;
@@ -79,7 +79,7 @@ namespace Typography.Rendering
 
             }
         }
-        void DrawBoneLinks(GlyphCentroidBranch branch)
+        void DrawBoneLinks(GlyphCentroidLine branch)
         {
             List<GlyphBone> glyphBones = branch.bones;
             int glyphBoneCount = glyphBones.Count;
