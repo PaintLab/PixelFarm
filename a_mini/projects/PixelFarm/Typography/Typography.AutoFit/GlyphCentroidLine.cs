@@ -253,12 +253,7 @@ namespace Typography.Rendering
         static bool ContainsTri(GlyphBoneJoint joint, GlyphTriangle tri)
         {
             GlyphCentroidPair ownerPair = joint.OwnerCentrodPair;
-            if (ownerPair.p == tri || ownerPair.q == tri)
-            {
-                //found
-                return true;
-            }
-            return false;
+            return ownerPair.p == tri || ownerPair.q == tri;
         }
     }
 
