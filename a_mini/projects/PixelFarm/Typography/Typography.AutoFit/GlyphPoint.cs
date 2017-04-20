@@ -39,6 +39,8 @@ namespace Typography.Rendering
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
 
+        internal EdgeLine _edgeLine1;
+        internal EdgeLine _edgeLine2;
 
 #if DEBUG
         //for debug only
@@ -52,7 +54,21 @@ namespace Typography.Rendering
             this.kind = kind;
         }
 
-
+        internal void SetRelatedEdgeLine(EdgeLine edge)
+        {
+            if (_edgeLine1 == null)
+            {
+                _edgeLine1 = edge;
+            }
+            else if (_edgeLine2 == null)
+            {
+                _edgeLine2 = edge;
+            }
+            else
+            {
+                throw new System.NotSupportedException();
+            }
+        }
         public float AdjustedY
         {
             get { return _adjY; }

@@ -79,6 +79,11 @@ namespace Typography.Rendering
                     SlopeKind = LineSlopeKind.Other;
                 }
             }
+            if (isOutside)
+            {
+                p.SetRelatedEdgeLine(this);
+                q.SetRelatedEdgeLine(this);
+            }
         }
 
         public GlyphPoint GlyphPoint_P
