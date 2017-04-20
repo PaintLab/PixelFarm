@@ -153,10 +153,11 @@ namespace Typography.Rendering
         }
         static bool CanbeTipEdge(EdgeLine edge, GlyphBoneJoint compareJoint)
         {
+            return edge.IsOutside;
             //
-            return (edge.IsOutside &&
-                    edge != compareJoint.RibEndEdgeA &&
-                    edge != compareJoint.RibEndEdgeB);
+            //return (edge.IsOutside &&
+            //        edge != compareJoint.RibEndEdgeA &&
+            //        edge != compareJoint.RibEndEdgeB);
             //{
             //    return true;
             //}
@@ -166,11 +167,7 @@ namespace Typography.Rendering
         {
             return (p.e0 == edge ||
                     p.e1 == edge ||
-                    p.e2 == edge);
-            //{
-            //    return true;
-            //}
-            //return false;
+                    p.e2 == edge); 
         }
         /// <summary>
         /// find nearest joint that contains tri 
@@ -787,41 +784,40 @@ namespace Typography.Rendering
                 case 1:
                     {
 
-                        //----------------------------------------------------------------------------
-                        //primary ribs
-                        //find shortest part from boneJoint to  edge or to corner.
-                        //draw perpendicular line to outside edge
-                        //and to the  corner of current edge.
-                        GlyphPoint p_ = contactEdge.GlyphPoint_P;
-                        GlyphPoint q_ = contactEdge.GlyphPoint_Q;
+                        ////----------------------------------------------------------------------------
+                        ////primary ribs
+                        ////find shortest part from boneJoint to  edge or to corner.
+                        ////draw perpendicular line to outside edge
+                        ////and to the  corner of current edge.
+                        //GlyphPoint p_ = contactEdge.GlyphPoint_P;
+                        //GlyphPoint q_ = contactEdge.GlyphPoint_Q;
 
-                        //TODO: review 
-                        switch (GetOnCurvePoints(p_, q_))
-                        {
-                            default: throw new NotSupportedException();
-                            case 2:
+                        ////TODO: review 
+                        //switch (GetOnCurvePoints(p_, q_))
+                        //{
+                        //    default: throw new NotSupportedException();
+                        //    case 2:
 
-                                //both connect with ON-curve point 
-                                //select p?
-                                p_.AddAssociatedBoneJoint(ownerEdgeJoint);
-                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(p_.x, p_.y));
-                                break;
-                            case 0:
-                                //select p 
-                                p_.AddAssociatedBoneJoint(ownerEdgeJoint);
-                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(p_.x, p_.y));
-                                break;
-                            //break;
-                            case 1:
-                                //select q 
-                                q_.AddAssociatedBoneJoint(ownerEdgeJoint);
-                                ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(q_.x, q_.y));
-                                break;
-                            //break;
-                            case -1:
-                                //both p and q are curve in between
-                                break;
-                        }
+                        //        //both connect with ON-curve point 
+                        //        //select p?
+
+                        //        ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(p_.x, p_.y));
+                        //        break;
+                        //    case 0:
+                        //        //select p 
+
+                        //        ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(p_.x, p_.y));
+                        //        break;
+                        //    //break;
+                        //    case 1:
+                        //        //select q  
+                        //        ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(q_.x, q_.y));
+                        //        break;
+                        //    //break;
+                        //    case -1:
+                        //        //both p and q are curve in between
+                        //        break;
+                        //}
 
                     }
                     break;
@@ -842,12 +838,12 @@ namespace Typography.Rendering
                         //for TipEdge
                         ownerEdgeJoint.SetTipEdge(tipEdge);
 
-                        //fot notTipEdge 
-                        Vector2 perpend_B;
-                        if (MyMath.FindPerpendicularCutPoint(notTipEdge, ownerEdgeJoint.Position, out perpend_B))
-                        {
-                            ownerEdgeJoint.AddRibEndAt(notTipEdge, perpend_B);
-                        }
+                        //for notTipEdge 
+                        //Vector2 perpend_B;
+                        //if (MyMath.FindPerpendicularCutPoint(notTipEdge, ownerEdgeJoint.Position, out perpend_B))
+                        //{
+                        //    ownerEdgeJoint.AddRibEndAt(notTipEdge, perpend_B);
+                        //}
                     }
                     break;
             }

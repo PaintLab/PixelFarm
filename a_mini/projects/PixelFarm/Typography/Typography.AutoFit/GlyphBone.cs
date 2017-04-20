@@ -56,23 +56,9 @@ namespace Typography.Rendering
         }
         public float GetLeftMostRib()
         {
-            float a_x = this.RibEndPointA.X;
-            if (this._selectedEdgeB != null)
-            {
-                float b_x = this.RibEndPointB.X;
-                if (a_x < b_x)
-                {
-                    return a_x;
-                }
-                else
-                {
-                    return b_x;
-                }
-            }
-            else
-            {
-                return a_x;
-            }
+            //TODO: revisit this again
+
+            return 0;
         }
         /// <summary>
         /// calculate distance^2 from contact point to specific point v
@@ -91,56 +77,24 @@ namespace Typography.Rendering
 
 
 
-
-
-        short _ribCount;
-        Vector2 _ribEndPoint_A, _ribEndPoint_B;
         /// <summary>
         /// tip point (mid of tip edge)
         /// </summary>
         Vector2 _tipPoint;
 
-        //one bone joint can have up to 2 tips
+        //one bone joint can have up to 2 tips 
 
-
-
-        EdgeLine _selectedEdgeA, _selectedEdgeB, _selectedTipEdge;
+        EdgeLine _selectedTipEdge;
         public List<GlyphBone> _assocBones;
         public List<GlyphPoint> _assocGlyphPoints;
 
 
-        public void AddRibEndAt(EdgeLine edgeLine, Vector2 vec)
-        {
-            switch (_ribCount)
-            {
-                //not more than 2
-                default: throw new NotSupportedException();
-                case 0:
-                    _selectedEdgeA = edgeLine;
-                    _ribEndPoint_A = vec;
-                    break;
-                case 1:
-                    _selectedEdgeB = edgeLine;
-                    _ribEndPoint_B = vec;
-                    break;
-            }
-
-
-            _ribCount++;
-        }
         public void SetTipEdge(EdgeLine tipEdge)
         {
             this._selectedTipEdge = tipEdge;
             this._tipPoint = tipEdge.GetMidPoint();
-        }
-
-        public short SelectedEdgePointCount { get { return _ribCount; } }
-        public Vector2 RibEndPointA { get { return _ribEndPoint_A; } }
-        public Vector2 RibEndPointB { get { return _ribEndPoint_B; } }
-        public Vector2 TipPoint { get { return _tipPoint; } }
-
-        public EdgeLine RibEndEdgeA { get { return _selectedEdgeA; } }
-        public EdgeLine RibEndEdgeB { get { return _selectedEdgeB; } }
+        } 
+        public Vector2 TipPoint { get { return _tipPoint; } } 
         public EdgeLine TipEdge { get { return _selectedTipEdge; } }
 
         public void AddAssociatedGlyphPoint(GlyphPoint glyphPoint)
@@ -358,6 +312,22 @@ namespace Typography.Rendering
             {
                 Vector2 edge = TipEdge.GetMidPoint();
                 return (edge + JointA.Position) / 2;
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
+
+        public Vector2 GetBoneVector()
+        {
+            if (JointB != null)
+            {
+                return JointB.Position - JointA.Position;
+            }
+            else if (TipEdge != null)
+            {
+                return TipEdge.GetMidPoint() - JointA.Position;
             }
             else
             {

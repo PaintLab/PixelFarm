@@ -22,7 +22,8 @@ namespace TestFoundamentalVectors
 
         private void button1_Click(object sender, EventArgs e)
         {
-            testCases.TestLines(g);
+            //testCases.TestLines(g);
+            testCases.TestLineCut(g);
         }
     }
 
