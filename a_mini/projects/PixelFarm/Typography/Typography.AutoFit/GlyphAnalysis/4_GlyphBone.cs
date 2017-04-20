@@ -95,7 +95,7 @@ namespace Typography.Rendering
         }
 
         /// <summary>
-        /// touch edge
+        /// perpendiculat edge of this bone
         /// </summary>
         public EdgeLine PerpendicularEdge
         {
