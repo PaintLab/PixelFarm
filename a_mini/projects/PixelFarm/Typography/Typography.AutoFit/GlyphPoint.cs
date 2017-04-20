@@ -44,7 +44,6 @@ namespace Typography.Rendering
         //for debug only
         internal GlyphPart dbugOwnerPart;  //link back to owner part
         public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
-
 #endif
         public GlyphPoint(float x, float y, PointKind kind)
         {

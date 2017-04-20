@@ -37,7 +37,7 @@ namespace Typography.Rendering
         internal GlyphTriangle dbugOwner;
 #endif
 
-        public EdgeLine(GlyphPoint p, GlyphPoint q)
+        public EdgeLine(GlyphPoint p, GlyphPoint q, bool isOutside)
         {
             //------------------------------------
             //an edge line connects 2 glyph points.
@@ -47,7 +47,7 @@ namespace Typography.Rendering
             //
             //------------------------------------           
 
-
+            this.IsOutside = isOutside;
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;
 
@@ -103,7 +103,7 @@ namespace Typography.Rendering
         public bool IsOutside
         {
             get;
-            internal set;
+            private set;
         }
         public bool IsInside
         {
@@ -133,7 +133,7 @@ namespace Typography.Rendering
         {
             return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
         }
-         
+
 
         static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
