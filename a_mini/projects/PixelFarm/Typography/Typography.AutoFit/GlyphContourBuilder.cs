@@ -144,6 +144,7 @@ namespace Typography.Rendering
         public List<GlyphPart> parts = new List<GlyphPart>();
 
         internal List<GlyphPoint> flattenPoints;
+        internal List<GlyphEdge> edgeLines;
 
         bool analyzed;
         bool analyzedClockDirection;
@@ -249,7 +250,56 @@ namespace Typography.Rendering
             }
             return isClockwise;
         }
+        internal void CreateGlyphEdges()
+        {
+            int lim = flattenPoints.Count - 1;
+            edgeLines = new List<GlyphEdge>();
+            GlyphPoint p = null, q = null;
+            EdgeLine edgeLine = null;
+            for (int i = 0; i < lim; ++i)
+            {
+                p = flattenPoints[i];
+                q = flattenPoints[i + 1];
+                if ((edgeLine = FineCommonEdgeLine(p, q)) != null)
+                {
+                    edgeLines.Add(new GlyphEdge(edgeLine));
+                }
+            }
+            //close   
+            p = flattenPoints[lim];
+            q = flattenPoints[0];
+            if ((edgeLine = FineCommonEdgeLine(p, q)) != null)
+            {
+                edgeLines.Add(new GlyphEdge(edgeLine));
+            }
+        }
+        static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
+        {
+            if (p._edgeLine1 == q._edgeLine1 ||
+                p._edgeLine1 == q._edgeLine2)
+            {
+                return p._edgeLine1;
+            }
+            else if (p._edgeLine2 == q._edgeLine1 ||
+                     p._edgeLine2 == q._edgeLine2)
+            {
+                return p._edgeLine1;
+            }
+            else
+            {
+
+                return null;
+            }
+        }
     }
 
+    public class GlyphEdge
+    {
+        internal readonly EdgeLine edgeLine;
+        internal GlyphEdge(EdgeLine edgeLine)
+        {
+            this.edgeLine = edgeLine;
+        }
+    }
 
 }

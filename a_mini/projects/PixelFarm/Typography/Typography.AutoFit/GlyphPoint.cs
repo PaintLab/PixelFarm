@@ -44,11 +44,14 @@ namespace Typography.Rendering
 
 #if DEBUG
         //for debug only
+        public readonly int dbugId = dbugTotalId++;
+        static int dbugTotalId;
         internal GlyphPart dbugOwnerPart;  //link back to owner part
         public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
 #endif
         public GlyphPoint(float x, float y, PointKind kind)
-        {
+        {    
+
             this.x = x;
             this.y = y;
             this.kind = kind;
@@ -68,6 +71,7 @@ namespace Typography.Rendering
             {
                 throw new System.NotSupportedException();
             }
+            //----
 #if DEBUG
             if (_edgeLine1 == _edgeLine2)
             {
@@ -130,7 +134,7 @@ namespace Typography.Rendering
 #if DEBUG
         public override string ToString()
         {
-            return this._glyphPointNo + " :" + ((AdjustedY != 0) ? "***" : "") +
+            return this.dbugId + " :" + ((AdjustedY != 0) ? "***" : "") +
                     (x + "," + y + " " + kind.ToString());
         }
 #endif 
