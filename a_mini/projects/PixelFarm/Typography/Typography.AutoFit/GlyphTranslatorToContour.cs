@@ -142,6 +142,7 @@ namespace Typography.Rendering
     {
 
         public List<GlyphPart> parts = new List<GlyphPart>();
+
         internal List<GlyphPoint> flattenPoints;
 
         bool analyzed;
@@ -371,9 +372,7 @@ namespace Typography.Rendering
         public GlyphPart PrevPart { get; set; }
         public abstract void Flatten(GlyphPartFlattener flattener);
 
-        public abstract Vector2 GetLastPoint();
-
-
+        public abstract Vector2 GetLastPoint(); 
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;

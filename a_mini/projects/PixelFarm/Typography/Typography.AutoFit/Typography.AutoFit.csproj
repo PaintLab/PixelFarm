@@ -36,16 +36,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CurveGen.cs" />
-    <Compile Include="EdgeLine.cs" />
-    <Compile Include="GlyphBone.cs" />
-    <Compile Include="GlyphCentroidLine.cs" />
-    <Compile Include="GlyphDynamicOutline.cs" />
-    <Compile Include="GlyphOutlineAnalyzer.cs" />
+    <Compile Include="GlyphAnalysis\1_EdgeLine.cs" />
+    <Compile Include="GlyphAnalysis\3_GlyphBoneJoint.cs" />
+    <Compile Include="GlyphAnalysis\4_GlyphBone.cs" />
+    <Compile Include="GlyphAnalysis\5_GlyphCentroidLineHub.cs" />
+    <Compile Include="GlyphAnalysis\GlyphDynamicOutline.cs" />
+    <Compile Include="GlyphAnalysis\GlyphOutlineAnalyzer.cs" />
+    <Compile Include="GlyphAnalysis\2_GlyphCentroidPair.cs" />
     <Compile Include="GlyphImages.cs" />
-    <Compile Include="GlyphIntermediateOutline.cs" />
+    <Compile Include="GlyphAnalysis\GlyphIntermediateOutline.cs" />
     <Compile Include="GlyphOutlineWalker.cs" />
     <Compile Include="GlyphTranslatorToContour.cs" />
-    <Compile Include="GlyphTriangle.cs" />
+    <Compile Include="GlyphAnalysis\0_GlyphTriangle.cs" />
     <Compile Include="MyMath.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rect.cs" />

@@ -26,7 +26,6 @@ namespace Typography.Rendering
             {
                 this.a = a;
                 this.b = b;
-
             }
         }
         class StrokeJoint
@@ -82,31 +81,32 @@ namespace Typography.Rendering
             //1. joints and its bones
             //2. bones and its controlled edge
 
-            _contours = intermediateOutline.GetContours();
-            _longVerticalBones = intermediateOutline.LongVerticalBones;
-            LeftControlPosX = intermediateOutline.LeftControlPosX;
+            _contours = intermediateOutline.GetContours(); //original contours
+            _longVerticalBones = intermediateOutline.LongVerticalBones; //analyzed long bones
+            LeftControlPosX = intermediateOutline.LeftControlPos; //left control position 
 
-            //
-            Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs = intermediateOutline.GetCentroidLineHubs();
+
+
+            List<CentroidLineHub> centroidLineHubs = intermediateOutline.GetCentroidLineHubs();
             _strokeLineHub = new List<StrokeLineHub>(centroidLineHubs.Count);
             //
-            foreach (CentroidLineHub lineHub in centroidLineHubs.Values)
+            foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
-                Dictionary<GlyphTriangle, GlyphCentroidBranch> branches = lineHub.GetAllBranches();
+                Dictionary<GlyphTriangle, GlyphCentroidLine> branches = lineHub.GetAllBranches();
 
                 //a line hub contains many centriod branches                                 
                 StrokeLineHub internalLineHub = new StrokeLineHub();
                 var branchList = new List<StrokeLine>(branches.Count);
-                foreach (GlyphCentroidBranch branch in branches.Values)
+                foreach (GlyphCentroidLine line in branches.Values)
                 {
                     //create a stroke line
                     StrokeLine strokeLine = new StrokeLine();
                     //head of this branch
-                    Vector2 brHead = branch.GetHeadPosition();
+                    Vector2 brHead = line.GetHeadPosition();
                     strokeLine._head = brHead;
 
                     //a branch contains small centroid line segments.
-                    CreateStrokeSegments(branch, strokeLine);
+                    CreateStrokeSegments(line, strokeLine);
                     //draw  a line link to centroid of target triangle
                     //WalkFromBranchHeadToHubCenter(brHead, hubCenter);
 
@@ -117,6 +117,11 @@ namespace Typography.Rendering
                 internalLineHub._headConnectedJoint = lineHub.GetHeadConnectedJoint();
                 _strokeLineHub.Add(internalLineHub);
             }
+
+            //---------------------
+            //interate all contour
+
+            //
         }
         /// <summary>
         /// set new stroke width for regenerated glyph
@@ -295,39 +300,39 @@ namespace Typography.Rendering
                     //the upper part point may affect the other(lower side)
                     //1.horizontal edge
 
-                    EdgeLine h_edge = p.horizontalEdge;
-                    EdgeLine matching_anotherSide = h_edge.GetMatchingOutsideEdge();
-                    if (matching_anotherSide != null)
-                    {
-                        GlyphPoint a_glyph_p = matching_anotherSide.GlyphPoint_P;
-                        GlyphPoint a_glyph_q = matching_anotherSide.GlyphPoint_Q;
-                        if (a_glyph_p != null)
-                        {
+                    //                    EdgeLine h_edge = p.horizontalEdge;
+                    //                    EdgeLine matching_anotherSide = h_edge.GetMatchingOutsideEdge();
+                    //                    if (matching_anotherSide != null)
+                    //                    {
+                    //                        GlyphPoint a_glyph_p = matching_anotherSide.GlyphPoint_P;
+                    //                        GlyphPoint a_glyph_q = matching_anotherSide.GlyphPoint_Q;
+                    //                        if (a_glyph_p != null)
+                    //                        {
 
-                            a_glyph_p.AdjustedY = -remaining;
-#if DEBUG
-                            if (!s_dbugAff2.ContainsKey(a_glyph_p))
-                            {
-                                s_dbugAff2.Add(a_glyph_p, true);
-                                s_dbugAffectedPoints.Add(a_glyph_p);
-                            }
+                    //                            a_glyph_p.AdjustedY = -remaining;
+                    //#if DEBUG
+                    //                            if (!s_dbugAff2.ContainsKey(a_glyph_p))
+                    //                            {
+                    //                                s_dbugAff2.Add(a_glyph_p, true);
+                    //                                s_dbugAffectedPoints.Add(a_glyph_p);
+                    //                            }
 
-#endif
-                        }
-                        if (a_glyph_q != null)
-                        {
+                    //#endif
+                    //                        }
+                    //                        if (a_glyph_q != null)
+                    //                        {
 
-                            a_glyph_q.AdjustedY = -remaining;
-#if DEBUG
-                            if (!s_dbugAff2.ContainsKey(a_glyph_q))
-                            {
-                                s_dbugAff2.Add(a_glyph_q, true);
-                                s_dbugAffectedPoints.Add(a_glyph_q);
-                            }
+                    //                            a_glyph_q.AdjustedY = -remaining;
+                    //#if DEBUG
+                    //                            if (!s_dbugAff2.ContainsKey(a_glyph_q))
+                    //                            {
+                    //                                s_dbugAff2.Add(a_glyph_q, true);
+                    //                                s_dbugAffectedPoints.Add(a_glyph_q);
+                    //                            }
 
-#endif
-                        }
-                    }
+                    //#endif
+                    //                        }
+                    //                    }
 
                     return floo_int;
                 }
@@ -784,7 +789,7 @@ namespace Typography.Rendering
             //            painter.StrokeColor = prevColor;
             //#endif
         }
-        void CreateStrokeSegments(GlyphCentroidBranch branch, StrokeLine strokeLine)
+        void CreateStrokeSegments(GlyphCentroidLine branch, StrokeLine strokeLine)
         {
 
             List<GlyphBone> glyphBones = branch.bones;
@@ -835,7 +840,7 @@ namespace Typography.Rendering
         {
             return _dbugTempIntermediateOutline.GetTriangles();
         }
-        internal Dictionary<GlyphTriangle, CentroidLineHub> dbugGetCentroidLineHubs()
+        internal List<CentroidLineHub> dbugGetCentroidLineHubs()
         {
             return _dbugTempIntermediateOutline.GetCentroidLineHubs();
         }
