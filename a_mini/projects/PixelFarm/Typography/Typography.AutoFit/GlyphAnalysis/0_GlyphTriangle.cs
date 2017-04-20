@@ -42,7 +42,7 @@ namespace Typography.Rendering
         }
         static EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
         {
-            return new EdgeLine(p.userData as GlyphPoint, q.userData as GlyphPoint) { IsOutside = isOutside };
+            return new EdgeLine(p.userData as GlyphPoint, q.userData as GlyphPoint, isOutside);
         }
         public double CentroidX
         {

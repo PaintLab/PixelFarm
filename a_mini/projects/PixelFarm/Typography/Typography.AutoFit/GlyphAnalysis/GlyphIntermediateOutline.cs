@@ -47,9 +47,8 @@ namespace Typography.Rendering
             //iterate each contour's point again
             //create relation  
             //----------------------------------------
+            CreateGlyphEdges();
         }
-
-
 
         void CreateCentroidLineHubs()
         {
@@ -169,6 +168,16 @@ namespace Typography.Rendering
             //----------------------------------------
             _outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
 
+        }
+
+        void CreateGlyphEdges()
+        {
+            List<GlyphContour> contours = this._contours;
+            int j = contours.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                contours[i].CreateGlyphEdges();
+            }
         }
         public List<GlyphBone> LongVerticalBones
         {
