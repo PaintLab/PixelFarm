@@ -521,13 +521,13 @@ namespace Typography.Rendering
 
                 if (knownOutsideEdge.SlopeKind == LineSlopeKind.Vertical)
                 {
-                    //TODO: review same side edge(Fan shape)
+                    //TODO: review same side edge (Fan shape)
                     if (pe_midX < qe_midX)
                     {
                         knownOutsideEdge.IsLeftSide = true;
                         if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
                         {
-                            //knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                            // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                         }
                     }
                     else
@@ -535,13 +535,13 @@ namespace Typography.Rendering
                         //matchingEdgeLine.IsLeftSide = true;
                         if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
                         {
-                            //knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                            // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                         }
                     }
                 }
                 else if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
                 {
-                    //TODO: review same side edge(Fan shape)
+                    //TODO: review same side edge (Fan shape)
 
                     if (pe_midY > qe_midY)
                     {
@@ -551,7 +551,7 @@ namespace Typography.Rendering
                             knownOutsideEdge.IsUpper = true;
                             if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
                             {
-                                //knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                                // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                             }
                         }
                     }
@@ -562,7 +562,7 @@ namespace Typography.Rendering
                             // matchingEdgeLine.IsUpper = true;
                             if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
                             {
-                                //knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                                //  knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
                             }
                         }
                     }
