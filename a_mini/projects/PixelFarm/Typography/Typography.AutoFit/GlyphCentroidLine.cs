@@ -255,10 +255,7 @@ namespace Typography.Rendering
             GlyphCentroidPair ownerPair = joint.OwnerCentrodPair;
             return ownerPair.p == tri || ownerPair.q == tri;
         }
-    }
-
-
-
+    } 
 
     /// <summary>
     /// a collection of centroid line
@@ -487,12 +484,11 @@ namespace Typography.Rendering
             //
             //p triangle=> (x0,y0)  (centroid of p)
             //q triangle=> (x1,y1)  (centroid of q)
-            //a centroid line  move from p to q 
-
+            //a centroid line  move from p to q  
             this.p = p;
             this.q = q;
-
             //1 centroid pair has 1 GlyphBoneJoint
+            //--------------------------------------
 
         }
         public bool SpecialConnectFromLastToFirst { get; set; }
@@ -511,13 +507,6 @@ namespace Typography.Rendering
             //check if q is upper or lower when compare with p
             //check if q is on left side or right side of p
             //then we know the direction
-            //....
-            //p
-            double x0 = p.CentroidX;
-            double y0 = p.CentroidY;
-            //q
-            double x1 = q.CentroidX;
-            double y1 = q.CentroidY;
 
 
 #if DEBUG

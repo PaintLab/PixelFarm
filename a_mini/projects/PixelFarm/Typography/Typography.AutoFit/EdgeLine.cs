@@ -23,7 +23,6 @@ namespace Typography.Rendering
         public readonly double y1;
 
 
-        Dictionary<EdgeLine, bool> matchingEdges; //TODO: remove this
         //------------------------------
         /// <summary>
         /// contact to another edge
@@ -41,12 +40,13 @@ namespace Typography.Rendering
 
         public EdgeLine(GlyphPoint p, GlyphPoint q)
         {
-
+            //------------------------------------
             //an edge line connects 2 glyph points.
             //it is created from triangulation process.
             //
             //some edge line is either 'INSIDE' edge  OR 'OUTSIDE'.
             //
+            //------------------------------------           
 
 
             this._glyphPoint_P = p;
@@ -87,7 +87,7 @@ namespace Typography.Rendering
             get
             {
                 return _glyphPoint_P;
-            } 
+            }
         }
         public GlyphPoint GlyphPoint_Q
         {
@@ -100,7 +100,7 @@ namespace Typography.Rendering
         {
             get;
             private set;
-        } 
+        }
         public bool IsOutside
         {
             get;
@@ -153,27 +153,27 @@ namespace Typography.Rendering
         //    }
         //}
 
-       
-//        public void AddMatchingOutsideEdge(EdgeLine edgeLine)
-//        {
-//#if DEBUG
-//            if (edgeLine == this) { throw new NotSupportedException(); }
-//#endif
-//            if (matchingEdges == null)
-//            {
-//                matchingEdges = new Dictionary<EdgeLine, bool>();
-//            }
-//            if (!matchingEdges.ContainsKey(edgeLine))
-//            {
-//                matchingEdges.Add(edgeLine, true);
-//            }
-//#if DEBUG
-//            if (matchingEdges.Count > 1)
-//            {
 
-//            }
-//#endif
-//        }
+        //        public void AddMatchingOutsideEdge(EdgeLine edgeLine)
+        //        {
+        //#if DEBUG
+        //            if (edgeLine == this) { throw new NotSupportedException(); }
+        //#endif
+        //            if (matchingEdges == null)
+        //            {
+        //                matchingEdges = new Dictionary<EdgeLine, bool>();
+        //            }
+        //            if (!matchingEdges.ContainsKey(edgeLine))
+        //            {
+        //                matchingEdges.Add(edgeLine, true);
+        //            }
+        //#if DEBUG
+        //            if (matchingEdges.Count > 1)
+        //            {
+
+        //            }
+        //#endif
+        //        }
 
         static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);

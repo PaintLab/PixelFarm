@@ -4,9 +4,8 @@ using Poly2Tri;
 namespace Typography.Rendering
 {
 
-    class GlyphTriangle 
+    class GlyphTriangle
     {
-
 
         //TODO: review here...
         //if we not use the 
@@ -22,28 +21,28 @@ namespace Typography.Rendering
         public GlyphTriangle(DelaunayTriangle tri)
         {
             this._tri = tri;
+            tri.GetCentroid(out centroidX, out centroidY);
+
+            //---------------------------------------------
             TriangulationPoint p0 = _tri.P0;
             TriangulationPoint p1 = _tri.P1;
             TriangulationPoint p2 = _tri.P2;
 
-
-            e0 = NewEdgeLine(p0, p1);
-            e1 = NewEdgeLine(p1, p2);
-            e2 = NewEdgeLine(p2, p0);
+            //an EdgeLine is created after we 
+            //creat GlyphTriangle
+            //
+            e0 = NewEdgeLine(p0, p1, tri.EdgeIsConstrained(tri.FindEdgeIndex(p0, p1)));
+            e1 = NewEdgeLine(p1, p2, tri.EdgeIsConstrained(tri.FindEdgeIndex(p1, p2)));
+            e2 = NewEdgeLine(p2, p0, tri.EdgeIsConstrained(tri.FindEdgeIndex(p2, p0)));
 
 #if DEBUG
             e0.dbugOwner = e1.dbugOwner = e2.dbugOwner = this;
 #endif
 
-            tri.GetCentroid(out centroidX, out centroidY);
-
-            e0.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P0, tri.P1));
-            e1.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P1, tri.P2));
-            e2.IsOutside = tri.EdgeIsConstrained(tri.FindEdgeIndex(tri.P2, tri.P0));
         }
-        static EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q)
+        static EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
         {
-            return new EdgeLine(p.userData as GlyphPoint, q.userData as GlyphPoint);
+            return new EdgeLine(p.userData as GlyphPoint, q.userData as GlyphPoint) { IsOutside = isOutside };
         }
         public double CentroidX
         {
