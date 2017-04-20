@@ -115,9 +115,18 @@ namespace Typography.Rendering
                 internalLineHub._headConnectedJoint = lineHub.GetHeadConnectedJoint();
                 _strokeLineHub.Add(internalLineHub);
             }
+        }
+        /// <summary>
+        /// set new stroke width for regenerated glyph
+        /// </summary>
+        /// <param name="relativeStrokeWidth"></param>
+        public void SetNewRelativeStrokeWidth(float relativeStrokeWidth)
+        {
+            //preserve original outline
+            //regenerate outline from original outline
+
 
         }
-
 
         public float LeftControlPosX { get; set; }
         public void Walk()
