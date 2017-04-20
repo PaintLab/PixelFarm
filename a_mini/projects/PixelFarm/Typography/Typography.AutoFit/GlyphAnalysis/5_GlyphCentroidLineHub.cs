@@ -34,7 +34,7 @@ namespace Typography.Rendering
         /// <summary>
         /// analyze edges of this line
         /// </summary>
-        public void AnalyzeEdges()
+        public void AnalyzeEdgesAndCreateBoneJoints()
         {
             List<GlyphCentroidPair> pairs = this.pairs;
             int j = pairs.Count;
@@ -42,7 +42,7 @@ namespace Typography.Rendering
             {
                 //for each centroid line
                 //analyze for its bone joint
-                pairs[i].AnalyzeEdges();
+                pairs[i].AnalyzeEdgesAndCreateBoneJoint();
             }
             if (j > 1)
             {
@@ -305,11 +305,11 @@ namespace Typography.Rendering
         /// <summary>
         /// analyze each branch for edge information
         /// </summary>
-        public void AnalyzeEachBranchForEdgeInfo()
+        public void CreateBoneJoints()
         {
             foreach (GlyphCentroidLine line in _lines.Values)
             {
-                line.AnalyzeEdges();
+                line.AnalyzeEdgesAndCreateBoneJoints();
             }
         }
 

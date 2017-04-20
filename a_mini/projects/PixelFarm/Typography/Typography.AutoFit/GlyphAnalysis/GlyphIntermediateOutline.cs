@@ -133,7 +133,7 @@ namespace Typography.Rendering
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
                 //we must analyze all info before create bones?
-                hub.AnalyzeEachBranchForEdgeInfo();
+                hub.CreateBoneJoints();
                 lineHubs.Add(hub);
             }
             //----------------------------------------

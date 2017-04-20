@@ -31,9 +31,9 @@ namespace Typography.Rendering
         public bool SpecialConnectFromLastToFirst { get; set; }
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
         /// <summary>
-        /// add information about edges to each triangle
+        /// add information about edges to each triangle and create BoneJoint
         /// </summary>
-        internal void AnalyzeEdges()
+        internal void AnalyzeEdgesAndCreateBoneJoint()
         {
 
             //...
