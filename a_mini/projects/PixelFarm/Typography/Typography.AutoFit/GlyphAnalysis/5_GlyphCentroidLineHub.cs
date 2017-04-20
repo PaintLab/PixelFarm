@@ -176,35 +176,18 @@ namespace Typography.Rendering
         /// <returns></returns>
         public GlyphBoneJoint FindNearestJoint(Vector2 pos, GlyphTriangle tri)
         {
-            for (int i = bones.Count - 1; i >= 0; --i)
+
+            for (int i = pairs.Count - 1; i >= 0; --i)
             {
-                GlyphBoneJoint joint1 = FindJoint(bones[i], pos, tri);
-                if (joint1 != null)
+                GlyphBoneJoint joint = pairs[i].BoneJoint;
+                //each pair has 1 bone joint 
+                //once we have 1 candidate
+                if (JointContainsTri(joint, tri))
                 {
-                    if (i == 0)
-                    {
-                        //this is the last one 
-                        //so just return
-                        return joint1;
-                    }
-                    else
-                    {
-                        //not the last one
-                        //compare again with sibling joint
-                        GlyphBoneJoint joint2 = FindJoint(bones[i - 1], pos, tri);
-                        if (joint2 == null)
-                        {
-                            return joint1;
-                        }
-                        else
-                        {
-                            //compare distance again
-                            return MyMath.MinDistanceFirst(pos, joint1.Position, joint2.Position) ? joint1 : joint2;
-                        }
-                    }
+                    //found another joint
+                    return joint;
                 }
             }
-            //not found
             return null;
         }
         static GlyphBoneJoint FindJoint(GlyphBone b, Vector2 pos, GlyphTriangle tri)
@@ -214,11 +197,11 @@ namespace Typography.Rendering
 
             GlyphBoneJoint foundOnA = null;
             GlyphBoneJoint foundOnB = null;
-            if (b.JointA != null && ContainsTri(b.JointA, tri))
+            if (b.JointA != null && JointContainsTri(b.JointA, tri))
             {
                 foundOnA = b.JointA;
             }
-            if (b.JointB != null && ContainsTri(b.JointB, tri))
+            if (b.JointB != null && JointContainsTri(b.JointB, tri))
             {
                 foundOnB = b.JointB;
             }
@@ -250,7 +233,7 @@ namespace Typography.Rendering
         /// <param name="joint"></param>
         /// <param name="tri"></param>
         /// <returns></returns>
-        static bool ContainsTri(GlyphBoneJoint joint, GlyphTriangle tri)
+        static bool JointContainsTri(GlyphBoneJoint joint, GlyphTriangle tri)
         {
             GlyphCentroidPair ownerPair = joint.OwnerCentrodPair;
             return ownerPair.p == tri || ownerPair.q == tri;
@@ -264,7 +247,7 @@ namespace Typography.Rendering
     {
         readonly GlyphTriangle mainTri;
         Dictionary<GlyphTriangle, GlyphCentroidLine> _lines = new Dictionary<GlyphTriangle, GlyphCentroidLine>();
-        List<CentroidLineHub> connectedLineHubs;
+        List<CentroidLineHub> otherConnectedLineHubs;//connection from other
         //
         GlyphCentroidLine currentLine;
         GlyphTriangle currentBranchTri;
@@ -407,12 +390,13 @@ namespace Typography.Rendering
 
 
         //--------------------------------------------------------
-        public bool FindBoneJoint(GlyphTriangle tri, Vector2 pos, out GlyphCentroidLine foundOnBranch, out GlyphBoneJoint foundOnJoint)
+        public bool FindBoneJoint(GlyphTriangle tri, Vector2 pos,
+            out GlyphCentroidLine foundOnBranch,
+            out GlyphBoneJoint foundOnJoint)
         {
             foreach (GlyphCentroidLine line in _lines.Values)
             {
-                foundOnJoint = line.FindNearestJoint(pos, tri);
-                if (foundOnJoint != null)
+                if ((foundOnJoint = line.FindNearestJoint(pos, tri)) != null)
                 {
                     foundOnBranch = line;
                     return true;
@@ -425,11 +409,11 @@ namespace Typography.Rendering
         }
         public void AddLineHubConnection(CentroidLineHub anotherHub)
         {
-            if (connectedLineHubs == null)
+            if (otherConnectedLineHubs == null)
             {
-                connectedLineHubs = new List<CentroidLineHub>();
+                otherConnectedLineHubs = new List<CentroidLineHub>();
             }
-            connectedLineHubs.Add(anotherHub);
+            otherConnectedLineHubs.Add(anotherHub);
         }
 
 
@@ -449,7 +433,7 @@ namespace Typography.Rendering
         }
         public List<CentroidLineHub> GetConnectedLineHubs()
         {
-            return this.connectedLineHubs;
+            return this.otherConnectedLineHubs;
         }
 
     }

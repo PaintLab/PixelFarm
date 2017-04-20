@@ -136,24 +136,25 @@ namespace Typography.Rendering
                 hub.AnalyzeEachBranchForEdgeInfo();
                 lineHubs.Add(hub);
             }
-        }
-        void CreateBones()
-        {
-            List<GlyphBone> newBones = new List<GlyphBone>();
+            //----------------------------------------
             int lineHubCount = lineHubs.Count;
-            for (int i = 0; i < lineHubCount; ++i)
-            {
-                //create bones and collect back to newBones                
-                lineHubs[i].CreateBones(newBones);
-            }
-            //----------------------------------------           
             for (int i = 0; i < lineHubCount; ++i)
             {
                 //after create bone ***
                 //link each hub to proper bone
                 FindStartHubLinkConnection(lineHubs[i], lineHubs);
             }
+        }
+        void CreateBones()
+        {
+            List<GlyphBone> newBones = new List<GlyphBone>();
 
+            int lineHubCount = lineHubs.Count;
+            for (int i = 0; i < lineHubCount; ++i)
+            {
+                //create bones and collect back to newBones                
+                lineHubs[i].CreateBones(newBones);
+            }
             //----------------------------------------
             outputVerticalLongBones = new List<GlyphBone>();
             AnalyzeBoneLength(newBones, outputVerticalLongBones);
@@ -170,6 +171,11 @@ namespace Typography.Rendering
             get { return this.outputVerticalLongBones; }
         }
 
+        /// <summary>
+        /// find link from main triangle of line-hub to another line hub
+        /// </summary>
+        /// <param name="analyzingHub"></param>
+        /// <param name="hubs"></param>
         static void FindStartHubLinkConnection(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
         {
             int j = hubs.Count;
@@ -181,14 +187,17 @@ namespace Typography.Rendering
                 {
                     continue;
                 }
+
                 GlyphCentroidLine foundOnBr;
                 GlyphBoneJoint foundOnJoint;
 
+                //from a given hub,
+                //find bone joint that close to the main triangle for of the analyzingHub
                 if (otherHub.FindBoneJoint(analyzingHub.MainTriangle, hubHeadPos, out foundOnBr, out foundOnJoint))
                 {
-                    //found
+                    //add connection from analyzingHub to otherHub
                     otherHub.AddLineHubConnection(analyzingHub);
-                    //
+                    //also set head connection from joint to this analyzing hub
                     analyzingHub.SetHeadConnnection(foundOnBr, foundOnJoint);
                     return;
                 }
