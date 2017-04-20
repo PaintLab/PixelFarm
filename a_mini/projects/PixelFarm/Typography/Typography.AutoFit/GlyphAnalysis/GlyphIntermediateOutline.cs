@@ -261,7 +261,7 @@ namespace Typography.Rendering
         {
             return this._contours;
         }
-        public float LeftControlPosX { get; set; }
+        public float LeftControlPos { get; set; }
     }
 
 }

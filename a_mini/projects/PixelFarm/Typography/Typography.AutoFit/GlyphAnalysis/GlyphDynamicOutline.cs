@@ -82,9 +82,9 @@ namespace Typography.Rendering
             //1. joints and its bones
             //2. bones and its controlled edge
 
-            _contours = intermediateOutline.GetContours();
-            _longVerticalBones = intermediateOutline.LongVerticalBones;
-            LeftControlPosX = intermediateOutline.LeftControlPosX;
+            _contours = intermediateOutline.GetContours(); //original contours
+            _longVerticalBones = intermediateOutline.LongVerticalBones; //analyzed long bones
+            LeftControlPosX = intermediateOutline.LeftControlPos; //left control position 
 
             //
             List<CentroidLineHub> centroidLineHubs = intermediateOutline.GetCentroidLineHubs();
