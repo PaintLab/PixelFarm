@@ -296,25 +296,7 @@ namespace SampleWinForms.UI
             EdgeLine p_contactEdge = joint._p_contact_edge;
             //mid point
             Vector2 jointPos = joint.Position * pxscale;//scaled joint pos
-            painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);
-
-            if (DrawRibs)
-            {
-                switch (joint.SelectedEdgePointCount)
-                {
-                    default: throw new NotSupportedException();
-                    case 0: break;
-                    case 1:
-                        DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
-                        break;
-                    case 2:
-
-                        DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
-                        DrawBoneRib(painter, joint.RibEndPointB, joint, pxscale);
-                        break;
-                }
-            }
-
+            painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow); 
             if (joint.TipPoint != Vector2.Zero)
             {
                 EdgeLine tipEdge = joint.TipEdge;

@@ -32,12 +32,12 @@ namespace Typography.Rendering
         class StrokeJoint
         {
             public Vector2 _position;
-            public Vector2 _ribA_endAt;
-            public Vector2 _ribB_endAt;
+            //public Vector2 _ribA_endAt;
+            //public Vector2 _ribB_endAt;
             public Vector2 _tip_endAt;
 
-            public bool hasRibA;
-            public bool hasRibB;
+            //public bool hasRibA;
+            //public bool hasRibB;
             public bool hasTip;
 #if DEBUG
             static int dbugTotalId;
@@ -521,29 +521,29 @@ namespace Typography.Rendering
         }
         void SetJointDetail(GlyphBoneJoint joint, StrokeJoint strokeJoint)
         {
-            switch (joint.SelectedEdgePointCount)
-            {
-                default: throw new NotSupportedException();
-                case 0: break;
-                case 1:
-                    strokeJoint._ribA_endAt = joint.RibEndPointA;
-                    strokeJoint.hasRibA = true;
-                    break;
-                case 2:
-                    strokeJoint._ribA_endAt = joint.RibEndPointA;
-                    strokeJoint._ribB_endAt = joint.RibEndPointB;
-                    strokeJoint.hasRibA = true;
-                    strokeJoint.hasRibB = true;//TODO: review here
+            //switch (joint.SelectedEdgePointCount)
+            //{
+            //    default: throw new NotSupportedException();
+            //    case 0: break;
+            //    case 1:
+            //        strokeJoint._ribA_endAt = joint.RibEndPointA;
+            //        strokeJoint.hasRibA = true;
+            //        break;
+            //    case 2:
+            //        strokeJoint._ribA_endAt = joint.RibEndPointA;
+            //        strokeJoint._ribB_endAt = joint.RibEndPointB;
+            //        strokeJoint.hasRibA = true;
+            //        strokeJoint.hasRibB = true;//TODO: review here
 
-                    //if (
-                    //    Math.Abs((joint.RibA_ArcTan() - joint.RibB_ArcTan())) <
-                    //    Math.Atan2(1,1))
-                    //{
-                    //    strokeJoint.hasRibB = false ;//TODO: review here
-                    //}
+            //        //if (
+            //        //    Math.Abs((joint.RibA_ArcTan() - joint.RibB_ArcTan())) <
+            //        //    Math.Atan2(1,1))
+            //        //{
+            //        //    strokeJoint.hasRibB = false ;//TODO: review here
+            //        //}
 
-                    break;
-            }
+            //        break;
+            //}
             //check if ribB and A angle
             //if less than 90 degree
             //remove this rib
@@ -564,17 +564,17 @@ namespace Typography.Rendering
             Vector2 jointPos = joint._position;
             //mid bone point***  
             WalkToCenterOfJoint(jointPos);
-            //a
-            if (joint.hasRibA)
-            {
-                WalkRib(joint._ribA_endAt, jointPos);
-            }
-            //b
-            if (joint.hasRibB)
-            {
-                WalkRib(joint._ribB_endAt, jointPos);
-            }
-            //
+            ////a
+            //if (joint.hasRibA)
+            //{
+            //    WalkRib(joint._ribA_endAt, jointPos);
+            //}
+            ////b
+            //if (joint.hasRibB)
+            //{
+            //    WalkRib(joint._ribB_endAt, jointPos);
+            //}
+            ////
             if (joint.hasTip)
             {
                 WalkFromJointToTip(jointPos, joint._tip_endAt);
@@ -588,17 +588,17 @@ namespace Typography.Rendering
             Vector2 jointPos = joint._position;
             ////mid bone point***  
             //WalkToCenterOfJoint(jointPos);
-            //a
-            if (joint.hasRibA)
-            {
+            ////a
+            //if (joint.hasRibA)
+            //{
 
-                output.Insert(0, joint._ribA_endAt * pxscale);
-            }
-            //b
-            if (joint.hasRibB)
-            {
-                output.Add(joint._ribB_endAt * pxscale);
-            }
+            //    output.Insert(0, joint._ribA_endAt * pxscale);
+            //}
+            ////b
+            //if (joint.hasRibB)
+            //{
+            //    output.Add(joint._ribB_endAt * pxscale);
+            //}
             //
             if (joint.hasTip)
             {

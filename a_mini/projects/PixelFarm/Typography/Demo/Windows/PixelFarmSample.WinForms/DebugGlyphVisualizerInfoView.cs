@@ -241,9 +241,9 @@ namespace SampleWinForms.UI
             }
         }
 
-         
 
-        
+
+
 
         public float PxScale { get; set; }
         public void Clear()
@@ -293,47 +293,13 @@ namespace SampleWinForms.UI
             //painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
 
             TreeNode jointNode = new TreeNode() { Tag = new NodeInfo(joint) };
-            bool added = false;
-            switch (joint.SelectedEdgePointCount)
-            {
-                default: throw new NotSupportedException();
-                case 0:
-                    //no rib
-                    jointNode.Text = "j:" + joint.ToString();
-                    _jointsNode.Nodes.Add(jointNode);
-                    added = true;
-                    break;
-                case 1:
 
-                    jointNode.Text = "j:" + joint.ToString();
-                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
-                    //
-                    _jointsNode.Nodes.Add(jointNode);
-                    added = true;
+            jointNode.Text = "j:" + joint.ToString();
+            _jointsNode.Nodes.Add(jointNode);
 
-                    break;
-                case 2:
-
-                    jointNode.Text = "j:" + joint.ToString();
-                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
-                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_b:" + joint.RibEndPointB, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointB) });
-                    //
-                    _jointsNode.Nodes.Add(jointNode);
-                    added = true;
-                    break;
-            }
             if (joint.TipPoint != System.Numerics.Vector2.Zero)
             {
-                //painter.Line(
-                //   jointPos.X * pxscale, jointPos.Y * pxscale,
-                //   joint.TipPoint.X * pxscale, joint.TipPoint.Y * pxscale,
-                //   PixelFarm.Drawing.Color.White);
                 jointNode.Nodes.Add(new TreeNode() { Text = "tip:" + joint.TipPoint, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPoint) });
-                if (!added)
-                {
-                    _jointsNode.Nodes.Add(jointNode);
-                    added = true;
-                }
             }
 
         }
