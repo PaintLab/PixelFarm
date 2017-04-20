@@ -122,10 +122,19 @@ namespace Typography.OpenFont
                 //eg. glyph '2' in Century font starts with 'OFF-CURVE' point, and ends with 'OFF-CURVE'
                 //-------------------------------------------------------------------
 
+#if DEBUG
+                int dbug_cmdcount = 0;
+#endif
 
 
                 for (; cpoint_index < nextCntBeginAtIndex; ++cpoint_index)
                 {
+
+
+#if DEBUG
+                    dbug_cmdcount++;
+
+#endif
                     //for each point in this contour
 
                     //point p is an on-curve point (on outline). (not curve control point)
