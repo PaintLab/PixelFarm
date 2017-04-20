@@ -126,11 +126,10 @@ namespace Typography.Rendering
                 }
             }
             //----------------------------------------
-            //collect all line hub into a lineHubs list
+            //collect all CentroidLineHub into a lineHubs list
             lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values.Count);
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
-
                 hub.AnalyzeEachBranchForEdgeInfo();
                 lineHubs.Add(hub);
             }

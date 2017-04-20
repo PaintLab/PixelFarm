@@ -334,7 +334,7 @@ namespace Typography.Rendering
         /// create a set of GlyphBone bone
         /// </summary>
         /// <param name="newlyCreatedBones"></param>
-        internal void CreateBones(List<GlyphBone> newlyCreatedBones)
+        public void CreateBones(List<GlyphBone> newlyCreatedBones)
         {
             foreach (GlyphCentroidLine line in _lines.Values)
             {
