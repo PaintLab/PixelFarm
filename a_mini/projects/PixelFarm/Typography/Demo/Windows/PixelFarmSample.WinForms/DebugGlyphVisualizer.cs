@@ -464,6 +464,24 @@ namespace SampleWinForms.UI
                     v2.X, v2.Y,
                     PixelFarm.Drawing.Color.Red);
                 //create a new perpendicular line
+                //------------------------------------------
+                //create a line that parallel with the bone
+                Vector2 boneVector = bone.GetBoneVector();
+                Vector2 v2up = v2 + boneVector;
+                Vector2 v2down = v2 - boneVector;
+
+                painter.Line(
+                   v2.X, v2.Y,
+                   v2up.X, v2up.Y,
+                   PixelFarm.Drawing.Color.Red);
+
+                //
+
+                painter.Line(
+                   v2.X, v2.Y,
+                   v2down.X, v2down.Y,
+                   PixelFarm.Drawing.Color.Red);
+
             }
 
             //--------

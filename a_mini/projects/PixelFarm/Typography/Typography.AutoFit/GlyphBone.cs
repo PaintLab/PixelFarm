@@ -364,6 +364,22 @@ namespace Typography.Rendering
                 return Vector2.Zero;
             }
         }
+
+        public Vector2 GetBoneVector()
+        {
+            if (JointB != null)
+            {
+                return JointB.Position - JointA.Position;
+            }
+            else if (TipEdge != null)
+            {
+                return TipEdge.GetMidPoint() - JointA.Position;
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
         public List<GlyphPointToBoneLink> _perpendiculatPoints;
         public void AddPerpendicularPoint(GlyphPoint p, Vector2 bonePoint)
         {
