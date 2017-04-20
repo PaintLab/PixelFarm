@@ -17,15 +17,10 @@ namespace Typography.Rendering
     /// </summary>
     public class GlyphBone
     {
-
-
-
         public readonly EdgeLine TipEdge;
         public readonly GlyphBoneJoint JointA;
         public readonly GlyphBoneJoint JointB;
-
         double _len;
-
         public Vector2 cutPoint_onEdge;
 
         public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
@@ -43,12 +38,7 @@ namespace Typography.Rendering
             Vector2 bpos = b.Position;
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
             EvaluteSlope(a.Position, bpos);
-            //------  
-
-            //for analysis in later step
-            a.AddAssociatedBone(this);
-            b.AddAssociatedBone(this);
-            //------  
+            // 
 
             //find common triangle between  2 joint
             GlyphTriangle commonTri = FindCommonTriangle(a, b);
@@ -58,10 +48,8 @@ namespace Typography.Rendering
                 EdgeLine outsideEdge = GetFirstFoundOutsidEdge(commonTri);
                 if (outsideEdge != null)
                 {
-                    if (MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge))
-                    {
-                        PerpendicularEdge = outsideEdge;
-                    }
+                    PerpendicularEdge = outsideEdge;
+                    MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
                 }
             }
             else
@@ -79,18 +67,16 @@ namespace Typography.Rendering
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluteSlope(a.Position, midPoint);
             //------
-            //for analysis in later step
-            a.AddAssociatedBone(this);
+            ////for analysis in later step
+
 
             //tip bone, no common triangle
             //
             EdgeLine outsideEdge = FindOutsideEdge(a, tipEdge);
             if (outsideEdge != null)
             {
-                if (MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge))
-                {
-                    PerpendicularEdge = outsideEdge;
-                }
+                PerpendicularEdge = outsideEdge;
+                MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
             }
         }
 
