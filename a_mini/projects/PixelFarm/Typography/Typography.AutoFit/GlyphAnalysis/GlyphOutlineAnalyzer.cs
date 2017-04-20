@@ -222,8 +222,7 @@ namespace Typography.Rendering
                         }
                     }
                     break;
-            }
-
+            } 
         }
         //============================
 
