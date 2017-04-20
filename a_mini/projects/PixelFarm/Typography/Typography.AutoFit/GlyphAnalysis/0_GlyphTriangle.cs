@@ -27,10 +27,10 @@ namespace Typography.Rendering
             TriangulationPoint p0 = _tri.P0;
             TriangulationPoint p1 = _tri.P1;
             TriangulationPoint p2 = _tri.P2;
+            //we do not store triangulation point
 
-            //an EdgeLine is created after we 
-            //creat GlyphTriangle
-            //
+            //an EdgeLine is created after we create GlyphTriangles.
+
             e0 = NewEdgeLine(p0, p1, tri.EdgeIsConstrained(tri.FindEdgeIndex(p0, p1)));
             e1 = NewEdgeLine(p1, p2, tri.EdgeIsConstrained(tri.FindEdgeIndex(p1, p2)));
             e2 = NewEdgeLine(p2, p0, tri.EdgeIsConstrained(tri.FindEdgeIndex(p2, p0)));

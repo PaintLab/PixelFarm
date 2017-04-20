@@ -28,23 +28,22 @@ namespace Typography.Rendering
                 delnTri.MarkAsActualTriangle();
                 _triangles.Add(new GlyphTriangle(delnTri));
             }
+
             //2. 
             Analyze();
         }
 
-        Dictionary<GlyphTriangle, CentroidLineHub> centroidLineHubs;
+
         List<CentroidLineHub> lineHubs;
         List<GlyphBone> outputVerticalLongBones;
 
         void Analyze()
         {
-            //we analyze each triangle here 
-            int triCount = _triangles.Count;
 
-            //-------------------------------------------------
-            //1. create a list of CentroidLineHub (and its members)
-            //-------------------------------------------------           
-            centroidLineHubs = new Dictionary<GlyphTriangle, CentroidLineHub>();
+            //----------------------------
+            //create centroid line hub
+            //----------------------------
+            var centroidLineHubs = new Dictionary<GlyphTriangle, CentroidLineHub>();
             CentroidLineHub currentCentroidLineHub = null;
             //2. 
             List<GlyphTriangle> usedTriList = new List<GlyphTriangle>();
@@ -52,7 +51,7 @@ namespace Typography.Rendering
 
             //we may walk forward and backward on each tri
             //so we record the used triangle into a usedTriList.
-
+            int triCount = _triangles.Count;
             for (int i = 0; i < triCount; ++i)
             {
                 GlyphTriangle tri = _triangles[i];
@@ -254,9 +253,9 @@ namespace Typography.Rendering
         {
             return _triangles;
         }
-        public Dictionary<GlyphTriangle, CentroidLineHub> GetCentroidLineHubs()
+        public List<CentroidLineHub> GetCentroidLineHubs()
         {
-            return this.centroidLineHubs;
+            return this.lineHubs;
         }
 
         public List<GlyphContour> GetContours()
