@@ -143,8 +143,9 @@ namespace Typography.Rendering
 
         public List<GlyphPart> parts = new List<GlyphPart>();
 
-        internal List<GlyphPoint> flattenPoints;
-        internal List<GlyphEdge> edgeLines;
+        internal List<GlyphPoint> flattenPoints; //original flatten points
+
+        internal List<GlyphEdge> edgeLines; //for dyanmic outline processing
 
         bool analyzed;
         bool analyzedClockDirection;
@@ -262,7 +263,7 @@ namespace Typography.Rendering
                 q = flattenPoints[i + 1];
                 if ((edgeLine = FineCommonEdgeLine(p, q)) != null)
                 {
-                    edgeLines.Add(new GlyphEdge(edgeLine));
+                    edgeLines.Add(new GlyphEdge(p, q, edgeLine));
                 }
             }
             //close   
@@ -270,8 +271,18 @@ namespace Typography.Rendering
             q = flattenPoints[0];
             if ((edgeLine = FineCommonEdgeLine(p, q)) != null)
             {
-                edgeLines.Add(new GlyphEdge(edgeLine));
+                edgeLines.Add(new GlyphEdge(p, q, edgeLine));
             }
+        }
+        internal void ApplyNewRelativeEdgeDistance(float relativeDistance)
+        {
+            int j = edgeLines.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                edgeLines[i].ApplyNewEdgeDistance(relativeDistance);
+            }
+            //find new cutpoint between edge
+
         }
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
         {
@@ -295,10 +306,20 @@ namespace Typography.Rendering
 
     public class GlyphEdge
     {
-        internal readonly EdgeLine edgeLine;
-        internal GlyphEdge(EdgeLine edgeLine)
+        internal readonly EdgeLine _edgeLine;
+        readonly GlyphPoint _p0;
+        readonly GlyphPoint _p1;
+        float _relativeDistance = 1;
+        internal GlyphEdge(GlyphPoint p0, GlyphPoint p1, EdgeLine edgeLine)
         {
-            this.edgeLine = edgeLine;
+            this._p0 = p0;
+            this._p1 = p1;
+            this._edgeLine = edgeLine;
+        }
+        internal void ApplyNewEdgeDistance(float newRelativeDistance)
+        {
+            _relativeDistance = newRelativeDistance;
+            
         }
     }
 
