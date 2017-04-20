@@ -522,50 +522,50 @@ namespace Typography.Rendering
                 if (knownOutsideEdge.SlopeKind == LineSlopeKind.Vertical)
                 {
                     //TODO: review same side edge (Fan shape)
-                    //if (pe_midX < qe_midX)
-                    //{
-                    //    knownOutsideEdge.IsLeftSide = true;
-                    //    if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
-                    //    {
-                    //        knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    //matchingEdgeLine.IsLeftSide = true;
-                    //    if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
-                    //    {
-                    //        knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                    //    }
-                    //}
+                    if (pe_midX < qe_midX)
+                    {
+                        knownOutsideEdge.IsLeftSide = true;
+                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
+                        {
+                            // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                        }
+                    }
+                    else
+                    {
+                        //matchingEdgeLine.IsLeftSide = true;
+                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
+                        {
+                            // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                        }
+                    }
                 }
                 else if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
                 {
                     //TODO: review same side edge (Fan shape)
 
-                    //if (pe_midY > qe_midY)
-                    //{
-                    //    //p side is upper , q side is lower
-                    //    if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
-                    //    {
-                    //        knownOutsideEdge.IsUpper = true;
-                    //        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                    //        {
-                    //            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                    //        }
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if (matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                    //    {
-                    //        // matchingEdgeLine.IsUpper = true;
-                    //        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                    //        {
-                    //            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                    //        }
-                    //    }
-                    //}
+                    if (pe_midY > qe_midY)
+                    {
+                        //p side is upper , q side is lower
+                        if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
+                        {
+                            knownOutsideEdge.IsUpper = true;
+                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+                            {
+                                // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+                        {
+                            // matchingEdgeLine.IsUpper = true;
+                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+                            {
+                                //  knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                            }
+                        }
+                    }
                 }
             }
         }
