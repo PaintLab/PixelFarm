@@ -135,45 +135,45 @@ namespace Typography.Rendering
             return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
         }
 
-        public EdgeLine GetMatchingOutsideEdge()
-        {
-            if (matchingEdges == null) { return null; }
+        //public EdgeLine GetMatchingOutsideEdge()
+        //{
+        //    if (matchingEdges == null) { return null; }
 
-            if (matchingEdges.Count == 1)
-            {
-                foreach (EdgeLine line in matchingEdges.Keys)
-                {
-                    return line;
-                }
-                return null;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        //    if (matchingEdges.Count == 1)
+        //    {
+        //        foreach (EdgeLine line in matchingEdges.Keys)
+        //        {
+        //            return line;
+        //        }
+        //        return null;
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
 
        
-        public void AddMatchingOutsideEdge(EdgeLine edgeLine)
-        {
-#if DEBUG
-            if (edgeLine == this) { throw new NotSupportedException(); }
-#endif
-            if (matchingEdges == null)
-            {
-                matchingEdges = new Dictionary<EdgeLine, bool>();
-            }
-            if (!matchingEdges.ContainsKey(edgeLine))
-            {
-                matchingEdges.Add(edgeLine, true);
-            }
-#if DEBUG
-            if (matchingEdges.Count > 1)
-            {
+//        public void AddMatchingOutsideEdge(EdgeLine edgeLine)
+//        {
+//#if DEBUG
+//            if (edgeLine == this) { throw new NotSupportedException(); }
+//#endif
+//            if (matchingEdges == null)
+//            {
+//                matchingEdges = new Dictionary<EdgeLine, bool>();
+//            }
+//            if (!matchingEdges.ContainsKey(edgeLine))
+//            {
+//                matchingEdges.Add(edgeLine, true);
+//            }
+//#if DEBUG
+//            if (matchingEdges.Count > 1)
+//            {
 
-            }
-#endif
-        }
+//            }
+//#endif
+//        }
 
         static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);

@@ -36,13 +36,13 @@ namespace Typography.Rendering
         /// </summary>
         public void AnalyzeEdges()
         {
-            List<GlyphCentroidPair> pairList = this.pairs;
-            int j = pairList.Count;
+            List<GlyphCentroidPair> pairs = this.pairs;
+            int j = pairs.Count;
             for (int i = 0; i < j; ++i)
             {
                 //for each centroid line
                 //analyze for its bone joint
-                pairList[i].AnalyzeEdges();
+                pairs[i].AnalyzeEdges();
             }
             if (j > 1)
             {
@@ -50,8 +50,8 @@ namespace Typography.Rendering
                 //add special tip
                 //get first line and last 
                 //check if this is loop
-                GlyphCentroidPair first_line = pairList[0];
-                GlyphCentroidPair last_line = pairList[j - 1];
+                GlyphCentroidPair first_line = pairs[0];
+                GlyphCentroidPair last_line = pairs[j - 1];
                 //open end or close end
 
                 if (!last_line.SpecialConnectFromLastToFirst)
@@ -75,7 +75,7 @@ namespace Typography.Rendering
                 //single line
                 //eg 'l' letter
 
-                GlyphCentroidPair line = pairList[0];
+                GlyphCentroidPair line = pairs[0];
                 AssignTipInfo(line, true);
             }
         }
@@ -347,8 +347,8 @@ namespace Typography.Rendering
 
                     //for each centroid line
                     //create bone that link the joint
-                    GlyphCentroidPair line = lineList[i];
-                    GlyphBoneJoint joint = line.BoneJoint;
+                    GlyphCentroidPair pair = lineList[i];
+                    GlyphBoneJoint joint = pair.BoneJoint;
                     //first one
                     if (joint.TipEdge != null)
                     {
@@ -491,6 +491,7 @@ namespace Typography.Rendering
             this.p = p;
             this.q = q;
 
+            //1 centroid pair has 1 GlyphBoneJoint
 
         }
         public bool SpecialConnectFromLastToFirst { get; set; }
@@ -994,50 +995,50 @@ namespace Typography.Rendering
                 if (knownOutsideEdge.SlopeKind == LineSlopeKind.Vertical)
                 {
                     //TODO: review same side edge (Fan shape)
-                    if (pe_midX < qe_midX)
-                    {
-                        knownOutsideEdge.IsLeftSide = true;
-                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
-                        {
-                            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                        }
-                    }
-                    else
-                    {
-                        //matchingEdgeLine.IsLeftSide = true;
-                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
-                        {
-                            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                        }
-                    }
+                    //if (pe_midX < qe_midX)
+                    //{
+                    //    knownOutsideEdge.IsLeftSide = true;
+                    //    if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
+                    //    {
+                    //        knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    //matchingEdgeLine.IsLeftSide = true;
+                    //    if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
+                    //    {
+                    //        knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                    //    }
+                    //}
                 }
                 else if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
                 {
                     //TODO: review same side edge (Fan shape)
 
-                    if (pe_midY > qe_midY)
-                    {
-                        //p side is upper , q side is lower
-                        if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
-                        {
-                            knownOutsideEdge.IsUpper = true;
-                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                            {
-                                knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                        {
-                            // matchingEdgeLine.IsUpper = true;
-                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                            {
-                                knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                            }
-                        }
-                    }
+                    //if (pe_midY > qe_midY)
+                    //{
+                    //    //p side is upper , q side is lower
+                    //    if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
+                    //    {
+                    //        knownOutsideEdge.IsUpper = true;
+                    //        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+                    //        {
+                    //            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    if (matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+                    //    {
+                    //        // matchingEdgeLine.IsUpper = true;
+                    //        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+                    //        {
+                    //            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                    //        }
+                    //    }
+                    //}
                 }
             }
         }

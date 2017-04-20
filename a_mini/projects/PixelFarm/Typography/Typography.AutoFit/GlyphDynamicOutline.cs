@@ -300,39 +300,39 @@ namespace Typography.Rendering
                     //the upper part point may affect the other(lower side)
                     //1.horizontal edge
 
-                    EdgeLine h_edge = p.horizontalEdge;
-                    EdgeLine matching_anotherSide = h_edge.GetMatchingOutsideEdge();
-                    if (matching_anotherSide != null)
-                    {
-                        GlyphPoint a_glyph_p = matching_anotherSide.GlyphPoint_P;
-                        GlyphPoint a_glyph_q = matching_anotherSide.GlyphPoint_Q;
-                        if (a_glyph_p != null)
-                        {
+//                    EdgeLine h_edge = p.horizontalEdge;
+//                    EdgeLine matching_anotherSide = h_edge.GetMatchingOutsideEdge();
+//                    if (matching_anotherSide != null)
+//                    {
+//                        GlyphPoint a_glyph_p = matching_anotherSide.GlyphPoint_P;
+//                        GlyphPoint a_glyph_q = matching_anotherSide.GlyphPoint_Q;
+//                        if (a_glyph_p != null)
+//                        {
 
-                            a_glyph_p.AdjustedY = -remaining;
-#if DEBUG
-                            if (!s_dbugAff2.ContainsKey(a_glyph_p))
-                            {
-                                s_dbugAff2.Add(a_glyph_p, true);
-                                s_dbugAffectedPoints.Add(a_glyph_p);
-                            }
+//                            a_glyph_p.AdjustedY = -remaining;
+//#if DEBUG
+//                            if (!s_dbugAff2.ContainsKey(a_glyph_p))
+//                            {
+//                                s_dbugAff2.Add(a_glyph_p, true);
+//                                s_dbugAffectedPoints.Add(a_glyph_p);
+//                            }
 
-#endif
-                        }
-                        if (a_glyph_q != null)
-                        {
+//#endif
+//                        }
+//                        if (a_glyph_q != null)
+//                        {
 
-                            a_glyph_q.AdjustedY = -remaining;
-#if DEBUG
-                            if (!s_dbugAff2.ContainsKey(a_glyph_q))
-                            {
-                                s_dbugAff2.Add(a_glyph_q, true);
-                                s_dbugAffectedPoints.Add(a_glyph_q);
-                            }
+//                            a_glyph_q.AdjustedY = -remaining;
+//#if DEBUG
+//                            if (!s_dbugAff2.ContainsKey(a_glyph_q))
+//                            {
+//                                s_dbugAff2.Add(a_glyph_q, true);
+//                                s_dbugAffectedPoints.Add(a_glyph_q);
+//                            }
 
-#endif
-                        }
-                    }
+//#endif
+//                        }
+//                    }
 
                     return floo_int;
                 }
