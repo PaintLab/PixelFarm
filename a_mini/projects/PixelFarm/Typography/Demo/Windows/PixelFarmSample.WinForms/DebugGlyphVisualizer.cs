@@ -296,7 +296,7 @@ namespace SampleWinForms.UI
             EdgeLine p_contactEdge = joint._p_contact_edge;
             //mid point
             Vector2 jointPos = joint.Position * pxscale;//scaled joint pos
-            painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow); 
+            painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);
             if (joint.TipPoint != Vector2.Zero)
             {
                 EdgeLine tipEdge = joint.TipEdge;
@@ -320,45 +320,6 @@ namespace SampleWinForms.UI
                 painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
             }
         }
-        void DrawAssocGlyphPoints(Vector2 pos, List<GlyphPoint> points)
-        {
-            int j = points.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                GlyphPoint p = points[i];
-                painter.Line(
-                      pos.X * _pxscale, pos.Y * _pxscale,
-                      p.x * _pxscale, p.y * _pxscale,
-                      PixelFarm.Drawing.Color.Yellow);
-            }
-        }
-        void DrawAssocGlyphPoints(Vector2 pos, List<GlyphPoint> points, float newRelativeLen)
-        {
-            int j = points.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                DrawAssocGlyphPoint(pos, points[i], newRelativeLen);
-            }
-        }
-        void DrawAssocGlyphPoint(Vector2 pos, GlyphPoint p, float newRelativeLen)
-        {
-            //test draw marker on different len....
-            //create  
-
-            PixelFarm.VectorMath.Vector delta = new PixelFarm.VectorMath.Vector(
-                new PixelFarm.VectorMath.Vector(pos.X, pos.Y),
-                new PixelFarm.VectorMath.Vector(p.x, p.y));
-
-            double currentLen = delta.Magnitude;
-            delta = delta.NewLength(currentLen * newRelativeLen);
-            //
-            PixelFarm.VectorMath.Vector v2 = new PixelFarm.VectorMath.Vector((float)pos.X, (float)pos.Y) + delta;
-            painter.Line(
-                pos.X * _pxscale, pos.Y * _pxscale,
-                v2.X * _pxscale, v2.Y * _pxscale,
-                PixelFarm.Drawing.Color.Red);
-        }
-
 
         Vector2 _branchHeadPos;
         protected override void OnBeginDrawingBoneLinks(System.Numerics.Vector2 branchHeadPos, int startAt, int endAt)
@@ -393,18 +354,6 @@ namespace SampleWinForms.UI
                 valid = true;
 
                 _infoView.ShowBone(bone, jointA, jointB);
-
-
-                if (jointA._assocGlyphPoints != null)
-                {
-                    DrawAssocGlyphPoints(jointA.Position, jointA._assocGlyphPoints);
-                    DrawAssocGlyphPoints(jointA.Position, jointA._assocGlyphPoints, newRelativeLen);
-                }
-                if (jointB._assocGlyphPoints != null)
-                {
-                    DrawAssocGlyphPoints(jointB.Position, jointB._assocGlyphPoints);
-                    DrawAssocGlyphPoints(jointB.Position, jointB._assocGlyphPoints, newRelativeLen);
-                }
             }
             if (jointA != null && bone.TipEdge != null)
             {
@@ -417,16 +366,9 @@ namespace SampleWinForms.UI
                     bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta);
                 valid = true;
                 _infoView.ShowBone(bone, jointA, bone.TipEdge);
-
-                if (jointA._assocGlyphPoints != null)
-                {
-
-                    DrawAssocGlyphPoints(jointA.Position, jointA._assocGlyphPoints);
-                    DrawAssocGlyphPoints(jointA.Position, jointA._assocGlyphPoints, newRelativeLen);
-                }
             }
 
-            if (bone.hasCutPointOnEdge)
+            if (bone.PerpendicularEdge != null)
             {
                 Vector2 midBone = bone.GetMidPoint() * pxscale;
                 Vector2 cut_point = bone.cutPoint_onEdge * pxscale;
@@ -485,7 +427,7 @@ namespace SampleWinForms.UI
                       PixelFarm.Drawing.Color.Yellow);
 
                     //test
-                    DrawAssocGlyphPoint(link.bonePoint, link.glyphPoint, newRelativeLen);
+                    //DrawAssocGlyphPoint(link.bonePoint, link.glyphPoint, newRelativeLen);
                 }
             }
             //--------

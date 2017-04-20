@@ -1,6 +1,5 @@
 ﻿//MIT, 2017, WinterDev
-using System;
-using System.Collections.Generic;
+ 
 using System.Numerics;
 
 namespace Typography.Rendering
@@ -17,6 +16,12 @@ namespace Typography.Rendering
         public EdgeLine _p_contact_edge;
         public EdgeLine _q_contact_edge;
         GlyphCentroidPair _owner;
+        /// <summary>
+        /// tip point (mid of tip edge)
+        /// </summary>
+        Vector2 _tipPoint;
+        //one bone joint can have up to 2 tips  
+        EdgeLine _selectedTipEdge;
 
 #if DEBUG
         public readonly int dbugId = dbugTotalId++;
@@ -67,40 +72,13 @@ namespace Typography.Rendering
 
             return (xdiff * xdiff) + (ydiff * ydiff);
         }
-
-
-
-        /// <summary>
-        /// tip point (mid of tip edge)
-        /// </summary>
-        Vector2 _tipPoint;
-
-        //one bone joint can have up to 2 tips 
-
-        EdgeLine _selectedTipEdge;
-        public List<GlyphBone> _assocBones;
-        public List<GlyphPoint> _assocGlyphPoints;
-
-
         public void SetTipEdge(EdgeLine tipEdge)
         {
             this._selectedTipEdge = tipEdge;
             this._tipPoint = tipEdge.GetMidPoint();
         }
         public Vector2 TipPoint { get { return _tipPoint; } }
-        public EdgeLine TipEdge { get { return _selectedTipEdge; } }
-
-        public void AddAssociatedGlyphPoint(GlyphPoint glyphPoint)
-        {
-            if (_assocGlyphPoints == null) { _assocGlyphPoints = new List<GlyphPoint>(); }
-            _assocGlyphPoints.Add(glyphPoint);
-        }
-        public void AddAssociatedBone(GlyphBone bone)
-        {
-            if (_assocBones == null) { _assocBones = new List<GlyphBone>(); }
-            _assocBones.Add(bone);
-        }
-
+        public EdgeLine TipEdge { get { return _selectedTipEdge; } } 
 #if DEBUG
         public override string ToString()
         {

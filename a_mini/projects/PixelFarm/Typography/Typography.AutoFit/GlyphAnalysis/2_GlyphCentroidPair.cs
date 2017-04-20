@@ -31,9 +31,9 @@ namespace Typography.Rendering
         public bool SpecialConnectFromLastToFirst { get; set; }
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
         /// <summary>
-        /// add information about edges to each triangle
+        /// add information about edges to each triangle and create BoneJoint
         /// </summary>
-        internal void AnalyzeEdges()
+        internal void AnalyzeEdgesAndCreateBoneJoint()
         {
 
             //...
@@ -89,32 +89,6 @@ namespace Typography.Rendering
         public GlyphTip P_Tip { get; set; }
         public GlyphTip Q_Tip { get; set; }
 
-        /// <summary>
-        /// get on curve points 
-        /// </summary>
-        /// <param name="p"></param>
-        /// <param name="q"></param>
-        /// <returns>0 =p, 1= q, none = -1, both=2</returns>
-        static int GetOnCurvePoints(GlyphPoint p, GlyphPoint q)
-        {
-            if (p.kind != PointKind.CurveInbetween && q.kind != PointKind.CurveInbetween)
-            {
-                //both are ONCurve point
-                return 2;
-            }
-            else if (p.kind != PointKind.CurveInbetween)
-            {
-                return 0;
-            }
-            else if (q.kind != PointKind.CurveInbetween)
-            {
-                return 1;
-            }
-            else
-            {
-                return -1;
-            }
-        }
 
         static void ClassifyTriangleEdges(
             GlyphTriangle triangle,

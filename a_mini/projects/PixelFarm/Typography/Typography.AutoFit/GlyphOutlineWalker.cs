@@ -29,9 +29,8 @@ namespace Typography.Rendering
                 OnTriangle(triNumber++, tri.e0, tri.e1, tri.e2, tri.CentroidX, tri.CentroidY);
             }
             //--------------- 
+#if DEBUG
             List<CentroidLineHub> centroidLineHubs = _dynamicOutline.dbugGetCentroidLineHubs();
-            //--------------- 
-
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
                 Dictionary<GlyphTriangle, GlyphCentroidLine> branches = lineHub.GetAllBranches();
@@ -76,8 +75,9 @@ namespace Typography.Rendering
                 }
                 //
                 OnEndLineHub(hubCenter.X, hubCenter.Y, lineHub.GetHeadConnectedJoint());
-
             }
+#endif
+
         }
         void DrawBoneLinks(GlyphCentroidLine branch)
         {
