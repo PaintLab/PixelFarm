@@ -294,34 +294,38 @@ namespace SampleWinForms.UI
 
             TreeNode jointNode = new TreeNode() { Tag = new NodeInfo(joint) };
             bool added = false;
-            switch (joint.SelectedEdgePointCount)
-            {
-                default: throw new NotSupportedException();
-                case 0:
-                    //no rib
-                    jointNode.Text = "j:" + joint.ToString();
-                    _jointsNode.Nodes.Add(jointNode);
-                    added = true;
-                    break;
-                case 1:
+            jointNode.Text = "j:" + joint.ToString();
+            _jointsNode.Nodes.Add(jointNode);
+            added = true;
 
-                    jointNode.Text = "j:" + joint.ToString();
-                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
-                    //
-                    _jointsNode.Nodes.Add(jointNode);
-                    added = true;
+            //switch (joint.SelectedEdgePointCount)
+            //{
+            //    default: throw new NotSupportedException();
+            //    case 0:
+            //        //no rib
+            //        jointNode.Text = "j:" + joint.ToString();
+            //        _jointsNode.Nodes.Add(jointNode);
+            //        added = true;
+            //        break;
+            //    case 1:
 
-                    break;
-                case 2:
+            //        jointNode.Text = "j:" + joint.ToString();
+            //        //jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
+            //        //
+            //        _jointsNode.Nodes.Add(jointNode);
+            //        added = true;
 
-                    jointNode.Text = "j:" + joint.ToString();
-                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
-                    jointNode.Nodes.Add(new TreeNode() { Text = "rib_b:" + joint.RibEndPointB, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointB) });
-                    //
-                    _jointsNode.Nodes.Add(jointNode);
-                    added = true;
-                    break;
-            }
+            //        break;
+            //    case 2:
+
+            //        jointNode.Text = "j:" + joint.ToString();
+            //        //jointNode.Nodes.Add(new TreeNode() { Text = "rib_a:" + joint.RibEndPointA, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointA) });
+            //       // jointNode.Nodes.Add(new TreeNode() { Text = "rib_b:" + joint.RibEndPointB, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.RibEndPointB) });
+            //        //
+            //        _jointsNode.Nodes.Add(jointNode);
+            //        added = true;
+            //        break;
+            //}
             if (joint.TipPoint != System.Numerics.Vector2.Zero)
             {
                 //painter.Line(

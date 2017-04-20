@@ -298,22 +298,22 @@ namespace SampleWinForms.UI
             Vector2 jointPos = joint.Position * pxscale;//scaled joint pos
             painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);
 
-            if (DrawRibs)
-            {
-                switch (joint.SelectedEdgePointCount)
-                {
-                    default: throw new NotSupportedException();
-                    case 0: break;
-                    case 1:
-                        DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
-                        break;
-                    case 2:
+            //if (DrawRibs)
+            //{
+            //    switch (joint.SelectedEdgePointCount)
+            //    {
+            //        default: throw new NotSupportedException();
+            //        case 0: break;
+            //        case 1:
+            //            DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
+            //            break;
+            //        case 2:
 
-                        DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
-                        DrawBoneRib(painter, joint.RibEndPointB, joint, pxscale);
-                        break;
-                }
-            }
+            //            DrawBoneRib(painter, joint.RibEndPointA, joint, pxscale);
+            //            DrawBoneRib(painter, joint.RibEndPointB, joint, pxscale);
+            //            break;
+            //    }
+            //}
 
             if (joint.TipPoint != Vector2.Zero)
             {
