@@ -1,473 +1,8 @@
 ﻿//MIT, 2017, WinterDev
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 
 namespace Typography.Rendering
 {
-
-    class GlyphCentroidLine
-    {
-        public List<GlyphCentroidPair> pairs = new List<GlyphCentroidPair>();
-        public List<GlyphBone> bones = new List<GlyphBone>();
-        internal readonly GlyphTriangle startTri;
-        internal GlyphCentroidLine(GlyphTriangle startTri)
-        {
-            this.startTri = startTri;
-        }
-        public void AddCentroidLine(GlyphCentroidPair pair)
-        {
-            pairs.Add(pair);
-        }
-        public Vector2 GetHeadPosition()
-        {
-            //after create bone process
-            if (bones.Count == 0)
-            {
-                return Vector2.Zero;
-            }
-            else
-            {
-                return bones[0].JointA.Position;
-            }
-        }
-        /// <summary>
-        /// analyze edges of this line
-        /// </summary>
-        public void AnalyzeEdges()
-        {
-            List<GlyphCentroidPair> pairList = this.pairs;
-            int j = pairList.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                //for each centroid line
-                //analyze for its bone joint
-                pairList[i].AnalyzeEdges();
-            }
-            if (j > 1)
-            {
-
-                //add special tip
-                //get first line and last 
-                //check if this is loop
-                GlyphCentroidPair first_line = pairList[0];
-                GlyphCentroidPair last_line = pairList[j - 1];
-                //open end or close end
-
-                if (!last_line.SpecialConnectFromLastToFirst)
-                {
-                    //no connection from last to first (eg. o)
-                    //one side is tip edge
-                    if (first_line.BoneJoint.TipEdge != null)
-                    {
-                        //create tip info
-                        AssignTipInfo(first_line, false);
-                    }
-                    if (last_line.BoneJoint.TipEdge != null)
-                    {
-                        //create tip info
-                        AssignTipInfo(last_line, false);
-                    }
-                }
-            }
-            else if (j == 1)
-            {
-                //single line
-                //eg 'l' letter
-
-                GlyphCentroidPair line = pairList[0];
-                AssignTipInfo(line, true);
-            }
-        }
-        static void AssignTipInfo(GlyphCentroidPair pair, bool twoside)
-        {
-            GlyphBoneJoint joint = pair.BoneJoint;
-            //get another edge for endtip
-
-            if (IsOwnerOf(pair.p, joint.TipEdge))
-            {
-                //tip edge is from p side
-                //so another side is q.
-
-                var tipPoint = joint.TipPoint;
-                GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdge);
-                pair.P_Tip = tip;
-
-                if (twoside)
-                {
-                    EdgeLine tipEdge = FindTip(pair, pair.q);
-                    if (tipEdge == null) throw new NotSupportedException();
-                    //-----
-                    tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
-                    pair.Q_Tip = tip;
-                }
-            }
-            else if (IsOwnerOf(pair.q, joint.TipEdge))
-            {
-
-                var tipPoint = joint.TipPoint;
-                GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdge);
-                pair.Q_Tip = tip;
-
-
-                //tip edge is from q side
-                //so another side is p.
-
-                if (twoside)
-                {
-                    //find proper tip edge
-                    EdgeLine tipEdge = FindTip(pair, pair.p);
-                    if (tipEdge == null)
-                    {
-                        //some time no tip found ***
-                        return;
-                    }
-                    //-----
-                    tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
-                    pair.P_Tip = tip;
-                }
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
-        }
-        static EdgeLine FindTip(GlyphCentroidPair pair, GlyphTriangle triangle)
-        {
-            GlyphBoneJoint boneJoint = pair.BoneJoint;
-            if (CanbeTipEdge(triangle.e0, boneJoint))
-            {
-                return triangle.e0;
-            }
-            if (CanbeTipEdge(triangle.e1, boneJoint))
-            {
-                return triangle.e1;
-            }
-            if (CanbeTipEdge(triangle.e2, boneJoint))
-            {
-                return triangle.e2;
-            }
-            //not found
-            return null;
-        }
-        static bool CanbeTipEdge(EdgeLine edge, GlyphBoneJoint compareJoint)
-        {
-            return edge.IsOutside;
-            //
-            //return (edge.IsOutside &&
-            //        edge != compareJoint.RibEndEdgeA &&
-            //        edge != compareJoint.RibEndEdgeB);
-            //{
-            //    return true;
-            //}
-            //return false;
-        }
-        static bool IsOwnerOf(GlyphTriangle p, EdgeLine edge)
-        {
-            return (p.e0 == edge ||
-                    p.e1 == edge ||
-                    p.e2 == edge);
-        }
-        /// <summary>
-        /// find nearest joint that contains tri 
-        /// </summary>
-        /// <param name="pos"></param>
-        /// <param name="tri"></param>
-        /// <returns></returns>
-        public GlyphBoneJoint FindNearestJoint(Vector2 pos, GlyphTriangle tri)
-        {
-            for (int i = bones.Count - 1; i >= 0; --i)
-            {
-                GlyphBoneJoint joint1 = FindJoint(bones[i], pos, tri);
-                if (joint1 != null)
-                {
-                    if (i == 0)
-                    {
-                        //this is the last one 
-                        //so just return
-                        return joint1;
-                    }
-                    else
-                    {
-                        //not the last one
-                        //compare again with sibling joint
-                        GlyphBoneJoint joint2 = FindJoint(bones[i - 1], pos, tri);
-                        if (joint2 == null)
-                        {
-                            return joint1;
-                        }
-                        else
-                        {
-                            //compare distance again
-                            return MyMath.MinDistanceFirst(pos, joint1.Position, joint2.Position) ? joint1 : joint2;
-                        }
-                    }
-                }
-            }
-            //not found
-            return null;
-        }
-        static GlyphBoneJoint FindJoint(GlyphBone b, Vector2 pos, GlyphTriangle tri)
-        {
-            //bone link 2 joint
-            //find what joint 
-
-            GlyphBoneJoint foundOnA = null;
-            GlyphBoneJoint foundOnB = null;
-            if (b.JointA != null && FoundTriOnJoint(b.JointA, tri))
-            {
-                foundOnA = b.JointA;
-            }
-            if (b.JointB != null && FoundTriOnJoint(b.JointB, tri))
-            {
-                foundOnB = b.JointB;
-            }
-
-            if (b.TipEdge != null)
-            {
-
-            }
-
-            if (foundOnA != null && foundOnB != null)
-            {
-                //select 1
-                //nearest distance (pos to joint a) or (pos to joint b) 
-                return MyMath.MinDistanceFirst(pos, foundOnA.Position, foundOnB.Position) ? foundOnA : foundOnB;
-            }
-            else if (foundOnA != null)
-            {
-                return foundOnA;
-            }
-            else if (foundOnB != null)
-            {
-                return foundOnB;
-            }
-            return null;
-        }
-        static bool FoundTriOnJoint(GlyphBoneJoint joint, GlyphTriangle tri)
-        {
-            GlyphCentroidPair ownerCentroidLine = joint.OwnerCentroidLine;
-            if (ownerCentroidLine.p == tri || ownerCentroidLine.q == tri)
-            {
-                //found
-                return true;
-            }
-            return false;
-        }
-    }
-
-
-
-
-    /// <summary>
-    /// a collection of centroid line
-    /// </summary>
-    class CentroidLineHub
-    {
-        readonly GlyphTriangle mainTri;
-        Dictionary<GlyphTriangle, GlyphCentroidLine> _lines = new Dictionary<GlyphTriangle, GlyphCentroidLine>();
-        List<CentroidLineHub> connectedLineHubs;
-        GlyphCentroidLine currentLine;
-        GlyphTriangle currentBranchTri;
-        public CentroidLineHub(GlyphTriangle mainTri)
-        {
-            this.mainTri = mainTri;
-        }
-        public GlyphTriangle MainTriangle
-        {
-            get { return mainTri; }
-        }
-
-        public Vector2 GetCenterPos()
-        {
-            int j = _lines.Count;
-            if (j == 0) return Vector2.Zero;
-            //---------------------------------
-            double cx = 0;
-            double cy = 0;
-            foreach (GlyphCentroidLine branch in _lines.Values)
-            {
-                Vector2 headpos = branch.GetHeadPosition();
-                cx += headpos.X;
-                cy += headpos.Y;
-            }
-            return new Vector2((float)(cx / j), (float)(cy / j));
-        }
-        public void SetBranch(GlyphTriangle tri)
-        {
-            if (currentBranchTri != tri)
-            {
-                //check if we have already create it
-                if (!_lines.TryGetValue(tri, out currentLine))
-                {
-                    //if not found then create new
-                    currentLine = new GlyphCentroidLine(tri);
-                    _lines.Add(tri, currentLine);
-                }
-                currentBranchTri = tri;
-            }
-        }
-        public int BranchCount
-        {
-            get
-            {
-                return _lines.Count;
-            }
-        }
-        public void AddChild(GlyphCentroidPair pair)
-        {
-            //add centroid line to current branch
-            currentLine.AddCentroidLine(pair);
-        }
-        /// <summary>
-        /// analyze each branch for edge information
-        /// </summary>
-        public void AnalyzeEachBranchForEdgeInfo()
-        {
-            foreach (GlyphCentroidLine line in _lines.Values)
-            {
-                line.AnalyzeEdges();
-            }
-        }
-
-        /// <summary>
-        /// create a set of GlyphBone bone
-        /// </summary>
-        /// <param name="newlyCreatedBones"></param>
-        internal void CreateBones(List<GlyphBone> newlyCreatedBones)
-        {
-            foreach (GlyphCentroidLine line in _lines.Values)
-            {
-                List<GlyphCentroidPair> lineList = line.pairs;
-                List<GlyphBone> glyphBones = line.bones;
-                int j = lineList.Count;
-
-                for (int i = 0; i < j; ++i)
-                {
-
-                    //for each centroid line
-                    //create bone that link the joint
-                    GlyphCentroidPair line = lineList[i];
-                    GlyphBoneJoint joint = line.BoneJoint;
-                    //first one
-                    if (joint.TipEdge != null)
-                    {
-                        //has tip point
-                        //create bone that link this joint 
-                        //and the edge
-                        if (i != j - 1)
-                        {
-                            //not the last one
-                            GlyphBone bone = new GlyphBone(joint, joint.TipEdge);
-                            newlyCreatedBones.Add(bone);
-                            glyphBones.Add(bone);
-                        }
-                    }
-
-                    if (i < j - 1)
-                    {
-                        //not the last one 
-                        GlyphCentroidPair nextline = lineList[i + 1];
-                        GlyphBoneJoint nextJoint = nextline.BoneJoint;
-                        GlyphBone bone = new GlyphBone(joint, nextJoint);
-                        newlyCreatedBones.Add(bone);
-                        glyphBones.Add(bone);
-                    }
-                    else
-                    {
-                        //last one
-                        if (joint.TipEdge != null)
-                        {
-                            //not the last one
-                            GlyphBone bone = new GlyphBone(joint, joint.TipEdge);
-                            newlyCreatedBones.Add(bone);
-                            glyphBones.Add(bone);
-                        }
-                        else
-                        {
-                            //glyph 'o' -> no tip point
-                            if (j > 1)
-                            {
-                                GlyphCentroidPair nextline = lineList[0];
-                                GlyphBone bone = new GlyphBone(joint, nextline.BoneJoint);
-                                newlyCreatedBones.Add(bone);
-                                glyphBones.Add(bone);
-                            }
-                        }
-                    }
-                }
-                //----------------
-            }
-        }
-
-        public Dictionary<GlyphTriangle, GlyphCentroidLine> GetAllBranches()
-        {
-            return _lines;
-        }
-
-
-        //--------------------------------------------------------
-        public bool FindBoneJoint(GlyphTriangle tri, Vector2 pos, out GlyphCentroidLine foundOnBranch, out GlyphBoneJoint foundOnJoint)
-        {
-            foreach (GlyphCentroidLine line in _lines.Values)
-            {
-                foundOnJoint = line.FindNearestJoint(pos, tri);
-                if (foundOnJoint != null)
-                {
-                    foundOnBranch = line;
-                    return true;
-                }
-            }
-            foundOnBranch = null;
-            foundOnJoint = null;
-            return false;
-
-        }
-        public void AddLineHubConnection(CentroidLineHub anotherHub)
-        {
-            if (connectedLineHubs == null)
-            {
-                connectedLineHubs = new List<CentroidLineHub>();
-            }
-            connectedLineHubs.Add(anotherHub);
-        }
-
-
-        GlyphCentroidLine anotherCentroidLine;
-        GlyphBoneJoint foundOnJoint;
-
-        public void SetHeadConnnection(GlyphCentroidLine anotherCentroidLine, GlyphBoneJoint foundOnJoint)
-        {
-            this.anotherCentroidLine = anotherCentroidLine;
-            this.foundOnJoint = foundOnJoint;
-        }
-
-
-        public GlyphBoneJoint GetHeadConnectedJoint()
-        {
-            return foundOnJoint;
-        }
-        public List<CentroidLineHub> GetConnectedLineHubs()
-        {
-            return this.connectedLineHubs;
-        }
-
-    }
-
-
-    class GlyphTip
-    {
-        public GlyphTip(GlyphCentroidPair ownerLine, Vector2 pos, EdgeLine edge)
-        {
-            this.OwnerLine = ownerLine;
-            this.Pos = pos;
-            this.Edge = edge;
-        }
-        public GlyphCentroidPair OwnerLine { get; set; }
-        public Vector2 Pos { get; set; }
-        public EdgeLine Edge { get; set; }
-    }
-
     /// <summary>
     /// a link (line) that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
@@ -486,11 +21,11 @@ namespace Typography.Rendering
             //
             //p triangle=> (x0,y0)  (centroid of p)
             //q triangle=> (x1,y1)  (centroid of q)
-            //a centroid line  move from p to q 
-
+            //a centroid line  move from p to q  
             this.p = p;
             this.q = q;
-
+            //1 centroid pair has 1 GlyphBoneJoint
+            //--------------------------------------
 
         }
         public bool SpecialConnectFromLastToFirst { get; set; }
@@ -509,13 +44,6 @@ namespace Typography.Rendering
             //check if q is upper or lower when compare with p
             //check if q is on left side or right side of p
             //then we know the direction
-            //....
-            //p
-            double x0 = p.CentroidX;
-            double y0 = p.CentroidY;
-            //q
-            double x1 = q.CentroidX;
-            double y1 = q.CentroidY;
 
 
 #if DEBUG
@@ -663,13 +191,13 @@ namespace Typography.Rendering
             out EdgeLine tipEdge,
             out EdgeLine notTipEdge)
         {
-            GlyphCentroidPair ownerCentroidLine = ownerEdgeJoint.OwnerCentroidLine;
+            GlyphCentroidPair ownerPair = ownerEdgeJoint.OwnerCentrodPair;
             //p
-            double x0 = ownerCentroidLine.p.CentroidX;
-            double y0 = ownerCentroidLine.p.CentroidY;
+            double x0 = ownerPair.p.CentroidX;
+            double y0 = ownerPair.p.CentroidY;
             //q
-            double x1 = ownerCentroidLine.q.CentroidX;
-            double y1 = ownerCentroidLine.q.CentroidY;
+            double x1 = ownerPair.q.CentroidX;
+            double y1 = ownerPair.q.CentroidY;
 
             LineSlopeKind centroidLineSlope = LineSlopeKind.Other;
             double slopeAngle = 0;
@@ -994,50 +522,50 @@ namespace Typography.Rendering
                 if (knownOutsideEdge.SlopeKind == LineSlopeKind.Vertical)
                 {
                     //TODO: review same side edge (Fan shape)
-                    if (pe_midX < qe_midX)
-                    {
-                        knownOutsideEdge.IsLeftSide = true;
-                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
-                        {
-                            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                        }
-                    }
-                    else
-                    {
-                        //matchingEdgeLine.IsLeftSide = true;
-                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
-                        {
-                            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                        }
-                    }
+                    //if (pe_midX < qe_midX)
+                    //{
+                    //    knownOutsideEdge.IsLeftSide = true;
+                    //    if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
+                    //    {
+                    //        knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    //matchingEdgeLine.IsLeftSide = true;
+                    //    if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
+                    //    {
+                    //        knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                    //    }
+                    //}
                 }
                 else if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
                 {
                     //TODO: review same side edge (Fan shape)
 
-                    if (pe_midY > qe_midY)
-                    {
-                        //p side is upper , q side is lower
-                        if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
-                        {
-                            knownOutsideEdge.IsUpper = true;
-                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                            {
-                                knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                        {
-                            // matchingEdgeLine.IsUpper = true;
-                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                            {
-                                knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                            }
-                        }
-                    }
+                    //if (pe_midY > qe_midY)
+                    //{
+                    //    //p side is upper , q side is lower
+                    //    if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
+                    //    {
+                    //        knownOutsideEdge.IsUpper = true;
+                    //        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+                    //        {
+                    //            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                    //        }
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    if (matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+                    //    {
+                    //        // matchingEdgeLine.IsUpper = true;
+                    //        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+                    //        {
+                    //            knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+                    //        }
+                    //    }
+                    //}
                 }
             }
         }
