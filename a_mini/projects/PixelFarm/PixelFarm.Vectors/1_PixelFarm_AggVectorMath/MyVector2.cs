@@ -168,11 +168,15 @@ namespace PixelFarm.VectorMath
 
         public void Rotate(int degree)
         {
+            //
             double radian = degree * Math.PI / 180.0;
             double sin = Math.Sin(radian);
             double cos = Math.Cos(radian);
             double nx = _x * cos - _y * sin;
             double ny = _x * sin + _y * cos;
+            
+            //TODO review here, we should create a new one 
+
             _x = nx;
             _y = ny;
         }
