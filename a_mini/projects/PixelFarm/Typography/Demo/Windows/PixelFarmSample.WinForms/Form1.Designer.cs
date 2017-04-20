@@ -402,8 +402,6 @@
             // chkDrawRib
             // 
             this.chkDrawRib.AutoSize = true;
-            this.chkDrawRib.Checked = true;
-            this.chkDrawRib.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkDrawRib.Location = new System.Drawing.Point(854, 275);
             this.chkDrawRib.Name = "chkDrawRib";
             this.chkDrawRib.Size = new System.Drawing.Size(75, 17);

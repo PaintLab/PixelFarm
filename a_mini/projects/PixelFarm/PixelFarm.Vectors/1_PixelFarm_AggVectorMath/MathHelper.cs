@@ -195,7 +195,8 @@ namespace PixelFarm.VectorMath
             return DeltaAngle;
         }
 
-
+        const double degToRad = System.Math.PI / 180.0f;
+        const double radToDeg = 180.0f / System.Math.PI;
         /// <summary>
         /// Convert degrees to radians
         /// </summary>
@@ -203,7 +204,7 @@ namespace PixelFarm.VectorMath
         /// <returns>The angle expressed in radians</returns>
         public static double DegreesToRadians(double degrees)
         {
-            const double degToRad = System.Math.PI / 180.0f;
+           
             return degrees * degToRad;
         }
 
@@ -214,7 +215,7 @@ namespace PixelFarm.VectorMath
         /// <returns>The angle expressed in degrees</returns>
         public static double RadiansToDegrees(double radians)
         {
-            const double radToDeg = 180.0f / System.Math.PI;
+           
             return radians * radToDeg;
         }
 

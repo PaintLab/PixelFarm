@@ -1,6 +1,5 @@
 ﻿//MIT, 2017, WinterDev
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 namespace Typography.Rendering
 {
@@ -23,12 +22,11 @@ namespace Typography.Rendering
         public readonly double y1;
 
 
-        Dictionary<EdgeLine, bool> matchingEdges; //TODO: remove this
         //------------------------------
         /// <summary>
-        /// contact to 
+        /// contact to another edge
         /// </summary>
-        public EdgeLine contactToEdge;
+        internal EdgeLine contactToEdge;
         //------------------------------
 
         readonly GlyphPoint _glyphPoint_P;
@@ -41,18 +39,25 @@ namespace Typography.Rendering
 
         public EdgeLine(GlyphPoint p, GlyphPoint q)
         {
+            //------------------------------------
+            //an edge line connects 2 glyph points.
+            //it is created from triangulation process.
+            //
+            //some edge line is either 'INSIDE' edge  OR 'OUTSIDE'.
+            //
+            //------------------------------------           
 
-            //edge  line connect 2 glyph point
 
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;
-
 
             x0 = p.x;
             y0 = p.y;
             x1 = q.x;
             y1 = q.y;
-            //-------------------
+            //-------------------------------
+            //analyze angle and slope kind
+            //-------------------------------
             if (x1 == x0)
             {
                 this.SlopeKind = LineSlopeKind.Vertical;
@@ -76,15 +81,25 @@ namespace Typography.Rendering
             }
         }
 
-
+        public GlyphPoint GlyphPoint_P
+        {
+            get
+            {
+                return _glyphPoint_P;
+            }
+        }
+        public GlyphPoint GlyphPoint_Q
+        {
+            get
+            {
+                return _glyphPoint_Q;
+            }
+        }
         public LineSlopeKind SlopeKind
         {
             get;
             private set;
         }
-
-
-
         public bool IsOutside
         {
             get;
@@ -118,60 +133,7 @@ namespace Typography.Rendering
         {
             return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
         }
-
-        public EdgeLine GetMatchingOutsideEdge()
-        {
-            if (matchingEdges == null) { return null; }
-
-            if (matchingEdges.Count == 1)
-            {
-                foreach (EdgeLine line in matchingEdges.Keys)
-                {
-                    return line;
-                }
-                return null;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public GlyphPoint GlyphPoint_P
-        {
-            get
-            {
-                return _glyphPoint_P;
-            }
-
-        }
-        public GlyphPoint GlyphPoint_Q
-        {
-            get
-            {
-                return _glyphPoint_Q;
-            }
-        }
-        public void AddMatchingOutsideEdge(EdgeLine edgeLine)
-        {
-#if DEBUG
-            if (edgeLine == this) { throw new NotSupportedException(); }
-#endif
-            if (matchingEdges == null)
-            {
-                matchingEdges = new Dictionary<EdgeLine, bool>();
-            }
-            if (!matchingEdges.ContainsKey(edgeLine))
-            {
-                matchingEdges.Add(edgeLine, true);
-            }
-#if DEBUG
-            if (matchingEdges.Count > 1)
-            {
-
-            }
-#endif
-        }
+         
 
         static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);

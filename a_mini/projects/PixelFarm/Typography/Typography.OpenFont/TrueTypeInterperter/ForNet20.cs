@@ -151,15 +151,15 @@ namespace System.Numerics
 #endif
 
 
-        public void Rotate(int degree)
+        public Vector2 Rotate(int degree)
         {
             double radian = degree * Math.PI / 180.0;
             double sin = Math.Sin(radian);
             double cos = Math.Cos(radian);
             double nx = X * cos - Y * sin;
             double ny = X * sin + Y * cos;
-            this.X = (float)nx;
-            this.Y = (float)ny;
+
+            return new Vector2((float)nx, (float)ny);
         }
         public Vector2 NewLength(double newLength)
         {

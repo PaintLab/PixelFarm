@@ -142,6 +142,7 @@ namespace Typography.Rendering
     {
 
         public List<GlyphPart> parts = new List<GlyphPart>();
+
         internal List<GlyphPoint> flattenPoints;
 
         bool analyzed;
@@ -371,9 +372,7 @@ namespace Typography.Rendering
         public GlyphPart PrevPart { get; set; }
         public abstract void Flatten(GlyphPartFlattener flattener);
 
-        public abstract Vector2 GetLastPoint();
-
-
+        public abstract Vector2 GetLastPoint(); 
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
@@ -416,18 +415,11 @@ namespace Typography.Rendering
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
         public EdgeLine horizontalEdge;
-
-
-        //TODO: remove this
-        List<EdgeLine> _edges;
-        internal List<GlyphBoneJoint> _assocJoints; //associatedJoints
-
-
+         
 #if DEBUG
         //for debug only
         public GlyphPart dbugOwnerPart;  //link back to owner part
-        public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
-        Dictionary<GlyphBoneJoint, bool> dbug_jointDic;
+        public Poly2Tri.TriangulationPoint dbugTriangulationPoint; 
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
@@ -461,6 +453,8 @@ namespace Typography.Rendering
         {
             _adjX = _adjY = 0;
         }
+
+
         internal void AddVerticalEdge(EdgeLine v_edge)
         {
             //associated 
@@ -473,54 +467,30 @@ namespace Typography.Rendering
                 this.IsLeftSide = v_edge.IsLeftSide;
             }
 
-            if (_edges == null)
-            {
-                _edges = new List<EdgeLine>();
-            }
-            _edges.Add(v_edge);
+            //if (_edges == null)
+            //{
+            //    _edges = new List<EdgeLine>();
+            //}
+            //_edges.Add(v_edge);
         }
         internal EdgeLine GetMatchingVerticalEdge()
         {
-            if (_edges == null)
-            {
-                return null;
-            }
-            if (_edges.Count == 1)
-            {
-                return _edges[0].GetMatchingOutsideEdge();
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        internal void AddAssociatedBoneJoint(GlyphBoneJoint joint)
-        {
-            if (_assocJoints == null)
-            {
-                _assocJoints = new List<GlyphBoneJoint>();
-#if DEBUG
-                dbug_jointDic = new Dictionary<GlyphBoneJoint, bool>();
-#endif
-            }
-            //
-            //if (_assocJoints.Count > 0)
+            return null;
+            //if (_edges == null)
             //{
-
+            //    return null;
             //}
-#if DEBUG
-            if (dbug_jointDic.ContainsKey(joint))
-            {
-                return;
-            }
-            dbug_jointDic.Add(joint, true);
-#endif
-
-            _assocJoints.Add(joint);
-
+            //if (_edges.Count == 1)
+            //{
+            //    return _edges[0].GetMatchingOutsideEdge();
+            //}
+            //else
+            //{
+            //    return null;
+            //}
         }
 
+ 
         public bool IsLeftSide { get; private set; }
         public bool IsPartOfVerticalEdge { get; private set; }
 #if DEBUG
