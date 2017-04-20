@@ -9,8 +9,12 @@ namespace Typography.Rendering
     class GlyphIntermediateOutline
     {
 
+
         List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
         List<GlyphContour> _contours;
+        //
+        List<CentroidLineHub> lineHubs;
+        List<GlyphBone> outputVerticalLongBones;
 #if DEBUG
         Polygon _dbugpolygon;
 #endif 
@@ -26,16 +30,12 @@ namespace Typography.Rendering
             foreach (DelaunayTriangle delnTri in polygon.Triangles)
             {
                 delnTri.MarkAsActualTriangle();
-                _triangles.Add(new GlyphTriangle(delnTri));
+                _triangles.Add(new GlyphTriangle(delnTri)); //all triangles are created from Triangulation process
             }
 
             //2. 
             Analyze();
         }
-
-
-        List<CentroidLineHub> lineHubs;
-        List<GlyphBone> outputVerticalLongBones;
 
         void Analyze()
         {
