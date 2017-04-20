@@ -79,6 +79,8 @@ namespace Typography.Rendering
 
             //we convert data from GlyphIntermediateOutline to newform (lightweight form).
             //and save it here.
+            //1. joints and its bones
+            //2. bones and its controlled edge
 
             _contours = intermediateOutline.GetContours();
             _longVerticalBones = intermediateOutline.LongVerticalBones;
@@ -124,6 +126,7 @@ namespace Typography.Rendering
         {
             //preserve original outline
             //regenerate outline from original outline
+
 
 
         }

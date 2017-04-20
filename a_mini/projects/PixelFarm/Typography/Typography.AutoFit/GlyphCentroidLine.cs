@@ -803,18 +803,18 @@ namespace Typography.Rendering
 
                                 //both connect with ON-curve point 
                                 //select p?
-                                p_.AddAssociatedBoneJoint(ownerEdgeJoint);
+                                //p_.AddAssociatedBoneJoint(ownerEdgeJoint);
                                 ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(p_.x, p_.y));
                                 break;
                             case 0:
                                 //select p 
-                                p_.AddAssociatedBoneJoint(ownerEdgeJoint);
+                                //p_.AddAssociatedBoneJoint(ownerEdgeJoint);
                                 ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(p_.x, p_.y));
                                 break;
                             //break;
                             case 1:
                                 //select q 
-                                q_.AddAssociatedBoneJoint(ownerEdgeJoint);
+                                //q_.AddAssociatedBoneJoint(ownerEdgeJoint);
                                 ownerEdgeJoint.AddRibEndAt(contactEdge, new Vector2(q_.x, q_.y));
                                 break;
                             //break;
