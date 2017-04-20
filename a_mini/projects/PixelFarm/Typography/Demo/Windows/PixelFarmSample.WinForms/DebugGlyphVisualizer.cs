@@ -296,7 +296,7 @@ namespace SampleWinForms.UI
             EdgeLine p_contactEdge = joint._p_contact_edge;
             //mid point
             Vector2 jointPos = joint.Position * pxscale;//scaled joint pos
-            painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow); 
+            painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);
             if (joint.TipPoint != Vector2.Zero)
             {
                 EdgeLine tipEdge = joint.TipEdge;
@@ -426,7 +426,7 @@ namespace SampleWinForms.UI
                 }
             }
 
-            if (bone.hasCutPointOnEdge)
+            if (bone.PerpendicularEdge != null)
             {
                 Vector2 midBone = bone.GetMidPoint() * pxscale;
                 Vector2 cut_point = bone.cutPoint_onEdge * pxscale;

@@ -17,6 +17,9 @@ namespace Typography.Rendering
     /// </summary>
     public class GlyphBone
     {
+
+
+
         public readonly EdgeLine TipEdge;
         public readonly GlyphBoneJoint JointA;
         public readonly GlyphBoneJoint JointB;
@@ -24,7 +27,6 @@ namespace Typography.Rendering
         double _len;
 
         public Vector2 cutPoint_onEdge;
-        public bool hasCutPointOnEdge;
 
         public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
         {
@@ -56,7 +58,10 @@ namespace Typography.Rendering
                 EdgeLine outsideEdge = GetFirstFoundOutsidEdge(commonTri);
                 if (outsideEdge != null)
                 {
-                    hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
+                    if (MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge))
+                    {
+                        PerpendicularEdge = outsideEdge;
+                    }
                 }
             }
             else
@@ -82,9 +87,23 @@ namespace Typography.Rendering
             EdgeLine outsideEdge = FindOutsideEdge(a, tipEdge);
             if (outsideEdge != null)
             {
-                hasCutPointOnEdge = MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
+                if (MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge))
+                {
+                    PerpendicularEdge = outsideEdge;
+                }
             }
         }
+
+        /// <summary>
+        /// touch edge
+        /// </summary>
+        public EdgeLine PerpendicularEdge
+        {
+            get;
+            internal set;
+        }
+
+
         static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
         {
             GlyphCentroidPair ownerCentroid_A = a.OwnerCentrodPair;
