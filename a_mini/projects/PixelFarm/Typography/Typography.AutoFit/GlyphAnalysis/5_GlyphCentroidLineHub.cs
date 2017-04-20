@@ -255,7 +255,7 @@ namespace Typography.Rendering
             GlyphCentroidPair ownerPair = joint.OwnerCentrodPair;
             return ownerPair.p == tri || ownerPair.q == tri;
         }
-    } 
+    }
 
     /// <summary>
     /// a collection of centroid line
@@ -331,7 +331,7 @@ namespace Typography.Rendering
         }
 
         /// <summary>
-        /// create a set of GlyphBone bone
+        /// create a set of GlyphBone
         /// </summary>
         /// <param name="newlyCreatedBones"></param>
         public void CreateBones(List<GlyphBone> newlyCreatedBones)
@@ -344,9 +344,9 @@ namespace Typography.Rendering
 
                 for (int i = 0; i < j; ++i)
                 {
+                    //for each GlyphCentroidPair                    
+                    //create bone that link the GlyphBoneJoint of the pair.
 
-                    //for each centroid line
-                    //create bone that link the joint
                     GlyphCentroidPair pair = lineList[i];
                     GlyphBoneJoint joint = pair.BoneJoint;
                     //first one
@@ -468,5 +468,5 @@ namespace Typography.Rendering
         public EdgeLine Edge { get; set; }
     }
 
-  
+
 }

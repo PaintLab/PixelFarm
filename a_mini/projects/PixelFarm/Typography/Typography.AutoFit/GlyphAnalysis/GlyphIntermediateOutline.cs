@@ -25,7 +25,9 @@ namespace Typography.Rendering
             this._dbugpolygon = polygon; //for debug only ***
             EdgeLine.s_dbugTotalId = 0;//reset
 #endif
-
+            //--------------------
+            //analyze ....
+            //--------------------
             //1. Generate GlyphTriangle triangle from DelaunayTriangle 
             foreach (DelaunayTriangle delnTri in polygon.Triangles)
             {
@@ -33,13 +35,14 @@ namespace Typography.Rendering
                 _triangles.Add(new GlyphTriangle(delnTri)); //all triangles are created from Triangulation process
             }
 
-            //2. 
-            Analyze();
+            //2. create centroid line hubs
+            CreateCentroidLineHubs();
+            //3. create bones 
+            CreateBones();
         }
 
-        void Analyze()
+        void CreateCentroidLineHubs()
         {
-
             //----------------------------
             //create centroid line hub
             //----------------------------
@@ -129,43 +132,39 @@ namespace Typography.Rendering
             lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values.Count);
             foreach (CentroidLineHub hub in centroidLineHubs.Values)
             {
+                //we must analyze all info before create bones?
                 hub.AnalyzeEachBranchForEdgeInfo();
                 lineHubs.Add(hub);
             }
-            //----------------------------------------
-            //link each hub start point
-            //----------------------------------------
+        }
+        void CreateBones()
+        {
             List<GlyphBone> newBones = new List<GlyphBone>();
-            foreach (CentroidLineHub hub in centroidLineHubs.Values)
-            {
-                //create bone and add into newBones list
-                hub.CreateBones(newBones);
-            }
-            //----------------------------------------
-
-
-            //----------------------------------------
             int lineHubCount = lineHubs.Count;
             for (int i = 0; i < lineHubCount; ++i)
             {
-                //after create bone
+                //create bones and collect back to newBones                
+                lineHubs[i].CreateBones(newBones);
+            }
+            //----------------------------------------           
+            for (int i = 0; i < lineHubCount; ++i)
+            {
+                //after create bone ***
                 //link each hub to proper bone
                 FindStartHubLinkConnection(lineHubs[i], lineHubs);
             }
-            //------------- 
+
+            //----------------------------------------
             outputVerticalLongBones = new List<GlyphBone>();
             AnalyzeBoneLength(newBones, outputVerticalLongBones);
-            //------------- 
             //create perpendicular line link from control nodes to glyph bone 
             //----------------------------------------
             outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
             //----------------------------------------
             //iterate each contour's point again
-            //create relation 
-
+            //create relation  
             //----------------------------------------
         }
-
         public List<GlyphBone> LongVerticalBones
         {
             get { return this.outputVerticalLongBones; }
@@ -177,19 +176,18 @@ namespace Typography.Rendering
             System.Numerics.Vector2 hubHeadPos = analyzingHub.GetCenterPos();
             for (int i = 0; i < j; ++i)
             {
-
-                CentroidLineHub hub = hubs[i];
-                if (hub == analyzingHub)
+                CentroidLineHub otherHub = hubs[i];
+                if (otherHub == analyzingHub)
                 {
                     continue;
                 }
                 GlyphCentroidLine foundOnBr;
                 GlyphBoneJoint foundOnJoint;
 
-                if (hub.FindBoneJoint(analyzingHub.MainTriangle, hubHeadPos, out foundOnBr, out foundOnJoint))
+                if (otherHub.FindBoneJoint(analyzingHub.MainTriangle, hubHeadPos, out foundOnBr, out foundOnJoint))
                 {
                     //found
-                    hub.AddLineHubConnection(analyzingHub);
+                    otherHub.AddLineHubConnection(analyzingHub);
                     //
                     analyzingHub.SetHeadConnnection(foundOnBr, foundOnJoint);
                     return;
