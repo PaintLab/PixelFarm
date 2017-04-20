@@ -26,7 +26,6 @@ namespace Typography.Rendering
             {
                 this.a = a;
                 this.b = b;
-
             }
         }
         class StrokeJoint
@@ -86,7 +85,8 @@ namespace Typography.Rendering
             _longVerticalBones = intermediateOutline.LongVerticalBones; //analyzed long bones
             LeftControlPosX = intermediateOutline.LeftControlPos; //left control position 
 
-            //
+
+
             List<CentroidLineHub> centroidLineHubs = intermediateOutline.GetCentroidLineHubs();
             _strokeLineHub = new List<StrokeLineHub>(centroidLineHubs.Count);
             //

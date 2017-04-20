@@ -112,8 +112,7 @@ namespace Typography.Rendering
                     }
                 }
             }
-            //-------------------------------------------------
-
+            //------------------------------------------------- 
             if (triCount > 2)
             {
                 //connect the last tri to the first tri
