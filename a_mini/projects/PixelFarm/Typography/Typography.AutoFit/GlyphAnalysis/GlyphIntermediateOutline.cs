@@ -13,8 +13,8 @@ namespace Typography.Rendering
         List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
         List<GlyphContour> _contours;
         //
-        List<CentroidLineHub> lineHubs;
-        List<GlyphBone> outputVerticalLongBones;
+        List<CentroidLineHub> _lineHubs;
+        List<GlyphBone> _outputVerticalLongBones;
 #if DEBUG
         Polygon _dbugpolygon;
 #endif 
@@ -37,7 +37,9 @@ namespace Typography.Rendering
 
             //2. create centroid line hubs
             CreateCentroidLineHubs();
-            //3. create bones 
+            //3. create bone joints
+            CreateBoneJoints();
+            //4. create bones 
             CreateBones();
         }
 
@@ -127,40 +129,39 @@ namespace Typography.Rendering
                     currentCentroidLineHub.AddChild(new GlyphCentroidPair(lastTri, firstTri) { SpecialConnectFromLastToFirst = true });
                 }
             }
+            _lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values);
+        }
+
+        void CreateBoneJoints()
+        {
             //----------------------------------------
-            //collect all CentroidLineHub into a lineHubs list
-            lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values.Count);
-            foreach (CentroidLineHub hub in centroidLineHubs.Values)
-            {
-                //we must analyze all info before create bones?
-                hub.CreateBoneJoints();
-                lineHubs.Add(hub);
-            }
-            //----------------------------------------
-            int lineHubCount = lineHubs.Count;
+            int lineHubCount = _lineHubs.Count;
             for (int i = 0; i < lineHubCount; ++i)
             {
-                //after create bone ***
-                //link each hub to proper bone
-                FindStartHubLinkConnection(lineHubs[i], lineHubs);
+                _lineHubs[i].CreateBoneJoints();
+            }
+            for (int i = 0; i < lineHubCount; ++i)
+            {
+                //after create bone joint ***                 
+                LinkEachLineHubTogether(_lineHubs[i], _lineHubs);
             }
         }
         void CreateBones()
         {
             List<GlyphBone> newBones = new List<GlyphBone>();
 
-            int lineHubCount = lineHubs.Count;
+            int lineHubCount = _lineHubs.Count;
             for (int i = 0; i < lineHubCount; ++i)
             {
                 //create bones and collect back to newBones                
-                lineHubs[i].CreateBones(newBones);
+                _lineHubs[i].CreateBones(newBones);
             }
             //----------------------------------------
-            outputVerticalLongBones = new List<GlyphBone>();
-            AnalyzeBoneLength(newBones, outputVerticalLongBones);
+            _outputVerticalLongBones = new List<GlyphBone>();
+            AnalyzeBoneLength(newBones, _outputVerticalLongBones);
             //create perpendicular line link from control nodes to glyph bone 
             //----------------------------------------
-            outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
+            _outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
             //----------------------------------------
             //iterate each contour's point again
             //create relation  
@@ -168,7 +169,7 @@ namespace Typography.Rendering
         }
         public List<GlyphBone> LongVerticalBones
         {
-            get { return this.outputVerticalLongBones; }
+            get { return this._outputVerticalLongBones; }
         }
 
         /// <summary>
@@ -176,7 +177,7 @@ namespace Typography.Rendering
         /// </summary>
         /// <param name="analyzingHub"></param>
         /// <param name="hubs"></param>
-        static void FindStartHubLinkConnection(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
+        static void LinkEachLineHubTogether(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
         {
             int j = hubs.Count;
             System.Numerics.Vector2 hubHeadPos = analyzingHub.GetCenterPos();
@@ -260,7 +261,7 @@ namespace Typography.Rendering
         }
         public List<CentroidLineHub> GetCentroidLineHubs()
         {
-            return this.lineHubs;
+            return this._lineHubs;
         }
 
         public List<GlyphContour> GetContours()
