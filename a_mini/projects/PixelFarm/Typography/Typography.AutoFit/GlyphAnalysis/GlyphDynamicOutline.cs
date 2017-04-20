@@ -402,7 +402,7 @@ namespace Typography.Rendering
                     float new_x = RoundToNearestX((float)p_x);
                     p_x = new_x;
                     //adjust right-side vertical edge
-                    EdgeLine rightside = p.GetMatchingVerticalEdge();
+                    
                 }
 
                 genPoints.Add(new Vector2((float)p_x, (float)p_y));

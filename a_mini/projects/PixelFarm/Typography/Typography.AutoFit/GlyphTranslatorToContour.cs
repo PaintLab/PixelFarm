@@ -173,12 +173,19 @@ namespace Typography.Rendering
             int j = parts.Count;
             //---------------
             List<GlyphPoint> prevResult = flattener.Result;
-            flattenPoints = flattener.Result = new List<GlyphPoint>();
+            List<GlyphPoint> tmpFlattenPoints = flattenPoints = flattener.Result = new List<GlyphPoint>();
             //start ...
             for (int i = 0; i < j; ++i)
             {
                 //flatten each part
                 parts[i].Flatten(flattener);
+            }
+
+            //assign number for all glyph point in this contour
+            int pointCount = tmpFlattenPoints.Count;
+            for (int i = 0; i < pointCount; ++i)
+            {
+                tmpFlattenPoints[i].GlyphPointNo = flattener.GetNewGlyphPointId();
             }
 
             flattener.Result = prevResult;
@@ -256,6 +263,7 @@ namespace Typography.Rendering
     {
         List<GlyphPoint> points;
 
+        int glyphPointIdCount;
         public GlyphPartFlattener()
         {
             this.NSteps = 2;//default
@@ -266,7 +274,14 @@ namespace Typography.Rendering
             set { points = value; }
         }
         public int NSteps { get; set; }
-
+        internal void ResetTotalGlyphPointId()
+        {
+            glyphPointIdCount = 0;
+        }
+        internal int GetNewGlyphPointId()
+        {
+            return glyphPointIdCount++;
+        }
         void AddPoint(float x, float y, PointKind kind)
         {
             var p = new GlyphPoint(x, y, kind);
@@ -372,7 +387,7 @@ namespace Typography.Rendering
         public GlyphPart PrevPart { get; set; }
         public abstract void Flatten(GlyphPartFlattener flattener);
 
-        public abstract Vector2 GetLastPoint(); 
+        public abstract Vector2 GetLastPoint();
 #if DEBUG
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
@@ -408,20 +423,23 @@ namespace Typography.Rendering
         public readonly float y;
         public readonly PointKind kind;
 
+        /// <summary>
+        /// glyph pointnumber
+        /// </summary>
+        int _glyphPointNo;
         // 
         float _adjX;
         float _adjY;
         //
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
-        public EdgeLine horizontalEdge;
-         
+
+
 #if DEBUG
         //for debug only
         public GlyphPart dbugOwnerPart;  //link back to owner part
-        public Poly2Tri.TriangulationPoint dbugTriangulationPoint; 
-        static int dbugTotalId;
-        public readonly int dbugId = dbugTotalId++;
+        public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
+
 #endif
         public GlyphPoint(float x, float y, PointKind kind)
         {
@@ -429,10 +447,8 @@ namespace Typography.Rendering
             this.y = y;
             this.kind = kind;
         }
-        public bool IsEqualValues(GlyphPoint another)
-        {
-            return x == another.x && y == another.y;
-        }
+
+
         public float AdjustedY
         {
             get { return _adjY; }
@@ -449,6 +465,13 @@ namespace Typography.Rendering
                 _adjX = value;
             }
         }
+
+        internal int GlyphPointNo
+        {
+            get { return this._glyphPointNo; }
+            set { this._glyphPointNo = value; }
+        }
+
         internal void ClearAdjustValues()
         {
             _adjX = _adjY = 0;
@@ -473,30 +496,15 @@ namespace Typography.Rendering
             //}
             //_edges.Add(v_edge);
         }
-        internal EdgeLine GetMatchingVerticalEdge()
-        {
-            return null;
-            //if (_edges == null)
-            //{
-            //    return null;
-            //}
-            //if (_edges.Count == 1)
-            //{
-            //    return _edges[0].GetMatchingOutsideEdge();
-            //}
-            //else
-            //{
-            //    return null;
-            //}
-        }
+        
 
- 
+
         public bool IsLeftSide { get; private set; }
         public bool IsPartOfVerticalEdge { get; private set; }
 #if DEBUG
         public override string ToString()
         {
-            return dbugId + " :" + ((AdjustedY != 0) ? "***" : "") +
+            return this._glyphPointNo + " :" + ((AdjustedY != 0) ? "***" : "") +
                     (x + "," + y + " " + kind.ToString());
         }
 #endif 

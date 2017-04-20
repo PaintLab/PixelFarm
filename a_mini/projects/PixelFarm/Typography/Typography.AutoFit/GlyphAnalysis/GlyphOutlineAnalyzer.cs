@@ -36,6 +36,7 @@ namespace Typography.Rendering
             {
                 //3.before create dynamic contour we must flatten data inside the contour 
                 _glyphFlattener.NSteps = 2;
+                _glyphFlattener.ResetTotalGlyphPointId();
                 for (int i = 0; i < cnt_count; ++i)
                 {
                     // (flatten each contour with the flattener)    
@@ -191,7 +192,7 @@ namespace Typography.Rendering
                             //TODO: review here
                             p.isPartOfHorizontalEdge = true;
                             p.isUpperSide = edge.IsUpper;
-                            p.horizontalEdge = edge;
+                            //p.horizontalEdge = edge;
                         }
 
                         GlyphPoint q = edge.GlyphPoint_Q;
@@ -199,7 +200,7 @@ namespace Typography.Rendering
                         {
                             //TODO: review here
                             q.isPartOfHorizontalEdge = true;
-                            q.horizontalEdge = edge;
+                            //q.horizontalEdge = edge;
                             q.isUpperSide = edge.IsUpper;
                         }
                     }
@@ -222,7 +223,7 @@ namespace Typography.Rendering
                         }
                     }
                     break;
-            } 
+            }
         }
         //============================
 
