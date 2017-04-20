@@ -42,17 +42,23 @@ namespace Typography.Rendering
         public EdgeLine(GlyphPoint p, GlyphPoint q)
         {
 
-            //edge  line connect 2 glyph point
+            //an edge line connects 2 glyph points.
+            //it is created from triangulation process.
+            //
+            //some edge line is either 'INSIDE' edge  OR 'OUTSIDE'.
+            //
+
 
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;
-
 
             x0 = p.x;
             y0 = p.y;
             x1 = q.x;
             y1 = q.y;
-            //-------------------
+            //-------------------------------
+            //analyze angle and slope kind
+            //-------------------------------
             if (x1 == x0)
             {
                 this.SlopeKind = LineSlopeKind.Vertical;
@@ -76,15 +82,25 @@ namespace Typography.Rendering
             }
         }
 
-
+        public GlyphPoint GlyphPoint_P
+        {
+            get
+            {
+                return _glyphPoint_P;
+            } 
+        }
+        public GlyphPoint GlyphPoint_Q
+        {
+            get
+            {
+                return _glyphPoint_Q;
+            }
+        }
         public LineSlopeKind SlopeKind
         {
             get;
             private set;
-        }
-
-
-
+        } 
         public bool IsOutside
         {
             get;
@@ -137,21 +153,7 @@ namespace Typography.Rendering
             }
         }
 
-        public GlyphPoint GlyphPoint_P
-        {
-            get
-            {
-                return _glyphPoint_P;
-            }
-
-        }
-        public GlyphPoint GlyphPoint_Q
-        {
-            get
-            {
-                return _glyphPoint_Q;
-            }
-        }
+       
         public void AddMatchingOutsideEdge(EdgeLine edgeLine)
         {
 #if DEBUG

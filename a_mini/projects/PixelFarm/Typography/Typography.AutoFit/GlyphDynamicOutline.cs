@@ -97,16 +97,16 @@ namespace Typography.Rendering
                 //a line hub contains many centriod branches                                 
                 StrokeLineHub internalLineHub = new StrokeLineHub();
                 var branchList = new List<StrokeLine>(branches.Count);
-                foreach (GlyphCentroidLine branch in branches.Values)
+                foreach (GlyphCentroidLine line in branches.Values)
                 {
                     //create a stroke line
                     StrokeLine strokeLine = new StrokeLine();
                     //head of this branch
-                    Vector2 brHead = branch.GetHeadPosition();
+                    Vector2 brHead = line.GetHeadPosition();
                     strokeLine._head = brHead;
 
                     //a branch contains small centroid line segments.
-                    CreateStrokeSegments(branch, strokeLine);
+                    CreateStrokeSegments(line, strokeLine);
                     //draw  a line link to centroid of target triangle
                     //WalkFromBranchHeadToHubCenter(brHead, hubCenter);
 
@@ -117,6 +117,11 @@ namespace Typography.Rendering
                 internalLineHub._headConnectedJoint = lineHub.GetHeadConnectedJoint();
                 _strokeLineHub.Add(internalLineHub);
             }
+
+            //---------------------
+            //interate all contour
+
+            //
         }
         /// <summary>
         /// set new stroke width for regenerated glyph

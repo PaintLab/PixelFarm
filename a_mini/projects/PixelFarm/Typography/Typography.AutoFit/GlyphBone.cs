@@ -50,7 +50,7 @@ namespace Typography.Rendering
                 return _p_contact_edge.GetMidPoint();
             }
         }
-        internal GlyphCentroidPair OwnerCentroidLine
+        internal GlyphCentroidPair OwnerCentrodPair
         {
             get { return _owner; }
         }
@@ -93,8 +93,8 @@ namespace Typography.Rendering
         {
             this._selectedTipEdge = tipEdge;
             this._tipPoint = tipEdge.GetMidPoint();
-        } 
-        public Vector2 TipPoint { get { return _tipPoint; } } 
+        }
+        public Vector2 TipPoint { get { return _tipPoint; } }
         public EdgeLine TipEdge { get { return _selectedTipEdge; } }
 
         public void AddAssociatedGlyphPoint(GlyphPoint glyphPoint)
@@ -193,7 +193,7 @@ namespace Typography.Rendering
         }
         static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
         {
-            GlyphCentroidPair ownerCentroid_A = a.OwnerCentroidLine;
+            GlyphCentroidPair ownerCentroid_A = a.OwnerCentrodPair;
             if (ContainsEdge(ownerCentroid_A.p, tipEdge))
             {
                 return FindAnotherOutsideEdge(ownerCentroid_A.p, tipEdge);
@@ -217,15 +217,15 @@ namespace Typography.Rendering
         }
         static GlyphTriangle FindCommonTriangle(GlyphBoneJoint a, GlyphBoneJoint b)
         {
-            GlyphCentroidPair ownerCentroid_A = a.OwnerCentroidLine;
-            GlyphCentroidPair ownerCentroid_B = b.OwnerCentroidLine;
-            if (ownerCentroid_A.p == ownerCentroid_B.p || ownerCentroid_A.p == ownerCentroid_B.q)
+            GlyphCentroidPair centroid_pair_A = a.OwnerCentrodPair;
+            GlyphCentroidPair centroid_pair_B = b.OwnerCentrodPair;
+            if (centroid_pair_A.p == centroid_pair_B.p || centroid_pair_A.p == centroid_pair_B.q)
             {
-                return ownerCentroid_A.p;
+                return centroid_pair_A.p;
             }
-            else if (ownerCentroid_A.q == ownerCentroid_B.p || ownerCentroid_A.q == ownerCentroid_B.q)
+            else if (centroid_pair_A.q == centroid_pair_B.p || centroid_pair_A.q == centroid_pair_B.q)
             {
-                return ownerCentroid_A.q;
+                return centroid_pair_A.q;
             }
             else
             {

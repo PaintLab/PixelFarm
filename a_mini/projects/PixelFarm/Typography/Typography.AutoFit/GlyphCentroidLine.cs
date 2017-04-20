@@ -246,8 +246,8 @@ namespace Typography.Rendering
         }
         static bool FoundTriOnJoint(GlyphBoneJoint joint, GlyphTriangle tri)
         {
-            GlyphCentroidPair ownerCentroidLine = joint.OwnerCentroidLine;
-            if (ownerCentroidLine.p == tri || ownerCentroidLine.q == tri)
+            GlyphCentroidPair ownerPair = joint.OwnerCentrodPair;
+            if (ownerPair.p == tri || ownerPair.q == tri)
             {
                 //found
                 return true;
@@ -663,13 +663,13 @@ namespace Typography.Rendering
             out EdgeLine tipEdge,
             out EdgeLine notTipEdge)
         {
-            GlyphCentroidPair ownerCentroidLine = ownerEdgeJoint.OwnerCentroidLine;
+            GlyphCentroidPair ownerPair = ownerEdgeJoint.OwnerCentrodPair;
             //p
-            double x0 = ownerCentroidLine.p.CentroidX;
-            double y0 = ownerCentroidLine.p.CentroidY;
+            double x0 = ownerPair.p.CentroidX;
+            double y0 = ownerPair.p.CentroidY;
             //q
-            double x1 = ownerCentroidLine.q.CentroidX;
-            double y1 = ownerCentroidLine.q.CentroidY;
+            double x1 = ownerPair.q.CentroidX;
+            double y1 = ownerPair.q.CentroidY;
 
             LineSlopeKind centroidLineSlope = LineSlopeKind.Other;
             double slopeAngle = 0;

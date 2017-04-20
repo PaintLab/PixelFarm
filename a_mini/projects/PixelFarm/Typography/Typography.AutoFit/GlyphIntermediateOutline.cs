@@ -162,7 +162,11 @@ namespace Typography.Rendering
             //create perpendicular line link from control nodes to glyph bone 
             //----------------------------------------
             outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
+            //----------------------------------------
+            //iterate each contour's point again
+            //create relation 
 
+            //----------------------------------------
         }
 
         public List<GlyphBone> LongVerticalBones
