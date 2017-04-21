@@ -132,9 +132,9 @@ namespace Typography.Rendering
         {
             //preserve original outline
             //regenerate outline from original outline
-           // if (_relativeStrokeWidth == relativeStrokeWidth) { return; }
+            // if (_relativeStrokeWidth == relativeStrokeWidth) { return; }
             //----------------------------------------------------------
-
+            this._relativeStrokeWidth = relativeStrokeWidth;
             List<GlyphContour> cnts = _contours;
             int j = cnts.Count;
             for (int i = 0; i < j; ++i)

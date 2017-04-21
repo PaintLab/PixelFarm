@@ -85,16 +85,26 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 GlyphContour cnt = cnts[i];
-                List<GlyphPoint> pnts = cnt.flattenPoints;
-                int lim = pnts.Count - 1;
-                for (int m = 0; m < lim; ++m)
+                List<GlyphEdge> edgeLines = cnt.edgeLines;
+                int n = edgeLines.Count;
+                for (int m = 0; m < n; ++m)
                 {
-                    GlyphPoint p = pnts[m];
-                    GlyphPoint q = pnts[m + 1];
-                    // OnGlyphEdge(p.newX, p.newY, q.newX, q.newY);
-                    OnGlyphEdge(p.x, p.y, q.x, q.y);
-                    OnGlyphEdgeN(p.newX, p.newY, q.newX, q.newY);
+                    GlyphEdge e = edgeLines[m];
+                    Vector2 cut_p = e.CutPoint_P;
+                    Vector2 cut_q = e.CutPoint_Q;
+                    OnGlyphEdgeN(cut_p.X, cut_p.Y, cut_q.X, cut_p.Y);
                 }
+
+                //List<GlyphPoint> pnts = cnt.flattenPoints;
+                //int lim = pnts.Count - 1;
+                //for (int m = 0; m < lim; ++m)
+                //{
+                //    GlyphPoint p = pnts[m];
+                //    GlyphPoint q = pnts[m + 1];
+                //    // OnGlyphEdge(p.newX, p.newY, q.newX, q.newY);
+                //    OnGlyphEdge(p.x, p.y, q.x, q.y);
+                //    OnGlyphEdgeN(p.newX, p.newY, q.newX, q.newY);
+                //}
 
 
             }

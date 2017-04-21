@@ -528,6 +528,14 @@ namespace Typography.Rendering
             //---------------------------------------------
         }
 
+        public Vector2 CutPoint_P
+        {
+            get { return new Vector2(_P.newX, _P.newY); }
+        }
+        public Vector2 CutPoint_Q
+        {
+            get { return new Vector2(_Q.newX, _Q.newY); }
+        }
     }
 
 }
