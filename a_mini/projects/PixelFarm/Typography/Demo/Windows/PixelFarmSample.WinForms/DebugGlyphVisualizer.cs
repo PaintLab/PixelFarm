@@ -174,6 +174,7 @@ namespace SampleWinForms.UI
             {
                 GlyphDynamicOutline dynamicOutline = builder.LatestGlyphFitOutline;
                 WalkDynamicOutline(painter, dynamicOutline, scale, DrawRegenerateOutline);
+
             }
 
         }
@@ -474,7 +475,9 @@ namespace SampleWinForms.UI
             //    PixelFarm.Drawing.Color.Green);
 
             painter.FillRectLBWH(x0 * pxscale, y0 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
-            painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
+            //painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
+
+            _infoView.ShowGlyphEdge(x0, y0, x1, y1);
         }
         protected override void OnCentroidLine(double px, double py, double qx, double qy)
         {

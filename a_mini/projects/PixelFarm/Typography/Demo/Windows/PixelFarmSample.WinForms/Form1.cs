@@ -130,7 +130,7 @@ namespace SampleWinForms
             chkDrawTriangles.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
-            chkDrawRib.CheckedChanged += (s, e) => UpdateRenderOutput();
+           
 
             //----------
             txtGlyphBoneCount.KeyDown += (s, e) =>
