@@ -388,28 +388,47 @@ namespace SampleWinForms.UI
                     midBone.X, midBone.Y,
                     v2.X, v2.Y,
                     PixelFarm.Drawing.Color.Red);
+
+                //----------------------                
+                //create green point at mid of GlyphEdge
+                Vector2 midEdge = bone.PerpendicularEdge.GetMidPoint();
+                painter.FillRectLBWH(midEdge.X * pxscale, midEdge.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Green);
+
+                //----------------------                
+                //Vector2 delta3 = bone.cutPoint_onEdge - bone.GetMidPoint();
+                //delta3 = delta3.NewLength(100);// currentLen * newRelativeLen * 0.5);
+                //Vector2 midEdge2 = midEdge + delta3;
+                //painter.FillRectLBWH(midEdge2.X * pxscale, midEdge2.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
+                //painter.Line(midEdge.X * pxscale, midEdge.Y * pxscale,
+                //     midEdge2.X * pxscale, midEdge2.Y * pxscale, PixelFarm.Drawing.Color.Blue);
+                //----------------------
+
+
+                //draw marker at midEdge
+                //create a new perpendicular line
+                //
                 //create a new perpendicular line
                 //------------------------------------------
                 //create a line that parallel with the bone
-                Vector2 boneVector = bone.GetBoneVector();
-                var boneLen = boneVector.Length();
-                Vector2 boneVec2 = boneVector.NewLength(boneLen * 0.5);
-                Vector2 v2up = v2 + boneVec2;
-                Vector2 v2down = v2 - boneVec2;
+                //Vector2 boneVector = bone.GetBoneVector();
+                //var boneLen = boneVector.Length();
+                //Vector2 boneVec2 = boneVector.NewLength(boneLen * 0.5);
+                //Vector2 v2up = v2 + boneVec2;
+                //Vector2 v2down = v2 - boneVec2;
 
 
-                //test only
-                painter.Line(
-                   v2.X, v2.Y,
-                   v2up.X, v2up.Y,
-                   PixelFarm.Drawing.Color.Red);
+                ////test only
+                //painter.Line(
+                //   v2.X, v2.Y,
+                //   v2up.X, v2up.Y,
+                //   PixelFarm.Drawing.Color.Red);
 
-                //test only
-                painter.Line(
-                   v2.X, v2.Y,
-                   v2down.X, v2down.Y,
-                   PixelFarm.Drawing.Color.Red);
-                //------------------------------------------
+                ////test only
+                //painter.Line(
+                //   v2.X, v2.Y,
+                //   v2down.X, v2down.Y,
+                //   PixelFarm.Drawing.Color.Red);
+                //////------------------------------------------
 
             }
 
@@ -474,7 +493,7 @@ namespace SampleWinForms.UI
             //    x1 * pxscale, y1 * pxscale,
             //    PixelFarm.Drawing.Color.Green);
 
-            painter.FillRectLBWH(x0 * pxscale, y0 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
+            painter.FillRectLBWH(x0 * pxscale, y0 * pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
             //painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
 
             _infoView.ShowGlyphEdge(x0, y0, x1, y1);
@@ -541,14 +560,14 @@ namespace SampleWinForms.UI
 #endif
             dynamicOutline.Walk();
         }
-        void DrawBoneRib(CanvasPainter painter, Vector2 vec, GlyphBoneJoint joint, float pixelScale)
-        {
-            Vector2 jointPos = joint.Position;
-            painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4, PixelFarm.Drawing.Color.Green);
-            painter.Line(jointPos.X * pixelScale, jointPos.Y * pixelScale,
-                vec.X * pixelScale,
-                vec.Y * pixelScale, PixelFarm.Drawing.Color.White);
-        }
+        //void DrawBoneRib(CanvasPainter painter, Vector2 vec, GlyphBoneJoint joint, float pixelScale)
+        //{
+        //    Vector2 jointPos = joint.Position;
+        //    painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4, PixelFarm.Drawing.Color.Green);
+        //    painter.Line(jointPos.X * pixelScale, jointPos.Y * pixelScale,
+        //        vec.X * pixelScale,
+        //        vec.Y * pixelScale, PixelFarm.Drawing.Color.White);
+        //}
 
 #endif
 
