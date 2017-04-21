@@ -173,7 +173,7 @@ namespace SampleWinForms.UI
             if (DrawDynamicOutline)
             {
                 GlyphDynamicOutline dynamicOutline = builder.LatestGlyphFitOutline;
-                DynamicOutline(painter, dynamicOutline, scale, DrawRegenerateOutline);
+                WalkDynamicOutline(painter, dynamicOutline, scale, DrawRegenerateOutline);
             }
 
         }
@@ -194,7 +194,7 @@ namespace SampleWinForms.UI
             get { return builder.LeftXControl; }
         }
 
-        public bool DrawRibs { get; set; }
+
         public bool DrawTrianglesAndEdges { get; set; }
         public bool DrawDynamicOutline { get; set; }
         public bool DrawRegenerateOutline { get; set; }
@@ -457,10 +457,24 @@ namespace SampleWinForms.UI
         protected override void OnGlyphEdge(float x0, float y0, float x1, float y1)
         {
             float pxscale = this._pxscale;
-            painter.Line(
-                x0 * pxscale, y0 * pxscale,
-                x1 * pxscale, y1 * pxscale,
-                PixelFarm.Drawing.Color.Green);
+            //painter.Line(
+            //    x0 * pxscale, y0 * pxscale,
+            //    x1 * pxscale, y1 * pxscale,
+            //    PixelFarm.Drawing.Color.Green);
+
+            painter.FillRectLBWH(x0 * pxscale, y0 * pxscale, 6, 6, PixelFarm.Drawing.Color.Yellow);
+            painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.Yellow);
+        }
+        protected override void OnGlyphEdgeN(float x0, float y0, float x1, float y1)
+        {
+            float pxscale = this._pxscale;
+            //painter.Line(
+            //    x0 * pxscale, y0 * pxscale,
+            //    x1 * pxscale, y1 * pxscale,
+            //    PixelFarm.Drawing.Color.Green);
+
+            painter.FillRectLBWH(x0 * pxscale, y0 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
+            painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
         }
         protected override void OnCentroidLine(double px, double py, double qx, double qy)
         {
@@ -516,7 +530,7 @@ namespace SampleWinForms.UI
             }
         }
 
-        public void DynamicOutline(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale, bool withRegenerateOutlines)
+        public void WalkDynamicOutline(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale, bool withRegenerateOutlines)
         {
 
 #if DEBUG 

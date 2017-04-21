@@ -411,7 +411,7 @@ namespace SampleWinForms
             debugGlyphVisualizer.DrawTrianglesAndEdges = this.chkDrawTriangles.Checked;
             debugGlyphVisualizer.WalkCentroidBone = this.chkDrawCentroidBone.Checked;
             debugGlyphVisualizer.WalkGlyphBone = this.chkDrawGlyphBone.Checked;
-            debugGlyphVisualizer.DrawRibs = this.chkDrawRib.Checked;
+             
             debugGlyphVisualizer.DrawDynamicOutline = chkDynamicOutline.Checked;
             debugGlyphVisualizer.DrawRegenerateOutline = chkDrawRegenerateOutline.Checked;
             //------------------------------------------------------

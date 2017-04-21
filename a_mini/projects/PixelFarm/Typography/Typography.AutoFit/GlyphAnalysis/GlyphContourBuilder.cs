@@ -323,8 +323,8 @@ namespace Typography.Rendering
         Vector2 _bone_midPoint;
         //-----------
 
-        Vector2 _lastestBoneDistanceTip;//perpendicular line
-
+        Vector2 _bone_to_edgeVector;//perpendicular line
+        Vector2 _newEdgeCutPoint;
         internal GlyphEdge(GlyphPoint p0, GlyphPoint p1, EdgeLine edgeLine)
         {
             this._P = p0;
@@ -334,8 +334,8 @@ namespace Typography.Rendering
             _o_edgeVector = new Vector2((float)(p1.x - p0.x), (float)(p1.y - p0.y));
             _bone_midPoint = edgeLine.PerpendicularBone.GetMidPoint();
 
-            _lastestBoneDistanceTip = _edgeLine.PerpendicularBone.cutPoint_onEdge;
-            _originalDistanceToBone = (_lastestBoneDistanceTip - _bone_midPoint).Length();
+            _bone_to_edgeVector = _edgeLine.PerpendicularBone.cutPoint_onEdge - _bone_midPoint;
+            _originalDistanceToBone = _bone_to_edgeVector.Length();
 
             ApplyNewEdgeDistance(1);
         }
@@ -343,16 +343,17 @@ namespace Typography.Rendering
         {
             _relativeDistance = newRelativeDistance;
             //find new edge end point 
-            Vector2 newlen = _lastestBoneDistanceTip.NewLength(_originalDistanceToBone * newRelativeDistance);
-            _lastestBoneDistanceTip = _bone_midPoint + newlen;
+            Vector2 newBoneToEdgeVector = _bone_to_edgeVector.NewLength(_originalDistanceToBone * newRelativeDistance);
+            _bone_to_edgeVector = newBoneToEdgeVector;
+            _newEdgeCutPoint = _bone_midPoint + _bone_to_edgeVector;
         }
         internal static void FindCutPoint(GlyphEdge e0, GlyphEdge e1)
         {
             //find cutpoint from e0.q to e1.p 
             //new sample
-            Vector2 tmp_e0_q = e0._lastestBoneDistanceTip + e0._o_edgeVector;
-            Vector2 tmp_e1_p = e1._lastestBoneDistanceTip - e1._o_edgeVector;
-            Vector2 cutpoint = FindCutPoint(e0._lastestBoneDistanceTip, tmp_e0_q, e1._lastestBoneDistanceTip, tmp_e1_p);
+            Vector2 tmp_e0_q = e0._newEdgeCutPoint + e0._o_edgeVector;
+            Vector2 tmp_e1_p = e1._newEdgeCutPoint - e1._o_edgeVector;
+            Vector2 cutpoint = FindCutPoint(e0._newEdgeCutPoint, tmp_e0_q, e1._newEdgeCutPoint, tmp_e1_p);
 
             e0._Q.newX = e1._P.newX = cutpoint.X;
             e0._Q.newY = e1._P.newY = cutpoint.Y;

@@ -91,7 +91,9 @@ namespace Typography.Rendering
                 {
                     GlyphPoint p = pnts[m];
                     GlyphPoint q = pnts[m + 1];
-                    OnGlyphEdge(p.newX, p.newY, q.newX, q.newY);
+                    // OnGlyphEdge(p.newX, p.newY, q.newX, q.newY);
+                    OnGlyphEdge(p.x, p.y, q.x, q.y);
+                    OnGlyphEdgeN(p.newX, p.newY, q.newX, q.newY);
                 }
 
 
@@ -144,6 +146,7 @@ namespace Typography.Rendering
         protected abstract void OnEndLineHub(float centerX, float centerY, GlyphBoneJoint joint);
 
         protected abstract void OnGlyphEdge(float x0, float y0, float x1, float y1);
+        protected abstract void OnGlyphEdgeN(float x0, float y0, float x1, float y1);
         //
     }
 }
