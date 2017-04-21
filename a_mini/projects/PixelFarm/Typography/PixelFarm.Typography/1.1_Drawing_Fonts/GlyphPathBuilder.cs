@@ -105,7 +105,7 @@ namespace Typography.Rendering
                     toPixelScale = 1;
                 }
 
-                _latestDynamicOutline.SetNewRelativeStrokeWidth(1f);
+                _latestDynamicOutline.SetNewRelativeStrokeWidth(1.5f);
 
                 _latestDynamicOutline.GenerateOutput(tx, toPixelScale);
                 this.LeftXControl = _latestDynamicOutline.LeftControlPosX;

@@ -55,6 +55,12 @@ namespace Typography.Rendering
         public GlyphPoint(float x, float y, PointKind kind)
         {
 
+//#if DEBUG
+//            if (dbugId == 16)
+//            {
+
+//            }
+//#endif
             this.x = x;
             this.y = y;
             this.kind = kind;
@@ -76,6 +82,10 @@ namespace Typography.Rendering
             }
             //----
 #if DEBUG
+            if (edge == null)
+            {
+
+            }
             if (_e0 == _e1)
             {
                 throw new System.NotSupportedException();
@@ -107,11 +117,11 @@ namespace Typography.Rendering
 
         internal EdgeLine E0
         {
-            get { return this._e0; } 
+            get { return this._e0; }
         }
         internal EdgeLine E1
         {
-            get { return this._e1; } 
+            get { return this._e1; }
         }
 
         internal void ClearAdjustValues()
@@ -131,15 +141,12 @@ namespace Typography.Rendering
             {
                 this.IsLeftSide = v_edge.IsLeftSide;
             }
-
-            //if (_edges == null)
-            //{
-            //    _edges = new List<EdgeLine>();
-            //}
-            //_edges.Add(v_edge);
         }
 
-
+        internal static bool SameCoordAs(GlyphPoint a, GlyphPoint b)
+        {
+            return a.x == b.x && a.y == b.y;
+        }
 
         public bool IsLeftSide { get; private set; }
         public bool IsPartOfVerticalEdge { get; private set; }

@@ -185,6 +185,15 @@ namespace Typography.Rendering
 
             //assign number for all glyph point in this contour
             int pointCount = tmpFlattenPoints.Count;
+            if (GlyphPoint.SameCoordAs(tmpFlattenPoints[pointCount - 1], tmpFlattenPoints[0]))
+            {
+                //check if the last point is the same value as the first 
+                //if yes => remove the last one
+                tmpFlattenPoints.RemoveAt(pointCount - 1);
+                pointCount--;
+            }
+
+
             for (int i = 0; i < pointCount; ++i)
             {
                 tmpFlattenPoints[i].GlyphPointNo = flattener.GetNewGlyphPointId();
@@ -251,6 +260,23 @@ namespace Typography.Rendering
             }
             return isClockwise;
         }
+
+#if DEBUG
+        internal void dbugCheckGlyphPoints()
+        {
+            //int j = flattenPoints.Count;
+            //GlyphPoint p = null;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    p = flattenPoints[i];
+            //    if (p.E0 == null || p.E1 == null)
+            //    {
+
+            //    }
+            //}
+
+        }
+#endif
         internal void CreateGlyphEdges()
         {
             int lim = flattenPoints.Count - 1;

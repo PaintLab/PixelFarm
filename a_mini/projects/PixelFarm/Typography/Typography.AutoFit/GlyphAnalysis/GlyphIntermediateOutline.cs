@@ -34,7 +34,12 @@ namespace Typography.Rendering
                 delnTri.MarkAsActualTriangle();
                 _triangles.Add(new GlyphTriangle(delnTri)); //all triangles are created from Triangulation process
             }
+            //--------------------
+#if DEBUG
+            dbugCheckGlyphPoints();
+#endif
 
+            //--------------------
             //2. create centroid line hubs
             CreateCentroidLineHubs();
             //3. create bone joints
@@ -164,7 +169,17 @@ namespace Typography.Rendering
             _outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
 
         }
-
+#if DEBUG
+        void dbugCheckGlyphPoints()
+        {
+            List<GlyphContour> contours = this._contours;
+            int j = contours.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                contours[i].dbugCheckGlyphPoints();
+            }
+        }
+#endif
         void CreateGlyphEdges()
         {
             List<GlyphContour> contours = this._contours;
