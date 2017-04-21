@@ -366,6 +366,12 @@ namespace Typography.Rendering
             this._edgeLine = edgeLine;
             //----------- 
             _o_edgeVector = new Vector2((float)(p1.x - p0.x), (float)(p1.y - p0.y));
+
+            if (edgeLine.PerpendicularBone == null)
+            {
+                return;
+            }
+
             _bone_midPoint = edgeLine.PerpendicularBone.GetMidPoint();
 
             _bone_to_edgeVector = _edgeLine.PerpendicularBone.cutPoint_onEdge - _bone_midPoint;

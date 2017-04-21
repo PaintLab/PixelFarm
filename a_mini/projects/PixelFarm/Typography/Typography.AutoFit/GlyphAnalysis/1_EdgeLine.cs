@@ -156,6 +156,10 @@ namespace Typography.Rendering
             }
         }
 
+
+#if DEBUG
+        public bool dbugHasPerpendicularBone { get { return this.PerpendicularBone != null; } }
+#endif
         static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);

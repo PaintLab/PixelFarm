@@ -335,6 +335,10 @@ namespace SampleWinForms.UI
             nodeEdge.Text = "e id=" + edge.dbugId + ",count="
                 + _testEdgeCount + " :(" + u_data_p.x + "," + u_data_p.y + ")" +
                 "=>(" + u_data_q.x + "," + u_data_q.y + ") ";
+            if (!edge.dbugHasPerpendicularBone)
+            {
+                nodeEdge.Text += "_X_";
+            }
             //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
             //{
             //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;
