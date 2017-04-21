@@ -28,7 +28,7 @@ namespace Typography.Rendering
         /// </summary>
         internal EdgeLine contactToEdge;
         //------------------------------
-
+        GlyphBone _perpendicularBone;
         readonly GlyphPoint _glyphPoint_P;
         readonly GlyphPoint _glyphPoint_Q;
 #if DEBUG
@@ -37,7 +37,7 @@ namespace Typography.Rendering
         internal GlyphTriangle dbugOwner;
 #endif
 
-        public EdgeLine(GlyphPoint p, GlyphPoint q, bool isOutside)
+        internal EdgeLine(GlyphPoint p, GlyphPoint q, bool isOutside)
         {
             //------------------------------------
             //an edge line connects 2 glyph points.
@@ -138,8 +138,28 @@ namespace Typography.Rendering
         {
             return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
         }
+        internal GlyphBone PerpendicularBone
+        {
+            get { return _perpendicularBone; }
+            set
+            {
+                if (value == null)
+                {
+
+                }
+                if (_perpendicularBone != null)
+                {
+                    //should not occur!
+                    throw new NotSupportedException();
+                }
+                _perpendicularBone = value;
+            }
+        }
 
 
+#if DEBUG
+        public bool dbugHasPerpendicularBone { get { return this.PerpendicularBone != null; } }
+#endif
         static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);

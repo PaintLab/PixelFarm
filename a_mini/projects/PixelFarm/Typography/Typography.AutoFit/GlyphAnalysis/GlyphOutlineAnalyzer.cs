@@ -134,13 +134,10 @@ namespace Typography.Rendering
             dbugCheckAllGlyphsAreUnique(flattenPoints);
 #endif
 
-            //1st point
-
-            //TODO: review here -> about last point
-            //
-            int lim = flattenPoints.Count - 1;
+            
+            int j = flattenPoints.Count;
             //pass
-            for (int i = 0; i < lim; ++i)
+            for (int i = 0; i < j; ++i)
             {
                 GlyphPoint p = flattenPoints[i];
                 double x = p.x;

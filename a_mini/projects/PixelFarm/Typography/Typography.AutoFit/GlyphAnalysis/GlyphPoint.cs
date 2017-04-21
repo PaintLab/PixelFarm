@@ -39,8 +39,11 @@ namespace Typography.Rendering
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
 
-        internal EdgeLine _edgeLine1;
-        internal EdgeLine _edgeLine2;
+        EdgeLine _e0;
+        EdgeLine _e1;
+
+        public float newX;
+        public float newY;
 
 #if DEBUG
         //for debug only
@@ -50,8 +53,14 @@ namespace Typography.Rendering
         public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
 #endif
         public GlyphPoint(float x, float y, PointKind kind)
-        {    
+        {
 
+//#if DEBUG
+//            if (dbugId == 16)
+//            {
+
+//            }
+//#endif
             this.x = x;
             this.y = y;
             this.kind = kind;
@@ -59,13 +68,13 @@ namespace Typography.Rendering
 
         internal void SetRelatedEdgeLine(EdgeLine edge)
         {
-            if (_edgeLine1 == null)
+            if (_e0 == null)
             {
-                _edgeLine1 = edge;
+                _e0 = edge;
             }
-            else if (_edgeLine2 == null)
+            else if (_e1 == null)
             {
-                _edgeLine2 = edge;
+                _e1 = edge;
             }
             else
             {
@@ -73,7 +82,11 @@ namespace Typography.Rendering
             }
             //----
 #if DEBUG
-            if (_edgeLine1 == _edgeLine2)
+            if (edge == null)
+            {
+
+            }
+            if (_e0 == _e1)
             {
                 throw new System.NotSupportedException();
             }
@@ -102,6 +115,15 @@ namespace Typography.Rendering
             set { this._glyphPointNo = value; }
         }
 
+        internal EdgeLine E0
+        {
+            get { return this._e0; }
+        }
+        internal EdgeLine E1
+        {
+            get { return this._e1; }
+        }
+
         internal void ClearAdjustValues()
         {
             _adjX = _adjY = 0;
@@ -119,15 +141,12 @@ namespace Typography.Rendering
             {
                 this.IsLeftSide = v_edge.IsLeftSide;
             }
-
-            //if (_edges == null)
-            //{
-            //    _edges = new List<EdgeLine>();
-            //}
-            //_edges.Add(v_edge);
         }
 
-
+        internal static bool SameCoordAs(GlyphPoint a, GlyphPoint b)
+        {
+            return a.x == b.x && a.y == b.y;
+        }
 
         public bool IsLeftSide { get; private set; }
         public bool IsPartOfVerticalEdge { get; private set; }

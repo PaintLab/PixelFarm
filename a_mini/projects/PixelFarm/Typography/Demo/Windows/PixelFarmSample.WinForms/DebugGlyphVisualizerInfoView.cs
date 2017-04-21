@@ -14,13 +14,13 @@ namespace SampleWinForms.UI
 
         TreeView _treeView;
         TreeNode _rootNode;
-        TreeNode _orgVxsNode;
+        TreeNode _orgCmds;
         TreeNode _flattenVxsNode;
         TreeNode _tessEdgesNode;
         TreeNode _jointsNode;
         TreeNode _trianglesNode;
         TreeNode _bonesNode;
-
+        TreeNode _glyphEdgesNode;
         //
         VertexStore _orgVxs;
         VertexStore _flattenVxs;
@@ -69,9 +69,9 @@ namespace SampleWinForms.UI
             _treeView.Nodes.Add(_rootNode);
             //
             //original
-            _orgVxsNode = new TreeNode();
-            _orgVxsNode.Text = "org";
-            _rootNode.Nodes.Add(_orgVxsNode);
+            _orgCmds = new TreeNode();
+            _orgCmds.Text = "org";
+            _rootNode.Nodes.Add(_orgCmds);
 
             //
             //flatten borders 
@@ -99,6 +99,10 @@ namespace SampleWinForms.UI
             _rootNode.Nodes.Add(_bonesNode);
 
             //
+            _glyphEdgesNode = new TreeNode();
+            _glyphEdgesNode.Text = "glyph_edges";
+            _rootNode.Nodes.Add(_glyphEdgesNode);
+
             _clearInfoView = true;//default
         }
         public void SetFlushOutputHander(SimpleAction flushOutput)
@@ -168,6 +172,7 @@ namespace SampleWinForms.UI
                     break;
                 case NodeInfoKind.RibEndPoint:
                 case NodeInfoKind.Joint:
+                case NodeInfoKind.GlyphEdge:
                     {
                         if (RequestGlyphRender != null)
                         {
@@ -255,6 +260,7 @@ namespace SampleWinForms.UI
                 _jointsNode.Nodes.Clear();
                 _trianglesNode.Nodes.Clear();
                 _bonesNode.Nodes.Clear();
+                _glyphEdgesNode.Nodes.Clear();
             }
             _testEdgeCount = 0;
         }
@@ -329,15 +335,35 @@ namespace SampleWinForms.UI
             nodeEdge.Text = "e id=" + edge.dbugId + ",count="
                 + _testEdgeCount + " :(" + u_data_p.x + "," + u_data_p.y + ")" +
                 "=>(" + u_data_q.x + "," + u_data_q.y + ") ";
+            if (!edge.dbugHasPerpendicularBone)
+            {
+                nodeEdge.Text += "_X_";
+            }
             //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
             //{
             //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;
             //}
-
             _tessEdgesNode.Nodes.Add(nodeEdge);
             //------------------------------- 
 
             _edgeLines.Add(edge);
+        }
+        public void ShowGlyphEdge(float x0, float y0, float x1, float y1)
+        {
+            if (!_clearInfoView)
+            {
+                return;
+            }
+
+            NodeInfo nodeInfo = new NodeInfo(NodeInfoKind.GlyphEdge, x0, y0, x1, y1);
+            TreeNode nodeEdge = new TreeNode();
+            nodeEdge.Tag = nodeInfo;
+            nodeEdge.Text = x0 + "," + y0 + "," + x1 + "," + y1;
+            //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
+            //{
+            //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;
+            //}
+            _glyphEdgesNode.Nodes.Add(nodeEdge);             
         }
         public void ShowFlatternBorderInfo(VertexStore vxs)
         {
@@ -351,9 +377,8 @@ namespace SampleWinForms.UI
             int index = 0;
             while ((cmd = vxs.GetVertex(index, out x, out y)) != VertexCmd.NoMore)
             {
-                NodeInfo nodeInfo = new NodeInfo(NodeInfoKind.FlattenVertexCommand, index);
-                TreeNode node = new TreeNode();
-                node.Tag = nodeInfo;
+
+                var node = new TreeNode() { Tag = new NodeInfo(NodeInfoKind.FlattenVertexCommand, index) };
                 node.Text = (index) + " " + cmd + ": (" + x + "," + y + ")";
                 _flattenVxsNode.Nodes.Add(node);
                 index++;
@@ -363,7 +388,7 @@ namespace SampleWinForms.UI
         public void ShowOrgBorderInfo(VertexStore vxs)
         {
             if (!_clearInfoView) { return; }
-            _orgVxsNode.Nodes.Clear();
+            _orgCmds.Nodes.Clear();
             _treeView.SuspendLayout();
             _orgVxs = vxs;
 
@@ -373,15 +398,15 @@ namespace SampleWinForms.UI
             int index = 0;
             while ((cmd = vxs.GetVertex(index, out x, out y)) != VertexCmd.NoMore)
             {
-                NodeInfo nodeInfo = new NodeInfo(NodeInfoKind.OrgVertexCommand, index);
-                TreeNode node = new TreeNode();
-                node.Tag = nodeInfo;
+
+                var node = new TreeNode() { Tag = new NodeInfo(NodeInfoKind.OrgVertexCommand, index) };
                 node.Text = (index) + " " + cmd + ": (" + x + "," + y + ")";
-                _orgVxsNode.Nodes.Add(node);
+                _orgCmds.Nodes.Add(node);
                 index++;
             }
             _treeView.ResumeLayout();
         }
+
         public bool HasDebugMark
         {
             get;
@@ -402,6 +427,7 @@ namespace SampleWinForms.UI
             RibEndPoint,
             Tri,
             Bone,
+            GlyphEdge,
         }
         class NodeInfo
         {
@@ -409,6 +435,8 @@ namespace SampleWinForms.UI
             GlyphBoneJoint joint;
             GlyphBone bone;
             System.Numerics.Vector2 pos;
+            System.Numerics.Vector2 pos2;
+
             GlyphTriangleInfo tri;
 
             public NodeInfo(NodeInfoKind nodeKind, EdgeLine edge, int edgeNo)
@@ -449,6 +477,12 @@ namespace SampleWinForms.UI
             {
                 this.pos = pos;
                 this.NodeKind = NodeInfoKind.Joint;
+            }
+            public NodeInfo(NodeInfoKind nodeKind, float x0, float y0, float x1, float y1)
+            {
+                this.NodeKind = nodeKind;
+                this.pos = new System.Numerics.Vector2(x0, y0);
+                this.pos2 = new System.Numerics.Vector2(x1, y1);
             }
             public int VertexCommandNo { get; set; }
             public NodeInfoKind NodeKind { get; set; }

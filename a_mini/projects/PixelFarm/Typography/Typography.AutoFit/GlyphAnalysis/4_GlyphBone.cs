@@ -22,6 +22,7 @@ namespace Typography.Rendering
         public readonly GlyphBoneJoint JointB;
         double _len;
         public Vector2 cutPoint_onEdge;
+        EdgeLine _perpendicularEdge;
 
         public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
         {
@@ -85,8 +86,12 @@ namespace Typography.Rendering
         /// </summary>
         public EdgeLine PerpendicularEdge
         {
-            get;
-            internal set;
+            get { return _perpendicularEdge; }
+            internal set
+            {
+                _perpendicularEdge = value;
+                value.PerpendicularBone = this;
+            }
         }
 
 
