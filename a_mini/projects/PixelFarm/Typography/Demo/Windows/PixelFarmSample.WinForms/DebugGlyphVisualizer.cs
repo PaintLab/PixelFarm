@@ -454,6 +454,14 @@ namespace SampleWinForms.UI
                 _infoView.ShowTriangles(new GlyphTriangleInfo(triangleId, e0, e1, e2, centroidX, centroidY));
             }
         }
+        protected override void OnGlyphEdge(float x0, float y0, float x1, float y1)
+        {
+            float pxscale = this._pxscale;
+            painter.Line(
+                x0 * pxscale, y0 * pxscale,
+                x1 * pxscale, y1 * pxscale,
+                PixelFarm.Drawing.Color.Green);
+        }
         protected override void OnCentroidLine(double px, double py, double qx, double qy)
         {
 

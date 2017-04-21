@@ -76,6 +76,27 @@ namespace Typography.Rendering
                 //
                 OnEndLineHub(hubCenter.X, hubCenter.Y, lineHub.GetHeadConnectedJoint());
             }
+
+
+            //----------------
+
+            List<GlyphContour> cnts = _dynamicOutline._contours;
+            int j = cnts.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphContour cnt = cnts[i];
+                List<GlyphPoint> pnts = cnt.flattenPoints;
+                int lim = pnts.Count - 1;
+                for (int m = 0; m < lim; ++m)
+                {
+                    GlyphPoint p = pnts[m];
+                    GlyphPoint q = pnts[m + 1];
+                    OnGlyphEdge(p.newX, p.newY, q.newX, q.newY);
+                }
+
+
+            }
+            //----------------
 #endif
 
         }
@@ -122,6 +143,7 @@ namespace Typography.Rendering
         protected abstract void OnBegingLineHub(float centerX, float centerY);
         protected abstract void OnEndLineHub(float centerX, float centerY, GlyphBoneJoint joint);
 
+        protected abstract void OnGlyphEdge(float x0, float y0, float x1, float y1);
         //
     }
 }

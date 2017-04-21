@@ -42,6 +42,9 @@ namespace Typography.Rendering
         internal EdgeLine _edgeLine1;
         internal EdgeLine _edgeLine2;
 
+        public float newX;
+        public float newY;
+
 #if DEBUG
         //for debug only
         public readonly int dbugId = dbugTotalId++;

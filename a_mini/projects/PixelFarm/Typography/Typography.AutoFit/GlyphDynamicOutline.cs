@@ -65,9 +65,9 @@ namespace Typography.Rendering
         }
 
         List<StrokeLineHub> _strokeLineHub;
-        List<GlyphContour> _contours;
+        internal List<GlyphContour> _contours;
         List<GlyphBone> _longVerticalBones;
-
+        float _relativeStrokeWidth = 1;
 
 
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
@@ -132,13 +132,15 @@ namespace Typography.Rendering
         {
             //preserve original outline
             //regenerate outline from original outline
+            if (_relativeStrokeWidth == relativeStrokeWidth) { return; }
+            //----------------------------------------------------------
 
             List<GlyphContour> cnts = _contours;
             int j = cnts.Count;
             for (int i = 0; i < j; ++i)
             {
                 GlyphContour cnt = cnts[i];
-                 
+                cnt.ApplyNewRelativeEdgeDistance(relativeStrokeWidth);
             }
         }
 

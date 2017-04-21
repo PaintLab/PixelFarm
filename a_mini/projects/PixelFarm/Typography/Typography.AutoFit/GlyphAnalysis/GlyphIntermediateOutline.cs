@@ -41,12 +41,7 @@ namespace Typography.Rendering
             CreateBoneJoints();
             //4. create bones 
             CreateBones();
-
-            //5. create relation between bone and edge line
-            //----------------------------------------
-            //iterate each contour's point again
-            //create relation  
-            //----------------------------------------
+            //5. create glyph edges          
             CreateGlyphEdges();
         }
 

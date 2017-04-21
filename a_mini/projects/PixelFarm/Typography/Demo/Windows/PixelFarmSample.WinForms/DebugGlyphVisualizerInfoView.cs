@@ -14,7 +14,7 @@ namespace SampleWinForms.UI
 
         TreeView _treeView;
         TreeNode _rootNode;
-        TreeNode _orgVxsNode;
+        TreeNode _orgCmds;
         TreeNode _flattenVxsNode;
         TreeNode _tessEdgesNode;
         TreeNode _jointsNode;
@@ -69,9 +69,9 @@ namespace SampleWinForms.UI
             _treeView.Nodes.Add(_rootNode);
             //
             //original
-            _orgVxsNode = new TreeNode();
-            _orgVxsNode.Text = "org";
-            _rootNode.Nodes.Add(_orgVxsNode);
+            _orgCmds = new TreeNode();
+            _orgCmds.Text = "org";
+            _rootNode.Nodes.Add(_orgCmds);
 
             //
             //flatten borders 
@@ -363,7 +363,7 @@ namespace SampleWinForms.UI
         public void ShowOrgBorderInfo(VertexStore vxs)
         {
             if (!_clearInfoView) { return; }
-            _orgVxsNode.Nodes.Clear();
+            _orgCmds.Nodes.Clear();
             _treeView.SuspendLayout();
             _orgVxs = vxs;
 
@@ -377,7 +377,7 @@ namespace SampleWinForms.UI
                 TreeNode node = new TreeNode();
                 node.Tag = nodeInfo;
                 node.Text = (index) + " " + cmd + ": (" + x + "," + y + ")";
-                _orgVxsNode.Nodes.Add(node);
+                _orgCmds.Nodes.Add(node);
                 index++;
             }
             _treeView.ResumeLayout();

@@ -142,7 +142,11 @@ namespace Typography.Rendering
         {
             get { return _perpendicularBone; }
             set
-            {
+            {   
+                if(value== null)
+                {
+
+                }
                 if (_perpendicularBone != null)
                 {
                     //should not occur!
