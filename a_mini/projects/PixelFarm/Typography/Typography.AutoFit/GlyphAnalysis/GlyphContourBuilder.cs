@@ -265,6 +265,10 @@ namespace Typography.Rendering
                 {
                     edgeLines.Add(new GlyphEdge(p, q, edgeLine));
                 }
+                else
+                {
+
+                }
             }
             //close   
             p = flattenPoints[lim];
@@ -294,15 +298,15 @@ namespace Typography.Rendering
         }
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
         {
-            if (p._edgeLine1 == q._edgeLine1 ||
-                p._edgeLine1 == q._edgeLine2)
+            if (p.E0 == q.E0 ||
+                p.E0 == q.E1)
             {
-                return p._edgeLine1;
+                return p.E0;
             }
-            else if (p._edgeLine2 == q._edgeLine1 ||
-                     p._edgeLine2 == q._edgeLine2)
+            else if (p.E1 == q.E0 ||
+                     p.E1 == q.E1)
             {
-                return p._edgeLine1;
+                return p.E1;
             }
             else
             {
