@@ -351,9 +351,8 @@ namespace SampleWinForms.UI
             int index = 0;
             while ((cmd = vxs.GetVertex(index, out x, out y)) != VertexCmd.NoMore)
             {
-                NodeInfo nodeInfo = new NodeInfo(NodeInfoKind.FlattenVertexCommand, index);
-                TreeNode node = new TreeNode();
-                node.Tag = nodeInfo;
+
+                var node = new TreeNode() { Tag = new NodeInfo(NodeInfoKind.FlattenVertexCommand, index) };
                 node.Text = (index) + " " + cmd + ": (" + x + "," + y + ")";
                 _flattenVxsNode.Nodes.Add(node);
                 index++;
@@ -373,9 +372,8 @@ namespace SampleWinForms.UI
             int index = 0;
             while ((cmd = vxs.GetVertex(index, out x, out y)) != VertexCmd.NoMore)
             {
-                NodeInfo nodeInfo = new NodeInfo(NodeInfoKind.OrgVertexCommand, index);
-                TreeNode node = new TreeNode();
-                node.Tag = nodeInfo;
+
+                var node = new TreeNode() { Tag = new NodeInfo(NodeInfoKind.OrgVertexCommand, index) }; 
                 node.Text = (index) + " " + cmd + ": (" + x + "," + y + ")";
                 _orgCmds.Nodes.Add(node);
                 index++;
