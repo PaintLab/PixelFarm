@@ -337,7 +337,7 @@ namespace SampleWinForms.UI
                 "=>(" + u_data_q.x + "," + u_data_q.y + ") ";
             if (!edge.dbugHasPerpendicularBone)
             {
-                nodeEdge.Text += "_X_";
+                nodeEdge.Text += "_X_ (no perpendicular_bone)";
             }
             //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
             //{

@@ -107,7 +107,7 @@ namespace Typography.Rendering
                             lineHub.SetBranch(tri);
                             //create centroid line and add to currrent hub
                             var pair = new GlyphCentroidPair(connectWithPrevTri, tri);
-                            currentCentroidLineHub.AddChild(pair);
+                            currentCentroidLineHub.AddCentroidPair(pair);
                         }
                         else
                         {
@@ -118,7 +118,7 @@ namespace Typography.Rendering
                                 currentCentroidLineHub.SetBranch(tri);
                             }
                             //create centroid line and add to currrent hub
-                            currentCentroidLineHub.AddChild(new GlyphCentroidPair(connectWithPrevTri, tri));
+                            currentCentroidLineHub.AddCentroidPair(new GlyphCentroidPair(connectWithPrevTri, tri));
                         }
                         latestTri = tri;
                     }
@@ -133,7 +133,7 @@ namespace Typography.Rendering
                 GlyphTriangle lastTri = _triangles[triCount - 1];
                 if (firstTri.IsConnectedWith(lastTri))
                 {
-                    currentCentroidLineHub.AddChild(new GlyphCentroidPair(lastTri, firstTri) { SpecialConnectFromLastToFirst = true });
+                    currentCentroidLineHub.AddCentroidPair(new GlyphCentroidPair(lastTri, firstTri) { SpecialConnectFromLastToFirst = true });
                 }
             }
             _lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values);

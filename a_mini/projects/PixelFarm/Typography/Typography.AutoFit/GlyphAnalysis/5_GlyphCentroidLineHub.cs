@@ -40,33 +40,34 @@ namespace Typography.Rendering
             int j = pairs.Count;
             for (int i = 0; i < j; ++i)
             {
-                //for each centroid line
-                //analyze for its bone joint
+                //create bone joint (and tip edge) in each pair                
                 pairs[i].AnalyzeEdgesAndCreateBoneJoint();
             }
+
+            //---------------
             if (j > 1)
             {
 
                 //add special tip
                 //get first line and last 
                 //check if this is loop
-                GlyphCentroidPair first_line = pairs[0];
-                GlyphCentroidPair last_line = pairs[j - 1];
+                GlyphCentroidPair first_pair = pairs[0];
+                GlyphCentroidPair last_pair = pairs[j - 1];
                 //open end or close end
 
-                if (!last_line.SpecialConnectFromLastToFirst)
+                if (!last_pair.SpecialConnectFromLastToFirst)
                 {
                     //no connection from last to first (eg. o)
                     //one side is tip edge
-                    if (first_line.BoneJoint.TipEdge != null)
+                    if (first_pair.BoneJoint.TipEdge != null)
                     {
                         //create tip info
-                        AssignTipInfo(first_line, false);
+                        AssignTipInfo(first_pair, false);
                     }
-                    if (last_line.BoneJoint.TipEdge != null)
+                    if (last_pair.BoneJoint.TipEdge != null)
                     {
                         //create tip info
-                        AssignTipInfo(last_line, false);
+                        AssignTipInfo(last_pair, false);
                     }
                 }
             }
@@ -297,9 +298,12 @@ namespace Typography.Rendering
                 return _lines.Count;
             }
         }
-        public void AddChild(GlyphCentroidPair pair)
+        /// <summary>
+        /// add centroid line to current centroid line
+        /// </summary>
+        /// <param name="pair"></param>
+        public void AddCentroidPair(GlyphCentroidPair pair)
         {
-            //add centroid line to current branch
             currentLine.AddCentroidLine(pair);
         }
         /// <summary>

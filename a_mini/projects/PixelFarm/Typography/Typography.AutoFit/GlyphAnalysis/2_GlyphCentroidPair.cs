@@ -13,7 +13,7 @@ namespace Typography.Rendering
         GlyphBoneJoint _boneJoint;
         internal GlyphCentroidPair(GlyphTriangle p, GlyphTriangle q)
         {
-            //[A]
+
             //each triangle has 1 centroid point
             //a centrod line connects between 2 adjacent triangles via centroid 
             //
@@ -31,20 +31,10 @@ namespace Typography.Rendering
         public bool SpecialConnectFromLastToFirst { get; set; }
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
         /// <summary>
-        /// add information about edges to each triangle and create BoneJoint
+        /// add information about edges to each triangle and create BoneJoint and Tip
         /// </summary>
         internal void AnalyzeEdgesAndCreateBoneJoint()
         {
-
-            //...
-            //tasks: 
-            // mark edge info
-
-            //[B]
-            //check if q is upper or lower when compare with p
-            //check if q is on left side or right side of p
-            //then we know the direction
-
 
 #if DEBUG
             if (p == q)
@@ -84,6 +74,12 @@ namespace Typography.Rendering
                 MarkProperOppositeOutsideEdges(p, _boneJoint, _boneJoint._p_contact_edge);
                 MarkProperOppositeOutsideEdges(q, _boneJoint, _boneJoint._q_contact_edge);
             }
+
+            else
+            {
+                //?
+            }
+
         }
 
         public GlyphTip P_Tip { get; set; }
