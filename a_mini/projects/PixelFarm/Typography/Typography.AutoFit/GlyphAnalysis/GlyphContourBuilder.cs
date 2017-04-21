@@ -311,6 +311,8 @@ namespace Typography.Rendering
         internal void ApplyNewRelativeEdgeDistance(float relativeDistance)
         {
             int j = edgeLines.Count;
+            if (j < 1) return;
+
             for (int i = 0; i < j; ++i)
             {
                 edgeLines[i].ApplyNewEdgeDistance(relativeDistance);
