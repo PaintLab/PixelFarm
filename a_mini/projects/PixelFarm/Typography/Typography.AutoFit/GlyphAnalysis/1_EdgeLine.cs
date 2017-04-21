@@ -37,7 +37,7 @@ namespace Typography.Rendering
         internal GlyphTriangle dbugOwner;
 #endif
 
-        public EdgeLine(GlyphPoint p, GlyphPoint q, bool isOutside)
+        internal EdgeLine(GlyphPoint p, GlyphPoint q, bool isOutside)
         {
             //------------------------------------
             //an edge line connects 2 glyph points.
