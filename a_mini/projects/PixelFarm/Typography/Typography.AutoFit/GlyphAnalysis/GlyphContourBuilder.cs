@@ -257,6 +257,7 @@ namespace Typography.Rendering
             edgeLines = new List<GlyphEdge>();
             GlyphPoint p = null, q = null;
             EdgeLine edgeLine = null;
+
             for (int i = 0; i < lim; ++i)
             {
                 p = flattenPoints[i];
@@ -276,6 +277,9 @@ namespace Typography.Rendering
             if ((edgeLine = FineCommonEdgeLine(p, q)) != null)
             {
                 edgeLines.Add(new GlyphEdge(p, q, edgeLine));
+            }
+            else
+            {
             }
         }
         internal void ApplyNewRelativeEdgeDistance(float relativeDistance)

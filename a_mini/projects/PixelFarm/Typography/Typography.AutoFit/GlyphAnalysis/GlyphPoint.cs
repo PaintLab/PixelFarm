@@ -107,31 +107,11 @@ namespace Typography.Rendering
 
         internal EdgeLine E0
         {
-            get { return this._e0; }
-            set
-            {
-#if DEBUG
-                if (_e0 != null)
-                {
-                    throw new System.NotSupportedException();
-                }
-#endif
-                _e0 = value;
-            }
+            get { return this._e0; } 
         }
         internal EdgeLine E1
         {
-            get { return this._e1; }
-            set
-            {
-#if DEBUG
-                if (_e1 != null)
-                {
-                    throw new System.NotSupportedException();
-                }
-#endif 
-                this._e1 = value;
-            }
+            get { return this._e1; } 
         }
 
         internal void ClearAdjustValues()
