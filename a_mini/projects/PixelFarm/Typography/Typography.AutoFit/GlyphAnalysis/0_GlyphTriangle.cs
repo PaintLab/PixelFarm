@@ -52,10 +52,7 @@ namespace Typography.Rendering
         {
             get { return centroidY; }
         }
-        public EdgeLine E0 { get { return e0; } }
-        public EdgeLine E1 { get { return e1; } }
-        public EdgeLine E2 { get { return e2; } }
-        //
+        
         internal bool IsConnectedWith(GlyphTriangle anotherTri)
         {
             DelaunayTriangle t2 = anotherTri._tri;

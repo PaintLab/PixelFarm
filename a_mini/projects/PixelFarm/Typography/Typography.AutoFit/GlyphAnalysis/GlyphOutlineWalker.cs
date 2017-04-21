@@ -95,14 +95,14 @@ namespace Typography.Rendering
                     OnGlyphEdgeN(cut_p.X, cut_p.Y, cut_q.X, cut_p.Y);
                 }
 
-                List<GlyphPoint> pnts = cnt.flattenPoints;
-                int lim = pnts.Count - 1;
-                for (int m = 0; m < lim; ++m)
-                {
-                    GlyphPoint p = pnts[m];
-                    GlyphPoint q = pnts[m + 1]; 
-                    OnGlyphEdge(p.x, p.y, q.x, q.y); 
-                }
+                //List<GlyphPoint> pnts = cnt.flattenPoints;
+                //int lim = pnts.Count - 1;
+                //for (int m = 0; m < lim; ++m)
+                //{
+                //    GlyphPoint p = pnts[m];
+                //    GlyphPoint q = pnts[m + 1]; 
+                //    OnGlyphEdge(p.x, p.y, q.x, q.y); 
+                //}
 
 
             }
