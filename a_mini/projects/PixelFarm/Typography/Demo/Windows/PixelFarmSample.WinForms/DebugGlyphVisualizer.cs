@@ -25,6 +25,11 @@ namespace SampleWinForms.UI
         public EdgeLine E0 { get; set; }
         public EdgeLine E1 { get; set; }
         public EdgeLine E2 { get; set; }
+        public override string ToString()
+        {
+            return this.CentroidX + "," + CentroidY;
+
+        }
     }
 
     class DebugGlyphVisualizer : GlyphOutlineWalker

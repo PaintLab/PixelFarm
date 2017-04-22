@@ -303,11 +303,14 @@ namespace SampleWinForms.UI
             jointNode.Text = "j:" + joint.ToString();
             _jointsNode.Nodes.Add(jointNode);
 
-            if (joint.TipPointP != System.Numerics.Vector2.Zero)
+            if (joint.HasTipP)
             {
-                jointNode.Nodes.Add(new TreeNode() { Text = "tip:" + joint.TipPointP, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPointP) });
+                jointNode.Nodes.Add(new TreeNode() { Text = "tip_p:" + joint.TipPointP, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPointP) });
             }
-
+            if (joint.HasTipQ)
+            {
+                jointNode.Nodes.Add(new TreeNode() { Text = "tip_q:" + joint.TipPointQ, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPointQ) });
+            }
         }
         public void ShowEdge(EdgeLine edge)
         {
@@ -363,7 +366,7 @@ namespace SampleWinForms.UI
             //{
             //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;
             //}
-            _glyphEdgesNode.Nodes.Add(nodeEdge);             
+            _glyphEdgesNode.Nodes.Add(nodeEdge);
         }
         public void ShowFlatternBorderInfo(VertexStore vxs)
         {

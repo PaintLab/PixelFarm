@@ -562,12 +562,12 @@ namespace Typography.Rendering
             //remove this rib
 
 
-            if (joint.TipPointP != System.Numerics.Vector2.Zero)
-            {
-                //TODO: review here, tip point
-                strokeJoint.hasTip = true;
-                strokeJoint._tip_endAt = joint.TipPointP;
-            }
+            //if (joint.TipPointP != System.Numerics.Vector2.Zero)
+            //{
+            //    //TODO: review here, tip point
+            //    strokeJoint.hasTip = true;
+            //    strokeJoint._tip_endAt = joint.TipPointP;
+            //}
         }
 
         void WalkToJoint(StrokeJoint joint)

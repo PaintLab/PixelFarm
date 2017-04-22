@@ -85,12 +85,20 @@ namespace Typography.Rendering
             {
                 throw new System.NotSupportedException();
             }
-            if (_tipEdge_p == _tipEdge_q)
+            if (_tipEdge_q != null && _tipEdge_q == _tipEdge_p)
             {
                 throw new System.NotSupportedException();
             }
 #endif
             this._tipEdge_q = e;
+        }
+        public bool HasTipP
+        {
+            get { return this._tipEdge_p != null; }
+        }
+        public bool HasTipQ
+        {
+            get { return this._tipEdge_q != null; }
         }
         public Vector2 TipPointP { get { return _tipEdge_p.GetMidPoint(); } }
         public EdgeLine TipEdgeP { get { return _tipEdge_p; } }
