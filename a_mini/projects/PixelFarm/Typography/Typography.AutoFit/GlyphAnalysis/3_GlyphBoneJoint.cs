@@ -42,7 +42,7 @@ namespace Typography.Rendering
         {
             get
             {
-                //mid point of the edge line
+                //mid point of the contact edge line
                 return _p_contact_edge.GetMidPoint();
             }
         }
