@@ -45,9 +45,9 @@ namespace Typography.Rendering
             //3. create bone joints
             CreateBoneJoints();
             //4. create bones 
-            CreateBones();
+            List<GlyphBone> newBones = CreateBones();
             //5. create glyph edges          
-            CreateGlyphEdges();
+            CreateGlyphEdges(newBones);
         }
 
         void CreateCentroidLineHubs()
@@ -152,7 +152,7 @@ namespace Typography.Rendering
                 LinkEachLineHubTogether(_lineHubs[i], _lineHubs);
             }
         }
-        void CreateBones()
+        List<GlyphBone> CreateBones()
         {
             List<GlyphBone> newBones = new List<GlyphBone>();
             int lineHubCount = _lineHubs.Count;
@@ -167,7 +167,8 @@ namespace Typography.Rendering
             //create perpendicular line link from control nodes to glyph bone 
             //----------------------------------------
             _outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
-
+            //
+            return newBones;
         }
 #if DEBUG
         void dbugCheckGlyphPoints()
@@ -180,13 +181,13 @@ namespace Typography.Rendering
             }
         }
 #endif
-        void CreateGlyphEdges()
+        void CreateGlyphEdges(List<GlyphBone> newBones)
         {
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
             for (int i = 0; i < j; ++i)
             {
-                contours[i].CreateGlyphEdges();
+                contours[i].CreateGlyphEdges(newBones);
             }
         }
         public List<GlyphBone> LongVerticalBones

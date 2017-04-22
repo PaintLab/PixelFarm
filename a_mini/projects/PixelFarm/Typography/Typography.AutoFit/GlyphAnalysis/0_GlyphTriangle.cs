@@ -18,6 +18,9 @@ namespace Typography.Rendering
         float centroidX;
         float centroidY;
 
+
+        GlyphCentroidLine ownerCentroidLine;
+
         public GlyphTriangle(DelaunayTriangle tri)
         {
             this._tri = tri;
@@ -53,6 +56,23 @@ namespace Typography.Rendering
             get { return centroidY; }
         }
 
+        public GlyphCentroidLine OwnerCentroidLine
+        {
+            get
+            {
+                return ownerCentroidLine;
+            }
+            set
+            {
+#if DEBUG
+                if (ownerCentroidLine != null)
+                {
+                }
+#endif
+                ownerCentroidLine = value;
+            }
+
+        }
         internal bool IsConnectedWith(GlyphTriangle anotherTri)
         {
             DelaunayTriangle t2 = anotherTri._tri;

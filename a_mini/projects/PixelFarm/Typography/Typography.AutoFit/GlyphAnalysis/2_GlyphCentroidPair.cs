@@ -28,6 +28,18 @@ namespace Typography.Rendering
             //--------------------------------------
 
         }
+        internal bool IsAdjacentTo(GlyphCentroidPair another)
+        {
+            return this.p == another.p ||
+                    this.p == another.q ||
+                    this.q == another.p ||
+                    this.q == another.q;
+        }
+        public void SetCentroidLine(GlyphCentroidLine centroidLine)
+        {
+            p.OwnerCentroidLine = centroidLine;
+            q.OwnerCentroidLine = centroidLine;
+        }
         public bool SpecialConnectFromLastToFirst { get; set; }
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
         /// <summary>
@@ -76,7 +88,7 @@ namespace Typography.Rendering
             //then, we mark outside edge compare to the known inside edge          
             MarkProperOppositeOutsideEdges(p, _boneJoint._p_contact_edge, true);
             MarkProperOppositeOutsideEdges(q, _boneJoint._q_contact_edge, false);
-        } 
+        }
         internal void UpdateTips()
         {
 

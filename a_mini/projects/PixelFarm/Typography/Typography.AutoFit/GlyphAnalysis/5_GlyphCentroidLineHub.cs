@@ -230,6 +230,8 @@ namespace Typography.Rendering
         /// <param name="pair"></param>
         public void AddCentroidPair(GlyphCentroidPair pair)
         {
+            //add centroid pair to line
+
             currentLine.AddCentroidLine(pair);
         }
         /// <summary>
@@ -292,11 +294,15 @@ namespace Typography.Rendering
                         if (j > 1)
                         {
                             //check if  the last bone is connected to the first or not
-                            
+
                             GlyphCentroidPair nextline = lineList[0];
-                            GlyphBone bone = new GlyphBone(joint, nextline.BoneJoint);
-                            newlyCreatedBones.Add(bone);
-                            glyphBones.Add(bone);
+                            if (pair.IsAdjacentTo(nextline))
+                            {
+                                GlyphBone bone = new GlyphBone(joint, nextline.BoneJoint);
+                                bone.IsLinkBack = true;
+                                newlyCreatedBones.Add(bone);
+                                glyphBones.Add(bone);
+                            }
                         }
                     }
                 }

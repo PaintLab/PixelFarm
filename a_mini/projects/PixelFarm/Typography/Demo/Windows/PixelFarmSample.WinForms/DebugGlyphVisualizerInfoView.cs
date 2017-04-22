@@ -337,11 +337,19 @@ namespace SampleWinForms.UI
             nodeEdge.Tag = nodeInfo;
             nodeEdge.Text = "e id=" + edge.dbugId + ",count="
                 + _testEdgeCount + " :(" + u_data_p.x + "," + u_data_p.y + ")" +
+
                 "=>(" + u_data_q.x + "," + u_data_q.y + ") ";
-            if (!edge.dbugHasPerpendicularBone)
+            if (edge.dbugNoPerpendicularBone)
             {
                 nodeEdge.Text += "_X_ (no perpendicular_bone)";
             }
+
+           
+            //if (!edge.dbugHasRelatedBone)
+            //{
+            //    nodeEdge.Text += "_X_ (no perpendicular_bone)";
+            //}
+
             //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
             //{
             //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;

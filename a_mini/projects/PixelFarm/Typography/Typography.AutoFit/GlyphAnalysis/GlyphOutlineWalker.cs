@@ -83,7 +83,7 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 GlyphContour cnt = cnts[i];
-                List<GlyphEdge> edgeLines = cnt.edgeLines;
+                List<GlyphEdge> edgeLines = cnt.edges;
                 int n = edgeLines.Count;
                 for (int m = 0; m < n; ++m)
                 {

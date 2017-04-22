@@ -138,6 +138,13 @@ namespace Typography.Rendering
                 throw new System.NotSupportedException();
             }
         }
+        /// <summary>
+        /// find a perpendicular cut-point from p to bone
+        /// </summary>
+        /// <param name="bone"></param>
+        /// <param name="p"></param>
+        /// <param name="cutPoint"></param>
+        /// <returns></returns>
         public static bool FindPerpendicularCutPoint(GlyphBone bone, Vector2 p, out Vector2 cutPoint)
         {
             if (bone.JointB != null)

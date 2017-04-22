@@ -21,8 +21,7 @@ namespace Typography.Rendering
         public readonly GlyphBoneJoint JointA;
         public readonly GlyphBoneJoint JointB;
         double _len;
-        public Vector2 cutPoint_onEdge;
-        EdgeLine _perpendicularEdge;
+
 
         public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
         {
@@ -41,21 +40,27 @@ namespace Typography.Rendering
             EvaluteSlope(a.Position, bpos);
             // 
 
-            //find common triangle between  2 joint
+            //  find common triangle between  2 joint
             GlyphTriangle commonTri = FindCommonTriangle(a, b);
             if (commonTri != null)
             {
                 //found common triangle 
-                EdgeLine outsideEdge = GetFirstFoundOutsidEdge(commonTri);
-                if (outsideEdge != null)
-                {
-                    PerpendicularEdge = outsideEdge;
-                    MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
-                }
-                else
-                {
+                OutsideEdge = GetFirstFoundOutsidEdge(commonTri);
+                //if (outsideEdge != null)
+                //{
 
-                }
+                //    if (MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge))
+                //    {
+                //        PerpendicularEdge = outsideEdge;
+                //    }
+                //    else
+                //    {
+                //    }
+                //}
+                //else
+                //{
+
+                //}
             }
             else
             {
@@ -68,6 +73,7 @@ namespace Typography.Rendering
             JointA = a;
             TipEdge = tipEdge;
 
+            this.IsTipBone = true;
             var midPoint = tipEdge.GetMidPoint();
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluteSlope(a.Position, midPoint);
@@ -75,35 +81,49 @@ namespace Typography.Rendering
             ////for analysis in later step 
             //tip bone, no common triangle
             //
-            EdgeLine outsideEdge = FindOutsideEdge(a, tipEdge);
-            if (outsideEdge != null)
-            {
-                PerpendicularEdge = outsideEdge;
-                MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
-            }
-            else
-            {
-
-            }
-            this.IsTipBone = true;
+            OutsideEdge = FindOutsideEdge(a, tipEdge);
+            //if (outsideEdge != null)
+            //{
+            //    if (MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge))
+            //    {
+            //        PerpendicularEdge = outsideEdge;
+            //    }
+            //    else
+            //    {
+            //    }
+            //}
+            //else
+            //{ 
+            //} 
         }
         public bool IsTipBone
         {
             get;
             private set;
         }
-        /// <summary>
-        /// perpendiculat edge of this bone
-        /// </summary>
-        public EdgeLine PerpendicularEdge
+        public bool IsLinkBack
         {
-            get { return _perpendicularEdge; }
-            internal set
+            get;
+            set;
+        }
+        EdgeLine _outsideEdge;
+        internal EdgeLine OutsideEdge
+        {
+            get { return _outsideEdge; }
+            set
             {
-                _perpendicularEdge = value;
-                value.PerpendicularBone = this;
+                _outsideEdge = value;
+                if (value != null)
+                {
+                    value.RelatedBone = this;
+                }
+                else
+                {
+                    //not outside edge
+                }
             }
         }
+
         static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
         {
             GlyphCentroidPair ownerCentroid_A = a.OwnerCentrodPair;
@@ -258,7 +278,16 @@ namespace Typography.Rendering
             _perpendiculatPoints.Add(pointToBoneLink);
         }
 
+#if DEBUG
 
+        public GlyphEdge dbugGlyphEdge
+        {
+            get
+            {
+                return (_outsideEdge != null) ? _outsideEdge.dbugGlyphEdge : null;
+            }
+        }
+#endif
 
 
 #if DEBUG

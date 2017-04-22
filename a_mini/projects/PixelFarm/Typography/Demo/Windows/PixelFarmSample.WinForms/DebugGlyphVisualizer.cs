@@ -277,6 +277,14 @@ namespace SampleWinForms.UI
                     painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
                 }
 
+                GlyphEdge glyphEdge = edge.dbugGlyphEdge;
+                if (glyphEdge != null && glyphEdge.RelatedBone != null)
+                {
+                    //drawline from this edge to related bone cutpoint
+                    Vector2 midEdge = edge.GetMidPoint();
+                    Vector2 boneCutPoint = glyphEdge.RelatedBoneCutPoint;
+                    painter.Line(midEdge.X * scale, midEdge.Y * scale, boneCutPoint.X * scale, boneCutPoint.Y * scale, PixelFarm.Drawing.Color.Red);
+                }
             }
             else
             {
@@ -398,68 +406,70 @@ namespace SampleWinForms.UI
                 _infoView.ShowBone(bone, jointA, bone.TipEdge);
             }
 
-            if (bone.PerpendicularEdge != null)
-            {
-                Vector2 midBone = bone.GetMidPoint() * pxscale;
-                Vector2 cut_point = bone.cutPoint_onEdge * pxscale;
-                painter.Line(
-                    cut_point.X, cut_point.Y,
-                    midBone.X, midBone.Y,
-                    PixelFarm.Drawing.Color.White);
-
-                //draw new line
-                Vector2 delta = bone.cutPoint_onEdge - bone.GetMidPoint();
-                double currentLen = delta.Length(); //unscale version
-                delta = delta.NewLength(currentLen * newRelativeLen);
-                //
-                Vector2 v2 = midBone + (delta * pxscale);
-                painter.Line(
-                    midBone.X, midBone.Y,
-                    v2.X, v2.Y,
-                    PixelFarm.Drawing.Color.Red);
-
-                //----------------------                
-                //create green point at mid of GlyphEdge
-                Vector2 midEdge = bone.PerpendicularEdge.GetMidPoint();
-                painter.FillRectLBWH(midEdge.X * pxscale, midEdge.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Green);
-
-                //----------------------                
-                //Vector2 delta3 = bone.cutPoint_onEdge - bone.GetMidPoint();
-                //delta3 = delta3.NewLength(100);// currentLen * newRelativeLen * 0.5);
-                //Vector2 midEdge2 = midEdge + delta3;
-                //painter.FillRectLBWH(midEdge2.X * pxscale, midEdge2.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
-                //painter.Line(midEdge.X * pxscale, midEdge.Y * pxscale,
-                //     midEdge2.X * pxscale, midEdge2.Y * pxscale, PixelFarm.Drawing.Color.Blue);
-                //----------------------
 
 
-                //draw marker at midEdge
-                //create a new perpendicular line
-                //
-                //create a new perpendicular line
-                //------------------------------------------
-                //create a line that parallel with the bone
-                //Vector2 boneVector = bone.GetBoneVector();
-                //var boneLen = boneVector.Length();
-                //Vector2 boneVec2 = boneVector.NewLength(boneLen * 0.5);
-                //Vector2 v2up = v2 + boneVec2;
-                //Vector2 v2down = v2 - boneVec2;
+            //if (bone.PerpendicularEdge != null)
+            //{
+            //    Vector2 midBone = bone.GetMidPoint() * pxscale;
+            //    Vector2 cut_point = bone.cutPoint_onEdge * pxscale;
+            //    painter.Line(
+            //        cut_point.X, cut_point.Y,
+            //        midBone.X, midBone.Y,
+            //        PixelFarm.Drawing.Color.White);
+
+            //    //draw new line
+            //    Vector2 delta = bone.cutPoint_onEdge - bone.GetMidPoint();
+            //    double currentLen = delta.Length(); //unscale version
+            //    delta = delta.NewLength(currentLen * newRelativeLen);
+            //    //
+            //    Vector2 v2 = midBone + (delta * pxscale);
+            //    painter.Line(
+            //        midBone.X, midBone.Y,
+            //        v2.X, v2.Y,
+            //        PixelFarm.Drawing.Color.Red);
+
+            //    //----------------------                
+            //    //create green point at mid of GlyphEdge
+            //    Vector2 midEdge = bone.PerpendicularEdge.GetMidPoint();
+            //    painter.FillRectLBWH(midEdge.X * pxscale, midEdge.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Green);
+
+            //    //----------------------                
+            //    //Vector2 delta3 = bone.cutPoint_onEdge - bone.GetMidPoint();
+            //    //delta3 = delta3.NewLength(100);// currentLen * newRelativeLen * 0.5);
+            //    //Vector2 midEdge2 = midEdge + delta3;
+            //    //painter.FillRectLBWH(midEdge2.X * pxscale, midEdge2.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
+            //    //painter.Line(midEdge.X * pxscale, midEdge.Y * pxscale,
+            //    //     midEdge2.X * pxscale, midEdge2.Y * pxscale, PixelFarm.Drawing.Color.Blue);
+            //    //----------------------
 
 
-                ////test only
-                //painter.Line(
-                //   v2.X, v2.Y,
-                //   v2up.X, v2up.Y,
-                //   PixelFarm.Drawing.Color.Red);
+            //    //draw marker at midEdge
+            //    //create a new perpendicular line
+            //    //
+            //    //create a new perpendicular line
+            //    //------------------------------------------
+            //    //create a line that parallel with the bone
+            //    //Vector2 boneVector = bone.GetBoneVector();
+            //    //var boneLen = boneVector.Length();
+            //    //Vector2 boneVec2 = boneVector.NewLength(boneLen * 0.5);
+            //    //Vector2 v2up = v2 + boneVec2;
+            //    //Vector2 v2down = v2 - boneVec2;
 
-                ////test only
-                //painter.Line(
-                //   v2.X, v2.Y,
-                //   v2down.X, v2down.Y,
-                //   PixelFarm.Drawing.Color.Red);
-                //////------------------------------------------
 
-            }
+            //    ////test only
+            //    //painter.Line(
+            //    //   v2.X, v2.Y,
+            //    //   v2up.X, v2up.Y,
+            //    //   PixelFarm.Drawing.Color.Red);
+
+            //    ////test only
+            //    //painter.Line(
+            //    //   v2.X, v2.Y,
+            //    //   v2down.X, v2down.Y,
+            //    //   PixelFarm.Drawing.Color.Red);
+            //    //////------------------------------------------
+
+            //}
 
             //--------
             //draw a perpendicular line from bone to associated glyph point
