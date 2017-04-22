@@ -68,9 +68,7 @@ namespace Typography.Rendering
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluteSlope(a.Position, midPoint);
             //------
-            ////for analysis in later step
-
-
+            ////for analysis in later step 
             //tip bone, no common triangle
             //
             EdgeLine outsideEdge = FindOutsideEdge(a, tipEdge);
@@ -79,8 +77,13 @@ namespace Typography.Rendering
                 PerpendicularEdge = outsideEdge;
                 MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
             }
+            this.IsTipBone = true;
         }
-
+        public bool IsTipBone
+        {
+            get;
+            private set;
+        }
         /// <summary>
         /// perpendiculat edge of this bone
         /// </summary>
@@ -92,7 +95,7 @@ namespace Typography.Rendering
                 _perpendicularEdge = value;
                 value.PerpendicularBone = this;
             }
-        } 
+        }
         static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
         {
             GlyphCentroidPair ownerCentroid_A = a.OwnerCentrodPair;
@@ -151,7 +154,7 @@ namespace Typography.Rendering
             double x1 = q.X;
             double y1 = q.Y;
 
-            SlopeAngleNoDirection = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0))); 
+            SlopeAngleNoDirection = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
             if (x1 == x0)
             {
                 this.SlopeKind = LineSlopeKind.Vertical;

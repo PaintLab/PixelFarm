@@ -65,7 +65,7 @@ namespace Typography.Rendering
             {
                 //single line
                 //eg 'l' letter
-                pairs[0].UpdateTips(); 
+                pairs[0].UpdateTips();
             }
         }
 
@@ -258,28 +258,28 @@ namespace Typography.Rendering
                 for (int i = 0; i < j; ++i)
                 {
                     //for each GlyphCentroidPair                    
-                    //create bone that link the GlyphBoneJoint of the pair.
-
+                    //create bone that link the GlyphBoneJoint of the pair 
                     GlyphCentroidPair pair = lineList[i];
                     GlyphBoneJoint joint = pair.BoneJoint;
-                    //first one
                     if (joint.TipEdgeP != null)
                     {
-                        //has tip point
-                        //create bone that link this joint 
-                        //and the edge
-                        if (i != j - 1)
-                        {
-                            //not the last one
-                            GlyphBone bone = new GlyphBone(joint, joint.TipEdgeP);
-                            newlyCreatedBones.Add(bone);
-                            glyphBones.Add(bone);
-                        }
+
+                        GlyphBone tipBone = new GlyphBone(joint, joint.TipEdgeP);
+                        newlyCreatedBones.Add(tipBone);
+                        glyphBones.Add(tipBone);
                     }
 
+                    if (joint.TipEdgeQ != null)
+                    {
+                        GlyphBone tipBone = new GlyphBone(joint, joint.TipEdgeQ);
+                        newlyCreatedBones.Add(tipBone);
+                        glyphBones.Add(tipBone);
+                    }
+                    //----------------------------------------------------- 
                     if (i < j - 1)
                     {
                         //not the last one 
+                        //has tip end 
                         GlyphCentroidPair nextline = lineList[i + 1];
                         GlyphBoneJoint nextJoint = nextline.BoneJoint;
                         GlyphBone bone = new GlyphBone(joint, nextJoint);
@@ -288,24 +288,15 @@ namespace Typography.Rendering
                     }
                     else
                     {
-                        //last one
-                        if (joint.TipEdgeP != null)
+                        //the last one ...
+                        if (j > 1)
                         {
-                            //not the last one
-                            GlyphBone bone = new GlyphBone(joint, joint.TipEdgeP);
+                            //check if  the last bone is connected to the first or not
+                            
+                            GlyphCentroidPair nextline = lineList[0];
+                            GlyphBone bone = new GlyphBone(joint, nextline.BoneJoint);
                             newlyCreatedBones.Add(bone);
                             glyphBones.Add(bone);
-                        }
-                        else
-                        {
-                            //glyph 'o' -> no tip point
-                            if (j > 1)
-                            {
-                                GlyphCentroidPair nextline = lineList[0];
-                                GlyphBone bone = new GlyphBone(joint, nextline.BoneJoint);
-                                newlyCreatedBones.Add(bone);
-                                glyphBones.Add(bone);
-                            }
                         }
                     }
                 }
