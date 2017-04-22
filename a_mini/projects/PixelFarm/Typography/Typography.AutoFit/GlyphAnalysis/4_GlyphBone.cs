@@ -52,6 +52,10 @@ namespace Typography.Rendering
                     PerpendicularEdge = outsideEdge;
                     MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
                 }
+                else
+                {
+
+                }
             }
             else
             {
@@ -76,6 +80,10 @@ namespace Typography.Rendering
             {
                 PerpendicularEdge = outsideEdge;
                 MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge);
+            }
+            else
+            {
+
             }
             this.IsTipBone = true;
         }

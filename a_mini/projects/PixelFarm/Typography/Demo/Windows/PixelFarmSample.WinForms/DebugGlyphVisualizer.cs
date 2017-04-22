@@ -551,7 +551,7 @@ namespace SampleWinForms.UI
             float pxscale = this._pxscale;
             painter.Line(qx * pxscale, qy * pxscale,
                          tip_qx * pxscale, tip_qy * pxscale,
-                         PixelFarm.Drawing.Color.Blue);
+                         PixelFarm.Drawing.Color.Green);
         }
         protected override void OnBoneJoint(GlyphBoneJoint joint)
         {

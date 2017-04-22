@@ -57,7 +57,7 @@ namespace Typography.Rendering
                             if (pair.BoneJoint.TipEdgeQ != null)
                             {
                                 Vector2 pos = pair.BoneJoint.TipPointQ;
-                                OnCentroidLineTip_P(qx, qy, pos.X, pos.Y);
+                                OnCentroidLineTip_Q(qx, qy, pos.X, pos.Y);
                             } 
                         }
                         if (WalkGlyphBone)
