@@ -34,7 +34,7 @@ namespace Typography.Rendering
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
                 Dictionary<GlyphTriangle, GlyphCentroidLine> branches = lineHub.GetAllBranches();
-                System.Numerics.Vector2 hubCenter = lineHub.GetCenterPos();
+                Vector2 hubCenter = lineHub.GetCenterPos();
 
                 OnBegingLineHub(hubCenter.X, hubCenter.Y);
                 foreach (GlyphCentroidLine branch in branches.Values)
@@ -42,29 +42,27 @@ namespace Typography.Rendering
                     int lineCount = branch.pairs.Count;
                     for (int i = 0; i < lineCount; ++i)
                     {
-                        GlyphCentroidPair line = branch.pairs[i];
+                        GlyphCentroidPair pair = branch.pairs[i];
                         if (WalkCentroidBone)
                         {
                             double px, py, qx, qy;
-                            line.GetLineCoords(out px, out py, out qx, out qy);
+                            pair.GetLineCoords(out px, out py, out qx, out qy);
                             OnCentroidLine(px, py, qx, qy);
-
-
-                            if (line.P_Tip != null)
+                            //--------------------------------------------------
+                            if (pair.BoneJoint.TipEdgeP != null)
                             {
-                                var pos = line.P_Tip.Pos;
+                                Vector2 pos = pair.BoneJoint.TipPointP;
                                 OnCentroidLineTip_P(px, py, pos.X, pos.Y);
                             }
-                            if (line.Q_Tip != null)
+                            if (pair.BoneJoint.TipEdgeQ != null)
                             {
-                                var pos = line.Q_Tip.Pos;
-                                OnCentroidLineTip_Q(qx, qy, pos.X, pos.Y);
-                            }
-
+                                Vector2 pos = pair.BoneJoint.TipPointQ;
+                                OnCentroidLineTip_P(qx, qy, pos.X, pos.Y);
+                            } 
                         }
                         if (WalkGlyphBone)
                         {
-                            OnBoneJoint(line.BoneJoint);
+                            OnBoneJoint(pair.BoneJoint);
                         }
                     }
                     if (WalkGlyphBone)

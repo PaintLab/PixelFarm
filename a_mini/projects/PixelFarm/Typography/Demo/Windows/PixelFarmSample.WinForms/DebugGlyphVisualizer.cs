@@ -298,9 +298,9 @@ namespace SampleWinForms.UI
             //mid point
             Vector2 jointPos = joint.Position * pxscale;//scaled joint pos
             painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);
-            if (joint.TipPoint != Vector2.Zero)
+            if (joint.TipEdgeP != null)
             {
-                EdgeLine tipEdge = joint.TipEdge;
+                EdgeLine tipEdge = joint.TipEdgeP;
                 float p_x = tipEdge.GlyphPoint_P.x * pxscale;
                 float p_y = tipEdge.GlyphPoint_P.y * pxscale;
                 float q_x = tipEdge.GlyphPoint_Q.x * pxscale;
@@ -320,6 +320,30 @@ namespace SampleWinForms.UI
                     PixelFarm.Drawing.Color.White);
                 painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
             }
+            if (joint.TipEdgeQ != null)
+            {
+                EdgeLine tipEdge = joint.TipEdgeQ;
+
+                float p_x = tipEdge.GlyphPoint_P.x * pxscale;
+                float p_y = tipEdge.GlyphPoint_P.y * pxscale;
+                float q_x = tipEdge.GlyphPoint_Q.x * pxscale;
+                float q_y = tipEdge.GlyphPoint_Q.y * pxscale;
+
+                //
+                painter.Line(
+                   jointPos.X, jointPos.Y,
+                   p_x, p_y,
+                   PixelFarm.Drawing.Color.White);
+                painter.FillRectLBWH(p_x, p_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
+
+                //
+                painter.Line(
+                    jointPos.X, jointPos.Y,
+                    q_x, q_y,
+                    PixelFarm.Drawing.Color.White);
+                painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
+            }
+
         }
 
         Vector2 _branchHeadPos;

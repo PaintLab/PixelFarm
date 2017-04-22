@@ -40,9 +40,9 @@ namespace Typography.Rendering
 #endif
 
         }
-        static EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
+        EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
         {
-            return new EdgeLine(p.userData as GlyphPoint, q.userData as GlyphPoint, isOutside);
+            return new EdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint, isOutside);
         }
         public double CentroidX
         {
@@ -52,7 +52,7 @@ namespace Typography.Rendering
         {
             get { return centroidY; }
         }
-        
+
         internal bool IsConnectedWith(GlyphTriangle anotherTri)
         {
             DelaunayTriangle t2 = anotherTri._tri;

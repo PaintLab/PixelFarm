@@ -1,6 +1,6 @@
 ﻿//MIT, 2017, WinterDev
 using System;
-
+using System.Numerics;
 namespace Typography.Rendering
 {
     /// <summary>
@@ -58,32 +58,79 @@ namespace Typography.Rendering
             //after this process, a boneJoint should be created
             //------------------------------------
 
-            if (_boneJoint != null)
-            {
-                //a joint has 2 contact edge (they are mathcing edge, but not the same).
-                //we add 'information' about other edge compare to the contact edges
-                //---
-                //both contact edge is INSIDE edge***
-                //then, we mark outside edge compare to the known inside edge          
 #if DEBUG
-                if (_boneJoint._p_contact_edge == _boneJoint._q_contact_edge)
-                {
-                    throw new NotSupportedException();
-                }
-#endif
-                MarkProperOppositeOutsideEdges(p, _boneJoint, _boneJoint._p_contact_edge);
-                MarkProperOppositeOutsideEdges(q, _boneJoint, _boneJoint._q_contact_edge);
-            }
-
-            else
+            //the pair must have joint
+            //1.
+            if (_boneJoint == null) { throw new NotSupportedException(); }
+            //2. 
+            if (_boneJoint._p_contact_edge == _boneJoint._q_contact_edge)
             {
-                //?
+                throw new NotSupportedException();
             }
+#endif
 
+            //a joint has 2 contact edge (they are mathcing edge, but not the same).
+            //we add 'information' about other edge compare to the contact edges
+            //---
+            //both contact edge is INSIDE edge***
+            //then, we mark outside edge compare to the known inside edge          
+            MarkProperOppositeOutsideEdges(p, _boneJoint._p_contact_edge, true);
+            MarkProperOppositeOutsideEdges(q, _boneJoint._q_contact_edge, false);
+        } 
+        internal void UpdateTips()
+        {
+
+            //GlyphBoneJoint joint = pair.BoneJoint;
+            //get another edge for endtip
+
+            //if (IsOwnerOf(pair.p, joint.TipEdgeP))
+            //{
+            //    //tip edge is from p side
+            //    //so another side is q.
+
+            //    Vector2 tipPoint = joint.TipPointP;
+            //    GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdgeP);
+            //    pair.P_Tip = tip;
+
+            //    if (twoside)
+            //    {
+            //        EdgeLine tipEdge = FindTip(pair, pair.q);
+            //        if (tipEdge == null) throw new NotSupportedException();
+            //        //-----
+            //        tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
+            //        pair.Q_Tip = tip;
+            //    }
+            //}
+            //else if (IsOwnerOf(pair.q, joint.TipEdgeP))
+            //{
+
+            //    Vector2 tipPoint = joint.TipPointP;
+            //    GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdgeP);
+            //    pair.Q_Tip = tip;
+
+
+            //    //tip edge is from q side
+            //    //so another side is p.
+
+            //    if (twoside)
+            //    {
+            //        //find proper tip edge
+            //        EdgeLine tipEdge = FindTip(pair, pair.p);
+            //        if (tipEdge == null)
+            //        {
+            //            //some time no tip found ***
+            //            return;
+            //        }
+            //        //-----
+            //        tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
+            //        pair.P_Tip = tip;
+            //    }
+            //}
+            //else
+            //{
+            //    throw new NotSupportedException();
+            //}
         }
-
-        public GlyphTip P_Tip { get; set; }
-        public GlyphTip Q_Tip { get; set; }
 
 
         static void ClassifyTriangleEdges(
@@ -154,37 +201,32 @@ namespace Typography.Rendering
             }
         }
 
-
-        static void SelectMostProperTipEdge(GlyphBoneJoint ownerEdgeJoint,
-            EdgeLine outside0,
-            EdgeLine outside1,
-            out EdgeLine tipEdge,
-            out EdgeLine notTipEdge)
+        static double CalculateCentroidPairSlope(GlyphCentroidPair centroidPair, out LineSlopeKind centroidLineSlope)
         {
-            GlyphCentroidPair ownerPair = ownerEdgeJoint.OwnerCentrodPair;
+            //calculate centroid pair slope 
             //p
-            double x0 = ownerPair.p.CentroidX;
-            double y0 = ownerPair.p.CentroidY;
+            double x0 = centroidPair.p.CentroidX;
+            double y0 = centroidPair.p.CentroidY;
             //q
-            double x1 = ownerPair.q.CentroidX;
-            double y1 = ownerPair.q.CentroidY;
+            double x1 = centroidPair.q.CentroidX;
+            double y1 = centroidPair.q.CentroidY;
 
-            LineSlopeKind centroidLineSlope = LineSlopeKind.Other;
-            double slopeAngle = 0;
+            centroidLineSlope = LineSlopeKind.Other;
+            double slopeAngleNoDirection = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
+            //we don't care direction of vector 
             if (x1 == x0)
             {
                 centroidLineSlope = LineSlopeKind.Vertical;
-                slopeAngle = 1;
             }
             else
             {
-                slopeAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-                if (slopeAngle > MyMath._85degreeToRad)
+
+                if (slopeAngleNoDirection > MyMath._85degreeToRad)
                 {
                     //assume
                     centroidLineSlope = LineSlopeKind.Vertical;
                 }
-                else if (slopeAngle < MyMath._03degreeToRad) //_15degreeToRad
+                else if (slopeAngleNoDirection < MyMath._03degreeToRad) //_15degreeToRad
                 {
                     //assume
                     centroidLineSlope = LineSlopeKind.Horizontal;
@@ -194,57 +236,87 @@ namespace Typography.Rendering
                     centroidLineSlope = LineSlopeKind.Other;
                 }
             }
-            //---------------------
-            switch (centroidLineSlope)
+            return slopeAngleNoDirection;
+        }
+        static void SelectMostProperTipEdge(
+            GlyphCentroidPair centroidPair,
+            EdgeLine outside0,
+            EdgeLine outside1,
+            out EdgeLine tipEdge,
+            out EdgeLine notTipEdge)
+        {
+            LineSlopeKind slopeKind;
+            //slop angle in rad
+            double slopeAngle = CalculateCentroidPairSlope(centroidPair, out slopeKind);
+            double diff0 = Math.Abs(outside0.GetSlopeAngleNoDirection() - slopeAngle);
+            double diff1 = Math.Abs(outside1.GetSlopeAngleNoDirection() - slopeAngle);
+            if (diff0 > diff1)
             {
-                default: throw new NotSupportedException();
-                case LineSlopeKind.Horizontal:
-                    if (outside0.SlopeKind == LineSlopeKind.Vertical)
-                    {
-                        tipEdge = outside0;
-                        notTipEdge = outside1;
-                    }
-                    else
-                    {
-                        tipEdge = outside1;
-                        notTipEdge = outside0;
-                    }
-                    break;
-                case LineSlopeKind.Vertical:
-                    if (outside0.SlopeKind == LineSlopeKind.Horizontal)
-                    {
-                        tipEdge = outside0;
-                        notTipEdge = outside1;
-                    }
-                    else
-                    {
-                        tipEdge = outside1;
-                        notTipEdge = outside0;
-                    }
-                    break;
-                case LineSlopeKind.Other:
-                    //select 1
-                    //choose the horizontal one 
-                    if (outside0.SlopeKind == LineSlopeKind.Horizontal)
-                    {
-                        tipEdge = outside0;
-                        notTipEdge = outside1;
-                    }
-                    else
-                    {
-                        tipEdge = outside1;
-                        notTipEdge = outside0;
-                    }
-                    break;
+                tipEdge = outside0;
+                notTipEdge = outside1;
             }
+            else
+            {
+                tipEdge = outside1;
+                notTipEdge = outside0;
+            }
+
+
+
+            ////---------------------
+            //switch (slopeKind)
+            //{
+            //    default: throw new NotSupportedException();
+            //    case LineSlopeKind.Horizontal:
+            //        if (outside0.SlopeKind == LineSlopeKind.Vertical)
+            //        {
+            //            tipEdge = outside0;
+            //            notTipEdge = outside1;
+            //        }
+            //        else
+            //        {
+            //            tipEdge = outside1;
+            //            notTipEdge = outside0;
+            //        }
+            //        break;
+            //    case LineSlopeKind.Vertical:
+            //        if (outside0.SlopeKind == LineSlopeKind.Horizontal)
+            //        {
+            //            tipEdge = outside0;
+            //            notTipEdge = outside1;
+            //        }
+            //        else
+            //        {
+            //            tipEdge = outside1;
+            //            notTipEdge = outside0;
+            //        }
+            //        break;
+            //    case LineSlopeKind.Other:
+            //        //select 1
+            //        //choose the horizontal one 
+            //        if (outside0.SlopeKind == LineSlopeKind.Horizontal)
+            //        {
+            //            tipEdge = outside0;
+            //            notTipEdge = outside1;
+            //        }
+            //        else
+            //        {
+            //            tipEdge = outside1;
+            //            notTipEdge = outside0;
+            //        }
+            //        break;
+            //}
         }
         /// <summary>
         /// add information about each edge of a triangle, compare to the contactEdge of a ownerEdgeJoint
         /// </summary>
         /// <param name="triangle"></param>
-        /// <param name="ownerEdgeJoint"></param>
+        /// <param name="boneJoint"></param>
         /// <param name="contactEdge"></param>
-        void MarkProperOppositeOutsideEdges(GlyphTriangle triangle, GlyphBoneJoint ownerEdgeJoint, EdgeLine contactEdge)
+        void MarkProperOppositeOutsideEdges(
+            GlyphTriangle triangle,
+            EdgeLine contactEdge,
+            bool is_p_side)
         {
 
             int outsideCount;
@@ -257,20 +329,13 @@ namespace Typography.Rendering
                 out outside1,
                 out outside2,
                 out outsideCount);
-
-
             //-------------------------------------------------------------------------------------------------------
             //1. check each edge of triangle 
-            //if an edge is outside  edge (since it is outside edge, it is not the contactEdge)
-
-
+            //if an edge is outside  edge (since it is outside edge, it is not the contactEdge) 
             //count represent OUTSIDE edge count, compare to the contactEdge
             //if count ==0 ,=> no outside edge found
             //count==1, => only 1 outside edge
-            //count==2, => this is tip of the centroid branch, ***
-
-
-
+            //count==2, => this is tip of the centroid branch, *** 
             //a contact edge has 2 glyph points
             //a GlyphPoint from p triangle=> GlyphPoint_P
             //and
@@ -330,14 +395,21 @@ namespace Typography.Rendering
                         //-------------------------------------------------------------------------
 
                         EdgeLine tipEdge, notTipEdge;
-                        SelectMostProperTipEdge(ownerEdgeJoint,
+                        SelectMostProperTipEdge(this,
                             outside0,
                             outside1,
                             out tipEdge,
                             out notTipEdge);
                         //for TipEdge
-                        ownerEdgeJoint.SetTipEdge(tipEdge);
-
+                        if (is_p_side)
+                        {
+                            _boneJoint.SetTipEdge_P(tipEdge);
+                        }
+                        else
+                        {
+                            //q side
+                            _boneJoint.SetTipEdge_Q(tipEdge);
+                        }
                         //for notTipEdge 
                         //Vector2 perpend_B;
                         //if (MyMath.FindPerpendicularCutPoint(notTipEdge, ownerEdgeJoint.Position, out perpend_B))
@@ -545,16 +617,16 @@ namespace Typography.Rendering
             out int edgeIndex)
         {
             //compare by radian of edge line
-            double compareSlope = Math.Abs(compareEdge.SlopAngle);
+            double compareSlope = Math.Abs(compareEdge.SlopeAngleNoDirection);
             double diff0 = double.MaxValue;
             double diff1 = double.MaxValue;
             double diff2 = double.MaxValue;
 
-            diff0 = Math.Abs(Math.Abs(another.e0.SlopAngle) - compareSlope);
+            diff0 = Math.Abs(Math.Abs(another.e0.SlopeAngleNoDirection) - compareSlope);
 
-            diff1 = Math.Abs(Math.Abs(another.e1.SlopAngle) - compareSlope);
+            diff1 = Math.Abs(Math.Abs(another.e1.SlopeAngleNoDirection) - compareSlope);
 
-            diff2 = Math.Abs(Math.Abs(another.e2.SlopAngle) - compareSlope);
+            diff2 = Math.Abs(Math.Abs(another.e2.SlopeAngleNoDirection) - compareSlope);
 
             //find min
             int minDiffSide = FindMinByIndex(diff0, diff1, diff2);

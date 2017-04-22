@@ -562,11 +562,11 @@ namespace Typography.Rendering
             //remove this rib
 
 
-            if (joint.TipPoint != System.Numerics.Vector2.Zero)
+            if (joint.TipPointP != System.Numerics.Vector2.Zero)
             {
                 //TODO: review here, tip point
                 strokeJoint.hasTip = true;
-                strokeJoint._tip_endAt = joint.TipPoint;
+                strokeJoint._tip_endAt = joint.TipPointP;
             }
         }
 

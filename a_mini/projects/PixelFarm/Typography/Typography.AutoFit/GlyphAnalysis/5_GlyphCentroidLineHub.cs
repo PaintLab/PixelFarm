@@ -57,82 +57,18 @@ namespace Typography.Rendering
 
                 if (!last_pair.SpecialConnectFromLastToFirst)
                 {
-                    //no connection from last to first (eg. o)
-                    //one side is tip edge
-                    if (first_pair.BoneJoint.TipEdge != null)
-                    {
-                        //create tip info
-                        AssignTipInfo(first_pair, false);
-                    }
-                    if (last_pair.BoneJoint.TipEdge != null)
-                    {
-                        //create tip info
-                        AssignTipInfo(last_pair, false);
-                    }
+                    first_pair.UpdateTips();
+                    last_pair.UpdateTips();
                 }
             }
             else if (j == 1)
             {
                 //single line
                 //eg 'l' letter
-
-                GlyphCentroidPair line = pairs[0];
-                AssignTipInfo(line, true);
+                pairs[0].UpdateTips(); 
             }
         }
-        static void AssignTipInfo(GlyphCentroidPair pair, bool twoside)
-        {
-            GlyphBoneJoint joint = pair.BoneJoint;
-            //get another edge for endtip
 
-            if (IsOwnerOf(pair.p, joint.TipEdge))
-            {
-                //tip edge is from p side
-                //so another side is q.
-
-                var tipPoint = joint.TipPoint;
-                GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdge);
-                pair.P_Tip = tip;
-
-                if (twoside)
-                {
-                    EdgeLine tipEdge = FindTip(pair, pair.q);
-                    if (tipEdge == null) throw new NotSupportedException();
-                    //-----
-                    tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
-                    pair.Q_Tip = tip;
-                }
-            }
-            else if (IsOwnerOf(pair.q, joint.TipEdge))
-            {
-
-                var tipPoint = joint.TipPoint;
-                GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdge);
-                pair.Q_Tip = tip;
-
-
-                //tip edge is from q side
-                //so another side is p.
-
-                if (twoside)
-                {
-                    //find proper tip edge
-                    EdgeLine tipEdge = FindTip(pair, pair.p);
-                    if (tipEdge == null)
-                    {
-                        //some time no tip found ***
-                        return;
-                    }
-                    //-----
-                    tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
-                    pair.P_Tip = tip;
-                }
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
-        }
         static EdgeLine FindTip(GlyphCentroidPair pair, GlyphTriangle triangle)
         {
             GlyphBoneJoint boneJoint = pair.BoneJoint;
@@ -183,7 +119,7 @@ namespace Typography.Rendering
                 GlyphBoneJoint joint = pairs[i].BoneJoint;
                 //each pair has 1 bone joint 
                 //once we have 1 candidate
-                if (JointContainsTri(joint, tri))
+                if (joint.ComposeOf(tri))
                 {
                     //found another joint
                     return joint;
@@ -198,11 +134,11 @@ namespace Typography.Rendering
 
             GlyphBoneJoint foundOnA = null;
             GlyphBoneJoint foundOnB = null;
-            if (b.JointA != null && JointContainsTri(b.JointA, tri))
+            if (b.JointA != null && b.JointA.ComposeOf(tri))
             {
                 foundOnA = b.JointA;
             }
-            if (b.JointB != null && JointContainsTri(b.JointB, tri))
+            if (b.JointB != null && b.JointB.ComposeOf(tri))
             {
                 foundOnB = b.JointB;
             }
@@ -228,17 +164,7 @@ namespace Typography.Rendering
             }
             return null;
         }
-        /// <summary>
-        /// check if the joint contains this triangle
-        /// </summary>
-        /// <param name="joint"></param>
-        /// <param name="tri"></param>
-        /// <returns></returns>
-        static bool JointContainsTri(GlyphBoneJoint joint, GlyphTriangle tri)
-        {
-            GlyphCentroidPair ownerPair = joint.OwnerCentrodPair;
-            return ownerPair.p == tri || ownerPair.q == tri;
-        }
+
     }
 
     /// <summary>
@@ -337,7 +263,7 @@ namespace Typography.Rendering
                     GlyphCentroidPair pair = lineList[i];
                     GlyphBoneJoint joint = pair.BoneJoint;
                     //first one
-                    if (joint.TipEdge != null)
+                    if (joint.TipEdgeP != null)
                     {
                         //has tip point
                         //create bone that link this joint 
@@ -345,7 +271,7 @@ namespace Typography.Rendering
                         if (i != j - 1)
                         {
                             //not the last one
-                            GlyphBone bone = new GlyphBone(joint, joint.TipEdge);
+                            GlyphBone bone = new GlyphBone(joint, joint.TipEdgeP);
                             newlyCreatedBones.Add(bone);
                             glyphBones.Add(bone);
                         }
@@ -363,10 +289,10 @@ namespace Typography.Rendering
                     else
                     {
                         //last one
-                        if (joint.TipEdge != null)
+                        if (joint.TipEdgeP != null)
                         {
                             //not the last one
-                            GlyphBone bone = new GlyphBone(joint, joint.TipEdge);
+                            GlyphBone bone = new GlyphBone(joint, joint.TipEdgeP);
                             newlyCreatedBones.Add(bone);
                             glyphBones.Add(bone);
                         }
@@ -429,8 +355,6 @@ namespace Typography.Rendering
             this.anotherCentroidLine = anotherCentroidLine;
             this.foundOnJoint = foundOnJoint;
         }
-
-
         public GlyphBoneJoint GetHeadConnectedJoint()
         {
             return foundOnJoint;
@@ -439,22 +363,5 @@ namespace Typography.Rendering
         {
             return this.otherConnectedLineHubs;
         }
-
     }
-
-
-    class GlyphTip
-    {
-        public GlyphTip(GlyphCentroidPair ownerLine, Vector2 pos, EdgeLine edge)
-        {
-            this.OwnerLine = ownerLine;
-            this.Pos = pos;
-            this.Edge = edge;
-        }
-        public GlyphCentroidPair OwnerLine { get; set; }
-        public Vector2 Pos { get; set; }
-        public EdgeLine Edge { get; set; }
-    }
-
-
 }

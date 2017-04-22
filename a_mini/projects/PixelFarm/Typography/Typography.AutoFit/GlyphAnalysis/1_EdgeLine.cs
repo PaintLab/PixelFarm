@@ -36,17 +36,17 @@ namespace Typography.Rendering
         public readonly int dbugId = s_dbugTotalId++;
         internal GlyphTriangle dbugOwner;
 #endif
-
-        internal EdgeLine(GlyphPoint p, GlyphPoint q, bool isOutside)
+        GlyphTriangle ownerTriangle;
+        internal EdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q, bool isOutside)
         {
+            this.ownerTriangle = ownerTriangle;
             //------------------------------------
             //an edge line connects 2 glyph points.
             //it is created from triangulation process.
             //
             //some edge line is either 'INSIDE' edge  OR 'OUTSIDE'.
             //
-            //------------------------------------           
-
+            //------------------------------------   
             this.IsOutside = isOutside;
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;
@@ -57,20 +57,20 @@ namespace Typography.Rendering
             y1 = q.y;
             //-------------------------------
             //analyze angle and slope kind
-            //-------------------------------
+            //------------------------------- 
+            SlopeAngleNoDirection = this.GetSlopeAngleNoDirection();
             if (x1 == x0)
             {
                 this.SlopeKind = LineSlopeKind.Vertical;
-                SlopAngle = 1;
             }
             else
             {
-                SlopAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-                if (SlopAngle > _85degreeToRad)
+
+                if (SlopeAngleNoDirection > _85degreeToRad)
                 {
                     SlopeKind = LineSlopeKind.Vertical;
                 }
-                else if (SlopAngle < _01degreeToRad)
+                else if (SlopeAngleNoDirection < _01degreeToRad)
                 {
                     SlopeKind = LineSlopeKind.Horizontal;
                 }
@@ -105,6 +105,11 @@ namespace Typography.Rendering
             get;
             private set;
         }
+
+        internal double GetSlopeAngleNoDirection()
+        {
+            return Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
+        }
         public bool IsOutside
         {
             get;
@@ -115,7 +120,7 @@ namespace Typography.Rendering
             get { return !this.IsOutside; }
 
         }
-        public double SlopAngle
+        internal double SlopeAngleNoDirection
         {
             get;
             private set;

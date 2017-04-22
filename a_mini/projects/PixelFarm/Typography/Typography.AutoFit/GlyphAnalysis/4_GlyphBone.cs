@@ -92,9 +92,7 @@ namespace Typography.Rendering
                 _perpendicularEdge = value;
                 value.PerpendicularBone = this;
             }
-        }
-
-
+        } 
         static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
         {
             GlyphCentroidPair ownerCentroid_A = a.OwnerCentrodPair;
@@ -143,6 +141,7 @@ namespace Typography.Rendering
             if (tri.e2.IsOutside) { return tri.e2; }
             return null; //not found               
         }
+
         void EvaluteSlope(Vector2 p, Vector2 q)
         {
 
@@ -152,19 +151,18 @@ namespace Typography.Rendering
             double x1 = q.X;
             double y1 = q.Y;
 
+            SlopeAngleNoDirection = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0))); 
             if (x1 == x0)
             {
                 this.SlopeKind = LineSlopeKind.Vertical;
-                SlopeAngle = 1;
             }
             else
             {
-                SlopeAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-                if (SlopeAngle > MyMath._85degreeToRad)
+                if (SlopeAngleNoDirection > MyMath._85degreeToRad)
                 {
                     SlopeKind = LineSlopeKind.Vertical;
                 }
-                else if (SlopeAngle < MyMath._03degreeToRad) //_15degreeToRad
+                else if (SlopeAngleNoDirection < MyMath._03degreeToRad) //_15degreeToRad
                 {
                     SlopeKind = LineSlopeKind.Horizontal;
                 }
@@ -174,7 +172,7 @@ namespace Typography.Rendering
                 }
             }
         }
-        internal double SlopeAngle { get; set; }
+        internal double SlopeAngleNoDirection { get; set; }
         public LineSlopeKind SlopeKind { get; set; }
         internal double Length
         {

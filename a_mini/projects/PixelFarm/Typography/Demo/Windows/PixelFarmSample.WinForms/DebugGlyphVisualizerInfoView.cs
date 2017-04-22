@@ -303,9 +303,9 @@ namespace SampleWinForms.UI
             jointNode.Text = "j:" + joint.ToString();
             _jointsNode.Nodes.Add(jointNode);
 
-            if (joint.TipPoint != System.Numerics.Vector2.Zero)
+            if (joint.TipPointP != System.Numerics.Vector2.Zero)
             {
-                jointNode.Nodes.Add(new TreeNode() { Text = "tip:" + joint.TipPoint, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPoint) });
+                jointNode.Nodes.Add(new TreeNode() { Text = "tip:" + joint.TipPointP, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPointP) });
             }
 
         }
