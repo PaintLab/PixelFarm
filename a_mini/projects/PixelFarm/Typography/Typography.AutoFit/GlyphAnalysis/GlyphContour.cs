@@ -186,10 +186,10 @@ namespace Typography.Rendering
         }
         internal void ApplyNewRelativeEdgeDistance(float relativeDistance)
         {
-            if (edges == null) return;
-            //
-            int j = edges.Count;
-            if (j < 1) return;
+            //if (edges == null) return;
+            ////
+            //int j = edges.Count;
+            //if (j < 1) return;
 
             //for (int i = 0; i < j; ++i)
             //{
@@ -197,14 +197,22 @@ namespace Typography.Rendering
             //}
             ////find new cutpoint between edges
             //create new cutting point between edges
-            int lim = j - 1;
-            for (int i = 0; i < lim; ++i)
+            //int lim = j - 1;
+            //for (int i = 0; i < lim; ++i)
+            //{
+            //    //e0 and e1 share cutpoint
+            //    GlyphEdge.FindCutPoint(edges[i], edges[i + 1]);
+            //}
+            ////last one 
+            //GlyphEdge.FindCutPoint(edges[lim], edges[0]);
+
+            int j = flattenPoints.Count;
+            for (int i = 0; i < j; ++i)
             {
-                //e0 and e1 share cutpoint
-                GlyphEdge.FindCutPoint(edges[i], edges[i + 1]);
+                flattenPoints[i].ApplyNewRelativeLen(relativeDistance);
+
             }
-            //last one 
-            GlyphEdge.FindCutPoint(edges[lim], edges[0]);
+
         }
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
         {

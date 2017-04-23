@@ -44,17 +44,18 @@ namespace Typography.Rendering
             _edgeLine.GlyphPoint_P.EvaluatePerpendicularBone();
             _edgeLine.GlyphPoint_Q.EvaluatePerpendicularBone();
         }
-        internal static void FindCutPoint(GlyphEdge e0, GlyphEdge e1)
-        {
-            //find cutpoint from e0.q to e1.p 
-            //new sample
-            Vector2 tmp_e0_q = e0._newEdgeCutPoint + e0._o_edgeVector;
-            Vector2 tmp_e1_p = e1._newEdgeCutPoint - e1._o_edgeVector;
-            Vector2 cutpoint = FindCutPoint(e0._newEdgeCutPoint, tmp_e0_q, e1._newEdgeCutPoint, tmp_e1_p);
 
-            e0._Q.newX = e1._P.newX = cutpoint.X;
-            e0._Q.newY = e1._P.newY = cutpoint.Y;
-        }
+        //internal static void FindCutPoint(GlyphEdge e0, GlyphEdge e1)
+        //{
+        //    //find cutpoint from e0.q to e1.p 
+        //    //new sample
+        //    Vector2 tmp_e0_q = e0._newEdgeCutPoint + e0._o_edgeVector;
+        //    Vector2 tmp_e1_p = e1._newEdgeCutPoint - e1._o_edgeVector;
+        //    Vector2 cutpoint = FindCutPoint(e0._newEdgeCutPoint, tmp_e0_q, e1._newEdgeCutPoint, tmp_e1_p);
+
+        //    e0._Q.newX = e1._P.newX = cutpoint.X;
+        //    e0._Q.newY = e1._P.newY = cutpoint.Y;
+        //}
         static Vector2 FindCutPoint(
             Vector2 p0, Vector2 p1,
             Vector2 p2, Vector2 p3)
