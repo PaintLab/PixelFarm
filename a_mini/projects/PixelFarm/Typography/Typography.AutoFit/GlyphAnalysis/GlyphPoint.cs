@@ -1,5 +1,6 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System.Collections.Generic;
+using System.Numerics;
 namespace Typography.Rendering
 {
 
@@ -141,6 +142,10 @@ namespace Typography.Rendering
             _assocBones.AddAssocBone(bone);
         }
 
+        internal void EvaluatePerpendicularBone()
+        {
+            _assocBones.EvaluatePerpendicularBone(this);
+        }
 
 #if DEBUG
         /// <summary>
@@ -166,18 +171,28 @@ namespace Typography.Rendering
 #endif 
     }
 
-    public class AssocBoneCollection 
+    public class AssocBoneCollection
     {
         Dictionary<GlyphBone, bool> _assocBones = new Dictionary<GlyphBone, bool>();
         List<GlyphBone> _assocBoneList;
         bool closeCollection;
+        bool hasEvaluatedPerpendicularBones;
+
+        Vector2 _cutPoint;
+
+        int exactPerpendicularBone;
+
+        internal AssocBoneCollection()
+        {
+            exactPerpendicularBone = -1;//not found
+        }
         internal void CloseCollection()
         {
             if (closeCollection) return;
             //convert from GlyphBone to 
             _assocBoneList = new List<GlyphBone>(_assocBones.Keys);
-            closeCollection = true;
             _assocBones = null; //clear
+            closeCollection = true;
         }
         internal void AddAssocBone(GlyphBone bone)
         {
@@ -199,7 +214,7 @@ namespace Typography.Rendering
             CloseCollection();
             return _assocBoneList[index];
         }
-         
+
         public IEnumerator<GlyphBone> GetEnumerator()
         {
             //close first            
@@ -211,6 +226,89 @@ namespace Typography.Rendering
                 yield return _assocBoneList[i];
             }
         }
+
+        internal void EvaluatePerpendicularBone(GlyphPoint ownerPoint)
+        {
+            //find a perpendicular line  and cutpoint from ownerPoint 
+            //to one of glyphBone, or avg of glyphBones
+            CloseCollection();
+            if (hasEvaluatedPerpendicularBones) return;
+            hasEvaluatedPerpendicularBones = true; //change state
+            //
+            //---------------------------------------------------------
+            Vector2 o_point = new Vector2(ownerPoint.x, ownerPoint.y);
+            int b_count = _assocBoneList.Count;
+            for (int i = 0; i < b_count; ++i)
+            {
+                GlyphBone b = _assocBoneList[i];
+                if (MyMath.FindPerpendicularCutPoint(b, o_point, out _cutPoint))
+                {
+                    exactPerpendicularBone = i;
+                    break;
+                }
+            }
+            //------------------------------------
+            if (exactPerpendicularBone > -1) { return; }
+            //------------------------------------
+            //if not found exact bone
+            //we use middle area cutpoint
+            switch (b_count)
+            {
+                case 0: throw new System.NotSupportedException(); //?
+                case 1:
+                    {
+                        //only 1 bone and no cutpoint found
+                        //so no exact perpendicular cut point
+                        //use mid point
+                        _cutPoint = _assocBoneList[0].GetMidPoint();
+                    }
+                    break;
+                case 2:
+                    {
+                        if (!FindAvgCutPoint(_assocBoneList[0], _assocBoneList[1], o_point, out _cutPoint))
+                        {
+                            //if not found 
+
+                        }
+                    }
+                    break;
+                default:
+                    {
+                        //we start at the middle 
+                        //and expand left and right
+
+                        int mm_mid = b_count / 2;
+                        int startAt = mm_mid - 1;
+                        int endAt = mm_mid + 1;
+                        bool foundResult = false;
+                        for (; startAt >= 0 && endAt < b_count;)
+                        {
+                            if (FindAvgCutPoint(_assocBoneList[startAt], _assocBoneList[endAt], o_point, out _cutPoint))
+                            {
+
+                                foundResult = true;
+                                break; //from loop
+                            }
+                        }
+
+                        if (!foundResult)
+                        {
+                            //no result found
+
+                        } 
+                    }
+                    break;
+            }
+        }
+
+        static bool FindAvgCutPoint(GlyphBone beginAt, GlyphBone endAt, Vector2 p, out Vector2 exactCutPoint)
+        {
+            //find avg cutpoint of 2 bone 
+            Vector2 first_v = beginAt.GetMidPoint();
+            Vector2 last_v = endAt.GetMidPoint();
+            return MyMath.FindPerpendicularCutPoint2(first_v, last_v, p, out exactCutPoint);
+        }
+
     }
 }
 

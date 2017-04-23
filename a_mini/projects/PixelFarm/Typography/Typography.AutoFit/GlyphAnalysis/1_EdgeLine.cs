@@ -160,5 +160,6 @@ namespace Typography.Rendering
                     p.e1 == edge ||
                     p.e2 == edge);
         }
+       
     }
 }
