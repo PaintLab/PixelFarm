@@ -15,22 +15,13 @@ namespace Typography.Rendering
     /// </summary>
     public class EdgeLine
     {
-
-        public readonly double x0;
-        public readonly double y0;
-        public readonly double x1;
-        public readonly double y1;
-
-
-        //------------------------------
+        readonly GlyphPoint _glyphPoint_P;
+        readonly GlyphPoint _glyphPoint_Q; 
         /// <summary>
         /// contact to another edge
         /// </summary>
         internal EdgeLine contactToEdge;
-        //------------------------------
 
-        readonly GlyphPoint _glyphPoint_P;
-        readonly GlyphPoint _glyphPoint_Q;
 #if DEBUG
         public static int s_dbugTotalId;
         public readonly int dbugId = s_dbugTotalId++;
@@ -47,17 +38,17 @@ namespace Typography.Rendering
             //some edge line is either 'INSIDE' edge  OR 'OUTSIDE'.
             //
             //------------------------------------   
-            this.IsOutside = isOutside;
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;
-
-            x0 = p.x;
-            y0 = p.y;
-            x1 = q.x;
-            y1 = q.y;
+            this.IsOutside = isOutside;
+            if (isOutside)
+            {
+                p.SetOutsideEdge(this);
+                q.SetOutsideEdge(this);
+            }
             //-------------------------------
             //analyze angle and slope kind
-            //------------------------------- 
+            //-------------------------------  
             SlopeAngleNoDirection = this.GetSlopeAngleNoDirection();
             if (x1 == x0)
             {
@@ -78,15 +69,15 @@ namespace Typography.Rendering
                 {
                     SlopeKind = LineSlopeKind.Other;
                 }
-            }
-            //-----------------------
-            if (isOutside)
-            {
-                p.SetOutsideEdge(this);
-                q.SetOutsideEdge(this);
-            }
-            //-----------------------
+            } 
         }
+
+        public double x0 { get { return this._glyphPoint_P.x; } }
+        public double y0 { get { return this._glyphPoint_P.y; } }
+        public double x1 { get { return this._glyphPoint_Q.x; } }
+        public double y1 { get { return this._glyphPoint_Q.y; } }
+
+
 #if DEBUG
         public bool dbugNoPerpendicularBone { get; set; }
         public GlyphEdge dbugGlyphEdge { get; set; }
@@ -112,10 +103,7 @@ namespace Typography.Rendering
             private set;
         }
 
-        internal double GetSlopeAngleNoDirection()
-        {
-            return Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-        }
+
         public bool IsOutside
         {
             get;
@@ -141,33 +129,28 @@ namespace Typography.Rendering
             get;
             internal set;
         }
-        public Vector2 GetMidPoint()
-        {
-            return new Vector2((float)((x0 + x1) / 2), (float)((y0 + y1) / 2));
-        }
+
         public override string ToString()
         {
             return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
         }
-        GlyphBone _relBone;
-        internal GlyphBone RelatedBone
-        {
-            get { return _relBone; }
-            set
-            {
-                _relBone = value;
-            }
-        }
 
-
-#if DEBUG
-        public bool dbugHasRelatedBone { get { return this.RelatedBone != null; } }
-#endif
         static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+    }
+     
 
-
+    public static class EdgeLineExtensions
+    {
+        public static Vector2 GetMidPoint(this EdgeLine line)
+        {
+            return new Vector2((float)((line.x0 + line.x1) / 2), (float)((line.y0 + line.y1) / 2));
+        }
+        internal static double GetSlopeAngleNoDirection(this EdgeLine line)
+        {
+            return Math.Abs(Math.Atan2(Math.Abs(line.y1 - line.y0), Math.Abs(line.x1 - line.x0)));
+        }
     }
 }

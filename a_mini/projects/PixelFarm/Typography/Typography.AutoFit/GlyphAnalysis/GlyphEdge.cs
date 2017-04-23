@@ -43,6 +43,7 @@ namespace Typography.Rendering
         }
         internal void FindPerpendicularBone(List<GlyphBone> newBones)
         {
+            //TODO: review here again
             GlyphTriangle ownerTri = this._edgeLine.OwnerTriangle;
 
             //GlyphCentroidLine ownerCentroidLine = this._edgeLine.OwnerTriangle.OwnerCentroidLine;
