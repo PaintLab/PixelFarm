@@ -309,6 +309,12 @@ namespace Typography.Rendering
         {
             get { return new Vector2(_Q.newX, _Q.newY); }
         }
+#if DEBUG
+        public override string ToString()
+        {
+            return this._P + "=>" + this._Q;
+        }
+#endif
     }
 
 }

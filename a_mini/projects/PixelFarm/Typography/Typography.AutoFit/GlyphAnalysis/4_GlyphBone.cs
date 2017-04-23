@@ -48,6 +48,7 @@ namespace Typography.Rendering
             EvaluteSlope(a.Position, midPoint);
 
             a.AddAssociateGlyphBoneToEndPoint(this);
+            tipEdge.AddAssociateGlyphBoneToEndPoint(this);
         }
         public bool IsTipBone
         {
