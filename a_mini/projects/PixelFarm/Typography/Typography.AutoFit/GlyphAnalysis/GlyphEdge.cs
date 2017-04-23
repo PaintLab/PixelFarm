@@ -10,10 +10,11 @@ namespace Typography.Rendering
         internal readonly EdgeLine _edgeLine;
         public readonly GlyphPoint _P;
         public readonly GlyphPoint _Q;
-        double _originalDistanceToBone;
+
         float _relativeDistance = 1;
         Vector2 _o_edgeVector; //original edge vector 
         Vector2 _bone_midPoint;
+        double _originalDistanceToBone;
         //-----------
 
         Vector2 _bone_to_edgeVector;//perpendicular line

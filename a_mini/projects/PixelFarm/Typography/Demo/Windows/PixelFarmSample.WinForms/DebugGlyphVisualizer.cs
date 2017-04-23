@@ -763,25 +763,7 @@ namespace SampleWinForms.UI
 
             //}
 
-            //--------
-            //draw a perpendicular line from bone to associated glyph point
-            List<GlyphPointToBoneLink> linkToGlyphPoints = bone._perpendiculatPoints;
-            if (linkToGlyphPoints != null)
-            {
-                int n = linkToGlyphPoints.Count;
-                for (int m = 0; m < n; ++m)
-                {
-                    GlyphPointToBoneLink link = linkToGlyphPoints[m];
-                    painter.Line(
-                      link.glyphPoint.x * pxscale, link.glyphPoint.y * pxscale,
-                      link.bonePoint.X * pxscale, link.bonePoint.Y * pxscale,
-                      PixelFarm.Drawing.Color.Yellow);
-
-                    //test
-                    //DrawAssocGlyphPoint(link.bonePoint, link.glyphPoint, newRelativeLen);
-                }
-            }
-            //--------
+ 
             if (boneIndex == 0)
             {
                 //for first bone 

@@ -1,16 +1,9 @@
 ﻿//MIT, 2017, WinterDev
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 
 namespace Typography.Rendering
 {
-
-    public struct GlyphPointToBoneLink
-    {
-        public GlyphPoint glyphPoint;
-        public Vector2 bonePoint;
-    }
 
     /// <summary>
     /// link between 2 GlyphBoneJoint or Joint and tipEdge
@@ -22,8 +15,7 @@ namespace Typography.Rendering
         public readonly GlyphBoneJoint JointB;
         double _len;
 
-#if DEBUG
-
+#if DEBUG 
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;
 #endif
@@ -36,65 +28,15 @@ namespace Typography.Rendering
             }
 #endif
 
-            if (dbugId == 4)
-            {
-
-            }
             JointA = a;
             JointB = b;
-
-
             Vector2 bpos = b.Position;
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
             EvaluteSlope(a.Position, bpos);
-            //  find common triangle between 2 joints
 
-            a._p_contact_edge.GlyphPoint_P.AddAssociateBone(this);
-            a._p_contact_edge.GlyphPoint_Q.AddAssociateBone(this);
-            b._p_contact_edge.GlyphPoint_P.AddAssociateBone(this);
-            b._p_contact_edge.GlyphPoint_Q.AddAssociateBone(this);
-
-            //GlyphTriangle commonTri = FindCommonTriangle(a, b);
-            //if (commonTri != null)
-            //{
-
-            //}
-
-            //if (commonTri != null)
-            //{
-            //    //if (dbugId == 4)
-            //    //{
-            //    //found common triangle 
-            //    if ((OutsideEdge = GetFirstFoundOutsidEdge(commonTri)) != null)
-            //    {
-            //        //register this bone to GlyphPoint
-            //        OutsideEdge.GlyphPoint_Q.AddAssociateBone(this);
-            //        OutsideEdge.GlyphPoint_P.AddAssociateBone(this);
-            //    }
-
-            //    //}
-            //    //if (outsideEdge != null)
-            //    //{
-
-            //    //    if (MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge))
-            //    //    {
-            //    //        PerpendicularEdge = outsideEdge;
-            //    //    }
-            //    //    else
-            //    //    {
-            //    //    }
-            //    //}
-            //    //else
-            //    //{
-
-            //    //}
-            //}
-            //else
-            //{
-            //    //not found?=>
-            //}
+            a.AddAssociateGlyphBoneToEndPoint(this);
+            b.AddAssociateGlyphBoneToEndPoint(this);
         }
-
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
         {
             JointA = a;
@@ -104,24 +46,8 @@ namespace Typography.Rendering
             var midPoint = tipEdge.GetMidPoint();
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluteSlope(a.Position, midPoint);
-            //------
-            ////for analysis in later step 
-            //tip bone, no common triangle
-            //
-            OutsideEdge = FindOutsideEdge(a, tipEdge);
-            //if (outsideEdge != null)
-            //{
-            //    if (MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge))
-            //    {
-            //        PerpendicularEdge = outsideEdge;
-            //    }
-            //    else
-            //    {
-            //    }
-            //}
-            //else
-            //{ 
-            //} 
+
+            a.AddAssociateGlyphBoneToEndPoint(this);
         }
         public bool IsTipBone
         {
@@ -132,72 +58,6 @@ namespace Typography.Rendering
         {
             get;
             set;
-        }
-        EdgeLine _outsideEdge;
-        internal EdgeLine OutsideEdge
-        {
-            get { return _outsideEdge; }
-            set
-            {
-                _outsideEdge = value;
-                if (value != null)
-                {
-                    value.RelatedBone = this;
-                }
-                else
-                {
-                    //not outside edge
-                }
-            }
-        }
-
-        static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
-        {
-            GlyphCentroidPair ownerCentroid_A = a.OwnerCentrodPair;
-            if (ContainsEdge(ownerCentroid_A.p, tipEdge))
-            {
-                return FindAnotherOutsideEdge(ownerCentroid_A.p, tipEdge);
-            }
-            else if (ContainsEdge(ownerCentroid_A.q, tipEdge))
-            {
-                return FindAnotherOutsideEdge(ownerCentroid_A.q, tipEdge);
-            }
-            return null;
-        }
-        static EdgeLine FindAnotherOutsideEdge(GlyphTriangle tri, EdgeLine knownOutsideEdge)
-        {
-            if (tri.e0.IsOutside && tri.e0 != knownOutsideEdge) { return tri.e0; }
-            if (tri.e1.IsOutside && tri.e1 != knownOutsideEdge) { return tri.e1; }
-            if (tri.e2.IsOutside && tri.e2 != knownOutsideEdge) { return tri.e2; }
-            return null;
-        }
-        static bool ContainsEdge(GlyphTriangle tri, EdgeLine edge)
-        {
-            return tri.e0 == edge || tri.e1 == edge || tri.e2 == edge;
-        }
-        static GlyphTriangle FindCommonTriangle(GlyphBoneJoint a, GlyphBoneJoint b)
-        {
-            GlyphCentroidPair centroid_pair_A = a.OwnerCentrodPair;
-            GlyphCentroidPair centroid_pair_B = b.OwnerCentrodPair;
-            if (centroid_pair_A.p == centroid_pair_B.p || centroid_pair_A.p == centroid_pair_B.q)
-            {
-                return centroid_pair_A.p;
-            }
-            else if (centroid_pair_A.q == centroid_pair_B.p || centroid_pair_A.q == centroid_pair_B.q)
-            {
-                return centroid_pair_A.q;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        static EdgeLine GetFirstFoundOutsidEdge(GlyphTriangle tri)
-        {
-            if (tri.e0.IsOutside) { return tri.e0; }
-            if (tri.e1.IsOutside) { return tri.e1; }
-            if (tri.e2.IsOutside) { return tri.e2; }
-            return null; //not found               
         }
 
         void EvaluteSlope(Vector2 p, Vector2 q)
@@ -262,60 +122,6 @@ namespace Typography.Rendering
             }
         }
 
-        public Vector2 GetMidPoint()
-        {
-            if (JointB != null)
-            {
-                return (JointA.Position + JointB.Position) / 2;
-            }
-            else if (TipEdge != null)
-            {
-                Vector2 edge = TipEdge.GetMidPoint();
-                return (edge + JointA.Position) / 2;
-            }
-            else
-            {
-                return Vector2.Zero;
-            }
-        }
-
-        public Vector2 GetBoneVector()
-        {
-            if (JointB != null)
-            {
-                return JointB.Position - JointA.Position;
-            }
-            else if (TipEdge != null)
-            {
-                return TipEdge.GetMidPoint() - JointA.Position;
-            }
-            else
-            {
-                return Vector2.Zero;
-            }
-        }
-        public List<GlyphPointToBoneLink> _perpendiculatPoints;
-        public void AddPerpendicularPoint(GlyphPoint p, Vector2 bonePoint)
-        {
-            //add a perpendicular glyph point to bones
-            if (_perpendiculatPoints == null) { _perpendiculatPoints = new List<GlyphPointToBoneLink>(); }
-            GlyphPointToBoneLink pointToBoneLink = new GlyphPointToBoneLink();
-            pointToBoneLink.bonePoint = bonePoint;
-            pointToBoneLink.glyphPoint = p;
-            _perpendiculatPoints.Add(pointToBoneLink);
-        }
-
-#if DEBUG
-
-        public GlyphEdge dbugGlyphEdge
-        {
-            get
-            {
-                return (_outsideEdge != null) ? _outsideEdge.dbugGlyphEdge : null;
-            }
-        }
-#endif
-
 
 #if DEBUG
         public override string ToString()
@@ -331,4 +137,111 @@ namespace Typography.Rendering
         }
 #endif
     }
+
+
+    public static class GlyphBoneExtensions
+    {
+
+        //utils for glyph bones
+        public static Vector2 GetMidPoint(this GlyphBone bone)
+        {
+            if (bone.JointB != null)
+            {
+                return (bone.JointA.Position + bone.JointB.Position) / 2;
+            }
+            else if (bone.TipEdge != null)
+            {
+                Vector2 edge = bone.TipEdge.GetMidPoint();
+                return (edge + bone.JointA.Position) / 2;
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
+
+        public static Vector2 GetBoneVector(this GlyphBone bone)
+        {
+            if (bone.JointB != null)
+            {
+                return bone.JointB.Position - bone.JointA.Position;
+            }
+            else if (bone.TipEdge != null)
+            {
+                return bone.TipEdge.GetMidPoint() - bone.JointA.Position;
+            }
+            else
+            {
+                return Vector2.Zero;
+            }
+        }
+        public static EdgeLine FindOutsideEdge(this GlyphBone bone)
+        {
+            if (bone.JointB != null)
+            {
+                GlyphTriangle commonTri = FindCommonTriangle(bone.JointA, bone.JointB);
+                if (commonTri != null)
+                {
+                    return GetFirstFoundOutsidEdge(commonTri);
+                }
+            }
+            else if (bone.TipEdge != null)
+            {
+                return FindOutsideEdge(bone.JointA, bone.TipEdge);
+            }
+
+            return null;
+
+        }
+        static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
+        {
+            GlyphCentroidPair ownerCentroid_A = a.OwnerCentrodPair;
+            if (ContainsEdge(ownerCentroid_A.p, tipEdge))
+            {
+                return FindAnotherOutsideEdge(ownerCentroid_A.p, tipEdge);
+            }
+            else if (ContainsEdge(ownerCentroid_A.q, tipEdge))
+            {
+                return FindAnotherOutsideEdge(ownerCentroid_A.q, tipEdge);
+            }
+            return null;
+        }
+        static EdgeLine FindAnotherOutsideEdge(GlyphTriangle tri, EdgeLine knownOutsideEdge)
+        {
+            if (tri.e0.IsOutside && tri.e0 != knownOutsideEdge) { return tri.e0; }
+            if (tri.e1.IsOutside && tri.e1 != knownOutsideEdge) { return tri.e1; }
+            if (tri.e2.IsOutside && tri.e2 != knownOutsideEdge) { return tri.e2; }
+            return null;
+        }
+        static bool ContainsEdge(GlyphTriangle tri, EdgeLine edge)
+        {
+            return tri.e0 == edge || tri.e1 == edge || tri.e2 == edge;
+        }
+        static GlyphTriangle FindCommonTriangle(GlyphBoneJoint a, GlyphBoneJoint b)
+        {
+            GlyphCentroidPair centroid_pair_A = a.OwnerCentrodPair;
+            GlyphCentroidPair centroid_pair_B = b.OwnerCentrodPair;
+            if (centroid_pair_A.p == centroid_pair_B.p || centroid_pair_A.p == centroid_pair_B.q)
+            {
+                return centroid_pair_A.p;
+            }
+            else if (centroid_pair_A.q == centroid_pair_B.p || centroid_pair_A.q == centroid_pair_B.q)
+            {
+                return centroid_pair_A.q;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        static EdgeLine GetFirstFoundOutsidEdge(GlyphTriangle tri)
+        {
+            if (tri.e0.IsOutside) { return tri.e0; }
+            if (tri.e1.IsOutside) { return tri.e1; }
+            if (tri.e2.IsOutside) { return tri.e2; }
+            return null; //not found               
+        }
+    }
+
 }

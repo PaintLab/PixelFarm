@@ -9,8 +9,10 @@ namespace Typography.Rendering
 
     class GlyphPartFlattener
     {
+        /// <summary>
+        /// result flatten points
+        /// </summary>
         List<GlyphPoint> points;
-
         int glyphPointIdCount;
         public GlyphPartFlattener()
         {

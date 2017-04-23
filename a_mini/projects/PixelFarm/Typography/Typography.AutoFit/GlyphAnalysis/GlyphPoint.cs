@@ -20,18 +20,13 @@ namespace Typography.Rendering
         CurveInbetween,
     }
 
-
-
     public class GlyphPoint
     {
         public readonly float x;
         public readonly float y;
         public readonly PointKind kind;
 
-        /// <summary>
-        /// glyph pointnumber
-        /// </summary>
-        int _glyphPointNo;
+
         // 
         float _adjX;
         float _adjY;
@@ -51,13 +46,6 @@ namespace Typography.Rendering
         public float newX;
         public float newY;
 
-#if DEBUG
-        //for debug only
-        public readonly int dbugId = dbugTotalId++;
-        static int dbugTotalId;
-        internal GlyphPart dbugOwnerPart;  //link back to owner part
-        public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
-#endif
         public GlyphPoint(float x, float y, PointKind kind)
         {
             this.x = x;
@@ -65,7 +53,11 @@ namespace Typography.Rendering
             this.kind = kind;
         }
 
-        internal void SetRelatedEdgeLine(EdgeLine edge)
+        /// <summary>         
+        /// set outside edge that link with this glyph point
+        /// </summary>
+        /// <param name="edge">edge must be outside edge</param>
+        internal void SetOutsideEdge(EdgeLine edge)
         {
             if (_e0 == null)
             {
@@ -108,11 +100,7 @@ namespace Typography.Rendering
             }
         }
 
-        internal int GlyphPointNo
-        {
-            get { return this._glyphPointNo; }
-            set { this._glyphPointNo = value; }
-        }
+
 
         internal EdgeLine E0
         {
@@ -161,19 +149,33 @@ namespace Typography.Rendering
             if (!_assocBones.ContainsKey(bone))
             {
                 _assocBones.Add(bone, true);
-            }             
+            }
         }
 
-
 #if DEBUG
+        /// <summary>
+        /// glyph pointnumber
+        /// </summary>
+        int dbug_GlyphPointNo;
+        //for debug only
+        public readonly int dbugId = dbugTotalId++;
+        static int dbugTotalId;
+        internal GlyphPart dbugOwnerPart;  //link back to owner part
+        public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
         public Dictionary<GlyphBone, bool> dbugGetAssocBones() { return _assocBones; }
         public override string ToString()
         {
             return this.dbugId + " :" + ((AdjustedY != 0) ? "***" : "") +
                     (x + "," + y + " " + kind.ToString());
         }
+        internal int dbugGlyphPointNo
+        {
+            get { return this.dbug_GlyphPointNo; }
+            set { this.dbug_GlyphPointNo = value; }
+        }
 #endif 
     }
+
 
 
 }

@@ -32,13 +32,8 @@ namespace Typography.Rendering
             this._p_contact_edge = p_contact_edge;
             this._q_contact_edge = q_contact_edge;
             this._owner = owner;
-            //---------------------------
-
-            
-
-            //---------------------------
         }
-
+         
         /// <summary>
         /// get position of this bone joint (mid point of the edge)
         /// </summary>
@@ -129,4 +124,21 @@ namespace Typography.Rendering
 
     }
 
+
+
+    static class GlyphBoneJointExtensions
+    {
+        /// <summary>
+        /// distribute associate glyph bone to end point of this joint
+        /// </summary>
+        /// <param name="joint"></param>
+        /// <param name="bone"></param>
+        public static void AddAssociateGlyphBoneToEndPoint(this GlyphBoneJoint joint, GlyphBone bone)
+        {
+            //_p_contact_edge and _q_contact_edge share glyph end (glyph) points
+            //so we select only 1 (to p)
+            joint._p_contact_edge.GlyphPoint_P.AddAssociateBone(bone);
+            joint._p_contact_edge.GlyphPoint_Q.AddAssociateBone(bone);
+        }
+    }
 }

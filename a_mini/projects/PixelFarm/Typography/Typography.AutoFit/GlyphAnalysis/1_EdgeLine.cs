@@ -82,8 +82,8 @@ namespace Typography.Rendering
             //-----------------------
             if (isOutside)
             {
-                p.SetRelatedEdgeLine(this);
-                q.SetRelatedEdgeLine(this);
+                p.SetOutsideEdge(this);
+                q.SetOutsideEdge(this);
             }
             //-----------------------
         }

@@ -194,11 +194,12 @@ namespace Typography.Rendering
             }
 
 
+#if DEBUG
             for (int i = 0; i < pointCount; ++i)
             {
-                tmpFlattenPoints[i].GlyphPointNo = flattener.GetNewGlyphPointId();
+                tmpFlattenPoints[i].dbugGlyphPointNo = flattener.GetNewGlyphPointId();
             }
-
+#endif
             flattener.Result = prevResult;
             analyzed = true;
         }
