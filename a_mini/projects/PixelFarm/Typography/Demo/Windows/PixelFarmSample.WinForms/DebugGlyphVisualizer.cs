@@ -175,12 +175,12 @@ namespace SampleWinForms.UI
                 RenderTessTesult();
             }
 
-            if (DrawDynamicOutline)
-            {
-                GlyphDynamicOutline dynamicOutline = builder.LatestGlyphFitOutline;
-                WalkDynamicOutline(painter, dynamicOutline, scale, DrawRegenerateOutline);
+            //if (DrawDynamicOutline)
+            //{
+            //    GlyphDynamicOutline dynamicOutline = builder.LatestGlyphFitOutline;
+            //    WalkDynamicOutline(painter, dynamicOutline, scale, DrawRegenerateOutline);
 
-            }
+            //}
 
         }
 
@@ -655,14 +655,14 @@ namespace SampleWinForms.UI
             }
         }
 
-        public void WalkDynamicOutline(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale, bool withRegenerateOutlines)
-        {
+//        public void WalkDynamicOutline(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale, bool withRegenerateOutlines)
+//        {
 
-#if DEBUG
-            dynamicOutline.dbugDrawRegeneratedOutlines = withRegenerateOutlines;
-#endif
-            dynamicOutline.Walk();
-        }
+//#if DEBUG
+//            dynamicOutline.dbugDrawRegeneratedOutlines = withRegenerateOutlines;
+//#endif
+//             //dynamicOutline.Walk();
+//        }
         //void DrawBoneRib(CanvasPainter painter, Vector2 vec, GlyphBoneJoint joint, float pixelScale)
         //{
         //    Vector2 jointPos = joint.Position;

@@ -40,6 +40,7 @@
     <Compile Include="GlyphAnalysis\3_GlyphBoneJoint.cs" />
     <Compile Include="GlyphAnalysis\4_GlyphBone.cs" />
     <Compile Include="GlyphAnalysis\5_GlyphCentroidLineHub.cs" />
+    <Compile Include="GlyphAnalysis\GlyphContour.cs" />
     <Compile Include="GlyphAnalysis\GlyphEdge.cs" />
     <Compile Include="GlyphDynamicOutline.cs" />
     <Compile Include="GlyphAnalysis\GlyphOutlineAnalyzer.cs" />
