@@ -1,6 +1,5 @@
 ﻿//MIT, 2017, WinterDev
-using System;
-using System.Numerics;
+using System; 
 namespace Typography.Rendering
 {
     /// <summary>
@@ -34,11 +33,11 @@ namespace Typography.Rendering
                     this.q == another.p ||
                     this.q == another.q;
         }
-        public void SetCentroidLine(GlyphCentroidLine centroidLine)
-        {
-            p.OwnerCentroidLine = centroidLine;
-            q.OwnerCentroidLine = centroidLine;
-        }
+       
+
+        /// <summary>
+        ///this centroid-pair links first triangle and last triangle of the same centroid branch ***
+        /// </summary>
         public bool SpecialConnectFromLastToFirst { get; set; }
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
         /// <summary>
@@ -88,6 +87,10 @@ namespace Typography.Rendering
             MarkProperOppositeOutsideEdges(p, _boneJoint._p_contact_edge, true);
             MarkProperOppositeOutsideEdges(q, _boneJoint._q_contact_edge, false);
         }
+
+        /// <summary>
+        /// evaluate and update tip info
+        /// </summary>
         internal void UpdateTips()
         {
 
