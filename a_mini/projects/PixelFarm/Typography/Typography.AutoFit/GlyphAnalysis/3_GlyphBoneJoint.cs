@@ -13,8 +13,8 @@ namespace Typography.Rendering
         //of 2 triangles,      
         //(_p_contact_edge, _q_contact_edge)
 
-        public readonly EdgeLine _p_contact_edge;
-        public readonly EdgeLine _q_contact_edge;
+        internal readonly EdgeLine _p_contact_edge;
+        internal readonly EdgeLine _q_contact_edge;
         GlyphCentroidPair _owner;
 
         //one bone joint can have up to 2 tips  
@@ -120,6 +120,11 @@ namespace Typography.Rendering
         {
             return "id:" + dbugId + " " + this.Position.ToString();
         }
+
+        public EdgeLine dbugGetEdge_P() { return _p_contact_edge; }
+        public EdgeLine dbugGetEdge_Q() { return _q_contact_edge; }
+        
+
 #endif
 
     }

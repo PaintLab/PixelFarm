@@ -293,7 +293,7 @@ namespace SampleWinForms.UI
         {
             if (!_clearInfoView) { return; }
             //-------------- 
-            EdgeLine p_contactEdge = joint._p_contact_edge;
+            EdgeLine p_contactEdge = joint.dbugGetEdge_Q();
             //mid point
             var jointPos = joint.Position;
             //painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
@@ -327,8 +327,8 @@ namespace SampleWinForms.UI
                 return;
             }
 
-            GlyphPoint u_data_p = edge.GlyphPoint_P;
-            GlyphPoint u_data_q = edge.GlyphPoint_Q;
+            GlyphPoint pnt_P = edge.GlyphPoint_P;
+            GlyphPoint pnt_Q = edge.GlyphPoint_Q;
 
             //-------------------------------
 
@@ -336,32 +336,32 @@ namespace SampleWinForms.UI
             TreeNode nodeEdge = new TreeNode();
             nodeEdge.Tag = nodeInfo;
             nodeEdge.Text = "e id=" + edge.dbugId + ",count="
-                + _testEdgeCount + " :(" + u_data_p.x + "," + u_data_p.y + ")" +
+                + _testEdgeCount + " :(" + pnt_P.x + "," + pnt_P.y + ")" +
 
-                "=>(" + u_data_q.x + "," + u_data_q.y + ") ";
+                "=>(" + pnt_Q.x + "," + pnt_Q.y + ") ";
             if (edge.dbugNoPerpendicularBone)
             {
                 nodeEdge.Text += "_X_ (no perpendicular_bone)";
             }
-            if (u_data_p != null)
+            if (pnt_P != null)
             {
 
-                foreach (GlyphBone b in u_data_p.dbugGetAssocBones())
+                foreach (GlyphBone b in pnt_P.dbugGetAssocBones())
                 {
                     TreeNode assocBoneNode = new TreeNode();
-                    assocBoneNode.Text = "-> bone_p:" + b.ToString();
+                    assocBoneNode.Text = "-> [p] bone:" + b.ToString();
                     nodeEdge.Nodes.Add(assocBoneNode);
                 }
 
             }
-            if (u_data_q != null)
+            if (pnt_Q != null)
             {
 
 
-                foreach (GlyphBone b in u_data_q.dbugGetAssocBones())
+                foreach (GlyphBone b in pnt_Q.dbugGetAssocBones())
                 {
                     TreeNode assocBoneNode = new TreeNode();
-                    assocBoneNode.Text = "-> bone_q:" + b.ToString();
+                    assocBoneNode.Text = "-> [q] bone:" + b.ToString();
                     nodeEdge.Nodes.Add(assocBoneNode);
                 }
 

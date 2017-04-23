@@ -228,8 +228,8 @@ namespace SampleWinForms
             //string inputstr = "t";
             //string inputstr = "2";
             //string inputstr = "o";
-            //string inputstr = "l";
-            string inputstr = "a";
+            string inputstr = "l";
+            //string inputstr = "a";
             //string inputstr = "Å";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
@@ -257,7 +257,7 @@ namespace SampleWinForms
         void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "Render with PixelFarm";
-            this.lstFontSizes.SelectedIndex = lstFontSizes.Items.Count - 2;
+            this.lstFontSizes.SelectedIndex = lstFontSizes.Items.Count - 3;
             //this.lstFontSizes.SelectedIndex = 0; 
             var installedFont = lstFontList.SelectedItem as InstalledFont;
             if (installedFont != null)

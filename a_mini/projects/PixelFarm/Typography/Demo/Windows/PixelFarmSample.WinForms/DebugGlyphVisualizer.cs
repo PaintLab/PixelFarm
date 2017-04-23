@@ -221,7 +221,7 @@ namespace SampleWinForms.UI
 
             }
         }
-        
+
         void DrawEdge(CanvasPainter painter, EdgeLine edge, float scale)
         {
             if (edge.IsOutside)
@@ -275,33 +275,36 @@ namespace SampleWinForms.UI
 
 
                     GlyphEdge glyphEdge = edge.dbugGlyphEdge;
-                    //draw
-                    GlyphPoint p = edge.GlyphPoint_P;
-                    GlyphPoint q = edge.GlyphPoint_Q;
-                    //
-                    AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
-                    if (p_bones != null)
+                    if (glyphEdge != null)
                     {
-                        Vector2 v2 = new Vector2(q.x, q.y);
-                        foreach (GlyphBone b in p_bones)
+                        //draw
+                        GlyphPoint p = edge.GlyphPoint_P;
+                        GlyphPoint q = edge.GlyphPoint_Q;
+                        //
+                        AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
+                        if (p_bones != null)
                         {
-                            Vector2 v3 = b.GetMidPoint();
-                            painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Yellow);
+                            Vector2 v2 = new Vector2(q.x, q.y);
+                            foreach (GlyphBone b in p_bones)
+                            {
+                                Vector2 v3 = b.GetMidPoint();
+                                painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Yellow);
+                            }
                         }
-                    }
 
 
 
-                    AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
-                    if (q_bones != null)
-                    {
-                        Vector2 v2 = new Vector2(p.x, p.y);
-                        foreach (GlyphBone b in q_bones)
+                        AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
+                        if (q_bones != null)
                         {
+                            Vector2 v2 = new Vector2(p.x, p.y);
+                            foreach (GlyphBone b in q_bones)
+                            {
 
-                            //Vector2 v2 = new Vector2(q.x, q.y);
-                            Vector2 v3 = b.GetMidPoint();
-                            painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Green);
+                                //Vector2 v2 = new Vector2(q.x, q.y);
+                                Vector2 v3 = b.GetMidPoint();
+                                painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Green);
+                            }
                         }
                     }
                 }
@@ -312,51 +315,55 @@ namespace SampleWinForms.UI
 
                 {
 
-                    //choice2
+
                     GlyphEdge glyphEdge = edge.dbugGlyphEdge;
-                    GlyphPoint p = edge.GlyphPoint_P;
-                    GlyphPoint q = edge.GlyphPoint_Q;
-                    //---------   
-
+                    if (glyphEdge != null)
                     {
-                        AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
-                        PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
-                        switch (p_bones.CutPointKind)
+                        GlyphPoint p = edge.GlyphPoint_P;
+                        GlyphPoint q = edge.GlyphPoint_Q;
+                        //---------   
+
                         {
-                            case BoneCutPointKind.NotPendicularCutPoint:
-                                cc = PixelFarm.Drawing.Color.Yellow;
-                                break;
-                            case BoneCutPointKind.PerpendicularToBoneGroup:
-                                cc = PixelFarm.Drawing.Color.Green;
-                                break;
+                            AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
+                            PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
+                            switch (p_bones.CutPointKind)
+                            {
+                                case BoneCutPointKind.NotPendicularCutPoint:
+                                    cc = PixelFarm.Drawing.Color.Yellow;
+                                    break;
+                                case BoneCutPointKind.PerpendicularToBoneGroup:
+                                    cc = PixelFarm.Drawing.Color.Green;
+                                    break;
+                            }
+                            Vector2 v2 = new Vector2(q.x, q.y);
+                            Vector2 cutpoint = p_bones.CutPoint;
+                            painter.Line(
+                                v2.X * _pxscale, v2.Y * _pxscale,
+                                cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                                cc);
                         }
-                        Vector2 v2 = new Vector2(q.x, q.y);
-                        Vector2 cutpoint = p_bones.CutPoint;
-                        painter.Line(
-                            v2.X * _pxscale, v2.Y * _pxscale,
-                            cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                            cc);
+
+                        {
+                            AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
+                            PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
+                            switch (q_bones.CutPointKind)
+                            {
+                                case BoneCutPointKind.NotPendicularCutPoint:
+                                    cc = PixelFarm.Drawing.Color.Yellow;
+                                    break;
+                                case BoneCutPointKind.PerpendicularToBoneGroup:
+                                    cc = PixelFarm.Drawing.Color.Green;
+                                    break;
+                            }
+                            Vector2 v2 = new Vector2(p.x, p.y);
+                            Vector2 cutpoint = q_bones.CutPoint;
+                            painter.Line(
+                                v2.X * _pxscale, v2.Y * _pxscale,
+                                cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                                cc);
+                        }
                     }
 
-                    {
-                        AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
-                        PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
-                        switch (q_bones.CutPointKind)
-                        {
-                            case BoneCutPointKind.NotPendicularCutPoint:
-                                cc = PixelFarm.Drawing.Color.Yellow;
-                                break;
-                            case BoneCutPointKind.PerpendicularToBoneGroup:
-                                cc = PixelFarm.Drawing.Color.Green;
-                                break;
-                        }
-                        Vector2 v2 = new Vector2(p.x, p.y);
-                        Vector2 cutpoint = q_bones.CutPoint;
-                        painter.Line(
-                            v2.X * _pxscale, v2.Y * _pxscale,
-                            cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                            cc);
-                    }
                 }
             }
             else
@@ -382,7 +389,7 @@ namespace SampleWinForms.UI
         void DrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)
         {
             //-------------- 
-            EdgeLine p_contactEdge = joint._p_contact_edge;
+            EdgeLine p_contactEdge = joint.dbugGetEdge_P();
             //mid point
             Vector2 jointPos = joint.Position * pxscale;//scaled joint pos
             painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);

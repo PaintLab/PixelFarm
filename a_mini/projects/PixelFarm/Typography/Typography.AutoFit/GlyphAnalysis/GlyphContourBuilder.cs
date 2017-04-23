@@ -318,6 +318,8 @@ namespace Typography.Rendering
         }
         internal void ApplyNewRelativeEdgeDistance(float relativeDistance)
         {
+            if (edges == null) return;
+            //
             int j = edges.Count;
             if (j < 1) return;
 
