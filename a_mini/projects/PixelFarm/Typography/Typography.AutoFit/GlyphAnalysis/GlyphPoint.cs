@@ -171,6 +171,14 @@ namespace Typography.Rendering
 #endif 
     }
 
+    public enum BoneCutPointKind
+    {
+        None,
+        PerpendicularToSingleBone,
+        PerpendicularToBoneGroup,
+        NotPendicularCutPoint,
+
+    }
     public class AssocBoneCollection
     {
         Dictionary<GlyphBone, bool> _assocBones = new Dictionary<GlyphBone, bool>();
@@ -178,13 +186,14 @@ namespace Typography.Rendering
         bool closeCollection;
         bool hasEvaluatedPerpendicularBones;
 
-        Vector2 _cutPoint;
+        Vector2 _cutPoint; //cut point
 
-        int exactPerpendicularBone;
+        int _startIndexAt = -1;
+        int _endIndexAt = -1;
 
         internal AssocBoneCollection()
         {
-            exactPerpendicularBone = -1;//not found
+
         }
         internal void CloseCollection()
         {
@@ -226,6 +235,13 @@ namespace Typography.Rendering
                 yield return _assocBoneList[i];
             }
         }
+        public BoneCutPointKind CutPointKind
+        {
+            get;
+            set;
+        }
+        public int StartIndexAt { get { return _startIndexAt; } }
+        public int EndIndexAt { get { return _endIndexAt; } }
 
         internal void EvaluatePerpendicularBone(GlyphPoint ownerPoint)
         {
@@ -243,24 +259,28 @@ namespace Typography.Rendering
                 GlyphBone b = _assocBoneList[i];
                 if (MyMath.FindPerpendicularCutPoint(b, o_point, out _cutPoint))
                 {
-                    exactPerpendicularBone = i;
+                    _startIndexAt = _endIndexAt = i;
+                    this.CutPointKind = BoneCutPointKind.PerpendicularToSingleBone;
                     break;
                 }
             }
             //------------------------------------
-            if (exactPerpendicularBone > -1) { return; }
+            if (_startIndexAt > -1) { return; }
             //------------------------------------
             //if not found exact bone
             //we use middle area cutpoint
             switch (b_count)
             {
-                case 0: throw new System.NotSupportedException(); //?
+                case 0:
+                    return;
                 case 1:
                     {
                         //only 1 bone and no cutpoint found
                         //so no exact perpendicular cut point
                         //use mid point
                         _cutPoint = _assocBoneList[0].GetMidPoint();
+                        this.CutPointKind = BoneCutPointKind.NotPendicularCutPoint;
+                        _startIndexAt = _endIndexAt = 0;
                     }
                     break;
                 case 2:
@@ -268,7 +288,26 @@ namespace Typography.Rendering
                         if (!FindAvgCutPoint(_assocBoneList[0], _assocBoneList[1], o_point, out _cutPoint))
                         {
                             //if not found 
+                            //-> no cutpoint
+                            //link to min distance
+                            if (MyMath.MinDistanceFirst(_assocBoneList[0].GetMidPoint(), _assocBoneList[1].GetMidPoint(), o_point))
+                            {
+                                _cutPoint = _assocBoneList[0].GetMidPoint();
+                                _startIndexAt = _endIndexAt = 0;
+                            }
+                            else
+                            {
+                                _cutPoint = _assocBoneList[1].GetMidPoint();
+                                _startIndexAt = _endIndexAt = 1;
+                            }
+                            this.CutPointKind = BoneCutPointKind.NotPendicularCutPoint;
+                        }
+                        else
+                        {
 
+                            _startIndexAt = 0;
+                            _endIndexAt = 1;
+                            this.CutPointKind = BoneCutPointKind.PerpendicularToBoneGroup;
                         }
                     }
                     break;
@@ -277,25 +316,28 @@ namespace Typography.Rendering
                         //we start at the middle 
                         //and expand left and right
 
-                        int mm_mid = b_count / 2;
-                        int startAt = mm_mid - 1;
-                        int endAt = mm_mid + 1;
+                        int mid_index = b_count / 2;
+                        int startAt = mid_index - 1;
+                        int endAt = mid_index + 1;
                         bool foundResult = false;
                         for (; startAt >= 0 && endAt < b_count;)
                         {
                             if (FindAvgCutPoint(_assocBoneList[startAt], _assocBoneList[endAt], o_point, out _cutPoint))
                             {
-
+                                this.CutPointKind = BoneCutPointKind.PerpendicularToBoneGroup;
+                                _startIndexAt = startAt;
+                                _endIndexAt = endAt;
                                 foundResult = true;
                                 break; //from loop
                             }
                         }
-
                         if (!foundResult)
                         {
                             //no result found
-
-                        } 
+                            _cutPoint = _assocBoneList[mid_index].GetMidPoint();
+                            _startIndexAt = _endIndexAt = mid_index;
+                            this.CutPointKind = BoneCutPointKind.NotPendicularCutPoint;
+                        }
                     }
                     break;
             }
