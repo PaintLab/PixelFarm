@@ -18,6 +18,8 @@ namespace Typography.Rendering
         float centroidX;
         float centroidY;
 
+ 
+
         public GlyphTriangle(DelaunayTriangle tri)
         {
             this._tri = tri;
@@ -40,9 +42,9 @@ namespace Typography.Rendering
 #endif
 
         }
-        static EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
+        EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
         {
-            return new EdgeLine(p.userData as GlyphPoint, q.userData as GlyphPoint, isOutside);
+            return new EdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint, isOutside);
         }
         public double CentroidX
         {
@@ -52,6 +54,7 @@ namespace Typography.Rendering
         {
             get { return centroidY; }
         }
+
         
         internal bool IsConnectedWith(GlyphTriangle anotherTri)
         {

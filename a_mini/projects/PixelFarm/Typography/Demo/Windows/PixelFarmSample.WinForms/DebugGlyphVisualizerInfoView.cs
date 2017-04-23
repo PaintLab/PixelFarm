@@ -303,11 +303,14 @@ namespace SampleWinForms.UI
             jointNode.Text = "j:" + joint.ToString();
             _jointsNode.Nodes.Add(jointNode);
 
-            if (joint.TipPoint != System.Numerics.Vector2.Zero)
+            if (joint.HasTipP)
             {
-                jointNode.Nodes.Add(new TreeNode() { Text = "tip:" + joint.TipPoint, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPoint) });
+                jointNode.Nodes.Add(new TreeNode() { Text = "tip_p:" + joint.TipPointP, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPointP) });
             }
-
+            if (joint.HasTipQ)
+            {
+                jointNode.Nodes.Add(new TreeNode() { Text = "tip_q:" + joint.TipPointQ, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPointQ) });
+            }
         }
         public void ShowEdge(EdgeLine edge)
         {
@@ -334,11 +337,40 @@ namespace SampleWinForms.UI
             nodeEdge.Tag = nodeInfo;
             nodeEdge.Text = "e id=" + edge.dbugId + ",count="
                 + _testEdgeCount + " :(" + u_data_p.x + "," + u_data_p.y + ")" +
+
                 "=>(" + u_data_q.x + "," + u_data_q.y + ") ";
-            if (!edge.dbugHasPerpendicularBone)
+            if (edge.dbugNoPerpendicularBone)
             {
-                nodeEdge.Text += "_X_";
+                nodeEdge.Text += "_X_ (no perpendicular_bone)";
             }
+            if (u_data_p != null)
+            {
+
+                foreach (GlyphBone b in u_data_p.dbugGetAssocBones())
+                {
+                    TreeNode assocBoneNode = new TreeNode();
+                    assocBoneNode.Text = "-> bone_p:" + b.ToString();
+                    nodeEdge.Nodes.Add(assocBoneNode);
+                }
+
+            }
+            if (u_data_q != null)
+            {
+
+
+                foreach (GlyphBone b in u_data_q.dbugGetAssocBones())
+                {
+                    TreeNode assocBoneNode = new TreeNode();
+                    assocBoneNode.Text = "-> bone_q:" + b.ToString();
+                    nodeEdge.Nodes.Add(assocBoneNode);
+                }
+
+            }
+            //if (!edge.dbugHasRelatedBone)
+            //{
+            //    nodeEdge.Text += "_X_ (no perpendicular_bone)";
+            //}
+
             //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
             //{
             //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;
@@ -363,7 +395,7 @@ namespace SampleWinForms.UI
             //{
             //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;
             //}
-            _glyphEdgesNode.Nodes.Add(nodeEdge);             
+            _glyphEdgesNode.Nodes.Add(nodeEdge);
         }
         public void ShowFlatternBorderInfo(VertexStore vxs)
         {

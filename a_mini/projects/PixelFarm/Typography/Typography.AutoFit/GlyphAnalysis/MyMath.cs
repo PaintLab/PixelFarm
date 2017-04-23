@@ -3,7 +3,7 @@ using System.Numerics;
 namespace Typography.Rendering
 {
 
-    static class MyMath
+    public static class MyMath
     {
 
         /// <summary>
@@ -82,6 +82,12 @@ namespace Typography.Rendering
             min = Vector2.Min(a_pos, b_pos);
             max = Vector2.Max(a_pos, b_pos);
         }
+        static void GetMinMax(Vector2 a_pos, Vector2 b_pos, out Vector2 min, out Vector2 max)
+        {
+
+            min = Vector2.Min(a_pos, b_pos);
+            max = Vector2.Max(a_pos, b_pos);
+        }
         public static int FindMin(Vector2 a, Vector2 b)
         {
             if (a.X < b.X)
@@ -138,6 +144,13 @@ namespace Typography.Rendering
                 throw new System.NotSupportedException();
             }
         }
+        /// <summary>
+        /// find a perpendicular cut-point from p to bone
+        /// </summary>
+        /// <param name="bone"></param>
+        /// <param name="p"></param>
+        /// <param name="cutPoint"></param>
+        /// <returns></returns>
         public static bool FindPerpendicularCutPoint(GlyphBone bone, Vector2 p, out Vector2 cutPoint)
         {
             if (bone.JointB != null)
@@ -199,7 +212,48 @@ namespace Typography.Rendering
             double cuty = (m2 * cutx) + b2;
             return new Vector2((float)cutx, (float)cuty);
         }
+        public static bool FindPerpendicularCutPoint2(Vector2 p0, Vector2 p1, Vector2 p2, out Vector2 cutPoint)
+        {
+            //a line from p0 to p1
+            //p2 is any point
+            //return p3 -> cutpoint on p0,p1 
 
+
+            double xdiff = p1.X - p0.X;
+            double ydiff = p1.Y - p0.Y;
+            if (xdiff == 0)
+            {
+                //90 or 180 degree
+                cutPoint = new Vector2(p1.X, p2.Y);
+                Vector2 min, max;
+                GetMinMax(p0, p1, out min, out max);
+                return cutPoint.X >= min.X && cutPoint.X <= max.X && cutPoint.Y >= min.Y && cutPoint.Y <= max.Y;
+
+            }
+            if (ydiff == 0)
+            {
+                cutPoint = new Vector2(p2.X, p1.Y);
+                Vector2 min, max;
+                GetMinMax(p0, p1, out min, out max);
+                return cutPoint.X >= min.X && cutPoint.X <= max.X && cutPoint.Y >= min.Y && cutPoint.Y <= max.Y;
+            }
+
+            double m1 = ydiff / xdiff;
+            double b1 = FindB(p0, p1);
+
+            double m2 = -1 / m1;
+            double b2 = p2.Y - (m2) * p2.X;
+            //find cut point
+            double cutx = (b2 - b1) / (m1 - m2);
+            double cuty = (m2 * cutx) + b2;
+            cutPoint = new Vector2((float)cutx, (float)cuty);
+            //
+            {
+                Vector2 min, max;
+                GetMinMax(p0, p1, out min, out max);
+                return cutPoint.X >= min.X && cutPoint.X <= max.X && cutPoint.Y >= min.Y && cutPoint.Y <= max.Y;
+            }
+        }
         static double FindB(Vector2 p0, Vector2 p1)
         {
 
