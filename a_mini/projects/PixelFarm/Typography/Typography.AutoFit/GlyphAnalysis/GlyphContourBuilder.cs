@@ -306,9 +306,10 @@ namespace Typography.Rendering
             }
             else
             {
+                //not found
             }
 
-            
+
             int j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
@@ -356,5 +357,5 @@ namespace Typography.Rendering
         }
     }
 
-  
+
 }

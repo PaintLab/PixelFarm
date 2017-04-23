@@ -21,12 +21,6 @@ namespace Typography.Rendering
 
 
 
-        struct BoneAndCutPoint
-        {
-            public GlyphBone bone;
-            public Vector2 cutPoint;
-        }
-
         internal GlyphEdge(GlyphPoint p0, GlyphPoint p1, EdgeLine edgeLine)
         {
             this._P = p0;
