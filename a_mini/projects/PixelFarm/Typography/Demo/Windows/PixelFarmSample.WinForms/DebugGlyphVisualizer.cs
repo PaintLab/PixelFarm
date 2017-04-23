@@ -175,12 +175,12 @@ namespace SampleWinForms.UI
                 RenderTessTesult();
             }
 
-            if (DrawDynamicOutline)
-            {
-                GlyphDynamicOutline dynamicOutline = builder.LatestGlyphFitOutline;
-                WalkDynamicOutline(painter, dynamicOutline, scale, DrawRegenerateOutline);
+            //if (DrawDynamicOutline)
+            //{
+            //    GlyphDynamicOutline dynamicOutline = builder.LatestGlyphFitOutline;
+            //    WalkDynamicOutline(painter, dynamicOutline, scale, DrawRegenerateOutline);
 
-            }
+            //}
 
         }
 
@@ -596,7 +596,7 @@ namespace SampleWinForms.UI
             //    x1 * pxscale, y1 * pxscale,
             //    PixelFarm.Drawing.Color.Green);
 
-            painter.FillRectLBWH(x0 * pxscale, y0 * pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
+            painter.FillRectLBWH(x0 * pxscale, y0 * pxscale, 3, 3, PixelFarm.Drawing.Color.Red);
             //painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
 
             _infoView.ShowGlyphEdge(x0, y0, x1, y1);
@@ -655,14 +655,14 @@ namespace SampleWinForms.UI
             }
         }
 
-        public void WalkDynamicOutline(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale, bool withRegenerateOutlines)
-        {
+        //        public void WalkDynamicOutline(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale, bool withRegenerateOutlines)
+        //        {
 
-#if DEBUG
-            dynamicOutline.dbugDrawRegeneratedOutlines = withRegenerateOutlines;
-#endif
-            dynamicOutline.Walk();
-        }
+        //#if DEBUG
+        //            dynamicOutline.dbugDrawRegeneratedOutlines = withRegenerateOutlines;
+        //#endif
+        //             //dynamicOutline.Walk();
+        //        }
         //void DrawBoneRib(CanvasPainter painter, Vector2 vec, GlyphBoneJoint joint, float pixelScale)
         //{
         //    Vector2 jointPos = joint.Position;

@@ -134,9 +134,6 @@ namespace Typography.Rendering
         {
             return a.x == b.x && a.y == b.y;
         }
-
-
-
         internal void AddAssociateBone(GlyphBone bone)
         {
             _assocBones.AddAssocBone(bone);
@@ -145,8 +142,14 @@ namespace Typography.Rendering
         internal void EvaluatePerpendicularBone()
         {
             _assocBones.EvaluatePerpendicularBone(this);
+            ApplyNewRelativeLen(1);
         }
-
+        internal void ApplyNewRelativeLen(float newRelativeLen)
+        {
+            Vector2 newRadiusEnd = _assocBones.CalculateCutPoint(newRelativeLen, new Vector2(x, y));
+            this.newX = newRadiusEnd.X;
+            this.newY = newRadiusEnd.Y;
+        }
 #if DEBUG
         /// <summary>
         /// glyph pointnumber
@@ -186,7 +189,7 @@ namespace Typography.Rendering
         bool closeCollection;
         bool hasEvaluatedPerpendicularBones;
 
-        Vector2 _cutPoint; //cut point
+        Vector2 _cutPoint;//original cut point
 
         int _startIndexAt = -1;
         int _endIndexAt = -1;
@@ -352,6 +355,12 @@ namespace Typography.Rendering
             Vector2 first_v = beginAt.GetMidPoint();
             Vector2 last_v = endAt.GetMidPoint();
             return MyMath.FindPerpendicularCutPoint2(first_v, last_v, p, out exactCutPoint);
+        }
+        internal Vector2 CalculateCutPoint(float relativeLen, Vector2 orgVector)
+        {
+            Vector2 delta = orgVector - _cutPoint;
+            Vector2 newDelta = delta.NewLength(delta.Length() * relativeLen);
+            return _cutPoint + newDelta;
         }
 
     }

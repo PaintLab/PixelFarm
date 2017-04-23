@@ -43,94 +43,19 @@ namespace Typography.Rendering
             //TODO: review here again
             _edgeLine.GlyphPoint_P.EvaluatePerpendicularBone();
             _edgeLine.GlyphPoint_Q.EvaluatePerpendicularBone();
-
-            //GlyphTriangle ownerTri = this._edgeLine.OwnerTriangle; 
-            //GlyphCentroidLine ownerCentroidLine = this._edgeLine.OwnerTriangle.OwnerCentroidLine;
-
-
-
-            //we try to find a perpedicular bone from 
-            //from edgeLine
-            //int j = newBones.Count;
-            //Vector2 midEdge = this._edgeLine.GetMidPoint();
-            //Vector2 midEdge = new Vector2(this._P.x, this._P.y);
-
-            //we find cut bone from owner Centroid Line
-            //(not cross centroid line)
-
-
-
-            //List<BoneAndCutPoint> foundCutPoints = new List<BoneAndCutPoint>();
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    //find perpendicular cutpoint from midEdge to the bone
-            //    Vector2 cutPoint;
-            //    GlyphBone bone = newBones[i];
-            //    if (MyMath.FindPerpendicularCutPoint(bone, midEdge, out cutPoint))
-            //    {
-            //        BoneAndCutPoint found = new BoneAndCutPoint();
-            //        found.bone = bone;
-            //        found.cutPoint = cutPoint;
-            //        foundCutPoints.Add(found);
-            //    }
-            //}
-            //if (foundCutPoints.Count > 1)
-            //{
-            //    //find min
-            //    double min = Double.MaxValue;
-            //    int minAt = -1;
-            //    int n = foundCutPoints.Count;
-            //    for (int i = 0; i < n; ++i)
-            //    {
-            //        BoneAndCutPoint cut = foundCutPoints[i];
-            //        double sqLen = MyMath.SquareDistance(cut.cutPoint, midEdge);
-            //        if (sqLen < min)
-            //        {
-            //            minAt = i;
-            //            min = sqLen;
-            //        }
-            //    }
-
-            //    BoneAndCutPoint found = foundCutPoints[minAt];
-            //    RelatedBone = found.bone;
-            //    RelatedBoneCutPoint = found.cutPoint;
-
-            //}
-            //else if (foundCutPoints.Count == 1)
-            //{
-            //    BoneAndCutPoint found = foundCutPoints[0];
-            //    RelatedBone = found.bone;
-            //    RelatedBoneCutPoint = found.cutPoint;
-            //}
-            //else
-            //{
-            //    //not found
-            //    //any perpedicular bone
-            //    this._edgeLine.dbugNoPerpendicularBone = true;
-            //}
         }
-        public GlyphBone RelatedBone { get; set; }
-        public Vector2 RelatedBoneCutPoint { get; set; }
 
-        internal void ApplyNewEdgeDistance(float newRelativeDistance)
-        {
-            _relativeDistance = newRelativeDistance;
-            //find new edge end point 
-            Vector2 newBoneToEdgeVector = _bone_to_edgeVector.NewLength(_originalDistanceToBone * newRelativeDistance);
-            _bone_to_edgeVector = newBoneToEdgeVector;
-            _newEdgeCutPoint = _bone_midPoint + _bone_to_edgeVector;
-        }
-        internal static void FindCutPoint(GlyphEdge e0, GlyphEdge e1)
-        {
-            //find cutpoint from e0.q to e1.p 
-            //new sample
-            Vector2 tmp_e0_q = e0._newEdgeCutPoint + e0._o_edgeVector;
-            Vector2 tmp_e1_p = e1._newEdgeCutPoint - e1._o_edgeVector;
-            Vector2 cutpoint = FindCutPoint(e0._newEdgeCutPoint, tmp_e0_q, e1._newEdgeCutPoint, tmp_e1_p);
+        //internal static void FindCutPoint(GlyphEdge e0, GlyphEdge e1)
+        //{
+        //    //find cutpoint from e0.q to e1.p 
+        //    //new sample
+        //    Vector2 tmp_e0_q = e0._newEdgeCutPoint + e0._o_edgeVector;
+        //    Vector2 tmp_e1_p = e1._newEdgeCutPoint - e1._o_edgeVector;
+        //    Vector2 cutpoint = FindCutPoint(e0._newEdgeCutPoint, tmp_e0_q, e1._newEdgeCutPoint, tmp_e1_p);
 
-            e0._Q.newX = e1._P.newX = cutpoint.X;
-            e0._Q.newY = e1._P.newY = cutpoint.Y;
-        }
+        //    e0._Q.newX = e1._P.newX = cutpoint.X;
+        //    e0._Q.newY = e1._P.newY = cutpoint.Y;
+        //}
         static Vector2 FindCutPoint(
             Vector2 p0, Vector2 p1,
             Vector2 p2, Vector2 p3)
@@ -301,14 +226,21 @@ namespace Typography.Rendering
             //---------------------------------------------
         }
 
-        public Vector2 CutPoint_P
+        public Vector2 Pos_P
         {
             get { return new Vector2(_P.newX, _P.newY); }
         }
-        public Vector2 CutPoint_Q
+        public Vector2 Pos_Q
         {
             get { return new Vector2(_Q.newX, _Q.newY); }
         }
+#if DEBUG
+
+        public override string ToString()
+        {
+            return this._P + "=>" + this._Q;
+        }
+#endif
     }
 
 }
