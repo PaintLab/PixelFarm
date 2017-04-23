@@ -1,5 +1,5 @@
 ﻿//MIT, 2017, WinterDev
- 
+
 using System.Numerics;
 
 namespace Typography.Rendering
@@ -13,16 +13,13 @@ namespace Typography.Rendering
         //of 2 triangles,      
         //(_p_contact_edge, _q_contact_edge)
 
-        public EdgeLine _p_contact_edge;
-        public EdgeLine _q_contact_edge;
+        public readonly EdgeLine _p_contact_edge;
+        public readonly EdgeLine _q_contact_edge;
         GlyphCentroidPair _owner;
-        /// <summary>
-        /// tip point (mid of tip edge)
-        /// </summary>
-        Vector2 _tipPoint;
-        //one bone joint can have up to 2 tips  
-        EdgeLine _selectedTipEdge;
 
+        //one bone joint can have up to 2 tips  
+        EdgeLine _tipEdge_p;
+        EdgeLine _tipEdge_q;
 #if DEBUG
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;
@@ -31,11 +28,12 @@ namespace Typography.Rendering
             EdgeLine p_contact_edge,
             EdgeLine q_contact_edge)
         {
+            //both p and q is INSIDE, contact edge
             this._p_contact_edge = p_contact_edge;
             this._q_contact_edge = q_contact_edge;
             this._owner = owner;
         }
-
+         
         /// <summary>
         /// get position of this bone joint (mid point of the edge)
         /// </summary>
@@ -44,14 +42,11 @@ namespace Typography.Rendering
         {
             get
             {
-                //mid point of the edge line
+                //mid point of the contact edge line
                 return _p_contact_edge.GetMidPoint();
             }
         }
-        internal GlyphCentroidPair OwnerCentrodPair
-        {
-            get { return _owner; }
-        }
+
         public float GetLeftMostRib()
         {
             //TODO: revisit this again
@@ -72,13 +67,54 @@ namespace Typography.Rendering
 
             return (xdiff * xdiff) + (ydiff * ydiff);
         }
-        public void SetTipEdge(EdgeLine tipEdge)
+        internal void SetTipEdge_P(EdgeLine e)
         {
-            this._selectedTipEdge = tipEdge;
-            this._tipPoint = tipEdge.GetMidPoint();
+#if DEBUG
+            if (_tipEdge_p != null)
+            {
+                throw new System.NotSupportedException();
+            }
+#endif
+            this._tipEdge_p = e;
+
         }
-        public Vector2 TipPoint { get { return _tipPoint; } }
-        public EdgeLine TipEdge { get { return _selectedTipEdge; } } 
+        internal void SetTipEdge_Q(EdgeLine e)
+        {
+#if DEBUG
+            if (_tipEdge_q != null)
+            {
+                throw new System.NotSupportedException();
+            }
+            if (_tipEdge_q != null && _tipEdge_q == _tipEdge_p)
+            {
+                throw new System.NotSupportedException();
+            }
+#endif
+            this._tipEdge_q = e;
+        }
+        public bool HasTipP
+        {
+            get { return this._tipEdge_p != null; }
+        }
+        public bool HasTipQ
+        {
+            get { return this._tipEdge_q != null; }
+        }
+        public Vector2 TipPointP { get { return _tipEdge_p.GetMidPoint(); } }
+        public EdgeLine TipEdgeP { get { return _tipEdge_p; } }
+
+        public Vector2 TipPointQ { get { return _tipEdge_q.GetMidPoint(); } }
+        public EdgeLine TipEdgeQ { get { return _tipEdge_q; } }
+        //
+        internal GlyphCentroidPair OwnerCentrodPair
+        {
+            get { return _owner; }
+        }
+        internal bool ComposeOf(GlyphTriangle tri)
+        {
+            return this._owner.p == tri || this._owner.q == tri;
+        }
+
 #if DEBUG
         public override string ToString()
         {
@@ -88,4 +124,21 @@ namespace Typography.Rendering
 
     }
 
+
+
+    static class GlyphBoneJointExtensions
+    {
+        /// <summary>
+        /// distribute associate glyph bone to end point of this joint
+        /// </summary>
+        /// <param name="joint"></param>
+        /// <param name="bone"></param>
+        public static void AddAssociateGlyphBoneToEndPoint(this GlyphBoneJoint joint, GlyphBone bone)
+        {
+            //_p_contact_edge and _q_contact_edge share glyph end (glyph) points
+            //so we select only 1 (to p)
+            joint._p_contact_edge.GlyphPoint_P.AddAssociateBone(bone);
+            joint._p_contact_edge.GlyphPoint_Q.AddAssociateBone(bone);
+        }
+    }
 }

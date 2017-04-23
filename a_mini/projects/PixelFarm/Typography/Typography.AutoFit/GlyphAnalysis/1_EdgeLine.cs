@@ -15,62 +15,53 @@ namespace Typography.Rendering
     /// </summary>
     public class EdgeLine
     {
-
-        public readonly double x0;
-        public readonly double y0;
-        public readonly double x1;
-        public readonly double y1;
-
-
-        //------------------------------
+        readonly GlyphPoint _glyphPoint_P;
+        readonly GlyphPoint _glyphPoint_Q;
         /// <summary>
         /// contact to another edge
         /// </summary>
         internal EdgeLine contactToEdge;
-        //------------------------------
 
-        readonly GlyphPoint _glyphPoint_P;
-        readonly GlyphPoint _glyphPoint_Q;
 #if DEBUG
         public static int s_dbugTotalId;
         public readonly int dbugId = s_dbugTotalId++;
         internal GlyphTriangle dbugOwner;
 #endif
-
-        public EdgeLine(GlyphPoint p, GlyphPoint q)
+        GlyphTriangle ownerTriangle;
+        internal EdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q, bool isOutside)
         {
+            this.ownerTriangle = ownerTriangle;
             //------------------------------------
             //an edge line connects 2 glyph points.
             //it is created from triangulation process.
             //
             //some edge line is either 'INSIDE' edge  OR 'OUTSIDE'.
             //
-            //------------------------------------           
-
-
+            //------------------------------------   
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;
-
-            x0 = p.x;
-            y0 = p.y;
-            x1 = q.x;
-            y1 = q.y;
+            this.IsOutside = isOutside;
+            if (isOutside)
+            {
+                p.SetOutsideEdge(this);
+                q.SetOutsideEdge(this);
+            }
             //-------------------------------
             //analyze angle and slope kind
-            //-------------------------------
+            //-------------------------------  
+            SlopeAngleNoDirection = this.GetSlopeAngleNoDirection();
             if (x1 == x0)
             {
                 this.SlopeKind = LineSlopeKind.Vertical;
-                SlopAngle = 1;
             }
             else
             {
-                SlopAngle = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-                if (SlopAngle > _85degreeToRad)
+
+                if (SlopeAngleNoDirection > _85degreeToRad)
                 {
                     SlopeKind = LineSlopeKind.Vertical;
                 }
-                else if (SlopAngle < _01degreeToRad)
+                else if (SlopeAngleNoDirection < _01degreeToRad)
                 {
                     SlopeKind = LineSlopeKind.Horizontal;
                 }
@@ -81,6 +72,17 @@ namespace Typography.Rendering
             }
         }
 
+        public double x0 { get { return this._glyphPoint_P.x; } }
+        public double y0 { get { return this._glyphPoint_P.y; } }
+        public double x1 { get { return this._glyphPoint_Q.x; } }
+        public double y1 { get { return this._glyphPoint_Q.y; } }
+
+
+#if DEBUG
+        public bool dbugNoPerpendicularBone { get; set; }
+        public GlyphEdge dbugGlyphEdge { get; set; }
+#endif
+        internal GlyphTriangle OwnerTriangle { get { return this.ownerTriangle; } }
         public GlyphPoint GlyphPoint_P
         {
             get
@@ -100,17 +102,19 @@ namespace Typography.Rendering
             get;
             private set;
         }
+
+
         public bool IsOutside
         {
             get;
-            internal set;
+            private set;
         }
         public bool IsInside
         {
             get { return !this.IsOutside; }
 
         }
-        public double SlopAngle
+        internal double SlopeAngleNoDirection
         {
             get;
             private set;
@@ -125,21 +129,37 @@ namespace Typography.Rendering
             get;
             internal set;
         }
-        public Vector2 GetMidPoint()
-        {
-            return new Vector2((float)((x0 + x1) / 2), (float)((y0 + y1) / 2));
-        }
+
         public override string ToString()
         {
             return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
         }
-         
 
         static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+    }
 
 
+    public static class EdgeLineExtensions
+    {
+        public static Vector2 GetMidPoint(this EdgeLine line)
+        {
+            return new Vector2((float)((line.x0 + line.x1) / 2), (float)((line.y0 + line.y1) / 2));
+        }
+
+        internal static double GetSlopeAngleNoDirection(this EdgeLine line)
+        {
+            return Math.Abs(Math.Atan2(Math.Abs(line.y1 - line.y0), Math.Abs(line.x1 - line.x0)));
+        }
+
+        internal static bool ContainsTriangle(this EdgeLine edge, GlyphTriangle p)
+        {
+            return (p.e0 == edge ||
+                    p.e1 == edge ||
+                    p.e2 == edge);
+        }
+       
     }
 }

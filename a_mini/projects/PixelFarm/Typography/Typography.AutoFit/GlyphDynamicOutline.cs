@@ -65,8 +65,9 @@ namespace Typography.Rendering
         }
 
         List<StrokeLineHub> _strokeLineHub;
-        List<GlyphContour> _contours;
+        internal List<GlyphContour> _contours;
         List<GlyphBone> _longVerticalBones;
+        float _relativeStrokeWidth = 1;
 
 
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
@@ -131,9 +132,16 @@ namespace Typography.Rendering
         {
             //preserve original outline
             //regenerate outline from original outline
-
-
-
+            // if (_relativeStrokeWidth == relativeStrokeWidth) { return; }
+            //----------------------------------------------------------
+            this._relativeStrokeWidth = relativeStrokeWidth;
+            List<GlyphContour> cnts = _contours;
+            int j = cnts.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphContour cnt = cnts[i];
+                cnt.ApplyNewRelativeEdgeDistance(relativeStrokeWidth);
+            }
         }
 
         public float LeftControlPosX { get; set; }
@@ -402,7 +410,7 @@ namespace Typography.Rendering
                     float new_x = RoundToNearestX((float)p_x);
                     p_x = new_x;
                     //adjust right-side vertical edge
-                    EdgeLine rightside = p.GetMatchingVerticalEdge();
+
                 }
 
                 genPoints.Add(new Vector2((float)p_x, (float)p_y));
@@ -554,12 +562,12 @@ namespace Typography.Rendering
             //remove this rib
 
 
-            if (joint.TipPoint != System.Numerics.Vector2.Zero)
-            {
-                //TODO: review here, tip point
-                strokeJoint.hasTip = true;
-                strokeJoint._tip_endAt = joint.TipPoint;
-            }
+            //if (joint.TipPointP != System.Numerics.Vector2.Zero)
+            //{
+            //    //TODO: review here, tip point
+            //    strokeJoint.hasTip = true;
+            //    strokeJoint._tip_endAt = joint.TipPointP;
+            //}
         }
 
         void WalkToJoint(StrokeJoint joint)

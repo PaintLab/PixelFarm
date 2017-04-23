@@ -25,6 +25,11 @@ namespace SampleWinForms.UI
         public EdgeLine E0 { get; set; }
         public EdgeLine E1 { get; set; }
         public EdgeLine E2 { get; set; }
+        public override string ToString()
+        {
+            return this.CentroidX + "," + CentroidY;
+
+        }
     }
 
     class DebugGlyphVisualizer : GlyphOutlineWalker
@@ -173,7 +178,8 @@ namespace SampleWinForms.UI
             if (DrawDynamicOutline)
             {
                 GlyphDynamicOutline dynamicOutline = builder.LatestGlyphFitOutline;
-                DynamicOutline(painter, dynamicOutline, scale, DrawRegenerateOutline);
+                WalkDynamicOutline(painter, dynamicOutline, scale, DrawRegenerateOutline);
+
             }
 
         }
@@ -194,7 +200,7 @@ namespace SampleWinForms.UI
             get { return builder.LeftXControl; }
         }
 
-        public bool DrawRibs { get; set; }
+
         public bool DrawTrianglesAndEdges { get; set; }
         public bool DrawDynamicOutline { get; set; }
         public bool DrawRegenerateOutline { get; set; }
@@ -215,6 +221,7 @@ namespace SampleWinForms.UI
 
             }
         }
+        
         void DrawEdge(CanvasPainter painter, EdgeLine edge, float scale)
         {
             if (edge.IsOutside)
@@ -265,12 +272,92 @@ namespace SampleWinForms.UI
                     painter.StrokeWidth = 3;
                     painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale, PixelFarm.Drawing.Color.Yellow);
                     painter.StrokeWidth = prevWidth;
+
+
+                    GlyphEdge glyphEdge = edge.dbugGlyphEdge;
+                    //draw
+                    GlyphPoint p = edge.GlyphPoint_P;
+                    GlyphPoint q = edge.GlyphPoint_Q;
+                    //
+                    AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
+                    if (p_bones != null)
+                    {
+                        Vector2 v2 = new Vector2(q.x, q.y);
+                        foreach (GlyphBone b in p_bones)
+                        {
+                            Vector2 v3 = b.GetMidPoint();
+                            painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Yellow);
+                        }
+                    }
+
+
+
+                    AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
+                    if (q_bones != null)
+                    {
+                        Vector2 v2 = new Vector2(p.x, p.y);
+                        foreach (GlyphBone b in q_bones)
+                        {
+
+                            //Vector2 v2 = new Vector2(q.x, q.y);
+                            Vector2 v3 = b.GetMidPoint();
+                            painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Green);
+                        }
+                    }
                 }
                 else
                 {
                     painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
                 }
 
+                {
+
+                    //choice2
+                    GlyphEdge glyphEdge = edge.dbugGlyphEdge;
+                    GlyphPoint p = edge.GlyphPoint_P;
+                    GlyphPoint q = edge.GlyphPoint_Q;
+                    //---------   
+
+                    {
+                        AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
+                        PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
+                        switch (p_bones.CutPointKind)
+                        {
+                            case BoneCutPointKind.NotPendicularCutPoint:
+                                cc = PixelFarm.Drawing.Color.Yellow;
+                                break;
+                            case BoneCutPointKind.PerpendicularToBoneGroup:
+                                cc = PixelFarm.Drawing.Color.Green;
+                                break;
+                        }
+                        Vector2 v2 = new Vector2(q.x, q.y);
+                        Vector2 cutpoint = p_bones.CutPoint;
+                        painter.Line(
+                            v2.X * _pxscale, v2.Y * _pxscale,
+                            cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                            cc);
+                    }
+
+                    {
+                        AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
+                        PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
+                        switch (q_bones.CutPointKind)
+                        {
+                            case BoneCutPointKind.NotPendicularCutPoint:
+                                cc = PixelFarm.Drawing.Color.Yellow;
+                                break;
+                            case BoneCutPointKind.PerpendicularToBoneGroup:
+                                cc = PixelFarm.Drawing.Color.Green;
+                                break;
+                        }
+                        Vector2 v2 = new Vector2(p.x, p.y);
+                        Vector2 cutpoint = q_bones.CutPoint;
+                        painter.Line(
+                            v2.X * _pxscale, v2.Y * _pxscale,
+                            cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                            cc);
+                    }
+                }
             }
             else
             {
@@ -288,6 +375,8 @@ namespace SampleWinForms.UI
                 }
                 painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
             }
+            //-----------
+
         }
 
         void DrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)
@@ -297,9 +386,9 @@ namespace SampleWinForms.UI
             //mid point
             Vector2 jointPos = joint.Position * pxscale;//scaled joint pos
             painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);
-            if (joint.TipPoint != Vector2.Zero)
+            if (joint.TipEdgeP != null)
             {
-                EdgeLine tipEdge = joint.TipEdge;
+                EdgeLine tipEdge = joint.TipEdgeP;
                 float p_x = tipEdge.GlyphPoint_P.x * pxscale;
                 float p_y = tipEdge.GlyphPoint_P.y * pxscale;
                 float q_x = tipEdge.GlyphPoint_Q.x * pxscale;
@@ -319,6 +408,30 @@ namespace SampleWinForms.UI
                     PixelFarm.Drawing.Color.White);
                 painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
             }
+            if (joint.TipEdgeQ != null)
+            {
+                EdgeLine tipEdge = joint.TipEdgeQ;
+
+                float p_x = tipEdge.GlyphPoint_P.x * pxscale;
+                float p_y = tipEdge.GlyphPoint_P.y * pxscale;
+                float q_x = tipEdge.GlyphPoint_Q.x * pxscale;
+                float q_y = tipEdge.GlyphPoint_Q.y * pxscale;
+
+                //
+                painter.Line(
+                   jointPos.X, jointPos.Y,
+                   p_x, p_y,
+                   PixelFarm.Drawing.Color.White);
+                painter.FillRectLBWH(p_x, p_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
+
+                //
+                painter.Line(
+                    jointPos.X, jointPos.Y,
+                    q_x, q_y,
+                    PixelFarm.Drawing.Color.White);
+                painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
+            }
+
         }
 
         Vector2 _branchHeadPos;
@@ -368,69 +481,72 @@ namespace SampleWinForms.UI
                 _infoView.ShowBone(bone, jointA, bone.TipEdge);
             }
 
-            if (bone.PerpendicularEdge != null)
-            {
-                Vector2 midBone = bone.GetMidPoint() * pxscale;
-                Vector2 cut_point = bone.cutPoint_onEdge * pxscale;
-                painter.Line(
-                    cut_point.X, cut_point.Y,
-                    midBone.X, midBone.Y,
-                    PixelFarm.Drawing.Color.White);
-
-                //draw new line
-                Vector2 delta = bone.cutPoint_onEdge - bone.GetMidPoint();
-                double currentLen = delta.Length(); //unscale version
-                delta = delta.NewLength(currentLen * newRelativeLen);
-                //
-                Vector2 v2 = midBone + (delta * pxscale);
-                painter.Line(
-                    midBone.X, midBone.Y,
-                    v2.X, v2.Y,
-                    PixelFarm.Drawing.Color.Red);
-                //create a new perpendicular line
-                //------------------------------------------
-                //create a line that parallel with the bone
-                Vector2 boneVector = bone.GetBoneVector();
-                var boneLen = boneVector.Length();
-                Vector2 boneVec2 = boneVector.NewLength(boneLen * 0.5);
-                Vector2 v2up = v2 + boneVec2;
-                Vector2 v2down = v2 - boneVec2;
 
 
-                //test only
-                painter.Line(
-                   v2.X, v2.Y,
-                   v2up.X, v2up.Y,
-                   PixelFarm.Drawing.Color.Red);
+            //if (bone.PerpendicularEdge != null)
+            //{
+            //    Vector2 midBone = bone.GetMidPoint() * pxscale;
+            //    Vector2 cut_point = bone.cutPoint_onEdge * pxscale;
+            //    painter.Line(
+            //        cut_point.X, cut_point.Y,
+            //        midBone.X, midBone.Y,
+            //        PixelFarm.Drawing.Color.White);
 
-                //test only
-                painter.Line(
-                   v2.X, v2.Y,
-                   v2down.X, v2down.Y,
-                   PixelFarm.Drawing.Color.Red);
-                //------------------------------------------
+            //    //draw new line
+            //    Vector2 delta = bone.cutPoint_onEdge - bone.GetMidPoint();
+            //    double currentLen = delta.Length(); //unscale version
+            //    delta = delta.NewLength(currentLen * newRelativeLen);
+            //    //
+            //    Vector2 v2 = midBone + (delta * pxscale);
+            //    painter.Line(
+            //        midBone.X, midBone.Y,
+            //        v2.X, v2.Y,
+            //        PixelFarm.Drawing.Color.Red);
 
-            }
+            //    //----------------------                
+            //    //create green point at mid of GlyphEdge
+            //    Vector2 midEdge = bone.PerpendicularEdge.GetMidPoint();
+            //    painter.FillRectLBWH(midEdge.X * pxscale, midEdge.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Green);
 
-            //--------
-            //draw a perpendicular line from bone to associated glyph point
-            List<GlyphPointToBoneLink> linkToGlyphPoints = bone._perpendiculatPoints;
-            if (linkToGlyphPoints != null)
-            {
-                int n = linkToGlyphPoints.Count;
-                for (int m = 0; m < n; ++m)
-                {
-                    GlyphPointToBoneLink link = linkToGlyphPoints[m];
-                    painter.Line(
-                      link.glyphPoint.x * pxscale, link.glyphPoint.y * pxscale,
-                      link.bonePoint.X * pxscale, link.bonePoint.Y * pxscale,
-                      PixelFarm.Drawing.Color.Yellow);
+            //    //----------------------                
+            //    //Vector2 delta3 = bone.cutPoint_onEdge - bone.GetMidPoint();
+            //    //delta3 = delta3.NewLength(100);// currentLen * newRelativeLen * 0.5);
+            //    //Vector2 midEdge2 = midEdge + delta3;
+            //    //painter.FillRectLBWH(midEdge2.X * pxscale, midEdge2.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
+            //    //painter.Line(midEdge.X * pxscale, midEdge.Y * pxscale,
+            //    //     midEdge2.X * pxscale, midEdge2.Y * pxscale, PixelFarm.Drawing.Color.Blue);
+            //    //----------------------
 
-                    //test
-                    //DrawAssocGlyphPoint(link.bonePoint, link.glyphPoint, newRelativeLen);
-                }
-            }
-            //--------
+
+            //    //draw marker at midEdge
+            //    //create a new perpendicular line
+            //    //
+            //    //create a new perpendicular line
+            //    //------------------------------------------
+            //    //create a line that parallel with the bone
+            //    //Vector2 boneVector = bone.GetBoneVector();
+            //    //var boneLen = boneVector.Length();
+            //    //Vector2 boneVec2 = boneVector.NewLength(boneLen * 0.5);
+            //    //Vector2 v2up = v2 + boneVec2;
+            //    //Vector2 v2down = v2 - boneVec2;
+
+
+            //    ////test only
+            //    //painter.Line(
+            //    //   v2.X, v2.Y,
+            //    //   v2up.X, v2up.Y,
+            //    //   PixelFarm.Drawing.Color.Red);
+
+            //    ////test only
+            //    //painter.Line(
+            //    //   v2.X, v2.Y,
+            //    //   v2down.X, v2down.Y,
+            //    //   PixelFarm.Drawing.Color.Red);
+            //    //////------------------------------------------
+
+            //}
+
+
             if (boneIndex == 0)
             {
                 //for first bone 
@@ -453,6 +569,30 @@ namespace SampleWinForms.UI
 
                 _infoView.ShowTriangles(new GlyphTriangleInfo(triangleId, e0, e1, e2, centroidX, centroidY));
             }
+        }
+        protected override void OnGlyphEdge(float x0, float y0, float x1, float y1)
+        {
+            float pxscale = this._pxscale;
+            //painter.Line(
+            //    x0 * pxscale, y0 * pxscale,
+            //    x1 * pxscale, y1 * pxscale,
+            //    PixelFarm.Drawing.Color.Green);
+
+            painter.FillRectLBWH(x0 * pxscale, y0 * pxscale, 6, 6, PixelFarm.Drawing.Color.Yellow);
+            painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.Yellow);
+        }
+        protected override void OnGlyphEdgeN(float x0, float y0, float x1, float y1)
+        {
+            float pxscale = this._pxscale;
+            //painter.Line(
+            //    x0 * pxscale, y0 * pxscale,
+            //    x1 * pxscale, y1 * pxscale,
+            //    PixelFarm.Drawing.Color.Green);
+
+            painter.FillRectLBWH(x0 * pxscale, y0 * pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
+            //painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
+
+            _infoView.ShowGlyphEdge(x0, y0, x1, y1);
         }
         protected override void OnCentroidLine(double px, double py, double qx, double qy)
         {
@@ -478,7 +618,7 @@ namespace SampleWinForms.UI
             float pxscale = this._pxscale;
             painter.Line(qx * pxscale, qy * pxscale,
                          tip_qx * pxscale, tip_qy * pxscale,
-                         PixelFarm.Drawing.Color.Blue);
+                         PixelFarm.Drawing.Color.Green);
         }
         protected override void OnBoneJoint(GlyphBoneJoint joint)
         {
@@ -508,22 +648,22 @@ namespace SampleWinForms.UI
             }
         }
 
-        public void DynamicOutline(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale, bool withRegenerateOutlines)
+        public void WalkDynamicOutline(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale, bool withRegenerateOutlines)
         {
 
-#if DEBUG 
+#if DEBUG
             dynamicOutline.dbugDrawRegeneratedOutlines = withRegenerateOutlines;
 #endif
             dynamicOutline.Walk();
         }
-        void DrawBoneRib(CanvasPainter painter, Vector2 vec, GlyphBoneJoint joint, float pixelScale)
-        {
-            Vector2 jointPos = joint.Position;
-            painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4, PixelFarm.Drawing.Color.Green);
-            painter.Line(jointPos.X * pixelScale, jointPos.Y * pixelScale,
-                vec.X * pixelScale,
-                vec.Y * pixelScale, PixelFarm.Drawing.Color.White);
-        }
+        //void DrawBoneRib(CanvasPainter painter, Vector2 vec, GlyphBoneJoint joint, float pixelScale)
+        //{
+        //    Vector2 jointPos = joint.Position;
+        //    painter.FillRectLBWH(vec.X * pixelScale, vec.Y * pixelScale, 4, 4, PixelFarm.Drawing.Color.Green);
+        //    painter.Line(jointPos.X * pixelScale, jointPos.Y * pixelScale,
+        //        vec.X * pixelScale,
+        //        vec.Y * pixelScale, PixelFarm.Drawing.Color.White);
+        //}
 
 #endif
 
@@ -602,7 +742,7 @@ namespace SampleWinForms.UI
                 //return new line slope
                 Math.Atan2(y1diff, x1diff) +
                 DegreesToRadians(cutAngle)); //new m 
-            //---------------------
+                                             //---------------------
 
 
             //from (6)
