@@ -22,7 +22,11 @@ namespace Typography.Rendering
         public readonly GlyphBoneJoint JointB;
         double _len;
 
+#if DEBUG
 
+        static int dbugTotalId;
+        public readonly int dbugId = dbugTotalId++;
+#endif
         public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
         {
 #if DEBUG
@@ -31,6 +35,11 @@ namespace Typography.Rendering
                 throw new NotSupportedException();
             }
 #endif
+
+            if (dbugId == 4)
+            {
+
+            }
             JointA = a;
             JointB = b;
 
@@ -38,34 +47,52 @@ namespace Typography.Rendering
             Vector2 bpos = b.Position;
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
             EvaluteSlope(a.Position, bpos);
-            // 
+            //  find common triangle between 2 joints
 
-            //  find common triangle between  2 joint
-            GlyphTriangle commonTri = FindCommonTriangle(a, b);
-            if (commonTri != null)
-            {
-                //found common triangle 
-                OutsideEdge = GetFirstFoundOutsidEdge(commonTri);
-                //if (outsideEdge != null)
-                //{
+            a._p_contact_edge.GlyphPoint_P.AddAssociateBone(this);
+            a._p_contact_edge.GlyphPoint_Q.AddAssociateBone(this);
+            b._p_contact_edge.GlyphPoint_P.AddAssociateBone(this);
+            b._p_contact_edge.GlyphPoint_Q.AddAssociateBone(this);
 
-                //    if (MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge))
-                //    {
-                //        PerpendicularEdge = outsideEdge;
-                //    }
-                //    else
-                //    {
-                //    }
-                //}
-                //else
-                //{
+            //GlyphTriangle commonTri = FindCommonTriangle(a, b);
+            //if (commonTri != null)
+            //{
 
-                //}
-            }
-            else
-            {
-                //not found?=>
-            }
+            //}
+
+            //if (commonTri != null)
+            //{
+            //    //if (dbugId == 4)
+            //    //{
+            //    //found common triangle 
+            //    if ((OutsideEdge = GetFirstFoundOutsidEdge(commonTri)) != null)
+            //    {
+            //        //register this bone to GlyphPoint
+            //        OutsideEdge.GlyphPoint_Q.AddAssociateBone(this);
+            //        OutsideEdge.GlyphPoint_P.AddAssociateBone(this);
+            //    }
+
+            //    //}
+            //    //if (outsideEdge != null)
+            //    //{
+
+            //    //    if (MyMath.FindPerpendicularCutPoint(outsideEdge, GetMidPoint(), out cutPoint_onEdge))
+            //    //    {
+            //    //        PerpendicularEdge = outsideEdge;
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //    }
+            //    //}
+            //    //else
+            //    //{
+
+            //    //}
+            //}
+            //else
+            //{
+            //    //not found?=>
+            //}
         }
 
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
@@ -295,11 +322,11 @@ namespace Typography.Rendering
         {
             if (TipEdge != null)
             {
-                return JointA.ToString() + "->" + TipEdge.GetMidPoint().ToString();
+                return dbugId + ":" + JointA.ToString() + "->" + TipEdge.GetMidPoint().ToString();
             }
             else
             {
-                return JointA.ToString() + "->" + JointB.ToString();
+                return dbugId + ":" + JointA.ToString() + "->" + JointB.ToString();
             }
         }
 #endif

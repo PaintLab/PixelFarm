@@ -32,6 +32,11 @@ namespace Typography.Rendering
             this._p_contact_edge = p_contact_edge;
             this._q_contact_edge = q_contact_edge;
             this._owner = owner;
+            //---------------------------
+
+            
+
+            //---------------------------
         }
 
         /// <summary>

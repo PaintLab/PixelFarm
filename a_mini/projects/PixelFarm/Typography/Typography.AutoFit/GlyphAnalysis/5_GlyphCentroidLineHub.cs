@@ -231,7 +231,7 @@ namespace Typography.Rendering
         public void AddCentroidPair(GlyphCentroidPair pair)
         {
             //add centroid pair to line
-
+            pair.SetCentroidLine(currentLine);
             currentLine.AddCentroidLine(pair);
         }
         /// <summary>

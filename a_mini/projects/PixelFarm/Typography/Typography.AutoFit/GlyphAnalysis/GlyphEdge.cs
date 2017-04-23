@@ -8,8 +8,8 @@ namespace Typography.Rendering
     public class GlyphEdge
     {
         internal readonly EdgeLine _edgeLine;
-        readonly GlyphPoint _P;
-        readonly GlyphPoint _Q;
+        public readonly GlyphPoint _P;
+        public readonly GlyphPoint _Q;
         double _originalDistanceToBone;
         float _relativeDistance = 1;
         Vector2 _o_edgeVector; //original edge vector 
@@ -43,73 +43,76 @@ namespace Typography.Rendering
             //} 
             //_bone_midPoint = edgeLine.PerpendicularBone.GetMidPoint(); 
             //_bone_to_edgeVector = _edgeLine.PerpendicularBone.cutPoint_onEdge - _bone_midPoint;
-            //_originalDistanceToBone = _bone_to_edgeVector.Length();
-
-            //ApplyNewEdgeDistance(1);
-
-
+            //_originalDistanceToBone = _bone_to_edgeVector.Length(); 
+            //ApplyNewEdgeDistance(1); 
         }
         internal void FindPerpendicularBone(List<GlyphBone> newBones)
         {
-            //we try to find a perpedicular bone from 
-            //from edgeLine
-            int j = newBones.Count;
-            Vector2 midEdge = this._edgeLine.GetMidPoint();
+            GlyphTriangle ownerTri = this._edgeLine.OwnerTriangle;
 
-
-            //we find cut bone from owner Centroid Line
-            //(not cross centroid line)
             //GlyphCentroidLine ownerCentroidLine = this._edgeLine.OwnerTriangle.OwnerCentroidLine;
 
 
-            List<BoneAndCutPoint> foundCutPoints = new List<BoneAndCutPoint>();
-            for (int i = 0; i < j; ++i)
-            {
-                //find perpendicular cutpoint from midEdge to the bone
-                Vector2 cutPoint;
-                GlyphBone bone = newBones[i];
-                if (MyMath.FindPerpendicularCutPoint(bone, midEdge, out cutPoint))
-                {
-                    BoneAndCutPoint found = new BoneAndCutPoint();
-                    found.bone = bone;
-                    found.cutPoint = cutPoint;
-                    foundCutPoints.Add(found);
-                }
-            }
-            if (foundCutPoints.Count > 1)
-            {
-                //find min
-                double min = Double.MaxValue;
-                int minAt = -1;
-                int n = foundCutPoints.Count;
-                for (int i = 0; i < n; ++i)
-                {
-                    BoneAndCutPoint cut = foundCutPoints[i];
-                    double sqLen = MyMath.SquareDistance(cut.cutPoint, midEdge);
-                    if (sqLen < min)
-                    {
-                        minAt = i;
-                        min = sqLen;
-                    }
-                }
 
-                BoneAndCutPoint found = foundCutPoints[minAt];
-                RelatedBone = found.bone;
-                RelatedBoneCutPoint = found.cutPoint;
+            //we try to find a perpedicular bone from 
+            //from edgeLine
+            //int j = newBones.Count;
+            //Vector2 midEdge = this._edgeLine.GetMidPoint();
+            //Vector2 midEdge = new Vector2(this._P.x, this._P.y);
 
-            }
-            else if (foundCutPoints.Count == 1)
-            {
-                BoneAndCutPoint found = foundCutPoints[0];
-                RelatedBone = found.bone;
-                RelatedBoneCutPoint = found.cutPoint;
-            }
-            else
-            {
-                //not found
-                //any perpedicular bone
-                this._edgeLine.dbugNoPerpendicularBone = true;
-            }
+            //we find cut bone from owner Centroid Line
+            //(not cross centroid line)
+
+
+
+            //List<BoneAndCutPoint> foundCutPoints = new List<BoneAndCutPoint>();
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    //find perpendicular cutpoint from midEdge to the bone
+            //    Vector2 cutPoint;
+            //    GlyphBone bone = newBones[i];
+            //    if (MyMath.FindPerpendicularCutPoint(bone, midEdge, out cutPoint))
+            //    {
+            //        BoneAndCutPoint found = new BoneAndCutPoint();
+            //        found.bone = bone;
+            //        found.cutPoint = cutPoint;
+            //        foundCutPoints.Add(found);
+            //    }
+            //}
+            //if (foundCutPoints.Count > 1)
+            //{
+            //    //find min
+            //    double min = Double.MaxValue;
+            //    int minAt = -1;
+            //    int n = foundCutPoints.Count;
+            //    for (int i = 0; i < n; ++i)
+            //    {
+            //        BoneAndCutPoint cut = foundCutPoints[i];
+            //        double sqLen = MyMath.SquareDistance(cut.cutPoint, midEdge);
+            //        if (sqLen < min)
+            //        {
+            //            minAt = i;
+            //            min = sqLen;
+            //        }
+            //    }
+
+            //    BoneAndCutPoint found = foundCutPoints[minAt];
+            //    RelatedBone = found.bone;
+            //    RelatedBoneCutPoint = found.cutPoint;
+
+            //}
+            //else if (foundCutPoints.Count == 1)
+            //{
+            //    BoneAndCutPoint found = foundCutPoints[0];
+            //    RelatedBone = found.bone;
+            //    RelatedBoneCutPoint = found.cutPoint;
+            //}
+            //else
+            //{
+            //    //not found
+            //    //any perpedicular bone
+            //    this._edgeLine.dbugNoPerpendicularBone = true;
+            //}
         }
         public GlyphBone RelatedBone { get; set; }
         public Vector2 RelatedBoneCutPoint { get; set; }

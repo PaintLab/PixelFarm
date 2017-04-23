@@ -1,5 +1,5 @@
 ﻿//MIT, 2016-2017, WinterDev
-
+using System.Collections.Generic;
 namespace Typography.Rendering
 {
 
@@ -39,7 +39,13 @@ namespace Typography.Rendering
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
 
+        /// <summary>
+        /// outside edge0 
+        /// </summary>
         EdgeLine _e0;
+        /// <summary>
+        /// outside edge 1
+        /// </summary>
         EdgeLine _e1;
 
         public float newX;
@@ -54,13 +60,6 @@ namespace Typography.Rendering
 #endif
         public GlyphPoint(float x, float y, PointKind kind)
         {
-
-//#if DEBUG
-//            if (dbugId == 16)
-//            {
-
-//            }
-//#endif
             this.x = x;
             this.y = y;
             this.kind = kind;
@@ -150,7 +149,24 @@ namespace Typography.Rendering
 
         public bool IsLeftSide { get; private set; }
         public bool IsPartOfVerticalEdge { get; private set; }
+
+        Dictionary<GlyphBone, bool> _assocBones;
+
+        internal void AddAssociateBone(GlyphBone bone)
+        {
+            if (_assocBones == null)
+            {
+                _assocBones = new Dictionary<GlyphBone, bool>();
+            }
+            if (!_assocBones.ContainsKey(bone))
+            {
+                _assocBones.Add(bone, true);
+            }             
+        }
+
+
 #if DEBUG
+        public Dictionary<GlyphBone, bool> dbugGetAssocBones() { return _assocBones; }
         public override string ToString()
         {
             return this.dbugId + " :" + ((AdjustedY != 0) ? "***" : "") +
