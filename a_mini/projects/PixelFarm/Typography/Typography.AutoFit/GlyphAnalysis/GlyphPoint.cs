@@ -240,6 +240,7 @@ namespace Typography.Rendering
             get;
             set;
         }
+        public Vector2 CutPoint { get { return _cutPoint; } }
         public int StartIndexAt { get { return _startIndexAt; } }
         public int EndIndexAt { get { return _endIndexAt; } }
 
