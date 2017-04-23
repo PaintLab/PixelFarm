@@ -209,14 +209,14 @@ namespace Typography.Rendering
                         if (p != null)
                         {
                             //TODO: review here 
-                            p.AddVerticalEdge(edge);
+                            p.NotifyVerticalEdge(edge);
                         }
 
                         GlyphPoint q = edge.GlyphPoint_Q;
                         if (q != null)
                         {   //TODO: review here
 
-                            q.AddVerticalEdge(edge);
+                            q.NotifyVerticalEdge(edge);
                         }
                     }
                     break;

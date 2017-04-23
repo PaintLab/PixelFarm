@@ -345,29 +345,26 @@ namespace SampleWinForms.UI
             }
             if (u_data_p != null)
             {
-                Dictionary<GlyphBone, bool> assocBones = u_data_p.dbugGetAssocBones();
-                if (assocBones != null)
+
+                foreach (GlyphBone b in u_data_p.dbugGetAssocBones())
                 {
-                    foreach (GlyphBone b in assocBones.Keys)
-                    {
-                        TreeNode assocBoneNode = new TreeNode();
-                        assocBoneNode.Text = "-> bone_p:" + b.ToString();
-                        nodeEdge.Nodes.Add(assocBoneNode);
-                    }
+                    TreeNode assocBoneNode = new TreeNode();
+                    assocBoneNode.Text = "-> bone_p:" + b.ToString();
+                    nodeEdge.Nodes.Add(assocBoneNode);
                 }
+
             }
             if (u_data_q != null)
             {
-                Dictionary<GlyphBone, bool> assocBones = u_data_q.dbugGetAssocBones();
-                if (assocBones != null)
+
+
+                foreach (GlyphBone b in u_data_q.dbugGetAssocBones())
                 {
-                    foreach (GlyphBone b in assocBones.Keys)
-                    {
-                        TreeNode assocBoneNode = new TreeNode();
-                        assocBoneNode.Text = "-> bone_q:" + b.ToString();
-                        nodeEdge.Nodes.Add(assocBoneNode);
-                    }
+                    TreeNode assocBoneNode = new TreeNode();
+                    assocBoneNode.Text = "-> bone_q:" + b.ToString();
+                    nodeEdge.Nodes.Add(assocBoneNode);
                 }
+
             }
             //if (!edge.dbugHasRelatedBone)
             //{
