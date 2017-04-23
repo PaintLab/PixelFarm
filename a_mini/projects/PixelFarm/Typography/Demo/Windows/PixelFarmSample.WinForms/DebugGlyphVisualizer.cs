@@ -221,6 +221,7 @@ namespace SampleWinForms.UI
 
             }
         }
+        
         void DrawEdge(CanvasPainter painter, EdgeLine edge, float scale)
         {
             if (edge.IsOutside)
@@ -277,11 +278,12 @@ namespace SampleWinForms.UI
                     //draw
                     GlyphPoint p = edge.GlyphPoint_P;
                     GlyphPoint q = edge.GlyphPoint_Q;
-                    Dictionary<GlyphBone, bool> p_bones = glyphEdge._P.dbugGetAssocBones();
+                    //
+                    AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
                     if (p_bones != null)
                     {
                         Vector2 v2 = new Vector2(q.x, q.y);
-                        foreach (GlyphBone b in p_bones.Keys)
+                        foreach (GlyphBone b in p_bones)
                         {
                             Vector2 v3 = b.GetMidPoint();
                             painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Yellow);
@@ -290,11 +292,11 @@ namespace SampleWinForms.UI
 
 
 
-                    Dictionary<GlyphBone, bool> q_bones = glyphEdge._Q.dbugGetAssocBones();
+                    AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
                     if (q_bones != null)
                     {
                         Vector2 v2 = new Vector2(p.x, p.y);
-                        foreach (GlyphBone b in q_bones.Keys)
+                        foreach (GlyphBone b in q_bones)
                         {
 
                             //Vector2 v2 = new Vector2(q.x, q.y);
@@ -314,267 +316,48 @@ namespace SampleWinForms.UI
                     GlyphEdge glyphEdge = edge.dbugGlyphEdge;
                     GlyphPoint p = edge.GlyphPoint_P;
                     GlyphPoint q = edge.GlyphPoint_Q;
-                    //--------- 
+                    //---------   
 
-
-                    Dictionary<GlyphBone, bool> p_bones = glyphEdge._P.dbugGetAssocBones();
-
-
-                    if (p_bones != null)
                     {
+                        AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
+                        PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
+                        switch (p_bones.CutPointKind)
+                        {
+                            case BoneCutPointKind.NotPendicularCutPoint:
+                                cc = PixelFarm.Drawing.Color.Yellow;
+                                break;
+                            case BoneCutPointKind.PerpendicularToBoneGroup:
+                                cc = PixelFarm.Drawing.Color.Green;
+                                break;
+                        }
                         Vector2 v2 = new Vector2(q.x, q.y);
-                        int v3_count = 0;
-                        Vector2 v3_sum = new Vector2();
-                        List<GlyphBone> bone_list = new List<GlyphBone>(p_bones.Keys);
-                        //find perpendicular glyph bone first 
-                        //if not found then use abstract visual bone
-
-                        bool foundExactCutPoint = false;
-                        foreach (GlyphBone b in p_bones.Keys)
-                        {
-                            Vector2 exactCutPoint;
-                            if (MyMath.FindPerpendicularCutPoint(b, v2, out exactCutPoint))
-                            {
-                                v3_sum = exactCutPoint;
-                                foundExactCutPoint = true;
-                                painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Red);
-                                break;
-                            }
-                        }
-
-
-
-                        if (!foundExactCutPoint)
-                        {
-                            //foreach (GlyphBone b in p_bones.Keys)
-                            //{
-
-                            //    v3_sum += b.GetMidPoint();
-                            //    v3_count++;
-                            //}
-                            //find max and min of the bone
-                            int b_count = p_bones.Count;
-                            //create a line that link first and last together
-                            GlyphBone first_bone = null;
-                            GlyphBone last_bone = null;
-                            int bb_count = 0;
-                            foreach (GlyphBone b in p_bones.Keys)
-                            {
-                                if (bb_count == 0)
-                                {
-                                    //first
-                                    first_bone = b;
-                                    v3_sum = b.GetMidPoint();
-                                }
-                                else if (bb_count == b_count - 1)
-                                {
-                                    //last
-                                    last_bone = b;
-                                    v3_sum += b.GetMidPoint();
-                                }
-                                bb_count++;
-                            }
-
-                            if (last_bone != null)
-                            {
-
-                                if (b_count > 3)
-                                {
-                                    //only 2
-                                    int mm_mid = b_count / 2;
-                                    int startAt = mm_mid - (mm_mid / 2);
-                                    int endAt = mm_mid + (mm_mid / 2);
-                                    Vector2 first_v = bone_list[startAt].GetMidPoint();
-                                    Vector2 last_v = bone_list[endAt].GetMidPoint();
-                                    Vector2 exactCutPoint;
-                                    if (MyMath.FindPerpendicularCutPoint2(first_v, last_v, v2, out exactCutPoint))
-                                    {
-                                        //have exact cutpoint
-                                        painter.Line(v2.X * scale, v2.Y * scale, exactCutPoint.X * scale, exactCutPoint.Y * scale, PixelFarm.Drawing.Color.Green);
-                                        painter.Line(first_v.X * scale, first_v.Y * scale, last_v.X * scale, last_v.Y * scale, PixelFarm.Drawing.Color.Green);
-
-                                    }
-                                    else
-                                    {
-                                        //still not found exact cutpoint
-                                        v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
-                                        painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                                    }
-
-                                }
-                                else
-                                {
-                                    //use 2 bone / first and last
-                                    Vector2 first_v = first_bone.GetMidPoint();
-                                    Vector2 last_v = last_bone.GetMidPoint();
-
-                                    Vector2 exactCutPoint;
-                                    if (MyMath.FindPerpendicularCutPoint2(first_v, last_v, v2, out exactCutPoint))
-                                    {
-                                        //have exact cutpoint
-                                        painter.Line(v2.X * scale, v2.Y * scale, exactCutPoint.X * scale, exactCutPoint.Y * scale, PixelFarm.Drawing.Color.Green);
-                                        painter.Line(first_v.X * scale, first_v.Y * scale, last_v.X * scale, last_v.Y * scale, PixelFarm.Drawing.Color.Green);
-
-                                    }
-                                    else
-                                    {
-                                        //still not found exact cutpoint
-                                        v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
-                                        painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
-                                painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                            }
-                        }
+                        Vector2 cutpoint = p_bones.CutPoint;
+                        painter.Line(
+                            v2.X * _pxscale, v2.Y * _pxscale,
+                            cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                            cc);
                     }
-                    Dictionary<GlyphBone, bool> q_bones = glyphEdge._Q.dbugGetAssocBones();
-                    if (q_bones != null)
+
                     {
-                        Vector2 v2 = new Vector2(p.x, p.y);
-                        int v3_count = 0;
-                        Vector2 v3_sum = new Vector2();
-                        bool foundExactCutPoint = false;
-                        List<GlyphBone> bone_list = new List<GlyphBone>(q_bones.Keys);
-                        foreach (GlyphBone b in q_bones.Keys)
+                        AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
+                        PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
+                        switch (q_bones.CutPointKind)
                         {
-                            Vector2 exactCutPoint;
-                            if (MyMath.FindPerpendicularCutPoint(b, v2, out exactCutPoint))
-                            {
-                                v3_sum = exactCutPoint;
-                                foundExactCutPoint = true;
-                                painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Red);
+                            case BoneCutPointKind.NotPendicularCutPoint:
+                                cc = PixelFarm.Drawing.Color.Yellow;
                                 break;
-                            }
+                            case BoneCutPointKind.PerpendicularToBoneGroup:
+                                cc = PixelFarm.Drawing.Color.Green;
+                                break;
                         }
-                        if (!foundExactCutPoint)
-                        {
-                            //foreach (GlyphBone b in q_bones.Keys)
-                            //{
-                            //    v3_sum += b.GetMidPoint();
-                            //    v3_count++;
-                            //}
-                            //v3_sum = v3_sum / v3_count;
-                            //painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Green);
-
-                            int b_count = q_bones.Count;
-                            //create a line that link first and last together
-                            GlyphBone first_bone = null;
-                            GlyphBone last_bone = null;
-                            int bb_count = 0;
-                            foreach (GlyphBone b in q_bones.Keys)
-                            {
-                                if (bb_count == 0)
-                                {
-                                    //first
-                                    first_bone = b;
-                                    v3_sum = b.GetMidPoint();
-                                }
-                                else if (bb_count == b_count - 1)
-                                {
-                                    //last
-                                    last_bone = b;
-                                    v3_sum += b.GetMidPoint();
-                                }
-                                bb_count++;
-                            }
-
-                            //v3_sum = v3_sum / ((last_bone == null) ? 1 : 2); 
-                            //painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                            if (last_bone != null)
-                            {
-                                //use 2 bone / first and last
-                                Vector2 first_v = first_bone.GetMidPoint();
-                                Vector2 last_v = last_bone.GetMidPoint();
-
-                                if (b_count > 3)
-                                {
-                                    //only 2
-                                    //only 2
-                                    int mm_mid = b_count / 2;
-                                    int startAt = mm_mid - (mm_mid / 2);
-                                    int endAt = mm_mid + (mm_mid / 2);
-                                      first_v = bone_list[startAt].GetMidPoint();
-                                      last_v = bone_list[endAt].GetMidPoint();
-                                    Vector2 exactCutPoint;
-                                    if (MyMath.FindPerpendicularCutPoint2(first_v, last_v, v2, out exactCutPoint))
-                                    {
-                                        //have exact cutpoint
-                                        painter.Line(v2.X * scale, v2.Y * scale, exactCutPoint.X * scale, exactCutPoint.Y * scale, PixelFarm.Drawing.Color.Green);
-                                        painter.Line(first_v.X * scale, first_v.Y * scale, last_v.X * scale, last_v.Y * scale, PixelFarm.Drawing.Color.Green);
-
-                                    }
-                                    else
-                                    {
-                                        //still not found exact cutpoint
-                                        v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
-                                        painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                                    }
-
-
-                                }
-                                else
-                                {
-
-                                    Vector2 exactCutPoint;
-                                    if (MyMath.FindPerpendicularCutPoint2(first_v, last_v, v2, out exactCutPoint))
-                                    {
-                                        //have exact cutpoint
-                                        painter.Line(v2.X * scale, v2.Y * scale, exactCutPoint.X * scale, exactCutPoint.Y * scale, PixelFarm.Drawing.Color.Green);
-                                        painter.Line(first_v.X * scale, first_v.Y * scale, last_v.X * scale, last_v.Y * scale, PixelFarm.Drawing.Color.Green);
-                                    }
-                                    else
-                                    {
-                                        v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
-                                        painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                                        //still not found exact cutpoint
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
-                                painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                                //v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
-                                //painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                            }
-                        }
-
-
-
+                        Vector2 v2 = new Vector2(p.x, p.y);
+                        Vector2 cutpoint = q_bones.CutPoint;
+                        painter.Line(
+                            v2.X * _pxscale, v2.Y * _pxscale,
+                            cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                            cc);
                     }
                 }
-
-
-
-                ////draw
-                //GlyphPoint p = edge.GlyphPoint_P;
-                //Dictionary<GlyphBone, bool> p_bones = glyphEdge._P.dbugGetAssocBones();
-                //if (p_bones != null)
-                //{
-                //    foreach (GlyphBone b in p_bones.Keys)
-                //    {
-                //        Vector2 v2 = new Vector2(p.x, p.y);
-                //        Vector2 v3 = b.GetMidPoint();
-                //        painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                //    }
-                //}
-
-
-                //GlyphPoint q = edge.GlyphPoint_Q;
-                //Dictionary<GlyphBone, bool> q_bones = glyphEdge._Q.dbugGetAssocBones();
-                //if (q_bones != null)
-                //{
-                //    foreach (GlyphBone b in q_bones.Keys)
-                //    {
-                //        Vector2 v2 = new Vector2(p.x, p.y);
-                //        Vector2 v3 = b.GetMidPoint();
-                //        painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                //    }
-                //} 
             }
             else
             {
@@ -763,7 +546,7 @@ namespace SampleWinForms.UI
 
             //}
 
- 
+
             if (boneIndex == 0)
             {
                 //for first bone 
@@ -868,7 +651,7 @@ namespace SampleWinForms.UI
         public void WalkDynamicOutline(CanvasPainter painter, GlyphDynamicOutline dynamicOutline, float pxscale, bool withRegenerateOutlines)
         {
 
-#if DEBUG 
+#if DEBUG
             dynamicOutline.dbugDrawRegeneratedOutlines = withRegenerateOutlines;
 #endif
             dynamicOutline.Walk();
@@ -959,7 +742,7 @@ namespace SampleWinForms.UI
                 //return new line slope
                 Math.Atan2(y1diff, x1diff) +
                 DegreesToRadians(cutAngle)); //new m 
-            //---------------------
+                                             //---------------------
 
 
             //from (6)

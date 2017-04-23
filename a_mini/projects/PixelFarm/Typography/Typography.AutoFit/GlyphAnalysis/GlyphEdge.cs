@@ -1,6 +1,5 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
-using System.Collections.Generic;
 using System.Numerics;
 
 namespace Typography.Rendering
@@ -19,8 +18,6 @@ namespace Typography.Rendering
 
         Vector2 _bone_to_edgeVector;//perpendicular line
         Vector2 _newEdgeCutPoint;
-
-
 
         internal GlyphEdge(GlyphPoint p0, GlyphPoint p1, EdgeLine edgeLine)
         {
@@ -41,11 +38,13 @@ namespace Typography.Rendering
             //_originalDistanceToBone = _bone_to_edgeVector.Length(); 
             //ApplyNewEdgeDistance(1); 
         }
-        internal void FindPerpendicularBone(List<GlyphBone> newBones)
+        internal void FindPerpendicularBones()
         {
             //TODO: review here again
-            GlyphTriangle ownerTri = this._edgeLine.OwnerTriangle;
+            _edgeLine.GlyphPoint_P.EvaluatePerpendicularBone();
+            _edgeLine.GlyphPoint_Q.EvaluatePerpendicularBone();
 
+            //GlyphTriangle ownerTri = this._edgeLine.OwnerTriangle; 
             //GlyphCentroidLine ownerCentroidLine = this._edgeLine.OwnerTriangle.OwnerCentroidLine;
 
 

@@ -278,7 +278,7 @@ namespace Typography.Rendering
 
         }
 #endif
-        internal void CreateGlyphEdges(List<GlyphBone> newBones)
+        internal void CreateGlyphEdges()
         {
             int lim = flattenPoints.Count - 1;
             edges = new List<GlyphEdge>();
@@ -309,12 +309,10 @@ namespace Typography.Rendering
             {
                 //not found
             }
-
-
             int j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
-                edges[i].FindPerpendicularBone(newBones);
+                edges[i].FindPerpendicularBones();
             }
             //
         }
