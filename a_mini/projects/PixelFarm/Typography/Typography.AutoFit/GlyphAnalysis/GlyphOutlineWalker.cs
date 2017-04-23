@@ -84,14 +84,17 @@ namespace Typography.Rendering
             {
                 GlyphContour cnt = cnts[i];
                 List<GlyphEdge> edgeLines = cnt.edges;
-                int n = edgeLines.Count;
-                for (int m = 0; m < n; ++m)
+                if(edgeLines != null)
                 {
-                    GlyphEdge e = edgeLines[m];
-                    Vector2 cut_p = e.CutPoint_P;
-                    Vector2 cut_q = e.CutPoint_Q;
-                    OnGlyphEdgeN(cut_p.X, cut_p.Y, cut_q.X, cut_p.Y);
-                }
+                    int n = edgeLines.Count;
+                    for (int m = 0; m < n; ++m)
+                    {
+                        GlyphEdge e = edgeLines[m];
+                        Vector2 cut_p = e.CutPoint_P;
+                        Vector2 cut_q = e.CutPoint_Q;
+                        OnGlyphEdgeN(cut_p.X, cut_p.Y, cut_q.X, cut_p.Y);
+                    }
+                } 
 
                 //List<GlyphPoint> pnts = cnt.flattenPoints;
                 //int lim = pnts.Count - 1;

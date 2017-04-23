@@ -82,7 +82,7 @@ namespace Typography.Rendering
         public bool dbugNoPerpendicularBone { get; set; }
         public GlyphEdge dbugGlyphEdge { get; set; }
 #endif
-        internal GlyphTriangle OwnerTriangle { get { return this.ownerTriangle; } }
+        //internal GlyphTriangle OwnerTriangle { get { return this.ownerTriangle; } }
         public GlyphPoint GlyphPoint_P
         {
             get
