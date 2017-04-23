@@ -41,7 +41,7 @@ namespace Typography.Rendering
             //_originalDistanceToBone = _bone_to_edgeVector.Length(); 
             //ApplyNewEdgeDistance(1); 
         }
-        internal void FindPerpendicularBone(List<GlyphBone> newBones)
+        internal void FindPerpendicularBones()
         {
             //TODO: review here again
             GlyphTriangle ownerTri = this._edgeLine.OwnerTriangle;
