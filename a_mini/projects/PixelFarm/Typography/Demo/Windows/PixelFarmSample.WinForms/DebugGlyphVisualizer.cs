@@ -389,7 +389,7 @@ namespace SampleWinForms.UI
         void DrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)
         {
             //-------------- 
-            EdgeLine p_contactEdge = joint._p_contact_edge;
+            EdgeLine p_contactEdge = joint.dbugGetEdge_P();
             //mid point
             Vector2 jointPos = joint.Position * pxscale;//scaled joint pos
             painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);

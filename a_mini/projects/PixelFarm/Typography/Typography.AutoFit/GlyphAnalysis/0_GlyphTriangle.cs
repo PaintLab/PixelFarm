@@ -17,9 +17,6 @@ namespace Typography.Rendering
         //centroid of edge mass
         float centroidX;
         float centroidY;
-
- 
-
         public GlyphTriangle(DelaunayTriangle tri)
         {
             this._tri = tri;
@@ -33,11 +30,17 @@ namespace Typography.Rendering
 
             //an EdgeLine is created after we create GlyphTriangles.
 
+            //triangulate point p0->p1->p2 is CCW ***             
             e0 = NewEdgeLine(p0, p1, tri.EdgeIsConstrained(tri.FindEdgeIndex(p0, p1)));
             e1 = NewEdgeLine(p1, p2, tri.EdgeIsConstrained(tri.FindEdgeIndex(p1, p2)));
             e2 = NewEdgeLine(p2, p0, tri.EdgeIsConstrained(tri.FindEdgeIndex(p2, p0)));
 
+            //if the order of original glyph point is CW
+            //we may want to reverse the order of edge creation :
+            //p2->p1->p0 
+
 #if DEBUG
+            //TODO: review here again
             e0.dbugOwner = e1.dbugOwner = e2.dbugOwner = this;
 #endif
 
@@ -55,7 +58,7 @@ namespace Typography.Rendering
             get { return centroidY; }
         }
 
-        
+
         internal bool IsConnectedWith(GlyphTriangle anotherTri)
         {
             DelaunayTriangle t2 = anotherTri._tri;

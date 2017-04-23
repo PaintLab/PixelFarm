@@ -293,7 +293,7 @@ namespace SampleWinForms.UI
         {
             if (!_clearInfoView) { return; }
             //-------------- 
-            EdgeLine p_contactEdge = joint._p_contact_edge;
+            EdgeLine p_contactEdge = joint.dbugGetEdge_Q();
             //mid point
             var jointPos = joint.Position;
             //painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
