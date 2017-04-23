@@ -329,8 +329,10 @@ namespace Typography.Rendering
                                 _startIndexAt = startAt;
                                 _endIndexAt = endAt;
                                 foundResult = true;
-                                break; //from loop
+                                break; //from loop for
                             }
+                            startAt--; //expand wider to left
+                            endAt++; //expand wider to right
                         }
                         if (!foundResult)
                         {
