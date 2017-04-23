@@ -283,7 +283,6 @@ namespace SampleWinForms.UI
                         Vector2 v2 = new Vector2(q.x, q.y);
                         foreach (GlyphBone b in p_bones.Keys)
                         {
-
                             Vector2 v3 = b.GetMidPoint();
                             painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Yellow);
                         }
@@ -315,19 +314,18 @@ namespace SampleWinForms.UI
                     GlyphEdge glyphEdge = edge.dbugGlyphEdge;
                     GlyphPoint p = edge.GlyphPoint_P;
                     GlyphPoint q = edge.GlyphPoint_Q;
-                    //---------
-
-
-                    //---------
+                    //--------- 
 
 
                     Dictionary<GlyphBone, bool> p_bones = glyphEdge._P.dbugGetAssocBones();
+
+
                     if (p_bones != null)
                     {
                         Vector2 v2 = new Vector2(q.x, q.y);
                         int v3_count = 0;
                         Vector2 v3_sum = new Vector2();
-
+                        List<GlyphBone> bone_list = new List<GlyphBone>(p_bones.Keys);
                         //find perpendicular glyph bone first 
                         //if not found then use abstract visual bone
 
@@ -343,6 +341,9 @@ namespace SampleWinForms.UI
                                 break;
                             }
                         }
+
+
+
                         if (!foundExactCutPoint)
                         {
                             //foreach (GlyphBone b in p_bones.Keys)
@@ -376,21 +377,51 @@ namespace SampleWinForms.UI
 
                             if (last_bone != null)
                             {
-                                //use 2 bone / first and last
-                                Vector2 first_v = first_bone.GetMidPoint();
-                                Vector2 last_v = last_bone.GetMidPoint();
 
-                                Vector2 exactCutPoint;
-                                if (MyMath.FindPerpendicularCutPoint2(first_v, last_v, v2, out exactCutPoint))
+                                if (b_count > 3)
                                 {
-                                    //have exact cutpoint
-                                    painter.Line(v2.X * scale, v2.Y * scale, exactCutPoint.X * scale, exactCutPoint.Y * scale, PixelFarm.Drawing.Color.Green);
+                                    //only 2
+                                    int mm_mid = b_count / 2;
+                                    int startAt = mm_mid - (mm_mid / 2);
+                                    int endAt = mm_mid + (mm_mid / 2);
+                                    Vector2 first_v = bone_list[startAt].GetMidPoint();
+                                    Vector2 last_v = bone_list[endAt].GetMidPoint();
+                                    Vector2 exactCutPoint;
+                                    if (MyMath.FindPerpendicularCutPoint2(first_v, last_v, v2, out exactCutPoint))
+                                    {
+                                        //have exact cutpoint
+                                        painter.Line(v2.X * scale, v2.Y * scale, exactCutPoint.X * scale, exactCutPoint.Y * scale, PixelFarm.Drawing.Color.Green);
+                                        painter.Line(first_v.X * scale, first_v.Y * scale, last_v.X * scale, last_v.Y * scale, PixelFarm.Drawing.Color.Green);
+
+                                    }
+                                    else
+                                    {
+                                        //still not found exact cutpoint
+                                        v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
+                                        painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
+                                    }
+
                                 }
                                 else
                                 {
-                                    //still not found exact cutpoint
-                                    v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
-                                    painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
+                                    //use 2 bone / first and last
+                                    Vector2 first_v = first_bone.GetMidPoint();
+                                    Vector2 last_v = last_bone.GetMidPoint();
+
+                                    Vector2 exactCutPoint;
+                                    if (MyMath.FindPerpendicularCutPoint2(first_v, last_v, v2, out exactCutPoint))
+                                    {
+                                        //have exact cutpoint
+                                        painter.Line(v2.X * scale, v2.Y * scale, exactCutPoint.X * scale, exactCutPoint.Y * scale, PixelFarm.Drawing.Color.Green);
+                                        painter.Line(first_v.X * scale, first_v.Y * scale, last_v.X * scale, last_v.Y * scale, PixelFarm.Drawing.Color.Green);
+
+                                    }
+                                    else
+                                    {
+                                        //still not found exact cutpoint
+                                        v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
+                                        painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
+                                    }
                                 }
                             }
                             else
@@ -407,6 +438,7 @@ namespace SampleWinForms.UI
                         int v3_count = 0;
                         Vector2 v3_sum = new Vector2();
                         bool foundExactCutPoint = false;
+                        List<GlyphBone> bone_list = new List<GlyphBone>(q_bones.Keys);
                         foreach (GlyphBone b in q_bones.Keys)
                         {
                             Vector2 exactCutPoint;
@@ -458,17 +490,48 @@ namespace SampleWinForms.UI
                                 Vector2 first_v = first_bone.GetMidPoint();
                                 Vector2 last_v = last_bone.GetMidPoint();
 
-                                Vector2 exactCutPoint;
-                                if (MyMath.FindPerpendicularCutPoint2(first_v, last_v, v2, out exactCutPoint))
+                                if (b_count > 3)
                                 {
-                                    //have exact cutpoint
-                                    painter.Line(v2.X * scale, v2.Y * scale, exactCutPoint.X * scale, exactCutPoint.Y * scale, PixelFarm.Drawing.Color.Green);
+                                    //only 2
+                                    //only 2
+                                    int mm_mid = b_count / 2;
+                                    int startAt = mm_mid - (mm_mid / 2);
+                                    int endAt = mm_mid + (mm_mid / 2);
+                                      first_v = bone_list[startAt].GetMidPoint();
+                                      last_v = bone_list[endAt].GetMidPoint();
+                                    Vector2 exactCutPoint;
+                                    if (MyMath.FindPerpendicularCutPoint2(first_v, last_v, v2, out exactCutPoint))
+                                    {
+                                        //have exact cutpoint
+                                        painter.Line(v2.X * scale, v2.Y * scale, exactCutPoint.X * scale, exactCutPoint.Y * scale, PixelFarm.Drawing.Color.Green);
+                                        painter.Line(first_v.X * scale, first_v.Y * scale, last_v.X * scale, last_v.Y * scale, PixelFarm.Drawing.Color.Green);
+
+                                    }
+                                    else
+                                    {
+                                        //still not found exact cutpoint
+                                        v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
+                                        painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
+                                    }
+
+
                                 }
                                 else
                                 {
-                                    v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
-                                    painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                                    //still not found exact cutpoint
+
+                                    Vector2 exactCutPoint;
+                                    if (MyMath.FindPerpendicularCutPoint2(first_v, last_v, v2, out exactCutPoint))
+                                    {
+                                        //have exact cutpoint
+                                        painter.Line(v2.X * scale, v2.Y * scale, exactCutPoint.X * scale, exactCutPoint.Y * scale, PixelFarm.Drawing.Color.Green);
+                                        painter.Line(first_v.X * scale, first_v.Y * scale, last_v.X * scale, last_v.Y * scale, PixelFarm.Drawing.Color.Green);
+                                    }
+                                    else
+                                    {
+                                        v3_sum = v3_sum / ((last_bone == null) ? 1 : 2);
+                                        painter.Line(v2.X * scale, v2.Y * scale, v3_sum.X * scale, v3_sum.Y * scale, PixelFarm.Drawing.Color.Yellow);
+                                        //still not found exact cutpoint
+                                    }
                                 }
                             }
                             else
