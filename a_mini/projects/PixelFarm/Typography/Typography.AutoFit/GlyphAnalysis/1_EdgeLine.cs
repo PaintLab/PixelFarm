@@ -16,7 +16,7 @@ namespace Typography.Rendering
     public class EdgeLine
     {
         readonly GlyphPoint _glyphPoint_P;
-        readonly GlyphPoint _glyphPoint_Q; 
+        readonly GlyphPoint _glyphPoint_Q;
         /// <summary>
         /// contact to another edge
         /// </summary>
@@ -69,7 +69,7 @@ namespace Typography.Rendering
                 {
                     SlopeKind = LineSlopeKind.Other;
                 }
-            } 
+            }
         }
 
         public double x0 { get { return this._glyphPoint_P.x; } }
@@ -140,7 +140,7 @@ namespace Typography.Rendering
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
     }
-     
+
 
     public static class EdgeLineExtensions
     {
@@ -148,9 +148,17 @@ namespace Typography.Rendering
         {
             return new Vector2((float)((line.x0 + line.x1) / 2), (float)((line.y0 + line.y1) / 2));
         }
+
         internal static double GetSlopeAngleNoDirection(this EdgeLine line)
         {
             return Math.Abs(Math.Atan2(Math.Abs(line.y1 - line.y0), Math.Abs(line.x1 - line.x0)));
+        }
+
+        internal static bool ContainsTriangle(this EdgeLine edge, GlyphTriangle p)
+        {
+            return (p.e0 == edge ||
+                    p.e1 == edge ||
+                    p.e2 == edge);
         }
     }
 }

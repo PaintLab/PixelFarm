@@ -5,7 +5,9 @@ using System.Numerics;
 
 namespace Typography.Rendering
 {
-
+    /// <summary>
+    /// a collection of connected centroid pairs
+    /// </summary>
     class GlyphCentroidLine
     {
         public List<GlyphCentroidPair> pairs = new List<GlyphCentroidPair>();
@@ -15,22 +17,15 @@ namespace Typography.Rendering
         {
             this.startTri = startTri;
         }
-        public void AddCentroidLine(GlyphCentroidPair pair)
+        /// <summary>
+        /// add a centroid pair
+        /// </summary>
+        /// <param name="pair"></param>
+        public void AddCentroidPair(GlyphCentroidPair pair)
         {
             pairs.Add(pair);
         }
-        public Vector2 GetHeadPosition()
-        {
-            //after create bone process
-            if (bones.Count == 0)
-            {
-                return Vector2.Zero;
-            }
-            else
-            {
-                return bones[0].JointA.Position;
-            }
-        }
+
         /// <summary>
         /// analyze edges of this line
         /// </summary>
@@ -45,16 +40,15 @@ namespace Typography.Rendering
             }
 
             //---------------
+            //TODO: review here
             if (j > 1)
             {
-
                 //add special tip
                 //get first line and last 
                 //check if this is loop
                 GlyphCentroidPair first_pair = pairs[0];
                 GlyphCentroidPair last_pair = pairs[j - 1];
-                //open end or close end
-
+                //open end or close end 
                 if (!last_pair.SpecialConnectFromLastToFirst)
                 {
                     first_pair.UpdateTips();
@@ -69,42 +63,8 @@ namespace Typography.Rendering
             }
         }
 
-        static EdgeLine FindTip(GlyphCentroidPair pair, GlyphTriangle triangle)
-        {
-            GlyphBoneJoint boneJoint = pair.BoneJoint;
-            if (CanbeTipEdge(triangle.e0, boneJoint))
-            {
-                return triangle.e0;
-            }
-            if (CanbeTipEdge(triangle.e1, boneJoint))
-            {
-                return triangle.e1;
-            }
-            if (CanbeTipEdge(triangle.e2, boneJoint))
-            {
-                return triangle.e2;
-            }
-            //not found
-            return null;
-        }
-        static bool CanbeTipEdge(EdgeLine edge, GlyphBoneJoint compareJoint)
-        {
-            return edge.IsOutside;
-            //
-            //return (edge.IsOutside &&
-            //        edge != compareJoint.RibEndEdgeA &&
-            //        edge != compareJoint.RibEndEdgeB);
-            //{
-            //    return true;
-            //}
-            //return false;
-        }
-        static bool IsOwnerOf(GlyphTriangle p, EdgeLine edge)
-        {
-            return (p.e0 == edge ||
-                    p.e1 == edge ||
-                    p.e2 == edge);
-        }
+
+
         /// <summary>
         /// find nearest joint that contains tri 
         /// </summary>
@@ -164,7 +124,20 @@ namespace Typography.Rendering
             }
             return null;
         }
-
+        public Vector2 GetHeadPosition()
+        {
+            //after create bone process
+            if (bones.Count == 0)
+            {
+                return Vector2.Zero;
+            }
+            else
+            {
+                //TODO: review here
+                //use jointA of bone of join B of bone
+                return bones[0].JointA.Position;
+            }
+        }
     }
 
     /// <summary>
@@ -231,8 +204,8 @@ namespace Typography.Rendering
         public void AddCentroidPair(GlyphCentroidPair pair)
         {
             //add centroid pair to line
-           
-            currentLine.AddCentroidLine(pair);
+
+            currentLine.AddCentroidPair(pair);
         }
         /// <summary>
         /// analyze each branch for edge information
@@ -359,6 +332,45 @@ namespace Typography.Rendering
         public List<CentroidLineHub> GetConnectedLineHubs()
         {
             return this.otherConnectedLineHubs;
+        }
+    }
+
+
+
+
+    static class GlyphCentroidLineExtensions
+    {
+
+        //utils
+        public static EdgeLine FindTip(this GlyphCentroidPair pair, GlyphTriangle triangle)
+        {
+            GlyphBoneJoint boneJoint = pair.BoneJoint;
+            if (CanbeTipEdge(triangle.e0, boneJoint))
+            {
+                return triangle.e0;
+            }
+            if (CanbeTipEdge(triangle.e1, boneJoint))
+            {
+                return triangle.e1;
+            }
+            if (CanbeTipEdge(triangle.e2, boneJoint))
+            {
+                return triangle.e2;
+            }
+            //not found
+            return null;
+        }
+        static bool CanbeTipEdge(EdgeLine edge, GlyphBoneJoint compareJoint)
+        {
+            return edge.IsOutside;
+            //
+            //return (edge.IsOutside &&
+            //        edge != compareJoint.RibEndEdgeA &&
+            //        edge != compareJoint.RibEndEdgeB);
+            //{
+            //    return true;
+            //}
+            //return false;
         }
     }
 }
