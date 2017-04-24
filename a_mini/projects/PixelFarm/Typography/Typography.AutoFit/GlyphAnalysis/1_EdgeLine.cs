@@ -22,6 +22,8 @@ namespace Typography.Rendering
         /// </summary>
         internal EdgeLine contactToEdge;
 
+
+        internal GlyphBoneJoint inside_joint;
 #if DEBUG
         public static int s_dbugTotalId;
         public readonly int dbugId = s_dbugTotalId++;
@@ -160,6 +162,6 @@ namespace Typography.Rendering
                     p.e1 == edge ||
                     p.e2 == edge);
         }
-       
+
     }
 }

@@ -33,16 +33,16 @@ namespace Typography.Rendering
             List<CentroidLineHub> centroidLineHubs = _dynamicOutline.dbugGetCentroidLineHubs();
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
-                Dictionary<GlyphTriangle, GlyphCentroidLine> branches = lineHub.GetAllBranches();
+                Dictionary<GlyphTriangle, GlyphCentroidLine> lines = lineHub.GetAllBranches();
                 Vector2 hubCenter = lineHub.GetCenterPos();
 
                 OnBegingLineHub(hubCenter.X, hubCenter.Y);
-                foreach (GlyphCentroidLine branch in branches.Values)
+                foreach (GlyphCentroidLine line in lines.Values)
                 {
-                    int lineCount = branch.pairs.Count;
-                    for (int i = 0; i < lineCount; ++i)
+                    int pairCount = line.pairs.Count;
+                    for (int i = 0; i < pairCount; ++i)
                     {
-                        GlyphCentroidPair pair = branch.pairs[i];
+                        GlyphCentroidPair pair = line.pairs[i];
                         if (WalkCentroidBone)
                         {
                             double px, py, qx, qy;
@@ -68,11 +68,11 @@ namespace Typography.Rendering
                     if (WalkGlyphBone)
                     {
                         //draw bone list
-                        DrawBoneLinks(branch);
+                        DrawBoneLinks(line);
                     }
                 }
                 //
-                OnEndLineHub(hubCenter.X, hubCenter.Y, lineHub.GetHeadConnectedJoint());
+                 OnEndLineHub(hubCenter.X, hubCenter.Y, lineHub.GetHeadConnectedJoint());
             }
 
 

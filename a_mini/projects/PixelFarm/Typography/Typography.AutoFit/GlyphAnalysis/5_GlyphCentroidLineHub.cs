@@ -51,6 +51,7 @@ namespace Typography.Rendering
                 //open end or close end 
                 if (!last_pair.SpecialConnectFromLastToFirst)
                 {
+
                     first_pair.UpdateTips();
                     last_pair.UpdateTips();
                 }
@@ -64,7 +65,21 @@ namespace Typography.Rendering
         }
 
 
-
+        public GlyphCentroidPair FindNearestPair(GlyphTriangle tri)
+        {
+            for (int i = pairs.Count - 1; i >= 0; --i)
+            {
+                GlyphCentroidPair pair = pairs[i];
+                if (pair.p.IsConnectedWith(tri) ||
+                    pair.q.IsConnectedWith(tri))
+                {
+                    //found
+                    return pair;
+                }
+            }
+            //not found
+            return null;
+        }
         /// <summary>
         /// find nearest joint that contains tri 
         /// </summary>
@@ -148,6 +163,8 @@ namespace Typography.Rendering
         readonly GlyphTriangle mainTri;
         Dictionary<GlyphTriangle, GlyphCentroidLine> _lines = new Dictionary<GlyphTriangle, GlyphCentroidLine>();
         List<CentroidLineHub> otherConnectedLineHubs;//connection from other
+        public List<CentroidLineHub> subLineHubs = new List<CentroidLineHub>();
+
         //
         GlyphCentroidLine currentLine;
         GlyphTriangle currentBranchTri;
@@ -226,15 +243,56 @@ namespace Typography.Rendering
         {
             foreach (GlyphCentroidLine line in _lines.Values)
             {
-                List<GlyphCentroidPair> lineList = line.pairs;
+                List<GlyphCentroidPair> pairList = line.pairs;
                 List<GlyphBone> glyphBones = line.bones;
-                int j = lineList.Count;
+                int j = pairList.Count;
 
                 for (int i = 0; i < j; ++i)
                 {
+                    if (i == 0)
+                    {
+                        //find connection from 
+                        //first tri of  centroid line
+                        //to other joint
+                        GlyphCentroidPair first_pair = pairList[i];
+                        GlyphTriangle firstTri = first_pair.p;
+
+                        //test 3 edges, find edge that is inside
+                        //and the joint is not the same as first_pair.BoneJoint
+
+                        if (firstTri.e0.IsInside &&
+                            firstTri.e0.inside_joint != null &&
+                            firstTri.e0.inside_joint != first_pair.BoneJoint)
+                        {
+                            //create connection 
+                            GlyphBone tipBone = new GlyphBone(firstTri.e0.inside_joint, first_pair.BoneJoint);
+                            newlyCreatedBones.Add(tipBone);
+                            glyphBones.Add(tipBone);
+                        }
+                        //
+                        if (firstTri.e1.IsInside &&
+                            firstTri.e1.inside_joint != null &&
+                            firstTri.e1.inside_joint != first_pair.BoneJoint)
+                        {
+                            GlyphBone tipBone = new GlyphBone(firstTri.e1.inside_joint, first_pair.BoneJoint);
+                            newlyCreatedBones.Add(tipBone);
+                            glyphBones.Add(tipBone);
+                        }
+                        //
+                        if (firstTri.e2.IsInside &&
+                            firstTri.e2.inside_joint != null &&
+                            firstTri.e2.inside_joint != first_pair.BoneJoint)
+                        {
+                            GlyphBone tipBone = new GlyphBone(firstTri.e2.inside_joint, first_pair.BoneJoint);
+                            newlyCreatedBones.Add(tipBone);
+                            glyphBones.Add(tipBone);
+                        }
+                        //------------
+                    }
+
                     //for each GlyphCentroidPair                    
                     //create bone that link the GlyphBoneJoint of the pair 
-                    GlyphCentroidPair pair = lineList[i];
+                    GlyphCentroidPair pair = pairList[i];
                     GlyphBoneJoint joint = pair.BoneJoint;
                     if (joint.TipEdgeP != null)
                     {
@@ -255,7 +313,7 @@ namespace Typography.Rendering
                     {
                         //not the last one 
                         //has tip end 
-                        GlyphCentroidPair nextline = lineList[i + 1];
+                        GlyphCentroidPair nextline = pairList[i + 1];
                         GlyphBoneJoint nextJoint = nextline.BoneJoint;
                         GlyphBone bone = new GlyphBone(joint, nextJoint);
                         newlyCreatedBones.Add(bone);
@@ -266,20 +324,18 @@ namespace Typography.Rendering
                         //the last one ...
                         if (j > 1)
                         {
-                            //check if  the last bone is connected to the first or not
-
-                            GlyphCentroidPair nextline = lineList[0];
-                            if (pair.IsAdjacentTo(nextline))
+                            //check if  the last bone is connected to the first or not 
+                            GlyphCentroidPair nextPair = pairList[0];
+                            if (pair.IsAdjacentTo(nextPair))
                             {
-                                GlyphBone bone = new GlyphBone(joint, nextline.BoneJoint);
+                                GlyphBone bone = new GlyphBone(joint, nextPair.BoneJoint);
                                 bone.IsLinkBack = true;
                                 newlyCreatedBones.Add(bone);
                                 glyphBones.Add(bone);
                             }
                         }
                     }
-                }
-                //----------------
+                } 
             }
         }
 
@@ -290,9 +346,21 @@ namespace Typography.Rendering
 
 
         //--------------------------------------------------------
+        public GlyphCentroidPair FindTriangle(GlyphTriangle tri)
+        {
+            foreach (GlyphCentroidLine line in _lines.Values)
+            {
+                GlyphCentroidPair p = line.FindNearestPair(tri);
+                if (p != null)
+                {
+
+                }
+            }
+            return null;
+        }
         public bool FindBoneJoint(GlyphTriangle tri, Vector2 pos,
-            out GlyphCentroidLine foundOnBranch,
-            out GlyphBoneJoint foundOnJoint)
+        out GlyphCentroidLine foundOnBranch,
+        out GlyphBoneJoint foundOnJoint)
         {
             foreach (GlyphCentroidLine line in _lines.Values)
             {

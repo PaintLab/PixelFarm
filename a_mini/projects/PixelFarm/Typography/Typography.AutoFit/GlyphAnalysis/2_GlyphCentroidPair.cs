@@ -26,6 +26,7 @@ namespace Typography.Rendering
             //1 centroid pair has 1 GlyphBoneJoint
             //-------------------------------------- 
         }
+       
         internal bool IsAdjacentTo(GlyphCentroidPair another)
         {
             return this.p == another.p ||

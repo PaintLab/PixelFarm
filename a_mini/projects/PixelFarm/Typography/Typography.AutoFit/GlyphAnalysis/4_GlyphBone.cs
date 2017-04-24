@@ -22,6 +22,10 @@ namespace Typography.Rendering
         public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
         {
 #if DEBUG
+            if (this.dbugId == 6)
+            {
+
+            }
             if (a == b)
             {
                 throw new NotSupportedException();
@@ -39,6 +43,10 @@ namespace Typography.Rendering
         }
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
         {
+            if (this.dbugId == 6)
+            {
+
+            }
             JointA = a;
             TipEdge = tipEdge;
 

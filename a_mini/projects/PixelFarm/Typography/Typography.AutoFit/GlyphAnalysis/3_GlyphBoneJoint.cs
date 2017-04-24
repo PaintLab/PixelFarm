@@ -28,10 +28,17 @@ namespace Typography.Rendering
             EdgeLine p_contact_edge,
             EdgeLine q_contact_edge)
         {
+
             //both p and q is INSIDE, contact edge
             this._p_contact_edge = p_contact_edge;
             this._q_contact_edge = q_contact_edge;
             this._owner = owner;
+            if (p_contact_edge.inside_joint != null ||
+                q_contact_edge.inside_joint != null)
+            {
+            }
+            p_contact_edge.inside_joint = this;
+            q_contact_edge.inside_joint = this;
         }
 
         /// <summary>

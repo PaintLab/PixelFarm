@@ -204,6 +204,7 @@ namespace SampleWinForms.UI
         public bool DrawTrianglesAndEdges { get; set; }
         public bool DrawDynamicOutline { get; set; }
         public bool DrawRegenerateOutline { get; set; }
+        public bool DrawEndLineHub { get; set; }
         //
 #if DEBUG
         void DrawPointKind(CanvasPainter painter, GlyphPoint point, float scale)
@@ -640,18 +641,20 @@ namespace SampleWinForms.UI
         protected override void OnEndLineHub(float centerX, float centerY, GlyphBoneJoint joint)
         {
 
-
-            painter.FillRectLBWH(centerX * _pxscale, centerY * _pxscale, 7, 7,
-                   PixelFarm.Drawing.Color.White);
-
-
-            if (joint != null)
+            if (DrawEndLineHub)
             {
-                Vector2 joint_pos = joint.Position;
-                painter.Line(
-                        joint_pos.X * _pxscale, joint_pos.Y * _pxscale,
-                        centerX * _pxscale, centerY * _pxscale,
-                        PixelFarm.Drawing.Color.Magenta);
+                //line hub cebter
+                painter.FillRectLBWH(centerX * _pxscale, centerY * _pxscale, 7, 7,
+                       PixelFarm.Drawing.Color.White);
+                //this line hub is connected with other line hub at joint
+                if (joint != null)
+                {
+                    Vector2 joint_pos = joint.Position;
+                    painter.Line(
+                            joint_pos.X * _pxscale, joint_pos.Y * _pxscale,
+                            centerX * _pxscale, centerY * _pxscale,
+                            PixelFarm.Drawing.Color.Magenta);
+                }
             }
         }
 
