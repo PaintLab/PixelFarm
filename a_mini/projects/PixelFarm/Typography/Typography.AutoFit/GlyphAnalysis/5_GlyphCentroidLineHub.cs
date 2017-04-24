@@ -333,18 +333,47 @@ namespace Typography.Rendering
                                 newlyCreatedBones.Add(bone);
                                 glyphBones.Add(bone);
                             }
+
+                            GlyphCentroidPair last_pair = pairList[j - 1];
+                            GlyphTriangle lastTri = last_pair.p;
+
+
+                            if (lastTri.e0.IsInside &&
+                                lastTri.e0.inside_joint != null &&
+                                lastTri.e0.inside_joint != last_pair.BoneJoint)
+                            {
+                                //create connection 
+                                GlyphBone tipBone = new GlyphBone(lastTri.e0.inside_joint, last_pair.BoneJoint);
+                                newlyCreatedBones.Add(tipBone);
+                                glyphBones.Add(tipBone);
+                            }
+                            //
+                            if (lastTri.e1.IsInside &&
+                                lastTri.e1.inside_joint != null &&
+                                lastTri.e1.inside_joint != last_pair.BoneJoint)
+                            {
+                                GlyphBone tipBone = new GlyphBone(lastTri.e1.inside_joint, last_pair.BoneJoint);
+                                newlyCreatedBones.Add(tipBone);
+                                glyphBones.Add(tipBone);
+                            }
+                            //
+                            if (lastTri.e2.IsInside &&
+                                lastTri.e2.inside_joint != null &&
+                                lastTri.e2.inside_joint != last_pair.BoneJoint)
+                            {
+                                GlyphBone tipBone = new GlyphBone(lastTri.e2.inside_joint, last_pair.BoneJoint);
+                                newlyCreatedBones.Add(tipBone);
+                                glyphBones.Add(tipBone);
+                            }
                         }
                     }
-                } 
+                }
             }
         }
-
         public Dictionary<GlyphTriangle, GlyphCentroidLine> GetAllBranches()
         {
             return _lines;
         }
-
-
         //--------------------------------------------------------
         public GlyphCentroidPair FindTriangle(GlyphTriangle tri)
         {
