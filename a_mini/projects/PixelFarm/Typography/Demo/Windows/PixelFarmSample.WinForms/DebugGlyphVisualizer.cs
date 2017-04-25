@@ -328,6 +328,11 @@ namespace SampleWinForms.UI
                             Vector2 newMidPoint = glyphEdge.GetNewMidPoint() * _pxscale;
                             painter.FillRectLBWH(newMidPoint.X, newMidPoint.Y, 3, 3, PixelFarm.Drawing.Color.Red);
                             painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
+
+
+                            painter.FillRectLBWH(p.newEdgeCutPointX * _pxscale, p.newEdgeCutPointY * _pxscale, 3, 3, PixelFarm.Drawing.Color.Blue);
+                            painter.FillRectLBWH(q.newEdgeCutPointX * _pxscale, q.newEdgeCutPointY * _pxscale, 3, 3, PixelFarm.Drawing.Color.Blue);
+
                         }
                         //---------   
                         {

@@ -29,9 +29,22 @@ namespace Typography.Rendering
 
         AssocBoneCollection _assocBones = new AssocBoneCollection();
 
+        /// <summary>
+        /// calculated x and y  
+        /// </summary>
         public float newX;
         public float newY;
-        //
+
+        /// <summary>
+        /// calculated edge CutX  from 2 outside cutpoint (E0,E1)
+        /// </summary>
+        public float newEdgeCutPointX;
+        /// <summary>
+        /// calculated edge CutY  from 2 outside cutpoint (E0,E1)
+        /// </summary>
+        public float newEdgeCutPointY;
+
+
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
 
@@ -423,10 +436,27 @@ namespace Typography.Rendering
                 //delta vector
                 Vector2 delta = orgVector - _boneCutPoint;
                 Vector2 newDelta = delta.NewLength(edgeOffsetFromMasterOutline);
+                //we apply offset from original master outline
+                //TODO: check limit of side edge ***
                 return orgVector + newDelta;
             }
         }
+        internal Vector2 CalculateNewCutPointFromBone(float edgeOffsetFromBone, Vector2 orgVector)
+        {
+            if (this.CutPointKind == BoneCutPointKind.NotPendicularCutPoint)
+            {
+                return orgVector;
+            }
+            else
+            {
+                //delta vector
+                Vector2 delta = orgVector - _boneCutPoint;
+                Vector2 newDelta = delta.NewLength(edgeOffsetFromBone);
+                //we apply offset from original master outline
 
+                return _boneCutPoint + newDelta;
+            }
+        }
     }
 }
 

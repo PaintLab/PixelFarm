@@ -26,7 +26,7 @@ namespace Typography.Rendering
             parts.Add(part);
         }
 
-       
+
         internal void Flatten(GlyphPartFlattener flattener)
         {
             //flatten once
@@ -176,6 +176,20 @@ namespace Typography.Rendering
                 //apply new relative len to edge***
                 edges[i].ApplyNewEdgeFromMasterOutline(newEdgeOffsetFromMasterOutline);
             }
+            //calculate edge cutpoint
+            int lim = edges.Count - 1; //skip lastone
+            for (int i = 0; i < lim; ++i)
+            {
+                //calculate adjacent outside edge cutpoint          
+                GlyphEdge.UpdateEdgeCutPoint(edges[i], edges[i + 1]);
+            }
+            //last one
+            if (lim > 1)
+            {
+                //close edge
+                GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
+            }
+
         }
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
         {

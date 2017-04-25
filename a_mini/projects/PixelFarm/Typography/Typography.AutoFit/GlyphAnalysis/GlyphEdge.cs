@@ -70,8 +70,9 @@ namespace Typography.Rendering
             _newMidPoint = GetMidPoint() + _deltaVector;
         }
 
-        internal static void FindCutPoint(GlyphEdge e0, GlyphEdge e1)
+        public static void UpdateEdgeCutPoint(GlyphEdge e0, GlyphEdge e1)
         {
+            
             //TODO: refactor here...
             //find cutpoint from e0.q to e1.p 
             //new sample
@@ -80,8 +81,8 @@ namespace Typography.Rendering
             Vector2 tmp_e1_p = e1._newMidPoint - e1.GetEdgeVector();
             Vector2 cutpoint = FindCutPoint(e0._newMidPoint, tmp_e0_q, e1._newMidPoint, tmp_e1_p);
 
-            e0._Q.newX = e1._P.newX = cutpoint.X;
-            e0._Q.newY = e1._P.newY = cutpoint.Y;
+            e0._Q.newEdgeCutPointX = e1._P.newEdgeCutPointX = cutpoint.X;
+            e0._Q.newEdgeCutPointY = e1._P.newEdgeCutPointY = cutpoint.Y;
         }
         static Vector2 FindCutPoint(
             Vector2 p0, Vector2 p1,
