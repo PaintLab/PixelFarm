@@ -100,13 +100,15 @@ namespace Typography.Rendering
 
             e0.newEdgeCut_Q_X = e1.newEdgeCut_P_X = cutpoint.X;
             e0.newEdgeCut_Q_Y = e1.newEdgeCut_P_Y = cutpoint.Y;
-             
+
         }
         static Vector2 FindCutPoint(
             Vector2 p0, Vector2 p1,
             Vector2 p2, Vector2 p3)
         {
             //TODO: refactor here...
+
+
 
 
             //find cut point of 2 line 
@@ -148,6 +150,11 @@ namespace Typography.Rendering
                 //90 or 180 degree
                 return new Vector2(p1.X, p2.Y);
             }
+            if (y1diff == 0)
+            {
+                //90 or 180 degree
+                return new Vector2(p2.X, p1.Y);
+            }
             //------------------------------
             //
             //find slope 
@@ -159,6 +166,7 @@ namespace Typography.Rendering
             //------------------------------
             double y2diff = p3.Y - p2.Y;
             double x2diff = p3.X - p2.X;
+
             double m2 = y2diff / x2diff;
 
             // 
@@ -172,109 +180,7 @@ namespace Typography.Rendering
             return new Vector2((float)cutx, (float)cuty);
 
         }
-        static Vector2 FindCutPoint(Vector2 p0, Vector2 p1, Vector2 p2, float cutAngle)
-        {
-            //a line from p0 to p1
-            //p2 is any point
-            //return p3 -> cutpoint on p0,p1
-
-            //from line equation
-            //y = mx + b ... (1)
-            //from (1)
-            //b = y- mx ... (2) 
-            //----------------------------------
-            //line1:
-            //y1 = (m1 * x1) + b1 ...(3)            
-            //line2:
-            //y2 = (m2 * x2) + b2 ...(4)
-            //----------------------------------
-            //from (3),
-            //b1 = y1 - (m1 * x1) ...(5)
-            //b2 = y2 - (m2 * x2) ...(6)
-            //----------------------------------
-            //y1diff = p1.Y-p0.Y  ...(7)
-            //x1diff = p1.X-p0.X  ...(8)
-            //
-            //m1 = (y1diff/x1diff) ...(9)
-            //m2 = cutAngle of m1 ...(10)
-            //
-            //replace value (x1,y1) and (x2,y2)
-            //we know b1 and b2         
-            //----------------------------------              
-            //at cutpoint of line1 and line2 => (x1,y1)== (x2,y2)
-            //or find (x,y) where (3)==(4)
-            //---------------------------------- 
-            //at cutpoint, find x
-            // (m1 * x1) + b1 = (m2 * x1) + b2  ...(11), replace x2 with x1
-            // (m1 * x1) - (m2 * x1) = b2 - b1  ...(12)
-            //  x1 * (m1-m2) = b2 - b1          ...(13)
-            //  x1 = (b2-b1)/(m1-m2)            ...(14), now we know x1
-            //---------------------------------- 
-            //at cutpoint, find y
-            //  y1 = (m1 * x1) + b1 ... (15), replace x1 with value from (14)
-            //Ans: (x1,y1)
-            //---------------------------------- 
-
-            double y1diff = p1.Y - p0.Y;
-            double x1diff = p1.X - p0.X;
-
-            if (x1diff == 0)
-            {
-                //90 or 180 degree
-                return new Vector2(p1.X, p2.Y);
-            }
-            //------------------------------
-            //
-            //find slope 
-            double m1 = y1diff / x1diff;
-            //from (2) b = y-mx, and (5)
-            //so ...
-            double b1 = p0.Y - (m1 * p0.X);
-            // 
-            //from (10)
-            //double invert_m = -(1 / slope_m);
-            //double m2 = -1 / m1;   //rotate m1
-            //---------------------
-            double angle = Math.Atan2(y1diff, x1diff); //rad in degree 
-                                                       //double m2 = -1 / m1;
-
-            double m2 = cutAngle == 90 ?
-                //short cut
-                (-1 / m1) :
-                //or 
-                Math.Tan(
-                //radial_angle of original line + radial of cutAngle
-                //return new line slope
-                Math.Atan2(y1diff, x1diff) +
-                MyMath.DegreesToRadians(cutAngle)); //new m 
-            //---------------------
-
-
-            //from (6)
-            double b2 = p2.Y - (m2) * p2.X;
-            //find cut point
-
-            //check if (m1-m2 !=0)
-            double cutx = (b2 - b1) / (m1 - m2); //from  (14)
-            double cuty = (m1 * cutx) + b1;  //from (15)
-            return new Vector2((float)cutx, (float)cuty);
-            //------
-            //at cutpoint of line1 and line2 => (x1,y1)== (x2,y2)
-            //or find (x,y) where (3)==(4)
-            //-----
-            //if (3)==(4)
-            //(m1 * x1) + b1 = (m2 * x2) + b2;
-            //from given p0 and p1,
-            //now we know m1 and b1, ( from (2),  b1 = y1-(m1*x1) )
-            //and we now m2 since => it is a 90 degree of m1.
-            //and we also know x2, since at the cut point x2 also =x1
-            //now we can find b2...
-            // (m1 * x1) + b1 = (m2 * x1) + b2  ...(5), replace x2 with x1
-            // b2 = (m1 * x1) + b1 - (m2 * x1)  ...(6), move  (m2 * x1)
-            // b2 = ((m1 - m2) * x1) + b1       ...(7), we can find b2
-            //---------------------------------------------
-        }
-
+      
 #if DEBUG
 
         public override string ToString()
