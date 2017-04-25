@@ -39,30 +39,33 @@ namespace Typography.Rendering
                 OnBegingLineHub(hubCenter.X, hubCenter.Y);
                 foreach (CentroidLine line in lines.Values)
                 {
-                    int pairCount = line.pairs.Count;
+                    List<GlyphBoneJoint> joints = line._joints;
+                    int pairCount = joints.Count;
+
                     for (int i = 0; i < pairCount; ++i)
                     {
-                        GlyphCentroidPair pair = line.pairs[i];
+                        GlyphBoneJoint joint = joints[i];
                         if (WalkCentroidBone)
                         {
                             double px, py, qx, qy;
-                            pair.GetLineCoords(out px, out py, out qx, out qy);
+
+                            joint.dbugGetCentroidBoneCenters(out px, out py, out qx, out qy);
                             OnCentroidLine(px, py, qx, qy);
                             //--------------------------------------------------
-                            if (pair.BoneJoint.TipEdgeP != null)
+                            if (joint.TipEdgeP != null)
                             {
-                                Vector2 pos = pair.BoneJoint.TipPointP;
+                                Vector2 pos = joint.TipPointP;
                                 OnCentroidLineTip_P(px, py, pos.X, pos.Y);
                             }
-                            if (pair.BoneJoint.TipEdgeQ != null)
+                            if (joint.TipEdgeQ != null)
                             {
-                                Vector2 pos = pair.BoneJoint.TipPointQ;
+                                Vector2 pos = joint.TipPointQ;
                                 OnCentroidLineTip_Q(qx, qy, pos.X, pos.Y);
-                            } 
+                            }
                         }
                         if (WalkGlyphBone)
                         {
-                            OnBoneJoint(pair.BoneJoint);
+                            OnBoneJoint(joint);
                         }
                     }
                     if (WalkGlyphBone)
@@ -72,7 +75,7 @@ namespace Typography.Rendering
                     }
                 }
                 //
-                 OnEndLineHub(hubCenter.X, hubCenter.Y, lineHub.GetHeadConnectedJoint());
+                OnEndLineHub(hubCenter.X, hubCenter.Y, lineHub.GetHeadConnectedJoint());
             }
 
 
@@ -84,7 +87,7 @@ namespace Typography.Rendering
             {
                 GlyphContour cnt = cnts[i];
                 List<GlyphEdge> edgeLines = cnt.edges;
-                if(edgeLines != null)
+                if (edgeLines != null)
                 {
                     int n = edgeLines.Count;
                     for (int m = 0; m < n; ++m)
@@ -94,7 +97,7 @@ namespace Typography.Rendering
                         Vector2 cut_q = e.Pos_Q;
                         OnGlyphEdgeN(cut_p.X, cut_p.Y, cut_q.X, cut_p.Y);
                     }
-                } 
+                }
 
                 //List<GlyphPoint> pnts = cnt.flattenPoints;
                 //int lim = pnts.Count - 1;
