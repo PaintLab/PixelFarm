@@ -457,7 +457,7 @@ namespace Typography.Rendering
                         //confirm that nbEdge is INSIDE edge
                         if (nbEdge.IsInside)
                         {
-                            GlyphBoneJoint joint = new GlyphBoneJoint(null, nbEdge, mainEdge);
+                            GlyphBoneJoint joint = new GlyphBoneJoint(nbEdge, mainEdge);
                             GlyphBone bone = new GlyphBone(first_p_tri.e2.inside_joint, firstPair.BoneJoint);
                             newlyCreatedBones.Add(bone);
                             glyphBones.Add(bone);

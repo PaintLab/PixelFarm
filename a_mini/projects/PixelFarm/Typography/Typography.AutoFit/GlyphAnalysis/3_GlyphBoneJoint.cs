@@ -15,7 +15,7 @@ namespace Typography.Rendering
 
         internal readonly EdgeLine _p_contact_edge;
         internal readonly EdgeLine _q_contact_edge;
-        GlyphCentroidPair _owner;
+
 
         //one bone joint can have up to 2 tips  
         EdgeLine _tipEdge_p;
@@ -24,7 +24,7 @@ namespace Typography.Rendering
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;
 #endif
-        internal GlyphBoneJoint(GlyphCentroidPair owner,
+        internal GlyphBoneJoint(
             EdgeLine p_contact_edge,
             EdgeLine q_contact_edge)
         {

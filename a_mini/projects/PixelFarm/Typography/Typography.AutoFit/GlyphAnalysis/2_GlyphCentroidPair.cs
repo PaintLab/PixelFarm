@@ -459,8 +459,7 @@ namespace Typography.Rendering
                     if (MarkMatchingInsideEdge(edgeLine, anotherTriangle))
                     {
 
-                        _boneJoint = new GlyphBoneJoint(
-                            this,
+                        _boneJoint = new GlyphBoneJoint( 
                             edgeLine,
                             edgeLine.contactToEdge);
                     }
