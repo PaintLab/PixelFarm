@@ -1,5 +1,5 @@
 ﻿//MIT, 2017, WinterDev
-using System; 
+using System;
 namespace Typography.Rendering
 {
     /// <summary>
@@ -7,6 +7,9 @@ namespace Typography.Rendering
     /// </summary>
     class GlyphCentroidPair
     {
+        //this is a temporary object.
+        //we crate glyph
+        //1 centroid pair has 1 GlyphBoneJoint
 
         internal readonly GlyphTriangle p, q;
         GlyphBoneJoint _boneJoint;
@@ -23,10 +26,8 @@ namespace Typography.Rendering
             //a centroid line  move from p to q  
             this.p = p;
             this.q = q;
-            //1 centroid pair has 1 GlyphBoneJoint
-            //-------------------------------------- 
         }
-       
+
         internal bool IsAdjacentTo(GlyphCentroidPair another)
         {
             return this.p == another.p ||
@@ -34,12 +35,9 @@ namespace Typography.Rendering
                     this.q == another.p ||
                     this.q == another.q;
         }
-       
 
-        /// <summary>
-        ///this centroid-pair links first triangle and last triangle of the same centroid branch ***
-        /// </summary>
-        public bool SpecialConnectFromLastToFirst { get; set; }
+
+      
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
         /// <summary>
         /// add information about edges to each triangle and create BoneJoint and Tip
@@ -459,7 +457,7 @@ namespace Typography.Rendering
                     if (MarkMatchingInsideEdge(edgeLine, anotherTriangle))
                     {
 
-                        _boneJoint = new GlyphBoneJoint( 
+                        _boneJoint = new GlyphBoneJoint(
                             edgeLine,
                             edgeLine.contactToEdge);
                     }

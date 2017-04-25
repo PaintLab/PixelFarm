@@ -47,29 +47,7 @@ namespace Typography.Rendering
                 pairs[i].AnalyzeEdgesAndCreateBoneJoint();
             }
 
-            //---------------
-            //TODO: review here
-            if (j > 1)
-            {
-                //add special tip
-                //get first line and last 
-                //check if this is loop
-                GlyphCentroidPair first_pair = pairs[0];
-                GlyphCentroidPair last_pair = pairs[j - 1];
-                //open end or close end 
-                if (!last_pair.SpecialConnectFromLastToFirst)
-                {
 
-                    first_pair.UpdateTips();
-                    last_pair.UpdateTips();
-                }
-            }
-            else if (j == 1)
-            {
-                //single line
-                //eg 'l' letter
-                pairs[0].UpdateTips();
-            }
         }
 
 
@@ -427,38 +405,52 @@ namespace Typography.Rendering
 
                 GlyphCentroidPair firstPair = pairList[0];
                 GlyphTriangle first_p_tri = firstPair.p;
+                GlyphBoneJoint firstPairJoint = firstPair.BoneJoint;
 
                 if (first_p_tri.e0.IsInside &&
                     first_p_tri.e0.inside_joint == null)
                 {
-                    GlyphBone bone = new GlyphBone(first_p_tri.e0.inside_joint, firstPair.BoneJoint);
-                    newlyCreatedBones.Add(bone);
-                    glyphBones.Add(bone);
-                }
-
-                if (first_p_tri.e1.IsInside &&
-                    first_p_tri.e1.inside_joint == null)
-                {
-                    GlyphBone bone = new GlyphBone(first_p_tri.e1.inside_joint, firstPair.BoneJoint);
-                    newlyCreatedBones.Add(bone);
-                    glyphBones.Insert(0, bone);
-                }
-
-                if (first_p_tri.e2.IsInside &&
-                    first_p_tri.e2.inside_joint == null)
-                {
-                    EdgeLine mainEdge = first_p_tri.e2;
+                    EdgeLine mainEdge = first_p_tri.e0;
                     EdgeLine nbEdge = null;
-                    if (HasTheSameEdgeLine(first_p_tri.N0, mainEdge, out nbEdge) ||
-                        HasTheSameEdgeLine(first_p_tri.N1, mainEdge, out nbEdge) ||
-                        HasTheSameEdgeLine(first_p_tri.N2, mainEdge, out nbEdge))
+                    if (FindSameCoordEdgeLine(first_p_tri.N0, mainEdge, out nbEdge) ||
+                        FindSameCoordEdgeLine(first_p_tri.N1, mainEdge, out nbEdge) ||
+                        FindSameCoordEdgeLine(first_p_tri.N2, mainEdge, out nbEdge))
                     {
 
                         //confirm that nbEdge is INSIDE edge
                         if (nbEdge.IsInside)
                         {
                             GlyphBoneJoint joint = new GlyphBoneJoint(nbEdge, mainEdge);
-                            GlyphBone bone = new GlyphBone(first_p_tri.e2.inside_joint, firstPair.BoneJoint);
+                            GlyphBone bone = new GlyphBone(mainEdge.inside_joint, firstPairJoint);
+                            newlyCreatedBones.Add(bone);
+                            glyphBones.Add(bone);
+                        }
+                        else
+                        {
+                            //?
+                        }
+                    }
+                    else
+                    {
+                        //?
+                    }
+                }
+                //---------------------------------------------------------------------
+                if (first_p_tri.e1.IsInside &&
+                    first_p_tri.e1.inside_joint == null)
+                {
+                    EdgeLine mainEdge = first_p_tri.e1;
+                    EdgeLine nbEdge = null;
+                    if (FindSameCoordEdgeLine(first_p_tri.N0, mainEdge, out nbEdge) ||
+                        FindSameCoordEdgeLine(first_p_tri.N1, mainEdge, out nbEdge) ||
+                        FindSameCoordEdgeLine(first_p_tri.N2, mainEdge, out nbEdge))
+                    {
+
+                        //confirm that nbEdge is INSIDE edge
+                        if (nbEdge.IsInside)
+                        {
+                            GlyphBoneJoint joint = new GlyphBoneJoint(nbEdge, mainEdge);
+                            GlyphBone bone = new GlyphBone(mainEdge.inside_joint, firstPairJoint);
                             newlyCreatedBones.Add(bone);
                             glyphBones.Add(bone);
                         }
@@ -473,15 +465,45 @@ namespace Typography.Rendering
                     }
 
                 }
+                //---------------------------------------------------------------------
+                if (first_p_tri.e2.IsInside &&
+                    first_p_tri.e2.inside_joint == null)
+                {
+                    EdgeLine mainEdge = first_p_tri.e2;
+                    EdgeLine nbEdge = null;
+                    if (FindSameCoordEdgeLine(first_p_tri.N0, mainEdge, out nbEdge) ||
+                        FindSameCoordEdgeLine(first_p_tri.N1, mainEdge, out nbEdge) ||
+                        FindSameCoordEdgeLine(first_p_tri.N2, mainEdge, out nbEdge))
+                    {
 
+                        //confirm that nbEdge is INSIDE edge
+                        if (nbEdge.IsInside)
+                        {
+                            GlyphBoneJoint joint = new GlyphBoneJoint(nbEdge, mainEdge);
+                            GlyphBone bone = new GlyphBone(mainEdge.inside_joint, firstPairJoint);
+                            newlyCreatedBones.Add(bone);
+                            glyphBones.Add(bone);
+                        }
+                        else
+                        {
+                            //?
+                        }
+                    }
+                    else
+                    {
+                        //?
+                    }
+
+                }
             }
         }
+
         /// <summary>
         /// find nb triangle that has the same edgeLine
         /// </summary>
         /// <param name="tri"></param>
         /// <returns></returns>
-        static bool HasTheSameEdgeLine(GlyphTriangle tri, EdgeLine edgeLine, out EdgeLine foundEdge)
+        static bool FindSameCoordEdgeLine(GlyphTriangle tri, EdgeLine edgeLine, out EdgeLine foundEdge)
         {
             foundEdge = null;
             if (tri == null)

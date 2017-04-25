@@ -28,18 +28,18 @@ namespace Typography.Rendering
             EdgeLine p_contact_edge,
             EdgeLine q_contact_edge)
         {
-            //this._owner = owner;
 
             //both p and q is INSIDE, contact edge
             this._p_contact_edge = p_contact_edge;
             this._q_contact_edge = q_contact_edge;
 
+#if DEBUG
             if (p_contact_edge.inside_joint != null ||
                 q_contact_edge.inside_joint != null)
             {
-                //TODO: review here 
-                //glyph #
+                throw new System.NotSupportedException();
             }
+#endif
             p_contact_edge.inside_joint = this;
             q_contact_edge.inside_joint = this;
         }
@@ -143,8 +143,6 @@ namespace Typography.Rendering
 
         public EdgeLine dbugGetEdge_P() { return _p_contact_edge; }
         public EdgeLine dbugGetEdge_Q() { return _q_contact_edge; }
-
-
 #endif
 
     }

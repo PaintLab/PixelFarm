@@ -126,20 +126,7 @@ namespace Typography.Rendering
                     }
                 }
             }
-            //------------------------------------------------- 
-            if (triCount > 2)
-            {
-                //connect the last tri to the first tri
-                //if it is connected
-
-                GlyphTriangle firstTri = _triangles[0];
-                GlyphTriangle lastTri = _triangles[triCount - 1];
-                if (firstTri.IsConnectedWith(lastTri))
-                {
-                    //TODO: review SpecialConnectFromLastToFirst, remove it
-                    currentCentroidLineHub.AddCentroidPair(new GlyphCentroidPair(lastTri, firstTri) { SpecialConnectFromLastToFirst = true });
-                }
-            }
+        
             //copy 
             _lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values);
 
