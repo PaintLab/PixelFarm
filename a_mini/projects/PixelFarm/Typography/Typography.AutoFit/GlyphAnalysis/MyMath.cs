@@ -64,7 +64,7 @@ namespace Typography.Rendering
                 new Vector2((float)edge.x0, (float)edge.y0),
                 new Vector2((float)edge.x1, (float)edge.y1),
                 p2);
-            //also check if result cutpoiny is on current line segment or not
+            //also check if result cutpoint is on current line segment or not
 
             Vector2 min, max;
             GetMinMax(edge, out min, out max);
@@ -116,11 +116,7 @@ namespace Typography.Rendering
         }
 
 
-        /// <summary>
-        /// which one is min,max
-        /// </summary>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
+
         static void GetMinMax(GlyphBone bone, out Vector2 min, out Vector2 max)
         {
             if (bone.JointB != null)
@@ -194,7 +190,6 @@ namespace Typography.Rendering
             double ydiff = p1.Y - p0.Y;
             if (xdiff == 0)
             {
-                //90 or 180 degree
                 return new Vector2(p1.X, p2.Y);
             }
             if (ydiff == 0)
@@ -210,8 +205,12 @@ namespace Typography.Rendering
             //find cut point
             double cutx = (b2 - b1) / (m1 - m2);
             double cuty = (m2 * cutx) + b2;
+
+           
+
             return new Vector2((float)cutx, (float)cuty);
         }
+      
         public static bool FindPerpendicularCutPoint2(Vector2 p0, Vector2 p1, Vector2 p2, out Vector2 cutPoint)
         {
             //a line from p0 to p1

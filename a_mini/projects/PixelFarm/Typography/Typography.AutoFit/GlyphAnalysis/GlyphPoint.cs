@@ -146,9 +146,17 @@ namespace Typography.Rendering
         }
         internal void ApplyNewRelativeLen(float newRelativeLen)
         {
-            Vector2 newRadiusEnd = _assocBones.CalculateCutPoint(newRelativeLen, new Vector2(x, y));
-            this.newX = newRadiusEnd.X;
-            this.newY = newRadiusEnd.Y;
+            if (newRelativeLen == 1)
+            {
+                this.newX = this.x;
+                this.newY = this.y;
+            }
+            else
+            {
+                Vector2 newRadiusEnd = _assocBones.CalculateCutPoint(newRelativeLen, new Vector2(x, y));
+                this.newX = newRadiusEnd.X;
+                this.newY = newRadiusEnd.Y;
+            }
         }
 #if DEBUG
         /// <summary>
@@ -176,10 +184,11 @@ namespace Typography.Rendering
 
     public enum BoneCutPointKind
     {
-        None,
+        Unknown,
         PerpendicularToSingleBone,
         PerpendicularToBoneGroup,
-        NotPendicularCutPoint,
+        MoreThanOnePerpendicularBones,
+        NotPendicularCutPoint
 
     }
     public class AssocBoneCollection
@@ -247,6 +256,38 @@ namespace Typography.Rendering
         public int StartIndexAt { get { return _startIndexAt; } }
         public int EndIndexAt { get { return _endIndexAt; } }
 
+
+
+
+        struct TmpCutPoint
+        {
+            public Vector2 cutpoint;
+            public int index;
+            public TmpCutPoint(int index, Vector2 cutpoint)
+            {
+                this.index = index;
+                this.cutpoint = cutpoint;
+            }
+        }
+        public static double AngleBetween(Vector2 vector1, Vector2 vector2)
+        {
+            double rad1 = System.Math.Atan2(vector1.Y, vector1.X);
+            double rad2 = System.Math.Atan2(vector2.Y, vector2.X);
+            //we want to find diff
+
+            if (rad1 < 0)
+            {
+                rad1 = System.Math.PI + rad1;
+            }
+            if (rad2 < 0)
+            {
+                rad2 = System.Math.PI + rad2;
+            }
+
+            return rad1 - rad2;
+        }
+        const float Epsilon = 0.0001f;
+        //
         internal void EvaluatePerpendicularBone(GlyphPoint ownerPoint)
         {
             //find a perpendicular line  and cutpoint from ownerPoint 
@@ -254,19 +295,40 @@ namespace Typography.Rendering
             CloseCollection();
             if (hasEvaluatedPerpendicularBones) return;
             hasEvaluatedPerpendicularBones = true; //change state
+
             //
             //---------------------------------------------------------
+            //TODO: review tmpCutPoints again 
+            List<TmpCutPoint> tmpCutPoints = new List<TmpCutPoint>();
+
             Vector2 o_point = new Vector2(ownerPoint.x, ownerPoint.y);
             int b_count = _assocBoneList.Count;
+            int perpendcut_count = 0;
+
             for (int i = 0; i < b_count; ++i)
             {
                 GlyphBone b = _assocBoneList[i];
-                if (MyMath.FindPerpendicularCutPoint(b, o_point, out _cutPoint))
+                Vector2 tempCutPoint;
+                if (MyMath.FindPerpendicularCutPoint(b, o_point, out tempCutPoint))
                 {
+
+                    _cutPoint = tempCutPoint;
                     _startIndexAt = _endIndexAt = i;
                     this.CutPointKind = BoneCutPointKind.PerpendicularToSingleBone;
-                    break;
+                    tmpCutPoints.Add(new TmpCutPoint(i, _cutPoint));
+                    perpendcut_count++;
                 }
+            }
+            //---------------------------------------------------------
+            if (perpendcut_count > 1)
+            {
+                //1.
+                this.CutPointKind = BoneCutPointKind.MoreThanOnePerpendicularBones;
+                _startIndexAt = _endIndexAt = 0;
+            }
+            else
+            {
+                // 
             }
             //------------------------------------
             if (_startIndexAt > -1) { return; }
@@ -294,16 +356,16 @@ namespace Typography.Rendering
                             //if not found 
                             //-> no cutpoint
                             //link to min distance
-                            if (MyMath.MinDistanceFirst(_assocBoneList[0].GetMidPoint(), _assocBoneList[1].GetMidPoint(), o_point))
-                            {
-                                _cutPoint = _assocBoneList[0].GetMidPoint();
-                                _startIndexAt = _endIndexAt = 0;
-                            }
-                            else
-                            {
-                                _cutPoint = _assocBoneList[1].GetMidPoint();
-                                _startIndexAt = _endIndexAt = 1;
-                            }
+                            //if (MyMath.MinDistanceFirst(_assocBoneList[0].GetMidPoint(), _assocBoneList[1].GetMidPoint(), o_point))
+                            //{
+                            //    _cutPoint = _assocBoneList[0].GetMidPoint();
+                            //    _startIndexAt = _endIndexAt = 0;
+                            //}
+                            //else
+                            //{
+                            //    _cutPoint = _assocBoneList[1].GetMidPoint();
+                            //    _startIndexAt = _endIndexAt = 1;
+                            //}
                             this.CutPointKind = BoneCutPointKind.NotPendicularCutPoint;
                         }
                         else
@@ -324,6 +386,7 @@ namespace Typography.Rendering
                         int startAt = mid_index - 1;
                         int endAt = mid_index + 1;
                         bool foundResult = false;
+
                         for (; startAt >= 0 && endAt < b_count;)
                         {
                             if (FindAvgCutPoint(_assocBoneList[startAt], _assocBoneList[endAt], o_point, out _cutPoint))
@@ -335,15 +398,27 @@ namespace Typography.Rendering
                                 break; //from loop for
                             }
                             startAt--; //expand wider to left
+                            if (startAt >= 0 &&
+                                FindAvgCutPoint(_assocBoneList[startAt], _assocBoneList[endAt], o_point, out _cutPoint))
+                            {
+
+                                this.CutPointKind = BoneCutPointKind.PerpendicularToBoneGroup;
+                                _startIndexAt = startAt;
+                                _endIndexAt = endAt;
+                                foundResult = true;
+                                break; //from loop for
+
+                            }
+
                             endAt++; //expand wider to right
                         }
-                        if (!foundResult)
-                        {
-                            //no result found
-                            _cutPoint = _assocBoneList[mid_index].GetMidPoint();
-                            _startIndexAt = _endIndexAt = mid_index;
-                            this.CutPointKind = BoneCutPointKind.NotPendicularCutPoint;
-                        }
+                        //if (!foundResult)
+                        //{
+                        //    //no result found
+                        //    _cutPoint = _assocBoneList[mid_index].GetMidPoint();
+                        //    _startIndexAt = _endIndexAt = mid_index;
+                        //    this.CutPointKind = BoneCutPointKind.NotPendicularCutPoint;
+                        //}
                     }
                     break;
             }
@@ -358,9 +433,16 @@ namespace Typography.Rendering
         }
         internal Vector2 CalculateCutPoint(float relativeLen, Vector2 orgVector)
         {
-            Vector2 delta = orgVector - _cutPoint;
-            Vector2 newDelta = delta.NewLength(delta.Length() * relativeLen);
-            return _cutPoint + newDelta;
+            if (this.CutPointKind == BoneCutPointKind.NotPendicularCutPoint)
+            {
+                return orgVector;
+            }
+            else
+            {
+                Vector2 delta = orgVector - _cutPoint;
+                Vector2 newDelta = delta.NewLength(delta.Length() * relativeLen);
+                return _cutPoint + newDelta;
+            }
         }
 
     }

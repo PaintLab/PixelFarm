@@ -1,49 +1,36 @@
 ﻿//MIT, 2017, WinterDev
-using System; 
+using System;
 namespace Typography.Rendering
 {
     /// <summary>
     /// a link (line) that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
-    class GlyphCentroidPair
+    struct GlyphCentroidPair
     {
+        //this is a temporary object.
+        //we crate glyph
+        //1 centroid pair has 1 GlyphBoneJoint
 
         internal readonly GlyphTriangle p, q;
-        GlyphBoneJoint _boneJoint;
+
         internal GlyphCentroidPair(GlyphTriangle p, GlyphTriangle q)
         {
 
             //each triangle has 1 centroid point
             //a centrod line connects between 2 adjacent triangles via centroid 
-            //
-            //
-            //
+
             //p triangle=> (x0,y0)  (centroid of p)
             //q triangle=> (x1,y1)  (centroid of q)
             //a centroid line  move from p to q  
             this.p = p;
             this.q = q;
-            //1 centroid pair has 1 GlyphBoneJoint
-            //-------------------------------------- 
         }
-        internal bool IsAdjacentTo(GlyphCentroidPair another)
-        {
-            return this.p == another.p ||
-                    this.p == another.q ||
-                    this.q == another.p ||
-                    this.q == another.q;
-        }
-       
 
-        /// <summary>
-        ///this centroid-pair links first triangle and last triangle of the same centroid branch ***
-        /// </summary>
-        public bool SpecialConnectFromLastToFirst { get; set; }
-        public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
+
         /// <summary>
         /// add information about edges to each triangle and create BoneJoint and Tip
         /// </summary>
-        internal void AnalyzeEdgesAndCreateBoneJoint()
+        public GlyphBoneJoint AnalyzeEdgesAndCreateBoneJoint()
         {
 
 #if DEBUG
@@ -58,22 +45,24 @@ namespace Typography.Rendering
             //....
             //pick up a edge of p and compare to all edge of q
             //do until complete
-            AddEdgesInformation(q, p.e0);
-            AddEdgesInformation(q, p.e1);
-            AddEdgesInformation(q, p.e2);
+            GlyphBoneJoint boneJoint = null;
+            AddEdgesInformation(q, p.e0, ref boneJoint);
+            AddEdgesInformation(q, p.e1, ref boneJoint);
+            AddEdgesInformation(q, p.e2, ref boneJoint);
             //
-            AddEdgesInformation(p, q.e0);
-            AddEdgesInformation(p, q.e1);
-            AddEdgesInformation(p, q.e2);
+            AddEdgesInformation(p, q.e0, ref boneJoint);
+            AddEdgesInformation(p, q.e1, ref boneJoint);
+            AddEdgesInformation(p, q.e2, ref boneJoint);
             //after this process, a boneJoint should be created
             //------------------------------------
 
 #if DEBUG
             //the pair must have joint
+            //after add edges info, the _boneJoint must be created successfully
             //1.
-            if (_boneJoint == null) { throw new NotSupportedException(); }
+            if (boneJoint == null) { throw new NotSupportedException(); }
             //2. 
-            if (_boneJoint._p_contact_edge == _boneJoint._q_contact_edge)
+            if (boneJoint._p_contact_edge == boneJoint._q_contact_edge)
             {
                 throw new NotSupportedException();
             }
@@ -84,66 +73,10 @@ namespace Typography.Rendering
             //---
             //both contact edge is INSIDE edge***
             //then, we mark outside edge compare to the known inside edge          
-            MarkProperOppositeOutsideEdges(p, _boneJoint._p_contact_edge, true);
-            MarkProperOppositeOutsideEdges(q, _boneJoint._q_contact_edge, false);
-        }
+            MarkProperOppositeOutsideEdges(p, boneJoint._p_contact_edge, boneJoint, true);
+            MarkProperOppositeOutsideEdges(q, boneJoint._q_contact_edge, boneJoint, false);
 
-        /// <summary>
-        /// evaluate and update tip info
-        /// </summary>
-        internal void UpdateTips()
-        {
-
-            //GlyphBoneJoint joint = pair.BoneJoint;
-            //get another edge for endtip
-
-            //if (IsOwnerOf(pair.p, joint.TipEdgeP))
-            //{
-            //    //tip edge is from p side
-            //    //so another side is q.
-
-            //    Vector2 tipPoint = joint.TipPointP;
-            //    GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdgeP);
-            //    pair.P_Tip = tip;
-
-            //    if (twoside)
-            //    {
-            //        EdgeLine tipEdge = FindTip(pair, pair.q);
-            //        if (tipEdge == null) throw new NotSupportedException();
-            //        //-----
-            //        tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
-            //        pair.Q_Tip = tip;
-            //    }
-            //}
-            //else if (IsOwnerOf(pair.q, joint.TipEdgeP))
-            //{
-
-            //    Vector2 tipPoint = joint.TipPointP;
-            //    GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdgeP);
-            //    pair.Q_Tip = tip;
-
-
-            //    //tip edge is from q side
-            //    //so another side is p.
-
-            //    if (twoside)
-            //    {
-            //        //find proper tip edge
-            //        EdgeLine tipEdge = FindTip(pair, pair.p);
-            //        if (tipEdge == null)
-            //        {
-            //            //some time no tip found ***
-            //            return;
-            //        }
-            //        //-----
-            //        tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
-            //        pair.P_Tip = tip;
-            //    }
-            //}
-            //else
-            //{
-            //    throw new NotSupportedException();
-            //}
+            return boneJoint;
         }
 
 
@@ -252,12 +185,13 @@ namespace Typography.Rendering
             }
             return slopeAngleNoDirection;
         }
-        static void SelectMostProperTipEdge(
-            GlyphCentroidPair centroidPair,
-            EdgeLine outside0,
-            EdgeLine outside1,
-            out EdgeLine tipEdge,
-            out EdgeLine notTipEdge)
+
+        void SelectMostProperTipEdge(
+          GlyphCentroidPair centroidPair,
+          EdgeLine outside0,
+          EdgeLine outside1,
+          out EdgeLine tipEdge,
+          out EdgeLine notTipEdge)
         {
             LineSlopeKind slopeKind;
             //slop angle in rad
@@ -275,51 +209,6 @@ namespace Typography.Rendering
                 notTipEdge = outside0;
             }
 
-
-
-            ////---------------------
-            //switch (slopeKind)
-            //{
-            //    default: throw new NotSupportedException();
-            //    case LineSlopeKind.Horizontal:
-            //        if (outside0.SlopeKind == LineSlopeKind.Vertical)
-            //        {
-            //            tipEdge = outside0;
-            //            notTipEdge = outside1;
-            //        }
-            //        else
-            //        {
-            //            tipEdge = outside1;
-            //            notTipEdge = outside0;
-            //        }
-            //        break;
-            //    case LineSlopeKind.Vertical:
-            //        if (outside0.SlopeKind == LineSlopeKind.Horizontal)
-            //        {
-            //            tipEdge = outside0;
-            //            notTipEdge = outside1;
-            //        }
-            //        else
-            //        {
-            //            tipEdge = outside1;
-            //            notTipEdge = outside0;
-            //        }
-            //        break;
-            //    case LineSlopeKind.Other:
-            //        //select 1
-            //        //choose the horizontal one 
-            //        if (outside0.SlopeKind == LineSlopeKind.Horizontal)
-            //        {
-            //            tipEdge = outside0;
-            //            notTipEdge = outside1;
-            //        }
-            //        else
-            //        {
-            //            tipEdge = outside1;
-            //            notTipEdge = outside0;
-            //        }
-            //        break;
-            //}
         }
         /// <summary>
         /// add information about each edge of a triangle, compare to the contactEdge of a ownerEdgeJoint
@@ -328,9 +217,10 @@ namespace Typography.Rendering
         /// <param name="boneJoint"></param>
         /// <param name="contactEdge"></param>
         void MarkProperOppositeOutsideEdges(
-            GlyphTriangle triangle,
-            EdgeLine contactEdge,
-            bool is_p_side)
+          GlyphTriangle triangle,
+          EdgeLine contactEdge,
+          GlyphBoneJoint boneJoint,
+          bool is_p_side)
         {
 
             int outsideCount;
@@ -417,12 +307,12 @@ namespace Typography.Rendering
                         //for TipEdge
                         if (is_p_side)
                         {
-                            _boneJoint.SetTipEdge_P(tipEdge);
+                            boneJoint.SetTipEdge_P(tipEdge);
                         }
                         else
                         {
                             //q side
-                            _boneJoint.SetTipEdge_Q(tipEdge);
+                            boneJoint.SetTipEdge_Q(tipEdge);
                         }
                         //for notTipEdge 
                         //Vector2 perpend_B;
@@ -439,7 +329,7 @@ namespace Typography.Rendering
         /// </summary>
         /// <param name="edgeLine"></param>
         /// <param name="anotherTriangle"></param>
-        void AddEdgesInformation(GlyphTriangle anotherTriangle, EdgeLine edgeLine)
+        static void AddEdgesInformation(GlyphTriangle anotherTriangle, EdgeLine edgeLine, ref GlyphBoneJoint bonejoint)
         {
             if (edgeLine.IsOutside)
             {
@@ -453,13 +343,12 @@ namespace Typography.Rendering
                 //if edge is inside =>
                 //we will evaluate if _boneJoint== null
 
-                if (_boneJoint == null)
+                if (bonejoint == null)
                 {
                     if (MarkMatchingInsideEdge(edgeLine, anotherTriangle))
                     {
 
-                        _boneJoint = new GlyphBoneJoint(
-                            this,
+                        bonejoint = new GlyphBoneJoint(
                             edgeLine,
                             edgeLine.contactToEdge);
                     }

@@ -21,6 +21,20 @@ namespace Typography.Rendering
         public GlyphIntermediateOutline(Polygon polygon, List<GlyphContour> contours)
         {
             this._contours = contours;
+
+            //1. create triangle list from given DelaunayTriangle polygon.
+            CreateTriangleList(polygon);
+            //2. create centroid line hubs
+            CreateCentroidLineHubs();
+            //3. create bone joints
+            CreateBoneJoints();
+            //4. create bones 
+            CreateBones();
+            //5. create glyph edges          
+            CreateGlyphEdges();
+        }
+        void CreateTriangleList(Polygon polygon)
+        {
 #if DEBUG
             this._dbugpolygon = polygon; //for debug only ***
             EdgeLine.s_dbugTotalId = 0;//reset
@@ -34,22 +48,8 @@ namespace Typography.Rendering
                 delnTri.MarkAsActualTriangle();
                 _triangles.Add(new GlyphTriangle(delnTri)); //all triangles are created from Triangulation process
             }
-            //--------------------
-#if DEBUG
-            dbugCheckGlyphPoints();
-#endif
 
-            //--------------------
-            //2. create centroid line hubs
-            CreateCentroidLineHubs();
-            //3. create bone joints
-            CreateBoneJoints();
-            //4. create bones 
-            CreateBones();
-            //5. create glyph edges          
-            CreateGlyphEdges();
         }
-
         void CreateCentroidLineHubs()
         {
             //----------------------------
@@ -96,6 +96,9 @@ namespace Typography.Rendering
                             {
                                 //if not found then=> //start new CentroidLineHub 
                                 centroidLineHubs[connectWithPrevTri] = lineHub = new CentroidLineHub(connectWithPrevTri);
+                                //create linehub to line hub connection
+                                //TODO: review here 
+                                //create centroid pair at link point 
                             }
                             else
                             {
@@ -104,18 +107,17 @@ namespace Typography.Rendering
 
                             currentCentroidLineHub = lineHub;
                             //ensure start triangle of the branch
-                            lineHub.SetBranch(tri);
-                            //create centroid line and add to currrent hub
-                            var pair = new GlyphCentroidPair(connectWithPrevTri, tri);
-                            currentCentroidLineHub.AddCentroidPair(pair);
+                            lineHub.SetCurrentCentroidLine(tri);
+                            //create centroid line and add to currrent hub 
+                            currentCentroidLineHub.AddCentroidPair(new GlyphCentroidPair(connectWithPrevTri, tri));
                         }
                         else
                         {
                             //add centroid line to current multifacet joint 
-                            if (currentCentroidLineHub.BranchCount == 0)
+                            if (currentCentroidLineHub.LineCount == 0)
                             {
                                 //ensure start triangle of the branch
-                                currentCentroidLineHub.SetBranch(tri);
+                                currentCentroidLineHub.SetCurrentCentroidLine(tri);
                             }
                             //create centroid line and add to currrent hub
                             currentCentroidLineHub.AddCentroidPair(new GlyphCentroidPair(connectWithPrevTri, tri));
@@ -124,19 +126,10 @@ namespace Typography.Rendering
                     }
                 }
             }
-            //------------------------------------------------- 
-            if (triCount > 2)
-            {
-                //connect the last tri to the first tri
-                //if it is connected
-                GlyphTriangle firstTri = _triangles[0];
-                GlyphTriangle lastTri = _triangles[triCount - 1];
-                if (firstTri.IsConnectedWith(lastTri))
-                {
-                    currentCentroidLineHub.AddCentroidPair(new GlyphCentroidPair(lastTri, firstTri) { SpecialConnectFromLastToFirst = true });
-                }
-            }
+
+            //copy 
             _lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values);
+
         }
         void CreateBoneJoints()
         {
@@ -162,25 +155,22 @@ namespace Typography.Rendering
                 _lineHubs[i].CreateBones(newBones);
             }
             //----------------------------------------
+            //check connection between head of each centroid line
+            for (int i = 0; i < lineHubCount; ++i)
+            {
+                _lineHubs[i].CreateBoneLinkBetweenCentroidLine(newBones);
+            }
+
+
             _outputVerticalLongBones = new List<GlyphBone>();
             AnalyzeBoneLength(newBones, _outputVerticalLongBones);
             //create perpendicular line link from control nodes to glyph bone 
             //----------------------------------------
             _outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
             //
-           
+
         }
-#if DEBUG
-        void dbugCheckGlyphPoints()
-        {
-            List<GlyphContour> contours = this._contours;
-            int j = contours.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                contours[i].dbugCheckGlyphPoints();
-            }
-        }
-#endif
+
         void CreateGlyphEdges()
         {
             List<GlyphContour> contours = this._contours;
@@ -194,7 +184,6 @@ namespace Typography.Rendering
         {
             get { return this._outputVerticalLongBones; }
         }
-
         /// <summary>
         /// find link from main triangle of line-hub to another line hub
         /// </summary>
@@ -203,7 +192,6 @@ namespace Typography.Rendering
         static void LinkEachLineHubTogether(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
         {
             int j = hubs.Count;
-            System.Numerics.Vector2 hubHeadPos = analyzingHub.GetCenterPos();
             for (int i = 0; i < j; ++i)
             {
                 CentroidLineHub otherHub = hubs[i];
@@ -212,13 +200,14 @@ namespace Typography.Rendering
                     continue;
                 }
 
-                GlyphCentroidLine foundOnBr;
+                CentroidLine foundOnBr;
                 GlyphBoneJoint foundOnJoint;
-
                 //from a given hub,
                 //find bone joint that close to the main triangle for of the analyzingHub
-                if (otherHub.FindBoneJoint(analyzingHub.MainTriangle, hubHeadPos, out foundOnBr, out foundOnJoint))
+                if (otherHub.FindBoneJoint(analyzingHub.StartTriangle, out foundOnBr, out foundOnJoint))
                 {
+                    //create a new bone joint 
+                    // FindNearestEdge(analyzingHub.MainTriangle, foundOnJoint); 
                     //add connection from analyzingHub to otherHub
                     otherHub.AddLineHubConnection(analyzingHub);
                     //also set head connection from joint to this analyzing hub
@@ -226,8 +215,16 @@ namespace Typography.Rendering
                     return;
                 }
             }
-        }
+            //------
 
+
+
+
+        }
+        //static EdgeLine FindNearestEdge(GlyphTriangle tri, GlyphBoneJoint joint)
+        //{
+        //    return null;
+        //}
         static void AnalyzeBoneLength(List<GlyphBone> newBones, List<GlyphBone> outputVerticalLongBones)
         {
             //----------------------------------------

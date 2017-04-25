@@ -130,7 +130,7 @@ namespace SampleWinForms
             chkDrawTriangles.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
-           
+            chkDrawLineHubConn.CheckedChanged += (s, e) => UpdateRenderOutput();
 
             //----------
             txtGlyphBoneCount.KeyDown += (s, e) =>
@@ -228,7 +228,10 @@ namespace SampleWinForms
             //string inputstr = "t";
             //string inputstr = "2";
             //string inputstr = "o";
-            string inputstr = "l";
+            //string inputstr = "l";
+            //string inputstr = "k";
+            //string inputstr = "8";
+            string inputstr = "#";
             //string inputstr = "a";
             //string inputstr = "Å";
             //string inputstr = "fi";
@@ -410,9 +413,10 @@ namespace SampleWinForms
             debugGlyphVisualizer.OffsetMinorX = chkMinorOffset.Checked;
             debugGlyphVisualizer.ShowTess = chkShowTess.Checked;
             debugGlyphVisualizer.DrawTrianglesAndEdges = this.chkDrawTriangles.Checked;
+            debugGlyphVisualizer.DrawEndLineHub = this.chkDrawLineHubConn.Checked;
             debugGlyphVisualizer.WalkCentroidBone = this.chkDrawCentroidBone.Checked;
             debugGlyphVisualizer.WalkGlyphBone = this.chkDrawGlyphBone.Checked;
-             
+
             debugGlyphVisualizer.DrawDynamicOutline = chkDynamicOutline.Checked;
             debugGlyphVisualizer.DrawRegenerateOutline = chkDrawRegenerateOutline.Checked;
             //------------------------------------------------------

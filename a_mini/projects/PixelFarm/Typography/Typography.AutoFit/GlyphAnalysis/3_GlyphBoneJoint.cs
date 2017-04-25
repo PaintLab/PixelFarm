@@ -15,7 +15,7 @@ namespace Typography.Rendering
 
         internal readonly EdgeLine _p_contact_edge;
         internal readonly EdgeLine _q_contact_edge;
-        GlyphCentroidPair _owner;
+
 
         //one bone joint can have up to 2 tips  
         EdgeLine _tipEdge_p;
@@ -24,16 +24,40 @@ namespace Typography.Rendering
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;
 #endif
-        internal GlyphBoneJoint(GlyphCentroidPair owner,
+        internal GlyphBoneJoint(
             EdgeLine p_contact_edge,
             EdgeLine q_contact_edge)
         {
+
             //both p and q is INSIDE, contact edge
             this._p_contact_edge = p_contact_edge;
             this._q_contact_edge = q_contact_edge;
-            this._owner = owner;
+
+#if DEBUG
+            if (p_contact_edge.inside_joint != null ||
+                q_contact_edge.inside_joint != null)
+            {
+                throw new System.NotSupportedException();
+            }
+#endif
+            p_contact_edge.inside_joint = this;
+            q_contact_edge.inside_joint = this;
         }
 
+        internal GlyphTriangle P_Tri
+        {
+            get
+            {
+                return _p_contact_edge.OwnerTriangle;
+            }
+        }
+        internal GlyphTriangle Q_Tri
+        {
+            get
+            {
+                return _q_contact_edge.OwnerTriangle;
+            }
+        }
         /// <summary>
         /// get position of this bone joint (mid point of the edge)
         /// </summary>
@@ -105,14 +129,10 @@ namespace Typography.Rendering
 
         public Vector2 TipPointQ { get { return _tipEdge_q.GetMidPoint(); } }
         public EdgeLine TipEdgeQ { get { return _tipEdge_q; } }
-        //
-        internal GlyphCentroidPair OwnerCentrodPair
-        {
-            get { return _owner; }
-        }
+
         internal bool ComposeOf(GlyphTriangle tri)
         {
-            return this._owner.p == tri || this._owner.q == tri;
+            return this.P_Tri == tri || this.Q_Tri == tri;
         }
 
 #if DEBUG
@@ -125,6 +145,17 @@ namespace Typography.Rendering
         public EdgeLine dbugGetEdge_Q() { return _q_contact_edge; }
 
 
+        public void dbugGetCentroidBoneCenters(out double cx0, out double cy0, out double cx1, out double cy1)
+        {
+
+            //for debug
+            GlyphTriangle p_tri = this.P_Tri;
+            cx0 = p_tri.CentroidX;
+            cy0 = p_tri.CentroidY;
+            GlyphTriangle q_tri = this.Q_Tri;
+            cx1 = q_tri.CentroidX;
+            cy1 = q_tri.CentroidY;
+        }
 #endif
 
     }
