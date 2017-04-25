@@ -6,15 +6,15 @@ namespace Typography.Rendering
 {
 
     /// <summary>
-    /// link between 2 GlyphBoneJoint or Joint and tipEdge
+    /// link between  (GlyphBoneJoint and Joint) or (GlyphBoneJoint and tipEdge)
     /// </summary>
     public class GlyphBone
     {
-        public readonly EdgeLine TipEdge;
         public readonly GlyphBoneJoint JointA;
         public readonly GlyphBoneJoint JointB;
-        double _len;
+        public readonly EdgeLine TipEdge;
 
+        double _len;
 #if DEBUG 
         static int dbugTotalId;
         public readonly int dbugId = dbugTotalId++;

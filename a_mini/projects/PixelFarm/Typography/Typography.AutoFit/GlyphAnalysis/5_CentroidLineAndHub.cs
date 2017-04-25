@@ -6,13 +6,11 @@ using System.Numerics;
 namespace Typography.Rendering
 {
     /// <summary>
-    /// a collection of connected centroid pairs
+    /// a collection of connected centroid pairs and bone
     /// </summary>
     class CentroidLine
     {
-        //at least 1 pair
-
-
+        //at least 1 pair 
 
         public List<GlyphCentroidPair> pairs = new List<GlyphCentroidPair>();
         public List<GlyphBone> bones = new List<GlyphBone>();
@@ -261,15 +259,6 @@ namespace Typography.Rendering
                         //the last one ...
                         if (j > 1)
                         {
-                            //check if  the last bone is connected to the first or not 
-                            GlyphCentroidPair nextPair = pairList[0];
-                            if (pair.IsAdjacentTo(nextPair))
-                            {
-                                GlyphBone bone = new GlyphBone(joint, nextPair.BoneJoint);
-                                bone.IsLinkBack = true;
-                                newlyCreatedBones.Add(bone);
-                                glyphBones.Add(bone);
-                            }
 
                             GlyphCentroidPair last_pair = pairList[j - 1];
                             GlyphTriangle lastTri = last_pair.p;
