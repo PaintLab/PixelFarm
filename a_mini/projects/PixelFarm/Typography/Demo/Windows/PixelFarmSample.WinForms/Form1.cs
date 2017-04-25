@@ -130,7 +130,7 @@ namespace SampleWinForms
             chkDrawTriangles.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
-           
+            chkDrawLineHubConn.CheckedChanged += (s, e) => UpdateRenderOutput();
 
             //----------
             txtGlyphBoneCount.KeyDown += (s, e) =>
@@ -229,7 +229,10 @@ namespace SampleWinForms
             //string inputstr = "2";
             //string inputstr = "o";
             //string inputstr = "l";
-            string inputstr = "a";
+            //string inputstr = "k";
+            //string inputstr = "8";
+            string inputstr = "#";
+            //string inputstr = "a";
             //string inputstr = "Å";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
@@ -257,7 +260,7 @@ namespace SampleWinForms
         void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "Render with PixelFarm";
-            this.lstFontSizes.SelectedIndex = lstFontSizes.Items.Count - 2;
+            this.lstFontSizes.SelectedIndex = lstFontSizes.Items.Count - 3;
             //this.lstFontSizes.SelectedIndex = 0; 
             var installedFont = lstFontList.SelectedItem as InstalledFont;
             if (installedFont != null)
@@ -410,9 +413,10 @@ namespace SampleWinForms
             debugGlyphVisualizer.OffsetMinorX = chkMinorOffset.Checked;
             debugGlyphVisualizer.ShowTess = chkShowTess.Checked;
             debugGlyphVisualizer.DrawTrianglesAndEdges = this.chkDrawTriangles.Checked;
+            debugGlyphVisualizer.DrawEndLineHub = this.chkDrawLineHubConn.Checked;
             debugGlyphVisualizer.WalkCentroidBone = this.chkDrawCentroidBone.Checked;
             debugGlyphVisualizer.WalkGlyphBone = this.chkDrawGlyphBone.Checked;
-             
+
             debugGlyphVisualizer.DrawDynamicOutline = chkDynamicOutline.Checked;
             debugGlyphVisualizer.DrawRegenerateOutline = chkDrawRegenerateOutline.Checked;
             //------------------------------------------------------

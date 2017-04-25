@@ -22,15 +22,17 @@ namespace Typography.Rendering
         /// </summary>
         internal EdgeLine contactToEdge;
 
+
+        internal GlyphBoneJoint inside_joint;
 #if DEBUG
         public static int s_dbugTotalId;
         public readonly int dbugId = s_dbugTotalId++;
-        internal GlyphTriangle dbugOwner;
+
 #endif
-        GlyphTriangle ownerTriangle;
+        GlyphTriangle _ownerTriangle;
         internal EdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q, bool isOutside)
         {
-            this.ownerTriangle = ownerTriangle;
+            this._ownerTriangle = ownerTriangle;
             //------------------------------------
             //an edge line connects 2 glyph points.
             //it is created from triangulation process.
@@ -82,7 +84,7 @@ namespace Typography.Rendering
         public bool dbugNoPerpendicularBone { get; set; }
         public GlyphEdge dbugGlyphEdge { get; set; }
 #endif
-        internal GlyphTriangle OwnerTriangle { get { return this.ownerTriangle; } }
+
         public GlyphPoint GlyphPoint_P
         {
             get
@@ -103,6 +105,7 @@ namespace Typography.Rendering
             private set;
         }
 
+        internal GlyphTriangle OwnerTriangle { get { return this._ownerTriangle; } }
 
         public bool IsOutside
         {
@@ -160,6 +163,6 @@ namespace Typography.Rendering
                     p.e1 == edge ||
                     p.e2 == edge);
         }
-       
+
     }
 }

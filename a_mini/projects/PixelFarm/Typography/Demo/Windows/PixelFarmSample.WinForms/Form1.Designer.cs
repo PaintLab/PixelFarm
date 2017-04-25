@@ -63,6 +63,7 @@
             this.chkDrawTriangles = new System.Windows.Forms.CheckBox();
             this.chkDrawRegenerateOutline = new System.Windows.Forms.CheckBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.chkDrawLineHubConn = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -398,11 +399,24 @@
             this.treeView1.Size = new System.Drawing.Size(393, 349);
             this.treeView1.TabIndex = 56;
             // 
+            // chkDrawLineHubConn
+            // 
+            this.chkDrawLineHubConn.AutoSize = true;
+            this.chkDrawLineHubConn.Checked = true;
+            this.chkDrawLineHubConn.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDrawLineHubConn.Location = new System.Drawing.Point(827, 275);
+            this.chkDrawLineHubConn.Name = "chkDrawLineHubConn";
+            this.chkDrawLineHubConn.Size = new System.Drawing.Size(122, 17);
+            this.chkDrawLineHubConn.TabIndex = 57;
+            this.chkDrawLineHubConn.Text = "Draw LineHub Conn";
+            this.chkDrawLineHubConn.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 857);
+            this.Controls.Add(this.chkDrawLineHubConn);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.chkDrawRegenerateOutline);
             this.Controls.Add(this.chkDrawTriangles);
@@ -483,6 +497,7 @@
         private System.Windows.Forms.CheckBox chkDrawTriangles;
         private System.Windows.Forms.CheckBox chkDrawRegenerateOutline;
         private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.CheckBox chkDrawLineHubConn;
     }
 }
 

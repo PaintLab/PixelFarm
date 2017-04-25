@@ -33,49 +33,50 @@ namespace Typography.Rendering
             List<CentroidLineHub> centroidLineHubs = _dynamicOutline.dbugGetCentroidLineHubs();
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
-                Dictionary<GlyphTriangle, GlyphCentroidLine> branches = lineHub.GetAllBranches();
-                Vector2 hubCenter = lineHub.GetCenterPos();
+                Dictionary<GlyphTriangle, CentroidLine> lines = lineHub.GetAllCentroidLines();
+                Vector2 hubCenter = lineHub.CalculateAvgHeadPosition();
 
                 OnBegingLineHub(hubCenter.X, hubCenter.Y);
-                foreach (GlyphCentroidLine branch in branches.Values)
+                foreach (CentroidLine line in lines.Values)
                 {
-                    int lineCount = branch.pairs.Count;
-                    for (int i = 0; i < lineCount; ++i)
+                    List<GlyphBoneJoint> joints = line._joints;
+                    int pairCount = joints.Count;
+
+                    for (int i = 0; i < pairCount; ++i)
                     {
-                        GlyphCentroidPair pair = branch.pairs[i];
+                        GlyphBoneJoint joint = joints[i];
                         if (WalkCentroidBone)
                         {
                             double px, py, qx, qy;
-                            pair.GetLineCoords(out px, out py, out qx, out qy);
+
+                            joint.dbugGetCentroidBoneCenters(out px, out py, out qx, out qy);
                             OnCentroidLine(px, py, qx, qy);
                             //--------------------------------------------------
-                            if (pair.BoneJoint.TipEdgeP != null)
+                            if (joint.TipEdgeP != null)
                             {
-                                Vector2 pos = pair.BoneJoint.TipPointP;
+                                Vector2 pos = joint.TipPointP;
                                 OnCentroidLineTip_P(px, py, pos.X, pos.Y);
                             }
-                            if (pair.BoneJoint.TipEdgeQ != null)
+                            if (joint.TipEdgeQ != null)
                             {
-                                Vector2 pos = pair.BoneJoint.TipPointQ;
+                                Vector2 pos = joint.TipPointQ;
                                 OnCentroidLineTip_Q(qx, qy, pos.X, pos.Y);
-                            } 
+                            }
                         }
                         if (WalkGlyphBone)
                         {
-                            OnBoneJoint(pair.BoneJoint);
+                            OnBoneJoint(joint);
                         }
                     }
                     if (WalkGlyphBone)
                     {
                         //draw bone list
-                        DrawBoneLinks(branch);
+                        DrawBoneLinks(line);
                     }
                 }
                 //
                 OnEndLineHub(hubCenter.X, hubCenter.Y, lineHub.GetHeadConnectedJoint());
-            }
-
-
+            } 
             //----------------
 
             List<GlyphContour> cnts = _dynamicOutline._contours;
@@ -84,13 +85,16 @@ namespace Typography.Rendering
             {
                 GlyphContour cnt = cnts[i];
                 List<GlyphEdge> edgeLines = cnt.edges;
-                int n = edgeLines.Count;
-                for (int m = 0; m < n; ++m)
+                if (edgeLines != null)
                 {
-                    GlyphEdge e = edgeLines[m];
-                    Vector2 cut_p = e.CutPoint_P;
-                    Vector2 cut_q = e.CutPoint_Q;
-                    OnGlyphEdgeN(cut_p.X, cut_p.Y, cut_q.X, cut_p.Y);
+                    int n = edgeLines.Count;
+                    for (int m = 0; m < n; ++m)
+                    {
+                        GlyphEdge e = edgeLines[m];
+                        Vector2 cut_p = e.Pos_P;
+                        Vector2 cut_q = e.Pos_Q;
+                        OnGlyphEdgeN(cut_p.X, cut_p.Y, cut_q.X, cut_p.Y);
+                    }
                 }
 
                 //List<GlyphPoint> pnts = cnt.flattenPoints;
@@ -108,7 +112,7 @@ namespace Typography.Rendering
 #endif
 
         }
-        void DrawBoneLinks(GlyphCentroidLine branch)
+        void DrawBoneLinks(CentroidLine branch)
         {
             List<GlyphBone> glyphBones = branch.bones;
             int glyphBoneCount = glyphBones.Count;
