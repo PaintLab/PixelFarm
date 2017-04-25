@@ -501,7 +501,7 @@ namespace Typography.Rendering
 
 
     static class CentroidLineExtensions
-    {
+    {  //utils
 
         public static Vector2 GetHeadPosition(this CentroidLine line)
         {
@@ -518,7 +518,7 @@ namespace Typography.Rendering
                 return bones[0].JointA.Position;
             }
         }
-        //utils
+
         public static Vector2 CalculateAvgHeadPosition(this CentroidLineHub lineHub)
         {
             Dictionary<GlyphTriangle, CentroidLine> _lines = lineHub.GetAllCentroidLines();
