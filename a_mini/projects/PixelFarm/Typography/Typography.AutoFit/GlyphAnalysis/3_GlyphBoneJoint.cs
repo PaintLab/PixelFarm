@@ -48,14 +48,14 @@ namespace Typography.Rendering
         {
             get
             {
-                return _p_contact_edge.dbugOwner;
+                return _p_contact_edge.OwnerTriangle;
             }
         }
         internal GlyphTriangle Q_Tri
         {
             get
             {
-                return _q_contact_edge.dbugOwner;
+                return _q_contact_edge.OwnerTriangle;
             }
         }
         /// <summary>
@@ -143,6 +143,19 @@ namespace Typography.Rendering
 
         public EdgeLine dbugGetEdge_P() { return _p_contact_edge; }
         public EdgeLine dbugGetEdge_Q() { return _q_contact_edge; }
+
+
+        public void dbugGetCentroidBoneCenters(out double cx0, out double cy0, out double cx1, out double cy1)
+        {
+
+            //for debug
+            GlyphTriangle p_tri = this.P_Tri;
+            cx0 = p_tri.CentroidX;
+            cy0 = p_tri.CentroidY;
+            GlyphTriangle q_tri = this.Q_Tri;
+            cx1 = q_tri.CentroidX;
+            cy1 = q_tri.CentroidY;
+        }
 #endif
 
     }

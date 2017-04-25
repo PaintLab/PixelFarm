@@ -40,12 +40,7 @@ namespace Typography.Rendering
             //if the order of original glyph point is CW
             //we may want to reverse the order of edge creation :
             //p2->p1->p0 
-
-#if DEBUG
-            //TODO: review here again
-            e0.dbugOwner = e1.dbugOwner = e2.dbugOwner = this;
-        
-#endif
+  
 
             //link back 
             tri.userData = this;

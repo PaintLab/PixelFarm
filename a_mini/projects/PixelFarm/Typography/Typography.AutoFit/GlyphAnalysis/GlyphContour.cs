@@ -129,23 +129,7 @@ namespace Typography.Rendering
             }
             return isClockwise;
         }
-
-#if DEBUG
-        internal void dbugCheckGlyphPoints()
-        {
-            //int j = flattenPoints.Count;
-            //GlyphPoint p = null;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    p = flattenPoints[i];
-            //    if (p.E0 == null || p.E1 == null)
-            //    {
-
-            //    }
-            //}
-
-        }
-#endif
+ 
         internal void CreateGlyphEdges()
         {
             int lim = flattenPoints.Count - 1;

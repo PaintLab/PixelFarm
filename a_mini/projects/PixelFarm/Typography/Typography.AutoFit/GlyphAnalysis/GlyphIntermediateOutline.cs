@@ -21,6 +21,20 @@ namespace Typography.Rendering
         public GlyphIntermediateOutline(Polygon polygon, List<GlyphContour> contours)
         {
             this._contours = contours;
+
+            //1. create triangle list from given DelaunayTriangle polygon.
+            CreateTriangleList(polygon);
+            //2. create centroid line hubs
+            CreateCentroidLineHubs();
+            //3. create bone joints
+            CreateBoneJoints();
+            //4. create bones 
+            CreateBones();
+            //5. create glyph edges          
+            CreateGlyphEdges();
+        }
+        void CreateTriangleList(Polygon polygon)
+        {
 #if DEBUG
             this._dbugpolygon = polygon; //for debug only ***
             EdgeLine.s_dbugTotalId = 0;//reset
@@ -34,22 +48,8 @@ namespace Typography.Rendering
                 delnTri.MarkAsActualTriangle();
                 _triangles.Add(new GlyphTriangle(delnTri)); //all triangles are created from Triangulation process
             }
-            //--------------------
-#if DEBUG
-            dbugCheckGlyphPoints();
-#endif
 
-            //--------------------
-            //2. create centroid line hubs
-            CreateCentroidLineHubs();
-            //3. create bone joints
-            CreateBoneJoints();
-            //4. create bones 
-            CreateBones();
-            //5. create glyph edges          
-            CreateGlyphEdges();
         }
-
         void CreateCentroidLineHubs()
         {
             //----------------------------
@@ -170,17 +170,7 @@ namespace Typography.Rendering
             //
 
         }
-#if DEBUG
-        void dbugCheckGlyphPoints()
-        {
-            List<GlyphContour> contours = this._contours;
-            int j = contours.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                contours[i].dbugCheckGlyphPoints();
-            }
-        }
-#endif
+
         void CreateGlyphEdges()
         {
             List<GlyphContour> contours = this._contours;
@@ -201,7 +191,7 @@ namespace Typography.Rendering
         /// <param name="hubs"></param>
         static void LinkEachLineHubTogether(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
         {
-            int j = hubs.Count; 
+            int j = hubs.Count;
             for (int i = 0; i < j; ++i)
             {
                 CentroidLineHub otherHub = hubs[i];
