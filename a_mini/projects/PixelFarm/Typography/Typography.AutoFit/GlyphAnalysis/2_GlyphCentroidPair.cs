@@ -37,7 +37,7 @@ namespace Typography.Rendering
         }
 
 
-      
+
         public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
         /// <summary>
         /// add information about edges to each triangle and create BoneJoint and Tip
@@ -85,64 +85,6 @@ namespace Typography.Rendering
             //then, we mark outside edge compare to the known inside edge          
             MarkProperOppositeOutsideEdges(p, _boneJoint._p_contact_edge, true);
             MarkProperOppositeOutsideEdges(q, _boneJoint._q_contact_edge, false);
-        }
-
-        /// <summary>
-        /// evaluate and update tip info
-        /// </summary>
-        internal void UpdateTips()
-        {
-
-            //GlyphBoneJoint joint = pair.BoneJoint;
-            //get another edge for endtip
-
-            //if (IsOwnerOf(pair.p, joint.TipEdgeP))
-            //{
-            //    //tip edge is from p side
-            //    //so another side is q.
-
-            //    Vector2 tipPoint = joint.TipPointP;
-            //    GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdgeP);
-            //    pair.P_Tip = tip;
-
-            //    if (twoside)
-            //    {
-            //        EdgeLine tipEdge = FindTip(pair, pair.q);
-            //        if (tipEdge == null) throw new NotSupportedException();
-            //        //-----
-            //        tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
-            //        pair.Q_Tip = tip;
-            //    }
-            //}
-            //else if (IsOwnerOf(pair.q, joint.TipEdgeP))
-            //{
-
-            //    Vector2 tipPoint = joint.TipPointP;
-            //    GlyphTip tip = new GlyphTip(pair, tipPoint, joint.TipEdgeP);
-            //    pair.Q_Tip = tip;
-
-
-            //    //tip edge is from q side
-            //    //so another side is p.
-
-            //    if (twoside)
-            //    {
-            //        //find proper tip edge
-            //        EdgeLine tipEdge = FindTip(pair, pair.p);
-            //        if (tipEdge == null)
-            //        {
-            //            //some time no tip found ***
-            //            return;
-            //        }
-            //        //-----
-            //        tip = new GlyphTip(pair, tipEdge.GetMidPoint(), tipEdge);
-            //        pair.P_Tip = tip;
-            //    }
-            //}
-            //else
-            //{
-            //    throw new NotSupportedException();
-            //}
         }
 
 
@@ -272,53 +214,8 @@ namespace Typography.Rendering
             {
                 tipEdge = outside1;
                 notTipEdge = outside0;
-            }
+            } 
 
-
-
-            ////---------------------
-            //switch (slopeKind)
-            //{
-            //    default: throw new NotSupportedException();
-            //    case LineSlopeKind.Horizontal:
-            //        if (outside0.SlopeKind == LineSlopeKind.Vertical)
-            //        {
-            //            tipEdge = outside0;
-            //            notTipEdge = outside1;
-            //        }
-            //        else
-            //        {
-            //            tipEdge = outside1;
-            //            notTipEdge = outside0;
-            //        }
-            //        break;
-            //    case LineSlopeKind.Vertical:
-            //        if (outside0.SlopeKind == LineSlopeKind.Horizontal)
-            //        {
-            //            tipEdge = outside0;
-            //            notTipEdge = outside1;
-            //        }
-            //        else
-            //        {
-            //            tipEdge = outside1;
-            //            notTipEdge = outside0;
-            //        }
-            //        break;
-            //    case LineSlopeKind.Other:
-            //        //select 1
-            //        //choose the horizontal one 
-            //        if (outside0.SlopeKind == LineSlopeKind.Horizontal)
-            //        {
-            //            tipEdge = outside0;
-            //            notTipEdge = outside1;
-            //        }
-            //        else
-            //        {
-            //            tipEdge = outside1;
-            //            notTipEdge = outside0;
-            //        }
-            //        break;
-            //}
         }
         /// <summary>
         /// add information about each edge of a triangle, compare to the contactEdge of a ownerEdgeJoint

@@ -107,17 +107,17 @@ namespace Typography.Rendering
 
                             currentCentroidLineHub = lineHub;
                             //ensure start triangle of the branch
-                            lineHub.SetBranch(tri);
+                            lineHub.SetCurrentCentroidLine(tri);
                             //create centroid line and add to currrent hub 
                             currentCentroidLineHub.AddCentroidPair(new GlyphCentroidPair(connectWithPrevTri, tri));
                         }
                         else
                         {
                             //add centroid line to current multifacet joint 
-                            if (currentCentroidLineHub.BranchCount == 0)
+                            if (currentCentroidLineHub.LineCount == 0)
                             {
                                 //ensure start triangle of the branch
-                                currentCentroidLineHub.SetBranch(tri);
+                                currentCentroidLineHub.SetCurrentCentroidLine(tri);
                             }
                             //create centroid line and add to currrent hub
                             currentCentroidLineHub.AddCentroidPair(new GlyphCentroidPair(connectWithPrevTri, tri));
@@ -126,7 +126,7 @@ namespace Typography.Rendering
                     }
                 }
             }
-        
+
             //copy 
             _lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values);
 
@@ -201,9 +201,7 @@ namespace Typography.Rendering
         /// <param name="hubs"></param>
         static void LinkEachLineHubTogether(CentroidLineHub analyzingHub, List<CentroidLineHub> hubs)
         {
-            int j = hubs.Count;
-            System.Numerics.Vector2 hubHeadPos = analyzingHub.GetCenterPos();
-
+            int j = hubs.Count; 
             for (int i = 0; i < j; ++i)
             {
                 CentroidLineHub otherHub = hubs[i];
@@ -216,7 +214,7 @@ namespace Typography.Rendering
                 GlyphBoneJoint foundOnJoint;
                 //from a given hub,
                 //find bone joint that close to the main triangle for of the analyzingHub
-                if (otherHub.FindBoneJoint(analyzingHub.MainTriangle, hubHeadPos, out foundOnBr, out foundOnJoint))
+                if (otherHub.FindBoneJoint(analyzingHub.StartTriangle, out foundOnBr, out foundOnJoint))
                 {
                     //create a new bone joint 
                     // FindNearestEdge(analyzingHub.MainTriangle, foundOnJoint); 

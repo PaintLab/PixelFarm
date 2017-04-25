@@ -33,8 +33,8 @@ namespace Typography.Rendering
             List<CentroidLineHub> centroidLineHubs = _dynamicOutline.dbugGetCentroidLineHubs();
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
-                Dictionary<GlyphTriangle, GlyphCentroidLine> lines = lineHub.GetAllBranches();
-                Vector2 hubCenter = lineHub.GetCenterPos();
+                Dictionary<GlyphTriangle, GlyphCentroidLine> lines = lineHub.GetAllCentroidLines();
+                Vector2 hubCenter = lineHub.CalculateAvgHeadPosition();
 
                 OnBegingLineHub(hubCenter.X, hubCenter.Y);
                 foreach (GlyphCentroidLine line in lines.Values)

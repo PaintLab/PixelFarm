@@ -66,13 +66,13 @@ namespace Typography.Rendering
             //not found
             return null;
         }
+
         /// <summary>
         /// find nearest joint that contains tri 
         /// </summary>
-        /// <param name="pos"></param>
         /// <param name="tri"></param>
         /// <returns></returns>
-        public GlyphBoneJoint FindNearestJoint(Vector2 pos, GlyphTriangle tri)
+        public GlyphBoneJoint FindNearestJoint(GlyphTriangle tri)
         {
 
             for (int i = pairs.Count - 1; i >= 0; --i)
@@ -141,8 +141,9 @@ namespace Typography.Rendering
         }
     }
 
+
     /// <summary>
-    /// a collection of centroid line
+    /// a collection of centroid line and bone joint
     /// </summary>
     class CentroidLineHub
     {
@@ -151,7 +152,7 @@ namespace Typography.Rendering
         //and can have more than 1 centroid line.
         //-----------------------------------------------
 
-        readonly GlyphTriangle mainTri;
+        readonly GlyphTriangle startTriangle;
         //each centoid line start with main triangle
 
         Dictionary<GlyphTriangle, GlyphCentroidLine> _lines = new Dictionary<GlyphTriangle, GlyphCentroidLine>();
@@ -164,45 +165,41 @@ namespace Typography.Rendering
         GlyphCentroidLine currentLine;
         GlyphTriangle currentBranchTri;
 
-        public CentroidLineHub(GlyphTriangle mainTri)
+        public CentroidLineHub(GlyphTriangle startTriangle)
         {
-            this.mainTri = mainTri;
+
+            this.startTriangle = startTriangle;
         }
-        public GlyphTriangle MainTriangle
+        public GlyphTriangle StartTriangle
         {
-            get { return mainTri; }
+            get { return startTriangle; }
         }
 
-        public Vector2 GetCenterPos()
+
+
+        /// <summary>
+        /// set current centroid line to a centroid line that starts with triangle of centroid-line-head
+        /// </summary>
+        /// <param name="triOfCentroidLineHead"></param>
+        public void SetCurrentCentroidLine(GlyphTriangle triOfCentroidLineHead)
         {
-            int j = _lines.Count;
-            if (j == 0) return Vector2.Zero;
-            //---------------------------------
-            double cx = 0;
-            double cy = 0;
-            foreach (GlyphCentroidLine branch in _lines.Values)
-            {
-                Vector2 headpos = branch.GetHeadPosition();
-                cx += headpos.X;
-                cy += headpos.Y;
-            }
-            return new Vector2((float)(cx / j), (float)(cy / j));
-        }
-        public void SetBranch(GlyphTriangle tri)
-        {
-            if (currentBranchTri != tri)
+            //this method is used during centroid line hub creation
+            if (currentBranchTri != triOfCentroidLineHead)
             {
                 //check if we have already create it
-                if (!_lines.TryGetValue(tri, out currentLine))
+                if (!_lines.TryGetValue(triOfCentroidLineHead, out currentLine))
                 {
                     //if not found then create new
-                    currentLine = new GlyphCentroidLine(tri);
-                    _lines.Add(tri, currentLine);
+                    currentLine = new GlyphCentroidLine(triOfCentroidLineHead);
+                    _lines.Add(triOfCentroidLineHead, currentLine);
                 }
-                currentBranchTri = tri;
+                currentBranchTri = triOfCentroidLineHead;
             }
         }
-        public int BranchCount
+        /// <summary>
+        /// member centoid line count
+        /// </summary>
+        public int LineCount
         {
             get
             {
@@ -210,13 +207,12 @@ namespace Typography.Rendering
             }
         }
         /// <summary>
-        /// add centroid line to current centroid line
+        /// add centroid pair to current centroid line
         /// </summary>
         /// <param name="pair"></param>
         public void AddCentroidPair(GlyphCentroidPair pair)
         {
-            //add centroid pair to line
-
+            //add centroid pair to line 
             currentLine.AddCentroidPair(pair);
         }
         /// <summary>
@@ -531,7 +527,7 @@ namespace Typography.Rendering
 
         }
 
-        public Dictionary<GlyphTriangle, GlyphCentroidLine> GetAllBranches()
+        public Dictionary<GlyphTriangle, GlyphCentroidLine> GetAllCentroidLines()
         {
             return _lines;
         }
@@ -548,13 +544,13 @@ namespace Typography.Rendering
             }
             return null;
         }
-        public bool FindBoneJoint(GlyphTriangle tri, Vector2 pos,
+        public bool FindBoneJoint(GlyphTriangle tri,
         out GlyphCentroidLine foundOnBranch,
         out GlyphBoneJoint foundOnJoint)
         {
             foreach (GlyphCentroidLine line in _lines.Values)
             {
-                if ((foundOnJoint = line.FindNearestJoint(pos, tri)) != null)
+                if ((foundOnJoint = line.FindNearestJoint(tri)) != null)
                 {
                     foundOnBranch = line;
                     return true;
@@ -597,9 +593,24 @@ namespace Typography.Rendering
 
 
     static class GlyphCentroidLineExtensions
-    {
+    {  //utils
+        public static Vector2 CalculateAvgHeadPosition(this CentroidLineHub lineHub)
+        {
+            Dictionary<GlyphTriangle, GlyphCentroidLine> _lines = lineHub.GetAllCentroidLines();
+            int j = _lines.Count;
+            if (j == 0) return Vector2.Zero;
+            //---------------------------------
+            double cx = 0;
+            double cy = 0;
+            foreach (GlyphCentroidLine line in _lines.Values)
+            {
+                Vector2 headpos = line.GetHeadPosition();
+                cx += headpos.X;
+                cy += headpos.Y;
+            }
+            return new Vector2((float)(cx / j), (float)(cy / j));
+        }
 
-        //utils
         public static EdgeLine FindTip(this GlyphCentroidPair pair, GlyphTriangle triangle)
         {
             GlyphBoneJoint boneJoint = pair.BoneJoint;
