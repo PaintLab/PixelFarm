@@ -22,10 +22,10 @@ namespace Typography.Rendering
         public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
         {
 #if DEBUG
-            if (this.dbugId == 6)
-            {
+            //if (this.dbugId == 6)
+            //{
 
-            }
+            //}
             if (a == b)
             {
                 throw new NotSupportedException();
@@ -43,10 +43,10 @@ namespace Typography.Rendering
         }
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
         {
-            if (this.dbugId == 6)
-            {
+            //if (this.dbugId == 6)
+            //{
 
-            }
+            //}
             JointA = a;
             TipEdge = tipEdge;
 
@@ -57,6 +57,21 @@ namespace Typography.Rendering
 
             a.AddAssociateGlyphBoneToEndPoint(this);
             tipEdge.AddAssociateGlyphBoneToEndPoint(this);
+        }
+        public Vector2 GetVector()
+        {
+            if (this.JointB != null)
+            {
+                return JointB.Position - JointA.Position;
+            }
+            else if (this.TipEdge != null)
+            {
+                return TipEdge.GetMidPoint() - JointA.Position;
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
         }
         public bool IsTipBone
         {
@@ -171,13 +186,43 @@ namespace Typography.Rendering
 
         public static Vector2 GetBoneVector(this GlyphBone bone)
         {
+            //if (bone.JointB != null)
+            //{
+            //    var b_pos = bone.JointB.Position;
+            //    var a_pos = bone.JointA.Position;
+            //    return new Vector2(
+            //            Math.Abs(b_pos.X - a_pos.X),
+            //            Math.Abs(b_pos.Y - a_pos.Y));
+            //}
+            //else if (bone.TipEdge != null)
+            //{
+            //    var b_pos = bone.TipEdge.GetMidPoint();
+            //    var a_pos = bone.JointA.Position;
+            //    return new Vector2(
+            //            Math.Abs(b_pos.X - a_pos.X),
+            //             Math.Abs(b_pos.Y - a_pos.Y));
+            //    return bone.TipEdge.GetMidPoint() - bone.JointA.Position;
+            //}
+            //else
+            //{
+            //    return Vector2.Zero;
+            //}
+
             if (bone.JointB != null)
             {
-                return bone.JointB.Position - bone.JointA.Position;
+                var b_pos = bone.JointB.Position;
+                var a_pos = bone.JointA.Position;
+                return new Vector2(
+                        b_pos.X - a_pos.X,
+                        b_pos.Y - a_pos.Y);
             }
             else if (bone.TipEdge != null)
             {
-                return bone.TipEdge.GetMidPoint() - bone.JointA.Position;
+                var b_pos = bone.TipEdge.GetMidPoint();
+                var a_pos = bone.JointA.Position;
+                return new Vector2(
+                      b_pos.X - a_pos.X,
+                      b_pos.Y - a_pos.Y);
             }
             else
             {

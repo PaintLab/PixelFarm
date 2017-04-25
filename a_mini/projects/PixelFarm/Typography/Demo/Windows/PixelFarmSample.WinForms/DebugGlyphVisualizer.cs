@@ -236,7 +236,6 @@ namespace SampleWinForms.UI
                 DrawPointKind(painter, u_data_p, scale);
                 DrawPointKind(painter, u_data_q, scale);
                 _infoView.ShowEdge(edge);
-
                 switch (edge.SlopeKind)
                 {
                     default:
@@ -329,8 +328,9 @@ namespace SampleWinForms.UI
                             PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
                             switch (p_bones.CutPointKind)
                             {
+
                                 case BoneCutPointKind.NotPendicularCutPoint:
-                                    cc = PixelFarm.Drawing.Color.Yellow;
+                                    cc = PixelFarm.Drawing.Color.Aqua;
                                     break;
                                 case BoneCutPointKind.PerpendicularToBoneGroup:
                                     cc = PixelFarm.Drawing.Color.Green;
@@ -338,6 +338,18 @@ namespace SampleWinForms.UI
                             }
                             Vector2 v2 = new Vector2(q.x, q.y);
                             Vector2 cutpoint = p_bones.CutPoint;
+
+
+                            //if (p_bones.CutPointKind == BoneCutPointKind.PerpendicularToSingleBone)
+                            //{
+                            //    double tan2 = System.Math.Atan2(cutpoint.Y - v2.Y, cutpoint.X - v2.X);
+                            //    double tan3 = Math.Atan2(1, 0);
+                            //    if (tan2 != tan3)
+                            //    {
+
+                            //    }
+                            //}
+
                             painter.Line(
                                 v2.X * _pxscale, v2.Y * _pxscale,
                                 cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
@@ -350,14 +362,26 @@ namespace SampleWinForms.UI
                             switch (q_bones.CutPointKind)
                             {
                                 case BoneCutPointKind.NotPendicularCutPoint:
-                                    cc = PixelFarm.Drawing.Color.Yellow;
+                                    cc = PixelFarm.Drawing.Color.Aqua;
                                     break;
                                 case BoneCutPointKind.PerpendicularToBoneGroup:
                                     cc = PixelFarm.Drawing.Color.Green;
                                     break;
                             }
                             Vector2 v2 = new Vector2(p.x, p.y);
+
                             Vector2 cutpoint = q_bones.CutPoint;
+                            //if (q_bones.CutPointKind == BoneCutPointKind.PerpendicularToSingleBone)
+                            //{
+                            //    double tan2 = System.Math.Atan2(cutpoint.Y - v2.Y, cutpoint.X - v2.X);
+                            //    double tan3 = Math.Atan2(1, 0);
+
+                            //    if (tan2 != tan3)
+                            //    {
+
+                            //    }
+                            //}
+
                             painter.Line(
                                 v2.X * _pxscale, v2.Y * _pxscale,
                                 cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
@@ -369,22 +393,22 @@ namespace SampleWinForms.UI
             }
             else
             {
-                switch (edge.SlopeKind)
-                {
-                    default:
-                        painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
-                        break;
-                    case LineSlopeKind.Vertical:
-                        painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
-                        break;
-                    case LineSlopeKind.Horizontal:
-                        painter.StrokeColor = PixelFarm.Drawing.Color.Yellow;
-                        break;
-                }
+                //inside edge
+                //switch (edge.SlopeKind)
+                //{
+                //    default:
+                //        painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
+                //        break;
+                //    case LineSlopeKind.Vertical:
+                //        painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
+                //        break;
+                //    case LineSlopeKind.Horizontal:
+                //        painter.StrokeColor = PixelFarm.Drawing.Color.Yellow;
+                //        break;
+                //}
+                painter.StrokeColor = PixelFarm.Drawing.Color.Gray;
                 painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
             }
-            //-----------
-
         }
 
         void DrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)

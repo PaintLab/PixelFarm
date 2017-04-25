@@ -187,7 +187,7 @@ namespace Typography.Rendering
         Unknown,
         PerpendicularToSingleBone,
         PerpendicularToBoneGroup,
-        NotPendicularCutPoint,
+        NotPendicularCutPoint
 
     }
     public class AssocBoneCollection
@@ -268,6 +268,24 @@ namespace Typography.Rendering
                 this.cutpoint = cutpoint;
             }
         }
+        public static double AngleBetween(Vector2 vector1, Vector2 vector2)
+        {
+            double rad1 = System.Math.Atan2(vector1.Y, vector1.X);
+            double rad2 = System.Math.Atan2(vector2.Y, vector2.X);
+            //we want to find diff
+
+            if (rad1 < 0)
+            {
+                rad1 = System.Math.PI + rad1;
+            }
+            if (rad2 < 0)
+            {
+                rad2 = System.Math.PI + rad2;
+            }
+
+            return rad1 - rad2;
+        }
+        const float Epsilon = 0.0001f;
         //
         internal void EvaluatePerpendicularBone(GlyphPoint ownerPoint)
         {
@@ -285,22 +303,37 @@ namespace Typography.Rendering
             Vector2 o_point = new Vector2(ownerPoint.x, ownerPoint.y);
             int b_count = _assocBoneList.Count;
             int perpendcut_count = 0;
+
             for (int i = 0; i < b_count; ++i)
             {
                 GlyphBone b = _assocBoneList[i];
-                if (MyMath.FindPerpendicularCutPoint(b, o_point, out _cutPoint))
+                Vector2 tempCutPoint;
+                if (MyMath.FindPerpendicularCutPoint(b, o_point, out tempCutPoint))
                 {
+                    //one point can ha
+                    _cutPoint = tempCutPoint;
                     _startIndexAt = _endIndexAt = i;
                     this.CutPointKind = BoneCutPointKind.PerpendicularToSingleBone;
                     tmpCutPoints.Add(new TmpCutPoint(i, _cutPoint));
                     perpendcut_count++;
+                    break;
                 }
             }
-
+            //---------------------------------------------------------
             if (perpendcut_count > 1)
             {
+                //1.
                 this.CutPointKind = BoneCutPointKind.NotPendicularCutPoint;
                 _startIndexAt = _endIndexAt = 0;
+            }
+            else
+            {
+                //
+
+
+
+
+
             }
             //------------------------------------
             if (_startIndexAt > -1) { return; }
