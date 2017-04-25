@@ -18,9 +18,7 @@ namespace Typography.Rendering
 
             //each triangle has 1 centroid point
             //a centrod line connects between 2 adjacent triangles via centroid 
-            //
-            //
-            //
+
             //p triangle=> (x0,y0)  (centroid of p)
             //q triangle=> (x1,y1)  (centroid of q)
             //a centroid line  move from p to q  
@@ -28,21 +26,13 @@ namespace Typography.Rendering
             this.q = q;
         }
 
-        internal bool IsAdjacentTo(GlyphCentroidPair another)
-        {
-            return this.p == another.p ||
-                    this.p == another.q ||
-                    this.q == another.p ||
-                    this.q == another.q;
-        }
 
 
-
-        public GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
+        GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
         /// <summary>
         /// add information about edges to each triangle and create BoneJoint and Tip
         /// </summary>
-        internal void AnalyzeEdgesAndCreateBoneJoint()
+        public GlyphBoneJoint AnalyzeEdgesAndCreateBoneJoint()
         {
 
 #if DEBUG
@@ -85,6 +75,8 @@ namespace Typography.Rendering
             //then, we mark outside edge compare to the known inside edge          
             MarkProperOppositeOutsideEdges(p, _boneJoint._p_contact_edge, true);
             MarkProperOppositeOutsideEdges(q, _boneJoint._q_contact_edge, false);
+
+            return this.BoneJoint;
         }
 
 
@@ -214,7 +206,7 @@ namespace Typography.Rendering
             {
                 tipEdge = outside1;
                 notTipEdge = outside0;
-            } 
+            }
 
         }
         /// <summary>

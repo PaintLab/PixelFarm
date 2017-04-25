@@ -12,8 +12,11 @@ namespace Typography.Rendering
     {
         //at least 1 pair 
 
-        public List<GlyphCentroidPair> pairs = new List<GlyphCentroidPair>();
+
+        internal List<GlyphCentroidPair> _n_pairs = new List<GlyphCentroidPair>();
+        public List<GlyphBoneJoint> _joints = new List<GlyphBoneJoint>();
         public List<GlyphBone> bones = new List<GlyphBone>();
+
         internal readonly GlyphTriangle startTri;
         internal CentroidLine(GlyphTriangle startTri)
         {
@@ -26,7 +29,7 @@ namespace Typography.Rendering
         /// <param name="pair"></param>
         public void AddCentroidPair(GlyphCentroidPair pair)
         {
-            pairs.Add(pair);
+            _n_pairs.Add(pair);
         }
 
         /// <summary>
@@ -34,21 +37,21 @@ namespace Typography.Rendering
         /// </summary>
         public void AnalyzeEdgesAndCreateBoneJoints()
         {
-            List<GlyphCentroidPair> pairs = this.pairs;
+            List<GlyphCentroidPair> pairs = this._n_pairs;
             int j = pairs.Count;
             for (int i = 0; i < j; ++i)
             {
                 //create bone joint (and tip edge) in each pair                
-                pairs[i].AnalyzeEdgesAndCreateBoneJoint();
+                _joints.Add(pairs[i].AnalyzeEdgesAndCreateBoneJoint());
             }
         }
 
 
         public GlyphCentroidPair FindNearestPair(GlyphTriangle tri)
         {
-            for (int i = pairs.Count - 1; i >= 0; --i)
+            for (int i = _n_pairs.Count - 1; i >= 0; --i)
             {
-                GlyphCentroidPair pair = pairs[i];
+                GlyphCentroidPair pair = _n_pairs[i];
                 if (pair.p.IsConnectedWith(tri) ||
                     pair.q.IsConnectedWith(tri))
                 {
@@ -68,9 +71,9 @@ namespace Typography.Rendering
         public GlyphBoneJoint FindNearestJoint(GlyphTriangle tri)
         {
 
-            for (int i = pairs.Count - 1; i >= 0; --i)
+            for (int i = _joints.Count - 1; i >= 0; --i)
             {
-                GlyphBoneJoint joint = pairs[i].BoneJoint;
+                GlyphBoneJoint joint = _joints[i];
                 //each pair has 1 bone joint 
                 //once we have 1 candidate
                 if (joint.ComposeOf(tri))
@@ -105,7 +108,7 @@ namespace Typography.Rendering
 
         //-----------------------------------------------
 
-        //
+
         CentroidLine currentLine;
         GlyphTriangle currentBranchTri;
 
@@ -178,9 +181,9 @@ namespace Typography.Rendering
         {
             foreach (CentroidLine line in _lines.Values)
             {
-                List<GlyphCentroidPair> pairList = line.pairs;
+                List<GlyphBoneJoint> jointlist = line._joints;
                 List<GlyphBone> glyphBones = line.bones;
-                int j = pairList.Count;
+                int j = jointlist.Count;
 
                 for (int i = 0; i < j; ++i)
                 {
@@ -189,36 +192,36 @@ namespace Typography.Rendering
                         //find connection from 
                         //first tri of  centroid line
                         //to other joint
-                        GlyphCentroidPair first_pair = pairList[i];
-                        GlyphTriangle firstTri = first_pair.p;
+                        GlyphBoneJoint firstJoint = jointlist[i];
+                        GlyphTriangle firstTri = firstJoint.P_Tri;
 
                         //test 3 edges, find edge that is inside
                         //and the joint is not the same as first_pair.BoneJoint
 
                         if (firstTri.e0.IsInside &&
                             firstTri.e0.inside_joint != null &&
-                            firstTri.e0.inside_joint != first_pair.BoneJoint)
+                            firstTri.e0.inside_joint != firstJoint)
                         {
                             //create connection 
-                            GlyphBone tipBone = new GlyphBone(firstTri.e0.inside_joint, first_pair.BoneJoint);
+                            GlyphBone tipBone = new GlyphBone(firstTri.e0.inside_joint, firstJoint);
                             newlyCreatedBones.Add(tipBone);
                             glyphBones.Add(tipBone);
                         }
                         //
                         if (firstTri.e1.IsInside &&
                             firstTri.e1.inside_joint != null &&
-                            firstTri.e1.inside_joint != first_pair.BoneJoint)
+                            firstTri.e1.inside_joint != firstJoint)
                         {
-                            GlyphBone tipBone = new GlyphBone(firstTri.e1.inside_joint, first_pair.BoneJoint);
+                            GlyphBone tipBone = new GlyphBone(firstTri.e1.inside_joint, firstJoint);
                             newlyCreatedBones.Add(tipBone);
                             glyphBones.Add(tipBone);
                         }
                         //
                         if (firstTri.e2.IsInside &&
                             firstTri.e2.inside_joint != null &&
-                            firstTri.e2.inside_joint != first_pair.BoneJoint)
+                            firstTri.e2.inside_joint != firstJoint)
                         {
-                            GlyphBone tipBone = new GlyphBone(firstTri.e2.inside_joint, first_pair.BoneJoint);
+                            GlyphBone tipBone = new GlyphBone(firstTri.e2.inside_joint, firstJoint);
                             newlyCreatedBones.Add(tipBone);
                             glyphBones.Add(tipBone);
                         }
@@ -227,8 +230,8 @@ namespace Typography.Rendering
 
                     //for each GlyphCentroidPair                    
                     //create bone that link the GlyphBoneJoint of the pair 
-                    GlyphCentroidPair pair = pairList[i];
-                    GlyphBoneJoint joint = pair.BoneJoint;
+
+                    GlyphBoneJoint joint = jointlist[i];
                     if (joint.TipEdgeP != null)
                     {
 
@@ -248,8 +251,7 @@ namespace Typography.Rendering
                     {
                         //not the last one 
                         //has tip end 
-                        GlyphCentroidPair nextline = pairList[i + 1];
-                        GlyphBoneJoint nextJoint = nextline.BoneJoint;
+                        GlyphBoneJoint nextJoint = jointlist[i + 1];
                         GlyphBone bone = new GlyphBone(joint, nextJoint);
                         newlyCreatedBones.Add(bone);
                         glyphBones.Add(bone);
@@ -260,64 +262,64 @@ namespace Typography.Rendering
                         if (j > 1)
                         {
 
-                            GlyphCentroidPair last_pair = pairList[j - 1];
-                            GlyphTriangle lastTri = last_pair.p;
+                            GlyphBoneJoint last_joint = jointlist[j - 1];
+                            GlyphTriangle lastTri = last_joint.P_Tri;
 
 
                             if (lastTri.e0.IsInside &&
                                 lastTri.e0.inside_joint != null &&
-                                lastTri.e0.inside_joint != last_pair.BoneJoint)
+                                lastTri.e0.inside_joint != last_joint)
                             {
                                 //create connection 
-                                GlyphBone tipBone = new GlyphBone(lastTri.e0.inside_joint, last_pair.BoneJoint);
+                                GlyphBone tipBone = new GlyphBone(lastTri.e0.inside_joint, last_joint);
                                 newlyCreatedBones.Add(tipBone);
                                 glyphBones.Add(tipBone);
                             }
                             //
                             if (lastTri.e1.IsInside &&
                                 lastTri.e1.inside_joint != null &&
-                                lastTri.e1.inside_joint != last_pair.BoneJoint)
+                                lastTri.e1.inside_joint != last_joint)
                             {
-                                GlyphBone tipBone = new GlyphBone(lastTri.e1.inside_joint, last_pair.BoneJoint);
+                                GlyphBone tipBone = new GlyphBone(lastTri.e1.inside_joint, last_joint);
                                 newlyCreatedBones.Add(tipBone);
                                 glyphBones.Add(tipBone);
                             }
                             //
                             if (lastTri.e2.IsInside &&
                                 lastTri.e2.inside_joint != null &&
-                                lastTri.e2.inside_joint != last_pair.BoneJoint)
+                                lastTri.e2.inside_joint != last_joint)
                             {
-                                GlyphBone tipBone = new GlyphBone(lastTri.e2.inside_joint, last_pair.BoneJoint);
+                                GlyphBone tipBone = new GlyphBone(lastTri.e2.inside_joint, last_joint);
                                 newlyCreatedBones.Add(tipBone);
                                 glyphBones.Add(tipBone);
                             }
                             //------------------
 
-                            lastTri = last_pair.q;
+                            lastTri = last_joint.Q_Tri;
                             if (lastTri.e0.IsInside &&
                                     lastTri.e0.inside_joint != null &&
-                                    lastTri.e0.inside_joint != last_pair.BoneJoint)
+                                    lastTri.e0.inside_joint != last_joint)
                             {
                                 //create connection 
-                                GlyphBone tipBone = new GlyphBone(lastTri.e0.inside_joint, last_pair.BoneJoint);
+                                GlyphBone tipBone = new GlyphBone(lastTri.e0.inside_joint, last_joint);
                                 newlyCreatedBones.Add(tipBone);
                                 glyphBones.Add(tipBone);
                             }
                             //
                             if (lastTri.e1.IsInside &&
                                 lastTri.e1.inside_joint != null &&
-                                lastTri.e1.inside_joint != last_pair.BoneJoint)
+                                lastTri.e1.inside_joint != last_joint)
                             {
-                                GlyphBone tipBone = new GlyphBone(lastTri.e1.inside_joint, last_pair.BoneJoint);
+                                GlyphBone tipBone = new GlyphBone(lastTri.e1.inside_joint, last_joint);
                                 newlyCreatedBones.Add(tipBone);
                                 glyphBones.Add(tipBone);
                             }
                             //
                             if (lastTri.e2.IsInside &&
                                 lastTri.e2.inside_joint != null &&
-                                lastTri.e2.inside_joint != last_pair.BoneJoint)
+                                lastTri.e2.inside_joint != last_joint)
                             {
-                                GlyphBone tipBone = new GlyphBone(lastTri.e2.inside_joint, last_pair.BoneJoint);
+                                GlyphBone tipBone = new GlyphBone(lastTri.e2.inside_joint, last_joint);
                                 newlyCreatedBones.Add(tipBone);
                                 glyphBones.Add(tipBone);
                             }
@@ -331,12 +333,11 @@ namespace Typography.Rendering
             foreach (CentroidLine line in _lines.Values)
             {
                 GlyphTriangle s_tri = line.startTri;
-                List<GlyphCentroidPair> pairList = line.pairs;
+                List<GlyphCentroidPair> pairList = line._n_pairs;
                 List<GlyphBone> glyphBones = line.bones;
 
-                GlyphCentroidPair firstPair = pairList[0];
-                GlyphTriangle first_p_tri = firstPair.p;
-                GlyphBoneJoint firstPairJoint = firstPair.BoneJoint;
+                GlyphBoneJoint firstPairJoint = line._joints[0];
+                GlyphTriangle first_p_tri = firstPairJoint.P_Tri;
 
                 if (first_p_tri.e0.IsInside &&
                     first_p_tri.e0.inside_joint == null)
@@ -562,39 +563,6 @@ namespace Typography.Rendering
             }
             return new Vector2((float)(cx / j), (float)(cy / j));
         }
-
-        public static EdgeLine FindTip(this GlyphCentroidPair pair, GlyphTriangle triangle)
-        {
-            GlyphBoneJoint boneJoint = pair.BoneJoint;
-            if (CanbeTipEdge(triangle.e0, boneJoint))
-            {
-                return triangle.e0;
-            }
-            if (CanbeTipEdge(triangle.e1, boneJoint))
-            {
-                return triangle.e1;
-            }
-            if (CanbeTipEdge(triangle.e2, boneJoint))
-            {
-                return triangle.e2;
-            }
-            //not found
-            return null;
-        }
-        static bool CanbeTipEdge(EdgeLine edge, GlyphBoneJoint compareJoint)
-        {
-            return edge.IsOutside;
-            //
-            //return (edge.IsOutside &&
-            //        edge != compareJoint.RibEndEdgeA &&
-            //        edge != compareJoint.RibEndEdgeB);
-            //{
-            //    return true;
-            //}
-            //return false;
-        }
-
-
         static GlyphBoneJoint FindJoint(GlyphBone b, Vector2 pos, GlyphTriangle tri)
         {
             //bone link 2 joint
