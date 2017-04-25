@@ -11,6 +11,9 @@ namespace Typography.Rendering
     class GlyphCentroidLine
     {
         //at least 1 pair
+
+
+
         public List<GlyphCentroidPair> pairs = new List<GlyphCentroidPair>();
         public List<GlyphBone> bones = new List<GlyphBone>();
         internal readonly GlyphTriangle startTri;
@@ -18,13 +21,7 @@ namespace Typography.Rendering
         {
             this.startTri = startTri;
         }
-        public GlyphTriangle GetLastTriangle()
-        {
-            //get last triangle
-            int j = pairs.Count;
-            //TODO: review p or q is the last one?
-            return pairs[j - 1].q;
-        }
+
         /// <summary>
         /// add a centroid pair
         /// </summary>
@@ -46,8 +43,6 @@ namespace Typography.Rendering
                 //create bone joint (and tip edge) in each pair                
                 pairs[i].AnalyzeEdgesAndCreateBoneJoint();
             }
-
-
         }
 
 
@@ -88,57 +83,8 @@ namespace Typography.Rendering
             }
             return null;
         }
-        static GlyphBoneJoint FindJoint(GlyphBone b, Vector2 pos, GlyphTriangle tri)
-        {
-            //bone link 2 joint
-            //find what joint 
 
-            GlyphBoneJoint foundOnA = null;
-            GlyphBoneJoint foundOnB = null;
-            if (b.JointA != null && b.JointA.ComposeOf(tri))
-            {
-                foundOnA = b.JointA;
-            }
-            if (b.JointB != null && b.JointB.ComposeOf(tri))
-            {
-                foundOnB = b.JointB;
-            }
 
-            if (b.TipEdge != null)
-            {
-
-            }
-
-            if (foundOnA != null && foundOnB != null)
-            {
-                //select 1
-                //nearest distance (pos to joint a) or (pos to joint b) 
-                return MyMath.MinDistanceFirst(pos, foundOnA.Position, foundOnB.Position) ? foundOnA : foundOnB;
-            }
-            else if (foundOnA != null)
-            {
-                return foundOnA;
-            }
-            else if (foundOnB != null)
-            {
-                return foundOnB;
-            }
-            return null;
-        }
-        public Vector2 GetHeadPosition()
-        {
-            //after create bone process
-            if (bones.Count == 0)
-            {
-                return Vector2.Zero;
-            }
-            else
-            {
-                //TODO: review here
-                //use jointA of bone of join B of bone
-                return bones[0].JointA.Position;
-            }
-        }
     }
 
 
@@ -593,7 +539,24 @@ namespace Typography.Rendering
 
 
     static class GlyphCentroidLineExtensions
-    {  //utils
+    {
+
+        public static Vector2 GetHeadPosition(this GlyphCentroidLine line)
+        {
+            //after create bone process
+            var bones = line.bones;
+            if (bones.Count == 0)
+            {
+                return Vector2.Zero;
+            }
+            else
+            {
+                //TODO: review here
+                //use jointA of bone of join B of bone
+                return bones[0].JointA.Position;
+            }
+        }
+        //utils
         public static Vector2 CalculateAvgHeadPosition(this CentroidLineHub lineHub)
         {
             Dictionary<GlyphTriangle, GlyphCentroidLine> _lines = lineHub.GetAllCentroidLines();
@@ -640,6 +603,45 @@ namespace Typography.Rendering
             //    return true;
             //}
             //return false;
+        }
+
+
+        static GlyphBoneJoint FindJoint(GlyphBone b, Vector2 pos, GlyphTriangle tri)
+        {
+            //bone link 2 joint
+            //find what joint 
+
+            GlyphBoneJoint foundOnA = null;
+            GlyphBoneJoint foundOnB = null;
+            if (b.JointA != null && b.JointA.ComposeOf(tri))
+            {
+                foundOnA = b.JointA;
+            }
+            if (b.JointB != null && b.JointB.ComposeOf(tri))
+            {
+                foundOnB = b.JointB;
+            }
+
+            if (b.TipEdge != null)
+            {
+
+            }
+
+            if (foundOnA != null && foundOnB != null)
+            {
+                //select 1
+                //nearest distance (pos to joint a) or (pos to joint b) 
+                return MyMath.MinDistanceFirst(pos, foundOnA.Position, foundOnB.Position) ? foundOnA : foundOnB;
+            }
+            else if (foundOnA != null)
+            {
+                return foundOnA;
+            }
+            else if (foundOnB != null)
+            {
+                return foundOnB;
+            }
+            return null;
         }
     }
 }
