@@ -28,19 +28,36 @@ namespace Typography.Rendering
             EdgeLine p_contact_edge,
             EdgeLine q_contact_edge)
         {
+            //this._owner = owner;
 
             //both p and q is INSIDE, contact edge
             this._p_contact_edge = p_contact_edge;
             this._q_contact_edge = q_contact_edge;
-            this._owner = owner;
+
             if (p_contact_edge.inside_joint != null ||
                 q_contact_edge.inside_joint != null)
             {
+                //TODO: review here 
+                //glyph #
             }
             p_contact_edge.inside_joint = this;
             q_contact_edge.inside_joint = this;
         }
 
+        internal GlyphTriangle P_Tri
+        {
+            get
+            {
+                return _p_contact_edge.dbugOwner;
+            }
+        }
+        internal GlyphTriangle Q_Tri
+        {
+            get
+            {
+                return _q_contact_edge.dbugOwner;
+            }
+        }
         /// <summary>
         /// get position of this bone joint (mid point of the edge)
         /// </summary>
@@ -112,14 +129,10 @@ namespace Typography.Rendering
 
         public Vector2 TipPointQ { get { return _tipEdge_q.GetMidPoint(); } }
         public EdgeLine TipEdgeQ { get { return _tipEdge_q; } }
-        //
-        internal GlyphCentroidPair OwnerCentrodPair
-        {
-            get { return _owner; }
-        }
+
         internal bool ComposeOf(GlyphTriangle tri)
         {
-            return this._owner.p == tri || this._owner.q == tri;
+            return this.P_Tri == tri || this.Q_Tri == tri;
         }
 
 #if DEBUG

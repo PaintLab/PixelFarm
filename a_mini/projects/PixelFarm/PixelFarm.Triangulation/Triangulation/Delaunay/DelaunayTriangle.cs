@@ -61,7 +61,7 @@ namespace Poly2Tri
         public bool isActualTriangle;
 
         /// <summary>
-        /// store user data
+        /// store general purpose data 
         /// </summary>
         public object userData;
 #if DEBUG

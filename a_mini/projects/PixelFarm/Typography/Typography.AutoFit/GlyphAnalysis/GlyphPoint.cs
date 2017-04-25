@@ -187,6 +187,7 @@ namespace Typography.Rendering
         Unknown,
         PerpendicularToSingleBone,
         PerpendicularToBoneGroup,
+        MoreThanOnePerpendicularBones,
         NotPendicularCutPoint
 
     }
@@ -310,30 +311,24 @@ namespace Typography.Rendering
                 Vector2 tempCutPoint;
                 if (MyMath.FindPerpendicularCutPoint(b, o_point, out tempCutPoint))
                 {
-                    //one point can ha
+
                     _cutPoint = tempCutPoint;
                     _startIndexAt = _endIndexAt = i;
                     this.CutPointKind = BoneCutPointKind.PerpendicularToSingleBone;
                     tmpCutPoints.Add(new TmpCutPoint(i, _cutPoint));
                     perpendcut_count++;
-                    break;
                 }
             }
             //---------------------------------------------------------
             if (perpendcut_count > 1)
             {
                 //1.
-                this.CutPointKind = BoneCutPointKind.NotPendicularCutPoint;
+                this.CutPointKind = BoneCutPointKind.MoreThanOnePerpendicularBones;
                 _startIndexAt = _endIndexAt = 0;
             }
             else
             {
-                //
-
-
-
-
-
+                // 
             }
             //------------------------------------
             if (_startIndexAt > -1) { return; }

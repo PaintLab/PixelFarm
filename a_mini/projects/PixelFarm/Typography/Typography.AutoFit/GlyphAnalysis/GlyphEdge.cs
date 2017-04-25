@@ -29,14 +29,7 @@ namespace Typography.Rendering
 #if DEBUG
             edgeLine.dbugGlyphEdge = this;
 #endif
-            //if (edgeLine.PerpendicularBone == null)
-            //{
-            //    return;
-            //} 
-            //_bone_midPoint = edgeLine.PerpendicularBone.GetMidPoint(); 
-            //_bone_to_edgeVector = _edgeLine.PerpendicularBone.cutPoint_onEdge - _bone_midPoint;
-            //_originalDistanceToBone = _bone_to_edgeVector.Length(); 
-            //ApplyNewEdgeDistance(1); 
+
         }
         internal void FindPerpendicularBones()
         {

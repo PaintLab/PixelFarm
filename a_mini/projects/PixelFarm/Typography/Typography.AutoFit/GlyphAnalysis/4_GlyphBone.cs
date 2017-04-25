@@ -249,14 +249,13 @@ namespace Typography.Rendering
         }
         static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
         {
-            GlyphCentroidPair ownerCentroid_A = a.OwnerCentrodPair;
-            if (ContainsEdge(ownerCentroid_A.p, tipEdge))
+            if (ContainsEdge(a.P_Tri, tipEdge))
             {
-                return FindAnotherOutsideEdge(ownerCentroid_A.p, tipEdge);
+                return FindAnotherOutsideEdge(a.P_Tri, tipEdge);
             }
-            else if (ContainsEdge(ownerCentroid_A.q, tipEdge))
+            else if (ContainsEdge(a.Q_Tri, tipEdge))
             {
-                return FindAnotherOutsideEdge(ownerCentroid_A.q, tipEdge);
+                return FindAnotherOutsideEdge(a.Q_Tri, tipEdge);
             }
             return null;
         }
@@ -273,15 +272,14 @@ namespace Typography.Rendering
         }
         static GlyphTriangle FindCommonTriangle(GlyphBoneJoint a, GlyphBoneJoint b)
         {
-            GlyphCentroidPair centroid_pair_A = a.OwnerCentrodPair;
-            GlyphCentroidPair centroid_pair_B = b.OwnerCentrodPair;
-            if (centroid_pair_A.p == centroid_pair_B.p || centroid_pair_A.p == centroid_pair_B.q)
+
+            if (a.P_Tri == b.P_Tri || a.P_Tri == b.Q_Tri)
             {
-                return centroid_pair_A.p;
+                return a.P_Tri;
             }
-            else if (centroid_pair_A.q == centroid_pair_B.p || centroid_pair_A.q == centroid_pair_B.q)
+            else if (a.Q_Tri == b.P_Tri || a.Q_Tri == b.Q_Tri)
             {
-                return centroid_pair_A.q;
+                return a.Q_Tri;
             }
             else
             {

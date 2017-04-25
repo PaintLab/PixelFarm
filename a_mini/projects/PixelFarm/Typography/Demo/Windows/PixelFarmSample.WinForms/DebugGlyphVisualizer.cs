@@ -328,7 +328,9 @@ namespace SampleWinForms.UI
                             PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
                             switch (p_bones.CutPointKind)
                             {
-
+                                case BoneCutPointKind.MoreThanOnePerpendicularBones:
+                                    cc = PixelFarm.Drawing.Color.Magenta;
+                                    break;
                                 case BoneCutPointKind.NotPendicularCutPoint:
                                     cc = PixelFarm.Drawing.Color.Aqua;
                                     break;
@@ -338,17 +340,6 @@ namespace SampleWinForms.UI
                             }
                             Vector2 v2 = new Vector2(q.x, q.y);
                             Vector2 cutpoint = p_bones.CutPoint;
-
-
-                            //if (p_bones.CutPointKind == BoneCutPointKind.PerpendicularToSingleBone)
-                            //{
-                            //    double tan2 = System.Math.Atan2(cutpoint.Y - v2.Y, cutpoint.X - v2.X);
-                            //    double tan3 = Math.Atan2(1, 0);
-                            //    if (tan2 != tan3)
-                            //    {
-
-                            //    }
-                            //}
 
                             painter.Line(
                                 v2.X * _pxscale, v2.Y * _pxscale,
@@ -361,6 +352,9 @@ namespace SampleWinForms.UI
                             PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
                             switch (q_bones.CutPointKind)
                             {
+                                case BoneCutPointKind.MoreThanOnePerpendicularBones:
+                                    cc = PixelFarm.Drawing.Color.Magenta;
+                                    break;
                                 case BoneCutPointKind.NotPendicularCutPoint:
                                     cc = PixelFarm.Drawing.Color.Aqua;
                                     break;
@@ -369,19 +363,7 @@ namespace SampleWinForms.UI
                                     break;
                             }
                             Vector2 v2 = new Vector2(p.x, p.y);
-
                             Vector2 cutpoint = q_bones.CutPoint;
-                            //if (q_bones.CutPointKind == BoneCutPointKind.PerpendicularToSingleBone)
-                            //{
-                            //    double tan2 = System.Math.Atan2(cutpoint.Y - v2.Y, cutpoint.X - v2.X);
-                            //    double tan3 = Math.Atan2(1, 0);
-
-                            //    if (tan2 != tan3)
-                            //    {
-
-                            //    }
-                            //}
-
                             painter.Line(
                                 v2.X * _pxscale, v2.Y * _pxscale,
                                 cutpoint.X * _pxscale, cutpoint.Y * _pxscale,

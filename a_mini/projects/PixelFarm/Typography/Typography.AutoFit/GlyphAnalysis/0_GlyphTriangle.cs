@@ -26,8 +26,10 @@ namespace Typography.Rendering
             TriangulationPoint p0 = _tri.P0;
             TriangulationPoint p1 = _tri.P1;
             TriangulationPoint p2 = _tri.P2;
-            //we do not store triangulation point
 
+
+
+            //we do not store triangulation point
             //an EdgeLine is created after we create GlyphTriangles.
 
             //triangulate point p0->p1->p2 is CCW ***             
@@ -42,7 +44,12 @@ namespace Typography.Rendering
 #if DEBUG
             //TODO: review here again
             e0.dbugOwner = e1.dbugOwner = e2.dbugOwner = this;
+        
 #endif
+
+            //link back 
+            tri.userData = this;
+
 
         }
         EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
@@ -59,7 +66,7 @@ namespace Typography.Rendering
         }
 
 
-        internal bool IsConnectedWith(GlyphTriangle anotherTri)
+        public bool IsConnectedWith(GlyphTriangle anotherTri)
         {
             DelaunayTriangle t2 = anotherTri._tri;
             if (t2 == this._tri)
@@ -71,7 +78,32 @@ namespace Typography.Rendering
                    this._tri.N1 == t2 ||
                    this._tri.N2 == t2;
         }
-
+        public GlyphTriangle N0
+        {
+            get
+            {
+                return GetGlyphTriFromUserData(_tri.N0);
+            }
+        }
+        public GlyphTriangle N1
+        {
+            get
+            {
+                return GetGlyphTriFromUserData(_tri.N1);
+            }
+        }
+        public GlyphTriangle N2
+        {
+            get
+            {
+                return GetGlyphTriFromUserData(_tri.N2);
+            }
+        }
+        static GlyphTriangle GetGlyphTriFromUserData(DelaunayTriangle tri)
+        {
+            if (tri == null) return null;
+            return tri.userData as GlyphTriangle;
+        }
 #if DEBUG
         public override string ToString()
         {
