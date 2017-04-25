@@ -11,6 +11,23 @@ namespace Typography.Rendering
         public readonly GlyphPoint _Q;
         Vector2 _newMidPoint;
 
+        /// <summary>
+        /// calculated edge CutX  from 2 outside cutpoint (E0,E1)
+        /// </summary>
+        public float newEdgeCut_P_X;
+        /// <summary>
+        /// calculated edge CutY  from 2 outside cutpoint (E0,E1)
+        /// </summary>
+        public float newEdgeCut_P_Y;
+
+
+        //---------------------
+        public float newEdgeCut_Q_X;
+        /// <summary>
+        /// calculated edge CutY  from 2 outside cutpoint (E0,E1)
+        /// </summary>
+        public float newEdgeCut_Q_Y;
+        //---------------------
 
 
         internal GlyphEdge(GlyphPoint p0, GlyphPoint p1, EdgeLine edgeLine)
@@ -72,7 +89,7 @@ namespace Typography.Rendering
 
         public static void UpdateEdgeCutPoint(GlyphEdge e0, GlyphEdge e1)
         {
-            
+
             //TODO: refactor here...
             //find cutpoint from e0.q to e1.p 
             //new sample
@@ -81,8 +98,9 @@ namespace Typography.Rendering
             Vector2 tmp_e1_p = e1._newMidPoint - e1.GetEdgeVector();
             Vector2 cutpoint = FindCutPoint(e0._newMidPoint, tmp_e0_q, e1._newMidPoint, tmp_e1_p);
 
-            e0._Q.newEdgeCutPointX = e1._P.newEdgeCutPointX = cutpoint.X;
-            e0._Q.newEdgeCutPointY = e1._P.newEdgeCutPointY = cutpoint.Y;
+            e0.newEdgeCut_Q_X = e1.newEdgeCut_P_X = cutpoint.X;
+            e0.newEdgeCut_Q_Y = e1.newEdgeCut_P_Y = cutpoint.Y;
+             
         }
         static Vector2 FindCutPoint(
             Vector2 p0, Vector2 p1,

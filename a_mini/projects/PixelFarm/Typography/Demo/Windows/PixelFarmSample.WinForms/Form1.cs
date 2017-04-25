@@ -131,16 +131,17 @@ namespace SampleWinForms
             chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawLineHubConn.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDrawPerpendicularLine.CheckedChanged += (s, e) => UpdateRenderOutput();
 
-            //----------
-            txtGlyphBoneCount.KeyDown += (s, e) =>
-            {
-                if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
-            };
-            txtGlyphBoneStartAt.KeyDown += (s, e) =>
-            {
-                if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
-            };
+            ////----------
+            //txtGlyphBoneCount.KeyDown += (s, e) =>
+            //{
+            //    if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
+            //};
+            //txtGlyphBoneStartAt.KeyDown += (s, e) =>
+            //{
+            //    if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
+            //};
             //---------- 
             //1. create font collection             
             installedFontCollection = new InstalledFontCollection();
@@ -228,10 +229,10 @@ namespace SampleWinForms
             //string inputstr = "t";
             //string inputstr = "2";
             //string inputstr = "o";
-            //string inputstr = "l";
+            string inputstr = "l";
             //string inputstr = "k";
             //string inputstr = "8";
-            string inputstr = "#";
+            //string inputstr = "#";
             //string inputstr = "a";
             //string inputstr = "Å";
             //string inputstr = "fi";
@@ -414,6 +415,7 @@ namespace SampleWinForms
             debugGlyphVisualizer.ShowTess = chkShowTess.Checked;
             debugGlyphVisualizer.DrawTrianglesAndEdges = this.chkDrawTriangles.Checked;
             debugGlyphVisualizer.DrawEndLineHub = this.chkDrawLineHubConn.Checked;
+            debugGlyphVisualizer.DrawPerpendicularLine = this.chkDrawPerpendicularLine.Checked;
             debugGlyphVisualizer.WalkCentroidBone = this.chkDrawCentroidBone.Checked;
             debugGlyphVisualizer.WalkGlyphBone = this.chkDrawGlyphBone.Checked;
 

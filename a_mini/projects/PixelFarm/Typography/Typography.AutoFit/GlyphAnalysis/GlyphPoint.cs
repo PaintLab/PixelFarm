@@ -35,14 +35,7 @@ namespace Typography.Rendering
         public float newX;
         public float newY;
 
-        /// <summary>
-        /// calculated edge CutX  from 2 outside cutpoint (E0,E1)
-        /// </summary>
-        public float newEdgeCutPointX;
-        /// <summary>
-        /// calculated edge CutY  from 2 outside cutpoint (E0,E1)
-        /// </summary>
-        public float newEdgeCutPointY;
+     
 
 
         public bool isPartOfHorizontalEdge;

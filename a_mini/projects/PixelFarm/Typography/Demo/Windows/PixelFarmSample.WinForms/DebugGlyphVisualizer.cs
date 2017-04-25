@@ -205,6 +205,7 @@ namespace SampleWinForms.UI
         public bool DrawDynamicOutline { get; set; }
         public bool DrawRegenerateOutline { get; set; }
         public bool DrawEndLineHub { get; set; }
+        public bool DrawPerpendicularLine { get; set; }
         //
 #if DEBUG
         void DrawPointKind(CanvasPainter painter, GlyphPoint point)
@@ -330,56 +331,61 @@ namespace SampleWinForms.UI
                             painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
 
 
-                            painter.FillRectLBWH(p.newEdgeCutPointX * _pxscale, p.newEdgeCutPointY * _pxscale, 3, 3, PixelFarm.Drawing.Color.Blue);
-                            painter.FillRectLBWH(q.newEdgeCutPointX * _pxscale, q.newEdgeCutPointY * _pxscale, 3, 3, PixelFarm.Drawing.Color.Blue);
+                            painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 3, 3, PixelFarm.Drawing.Color.Blue);
+                            painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 3, 3, PixelFarm.Drawing.Color.Blue);
 
                         }
                         //---------   
+                        if (this.DrawPerpendicularLine)
                         {
-                            AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
-                            PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
-                            switch (p_bones.CutPointKind)
                             {
-                                case BoneCutPointKind.MoreThanOnePerpendicularBones:
-                                    cc = PixelFarm.Drawing.Color.Magenta;
-                                    break;
-                                case BoneCutPointKind.NotPendicularCutPoint:
-                                    cc = PixelFarm.Drawing.Color.Aqua;
-                                    break;
-                                case BoneCutPointKind.PerpendicularToBoneGroup:
-                                    cc = PixelFarm.Drawing.Color.Green;
-                                    break;
+                                //p
+                                AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
+                                PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
+                                switch (p_bones.CutPointKind)
+                                {
+                                    case BoneCutPointKind.MoreThanOnePerpendicularBones:
+                                        cc = PixelFarm.Drawing.Color.Magenta;
+                                        break;
+                                    case BoneCutPointKind.NotPendicularCutPoint:
+                                        cc = PixelFarm.Drawing.Color.Aqua;
+                                        break;
+                                    case BoneCutPointKind.PerpendicularToBoneGroup:
+                                        cc = PixelFarm.Drawing.Color.Green;
+                                        break;
+                                }
+                                Vector2 v2 = new Vector2(q.x, q.y);
+                                Vector2 cutpoint = p_bones.CutPoint;
+
+                                painter.Line(
+                                    v2.X * _pxscale, v2.Y * _pxscale,
+                                    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                                    cc);
                             }
-                            Vector2 v2 = new Vector2(q.x, q.y);
-                            Vector2 cutpoint = p_bones.CutPoint;
 
-                            painter.Line(
-                                v2.X * _pxscale, v2.Y * _pxscale,
-                                cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                                cc);
-                        }
-
-                        {
-                            AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
-                            PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
-                            switch (q_bones.CutPointKind)
                             {
-                                case BoneCutPointKind.MoreThanOnePerpendicularBones:
-                                    cc = PixelFarm.Drawing.Color.Magenta;
-                                    break;
-                                case BoneCutPointKind.NotPendicularCutPoint:
-                                    cc = PixelFarm.Drawing.Color.Aqua;
-                                    break;
-                                case BoneCutPointKind.PerpendicularToBoneGroup:
-                                    cc = PixelFarm.Drawing.Color.Green;
-                                    break;
+                                //q
+                                AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
+                                PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
+                                switch (q_bones.CutPointKind)
+                                {
+                                    case BoneCutPointKind.MoreThanOnePerpendicularBones:
+                                        cc = PixelFarm.Drawing.Color.Magenta;
+                                        break;
+                                    case BoneCutPointKind.NotPendicularCutPoint:
+                                        cc = PixelFarm.Drawing.Color.Aqua;
+                                        break;
+                                    case BoneCutPointKind.PerpendicularToBoneGroup:
+                                        cc = PixelFarm.Drawing.Color.Green;
+                                        break;
+                                }
+                                Vector2 v2 = new Vector2(p.x, p.y);
+                                Vector2 cutpoint = q_bones.CutPoint;
+                                painter.Line(
+                                    v2.X * _pxscale, v2.Y * _pxscale,
+                                    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                                    cc);
                             }
-                            Vector2 v2 = new Vector2(p.x, p.y);
-                            Vector2 cutpoint = q_bones.CutPoint;
-                            painter.Line(
-                                v2.X * _pxscale, v2.Y * _pxscale,
-                                cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                                cc);
                         }
                     }
 
