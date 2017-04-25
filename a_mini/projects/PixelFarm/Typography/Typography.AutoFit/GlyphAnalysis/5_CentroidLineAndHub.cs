@@ -10,14 +10,16 @@ namespace Typography.Rendering
     /// </summary>
     class CentroidLine
     {
-        //at least 1 pair 
 
 
-        internal List<GlyphCentroidPair> _n_pairs = new List<GlyphCentroidPair>();
+        //temp store centroid pair, we can clear it after AnalyzeEdgesAndCreateBoneJoints()
+        List<GlyphCentroidPair> _centroid_pairs = new List<GlyphCentroidPair>();
+        //joint list is created from each centroid pair
         public List<GlyphBoneJoint> _joints = new List<GlyphBoneJoint>();
+        //bone list is created from linking each joint list
         public List<GlyphBone> bones = new List<GlyphBone>();
-
         internal readonly GlyphTriangle startTri;
+
         internal CentroidLine(GlyphTriangle startTri)
         {
             this.startTri = startTri;
@@ -29,7 +31,7 @@ namespace Typography.Rendering
         /// <param name="pair"></param>
         public void AddCentroidPair(GlyphCentroidPair pair)
         {
-            _n_pairs.Add(pair);
+            _centroid_pairs.Add(pair);
         }
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace Typography.Rendering
         /// </summary>
         public void AnalyzeEdgesAndCreateBoneJoints()
         {
-            List<GlyphCentroidPair> pairs = this._n_pairs;
+            List<GlyphCentroidPair> pairs = this._centroid_pairs;
             int j = pairs.Count;
             for (int i = 0; i < j; ++i)
             {
@@ -46,22 +48,6 @@ namespace Typography.Rendering
             }
         }
 
-
-        public GlyphCentroidPair FindNearestPair(GlyphTriangle tri)
-        {
-            for (int i = _n_pairs.Count - 1; i >= 0; --i)
-            {
-                GlyphCentroidPair pair = _n_pairs[i];
-                if (pair.p.IsConnectedWith(tri) ||
-                    pair.q.IsConnectedWith(tri))
-                {
-                    //found
-                    return pair;
-                }
-            }
-            //not found
-            return null;
-        }
 
         /// <summary>
         /// find nearest joint that contains tri 
@@ -84,8 +70,6 @@ namespace Typography.Rendering
             }
             return null;
         }
-
-
     }
 
 
@@ -333,7 +317,7 @@ namespace Typography.Rendering
             foreach (CentroidLine line in _lines.Values)
             {
                 GlyphTriangle s_tri = line.startTri;
-                List<GlyphCentroidPair> pairList = line._n_pairs;
+
                 List<GlyphBone> glyphBones = line.bones;
 
                 GlyphBoneJoint firstPairJoint = line._joints[0];
@@ -467,19 +451,7 @@ namespace Typography.Rendering
         {
             return _lines;
         }
-        //--------------------------------------------------------
-        public GlyphCentroidPair FindTriangle(GlyphTriangle tri)
-        {
-            foreach (CentroidLine line in _lines.Values)
-            {
-                GlyphCentroidPair p = line.FindNearestPair(tri);
-                if (p != null)
-                {
 
-                }
-            }
-            return null;
-        }
         public bool FindBoneJoint(GlyphTriangle tri,
         out CentroidLine foundOnBranch,
         out GlyphBoneJoint foundOnJoint)

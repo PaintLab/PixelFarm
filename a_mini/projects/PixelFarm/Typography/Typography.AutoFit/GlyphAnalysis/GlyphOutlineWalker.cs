@@ -76,9 +76,7 @@ namespace Typography.Rendering
                 }
                 //
                 OnEndLineHub(hubCenter.X, hubCenter.Y, lineHub.GetHeadConnectedJoint());
-            }
-
-
+            } 
             //----------------
 
             List<GlyphContour> cnts = _dynamicOutline._contours;

@@ -5,14 +5,14 @@ namespace Typography.Rendering
     /// <summary>
     /// a link (line) that connects between centroid of 2 GlyphTriangle(p => q)
     /// </summary>
-    class GlyphCentroidPair
+    struct GlyphCentroidPair
     {
         //this is a temporary object.
         //we crate glyph
         //1 centroid pair has 1 GlyphBoneJoint
 
         internal readonly GlyphTriangle p, q;
-        GlyphBoneJoint _boneJoint;
+
         internal GlyphCentroidPair(GlyphTriangle p, GlyphTriangle q)
         {
 
@@ -27,8 +27,6 @@ namespace Typography.Rendering
         }
 
 
-
-        GlyphBoneJoint BoneJoint { get { return _boneJoint; } }
         /// <summary>
         /// add information about edges to each triangle and create BoneJoint and Tip
         /// </summary>
@@ -47,22 +45,24 @@ namespace Typography.Rendering
             //....
             //pick up a edge of p and compare to all edge of q
             //do until complete
-            AddEdgesInformation(q, p.e0);
-            AddEdgesInformation(q, p.e1);
-            AddEdgesInformation(q, p.e2);
+            GlyphBoneJoint boneJoint = null;
+            AddEdgesInformation(q, p.e0, ref boneJoint);
+            AddEdgesInformation(q, p.e1, ref boneJoint);
+            AddEdgesInformation(q, p.e2, ref boneJoint);
             //
-            AddEdgesInformation(p, q.e0);
-            AddEdgesInformation(p, q.e1);
-            AddEdgesInformation(p, q.e2);
+            AddEdgesInformation(p, q.e0, ref boneJoint);
+            AddEdgesInformation(p, q.e1, ref boneJoint);
+            AddEdgesInformation(p, q.e2, ref boneJoint);
             //after this process, a boneJoint should be created
             //------------------------------------
 
 #if DEBUG
             //the pair must have joint
+            //after add edges info, the _boneJoint must be created successfully
             //1.
-            if (_boneJoint == null) { throw new NotSupportedException(); }
+            if (boneJoint == null) { throw new NotSupportedException(); }
             //2. 
-            if (_boneJoint._p_contact_edge == _boneJoint._q_contact_edge)
+            if (boneJoint._p_contact_edge == boneJoint._q_contact_edge)
             {
                 throw new NotSupportedException();
             }
@@ -73,10 +73,10 @@ namespace Typography.Rendering
             //---
             //both contact edge is INSIDE edge***
             //then, we mark outside edge compare to the known inside edge          
-            MarkProperOppositeOutsideEdges(p, _boneJoint._p_contact_edge, true);
-            MarkProperOppositeOutsideEdges(q, _boneJoint._q_contact_edge, false);
+            MarkProperOppositeOutsideEdges(p, boneJoint._p_contact_edge, boneJoint, true);
+            MarkProperOppositeOutsideEdges(q, boneJoint._q_contact_edge, boneJoint, false);
 
-            return this.BoneJoint;
+            return boneJoint;
         }
 
 
@@ -185,12 +185,13 @@ namespace Typography.Rendering
             }
             return slopeAngleNoDirection;
         }
-        static void SelectMostProperTipEdge(
-            GlyphCentroidPair centroidPair,
-            EdgeLine outside0,
-            EdgeLine outside1,
-            out EdgeLine tipEdge,
-            out EdgeLine notTipEdge)
+
+        void SelectMostProperTipEdge(
+          GlyphCentroidPair centroidPair,
+          EdgeLine outside0,
+          EdgeLine outside1,
+          out EdgeLine tipEdge,
+          out EdgeLine notTipEdge)
         {
             LineSlopeKind slopeKind;
             //slop angle in rad
@@ -216,9 +217,10 @@ namespace Typography.Rendering
         /// <param name="boneJoint"></param>
         /// <param name="contactEdge"></param>
         void MarkProperOppositeOutsideEdges(
-            GlyphTriangle triangle,
-            EdgeLine contactEdge,
-            bool is_p_side)
+          GlyphTriangle triangle,
+          EdgeLine contactEdge,
+          GlyphBoneJoint boneJoint,
+          bool is_p_side)
         {
 
             int outsideCount;
@@ -305,12 +307,12 @@ namespace Typography.Rendering
                         //for TipEdge
                         if (is_p_side)
                         {
-                            _boneJoint.SetTipEdge_P(tipEdge);
+                            boneJoint.SetTipEdge_P(tipEdge);
                         }
                         else
                         {
                             //q side
-                            _boneJoint.SetTipEdge_Q(tipEdge);
+                            boneJoint.SetTipEdge_Q(tipEdge);
                         }
                         //for notTipEdge 
                         //Vector2 perpend_B;
@@ -327,7 +329,7 @@ namespace Typography.Rendering
         /// </summary>
         /// <param name="edgeLine"></param>
         /// <param name="anotherTriangle"></param>
-        void AddEdgesInformation(GlyphTriangle anotherTriangle, EdgeLine edgeLine)
+        static void AddEdgesInformation(GlyphTriangle anotherTriangle, EdgeLine edgeLine, ref GlyphBoneJoint bonejoint)
         {
             if (edgeLine.IsOutside)
             {
@@ -341,12 +343,12 @@ namespace Typography.Rendering
                 //if edge is inside =>
                 //we will evaluate if _boneJoint== null
 
-                if (_boneJoint == null)
+                if (bonejoint == null)
                 {
                     if (MarkMatchingInsideEdge(edgeLine, anotherTriangle))
                     {
 
-                        _boneJoint = new GlyphBoneJoint(
+                        bonejoint = new GlyphBoneJoint(
                             edgeLine,
                             edgeLine.contactToEdge);
                     }

@@ -21,11 +21,7 @@ namespace Typography.Rendering
 #endif
         public GlyphBone(GlyphBoneJoint a, GlyphBoneJoint b)
         {
-#if DEBUG
-            //if (this.dbugId == 6)
-            //{
-
-            //}
+#if DEBUG 
             if (a == b)
             {
                 throw new NotSupportedException();
@@ -43,14 +39,9 @@ namespace Typography.Rendering
         }
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
         {
-            //if (this.dbugId == 6)
-            //{
-
-            //}
+             
             JointA = a;
-            TipEdge = tipEdge;
-
-            this.IsTipBone = true;
+            TipEdge = tipEdge; 
             var midPoint = tipEdge.GetMidPoint();
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluteSlope(a.Position, midPoint);
@@ -75,14 +66,9 @@ namespace Typography.Rendering
         }
         public bool IsTipBone
         {
-            get;
-            private set;
+            get { return this.TipEdge != null; }
         }
-        public bool IsLinkBack
-        {
-            get;
-            set;
-        }
+
 
         void EvaluteSlope(Vector2 p, Vector2 q)
         {
