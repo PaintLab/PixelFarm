@@ -76,7 +76,7 @@ namespace Typography.Rendering
         /// new stroke width offset from master outline
         /// </summary>
         /// <param name="offsetFromMasterOutline"></param>
-        public void SetNewStrokeWidthOffset(float offsetFromMasterOutline)
+        public void SetNewEdgeOffsetFromMasterOutline(float offsetFromMasterOutline)
         {
             //preserve original outline
             //regenerate outline from original outline
@@ -128,11 +128,11 @@ namespace Typography.Rendering
 
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                //new contour
-                contours[i].ClearAllAdjustValues();
-            }
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    //new contour
+            //    contours[i].ClearAllAdjustValues();
+            //}
 #if DEBUG
             s_dbugAffectedPoints.Clear();
             s_dbugAff2.Clear();
@@ -420,31 +420,40 @@ namespace Typography.Rendering
             {
                 GlyphPoint glyphPoint = flattenPoints[i];
                 Vector2 p = genPoints[i];
-
-                if (glyphPoint.AdjustedY != 0)
+                if (i == 0)
                 {
-                    if (i == 0)
-                    {
-                        //first point
-                        tx.MoveTo(first_px = p.X, first_py = (float)(p.Y + glyphPoint.AdjustedY));
-                    }
-                    else
-                    {
-                        tx.LineTo(p.X, (float)(p.Y + glyphPoint.AdjustedY));
-                    }
+                    //first point
+                    tx.MoveTo(first_px = p.X, first_py = p.Y);
                 }
                 else
                 {
-                    if (i == 0)
-                    {
-                        //first point
-                        tx.MoveTo(first_px = p.X, first_py = p.Y);
-                    }
-                    else
-                    {
-                        tx.LineTo(p.X, p.Y);
-                    }
+                    tx.LineTo(p.X, p.Y);
                 }
+
+                //if (glyphPoint.AdjustedY != 0)
+                //{
+                //    if (i == 0)
+                //    {
+                //        //first point
+                //        tx.MoveTo(first_px = p.X, first_py = (float)(p.Y  ));
+                //    }
+                //    else
+                //    {
+                //        tx.LineTo(p.X, (float)(p.Y ));
+                //    }
+                //}
+                //else
+                //{
+                //    if (i == 0)
+                //    {
+                //        //first point
+                //        tx.MoveTo(first_px = p.X, first_py = p.Y);
+                //    }
+                //    else
+                //    {
+                //        tx.LineTo(p.X, p.Y);
+                //    }
+                //}
             }
             //close
 

@@ -105,7 +105,10 @@ namespace Typography.Rendering
                     toPixelScale = 1;
                 }
 
-                _latestDynamicOutline.SetNewRelativeStrokeWidth(1.5f);
+
+                float offsetLenFromMasterOutline =10; //test *** +5px offset from original outline
+                //we will scale back later, so at this step we devide it with toPixelScale
+                _latestDynamicOutline.SetNewEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
 
                 _latestDynamicOutline.GenerateOutput(tx, toPixelScale);
                 this.LeftXControl = _latestDynamicOutline.LeftControlPosX;

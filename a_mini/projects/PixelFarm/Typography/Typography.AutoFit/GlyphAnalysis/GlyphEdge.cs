@@ -9,50 +9,87 @@ namespace Typography.Rendering
         internal readonly EdgeLine _edgeLine;
         public readonly GlyphPoint _P;
         public readonly GlyphPoint _Q;
+        Vector2 _newMidPoint;
 
-        float _relativeDistance = 1;
-        Vector2 _o_edgeVector; //original edge vector 
-        Vector2 _bone_midPoint;
-        double _originalDistanceToBone;
-        //-----------
 
-        Vector2 _bone_to_edgeVector;//perpendicular line
-        Vector2 _newEdgeCutPoint;
 
         internal GlyphEdge(GlyphPoint p0, GlyphPoint p1, EdgeLine edgeLine)
         {
             this._P = p0;
             this._Q = p1;
             this._edgeLine = edgeLine;
+            _newMidPoint = this.GetMidPoint(); //original
             //----------- 
-            _o_edgeVector = new Vector2((float)(p1.x - p0.x), (float)(p1.y - p0.y));
 #if DEBUG
             edgeLine.dbugGlyphEdge = this;
 #endif
-
         }
         internal void FindPerpendicularBones()
         {
-            //TODO: review here again
+
             _edgeLine.GlyphPoint_P.EvaluatePerpendicularBone();
             _edgeLine.GlyphPoint_Q.EvaluatePerpendicularBone();
         }
+        /// <summary>
+        /// get mid point of master outline
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 GetMidPoint()
+        {
+            return new Vector2((_P.x + _Q.x) / 2, (_P.y + _Q.y) / 2);
+        }
+        public Vector2 GetNewMidPoint()
+        {
+            return _newMidPoint;
+        }
 
-        //internal static void FindCutPoint(GlyphEdge e0, GlyphEdge e1)
-        //{
-        //    //find cutpoint from e0.q to e1.p 
-        //    //new sample
-        //    Vector2 tmp_e0_q = e0._newEdgeCutPoint + e0._o_edgeVector;
-        //    Vector2 tmp_e1_p = e1._newEdgeCutPoint - e1._o_edgeVector;
-        //    Vector2 cutpoint = FindCutPoint(e0._newEdgeCutPoint, tmp_e0_q, e1._newEdgeCutPoint, tmp_e1_p);
+        public Vector2 NewPos_P
+        {
+            get { return new Vector2(_P.newX, _P.newY); }
+        }
+        public Vector2 NewPos_Q
+        {
+            get { return new Vector2(_Q.newX, _Q.newY); }
+        }
+        Vector2 GetEdgeVector()
+        {
+            GlyphPoint p0 = this._P, p1 = this._Q;
+            return new Vector2((float)(p1.x - p0.x), (float)(p1.y - p0.y));
+        }
+        internal void ApplyNewEdgeFromMasterOutline(float newEdgeOffsetFromMasterOutline)
+        {
+            //TODO: refactor here...
+            //this is relative len from current edge              
+            //origianl vector
+            Vector2 _o_edgeVector = GetEdgeVector();
+            //rotate 90
+            Vector2 _rotate = _o_edgeVector.Rotate(90);
+            //
+            Vector2 _deltaVector = _rotate.NewLength(newEdgeOffsetFromMasterOutline);
+            //new len  
+            _newMidPoint = GetMidPoint() + _deltaVector;
+        }
 
-        //    e0._Q.newX = e1._P.newX = cutpoint.X;
-        //    e0._Q.newY = e1._P.newY = cutpoint.Y;
-        //}
+        internal static void FindCutPoint(GlyphEdge e0, GlyphEdge e1)
+        {
+            //TODO: refactor here...
+            //find cutpoint from e0.q to e1.p 
+            //new sample
+
+            Vector2 tmp_e0_q = e0._newMidPoint + e0.GetEdgeVector();
+            Vector2 tmp_e1_p = e1._newMidPoint - e1.GetEdgeVector();
+            Vector2 cutpoint = FindCutPoint(e0._newMidPoint, tmp_e0_q, e1._newMidPoint, tmp_e1_p);
+
+            e0._Q.newX = e1._P.newX = cutpoint.X;
+            e0._Q.newY = e1._P.newY = cutpoint.Y;
+        }
         static Vector2 FindCutPoint(
             Vector2 p0, Vector2 p1,
             Vector2 p2, Vector2 p3)
         {
+            //TODO: refactor here...
+
+
             //find cut point of 2 line 
             //y = mx + b
             //from line equation
@@ -219,14 +256,6 @@ namespace Typography.Rendering
             //---------------------------------------------
         }
 
-        public Vector2 Pos_P
-        {
-            get { return new Vector2(_P.newX, _P.newY); }
-        }
-        public Vector2 Pos_Q
-        {
-            get { return new Vector2(_Q.newX, _Q.newY); }
-        }
 #if DEBUG
 
         public override string ToString()

@@ -91,8 +91,8 @@ namespace Typography.Rendering
                     for (int m = 0; m < n; ++m)
                     {
                         GlyphEdge e = edgeLines[m];
-                        Vector2 cut_p = e.Pos_P;
-                        Vector2 cut_q = e.Pos_Q;
+                        Vector2 cut_p = e.NewPos_P;
+                        Vector2 cut_q = e.NewPos_Q;
                         OnGlyphEdgeN(cut_p.X, cut_p.Y, cut_q.X, cut_p.Y);
                     }
                 }

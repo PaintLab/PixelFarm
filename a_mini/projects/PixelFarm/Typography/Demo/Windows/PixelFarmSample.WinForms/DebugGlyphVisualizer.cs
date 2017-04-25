@@ -207,7 +207,7 @@ namespace SampleWinForms.UI
         public bool DrawEndLineHub { get; set; }
         //
 #if DEBUG
-        void DrawPointKind(CanvasPainter painter, GlyphPoint point, float scale)
+        void DrawPointKind(CanvasPainter painter, GlyphPoint point)
         {
             switch (point.kind)
             {
@@ -217,13 +217,13 @@ namespace SampleWinForms.UI
                 case PointKind.C4End:
                 case PointKind.LineStart:
                 case PointKind.LineStop:
-                    painter.FillRectLBWH(point.x * scale, point.y * scale, 5, 5, PixelFarm.Drawing.Color.Red);
+                    painter.FillRectLBWH(point.x * _pxscale, point.y * _pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
                     break;
 
             }
         }
 
-        void DrawEdge(CanvasPainter painter, EdgeLine edge, float scale)
+        void DrawEdge(CanvasPainter painter, EdgeLine edge)
         {
             if (edge.IsOutside)
             {
@@ -233,8 +233,8 @@ namespace SampleWinForms.UI
                 GlyphPoint u_data_q = edge.GlyphPoint_Q;
 
 
-                DrawPointKind(painter, u_data_p, scale);
-                DrawPointKind(painter, u_data_q, scale);
+                DrawPointKind(painter, u_data_p);
+                DrawPointKind(painter, u_data_q);
                 _infoView.ShowEdge(edge);
                 switch (edge.SlopeKind)
                 {
@@ -265,6 +265,7 @@ namespace SampleWinForms.UI
                         break;
                 }
 
+                float scale = this._pxscale;
                 //show info: => edge point
                 if (_infoView.HasDebugMark)
                 {
@@ -322,7 +323,13 @@ namespace SampleWinForms.UI
                         GlyphPoint p = edge.GlyphPoint_P;
                         GlyphPoint q = edge.GlyphPoint_Q;
                         //---------   
-
+                        {
+                            Vector2 orginal_MidPoint = glyphEdge.GetMidPoint() * _pxscale;
+                            Vector2 newMidPoint = glyphEdge.GetNewMidPoint() * _pxscale;
+                            painter.FillRectLBWH(newMidPoint.X, newMidPoint.Y, 3, 3, PixelFarm.Drawing.Color.Red);
+                            painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
+                        }
+                        //---------   
                         {
                             AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
                             PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
@@ -389,24 +396,24 @@ namespace SampleWinForms.UI
                 //        break;
                 //}
                 painter.StrokeColor = PixelFarm.Drawing.Color.Gray;
-                painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
+                painter.Line(edge.x0 * _pxscale, edge.y0 * _pxscale, edge.x1 * _pxscale, edge.y1 * _pxscale);
             }
         }
 
-        void DrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint, float pxscale)
+        void DrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint)
         {
             //-------------- 
             EdgeLine p_contactEdge = joint.dbugGetEdge_P();
             //mid point
-            Vector2 jointPos = joint.Position * pxscale;//scaled joint pos
+            Vector2 jointPos = joint.Position * _pxscale;//scaled joint pos
             painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);
             if (joint.TipEdgeP != null)
             {
                 EdgeLine tipEdge = joint.TipEdgeP;
-                float p_x = tipEdge.GlyphPoint_P.x * pxscale;
-                float p_y = tipEdge.GlyphPoint_P.y * pxscale;
-                float q_x = tipEdge.GlyphPoint_Q.x * pxscale;
-                float q_y = tipEdge.GlyphPoint_Q.y * pxscale;
+                float p_x = tipEdge.GlyphPoint_P.x * _pxscale;
+                float p_y = tipEdge.GlyphPoint_P.y * _pxscale;
+                float q_x = tipEdge.GlyphPoint_Q.x * _pxscale;
+                float q_y = tipEdge.GlyphPoint_Q.y * _pxscale;
 
                 //
                 painter.Line(
@@ -426,10 +433,10 @@ namespace SampleWinForms.UI
             {
                 EdgeLine tipEdge = joint.TipEdgeQ;
 
-                float p_x = tipEdge.GlyphPoint_P.x * pxscale;
-                float p_y = tipEdge.GlyphPoint_P.y * pxscale;
-                float q_x = tipEdge.GlyphPoint_Q.x * pxscale;
-                float q_y = tipEdge.GlyphPoint_Q.y * pxscale;
+                float p_x = tipEdge.GlyphPoint_P.x * _pxscale;
+                float p_y = tipEdge.GlyphPoint_P.y * _pxscale;
+                float q_x = tipEdge.GlyphPoint_Q.x * _pxscale;
+                float q_y = tipEdge.GlyphPoint_Q.y * _pxscale;
 
                 //
                 painter.Line(
@@ -577,9 +584,9 @@ namespace SampleWinForms.UI
         {
             if (DrawTrianglesAndEdges)
             {
-                DrawEdge(painter, e0, _pxscale);
-                DrawEdge(painter, e1, _pxscale);
-                DrawEdge(painter, e2, _pxscale);
+                DrawEdge(painter, e0);
+                DrawEdge(painter, e1);
+                DrawEdge(painter, e2);
 
                 _infoView.ShowTriangles(new GlyphTriangleInfo(triangleId, e0, e1, e2, centroidX, centroidY));
             }
@@ -636,7 +643,7 @@ namespace SampleWinForms.UI
         }
         protected override void OnBoneJoint(GlyphBoneJoint joint)
         {
-            DrawBoneJoint(painter, joint, _pxscale);
+            DrawBoneJoint(painter, joint);
             _infoView.ShowJoint(joint);
         }
         //----------------------
