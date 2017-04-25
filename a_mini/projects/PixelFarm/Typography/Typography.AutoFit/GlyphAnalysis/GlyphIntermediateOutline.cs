@@ -210,7 +210,7 @@ namespace Typography.Rendering
                     continue;
                 }
 
-                GlyphCentroidLine foundOnBr;
+                CentroidLine foundOnBr;
                 GlyphBoneJoint foundOnJoint;
                 //from a given hub,
                 //find bone joint that close to the main triangle for of the analyzingHub

@@ -33,11 +33,11 @@ namespace Typography.Rendering
             List<CentroidLineHub> centroidLineHubs = _dynamicOutline.dbugGetCentroidLineHubs();
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
-                Dictionary<GlyphTriangle, GlyphCentroidLine> lines = lineHub.GetAllCentroidLines();
+                Dictionary<GlyphTriangle, CentroidLine> lines = lineHub.GetAllCentroidLines();
                 Vector2 hubCenter = lineHub.CalculateAvgHeadPosition();
 
                 OnBegingLineHub(hubCenter.X, hubCenter.Y);
-                foreach (GlyphCentroidLine line in lines.Values)
+                foreach (CentroidLine line in lines.Values)
                 {
                     int pairCount = line.pairs.Count;
                     for (int i = 0; i < pairCount; ++i)
@@ -111,7 +111,7 @@ namespace Typography.Rendering
 #endif
 
         }
-        void DrawBoneLinks(GlyphCentroidLine branch)
+        void DrawBoneLinks(CentroidLine branch)
         {
             List<GlyphBone> glyphBones = branch.bones;
             int glyphBoneCount = glyphBones.Count;

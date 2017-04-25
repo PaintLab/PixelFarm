@@ -8,7 +8,7 @@ namespace Typography.Rendering
     /// <summary>
     /// a collection of connected centroid pairs
     /// </summary>
-    class GlyphCentroidLine
+    class CentroidLine
     {
         //at least 1 pair
 
@@ -17,7 +17,7 @@ namespace Typography.Rendering
         public List<GlyphCentroidPair> pairs = new List<GlyphCentroidPair>();
         public List<GlyphBone> bones = new List<GlyphBone>();
         internal readonly GlyphTriangle startTri;
-        internal GlyphCentroidLine(GlyphTriangle startTri)
+        internal CentroidLine(GlyphTriangle startTri)
         {
             this.startTri = startTri;
         }
@@ -101,14 +101,14 @@ namespace Typography.Rendering
         readonly GlyphTriangle startTriangle;
         //each centoid line start with main triangle
 
-        Dictionary<GlyphTriangle, GlyphCentroidLine> _lines = new Dictionary<GlyphTriangle, GlyphCentroidLine>();
+        Dictionary<GlyphTriangle, CentroidLine> _lines = new Dictionary<GlyphTriangle, CentroidLine>();
         //-----------------------------------------------
         List<CentroidLineHub> otherConnectedLineHubs;//connection from other hub***
 
         //-----------------------------------------------
 
         //
-        GlyphCentroidLine currentLine;
+        CentroidLine currentLine;
         GlyphTriangle currentBranchTri;
 
         public CentroidLineHub(GlyphTriangle startTriangle)
@@ -136,7 +136,7 @@ namespace Typography.Rendering
                 if (!_lines.TryGetValue(triOfCentroidLineHead, out currentLine))
                 {
                     //if not found then create new
-                    currentLine = new GlyphCentroidLine(triOfCentroidLineHead);
+                    currentLine = new CentroidLine(triOfCentroidLineHead);
                     _lines.Add(triOfCentroidLineHead, currentLine);
                 }
                 currentBranchTri = triOfCentroidLineHead;
@@ -166,7 +166,7 @@ namespace Typography.Rendering
         /// </summary>
         public void CreateBoneJoints()
         {
-            foreach (GlyphCentroidLine line in _lines.Values)
+            foreach (CentroidLine line in _lines.Values)
             {
                 line.AnalyzeEdgesAndCreateBoneJoints();
             }
@@ -178,7 +178,7 @@ namespace Typography.Rendering
         /// <param name="newlyCreatedBones"></param>
         public void CreateBones(List<GlyphBone> newlyCreatedBones)
         {
-            foreach (GlyphCentroidLine line in _lines.Values)
+            foreach (CentroidLine line in _lines.Values)
             {
                 List<GlyphCentroidPair> pairList = line.pairs;
                 List<GlyphBone> glyphBones = line.bones;
@@ -339,7 +339,7 @@ namespace Typography.Rendering
         }
         public void CreateBoneLinkBetweenCentroidLine(List<GlyphBone> newlyCreatedBones)
         {
-            foreach (GlyphCentroidLine line in _lines.Values)
+            foreach (CentroidLine line in _lines.Values)
             {
                 GlyphTriangle s_tri = line.startTri;
                 List<GlyphCentroidPair> pairList = line.pairs;
@@ -473,14 +473,14 @@ namespace Typography.Rendering
 
         }
 
-        public Dictionary<GlyphTriangle, GlyphCentroidLine> GetAllCentroidLines()
+        public Dictionary<GlyphTriangle, CentroidLine> GetAllCentroidLines()
         {
             return _lines;
         }
         //--------------------------------------------------------
         public GlyphCentroidPair FindTriangle(GlyphTriangle tri)
         {
-            foreach (GlyphCentroidLine line in _lines.Values)
+            foreach (CentroidLine line in _lines.Values)
             {
                 GlyphCentroidPair p = line.FindNearestPair(tri);
                 if (p != null)
@@ -491,10 +491,10 @@ namespace Typography.Rendering
             return null;
         }
         public bool FindBoneJoint(GlyphTriangle tri,
-        out GlyphCentroidLine foundOnBranch,
+        out CentroidLine foundOnBranch,
         out GlyphBoneJoint foundOnJoint)
         {
-            foreach (GlyphCentroidLine line in _lines.Values)
+            foreach (CentroidLine line in _lines.Values)
             {
                 if ((foundOnJoint = line.FindNearestJoint(tri)) != null)
                 {
@@ -517,10 +517,10 @@ namespace Typography.Rendering
         }
 
 
-        GlyphCentroidLine anotherCentroidLine;
+        CentroidLine anotherCentroidLine;
         GlyphBoneJoint foundOnJoint;
 
-        public void SetHeadConnnection(GlyphCentroidLine anotherCentroidLine, GlyphBoneJoint foundOnJoint)
+        public void SetHeadConnnection(CentroidLine anotherCentroidLine, GlyphBoneJoint foundOnJoint)
         {
             this.anotherCentroidLine = anotherCentroidLine;
             this.foundOnJoint = foundOnJoint;
@@ -538,10 +538,10 @@ namespace Typography.Rendering
 
 
 
-    static class GlyphCentroidLineExtensions
+    static class CentroidLineExtensions
     {
 
-        public static Vector2 GetHeadPosition(this GlyphCentroidLine line)
+        public static Vector2 GetHeadPosition(this CentroidLine line)
         {
             //after create bone process
             var bones = line.bones;
@@ -559,13 +559,13 @@ namespace Typography.Rendering
         //utils
         public static Vector2 CalculateAvgHeadPosition(this CentroidLineHub lineHub)
         {
-            Dictionary<GlyphTriangle, GlyphCentroidLine> _lines = lineHub.GetAllCentroidLines();
+            Dictionary<GlyphTriangle, CentroidLine> _lines = lineHub.GetAllCentroidLines();
             int j = _lines.Count;
             if (j == 0) return Vector2.Zero;
             //---------------------------------
             double cx = 0;
             double cy = 0;
-            foreach (GlyphCentroidLine line in _lines.Values)
+            foreach (CentroidLine line in _lines.Values)
             {
                 Vector2 headpos = line.GetHeadPosition();
                 cx += headpos.X;
