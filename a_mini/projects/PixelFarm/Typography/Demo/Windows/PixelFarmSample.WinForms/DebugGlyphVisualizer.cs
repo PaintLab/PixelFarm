@@ -81,6 +81,7 @@ namespace SampleWinForms.UI
         {
             painter.FillRectLBWH(x, y, sizeInPx, sizeInPx, color);
         }
+        public float GlyphEdgeOffset { get; set; }
         public void RenderChar(char testChar, HintTechnique hint)
         {
             builder.SetHintTechnique(hint);
@@ -94,6 +95,8 @@ namespace SampleWinForms.UI
             //----------------------------------------------------
             builder.Build(testChar, _sizeInPoint);
             var txToVxs1 = new GlyphTranslatorToVxs();
+            builder.GlyphEdgeOffset = this.GlyphEdgeOffset;
+
             builder.ReadShapes(txToVxs1);
 
 #if DEBUG 
@@ -101,6 +104,7 @@ namespace SampleWinForms.UI
             _infoView.ShowOrgBorderInfo(ps.Vxs);
 #endif
             VertexStore vxs = new VertexStore();
+
             txToVxs1.WriteOutput(vxs, _vxsPool);
             //----------------------------------------------------
 

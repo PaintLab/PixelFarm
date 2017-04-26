@@ -12,6 +12,7 @@ namespace Typography.Rendering
         GlyphOutlineAnalyzer _fitShapeAnalyzer = new GlyphOutlineAnalyzer();
         Dictionary<ushort, GlyphDynamicOutline> _fitoutlineCollection = new Dictionary<ushort, GlyphDynamicOutline>();
         GlyphDynamicOutline _latestDynamicOutline;
+
         public GlyphPathBuilder(Typeface typeface)
             : base(typeface)
         {
@@ -21,6 +22,7 @@ namespace Typography.Rendering
 
 #endif 
         public float LeftXControl { get; set; }
+        public float GlyphEdgeOffset { get; set; }
         protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph)
         {
             //not use interperter so we need to scale it with our machnism
@@ -104,9 +106,7 @@ namespace Typography.Rendering
                 {
                     toPixelScale = 1;
                 }
-
-
-                float offsetLenFromMasterOutline = -10; //test *** +5px offset from original outline
+                float offsetLenFromMasterOutline = GlyphEdgeOffset;
                 //we will scale back later, so at this step we devide it with toPixelScale
                 _latestDynamicOutline.SetNewEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
 

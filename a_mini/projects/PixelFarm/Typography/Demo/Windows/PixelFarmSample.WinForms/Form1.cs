@@ -84,9 +84,22 @@ namespace SampleWinForms
             lstHintList.Items.Add(HintTechnique.CustomAutoFit);
             lstHintList.SelectedIndex = 3;
             lstHintList.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
+            //edge offset
+            lstEdgeOffset.Items.Add(0f);
+            lstEdgeOffset.Items.Add(-10f);
+            lstEdgeOffset.Items.Add(-8f);
+            lstEdgeOffset.Items.Add(-6f);
+            lstEdgeOffset.Items.Add(-4f);
+            lstEdgeOffset.Items.Add(4f);
+            lstEdgeOffset.Items.Add(6f);
+            lstEdgeOffset.Items.Add(8f);
+            lstEdgeOffset.Items.Add(10f);
+            lstEdgeOffset.SelectedIndex = 0;
+            lstEdgeOffset.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
+            //---------- 
             //---------- 
             //snapX
-
+            //---------- 
             lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.None);
             lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Half);
             lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Integer);
@@ -419,10 +432,11 @@ namespace SampleWinForms
             debugGlyphVisualizer.DrawPerpendicularLine = this.chkDrawPerpendicularLine.Checked;
             debugGlyphVisualizer.WalkCentroidBone = this.chkDrawCentroidBone.Checked;
             debugGlyphVisualizer.WalkGlyphBone = this.chkDrawGlyphBone.Checked;
-
+            debugGlyphVisualizer.GlyphEdgeOffset = (float)this.lstEdgeOffset.SelectedItem;
             debugGlyphVisualizer.DrawDynamicOutline = chkDynamicOutline.Checked;
             debugGlyphVisualizer.DrawRegenerateOutline = chkDrawRegenerateOutline.Checked;
             //------------------------------------------------------
+
             debugGlyphVisualizer.RenderChar(testChar, (HintTechnique)lstHintList.SelectedItem);
             //---------------------------------------------------- 
             this.txtLeftXControl.Text = debugGlyphVisualizer.MinorOffsetInfo;

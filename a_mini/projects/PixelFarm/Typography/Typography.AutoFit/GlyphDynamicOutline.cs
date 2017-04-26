@@ -46,12 +46,18 @@ namespace Typography.Rendering
             // if (_relativeStrokeWidth == relativeStrokeWidth) { return; }
             //----------------------------------------------------------
             this._offsetFromMasterOutline = offsetFromMasterOutline;
-            List<GlyphContour> cnts = _contours;
-            int j = cnts.Count;
-            for (int i = 0; i < j; ++i)
+
+            if (offsetFromMasterOutline != 0)
             {
-                cnts[i].ApplyNewEdgeOffsetFromMasterOutline(offsetFromMasterOutline);
+                //if 0, new other action
+                List<GlyphContour> cnts = _contours;
+                int j = cnts.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    cnts[i].ApplyNewEdgeOffsetFromMasterOutline(offsetFromMasterOutline);
+                }
             }
+
         }
 
         public float LeftControlPosX { get; set; }
@@ -62,11 +68,7 @@ namespace Typography.Rendering
 
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    //new contour
-            //    contours[i].ClearAllAdjustValues();
-            //}
+        
 #if DEBUG
             s_dbugAffectedPoints.Clear();
             s_dbugAff2.Clear();
@@ -122,7 +124,13 @@ namespace Typography.Rendering
         public void GenerateOutput2(IGlyphTranslator tx, float pxScale)
         {
             this.pxScale = pxScale;
-
+            if (_offsetFromMasterOutline == 0)
+            {
+                //gen with anohter methods
+                GenerateOutput(tx, pxScale);
+                return;
+            }
+            //-------------------------------------------------
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
 
@@ -131,13 +139,15 @@ namespace Typography.Rendering
             s_dbugAff2.Clear();
 #endif
 
-
             LeftControlPosX = 0;
             tx.BeginRead(j);
+
+
             for (int i = 0; i < j; ++i)
             {
                 GenerateFitOutput2(tx, pxScale, contours[i]);
             }
+
             tx.EndRead();
             //-------------
         }
@@ -373,6 +383,7 @@ namespace Typography.Rendering
             //        tx.LineTo(p.X, p.Y);
             //    }
             //}
+
 
 
             List<GlyphEdge> edges = contour.edges;

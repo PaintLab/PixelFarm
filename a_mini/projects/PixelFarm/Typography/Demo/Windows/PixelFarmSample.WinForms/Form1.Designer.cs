@@ -64,6 +64,7 @@
             this.chkDrawLineHubConn = new System.Windows.Forms.CheckBox();
             this.chkDrawPerpendicularLine = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
+            this.lstEdgeOffset = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // button1
@@ -417,11 +418,20 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // lstEdgeOffset
+            // 
+            this.lstEdgeOffset.FormattingEnabled = true;
+            this.lstEdgeOffset.Location = new System.Drawing.Point(528, 386);
+            this.lstEdgeOffset.Name = "lstEdgeOffset";
+            this.lstEdgeOffset.Size = new System.Drawing.Size(120, 95);
+            this.lstEdgeOffset.TabIndex = 60;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 857);
+            this.Controls.Add(this.lstEdgeOffset);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.chkDrawPerpendicularLine);
             this.Controls.Add(this.chkDrawLineHubConn);
@@ -504,6 +514,7 @@
         private System.Windows.Forms.CheckBox chkDrawLineHubConn;
         private System.Windows.Forms.CheckBox chkDrawPerpendicularLine;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ListBox lstEdgeOffset;
     }
 }
 
