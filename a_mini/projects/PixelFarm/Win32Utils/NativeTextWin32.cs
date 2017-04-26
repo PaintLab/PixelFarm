@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing.WinGdi
     using PixelFarm.Drawing.Fonts;
     using System.Collections.Generic;
 
-    static class WinGdiTextService
+    public static class WinGdiTextService
     {
         //TODO: consider use uniscribe
 
@@ -25,7 +25,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         static float whitespaceSize = -1;
         static char[] whitespace = new char[1];
-        static Encoding s_en;
+        static Encoding s_en = System.Text.Encoding.ASCII;
         static WinGdiTextService()
         {
             win32MemDc = new NativeWin32MemoryDc(2, 2);
@@ -401,9 +401,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             WinGdiTextService.CalculateGlyphAdvancePos(str, startAt, len, font, glyphXAdvances);
         }
-        public void Dispose()
-        {
-        }
+
     }
 
     struct FontFaceKey

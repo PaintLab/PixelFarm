@@ -1,7 +1,6 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 namespace TestGraphicPackage2
 {
@@ -12,14 +11,20 @@ namespace TestGraphicPackage2
         static void Main()
         {
 
-
+            OpenTK.Toolkit.Init();
             //-------------------------------
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //temp
             //TODO: fix this , 
-            //LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
-            //LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyNativeTextBreaker();
+            //set data dir before load
+            LayoutFarm.TextBreak.CustomBreakerBuilder.DataDir = @"../../Deps_I18N/LayoutFarm.TextBreak/icu58/brkitr_src/dictionaries";
+            LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
+            //RootDemoPath.Path = @"..\Data";
+            //you can use your font loader
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
+            PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
+
 
             ////------------------------------- 
             formDemoList = new LayoutFarm.Dev.FormDemoList();

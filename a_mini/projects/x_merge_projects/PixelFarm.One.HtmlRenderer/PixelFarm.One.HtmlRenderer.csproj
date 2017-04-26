@@ -79,10 +79,6 @@
       <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
       <Name>PixelFarm.Triangulation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
-      <Name>PixelFarm.Typography</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
       <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
       <Name>Tesselate</Name>
@@ -99,6 +95,10 @@
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
       <Name>Typography.GlyphLayout</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Typography.MsdfGen\Typography.MsdfGen.csproj">
       <Project>{8f69ab8d-174a-4912-9328-cae8eda5564b}</Project>
       <Name>Typography.MsdfGen</Name>
@@ -107,7 +107,7 @@
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenFont</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.Rendering\Typography.Rendering.csproj">
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.AutoFit\Typography.AutoFit.csproj">
       <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
       <Name>Typography.Rendering</Name>
     </ProjectReference>

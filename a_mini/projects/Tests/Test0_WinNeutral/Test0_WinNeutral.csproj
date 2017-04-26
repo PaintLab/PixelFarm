@@ -33,12 +33,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LionDataStore.cs" />
-    <Compile Include="MyNativeRGBA32BitsImage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleBase.cs" />
-    <Compile Include="SpriteShape.cs" />
-    <Compile Include="T108_LionFill.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
@@ -53,13 +48,13 @@
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
-      <Name>PixelFarm.Typography</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinNeutral\LayoutFarm.Platforms.WinNeutral.csproj">
       <Project>{2854a4f1-0110-4b47-b773-9a5fd462755e}</Project>
       <Name>LayoutFarm.Platforms.WinNeutral</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

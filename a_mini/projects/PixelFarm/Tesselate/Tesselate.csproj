@@ -79,7 +79,7 @@
   -->
   <ItemGroup>
     <Compile Include="ActiveRegion.cs" />
-    <Compile Include="Collections\MaxFirstList.cs" />
+    <Compile Include="MaxFirstList.cs" />
     <Compile Include="ContourVertex.cs" />
     <Compile Include="Dictionary.cs" />
     <Compile Include="Face.cs" />

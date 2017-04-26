@@ -41,7 +41,7 @@ namespace LayoutFarm
             //load bitmap with gdi+                
             if (arrowBmp == null)
             {
-                arrowBmp = LoadImageBinder("../../Demo/arrow_open.png");
+                arrowBmp = LoadImageBinder("../../Data/imgs/arrow_open.png");
             }
             LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.Image.Width, arrowBmp.Image.Height);
             imgBox.ImageBinder = arrowBmp;
@@ -91,7 +91,7 @@ namespace LayoutFarm
             
             if (arrowBmp == null)
             {
-                arrowBmp = LoadImageBinder("../../Demo/arrow_open.png");
+                arrowBmp = LoadImageBinder("../../Data/imgs/arrow_open.png");
             }
             LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.ImageWidth, arrowBmp.ImageHeight);
             imgBox.ImageBinder = arrowBmp;

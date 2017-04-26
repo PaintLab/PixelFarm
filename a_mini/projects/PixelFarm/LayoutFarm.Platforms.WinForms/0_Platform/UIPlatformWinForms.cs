@@ -9,6 +9,7 @@ namespace LayoutFarm.UI
         {
 
         }
+
         public static UIPlatformWinForm GetDefault()
         {
             return platform;
@@ -28,16 +29,12 @@ namespace LayoutFarm.UI
                 platform = this;
             }
 
-            var fontloader = new PixelFarm.Drawing.WindowsFontLoader();
-
+            var fontLoader = new PixelFarm.Drawing.Fonts.OpenFontStore();
             try
             {
                 //set up winform platform 
                 ////gdi+
-                PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontloader);
-                //PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
-
-
+                PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontLoader);
                 LayoutFarm.UI.Clipboard.SetUIPlatform(this);
             }
             catch (System.Exception ex)
@@ -75,13 +72,6 @@ namespace LayoutFarm.UI
         public override void SetClipboardData(string textData)
         {
             System.Windows.Forms.Clipboard.SetText(textData);
-        }
-
-
-        PixelFarm.Drawing.WinGdi.Gdi32IFonts _gdiPlusIFonts;
-        public PixelFarm.Drawing.IFonts GetIFonts()
-        {
-            return this._gdiPlusIFonts;
         }
 
 

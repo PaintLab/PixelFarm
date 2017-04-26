@@ -16,7 +16,7 @@ namespace LayoutFarm.UI
         List<Form> subForms = new List<Form>();
 
 
-      
+
         public UISurfaceViewportControl()
         {
             InitializeComponent();
@@ -109,12 +109,12 @@ namespace LayoutFarm.UI
                         //printer.HintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction_VerticalOnly;
                         //printer.UseSubPixelRendering = true;
                         //canvasPainter.TextPrinter = printer;
-
-                        var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader); 
+                        var openFontStore = new PixelFarm.Drawing.Fonts.OpenFontStore(); 
+                        var printer = new GLBmpGlyphTextPrinter(canvasPainter, openFontStore);
                         canvasPainter.TextPrinter = printer;
 
                         //
-                        //var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLCanvas(canvasPainter, 0, 0, view.Width, view.Height);
+                       
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLCanvas(canvasPainter, 0, 0, view.Width, view.Height);
                         bridge.SetCanvas(myGLCanvas1);
 

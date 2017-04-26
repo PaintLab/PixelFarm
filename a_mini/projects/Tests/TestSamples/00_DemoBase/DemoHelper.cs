@@ -4,14 +4,23 @@ using PixelFarm.DrawingGL;
 
 namespace Mini
 {
+
+    public delegate void SetupPainterDel(GLCanvasPainter painter);
+
     public class GLDemoContext
     {
         Mini.DemoBase demo;
         int w, h;
+        SetupPainterDel _getTextPrinterDel;
+
         public GLDemoContext(int w, int h)
         {
             this.w = w;
             this.h = h;
+        }
+        public void SetTextPrinter(SetupPainterDel del)
+        {
+            _getTextPrinterDel = del;
         }
         public void Close()
         {
@@ -36,8 +45,9 @@ namespace Mini
                 //int max = Math.Max(w, h);
                 //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
                 //canvasPainter = new GLCanvasPainter(canvas2d, max, max);
-          
-                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
+
+                //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
+                canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
                 canvasPainter = new GLCanvasPainter(canvas2d, w, h);
 
                 //create text printer for opengl 
@@ -59,6 +69,12 @@ namespace Mini
                 //resolve request font 
                 //var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
                 //canvasPainter.TextPrinter = printer;
+
+                if (_getTextPrinterDel != null)
+                {
+                    _getTextPrinterDel(canvasPainter);
+                }
+
             }
 
             demo.SetEssentialGLHandlers(

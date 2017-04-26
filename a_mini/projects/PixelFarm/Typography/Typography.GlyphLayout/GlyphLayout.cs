@@ -120,7 +120,7 @@ namespace Typography.TextLayout
         public bool EnableLigature { get; set; }
 
         void UpdateLayoutPlan()
-        {   
+        {
             GlyphLayoutPlanContext context = _layoutPlanCollection.GetPlanOrCreate(this._typeface, this._scriptLang);
             this._gpos = context._glyphPos;
             this._gsub = context._glyphSub;
@@ -212,6 +212,21 @@ namespace Typography.TextLayout
 
     public static class GlyphLayoutExtensions
     {
+
+        public static float SnapInteger(float value)
+        {
+            int floor_value = (int)value;
+            return (value - floor_value >= (1f / 2f)) ? floor_value + 1 : floor_value;
+        }
+        public static float SnapHalf(float value)
+        {
+            int floor_value = (int)value;
+            //round to int 0, 0.5,1.0
+            return (value - floor_value >= (2f / 3f)) ? floor_value + 1 : //else->
+                   (value - floor_value >= (1f / 3f)) ? floor_value + 0.5f : floor_value;
+
+        }
+
         /// <summary>
         /// read UserCharToGlyphIndexMap from latest layout output
         /// </summary>
@@ -323,7 +338,7 @@ namespace Typography.TextLayout
                 }
                 cx += glyphPos.advWidth;
             }
-        } 
+        }
         public static void Layout(this GlyphLayout glyphLayout, Typeface typeface, char[] str, int startAt, int len, List<GlyphPlan> outputGlyphList)
         {
             glyphLayout.Typeface = typeface;
@@ -372,6 +387,7 @@ namespace Typography.TextLayout
             //
             int j = outputGlyphPlans.Count;
 
+
             Typeface currentTypeface = glyphLayout.Typeface;
             if (j == 0)
             {
@@ -380,16 +396,27 @@ namespace Typography.TextLayout
                     currentTypeface.Ascender * scale,
                     currentTypeface.Descender * scale,
                     currentTypeface.LineGap * scale);
+
             }
-            //get last one
-            GlyphPlan lastOne = outputGlyphPlans[j - 1];
-            strBox = new MeasuredStringBox((lastOne.x + lastOne.advX) * scale,
-                    currentTypeface.Ascender * scale,
-                    currentTypeface.Descender * scale,
-                    currentTypeface.LineGap * scale);
+            else
+            {
+                GlyphPlan lastOne = outputGlyphPlans[j - 1];
+                strBox = new MeasuredStringBox((lastOne.x + lastOne.advX) * scale,
+                        currentTypeface.Ascender * scale,
+                        currentTypeface.Descender * scale,
+                        currentTypeface.LineGap * scale);
+            }
         }
     }
 
-
+    /// <summary>
+    /// how to pos a glyph on specific point
+    /// </summary>
+    public enum GlyphPosPixelSnapKind : byte
+    {
+        Integer,//default
+        Half,
+        None
+    }
 
 }

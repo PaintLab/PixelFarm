@@ -14,7 +14,7 @@ namespace OpenTkEssTest
         protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
-            this.painter = painter;
+            this.painter = painter; 
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
@@ -29,9 +29,11 @@ namespace OpenTkEssTest
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.ClearColorBuffer();
             canvas2d.Clear(PixelFarm.Drawing.Color.Red);
+
             //-------------------------------
-            painter.DrawString("OK", 0, 17);
-            painter.DrawString("1234567890", 0, 17 * 3);
+            painter.FillColor = PixelFarm.Drawing.Color.Black;
+            painter.DrawString("OK", 0, 100);
+            painter.DrawString("1234567890", 0, 200);
             //-------------------------------
             SwapBuffers();
         }
