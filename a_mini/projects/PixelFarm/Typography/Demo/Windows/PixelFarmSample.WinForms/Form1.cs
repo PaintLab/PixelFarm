@@ -84,9 +84,22 @@ namespace SampleWinForms
             lstHintList.Items.Add(HintTechnique.CustomAutoFit);
             lstHintList.SelectedIndex = 3;
             lstHintList.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
+            //edge offset
+            lstEdgeOffset.Items.Add(0f);
+            lstEdgeOffset.Items.Add(-10f);
+            lstEdgeOffset.Items.Add(-8f);
+            lstEdgeOffset.Items.Add(-6f);
+            lstEdgeOffset.Items.Add(-4f);
+            lstEdgeOffset.Items.Add(4f);
+            lstEdgeOffset.Items.Add(6f);
+            lstEdgeOffset.Items.Add(8f);
+            lstEdgeOffset.Items.Add(10f);
+            lstEdgeOffset.SelectedIndex = 0;
+            lstEdgeOffset.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
+            //---------- 
             //---------- 
             //snapX
-
+            //---------- 
             lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.None);
             lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Half);
             lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Integer);
@@ -131,16 +144,17 @@ namespace SampleWinForms
             chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawLineHubConn.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDrawPerpendicularLine.CheckedChanged += (s, e) => UpdateRenderOutput();
 
-            //----------
-            txtGlyphBoneCount.KeyDown += (s, e) =>
-            {
-                if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
-            };
-            txtGlyphBoneStartAt.KeyDown += (s, e) =>
-            {
-                if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
-            };
+            ////----------
+            //txtGlyphBoneCount.KeyDown += (s, e) =>
+            //{
+            //    if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
+            //};
+            //txtGlyphBoneStartAt.KeyDown += (s, e) =>
+            //{
+            //    if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
+            //};
             //---------- 
             //1. create font collection             
             installedFontCollection = new InstalledFontCollection();
@@ -227,11 +241,12 @@ namespace SampleWinForms
             //string inputstr = "u";
             //string inputstr = "t";
             //string inputstr = "2";
+            string inputstr = "3";
             //string inputstr = "o";
             //string inputstr = "l";
             //string inputstr = "k";
             //string inputstr = "8";
-            string inputstr = "#";
+            //string inputstr = "#";
             //string inputstr = "a";
             //string inputstr = "Å";
             //string inputstr = "fi";
@@ -412,14 +427,16 @@ namespace SampleWinForms
             debugGlyphVisualizer.DrawBorder = chkBorder.Checked;
             debugGlyphVisualizer.OffsetMinorX = chkMinorOffset.Checked;
             debugGlyphVisualizer.ShowTess = chkShowTess.Checked;
-            debugGlyphVisualizer.DrawTrianglesAndEdges = this.chkDrawTriangles.Checked;
+            debugGlyphVisualizer.WalkTrianglesAndEdges = this.chkDrawTriangles.Checked;
             debugGlyphVisualizer.DrawEndLineHub = this.chkDrawLineHubConn.Checked;
+            debugGlyphVisualizer.DrawPerpendicularLine = this.chkDrawPerpendicularLine.Checked;
             debugGlyphVisualizer.WalkCentroidBone = this.chkDrawCentroidBone.Checked;
             debugGlyphVisualizer.WalkGlyphBone = this.chkDrawGlyphBone.Checked;
-
+            debugGlyphVisualizer.GlyphEdgeOffset = (float)this.lstEdgeOffset.SelectedItem;
             debugGlyphVisualizer.DrawDynamicOutline = chkDynamicOutline.Checked;
             debugGlyphVisualizer.DrawRegenerateOutline = chkDrawRegenerateOutline.Checked;
             //------------------------------------------------------
+
             debugGlyphVisualizer.RenderChar(testChar, (HintTechnique)lstHintList.SelectedItem);
             //---------------------------------------------------- 
             this.txtLeftXControl.Text = debugGlyphVisualizer.MinorOffsetInfo;
@@ -649,5 +666,20 @@ namespace SampleWinForms
             //}
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            System.Numerics.Vector2 p0 = new System.Numerics.Vector2(0, 0);
+            System.Numerics.Vector2 p1 = new System.Numerics.Vector2(0, 10);
+            System.Numerics.Vector2 p2 = new System.Numerics.Vector2(5, 5);
+            System.Numerics.Vector2 p3 = new System.Numerics.Vector2(10, 10);
+
+            System.Numerics.Vector2 result;
+            if (Typography.Rendering.MyMath.FindCutPoint(p0, p1, p2, p3, out result))
+            {
+                //found cutpoint
+            }
+
+
+        }
     }
 }

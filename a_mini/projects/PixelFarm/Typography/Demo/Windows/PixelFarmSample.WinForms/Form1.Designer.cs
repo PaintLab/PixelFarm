@@ -55,8 +55,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.chkDrawGlyphBone = new System.Windows.Forms.CheckBox();
-            this.txtGlyphBoneStartAt = new System.Windows.Forms.TextBox();
-            this.txtGlyphBoneCount = new System.Windows.Forms.TextBox();
             this.chkDynamicOutline = new System.Windows.Forms.CheckBox();
             this.txtLeftXControl = new System.Windows.Forms.TextBox();
             this.chkMinorOffset = new System.Windows.Forms.CheckBox();
@@ -64,6 +62,9 @@
             this.chkDrawRegenerateOutline = new System.Windows.Forms.CheckBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.chkDrawLineHubConn = new System.Windows.Forms.CheckBox();
+            this.chkDrawPerpendicularLine = new System.Windows.Forms.CheckBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.lstEdgeOffset = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // button1
@@ -326,22 +327,6 @@
             this.chkDrawGlyphBone.Text = "Draw Glyph Bone";
             this.chkDrawGlyphBone.UseVisualStyleBackColor = true;
             // 
-            // txtGlyphBoneStartAt
-            // 
-            this.txtGlyphBoneStartAt.Location = new System.Drawing.Point(943, 246);
-            this.txtGlyphBoneStartAt.Name = "txtGlyphBoneStartAt";
-            this.txtGlyphBoneStartAt.Size = new System.Drawing.Size(20, 20);
-            this.txtGlyphBoneStartAt.TabIndex = 48;
-            this.txtGlyphBoneStartAt.Text = "0";
-            // 
-            // txtGlyphBoneCount
-            // 
-            this.txtGlyphBoneCount.Location = new System.Drawing.Point(974, 246);
-            this.txtGlyphBoneCount.Name = "txtGlyphBoneCount";
-            this.txtGlyphBoneCount.Size = new System.Drawing.Size(20, 20);
-            this.txtGlyphBoneCount.TabIndex = 49;
-            this.txtGlyphBoneCount.Text = "-1";
-            // 
             // chkDynamicOutline
             // 
             this.chkDynamicOutline.AutoSize = true;
@@ -411,11 +396,44 @@
             this.chkDrawLineHubConn.Text = "Draw LineHub Conn";
             this.chkDrawLineHubConn.UseVisualStyleBackColor = true;
             // 
+            // chkDrawPerpendicularLine
+            // 
+            this.chkDrawPerpendicularLine.AutoSize = true;
+            this.chkDrawPerpendicularLine.Checked = true;
+            this.chkDrawPerpendicularLine.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDrawPerpendicularLine.Location = new System.Drawing.Point(952, 196);
+            this.chkDrawPerpendicularLine.Name = "chkDrawPerpendicularLine";
+            this.chkDrawPerpendicularLine.Size = new System.Drawing.Size(142, 17);
+            this.chkDrawPerpendicularLine.TabIndex = 58;
+            this.chkDrawPerpendicularLine.Text = "Draw Perpendicular Line";
+            this.chkDrawPerpendicularLine.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(349, 11);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(81, 37);
+            this.button2.TabIndex = 59;
+            this.button2.Text = "Render!";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // lstEdgeOffset
+            // 
+            this.lstEdgeOffset.FormattingEnabled = true;
+            this.lstEdgeOffset.Location = new System.Drawing.Point(528, 386);
+            this.lstEdgeOffset.Name = "lstEdgeOffset";
+            this.lstEdgeOffset.Size = new System.Drawing.Size(120, 95);
+            this.lstEdgeOffset.TabIndex = 60;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 857);
+            this.Controls.Add(this.lstEdgeOffset);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.chkDrawPerpendicularLine);
             this.Controls.Add(this.chkDrawLineHubConn);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.chkDrawRegenerateOutline);
@@ -423,8 +441,6 @@
             this.Controls.Add(this.chkMinorOffset);
             this.Controls.Add(this.txtLeftXControl);
             this.Controls.Add(this.chkDynamicOutline);
-            this.Controls.Add(this.txtGlyphBoneCount);
-            this.Controls.Add(this.txtGlyphBoneStartAt);
             this.Controls.Add(this.chkDrawGlyphBone);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
@@ -489,8 +505,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox chkDrawGlyphBone;
-        private System.Windows.Forms.TextBox txtGlyphBoneStartAt;
-        private System.Windows.Forms.TextBox txtGlyphBoneCount;
         private System.Windows.Forms.CheckBox chkDynamicOutline;
         private System.Windows.Forms.TextBox txtLeftXControl;
         private System.Windows.Forms.CheckBox chkMinorOffset;
@@ -498,6 +512,9 @@
         private System.Windows.Forms.CheckBox chkDrawRegenerateOutline;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.CheckBox chkDrawLineHubConn;
+        private System.Windows.Forms.CheckBox chkDrawPerpendicularLine;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ListBox lstEdgeOffset;
     }
 }
 
