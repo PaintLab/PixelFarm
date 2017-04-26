@@ -14,6 +14,7 @@
 // "The Art of War"
 
 using System;
+using PixelFarm.Agg;
 namespace PixelFarm.Drawing.GLES2
 {
 
@@ -76,11 +77,11 @@ namespace PixelFarm.Drawing.GLES2
                     {
                         //use default solid brush
                         SolidBrush solidBrush = (SolidBrush)brush;
-                        var prevColor = painter1.FillColor;
-                        painter1.FillColor = solidBrush.Color;
-                        painter1.FillRectangle(left, this.Height - (top + height), left + width, this.Height - top);
-                        painter1.FillColor = prevColor;
-                        //internalSolidBrush.Color = prevColor;
+                        painter1.FillRectangle(
+                            left, this.Height - (top + height),
+                            left + width, this.Height - top,
+                            solidBrush.Color);
+
                     }
                     break;
                 case BrushKind.LinearGradient:
@@ -104,16 +105,12 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
-
-            painter1.FillColor = color;
-            painter1.FillRectangle(left, this.Height - (top + height), left + width, this.Height - top);
+            painter1.FillRectangle(left, this.Height - (top + height), left + width, this.Height - top, color);
         }
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
-            painter1.StrokeColor = color;
-            painter1.Rectangle(left, this.Height - (top + height), left + width, this.Height - top);
+            painter1.Rectangle(left, this.Height - (top + height), left + width, this.Height - top, color);
         }
-
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
             painter1.Line(x1, this.Height - y1, x2, this.Height - y2);

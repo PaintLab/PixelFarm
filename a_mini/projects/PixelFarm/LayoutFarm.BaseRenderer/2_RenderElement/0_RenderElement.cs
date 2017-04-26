@@ -5,10 +5,11 @@ using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
 namespace LayoutFarm
 {
-    
+
     public abstract partial class RenderElement : IRenderElement
     {
         RootGraphic rootGfx;
+
         IParentLink parentLink;
         object controller;
         int propFlags;
@@ -52,10 +53,12 @@ namespace LayoutFarm
         //controller-listener
         public object GetController()
         {
+            //TODO: move to extension method ***
             return controller;
         }
         public void SetController(object controller)
         {
+            //TODO: move to extension method ***
             this.controller = controller;
         }
         public bool TransparentForAllEvents

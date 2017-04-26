@@ -389,14 +389,7 @@ namespace PixelFarm.Drawing.Skia
             _skCanvas.DrawCircle((float)x, (float)y, (float)radius, _fill);
         }
 
-        public override void FillCircle(double x, double y, double radius, Drawing.Color color)
-        {
 
-            var prevColor = FillColor;
-            FillColor = color;
-            _skCanvas.DrawCircle((float)x, (float)y, (float)radius, _fill);
-            FillColor = prevColor;
-        }
 
         public override void FillEllipse(double left, double bottom, double right, double top)
         {
@@ -417,15 +410,7 @@ namespace PixelFarm.Drawing.Skia
               new SKRect((float)left, (float)top, (float)right, (float)bottom),
                 _fill);
         }
-        public override void FillRectangle(double left, double bottom, double right, double top, Color fillColor)
-        {
-            var prevColor = FillColor;
-            FillColor = fillColor;
-            _skCanvas.DrawRect(
-              new SKRect((float)left, (float)top, (float)right, (float)bottom),
-                _fill);
-            FillColor = prevColor;
-        }
+
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {
 
@@ -483,13 +468,7 @@ namespace PixelFarm.Drawing.Skia
         {
             _skCanvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2, _stroke);
         }
-        public override void Line(double x1, double y1, double x2, double y2, Color color)
-        {
-            var prevColor = StrokeColor;
-            StrokeColor = color;
-            _skCanvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2, _stroke);
-            StrokeColor = prevColor;
-        }
+
         public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
         {
             var prevColor = FillColor;
@@ -505,13 +484,7 @@ namespace PixelFarm.Drawing.Skia
         {
             _skCanvas.DrawLine((float)left, (float)top, (float)right, (float)bottom, _stroke);
         }
-        public override void Rectangle(double left, double bottom, double right, double top, Color color)
-        {
-            var prevColor = StrokeColor;
-            StrokeColor = color;
-            _skCanvas.DrawLine((float)left, (float)top, (float)right, (float)bottom, _stroke);
-            StrokeColor = prevColor;
-        }
+        
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
             _skCanvas.ClipRect(new SKRect(x1, y1, x2, y2));

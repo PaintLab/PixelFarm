@@ -7,12 +7,13 @@ namespace LayoutFarm
     {
         //----------------------
         //rectangle boundary area 
+        //for fast approximation
         int b_top;
         int b_left;
         int b_width;
         int b_height;
         int uiLayoutFlags;
-        //-----------------------------------------------
+        //------------------------ 
 
         public Rectangle RectBounds
         {

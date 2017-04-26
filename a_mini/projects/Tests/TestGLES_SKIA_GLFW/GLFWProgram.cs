@@ -20,55 +20,48 @@ namespace TestGlfw
         SKIA
     }
 
-
-    class GLFWProgram
+    abstract class GlfwAppBase
     {
-        static BackEnd selectedBackEnd = BackEnd.GLES2;
-
+        public abstract void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs);
+    }
+    class GlfwSkia : GlfwAppBase
+    {
+        static PixelFarm.DrawingGL.CanvasGL2d canvasGL2d;
         static MyNativeRGBA32BitsImage myImg;
-        static Mini.GLDemoContext demoContext2 = null;
+        public GlfwSkia()
+        {
+            int ww_w = 800;
+            int ww_h = 600;
+            int max = Math.Max(ww_w, ww_h);
+            canvasGL2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
 
-        static void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
+        }
+        public override void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {
             //1. create platform bitmap 
             // create the surface
             int w = 800;
             int h = 600;
-            if (selectedBackEnd == BackEnd.SKIA)
-            {
-                if (myImg == null)
-                {
-                    myImg = new TestGlfw.MyNativeRGBA32BitsImage(w, h);
-                    //test1
-                    // create the surface
-                    var info = new SKImageInfo(w, h, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
-                    using (var surface = SKSurface.Create(info, myImg.Scan0, myImg.Stride))
-                    {
-                        // start drawing
-                        SKCanvas canvas = surface.Canvas;
-                        DrawWithSkia(canvas);
-                        surface.Canvas.Flush();
-                    }
-                }
 
-                var glBmp = new PixelFarm.DrawingGL.GLBitmap(w, h, myImg.Scan0);
-                canvasGL2d.DrawImage(glBmp, 0, 600);
-                glBmp.Dispose();
-            }
-            else
+            if (myImg == null)
             {
-                if (demoContext2 == null)
-                {
-                    //var demo = new T44_SimpleVertexShader(); 
-                    //var demo = new T42_ES2HelloTriangleDemo();
-                    demoContext2 = new Mini.GLDemoContext(w, h);
 
-                    //demoContext2.LoadDemo(new T45_TextureWrap());
-                    //demoContext2.LoadDemo(new T48_MultiTexture());
-                    demoContext2.LoadDemo(new T107_SampleDrawImage());
+                myImg = new TestGlfw.MyNativeRGBA32BitsImage(w, h);
+                //test1
+                // create the surface
+                var info = new SKImageInfo(w, h, SKImageInfo.PlatformColorType, SKAlphaType.Premul);
+                using (var surface = SKSurface.Create(info, myImg.Scan0, myImg.Stride))
+                {
+                    // start drawing
+                    SKCanvas canvas = surface.Canvas;
+                    DrawWithSkia(canvas);
+                    surface.Canvas.Flush();
                 }
-                demoContext2.Render();
             }
+
+            var glBmp = new PixelFarm.DrawingGL.GLBitmap(w, h, myImg.Scan0);
+            canvasGL2d.DrawImage(glBmp, 0, 600);
+            glBmp.Dispose();
         }
         static void DrawWithSkia(SKCanvas canvas)
         {
@@ -85,7 +78,114 @@ namespace TestGlfw
             }
         }
 
-        static PixelFarm.DrawingGL.CanvasGL2d canvasGL2d;
+        static PixelFarm.Agg.ActualImage LoadImage(string filename)
+        {
+            ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
+            using (var fs = new System.IO.FileStream(filename, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            {
+                //TODO: review img loading, we should not use only its extension
+                //
+                string fileExt = System.IO.Path.GetExtension(filename).ToLower();
+                switch (fileExt)
+                {
+                    case ".png":
+                        {
+                            var decoder = new ImageTools.IO.Png.PngDecoder();
+                            extendedImg.Load(fs, decoder);
+                        }
+                        break;
+                    case ".jpg":
+                        {
+                            var decoder = new ImageTools.IO.Jpeg.JpegDecoder();
+                            extendedImg.Load(fs, decoder);
+                        }
+                        break;
+                    default:
+                        throw new System.NotSupportedException();
+
+                }
+                //var decoder = new ImageTools.IO.Png.PngDecoder();
+
+            }
+            //assume 32 bit 
+
+            PixelFarm.Agg.ActualImage actualImg = PixelFarm.Agg.ActualImage.CreateFromBuffer(
+                extendedImg.PixelWidth,
+                extendedImg.PixelHeight,
+                PixelFarm.Agg.PixelFormat.ARGB32,
+                extendedImg.Pixels
+                );
+            //the imgtools load data as BigEndian
+            actualImg.IsBigEndian = true;
+            return actualImg;
+        }
+    }
+
+    class GlfwGLES2 : GlfwAppBase
+    {
+
+        static Mini.GLDemoContext demoContext2 = null;
+        static PixelFarm.Drawing.Fonts.OpenFontStore s_fontstore;
+
+        public GlfwGLES2()
+        {
+            s_fontstore = new PixelFarm.Drawing.Fonts.OpenFontStore();
+        }
+        public override void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
+        {
+            //1. create platform bitmap 
+            // create the surface
+            int w = 800;
+            int h = 600;
+
+            if (demoContext2 == null)
+            {
+
+                //var demo = new T44_SimpleVertexShader(); 
+                //var demo = new T42_ES2HelloTriangleDemo();
+                demoContext2 = new Mini.GLDemoContext(w, h);
+                demoContext2.SetTextPrinter(painter =>
+                {
+
+
+                    var printer = new PixelFarm.DrawingGL.GLBmpGlyphTextPrinter(
+                        painter,
+                        s_fontstore);
+                    painter.TextPrinter = printer;
+                    //create text printer for opengl 
+                    //----------------------
+                    //1. win gdi based
+                    //var printer = new WinGdiFontPrinter(canvas2d, w, h);
+                    //canvasPainter.TextPrinter = printer;
+                    //----------------------
+                    //2. raw vxs
+                    //var printer = new PixelFarm.Drawing.Fonts.VxsTextPrinter(canvasPainter);
+                    //canvasPainter.TextPrinter = printer;
+                    //----------------------
+                    //3. agg texture based font texture
+                    //var printer = new AggFontPrinter(canvasPainter, w, h);
+                    //canvasPainter.TextPrinter = printer;
+                    //----------------------
+                    //4. texture atlas based font texture 
+                    //------------
+                    //resolve request font 
+                    //var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapWinGdi.myFontLoader);
+                    //canvasPainter.TextPrinter = printer;
+
+                });
+                //demoContext2.LoadDemo(new T45_TextureWrap());
+                //demoContext2.LoadDemo(new T48_MultiTexture());
+                //demoContext2.LoadDemo(new T107_SampleDrawImage());
+
+                demoContext2.LoadDemo(new T110_DrawText());
+            }
+            demoContext2.Render();
+
+        }
+    }
+
+    class GLFWProgram
+    {
         static PixelFarm.Agg.ActualImage LoadImage(string filename)
         {
             ImageTools.ExtendedImage extendedImg = new ImageTools.ExtendedImage();
@@ -162,7 +262,7 @@ namespace TestGlfw
             int ww_w = 800;
             int ww_h = 600;
             int max = Math.Max(ww_w, ww_h);
-            canvasGL2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+
 
             //------------------------------------
             GL.Enable(EnableCap.Blend);
@@ -170,18 +270,17 @@ namespace TestGlfw
             GL.ClearColor(1, 1, 1, 1);
             //--------------------------------------------------------------------------------
             //setup viewport size
-            //set up canvas 
-
-            //GL.Viewport(0, 0, 800, 600);
+            //set up canvas  
             GL.Viewport(0, 0, max, max);
 
             FormRenderUpdateEventArgs formRenderUpdateEventArgs = new FormRenderUpdateEventArgs();
             formRenderUpdateEventArgs.form = form1;
 
+            GlfwGLES2 glfwApp = new GlfwGLES2();
+
             form1.SetDrawFrameDelegate(() =>
             {
-                UpdateViewContent(formRenderUpdateEventArgs);
-
+                glfwApp.UpdateViewContent(formRenderUpdateEventArgs);
 
             });
 

@@ -38,7 +38,7 @@ namespace Mini
             cmbRenderBackend.Items.Add(RenderBackendChoice.OpenGLES2);
             cmbRenderBackend.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
             cmbRenderBackend.Items.Add(RenderBackendChoice.SkiaGLBackend);
-            cmbRenderBackend.SelectedIndex = 2;//set default 
+            cmbRenderBackend.SelectedIndex = 0;//set default 
         }
 
 
@@ -348,7 +348,8 @@ namespace Mini
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     //test subpixel rendering 
 
-                    vxs = PixelFarm.Agg.Transform.Affine.TranslateToVxs(vxs, 15, 0, new VertexStore());
+
+                    vxs = vxs.TranslateToNewVxs(15, 0, new VertexStore());
                     gfx.UseSubPixelRendering = true;
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(

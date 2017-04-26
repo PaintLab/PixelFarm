@@ -1,9 +1,6 @@
 ﻿//MIT, 2017, WinterDev 
 using System;
 using Mini;
-using PixelFarm.Agg;
-using PixelFarm.Agg.VertexSource;
-
 namespace PixelFarm.Agg.Sample_AADemoTest4
 {
 
@@ -13,11 +10,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         B,
         C,
         D,
-        E, F, 
-
+        E,
+        F,
     }
-
-
 
 
     [Info(OrderCode = "02")]
@@ -26,6 +21,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
     {
         public AADemoTest4_subpix()
         {
+            this.EnableSubPix = false;
         }
         static byte[] CreateGreyScaleBuffer(ActualImage img)
         {
@@ -190,6 +186,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         //    while(--width);
         //}
 
+        [DemoConfig]
+        public bool EnableSubPix
+        {
+            get; set;
+        }
 
         [DemoConfig]
         public Sample Sample
@@ -197,8 +198,6 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             get;
             set;
         }
-
-
 
         void RunSampleA(CanvasPainter p)
         {
@@ -271,10 +270,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //---------------------------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 1.0f;
-            p.UseSubPixelRendering = true;
-            p.Line(0, 0, 15, 20);
-
-
+            p.UseSubPixelRendering = this.EnableSubPix;
+            p.Line(0, 1, 15, 20);
         }
         static double DegToRad(double degree)
         {
@@ -289,10 +286,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelRendering = this.EnableSubPix;
             //--------------------------
-            p.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            p.StrokeWidth = 2.0f;
+            p.StrokeColor = PixelFarm.Drawing.Color.Black;
+            p.StrokeWidth = 1.0f;
             //p.Line(2, 0, 10, 15);
 
             int lineLen = 10;
@@ -313,7 +310,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelRendering = this.EnableSubPix;
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
@@ -323,25 +320,24 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int x = 30;
             int y = 30;
             p.FillColor = PixelFarm.Drawing.Color.Black;
+            p.FillRectLBWH(0, 0, 1, 1);
 
-            p.FillRectangle(0, 0, 20, 20);
+            //for (int i = 0; i < 360; i += 30)
+            //{
+            //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
 
-            for (int i = 0; i < 360; i += 30)
-            {
-                p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
-
-            }
-            y += 10;
-            for (int i = 0; i < 360; i += 360)
-            {
-                p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
-            }
+            //}
+            //y += 10;
+            //for (int i = 0; i < 360; i += 360)
+            //{
+            //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+            //}
         }
         void RunSampleF(CanvasPainter p)
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
-            p.UseSubPixelRendering = true;
+            p.UseSubPixelRendering = this.EnableSubPix;
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
@@ -370,7 +366,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //p.FillRectangle(0, 0, 20, 20);
 
         }
-        
+
         public override void Draw(CanvasPainter p)
         {
             //specific for agg
@@ -400,15 +396,15 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 case Sample.F:
                     RunSampleF(p);
                     break;
-              
+
             }
 
         }
 
-        static LcdDistributionLut g8_1_2lcd = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray8, 0.5, 0.25, 0.125);
+        static LcdDistributionLut g8_4_2_1 = new LcdDistributionLut(64, 4 / 8f, 2 / 8f, 1 / 8f);
         void BlendWithLcdTechnique(ActualImage destImg, ActualImage glyphImg, PixelFarm.Drawing.Color color)
         {
-            var g8Lut = g8_1_2lcd;
+            var g8Lut = g8_4_2_1;
             var forwardBuffer = new ScanlineSubPixelRasterizer.TempForwardAccumBuffer();
             int glyphH = glyphImg.Height;
             int glyphW = glyphImg.Width;
@@ -455,9 +451,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     {
 
                         forwardBuffer.WriteAccumAndReadBack(
-                         g8Lut.Tertiary(greyScaleValue),
-                         g8Lut.Secondary(greyScaleValue),
-                         g8Lut.Primary(greyScaleValue), out e0);
+                         g8Lut.TertiaryFromLevel(greyScaleValue),
+                         g8Lut.SecondaryFromLevel(greyScaleValue),
+                         g8Lut.PrimaryFromLevel(greyScaleValue), out e0);
 
                         //5. blend this pixel to dest image (expand to 5 (sub)pixel)                          
                         BlendPixel(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
@@ -552,7 +548,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //agg lcd test
             //lcd_distribution_lut<ggo_gray8> lut(1.0/3.0, 2.0/9.0, 1.0/9.0);
             //lcd_distribution_lut<ggo_gray8> lut(0.5, 0.25, 0.125);
-            LcdDistributionLut lut = g8_1_2lcd;
+            LcdDistributionLut lut = g8_4_2_1;
             int destImgStride = srcW + 4; //expand the original gray scale 
             newImageStride = destImgStride;
 
@@ -572,11 +568,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                     //convert to grey scale  
                     int v = src[srcImgIndex];// (int)((greyScaleValue / 255f) * 65f);
                     //----------------------------------
-                    destBuffer[destImgIndex] += lut.Tertiary(v);
-                    destBuffer[destImgIndex + 1] += lut.Secondary(v);
-                    destBuffer[destImgIndex + 2] += lut.Primary(v);
-                    destBuffer[destImgIndex + 3] += lut.Secondary(v);
-                    destBuffer[destImgIndex + 4] += lut.Tertiary(v);
+                    destBuffer[destImgIndex] += lut.TertiaryFromLevel(v);
+                    destBuffer[destImgIndex + 1] += lut.SecondaryFromLevel(v);
+                    destBuffer[destImgIndex + 2] += lut.PrimaryFromLevel(v);
+                    destBuffer[destImgIndex + 3] += lut.SecondaryFromLevel(v);
+                    destBuffer[destImgIndex + 4] += lut.TertiaryFromLevel(v);
                     destImgIndex++;
                     srcImgIndex++;
                 }

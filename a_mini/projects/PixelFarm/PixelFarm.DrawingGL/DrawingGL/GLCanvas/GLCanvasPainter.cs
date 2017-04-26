@@ -193,7 +193,7 @@ namespace PixelFarm.DrawingGL
         public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
         {
             var v1 = GetFreeVxs();
-            BezierCurve.CreateBezierVxs4(v1,
+            VertexSourceExtensions.CreateBezierVxs4(v1,
                 new PixelFarm.VectorMath.Vector2(startX, startY),
                 new PixelFarm.VectorMath.Vector2(endX, endY),
                 new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
@@ -303,13 +303,6 @@ namespace PixelFarm.DrawingGL
             FillEllipse(x - radius, y - radius, x + radius, y + radius);
         }
 
-        public override void FillCircle(double x, double y, double radius, Color color)
-        {
-            Color prevColor = _fillColor;
-            _fillColor = color;
-            FillEllipse(x - radius, y - radius, x + radius, y + radius);
-            _fillColor = prevColor; //reset
-        }
         public void FillRoundRect(Color color, float x, float y, float w, float h, float rx, float ry)
         {
             roundRect.SetRect(x, y, x + w, y + h);
@@ -412,13 +405,7 @@ namespace PixelFarm.DrawingGL
         {
             FillRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
         }
-        public override void FillRectangle(double left, double bottom, double right, double top, Color fillColor)
-        {
-            Color prev_color = FillColor; //store prev value
-            FillColor = fillColor;
-            FillRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
-            FillColor = prev_color;
-        }
+
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {
             FillRect((float)left, (float)bottom, (float)width, (float)height);
@@ -486,11 +473,7 @@ namespace PixelFarm.DrawingGL
             _canvas.StrokeColor = _strokeColor;
             _canvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
         }
-        public override void Line(double x1, double y1, double x2, double y2, Color color)
-        {
-            _canvas.StrokeColor = color;
-            _canvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
-        }
+
         public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
         {
             //TODO: review here.
@@ -505,13 +488,7 @@ namespace PixelFarm.DrawingGL
             //draw rectangle
             _canvas.DrawRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
         }
-        public override void Rectangle(double left, double bottom, double right, double top, Color color)
-        {   //draw rectangle
-            var prev = _canvas.StrokeColor;
-            _canvas.StrokeColor = color;
-            _canvas.DrawRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
-            _canvas.StrokeColor = prev;
-        }
+
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
         }

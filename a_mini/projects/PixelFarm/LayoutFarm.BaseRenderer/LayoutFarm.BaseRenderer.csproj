@@ -36,7 +36,6 @@
     <Compile Include="1_Root\RootGraphicsPlatform.cs" />
     <Compile Include="2_RenderElement\3_RenderElement.Bubble_Layout.cs" />
     <Compile Include="2_RenderElement\RenderElementConst.cs" />
-    <Compile Include="2_RenderElement\RenderElementFoundDelegate.cs" />
     <Compile Include="2_RenderElement\RenderElement_IParentLink.cs" />
     <Compile Include="2_RenderElement\x_RenderElement_LocationHelper.cs" />
     <Compile Include="1_Root\1_RootGraphic.cs" />

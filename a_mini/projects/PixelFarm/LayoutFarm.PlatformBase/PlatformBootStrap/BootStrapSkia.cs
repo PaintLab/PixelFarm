@@ -8,7 +8,7 @@ namespace YourImplementation
 
     public static class BootStrapSkia
     {
-        public static readonly IFontLoader myFontLoader = new WindowsFontLoader();
+     
         static string lib_SKIA = "libSkiaSharp.dll";
         static BootStrapSkia()
         {

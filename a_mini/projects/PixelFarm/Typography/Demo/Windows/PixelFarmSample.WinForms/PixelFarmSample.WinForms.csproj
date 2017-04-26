@@ -38,18 +38,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Shared\DevTextPrinter\DevTextPrinterBase.cs">
-      <Link>DevTextPrinter\DevTextPrinterBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DevTextPrinter\FontManagement.cs">
-      <Link>DevTextPrinter\FontManagement.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\DevTextPrinter\GlyphMeshCollection.cs">
-      <Link>DevTextPrinter\GlyphMeshCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilderBase.cs">
-      <Link>GlyphPathBuilder\GlyphPathBuilderBase.cs</Link>
-    </Compile>
     <Compile Include="..\GdiPlusSample.WinForms\GdiPlus\DevGdiTextPrinter.cs">
       <Link>GdiPlus\DevGdiTextPrinter.cs</Link>
     </Compile>
@@ -62,19 +50,8 @@
     <Compile Include="..\TextBoxSample.WinForms\TextBoxController\SampleTextBoxLineModel.cs">
       <Link>GdiPlus\SampleTextBoxLineModel.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
-      <Link>GlyphPathBuilder\GlyphPathBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\HintTechnique.cs">
-      <Link>GlyphPathBuilder\HintTechnique.cs</Link>
-    </Compile>
-    <Compile Include="..\TextBoxSample.WinForms\SampleTextBox.cs">
-      <Link>SampleTextBox.cs</Link>
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="..\TextBoxSample.WinForms\SampleTextBox.Designer.cs">
-      <Link>SampleTextBox.Designer.cs</Link>
-    </Compile>
+    <Compile Include="DebugGlyphVisualizer.cs" />
+    <Compile Include="DebugGlyphVisualizerInfoView.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,15 +59,17 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="PixelFarm\BitmapHelper.cs" />
-    <Compile Include="PixelFarm\DevVxsTextPrinter.cs" />
-    <Compile Include="PixelFarm\GlyphTranslatorToVxs.cs" />
-    <Compile Include="PixelFarm\HintedVxsGlyphCollection.cs" />
+    <Compile Include="PixelFarm\MouseButtonsAndKeys.cs" />
     <Compile Include="PixelFarm\SampleTextBoxControllerForPixelFarm.cs" />
+    <Compile Include="PixelFarm\VisualLine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="..\TextBoxSample.WinForms\SampleTextBox.resx">
-      <Link>SampleTextBox.resx</Link>
-    </EmbeddedResource>
+    <Compile Include="SampleTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SampleTextBox.Designer.cs">
+      <DependentUpon>SampleTextBox.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -104,6 +83,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SampleTextBox.resx">
+      <DependentUpon>SampleTextBox.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -115,9 +97,25 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\FontAtlas\FontAtlas.csproj">
-      <Project>{64c28aab-e2ef-45c1-a674-5660d462882f}</Project>
-      <Name>FontAtlas</Name>
+    <ProjectReference Include="..\..\..\..\MiniAgg.Complements\MiniAgg.Complements.csproj">
+      <Project>{ae0df71e-9b14-4197-b55a-e1e0ce0683c7}</Project>
+      <Name>MiniAgg.Complements</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\MiniAgg\MiniAgg.csproj">
+      <Project>{4d5ce655-58fa-4523-8e46-738b941e9e47}</Project>
+      <Name>MiniAgg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
+      <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
+      <Name>PixelFarm.DrawingCanvas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj">
+      <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
+      <Name>PixelFarm.Triangulation</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
@@ -127,17 +125,17 @@
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
       <Name>Typography.GlyphLayout</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Typography.AutoFit\Typography.AutoFit.csproj">
+      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
+      <Name>Typography.AutoFit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Typography.MsdfGen\Typography.MsdfGen.csproj">
       <Project>{8f69ab8d-174a-4912-9328-cae8eda5564b}</Project>
       <Name>Typography.MsdfGen</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Typography.Rendering\Typography.Rendering.csproj">
-      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
-      <Name>Typography.Rendering</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\x_autogen2\PixelFarm.MiniAgg.One\PixelFarm.MiniAgg.One.csproj">
-      <Project>{fb5f78f5-c921-405d-8f21-42f7c15c2ad9}</Project>
-      <Name>PixelFarm.MiniAgg.One</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

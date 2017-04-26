@@ -12,7 +12,7 @@ namespace OpenTkEssTest
     [Info("T405_DrawString")]
     public class T405_DrawString : DemoBase
     {
-        HarfBuzzShapingService hbShapingService;
+        //HarfBuzzShapingService hbShapingService;
         PixelFarm.Drawing.RequestFont font1;
         PixelFarm.Drawing.RequestFont font2;
         protected override void OnReadyForInitGLShaderProgram()
@@ -21,10 +21,10 @@ namespace OpenTkEssTest
         }
         protected override void OnPainterReady(CanvasPainter painter)
         {
-            font1 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
+            font1 = new PixelFarm.Drawing.RequestFont("tahoma", 10);
             font1.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
             //
-            font2 = new PixelFarm.Drawing.RequestFont("tahoma", 16);
+            font2 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
             font2.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
             painter.UseSubPixelRendering = true;
             painter.CurrentFont = font1;
@@ -44,7 +44,7 @@ namespace OpenTkEssTest
             // string test_str = "อูญูอุบ่ป่กินกิ่นก็โก้";
             //string test_str = "ปู่";
             //string test_str = "ก็";
-            string test_str = "s";
+            string test_str = "example";
             //string test_str = "A";
             //string test_str = "012345";
             //string test_str = "กิน";
@@ -117,7 +117,7 @@ namespace OpenTkEssTest
     [Info("T405_1_DrawStringRenderVx")]
     public class T405_1_DrawStringRenderVx : DemoBase
     {
-        HarfBuzzShapingService hbShapingService;
+        //HarfBuzzShapingService hbShapingService;
         PixelFarm.Drawing.RequestFont font1;
         PixelFarm.Drawing.RequestFont font2;
         protected override void OnReadyForInitGLShaderProgram()

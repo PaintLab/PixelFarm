@@ -48,19 +48,25 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawText(char[] buffer, int x, int y)
         {
+            var prevColor = painter1.FillColor;
+            painter1.FillColor = PixelFarm.Drawing.Color.Black;
             painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, x, this.Height - y);
+            painter1.FillColor = prevColor;
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
+            var prevColor = painter1.FillColor;
+            painter1.FillColor = PixelFarm.Drawing.Color.Black;
             painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, logicalTextBox.X, this.Height - logicalTextBox.Y);
-
+            painter1.FillColor = prevColor;
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
             //TODO: review again
-            
+            var prevColor = painter1.FillColor;
+            painter1.FillColor = PixelFarm.Drawing.Color.Black;
             painter1.TextPrinter.DrawString(str, startAt, len, logicalTextBox.X, this.Height - logicalTextBox.Y);
-
+            painter1.FillColor = prevColor;
             //TODO: review here
             //painter1.FillRectangle(0, 0, 20, 20, Color.Red);
 

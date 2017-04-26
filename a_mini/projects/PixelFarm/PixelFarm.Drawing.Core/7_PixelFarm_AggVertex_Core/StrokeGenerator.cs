@@ -133,7 +133,7 @@ namespace PixelFarm.Agg
                     break;
                 case VertexCmd.Close:
                 case VertexCmd.CloseAndEndFigure:
-                    m_closed = true;
+                    //m_closed = true;
                     break;
                 default:
                     multipartVertexDistanceList.AddVertex(new Vertex2d(x, y));
@@ -150,7 +150,7 @@ namespace PixelFarm.Agg
             //int n = 0;
             for (;;)
             {
-                VertexCmd cmd = GetNextVertex(ref x, ref y);
+                VertexCmd cmd = GetNextVertex(out x, out y);
                 if (cmd == VertexCmd.NoMore)
                 {
                     if (currentRangeIndex + 1 < multipartVertexDistanceList.RangeCount)
@@ -205,8 +205,9 @@ namespace PixelFarm.Agg
             multipartVertexDistanceList.Rewind();
         }
 
-        VertexCmd GetNextVertex(ref double x, ref double y)
+        VertexCmd GetNextVertex(out double x, out double y)
         {
+            x = 0; y = 0;
             VertexCmd cmd = VertexCmd.LineTo;
             do
             {
@@ -227,6 +228,10 @@ namespace PixelFarm.Agg
                         m_src_vertex = 0;
                         m_out_vertex = 0;
                         break;
+                    case Status.CloseFirst:
+                        m_status = Status.Outline2;
+                        cmd = VertexCmd.MoveTo;
+                        goto case Status.Outline2;
                     case Status.Cap1:
                         {
                             Vertex2d v0, v1;
@@ -284,25 +289,22 @@ namespace PixelFarm.Agg
                                 out next);
                             //check if we should join or not ?
 
-                            //don't join it
-                            m_stroker.CreateJoin(m_out_vertices,
-                           prev,
-                           cur,
-                           next,
-                           prev.CalLen(cur),
-                           cur.CalLen(next));
+                                //don't join it
+                                m_stroker.CreateJoin(m_out_vertices,
+                               prev,
+                               cur,
+                               next,
+                               prev.CalLen(cur),
+                               cur.CalLen(next));
 
-                            ++m_src_vertex;
-                            m_prev_status = m_status;
-                            m_status = Status.OutVertices;
-                            m_out_vertex = 0;
+                                ++m_src_vertex;
+                                m_prev_status = m_status;
+                                m_status = Status.OutVertices;
+                                m_out_vertex = 0;
 
                         }
                         break;
-                    case Status.CloseFirst:
-                        m_status = Status.Outline2;
-                        cmd = VertexCmd.MoveTo;
-                        goto case Status.Outline2;
+                   
                     case Status.Outline2:
                         {
                             if (m_src_vertex <= (!m_closed ? 1 : 0))
@@ -346,10 +348,12 @@ namespace PixelFarm.Agg
                     case Status.EndPoly1:
                         m_status = m_prev_status;
                         x = (int)EndVertexOrientation.CCW;
+                        y = 0;
                         return VertexCmd.Close;
                     case Status.EndPoly2:
                         m_status = m_prev_status;
                         x = (int)EndVertexOrientation.CW;
+                        y = 0;
                         return VertexCmd.Close;
                     case Status.Stop:
                         cmd = VertexCmd.NoMore;
@@ -398,10 +402,7 @@ namespace PixelFarm.Agg
             {
                 _ranges[_ranges.Count - 1].SetEndAt(_vertextDistanceList.Count);
             }
-            if (_ranges.Count >= 83)
-            {
 
-            }
             _ranges.Add(_range = new Range(_vertextDistanceList.Count));
             AddVertex(new Agg.Vertex2d(x, y));
         }
@@ -418,7 +419,10 @@ namespace PixelFarm.Agg
         }
         public int CurrentRangeLen
         {
-            get { return _range.len; }
+            get
+            {
+                return (_range == null) ? 0 : _range.len;
+            }
         }
         public void AddLineTo(double x, double y)
         {
@@ -449,6 +453,7 @@ namespace PixelFarm.Agg
             _vertextDistanceList.Clear();
             _latest = new Agg.Vertex2d();
             _rangeIndex = 0;
+            _range = null;
         }
         public void Rewind()
         {
@@ -467,7 +472,7 @@ namespace PixelFarm.Agg
         public void GetTripleVertices(int idx, out Vertex2d prev, out Vertex2d cur, out Vertex2d next)
         {
             //we want 3 vertices
-            if (idx > 1 && idx + 2 <= _range.Count)
+            if (idx > 0 && idx + 2 <= _range.Count)
             {
                 prev = _vertextDistanceList[_range.beginAt + idx - 1];
                 cur = _vertextDistanceList[_range.beginAt + idx];

@@ -56,12 +56,18 @@ namespace PixelFarm.Agg
             //    return true;
             //}
         }
+#if DEBUG
+        public override string ToString()
+        {
+            return "(" + x + "," + y + ")";
+        }
+#endif
     }
 
 
     public class StrokeMath
     {
-       
+
         double m_width;
         double m_width_abs;
         double m_width_eps;

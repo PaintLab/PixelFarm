@@ -50,6 +50,7 @@
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGenGouraudRGBA.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGradient.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
+    <Compile Include="MiniAgg.Complements\Filter\BrightnessAndContrastAdjustment.cs" />
     <Compile Include="MiniAgg.Complements\Filter\ImageFilters.cs" />
     <Compile Include="MiniAgg.Complements\Filter\PatternFilterBilnearColorRGBA.cs" />
     <Compile Include="MiniAgg.Complements\Filter\RecursiveBlur.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="MiniAgg\04_Scanline\4.3_VectorClipper.cs" />
     <Compile Include="MiniAgg\04_Scanline\5_ScanlineRasToDestBitmapRenderer.cs" />
     <Compile Include="MiniAgg\04_Scanline\6_ClipLiangBarsky.cs" />
+    <Compile Include="MiniAgg\04_Scanline\SubPixConst.cs" />
     <Compile Include="MiniAgg\07_ISpanInterpolator\LineInterpolators.cs" />
     <Compile Include="MiniAgg\07_ISpanInterpolator\SpanInterpolatorLinear.cs" />
     <Compile Include="MiniAgg\07_ISpanInterpolator\SpanInterpolatorPerspectiveLerp.cs" />
@@ -109,6 +111,7 @@
     <Compile Include="MiniAgg\08_ImageResampling\ImageFreeTransform.cs" />
     <Compile Include="MiniAgg\08_ImageResampling\ImageInterpolationQuality.cs" />
     <Compile Include="MiniAgg\08_ImageResampling\ImageTransform.cs" />
+    <Compile Include="MiniAgg\09_ImgFilters\InternalBrightnessAndContrastAdjustment.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
