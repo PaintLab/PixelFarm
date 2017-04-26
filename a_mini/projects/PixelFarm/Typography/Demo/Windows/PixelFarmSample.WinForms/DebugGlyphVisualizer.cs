@@ -201,7 +201,7 @@ namespace SampleWinForms.UI
         }
 
 
-        public bool DrawTrianglesAndEdges { get; set; }
+
         public bool DrawDynamicOutline { get; set; }
         public bool DrawRegenerateOutline { get; set; }
         public bool DrawEndLineHub { get; set; }
@@ -229,59 +229,57 @@ namespace SampleWinForms.UI
             if (edge.IsOutside)
             {
                 //free side      
-
-                GlyphPoint u_data_p = edge.GlyphPoint_P;
-                GlyphPoint u_data_q = edge.GlyphPoint_Q;
-
-
-                DrawPointKind(painter, u_data_p);
-                DrawPointKind(painter, u_data_q);
-                _infoView.ShowEdge(edge);
-                switch (edge.SlopeKind)
                 {
-                    default:
-                        painter.StrokeColor = PixelFarm.Drawing.Color.Green;
-                        break;
-                    case LineSlopeKind.Vertical:
-                        if (edge.IsLeftSide)
-                        {
-                            painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
-                        }
-                        else
-                        {
-                            painter.StrokeColor = PixelFarm.Drawing.Color.LightGray;
-                        }
-                        break;
-                    case LineSlopeKind.Horizontal:
+                    GlyphPoint p = edge.GlyphPoint_P;
+                    GlyphPoint q = edge.GlyphPoint_Q;
 
-                        if (edge.IsUpper)
-                        {
-                            painter.StrokeColor = PixelFarm.Drawing.Color.Red;
-                        }
-                        else
-                        {
-                            //lower edge
-                            painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
-                        }
-                        break;
+                    DrawPointKind(painter, p);
+                    DrawPointKind(painter, q);
+                    _infoView.ShowEdge(edge);
+                    switch (edge.SlopeKind)
+                    {
+                        default:
+                            painter.StrokeColor = PixelFarm.Drawing.Color.Green;
+                            break;
+                        case LineSlopeKind.Vertical:
+                            if (edge.IsLeftSide)
+                            {
+                                painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
+                            }
+                            else
+                            {
+                                painter.StrokeColor = PixelFarm.Drawing.Color.LightGray;
+                            }
+                            break;
+                        case LineSlopeKind.Horizontal:
+
+                            if (edge.IsUpper)
+                            {
+                                painter.StrokeColor = PixelFarm.Drawing.Color.Red;
+                            }
+                            else
+                            {
+                                //lower edge
+                                painter.StrokeColor = PixelFarm.Drawing.Color.Magenta;
+                            }
+                            break;
+                    }
                 }
-
                 float scale = this._pxscale;
                 //show info: => edge point
-                if (_infoView.HasDebugMark)
+                if (this.DrawPerpendicularLine && _infoView.HasDebugMark)
                 {
                     double prevWidth = painter.StrokeWidth;
                     painter.StrokeWidth = 3;
                     painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale, PixelFarm.Drawing.Color.Yellow);
                     painter.StrokeWidth = prevWidth;
-
-
                     GlyphEdge glyphEdge = edge.dbugGlyphEdge;
                     if (glyphEdge != null)
                     {
                         //draw
                         GlyphPoint p = edge.GlyphPoint_P;
                         GlyphPoint q = edge.GlyphPoint_Q;
+
                         //
                         AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
                         if (p_bones != null)
@@ -294,8 +292,6 @@ namespace SampleWinForms.UI
                             }
                         }
 
-
-
                         AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
                         if (q_bones != null)
                         {
@@ -307,6 +303,18 @@ namespace SampleWinForms.UI
                                 Vector2 v3 = b.GetMidPoint();
                                 painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Green);
                             }
+                        }
+
+                        {
+                            Vector2 orginal_MidPoint = glyphEdge.GetMidPoint() * _pxscale;
+                            Vector2 newMidPoint = glyphEdge.GetNewMidPoint() * _pxscale;
+                            painter.FillRectLBWH(newMidPoint.X, newMidPoint.Y, 3, 3, PixelFarm.Drawing.Color.Red);
+                            painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
+
+
+                            painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
+                            painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
+
                         }
                     }
                 }
@@ -331,8 +339,8 @@ namespace SampleWinForms.UI
                             painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
 
 
-                            painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 3, 3, PixelFarm.Drawing.Color.Blue);
-                            painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 3, 3, PixelFarm.Drawing.Color.Blue);
+                            painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue);
+                            painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue);
 
                         }
                         //---------   
@@ -593,38 +601,28 @@ namespace SampleWinForms.UI
 
         protected override void OnTriangle(int triangleId, EdgeLine e0, EdgeLine e1, EdgeLine e2, double centroidX, double centroidY)
         {
-            if (DrawTrianglesAndEdges)
-            {
-                DrawEdge(painter, e0);
-                DrawEdge(painter, e1);
-                DrawEdge(painter, e2);
 
-                _infoView.ShowTriangles(new GlyphTriangleInfo(triangleId, e0, e1, e2, centroidX, centroidY));
-            }
+            DrawEdge(painter, e0);
+            DrawEdge(painter, e1);
+            DrawEdge(painter, e2);
+
+            _infoView.ShowTriangles(new GlyphTriangleInfo(triangleId, e0, e1, e2, centroidX, centroidY));
+
         }
-        protected override void OnGlyphEdge(float x0, float y0, float x1, float y1)
+
+        protected override void OnGlyphEdgeN(GlyphEdge e)
         {
             float pxscale = this._pxscale;
-            //painter.Line(
-            //    x0 * pxscale, y0 * pxscale,
-            //    x1 * pxscale, y1 * pxscale,
-            //    PixelFarm.Drawing.Color.Green);
+            Vector2 cut_p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
+            Vector2 cut_q = new Vector2(e.newEdgeCut_Q_X, e.newEdgeCut_Q_Y) * pxscale;
 
-            painter.FillRectLBWH(x0 * pxscale, y0 * pxscale, 6, 6, PixelFarm.Drawing.Color.Yellow);
-            painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.Yellow);
-        }
-        protected override void OnGlyphEdgeN(float x0, float y0, float x1, float y1)
-        {
-            float pxscale = this._pxscale;
-            //painter.Line(
-            //    x0 * pxscale, y0 * pxscale,
-            //    x1 * pxscale, y1 * pxscale,
-            //    PixelFarm.Drawing.Color.Green);
 
-            painter.FillRectLBWH(x0 * pxscale, y0 * pxscale, 3, 3, PixelFarm.Drawing.Color.Red);
+            painter.FillRectLBWH(cut_p.X, cut_p.Y, 3, 3, PixelFarm.Drawing.Color.Red);
             //painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
 
-            _infoView.ShowGlyphEdge(x0, y0, x1, y1);
+            _infoView.ShowGlyphEdge(e,
+                e.newEdgeCut_P_X, e.newEdgeCut_P_Y,
+                e.newEdgeCut_Q_X, e.newEdgeCut_Q_Y);
         }
         protected override void OnCentroidLine(double px, double py, double qx, double qy)
         {

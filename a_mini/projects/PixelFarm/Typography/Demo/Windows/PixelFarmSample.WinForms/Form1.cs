@@ -228,8 +228,9 @@ namespace SampleWinForms
             //string inputstr = "u";
             //string inputstr = "t";
             //string inputstr = "2";
+            string inputstr = "3";
             //string inputstr = "o";
-            string inputstr = "l";
+            //string inputstr = "l";
             //string inputstr = "k";
             //string inputstr = "8";
             //string inputstr = "#";
@@ -413,7 +414,7 @@ namespace SampleWinForms
             debugGlyphVisualizer.DrawBorder = chkBorder.Checked;
             debugGlyphVisualizer.OffsetMinorX = chkMinorOffset.Checked;
             debugGlyphVisualizer.ShowTess = chkShowTess.Checked;
-            debugGlyphVisualizer.DrawTrianglesAndEdges = this.chkDrawTriangles.Checked;
+            debugGlyphVisualizer.WalkTrianglesAndEdges = this.chkDrawTriangles.Checked;
             debugGlyphVisualizer.DrawEndLineHub = this.chkDrawLineHubConn.Checked;
             debugGlyphVisualizer.DrawPerpendicularLine = this.chkDrawPerpendicularLine.Checked;
             debugGlyphVisualizer.WalkCentroidBone = this.chkDrawCentroidBone.Checked;
@@ -651,5 +652,16 @@ namespace SampleWinForms
             //}
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            System.Numerics.Vector2 p0 = new System.Numerics.Vector2(0, 0);
+            System.Numerics.Vector2 p1 = new System.Numerics.Vector2(0, 10);
+            System.Numerics.Vector2 p2 = new System.Numerics.Vector2(5, 5);
+            System.Numerics.Vector2 p3 = new System.Numerics.Vector2(10, 10);
+
+            System.Numerics.Vector2 result = Typography.Rendering.MyMath.FindCutPoint(p0, p1, p2, p3);
+
+
+        }
     }
 }
