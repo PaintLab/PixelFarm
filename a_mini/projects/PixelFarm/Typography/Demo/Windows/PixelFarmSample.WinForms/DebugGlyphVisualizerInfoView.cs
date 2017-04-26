@@ -380,7 +380,7 @@ namespace SampleWinForms.UI
 
             _edgeLines.Add(edge);
         }
-        public void ShowGlyphEdge(float x0, float y0, float x1, float y1)
+        public void ShowGlyphEdge(GlyphEdge e, float x0, float y0, float x1, float y1)
         {
             if (!_clearInfoView)
             {
@@ -390,7 +390,7 @@ namespace SampleWinForms.UI
             NodeInfo nodeInfo = new NodeInfo(NodeInfoKind.GlyphEdge, x0, y0, x1, y1);
             TreeNode nodeEdge = new TreeNode();
             nodeEdge.Tag = nodeInfo;
-            nodeEdge.Text = x0 + "," + y0 + "," + x1 + "," + y1;
+            nodeEdge.Text = e.dbugId + ": (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")";
             //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
             //{
             //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;

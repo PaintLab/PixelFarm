@@ -13,23 +13,29 @@ namespace Typography.Rendering
         public GlyphOutlineWalker()
         {
             //default
-            WalkCentroidBone = WalkGlyphBone = true;
+            WalkTrianglesAndEdges = WalkCentroidBone = WalkGlyphBone = true;
         }
-
+        public bool WalkTrianglesAndEdges { get; set; }
         public bool WalkCentroidBone { get; set; }
         public bool WalkGlyphBone { get; set; }
         //
         public void Walk(GlyphDynamicOutline dynamicOutline)
         {
+#if DEBUG
             this._dynamicOutline = dynamicOutline;
-
             int triNumber = 0;
-            foreach (GlyphTriangle tri in _dynamicOutline.dbugGetGlyphTriangles())
+            if (WalkTrianglesAndEdges)
             {
-                OnTriangle(triNumber++, tri.e0, tri.e1, tri.e2, tri.CentroidX, tri.CentroidY);
+                foreach (GlyphTriangle tri in _dynamicOutline.dbugGetGlyphTriangles())
+                {
+                    OnTriangle(triNumber++, tri.e0, tri.e1, tri.e2, tri.CentroidX, tri.CentroidY);
+                }
             }
             //--------------- 
-#if DEBUG
+            List<GlyphContour> contours = _dynamicOutline._contours;
+
+
+            //--------------- 
             List<CentroidLineHub> centroidLineHubs = _dynamicOutline.dbugGetCentroidLineHubs();
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
@@ -76,7 +82,7 @@ namespace Typography.Rendering
                 }
                 //
                 OnEndLineHub(hubCenter.X, hubCenter.Y, lineHub.GetHeadConnectedJoint());
-            } 
+            }
             //----------------
 
             List<GlyphContour> cnts = _dynamicOutline._contours;
@@ -90,25 +96,20 @@ namespace Typography.Rendering
                     int n = edgeLines.Count;
                     for (int m = 0; m < n; ++m)
                     {
-                        GlyphEdge e = edgeLines[m];
-                        Vector2 cut_p = e.Pos_P;
-                        Vector2 cut_q = e.Pos_Q;
-                        OnGlyphEdgeN(cut_p.X, cut_p.Y, cut_q.X, cut_p.Y);
+                        OnGlyphEdgeN(edgeLines[m]);
+
                     }
                 }
 
-                //List<GlyphPoint> pnts = cnt.flattenPoints;
-                //int lim = pnts.Count - 1;
-                //for (int m = 0; m < lim; ++m)
-                //{
-                //    GlyphPoint p = pnts[m];
-                //    GlyphPoint q = pnts[m + 1]; 
-                //    OnGlyphEdge(p.x, p.y, q.x, q.y); 
-                //}
-
-
             }
-            //----------------
+            ////----------------
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    GlyphContour cnt = contours[i];
+            //    List<GlyphPoint> pnts = cnt.flattenPoints;
+            //    //pnts and edges 
+            //    //iterate all glyph points  
+            //}
 #endif
 
         }
@@ -155,8 +156,7 @@ namespace Typography.Rendering
         protected abstract void OnBegingLineHub(float centerX, float centerY);
         protected abstract void OnEndLineHub(float centerX, float centerY, GlyphBoneJoint joint);
 
-        protected abstract void OnGlyphEdge(float x0, float y0, float x1, float y1);
-        protected abstract void OnGlyphEdgeN(float x0, float y0, float x1, float y1);
+        protected abstract void OnGlyphEdgeN(GlyphEdge edge);
         //
     }
 }

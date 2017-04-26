@@ -173,6 +173,9 @@ namespace Typography.Rendering
 
         void CreateGlyphEdges()
         {
+#if DEBUG
+            GlyphEdge.dbugTotalId = 0;//reset, for debugging
+#endif
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
             for (int i = 0; i < j; ++i)

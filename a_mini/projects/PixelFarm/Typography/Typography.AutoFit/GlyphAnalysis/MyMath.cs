@@ -205,12 +205,295 @@ namespace Typography.Rendering
             //find cut point
             double cutx = (b2 - b1) / (m1 - m2);
             double cuty = (m2 * cutx) + b2;
-
-           
-
             return new Vector2((float)cutx, (float)cuty);
         }
-      
+        /// <summary>
+        /// find parameter A,B,C from Ax + By = C, with given 2 points
+        /// </summary>
+        /// <param name="p0"></param>
+        /// <param name="p1"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="c"></param>
+        static void FindABC(Vector2 p0, Vector2 p1, out double a, out double b, out double c)
+        {
+            //line is in the form
+            //Ax + By = C 
+            //from http://stackoverflow.com/questions/4543506/algorithm-for-intersection-of-2-lines
+            //and https://www.topcoder.com/community/data-science/data-science-tutorials/geometry-concepts-line-intersection-and-its-applications/
+            a = p1.Y - p0.Y;
+            b = p0.X - p1.X;
+            c = a * p0.X + b * p0.Y;
+        }
+        public static bool FindCutPoint(
+              Vector2 p0, Vector2 p1,
+              Vector2 p2, Vector2 p3, out Vector2 result)
+        {
+            //TODO: review here
+            //from http://stackoverflow.com/questions/4543506/algorithm-for-intersection-of-2-lines
+            //and https://www.topcoder.com/community/data-science/data-science-tutorials/geometry-concepts-line-intersection-and-its-applications/
+
+            //------------------------------------------
+            //use matrix style ***
+            //------------------------------------------
+            //line is in the form
+            //Ax + By = C
+            //so   A1x +B1y= C1 ... line1
+            //     A2x +B2y=C2  ... line2
+            //------------------------------------------
+            //
+            //from Ax+By=C ... (1)
+            //By = C- Ax;
+
+            double a1, b1, c1;
+            FindABC(p0, p1, out a1, out b1, out c1);
+
+            double a2, b2, c2;
+            FindABC(p2, p3, out a2, out b2, out c2);
+
+            double delta = a1 * b2 - a2 * b1; //delta is the determinant in math parlance
+            if (delta == 0)
+            {
+                //"Lines are parallel"
+                result = Vector2.Zero;
+                return false; //
+                throw new System.ArgumentException("Lines are parallel");
+            }
+            double x = (b2 * c1 - b1 * c2) / delta;
+            double y = (a1 * c2 - a2 * c1) / delta;
+            result = new Vector2((float)x, (float)y);
+            return true; //has cutpoint
+        }
+
+        static Vector2 FindCutPoint_Algebra(
+            Vector2 p0, Vector2 p1,
+            Vector2 p2, Vector2 p3)
+        {
+            //prefer matrix style (upper)
+
+            //TODO: refactor here... 
+            //find cut point of 2 line 
+            //y = mx + b
+            //from line equation
+            //y = mx + b ... (1)
+            //from (1)
+            //b = y- mx ... (2) 
+            //----------------------------------
+            //line1:
+            //y1 = (m1 * x1) + b1 ...(3)            
+            //line2:
+            //y2 = (m2 * x2) + b2 ...(4)
+            //----------------------------------
+            //from (3),
+            //b1 = y1 - (m1 * x1) ...(5)
+            //b2 = y2 - (m2 * x2) ...(6)
+            //----------------------------------
+            //at cutpoint of line1 and line2 => (x1,y1)== (x2,y2)
+            //or find (x,y) where (3)==(4)
+            //---------------------------------- 
+            //at cutpoint, find x
+            // (m1 * x1) + b1 = (m2 * x1) + b2  ...(11), replace x2 with x1
+            // (m1 * x1) - (m2 * x1) = b2 - b1  ...(12)
+            //  x1 * (m1-m2) = b2 - b1          ...(13)
+            //  x1 = (b2-b1)/(m1-m2)            ...(14), now we know x1
+            //---------------------------------- 
+            //at cutpoint, find y
+            //  y1 = (m1 * x1) + b1 ... (15), replace x1 with value from (14)
+            //Ans: (x1,y1)
+            //----------------------------------
+
+            double y1diff = p1.Y - p0.Y;
+            double x1diff = p1.X - p0.X;
+            //find slope 
+            double m1 = y1diff / x1diff;
+            double b1 = p0.Y - (m1 * p0.X);
+            //from (2) b = y-mx, and (5)
+            //so ...  
+            //------------------------------
+            double y2diff = p3.Y - p2.Y;
+            double x2diff = p3.X - p2.X;
+
+            if (y1diff == 0)
+            {
+                //p0p1 -> same y, p0p1 is horizontal
+                //we known y value
+                float ky = p0.Y;
+                //so find X
+                //from y1=m1x1 +b1;
+                //x1= (y1-b1)/m1 
+                if (x2diff == 0)
+                {   //p2p3 -> same x, p2p3 is vertical
+                    return new Vector2((float)p3.X, ky);
+                }
+                else
+                {
+                    double m2 = y2diff / x2diff;
+                    double b2 = p2.Y - (m2) * p2.X;
+                    //from (6)             
+                    //find cut point
+                    //from y2=m2x2 +b2;
+                    //
+                    //
+                    //x2= (y2-b2)/m2
+                    //replace y2 with ky
+                    //x2 = (ky - b2)/m2
+                    double findingX = (ky - b2) / m2;
+                    return new Vector2((float)findingX, ky);
+                }
+
+            }
+            else if (x1diff == 0)
+            {
+                //p0p1 -> same x, p0p1 is vertical
+                if (y2diff == 0)
+                {
+                    //p2p3 -> same y, p2p3 is horizontal
+                    return new Vector2((float)p1.X, (float)p2.Y);
+                }
+                else
+                {
+                    //we know cutX
+                    //so find cutY
+                    double cutx_p2p3 = p1.X;
+
+                    {
+                        double m2 = y2diff / x2diff;
+                        double b2 = p2.Y - (m2) * p2.X;
+                        //from (6)             
+                        //find cut point
+
+                        //check if (m1-m2 !=0)
+                        double cutx = cutx_p2p3; //from  (14) 
+                        double cuty = (m2 * cutx) + b2;  //from (15)
+                        return new Vector2((float)cutx, (float)cuty);
+                    }
+                }
+            }
+            else if (x2diff == 0)
+            {
+                //p2p3 -> same x, p2p3 is vertical
+                //for p0p1
+                //cutX = p2.x
+                //cutY =  (m1 * cutx) + b1
+                double cutx_p2p3 = p2.X;
+                double cuty_p2p3 = (m1 * cutx_p2p3) + b1;  //from (15)
+                return new Vector2((float)cutx_p2p3, (float)cuty_p2p3);
+            }
+            else if (y2diff == 0)
+            {
+                //p2p3 -> same y, p2p3 is horizontal
+                //we know cutY
+                double cuty_p2p3 = p2.Y;
+                //from y1=m1x1 +b1;
+                //x1= (y1-b1)/m1
+                double cutx_p2p3 = (cuty_p2p3 - b1) / m1;
+                return new Vector2((float)cutx_p2p3, (float)cuty_p2p3);
+            }
+
+            {
+                double m2 = y2diff / x2diff;
+                double b2 = p2.Y - (m2) * p2.X;
+                //from (6)             
+                //find cut point
+
+                //check if (m1-m2 !=0)
+                double cutx = (b2 - b1) / (m1 - m2); //from  (14) 
+                double cuty = (m1 * cutx) + b1;  //from (15)
+                return new Vector2((float)cutx, (float)cuty);
+            }
+
+        }
+        static Vector2 FindCutPoint(Vector2 p0, Vector2 p1, Vector2 p2, float cutAngle)
+        {
+            //a line from p0 to p1
+            //p2 is any point
+            //return p3 -> cutpoint on p0,p1
+
+            //from line equation
+            //y = mx + b ... (1)
+            //from (1)
+            //b = y- mx ... (2) 
+            //----------------------------------
+            //line1:
+            //y1 = (m1 * x1) + b1 ...(3)            
+            //line2:
+            //y2 = (m2 * x2) + b2 ...(4)
+            //----------------------------------
+            //from (3),
+            //b1 = y1 - (m1 * x1) ...(5)
+            //b2 = y2 - (m2 * x2) ...(6)
+            //----------------------------------
+            //y1diff = p1.Y-p0.Y  ...(7)
+            //x1diff = p1.X-p0.X  ...(8)
+            //
+            //m1 = (y1diff/x1diff) ...(9)
+            //m2 = cutAngle of m1 ...(10)
+            //
+            //replace value (x1,y1) and (x2,y2)
+            //we know b1 and b2         
+            //----------------------------------              
+            //at cutpoint of line1 and line2 => (x1,y1)== (x2,y2)
+            //or find (x,y) where (3)==(4)
+            //---------------------------------- 
+            //at cutpoint, find x
+            // (m1 * x1) + b1 = (m2 * x1) + b2  ...(11), replace x2 with x1
+            // (m1 * x1) - (m2 * x1) = b2 - b1  ...(12)
+            //  x1 * (m1-m2) = b2 - b1          ...(13)
+            //  x1 = (b2-b1)/(m1-m2)            ...(14), now we know x1
+            //---------------------------------- 
+            //at cutpoint, find y
+            //  y1 = (m1 * x1) + b1 ... (15), replace x1 with value from (14)
+            //Ans: (x1,y1)
+            //---------------------------------- 
+
+            double y1diff = p1.Y - p0.Y;
+            double x1diff = p1.X - p0.X;
+
+            if (x1diff == 0)
+            {
+                //90 or 180 degree
+                return new Vector2(p1.X, p2.Y);
+            }
+            if (y1diff == 0)
+            {
+                return new Vector2(p2.X, p1.Y);
+            }
+            //------------------------------
+            //
+            //find slope 
+            double m1 = y1diff / x1diff;
+            //from (2) b = y-mx, and (5)
+            //so ...
+            double b1 = p0.Y - (m1 * p0.X);
+            // 
+            //from (10)
+            //double invert_m = -(1 / slope_m);
+            //double m2 = -1 / m1;   //rotate m1
+            //---------------------
+            double angle = System.Math.Atan2(y1diff, x1diff); //rad in degree 
+                                                              //double m2 = -1 / m1;
+
+            double m2 = cutAngle == 90 ?
+                //short cut
+                (-1 / m1) :
+                //or 
+                System.Math.Tan(
+                //radial_angle of original line + radial of cutAngle
+                //return new line slope
+                System.Math.Atan2(y1diff, x1diff) +
+                MyMath.DegreesToRadians(cutAngle)); //new m 
+            //--------------------- 
+            //from (6)
+            double b2 = p2.Y - (m2) * p2.X;
+            //find cut point
+
+            //check if (m1-m2 !=0)
+            double cutx = (b2 - b1) / (m1 - m2); //from  (14)
+            double cuty = (m1 * cutx) + b1;  //from (15)
+            return new Vector2((float)cutx, (float)cuty);
+
+        }
+
         public static bool FindPerpendicularCutPoint2(Vector2 p0, Vector2 p1, Vector2 p2, out Vector2 cutPoint)
         {
             //a line from p0 to p1

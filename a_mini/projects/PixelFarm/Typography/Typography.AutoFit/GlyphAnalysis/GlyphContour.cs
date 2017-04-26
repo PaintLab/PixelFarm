@@ -11,8 +11,7 @@ namespace Typography.Rendering
 
         public List<GlyphPart> parts = new List<GlyphPart>();
 
-        internal List<GlyphPoint> flattenPoints; //original flatten points
-
+        internal List<GlyphPoint> flattenPoints; //original flatten points 
         internal List<GlyphEdge> edges; //for dyanmic outline processing
 
         bool analyzed;
@@ -27,13 +26,7 @@ namespace Typography.Rendering
             parts.Add(part);
         }
 
-        internal void ClearAllAdjustValues()
-        {
-            for (int i = flattenPoints.Count - 1; i >= 0; --i)
-            {
-                flattenPoints[i].ClearAdjustValues();
-            }
-        }
+
         internal void Flatten(GlyphPartFlattener flattener)
         {
             //flatten once
@@ -129,7 +122,7 @@ namespace Typography.Rendering
             }
             return isClockwise;
         }
- 
+
         internal void CreateGlyphEdges()
         {
             int lim = flattenPoints.Count - 1;
@@ -168,33 +161,33 @@ namespace Typography.Rendering
             }
             //
         }
-        internal void ApplyNewRelativeEdgeDistance(float relativeDistance)
+
+        internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
-            //if (edges == null) return;
-            ////
-            //int j = edges.Count;
-            //if (j < 1) return;
-
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    edges[i].ApplyNewEdgeDistance(relativeDistance);
-            //}
-            ////find new cutpoint between edges
-            //create new cutting point between edges
-            //int lim = j - 1;
-            //for (int i = 0; i < lim; ++i)
-            //{
-            //    //e0 and e1 share cutpoint
-            //    GlyphEdge.FindCutPoint(edges[i], edges[i + 1]);
-            //}
-            ////last one 
-            //GlyphEdge.FindCutPoint(edges[lim], edges[0]);
-
             int j = flattenPoints.Count;
             for (int i = 0; i < j; ++i)
             {
-                flattenPoints[i].ApplyNewRelativeLen(relativeDistance);
-
+                flattenPoints[i].ApplyNewEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
+            }
+            //
+            j = edges.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //apply new relative len to edge***
+                edges[i].ApplyNewEdgeFromMasterOutline(newEdgeOffsetFromMasterOutline);
+            }
+            //calculate edge cutpoint
+            int lim = edges.Count - 1; //skip lastone
+            for (int i = 0; i < lim; ++i)
+            {
+                //calculate adjacent outside edge cutpoint          
+                GlyphEdge.UpdateEdgeCutPoint(edges[i], edges[i + 1]);
+            }
+            //last one
+            if (lim > 1)
+            {
+                //close edge
+                GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
             }
 
         }
