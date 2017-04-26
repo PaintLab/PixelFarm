@@ -99,10 +99,16 @@ namespace Typography.Rendering
             Vector2 tmp_e0_q = e0._newMidPoint + e0.GetEdgeVector();
             Vector2 tmp_e1_p = e1._newMidPoint - e1.GetEdgeVector();
 
-            Vector2 cutpoint = MyMath.FindCutPoint(e0._newMidPoint, tmp_e0_q, e1._newMidPoint, tmp_e1_p);
-
-            e0.newEdgeCut_Q_X = e1.newEdgeCut_P_X = cutpoint.X;
-            e0.newEdgeCut_Q_Y = e1.newEdgeCut_P_Y = cutpoint.Y;
+            Vector2 cutpoint;
+            if (MyMath.FindCutPoint(e0._newMidPoint, tmp_e0_q, e1._newMidPoint, tmp_e1_p, out cutpoint))
+            {
+                e0.newEdgeCut_Q_X = e1.newEdgeCut_P_X = cutpoint.X;
+                e0.newEdgeCut_Q_Y = e1.newEdgeCut_P_Y = cutpoint.Y;
+            }
+            else
+            {
+                //2 edge is pararell
+            }
 
         }
 

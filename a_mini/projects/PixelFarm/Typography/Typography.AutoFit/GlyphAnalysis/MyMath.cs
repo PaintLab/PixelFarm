@@ -205,13 +205,8 @@ namespace Typography.Rendering
             //find cut point
             double cutx = (b2 - b1) / (m1 - m2);
             double cuty = (m2 * cutx) + b2;
-
-
-
             return new Vector2((float)cutx, (float)cuty);
         }
-
-
         /// <summary>
         /// find parameter A,B,C from Ax + By = C, with given 2 points
         /// </summary>
@@ -223,19 +218,16 @@ namespace Typography.Rendering
         static void FindABC(Vector2 p0, Vector2 p1, out double a, out double b, out double c)
         {
             //line is in the form
-            //Ax + By = C
-
-
+            //Ax + By = C 
             //from http://stackoverflow.com/questions/4543506/algorithm-for-intersection-of-2-lines
             //and https://www.topcoder.com/community/data-science/data-science-tutorials/geometry-concepts-line-intersection-and-its-applications/
-
             a = p1.Y - p0.Y;
             b = p0.X - p1.X;
             c = a * p0.X + b * p0.Y;
         }
-        public static Vector2 FindCutPoint(
+        public static bool FindCutPoint(
               Vector2 p0, Vector2 p1,
-              Vector2 p2, Vector2 p3)
+              Vector2 p2, Vector2 p3, out Vector2 result)
         {
             //TODO: review here
             //from http://stackoverflow.com/questions/4543506/algorithm-for-intersection-of-2-lines
@@ -262,12 +254,21 @@ namespace Typography.Rendering
             double delta = a1 * b2 - a2 * b1; //delta is the determinant in math parlance
             if (delta == 0)
             {
+                //"Lines are parallel"
+                result = Vector2.Zero;
+                return false; //
                 throw new System.ArgumentException("Lines are parallel");
             }
             double x = (b2 * c1 - b1 * c2) / delta;
             double y = (a1 * c2 - a2 * c1) / delta;
-            return new Vector2((float)x, (float)y);
+            result = new Vector2((float)x, (float)y);
+            return true; //has cutpoint
         }
+
+
+
+
+
         static Vector2 FindCutPoint_Algebra(
             Vector2 p0, Vector2 p1,
             Vector2 p2, Vector2 p3)
