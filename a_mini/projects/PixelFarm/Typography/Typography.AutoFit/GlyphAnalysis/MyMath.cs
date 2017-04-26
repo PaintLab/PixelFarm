@@ -210,6 +210,151 @@ namespace Typography.Rendering
 
             return new Vector2((float)cutx, (float)cuty);
         }
+        public static Vector2 FindCutPoint(
+            Vector2 p0, Vector2 p1,
+            Vector2 p2, Vector2 p3)
+        {
+            //TODO: refactor here... 
+            //find cut point of 2 line 
+            //y = mx + b
+            //from line equation
+            //y = mx + b ... (1)
+            //from (1)
+            //b = y- mx ... (2) 
+            //----------------------------------
+            //line1:
+            //y1 = (m1 * x1) + b1 ...(3)            
+            //line2:
+            //y2 = (m2 * x2) + b2 ...(4)
+            //----------------------------------
+            //from (3),
+            //b1 = y1 - (m1 * x1) ...(5)
+            //b2 = y2 - (m2 * x2) ...(6)
+            //----------------------------------
+            //at cutpoint of line1 and line2 => (x1,y1)== (x2,y2)
+            //or find (x,y) where (3)==(4)
+            //---------------------------------- 
+            //at cutpoint, find x
+            // (m1 * x1) + b1 = (m2 * x1) + b2  ...(11), replace x2 with x1
+            // (m1 * x1) - (m2 * x1) = b2 - b1  ...(12)
+            //  x1 * (m1-m2) = b2 - b1          ...(13)
+            //  x1 = (b2-b1)/(m1-m2)            ...(14), now we know x1
+            //---------------------------------- 
+            //at cutpoint, find y
+            //  y1 = (m1 * x1) + b1 ... (15), replace x1 with value from (14)
+            //Ans: (x1,y1)
+            //----------------------------------
+
+            double y1diff = p1.Y - p0.Y;
+            double x1diff = p1.X - p0.X;
+
+
+
+            //find slope 
+            double m1 = 0;
+            double b1 = 0;
+
+
+            m1 = y1diff / x1diff;
+            b1 = p0.Y - (m1 * p0.X);
+
+            //from (2) b = y-mx, and (5)
+            //so ...
+
+            //------------------------------
+            double y2diff = p3.Y - p2.Y;
+            double x2diff = p3.X - p2.X;
+
+            if (y1diff == 0)
+            {
+                //p0p1 -> same y, p0p1 is horizontal
+
+                if (x2diff == 0)
+                {   //p2p3 -> same x, p2p3 is vertical
+                    return new Vector2((float)p3.X, (float)p1.Y);
+                }
+                else
+                {
+                    //
+                    //we know Y
+                    //we know cutY
+                    double cuty_p2p3 = p1.Y;
+                    //from y1=m1x1 +b1;
+                    //x1= (y1-b1)/m1
+                    {
+                        double m2 = y2diff / x2diff;
+                        double b2 = p2.Y - (m2) * p2.X;
+                        //from (6)             
+                        //find cut point
+                        //from y1=m1x1 +b1;
+                        //x2= (y2-b2)/m2
+                        double cutx_p2p3 = (cuty_p2p3 - b2) / m2;
+                        return new Vector2((float)cutx_p2p3, (float)cuty_p2p3);
+                    }
+                }
+
+            }
+            else if (x1diff == 0)
+            {
+                //p0p1 -> same x, p0p1 is vertical
+                if (y2diff == 0)
+                {
+                    //p2p3 -> same y, p2p3 is horizontal
+                    return new Vector2((float)p1.X, (float)p2.Y);
+                }
+                else
+                {
+                    //we know cutX
+                    //so find cutY
+                    double cutx_p2p3 = p1.X;
+
+                    {
+                        double m2 = y2diff / x2diff;
+                        double b2 = p2.Y - (m2) * p2.X;
+                        //from (6)             
+                        //find cut point
+
+                        //check if (m1-m2 !=0)
+                        double cutx = cutx_p2p3; //from  (14) 
+                        double cuty = (m2 * cutx) + b2;  //from (15)
+                        return new Vector2((float)cutx, (float)cuty);
+                    }
+                }
+            }
+            else if (x2diff == 0)
+            {
+                //p2p3 -> same x, p2p3 is vertical
+                //for p0p1
+                //cutX = p2.x
+                //cutY =  (m1 * cutx) + b1
+                double cutx_p2p3 = p2.X;
+                double cuty_p2p3 = (m1 * cutx_p2p3) + b1;  //from (15)
+                return new Vector2((float)cutx_p2p3, (float)cuty_p2p3);
+            }
+            else if (y2diff == 0)
+            {
+                //p2p3 -> same y, p2p3 is horizontal
+                //we know cutY
+                double cuty_p2p3 = p2.Y;
+                //from y1=m1x1 +b1;
+                //x1= (y1-b1)/m1
+                double cutx_p2p3 = (cuty_p2p3 - b1) / m1;
+                return new Vector2((float)cutx_p2p3, (float)cuty_p2p3);
+            }
+
+            {
+                double m2 = y2diff / x2diff;
+                double b2 = p2.Y - (m2) * p2.X;
+                //from (6)             
+                //find cut point
+
+                //check if (m1-m2 !=0)
+                double cutx = (b2 - b1) / (m1 - m2); //from  (14) 
+                double cuty = (m1 * cutx) + b1;  //from (15)
+                return new Vector2((float)cutx, (float)cuty);
+            }
+
+        }
         static Vector2 FindCutPoint(Vector2 p0, Vector2 p1, Vector2 p2, float cutAngle)
         {
             //a line from p0 to p1
