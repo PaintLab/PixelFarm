@@ -32,44 +32,7 @@ namespace Typography.Rendering
             _contours = intermediateOutline.GetContours(); //original contours
             _longVerticalBones = intermediateOutline.LongVerticalBones; //analyzed long bones
             LeftControlPosX = intermediateOutline.LeftControlPos; //left control position  
-            //
 
-
-            //List<CentroidLineHub> centroidLineHubs = intermediateOutline.GetCentroidLineHubs();
-            //_strokeLineHub = new List<StrokeLineHub>(centroidLineHubs.Count);
-            ////
-            //foreach (CentroidLineHub lineHub in centroidLineHubs)
-            //{
-            //    Dictionary<GlyphTriangle, GlyphCentroidLine> branches = lineHub.GetAllBranches();
-
-            //    //a line hub contains many centriod branches                                 
-            //    StrokeLineHub internalLineHub = new StrokeLineHub();
-            //    var branchList = new List<StrokeLine>(branches.Count);
-            //    foreach (GlyphCentroidLine line in branches.Values)
-            //    {
-            //        //create a stroke line
-            //        StrokeLine strokeLine = new StrokeLine();
-            //        //head of this branch
-            //        Vector2 brHead = line.GetHeadPosition();
-            //        strokeLine._head = brHead;
-
-            //        //a branch contains small centroid line segments.
-            //        CreateStrokeSegments(line, strokeLine);
-            //        //draw  a line link to centroid of target triangle
-            //        //WalkFromBranchHeadToHubCenter(brHead, hubCenter);
-
-            //        branchList.Add(strokeLine);
-            //    }
-            //    internalLineHub._branches = branchList;
-            //    internalLineHub._center = lineHub.GetCenterPos();
-            //    internalLineHub._headConnectedJoint = lineHub.GetHeadConnectedJoint();
-            //    _strokeLineHub.Add(internalLineHub);
-            //}
-
-            //---------------------
-            //interate all contour
-
-            //
         }
 
         /// <summary>
@@ -92,35 +55,6 @@ namespace Typography.Rendering
         }
 
         public float LeftControlPosX { get; set; }
-        //public void Walk()
-        //{
-        //    //each centroid hub 
-        //    foreach (StrokeLineHub lineHub in _strokeLineHub)
-        //    {
-        //        Vector2 hubCenter = lineHub._center;
-        //        WalkHubCenter(hubCenter);
-
-        //        //a line hub contains many centriod branches
-        //        //
-        //        List<StrokeLine> branches = lineHub._branches;
-
-        //        foreach (StrokeLine branch in branches)
-        //        {
-        //            //head of this branch
-        //            Vector2 brHead = branch._head;
-
-        //            WalkStrokeLine(branch);
-        //            //draw  a line link to centroid of target triangle
-        //            WalkFromBranchHeadToHubCenter(brHead, hubCenter);
-        //        }
-
-        //        GlyphBoneJoint joint = lineHub._headConnectedJoint;
-        //        if (joint != null)
-        //        {
-        //            WalkFromHubCenterToJoint(joint.Position, hubCenter);
-        //        }
-        //    }
-        //}
 
         public void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
@@ -140,12 +74,12 @@ namespace Typography.Rendering
             List<List<Vector2>> genPointList = new List<List<Vector2>>();
             for (int i = 0; i < j; ++i)
             {
-                //new contour
-                List<Vector2> genPoints = new List<Vector2>();
-                GenerateNewFitPoints(genPoints,
+                //generate vector list for each contour
+                List<Vector2> outputPoints = new List<Vector2>();
+                GenerateNewFitPoints(outputPoints,
                     contours[i], pxScale,
                     false, true, false);
-                genPointList.Add(genPoints);
+                genPointList.Add(outputPoints);
             }
 
             //-------------
@@ -166,17 +100,6 @@ namespace Typography.Rendering
                 GlyphBone longVertBone = _longVerticalBones[0];
                 var leftTouchPos = longVertBone.LeftMostPoint();
                 LeftControlPosX = leftTouchPos;
-                //double avgWidth = longVertBone.CalculateAvgBoneWidth();
-                //System.Numerics.Vector2 midBone = longVertBone.JointA.Position;
-
-                ////left side
-                //double newLeftAndScale = (midBone.X - (avgWidth / 2)) * pxScale;
-                ////then move to fit int
-                //minorOffset = MyMath.FindDiffToFitInteger((float)newLeftAndScale);
-                //for (int m = 0; m < j; ++m)
-                //{
-                //    OffsetPoints(genPointList[m], minorOffset);
-                //}
             }
             else
             {
@@ -191,6 +114,29 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 GenerateFitOutput(tx, genPointList[i], contours[i]);
+            }
+            tx.EndRead();
+            //-------------
+        }
+
+        public void GenerateOutput2(IGlyphTranslator tx, float pxScale)
+        {
+            this.pxScale = pxScale;
+
+            List<GlyphContour> contours = this._contours;
+            int j = contours.Count;
+
+#if DEBUG
+            s_dbugAffectedPoints.Clear();
+            s_dbugAff2.Clear();
+#endif
+
+
+            LeftControlPosX = 0;
+            tx.BeginRead(j);
+            for (int i = 0; i < j; ++i)
+            {
+                GenerateFitOutput2(tx, pxScale, contours[i]);
             }
             tx.EndRead();
             //-------------
@@ -391,7 +337,65 @@ namespace Typography.Rendering
             }
         }
 
+        static void GenerateFitOutput2(
+             IGlyphTranslator tx,
+             float pxscale,
+             GlyphContour contour)
+        {
 
+
+            //merge 0 = start
+            //double prev_px = 0;
+            //double prev_py = 0; 
+            float first_px = 0;
+            float first_py = 0;
+            //---------------
+            //1st round for value adjustment
+            //---------------
+
+            ////find adjust y
+            //List<GlyphPoint> flattenPoints = contour.flattenPoints;
+            ////---------------
+            //int j = flattenPoints.Count;
+            ////---------------
+            ////we can draw along a contour or along edge
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    GlyphPoint glyphPoint = flattenPoints[i];
+            //    Vector2 p = new Vector2(glyphPoint.x, glyphPoint.y) * pxscale;
+            //    if (i == 0)
+            //    {
+            //        //first point
+            //        tx.MoveTo(first_px = p.X, first_py = p.Y);
+            //    }
+            //    else
+            //    {
+            //        tx.LineTo(p.X, p.Y);
+            //    }
+            //}
+
+
+            List<GlyphEdge> edges = contour.edges;
+            int j = edges.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphEdge e = edges[i];
+                Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
+                if (i == 0)
+                {
+                    //first edge 
+                    //move to
+                    tx.MoveTo(first_px = p.X, first_py = p.Y);
+                }
+                else
+                {
+                    tx.LineTo(p.X, p.Y);
+                }
+            }
+
+            //close 
+            tx.CloseContour();
+        }
         static void GenerateFitOutput(
           IGlyphTranslator tx,
           List<Vector2> genPoints,
@@ -429,38 +433,10 @@ namespace Typography.Rendering
                 {
                     tx.LineTo(p.X, p.Y);
                 }
-
-                //if (glyphPoint.AdjustedY != 0)
-                //{
-                //    if (i == 0)
-                //    {
-                //        //first point
-                //        tx.MoveTo(first_px = p.X, first_py = (float)(p.Y  ));
-                //    }
-                //    else
-                //    {
-                //        tx.LineTo(p.X, (float)(p.Y ));
-                //    }
-                //}
-                //else
-                //{
-                //    if (i == 0)
-                //    {
-                //        //first point
-                //        tx.MoveTo(first_px = p.X, first_py = p.Y);
-                //    }
-                //    else
-                //    {
-                //        tx.LineTo(p.X, p.Y);
-                //    }
-                //}
             }
-            //close
-
+            //close 
             tx.CloseContour();
         }
-
-
         static void GeneratePerpendicularLines(
              float x0, float y0, float x1, float y1, float len,
              out Vector2 delta)
