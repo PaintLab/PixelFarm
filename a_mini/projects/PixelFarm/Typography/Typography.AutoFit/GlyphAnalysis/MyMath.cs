@@ -265,15 +265,11 @@ namespace Typography.Rendering
             return true; //has cutpoint
         }
 
-
-
-
-
         static Vector2 FindCutPoint_Algebra(
             Vector2 p0, Vector2 p1,
             Vector2 p2, Vector2 p3)
         {
-            //prefer matrix style
+            //prefer matrix style (upper)
 
             //TODO: refactor here... 
             //find cut point of 2 line 
@@ -309,16 +305,10 @@ namespace Typography.Rendering
             double y1diff = p1.Y - p0.Y;
             double x1diff = p1.X - p0.X;
             //find slope 
-            double m1 = 0;
-            double b1 = 0;
-
-
-            m1 = y1diff / x1diff;
-            b1 = p0.Y - (m1 * p0.X);
-
+            double m1 = y1diff / x1diff;
+            double b1 = p0.Y - (m1 * p0.X);
             //from (2) b = y-mx, and (5)
-            //so ...
-
+            //so ...  
             //------------------------------
             double y2diff = p3.Y - p2.Y;
             double x2diff = p3.X - p2.X;
@@ -326,29 +316,29 @@ namespace Typography.Rendering
             if (y1diff == 0)
             {
                 //p0p1 -> same y, p0p1 is horizontal
-
+                //we known y value
+                float ky = p0.Y;
+                //so find X
+                //from y1=m1x1 +b1;
+                //x1= (y1-b1)/m1 
                 if (x2diff == 0)
                 {   //p2p3 -> same x, p2p3 is vertical
-                    return new Vector2((float)p3.X, (float)p1.Y);
+                    return new Vector2((float)p3.X, ky);
                 }
                 else
                 {
+                    double m2 = y2diff / x2diff;
+                    double b2 = p2.Y - (m2) * p2.X;
+                    //from (6)             
+                    //find cut point
+                    //from y2=m2x2 +b2;
                     //
-                    //we know Y
-                    //we know cutY
-                    double cuty_p2p3 = p1.Y;
-                    //from y1=m1x1 +b1;
-                    //x1= (y1-b1)/m1
-                    {
-                        double m2 = y2diff / x2diff;
-                        double b2 = p2.Y - (m2) * p2.X;
-                        //from (6)             
-                        //find cut point
-                        //from y1=m1x1 +b1;
-                        //x2= (y2-b2)/m2
-                        double cutx_p2p3 = (cuty_p2p3 - b2) / m2;
-                        return new Vector2((float)cutx_p2p3, (float)cuty_p2p3);
-                    }
+                    //
+                    //x2= (y2-b2)/m2
+                    //replace y2 with ky
+                    //x2 = (ky - b2)/m2
+                    double findingX = (ky - b2) / m2;
+                    return new Vector2((float)findingX, ky);
                 }
 
             }
