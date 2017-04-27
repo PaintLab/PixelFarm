@@ -285,6 +285,7 @@ namespace PixelFarm.Agg
         EdgeLine currentEdgeLine = new EdgeLine();
         List<Vector> positiveSideVectors = new List<Vector>();
         List<Vector> negativeSideVectors = new List<Vector>();
+        LineCap lineCap = LineCap.Butt;
 
         float positiveSide, negativeSide;
         public StrokeGen2()
@@ -492,16 +493,39 @@ namespace PixelFarm.Agg
         }
         void CreateStartLineCap(VertexStore outputVxs, Vector v0, Vector v1, Vector v0_n, double edgeWidth)
         {
-            Vector delta = (v1 - v0).NewLength(edgeWidth);
-            //------------------------
-            outputVxs.AddMoveTo(v0_n.X - delta.X, v0_n.Y - delta.Y);// moveto
-            outputVxs.AddLineTo(v0.X - delta.X, v0.Y - delta.Y);
+            //TODO: review 
+            switch (lineCap)
+            {
+                default: throw new NotSupportedException();
+                case LineCap.Butt:
+                    outputVxs.AddMoveTo(v0.X, v0.Y);// moveto
+
+                    break;
+                case LineCap.Square:
+                    Vector delta = (v1 - v0).NewLength(edgeWidth);
+                    //------------------------
+                    outputVxs.AddMoveTo(v0_n.X - delta.X, v0_n.Y - delta.Y);// moveto
+                    outputVxs.AddLineTo(v0.X - delta.X, v0.Y - delta.Y);
+                    break;
+            }
         }
         void CreateEndLineCap(VertexStore outputVxs, Vector v0, Vector v1, Vector v0_n, double edgeWidth)
         {
-            Vector delta = (v1 - v0).NewLength(edgeWidth);
-            outputVxs.AddLineTo(v1.X + delta.X, v1.Y + delta.Y);// moveto
-            outputVxs.AddLineTo(v0_n.X + delta.X, v0_n.Y + delta.Y);
+            //TODO: review 
+            switch (lineCap)
+            {
+                default: throw new NotSupportedException();
+                case LineCap.Butt:
+
+                    outputVxs.AddLineTo(v1.X, v1.Y);// moveto
+                    outputVxs.AddLineTo(v0_n.X, v0_n.Y);
+                    break;
+                case LineCap.Square:
+                    Vector delta = (v1 - v0).NewLength(edgeWidth);
+                    outputVxs.AddLineTo(v1.X + delta.X, v1.Y + delta.Y);// moveto
+                    outputVxs.AddLineTo(v0_n.X + delta.X, v0_n.Y + delta.Y);
+                    break;
+            }
         }
     }
     class StrokeGenerator
