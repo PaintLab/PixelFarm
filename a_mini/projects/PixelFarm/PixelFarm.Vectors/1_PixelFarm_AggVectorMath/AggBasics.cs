@@ -31,13 +31,13 @@ namespace PixelFarm.Agg
         //------------------------------------------------------------------deg2rad
         public static double deg2rad(double deg)
         {
-            return deg * Math.PI / 180.0;
+            return deg * (Math.PI / 180.0);
         }
 
         //------------------------------------------------------------------rad2deg
         public static double rad2deg(double rad)
         {
-            return rad * 180.0 / Math.PI;
+            return rad * (180.0 / Math.PI);
         }
 
         public static int iround(double v)
@@ -79,6 +79,6 @@ namespace PixelFarm.Agg
             return (int)(uint)(Math.Ceiling(v));
         }
 
-      
+
     }
 }

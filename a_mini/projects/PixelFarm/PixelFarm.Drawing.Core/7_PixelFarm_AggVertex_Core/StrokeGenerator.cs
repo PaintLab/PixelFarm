@@ -286,6 +286,7 @@ namespace PixelFarm.Agg
         List<Vector> positiveSideVectors = new List<Vector>();
         List<Vector> negativeSideVectors = new List<Vector>();
 
+        float positiveSide, negativeSide;
         public StrokeGen2()
         {
             //use 2 vertext list to store perpendicular outline 
@@ -293,6 +294,9 @@ namespace PixelFarm.Agg
         }
         public void SetEdgeWidth(float positiveSide, float negativeSide)
         {
+            this.positiveSide = positiveSide;
+            this.negativeSide = negativeSide;
+            //
             currentEdgeLine.SetEdgeWidths(positiveSide, negativeSide);
         }
         public void Generate(VertexStore srcVxs, VertexStore outputVxs)
@@ -411,10 +415,13 @@ namespace PixelFarm.Agg
         {
 
             //write output to 
-            int edge_count = positiveSideVectors.Count;
+
             if (close)
             {
-                int n = edge_count - 1;
+                int positive_edgeCount = positiveSideVectors.Count;
+                int negative_edgeCount = negativeSideVectors.Count;
+
+                int n = positive_edgeCount - 1;
                 Vector v = positiveSideVectors[n];
                 outputVxs.AddMoveTo(v.X, v.Y);
                 for (; n >= 0; --n)
@@ -424,14 +431,12 @@ namespace PixelFarm.Agg
                 }
                 outputVxs.AddCloseFigure();
                 //end ... create join to negative side
-                //------------------------------------------
-                edge_count = negativeSideVectors.Count;
+                //------------------------------------------ 
                 //create line join from positive  to negative side
                 v = negativeSideVectors[0];
                 outputVxs.AddMoveTo(v.X, v.Y);
                 n = 1;
-                // for (n = edge_count - 1; n >= 0; --n)
-                for (; n < edge_count; ++n)
+                for (; n < negative_edgeCount; ++n)
                 {
                     v = negativeSideVectors[n];
                     outputVxs.AddLineTo(v.X, v.Y);
@@ -443,28 +448,61 @@ namespace PixelFarm.Agg
             else
             {
 
+                int positive_edgeCount = positiveSideVectors.Count;
+                int negative_edgeCount = negativeSideVectors.Count;
+
+                //no a close shape stroke
+                //create line cap for this
+                //
+                //positive
                 Vector v = positiveSideVectors[0];
-                outputVxs.AddMoveTo(v.X, v.Y);
+                //-----------
+
+                CreateStartLineCap(outputVxs, v, positiveSideVectors[1],
+                    negativeSideVectors[0], positiveSide);
+                //-----------
+
                 int n = 1;
-                for (; n < edge_count; ++n)
+                for (; n < positive_edgeCount; ++n)
                 {
+                    //increment n
                     v = positiveSideVectors[n];
                     outputVxs.AddLineTo(v.X, v.Y);
                 }
-                //---------------------- 
-                for (n = edge_count - 1; n >= 0; --n)
+                //negative 
+                //---------------------------------- 
+                CreateEndLineCap(outputVxs,
+                    positiveSideVectors[positive_edgeCount - 2],
+                    positiveSideVectors[positive_edgeCount - 1],
+                    negativeSideVectors[negative_edgeCount - 1],
+                    positiveSide);
+                //----------------------------------
+                for (n = negative_edgeCount - 2; n >= 0; --n)
                 {
+                    //decrement n
                     v = negativeSideVectors[n];
                     outputVxs.AddLineTo(v.X, v.Y);
                 }
+
                 outputVxs.AddCloseFigure();
             }
             //reset
             positiveSideVectors.Clear();
             negativeSideVectors.Clear();
-
         }
-
+        void CreateStartLineCap(VertexStore outputVxs, Vector v0, Vector v1, Vector v0_n, double edgeWidth)
+        {
+            Vector delta = (v1 - v0).NewLength(edgeWidth);
+            //------------------------
+            outputVxs.AddMoveTo(v0_n.X - delta.X, v0_n.Y - delta.Y);// moveto
+            outputVxs.AddLineTo(v0.X - delta.X, v0.Y - delta.Y);
+        }
+        void CreateEndLineCap(VertexStore outputVxs, Vector v0, Vector v1, Vector v0_n, double edgeWidth)
+        {
+            Vector delta = (v1 - v0).NewLength(edgeWidth);
+            outputVxs.AddLineTo(v1.X + delta.X, v1.Y + delta.Y);// moveto
+            outputVxs.AddLineTo(v0_n.X + delta.X, v0_n.Y + delta.Y);
+        }
     }
     class StrokeGenerator
     {
