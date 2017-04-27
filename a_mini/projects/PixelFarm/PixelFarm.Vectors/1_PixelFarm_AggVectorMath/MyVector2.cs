@@ -69,7 +69,7 @@ namespace PixelFarm.VectorMath
 
     public struct Vector
     {
-        double _x, _y;
+        readonly double _x, _y;
         public Vector(double x, double y)
         {
             _x = x; _y = y;
@@ -88,13 +88,13 @@ namespace PixelFarm.VectorMath
         public double X
         {
             get { return _x; }
-            set { _x = value; }
+            //set { _x = value; }
         }
 
         public double Y
         {
             get { return _y; }
-            set { _y = value; }
+            //set { _y = value; }
         }
 
         public double Magnitude
@@ -166,27 +166,29 @@ namespace PixelFarm.VectorMath
             return Math.Abs(v2.CrossProduct(v1));
         }
 
-        public void Rotate(int degree)
+        public Vector Rotate(int degree)
         {
             //
-            double radian = degree * Math.PI / 180.0;
+            double radian = degree * (Math.PI / 180.0);
             double sin = Math.Sin(radian);
             double cos = Math.Cos(radian);
             double nx = _x * cos - _y * sin;
             double ny = _x * sin + _y * cos;
-            
-            //TODO review here, we should create a new one 
-
-            _x = nx;
-            _y = ny;
+            return new Vector(nx, ny);
         }
         public Vector NewLength(double newLength)
         {
             //radian
             double atan = Math.Atan2(_y, _x);
-            return new Vector(Math.Cos(atan) * newLength,
-                        Math.Sin(atan) * newLength);
+            return new Vector(Math.Cos(atan) * newLength, Math.Sin(atan) * newLength);
         }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return _x + "," + _y;
+        }
+#endif
     }
 
 }

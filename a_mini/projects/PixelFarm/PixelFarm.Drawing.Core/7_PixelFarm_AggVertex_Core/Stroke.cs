@@ -99,7 +99,8 @@ namespace PixelFarm.Agg
 
                         if (i < j)
                         {
-                            strkgen.AddVertex(startX, startY, VertexCmd.LineTo);
+                            //strkgen.AddVertex(startX, startY, VertexCmd.LineTo);
+                            strkgen.AddVertex(startX, startY, VertexCmd.Close);
                             strkgen.WriteTo(vxs);
                             strkgen.Reset();
                         }

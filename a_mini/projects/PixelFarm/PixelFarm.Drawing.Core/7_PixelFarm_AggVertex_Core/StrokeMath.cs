@@ -28,7 +28,7 @@ namespace PixelFarm.Agg
 {
     public struct Vertex2d
     {
-        //TODO: change this to common Vector2
+
 
         public readonly double x;
         public readonly double y;
