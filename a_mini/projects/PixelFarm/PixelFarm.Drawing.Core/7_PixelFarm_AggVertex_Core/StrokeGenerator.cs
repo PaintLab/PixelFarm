@@ -171,12 +171,7 @@ namespace PixelFarm.Agg
             this.positiveSide = positiveSide;
             this.negativeSide = negativeSide;
         }
-        public void Close()
-        {
-            //close both edge together
-            // LineTo(latest_moveto_x, latest_moveto_y);
 
-        }
 
         public void AcceptLatest()
         {
@@ -398,44 +393,77 @@ namespace PixelFarm.Agg
                             //------------------------------------------
                             currentEdgeLine.CreateLineJoin(first_lineto_x, first_lineto_y, positiveSideVectors, negativeSideVectors);
                             //------------------------------------------
-
-                            currentEdgeLine.Close();
-                            //write output to 
-                            int edge_count = positiveSideVectors.Count;
-                            int n = edge_count - 1;
-                            Vector v = positiveSideVectors[n];
-                            outputVxs.AddMoveTo(v.X, v.Y);
-                            for (; n >= 0; --n)
-                            {
-                                v = positiveSideVectors[n];
-                                outputVxs.AddLineTo(v.X, v.Y);
-                            }
-                            outputVxs.AddCloseFigure();
-                            //end ... create join to negative side
-                            //------------------------------------------
-                            edge_count = negativeSideVectors.Count;
-                            //create line join from positive  to negative side
-                            v = negativeSideVectors[0];
-                            outputVxs.AddMoveTo(v.X, v.Y);
-                            n = 1;
-                            // for (n = edge_count - 1; n >= 0; --n)
-                            for (; n < edge_count; ++n)
-                            {
-                                v = negativeSideVectors[n];
-                                outputVxs.AddLineTo(v.X, v.Y);
-                            }
-                            //------------------------------------------
-                            //close
-                            outputVxs.AddCloseFigure();
-
+                            WriteOutput(outputVxs, true);
+                            current_coord_count = 0;
                         }//create line cap
                         break;
                     default:
                         break;
                 }
             }
+            //-------------
+            if (current_coord_count > 0)
+            {
+                WriteOutput(outputVxs, false);
+            }
         }
+        void WriteOutput(VertexStore outputVxs, bool close)
+        {
 
+            //write output to 
+            int edge_count = positiveSideVectors.Count;
+            if (close)
+            {
+                int n = edge_count - 1;
+                Vector v = positiveSideVectors[n];
+                outputVxs.AddMoveTo(v.X, v.Y);
+                for (; n >= 0; --n)
+                {
+                    v = positiveSideVectors[n];
+                    outputVxs.AddLineTo(v.X, v.Y);
+                }
+                outputVxs.AddCloseFigure();
+                //end ... create join to negative side
+                //------------------------------------------
+                edge_count = negativeSideVectors.Count;
+                //create line join from positive  to negative side
+                v = negativeSideVectors[0];
+                outputVxs.AddMoveTo(v.X, v.Y);
+                n = 1;
+                // for (n = edge_count - 1; n >= 0; --n)
+                for (; n < edge_count; ++n)
+                {
+                    v = negativeSideVectors[n];
+                    outputVxs.AddLineTo(v.X, v.Y);
+                }
+                //------------------------------------------
+                //close
+                outputVxs.AddCloseFigure();
+            }
+            else
+            {
+
+                Vector v = positiveSideVectors[0];
+                outputVxs.AddMoveTo(v.X, v.Y);
+                int n = 1;
+                for (; n < edge_count; ++n)
+                {
+                    v = positiveSideVectors[n];
+                    outputVxs.AddLineTo(v.X, v.Y);
+                }
+                //---------------------- 
+                for (n = edge_count - 1; n >= 0; --n)
+                {
+                    v = negativeSideVectors[n];
+                    outputVxs.AddLineTo(v.X, v.Y);
+                }
+                outputVxs.AddCloseFigure();
+            }
+            //reset
+            positiveSideVectors.Clear();
+            negativeSideVectors.Clear();
+
+        }
 
     }
     class StrokeGenerator
