@@ -151,81 +151,7 @@ namespace PixelFarm.Agg
     }
 
 
-    static class LineMath
-    {
 
-        public static void CreateLineJoin(
-         double x0, double y0, double x1, double y1,
-         double previewX1, double previewY1,
-         double positiveSide,
-         //
-         List<Vector> outputPositiveSideList,
-         List<Vector> outputNegativeSideList)
-        {
-
-            //----------
-            Vector2 line_vector = new Vector2(x1 - x0, y1 - y0);
-            Vector2 delta0 = line_vector.RotateInDegree(90).NewLength(positiveSide);
-            Vector2 delta1 = delta0;
-            Vector2 e1_positive = new Vector2(x1 + delta1.X, y1 + delta1.Y);
-            Vector2 e1_negative = new Vector2(x1 - delta1.X, y1 - delta1.Y);
-
-            //----------
-            //create line join for previewX1,previewY1
-            //in this version, 
-            //we find the cutpoint of 2 edge
-            Vector line2_vec = new Vector(previewX1 - x1, previewY1 - y1);
-            //find line cut between line2_vec and line_vector
-
-            Vector previewDelta = line2_vec.Rotate(90).NewLength(positiveSide);
-
-            Vector2 e1_preview_positive = new Vector2(x1 + previewDelta.X, y1 + previewDelta.Y);
-            Vector2 e1_preview_positive1_1 = new Vector2(e1_preview_positive.X + line2_vec.X,
-                                                         e1_preview_positive.y + line2_vec.Y);
-
-
-
-            //------------------------------
-            //find cutpoint on each side
-            Vector2 cutPoint;
-
-            //find negative cutpoint
-            if (MyMath.FindCutPoint(
-                   e1_preview_positive,
-                   e1_preview_positive1_1,
-                   new Vector2(e1_positive.X + line_vector.X, e1_positive.Y + line_vector.Y),
-                   new Vector2(e1_positive.X, e1_positive.Y),
-                   out cutPoint))
-            {
-                outputPositiveSideList.Add(new Vector(cutPoint.x, cutPoint.y));
-            }
-            else
-            {
-
-            }
-            //---------------------------------------------------
-            Vector2 e1_preview_negative = new Vector2(x1 - previewDelta.X, y1 - previewDelta.Y);
-            Vector2 e1_preview_negative_1 = new Vector2(e1_preview_negative.X + line2_vec.X,
-                                                        e1_preview_negative.y + line2_vec.Y);
-
-
-            if (MyMath.FindCutPoint(
-                  e1_preview_negative,
-                  e1_preview_negative_1,
-                  new Vector2(e1_negative.X + line_vector.X, e1_negative.Y + line_vector.Y),
-                  new Vector2(e1_negative.X, e1_negative.Y),
-                  out cutPoint))
-            {
-                outputNegativeSideList.Add(new Vector(cutPoint.x, cutPoint.y));
-            }
-            else
-            {
-
-            }
-        }
-
-
-    }
     class EdgeLine
     {
 
@@ -296,13 +222,6 @@ namespace PixelFarm.Agg
             ex0_n = x0 - delta0.X;
             ey0_n = y0 - delta0.Y;
         }
-        public void GetEdge1(out double ex1, out double ey1, out double ex1_n, out double ey1_n)
-        {
-            ex1 = x1 + delta0.X;
-            ey1 = y1 = +delta1.Y;
-            ex1_n = x0 - delta1.X;
-            ey1_n = y0 - delta1.Y;
-        }
 
         public void CreateLineJoin(
          double previewX1, double previewY1,
@@ -315,28 +234,24 @@ namespace PixelFarm.Agg
             //create line join for previewX1,previewY1
             //in this version, 
             //we find the cutpoint of 2 edge
-            Vector newline_vector = new Vector(previewX1 - x1, previewY1 - y1);
-            //find line cut between line2_vec and line_vector
+            Vector2 newline_vector = new Vector2(previewX1 - x1, previewY1 - y1);
+            //find line cut between line2_vec and line_vector 
+            Vector2 previewDelta = newline_vector.RotateInDegree(90).NewLength(positiveSide);
 
-            Vector previewDelta = newline_vector.Rotate(90).NewLength(positiveSide);
-
-            Vector2 e1_preview_positive = new Vector2(x1 + previewDelta.X, y1 + previewDelta.Y);
-            Vector2 e1_preview_positive1_1 = new Vector2(e1_preview_positive.X + newline_vector.X,
-                                                         e1_preview_positive.y + newline_vector.Y);
-
-
+            Vector2 x1_preview_positive = new Vector2(previewX1 + previewDelta.X, previewY1 + previewDelta.Y);
+            Vector2 x1_preview_positive_1 = new Vector2(x1_preview_positive.X + newline_vector.X,
+                                                        x1_preview_positive.y + newline_vector.Y);
 
             //------------------------------
             //find cutpoint on each side
             Vector2 cutPoint;
 
-            //find negative cutpoint
             if (MyMath.FindCutPoint(
-                   e1_preview_positive,
-                   e1_preview_positive1_1,
+                   x1_preview_positive,
+                   x1_preview_positive_1,
                    new Vector2(e1_positive.X + line_vector.X, e1_positive.Y + line_vector.Y),
                    new Vector2(e1_positive.X, e1_positive.Y),
-                   out cutPoint))
+               out cutPoint))
             {
                 outputPositiveSideList.Add(new Vector(cutPoint.x, cutPoint.y));
             }
@@ -345,17 +260,15 @@ namespace PixelFarm.Agg
 
             }
             //---------------------------------------------------
-            Vector2 e1_preview_negative = new Vector2(x1 - previewDelta.X, y1 - previewDelta.Y);
+            Vector2 e1_preview_negative = new Vector2(previewX1 - previewDelta.X, previewY1 - previewDelta.Y);
             Vector2 e1_preview_negative_1 = new Vector2(e1_preview_negative.X + newline_vector.X,
                                                         e1_preview_negative.y + newline_vector.Y);
-
-
             if (MyMath.FindCutPoint(
-                  e1_preview_negative,
-                  e1_preview_negative_1,
-                  new Vector2(e1_negative.X + line_vector.X, e1_negative.Y + line_vector.Y),
-                  new Vector2(e1_negative.X, e1_negative.Y),
-                  out cutPoint))
+               e1_preview_negative,
+               e1_preview_negative_1,
+               new Vector2(e1_negative.X + line_vector.X, e1_negative.Y + line_vector.Y),
+               new Vector2(e1_negative.X, e1_negative.Y),
+               out cutPoint))
             {
                 outputNegativeSideList.Add(new Vector(cutPoint.x, cutPoint.y));
             }
@@ -404,6 +317,8 @@ namespace PixelFarm.Agg
             int current_coord_count = 0;
             double latest_moveto_x = 0;
             double latest_moveto_y = 0;
+            double first_lineto_x = 0;
+            double first_lineto_y = 0;
             for (int i = 0; i < cmdCount; ++i)
             {
                 cmd = srcVxs.GetVertex(i, out x, out y);
@@ -428,7 +343,7 @@ namespace PixelFarm.Agg
                             }
                             else
                             {
-                                currentEdgeLine.LineTo(x, y);
+                                currentEdgeLine.LineTo(first_lineto_x = x, first_lineto_y = y);
                                 currentEdgeLine.GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
                                 //add to vectors
                                 positiveSideVectors.Add(new Vector(ex0, ey0));
@@ -455,7 +370,6 @@ namespace PixelFarm.Agg
                             //------------------------------------------
                             currentEdgeLine.CreateLineJoin(latest_moveto_x, latest_moveto_y, positiveSideVectors, negativeSideVectors);
                             currentEdgeLine.LineTo(latest_moveto_x, latest_moveto_y);
-
                             if (current_coord_count > 1)
                             {
 
@@ -481,28 +395,31 @@ namespace PixelFarm.Agg
                             }
                             currentEdgeLine.AcceptLatest();
                             current_coord_count++;
-
-
-
                             //------------------------------------------
+                            currentEdgeLine.CreateLineJoin(first_lineto_x, first_lineto_y, positiveSideVectors, negativeSideVectors);
+                            //------------------------------------------
+
                             currentEdgeLine.Close();
                             //write output to 
                             int edge_count = positiveSideVectors.Count;
-                            Vector v = positiveSideVectors[0];
+                            int n = edge_count - 1;
+                            Vector v = positiveSideVectors[n];
                             outputVxs.AddMoveTo(v.X, v.Y);
-                            int n = 1;
-                            for (; n < edge_count; ++n)
+                            for (; n >= 0; --n)
                             {
                                 v = positiveSideVectors[n];
                                 outputVxs.AddLineTo(v.X, v.Y);
                             }
+                            outputVxs.AddCloseFigure();
                             //end ... create join to negative side
                             //------------------------------------------
                             edge_count = negativeSideVectors.Count;
                             //create line join from positive  to negative side
-
-
-                            for (n = edge_count - 1; n >= 0; --n)
+                            v = negativeSideVectors[0];
+                            outputVxs.AddMoveTo(v.X, v.Y);
+                            n = 1;
+                            // for (n = edge_count - 1; n >= 0; --n)
+                            for (; n < edge_count; ++n)
                             {
                                 v = negativeSideVectors[n];
                                 outputVxs.AddLineTo(v.X, v.Y);

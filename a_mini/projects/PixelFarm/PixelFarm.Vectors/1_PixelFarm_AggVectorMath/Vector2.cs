@@ -161,11 +161,14 @@ namespace PixelFarm.VectorMath
 
         public Vector2 RotateInDegree(double deg)
         {
-            //convert from degree to rad
-            double rad = deg * (System.Math.PI / 180.0f);
-            double cos = System.Math.Cos(rad);
+           
+            double rad = deg * (System.Math.PI / 180.0f); //convert from degree to rad 
             double sin = System.Math.Sin(rad);
-            return new Vector2(x * cos - y * sin, y * cos + x * sin);
+            double cos = System.Math.Cos(rad);
+
+            return new Vector2(
+                x * cos - y * sin, 
+                x * sin + y * cos);
         }
 
         public double GetAngle()
