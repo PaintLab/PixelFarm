@@ -303,7 +303,8 @@ namespace PixelFarm.Agg.Sample_Draw
             //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
             VertexStore output = new VertexStore();
 
-            gen2.SetEdgeWidth(7f, 7f);
+            //gen2.SetEdgeWidth(7f, 7f);
+            gen2.SetEdgeWidth(2f, 2f);
             gen2.Generate(ps.Vxs, output);
             painter.Fill(output, PixelFarm.Drawing.Color.Red);
 
