@@ -272,7 +272,6 @@ namespace PixelFarm.Agg
 
             }
         }
-
     }
 
 
@@ -285,7 +284,7 @@ namespace PixelFarm.Agg
         EdgeLine currentEdgeLine = new EdgeLine();
         List<Vector> positiveSideVectors = new List<Vector>();
         List<Vector> negativeSideVectors = new List<Vector>();
-        LineCap lineCap = LineCap.Butt;
+        LineCap lineCap = LineCap.Round;
 
         float positiveSide, negativeSide;
         public StrokeGen2()
@@ -356,7 +355,6 @@ namespace PixelFarm.Agg
                             currentEdgeLine.AcceptLatest();
                             current_coord_count++;
                         }
-
                         break;
                     case VertexCmd.MoveTo:
                         //if we have current shape
@@ -499,13 +497,41 @@ namespace PixelFarm.Agg
                 default: throw new NotSupportedException();
                 case LineCap.Butt:
                     outputVxs.AddMoveTo(v0.X, v0.Y);// moveto
-
                     break;
                 case LineCap.Square:
-                    Vector delta = (v1 - v0).NewLength(edgeWidth);
-                    //------------------------
-                    outputVxs.AddMoveTo(v0_n.X - delta.X, v0_n.Y - delta.Y);// moveto
-                    outputVxs.AddLineTo(v0.X - delta.X, v0.Y - delta.Y);
+                    {
+                        Vector delta = (v1 - v0).NewLength(edgeWidth);
+                        //------------------------
+                        outputVxs.AddMoveTo(v0_n.X - delta.X, v0_n.Y - delta.Y);// moveto
+                        outputVxs.AddLineTo(v0.X - delta.X, v0.Y - delta.Y);
+                    }
+                    break;
+                case LineCap.Round:
+                    //impl round cap
+                    {
+                        //1. first vector
+                        Vector v1v0dev = (v1 - v0).NewLength(edgeWidth);
+                        float startAngle = 90;
+                        Vector delta = v1v0dev.Rotate(startAngle);
+                        Vector start_position = v0 - delta; //center 
+                        // first one
+                        outputVxs.AddMoveTo(v0_n.X, v0_n.Y);// moveto
+                        outputVxs.AddLineTo(start_position.X + delta.X, start_position.Y + delta.Y);
+                        //---------------
+                        int roundStep = 8;
+                        float eachStep = 180f / roundStep;
+                        startAngle += eachStep;
+                        for (int i = 1; i < roundStep; ++i)
+                        {
+                            startAngle += eachStep;
+                            delta = v1v0dev.Rotate(startAngle);
+                            Vector newpos = start_position + delta;
+                            outputVxs.AddLineTo(newpos.X, newpos.Y);
+                        }
+                        //---------------
+                        //last one
+                        outputVxs.AddLineTo(v0.X, v0.Y);
+                    }
                     break;
             }
         }
@@ -515,15 +541,47 @@ namespace PixelFarm.Agg
             switch (lineCap)
             {
                 default: throw new NotSupportedException();
-                case LineCap.Butt:
 
-                    outputVxs.AddLineTo(v1.X, v1.Y);// moveto
-                    outputVxs.AddLineTo(v0_n.X, v0_n.Y);
+                case LineCap.Butt:
+                    {
+                        outputVxs.AddLineTo(v1.X, v1.Y);// moveto
+                        outputVxs.AddLineTo(v0_n.X, v0_n.Y);
+                    }
                     break;
                 case LineCap.Square:
-                    Vector delta = (v1 - v0).NewLength(edgeWidth);
-                    outputVxs.AddLineTo(v1.X + delta.X, v1.Y + delta.Y);// moveto
-                    outputVxs.AddLineTo(v0_n.X + delta.X, v0_n.Y + delta.Y);
+                    {
+                        Vector delta = (v1 - v0).NewLength(edgeWidth);
+                        outputVxs.AddLineTo(v1.X + delta.X, v1.Y + delta.Y);// moveto
+                        outputVxs.AddLineTo(v0_n.X + delta.X, v0_n.Y + delta.Y);
+                    }
+                    break;
+                case LineCap.Round:
+                    //impl round cap
+                    {
+                        //1. first vector
+                        Vector v1v0dev = (v1 - v0).NewLength(edgeWidth);
+                        float startAngle = -90;
+                        Vector delta = -v1v0dev.Rotate(startAngle);
+                        Vector start_position = v1 - delta; //center 
+                        // first one
+                        outputVxs.AddLineTo(v0.X, v0.Y);
+                        outputVxs.AddLineTo(v1.X, v1.Y);
+                        //---------------
+                        int roundStep = 8;
+                        float eachStep = -180f / roundStep;
+                        
+                        for (int i = 0; i <= roundStep; ++i)
+                        {
+
+                            delta = v1v0dev.Rotate(startAngle);
+                            Vector newpos = start_position + delta;
+                            outputVxs.AddLineTo(newpos.X, newpos.Y);
+                            startAngle -= eachStep;
+                        }
+                        //---------------
+                        //last one
+                        outputVxs.AddLineTo(v0_n.X, v0_n.Y);
+                    }
                     break;
             }
         }

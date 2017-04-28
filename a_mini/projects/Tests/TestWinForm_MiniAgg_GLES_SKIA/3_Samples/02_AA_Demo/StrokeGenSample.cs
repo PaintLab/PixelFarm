@@ -297,6 +297,7 @@ namespace PixelFarm.Agg.Sample_Draw
             ps.LineTo(50, 10);
             ps.LineTo(50, 50);
             ps.LineTo(10, 50);
+            ps.LineTo(10, 80);
             //ps.CloseFigure();
 
             //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);

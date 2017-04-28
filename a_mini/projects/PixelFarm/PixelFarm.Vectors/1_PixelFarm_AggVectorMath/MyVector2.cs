@@ -166,7 +166,7 @@ namespace PixelFarm.VectorMath
             return Math.Abs(v2.CrossProduct(v1));
         }
 
-        public Vector Rotate(int degree)
+        public Vector Rotate(float degree)
         {
             //
             double radian = degree * (Math.PI / 180.0);
