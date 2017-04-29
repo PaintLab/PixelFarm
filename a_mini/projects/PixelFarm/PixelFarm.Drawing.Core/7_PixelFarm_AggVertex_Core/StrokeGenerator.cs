@@ -166,34 +166,9 @@ namespace PixelFarm.Agg
 
         public LineJoin LineJoin { get; set; }
         public double HalfWidth { get; set; }
-        public bool PositiveHalf { get; set; }
-        public bool IsOutterSide { get; set; }
-        /// <summary>
-        /// set input line (x0,y0) -> (x1,y1)
-        /// </summary>
-        /// <param name="x0"></param>
-        /// <param name="y0"></param>
-        /// <param name="x1"></param>
-        /// <param name="y1"></param>
-        /// <param name="x2"></param>
-        /// <param name="y2"></param>
-        public void SetInputVector(double x0, double y0, double x1, double y1)
-        {
-            this.x0 = x0;
-            this.y0 = y0;
-            this.x1 = x1;
-            this.y1 = y1;
-        }
-        /// <summary>
-        /// set output line (x1,y1) ->(x2,y2)
-        /// </summary>
-        /// <param name="x2"></param>
-        /// <param name="y2"></param>
-        public void SetOutputVector(double x2, double y2)
-        {
-            this.x2 = x2;
-            this.y2 = y2;
-        }
+
+
+
         /// <summary>
         /// set input line (x0,y0)-> (x1,y1) and output line (x1,y1)-> (x2,y2)
         /// </summary>
@@ -226,8 +201,12 @@ namespace PixelFarm.Agg
             ArcGenerator.GenerateArcNew(outputVectors,
                          x1, y1, delta, MyMath.DegreesToRadians(180));
         }
-        public void BuildJointVertex(List<Vector> outputVectors)
+
+
+        public void BuildJointVertex(List<Vector> positiveSideVectors, List<Vector> negativeSideVectors)
         {
+            if (LineJoin == LineJoin.Bevel) return;
+            //--------------------------------------------------------------
             Vector2 v0v1 = new Vector2(x1 - x0, y1 - y0);
             Vector2 v1v2 = new Vector2(x2 - x1, y2 - y1);
 
@@ -239,7 +218,7 @@ namespace PixelFarm.Agg
             double rad_v1v2 = Math.Atan2(v1v2.y, v1v2.x);
             double angle_rad_diff = rad_v1v2 - rad_v0v1;
 
-            if (PositiveHalf)
+            if (positiveSideVectors != null)
             {
                 //input point
 
@@ -254,32 +233,50 @@ namespace PixelFarm.Agg
 
                     if (angle_rad_diff > 0)
                     {
+                        //'ACUTE' angle side 
+                        //------------
+                        //inner join
                         //v0v1 => v1v2 is inner angle for positive side
-                        //and is outter angle of negative side
-                        this.IsOutterSide = false;
-                        this.InputPoint = cutPoint;
+                        //and is outter angle of negative side 
                         //inside joint share the same cutpoint
-                        outputVectors.Add(new Vector(cutPoint.x, cutPoint.y));
+                        positiveSideVectors.Add(new Vector(cutPoint.x, cutPoint.y));
+                    }
+                    else if (angle_rad_diff < 0)
+                    {
+                        //'OBTUSE' angle side
+                        //-------------------     
+                        switch (LineJoin)
+                        {
+                            default: throw new NotSupportedException();
+                            case LineJoin.Round:
+
+                                ArcGenerator.GenerateArcNew(positiveSideVectors,
+                                    x1, y1,
+                                    delta_v0v1,
+                                    angle_rad_diff);
+
+                                break;
+                            case LineJoin.Miter:
+                                {
+
+                                }
+                                break;
+                        }
 
                     }
                     else
                     {
-                        this.IsOutterSide = true;
-                        //outside joint  
-                        //generate arc   
-                        ArcGenerator.GenerateArcNew(outputVectors,
-                            x1, y1,
-                            delta_v0v1,
-                            angle_rad_diff);
+                        //angle =0 , same line
+
                     }
                 }
                 else
                 {
                     //the 2 not cut
                 }
-
             }
-            else
+            //----------------------------------------------------------------
+            if (negativeSideVectors != null)
             {
                 //input point
 
@@ -298,22 +295,37 @@ namespace PixelFarm.Agg
 
                     if (angle_rad_diff > 0)
                     {
-                        IsOutterSide = true;
-                        //generate arc   
-                        ArcGenerator.GenerateArcNew(outputVectors,
-                            x1, y1,
-                            delta_v0v1,
-                            angle_rad_diff);
+                        //'ACUTE' angle side 
+                        //for negative side, this is outter join
+                        //-------------------        
 
+                        switch (LineJoin)
+                        {
+                            case LineJoin.Round:
+                                ArcGenerator.GenerateArcNew(negativeSideVectors,
+                                    x1, y1,
+                                    delta_v0v1,
+                                    angle_rad_diff);
+                                break;
+                            case LineJoin.Miter:
+                                {
+
+                                }
+                                break;
+                        }
+                    }
+                    else if (angle_rad_diff < 0)
+                    {
+                        //'OBTUSE' angle side
+                        //------------ 
+                        //for negative side, this is outter join
+                        //inner join share the same cutpoint
+                        negativeSideVectors.Add(new Vector(cutPoint.x, cutPoint.y));
                     }
                     else
                     {
-                        this.IsOutterSide = false;
-                        this.InputPoint = cutPoint;
-                        //inside joint share the same cutpoint
-                        outputVectors.Add(new Vector(cutPoint.x, cutPoint.y));
-                    }
 
+                    }
                 }
                 else
                 {
@@ -322,16 +334,14 @@ namespace PixelFarm.Agg
 
             }
         }
-        public Vector2 InputPoint { get; private set; }
+
     }
 
 
     class EdgeLine
     {
 
-        public LineJoiner positiveHalfJoint;
-        public LineJoiner negativeHalfJoint;
-
+        public LineJoiner _lineJoiner;
 
         double latest_moveto_x;
         double latest_moveto_y;
@@ -348,17 +358,17 @@ namespace PixelFarm.Agg
         LineJoin linejoin;
         public EdgeLine()
         {
-            linejoin = LineJoin.Round;
-            positiveHalfJoint = new LineJoiner() { PositiveHalf = true };
-            negativeHalfJoint = new LineJoiner();
+            linejoin = LineJoin.Miter;
+            _lineJoiner = new LineJoiner();
+            _lineJoiner.LineJoin = LineJoin.Miter;
         }
 
         public void SetEdgeWidths(double positiveSide, double negativeSide)
         {
             this.positiveSide = positiveSide;
             this.negativeSide = negativeSide;
-            positiveHalfJoint.HalfWidth = positiveSide;
-            negativeHalfJoint.HalfWidth = negativeSide;
+            _lineJoiner.HalfWidth = positiveSide;
+
         }
 
 
@@ -415,13 +425,9 @@ namespace PixelFarm.Agg
          List<Vector> outputNegativeSideList)
         {
             if (linejoin == LineJoin.Bevel) return;
-            //------------------------------------------
-
-            positiveHalfJoint.SetControlVectors(x0, y0, x1, y1, previewX1, previewY1);
-            negativeHalfJoint.SetControlVectors(x0, y0, x1, y1, previewX1, previewY1);
-            //-----------------------------------------------
-            positiveHalfJoint.BuildJointVertex(outputPositiveSideList);
-            negativeHalfJoint.BuildJointVertex(outputNegativeSideList);
+            //------------------------------------------ 
+            _lineJoiner.SetControlVectors(x0, y0, x1, y1, previewX1, previewY1);
+            _lineJoiner.BuildJointVertex(outputPositiveSideList, outputNegativeSideList);
             //------------------------------------------ 
         }
 
@@ -496,7 +502,6 @@ namespace PixelFarm.Agg
         public StrokeGen2()
         {
             lineJoiner = new LineJoiner();
-            lineJoiner.PositiveHalf = false;
             //
             //use 2 vertext list to store perpendicular outline 
             currentEdgeLine.SetEdgeWidths(0.5f, 0.5f);//default
@@ -723,7 +728,7 @@ namespace PixelFarm.Agg
                         float startAngle = 90;
                         Vector delta = v1v0dev.Rotate(startAngle);
                         Vector start_position = v0 - delta; //center 
-                        // first one
+                                                            // first one
                         outputVxs.AddMoveTo(v0_n.X, v0_n.Y);// moveto
                         outputVxs.AddLineTo(start_position.X + delta.X, start_position.Y + delta.Y);
                         //---------------
@@ -747,7 +752,7 @@ namespace PixelFarm.Agg
         void CreateEndLineCapNew(VertexStore outputVxs, Vector v0, Vector v2, double edgeWidth)
         {
 
-            lineJoiner.PositiveHalf = true;
+
             lineJoiner.LineJoin = LineJoin.Round;
             lineJoiner.SetControlVectors(v0.X, v0.Y, 0, 0, v2.X, v2.Y);
             List<Vector> capVectors = new List<Vector>();

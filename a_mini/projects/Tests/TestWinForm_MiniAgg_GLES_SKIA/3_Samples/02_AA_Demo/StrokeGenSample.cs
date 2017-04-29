@@ -293,13 +293,19 @@ namespace PixelFarm.Agg.Sample_Draw
             //p.Line(50, 10, 10, 10);
 
             ps.Clear();
-            ps.MoveTo(10, 10);
-            ps.LineTo(50, 10);
-            ps.LineTo(50, 50);
-            ps.LineTo(20, 50);
-            ps.LineTo(80, 80);
+            //ps.MoveTo(10, 10);
+            //ps.LineTo(50, 10);
+            //ps.LineTo(50, 50);
+            //ps.LineTo(40, 50);
+            //ps.LineTo(80, 70);
 
-            //ps.LineTo(10, 80);
+
+            
+            ps.MoveTo(50, 50);
+            ps.LineTo(40, 50);
+            ps.LineTo(80, 70);
+
+
             //ps.CloseFigure();
 
             //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
