@@ -293,17 +293,17 @@ namespace PixelFarm.Agg.Sample_Draw
             //p.Line(50, 10, 10, 10);
 
             ps.Clear();
-            //ps.MoveTo(10, 10);
-            //ps.LineTo(50, 10);
-            //ps.LineTo(50, 50);
-            //ps.LineTo(40, 50);
-            //ps.LineTo(80, 70);
-
-
-            
-            ps.MoveTo(50, 50);
+            ps.MoveTo(10, 10);
+            ps.LineTo(50, 10);
+            ps.LineTo(50, 50);
             ps.LineTo(40, 50);
             ps.LineTo(80, 70);
+
+
+
+            //ps.MoveTo(50, 50);
+            //ps.LineTo(40, 50);
+            //ps.LineTo(80, 70);
 
 
             //ps.CloseFigure();
@@ -316,8 +316,8 @@ namespace PixelFarm.Agg.Sample_Draw
             gen2.Generate(ps.Vxs, output);
             painter.Fill(output, PixelFarm.Drawing.Color.Red);
 
-            //painter.StrokeWidth = 1f;
-            //painter.Draw(ps.Vxs, PixelFarm.Drawing.Color.Red);
+            painter.StrokeWidth = 1f;
+            painter.Draw(ps.Vxs, PixelFarm.Drawing.Color.Black);
 
         }
     }
