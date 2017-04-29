@@ -296,7 +296,9 @@ namespace PixelFarm.Agg.Sample_Draw
             ps.MoveTo(10, 10);
             ps.LineTo(50, 10);
             ps.LineTo(50, 50);
-            //ps.LineTo(10, 50);
+            ps.LineTo(20, 50);
+            ps.LineTo(80, 80);
+
             //ps.LineTo(10, 80);
             //ps.CloseFigure();
 

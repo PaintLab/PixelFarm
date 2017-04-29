@@ -155,16 +155,190 @@ namespace PixelFarm.Agg
 
     }
 
+    class LineJoiner
+    {
+        //create a joint between 2 line 
+        public LineJoiner()
+        {
+
+        }
+        double x0, y0, x1, y1, x2, y2;
+
+        public LineJoin LineJoin { get; set; }
+        public double HalfWidth { get; set; }
+        public bool PositiveHalf { get; set; }
+        public bool IsOutterSide { get; set; }
+        /// <summary>
+        /// set input line (x0,y0) -> (x1,y1)
+        /// </summary>
+        /// <param name="x0"></param>
+        /// <param name="y0"></param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        public void SetInputVector(double x0, double y0, double x1, double y1)
+        {
+            this.x0 = x0;
+            this.y0 = y0;
+            this.x1 = x1;
+            this.y1 = y1;
+        }
+        /// <summary>
+        /// set output line (x1,y1) ->(x2,y2)
+        /// </summary>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        public void SetOutputVector(double x2, double y2)
+        {
+            this.x2 = x2;
+            this.y2 = y2;
+        }
+        /// <summary>
+        /// set input line (x0,y0)-> (x1,y1) and output line (x1,y1)-> (x2,y2)
+        /// </summary>
+        /// <param name="x0"></param>
+        /// <param name="y0"></param>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        public void SetControlVectors(double x0, double y0, double x1, double y1, double x2, double y2)
+        {
+            this.x0 = x0;
+            this.y0 = y0;
+            this.x1 = x1;
+            this.y1 = y1;
+            this.x2 = x2;
+            this.y2 = y2;
+        }
+
+        public void BuildCapVertex(List<Vector> outputVectors)
+        {
+            //------------------------
+            //x0,y0 -> end of line 1
+            //x1,y1 -> auto create point
+            //x2,y2 -> end of line 2
+            //------------------------ 
+            this.x1 = (x0 + x2) / 2;
+            this.y1 = (y0 + y2) / 2;
+            Vector2 delta = new Vector2(x2 - x1, y2 - y1);
+            ArcGenerator.GenerateArcNew(outputVectors,
+                         x1, y1, delta, MyMath.DegreesToRadians(180));
+        }
+        public void BuildJointVertex(List<Vector> outputVectors)
+        {
+            Vector2 v0v1 = new Vector2(x1 - x0, y1 - y0);
+            Vector2 v1v2 = new Vector2(x2 - x1, y2 - y1);
+
+            Vector2 delta_v0v1 = v0v1.RotateInDegree(90).NewLength(HalfWidth);
+            Vector2 delta_v1v2 = v1v2.RotateInDegree(90).NewLength(HalfWidth);
+            //check inner or outter joint: by check angle positive or negative
+
+            double rad_v0v1 = Math.Atan2(v0v1.y, v0v1.x);
+            double rad_v1v2 = Math.Atan2(v1v2.y, v1v2.x);
+            double angle_rad_diff = rad_v1v2 - rad_v0v1;
+
+            if (PositiveHalf)
+            {
+                //input point
+
+                Vector2 cutPoint;
+                if (MyMath.FindCutPoint(
+                       new Vector2(x0 + delta_v0v1.x, y0 + delta_v0v1.y),
+                       new Vector2(x1 + delta_v0v1.x, y1 + delta_v0v1.y),
+                       new Vector2(x1 + delta_v1v2.x, y1 + delta_v1v2.y),
+                       new Vector2(x2 + delta_v1v2.x, y2 + delta_v1v2.y),
+                   out cutPoint))
+                {
+
+                    if (angle_rad_diff > 0)
+                    {
+                        //v0v1 => v1v2 is inner angle for positive side
+                        //and is outter angle of negative side
+                        this.IsOutterSide = false;
+                        this.InputPoint = cutPoint;
+                        //inside joint share the same cutpoint
+                        outputVectors.Add(new Vector(cutPoint.x, cutPoint.y));
+
+                    }
+                    else
+                    {
+                        this.IsOutterSide = true;
+                        //outside joint  
+                        //generate arc   
+                        ArcGenerator.GenerateArcNew(outputVectors,
+                            x1, y1,
+                            delta_v0v1,
+                            angle_rad_diff);
+                    }
+                }
+                else
+                {
+                    //the 2 not cut
+                }
+
+            }
+            else
+            {
+                //input point
+
+                delta_v0v1 = -delta_v0v1; //change vector direction
+                delta_v1v2 = -delta_v1v2;
+
+                //-------------
+                Vector2 cutPoint;
+                if (MyMath.FindCutPoint(
+                        new Vector2(x0 + delta_v0v1.x, y0 + delta_v0v1.y),
+                        new Vector2(x1 + delta_v0v1.x, y1 + delta_v0v1.y),
+                        new Vector2(x1 + delta_v1v2.x, y1 + delta_v1v2.y),
+                        new Vector2(x2 + delta_v1v2.x, y2 + delta_v1v2.y),
+                    out cutPoint))
+                {
+
+                    if (angle_rad_diff > 0)
+                    {
+                        IsOutterSide = true;
+                        //generate arc   
+                        ArcGenerator.GenerateArcNew(outputVectors,
+                            x1, y1,
+                            delta_v0v1,
+                            angle_rad_diff);
+
+                    }
+                    else
+                    {
+                        this.IsOutterSide = false;
+                        this.InputPoint = cutPoint;
+                        //inside joint share the same cutpoint
+                        outputVectors.Add(new Vector(cutPoint.x, cutPoint.y));
+                    }
+
+                }
+                else
+                {
+                    //the 2 not cut
+                }
+
+            }
+        }
+        public Vector2 InputPoint { get; private set; }
+    }
 
 
     class EdgeLine
     {
 
+        public LineJoiner positiveHalfJoint;
+        public LineJoiner negativeHalfJoint;
+
+
         double latest_moveto_x;
         double latest_moveto_y;
         double positiveSide, negativeSide;
         //line core (x0,y0) ->  (x1,y1) -> (x2,y2)
-        double x0, y0, x1, y1, x2, y2;
+        double x0, y0, x1, y1;
+
 
         public Vector delta0, delta1;
         public Vector e1_positive;
@@ -175,12 +349,16 @@ namespace PixelFarm.Agg
         public EdgeLine()
         {
             linejoin = LineJoin.Round;
+            positiveHalfJoint = new LineJoiner() { PositiveHalf = true };
+            negativeHalfJoint = new LineJoiner();
         }
 
         public void SetEdgeWidths(double positiveSide, double negativeSide)
         {
             this.positiveSide = positiveSide;
             this.negativeSide = negativeSide;
+            positiveHalfJoint.HalfWidth = positiveSide;
+            negativeHalfJoint.HalfWidth = negativeSide;
         }
 
 
@@ -190,6 +368,20 @@ namespace PixelFarm.Agg
             this.x0 = x1;
             this.y0 = y1;
         }
+        public void MoveTo(double x0, double y0)
+        {
+            //reset data
+            coordCount = 0;
+            latest_moveto_x = x0;
+            latest_moveto_y = y0;
+
+            this.x0 = x0;
+            this.y0 = y0;
+
+
+            coordCount++;
+        }
+
         public void LineTo(double x1, double y1)
         {
             if (coordCount > 0)
@@ -208,19 +400,7 @@ namespace PixelFarm.Agg
             //create both positive and negative edge 
             coordCount++;
         }
-        public void MoveTo(double x0, double y0)
-        {
-            //reset data
-            coordCount = 0;
-            latest_moveto_x = x0;
-            latest_moveto_y = y0;
 
-            this.x0 = x0;
-            this.y0 = y0;
-
-
-            coordCount++;
-        }
         public void GetEdge0(out double ex0, out double ey0, out double ex0_n, out double ey0_n)
         {
             ex0 = x0 + delta0.X;
@@ -237,77 +417,40 @@ namespace PixelFarm.Agg
             if (linejoin == LineJoin.Bevel) return;
             //------------------------------------------
 
-            //----------
-            //create line join for previewX1,previewY1
-            //in this version, 
-            //we find the cutpoint of 2 edge
-            Vector2 newline_vector = new Vector2(previewX1 - x1, previewY1 - y1);
-            //find line cut between line2_vec and line_vector 
-            Vector2 previewDelta = newline_vector.RotateInDegree(90).NewLength(positiveSide);
-
-            Vector2 x1_preview_positive = new Vector2(previewX1 + previewDelta.X, previewY1 + previewDelta.Y);
-            Vector2 x1_preview_positive_1 = new Vector2(x1_preview_positive.X + newline_vector.X,
-                                                        x1_preview_positive.y + newline_vector.Y);
-
-            //------------------------------
-            //find cutpoint on each side
-            Vector2 cutPoint;
-
-            if (MyMath.FindCutPoint(
-                   x1_preview_positive,
-                   x1_preview_positive_1,
-                   //new Vector2(e1_positive.X + line_vector.X, e1_positive.Y + line_vector.Y),
-                   new Vector2(x0 + delta0.X, y0 + delta0.Y),
-                   new Vector2(e1_positive.X, e1_positive.Y),
-               out cutPoint))
-            {
-                outputPositiveSideList.Add(new Vector(cutPoint.x, cutPoint.y));
-            }
-            else
-            {
-
-            }
-            //---------------------------------------------------
-            Vector2 e1_preview_negative = new Vector2(previewX1 - previewDelta.X, previewY1 - previewDelta.Y);
-            Vector2 e1_preview_negative_1 = new Vector2(e1_preview_negative.X + newline_vector.X,
-                                                        e1_preview_negative.y + newline_vector.Y);
-            if (MyMath.FindCutPoint(
-               e1_preview_negative,
-               e1_preview_negative_1,
-                //new Vector2(e1_negative.X + line_vector.X, e1_negative.Y + line_vector.Y),
-                new Vector2(x0 - delta0.X, y0 - delta0.Y),
-               new Vector2(e1_negative.X, e1_negative.Y),
-               out cutPoint))
-            {
-                //inner?
-
-                if (linejoin == LineJoin.Round)
-                {
-
-                    ArcGenerator.GenerateArc(outputNegativeSideList,
-                        new Vector2(e1_negative.X, e1_negative.Y),
-                        new Vector2(e1_negative.X + line_vector.X, e1_negative.Y + line_vector.Y),
-                        e1_preview_negative_1,
-                        e1_preview_negative,
-
-                        positiveSide);
-                }
-                else
-                {
-                    outputNegativeSideList.Add(new Vector(cutPoint.x, cutPoint.y));
-                }
-            }
-            else
-            {
-
-            }
+            positiveHalfJoint.SetControlVectors(x0, y0, x1, y1, previewX1, previewY1);
+            negativeHalfJoint.SetControlVectors(x0, y0, x1, y1, previewX1, previewY1);
+            //-----------------------------------------------
+            positiveHalfJoint.BuildJointVertex(outputPositiveSideList);
+            negativeHalfJoint.BuildJointVertex(outputNegativeSideList);
+            //------------------------------------------ 
         }
+
     }
 
     static class ArcGenerator
     {
         //helper class for generate arc
         //
+        public static void GenerateArcNew(List<Vector> output, double cx,
+            double cy,
+            Vector2 startDelta,
+            double sweepAngleRad)
+        {
+
+            //increment
+            int nsteps = 4;
+            double eachStep = MyMath.RadToDegrees(sweepAngleRad) / nsteps;
+            double angle = 0;
+            for (int i = 0; i < nsteps; ++i)
+            {
+
+                Vector2 newPerpend = startDelta.RotateInDegree(angle);
+                Vector2 newpos = new Vector2(cx + newPerpend.x, cy + newPerpend.y);
+                output.Add(new Vector(newpos.x, newpos.y));
+                angle += eachStep;
+            }
+
+        }
         public static void GenerateArc(List<Vector> output, Vector2 pos0, Vector2 pos1, Vector2 pos2, Vector2 pos3, double edgeWidth)
         {
             Vector2 v0v1 = pos1 - pos0;
@@ -335,6 +478,7 @@ namespace PixelFarm.Agg
             }
 
         }
+
     }
     public class StrokeGen2
     {
@@ -346,10 +490,14 @@ namespace PixelFarm.Agg
         List<Vector> positiveSideVectors = new List<Vector>();
         List<Vector> negativeSideVectors = new List<Vector>();
         LineCap lineCap = LineCap.Round;
+        LineJoiner lineJoiner;
 
         float positiveSide, negativeSide;
         public StrokeGen2()
         {
+            lineJoiner = new LineJoiner();
+            lineJoiner.PositiveHalf = false;
+            //
             //use 2 vertext list to store perpendicular outline 
             currentEdgeLine.SetEdgeWidths(0.5f, 0.5f);//default
         }
@@ -410,10 +558,7 @@ namespace PixelFarm.Agg
                                 currentEdgeLine.GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
                                 //add to vectors
                                 positiveSideVectors.Add(new Vector(ex0, ey0));
-                                //positiveSideVectors.Add(currentEdgeLine.e1_positive);
-                                //
                                 negativeSideVectors.Add(new Vector(ex0_n, ey0_n));
-                                //negativeSideVectors.Add(currentEdgeLine.e1_negative);
 
                             }
 
@@ -533,9 +678,9 @@ namespace PixelFarm.Agg
                     outputVxs.AddLineTo(v.X, v.Y);
                 }
                 //negative 
+
                 //---------------------------------- 
-                CreateEndLineCap(outputVxs,
-                    positiveSideVectors[positive_edgeCount - 2],
+                CreateEndLineCapNew(outputVxs,
                     positiveSideVectors[positive_edgeCount - 1],
                     negativeSideVectors[negative_edgeCount - 1],
                     positiveSide);
@@ -599,6 +744,21 @@ namespace PixelFarm.Agg
                     break;
             }
         }
+        void CreateEndLineCapNew(VertexStore outputVxs, Vector v0, Vector v2, double edgeWidth)
+        {
+
+            lineJoiner.PositiveHalf = true;
+            lineJoiner.LineJoin = LineJoin.Round;
+            lineJoiner.SetControlVectors(v0.X, v0.Y, 0, 0, v2.X, v2.Y);
+            List<Vector> capVectors = new List<Vector>();
+            lineJoiner.BuildCapVertex(capVectors);
+            int j = capVectors.Count;
+            for (int i = j - 1; i >= 0; --i)
+            {
+                Vector v = capVectors[i];
+                outputVxs.AddLineTo(v.X, v.Y);
+            }
+        }
         void CreateEndLineCap(VertexStore outputVxs, Vector v0, Vector v1, Vector v0_n, double edgeWidth)
         {
             //TODO: review 
@@ -620,31 +780,33 @@ namespace PixelFarm.Agg
                     }
                     break;
                 case LineCap.Round:
-                    //impl round cap
                     {
-                        //1. first vector
-                        Vector v1v0dev = (v1 - v0).NewLength(edgeWidth);
-                        float startAngle = -90;
-                        Vector delta = -v1v0dev.Rotate(startAngle);
-                        Vector start_position = v1 - delta; //center 
-                        // first one
-                        outputVxs.AddLineTo(v0.X, v0.Y);
-                        outputVxs.AddLineTo(v1.X, v1.Y);
-                        //---------------
-                        int roundStep = 8;
-                        float eachStep = -180f / roundStep;
 
-                        for (int i = 0; i <= roundStep; ++i)
-                        {
+                        //impl round cap
+                        //currentEdgeLine.CreateLineJoin(x, y, positiveSideVectors, negativeSideVectors);
+                        ////1. first vector
+                        //Vector v1v0dev = (v1 - v0).NewLength(edgeWidth);
+                        //float startAngle = -90;
+                        //Vector delta = -v1v0dev.Rotate(startAngle);
+                        //Vector start_position = v1 - delta; //center 
+                        //// first one
+                        //outputVxs.AddLineTo(v0.X, v0.Y);
+                        //outputVxs.AddLineTo(v1.X, v1.Y);
+                        ////---------------
+                        //int roundStep = 8;
+                        //float eachStep = -180f / roundStep;
 
-                            delta = v1v0dev.Rotate(startAngle);
-                            Vector newpos = start_position + delta;
-                            outputVxs.AddLineTo(newpos.X, newpos.Y);
-                            startAngle -= eachStep;
-                        }
-                        //---------------
-                        //last one
-                        outputVxs.AddLineTo(v0_n.X, v0_n.Y);
+                        //for (int i = 0; i <= roundStep; ++i)
+                        //{
+
+                        //    delta = v1v0dev.Rotate(startAngle);
+                        //    Vector newpos = start_position + delta;
+                        //    outputVxs.AddLineTo(newpos.X, newpos.Y);
+                        //    startAngle -= eachStep;
+                        //}
+                        ////---------------
+                        ////last one
+                        //outputVxs.AddLineTo(v0_n.X, v0_n.Y);
                     }
                     break;
             }
