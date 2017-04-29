@@ -155,6 +155,7 @@ namespace PixelFarm.Agg
 
     }
 
+
     class LineJoiner
     {
         //create a joint between 2 line 
@@ -166,8 +167,6 @@ namespace PixelFarm.Agg
 
         public LineJoin LineJoinKind { get; set; }
         public double HalfWidth { get; set; }
-
-
 
         /// <summary>
         /// set input line (x0,y0)-> (x1,y1) and output line (x1,y1)-> (x2,y2)
@@ -187,38 +186,14 @@ namespace PixelFarm.Agg
             this.x2 = x2;
             this.y2 = y2;
         }
-        public void BuildBeginCap(List<Vector> outputVectors)
-        {
-            //------------------------
-            //x0,y0 -> begin of line 1
-            //x1,y1 -> auto create point
-            //x2,y2 -> begin of line 2
-            //------------------------ 
-            this.x1 = (x0 + x2) / 2;
-            this.y1 = (y0 + y2) / 2;
-            Vector2 delta = new Vector2(x0 - x1, y0 - y1);
-            ArcGenerator.GenerateArcNew(outputVectors,
-                         x1, y1, delta, MyMath.DegreesToRadians(180));
-        }
-
-        public void BuildEndCap(List<Vector> outputVectors)
-        {
-            //------------------------
-            //x0,y0 -> end of line 1
-            //x1,y1 -> auto create point
-            //x2,y2 -> end of line 2
-            //------------------------ 
-            this.x1 = (x0 + x2) / 2;
-            this.y1 = (y0 + y2) / 2;
-            Vector2 delta = new Vector2(x2 - x1, y2 - y1);
-            ArcGenerator.GenerateArcNew(outputVectors,
-                         x1, y1, delta, MyMath.DegreesToRadians(180));
-        }
 
 
-        public void BuildJointVertex(List<Vector> positiveSideVectors, List<Vector> negativeSideVectors)
+        public void BuildJointVertex(
+            List<Vector> positiveSideVectors,
+            List<Vector> negativeSideVectors)
         {
             if (LineJoinKind == LineJoin.Bevel) return;
+
             //--------------------------------------------------------------
             Vector2 v0v1 = new Vector2(x1 - x0, y1 - y0);
             Vector2 v1v2 = new Vector2(x2 - x1, y2 - y1);
@@ -343,31 +318,28 @@ namespace PixelFarm.Agg
 
             }
         }
-
     }
 
 
     class EdgeLine
     {
 
-        public LineJoiner _lineJoiner;
+        LineJoiner _lineJoiner;
 
         double latest_moveto_x;
         double latest_moveto_y;
         double positiveSide, negativeSide;
         //line core (x0,y0) ->  (x1,y1) -> (x2,y2)
         double x0, y0, x1, y1;
-
-
-        public Vector delta0, delta1;
-        public Vector e1_positive;
-        public Vector e1_negative;
-        public Vector line_vector; //latest line vector
+        Vector delta0, delta1;
+        Vector e1_positive;
+        Vector e1_negative;
+        Vector line_vector; //latest line vector
         int coordCount = 0;
+        double first_lineto_x, first_lineto_y;
 
         public EdgeLine()
         {
-
             _lineJoiner = new LineJoiner();
             _lineJoiner.LineJoinKind = LineJoin.Bevel;
         }
@@ -377,11 +349,8 @@ namespace PixelFarm.Agg
             this.positiveSide = positiveSide;
             this.negativeSide = negativeSide;
             _lineJoiner.HalfWidth = positiveSide;
-
         }
-
-
-        public void AcceptLatest()
+        void AcceptLatest()
         {
             //TODO: rename this method
             this.x0 = x1;
@@ -393,23 +362,94 @@ namespace PixelFarm.Agg
             coordCount = 0;
             latest_moveto_x = x0;
             latest_moveto_y = y0;
-
             this.x0 = x0;
             this.y0 = y0;
 
-
-            coordCount++;
         }
 
-        public void LineTo(double x1, double y1)
+        public void LineTo(double x1, double y1,
+            List<Vector> outputPositiveSideList,
+            List<Vector> outputNegativeSideList)
         {
+            double ex0, ey0, ex0_n, ey0_n;
             if (coordCount > 0)
             {
-                //perpendicular line
-                //create line vector
-                line_vector = delta0 = new Vector(x1 - x0, y1 - y0);
-                delta1 = delta0 = delta0.Rotate(90).NewLength(positiveSide);
+                CreateLineJoin(x1, y1, outputPositiveSideList, outputNegativeSideList);
+                AcceptLatest();
+                ExactLineTo(x1, y1);
+                //--------------------------------------------------
+
+                //consider create joint here
+                GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
+                //add to vectors
+                outputPositiveSideList.Add(new Vector(ex0, ey0));
+                outputPositiveSideList.Add(e1_positive);
+                //
+                outputNegativeSideList.Add(new Vector(ex0_n, ey0_n));
+                outputNegativeSideList.Add(e1_negative);
             }
+            else
+            {
+                ExactLineTo(x1, y1);
+                GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
+                //add to vectors
+                outputPositiveSideList.Add(new Vector(ex0, ey0));
+                outputNegativeSideList.Add(new Vector(ex0_n, ey0_n));
+            }
+        }
+        public void Close(
+            double first_lineto_x, double first_lineto_y,
+            List<Vector> outputPositiveSideList,
+            List<Vector> outputNegativeSideList)
+        {
+            double ex0, ey0, ex0_n, ey0_n;
+            CreateLineJoin(latest_moveto_x, latest_moveto_y, outputPositiveSideList, outputNegativeSideList);
+            //
+            ExactLineTo(latest_moveto_x, latest_moveto_y);
+            if (coordCount > 1)
+            {
+
+                //consider create joint here
+                GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
+                //add to vectors
+                outputPositiveSideList.Add(new Vector(ex0, ey0));
+                outputPositiveSideList.Add(e1_positive);
+                //
+                outputNegativeSideList.Add(new Vector(ex0_n, ey0_n));
+                outputNegativeSideList.Add(e1_negative);
+            }
+            else
+            {
+                GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
+                //add to vectors
+                outputPositiveSideList.Add(new Vector(ex0, ey0));
+                outputPositiveSideList.Add(e1_positive);
+                //
+                outputNegativeSideList.Add(new Vector(ex0_n, ey0_n));
+                outputNegativeSideList.Add(e1_negative);
+            }
+
+            //------------------------------------------
+            CreateLineJoin(first_lineto_x, first_lineto_y, outputPositiveSideList, outputNegativeSideList);
+            AcceptLatest();
+            //------------------------------------------
+        }
+        void GetEdge0(out double ex0, out double ey0, out double ex0_n, out double ey0_n)
+        {
+            ex0 = x0 + delta0.X;
+            ey0 = y0 + delta0.Y;
+            ex0_n = x0 - delta0.X;
+            ey0_n = y0 - delta0.Y;
+        }
+
+        void ExactLineTo(double x1, double y1)
+        {
+
+            //perpendicular line
+            //create line vector
+            line_vector = delta0 = new Vector(x1 - x0, y1 - y0);
+            delta1 = delta0 = delta0.Rotate(90).NewLength(positiveSide);
+
             this.x1 = x1;
             this.y1 = y1;
             //------------------------------------------------------
@@ -419,19 +459,11 @@ namespace PixelFarm.Agg
             //create both positive and negative edge 
             coordCount++;
         }
-
-        public void GetEdge0(out double ex0, out double ey0, out double ex0_n, out double ey0_n)
-        {
-            ex0 = x0 + delta0.X;
-            ey0 = y0 + delta0.Y;
-            ex0_n = x0 - delta0.X;
-            ey0_n = y0 - delta0.Y;
-        }
-
-        public void CreateLineJoin(
-         double previewX1, double previewY1,
-         List<Vector> outputPositiveSideList,
-         List<Vector> outputNegativeSideList)
+        void CreateLineJoin(
+           double previewX1,
+           double previewY1,
+           List<Vector> outputPositiveSideList,
+           List<Vector> outputNegativeSideList)
         {
 
             if (_lineJoiner.LineJoinKind == LineJoin.Bevel)
@@ -450,80 +482,27 @@ namespace PixelFarm.Agg
 
     }
 
-    static class ArcGenerator
-    {
-        //helper class for generate arc
-        //
-        public static void GenerateArcNew(List<Vector> output, double cx,
-            double cy,
-            Vector2 startDelta,
-            double sweepAngleRad)
-        {
 
-            //increment
-            int nsteps = 4;
-            double eachStep = MyMath.RadToDegrees(sweepAngleRad) / nsteps;
-            double angle = 0;
-            for (int i = 0; i < nsteps; ++i)
-            {
-
-                Vector2 newPerpend = startDelta.RotateInDegree(angle);
-                Vector2 newpos = new Vector2(cx + newPerpend.x, cy + newPerpend.y);
-                output.Add(new Vector(newpos.x, newpos.y));
-                angle += eachStep;
-            }
-
-        }
-        public static void GenerateArc(List<Vector> output, Vector2 pos0, Vector2 pos1, Vector2 pos2, Vector2 pos3, double edgeWidth)
-        {
-            Vector2 v0v1 = pos1 - pos0;
-            Vector2 v2v3 = pos2 - pos3;
-            double rad1 = Math.Atan2(v0v1.Y, v0v1.X);
-            double rad2 = Math.Atan2(v2v3.Y, v2v3.X);
-            double rad_diff = rad2 - rad1;
-            //increment
-            int nsteps = 4;
-            double eachStep = MyMath.RadToDegrees(rad_diff) / nsteps;
-
-            Vector2 perpend1 = v0v1.RotateInDegree(90).NewLength(edgeWidth);
-            //move to core
-            Vector2 corepos = pos0 + perpend1;
-            perpend1 = perpend1.RotateInDegree(-180).NewLength(edgeWidth);
-
-            double angle = 0;
-            for (int i = 0; i < nsteps; ++i)
-            {
-
-                Vector2 newPerpend = perpend1.RotateInDegree(angle);
-                Vector2 newpos = corepos + newPerpend;
-                output.Add(new Vector(newpos.x, newpos.y));
-                angle += eachStep;
-            }
-
-        }
-
-    }
     public class StrokeGen2
     {
 
-        VertexStore m_out_vertices = new VertexStore();
-        StrokeMath m_stroker = new StrokeMath();
-        MultipartVerextDistanceList multipartVertexDistanceList = new MultipartVerextDistanceList();
         EdgeLine currentEdgeLine = new EdgeLine();
         List<Vector> positiveSideVectors = new List<Vector>();
         List<Vector> negativeSideVectors = new List<Vector>();
-        LineCap lineCap = LineCap.Round;
-        LineJoiner lineCapMaker;
+        List<Vector> capVectors = new List<Vector>(); //temporary 
+
 
         float positiveSide, negativeSide;
         public StrokeGen2()
         {
-            lineCapMaker = new LineJoiner();
-            lineCapMaker.LineJoinKind = LineJoin.Bevel;
+
             //
             //use 2 vertext list to store perpendicular outline 
-            currentEdgeLine.SetEdgeWidths(0.5f, 0.5f);//default
+            this.LineCapKind = LineCap.Square;
+            SetEdgeWidth(0.5f, 0.5f);//default
         }
+
+        public LineCap LineCapKind { get; set; }
         public void SetEdgeWidth(float positiveSide, float negativeSide)
         {
             this.positiveSide = positiveSide;
@@ -557,31 +536,13 @@ namespace PixelFarm.Agg
                 {
                     case VertexCmd.LineTo:
                         {
-
                             if (current_coord_count > 1)
                             {
-                                currentEdgeLine.CreateLineJoin(x, y, positiveSideVectors, negativeSideVectors);
-                                currentEdgeLine.AcceptLatest();
-
-                                //
-                                currentEdgeLine.LineTo(x, y);
-                                //consider create joint here
-                                currentEdgeLine.GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
-                                //add to vectors
-                                positiveSideVectors.Add(new Vector(ex0, ey0));
-                                positiveSideVectors.Add(currentEdgeLine.e1_positive);
-                                //
-                                negativeSideVectors.Add(new Vector(ex0_n, ey0_n));
-                                negativeSideVectors.Add(currentEdgeLine.e1_negative);
-
+                                currentEdgeLine.LineTo(x, y, positiveSideVectors, negativeSideVectors);
                             }
                             else
                             {
-                                currentEdgeLine.LineTo(first_lineto_x = x, first_lineto_y = y);
-                                currentEdgeLine.GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
-                                //add to vectors
-                                positiveSideVectors.Add(new Vector(ex0, ey0));
-                                negativeSideVectors.Add(new Vector(ex0_n, ey0_n));
+                                currentEdgeLine.LineTo(first_lineto_x = x, first_lineto_y = y, positiveSideVectors, negativeSideVectors);
 
                             }
 
@@ -598,36 +559,12 @@ namespace PixelFarm.Agg
                     case VertexCmd.CloseAndEndFigure:
                         {
                             //------------------------------------------
-                            currentEdgeLine.CreateLineJoin(latest_moveto_x, latest_moveto_y, positiveSideVectors, negativeSideVectors);
-                            currentEdgeLine.LineTo(latest_moveto_x, latest_moveto_y);
-                            if (current_coord_count > 1)
-                            {
+                            currentEdgeLine.Close(first_lineto_x, first_lineto_y, positiveSideVectors, negativeSideVectors);
 
-                                //consider create joint here
-                                currentEdgeLine.GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
-                                //add to vectors
-                                positiveSideVectors.Add(new Vector(ex0, ey0));
-                                positiveSideVectors.Add(currentEdgeLine.e1_positive);
-                                //
-                                negativeSideVectors.Add(new Vector(ex0_n, ey0_n));
-                                negativeSideVectors.Add(currentEdgeLine.e1_negative);
-                            }
-                            else
-                            {
-                                currentEdgeLine.GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
-                                //add to vectors
-                                positiveSideVectors.Add(new Vector(ex0, ey0));
-                                positiveSideVectors.Add(currentEdgeLine.e1_positive);
-                                //
-                                negativeSideVectors.Add(new Vector(ex0_n, ey0_n));
-                                negativeSideVectors.Add(currentEdgeLine.e1_negative);
-                            }
+
 
                             current_coord_count++;
-                            //------------------------------------------
-                            currentEdgeLine.CreateLineJoin(first_lineto_x, first_lineto_y, positiveSideVectors, negativeSideVectors);
-                            currentEdgeLine.AcceptLatest();
-                            //------------------------------------------
+
                             WriteOutput(outputVxs, true);
                             current_coord_count = 0;
                         }//create line cap
@@ -691,7 +628,7 @@ namespace PixelFarm.Agg
                 //1. moveto
 
                 //2.
-                CreateStartLineCapNew(outputVxs,
+                CreateStartLineCap(outputVxs,
                     v,
                     negativeSideVectors[0], positiveSide);
                 //-----------
@@ -706,7 +643,7 @@ namespace PixelFarm.Agg
                 //negative 
 
                 //---------------------------------- 
-                CreateEndLineCapNew(outputVxs,
+                CreateEndLineCap(outputVxs,
                     positiveSideVectors[positive_edgeCount - 1],
                     negativeSideVectors[negative_edgeCount - 1],
                     positiveSide);
@@ -724,604 +661,155 @@ namespace PixelFarm.Agg
             positiveSideVectors.Clear();
             negativeSideVectors.Clear();
         }
-        //void CreateStartLineCap(VertexStore outputVxs, Vector v0, Vector v1, Vector v0_n, double edgeWidth)
-        //{
-        //    //TODO: review 
-        //    switch (lineCap)
-        //    {
-        //        default: throw new NotSupportedException();
-        //        case LineCap.Butt:
-        //            outputVxs.AddMoveTo(v0.X, v0.Y);// moveto
-        //            break;
-        //        case LineCap.Square:
-        //            {
-        //                Vector delta = (v1 - v0).NewLength(edgeWidth);
-        //                //------------------------
-        //                outputVxs.AddMoveTo(v0_n.X - delta.X, v0_n.Y - delta.Y);// moveto
-        //                outputVxs.AddLineTo(v0.X - delta.X, v0.Y - delta.Y);
-        //            }
-        //            break;
-        //        case LineCap.Round:
-        //            //impl round cap
-        //            {
-        //                //1. first vector
-        //                Vector v1v0dev = (v1 - v0).NewLength(edgeWidth);
-        //                float startAngle = 90;
-        //                Vector delta = v1v0dev.Rotate(startAngle);
-        //                Vector start_position = v0 - delta; //center 
-        //                                                    // first one
-        //                outputVxs.AddMoveTo(v0_n.X, v0_n.Y);// moveto
-        //                outputVxs.AddLineTo(start_position.X + delta.X, start_position.Y + delta.Y);
-        //                //---------------
-        //                int roundStep = 8;
-        //                float eachStep = 180f / roundStep;
-        //                startAngle += eachStep;
-        //                for (int i = 1; i < roundStep; ++i)
-        //                {
-        //                    startAngle += eachStep;
-        //                    delta = v1v0dev.Rotate(startAngle);
-        //                    Vector newpos = start_position + delta;
-        //                    outputVxs.AddLineTo(newpos.X, newpos.Y);
-        //                }
-        //                //---------------
-        //                //last one
-        //                outputVxs.AddLineTo(v0.X, v0.Y);
-        //            }
-        //            break;
-        //    }
-        //}
-        List<Vector> capVectors = new List<Vector>();
-        void CreateEndLineCapNew(VertexStore outputVxs, Vector v0, Vector v2, double edgeWidth)
+
+
+       
+        void CreateStartLineCap(VertexStore outputVxs, Vector v0, Vector v1, double edgeWidth)
         {
-            capVectors.Clear();
-            lineCapMaker.LineJoinKind = LineJoin.Round;
-            lineCapMaker.SetControlVectors(v0.X, v0.Y, 0, 0, v2.X, v2.Y);
-            lineCapMaker.BuildEndCap(capVectors);
-            int j = capVectors.Count;
-            for (int i = j - 1; i >= 0; --i)
+            switch (this.LineCapKind)
             {
-                Vector v = capVectors[i];
-                outputVxs.AddLineTo(v.X, v.Y);
-            }
-        }
-        void CreateStartLineCapNew(VertexStore outputVxs, Vector v0, Vector v2, double edgeWidth)
-        {
-            
-            capVectors.Clear();
-            lineCapMaker.LineJoinKind = LineJoin.Round;
-            lineCapMaker.SetControlVectors(v0.X, v0.Y, 0, 0, v2.X, v2.Y);
-            lineCapMaker.BuildBeginCap(capVectors); 
-            int j = capVectors.Count; 
-            outputVxs.AddMoveTo(v2.X, v2.Y);
-
-            for (int i = j - 1; i >= 0; --i)
-            {
-                Vector v = capVectors[i];
-                outputVxs.AddLineTo(v.X, v.Y);
-            }
-
-        }
-        //void CreateEndLineCap(VertexStore outputVxs, Vector v0, Vector v1, Vector v0_n, double edgeWidth)
-        //{
-        //    //TODO: review 
-        //    switch (lineCap)
-        //    {
-        //        default: throw new NotSupportedException();
-
-        //        case LineCap.Butt:
-        //            {
-        //                outputVxs.AddLineTo(v1.X, v1.Y);// moveto
-        //                outputVxs.AddLineTo(v0_n.X, v0_n.Y);
-        //            }
-        //            break;
-        //        case LineCap.Square:
-        //            {
-        //                Vector delta = (v1 - v0).NewLength(edgeWidth);
-        //                outputVxs.AddLineTo(v1.X + delta.X, v1.Y + delta.Y);// moveto
-        //                outputVxs.AddLineTo(v0_n.X + delta.X, v0_n.Y + delta.Y);
-        //            }
-        //            break;
-        //        case LineCap.Round:
-        //            {
-
-        //                //impl round cap
-        //                //currentEdgeLine.CreateLineJoin(x, y, positiveSideVectors, negativeSideVectors);
-        //                ////1. first vector
-        //                //Vector v1v0dev = (v1 - v0).NewLength(edgeWidth);
-        //                //float startAngle = -90;
-        //                //Vector delta = -v1v0dev.Rotate(startAngle);
-        //                //Vector start_position = v1 - delta; //center 
-        //                //// first one
-        //                //outputVxs.AddLineTo(v0.X, v0.Y);
-        //                //outputVxs.AddLineTo(v1.X, v1.Y);
-        //                ////---------------
-        //                //int roundStep = 8;
-        //                //float eachStep = -180f / roundStep;
-
-        //                //for (int i = 0; i <= roundStep; ++i)
-        //                //{
-
-        //                //    delta = v1v0dev.Rotate(startAngle);
-        //                //    Vector newpos = start_position + delta;
-        //                //    outputVxs.AddLineTo(newpos.X, newpos.Y);
-        //                //    startAngle -= eachStep;
-        //                //}
-        //                ////---------------
-        //                ////last one
-        //                //outputVxs.AddLineTo(v0_n.X, v0_n.Y);
-        //            }
-        //            break;
-        //    }
-        //}
-    }
-    class StrokeGenerator
-    {
-
-        /// <summary>
-        /// stroke generator's status
-        /// </summary>
-        public enum Status
-        {
-            Init,
-            Ready,
-            Cap1,
-            Cap2,
-            Outline1,
-            CloseFirst,
-            Outline2,
-            OutVertices,
-            EndPoly1,
-            EndPoly2,
-            Stop
-        }
-
-
-        StrokeMath m_stroker;
-        MultipartVerextDistanceList multipartVertexDistanceList = new MultipartVerextDistanceList();
-        VertexStore m_out_vertices;
-        double m_shorten;
-        bool m_closed;
-        Status m_status;
-        Status m_prev_status;
-        int m_src_vertex;
-        int m_out_vertex;
-        public StrokeGenerator()
-        {
-            m_stroker = new StrokeMath();
-            m_out_vertices = new VertexStore();
-            m_status = Status.Init;
-        }
-
-        public LineCap LineCap
-        {
-            get { return this.m_stroker.LineCap; }
-            set { this.m_stroker.LineCap = value; }
-        }
-        public LineJoin LineJoin
-        {
-            get { return this.m_stroker.LineJoin; }
-            set { this.m_stroker.LineJoin = value; }
-        }
-        public InnerJoin InnerJoin
-        {
-            get { return this.m_stroker.InnerJoin; }
-            set { this.m_stroker.InnerJoin = value; }
-        }
-
-        public double Width
-        {
-            get { return m_stroker.Width; }
-            set { this.m_stroker.Width = value; }
-        }
-        public void SetMiterLimitTheta(double t) { m_stroker.SetMiterLimitTheta(t); }
-
-
-        public double InnerMiterLimit
-        {
-            get { return this.m_stroker.InnerMiterLimit; }
-            set { this.m_stroker.InnerMiterLimit = value; }
-        }
-        public double MiterLimit
-        {
-            get { return this.m_stroker.InnerMiterLimit; }
-            set { this.m_stroker.InnerMiterLimit = value; }
-        }
-        public double ApproximateScale
-        {
-            get { return this.m_stroker.ApproximateScale; }
-            set { this.m_stroker.ApproximateScale = value; }
-        }
-        public bool AutoDetectOrientation
-        {
-            get { throw new NotSupportedException(); }
-            set { throw new NotSupportedException(); }
-        }
-        public double Shorten
-        {
-            get { return this.m_shorten; }
-            set { this.m_shorten = value; }
-        }
-        // Vertex Generator Interface
-        public void Reset()
-        {
-            multipartVertexDistanceList.Clear();
-            m_closed = false;
-            m_status = Status.Init;
-
-        }
-        public void AddVertex(double x, double y, VertexCmd cmd)
-        {
-            //TODO: review 
-            m_status = Status.Init;
-            switch (cmd)
-            {
-                case VertexCmd.MoveTo:
-                    multipartVertexDistanceList.AddMoveTo(x, y);
+                default: throw new NotSupportedException();
+                case LineCap.Butt:
+                    outputVxs.AddMoveTo(v1.X, v1.Y);// moveto      
+                    outputVxs.AddLineTo(v0.X, v0.Y);
                     break;
-                case VertexCmd.Close:
-                case VertexCmd.CloseAndEndFigure:
-                    //m_closed = true;
-                    break;
-                default:
-                    multipartVertexDistanceList.AddVertex(new Vertex2d(x, y));
-                    break;
-            }
-        }
-
-        public void WriteTo(VertexStore outputVxs)
-        {
-
-            this.Rewind();
-            int currentRangeIndex = 0;
-            double x = 0, y = 0;
-            //int n = 0;
-            for (;;)
-            {
-                VertexCmd cmd = GetNextVertex(out x, out y);
-                if (cmd == VertexCmd.NoMore)
-                {
-                    if (currentRangeIndex + 1 < multipartVertexDistanceList.RangeCount)
+                case LineCap.Square:
                     {
-                        //move to next range
-                        multipartVertexDistanceList.SetRangeIndex(currentRangeIndex + 1);
-                        currentRangeIndex++;
-
-                        m_status = Status.Ready;
-                        m_src_vertex = 0;
-                        m_out_vertex = 0;
-                        continue;
+                        Vector delta = (v0 - v1).Rotate(90).NewLength(edgeWidth);
+                        //------------------------
+                        outputVxs.AddMoveTo(v1.X + delta.X, v1.Y + delta.Y);
+                        outputVxs.AddLineTo(v0.X + delta.X, v0.Y + delta.Y);
                     }
-                    else
+                    break;
+                case LineCap.Round:
+                    capVectors.Clear();
+                    BuildBeginCap(v0.X, v0.Y, v1.X, v1.Y, capVectors);
+                    //----------------------------------------------------
+                    int j = capVectors.Count;
+                    outputVxs.AddMoveTo(v1.X, v1.Y);
+                    for (int i = j - 1; i >= 0; --i)
                     {
-                        break;//exit from loop
+                        Vector v = capVectors[i];
+                        outputVxs.AddLineTo(v.X, v.Y);
                     }
-                }
-                outputVxs.AddVertex(x, y, cmd);
-
-
-                //Console.WriteLine(n + " " + x + "," + y);
-                //n++;
-                //if (n == 419)
-                //{ 
-                //}
+                    break;
             }
         }
-        void Rewind()
+        void CreateEndLineCap(VertexStore outputVxs, Vector v0, Vector v1, double edgeWidth)
         {
-            if (m_status == Status.Init)
+            switch (this.LineCapKind)
             {
-                multipartVertexDistanceList.Rewind();
-                if (multipartVertexDistanceList.CurrentRangeLen < 3)
-                {
-                    //force
-                    m_closed = false;
-                }
-                //_curCurtexDistanceList.Close(m_closed);
-                //VertexHelper.ShortenPath(_curCurtexDistanceList, m_shorten, m_closed);
-                //if (_curCurtexDistanceList.Count < 3) { m_closed = false; }
+                default: throw new NotSupportedException();
+                case LineCap.Butt:
+                    outputVxs.AddLineTo(v0.X, v0.Y);
+                    outputVxs.AddLineTo(v1.X, v1.Y);
+
+                    break;
+                case LineCap.Square:
+                    {
+                        Vector delta = (v1 - v0).Rotate(90).NewLength(edgeWidth);
+                        outputVxs.AddLineTo(v0.X + delta.X, v0.Y + delta.Y);
+                        outputVxs.AddLineTo(v1.X + delta.X, v1.Y + delta.Y);
+                    }
+                    break;
+                case LineCap.Round:
+                    {
+                        capVectors.Clear();
+                        BuildEndCap(v0.X, v0.Y, v1.X, v1.Y, capVectors);
+                        int j = capVectors.Count;
+                        for (int i = j - 1; i >= 0; --i)
+                        {
+                            Vector v = capVectors[i];
+                            outputVxs.AddLineTo(v.X, v.Y);
+                        }
+                    }
+                    break;
             }
-            m_status = Status.Ready;
-            m_src_vertex = 0;
-            m_out_vertex = 0;
-            //if (_vertextDistanceListQueue.Count > 0)
-            //{
-            //    _vertextDistanceListQueue.Enqueue(_curCurtexDistanceList);
-            //    //switch to first one
-            //    _curCurtexDistanceList = _vertextDistanceListQueue.Dequeue();
-            //}
-            multipartVertexDistanceList.Rewind();
         }
 
-        VertexCmd GetNextVertex(out double x, out double y)
+
+        void BuildBeginCap(
+          double x0, double y0,
+          double x1, double y1,
+          List<Vector> outputVectors)
         {
-            x = 0; y = 0;
-            VertexCmd cmd = VertexCmd.LineTo;
-            do
+            switch (LineCapKind)
             {
-                switch (m_status)
-                {
-                    case Status.Init:
-                        this.Rewind();
-                        goto case Status.Ready;
-                    case Status.Ready:
+                default: throw new NotSupportedException();
+                case LineCap.Butt:
+                    break;
+                case LineCap.Square:
+                    break;
+                case LineCap.Round:
 
-                        if (multipartVertexDistanceList.CurrentRangeLen < 2 + (m_closed ? 1 : 0))
-                        {
-                            cmd = VertexCmd.NoMore;
-                            break;
-                        }
-                        m_status = m_closed ? Status.Outline1 : Status.Cap1;
-                        cmd = VertexCmd.MoveTo;
-                        m_src_vertex = 0;
-                        m_out_vertex = 0;
-                        break;
-                    case Status.CloseFirst:
-                        m_status = Status.Outline2;
-                        cmd = VertexCmd.MoveTo;
-                        goto case Status.Outline2;
-                    case Status.Cap1:
-                        {
-                            Vertex2d v0, v1;
+                    {
+                        //------------------------
+                        //x0,y0 -> begin of line 1
+                        //x1,y1 -> begin of line 2
+                        //------------------------ 
+                        double c_x = (x0 + x1) / 2;
+                        double c_y = (y0 + y1) / 2;
+                        Vector2 delta = new Vector2(x0 - c_x, y0 - c_y);
+                        ArcGenerator.GenerateArcNew(outputVectors,
+                                     c_x, c_y, delta, MyMath.DegreesToRadians(180));
+                    }
+                    break;
+            }
 
-                            multipartVertexDistanceList.GetFirst2(out v0, out v1);
-                            m_stroker.CreateCap(
-                                m_out_vertices,
-                                v0,
-                                v1,
-                                v0.CalLen(v1));
+        }
 
-                            m_src_vertex = 1;
-                            m_prev_status = Status.Outline1;
-                            m_status = Status.OutVertices;
-                            m_out_vertex = 0;
-                        }
-                        break;
-                    case Status.Cap2:
-                        {
-                            Vertex2d beforeLast, last;
-                            multipartVertexDistanceList.GetLast2(out beforeLast, out last);
-                            m_stroker.CreateCap(m_out_vertices,
-                                last,
-                                beforeLast,
-                                beforeLast.CalLen(last));
-                            m_prev_status = Status.Outline2;
-                            m_status = Status.OutVertices;
-                            m_out_vertex = 0;
-                        }
-                        break;
-                    case Status.Outline1:
-                        {
-                            if (m_closed)
-                            {
-                                if (m_src_vertex >= multipartVertexDistanceList.CurrentRangeLen)
-                                {
-                                    m_prev_status = Status.CloseFirst;
-                                    m_status = Status.EndPoly1;
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                if (m_src_vertex >= multipartVertexDistanceList.CurrentRangeLen - 1)
-                                {
-                                    m_status = Status.Cap2;
-                                    break;
-                                }
-                            }
-
-                            Vertex2d prev, cur, next;
-                            multipartVertexDistanceList.GetTripleVertices(m_src_vertex,
-                                out prev,
-                                out cur,
-                                out next);
-                            //check if we should join or not ?
-
-                            //don't join it
-                            m_stroker.CreateJoin(m_out_vertices,
-                           prev,
-                           cur,
-                           next,
-                           prev.CalLen(cur),
-                           cur.CalLen(next));
-
-                            ++m_src_vertex;
-                            m_prev_status = m_status;
-                            m_status = Status.OutVertices;
-                            m_out_vertex = 0;
-
-                        }
-                        break;
-
-                    case Status.Outline2:
-                        {
-                            if (m_src_vertex <= (!m_closed ? 1 : 0))
-                            {
-                                m_status = Status.EndPoly2;
-                                m_prev_status = Status.Stop;
-                                break;
-                            }
-
-                            --m_src_vertex;
-
-                            Vertex2d prev, cur, next;
-                            multipartVertexDistanceList.GetTripleVertices(m_src_vertex,
-                                out prev,
-                                out cur,
-                                out next);
-
-                            m_stroker.CreateJoin(m_out_vertices,
-                              next,
-                              cur,
-                              prev,
-                              cur.CalLen(next),
-                              prev.CalLen(cur));
-                            m_prev_status = m_status;
-                            m_status = Status.OutVertices;
-                            m_out_vertex = 0;
-
-                        }
-                        break;
-                    case Status.OutVertices:
-                        if (m_out_vertex >= m_out_vertices.Count)
-                        {
-                            m_status = m_prev_status;
-                        }
-                        else
-                        {
-                            m_out_vertices.GetVertex(m_out_vertex++, out x, out y);
-                            return cmd;
-                        }
-                        break;
-                    case Status.EndPoly1:
-                        m_status = m_prev_status;
-                        x = (int)EndVertexOrientation.CCW;
-                        y = 0;
-                        return VertexCmd.Close;
-                    case Status.EndPoly2:
-                        m_status = m_prev_status;
-                        x = (int)EndVertexOrientation.CW;
-                        y = 0;
-                        return VertexCmd.Close;
-                    case Status.Stop:
-                        cmd = VertexCmd.NoMore;
-                        break;
-                }
-
-            } while (!VertexHelper.IsEmpty(cmd));
-            return cmd;
+        void BuildEndCap(
+          double x0, double y0,
+          double x1, double y1,
+          List<Vector> outputVectors)
+        {
+            switch (LineCapKind)
+            {
+                default: throw new NotSupportedException();
+                case LineCap.Butt:
+                    break;
+                case LineCap.Square:
+                    break;
+                case LineCap.Round:
+                    {
+                        //------------------------
+                        //x0,y0 -> end of line 1 
+                        //x1,y1 -> end of line 2
+                        //------------------------ 
+                        double c_x = (x0 + x1) / 2;
+                        double c_y = (y0 + y1) / 2;
+                        Vector2 delta = new Vector2(x1 - c_x, y1 - c_y);
+                        ArcGenerator.GenerateArcNew(outputVectors,
+                                     c_x, c_y, delta, MyMath.DegreesToRadians(180));
+                    }
+                    break;
+            }
         }
     }
 
-    class MultipartVerextDistanceList
+
+    static class ArcGenerator
     {
-        class Range
+        //helper class for generate arc
+        //
+        public static void GenerateArcNew(List<Vector> output, double cx,
+            double cy,
+            Vector2 startDelta,
+            double sweepAngleRad)
         {
-            public int beginAt;
-            public int len;
-            public Range(int beginAt)
-            {
-                this.beginAt = beginAt;
-                this.len = 0;
-            }
-            public int Count
-            {
-                get { return len; }
-            }
-            public void SetLen(int len)
-            {
-                this.len = len;
-            }
-            public void SetEndAt(int endAt)
-            {
-                this.len = endAt - beginAt;
-            }
-        }
-        List<Vertex2d> _vertextDistanceList = new List<Vertex2d>();
-        List<Range> _ranges = new List<Range>();
-        Range _range;
-        Vertex2d _latest = new Vertex2d();
-        int _rangeIndex = 0;
-        public void AddMoveTo(double x, double y)
-        {
-            //TODO: review here
-            //1. stop current range
-            if (_ranges.Count > 0)
-            {
-                _ranges[_ranges.Count - 1].SetEndAt(_vertextDistanceList.Count);
-            }
 
-            _ranges.Add(_range = new Range(_vertextDistanceList.Count));
-            AddVertex(new Agg.Vertex2d(x, y));
-        }
-
-        public int RangeIndex { get { return this._rangeIndex; } }
-        public void SetRangeIndex(int index)
-        {
-            this._rangeIndex = index;
-            _range = _ranges[index];
-        }
-        public int RangeCount
-        {
-            get { return _ranges.Count; }
-        }
-        public int CurrentRangeLen
-        {
-            get
+            //TODO: review here ***
+            int nsteps = 4;
+            double eachStep = MyMath.RadToDegrees(sweepAngleRad) / nsteps;
+            double angle = 0;
+            for (int i = 0; i < nsteps; ++i)
             {
-                return (_range == null) ? 0 : _range.len;
-            }
-        }
-        public void AddLineTo(double x, double y)
-        {
-            AddVertex(new Agg.Vertex2d(x, y));
-        }
-        public void AddVertex(Vertex2d val)
-        {
-            int count = _range.Count;
-            //Ensure that the new one is not duplicate with the last one
-            switch (count)
-            {
-                case 0:
-                    _vertextDistanceList.Add(_latest = val);
-                    _range.SetLen(count + 1);
-                    break;
-                default:
-                    if (!_latest.IsEqual(val))
-                    {
-                        _range.SetLen(count + 1);
-                        _vertextDistanceList.Add(_latest = val);
-                    }
-                    break;
-            }
-        }
-        public void Clear()
-        {
-            _ranges.Clear();
-            _vertextDistanceList.Clear();
-            _latest = new Agg.Vertex2d();
-            _rangeIndex = 0;
-            _range = null;
-        }
-        public void Rewind()
-        {
-            _rangeIndex = 0;
-            if (_ranges.Count > 0)
-            {
-                _range = _ranges[_rangeIndex];
-            }
-        }
 
-        public void ReplaceLast(Vertex2d val)
-        {
-            _vertextDistanceList.RemoveAt(_vertextDistanceList.Count - 1);
-            AddVertex(val);
-        }
-        public void GetTripleVertices(int idx, out Vertex2d prev, out Vertex2d cur, out Vertex2d next)
-        {
-            //we want 3 vertices
-            if (idx > 0 && idx + 2 <= _range.Count)
-            {
-                prev = _vertextDistanceList[_range.beginAt + idx - 1];
-                cur = _vertextDistanceList[_range.beginAt + idx];
-                next = _vertextDistanceList[_range.beginAt + idx + 1];
-
+                Vector2 newPerpend = startDelta.RotateInDegree(angle);
+                Vector2 newpos = new Vector2(cx + newPerpend.x, cy + newPerpend.y);
+                output.Add(new Vector(newpos.x, newpos.y));
+                angle += eachStep;
             }
-            else
-            {
-                prev = cur = next = new Vertex2d();
-            }
-        }
-        public void GetFirst2(out Vertex2d first, out Vertex2d second)
-        {
-            first = _vertextDistanceList[_range.beginAt];
-            second = _vertextDistanceList[_range.beginAt + 1];
-
-        }
-        public void GetLast2(out Vertex2d beforeLast, out Vertex2d last)
-        {
-            beforeLast = _vertextDistanceList[_range.beginAt + _range.len - 2];
-            last = _vertextDistanceList[_range.beginAt + _range.len - 1];
-
         }
     }
 
