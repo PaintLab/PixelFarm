@@ -34,8 +34,13 @@ namespace PixelFarm.Agg
         /// <returns>The angle expressed in radians</returns>
         public static double DegreesToRadians(double degrees)
         {
-            const double degToRad = System.Math.PI / 180.0f;
-            return degrees * degToRad;
+
+            return degrees * System.Math.PI / 180.0f;
+        }
+        public static double RadToDegrees(double rad)
+        {
+
+            return rad * (180.0f / System.Math.PI);
         }
         public static bool MinDistanceFirst(Vector2 baseVec, Vector2 compare0, Vector2 compare1)
         {
@@ -166,6 +171,12 @@ namespace PixelFarm.Agg
         public Vector e1_negative;
         public Vector line_vector; //latest line vector
         int coordCount = 0;
+        LineJoin linejoin;
+        public EdgeLine()
+        {
+            linejoin = LineJoin.Round;
+        }
+
         public void SetEdgeWidths(double positiveSide, double negativeSide)
         {
             this.positiveSide = positiveSide;
@@ -223,7 +234,8 @@ namespace PixelFarm.Agg
          List<Vector> outputPositiveSideList,
          List<Vector> outputNegativeSideList)
         {
-
+            if (linejoin == LineJoin.Bevel) return;
+            //------------------------------------------
 
             //----------
             //create line join for previewX1,previewY1
@@ -244,7 +256,8 @@ namespace PixelFarm.Agg
             if (MyMath.FindCutPoint(
                    x1_preview_positive,
                    x1_preview_positive_1,
-                   new Vector2(e1_positive.X + line_vector.X, e1_positive.Y + line_vector.Y),
+                   //new Vector2(e1_positive.X + line_vector.X, e1_positive.Y + line_vector.Y),
+                   new Vector2(x0 + delta0.X, y0 + delta0.Y),
                    new Vector2(e1_positive.X, e1_positive.Y),
                out cutPoint))
             {
@@ -261,11 +274,28 @@ namespace PixelFarm.Agg
             if (MyMath.FindCutPoint(
                e1_preview_negative,
                e1_preview_negative_1,
-               new Vector2(e1_negative.X + line_vector.X, e1_negative.Y + line_vector.Y),
+                //new Vector2(e1_negative.X + line_vector.X, e1_negative.Y + line_vector.Y),
+                new Vector2(x0 - delta0.X, y0 - delta0.Y),
                new Vector2(e1_negative.X, e1_negative.Y),
                out cutPoint))
             {
-                outputNegativeSideList.Add(new Vector(cutPoint.x, cutPoint.y));
+                //inner?
+
+                if (linejoin == LineJoin.Round)
+                {
+
+                    ArcGenerator.GenerateArc(outputNegativeSideList,
+                        new Vector2(e1_negative.X, e1_negative.Y),
+                        new Vector2(e1_negative.X + line_vector.X, e1_negative.Y + line_vector.Y),
+                        e1_preview_negative_1,
+                        e1_preview_negative,
+
+                        positiveSide);
+                }
+                else
+                {
+                    outputNegativeSideList.Add(new Vector(cutPoint.x, cutPoint.y));
+                }
             }
             else
             {
@@ -274,7 +304,38 @@ namespace PixelFarm.Agg
         }
     }
 
+    static class ArcGenerator
+    {
+        //helper class for generate arc
+        //
+        public static void GenerateArc(List<Vector> output, Vector2 pos0, Vector2 pos1, Vector2 pos2, Vector2 pos3, double edgeWidth)
+        {
+            Vector2 v0v1 = pos1 - pos0;
+            Vector2 v2v3 = pos2 - pos3;
+            double rad1 = Math.Atan2(v0v1.Y, v0v1.X);
+            double rad2 = Math.Atan2(v2v3.Y, v2v3.X);
+            double rad_diff = rad2 - rad1;
+            //increment
+            int nsteps = 4;
+            double eachStep = MyMath.RadToDegrees(rad_diff) / nsteps;
 
+            Vector2 perpend1 = v0v1.RotateInDegree(90).NewLength(edgeWidth);
+            //move to core
+            Vector2 corepos = pos0 + perpend1;
+            perpend1 = perpend1.RotateInDegree(-180).NewLength(edgeWidth);
+
+            double angle = 0;
+            for (int i = 0; i < nsteps; ++i)
+            {
+
+                Vector2 newPerpend = perpend1.RotateInDegree(angle);
+                Vector2 newpos = corepos + newPerpend;
+                output.Add(new Vector(newpos.x, newpos.y));
+                angle += eachStep;
+            }
+
+        }
+    }
     public class StrokeGen2
     {
 
@@ -329,6 +390,8 @@ namespace PixelFarm.Agg
                             if (current_coord_count > 1)
                             {
                                 currentEdgeLine.CreateLineJoin(x, y, positiveSideVectors, negativeSideVectors);
+                                currentEdgeLine.AcceptLatest();
+
                                 //
                                 currentEdgeLine.LineTo(x, y);
                                 //consider create joint here
@@ -339,6 +402,7 @@ namespace PixelFarm.Agg
                                 //
                                 negativeSideVectors.Add(new Vector(ex0_n, ey0_n));
                                 negativeSideVectors.Add(currentEdgeLine.e1_negative);
+
                             }
                             else
                             {
@@ -346,13 +410,13 @@ namespace PixelFarm.Agg
                                 currentEdgeLine.GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
                                 //add to vectors
                                 positiveSideVectors.Add(new Vector(ex0, ey0));
-                                positiveSideVectors.Add(currentEdgeLine.e1_positive);
+                                //positiveSideVectors.Add(currentEdgeLine.e1_positive);
                                 //
                                 negativeSideVectors.Add(new Vector(ex0_n, ey0_n));
-                                negativeSideVectors.Add(currentEdgeLine.e1_negative);
+                                //negativeSideVectors.Add(currentEdgeLine.e1_negative);
 
                             }
-                            currentEdgeLine.AcceptLatest();
+
                             current_coord_count++;
                         }
                         break;
@@ -389,12 +453,12 @@ namespace PixelFarm.Agg
                                 //
                                 negativeSideVectors.Add(new Vector(ex0_n, ey0_n));
                                 negativeSideVectors.Add(currentEdgeLine.e1_negative);
-
                             }
-                            currentEdgeLine.AcceptLatest();
+
                             current_coord_count++;
                             //------------------------------------------
                             currentEdgeLine.CreateLineJoin(first_lineto_x, first_lineto_y, positiveSideVectors, negativeSideVectors);
+                            currentEdgeLine.AcceptLatest();
                             //------------------------------------------
                             WriteOutput(outputVxs, true);
                             current_coord_count = 0;
@@ -569,7 +633,7 @@ namespace PixelFarm.Agg
                         //---------------
                         int roundStep = 8;
                         float eachStep = -180f / roundStep;
-                        
+
                         for (int i = 0; i <= roundStep; ++i)
                         {
 

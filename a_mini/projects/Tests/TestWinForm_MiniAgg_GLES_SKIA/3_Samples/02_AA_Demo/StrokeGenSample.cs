@@ -296,15 +296,15 @@ namespace PixelFarm.Agg.Sample_Draw
             ps.MoveTo(10, 10);
             ps.LineTo(50, 10);
             ps.LineTo(50, 50);
-            ps.LineTo(10, 50);
-            ps.LineTo(10, 80);
+            //ps.LineTo(10, 50);
+            //ps.LineTo(10, 80);
             //ps.CloseFigure();
 
             //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
             VertexStore output = new VertexStore();
 
-            //gen2.SetEdgeWidth(7f, 7f);
-            gen2.SetEdgeWidth(2f, 2f);
+            gen2.SetEdgeWidth(7f, 7f);
+            //gen2.SetEdgeWidth(2f, 2f);
             gen2.Generate(ps.Vxs, output);
             painter.Fill(output, PixelFarm.Drawing.Color.Red);
 
