@@ -426,11 +426,10 @@ namespace PixelFarm.Agg
     }
 
 
-    class EdgeLine
+    class LineStrokeGenerator
     {
 
-        LineJoiner _lineJoiner;
-
+        LineJoiner _lineJoiner; 
         double latest_moveto_x;
         double latest_moveto_y;
         double positiveSide;
@@ -443,7 +442,7 @@ namespace PixelFarm.Agg
         int coordCount = 0;
         double first_lineto_x, first_lineto_y;
 
-        public EdgeLine()
+        public LineStrokeGenerator()
         {
             _lineJoiner = new LineJoiner();
             _lineJoiner.LineJoinKind = LineJoin.Bevel;
@@ -596,7 +595,7 @@ namespace PixelFarm.Agg
     public class StrokeGen2
     {
 
-        EdgeLine currentEdgeLine = new EdgeLine();
+        LineStrokeGenerator lineGen = new LineStrokeGenerator();
         List<Vector> positiveSideVectors = new List<Vector>();
         List<Vector> negativeSideVectors = new List<Vector>();
         List<Vector> capVectors = new List<Vector>(); //temporary  
@@ -613,27 +612,27 @@ namespace PixelFarm.Agg
         }
         public LineJoin LineJoinStyle
         {
-            get { return currentEdgeLine.JoinKind; }
+            get { return lineGen.JoinKind; }
             set
             {
-                currentEdgeLine.JoinKind = value;
+                lineGen.JoinKind = value;
             }
         }
         public double StrokeWidth
         {
             get
             {
-                return currentEdgeLine.HalfStrokWidth * 2;
+                return lineGen.HalfStrokWidth * 2;
             }
             set
             {
-                currentEdgeLine.HalfStrokWidth = value / 2;
+                lineGen.HalfStrokWidth = value / 2;
             }
         }
         public double HalfStrokeWidth
         {
-            get { return currentEdgeLine.HalfStrokWidth; }
-            set { currentEdgeLine.HalfStrokWidth = value; }
+            get { return lineGen.HalfStrokWidth; }
+            set { lineGen.HalfStrokWidth = value; }
         }
 
         public void Generate(VertexStore srcVxs, VertexStore outputVxs)
@@ -656,18 +655,18 @@ namespace PixelFarm.Agg
                 switch (cmd)
                 {
                     case VertexCmd.LineTo:
-                        currentEdgeLine.LineTo(x, y, positiveSideVectors, negativeSideVectors);
+                        lineGen.LineTo(x, y, positiveSideVectors, negativeSideVectors);
                         has_some_results = true;
                         break;
                     case VertexCmd.MoveTo:
                         //if we have current shape
                         //leave it and start the new shape
-                        currentEdgeLine.MoveTo(x, y);
+                        lineGen.MoveTo(x, y);
                         break;
                     case VertexCmd.Close:
                     case VertexCmd.CloseAndEndFigure:
 
-                        currentEdgeLine.Close(positiveSideVectors, negativeSideVectors);
+                        lineGen.Close(positiveSideVectors, negativeSideVectors);
                         WriteOutput(outputVxs, true);
                         has_some_results = false;
                         break;
