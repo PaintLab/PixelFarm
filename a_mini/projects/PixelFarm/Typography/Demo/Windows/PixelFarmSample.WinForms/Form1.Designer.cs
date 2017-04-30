@@ -63,7 +63,6 @@
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.chkDrawLineHubConn = new System.Windows.Forms.CheckBox();
             this.chkDrawPerpendicularLine = new System.Windows.Forms.CheckBox();
-            this.button2 = new System.Windows.Forms.Button();
             this.lstEdgeOffset = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
@@ -408,16 +407,6 @@
             this.chkDrawPerpendicularLine.Text = "Draw Perpendicular Line";
             this.chkDrawPerpendicularLine.UseVisualStyleBackColor = true;
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(349, 11);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(81, 37);
-            this.button2.TabIndex = 59;
-            this.button2.Text = "Render!";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // lstEdgeOffset
             // 
             this.lstEdgeOffset.FormattingEnabled = true;
@@ -432,7 +421,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 857);
             this.Controls.Add(this.lstEdgeOffset);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.chkDrawPerpendicularLine);
             this.Controls.Add(this.chkDrawLineHubConn);
             this.Controls.Add(this.treeView1);
@@ -513,7 +501,6 @@
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.CheckBox chkDrawLineHubConn;
         private System.Windows.Forms.CheckBox chkDrawPerpendicularLine;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ListBox lstEdgeOffset;
     }
 }

@@ -666,20 +666,6 @@ namespace SampleWinForms
             //}
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            System.Numerics.Vector2 p0 = new System.Numerics.Vector2(0, 0);
-            System.Numerics.Vector2 p1 = new System.Numerics.Vector2(0, 10);
-            System.Numerics.Vector2 p2 = new System.Numerics.Vector2(5, 5);
-            System.Numerics.Vector2 p3 = new System.Numerics.Vector2(10, 10);
-
-            System.Numerics.Vector2 result;
-            if (Typography.Rendering.MyMath.FindCutPoint(p0, p1, p2, p3, out result))
-            {
-                //found cutpoint
-            }
-
-
-        }
+        
     }
 }
