@@ -158,9 +158,11 @@ namespace PixelFarm.Agg
 
     class LineJoiner
     {
-        //create a joint between 2 line 
+
+        int _mitterLimit = 4; //default
         public LineJoiner()
         {
+            //_mitterLimit = 1;
 
         }
         double x0, y0, x1, y1, x2, y2;
@@ -168,6 +170,17 @@ namespace PixelFarm.Agg
         public LineJoin LineJoinKind { get; set; }
         public double HalfWidth { get; set; }
 
+        /// <summary>
+        ///   a limit on the ratio of the miter length to the stroke-width
+        /// </summary>
+        public int MitterLimit
+        {
+            get { return _mitterLimit; }
+            set
+            {
+                _mitterLimit = (value < 1) ? 1 : value;
+            }
+        }
         /// <summary>
         /// set input line (x0,y0)-> (x1,y1) and output line (x1,y1)-> (x2,y2)
         /// </summary>
@@ -200,7 +213,7 @@ namespace PixelFarm.Agg
 
             Vector2 delta_v0v1 = v0v1.RotateInDegree(90).NewLength(HalfWidth);
             Vector2 delta_v1v2 = v1v2.RotateInDegree(90).NewLength(HalfWidth);
-            //check inner or outter joint: by check angle positive or negative
+
 
             double rad_v0v1 = Math.Atan2(v0v1.y, v0v1.x);
             double rad_v1v2 = Math.Atan2(v1v2.y, v1v2.x);
@@ -209,18 +222,23 @@ namespace PixelFarm.Agg
             if (positiveSideVectors != null)
             {
 
+
+                Vector2 vec_a = new Vector2(x0 + delta_v0v1.x, y0 + delta_v0v1.y);
+                Vector2 vec_b = new Vector2(x1 + delta_v0v1.x, y1 + delta_v0v1.y);
+                Vector2 vec_c = new Vector2(x1 + delta_v1v2.x, y1 + delta_v1v2.y);
+                Vector2 vec_d = new Vector2(x2 + delta_v1v2.x, y2 + delta_v1v2.y);
+
+
                 Vector2 cutPoint;
                 if (MyMath.FindCutPoint(
-                       new Vector2(x0 + delta_v0v1.x, y0 + delta_v0v1.y),
-                       new Vector2(x1 + delta_v0v1.x, y1 + delta_v0v1.y),
-                       new Vector2(x1 + delta_v1v2.x, y1 + delta_v1v2.y),
-                       new Vector2(x2 + delta_v1v2.x, y2 + delta_v1v2.y),
+                       vec_a, vec_b, //a->b
+                       vec_c, vec_d, //b->c
                    out cutPoint))
                 {
 
                     if (angle_rad_diff > 0)
                     {
-                        //'ACUTE' angle side 
+                        //'ACUTE' angle side, 'INNER' join
                         //------------
                         //inner join
                         //v0v1 => v1v2 is inner angle for positive side
@@ -230,7 +248,7 @@ namespace PixelFarm.Agg
                     }
                     else if (angle_rad_diff < 0)
                     {
-                        //'OBTUSE' angle side
+                        //'OBTUSE' angle side,'OUTTER' join
                         //-------------------     
                         switch (LineJoinKind)
                         {
@@ -244,9 +262,50 @@ namespace PixelFarm.Agg
 
                                 break;
                             case LineJoin.Miter:
+                                {
+                                    //check mitter limit 
+                                    double cal_mitterLen = HalfWidth / Math.Sin((Math.PI - angle_rad_diff) / 2);
+                                    double half_mitterLen = HalfWidth * MitterLimit;
+                                    if (cal_mitterLen > half_mitterLen)
+                                    {
 
-                                positiveSideVectors.Add(new Vector(cutPoint.x, cutPoint.y));
+                                        Vector2 mid_bc = (vec_b + vec_c) / 2;
+                                        Vector2 vec_bc = vec_c - vec_b;
+                                        Vector2 limit_delta = vec_bc.RotateInDegree(90).NewLength(half_mitterLen);
+                                        Vector2 mid_bc_n = mid_bc + limit_delta;
 
+
+                                        Vector2 lim_cutPoint;
+                                        if (MyMath.FindCutPoint(
+                                                vec_a, vec_b, //a->b
+                                                mid_bc_n, mid_bc_n + vec_bc, //b->c
+                                                out lim_cutPoint))
+                                        {
+
+                                            positiveSideVectors.Add(new Vector(lim_cutPoint.x, lim_cutPoint.y));
+                                        }
+                                        else
+                                        {
+                                        }
+
+                                        if (MyMath.FindCutPoint(
+                                                vec_c, vec_d, //a->b
+                                                mid_bc_n, mid_bc_n + vec_bc, //b->c
+                                                out lim_cutPoint))
+                                        {
+
+                                            positiveSideVectors.Add(new Vector(lim_cutPoint.x, lim_cutPoint.y));
+                                        }
+                                        else
+                                        {
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        positiveSideVectors.Add(new Vector(cutPoint.x, cutPoint.y));
+                                    }
+                                }
                                 break;
                         }
 
@@ -265,18 +324,20 @@ namespace PixelFarm.Agg
             //----------------------------------------------------------------
             if (negativeSideVectors != null)
             {
-                //input point
+               
+                delta_v0v1 = -delta_v0v1; //change vector direction***
+                delta_v1v2 = -delta_v1v2; //change vector direction***
 
-                delta_v0v1 = -delta_v0v1; //change vector direction
-                delta_v1v2 = -delta_v1v2;
+                Vector2 vec_a = new Vector2(x0 + delta_v0v1.x, y0 + delta_v0v1.y);
+                Vector2 vec_b = new Vector2(x1 + delta_v0v1.x, y1 + delta_v0v1.y);
+                Vector2 vec_c = new Vector2(x1 + delta_v1v2.x, y1 + delta_v1v2.y);
+                Vector2 vec_d = new Vector2(x2 + delta_v1v2.x, y2 + delta_v1v2.y);
 
                 //-------------
                 Vector2 cutPoint;
                 if (MyMath.FindCutPoint(
-                        new Vector2(x0 + delta_v0v1.x, y0 + delta_v0v1.y),
-                        new Vector2(x1 + delta_v0v1.x, y1 + delta_v0v1.y),
-                        new Vector2(x1 + delta_v1v2.x, y1 + delta_v1v2.y),
-                        new Vector2(x2 + delta_v1v2.x, y2 + delta_v1v2.y),
+                        vec_a, vec_b, //a->b
+                        vec_c, vec_d, //b->c
                     out cutPoint))
                 {
 
@@ -294,7 +355,51 @@ namespace PixelFarm.Agg
                                     angle_rad_diff);
                                 break;
                             case LineJoin.Miter:
-                                negativeSideVectors.Add(new Vector(cutPoint.x, cutPoint.y));
+                                {
+                                    //see https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-miterlimit
+
+                                    double cal_mitterLen = HalfWidth / Math.Sin((Math.PI - angle_rad_diff) / 2);
+                                    double half_mitterLen = HalfWidth * MitterLimit;
+                                    if (cal_mitterLen > half_mitterLen)
+                                    {
+
+                                        Vector2 mid_bc = (vec_b + vec_c) / 2;
+                                        Vector2 vec_bc = vec_c - vec_b;
+                                        Vector2 limit_delta = vec_bc.RotateInDegree(-90).NewLength(half_mitterLen);
+                                        Vector2 mid_bc_n = mid_bc + limit_delta;
+
+
+                                        Vector2 lim_cutPoint;
+                                        if (MyMath.FindCutPoint(
+                                                vec_a, vec_b, //a->b
+                                                mid_bc_n, mid_bc_n + vec_bc, //b->c
+                                                out lim_cutPoint))
+                                        {
+
+                                            negativeSideVectors.Add(new Vector(lim_cutPoint.x, lim_cutPoint.y));
+                                        }
+                                        else
+                                        {
+                                        }
+
+                                        if (MyMath.FindCutPoint(
+                                                vec_c, vec_d, //a->b
+                                                mid_bc_n, mid_bc_n + vec_bc, //b->c
+                                                out lim_cutPoint))
+                                        {
+
+                                            negativeSideVectors.Add(new Vector(lim_cutPoint.x, lim_cutPoint.y));
+                                        }
+                                        else
+                                        {
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        negativeSideVectors.Add(new Vector(cutPoint.x, cutPoint.y));
+                                    }
+                                }
                                 break;
                         }
                     }
@@ -328,7 +433,7 @@ namespace PixelFarm.Agg
 
         double latest_moveto_x;
         double latest_moveto_y;
-        double positiveSide, negativeSide;
+        double positiveSide;
         //line core (x0,y0) ->  (x1,y1) -> (x2,y2)
         double x0, y0, x1, y1;
         Vector delta0, delta1;
@@ -344,11 +449,18 @@ namespace PixelFarm.Agg
             _lineJoiner.LineJoinKind = LineJoin.Bevel;
         }
 
-        public void SetEdgeWidths(double positiveSide, double negativeSide)
+        public double HalfStrokWidth
         {
-            this.positiveSide = positiveSide;
-            this.negativeSide = negativeSide;
-            _lineJoiner.HalfWidth = positiveSide;
+            get { return this.positiveSide; }
+            set
+            {
+                this.positiveSide = _lineJoiner.HalfWidth = value;
+            }
+        }
+        public LineJoin JoinKind
+        {
+            get { return _lineJoiner.LineJoinKind; }
+            set { _lineJoiner.LineJoinKind = value; }
         }
         void AcceptLatest()
         {
@@ -364,7 +476,6 @@ namespace PixelFarm.Agg
             latest_moveto_y = y0;
             this.x0 = x0;
             this.y0 = y0;
-
         }
 
         public void LineTo(double x1, double y1,
@@ -390,7 +501,7 @@ namespace PixelFarm.Agg
             }
             else
             {
-                ExactLineTo(x1, y1);
+                ExactLineTo(first_lineto_x = x1, first_lineto_y = y1);
                 GetEdge0(out ex0, out ey0, out ex0_n, out ey0_n);
                 //add to vectors
                 outputPositiveSideList.Add(new Vector(ex0, ey0));
@@ -398,7 +509,6 @@ namespace PixelFarm.Agg
             }
         }
         public void Close(
-            double first_lineto_x, double first_lineto_y,
             List<Vector> outputPositiveSideList,
             List<Vector> outputNegativeSideList)
         {
@@ -489,27 +599,43 @@ namespace PixelFarm.Agg
         EdgeLine currentEdgeLine = new EdgeLine();
         List<Vector> positiveSideVectors = new List<Vector>();
         List<Vector> negativeSideVectors = new List<Vector>();
-        List<Vector> capVectors = new List<Vector>(); //temporary 
-
-
-        float positiveSide, negativeSide;
+        List<Vector> capVectors = new List<Vector>(); //temporary  
         public StrokeGen2()
         {
-
-            //
-            //use 2 vertext list to store perpendicular outline 
-            this.LineCapKind = LineCap.Square;
-            SetEdgeWidth(0.5f, 0.5f);//default
+            this.LineCapStyle = LineCap.Square;
+            this.StrokeWidth = 1;
         }
 
-        public LineCap LineCapKind { get; set; }
-        public void SetEdgeWidth(float positiveSide, float negativeSide)
+        public LineCap LineCapStyle
         {
-            this.positiveSide = positiveSide;
-            this.negativeSide = negativeSide;
-            //
-            currentEdgeLine.SetEdgeWidths(positiveSide, negativeSide);
+            get;
+            set;
         }
+        public LineJoin LineJoinStyle
+        {
+            get { return currentEdgeLine.JoinKind; }
+            set
+            {
+                currentEdgeLine.JoinKind = value;
+            }
+        }
+        public double StrokeWidth
+        {
+            get
+            {
+                return currentEdgeLine.HalfStrokWidth * 2;
+            }
+            set
+            {
+                currentEdgeLine.HalfStrokWidth = value / 2;
+            }
+        }
+        public double HalfStrokeWidth
+        {
+            get { return currentEdgeLine.HalfStrokWidth; }
+            set { currentEdgeLine.HalfStrokWidth = value; }
+        }
+
         public void Generate(VertexStore srcVxs, VertexStore outputVxs)
         {
             //read data from src
@@ -523,7 +649,7 @@ namespace PixelFarm.Agg
             positiveSideVectors.Clear();
             negativeSideVectors.Clear();
 
-            double ex0, ey0, ex0_n, ey0_n;
+
             int current_coord_count = 0;
             double latest_moveto_x = 0;
             double latest_moveto_y = 0;
@@ -558,13 +684,10 @@ namespace PixelFarm.Agg
                     case VertexCmd.Close:
                     case VertexCmd.CloseAndEndFigure:
                         {
-                            //------------------------------------------
-                            currentEdgeLine.Close(first_lineto_x, first_lineto_y, positiveSideVectors, negativeSideVectors);
 
-
-
+                            currentEdgeLine.Close(positiveSideVectors, negativeSideVectors);
                             current_coord_count++;
-
+                            //
                             WriteOutput(outputVxs, true);
                             current_coord_count = 0;
                         }//create line cap
@@ -630,7 +753,7 @@ namespace PixelFarm.Agg
                 //2.
                 CreateStartLineCap(outputVxs,
                     v,
-                    negativeSideVectors[0], positiveSide);
+                    negativeSideVectors[0], this.HalfStrokeWidth);
                 //-----------
 
                 int n = 1;
@@ -646,7 +769,7 @@ namespace PixelFarm.Agg
                 CreateEndLineCap(outputVxs,
                     positiveSideVectors[positive_edgeCount - 1],
                     negativeSideVectors[negative_edgeCount - 1],
-                    positiveSide);
+                    this.HalfStrokeWidth);
                 //----------------------------------
                 for (n = negative_edgeCount - 2; n >= 0; --n)
                 {
@@ -663,10 +786,10 @@ namespace PixelFarm.Agg
         }
 
 
-       
+
         void CreateStartLineCap(VertexStore outputVxs, Vector v0, Vector v1, double edgeWidth)
         {
-            switch (this.LineCapKind)
+            switch (this.LineCapStyle)
             {
                 default: throw new NotSupportedException();
                 case LineCap.Butt:
@@ -697,7 +820,7 @@ namespace PixelFarm.Agg
         }
         void CreateEndLineCap(VertexStore outputVxs, Vector v0, Vector v1, double edgeWidth)
         {
-            switch (this.LineCapKind)
+            switch (this.LineCapStyle)
             {
                 default: throw new NotSupportedException();
                 case LineCap.Butt:
@@ -733,7 +856,7 @@ namespace PixelFarm.Agg
           double x1, double y1,
           List<Vector> outputVectors)
         {
-            switch (LineCapKind)
+            switch (LineCapStyle)
             {
                 default: throw new NotSupportedException();
                 case LineCap.Butt:
@@ -763,7 +886,7 @@ namespace PixelFarm.Agg
           double x1, double y1,
           List<Vector> outputVectors)
         {
-            switch (LineCapKind)
+            switch (LineCapStyle)
             {
                 default: throw new NotSupportedException();
                 case LineCap.Butt:

@@ -293,13 +293,17 @@ namespace PixelFarm.Agg.Sample_Draw
             //p.Line(50, 10, 10, 10);
 
             ps.Clear();
-            ps.MoveTo(10, 10);
-            ps.LineTo(50, 10);
-            ps.LineTo(50, 50);
-            //ps.LineTo(40, 50);
-            //ps.LineTo(80, 70);
+            //ps.MoveTo(10, 10);
+            //ps.LineTo(50, 10);
+            //ps.LineTo(50, 50);
 
+            //ps.MoveTo(10, 10);
+            //ps.LineTo(50, 10);
+            //ps.LineTo(10, 20);
 
+            ps.MoveTo(150, 10);
+            ps.LineTo(110, 10);
+            ps.LineTo(150, 20);
 
             //ps.MoveTo(50, 50);
             //ps.LineTo(40, 50);
@@ -311,10 +315,9 @@ namespace PixelFarm.Agg.Sample_Draw
             //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
             VertexStore output = new VertexStore();
             StrokeGen2 gen2 = new StrokeGen2();
-            gen2.LineCapKind = LineCap.Square;
-
-            gen2.SetEdgeWidth(7f, 7f);
-            //gen2.SetEdgeWidth(2f, 2f);
+            gen2.LineCapStyle = LineCap.Butt;
+            gen2.LineJoinStyle = LineJoin.Miter;
+            gen2.HalfStrokeWidth = 7;//  
             gen2.Generate(ps.Vxs, output);
             //-----------------------------------------------------
 
