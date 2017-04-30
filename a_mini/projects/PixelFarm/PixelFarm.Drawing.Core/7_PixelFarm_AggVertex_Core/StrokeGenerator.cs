@@ -324,7 +324,7 @@ namespace PixelFarm.Agg
             //----------------------------------------------------------------
             if (negativeSideVectors != null)
             {
-               
+
                 delta_v0v1 = -delta_v0v1; //change vector direction***
                 delta_v1v2 = -delta_v1v2; //change vector direction***
 
@@ -648,56 +648,35 @@ namespace PixelFarm.Agg
 
             positiveSideVectors.Clear();
             negativeSideVectors.Clear();
-
-
-            int current_coord_count = 0;
-            double latest_moveto_x = 0;
-            double latest_moveto_y = 0;
-            double first_lineto_x = 0;
-            double first_lineto_y = 0;
+             
+            bool has_some_results = false;
             for (int i = 0; i < cmdCount; ++i)
             {
                 cmd = srcVxs.GetVertex(i, out x, out y);
                 switch (cmd)
                 {
                     case VertexCmd.LineTo:
-                        {
-                            if (current_coord_count > 1)
-                            {
-                                currentEdgeLine.LineTo(x, y, positiveSideVectors, negativeSideVectors);
-                            }
-                            else
-                            {
-                                currentEdgeLine.LineTo(first_lineto_x = x, first_lineto_y = y, positiveSideVectors, negativeSideVectors);
-
-                            }
-
-                            current_coord_count++;
-                        }
+                        currentEdgeLine.LineTo(x, y, positiveSideVectors, negativeSideVectors);
+                        has_some_results = true;
                         break;
                     case VertexCmd.MoveTo:
                         //if we have current shape
                         //leave it and start the new shape
-                        currentEdgeLine.MoveTo(latest_moveto_x = x, latest_moveto_y = y);
-                        current_coord_count = 1;
+                        currentEdgeLine.MoveTo(x, y);
                         break;
                     case VertexCmd.Close:
                     case VertexCmd.CloseAndEndFigure:
-                        {
 
-                            currentEdgeLine.Close(positiveSideVectors, negativeSideVectors);
-                            current_coord_count++;
-                            //
-                            WriteOutput(outputVxs, true);
-                            current_coord_count = 0;
-                        }//create line cap
+                        currentEdgeLine.Close(positiveSideVectors, negativeSideVectors);
+                        WriteOutput(outputVxs, true);
+                        has_some_results = false;
                         break;
                     default:
                         break;
                 }
             }
             //-------------
-            if (current_coord_count > 0)
+            if (has_some_results)
             {
                 WriteOutput(outputVxs, false);
             }
