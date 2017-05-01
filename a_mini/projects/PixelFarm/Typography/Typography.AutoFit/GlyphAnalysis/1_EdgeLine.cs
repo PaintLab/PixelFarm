@@ -10,6 +10,8 @@ namespace Typography.Rendering
         Other
     }
 
+
+
     /// <summary>
     /// edge of GlyphTriangle
     /// </summary>
@@ -21,15 +23,21 @@ namespace Typography.Rendering
         /// contact to another edge
         /// </summary>
         internal EdgeLine contactToEdge;
-
-
         internal GlyphBoneJoint inside_joint;
+
+        //---
+        public EdgeLine _controlE0;
+        public EdgeLine _controlE1;
+        public Vector2 _controlE0_cutAt;
+        public Vector2 _controlE1_cutAt;
+
+        //---
 #if DEBUG
         public static int s_dbugTotalId;
         public readonly int dbugId = s_dbugTotalId++;
-
 #endif
         GlyphTriangle _ownerTriangle;
+
         internal EdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q, bool isOutside)
         {
             this._ownerTriangle = ownerTriangle;
@@ -138,10 +146,12 @@ namespace Typography.Rendering
             return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
         }
 
-        static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
+
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+        internal bool _earlyInsideAnalysis;
+
     }
 
 

@@ -204,13 +204,12 @@ namespace SampleWinForms.UI
             get { return builder.LeftXControl; }
         }
 
-
-
         public bool DrawDynamicOutline { get; set; }
         public bool DrawRegenerateOutline { get; set; }
         public bool DrawEndLineHub { get; set; }
         public bool DrawPerpendicularLine { get; set; }
         public bool DrawGlyphPoint { get; set; }
+        public bool DrawEdgeMidPoint { get; set; }
         //
 #if DEBUG
         void DrawPointKind(CanvasPainter painter, GlyphPoint point)
@@ -227,7 +226,6 @@ namespace SampleWinForms.UI
                 case PointKind.LineStop:
                     painter.FillRectLBWH(point.x * _pxscale, point.y * _pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
                     break;
-
             }
         }
 
@@ -331,8 +329,6 @@ namespace SampleWinForms.UI
                 }
 
                 {
-
-
                     GlyphEdge glyphEdge = edge.dbugGlyphEdge;
                     if (glyphEdge != null)
                     {
@@ -342,10 +338,13 @@ namespace SampleWinForms.UI
                         {
                             Vector2 orginal_MidPoint = glyphEdge.GetMidPoint() * _pxscale;
                             Vector2 newMidPoint = glyphEdge.GetNewMidPoint() * _pxscale;
-                            painter.FillRectLBWH(newMidPoint.X, newMidPoint.Y, 3, 3, PixelFarm.Drawing.Color.Red);
+
+                            if (DrawEdgeMidPoint)
+                            {
+                                painter.FillRectLBWH(newMidPoint.X, newMidPoint.Y, 3, 3, PixelFarm.Drawing.Color.Red);
+                            }
+                            //
                             painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
-
-
                             painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue);
                             painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue);
 
@@ -353,54 +352,58 @@ namespace SampleWinForms.UI
                         //---------   
                         if (this.DrawPerpendicularLine)
                         {
-                            {
-                                //p
-                                AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
-                                PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
-                                switch (p_bones.CutPointKind)
-                                {
-                                    case BoneCutPointKind.MoreThanOnePerpendicularBones:
-                                        cc = PixelFarm.Drawing.Color.Magenta;
-                                        break;
-                                    case BoneCutPointKind.NotPendicularCutPoint:
-                                        cc = PixelFarm.Drawing.Color.Aqua;
-                                        break;
-                                    case BoneCutPointKind.PerpendicularToBoneGroup:
-                                        cc = PixelFarm.Drawing.Color.Green;
-                                        break;
-                                }
-                                Vector2 v2 = new Vector2(q.x, q.y);
-                                Vector2 cutpoint = p_bones.CutPoint;
 
-                                painter.Line(
-                                    v2.X * _pxscale, v2.Y * _pxscale,
-                                    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                                    cc);
-                            }
 
-                            {
-                                //q
-                                AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
-                                PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
-                                switch (q_bones.CutPointKind)
-                                {
-                                    case BoneCutPointKind.MoreThanOnePerpendicularBones:
-                                        cc = PixelFarm.Drawing.Color.Magenta;
-                                        break;
-                                    case BoneCutPointKind.NotPendicularCutPoint:
-                                        cc = PixelFarm.Drawing.Color.Aqua;
-                                        break;
-                                    case BoneCutPointKind.PerpendicularToBoneGroup:
-                                        cc = PixelFarm.Drawing.Color.Green;
-                                        break;
-                                }
-                                Vector2 v2 = new Vector2(p.x, p.y);
-                                Vector2 cutpoint = q_bones.CutPoint;
-                                painter.Line(
-                                    v2.X * _pxscale, v2.Y * _pxscale,
-                                    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                                    cc);
-                            }
+                            DrawPerpendicularEdgeControlPoints(painter, glyphEdge);
+
+                            //{
+                            //    //p
+                            //    AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
+                            //    PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
+                            //    switch (p_bones.CutPointKind)
+                            //    {
+                            //        case BoneCutPointKind.MoreThanOnePerpendicularBones:
+                            //            cc = PixelFarm.Drawing.Color.Magenta;
+                            //            break;
+                            //        case BoneCutPointKind.NotPendicularCutPoint:
+                            //            cc = PixelFarm.Drawing.Color.Aqua;
+                            //            break;
+                            //        case BoneCutPointKind.PerpendicularToBoneGroup:
+                            //            cc = PixelFarm.Drawing.Color.Green;
+                            //            break;
+                            //    }
+                            //    Vector2 v2 = new Vector2(q.x, q.y);
+                            //    Vector2 cutpoint = p_bones.CutPoint;
+
+                            //    painter.Line(
+                            //        v2.X * _pxscale, v2.Y * _pxscale,
+                            //        cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                            //        cc);
+                            //}
+
+                            //{
+                            //    //q
+                            //    AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
+                            //    PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
+                            //    switch (q_bones.CutPointKind)
+                            //    {
+                            //        case BoneCutPointKind.MoreThanOnePerpendicularBones:
+                            //            cc = PixelFarm.Drawing.Color.Magenta;
+                            //            break;
+                            //        case BoneCutPointKind.NotPendicularCutPoint:
+                            //            cc = PixelFarm.Drawing.Color.Aqua;
+                            //            break;
+                            //        case BoneCutPointKind.PerpendicularToBoneGroup:
+                            //            cc = PixelFarm.Drawing.Color.Green;
+                            //            break;
+                            //    }
+                            //    Vector2 v2 = new Vector2(p.x, p.y);
+                            //    Vector2 cutpoint = q_bones.CutPoint;
+                            //    painter.Line(
+                            //        v2.X * _pxscale, v2.Y * _pxscale,
+                            //        cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                            //        cc);
+                            //}
                         }
                     }
 
@@ -425,7 +428,37 @@ namespace SampleWinForms.UI
                 painter.Line(edge.x0 * _pxscale, edge.y0 * _pxscale, edge.x1 * _pxscale, edge.y1 * _pxscale);
             }
         }
+        void DrawPerpendicularEdgeControlPoints(CanvasPainter painter, GlyphEdge edge)
+        {
+            EdgeLine internalEdgeLine = edge.dbugGetInternalEdgeLine();
+            bool foundSomePerpendicularEdge = false;
 
+            if (internalEdgeLine._controlE0 != null)
+            {
+                Vector2 v2 = internalEdgeLine._controlE0.GetMidPoint();
+                Vector2 cutpoint = internalEdgeLine._controlE0_cutAt;
+                painter.Line(
+                    v2.X * _pxscale, v2.Y * _pxscale,
+                    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                    PixelFarm.Drawing.Color.Red);
+                foundSomePerpendicularEdge = true;
+            }
+            if (internalEdgeLine._controlE1 != null)
+            {
+                Vector2 v2 = internalEdgeLine._controlE1.GetMidPoint();
+                Vector2 cutpoint = internalEdgeLine._controlE1_cutAt;
+                painter.Line(
+                    v2.X * _pxscale, v2.Y * _pxscale,
+                    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                    PixelFarm.Drawing.Color.Red);
+                foundSomePerpendicularEdge = true;
+            }
+            if (!foundSomePerpendicularEdge)
+            {
+                Vector2 midpoint = edge.GetMidPoint();
+                painter.FillRectLBWH(midpoint.X, midpoint.Y, 5, 5, PixelFarm.Drawing.Color.White);
+            }
+        }
         void DrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint)
         {
             //-------------- 

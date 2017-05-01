@@ -185,8 +185,6 @@
             // chkDrawCentroidBone
             // 
             this.chkDrawCentroidBone.AutoSize = true;
-            this.chkDrawCentroidBone.Checked = true;
-            this.chkDrawCentroidBone.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkDrawCentroidBone.Location = new System.Drawing.Point(827, 223);
             this.chkDrawCentroidBone.Name = "chkDrawCentroidBone";
             this.chkDrawCentroidBone.Size = new System.Drawing.Size(121, 17);

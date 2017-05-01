@@ -74,6 +74,9 @@ namespace Typography.Rendering
             GlyphPoint p0 = this._P, p1 = this._Q;
             return new Vector2((float)(p1.x - p0.x), (float)(p1.y - p0.y));
         }
+
+
+
         internal void ApplyNewEdgeFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
 
@@ -114,7 +117,10 @@ namespace Typography.Rendering
 
 
 #if DEBUG
-
+        public EdgeLine dbugGetInternalEdgeLine()
+        {
+            return this._edgeLine;
+        }
         public override string ToString()
         {
             return this._P + "=>" + this._Q;

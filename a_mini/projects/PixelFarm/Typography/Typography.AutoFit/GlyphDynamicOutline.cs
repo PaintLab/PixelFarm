@@ -203,7 +203,7 @@ namespace Typography.Rendering
         public void GenerateOutput2(IGlyphTranslator tx, float pxScale)
         {
             this.pxScale = pxScale;
-            ApplyGridToMasterOutline(10, 10);
+            ApplyGridToMasterOutline(20, 20);
 
 
             //-------------------------------------------------
