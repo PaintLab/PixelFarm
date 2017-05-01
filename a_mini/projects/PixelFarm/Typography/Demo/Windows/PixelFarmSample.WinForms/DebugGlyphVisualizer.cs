@@ -515,7 +515,7 @@ namespace SampleWinForms.UI
                     painter.Line(
                         jointA.newX * pxscale, jointA.newY * pxscale,
                         jointB.newX * pxscale, jointB.newY * pxscale,
-                        bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.White);
+                        PixelFarm.Drawing.Color.White);
                 }
                 else
                 {

@@ -95,7 +95,16 @@ namespace Typography.Rendering
             //2. midpoint
             float remaining = value - floor;
             float halfGrid = gridSize / 2f;
+
+#if DEBUG
+            int result = (remaining > halfGrid) ? floor + gridSize : floor;
+            //if (result % gridSize != 0)
+            //{
+            //}
+            return result;
+#else
             return (remaining > halfGrid) ? floor + gridSize : floor;
+#endif
         }
         /// <summary>
         /// new stroke width offset from master outline
