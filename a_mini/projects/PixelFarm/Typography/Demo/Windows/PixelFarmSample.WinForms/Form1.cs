@@ -145,6 +145,7 @@ namespace SampleWinForms
             chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawLineHubConn.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawPerpendicularLine.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDrawGlyphPoint.CheckedChanged += (s, e) => UpdateRenderOutput();
 
             ////----------
             //txtGlyphBoneCount.KeyDown += (s, e) =>
@@ -435,6 +436,7 @@ namespace SampleWinForms
             debugGlyphVisualizer.GlyphEdgeOffset = (float)this.lstEdgeOffset.SelectedItem;
             debugGlyphVisualizer.DrawDynamicOutline = chkDynamicOutline.Checked;
             debugGlyphVisualizer.DrawRegenerateOutline = chkDrawRegenerateOutline.Checked;
+            debugGlyphVisualizer.DrawGlyphPoint = chkDrawGlyphPoint.Checked;
             //------------------------------------------------------
 
             debugGlyphVisualizer.RenderChar(testChar, (HintTechnique)lstHintList.SelectedItem);
@@ -666,6 +668,6 @@ namespace SampleWinForms
             //}
         }
 
-        
+
     }
 }

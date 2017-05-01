@@ -64,6 +64,7 @@
             this.chkDrawLineHubConn = new System.Windows.Forms.CheckBox();
             this.chkDrawPerpendicularLine = new System.Windows.Forms.CheckBox();
             this.lstEdgeOffset = new System.Windows.Forms.ListBox();
+            this.chkDrawGlyphPoint = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -415,11 +416,24 @@
             this.lstEdgeOffset.Size = new System.Drawing.Size(120, 95);
             this.lstEdgeOffset.TabIndex = 60;
             // 
+            // chkDrawGlyphPoint
+            // 
+            this.chkDrawGlyphPoint.AutoSize = true;
+            this.chkDrawGlyphPoint.Checked = true;
+            this.chkDrawGlyphPoint.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDrawGlyphPoint.Location = new System.Drawing.Point(952, 225);
+            this.chkDrawGlyphPoint.Name = "chkDrawGlyphPoint";
+            this.chkDrawGlyphPoint.Size = new System.Drawing.Size(105, 17);
+            this.chkDrawGlyphPoint.TabIndex = 61;
+            this.chkDrawGlyphPoint.Text = "Draw GlyphPoint";
+            this.chkDrawGlyphPoint.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1117, 857);
+            this.Controls.Add(this.chkDrawGlyphPoint);
             this.Controls.Add(this.lstEdgeOffset);
             this.Controls.Add(this.chkDrawPerpendicularLine);
             this.Controls.Add(this.chkDrawLineHubConn);
@@ -502,6 +516,7 @@
         private System.Windows.Forms.CheckBox chkDrawLineHubConn;
         private System.Windows.Forms.CheckBox chkDrawPerpendicularLine;
         private System.Windows.Forms.ListBox lstEdgeOffset;
+        private System.Windows.Forms.CheckBox chkDrawGlyphPoint;
     }
 }
 

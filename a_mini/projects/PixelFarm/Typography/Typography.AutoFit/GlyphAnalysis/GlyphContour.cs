@@ -189,6 +189,9 @@ namespace Typography.Rendering
                 //close edge
                 GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
             }
+        }
+        internal void ApplyNewFitPointPosition()
+        {
 
         }
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)

@@ -22,8 +22,8 @@ namespace Typography.Rendering
         EdgeLine _tipEdge_q;
 
         //temp 
-        public double newX;
-        public double newY;
+        double _newx, _newy;
+       
 #if DEBUG
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;
@@ -47,7 +47,19 @@ namespace Typography.Rendering
             p_contact_edge.inside_joint = this;
             q_contact_edge.inside_joint = this;
         }
-
+        public double newX
+        {
+            get { return _newx; }
+        }
+        public double newY
+        {
+            get { return _newy; }
+        }
+        internal void SetFitXY(double newx, double newy)
+        {
+            this._newx = newx;
+            this._newy = newy;
+        }
         internal GlyphTriangle P_Tri
         {
             get

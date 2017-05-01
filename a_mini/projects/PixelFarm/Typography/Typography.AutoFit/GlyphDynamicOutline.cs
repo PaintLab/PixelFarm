@@ -72,19 +72,29 @@ namespace Typography.Rendering
                 GlyphBoneJoint jointA = b.JointA;
                 Vector2 jointPos = jointA.Position;
 
-                jointA.newX = FitToGrid(jointPos.X, gridX);
-                jointA.newY = FitToGrid(jointPos.Y, gridY);
+                jointA.SetFitXY(FitToGrid(jointPos.X, gridX), FitToGrid(jointPos.Y, gridY));
                 if (b.JointB != null)
                 {
                     GlyphBoneJoint jointB = b.JointB;
                     jointPos = jointB.Position;
-                    jointB.newX = FitToGrid(jointPos.X, gridX);
-                    jointB.newY = FitToGrid(jointPos.Y, gridY);
+                    jointB.SetFitXY(FitToGrid(jointPos.X, gridX), FitToGrid(jointPos.Y, gridY));
                 }
                 else
                 {
 
                 }
+            }
+
+
+            //changing glyph bone joint affect the 
+            //---------------------------------------------------
+            //then  apply new edge
+            //if 0, new other action
+            List<GlyphContour> cnts = _contours;
+            j = cnts.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                cnts[i].ApplyNewFitPointPosition();
             }
         }
         static int FitToGrid(float value, int gridSize)
@@ -413,17 +423,17 @@ namespace Typography.Rendering
                     float new_x = RoundToNearestX((float)p_x);
                     p_x = new_x;
                 }
-
                 genPoints.Add(new Vector2((float)p_x, (float)p_y));
             }
         }
-
         static void GenerateFitOutput2(
              IGlyphTranslator tx,
              float pxscale,
              GlyphContour contour)
         {
-
+            //walk along the edge in the contour to generate new edge output
+            //
+            //
             List<GlyphEdge> edges = contour.edges;
             int j = edges.Count;
             if (j > 0)
@@ -437,6 +447,7 @@ namespace Typography.Rendering
                 }
                 for (int i = 1; i < j; ++i)
                 {
+
                     e = edges[i];
                     Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
                     tx.LineTo(p.X, p.Y);

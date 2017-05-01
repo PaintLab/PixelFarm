@@ -40,12 +40,26 @@ namespace Typography.Rendering
             //if the order of original glyph point is CW
             //we may want to reverse the order of edge creation :
             //p2->p1->p0 
-  
+
 
             //link back 
             tri.userData = this;
+            //----------------
 
+            if (e0.IsOutside)
+            {
 
+            }
+
+            if (e1.IsOutside)
+            {
+
+            }
+
+            if (e2.IsOutside)
+            {
+
+            }
         }
         EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
         {
