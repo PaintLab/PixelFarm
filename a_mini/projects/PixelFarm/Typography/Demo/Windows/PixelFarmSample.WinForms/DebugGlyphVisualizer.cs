@@ -450,29 +450,28 @@ namespace SampleWinForms.UI
                     foundSomePerpendicularEdge = true;
                 }
             }
-            else
+
+            if (internalEdgeLine._controlE0 != null)
             {
-                if (internalEdgeLine._controlE0 != null)
-                {
-                    Vector2 v2 = internalEdgeLine._controlE0.GetMidPoint();
-                    Vector2 cutpoint = internalEdgeLine._controlE0_cutAt;
-                    painter.Line(
-                        v2.X * _pxscale, v2.Y * _pxscale,
-                        cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                        PixelFarm.Drawing.Color.Red);
-                    foundSomePerpendicularEdge = true;
-                }
-                if (internalEdgeLine._controlE1 != null)
-                {
-                    Vector2 v2 = internalEdgeLine._controlE1.GetMidPoint();
-                    Vector2 cutpoint = internalEdgeLine._controlE1_cutAt;
-                    painter.Line(
-                        v2.X * _pxscale, v2.Y * _pxscale,
-                        cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                        PixelFarm.Drawing.Color.Red);
-                    foundSomePerpendicularEdge = true;
-                }
+                Vector2 v2 = internalEdgeLine._controlE0.GetMidPoint();
+                Vector2 cutpoint = internalEdgeLine._controlE0_cutAt;
+                painter.Line(
+                    v2.X * _pxscale, v2.Y * _pxscale,
+                    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                    PixelFarm.Drawing.Color.Green);
+                foundSomePerpendicularEdge = true;
             }
+            if (internalEdgeLine._controlE1 != null)
+            {
+                Vector2 v2 = internalEdgeLine._controlE1.GetMidPoint();
+                Vector2 cutpoint = internalEdgeLine._controlE1_cutAt;
+                painter.Line(
+                    v2.X * _pxscale, v2.Y * _pxscale,
+                    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                    PixelFarm.Drawing.Color.Green);
+                foundSomePerpendicularEdge = true;
+            }
+
             if (!foundSomePerpendicularEdge)
             {
                 Vector2 midpoint = edge.GetMidPoint();
