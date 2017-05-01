@@ -453,8 +453,8 @@ namespace Typography.Rendering
         }
 
         public bool FindBoneJoint(GlyphTriangle tri,
-        out CentroidLine foundOnBranch,
-        out GlyphBoneJoint foundOnJoint)
+            out CentroidLine foundOnBranch,
+            out GlyphBoneJoint foundOnJoint)
         {
             foreach (CentroidLine line in _lines.Values)
             {

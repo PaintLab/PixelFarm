@@ -333,7 +333,7 @@
             this.chkDynamicOutline.Name = "chkDynamicOutline";
             this.chkDynamicOutline.Size = new System.Drawing.Size(130, 17);
             this.chkDynamicOutline.TabIndex = 51;
-            this.chkDynamicOutline.Text = "Show DyanmicOutline";
+            this.chkDynamicOutline.Text = "Show DynamicOutline";
             this.chkDynamicOutline.UseVisualStyleBackColor = true;
             // 
             // txtLeftXControl

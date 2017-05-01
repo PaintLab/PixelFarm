@@ -147,6 +147,7 @@ namespace Typography.Rendering
         }
         void CreateBones()
         {
+            
             List<GlyphBone> newBones = new List<GlyphBone>();
             int lineHubCount = _lineHubs.Count;
             for (int i = 0; i < lineHubCount; ++i)

@@ -12,11 +12,14 @@ namespace Typography.Rendering
 
         internal List<GlyphContour> _contours;
         List<GlyphBone> _longVerticalBones;
+        List<CentroidLineHub> _centroidLineHubs;
+        List<GlyphBone> _allBones;
         /// <summary>
         /// offset in pixel unit from master outline, accept + and -
         /// </summary>
         float _offsetFromMasterOutline = 0; //pixel unit
         float pxScale;
+
 
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
@@ -31,10 +34,69 @@ namespace Typography.Rendering
             //2. bones and its controlled edge 
             _contours = intermediateOutline.GetContours(); //original contours
             _longVerticalBones = intermediateOutline.LongVerticalBones; //analyzed long bones
+            _centroidLineHubs = intermediateOutline.GetCentroidLineHubs();
+
+            LoadGlyphBones();
+
+            //--------
             LeftControlPosX = intermediateOutline.LeftControlPos; //left control position  
-
         }
+        void LoadGlyphBones()
+        {
+            _allBones = new List<GlyphBone>();
+            int j = _centroidLineHubs.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                CentroidLineHub hub = _centroidLineHubs[i];
+                foreach (CentroidLine line in hub.GetAllCentroidLines().Values)
+                {
+                    //*** 
+                    _allBones.AddRange(line.bones);
+                }
+            }
+        }
+        void ApplyGridToMasterOutline(int gridX, int gridY)
+        {
 
+            //test:
+            //1. apply grid size to glyph bone and 
+            //2. regenerate outline from new glygh bone
+            gridX = (int)(gridX / pxScale);
+            gridY = (int)(gridY / pxScale);
+
+            int j = _allBones.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphBone b = _allBones[i];
+                //apply grid to 
+                GlyphBoneJoint jointA = b.JointA;
+                Vector2 jointPos = jointA.Position;
+
+                jointA.newX = FitToGrid(jointPos.X, gridX);
+                jointA.newY = FitToGrid(jointPos.Y, gridY);
+                if (b.JointB != null)
+                {
+                    GlyphBoneJoint jointB = b.JointB;
+                    jointPos = jointB.Position;
+                    jointB.newX = FitToGrid(jointPos.X, gridX);
+                    jointB.newY = FitToGrid(jointPos.Y, gridY);
+                }
+                else
+                {
+
+                }
+            }
+        }
+        static int FitToGrid(float value, int gridSize)
+        {
+            //fit to grid 
+            //1. lower
+            int floor = ((int)(value / gridSize) * gridSize);
+            //2. midpoint
+            float remaining = value - floor;
+            float halfGrid = gridSize / 2f;
+            return (remaining > halfGrid) ? floor + gridSize : floor;
+        }
         /// <summary>
         /// new stroke width offset from master outline
         /// </summary>
@@ -57,18 +119,17 @@ namespace Typography.Rendering
                     cnts[i].ApplyNewEdgeOffsetFromMasterOutline(offsetFromMasterOutline);
                 }
             }
-
         }
 
         public float LeftControlPosX { get; set; }
 
-        public void GenerateOutput(IGlyphTranslator tx, float pxScale)
+        void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
             this.pxScale = pxScale;
 
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
-        
+
 #if DEBUG
             s_dbugAffectedPoints.Clear();
             s_dbugAff2.Clear();
@@ -96,8 +157,7 @@ namespace Typography.Rendering
             int longBoneCount = 0;
             if (_longVerticalBones != null && (longBoneCount = _longVerticalBones.Count) > 0)
             {
-                ////only longest bone
-
+                ////only longest bone 
                 //the first one is the longest bone.
                 GlyphBone longVertBone = _longVerticalBones[0];
                 var leftTouchPos = longVertBone.LeftMostPoint();
@@ -124,6 +184,10 @@ namespace Typography.Rendering
         public void GenerateOutput2(IGlyphTranslator tx, float pxScale)
         {
             this.pxScale = pxScale;
+            ApplyGridToMasterOutline(10, 10);
+
+
+            //-------------------------------------------------
             if (_offsetFromMasterOutline == 0)
             {
                 //gen with anohter methods
@@ -285,10 +349,8 @@ namespace Typography.Rendering
 
             //---------------
             //1st round for value adjustment
-            //---------------
-
-            //find adjust y
-
+            //--------------- 
+            //find adjust y 
             {
                 GlyphPoint p = flattenPoints[0];
                 p_x = p.x * pixelScale;
@@ -353,59 +415,27 @@ namespace Typography.Rendering
              GlyphContour contour)
         {
 
-
-            //merge 0 = start
-            //double prev_px = 0;
-            //double prev_py = 0; 
-            float first_px = 0;
-            float first_py = 0;
-            //---------------
-            //1st round for value adjustment
-            //---------------
-
-            ////find adjust y
-            //List<GlyphPoint> flattenPoints = contour.flattenPoints;
-            ////---------------
-            //int j = flattenPoints.Count;
-            ////---------------
-            ////we can draw along a contour or along edge
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    GlyphPoint glyphPoint = flattenPoints[i];
-            //    Vector2 p = new Vector2(glyphPoint.x, glyphPoint.y) * pxscale;
-            //    if (i == 0)
-            //    {
-            //        //first point
-            //        tx.MoveTo(first_px = p.X, first_py = p.Y);
-            //    }
-            //    else
-            //    {
-            //        tx.LineTo(p.X, p.Y);
-            //    }
-            //}
-
-
-
             List<GlyphEdge> edges = contour.edges;
             int j = edges.Count;
-            for (int i = 0; i < j; ++i)
+            if (j > 0)
             {
-                GlyphEdge e = edges[i];
-                Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
-                if (i == 0)
+                GlyphEdge e;
                 {
-                    //first edge 
-                    //move to
-                    tx.MoveTo(first_px = p.X, first_py = p.Y);
+                    //1st 
+                    e = edges[0];
+                    Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
+                    tx.MoveTo(p.X, p.Y);
                 }
-                else
+                for (int i = 1; i < j; ++i)
                 {
+                    e = edges[i];
+                    Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
                     tx.LineTo(p.X, p.Y);
                 }
-            }
 
-            //close 
-            tx.CloseContour();
+                //close 
+                tx.CloseContour();
+            }
         }
         static void GenerateFitOutput(
           IGlyphTranslator tx,

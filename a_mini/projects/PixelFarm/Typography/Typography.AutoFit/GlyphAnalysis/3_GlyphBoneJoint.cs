@@ -20,6 +20,10 @@ namespace Typography.Rendering
         //one bone joint can have up to 2 tips  
         EdgeLine _tipEdge_p;
         EdgeLine _tipEdge_q;
+
+        //temp 
+        public double newX;
+        public double newY;
 #if DEBUG
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;

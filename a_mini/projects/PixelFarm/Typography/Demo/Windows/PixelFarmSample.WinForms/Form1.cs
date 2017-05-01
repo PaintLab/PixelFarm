@@ -241,13 +241,13 @@ namespace SampleWinForms
             //string inputstr = "u";
             //string inputstr = "t";
             //string inputstr = "2";
-            string inputstr = "3";
+            //string inputstr = "3";
             //string inputstr = "o";
             //string inputstr = "l";
             //string inputstr = "k";
             //string inputstr = "8";
             //string inputstr = "#";
-            //string inputstr = "a";
+            string inputstr = "a";
             //string inputstr = "Å";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";

@@ -492,7 +492,7 @@ namespace SampleWinForms.UI
         protected override void OnDrawBone(GlyphBone bone, int boneIndex)
         {
 
-            float newRelativeLen = 1.5f;
+
             float pxscale = this._pxscale;
             GlyphBoneJoint jointA = bone.JointA;
             GlyphBoneJoint jointB = bone.JointB;
@@ -504,10 +504,29 @@ namespace SampleWinForms.UI
                 Vector2 jointAPoint = jointA.Position;
                 Vector2 jointBPoint = jointB.Position;
 
-                painter.Line(
-                    jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
-                    jointBPoint.X * pxscale, jointBPoint.Y * pxscale,
-                    bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta);
+
+                if (this.DrawDynamicOutline)
+                {
+                    painter.Line(
+                       jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
+                       jointBPoint.X * pxscale, jointBPoint.Y * pxscale,
+                       bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta);
+
+                    painter.Line(
+                        jointA.newX * pxscale, jointA.newY * pxscale,
+                        jointB.newX * pxscale, jointB.newY * pxscale,
+                        bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.White);
+                }
+                else
+                {
+                    painter.Line(
+                        jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
+                        jointBPoint.X * pxscale, jointBPoint.Y * pxscale,
+                        bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta);
+
+                }
+
+
                 valid = true;
 
                 _infoView.ShowBone(bone, jointA, jointB);
@@ -521,6 +540,10 @@ namespace SampleWinForms.UI
                     jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
                     mid.X * pxscale, mid.Y * pxscale,
                     bone.IsLongBone ? PixelFarm.Drawing.Color.Yellow : PixelFarm.Drawing.Color.Magenta);
+
+
+
+
                 valid = true;
                 _infoView.ShowBone(bone, jointA, bone.TipEdge);
             }

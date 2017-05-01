@@ -14,6 +14,9 @@ namespace Typography.Rendering
         public readonly GlyphBoneJoint JointB;
         public readonly EdgeLine TipEdge;
 
+
+        
+
         double _len;
 #if DEBUG 
         static int dbugTotalId;
@@ -39,9 +42,9 @@ namespace Typography.Rendering
         }
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
         {
-             
+
             JointA = a;
-            TipEdge = tipEdge; 
+            TipEdge = tipEdge;
             var midPoint = tipEdge.GetMidPoint();
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluteSlope(a.Position, midPoint);
@@ -280,6 +283,7 @@ namespace Typography.Rendering
             if (tri.e2.IsOutside) { return tri.e2; }
             return null; //not found               
         }
+ 
     }
 
 }
