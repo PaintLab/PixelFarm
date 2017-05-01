@@ -433,25 +433,45 @@ namespace SampleWinForms.UI
             EdgeLine internalEdgeLine = edge.dbugGetInternalEdgeLine();
             bool foundSomePerpendicularEdge = false;
 
-            if (internalEdgeLine._controlE0 != null)
+            if (internalEdgeLine._controlE0 != null && internalEdgeLine._controlE1 != null)
             {
-                Vector2 v2 = internalEdgeLine._controlE0.GetMidPoint();
-                Vector2 cutpoint = internalEdgeLine._controlE0_cutAt;
-                painter.Line(
-                    v2.X * _pxscale, v2.Y * _pxscale,
-                    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                    PixelFarm.Drawing.Color.Red);
-                foundSomePerpendicularEdge = true;
+
+                Vector2 m0 = internalEdgeLine._controlE0.GetMidPoint();
+                Vector2 m1 = internalEdgeLine._controlE1.GetMidPoint();
+                Vector2 v2 = (m0 + m1) / 2f;
+                //find perpendicular line  from  midpoint_m0m1 to edge
+                Vector2 cutpoint;
+                if (MyMath.FindPerpendicularCutPoint(internalEdgeLine, v2, out cutpoint))
+                {
+                    painter.Line(
+                       v2.X * _pxscale, v2.Y * _pxscale,
+                       cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                       PixelFarm.Drawing.Color.Red);
+                    foundSomePerpendicularEdge = true;
+                }
             }
-            if (internalEdgeLine._controlE1 != null)
+            else
             {
-                Vector2 v2 = internalEdgeLine._controlE1.GetMidPoint();
-                Vector2 cutpoint = internalEdgeLine._controlE1_cutAt;
-                painter.Line(
-                    v2.X * _pxscale, v2.Y * _pxscale,
-                    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                    PixelFarm.Drawing.Color.Red);
-                foundSomePerpendicularEdge = true;
+                if (internalEdgeLine._controlE0 != null)
+                {
+                    Vector2 v2 = internalEdgeLine._controlE0.GetMidPoint();
+                    Vector2 cutpoint = internalEdgeLine._controlE0_cutAt;
+                    painter.Line(
+                        v2.X * _pxscale, v2.Y * _pxscale,
+                        cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                        PixelFarm.Drawing.Color.Red);
+                    foundSomePerpendicularEdge = true;
+                }
+                if (internalEdgeLine._controlE1 != null)
+                {
+                    Vector2 v2 = internalEdgeLine._controlE1.GetMidPoint();
+                    Vector2 cutpoint = internalEdgeLine._controlE1_cutAt;
+                    painter.Line(
+                        v2.X * _pxscale, v2.Y * _pxscale,
+                        cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                        PixelFarm.Drawing.Color.Red);
+                    foundSomePerpendicularEdge = true;
+                }
             }
             if (!foundSomePerpendicularEdge)
             {
