@@ -530,8 +530,7 @@ namespace Typography.Rendering
                 //    v2.X * _pxscale, v2.Y * _pxscale,
                 //    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
                 //    PixelFarm.Drawing.Color.Green); 
-                foundSomePerpendicularEdge = true;
-
+                foundSomePerpendicularEdge = true; 
                 if (srcIndex == 0 && !moveTo)
                 {
                     tx.MoveTo(regen0.X * _pxscale, regen0.Y * _pxscale);

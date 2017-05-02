@@ -135,7 +135,8 @@ namespace Typography.Rendering
                 _newRegen1 = new Vector2(_edgeLine._controlE1_cutAt.X, _edgeLine._controlE1_cutAt.Y + ydiff_1);
 
                 Vector2 orgMidEdgeMitPoint = _edgeLine.GetMidPoint();
-                _newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + (ydiff_0 + ydiff_1) / 2);
+                //_newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + (ydiff_0 + ydiff_1) / 2);
+                _newMidPoint = orgMidEdgeMitPoint;
             }
             else if (_edgeLine._controlE0 != null)
             {
@@ -144,7 +145,8 @@ namespace Typography.Rendering
                 float ydiff_0 = e0_fitpos.Y - org_midE0.Y;
                 _newRegen0 = new Vector2(_edgeLine._controlE0_cutAt.X, _edgeLine._controlE0_cutAt.Y + ydiff_0);
                 Vector2 orgMidEdgeMitPoint = _edgeLine.GetMidPoint();
-                _newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + ydiff_0);
+                //_newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + ydiff_0);
+                _newMidPoint = orgMidEdgeMitPoint;
             }
             else if (_edgeLine._controlE1 != null)
             {
@@ -153,7 +155,12 @@ namespace Typography.Rendering
                 float ydiff_1 = e1_fitpos.Y - org_midE1.Y;
                 _newRegen1 = new Vector2(_edgeLine._controlE1_cutAt.X, _edgeLine._controlE1_cutAt.Y + ydiff_1);
                 Vector2 orgMidEdgeMitPoint = _edgeLine.GetMidPoint();
-                _newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + ydiff_1);
+                //_newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + ydiff_1);
+                _newMidPoint = orgMidEdgeMitPoint;
+            }
+            else
+            {
+                _newMidPoint = _edgeLine.GetMidPoint();
             }
         }
         internal void ApplyNewEdgeFromMasterOutline(float newEdgeOffsetFromMasterOutline)
