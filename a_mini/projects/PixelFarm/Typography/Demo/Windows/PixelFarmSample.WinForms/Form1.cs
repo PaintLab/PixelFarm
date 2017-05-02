@@ -454,7 +454,7 @@ namespace SampleWinForms
             if (chkShowGrid.Checked)
             {
                 //render grid
-                RenderGrid(800, 600, _gridSize, painter);
+                RenderGrids(800, 600, _gridSize, painter);
             }
             painter.SetOrigin(0, 0);
             //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
@@ -496,7 +496,7 @@ namespace SampleWinForms
             if (chkShowGrid.Checked)
             {
                 //render grid
-                RenderGrid(800, 600, _gridSize, painter);
+                RenderGrids(800, 600, _gridSize, painter);
             }
 
             //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
@@ -509,70 +509,24 @@ namespace SampleWinForms
 
 
 
-        void RenderGrid(int width, int height, int sqSize, AggCanvasPainter p)
+        void RenderGrids(int width, int height, int sqSize, CanvasPainter p)
         {
             //render grid 
             p.FillColor = PixelFarm.Drawing.Color.Gray;
+
+            float pointW = (sqSize >= 100) ? 2 : 1;
+
             for (int y = 0; y < height;)
             {
                 for (int x = 0; x < width;)
                 {
-                    p.FillRectLBWH(x, y, 1, 1);
+                    p.FillRectLBWH(x, y, pointW, pointW);
                     x += sqSize;
                 }
                 y += sqSize;
             }
         }
 
-
-        void DrawGlyphContour(GlyphContour cnt, AggCanvasPainter p)
-        {
-            //for debug
-            List<GlyphPart> parts = cnt.parts;
-            int j = parts.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                GlyphPart part = parts[i];
-                switch (part.Kind)
-                {
-                    default: throw new NotSupportedException();
-                    case GlyphPartKind.Line:
-                        {
-                            GlyphLine line = (GlyphLine)part;
-                            p.FillColor = PixelFarm.Drawing.Color.Red;
-                            var p0 = line.FirstPoint;
-                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
-                            p.FillRectLBWH(line.x1, line.y1, 2, 2);
-                        }
-                        break;
-                    case GlyphPartKind.Curve3:
-                        {
-                            GlyphCurve3 c = (GlyphCurve3)part;
-                            p.FillColor = PixelFarm.Drawing.Color.Red;
-                            var p0 = c.FirstPoint;
-                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
-                            p.FillColor = PixelFarm.Drawing.Color.Blue;
-                            p.FillRectLBWH(c.x1, c.y1, 2, 2);
-                            p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x2, c.y2, 2, 2);
-                        }
-                        break;
-                    case GlyphPartKind.Curve4:
-                        {
-                            GlyphCurve4 c = (GlyphCurve4)part;
-                            p.FillColor = PixelFarm.Drawing.Color.Red;
-                            var p0 = c.FirstPoint;
-                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
-                            p.FillColor = PixelFarm.Drawing.Color.Blue;
-                            p.FillRectLBWH(c.x1, c.y1, 2, 2);
-                            p.FillRectLBWH(c.x2, c.y2, 2, 2);
-                            p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x3, c.y3, 2, 2);
-                        }
-                        break;
-                }
-            }
-        }
 
 
 
@@ -591,9 +545,9 @@ namespace SampleWinForms
                     {
                         _gridSize = 5;
                     }
-                    else if (result > 200)
+                    else if (result > 800)
                     {
-                        _gridSize = 200;
+                        _gridSize = 800;
                     }
                 }
                 this._gridSize = result;

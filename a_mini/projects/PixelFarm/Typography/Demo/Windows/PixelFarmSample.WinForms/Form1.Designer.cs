@@ -89,7 +89,7 @@
             // chkBorder
             // 
             this.chkBorder.AutoSize = true;
-            this.chkBorder.Location = new System.Drawing.Point(937, 41);
+            this.chkBorder.Location = new System.Drawing.Point(1155, 41);
             this.chkBorder.Name = "chkBorder";
             this.chkBorder.Size = new System.Drawing.Size(57, 17);
             this.chkBorder.TabIndex = 3;
@@ -99,7 +99,7 @@
             // chkFillBackground
             // 
             this.chkFillBackground.AutoSize = true;
-            this.chkFillBackground.Location = new System.Drawing.Point(937, 64);
+            this.chkFillBackground.Location = new System.Drawing.Point(1155, 64);
             this.chkFillBackground.Name = "chkFillBackground";
             this.chkFillBackground.Size = new System.Drawing.Size(101, 17);
             this.chkFillBackground.TabIndex = 4;
@@ -110,7 +110,7 @@
             // 
             this.cmbRenderChoices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbRenderChoices.FormattingEnabled = true;
-            this.cmbRenderChoices.Location = new System.Drawing.Point(523, 12);
+            this.cmbRenderChoices.Location = new System.Drawing.Point(741, 12);
             this.cmbRenderChoices.Name = "cmbRenderChoices";
             this.cmbRenderChoices.Size = new System.Drawing.Size(224, 21);
             this.cmbRenderChoices.TabIndex = 7;
@@ -118,7 +118,7 @@
             // lstFontSizes
             // 
             this.lstFontSizes.FormattingEnabled = true;
-            this.lstFontSizes.Location = new System.Drawing.Point(528, 167);
+            this.lstFontSizes.Location = new System.Drawing.Point(746, 167);
             this.lstFontSizes.Name = "lstFontSizes";
             this.lstFontSizes.Size = new System.Drawing.Size(121, 212);
             this.lstFontSizes.TabIndex = 8;
@@ -126,7 +126,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(525, 151);
+            this.label2.Location = new System.Drawing.Point(743, 151);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 13);
             this.label2.TabIndex = 9;
@@ -137,7 +137,7 @@
             this.chkShowControlPoints.AutoSize = true;
             this.chkShowControlPoints.Checked = true;
             this.chkShowControlPoints.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkShowControlPoints.Location = new System.Drawing.Point(937, 86);
+            this.chkShowControlPoints.Location = new System.Drawing.Point(1155, 86);
             this.chkShowControlPoints.Name = "chkShowControlPoints";
             this.chkShowControlPoints.Size = new System.Drawing.Size(121, 17);
             this.chkShowControlPoints.TabIndex = 12;
@@ -147,7 +147,7 @@
             // chkShowTess
             // 
             this.chkShowTess.AutoSize = true;
-            this.chkShowTess.Location = new System.Drawing.Point(811, 173);
+            this.chkShowTess.Location = new System.Drawing.Point(1029, 173);
             this.chkShowTess.Name = "chkShowTess";
             this.chkShowTess.Size = new System.Drawing.Size(110, 17);
             this.chkShowTess.TabIndex = 13;
@@ -157,7 +157,7 @@
             // chkShowGrid
             // 
             this.chkShowGrid.AutoSize = true;
-            this.chkShowGrid.Location = new System.Drawing.Point(665, 173);
+            this.chkShowGrid.Location = new System.Drawing.Point(883, 173);
             this.chkShowGrid.Name = "chkShowGrid";
             this.chkShowGrid.Size = new System.Drawing.Size(75, 17);
             this.chkShowGrid.TabIndex = 14;
@@ -166,7 +166,7 @@
             // 
             // txtGridSize
             // 
-            this.txtGridSize.Location = new System.Drawing.Point(735, 173);
+            this.txtGridSize.Location = new System.Drawing.Point(953, 173);
             this.txtGridSize.Name = "txtGridSize";
             this.txtGridSize.Size = new System.Drawing.Size(51, 20);
             this.txtGridSize.TabIndex = 15;
@@ -177,7 +177,7 @@
             this.chkYGridFitting.AutoSize = true;
             this.chkYGridFitting.Checked = true;
             this.chkYGridFitting.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkYGridFitting.Location = new System.Drawing.Point(667, 225);
+            this.chkYGridFitting.Location = new System.Drawing.Point(885, 225);
             this.chkYGridFitting.Name = "chkYGridFitting";
             this.chkYGridFitting.Size = new System.Drawing.Size(111, 17);
             this.chkYGridFitting.TabIndex = 16;
@@ -187,7 +187,7 @@
             // chkDrawCentroidBone
             // 
             this.chkDrawCentroidBone.AutoSize = true;
-            this.chkDrawCentroidBone.Location = new System.Drawing.Point(827, 223);
+            this.chkDrawCentroidBone.Location = new System.Drawing.Point(1045, 223);
             this.chkDrawCentroidBone.Name = "chkDrawCentroidBone";
             this.chkDrawCentroidBone.Size = new System.Drawing.Size(121, 17);
             this.chkDrawCentroidBone.TabIndex = 19;
@@ -197,7 +197,7 @@
             // chkXGridFitting
             // 
             this.chkXGridFitting.AutoSize = true;
-            this.chkXGridFitting.Location = new System.Drawing.Point(667, 248);
+            this.chkXGridFitting.Location = new System.Drawing.Point(885, 248);
             this.chkXGridFitting.Name = "chkXGridFitting";
             this.chkXGridFitting.Size = new System.Drawing.Size(111, 17);
             this.chkXGridFitting.TabIndex = 20;
@@ -207,7 +207,7 @@
             // chkLcdTechnique
             // 
             this.chkLcdTechnique.AutoSize = true;
-            this.chkLcdTechnique.Location = new System.Drawing.Point(667, 271);
+            this.chkLcdTechnique.Location = new System.Drawing.Point(885, 271);
             this.chkLcdTechnique.Name = "chkLcdTechnique";
             this.chkLcdTechnique.Size = new System.Drawing.Size(95, 17);
             this.chkLcdTechnique.TabIndex = 21;
@@ -216,7 +216,7 @@
             // 
             // cmdBuildMsdfTexture
             // 
-            this.cmdBuildMsdfTexture.Location = new System.Drawing.Point(937, 135);
+            this.cmdBuildMsdfTexture.Location = new System.Drawing.Point(1155, 135);
             this.cmdBuildMsdfTexture.Name = "cmdBuildMsdfTexture";
             this.cmdBuildMsdfTexture.Size = new System.Drawing.Size(121, 28);
             this.cmdBuildMsdfTexture.TabIndex = 22;
@@ -228,7 +228,7 @@
             // 
             this.cmbPositionTech.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbPositionTech.FormattingEnabled = true;
-            this.cmbPositionTech.Location = new System.Drawing.Point(523, 39);
+            this.cmbPositionTech.Location = new System.Drawing.Point(741, 39);
             this.cmbPositionTech.Name = "cmbPositionTech";
             this.cmbPositionTech.Size = new System.Drawing.Size(224, 21);
             this.cmbPositionTech.TabIndex = 23;
@@ -236,7 +236,7 @@
             // lstFontList
             // 
             this.lstFontList.FormattingEnabled = true;
-            this.lstFontList.Location = new System.Drawing.Point(800, 12);
+            this.lstFontList.Location = new System.Drawing.Point(1018, 12);
             this.lstFontList.Name = "lstFontList";
             this.lstFontList.Size = new System.Drawing.Size(121, 121);
             this.lstFontList.TabIndex = 25;
@@ -246,7 +246,7 @@
             this.chkGsubEnableLigature.AutoSize = true;
             this.chkGsubEnableLigature.Checked = true;
             this.chkGsubEnableLigature.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkGsubEnableLigature.Location = new System.Drawing.Point(938, 14);
+            this.chkGsubEnableLigature.Location = new System.Drawing.Point(1156, 14);
             this.chkGsubEnableLigature.Name = "chkGsubEnableLigature";
             this.chkGsubEnableLigature.Size = new System.Drawing.Size(136, 17);
             this.chkGsubEnableLigature.TabIndex = 26;
@@ -256,7 +256,7 @@
             // lstHintList
             // 
             this.lstHintList.FormattingEnabled = true;
-            this.lstHintList.Location = new System.Drawing.Point(523, 71);
+            this.lstHintList.Location = new System.Drawing.Point(741, 71);
             this.lstHintList.Name = "lstHintList";
             this.lstHintList.Size = new System.Drawing.Size(224, 69);
             this.lstHintList.TabIndex = 27;
@@ -264,7 +264,7 @@
             // chkShowSampleTextBox
             // 
             this.chkShowSampleTextBox.AutoSize = true;
-            this.chkShowSampleTextBox.Location = new System.Drawing.Point(665, 146);
+            this.chkShowSampleTextBox.Location = new System.Drawing.Point(883, 146);
             this.chkShowSampleTextBox.Name = "chkShowSampleTextBox";
             this.chkShowSampleTextBox.Size = new System.Drawing.Size(133, 17);
             this.chkShowSampleTextBox.TabIndex = 39;
@@ -284,7 +284,7 @@
             // lstGlyphSnapX
             // 
             this.lstGlyphSnapX.FormattingEnabled = true;
-            this.lstGlyphSnapX.Location = new System.Drawing.Point(666, 320);
+            this.lstGlyphSnapX.Location = new System.Drawing.Point(884, 320);
             this.lstGlyphSnapX.Name = "lstGlyphSnapX";
             this.lstGlyphSnapX.Size = new System.Drawing.Size(120, 69);
             this.lstGlyphSnapX.TabIndex = 43;
@@ -292,7 +292,7 @@
             // lstGlyphSnapY
             // 
             this.lstGlyphSnapY.FormattingEnabled = true;
-            this.lstGlyphSnapY.Location = new System.Drawing.Point(666, 421);
+            this.lstGlyphSnapY.Location = new System.Drawing.Point(884, 421);
             this.lstGlyphSnapY.Name = "lstGlyphSnapY";
             this.lstGlyphSnapY.Size = new System.Drawing.Size(120, 69);
             this.lstGlyphSnapY.TabIndex = 44;
@@ -300,7 +300,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(664, 306);
+            this.label1.Location = new System.Drawing.Point(882, 306);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(39, 13);
             this.label1.TabIndex = 45;
@@ -309,7 +309,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(664, 405);
+            this.label3.Location = new System.Drawing.Point(882, 405);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(39, 13);
             this.label3.TabIndex = 46;
@@ -320,7 +320,7 @@
             this.chkDrawGlyphBone.AutoSize = true;
             this.chkDrawGlyphBone.Checked = true;
             this.chkDrawGlyphBone.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDrawGlyphBone.Location = new System.Drawing.Point(827, 252);
+            this.chkDrawGlyphBone.Location = new System.Drawing.Point(1045, 252);
             this.chkDrawGlyphBone.Name = "chkDrawGlyphBone";
             this.chkDrawGlyphBone.Size = new System.Drawing.Size(109, 17);
             this.chkDrawGlyphBone.TabIndex = 47;
@@ -330,7 +330,7 @@
             // chkDynamicOutline
             // 
             this.chkDynamicOutline.AutoSize = true;
-            this.chkDynamicOutline.Location = new System.Drawing.Point(806, 306);
+            this.chkDynamicOutline.Location = new System.Drawing.Point(1024, 306);
             this.chkDynamicOutline.Name = "chkDynamicOutline";
             this.chkDynamicOutline.Size = new System.Drawing.Size(130, 17);
             this.chkDynamicOutline.TabIndex = 51;
@@ -339,7 +339,7 @@
             // 
             // txtLeftXControl
             // 
-            this.txtLeftXControl.Location = new System.Drawing.Point(788, 380);
+            this.txtLeftXControl.Location = new System.Drawing.Point(1006, 380);
             this.txtLeftXControl.Name = "txtLeftXControl";
             this.txtLeftXControl.Size = new System.Drawing.Size(217, 20);
             this.txtLeftXControl.TabIndex = 52;
@@ -348,7 +348,7 @@
             // chkMinorOffset
             // 
             this.chkMinorOffset.AutoSize = true;
-            this.chkMinorOffset.Location = new System.Drawing.Point(788, 357);
+            this.chkMinorOffset.Location = new System.Drawing.Point(1006, 357);
             this.chkMinorOffset.Name = "chkMinorOffset";
             this.chkMinorOffset.Size = new System.Drawing.Size(80, 17);
             this.chkMinorOffset.TabIndex = 53;
@@ -360,7 +360,7 @@
             this.chkDrawTriangles.AutoSize = true;
             this.chkDrawTriangles.Checked = true;
             this.chkDrawTriangles.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDrawTriangles.Location = new System.Drawing.Point(827, 196);
+            this.chkDrawTriangles.Location = new System.Drawing.Point(1045, 196);
             this.chkDrawTriangles.Name = "chkDrawTriangles";
             this.chkDrawTriangles.Size = new System.Drawing.Size(94, 17);
             this.chkDrawTriangles.TabIndex = 54;
@@ -370,7 +370,7 @@
             // chkDrawRegenerateOutline
             // 
             this.chkDrawRegenerateOutline.AutoSize = true;
-            this.chkDrawRegenerateOutline.Location = new System.Drawing.Point(826, 329);
+            this.chkDrawRegenerateOutline.Location = new System.Drawing.Point(1044, 329);
             this.chkDrawRegenerateOutline.Name = "chkDrawRegenerateOutline";
             this.chkDrawRegenerateOutline.Size = new System.Drawing.Size(157, 17);
             this.chkDrawRegenerateOutline.TabIndex = 55;
@@ -379,7 +379,7 @@
             // 
             // treeView1
             // 
-            this.treeView1.Location = new System.Drawing.Point(528, 496);
+            this.treeView1.Location = new System.Drawing.Point(746, 496);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(393, 349);
             this.treeView1.TabIndex = 56;
@@ -389,7 +389,7 @@
             this.chkDrawLineHubConn.AutoSize = true;
             this.chkDrawLineHubConn.Checked = true;
             this.chkDrawLineHubConn.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDrawLineHubConn.Location = new System.Drawing.Point(827, 275);
+            this.chkDrawLineHubConn.Location = new System.Drawing.Point(1045, 275);
             this.chkDrawLineHubConn.Name = "chkDrawLineHubConn";
             this.chkDrawLineHubConn.Size = new System.Drawing.Size(122, 17);
             this.chkDrawLineHubConn.TabIndex = 57;
@@ -401,7 +401,7 @@
             this.chkDrawPerpendicularLine.AutoSize = true;
             this.chkDrawPerpendicularLine.Checked = true;
             this.chkDrawPerpendicularLine.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDrawPerpendicularLine.Location = new System.Drawing.Point(952, 196);
+            this.chkDrawPerpendicularLine.Location = new System.Drawing.Point(1170, 196);
             this.chkDrawPerpendicularLine.Name = "chkDrawPerpendicularLine";
             this.chkDrawPerpendicularLine.Size = new System.Drawing.Size(142, 17);
             this.chkDrawPerpendicularLine.TabIndex = 58;
@@ -411,7 +411,7 @@
             // lstEdgeOffset
             // 
             this.lstEdgeOffset.FormattingEnabled = true;
-            this.lstEdgeOffset.Location = new System.Drawing.Point(528, 386);
+            this.lstEdgeOffset.Location = new System.Drawing.Point(746, 386);
             this.lstEdgeOffset.Name = "lstEdgeOffset";
             this.lstEdgeOffset.Size = new System.Drawing.Size(120, 95);
             this.lstEdgeOffset.TabIndex = 60;
@@ -421,7 +421,7 @@
             this.chkDrawGlyphPoint.AutoSize = true;
             this.chkDrawGlyphPoint.Checked = true;
             this.chkDrawGlyphPoint.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDrawGlyphPoint.Location = new System.Drawing.Point(952, 225);
+            this.chkDrawGlyphPoint.Location = new System.Drawing.Point(1170, 225);
             this.chkDrawGlyphPoint.Name = "chkDrawGlyphPoint";
             this.chkDrawGlyphPoint.Size = new System.Drawing.Size(105, 17);
             this.chkDrawGlyphPoint.TabIndex = 61;
@@ -433,7 +433,7 @@
             this.chkTestGridFit.AutoSize = true;
             this.chkTestGridFit.Checked = true;
             this.chkTestGridFit.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkTestGridFit.Location = new System.Drawing.Point(952, 252);
+            this.chkTestGridFit.Location = new System.Drawing.Point(1170, 252);
             this.chkTestGridFit.Name = "chkTestGridFit";
             this.chkTestGridFit.Size = new System.Drawing.Size(80, 17);
             this.chkTestGridFit.TabIndex = 62;
