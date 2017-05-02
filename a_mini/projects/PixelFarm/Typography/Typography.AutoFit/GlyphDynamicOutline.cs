@@ -61,8 +61,8 @@ namespace Typography.Rendering
             //test:
             //1. apply grid size to glyph bone and 
             //2. regenerate outline from new glygh bone
-            gridX = (int)(gridX / pxScale);
-            gridY = (int)(gridY / pxScale);
+            //gridX = (int)(gridX / pxScale);
+            //gridY = (int)(gridY / pxScale);
 
             int j = _allBones.Count;
             for (int i = 0; i < j; ++i)
@@ -89,7 +89,7 @@ namespace Typography.Rendering
             //then  apply new edge
             //if 0, new other action
             List<GlyphContour> cnts = _contours;
-           j = cnts.Count;
+            j = cnts.Count;
             for (int i = 0; i < j; ++i)
             {
                 cnts[i].ApplyNewFitPointPosition();
@@ -105,11 +105,11 @@ namespace Typography.Rendering
             float remaining = value - floor;
 
             float halfGrid = gridSize / 2f;
-            if (remaining > (2 / 3f) * gridSize)
+            if (remaining >= (2 / 3f) * gridSize)
             {
                 return floor + gridSize;
             }
-            else if (remaining > (1 / 3f) * gridSize)
+            else if (remaining >= (1 / 3f) * gridSize)
             {
                 return (int)(floor + gridSize * (1 / 2f));
             }
@@ -215,15 +215,15 @@ namespace Typography.Rendering
         {
             this.pxScale = pxScale;
 
-            ApplyGridToMasterOutline(1, 40);
+            ApplyGridToMasterOutline(1,50);
 
             //-------------------------------------------------
-            if (_offsetFromMasterOutline == 0)
-            {
-                //gen with anohter methods
-                GenerateOutput(tx, pxScale);
-                return;
-            }
+            //if (_offsetFromMasterOutline == 0)
+            //{
+            //    //gen with anohter methods
+            //    GenerateOutput(tx, pxScale);
+            //    return;
+            //}
             //-------------------------------------------------
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
@@ -437,14 +437,15 @@ namespace Typography.Rendering
                 genPoints.Add(new Vector2((float)p_x, (float)p_y));
             }
         }
-        static void GenerateFitOutput2(
-             IGlyphTranslator tx,
-             float pxscale,
-             GlyphContour contour)
+        void GenerateFitOutput2(
+           IGlyphTranslator tx,
+           float pxscale,
+           GlyphContour contour)
         {
             //walk along the edge in the contour to generate new edge output
-            //
-            //
+
+
+
             List<GlyphEdge> edges = contour.edges;
             int j = edges.Count;
             if (j > 0)
@@ -467,6 +468,133 @@ namespace Typography.Rendering
                 //close 
                 tx.CloseContour();
             }
+
+            //List<GlyphEdge> edges = contour.edges;
+            //int j = edges.Count;
+            //if (j > 0)
+            //{
+
+            //    {
+            //        //1st  
+            //        WriteFitEdge(0, tx, edges[0]);
+            //    }
+            //    for (int i = 1; i < j; ++i)
+            //    {
+            //        WriteFitEdge(i, tx, edges[i]);
+            //    }
+
+            //    //close 
+            //    tx.CloseContour();
+            //}
+        }
+        void WriteFitEdge(int srcIndex, IGlyphTranslator tx, GlyphEdge edge)
+        {
+            EdgeLine internalEdgeLine = edge.dbugGetInternalEdgeLine();
+            float _pxscale = this.pxScale;
+            Vector2 p = new Vector2(edge.newEdgeCut_P_X, edge.newEdgeCut_P_Y) * _pxscale;
+            Vector2 regen0 = edge._newRegen0;
+            Vector2 regen1 = edge._newRegen1;
+            bool foundSomePerpendicularEdge = false;
+
+            bool moveTo = false;
+
+
+            if (internalEdgeLine._controlE0 != null)
+            {
+                //Vector2 v2 = internalEdgeLine._controlE0.GetMidPoint();
+                //Vector2 cutpoint = internalEdgeLine._controlE0_cutAt;
+                //painter.Line(
+                //    v2.X * _pxscale, v2.Y * _pxscale,
+                //    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                //    PixelFarm.Drawing.Color.Green); 
+                foundSomePerpendicularEdge = true;
+
+                if (srcIndex == 0 && !moveTo)
+                {
+                    tx.MoveTo(regen0.X * _pxscale, regen0.Y * _pxscale);
+                    moveTo = true;
+                }
+                else
+                {
+                    tx.LineTo(regen0.X * _pxscale, regen0.Y * _pxscale);
+                }
+            }
+
+
+            if (internalEdgeLine._controlE0 != null && internalEdgeLine._controlE1 != null)
+            {
+                //Vector2 m0 = internalEdgeLine._controlE0.GetMidPoint();
+                //Vector2 m1 = internalEdgeLine._controlE1.GetMidPoint();
+
+                ////find angle from m0-> m1
+
+                //Vector2 v2 = (m0 + m1) / 2;
+                ////find perpendicular line  from  midpoint_m0m1 to edge
+                //Vector2 cutpoint;
+                //if (MyMath.FindPerpendicularCutPoint(internalEdgeLine, v2, out cutpoint))
+                //{
+                //    painter.Line(
+                //       v2.X * _pxscale, v2.Y * _pxscale,
+                //       cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                //       PixelFarm.Drawing.Color.Red);
+                //    foundSomePerpendicularEdge = true;
+                //}
+
+                //Vector2 e0_fitpos = internalEdgeLine._controlE0.GetFitPos() * _pxscale;
+                //Vector2 e1_fitpos = internalEdgeLine._controlE1.GetFitPos() * _pxscale;
+
+                //painter.Line(
+                //      e0_fitpos.X, e0_fitpos.Y,
+                //      regen0.X, regen0.Y,
+                //      PixelFarm.Drawing.Color.Yellow);
+                //painter.Line(
+                //    e1_fitpos.X, e1_fitpos.Y,
+                //    regen1.X, regen1.Y,
+                //    PixelFarm.Drawing.Color.Yellow);
+                //if (srcIndex == 0)
+                //{ 
+                //}
+                //else
+                //{ 
+                //}
+            }
+
+
+
+            if (internalEdgeLine._controlE1 != null)
+            {
+                //Vector2 v2 = internalEdgeLine._controlE1.GetMidPoint();
+                //Vector2 cutpoint = internalEdgeLine._controlE1_cutAt;
+                //painter.Line(
+                //    v2.X * _pxscale, v2.Y * _pxscale,
+                //    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+                //    PixelFarm.Drawing.Color.Green); 
+
+                foundSomePerpendicularEdge = true;
+
+                if (srcIndex == 0 && !moveTo)
+                {
+                    tx.MoveTo(regen1.X * _pxscale, regen1.Y * _pxscale);
+                    moveTo = true;
+                }
+                else
+                {
+                    tx.LineTo(regen1.X * _pxscale, regen1.Y * _pxscale);
+                }
+            }
+
+
+            if (!foundSomePerpendicularEdge)
+            {
+                tx.LineTo(p.X, p.Y);
+            }
+
+
+            //if (!foundSomePerpendicularEdge)
+            //{
+            //    Vector2 midpoint = edge.GetMidPoint();
+            //    //painter.FillRectLBWH(midpoint.X, midpoint.Y, 5, 5, PixelFarm.Drawing.Color.White);
+            //}
         }
         static void GenerateFitOutput(
           IGlyphTranslator tx,

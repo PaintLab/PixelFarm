@@ -201,19 +201,19 @@ namespace Typography.Rendering
                 //from the edge
                 edge.RegenerateNewFitPoints();
             }
-        }
-
-        internal void ApplyNewFitPointPosition2(int gridW, int gridH)
-        {
-
-            int j = edges.Count;
-            for (int i = 0; i < j; ++i)
+            //calculate edge cutpoint
+            int lim = edges.Count - 1; //skip lastone
+            for (int i = 0; i < lim; ++i)
             {
-                //apply new relative len to edge***
-                GlyphEdge edge = edges[i];
-                //from the edge
-                edge.RegenerateNewFitPoints2(gridW, gridH);
-            } 
+                //calculate adjacent outside edge cutpoint          
+                GlyphEdge.UpdateEdgeCutPoint(edges[i], edges[i + 1]);
+            }
+            //last one
+            if (lim > 1)
+            {
+                //close edge
+                GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
+            }
         }
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
         {

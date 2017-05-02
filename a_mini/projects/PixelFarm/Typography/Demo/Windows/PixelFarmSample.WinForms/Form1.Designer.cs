@@ -78,9 +78,10 @@
             // 
             // txtInputChar
             // 
+            this.txtInputChar.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.txtInputChar.Location = new System.Drawing.Point(0, -2);
             this.txtInputChar.Name = "txtInputChar";
-            this.txtInputChar.Size = new System.Drawing.Size(168, 20);
+            this.txtInputChar.Size = new System.Drawing.Size(168, 21);
             this.txtInputChar.TabIndex = 1;
             this.txtInputChar.Text = "I";
             // 

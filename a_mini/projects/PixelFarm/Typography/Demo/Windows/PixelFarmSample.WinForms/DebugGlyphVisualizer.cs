@@ -434,8 +434,8 @@ namespace SampleWinForms.UI
             Vector2 regen0 = edge._newRegen0 * _pxscale;
             Vector2 regen1 = edge._newRegen1 * _pxscale;
 
-            //painter.FillRectLBWH(regen0.X, regen0.Y, 5, 5, PixelFarm.Drawing.Color.Green);
-            //painter.FillRectLBWH(regen1.X, regen1.Y, 5, 5, PixelFarm.Drawing.Color.Green);
+            painter.FillRectLBWH(regen0.X, regen0.Y, 5, 5, PixelFarm.Drawing.Color.Green);
+            painter.FillRectLBWH(regen1.X, regen1.Y, 5, 5, PixelFarm.Drawing.Color.Blue);
 
             bool foundSomePerpendicularEdge = false;
 
@@ -446,7 +446,7 @@ namespace SampleWinForms.UI
 
                 //find angle from m0-> m1
 
-                Vector2 v2 = (m0 + m1) / 2f;
+                Vector2 v2 = (m0 + m1) / 2;
                 //find perpendicular line  from  midpoint_m0m1 to edge
                 Vector2 cutpoint;
                 if (MyMath.FindPerpendicularCutPoint(internalEdgeLine, v2, out cutpoint))
@@ -456,28 +456,19 @@ namespace SampleWinForms.UI
                        cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
                        PixelFarm.Drawing.Color.Red);
                     foundSomePerpendicularEdge = true;
-                }
+                } 
 
-                ////--------------------------------
-                //Vector2 regen0 = edge._newRegen0 * _pxscale;
-                //Vector2 regen1 = edge._newRegen1 * _pxscale;
+                Vector2 e0_fitpos = internalEdgeLine._controlE0.GetFitPos() * _pxscale;
+                Vector2 e1_fitpos = internalEdgeLine._controlE1.GetFitPos() * _pxscale;
 
-
-                //Vector2 e0_fitpos = internalEdgeLine._controlE0.GetFitPos() * _pxscale;
-                //Vector2 e1_fitpos = internalEdgeLine._controlE1.GetFitPos() * _pxscale;
-                //painter.FillRectLBWH(regen0.X, regen0.Y, 5, 5, PixelFarm.Drawing.Color.Green);
-                //painter.FillRectLBWH(regen1.X, regen1.Y, 5, 5, PixelFarm.Drawing.Color.Green);
-
-                //painter.Line(
-                //      e0_fitpos.X, e0_fitpos.Y,
-                //      regen0.X, regen0.Y,
-                //      PixelFarm.Drawing.Color.Yellow);
-                //painter.Line(
-                //    e1_fitpos.X, e1_fitpos.Y,
-                //    regen1.X, regen1.Y,
-                //    PixelFarm.Drawing.Color.Yellow);
-
-
+                painter.Line(
+                      e0_fitpos.X, e0_fitpos.Y,
+                      regen0.X, regen0.Y,
+                      PixelFarm.Drawing.Color.Yellow);
+                painter.Line(
+                    e1_fitpos.X, e1_fitpos.Y,
+                    regen1.X, regen1.Y,
+                    PixelFarm.Drawing.Color.Yellow); 
             }
 
             if (internalEdgeLine._controlE0 != null)
@@ -488,6 +479,8 @@ namespace SampleWinForms.UI
                     v2.X * _pxscale, v2.Y * _pxscale,
                     cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
                     PixelFarm.Drawing.Color.Green);
+               
+
                 foundSomePerpendicularEdge = true;
             }
             if (internalEdgeLine._controlE1 != null)
