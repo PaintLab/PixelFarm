@@ -94,6 +94,7 @@ namespace Typography.Rendering
                 foundOnePerpendicularLine = true;
                 outsideEdge._controlE0 = inside0;
                 outsideEdge._controlE0_cutAt = cut_fromM0;
+                outsideEdge._controlE0_len = (float)(m0 - cut_fromM0).Length();
             }
             else
             {
@@ -107,6 +108,7 @@ namespace Typography.Rendering
                 foundOnePerpendicularLine = true;
                 outsideEdge._controlE1 = inside1;
                 outsideEdge._controlE1_cutAt = cut_fromM1;
+                outsideEdge._controlE1_len = (float)(m1 - cut_fromM1).Length();
             }
             else
             {

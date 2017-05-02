@@ -22,8 +22,8 @@ namespace Typography.Rendering
         EdgeLine _tipEdge_q;
 
         //temp 
-        double _newx, _newy;
-       
+        double _fitX, _fitY;
+
 #if DEBUG
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;
@@ -49,16 +49,25 @@ namespace Typography.Rendering
         }
         public double newX
         {
-            get { return _newx; }
+            get { return _fitX; }
         }
         public double newY
         {
-            get { return _newy; }
+            get { return _fitY; }
         }
         internal void SetFitXY(double newx, double newy)
         {
-            this._newx = newx;
-            this._newy = newy;
+            this._fitX = newx;
+            this._fitY = newy;
+            if (newy != 0)
+            {
+
+            }
+            _p_contact_edge._newFitX = _q_contact_edge._newFitX = (float)newx;
+            _p_contact_edge._newFitY = _q_contact_edge._newFitY = (float)newy;
+            _p_contact_edge._hasNewFitValues = _q_contact_edge._hasNewFitValues = true;
+
+            //set this to the 
         }
         internal GlyphTriangle P_Tri
         {

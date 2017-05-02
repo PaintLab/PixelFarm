@@ -26,12 +26,18 @@ namespace Typography.Rendering
         internal GlyphBoneJoint inside_joint;
 
         //---
+        //if this is outside edge, we store control point here
         public EdgeLine _controlE0;
         public EdgeLine _controlE1;
         public Vector2 _controlE0_cutAt;
         public Vector2 _controlE1_cutAt;
+        public float _controlE0_len;
+        public float _controlE1_len;
 
         //---
+        public float _newFitX;
+        public float _newFitY;
+        public bool _hasNewFitValues;
 #if DEBUG
         public static int s_dbugTotalId;
         public readonly int dbugId = s_dbugTotalId++;
@@ -146,6 +152,7 @@ namespace Typography.Rendering
             return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
         }
 
+        public Vector2 GetFitPos() { return new Vector2(_newFitX, _newFitY); }
 
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);

@@ -68,10 +68,8 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 GlyphBone b = _allBones[i];
-                //apply grid to 
                 GlyphBoneJoint jointA = b.JointA;
                 Vector2 jointPos = jointA.Position;
-
                 jointA.SetFitXY(FitToGrid(jointPos.X, gridX), FitToGrid(jointPos.Y, gridY));
                 if (b.JointB != null)
                 {
@@ -91,10 +89,11 @@ namespace Typography.Rendering
             //then  apply new edge
             //if 0, new other action
             List<GlyphContour> cnts = _contours;
-            j = cnts.Count;
+           j = cnts.Count;
             for (int i = 0; i < j; ++i)
             {
                 cnts[i].ApplyNewFitPointPosition();
+
             }
         }
         static int FitToGrid(float value, int gridSize)
@@ -104,14 +103,26 @@ namespace Typography.Rendering
             int floor = ((int)(value / gridSize) * gridSize);
             //2. midpoint
             float remaining = value - floor;
-            float halfGrid = gridSize / 2f;
 
+            float halfGrid = gridSize / 2f;
+            if (remaining > (2 / 3f) * gridSize)
+            {
+                return floor + gridSize;
+            }
+            else if (remaining > (1 / 3f) * gridSize)
+            {
+                return (int)(floor + gridSize * (1 / 2f));
+            }
+            else
+            {
+                return floor;
+            }
 #if DEBUG
-            int result = (remaining > halfGrid) ? floor + gridSize : floor;
-            //if (result % gridSize != 0)
-            //{
-            //}
-            return result;
+            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
+            ////if (result % gridSize != 0)
+            ////{
+            ////}
+            //return result;
 #else
             return (remaining > halfGrid) ? floor + gridSize : floor;
 #endif
@@ -202,9 +213,9 @@ namespace Typography.Rendering
 
         public void GenerateOutput2(IGlyphTranslator tx, float pxScale)
         {
-            this.pxScale = pxScale; 
+            this.pxScale = pxScale;
 
-            ApplyGridToMasterOutline(1, 20);
+            ApplyGridToMasterOutline(1, 40);
 
             //-------------------------------------------------
             if (_offsetFromMasterOutline == 0)

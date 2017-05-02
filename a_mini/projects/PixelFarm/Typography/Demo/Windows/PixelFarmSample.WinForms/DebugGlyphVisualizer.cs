@@ -431,13 +431,21 @@ namespace SampleWinForms.UI
         void DrawPerpendicularEdgeControlPoints(CanvasPainter painter, GlyphEdge edge)
         {
             EdgeLine internalEdgeLine = edge.dbugGetInternalEdgeLine();
+            Vector2 regen0 = edge._newRegen0 * _pxscale;
+            Vector2 regen1 = edge._newRegen1 * _pxscale;
+
+            //painter.FillRectLBWH(regen0.X, regen0.Y, 5, 5, PixelFarm.Drawing.Color.Green);
+            //painter.FillRectLBWH(regen1.X, regen1.Y, 5, 5, PixelFarm.Drawing.Color.Green);
+
             bool foundSomePerpendicularEdge = false;
 
             if (internalEdgeLine._controlE0 != null && internalEdgeLine._controlE1 != null)
             {
-
                 Vector2 m0 = internalEdgeLine._controlE0.GetMidPoint();
                 Vector2 m1 = internalEdgeLine._controlE1.GetMidPoint();
+
+                //find angle from m0-> m1
+
                 Vector2 v2 = (m0 + m1) / 2f;
                 //find perpendicular line  from  midpoint_m0m1 to edge
                 Vector2 cutpoint;
@@ -449,6 +457,27 @@ namespace SampleWinForms.UI
                        PixelFarm.Drawing.Color.Red);
                     foundSomePerpendicularEdge = true;
                 }
+
+                ////--------------------------------
+                //Vector2 regen0 = edge._newRegen0 * _pxscale;
+                //Vector2 regen1 = edge._newRegen1 * _pxscale;
+
+
+                //Vector2 e0_fitpos = internalEdgeLine._controlE0.GetFitPos() * _pxscale;
+                //Vector2 e1_fitpos = internalEdgeLine._controlE1.GetFitPos() * _pxscale;
+                //painter.FillRectLBWH(regen0.X, regen0.Y, 5, 5, PixelFarm.Drawing.Color.Green);
+                //painter.FillRectLBWH(regen1.X, regen1.Y, 5, 5, PixelFarm.Drawing.Color.Green);
+
+                //painter.Line(
+                //      e0_fitpos.X, e0_fitpos.Y,
+                //      regen0.X, regen0.Y,
+                //      PixelFarm.Drawing.Color.Yellow);
+                //painter.Line(
+                //    e1_fitpos.X, e1_fitpos.Y,
+                //    regen1.X, regen1.Y,
+                //    PixelFarm.Drawing.Color.Yellow);
+
+
             }
 
             if (internalEdgeLine._controlE0 != null)

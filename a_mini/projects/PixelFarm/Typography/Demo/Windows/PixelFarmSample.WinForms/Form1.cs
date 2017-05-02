@@ -223,7 +223,7 @@ namespace SampleWinForms
                     16,
                     18,20,22,24,26,28,36,48,72,
                     240,280,300,360,400,420,460,
-                    620,720
+                    620,720,860,920,1024
               });
             lstFontSizes.SelectedIndexChanged += (s, e) =>
             {

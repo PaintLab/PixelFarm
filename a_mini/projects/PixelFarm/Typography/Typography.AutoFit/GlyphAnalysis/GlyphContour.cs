@@ -193,6 +193,27 @@ namespace Typography.Rendering
         internal void ApplyNewFitPointPosition()
         {
 
+            int j = edges.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //apply new relative len to edge***
+                GlyphEdge edge = edges[i];
+                //from the edge
+                edge.RegenerateNewFitPoints();
+            }
+        }
+
+        internal void ApplyNewFitPointPosition2(int gridW, int gridH)
+        {
+
+            int j = edges.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //apply new relative len to edge***
+                GlyphEdge edge = edges[i];
+                //from the edge
+                edge.RegenerateNewFitPoints2(gridW, gridH);
+            } 
         }
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
         {
