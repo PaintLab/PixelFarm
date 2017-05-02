@@ -24,7 +24,10 @@ namespace Typography.Rendering
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
 
+            this.GridBoxWidth = 1; //pixels
+            this.GridBoxHeight = 50; //pixels
 #if DEBUG
+            this.GridBoxHeight = dbugGridHeight; //pixels
             _dbugTempIntermediateOutline = intermediateOutline;
 #endif
 
@@ -152,6 +155,22 @@ namespace Typography.Rendering
         }
 
         public float LeftControlPosX { get; set; }
+        /// <summary>
+        /// grid box width in pixels
+        /// </summary>
+        public int GridBoxWidth { get; set; }
+        /// <summary>
+        /// grid box height in pixels
+        /// </summary>
+        public int GridBoxHeight { get; set; }
+
+
+
+#if DEBUG
+        public static bool dbugTestNewGridFitting { get; set; }
+        public static int dbugGridHeight = 50;
+#endif
+
 
         void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
@@ -215,19 +234,23 @@ namespace Typography.Rendering
         {
             this.pxScale = pxScale;
 
-            ApplyGridToMasterOutline(1,50);
+            ApplyGridToMasterOutline(GridBoxWidth, GridBoxHeight);
 
             //-------------------------------------------------
-            //if (_offsetFromMasterOutline == 0)
-            //{
-            //    //gen with anohter methods
-            //    GenerateOutput(tx, pxScale);
-            //    return;
-            //}
+            if (!dbugTestNewGridFitting)
+            {
+                if (_offsetFromMasterOutline == 0)
+                {
+                    //gen with anohter methods
+                    GenerateOutput(tx, pxScale);
+                    return;
+                }
+            }
+            //-------------------------------------------------
+
             //-------------------------------------------------
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
-
 #if DEBUG
             s_dbugAffectedPoints.Clear();
             s_dbugAff2.Clear();

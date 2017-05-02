@@ -146,6 +146,7 @@ namespace SampleWinForms
             chkDrawLineHubConn.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawPerpendicularLine.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawGlyphPoint.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkTestGridFit.CheckedChanged += (s, e) => UpdateRenderOutput();
 
             ////----------
             //txtGlyphBoneCount.KeyDown += (s, e) =>
@@ -437,6 +438,12 @@ namespace SampleWinForms
             debugGlyphVisualizer.DrawDynamicOutline = chkDynamicOutline.Checked;
             debugGlyphVisualizer.DrawRegenerateOutline = chkDrawRegenerateOutline.Checked;
             debugGlyphVisualizer.DrawGlyphPoint = chkDrawGlyphPoint.Checked;
+
+#if DEBUG
+            Typography.Rendering.GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
+#endif
+
+
             //------------------------------------------------------
 
             debugGlyphVisualizer.RenderChar(testChar, (HintTechnique)lstHintList.SelectedItem);
@@ -590,7 +597,11 @@ namespace SampleWinForms
                     }
                 }
                 this._gridSize = result;
+
                 this.txtGridSize.Text = _gridSize.ToString();
+#if DEBUG
+                Typography.Rendering.GlyphDynamicOutline.dbugGridHeight = _gridSize;
+#endif
                 UpdateRenderOutput();
             }
 

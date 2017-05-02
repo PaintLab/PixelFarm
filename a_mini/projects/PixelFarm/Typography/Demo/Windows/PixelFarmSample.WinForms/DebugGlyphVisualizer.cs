@@ -93,6 +93,7 @@ namespace SampleWinForms.UI
             _latestHint = hint;
             _testChar = testChar;
             //----------------------------------------------------
+            //
             builder.Build(testChar, _sizeInPoint);
             var txToVxs1 = new GlyphTranslatorToVxs();
             builder.GlyphEdgeOffset = this.GlyphEdgeOffset;
@@ -210,7 +211,7 @@ namespace SampleWinForms.UI
         public bool DrawPerpendicularLine { get; set; }
         public bool DrawGlyphPoint { get; set; }
         public bool DrawEdgeMidPoint { get; set; }
-        //
+
 #if DEBUG
         void DrawPointKind(CanvasPainter painter, GlyphPoint point)
         {
@@ -456,7 +457,7 @@ namespace SampleWinForms.UI
                        cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
                        PixelFarm.Drawing.Color.Red);
                     foundSomePerpendicularEdge = true;
-                } 
+                }
 
                 Vector2 e0_fitpos = internalEdgeLine._controlE0.GetFitPos() * _pxscale;
                 Vector2 e1_fitpos = internalEdgeLine._controlE1.GetFitPos() * _pxscale;
@@ -468,7 +469,7 @@ namespace SampleWinForms.UI
                 painter.Line(
                     e1_fitpos.X, e1_fitpos.Y,
                     regen1.X, regen1.Y,
-                    PixelFarm.Drawing.Color.Yellow); 
+                    PixelFarm.Drawing.Color.Yellow);
             }
 
             if (internalEdgeLine._controlE0 != null)
@@ -479,7 +480,7 @@ namespace SampleWinForms.UI
                     v2.X * _pxscale, v2.Y * _pxscale,
                     cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
                     PixelFarm.Drawing.Color.Green);
-               
+
 
                 foundSomePerpendicularEdge = true;
             }
