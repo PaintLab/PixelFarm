@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+
 
 namespace Typography.Rendering
 {
@@ -44,7 +44,7 @@ namespace Typography.Rendering
                 parts[i].Flatten(flattener);
             }
 
-            //assign number for all glyph point in this contour
+            //check duplicated the first point and last point
             int pointCount = tmpFlattenPoints.Count;
             if (GlyphPoint.SameCoordAs(tmpFlattenPoints[pointCount - 1], tmpFlattenPoints[0]))
             {
@@ -54,13 +54,13 @@ namespace Typography.Rendering
                 pointCount--;
             }
 
-
-#if DEBUG
+            //assign number for all glyph point in this contour
             for (int i = 0; i < pointCount; ++i)
             {
-                tmpFlattenPoints[i].dbugGlyphPointNo = flattener.GetNewGlyphPointId();
+                tmpFlattenPoints[i].SeqNo = i;
+ 
             }
-#endif
+
             flattener.Result = prevResult;
             analyzed = true;
         }
@@ -196,7 +196,7 @@ namespace Typography.Rendering
         {
             //----------
             //apply new fit position after find new fit core
-             
+
             int j = flattenPoints.Count;
             for (int i = 0; i < j; ++i)
             {

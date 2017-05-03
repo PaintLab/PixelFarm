@@ -36,7 +36,7 @@ namespace Typography.Rendering
             {
                 //3.before create dynamic contour we must flatten data inside the contour 
                 _glyphFlattener.NSteps = 2;
-                _glyphFlattener.ResetTotalGlyphPointId();
+                
                 for (int i = 0; i < cnt_count; ++i)
                 {
                     // (flatten each contour with the flattener)    

@@ -35,9 +35,6 @@ namespace Typography.Rendering
         public float newX;
         public float newY;
 
-     
-
-
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
 
@@ -56,6 +53,8 @@ namespace Typography.Rendering
             this.y = y;
             this.kind = kind;
         }
+        public int SeqNo { get; internal set; }
+
         public bool IsLeftSide { get; private set; }
         public bool IsPartOfVerticalEdge { get; private set; }
 
@@ -98,10 +97,6 @@ namespace Typography.Rendering
             }
 #endif
         }
-
-
-
-
         internal void NotifyVerticalEdge(EdgeLine v_edge)
         {
             //associated 
@@ -114,7 +109,6 @@ namespace Typography.Rendering
                 this.IsLeftSide = v_edge.IsLeftSide;
             }
         }
-
         internal static bool SameCoordAs(GlyphPoint a, GlyphPoint b)
         {
             return a.x == b.x && a.y == b.y;
@@ -144,6 +138,7 @@ namespace Typography.Rendering
                 this.newY = newRadiusEnd.Y;
             }
         }
+
 #if DEBUG
         /// <summary>
         /// glyph pointnumber
@@ -161,11 +156,7 @@ namespace Typography.Rendering
             return this.dbugId + " :" +
                     (x + "," + y + " " + kind.ToString());
         }
-        internal int dbugGlyphPointNo
-        {
-            get { return this.dbug_GlyphPointNo; }
-            set { this.dbug_GlyphPointNo = value; }
-        }
+       
 #endif 
     }
 
@@ -260,8 +251,8 @@ namespace Typography.Rendering
                 this.cutpoint = cutpoint;
             }
         }
-        
-        
+
+
         //
         internal void EvaluatePerpendicularBone(GlyphPoint ownerPoint)
         {
@@ -285,7 +276,7 @@ namespace Typography.Rendering
                 GlyphBone b = _assocBoneList[i];
                 Vector2 tempCutPoint;
                 if (MyMath.FindPerpendicularCutPoint(b, o_point, out tempCutPoint))
-                { 
+                {
                     _boneCutPoint = tempCutPoint;
                     _startIndexAt = _endIndexAt = i;
                     this.CutPointKind = BoneCutPointKind.PerpendicularToSingleBone;
