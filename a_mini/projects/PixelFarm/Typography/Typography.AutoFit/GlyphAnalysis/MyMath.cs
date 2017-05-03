@@ -5,7 +5,23 @@ namespace Typography.Rendering
 
     public static class MyMath
     {
+        public static double AngleBetween(Vector2 vector1, Vector2 vector2)
+        {
+            double rad1 = System.Math.Atan2(vector1.Y, vector1.X);
+            double rad2 = System.Math.Atan2(vector2.Y, vector2.X);
+            //we want to find diff
 
+            if (rad1 < 0)
+            {
+                rad1 = System.Math.PI + rad1;
+            }
+            if (rad2 < 0)
+            {
+                rad2 = System.Math.PI + rad2;
+            }
+
+            return rad1 - rad2;
+        }
         /// <summary>
         /// Convert degrees to radians
         /// </summary>

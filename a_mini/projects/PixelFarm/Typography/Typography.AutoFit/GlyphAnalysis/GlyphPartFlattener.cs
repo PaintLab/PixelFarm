@@ -41,8 +41,7 @@ namespace Typography.Rendering
             points.Add(p);
         }
 
-        public void GeneratePointsFromLine(
-           Vector2 start, Vector2 end)
+        public void GeneratePointsFromLine(Vector2 start, Vector2 end)
         {
             if (points.Count == 0)
             {

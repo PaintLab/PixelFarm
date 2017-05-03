@@ -58,8 +58,11 @@ namespace Typography.Rendering
                 }
             }
         }
-        void ApplyGridToMasterOutline(int gridX, int gridY)
+
+        public void ApplyGridToMasterOutline(int gridBoxW, int gridBoxH)
         {
+            this.GridBoxHeight = gridBoxH;
+            this.GridBoxWidth = gridBoxW;
 
             //test:
             //1. apply grid size to glyph bone and 
@@ -73,19 +76,18 @@ namespace Typography.Rendering
                 GlyphBone b = _allBones[i];
                 GlyphBoneJoint jointA = b.JointA;
                 Vector2 jointPos = jointA.Position;
-                jointA.SetFitXY(FitToGrid(jointPos.X, gridX), FitToGrid(jointPos.Y, gridY));
+                jointA.SetFitXY(FitToGrid(jointPos.X, gridBoxW), FitToGrid(jointPos.Y, gridBoxH));
                 if (b.JointB != null)
                 {
                     GlyphBoneJoint jointB = b.JointB;
                     jointPos = jointB.Position;
-                    jointB.SetFitXY(FitToGrid(jointPos.X, gridX), FitToGrid(jointPos.Y, gridY));
+                    jointB.SetFitXY(FitToGrid(jointPos.X, gridBoxW), FitToGrid(jointPos.Y, gridBoxH));
                 }
                 else
                 {
 
                 }
             }
-
 
             //changing glyph bone joint affect the 
             //---------------------------------------------------
@@ -158,11 +160,11 @@ namespace Typography.Rendering
         /// <summary>
         /// grid box width in pixels
         /// </summary>
-        public int GridBoxWidth { get; set; }
+        public int GridBoxWidth { get; private set; }
         /// <summary>
         /// grid box height in pixels
         /// </summary>
-        public int GridBoxHeight { get; set; }
+        public int GridBoxHeight { get; private set; }
 
 
 
@@ -234,7 +236,8 @@ namespace Typography.Rendering
         {
             this.pxScale = pxScale;
 
-            ApplyGridToMasterOutline(GridBoxWidth, GridBoxHeight);
+            // 
+
 
             //-------------------------------------------------
             if (!dbugTestNewGridFitting)
@@ -245,6 +248,11 @@ namespace Typography.Rendering
                     GenerateOutput(tx, pxScale);
                     return;
                 }
+            }
+            else
+            {
+                //test grid fitting
+                ApplyGridToMasterOutline(GridBoxWidth, GridBoxHeight);
             }
             //-------------------------------------------------
 
@@ -467,8 +475,6 @@ namespace Typography.Rendering
         {
             //walk along the edge in the contour to generate new edge output
 
-
-
             List<GlyphEdge> edges = contour.edges;
             int j = edges.Count;
             if (j > 0)
@@ -530,7 +536,7 @@ namespace Typography.Rendering
                 //    v2.X * _pxscale, v2.Y * _pxscale,
                 //    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
                 //    PixelFarm.Drawing.Color.Green); 
-                foundSomePerpendicularEdge = true; 
+                foundSomePerpendicularEdge = true;
                 if (srcIndex == 0 && !moveTo)
                 {
                     tx.MoveTo(regen0.X * _pxscale, regen0.Y * _pxscale);

@@ -80,7 +80,7 @@ namespace Typography.Rendering
             analyzedClockDirection = true;
 
 
-
+            //TODO: review here again***
             //---------------
             //http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
             //check if hole or not
@@ -164,13 +164,13 @@ namespace Typography.Rendering
 
         internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
-            int j = flattenPoints.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                flattenPoints[i].ApplyNewEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
-            }
+            // int j = flattenPoints.Count;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    flattenPoints[i].ApplyNewEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
+            //}
             //
-            j = edges.Count;
+            int j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
                 //apply new relative len to edge***
@@ -189,11 +189,22 @@ namespace Typography.Rendering
                 //close edge
                 GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
             }
+
         }
+
         internal void ApplyNewFitPointPosition()
         {
+            //----------
+            //apply new fit position after find new fit core
+             
+            int j = flattenPoints.Count;
+            for (int i = 0; i < j; ++i)
+            {
 
-            int j = edges.Count;
+                //apply edge fit to the flatten point
+                //flattenPoints[i].ApplyNewEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
+            }
+            j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
                 //apply new relative len to edge***
@@ -214,6 +225,7 @@ namespace Typography.Rendering
                 //close edge
                 GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
             }
+
         }
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
         {

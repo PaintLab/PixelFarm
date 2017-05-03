@@ -180,6 +180,10 @@ namespace Typography.Rendering
     }
     public class AssocBoneCollection
     {
+        // a collection of glyph bones that are associate with to a GlyphPoint
+        //one GlyphPoint can associate more than 1 GlyphBone
+
+
         Dictionary<GlyphBone, bool> _assocBones = new Dictionary<GlyphBone, bool>();
         List<GlyphBone> _assocBoneList;
         bool closeCollection;
@@ -256,24 +260,8 @@ namespace Typography.Rendering
                 this.cutpoint = cutpoint;
             }
         }
-        public static double AngleBetween(Vector2 vector1, Vector2 vector2)
-        {
-            double rad1 = System.Math.Atan2(vector1.Y, vector1.X);
-            double rad2 = System.Math.Atan2(vector2.Y, vector2.X);
-            //we want to find diff
-
-            if (rad1 < 0)
-            {
-                rad1 = System.Math.PI + rad1;
-            }
-            if (rad2 < 0)
-            {
-                rad2 = System.Math.PI + rad2;
-            }
-
-            return rad1 - rad2;
-        }
-        const float Epsilon = 0.0001f;
+        
+        
         //
         internal void EvaluatePerpendicularBone(GlyphPoint ownerPoint)
         {
@@ -297,8 +285,7 @@ namespace Typography.Rendering
                 GlyphBone b = _assocBoneList[i];
                 Vector2 tempCutPoint;
                 if (MyMath.FindPerpendicularCutPoint(b, o_point, out tempCutPoint))
-                {
-
+                { 
                     _boneCutPoint = tempCutPoint;
                     _startIndexAt = _endIndexAt = i;
                     this.CutPointKind = BoneCutPointKind.PerpendicularToSingleBone;
