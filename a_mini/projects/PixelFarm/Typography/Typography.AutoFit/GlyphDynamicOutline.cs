@@ -71,12 +71,12 @@ namespace Typography.Rendering
                 GlyphBone bone = _allBones[i];
                 GlyphBoneJoint jointA = bone.JointA;
                 Vector2 jointPos = jointA.Position;
-                jointA.SetFitXY(FitToGrid(jointPos.X, gridBoxW), FitToGrid(jointPos.Y, gridBoxH));
+                jointA.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
                 if (bone.JointB != null)
                 {
                     GlyphBoneJoint jointB = bone.JointB;
                     jointPos = jointB.Position;
-                    jointB.SetFitXY(FitToGrid(jointPos.X, gridBoxW), FitToGrid(jointPos.Y, gridBoxH));
+                    jointB.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
                 }
                 else
                 {
@@ -95,37 +95,7 @@ namespace Typography.Rendering
 
             }
         }
-        static int FitToGrid(float value, int gridSize)
-        {
-            //fit to grid 
-            //1. lower
-            int floor = ((int)(value / gridSize) * gridSize);
-            //2. midpoint
-            float remaining = value - floor;
 
-            float halfGrid = gridSize / 2f;
-            if (remaining >= (2 / 3f) * gridSize)
-            {
-                return floor + gridSize;
-            }
-            else if (remaining >= (1 / 3f) * gridSize)
-            {
-                return (int)(floor + gridSize * (1 / 2f));
-            }
-            else
-            {
-                return floor;
-            }
-#if DEBUG
-            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
-            ////if (result % gridSize != 0)
-            ////{
-            ////}
-            //return result;
-#else
-            return (remaining > halfGrid) ? floor + gridSize : floor;
-#endif
-        }
         /// <summary>
         /// new stroke width offset from master outline
         /// </summary>
@@ -458,8 +428,7 @@ namespace Typography.Rendering
         {
             //walk along the edge in the contour to generate new edge output
 
-            //List<GlyphEdge> edges = contour.edges;
-
+            //List<GlyphEdge> edges = contour.edges; 
             //int j = edges.Count;
             //if (j > 0)
             //{
@@ -481,24 +450,111 @@ namespace Typography.Rendering
             //    //close 
             //    tx.CloseContour();
             //}
+
+            GridFitter gridFitterX = new GridFitter(1, pxscale);
+            GridFitter gridFitterY = new GridFitter(1, pxscale);
             List<GlyphPoint> points = contour.flattenPoints;
             int j = points.Count;
             if (j > 0)
             {
                 //1.
                 GlyphPoint p = points[0];
-                tx.MoveTo(p.x * pxscale, p.y * pxscale);
+                float x, y;
+                gridFitterX.GetFitPosX(p, out x);
+                gridFitterY.GetFitPosY(p, out y);
+                tx.MoveTo(x, y);
+
                 //2. others
                 for (int i = 1; i < j; ++i)
                 {
+                    //try to fit to grid 
                     p = points[i];
-                    tx.LineTo(p.x * pxscale, p.y * pxscale);
+                    gridFitterX.GetFitPosX(p, out x);
+                    gridFitterY.GetFitPosY(p, out y);
+                    tx.LineTo(x, y);
                 }
                 //close 
                 tx.CloseContour();
             }
-
         }
+
+        struct GridFitter
+        {
+            readonly int _gridSize;
+            readonly float _scale;
+            public GridFitter(int gridSize, float scale)
+            {
+                _gridSize = gridSize;
+                _scale = scale;
+            }
+            public void GetFitPosX(GlyphPoint p, out float result)
+            {
+                float value = p.x * _scale;
+                //
+                int floor = ((int)(value / _gridSize) * _gridSize);
+                //2. midpoint
+                float remaining = value - floor;
+
+                float halfGrid = _gridSize / 2f;
+                if (remaining >= (2 / 3f) * _gridSize)
+                {
+                    result = floor + _gridSize;
+                }
+                else if (remaining >= (1 / 3f) * _gridSize)
+                {
+                    result = (floor + _gridSize * (1 / 2f));
+                }
+                else
+                {
+                    result = floor;
+                }
+            }
+            public void GetFitPosY(GlyphPoint p, out float result)
+            {
+                //we may have a special treatment for vertical axis
+
+                float value = p.y * _scale;
+                float guide_y = p.newY * _scale;
+                int floor = ((int)(value / _gridSize) * _gridSize);
+                float remaining = value - floor;
+                float halfGrid = _gridSize / 2f;
+
+
+                if (p.isPartOfHorizontalEdge)
+                {
+                    var diff = guide_y - value;
+                    if (guide_y != value)
+                    {
+
+                    }
+                    if (p.isUpperSide)
+                    {
+                        result = value + 0.125f;
+                    }
+                    else
+                    {
+                        result = value - 0.125f;
+                    }
+                    return;
+                }
+
+
+
+                if (remaining >= (2 / 3f) * _gridSize)
+                {
+                    result = floor + _gridSize;
+                }
+                else if (remaining >= (1 / 3f) * _gridSize)
+                {
+                    result = (floor + _gridSize * (1 / 2f));
+                }
+                else
+                {
+                    result = floor;
+                }
+            }
+        }
+
         //void WriteFitEdge(int srcIndex, IGlyphTranslator tx, GlyphEdge edge)
         //{
         //    EdgeLine internalEdgeLine = edge.dbugGetInternalEdgeLine();

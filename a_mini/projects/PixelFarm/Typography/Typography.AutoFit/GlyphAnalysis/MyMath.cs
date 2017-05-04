@@ -5,6 +5,68 @@ namespace Typography.Rendering
 
     public static class MyMath
     {
+        internal static float FitToGridF(float value, int gridSize)
+        {
+            //fit to grid 
+            //1. lower
+            int floor = ((int)(value / gridSize) * gridSize);
+            //2. midpoint
+            float remaining = value - floor;
+
+            float halfGrid = gridSize / 2f;
+            if (remaining >= (2 / 3f) * gridSize)
+            {
+                return floor + gridSize;
+            }
+            else if (remaining >= (1 / 3f) * gridSize)
+            {
+                return (floor + gridSize * (1 / 2f));
+            }
+            else
+            {
+                return floor;
+            }
+#if DEBUG
+            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
+            ////if (result % gridSize != 0)
+            ////{
+            ////}
+            //return result;
+#else
+            return (remaining > halfGrid) ? floor + gridSize : floor;
+#endif
+        }
+        internal static int FitToGrid(float value, int gridSize)
+        {
+            //fit to grid 
+            //1. lower
+            int floor = ((int)(value / gridSize) * gridSize);
+            //2. midpoint
+            float remaining = value - floor;
+
+            float halfGrid = gridSize / 2f;
+            if (remaining >= (2 / 3f) * gridSize)
+            {
+                return floor + gridSize;
+            }
+            else if (remaining >= (1 / 3f) * gridSize)
+            {
+                return (int)(floor + gridSize * (1 / 2f));
+            }
+            else
+            {
+                return floor;
+            }
+#if DEBUG
+            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
+            ////if (result % gridSize != 0)
+            ////{
+            ////}
+            //return result;
+#else
+            return (remaining > halfGrid) ? floor + gridSize : floor;
+#endif
+        }
         public static double AngleBetween(Vector2 vector1, Vector2 vector2)
         {
             double rad1 = System.Math.Atan2(vector1.Y, vector1.X);

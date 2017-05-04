@@ -124,8 +124,8 @@ namespace Typography.Rendering
                 throw new System.NotSupportedException();
             }
 #endif
-            this._tipEdge_p = e;
             e.IsTip = true;
+            this._tipEdge_p = e;
         }
         internal void SetTipEdge_Q(EdgeLine e)
         {
