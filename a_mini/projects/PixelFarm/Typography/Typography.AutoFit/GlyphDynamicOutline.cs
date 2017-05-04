@@ -54,6 +54,7 @@ namespace Typography.Rendering
                 foreach (CentroidLine line in hub.GetAllCentroidLines().Values)
                 {
                     //*** 
+                    //all bones in a centroid
                     _allBones.AddRange(line.bones);
                 }
             }
@@ -63,6 +64,8 @@ namespace Typography.Rendering
         {
             this.GridBoxHeight = gridBoxH;
             this.GridBoxWidth = gridBoxW;
+
+
 
             //fit bone to grid 
             int j = _allBones.Count;
@@ -484,33 +487,12 @@ namespace Typography.Rendering
             GlyphContour contour)
         {
             //walk along the edge in the contour to generate new edge output
-            //List<GlyphEdge> edges = contour.edges; 
-            //int j = edges.Count;
-            //if (j > 0)
-            //{
-            //    GlyphEdge e;
-            //    {
-            //        //1st 
-            //        e = edges[0];
-            //        Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
-            //        tx.MoveTo(p.X, p.Y);
-            //    }
-            //    for (int i = 1; i < j; ++i)
-            //    {
 
-            //        e = edges[i];
-            //        Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
-            //        tx.LineTo(p.X, p.Y);
-            //    }
-
-            //    //close 
-            //    tx.CloseContour();
-            //}
-
+            //------------------------------------------------------------------------------------
             GridFitter gridFitterX = new GridFitter(1, pxscale); //use struct, no alloc on heap
             GridFitter gridFitterY = new GridFitter(1, pxscale);
             List<GlyphPoint> points = contour.flattenPoints;
-            int j = points.Count;
+            j = points.Count;
             if (j > 0)
             {
                 //1.
@@ -577,12 +559,26 @@ namespace Typography.Rendering
 
                 if (p.isPartOfHorizontalEdge)
                 {
-                    //var diff = guide_y - value;
-                    //if (guide_y != value)
-                    //{
+                    //fit horizontal edge
 
-                    //}
-                    result = value + 0.50f;
+                    if (value < 3)
+                    {
+
+                    }
+                    int ceilling = floor + _gridSize;
+
+                    if (value > (floor + halfGrid))
+                    {
+                        //move up
+                    }
+                    else
+                    {
+                        //move down
+                    }
+
+
+
+                    result = value + 0.30f;
                     Console.WriteLine(p.dbugId + " pre: " + value + ",post:" + result);
                     return;
                     //if (p.isUpperSide)

@@ -108,14 +108,7 @@ namespace Typography.Rendering
 #endif
         }
 
-        public void EvaluateEdgeInfo()
-        {
-
-            //find opposite 
-
-
-
-        }
+   
         internal void ApplyNewEdgeFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
 

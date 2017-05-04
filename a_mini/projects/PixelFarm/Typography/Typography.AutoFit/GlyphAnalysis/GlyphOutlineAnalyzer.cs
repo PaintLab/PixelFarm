@@ -112,8 +112,12 @@ namespace Typography.Rendering
             }
 
 
-            //convert intermediate outline to dynamic outline
+            //
 
+
+
+
+            //convert intermediate outline to dynamic outline
             return new GlyphDynamicOutline(intermediateOutline);
         }
 
@@ -223,6 +227,8 @@ namespace Typography.Rendering
                                 //found this edge
                                 //store edge line
                                 ownerTri.N1_IsOpposite = true;
+                                edge.OppositeEdge = oppEdge;
+                                
                             }
                         }
                         GlyphTriangle n2 = ownerTri.N2;
@@ -231,8 +237,11 @@ namespace Typography.Rendering
                             if ((oppEdge = n2.FindOppositeEdge(edge)) != null)
                             {
                                 ownerTri.N2_IsOpposite = true;
+
                             }
                         }
+
+
                     }
                     break;
                 case LineSlopeKind.Vertical:

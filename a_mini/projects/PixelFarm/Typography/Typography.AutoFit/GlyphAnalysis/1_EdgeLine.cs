@@ -27,11 +27,15 @@ namespace Typography.Rendering
 
 
         //---
+        EdgeLine _oppositeEdge; //on another tri
         EdgeLine _ctrlEdge_P;
         EdgeLine _ctrlEdge_Q;
         internal float _newFitX;
         internal float _newFitY;
+        internal bool _analyzeFitPlan;
         public bool _hasNewFitValues;
+
+
 #if DEBUG
         public static int s_dbugTotalId;
         public readonly int dbugId = s_dbugTotalId++;
