@@ -440,10 +440,10 @@ namespace SampleWinForms.UI
 
             bool foundSomePerpendicularEdge = false;
 
-            if (internalEdgeLine._controlE0 != null && internalEdgeLine._controlE1 != null)
+            if (internalEdgeLine.ControlEdge_P != null && internalEdgeLine.ControlEdge_Q != null)
             {
-                Vector2 m0 = internalEdgeLine._controlE0.GetMidPoint();
-                Vector2 m1 = internalEdgeLine._controlE1.GetMidPoint();
+                Vector2 m0 = internalEdgeLine.ControlEdge_P.GetMidPoint();
+                Vector2 m1 = internalEdgeLine.ControlEdge_Q.GetMidPoint();
 
                 //find angle from m0-> m1
 
@@ -459,8 +459,8 @@ namespace SampleWinForms.UI
                     foundSomePerpendicularEdge = true;
                 }
 
-                Vector2 e0_fitpos = internalEdgeLine._controlE0.GetFitPos() * _pxscale;
-                Vector2 e1_fitpos = internalEdgeLine._controlE1.GetFitPos() * _pxscale;
+                Vector2 e0_fitpos = internalEdgeLine.ControlEdge_P.GetFitPos() * _pxscale;
+                Vector2 e1_fitpos = internalEdgeLine.ControlEdge_Q.GetFitPos() * _pxscale;
 
                 painter.Line(
                       e0_fitpos.X, e0_fitpos.Y,
@@ -472,10 +472,10 @@ namespace SampleWinForms.UI
                     PixelFarm.Drawing.Color.Yellow);
             }
 
-            if (internalEdgeLine._controlE0 != null)
+            if (internalEdgeLine.ControlEdge_P != null)
             {
-                Vector2 v2 = internalEdgeLine._controlE0.GetMidPoint();
-                Vector2 cutpoint = internalEdgeLine._controlE0_cutAt;
+                Vector2 v2 = internalEdgeLine.ControlEdge_P.GetMidPoint();
+                Vector2 cutpoint = internalEdgeLine._ctrlEdge_P_cutAt;
                 painter.Line(
                     v2.X * _pxscale, v2.Y * _pxscale,
                     cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
@@ -484,10 +484,10 @@ namespace SampleWinForms.UI
 
                 foundSomePerpendicularEdge = true;
             }
-            if (internalEdgeLine._controlE1 != null)
+            if (internalEdgeLine.ControlEdge_Q != null)
             {
-                Vector2 v2 = internalEdgeLine._controlE1.GetMidPoint();
-                Vector2 cutpoint = internalEdgeLine._controlE1_cutAt;
+                Vector2 v2 = internalEdgeLine.ControlEdge_Q.GetMidPoint();
+                Vector2 cutpoint = internalEdgeLine._ctrlEdge_Q_cutAt;
                 painter.Line(
                     v2.X * _pxscale, v2.Y * _pxscale,
                     cutpoint.X * _pxscale, cutpoint.Y * _pxscale,

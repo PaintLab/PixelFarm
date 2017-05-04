@@ -126,6 +126,8 @@ namespace Typography.Rendering
 
         internal void ApplyNewEdgeOffsetFromMasterOutline(float edgeOffsetFromMasterOutline)
         {
+            //TODO: this is not used,
+            //review here again
             if (edgeOffsetFromMasterOutline == 0)
             {
                 this.newX = this.x;
@@ -138,7 +140,12 @@ namespace Typography.Rendering
                 this.newY = newRadiusEnd.Y;
             }
         }
+        internal void ApplyNewFitEdge()
+        {
 
+
+
+        }
 #if DEBUG
         /// <summary>
         /// glyph pointnumber
@@ -156,8 +163,8 @@ namespace Typography.Rendering
             return this.dbugId + " :" +
                     (x + "," + y + " " + kind.ToString());
         }
-       
-#endif 
+
+#endif
     }
 
     public enum BoneCutPointKind

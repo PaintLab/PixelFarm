@@ -92,9 +92,7 @@ namespace Typography.Rendering
             if (MyMath.FindPerpendicularCutPoint(outsideEdge, new System.Numerics.Vector2(m0.X, m0.Y), out cut_fromM0))
             {
                 foundOnePerpendicularLine = true;
-                outsideEdge._controlE0 = inside0;
-                outsideEdge._controlE0_cutAt = cut_fromM0;
-                outsideEdge._controlE0_len = (float)(m0 - cut_fromM0).Length();
+                outsideEdge.SetControlEdge(inside1, cut_fromM0, (float)(m0 - cut_fromM0).Length());
             }
             else
             {
@@ -106,9 +104,7 @@ namespace Typography.Rendering
             if (MyMath.FindPerpendicularCutPoint(outsideEdge, new System.Numerics.Vector2(m1.X, m1.Y), out cut_fromM1))
             {
                 foundOnePerpendicularLine = true;
-                outsideEdge._controlE1 = inside1;
-                outsideEdge._controlE1_cutAt = cut_fromM1;
-                outsideEdge._controlE1_len = (float)(m1 - cut_fromM1).Length();
+                outsideEdge.SetControlEdge(inside1, cut_fromM1, (float)(m1 - cut_fromM1).Length()); 
             }
             else
             {

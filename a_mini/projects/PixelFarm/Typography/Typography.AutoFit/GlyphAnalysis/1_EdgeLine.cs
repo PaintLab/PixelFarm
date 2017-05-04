@@ -25,16 +25,10 @@ namespace Typography.Rendering
         internal EdgeLine contactToEdge;
         internal GlyphBoneJoint inside_joint;
 
-        //---
-        //if this is outside edge, we store control point here
-        public EdgeLine _controlE0;
-        public EdgeLine _controlE1;
-        public Vector2 _controlE0_cutAt;
-        public Vector2 _controlE1_cutAt;
-        public float _controlE0_len;
-        public float _controlE1_len;
 
         //---
+        EdgeLine _ctrlEdge_P;
+        EdgeLine _ctrlEdge_Q;
         public float _newFitX;
         public float _newFitY;
         public bool _hasNewFitValues;
@@ -93,7 +87,82 @@ namespace Typography.Rendering
         public double x1 { get { return this._glyphPoint_Q.x; } }
         public double y1 { get { return this._glyphPoint_Q.y; } }
 
+        public EdgeLine ControlEdge_P
+        {
+            get { return _ctrlEdge_P; }
+        }
+        public EdgeLine ControlEdge_Q
+        {
+            get { return _ctrlEdge_Q; }
+        }
+        //--- 
+        public Vector2 _ctrlEdge_P_cutAt { get; private set; }
+        public Vector2 _ctrlEdge_Q_cutAt { get; private set; }
 
+        public float _ctrlEdge_P_cutLen { get; private set; }
+        public float _ctrlEdge_Q_cutLen { get; private set; }
+
+        internal void SetControlEdge(EdgeLine controlEdge, Vector2 cutPoint, double cutLen)
+        {
+            //check if edge is connect to p or q
+
+#if DEBUG
+            if (!controlEdge.IsInside)
+            {
+
+            }
+#endif
+            //----------------
+            if (_glyphPoint_P == controlEdge._glyphPoint_P)
+            {
+#if DEBUG
+                if (_ctrlEdge_P != null && _ctrlEdge_P != controlEdge)
+                {
+                }
+#endif
+                //map this p to p of the control edge
+                _ctrlEdge_P = controlEdge;
+                _ctrlEdge_P_cutAt = cutPoint;
+                _ctrlEdge_P_cutLen = (float)cutLen; //TODO: review float or double
+            }
+            else if (_glyphPoint_P == controlEdge.GlyphPoint_Q)
+            {
+#if DEBUG
+                if (_ctrlEdge_P != null && _ctrlEdge_P != controlEdge)
+                {
+                }
+#endif
+                _ctrlEdge_P = controlEdge;
+                _ctrlEdge_P_cutAt = cutPoint;
+                _ctrlEdge_P_cutLen = (float)cutLen; //TODO: review float or double
+            }
+            else if (_glyphPoint_Q == controlEdge._glyphPoint_P)
+            {
+#if DEBUG
+                if (_ctrlEdge_Q != null && _ctrlEdge_Q != controlEdge)
+                {
+                }
+#endif
+                _ctrlEdge_Q = controlEdge;
+                _ctrlEdge_Q_cutAt = cutPoint;
+                _ctrlEdge_Q_cutLen = (float)cutLen; //TODO: review float or double
+            }
+            else if (_glyphPoint_Q == controlEdge.GlyphPoint_Q)
+            {
+#if DEBUG
+                if (_ctrlEdge_Q != null && _ctrlEdge_Q != controlEdge)
+                {
+                }
+#endif
+                _ctrlEdge_Q = controlEdge;
+                _ctrlEdge_Q_cutAt = cutPoint;
+                _ctrlEdge_Q_cutLen = (float)cutLen; //TODO: review float or double
+            }
+            else
+            {
+                //?
+            }
+        }
 #if DEBUG
         public bool dbugNoPerpendicularBone { get; set; }
         public GlyphEdge dbugGlyphEdge { get; set; }

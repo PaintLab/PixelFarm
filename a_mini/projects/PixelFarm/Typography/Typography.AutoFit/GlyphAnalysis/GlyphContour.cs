@@ -58,7 +58,7 @@ namespace Typography.Rendering
             for (int i = 0; i < pointCount; ++i)
             {
                 tmpFlattenPoints[i].SeqNo = i;
- 
+
             }
 
             flattener.Result = prevResult;
@@ -162,8 +162,10 @@ namespace Typography.Rendering
             //
         }
 
+        bool useNewEdgeCutPointFromMasterOutline = false;
         internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
+            useNewEdgeCutPointFromMasterOutline = true;
             // int j = flattenPoints.Count;
             //for (int i = 0; i < j; ++i)
             //{
@@ -189,21 +191,17 @@ namespace Typography.Rendering
                 //close edge
                 GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
             }
-
         }
 
         internal void ApplyNewFitPointPosition()
         {
-            //----------
-            //apply new fit position after find new fit core
 
-            int j = flattenPoints.Count;
-            for (int i = 0; i < j; ++i)
-            {
+            //after GlyphBone is adjust to the new fit grid
+            //we adjust each GlyphEdge adn GlyphPoint
 
-                //apply edge fit to the flatten point
-                //flattenPoints[i].ApplyNewEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
-            }
+            useNewEdgeCutPointFromMasterOutline = false;
+            int j = 0;
+
             j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
@@ -212,8 +210,15 @@ namespace Typography.Rendering
                 //from the edge
                 edge.RegenerateNewFitPoints();
             }
+            //----------
+            j = flattenPoints.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                flattenPoints[i].ApplyNewFitEdge();
+            }
+            //----------
             //calculate edge cutpoint
-            int lim = edges.Count - 1; //skip lastone
+            int lim = edges.Count - 1; //skip last one
             for (int i = 0; i < lim; ++i)
             {
                 //calculate adjacent outside edge cutpoint          
