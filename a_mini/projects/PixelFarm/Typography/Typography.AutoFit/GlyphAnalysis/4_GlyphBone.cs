@@ -15,7 +15,7 @@ namespace Typography.Rendering
         public readonly EdgeLine TipEdge;
 
 
-        
+
 
         double _len;
 #if DEBUG 
@@ -45,10 +45,11 @@ namespace Typography.Rendering
 
             JointA = a;
             TipEdge = tipEdge;
-            var midPoint = tipEdge.GetMidPoint();
+            Vector2 midPoint = tipEdge.GetMidPoint();
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluteSlope(a.Position, midPoint);
 
+            //--------------------
             a.AddAssociateGlyphBoneToEndPoint(this);
             tipEdge.AddAssociateGlyphBoneToEndPoint(this);
         }
@@ -283,7 +284,7 @@ namespace Typography.Rendering
             if (tri.e2.IsOutside) { return tri.e2; }
             return null; //not found               
         }
- 
+
     }
 
 }

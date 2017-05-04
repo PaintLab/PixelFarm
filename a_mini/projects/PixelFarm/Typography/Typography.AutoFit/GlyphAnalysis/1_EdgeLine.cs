@@ -95,7 +95,7 @@ namespace Typography.Rendering
         {
             get { return _ctrlEdge_Q; }
         }
-
+        public bool IsTip { get; internal set; }
 
         internal EdgeLine GetControlEdgeThatContains(GlyphPoint p)
         {

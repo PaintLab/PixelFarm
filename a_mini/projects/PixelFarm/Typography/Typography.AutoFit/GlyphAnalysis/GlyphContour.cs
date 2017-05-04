@@ -193,7 +193,7 @@ namespace Typography.Rendering
             }
         }
 
-        internal void ApplyNewFitPointPosition()
+        internal void ApplyFitPositions()
         {
 
             //after GlyphBone is adjust to the new fit grid
@@ -208,7 +208,7 @@ namespace Typography.Rendering
                 //apply new relative len to edge***
                 GlyphEdge edge = edges[i];
                 //from the edge
-                edge.RegenerateNewFitPoints();
+                edge.EvaluateEdgeInfo();
             }
             //----------
             j = flattenPoints.Count;

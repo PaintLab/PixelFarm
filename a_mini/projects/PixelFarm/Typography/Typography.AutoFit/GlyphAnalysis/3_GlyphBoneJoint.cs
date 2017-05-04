@@ -125,7 +125,7 @@ namespace Typography.Rendering
             }
 #endif
             this._tipEdge_p = e;
-
+            e.IsTip = true;
         }
         internal void SetTipEdge_Q(EdgeLine e)
         {
@@ -139,7 +139,9 @@ namespace Typography.Rendering
                 throw new System.NotSupportedException();
             }
 #endif
+            e.IsTip = true;
             this._tipEdge_q = e;
+
         }
         public bool HasTipP
         {

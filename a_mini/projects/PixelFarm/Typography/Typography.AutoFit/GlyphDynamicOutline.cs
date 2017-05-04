@@ -91,7 +91,7 @@ namespace Typography.Rendering
             j = cnts.Count;
             for (int i = 0; i < j; ++i)
             {
-                cnts[i].ApplyNewFitPointPosition();
+                cnts[i].ApplyFitPositions();
 
             }
         }
