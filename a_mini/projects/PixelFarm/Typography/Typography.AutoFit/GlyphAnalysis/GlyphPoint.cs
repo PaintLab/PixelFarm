@@ -122,27 +122,30 @@ namespace Typography.Rendering
         internal void EvaluatePerpendicularBone()
         {
             _assocBones.EvaluatePerpendicularBone(this);
-            ApplyNewEdgeOffsetFromMasterOutline(0);
+            ResetNewXY();
         }
 
-        internal void ApplyNewEdgeOffsetFromMasterOutline(float edgeOffsetFromMasterOutline)
+        internal void ResetNewXY()
         {
-            //TODO: this is not used,
-            //review here again
-            if (edgeOffsetFromMasterOutline == 0)
-            {
-                this.newX = this.x;
-                this.newY = this.y;
-            }
-            else
-            {
-                Vector2 newRadiusEnd = _assocBones.CalculateNewCutPointFromMasterOutline(edgeOffsetFromMasterOutline, new Vector2(x, y));
-                this.newX = newRadiusEnd.X;
-                this.newY = newRadiusEnd.Y;
-            }
+            this.newX = this.x;
+            this.newY = this.y;
         }
+#if DEBUG
+        bool _dbugFitSet;
+        internal void dbugClearLastFit()
+        {
+            _dbugFitSet = false;
+        }
+#endif
         internal void ApplyNewFitEdge()
         {
+
+#if DEBUG
+            if (_dbugFitSet)
+            {
+
+            }
+#endif
             EdgeLine e0 = this.E0;
             EdgeLine e1 = this.E1;
             EdgeLine controlE_ofE0 = e0.GetControlEdgeThatContains(this);
@@ -169,18 +172,13 @@ namespace Typography.Rendering
                 //?
 
             }
-            //we use only vertical hint 
-            //this.newX = (e0._re + e1._newFitX) / 2;
-            //this.newY = (e0._newFitY + e1._newFitY) / 2;
+#if DEBUG
+            _dbugFitSet = true;
+#endif
         }
 
-
 #if DEBUG
-        /// <summary>
-        /// glyph pointnumber
-        /// </summary>
-        int dbug_GlyphPointNo;
-        //for debug only
+       
         public readonly int dbugId = dbugTotalId++;
         static int dbugTotalId;
         internal GlyphPart dbugOwnerPart;  //link back to owner part

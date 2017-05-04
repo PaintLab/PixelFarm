@@ -244,8 +244,6 @@ namespace Typography.Rendering
                 //test grid fitting
                 ApplyGridToMasterOutline(GridBoxWidth, GridBoxHeight);
             }
-            
-
             //-------------------------------------------------
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
@@ -256,18 +254,13 @@ namespace Typography.Rendering
 
             LeftControlPosX = 0;
             tx.BeginRead(j);
-
-
             for (int i = 0; i < j; ++i)
             {
                 GenerateFitOutput2(tx, pxScale, contours[i]);
             }
-
             tx.EndRead();
             //-------------
         }
-
-
         const int GRID_SIZE = 1;
         const float GRID_SIZE_25 = 1f / 4f;
         const float GRID_SIZE_50 = 2f / 4f;
@@ -465,46 +458,46 @@ namespace Typography.Rendering
         {
             //walk along the edge in the contour to generate new edge output
 
-            List<GlyphEdge> edges = contour.edges;
-            int j = edges.Count;
-            if (j > 0)
-            {
-                GlyphEdge e;
-                {
-                    //1st 
-                    e = edges[0];
-                    Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
-                    tx.MoveTo(p.X, p.Y);
-                }
-                for (int i = 1; i < j; ++i)
-                {
-
-                    e = edges[i];
-                    Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
-                    tx.LineTo(p.X, p.Y);
-                }
-
-                //close 
-                tx.CloseContour();
-            }
-
             //List<GlyphEdge> edges = contour.edges;
+
             //int j = edges.Count;
             //if (j > 0)
             //{
-
+            //    GlyphEdge e;
             //    {
-            //        //1st  
-            //        WriteFitEdge(0, tx, edges[0]);
+            //        //1st 
+            //        e = edges[0];
+            //        Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
+            //        tx.MoveTo(p.X, p.Y);
             //    }
             //    for (int i = 1; i < j; ++i)
             //    {
-            //        WriteFitEdge(i, tx, edges[i]);
+
+            //        e = edges[i];
+            //        Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
+            //        tx.LineTo(p.X, p.Y);
             //    }
 
             //    //close 
             //    tx.CloseContour();
             //}
+            List<GlyphPoint> points = contour.flattenPoints;
+            int j = points.Count;
+            if (j > 0)
+            {
+                //1.
+                GlyphPoint p = points[0];
+                tx.MoveTo(p.x * pxscale, p.y * pxscale);
+                //2. others
+                for (int i = 1; i < j; ++i)
+                {
+                    p = points[i];
+                    tx.LineTo(p.x * pxscale, p.y * pxscale);
+                }
+                //close 
+                tx.CloseContour();
+            }
+
         }
         //void WriteFitEdge(int srcIndex, IGlyphTranslator tx, GlyphEdge edge)
         //{

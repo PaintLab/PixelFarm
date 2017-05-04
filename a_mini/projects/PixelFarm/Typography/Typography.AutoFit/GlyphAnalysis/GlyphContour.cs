@@ -212,24 +212,31 @@ namespace Typography.Rendering
             }
             //----------
             j = flattenPoints.Count;
+#if DEBUG
+            for (int i = 0; i < j; ++i)
+            {
+
+                flattenPoints[i].dbugClearLastFit();
+            }
+#endif
             for (int i = 0; i < j; ++i)
             {
                 flattenPoints[i].ApplyNewFitEdge();
             }
-            //----------
-            //calculate edge cutpoint
-            int lim = edges.Count - 1; //skip last one
-            for (int i = 0; i < lim; ++i)
-            {
-                //calculate adjacent outside edge cutpoint          
-                GlyphEdge.UpdateEdgeCutPoint(edges[i], edges[i + 1]);
-            }
-            //last one
-            if (lim > 1)
-            {
-                //close edge
-                GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
-            }
+            ////----------
+            ////calculate edge cutpoint
+            //int lim = edges.Count - 1; //skip last one
+            //for (int i = 0; i < lim; ++i)
+            //{
+            //    //calculate adjacent outside edge cutpoint          
+            //    GlyphEdge.UpdateEdgeCutPoint(edges[i], edges[i + 1]);
+            //}
+            ////last one
+            //if (lim > 1)
+            //{
+            //    //close edge
+            //    GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
+            //}
 
         }
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)

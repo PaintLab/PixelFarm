@@ -425,8 +425,12 @@ namespace SampleWinForms.UI
                 //        painter.StrokeColor = PixelFarm.Drawing.Color.Yellow;
                 //        break;
                 //}
-                painter.StrokeColor = PixelFarm.Drawing.Color.Gray;
-                painter.Line(edge.x0 * _pxscale, edge.y0 * _pxscale, edge.x1 * _pxscale, edge.y1 * _pxscale);
+
+                painter.Line(edge.x0 * _pxscale, edge.y0 * _pxscale, edge.x1 * _pxscale, edge.y1 * _pxscale, PixelFarm.Drawing.Color.Gray);
+                //draw control point of this edge
+                Vector2 fitpos = edge.GetFitPos();
+                painter.FillRectLBWH(fitpos.X * _pxscale, fitpos.Y * _pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
+
             }
         }
         void DrawPerpendicularEdgeControlPoints(CanvasPainter painter, GlyphEdge edge)

@@ -276,7 +276,7 @@ namespace Typography.Rendering
         }
         internal static float GetVerticalFitDiff(this EdgeLine line)
         {
-            return line.GetMidPoint().Y - line._newFitY;
+            return line._newFitY - line.GetMidPoint().Y;
         }
         internal static bool ContainsTriangle(this EdgeLine edge, GlyphTriangle p)
         {
