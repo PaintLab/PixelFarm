@@ -81,8 +81,7 @@ namespace Typography.Rendering
                 else
                 {
                     //this is tip
-                    //add information about tip too
-
+                    //add information about tip too 
                 }
             }
             //--------------------------------------------
@@ -91,8 +90,11 @@ namespace Typography.Rendering
             j = cnts.Count;
             for (int i = 0; i < j; ++i)
             {
+                cnts[i].CreateFitPlan();
+            }
+            for (int i = 0; i < j; ++i)
+            {
                 cnts[i].ApplyFitPositions();
-
             }
         }
 
@@ -226,7 +228,7 @@ namespace Typography.Rendering
             tx.BeginRead(j);
             for (int i = 0; i < j; ++i)
             {
-                GenerateFitOutput2(tx, pxScale, contours[i]);
+                GenerateFitOutput3(tx, pxScale, contours[i]);
             }
             tx.EndRead();
             //-------------
@@ -463,6 +465,60 @@ namespace Typography.Rendering
                 gridFitterX.GetFitPosX(p, out x);
                 gridFitterY.GetFitPosY(p, out y);
                 tx.MoveTo(x, y);
+                //2. others
+                for (int i = 1; i < j; ++i)
+                {
+                    //try to fit to grid 
+                    p = points[i];
+                    gridFitterX.GetFitPosX(p, out x);
+                    gridFitterY.GetFitPosY(p, out y);
+                    tx.LineTo(x, y);
+                }
+                //close 
+                tx.CloseContour();
+            }
+        }
+        void GenerateFitOutput3(
+            IGlyphTranslator tx,
+            float pxscale,
+            GlyphContour contour)
+        {
+            //walk along the edge in the contour to generate new edge output
+            //List<GlyphEdge> edges = contour.edges; 
+            //int j = edges.Count;
+            //if (j > 0)
+            //{
+            //    GlyphEdge e;
+            //    {
+            //        //1st 
+            //        e = edges[0];
+            //        Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
+            //        tx.MoveTo(p.X, p.Y);
+            //    }
+            //    for (int i = 1; i < j; ++i)
+            //    {
+
+            //        e = edges[i];
+            //        Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
+            //        tx.LineTo(p.X, p.Y);
+            //    }
+
+            //    //close 
+            //    tx.CloseContour();
+            //}
+
+            GridFitter gridFitterX = new GridFitter(1, pxscale); //use struct, no alloc on heap
+            GridFitter gridFitterY = new GridFitter(1, pxscale);
+            List<GlyphPoint> points = contour.flattenPoints;
+            int j = points.Count;
+            if (j > 0)
+            {
+                //1.
+                GlyphPoint p = points[0];
+                float x, y;
+                gridFitterX.GetFitPosX(p, out x);
+                gridFitterY.GetFitPosY(p, out y);
+                tx.MoveTo(x, y);
 
                 //2. others
                 for (int i = 1; i < j; ++i)
@@ -477,7 +533,6 @@ namespace Typography.Rendering
                 tx.CloseContour();
             }
         }
-
         struct GridFitter
         {
             readonly int _gridSize;
@@ -522,20 +577,23 @@ namespace Typography.Rendering
 
                 if (p.isPartOfHorizontalEdge)
                 {
-                    var diff = guide_y - value;
-                    if (guide_y != value)
-                    {
+                    //var diff = guide_y - value;
+                    //if (guide_y != value)
+                    //{
 
-                    }
-                    if (p.isUpperSide)
-                    {
-                        result = value + 0.125f;
-                    }
-                    else
-                    {
-                        result = value - 0.125f;
-                    }
+                    //}
+                    result = value + 0.50f;
+                    Console.WriteLine(p.dbugId + " pre: " + value + ",post:" + result);
                     return;
+                    //if (p.isUpperSide)
+                    //{
+                    //    result = value + 0.125f;
+                    //}
+                    //else
+                    //{
+                    //    result = value - 0.125f;
+                    //}
+                    //return;
                 }
 
 

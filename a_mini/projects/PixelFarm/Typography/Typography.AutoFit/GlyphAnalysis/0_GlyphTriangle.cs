@@ -64,8 +64,6 @@ namespace Typography.Rendering
                 }
                 else
                 {
-                    //d0, d1=>inside
-                    //d2 => outside ***
 
                     //1 outside edge (d2)
                     //2 inside edges (d0,d1)

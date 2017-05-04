@@ -192,13 +192,17 @@ namespace Typography.Rendering
                 GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
             }
         }
+        internal void CreateFitPlan()
+        {
 
+
+
+        }
         internal void ApplyFitPositions()
         {
 
             //after GlyphBone is adjust to the new fit grid
-            //we adjust each GlyphEdge adn GlyphPoint
-
+            //we adjust each GlyphEdge adn GlyphPoint 
             useNewEdgeCutPointFromMasterOutline = false;
             int j = 0;
 
@@ -215,7 +219,6 @@ namespace Typography.Rendering
 #if DEBUG
             for (int i = 0; i < j; ++i)
             {
-
                 flattenPoints[i].dbugClearLastFit();
             }
 #endif
@@ -223,20 +226,8 @@ namespace Typography.Rendering
             {
                 flattenPoints[i].ApplyNewFitEdge();
             }
-            ////----------
-            ////calculate edge cutpoint
-            //int lim = edges.Count - 1; //skip last one
-            //for (int i = 0; i < lim; ++i)
-            //{
-            //    //calculate adjacent outside edge cutpoint          
-            //    GlyphEdge.UpdateEdgeCutPoint(edges[i], edges[i + 1]);
-            //}
-            ////last one
-            //if (lim > 1)
-            //{
-            //    //close edge
-            //    GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
-            //}
+
+            //----------
 
         }
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)

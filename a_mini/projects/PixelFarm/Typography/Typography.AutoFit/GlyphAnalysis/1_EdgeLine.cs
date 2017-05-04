@@ -50,8 +50,7 @@ namespace Typography.Rendering
             //------------------------------------   
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;
-            this.IsOutside = isOutside;
-            if (isOutside)
+            if (this.IsOutside = isOutside)
             {
                 p.SetOutsideEdge(this);
                 q.SetOutsideEdge(this);
@@ -109,12 +108,7 @@ namespace Typography.Rendering
             }
             return null; //not found 
         }
-        //--- 
-        //public Vector2 _ctrlEdge_P_cutAt { get; private set; }
-        //public Vector2 _ctrlEdge_Q_cutAt { get; private set; }
 
-        //public float _ctrlEdge_P_cutLen { get; private set; }
-        //public float _ctrlEdge_Q_cutLen { get; private set; }
 
         EdgeLine _outsideEdge;
         Vector2 _outsideEdgeCutAt;
@@ -225,11 +219,6 @@ namespace Typography.Rendering
             get { return !this.IsOutside; }
 
         }
-        internal double SlopeAngleNoDirection
-        {
-            get;
-            private set;
-        }
         public bool IsUpper
         {
             get;
@@ -240,6 +229,12 @@ namespace Typography.Rendering
             get;
             internal set;
         }
+        internal double SlopeAngleNoDirection
+        {
+            get;
+            private set;
+        }
+
 
         public override string ToString()
         {
@@ -256,6 +251,7 @@ namespace Typography.Rendering
         {
             return this._glyphPoint_P == p || this._glyphPoint_Q == p;
         }
+
     }
 
 

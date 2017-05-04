@@ -225,7 +225,14 @@ namespace SampleWinForms.UI
                 case PointKind.C4End:
                 case PointKind.LineStart:
                 case PointKind.LineStop:
-                    painter.FillRectLBWH(point.x * _pxscale, point.y * _pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
+                    if (point.isPartOfHorizontalEdge)
+                    {
+                        painter.FillRectLBWH(point.x * _pxscale, point.y * _pxscale, 8, 8, PixelFarm.Drawing.Color.Yellow);
+                    }
+                    else
+                    {
+                        painter.FillRectLBWH(point.x * _pxscale, point.y * _pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
+                    }
                     break;
             }
         }

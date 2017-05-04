@@ -40,7 +40,7 @@ namespace Typography.Rendering
         public bool isUpperSide;
 
         /// <summary>
-        /// outside edge0 
+        /// outside edge0
         /// </summary>
         EdgeLine _e0;
         /// <summary>
@@ -178,7 +178,7 @@ namespace Typography.Rendering
         }
 
 #if DEBUG
-       
+
         public readonly int dbugId = dbugTotalId++;
         static int dbugTotalId;
         internal GlyphPart dbugOwnerPart;  //link back to owner part
