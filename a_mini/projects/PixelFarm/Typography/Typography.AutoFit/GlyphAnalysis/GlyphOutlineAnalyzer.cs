@@ -36,7 +36,7 @@ namespace Typography.Rendering
             {
                 //3.before create dynamic contour we must flatten data inside the contour 
                 _glyphFlattener.NSteps = 2;
-                
+
                 for (int i = 0; i < cnt_count; ++i)
                 {
                     // (flatten each contour with the flattener)    
@@ -97,16 +97,18 @@ namespace Typography.Rendering
             //3. intermediate outline is used inside this lib
 
             var intermediateOutline = new GlyphIntermediateOutline(mainPolygon, flattenContours);
-
             List<GlyphTriangle> triAngles = intermediateOutline.GetTriangles();
             int triangleCount = triAngles.Count;
             for (int i = 0; i < triangleCount; ++i)
             {
-                //---------------
+
+                //iterate all triangles,
+                //create relation between edges
+
                 GlyphTriangle tri = triAngles[i];
-                AssignPointEdgeInvolvement(tri.e0);
-                AssignPointEdgeInvolvement(tri.e1);
-                AssignPointEdgeInvolvement(tri.e2);
+                AssignPointEdgeInvolvement(tri, tri.e0);
+                AssignPointEdgeInvolvement(tri, tri.e1);
+                AssignPointEdgeInvolvement(tri, tri.e2);
             }
 
 
@@ -134,7 +136,7 @@ namespace Typography.Rendering
             dbugCheckAllGlyphsAreUnique(flattenPoints);
 #endif
 
-            
+
             int j = flattenPoints.Count;
             //pass
             for (int i = 0; i < j; ++i)
@@ -164,7 +166,7 @@ namespace Typography.Rendering
             return new Poly2Tri.Polygon(points.ToArray());
 
         }
-        static void AssignPointEdgeInvolvement(EdgeLine edge)
+        static void AssignPointEdgeInvolvement(GlyphTriangle ownerTri, EdgeLine edge)
         {
             if (!edge.IsOutside)
             {
@@ -199,6 +201,37 @@ namespace Typography.Rendering
                             q.isPartOfHorizontalEdge = true;
                             //q.horizontalEdge = edge;
                             q.isUpperSide = edge.IsUpper;
+                        }
+
+                        //------------ 
+                        //neighbors: find opposite edge to this edge
+
+                        GlyphTriangle n0 = ownerTri.N0;
+                        EdgeLine oppEdge;
+                        if (n0 != null)
+                        {
+                            if ((oppEdge = n0.FindOppositeEdge(edge)) != null)
+                            {
+                                ownerTri.N0_IsOpposite = true;
+                            }
+                        }
+                        GlyphTriangle n1 = ownerTri.N1;
+                        if (n1 != null)
+                        {
+                            if ((oppEdge = n1.FindOppositeEdge(edge)) != null)
+                            {
+                                //found this edge
+                                //store edge line
+                                ownerTri.N1_IsOpposite = true;
+                            }
+                        }
+                        GlyphTriangle n2 = ownerTri.N2;
+                        if (n2 != null)
+                        {
+                            if ((oppEdge = n2.FindOppositeEdge(edge)) != null)
+                            {
+                                ownerTri.N2_IsOpposite = true;
+                            }
                         }
                     }
                     break;

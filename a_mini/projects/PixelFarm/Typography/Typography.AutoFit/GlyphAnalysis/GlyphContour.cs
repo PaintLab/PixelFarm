@@ -194,9 +194,13 @@ namespace Typography.Rendering
         }
         internal void CreateFitPlan()
         {
-
-
-
+            int j = edges.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //create relation between edges
+                GlyphEdge edge = edges[i];
+                edge.EvaluateEdgeInfo();
+            }
         }
         internal void ApplyFitPositions()
         {
@@ -204,18 +208,7 @@ namespace Typography.Rendering
             //after GlyphBone is adjust to the new fit grid
             //we adjust each GlyphEdge adn GlyphPoint 
             useNewEdgeCutPointFromMasterOutline = false;
-            int j = 0;
-
-            j = edges.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                //apply new relative len to edge***
-                GlyphEdge edge = edges[i];
-                //from the edge
-                edge.EvaluateEdgeInfo();
-            }
-            //----------
-            j = flattenPoints.Count;
+            int j = flattenPoints.Count;
 #if DEBUG
             for (int i = 0; i < j; ++i)
             {
