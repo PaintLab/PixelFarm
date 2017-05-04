@@ -75,8 +75,8 @@ namespace Typography.Rendering
             return new Vector2((float)(p1.x - p0.x), (float)(p1.y - p0.y));
         }
 
-        public Vector2 _newRegen0;
-        public Vector2 _newRegen1;
+        //public Vector2 _newRegen0;
+        //public Vector2 _newRegen1;
       
         static int FitToGrid(float value, int gridSize)
         {
@@ -111,50 +111,53 @@ namespace Typography.Rendering
         }
         public void RegenerateNewFitPoints()
         {
-            if (_edgeLine.ControlEdge_P != null && _edgeLine.ControlEdge_Q != null)
-            {
-                //controlE0 and controlE1 is inside edge
-                //both are close to GlyphBone
-                //
-                Vector2 org_midE0 = _edgeLine.ControlEdge_P.GetMidPoint();
-                Vector2 e0_fitpos = _edgeLine.ControlEdge_P.GetFitPos();
-                float ydiff_0 = e0_fitpos.Y - org_midE0.Y;
-                //
-                Vector2 org_midE1 = _edgeLine.ControlEdge_Q.GetMidPoint();
-                Vector2 e1_fitpos = _edgeLine.ControlEdge_Q.GetFitPos();
-                float ydiff_1 = e1_fitpos.Y - org_midE1.Y;
-                // 
-                _newRegen0 = new Vector2(_edgeLine._ctrlEdge_P_cutAt.X, _edgeLine._ctrlEdge_P_cutAt.Y + ydiff_0);
-                _newRegen1 = new Vector2(_edgeLine._ctrlEdge_Q_cutAt.X, _edgeLine._ctrlEdge_Q_cutAt.Y + ydiff_1);
+            //perserve
+            _newMidPoint = _edgeLine.GetMidPoint();
 
-                Vector2 orgMidEdgeMitPoint = _edgeLine.GetMidPoint();
-                //_newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + (ydiff_0 + ydiff_1) / 2);
-                _newMidPoint = orgMidEdgeMitPoint;
-            }
-            else if (_edgeLine.ControlEdge_P != null)
-            {
-                Vector2 org_midE0 = _edgeLine.ControlEdge_P.GetMidPoint();
-                Vector2 e0_fitpos = _edgeLine.ControlEdge_P.GetFitPos();
-                float ydiff_0 = e0_fitpos.Y - org_midE0.Y;
-                _newRegen0 = new Vector2(_edgeLine._ctrlEdge_P_cutAt.X, _edgeLine._ctrlEdge_P_cutAt.Y + ydiff_0);
-                Vector2 orgMidEdgeMitPoint = _edgeLine.GetMidPoint();
-                //_newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + ydiff_0);
-                _newMidPoint = orgMidEdgeMitPoint;
-            }
-            else if (_edgeLine.ControlEdge_Q != null)
-            {
-                Vector2 org_midE1 = _edgeLine.ControlEdge_Q.GetMidPoint();
-                Vector2 e1_fitpos = _edgeLine.ControlEdge_Q.GetFitPos();
-                float ydiff_1 = e1_fitpos.Y - org_midE1.Y;
-                _newRegen1 = new Vector2(_edgeLine._ctrlEdge_Q_cutAt.X, _edgeLine._ctrlEdge_Q_cutAt.Y + ydiff_1);
-                Vector2 orgMidEdgeMitPoint = _edgeLine.GetMidPoint();
-                //_newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + ydiff_1);
-                _newMidPoint = orgMidEdgeMitPoint;
-            }
-            else
-            {
-                _newMidPoint = _edgeLine.GetMidPoint();
-            }
+            //if (_edgeLine.ControlEdge_P != null && _edgeLine.ControlEdge_Q != null)
+            //{
+            //    //controlE0 and controlE1 is inside edge
+            //    //both are close to GlyphBone
+            //    //
+            //    Vector2 org_midE0 = _edgeLine.ControlEdge_P.GetMidPoint();
+            //    Vector2 e0_fitpos = _edgeLine.ControlEdge_P.GetFitPos();
+            //    float ydiff_0 = e0_fitpos.Y - org_midE0.Y;
+            //    //
+            //    Vector2 org_midE1 = _edgeLine.ControlEdge_Q.GetMidPoint();
+            //    Vector2 e1_fitpos = _edgeLine.ControlEdge_Q.GetFitPos();
+            //    float ydiff_1 = e1_fitpos.Y - org_midE1.Y;
+            //    // 
+            //    _newRegen0 = new Vector2(_edgeLine._ctrlEdge_P_cutAt.X, _edgeLine._ctrlEdge_P_cutAt.Y + ydiff_0);
+            //    _newRegen1 = new Vector2(_edgeLine._ctrlEdge_Q_cutAt.X, _edgeLine._ctrlEdge_Q_cutAt.Y + ydiff_1);
+
+            //    Vector2 orgMidEdgeMitPoint = _edgeLine.GetMidPoint();
+            //    //_newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + (ydiff_0 + ydiff_1) / 2);
+            //    _newMidPoint = orgMidEdgeMitPoint;
+            //}
+            //else if (_edgeLine.ControlEdge_P != null)
+            //{
+            //    Vector2 org_midE0 = _edgeLine.ControlEdge_P.GetMidPoint();
+            //    Vector2 e0_fitpos = _edgeLine.ControlEdge_P.GetFitPos();
+            //    float ydiff_0 = e0_fitpos.Y - org_midE0.Y;
+            //    _newRegen0 = new Vector2(_edgeLine._ctrlEdge_P_cutAt.X, _edgeLine._ctrlEdge_P_cutAt.Y + ydiff_0);
+            //    Vector2 orgMidEdgeMitPoint = _edgeLine.GetMidPoint();
+            //    //_newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + ydiff_0);
+            //    _newMidPoint = orgMidEdgeMitPoint;
+            //}
+            //else if (_edgeLine.ControlEdge_Q != null)
+            //{
+            //    Vector2 org_midE1 = _edgeLine.ControlEdge_Q.GetMidPoint();
+            //    Vector2 e1_fitpos = _edgeLine.ControlEdge_Q.GetFitPos();
+            //    float ydiff_1 = e1_fitpos.Y - org_midE1.Y;
+            //    _newRegen1 = new Vector2(_edgeLine._ctrlEdge_Q_cutAt.X, _edgeLine._ctrlEdge_Q_cutAt.Y + ydiff_1);
+            //    Vector2 orgMidEdgeMitPoint = _edgeLine.GetMidPoint();
+            //    //_newMidPoint = new Vector2(orgMidEdgeMitPoint.X, orgMidEdgeMitPoint.Y + ydiff_1);
+            //    _newMidPoint = orgMidEdgeMitPoint;
+            //}
+            //else
+            //{
+            //    _newMidPoint = _edgeLine.GetMidPoint();
+            //}
         }
         internal void ApplyNewEdgeFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {

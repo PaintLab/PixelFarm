@@ -27,6 +27,7 @@ namespace Typography.Rendering
         public readonly float y;
         public readonly PointKind kind;
 
+
         AssocBoneCollection _assocBones = new AssocBoneCollection();
 
         /// <summary>
@@ -142,10 +143,38 @@ namespace Typography.Rendering
         }
         internal void ApplyNewFitEdge()
         {
+            EdgeLine e0 = this.E0;
+            EdgeLine e1 = this.E1;
+            EdgeLine controlE_ofE0 = e0.GetControlEdgeThatContains(this);
+            EdgeLine controlE_ofE1 = e1.GetControlEdgeThatContains(this);
+            float e0DiffY = 0, e1DiffY = 0;
+            if (controlE_ofE0 != null && controlE_ofE1 != null)
+            {
+                e0DiffY = controlE_ofE0.GetVerticalFitDiff();
+                e1DiffY = controlE_ofE1.GetVerticalFitDiff();
+                this.newY += (e0DiffY + e1DiffY) / 2;
+            }
+            else if (controlE_ofE0 != null)
+            {
+                e0DiffY = controlE_ofE0.GetVerticalFitDiff();
+                this.newY += e0DiffY;
+            }
+            else if (controlE_ofE1 != null)
+            {
+                e1DiffY = controlE_ofE1.GetVerticalFitDiff();
+                this.newY += e1DiffY;
+            }
+            else
+            {
+                //?
 
-
-
+            }
+            //we use only vertical hint 
+            //this.newX = (e0._re + e1._newFitX) / 2;
+            //this.newY = (e0._newFitY + e1._newFitY) / 2;
         }
+
+
 #if DEBUG
         /// <summary>
         /// glyph pointnumber

@@ -29,8 +29,8 @@ namespace Typography.Rendering
         //---
         EdgeLine _ctrlEdge_P;
         EdgeLine _ctrlEdge_Q;
-        public float _newFitX;
-        public float _newFitY;
+        internal float _newFitX;
+        internal float _newFitY;
         public bool _hasNewFitValues;
 #if DEBUG
         public static int s_dbugTotalId;
@@ -95,14 +95,40 @@ namespace Typography.Rendering
         {
             get { return _ctrlEdge_Q; }
         }
+
+
+        internal EdgeLine GetControlEdgeThatContains(GlyphPoint p)
+        {
+            if (_ctrlEdge_P != null && _ctrlEdge_P.ContainsGlyphPoint(p))
+            {
+                return _ctrlEdge_P;
+            }
+            if (_ctrlEdge_Q != null && _ctrlEdge_Q.ContainsGlyphPoint(p))
+            {
+                return _ctrlEdge_Q;
+            }
+            return null; //not found 
+        }
         //--- 
-        public Vector2 _ctrlEdge_P_cutAt { get; private set; }
-        public Vector2 _ctrlEdge_Q_cutAt { get; private set; }
+        //public Vector2 _ctrlEdge_P_cutAt { get; private set; }
+        //public Vector2 _ctrlEdge_Q_cutAt { get; private set; }
 
-        public float _ctrlEdge_P_cutLen { get; private set; }
-        public float _ctrlEdge_Q_cutLen { get; private set; }
+        //public float _ctrlEdge_P_cutLen { get; private set; }
+        //public float _ctrlEdge_Q_cutLen { get; private set; }
 
-        internal void SetControlEdge(EdgeLine controlEdge, Vector2 cutPoint, double cutLen)
+        EdgeLine _outsideEdge;
+        Vector2 _outsideEdgeCutAt;
+        float _outsideEdgeCutLen;
+        internal void SetOutsideEdge(EdgeLine outsideEdge, Vector2 cutPoint, float cutLen)
+        {
+#if DEBUG
+            if (outsideEdge == this) { throw new NotSupportedException(); }
+#endif
+            _outsideEdge = outsideEdge;
+            _outsideEdgeCutAt = cutPoint;
+            _outsideEdgeCutLen = cutLen;
+        }
+        internal void SetControlEdge(EdgeLine controlEdge)
         {
             //check if edge is connect to p or q
 
@@ -122,8 +148,7 @@ namespace Typography.Rendering
 #endif
                 //map this p to p of the control edge
                 _ctrlEdge_P = controlEdge;
-                _ctrlEdge_P_cutAt = cutPoint;
-                _ctrlEdge_P_cutLen = (float)cutLen; //TODO: review float or double
+
             }
             else if (_glyphPoint_P == controlEdge.GlyphPoint_Q)
             {
@@ -133,8 +158,8 @@ namespace Typography.Rendering
                 }
 #endif
                 _ctrlEdge_P = controlEdge;
-                _ctrlEdge_P_cutAt = cutPoint;
-                _ctrlEdge_P_cutLen = (float)cutLen; //TODO: review float or double
+                //_ctrlEdge_P_cutAt = cutPoint;
+                //_ctrlEdge_P_cutLen = (float)cutLen; //TODO: review float or double
             }
             else if (_glyphPoint_Q == controlEdge._glyphPoint_P)
             {
@@ -144,8 +169,8 @@ namespace Typography.Rendering
                 }
 #endif
                 _ctrlEdge_Q = controlEdge;
-                _ctrlEdge_Q_cutAt = cutPoint;
-                _ctrlEdge_Q_cutLen = (float)cutLen; //TODO: review float or double
+                //_ctrlEdge_Q_cutAt = cutPoint;
+                //_ctrlEdge_Q_cutLen = (float)cutLen; //TODO: review float or double
             }
             else if (_glyphPoint_Q == controlEdge.GlyphPoint_Q)
             {
@@ -155,8 +180,8 @@ namespace Typography.Rendering
                 }
 #endif
                 _ctrlEdge_Q = controlEdge;
-                _ctrlEdge_Q_cutAt = cutPoint;
-                _ctrlEdge_Q_cutLen = (float)cutLen; //TODO: review float or double
+                //_ctrlEdge_Q_cutAt = cutPoint;
+                //_ctrlEdge_Q_cutLen = (float)cutLen; //TODO: review float or double
             }
             else
             {
@@ -227,7 +252,10 @@ namespace Typography.Rendering
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
         internal bool _earlyInsideAnalysis;
-
+        internal bool ContainsGlyphPoint(GlyphPoint p)
+        {
+            return this._glyphPoint_P == p || this._glyphPoint_Q == p;
+        }
     }
 
 
@@ -237,12 +265,19 @@ namespace Typography.Rendering
         {
             return new Vector2((float)((line.x0 + line.x1) / 2), (float)((line.y0 + line.y1) / 2));
         }
+        //public static Vector2 GetNewEdgeOutsideCutPoint(this EdgeLine line)
+        //{
+        //    return new Vector2(line._ctrlEdge_P_cutAt.X, line._ctrlEdge_Q_cutAt.Y + line.GetVerticalFitDiff());
 
+        //}
         internal static double GetSlopeAngleNoDirection(this EdgeLine line)
         {
             return Math.Abs(Math.Atan2(Math.Abs(line.y1 - line.y0), Math.Abs(line.x1 - line.x0)));
         }
-
+        internal static float GetVerticalFitDiff(this EdgeLine line)
+        {
+            return line.GetMidPoint().Y - line._newFitY;
+        }
         internal static bool ContainsTriangle(this EdgeLine edge, GlyphTriangle p)
         {
             return (p.e0 == edge ||

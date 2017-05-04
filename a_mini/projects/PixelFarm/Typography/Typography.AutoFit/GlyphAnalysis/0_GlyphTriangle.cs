@@ -64,10 +64,14 @@ namespace Typography.Rendering
                 }
                 else
                 {
-                    //1 outside edge
-                    //2 inside edges
+                    //d0, d1=>inside
+                    //d2 => outside ***
+
+                    //1 outside edge (d2)
+                    //2 inside edges (d0,d1)
                     //find a perpendicular line
-                    FindPerpendicular_1(d2, d0, d1);
+                    FindPerpendicular(d2, d0);
+                    FindPerpendicular(d2, d1);
                 }
             }
             else if (d2.IsInside)
@@ -78,48 +82,27 @@ namespace Typography.Rendering
                 }
                 else
                 {
-                    //2 inside edges
-                    FindPerpendicular_1(d1, d0, d2);
+                    //1 outside edge (d1)
+                    //2 inside edges (d0,d2)
+                    FindPerpendicular(d1, d0);
+                    FindPerpendicular(d1, d2);
                 }
             }
         }
-        void FindPerpendicular_1(EdgeLine outsideEdge, EdgeLine inside0, EdgeLine inside1)
+        void FindPerpendicular(EdgeLine outsideEdge, EdgeLine inside)
         {
-            System.Numerics.Vector2 m0 = inside0.GetMidPoint();
+            System.Numerics.Vector2 m0 = inside.GetMidPoint();
             System.Numerics.Vector2 cut_fromM0;
-            bool foundOnePerpendicularLine = false;
-            //
             if (MyMath.FindPerpendicularCutPoint(outsideEdge, new System.Numerics.Vector2(m0.X, m0.Y), out cut_fromM0))
             {
-                foundOnePerpendicularLine = true;
-                outsideEdge.SetControlEdge(inside1, cut_fromM0, (float)(m0 - cut_fromM0).Length());
+                inside.SetOutsideEdge(outsideEdge, cut_fromM0, (float)(m0 - cut_fromM0).Length());
+                outsideEdge.SetControlEdge(inside);
             }
             else
             {
 
             }
-            //------
-            System.Numerics.Vector2 m1 = inside1.GetMidPoint();
-            System.Numerics.Vector2 cut_fromM1;
-            if (MyMath.FindPerpendicularCutPoint(outsideEdge, new System.Numerics.Vector2(m1.X, m1.Y), out cut_fromM1))
-            {
-                foundOnePerpendicularLine = true;
-                outsideEdge.SetControlEdge(inside1, cut_fromM1, (float)(m1 - cut_fromM1).Length()); 
-            }
-            else
-            {
-
-            }
-            //------
-            if (!foundOnePerpendicularLine)
-            {
-
-            }
-
-            //all edges are analyzed
-            outsideEdge._earlyInsideAnalysis =
-                inside0._earlyInsideAnalysis =
-                inside1._earlyInsideAnalysis = true;
+            outsideEdge._earlyInsideAnalysis = inside._earlyInsideAnalysis = true;
 
         }
         EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
