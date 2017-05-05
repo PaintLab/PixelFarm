@@ -192,27 +192,26 @@ namespace Typography.Rendering
                 GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
             }
         } 
-        internal void ApplyFitPositions()
-        {
+//        internal void ApplyFitPositions()
+//        {
 
-            //after GlyphBone is adjust to the new fit grid
-            //we adjust each GlyphEdge adn GlyphPoint 
-            useNewEdgeCutPointFromMasterOutline = false;
-            int j = flattenPoints.Count;
-#if DEBUG
-            for (int i = 0; i < j; ++i)
-            {
-                flattenPoints[i].dbugClearLastFit();
-            }
-#endif
-            for (int i = 0; i < j; ++i)
-            {
-                flattenPoints[i].ApplyNewFitEdge();
-            }
+//            //after GlyphBone is adjust to the new fit grid
+//            //we adjust each GlyphEdge adn GlyphPoint 
+//            useNewEdgeCutPointFromMasterOutline = false;
+//            int j = flattenPoints.Count;
+//#if DEBUG
+//            for (int i = 0; i < j; ++i)
+//            {
+//                flattenPoints[i].dbugClearLastFit();
+//            }
+//#endif
+//            for (int i = 0; i < j; ++i)
+//            {
+//                flattenPoints[i].ApplyNewFitEdge();
+//            }
 
-            //----------
-
-        }
+//            //---------- 
+//        }
         internal void ApplyFitPositions2()
         {
 

@@ -42,7 +42,7 @@ namespace Typography.Rendering
             //1. lower
             //int floor = ((int)(value / gridSize) * gridSize);
             int floor = (int)value;
-            floorRemaining = value - floor; 
+            floorRemaining = value - floor;
 
             if (floorRemaining >= (1 / 2f) * gridSize)
             {
@@ -56,6 +56,7 @@ namespace Typography.Rendering
                 diff = result - value;
                 return result;
             }
+
         }
         internal static int FitToGrid(float value, int gridSize)
         {
@@ -220,8 +221,8 @@ namespace Typography.Rendering
         {
             if (bone.JointB != null)
             {
-                var a_pos = bone.JointA.Position;
-                var b_pos = bone.JointB.Position;
+                var a_pos = bone.JointA.OriginalJointPos;
+                var b_pos = bone.JointB.OriginalJointPos;
 
                 min = Vector2.Min(a_pos, b_pos);
                 max = Vector2.Max(a_pos, b_pos);
@@ -229,7 +230,7 @@ namespace Typography.Rendering
             }
             else if (bone.TipEdge != null)
             {
-                var a_pos = bone.JointA.Position;
+                var a_pos = bone.JointA.OriginalJointPos;
                 var tip_pos = bone.TipEdge.GetMidPoint();
                 min = Vector2.Min(a_pos, tip_pos);
                 max = Vector2.Max(a_pos, tip_pos);
@@ -251,8 +252,8 @@ namespace Typography.Rendering
             if (bone.JointB != null)
             {
                 cutPoint = FindPerpendicularCutPoint(
-                  bone.JointA.Position,
-                  bone.JointB.Position,
+                  bone.JointA.OriginalJointPos,
+                  bone.JointB.OriginalJointPos,
                   p);
                 //find min /max
                 Vector2 min, max;
@@ -265,7 +266,7 @@ namespace Typography.Rendering
                 if (bone.TipEdge != null)
                 {
                     cutPoint = FindPerpendicularCutPoint(
-                        bone.JointA.Position,
+                        bone.JointA.OriginalJointPos,
                         bone.TipEdge.GetMidPoint(),
                         p);
                     Vector2 min, max;

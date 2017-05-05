@@ -57,17 +57,19 @@ namespace Typography.Rendering
         /// <param name="gridH"></param>
         public void ApplyGridBox(int gridW, int gridH)
         {
+
             int j = bones.Count;
             for (int i = 0; i < j; ++i)
             {
                 GlyphBone bone = bones[i];
+                var pre = bone.SlopeKind;
                 GlyphBoneJoint jointA = bone.JointA;
-                Vector2 jointPos = jointA.Position;
+                Vector2 jointPos = jointA.OriginalJointPos;
                 jointA.SetFitXY(MyMath.FitToGrid(jointPos.X, gridW), MyMath.FitToGrid(jointPos.Y, gridH));
                 if (bone.JointB != null)
                 {
                     GlyphBoneJoint jointB = bone.JointB;
-                    jointPos = jointB.Position;
+                    jointPos = jointB.OriginalJointPos;
                     jointB.SetFitXY(MyMath.FitToGrid(jointPos.X, gridW), MyMath.FitToGrid(jointPos.Y, gridH));
                 }
                 else if (bone.TipEdge != null)
@@ -75,16 +77,33 @@ namespace Typography.Rendering
                     //set info to tip pos?
 
                 }
+                bone.EvaluateSlope(); 
             }
+            //int j = _joints.Count;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    GlyphBoneJoint joint = _joints[i];
+            //    Vector2 jointPos = joint.OriginalJointPos;
+            //    joint.SetFitXY(MyMath.FitToGrid(jointPos.X, gridW), MyMath.FitToGrid(jointPos.Y, gridH));
+            //}
+            ////average joint pos again
+            //j = bones.Count;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    GlyphBone bone = bones[i];
+            //    bone.EvaluateSlope();
+            //}
             //--------------------------------------------------
             //after apply grid box to each bone
             //the we evaluate slope kind of each bone , and arrange bone group again 
             //--------------------------------------------------
-            AnalyzeBoneGroups(); 
+            AnalyzeBoneGroups();
         }
         void AnalyzeBoneGroups()
         {
-            int j = bones.Count; 
+            int j = bones.Count;
+
+
             this.boneGroups = new List<BoneGroup>();
             BoneGroup boneGroup = new BoneGroup();
             boneGroup.slopeKind = LineSlopeKind.Other;
@@ -117,6 +136,8 @@ namespace Typography.Rendering
             }
             //-----------------
             j = this.boneGroups.Count;
+
+
             for (int i = 0; i < j; ++i)
             {
                 BoneGroup bonegroup = this.boneGroups[i];
@@ -133,7 +154,7 @@ namespace Typography.Rendering
                     {
                         GlyphBone bone = bones[startAt];
                         //collect all outside edge arround  glyph bone
-                        bone.CollectOutsideEdge(LineSlopeKind.Horizontal, outsideEdges);
+                        bone.CollectOutsideEdge(outsideEdges);
                         startAt++;
                     }
                     if (outsideEdges.Count > 0)
@@ -580,7 +601,7 @@ namespace Typography.Rendering
             }
             otherConnectedLineHubs.Add(anotherHub);
         }
-       
+
         CentroidLine anotherCentroidLine;
         GlyphBoneJoint foundOnJoint;
 
@@ -618,7 +639,7 @@ namespace Typography.Rendering
             {
                 //TODO: review here
                 //use jointA of bone of join B of bone
-                return bones[0].JointA.Position;
+                return bones[0].JointA.OriginalJointPos;
             }
         }
 
@@ -663,7 +684,7 @@ namespace Typography.Rendering
             {
                 //select 1
                 //nearest distance (pos to joint a) or (pos to joint b) 
-                return MyMath.MinDistanceFirst(pos, foundOnA.Position, foundOnB.Position) ? foundOnA : foundOnB;
+                return MyMath.MinDistanceFirst(pos, foundOnA.OriginalJointPos, foundOnB.OriginalJointPos) ? foundOnA : foundOnB;
             }
             else if (foundOnA != null)
             {

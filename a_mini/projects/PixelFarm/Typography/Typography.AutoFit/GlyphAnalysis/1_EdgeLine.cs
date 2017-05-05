@@ -25,16 +25,11 @@ namespace Typography.Rendering
         internal EdgeLine contactToEdge;
         internal GlyphBoneJoint inside_joint;
 
-
-        //---
-        EdgeLine _oppositeEdge; //on another tri
         EdgeLine _ctrlEdge_P;
         EdgeLine _ctrlEdge_Q;
         internal float _newFitX;
         internal float _newFitY;
-        internal bool _analyzeFitPlan;
-        public bool _hasNewFitValues;
-
+         
 
 #if DEBUG
         public static int s_dbugTotalId;
@@ -245,7 +240,7 @@ namespace Typography.Rendering
             return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
         }
 
-        public Vector2 GetFitPos() { return new Vector2(_newFitX, _newFitY); }
+
 
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);

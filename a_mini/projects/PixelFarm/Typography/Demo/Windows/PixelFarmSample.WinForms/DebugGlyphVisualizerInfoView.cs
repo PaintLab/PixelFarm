@@ -295,7 +295,7 @@ namespace SampleWinForms.UI
             //-------------- 
             EdgeLine p_contactEdge = joint.dbugGetEdge_Q();
             //mid point
-            var jointPos = joint.Position;
+            var jointPos = joint.OriginalJointPos;
             //painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
 
             TreeNode jointNode = new TreeNode() { Tag = new NodeInfo(joint) };
@@ -485,7 +485,7 @@ namespace SampleWinForms.UI
             public NodeInfo(GlyphBoneJoint joint)
             {
                 this.joint = joint;
-                this.pos = joint.Position;
+                this.pos = joint.OriginalJointPos;
                 this.NodeKind = NodeInfoKind.Joint;
             }
             public NodeInfo(GlyphBone bone, GlyphBoneJoint a, GlyphBoneJoint b)

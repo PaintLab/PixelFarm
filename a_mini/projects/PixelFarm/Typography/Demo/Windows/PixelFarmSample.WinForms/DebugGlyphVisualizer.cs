@@ -360,83 +360,18 @@ namespace SampleWinForms.UI
                         //---------   
                         if (this.DrawPerpendicularLine)
                         {
-
-
                             DrawPerpendicularEdgeControlPoints(painter, glyphEdge);
-
-                            //{
-                            //    //p
-                            //    AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
-                            //    PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
-                            //    switch (p_bones.CutPointKind)
-                            //    {
-                            //        case BoneCutPointKind.MoreThanOnePerpendicularBones:
-                            //            cc = PixelFarm.Drawing.Color.Magenta;
-                            //            break;
-                            //        case BoneCutPointKind.NotPendicularCutPoint:
-                            //            cc = PixelFarm.Drawing.Color.Aqua;
-                            //            break;
-                            //        case BoneCutPointKind.PerpendicularToBoneGroup:
-                            //            cc = PixelFarm.Drawing.Color.Green;
-                            //            break;
-                            //    }
-                            //    Vector2 v2 = new Vector2(q.x, q.y);
-                            //    Vector2 cutpoint = p_bones.CutPoint;
-
-                            //    painter.Line(
-                            //        v2.X * _pxscale, v2.Y * _pxscale,
-                            //        cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                            //        cc);
-                            //}
-
-                            //{
-                            //    //q
-                            //    AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
-                            //    PixelFarm.Drawing.Color cc = PixelFarm.Drawing.Color.Red;
-                            //    switch (q_bones.CutPointKind)
-                            //    {
-                            //        case BoneCutPointKind.MoreThanOnePerpendicularBones:
-                            //            cc = PixelFarm.Drawing.Color.Magenta;
-                            //            break;
-                            //        case BoneCutPointKind.NotPendicularCutPoint:
-                            //            cc = PixelFarm.Drawing.Color.Aqua;
-                            //            break;
-                            //        case BoneCutPointKind.PerpendicularToBoneGroup:
-                            //            cc = PixelFarm.Drawing.Color.Green;
-                            //            break;
-                            //    }
-                            //    Vector2 v2 = new Vector2(p.x, p.y);
-                            //    Vector2 cutpoint = q_bones.CutPoint;
-                            //    painter.Line(
-                            //        v2.X * _pxscale, v2.Y * _pxscale,
-                            //        cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
-                            //        cc);
-                            //}
                         }
-                    }
-
+                    } 
                 }
             }
             else
             {
-                //inside edge
-                //switch (edge.SlopeKind)
-                //{
-                //    default:
-                //        painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
-                //        break;
-                //    case LineSlopeKind.Vertical:
-                //        painter.StrokeColor = PixelFarm.Drawing.Color.Blue;
-                //        break;
-                //    case LineSlopeKind.Horizontal:
-                //        painter.StrokeColor = PixelFarm.Drawing.Color.Yellow;
-                //        break;
-                //}
-
-                painter.Line(edge.x0 * _pxscale, edge.y0 * _pxscale, edge.x1 * _pxscale, edge.y1 * _pxscale, PixelFarm.Drawing.Color.Gray);
-                //draw control point of this edge
-                Vector2 fitpos = edge.GetFitPos();
-                painter.FillRectLBWH(fitpos.X * _pxscale, fitpos.Y * _pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
+                //draw inside edge 
+                painter.Line(
+                    edge.x0 * _pxscale, edge.y0 * _pxscale,
+                    edge.x1 * _pxscale, edge.y1 * _pxscale,
+                    PixelFarm.Drawing.Color.Gray);
 
             }
         }
@@ -469,8 +404,8 @@ namespace SampleWinForms.UI
                     foundSomePerpendicularEdge = true;
                 }
 
-                Vector2 e0_fitpos = internalEdgeLine.ControlEdge_P.GetFitPos() * _pxscale;
-                Vector2 e1_fitpos = internalEdgeLine.ControlEdge_Q.GetFitPos() * _pxscale;
+                //Vector2 e0_fitpos = internalEdgeLine.ControlEdge_P.GetFitPos() * _pxscale;
+                //Vector2 e1_fitpos = internalEdgeLine.ControlEdge_Q.GetFitPos() * _pxscale;
 
                 //painter.Line(
                 //      e0_fitpos.X, e0_fitpos.Y,
@@ -514,7 +449,7 @@ namespace SampleWinForms.UI
             //-------------- 
             EdgeLine p_contactEdge = joint.dbugGetEdge_P();
             //mid point
-            Vector2 jointPos = joint.Position * _pxscale;//scaled joint pos
+            Vector2 jointPos = joint.OriginalJointPos * _pxscale;//scaled joint pos
             painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);
             if (joint.TipEdgeP != null)
             {
@@ -587,8 +522,8 @@ namespace SampleWinForms.UI
             if (jointA != null && jointB != null)
             {
 
-                Vector2 jointAPoint = jointA.Position;
-                Vector2 jointBPoint = jointB.Position;
+                Vector2 jointAPoint = jointA.OriginalJointPos;
+                Vector2 jointBPoint = jointB.OriginalJointPos;
 
                 painter.Line(
                       jointAPoint.X * pxscale, jointAPoint.Y * pxscale,
@@ -597,10 +532,10 @@ namespace SampleWinForms.UI
 
                 if (this.DrawDynamicOutline)
                 {
-
+                    //****
                     painter.Line(
-                        jointA.newX * pxscale, jointA.newY * pxscale,
-                        jointB.newX * pxscale, jointB.newY * pxscale,
+                        jointA.FitX * pxscale, jointA.FitY * pxscale,
+                        jointB.FitX * pxscale, jointB.FitY * pxscale,
                         PixelFarm.Drawing.Color.White);
                 }
 
@@ -610,7 +545,7 @@ namespace SampleWinForms.UI
             }
             if (jointA != null && bone.TipEdge != null)
             {
-                Vector2 jointAPoint = jointA.Position;
+                Vector2 jointAPoint = jointA.OriginalJointPos;
                 Vector2 mid = bone.TipEdge.GetMidPoint();
 
                 painter.Line(
@@ -707,7 +642,7 @@ namespace SampleWinForms.UI
                 //this line hub is connected with other line hub at joint
                 if (joint != null)
                 {
-                    Vector2 joint_pos = joint.Position;
+                    Vector2 joint_pos = joint.OriginalJointPos;
                     painter.Line(
                             joint_pos.X * _pxscale, joint_pos.Y * _pxscale,
                             centerX * _pxscale, centerY * _pxscale,
