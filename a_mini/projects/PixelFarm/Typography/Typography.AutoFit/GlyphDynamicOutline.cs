@@ -13,6 +13,7 @@ namespace Typography.Rendering
         internal List<GlyphContour> _contours;
         List<GlyphBone> _longVerticalBones;
         List<CentroidLineHub> _centroidLineHubs;
+        List<CentroidLine> _allCentroidLines;
         List<GlyphBone> _allBones;
         /// <summary>
         /// offset in pixel unit from master outline, accept + and -
@@ -47,12 +48,14 @@ namespace Typography.Rendering
         void LoadGlyphBones()
         {
             _allBones = new List<GlyphBone>();
+            _allCentroidLines = new List<CentroidLine>();
             int j = _centroidLineHubs.Count;
             for (int i = 0; i < j; ++i)
             {
                 CentroidLineHub hub = _centroidLineHubs[i];
                 foreach (CentroidLine line in hub.GetAllCentroidLines().Values)
                 {
+                    _allCentroidLines.Add(line);
                     //*** 
                     //all bones in a centroid
                     _allBones.AddRange(line.bones);
@@ -66,41 +69,192 @@ namespace Typography.Rendering
             this.GridBoxWidth = gridBoxW;
 
 
+            int centroidLineCount = _allCentroidLines.Count;
+            //apply to line hub
+            for (int i = 0; i < centroidLineCount; ++i)
+            {
+                CentroidLine line = _allCentroidLines[i];
+                List<List<EdgeLine>> sel_H_edges = line.selectedHorizontalEdges;
+                if (sel_H_edges != null)
+                {
+                    //apply gridBoxW and H per 'stem group'
+                    int n = sel_H_edges.Count;
+                    for (int m = 0; m < n; ++m)
+                    {
+                        //all edge lines in this list are
+                        //selected horizontal edges
+                        List<EdgeLine> h_edges = sel_H_edges[m];
+                        int edgeCount = h_edges.Count;
 
-            //fit bone to grid 
-            int j = _allBones.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                GlyphBone bone = _allBones[i];
-                GlyphBoneJoint jointA = bone.JointA;
-                Vector2 jointPos = jointA.Position;
-                jointA.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
-                if (bone.JointB != null)
-                {
-                    GlyphBoneJoint jointB = bone.JointB;
-                    jointPos = jointB.Position;
-                    jointB.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
+                        //we need to calculate the avg of the glyph point
+                        //and add a total summary to this
+                        float diffTotal = 0;
+
+                        float min_diff = float.MaxValue;
+                        float max_diff = float.MinValue;
+
+                        for (int e = 0; e < edgeCount; ++e)
+                        {
+                            EdgeLine ee = h_edges[e];
+                            GlyphPoint p_pnt = ee.GlyphPoint_P;
+                            GlyphPoint q_pnt = ee.GlyphPoint_Q;
+
+                            //this version we focus on vertical hint only 
+
+                            float floorRemaining, diff;
+                            MyMath.FitToGrid2(p_pnt.y * pxScale, 1, out floorRemaining, out diff);
+                            if (diff < min_diff)
+                            {
+                                min_diff = diff;
+                            }
+                            if (diff > max_diff)
+                            {
+                                max_diff = diff;
+                            }
+                            diffTotal += Math.Abs(diff);
+                            //
+                            //evaluate diff
+                            //
+                            MyMath.FitToGrid2(q_pnt.y * pxScale, 1, out floorRemaining, out diff);
+                            if (diff < min_diff)
+                            {
+                                min_diff = diff;
+                            }
+                            if (diff > max_diff)
+                            {
+                                max_diff = diff;
+                            }
+                            diffTotal += Math.Abs(diff);
+                        }
+
+                        float avg_ydiff = diffTotal / (edgeCount * 2);
+                        //compare abs max /min 
+                        
+                        if (Math.Abs(min_diff) > max_diff && min_diff < 0)
+                        {
+                            avg_ydiff = -avg_ydiff;
+                        }
+
+
+                        //distribute all adjust value to specific glyph points
+                        for (int e = 0; e < edgeCount; ++e)
+                        {
+                            EdgeLine ee = h_edges[e];
+                            GlyphPoint p_pnt = ee.GlyphPoint_P;
+                            GlyphPoint q_pnt = ee.GlyphPoint_Q;
+                            p_pnt.fit_NewX = p_pnt.x * pxScale;
+                            p_pnt.fit_NewY = (p_pnt.y * pxScale) + avg_ydiff;
+                            p_pnt.fit_analyzed = true;
+                            //
+                            q_pnt.fit_NewX = q_pnt.x * pxScale;
+                            q_pnt.fit_NewY = (q_pnt.y * pxScale) + avg_ydiff;
+                            q_pnt.fit_analyzed = true;
+                            //
+                        }
+
+
+#if DEBUG
+                        //if ((diffTotal / (edgeCount * 2)) > 1)
+                        //{
+
+                        //}
+                        //Console.WriteLine("ydiff:" + m + " =" + (diffTotal / (edgeCount * 2)));
+#endif
+                    }
                 }
-                else
-                {
-                    //this is tip
-                    //add information about tip too 
-                }
             }
-            //--------------------------------------------
-            //after all bones are fit, then => add fit hint to each contour
-            List<GlyphContour> cnts = _contours;
-            j = cnts.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                cnts[i].CreateFitPlan();
-            }
-            for (int i = 0; i < j; ++i)
-            {
-                cnts[i].ApplyFitPositions();
-            }
+            ////---------------------------------------------
+            ////fit bone to grid 
+            //int j = _allBones.Count;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    GlyphBone bone = _allBones[i];
+            //    GlyphBoneJoint jointA = bone.JointA;
+            //    Vector2 jointPos = jointA.Position;
+            //    jointA.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
+            //    if (bone.JointB != null)
+            //    {
+            //        GlyphBoneJoint jointB = bone.JointB;
+            //        jointPos = jointB.Position;
+            //        jointB.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
+            //    }
+            //    else
+            //    {
+            //        //this is tip
+            //        //add information about tip too 
+            //    }
+            //}
+            ////--------------------------------------------
+            ////after all bones are fit, then => add fit hint to each contour
+            //List<GlyphContour> cnts = _contours;
+            //j = cnts.Count;
+
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    cnts[i].ApplyFitPositions2();
+            //}
         }
 
+        //public void ApplyGridToMasterOutline(int gridBoxW, int gridBoxH)
+        //{
+        //    this.GridBoxHeight = gridBoxH;
+        //    this.GridBoxWidth = gridBoxW;
+
+
+        //    int centroidLineCount = _allCentroidLines.Count;
+        //    //apply to line hub
+        //    for (int i = 0; i < centroidLineCount; ++i)
+        //    {
+        //        CentroidLine line = _allCentroidLines[i];
+        //        List<List<EdgeLine>> sel_H_edges = line.selectedHorizontalEdges;
+        //        if (sel_H_edges != null)
+        //        {
+        //            //apply gridBoxW and H per 'stem group'
+        //            int n = sel_H_edges.Count;
+        //            for (int m = 0; m < n; ++m)
+        //            {
+        //                //all edge lines in this list are
+        //                //selected horizontal edges
+        //                List<EdgeLine> h_edges = sel_H_edges[m];
+        //                int edgeCount = h_edges.Count;
+        //                for (int e = 0; e < edgeCount; ++e)
+        //                {
+
+        //                }
+        //            }
+        //        }
+        //    }
+        //    //---------------------------------------------
+        //    //fit bone to grid 
+        //    int j = _allBones.Count;
+        //    for (int i = 0; i < j; ++i)
+        //    {
+        //        GlyphBone bone = _allBones[i];
+        //        GlyphBoneJoint jointA = bone.JointA;
+        //        Vector2 jointPos = jointA.Position;
+        //        jointA.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
+        //        if (bone.JointB != null)
+        //        {
+        //            GlyphBoneJoint jointB = bone.JointB;
+        //            jointPos = jointB.Position;
+        //            jointB.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
+        //        }
+        //        else
+        //        {
+        //            //this is tip
+        //            //add information about tip too 
+        //        }
+        //    }
+        //    //--------------------------------------------
+        //    //after all bones are fit, then => add fit hint to each contour
+        //    List<GlyphContour> cnts = _contours;
+        //    j = cnts.Count;
+
+        //    for (int i = 0; i < j; ++i)
+        //    {
+        //        cnts[i].ApplyFitPositions();
+        //    }
+        //}
         /// <summary>
         /// new stroke width offset from master outline
         /// </summary>
@@ -498,18 +652,49 @@ namespace Typography.Rendering
                 //1.
                 GlyphPoint p = points[0];
                 float x, y;
-                gridFitterX.GetFitPosX(p, out x);
-                gridFitterY.GetFitPosY(p, out y);
-                tx.MoveTo(x, y);
-
+                if (p.fit_analyzed)
+                {
+                    if (dbugTestNewGridFitting)
+                    {
+                        tx.MoveTo(p.fit_NewX, p.fit_NewY);
+                    }
+                    else
+                    {
+                        tx.MoveTo(p.x * pxscale, p.y * pxscale);
+                    }
+                }
+                else
+                {
+                    //gridFitterX.GetFitPosX(p, out x);
+                    //gridFitterY.GetFitPosY(p, out y);
+                    tx.MoveTo(p.x * pxscale, p.y * pxscale);
+                }
                 //2. others
                 for (int i = 1; i < j; ++i)
                 {
                     //try to fit to grid 
                     p = points[i];
-                    gridFitterX.GetFitPosX(p, out x);
-                    gridFitterY.GetFitPosY(p, out y);
-                    tx.LineTo(x, y);
+                    if (p.fit_analyzed)
+                    {
+
+                        if (dbugTestNewGridFitting)
+                        {
+                            tx.LineTo(p.fit_NewX, p.fit_NewY);
+                        }
+                        else
+                        {
+                            tx.LineTo(p.x * pxscale, p.y * pxscale);
+                        }
+                    }
+                    else
+                    {
+                        tx.LineTo(p.x * pxscale, p.y * pxscale);
+                        //gridFitterX.GetFitPosX(p, out x);
+                        //gridFitterY.GetFitPosY(p, out y);
+                        //tx.LineTo(x, y);
+                    }
+
+
                 }
                 //close 
                 tx.CloseContour();
@@ -551,46 +736,49 @@ namespace Typography.Rendering
                 //we may have a special treatment for vertical axis
 
                 float value = p.y * _scale;
+                //result = value;
+                //return;
+
                 float guide_y = p.newY * _scale;
                 int floor = ((int)(value / _gridSize) * _gridSize);
                 float remaining = value - floor;
                 float halfGrid = _gridSize / 2f;
 
 
-                if (p.isPartOfHorizontalEdge)
-                {
-                    //fit horizontal edge
+                //if (p.isPartOfHorizontalEdge)
+                //{
+                //    //fit horizontal edge
 
-                    if (value < 3)
-                    {
+                //    if (value < 3)
+                //    {
 
-                    }
-                    int ceilling = floor + _gridSize;
+                //    }
+                //    int ceilling = floor + _gridSize;
 
-                    if (value > (floor + halfGrid))
-                    {
-                        //move up
-                    }
-                    else
-                    {
-                        //move down
-                    }
+                //    if (value > (floor + halfGrid))
+                //    {
+                //        //move up
+                //    }
+                //    else
+                //    {
+                //        //move down
+                //    }
 
 
 
-                    result = value + 0.30f;
-                    Console.WriteLine(p.dbugId + " pre: " + value + ",post:" + result);
-                    return;
-                    //if (p.isUpperSide)
-                    //{
-                    //    result = value + 0.125f;
-                    //}
-                    //else
-                    //{
-                    //    result = value - 0.125f;
-                    //}
-                    //return;
-                }
+                //    result = value + 0.30f;
+                //    Console.WriteLine(p.dbugId + " pre: " + value + ",post:" + result);
+                //    return;
+                //    //if (p.isUpperSide)
+                //    //{
+                //    //    result = value + 0.125f;
+                //    //}
+                //    //else
+                //    //{
+                //    //    result = value - 0.125f;
+                //    //}
+                //    //return;
+                //}
 
 
 

@@ -35,7 +35,13 @@ namespace Typography.Rendering
         /// </summary>
         public float newX;
         public float newY;
+        //----------------------------------------
 
+        //temp ***
+        public float fit_NewX;
+        public float fit_NewY;
+        public bool fit_analyzed;
+        //----------------------------------------
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
 

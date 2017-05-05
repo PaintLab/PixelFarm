@@ -19,7 +19,7 @@ namespace Typography.Rendering
         //bone list is created from linking each joint list
         public List<GlyphBone> bones = new List<GlyphBone>();
         List<BoneGroup> boneGroups;
-
+        internal List<List<EdgeLine>> selectedHorizontalEdges;
         internal readonly GlyphTriangle startTri;
 
         internal CentroidLine(GlyphTriangle startTri)
@@ -95,18 +95,24 @@ namespace Typography.Rendering
                 {
                     //this is horizontal group
                     int startAt = bonegroup.startIndex;
+                    if (selectedHorizontalEdges == null)
+                    {
+                        selectedHorizontalEdges = new List<List<EdgeLine>>();
+                    }
                     List<EdgeLine> outsideEdges = new List<EdgeLine>();
-
                     for (int n = 0; n < bonegroup.len; ++n)
                     {
                         GlyphBone bone = bones[startAt];
                         //collect all outside edge arround  glyph bone
-                        bone.CollectOutsideEdge(outsideEdges);
+                        bone.CollectOutsideEdge(LineSlopeKind.Horizontal, outsideEdges);
                         startAt++;
+                    }
+                    if (outsideEdges.Count > 0)
+                    {
+                        selectedHorizontalEdges.Add(outsideEdges);
                     }
                 }
             }
-
         }
 
         struct BoneGroup
@@ -512,9 +518,7 @@ namespace Typography.Rendering
             return (a.GlyphPoint_P == b.GlyphPoint_P ||
                     a.GlyphPoint_P == b.GlyphPoint_Q) &&
                    (a.GlyphPoint_Q == b.GlyphPoint_P ||
-                    a.GlyphPoint_Q == b.GlyphPoint_Q);
-
-
+                    a.GlyphPoint_Q == b.GlyphPoint_Q); 
         }
 
         public Dictionary<GlyphTriangle, CentroidLine> GetAllCentroidLines()

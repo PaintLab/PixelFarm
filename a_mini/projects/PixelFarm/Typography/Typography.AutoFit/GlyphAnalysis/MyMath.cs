@@ -36,6 +36,27 @@ namespace Typography.Rendering
             return (remaining > halfGrid) ? floor + gridSize : floor;
 #endif
         }
+        internal static int FitToGrid2(float value, int gridSize, out float floorRemaining, out float diff)
+        {
+            //fit to grid 
+            //1. lower
+            //int floor = ((int)(value / gridSize) * gridSize);
+            int floor = (int)value;
+            floorRemaining = value - floor; 
+
+            if (floorRemaining >= (1 / 2f) * gridSize)
+            {
+                int result = floor + gridSize;
+                diff = result - value;
+                return result;
+            }
+            else
+            {
+                int result = floor;
+                diff = result - value;
+                return result;
+            }
+        }
         internal static int FitToGrid(float value, int gridSize)
         {
             //fit to grid 
@@ -43,8 +64,8 @@ namespace Typography.Rendering
             int floor = ((int)(value / gridSize) * gridSize);
             //2. midpoint
             float remaining = value - floor;
-
             float halfGrid = gridSize / 2f;
+
             if (remaining >= (2 / 3f) * gridSize)
             {
                 return floor + gridSize;

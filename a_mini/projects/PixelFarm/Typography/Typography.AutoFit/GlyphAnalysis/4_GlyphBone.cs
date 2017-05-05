@@ -226,16 +226,16 @@ namespace Typography.Rendering
         /// <param name="bone"></param>
         /// <param name="outsideEdges"></param>
         /// <returns></returns>
-        public static void CollectOutsideEdge(this GlyphBone bone, System.Collections.Generic.List<EdgeLine> outsideEdges)
+        public static void CollectOutsideEdge(this GlyphBone bone, LineSlopeKind edgeSlopeKind, System.Collections.Generic.List<EdgeLine> outsideEdges)
         {
             if (bone.JointB != null)
             {
                 GlyphTriangle commonTri = FindCommonTriangle(bone.JointA, bone.JointB);
                 if (commonTri != null)
-                {
-                    if (commonTri.e0.IsOutside) { outsideEdges.Add(commonTri.e0); }
-                    if (commonTri.e1.IsOutside) { outsideEdges.Add(commonTri.e1); }
-                    if (commonTri.e2.IsOutside) { outsideEdges.Add(commonTri.e2); }
+                { 
+                    if (commonTri.e0.IsOutside && commonTri.e0.SlopeKind == edgeSlopeKind) { outsideEdges.Add(commonTri.e0); }
+                    if (commonTri.e1.IsOutside && commonTri.e1.SlopeKind == edgeSlopeKind) { outsideEdges.Add(commonTri.e1); }
+                    if (commonTri.e2.IsOutside && commonTri.e2.SlopeKind == edgeSlopeKind) { outsideEdges.Add(commonTri.e2); }
                 }
             }
             else if (bone.TipEdge != null)
@@ -243,7 +243,8 @@ namespace Typography.Rendering
                 outsideEdges.Add(bone.TipEdge);
                 EdgeLine found;
                 if (ContainsEdge(bone.JointA.P_Tri, bone.TipEdge) &&
-                    (found = FindAnotherOutsideEdge(bone.JointA.P_Tri, bone.TipEdge)) != null)
+                    (found = FindAnotherOutsideEdge(bone.JointA.P_Tri, bone.TipEdge)) != null &&
+                    (found.SlopeKind == edgeSlopeKind))
                 {
                     outsideEdges.Add(found);
                 }

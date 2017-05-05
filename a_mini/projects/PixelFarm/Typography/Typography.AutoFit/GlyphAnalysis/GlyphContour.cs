@@ -191,66 +191,29 @@ namespace Typography.Rendering
                 //close edge
                 GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
             }
-        }
-
-
-        static void FindConnectedHorizontalEdge(EdgeLine mainEdge, List<EdgeLine> connectedHorizontalEdges)
+        } 
+        internal void ApplyFitPositions()
         {
-            GlyphTriangle ownerTri = mainEdge.OwnerTriangle;
-            if (ownerTri.N0_IsOpposite)
-            {
 
-            }
-            if (ownerTri.N1_IsOpposite)
-            {
-
-            }
-        }
-        internal void CreateFitPlan()
-        {
-            //check if we have created abstract stem group
-            //this is version when fitting,
-            //we have a special treatment for horiztontal edge
-            //so select it first 
-            //then check if it is a connected group or not 
-            int j = edges.Count;
-
+            //after GlyphBone is adjust to the new fit grid
+            //we adjust each GlyphEdge adn GlyphPoint 
+            useNewEdgeCutPointFromMasterOutline = false;
+            int j = flattenPoints.Count;
+#if DEBUG
             for (int i = 0; i < j; ++i)
             {
-                //create relation between edges 
-                EdgeLine edgeLine = edges[i]._edgeLine;
-                if (!edgeLine._analyzeFitPlan &&
-                    edgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                {
-                    edgeLine._analyzeFitPlan = true;
-                    List<EdgeLine> connectedHorizontalEdges = new List<EdgeLine>();
-                    FindConnectedHorizontalEdge(edgeLine, connectedHorizontalEdges);
-                }
-
-
-                //     List<GlyphEdge> edges = contour.edges;
-                //int j = edges.Count;
-                //if (j > 0)
-                //{
-
-                //    for (int i = 0; i < j; ++i)
-                //    {
-
-                //        EdgeLine edgeLine = edges[i]._edgeLine;
-                //        if (edgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                //        {
-                //            GlyphTriangle ownerTri = edgeLine.OwnerTriangle;
-
-                //        }
-                //    }
-
-                //    //close 
-                //    tx.CloseContour();
-                //}
-
+                flattenPoints[i].dbugClearLastFit();
             }
+#endif
+            for (int i = 0; i < j; ++i)
+            {
+                flattenPoints[i].ApplyNewFitEdge();
+            }
+
+            //----------
+
         }
-        internal void ApplyFitPositions()
+        internal void ApplyFitPositions2()
         {
 
             //after GlyphBone is adjust to the new fit grid
