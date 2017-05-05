@@ -57,42 +57,20 @@ namespace Typography.Rendering
         /// <param name="gridH"></param>
         public void ApplyGridBox(int gridW, int gridH)
         {
+            int j = _joints.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphBoneJoint joint = _joints[i];
+                Vector2 jointPos = joint.OriginalJointPos;
+                joint.SetFitXY(MyMath.FitToGrid(jointPos.X, gridW), MyMath.FitToGrid(jointPos.Y, gridH));
+            }
 
-            int j = bones.Count;
+            j = bones.Count;
             for (int i = 0; i < j; ++i)
             {
                 GlyphBone bone = bones[i];
-                var pre = bone.SlopeKind;
-                GlyphBoneJoint jointA = bone.JointA;
-                Vector2 jointPos = jointA.OriginalJointPos;
-                jointA.SetFitXY(MyMath.FitToGrid(jointPos.X, gridW), MyMath.FitToGrid(jointPos.Y, gridH));
-                if (bone.JointB != null)
-                {
-                    GlyphBoneJoint jointB = bone.JointB;
-                    jointPos = jointB.OriginalJointPos;
-                    jointB.SetFitXY(MyMath.FitToGrid(jointPos.X, gridW), MyMath.FitToGrid(jointPos.Y, gridH));
-                }
-                else if (bone.TipEdge != null)
-                {
-                    //set info to tip pos?
-
-                }
-                bone.EvaluateSlope(); 
+                bone.EvaluateSlope();
             }
-            //int j = _joints.Count;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    GlyphBoneJoint joint = _joints[i];
-            //    Vector2 jointPos = joint.OriginalJointPos;
-            //    joint.SetFitXY(MyMath.FitToGrid(jointPos.X, gridW), MyMath.FitToGrid(jointPos.Y, gridH));
-            //}
-            ////average joint pos again
-            //j = bones.Count;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    GlyphBone bone = bones[i];
-            //    bone.EvaluateSlope();
-            //}
             //--------------------------------------------------
             //after apply grid box to each bone
             //the we evaluate slope kind of each bone , and arrange bone group again 
@@ -115,32 +93,32 @@ namespace Typography.Rendering
                 if (slope != boneGroup.slopeKind)
                 {
                     //add existing to list and create a new group
-                    if (boneGroup.len > 0)
+                    if (boneGroup.count > 0)
                     {
                         this.boneGroups.Add(boneGroup);
                     }
                     //
                     boneGroup = new BoneGroup();
                     boneGroup.startIndex = i;
-                    boneGroup.len++;
+                    boneGroup.count++;
                     boneGroup.slopeKind = slope;
                 }
                 else
                 {
-                    boneGroup.len++;
+                    boneGroup.count++;
                 }
             }
-            if (boneGroup.len > 0)
+            if (boneGroup.count > 0)
             {
                 this.boneGroups.Add(boneGroup);
             }
             //-----------------
             j = this.boneGroups.Count;
 
-
             for (int i = 0; i < j; ++i)
             {
                 BoneGroup bonegroup = this.boneGroups[i];
+
                 if (bonegroup.slopeKind == LineSlopeKind.Horizontal)
                 {
                     //this is horizontal group
@@ -150,7 +128,8 @@ namespace Typography.Rendering
                         selectedHorizontalEdges = new List<List<EdgeLine>>();
                     }
                     List<EdgeLine> outsideEdges = new List<EdgeLine>();
-                    for (int n = 0; n < bonegroup.len; ++n)
+                    //calculate 'fit' length
+                    for (int n = 0; n < bonegroup.count; ++n)
                     {
                         GlyphBone bone = bones[startAt];
                         //collect all outside edge arround  glyph bone
@@ -168,12 +147,13 @@ namespace Typography.Rendering
         struct BoneGroup
         {
             public int startIndex;
-            public int len;
+            public int count;
             public LineSlopeKind slopeKind;
+
 #if DEBUG
             public override string ToString()
             {
-                return slopeKind + ":" + startIndex + ":" + len;
+                return slopeKind + ":" + startIndex + ":" + count;
             }
 #endif
         }
