@@ -492,7 +492,7 @@ namespace Typography.Rendering
             GridFitter gridFitterX = new GridFitter(1, pxscale); //use struct, no alloc on heap
             GridFitter gridFitterY = new GridFitter(1, pxscale);
             List<GlyphPoint> points = contour.flattenPoints;
-            j = points.Count;
+            int j = points.Count;
             if (j > 0)
             {
                 //1.

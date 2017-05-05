@@ -219,35 +219,40 @@ namespace Typography.Rendering
                 return Vector2.Zero;
             }
         }
-        public static EdgeLine FindOutsideEdge(this GlyphBone bone)
+
+        /// <summary>
+        /// find all outside edge a
+        /// </summary>
+        /// <param name="bone"></param>
+        /// <param name="outsideEdges"></param>
+        /// <returns></returns>
+        public static void CollectOutsideEdge(this GlyphBone bone, System.Collections.Generic.List<EdgeLine> outsideEdges)
         {
             if (bone.JointB != null)
             {
                 GlyphTriangle commonTri = FindCommonTriangle(bone.JointA, bone.JointB);
                 if (commonTri != null)
                 {
-                    return GetFirstFoundOutsidEdge(commonTri);
+                    if (commonTri.e0.IsOutside) { outsideEdges.Add(commonTri.e0); }
+                    if (commonTri.e1.IsOutside) { outsideEdges.Add(commonTri.e1); }
+                    if (commonTri.e2.IsOutside) { outsideEdges.Add(commonTri.e2); }
                 }
             }
             else if (bone.TipEdge != null)
             {
-                return FindOutsideEdge(bone.JointA, bone.TipEdge);
+                outsideEdges.Add(bone.TipEdge);
+                EdgeLine found;
+                if (ContainsEdge(bone.JointA.P_Tri, bone.TipEdge) &&
+                    (found = FindAnotherOutsideEdge(bone.JointA.P_Tri, bone.TipEdge)) != null)
+                {
+                    outsideEdges.Add(found);
+                }
+                else if (ContainsEdge(bone.JointA.Q_Tri, bone.TipEdge) &&
+                    (found = FindAnotherOutsideEdge(bone.JointA.Q_Tri, bone.TipEdge)) != null)
+                {
+                    outsideEdges.Add(found);
+                }
             }
-
-            return null;
-
-        }
-        static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
-        {
-            if (ContainsEdge(a.P_Tri, tipEdge))
-            {
-                return FindAnotherOutsideEdge(a.P_Tri, tipEdge);
-            }
-            else if (ContainsEdge(a.Q_Tri, tipEdge))
-            {
-                return FindAnotherOutsideEdge(a.Q_Tri, tipEdge);
-            }
-            return null;
         }
         static EdgeLine FindAnotherOutsideEdge(GlyphTriangle tri, EdgeLine knownOutsideEdge)
         {
@@ -256,6 +261,7 @@ namespace Typography.Rendering
             if (tri.e2.IsOutside && tri.e2 != knownOutsideEdge) { return tri.e2; }
             return null;
         }
+
         static bool ContainsEdge(GlyphTriangle tri, EdgeLine edge)
         {
             return tri.e0 == edge || tri.e1 == edge || tri.e2 == edge;
@@ -277,13 +283,7 @@ namespace Typography.Rendering
             }
         }
 
-        static EdgeLine GetFirstFoundOutsidEdge(GlyphTriangle tri)
-        {
-            if (tri.e0.IsOutside) { return tri.e0; }
-            if (tri.e1.IsOutside) { return tri.e1; }
-            if (tri.e2.IsOutside) { return tri.e2; }
-            return null; //not found               
-        }
+
 
     }
 

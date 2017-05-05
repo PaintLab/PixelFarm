@@ -110,17 +110,13 @@ namespace Typography.Rendering
                 AssignPointEdgeInvolvement(tri, tri.e1);
                 AssignPointEdgeInvolvement(tri, tri.e2);
             }
-
-
-            //
-
-
+          
 
 
             //convert intermediate outline to dynamic outline
             return new GlyphDynamicOutline(intermediateOutline);
         }
-
+        
 
         /// <summary>
         /// create polygon from GlyphContour
@@ -226,9 +222,7 @@ namespace Typography.Rendering
                             {
                                 //found this edge
                                 //store edge line
-                                ownerTri.N1_IsOpposite = true;
-                                edge.OppositeEdge = oppEdge;
-                                
+                                ownerTri.N1_IsOpposite = true; 
                             }
                         }
                         GlyphTriangle n2 = ownerTri.N2;

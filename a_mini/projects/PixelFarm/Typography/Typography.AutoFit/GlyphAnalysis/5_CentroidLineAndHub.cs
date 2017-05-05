@@ -18,12 +18,15 @@ namespace Typography.Rendering
         public List<GlyphBoneJoint> _joints = new List<GlyphBoneJoint>();
         //bone list is created from linking each joint list
         public List<GlyphBone> bones = new List<GlyphBone>();
+        List<BoneGroup> boneGroups;
+
         internal readonly GlyphTriangle startTri;
 
         internal CentroidLine(GlyphTriangle startTri)
         {
             this.startTri = startTri;
         }
+
 
         /// <summary>
         /// add a centroid pair
@@ -48,7 +51,76 @@ namespace Typography.Rendering
             }
         }
 
+        public void AnalyzeBoneGroups()
+        {
+            int j = bones.Count;
 
+
+            this.boneGroups = new List<BoneGroup>();
+            BoneGroup boneGroup = new BoneGroup();
+            boneGroup.slopeKind = LineSlopeKind.Other;
+
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphBone bone = bones[i];
+                LineSlopeKind slope = bone.SlopeKind;
+                if (slope != boneGroup.slopeKind)
+                {
+                    //add existing to list and create a new group
+                    if (boneGroup.len > 0)
+                    {
+                        this.boneGroups.Add(boneGroup);
+                    }
+                    //
+                    boneGroup = new BoneGroup();
+                    boneGroup.startIndex = i;
+                    boneGroup.len++;
+                    boneGroup.slopeKind = slope;
+                }
+                else
+                {
+                    boneGroup.len++;
+                }
+            }
+            if (boneGroup.len > 0)
+            {
+                this.boneGroups.Add(boneGroup);
+            }
+            //-----------------
+            j = this.boneGroups.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                BoneGroup bonegroup = this.boneGroups[i];
+                if (bonegroup.slopeKind == LineSlopeKind.Horizontal)
+                {
+                    //this is horizontal group
+                    int startAt = bonegroup.startIndex;
+                    List<EdgeLine> outsideEdges = new List<EdgeLine>();
+
+                    for (int n = 0; n < bonegroup.len; ++n)
+                    {
+                        GlyphBone bone = bones[startAt];
+                        //collect all outside edge arround  glyph bone
+                        bone.CollectOutsideEdge(outsideEdges);
+                        startAt++;
+                    }
+                }
+            }
+
+        }
+
+        struct BoneGroup
+        {
+            public int startIndex;
+            public int len;
+            public LineSlopeKind slopeKind;
+#if DEBUG
+            public override string ToString()
+            {
+                return slopeKind + ":" + startIndex + ":" + len;
+            }
+#endif
+        }
         /// <summary>
         /// find nearest joint that contains tri 
         /// </summary>
@@ -85,11 +157,9 @@ namespace Typography.Rendering
 
         readonly GlyphTriangle startTriangle;
         //each centoid line start with main triangle
-
         Dictionary<GlyphTriangle, CentroidLine> _lines = new Dictionary<GlyphTriangle, CentroidLine>();
         //-----------------------------------------------
         List<CentroidLineHub> otherConnectedLineHubs;//connection from other hub***
-
         //-----------------------------------------------
 
 
@@ -477,7 +547,13 @@ namespace Typography.Rendering
             }
             otherConnectedLineHubs.Add(anotherHub);
         }
-
+        public void CreateBoneGroups()
+        {
+            foreach (CentroidLine line in _lines.Values)
+            {
+                line.AnalyzeBoneGroups();
+            }
+        }
 
         CentroidLine anotherCentroidLine;
         GlyphBoneJoint foundOnJoint;
@@ -495,6 +571,7 @@ namespace Typography.Rendering
         {
             return this.otherConnectedLineHubs;
         }
+
     }
 
 

@@ -24,7 +24,7 @@ namespace Typography.Rendering
 
             //1. create triangle list from given DelaunayTriangle polygon.
             CreateTriangleList(polygon);
-            //2. create centroid line hubs
+            //2. create centroid line hubs: 
             CreateCentroidLineHubs();
             //3. create bone joints
             CreateBoneJoints();
@@ -32,6 +32,9 @@ namespace Typography.Rendering
             CreateBones();
             //5. create glyph edges          
             CreateGlyphEdges();
+            //6. create bone groups
+            CreateBoneGroups();
+
         }
         void CreateTriangleList(Polygon polygon)
         {
@@ -39,10 +42,8 @@ namespace Typography.Rendering
             this._dbugpolygon = polygon; //for debug only ***
             EdgeLine.s_dbugTotalId = 0;//reset
 #endif
-            //--------------------
-            //analyze ....
-            //--------------------
-            //1. Generate GlyphTriangle triangle from DelaunayTriangle 
+
+            // Generate GlyphTriangle triangle from DelaunayTriangle 
             foreach (DelaunayTriangle delnTri in polygon.Triangles)
             {
                 delnTri.MarkAsActualTriangle();
@@ -147,7 +148,7 @@ namespace Typography.Rendering
         }
         void CreateBones()
         {
-            
+
             List<GlyphBone> newBones = new List<GlyphBone>();
             int lineHubCount = _lineHubs.Count;
             for (int i = 0; i < lineHubCount; ++i)
@@ -161,14 +162,12 @@ namespace Typography.Rendering
             {
                 _lineHubs[i].CreateBoneLinkBetweenCentroidLine(newBones);
             }
-
-
             _outputVerticalLongBones = new List<GlyphBone>();
+
             AnalyzeBoneLength(newBones, _outputVerticalLongBones);
             //create perpendicular line link from control nodes to glyph bone 
             //----------------------------------------
             _outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
-            //
 
         }
 
@@ -184,6 +183,17 @@ namespace Typography.Rendering
                 contours[i].CreateGlyphEdges();
             }
         }
+
+        void CreateBoneGroups()
+        {
+            //----------------------------------------
+            int lineHubCount = _lineHubs.Count;
+            for (int i = 0; i < lineHubCount; ++i)
+            {
+                _lineHubs[i].CreateBoneGroups();
+            }
+        }
+
         public List<GlyphBone> LongVerticalBones
         {
             get { return this._outputVerticalLongBones; }

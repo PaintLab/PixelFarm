@@ -175,6 +175,14 @@ namespace Typography.Rendering
 
     static class GlyphTriangleExtensions
     {
+        
+        static EdgeLine GetFirstFoundOutsidEdge(GlyphTriangle tri)
+        {
+            if (tri.e0.IsOutside) { return tri.e0; }
+            if (tri.e1.IsOutside) { return tri.e1; }
+            if (tri.e2.IsOutside) { return tri.e2; }
+            return null; //not found               
+        }
         internal static EdgeLine FindOppositeEdge(this GlyphTriangle tri, EdgeLine testEdge)
         {
             //find opposite edge to this testEdge
