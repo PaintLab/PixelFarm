@@ -50,12 +50,41 @@ namespace Typography.Rendering
                 _joints.Add(pairs[i].AnalyzeEdgesAndCreateBoneJoint());
             }
         }
-
-        public void AnalyzeBoneGroups()
+        /// <summary>
+        /// apply grid box to all bones in this line
+        /// </summary>
+        /// <param name="gridW"></param>
+        /// <param name="gridH"></param>
+        public void ApplyGridBox(int gridW, int gridH)
         {
             int j = bones.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphBone bone = bones[i];
+                GlyphBoneJoint jointA = bone.JointA;
+                Vector2 jointPos = jointA.Position;
+                jointA.SetFitXY(MyMath.FitToGrid(jointPos.X, gridW), MyMath.FitToGrid(jointPos.Y, gridH));
+                if (bone.JointB != null)
+                {
+                    GlyphBoneJoint jointB = bone.JointB;
+                    jointPos = jointB.Position;
+                    jointB.SetFitXY(MyMath.FitToGrid(jointPos.X, gridW), MyMath.FitToGrid(jointPos.Y, gridH));
+                }
+                else if (bone.TipEdge != null)
+                {
+                    //set info to tip pos?
 
-
+                }
+            }
+            //--------------------------------------------------
+            //after apply grid box to each bone
+            //the we evaluate slope kind of each bone , and arrange bone group again 
+            //--------------------------------------------------
+            AnalyzeBoneGroups(); 
+        }
+        void AnalyzeBoneGroups()
+        {
+            int j = bones.Count; 
             this.boneGroups = new List<BoneGroup>();
             BoneGroup boneGroup = new BoneGroup();
             boneGroup.slopeKind = LineSlopeKind.Other;
@@ -518,7 +547,7 @@ namespace Typography.Rendering
             return (a.GlyphPoint_P == b.GlyphPoint_P ||
                     a.GlyphPoint_P == b.GlyphPoint_Q) &&
                    (a.GlyphPoint_Q == b.GlyphPoint_P ||
-                    a.GlyphPoint_Q == b.GlyphPoint_Q); 
+                    a.GlyphPoint_Q == b.GlyphPoint_Q);
         }
 
         public Dictionary<GlyphTriangle, CentroidLine> GetAllCentroidLines()
@@ -551,14 +580,7 @@ namespace Typography.Rendering
             }
             otherConnectedLineHubs.Add(anotherHub);
         }
-        public void CreateBoneGroups()
-        {
-            foreach (CentroidLine line in _lines.Values)
-            {
-                line.AnalyzeBoneGroups();
-            }
-        }
-
+       
         CentroidLine anotherCentroidLine;
         GlyphBoneJoint foundOnJoint;
 

@@ -32,8 +32,7 @@ namespace Typography.Rendering
             CreateBones();
             //5. create glyph edges          
             CreateGlyphEdges();
-            //6. create bone groups
-            CreateBoneGroups();
+      
 
         }
         void CreateTriangleList(Polygon polygon)
@@ -184,15 +183,15 @@ namespace Typography.Rendering
             }
         }
 
-        void CreateBoneGroups()
-        {
-            //----------------------------------------
-            int lineHubCount = _lineHubs.Count;
-            for (int i = 0; i < lineHubCount; ++i)
-            {
-                _lineHubs[i].CreateBoneGroups();
-            }
-        }
+        //void CreateBoneGroups()
+        //{
+        //    //----------------------------------------
+        //    int lineHubCount = _lineHubs.Count;
+        //    for (int i = 0; i < lineHubCount; ++i)
+        //    {
+        //        _lineHubs[i].CreateBoneGroups();
+        //    }
+        //}
 
         public List<GlyphBone> LongVerticalBones
         {

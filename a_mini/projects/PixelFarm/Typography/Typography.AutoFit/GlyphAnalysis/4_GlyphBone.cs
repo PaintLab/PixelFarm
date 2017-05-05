@@ -37,6 +37,7 @@ namespace Typography.Rendering
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
             EvaluteSlope(a.Position, bpos);
 
+            //TODO: review this again
             a.AddAssociateGlyphBoneToEndPoint(this);
             b.AddAssociateGlyphBoneToEndPoint(this);
         }
@@ -50,6 +51,7 @@ namespace Typography.Rendering
             EvaluteSlope(a.Position, midPoint);
 
             //--------------------
+            //TODO: review this again
             a.AddAssociateGlyphBoneToEndPoint(this);
             tipEdge.AddAssociateGlyphBoneToEndPoint(this);
         }
@@ -83,18 +85,18 @@ namespace Typography.Rendering
             double x1 = q.X;
             double y1 = q.Y;
 
-            SlopeAngleNoDirection = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
+            double slopeNoDirection = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
             if (x1 == x0)
             {
                 this.SlopeKind = LineSlopeKind.Vertical;
             }
             else
             {
-                if (SlopeAngleNoDirection > MyMath._85degreeToRad)
+                if (slopeNoDirection > MyMath._85degreeToRad)
                 {
                     SlopeKind = LineSlopeKind.Vertical;
                 }
-                else if (SlopeAngleNoDirection < MyMath._03degreeToRad) //_15degreeToRad
+                else if (slopeNoDirection < MyMath._03degreeToRad) //_15degreeToRad
                 {
                     SlopeKind = LineSlopeKind.Horizontal;
                 }
@@ -104,7 +106,7 @@ namespace Typography.Rendering
                 }
             }
         }
-        internal double SlopeAngleNoDirection { get; set; }
+
         public LineSlopeKind SlopeKind { get; set; }
         internal double Length
         {
@@ -232,7 +234,7 @@ namespace Typography.Rendering
             {
                 GlyphTriangle commonTri = FindCommonTriangle(bone.JointA, bone.JointB);
                 if (commonTri != null)
-                { 
+                {
                     if (commonTri.e0.IsOutside && commonTri.e0.SlopeKind == edgeSlopeKind) { outsideEdges.Add(commonTri.e0); }
                     if (commonTri.e1.IsOutside && commonTri.e1.SlopeKind == edgeSlopeKind) { outsideEdges.Add(commonTri.e1); }
                     if (commonTri.e2.IsOutside && commonTri.e2.SlopeKind == edgeSlopeKind) { outsideEdges.Add(commonTri.e2); }

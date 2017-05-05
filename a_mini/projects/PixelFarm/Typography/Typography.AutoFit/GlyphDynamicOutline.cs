@@ -70,6 +70,15 @@ namespace Typography.Rendering
 
 
             int centroidLineCount = _allCentroidLines.Count;
+
+            for (int i = 0; i < centroidLineCount; ++i)
+            {
+                CentroidLine line = _allCentroidLines[i];
+                //apply new grid to this centroid line
+                line.ApplyGridBox(gridBoxW, gridBoxH);
+            }
+
+
             //apply to line hub
             for (int i = 0; i < centroidLineCount; ++i)
             {
@@ -129,7 +138,7 @@ namespace Typography.Rendering
 
                         float avg_ydiff = diffTotal / (edgeCount * 2);
                         //compare abs max /min 
-                        
+
                         if (Math.Abs(min_diff) > max_diff && min_diff < 0)
                         {
                             avg_ydiff = -avg_ydiff;
@@ -163,36 +172,8 @@ namespace Typography.Rendering
                     }
                 }
             }
-            ////---------------------------------------------
-            ////fit bone to grid 
-            //int j = _allBones.Count;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    GlyphBone bone = _allBones[i];
-            //    GlyphBoneJoint jointA = bone.JointA;
-            //    Vector2 jointPos = jointA.Position;
-            //    jointA.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
-            //    if (bone.JointB != null)
-            //    {
-            //        GlyphBoneJoint jointB = bone.JointB;
-            //        jointPos = jointB.Position;
-            //        jointB.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
-            //    }
-            //    else
-            //    {
-            //        //this is tip
-            //        //add information about tip too 
-            //    }
-            //}
-            ////--------------------------------------------
-            ////after all bones are fit, then => add fit hint to each contour
-            //List<GlyphContour> cnts = _contours;
-            //j = cnts.Count;
 
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    cnts[i].ApplyFitPositions2();
-            //}
+
         }
 
         //public void ApplyGridToMasterOutline(int gridBoxW, int gridBoxH)
