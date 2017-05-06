@@ -67,8 +67,8 @@ namespace Typography.Rendering
         public void ApplyGridToMasterOutline(int gridBoxW, int gridBoxH)
         {
             this.GridBoxHeight = gridBoxH;
-            this.GridBoxWidth = gridBoxW; 
-            int centroidLineCount = _allCentroidLines.Count; 
+            this.GridBoxWidth = gridBoxW;
+            int centroidLineCount = _allCentroidLines.Count;
             BoneGroupStatisticCollector statCollector = new BoneGroupStatisticCollector();
             for (int i = 0; i < centroidLineCount; ++i)
             {
@@ -81,14 +81,18 @@ namespace Typography.Rendering
             }
 
             //analyze bone group (stem) as a whole
-            statCollector.AnalyzeBoneGroups(); 
+            statCollector.AnalyzeBoneGroups();
 
             for (int i = 0; i < centroidLineCount; ++i)
             {
                 _allCentroidLines[i].CollectOutsideEdges();
             }
-            //analyze bone group (stem) as a whole
-             
+
+            //assign fit y pos in order
+
+
+
+
 
             //apply to line hub
             for (int i = 0; i < centroidLineCount; ++i)
@@ -103,7 +107,9 @@ namespace Typography.Rendering
                     {
                         //all edge lines in this list are
                         //selected horizontal edges
-                        EdgeLine[] h_edges = sel_H_edges[m].edges;
+                        BoneGroup boneGroup = sel_H_edges[m];
+                        EdgeLine[] h_edges = boneGroup.edges;
+
                         int edgeCount = h_edges.Length;
 
                         //we need to calculate the avg of the glyph point

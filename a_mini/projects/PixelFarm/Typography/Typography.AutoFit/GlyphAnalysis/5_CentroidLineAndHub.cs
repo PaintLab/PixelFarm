@@ -153,7 +153,27 @@ namespace Typography.Rendering
                     //
                     if (tmpEdges.Count > 0)
                     {
-                        bonegroup.edges = tmpEdges.ToArray();
+                        EdgeLine[] edges = tmpEdges.ToArray();
+                        bonegroup.edges = edges;
+                        //find minY and maxY for vertical fit
+                        float minY = float.MaxValue;
+                        float maxY = float.MinValue;
+                        for (int e = edges.Length - 1; e >= 0; --e)
+                        {
+                            EdgeLine edge = edges[e];
+                            Vector2 midPos = edge.GetMidPoint();
+                            if (midPos.Y < minY)
+                            {
+                                minY = midPos.Y;
+                            }
+                            if (midPos.Y > maxY)
+                            {
+                                maxY = midPos.Y;
+                            }
+                        }
+                        //-------------------
+                        bonegroup.minY = minY;
+                        bonegroup.maxY = maxY;
                         selectedHorizontalBoneGroups.Add(bonegroup);
                     }
                 }
@@ -247,8 +267,9 @@ namespace Typography.Rendering
         public LineSlopeKind slopeKind;
         public float virtFitLen;
         public float y_pos;//avg
+        public float minY;
+        public float maxY;
         public EdgeLine[] edges;
-
         public bool toBeRemoved;
 
 #if DEBUG
