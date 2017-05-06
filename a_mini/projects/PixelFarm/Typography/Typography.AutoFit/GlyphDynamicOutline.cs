@@ -63,27 +63,38 @@ namespace Typography.Rendering
             }
         }
 
+
         public void ApplyGridToMasterOutline(int gridBoxW, int gridBoxH)
         {
             this.GridBoxHeight = gridBoxH;
-            this.GridBoxWidth = gridBoxW;
+            this.GridBoxWidth = gridBoxW; 
+            int centroidLineCount = _allCentroidLines.Count; 
+            BoneGroupStatisticCollector statCollector = new BoneGroupStatisticCollector();
+            for (int i = 0; i < centroidLineCount; ++i)
+            {
+                //apply new grid to this centroid line
+                CentroidLine line = _allCentroidLines[i];
+                line.ApplyGridBox(gridBoxW, gridBoxH);
+                //analyze within the line
+                line.AnalyzeBoneGroups();
+                statCollector.CollectBoneGroup(line);
+            }
 
-
-            int centroidLineCount = _allCentroidLines.Count;
+            //analyze bone group (stem) as a whole
+            statCollector.AnalyzeBoneGroups(); 
 
             for (int i = 0; i < centroidLineCount; ++i)
             {
-                CentroidLine line = _allCentroidLines[i];
-                //apply new grid to this centroid line
-                line.ApplyGridBox(gridBoxW, gridBoxH);
+                _allCentroidLines[i].CollectOutsideEdges();
             }
-
+            //analyze bone group (stem) as a whole
+             
 
             //apply to line hub
             for (int i = 0; i < centroidLineCount; ++i)
             {
                 CentroidLine line = _allCentroidLines[i];
-                List<List<EdgeLine>> sel_H_edges = line.selectedHorizontalEdges;
+                List<BoneGroup> sel_H_edges = line.selectedHorizontalBoneGroups;
                 if (sel_H_edges != null)
                 {
                     //apply gridBoxW and H per 'stem group'
@@ -92,8 +103,8 @@ namespace Typography.Rendering
                     {
                         //all edge lines in this list are
                         //selected horizontal edges
-                        List<EdgeLine> h_edges = sel_H_edges[m];
-                        int edgeCount = h_edges.Count;
+                        EdgeLine[] h_edges = sel_H_edges[m].edges;
+                        int edgeCount = h_edges.Length;
 
                         //we need to calculate the avg of the glyph point
                         //and add a total summary to this

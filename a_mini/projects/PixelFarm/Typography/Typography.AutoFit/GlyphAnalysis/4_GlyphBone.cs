@@ -83,6 +83,28 @@ namespace Typography.Rendering
                 EvaluateSlope(this.JointA.DynamicFitPos, this.TipEdge.GetMidPoint());
             }
         }
+        internal float EvaluateFitLength()
+        {
+            if (this.JointB != null)
+            {
+                return (float)(JointA.DynamicFitPos - JointB.DynamicFitPos).Length();
+            }
+            else
+            {
+                return (float)(JointA.DynamicFitPos - this.TipEdge.GetMidPoint()).Length();
+            }
+        }
+        internal float EvaluateY()
+        {
+            if (this.JointB != null)
+            {
+                return (JointA.DynamicFitPos.Y + JointB.DynamicFitPos.Y) / 2;
+            }
+            else
+            {
+                return (JointA.DynamicFitPos.Y + TipEdge.GetMidPoint().Y) / 2;
+            } 
+        }
         void EvaluateSlope(Vector2 p, Vector2 q)
         {
 
