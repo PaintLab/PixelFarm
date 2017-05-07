@@ -90,26 +90,13 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 GlyphContour cnt = cnts[i];
-                List<EdgeLine> edgeLines = cnt.dbugGetEdges();
-                if (edgeLines != null)
+                List<GlyphPoint> points = cnt.flattenPoints;
+                int n = points.Count;
+                for (int m = 0; m < n; ++m)
                 {
-                    int n = edgeLines.Count;
-                    for (int m = 0; m < n; ++m)
-                    {
-                        OnGlyphEdgeN(edgeLines[m]);
-
-                    }
+                    OnGlyphEdgeN(points[m].InwardEdge);
                 }
-
-            }
-            ////----------------
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    GlyphContour cnt = contours[i];
-            //    List<GlyphPoint> pnts = cnt.flattenPoints;
-            //    //pnts and edges 
-            //    //iterate all glyph points  
-            //}
+            } 
 #endif
 
         }

@@ -43,13 +43,13 @@ namespace Typography.Rendering
         public bool isUpperSide;
 
         /// <summary>
-        /// outside edge0
+        /// outside inward edge
         /// </summary>
-        EdgeLine _e0;
+        EdgeLine _inwardEdge;
         /// <summary>
-        /// outside edge 1
+        /// outside outward edge
         /// </summary>
-        EdgeLine _e1;
+        EdgeLine _outwardEdge;
 
         public GlyphPoint(float x, float y, PointKind kind)
         {
@@ -64,28 +64,41 @@ namespace Typography.Rendering
         public bool IsLeftSide { get; private set; }
         public bool IsPartOfVerticalEdge { get; private set; }
 
-
-        internal EdgeLine E0
+        /// <summary>
+        /// outside inward edge
+        /// </summary>
+        internal EdgeLine InwardEdge
         {
-            get { return this._e0; }
+            get { return this._inwardEdge; }
+            set { _inwardEdge = value; }
         }
-        internal EdgeLine E1
+        /// <summary>
+        /// outside outward edge
+        /// </summary>
+        internal EdgeLine OutwardEdge
         {
-            get { return this._e1; }
+            get { return this._outwardEdge; }
+            set { _outwardEdge = value; }
         }
+         
         /// <summary>         
         /// set outside edge that link with this glyph point
         /// </summary>
         /// <param name="edge">edge must be outside edge</param>
         internal void SetOutsideEdge(EdgeLine edge)
         {
-            if (_e0 == null)
+            //at this stage, we don't known the edge is outward or inward.
+            //so just set it
+            //------------------------------------------
+            //e0 and e1 will be swaped later for this point SetCorrectInwardAndOutWardEdge() ***
+
+            if (_inwardEdge == null)
             {
-                _e0 = edge;
+                _inwardEdge = edge;
             }
-            else if (_e1 == null)
+            else if (_outwardEdge == null)
             {
-                _e1 = edge;
+                _outwardEdge = edge;
             }
             else
             {
@@ -97,12 +110,13 @@ namespace Typography.Rendering
             {
 
             }
-            if (_e0 == _e1)
+            if (_inwardEdge == _outwardEdge)
             {
                 throw new System.NotSupportedException();
             }
 #endif
         }
+
         internal void NotifyVerticalEdge(EdgeLine v_edge)
         {
             //associated 
@@ -119,7 +133,6 @@ namespace Typography.Rendering
         {
             return a.x == b.x && a.y == b.y;
         }
-
 #if DEBUG
 
         public readonly int dbugId = dbugTotalId++;

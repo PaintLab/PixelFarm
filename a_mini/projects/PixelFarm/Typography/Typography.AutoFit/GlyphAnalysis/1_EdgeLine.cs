@@ -159,8 +159,6 @@ namespace Typography.Rendering
                 }
 #endif
                 _ctrlEdge_P = controlEdge;
-                //_ctrlEdge_P_cutAt = cutPoint;
-                //_ctrlEdge_P_cutLen = (float)cutLen; //TODO: review float or double
             }
             else if (_glyphPoint_Q == controlEdge._glyphPoint_P)
             {
@@ -170,8 +168,6 @@ namespace Typography.Rendering
                 }
 #endif
                 _ctrlEdge_Q = controlEdge;
-                //_ctrlEdge_Q_cutAt = cutPoint;
-                //_ctrlEdge_Q_cutLen = (float)cutLen; //TODO: review float or double
             }
             else if (_glyphPoint_Q == controlEdge.GlyphPoint_Q)
             {
@@ -181,8 +177,6 @@ namespace Typography.Rendering
                 }
 #endif
                 _ctrlEdge_Q = controlEdge;
-                //_ctrlEdge_Q_cutAt = cutPoint;
-                //_ctrlEdge_Q_cutLen = (float)cutLen; //TODO: review float or double
             }
             else
             {
@@ -191,7 +185,7 @@ namespace Typography.Rendering
         }
 #if DEBUG
         public bool dbugNoPerpendicularBone { get; set; }
-    
+
 #endif
 
         public GlyphPoint GlyphPoint_P
@@ -274,6 +268,31 @@ namespace Typography.Rendering
             //new dynamic mid point  
             this._newDynamicMidPoint = this.GetMidPoint() + _deltaVector;
         }
+        /// <summary>
+        /// find common edge of 2 glyph points
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        internal static EdgeLine FindCommonOutsideEdge(GlyphPoint p, GlyphPoint q)
+        {
+            if (p.InwardEdge == q.InwardEdge ||
+                p.InwardEdge == q.OutwardEdge)
+            {
+                return p.InwardEdge;
+            }
+            else if (p.OutwardEdge == q.InwardEdge ||
+                     p.OutwardEdge == q.OutwardEdge)
+            {
+                return p.OutwardEdge;
+            }
+            else
+            {
+
+                return null;
+            }
+        }
+
 
     }
 
@@ -284,11 +303,7 @@ namespace Typography.Rendering
         {
             return new Vector2((float)((line.x0 + line.x1) / 2), (float)((line.y0 + line.y1) / 2));
         }
-        //public static Vector2 GetNewEdgeOutsideCutPoint(this EdgeLine line)
-        //{
-        //    return new Vector2(line._ctrlEdge_P_cutAt.X, line._ctrlEdge_Q_cutAt.Y + line.GetVerticalFitDiff());
 
-        //}
         internal static double GetSlopeAngleNoDirection(this EdgeLine line)
         {
             return Math.Abs(Math.Atan2(Math.Abs(line.y1 - line.y0), Math.Abs(line.x1 - line.x0)));
