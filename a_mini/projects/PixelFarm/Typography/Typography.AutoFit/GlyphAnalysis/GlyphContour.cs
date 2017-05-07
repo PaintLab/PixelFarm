@@ -13,7 +13,7 @@ namespace Typography.Rendering
         public List<GlyphPart> parts = new List<GlyphPart>();
 
         internal List<GlyphPoint> flattenPoints; //original flatten points 
-        internal List<GlyphEdge> edges; //for dyanmic outline processing
+        List<EdgeLine> edges; //for dyanmic outline processing
 
         bool analyzed;
         bool analyzedClockDirection;
@@ -127,7 +127,7 @@ namespace Typography.Rendering
         internal void CreateGlyphEdges()
         {
             int lim = flattenPoints.Count - 1;
-            edges = new List<GlyphEdge>();
+            edges = new List<EdgeLine>();
             GlyphPoint p = null, q = null;
             EdgeLine edgeLine = null;
 
@@ -135,33 +135,35 @@ namespace Typography.Rendering
             {
                 p = flattenPoints[i];
                 q = flattenPoints[i + 1];
+
                 if ((edgeLine = FineCommonEdgeLine(p, q)) != null)
                 {
-                    edges.Add(new GlyphEdge(p, q, edgeLine));
+                    edges.Add(edgeLine);
                 }
                 else
                 {
-
+                    //?
                 }
             }
             //close   
             p = flattenPoints[lim];
             q = flattenPoints[0];
+
             if ((edgeLine = FineCommonEdgeLine(p, q)) != null)
             {
-                edges.Add(new GlyphEdge(p, q, edgeLine));
+                edges.Add(edgeLine);
             }
             else
             {
                 //not found
             }
-            int j = edges.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                EdgeLine ed = edges[i].dbugGetInternalEdgeLine();
-                ed.GlyphPoint_P.EvaluatePerpendicularBone();
-                ed.GlyphPoint_Q.EvaluatePerpendicularBone();
-            }
+            //int j = edges.Count;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    EdgeLine ed = edges[i].dbugGetInternalEdgeLine();
+            //    ed.GlyphPoint_P.EvaluatePerpendicularBone();
+            //    ed.GlyphPoint_Q.EvaluatePerpendicularBone();
+            //}
             //
         }
 
@@ -173,7 +175,7 @@ namespace Typography.Rendering
             int j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
-                edges[i].dbugGetInternalEdgeLine().SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
+                edges[i].SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
             }
             //calculate edge cutpoint             
             for (int i = flattenPoints.Count - 1; i >= 0; --i)
@@ -205,27 +207,34 @@ namespace Typography.Rendering
             }
 
         }
-        internal void ApplyFitPositions2()
-        {
-
-            //after GlyphBone is adjust to the new fit grid
-            //we adjust each GlyphEdge adn GlyphPoint 
-            useNewEdgeCutPointFromMasterOutline = false;
-            int j = flattenPoints.Count;
 #if DEBUG
-            for (int i = 0; i < j; ++i)
-            {
-                flattenPoints[i].dbugClearLastFit();
-            }
+
+        public List<EdgeLine> dbugGetEdges() { return this.edges; }
 #endif
-            for (int i = 0; i < j; ++i)
-            {
-                flattenPoints[i].ApplyNewFitEdge();
-            }
+        //        internal void ApplyFitPositions2()
+        //        {
 
-            //----------
-
-        }
+        //            //after GlyphBone is adjust to the new fit grid
+        //            //we adjust each GlyphEdge adn GlyphPoint 
+        //            useNewEdgeCutPointFromMasterOutline = false;
+        //            int j = flattenPoints.Count;
+        //#if DEBUG
+        //            for (int i = 0; i < j; ++i)
+        //            {
+        //                flattenPoints[i].dbugClearLastFit();
+        //            }
+        //#endif
+        //            for (int i = 0; i < j; ++i)
+        //            {
+        //                flattenPoints[i].ApplyNewFitEdge();
+        //            }
+        //        }
+        /// <summary>
+        /// find common edge of 2 glyph points
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="q"></param>
+        /// <returns></returns>
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
         {
             if (p.E0 == q.E0 ||

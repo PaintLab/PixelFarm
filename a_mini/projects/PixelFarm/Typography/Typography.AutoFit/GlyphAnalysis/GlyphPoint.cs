@@ -143,45 +143,40 @@ namespace Typography.Rendering
             _dbugFitSet = false;
         }
 #endif
-        internal void ApplyNewFitEdge()
-        {
+//        internal void ApplyNewFitEdge()
+//        {
 
-#if DEBUG
-            if (_dbugFitSet)
-            {
+ 
+//            EdgeLine e0 = this.E0;
+//            EdgeLine e1 = this.E1;
+//            EdgeLine controlE_ofE0 = e0.GetControlEdgeThatContains(this);
+//            EdgeLine controlE_ofE1 = e1.GetControlEdgeThatContains(this);
+//            float e0DiffY = 0, e1DiffY = 0;
+//            if (controlE_ofE0 != null && controlE_ofE1 != null)
+//            {
+//                e0DiffY = controlE_ofE0.GetVerticalFitDiff();
+//                e1DiffY = controlE_ofE1.GetVerticalFitDiff();
+//                this.newY += (e0DiffY + e1DiffY) / 2;
+//            }
+//            else if (controlE_ofE0 != null)
+//            {
+//                e0DiffY = controlE_ofE0.GetVerticalFitDiff();
+//                this.newY += e0DiffY;
+//            }
+//            else if (controlE_ofE1 != null)
+//            {
+//                e1DiffY = controlE_ofE1.GetVerticalFitDiff();
+//                this.newY += e1DiffY;
+//            }
+//            else
+//            {
+//                //?
 
-            }
-#endif
-            EdgeLine e0 = this.E0;
-            EdgeLine e1 = this.E1;
-            EdgeLine controlE_ofE0 = e0.GetControlEdgeThatContains(this);
-            EdgeLine controlE_ofE1 = e1.GetControlEdgeThatContains(this);
-            float e0DiffY = 0, e1DiffY = 0;
-            if (controlE_ofE0 != null && controlE_ofE1 != null)
-            {
-                e0DiffY = controlE_ofE0.GetVerticalFitDiff();
-                e1DiffY = controlE_ofE1.GetVerticalFitDiff();
-                this.newY += (e0DiffY + e1DiffY) / 2;
-            }
-            else if (controlE_ofE0 != null)
-            {
-                e0DiffY = controlE_ofE0.GetVerticalFitDiff();
-                this.newY += e0DiffY;
-            }
-            else if (controlE_ofE1 != null)
-            {
-                e1DiffY = controlE_ofE1.GetVerticalFitDiff();
-                this.newY += e1DiffY;
-            }
-            else
-            {
-                //?
-
-            }
-#if DEBUG
-            _dbugFitSet = true;
-#endif
-        }
+//            }
+//#if DEBUG
+//            _dbugFitSet = true;
+//#endif
+//        }
 
 #if DEBUG
 
