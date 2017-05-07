@@ -157,13 +157,10 @@ namespace Typography.Rendering
             {
                 //not found
             }
-            for (int i = flattenPoints.Count - 1; i >= 0; --i)
-            {
-                flattenPoints[i].EvaluatePerpendicularBone();
-            }
-        } 
+
+        }
         internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
-        {   
+        {
             int j = edges.Count;
             for (int i = 0; i < j; ++i)
             {

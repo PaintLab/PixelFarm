@@ -194,29 +194,5 @@ namespace Typography.Rendering
 #endif
 
     }
-
-
-
-    static class GlyphBoneJointExtensions
-    {
-        /// <summary>
-        /// distribute associate glyph bone to end point of this joint
-        /// </summary>
-        /// <param name="joint"></param>
-        /// <param name="bone"></param>
-        public static void AddAssociateGlyphBoneToEndPoint(this GlyphBoneJoint joint, GlyphBone bone)
-        {
-            //_p_contact_edge and _q_contact_edge share glyph end (glyph) points
-            //so we select only 1 (to p)            
-
-            AddAssociateGlyphBoneToEndPoint(joint._p_contact_edge, bone);
-        }
-        public static void AddAssociateGlyphBoneToEndPoint(this EdgeLine edge, GlyphBone bone)
-        {
-            //_p_contact_edge and _q_contact_edge share glyph end (glyph) points
-            //so we select only 1 (to p)
-            edge.GlyphPoint_P.AddAssociateBone(bone);
-            edge.GlyphPoint_Q.AddAssociateBone(bone);
-        }
-    }
+     
 }
