@@ -20,14 +20,16 @@ namespace Typography.Rendering
         public List<GlyphBone> bones = new List<GlyphBone>();
         public List<BoneGroup> boneGroups;
         internal List<BoneGroup> selectedHorizontalBoneGroups;
-        internal readonly GlyphTriangle startTri;
 
-        internal CentroidLine(GlyphTriangle startTri)
+
+
+        internal CentroidLine()
         {
-            this.startTri = startTri;
         }
 
-
+#if DEBUG
+        internal GlyphTriangle dbugStartTri;
+#endif
         /// <summary>
         /// add a centroid pair
         /// </summary>
@@ -203,8 +205,7 @@ namespace Typography.Rendering
 
     struct BoneGroupStatisticCollector
     {
-        //this is helper object
-
+        //this is helper class
         public List<BoneGroup> _selectedHorizontalBoneGroups;
         public void Reset()
         {
@@ -287,31 +288,24 @@ namespace Typography.Rendering
         //-----------------------------------------------
         //a centroid line hub start at the same mainTri.
         //and can have more than 1 centroid line.
-        //-----------------------------------------------
-
+        //----------------------------------------------- 
         readonly GlyphTriangle startTriangle;
-        //each centoid line start with main triangle
+        //each centoid line start with main triangle       
         Dictionary<GlyphTriangle, CentroidLine> _lines = new Dictionary<GlyphTriangle, CentroidLine>();
         //-----------------------------------------------
-        List<CentroidLineHub> otherConnectedLineHubs;//connection from other hub***
+        List<CentroidLineHub> otherConnectedLineHubs;//connections from other hub***
         //-----------------------------------------------
-
-
         CentroidLine currentLine;
         GlyphTriangle currentBranchTri;
 
         public CentroidLineHub(GlyphTriangle startTriangle)
         {
-
             this.startTriangle = startTriangle;
         }
         public GlyphTriangle StartTriangle
         {
             get { return startTriangle; }
         }
-
-
-
         /// <summary>
         /// set current centroid line to a centroid line that starts with triangle of centroid-line-head
         /// </summary>
@@ -325,7 +319,10 @@ namespace Typography.Rendering
                 if (!_lines.TryGetValue(triOfCentroidLineHead, out currentLine))
                 {
                     //if not found then create new
-                    currentLine = new CentroidLine(triOfCentroidLineHead);
+                    currentLine = new CentroidLine();
+#if  DEBUG
+                    currentLine.dbugStartTri = triOfCentroidLineHead;
+#endif
                     _lines.Add(triOfCentroidLineHead, currentLine);
                 }
                 currentBranchTri = triOfCentroidLineHead;
@@ -520,7 +517,7 @@ namespace Typography.Rendering
         {
             foreach (CentroidLine line in _lines.Values)
             {
-                GlyphTriangle s_tri = line.startTri;
+
 
                 List<GlyphBone> glyphBones = line.bones;
 
