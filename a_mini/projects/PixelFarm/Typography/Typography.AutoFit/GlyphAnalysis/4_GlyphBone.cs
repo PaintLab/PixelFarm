@@ -33,9 +33,7 @@ namespace Typography.Rendering
             Vector2 bpos = b.OriginalJointPos;
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
             EvaluateSlope();
-            //TODO: review this again
-            a.AddAssociateGlyphBoneToEndPoint(this);
-            b.AddAssociateGlyphBoneToEndPoint(this);
+        
         }
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
         {
@@ -45,11 +43,7 @@ namespace Typography.Rendering
             Vector2 midPoint = tipEdge.GetMidPoint();
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluateSlope();
-
-            //--------------------
-            //TODO: review this again
-            a.AddAssociateGlyphBoneToEndPoint(this);
-            tipEdge.AddAssociateGlyphBoneToEndPoint(this);
+             
         }
         public Vector2 GetVector()
         {

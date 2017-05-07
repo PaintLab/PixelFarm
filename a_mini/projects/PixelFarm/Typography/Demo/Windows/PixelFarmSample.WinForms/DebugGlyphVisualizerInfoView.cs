@@ -343,29 +343,9 @@ namespace SampleWinForms.UI
             {
                 nodeEdge.Text += "_X_ (no perpendicular_bone)";
             }
-            if (pnt_P != null)
-            {
+            
 
-                foreach (GlyphBone b in pnt_P.dbugGetAssocBones())
-                {
-                    TreeNode assocBoneNode = new TreeNode();
-                    assocBoneNode.Text = "-> [p] bone:" + b.ToString();
-                    nodeEdge.Nodes.Add(assocBoneNode);
-                }
-
-            }
-            if (pnt_Q != null)
-            {
-
-
-                foreach (GlyphBone b in pnt_Q.dbugGetAssocBones())
-                {
-                    TreeNode assocBoneNode = new TreeNode();
-                    assocBoneNode.Text = "-> [q] bone:" + b.ToString();
-                    nodeEdge.Nodes.Add(assocBoneNode);
-                }
-
-            }
+            //}
             //if (!edge.dbugHasRelatedBone)
             //{
             //    nodeEdge.Text += "_X_ (no perpendicular_bone)";
