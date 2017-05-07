@@ -191,7 +191,7 @@ namespace Typography.Rendering
         }
 #if DEBUG
         public bool dbugNoPerpendicularBone { get; set; }
-        public GlyphEdge dbugGlyphEdge { get; set; }
+    
 #endif
 
         public GlyphPoint GlyphPoint_P

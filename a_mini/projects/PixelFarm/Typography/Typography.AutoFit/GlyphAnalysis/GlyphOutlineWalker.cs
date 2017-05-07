@@ -90,7 +90,7 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 GlyphContour cnt = cnts[i];
-                List<GlyphEdge> edgeLines = cnt.edges;
+                List<EdgeLine> edgeLines = cnt.dbugGetEdges();
                 if (edgeLines != null)
                 {
                     int n = edgeLines.Count;
@@ -156,7 +156,7 @@ namespace Typography.Rendering
         protected abstract void OnBegingLineHub(float centerX, float centerY);
         protected abstract void OnEndLineHub(float centerX, float centerY, GlyphBoneJoint joint);
 
-        protected abstract void OnGlyphEdgeN(GlyphEdge edge);
+        protected abstract void OnGlyphEdgeN(EdgeLine edge);
         //
     }
 }
