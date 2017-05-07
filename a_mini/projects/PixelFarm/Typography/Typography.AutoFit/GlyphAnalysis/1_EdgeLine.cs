@@ -56,6 +56,7 @@ namespace Typography.Rendering
                 p.SetOutsideEdge(this);
                 q.SetOutsideEdge(this);
             }
+            _newDynamicMidPoint = new Vector2((p.x + q.x) / 2, (p.y + q.y) / 2);
             //-------------------------------
             //analyze angle and slope kind
             //-------------------------------  
@@ -256,6 +257,22 @@ namespace Typography.Rendering
         internal bool ContainsGlyphPoint(GlyphPoint p)
         {
             return this._glyphPoint_P == p || this._glyphPoint_Q == p;
+        }
+
+        internal void SetDynamicEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
+        {
+
+            //TODO: refactor here...
+            //this is relative len from current edge              
+            //origianl vector
+            Vector2 _o_edgeVector = GetEdgeVector();
+            //rotate 90
+            Vector2 _rotate = _o_edgeVector.Rotate(90);
+            //
+            Vector2 _deltaVector = _rotate.NewLength(newEdgeOffsetFromMasterOutline);
+
+            //new dynamic mid point  
+            this._newDynamicMidPoint = this.GetMidPoint() + _deltaVector;
         }
 
     }

@@ -158,7 +158,9 @@ namespace Typography.Rendering
             int j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
-                edges[i].FindPerpendicularBones();
+                EdgeLine ed = edges[i].dbugGetInternalEdgeLine();
+                ed.GlyphPoint_P.EvaluatePerpendicularBone();
+                ed.GlyphPoint_Q.EvaluatePerpendicularBone();
             }
             //
         }
@@ -171,7 +173,7 @@ namespace Typography.Rendering
             int j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
-                edges[i].SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
+                edges[i].dbugGetInternalEdgeLine().SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
             }
             //calculate edge cutpoint             
             for (int i = flattenPoints.Count - 1; i >= 0; --i)
