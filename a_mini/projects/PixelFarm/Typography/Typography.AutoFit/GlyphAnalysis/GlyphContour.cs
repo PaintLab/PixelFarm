@@ -97,9 +97,7 @@ namespace Typography.Rendering
                 {
                     GlyphPoint p0 = f_points[i - 1];
                     GlyphPoint p1 = f_points[i];
-
-
-                    total += (p1.x - p0.x) * (p1.y + p0.y);
+                    total += (p1.OX - p0.OX) * (p1.OY + p0.OY);
                     i += 2;
                 }
                 //the last one
@@ -107,7 +105,7 @@ namespace Typography.Rendering
                     GlyphPoint p0 = f_points[j - 1];
                     GlyphPoint p1 = f_points[0];
 
-                    total += (p1.x - p0.x) * (p1.y + p0.y);
+                    total += (p1.OX - p0.OX) * (p1.OY + p0.OY);
                 }
                 isClockwise = total >= 0;
             }
@@ -179,8 +177,8 @@ namespace Typography.Rendering
             EdgeLine e0 = p.InwardEdge;
             EdgeLine e1 = p.OutwardEdge;
 
-            Vector2 tmp_e0_q = e0._newDynamicMidPoint + e0.GetEdgeVector();
-            Vector2 tmp_e1_p = e1._newDynamicMidPoint - e1.GetEdgeVector();
+            Vector2 tmp_e0_q = e0._newDynamicMidPoint + e0.GetOriginalEdgeVector();
+            Vector2 tmp_e1_p = e1._newDynamicMidPoint - e1.GetOriginalEdgeVector();
 
             Vector2 cutpoint;
             if (MyMath.FindCutPoint(e0._newDynamicMidPoint, tmp_e0_q, e1._newDynamicMidPoint, tmp_e1_p, out cutpoint))

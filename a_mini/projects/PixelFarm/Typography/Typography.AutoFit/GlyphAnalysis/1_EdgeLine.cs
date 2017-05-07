@@ -27,15 +27,12 @@ namespace Typography.Rendering
 
         EdgeLine _ctrlEdge_P;
         EdgeLine _ctrlEdge_Q;
-        internal float _newFitX;
-        internal float _newFitY;
 
         internal Vector2 _newDynamicMidPoint;
+        EdgeLine _outsideEdge;
+        Vector2 _outsideEdgeCutAt;
+        float _outsideEdgeCutLen;
 
-#if DEBUG
-        public static int s_dbugTotalId;
-        public readonly int dbugId = s_dbugTotalId++;
-#endif
         GlyphTriangle _ownerTriangle;
 
         internal EdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q, bool isOutside)
@@ -56,12 +53,15 @@ namespace Typography.Rendering
                 p.SetOutsideEdge(this);
                 q.SetOutsideEdge(this);
             }
-            _newDynamicMidPoint = new Vector2((p.x + q.x) / 2, (p.y + q.y) / 2);
+
+            //new dynamic mid point is calculate from original X,Y
+
+            _newDynamicMidPoint = new Vector2((p.OX + q.OX) / 2, (p.OY + q.OY) / 2);
             //-------------------------------
             //analyze angle and slope kind
             //-------------------------------  
             SlopeAngleNoDirection = this.GetSlopeAngleNoDirection();
-            if (x1 == x0)
+            if (QX == PX)
             {
                 this.SlopeKind = LineSlopeKind.Vertical;
             }
@@ -83,10 +83,22 @@ namespace Typography.Rendering
             }
         }
 
-        public double x0 { get { return this._glyphPoint_P.x; } }
-        public double y0 { get { return this._glyphPoint_P.y; } }
-        public double x1 { get { return this._glyphPoint_Q.x; } }
-        public double y1 { get { return this._glyphPoint_Q.y; } }
+        /// <summary>
+        /// original px
+        /// </summary>
+        public double PX { get { return this._glyphPoint_P.OX; } }
+        /// <summary>
+        /// original py
+        /// </summary>
+        public double PY { get { return this._glyphPoint_P.OY; } }
+        /// <summary>
+        /// original qx
+        /// </summary>
+        public double QX { get { return this._glyphPoint_Q.OX; } }
+        /// <summary>
+        /// original qy
+        /// </summary>
+        public double QY { get { return this._glyphPoint_Q.OY; } }
 
         public EdgeLine ControlEdge_P
         {
@@ -111,15 +123,13 @@ namespace Typography.Rendering
             return null; //not found 
         }
 
-        internal Vector2 GetEdgeVector()
+        internal Vector2 GetOriginalEdgeVector()
         {
             return new Vector2(
-                GlyphPoint_Q.x - _glyphPoint_P.x,
-                GlyphPoint_Q.y - _glyphPoint_P.y);
+                GlyphPoint_Q.OX - _glyphPoint_P.OX,
+                GlyphPoint_Q.OY - _glyphPoint_P.OY);
         }
-        EdgeLine _outsideEdge;
-        Vector2 _outsideEdgeCutAt;
-        float _outsideEdgeCutLen;
+      
         internal void SetOutsideEdge(EdgeLine outsideEdge, Vector2 cutPoint, float cutLen)
         {
 #if DEBUG
@@ -183,10 +193,7 @@ namespace Typography.Rendering
                 //?
             }
         }
-#if DEBUG
-        public bool dbugNoPerpendicularBone { get; set; }
 
-#endif
 
         public GlyphPoint GlyphPoint_P
         {
@@ -239,7 +246,7 @@ namespace Typography.Rendering
 
         public override string ToString()
         {
-            return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
+            return SlopeKind + ":" + PX + "," + PY + "," + QX + "," + QY;
         }
 
 
@@ -259,7 +266,7 @@ namespace Typography.Rendering
             //TODO: refactor here...
             //this is relative len from current edge              
             //origianl vector
-            Vector2 _o_edgeVector = GetEdgeVector();
+            Vector2 _o_edgeVector = GetOriginalEdgeVector();
             //rotate 90
             Vector2 _rotate = _o_edgeVector.Rotate(90);
             //
@@ -292,7 +299,11 @@ namespace Typography.Rendering
                 return null;
             }
         }
-
+#if DEBUG
+        public bool dbugNoPerpendicularBone { get; set; }
+        public static int s_dbugTotalId;
+        public readonly int dbugId = s_dbugTotalId++;
+#endif
 
     }
 
@@ -301,23 +312,30 @@ namespace Typography.Rendering
     {
         public static Vector2 GetMidPoint(this EdgeLine line)
         {
-            return new Vector2((float)((line.x0 + line.x1) / 2), (float)((line.y0 + line.y1) / 2));
+            return new Vector2((float)((line.PX + line.QX) / 2), (float)((line.PY + line.QY) / 2));
         }
 
         internal static double GetSlopeAngleNoDirection(this EdgeLine line)
         {
-            return Math.Abs(Math.Atan2(Math.Abs(line.y1 - line.y0), Math.Abs(line.x1 - line.x0)));
+            return Math.Abs(Math.Atan2(Math.Abs(line.QY - line.PY), Math.Abs(line.QX - line.PX)));
         }
-        internal static float GetVerticalFitDiff(this EdgeLine line)
-        {
-            return line._newFitY - line.GetMidPoint().Y;
-        }
+
         internal static bool ContainsTriangle(this EdgeLine edge, GlyphTriangle p)
         {
             return (p.e0 == edge ||
                     p.e1 == edge ||
                     p.e2 == edge);
         }
+#if DEBUG
+        public static void dbugGetScaledXY(this EdgeLine edge, out double px, out double py, out double qx, out double qy, float scale)
+        {
+            px = edge.PX * scale;
+            py = edge.PY * scale;
+            //
+            qx = edge.QX * scale;
+            qy = edge.QY * scale;
 
+        }
+#endif
     }
 }

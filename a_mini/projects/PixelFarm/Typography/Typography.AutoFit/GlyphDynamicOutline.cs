@@ -115,7 +115,7 @@ namespace Typography.Rendering
 
                     //this version we focus on vertical hint only 
 
-                    float diff = MyMath.CalculateDiffToFit(p_pnt.y * _pxScale);
+                    float diff = MyMath.CalculateDiffToFit(p_pnt.newY * _pxScale);
                     if (diff < 0)
                     {
                         negative_diff += diff;
@@ -129,7 +129,7 @@ namespace Typography.Rendering
                     //
                     //evaluate diff
                     //
-                    diff = MyMath.CalculateDiffToFit(q_pnt.y * _pxScale);
+                    diff = MyMath.CalculateDiffToFit(q_pnt.newY * _pxScale);
                     if (diff < 0)
                     {
                         negative_diff += diff;
@@ -183,12 +183,14 @@ namespace Typography.Rendering
                     EdgeLine ee = h_edges[e];
                     GlyphPoint p_pnt = ee.GlyphPoint_P;
                     GlyphPoint q_pnt = ee.GlyphPoint_Q;
-                    p_pnt.fit_NewX = p_pnt.x * _pxScale;
-                    p_pnt.fit_NewY = (p_pnt.y * _pxScale) + avg_ydiff;
+
+                    //apply from newX and newY
+                    p_pnt.fit_NewX = p_pnt.newX * _pxScale;
+                    p_pnt.fit_NewY = (p_pnt.newY * _pxScale) + avg_ydiff;
                     p_pnt.fit_analyzed = true;
                     //
-                    q_pnt.fit_NewX = q_pnt.x * _pxScale;
-                    q_pnt.fit_NewY = (q_pnt.y * _pxScale) + avg_ydiff;
+                    q_pnt.fit_NewX = q_pnt.newX * _pxScale;
+                    q_pnt.fit_NewY = (q_pnt.newY * _pxScale) + avg_ydiff;
                     q_pnt.fit_analyzed = true;
                 }
             }

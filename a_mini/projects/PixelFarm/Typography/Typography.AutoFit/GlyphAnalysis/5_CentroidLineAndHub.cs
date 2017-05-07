@@ -162,8 +162,8 @@ namespace Typography.Rendering
                         {
                             EdgeLine edge = edges[e];
                             Vector2 midPos = edge.GetMidPoint();
-                            FindMinMax(ref minY, ref maxY, (float)edge.y0);
-                            FindMinMax(ref minY, ref maxY, (float)edge.y1);
+                            FindMinMax(ref minY, ref maxY, (float)edge.PY);
+                            FindMinMax(ref minY, ref maxY, (float)edge.QY);
                         }
                         //-------------------
                         bonegroup.minY = minY;

@@ -227,11 +227,11 @@ namespace SampleWinForms.UI
                 case PointKind.LineStop:
                     if (point.isPartOfHorizontalEdge)
                     {
-                        painter.FillRectLBWH(point.x * _pxscale, point.y * _pxscale, 8, 8, PixelFarm.Drawing.Color.Yellow);
+                        painter.FillRectLBWH(point.OX * _pxscale, point.OY * _pxscale, 8, 8, PixelFarm.Drawing.Color.Yellow);
                     }
                     else
                     {
-                        painter.FillRectLBWH(point.x * _pxscale, point.y * _pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
+                        painter.FillRectLBWH(point.OX * _pxscale, point.OY * _pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
                     }
                     break;
             }
@@ -284,7 +284,7 @@ namespace SampleWinForms.UI
                 {
                     double prevWidth = painter.StrokeWidth;
                     painter.StrokeWidth = 3;
-                    painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale, PixelFarm.Drawing.Color.Yellow);
+                    painter.Line(edge.PX * scale, edge.PY * scale, edge.QX * scale, edge.QY * scale, PixelFarm.Drawing.Color.Yellow);
                     painter.StrokeWidth = prevWidth;
 
                     //draw
@@ -332,7 +332,7 @@ namespace SampleWinForms.UI
                 }
                 else
                 {
-                    painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale);
+                    painter.Line(edge.PX * scale, edge.PY * scale, edge.QX * scale, edge.QY * scale);
                 }
 
                 {
@@ -367,8 +367,8 @@ namespace SampleWinForms.UI
             {
                 //draw inside edge 
                 painter.Line(
-                    edge.x0 * _pxscale, edge.y0 * _pxscale,
-                    edge.x1 * _pxscale, edge.y1 * _pxscale,
+                    edge.PX * _pxscale, edge.PY * _pxscale,
+                    edge.QX * _pxscale, edge.QY * _pxscale,
                     PixelFarm.Drawing.Color.Gray);
 
             }
@@ -453,11 +453,8 @@ namespace SampleWinForms.UI
             if (joint.TipEdgeP != null)
             {
                 EdgeLine tipEdge = joint.TipEdgeP;
-                float p_x = tipEdge.GlyphPoint_P.x * _pxscale;
-                float p_y = tipEdge.GlyphPoint_P.y * _pxscale;
-                float q_x = tipEdge.GlyphPoint_Q.x * _pxscale;
-                float q_y = tipEdge.GlyphPoint_Q.y * _pxscale;
-
+                double p_x, p_y, q_x, q_y;
+                tipEdge.dbugGetScaledXY(out p_x, out p_y, out q_x, out q_y, _pxscale);
                 //
                 painter.Line(
                    jointPos.X, jointPos.Y,
@@ -474,13 +471,9 @@ namespace SampleWinForms.UI
             }
             if (joint.TipEdgeQ != null)
             {
-                EdgeLine tipEdge = joint.TipEdgeQ;
-
-                float p_x = tipEdge.GlyphPoint_P.x * _pxscale;
-                float p_y = tipEdge.GlyphPoint_P.y * _pxscale;
-                float q_x = tipEdge.GlyphPoint_Q.x * _pxscale;
-                float q_y = tipEdge.GlyphPoint_Q.y * _pxscale;
-
+                EdgeLine tipEdge = joint.TipEdgeQ; 
+                double p_x, p_y, q_x, q_y;
+                tipEdge.dbugGetScaledXY(out p_x, out p_y, out q_x, out q_y, _pxscale);
                 //
                 painter.Line(
                    jointPos.X, jointPos.Y,

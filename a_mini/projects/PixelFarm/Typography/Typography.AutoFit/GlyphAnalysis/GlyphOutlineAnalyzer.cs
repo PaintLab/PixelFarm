@@ -110,13 +110,13 @@ namespace Typography.Rendering
                 AssignPointEdgeInvolvement(tri, tri.e1);
                 AssignPointEdgeInvolvement(tri, tri.e2);
             }
-          
+
 
 
             //convert intermediate outline to dynamic outline
             return new GlyphDynamicOutline(intermediateOutline);
         }
-        
+
 
         /// <summary>
         /// create polygon from GlyphContour
@@ -142,8 +142,8 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 GlyphPoint p = flattenPoints[i];
-                double x = p.x;
-                double y = p.y;
+                double x = p.OX; //start from original X***
+                double y = p.OY; //start from original Y***
 
                 if (x == prevX && y == prevY)
                 {
@@ -222,7 +222,7 @@ namespace Typography.Rendering
                             {
                                 //found this edge
                                 //store edge line
-                                ownerTri.N1_IsOpposite = true; 
+                                ownerTri.N1_IsOpposite = true;
                             }
                         }
                         GlyphTriangle n2 = ownerTri.N2;
@@ -285,8 +285,8 @@ namespace Typography.Rendering
             for (int i = 0; i < lim; ++i)
             {
                 GlyphPoint p = flattenPoints[i];
-                double x = p.x;
-                double y = p.y;
+                double x = p.OX; //start from original X***
+                double y = p.OY; //start from original Y***
 
                 if (x == prevX && y == prevY)
                 {

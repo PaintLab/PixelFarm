@@ -425,14 +425,14 @@ namespace Typography.Rendering
         static bool IsMatchingEdge(EdgeLine a, EdgeLine b)
         {
             //x-axis
-            if ((a.x0 == b.x0 && a.x1 == b.x1) ||
-                (a.x0 == b.x1 && a.x1 == b.x0))
+            if ((a.PX == b.PX && a.QX == b.QX) ||
+                (a.PX == b.QX && a.QX == b.PX))
             {
                 //pass x-axis
                 //
                 //y_axis
-                if ((a.y0 == b.y0 && a.y1 == b.y1) ||
-                    (a.y0 == b.y1 && a.y1 == b.y0))
+                if ((a.PY == b.PY && a.QY == b.QY) ||
+                    (a.PY == b.QY && a.QY == b.PY))
                 {
                     return true;
                 }

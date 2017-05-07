@@ -33,7 +33,7 @@ namespace Typography.Rendering
             Vector2 bpos = b.OriginalJointPos;
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
             EvaluateSlope();
-        
+
         }
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
         {
@@ -43,7 +43,7 @@ namespace Typography.Rendering
             Vector2 midPoint = tipEdge.GetMidPoint();
             _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
             EvaluateSlope();
-             
+
         }
         public Vector2 GetVector()
         {
@@ -97,7 +97,7 @@ namespace Typography.Rendering
             else
             {
                 return (JointA.DynamicFitPos.Y + TipEdge.GetMidPoint().Y) / 2;
-            } 
+            }
         }
         void EvaluateSlope(Vector2 p, Vector2 q)
         {
@@ -199,51 +199,6 @@ namespace Typography.Rendering
             }
         }
 
-        public static Vector2 GetBoneVector(this GlyphBone bone)
-        {
-            //if (bone.JointB != null)
-            //{
-            //    var b_pos = bone.JointB.Position;
-            //    var a_pos = bone.JointA.Position;
-            //    return new Vector2(
-            //            Math.Abs(b_pos.X - a_pos.X),
-            //            Math.Abs(b_pos.Y - a_pos.Y));
-            //}
-            //else if (bone.TipEdge != null)
-            //{
-            //    var b_pos = bone.TipEdge.GetMidPoint();
-            //    var a_pos = bone.JointA.Position;
-            //    return new Vector2(
-            //            Math.Abs(b_pos.X - a_pos.X),
-            //             Math.Abs(b_pos.Y - a_pos.Y));
-            //    return bone.TipEdge.GetMidPoint() - bone.JointA.Position;
-            //}
-            //else
-            //{
-            //    return Vector2.Zero;
-            //}
-
-            if (bone.JointB != null)
-            {
-                var b_pos = bone.JointB.OriginalJointPos;
-                var a_pos = bone.JointA.OriginalJointPos;
-                return new Vector2(
-                        b_pos.X - a_pos.X,
-                        b_pos.Y - a_pos.Y);
-            }
-            else if (bone.TipEdge != null)
-            {
-                var b_pos = bone.TipEdge.GetMidPoint();
-                var a_pos = bone.JointA.OriginalJointPos;
-                return new Vector2(
-                      b_pos.X - a_pos.X,
-                      b_pos.Y - a_pos.Y);
-            }
-            else
-            {
-                return Vector2.Zero;
-            }
-        }
 
         /// <summary>
         /// find all outside edge a
@@ -261,10 +216,6 @@ namespace Typography.Rendering
                     if (commonTri.e0.IsOutside) { outsideEdges.Add(commonTri.e0); }
                     if (commonTri.e1.IsOutside) { outsideEdges.Add(commonTri.e1); }
                     if (commonTri.e2.IsOutside) { outsideEdges.Add(commonTri.e2); }
-
-                    //if (commonTri.e0.IsOutside && commonTri.e0.SlopeKind == edgeSlopeKind) { outsideEdges.Add(commonTri.e0); }
-                    //if (commonTri.e1.IsOutside && commonTri.e1.SlopeKind == edgeSlopeKind) { outsideEdges.Add(commonTri.e1); }
-                    //if (commonTri.e2.IsOutside && commonTri.e2.SlopeKind == edgeSlopeKind) { outsideEdges.Add(commonTri.e2); }
                 }
             }
             else if (bone.TipEdge != null)
