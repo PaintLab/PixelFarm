@@ -121,8 +121,8 @@ namespace Typography.Rendering
         public static bool FindPerpendicularCutPoint(EdgeLine edge, Vector2 p2, out Vector2 cutResult)
         {
             cutResult = FindPerpendicularCutPoint(
-                new Vector2((float)edge.x0, (float)edge.y0),
-                new Vector2((float)edge.x1, (float)edge.y1),
+                new Vector2((float)edge.PX, (float)edge.PY),
+                new Vector2((float)edge.QX, (float)edge.QY),
                 p2);
             //also check if result cutpoint is on current line segment or not
 
@@ -137,8 +137,8 @@ namespace Typography.Rendering
         /// <param name="max"></param>
         static void GetMinMax(EdgeLine edge, out Vector2 min, out Vector2 max)
         {
-            Vector2 a_pos = new Vector2((float)edge.x0, (float)edge.y0);
-            Vector2 b_pos = new Vector2((float)edge.x1, (float)edge.y1);
+            Vector2 a_pos = new Vector2((float)edge.PX, (float)edge.PY);
+            Vector2 b_pos = new Vector2((float)edge.QX, (float)edge.QY);
             min = Vector2.Min(a_pos, b_pos);
             max = Vector2.Max(a_pos, b_pos);
         }

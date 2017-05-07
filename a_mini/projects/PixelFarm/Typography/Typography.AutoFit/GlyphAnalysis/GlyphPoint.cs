@@ -23,8 +23,8 @@ namespace Typography.Rendering
 
     public class GlyphPoint
     {
-        public readonly float x;
-        public readonly float y;
+        readonly float x; //original x
+        readonly float y; //original y
         public readonly PointKind kind;
 
         /// <summary>
@@ -53,16 +53,23 @@ namespace Typography.Rendering
 
         public GlyphPoint(float x, float y, PointKind kind)
         {
-            this.x = x;
-            this.y = y;
-            this.newX = this.x;
-            this.newY = this.y;
+            this.x = this.newX = x;
+            this.y = this.newY = y;
             this.kind = kind;
         }
         public int SeqNo { get; internal set; }
-
         public bool IsLeftSide { get; private set; }
         public bool IsPartOfVerticalEdge { get; private set; }
+
+        /// <summary>
+        /// original X
+        /// </summary>
+        public float OX { get { return this.x; } }
+        /// <summary>
+        /// original Y
+        /// </summary>
+        public float OY { get { return this.y; } }
+
 
         /// <summary>
         /// outside inward edge
@@ -80,7 +87,7 @@ namespace Typography.Rendering
             get { return this._outwardEdge; }
             set { _outwardEdge = value; }
         }
-         
+
         /// <summary>         
         /// set outside edge that link with this glyph point
         /// </summary>
@@ -133,6 +140,7 @@ namespace Typography.Rendering
         {
             return a.x == b.x && a.y == b.y;
         }
+
 #if DEBUG
 
         public readonly int dbugId = dbugTotalId++;

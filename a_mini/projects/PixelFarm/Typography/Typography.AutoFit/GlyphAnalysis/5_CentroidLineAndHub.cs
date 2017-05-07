@@ -57,6 +57,7 @@ namespace Typography.Rendering
         /// <param name="gridH"></param>
         public void ApplyGridBox(int gridW, int gridH)
         {
+            //1.
             //apply grid box to each joint
             int j = _joints.Count;
             for (int i = 0; i < j; ++i)
@@ -71,13 +72,12 @@ namespace Typography.Rendering
             {
                 bones[i].EvaluateSlope();
             }
-        }
-        /// <summary>
-        /// separate GlyphBone into groups
-        /// </summary>
-        public void AnalyzeBoneGroups()
-        {
-            int j = bones.Count;
+
+            //----------------------------------------
+            //2.
+            //analyze bone groups
+            //separate GlyphBone into groups 
+            j = bones.Count;
             this.boneGroups = new List<BoneGroup>(); //clear 
 
             BoneGroup boneGroup = new BoneGroup(); //new group
@@ -120,9 +120,8 @@ namespace Typography.Rendering
                 boneGroup.y_pos = ypos_sum / boneGroup.count;
                 this.boneGroups.Add(boneGroup);
             }
-            //----------------
-
         }
+
         public void CollectOutsideEdges()
         {
             int j = this.boneGroups.Count;
@@ -162,8 +161,8 @@ namespace Typography.Rendering
                         {
                             EdgeLine edge = edges[e];
                             Vector2 midPos = edge.GetMidPoint();
-                            FindMinMax(ref minY, ref maxY, (float)edge.y0);
-                            FindMinMax(ref minY, ref maxY, (float)edge.y1);
+                            FindMinMax(ref minY, ref maxY, (float)edge.PY);
+                            FindMinMax(ref minY, ref maxY, (float)edge.QY);
                         }
                         //-------------------
                         bonegroup.minY = minY;
@@ -205,13 +204,13 @@ namespace Typography.Rendering
     struct BoneGroupStatisticCollector
     {
         //this is helper object
-        
+
         public List<BoneGroup> _selectedHorizontalBoneGroups;
         public void Reset()
         {
             _selectedHorizontalBoneGroups.Clear();
         }
-        public void CollectBoneGroup(CentroidLine ownerline)
+        public void CollectBoneGroups(CentroidLine ownerline)
         {
             List<BoneGroup> boneGroups = ownerline.boneGroups;
             int j = boneGroups.Count;
