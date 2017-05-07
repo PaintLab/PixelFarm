@@ -50,16 +50,7 @@ namespace Typography.Rendering
             LeftControlPosX = intermediateOutline.LeftControlPos; //left control position  
         }
 
-        void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
-        {
-            _allCentroidLines = new List<CentroidLine>();
-            int j = lineHubs.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                _allCentroidLines.AddRange(lineHubs[i].GetAllCentroidLines().Values);
-            }
-        }
-
+      
         /// <summary>
         /// set grid value and apply to current master outline
         /// </summary>
@@ -245,6 +236,15 @@ namespace Typography.Rendering
         /// </summary>
         public int GridBoxHeight { get; private set; }
 
+        void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
+        {
+            _allCentroidLines = new List<CentroidLine>();
+            int j = lineHubs.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                _allCentroidLines.AddRange(lineHubs[i].GetAllCentroidLines().Values);
+            }
+        }
 
 #if DEBUG
         public static bool dbugTestNewGridFitting { get; set; }
