@@ -145,6 +145,8 @@ namespace SampleWinForms
             chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawLineHubConn.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawPerpendicularLine.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkDrawGlyphPoint.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkTestGridFit.CheckedChanged += (s, e) => UpdateRenderOutput();
 
             ////----------
             //txtGlyphBoneCount.KeyDown += (s, e) =>
@@ -222,7 +224,7 @@ namespace SampleWinForms
                     16,
                     18,20,22,24,26,28,36,48,72,
                     240,280,300,360,400,420,460,
-                    620,720
+                    620,720,860,920,1024
               });
             lstFontSizes.SelectedIndexChanged += (s, e) =>
             {
@@ -241,13 +243,14 @@ namespace SampleWinForms
             //string inputstr = "u";
             //string inputstr = "t";
             //string inputstr = "2";
-            string inputstr = "3";
+            //string inputstr = "3";
             //string inputstr = "o";
             //string inputstr = "l";
             //string inputstr = "k";
             //string inputstr = "8";
             //string inputstr = "#";
             //string inputstr = "a";
+            string inputstr = "e";
             //string inputstr = "Å";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
@@ -435,6 +438,13 @@ namespace SampleWinForms
             debugGlyphVisualizer.GlyphEdgeOffset = (float)this.lstEdgeOffset.SelectedItem;
             debugGlyphVisualizer.DrawDynamicOutline = chkDynamicOutline.Checked;
             debugGlyphVisualizer.DrawRegenerateOutline = chkDrawRegenerateOutline.Checked;
+            debugGlyphVisualizer.DrawGlyphPoint = chkDrawGlyphPoint.Checked;
+
+#if DEBUG
+            Typography.Rendering.GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
+#endif
+
+
             //------------------------------------------------------
 
             debugGlyphVisualizer.RenderChar(testChar, (HintTechnique)lstHintList.SelectedItem);
@@ -445,7 +455,7 @@ namespace SampleWinForms
             if (chkShowGrid.Checked)
             {
                 //render grid
-                RenderGrid(800, 600, _gridSize, painter);
+                RenderGrids(800, 600, _gridSize, painter);
             }
             painter.SetOrigin(0, 0);
             //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
@@ -487,7 +497,7 @@ namespace SampleWinForms
             if (chkShowGrid.Checked)
             {
                 //render grid
-                RenderGrid(800, 600, _gridSize, painter);
+                RenderGrids(800, 600, _gridSize, painter);
             }
 
             //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
@@ -496,74 +506,26 @@ namespace SampleWinForms
             //7. just render our bitmap
             g.Clear(Color.White);
             g.DrawImage(winBmp, new Point(30, 20));
-        }
+        } 
 
-
-
-        void RenderGrid(int width, int height, int sqSize, AggCanvasPainter p)
+        void RenderGrids(int width, int height, int sqSize, CanvasPainter p)
         {
             //render grid 
             p.FillColor = PixelFarm.Drawing.Color.Gray;
+
+            float pointW = (sqSize >= 100) ? 2 : 1;
+
             for (int y = 0; y < height;)
             {
                 for (int x = 0; x < width;)
                 {
-                    p.FillRectLBWH(x, y, 1, 1);
+                    p.FillRectLBWH(x, y, pointW, pointW);
                     x += sqSize;
                 }
                 y += sqSize;
             }
         }
 
-
-        void DrawGlyphContour(GlyphContour cnt, AggCanvasPainter p)
-        {
-            //for debug
-            List<GlyphPart> parts = cnt.parts;
-            int j = parts.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                GlyphPart part = parts[i];
-                switch (part.Kind)
-                {
-                    default: throw new NotSupportedException();
-                    case GlyphPartKind.Line:
-                        {
-                            GlyphLine line = (GlyphLine)part;
-                            p.FillColor = PixelFarm.Drawing.Color.Red;
-                            var p0 = line.FirstPoint;
-                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
-                            p.FillRectLBWH(line.x1, line.y1, 2, 2);
-                        }
-                        break;
-                    case GlyphPartKind.Curve3:
-                        {
-                            GlyphCurve3 c = (GlyphCurve3)part;
-                            p.FillColor = PixelFarm.Drawing.Color.Red;
-                            var p0 = c.FirstPoint;
-                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
-                            p.FillColor = PixelFarm.Drawing.Color.Blue;
-                            p.FillRectLBWH(c.x1, c.y1, 2, 2);
-                            p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x2, c.y2, 2, 2);
-                        }
-                        break;
-                    case GlyphPartKind.Curve4:
-                        {
-                            GlyphCurve4 c = (GlyphCurve4)part;
-                            p.FillColor = PixelFarm.Drawing.Color.Red;
-                            var p0 = c.FirstPoint;
-                            p.FillRectLBWH(p0.X, p0.Y, 2, 2);
-                            p.FillColor = PixelFarm.Drawing.Color.Blue;
-                            p.FillRectLBWH(c.x1, c.y1, 2, 2);
-                            p.FillRectLBWH(c.x2, c.y2, 2, 2);
-                            p.FillColor = PixelFarm.Drawing.Color.Red;
-                            p.FillRectLBWH(c.x3, c.y3, 2, 2);
-                        }
-                        break;
-                }
-            }
-        }
 
 
 
@@ -582,13 +544,17 @@ namespace SampleWinForms
                     {
                         _gridSize = 5;
                     }
-                    else if (result > 200)
+                    else if (result > 800)
                     {
-                        _gridSize = 200;
+                        _gridSize = 800;
                     }
                 }
                 this._gridSize = result;
+
                 this.txtGridSize.Text = _gridSize.ToString();
+#if DEBUG
+                Typography.Rendering.GlyphDynamicOutline.dbugGridHeight = _gridSize;
+#endif
                 UpdateRenderOutput();
             }
 
@@ -666,20 +632,6 @@ namespace SampleWinForms
             //}
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            System.Numerics.Vector2 p0 = new System.Numerics.Vector2(0, 0);
-            System.Numerics.Vector2 p1 = new System.Numerics.Vector2(0, 10);
-            System.Numerics.Vector2 p2 = new System.Numerics.Vector2(5, 5);
-            System.Numerics.Vector2 p3 = new System.Numerics.Vector2(10, 10);
 
-            System.Numerics.Vector2 result;
-            if (Typography.Rendering.MyMath.FindCutPoint(p0, p1, p2, p3, out result))
-            {
-                //found cutpoint
-            }
-
-
-        }
     }
 }

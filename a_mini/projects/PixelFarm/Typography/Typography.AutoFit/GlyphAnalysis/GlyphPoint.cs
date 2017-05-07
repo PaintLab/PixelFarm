@@ -27,6 +27,7 @@ namespace Typography.Rendering
         public readonly float y;
         public readonly PointKind kind;
 
+
         AssocBoneCollection _assocBones = new AssocBoneCollection();
 
         /// <summary>
@@ -34,15 +35,18 @@ namespace Typography.Rendering
         /// </summary>
         public float newX;
         public float newY;
+        //----------------------------------------
 
-     
-
-
+        //temp ***
+        public float fit_NewX;
+        public float fit_NewY;
+        public bool fit_analyzed;
+        //----------------------------------------
         public bool isPartOfHorizontalEdge;
         public bool isUpperSide;
 
         /// <summary>
-        /// outside edge0 
+        /// outside edge0
         /// </summary>
         EdgeLine _e0;
         /// <summary>
@@ -56,6 +60,8 @@ namespace Typography.Rendering
             this.y = y;
             this.kind = kind;
         }
+        public int SeqNo { get; internal set; }
+
         public bool IsLeftSide { get; private set; }
         public bool IsPartOfVerticalEdge { get; private set; }
 
@@ -98,10 +104,6 @@ namespace Typography.Rendering
             }
 #endif
         }
-
-
-
-
         internal void NotifyVerticalEdge(EdgeLine v_edge)
         {
             //associated 
@@ -114,7 +116,6 @@ namespace Typography.Rendering
                 this.IsLeftSide = v_edge.IsLeftSide;
             }
         }
-
         internal static bool SameCoordAs(GlyphPoint a, GlyphPoint b)
         {
             return a.x == b.x && a.y == b.y;
@@ -127,29 +128,63 @@ namespace Typography.Rendering
         internal void EvaluatePerpendicularBone()
         {
             _assocBones.EvaluatePerpendicularBone(this);
-            ApplyNewEdgeOffsetFromMasterOutline(0);
+            ResetNewXY();
         }
 
-        internal void ApplyNewEdgeOffsetFromMasterOutline(float edgeOffsetFromMasterOutline)
+        internal void ResetNewXY()
         {
-            if (edgeOffsetFromMasterOutline == 0)
+            this.newX = this.x;
+            this.newY = this.y;
+        }
+#if DEBUG
+        bool _dbugFitSet;
+        internal void dbugClearLastFit()
+        {
+            _dbugFitSet = false;
+        }
+#endif
+        internal void ApplyNewFitEdge()
+        {
+
+#if DEBUG
+            if (_dbugFitSet)
             {
-                this.newX = this.x;
-                this.newY = this.y;
+
+            }
+#endif
+            EdgeLine e0 = this.E0;
+            EdgeLine e1 = this.E1;
+            EdgeLine controlE_ofE0 = e0.GetControlEdgeThatContains(this);
+            EdgeLine controlE_ofE1 = e1.GetControlEdgeThatContains(this);
+            float e0DiffY = 0, e1DiffY = 0;
+            if (controlE_ofE0 != null && controlE_ofE1 != null)
+            {
+                e0DiffY = controlE_ofE0.GetVerticalFitDiff();
+                e1DiffY = controlE_ofE1.GetVerticalFitDiff();
+                this.newY += (e0DiffY + e1DiffY) / 2;
+            }
+            else if (controlE_ofE0 != null)
+            {
+                e0DiffY = controlE_ofE0.GetVerticalFitDiff();
+                this.newY += e0DiffY;
+            }
+            else if (controlE_ofE1 != null)
+            {
+                e1DiffY = controlE_ofE1.GetVerticalFitDiff();
+                this.newY += e1DiffY;
             }
             else
             {
-                Vector2 newRadiusEnd = _assocBones.CalculateNewCutPointFromMasterOutline(edgeOffsetFromMasterOutline, new Vector2(x, y));
-                this.newX = newRadiusEnd.X;
-                this.newY = newRadiusEnd.Y;
+                //?
+
             }
-        }
 #if DEBUG
-        /// <summary>
-        /// glyph pointnumber
-        /// </summary>
-        int dbug_GlyphPointNo;
-        //for debug only
+            _dbugFitSet = true;
+#endif
+        }
+
+#if DEBUG
+
         public readonly int dbugId = dbugTotalId++;
         static int dbugTotalId;
         internal GlyphPart dbugOwnerPart;  //link back to owner part
@@ -161,12 +196,8 @@ namespace Typography.Rendering
             return this.dbugId + " :" +
                     (x + "," + y + " " + kind.ToString());
         }
-        internal int dbugGlyphPointNo
-        {
-            get { return this.dbug_GlyphPointNo; }
-            set { this.dbug_GlyphPointNo = value; }
-        }
-#endif 
+
+#endif
     }
 
     public enum BoneCutPointKind
@@ -180,6 +211,10 @@ namespace Typography.Rendering
     }
     public class AssocBoneCollection
     {
+        // a collection of glyph bones that are associate with to a GlyphPoint
+        //one GlyphPoint can associate more than 1 GlyphBone
+
+
         Dictionary<GlyphBone, bool> _assocBones = new Dictionary<GlyphBone, bool>();
         List<GlyphBone> _assocBoneList;
         bool closeCollection;
@@ -256,24 +291,8 @@ namespace Typography.Rendering
                 this.cutpoint = cutpoint;
             }
         }
-        public static double AngleBetween(Vector2 vector1, Vector2 vector2)
-        {
-            double rad1 = System.Math.Atan2(vector1.Y, vector1.X);
-            double rad2 = System.Math.Atan2(vector2.Y, vector2.X);
-            //we want to find diff
 
-            if (rad1 < 0)
-            {
-                rad1 = System.Math.PI + rad1;
-            }
-            if (rad2 < 0)
-            {
-                rad2 = System.Math.PI + rad2;
-            }
 
-            return rad1 - rad2;
-        }
-        const float Epsilon = 0.0001f;
         //
         internal void EvaluatePerpendicularBone(GlyphPoint ownerPoint)
         {
@@ -298,7 +317,6 @@ namespace Typography.Rendering
                 Vector2 tempCutPoint;
                 if (MyMath.FindPerpendicularCutPoint(b, o_point, out tempCutPoint))
                 {
-
                     _boneCutPoint = tempCutPoint;
                     _startIndexAt = _endIndexAt = i;
                     this.CutPointKind = BoneCutPointKind.PerpendicularToSingleBone;

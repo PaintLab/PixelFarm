@@ -15,11 +15,13 @@ namespace Typography.Rendering
 
         internal readonly EdgeLine _p_contact_edge;
         internal readonly EdgeLine _q_contact_edge;
-
-
         //one bone joint can have up to 2 tips  
         EdgeLine _tipEdge_p;
         EdgeLine _tipEdge_q;
+
+        //temp 
+        float _fitX, _fitY;
+
 #if DEBUG
         public readonly int dbugId = dbugTotalId++;
         public static int dbugTotalId;
@@ -32,6 +34,10 @@ namespace Typography.Rendering
             //both p and q is INSIDE, contact edge
             this._p_contact_edge = p_contact_edge;
             this._q_contact_edge = q_contact_edge;
+            //this is original x,y
+            Vector2 midpos = p_contact_edge.GetMidPoint();
+            this._fitX = midpos.X;
+            this._fitY = midpos.Y;
 
 #if DEBUG
             if (p_contact_edge.inside_joint != null ||
@@ -43,7 +49,25 @@ namespace Typography.Rendering
             p_contact_edge.inside_joint = this;
             q_contact_edge.inside_joint = this;
         }
-
+        /// <summary>
+        /// dynamic fit x
+        /// </summary>
+        public float FitX
+        {
+            get { return _fitX; }
+        }
+        /// <summary>
+        /// dynamic fit y
+        /// </summary>
+        public float FitY
+        {
+            get { return _fitY; }
+        }
+        internal void SetFitXY(float newx, float newy)
+        {
+            this._fitX = newx;
+            this._fitY = newy;
+        }
         internal GlyphTriangle P_Tri
         {
             get
@@ -58,11 +82,13 @@ namespace Typography.Rendering
                 return _q_contact_edge.OwnerTriangle;
             }
         }
+
+
         /// <summary>
         /// get position of this bone joint (mid point of the edge)
         /// </summary>
         /// <returns></returns>
-        public Vector2 Position
+        public Vector2 OriginalJointPos
         {
             get
             {
@@ -70,7 +96,14 @@ namespace Typography.Rendering
                 return _p_contact_edge.GetMidPoint();
             }
         }
-
+        public Vector2 DynamicFitPos
+        {
+            get
+            {
+                //mid point of the contact edge line
+                return new Vector2(_fitX, _fitY);
+            }
+        }
         public float GetLeftMostRib()
         {
             //TODO: revisit this again
@@ -85,7 +118,7 @@ namespace Typography.Rendering
         public double CalculateSqrDistance(Vector2 v)
         {
 
-            Vector2 contactPoint = this.Position;
+            Vector2 contactPoint = this.OriginalJointPos;
             float xdiff = contactPoint.X - v.X;
             float ydiff = contactPoint.Y - v.Y;
 
@@ -99,8 +132,8 @@ namespace Typography.Rendering
                 throw new System.NotSupportedException();
             }
 #endif
+            e.IsTip = true;
             this._tipEdge_p = e;
-
         }
         internal void SetTipEdge_Q(EdgeLine e)
         {
@@ -114,7 +147,9 @@ namespace Typography.Rendering
                 throw new System.NotSupportedException();
             }
 #endif
+            e.IsTip = true;
             this._tipEdge_q = e;
+
         }
         public bool HasTipP
         {
@@ -138,7 +173,7 @@ namespace Typography.Rendering
 #if DEBUG
         public override string ToString()
         {
-            return "id:" + dbugId + " " + this.Position.ToString();
+            return "id:" + dbugId + " " + this.OriginalJointPos.ToString();
         }
 
         public EdgeLine dbugGetEdge_P() { return _p_contact_edge; }

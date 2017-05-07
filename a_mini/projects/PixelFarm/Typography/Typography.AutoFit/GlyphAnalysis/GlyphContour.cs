@@ -1,7 +1,7 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
 using System.Collections.Generic;
-using System.Numerics;
+
 
 namespace Typography.Rendering
 {
@@ -44,7 +44,7 @@ namespace Typography.Rendering
                 parts[i].Flatten(flattener);
             }
 
-            //assign number for all glyph point in this contour
+            //check duplicated the first point and last point
             int pointCount = tmpFlattenPoints.Count;
             if (GlyphPoint.SameCoordAs(tmpFlattenPoints[pointCount - 1], tmpFlattenPoints[0]))
             {
@@ -54,13 +54,13 @@ namespace Typography.Rendering
                 pointCount--;
             }
 
-
-#if DEBUG
+            //assign number for all glyph point in this contour
             for (int i = 0; i < pointCount; ++i)
             {
-                tmpFlattenPoints[i].dbugGlyphPointNo = flattener.GetNewGlyphPointId();
+                tmpFlattenPoints[i].SeqNo = i;
+
             }
-#endif
+
             flattener.Result = prevResult;
             analyzed = true;
         }
@@ -80,7 +80,7 @@ namespace Typography.Rendering
             analyzedClockDirection = true;
 
 
-
+            //TODO: review here again***
             //---------------
             //http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
             //check if hole or not
@@ -162,15 +162,17 @@ namespace Typography.Rendering
             //
         }
 
+        bool useNewEdgeCutPointFromMasterOutline = false;
         internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
-            int j = flattenPoints.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                flattenPoints[i].ApplyNewEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
-            }
+            useNewEdgeCutPointFromMasterOutline = true;
+            // int j = flattenPoints.Count;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    flattenPoints[i].ApplyNewEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
+            //}
             //
-            j = edges.Count;
+            int j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
                 //apply new relative len to edge***
@@ -189,6 +191,46 @@ namespace Typography.Rendering
                 //close edge
                 GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
             }
+        } 
+//        internal void ApplyFitPositions()
+//        {
+
+//            //after GlyphBone is adjust to the new fit grid
+//            //we adjust each GlyphEdge adn GlyphPoint 
+//            useNewEdgeCutPointFromMasterOutline = false;
+//            int j = flattenPoints.Count;
+//#if DEBUG
+//            for (int i = 0; i < j; ++i)
+//            {
+//                flattenPoints[i].dbugClearLastFit();
+//            }
+//#endif
+//            for (int i = 0; i < j; ++i)
+//            {
+//                flattenPoints[i].ApplyNewFitEdge();
+//            }
+
+//            //---------- 
+//        }
+        internal void ApplyFitPositions2()
+        {
+
+            //after GlyphBone is adjust to the new fit grid
+            //we adjust each GlyphEdge adn GlyphPoint 
+            useNewEdgeCutPointFromMasterOutline = false;
+            int j = flattenPoints.Count;
+#if DEBUG
+            for (int i = 0; i < j; ++i)
+            {
+                flattenPoints[i].dbugClearLastFit();
+            }
+#endif
+            for (int i = 0; i < j; ++i)
+            {
+                flattenPoints[i].ApplyNewFitEdge();
+            }
+
+            //----------
 
         }
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
