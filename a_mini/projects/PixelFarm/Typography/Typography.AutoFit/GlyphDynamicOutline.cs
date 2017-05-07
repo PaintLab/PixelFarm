@@ -56,7 +56,7 @@ namespace Typography.Rendering
         /// </summary>
         /// <param name="gridBoxW"></param>
         /// <param name="gridBoxH"></param>
-        public void ApplyGridToMasterOutline(int gridBoxW, int gridBoxH)
+        public void ApplyGrid(int gridBoxW, int gridBoxH)
         {
 
             this.GridBoxHeight = gridBoxH;
@@ -69,9 +69,7 @@ namespace Typography.Rendering
             {
                 //apply new grid to this centroid line
                 CentroidLine line = _allCentroidLines[i];
-                line.ApplyGridBox(gridBoxW, gridBoxH);
-                //analyze within the line
-                line.AnalyzeBoneGroups();
+                line.ApplyGridBox(gridBoxW, gridBoxH); 
                 _statCollector.CollectBoneGroup(line);
             }
 
@@ -85,7 +83,6 @@ namespace Typography.Rendering
 
             //assign fit y pos in order
             List<BoneGroup> selectedHBoneGroups = _statCollector._selectedHorizontalBoneGroups;
-
 
             for (int i = selectedHBoneGroups.Count - 1; i >= 0; --i)
             {
@@ -262,17 +259,18 @@ namespace Typography.Rendering
             this._pxScale = pxScale;
             if (EnableGridFit)
             {
-                ApplyGridToMasterOutline(GridBoxWidth, GridBoxHeight);
+                ApplyGrid(GridBoxWidth, GridBoxHeight);
             }
 
             List<GlyphContour> contours = this._contours;
-            int j = contours.Count;
             LeftControlPosX = 0;
+            //
+            int j = contours.Count;
             tx.BeginRead(j);
             for (int i = 0; i < j; ++i)
             {
                 //generate in order of contour
-                GenerateFitOutput3(tx, contours[i]);
+                GenerateContourOutput(tx, contours[i]);
             }
             tx.EndRead();
             //-------------
@@ -298,50 +296,47 @@ namespace Typography.Rendering
             return min;
         }
 
-        void GenerateFitOutput3(
+        void GenerateContourOutput(
             IGlyphTranslator tx,
             GlyphContour contour)
         {
             //walk along the edge in the contour to generate new edge output
-            float pxscale = this._pxScale;
+
             List<GlyphPoint> points = contour.flattenPoints;
             int j = points.Count;
-            if (j > 0)
+            if (j == 0) return;
+            //
+            // 
+            //1.
+            GlyphPoint p = points[0];
+            float pxscale = this._pxScale;
+            bool useGridFit = EnableGridFit;
+            if (useGridFit && p.fit_analyzed)
             {
-                //1.
-                GlyphPoint p = points[0];
+                tx.MoveTo(p.fit_NewX, p.fit_NewY);
+            }
+            else
+            {
+                tx.MoveTo(p.newX * pxscale, p.newY * pxscale);
+            }
 
-
-                if (p.fit_analyzed && dbugTestNewGridFitting)
+            //2. others
+            for (int i = 1; i < j; ++i)
+            {
+                //try to fit to grid 
+                p = points[i];
+                if (useGridFit && p.fit_analyzed)
                 {
-                    tx.MoveTo(p.fit_NewX, p.fit_NewY);
+                    tx.LineTo(p.fit_NewX, p.fit_NewY);
                 }
                 else
                 {
-                    tx.MoveTo(p.newX * pxscale, p.newY * pxscale);
+                    tx.LineTo(p.newX * pxscale, p.newY * pxscale);
                 }
-
-                //2. others
-                for (int i = 1; i < j; ++i)
-                {
-                    //try to fit to grid 
-                    p = points[i];
-
-
-                    if (p.fit_analyzed && dbugTestNewGridFitting)
-                    {
-                        tx.LineTo(p.fit_NewX, p.fit_NewY);
-                    }
-                    else
-                    {
-                        tx.LineTo(p.newX * pxscale, p.newY * pxscale);
-                    }
-                     
-
-                }
-                //close 
-                tx.CloseContour();
             }
+            //close 
+            tx.CloseContour();
+
         }
 
 
