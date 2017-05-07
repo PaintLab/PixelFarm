@@ -248,7 +248,7 @@ namespace Typography.Rendering
 #endif
 
 
-        void GenerateOutput(IGlyphTranslator tx, float pxScale)
+        void SimpleGenerateOutput(IGlyphTranslator tx, float pxScale)
         {
             this.pxScale = pxScale;
 
@@ -306,7 +306,7 @@ namespace Typography.Rendering
             //-------------
         }
 
-        public void GenerateOutput2(IGlyphTranslator tx, float pxScale)
+        public void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
             this.pxScale = pxScale;
             //-------------------------------------------------
@@ -315,7 +315,7 @@ namespace Typography.Rendering
                 if (_offsetFromMasterOutline == 0)
                 {
                     //gen with anohter methods
-                    GenerateOutput(tx, pxScale);
+                    SimpleGenerateOutput(tx, pxScale);
                     return;
                 }
             }

@@ -110,7 +110,7 @@ namespace Typography.Rendering
                 //we will scale back later, so at this step we devide it with toPixelScale
                 _latestDynamicOutline.SetNewEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
 
-                _latestDynamicOutline.GenerateOutput2(tx, toPixelScale);
+                _latestDynamicOutline.GenerateOutput(tx, toPixelScale);
                 this.LeftXControl = _latestDynamicOutline.LeftControlPosX;
             }
             else
