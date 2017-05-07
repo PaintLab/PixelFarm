@@ -166,12 +166,7 @@ namespace Typography.Rendering
         internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
             useNewEdgeCutPointFromMasterOutline = true;
-            // int j = flattenPoints.Count;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    flattenPoints[i].ApplyNewEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
-            //}
-            //
+
             int j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
@@ -191,27 +186,7 @@ namespace Typography.Rendering
                 //close edge
                 GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
             }
-        } 
-//        internal void ApplyFitPositions()
-//        {
-
-//            //after GlyphBone is adjust to the new fit grid
-//            //we adjust each GlyphEdge adn GlyphPoint 
-//            useNewEdgeCutPointFromMasterOutline = false;
-//            int j = flattenPoints.Count;
-//#if DEBUG
-//            for (int i = 0; i < j; ++i)
-//            {
-//                flattenPoints[i].dbugClearLastFit();
-//            }
-//#endif
-//            for (int i = 0; i < j; ++i)
-//            {
-//                flattenPoints[i].ApplyNewFitEdge();
-//            }
-
-//            //---------- 
-//        }
+        }
         internal void ApplyFitPositions2()
         {
 

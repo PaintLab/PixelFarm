@@ -204,7 +204,8 @@ namespace Typography.Rendering
 
     struct BoneGroupStatisticCollector
     {
-
+        //this is helper object
+        
         public List<BoneGroup> _selectedHorizontalBoneGroups;
         public void Reset()
         {

@@ -50,7 +50,7 @@ namespace Typography.Rendering
             LeftControlPosX = intermediateOutline.LeftControlPos; //left control position  
         }
 
-      
+
         /// <summary>
         /// set grid value and apply to current master outline
         /// </summary>
@@ -85,9 +85,9 @@ namespace Typography.Rendering
 
             //assign fit y pos in order
             List<BoneGroup> selectedHBoneGroups = _statCollector._selectedHorizontalBoneGroups;
-            int boneGroupCount = selectedHBoneGroups.Count;
 
-            for (int i = boneGroupCount - 1; i >= 0; --i)
+
+            for (int i = selectedHBoneGroups.Count - 1; i >= 0; --i)
             {
                 //arrange selected horizontal
                 BoneGroup boneGroup = selectedHBoneGroups[i];
@@ -115,8 +115,7 @@ namespace Typography.Rendering
 
                     //this version we focus on vertical hint only 
 
-                    float floorRemaining, diff;
-                    MyMath.FitToFullGrid(p_pnt.y * _pxScale, out floorRemaining, out diff);
+                    float diff = MyMath.CalculateDiffToFit(p_pnt.y * _pxScale);
                     if (diff < 0)
                     {
                         negative_diff += diff;
@@ -127,11 +126,10 @@ namespace Typography.Rendering
                         positive_diff += diff;
                         positiveCount++;
                     }
-
                     //
                     //evaluate diff
                     //
-                    MyMath.FitToFullGrid(q_pnt.y * _pxScale, out floorRemaining, out diff);
+                    diff = MyMath.CalculateDiffToFit(q_pnt.y * _pxScale);
                     if (diff < 0)
                     {
                         negative_diff += diff;
@@ -205,20 +203,19 @@ namespace Typography.Rendering
         {
             //preserve original outline
             //regenerate outline from original outline
-            //----------------------------------------------------------
-
-            this._offsetFromMasterOutline = offsetFromMasterOutline;
-
-            if (offsetFromMasterOutline != 0)
+            //----------------------------------------------------------        
+            if ((this._offsetFromMasterOutline = offsetFromMasterOutline) != 0)
             {
                 //if 0, new other action
                 List<GlyphContour> cnts = _contours;
                 int j = cnts.Count;
-                for (int i = 0; i < j; ++i)
+                for (int i = cnts.Count - 1; i >= 0; --i)
                 {
                     cnts[i].ApplyNewEdgeOffsetFromMasterOutline(offsetFromMasterOutline);
                 }
             }
+            //***
+            _needRefreshGrid = true;
         }
 
         public float LeftControlPosX { get; set; }
@@ -236,8 +233,10 @@ namespace Typography.Rendering
         /// </summary>
         public int GridBoxHeight { get; private set; }
 
+
         void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
+            //collect all centroid lines from each line CentroidLineHub
             _allCentroidLines = new List<CentroidLine>();
             int j = lineHubs.Count;
             for (int i = 0; i < j; ++i)
@@ -259,10 +258,6 @@ namespace Typography.Rendering
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
 
-#if DEBUG
-            s_dbugAffectedPoints.Clear();
-            s_dbugAff2.Clear();
-#endif
             List<List<Vector2>> genPointList = new List<List<Vector2>>();
             for (int i = 0; i < j; ++i)
             {
@@ -317,8 +312,14 @@ namespace Typography.Rendering
         /// <param name="pxScale"></param>
         public void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
+            //if the same scale
             this._pxScale = pxScale;
             //-------------------------------------------------
+#if DEBUG
+            this.EnableGridFit = dbugTestNewGridFitting;
+#endif
+            //-------------------------------------------------
+
             if (!dbugTestNewGridFitting)
             {
                 if (_offsetFromMasterOutline == 0)
@@ -335,16 +336,12 @@ namespace Typography.Rendering
             }
             //-------------------------------------------------
             List<GlyphContour> contours = this._contours;
-            int j = contours.Count;
-#if DEBUG
-            s_dbugAffectedPoints.Clear();
-            s_dbugAff2.Clear();
-#endif
-
+            int j = contours.Count; 
             LeftControlPosX = 0;
             tx.BeginRead(j);
             for (int i = 0; i < j; ++i)
-            {
+            {   
+                //generate in order of contour
                 GenerateFitOutput3(tx, pxScale, contours[i]);
             }
             tx.EndRead();
@@ -728,8 +725,8 @@ namespace Typography.Rendering
         {
             return _dbugTempIntermediateOutline.GetCentroidLineHubs();
         }
-        public static List<GlyphPoint> s_dbugAffectedPoints = new List<GlyphPoint>();
-        public static Dictionary<GlyphPoint, bool> s_dbugAff2 = new Dictionary<GlyphPoint, bool>();
+        //public static List<GlyphPoint> s_dbugAffectedPoints = new List<GlyphPoint>();
+        //public static Dictionary<GlyphPoint, bool> s_dbugAff2 = new Dictionary<GlyphPoint, bool>();
         GlyphIntermediateOutline _dbugTempIntermediateOutline;
         public bool dbugDrawRegeneratedOutlines { get; set; }
 #endif
