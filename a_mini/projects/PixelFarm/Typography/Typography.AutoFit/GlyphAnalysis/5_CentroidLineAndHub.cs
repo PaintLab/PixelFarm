@@ -162,25 +162,23 @@ namespace Typography.Rendering
                         {
                             EdgeLine edge = edges[e];
                             Vector2 midPos = edge.GetMidPoint();
-                            if (midPos.Y < minY)
-                            {
-                                minY = midPos.Y;
-                            }
-                            if (midPos.Y > maxY)
-                            {
-                                maxY = midPos.Y;
-                            }
+                            FindMinMax(ref minY, ref maxY, (float)edge.y0);
+                            FindMinMax(ref minY, ref maxY, (float)edge.y1);
                         }
                         //-------------------
                         bonegroup.minY = minY;
                         bonegroup.maxY = maxY;
+
                         selectedHorizontalBoneGroups.Add(bonegroup);
                     }
                 }
             }
-
         }
-
+        static void FindMinMax(ref float currentMin, ref float currentMax, float value)
+        {
+            if (value < currentMin) { currentMin = value; }
+            if (value > currentMax) { currentMax = value; }
+        }
         /// <summary>
         /// find nearest joint that contains tri 
         /// </summary>
