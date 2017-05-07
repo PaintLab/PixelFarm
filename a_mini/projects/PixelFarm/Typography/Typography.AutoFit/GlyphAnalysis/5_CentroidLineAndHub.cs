@@ -210,7 +210,7 @@ namespace Typography.Rendering
         {
             _selectedHorizontalBoneGroups.Clear();
         }
-        public void CollectBoneGroup(CentroidLine ownerline)
+        public void CollectBoneGroups(CentroidLine ownerline)
         {
             List<BoneGroup> boneGroups = ownerline.boneGroups;
             int j = boneGroups.Count;

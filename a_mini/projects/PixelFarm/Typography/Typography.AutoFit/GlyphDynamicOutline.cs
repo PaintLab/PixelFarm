@@ -69,8 +69,8 @@ namespace Typography.Rendering
             {
                 //apply new grid to this centroid line
                 CentroidLine line = _allCentroidLines[i];
-                line.ApplyGridBox(gridBoxW, gridBoxH); 
-                _statCollector.CollectBoneGroup(line);
+                line.ApplyGridBox(gridBoxW, gridBoxH);
+                _statCollector.CollectBoneGroups(line);
             }
 
             //analyze bone group (stem) as a whole
