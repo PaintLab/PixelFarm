@@ -187,11 +187,11 @@ namespace Typography.Rendering
                     //apply from newX and newY
                     p_pnt.fit_NewX = p_pnt.newX * _pxScale;
                     p_pnt.fit_NewY = (p_pnt.newY * _pxScale) + avg_ydiff;
-                    p_pnt.fit_analyzed = true;
                     //
                     q_pnt.fit_NewX = q_pnt.newX * _pxScale;
                     q_pnt.fit_NewY = (q_pnt.newY * _pxScale) + avg_ydiff;
-                    q_pnt.fit_analyzed = true;
+
+                    p_pnt.fit_analyzed = q_pnt.fit_analyzed = true;
                 }
             }
 
@@ -311,43 +311,32 @@ namespace Typography.Rendering
                 //1.
                 GlyphPoint p = points[0];
 
-                if (p.fit_analyzed)
+
+                if (p.fit_analyzed && dbugTestNewGridFitting)
                 {
-                    if (dbugTestNewGridFitting)
-                    {
-                        tx.MoveTo(p.fit_NewX, p.fit_NewY);
-                    }
-                    else
-                    {
-                        tx.MoveTo(p.newX * pxscale, p.newY * pxscale);
-                    }
+                    tx.MoveTo(p.fit_NewX, p.fit_NewY);
                 }
                 else
                 {
                     tx.MoveTo(p.newX * pxscale, p.newY * pxscale);
                 }
+
                 //2. others
                 for (int i = 1; i < j; ++i)
                 {
                     //try to fit to grid 
                     p = points[i];
-                    if (p.fit_analyzed)
-                    {
 
-                        if (dbugTestNewGridFitting)
-                        {
-                            tx.LineTo(p.fit_NewX, p.fit_NewY);
-                        }
-                        else
-                        {
-                            tx.LineTo(p.newX * pxscale, p.newY * pxscale);
-                        }
+
+                    if (p.fit_analyzed && dbugTestNewGridFitting)
+                    {
+                        tx.LineTo(p.fit_NewX, p.fit_NewY);
                     }
                     else
                     {
                         tx.LineTo(p.newX * pxscale, p.newY * pxscale);
                     }
-
+                     
 
                 }
                 //close 

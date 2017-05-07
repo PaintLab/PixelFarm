@@ -142,6 +142,7 @@ namespace Typography.Rendering
         }
 
 #if DEBUG
+
         public readonly int dbugId = dbugTotalId++;
         static int dbugTotalId;
         internal GlyphPart dbugOwnerPart;  //link back to owner part
