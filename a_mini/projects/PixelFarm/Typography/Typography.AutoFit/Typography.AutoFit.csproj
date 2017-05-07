@@ -41,7 +41,6 @@
     <Compile Include="GlyphAnalysis\4_GlyphBone.cs" />
     <Compile Include="GlyphAnalysis\5_CentroidLineAndHub.cs" />
     <Compile Include="GlyphAnalysis\GlyphContour.cs" />
-    <Compile Include="GlyphAnalysis\GlyphEdge.cs" />
     <Compile Include="GlyphDynamicOutline.cs" />
     <Compile Include="GlyphAnalysis\GlyphOutlineAnalyzer.cs" />
     <Compile Include="GlyphAnalysis\2_GlyphCentroidPair.cs" />
