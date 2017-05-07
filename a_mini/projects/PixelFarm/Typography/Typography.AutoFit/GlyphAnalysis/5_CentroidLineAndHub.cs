@@ -19,8 +19,6 @@ namespace Typography.Rendering
         //bone list is created from linking each joint list
         public List<GlyphBone> bones = new List<GlyphBone>();
         public List<BoneGroup> boneGroups;
-        internal List<BoneGroup> selectedHorizontalBoneGroups;
-
 
 
         internal CentroidLine()
@@ -124,24 +122,17 @@ namespace Typography.Rendering
             }
         }
 
-        public void CollectOutsideEdges()
+        internal void CollectOutsideEdges(List<EdgeLine> tmpEdges)
         {
             int j = this.boneGroups.Count;
-
-            List<EdgeLine> tmpEdges = new List<EdgeLine>();
+            tmpEdges.Clear();
             for (int i = 0; i < j; ++i)
             {
                 BoneGroup bonegroup = this.boneGroups[i];
                 if (!bonegroup.toBeRemoved && bonegroup.slopeKind == LineSlopeKind.Horizontal)
                 {
-                    //this is horizontal group
-
-                    if (selectedHorizontalBoneGroups == null)
-                    {
-                        selectedHorizontalBoneGroups = new List<BoneGroup>();
-                    }
+                    //this is horizontal group 
                     tmpEdges.Clear();
-
                     //
                     int startAt = bonegroup.startIndex;
                     for (int n = bonegroup.count - 1; n >= 0; --n)
@@ -169,8 +160,6 @@ namespace Typography.Rendering
                         //-------------------
                         bonegroup.minY = minY;
                         bonegroup.maxY = maxY;
-
-                        selectedHorizontalBoneGroups.Add(bonegroup);
                     }
                 }
             }
@@ -640,10 +629,10 @@ namespace Typography.Rendering
         static bool SameCoord(EdgeLine a, EdgeLine b)
         {
             //TODO: review this again
-            return (a.GlyphPoint_P == b.GlyphPoint_P ||
-                    a.GlyphPoint_P == b.GlyphPoint_Q) &&
-                   (a.GlyphPoint_Q == b.GlyphPoint_P ||
-                    a.GlyphPoint_Q == b.GlyphPoint_Q);
+            return (a.P == b.P ||
+                    a.P == b.Q) &&
+                   (a.Q == b.P ||
+                    a.Q == b.Q);
         }
 
         public Dictionary<GlyphTriangle, CentroidLine> GetAllCentroidLines()

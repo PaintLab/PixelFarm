@@ -126,8 +126,8 @@ namespace Typography.Rendering
         internal Vector2 GetOriginalEdgeVector()
         {
             return new Vector2(
-                GlyphPoint_Q.OX - _glyphPoint_P.OX,
-                GlyphPoint_Q.OY - _glyphPoint_P.OY);
+                Q.OX - _glyphPoint_P.OX,
+                Q.OY - _glyphPoint_P.OY);
         }
       
         internal void SetOutsideEdge(EdgeLine outsideEdge, Vector2 cutPoint, float cutLen)
@@ -161,7 +161,7 @@ namespace Typography.Rendering
                 _ctrlEdge_P = controlEdge;
 
             }
-            else if (_glyphPoint_P == controlEdge.GlyphPoint_Q)
+            else if (_glyphPoint_P == controlEdge.Q)
             {
 #if DEBUG
                 if (_ctrlEdge_P != null && _ctrlEdge_P != controlEdge)
@@ -179,7 +179,7 @@ namespace Typography.Rendering
 #endif
                 _ctrlEdge_Q = controlEdge;
             }
-            else if (_glyphPoint_Q == controlEdge.GlyphPoint_Q)
+            else if (_glyphPoint_Q == controlEdge.Q)
             {
 #if DEBUG
                 if (_ctrlEdge_Q != null && _ctrlEdge_Q != controlEdge)
@@ -195,14 +195,14 @@ namespace Typography.Rendering
         }
 
 
-        public GlyphPoint GlyphPoint_P
+        public GlyphPoint P
         {
             get
             {
                 return _glyphPoint_P;
             }
         }
-        public GlyphPoint GlyphPoint_Q
+        public GlyphPoint Q
         {
             get
             {

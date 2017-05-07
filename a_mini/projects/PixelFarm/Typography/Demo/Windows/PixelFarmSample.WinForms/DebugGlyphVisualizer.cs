@@ -243,8 +243,8 @@ namespace SampleWinForms.UI
             {
                 //free side      
                 {
-                    GlyphPoint p = edge.GlyphPoint_P;
-                    GlyphPoint q = edge.GlyphPoint_Q;
+                    GlyphPoint p = edge.P;
+                    GlyphPoint q = edge.Q;
 
                     DrawPointKind(painter, p);
                     DrawPointKind(painter, q);
@@ -288,8 +288,8 @@ namespace SampleWinForms.UI
                     painter.StrokeWidth = prevWidth;
 
                     //draw
-                    GlyphPoint p = edge.GlyphPoint_P;
-                    GlyphPoint q = edge.GlyphPoint_Q;
+                    GlyphPoint p = edge.P;
+                    GlyphPoint q = edge.Q;
 
                     //
                     //AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
@@ -337,8 +337,8 @@ namespace SampleWinForms.UI
 
                 {
 
-                    GlyphPoint p = edge.GlyphPoint_P;
-                    GlyphPoint q = edge.GlyphPoint_Q;
+                    GlyphPoint p = edge.P;
+                    GlyphPoint q = edge.Q;
                     //---------   
                     {
                         //TODO: reimplement this again

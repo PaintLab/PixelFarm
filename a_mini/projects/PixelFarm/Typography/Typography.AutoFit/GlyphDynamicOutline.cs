@@ -76,9 +76,10 @@ namespace Typography.Rendering
             //analyze bone group (stem) as a whole
             _statCollector.AnalyzeBoneGroups();
 
+            List<EdgeLine> tmpEdges = new List<EdgeLine>();
             for (int i = 0; i < centroidLineCount; ++i)
             {
-                _allCentroidLines[i].CollectOutsideEdges();
+                _allCentroidLines[i].CollectOutsideEdges(tmpEdges);
             }
 
             //assign fit y pos in order
@@ -107,8 +108,8 @@ namespace Typography.Rendering
                 for (int e = 0; e < edgeCount; ++e)
                 {
                     EdgeLine ee = h_edges[e];
-                    GlyphPoint p_pnt = ee.GlyphPoint_P;
-                    GlyphPoint q_pnt = ee.GlyphPoint_Q;
+                    GlyphPoint p_pnt = ee.P;
+                    GlyphPoint q_pnt = ee.Q;
 
                     //this version we focus on vertical hint only 
 
@@ -178,8 +179,8 @@ namespace Typography.Rendering
                 for (int e = 0; e < edgeCount; ++e)
                 {
                     EdgeLine ee = h_edges[e];
-                    GlyphPoint p_pnt = ee.GlyphPoint_P;
-                    GlyphPoint q_pnt = ee.GlyphPoint_Q;
+                    GlyphPoint p_pnt = ee.P;
+                    GlyphPoint q_pnt = ee.Q;
 
                     //apply from newX and newY
                     p_pnt.fit_NewX = p_pnt.newX * _pxScale;

@@ -185,7 +185,7 @@ namespace Typography.Rendering
 
                         //------------
                         //both p and q of this edge is part of horizontal edge 
-                        GlyphPoint p = edge.GlyphPoint_P;
+                        GlyphPoint p = edge.P;
                         if (p != null)
                         {
                             //TODO: review here
@@ -194,7 +194,7 @@ namespace Typography.Rendering
                             //p.horizontalEdge = edge;
                         }
 
-                        GlyphPoint q = edge.GlyphPoint_Q;
+                        GlyphPoint q = edge.Q;
                         if (q != null)
                         {
                             //TODO: review here
@@ -241,14 +241,14 @@ namespace Typography.Rendering
                 case LineSlopeKind.Vertical:
                     {
                         //both p and q of this edge is part of vertical edge 
-                        GlyphPoint p = edge.GlyphPoint_P;
+                        GlyphPoint p = edge.P;
                         if (p != null)
                         {
                             //TODO: review here 
                             p.NotifyVerticalEdge(edge);
                         }
 
-                        GlyphPoint q = edge.GlyphPoint_Q;
+                        GlyphPoint q = edge.Q;
                         if (q != null)
                         {   //TODO: review here
 
