@@ -10,7 +10,7 @@ namespace Typography.Rendering
         internal readonly EdgeLine _edgeLine;
         public readonly GlyphPoint _P;
         public readonly GlyphPoint _Q;
-        Vector2 _newMidPoint;
+        Vector2 _newDynamicMidPoint;
 
         /// <summary>
         /// calculated edge CutX  from 2 outside cutpoint (E0,E1)
@@ -42,7 +42,7 @@ namespace Typography.Rendering
             this._P = p0;
             this._Q = p1;
             this._edgeLine = edgeLine;
-            _newMidPoint = this.GetMidPoint(); //original 
+            _newDynamicMidPoint = this.GetMidPoint(); //original 
 
         }
         internal void FindPerpendicularBones()
@@ -60,7 +60,7 @@ namespace Typography.Rendering
         }
         public Vector2 GetNewMidPoint()
         {
-            return _newMidPoint;
+            return _newDynamicMidPoint;
         }
 
         public Vector2 NewPos_P
@@ -108,8 +108,8 @@ namespace Typography.Rendering
 #endif
         }
 
-   
-        internal void ApplyNewEdgeFromMasterOutline(float newEdgeOffsetFromMasterOutline)
+
+        internal void SetDynamicEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
 
             //TODO: refactor here...
@@ -120,32 +120,31 @@ namespace Typography.Rendering
             Vector2 _rotate = _o_edgeVector.Rotate(90);
             //
             Vector2 _deltaVector = _rotate.NewLength(newEdgeOffsetFromMasterOutline);
-            //new len  
-            _newMidPoint = GetMidPoint() + _deltaVector;
 
+            //new dynamic mid point  
+            _newDynamicMidPoint = GetMidPoint() + _deltaVector;
         }
 
-        public static void UpdateEdgeCutPoint(GlyphEdge e0, GlyphEdge e1)
+        internal static void UpdateEdgeCutPoint(GlyphEdge e0, GlyphEdge e1)
         {
 
             //TODO: refactor here...
             //find cutpoint from e0.q to e1.p 
             //new sample
 
-            Vector2 tmp_e0_q = e0._newMidPoint + e0.GetEdgeVector();
-            Vector2 tmp_e1_p = e1._newMidPoint - e1.GetEdgeVector();
+            Vector2 tmp_e0_q = e0._newDynamicMidPoint + e0.GetEdgeVector();
+            Vector2 tmp_e1_p = e1._newDynamicMidPoint - e1.GetEdgeVector();
 
             Vector2 cutpoint;
-            if (MyMath.FindCutPoint(e0._newMidPoint, tmp_e0_q, e1._newMidPoint, tmp_e1_p, out cutpoint))
+            if (MyMath.FindCutPoint(e0._newDynamicMidPoint, tmp_e0_q, e1._newDynamicMidPoint, tmp_e1_p, out cutpoint))
             {
                 e0.newEdgeCut_Q_X = e1.newEdgeCut_P_X = cutpoint.X;
                 e0.newEdgeCut_Q_Y = e1.newEdgeCut_P_Y = cutpoint.Y;
             }
             else
             {
-                //2 edge is pararell
+                //pararell edges
             }
-
         }
 
 

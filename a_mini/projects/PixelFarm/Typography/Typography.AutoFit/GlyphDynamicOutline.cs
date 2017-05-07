@@ -329,18 +329,18 @@ namespace Typography.Rendering
                     return;
                 }
             }
-            else
+            //------------------------------------------------- 
+            if (EnableGridFit)
             {
-                //test grid fitting
                 ApplyGridToMasterOutline(GridBoxWidth, GridBoxHeight);
             }
-            //-------------------------------------------------
+
             List<GlyphContour> contours = this._contours;
-            int j = contours.Count; 
+            int j = contours.Count;
             LeftControlPosX = 0;
             tx.BeginRead(j);
             for (int i = 0; i < j; ++i)
-            {   
+            {
                 //generate in order of contour
                 GenerateFitOutput3(tx, pxScale, contours[i]);
             }

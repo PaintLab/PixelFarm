@@ -170,8 +170,7 @@ namespace Typography.Rendering
             int j = edges.Count;
             for (int i = 0; i < j; ++i)
             {
-                //apply new relative len to edge***
-                edges[i].ApplyNewEdgeFromMasterOutline(newEdgeOffsetFromMasterOutline);
+                edges[i].SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
             }
             //calculate edge cutpoint
             int lim = edges.Count - 1; //skip lastone
