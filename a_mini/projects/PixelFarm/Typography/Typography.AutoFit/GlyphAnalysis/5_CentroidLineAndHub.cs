@@ -205,9 +205,10 @@ namespace Typography.Rendering
     {
 
         public List<BoneGroup> _selectedHorizontalBoneGroup = new List<BoneGroup>();
-        public BoneGroupStatisticCollector()
-        {
 
+        public void Reset()
+        {
+            _selectedHorizontalBoneGroup.Clear();
         }
         public void CollectBoneGroup(CentroidLine ownerline)
         {

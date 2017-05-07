@@ -63,13 +63,13 @@ namespace Typography.Rendering
             }
         }
 
-
+        BoneGroupStatisticCollector statCollector = new BoneGroupStatisticCollector();
         public void ApplyGridToMasterOutline(int gridBoxW, int gridBoxH)
         {
             this.GridBoxHeight = gridBoxH;
             this.GridBoxWidth = gridBoxW;
             int centroidLineCount = _allCentroidLines.Count;
-            BoneGroupStatisticCollector statCollector = new BoneGroupStatisticCollector();
+            statCollector.Reset();
             for (int i = 0; i < centroidLineCount; ++i)
             {
                 //apply new grid to this centroid line
@@ -89,170 +89,123 @@ namespace Typography.Rendering
             }
 
             //assign fit y pos in order
+            List<BoneGroup> selectedHBoneGroups = statCollector._selectedHorizontalBoneGroup;
+            int boneGroupCount = selectedHBoneGroups.Count;
 
 
-
-
-
-            //apply to line hub
-            for (int i = 0; i < centroidLineCount; ++i)
+            for (int i = boneGroupCount - 1; i >= 0; --i)
             {
-                CentroidLine line = _allCentroidLines[i];
-                List<BoneGroup> sel_H_edges = line.selectedHorizontalBoneGroups;
-                if (sel_H_edges != null)
+                //arrange selected horizontal
+                BoneGroup boneGroup = selectedHBoneGroups[i];
+                if (boneGroup.toBeRemoved)
                 {
-                    //apply gridBoxW and H per 'stem group'
-                    int n = sel_H_edges.Count;
-                    for (int m = 0; m < n; ++m)
+                    continue;
+                }
+
+                EdgeLine[] h_edges = boneGroup.edges;
+
+                int edgeCount = h_edges.Length;
+
+                //we need to calculate the avg of the glyph point
+                //and add a total summary to this
+
+                float negative_diff = 0;
+                float positive_diff = 0;
+                int negativeCount = 0;
+                int positiveCount = 0;
+                for (int e = 0; e < edgeCount; ++e)
+                {
+                    EdgeLine ee = h_edges[e];
+                    GlyphPoint p_pnt = ee.GlyphPoint_P;
+                    GlyphPoint q_pnt = ee.GlyphPoint_Q;
+
+                    //this version we focus on vertical hint only 
+
+                    float floorRemaining, diff;
+                    MyMath.FitToGrid2(p_pnt.y * pxScale, 1, out floorRemaining, out diff);
+                    if (diff < 0)
                     {
-                        //all edge lines in this list are
-                        //selected horizontal edges
-                        BoneGroup boneGroup = sel_H_edges[m];
-                        EdgeLine[] h_edges = boneGroup.edges;
-
-                        int edgeCount = h_edges.Length;
-
-                        //we need to calculate the avg of the glyph point
-                        //and add a total summary to this
-                        float diffTotal = 0;
-
-                        float min_diff = float.MaxValue;
-                        float max_diff = float.MinValue;
-
-                        for (int e = 0; e < edgeCount; ++e)
-                        {
-                            EdgeLine ee = h_edges[e];
-                            GlyphPoint p_pnt = ee.GlyphPoint_P;
-                            GlyphPoint q_pnt = ee.GlyphPoint_Q;
-
-                            //this version we focus on vertical hint only 
-
-                            float floorRemaining, diff;
-                            MyMath.FitToGrid2(p_pnt.y * pxScale, 1, out floorRemaining, out diff);
-                            if (diff < min_diff)
-                            {
-                                min_diff = diff;
-                            }
-                            if (diff > max_diff)
-                            {
-                                max_diff = diff;
-                            }
-                            diffTotal += Math.Abs(diff);
-                            //
-                            //evaluate diff
-                            //
-                            MyMath.FitToGrid2(q_pnt.y * pxScale, 1, out floorRemaining, out diff);
-                            if (diff < min_diff)
-                            {
-                                min_diff = diff;
-                            }
-                            if (diff > max_diff)
-                            {
-                                max_diff = diff;
-                            }
-                            diffTotal += Math.Abs(diff);
-                        }
-
-                        float avg_ydiff = diffTotal / (edgeCount * 2);
-                        //compare abs max /min 
-
-                        if (Math.Abs(min_diff) > max_diff && min_diff < 0)
-                        {
-                            avg_ydiff = -avg_ydiff;
-                        }
-
-
-                        //distribute all adjust value to specific glyph points
-                        for (int e = 0; e < edgeCount; ++e)
-                        {
-                            EdgeLine ee = h_edges[e];
-                            GlyphPoint p_pnt = ee.GlyphPoint_P;
-                            GlyphPoint q_pnt = ee.GlyphPoint_Q;
-                            p_pnt.fit_NewX = p_pnt.x * pxScale;
-                            p_pnt.fit_NewY = (p_pnt.y * pxScale) + avg_ydiff;
-                            p_pnt.fit_analyzed = true;
-                            //
-                            q_pnt.fit_NewX = q_pnt.x * pxScale;
-                            q_pnt.fit_NewY = (q_pnt.y * pxScale) + avg_ydiff;
-                            q_pnt.fit_analyzed = true;
-                            //
-                        }
-
-
-#if DEBUG
-                        //if ((diffTotal / (edgeCount * 2)) > 1)
-                        //{
-
-                        //}
-                        //Console.WriteLine("ydiff:" + m + " =" + (diffTotal / (edgeCount * 2)));
-#endif
+                        negative_diff += diff;
+                        negativeCount++;
                     }
+                    else
+                    {
+                        positive_diff += diff;
+                        positiveCount++;
+                    }
+
+                    //
+                    //evaluate diff
+                    //
+                    MyMath.FitToGrid2(q_pnt.y * pxScale, 1, out floorRemaining, out diff);
+                    if (diff < 0)
+                    {
+                        negative_diff += diff;
+                        negativeCount++;
+                    }
+                    else
+                    {
+                        positive_diff += diff;
+                        positiveCount++;
+                    }
+                }
+
+                float avg_ydiff = 0;
+                if (positiveCount != 0 && negativeCount != 0)
+                {
+                    //check if we should move to positive or negative
+                    float avg_pos = positive_diff / positiveCount;
+                    //check only 'amount', not sign ,
+                    //make nagative to positive
+                    float avg_neg = -(negative_diff / negativeCount);
+
+                    //choose minimum move to reach the target
+                    if (avg_pos > avg_neg)
+                    {
+                        //move to negative***
+                        avg_ydiff = -(avg_pos + avg_neg) / 2;
+
+                    }
+                    else
+                    {
+                        //avg to positive
+                        avg_ydiff = (avg_pos + avg_neg) / 2;
+                    }
+
+                }
+                else if (positiveCount != 0)
+                {
+                    //only positive side
+                    avg_ydiff = positive_diff / positiveCount;
+                }
+                else if (negativeCount != 0)
+                {
+                    //only negative side, preserve negative sign
+                    avg_ydiff = negative_diff / negativeCount;
+                }
+
+                //compare abs max /min  
+
+
+                //distribute all adjust value to specific glyph points
+                for (int e = 0; e < edgeCount; ++e)
+                {
+                    EdgeLine ee = h_edges[e];
+                    GlyphPoint p_pnt = ee.GlyphPoint_P;
+                    GlyphPoint q_pnt = ee.GlyphPoint_Q;
+                    p_pnt.fit_NewX = p_pnt.x * pxScale;
+                    p_pnt.fit_NewY = (p_pnt.y * pxScale) + avg_ydiff;
+                    p_pnt.fit_analyzed = true;
+                    //
+                    q_pnt.fit_NewX = q_pnt.x * pxScale;
+                    q_pnt.fit_NewY = (q_pnt.y * pxScale) + avg_ydiff;
+                    q_pnt.fit_analyzed = true;
+
                 }
             }
 
-
         }
 
-        //public void ApplyGridToMasterOutline(int gridBoxW, int gridBoxH)
-        //{
-        //    this.GridBoxHeight = gridBoxH;
-        //    this.GridBoxWidth = gridBoxW;
-
-
-        //    int centroidLineCount = _allCentroidLines.Count;
-        //    //apply to line hub
-        //    for (int i = 0; i < centroidLineCount; ++i)
-        //    {
-        //        CentroidLine line = _allCentroidLines[i];
-        //        List<List<EdgeLine>> sel_H_edges = line.selectedHorizontalEdges;
-        //        if (sel_H_edges != null)
-        //        {
-        //            //apply gridBoxW and H per 'stem group'
-        //            int n = sel_H_edges.Count;
-        //            for (int m = 0; m < n; ++m)
-        //            {
-        //                //all edge lines in this list are
-        //                //selected horizontal edges
-        //                List<EdgeLine> h_edges = sel_H_edges[m];
-        //                int edgeCount = h_edges.Count;
-        //                for (int e = 0; e < edgeCount; ++e)
-        //                {
-
-        //                }
-        //            }
-        //        }
-        //    }
-        //    //---------------------------------------------
-        //    //fit bone to grid 
-        //    int j = _allBones.Count;
-        //    for (int i = 0; i < j; ++i)
-        //    {
-        //        GlyphBone bone = _allBones[i];
-        //        GlyphBoneJoint jointA = bone.JointA;
-        //        Vector2 jointPos = jointA.Position;
-        //        jointA.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
-        //        if (bone.JointB != null)
-        //        {
-        //            GlyphBoneJoint jointB = bone.JointB;
-        //            jointPos = jointB.Position;
-        //            jointB.SetFitXY(MyMath.FitToGrid(jointPos.X, gridBoxW), MyMath.FitToGrid(jointPos.Y, gridBoxH));
-        //        }
-        //        else
-        //        {
-        //            //this is tip
-        //            //add information about tip too 
-        //        }
-        //    }
-        //    //--------------------------------------------
-        //    //after all bones are fit, then => add fit hint to each contour
-        //    List<GlyphContour> cnts = _contours;
-        //    j = cnts.Count;
-
-        //    for (int i = 0; i < j; ++i)
-        //    {
-        //        cnts[i].ApplyFitPositions();
-        //    }
-        //}
         /// <summary>
         /// new stroke width offset from master outline
         /// </summary>
