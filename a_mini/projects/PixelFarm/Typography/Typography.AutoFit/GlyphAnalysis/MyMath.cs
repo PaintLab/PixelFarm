@@ -4,61 +4,21 @@ namespace Typography.Rendering
 {
 
     public static class MyMath
-    {
-        internal static float FitToGridF(float value, int gridSize)
+    { 
+        /// <summary>
+        /// calculate distance to fit interger grid pos, assum grid size=1
+        /// </summary>
+        /// <param name="value">diff distance to fit grid position</param>
+        /// <returns></returns>
+        internal static float CalculateDiffToFit(float value)
         {
-            //fit to grid 
-            //1. lower
-            int floor = ((int)(value / gridSize) * gridSize);
-            //2. midpoint
-            float remaining = value - floor;
-
-            float halfGrid = gridSize / 2f;
-            if (remaining >= (2 / 3f) * gridSize)
-            {
-                return floor + gridSize;
-            }
-            else if (remaining >= (1 / 3f) * gridSize)
-            {
-                return (floor + gridSize * (1 / 2f));
-            }
-            else
-            {
-                return floor;
-            }
-#if DEBUG
-            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
-            ////if (result % gridSize != 0)
-            ////{
-            ////}
-            //return result;
-#else
-            return (remaining > halfGrid) ? floor + gridSize : floor;
-#endif
-        }
-        internal static int FitToGrid2(float value, int gridSize, out float floorRemaining, out float diff)
-        {
-            //fit to grid 
-            //1. lower
-            //int floor = ((int)(value / gridSize) * gridSize);
+            //optimized version, assum gridSize = 1
             int floor = (int)value;
-            floorRemaining = value - floor;
-
-            if (floorRemaining >= (1 / 2f) * gridSize)
-            {
-                int result = floor + gridSize;
-                diff = result - value;
-                return result;
-            }
-            else
-            {
-                int result = floor;
-                diff = result - value;
-                return result;
-            }
-
+            return ((value - floor) >= (1 / 2f)) ?
+                (floor + 1) - value : //if true, more than half of 1 
+                floor - value; //else
         }
-        internal static int FitToGrid(float value, int gridSize)
+        internal static int FitToHalfGrid(float value, int gridSize)
         {
             //fit to grid 
             //1. lower

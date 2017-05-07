@@ -63,7 +63,7 @@ namespace Typography.Rendering
             {
                 GlyphBoneJoint joint = _joints[i];
                 Vector2 jointPos = joint.OriginalJointPos;
-                joint.SetFitXY(MyMath.FitToGrid(jointPos.X, gridW), MyMath.FitToGrid(jointPos.Y, gridH));
+                joint.SetFitXY(MyMath.FitToHalfGrid(jointPos.X, gridW), MyMath.FitToHalfGrid(jointPos.Y, gridH));
             }
             //calculate slope for all bones
             j = bones.Count;
@@ -201,14 +201,15 @@ namespace Typography.Rendering
             return null;
         }
     }
-    class BoneGroupStatisticCollector
+
+    struct BoneGroupStatisticCollector
     {
-
-        public List<BoneGroup> _selectedHorizontalBoneGroup = new List<BoneGroup>();
-
+        //this is helper object
+        
+        public List<BoneGroup> _selectedHorizontalBoneGroups;
         public void Reset()
         {
-            _selectedHorizontalBoneGroup.Clear();
+            _selectedHorizontalBoneGroups.Clear();
         }
         public void CollectBoneGroup(CentroidLine ownerline)
         {
@@ -220,7 +221,7 @@ namespace Typography.Rendering
                 BoneGroup boneGroup = boneGroups[i];
                 if (boneGroup.slopeKind == LineSlopeKind.Horizontal)
                 {
-                    _selectedHorizontalBoneGroup.Add(boneGroup);
+                    _selectedHorizontalBoneGroups.Add(boneGroup);
                 }
 
             }
@@ -233,15 +234,15 @@ namespace Typography.Rendering
             //quantization?
             //
             //this version, just use median len
-            _selectedHorizontalBoneGroup.Sort((bg0, bg1) => bg0.virtFitLen.CompareTo(bg1.virtFitLen));
-            int groupCount = _selectedHorizontalBoneGroup.Count;
+            _selectedHorizontalBoneGroups.Sort((bg0, bg1) => bg0.virtFitLen.CompareTo(bg1.virtFitLen));
+            int groupCount = _selectedHorizontalBoneGroups.Count;
             //median
             int mid_index = groupCount / 2;
-            BoneGroup bonegroup = _selectedHorizontalBoneGroup[mid_index];
+            BoneGroup bonegroup = _selectedHorizontalBoneGroups[mid_index];
             float lower_limit = bonegroup.virtFitLen / 4;
             for (int i = 0; i < mid_index; ++i)
             {
-                bonegroup = _selectedHorizontalBoneGroup[i];
+                bonegroup = _selectedHorizontalBoneGroups[i];
                 if (bonegroup.virtFitLen < lower_limit)
                 {
                     bonegroup.toBeRemoved = true;
@@ -254,7 +255,7 @@ namespace Typography.Rendering
             }
             //--------------------
             //arrange again for vertical alignment
-            _selectedHorizontalBoneGroup.Sort((bg0, bg1) => bg0.y_pos.CompareTo(bg1.y_pos));
+            _selectedHorizontalBoneGroups.Sort((bg0, bg1) => bg0.y_pos.CompareTo(bg1.y_pos));
         }
     }
     class BoneGroup

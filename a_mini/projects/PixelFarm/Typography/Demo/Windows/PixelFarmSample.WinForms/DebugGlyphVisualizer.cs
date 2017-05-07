@@ -286,50 +286,49 @@ namespace SampleWinForms.UI
                     painter.StrokeWidth = 3;
                     painter.Line(edge.x0 * scale, edge.y0 * scale, edge.x1 * scale, edge.y1 * scale, PixelFarm.Drawing.Color.Yellow);
                     painter.StrokeWidth = prevWidth;
-                    GlyphEdge glyphEdge = edge.dbugGlyphEdge;
-                    if (glyphEdge != null)
+
+                    //draw
+                    GlyphPoint p = edge.GlyphPoint_P;
+                    GlyphPoint q = edge.GlyphPoint_Q;
+
+                    //
+                    //AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
+                    //if (p_bones != null)
+                    //{
+                    //    Vector2 v2 = new Vector2(q.x, q.y);
+                    //    foreach (GlyphBone b in p_bones)
+                    //    {
+                    //        Vector2 v3 = b.GetMidPoint();
+                    //        painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Yellow);
+                    //    }
+                    //}
+
+                    //AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
+                    //if (q_bones != null)
+                    //{
+                    //    Vector2 v2 = new Vector2(p.x, p.y);
+                    //    foreach (GlyphBone b in q_bones)
+                    //    {
+
+                    //        //Vector2 v2 = new Vector2(q.x, q.y);
+                    //        Vector2 v3 = b.GetMidPoint();
+                    //        painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Green);
+                    //    }
+                    //}
+
                     {
-                        //draw
-                        GlyphPoint p = edge.GlyphPoint_P;
-                        GlyphPoint q = edge.GlyphPoint_Q;
-
-                        //
-                        AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
-                        if (p_bones != null)
-                        {
-                            Vector2 v2 = new Vector2(q.x, q.y);
-                            foreach (GlyphBone b in p_bones)
-                            {
-                                Vector2 v3 = b.GetMidPoint();
-                                painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Yellow);
-                            }
-                        }
-
-                        AssocBoneCollection q_bones = glyphEdge._Q.dbugGetAssocBones();
-                        if (q_bones != null)
-                        {
-                            Vector2 v2 = new Vector2(p.x, p.y);
-                            foreach (GlyphBone b in q_bones)
-                            {
-
-                                //Vector2 v2 = new Vector2(q.x, q.y);
-                                Vector2 v3 = b.GetMidPoint();
-                                painter.Line(v2.X * scale, v2.Y * scale, v3.X * scale, v3.Y * scale, PixelFarm.Drawing.Color.Green);
-                            }
-                        }
-
-                        {
-                            Vector2 orginal_MidPoint = glyphEdge.GetMidPoint() * _pxscale;
-                            Vector2 newMidPoint = glyphEdge.GetNewMidPoint() * _pxscale;
-                            painter.FillRectLBWH(newMidPoint.X, newMidPoint.Y, 3, 3, PixelFarm.Drawing.Color.Red);
-                            painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
+                        //TODO: reimplement this again
+                        //Vector2 orginal_MidPoint = glyphEdge.GetMidPoint() * _pxscale;
+                        //Vector2 newMidPoint = glyphEdge.GetNewMidPoint() * _pxscale;
+                        //painter.FillRectLBWH(newMidPoint.X, newMidPoint.Y, 3, 3, PixelFarm.Drawing.Color.Red);
+                        //painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
 
 
-                            painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
-                            painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
+                        //painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
+                        //painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
 
-                        }
                     }
+
                 }
                 else
                 {
@@ -337,32 +336,31 @@ namespace SampleWinForms.UI
                 }
 
                 {
-                    GlyphEdge glyphEdge = edge.dbugGlyphEdge;
-                    if (glyphEdge != null)
+
+                    GlyphPoint p = edge.GlyphPoint_P;
+                    GlyphPoint q = edge.GlyphPoint_Q;
+                    //---------   
                     {
-                        GlyphPoint p = edge.GlyphPoint_P;
-                        GlyphPoint q = edge.GlyphPoint_Q;
-                        //---------   
-                        {
-                            Vector2 orginal_MidPoint = glyphEdge.GetMidPoint() * _pxscale;
-                            Vector2 newMidPoint = glyphEdge.GetNewMidPoint() * _pxscale;
+                        //TODO: reimplement this again
+                        //Vector2 orginal_MidPoint = glyphEdge.GetMidPoint() * _pxscale;
+                        //Vector2 newMidPoint = glyphEdge.GetNewMidPoint() * _pxscale;
 
-                            if (DrawEdgeMidPoint)
-                            {
-                                painter.FillRectLBWH(newMidPoint.X, newMidPoint.Y, 3, 3, PixelFarm.Drawing.Color.Red);
-                            }
-                            //
-                            painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
-                            painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue);
-                            painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue);
+                        //if (DrawEdgeMidPoint)
+                        //{
+                        //    painter.FillRectLBWH(newMidPoint.X, newMidPoint.Y, 3, 3, PixelFarm.Drawing.Color.Red);
+                        //}
+                        ////
+                        //painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
 
-                        }
-                        //---------   
-                        if (this.DrawPerpendicularLine)
-                        {
-                            DrawPerpendicularEdgeControlPoints(painter, glyphEdge);
-                        }
-                    } 
+                        //painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue);
+                        //painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue); 
+                    }
+                    //---------   
+                    if (this.DrawPerpendicularLine)
+                    {
+                        DrawPerpendicularEdgeControlPoints(painter, edge);
+                    }
+
                 }
             }
             else
@@ -375,9 +373,9 @@ namespace SampleWinForms.UI
 
             }
         }
-        void DrawPerpendicularEdgeControlPoints(CanvasPainter painter, GlyphEdge edge)
+        void DrawPerpendicularEdgeControlPoints(CanvasPainter painter, EdgeLine internalEdgeLine)
         {
-            EdgeLine internalEdgeLine = edge.dbugGetInternalEdgeLine();
+
             //Vector2 regen0 = edge._newRegen0 * _pxscale;
             //Vector2 regen1 = edge._newRegen1 * _pxscale;
             //painter.FillRectLBWH(regen0.X, regen0.Y, 5, 5, PixelFarm.Drawing.Color.Green);
@@ -440,8 +438,9 @@ namespace SampleWinForms.UI
 
             if (!foundSomePerpendicularEdge)
             {
-                Vector2 midpoint = edge.GetMidPoint();
-                painter.FillRectLBWH(midpoint.X, midpoint.Y, 5, 5, PixelFarm.Drawing.Color.White);
+                //TODO: reimplement this again
+                //Vector2 midpoint = edge.GetMidPoint();
+                //painter.FillRectLBWH(midpoint.X, midpoint.Y, 5, 5, PixelFarm.Drawing.Color.White);
             }
         }
         void DrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint)
@@ -580,19 +579,20 @@ namespace SampleWinForms.UI
 
         }
 
-        protected override void OnGlyphEdgeN(GlyphEdge e)
+        protected override void OnGlyphEdgeN(EdgeLine e)
         {
             float pxscale = this._pxscale;
-            Vector2 cut_p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
-            Vector2 cut_q = new Vector2(e.newEdgeCut_Q_X, e.newEdgeCut_Q_Y) * pxscale;
 
+            //TODO: reimplement this again
 
-            painter.FillRectLBWH(cut_p.X, cut_p.Y, 3, 3, PixelFarm.Drawing.Color.Red);
+            //Vector2 cut_p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
+            //Vector2 cut_q = new Vector2(e.newEdgeCut_Q_X, e.newEdgeCut_Q_Y) * pxscale; 
+            //painter.FillRectLBWH(cut_p.X, cut_p.Y, 3, 3, PixelFarm.Drawing.Color.Red);
             //painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
 
-            _infoView.ShowGlyphEdge(e,
-                e.newEdgeCut_P_X, e.newEdgeCut_P_Y,
-                e.newEdgeCut_Q_X, e.newEdgeCut_Q_Y);
+            //_infoView.ShowGlyphEdge(e,
+            //    e.newEdgeCut_P_X, e.newEdgeCut_P_Y,
+            //    e.newEdgeCut_Q_X, e.newEdgeCut_Q_Y);
         }
         protected override void OnCentroidLine(double px, double py, double qx, double qy)
         {

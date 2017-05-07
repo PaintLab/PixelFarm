@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+using System.Numerics;
 
 namespace Typography.Rendering
 {
@@ -12,7 +13,7 @@ namespace Typography.Rendering
         public List<GlyphPart> parts = new List<GlyphPart>();
 
         internal List<GlyphPoint> flattenPoints; //original flatten points 
-        internal List<GlyphEdge> edges; //for dyanmic outline processing
+        List<EdgeLine> edges; //for dyanmic outline processing
 
         bool analyzed;
         bool analyzedClockDirection;
@@ -126,7 +127,7 @@ namespace Typography.Rendering
         internal void CreateGlyphEdges()
         {
             int lim = flattenPoints.Count - 1;
-            edges = new List<GlyphEdge>();
+            edges = new List<EdgeLine>();
             GlyphPoint p = null, q = null;
             EdgeLine edgeLine = null;
 
@@ -134,105 +135,98 @@ namespace Typography.Rendering
             {
                 p = flattenPoints[i];
                 q = flattenPoints[i + 1];
+
                 if ((edgeLine = FineCommonEdgeLine(p, q)) != null)
                 {
-                    edges.Add(new GlyphEdge(p, q, edgeLine));
+                    edges.Add(edgeLine);
                 }
                 else
                 {
-
+                    //?
                 }
             }
             //close   
             p = flattenPoints[lim];
             q = flattenPoints[0];
+
             if ((edgeLine = FineCommonEdgeLine(p, q)) != null)
             {
-                edges.Add(new GlyphEdge(p, q, edgeLine));
+                edges.Add(edgeLine);
             }
             else
             {
                 //not found
             }
-            int j = edges.Count;
-            for (int i = 0; i < j; ++i)
+            for (int i = flattenPoints.Count - 1; i >= 0; --i)
             {
-                edges[i].FindPerpendicularBones();
-            }
-            //
-        }
-
-        bool useNewEdgeCutPointFromMasterOutline = false;
-        internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
-        {
-            useNewEdgeCutPointFromMasterOutline = true;
-            // int j = flattenPoints.Count;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    flattenPoints[i].ApplyNewEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
-            //}
-            //
-            int j = edges.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                //apply new relative len to edge***
-                edges[i].ApplyNewEdgeFromMasterOutline(newEdgeOffsetFromMasterOutline);
-            }
-            //calculate edge cutpoint
-            int lim = edges.Count - 1; //skip lastone
-            for (int i = 0; i < lim; ++i)
-            {
-                //calculate adjacent outside edge cutpoint          
-                GlyphEdge.UpdateEdgeCutPoint(edges[i], edges[i + 1]);
-            }
-            //last one
-            if (lim > 1)
-            {
-                //close edge
-                GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
+                flattenPoints[i].EvaluatePerpendicularBone();
             }
         } 
-//        internal void ApplyFitPositions()
-//        {
-
-//            //after GlyphBone is adjust to the new fit grid
-//            //we adjust each GlyphEdge adn GlyphPoint 
-//            useNewEdgeCutPointFromMasterOutline = false;
-//            int j = flattenPoints.Count;
-//#if DEBUG
-//            for (int i = 0; i < j; ++i)
-//            {
-//                flattenPoints[i].dbugClearLastFit();
-//            }
-//#endif
-//            for (int i = 0; i < j; ++i)
-//            {
-//                flattenPoints[i].ApplyNewFitEdge();
-//            }
-
-//            //---------- 
-//        }
-        internal void ApplyFitPositions2()
+        internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
+        {   
+            int j = edges.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                edges[i].SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
+            }
+            //calculate edge cutpoint             
+            for (int i = flattenPoints.Count - 1; i >= 0; --i)
+            {
+                UpdateNewEdgeCut(flattenPoints[i]);
+            }
+        }
+        /// <summary>
+        /// update dynamic cutpoint of 2 adjacent edges
+        /// </summary>
+        /// <param name="p"></param>
+        static void UpdateNewEdgeCut(GlyphPoint p)
         {
+            EdgeLine e0 = p.E0;
+            EdgeLine e1 = p.E1;
 
-            //after GlyphBone is adjust to the new fit grid
-            //we adjust each GlyphEdge adn GlyphPoint 
-            useNewEdgeCutPointFromMasterOutline = false;
-            int j = flattenPoints.Count;
-#if DEBUG
-            for (int i = 0; i < j; ++i)
-            {
-                flattenPoints[i].dbugClearLastFit();
-            }
-#endif
-            for (int i = 0; i < j; ++i)
-            {
-                flattenPoints[i].ApplyNewFitEdge();
-            }
+            Vector2 tmp_e0_q = e0._newDynamicMidPoint + e0.GetEdgeVector();
+            Vector2 tmp_e1_p = e1._newDynamicMidPoint - e1.GetEdgeVector();
 
-            //----------
+            Vector2 cutpoint;
+            if (MyMath.FindCutPoint(e0._newDynamicMidPoint, tmp_e0_q, e1._newDynamicMidPoint, tmp_e1_p, out cutpoint))
+            {
+                p.newX = cutpoint.X;
+                p.newY = cutpoint.Y;
+            }
+            else
+            {
+                //pararell edges
+            }
 
         }
+#if DEBUG
+
+        public List<EdgeLine> dbugGetEdges() { return this.edges; }
+#endif
+        //        internal void ApplyFitPositions2()
+        //        {
+
+        //            //after GlyphBone is adjust to the new fit grid
+        //            //we adjust each GlyphEdge adn GlyphPoint 
+        //            useNewEdgeCutPointFromMasterOutline = false;
+        //            int j = flattenPoints.Count;
+        //#if DEBUG
+        //            for (int i = 0; i < j; ++i)
+        //            {
+        //                flattenPoints[i].dbugClearLastFit();
+        //            }
+        //#endif
+        //            for (int i = 0; i < j; ++i)
+        //            {
+        //                flattenPoints[i].ApplyNewFitEdge();
+        //            }
+        //        }
+        /// <summary>
+        /// find common edge of 2 glyph points
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="q"></param>
+        /// <returns></returns>
         static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
         {
             if (p.E0 == q.E0 ||

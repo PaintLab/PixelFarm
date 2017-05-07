@@ -29,7 +29,8 @@ namespace Typography.Rendering
         EdgeLine _ctrlEdge_Q;
         internal float _newFitX;
         internal float _newFitY;
-         
+
+        internal Vector2 _newDynamicMidPoint;
 
 #if DEBUG
         public static int s_dbugTotalId;
@@ -51,9 +52,11 @@ namespace Typography.Rendering
             this._glyphPoint_Q = q;
             if (this.IsOutside = isOutside)
             {
+                //set back
                 p.SetOutsideEdge(this);
                 q.SetOutsideEdge(this);
             }
+            _newDynamicMidPoint = new Vector2((p.x + q.x) / 2, (p.y + q.y) / 2);
             //-------------------------------
             //analyze angle and slope kind
             //-------------------------------  
@@ -108,7 +111,12 @@ namespace Typography.Rendering
             return null; //not found 
         }
 
-
+        internal Vector2 GetEdgeVector()
+        {
+            return new Vector2(
+                GlyphPoint_Q.x - _glyphPoint_P.x,
+                GlyphPoint_Q.y - _glyphPoint_P.y);
+        }
         EdgeLine _outsideEdge;
         Vector2 _outsideEdgeCutAt;
         float _outsideEdgeCutLen;
@@ -183,7 +191,7 @@ namespace Typography.Rendering
         }
 #if DEBUG
         public bool dbugNoPerpendicularBone { get; set; }
-        public GlyphEdge dbugGlyphEdge { get; set; }
+    
 #endif
 
         public GlyphPoint GlyphPoint_P
@@ -249,6 +257,22 @@ namespace Typography.Rendering
         internal bool ContainsGlyphPoint(GlyphPoint p)
         {
             return this._glyphPoint_P == p || this._glyphPoint_Q == p;
+        }
+
+        internal void SetDynamicEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
+        {
+
+            //TODO: refactor here...
+            //this is relative len from current edge              
+            //origianl vector
+            Vector2 _o_edgeVector = GetEdgeVector();
+            //rotate 90
+            Vector2 _rotate = _o_edgeVector.Rotate(90);
+            //
+            Vector2 _deltaVector = _rotate.NewLength(newEdgeOffsetFromMasterOutline);
+
+            //new dynamic mid point  
+            this._newDynamicMidPoint = this.GetMidPoint() + _deltaVector;
         }
 
     }
