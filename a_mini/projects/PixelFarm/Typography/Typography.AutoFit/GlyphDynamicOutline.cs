@@ -13,6 +13,7 @@ namespace Typography.Rendering
         internal List<GlyphContour> _contours;
         List<GlyphBone> _longVerticalBones;
         List<CentroidLineHub> _centroidLineHubs;
+        List<CentroidLine> _allCentroidLines;
         List<GlyphBone> _allBones;
         /// <summary>
         /// offset in pixel unit from master outline, accept + and -
@@ -24,7 +25,10 @@ namespace Typography.Rendering
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
 
+            this.GridBoxWidth = 1; //pixels
+            this.GridBoxHeight = 50; //pixels
 #if DEBUG
+            this.GridBoxHeight = dbugGridHeight; //pixels
             _dbugTempIntermediateOutline = intermediateOutline;
 #endif
 
@@ -44,78 +48,164 @@ namespace Typography.Rendering
         void LoadGlyphBones()
         {
             _allBones = new List<GlyphBone>();
+            _allCentroidLines = new List<CentroidLine>();
             int j = _centroidLineHubs.Count;
             for (int i = 0; i < j; ++i)
             {
                 CentroidLineHub hub = _centroidLineHubs[i];
                 foreach (CentroidLine line in hub.GetAllCentroidLines().Values)
                 {
+                    _allCentroidLines.Add(line);
                     //*** 
+                    //all bones in a centroid
                     _allBones.AddRange(line.bones);
                 }
             }
         }
-        void ApplyGridToMasterOutline(int gridX, int gridY)
+
+        BoneGroupStatisticCollector statCollector = new BoneGroupStatisticCollector();
+        public void ApplyGridToMasterOutline(int gridBoxW, int gridBoxH)
         {
-
-            //test:
-            //1. apply grid size to glyph bone and 
-            //2. regenerate outline from new glygh bone
-            gridX = (int)(gridX / pxScale);
-            gridY = (int)(gridY / pxScale);
-
-            int j = _allBones.Count;
-            for (int i = 0; i < j; ++i)
+            this.GridBoxHeight = gridBoxH;
+            this.GridBoxWidth = gridBoxW;
+            int centroidLineCount = _allCentroidLines.Count;
+            statCollector.Reset();
+            for (int i = 0; i < centroidLineCount; ++i)
             {
-                GlyphBone b = _allBones[i];
-                //apply grid to 
-                GlyphBoneJoint jointA = b.JointA;
-                Vector2 jointPos = jointA.Position;
+                //apply new grid to this centroid line
+                CentroidLine line = _allCentroidLines[i];
+                line.ApplyGridBox(gridBoxW, gridBoxH);
+                //analyze within the line
+                line.AnalyzeBoneGroups();
+                statCollector.CollectBoneGroup(line);
+            }
 
-                jointA.SetFitXY(FitToGrid(jointPos.X, gridX), FitToGrid(jointPos.Y, gridY));
-                if (b.JointB != null)
+            //analyze bone group (stem) as a whole
+            statCollector.AnalyzeBoneGroups();
+
+            for (int i = 0; i < centroidLineCount; ++i)
+            {
+                _allCentroidLines[i].CollectOutsideEdges();
+            }
+
+            //assign fit y pos in order
+            List<BoneGroup> selectedHBoneGroups = statCollector._selectedHorizontalBoneGroup;
+            int boneGroupCount = selectedHBoneGroups.Count;
+
+
+            for (int i = boneGroupCount - 1; i >= 0; --i)
+            {
+                //arrange selected horizontal
+                BoneGroup boneGroup = selectedHBoneGroups[i];
+                if (boneGroup.toBeRemoved)
                 {
-                    GlyphBoneJoint jointB = b.JointB;
-                    jointPos = jointB.Position;
-                    jointB.SetFitXY(FitToGrid(jointPos.X, gridX), FitToGrid(jointPos.Y, gridY));
+                    continue;
                 }
-                else
+
+                EdgeLine[] h_edges = boneGroup.edges;
+
+                int edgeCount = h_edges.Length;
+
+                //we need to calculate the avg of the glyph point
+                //and add a total summary to this
+
+                float negative_diff = 0;
+                float positive_diff = 0;
+                int negativeCount = 0;
+                int positiveCount = 0;
+                for (int e = 0; e < edgeCount; ++e)
                 {
+                    EdgeLine ee = h_edges[e];
+                    GlyphPoint p_pnt = ee.GlyphPoint_P;
+                    GlyphPoint q_pnt = ee.GlyphPoint_Q;
+
+                    //this version we focus on vertical hint only 
+
+                    float floorRemaining, diff;
+                    MyMath.FitToGrid2(p_pnt.y * pxScale, 1, out floorRemaining, out diff);
+                    if (diff < 0)
+                    {
+                        negative_diff += diff;
+                        negativeCount++;
+                    }
+                    else
+                    {
+                        positive_diff += diff;
+                        positiveCount++;
+                    }
+
+                    //
+                    //evaluate diff
+                    //
+                    MyMath.FitToGrid2(q_pnt.y * pxScale, 1, out floorRemaining, out diff);
+                    if (diff < 0)
+                    {
+                        negative_diff += diff;
+                        negativeCount++;
+                    }
+                    else
+                    {
+                        positive_diff += diff;
+                        positiveCount++;
+                    }
+                }
+
+                float avg_ydiff = 0;
+                if (positiveCount != 0 && negativeCount != 0)
+                {
+                    //check if we should move to positive or negative
+                    float avg_pos = positive_diff / positiveCount;
+                    //check only 'amount', not sign ,
+                    //make nagative to positive
+                    float avg_neg = -(negative_diff / negativeCount);
+
+                    //choose minimum move to reach the target
+                    if (avg_pos > avg_neg)
+                    {
+                        //move to negative***
+                        avg_ydiff = -(avg_pos + avg_neg) / 2;
+
+                    }
+                    else
+                    {
+                        //avg to positive
+                        avg_ydiff = (avg_pos + avg_neg) / 2;
+                    }
+
+                }
+                else if (positiveCount != 0)
+                {
+                    //only positive side
+                    avg_ydiff = positive_diff / positiveCount;
+                }
+                else if (negativeCount != 0)
+                {
+                    //only negative side, preserve negative sign
+                    avg_ydiff = negative_diff / negativeCount;
+                }
+
+                //compare abs max /min  
+
+
+                //distribute all adjust value to specific glyph points
+                for (int e = 0; e < edgeCount; ++e)
+                {
+                    EdgeLine ee = h_edges[e];
+                    GlyphPoint p_pnt = ee.GlyphPoint_P;
+                    GlyphPoint q_pnt = ee.GlyphPoint_Q;
+                    p_pnt.fit_NewX = p_pnt.x * pxScale;
+                    p_pnt.fit_NewY = (p_pnt.y * pxScale) + avg_ydiff;
+                    p_pnt.fit_analyzed = true;
+                    //
+                    q_pnt.fit_NewX = q_pnt.x * pxScale;
+                    q_pnt.fit_NewY = (q_pnt.y * pxScale) + avg_ydiff;
+                    q_pnt.fit_analyzed = true;
 
                 }
             }
 
-
-            //changing glyph bone joint affect the 
-            //---------------------------------------------------
-            //then  apply new edge
-            //if 0, new other action
-            List<GlyphContour> cnts = _contours;
-            j = cnts.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                cnts[i].ApplyNewFitPointPosition();
-            }
         }
-        static int FitToGrid(float value, int gridSize)
-        {
-            //fit to grid 
-            //1. lower
-            int floor = ((int)(value / gridSize) * gridSize);
-            //2. midpoint
-            float remaining = value - floor;
-            float halfGrid = gridSize / 2f;
 
-#if DEBUG
-            int result = (remaining > halfGrid) ? floor + gridSize : floor;
-            //if (result % gridSize != 0)
-            //{
-            //}
-            return result;
-#else
-            return (remaining > halfGrid) ? floor + gridSize : floor;
-#endif
-        }
         /// <summary>
         /// new stroke width offset from master outline
         /// </summary>
@@ -141,6 +231,22 @@ namespace Typography.Rendering
         }
 
         public float LeftControlPosX { get; set; }
+        /// <summary>
+        /// grid box width in pixels
+        /// </summary>
+        public int GridBoxWidth { get; private set; }
+        /// <summary>
+        /// grid box height in pixels
+        /// </summary>
+        public int GridBoxHeight { get; private set; }
+
+
+
+#if DEBUG
+        public static bool dbugTestNewGridFitting { get; set; }
+        public static int dbugGridHeight = 50;
+#endif
+
 
         void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
@@ -203,20 +309,24 @@ namespace Typography.Rendering
         public void GenerateOutput2(IGlyphTranslator tx, float pxScale)
         {
             this.pxScale = pxScale;
-            ApplyGridToMasterOutline(20, 20);
-
-
             //-------------------------------------------------
-            if (_offsetFromMasterOutline == 0)
+            if (!dbugTestNewGridFitting)
             {
-                //gen with anohter methods
-                GenerateOutput(tx, pxScale);
-                return;
+                if (_offsetFromMasterOutline == 0)
+                {
+                    //gen with anohter methods
+                    GenerateOutput(tx, pxScale);
+                    return;
+                }
+            }
+            else
+            {
+                //test grid fitting
+                ApplyGridToMasterOutline(GridBoxWidth, GridBoxHeight);
             }
             //-------------------------------------------------
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
-
 #if DEBUG
             s_dbugAffectedPoints.Clear();
             s_dbugAff2.Clear();
@@ -224,18 +334,13 @@ namespace Typography.Rendering
 
             LeftControlPosX = 0;
             tx.BeginRead(j);
-
-
             for (int i = 0; i < j; ++i)
             {
-                GenerateFitOutput2(tx, pxScale, contours[i]);
+                GenerateFitOutput3(tx, pxScale, contours[i]);
             }
-
             tx.EndRead();
             //-------------
         }
-
-
         const int GRID_SIZE = 1;
         const float GRID_SIZE_25 = 1f / 4f;
         const float GRID_SIZE_50 = 2f / 4f;
@@ -426,37 +531,331 @@ namespace Typography.Rendering
                 genPoints.Add(new Vector2((float)p_x, (float)p_y));
             }
         }
-        static void GenerateFitOutput2(
-             IGlyphTranslator tx,
-             float pxscale,
-             GlyphContour contour)
+        void GenerateFitOutput2(
+           IGlyphTranslator tx,
+           float pxscale,
+           GlyphContour contour)
         {
             //walk along the edge in the contour to generate new edge output
-            //
-            //
-            List<GlyphEdge> edges = contour.edges;
-            int j = edges.Count;
+
+            //List<GlyphEdge> edges = contour.edges; 
+            //int j = edges.Count;
+            //if (j > 0)
+            //{
+            //    GlyphEdge e;
+            //    {
+            //        //1st 
+            //        e = edges[0];
+            //        Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
+            //        tx.MoveTo(p.X, p.Y);
+            //    }
+            //    for (int i = 1; i < j; ++i)
+            //    {
+
+            //        e = edges[i];
+            //        Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
+            //        tx.LineTo(p.X, p.Y);
+            //    }
+
+            //    //close 
+            //    tx.CloseContour();
+            //}
+
+            GridFitter gridFitterX = new GridFitter(1, pxscale);
+            GridFitter gridFitterY = new GridFitter(1, pxscale);
+            List<GlyphPoint> points = contour.flattenPoints;
+            int j = points.Count;
             if (j > 0)
             {
-                GlyphEdge e;
-                {
-                    //1st 
-                    e = edges[0];
-                    Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
-                    tx.MoveTo(p.X, p.Y);
-                }
+                //1.
+                GlyphPoint p = points[0];
+                float x, y;
+                gridFitterX.GetFitPosX(p, out x);
+                gridFitterY.GetFitPosY(p, out y);
+                tx.MoveTo(x, y);
+                //2. others
                 for (int i = 1; i < j; ++i)
                 {
-
-                    e = edges[i];
-                    Vector2 p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
-                    tx.LineTo(p.X, p.Y);
+                    //try to fit to grid 
+                    p = points[i];
+                    gridFitterX.GetFitPosX(p, out x);
+                    gridFitterY.GetFitPosY(p, out y);
+                    tx.LineTo(x, y);
                 }
-
                 //close 
                 tx.CloseContour();
             }
         }
+        void GenerateFitOutput3(
+            IGlyphTranslator tx,
+            float pxscale,
+            GlyphContour contour)
+        {
+            //walk along the edge in the contour to generate new edge output
+
+            //------------------------------------------------------------------------------------
+            GridFitter gridFitterX = new GridFitter(1, pxscale); //use struct, no alloc on heap
+            GridFitter gridFitterY = new GridFitter(1, pxscale);
+            List<GlyphPoint> points = contour.flattenPoints;
+            int j = points.Count;
+            if (j > 0)
+            {
+                //1.
+                GlyphPoint p = points[0];
+                float x, y;
+                if (p.fit_analyzed)
+                {
+                    if (dbugTestNewGridFitting)
+                    {
+                        tx.MoveTo(p.fit_NewX, p.fit_NewY);
+                    }
+                    else
+                    {
+                        tx.MoveTo(p.x * pxscale, p.y * pxscale);
+                    }
+                }
+                else
+                {
+                    //gridFitterX.GetFitPosX(p, out x);
+                    //gridFitterY.GetFitPosY(p, out y);
+                    tx.MoveTo(p.x * pxscale, p.y * pxscale);
+                }
+                //2. others
+                for (int i = 1; i < j; ++i)
+                {
+                    //try to fit to grid 
+                    p = points[i];
+                    if (p.fit_analyzed)
+                    {
+
+                        if (dbugTestNewGridFitting)
+                        {
+                            tx.LineTo(p.fit_NewX, p.fit_NewY);
+                        }
+                        else
+                        {
+                            tx.LineTo(p.x * pxscale, p.y * pxscale);
+                        }
+                    }
+                    else
+                    {
+                        tx.LineTo(p.x * pxscale, p.y * pxscale);
+                        //gridFitterX.GetFitPosX(p, out x);
+                        //gridFitterY.GetFitPosY(p, out y);
+                        //tx.LineTo(x, y);
+                    }
+
+
+                }
+                //close 
+                tx.CloseContour();
+            }
+        }
+        struct GridFitter
+        {
+            readonly int _gridSize;
+            readonly float _scale;
+            public GridFitter(int gridSize, float scale)
+            {
+                _gridSize = gridSize;
+                _scale = scale;
+            }
+            public void GetFitPosX(GlyphPoint p, out float result)
+            {
+                float value = p.x * _scale;
+                //
+                int floor = ((int)(value / _gridSize) * _gridSize);
+                //2. midpoint
+                float remaining = value - floor;
+
+                float halfGrid = _gridSize / 2f;
+                if (remaining >= (2 / 3f) * _gridSize)
+                {
+                    result = floor + _gridSize;
+                }
+                else if (remaining >= (1 / 3f) * _gridSize)
+                {
+                    result = (floor + _gridSize * (1 / 2f));
+                }
+                else
+                {
+                    result = floor;
+                }
+            }
+            public void GetFitPosY(GlyphPoint p, out float result)
+            {
+                //we may have a special treatment for vertical axis
+
+                float value = p.y * _scale;
+                //result = value;
+                //return;
+
+                float guide_y = p.newY * _scale;
+                int floor = ((int)(value / _gridSize) * _gridSize);
+                float remaining = value - floor;
+                float halfGrid = _gridSize / 2f;
+
+
+                //if (p.isPartOfHorizontalEdge)
+                //{
+                //    //fit horizontal edge
+
+                //    if (value < 3)
+                //    {
+
+                //    }
+                //    int ceilling = floor + _gridSize;
+
+                //    if (value > (floor + halfGrid))
+                //    {
+                //        //move up
+                //    }
+                //    else
+                //    {
+                //        //move down
+                //    }
+
+
+
+                //    result = value + 0.30f;
+                //    Console.WriteLine(p.dbugId + " pre: " + value + ",post:" + result);
+                //    return;
+                //    //if (p.isUpperSide)
+                //    //{
+                //    //    result = value + 0.125f;
+                //    //}
+                //    //else
+                //    //{
+                //    //    result = value - 0.125f;
+                //    //}
+                //    //return;
+                //}
+
+
+
+                if (remaining >= (2 / 3f) * _gridSize)
+                {
+                    result = floor + _gridSize;
+                }
+                else if (remaining >= (1 / 3f) * _gridSize)
+                {
+                    result = (floor + _gridSize * (1 / 2f));
+                }
+                else
+                {
+                    result = floor;
+                }
+            }
+        }
+
+        //void WriteFitEdge(int srcIndex, IGlyphTranslator tx, GlyphEdge edge)
+        //{
+        //    EdgeLine internalEdgeLine = edge.dbugGetInternalEdgeLine();
+        //    float _pxscale = this.pxScale;
+        //    Vector2 p = new Vector2(edge.newEdgeCut_P_X, edge.newEdgeCut_P_Y) * _pxscale;
+        //    Vector2 regen0 = edge._newRegen0;
+        //    Vector2 regen1 = edge._newRegen1;
+        //    bool foundSomePerpendicularEdge = false;
+
+        //    bool moveTo = false;
+
+
+        //    if (internalEdgeLine._controlE0 != null)
+        //    {
+        //        //Vector2 v2 = internalEdgeLine._controlE0.GetMidPoint();
+        //        //Vector2 cutpoint = internalEdgeLine._controlE0_cutAt;
+        //        //painter.Line(
+        //        //    v2.X * _pxscale, v2.Y * _pxscale,
+        //        //    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+        //        //    PixelFarm.Drawing.Color.Green); 
+        //        foundSomePerpendicularEdge = true;
+        //        if (srcIndex == 0 && !moveTo)
+        //        {
+        //            tx.MoveTo(regen0.X * _pxscale, regen0.Y * _pxscale);
+        //            moveTo = true;
+        //        }
+        //        else
+        //        {
+        //            tx.LineTo(regen0.X * _pxscale, regen0.Y * _pxscale);
+        //        }
+        //    }
+
+
+        //    if (internalEdgeLine._controlE0 != null && internalEdgeLine._controlE1 != null)
+        //    {
+        //        //Vector2 m0 = internalEdgeLine._controlE0.GetMidPoint();
+        //        //Vector2 m1 = internalEdgeLine._controlE1.GetMidPoint();
+
+        //        ////find angle from m0-> m1
+
+        //        //Vector2 v2 = (m0 + m1) / 2;
+        //        ////find perpendicular line  from  midpoint_m0m1 to edge
+        //        //Vector2 cutpoint;
+        //        //if (MyMath.FindPerpendicularCutPoint(internalEdgeLine, v2, out cutpoint))
+        //        //{
+        //        //    painter.Line(
+        //        //       v2.X * _pxscale, v2.Y * _pxscale,
+        //        //       cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+        //        //       PixelFarm.Drawing.Color.Red);
+        //        //    foundSomePerpendicularEdge = true;
+        //        //}
+
+        //        //Vector2 e0_fitpos = internalEdgeLine._controlE0.GetFitPos() * _pxscale;
+        //        //Vector2 e1_fitpos = internalEdgeLine._controlE1.GetFitPos() * _pxscale;
+
+        //        //painter.Line(
+        //        //      e0_fitpos.X, e0_fitpos.Y,
+        //        //      regen0.X, regen0.Y,
+        //        //      PixelFarm.Drawing.Color.Yellow);
+        //        //painter.Line(
+        //        //    e1_fitpos.X, e1_fitpos.Y,
+        //        //    regen1.X, regen1.Y,
+        //        //    PixelFarm.Drawing.Color.Yellow);
+        //        //if (srcIndex == 0)
+        //        //{ 
+        //        //}
+        //        //else
+        //        //{ 
+        //        //}
+        //    }
+
+
+
+        //    if (internalEdgeLine._controlE1 != null)
+        //    {
+        //        //Vector2 v2 = internalEdgeLine._controlE1.GetMidPoint();
+        //        //Vector2 cutpoint = internalEdgeLine._controlE1_cutAt;
+        //        //painter.Line(
+        //        //    v2.X * _pxscale, v2.Y * _pxscale,
+        //        //    cutpoint.X * _pxscale, cutpoint.Y * _pxscale,
+        //        //    PixelFarm.Drawing.Color.Green); 
+
+        //        foundSomePerpendicularEdge = true;
+
+        //        if (srcIndex == 0 && !moveTo)
+        //        {
+        //            tx.MoveTo(regen1.X * _pxscale, regen1.Y * _pxscale);
+        //            moveTo = true;
+        //        }
+        //        else
+        //        {
+        //            tx.LineTo(regen1.X * _pxscale, regen1.Y * _pxscale);
+        //        }
+        //    }
+
+
+        //    if (!foundSomePerpendicularEdge)
+        //    {
+        //        tx.LineTo(p.X, p.Y);
+        //    }
+
+
+        //    //if (!foundSomePerpendicularEdge)
+        //    //{
+        //    //    Vector2 midpoint = edge.GetMidPoint();
+        //    //    //painter.FillRectLBWH(midpoint.X, midpoint.Y, 5, 5, PixelFarm.Drawing.Color.White);
+        //    //}
+        //}
         static void GenerateFitOutput(
           IGlyphTranslator tx,
           List<Vector2> genPoints,

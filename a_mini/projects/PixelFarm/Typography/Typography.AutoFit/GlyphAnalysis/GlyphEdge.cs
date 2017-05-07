@@ -4,6 +4,7 @@ using System.Numerics;
 
 namespace Typography.Rendering
 {
+
     public class GlyphEdge
     {
         internal readonly EdgeLine _edgeLine;
@@ -42,6 +43,7 @@ namespace Typography.Rendering
             this._Q = p1;
             this._edgeLine = edgeLine;
             _newMidPoint = this.GetMidPoint(); //original 
+
         }
         internal void FindPerpendicularBones()
         {
@@ -74,9 +76,39 @@ namespace Typography.Rendering
             GlyphPoint p0 = this._P, p1 = this._Q;
             return new Vector2((float)(p1.x - p0.x), (float)(p1.y - p0.y));
         }
+        static int FitToGrid(float value, int gridSize)
+        {
+            //fit to grid 
+            //1. lower
+            int floor = ((int)(value / gridSize) * gridSize);
+            //2. midpoint
+            float remaining = value - floor;
 
+            float halfGrid = gridSize / 2f;
+            if (remaining > (2 / 3f) * gridSize)
+            {
+                return floor + gridSize;
+            }
+            else if (remaining > (1 / 3f) * gridSize)
+            {
+                return (int)(floor + gridSize * (1 / 2f));
+            }
+            else
+            {
+                return floor;
+            }
+#if DEBUG
+            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
+            ////if (result % gridSize != 0)
+            ////{
+            ////}
+            //return result;
+#else
+            return (remaining > halfGrid) ? floor + gridSize : floor;
+#endif
+        }
 
-
+   
         internal void ApplyNewEdgeFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
 
@@ -90,6 +122,7 @@ namespace Typography.Rendering
             Vector2 _deltaVector = _rotate.NewLength(newEdgeOffsetFromMasterOutline);
             //new len  
             _newMidPoint = GetMidPoint() + _deltaVector;
+
         }
 
         public static void UpdateEdgeCutPoint(GlyphEdge e0, GlyphEdge e1)

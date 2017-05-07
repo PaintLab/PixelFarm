@@ -5,7 +5,107 @@ namespace Typography.Rendering
 
     public static class MyMath
     {
+        internal static float FitToGridF(float value, int gridSize)
+        {
+            //fit to grid 
+            //1. lower
+            int floor = ((int)(value / gridSize) * gridSize);
+            //2. midpoint
+            float remaining = value - floor;
 
+            float halfGrid = gridSize / 2f;
+            if (remaining >= (2 / 3f) * gridSize)
+            {
+                return floor + gridSize;
+            }
+            else if (remaining >= (1 / 3f) * gridSize)
+            {
+                return (floor + gridSize * (1 / 2f));
+            }
+            else
+            {
+                return floor;
+            }
+#if DEBUG
+            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
+            ////if (result % gridSize != 0)
+            ////{
+            ////}
+            //return result;
+#else
+            return (remaining > halfGrid) ? floor + gridSize : floor;
+#endif
+        }
+        internal static int FitToGrid2(float value, int gridSize, out float floorRemaining, out float diff)
+        {
+            //fit to grid 
+            //1. lower
+            //int floor = ((int)(value / gridSize) * gridSize);
+            int floor = (int)value;
+            floorRemaining = value - floor;
+
+            if (floorRemaining >= (1 / 2f) * gridSize)
+            {
+                int result = floor + gridSize;
+                diff = result - value;
+                return result;
+            }
+            else
+            {
+                int result = floor;
+                diff = result - value;
+                return result;
+            }
+
+        }
+        internal static int FitToGrid(float value, int gridSize)
+        {
+            //fit to grid 
+            //1. lower
+            int floor = ((int)(value / gridSize) * gridSize);
+            //2. midpoint
+            float remaining = value - floor;
+            float halfGrid = gridSize / 2f;
+
+            if (remaining >= (2 / 3f) * gridSize)
+            {
+                return floor + gridSize;
+            }
+            else if (remaining >= (1 / 3f) * gridSize)
+            {
+                return (int)(floor + gridSize * (1 / 2f));
+            }
+            else
+            {
+                return floor;
+            }
+#if DEBUG
+            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
+            ////if (result % gridSize != 0)
+            ////{
+            ////}
+            //return result;
+#else
+            return (remaining > halfGrid) ? floor + gridSize : floor;
+#endif
+        }
+        public static double AngleBetween(Vector2 vector1, Vector2 vector2)
+        {
+            double rad1 = System.Math.Atan2(vector1.Y, vector1.X);
+            double rad2 = System.Math.Atan2(vector2.Y, vector2.X);
+            //we want to find diff
+
+            if (rad1 < 0)
+            {
+                rad1 = System.Math.PI + rad1;
+            }
+            if (rad2 < 0)
+            {
+                rad2 = System.Math.PI + rad2;
+            }
+
+            return rad1 - rad2;
+        }
         /// <summary>
         /// Convert degrees to radians
         /// </summary>
@@ -121,8 +221,8 @@ namespace Typography.Rendering
         {
             if (bone.JointB != null)
             {
-                var a_pos = bone.JointA.Position;
-                var b_pos = bone.JointB.Position;
+                var a_pos = bone.JointA.OriginalJointPos;
+                var b_pos = bone.JointB.OriginalJointPos;
 
                 min = Vector2.Min(a_pos, b_pos);
                 max = Vector2.Max(a_pos, b_pos);
@@ -130,7 +230,7 @@ namespace Typography.Rendering
             }
             else if (bone.TipEdge != null)
             {
-                var a_pos = bone.JointA.Position;
+                var a_pos = bone.JointA.OriginalJointPos;
                 var tip_pos = bone.TipEdge.GetMidPoint();
                 min = Vector2.Min(a_pos, tip_pos);
                 max = Vector2.Max(a_pos, tip_pos);
@@ -152,8 +252,8 @@ namespace Typography.Rendering
             if (bone.JointB != null)
             {
                 cutPoint = FindPerpendicularCutPoint(
-                  bone.JointA.Position,
-                  bone.JointB.Position,
+                  bone.JointA.OriginalJointPos,
+                  bone.JointB.OriginalJointPos,
                   p);
                 //find min /max
                 Vector2 min, max;
@@ -166,7 +266,7 @@ namespace Typography.Rendering
                 if (bone.TipEdge != null)
                 {
                     cutPoint = FindPerpendicularCutPoint(
-                        bone.JointA.Position,
+                        bone.JointA.OriginalJointPos,
                         bone.TipEdge.GetMidPoint(),
                         p);
                     Vector2 min, max;

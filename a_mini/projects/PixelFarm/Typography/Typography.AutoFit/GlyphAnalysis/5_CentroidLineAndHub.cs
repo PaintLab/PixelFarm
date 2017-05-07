@@ -18,12 +18,15 @@ namespace Typography.Rendering
         public List<GlyphBoneJoint> _joints = new List<GlyphBoneJoint>();
         //bone list is created from linking each joint list
         public List<GlyphBone> bones = new List<GlyphBone>();
+        public List<BoneGroup> boneGroups;
+        internal List<BoneGroup> selectedHorizontalBoneGroups;
         internal readonly GlyphTriangle startTri;
 
         internal CentroidLine(GlyphTriangle startTri)
         {
             this.startTri = startTri;
         }
+
 
         /// <summary>
         /// add a centroid pair
@@ -47,8 +50,135 @@ namespace Typography.Rendering
                 _joints.Add(pairs[i].AnalyzeEdgesAndCreateBoneJoint());
             }
         }
+        /// <summary>
+        /// apply grid box to all bones in this line
+        /// </summary>
+        /// <param name="gridW"></param>
+        /// <param name="gridH"></param>
+        public void ApplyGridBox(int gridW, int gridH)
+        {
+            //apply grid box to each joint
+            int j = _joints.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphBoneJoint joint = _joints[i];
+                Vector2 jointPos = joint.OriginalJointPos;
+                joint.SetFitXY(MyMath.FitToGrid(jointPos.X, gridW), MyMath.FitToGrid(jointPos.Y, gridH));
+            }
+            //calculate slope for all bones
+            j = bones.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                bones[i].EvaluateSlope();
+            }
+        }
+        /// <summary>
+        /// separate GlyphBone into groups
+        /// </summary>
+        public void AnalyzeBoneGroups()
+        {
+            int j = bones.Count;
+            this.boneGroups = new List<BoneGroup>(); //clear 
 
+            BoneGroup boneGroup = new BoneGroup(); //new group
+            boneGroup.slopeKind = LineSlopeKind.Other;
 
+            float virtFitLen = 0;
+            float ypos_sum = 0; //since we focus on ypos for vertical fitting
+            for (int i = 0; i < j; ++i)
+            {
+                GlyphBone bone = bones[i];
+                LineSlopeKind slope = bone.SlopeKind;
+                if (slope != boneGroup.slopeKind)
+                {
+                    //add existing to list and create a new group
+                    if (boneGroup.count > 0)
+                    {
+                        //
+                        boneGroup.virtFitLen = virtFitLen;
+                        boneGroup.y_pos = ypos_sum / boneGroup.count;
+                        this.boneGroups.Add(boneGroup);
+                    }
+                    // 
+                    boneGroup = new BoneGroup();
+                    boneGroup.startIndex = i;
+                    boneGroup.count++;
+                    boneGroup.slopeKind = slope;
+                    virtFitLen = bone.EvaluateFitLength(); //reset
+                    ypos_sum = bone.GetMidPoint().Y;
+                }
+                else
+                {
+                    virtFitLen += bone.EvaluateFitLength(); //append
+                    ypos_sum += bone.GetMidPoint().Y;
+                    boneGroup.count++;
+                }
+            }
+            if (boneGroup.count > 0)
+            {
+                boneGroup.virtFitLen = virtFitLen;
+                boneGroup.y_pos = ypos_sum / boneGroup.count;
+                this.boneGroups.Add(boneGroup);
+            }
+            //----------------
+
+        }
+        public void CollectOutsideEdges()
+        {
+            int j = this.boneGroups.Count;
+
+            List<EdgeLine> tmpEdges = new List<EdgeLine>();
+            for (int i = 0; i < j; ++i)
+            {
+                BoneGroup bonegroup = this.boneGroups[i];
+                if (!bonegroup.toBeRemoved && bonegroup.slopeKind == LineSlopeKind.Horizontal)
+                {
+                    //this is horizontal group
+
+                    if (selectedHorizontalBoneGroups == null)
+                    {
+                        selectedHorizontalBoneGroups = new List<BoneGroup>();
+                    }
+                    tmpEdges.Clear();
+
+                    //
+                    int startAt = bonegroup.startIndex;
+                    for (int n = bonegroup.count - 1; n >= 0; --n)
+                    {
+                        GlyphBone bone = bones[startAt];
+                        //collect all outside edge arround  glyph bone
+                        bone.CollectOutsideEdge(tmpEdges);
+                        startAt++;
+                    }
+                    //
+                    if (tmpEdges.Count > 0)
+                    {
+                        EdgeLine[] edges = tmpEdges.ToArray();
+                        bonegroup.edges = edges;
+                        //find minY and maxY for vertical fit
+                        float minY = float.MaxValue;
+                        float maxY = float.MinValue;
+                        for (int e = edges.Length - 1; e >= 0; --e)
+                        {
+                            EdgeLine edge = edges[e];
+                            Vector2 midPos = edge.GetMidPoint();
+                            FindMinMax(ref minY, ref maxY, (float)edge.y0);
+                            FindMinMax(ref minY, ref maxY, (float)edge.y1);
+                        }
+                        //-------------------
+                        bonegroup.minY = minY;
+                        bonegroup.maxY = maxY;
+
+                        selectedHorizontalBoneGroups.Add(bonegroup);
+                    }
+                }
+            }
+        }
+        static void FindMinMax(ref float currentMin, ref float currentMax, float value)
+        {
+            if (value < currentMin) { currentMin = value; }
+            if (value > currentMax) { currentMax = value; }
+        }
         /// <summary>
         /// find nearest joint that contains tri 
         /// </summary>
@@ -71,7 +201,83 @@ namespace Typography.Rendering
             return null;
         }
     }
+    class BoneGroupStatisticCollector
+    {
 
+        public List<BoneGroup> _selectedHorizontalBoneGroup = new List<BoneGroup>();
+
+        public void Reset()
+        {
+            _selectedHorizontalBoneGroup.Clear();
+        }
+        public void CollectBoneGroup(CentroidLine ownerline)
+        {
+            List<BoneGroup> boneGroups = ownerline.boneGroups;
+            int j = boneGroups.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                //this version, we focus on horizontal bone group
+                BoneGroup boneGroup = boneGroups[i];
+                if (boneGroup.slopeKind == LineSlopeKind.Horizontal)
+                {
+                    _selectedHorizontalBoneGroup.Add(boneGroup);
+                }
+
+            }
+        }
+        public void AnalyzeBoneGroups()
+        {
+            //remove too small bone group
+            //
+            //statistic ?
+            //quantization?
+            //
+            //this version, just use median len
+            _selectedHorizontalBoneGroup.Sort((bg0, bg1) => bg0.virtFitLen.CompareTo(bg1.virtFitLen));
+            int groupCount = _selectedHorizontalBoneGroup.Count;
+            //median
+            int mid_index = groupCount / 2;
+            BoneGroup bonegroup = _selectedHorizontalBoneGroup[mid_index];
+            float lower_limit = bonegroup.virtFitLen / 4;
+            for (int i = 0; i < mid_index; ++i)
+            {
+                bonegroup = _selectedHorizontalBoneGroup[i];
+                if (bonegroup.virtFitLen < lower_limit)
+                {
+                    bonegroup.toBeRemoved = true;
+                }
+                else
+                {
+                    //since to list is sorted                    
+                    break;
+                }
+            }
+            //--------------------
+            //arrange again for vertical alignment
+            _selectedHorizontalBoneGroup.Sort((bg0, bg1) => bg0.y_pos.CompareTo(bg1.y_pos));
+        }
+    }
+    class BoneGroup
+    {
+        //small stem
+
+        public int startIndex;
+        public int count;
+        public LineSlopeKind slopeKind;
+        public float virtFitLen;
+        public float y_pos;//avg
+        public float minY;
+        public float maxY;
+        public EdgeLine[] edges;
+        public bool toBeRemoved;
+
+#if DEBUG
+        public override string ToString()
+        {
+            return slopeKind + ":y" + y_pos + "s:" + startIndex + ":" + count + " len:" + virtFitLen;
+        }
+#endif
+    }
 
     /// <summary>
     /// a collection of centroid line and bone joint
@@ -85,11 +291,9 @@ namespace Typography.Rendering
 
         readonly GlyphTriangle startTriangle;
         //each centoid line start with main triangle
-
         Dictionary<GlyphTriangle, CentroidLine> _lines = new Dictionary<GlyphTriangle, CentroidLine>();
         //-----------------------------------------------
         List<CentroidLineHub> otherConnectedLineHubs;//connection from other hub***
-
         //-----------------------------------------------
 
 
@@ -443,8 +647,6 @@ namespace Typography.Rendering
                     a.GlyphPoint_P == b.GlyphPoint_Q) &&
                    (a.GlyphPoint_Q == b.GlyphPoint_P ||
                     a.GlyphPoint_Q == b.GlyphPoint_Q);
-
-
         }
 
         public Dictionary<GlyphTriangle, CentroidLine> GetAllCentroidLines()
@@ -478,7 +680,6 @@ namespace Typography.Rendering
             otherConnectedLineHubs.Add(anotherHub);
         }
 
-
         CentroidLine anotherCentroidLine;
         GlyphBoneJoint foundOnJoint;
 
@@ -495,6 +696,7 @@ namespace Typography.Rendering
         {
             return this.otherConnectedLineHubs;
         }
+
     }
 
 
@@ -515,7 +717,7 @@ namespace Typography.Rendering
             {
                 //TODO: review here
                 //use jointA of bone of join B of bone
-                return bones[0].JointA.Position;
+                return bones[0].JointA.OriginalJointPos;
             }
         }
 
@@ -560,7 +762,7 @@ namespace Typography.Rendering
             {
                 //select 1
                 //nearest distance (pos to joint a) or (pos to joint b) 
-                return MyMath.MinDistanceFirst(pos, foundOnA.Position, foundOnB.Position) ? foundOnA : foundOnB;
+                return MyMath.MinDistanceFirst(pos, foundOnA.OriginalJointPos, foundOnB.OriginalJointPos) ? foundOnA : foundOnB;
             }
             else if (foundOnA != null)
             {
