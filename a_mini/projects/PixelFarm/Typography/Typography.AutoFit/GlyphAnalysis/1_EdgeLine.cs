@@ -29,7 +29,8 @@ namespace Typography.Rendering
         EdgeLine _ctrlEdge_Q;
         internal float _newFitX;
         internal float _newFitY;
-         
+
+        internal Vector2 _newDynamicMidPoint;
 
 #if DEBUG
         public static int s_dbugTotalId;
@@ -51,6 +52,7 @@ namespace Typography.Rendering
             this._glyphPoint_Q = q;
             if (this.IsOutside = isOutside)
             {
+                //set back
                 p.SetOutsideEdge(this);
                 q.SetOutsideEdge(this);
             }
@@ -108,7 +110,12 @@ namespace Typography.Rendering
             return null; //not found 
         }
 
-
+        internal Vector2 GetEdgeVector()
+        {
+            return new Vector2(
+                GlyphPoint_Q.x - _glyphPoint_P.x,
+                GlyphPoint_Q.y - _glyphPoint_P.y);
+        }
         EdgeLine _outsideEdge;
         Vector2 _outsideEdgeCutAt;
         float _outsideEdgeCutLen;

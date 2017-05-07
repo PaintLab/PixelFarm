@@ -324,9 +324,9 @@ namespace SampleWinForms.UI
                             painter.FillRectLBWH(newMidPoint.X, newMidPoint.Y, 3, 3, PixelFarm.Drawing.Color.Red);
                             painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
 
-
-                            painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
-                            painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
+                            //TODO: reimplement this again
+                            //painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
+                            //painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 6, 6, PixelFarm.Drawing.Color.Blue);
 
                         }
                     }
@@ -353,16 +353,16 @@ namespace SampleWinForms.UI
                             }
                             //
                             painter.Line(newMidPoint.X, newMidPoint.Y, orginal_MidPoint.X, orginal_MidPoint.Y, PixelFarm.Drawing.Color.LightGray);
-                            painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue);
-                            painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue);
-
+                            //TODO: reimplement this again
+                            //painter.FillRectLBWH(glyphEdge.newEdgeCut_P_X * _pxscale, glyphEdge.newEdgeCut_P_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue);
+                            //painter.FillRectLBWH(glyphEdge.newEdgeCut_Q_X * _pxscale, glyphEdge.newEdgeCut_Q_Y * _pxscale, 4, 4, PixelFarm.Drawing.Color.Blue); 
                         }
                         //---------   
                         if (this.DrawPerpendicularLine)
                         {
                             DrawPerpendicularEdgeControlPoints(painter, glyphEdge);
                         }
-                    } 
+                    }
                 }
             }
             else
@@ -583,16 +583,17 @@ namespace SampleWinForms.UI
         protected override void OnGlyphEdgeN(GlyphEdge e)
         {
             float pxscale = this._pxscale;
-            Vector2 cut_p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
-            Vector2 cut_q = new Vector2(e.newEdgeCut_Q_X, e.newEdgeCut_Q_Y) * pxscale;
 
+            //TODO: reimplement this again
 
-            painter.FillRectLBWH(cut_p.X, cut_p.Y, 3, 3, PixelFarm.Drawing.Color.Red);
+            //Vector2 cut_p = new Vector2(e.newEdgeCut_P_X, e.newEdgeCut_P_Y) * pxscale;
+            //Vector2 cut_q = new Vector2(e.newEdgeCut_Q_X, e.newEdgeCut_Q_Y) * pxscale; 
+            //painter.FillRectLBWH(cut_p.X, cut_p.Y, 3, 3, PixelFarm.Drawing.Color.Red);
             //painter.FillRectLBWH(x1 * pxscale, y1 * pxscale, 6, 6, PixelFarm.Drawing.Color.OrangeRed);
 
-            _infoView.ShowGlyphEdge(e,
-                e.newEdgeCut_P_X, e.newEdgeCut_P_Y,
-                e.newEdgeCut_Q_X, e.newEdgeCut_Q_Y);
+            //_infoView.ShowGlyphEdge(e,
+            //    e.newEdgeCut_P_X, e.newEdgeCut_P_Y,
+            //    e.newEdgeCut_Q_X, e.newEdgeCut_Q_Y);
         }
         protected override void OnCentroidLine(double px, double py, double qx, double qy)
         {

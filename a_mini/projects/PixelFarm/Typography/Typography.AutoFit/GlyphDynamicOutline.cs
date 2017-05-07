@@ -560,12 +560,12 @@ namespace Typography.Rendering
                     }
                     else
                     {
-                        tx.MoveTo(p.x * pxscale, p.y * pxscale);
+                        tx.MoveTo(p.newX * pxscale, p.newY * pxscale);
                     }
                 }
                 else
                 {
-                    tx.MoveTo(p.x * pxscale, p.y * pxscale);
+                    tx.MoveTo(p.newX * pxscale, p.newY * pxscale);
                 }
                 //2. others
                 for (int i = 1; i < j; ++i)
@@ -581,12 +581,12 @@ namespace Typography.Rendering
                         }
                         else
                         {
-                            tx.LineTo(p.x * pxscale, p.y * pxscale);
+                            tx.LineTo(p.newX * pxscale, p.newY * pxscale);
                         }
                     }
                     else
                     {
-                        tx.LineTo(p.x * pxscale, p.y * pxscale);
+                        tx.LineTo(p.newX * pxscale, p.newY * pxscale);
                     }
 
 

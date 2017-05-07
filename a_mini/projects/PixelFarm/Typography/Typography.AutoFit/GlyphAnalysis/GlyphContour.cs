@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+using System.Numerics;
 
 namespace Typography.Rendering
 {
@@ -172,19 +173,35 @@ namespace Typography.Rendering
             {
                 edges[i].SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
             }
-            //calculate edge cutpoint
-            int lim = edges.Count - 1; //skip lastone
-            for (int i = 0; i < lim; ++i)
+            //calculate edge cutpoint             
+            for (int i = flattenPoints.Count - 1; i >= 0; --i)
             {
-                //calculate adjacent outside edge cutpoint          
-                GlyphEdge.UpdateEdgeCutPoint(edges[i], edges[i + 1]);
+                UpdateNewEdgeCut(flattenPoints[i]);
             }
-            //last one
-            if (lim > 1)
+        }
+        /// <summary>
+        /// update dynamic cutpoint of 2 adjacent edges
+        /// </summary>
+        /// <param name="p"></param>
+        static void UpdateNewEdgeCut(GlyphPoint p)
+        {
+            EdgeLine e0 = p.E0;
+            EdgeLine e1 = p.E1;
+
+            Vector2 tmp_e0_q = e0._newDynamicMidPoint + e0.GetEdgeVector();
+            Vector2 tmp_e1_p = e1._newDynamicMidPoint - e1.GetEdgeVector();
+
+            Vector2 cutpoint;
+            if (MyMath.FindCutPoint(e0._newDynamicMidPoint, tmp_e0_q, e1._newDynamicMidPoint, tmp_e1_p, out cutpoint))
             {
-                //close edge
-                GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
+                p.newX = cutpoint.X;
+                p.newY = cutpoint.Y;
             }
+            else
+            {
+                //pararell edges
+            }
+
         }
         internal void ApplyFitPositions2()
         {

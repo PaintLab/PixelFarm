@@ -10,25 +10,6 @@ namespace Typography.Rendering
         internal readonly EdgeLine _edgeLine;
         public readonly GlyphPoint _P;
         public readonly GlyphPoint _Q;
-        Vector2 _newDynamicMidPoint;
-
-        /// <summary>
-        /// calculated edge CutX  from 2 outside cutpoint (E0,E1)
-        /// </summary>
-        public float newEdgeCut_P_X;
-        /// <summary>
-        /// calculated edge CutY  from 2 outside cutpoint (E0,E1)
-        /// </summary>
-        public float newEdgeCut_P_Y;
-
-
-        //---------------------
-        public float newEdgeCut_Q_X;
-        /// <summary>
-        /// calculated edge CutY  from 2 outside cutpoint (E0,E1)
-        /// </summary>
-        public float newEdgeCut_Q_Y;
-        //---------------------
 
 #if DEBUG
         public static int dbugTotalId;
@@ -42,7 +23,7 @@ namespace Typography.Rendering
             this._P = p0;
             this._Q = p1;
             this._edgeLine = edgeLine;
-            _newDynamicMidPoint = this.GetMidPoint(); //original 
+            edgeLine._newDynamicMidPoint = this.GetMidPoint(); //original 
 
         }
         internal void FindPerpendicularBones()
@@ -60,17 +41,9 @@ namespace Typography.Rendering
         }
         public Vector2 GetNewMidPoint()
         {
-            return _newDynamicMidPoint;
+            return _edgeLine._newDynamicMidPoint;
         }
 
-        public Vector2 NewPos_P
-        {
-            get { return new Vector2(_P.newX, _P.newY); }
-        }
-        public Vector2 NewPos_Q
-        {
-            get { return new Vector2(_Q.newX, _Q.newY); }
-        }
         Vector2 GetEdgeVector()
         {
             GlyphPoint p0 = this._P, p1 = this._Q;
@@ -97,15 +70,7 @@ namespace Typography.Rendering
             {
                 return floor;
             }
-#if DEBUG
-            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
-            ////if (result % gridSize != 0)
-            ////{
-            ////}
-            //return result;
-#else
-            return (remaining > halfGrid) ? floor + gridSize : floor;
-#endif
+
         }
 
 
@@ -122,31 +87,8 @@ namespace Typography.Rendering
             Vector2 _deltaVector = _rotate.NewLength(newEdgeOffsetFromMasterOutline);
 
             //new dynamic mid point  
-            _newDynamicMidPoint = GetMidPoint() + _deltaVector;
+            _edgeLine._newDynamicMidPoint = GetMidPoint() + _deltaVector;
         }
-
-        internal static void UpdateEdgeCutPoint(GlyphEdge e0, GlyphEdge e1)
-        {
-
-            //TODO: refactor here...
-            //find cutpoint from e0.q to e1.p 
-            //new sample
-
-            Vector2 tmp_e0_q = e0._newDynamicMidPoint + e0.GetEdgeVector();
-            Vector2 tmp_e1_p = e1._newDynamicMidPoint - e1.GetEdgeVector();
-
-            Vector2 cutpoint;
-            if (MyMath.FindCutPoint(e0._newDynamicMidPoint, tmp_e0_q, e1._newDynamicMidPoint, tmp_e1_p, out cutpoint))
-            {
-                e0.newEdgeCut_Q_X = e1.newEdgeCut_P_X = cutpoint.X;
-                e0.newEdgeCut_Q_Y = e1.newEdgeCut_P_Y = cutpoint.Y;
-            }
-            else
-            {
-                //pararell edges
-            }
-        }
-
 
 #if DEBUG
         public EdgeLine dbugGetInternalEdgeLine()
