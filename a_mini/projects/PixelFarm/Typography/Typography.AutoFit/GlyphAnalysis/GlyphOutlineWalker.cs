@@ -28,14 +28,14 @@ namespace Typography.Rendering
             {
                 foreach (GlyphTriangle tri in _dynamicOutline.dbugGetGlyphTriangles())
                 {
-                    OnTriangle(triNumber++, tri.e0, tri.e1, tri.e2, tri.CentroidX, tri.CentroidY);
+                    float centroidX, centriodY;
+                    tri.CalculateCentroid(out centroidX, out centriodY);
+                    OnTriangle(triNumber++, tri.e0, tri.e1, tri.e2, centroidX, centriodY);
                 }
             }
             //--------------- 
             List<GlyphContour> contours = _dynamicOutline._contours;
 
-
-            //--------------- 
             List<CentroidLineHub> centroidLineHubs = _dynamicOutline.dbugGetCentroidLineHubs();
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
@@ -53,8 +53,7 @@ namespace Typography.Rendering
                         GlyphBoneJoint joint = joints[i];
                         if (WalkCentroidBone)
                         {
-                            double px, py, qx, qy;
-
+                            float px, py, qx, qy;
                             joint.dbugGetCentroidBoneCenters(out px, out py, out qx, out qy);
                             OnCentroidLine(px, py, qx, qy);
                             //--------------------------------------------------
@@ -96,7 +95,7 @@ namespace Typography.Rendering
                 {
                     OnGlyphEdgeN(points[m].E0);
                 }
-            } 
+            }
 #endif
 
         }

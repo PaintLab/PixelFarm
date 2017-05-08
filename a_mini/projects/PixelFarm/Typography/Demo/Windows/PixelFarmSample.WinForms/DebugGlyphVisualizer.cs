@@ -96,7 +96,7 @@ namespace SampleWinForms.UI
             //
             builder.Build(testChar, _sizeInPoint);
             var txToVxs1 = new GlyphTranslatorToVxs();
-            builder.GlyphEdgeOffset = this.GlyphEdgeOffset;
+            builder.GlyphDynamicEdgeOffset = this.GlyphEdgeOffset;
 
             builder.ReadShapes(txToVxs1);
 
@@ -225,14 +225,9 @@ namespace SampleWinForms.UI
                 case PointKind.C4End:
                 case PointKind.LineStart:
                 case PointKind.LineStop:
-                    if (point.isPartOfHorizontalEdge)
-                    {
-                        painter.FillRectLBWH(point.OX * _pxscale, point.OY * _pxscale, 8, 8, PixelFarm.Drawing.Color.Yellow);
-                    }
-                    else
-                    {
-                        painter.FillRectLBWH(point.OX * _pxscale, point.OY * _pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
-                    }
+                    
+                    painter.FillRectLBWH(point.OX * _pxscale, point.OY * _pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
+                     
                     break;
             }
         }

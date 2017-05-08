@@ -172,19 +172,17 @@ namespace Typography.Rendering
                 UpdateNewEdgeCut(flattenPoints[i]);
             }
         }
-        //internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
-        //{
-        //    int j = flattenPoints.Count;
-        //    for (int i = j - 1; i >= 0; --i)
-        //    {
-        //        flattenPoints[i].InwardEdge.SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
-        //    }
-        //    //calculate edge cutpoint             
-        //    for (int i = j - 1; i >= 0; --i)
-        //    {
-        //        UpdateNewEdgeCut(flattenPoints[i]);
-        //    }
-        //}
+
+        internal void FindBounds(ref float minX, ref float minY, ref float maxX, ref float maxY)
+        {   
+            for (int i = flattenPoints.Count - 1; i >= 0; --i)
+            {
+                GlyphPoint p = flattenPoints[i];
+                MyMath.FindMinMax(ref minX, ref maxX, p.newX);
+                MyMath.FindMinMax(ref minY, ref maxY, p.newY);
+            }
+        }
+
         /// <summary>
         /// update dynamic cutpoint of 2 adjacent edges
         /// </summary>

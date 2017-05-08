@@ -13,7 +13,6 @@ namespace Typography.Rendering
         public readonly GlyphBoneJoint JointA;
         public readonly GlyphBoneJoint JointB;
         public readonly EdgeLine TipEdge;
-
         double _len;
 #if DEBUG 
         static int dbugTotalId;
@@ -139,29 +138,7 @@ namespace Typography.Rendering
             }
         }
         public bool IsLongBone { get; internal set; }
-
-        //--------
-        public float LeftMostPoint()
-        {
-            if (JointB != null)
-            {
-                //compare joint A and B 
-                if (JointA.OriginalJointPos.X < JointB.OriginalJointPos.X)
-                {
-                    return JointA.GetLeftMostRib();
-                }
-                else
-                {
-                    return JointB.GetLeftMostRib();
-                }
-            }
-            else
-            {
-                return JointA.GetLeftMostRib();
-            }
-        }
-
-
+         
 #if DEBUG
         public override string ToString()
         {

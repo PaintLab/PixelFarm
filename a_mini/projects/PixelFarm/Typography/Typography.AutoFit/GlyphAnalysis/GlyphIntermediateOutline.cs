@@ -9,64 +9,65 @@ namespace Typography.Rendering
     class GlyphIntermediateOutline
     {
 
-
-        List<GlyphTriangle> _triangles = new List<GlyphTriangle>();
         List<GlyphContour> _contours;
-        //
         List<CentroidLineHub> _lineHubs;
-        List<GlyphBone> _outputVerticalLongBones;
-#if DEBUG
-        Polygon _dbugpolygon;
-#endif 
+
+
+        float _bounds_minX, _bounds_minY, _bounds_maxX, _bounds_maxY;
+
         public GlyphIntermediateOutline(Polygon polygon, List<GlyphContour> contours)
         {
+            //init value
+            _bounds_minX = _bounds_minY = float.MaxValue;
+            _bounds_maxX = _bounds_maxY = float.MinValue;
+
+
             this._contours = contours;
 
-            //1. create triangle list from given DelaunayTriangle polygon.
-            CreateTriangleList(polygon);
-            //2. create centroid line hubs: 
-            CreateCentroidLineHubs();
-            //3. create bone joints
+            //1. create centroid line hubs: 
+            CreateCentroidLineHubs(polygon);
+            //2. create bone joints (create joint before bone)
             CreateBoneJoints();
-            //4. create bones 
+            //3. create bones 
             CreateBones();
-            //5. create glyph edges          
+            //4. create glyph edges          
             CreateGlyphEdges();
-
-
         }
-        void CreateTriangleList(Polygon polygon)
+
+        void CreateCentroidLineHubs(Polygon polygon)
         {
+
+            List<GlyphTriangle> triangles = new List<GlyphTriangle>();
 #if DEBUG
             this._dbugpolygon = polygon; //for debug only ***
             EdgeLine.s_dbugTotalId = 0;//reset
+            this._dbugTriangles = triangles;
 #endif
 
+            //create triangle list from given DelaunayTriangle polygon.
             // Generate GlyphTriangle triangle from DelaunayTriangle 
             foreach (DelaunayTriangle delnTri in polygon.Triangles)
             {
                 delnTri.MarkAsActualTriangle();
-                _triangles.Add(new GlyphTriangle(delnTri)); //all triangles are created from Triangulation process
+                triangles.Add(new GlyphTriangle(delnTri)); //all triangles are created from Triangulation process
             }
 
-        }
-        void CreateCentroidLineHubs()
-        {
             //----------------------------
             //create centroid line hub
             //----------------------------
+            //1.
             var centroidLineHubs = new Dictionary<GlyphTriangle, CentroidLineHub>();
             CentroidLineHub currentCentroidLineHub = null;
-            //2. 
+            //2. temporary list of used triangles
             List<GlyphTriangle> usedTriList = new List<GlyphTriangle>();
             GlyphTriangle latestTri = null;
 
             //we may walk forward and backward on each tri
             //so we record the used triangle into a usedTriList.
-            int triCount = _triangles.Count;
+            int triCount = triangles.Count;
             for (int i = 0; i < triCount; ++i)
             {
-                GlyphTriangle tri = _triangles[i];
+                GlyphTriangle tri = triangles[i];
                 if (i == 0)
                 {
                     centroidLineHubs[tri] = currentCentroidLineHub = new CentroidLineHub(tri);
@@ -128,13 +129,12 @@ namespace Typography.Rendering
             }
 
             //--------------------------------------------------------------
-            //copy to list
+            //copy to list, we not use the centroidLineHubs anymore
             _lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values);
 
         }
         void CreateBoneJoints()
         {
-            //----------------------------------------
             int lineHubCount = _lineHubs.Count;
             for (int i = 0; i < lineHubCount; ++i)
             {
@@ -162,13 +162,6 @@ namespace Typography.Rendering
             {
                 _lineHubs[i].CreateBoneLinkBetweenCentroidLine(newBones);
             }
-            _outputVerticalLongBones = new List<GlyphBone>();
-
-            AnalyzeBoneLength(newBones, _outputVerticalLongBones);
-            //create perpendicular line link from control nodes to glyph bone 
-            //----------------------------------------
-            _outputVerticalLongBones.Sort((b0, b1) => b0.LeftMostPoint().CompareTo(b1.LeftMostPoint()));
-
         }
 
         void CreateGlyphEdges()
@@ -178,24 +171,18 @@ namespace Typography.Rendering
             int j = contours.Count;
             for (int i = 0; i < j; ++i)
             {
-                contours[i].CreateGlyphEdges();
+                GlyphContour cnt = contours[i];
+                cnt.CreateGlyphEdges();
+                //
+                cnt.FindBounds(ref _bounds_minX, ref _bounds_minY, ref _bounds_maxX, ref _bounds_maxY);
             }
         }
 
-        //void CreateBoneGroups()
-        //{
-        //    //----------------------------------------
-        //    int lineHubCount = _lineHubs.Count;
-        //    for (int i = 0; i < lineHubCount; ++i)
-        //    {
-        //        _lineHubs[i].CreateBoneGroups();
-        //    }
-        //}
+        public float MinX { get { return _bounds_minX; } }
+        public float MinY { get { return _bounds_minY; } }
+        public float MaxX { get { return _bounds_maxX; } }
+        public float MaxY { get { return _bounds_maxY; } }
 
-        public List<GlyphBone> LongVerticalBones
-        {
-            get { return this._outputVerticalLongBones; }
-        }
         /// <summary>
         /// find link from main triangle of line-hub to another line hub
         /// </summary>
@@ -227,52 +214,6 @@ namespace Typography.Rendering
                     return;
                 }
             }
-            //------
-
-
-
-
-        }
-        //static EdgeLine FindNearestEdge(GlyphTriangle tri, GlyphBoneJoint joint)
-        //{
-        //    return null;
-        //}
-        static void AnalyzeBoneLength(List<GlyphBone> newBones, List<GlyphBone> outputVerticalLongBones)
-        {
-            //----------------------------------------
-            //collect major bones
-            newBones.Sort((b0, b1) => b0.Length.CompareTo(b1.Length));
-            //----------------------------------------
-            //find exact glyph bounding box
-            //median
-            int n = newBones.Count;
-            GlyphBone medianBone = newBones[n / 2];
-            //classify bone len
-
-            double medianLen = medianBone.Length;
-            double median_x2 = medianLen + medianLen;
-            //----------------------------------------
-
-            int boneCount = newBones.Count;
-            for (int i = boneCount - 1; i >= 0; --i)
-            {
-                GlyphBone b = newBones[i];
-                if (b.Length >= median_x2)
-                {
-                    b.IsLongBone = true;
-                    if (b.SlopeKind == LineSlopeKind.Vertical)
-                    {
-                        outputVerticalLongBones.Add(b);
-                    }
-                }
-                else
-                {
-                    //since all bones are sorted
-                    //not need to go more
-                    break;
-                }
-            }
-            //----------------------------------------
         }
 
         static int FindLatestConnectedTri(List<GlyphTriangle> usedTriList, GlyphTriangle tri)
@@ -287,10 +228,7 @@ namespace Typography.Rendering
             }
             return -1;
         }
-        public List<GlyphTriangle> GetTriangles()
-        {
-            return _triangles;
-        }
+
         public List<CentroidLineHub> GetCentroidLineHubs()
         {
             return this._lineHubs;
@@ -300,7 +238,17 @@ namespace Typography.Rendering
         {
             return this._contours;
         }
-        public float LeftControlPos { get; set; }
+
+
+#if DEBUG
+
+        Polygon _dbugpolygon;
+        List<GlyphTriangle> _dbugTriangles;
+        public List<GlyphTriangle> dbugGetTriangles()
+        {
+            return _dbugTriangles;
+        }
+#endif
     }
 
 }

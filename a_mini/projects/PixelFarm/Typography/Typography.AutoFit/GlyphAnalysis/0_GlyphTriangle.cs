@@ -14,14 +14,10 @@ namespace Typography.Rendering
         public readonly EdgeLine e1;
         public readonly EdgeLine e2;
 
-        float centroidX;
-        float centroidY;
 
         public GlyphTriangle(DelaunayTriangle tri)
         {
             this._tri = tri;
-            tri.GetCentroid(out centroidX, out centroidY);
-
             //---------------------------------------------
             TriangulationPoint p0 = _tri.P0;
             TriangulationPoint p1 = _tri.P1;
@@ -38,7 +34,6 @@ namespace Typography.Rendering
             //if the order of original glyph point is CW
             //we may want to reverse the order of edge creation :
             //p2->p1->p0 
-
 
             //link back 
             tri.userData = this;
@@ -68,14 +63,11 @@ namespace Typography.Rendering
                 }
                 else
                 {
-                    //1 outside edge (d2)
-
-
+                    //1 outside edge (d2) 
                     //2 inside edges (d0,d1)
                     //find a perpendicular line
                     FindPerpendicular(d2, d0);
                     FindPerpendicular(d2, d1);
-
                 }
             }
             else if (d2.IsInside)
@@ -115,15 +107,11 @@ namespace Typography.Rendering
             return isOutside ?
                 (EdgeLine)(new OutsideEdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint)) :
                 new InsideEdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint);
+        }
 
-        }
-        public double CentroidX
+        public void CalculateCentroid(out float centroidX, out float centroidY)
         {
-            get { return centroidX; }
-        }
-        public double CentroidY
-        {
-            get { return centroidY; }
+            _tri.GetCentroid(out centroidX, out centroidY);
         }
         public bool IsConnectedTo(GlyphTriangle anotherTri)
         {
@@ -163,12 +151,7 @@ namespace Typography.Rendering
             if (tri == null) return null;
             return tri.userData as GlyphTriangle;
         }
-#if DEBUG
-        public override string ToString()
-        {
-            return "centroid:" + centroidX + "," + centroidY;
-        }
-#endif
+
     }
 
 
