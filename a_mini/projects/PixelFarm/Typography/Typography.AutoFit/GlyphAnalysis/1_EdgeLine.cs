@@ -14,17 +14,13 @@ namespace Typography.Rendering
     /// <summary>
     /// edge of GlyphTriangle
     /// </summary>
-    public class EdgeLine
+    public abstract class EdgeLine
     {
         internal readonly GlyphPoint _glyphPoint_P;
         internal readonly GlyphPoint _glyphPoint_Q;
-        /// <summary>
-        /// contact to another edge
-        /// </summary>
-        internal EdgeLine contactToEdge;
+     
 
-        internal GlyphBoneJoint inside_joint;
-
+      
 
 
         internal Vector2 _newDynamicMidPoint;
@@ -34,7 +30,7 @@ namespace Typography.Rendering
 
         GlyphTriangle _ownerTriangle;
 
-        internal EdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q, bool isOutside)
+        internal EdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
         {
             //this canbe inside edge or outside edge
 
@@ -99,19 +95,6 @@ namespace Typography.Rendering
 
         public bool IsTip { get; internal set; }
 
-        //internal EdgeLine GetControlEdgeThatContains(GlyphPoint p)
-        //{
-        //    if (_ctrlEdge_P != null && _ctrlEdge_P.ContainsGlyphPoint(p))
-        //    {
-        //        return _ctrlEdge_P;
-        //    }
-        //    if (_ctrlEdge_Q != null && _ctrlEdge_Q.ContainsGlyphPoint(p))
-        //    {
-        //        return _ctrlEdge_Q;
-        //    }
-        //    return null; //not found 
-        //}
-
         internal Vector2 GetOriginalEdgeVector()
         {
             return new Vector2(
@@ -153,15 +136,14 @@ namespace Typography.Rendering
 
         internal GlyphTriangle OwnerTriangle { get { return this._ownerTriangle; } }
 
-        public bool IsOutside
+        public abstract bool IsOutside
         {
             get;
-            private set;
+
         }
         public bool IsInside
         {
             get { return !this.IsOutside; }
-
         }
         public bool IsUpper
         {
@@ -250,13 +232,17 @@ namespace Typography.Rendering
         EdgeLine _ctrlEdge_P;
         EdgeLine _ctrlEdge_Q;
         internal OutsideEdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
-            : base(ownerTriangle, p, q, true)
+            : base(ownerTriangle, p, q)
         {
 
             //set back
             p.SetOutsideEdge(this);
             q.SetOutsideEdge(this);
 
+        }
+        public override bool IsOutside
+        {
+            get { return true; }
         }
         public EdgeLine ControlEdge_P
         {
@@ -322,10 +308,18 @@ namespace Typography.Rendering
         }
     }
     public class InsideEdgeLine : EdgeLine
-    {
+    {   /// <summary>
+        /// contact to another edge
+        /// </summary>
+        internal InsideEdgeLine contactToEdge;
+        internal GlyphBoneJoint inside_joint;
         internal InsideEdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
-            : base(ownerTriangle, p, q, false)
+            : base(ownerTriangle, p, q)
         {
+        }
+        public override bool IsOutside
+        {
+            get { return false; }
         }
     }
     public static class EdgeLineExtensions

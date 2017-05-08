@@ -114,7 +114,10 @@ namespace Typography.Rendering
         }
         EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
         {
-            return new EdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint, isOutside);
+            return isOutside ?
+                (EdgeLine)(new OutsideEdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint)) :
+                new InsideEdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint);
+
         }
         public double CentroidX
         {

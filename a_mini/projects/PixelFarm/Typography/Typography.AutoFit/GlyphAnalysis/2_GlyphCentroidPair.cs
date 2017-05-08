@@ -331,26 +331,26 @@ namespace Typography.Rendering
         /// <param name="anotherTriangle"></param>
         static void AddEdgesInformation(GlyphTriangle anotherTriangle, EdgeLine edgeLine, ref GlyphBoneJoint bonejoint)
         {
+
             if (edgeLine.IsOutside)
             {
                 //if edgeLine is outside edge,
                 //mark the relation of this to anotherTriangle.
-                MarkMatchingOutsideEdge(edgeLine, anotherTriangle);
+                MarkMatchingOutsideEdge((OutsideEdgeLine)edgeLine, anotherTriangle);
             }
             else
             {
                 //TODO: review here
                 //if edge is inside =>
-                //we will evaluate if _boneJoint== null
-
+                //we will evaluate if _boneJoint== null 
                 if (bonejoint == null)
                 {
-                    if (MarkMatchingInsideEdge(edgeLine, anotherTriangle))
+                    InsideEdgeLine insideEdge = (InsideEdgeLine)edgeLine;
+                    if (MarkMatchingInsideEdge(insideEdge, anotherTriangle))
                     {
-
                         bonejoint = new GlyphBoneJoint(
-                            edgeLine,
-                            edgeLine.contactToEdge);
+                            insideEdge,
+                            insideEdge.contactToEdge);
                     }
                 }
             }
@@ -378,7 +378,7 @@ namespace Typography.Rendering
         /// <param name="knownInsideEdge"></param>
         /// <param name="another"></param>
         /// <returns></returns>
-        static bool MarkMatchingInsideEdge(EdgeLine knownInsideEdge, GlyphTriangle another)
+        static bool MarkMatchingInsideEdge(InsideEdgeLine knownInsideEdge, GlyphTriangle another)
         {
 
             //evalute side-by-side
@@ -402,13 +402,13 @@ namespace Typography.Rendering
         /// <param name="knownInsideEdge"></param>
         /// <param name="anotherEdge"></param>
         /// <returns></returns>
-        static bool MarkMatchingInsideEdge(EdgeLine knownInsideEdge, EdgeLine anotherEdge)
+        static bool MarkMatchingInsideEdge(InsideEdgeLine knownInsideEdge, EdgeLine anotherEdge)
         {
             //another edge must be inside edge too, then check if the two is matching or not
             if (anotherEdge.IsInside && IsMatchingEdge(knownInsideEdge, anotherEdge))
             {   //if yes                
                 //mark contact toEdge
-                knownInsideEdge.contactToEdge = anotherEdge;
+                knownInsideEdge.contactToEdge = (InsideEdgeLine)anotherEdge;
                 return true;
             }
             else
@@ -445,7 +445,7 @@ namespace Typography.Rendering
         /// </summary>
         /// <param name="knownOutsideEdge"></param>
         /// <param name="q"></param>
-        static void MarkMatchingOutsideEdge(EdgeLine knownOutsideEdge, GlyphTriangle q)
+        static void MarkMatchingOutsideEdge(OutsideEdgeLine knownOutsideEdge, GlyphTriangle q)
         {
 
             EdgeLine matchingEdgeLine;
