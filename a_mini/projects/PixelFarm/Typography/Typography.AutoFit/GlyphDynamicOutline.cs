@@ -19,13 +19,16 @@ namespace Typography.Rendering
         /// </summary>
         float _offsetFromMasterOutline = 0; //pixel unit
         float _pxScale;
-        bool _needRefreshGrid;
+        bool _needRefreshBoneGroup;
+        bool _needAdjustGridFitValues;
+
         BoneGroupStatisticCollector _statCollector = new BoneGroupStatisticCollector();
 
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
             //setup default values
-            _needRefreshGrid = true;
+            _needRefreshBoneGroup = true; //first time
+            _needAdjustGridFitValues = true;//first time
             this.GridBoxWidth = 1; //pixels
             this.GridBoxHeight = 50; //pixels 
             _statCollector._selectedHorizontalBoneGroups = new List<BoneGroup>();
@@ -52,11 +55,11 @@ namespace Typography.Rendering
 
 
         /// <summary>
-        /// set grid value and apply to current master outline
+        ///classify bone group by gridbox(w,h) and apply to current master outline
         /// </summary>
         /// <param name="gridBoxW"></param>
         /// <param name="gridBoxH"></param>
-        public void ApplyGrid(int gridBoxW, int gridBoxH)
+        public void ClassifyBones(int gridBoxW, int gridBoxH)
         {
 
             this.GridBoxHeight = gridBoxH;
@@ -75,16 +78,106 @@ namespace Typography.Rendering
 
             //analyze bone group (stem) as a whole
             _statCollector.AnalyzeBoneGroups();
-
             List<EdgeLine> tmpEdges = new List<EdgeLine>();
             for (int i = 0; i < centroidLineCount; ++i)
             {
                 _allCentroidLines[i].CollectOutsideEdges(tmpEdges);
             }
+        }
+
+        /// <summary>
+        /// new stroke width offset from master outline
+        /// </summary>
+        /// <param name="offsetFromMasterOutline"></param>
+        public void SetDynamicEdgeOffsetFromMasterOutline(float offsetFromMasterOutline)
+        {
+            //preserve original outline
+            //regenerate outline from original outline
+            //----------------------------------------------------------        
+            if ((this._offsetFromMasterOutline = offsetFromMasterOutline) != 0)
+            {
+                //if 0, new other action
+                List<GlyphContour> cnts = _contours;
+                int j = cnts.Count;
+                for (int i = cnts.Count - 1; i >= 0; --i)
+                {
+                    cnts[i].ApplyNewEdgeOffsetFromMasterOutline(offsetFromMasterOutline);
+                }
+            }
+            //***
+            //changing offset from master outline affects the grid fit-> need to recalculate 
+            _needRefreshBoneGroup = true;
+        }
+
+        public float LeftControlPosX { get; set; }
+
+        /// <summary>
+        /// use grid fit or not
+        /// </summary>
+        public bool EnableGridFit { get; set; }
+        /// <summary>
+        /// grid box width in pixels
+        /// </summary>
+        public int GridBoxWidth { get; private set; }
+        /// <summary>
+        /// grid box height in pixels
+        /// </summary>
+        public int GridBoxHeight { get; private set; }
+
+
+        /// <summary>
+        /// generate output with specific pixel scale
+        /// </summary>
+        /// <param name="tx"></param>
+        /// <param name="pxScale"></param>
+        public void GenerateOutput(IGlyphTranslator tx, float pxScale)
+        {
+#if DEBUG
+            this.EnableGridFit = dbugTestNewGridFitting;
+#endif
+
+            if (_pxScale != pxScale)
+            {
+                //new scale need to adjust fit value again
+                _needAdjustGridFitValues = true;
+            }
+            //
+            this._pxScale = pxScale;
+            //
+            if (EnableGridFit)
+            {
+                if (_needRefreshBoneGroup)
+                {
+                    //change scale not affact the grid fit ***
+                    ClassifyBones(GridBoxWidth, GridBoxHeight);
+                    _needRefreshBoneGroup = false;
+                }
+                //
+                if (_needAdjustGridFitValues)
+                {
+                    AdjustFitValues();
+                    _needAdjustGridFitValues = false;
+                }
+            }
+
+            List<GlyphContour> contours = this._contours;
+            LeftControlPosX = 0;
+            //
+            int j = contours.Count;
+            tx.BeginRead(j);
+            for (int i = 0; i < j; ++i)
+            {
+                //generate in order of contour
+                GenerateContourOutput(tx, contours[i]);
+            }
+            tx.EndRead();
+            //-------------
+        }
+        void AdjustFitValues()
+        {
 
             //assign fit y pos in order
             List<BoneGroup> selectedHBoneGroups = _statCollector._selectedHorizontalBoneGroups;
-
             for (int i = selectedHBoneGroups.Count - 1; i >= 0; --i)
             {
                 //arrange selected horizontal
@@ -95,7 +188,6 @@ namespace Typography.Rendering
                 }
 
                 EdgeLine[] h_edges = boneGroup.edges;
-
                 int edgeCount = h_edges.Length;
 
                 //we need to calculate the avg of the glyph point
@@ -110,9 +202,7 @@ namespace Typography.Rendering
                     EdgeLine ee = h_edges[e];
                     GlyphPoint p_pnt = ee.P;
                     GlyphPoint q_pnt = ee.Q;
-
-                    //this version we focus on vertical hint only 
-
+                    //this version we focus on vertical hint only  
                     float diff = MyMath.CalculateDiffToFit(p_pnt.newY * _pxScale);
                     if (diff < 0)
                     {
@@ -182,6 +272,7 @@ namespace Typography.Rendering
                     GlyphPoint p_pnt = ee.P;
                     GlyphPoint q_pnt = ee.Q;
 
+                    //this version apply only Y ?
                     //apply from newX and newY
                     p_pnt.fit_NewX = p_pnt.newX * _pxScale;
                     p_pnt.fit_NewY = (p_pnt.newY * _pxScale) + avg_ydiff;
@@ -192,80 +283,7 @@ namespace Typography.Rendering
                     p_pnt.fit_analyzed = q_pnt.fit_analyzed = true;
                 }
             }
-
         }
-
-        /// <summary>
-        /// new stroke width offset from master outline
-        /// </summary>
-        /// <param name="offsetFromMasterOutline"></param>
-        public void SetDynamicEdgeOffsetFromMasterOutline(float offsetFromMasterOutline)
-        {
-            //preserve original outline
-            //regenerate outline from original outline
-            //----------------------------------------------------------        
-            if ((this._offsetFromMasterOutline = offsetFromMasterOutline) != 0)
-            {
-                //if 0, new other action
-                List<GlyphContour> cnts = _contours;
-                int j = cnts.Count;
-                for (int i = cnts.Count - 1; i >= 0; --i)
-                {
-                    cnts[i].ApplyNewEdgeOffsetFromMasterOutline(offsetFromMasterOutline);
-                }
-            }
-            //***
-            _needRefreshGrid = true;
-        }
-
-        public float LeftControlPosX { get; set; }
-
-        /// <summary>
-        /// use grid fit or not
-        /// </summary>
-        public bool EnableGridFit { get; set; }
-        /// <summary>
-        /// grid box width in pixels
-        /// </summary>
-        public int GridBoxWidth { get; private set; }
-        /// <summary>
-        /// grid box height in pixels
-        /// </summary>
-        public int GridBoxHeight { get; private set; }
-
-
-        /// <summary>
-        /// generate output with specific pixel scale
-        /// </summary>
-        /// <param name="tx"></param>
-        /// <param name="pxScale"></param>
-        public void GenerateOutput(IGlyphTranslator tx, float pxScale)
-        {
-#if DEBUG
-            this.EnableGridFit = dbugTestNewGridFitting;
-#endif  
-
-            //if the same scale
-            this._pxScale = pxScale;
-            if (EnableGridFit)
-            {
-                ApplyGrid(GridBoxWidth, GridBoxHeight);
-            }
-
-            List<GlyphContour> contours = this._contours;
-            LeftControlPosX = 0;
-            //
-            int j = contours.Count;
-            tx.BeginRead(j);
-            for (int i = 0; i < j; ++i)
-            {
-                //generate in order of contour
-                GenerateContourOutput(tx, contours[i]);
-            }
-            tx.EndRead();
-            //-------------
-        }
-
         void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
             //collect all centroid lines from each line CentroidLineHub
