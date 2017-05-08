@@ -252,8 +252,8 @@ namespace Typography.Rendering
         public float approxLength;
 
         public float y_pos;
-        public float minY;
-        public float maxY;
+        public float minY, maxY;
+        public float minX, maxX;
 
 
 
@@ -272,8 +272,7 @@ namespace Typography.Rendering
 
         internal void CollectOutsideEdges(List<EdgeLine> tmpEdges)
         {
-            tmpEdges.Clear(); //
-
+            tmpEdges.Clear(); // 
             int index = this.startIndex;
             for (int n = this.count - 1; n >= 0; --n)
             {
@@ -283,24 +282,33 @@ namespace Typography.Rendering
                 index++;
             }
             //
-            if (tmpEdges.Count > 0)
+            if (tmpEdges.Count == 0) return;
+            //---------------------
+            EdgeLine[] edges = tmpEdges.ToArray();
+            this.edges = edges;
+            //find minY and maxY for vertical fit
+            float minY = float.MaxValue;
+            float maxY = float.MinValue;
+            float minX = float.MaxValue;
+            float maxX = float.MinValue;
+            for (int e = edges.Length - 1; e >= 0; --e)
             {
-                EdgeLine[] edges = tmpEdges.ToArray();
-                this.edges = edges;
-                //find minY and maxY for vertical fit
-                float minY = float.MaxValue;
-                float maxY = float.MinValue;
-                for (int e = edges.Length - 1; e >= 0; --e)
-                {
-                    EdgeLine edge = edges[e];
-                    Vector2 midPos = edge.GetMidPoint();
-                    FindMinMax(ref minY, ref maxY, (float)edge.PY);
-                    FindMinMax(ref minY, ref maxY, (float)edge.QY);
-                }
-                //-------------------
-                this.minY = minY;
-                this.maxY = maxY;
+                EdgeLine edge = edges[e];
+                Vector2 midPos = edge.GetMidPoint();
+                // x
+                FindMinMax(ref minX, ref maxX, (float)edge.PX);
+                FindMinMax(ref minX, ref maxX, (float)edge.QX);
+                // y
+                FindMinMax(ref minY, ref maxY, (float)edge.PY);
+                FindMinMax(ref minY, ref maxY, (float)edge.QY);
             }
+            //-------------------
+            this.maxY = maxY;
+            this.minY = minY;
+            //-------------------
+            this.minX = minX;
+            this.maxX = maxX;
+
         }
         static void FindMinMax(ref float currentMin, ref float currentMax, float value)
         {
