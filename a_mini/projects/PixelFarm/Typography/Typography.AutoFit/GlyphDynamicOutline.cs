@@ -10,7 +10,7 @@ namespace Typography.Rendering
     {
 
         internal List<GlyphContour> _contours;
-        List<GlyphBone> _longVerticalBones;
+
         List<CentroidLine> _allCentroidLines;
 
         /// <summary>
@@ -43,15 +43,15 @@ namespace Typography.Rendering
             //1. joints and its bones
             //2. bones and its controlled edge 
             _contours = intermediateOutline.GetContours(); //original contours
-            _longVerticalBones = intermediateOutline.LongVerticalBones; //analyzed long bones
+
             //3.
             CollectAllCentroidLines(intermediateOutline.GetCentroidLineHubs());
 
-            //--------
-            //LeftControlPosX = intermediateOutline.LeftControlPos; //left control position  
+            //left control from vertical long bone
+            //-------- 
+
+            SetupLeftPositionX();
         }
-
-
         /// <summary>
         ///classify bone group by gridbox(w,h) and apply to current master outline
         /// </summary>
@@ -167,6 +167,9 @@ namespace Typography.Rendering
             tx.EndRead();
         }
 
+        /// <summary>
+        /// adjust vertical fitting value
+        /// </summary>
         void AdjustFitValues()
         {
 
@@ -286,6 +289,24 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 _allCentroidLines.AddRange(lineHubs[i].GetAllCentroidLines().Values);
+            }
+        }
+
+        void SetupLeftPositionX()
+        {
+            PrepareFitValues(GridBoxWidth, GridBoxHeight);
+            _needRefreshBoneGroup = false;
+            //
+            List<BoneGroup> arrangedVerticalBoneGroups = _groupingHelper.SelectedVerticalBoneGroups; 
+            //left most
+            //find adjust values
+            if (arrangedVerticalBoneGroups != null && arrangedVerticalBoneGroups.Count > 0)
+            {
+                this.LeftControlPositionX = arrangedVerticalBoneGroups[0].x_pos;
+            }
+            else
+            {
+                this.LeftControlPositionX = 0;
             }
         }
 
