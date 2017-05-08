@@ -81,42 +81,51 @@ namespace Typography.Rendering
 
             BoneGroup boneGroup = new BoneGroup(this); //new group
             boneGroup.slopeKind = LineSlopeKind.Other;
-            float virtFitLen = 0;
-            float ypos_sum = 0; //since we focus on ypos for vertical fitting
-
+            float approxLen = 0;
+            float ypos_sum = 0;
+            float xpos_sum = 0;
             for (int i = 0; i < j; ++i)
             {
                 GlyphBone bone = bones[i];
                 LineSlopeKind slope = bone.SlopeKind;
+                Vector2 mid_pos = bone.GetMidPoint();
+
                 if (slope != boneGroup.slopeKind)
                 {
                     //add existing to list and create a new group
                     if (boneGroup.count > 0)
                     {
                         //
-                        boneGroup.approxLength = virtFitLen;
+                        boneGroup.approxLength = approxLen;
                         boneGroup.y_pos = ypos_sum / boneGroup.count;
+                        boneGroup.x_pos = xpos_sum / boneGroup.count;
+                        //
                         this.boneGroups.Add(boneGroup);
                     }
                     // 
                     boneGroup = new BoneGroup(this);
                     boneGroup.startIndex = i;
-                    boneGroup.count++;
                     boneGroup.slopeKind = slope;
-                    virtFitLen = bone.EvaluateFitLength(); //reset
-                    ypos_sum = bone.GetMidPoint().Y;
+                    //
+                    boneGroup.count++;
+                    approxLen = bone.EvaluateFitLength(); //reset
+                    //
+                    ypos_sum = mid_pos.Y;
+                    xpos_sum = mid_pos.X;
                 }
                 else
                 {
-                    virtFitLen += bone.EvaluateFitLength(); //append
-                    ypos_sum += bone.GetMidPoint().Y;
                     boneGroup.count++;
+                    approxLen += bone.EvaluateFitLength(); //append
+                    ypos_sum += mid_pos.Y;
+                    xpos_sum += mid_pos.X;
                 }
             }
             if (boneGroup.count > 0)
             {
-                boneGroup.approxLength = virtFitLen;
+                boneGroup.approxLength = approxLen;
                 boneGroup.y_pos = ypos_sum / boneGroup.count;
+                boneGroup.x_pos = xpos_sum / boneGroup.count;
                 this.boneGroups.Add(boneGroup);
             }
         }
@@ -188,6 +197,7 @@ namespace Typography.Rendering
         public void AnalyzeHorizontalBoneGroups()
         {
             MarkTooSmallBones(_selectedHorizontalBoneGroups);
+            //arrange by y-pos for horizontal group
             _selectedHorizontalBoneGroups.Sort((bg0, bg1) => bg0.y_pos.CompareTo(bg1.y_pos));
             //
             //collect outside edge of horizontal group
@@ -200,8 +210,8 @@ namespace Typography.Rendering
         public void AnalyzeVerticalBoneGroups()
         {
             MarkTooSmallBones(_selectedVerticalBoneGroups);
-            //arrange again for vertical alignment
-            _selectedVerticalBoneGroups.Sort((bg0, bg1) => bg0.y_pos.CompareTo(bg1.y_pos));
+            //arrange by x-pos for vertical
+            _selectedVerticalBoneGroups.Sort((bg0, bg1) => bg0.x_pos.CompareTo(bg1.x_pos));
             //
             //collect outside edge of vertical group
             for (int i = _selectedVerticalBoneGroups.Count - 1; i >= 0; --i)
@@ -252,6 +262,7 @@ namespace Typography.Rendering
         public float approxLength;
 
         public float y_pos;
+        public float x_pos;
         public float minY, maxY;
         public float minX, maxX;
 
@@ -294,7 +305,7 @@ namespace Typography.Rendering
             for (int e = edges.Length - 1; e >= 0; --e)
             {
                 EdgeLine edge = edges[e];
-                Vector2 midPos = edge.GetMidPoint();
+
                 // x
                 FindMinMax(ref minX, ref maxX, (float)edge.PX);
                 FindMinMax(ref minX, ref maxX, (float)edge.QX);
@@ -318,7 +329,7 @@ namespace Typography.Rendering
 #if DEBUG
         public override string ToString()
         {
-            return slopeKind + ":y" + y_pos + "s:" + startIndex + ":" + count + " len:" + approxLength;
+            return slopeKind + ",x:" + x_pos + ",y:" + y_pos + ",s:" + startIndex + ":" + count + " len:" + approxLength;
         }
 #endif
     }
