@@ -10,7 +10,6 @@ namespace Typography.Contours
     {
 
         internal List<GlyphContour> _contours;
-
         List<CentroidLine> _allCentroidLines;
 
         /// <summary>
@@ -25,14 +24,13 @@ namespace Typography.Contours
 
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
+
             //setup default values
             _needRefreshBoneGroup = true; //first time
             _needAdjustGridFitValues = true;//first time
             this.GridBoxWidth = 1; //pixels
             this.GridBoxHeight = 50; //pixels 
             _groupingHelper = BoneGroupingHelper.CreateBoneGroupingHelper();
-
-
 #if DEBUG
             this.GridBoxHeight = dbugGridHeight; //pixels
             _dbugTempIntermediateOutline = intermediateOutline;
@@ -52,6 +50,15 @@ namespace Typography.Contours
 
             SetupLeftPositionX();
         }
+        private GlyphDynamicOutline()
+        {
+            //for empty dynamic outline
+        }
+        internal static GlyphDynamicOutline CreateBlankDynamicOutline()
+        {
+            return new GlyphDynamicOutline();
+        }
+
         public List<GlyphContour> GetContours()
         {
             return _contours;
@@ -187,10 +194,12 @@ namespace Typography.Contours
                 {
                     continue;
                 }
-
                 EdgeLine[] h_edges = boneGroup.edges;
+                if (h_edges == null)
+                {
+                    continue;
+                }
                 int edgeCount = h_edges.Length;
-
                 //we need to calculate the avg of the glyph point
                 //and add a total summary to this
 

@@ -196,6 +196,8 @@ namespace Typography.Contours
         }
         public void AnalyzeHorizontalBoneGroups()
         {
+            if (_selectedHorizontalBoneGroups.Count == 0) return;
+            //
             MarkTooSmallBones(_selectedHorizontalBoneGroups);
             //arrange by y-pos for horizontal group
             _selectedHorizontalBoneGroups.Sort((bg0, bg1) => bg0.y_pos.CompareTo(bg1.y_pos));
@@ -209,6 +211,8 @@ namespace Typography.Contours
         }
         public void AnalyzeVerticalBoneGroups()
         {
+            if (_selectedVerticalBoneGroups.Count == 0) return;
+            //
             MarkTooSmallBones(_selectedVerticalBoneGroups);
             //arrange by x-pos for vertical
             _selectedVerticalBoneGroups.Sort((bg0, bg1) => bg0.x_pos.CompareTo(bg1.x_pos));
