@@ -193,7 +193,7 @@ namespace Typography.Rendering
         }
     }
 
-    struct BoneGroupStatisticCollector
+    struct BoneGroupingHelper
     {
         //this is helper class
         public List<BoneGroup> _selectedHorizontalBoneGroups;

@@ -22,7 +22,7 @@ namespace Typography.Rendering
         bool _needRefreshBoneGroup;
         bool _needAdjustGridFitValues;
 
-        BoneGroupStatisticCollector _statCollector = new BoneGroupStatisticCollector();
+        BoneGroupingHelper _groupingHelper = new BoneGroupingHelper();
 
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
@@ -31,7 +31,7 @@ namespace Typography.Rendering
             _needAdjustGridFitValues = true;//first time
             this.GridBoxWidth = 1; //pixels
             this.GridBoxHeight = 50; //pixels 
-            _statCollector._selectedHorizontalBoneGroups = new List<BoneGroup>();
+            _groupingHelper._selectedHorizontalBoneGroups = new List<BoneGroup>();
             //-------------------------------- 
 
 #if DEBUG
@@ -65,7 +65,7 @@ namespace Typography.Rendering
             this.GridBoxHeight = gridBoxH;
             this.GridBoxWidth = gridBoxW;
             //
-            _statCollector.Reset();
+            _groupingHelper.Reset();
             int centroidLineCount = _allCentroidLines.Count;
 
             for (int i = 0; i < centroidLineCount; ++i)
@@ -73,11 +73,11 @@ namespace Typography.Rendering
                 //apply new grid to this centroid line
                 CentroidLine line = _allCentroidLines[i];
                 line.ApplyGridBox(gridBoxW, gridBoxH);
-                _statCollector.CollectBoneGroups(line);
+                _groupingHelper.CollectBoneGroups(line);
             }
 
             //analyze bone group (stem) as a whole
-            _statCollector.AnalyzeBoneGroups();
+            _groupingHelper.AnalyzeBoneGroups();
             List<EdgeLine> tmpEdges = new List<EdgeLine>();
             for (int i = 0; i < centroidLineCount; ++i)
             {
@@ -171,13 +171,13 @@ namespace Typography.Rendering
                 GenerateContourOutput(tx, contours[i]);
             }
             tx.EndRead();
-            //-------------
         }
+
         void AdjustFitValues()
         {
 
             //assign fit y pos in order
-            List<BoneGroup> selectedHBoneGroups = _statCollector._selectedHorizontalBoneGroups;
+            List<BoneGroup> selectedHBoneGroups = _groupingHelper._selectedHorizontalBoneGroups;
             for (int i = selectedHBoneGroups.Count - 1; i >= 0; --i)
             {
                 //arrange selected horizontal
