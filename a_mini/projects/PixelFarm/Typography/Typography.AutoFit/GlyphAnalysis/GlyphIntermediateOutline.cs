@@ -127,7 +127,8 @@ namespace Typography.Rendering
                 }
             }
 
-            //copy 
+            //--------------------------------------------------------------
+            //copy to list
             _lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values);
 
         }

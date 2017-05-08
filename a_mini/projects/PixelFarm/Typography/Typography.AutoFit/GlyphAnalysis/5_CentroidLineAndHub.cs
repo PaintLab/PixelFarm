@@ -723,42 +723,6 @@ namespace Typography.Rendering
             }
             return new Vector2((float)(cx / j), (float)(cy / j));
         }
-        static GlyphBoneJoint FindJoint(GlyphBone b, Vector2 pos, GlyphTriangle tri)
-        {
-            //bone link 2 joint
-            //find what joint 
 
-            GlyphBoneJoint foundOnA = null;
-            GlyphBoneJoint foundOnB = null;
-            if (b.JointA != null && b.JointA.ComposeOf(tri))
-            {
-                foundOnA = b.JointA;
-            }
-            if (b.JointB != null && b.JointB.ComposeOf(tri))
-            {
-                foundOnB = b.JointB;
-            }
-
-            if (b.TipEdge != null)
-            {
-
-            }
-
-            if (foundOnA != null && foundOnB != null)
-            {
-                //select 1
-                //nearest distance (pos to joint a) or (pos to joint b) 
-                return MyMath.MinDistanceFirst(pos, foundOnA.OriginalJointPos, foundOnB.OriginalJointPos) ? foundOnA : foundOnB;
-            }
-            else if (foundOnA != null)
-            {
-                return foundOnA;
-            }
-            else if (foundOnB != null)
-            {
-                return foundOnB;
-            }
-            return null;
-        }
     }
 }
