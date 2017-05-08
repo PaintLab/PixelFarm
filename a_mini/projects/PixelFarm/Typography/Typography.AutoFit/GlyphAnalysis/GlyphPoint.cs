@@ -42,11 +42,11 @@ namespace Typography.Rendering
         public bool isUpperSide;
 
         /// <summary>
-        /// outside inward edge
+        /// outside inward edge ?, TODO: review inward, outward concept again 
         /// </summary>
         OutsideEdgeLine _e0;
         /// <summary>
-        /// outside outward edge
+        /// outside outward edge ? TODO: review inward, outward concept again 
         /// </summary>
         OutsideEdgeLine _e1;
 
