@@ -125,10 +125,8 @@ namespace Typography.Rendering
         public double CentroidY
         {
             get { return centroidY; }
-        }
-
-
-        public bool IsConnectedWith(GlyphTriangle anotherTri)
+        } 
+        public bool IsConnectedTo(GlyphTriangle anotherTri)
         {
             DelaunayTriangle t2 = anotherTri._tri;
             if (t2 == this._tri)
@@ -165,10 +163,7 @@ namespace Typography.Rendering
         {
             if (tri == null) return null;
             return tri.userData as GlyphTriangle;
-        }
-        internal bool N0_IsOpposite { get; set; }
-        internal bool N1_IsOpposite { get; set; }
-        internal bool N2_IsOpposite { get; set; }
+        } 
 #if DEBUG
         public override string ToString()
         {
