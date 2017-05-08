@@ -10,7 +10,7 @@ namespace Typography.Contours
     public class GlyphOutlineAnalyzer
     {
         GlyphPartFlattener _glyphFlattener = new GlyphPartFlattener();
-        GlyphContourBuilder _glyphToCountor = new GlyphContourBuilder();
+        GlyphContourBuilder _glyphToContour = new GlyphContourBuilder();
         public GlyphOutlineAnalyzer()
         {
 
@@ -26,9 +26,9 @@ namespace Typography.Contours
         {
 
             //1. convert original glyph point to contour
-            _glyphToCountor.Read(glyphPoints, glyphContours);
+            _glyphToContour.Read(glyphPoints, glyphContours);
             //2. get result as list of contour
-            List<GlyphContour> contours = _glyphToCountor.GetContours();
+            List<GlyphContour> contours = _glyphToContour.GetContours();
 
             int cnt_count = contours.Count;
             //
@@ -47,7 +47,7 @@ namespace Typography.Contours
             }
             else
             {
-                return null;
+                return GlyphDynamicOutline.CreateBlankDynamicOutline();
             }
         }
 
