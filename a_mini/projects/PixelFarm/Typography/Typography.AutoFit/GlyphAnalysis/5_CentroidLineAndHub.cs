@@ -79,7 +79,7 @@ namespace Typography.Rendering
             j = bones.Count;
             this.boneGroups = new List<BoneGroup>();
 
-            BoneGroup boneGroup = new BoneGroup(); //new group
+            BoneGroup boneGroup = new BoneGroup(this); //new group
             boneGroup.slopeKind = LineSlopeKind.Other;
             float virtFitLen = 0;
             float ypos_sum = 0; //since we focus on ypos for vertical fitting
@@ -94,12 +94,12 @@ namespace Typography.Rendering
                     if (boneGroup.count > 0)
                     {
                         //
-                        boneGroup.virtFitLen = virtFitLen;
+                        boneGroup.approxLength = virtFitLen;
                         boneGroup.y_pos = ypos_sum / boneGroup.count;
                         this.boneGroups.Add(boneGroup);
                     }
                     // 
-                    boneGroup = new BoneGroup();
+                    boneGroup = new BoneGroup(this);
                     boneGroup.startIndex = i;
                     boneGroup.count++;
                     boneGroup.slopeKind = slope;
@@ -115,61 +115,12 @@ namespace Typography.Rendering
             }
             if (boneGroup.count > 0)
             {
-                boneGroup.virtFitLen = virtFitLen;
+                boneGroup.approxLength = virtFitLen;
                 boneGroup.y_pos = ypos_sum / boneGroup.count;
                 this.boneGroups.Add(boneGroup);
             }
         }
 
-        internal void CollectOutsideEdges(List<EdgeLine> tmpEdges)
-        {
-            tmpEdges.Clear();
-            int j = this.boneGroups.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                BoneGroup bonegroup = this.boneGroups[i];
-                //this version we focus only horizontal group 
-                //TODO: for vertical group?
-                if (!bonegroup.toBeRemoved && bonegroup.slopeKind == LineSlopeKind.Horizontal)
-                {
-
-                    tmpEdges.Clear();
-                    //
-                    int index = bonegroup.startIndex;
-                    for (int n = bonegroup.count - 1; n >= 0; --n)
-                    {
-                        GlyphBone bone = bones[index];
-                        //collect all outside edge arround  glyph bone
-                        bone.CollectOutsideEdge(tmpEdges);
-                        index++;
-                    }
-                    //
-                    if (tmpEdges.Count > 0)
-                    {
-                        EdgeLine[] edges = tmpEdges.ToArray();
-                        bonegroup.edges = edges;
-                        //find minY and maxY for vertical fit
-                        float minY = float.MaxValue;
-                        float maxY = float.MinValue;
-                        for (int e = edges.Length - 1; e >= 0; --e)
-                        {
-                            EdgeLine edge = edges[e];
-                            Vector2 midPos = edge.GetMidPoint();
-                            FindMinMax(ref minY, ref maxY, (float)edge.PY);
-                            FindMinMax(ref minY, ref maxY, (float)edge.QY);
-                        }
-                        //-------------------
-                        bonegroup.minY = minY;
-                        bonegroup.maxY = maxY;
-                    }
-                }
-            }
-        }
-        static void FindMinMax(ref float currentMin, ref float currentMax, float value)
-        {
-            if (value < currentMin) { currentMin = value; }
-            if (value > currentMax) { currentMax = value; }
-        }
         /// <summary>
         /// find nearest joint that contains tri 
         /// </summary>
@@ -196,44 +147,81 @@ namespace Typography.Rendering
     struct BoneGroupingHelper
     {
         //this is helper class
-        public List<BoneGroup> _selectedHorizontalBoneGroups;
+        List<BoneGroup> _selectedHorizontalBoneGroups;
+        List<BoneGroup> _selectedVerticalBoneGroups;
+        List<EdgeLine> tmpEdges;
+
+        public static BoneGroupingHelper CreateBoneGroupingHelper()
+        {
+            BoneGroupingHelper helper = new BoneGroupingHelper();
+            helper._selectedHorizontalBoneGroups = new List<BoneGroup>();
+            helper._selectedVerticalBoneGroups = new List<BoneGroup>();
+            helper.tmpEdges = new List<EdgeLine>();
+            return helper;
+        }
         public void Reset()
         {
             _selectedHorizontalBoneGroups.Clear();
+            _selectedVerticalBoneGroups.Clear();
         }
-        public void CollectBoneGroups(CentroidLine ownerline)
+        public List<BoneGroup> SelectedHorizontalBoneGroups { get { return _selectedHorizontalBoneGroups; } }
+        public List<BoneGroup> SelectedVerticalBoneGroups { get { return _selectedVerticalBoneGroups; } }
+        public void CollectBoneGroups(CentroidLine line)
         {
-            List<BoneGroup> boneGroups = ownerline.boneGroups;
+            List<BoneGroup> boneGroups = line.boneGroups;
             int j = boneGroups.Count;
             for (int i = 0; i < j; ++i)
             {
                 //this version, we focus on horizontal bone group
                 BoneGroup boneGroup = boneGroups[i];
-                if (boneGroup.slopeKind == LineSlopeKind.Horizontal)
+                switch (boneGroup.slopeKind)
                 {
-                    _selectedHorizontalBoneGroups.Add(boneGroup);
+                    case LineSlopeKind.Horizontal:
+                        _selectedHorizontalBoneGroups.Add(boneGroup);
+                        break;
+                    case LineSlopeKind.Vertical:
+                        _selectedVerticalBoneGroups.Add(boneGroup);
+                        break;
                 }
-
             }
         }
-        public void AnalyzeBoneGroups()
+        public void AnalyzeHorizontalBoneGroups()
         {
-            //remove too small bone group
+            MarkTooSmallBones(_selectedHorizontalBoneGroups);
+            _selectedHorizontalBoneGroups.Sort((bg0, bg1) => bg0.y_pos.CompareTo(bg1.y_pos));
             //
-            //statistic ?
-            //quantization?
+            //collect outside edge of horizontal group
+            for (int i = _selectedHorizontalBoneGroups.Count - 1; i >= 0; --i)
+            {
+                _selectedHorizontalBoneGroups[i].CollectOutsideEdges(tmpEdges);
+            }
+
+        }
+        public void AnalyzeVerticalBoneGroups()
+        {
+            MarkTooSmallBones(_selectedVerticalBoneGroups);
+            //arrange again for vertical alignment
+            _selectedVerticalBoneGroups.Sort((bg0, bg1) => bg0.y_pos.CompareTo(bg1.y_pos));
             //
-            //this version, just use median len
-            _selectedHorizontalBoneGroups.Sort((bg0, bg1) => bg0.virtFitLen.CompareTo(bg1.virtFitLen));
-            int groupCount = _selectedHorizontalBoneGroups.Count;
+            //collect outside edge of vertical group
+            for (int i = _selectedVerticalBoneGroups.Count - 1; i >= 0; --i)
+            {
+                _selectedVerticalBoneGroups[i].CollectOutsideEdges(tmpEdges);
+            }
+
+        }
+        static void MarkTooSmallBones(List<BoneGroup> boneGroups)
+        {
+            boneGroups.Sort((bg0, bg1) => bg0.approxLength.CompareTo(bg1.approxLength));
+            int groupCount = boneGroups.Count;
             //median
             int mid_index = groupCount / 2;
-            BoneGroup bonegroup = _selectedHorizontalBoneGroups[mid_index];
-            float lower_limit = bonegroup.virtFitLen / 4;
+            BoneGroup bonegroup = boneGroups[mid_index];
+            float lower_limit = bonegroup.approxLength / 4;
             for (int i = 0; i < mid_index; ++i)
             {
-                bonegroup = _selectedHorizontalBoneGroups[i];
-                if (bonegroup.virtFitLen < lower_limit)
+                bonegroup = boneGroups[i];
+                if (bonegroup.approxLength < lower_limit)
                 {
                     bonegroup.toBeRemoved = true;
                 }
@@ -243,29 +231,86 @@ namespace Typography.Rendering
                     break;
                 }
             }
-            //--------------------
-            //arrange again for vertical alignment
-            _selectedHorizontalBoneGroups.Sort((bg0, bg1) => bg0.y_pos.CompareTo(bg1.y_pos));
         }
     }
+
     class BoneGroup
     {
-        //small stem
-
-        public int startIndex;
-        public int count;
         public LineSlopeKind slopeKind;
-        public float virtFitLen;
-        public float y_pos;//avg
+        /// <summary>
+        /// start index from owner centroid line
+        /// </summary>
+        public int startIndex;
+        /// <summary>
+        /// member count in this group
+        /// </summary>
+        public int count;
+
+        /// <summary>
+        /// approximation of summation of bone length in this group
+        /// </summary>
+        public float approxLength;
+
+        public float y_pos;
         public float minY;
         public float maxY;
+
+
+
         public EdgeLine[] edges;
+
+        /// <summary>
+        /// marked as tobeRemoved, 
+        /// </summary>
         public bool toBeRemoved;
 
+        internal readonly CentroidLine ownerCentroidLine;
+        public BoneGroup(CentroidLine ownerCentroidLine)
+        {
+            this.ownerCentroidLine = ownerCentroidLine;
+        }
+
+        internal void CollectOutsideEdges(List<EdgeLine> tmpEdges)
+        {
+            tmpEdges.Clear(); //
+
+            int index = this.startIndex;
+            for (int n = this.count - 1; n >= 0; --n)
+            {
+                GlyphBone bone = ownerCentroidLine.bones[index];
+                //collect all outside edge arround  glyph bone
+                bone.CollectOutsideEdge(tmpEdges);
+                index++;
+            }
+            //
+            if (tmpEdges.Count > 0)
+            {
+                EdgeLine[] edges = tmpEdges.ToArray();
+                this.edges = edges;
+                //find minY and maxY for vertical fit
+                float minY = float.MaxValue;
+                float maxY = float.MinValue;
+                for (int e = edges.Length - 1; e >= 0; --e)
+                {
+                    EdgeLine edge = edges[e];
+                    Vector2 midPos = edge.GetMidPoint();
+                    FindMinMax(ref minY, ref maxY, (float)edge.PY);
+                    FindMinMax(ref minY, ref maxY, (float)edge.QY);
+                }
+                //-------------------
+                this.minY = minY;
+                this.maxY = maxY;
+            }
+        }
+        static void FindMinMax(ref float currentMin, ref float currentMax, float value)
+        {
+            if (value < currentMin) { currentMin = value; }
+            if (value > currentMax) { currentMax = value; }
+        }
 #if DEBUG
         public override string ToString()
         {
-            return slopeKind + ":y" + y_pos + "s:" + startIndex + ":" + count + " len:" + virtFitLen;
+            return slopeKind + ":y" + y_pos + "s:" + startIndex + ":" + count + " len:" + approxLength;
         }
 #endif
     }

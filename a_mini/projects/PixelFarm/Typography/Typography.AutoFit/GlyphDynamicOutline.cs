@@ -22,7 +22,7 @@ namespace Typography.Rendering
         bool _needRefreshBoneGroup;
         bool _needAdjustGridFitValues;
 
-        BoneGroupingHelper _groupingHelper = new BoneGroupingHelper();
+        BoneGroupingHelper _groupingHelper;
 
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
@@ -31,8 +31,8 @@ namespace Typography.Rendering
             _needAdjustGridFitValues = true;//first time
             this.GridBoxWidth = 1; //pixels
             this.GridBoxHeight = 50; //pixels 
-            _groupingHelper._selectedHorizontalBoneGroups = new List<BoneGroup>();
-            //-------------------------------- 
+            _groupingHelper = BoneGroupingHelper.CreateBoneGroupingHelper();
+
 
 #if DEBUG
             this.GridBoxHeight = dbugGridHeight; //pixels
@@ -61,7 +61,8 @@ namespace Typography.Rendering
         /// <param name="gridBoxH"></param>
         public void PrepareFitValues(int gridBoxW, int gridBoxH)
         {
-
+            //bone grouping depends on grid size.
+            
             this.GridBoxHeight = gridBoxH;
             this.GridBoxWidth = gridBoxW;
             //
@@ -75,14 +76,9 @@ namespace Typography.Rendering
                 line.ApplyGridBox(gridBoxW, gridBoxH);
                 _groupingHelper.CollectBoneGroups(line);
             }
-
             //analyze bone group (stem) as a whole
-            _groupingHelper.AnalyzeBoneGroups();
-            List<EdgeLine> tmpEdges = new List<EdgeLine>();
-            for (int i = 0; i < centroidLineCount; ++i)
-            {
-                _allCentroidLines[i].CollectOutsideEdges(tmpEdges);
-            }
+            _groupingHelper.AnalyzeHorizontalBoneGroups();
+            _groupingHelper.AnalyzeVerticalBoneGroups();
         }
 
         /// <summary>
@@ -177,7 +173,7 @@ namespace Typography.Rendering
         {
 
             //assign fit y pos in order
-            List<BoneGroup> selectedHBoneGroups = _groupingHelper._selectedHorizontalBoneGroups;
+            List<BoneGroup> selectedHBoneGroups = _groupingHelper.SelectedHorizontalBoneGroups;
             for (int i = selectedHBoneGroups.Count - 1; i >= 0; --i)
             {
                 //arrange selected horizontal
