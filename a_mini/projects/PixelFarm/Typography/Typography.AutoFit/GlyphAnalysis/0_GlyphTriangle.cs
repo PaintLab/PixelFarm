@@ -14,10 +14,9 @@ namespace Typography.Rendering
         public readonly EdgeLine e1;
         public readonly EdgeLine e2;
 
-
-        //centroid of edge mass
         float centroidX;
         float centroidY;
+
         public GlyphTriangle(DelaunayTriangle tri)
         {
             this._tri = tri;
@@ -49,6 +48,9 @@ namespace Typography.Rendering
             AnalyzeInsideEdge(e0, e1, e2);
             AnalyzeInsideEdge(e1, e0, e2);
             AnalyzeInsideEdge(e2, e0, e1);
+            //at this point, 
+            //we should know the direction of this triangle
+            //then we known that if this triangle is left/right/upper/lower of the 'stroke' line
         }
         void AnalyzeInsideEdge(EdgeLine d0, EdgeLine d1, EdgeLine d2)
         {
@@ -99,8 +101,7 @@ namespace Typography.Rendering
             System.Numerics.Vector2 cut_fromM0;
             if (MyMath.FindPerpendicularCutPoint(outsideEdge, new System.Numerics.Vector2(m0.X, m0.Y), out cut_fromM0))
             {
-                inside.SetOutsideEdge(outsideEdge, cut_fromM0, (float)(m0 - cut_fromM0).Length());
-                outsideEdge.SetControlEdge(inside);
+                ((OutsideEdgeLine)outsideEdge).SetControlEdge(inside);
             }
             else
             {
@@ -111,7 +112,10 @@ namespace Typography.Rendering
         }
         EdgeLine NewEdgeLine(TriangulationPoint p, TriangulationPoint q, bool isOutside)
         {
-            return new EdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint, isOutside);
+            return isOutside ?
+                (EdgeLine)(new OutsideEdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint)) :
+                new InsideEdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint);
+
         }
         public double CentroidX
         {
@@ -121,9 +125,7 @@ namespace Typography.Rendering
         {
             get { return centroidY; }
         }
-
-
-        public bool IsConnectedWith(GlyphTriangle anotherTri)
+        public bool IsConnectedTo(GlyphTriangle anotherTri)
         {
             DelaunayTriangle t2 = anotherTri._tri;
             if (t2 == this._tri)
@@ -161,9 +163,6 @@ namespace Typography.Rendering
             if (tri == null) return null;
             return tri.userData as GlyphTriangle;
         }
-        internal bool N0_IsOpposite { get; set; }
-        internal bool N1_IsOpposite { get; set; }
-        internal bool N2_IsOpposite { get; set; }
 #if DEBUG
         public override string ToString()
         {
@@ -175,7 +174,7 @@ namespace Typography.Rendering
 
     static class GlyphTriangleExtensions
     {
-        
+
         static EdgeLine GetFirstFoundOutsidEdge(GlyphTriangle tri)
         {
             if (tri.e0.IsOutside) { return tri.e0; }
