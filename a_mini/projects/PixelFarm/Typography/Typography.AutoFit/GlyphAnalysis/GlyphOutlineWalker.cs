@@ -36,8 +36,6 @@ namespace Typography.Rendering
             //--------------- 
             List<GlyphContour> contours = _dynamicOutline._contours;
 
-
-            //--------------- 
             List<CentroidLineHub> centroidLineHubs = _dynamicOutline.dbugGetCentroidLineHubs();
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {

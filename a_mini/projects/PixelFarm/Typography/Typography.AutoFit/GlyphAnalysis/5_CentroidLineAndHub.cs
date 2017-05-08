@@ -64,27 +64,26 @@ namespace Typography.Rendering
             {
                 GlyphBoneJoint joint = _joints[i];
                 Vector2 jointPos = joint.OriginalJointPos;
-                joint.SetFitXY(MyMath.FitToHalfGrid(jointPos.X, gridW), MyMath.FitToHalfGrid(jointPos.Y, gridH));
+                //set fit (x,y) to joint, then we will evaluate bone slope again (next step)
+                joint.SetFitXY(
+                    MyMath.FitToHalfGrid(jointPos.X, gridW), //use fit half
+                    MyMath.FitToHalfGrid(jointPos.Y, gridH));//use fit half
             }
-            //calculate slope for all bones
+            //2. (re) calculate slope for all bones.
             j = bones.Count;
             for (int i = 0; i < j; ++i)
             {
                 bones[i].EvaluateSlope();
             }
-
-            //----------------------------------------
-            //2.
-            //analyze bone groups
-            //separate GlyphBone into groups 
+            //3. re-grouping 
             j = bones.Count;
-            this.boneGroups = new List<BoneGroup>(); //clear 
+            this.boneGroups = new List<BoneGroup>();
 
             BoneGroup boneGroup = new BoneGroup(); //new group
             boneGroup.slopeKind = LineSlopeKind.Other;
-
             float virtFitLen = 0;
             float ypos_sum = 0; //since we focus on ypos for vertical fitting
+
             for (int i = 0; i < j; ++i)
             {
                 GlyphBone bone = bones[i];
@@ -124,23 +123,25 @@ namespace Typography.Rendering
 
         internal void CollectOutsideEdges(List<EdgeLine> tmpEdges)
         {
-            int j = this.boneGroups.Count;
             tmpEdges.Clear();
+            int j = this.boneGroups.Count;
             for (int i = 0; i < j; ++i)
             {
                 BoneGroup bonegroup = this.boneGroups[i];
+                //this version we focus only horizontal group 
+                //TODO: for vertical group?
                 if (!bonegroup.toBeRemoved && bonegroup.slopeKind == LineSlopeKind.Horizontal)
                 {
-                    //this is horizontal group 
+
                     tmpEdges.Clear();
                     //
-                    int startAt = bonegroup.startIndex;
+                    int index = bonegroup.startIndex;
                     for (int n = bonegroup.count - 1; n >= 0; --n)
                     {
-                        GlyphBone bone = bones[startAt];
+                        GlyphBone bone = bones[index];
                         //collect all outside edge arround  glyph bone
                         bone.CollectOutsideEdge(tmpEdges);
-                        startAt++;
+                        index++;
                     }
                     //
                     if (tmpEdges.Count > 0)
@@ -462,7 +463,7 @@ namespace Typography.Rendering
         static void CreateBoneJointIfNeed(
             InsideEdgeLine insideEdge,
             GlyphTriangle first_p_tri,
-            GlyphBoneJoint firstPairJoint,
+            GlyphBoneJoint firstJoint,
             List<GlyphBone> newlyCreatedBones,
             List<GlyphBone> glyphBones)
         {
@@ -480,7 +481,7 @@ namespace Typography.Rendering
                     if (nbEdge.IsInside)
                     {
                         GlyphBoneJoint joint = new GlyphBoneJoint((InsideEdgeLine)nbEdge, mainEdge);
-                        GlyphBone bone = new GlyphBone(mainEdge.inside_joint, firstPairJoint);
+                        GlyphBone bone = new GlyphBone(mainEdge.inside_joint, firstJoint);
                         newlyCreatedBones.Add(bone);
                         glyphBones.Add(bone);
                     }

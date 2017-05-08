@@ -31,15 +31,11 @@ namespace Typography.Rendering
         /// </summary>
         public float newX;
         public float newY;
-        //----------------------------------------
-
-        //temp ***
+        //---------------------------------------- 
         public float fit_NewX;
         public float fit_NewY;
         public bool fit_analyzed;
-        //----------------------------------------
-        public bool isPartOfHorizontalEdge;
-        public bool isUpperSide;
+        //------------------------------------- 
 
         /// <summary>
         /// outside inward edge ?, TODO: review inward, outward concept again 
@@ -57,8 +53,6 @@ namespace Typography.Rendering
             this.kind = kind;
         }
         public int SeqNo { get; internal set; }
-        public bool IsLeftSide { get; private set; }
-        public bool IsPartOfVerticalEdge { get; private set; }
 
         /// <summary>
         /// original X
@@ -124,18 +118,7 @@ namespace Typography.Rendering
 #endif
         }
 
-        internal void NotifyVerticalEdge(EdgeLine v_edge)
-        {
-            //associated 
-            if (!this.IsPartOfVerticalEdge)
-            {
-                this.IsPartOfVerticalEdge = true;
-            }
-            if (!this.IsLeftSide)
-            {
-                this.IsLeftSide = v_edge.IsLeftSide;
-            }
-        }
+
         internal static bool SameCoordAs(GlyphPoint a, GlyphPoint b)
         {
             return a.x == b.x && a.y == b.y;

@@ -15,7 +15,6 @@ namespace Typography.Rendering
         public readonly EdgeLine e2;
 
 
-
         public GlyphTriangle(DelaunayTriangle tri)
         {
             this._tri = tri;
@@ -35,7 +34,6 @@ namespace Typography.Rendering
             //if the order of original glyph point is CW
             //we may want to reverse the order of edge creation :
             //p2->p1->p0 
-
 
             //link back 
             tri.userData = this;
@@ -65,14 +63,11 @@ namespace Typography.Rendering
                 }
                 else
                 {
-                    //1 outside edge (d2)
-
-
+                    //1 outside edge (d2) 
                     //2 inside edges (d0,d1)
                     //find a perpendicular line
                     FindPerpendicular(d2, d0);
                     FindPerpendicular(d2, d1);
-
                 }
             }
             else if (d2.IsInside)
@@ -156,7 +151,7 @@ namespace Typography.Rendering
             if (tri == null) return null;
             return tri.userData as GlyphTriangle;
         }
- 
+
     }
 
 

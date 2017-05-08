@@ -13,7 +13,6 @@ namespace Typography.Rendering
         public readonly GlyphBoneJoint JointA;
         public readonly GlyphBoneJoint JointB;
         public readonly EdgeLine TipEdge;
-
         double _len;
 #if DEBUG 
         static int dbugTotalId;

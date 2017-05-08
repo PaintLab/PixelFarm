@@ -327,7 +327,7 @@ namespace Typography.Rendering
         public static int dbugGridHeight = 50;
         internal List<GlyphTriangle> dbugGetGlyphTriangles()
         {
-            return _dbugTempIntermediateOutline.GetTriangles();
+            return _dbugTempIntermediateOutline.dbugGetTriangles();
         }
         internal List<CentroidLineHub> dbugGetCentroidLineHubs()
         {

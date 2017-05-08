@@ -94,27 +94,10 @@ namespace Typography.Rendering
             //2. tri angulate 
             Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
 
-            //3. intermediate outline is used inside this lib
-
-            var intermediateOutline = new GlyphIntermediateOutline(mainPolygon, flattenContours);
-            List<GlyphTriangle> triAngles = intermediateOutline.GetTriangles();
-            int triangleCount = triAngles.Count;
-            for (int i = 0; i < triangleCount; ++i)
-            {
-
-                //iterate all triangles,
-                //create relation between edges
-
-                GlyphTriangle tri = triAngles[i];
-                AssignPointEdgeInvolvement(tri, tri.e0);
-                AssignPointEdgeInvolvement(tri, tri.e1);
-                AssignPointEdgeInvolvement(tri, tri.e2);
-            }
-
-
-
-            //convert intermediate outline to dynamic outline
-            return new GlyphDynamicOutline(intermediateOutline);
+            //3. intermediate outline is used inside this lib 
+            //and then convert intermediate outline to dynamic outline
+            return new GlyphDynamicOutline(
+                new GlyphIntermediateOutline(mainPolygon, flattenContours));
         }
 
 
@@ -166,106 +149,12 @@ namespace Typography.Rendering
             return new Poly2Tri.Polygon(points.ToArray());
 
         }
-        static void AssignPointEdgeInvolvement(GlyphTriangle ownerTri, EdgeLine edge)
-        {
-            if (!edge.IsOutside)
-            {
-                return;
-            }
-
-            switch (edge.SlopeKind)
-            {
-
-                case LineSlopeKind.Horizontal:
-                    {
-                        //horiontal edge
-                        //must check if this is upper horizontal 
-                        //or lower horizontal 
-                        //we know after do bone analysis
-
-                        //------------
-                        //both p and q of this edge is part of horizontal edge 
-                        GlyphPoint p = edge.P;
-                        if (p != null)
-                        {
-                            //TODO: review here
-                            p.isPartOfHorizontalEdge = true;
-                            p.isUpperSide = edge.IsUpper;
-                            //p.horizontalEdge = edge;
-                        }
-
-                        GlyphPoint q = edge.Q;
-                        if (q != null)
-                        {
-                            //TODO: review here
-                            q.isPartOfHorizontalEdge = true;
-                            //q.horizontalEdge = edge;
-                            q.isUpperSide = edge.IsUpper;
-                        }
-
-                        //------------ 
-                        //neighbors: find opposite edge to this edge
-
-                        GlyphTriangle n0 = ownerTri.N0;
-                        EdgeLine oppEdge;
-                        if (n0 != null)
-                        {
-                            if ((oppEdge = n0.FindOppositeEdge(edge)) != null)
-                            {
-                                //ownerTri.N0_IsOpposite = true;
-                            }
-                        }
-                        GlyphTriangle n1 = ownerTri.N1;
-                        if (n1 != null)
-                        {
-                            if ((oppEdge = n1.FindOppositeEdge(edge)) != null)
-                            {
-                                //found this edge
-                                //store edge line
-                                //ownerTri.N1_IsOpposite = true;
-                            }
-                        }
-                        GlyphTriangle n2 = ownerTri.N2;
-                        if (n2 != null)
-                        {
-                            if ((oppEdge = n2.FindOppositeEdge(edge)) != null)
-                            {
-                                //ownerTri.N2_IsOpposite = true;
-
-                            }
-                        }
-
-
-                    }
-                    break;
-                case LineSlopeKind.Vertical:
-                    {
-                        //both p and q of this edge is part of vertical edge 
-                        GlyphPoint p = edge.P;
-                        if (p != null)
-                        {
-                            //TODO: review here 
-                            p.NotifyVerticalEdge(edge);
-                        }
-
-                        GlyphPoint q = edge.Q;
-                        if (q != null)
-                        {   //TODO: review here
-
-                            q.NotifyVerticalEdge(edge);
-                        }
-                    }
-                    break;
-            }
-        }
-        //============================
-
 #if DEBUG
-        struct TmpPoint
+        struct dbugTmpPoint
         {
             public readonly double x;
             public readonly double y;
-            public TmpPoint(double x, double y)
+            public dbugTmpPoint(double x, double y)
             {
                 this.x = x;
                 this.y = y;
@@ -275,12 +164,12 @@ namespace Typography.Rendering
                 return x + "," + y;
             }
         }
-        static Dictionary<TmpPoint, bool> s_debugTmpPoints = new Dictionary<TmpPoint, bool>();
+        static Dictionary<dbugTmpPoint, bool> s_debugTmpPoints = new Dictionary<dbugTmpPoint, bool>();
         static void dbugCheckAllGlyphsAreUnique(List<GlyphPoint> flattenPoints)
         {
             double prevX = 0;
             double prevY = 0;
-            s_debugTmpPoints = new Dictionary<TmpPoint, bool>();
+            s_debugTmpPoints = new Dictionary<dbugTmpPoint, bool>();
             int lim = flattenPoints.Count - 1;
             for (int i = 0; i < lim; ++i)
             {
@@ -297,7 +186,7 @@ namespace Typography.Rendering
                 }
                 else
                 {
-                    TmpPoint tmp_point = new TmpPoint(x, y);
+                    dbugTmpPoint tmp_point = new dbugTmpPoint(x, y);
                     if (!s_debugTmpPoints.ContainsKey(tmp_point))
                     {
                         //ensure no duplicated point
