@@ -59,7 +59,7 @@ namespace Typography.Rendering
         /// </summary>
         /// <param name="gridBoxW"></param>
         /// <param name="gridBoxH"></param>
-        public void ClassifyBones(int gridBoxW, int gridBoxH)
+        public void PrepareFitValues(int gridBoxW, int gridBoxH)
         {
 
             this.GridBoxHeight = gridBoxH;
@@ -149,7 +149,7 @@ namespace Typography.Rendering
                 if (_needRefreshBoneGroup)
                 {
                     //change scale not affact the grid fit ***
-                    ClassifyBones(GridBoxWidth, GridBoxHeight);
+                    PrepareFitValues(GridBoxWidth, GridBoxHeight);
                     _needRefreshBoneGroup = false;
                 }
                 //
