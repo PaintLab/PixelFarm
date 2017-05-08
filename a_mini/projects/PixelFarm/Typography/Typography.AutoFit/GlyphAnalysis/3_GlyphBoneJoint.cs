@@ -19,7 +19,6 @@ namespace Typography.Rendering
         EdgeLine _tipEdge_p;
         EdgeLine _tipEdge_q;
 
-
         float _fitX, _fitY;
 
 #if DEBUG
@@ -27,8 +26,8 @@ namespace Typography.Rendering
         public static int dbugTotalId;
 #endif
         internal GlyphBoneJoint(
-            EdgeLine p_contact_edge,
-            EdgeLine q_contact_edge)
+            InsideEdgeLine p_contact_edge,
+            InsideEdgeLine q_contact_edge)
         {
 
             //both p and q is INSIDE, contact edge

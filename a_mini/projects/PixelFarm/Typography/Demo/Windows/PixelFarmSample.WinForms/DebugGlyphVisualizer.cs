@@ -358,7 +358,11 @@ namespace SampleWinForms.UI
                     //---------   
                     if (this.DrawPerpendicularLine)
                     {
-                        DrawPerpendicularEdgeControlPoints(painter, edge);
+                        var asOutsideEdge = edge as OutsideEdgeLine;
+                        if (asOutsideEdge != null)
+                        {
+                            DrawPerpendicularEdgeControlPoints(painter, asOutsideEdge);
+                        }
                     }
 
                 }
@@ -373,7 +377,7 @@ namespace SampleWinForms.UI
 
             }
         }
-        void DrawPerpendicularEdgeControlPoints(CanvasPainter painter, EdgeLine internalEdgeLine)
+        void DrawPerpendicularEdgeControlPoints(CanvasPainter painter, OutsideEdgeLine internalEdgeLine)
         {
 
             //Vector2 regen0 = edge._newRegen0 * _pxscale;
@@ -471,7 +475,7 @@ namespace SampleWinForms.UI
             }
             if (joint.TipEdgeQ != null)
             {
-                EdgeLine tipEdge = joint.TipEdgeQ; 
+                EdgeLine tipEdge = joint.TipEdgeQ;
                 double p_x, p_y, q_x, q_y;
                 tipEdge.dbugGetScaledXY(out p_x, out p_y, out q_x, out q_y, _pxscale);
                 //

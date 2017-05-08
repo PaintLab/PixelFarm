@@ -212,7 +212,7 @@ namespace Typography.Rendering
                         {
                             if ((oppEdge = n0.FindOppositeEdge(edge)) != null)
                             {
-                                ownerTri.N0_IsOpposite = true;
+                                //ownerTri.N0_IsOpposite = true;
                             }
                         }
                         GlyphTriangle n1 = ownerTri.N1;
@@ -222,7 +222,7 @@ namespace Typography.Rendering
                             {
                                 //found this edge
                                 //store edge line
-                                ownerTri.N1_IsOpposite = true;
+                                //ownerTri.N1_IsOpposite = true;
                             }
                         }
                         GlyphTriangle n2 = ownerTri.N2;
@@ -230,7 +230,7 @@ namespace Typography.Rendering
                         {
                             if ((oppEdge = n2.FindOppositeEdge(edge)) != null)
                             {
-                                ownerTri.N2_IsOpposite = true;
+                                //ownerTri.N2_IsOpposite = true;
 
                             }
                         }
