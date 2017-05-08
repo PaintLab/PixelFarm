@@ -19,7 +19,7 @@ namespace Typography.Rendering
         EdgeLine _tipEdge_p;
         EdgeLine _tipEdge_q;
 
-        //temp 
+
         float _fitX, _fitY;
 
 #if DEBUG
@@ -194,5 +194,5 @@ namespace Typography.Rendering
 #endif
 
     }
-     
+
 }
