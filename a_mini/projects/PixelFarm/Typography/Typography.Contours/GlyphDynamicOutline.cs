@@ -302,7 +302,7 @@ namespace Typography.Contours
         }
         void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
-            if (_isBlank) return;
+
             //collect all centroid lines from each line CentroidLineHub
             _allCentroidLines = new List<CentroidLine>();
             int j = lineHubs.Count;
@@ -314,7 +314,7 @@ namespace Typography.Contours
 
         void SetupLeftPositionX()
         {
-            if (_isBlank) return;
+
             PrepareFitValues(GridBoxWidth, GridBoxHeight);
             _needRefreshBoneGroup = false;
             //
@@ -336,7 +336,7 @@ namespace Typography.Contours
             GlyphContour contour)
         {
             //walk along the edge in the contour to generate new edge output
-            if (_isBlank) return;
+
             List<GlyphPoint> points = contour.flattenPoints;
             int j = points.Count;
             if (j == 0) return;
