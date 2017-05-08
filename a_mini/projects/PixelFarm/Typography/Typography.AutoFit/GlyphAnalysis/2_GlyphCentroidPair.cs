@@ -152,11 +152,13 @@ namespace Typography.Rendering
         {
             //calculate centroid pair slope 
             //p
-            double x0 = centroidPair.p.CentroidX;
-            double y0 = centroidPair.p.CentroidY;
+            float x0, y0;
+            centroidPair.p.CalculateCentroid(out x0, out y0);
+
             //q
-            double x1 = centroidPair.q.CentroidX;
-            double y1 = centroidPair.q.CentroidY; 
+            float x1, y1;
+            centroidPair.q.CalculateCentroid(out x1, out y1);
+
             //return slop angle no direction,we don't care direction of vector  
             return Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
         }

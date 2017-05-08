@@ -14,14 +14,11 @@ namespace Typography.Rendering
         public readonly EdgeLine e1;
         public readonly EdgeLine e2;
 
-        float centroidX;
-        float centroidY;
+
 
         public GlyphTriangle(DelaunayTriangle tri)
         {
             this._tri = tri;
-            tri.GetCentroid(out centroidX, out centroidY);
-
             //---------------------------------------------
             TriangulationPoint p0 = _tri.P0;
             TriangulationPoint p1 = _tri.P1;
@@ -115,15 +112,11 @@ namespace Typography.Rendering
             return isOutside ?
                 (EdgeLine)(new OutsideEdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint)) :
                 new InsideEdgeLine(this, p.userData as GlyphPoint, q.userData as GlyphPoint);
+        }
 
-        }
-        public double CentroidX
+        public void CalculateCentroid(out float centroidX, out float centroidY)
         {
-            get { return centroidX; }
-        }
-        public double CentroidY
-        {
-            get { return centroidY; }
+            _tri.GetCentroid(out centroidX, out centroidY);
         }
         public bool IsConnectedTo(GlyphTriangle anotherTri)
         {
@@ -163,12 +156,7 @@ namespace Typography.Rendering
             if (tri == null) return null;
             return tri.userData as GlyphTriangle;
         }
-#if DEBUG
-        public override string ToString()
-        {
-            return "centroid:" + centroidX + "," + centroidY;
-        }
-#endif
+ 
     }
 
 

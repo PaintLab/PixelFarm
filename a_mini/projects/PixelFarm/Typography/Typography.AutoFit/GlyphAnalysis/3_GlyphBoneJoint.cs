@@ -179,16 +179,12 @@ namespace Typography.Rendering
         public EdgeLine dbugGetEdge_Q() { return _q_contact_edge; }
 
 
-        public void dbugGetCentroidBoneCenters(out double cx0, out double cy0, out double cx1, out double cy1)
+        public void dbugGetCentroidBoneCenters(out float cx0, out float cy0, out float cx1, out float cy1)
         {
 
-            //for debug
-            GlyphTriangle p_tri = this.P_Tri;
-            cx0 = p_tri.CentroidX;
-            cy0 = p_tri.CentroidY;
-            GlyphTriangle q_tri = this.Q_Tri;
-            cx1 = q_tri.CentroidX;
-            cy1 = q_tri.CentroidY;
+            //for debug 
+            this.P_Tri.CalculateCentroid(out cx0, out cy0);
+            this.Q_Tri.CalculateCentroid(out cx1, out cy1);
         }
 #endif
 
