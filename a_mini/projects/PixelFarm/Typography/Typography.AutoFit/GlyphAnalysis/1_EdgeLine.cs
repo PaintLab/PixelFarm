@@ -11,22 +11,21 @@ namespace Typography.Rendering
     }
 
 
-
     /// <summary>
     /// edge of GlyphTriangle
     /// </summary>
     public class EdgeLine
     {
-        readonly GlyphPoint _glyphPoint_P;
-        readonly GlyphPoint _glyphPoint_Q;
+        internal readonly GlyphPoint _glyphPoint_P;
+        internal readonly GlyphPoint _glyphPoint_Q;
         /// <summary>
         /// contact to another edge
         /// </summary>
         internal EdgeLine contactToEdge;
+
         internal GlyphBoneJoint inside_joint;
 
-        EdgeLine _ctrlEdge_P;
-        EdgeLine _ctrlEdge_Q;
+
 
         internal Vector2 _newDynamicMidPoint;
         EdgeLine _outsideEdge;
@@ -37,6 +36,8 @@ namespace Typography.Rendering
 
         internal EdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q, bool isOutside)
         {
+            //this canbe inside edge or outside edge
+
             this._ownerTriangle = ownerTriangle;
             //------------------------------------
             //an edge line connects 2 glyph points.
@@ -47,12 +48,7 @@ namespace Typography.Rendering
             //------------------------------------   
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;
-            if (this.IsOutside = isOutside)
-            {
-                //set back
-                p.SetOutsideEdge(this);
-                q.SetOutsideEdge(this);
-            }
+
 
             //new dynamic mid point is calculate from original X,Y
 
@@ -100,28 +96,21 @@ namespace Typography.Rendering
         /// </summary>
         public double QY { get { return this._glyphPoint_Q.OY; } }
 
-        public EdgeLine ControlEdge_P
-        {
-            get { return _ctrlEdge_P; }
-        }
-        public EdgeLine ControlEdge_Q
-        {
-            get { return _ctrlEdge_Q; }
-        }
+
         public bool IsTip { get; internal set; }
 
-        internal EdgeLine GetControlEdgeThatContains(GlyphPoint p)
-        {
-            if (_ctrlEdge_P != null && _ctrlEdge_P.ContainsGlyphPoint(p))
-            {
-                return _ctrlEdge_P;
-            }
-            if (_ctrlEdge_Q != null && _ctrlEdge_Q.ContainsGlyphPoint(p))
-            {
-                return _ctrlEdge_Q;
-            }
-            return null; //not found 
-        }
+        //internal EdgeLine GetControlEdgeThatContains(GlyphPoint p)
+        //{
+        //    if (_ctrlEdge_P != null && _ctrlEdge_P.ContainsGlyphPoint(p))
+        //    {
+        //        return _ctrlEdge_P;
+        //    }
+        //    if (_ctrlEdge_Q != null && _ctrlEdge_Q.ContainsGlyphPoint(p))
+        //    {
+        //        return _ctrlEdge_Q;
+        //    }
+        //    return null; //not found 
+        //}
 
         internal Vector2 GetOriginalEdgeVector()
         {
@@ -129,7 +118,7 @@ namespace Typography.Rendering
                 Q.OX - _glyphPoint_P.OX,
                 Q.OY - _glyphPoint_P.OY);
         }
-      
+
         internal void SetOutsideEdge(EdgeLine outsideEdge, Vector2 cutPoint, float cutLen)
         {
 #if DEBUG
@@ -139,60 +128,7 @@ namespace Typography.Rendering
             _outsideEdgeCutAt = cutPoint;
             _outsideEdgeCutLen = cutLen;
         }
-        internal void SetControlEdge(EdgeLine controlEdge)
-        {
-            //check if edge is connect to p or q
 
-#if DEBUG
-            if (!controlEdge.IsInside)
-            {
-
-            }
-#endif
-            //----------------
-            if (_glyphPoint_P == controlEdge._glyphPoint_P)
-            {
-#if DEBUG
-                if (_ctrlEdge_P != null && _ctrlEdge_P != controlEdge)
-                {
-                }
-#endif
-                //map this p to p of the control edge
-                _ctrlEdge_P = controlEdge;
-
-            }
-            else if (_glyphPoint_P == controlEdge.Q)
-            {
-#if DEBUG
-                if (_ctrlEdge_P != null && _ctrlEdge_P != controlEdge)
-                {
-                }
-#endif
-                _ctrlEdge_P = controlEdge;
-            }
-            else if (_glyphPoint_Q == controlEdge._glyphPoint_P)
-            {
-#if DEBUG
-                if (_ctrlEdge_Q != null && _ctrlEdge_Q != controlEdge)
-                {
-                }
-#endif
-                _ctrlEdge_Q = controlEdge;
-            }
-            else if (_glyphPoint_Q == controlEdge.Q)
-            {
-#if DEBUG
-                if (_ctrlEdge_Q != null && _ctrlEdge_Q != controlEdge)
-                {
-                }
-#endif
-                _ctrlEdge_Q = controlEdge;
-            }
-            else
-            {
-                //?
-            }
-        }
 
 
         public GlyphPoint P
@@ -307,7 +243,91 @@ namespace Typography.Rendering
 
     }
 
+    public class OutsideEdgeLine : EdgeLine
+    {
+        //if this edge is 'OUTSIDE',
+        //it have 1-2 control(s) edge (inside)
+        EdgeLine _ctrlEdge_P;
+        EdgeLine _ctrlEdge_Q;
+        internal OutsideEdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
+            : base(ownerTriangle, p, q, true)
+        {
 
+            //set back
+            p.SetOutsideEdge(this);
+            q.SetOutsideEdge(this);
+
+        }
+        public EdgeLine ControlEdge_P
+        {
+            get { return _ctrlEdge_P; }
+        }
+        public EdgeLine ControlEdge_Q
+        {
+            get { return _ctrlEdge_Q; }
+        }
+        internal void SetControlEdge(EdgeLine controlEdge)
+        {
+            //check if edge is connect to p or q
+
+#if DEBUG
+            if (!controlEdge.IsInside)
+            {
+
+            }
+#endif
+            //----------------
+            if (_glyphPoint_P == controlEdge._glyphPoint_P)
+            {
+#if DEBUG
+                if (_ctrlEdge_P != null && _ctrlEdge_P != controlEdge)
+                {
+                }
+#endif
+                //map this p to p of the control edge
+                _ctrlEdge_P = controlEdge;
+
+            }
+            else if (_glyphPoint_P == controlEdge.Q)
+            {
+#if DEBUG
+                if (_ctrlEdge_P != null && _ctrlEdge_P != controlEdge)
+                {
+                }
+#endif
+                _ctrlEdge_P = controlEdge;
+            }
+            else if (_glyphPoint_Q == controlEdge._glyphPoint_P)
+            {
+#if DEBUG
+                if (_ctrlEdge_Q != null && _ctrlEdge_Q != controlEdge)
+                {
+                }
+#endif
+                _ctrlEdge_Q = controlEdge;
+            }
+            else if (_glyphPoint_Q == controlEdge.Q)
+            {
+#if DEBUG
+                if (_ctrlEdge_Q != null && _ctrlEdge_Q != controlEdge)
+                {
+                }
+#endif
+                _ctrlEdge_Q = controlEdge;
+            }
+            else
+            {
+                //?
+            }
+        }
+    }
+    public class InsideEdgeLine : EdgeLine
+    {
+        internal InsideEdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
+            : base(ownerTriangle, p, q, false)
+        {
+        }
+    }
     public static class EdgeLineExtensions
     {
         public static Vector2 GetMidPoint(this EdgeLine line)
