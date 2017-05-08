@@ -148,7 +148,7 @@ namespace Typography.Rendering
             }
         }
 
-        static double CalculateCentroidPairSlope(GlyphCentroidPair centroidPair, out LineSlopeKind centroidLineSlope)
+        static double CalculateCentroidPairSlope(GlyphCentroidPair centroidPair)
         {
             //calculate centroid pair slope 
             //p
@@ -156,34 +156,9 @@ namespace Typography.Rendering
             double y0 = centroidPair.p.CentroidY;
             //q
             double x1 = centroidPair.q.CentroidX;
-            double y1 = centroidPair.q.CentroidY;
-
-            centroidLineSlope = LineSlopeKind.Other;
-            double slopeAngleNoDirection = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-            //we don't care direction of vector 
-            if (x1 == x0)
-            {
-                centroidLineSlope = LineSlopeKind.Vertical;
-            }
-            else
-            {
-
-                if (slopeAngleNoDirection > MyMath._85degreeToRad)
-                {
-                    //assume
-                    centroidLineSlope = LineSlopeKind.Vertical;
-                }
-                else if (slopeAngleNoDirection < MyMath._03degreeToRad) //_15degreeToRad
-                {
-                    //assume
-                    centroidLineSlope = LineSlopeKind.Horizontal;
-                }
-                else
-                {
-                    centroidLineSlope = LineSlopeKind.Other;
-                }
-            }
-            return slopeAngleNoDirection;
+            double y1 = centroidPair.q.CentroidY; 
+            //return slop angle no direction,we don't care direction of vector  
+            return Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
         }
 
         void SelectMostProperTipEdge(
@@ -193,9 +168,9 @@ namespace Typography.Rendering
           out EdgeLine tipEdge,
           out EdgeLine notTipEdge)
         {
-            LineSlopeKind slopeKind;
+
             //slop angle in rad
-            double slopeAngle = CalculateCentroidPairSlope(centroidPair, out slopeKind);
+            double slopeAngle = CalculateCentroidPairSlope(centroidPair);
             double diff0 = Math.Abs(outside0.GetSlopeAngleNoDirection() - slopeAngle);
             double diff1 = Math.Abs(outside1.GetSlopeAngleNoDirection() - slopeAngle);
             if (diff0 > diff1)
@@ -357,21 +332,7 @@ namespace Typography.Rendering
         }
 
 
-        /// <summary>
-        ///helper method for debug,  read px,py, qx,qy, 
-        /// </summary>
-        /// <param name="px"></param>
-        /// <param name="py"></param>
-        /// <param name="qx"></param>
-        /// <param name="qy"></param>
-        public void GetLineCoords(out double px, out double py, out double qx, out double qy)
-        {
-            px = p.CentroidX;
-            py = p.CentroidY;
-            //
-            qx = q.CentroidX;
-            qy = q.CentroidY;
-        }
+
         /// <summary>
         /// from a knownInsideEdge, find a matching-inside-edge on another triangle.
         /// </summary>

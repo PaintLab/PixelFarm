@@ -14,10 +14,9 @@ namespace Typography.Rendering
         public readonly EdgeLine e1;
         public readonly EdgeLine e2;
 
-
-        //centroid of edge mass
         float centroidX;
         float centroidY;
+
         public GlyphTriangle(DelaunayTriangle tri)
         {
             this._tri = tri;
@@ -125,7 +124,7 @@ namespace Typography.Rendering
         public double CentroidY
         {
             get { return centroidY; }
-        } 
+        }
         public bool IsConnectedTo(GlyphTriangle anotherTri)
         {
             DelaunayTriangle t2 = anotherTri._tri;
@@ -163,7 +162,7 @@ namespace Typography.Rendering
         {
             if (tri == null) return null;
             return tri.userData as GlyphTriangle;
-        } 
+        }
 #if DEBUG
         public override string ToString()
         {
