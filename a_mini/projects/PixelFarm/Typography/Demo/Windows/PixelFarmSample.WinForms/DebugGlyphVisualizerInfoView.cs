@@ -327,8 +327,8 @@ namespace SampleWinForms.UI
                 return;
             }
 
-            GlyphPoint pnt_P = edge.GlyphPoint_P;
-            GlyphPoint pnt_Q = edge.GlyphPoint_Q;
+            GlyphPoint pnt_P = edge.P;
+            GlyphPoint pnt_Q = edge.Q;
 
             //-------------------------------
 

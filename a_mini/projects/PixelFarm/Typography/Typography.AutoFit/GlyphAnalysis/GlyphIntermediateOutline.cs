@@ -127,7 +127,8 @@ namespace Typography.Rendering
                 }
             }
 
-            //copy 
+            //--------------------------------------------------------------
+            //copy to list
             _lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values);
 
         }
@@ -279,7 +280,7 @@ namespace Typography.Rendering
             //search back ***
             for (int i = usedTriList.Count - 1; i >= 0; --i)
             {
-                if (usedTriList[i].IsConnectedWith(tri))
+                if (usedTriList[i].IsConnectedTo(tri))
                 {
                     return i;
                 }

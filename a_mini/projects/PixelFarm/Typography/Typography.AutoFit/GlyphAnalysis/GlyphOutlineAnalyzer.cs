@@ -185,7 +185,7 @@ namespace Typography.Rendering
 
                         //------------
                         //both p and q of this edge is part of horizontal edge 
-                        GlyphPoint p = edge.GlyphPoint_P;
+                        GlyphPoint p = edge.P;
                         if (p != null)
                         {
                             //TODO: review here
@@ -194,7 +194,7 @@ namespace Typography.Rendering
                             //p.horizontalEdge = edge;
                         }
 
-                        GlyphPoint q = edge.GlyphPoint_Q;
+                        GlyphPoint q = edge.Q;
                         if (q != null)
                         {
                             //TODO: review here
@@ -212,7 +212,7 @@ namespace Typography.Rendering
                         {
                             if ((oppEdge = n0.FindOppositeEdge(edge)) != null)
                             {
-                                ownerTri.N0_IsOpposite = true;
+                                //ownerTri.N0_IsOpposite = true;
                             }
                         }
                         GlyphTriangle n1 = ownerTri.N1;
@@ -222,7 +222,7 @@ namespace Typography.Rendering
                             {
                                 //found this edge
                                 //store edge line
-                                ownerTri.N1_IsOpposite = true;
+                                //ownerTri.N1_IsOpposite = true;
                             }
                         }
                         GlyphTriangle n2 = ownerTri.N2;
@@ -230,7 +230,7 @@ namespace Typography.Rendering
                         {
                             if ((oppEdge = n2.FindOppositeEdge(edge)) != null)
                             {
-                                ownerTri.N2_IsOpposite = true;
+                                //ownerTri.N2_IsOpposite = true;
 
                             }
                         }
@@ -241,14 +241,14 @@ namespace Typography.Rendering
                 case LineSlopeKind.Vertical:
                     {
                         //both p and q of this edge is part of vertical edge 
-                        GlyphPoint p = edge.GlyphPoint_P;
+                        GlyphPoint p = edge.P;
                         if (p != null)
                         {
                             //TODO: review here 
                             p.NotifyVerticalEdge(edge);
                         }
 
-                        GlyphPoint q = edge.GlyphPoint_Q;
+                        GlyphPoint q = edge.Q;
                         if (q != null)
                         {   //TODO: review here
 

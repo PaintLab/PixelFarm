@@ -76,9 +76,10 @@ namespace Typography.Rendering
             //analyze bone group (stem) as a whole
             _statCollector.AnalyzeBoneGroups();
 
+            List<EdgeLine> tmpEdges = new List<EdgeLine>();
             for (int i = 0; i < centroidLineCount; ++i)
             {
-                _allCentroidLines[i].CollectOutsideEdges();
+                _allCentroidLines[i].CollectOutsideEdges(tmpEdges);
             }
 
             //assign fit y pos in order
@@ -107,8 +108,8 @@ namespace Typography.Rendering
                 for (int e = 0; e < edgeCount; ++e)
                 {
                     EdgeLine ee = h_edges[e];
-                    GlyphPoint p_pnt = ee.GlyphPoint_P;
-                    GlyphPoint q_pnt = ee.GlyphPoint_Q;
+                    GlyphPoint p_pnt = ee.P;
+                    GlyphPoint q_pnt = ee.Q;
 
                     //this version we focus on vertical hint only 
 
@@ -178,8 +179,8 @@ namespace Typography.Rendering
                 for (int e = 0; e < edgeCount; ++e)
                 {
                     EdgeLine ee = h_edges[e];
-                    GlyphPoint p_pnt = ee.GlyphPoint_P;
-                    GlyphPoint q_pnt = ee.GlyphPoint_Q;
+                    GlyphPoint p_pnt = ee.P;
+                    GlyphPoint q_pnt = ee.Q;
 
                     //apply from newX and newY
                     p_pnt.fit_NewX = p_pnt.newX * _pxScale;
@@ -198,7 +199,7 @@ namespace Typography.Rendering
         /// new stroke width offset from master outline
         /// </summary>
         /// <param name="offsetFromMasterOutline"></param>
-        public void SetNewEdgeOffsetFromMasterOutline(float offsetFromMasterOutline)
+        public void SetDynamicEdgeOffsetFromMasterOutline(float offsetFromMasterOutline)
         {
             //preserve original outline
             //regenerate outline from original outline
@@ -233,17 +234,6 @@ namespace Typography.Rendering
         public int GridBoxHeight { get; private set; }
 
 
-        void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
-        {
-            //collect all centroid lines from each line CentroidLineHub
-            _allCentroidLines = new List<CentroidLine>();
-            int j = lineHubs.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                _allCentroidLines.AddRange(lineHubs[i].GetAllCentroidLines().Values);
-            }
-        }
-
         /// <summary>
         /// generate output with specific pixel scale
         /// </summary>
@@ -276,24 +266,15 @@ namespace Typography.Rendering
             //-------------
         }
 
-        static float FindLeftMost(List<List<Vector2>> genPointList)
+        void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
-            //find left most x value
-            float min = float.MaxValue;
-            for (int i = genPointList.Count - 1; i >= 0; --i)
+            //collect all centroid lines from each line CentroidLineHub
+            _allCentroidLines = new List<CentroidLine>();
+            int j = lineHubs.Count;
+            for (int i = 0; i < j; ++i)
             {
-                //new contour
-                List<Vector2> genPoints = genPointList[i];
-                for (int m = genPoints.Count - 1; m >= 0; --m)
-                {
-                    Vector2 p = genPoints[m];
-                    if (p.X < min)
-                    {
-                        min = p.X;
-                    }
-                }
+                _allCentroidLines.AddRange(lineHubs[i].GetAllCentroidLines().Values);
             }
-            return min;
         }
 
         void GenerateContourOutput(
@@ -311,6 +292,7 @@ namespace Typography.Rendering
             GlyphPoint p = points[0];
             float pxscale = this._pxScale;
             bool useGridFit = EnableGridFit;
+            //TODO: review here
             if (useGridFit && p.fit_analyzed)
             {
                 tx.MoveTo(p.fit_NewX, p.fit_NewY);

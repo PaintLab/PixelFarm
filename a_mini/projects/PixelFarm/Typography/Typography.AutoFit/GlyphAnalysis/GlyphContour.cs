@@ -115,9 +115,9 @@ namespace Typography.Rendering
         internal void CreateGlyphEdges()
         {
             int lim = flattenPoints.Count - 1;
-
+            edges = new List<OutsideEdgeLine>();
             GlyphPoint p = null, q = null;
-            EdgeLine edgeLine = null;
+            OutsideEdgeLine edgeLine = null;
 
             for (int i = 0; i < lim; ++i)
             {
@@ -130,7 +130,8 @@ namespace Typography.Rendering
                     //so ...
                     //edgeLine is outwardEdge for p.
                     //edgeLine is inwardEdge for q.
-                    p.OutwardEdge = q.InwardEdge = edgeLine;
+                    //p.OutwardEdge = q.InwardEdge = edgeLine;
+                    edges.Add(edgeLine);
                 }
                 else
                 {
@@ -147,7 +148,8 @@ namespace Typography.Rendering
                 //so ...
                 //edgeLine is outwardEdge for p.
                 //edgeLine is inwardEdge for q.
-                p.OutwardEdge = q.InwardEdge = edgeLine;
+                //p.OutwardEdge = q.InwardEdge = edgeLine;
+                edges.Add(edgeLine);
             }
             else
             {
@@ -155,27 +157,42 @@ namespace Typography.Rendering
             }
 
         }
+        List<OutsideEdgeLine> edges;
         internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
-            int j = flattenPoints.Count;
-            for (int i = j - 1; i >= 0; --i)
+            int j = edges.Count;
+
+            for (int i = 0; i < j; ++i)
             {
-                flattenPoints[i].InwardEdge.SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
+                edges[i].SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
             }
             //calculate edge cutpoint             
-            for (int i = j - 1; i >= 0; --i)
+            for (int i = flattenPoints.Count - 1; i >= 0; --i)
             {
                 UpdateNewEdgeCut(flattenPoints[i]);
             }
         }
+        //internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
+        //{
+        //    int j = flattenPoints.Count;
+        //    for (int i = j - 1; i >= 0; --i)
+        //    {
+        //        flattenPoints[i].InwardEdge.SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
+        //    }
+        //    //calculate edge cutpoint             
+        //    for (int i = j - 1; i >= 0; --i)
+        //    {
+        //        UpdateNewEdgeCut(flattenPoints[i]);
+        //    }
+        //}
         /// <summary>
         /// update dynamic cutpoint of 2 adjacent edges
         /// </summary>
         /// <param name="p"></param>
         static void UpdateNewEdgeCut(GlyphPoint p)
         {
-            EdgeLine e0 = p.InwardEdge;
-            EdgeLine e1 = p.OutwardEdge;
+            OutsideEdgeLine e0 = p.E0;
+            OutsideEdgeLine e1 = p.E1;
 
             Vector2 tmp_e0_q = e0._newDynamicMidPoint + e0.GetOriginalEdgeVector();
             Vector2 tmp_e1_p = e1._newDynamicMidPoint - e1.GetOriginalEdgeVector();

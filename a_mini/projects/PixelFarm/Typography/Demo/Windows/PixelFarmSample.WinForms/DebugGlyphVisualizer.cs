@@ -243,8 +243,8 @@ namespace SampleWinForms.UI
             {
                 //free side      
                 {
-                    GlyphPoint p = edge.GlyphPoint_P;
-                    GlyphPoint q = edge.GlyphPoint_Q;
+                    GlyphPoint p = edge.P;
+                    GlyphPoint q = edge.Q;
 
                     DrawPointKind(painter, p);
                     DrawPointKind(painter, q);
@@ -288,8 +288,8 @@ namespace SampleWinForms.UI
                     painter.StrokeWidth = prevWidth;
 
                     //draw
-                    GlyphPoint p = edge.GlyphPoint_P;
-                    GlyphPoint q = edge.GlyphPoint_Q;
+                    GlyphPoint p = edge.P;
+                    GlyphPoint q = edge.Q;
 
                     //
                     //AssocBoneCollection p_bones = glyphEdge._P.dbugGetAssocBones();
@@ -337,8 +337,8 @@ namespace SampleWinForms.UI
 
                 {
 
-                    GlyphPoint p = edge.GlyphPoint_P;
-                    GlyphPoint q = edge.GlyphPoint_Q;
+                    GlyphPoint p = edge.P;
+                    GlyphPoint q = edge.Q;
                     //---------   
                     {
                         //TODO: reimplement this again
@@ -358,7 +358,11 @@ namespace SampleWinForms.UI
                     //---------   
                     if (this.DrawPerpendicularLine)
                     {
-                        DrawPerpendicularEdgeControlPoints(painter, edge);
+                        var asOutsideEdge = edge as OutsideEdgeLine;
+                        if (asOutsideEdge != null)
+                        {
+                            DrawPerpendicularEdgeControlPoints(painter, asOutsideEdge);
+                        }
                     }
 
                 }
@@ -373,7 +377,7 @@ namespace SampleWinForms.UI
 
             }
         }
-        void DrawPerpendicularEdgeControlPoints(CanvasPainter painter, EdgeLine internalEdgeLine)
+        void DrawPerpendicularEdgeControlPoints(CanvasPainter painter, OutsideEdgeLine internalEdgeLine)
         {
 
             //Vector2 regen0 = edge._newRegen0 * _pxscale;
@@ -471,7 +475,7 @@ namespace SampleWinForms.UI
             }
             if (joint.TipEdgeQ != null)
             {
-                EdgeLine tipEdge = joint.TipEdgeQ; 
+                EdgeLine tipEdge = joint.TipEdgeQ;
                 double p_x, p_y, q_x, q_y;
                 tipEdge.dbugGetScaledXY(out p_x, out p_y, out q_x, out q_y, _pxscale);
                 //
