@@ -44,11 +44,11 @@ namespace Typography.Rendering
         /// <summary>
         /// outside inward edge
         /// </summary>
-        OutsideEdgeLine _inwardEdge;
+        OutsideEdgeLine _e0;
         /// <summary>
         /// outside outward edge
         /// </summary>
-        OutsideEdgeLine _outwardEdge;
+        OutsideEdgeLine _e1;
 
         public GlyphPoint(float x, float y, PointKind kind)
         {
@@ -73,18 +73,19 @@ namespace Typography.Rendering
         /// <summary>
         /// outside inward edge
         /// </summary>
-        internal OutsideEdgeLine InwardEdge
+        internal OutsideEdgeLine E0
         {
-            get { return this._inwardEdge; }
-            set { _inwardEdge = value; }
+            //TODO: review inward and outward edge again
+            get { return this._e0; }
+
         }
         /// <summary>
         /// outside outward edge
         /// </summary>
-        internal OutsideEdgeLine OutwardEdge
+        internal OutsideEdgeLine E1
         {
-            get { return this._outwardEdge; }
-            set { _outwardEdge = value; }
+            //TODO: review inward and outward edge again
+            get { return this._e1; }
         }
 
         /// <summary>         
@@ -98,13 +99,13 @@ namespace Typography.Rendering
             //------------------------------------------
             //e0 and e1 will be swaped later for this point SetCorrectInwardAndOutWardEdge() ***
 
-            if (_inwardEdge == null)
+            if (_e0 == null)
             {
-                _inwardEdge = edge;
+                _e0 = edge;
             }
-            else if (_outwardEdge == null)
+            else if (_e1 == null)
             {
-                _outwardEdge = edge;
+                _e1 = edge;
             }
             else
             {
@@ -116,7 +117,7 @@ namespace Typography.Rendering
             {
 
             }
-            if (_inwardEdge == _outwardEdge)
+            if (_e0 == _e1)
             {
                 throw new System.NotSupportedException();
             }

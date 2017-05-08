@@ -160,15 +160,15 @@ namespace Typography.Rendering
         /// <returns></returns>
         internal static OutsideEdgeLine FindCommonOutsideEdge(GlyphPoint p, GlyphPoint q)
         {
-            if (p.InwardEdge == q.InwardEdge ||
-                p.InwardEdge == q.OutwardEdge)
+            if (p.E0 == q.E0 ||
+                p.E0 == q.E1)
             {
-                return p.InwardEdge;
+                return p.E0;
             }
-            else if (p.OutwardEdge == q.InwardEdge ||
-                     p.OutwardEdge == q.OutwardEdge)
+            else if (p.E1 == q.E0 ||
+                     p.E1 == q.E1)
             {
-                return p.OutwardEdge;
+                return p.E1;
             }
             else
             {

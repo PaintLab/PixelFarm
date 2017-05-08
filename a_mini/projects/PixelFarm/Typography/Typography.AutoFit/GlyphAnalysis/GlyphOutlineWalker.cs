@@ -94,7 +94,7 @@ namespace Typography.Rendering
                 int n = points.Count;
                 for (int m = 0; m < n; ++m)
                 {
-                    OnGlyphEdgeN(points[m].InwardEdge);
+                    OnGlyphEdgeN(points[m].E0);
                 }
             } 
 #endif

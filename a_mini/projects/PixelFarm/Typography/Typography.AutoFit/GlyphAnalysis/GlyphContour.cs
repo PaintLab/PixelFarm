@@ -191,8 +191,8 @@ namespace Typography.Rendering
         /// <param name="p"></param>
         static void UpdateNewEdgeCut(GlyphPoint p)
         {
-            OutsideEdgeLine e0 = p.InwardEdge;
-            OutsideEdgeLine e1 = p.OutwardEdge;
+            OutsideEdgeLine e0 = p.E0;
+            OutsideEdgeLine e1 = p.E1;
 
             Vector2 tmp_e0_q = e0._newDynamicMidPoint + e0.GetOriginalEdgeVector();
             Vector2 tmp_e1_p = e1._newDynamicMidPoint - e1.GetOriginalEdgeVector();
