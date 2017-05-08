@@ -1,6 +1,5 @@
 ﻿//MIT, 2017, WinterDev
 using System;
-using System.Numerics;
 using System.Collections.Generic;
 using Typography.OpenFont;
 
@@ -45,12 +44,11 @@ namespace Typography.Rendering
             //2. bones and its controlled edge 
             _contours = intermediateOutline.GetContours(); //original contours
             _longVerticalBones = intermediateOutline.LongVerticalBones; //analyzed long bones
-
             //3.
             CollectAllCentroidLines(intermediateOutline.GetCentroidLineHubs());
 
             //--------
-            LeftControlPosX = intermediateOutline.LeftControlPos; //left control position  
+            //LeftControlPosX = intermediateOutline.LeftControlPos; //left control position  
         }
 
 
@@ -62,7 +60,7 @@ namespace Typography.Rendering
         public void PrepareFitValues(int gridBoxW, int gridBoxH)
         {
             //bone grouping depends on grid size.
-            
+
             this.GridBoxHeight = gridBoxH;
             this.GridBoxWidth = gridBoxW;
             //
@@ -105,7 +103,7 @@ namespace Typography.Rendering
             _needRefreshBoneGroup = true;
         }
 
-        public float LeftControlPosX { get; set; }
+        public float LeftControlPositionX { get; set; }
 
         /// <summary>
         /// use grid fit or not
@@ -157,7 +155,7 @@ namespace Typography.Rendering
             }
 
             List<GlyphContour> contours = this._contours;
-            LeftControlPosX = 0;
+            LeftControlPositionX = 0;
             //
             int j = contours.Count;
             tx.BeginRead(j);

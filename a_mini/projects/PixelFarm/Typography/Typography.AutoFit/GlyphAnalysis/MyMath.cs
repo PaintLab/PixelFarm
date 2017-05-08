@@ -4,7 +4,13 @@ namespace Typography.Rendering
 {
 
     public static class MyMath
-    { 
+    {
+        static internal void FindMinMax(ref float currentMin, ref float currentMax, float value)
+        {
+            if (value < currentMin) { currentMin = value; }
+            if (value > currentMax) { currentMax = value; }
+        }
+
         /// <summary>
         /// calculate distance to fit interger grid pos, assum grid size=1
         /// </summary>

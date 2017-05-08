@@ -13,9 +13,17 @@ namespace Typography.Rendering
         List<CentroidLineHub> _lineHubs;
         List<GlyphBone> _outputVerticalLongBones;
 
+        float _bounds_minX, _bounds_minY, _bounds_maxX, _bounds_maxY;
+
         public GlyphIntermediateOutline(Polygon polygon, List<GlyphContour> contours)
         {
+            //init value
+            _bounds_minX = _bounds_minY = float.MaxValue;
+            _bounds_maxX = _bounds_maxY = float.MinValue;
+
+
             this._contours = contours;
+
             //1. create centroid line hubs: 
             CreateCentroidLineHubs(polygon);
             //2. create bone joints (create joint before bone)
@@ -170,9 +178,17 @@ namespace Typography.Rendering
             int j = contours.Count;
             for (int i = 0; i < j; ++i)
             {
-                contours[i].CreateGlyphEdges();
+                GlyphContour cnt = contours[i];
+                cnt.CreateGlyphEdges();
+                //
+                cnt.FindBounds(ref _bounds_minX, ref _bounds_minY, ref _bounds_maxX, ref _bounds_maxY);
             }
         }
+
+        public float MinX { get { return _bounds_minX; } }
+        public float MinY { get { return _bounds_minY; } }
+        public float MaxX { get { return _bounds_maxX; } }
+        public float MaxY { get { return _bounds_maxY; } }
 
         public List<GlyphBone> LongVerticalBones
         {
@@ -271,7 +287,7 @@ namespace Typography.Rendering
         {
             return this._contours;
         }
-        public float LeftControlPos { get; set; }
+
 
 #if DEBUG
 

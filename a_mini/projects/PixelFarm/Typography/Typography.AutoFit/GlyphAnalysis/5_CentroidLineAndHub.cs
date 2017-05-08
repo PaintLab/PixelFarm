@@ -307,11 +307,11 @@ namespace Typography.Rendering
                 EdgeLine edge = edges[e];
 
                 // x
-                FindMinMax(ref minX, ref maxX, (float)edge.PX);
-                FindMinMax(ref minX, ref maxX, (float)edge.QX);
+                MyMath.FindMinMax(ref minX, ref maxX, (float)edge.PX);
+                MyMath.FindMinMax(ref minX, ref maxX, (float)edge.QX);
                 // y
-                FindMinMax(ref minY, ref maxY, (float)edge.PY);
-                FindMinMax(ref minY, ref maxY, (float)edge.QY);
+                MyMath.FindMinMax(ref minY, ref maxY, (float)edge.PY);
+                MyMath.FindMinMax(ref minY, ref maxY, (float)edge.QY);
             }
             //-------------------
             this.maxY = maxY;
@@ -321,11 +321,7 @@ namespace Typography.Rendering
             this.maxX = maxX;
 
         }
-        static void FindMinMax(ref float currentMin, ref float currentMax, float value)
-        {
-            if (value < currentMin) { currentMin = value; }
-            if (value > currentMax) { currentMax = value; }
-        }
+
 #if DEBUG
         public override string ToString()
         {

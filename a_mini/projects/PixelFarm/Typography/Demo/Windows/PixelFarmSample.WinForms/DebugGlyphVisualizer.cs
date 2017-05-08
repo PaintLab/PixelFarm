@@ -96,7 +96,7 @@ namespace SampleWinForms.UI
             //
             builder.Build(testChar, _sizeInPoint);
             var txToVxs1 = new GlyphTranslatorToVxs();
-            builder.GlyphEdgeOffset = this.GlyphEdgeOffset;
+            builder.GlyphDynamicEdgeOffset = this.GlyphEdgeOffset;
 
             builder.ReadShapes(txToVxs1);
 
