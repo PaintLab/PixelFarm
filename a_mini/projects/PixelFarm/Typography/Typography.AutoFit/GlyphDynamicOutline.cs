@@ -292,6 +292,7 @@ namespace Typography.Rendering
             GlyphPoint p = points[0];
             float pxscale = this._pxScale;
             bool useGridFit = EnableGridFit;
+            //TODO: review here
             if (useGridFit && p.fit_analyzed)
             {
                 tx.MoveTo(p.fit_NewX, p.fit_NewY);
