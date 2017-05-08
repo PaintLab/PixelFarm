@@ -19,7 +19,7 @@ namespace Typography.Contours
         float _pxScale;
         bool _needRefreshBoneGroup;
         bool _needAdjustGridFitValues;
-
+        bool _isBlank;
         BoneGroupingHelper _groupingHelper;
 
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
@@ -53,6 +53,7 @@ namespace Typography.Contours
         private GlyphDynamicOutline()
         {
             //for empty dynamic outline
+            _isBlank = true;
         }
         internal static GlyphDynamicOutline CreateBlankDynamicOutline()
         {
@@ -70,6 +71,8 @@ namespace Typography.Contours
         /// <param name="gridBoxH"></param>
         public void PrepareFitValues(int gridBoxW, int gridBoxH)
         {
+            if (_isBlank) return;
+
             //bone grouping depends on grid size.
 
             this.GridBoxHeight = gridBoxH;
@@ -96,6 +99,8 @@ namespace Typography.Contours
         /// <param name="offsetFromMasterOutline"></param>
         public void SetDynamicEdgeOffsetFromMasterOutline(float offsetFromMasterOutline)
         {
+            if (_isBlank) return;
+
             //preserve original outline
             //regenerate outline from original outline
             //----------------------------------------------------------        
@@ -137,6 +142,7 @@ namespace Typography.Contours
         /// <param name="pxScale"></param>
         public void GenerateOutput(IGlyphTranslator tx, float pxScale)
         {
+            if (_isBlank) return;
 #if DEBUG
             this.EnableGridFit = dbugTestNewGridFitting;
 #endif
@@ -183,7 +189,7 @@ namespace Typography.Contours
         /// </summary>
         void AdjustFitValues()
         {
-
+            if (_isBlank) return;
             //assign fit y pos in order
             List<BoneGroup> selectedHBoneGroups = _groupingHelper.SelectedHorizontalBoneGroups;
             for (int i = selectedHBoneGroups.Count - 1; i >= 0; --i)
@@ -296,6 +302,7 @@ namespace Typography.Contours
         }
         void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
+            if (_isBlank) return;
             //collect all centroid lines from each line CentroidLineHub
             _allCentroidLines = new List<CentroidLine>();
             int j = lineHubs.Count;
@@ -307,6 +314,7 @@ namespace Typography.Contours
 
         void SetupLeftPositionX()
         {
+            if (_isBlank) return;
             PrepareFitValues(GridBoxWidth, GridBoxHeight);
             _needRefreshBoneGroup = false;
             //
@@ -328,7 +336,7 @@ namespace Typography.Contours
             GlyphContour contour)
         {
             //walk along the edge in the contour to generate new edge output
-
+            if (_isBlank) return;
             List<GlyphPoint> points = contour.flattenPoints;
             int j = points.Count;
             if (j == 0) return;
