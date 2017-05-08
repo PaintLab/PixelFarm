@@ -156,6 +156,7 @@
     <Compile Include="5_PixelFarm_Agg\ActualImage.cs" />
     <Compile Include="5_PixelFarm_Agg\PixelFormat.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\BoundingRect.cs" />
+    <Compile Include="7_PixelFarm_AggVertex_Core\StrokeGen_Old.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\VertexSourceExtensions.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\LineWalker.cs" />
     <Compile Include="ForNet20\ExtensionAttribute.cs" />

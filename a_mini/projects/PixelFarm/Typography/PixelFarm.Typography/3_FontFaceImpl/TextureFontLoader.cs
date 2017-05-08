@@ -164,17 +164,21 @@ namespace PixelFarm.Drawing.Fonts
             //-------------------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
             builder.SetHintTechnique(hintTech);
-
+            MsdfGenParams genParams = new MsdfGenParams();
             var atlasBuilder = new SimpleFontAtlasBuilder();
             atlasBuilder.SetAtlasInfo(TextureKind.Msdf, sizeInPoint);
             foreach (ushort gindex in glyphIndexIter)
             {
                 //build glyph 
-                builder.BuildFromGlyphIndex(gindex, sizeInPoint);
+                builder.BuildFromGlyphIndex(gindex, -1); //use original glyph size (assign -1)
                 var glyphToContour = new GlyphContourBuilder();
+                
+
                 //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
                 builder.ReadShapes(glyphToContour);
-                GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour);
+                genParams.shapeScale = 1f / 64; //we scale later (as original C++ code use 1/64)
+                GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, genParams);
+
                 atlasBuilder.AddGlyph(gindex, glyphImg);
 
 

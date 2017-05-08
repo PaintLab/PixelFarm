@@ -10,28 +10,20 @@ namespace Typography.Rendering
         Other
     }
 
+
     /// <summary>
     /// edge of GlyphTriangle
     /// </summary>
-    public class EdgeLine
+    public abstract class EdgeLine
     {
-        readonly GlyphPoint _glyphPoint_P;
-        readonly GlyphPoint _glyphPoint_Q;
-        /// <summary>
-        /// contact to another edge
-        /// </summary>
-        internal EdgeLine contactToEdge;
-
-
-        internal GlyphBoneJoint inside_joint;
-#if DEBUG
-        public static int s_dbugTotalId;
-        public readonly int dbugId = s_dbugTotalId++;
-
-#endif
+        internal readonly GlyphPoint _glyphPoint_P;
+        internal readonly GlyphPoint _glyphPoint_Q;
         GlyphTriangle _ownerTriangle;
-        internal EdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q, bool isOutside)
+
+        internal EdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
         {
+            //this canbe inside edge or outside edge
+
             this._ownerTriangle = ownerTriangle;
             //------------------------------------
             //an edge line connects 2 glyph points.
@@ -42,17 +34,16 @@ namespace Typography.Rendering
             //------------------------------------   
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;
-            this.IsOutside = isOutside;
-            if (isOutside)
-            {
-                p.SetOutsideEdge(this);
-                q.SetOutsideEdge(this);
-            }
+
+
+            //new dynamic mid point is calculate from original X,Y
+
+
             //-------------------------------
             //analyze angle and slope kind
             //-------------------------------  
             SlopeAngleNoDirection = this.GetSlopeAngleNoDirection();
-            if (x1 == x0)
+            if (QX == PX)
             {
                 this.SlopeKind = LineSlopeKind.Vertical;
             }
@@ -74,25 +65,42 @@ namespace Typography.Rendering
             }
         }
 
-        public double x0 { get { return this._glyphPoint_P.x; } }
-        public double y0 { get { return this._glyphPoint_P.y; } }
-        public double x1 { get { return this._glyphPoint_Q.x; } }
-        public double y1 { get { return this._glyphPoint_Q.y; } }
+        /// <summary>
+        /// original px
+        /// </summary>
+        public double PX { get { return this._glyphPoint_P.OX; } }
+        /// <summary>
+        /// original py
+        /// </summary>
+        public double PY { get { return this._glyphPoint_P.OY; } }
+        /// <summary>
+        /// original qx
+        /// </summary>
+        public double QX { get { return this._glyphPoint_Q.OX; } }
+        /// <summary>
+        /// original qy
+        /// </summary>
+        public double QY { get { return this._glyphPoint_Q.OY; } }
+
+        
+        public bool IsTip { get; internal set; }
+
+        internal Vector2 GetOriginalEdgeVector()
+        {
+            return new Vector2(
+                Q.OX - _glyphPoint_P.OX,
+                Q.OY - _glyphPoint_P.OY);
+        }
 
 
-#if DEBUG
-        public bool dbugNoPerpendicularBone { get; set; }
-        public GlyphEdge dbugGlyphEdge { get; set; }
-#endif
-
-        public GlyphPoint GlyphPoint_P
+        public GlyphPoint P
         {
             get
             {
                 return _glyphPoint_P;
             }
         }
-        public GlyphPoint GlyphPoint_Q
+        public GlyphPoint Q
         {
             get
             {
@@ -107,20 +115,13 @@ namespace Typography.Rendering
 
         internal GlyphTriangle OwnerTriangle { get { return this._ownerTriangle; } }
 
-        public bool IsOutside
+        public abstract bool IsOutside
         {
             get;
-            private set;
         }
         public bool IsInside
         {
             get { return !this.IsOutside; }
-
-        }
-        internal double SlopeAngleNoDirection
-        {
-            get;
-            private set;
         }
         public bool IsUpper
         {
@@ -132,29 +133,180 @@ namespace Typography.Rendering
             get;
             internal set;
         }
-
+        internal double SlopeAngleNoDirection
+        {
+            get;
+            private set;
+        }
         public override string ToString()
         {
-            return SlopeKind + ":" + x0 + "," + y0 + "," + x1 + "," + y1;
+            return SlopeKind + ":" + PX + "," + PY + "," + QX + "," + QY;
         }
 
-        static readonly double _88degreeToRad = MyMath.DegreesToRadians(88);
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
         static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+        internal bool _earlyInsideAnalysis;
+        internal bool ContainsGlyphPoint(GlyphPoint p)
+        {
+            return this._glyphPoint_P == p || this._glyphPoint_Q == p;
+        }
+
+        /// <summary>
+        /// find common edge of 2 glyph points
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="q"></param>
+        /// <returns></returns>
+        internal static OutsideEdgeLine FindCommonOutsideEdge(GlyphPoint p, GlyphPoint q)
+        {
+            if (p.E0 == q.E0 ||
+                p.E0 == q.E1)
+            {
+                return p.E0;
+            }
+            else if (p.E1 == q.E0 ||
+                     p.E1 == q.E1)
+            {
+                return p.E1;
+            }
+            else
+            {
+
+                return null;
+            }
+        }
+#if DEBUG
+        public bool dbugNoPerpendicularBone { get; set; }
+        public static int s_dbugTotalId;
+        public readonly int dbugId = s_dbugTotalId++;
+#endif
+
     }
 
+    public class OutsideEdgeLine : EdgeLine
+    {
+        internal Vector2 _newDynamicMidPoint;
+        //if this edge is 'OUTSIDE',
+        //it have 1-2 control(s) edge (inside)
+        EdgeLine _ctrlEdge_P;
+        EdgeLine _ctrlEdge_Q;
+        internal OutsideEdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
+            : base(ownerTriangle, p, q)
+        {
 
+            //set back
+            p.SetOutsideEdgeUnconfirmEdgeDirection(this);
+            q.SetOutsideEdgeUnconfirmEdgeDirection(this);
+            _newDynamicMidPoint = new Vector2((p.OX + q.OX) / 2, (p.OY + q.OY) / 2);
+        }
+        internal void SetDynamicEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
+        {
+
+            //TODO: refactor here...
+            //this is relative len from current edge              
+            //origianl vector
+            Vector2 _o_edgeVector = GetOriginalEdgeVector();
+            //rotate 90
+            Vector2 _rotate = _o_edgeVector.Rotate(90);
+            //
+            Vector2 _deltaVector = _rotate.NewLength(newEdgeOffsetFromMasterOutline);
+
+            //new dynamic mid point  
+            this._newDynamicMidPoint = this.GetMidPoint() + _deltaVector;
+        }
+        public override bool IsOutside
+        {
+            get { return true; }
+        }
+        public EdgeLine ControlEdge_P
+        {
+            get { return _ctrlEdge_P; }
+        }
+        public EdgeLine ControlEdge_Q
+        {
+            get { return _ctrlEdge_Q; }
+        }
+        internal void SetControlEdge(EdgeLine controlEdge)
+        {
+            //check if edge is connect to p or q
+
+#if DEBUG
+            if (!controlEdge.IsInside)
+            {
+
+            }
+#endif
+            //----------------
+            if (_glyphPoint_P == controlEdge._glyphPoint_P)
+            {
+#if DEBUG
+                if (_ctrlEdge_P != null && _ctrlEdge_P != controlEdge)
+                {
+                }
+#endif
+                //map this p to p of the control edge
+                _ctrlEdge_P = controlEdge;
+
+            }
+            else if (_glyphPoint_P == controlEdge.Q)
+            {
+#if DEBUG
+                if (_ctrlEdge_P != null && _ctrlEdge_P != controlEdge)
+                {
+                }
+#endif
+                _ctrlEdge_P = controlEdge;
+            }
+            else if (_glyphPoint_Q == controlEdge._glyphPoint_P)
+            {
+#if DEBUG
+                if (_ctrlEdge_Q != null && _ctrlEdge_Q != controlEdge)
+                {
+                }
+#endif
+                _ctrlEdge_Q = controlEdge;
+            }
+            else if (_glyphPoint_Q == controlEdge.Q)
+            {
+#if DEBUG
+                if (_ctrlEdge_Q != null && _ctrlEdge_Q != controlEdge)
+                {
+                }
+#endif
+                _ctrlEdge_Q = controlEdge;
+            }
+            else
+            {
+                //?
+            }
+        }
+    }
+    public class InsideEdgeLine : EdgeLine
+    {   /// <summary>
+        /// contact to another edge
+        /// </summary>
+        internal InsideEdgeLine contactToEdge;
+        internal GlyphBoneJoint inside_joint;
+        internal InsideEdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
+            : base(ownerTriangle, p, q)
+        {
+        }
+        public override bool IsOutside
+        {
+            get { return false; }
+        }
+    }
     public static class EdgeLineExtensions
     {
         public static Vector2 GetMidPoint(this EdgeLine line)
         {
-            return new Vector2((float)((line.x0 + line.x1) / 2), (float)((line.y0 + line.y1) / 2));
+            return new Vector2((float)((line.PX + line.QX) / 2), (float)((line.PY + line.QY) / 2));
         }
 
         internal static double GetSlopeAngleNoDirection(this EdgeLine line)
         {
-            return Math.Abs(Math.Atan2(Math.Abs(line.y1 - line.y0), Math.Abs(line.x1 - line.x0)));
+            return Math.Abs(Math.Atan2(Math.Abs(line.QY - line.PY), Math.Abs(line.QX - line.PX)));
         }
 
         internal static bool ContainsTriangle(this EdgeLine edge, GlyphTriangle p)
@@ -163,6 +315,16 @@ namespace Typography.Rendering
                     p.e1 == edge ||
                     p.e2 == edge);
         }
+#if DEBUG
+        public static void dbugGetScaledXY(this EdgeLine edge, out double px, out double py, out double qx, out double qy, float scale)
+        {
+            px = edge.PX * scale;
+            py = edge.PY * scale;
+            //
+            qx = edge.QX * scale;
+            qy = edge.QY * scale;
 
+        }
+#endif
     }
 }

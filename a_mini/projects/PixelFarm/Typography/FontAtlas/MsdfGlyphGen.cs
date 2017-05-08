@@ -6,9 +6,38 @@ using System.Collections.Generic;
 
 namespace Typography.Rendering
 {
+
+    /// <summary>
+    /// parameter for msdf generation
+    /// </summary>
+    public class MsdfGenParams
+    {
+        public float scaleX = 1;
+        public float scaleY = 1;
+        public float shapeScale = 1;
+        public int minImgWidth = 5;
+        public int minImgHeight = 5;
+
+        public double angleThreshold = 3; //default
+        public double pxRange = 4; //default
+        public double edgeThreshold = 1.00000001;//default,(from original code)
+
+
+        public MsdfGenParams()
+        {
+
+        }
+        public void SetScale(float scaleX, float scaleY)
+        {
+            this.scaleX = scaleX;
+            this.scaleY = scaleY;
+        }
+
+
+    }
     public static class MsdfGlyphGen
     {
-        public static Msdfgen.Shape CreateMsdfShape(GlyphContourBuilder glyphToContour, float pxScale = 1)
+        public static Msdfgen.Shape CreateMsdfShape(GlyphContourBuilder glyphToContour, float pxScale)
         {
             List<GlyphContour> cnts = glyphToContour.GetContours();
             List<GlyphContour> newFitContours = new List<GlyphContour>();
@@ -44,9 +73,8 @@ namespace Typography.Rendering
                         case GlyphPartKind.Curve3:
                             {
                                 GlyphCurve3 curve3 = (GlyphCurve3)p;
-                                var p0 = curve3.FirstPoint;
                                 cnt.AddQuadraticSegment(
-                                    p0.X, p0.Y,
+                                    curve3.FirstPoint.X, curve3.FirstPoint.Y,
                                     curve3.x1, curve3.y1,
                                     curve3.x2, curve3.y2
                                    );
@@ -55,9 +83,8 @@ namespace Typography.Rendering
                         case GlyphPartKind.Curve4:
                             {
                                 GlyphCurve4 curve4 = (GlyphCurve4)p;
-                                var p0 = curve4.FirstPoint;
                                 cnt.AddCubicSegment(
-                                    p0.X, p0.Y,
+                                    curve4.FirstPoint.X, curve4.FirstPoint.Y,
                                     curve4.x1, curve4.y1,
                                     curve4.x2, curve4.y2,
                                     curve4.x3, curve4.y3);
@@ -66,9 +93,8 @@ namespace Typography.Rendering
                         case GlyphPartKind.Line:
                             {
                                 GlyphLine line = (GlyphLine)p;
-                                var p0 = line.FirstPoint;
                                 cnt.AddLine(
-                                    p0.X, p0.Y,
+                                    line.FirstPoint.X, line.FirstPoint.Y,
                                     line.x1, line.y1);
                             }
                             break;
@@ -82,7 +108,6 @@ namespace Typography.Rendering
             GlyphContour newc = new GlyphContour();
             List<GlyphPart> parts = contour.parts;
             int m = parts.Count;
-            GlyphPart latestPart = null;
             for (int n = 0; n < m; ++n)
             {
                 GlyphPart p = parts[n];
@@ -92,19 +117,18 @@ namespace Typography.Rendering
                     case GlyphPartKind.Curve3:
                         {
                             GlyphCurve3 curve3 = (GlyphCurve3)p;
-                            newc.AddPart(latestPart = new GlyphCurve3(
-                                //curve3.x0 * pixelScale, curve3.y0 * pixelScale,
-                                latestPart,
-                                curve3.x1 * pixelScale, curve3.y1 * pixelScale,
-                                curve3.x2 * pixelScale, curve3.y2 * pixelScale));
+                            newc.AddPart(new GlyphCurve3(
+                                    curve3.FirstPoint.X * pixelScale, curve3.FirstPoint.Y * pixelScale,
+                                    curve3.x1 * pixelScale, curve3.y1 * pixelScale,
+                                    curve3.x2 * pixelScale, curve3.y2 * pixelScale));
+
                         }
                         break;
                     case GlyphPartKind.Curve4:
                         {
                             GlyphCurve4 curve4 = (GlyphCurve4)p;
-                            newc.AddPart(latestPart = new GlyphCurve4(
-                                  //curve4.x0 * pixelScale, curve4.y0 * pixelScale,
-                                  latestPart,
+                            newc.AddPart(new GlyphCurve4(
+                                  curve4.FirstPoint.X * pixelScale, curve4.FirstPoint.Y * pixelScale,
                                   curve4.x1 * pixelScale, curve4.y1 * pixelScale,
                                   curve4.x2 * pixelScale, curve4.y2 * pixelScale,
                                   curve4.x3 * pixelScale, curve4.y3 * pixelScale
@@ -114,9 +138,8 @@ namespace Typography.Rendering
                     case GlyphPartKind.Line:
                         {
                             GlyphLine line = (GlyphLine)p;
-                            newc.AddPart(latestPart = new GlyphLine(
-                                //line.x0 * pixelScale, line.y0 * pixelScale,
-                                latestPart,
+                            newc.AddPart(new GlyphLine(
+                                line.FirstPoint.X * pixelScale, line.FirstPoint.Y * pixelScale,
                                 line.x1 * pixelScale, line.y1 * pixelScale
                                 ));
                         }
@@ -127,25 +150,35 @@ namespace Typography.Rendering
         }
         //---------------------------------------------------------------------
 
-        public static GlyphImage CreateMsdfImage(GlyphContourBuilder glyphToContour)
+        public static GlyphImage CreateMsdfImage(
+             GlyphContourBuilder glyphToContour, MsdfGenParams genParams)
         {
             // create msdf shape , then convert to actual image
-            return CreateMsdfImage(CreateMsdfShape(glyphToContour, 1));
+            return CreateMsdfImage(CreateMsdfShape(glyphToContour, genParams.shapeScale), genParams);
         }
-        public static GlyphImage CreateMsdfImage(Msdfgen.Shape shape)
+        public static GlyphImage CreateMsdfImage(Msdfgen.Shape shape, MsdfGenParams genParams)
         {
             double left, bottom, right, top;
             shape.findBounds(out left, out bottom, out right, out top);
             int w = (int)Math.Ceiling((right - left));
             int h = (int)Math.Ceiling((top - bottom));
-            if (w < 5)
+
+            if (w < genParams.minImgWidth)
             {
-                w = 5;
+                w = genParams.minImgWidth;
             }
-            if (h < 5)
+            if (h < genParams.minImgHeight)
             {
-                h = 5;
+                h = genParams.minImgHeight;
             }
+
+
+            //temp, for debug with glyph 'I', tahoma font
+            //double edgeThreshold = 1.00000001;//default, if edgeThreshold < 0 then  set  edgeThreshold=1 
+            //Msdfgen.Vector2 scale = new Msdfgen.Vector2(0.98714652956298199, 0.98714652956298199);
+            //double pxRange = 4;
+            //translate = new Msdfgen.Vector2(12.552083333333332, 4.0520833333333330);
+            //double range = pxRange / Math.Min(scale.x, scale.y);
 
 
             int borderW = (int)((float)w / 5f);
@@ -153,18 +186,23 @@ namespace Typography.Rendering
             w += borderW * 2; //borders,left- right
             h += borderW * 2; //borders, top- bottom
 
+            double edgeThreshold = genParams.edgeThreshold;
+            if (edgeThreshold < 0)
+            {
+                edgeThreshold = 1.00000001; //use default if  edgeThreshold <0
+            }
 
-
+            var scale = new Msdfgen.Vector2(genParams.scaleX, genParams.scaleY); //scale               
+            double range = genParams.pxRange / Math.Min(scale.x, scale.y);
+            //---------
             Msdfgen.FloatRGBBmp frgbBmp = new Msdfgen.FloatRGBBmp(w, h);
-            Msdfgen.EdgeColoring.edgeColoringSimple(shape, 3);
-
-
+            Msdfgen.EdgeColoring.edgeColoringSimple(shape, genParams.angleThreshold);
             Msdfgen.MsdfGenerator.generateMSDF(frgbBmp,
                 shape,
-                4,
-                new Msdfgen.Vector2(1, 1), //scale                 
+                range,
+                scale,
                 translate,//translate to positive quadrant
-                -1);
+                edgeThreshold);
             //-----------------------------------
             int[] buffer = Msdfgen.MsdfGenerator.ConvertToIntBmp(frgbBmp);
 

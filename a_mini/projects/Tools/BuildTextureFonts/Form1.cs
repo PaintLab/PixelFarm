@@ -491,7 +491,7 @@ namespace BuildTextureFonts
             //msdf(default) – generates a multi - channel signed distance field using my new method.
 
             //char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
-            char[] fontChars = new char[] { (char)197 };
+            char[] fontChars = new char[] { (char)'l' };
             int j = fontChars.Length;
             for (int i = 0; i < j; ++i)
             {
@@ -503,15 +503,16 @@ namespace BuildTextureFonts
                 string[] splitStr = pars.GetArgs();
                 MyFtLib.MyFtMSDFGEN(splitStr.Length, splitStr);
             }
-            for (int i = 0; i < j; ++i)
-            {
-                char c = fontChars[i];
-                MsdfParameters pars = new MsdfParameters(@"C:\Windows\Fonts\tahoma.ttf", c);
-                pars.enableRenderTestFile = false;
-                pars.useClassicSdf = true;
-                string[] splitStr = pars.GetArgs();
-                MyFtLib.MyFtMSDFGEN(splitStr.Length, pars.GetArgs());
-            }
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    char c = fontChars[i];
+            //    MsdfParameters pars = new MsdfParameters(@"C:\Windows\Fonts\tahoma.ttf", c);
+            //    pars.enableRenderTestFile = false;
+            //    pars.useClassicSdf = true;
+
+            //    string[] splitStr = pars.GetArgs();
+            //    MyFtLib.MyFtMSDFGEN(splitStr.Length, pars.GetArgs());
+            //}
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -519,10 +520,16 @@ namespace BuildTextureFonts
             int version = MyFtLib.MyFtLibGetVersion();
             IntPtr shape = MyFtLib.CreateShape();
             IntPtr cnt = MyFtLib.ShapeAddBlankContour(shape);
-            MyFtLib.ContourAddLinearSegment(cnt, 10, 10, 25, 25);
-            MyFtLib.ContourAddLinearSegment(cnt, 25, 25, 15, 10);
-            MyFtLib.ContourAddLinearSegment(cnt, 15, 10, 10, 10);
+            //MyFtLib.ContourAddLinearSegment(cnt, 10, 10, 25, 25);
+            //MyFtLib.ContourAddLinearSegment(cnt, 25, 25, 15, 10);
+            //MyFtLib.ContourAddLinearSegment(cnt, 15, 10, 10, 10);
 
+            MyFtLib.ContourAddLinearSegment(cnt, 3.84f, 0, 1.64f, 0);
+            MyFtLib.ContourAddLinearSegment(cnt, 1.64f, 0, 1.64f, 18.23f);
+            MyFtLib.ContourAddLinearSegment(cnt, 1.64f, 18.23f, 3.84f, 18.23f);
+            MyFtLib.ContourAddLinearSegment(cnt, 3.84f, 18.23f, 3.84f, 0);
+
+ 
             double s_left, s_bottom, s_right, s_top;
             MyFtLib.ShapeFindBounds(shape, out s_left, out s_bottom, out s_right, out s_top);
 
@@ -1058,7 +1065,7 @@ namespace BuildTextureFonts
 
         private void cmdTestTess_Click(object sender, EventArgs e)
         {
-           
+
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Typography.Rendering
         /// result flatten points
         /// </summary>
         List<GlyphPoint> points;
-        int glyphPointIdCount;
+        
         public GlyphPartFlattener()
         {
             this.NSteps = 2;//default
@@ -24,14 +24,8 @@ namespace Typography.Rendering
             set { points = value; }
         }
         public int NSteps { get; set; }
-        internal void ResetTotalGlyphPointId()
-        {
-            glyphPointIdCount = 0;
-        }
-        internal int GetNewGlyphPointId()
-        {
-            return glyphPointIdCount++;
-        }
+        
+        
         void AddPoint(float x, float y, PointKind kind)
         {
             var p = new GlyphPoint(x, y, kind);
@@ -41,8 +35,7 @@ namespace Typography.Rendering
             points.Add(p);
         }
 
-        public void GeneratePointsFromLine(
-           Vector2 start, Vector2 end)
+        public void GeneratePointsFromLine(Vector2 start, Vector2 end)
         {
             if (points.Count == 0)
             {

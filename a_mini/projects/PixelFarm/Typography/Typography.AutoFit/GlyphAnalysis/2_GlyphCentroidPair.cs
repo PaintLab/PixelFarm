@@ -148,42 +148,19 @@ namespace Typography.Rendering
             }
         }
 
-        static double CalculateCentroidPairSlope(GlyphCentroidPair centroidPair, out LineSlopeKind centroidLineSlope)
+        static double CalculateCentroidPairSlope(GlyphCentroidPair centroidPair)
         {
             //calculate centroid pair slope 
             //p
-            double x0 = centroidPair.p.CentroidX;
-            double y0 = centroidPair.p.CentroidY;
+            float x0, y0;
+            centroidPair.p.CalculateCentroid(out x0, out y0);
+
             //q
-            double x1 = centroidPair.q.CentroidX;
-            double y1 = centroidPair.q.CentroidY;
+            float x1, y1;
+            centroidPair.q.CalculateCentroid(out x1, out y1);
 
-            centroidLineSlope = LineSlopeKind.Other;
-            double slopeAngleNoDirection = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
-            //we don't care direction of vector 
-            if (x1 == x0)
-            {
-                centroidLineSlope = LineSlopeKind.Vertical;
-            }
-            else
-            {
-
-                if (slopeAngleNoDirection > MyMath._85degreeToRad)
-                {
-                    //assume
-                    centroidLineSlope = LineSlopeKind.Vertical;
-                }
-                else if (slopeAngleNoDirection < MyMath._03degreeToRad) //_15degreeToRad
-                {
-                    //assume
-                    centroidLineSlope = LineSlopeKind.Horizontal;
-                }
-                else
-                {
-                    centroidLineSlope = LineSlopeKind.Other;
-                }
-            }
-            return slopeAngleNoDirection;
+            //return slop angle no direction,we don't care direction of vector  
+            return Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
         }
 
         void SelectMostProperTipEdge(
@@ -193,9 +170,9 @@ namespace Typography.Rendering
           out EdgeLine tipEdge,
           out EdgeLine notTipEdge)
         {
-            LineSlopeKind slopeKind;
+
             //slop angle in rad
-            double slopeAngle = CalculateCentroidPairSlope(centroidPair, out slopeKind);
+            double slopeAngle = CalculateCentroidPairSlope(centroidPair);
             double diff0 = Math.Abs(outside0.GetSlopeAngleNoDirection() - slopeAngle);
             double diff1 = Math.Abs(outside1.GetSlopeAngleNoDirection() - slopeAngle);
             if (diff0 > diff1)
@@ -331,54 +308,40 @@ namespace Typography.Rendering
         /// <param name="anotherTriangle"></param>
         static void AddEdgesInformation(GlyphTriangle anotherTriangle, EdgeLine edgeLine, ref GlyphBoneJoint bonejoint)
         {
+
             if (edgeLine.IsOutside)
             {
                 //if edgeLine is outside edge,
                 //mark the relation of this to anotherTriangle.
-                MarkMatchingOutsideEdge(edgeLine, anotherTriangle);
+                MarkMatchingOutsideEdge((OutsideEdgeLine)edgeLine, anotherTriangle);
             }
             else
             {
                 //TODO: review here
                 //if edge is inside =>
-                //we will evaluate if _boneJoint== null
-
+                //we will evaluate if _boneJoint== null 
                 if (bonejoint == null)
                 {
-                    if (MarkMatchingInsideEdge(edgeLine, anotherTriangle))
+                    InsideEdgeLine insideEdge = (InsideEdgeLine)edgeLine;
+                    if (MarkMatchingInsideEdge(insideEdge, anotherTriangle))
                     {
-
                         bonejoint = new GlyphBoneJoint(
-                            edgeLine,
-                            edgeLine.contactToEdge);
+                            insideEdge,
+                            insideEdge.contactToEdge);
                     }
                 }
             }
         }
 
 
-        /// <summary>
-        ///helper method for debug,  read px,py, qx,qy, 
-        /// </summary>
-        /// <param name="px"></param>
-        /// <param name="py"></param>
-        /// <param name="qx"></param>
-        /// <param name="qy"></param>
-        public void GetLineCoords(out double px, out double py, out double qx, out double qy)
-        {
-            px = p.CentroidX;
-            py = p.CentroidY;
-            //
-            qx = q.CentroidX;
-            qy = q.CentroidY;
-        }
+
         /// <summary>
         /// from a knownInsideEdge, find a matching-inside-edge on another triangle.
         /// </summary>
         /// <param name="knownInsideEdge"></param>
         /// <param name="another"></param>
         /// <returns></returns>
-        static bool MarkMatchingInsideEdge(EdgeLine knownInsideEdge, GlyphTriangle another)
+        static bool MarkMatchingInsideEdge(InsideEdgeLine knownInsideEdge, GlyphTriangle another)
         {
 
             //evalute side-by-side
@@ -402,13 +365,13 @@ namespace Typography.Rendering
         /// <param name="knownInsideEdge"></param>
         /// <param name="anotherEdge"></param>
         /// <returns></returns>
-        static bool MarkMatchingInsideEdge(EdgeLine knownInsideEdge, EdgeLine anotherEdge)
+        static bool MarkMatchingInsideEdge(InsideEdgeLine knownInsideEdge, EdgeLine anotherEdge)
         {
             //another edge must be inside edge too, then check if the two is matching or not
             if (anotherEdge.IsInside && IsMatchingEdge(knownInsideEdge, anotherEdge))
             {   //if yes                
                 //mark contact toEdge
-                knownInsideEdge.contactToEdge = anotherEdge;
+                knownInsideEdge.contactToEdge = (InsideEdgeLine)anotherEdge;
                 return true;
             }
             else
@@ -425,14 +388,14 @@ namespace Typography.Rendering
         static bool IsMatchingEdge(EdgeLine a, EdgeLine b)
         {
             //x-axis
-            if ((a.x0 == b.x0 && a.x1 == b.x1) ||
-                (a.x0 == b.x1 && a.x1 == b.x0))
+            if ((a.PX == b.PX && a.QX == b.QX) ||
+                (a.PX == b.QX && a.QX == b.PX))
             {
                 //pass x-axis
                 //
                 //y_axis
-                if ((a.y0 == b.y0 && a.y1 == b.y1) ||
-                    (a.y0 == b.y1 && a.y1 == b.y0))
+                if ((a.PY == b.PY && a.QY == b.QY) ||
+                    (a.PY == b.QY && a.QY == b.PY))
                 {
                     return true;
                 }
@@ -445,7 +408,7 @@ namespace Typography.Rendering
         /// </summary>
         /// <param name="knownOutsideEdge"></param>
         /// <param name="q"></param>
-        static void MarkMatchingOutsideEdge(EdgeLine knownOutsideEdge, GlyphTriangle q)
+        static void MarkMatchingOutsideEdge(OutsideEdgeLine knownOutsideEdge, GlyphTriangle q)
         {
 
             EdgeLine matchingEdgeLine;
