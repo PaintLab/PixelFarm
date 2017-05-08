@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using PixelFarm.Drawing.Fonts;
 using Typography.Rendering;
+using Typography.Contours;
 
 namespace BuildTextureFonts
 {
@@ -1006,7 +1007,7 @@ namespace BuildTextureFonts
             int[] outputBuffer = new int[w * h];
             GlyphImage glyphImage = new GlyphImage(w, h);
             glyphImage.BorderXY = borderXY;
-            glyphImage.OriginalGlyphBounds = Typography.Rendering.RectangleF.FromLTRB(
+            glyphImage.OriginalGlyphBounds = Typography.Contours.RectangleF.FromLTRB(
                 glyphBounds.Left,
                 glyphBounds.Top,
                 glyphBounds.Right,

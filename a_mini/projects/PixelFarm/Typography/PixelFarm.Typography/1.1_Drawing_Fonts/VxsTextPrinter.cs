@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Typography.Contours;
 using Typography.OpenFont;
-using Typography.TextLayout;
 using Typography.Rendering;
+using Typography.TextLayout;
+
 
 using PixelFarm.Agg;
 

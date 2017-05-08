@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Typography.Rendering;
+using Typography.Contours;
 using PixelFarm;
 using PixelFarm.Agg;
 namespace SampleWinForms.UI

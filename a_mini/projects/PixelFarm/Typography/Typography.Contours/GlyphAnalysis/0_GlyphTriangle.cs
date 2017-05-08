@@ -1,7 +1,7 @@
 ﻿//MIT, 2017, WinterDev
 using System;
 using Poly2Tri;
-namespace Typography.Rendering
+namespace Typography.Contours
 {
 
     class GlyphTriangle

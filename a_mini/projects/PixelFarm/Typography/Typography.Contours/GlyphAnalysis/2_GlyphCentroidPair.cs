@@ -1,6 +1,6 @@
 ﻿//MIT, 2017, WinterDev
 using System;
-namespace Typography.Rendering
+namespace Typography.Contours
 {
     /// <summary>
     /// a link (line) that connects between centroid of 2 GlyphTriangle(p => q)

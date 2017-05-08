@@ -1,4 +1,5 @@
 ﻿using System;
+using Typography.Contours;
 namespace Typography.Rendering
 {
     public class GlyphImage

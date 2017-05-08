@@ -256,7 +256,7 @@ namespace PixelFarm.DrawingGL
                 _glBmp = null;
             }
         }
-        static PixelFarm.Drawing.Rectangle ConvToRect(Typography.Rendering.Rectangle r)
+        static PixelFarm.Drawing.Rectangle ConvToRect(Typography.Contours.Rectangle r)
         {
             //TODO: review here
             return PixelFarm.Drawing.Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);

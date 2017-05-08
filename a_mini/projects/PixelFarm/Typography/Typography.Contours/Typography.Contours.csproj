@@ -45,7 +45,6 @@
     <Compile Include="GlyphAnalysis\GlyphOutlineAnalyzer.cs" />
     <Compile Include="GlyphAnalysis\2_GlyphCentroidPair.cs" />
     <Compile Include="GlyphAnalysis\GlyphPartFlattener.cs" />
-    <Compile Include="GlyphImages.cs" />
     <Compile Include="GlyphAnalysis\GlyphIntermediateOutline.cs" />
     <Compile Include="GlyphAnalysis\GlyphOutlineWalker.cs" />
     <Compile Include="GlyphAnalysis\GlyphParts.cs" />

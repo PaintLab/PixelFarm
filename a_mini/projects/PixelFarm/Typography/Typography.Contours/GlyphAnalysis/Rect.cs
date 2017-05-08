@@ -33,7 +33,7 @@
 
 
 
-namespace Typography.Rendering
+namespace Typography.Contours
 {
     public struct Rectangle
     {

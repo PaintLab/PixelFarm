@@ -268,7 +268,7 @@ namespace PixelFarm.Drawing.Fonts
 
 
         const double FT_RESIZE = 64; //essential to be floating point
-        internal unsafe static GlyphImage BuildMsdfFontImage(NativeFontGlyph fontGlyph)
+        internal unsafe static Typography.Rendering.GlyphImage BuildMsdfFontImage(NativeFontGlyph fontGlyph)
         {
             IntPtr shape = MyFtLib.CreateShape();
             FT_Outline outline = (*(FT_Outline*)fontGlyph.nativeOutlinePtr);            //outline version
@@ -480,7 +480,7 @@ namespace PixelFarm.Drawing.Fonts
             int[] outputBuffer = new int[w * h];
             GlyphImage glyphImage = new GlyphImage(w, h);
             glyphImage.BorderXY = borderXY;
-            glyphImage.OriginalGlyphBounds = Typography.Rendering.RectangleF.FromLTRB(
+            glyphImage.OriginalGlyphBounds = Typography.Contours.RectangleF.FromLTRB(
                 glyphBounds.Left,
                 glyphBounds.Top,
                 glyphBounds.Right,

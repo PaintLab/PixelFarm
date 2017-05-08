@@ -1,9 +1,9 @@
 ﻿//MIT, 2016-2017, WinterDev
 
 using Typography.OpenFont;
+using Typography.Rendering;
 
-
-namespace Typography.Rendering
+namespace Typography.Contours
 {
     //-----------------------------------
     //sample GlyphPathBuilder :
