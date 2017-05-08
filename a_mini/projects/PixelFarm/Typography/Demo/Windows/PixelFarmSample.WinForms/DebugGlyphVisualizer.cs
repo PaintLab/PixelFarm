@@ -5,7 +5,9 @@ using System.Numerics;
 using PixelFarm.Agg;
 using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
+using Typography.Contours;
 using Typography.Rendering;
+
 namespace SampleWinForms.UI
 {
     class GlyphTriangleInfo

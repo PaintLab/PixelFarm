@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 
+using Typography.Contours;
 
 namespace Typography.Rendering
 {

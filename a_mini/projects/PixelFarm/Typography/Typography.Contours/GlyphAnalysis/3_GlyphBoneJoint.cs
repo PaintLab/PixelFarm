@@ -2,7 +2,7 @@
 
 using System.Numerics;
 
-namespace Typography.Rendering
+namespace Typography.Contours
 {
 
     public class GlyphBoneJoint

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace Typography.Rendering
+namespace Typography.Contours
 {
     /// <summary>
     /// a collection of connected centroid pairs and bone

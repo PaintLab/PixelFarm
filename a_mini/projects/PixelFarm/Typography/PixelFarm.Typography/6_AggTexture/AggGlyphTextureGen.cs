@@ -1,10 +1,7 @@
 ﻿//MIT, 2016-2017, WinterDev
 //-----------------------------------  
 using System;
-using System.Collections.Generic;
-using Typography.OpenFont;
-using PixelFarm.Drawing;
-
+using Typography.Contours;
 
 namespace Typography.Rendering
 {

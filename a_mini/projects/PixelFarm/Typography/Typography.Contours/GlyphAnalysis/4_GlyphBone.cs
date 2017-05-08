@@ -2,7 +2,7 @@
 using System;
 using System.Numerics;
 
-namespace Typography.Rendering
+namespace Typography.Contours
 {
 
     /// <summary>

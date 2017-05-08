@@ -4,6 +4,7 @@ using System;
 using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.Fonts;
+using Typography.Contours; 
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "404")]
@@ -16,7 +17,7 @@ namespace OpenTkEssTest
         GLCanvasPainter painter;
         PixelFarm.Agg.ActualImage totalImg;
         SimpleFontAtlas fontAtlas;
-        
+
         protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
@@ -83,7 +84,7 @@ namespace OpenTkEssTest
             canvas2d.DrawImage(msdf_bmp, 100, 300);
             SwapBuffers();
         }
-        static PixelFarm.Drawing.Rectangle ConvToRect(Typography.Rendering.Rectangle r)
+        static PixelFarm.Drawing.Rectangle ConvToRect(Rectangle r)
         {
             return PixelFarm.Drawing.Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);
         }

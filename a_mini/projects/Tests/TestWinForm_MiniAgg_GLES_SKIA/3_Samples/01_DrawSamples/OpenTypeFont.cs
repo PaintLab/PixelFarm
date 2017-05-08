@@ -13,8 +13,8 @@ using Mini;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
-using Typography.Rendering;
-using PixelFarm.Agg;
+using Typography.Contours;
+ 
 
 namespace PixelFarm.Agg.Sample_Draw
 {

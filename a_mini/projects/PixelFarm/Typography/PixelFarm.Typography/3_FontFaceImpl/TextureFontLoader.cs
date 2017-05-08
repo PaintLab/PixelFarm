@@ -5,9 +5,12 @@ using System.Collections.Generic;
 
 using PixelFarm.Agg;
 using Typography.OpenFont;
-using Typography.Rendering;
 using Typography.OpenFont.Tables;
 using Typography.OpenFont.Extensions;
+
+using Typography.Contours;
+using Typography.Rendering;
+
 
 
 namespace PixelFarm.Drawing.Fonts

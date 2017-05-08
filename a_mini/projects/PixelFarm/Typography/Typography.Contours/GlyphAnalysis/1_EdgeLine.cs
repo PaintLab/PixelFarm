@@ -1,7 +1,7 @@
 ﻿//MIT, 2017, WinterDev
 using System;
 using System.Numerics;
-namespace Typography.Rendering
+namespace Typography.Contours
 {
     public enum LineSlopeKind : byte
     {
