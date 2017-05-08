@@ -44,11 +44,11 @@ namespace Typography.Rendering
         /// <summary>
         /// outside inward edge
         /// </summary>
-        EdgeLine _inwardEdge;
+        OutsideEdgeLine _inwardEdge;
         /// <summary>
         /// outside outward edge
         /// </summary>
-        EdgeLine _outwardEdge;
+        OutsideEdgeLine _outwardEdge;
 
         public GlyphPoint(float x, float y, PointKind kind)
         {
@@ -73,7 +73,7 @@ namespace Typography.Rendering
         /// <summary>
         /// outside inward edge
         /// </summary>
-        internal EdgeLine InwardEdge
+        internal OutsideEdgeLine InwardEdge
         {
             get { return this._inwardEdge; }
             set { _inwardEdge = value; }
@@ -81,7 +81,7 @@ namespace Typography.Rendering
         /// <summary>
         /// outside outward edge
         /// </summary>
-        internal EdgeLine OutwardEdge
+        internal OutsideEdgeLine OutwardEdge
         {
             get { return this._outwardEdge; }
             set { _outwardEdge = value; }
@@ -91,7 +91,7 @@ namespace Typography.Rendering
         /// set outside edge that link with this glyph point
         /// </summary>
         /// <param name="edge">edge must be outside edge</param>
-        internal void SetOutsideEdge(EdgeLine edge)
+        internal void SetOutsideEdgeUnconfirmEdgeDirection(OutsideEdgeLine edge)
         {
             //at this stage, we don't known the edge is outward or inward.
             //so just set it

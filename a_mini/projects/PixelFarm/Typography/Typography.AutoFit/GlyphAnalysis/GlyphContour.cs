@@ -117,7 +117,7 @@ namespace Typography.Rendering
             int lim = flattenPoints.Count - 1;
 
             GlyphPoint p = null, q = null;
-            EdgeLine edgeLine = null;
+            OutsideEdgeLine edgeLine = null;
 
             for (int i = 0; i < lim; ++i)
             {
@@ -174,8 +174,8 @@ namespace Typography.Rendering
         /// <param name="p"></param>
         static void UpdateNewEdgeCut(GlyphPoint p)
         {
-            EdgeLine e0 = p.InwardEdge;
-            EdgeLine e1 = p.OutwardEdge;
+            OutsideEdgeLine e0 = p.InwardEdge;
+            OutsideEdgeLine e1 = p.OutwardEdge;
 
             Vector2 tmp_e0_q = e0._newDynamicMidPoint + e0.GetOriginalEdgeVector();
             Vector2 tmp_e1_p = e1._newDynamicMidPoint - e1.GetOriginalEdgeVector();

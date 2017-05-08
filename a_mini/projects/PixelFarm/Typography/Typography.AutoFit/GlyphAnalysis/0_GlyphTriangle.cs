@@ -102,7 +102,6 @@ namespace Typography.Rendering
             System.Numerics.Vector2 cut_fromM0;
             if (MyMath.FindPerpendicularCutPoint(outsideEdge, new System.Numerics.Vector2(m0.X, m0.Y), out cut_fromM0))
             {
-                inside.SetOutsideEdge(outsideEdge, cut_fromM0, (float)(m0 - cut_fromM0).Length());
                 ((OutsideEdgeLine)outsideEdge).SetControlEdge(inside);
             }
             else

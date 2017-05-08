@@ -18,16 +18,6 @@ namespace Typography.Rendering
     {
         internal readonly GlyphPoint _glyphPoint_P;
         internal readonly GlyphPoint _glyphPoint_Q;
-     
-
-      
-
-
-        internal Vector2 _newDynamicMidPoint;
-        EdgeLine _outsideEdge;
-        Vector2 _outsideEdgeCutAt;
-        float _outsideEdgeCutLen;
-
         GlyphTriangle _ownerTriangle;
 
         internal EdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
@@ -48,7 +38,7 @@ namespace Typography.Rendering
 
             //new dynamic mid point is calculate from original X,Y
 
-            _newDynamicMidPoint = new Vector2((p.OX + q.OX) / 2, (p.OY + q.OY) / 2);
+
             //-------------------------------
             //analyze angle and slope kind
             //-------------------------------  
@@ -92,7 +82,7 @@ namespace Typography.Rendering
         /// </summary>
         public double QY { get { return this._glyphPoint_Q.OY; } }
 
-
+        
         public bool IsTip { get; internal set; }
 
         internal Vector2 GetOriginalEdgeVector()
@@ -101,17 +91,6 @@ namespace Typography.Rendering
                 Q.OX - _glyphPoint_P.OX,
                 Q.OY - _glyphPoint_P.OY);
         }
-
-        internal void SetOutsideEdge(EdgeLine outsideEdge, Vector2 cutPoint, float cutLen)
-        {
-#if DEBUG
-            if (outsideEdge == this) { throw new NotSupportedException(); }
-#endif
-            _outsideEdge = outsideEdge;
-            _outsideEdgeCutAt = cutPoint;
-            _outsideEdgeCutLen = cutLen;
-        }
-
 
 
         public GlyphPoint P
@@ -139,7 +118,6 @@ namespace Typography.Rendering
         public abstract bool IsOutside
         {
             get;
-
         }
         public bool IsInside
         {
@@ -160,14 +138,10 @@ namespace Typography.Rendering
             get;
             private set;
         }
-
-
         public override string ToString()
         {
             return SlopeKind + ":" + PX + "," + PY + "," + QX + "," + QY;
         }
-
-
 
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
@@ -178,28 +152,13 @@ namespace Typography.Rendering
             return this._glyphPoint_P == p || this._glyphPoint_Q == p;
         }
 
-        internal void SetDynamicEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
-        {
-
-            //TODO: refactor here...
-            //this is relative len from current edge              
-            //origianl vector
-            Vector2 _o_edgeVector = GetOriginalEdgeVector();
-            //rotate 90
-            Vector2 _rotate = _o_edgeVector.Rotate(90);
-            //
-            Vector2 _deltaVector = _rotate.NewLength(newEdgeOffsetFromMasterOutline);
-
-            //new dynamic mid point  
-            this._newDynamicMidPoint = this.GetMidPoint() + _deltaVector;
-        }
         /// <summary>
         /// find common edge of 2 glyph points
         /// </summary>
         /// <param name="p"></param>
         /// <param name="q"></param>
         /// <returns></returns>
-        internal static EdgeLine FindCommonOutsideEdge(GlyphPoint p, GlyphPoint q)
+        internal static OutsideEdgeLine FindCommonOutsideEdge(GlyphPoint p, GlyphPoint q)
         {
             if (p.InwardEdge == q.InwardEdge ||
                 p.InwardEdge == q.OutwardEdge)
@@ -227,6 +186,7 @@ namespace Typography.Rendering
 
     public class OutsideEdgeLine : EdgeLine
     {
+        internal Vector2 _newDynamicMidPoint;
         //if this edge is 'OUTSIDE',
         //it have 1-2 control(s) edge (inside)
         EdgeLine _ctrlEdge_P;
@@ -236,9 +196,24 @@ namespace Typography.Rendering
         {
 
             //set back
-            p.SetOutsideEdge(this);
-            q.SetOutsideEdge(this);
+            p.SetOutsideEdgeUnconfirmEdgeDirection(this);
+            q.SetOutsideEdgeUnconfirmEdgeDirection(this);
+            _newDynamicMidPoint = new Vector2((p.OX + q.OX) / 2, (p.OY + q.OY) / 2);
+        }
+        internal void SetDynamicEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
+        {
 
+            //TODO: refactor here...
+            //this is relative len from current edge              
+            //origianl vector
+            Vector2 _o_edgeVector = GetOriginalEdgeVector();
+            //rotate 90
+            Vector2 _rotate = _o_edgeVector.Rotate(90);
+            //
+            Vector2 _deltaVector = _rotate.NewLength(newEdgeOffsetFromMasterOutline);
+
+            //new dynamic mid point  
+            this._newDynamicMidPoint = this.GetMidPoint() + _deltaVector;
         }
         public override bool IsOutside
         {
