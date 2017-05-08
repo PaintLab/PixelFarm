@@ -4,7 +4,7 @@ using System.Numerics;
 using System.Collections.Generic;
 
 
-namespace Typography.Rendering
+namespace Typography.Contours
 {
 
     public abstract class GlyphOutlineWalker

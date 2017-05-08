@@ -355,7 +355,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 Typography.OpenFont.Typeface typeface = reader.Read(fs);
 
 
-                Typography.Rendering.GlyphPathBuilder builder = new Typography.Rendering.GlyphPathBuilder(typeface);
+                var builder = new Typography.Contours.GlyphPathBuilder(typeface);
                 builder.BuildFromGlyphIndex((ushort)typeface.LookupIndex('C'), 16);
                 PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs tovxs = new Drawing.Fonts.GlyphTranslatorToVxs();
                 builder.ReadShapes(tovxs);

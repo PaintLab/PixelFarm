@@ -1,5 +1,5 @@
 ﻿//MIT, 2016-2017, WinterDev
-using System.IO;
+ 
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Typography.OpenFont;
 using Typography.TextLayout;
 using Typography.Rendering;
-
+using Typography.Contours;
 
 namespace SampleWinForms
 {

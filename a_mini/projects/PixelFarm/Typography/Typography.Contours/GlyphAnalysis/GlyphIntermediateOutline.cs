@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Poly2Tri;
 
-namespace Typography.Rendering
+namespace Typography.Contours
 {
 
     class GlyphIntermediateOutline

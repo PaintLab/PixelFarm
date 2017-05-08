@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg;
-using Typography.Rendering;
+using Typography.Contours;
 
 namespace PixelFarm.Drawing.Fonts
 {
@@ -480,7 +480,7 @@ namespace PixelFarm.Drawing.Fonts
             int[] outputBuffer = new int[w * h];
             GlyphImage glyphImage = new GlyphImage(w, h);
             glyphImage.BorderXY = borderXY;
-            glyphImage.OriginalGlyphBounds = Typography.Rendering.RectangleF.FromLTRB(
+            glyphImage.OriginalGlyphBounds = Typography.Contours.RectangleF.FromLTRB(
                 glyphBounds.Left,
                 glyphBounds.Top,
                 glyphBounds.Right,

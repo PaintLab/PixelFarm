@@ -6,12 +6,14 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
+using PixelFarm.Agg;
+using PixelFarm.Drawing.Fonts;
+
 using Typography.OpenFont;
 using Typography.Rendering;
-
-using PixelFarm.Agg;
+using Typography.Contours;
 using Typography.TextLayout;
-using PixelFarm.Drawing.Fonts;
+
 
 namespace SampleWinForms
 {
@@ -441,7 +443,7 @@ namespace SampleWinForms
             debugGlyphVisualizer.DrawGlyphPoint = chkDrawGlyphPoint.Checked;
 
 #if DEBUG
-            Typography.Rendering.GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
+            Typography.Contours.GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
 #endif
 
 
@@ -557,7 +559,7 @@ namespace SampleWinForms
 
                 this.txtGridSize.Text = _gridSize.ToString();
 #if DEBUG
-                Typography.Rendering.GlyphDynamicOutline.dbugGridHeight = _gridSize;
+                Typography.Contours.GlyphDynamicOutline.dbugGridHeight = _gridSize;
 #endif
                 UpdateRenderOutput();
             }
