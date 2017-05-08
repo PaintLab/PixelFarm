@@ -52,6 +52,10 @@ namespace Typography.Rendering
 
             SetupLeftPositionX();
         }
+        public List<GlyphContour> GetContours()
+        {
+            return _contours;
+        }
         /// <summary>
         ///classify bone group by gridbox(w,h) and apply to current master outline
         /// </summary>
@@ -297,7 +301,7 @@ namespace Typography.Rendering
             PrepareFitValues(GridBoxWidth, GridBoxHeight);
             _needRefreshBoneGroup = false;
             //
-            List<BoneGroup> arrangedVerticalBoneGroups = _groupingHelper.SelectedVerticalBoneGroups; 
+            List<BoneGroup> arrangedVerticalBoneGroups = _groupingHelper.SelectedVerticalBoneGroups;
             //left most
             //find adjust values
             if (arrangedVerticalBoneGroups != null && arrangedVerticalBoneGroups.Count > 0)
