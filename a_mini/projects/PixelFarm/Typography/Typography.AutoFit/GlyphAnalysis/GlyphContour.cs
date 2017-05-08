@@ -1,6 +1,7 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
 using System.Collections.Generic;
+
 using System.Numerics;
 
 namespace Typography.Rendering
@@ -10,9 +11,7 @@ namespace Typography.Rendering
     {
 
         public List<GlyphPart> parts = new List<GlyphPart>();
-
         internal List<GlyphPoint> flattenPoints; //original flatten points 
-        internal List<GlyphEdge> edges; //for dyanmic outline processing
 
         bool analyzed;
         bool analyzedClockDirection;
@@ -44,7 +43,7 @@ namespace Typography.Rendering
                 parts[i].Flatten(flattener);
             }
 
-            //assign number for all glyph point in this contour
+            //check duplicated the first point and last point
             int pointCount = tmpFlattenPoints.Count;
             if (GlyphPoint.SameCoordAs(tmpFlattenPoints[pointCount - 1], tmpFlattenPoints[0]))
             {
@@ -54,13 +53,13 @@ namespace Typography.Rendering
                 pointCount--;
             }
 
-
-#if DEBUG
+            //assign number for all glyph point in this contour
             for (int i = 0; i < pointCount; ++i)
             {
-                tmpFlattenPoints[i].dbugGlyphPointNo = flattener.GetNewGlyphPointId();
+                tmpFlattenPoints[i].SeqNo = i;
+
             }
-#endif
+
             flattener.Result = prevResult;
             analyzed = true;
         }
@@ -80,7 +79,7 @@ namespace Typography.Rendering
             analyzedClockDirection = true;
 
 
-
+            //TODO: review here again***
             //---------------
             //http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
             //check if hole or not
@@ -98,13 +97,7 @@ namespace Typography.Rendering
                 {
                     GlyphPoint p0 = f_points[i - 1];
                     GlyphPoint p1 = f_points[i];
-
-                    double x0 = p0.x;
-                    double y0 = p0.y;
-                    double x1 = p1.x;
-                    double y1 = p1.y;
-
-                    total += (x1 - x0) * (y1 + y0);
+                    total += (p1.OX - p0.OX) * (p1.OY + p0.OY);
                     i += 2;
                 }
                 //the last one
@@ -112,11 +105,7 @@ namespace Typography.Rendering
                     GlyphPoint p0 = f_points[j - 1];
                     GlyphPoint p1 = f_points[0];
 
-                    double x0 = p0.x;
-                    double y0 = p0.y;
-                    double x1 = p1.x;
-                    double y1 = p1.y;
-                    total += (x1 - x0) * (y1 + y0);
+                    total += (p1.OX - p0.OX) * (p1.OY + p0.OY);
                 }
                 isClockwise = total >= 0;
             }
@@ -126,89 +115,98 @@ namespace Typography.Rendering
         internal void CreateGlyphEdges()
         {
             int lim = flattenPoints.Count - 1;
-            edges = new List<GlyphEdge>();
+            edges = new List<OutsideEdgeLine>();
             GlyphPoint p = null, q = null;
-            EdgeLine edgeLine = null;
+            OutsideEdgeLine edgeLine = null;
 
             for (int i = 0; i < lim; ++i)
             {
+                //in order ...
                 p = flattenPoints[i];
                 q = flattenPoints[i + 1];
-                if ((edgeLine = FineCommonEdgeLine(p, q)) != null)
+                if ((edgeLine = EdgeLine.FindCommonOutsideEdge(p, q)) != null)
                 {
-                    edges.Add(new GlyphEdge(p, q, edgeLine));
+                    //from p point to q
+                    //so ...
+                    //edgeLine is outwardEdge for p.
+                    //edgeLine is inwardEdge for q.
+                    //p.OutwardEdge = q.InwardEdge = edgeLine;
+                    edges.Add(edgeLine);
                 }
                 else
                 {
-
+                    //?
                 }
             }
             //close   
             p = flattenPoints[lim];
             q = flattenPoints[0];
-            if ((edgeLine = FineCommonEdgeLine(p, q)) != null)
+
+            if ((edgeLine = EdgeLine.FindCommonOutsideEdge(p, q)) != null)
             {
-                edges.Add(new GlyphEdge(p, q, edgeLine));
+                //from p point to q
+                //so ...
+                //edgeLine is outwardEdge for p.
+                //edgeLine is inwardEdge for q.
+                //p.OutwardEdge = q.InwardEdge = edgeLine;
+                edges.Add(edgeLine);
             }
             else
             {
                 //not found
             }
-            int j = edges.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                edges[i].FindPerpendicularBones();
-            }
-            //
-        }
 
+        }
+        List<OutsideEdgeLine> edges;
         internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
-            int j = flattenPoints.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                flattenPoints[i].ApplyNewEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
-            }
-            //
-            j = edges.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                //apply new relative len to edge***
-                edges[i].ApplyNewEdgeFromMasterOutline(newEdgeOffsetFromMasterOutline);
-            }
-            //calculate edge cutpoint
-            int lim = edges.Count - 1; //skip lastone
-            for (int i = 0; i < lim; ++i)
-            {
-                //calculate adjacent outside edge cutpoint          
-                GlyphEdge.UpdateEdgeCutPoint(edges[i], edges[i + 1]);
-            }
-            //last one
-            if (lim > 1)
-            {
-                //close edge
-                GlyphEdge.UpdateEdgeCutPoint(edges[lim], edges[0]);
-            }
+            int j = edges.Count;
 
-        }
-        static EdgeLine FineCommonEdgeLine(GlyphPoint p, GlyphPoint q)
-        {
-            if (p.E0 == q.E0 ||
-                p.E0 == q.E1)
+            for (int i = 0; i < j; ++i)
             {
-                return p.E0;
+                edges[i].SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
             }
-            else if (p.E1 == q.E0 ||
-                     p.E1 == q.E1)
+            //calculate edge cutpoint             
+            for (int i = flattenPoints.Count - 1; i >= 0; --i)
             {
-                return p.E1;
+                UpdateNewEdgeCut(flattenPoints[i]);
+            }
+        }
+
+        internal void FindBounds(ref float minX, ref float minY, ref float maxX, ref float maxY)
+        {   
+            for (int i = flattenPoints.Count - 1; i >= 0; --i)
+            {
+                GlyphPoint p = flattenPoints[i];
+                MyMath.FindMinMax(ref minX, ref maxX, p.newX);
+                MyMath.FindMinMax(ref minY, ref maxY, p.newY);
+            }
+        }
+
+        /// <summary>
+        /// update dynamic cutpoint of 2 adjacent edges
+        /// </summary>
+        /// <param name="p"></param>
+        static void UpdateNewEdgeCut(GlyphPoint p)
+        {
+            OutsideEdgeLine e0 = p.E0;
+            OutsideEdgeLine e1 = p.E1;
+
+            Vector2 tmp_e0_q = e0._newDynamicMidPoint + e0.GetOriginalEdgeVector();
+            Vector2 tmp_e1_p = e1._newDynamicMidPoint - e1.GetOriginalEdgeVector();
+
+            Vector2 cutpoint;
+            if (MyMath.FindCutPoint(e0._newDynamicMidPoint, tmp_e0_q, e1._newDynamicMidPoint, tmp_e1_p, out cutpoint))
+            {
+                p.newX = cutpoint.X;
+                p.newY = cutpoint.Y;
             }
             else
             {
-
-                return null;
+                //pararell edges
             }
         }
+
     }
 
 }

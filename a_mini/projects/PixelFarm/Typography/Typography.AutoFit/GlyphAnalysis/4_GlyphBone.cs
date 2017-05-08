@@ -13,7 +13,6 @@ namespace Typography.Rendering
         public readonly GlyphBoneJoint JointA;
         public readonly GlyphBoneJoint JointB;
         public readonly EdgeLine TipEdge;
-
         double _len;
 #if DEBUG 
         static int dbugTotalId;
@@ -30,34 +29,30 @@ namespace Typography.Rendering
 
             JointA = a;
             JointB = b;
-            Vector2 bpos = b.Position;
+            Vector2 bpos = b.OriginalJointPos;
             _len = Math.Sqrt(a.CalculateSqrDistance(bpos));
-            EvaluteSlope(a.Position, bpos);
+            EvaluateSlope();
 
-            a.AddAssociateGlyphBoneToEndPoint(this);
-            b.AddAssociateGlyphBoneToEndPoint(this);
         }
         public GlyphBone(GlyphBoneJoint a, EdgeLine tipEdge)
         {
-             
-            JointA = a;
-            TipEdge = tipEdge; 
-            var midPoint = tipEdge.GetMidPoint();
-            _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
-            EvaluteSlope(a.Position, midPoint);
 
-            a.AddAssociateGlyphBoneToEndPoint(this);
-            tipEdge.AddAssociateGlyphBoneToEndPoint(this);
+            JointA = a;
+            TipEdge = tipEdge;
+            Vector2 midPoint = tipEdge.GetMidPoint();
+            _len = Math.Sqrt(a.CalculateSqrDistance(midPoint));
+            EvaluateSlope();
+
         }
         public Vector2 GetVector()
         {
             if (this.JointB != null)
             {
-                return JointB.Position - JointA.Position;
+                return JointB.OriginalJointPos - JointA.OriginalJointPos;
             }
             else if (this.TipEdge != null)
             {
-                return TipEdge.GetMidPoint() - JointA.Position;
+                return TipEdge.GetMidPoint() - JointA.OriginalJointPos;
             }
             else
             {
@@ -69,8 +64,41 @@ namespace Typography.Rendering
             get { return this.TipEdge != null; }
         }
 
-
-        void EvaluteSlope(Vector2 p, Vector2 q)
+        internal void EvaluateSlope()
+        {
+            if (this.JointB != null)
+            {
+                EvaluateSlope(this.JointA.DynamicFitPos, this.JointB.DynamicFitPos);
+            }
+            else
+            {
+                //TODO: review fit pos of tip edge
+                EvaluateSlope(this.JointA.DynamicFitPos, this.TipEdge.GetMidPoint());
+            }
+        }
+        internal float EvaluateFitLength()
+        {
+            if (this.JointB != null)
+            {
+                return (float)(JointA.DynamicFitPos - JointB.DynamicFitPos).Length();
+            }
+            else
+            {
+                return (float)(JointA.DynamicFitPos - this.TipEdge.GetMidPoint()).Length();
+            }
+        }
+        internal float EvaluateY()
+        {
+            if (this.JointB != null)
+            {
+                return (JointA.DynamicFitPos.Y + JointB.DynamicFitPos.Y) / 2;
+            }
+            else
+            {
+                return (JointA.DynamicFitPos.Y + TipEdge.GetMidPoint().Y) / 2;
+            }
+        }
+        void EvaluateSlope(Vector2 p, Vector2 q)
         {
 
             double x0 = p.X;
@@ -79,18 +107,18 @@ namespace Typography.Rendering
             double x1 = q.X;
             double y1 = q.Y;
 
-            SlopeAngleNoDirection = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
+            double slopeNoDirection = Math.Abs(Math.Atan2(Math.Abs(y1 - y0), Math.Abs(x1 - x0)));
             if (x1 == x0)
             {
                 this.SlopeKind = LineSlopeKind.Vertical;
             }
             else
             {
-                if (SlopeAngleNoDirection > MyMath._85degreeToRad)
+                if (slopeNoDirection > MyMath._85degreeToRad)
                 {
                     SlopeKind = LineSlopeKind.Vertical;
                 }
-                else if (SlopeAngleNoDirection < MyMath._03degreeToRad) //_15degreeToRad
+                else if (slopeNoDirection < MyMath._03degreeToRad) //_15degreeToRad
                 {
                     SlopeKind = LineSlopeKind.Horizontal;
                 }
@@ -100,8 +128,8 @@ namespace Typography.Rendering
                 }
             }
         }
-        internal double SlopeAngleNoDirection { get; set; }
-        public LineSlopeKind SlopeKind { get; set; }
+
+        public LineSlopeKind SlopeKind { get; private set; }
         internal double Length
         {
             get
@@ -110,29 +138,7 @@ namespace Typography.Rendering
             }
         }
         public bool IsLongBone { get; internal set; }
-
-        //--------
-        public float LeftMostPoint()
-        {
-            if (JointB != null)
-            {
-                //compare joint A and B 
-                if (JointA.Position.X < JointB.Position.X)
-                {
-                    return JointA.GetLeftMostRib();
-                }
-                else
-                {
-                    return JointB.GetLeftMostRib();
-                }
-            }
-            else
-            {
-                return JointA.GetLeftMostRib();
-            }
-        }
-
-
+         
 #if DEBUG
         public override string ToString()
         {
@@ -157,12 +163,12 @@ namespace Typography.Rendering
         {
             if (bone.JointB != null)
             {
-                return (bone.JointA.Position + bone.JointB.Position) / 2;
+                return (bone.JointA.OriginalJointPos + bone.JointB.OriginalJointPos) / 2;
             }
             else if (bone.TipEdge != null)
             {
                 Vector2 edge = bone.TipEdge.GetMidPoint();
-                return (edge + bone.JointA.Position) / 2;
+                return (edge + bone.JointA.OriginalJointPos) / 2;
             }
             else
             {
@@ -170,80 +176,40 @@ namespace Typography.Rendering
             }
         }
 
-        public static Vector2 GetBoneVector(this GlyphBone bone)
-        {
-            //if (bone.JointB != null)
-            //{
-            //    var b_pos = bone.JointB.Position;
-            //    var a_pos = bone.JointA.Position;
-            //    return new Vector2(
-            //            Math.Abs(b_pos.X - a_pos.X),
-            //            Math.Abs(b_pos.Y - a_pos.Y));
-            //}
-            //else if (bone.TipEdge != null)
-            //{
-            //    var b_pos = bone.TipEdge.GetMidPoint();
-            //    var a_pos = bone.JointA.Position;
-            //    return new Vector2(
-            //            Math.Abs(b_pos.X - a_pos.X),
-            //             Math.Abs(b_pos.Y - a_pos.Y));
-            //    return bone.TipEdge.GetMidPoint() - bone.JointA.Position;
-            //}
-            //else
-            //{
-            //    return Vector2.Zero;
-            //}
 
-            if (bone.JointB != null)
-            {
-                var b_pos = bone.JointB.Position;
-                var a_pos = bone.JointA.Position;
-                return new Vector2(
-                        b_pos.X - a_pos.X,
-                        b_pos.Y - a_pos.Y);
-            }
-            else if (bone.TipEdge != null)
-            {
-                var b_pos = bone.TipEdge.GetMidPoint();
-                var a_pos = bone.JointA.Position;
-                return new Vector2(
-                      b_pos.X - a_pos.X,
-                      b_pos.Y - a_pos.Y);
-            }
-            else
-            {
-                return Vector2.Zero;
-            }
-        }
-        public static EdgeLine FindOutsideEdge(this GlyphBone bone)
+        /// <summary>
+        /// find all outside edge a
+        /// </summary>
+        /// <param name="bone"></param>
+        /// <param name="outsideEdges"></param>
+        /// <returns></returns>
+        public static void CollectOutsideEdge(this GlyphBone bone, System.Collections.Generic.List<EdgeLine> outsideEdges)
         {
             if (bone.JointB != null)
             {
                 GlyphTriangle commonTri = FindCommonTriangle(bone.JointA, bone.JointB);
                 if (commonTri != null)
                 {
-                    return GetFirstFoundOutsidEdge(commonTri);
+                    if (commonTri.e0.IsOutside) { outsideEdges.Add(commonTri.e0); }
+                    if (commonTri.e1.IsOutside) { outsideEdges.Add(commonTri.e1); }
+                    if (commonTri.e2.IsOutside) { outsideEdges.Add(commonTri.e2); }
                 }
             }
             else if (bone.TipEdge != null)
             {
-                return FindOutsideEdge(bone.JointA, bone.TipEdge);
+                outsideEdges.Add(bone.TipEdge);
+                EdgeLine found;
+                if (ContainsEdge(bone.JointA.P_Tri, bone.TipEdge) &&
+                    (found = FindAnotherOutsideEdge(bone.JointA.P_Tri, bone.TipEdge)) != null)
+                {
+                    outsideEdges.Add(found);
+                }
+                else if (ContainsEdge(bone.JointA.Q_Tri, bone.TipEdge) &&
+                    (found = FindAnotherOutsideEdge(bone.JointA.Q_Tri, bone.TipEdge)) != null)
+                {
+                    outsideEdges.Add(found);
+                }
             }
-
-            return null;
-
-        }
-        static EdgeLine FindOutsideEdge(GlyphBoneJoint a, EdgeLine tipEdge)
-        {
-            if (ContainsEdge(a.P_Tri, tipEdge))
-            {
-                return FindAnotherOutsideEdge(a.P_Tri, tipEdge);
-            }
-            else if (ContainsEdge(a.Q_Tri, tipEdge))
-            {
-                return FindAnotherOutsideEdge(a.Q_Tri, tipEdge);
-            }
-            return null;
         }
         static EdgeLine FindAnotherOutsideEdge(GlyphTriangle tri, EdgeLine knownOutsideEdge)
         {
@@ -252,6 +218,7 @@ namespace Typography.Rendering
             if (tri.e2.IsOutside && tri.e2 != knownOutsideEdge) { return tri.e2; }
             return null;
         }
+
         static bool ContainsEdge(GlyphTriangle tri, EdgeLine edge)
         {
             return tri.e0 == edge || tri.e1 == edge || tri.e2 == edge;
@@ -273,13 +240,8 @@ namespace Typography.Rendering
             }
         }
 
-        static EdgeLine GetFirstFoundOutsidEdge(GlyphTriangle tri)
-        {
-            if (tri.e0.IsOutside) { return tri.e0; }
-            if (tri.e1.IsOutside) { return tri.e1; }
-            if (tri.e2.IsOutside) { return tri.e2; }
-            return null; //not found               
-        }
+
+
     }
 
 }

@@ -295,7 +295,7 @@ namespace SampleWinForms.UI
             //-------------- 
             EdgeLine p_contactEdge = joint.dbugGetEdge_Q();
             //mid point
-            var jointPos = joint.Position;
+            var jointPos = joint.OriginalJointPos;
             //painter.FillRectLBWH(jointPos.X * pxscale, jointPos.Y * pxscale, 4, 4, PixelFarm.Drawing.Color.Yellow);
 
             TreeNode jointNode = new TreeNode() { Tag = new NodeInfo(joint) };
@@ -327,8 +327,8 @@ namespace SampleWinForms.UI
                 return;
             }
 
-            GlyphPoint pnt_P = edge.GlyphPoint_P;
-            GlyphPoint pnt_Q = edge.GlyphPoint_Q;
+            GlyphPoint pnt_P = edge.P;
+            GlyphPoint pnt_Q = edge.Q;
 
             //-------------------------------
 
@@ -336,36 +336,16 @@ namespace SampleWinForms.UI
             TreeNode nodeEdge = new TreeNode();
             nodeEdge.Tag = nodeInfo;
             nodeEdge.Text = "e id=" + edge.dbugId + ",count="
-                + _testEdgeCount + " :(" + pnt_P.x + "," + pnt_P.y + ")" +
+                + _testEdgeCount + " :(" + pnt_P.newX + "," + pnt_P.newY + ")" +
 
-                "=>(" + pnt_Q.x + "," + pnt_Q.y + ") ";
+                "=>(" + pnt_Q.newX + "," + pnt_Q.newY + ") ";
             if (edge.dbugNoPerpendicularBone)
             {
                 nodeEdge.Text += "_X_ (no perpendicular_bone)";
             }
-            if (pnt_P != null)
-            {
-
-                foreach (GlyphBone b in pnt_P.dbugGetAssocBones())
-                {
-                    TreeNode assocBoneNode = new TreeNode();
-                    assocBoneNode.Text = "-> [p] bone:" + b.ToString();
-                    nodeEdge.Nodes.Add(assocBoneNode);
-                }
-
-            }
-            if (pnt_Q != null)
-            {
 
 
-                foreach (GlyphBone b in pnt_Q.dbugGetAssocBones())
-                {
-                    TreeNode assocBoneNode = new TreeNode();
-                    assocBoneNode.Text = "-> [q] bone:" + b.ToString();
-                    nodeEdge.Nodes.Add(assocBoneNode);
-                }
-
-            }
+            //}
             //if (!edge.dbugHasRelatedBone)
             //{
             //    nodeEdge.Text += "_X_ (no perpendicular_bone)";
@@ -380,7 +360,7 @@ namespace SampleWinForms.UI
 
             _edgeLines.Add(edge);
         }
-        public void ShowGlyphEdge(GlyphEdge e, float x0, float y0, float x1, float y1)
+        public void ShowGlyphEdge(EdgeLine e, float x0, float y0, float x1, float y1)
         {
             if (!_clearInfoView)
             {
@@ -390,7 +370,7 @@ namespace SampleWinForms.UI
             NodeInfo nodeInfo = new NodeInfo(NodeInfoKind.GlyphEdge, x0, y0, x1, y1);
             TreeNode nodeEdge = new TreeNode();
             nodeEdge.Tag = nodeInfo;
-            nodeEdge.Text = e.dbugId + ": (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")";
+            nodeEdge.Text = "(" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")";
             //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
             //{
             //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;
@@ -485,7 +465,7 @@ namespace SampleWinForms.UI
             public NodeInfo(GlyphBoneJoint joint)
             {
                 this.joint = joint;
-                this.pos = joint.Position;
+                this.pos = joint.OriginalJointPos;
                 this.NodeKind = NodeInfoKind.Joint;
             }
             public NodeInfo(GlyphBone bone, GlyphBoneJoint a, GlyphBoneJoint b)

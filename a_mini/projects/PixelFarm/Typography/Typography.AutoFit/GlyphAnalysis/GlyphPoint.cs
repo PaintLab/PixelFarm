@@ -1,6 +1,5 @@
 ﻿//MIT, 2016-2017, WinterDev
-using System.Collections.Generic;
-using System.Numerics;
+
 namespace Typography.Rendering
 {
 
@@ -23,57 +22,77 @@ namespace Typography.Rendering
 
     public class GlyphPoint
     {
-        public readonly float x;
-        public readonly float y;
+        readonly float x; //original x
+        readonly float y; //original y
         public readonly PointKind kind;
-
-        AssocBoneCollection _assocBones = new AssocBoneCollection();
 
         /// <summary>
         /// calculated x and y  
         /// </summary>
         public float newX;
         public float newY;
-
-     
-
-
-        public bool isPartOfHorizontalEdge;
-        public bool isUpperSide;
+        //---------------------------------------- 
+        public float fit_NewX;
+        public float fit_NewY;
+        public bool fit_analyzed;
+        //------------------------------------- 
 
         /// <summary>
-        /// outside edge0 
+        /// outside inward edge ?, TODO: review inward, outward concept again 
         /// </summary>
-        EdgeLine _e0;
+        OutsideEdgeLine _e0;
         /// <summary>
-        /// outside edge 1
+        /// outside outward edge ? TODO: review inward, outward concept again 
         /// </summary>
-        EdgeLine _e1;
+        OutsideEdgeLine _e1;
 
         public GlyphPoint(float x, float y, PointKind kind)
         {
-            this.x = x;
-            this.y = y;
+            this.x = this.newX = x;
+            this.y = this.newY = y;
             this.kind = kind;
         }
-        public bool IsLeftSide { get; private set; }
-        public bool IsPartOfVerticalEdge { get; private set; }
+        public int SeqNo { get; internal set; }
+
+        /// <summary>
+        /// original X
+        /// </summary>
+        public float OX { get { return this.x; } }
+        /// <summary>
+        /// original Y
+        /// </summary>
+        public float OY { get { return this.y; } }
 
 
-        internal EdgeLine E0
+        /// <summary>
+        /// outside inward edge
+        /// </summary>
+        internal OutsideEdgeLine E0
         {
+            //TODO: review inward and outward edge again
             get { return this._e0; }
+
         }
-        internal EdgeLine E1
+        /// <summary>
+        /// outside outward edge
+        /// </summary>
+        internal OutsideEdgeLine E1
         {
+            //TODO: review inward and outward edge again
             get { return this._e1; }
         }
+
         /// <summary>         
         /// set outside edge that link with this glyph point
         /// </summary>
         /// <param name="edge">edge must be outside edge</param>
-        internal void SetOutsideEdge(EdgeLine edge)
+        internal void SetOutsideEdgeUnconfirmEdgeDirection(OutsideEdgeLine edge)
         {
+            //at this stage, we don't known the edge is outward or inward.
+            //so just set it
+            //------------------------------------------
+            //e0 and e1 will be swaped later for this point SetCorrectInwardAndOutWardEdge() ***
+
             if (_e0 == null)
             {
                 _e0 = edge;
@@ -100,356 +119,27 @@ namespace Typography.Rendering
         }
 
 
-
-
-        internal void NotifyVerticalEdge(EdgeLine v_edge)
-        {
-            //associated 
-            if (!this.IsPartOfVerticalEdge)
-            {
-                this.IsPartOfVerticalEdge = true;
-            }
-            if (!this.IsLeftSide)
-            {
-                this.IsLeftSide = v_edge.IsLeftSide;
-            }
-        }
-
         internal static bool SameCoordAs(GlyphPoint a, GlyphPoint b)
         {
             return a.x == b.x && a.y == b.y;
         }
-        internal void AddAssociateBone(GlyphBone bone)
-        {
-            _assocBones.AddAssocBone(bone);
-        }
 
-        internal void EvaluatePerpendicularBone()
-        {
-            _assocBones.EvaluatePerpendicularBone(this);
-            ApplyNewEdgeOffsetFromMasterOutline(0);
-        }
-
-        internal void ApplyNewEdgeOffsetFromMasterOutline(float edgeOffsetFromMasterOutline)
-        {
-            if (edgeOffsetFromMasterOutline == 0)
-            {
-                this.newX = this.x;
-                this.newY = this.y;
-            }
-            else
-            {
-                Vector2 newRadiusEnd = _assocBones.CalculateNewCutPointFromMasterOutline(edgeOffsetFromMasterOutline, new Vector2(x, y));
-                this.newX = newRadiusEnd.X;
-                this.newY = newRadiusEnd.Y;
-            }
-        }
 #if DEBUG
-        /// <summary>
-        /// glyph pointnumber
-        /// </summary>
-        int dbug_GlyphPointNo;
-        //for debug only
+
         public readonly int dbugId = dbugTotalId++;
         static int dbugTotalId;
         internal GlyphPart dbugOwnerPart;  //link back to owner part
         public Poly2Tri.TriangulationPoint dbugTriangulationPoint;
-        public AssocBoneCollection dbugGetAssocBones() { return _assocBones; }
+
         public override string ToString()
         {
             //TODO: review adjust value again
             return this.dbugId + " :" +
                     (x + "," + y + " " + kind.ToString());
         }
-        internal int dbugGlyphPointNo
-        {
-            get { return this.dbug_GlyphPointNo; }
-            set { this.dbug_GlyphPointNo = value; }
-        }
-#endif 
+
+#endif
     }
 
-    public enum BoneCutPointKind
-    {
-        Unknown,
-        PerpendicularToSingleBone,
-        PerpendicularToBoneGroup,
-        MoreThanOnePerpendicularBones,
-        NotPendicularCutPoint
-
-    }
-    public class AssocBoneCollection
-    {
-        Dictionary<GlyphBone, bool> _assocBones = new Dictionary<GlyphBone, bool>();
-        List<GlyphBone> _assocBoneList;
-        bool closeCollection;
-        bool hasEvaluatedPerpendicularBones;
-
-        Vector2 _boneCutPoint;//original cutpoint on bone (from glyphPoint)
-
-        int _startIndexAt = -1;
-        int _endIndexAt = -1;
-
-        internal AssocBoneCollection()
-        {
-
-        }
-        internal void CloseCollection()
-        {
-            if (closeCollection) return;
-            //convert from GlyphBone to 
-            _assocBoneList = new List<GlyphBone>(_assocBones.Keys);
-            _assocBones = null; //clear
-            closeCollection = true;
-        }
-        internal void AddAssocBone(GlyphBone bone)
-        {
-            if (!_assocBones.ContainsKey(bone))
-            {
-                _assocBones.Add(bone, true);
-            }
-        }
-        public int GetBoneCount()
-        {
-            //close first            
-            CloseCollection();
-            return _assocBoneList.Count;
-        }
-        public GlyphBone this[int index] { get { return _assocBoneList[index]; } }
-        public GlyphBone GetGlyphBone(int index)
-        {
-            //close first            
-            CloseCollection();
-            return _assocBoneList[index];
-        }
-
-        public IEnumerator<GlyphBone> GetEnumerator()
-        {
-            //close first            
-            CloseCollection();
-            //
-            int j = _assocBoneList.Count;
-            for (int i = 0; i < j; ++i)
-            {
-                yield return _assocBoneList[i];
-            }
-        }
-        public BoneCutPointKind CutPointKind
-        {
-            get;
-            set;
-        }
-        public Vector2 CutPoint { get { return _boneCutPoint; } }
-        public int StartIndexAt { get { return _startIndexAt; } }
-        public int EndIndexAt { get { return _endIndexAt; } }
-
-
-
-
-        struct TmpCutPoint
-        {
-            public Vector2 cutpoint;
-            public int index;
-            public TmpCutPoint(int index, Vector2 cutpoint)
-            {
-                this.index = index;
-                this.cutpoint = cutpoint;
-            }
-        }
-        public static double AngleBetween(Vector2 vector1, Vector2 vector2)
-        {
-            double rad1 = System.Math.Atan2(vector1.Y, vector1.X);
-            double rad2 = System.Math.Atan2(vector2.Y, vector2.X);
-            //we want to find diff
-
-            if (rad1 < 0)
-            {
-                rad1 = System.Math.PI + rad1;
-            }
-            if (rad2 < 0)
-            {
-                rad2 = System.Math.PI + rad2;
-            }
-
-            return rad1 - rad2;
-        }
-        const float Epsilon = 0.0001f;
-        //
-        internal void EvaluatePerpendicularBone(GlyphPoint ownerPoint)
-        {
-            //find a perpendicular line  and cutpoint from ownerPoint 
-            //to one of glyphBone, or avg of glyphBones
-            CloseCollection();
-            if (hasEvaluatedPerpendicularBones) return;
-            hasEvaluatedPerpendicularBones = true; //change state
-
-            //
-            //---------------------------------------------------------
-            //TODO: review tmpCutPoints again 
-            List<TmpCutPoint> tmpCutPoints = new List<TmpCutPoint>();
-
-            Vector2 o_point = new Vector2(ownerPoint.x, ownerPoint.y);
-            int b_count = _assocBoneList.Count;
-            int perpendcut_count = 0;
-
-            for (int i = 0; i < b_count; ++i)
-            {
-                GlyphBone b = _assocBoneList[i];
-                Vector2 tempCutPoint;
-                if (MyMath.FindPerpendicularCutPoint(b, o_point, out tempCutPoint))
-                {
-
-                    _boneCutPoint = tempCutPoint;
-                    _startIndexAt = _endIndexAt = i;
-                    this.CutPointKind = BoneCutPointKind.PerpendicularToSingleBone;
-                    tmpCutPoints.Add(new TmpCutPoint(i, _boneCutPoint));
-                    perpendcut_count++;
-                }
-            }
-            //---------------------------------------------------------
-            if (perpendcut_count > 1)
-            {
-                //1.
-                this.CutPointKind = BoneCutPointKind.MoreThanOnePerpendicularBones;
-                _startIndexAt = _endIndexAt = 0;
-            }
-            else
-            {
-                // 
-            }
-            //------------------------------------
-            if (_startIndexAt > -1) { return; }
-            //------------------------------------
-            //if not found exact bone
-            //we use middle area cutpoint
-            switch (b_count)
-            {
-                case 0:
-                    return;
-                case 1:
-                    {
-                        //only 1 bone and no cutpoint found
-                        //so no exact perpendicular cut point
-                        //use mid point
-                        _boneCutPoint = _assocBoneList[0].GetMidPoint();
-                        this.CutPointKind = BoneCutPointKind.NotPendicularCutPoint;
-                        _startIndexAt = _endIndexAt = 0;
-                    }
-                    break;
-                case 2:
-                    {
-                        if (!FindAvgCutPoint(_assocBoneList[0], _assocBoneList[1], o_point, out _boneCutPoint))
-                        {
-                            //if not found 
-                            //-> no cutpoint
-                            //link to min distance
-                            //if (MyMath.MinDistanceFirst(_assocBoneList[0].GetMidPoint(), _assocBoneList[1].GetMidPoint(), o_point))
-                            //{
-                            //    _cutPoint = _assocBoneList[0].GetMidPoint();
-                            //    _startIndexAt = _endIndexAt = 0;
-                            //}
-                            //else
-                            //{
-                            //    _cutPoint = _assocBoneList[1].GetMidPoint();
-                            //    _startIndexAt = _endIndexAt = 1;
-                            //}
-                            this.CutPointKind = BoneCutPointKind.NotPendicularCutPoint;
-                        }
-                        else
-                        {
-
-                            _startIndexAt = 0;
-                            _endIndexAt = 1;
-                            this.CutPointKind = BoneCutPointKind.PerpendicularToBoneGroup;
-                        }
-                    }
-                    break;
-                default:
-                    {
-                        //we start at the middle 
-                        //and expand left and right
-
-                        int mid_index = b_count / 2;
-                        int startAt = mid_index - 1;
-                        int endAt = mid_index + 1;
-                        bool foundResult = false;
-
-                        for (; startAt >= 0 && endAt < b_count;)
-                        {
-                            if (FindAvgCutPoint(_assocBoneList[startAt], _assocBoneList[endAt], o_point, out _boneCutPoint))
-                            {
-                                this.CutPointKind = BoneCutPointKind.PerpendicularToBoneGroup;
-                                _startIndexAt = startAt;
-                                _endIndexAt = endAt;
-                                foundResult = true;
-                                break; //from loop for
-                            }
-                            startAt--; //expand wider to left
-                            if (startAt >= 0 &&
-                                FindAvgCutPoint(_assocBoneList[startAt], _assocBoneList[endAt], o_point, out _boneCutPoint))
-                            {
-
-                                this.CutPointKind = BoneCutPointKind.PerpendicularToBoneGroup;
-                                _startIndexAt = startAt;
-                                _endIndexAt = endAt;
-                                foundResult = true;
-                                break; //from loop for
-
-                            }
-
-                            endAt++; //expand wider to right
-                        }
-                        //if (!foundResult)
-                        //{
-                        //    //no result found
-                        //    _cutPoint = _assocBoneList[mid_index].GetMidPoint();
-                        //    _startIndexAt = _endIndexAt = mid_index;
-                        //    this.CutPointKind = BoneCutPointKind.NotPendicularCutPoint;
-                        //}
-                    }
-                    break;
-            }
-        }
-
-        static bool FindAvgCutPoint(GlyphBone beginAt, GlyphBone endAt, Vector2 p, out Vector2 exactCutPoint)
-        {
-            //find avg cutpoint of 2 bone 
-            Vector2 first_v = beginAt.GetMidPoint();
-            Vector2 last_v = endAt.GetMidPoint();
-            return MyMath.FindPerpendicularCutPoint2(first_v, last_v, p, out exactCutPoint);
-        }
-        internal Vector2 CalculateNewCutPointFromMasterOutline(float edgeOffsetFromMasterOutline, Vector2 orgVector)
-        {
-            if (this.CutPointKind == BoneCutPointKind.NotPendicularCutPoint)
-            {
-                return orgVector;
-            }
-            else
-            {
-                //delta vector
-                Vector2 delta = orgVector - _boneCutPoint;
-                Vector2 newDelta = delta.NewLength(edgeOffsetFromMasterOutline);
-                //we apply offset from original master outline
-                //TODO: check limit of side edge ***
-                return orgVector + newDelta;
-            }
-        }
-        internal Vector2 CalculateNewCutPointFromBone(float edgeOffsetFromBone, Vector2 orgVector)
-        {
-            if (this.CutPointKind == BoneCutPointKind.NotPendicularCutPoint)
-            {
-                return orgVector;
-            }
-            else
-            {
-                //delta vector
-                Vector2 delta = orgVector - _boneCutPoint;
-                Vector2 newDelta = delta.NewLength(edgeOffsetFromBone);
-                //we apply offset from original master outline
-
-                return _boneCutPoint + newDelta;
-            }
-        }
-    }
 }
 

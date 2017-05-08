@@ -5,7 +5,73 @@ namespace Typography.Rendering
 
     public static class MyMath
     {
+        static internal void FindMinMax(ref float currentMin, ref float currentMax, float value)
+        {
+            if (value < currentMin) { currentMin = value; }
+            if (value > currentMax) { currentMax = value; }
+        }
 
+        /// <summary>
+        /// calculate distance to fit interger grid pos, assum grid size=1
+        /// </summary>
+        /// <param name="value">diff distance to fit grid position</param>
+        /// <returns></returns>
+        internal static float CalculateDiffToFit(float value)
+        {
+            //optimized version, assum gridSize = 1
+            int floor = (int)value;
+            return ((value - floor) >= (1 / 2f)) ?
+                (floor + 1) - value : //if true, more than half of 1 
+                floor - value; //else
+        }
+        internal static int FitToHalfGrid(float value, int gridSize)
+        {
+            //fit to grid 
+            //1. lower
+            int floor = ((int)(value / gridSize) * gridSize);
+            //2. midpoint
+            float remaining = value - floor;
+            float halfGrid = gridSize / 2f;
+
+            if (remaining >= (2 / 3f) * gridSize)
+            {
+                return floor + gridSize;
+            }
+            else if (remaining >= (1 / 3f) * gridSize)
+            {
+                return (int)(floor + gridSize * (1 / 2f));
+            }
+            else
+            {
+                return floor;
+            }
+#if DEBUG
+            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
+            ////if (result % gridSize != 0)
+            ////{
+            ////}
+            //return result;
+#else
+            return (remaining > halfGrid) ? floor + gridSize : floor;
+#endif
+        }
+        public static double AngleBetween(Vector2 vector1, Vector2 vector2)
+        {
+            double rad1 = System.Math.Atan2(vector1.Y, vector1.X);
+            double rad2 = System.Math.Atan2(vector2.Y, vector2.X);
+            //we want to find diff
+
+            if (rad1 < 0)
+            {
+                rad1 = System.Math.PI + rad1;
+            }
+            if (rad2 < 0)
+            {
+                rad2 = System.Math.PI + rad2;
+            }
+
+            return rad1 - rad2;
+        }
         /// <summary>
         /// Convert degrees to radians
         /// </summary>
@@ -61,8 +127,8 @@ namespace Typography.Rendering
         public static bool FindPerpendicularCutPoint(EdgeLine edge, Vector2 p2, out Vector2 cutResult)
         {
             cutResult = FindPerpendicularCutPoint(
-                new Vector2((float)edge.x0, (float)edge.y0),
-                new Vector2((float)edge.x1, (float)edge.y1),
+                new Vector2((float)edge.PX, (float)edge.PY),
+                new Vector2((float)edge.QX, (float)edge.QY),
                 p2);
             //also check if result cutpoint is on current line segment or not
 
@@ -77,8 +143,8 @@ namespace Typography.Rendering
         /// <param name="max"></param>
         static void GetMinMax(EdgeLine edge, out Vector2 min, out Vector2 max)
         {
-            Vector2 a_pos = new Vector2((float)edge.x0, (float)edge.y0);
-            Vector2 b_pos = new Vector2((float)edge.x1, (float)edge.y1);
+            Vector2 a_pos = new Vector2((float)edge.PX, (float)edge.PY);
+            Vector2 b_pos = new Vector2((float)edge.QX, (float)edge.QY);
             min = Vector2.Min(a_pos, b_pos);
             max = Vector2.Max(a_pos, b_pos);
         }
@@ -121,8 +187,8 @@ namespace Typography.Rendering
         {
             if (bone.JointB != null)
             {
-                var a_pos = bone.JointA.Position;
-                var b_pos = bone.JointB.Position;
+                var a_pos = bone.JointA.OriginalJointPos;
+                var b_pos = bone.JointB.OriginalJointPos;
 
                 min = Vector2.Min(a_pos, b_pos);
                 max = Vector2.Max(a_pos, b_pos);
@@ -130,7 +196,7 @@ namespace Typography.Rendering
             }
             else if (bone.TipEdge != null)
             {
-                var a_pos = bone.JointA.Position;
+                var a_pos = bone.JointA.OriginalJointPos;
                 var tip_pos = bone.TipEdge.GetMidPoint();
                 min = Vector2.Min(a_pos, tip_pos);
                 max = Vector2.Max(a_pos, tip_pos);
@@ -152,8 +218,8 @@ namespace Typography.Rendering
             if (bone.JointB != null)
             {
                 cutPoint = FindPerpendicularCutPoint(
-                  bone.JointA.Position,
-                  bone.JointB.Position,
+                  bone.JointA.OriginalJointPos,
+                  bone.JointB.OriginalJointPos,
                   p);
                 //find min /max
                 Vector2 min, max;
@@ -166,7 +232,7 @@ namespace Typography.Rendering
                 if (bone.TipEdge != null)
                 {
                     cutPoint = FindPerpendicularCutPoint(
-                        bone.JointA.Position,
+                        bone.JointA.OriginalJointPos,
                         bone.TipEdge.GetMidPoint(),
                         p);
                     Vector2 min, max;

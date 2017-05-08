@@ -22,7 +22,11 @@ namespace Typography.Rendering
 
 #endif 
         public float LeftXControl { get; set; }
-        public float GlyphEdgeOffset { get; set; }
+        /// <summary>
+        /// glyph dynamic edge offset
+        /// </summary>
+        public float GlyphDynamicEdgeOffset { get; set; }
+
         protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph)
         {
             //not use interperter so we need to scale it with our machnism
@@ -60,7 +64,8 @@ namespace Typography.Rendering
                             this._outputGlyphPoints,
                             this._outputContours);
                         _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
-                        this.LeftXControl = _latestDynamicOutline.LeftControlPosX;
+
+                        this.LeftXControl = _latestDynamicOutline.LeftControlPositionX;
                     }
                 }
             }
@@ -106,12 +111,12 @@ namespace Typography.Rendering
                 {
                     toPixelScale = 1;
                 }
-                float offsetLenFromMasterOutline = GlyphEdgeOffset;
+                float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
                 //we will scale back later, so at this step we devide it with toPixelScale
-                _latestDynamicOutline.SetNewEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
+                _latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
 
-                _latestDynamicOutline.GenerateOutput2(tx, toPixelScale);
-                this.LeftXControl = _latestDynamicOutline.LeftControlPosX;
+                _latestDynamicOutline.GenerateOutput(tx, toPixelScale);
+                this.LeftXControl = _latestDynamicOutline.LeftControlPositionX;
             }
             else
             {

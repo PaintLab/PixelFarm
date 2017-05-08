@@ -28,14 +28,14 @@ namespace Typography.Rendering
             {
                 foreach (GlyphTriangle tri in _dynamicOutline.dbugGetGlyphTriangles())
                 {
-                    OnTriangle(triNumber++, tri.e0, tri.e1, tri.e2, tri.CentroidX, tri.CentroidY);
+                    float centroidX, centriodY;
+                    tri.CalculateCentroid(out centroidX, out centriodY);
+                    OnTriangle(triNumber++, tri.e0, tri.e1, tri.e2, centroidX, centriodY);
                 }
             }
             //--------------- 
             List<GlyphContour> contours = _dynamicOutline._contours;
 
-
-            //--------------- 
             List<CentroidLineHub> centroidLineHubs = _dynamicOutline.dbugGetCentroidLineHubs();
             foreach (CentroidLineHub lineHub in centroidLineHubs)
             {
@@ -53,8 +53,7 @@ namespace Typography.Rendering
                         GlyphBoneJoint joint = joints[i];
                         if (WalkCentroidBone)
                         {
-                            double px, py, qx, qy;
-
+                            float px, py, qx, qy;
                             joint.dbugGetCentroidBoneCenters(out px, out py, out qx, out qy);
                             OnCentroidLine(px, py, qx, qy);
                             //--------------------------------------------------
@@ -90,26 +89,13 @@ namespace Typography.Rendering
             for (int i = 0; i < j; ++i)
             {
                 GlyphContour cnt = cnts[i];
-                List<GlyphEdge> edgeLines = cnt.edges;
-                if (edgeLines != null)
+                List<GlyphPoint> points = cnt.flattenPoints;
+                int n = points.Count;
+                for (int m = 0; m < n; ++m)
                 {
-                    int n = edgeLines.Count;
-                    for (int m = 0; m < n; ++m)
-                    {
-                        OnGlyphEdgeN(edgeLines[m]);
-
-                    }
+                    OnGlyphEdgeN(points[m].E0);
                 }
-
             }
-            ////----------------
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    GlyphContour cnt = contours[i];
-            //    List<GlyphPoint> pnts = cnt.flattenPoints;
-            //    //pnts and edges 
-            //    //iterate all glyph points  
-            //}
 #endif
 
         }
@@ -156,7 +142,7 @@ namespace Typography.Rendering
         protected abstract void OnBegingLineHub(float centerX, float centerY);
         protected abstract void OnEndLineHub(float centerX, float centerY, GlyphBoneJoint joint);
 
-        protected abstract void OnGlyphEdgeN(GlyphEdge edge);
+        protected abstract void OnGlyphEdgeN(EdgeLine edge);
         //
     }
 }
