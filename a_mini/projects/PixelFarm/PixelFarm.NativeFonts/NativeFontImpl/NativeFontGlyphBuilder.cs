@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg;
-using Typography.Contours;
+using Typography.Rendering;
 
 namespace PixelFarm.Drawing.Fonts
 {
@@ -268,7 +268,7 @@ namespace PixelFarm.Drawing.Fonts
 
 
         const double FT_RESIZE = 64; //essential to be floating point
-        internal unsafe static GlyphImage BuildMsdfFontImage(NativeFontGlyph fontGlyph)
+        internal unsafe static Typography.Rendering.GlyphImage BuildMsdfFontImage(NativeFontGlyph fontGlyph)
         {
             IntPtr shape = MyFtLib.CreateShape();
             FT_Outline outline = (*(FT_Outline*)fontGlyph.nativeOutlinePtr);            //outline version

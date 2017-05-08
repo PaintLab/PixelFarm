@@ -38,7 +38,7 @@ namespace OpenTkEssTest
             //var buffer = new int[totalImg.Width * totalImg.Height];
             //System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
             //totalImg.UnlockBits(bmpdata);
-            var glyph = new Typography.Contours.GlyphImage(totalImg.Width, totalImg.Height);
+            var glyph = new Typography.Rendering.GlyphImage(totalImg.Width, totalImg.Height);
             glyph.SetImageBuffer(PixelFarm.Agg.ActualImage.GetBuffer2(actualImg), false);
             fontAtlas.TotalGlyph = glyph;
         }
@@ -68,7 +68,7 @@ namespace OpenTkEssTest
             //painter.DrawString("hello!", 0, 20);
             //canvas2d.DrawImageWithSubPixelRenderingMsdf(msdf_bmp, 200, 500, 15f);
 
-            Typography.Contours.TextureFontGlyphData glyphData;
+            Typography.Rendering.TextureFontGlyphData glyphData;
 
             byte[] codepoint = System.Text.Encoding.UTF8.GetBytes("AB");
             fontAtlas.TryGetGlyphDataByCodePoint(codepoint[0], out glyphData);

@@ -204,7 +204,7 @@ namespace PixelFarm.DrawingGL
             _loadedGlyphs = new GLBitmapCache<SimpleFontAtlas>(atlas =>
             {
                 //create new one
-                Typography.Contours.GlyphImage totalGlyphImg = atlas.TotalGlyph;
+                Typography.Rendering.GlyphImage totalGlyphImg = atlas.TotalGlyph;
                 //load to glbmp 
                 GLBitmap found = new GLBitmap(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer(), false);
                 found.IsInvert = false;
@@ -333,7 +333,7 @@ namespace PixelFarm.DrawingGL
             for (int i = 0; i < n; ++i)
             {
                 GlyphPlan glyph = glyphPlans[i];
-                Typography.Contours.TextureFontGlyphData glyphData;
+                Typography.Rendering.TextureFontGlyphData glyphData;
                 if (!simpleFontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
@@ -430,7 +430,7 @@ namespace PixelFarm.DrawingGL
                 //TODO: 
                 //render a set of glyph instead of one glyph per time ***
                 RenderVxGlyphPlan glyph = glyphPlans[i];
-                Typography.Contours.TextureFontGlyphData glyphData;
+                Typography.Rendering.TextureFontGlyphData glyphData;
                 if (!simpleFontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
                 {
                     //if no glyph data, we should render a missing glyph ***
