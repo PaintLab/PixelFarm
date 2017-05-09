@@ -207,25 +207,18 @@ namespace Typography.Contours
             {
                 if (positiveCount != 0 && negativeCount != 0)
                 {
-                    //check if we should move to positive or negative
-                    float avg_pos = positive_diff / positiveCount;
-                    //check only 'amount', not sign ,
-                    //make nagative to positive
-                    float avg_neg = -(negative_diff / negativeCount);
-
-                    //choose minimum move to reach the target
-                    if (avg_pos > avg_neg)
+                    //check if we should move to positive or negative  
+                    //tech: choose minimum move to reach the target
+                    if (positive_diff > -negative_diff)
                     {
                         //move to negative***
-                        return -(avg_pos + avg_neg) / 2;
-
+                        return -(positive_diff - negative_diff) / (positiveCount + negativeCount);
                     }
                     else
                     {
                         //avg to positive
-                        return (avg_pos + avg_neg) / 2;
+                        return (positive_diff - negative_diff) / (positiveCount + negativeCount);
                     }
-
                 }
                 else if (positiveCount != 0)
                 {
@@ -243,11 +236,15 @@ namespace Typography.Contours
                 }
             }
         }
+        float _avg_xdiff = 0;
         /// <summary>
         /// adjust vertical fitting value
         /// </summary>
         void AdjustFitValues()
         {
+            //adjust the value when we move to new pixel scale (pxscale)
+            //if we known adjust values for that pxscale before( and cache it)
+            //we can use that without recalculation
 
             //assign fit y pos in order
             List<BoneGroup> selectedHBoneGroups = _groupingHelper.SelectedHorizontalBoneGroups;
@@ -268,8 +265,6 @@ namespace Typography.Contours
                 //we need to calculate the avg of the glyph point
                 //and add a total summary to this 
                 FitDiffCollector y_fitDiffCollector = new FitDiffCollector();
-
-
                 for (int e = 0; e < edgeCount; ++e)
                 {
                     EdgeLine ee = h_edges[e];
@@ -306,72 +301,40 @@ namespace Typography.Contours
             }
             //---------------------------------------------------------
             //vertical group
-            //List<BoneGroup> vertocalGroups = _groupingHelper.SelectedVerticalBoneGroups;
-            //for (int i = vertocalGroups.Count - 1; i >= 0; --i)
-            //{
-            //    //arrange selected horizontal
-            //    BoneGroup boneGroup = vertocalGroups[i];
-            //    if (boneGroup.toBeRemoved)
-            //    {
-            //        continue;
-            //    }
-            //    EdgeLine[] v_edges = boneGroup.edges;
-            //    if (v_edges == null)
-            //    {
-            //        continue;
-            //    }
-            //    int edgeCount = v_edges.Length;
-            //    //we need to calculate the avg of the glyph point
-            //    //and add a total summary to this
 
-            //    FitDiffCollector x_fitDiffCollector = new FitDiffCollector();
+            List<BoneGroup> verticalGroups = _groupingHelper.SelectedVerticalBoneGroups;
+            FitDiffCollector x_fitDiffCollector = new FitDiffCollector();
+            for (int i = verticalGroups.Count - 1; i >= 0; --i)
+            {
+                BoneGroup boneGroup = verticalGroups[i];
+                if (boneGroup.toBeRemoved)
+                {
+                    continue;
+                }
+                EdgeLine[] v_edges = boneGroup.edges;
+                if (v_edges == null)
+                {
+                    continue;
+                }
+                int edgeCount = v_edges.Length;
+                //we need to calculate the avg of the glyph point
+                //and add a total summary to this 
 
-            //    for (int e = 0; e < edgeCount; ++e)
-            //    {
-            //        EdgeLine ee = v_edges[e];
-            //        GlyphPoint p_pnt = ee.P;
-            //        GlyphPoint q_pnt = ee.Q;
-            //        //p
-            //        x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(p_pnt.newX * _pxScale));
-            //        //q
-            //        x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(q_pnt.newX * _pxScale));
-            //    }
-            //    float avg_xdiff = x_fitDiffCollector.CalculateProperDiff();
-             
-            //    //compare abs max /min   
-            //    //distribute all adjust value to specific glyph points
-            //    for (int e = 0; e < edgeCount; ++e)
-            //    {
-            //        EdgeLine ee = v_edges[e];
-            //        GlyphPoint p_pnt = ee.P;
-            //        GlyphPoint q_pnt = ee.Q;
-
-            //        //this version apply only Y ?
-            //        //apply from newX and newY
-            //        if (p_pnt.fit_analyzed)
-            //        {
-            //           // p_pnt.fit_NewX = (p_pnt.newX * _pxScale) + avg_xdiff;
-            //        }
-            //        else
-            //        {
-            //            p_pnt.fit_NewX = (p_pnt.newX * _pxScale) + avg_xdiff;
-            //            p_pnt.fit_NewY = (p_pnt.newY * _pxScale);
-            //        }
-
-            //        //
-            //        if (q_pnt.fit_analyzed)
-            //        {
-            //          //  q_pnt.fit_NewX = (q_pnt.newX * _pxScale) + avg_xdiff;
-            //        }
-            //        else
-            //        {
-            //            q_pnt.fit_NewX = (q_pnt.newX * _pxScale) + avg_xdiff;
-            //            q_pnt.fit_NewY = (q_pnt.newY * _pxScale);
-            //        }
-            //        p_pnt.fit_analyzed = q_pnt.fit_analyzed = true;
-            //    }
-            //}
-
+                for (int e = 0; e < edgeCount; ++e)
+                {
+                    EdgeLine ee = v_edges[e];
+                    GlyphPoint p_pnt = ee.P;
+                    GlyphPoint q_pnt = ee.Q;
+                    //p
+                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(p_pnt.newX * _pxScale));
+                    //q
+                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(q_pnt.newX * _pxScale));
+                }
+            }
+            _avg_xdiff = x_fitDiffCollector.CalculateProperDiff();
+            ////experiment
+            ////for subpixel rendering
+            //_avg_xdiff = -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
         }
         void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
@@ -411,6 +374,10 @@ namespace Typography.Contours
         {
             //walk along the edge in the contour to generate new edge output
 
+#if DEBUG 
+            Console.WriteLine("===begin===" + _avg_xdiff);
+            float offset = _avg_xdiff;
+#endif
             List<GlyphPoint> points = contour.flattenPoints;
             int j = points.Count;
             if (j == 0) return;
@@ -421,13 +388,28 @@ namespace Typography.Contours
             float pxscale = this._pxScale;
             bool useGridFit = EnableGridFit;
             //TODO: review here
+
+            float pre_x = 0, post_x = 0;
+
             if (useGridFit && p.fit_analyzed)
             {
-                tx.MoveTo(p.fit_NewX, p.fit_NewY);
+                pre_x = p.fit_NewX;
+                post_x = pre_x + offset;
+                //
+                tx.MoveTo(post_x, p.fit_NewY);
+#if DEBUG
+                dbugWriteOutput("M", pre_x, post_x, p.fit_NewY);
+#endif
             }
             else
             {
-                tx.MoveTo(p.newX * pxscale, p.newY * pxscale);
+                pre_x = p.newX * pxscale;
+                post_x = pre_x + offset;
+
+                tx.MoveTo(post_x, p.newY * pxscale);
+#if DEBUG
+                dbugWriteOutput("M", pre_x, post_x, p.newY * pxscale);
+#endif
             }
 
             //2. others
@@ -437,20 +419,37 @@ namespace Typography.Contours
                 p = points[i];
                 if (useGridFit && p.fit_analyzed)
                 {
-                    tx.LineTo(p.fit_NewX, p.fit_NewY);
+                    pre_x = p.fit_NewX;
+                    post_x = pre_x + offset;
+                    tx.LineTo(post_x, p.fit_NewY);
+#if DEBUG 
+                    dbugWriteOutput("L", pre_x, post_x, p.fit_NewY);
+#endif
                 }
                 else
                 {
-                    tx.LineTo(p.newX * pxscale, p.newY * pxscale);
+                    pre_x = p.newX * pxscale;
+                    post_x = pre_x + offset;
+                    tx.LineTo(post_x, p.newY * pxscale);
+#if DEBUG                  
+                    //for debug
+                    dbugWriteOutput("L", pre_x, post_x, p.newY * pxscale);
+#endif
                 }
             }
             //close 
             tx.CloseContour();
-
+#if DEBUG
+            Console.WriteLine("===end===");
+#endif
         }
 
 
 #if DEBUG
+        void dbugWriteOutput(string cmd, float pre_x, float post_x, float y)
+        {
+            Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
+        }
         public static bool dbugTestNewGridFitting { get; set; }
         public static int dbugGridHeight = 50;
         internal List<GlyphTriangle> dbugGetGlyphTriangles()
