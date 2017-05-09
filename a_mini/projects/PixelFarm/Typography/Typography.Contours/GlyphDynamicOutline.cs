@@ -65,16 +65,13 @@ namespace Typography.Contours
             return _contours;
         }
         /// <summary>
-        ///classify bone group by gridbox(w,h) and apply to current master outline
+        ///classify bone group by gridbox(w,h) 
         /// </summary>
         /// <param name="gridBoxW"></param>
         /// <param name="gridBoxH"></param>
-        public void PrepareFitValues(int gridBoxW, int gridBoxH)
+        public void AnalyzeBoneGroups(int gridBoxW, int gridBoxH)
         {
-
-
             //bone grouping depends on grid size.
-
             this.GridBoxHeight = gridBoxH;
             this.GridBoxWidth = gridBoxW;
             //
@@ -91,6 +88,10 @@ namespace Typography.Contours
             //analyze bone group (stem) as a whole
             _groupingHelper.AnalyzeHorizontalBoneGroups();
             _groupingHelper.AnalyzeVerticalBoneGroups();
+
+            //at this state we have a list of BoneGroup. 
+            //but we don't know the  'fit-adjust' value for each GlyphPoint
+            //we will known the 'fit-adjust' value after we know the pxscale
         }
 
         /// <summary>
@@ -160,7 +161,7 @@ namespace Typography.Contours
                 if (_needRefreshBoneGroup)
                 {
                     //change scale not affact the grid fit ***
-                    PrepareFitValues(GridBoxWidth, GridBoxHeight);
+                    AnalyzeBoneGroups(GridBoxWidth, GridBoxHeight);
                     _needRefreshBoneGroup = false;
                 }
                 //
@@ -246,8 +247,13 @@ namespace Typography.Contours
             //if we known adjust values for that pxscale before( and cache it)
             //we can use that without recalculation
 
-            //assign fit y pos in order
+            //--------------------
+            //select Horizontal BoneGroups for Vertical fitting:
+            //for veritical fitting, we apply fitting value to each group.
+            //each group may not need the same value.
+            //--------------------
             List<BoneGroup> selectedHBoneGroups = _groupingHelper.SelectedHorizontalBoneGroups;
+
             for (int i = selectedHBoneGroups.Count - 1; i >= 0; --i)
             {
                 //arrange selected horizontal
@@ -280,30 +286,27 @@ namespace Typography.Contours
 
                 float avg_ydiff = y_fitDiffCollector.CalculateProperDiff();
 
-                //compare abs max /min   
-                //distribute all adjust value to specific glyph points
                 for (int e = 0; e < edgeCount; ++e)
                 {
                     EdgeLine ee = h_edges[e];
                     GlyphPoint p_pnt = ee.P;
                     GlyphPoint q_pnt = ee.Q;
-
-                    //this version apply only Y ?
-                    //apply from newX and newY
                     p_pnt.fit_NewX = p_pnt.newX * _pxScale;
                     p_pnt.fit_NewY = (p_pnt.newY * _pxScale) + avg_ydiff;
                     //
                     q_pnt.fit_NewX = q_pnt.newX * _pxScale;
                     q_pnt.fit_NewY = (q_pnt.newY * _pxScale) + avg_ydiff;
-
                     p_pnt.fit_analyzed = q_pnt.fit_analyzed = true;
                 }
             }
             //---------------------------------------------------------
-            //vertical group
-
+            //vertical group for horizontal fit:
+            //this different from the vertical fitting.
+            //we calculate the value as a whole.
+            //and apply it as a whole in later state 
             List<BoneGroup> verticalGroups = _groupingHelper.SelectedVerticalBoneGroups;
             FitDiffCollector x_fitDiffCollector = new FitDiffCollector();
+
             for (int i = verticalGroups.Count - 1; i >= 0; --i)
             {
                 BoneGroup boneGroup = verticalGroups[i];
@@ -351,7 +354,7 @@ namespace Typography.Contours
         void SetupLeftPositionX()
         {
 
-            PrepareFitValues(GridBoxWidth, GridBoxHeight);
+            AnalyzeBoneGroups(GridBoxWidth, GridBoxHeight);
             _needRefreshBoneGroup = false;
             //
             List<BoneGroup> arrangedVerticalBoneGroups = _groupingHelper.SelectedVerticalBoneGroups;
