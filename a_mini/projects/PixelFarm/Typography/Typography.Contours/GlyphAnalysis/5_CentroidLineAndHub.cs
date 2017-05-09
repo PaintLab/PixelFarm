@@ -14,9 +14,10 @@ namespace Typography.Contours
 
         //temp store centroid pair, we can clear it after AnalyzeEdgesAndCreateBoneJoints()
         List<GlyphCentroidPair> _centroid_pairs = new List<GlyphCentroidPair>();
+        //
         //joint list is created from each centroid pair
         public List<GlyphBoneJoint> _joints = new List<GlyphBoneJoint>();
-        //bone list is created from linking each joint list
+
         public List<GlyphBone> bones = new List<GlyphBone>();
         public List<BoneGroup> boneGroups;
 
@@ -49,6 +50,10 @@ namespace Typography.Contours
                 //create bone joint (and tip edge) in each pair                
                 _joints.Add(pairs[i].AnalyzeEdgesAndCreateBoneJoint());
             }
+
+            //we dont' use it anymore
+            _centroid_pairs.Clear();
+            _centroid_pairs = null;
         }
         /// <summary>
         /// apply grid box to all bones in this line
@@ -66,8 +71,8 @@ namespace Typography.Contours
                 Vector2 jointPos = joint.OriginalJointPos;
                 //set fit (x,y) to joint, then we will evaluate bone slope again (next step)
                 joint.SetFitXY(
-                    MyMath.FitToHalfGrid(jointPos.X, gridW), //use fit half
-                    MyMath.FitToHalfGrid(jointPos.Y, gridH));//use fit half
+                    MyMath.FitToHalfGrid(jointPos.X, gridW), //use half?
+                    MyMath.FitToHalfGrid(jointPos.Y, gridH));//use half?
             }
             //2. (re) calculate slope for all bones.
             j = bones.Count;
@@ -222,16 +227,21 @@ namespace Typography.Contours
             {
                 _selectedVerticalBoneGroups[i].CollectOutsideEdges(tmpEdges);
             }
-
         }
+
         static void MarkTooSmallBones(List<BoneGroup> boneGroups)
         {
+
+            int boneGroupsCount = boneGroups.Count;
+            if (boneGroupsCount < 2) { return; }
+            //----------------------
+            //use median ?,
             boneGroups.Sort((bg0, bg1) => bg0.approxLength.CompareTo(bg1.approxLength));
             int groupCount = boneGroups.Count;
             //median
             int mid_index = groupCount / 2;
             BoneGroup bonegroup = boneGroups[mid_index];
-            float lower_limit = bonegroup.approxLength / 4;
+            float lower_limit = bonegroup.approxLength / 2;
             for (int i = 0; i < mid_index; ++i)
             {
                 bonegroup = boneGroups[i];
@@ -245,6 +255,7 @@ namespace Typography.Contours
                     break;
                 }
             }
+
         }
     }
 

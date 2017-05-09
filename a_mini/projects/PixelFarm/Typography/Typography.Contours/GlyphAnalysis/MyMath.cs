@@ -29,6 +29,7 @@ namespace Typography.Contours
             //fit to grid 
             //1. lower
             int floor = ((int)(value / gridSize) * gridSize);
+            
             //2. midpoint
             float remaining = value - floor;
             float halfGrid = gridSize / 2f;
@@ -45,15 +46,7 @@ namespace Typography.Contours
             {
                 return floor;
             }
-#if DEBUG
-            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
-            ////if (result % gridSize != 0)
-            ////{
-            ////}
-            //return result;
-#else
-            return (remaining > halfGrid) ? floor + gridSize : floor;
-#endif
+
         }
         public static double AngleBetween(Vector2 vector1, Vector2 vector2)
         {

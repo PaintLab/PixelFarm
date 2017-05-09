@@ -28,7 +28,7 @@ namespace Typography.Contours
             //setup default values
             _needRefreshBoneGroup = true; //first time
             _needAdjustGridFitValues = true;//first time
-            this.GridBoxWidth = 1; //pixels
+            this.GridBoxWidth = 32; //pixels
             this.GridBoxHeight = 50; //pixels 
             _groupingHelper = BoneGroupingHelper.CreateBoneGroupingHelper();
 #if DEBUG
@@ -376,10 +376,13 @@ namespace Typography.Contours
             GlyphContour contour)
         {
             //walk along the edge in the contour to generate new edge output
-
+            float offset = _avg_xdiff;
 #if DEBUG 
             Console.WriteLine("===begin===" + _avg_xdiff);
-            float offset = _avg_xdiff;
+            if (!dbugUseHorizontalFitValue)
+            {
+                offset = 0;
+            }
 #endif
             List<GlyphPoint> points = contour.flattenPoints;
             int j = points.Count;
@@ -453,6 +456,8 @@ namespace Typography.Contours
         {
             Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
         }
+        public static bool dbugActualPosToConsole { get; set; }
+        public static bool dbugUseHorizontalFitValue { get; set; }
         public static bool dbugTestNewGridFitting { get; set; }
         public static int dbugGridHeight = 50;
         internal List<GlyphTriangle> dbugGetGlyphTriangles()
