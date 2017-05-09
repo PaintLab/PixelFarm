@@ -183,7 +183,66 @@ namespace Typography.Contours
             }
             tx.EndRead();
         }
+        struct FitDiffCollector
+        {
 
+            public float negative_diff;
+            public float positive_diff;
+            public int negativeCount;
+            public int positiveCount;
+            public void Collect(float diff)
+            {
+                if (diff < 0)
+                {
+                    negative_diff += diff;
+                    negativeCount++;
+                }
+                else
+                {
+                    positive_diff += diff;
+                    positiveCount++;
+                }
+            }
+            public float CalculateProperDiff()
+            {
+                if (positiveCount != 0 && negativeCount != 0)
+                {
+                    //check if we should move to positive or negative
+                    float avg_pos = positive_diff / positiveCount;
+                    //check only 'amount', not sign ,
+                    //make nagative to positive
+                    float avg_neg = -(negative_diff / negativeCount);
+
+                    //choose minimum move to reach the target
+                    if (avg_pos > avg_neg)
+                    {
+                        //move to negative***
+                        return -(avg_pos + avg_neg) / 2;
+
+                    }
+                    else
+                    {
+                        //avg to positive
+                        return (avg_pos + avg_neg) / 2;
+                    }
+
+                }
+                else if (positiveCount != 0)
+                {
+                    //only positive side
+                    return positive_diff / positiveCount;
+                }
+                else if (negativeCount != 0)
+                {
+                    //only negative side, preserve negative sign
+                    return negative_diff / negativeCount;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
         /// <summary>
         /// adjust vertical fitting value
         /// </summary>
@@ -209,76 +268,21 @@ namespace Typography.Contours
                 //we need to calculate the avg of the glyph point
                 //and add a total summary to this
 
-                float negative_diff = 0;
-                float positive_diff = 0;
-                int negativeCount = 0;
-                int positiveCount = 0;
+                FitDiffCollector y_fitDiffCollector = new FitDiffCollector();
+
                 for (int e = 0; e < edgeCount; ++e)
                 {
                     EdgeLine ee = h_edges[e];
                     GlyphPoint p_pnt = ee.P;
-                    GlyphPoint q_pnt = ee.Q;
-                    //this version we focus on vertical hint only  
-                    float diff = MyMath.CalculateDiffToFit(p_pnt.newY * _pxScale);
-                    if (diff < 0)
-                    {
-                        negative_diff += diff;
-                        negativeCount++;
-                    }
-                    else
-                    {
-                        positive_diff += diff;
-                        positiveCount++;
-                    }
-                    //
-                    //evaluate diff
-                    //
-                    diff = MyMath.CalculateDiffToFit(q_pnt.newY * _pxScale);
-                    if (diff < 0)
-                    {
-                        negative_diff += diff;
-                        negativeCount++;
-                    }
-                    else
-                    {
-                        positive_diff += diff;
-                        positiveCount++;
-                    }
+                    GlyphPoint q_pnt = ee.Q; 
+                    //p
+                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(p_pnt.newY * _pxScale));
+                    //q
+                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(q_pnt.newY * _pxScale));
                 }
 
-                float avg_ydiff = 0;
-                if (positiveCount != 0 && negativeCount != 0)
-                {
-                    //check if we should move to positive or negative
-                    float avg_pos = positive_diff / positiveCount;
-                    //check only 'amount', not sign ,
-                    //make nagative to positive
-                    float avg_neg = -(negative_diff / negativeCount);
+                float avg_ydiff = y_fitDiffCollector.CalculateProperDiff();
 
-                    //choose minimum move to reach the target
-                    if (avg_pos > avg_neg)
-                    {
-                        //move to negative***
-                        avg_ydiff = -(avg_pos + avg_neg) / 2;
-
-                    }
-                    else
-                    {
-                        //avg to positive
-                        avg_ydiff = (avg_pos + avg_neg) / 2;
-                    }
-
-                }
-                else if (positiveCount != 0)
-                {
-                    //only positive side
-                    avg_ydiff = positive_diff / positiveCount;
-                }
-                else if (negativeCount != 0)
-                {
-                    //only negative side, preserve negative sign
-                    avg_ydiff = negative_diff / negativeCount;
-                }
 
                 //compare abs max /min   
                 //distribute all adjust value to specific glyph points
