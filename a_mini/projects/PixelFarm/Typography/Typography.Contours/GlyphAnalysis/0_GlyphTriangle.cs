@@ -123,6 +123,9 @@ namespace Typography.Contours
                    this._tri.N1 == t2 ||
                    this._tri.N2 == t2;
         }
+        /// <summary>
+        /// neighbor triangle 0
+        /// </summary>
         public GlyphTriangle N0
         {
             get
@@ -130,6 +133,9 @@ namespace Typography.Contours
                 return GetGlyphTriFromUserData(_tri.N0);
             }
         }
+        /// <summary>
+        /// neighbor triangle 1
+        /// </summary>
         public GlyphTriangle N1
         {
             get
@@ -137,6 +143,9 @@ namespace Typography.Contours
                 return GetGlyphTriFromUserData(_tri.N1);
             }
         }
+        /// <summary>
+        /// neighbor triangle 2
+        /// </summary>
         public GlyphTriangle N2
         {
             get

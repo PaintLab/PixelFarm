@@ -49,51 +49,23 @@ namespace Typography.Contours
 
                         //GlyphContourBuilder contBuilder = new GlyphContourBuilder();
                         //contBuilder.Reset();
-                        //int x = 100, y = 120, w = 700, h = 200;
-
+                        //int x = 100, y = 120, w = 700, h = 200; 
                         //contBuilder.MoveTo(x, y);
                         //contBuilder.LineTo(x + w, y);
                         //contBuilder.LineTo(x + w, y + h);
                         //contBuilder.LineTo(x, y + h);
-                        //contBuilder.CloseFigure();
-
-                        //_fitOutline = _fitShapeAnalyzer.dbugAnalyze(contBuilder.CurrentContour, new ushort[] { 3 });
-
-                        //---------------------------------------------
+                        //contBuilder.CloseFigure(); 
+                        //--------------------------------------------- 
                         _latestDynamicOutline = _fitShapeAnalyzer.CreateDynamicOutline(
                             this._outputGlyphPoints,
                             this._outputContours);
                         _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
 
+
                         this.LeftXControl = _latestDynamicOutline.LeftControlPositionX;
                     }
                 }
             }
-
-            //#if DEBUG
-            //            if (dbugAlwaysDoCurveAnalysis && _fitOutline == null)
-            //            {
-            //                //---------------------------------------------
-            //                //test code 
-            //                //GlyphContourBuilder contBuilder = new GlyphContourBuilder();
-            //                //contBuilder.Reset();
-            //                //int x = 100, y = 120, w = 700, h = 200;
-
-            //                //contBuilder.MoveTo(x, y);
-            //                //contBuilder.LineTo(x + w, y);
-            //                //contBuilder.LineTo(x + w, y + h);
-            //                //contBuilder.LineTo(x, y + h);
-            //                //contBuilder.CloseFigure();
-
-            //                //_fitOutline = _fitShapeAnalyzer.dbugAnalyze(contBuilder.CurrentContour, new ushort[] { 3 }); 
-
-
-            //                _fitOutline = _fitShapeAnalyzer.CreateGlyphFitOutline(
-            //                         this._outputGlyphPoints,
-            //                         this._outputContours);
-            //            }
-            //#endif
-
         }
         public override void ReadShapes(IGlyphTranslator tx)
         {

@@ -19,11 +19,8 @@ namespace Typography.Contours
         float _pxScale;
         bool _needRefreshBoneGroup;
         bool _needAdjustGridFitValues; 
-        float _avg_xdiff = 0;
-
-
-        BoneGroupingHelper _groupingHelper;
-
+        float _avg_xdiff = 0; 
+        BoneGroupingHelper _groupingHelper; 
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
 
