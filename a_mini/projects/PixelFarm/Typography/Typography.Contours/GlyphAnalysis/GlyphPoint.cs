@@ -20,21 +20,19 @@ namespace Typography.Contours
         CurveInbetween,
     }
 
+
     public class GlyphPoint
     {
         readonly float x; //original x
         readonly float y; //original y
-        public readonly PointKind kind;
+        readonly PointKind kind;
 
-        /// <summary>
-        /// calculated x and y  
-        /// </summary>
-        public float newX;
-        public float newY;
+        internal float newX;
+        internal float newY;
         //---------------------------------------- 
         public float fit_NewX;
         public float fit_NewY;
-        public bool fit_analyzed;
+        internal bool fit_analyzed;
         //------------------------------------- 
 
         /// <summary>
@@ -53,6 +51,15 @@ namespace Typography.Contours
             this.kind = kind;
         }
         public int SeqNo { get; internal set; }
+        public PointKind PointKind
+        {
+            get
+            {
+                return this.kind;
+            }
+        }
+
+        internal bool IsPartOfHorizontalEdge { get; set; }
 
         /// <summary>
         /// original X
@@ -62,7 +69,9 @@ namespace Typography.Contours
         /// original Y
         /// </summary>
         public float OY { get { return this.y; } }
-
+        //
+        public float NewX { get { return this.newX; } }
+        public float NewY { get { return this.newY; } }
 
         /// <summary>
         /// outside inward edge
@@ -135,7 +144,7 @@ namespace Typography.Contours
         {
             //TODO: review adjust value again
             return this.dbugId + " :" +
-                    (x + "," + y + " " + kind.ToString());
+                    (x + "," + y + " " + PointKind.ToString());
         }
 
 #endif

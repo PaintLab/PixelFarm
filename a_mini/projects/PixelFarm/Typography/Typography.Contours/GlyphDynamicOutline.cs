@@ -18,9 +18,9 @@ namespace Typography.Contours
         float _offsetFromMasterOutline = 0; //pixel unit
         float _pxScale;
         bool _needRefreshBoneGroup;
-        bool _needAdjustGridFitValues; 
-        float _avg_xdiff = 0; 
-        BoneGroupingHelper _groupingHelper; 
+        bool _needAdjustGridFitValues;
+        float _avg_xdiff = 0;
+        BoneGroupingHelper _groupingHelper;
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
 
@@ -42,7 +42,7 @@ namespace Typography.Contours
             _contours = intermediateOutline.GetContours(); //original contours
             //3.
             CollectAllCentroidLines(intermediateOutline.GetCentroidLineHubs());
-             
+
         }
         private GlyphDynamicOutline()
         {
@@ -322,20 +322,19 @@ namespace Typography.Contours
                 {
                     EdgeLine ee = v_edges[e];
 
+                    //TODO: review this
                     //if (ee.IsLeftSide)
                     //{
-                        //focus on leftside edge
-                        //p
-                        x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.newX * _pxScale), groupLen);
-                        //q
-                        x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.newX * _pxScale), groupLen);
+                    //focus on leftside edge
+                    //p
+                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.newX * _pxScale), groupLen);
+                    //q
+                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.newX * _pxScale), groupLen);
                     //}
                 }
             }
             _avg_xdiff = x_fitDiffCollector.CalculateProperDiff();
-            ////experiment
-            ////for subpixel rendering
-            //_avg_xdiff = -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
+          
         }
         void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
@@ -347,14 +346,18 @@ namespace Typography.Contours
             {
                 _allCentroidLines.AddRange(lineHubs[i].GetAllCentroidLines().Values);
             }
-        } 
+        }
         void GenerateContourOutput(
             IGlyphTranslator tx,
             GlyphContour contour)
         {
             //walk along the edge in the contour to generate new edge output
             float offset = _avg_xdiff;
-#if DEBUG 
+            ////experiment
+            ////for subpixel rendering
+            //offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
+
+#if DEBUG
             dbugWriteLine("===begin===" + _avg_xdiff);
             if (!dbugUseHorizontalFitValue)
             {
