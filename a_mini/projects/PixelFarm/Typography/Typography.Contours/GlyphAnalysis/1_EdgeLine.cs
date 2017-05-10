@@ -284,10 +284,8 @@ namespace Typography.Contours
         }
     }
     public class InsideEdgeLine : EdgeLine
-    {   /// <summary>
-        /// contact to another edge
-        /// </summary>
-        internal InsideEdgeLine contactToEdge;
+    {   
+        
         internal GlyphBoneJoint inside_joint;
         internal InsideEdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
             : base(ownerTriangle, p, q)
