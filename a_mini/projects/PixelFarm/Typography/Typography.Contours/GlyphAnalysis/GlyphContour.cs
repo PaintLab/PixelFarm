@@ -93,12 +93,14 @@ namespace Typography.Contours
                 //if it's negative the curve is counter-clockwise. (The result is twice the enclosed area, with a +/- convention.)
                 int j = flattenPoints.Count;
                 double total = 0;
+
+
                 for (int i = 1; i < j; ++i)
                 {
                     GlyphPoint p0 = f_points[i - 1];
                     GlyphPoint p1 = f_points[i];
                     total += (p1.OX - p0.OX) * (p1.OY + p0.OY);
-                    i += 2;
+                 
                 }
                 //the last one
                 {
