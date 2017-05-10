@@ -23,15 +23,15 @@ namespace Typography.Contours
 
     public class GlyphPoint
     {
-        readonly float x; //original x
-        readonly float y; //original y
+        readonly float _ox; //original x
+        readonly float _oy; //original y
         readonly PointKind kind;
 
         internal float newX;
         internal float newY;
         //---------------------------------------- 
-        public float fit_NewX;
-        public float fit_NewY;
+        internal float fit_NewX;
+        internal float fit_NewY;
         internal bool fit_analyzed;
         //------------------------------------- 
 
@@ -46,8 +46,8 @@ namespace Typography.Contours
 
         public GlyphPoint(float x, float y, PointKind kind)
         {
-            this.x = this.newX = x;
-            this.y = this.newY = y;
+            this._ox = this.newX = x;
+            this._oy = this.newY = y;
             this.kind = kind;
         }
         public int SeqNo { get; internal set; }
@@ -64,14 +64,21 @@ namespace Typography.Contours
         /// <summary>
         /// original X
         /// </summary>
-        public float OX { get { return this.x; } }
+        public float OX { get { return this._ox; } }
         /// <summary>
         /// original Y
         /// </summary>
-        public float OY { get { return this.y; } }
-        //
-        public float NewX { get { return this.newX; } }
-        public float NewY { get { return this.newY; } }
+        public float OY { get { return this._oy; } }
+        /// <summary>
+        /// modified X
+        /// </summary>
+        public float X { get { return this.newX; } }
+        /// <summary>
+        /// modified Y
+        /// </summary>
+        public float Y { get { return this.newY; } }
+
+
 
         /// <summary>
         /// outside inward edge
@@ -130,7 +137,7 @@ namespace Typography.Contours
 
         internal static bool SameCoordAs(GlyphPoint a, GlyphPoint b)
         {
-            return a.x == b.x && a.y == b.y;
+            return a._ox == b._ox && a._oy == b._oy;
         }
 
 #if DEBUG
@@ -144,7 +151,7 @@ namespace Typography.Contours
         {
             //TODO: review adjust value again
             return this.dbugId + " :" +
-                    (x + "," + y + " " + PointKind.ToString());
+                    (_ox + "," + _oy + " " + PointKind.ToString());
         }
 
 #endif
