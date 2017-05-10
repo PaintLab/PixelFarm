@@ -30,9 +30,9 @@ namespace Typography.Contours
         float newX;
         float newY;
         //---------------------------------------- 
-        internal float fit_NewX;
-        internal float fit_NewY;
-        internal bool fit_analyzed;
+
+
+        bool fit_analyzed;
 
         float _adjust_fit_x;
         float _adjust_fit_y;
@@ -84,22 +84,45 @@ namespace Typography.Contours
         public float Y { get { return this.newY; } }
 
         //-----------
+#if DEBUG
+        int dbug_adj_y_count = 0;
+#endif
         public float FitAdjustX
         {
             get { return _adjust_fit_x; }
             internal set
             {
+                if (_has_adjust_x)
+                {
+
+                }
                 _adjust_fit_x = value;
                 _has_adjust_x = true;
+                fit_analyzed = true;
             }
         }
         public float FitAdjustY
         {
-            get { return _adjust_fit_y; }
+            get
+            {
+                return _adjust_fit_y;
+            }
             internal set
             {
+                if (_has_adjust_y)
+                {
+                    if (_adjust_fit_y != value)
+                    {
+                        if (dbug_adj_y_count > 1)
+                        {
+
+                        }
+                    }
+                }
                 _adjust_fit_y = value;
                 _has_adjust_y = true;
+                fit_analyzed = true;
+                dbug_adj_y_count++;
             }
         }
         internal bool HasAdjustX { get { return _has_adjust_x; } }
@@ -107,10 +130,27 @@ namespace Typography.Contours
         internal void ResetFitAdjustValues()
         {
             //reset all fit values
-            fit_NewX = newX;
-            fit_NewY = newY;
+            //fit_NewX = newX;
+            //fit_NewY = newY;
             _adjust_fit_x = _adjust_fit_y = 0;
             this._has_adjust_x = _has_adjust_y = fit_analyzed = false;
+#if DEBUG
+
+            dbug_adj_y_count = 0;
+#endif
+        }
+
+        internal float GetFitY(float pxscale)
+        {
+            return (this.newY * pxscale) + _adjust_fit_y;
+        }
+        internal float GetFitX(float pxscale)
+        {
+            return (this.newX * pxscale) + _adjust_fit_x;
+        }
+        internal bool NeedFitAdjust
+        {
+            get { return this.fit_analyzed; }
         }
         internal void SetXY(float x, float y)
         {

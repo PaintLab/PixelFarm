@@ -293,15 +293,17 @@ namespace Typography.Contours
                     EdgeLine ee = h_edges[e];
                     GlyphPoint p_pnt = ee.P;
                     GlyphPoint q_pnt = ee.Q;
-                    p_pnt.fit_NewX = p_pnt.X * _pxScale;
-                    p_pnt.fit_NewY = (p_pnt.Y * _pxScale) + avg_ydiff;
                     p_pnt.FitAdjustY = avg_ydiff;
+                    // p_pnt.fit_NewX = p_pnt.X * _pxScale;
+                    //p_pnt.fit_NewY = (p_pnt.Y * _pxScale) + avg_ydiff;
+
                     //
-                    q_pnt.fit_NewX = q_pnt.X * _pxScale;
-                    q_pnt.fit_NewY = (q_pnt.Y * _pxScale) + avg_ydiff;
                     q_pnt.FitAdjustY = avg_ydiff;
+                    //q_pnt.fit_NewX = q_pnt.X * _pxScale;
+                    //q_pnt.fit_NewY = (q_pnt.Y * _pxScale) + avg_ydiff;
+
                     //
-                    p_pnt.fit_analyzed = q_pnt.fit_analyzed = true;
+                    //p_pnt.fit_analyzed = q_pnt.fit_analyzed = true;
                 }
             }
             //---------------------------------------------------------
@@ -393,14 +395,14 @@ namespace Typography.Contours
 
             float pre_x = 0, post_x = 0;
 
-            if (useGridFit && p.fit_analyzed)
+            if (useGridFit && p.NeedFitAdjust)
             {
-                pre_x = p.fit_NewX;
+                pre_x = p.GetFitX(pxscale);
                 post_x = pre_x + offset;
                 //
-                tx.MoveTo(post_x, p.fit_NewY);
+                tx.MoveTo(post_x, p.GetFitY(pxscale));
 #if DEBUG
-                dbugWriteOutput("M", pre_x, post_x, p.fit_NewY);
+                dbugWriteOutput("M", pre_x, post_x, p.GetFitY(pxscale));
 #endif
             }
             else
@@ -419,13 +421,13 @@ namespace Typography.Contours
             {
                 //try to fit to grid 
                 p = points[i];
-                if (useGridFit && p.fit_analyzed)
+                if (useGridFit && p.NeedFitAdjust)
                 {
-                    pre_x = p.fit_NewX;
+                    pre_x = p.GetFitX(pxscale);
                     post_x = pre_x + offset;
-                    tx.LineTo(post_x, p.fit_NewY);
+                    tx.LineTo(post_x, p.GetFitY(pxscale));
 #if DEBUG
-                    dbugWriteOutput("L", pre_x, post_x, p.fit_NewY);
+                    dbugWriteOutput("L", pre_x, post_x, p.GetFitY(pxscale));
 #endif
                 }
                 else
