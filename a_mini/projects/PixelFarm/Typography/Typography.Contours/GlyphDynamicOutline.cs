@@ -324,10 +324,7 @@ namespace Typography.Contours
                 {
                     continue;
                 }
-                if (boneGroup.approxLength < 300)
-                {
-                    continue;
-                }
+               
                 int edgeCount = v_edges.Length;
                 //we need to calculate the avg of the glyph point
                 //and add a total summary to this 
