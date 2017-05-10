@@ -146,7 +146,7 @@ namespace Typography.Contours
 
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
-        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+       
         internal bool _earlyInsideAnalysis;
         internal bool ContainsGlyphPoint(GlyphPoint p)
         {
