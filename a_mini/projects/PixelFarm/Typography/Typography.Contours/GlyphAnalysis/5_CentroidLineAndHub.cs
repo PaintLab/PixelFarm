@@ -16,17 +16,12 @@ namespace Typography.Contours
         List<GlyphCentroidPair> _centroid_pairs = new List<GlyphCentroidPair>();
         //
         //joint list is created from each centroid pair
-        public List<GlyphBoneJoint> _joints = new List<GlyphBoneJoint>();
-
-        public List<GlyphBone> bones = new List<GlyphBone>();
-
-
+        public List<GlyphBoneJoint> _joints = new List<GlyphBoneJoint>(); 
+        public List<GlyphBone> bones = new List<GlyphBone>(); 
 
         internal CentroidLine()
         {
-        }
-
-
+        }  
         /// <summary>
         /// add a centroid pair
         /// </summary>
