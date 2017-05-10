@@ -19,16 +19,14 @@ namespace Typography.Contours
         public List<GlyphBoneJoint> _joints = new List<GlyphBoneJoint>();
 
         public List<GlyphBone> bones = new List<GlyphBone>();
-        public List<BoneGroup> boneGroups;
+
 
 
         internal CentroidLine()
         {
         }
 
-#if DEBUG
-        internal GlyphTriangle dbugStartTri;
-#endif
+
         /// <summary>
         /// add a centroid pair
         /// </summary>
@@ -60,35 +58,27 @@ namespace Typography.Contours
         /// </summary>
         /// <param name="gridW"></param>
         /// <param name="gridH"></param>
-        public void ApplyGridBox(int gridW, int gridH)
+        public void ApplyGridBox(List<BoneGroup> boneGroups, int gridW, int gridH)
         {
-            //1.
-            //apply grid box to each joint
-            int j = _joints.Count;
-            for (int i = 0; i < j; ++i)
+            //1. apply grid box to each joint
+            for (int i = _joints.Count - 1; i >= 0; --i)
             {
-                GlyphBoneJoint joint = _joints[i];
-                Vector2 jointPos = joint.OriginalJointPos;
-                //set fit (x,y) to joint, then we will evaluate bone slope again (next step)
-                joint.SetFitXY(
-                    MyMath.FitToHalfGrid(jointPos.X, gridW), //use half?
-                    MyMath.FitToHalfGrid(jointPos.Y, gridH));//use half?
+                _joints[i].AdjustFitXY(gridW, gridH);
             }
             //2. (re) calculate slope for all bones.
-            j = bones.Count;
-            for (int i = 0; i < j; ++i)
+            for (int i = bones.Count - 1; i >= 0; --i)
             {
                 bones[i].EvaluateSlope();
             }
             //3. re-grouping 
-            j = bones.Count;
-            this.boneGroups = new List<BoneGroup>();
-
+            int j = bones.Count;
             BoneGroup boneGroup = new BoneGroup(this); //new group
             boneGroup.slopeKind = LineSlopeKind.Other;
+            //
             float approxLen = 0;
             float ypos_sum = 0;
             float xpos_sum = 0;
+
             for (int i = 0; i < j; ++i)
             {
                 GlyphBone bone = bones[i];
@@ -100,12 +90,12 @@ namespace Typography.Contours
                     //add existing to list and create a new group
                     if (boneGroup.count > 0)
                     {
-                        //
+                        //add existing bone group to bone-group list
                         boneGroup.approxLength = approxLen;
-                        boneGroup.y_pos = ypos_sum / boneGroup.count;
-                        boneGroup.x_pos = xpos_sum / boneGroup.count;
+                        boneGroup.avg_x = xpos_sum / boneGroup.count;
+                        boneGroup.avg_y = ypos_sum / boneGroup.count;
                         //
-                        this.boneGroups.Add(boneGroup);
+                        boneGroups.Add(boneGroup);
                     }
                     // 
                     boneGroup = new BoneGroup(this);
@@ -115,23 +105,26 @@ namespace Typography.Contours
                     boneGroup.count++;
                     approxLen = bone.EvaluateFitLength(); //reset
                     //
-                    ypos_sum = mid_pos.Y;
                     xpos_sum = mid_pos.X;
+                    ypos_sum = mid_pos.Y;
+
                 }
                 else
                 {
                     boneGroup.count++;
                     approxLen += bone.EvaluateFitLength(); //append
-                    ypos_sum += mid_pos.Y;
+                    //
                     xpos_sum += mid_pos.X;
+                    ypos_sum += mid_pos.Y;
                 }
             }
+            //
             if (boneGroup.count > 0)
             {
                 boneGroup.approxLength = approxLen;
-                boneGroup.y_pos = ypos_sum / boneGroup.count;
-                boneGroup.x_pos = xpos_sum / boneGroup.count;
-                this.boneGroups.Add(boneGroup);
+                boneGroup.avg_x = xpos_sum / boneGroup.count;
+                boneGroup.avg_y = ypos_sum / boneGroup.count;
+                boneGroups.Add(boneGroup);
             }
         }
 
@@ -156,28 +149,34 @@ namespace Typography.Contours
             }
             return null;
         }
-
-
-
+#if DEBUG
+        internal GlyphTriangle dbugStartTri;
+#endif
     }
 
     struct BoneGroupingHelper
     {
-        //this is helper class
+        //this is a helper***
+
         List<BoneGroup> _selectedHorizontalBoneGroups;
         List<BoneGroup> _selectedVerticalBoneGroups;
+        List<BoneGroup> _tmpBoneGroups;
         List<EdgeLine> tmpEdges;
+        int gridBoxW, gridBoxH;
 
         public static BoneGroupingHelper CreateBoneGroupingHelper()
         {
             BoneGroupingHelper helper = new BoneGroupingHelper();
             helper._selectedHorizontalBoneGroups = new List<BoneGroup>();
             helper._selectedVerticalBoneGroups = new List<BoneGroup>();
+            helper._tmpBoneGroups = new List<BoneGroup>();
             helper.tmpEdges = new List<EdgeLine>();
             return helper;
         }
-        public void Reset()
+        public void Reset(int gridBoxW, int gridBoxH)
         {
+            this.gridBoxW = gridBoxW;
+            this.gridBoxH = gridBoxH;
             _selectedHorizontalBoneGroups.Clear();
             _selectedVerticalBoneGroups.Clear();
         }
@@ -185,12 +184,14 @@ namespace Typography.Contours
         public List<BoneGroup> SelectedVerticalBoneGroups { get { return _selectedVerticalBoneGroups; } }
         public void CollectBoneGroups(CentroidLine line)
         {
-            List<BoneGroup> boneGroups = line.boneGroups;
-            int j = boneGroups.Count;
-            for (int i = 0; i < j; ++i)
+            //
+            _tmpBoneGroups.Clear();
+            line.ApplyGridBox(_tmpBoneGroups, gridBoxW, gridBoxH);
+            // 
+            for (int i = _tmpBoneGroups.Count - 1; i >= 0; --i)
             {
                 //this version, we focus on horizontal bone group
-                BoneGroup boneGroup = boneGroups[i];
+                BoneGroup boneGroup = _tmpBoneGroups[i];
                 switch (boneGroup.slopeKind)
                 {
                     case LineSlopeKind.Horizontal:
@@ -201,6 +202,7 @@ namespace Typography.Contours
                         break;
                 }
             }
+            _tmpBoneGroups.Clear();
         }
         public void AnalyzeHorizontalBoneGroups()
         {
@@ -209,7 +211,7 @@ namespace Typography.Contours
             //for Horizontal group analysis, we don't include short bone 
             Mark_ShortBones(_selectedHorizontalBoneGroups); //SHORT BONES
             //arrange by y-pos for horizontal group
-            _selectedHorizontalBoneGroups.Sort((bg0, bg1) => bg0.y_pos.CompareTo(bg1.y_pos));
+            _selectedHorizontalBoneGroups.Sort((bg0, bg1) => bg0.avg_y.CompareTo(bg1.avg_y));
             //
             //collect outside edge of horizontal group
             for (int i = _selectedHorizontalBoneGroups.Count - 1; i >= 0; --i)
@@ -225,7 +227,7 @@ namespace Typography.Contours
             //for vertical group analysis, we use only long bones
             Mark_LongBones(_selectedVerticalBoneGroups); //LONG BONES
             //arrange by x-pos for vertical
-            _selectedVerticalBoneGroups.Sort((bg0, bg1) => bg0.x_pos.CompareTo(bg1.x_pos));
+            _selectedVerticalBoneGroups.Sort((bg0, bg1) => bg0.avg_x.CompareTo(bg1.avg_x));
             //
             //collect outside edge of vertical group
             for (int i = _selectedVerticalBoneGroups.Count - 1; i >= 0; --i)
@@ -316,10 +318,16 @@ namespace Typography.Contours
         /// approximation of summation of bone length in this group
         /// </summary>
         public float approxLength;
-        public float y_pos;
-        public float x_pos;
-        public float minY, maxY;
-        public float minX, maxX;
+
+        /// <summary>
+        /// average x pos of this group
+        /// </summary>
+        public float avg_x;
+        /// <summary>
+        /// average y pos of this group
+        /// </summary>
+        public float avg_y;
+
         public EdgeLine[] edges;
 
         public BoneGroupSumLengthKind _lengKind;
@@ -330,9 +338,10 @@ namespace Typography.Contours
             this.ownerCentroidLine = ownerCentroidLine;
         }
 
+
         internal void CollectOutsideEdges(List<EdgeLine> tmpEdges)
         {
-            tmpEdges.Clear(); // 
+            tmpEdges.Clear();
             int index = this.startIndex;
             for (int n = this.count - 1; n >= 0; --n)
             {
@@ -343,14 +352,12 @@ namespace Typography.Contours
             }
             //
             if (tmpEdges.Count == 0) return;
-            //---------------------
-            EdgeLine[] edges = tmpEdges.ToArray();
-            this.edges = edges;
-            //find minY and maxY for vertical fit
-            float minY = float.MaxValue;
-            float maxY = float.MinValue;
-            float minX = float.MaxValue;
-            float maxX = float.MinValue;
+            this.edges = tmpEdges.ToArray();
+        }
+
+        public void CalculateBounds(ref float minX, ref float minY, ref float maxX, ref float maxY)
+        {
+
             for (int e = edges.Length - 1; e >= 0; --e)
             {
                 EdgeLine edge = edges[e];
@@ -362,19 +369,13 @@ namespace Typography.Contours
                 MyMath.FindMinMax(ref minY, ref maxY, (float)edge.PY);
                 MyMath.FindMinMax(ref minY, ref maxY, (float)edge.QY);
             }
-            //-------------------
-            this.maxY = maxY;
-            this.minY = minY;
-            //-------------------
-            this.minX = minX;
-            this.maxX = maxX;
 
         }
 
 #if DEBUG
         public override string ToString()
         {
-            return slopeKind + ",x:" + x_pos + ",y:" + y_pos + ",s:" + startIndex + ":" + count + " len:" + approxLength;
+            return slopeKind + ",x:" + avg_x + ",y:" + avg_y + ",s:" + startIndex + ":" + count + " len:" + approxLength;
         }
 #endif
     }

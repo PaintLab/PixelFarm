@@ -41,13 +41,10 @@ namespace Typography.Contours
             //1. joints and its bones
             //2. bones and its controlled edge 
             _contours = intermediateOutline.GetContours(); //original contours
-
             //3.
             CollectAllCentroidLines(intermediateOutline.GetCentroidLineHubs());
-
             //left control from vertical long bone
-            //-------- 
-
+            //--------
             SetupLeftPositionX();
         }
         private GlyphDynamicOutline()
@@ -75,15 +72,12 @@ namespace Typography.Contours
             this.GridBoxHeight = gridBoxH;
             this.GridBoxWidth = gridBoxW;
             //
-            _groupingHelper.Reset();
-            int centroidLineCount = _allCentroidLines.Count;
+            _groupingHelper.Reset(gridBoxW, gridBoxH);
 
-            for (int i = 0; i < centroidLineCount; ++i)
+            for (int i = _allCentroidLines.Count - 1; i >= 0; --i)
             {
-                //apply new grid to this centroid line
-                CentroidLine line = _allCentroidLines[i];
-                line.ApplyGridBox(gridBoxW, gridBoxH);
-                _groupingHelper.CollectBoneGroups(line);
+                //apply new grid to this centroid line 
+                _groupingHelper.CollectBoneGroups(_allCentroidLines[i]);
             }
             //analyze bone group (stem) as a whole
             _groupingHelper.AnalyzeHorizontalBoneGroups();
@@ -109,7 +103,6 @@ namespace Typography.Contours
             {
                 //if 0, new other action
                 List<GlyphContour> cnts = _contours;
-                int j = cnts.Count;
                 for (int i = cnts.Count - 1; i >= 0; --i)
                 {
                     cnts[i].ApplyNewEdgeOffsetFromMasterOutline(offsetFromMasterOutline);
@@ -324,7 +317,7 @@ namespace Typography.Contours
                 {
                     continue;
                 }
-               
+
                 int edgeCount = v_edges.Length;
                 //we need to calculate the avg of the glyph point
                 //and add a total summary to this 
@@ -373,7 +366,7 @@ namespace Typography.Contours
             //find adjust values
             if (arrangedVerticalBoneGroups != null && arrangedVerticalBoneGroups.Count > 0)
             {
-                this.LeftControlPositionX = arrangedVerticalBoneGroups[0].x_pos;
+                this.LeftControlPositionX = arrangedVerticalBoneGroups[0].avg_x;
             }
             else
             {
@@ -389,7 +382,7 @@ namespace Typography.Contours
             //walk along the edge in the contour to generate new edge output
             float offset = _avg_xdiff;
 #if DEBUG 
-            Console.WriteLine("===begin===" + _avg_xdiff);
+            dbugWriteLine("===begin===" + _avg_xdiff);
             if (!dbugUseHorizontalFitValue)
             {
                 offset = 0;
@@ -457,15 +450,19 @@ namespace Typography.Contours
             //close 
             tx.CloseContour();
 #if DEBUG
-            Console.WriteLine("===end===");
+            dbugWriteLine("===end===");
 #endif
         }
 
 
 #if DEBUG
+        void dbugWriteLine(string text)
+        {
+            //Console.WriteLine(text);
+        }
         void dbugWriteOutput(string cmd, float pre_x, float post_x, float y)
         {
-            Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
+            //Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
         }
         public static bool dbugActualPosToConsole { get; set; }
         public static bool dbugUseHorizontalFitValue { get; set; }
