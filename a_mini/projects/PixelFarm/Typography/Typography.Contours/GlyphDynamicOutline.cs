@@ -237,6 +237,16 @@ namespace Typography.Contours
         /// </summary>
         void AdjustFitValues()
         {
+            //clear all prev adjust value
+            for (int i = _contours.Count - 1; i >= 0; --i)
+            {
+                List<GlyphPoint> pnts = _contours[i].flattenPoints;
+                for (int m = pnts.Count - 1; m >= 0; --m)
+                {
+                    pnts[m].ResetFitAdjustValues();
+                }
+            }
+
             //adjust the value when we move to new pixel scale (pxscale)
             //if we known adjust values for that pxscale before( and cache it)
             //we can use that without recalculation
@@ -271,9 +281,9 @@ namespace Typography.Contours
                 {
                     EdgeLine ee = h_edges[e];
                     //p                    
-                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.newY * _pxScale), groupLen);
+                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.Y * _pxScale), groupLen);
                     //q
-                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.newY * _pxScale), groupLen);
+                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.Y * _pxScale), groupLen);
                 }
 
                 float avg_ydiff = y_fitDiffCollector.CalculateProperDiff();
@@ -283,13 +293,8 @@ namespace Typography.Contours
                     EdgeLine ee = h_edges[e];
                     GlyphPoint p_pnt = ee.P;
                     GlyphPoint q_pnt = ee.Q;
-                    p_pnt.fit_NewX = p_pnt.newX * _pxScale;
-                    p_pnt.fit_NewY = (p_pnt.newY * _pxScale) + avg_ydiff;
-                    //
-                    q_pnt.fit_NewX = q_pnt.newX * _pxScale;
-                    q_pnt.fit_NewY = (q_pnt.newY * _pxScale) + avg_ydiff;
-                    //
-                    p_pnt.fit_analyzed = q_pnt.fit_analyzed = true;
+                    p_pnt.FitAdjustY = avg_ydiff; 
+                    q_pnt.FitAdjustY = avg_ydiff; 
                 }
             }
             //---------------------------------------------------------
@@ -330,9 +335,9 @@ namespace Typography.Contours
                     //{
                     //focus on leftside edge
                     //p
-                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.newX * _pxScale), groupLen);
+                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.X * _pxScale), groupLen);
                     //q
-                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.newX * _pxScale), groupLen);
+                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.X * _pxScale), groupLen);
                     //}
                 }
                 break; //only left most first long group
@@ -356,7 +361,7 @@ namespace Typography.Contours
             GlyphContour contour)
         {
             //walk along the edge in the contour to generate new edge output
-            float offset = _avg_xdiff;
+            float fit_x_offset = _avg_xdiff;
             ////experiment
             ////for subpixel rendering
             //offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
@@ -365,67 +370,36 @@ namespace Typography.Contours
             dbugWriteLine("===begin===" + _avg_xdiff);
             if (!dbugUseHorizontalFitValue)
             {
-                offset = 0;
+                fit_x_offset = 0;
             }
 #endif
             List<GlyphPoint> points = contour.flattenPoints;
             int j = points.Count;
             if (j == 0) return;
-            //
-            // 
-            //1.
-            GlyphPoint p = points[0];
+
+
             float pxscale = this._pxScale;
             bool useGridFit = EnableGridFit;
             //TODO: review here
 
-            float pre_x = 0, post_x = 0;
+            float fit_x, fit_y;
+            points[0].GetFitXY(pxscale, out fit_x, out fit_y);
 
-            if (useGridFit && p.fit_analyzed)
-            {
-                pre_x = p.fit_NewX;
-                post_x = pre_x + offset;
-                //
-                tx.MoveTo(post_x, p.fit_NewY);
+            //
+            tx.MoveTo(fit_x + fit_x_offset, fit_y);
 #if DEBUG
-                dbugWriteOutput("M", pre_x, post_x, p.fit_NewY);
+            dbugWriteOutput("M", fit_x, fit_x + fit_x_offset, fit_y);
 #endif
-            }
-            else
-            {
-                pre_x = p.newX * pxscale;
-                post_x = pre_x + offset;
-
-                tx.MoveTo(post_x, p.newY * pxscale);
-#if DEBUG
-                dbugWriteOutput("M", pre_x, post_x, p.newY * pxscale);
-#endif
-            }
-
             //2. others
             for (int i = 1; i < j; ++i)
             {
-                //try to fit to grid 
-                p = points[i];
-                if (useGridFit && p.fit_analyzed)
-                {
-                    pre_x = p.fit_NewX;
-                    post_x = pre_x + offset;
-                    tx.LineTo(post_x, p.fit_NewY);
+                //try to fit to grid  
+                points[i].GetFitXY(pxscale, out fit_x, out fit_y);
+                tx.LineTo(fit_x + fit_x_offset, fit_y);
 #if DEBUG
-                    dbugWriteOutput("L", pre_x, post_x, p.fit_NewY);
+                //for debug
+                dbugWriteOutput("L", fit_x, fit_x + fit_x_offset, fit_y);
 #endif
-                }
-                else
-                {
-                    pre_x = p.newX * pxscale;
-                    post_x = pre_x + offset;
-                    tx.LineTo(post_x, p.newY * pxscale);
-#if DEBUG
-                    //for debug
-                    dbugWriteOutput("L", pre_x, post_x, p.newY * pxscale);
-#endif
-                }
             }
             //close 
             tx.CloseContour();

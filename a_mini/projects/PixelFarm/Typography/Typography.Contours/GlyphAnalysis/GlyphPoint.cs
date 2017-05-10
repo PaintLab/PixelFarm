@@ -27,12 +27,11 @@ namespace Typography.Contours
         readonly float _oy; //original y
         readonly PointKind kind;
 
-        internal float newX;
-        internal float newY;
-        //---------------------------------------- 
-        internal float fit_NewX;
-        internal float fit_NewY;
-        internal bool fit_analyzed;
+        float newX;
+        float newY;
+        //----------------------------------------  
+        float _adjust_fit_x;
+        float _adjust_fit_y;
         //------------------------------------- 
 
         /// <summary>
@@ -79,6 +78,53 @@ namespace Typography.Contours
         public float Y { get { return this.newY; } }
 
 
+
+        public float FitAdjustX
+        {
+            get { return _adjust_fit_x; }
+            internal set
+            {
+                _adjust_fit_x = value;
+
+#if DEBUG
+                _dbug_has_adjust_x = true;
+                _dbug_fit_analyzed = true;
+#endif
+            }
+        }
+        public float FitAdjustY
+        {
+            get
+            {
+                return _adjust_fit_y;
+            }
+            internal set
+            {
+                _adjust_fit_y = value;
+#if DEBUG
+                _dbug_has_adjust_y = true;
+                _dbug_fit_analyzed = true;
+#endif 
+            }
+        }
+
+        internal void ResetFitAdjustValues()
+        {
+            _adjust_fit_x = _adjust_fit_y = 0;
+        }
+
+        internal void GetFitXY(float pxscale, out float x, out float y)
+        {
+            x = (this.newX * pxscale) + _adjust_fit_x;
+            y = (this.newY * pxscale) + _adjust_fit_y;
+        }
+
+        internal void SetXY(float x, float y)
+        {
+            this.newX = x;
+            this.newY = y;
+        }
+        //-----------
 
         /// <summary>
         /// outside inward edge
@@ -141,7 +187,9 @@ namespace Typography.Contours
         }
 
 #if DEBUG
-
+        bool _dbug_fit_analyzed;
+        bool _dbug_has_adjust_x;
+        bool _dbug_has_adjust_y;
         public readonly int dbugId = dbugTotalId++;
         static int dbugTotalId;
         internal GlyphPart dbugOwnerPart;  //link back to owner part
@@ -153,7 +201,6 @@ namespace Typography.Contours
             return this.dbugId + " :" +
                     (_ox + "," + _oy + " " + PointKind.ToString());
         }
-
 #endif
     }
 

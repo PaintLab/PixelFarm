@@ -174,12 +174,12 @@ namespace Typography.Contours
         }
 
         internal void FindBounds(ref float minX, ref float minY, ref float maxX, ref float maxY)
-        {   
+        {
             for (int i = flattenPoints.Count - 1; i >= 0; --i)
             {
                 GlyphPoint p = flattenPoints[i];
-                MyMath.FindMinMax(ref minX, ref maxX, p.newX);
-                MyMath.FindMinMax(ref minY, ref maxY, p.newY);
+                MyMath.FindMinMax(ref minX, ref maxX, p.X);
+                MyMath.FindMinMax(ref minY, ref maxY, p.Y);
             }
         }
 
@@ -198,8 +198,7 @@ namespace Typography.Contours
             Vector2 cutpoint;
             if (MyMath.FindCutPoint(e0._newDynamicMidPoint, tmp_e0_q, e1._newDynamicMidPoint, tmp_e1_p, out cutpoint))
             {
-                p.newX = cutpoint.X;
-                p.newY = cutpoint.Y;
+                p.SetXY(cutpoint.X, cutpoint.Y);
             }
             else
             {
