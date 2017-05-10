@@ -237,6 +237,16 @@ namespace Typography.Contours
         /// </summary>
         void AdjustFitValues()
         {
+            //clear all prev adjust value
+            for (int i = _contours.Count - 1; i >= 0; --i)
+            {
+                List<GlyphPoint> pnts = _contours[i].flattenPoints;
+                for (int m = pnts.Count - 1; m >= 0; --m)
+                {
+                    pnts[m].ResetFitAdjustValues();
+                }
+            }
+
             //adjust the value when we move to new pixel scale (pxscale)
             //if we known adjust values for that pxscale before( and cache it)
             //we can use that without recalculation
@@ -271,9 +281,9 @@ namespace Typography.Contours
                 {
                     EdgeLine ee = h_edges[e];
                     //p                    
-                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.newY * _pxScale), groupLen);
+                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.Y * _pxScale), groupLen);
                     //q
-                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.newY * _pxScale), groupLen);
+                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.Y * _pxScale), groupLen);
                 }
 
                 float avg_ydiff = y_fitDiffCollector.CalculateProperDiff();
@@ -283,11 +293,13 @@ namespace Typography.Contours
                     EdgeLine ee = h_edges[e];
                     GlyphPoint p_pnt = ee.P;
                     GlyphPoint q_pnt = ee.Q;
-                    p_pnt.fit_NewX = p_pnt.newX * _pxScale;
-                    p_pnt.fit_NewY = (p_pnt.newY * _pxScale) + avg_ydiff;
+                    p_pnt.fit_NewX = p_pnt.X * _pxScale;
+                    p_pnt.fit_NewY = (p_pnt.Y * _pxScale) + avg_ydiff;
+                    p_pnt.FitAdjustY = avg_ydiff;
                     //
-                    q_pnt.fit_NewX = q_pnt.newX * _pxScale;
-                    q_pnt.fit_NewY = (q_pnt.newY * _pxScale) + avg_ydiff;
+                    q_pnt.fit_NewX = q_pnt.X * _pxScale;
+                    q_pnt.fit_NewY = (q_pnt.Y * _pxScale) + avg_ydiff;
+                    q_pnt.FitAdjustY = avg_ydiff;
                     //
                     p_pnt.fit_analyzed = q_pnt.fit_analyzed = true;
                 }
@@ -330,9 +342,9 @@ namespace Typography.Contours
                     //{
                     //focus on leftside edge
                     //p
-                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.newX * _pxScale), groupLen);
+                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.X * _pxScale), groupLen);
                     //q
-                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.newX * _pxScale), groupLen);
+                    x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.X * _pxScale), groupLen);
                     //}
                 }
                 break; //only left most first long group
@@ -393,12 +405,12 @@ namespace Typography.Contours
             }
             else
             {
-                pre_x = p.newX * pxscale;
+                pre_x = p.X * pxscale;
                 post_x = pre_x + offset;
 
-                tx.MoveTo(post_x, p.newY * pxscale);
+                tx.MoveTo(post_x, p.Y * pxscale);
 #if DEBUG
-                dbugWriteOutput("M", pre_x, post_x, p.newY * pxscale);
+                dbugWriteOutput("M", pre_x, post_x, p.Y * pxscale);
 #endif
             }
 
@@ -418,12 +430,12 @@ namespace Typography.Contours
                 }
                 else
                 {
-                    pre_x = p.newX * pxscale;
+                    pre_x = p.X * pxscale;
                     post_x = pre_x + offset;
-                    tx.LineTo(post_x, p.newY * pxscale);
+                    tx.LineTo(post_x, p.Y * pxscale);
 #if DEBUG
                     //for debug
-                    dbugWriteOutput("L", pre_x, post_x, p.newY * pxscale);
+                    dbugWriteOutput("L", pre_x, post_x, p.Y * pxscale);
 #endif
                 }
             }

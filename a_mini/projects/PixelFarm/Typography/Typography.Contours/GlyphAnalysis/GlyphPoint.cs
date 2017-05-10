@@ -27,12 +27,17 @@ namespace Typography.Contours
         readonly float _oy; //original y
         readonly PointKind kind;
 
-        internal float newX;
-        internal float newY;
+        float newX;
+        float newY;
         //---------------------------------------- 
         internal float fit_NewX;
         internal float fit_NewY;
         internal bool fit_analyzed;
+
+        float _adjust_fit_x;
+        float _adjust_fit_y;
+        bool _has_adjust_x;
+        bool _has_adjust_y;
         //------------------------------------- 
 
         /// <summary>
@@ -78,7 +83,41 @@ namespace Typography.Contours
         /// </summary>
         public float Y { get { return this.newY; } }
 
-
+        //-----------
+        public float FitAdjustX
+        {
+            get { return _adjust_fit_x; }
+            internal set
+            {
+                _adjust_fit_x = value;
+                _has_adjust_x = true;
+            }
+        }
+        public float FitAdjustY
+        {
+            get { return _adjust_fit_y; }
+            internal set
+            {
+                _adjust_fit_y = value;
+                _has_adjust_y = true;
+            }
+        }
+        internal bool HasAdjustX { get { return _has_adjust_x; } }
+        internal bool HasAdjustY { get { return _has_adjust_y; } }
+        internal void ResetFitAdjustValues()
+        {
+            //reset all fit values
+            fit_NewX = newX;
+            fit_NewY = newY;
+            _adjust_fit_x = _adjust_fit_y = 0;
+            this._has_adjust_x = _has_adjust_y = fit_analyzed = false;
+        }
+        internal void SetXY(float x, float y)
+        {
+            this.newX = x;
+            this.newY = y;
+        }
+        //-----------
 
         /// <summary>
         /// outside inward edge
