@@ -124,6 +124,7 @@ namespace Typography.Contours
         {
             get { return !this.IsOutside; }
         }
+        //
         public bool IsUpper
         {
             get;

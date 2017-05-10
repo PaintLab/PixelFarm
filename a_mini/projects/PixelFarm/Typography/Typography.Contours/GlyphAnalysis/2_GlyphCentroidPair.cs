@@ -271,86 +271,8 @@ namespace Typography.Contours
             }
             return null;
         }
-
-
-        ///// <summary>
-        ///// add information on each edge of the given triangle compare the given EdgeLine
-        ///// </summary>
-        ///// <param name="edgeLine"></param>
-        ///// <param name="anotherTriangle"></param>
-        //static void AddEdgesInformation(GlyphTriangle anotherTriangle, EdgeLine edgeLine, ref GlyphBoneJoint bonejoint)
-        //{
-
-        //    if (edgeLine.IsOutside)
-        //    {
-        //        //if edgeLine is outside edge,
-        //        //mark the relation of this to anotherTriangle.
-        //        //MarkMatchingOutsideEdge((OutsideEdgeLine)edgeLine, anotherTriangle);
-        //    }
-        //    else
-        //    {
-        //        //TODO: review here
-        //        //if edge is inside =>
-        //        //we will evaluate if _boneJoint== null 
-        //        if (bonejoint == null)
-        //        {
-        //            InsideEdgeLine insideEdge = (InsideEdgeLine)edgeLine;
-        //            if (MarkMatchingInsideEdge(insideEdge, anotherTriangle))
-        //            {
-        //                bonejoint = new GlyphBoneJoint(
-        //                    insideEdge,
-        //                    insideEdge.contactToEdge);
-        //            }
-        //        }
-        //    }
-        //}
-
-
-
-        /// <summary>
-        /// from a knownInsideEdge, find a matching-inside-edge on another triangle.
-        /// </summary>
-        /// <param name="knownInsideEdge"></param>
-        /// <param name="another"></param>
-        /// <returns></returns>
-        static bool MarkMatchingInsideEdge(InsideEdgeLine knownInsideEdge, GlyphTriangle another)
-        {
-
-            //evalute side-by-side
-            //
-            //if the two contact together
-            //it must have only 1  contact edge.
-            //so ... find side-by-side
-
-            if (MarkMatchingInsideEdge(knownInsideEdge, another.e0) ||
-                MarkMatchingInsideEdge(knownInsideEdge, another.e1) ||
-                MarkMatchingInsideEdge(knownInsideEdge, another.e2))
-            {
-                //found!
-                return true;
-            }
-            return false;
-        }
-        /// <summary>
-        /// check if 
-        /// </summary>
-        /// <param name="knownInsideEdge"></param>
-        /// <param name="anotherEdge"></param>
-        /// <returns></returns>
-        static bool MarkMatchingInsideEdge(InsideEdgeLine knownInsideEdge, EdgeLine anotherEdge)
-        {
-            //another edge must be inside edge too, then check if the two is matching or not
-            if (anotherEdge.IsInside && IsMatchingEdge(knownInsideEdge, anotherEdge))
-            {   //if yes                
-                //mark contact toEdge
-                //knownInsideEdge.contactToEdge = (InsideEdgeLine)anotherEdge;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+         
+ 
         /// <summary>
         /// check if the 2 triangle is matching or not
         /// </summary>
