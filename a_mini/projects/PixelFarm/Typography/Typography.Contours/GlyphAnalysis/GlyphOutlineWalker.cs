@@ -99,13 +99,13 @@ namespace Typography.Contours
 #endif
 
         }
-        void DrawBoneLinks(CentroidLine branch)
+        void DrawBoneLinks(CentroidLine line)
         {
-            List<GlyphBone> glyphBones = branch.bones;
+            List<GlyphBone> glyphBones = line.bones;
             int glyphBoneCount = glyphBones.Count;
             int startAt = 0;
             int endAt = startAt + glyphBoneCount;
-            OnBeginDrawingBoneLinks(branch.GetHeadPosition(), startAt, endAt);
+            OnBeginDrawingBoneLinks(line.GetHeadPosition(), startAt, endAt);
             int nn = 0;
             for (int i = startAt; i < endAt; ++i)
             {
