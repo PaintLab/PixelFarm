@@ -66,6 +66,8 @@
             this.lstEdgeOffset = new System.Windows.Forms.ListBox();
             this.chkDrawGlyphPoint = new System.Windows.Forms.CheckBox();
             this.chkTestGridFit = new System.Windows.Forms.CheckBox();
+            this.chkWriteFitOutputToConsole = new System.Windows.Forms.CheckBox();
+            this.chkUseHorizontalFitAlign = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -440,11 +442,37 @@
             this.chkTestGridFit.Text = "Test GridFit";
             this.chkTestGridFit.UseVisualStyleBackColor = true;
             // 
+            // chkWriteFitOutputToConsole
+            // 
+            this.chkWriteFitOutputToConsole.AutoSize = true;
+            this.chkWriteFitOutputToConsole.Checked = true;
+            this.chkWriteFitOutputToConsole.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkWriteFitOutputToConsole.Location = new System.Drawing.Point(1187, 289);
+            this.chkWriteFitOutputToConsole.Name = "chkWriteFitOutputToConsole";
+            this.chkWriteFitOutputToConsole.Size = new System.Drawing.Size(150, 17);
+            this.chkWriteFitOutputToConsole.TabIndex = 63;
+            this.chkWriteFitOutputToConsole.Text = "WriteFit Output to Console";
+            this.chkWriteFitOutputToConsole.UseVisualStyleBackColor = true;
+            // 
+            // chkUseHorizontalFitAlign
+            // 
+            this.chkUseHorizontalFitAlign.AutoSize = true;
+            this.chkUseHorizontalFitAlign.Checked = true;
+            this.chkUseHorizontalFitAlign.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkUseHorizontalFitAlign.Location = new System.Drawing.Point(1187, 312);
+            this.chkUseHorizontalFitAlign.Name = "chkUseHorizontalFitAlign";
+            this.chkUseHorizontalFitAlign.Size = new System.Drawing.Size(99, 17);
+            this.chkUseHorizontalFitAlign.TabIndex = 64;
+            this.chkUseHorizontalFitAlign.Text = "Use H_Fit Align";
+            this.chkUseHorizontalFitAlign.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1393, 857);
+            this.Controls.Add(this.chkUseHorizontalFitAlign);
+            this.Controls.Add(this.chkWriteFitOutputToConsole);
             this.Controls.Add(this.chkTestGridFit);
             this.Controls.Add(this.chkDrawGlyphPoint);
             this.Controls.Add(this.lstEdgeOffset);
@@ -531,6 +559,8 @@
         private System.Windows.Forms.ListBox lstEdgeOffset;
         private System.Windows.Forms.CheckBox chkDrawGlyphPoint;
         private System.Windows.Forms.CheckBox chkTestGridFit;
+        private System.Windows.Forms.CheckBox chkWriteFitOutputToConsole;
+        private System.Windows.Forms.CheckBox chkUseHorizontalFitAlign;
     }
 }
 

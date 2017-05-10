@@ -215,7 +215,7 @@ namespace Typography.TextLayout
 
         public static float SnapInteger(float value)
         {
-            int floor_value = (int)value;
+            int floor_value = (int)value; 
             return (value - floor_value >= (1f / 2f)) ? floor_value + 1 : floor_value;
         }
         public static float SnapHalf(float value)

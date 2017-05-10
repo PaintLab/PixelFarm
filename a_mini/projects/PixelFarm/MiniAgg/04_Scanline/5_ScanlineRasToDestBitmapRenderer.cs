@@ -238,6 +238,7 @@ namespace PixelFarm.Agg
             }
 
             bool useContrastFilter = this.ContrastAdjustmentValue != 0;
+            useContrastFilter = false;
             while (srcW > 3)
             {
                 //------------

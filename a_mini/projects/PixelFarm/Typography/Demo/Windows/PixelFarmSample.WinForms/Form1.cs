@@ -149,16 +149,9 @@ namespace SampleWinForms
             chkDrawPerpendicularLine.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawGlyphPoint.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkTestGridFit.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkUseHorizontalFitAlign.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkWriteFitOutputToConsole.CheckedChanged += (s, e) => UpdateRenderOutput();
 
-            ////----------
-            //txtGlyphBoneCount.KeyDown += (s, e) =>
-            //{
-            //    if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
-            //};
-            //txtGlyphBoneStartAt.KeyDown += (s, e) =>
-            //{
-            //    if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
-            //};
             //---------- 
             //1. create font collection             
             installedFontCollection = new InstalledFontCollection();
@@ -252,7 +245,9 @@ namespace SampleWinForms
             //string inputstr = "8";
             //string inputstr = "#";
             //string inputstr = "a";
-            string inputstr = "e";
+            //string inputstr = "e";
+            //string inputstr = "l";
+            string inputstr = "t";
             //string inputstr = "Å";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
@@ -262,11 +257,7 @@ namespace SampleWinForms
             //----------------
             this.txtInputChar.Text = inputstr;
             this.chkFillBackground.Checked = true;
-
-
         }
-
-
 
         enum RenderChoice
         {
@@ -280,8 +271,8 @@ namespace SampleWinForms
         void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "Render with PixelFarm";
-            this.lstFontSizes.SelectedIndex = lstFontSizes.Items.Count - 3;
-            //this.lstFontSizes.SelectedIndex = 0; 
+            this.lstFontSizes.SelectedIndex = 0;// lstFontSizes.Items.Count - 3;
+
             var installedFont = lstFontList.SelectedItem as InstalledFont;
             if (installedFont != null)
             {
@@ -443,7 +434,9 @@ namespace SampleWinForms
             debugGlyphVisualizer.DrawGlyphPoint = chkDrawGlyphPoint.Checked;
 
 #if DEBUG
-            Typography.Contours.GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
+            GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
+            GlyphDynamicOutline.dbugActualPosToConsole = chkWriteFitOutputToConsole.Checked;
+            GlyphDynamicOutline.dbugUseHorizontalFitValue = chkUseHorizontalFitAlign.Checked;
 #endif
 
 
