@@ -300,8 +300,12 @@ namespace Typography.Contours
             List<BoneGroup> verticalGroups = _groupingHelper.SelectedVerticalBoneGroups;
             FitDiffCollector x_fitDiffCollector = new FitDiffCollector();
 
-            for (int i = verticalGroups.Count - 1; i >= 0; --i)
+            int j = verticalGroups.Count;
+            for (int i = 0; i < j; ++i)
             {
+                //1. the verticalGroup list is sorted, left to right
+                //2. analyze in order left-> right
+
                 BoneGroup boneGroup = verticalGroups[i];
                 if (boneGroup._lengKind != BoneGroupSumLengthKind.Long)
                 {
@@ -321,7 +325,6 @@ namespace Typography.Contours
                 for (int e = 0; e < edgeCount; ++e)
                 {
                     EdgeLine ee = v_edges[e];
-
                     //TODO: review this
                     //if (ee.IsLeftSide)
                     //{
@@ -332,9 +335,10 @@ namespace Typography.Contours
                     x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.newX * _pxScale), groupLen);
                     //}
                 }
+                break; //only left most first long group
             }
             _avg_xdiff = x_fitDiffCollector.CalculateProperDiff();
-          
+
         }
         void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
@@ -408,7 +412,7 @@ namespace Typography.Contours
                     pre_x = p.fit_NewX;
                     post_x = pre_x + offset;
                     tx.LineTo(post_x, p.fit_NewY);
-#if DEBUG 
+#if DEBUG
                     dbugWriteOutput("L", pre_x, post_x, p.fit_NewY);
 #endif
                 }
@@ -417,7 +421,7 @@ namespace Typography.Contours
                     pre_x = p.newX * pxscale;
                     post_x = pre_x + offset;
                     tx.LineTo(post_x, p.newY * pxscale);
-#if DEBUG                  
+#if DEBUG
                     //for debug
                     dbugWriteOutput("L", pre_x, post_x, p.newY * pxscale);
 #endif
