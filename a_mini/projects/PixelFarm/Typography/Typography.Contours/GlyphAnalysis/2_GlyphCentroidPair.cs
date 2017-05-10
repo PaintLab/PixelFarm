@@ -313,7 +313,7 @@ namespace Typography.Contours
             {
                 //if edgeLine is outside edge,
                 //mark the relation of this to anotherTriangle.
-                MarkMatchingOutsideEdge((OutsideEdgeLine)edgeLine, anotherTriangle);
+                //MarkMatchingOutsideEdge((OutsideEdgeLine)edgeLine, anotherTriangle);
             }
             else
             {
@@ -403,124 +403,124 @@ namespace Typography.Contours
             //otherwise...
             return false;
         }
-        /// <summary>
-        /// analyze relation between each edge of q and knownOutsideEdge.
-        /// </summary>
-        /// <param name="knownOutsideEdge"></param>
-        /// <param name="q"></param>
-        static void MarkMatchingOutsideEdge(OutsideEdgeLine knownOutsideEdge, GlyphTriangle q)
-        {
+        ///// <summary>
+        ///// analyze relation between each edge of q and knownOutsideEdge.
+        ///// </summary>
+        ///// <param name="knownOutsideEdge"></param>
+        ///// <param name="q"></param>
+        //static void MarkMatchingOutsideEdge(OutsideEdgeLine knownOutsideEdge, GlyphTriangle q)
+        //{
+        //    return;
+        //    //EdgeLine matchingEdgeLine;
+        //    //int matchingEdgeSideNo;
+        //    //if (FindMatchingOuterSide(knownOutsideEdge, q, out matchingEdgeLine, out matchingEdgeSideNo))
+        //    //{
+        //    //    //assign matching edge line   
+        //    //    //mid point of each edge
+        //    //    //p-triangle's edge midX,midY
 
-            EdgeLine matchingEdgeLine;
-            int matchingEdgeSideNo;
-            if (FindMatchingOuterSide(knownOutsideEdge, q, out matchingEdgeLine, out matchingEdgeSideNo))
-            {
-                //assign matching edge line   
-                //mid point of each edge
-                //p-triangle's edge midX,midY
+        //    //    var pe = knownOutsideEdge.GetMidPoint();
+        //    //    double pe_midX = pe.X, pe_midY = pe.Y;
 
-                var pe = knownOutsideEdge.GetMidPoint();
-                double pe_midX = pe.X, pe_midY = pe.Y;
-
-                //q-triangle's edge midX,midY
-                var qe = matchingEdgeLine.GetMidPoint();
-                double qe_midX = qe.X, qe_midY = qe.Y;
+        //    //    //q-triangle's edge midX,midY
+        //    //    var qe = matchingEdgeLine.GetMidPoint();
+        //    //    double qe_midX = qe.X, qe_midY = qe.Y;
 
 
-                if (knownOutsideEdge.SlopeKind == LineSlopeKind.Vertical)
-                {
-                    //TODO: review same side edge (Fan shape)
-                    if (pe_midX < qe_midX)
-                    {
-                        knownOutsideEdge.IsLeftSide = true;
-                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
-                        {
-                            // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                        }
-                    }
-                    else
-                    {
-                        //matchingEdgeLine.IsLeftSide = true;
-                        if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
-                        {
-                            // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                        }
-                    }
-                }
-                else if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
-                {
-                    //TODO: review same side edge (Fan shape)
+        //    //    if (knownOutsideEdge.SlopeKind == LineSlopeKind.Vertical)
+        //    //    {
+        //    //        //TODO: review same side edge (Fan shape)
+        //    //        if (pe_midX < qe_midX)
+        //    //        {
+        //    //            knownOutsideEdge.IsLeftSide = true;
+        //    //            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
+        //    //            {
+        //    //                // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+        //    //            }
+        //    //        }
+        //    //        else
+        //    //        {
+        //    //            //matchingEdgeLine.IsLeftSide = true;
+        //    //            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Vertical)
+        //    //            {
+        //    //                // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+        //    //            }
+        //    //        }
+        //    //    }
+        //    //    else if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
+        //    //    {
+        //    //        //TODO: review same side edge (Fan shape)
 
-                    if (pe_midY > qe_midY)
-                    {
-                        //p side is upper , q side is lower
-                        if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
-                        {
-                            knownOutsideEdge.IsUpper = true;
-                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                            {
-                                // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                        {
-                            // matchingEdgeLine.IsUpper = true;
-                            if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
-                            {
-                                //  knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        static bool FindMatchingOuterSide(EdgeLine compareEdge,
-            GlyphTriangle another,
-            out EdgeLine result,
-            out int edgeIndex)
-        {
-            //compare by radian of edge line
-            double compareSlope = Math.Abs(compareEdge.SlopeAngleNoDirection);
-            double diff0 = double.MaxValue;
-            double diff1 = double.MaxValue;
-            double diff2 = double.MaxValue;
+        //    //        if (pe_midY > qe_midY)
+        //    //        {
+        //    //            //p side is upper , q side is lower
+        //    //            if (knownOutsideEdge.SlopeKind == LineSlopeKind.Horizontal)
+        //    //            {
+        //    //                knownOutsideEdge.IsUpper = true;
+        //    //                if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+        //    //                {
+        //    //                    // knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+        //    //                }
+        //    //            }
+        //    //        }
+        //    //        else
+        //    //        {
+        //    //            if (matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+        //    //            {
+        //    //                // matchingEdgeLine.IsUpper = true;
+        //    //                if (matchingEdgeLine.IsOutside && matchingEdgeLine.SlopeKind == LineSlopeKind.Horizontal)
+        //    //                {
+        //    //                    //  knownOutsideEdge.AddMatchingOutsideEdge(matchingEdgeLine);
+        //    //                }
+        //    //            }
+        //    //        }
+        //    //    }
+        //    //}
+        //}
+        //static bool FindMatchingOuterSide(EdgeLine compareEdge,
+        //    GlyphTriangle another,
+        //    out EdgeLine result,
+        //    out int edgeIndex)
+        //{
+        //    //compare by radian of edge line
+        //    double compareSlope = Math.Abs(compareEdge.SlopeAngleNoDirection);
+        //    double diff0 = double.MaxValue;
+        //    double diff1 = double.MaxValue;
+        //    double diff2 = double.MaxValue;
 
-            diff0 = Math.Abs(Math.Abs(another.e0.SlopeAngleNoDirection) - compareSlope);
+        //    diff0 = Math.Abs(Math.Abs(another.e0.SlopeAngleNoDirection) - compareSlope);
 
-            diff1 = Math.Abs(Math.Abs(another.e1.SlopeAngleNoDirection) - compareSlope);
+        //    diff1 = Math.Abs(Math.Abs(another.e1.SlopeAngleNoDirection) - compareSlope);
 
-            diff2 = Math.Abs(Math.Abs(another.e2.SlopeAngleNoDirection) - compareSlope);
+        //    diff2 = Math.Abs(Math.Abs(another.e2.SlopeAngleNoDirection) - compareSlope);
 
-            //find min
-            int minDiffSide = FindMinByIndex(diff0, diff1, diff2);
-            if (minDiffSide > -1)
-            {
-                edgeIndex = minDiffSide;
-                switch (minDiffSide)
-                {
-                    default: throw new NotSupportedException();
-                    case 0:
-                        result = another.e0;
-                        break;
-                    case 1:
-                        result = another.e1;
-                        break;
-                    case 2:
-                        result = another.e2;
-                        break;
-                }
-                return true;
-            }
-            else
-            {
-                edgeIndex = -1;
-                result = null;
-                return false;
-            }
-        }
+        //    //find min
+        //    int minDiffSide = FindMinByIndex(diff0, diff1, diff2);
+        //    if (minDiffSide > -1)
+        //    {
+        //        edgeIndex = minDiffSide;
+        //        switch (minDiffSide)
+        //        {
+        //            default: throw new NotSupportedException();
+        //            case 0:
+        //                result = another.e0;
+        //                break;
+        //            case 1:
+        //                result = another.e1;
+        //                break;
+        //            case 2:
+        //                result = another.e2;
+        //                break;
+        //        }
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        edgeIndex = -1;
+        //        result = null;
+        //        return false;
+        //    }
+        //}
         /// <summary>
         /// compare d0, d1, d2 return min value by index 0 or 1 or 2
         /// </summary>

@@ -39,6 +39,9 @@ namespace Typography.Contours
             //-------------------------------
             //analyze angle and slope kind
             //-------------------------------  
+
+            //slope kind is evaluated
+
             SlopeAngleNoDirection = this.GetSlopeAngleNoDirection();
             if (QX == PX)
             {
