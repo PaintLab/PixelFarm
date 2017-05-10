@@ -370,7 +370,7 @@ namespace Typography.Contours
             GlyphContour contour)
         {
             //walk along the edge in the contour to generate new edge output
-            float offset = _avg_xdiff;
+            float fit_x_offset = _avg_xdiff;
             ////experiment
             ////for subpixel rendering
             //offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
@@ -379,7 +379,7 @@ namespace Typography.Contours
             dbugWriteLine("===begin===" + _avg_xdiff);
             if (!dbugUseHorizontalFitValue)
             {
-                offset = 0;
+                fit_x_offset = 0;
             }
 #endif
             List<GlyphPoint> points = contour.flattenPoints;
@@ -393,53 +393,43 @@ namespace Typography.Contours
             bool useGridFit = EnableGridFit;
             //TODO: review here
 
-            float pre_x = 0, post_x = 0;
+            float pre_x = p.GetFitX(pxscale);
+            float post_x = pre_x + fit_x_offset;
+            float post_y = p.GetFitY(pxscale);
 
             if (useGridFit && p.NeedFitAdjust)
             {
-                pre_x = p.GetFitX(pxscale);
-                post_x = pre_x + offset;
-                //
-                tx.MoveTo(post_x, p.GetFitY(pxscale));
-#if DEBUG
-                dbugWriteOutput("M", pre_x, post_x, p.GetFitY(pxscale));
-#endif
+                tx.MoveTo(post_x, post_y);
             }
             else
             {
-                pre_x = p.X * pxscale;
-                post_x = pre_x + offset;
-
-                tx.MoveTo(post_x, p.Y * pxscale);
-#if DEBUG
-                dbugWriteOutput("M", pre_x, post_x, p.Y * pxscale);
-#endif
+                tx.MoveTo(post_x, post_y); 
             }
-
+#if DEBUG
+            dbugWriteOutput("M", pre_x, post_x, post_y);
+#endif
             //2. others
             for (int i = 1; i < j; ++i)
             {
                 //try to fit to grid 
                 p = points[i];
+
+                pre_x = p.GetFitX(pxscale);
+                post_x = pre_x + fit_x_offset;
+                post_y = p.GetFitY(pxscale);
+
                 if (useGridFit && p.NeedFitAdjust)
                 {
-                    pre_x = p.GetFitX(pxscale);
-                    post_x = pre_x + offset;
-                    tx.LineTo(post_x, p.GetFitY(pxscale));
-#if DEBUG
-                    dbugWriteOutput("L", pre_x, post_x, p.GetFitY(pxscale));
-#endif
+                    tx.LineTo(post_x, post_y);
                 }
                 else
                 {
-                    pre_x = p.X * pxscale;
-                    post_x = pre_x + offset;
-                    tx.LineTo(post_x, p.Y * pxscale);
-#if DEBUG
-                    //for debug
-                    dbugWriteOutput("L", pre_x, post_x, p.Y * pxscale);
-#endif
+                    tx.LineTo(post_x, post_y);
                 }
+#if DEBUG
+                //for debug
+                dbugWriteOutput("L", pre_x, post_x, post_y);
+#endif
             }
             //close 
             tx.CloseContour();
