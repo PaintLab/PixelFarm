@@ -15,8 +15,7 @@ namespace Typography.Contours
         public GlyphIntermediateOutline(Polygon polygon, List<GlyphContour> contours)
         {
             //init value
-            _bounds_minX = _bounds_minY = float.MaxValue;
-            _bounds_maxX = _bounds_maxY = float.MinValue; 
+           
             this._contours = contours; 
             //1. create centroid line hubs: 
             CreateCentroidLineHubs(polygon);
@@ -160,6 +159,9 @@ namespace Typography.Contours
 
         void CreateGlyphEdges()
         {
+            //reset bounds
+            _bounds_minX = _bounds_minY = float.MaxValue;
+            _bounds_maxX = _bounds_maxY = float.MinValue;
 
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
