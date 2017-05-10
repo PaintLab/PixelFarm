@@ -90,10 +90,7 @@ namespace Typography.Contours
                 stepSum += eachstep;
             }
             AddPoint(end.X, end.Y, PointKind.C3End);
-        }
-
-
-
+        } 
 
 #if DEBUG
         GlyphPart dbug_ownerPart;

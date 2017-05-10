@@ -1,11 +1,10 @@
 ﻿//MIT, 2014-2017, WinterDev
-using System;
-using System.Collections.Generic;
-using System.Numerics;
 using PixelFarm.Agg;
 using PixelFarm.Drawing.Fonts;
-using Typography.OpenFont;
+using System;
+using System.Numerics;
 using Typography.Contours;
+using Typography.OpenFont;
 using Typography.Rendering;
 
 namespace SampleWinForms.UI
@@ -219,7 +218,7 @@ namespace SampleWinForms.UI
         {
             if (!DrawGlyphPoint) { return; }
 
-            switch (point.kind)
+            switch (point.PointKind)
             {
                 case PointKind.C3Start:
                 case PointKind.C3End:
@@ -227,9 +226,9 @@ namespace SampleWinForms.UI
                 case PointKind.C4End:
                 case PointKind.LineStart:
                 case PointKind.LineStop:
-                    
+
                     painter.FillRectLBWH(point.OX * _pxscale, point.OY * _pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
-                     
+
                     break;
             }
         }

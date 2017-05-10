@@ -29,7 +29,7 @@ namespace Typography.Contours
             //fit to grid 
             //1. lower
             int floor = ((int)(value / gridSize) * gridSize);
-            
+
             //2. midpoint
             float remaining = value - floor;
             float halfGrid = gridSize / 2f;
@@ -612,26 +612,7 @@ namespace Typography.Contours
 
 
         internal static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
-        internal static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
         internal static readonly double _03degreeToRad = MyMath.DegreesToRadians(3);
-        internal static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
 
-
-
-        internal static float FindDiffToFitInteger(float actualValue)
-        {
-            int floor = (int)actualValue;
-            float diff = actualValue - floor;
-            if (diff >= 0.5)
-            {
-                //move up
-                return (floor + 1) - actualValue;
-            }
-            else
-            {
-                //move down
-                return actualValue - floor;
-            }
-        }
     }
 }

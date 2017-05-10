@@ -10,20 +10,14 @@ namespace Typography.Contours
     {
 
         List<GlyphContour> _contours;
-        List<CentroidLineHub> _lineHubs;
-
-
-        float _bounds_minX, _bounds_minY, _bounds_maxX, _bounds_maxY;
-
+        List<CentroidLineHub> _lineHubs; 
+        float _bounds_minX, _bounds_minY, _bounds_maxX, _bounds_maxY; 
         public GlyphIntermediateOutline(Polygon polygon, List<GlyphContour> contours)
         {
             //init value
             _bounds_minX = _bounds_minY = float.MaxValue;
-            _bounds_maxX = _bounds_maxY = float.MinValue;
-
-
-            this._contours = contours;
-
+            _bounds_maxX = _bounds_maxY = float.MinValue; 
+            this._contours = contours; 
             //1. create centroid line hubs: 
             CreateCentroidLineHubs(polygon);
             //2. create bone joints (create joint before bone)

@@ -35,10 +35,7 @@ namespace Typography.Contours
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;
 
-
-            //new dynamic mid point is calculate from original X,Y
-
-
+            //new dynamic mid point is calculate from original X,Y 
             //-------------------------------
             //analyze angle and slope kind
             //-------------------------------  
@@ -57,6 +54,7 @@ namespace Typography.Contours
                 else if (SlopeAngleNoDirection < _01degreeToRad)
                 {
                     SlopeKind = LineSlopeKind.Horizontal;
+                    p.IsPartOfHorizontalEdge = q.IsPartOfHorizontalEdge = true;
                 }
                 else
                 {
@@ -82,7 +80,7 @@ namespace Typography.Contours
         /// </summary>
         public double QY { get { return this._glyphPoint_Q.OY; } }
 
-        
+
         public bool IsTip { get; internal set; }
 
         internal Vector2 GetOriginalEdgeVector()

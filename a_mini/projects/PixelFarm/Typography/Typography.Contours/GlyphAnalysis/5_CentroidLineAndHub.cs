@@ -17,16 +17,11 @@ namespace Typography.Contours
         //
         //joint list is created from each centroid pair
         public List<GlyphBoneJoint> _joints = new List<GlyphBoneJoint>();
-
         public List<GlyphBone> bones = new List<GlyphBone>();
-
-
 
         internal CentroidLine()
         {
         }
-
-
         /// <summary>
         /// add a centroid pair
         /// </summary>
@@ -199,7 +194,7 @@ namespace Typography.Contours
                         break;
                     case LineSlopeKind.Vertical:
                         _selectedVerticalBoneGroups.Add(boneGroup);
-                        break;
+                        break; 
                 }
             }
             _tmpBoneGroups.Clear();
@@ -240,28 +235,50 @@ namespace Typography.Contours
         {
 
             int boneGroupsCount = boneGroups.Count;
-            if (boneGroupsCount < 2) { return; }
-            //----------------------
-            //use median ?,
-            boneGroups.Sort((bg0, bg1) => bg0.approxLength.CompareTo(bg1.approxLength));
-            int groupCount = boneGroups.Count;
-            //median
-            int mid_index = groupCount / 2;
-            BoneGroup bonegroup = boneGroups[mid_index];
-            float upper_limit = bonegroup.approxLength * 2;
-            for (int i = groupCount - 1; i >= mid_index; --i)
+            if (boneGroupsCount == 0)
             {
-                //from end to mid_index => since the list is sorted
-
-                bonegroup = boneGroups[i];
-                if (bonegroup.approxLength > upper_limit)
+                return;
+            }
+            else if (boneGroupsCount == 1)
+            {
+                //eg 1 group
+                //makr this long bone
+                boneGroups[0]._lengKind = BoneGroupSumLengthKind.Long;
+                return;
+            }
+            else
+            {
+                //----------------------
+                //use median ?,
+                boneGroups.Sort((bg0, bg1) => bg0.approxLength.CompareTo(bg1.approxLength));
+                int groupCount = boneGroups.Count;
+                //median
+                int mid_index = groupCount / 2;
+                BoneGroup bonegroup = boneGroups[mid_index];
+                float upper_limit = bonegroup.approxLength * 2;
+                bool foundSomeLongBone = false;
+                for (int i = groupCount - 1; i >= mid_index; --i)
                 {
-                    bonegroup._lengKind = BoneGroupSumLengthKind.Long;
+                    //from end to mid_index => since the list is sorted
+                    bonegroup = boneGroups[i];
+                    if (bonegroup.approxLength > upper_limit)
+                    {
+                        foundSomeLongBone = true;
+                        bonegroup._lengKind = BoneGroupSumLengthKind.Long;
+                    }
+                    else
+                    {
+                        //since to list is sorted                    
+                        break;
+                    }
                 }
-                else
+                //----------------------
+                if (!foundSomeLongBone)
                 {
-                    //since to list is sorted                    
-                    break;
+                    for (int i = groupCount - 1; i >= mid_index; --i)
+                    {
+                        boneGroups[i]._lengKind = BoneGroupSumLengthKind.Long;
+                    }
                 }
             }
         }

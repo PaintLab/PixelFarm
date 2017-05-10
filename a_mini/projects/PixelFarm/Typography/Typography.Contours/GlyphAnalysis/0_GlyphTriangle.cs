@@ -7,8 +7,6 @@ namespace Typography.Contours
     class GlyphTriangle
     {
 
-        //TODO: review here...
-        //if we not use the 
         DelaunayTriangle _tri;
         public readonly EdgeLine e0;
         public readonly EdgeLine e1;
@@ -125,6 +123,9 @@ namespace Typography.Contours
                    this._tri.N1 == t2 ||
                    this._tri.N2 == t2;
         }
+        /// <summary>
+        /// neighbor triangle 0
+        /// </summary>
         public GlyphTriangle N0
         {
             get
@@ -132,6 +133,9 @@ namespace Typography.Contours
                 return GetGlyphTriFromUserData(_tri.N0);
             }
         }
+        /// <summary>
+        /// neighbor triangle 1
+        /// </summary>
         public GlyphTriangle N1
         {
             get
@@ -139,6 +143,9 @@ namespace Typography.Contours
                 return GetGlyphTriFromUserData(_tri.N1);
             }
         }
+        /// <summary>
+        /// neighbor triangle 2
+        /// </summary>
         public GlyphTriangle N2
         {
             get
@@ -153,116 +160,5 @@ namespace Typography.Contours
         }
 
     }
-
-
-    static class GlyphTriangleExtensions
-    {
-
-        static EdgeLine GetFirstFoundOutsidEdge(GlyphTriangle tri)
-        {
-            if (tri.e0.IsOutside) { return tri.e0; }
-            if (tri.e1.IsOutside) { return tri.e1; }
-            if (tri.e2.IsOutside) { return tri.e2; }
-            return null; //not found               
-        }
-        internal static EdgeLine FindOppositeEdge(this GlyphTriangle tri, EdgeLine testEdge)
-        {
-            //find opposite edge to this testEdge
-            //1. opposite side
-            //2. 
-            EdgeLine f_e0, f_e1, f_e2;
-            switch (tri.GetOutsideEdgeLine(out f_e0, out f_e1, out f_e2))
-            {
-                default: throw new NotSupportedException();
-                case 0:
-                    return null;
-                case 1:
-
-                    if (f_e0.SlopeKind == testEdge.SlopeKind)
-                    {
-                        return f_e0;
-                    }
-                    return null;
-                case 2:
-
-                    //2 outside
-                    if (f_e0.SlopeKind == testEdge.SlopeKind)
-                    {
-                        return f_e0;
-                    }
-                    if (f_e1.SlopeKind == testEdge.SlopeKind)
-                    {
-                        return f_e1;
-                    }
-                    return null;
-
-                case 3:
-
-                    //not possible! 
-                    throw new NotSupportedException();
-
-            }
-        }
-        internal static int GetOutsideEdgeLine(this GlyphTriangle tri,
-            out EdgeLine foundE0,
-            out EdgeLine foundE1,
-            out EdgeLine foundE2)
-        {
-            foundE0 = foundE1 = foundE2 = null;
-            int outsideEdgeCount = 0;
-            if (tri.e0 != null && tri.e0.IsOutside)
-            {
-                switch (outsideEdgeCount)
-                {
-                    case 0:
-                        foundE0 = tri.e0;
-                        break;
-                    case 1:
-                        foundE1 = tri.e0;
-                        break;
-                    case 2:
-                        foundE2 = tri.e0;
-                        break;
-                }
-                outsideEdgeCount++;
-            }
-            //---------------------------------
-            if (tri.e1 != null && tri.e1.IsOutside)
-            {
-                switch (outsideEdgeCount)
-                {
-                    case 0:
-                        foundE0 = tri.e1;
-                        break;
-                    case 1:
-                        foundE1 = tri.e1;
-                        break;
-                    case 2:
-                        foundE2 = tri.e1;
-                        break;
-                }
-                outsideEdgeCount++;
-            }
-            //---------------------------------
-            if (tri.e2 != null && tri.e2.IsOutside)
-            {
-                switch (outsideEdgeCount)
-                {
-                    case 0:
-                        foundE0 = tri.e2;
-                        break;
-                    case 1:
-                        foundE1 = tri.e2;
-                        break;
-                    case 2:
-                        foundE2 = tri.e2;
-                        break;
-                }
-                outsideEdgeCount++;
-            }
-            return outsideEdgeCount;
-        }
-
-    }
-
+     
 }
