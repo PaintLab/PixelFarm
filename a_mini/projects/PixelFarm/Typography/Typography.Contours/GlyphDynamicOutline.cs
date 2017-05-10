@@ -18,7 +18,9 @@ namespace Typography.Contours
         float _offsetFromMasterOutline = 0; //pixel unit
         float _pxScale;
         bool _needRefreshBoneGroup;
-        bool _needAdjustGridFitValues;
+        bool _needAdjustGridFitValues; 
+        float _avg_xdiff = 0;
+
 
         BoneGroupingHelper _groupingHelper;
 
@@ -43,9 +45,7 @@ namespace Typography.Contours
             _contours = intermediateOutline.GetContours(); //original contours
             //3.
             CollectAllCentroidLines(intermediateOutline.GetCentroidLineHubs());
-            //left control from vertical long bone
-            //--------
-            SetupLeftPositionX();
+             
         }
         private GlyphDynamicOutline()
         {
@@ -235,7 +235,6 @@ namespace Typography.Contours
             }
         }
 
-        float _avg_xdiff = 0;
         /// <summary>
         /// adjust vertical fitting value
         /// </summary>
@@ -326,14 +325,14 @@ namespace Typography.Contours
                 {
                     EdgeLine ee = v_edges[e];
 
-                    if (ee.IsLeftSide)
-                    {
+                    //if (ee.IsLeftSide)
+                    //{
                         //focus on leftside edge
                         //p
                         x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.newX * _pxScale), groupLen);
                         //q
                         x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.newX * _pxScale), groupLen);
-                    }
+                    //}
                 }
             }
             _avg_xdiff = x_fitDiffCollector.CalculateProperDiff();
@@ -351,28 +350,7 @@ namespace Typography.Contours
             {
                 _allCentroidLines.AddRange(lineHubs[i].GetAllCentroidLines().Values);
             }
-        }
-
-        void SetupLeftPositionX()
-        {
-
-            //AnalyzeBoneGroups(GridBoxWidth, GridBoxHeight);
-            //_needRefreshBoneGroup = false;
-            ////
-            //List<BoneGroup> arrangedVerticalBoneGroups = _groupingHelper.SelectedVerticalBoneGroups;
-            ////left most
-            ////find adjust values
-            //if (arrangedVerticalBoneGroups != null && arrangedVerticalBoneGroups.Count > 0)
-            //{
-            //    this.LeftControlPositionX = arrangedVerticalBoneGroups[0].avg_x;
-            //}
-            //else
-            //{
-            //    this.LeftControlPositionX = 0;
-            //}
-            //LeftControlPositionX = 0;
-        }
-
+        } 
         void GenerateContourOutput(
             IGlyphTranslator tx,
             GlyphContour contour)
