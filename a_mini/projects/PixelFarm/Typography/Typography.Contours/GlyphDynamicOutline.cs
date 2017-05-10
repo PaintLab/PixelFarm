@@ -41,13 +41,10 @@ namespace Typography.Contours
             //1. joints and its bones
             //2. bones and its controlled edge 
             _contours = intermediateOutline.GetContours(); //original contours
-
             //3.
             CollectAllCentroidLines(intermediateOutline.GetCentroidLineHubs());
-
             //left control from vertical long bone
-            //-------- 
-
+            //--------
             SetupLeftPositionX();
         }
         private GlyphDynamicOutline()
@@ -324,7 +321,7 @@ namespace Typography.Contours
                 {
                     continue;
                 }
-               
+
                 int edgeCount = v_edges.Length;
                 //we need to calculate the avg of the glyph point
                 //and add a total summary to this 
@@ -373,7 +370,7 @@ namespace Typography.Contours
             //find adjust values
             if (arrangedVerticalBoneGroups != null && arrangedVerticalBoneGroups.Count > 0)
             {
-                this.LeftControlPositionX = arrangedVerticalBoneGroups[0].x_pos;
+                this.LeftControlPositionX = arrangedVerticalBoneGroups[0].avg_x;
             }
             else
             {

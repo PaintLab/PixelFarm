@@ -103,12 +103,7 @@ namespace Typography.Contours
                 return new Vector2(_fitX, _fitY);
             }
         }
-        public float GetLeftMostRib()
-        {
-            //TODO: revisit this again
 
-            return 0;
-        }
         /// <summary>
         /// calculate distance^2 from contact point to specific point v
         /// </summary>
@@ -168,7 +163,20 @@ namespace Typography.Contours
         {
             return this.P_Tri == tri || this.Q_Tri == tri;
         }
+        /// <summary>
+        /// adjust this bone joint to fit with given gridboxW and H
+        /// </summary>
+        /// <param name="gridW"></param>
+        /// <param name="gridH"></param>
+        internal void AdjustFitXY(int gridW, int gridH)
+        {
 
+            Vector2 jointPos = this.OriginalJointPos;
+            //set fit (x,y) to joint, then we will evaluate bone slope again (next step)
+            this.SetFitXY(
+                MyMath.FitToHalfGrid(jointPos.X, gridW), //use half?
+                MyMath.FitToHalfGrid(jointPos.Y, gridH));//use half?
+        }
 #if DEBUG
         public override string ToString()
         {
