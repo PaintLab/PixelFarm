@@ -194,7 +194,7 @@ namespace Typography.Contours
                         break;
                     case LineSlopeKind.Vertical:
                         _selectedVerticalBoneGroups.Add(boneGroup);
-                        break;
+                        break; 
                 }
             }
             _tmpBoneGroups.Clear();
