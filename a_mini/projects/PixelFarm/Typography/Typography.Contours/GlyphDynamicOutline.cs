@@ -293,17 +293,8 @@ namespace Typography.Contours
                     EdgeLine ee = h_edges[e];
                     GlyphPoint p_pnt = ee.P;
                     GlyphPoint q_pnt = ee.Q;
-                    p_pnt.FitAdjustY = avg_ydiff;
-                    // p_pnt.fit_NewX = p_pnt.X * _pxScale;
-                    //p_pnt.fit_NewY = (p_pnt.Y * _pxScale) + avg_ydiff;
-
-                    //
-                    q_pnt.FitAdjustY = avg_ydiff;
-                    //q_pnt.fit_NewX = q_pnt.X * _pxScale;
-                    //q_pnt.fit_NewY = (q_pnt.Y * _pxScale) + avg_ydiff;
-
-                    //
-                    //p_pnt.fit_analyzed = q_pnt.fit_analyzed = true;
+                    p_pnt.FitAdjustY = avg_ydiff; 
+                    q_pnt.FitAdjustY = avg_ydiff; 
                 }
             }
             //---------------------------------------------------------

@@ -29,15 +29,9 @@ namespace Typography.Contours
 
         float newX;
         float newY;
-        //---------------------------------------- 
-
-
-        bool fit_analyzed;
-
+        //----------------------------------------  
         float _adjust_fit_x;
         float _adjust_fit_y;
-        bool _has_adjust_x;
-        bool _has_adjust_y;
         //------------------------------------- 
 
         /// <summary>
@@ -83,22 +77,19 @@ namespace Typography.Contours
         /// </summary>
         public float Y { get { return this.newY; } }
 
-        //-----------
-#if DEBUG
-        int dbug_adj_y_count = 0;
-#endif
+
+
         public float FitAdjustX
         {
             get { return _adjust_fit_x; }
             internal set
             {
-                if (_has_adjust_x)
-                {
-
-                }
                 _adjust_fit_x = value;
-                _has_adjust_x = true;
-                fit_analyzed = true;
+
+#if DEBUG
+                _dbug_has_adjust_x = true;
+                _dbug_fit_analyzed = true;
+#endif
             }
         }
         public float FitAdjustY
@@ -109,35 +100,17 @@ namespace Typography.Contours
             }
             internal set
             {
-                if (_has_adjust_y)
-                {
-                    if (_adjust_fit_y != value)
-                    {
-                        if (dbug_adj_y_count > 1)
-                        {
-
-                        }
-                    }
-                }
                 _adjust_fit_y = value;
-                _has_adjust_y = true;
-                fit_analyzed = true;
-                dbug_adj_y_count++;
+#if DEBUG
+                _dbug_has_adjust_y = true;
+                _dbug_fit_analyzed = true;
+#endif 
             }
         }
-        internal bool HasAdjustX { get { return _has_adjust_x; } }
-        internal bool HasAdjustY { get { return _has_adjust_y; } }
+
         internal void ResetFitAdjustValues()
         {
-            //reset all fit values
-            //fit_NewX = newX;
-            //fit_NewY = newY;
             _adjust_fit_x = _adjust_fit_y = 0;
-            this._has_adjust_x = _has_adjust_y = fit_analyzed = false;
-#if DEBUG
-
-            dbug_adj_y_count = 0;
-#endif
         }
 
         internal void GetFitXY(float pxscale, out float x, out float y)
@@ -145,18 +118,7 @@ namespace Typography.Contours
             x = (this.newX * pxscale) + _adjust_fit_x;
             y = (this.newY * pxscale) + _adjust_fit_y;
         }
-        internal float GetFitY(float pxscale)
-        {
-            return (this.newY * pxscale) + _adjust_fit_y;
-        }
-        internal float GetFitX(float pxscale)
-        {
-            return (this.newX * pxscale) + _adjust_fit_x;
-        }
-        internal bool NeedFitAdjust
-        {
-            get { return this.fit_analyzed; }
-        }
+
         internal void SetXY(float x, float y)
         {
             this.newX = x;
@@ -225,7 +187,9 @@ namespace Typography.Contours
         }
 
 #if DEBUG
-
+        bool _dbug_fit_analyzed;
+        bool _dbug_has_adjust_x;
+        bool _dbug_has_adjust_y;
         public readonly int dbugId = dbugTotalId++;
         static int dbugTotalId;
         internal GlyphPart dbugOwnerPart;  //link back to owner part
@@ -237,7 +201,6 @@ namespace Typography.Contours
             return this.dbugId + " :" +
                     (_ox + "," + _oy + " " + PointKind.ToString());
         }
-
 #endif
     }
 
