@@ -51,7 +51,7 @@ namespace Typography.Contours
             {
                 //create joint 
                 boneJoint = new GlyphBoneJoint(p_edge, q_edge);
-                double slopeAngle = CalculateCentroidPairSlope(this);
+                double slopeAngle = CalculateCentroidPairSlopeNoDirection(this);
                 //
                 EdgeLine foundTipEdge = null;
                 if ((foundTipEdge = CreateTipEdgeIfNeed(slopeAngle, p, p_edge)) != null)
@@ -183,7 +183,7 @@ namespace Typography.Contours
             }
         }
 
-        static double CalculateCentroidPairSlope(GlyphCentroidPair centroidPair)
+        static double CalculateCentroidPairSlopeNoDirection(GlyphCentroidPair centroidPair)
         {
             //calculate centroid pair slope 
             //p
