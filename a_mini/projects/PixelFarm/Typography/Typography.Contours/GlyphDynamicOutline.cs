@@ -265,6 +265,7 @@ namespace Typography.Contours
                 {
                     continue;
                 }
+                //
                 int edgeCount = h_edges.Length;
                 //we need to calculate the avg of the glyph point
                 //and add a total summary to this 
@@ -273,12 +274,10 @@ namespace Typography.Contours
                 for (int e = 0; e < edgeCount; ++e)
                 {
                     EdgeLine ee = h_edges[e];
-                    GlyphPoint p_pnt = ee.P;
-                    GlyphPoint q_pnt = ee.Q;
                     //p                    
-                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(p_pnt.newY * _pxScale), groupLen);
+                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.newY * _pxScale), groupLen);
                     //q
-                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(q_pnt.newY * _pxScale), groupLen);
+                    y_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.newY * _pxScale), groupLen);
                 }
 
                 float avg_ydiff = y_fitDiffCollector.CalculateProperDiff();
@@ -293,6 +292,7 @@ namespace Typography.Contours
                     //
                     q_pnt.fit_NewX = q_pnt.newX * _pxScale;
                     q_pnt.fit_NewY = (q_pnt.newY * _pxScale) + avg_ydiff;
+                    //
                     p_pnt.fit_analyzed = q_pnt.fit_analyzed = true;
                 }
             }
@@ -325,16 +325,14 @@ namespace Typography.Contours
                 for (int e = 0; e < edgeCount; ++e)
                 {
                     EdgeLine ee = v_edges[e];
-                    GlyphPoint p_pnt = ee.P;
-                    GlyphPoint q_pnt = ee.Q;
 
                     if (ee.IsLeftSide)
                     {
                         //focus on leftside edge
                         //p
-                        x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(p_pnt.newX * _pxScale), groupLen);
+                        x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.P.newX * _pxScale), groupLen);
                         //q
-                        x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(q_pnt.newX * _pxScale), groupLen);
+                        x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.newX * _pxScale), groupLen);
                     }
                 }
             }
@@ -358,21 +356,21 @@ namespace Typography.Contours
         void SetupLeftPositionX()
         {
 
-            AnalyzeBoneGroups(GridBoxWidth, GridBoxHeight);
-            _needRefreshBoneGroup = false;
-            //
-            List<BoneGroup> arrangedVerticalBoneGroups = _groupingHelper.SelectedVerticalBoneGroups;
-            //left most
-            //find adjust values
-            if (arrangedVerticalBoneGroups != null && arrangedVerticalBoneGroups.Count > 0)
-            {
-                this.LeftControlPositionX = arrangedVerticalBoneGroups[0].avg_x;
-            }
-            else
-            {
-                this.LeftControlPositionX = 0;
-            }
-            LeftControlPositionX = 0;
+            //AnalyzeBoneGroups(GridBoxWidth, GridBoxHeight);
+            //_needRefreshBoneGroup = false;
+            ////
+            //List<BoneGroup> arrangedVerticalBoneGroups = _groupingHelper.SelectedVerticalBoneGroups;
+            ////left most
+            ////find adjust values
+            //if (arrangedVerticalBoneGroups != null && arrangedVerticalBoneGroups.Count > 0)
+            //{
+            //    this.LeftControlPositionX = arrangedVerticalBoneGroups[0].avg_x;
+            //}
+            //else
+            //{
+            //    this.LeftControlPositionX = 0;
+            //}
+            //LeftControlPositionX = 0;
         }
 
         void GenerateContourOutput(
