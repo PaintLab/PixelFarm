@@ -613,6 +613,36 @@ namespace Typography.Contours
 
         internal static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         internal static readonly double _03degreeToRad = MyMath.DegreesToRadians(3);
+        /// <summary>
+        /// compare d0, d1, d2 return min value by index 0 or 1 or 2
+        /// </summary>
+        /// <param name="d0"></param>
+        /// <param name="d1"></param>
+        /// <param name="d2"></param>
+        /// <returns></returns>
+        static int FindMinByIndex(double d0, double d1, double d2)
+        {
+            unsafe
+            {
+                double* tmpArr = stackalloc double[3];
+                tmpArr[0] = d0;
+                tmpArr[1] = d1;
+                tmpArr[2] = d2;
+
+                int minAt = -1;
+                double currentMin = double.MaxValue;
+                for (int i = 0; i < 3; ++i)
+                {
+                    double d = tmpArr[i];
+                    if (d < currentMin)
+                    {
+                        currentMin = d;
+                        minAt = i;
+                    }
+                }
+                return minAt;
+            }
+        }
 
     }
 }

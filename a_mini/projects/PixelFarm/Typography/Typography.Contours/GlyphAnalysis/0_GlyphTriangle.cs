@@ -43,7 +43,32 @@ namespace Typography.Contours
             AnalyzeInsideEdge(e2, e0, e1);
             //at this point, 
             //we should know the direction of this triangle
-            //then we known that if this triangle is left/right/upper/lower of the 'stroke' line
+            //then we known that if this triangle is left/right/upper/lower of the 'stroke' line 
+
+            float cent_x, cent_y;
+            this.CalculateCentroid(out cent_x, out cent_y);
+            AnalyzeOutsideEdge(e0, cent_x, cent_y);
+            AnalyzeOutsideEdge(e1, cent_x, cent_y);
+            AnalyzeOutsideEdge(e2, cent_x, cent_y);
+        }
+        void AnalyzeOutsideEdge(EdgeLine d, float centroidX, float centroidY)
+        {
+            //check if edge slope
+            if (!d.IsOutside) return;
+            //---------------------------
+            switch (d.SlopeKind)
+            {
+                case LineSlopeKind.Horizontal:
+
+                    //check if upper or lower
+                    //compare mid point with the centroid  
+                    d.IsUpper = d.GetMidPoint().Y > centroidY;
+                    break;
+                case LineSlopeKind.Vertical:
+                    d.IsLeftSide = d.GetMidPoint().X < centroidX;
+                    break;
+            }
+
         }
         void AnalyzeInsideEdge(EdgeLine d0, EdgeLine d1, EdgeLine d2)
         {
@@ -56,8 +81,7 @@ namespace Typography.Contours
             {
                 if (d2.IsInside)
                 {
-                    //3 inside edges
-
+                    //3 inside edges 
                 }
                 else
                 {
@@ -85,7 +109,7 @@ namespace Typography.Contours
                 }
             }
         }
-        void FindPerpendicular(EdgeLine outsideEdge, EdgeLine inside)
+        static void FindPerpendicular(EdgeLine outsideEdge, EdgeLine inside)
         {
             System.Numerics.Vector2 m0 = inside.GetMidPoint();
             System.Numerics.Vector2 cut_fromM0;
@@ -160,5 +184,5 @@ namespace Typography.Contours
         }
 
     }
-     
+
 }

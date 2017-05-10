@@ -39,6 +39,9 @@ namespace Typography.Contours
             //-------------------------------
             //analyze angle and slope kind
             //-------------------------------  
+
+            //slope kind is evaluated
+
             SlopeAngleNoDirection = this.GetSlopeAngleNoDirection();
             if (QX == PX)
             {
@@ -121,6 +124,7 @@ namespace Typography.Contours
         {
             get { return !this.IsOutside; }
         }
+        //
         public bool IsUpper
         {
             get;
@@ -143,7 +147,7 @@ namespace Typography.Contours
 
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
-        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+       
         internal bool _earlyInsideAnalysis;
         internal bool ContainsGlyphPoint(GlyphPoint p)
         {
@@ -281,10 +285,8 @@ namespace Typography.Contours
         }
     }
     public class InsideEdgeLine : EdgeLine
-    {   /// <summary>
-        /// contact to another edge
-        /// </summary>
-        internal InsideEdgeLine contactToEdge;
+    {   
+        
         internal GlyphBoneJoint inside_joint;
         internal InsideEdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
             : base(ownerTriangle, p, q)

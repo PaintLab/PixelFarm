@@ -20,11 +20,7 @@ namespace Typography.Contours
         EdgeLine _tipEdge_q;
 
         float _fitX, _fitY;
-
-#if DEBUG
-        public readonly int dbugId = dbugTotalId++;
-        public static int dbugTotalId;
-#endif
+ 
         internal GlyphBoneJoint(
             InsideEdgeLine p_contact_edge,
             InsideEdgeLine q_contact_edge)
@@ -178,15 +174,16 @@ namespace Typography.Contours
                 MyMath.FitToHalfGrid(jointPos.Y, gridH));//use half?
         }
 #if DEBUG
+        public readonly int dbugId = dbugTotalId++;
+        public static int dbugTotalId;
+
         public override string ToString()
         {
             return "id:" + dbugId + " " + this.OriginalJointPos.ToString();
         }
 
         public EdgeLine dbugGetEdge_P() { return _p_contact_edge; }
-        public EdgeLine dbugGetEdge_Q() { return _q_contact_edge; }
-
-
+        public EdgeLine dbugGetEdge_Q() { return _q_contact_edge; } 
         public void dbugGetCentroidBoneCenters(out float cx0, out float cy0, out float cx1, out float cy1)
         {
 
