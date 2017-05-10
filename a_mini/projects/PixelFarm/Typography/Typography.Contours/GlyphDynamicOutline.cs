@@ -385,50 +385,29 @@ namespace Typography.Contours
             List<GlyphPoint> points = contour.flattenPoints;
             int j = points.Count;
             if (j == 0) return;
-            //
-            // 
-            //1.
-            GlyphPoint p = points[0];
+
+
             float pxscale = this._pxScale;
             bool useGridFit = EnableGridFit;
             //TODO: review here
 
-            float pre_x = p.GetFitX(pxscale);
-            float post_x = pre_x + fit_x_offset;
-            float post_y = p.GetFitY(pxscale);
+            float fit_x, fit_y;
+            points[0].GetFitXY(pxscale, out fit_x, out fit_y);
 
-            if (useGridFit && p.NeedFitAdjust)
-            {
-                tx.MoveTo(post_x, post_y);
-            }
-            else
-            {
-                tx.MoveTo(post_x, post_y); 
-            }
+            //
+            tx.MoveTo(fit_x + fit_x_offset, fit_y);
 #if DEBUG
-            dbugWriteOutput("M", pre_x, post_x, post_y);
+            dbugWriteOutput("M", fit_x, fit_x + fit_x_offset, fit_y);
 #endif
             //2. others
             for (int i = 1; i < j; ++i)
             {
-                //try to fit to grid 
-                p = points[i];
-
-                pre_x = p.GetFitX(pxscale);
-                post_x = pre_x + fit_x_offset;
-                post_y = p.GetFitY(pxscale);
-
-                if (useGridFit && p.NeedFitAdjust)
-                {
-                    tx.LineTo(post_x, post_y);
-                }
-                else
-                {
-                    tx.LineTo(post_x, post_y);
-                }
+                //try to fit to grid  
+                points[i].GetFitXY(pxscale, out fit_x, out fit_y);
+                tx.LineTo(fit_x + fit_x_offset, fit_y);
 #if DEBUG
                 //for debug
-                dbugWriteOutput("L", pre_x, post_x, post_y);
+                dbugWriteOutput("L", fit_x, fit_x + fit_x_offset, fit_y);
 #endif
             }
             //close 
