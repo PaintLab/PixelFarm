@@ -8,7 +8,10 @@ namespace Typography.TextLayout
     public struct GlyphPlan
     {
         public readonly ushort glyphIndex;//2
-        public readonly int x;//4, //TODO: review here=> change to short ?
+        /// <summary>
+        /// exact x pos, start from start pos 0 of span
+        /// </summary>
+        public readonly int x;//4, //TODO: review here=> change to relative pos 
         public readonly short y;//2
         public readonly ushort advX;//2
         public GlyphPlan(ushort glyphIndex, int x, short y, ushort advX)
@@ -103,6 +106,7 @@ namespace Typography.TextLayout
         {
             PositionTechnique = PositionTechnique.OpenFont;
             ScriptLang = ScriptLangs.Latin;
+            PixelScale = 1;//default
         }
         public PositionTechnique PositionTechnique { get; set; }
         public ScriptLang ScriptLang
@@ -189,9 +193,17 @@ namespace Typography.TextLayout
                 //at this stage _inputGlyphs and _glyphPositions 
                 //has member 1:1
                 ushort glyIndex = _inputGlyphs[i];
+                //
+                Glyph orgGlyph = typeface.GetGlyphByIndex(glyIndex);
+                if (!orgGlyph.HasAdvWidth)
+                {
+                    orgGlyph.AdvanceWidth = typeface.GetHAdvanceWidthFromGlyphIndex(glyIndex);
+                }
+                //
+                //this is original value WITHOUT fit-to-grid adjust
                 _glyphPositions.Add(new GlyphPos(
                     glyIndex,
-                    typeface.GetGlyphByIndex(glyIndex).GlyphClass,
+                    orgGlyph,
                     typeface.GetHAdvanceWidthFromGlyphIndex(glyIndex))
                    );
             }
@@ -205,6 +217,7 @@ namespace Typography.TextLayout
         //
         internal List<GlyphPlan> _myGlyphPlans = new List<GlyphPlan>();
 
+        public float PixelScale { get; set; }
     }
 
 
@@ -215,7 +228,7 @@ namespace Typography.TextLayout
 
         public static float SnapInteger(float value)
         {
-            int floor_value = (int)value; 
+            int floor_value = (int)value;
             return (value - floor_value >= (1f / 2f)) ? floor_value + 1 : floor_value;
         }
         public static float SnapHalf(float value)
@@ -224,11 +237,15 @@ namespace Typography.TextLayout
             //round to int 0, 0.5,1.0
             return (value - floor_value >= (2f / 3f)) ? floor_value + 1 : //else->
                    (value - floor_value >= (1f / 3f)) ? floor_value + 0.5f : floor_value;
-
+        }
+        static int SnapUpper(float value)
+        {
+            int floor_value = (int)value;
+            return floor_value + 1;
         }
 
         /// <summary>
-        /// read UserCharToGlyphIndexMap from latest layout output
+        /// read latest layout output into outputGlyphPlanList
         /// </summary>
         /// <param name="glyphLayout"></param>
         /// <param name="outputGlyphPlanList"></param>
@@ -237,7 +254,7 @@ namespace Typography.TextLayout
             outputGlyphPlanList.AddRange(glyphLayout._inputGlyphs._mapUserCharToGlyphIndics);
         }
         /// <summary>
-        /// read GlyphPlan latest layout output
+        /// read latest layout output into outputGlyphPlanList
         /// </summary>
         public static void ReadOutput(this GlyphLayout glyphLayout, List<GlyphPlan> outputGlyphPlanList)
         {
@@ -250,6 +267,9 @@ namespace Typography.TextLayout
 
             PositionTechnique posTech = glyphLayout.PositionTechnique;
             ushort prev_index = 0;
+
+            float pxscale = glyphLayout.PixelScale;
+
             for (int i = 0; i < finalGlyphCount; ++i)
             {
 
@@ -259,30 +279,55 @@ namespace Typography.TextLayout
                 {
                     default: throw new NotSupportedException();
                     case PositionTechnique.None:
-                        outputGlyphPlanList.Add(new GlyphPlan(glyphPos.glyphIndex, cx, cy, glyphPos.advWidth));
+                        {
+                            outputGlyphPlanList.Add(new GlyphPlan(glyphPos.glyphIndex, cx, cy, glyphPos.AdvWidth));
+                            cx += glyphPos.AdvWidth;
+                        }
                         break;
                     case PositionTechnique.OpenFont:
-                        outputGlyphPlanList.Add(new GlyphPlan(
-                            glyphPos.glyphIndex,
-                            cx + glyphPos.xoffset,
-                            (short)(cy + glyphPos.yoffset),
-                            glyphPos.advWidth));
+                        {
+                            //if want grid fitting
+                            //in this version  we must ensure
+                            //that we fit each grid to integer pos 
+
+
+                            //outputGlyphPlanList.Add(new GlyphPlan(
+                            //    glyphPos.glyphIndex,
+                            //    cx + glyphPos.xoffset,
+                            //    (short)(cy + glyphPos.yoffset),
+                            //    glyphPos.advWidth));
+                            //cx += glyphPos.advWidth; 
+
+                            float actual_adv = glyphPos.AdvWidth * pxscale;
+                            float fitting_adv = SnapInteger(actual_adv);
+                            short glyph_xoffset = glyphPos.xoffset;
+
+                            outputGlyphPlanList.Add(new GlyphPlan(
+                                glyphPos.glyphIndex,
+                                cx + glyphPos.xoffset,
+                                (short)(cy + glyphPos.yoffset),
+                                glyphPos.AdvWidth));
+                            //this will be scaled again later
+                            cx += (int)(fitting_adv / pxscale);
+                        }
                         break;
                     case PositionTechnique.Kerning:
-
-                        if (i > 0)
                         {
-                            cx += typeface.GetKernDistance(prev_index, glyphPos.glyphIndex);
+                            //TODO: review this again, this should be merged with openfont layout
+                            if (i > 0)
+                            {
+                                cx += typeface.GetKernDistance(prev_index, glyphPos.glyphIndex);
+                            }
+                            outputGlyphPlanList.Add(new GlyphPlan(
+                               prev_index = glyphPos.glyphIndex,
+                               cx,
+                               cy,
+                               glyphPos.AdvWidth));
+                            cx += glyphPos.AdvWidth;
                         }
-                        outputGlyphPlanList.Add(new GlyphPlan(
-                           prev_index = glyphPos.glyphIndex,
-                           cx,
-                           cy,
-                           glyphPos.advWidth));
-
                         break;
                 }
-                cx += glyphPos.advWidth;
+
             }
         }
 
@@ -313,14 +358,14 @@ namespace Typography.TextLayout
                 {
                     default: throw new NotSupportedException();
                     case PositionTechnique.None:
-                        readDel(i, new GlyphPlan(glyphPos.glyphIndex, cx, cy, glyphPos.advWidth));
+                        readDel(i, new GlyphPlan(glyphPos.glyphIndex, cx, cy, glyphPos.AdvWidth));
                         break;
                     case PositionTechnique.OpenFont:
                         readDel(i, new GlyphPlan(
                             glyphPos.glyphIndex,
                             cx + glyphPos.xoffset,
                             (short)(cy + glyphPos.yoffset),
-                            glyphPos.advWidth));
+                            glyphPos.AdvWidth));
                         break;
                     case PositionTechnique.Kerning:
 
@@ -332,11 +377,11 @@ namespace Typography.TextLayout
                              prev_index = glyphPos.glyphIndex,
                            cx,
                            cy,
-                           glyphPos.advWidth));
+                           glyphPos.AdvWidth));
 
                         break;
                 }
-                cx += glyphPos.advWidth;
+                cx += glyphPos.AdvWidth;
             }
         }
         public static void Layout(this GlyphLayout glyphLayout, Typeface typeface, char[] str, int startAt, int len, List<GlyphPlan> outputGlyphList)
