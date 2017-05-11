@@ -365,9 +365,14 @@ namespace Typography.Contours
             ////experiment
             ////for subpixel rendering
             //fit_x_offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
+            fit_x_offset = 0;
+            if (fit_x_offset < 0)
+            {
 
+                //fit_x_offset = 1 + fit_x_offset;
+            }
 #if DEBUG
-            dbugWriteLine("===begin===" + _avg_xdiff);
+            dbugWriteLine("===begin===" + fit_x_offset);
             if (!dbugUseHorizontalFitValue)
             {
                 fit_x_offset = 0;
@@ -388,7 +393,7 @@ namespace Typography.Contours
             //
             tx.MoveTo(fit_x + fit_x_offset, fit_y);
 #if DEBUG
-            dbugWriteOutput("M", fit_x, fit_x + fit_x_offset, fit_y);
+            // dbugWriteOutput("M", fit_x, fit_x + fit_x_offset, fit_y);
 #endif
             //2. others
             for (int i = 1; i < j; ++i)
@@ -398,7 +403,7 @@ namespace Typography.Contours
                 tx.LineTo(fit_x + fit_x_offset, fit_y);
 #if DEBUG
                 //for debug
-                dbugWriteOutput("L", fit_x, fit_x + fit_x_offset, fit_y);
+                //dbugWriteOutput("L", fit_x, fit_x + fit_x_offset, fit_y);
 #endif
             }
             //close 
@@ -412,11 +417,11 @@ namespace Typography.Contours
 #if DEBUG
         void dbugWriteLine(string text)
         {
-            //Console.WriteLine(text);
+            Console.WriteLine(text);
         }
         void dbugWriteOutput(string cmd, float pre_x, float post_x, float y)
         {
-            //Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
+            Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
         }
         public static bool dbugActualPosToConsole { get; set; }
         public static bool dbugUseHorizontalFitValue { get; set; }

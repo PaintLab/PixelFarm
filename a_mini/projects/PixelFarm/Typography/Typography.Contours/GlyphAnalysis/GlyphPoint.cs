@@ -115,8 +115,10 @@ namespace Typography.Contours
 
         internal void GetFitXY(float pxscale, out float x, out float y)
         {
-            x = (this.newX * pxscale) + _adjust_fit_x;
-            y = (this.newY * pxscale) + _adjust_fit_y;
+            x = (this.newX * pxscale);
+            y = (this.newY * pxscale);
+            //x = (this.newX * pxscale) + _adjust_fit_x;
+            //y = (this.newY * pxscale) + _adjust_fit_y;
         }
 
         internal void SetXY(float x, float y)
