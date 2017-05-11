@@ -333,8 +333,8 @@ namespace PixelFarm.Drawing.Fonts
                     hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphVxs);
                 }
 
-                g_x = (glyphPlan.x * scale + x);
-                g_y = glyphPlan.y * scale;
+                g_x = glyphPlan.ExactX + x;
+                g_y = glyphPlan.ExactY;
 
                 switch (x_snap)
                 {
@@ -406,9 +406,9 @@ namespace PixelFarm.Drawing.Fonts
                 GlyphPlan glyphPlan = glyphPlans[i];
                 renderVxGlyphPlans[i] = new RenderVxGlyphPlan(
                     glyphPlan.glyphIndex,
-                    glyphPlan.x * scale,
-                    glyphPlan.y * scale,
-                    glyphPlan.advX * scale
+                    glyphPlan.ExactX,
+                    glyphPlan.ExactY,
+                    glyphPlan.AdvanceX
                     );
             }
             renderVx.glyphList = renderVxGlyphPlans;

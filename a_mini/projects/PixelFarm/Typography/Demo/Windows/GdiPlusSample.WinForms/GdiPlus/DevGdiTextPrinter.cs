@@ -155,8 +155,8 @@ namespace SampleWinForms
                 }
                 //------
                 //then move pen point to the position we want to draw a glyph
-                float tx = x + glyphPlan.x * scale;
-                float ty = y + glyphPlan.y * scale;
+                float tx = x + glyphPlan.ExactX;
+                float ty = y + glyphPlan.ExactY;
                 g.TranslateTransform(tx, ty);
 
                 if (FillBackground)

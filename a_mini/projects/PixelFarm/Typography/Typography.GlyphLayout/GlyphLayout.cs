@@ -8,23 +8,49 @@ namespace Typography.TextLayout
     public struct GlyphPlan
     {
         public readonly ushort glyphIndex;//2
-        /// <summary>
-        /// exact x pos, start from start pos 0 of span
-        /// </summary>
-        public readonly int x;//4, //TODO: review here=> change to relative pos 
-        public readonly short y;//2
-        public readonly ushort advX;//2
-        public GlyphPlan(ushort glyphIndex, int x, short y, ushort advX)
+        ///// <summary>
+        ///// exact x pos, start from start pos 0 of span
+        ///// </summary>
+        //public readonly int x;//4, //TODO: review here=> change to relative pos 
+        //public readonly short y;//2
+        //public readonly ushort advX;//2
+        //public GlyphPlan(ushort glyphIndex, int x, short y, ushort advX)
+        //{
+        //    this.glyphIndex = glyphIndex;
+        //    this.x = x;
+        //    this.y = y;
+        //    this.advX = advX;
+        //}
+        public GlyphPlan(ushort glyphIndex, float exactX, short exactY, float extactAdvX)
         {
             this.glyphIndex = glyphIndex;
-            this.x = x;
-            this.y = y;
-            this.advX = advX;
+            this.ExactX = exactX;
+            this.ExactY = exactY;
+            this.AdvanceX = extactAdvX;
+
+        }
+        public float ExactY { get; private set; }
+        public float ExactX { get; private set; }
+        public float ExactRight
+        {
+            get
+            {
+                return ExactX + AdvanceX;
+            }
+        }
+        public float AdvanceX
+        {
+            get;
+            private set;
+        }
+        public bool AdvanceMoveForward
+        {
+            get { return this.AdvanceX > 0; }
         }
 #if DEBUG
         public override string ToString()
         {
-            return "(" + x + "," + y + "), adv:" + advX;
+            return "(" + ExactX + "," + ExactY + "), adv:" + AdvanceX;
         }
 #endif
     }
@@ -279,8 +305,9 @@ namespace Typography.TextLayout
                     default: throw new NotSupportedException();
                     case PositionTechnique.None:
                         {
-                            outputGlyphPlanList.Add(new GlyphPlan(glyphPos.glyphIndex, cx, cy, glyphPos.AdvWidth));
-                            cx += glyphPos.AdvWidth;
+                            throw new NotSupportedException();
+                            //outputGlyphPlanList.Add(new GlyphPlan(glyphPos.glyphIndex, cx, cy, glyphPos.AdvWidth));
+                            //cx += glyphPos.AdvWidth;
                         }
                         break;
                     case PositionTechnique.OpenFont:
@@ -372,17 +399,18 @@ namespace Typography.TextLayout
                         break;
                     case PositionTechnique.Kerning:
                         {
-                            //TODO: review this again, this should be merged with openfont layout
-                            if (i > 0)
-                            {
-                                cx += typeface.GetKernDistance(prev_index, glyphPos.glyphIndex);
-                            }
-                            outputGlyphPlanList.Add(new GlyphPlan(
-                               prev_index = glyphPos.glyphIndex,
-                               cx,
-                               cy,
-                               glyphPos.AdvWidth));
-                            cx += glyphPos.AdvWidth;
+                            throw new NotSupportedException();
+                            ////TODO: review this again, this should be merged with openfont layout
+                            //if (i > 0)
+                            //{
+                            //    cx += typeface.GetKernDistance(prev_index, glyphPos.glyphIndex);
+                            //}
+                            //outputGlyphPlanList.Add(new GlyphPlan(
+                            //   prev_index = glyphPos.glyphIndex,
+                            //   cx,
+                            //   cy,
+                            //   glyphPos.AdvWidth));
+                            //cx += glyphPos.AdvWidth;
                         }
                         break;
                 }
@@ -399,49 +427,51 @@ namespace Typography.TextLayout
         /// <param name="readDel"></param>
         public static void ReadOutput(this GlyphLayout glyphLayout, GlyphReadOutputDelegate readDel)
         {
-            Typeface typeface = glyphLayout.Typeface;
-            List<GlyphPos> glyphPositions = glyphLayout._glyphPositions;
-            //3.read back
-            int finalGlyphCount = glyphPositions.Count;
-            int cx = 0;
-            short cy = 0;
+            throw new NotSupportedException();
 
-            PositionTechnique posTech = glyphLayout.PositionTechnique;
-            ushort prev_index = 0;
-            for (int i = 0; i < finalGlyphCount; ++i)
-            {
+            //Typeface typeface = glyphLayout.Typeface;
+            //List<GlyphPos> glyphPositions = glyphLayout._glyphPositions;
+            ////3.read back
+            //int finalGlyphCount = glyphPositions.Count;
+            //int cx = 0;
+            //short cy = 0;
 
-                GlyphPos glyphPos = glyphPositions[i];
-                //----------------------------------   
-                switch (posTech)
-                {
-                    default: throw new NotSupportedException();
-                    case PositionTechnique.None:
-                        readDel(i, new GlyphPlan(glyphPos.glyphIndex, cx, cy, glyphPos.AdvWidth));
-                        break;
-                    case PositionTechnique.OpenFont:
-                        readDel(i, new GlyphPlan(
-                            glyphPos.glyphIndex,
-                            cx + glyphPos.xoffset,
-                            (short)(cy + glyphPos.yoffset),
-                            glyphPos.AdvWidth));
-                        break;
-                    case PositionTechnique.Kerning:
+            //PositionTechnique posTech = glyphLayout.PositionTechnique;
+            //ushort prev_index = 0;
+            //for (int i = 0; i < finalGlyphCount; ++i)
+            //{
 
-                        if (i > 0)
-                        {
-                            cx += typeface.GetKernDistance(prev_index, glyphPos.glyphIndex);
-                        }
-                        readDel(i, new GlyphPlan(
-                             prev_index = glyphPos.glyphIndex,
-                           cx,
-                           cy,
-                           glyphPos.AdvWidth));
+            //    GlyphPos glyphPos = glyphPositions[i];
+            //    //----------------------------------   
+            //    switch (posTech)
+            //    {
+            //        default: throw new NotSupportedException();
+            //        case PositionTechnique.None:
+            //            readDel(i, new GlyphPlan(glyphPos.glyphIndex, cx, cy, glyphPos.AdvWidth));
+            //            break;
+            //        case PositionTechnique.OpenFont:
+            //            readDel(i, new GlyphPlan(
+            //                glyphPos.glyphIndex,
+            //                cx + glyphPos.xoffset,
+            //                (short)(cy + glyphPos.yoffset),
+            //                glyphPos.AdvWidth));
+            //            break;
+            //        case PositionTechnique.Kerning:
 
-                        break;
-                }
-                cx += glyphPos.AdvWidth;
-            }
+            //            if (i > 0)
+            //            {
+            //                cx += typeface.GetKernDistance(prev_index, glyphPos.glyphIndex);
+            //            }
+            //            readDel(i, new GlyphPlan(
+            //                 prev_index = glyphPos.glyphIndex,
+            //               cx,
+            //               cy,
+            //               glyphPos.AdvWidth));
+
+            //            break;
+            //    }
+            //    cx += glyphPos.AdvWidth;
+            //}
         }
         public static void Layout(this GlyphLayout glyphLayout, Typeface typeface, char[] str, int startAt, int len, List<GlyphPlan> outputGlyphList)
         {
@@ -505,7 +535,7 @@ namespace Typography.TextLayout
             else
             {
                 GlyphPlan lastOne = outputGlyphPlans[j - 1];
-                strBox = new MeasuredStringBox((lastOne.x + lastOne.advX) * scale,
+                strBox = new MeasuredStringBox((lastOne.ExactRight) * scale,
                         currentTypeface.Ascender * scale,
                         currentTypeface.Descender * scale,
                         currentTypeface.LineGap * scale);

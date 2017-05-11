@@ -343,8 +343,8 @@ namespace PixelFarm.DrawingGL
                 //TODO: review precise height in float
                 //-------------------------------------- 
                 PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
-                g_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                g_y = (float)((glyph.y * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
+                g_x = (float)(x + (glyph.ExactX - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
+                g_y = (float)((glyph.ExactY - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
                 switch (x_snap)
                 {
                     default: throw new NotSupportedException();
