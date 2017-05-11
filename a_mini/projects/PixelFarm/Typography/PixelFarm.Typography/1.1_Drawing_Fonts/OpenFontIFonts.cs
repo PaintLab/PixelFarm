@@ -32,28 +32,30 @@ namespace LayoutFarm
         }
         public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
         {
-            //from font
-            //resolve for typeface
-            userGlyphPlanList.Clear();
-            userCharToGlyphMapList.Clear();
-            // 
-            Typeface typeface = typefaceStore.GetTypeface(font.Name, InstalledFontStyle.Normal);
-            glyhLayout.Typeface = typeface;
-            glyhLayout.GenerateGlyphPlans(str, startAt, len, userGlyphPlanList, userCharToGlyphMapList);
-            //
-            //
-            float scale = typeface.CalculateToPixelScaleFromPointSize(font.SizeInPoints);
-            int j = glyphXAdvances.Length;
-            double actualX = 0;
-            for (int i = 0; i < j; ++i)
-            {
-                GlyphPlan p = userGlyphPlanList[i];
-                double actualAdvX = p.advX * scale;
-                double newX = actualX + actualAdvX;
 
-                glyphXAdvances[i] = (int)Math.Round(newX - actualX);
-                actualX = newX;
-            }
+
+            ////from font
+            ////resolve for typeface
+            //userGlyphPlanList.Clear();
+            //userCharToGlyphMapList.Clear();
+            //// 
+            //Typeface typeface = typefaceStore.GetTypeface(font.Name, InstalledFontStyle.Normal);
+            //glyhLayout.Typeface = typeface;
+            //glyhLayout.GenerateGlyphPlans(str, startAt, len, userGlyphPlanList, userCharToGlyphMapList);
+            ////
+            ////
+            //float scale = typeface.CalculateToPixelScaleFromPointSize(font.SizeInPoints);
+            //int j = glyphXAdvances.Length;
+            //double actualX = 0;
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    GlyphPlan p = userGlyphPlanList[i];
+            //    double actualAdvX = p.advX * scale;
+            //    double newX = actualX + actualAdvX;
+
+            //    glyphXAdvances[i] = (int)Math.Round(newX - actualX);
+            //    actualX = newX;
+            //}
 
         }
         public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
