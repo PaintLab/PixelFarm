@@ -190,7 +190,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_x = GlyphLayoutExtensions.SnapInteger(g_x);
+                        g_x = GlyphLayoutExtensions.SnapToFitInteger(g_x);
                         break;
                     case GlyphPosPixelSnapKind.Half:
                         g_x = GlyphLayoutExtensions.SnapHalf(g_x);
@@ -202,7 +202,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_y = baseY + GlyphLayoutExtensions.SnapInteger(g_y);   //use baseY not y
+                        g_y = baseY + GlyphLayoutExtensions.SnapToFitInteger(g_y);   //use baseY not y
                         break;
                     case GlyphPosPixelSnapKind.Half:
                         g_y = baseY + GlyphLayoutExtensions.SnapHalf(g_y);
@@ -340,7 +340,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_x = GlyphLayoutExtensions.SnapInteger(g_x);
+                        g_x = GlyphLayoutExtensions.SnapToFitInteger(g_x);
                         break;
                     case GlyphPosPixelSnapKind.Half:
                         g_x = GlyphLayoutExtensions.SnapHalf(g_x);
@@ -352,7 +352,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_y = baseY + GlyphLayoutExtensions.SnapInteger(g_y);   //use baseY not y
+                        g_y = baseY + GlyphLayoutExtensions.SnapToFitInteger(g_y);   //use baseY not y
                         break;
                     case GlyphPosPixelSnapKind.Half:
                         g_y = baseY + GlyphLayoutExtensions.SnapHalf(g_y);
