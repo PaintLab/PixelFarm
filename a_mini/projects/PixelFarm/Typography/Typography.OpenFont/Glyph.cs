@@ -10,6 +10,8 @@ namespace Typography.OpenFont
     {
         GlyphPointF[] glyphPoints;
         ushort[] _contourEndPoints;
+        ushort _advWidth;
+        bool _hasAdvWidth;
         Bounds _bounds;
         public static readonly Glyph Empty = new Glyph(new GlyphPointF[0], new ushort[0], Bounds.Zero, null);
 
@@ -31,13 +33,22 @@ namespace Typography.OpenFont
             _contourEndPoints = contourEndPoints;
             _bounds = bounds;
             GlyphInstructions = glyphInstructions;
-
         }
 
 
         public Bounds Bounds { get { return _bounds; } }
         public ushort[] EndPoints { get { return _contourEndPoints; } }
         public GlyphPointF[] GlyphPoints { get { return glyphPoints; } }
+        public ushort AdvanceWidth
+        {
+            get { return _advWidth; }
+            set
+            {
+                _advWidth = value;
+                _hasAdvWidth = true;
+            }
+        }
+        public bool HasAdvWidth { get { return _hasAdvWidth; } }
         //--------------
 
         internal static void OffsetXY(Glyph glyph, short dx, short dy)
