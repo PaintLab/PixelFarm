@@ -631,7 +631,7 @@ namespace Typography.OpenFont.Tables
                                 BaseRecord baseRecord = BaseArrayTable.GetBaseRecords(baseFound);
                                 AnchorPoint basePointForMark = baseRecord.anchors[markClass];
 
-                                glyphPos.xoffset += (short)((-inputGlyphs[i - 1].advWidth + basePointForMark.xcoord - markAnchorPoint.xcoord));
+                                glyphPos.xoffset += (short)((-inputGlyphs[i - 1].AdvWidth + basePointForMark.xcoord - markAnchorPoint.xcoord));
 
 #if DEBUG
                                 if (markAnchorPoint.ycoord != 0)
@@ -643,7 +643,7 @@ namespace Typography.OpenFont.Tables
 
                             }
                         }
-                        xpos += glyphPos.advWidth;
+                        xpos += glyphPos.AdvWidth;
                     }
                 }
 
@@ -895,7 +895,7 @@ namespace Typography.OpenFont.Tables
                 for (int i = startAt; i >= 0; --i)
                 {
                     GlyphPos glyphPos = inputGlyphs[i];
-                    if (glyphPos._classKind <= GlyphClassKind.Base)
+                    if (glyphPos.classKind <= GlyphClassKind.Base)
                     {
                         return i;
                     }
