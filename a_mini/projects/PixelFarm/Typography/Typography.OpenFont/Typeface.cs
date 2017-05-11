@@ -341,9 +341,7 @@ namespace Typography.OpenFont
         public readonly ushort glyphIndex;
         public short xoffset;
         public short yoffset;
-
         Glyph _glyph;
-
         public GlyphPos(ushort glyphIndex, Glyph glyph)
         {
             this.glyphIndex = glyphIndex;
@@ -359,6 +357,16 @@ namespace Typography.OpenFont
             {
                 return _glyph.AdvanceWidth;
             }
+        }
+        public Bounds Bounds
+        {
+            get { return _glyph.Bounds; }
+        }
+        public void GetLeftAndRightBearing(out short leftBearing, out short rightBearing)
+        {
+            Bounds b = _glyph.Bounds;
+            leftBearing = b.XMin;
+            rightBearing = (short)(this.AdvWidth - b.XMax);
         }
 #if DEBUG
         public override string ToString()
