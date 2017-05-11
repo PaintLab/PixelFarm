@@ -289,7 +289,8 @@ namespace Typography.TextLayout
                             //in this version  we must ensure
                             //that we fit each grid to integer pos 
 
-                            //----------
+                            //--------------------------------------------------
+                            //version 1:
                             //original, no horizontal grid fit
                             //outputGlyphPlanList.Add(new GlyphPlan(
                             //    glyphPos.glyphIndex,
@@ -297,7 +298,42 @@ namespace Typography.TextLayout
                             //    (short)(cy + glyphPos.yoffset),
                             //    glyphPos.advWidth));
                             //cx += glyphPos.advWidth; 
+                            //--------------------------------------------------
+                            //version 2:
 
+                            //float actual_adv = glyphPos.AdvWidth * pxscale;
+                            //float fitting_adv = SnapInteger(actual_adv);
+
+                            //short leftBearing, rightBearing;
+                            //glyphPos.GetLeftAndRightBearing(out leftBearing, out rightBearing);
+                            //float scaled_leftBearing = leftBearing * pxscale;
+                            //float scaled_rightBearing = rightBearing * pxscale;
+                            ////
+                            ////for good readable we should ensure
+                            ////left bearing space at least 1 px 
+                            ////if not then we need to adjust it.
+                            //int floor_left_bearing = (int)scaled_leftBearing;
+                            //int floor_right_bearing = (int)scaled_rightBearing;
+                            //int bearing_sum = (int)(scaled_leftBearing + scaled_rightBearing);
+                            //float left_bearind_adjust = 0;
+
+                            //if (bearing_sum == 0)
+                            //{
+                            //    //this could cause congest glyph
+                            //    //so we adjust it
+                            //    left_bearind_adjust = 1 - (scaled_leftBearing);
+                            //    fitting_adv += left_bearind_adjust;
+                            //}
+
+                            //outputGlyphPlanList.Add(new GlyphPlan(
+                            //    glyphPos.glyphIndex,
+                            //    cx + glyphPos.xoffset + (int)(left_bearind_adjust / pxscale),
+                            //    (short)(cy + glyphPos.yoffset),
+                            //    glyphPos.AdvWidth));
+                            ////this will be scaled again later
+                            //cx += (int)(fitting_adv / pxscale);
+                            //--------------------------------------------------
+                            //version 3:
                             float actual_adv = glyphPos.AdvWidth * pxscale;
                             float fitting_adv = SnapInteger(actual_adv);
 
@@ -319,10 +355,8 @@ namespace Typography.TextLayout
                                 //this could cause congest glyph
                                 //so we adjust it
                                 left_bearind_adjust = 1 - (scaled_leftBearing);
-
                                 fitting_adv += left_bearind_adjust;
                             }
-
 
                             outputGlyphPlanList.Add(new GlyphPlan(
                                 glyphPos.glyphIndex,
@@ -331,6 +365,7 @@ namespace Typography.TextLayout
                                 glyphPos.AdvWidth));
                             //this will be scaled again later
                             cx += (int)(fitting_adv / pxscale);
+
                         }
                         break;
                     case PositionTechnique.Kerning:
