@@ -339,17 +339,27 @@ namespace Typography.OpenFont
     public class GlyphPos
     {
         public readonly ushort glyphIndex;
-        public readonly ushort advWidth;
         public short xoffset;
         public short yoffset;
-        public GlyphClassKind _classKind;
-        public GlyphPos(ushort glyphIndex, GlyphClassKind classKind, ushort advWidth)
+
+        Glyph _glyph;
+
+        public GlyphPos(ushort glyphIndex, Glyph glyph)
         {
             this.glyphIndex = glyphIndex;
-            this.advWidth = advWidth;
-            this._classKind = classKind;
+            this._glyph = glyph;
         }
-
+        public GlyphClassKind classKind
+        {
+            get { return _glyph.GlyphClass; }
+        }
+        public ushort AdvWidth
+        {
+            get
+            {
+                return _glyph.AdvanceWidth;
+            }
+        }
 #if DEBUG
         public override string ToString()
         {
