@@ -60,44 +60,57 @@ namespace Typography.Contours
         {
 
             int cntCount = flattenContours.Count;
-            GlyphContour cnt = flattenContours[0]; //first contour
+            GlyphContour cnt = flattenContours[0]; //first contour 
             //--------------------------
-            //TODO: review here, add hole or not 
-            //first polygon
-            Poly2Tri.Polygon mainPolygon = CreatePolygon(cnt.flattenPoints);//first contour        
-            bool isClockWise = cnt.IsClosewise();
-            //review is hole or not here
+            //TODO: review here, add hole or not  
+            // more than 1 contours, no hole => eg.  i, j, ;,  etc
+            // more than 1 contours, with hole => eg.  a,e ,   etc  
+            //closewise => not hole
+            Poly2Tri.Polygon mainPolygon = CreatePolygon(cnt.flattenPoints);//first contour         
+            //
+            //this version if it is a hole=> we add it to main polygon
+            //TODO: add to more proper polygon ***
             //eg i
             //-------------------------- 
+            List<Poly2Tri.Polygon> otherPolygons = null;
             for (int n = 1; n < cntCount; ++n)
             {
                 cnt = flattenContours[n];
                 //IsHole is correct after we Analyze() the glyph contour
                 Poly2Tri.Polygon subPolygon = CreatePolygon(cnt.flattenPoints);
-                //TODO: review here 
-                mainPolygon.AddHole(subPolygon);
-                //if (cnt.IsClosewise())
-                //{ 
-                //}
-                //if (cnt.IsClosewise())
-                //{
-                //    mainPolygon.AddHole(subPolygon);
-                //}
-                //else
-                //{
-                //    //TODO: review here
-                //    //the is a complete separate part                   
-                //    //eg i j has 2 part (dot over i and j etc)
-                //}
+
+                if (cnt.IsClosewise())
+                {
+                    //not a hole
+                    if (otherPolygons == null)
+                    {
+                        otherPolygons = new List<Poly2Tri.Polygon>();
+                    }
+                    otherPolygons.Add(subPolygon);
+                }
+                else
+                {
+                    //hole, A subtraction polygon fully contained inside this polygon
+                    mainPolygon.AddHole(subPolygon);
+                }
             }
             //------------------------------------------
             //2. tri angulate 
             Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
 
+            Poly2Tri.Polygon[] subPolygons = (otherPolygons != null) ? otherPolygons.ToArray() : null;
+            if (subPolygons != null)
+            {
+                for (int i = subPolygons.Length - 1; i >= 0; --i)
+                {
+                    Poly2Tri.P2T.Triangulate(subPolygons[i]);
+                }
+            }
+
             //3. intermediate outline is used inside this lib 
             //and then convert intermediate outline to dynamic outline
             return new GlyphDynamicOutline(
-                new GlyphIntermediateOutline(mainPolygon, flattenContours));
+                new GlyphIntermediateOutline(flattenContours, mainPolygon, subPolygons));
         }
 
 
