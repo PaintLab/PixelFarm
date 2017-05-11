@@ -386,14 +386,17 @@ namespace Typography.TextLayout
                                 left_bearing_adjust = 1 - (scaled_leftBearing);
                                 preview_adv_width += left_bearing_adjust;
                             }
+                            //-----------------------
 
+
+                            //-----------------------
                             outputGlyphPlanList.Add(new GlyphPlan(
                                 glyphPos.glyphIndex,
-                                cx + glyphPos.xoffset + (int)(left_bearing_adjust / pxscale),
+                                cx + glyphPos.xoffset + (int)(left_bearing_adjust),
                                 (short)(cy + glyphPos.yoffset),
                                 glyphPos.AdvWidth));
-                            //this will be scaled again later
-                            cx += (int)(preview_adv_width / pxscale);
+
+                            cx += (int)preview_adv_width;
 
                         }
                         break;
