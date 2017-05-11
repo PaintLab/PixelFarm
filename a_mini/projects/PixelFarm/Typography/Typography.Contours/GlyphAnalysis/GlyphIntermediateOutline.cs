@@ -34,22 +34,28 @@ namespace Typography.Contours
         {
             List<GlyphTriangle> triangles = new List<GlyphTriangle>();
             _lineHubs = new List<CentroidLineHub>();
-#if DEBUG
-            this._dbugpolygon = polygon; //for debug only ***
+#if DEBUG            
             EdgeLine.s_dbugTotalId = 0;//reset 
-            this._dbugTriangles = triangles;//for debug 
+            this._dbugTriangles = new List<GlyphTriangle>();
 #endif
 
             //main polygon
             CreateCentroidLineHubs(polygon, triangles, _lineHubs);
+#if DEBUG
+            _dbugTriangles.AddRange(triangles);
+#endif
             if (subPolygons != null)
             {
                 int j = subPolygons.Length;
-                List<GlyphTriangle> triangles2 = new List<GlyphTriangle>();
+
                 for (int i = 0; i < j; ++i)
-                {                    
-                    CreateCentroidLineHubs(subPolygons[i], triangles2, _lineHubs);
-                    triangles2.Clear();
+                {
+
+                    triangles.Clear();//clear, reuse it
+                    CreateCentroidLineHubs(subPolygons[i], triangles, _lineHubs);
+#if DEBUG
+                    _dbugTriangles.AddRange(triangles);
+#endif
                 }
             }
         }
@@ -259,7 +265,7 @@ namespace Typography.Contours
 
 #if DEBUG
 
-        Polygon _dbugpolygon;
+
         List<GlyphTriangle> _dbugTriangles;
         public List<GlyphTriangle> dbugGetTriangles()
         {
