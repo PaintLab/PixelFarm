@@ -327,7 +327,7 @@ namespace PixelFarm.Drawing.Fonts
                     ////find bounding box
                     //RectD boundingRect = new RectD();
                     //PixelFarm.Agg.BoundingRect.GetBoundingRect(new VertexStoreSnap(glyphVxs), ref boundingRect);
-                      
+
 
                     //------------------
                     hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphVxs);
@@ -375,6 +375,9 @@ namespace PixelFarm.Drawing.Fonts
         {
             UpdateGlyphLayoutSettings();
             _outputGlyphPlans.Clear();
+
+            //
+            _glyphLayout.PixelScale = _glyphPathBuilder.Typeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
             _glyphLayout.GenerateGlyphPlans(text, startAt, len, _outputGlyphPlans, null);
             DrawFromGlyphPlans(_outputGlyphPlans, (float)x, (float)y);
         }
@@ -382,6 +385,8 @@ namespace PixelFarm.Drawing.Fonts
         {
             UpdateGlyphLayoutSettings();
             _outputGlyphPlans.Clear();
+            //             
+            _glyphLayout.PixelScale = _glyphPathBuilder.Typeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
             _glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _outputGlyphPlans, null);
             DrawFromGlyphPlans(_outputGlyphPlans, x, y);
 

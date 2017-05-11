@@ -36,10 +36,7 @@ namespace LayoutFarm
             //resolve for typeface
             userGlyphPlanList.Clear();
             userCharToGlyphMapList.Clear();
-            //
-
-            
-
+            // 
             Typeface typeface = typefaceStore.GetTypeface(font.Name, InstalledFontStyle.Normal);
             glyhLayout.Typeface = typeface;
             glyhLayout.GenerateGlyphPlans(str, startAt, len, userGlyphPlanList, userCharToGlyphMapList);
