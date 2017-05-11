@@ -203,8 +203,7 @@ namespace Typography.TextLayout
                 //this is original value WITHOUT fit-to-grid adjust
                 _glyphPositions.Add(new GlyphPos(
                     glyIndex,
-                    orgGlyph,
-                    typeface.GetHAdvanceWidthFromGlyphIndex(glyIndex))
+                    orgGlyph)
                    );
             }
             PositionTechnique posTech = this.PositionTechnique;
