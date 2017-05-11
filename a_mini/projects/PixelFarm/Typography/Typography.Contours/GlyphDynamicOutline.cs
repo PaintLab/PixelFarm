@@ -364,7 +364,7 @@ namespace Typography.Contours
             float fit_x_offset = _avg_xdiff;
             ////experiment
             ////for subpixel rendering
-            // fit_x_offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
+            fit_x_offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
 
 #if DEBUG
             dbugWriteLine("===begin===" + _avg_xdiff);
