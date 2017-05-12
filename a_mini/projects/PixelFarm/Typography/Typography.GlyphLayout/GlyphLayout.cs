@@ -4,6 +4,34 @@ using System.Collections.Generic;
 using Typography.OpenFont;
 namespace Typography.TextLayout
 {
+    public struct ABC
+    {
+        public float a;
+        public float b;
+        public float c;
+    }
+
+    public interface IGridFittingEngine
+    {
+        /// <summary>
+        /// check if we need grid fitting at specific pixel scale or not
+        /// </summary>
+        /// <param name="pxscale"></param>
+        /// <returns></returns>
+        bool NeedFitting(float pxscale);
+        /// <summary>
+        /// set current pixel scale
+        /// </summary>
+        /// <param name="pxscale"></param>
+        void SetPixelScale(float pxscale);
+        /// <summary>
+        /// get abc fit at specific scale
+        /// </summary>
+        /// <param name="glyphIndex"></param>
+        /// <returns></returns>
+        ABC GetABC(ushort glyphIndex);
+
+    }
 
     public struct GlyphPlan
     {
@@ -115,7 +143,9 @@ namespace Typography.TextLayout
 
 
 
-
+    /// <summary>
+    /// text span's glyph layout engine
+    /// </summary>
     public class GlyphLayout
     {
         GlyphLayoutPlanCollection _layoutPlanCollection = new GlyphLayoutPlanCollection();
@@ -147,6 +177,9 @@ namespace Typography.TextLayout
                 _scriptLang = value;
             }
         }
+        public IGridFittingEngine GridFittingEngine { get; set; }
+
+
         public bool EnableLigature { get; set; }
 
         void UpdateLayoutPlan()
@@ -237,6 +270,7 @@ namespace Typography.TextLayout
             {
                 _gpos.DoGlyphPosition(_glyphPositions);
             }
+            //----------------------------------------------  
         }
 
         //
@@ -283,9 +317,8 @@ namespace Typography.TextLayout
         /// </summary>
         public static void ReadOutput(this GlyphLayout glyphLayout, List<GlyphPlan> outputGlyphPlanList)
         {
-            Typeface typeface = glyphLayout.Typeface;
-            List<GlyphPos> glyphPositions = glyphLayout._glyphPositions;
-            //3.read back
+
+            List<GlyphPos> glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
             int finalGlyphCount = glyphPositions.Count;
             int cx = 0;
             short cy = 0;
@@ -298,14 +331,23 @@ namespace Typography.TextLayout
                 default: throw new NotSupportedException();
                 case PositionTechnique.OpenFont:
                     {
+                        //--------------------------------------
+                        //if the glyph is modified by some fitting engine
+                        //the position of it may be changed from original glyph info
+                        //(eg left, right bearing).
+                        //so we need a modified glyph metrix info from the fitting engine.
+                        //--------------------------------------
+                        IGridFittingEngine gridFittingEngine = glyphLayout.GridFittingEngine;
+
+
                         float prev_diff_from_xmax = 0;
                         for (int i = 0; i < finalGlyphCount; ++i)
                         {
                             GlyphPos glyphPos = glyphPositions[i];
+
                             //--------------------------------------------------
                             //version 1:
-                            // original, no horizontal grid fit
-
+                            //original, no horizontal grid fit
                             int advW = (int)(glyphPos.AdvWidth * pxscale);
 
                             outputGlyphPlanList.Add(new GlyphPlan(
