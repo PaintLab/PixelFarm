@@ -122,12 +122,47 @@ namespace Typography.Contours
             if (_fitoutlineCollection.TryGetValue(glyphIndex, out found))
             {
                 //evaluate at current pxscale
-                float avg_xdiffOffset = found.AvgXFitOffset;
+                float avg_xdiffOffset = found.AvgXFitOffset - 0.33f;//-0.33f for subpix rendering
+                Bounds orgBounds = found.OriginalGlyphControlBounds;
+                //---
+                //this is the scaled of original value
+                float s_advanced = found.OriginalAdvanceWidth * _fit_pxscale;
+                float s_minX = orgBounds.XMin * _fit_pxscale;
+                float s_maxX = orgBounds.XMax * _fit_pxscale;
+                //---
+                float new_xmin = s_minX + avg_xdiffOffset;
+                float new_xmax = s_maxX + avg_xdiffOffset;
+                float new_advanced = s_advanced + avg_xdiffOffset;
 
+                //---
+                ABC abc = new ABC();
 
+                if (s_minX >= 0 && new_xmin < 0)
+                {
+                    abc.x_offset = 1;
+                    //move org to left 1 px
+                    if (new_xmax + 0.66f > s_maxX)
+                    {
+                        new_advanced = (int)Math.Ceiling(new_advanced);
+                    }
+                }
+                else if (s_minX < 0.5f)
+                {
+                    abc.x_offset = 1;
+                    //move org to left 1 px
+                    if (new_xmax + 0.66f > new_advanced)
+                    {
+                        new_advanced = (int)Math.Ceiling(new_advanced);
+                    }
+                }
+                abc.w = (short)Math.Round(new_advanced);
+                return abc;
             }
-            ABC abc = new ABC();
-            return abc;
+            else
+            {
+                return new ABC();
+            }
+
         }
         public GlyphDynamicOutline LatestGlyphFitOutline
         {
