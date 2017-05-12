@@ -127,6 +127,7 @@ namespace PixelFarm.Drawing.Fonts
                 if (_glyphPathBuilder == null)
                 {
                     _glyphPathBuilder = new GlyphPathBuilder(value);
+
                 }
                 OnFontSizeChanged();
             }

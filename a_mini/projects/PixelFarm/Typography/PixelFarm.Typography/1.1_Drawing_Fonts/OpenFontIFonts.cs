@@ -16,16 +16,18 @@ namespace LayoutFarm
         List<GlyphPlan> userGlyphPlanList;
         List<UserCharToGlyphIndexMap> userCharToGlyphMapList;
 
-
-
         public OpenFontIFonts(IFontLoader fontloader)
         {
             this._fontloader = fontloader;
             typefaceStore = new TypefaceStore();
             typefaceStore.FontCollection = InstalledFontCollection.GetSharedFontCollection(null);
             glyhLayout = new GlyphLayout();
+            
             glyhLayout.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;//test conplex script
             glyhLayout.PositionTechnique = PositionTechnique.OpenFont;
+
+
+
             //
             userGlyphPlanList = new List<GlyphPlan>();
             userCharToGlyphMapList = new List<UserCharToGlyphIndexMap>();

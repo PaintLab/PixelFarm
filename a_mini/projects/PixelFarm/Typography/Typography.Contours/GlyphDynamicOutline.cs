@@ -127,7 +127,11 @@ namespace Typography.Contours
         /// <summary>
         /// external glyph bounds 
         /// </summary>
-        public Bounds GlyphControlBounds { get; set; }
+        public Bounds OriginalGlyphControlBounds { get; set; }
+        /// <summary>
+        /// orignal glyph advance width
+        /// </summary>
+        public int OriginalAdvanceWidth { get; set; }
 
         /// <summary>
         /// generate output with specific pixel scale
@@ -369,18 +373,44 @@ namespace Typography.Contours
             int j = points.Count;
             if (j == 0) return;
             //------------------------------------------------- 
-            Bounds controlBounds = this.GlyphControlBounds;
-
-
+            Bounds controlBounds = this.OriginalGlyphControlBounds;
             //walk along the edge in the contour to generate new edge output
+            float pxscale = this._pxScale;
             float fit_x_offset = _avg_xdiff;
+
+            //this is original control bounds
+            //we use this to decide minor shift direction
+            //scaled values
+
+            float one_px = 1 / pxscale;
+            bool atLeast1PxLeft = controlBounds.XMin >= one_px;  //at least 1 px left
+
+            float s_xmin = controlBounds.XMin * pxscale;
+            float s_ymin = controlBounds.YMin * pxscale;
+            float s_xmax = controlBounds.XMax * pxscale;
+            float s_ymax = controlBounds.YMax * pxscale;
+            float s_advance_w = OriginalAdvanceWidth * pxscale;
+
+
+            //------------------------------------------------- 
             ////experiment
-            ////for subpixel rendering
+            ////for subpixel rendering 
             //fit_x_offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
-            fit_x_offset = 0;
+
             if (fit_x_offset < 0)
             {
                 //fit_x_offset = 1 + fit_x_offset;
+                fit_x_offset = -s_xmin + 1 + (+fit_x_offset);
+            }
+            else
+            {
+                fit_x_offset = -s_xmin + 1 + (1 - fit_x_offset);
+                //offset to right (+)
+                //to fit main integer
+                //float new_floor = (int)s_xmin;
+                //new_floor += fit_x_offset;
+                //float new_minor_diff = new_floor - s_xmin; 
+                //float actual_first = s_xmin + fit_x_offset;
             }
 
 
@@ -392,7 +422,7 @@ namespace Typography.Contours
             }
 #endif
             //------------------------------------------------- 
-            float pxscale = this._pxScale;
+
             bool useGridFit = EnableGridFit;
             //TODO: review here 
             float fit_x, fit_y;
