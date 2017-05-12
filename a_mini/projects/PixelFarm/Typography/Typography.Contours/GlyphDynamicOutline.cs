@@ -19,6 +19,10 @@ namespace Typography.Contours
         float _pxScale;
         bool _needRefreshBoneGroup;
         bool _needAdjustGridFitValues;
+
+        /// <summary>
+        /// x offset (start from abstract origin) to fit the grid
+        /// </summary>
         float _avg_x_fitOffset = 0;
         BoneGroupingHelper _groupingHelper;
         //
@@ -142,7 +146,7 @@ namespace Typography.Contours
         {
             if (_contours == null) return; //blank
 #if DEBUG
-            this.EnableGridFit = dbugTestNewGridFitting; 
+            this.EnableGridFit = dbugTestNewGridFitting;
 #endif
 
             if (_pxScale != pxScale)
@@ -389,20 +393,20 @@ namespace Typography.Contours
             //we use this to decide minor shift direction
             //scaled values
 
-            float one_px = 1 / pxscale;
-            bool atLeast1PxLeft = controlBounds.XMin >= one_px;  //at least 1 px left
+            //float one_px = 1 / pxscale;
+            //bool atLeast1PxLeft = controlBounds.XMin >= one_px;  //at least 1 px left
 
-            float s_xmin = controlBounds.XMin * pxscale;
-            float s_ymin = controlBounds.YMin * pxscale;
-            float s_xmax = controlBounds.XMax * pxscale;
-            float s_ymax = controlBounds.YMax * pxscale;
-            float s_advance_w = OriginalAdvanceWidth * pxscale;
+            //float s_xmin = controlBounds.XMin * pxscale;
+            //float s_ymin = controlBounds.YMin * pxscale;
+            //float s_xmax = controlBounds.XMax * pxscale;
+            //float s_ymax = controlBounds.YMax * pxscale;
+            //float s_advance_w = OriginalAdvanceWidth * pxscale;
 
 
             //------------------------------------------------- 
             ////experiment
             ////for subpixel rendering 
-            //fit_x_offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
+            fit_x_offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
 
             //if (fit_x_offset < 0)
             //{
@@ -461,11 +465,11 @@ namespace Typography.Contours
 #if DEBUG
         void dbugWriteLine(string text)
         {
-            Console.WriteLine(text);
+            //Console.WriteLine(text);
         }
         void dbugWriteOutput(string cmd, float pre_x, float post_x, float y)
         {
-            Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
+           // Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
         }
         public static bool dbugActualPosToConsole { get; set; }
         public static bool dbugUseHorizontalFitValue { get; set; }

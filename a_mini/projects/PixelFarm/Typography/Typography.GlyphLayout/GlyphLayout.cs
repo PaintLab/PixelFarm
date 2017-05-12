@@ -6,9 +6,18 @@ namespace Typography.TextLayout
 {
     public struct ABC
     {
-        public float a;
-        public float b;
-        public float c;
+        public short a;
+        public short b;
+        public short c;
+        public short w;
+        public short x_offset;
+        public bool IsEmpty
+        {
+            get
+            {
+                return a == 0 && (b == 0) && (c == 0) && (w == 0) && (x_offset == 0);
+            }
+        }
     }
 
     public interface IGridFittingEngine
@@ -339,7 +348,7 @@ namespace Typography.TextLayout
                         if (gridFittingEngine != null)
                         {
                             //use grid fitting engine
-
+                            gridFittingEngine.SetPixelScale(pxscale);
                             //use original
                             float prev_diff_from_xmax = 0;
                             for (int i = 0; i < finalGlyphCount; ++i)
@@ -348,19 +357,34 @@ namespace Typography.TextLayout
                                 GlyphPos glyphPos = glyphPositions[i];
                                 ABC abc = gridFittingEngine.GetABC(glyphPos.glyphIndex);
 
+                                if (!abc.IsEmpty)
+                                {
+                                    //--------------------------------------------------
+                                    //version 1:
+                                    //original, no horizontal grid fit
+                                    int advW = abc.w + abc.x_offset;
+                                    outputGlyphPlanList.Add(new GlyphPlan(
+                                        glyphPos.glyphIndex,
+                                        cx + abc.x_offset + glyphPos.xoffset,
+                                        (short)(cy + glyphPos.yoffset),
+                                        advW));
 
+                                    cx += advW;
+                                }
+                                else
+                                {
+                                    //--------------------------------------------------
+                                    //version 1:
+                                    //original, no horizontal grid fit
+                                    int advW = (int)(glyphPos.AdvWidth * pxscale);
+                                    outputGlyphPlanList.Add(new GlyphPlan(
+                                        glyphPos.glyphIndex,
+                                        cx + glyphPos.xoffset,
+                                        (short)(cy + glyphPos.yoffset),
+                                        advW));
 
-                                //--------------------------------------------------
-                                //version 1:
-                                //original, no horizontal grid fit
-                                int advW = (int)(glyphPos.AdvWidth * pxscale);
-                                outputGlyphPlanList.Add(new GlyphPlan(
-                                    glyphPos.glyphIndex,
-                                    cx + glyphPos.xoffset,
-                                    (short)(cy + glyphPos.yoffset),
-                                    advW));
-                                cx += advW;
-
+                                    cx += advW;
+                                }
 
                                 //version 3
                                 //GlyphPos glyphPos = glyphPositions[i];
