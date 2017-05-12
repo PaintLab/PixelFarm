@@ -111,8 +111,6 @@ namespace Typography.Contours
             _needRefreshBoneGroup = true;
         }
 
-
-
         /// <summary>
         /// use grid fit or not
         /// </summary>
@@ -126,6 +124,10 @@ namespace Typography.Contours
         /// </summary>
         public int GridBoxHeight { get; private set; }
 
+        /// <summary>
+        /// external glyph bounds 
+        /// </summary>
+        public Bounds GlyphControlBounds { get; set; }
 
         /// <summary>
         /// generate output with specific pixel scale

@@ -60,7 +60,8 @@ namespace Typography.Contours
                         _latestDynamicOutline = _fitShapeAnalyzer.CreateDynamicOutline(
                             this._outputGlyphPoints,
                             this._outputContours);
-                        //--------------------------------------------- 
+                        _latestDynamicOutline.GlyphControlBounds = glyph.Bounds;
+
 
                         //--------------------------------------------- 
                         _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
