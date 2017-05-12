@@ -336,6 +336,7 @@ namespace Typography.OpenFont
 
 
     //------------------------------------------------------------------------------------------------------
+    //TODO: review this class again
     public class GlyphPos
     {
         public readonly ushort glyphIndex;
