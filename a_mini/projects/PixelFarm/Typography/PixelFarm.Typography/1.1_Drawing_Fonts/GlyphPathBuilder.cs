@@ -60,10 +60,13 @@ namespace Typography.Contours
                         _latestDynamicOutline = _fitShapeAnalyzer.CreateDynamicOutline(
                             this._outputGlyphPoints,
                             this._outputContours);
+                        //--------------------------------------------- 
+
+                        //--------------------------------------------- 
                         _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
 
 
-                        this.LeftXControl = _latestDynamicOutline.LeftControlPositionX;
+                        this.LeftXControl = 0;
                     }
                 }
             }
@@ -91,7 +94,7 @@ namespace Typography.Contours
                 _latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
 
                 _latestDynamicOutline.GenerateOutput(tx, toPixelScale);
-                this.LeftXControl = _latestDynamicOutline.LeftControlPositionX;
+                this.LeftXControl = 0;
             }
             else
             {

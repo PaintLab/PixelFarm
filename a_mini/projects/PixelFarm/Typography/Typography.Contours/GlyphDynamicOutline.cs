@@ -21,6 +21,7 @@ namespace Typography.Contours
         bool _needAdjustGridFitValues;
         float _avg_xdiff = 0;
         BoneGroupingHelper _groupingHelper;
+        //
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
 
@@ -110,7 +111,7 @@ namespace Typography.Contours
             _needRefreshBoneGroup = true;
         }
 
-     
+
 
         /// <summary>
         /// use grid fit or not
@@ -163,7 +164,7 @@ namespace Typography.Contours
             }
 
             List<GlyphContour> contours = this._contours;
-            LeftControlPositionX = 0;
+
             //
             int j = contours.Count;
             tx.BeginRead(j);
