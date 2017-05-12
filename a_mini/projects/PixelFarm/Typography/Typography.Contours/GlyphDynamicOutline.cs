@@ -363,6 +363,15 @@ namespace Typography.Contours
             IGlyphTranslator tx,
             GlyphContour contour)
         {
+
+
+            List<GlyphPoint> points = contour.flattenPoints;
+            int j = points.Count;
+            if (j == 0) return;
+            //------------------------------------------------- 
+            Bounds controlBounds = this.GlyphControlBounds;
+
+
             //walk along the edge in the contour to generate new edge output
             float fit_x_offset = _avg_xdiff;
             ////experiment
@@ -371,9 +380,10 @@ namespace Typography.Contours
             fit_x_offset = 0;
             if (fit_x_offset < 0)
             {
-
                 //fit_x_offset = 1 + fit_x_offset;
             }
+
+
 #if DEBUG
             dbugWriteLine("===begin===" + fit_x_offset);
             if (!dbugUseHorizontalFitValue)
@@ -381,18 +391,12 @@ namespace Typography.Contours
                 fit_x_offset = 0;
             }
 #endif
-            List<GlyphPoint> points = contour.flattenPoints;
-            int j = points.Count;
-            if (j == 0) return;
-
-
+            //------------------------------------------------- 
             float pxscale = this._pxScale;
             bool useGridFit = EnableGridFit;
-            //TODO: review here
-
+            //TODO: review here 
             float fit_x, fit_y;
             points[0].GetFitXY(pxscale, out fit_x, out fit_y);
-
             //
             tx.MoveTo(fit_x + fit_x_offset, fit_y);
 #if DEBUG
