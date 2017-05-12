@@ -94,6 +94,9 @@ namespace Typography.Contours
             //read output from glyph points
             tx.Read(this._outputGlyphPoints, this._outputContours, _recentPixelScale);
         }
+
+
+
     }
 
     public static class GlyphPathBuilderExtensions

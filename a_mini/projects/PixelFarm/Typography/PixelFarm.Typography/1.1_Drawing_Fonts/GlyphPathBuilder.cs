@@ -20,7 +20,8 @@ namespace Typography.Contours
 #if DEBUG
         public bool dbugAlwaysDoCurveAnalysis;
 
-#endif 
+#endif
+        //TODO: remove this
         public float LeftXControl { get; set; }
         /// <summary>
         /// glyph dynamic edge offset
@@ -69,6 +70,8 @@ namespace Typography.Contours
         }
         public override void ReadShapes(IGlyphTranslator tx)
         {
+            //read output shape from dynamic outline
+
             if (this.UseTrueTypeInstructions)
             {
                 base.ReadShapes(tx);

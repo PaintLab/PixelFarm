@@ -54,7 +54,7 @@ namespace Typography.Contours
             return new GlyphDynamicOutline();
         }
 
-        public List<GlyphContour> GetContours()
+        internal List<GlyphContour> GetContours()
         {
             return _contours;
         }
@@ -63,7 +63,7 @@ namespace Typography.Contours
         /// </summary>
         /// <param name="gridBoxW"></param>
         /// <param name="gridBoxH"></param>
-        public void AnalyzeBoneGroups(int gridBoxW, int gridBoxH)
+        internal void AnalyzeBoneGroups(int gridBoxW, int gridBoxH)
         {
             //bone grouping depends on grid size.
             this.GridBoxHeight = gridBoxH;
@@ -110,7 +110,7 @@ namespace Typography.Contours
             _needRefreshBoneGroup = true;
         }
 
-        public float LeftControlPositionX { get; set; }
+     
 
         /// <summary>
         /// use grid fit or not

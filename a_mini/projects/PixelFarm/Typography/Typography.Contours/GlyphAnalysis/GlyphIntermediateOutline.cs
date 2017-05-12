@@ -11,6 +11,7 @@ namespace Typography.Contours
 
         List<GlyphContour> _contours;
         List<CentroidLineHub> _lineHubs;
+
         float _bounds_minX, _bounds_minY, _bounds_maxX, _bounds_maxY;
         public GlyphIntermediateOutline(
             List<GlyphContour> contours,
