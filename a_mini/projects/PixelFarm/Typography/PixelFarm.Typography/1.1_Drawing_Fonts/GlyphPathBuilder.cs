@@ -32,7 +32,7 @@ namespace Typography.Contours
 
         protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph)
         {
-            //not use interperter so we need to scale it with our machnism
+            //not use interperter so we need to scale it with our mechanism
             //this demonstrate our auto hint engine ***
             //you can change this to your own hint engine***   
             _latestDynamicOutline = null;//reset
@@ -122,7 +122,7 @@ namespace Typography.Contours
             if (_fitoutlineCollection.TryGetValue(glyphIndex, out found))
             {
                 //evaluate at current pxscale
-                
+                float avg_xdiffOffset = found.AvgXFitOffset;
 
 
             }

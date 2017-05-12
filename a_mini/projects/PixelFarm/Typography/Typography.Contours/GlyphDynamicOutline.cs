@@ -142,7 +142,7 @@ namespace Typography.Contours
         {
             if (_contours == null) return; //blank
 #if DEBUG
-            this.EnableGridFit = dbugTestNewGridFitting;
+            this.EnableGridFit = dbugTestNewGridFitting; 
 #endif
 
             if (_pxScale != pxScale)
@@ -404,21 +404,21 @@ namespace Typography.Contours
             ////for subpixel rendering 
             //fit_x_offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
 
-            if (fit_x_offset < 0)
-            {
-                //fit_x_offset = 1 + fit_x_offset;
-                fit_x_offset = -s_xmin + 1 + (+fit_x_offset);
-            }
-            else
-            {
-                fit_x_offset = -s_xmin + 1 + (1 - fit_x_offset);
-                //offset to right (+)
-                //to fit main integer
-                //float new_floor = (int)s_xmin;
-                //new_floor += fit_x_offset;
-                //float new_minor_diff = new_floor - s_xmin; 
-                //float actual_first = s_xmin + fit_x_offset;
-            }
+            //if (fit_x_offset < 0)
+            //{
+            //    //fit_x_offset = 1 + fit_x_offset;
+            //    fit_x_offset = -s_xmin + 1 + (+fit_x_offset);
+            //}
+            //else
+            //{
+            //    fit_x_offset = -s_xmin + 1 + (1 - fit_x_offset);
+            //    //offset to right (+)
+            //    //to fit main integer
+            //    //float new_floor = (int)s_xmin;
+            //    //new_floor += fit_x_offset;
+            //    //float new_minor_diff = new_floor - s_xmin; 
+            //    //float actual_first = s_xmin + fit_x_offset;
+            //}
 
 
 #if DEBUG
