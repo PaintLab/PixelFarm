@@ -19,7 +19,7 @@ namespace Typography.Contours
         float _pxScale;
         bool _needRefreshBoneGroup;
         bool _needAdjustGridFitValues;
-        float _avg_xdiff = 0;
+        float _avg_x_fitOffset = 0;
         BoneGroupingHelper _groupingHelper;
         //
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
@@ -349,8 +349,15 @@ namespace Typography.Contours
                 }
                 break; //only left most first long group
             }
-            _avg_xdiff = x_fitDiffCollector.CalculateProperDiff();
+            _avg_x_fitOffset = x_fitDiffCollector.CalculateProperDiff();
 
+        }
+        /// <summary>
+        /// average horizontal diff to fit the grid
+        /// </summary>
+        public float AvgXFitOffset
+        {
+            get { return _avg_x_fitOffset; }
         }
         void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
@@ -376,7 +383,7 @@ namespace Typography.Contours
             Bounds controlBounds = this.OriginalGlyphControlBounds;
             //walk along the edge in the contour to generate new edge output
             float pxscale = this._pxScale;
-            float fit_x_offset = _avg_xdiff;
+            float fit_x_offset = _avg_x_fitOffset;
 
             //this is original control bounds
             //we use this to decide minor shift direction

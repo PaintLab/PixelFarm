@@ -123,12 +123,12 @@ namespace PixelFarm.Drawing.Fonts
                 //check if we have this in cache ?
                 //if we don't have it, this _currentTypeface will set to null ***                  
                 _cacheGlyphPathBuilders.TryGetValue(_currentTypeface, out _glyphPathBuilder);
-
                 if (_glyphPathBuilder == null)
                 {
                     _glyphPathBuilder = new GlyphPathBuilder(value);
-
                 }
+                //assign grid fitting engine to layout
+                _glyphLayout.GridFittingEngine = _glyphPathBuilder;
                 OnFontSizeChanged();
             }
         }

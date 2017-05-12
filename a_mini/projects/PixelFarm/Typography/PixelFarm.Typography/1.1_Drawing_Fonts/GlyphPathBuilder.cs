@@ -2,12 +2,14 @@
 
 using Typography.OpenFont;
 using System.Collections.Generic;
+using System;
+using Typography.TextLayout;
 
 namespace Typography.Contours
 {
 
 
-    public class GlyphPathBuilder : GlyphPathBuilderBase
+    public class GlyphPathBuilder : GlyphPathBuilderBase, Typography.TextLayout.IGridFittingEngine
     {
         GlyphOutlineAnalyzer _fitShapeAnalyzer = new GlyphOutlineAnalyzer();
         Dictionary<ushort, GlyphDynamicOutline> _fitoutlineCollection = new Dictionary<ushort, GlyphDynamicOutline>();
@@ -65,7 +67,7 @@ namespace Typography.Contours
 
 
                         //--------------------------------------------- 
-                        _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline); 
+                        _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
                         this.LeftXControl = 0;
                     }
                 }
@@ -102,6 +104,31 @@ namespace Typography.Contours
             }
         }
 
+        //-----------------------------------------------------
+        public bool NeedFitting(float pxscale)
+        {
+            return true;
+        }
+
+        float _fit_pxscale;
+        public void SetPixelScale(float pxscale)
+        {
+            _fit_pxscale = pxscale;
+        }
+        public ABC GetABC(ushort glyphIndex)
+        {
+
+            GlyphDynamicOutline found;
+            if (_fitoutlineCollection.TryGetValue(glyphIndex, out found))
+            {
+                //evaluate at current pxscale
+                
+
+
+            }
+            ABC abc = new ABC();
+            return abc;
+        }
         public GlyphDynamicOutline LatestGlyphFitOutline
         {
             get
