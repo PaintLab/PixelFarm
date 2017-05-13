@@ -146,15 +146,15 @@ namespace Typography.Contours
                         new_advanced = (int)Math.Ceiling(new_advanced);
                     }
                 }
-                else if (s_minX < 0.5f)
-                {
-                    abc.x_offset = 1;
-                    //move org to left 1 px
-                    if (new_xmax + 0.66f > new_advanced)
-                    {
-                        new_advanced = (int)Math.Ceiling(new_advanced);
-                    }
-                }
+                //else if (s_minX < 0.5f)
+                //{
+                //    //abc.x_offset = 1;
+                //    ////move org to left 1 px
+                //    //if (new_xmax + 0.66f > new_advanced)
+                //    //{
+                //    //    new_advanced = (int)Math.Ceiling(new_advanced);
+                //    //}
+                //}
                 abc.w = (short)Math.Round(new_advanced);
                 return abc;
             }
