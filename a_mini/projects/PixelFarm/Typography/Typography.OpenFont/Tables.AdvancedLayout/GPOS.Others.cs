@@ -828,4 +828,25 @@ namespace Typography.OpenFont.Tables
 
     }
 
+
+    //struct GlyphPos
+    //{
+    //    IGlyphPositions glyphPositions;
+    //    int index;
+    //    public GlyphPos(IGlyphPositions glyphPositions, int index)
+    //    {
+    //        this.glyphPositions = glyphPositions;
+    //        this.index = index;
+    //    }
+    //}
+
+    //static class IGlyphPositionsExtensions
+    //{
+    //    public static GlyphPos GetGlyphPos(this IGlyphPositions glyphPositions, int index)
+    //    {
+    //        return new GlyphPos(glyphPositions, index);
+    //    }
+    //}
+
+
 }

@@ -31,7 +31,6 @@ namespace Typography.OpenFont.Tables
     //Offset16 => same as uint32
 
 
-
     //https://www.microsoft.com/typography/otspec/GPOS.htm
 
     public partial class GPOS : TableEntry
@@ -616,6 +615,7 @@ namespace Typography.OpenFont.Tables
                     int j = inputGlyphs.Count;
                     for (int i = 1; i < j; ++i) //start at 1
                     {
+
                         ushort glyph_advW;
                         int markFound = MarkCoverageTable.FindPosition(inputGlyphs.GetGlyphIndex(i, out glyph_advW));
                         if (markFound > -1)
@@ -630,7 +630,7 @@ namespace Typography.OpenFont.Tables
                                 //find anchor on base glyph   
                                 AnchorPoint markAnchorPoint = this.MarkArrayTable.GetAnchorPoint(markFound);
                                 BaseRecord baseRecord = BaseArrayTable.GetBaseRecords(baseFound);
-                                AnchorPoint basePointForMark = baseRecord.anchors[markClass]; 
+                                AnchorPoint basePointForMark = baseRecord.anchors[markClass];
                                 inputGlyphs.AppendGlyphOffset(
                                     i,
                                     (short)((-prev_glyph_adv_w + basePointForMark.xcoord - markAnchorPoint.xcoord)),
