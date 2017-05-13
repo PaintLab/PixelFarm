@@ -630,14 +630,7 @@ namespace Typography.OpenFont.Tables
                                 //find anchor on base glyph   
                                 AnchorPoint markAnchorPoint = this.MarkArrayTable.GetAnchorPoint(markFound);
                                 BaseRecord baseRecord = BaseArrayTable.GetBaseRecords(baseFound);
-                                AnchorPoint basePointForMark = baseRecord.anchors[markClass];
-#if DEBUG
-                                if (markAnchorPoint.ycoord != 0)
-                                {
-
-                                }
-#endif
-
+                                AnchorPoint basePointForMark = baseRecord.anchors[markClass]; 
                                 inputGlyphs.AppendGlyphOffset(
                                     i,
                                     (short)((-prev_glyph_adv_w + basePointForMark.xcoord - markAnchorPoint.xcoord)),
@@ -879,11 +872,11 @@ namespace Typography.OpenFont.Tables
                                     int actualBasePos = FindActualBaseGlyphBackward(inputGlyphs, i - 1);
                                     if (actualBasePos > -1)
                                     {
-                                        short offset_x, offset_y;
-                                        inputGlyphs.GetOffset(actualBasePos, out offset_x, out offset_y);
+                                        short actual_base_offset_x, acutal_base_offset_y;
+                                        inputGlyphs.GetOffset(actualBasePos, out actual_base_offset_x, out acutal_base_offset_y);
                                         inputGlyphs.AppendGlyphOffset(
                                             i,
-                                            (short)(offset_x + mark2BaseAnchor.xcoord - mark1Anchor.xcoord),
+                                            (short)(actual_base_offset_x + mark2BaseAnchor.xcoord - mark1Anchor.xcoord),
                                             0);
                                     }
                                 }
