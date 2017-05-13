@@ -78,7 +78,7 @@ namespace Typography.TextLayout
 
         }
         public string Lang { get; private set; }
-        public void DoGlyphPosition(List<GlyphPos> glyphPositions)
+        public void DoGlyphPosition(IGlyphPositions glyphPositions)
         {
 
             if (lookupTables == null) { return; } //early exit if no lookup tables

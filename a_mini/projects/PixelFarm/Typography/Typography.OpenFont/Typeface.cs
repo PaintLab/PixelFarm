@@ -334,39 +334,55 @@ namespace Typography.OpenFont
         }
     }
 
-
-    //------------------------------------------------------------------------------------------------------
-    //TODO: review this class again
-    public class GlyphPos
+    public struct GlyphPos
     {
-        public readonly ushort glyphIndex;
-        public short xoffset;
-        public short yoffset;
-        Glyph _glyph;
-        public GlyphPos(ushort glyphIndex, Glyph glyph)
+        readonly ushort _glyphIndex;
+        readonly ushort _advW;
+        short _offsetX;
+        short _offsetY;
+        public GlyphPos(ushort glyphIndex,
+            short offsetX,
+            short offsetY,
+            ushort advW)
         {
-            this.glyphIndex = glyphIndex;
-            this._glyph = glyph;
+            _glyphIndex = glyphIndex;
+            _offsetX = offsetX;
+            _offsetY = offsetY;
+            _advW = advW;
         }
-        public GlyphClassKind classKind
+        public ushort GlyphIndex
         {
-            get { return _glyph.GlyphClass; }
+            get
+            {
+                return _glyphIndex;
+            }
+        }
+        public short OffsetX
+        {
+            get { return _offsetX; } 
+        }
+        public short OffsetY
+        {
+            get { return _offsetY; } 
         }
         public ushort AdvWidth
         {
             get
             {
-                return _glyph.AdvanceWidth;
+                return _advW;
             }
         }
-         
-#if DEBUG
-        public override string ToString()
-        {
-            return glyphIndex.ToString() + "(" + xoffset + "," + yoffset + ")";
-        }
-#endif
     }
+
+    public interface IGlyphPositions
+    {
+        int Count { get; }
+        GlyphPos this[int index] { get; }
+        GlyphClassKind GetGlyphClassKind(int index);
+        void AppendGlyphOffset(int index, short appendOffsetX, short appendOffsetY);
+    }
+
+
 
     namespace Extensions
     {
