@@ -400,30 +400,11 @@ namespace Typography.Contours
             //float s_ymin = controlBounds.YMin * pxscale;
             //float s_xmax = controlBounds.XMax * pxscale;
             //float s_ymax = controlBounds.YMax * pxscale;
-            //float s_advance_w = OriginalAdvanceWidth * pxscale;
-
-
+            //float s_advance_w = OriginalAdvanceWidth * pxscale; 
             //------------------------------------------------- 
-            ////experiment
-            ////for subpixel rendering 
+            //experiment
+            //for subpixel rendering 
             fit_x_offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
-
-            //if (fit_x_offset < 0)
-            //{
-            //    //fit_x_offset = 1 + fit_x_offset;
-            //    fit_x_offset = -s_xmin + 1 + (+fit_x_offset);
-            //}
-            //else
-            //{
-            //    fit_x_offset = -s_xmin + 1 + (1 - fit_x_offset);
-            //    //offset to right (+)
-            //    //to fit main integer
-            //    //float new_floor = (int)s_xmin;
-            //    //new_floor += fit_x_offset;
-            //    //float new_minor_diff = new_floor - s_xmin; 
-            //    //float actual_first = s_xmin + fit_x_offset;
-            //}
-
 
 #if DEBUG
             dbugWriteLine("===begin===" + fit_x_offset);
@@ -469,7 +450,7 @@ namespace Typography.Contours
         }
         void dbugWriteOutput(string cmd, float pre_x, float post_x, float y)
         {
-           // Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
+            // Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
         }
         public static bool dbugActualPosToConsole { get; set; }
         public static bool dbugUseHorizontalFitValue { get; set; }
