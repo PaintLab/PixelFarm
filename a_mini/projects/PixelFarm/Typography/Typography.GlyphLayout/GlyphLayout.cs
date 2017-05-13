@@ -380,7 +380,7 @@ namespace Typography.TextLayout
 
                                     outputGlyphPlanList.Add(new GlyphPlan(
                                         glyph_pos.GlyphIndex,
-                                        cx + abc.x_offset * pxscale + glyph_pos.OffsetX,
+                                        cx + abc.x_offset * pxscale + glyph_pos.OffsetX * pxscale,
                                         (short)(cy + glyph_pos.OffsetY),
                                         advW));
 
