@@ -967,6 +967,12 @@ namespace Typography.TextLayout
         {
             _glyphs.Add(new InternalGlyphPos(glyphIndex, glyph));
         }
+        public void AppendGlyphOffset(int index, short appendOffsetX, short appendOffsetY)
+        {
+            InternalGlyphPos glyphPos = _glyphs[index];
+            glyphPos.xoffset += appendOffsetX;
+            glyphPos.yoffset += appendOffsetY;
+        }
         public GlyphPos this[int index]
         {
 

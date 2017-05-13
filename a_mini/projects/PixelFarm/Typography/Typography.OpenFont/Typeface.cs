@@ -359,21 +359,11 @@ namespace Typography.OpenFont
         }
         public short OffsetX
         {
-            get { return _offsetX; }
-            set
-            {
-                //temp
-                _offsetX = value;
-            }
+            get { return _offsetX; } 
         }
         public short OffsetY
         {
-            get { return _offsetY; }
-            set
-            {
-                //temp
-                _offsetY = value;
-            }
+            get { return _offsetY; } 
         }
         public ushort AdvWidth
         {
@@ -389,6 +379,7 @@ namespace Typography.OpenFont
         int Count { get; }
         GlyphPos this[int index] { get; }
         GlyphClassKind GetGlyphClassKind(int index);
+        void AppendGlyphOffset(int index, short appendOffsetX, short appendOffsetY);
     }
 
 

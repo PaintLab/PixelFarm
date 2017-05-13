@@ -636,9 +636,13 @@ namespace Typography.OpenFont.Tables
 
                                 }
 #endif
-                                glyphPos.OffsetX += (short)((-inputGlyphs[i - 1].AdvWidth + basePointForMark.xcoord - markAnchorPoint.xcoord));
-                                glyphPos.OffsetY += (short)(basePointForMark.ycoord - markAnchorPoint.ycoord);
-
+                                //glyphPos.OffsetX += (short)((-inputGlyphs[i - 1].AdvWidth + basePointForMark.xcoord - markAnchorPoint.xcoord));
+                                //glyphPos.OffsetY += (short)(basePointForMark.ycoord - markAnchorPoint.ycoord);
+                                inputGlyphs.AppendGlyphOffset(
+                                    i,
+                                    (short)((-inputGlyphs[i - 1].AdvWidth + basePointForMark.xcoord - markAnchorPoint.xcoord)),
+                                    (short)(basePointForMark.ycoord - markAnchorPoint.ycoord)
+                                    );
                             }
                         }
                         xpos += glyphPos.AdvWidth;
@@ -866,22 +870,34 @@ namespace Typography.OpenFont.Tables
                                 AnchorPoint mark2BaseAnchor = this.Mark2ArrayTable.GetAnchorPoint(baseFound, markClassId);
                                 AnchorPoint mark1Anchor = this.Mark1ArrayTable.GetAnchorPoint(markFound);
 
-                                //TODO: review here
+                                //TODO: review here 
+
                                 if (mark1Anchor.ycoord < 0)
                                 {
                                     //eg. น้ำ
-                                    prev_pos.OffsetY += (short)(-mark1Anchor.ycoord);
+                                    //change yoffset of prev pos
+                                    //prev_pos.OffsetY += (short)(-mark1Anchor.ycoord);  
+                                    inputGlyphs.AppendGlyphOffset(i - 1, 0, (short)(-mark1Anchor.ycoord));//*** PREV
                                     int actualBasePos = FindActualBaseGlyphBackward(inputGlyphs, i - 1);
                                     if (actualBasePos > -1)
                                     {
                                         GlyphPos prev_pos2 = inputGlyphs[actualBasePos];
-                                        glyphPos.OffsetX += (short)((prev_pos2.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord));
+                                        //glyphPos.OffsetX += (short)((prev_pos2.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord));
+                                        inputGlyphs.AppendGlyphOffset(
+                                            i,
+                                            (short)(prev_pos2.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord), 
+                                            0);
                                     }
                                 }
                                 else
                                 {
-                                    glyphPos.OffsetY += (short)(mark1Anchor.ycoord);
-                                    glyphPos.OffsetX += (short)((prev_pos.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord));
+                                    //glyphPos.OffsetY += (short)(mark1Anchor.ycoord);
+                                    //glyphPos.OffsetX += (short)((prev_pos.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord));
+                                    //
+                                    inputGlyphs.AppendGlyphOffset(
+                                         i,
+                                         (short)(prev_pos.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord),
+                                         mark1Anchor.ycoord);
                                 }
                             }
                         }
