@@ -350,7 +350,7 @@ namespace Typography.TextLayout
                             //use grid fitting engine
                             gridFittingEngine.SetPixelScale(pxscale);
                             //use original
-                            float prev_diff_from_xmax = 0;
+                          
                             for (int i = 0; i < finalGlyphCount; ++i)
                             {
                                 //get glyph's ABC from grid fitting engine

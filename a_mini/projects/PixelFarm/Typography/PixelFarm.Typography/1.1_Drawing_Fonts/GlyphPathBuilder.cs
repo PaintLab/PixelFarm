@@ -48,8 +48,7 @@ namespace Typography.Contours
                     {
 
                         //---------------------------------------------
-                        //test code
-
+                        //test code 
                         //GlyphContourBuilder contBuilder = new GlyphContourBuilder();
                         //contBuilder.Reset();
                         //int x = 100, y = 120, w = 700, h = 200; 
