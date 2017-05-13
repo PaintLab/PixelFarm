@@ -213,7 +213,7 @@ namespace Typography.OpenFont.Tables
         {
             public GPOS OwnerGPos;
 
-            public abstract void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len);
+            public abstract void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len);
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace Typography.OpenFont.Tables
                 this.subTableOffsets = subTableOffsets;
                 this.markFilteringSet = markFilteringSet;
             }
-            public void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+            public void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
             {
 
                 int j = subTables.Count;
@@ -332,7 +332,7 @@ namespace Typography.OpenFont.Tables
                     private set;
                 }
                 public CoverageTable CoverageTable { get; set; }
-                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -416,7 +416,7 @@ namespace Typography.OpenFont.Tables
                     get;
                     set;
                 }
-                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -608,7 +608,7 @@ namespace Typography.OpenFont.Tables
                 public BaseArrayTable BaseArrayTable { get; set; }
                 public MarkArrayTable MarkArrayTable { get; set; }
 
-                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
                     int xpos = 0;
                     //find marker  
@@ -770,7 +770,7 @@ namespace Typography.OpenFont.Tables
                 public CoverageTable LigatureCoverage { get; set; }
                 public MarkArrayTable MarkArrayTable { get; set; }
                 public LigatureArrayTable LigatureArrayTable { get; set; }
-                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -837,7 +837,7 @@ namespace Typography.OpenFont.Tables
                 public CoverageTable MarkCoverage2 { get; set; }
                 public MarkArrayTable Mark1ArrayTable { get; set; }
                 public Mark2ArrayTable Mark2ArrayTable { get; set; } // Mark2 attachment points used to attach Mark1 glyphs to a specific Mark2 glyph. 
-                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
                     //find marker 
                     if (startAt == 0)
@@ -888,7 +888,7 @@ namespace Typography.OpenFont.Tables
                     }
                 }
             }
-            static int FindActualBaseGlyphBackward(GlyphPosStream inputGlyphs, int startAt)
+            static int FindActualBaseGlyphBackward(IGlyphPositions inputGlyphs, int startAt)
             {
                 for (int i = startAt; i >= 0; --i)
                 {
@@ -1051,7 +1051,7 @@ namespace Typography.OpenFont.Tables
 
                 public CoverageTable CoverageTable { get; set; }
                 public PosRuleSetTable[] PosRuleSetTables { get; set; }
-                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -1062,7 +1062,7 @@ namespace Typography.OpenFont.Tables
                 public ushort ClassDefOffset { get; set; }
                 public CoverageTable CoverageTable { get; set; }
                 public PosClassSetTable[] PosClassSetTables { get; set; }
-                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -1072,7 +1072,7 @@ namespace Typography.OpenFont.Tables
             {
                 public CoverageTable[] CoverageTables { get; set; }
                 public PosLookupRecord[] PosLookupRecords { get; set; }
-                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -1083,7 +1083,7 @@ namespace Typography.OpenFont.Tables
 
                 public CoverageTable CoverageTable { get; set; }
                 public PosRuleSetTable[] PosRuleSetTables { get; set; }
-                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -1104,7 +1104,7 @@ namespace Typography.OpenFont.Tables
                 public ushort LookaheadClassDefOffset { get; set; }
 
 
-                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -1128,7 +1128,7 @@ namespace Typography.OpenFont.Tables
                 //struct 	PosLookupRecord[PosCount] 	Array of PosLookupRecords,in design order
 
 
-                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }

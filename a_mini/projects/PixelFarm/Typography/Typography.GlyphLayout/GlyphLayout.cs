@@ -337,7 +337,7 @@ namespace Typography.TextLayout
         public static void ReadOutput(this GlyphLayout glyphLayout, List<GlyphPlan> outputGlyphPlanList)
         {
 
-            GlyphPosStream glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
+            IGlyphPositions glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
             int finalGlyphCount = glyphPositions.Count;
             int cx = 0;
             short cy = 0;
@@ -931,4 +931,97 @@ namespace Typography.TextLayout
         None
     }
 
+
+
+    /// <summary>
+    /// glyph position stream
+    /// </summary>
+    class GlyphPosStream : IGlyphPositions
+    {
+        List<InternalGlyphPos> _glyphs = new List<InternalGlyphPos>();
+        int _index; //current index
+
+        /// <summary>
+        /// current index
+        /// </summary>
+        public int Index
+        {
+            get { return _index; }
+            set
+            {
+                _index = value;
+            }
+        }
+        public int Count
+        {
+            get
+            {
+                return _glyphs.Count;
+            }
+        }
+        public void Clear()
+        {
+            _glyphs.Clear();
+        }
+        public void AddGlyph(ushort glyphIndex, Glyph glyph)
+        {
+            _glyphs.Add(new InternalGlyphPos(glyphIndex, glyph));
+        }
+        public NewGlyphPos this[int index]
+        {
+
+            get
+            {
+                InternalGlyphPos pos = _glyphs[index];
+                return new NewGlyphPos(
+                    pos.glyphIndex,
+                    pos.xoffset,
+                    pos.yoffset,
+                    pos.AdvWidth);
+            }
+        }
+        public GlyphClassKind GetGlyphClassKind(int index)
+        {
+            return _glyphs[index].classKind;
+        }
+        public ushort GetGlyphIndex(int index)
+        {
+            return _glyphs[index].glyphIndex;
+        }
+        public void SetGlyphOffset(int index, short offsetX, short offsetY)
+        {
+
+        }
+    }
+
+    class InternalGlyphPos
+    {
+        public readonly ushort glyphIndex;
+        public short xoffset;
+        public short yoffset;
+        Glyph _glyph;
+        public InternalGlyphPos(ushort glyphIndex, Glyph glyph)
+        {
+            this.glyphIndex = glyphIndex;
+            this._glyph = glyph;
+        }
+        public GlyphClassKind classKind
+        {
+            get { return _glyph.GlyphClass; }
+        }
+        public ushort AdvWidth
+        {
+            get
+            {
+                return _glyph.AdvanceWidth;
+            }
+        }
+
+#if DEBUG
+        public override string ToString()
+        {
+            return glyphIndex.ToString() + "(" + xoffset + "," + yoffset + ")";
+        }
+#endif
+    }
 }

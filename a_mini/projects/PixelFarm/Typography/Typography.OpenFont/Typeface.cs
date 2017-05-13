@@ -336,125 +336,64 @@ namespace Typography.OpenFont
 
     public struct NewGlyphPos
     {
-        GlyphPos _glyphPos;
-        internal NewGlyphPos(GlyphPos glyphPos)
+        readonly ushort _glyphIndex;
+        readonly ushort _advW;
+        short _offsetX;
+        short _offsetY;
+
+
+        public NewGlyphPos(ushort glyphIndex,
+            short offsetX,
+            short offsetY,
+            ushort advW)
         {
-            this._glyphPos = glyphPos;
+            _glyphIndex = glyphIndex;
+            _offsetX = offsetX;
+            _offsetY = offsetY;
+            _advW = advW;
         }
         public ushort GlyphIndex
         {
             get
             {
-                return _glyphPos.glyphIndex;
+                return _glyphIndex;
             }
         }
         public short OffsetX
         {
-            get { return _glyphPos.xoffset; }
+            get { return _offsetX; }
             set
             {
-                _glyphPos.xoffset = value;
+                //temp
+                _offsetX = value;
             }
         }
         public short OffsetY
         {
-            get { return _glyphPos.yoffset; }
+            get { return _offsetY; }
             set
             {
-                _glyphPos.yoffset = value;
+                //temp
+                _offsetY = value;
             }
         }
         public ushort AdvWidth
         {
             get
             {
-                return _glyphPos.AdvWidth;
+                return _advW;
             }
         }
     }
 
-    /// <summary>
-    /// glyph position stream
-    /// </summary>
-    public class GlyphPosStream
+    public interface IGlyphPositions
     {
-        List<GlyphPos> _glyphs = new List<GlyphPos>();
-        int _index; //current index
-
-        /// <summary>
-        /// current index
-        /// </summary>
-        public int Index
-        {
-            get { return _index; }
-            set
-            {
-                _index = value;
-            }
-        }
-        public int Count
-        {
-            get
-            {
-                return _glyphs.Count;
-            }
-        }
-        public void Clear()
-        {
-            _glyphs.Clear();
-        }
-        public void AddGlyph(ushort glyphIndex, Glyph glyph)
-        {
-            _glyphs.Add(new GlyphPos(glyphIndex, glyph));
-        }
-        public NewGlyphPos this[int index]
-        {
-            get { return new NewGlyphPos(_glyphs[index]); }
-        }
-        public GlyphClassKind GetGlyphClassKind(int index)
-        {
-            return _glyphs[index].classKind;
-        }
-        public ushort GetGlyphIndex(int index)
-        {
-            return _glyphs[index].glyphIndex;
-        }
-        public void SetGlyphOffset(int index, short offsetX, short offsetY)
-        {
-
-        }
+        int Count { get; }
+        NewGlyphPos this[int index] { get; }
+        GlyphClassKind GetGlyphClassKind(int index);
     }
 
-    class GlyphPos
-    {
-        public readonly ushort glyphIndex;
-        public short xoffset;
-        public short yoffset;
-        Glyph _glyph;
-        public GlyphPos(ushort glyphIndex, Glyph glyph)
-        {
-            this.glyphIndex = glyphIndex;
-            this._glyph = glyph;
-        }
-        public GlyphClassKind classKind
-        {
-            get { return _glyph.GlyphClass; }
-        }
-        public ushort AdvWidth
-        {
-            get
-            {
-                return _glyph.AdvanceWidth;
-            }
-        }
 
-#if DEBUG
-        public override string ToString()
-        {
-            return glyphIndex.ToString() + "(" + xoffset + "," + yoffset + ")";
-        }
-#endif
-    }
 
     namespace Extensions
     {
