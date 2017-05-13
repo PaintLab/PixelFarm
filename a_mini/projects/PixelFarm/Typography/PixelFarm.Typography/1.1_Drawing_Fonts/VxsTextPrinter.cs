@@ -322,14 +322,7 @@ namespace PixelFarm.Drawing.Fonts
                     //------------------
                     //TODO: review here,  
                     glyphVxs = new VertexStore();
-                    _tovxs.WriteOutput(glyphVxs, _vxsPool);
-                    //
-                    ////------------------
-                    ////find bounding box
-                    //RectD boundingRect = new RectD();
-                    //PixelFarm.Agg.BoundingRect.GetBoundingRect(new VertexStoreSnap(glyphVxs), ref boundingRect);
-
-
+                    _tovxs.WriteOutput(glyphVxs, _vxsPool); 
                     //------------------
                     hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphVxs);
                 }

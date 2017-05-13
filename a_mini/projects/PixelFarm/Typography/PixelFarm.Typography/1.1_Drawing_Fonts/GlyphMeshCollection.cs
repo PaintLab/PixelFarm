@@ -18,6 +18,7 @@ namespace Typography.Rendering
 
         public void SetCacheInfo(Typeface typeface, float sizeInPts, HintTechnique hintTech)
         {
+            //TODO: review key object again, if we need to store a typeface object ?
             //check if we have create the context for this request parameters?
             var key = new GlyphKey() { hintTech = hintTech, sizeInPts = sizeInPts, typeface = typeface };
             if (!_registerGlyphCollection.TryGetValue(key, out _currentGlyphDic))
