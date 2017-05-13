@@ -45,19 +45,7 @@ namespace Typography.TextLayout
     public struct GlyphPlan
     {
         public readonly ushort glyphIndex;//2
-        ///// <summary>
-        ///// exact x pos, start from start pos 0 of span
-        ///// </summary>
-        //public readonly int x;//4, //TODO: review here=> change to relative pos 
-        //public readonly short y;//2
-        //public readonly ushort advX;//2
-        //public GlyphPlan(ushort glyphIndex, int x, short y, ushort advX)
-        //{
-        //    this.glyphIndex = glyphIndex;
-        //    this.x = x;
-        //    this.y = y;
-        //    this.advX = advX;
-        //}
+       
         public GlyphPlan(ushort glyphIndex, float exactX, short exactY, float extactAdvX)
         {
             this.glyphIndex = glyphIndex;
