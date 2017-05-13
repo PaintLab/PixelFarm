@@ -106,7 +106,7 @@ namespace SampleWinForms.UI
                     //-------------------------
                     //we -1 ***
                     GlyphPlan glyphPlan = _glyphPlans[userCharToGlyphMap.glyphIndexListOffset_plus1 - 1];
-                    if (glyphPlan.advX <= 0)
+                    if (!glyphPlan.AdvanceMoveForward)
                     {
                         //caret can't rest here
                         //so
@@ -152,7 +152,7 @@ namespace SampleWinForms.UI
                     //-------------------------
                     //we -1 ***
                     GlyphPlan glyphPlan = _glyphPlans[userCharToGlyphMap.glyphIndexListOffset_plus1 - 1];
-                    if (glyphPlan.advX <= 0)
+                    if (!glyphPlan.AdvanceMoveForward)
                     {
                         //caret can't rest here
                         //so
@@ -195,7 +195,7 @@ namespace SampleWinForms.UI
             float accum_x = 0;
             for (int i = 0; i < count; ++i)
             {
-                float thisGlyphW = _glyphPlans[i].advX * toPxScale;
+                float thisGlyphW = _glyphPlans[i].AdvanceX;
                 accum_x += thisGlyphW;
                 if (accum_x > x)
                 {
@@ -221,7 +221,7 @@ namespace SampleWinForms.UI
                         else
                         {
                             //has map
-                            if (_caretCharIndex < count && _glyphPlans[map.glyphIndexListOffset_plus1 - 1].advX <= 0)
+                            if (_caretCharIndex < count && !_glyphPlans[map.glyphIndexListOffset_plus1 - 1].AdvanceMoveForward)
                             {
                                 //recursive ***
                                 DoRight(); //
@@ -246,7 +246,7 @@ namespace SampleWinForms.UI
                         else
                         {
                             //has map
-                            if (_caretCharIndex < count && _glyphPlans[map.glyphIndexListOffset_plus1 - 1].advX <= 0)
+                            if (_caretCharIndex < count && !_glyphPlans[map.glyphIndexListOffset_plus1 - 1].AdvanceMoveForward)
                             {
                                 //recursive ***
                                 DoLeft();

@@ -2,12 +2,14 @@
 
 using Typography.OpenFont;
 using System.Collections.Generic;
+using System;
+using Typography.TextLayout;
 
 namespace Typography.Contours
 {
 
 
-    public class GlyphPathBuilder : GlyphPathBuilderBase
+    public class GlyphPathBuilder : GlyphPathBuilderBase, Typography.TextLayout.IGridFittingEngine
     {
         GlyphOutlineAnalyzer _fitShapeAnalyzer = new GlyphOutlineAnalyzer();
         Dictionary<ushort, GlyphDynamicOutline> _fitoutlineCollection = new Dictionary<ushort, GlyphDynamicOutline>();
@@ -20,7 +22,8 @@ namespace Typography.Contours
 #if DEBUG
         public bool dbugAlwaysDoCurveAnalysis;
 
-#endif 
+#endif
+        //TODO: remove this
         public float LeftXControl { get; set; }
         /// <summary>
         /// glyph dynamic edge offset
@@ -29,7 +32,7 @@ namespace Typography.Contours
 
         protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph)
         {
-            //not use interperter so we need to scale it with our machnism
+            //not use interperter so we need to scale it with our mechanism
             //this demonstrate our auto hint engine ***
             //you can change this to your own hint engine***   
             _latestDynamicOutline = null;//reset
@@ -59,16 +62,21 @@ namespace Typography.Contours
                         _latestDynamicOutline = _fitShapeAnalyzer.CreateDynamicOutline(
                             this._outputGlyphPoints,
                             this._outputContours);
+                        _latestDynamicOutline.OriginalAdvanceWidth = glyph.AdvanceWidth;
+                        _latestDynamicOutline.OriginalGlyphControlBounds = glyph.Bounds;
+
+
+                        //--------------------------------------------- 
                         _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
-
-
-                        this.LeftXControl = _latestDynamicOutline.LeftControlPositionX;
+                        this.LeftXControl = 0;
                     }
                 }
             }
         }
         public override void ReadShapes(IGlyphTranslator tx)
         {
+            //read output shape from dynamic outline
+
             if (this.UseTrueTypeInstructions)
             {
                 base.ReadShapes(tx);
@@ -88,7 +96,7 @@ namespace Typography.Contours
                 _latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
 
                 _latestDynamicOutline.GenerateOutput(tx, toPixelScale);
-                this.LeftXControl = _latestDynamicOutline.LeftControlPositionX;
+                this.LeftXControl = 0;
             }
             else
             {
@@ -96,6 +104,66 @@ namespace Typography.Contours
             }
         }
 
+        //-----------------------------------------------------
+        public bool NeedFitting(float pxscale)
+        {
+            return true;
+        }
+
+        float _fit_pxscale;
+        public void SetPixelScale(float pxscale)
+        {
+            _fit_pxscale = pxscale;
+        }
+        public ABC GetABC(ushort glyphIndex)
+        {
+
+            GlyphDynamicOutline found;
+            if (_fitoutlineCollection.TryGetValue(glyphIndex, out found))
+            {
+                //evaluate at current pxscale
+                float avg_xdiffOffset = found.AvgXFitOffset - 0.33f;//-0.33f for subpix rendering
+                Bounds orgBounds = found.OriginalGlyphControlBounds;
+                //---
+                //this is the scaled of original value
+                float s_advanced = found.OriginalAdvanceWidth * _fit_pxscale;
+                float s_minX = orgBounds.XMin * _fit_pxscale;
+                float s_maxX = orgBounds.XMax * _fit_pxscale;
+                //---
+                float new_xmin = s_minX + avg_xdiffOffset;
+                float new_xmax = s_maxX + avg_xdiffOffset;
+                float new_advanced = s_advanced + avg_xdiffOffset;
+
+                //---
+                ABC abc = new ABC();
+
+                if (s_minX >= 0 && new_xmin < 0)
+                {
+                    abc.x_offset = 1;
+                    //move org to left 1 px
+                    if (new_xmax + 0.66f > s_maxX)
+                    {
+                        new_advanced = (int)Math.Ceiling(new_advanced);
+                    }
+                }
+                //else if (s_minX < 0.5f)
+                //{
+                //    //abc.x_offset = 1;
+                //    ////move org to left 1 px
+                //    //if (new_xmax + 0.66f > new_advanced)
+                //    //{
+                //    //    new_advanced = (int)Math.Ceiling(new_advanced);
+                //    //}
+                //}
+                abc.w = (short)Math.Round(new_advanced);
+                return abc;
+            }
+            else
+            {
+                return new ABC();
+            }
+
+        }
         public GlyphDynamicOutline LatestGlyphFitOutline
         {
             get

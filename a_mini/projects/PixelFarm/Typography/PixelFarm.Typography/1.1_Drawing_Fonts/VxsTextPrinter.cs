@@ -123,11 +123,12 @@ namespace PixelFarm.Drawing.Fonts
                 //check if we have this in cache ?
                 //if we don't have it, this _currentTypeface will set to null ***                  
                 _cacheGlyphPathBuilders.TryGetValue(_currentTypeface, out _glyphPathBuilder);
-
                 if (_glyphPathBuilder == null)
                 {
                     _glyphPathBuilder = new GlyphPathBuilder(value);
                 }
+                //assign grid fitting engine to layout
+                _glyphLayout.GridFittingEngine = _glyphPathBuilder;
                 OnFontSizeChanged();
             }
         }
@@ -190,7 +191,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_x = GlyphLayoutExtensions.SnapInteger(g_x);
+                        g_x = GlyphLayoutExtensions.SnapToFitInteger(g_x);
                         break;
                     case GlyphPosPixelSnapKind.Half:
                         g_x = GlyphLayoutExtensions.SnapHalf(g_x);
@@ -202,7 +203,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_y = baseY + GlyphLayoutExtensions.SnapInteger(g_y);   //use baseY not y
+                        g_y = baseY + GlyphLayoutExtensions.SnapToFitInteger(g_y);   //use baseY not y
                         break;
                     case GlyphPosPixelSnapKind.Half:
                         g_y = baseY + GlyphLayoutExtensions.SnapHalf(g_y);
@@ -333,14 +334,14 @@ namespace PixelFarm.Drawing.Fonts
                     hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphVxs);
                 }
 
-                g_x = (glyphPlan.x * scale + x);
-                g_y = glyphPlan.y * scale;
+                g_x = glyphPlan.ExactX + x;
+                g_y = glyphPlan.ExactY;
 
                 switch (x_snap)
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_x = GlyphLayoutExtensions.SnapInteger(g_x);
+                        g_x = GlyphLayoutExtensions.SnapToFitInteger(g_x);
                         break;
                     case GlyphPosPixelSnapKind.Half:
                         g_x = GlyphLayoutExtensions.SnapHalf(g_x);
@@ -352,7 +353,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     default: throw new NotSupportedException();
                     case GlyphPosPixelSnapKind.Integer:
-                        g_y = baseY + GlyphLayoutExtensions.SnapInteger(g_y);   //use baseY not y
+                        g_y = baseY + GlyphLayoutExtensions.SnapToFitInteger(g_y);   //use baseY not y
                         break;
                     case GlyphPosPixelSnapKind.Half:
                         g_y = baseY + GlyphLayoutExtensions.SnapHalf(g_y);
@@ -406,9 +407,9 @@ namespace PixelFarm.Drawing.Fonts
                 GlyphPlan glyphPlan = glyphPlans[i];
                 renderVxGlyphPlans[i] = new RenderVxGlyphPlan(
                     glyphPlan.glyphIndex,
-                    glyphPlan.x * scale,
-                    glyphPlan.y * scale,
-                    glyphPlan.advX * scale
+                    glyphPlan.ExactX,
+                    glyphPlan.ExactY,
+                    glyphPlan.AdvanceX
                     );
             }
             renderVx.glyphList = renderVxGlyphPlans;

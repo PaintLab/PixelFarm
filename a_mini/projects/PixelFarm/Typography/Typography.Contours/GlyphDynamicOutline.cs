@@ -19,8 +19,13 @@ namespace Typography.Contours
         float _pxScale;
         bool _needRefreshBoneGroup;
         bool _needAdjustGridFitValues;
-        float _avg_xdiff = 0;
+
+        /// <summary>
+        /// x offset (start from abstract origin) to fit the grid
+        /// </summary>
+        float _avg_x_fitOffset = 0;
         BoneGroupingHelper _groupingHelper;
+        //
         internal GlyphDynamicOutline(GlyphIntermediateOutline intermediateOutline)
         {
 
@@ -54,7 +59,7 @@ namespace Typography.Contours
             return new GlyphDynamicOutline();
         }
 
-        public List<GlyphContour> GetContours()
+        internal List<GlyphContour> GetContours()
         {
             return _contours;
         }
@@ -63,7 +68,7 @@ namespace Typography.Contours
         /// </summary>
         /// <param name="gridBoxW"></param>
         /// <param name="gridBoxH"></param>
-        public void AnalyzeBoneGroups(int gridBoxW, int gridBoxH)
+        internal void AnalyzeBoneGroups(int gridBoxW, int gridBoxH)
         {
             //bone grouping depends on grid size.
             this.GridBoxHeight = gridBoxH;
@@ -110,8 +115,6 @@ namespace Typography.Contours
             _needRefreshBoneGroup = true;
         }
 
-        public float LeftControlPositionX { get; set; }
-
         /// <summary>
         /// use grid fit or not
         /// </summary>
@@ -125,6 +128,14 @@ namespace Typography.Contours
         /// </summary>
         public int GridBoxHeight { get; private set; }
 
+        /// <summary>
+        /// external glyph bounds 
+        /// </summary>
+        public Bounds OriginalGlyphControlBounds { get; set; }
+        /// <summary>
+        /// orignal glyph advance width
+        /// </summary>
+        public int OriginalAdvanceWidth { get; set; }
 
         /// <summary>
         /// generate output with specific pixel scale
@@ -163,7 +174,7 @@ namespace Typography.Contours
             }
 
             List<GlyphContour> contours = this._contours;
-            LeftControlPositionX = 0;
+
             //
             int j = contours.Count;
             tx.BeginRead(j);
@@ -293,8 +304,8 @@ namespace Typography.Contours
                     EdgeLine ee = h_edges[e];
                     GlyphPoint p_pnt = ee.P;
                     GlyphPoint q_pnt = ee.Q;
-                    p_pnt.FitAdjustY = avg_ydiff; 
-                    q_pnt.FitAdjustY = avg_ydiff; 
+                    p_pnt.FitAdjustY = avg_ydiff;
+                    q_pnt.FitAdjustY = avg_ydiff;
                 }
             }
             //---------------------------------------------------------
@@ -342,8 +353,15 @@ namespace Typography.Contours
                 }
                 break; //only left most first long group
             }
-            _avg_xdiff = x_fitDiffCollector.CalculateProperDiff();
+            _avg_x_fitOffset = x_fitDiffCollector.CalculateProperDiff();
 
+        }
+        /// <summary>
+        /// average horizontal diff to fit the grid
+        /// </summary>
+        public float AvgXFitOffset
+        {
+            get { return _avg_x_fitOffset; }
         }
         void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
@@ -360,35 +378,70 @@ namespace Typography.Contours
             IGlyphTranslator tx,
             GlyphContour contour)
         {
+
+
+            List<GlyphPoint> points = contour.flattenPoints;
+            int j = points.Count;
+            if (j == 0) return;
+            //------------------------------------------------- 
+            Bounds controlBounds = this.OriginalGlyphControlBounds;
             //walk along the edge in the contour to generate new edge output
-            float fit_x_offset = _avg_xdiff;
+            float pxscale = this._pxScale;
+            float fit_x_offset = _avg_x_fitOffset;
+
+            //this is original control bounds
+            //we use this to decide minor shift direction
+            //scaled values
+
+            //float one_px = 1 / pxscale;
+            //bool atLeast1PxLeft = controlBounds.XMin >= one_px;  //at least 1 px left
+
+            //float s_xmin = controlBounds.XMin * pxscale;
+            //float s_ymin = controlBounds.YMin * pxscale;
+            //float s_xmax = controlBounds.XMax * pxscale;
+            //float s_ymax = controlBounds.YMax * pxscale;
+            //float s_advance_w = OriginalAdvanceWidth * pxscale;
+
+
+            //------------------------------------------------- 
             ////experiment
-            ////for subpixel rendering
-            //offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
+            ////for subpixel rendering 
+            fit_x_offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
+
+            //if (fit_x_offset < 0)
+            //{
+            //    //fit_x_offset = 1 + fit_x_offset;
+            //    fit_x_offset = -s_xmin + 1 + (+fit_x_offset);
+            //}
+            //else
+            //{
+            //    fit_x_offset = -s_xmin + 1 + (1 - fit_x_offset);
+            //    //offset to right (+)
+            //    //to fit main integer
+            //    //float new_floor = (int)s_xmin;
+            //    //new_floor += fit_x_offset;
+            //    //float new_minor_diff = new_floor - s_xmin; 
+            //    //float actual_first = s_xmin + fit_x_offset;
+            //}
+
 
 #if DEBUG
-            dbugWriteLine("===begin===" + _avg_xdiff);
+            dbugWriteLine("===begin===" + fit_x_offset);
             if (!dbugUseHorizontalFitValue)
             {
                 fit_x_offset = 0;
             }
 #endif
-            List<GlyphPoint> points = contour.flattenPoints;
-            int j = points.Count;
-            if (j == 0) return;
+            //------------------------------------------------- 
 
-
-            float pxscale = this._pxScale;
             bool useGridFit = EnableGridFit;
-            //TODO: review here
-
+            //TODO: review here 
             float fit_x, fit_y;
             points[0].GetFitXY(pxscale, out fit_x, out fit_y);
-
             //
             tx.MoveTo(fit_x + fit_x_offset, fit_y);
 #if DEBUG
-            dbugWriteOutput("M", fit_x, fit_x + fit_x_offset, fit_y);
+            // dbugWriteOutput("M", fit_x, fit_x + fit_x_offset, fit_y);
 #endif
             //2. others
             for (int i = 1; i < j; ++i)
@@ -398,7 +451,7 @@ namespace Typography.Contours
                 tx.LineTo(fit_x + fit_x_offset, fit_y);
 #if DEBUG
                 //for debug
-                dbugWriteOutput("L", fit_x, fit_x + fit_x_offset, fit_y);
+                //dbugWriteOutput("L", fit_x, fit_x + fit_x_offset, fit_y);
 #endif
             }
             //close 
@@ -416,7 +469,7 @@ namespace Typography.Contours
         }
         void dbugWriteOutput(string cmd, float pre_x, float post_x, float y)
         {
-            //Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
+           // Console.WriteLine(cmd + "pre_x:" + pre_x + ",post_x:" + post_x + ",y" + y);
         }
         public static bool dbugActualPosToConsole { get; set; }
         public static bool dbugUseHorizontalFitValue { get; set; }
