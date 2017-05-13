@@ -261,7 +261,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             if (this._font == null)
             {
-                this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
+                //this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
                 ChangeFont(canvasPainter.CurrentFont);
             }
 

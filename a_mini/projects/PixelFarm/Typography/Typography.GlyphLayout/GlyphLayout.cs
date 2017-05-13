@@ -375,13 +375,13 @@ namespace Typography.TextLayout
                                     //--------------------------------------------------
                                     //version 1:
                                     //original, no horizontal grid fit
-                                    int advW = abc.w + abc.x_offset;
+                                    int advW = (int)(abc.w + abc.x_offset * pxscale);
                                     //create final glyph plan here ***
 
                                     outputGlyphPlanList.Add(new GlyphPlan(
                                         glyph_pos.GlyphIndex,
-                                        cx + abc.x_offset + glyph_pos.OffsetX,
-                                        (short)(cy + glyph_pos.OffsetY),
+                                        cx + abc.x_offset * pxscale + glyph_pos.OffsetX,
+                                        (short)(cy + glyph_pos.OffsetY  ),
                                         advW));
 
                                     cx += advW;
@@ -394,8 +394,8 @@ namespace Typography.TextLayout
                                     int advW = (int)(glyph_pos.AdvWidth * pxscale);
                                     outputGlyphPlanList.Add(new GlyphPlan(
                                         glyph_pos.GlyphIndex,
-                                        cx + glyph_pos.OffsetX,
-                                        (short)(cy + glyph_pos.OffsetY),
+                                        cx + glyph_pos.OffsetX * pxscale,
+                                        (short)(cy + glyph_pos.OffsetY * pxscale),
                                         advW));
 
                                     cx += advW;
@@ -417,8 +417,8 @@ namespace Typography.TextLayout
 
                                 outputGlyphPlanList.Add(new GlyphPlan(
                                     glyph_pos.GlyphIndex,
-                                    cx + glyph_pos.OffsetX,
-                                    (short)(cy + glyph_pos.OffsetY),
+                                    cx + glyph_pos.OffsetX * pxscale,
+                                    (short)(cy + glyph_pos.OffsetY * pxscale),
                                     advW));
                                 cx += advW;
 
