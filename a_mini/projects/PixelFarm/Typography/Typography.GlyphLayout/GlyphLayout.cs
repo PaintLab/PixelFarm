@@ -367,7 +367,7 @@ namespace Typography.TextLayout
                             {
                                 //get glyph's ABC from grid fitting engine
 
-                                NewGlyphPos glyph_pos = glyphPositions[i];
+                                GlyphPos glyph_pos = glyphPositions[i];
                                 ABC abc = gridFittingEngine.GetABC(glyph_pos.GlyphIndex);
 
                                 if (!abc.IsEmpty)
@@ -408,7 +408,7 @@ namespace Typography.TextLayout
                             float prev_diff_from_xmax = 0;
                             for (int i = 0; i < finalGlyphCount; ++i)
                             {
-                                NewGlyphPos glyph_pos = glyphPositions[i];
+                                GlyphPos glyph_pos = glyphPositions[i];
 
                                 //--------------------------------------------------
                                 //version 1:
@@ -967,13 +967,13 @@ namespace Typography.TextLayout
         {
             _glyphs.Add(new InternalGlyphPos(glyphIndex, glyph));
         }
-        public NewGlyphPos this[int index]
+        public GlyphPos this[int index]
         {
 
             get
             {
                 InternalGlyphPos pos = _glyphs[index];
-                return new NewGlyphPos(
+                return new GlyphPos(
                     pos.glyphIndex,
                     pos.xoffset,
                     pos.yoffset,

@@ -334,15 +334,13 @@ namespace Typography.OpenFont
         }
     }
 
-    public struct NewGlyphPos
+    public struct GlyphPos
     {
         readonly ushort _glyphIndex;
         readonly ushort _advW;
         short _offsetX;
         short _offsetY;
-
-
-        public NewGlyphPos(ushort glyphIndex,
+        public GlyphPos(ushort glyphIndex,
             short offsetX,
             short offsetY,
             ushort advW)
@@ -389,7 +387,7 @@ namespace Typography.OpenFont
     public interface IGlyphPositions
     {
         int Count { get; }
-        NewGlyphPos this[int index] { get; }
+        GlyphPos this[int index] { get; }
         GlyphClassKind GetGlyphClassKind(int index);
     }
 

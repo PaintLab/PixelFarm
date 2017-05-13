@@ -616,7 +616,7 @@ namespace Typography.OpenFont.Tables
                     int j = inputGlyphs.Count;
                     for (int i = 1; i < j; ++i) //start at 1
                     {
-                        NewGlyphPos glyphPos = inputGlyphs[i];
+                        GlyphPos glyphPos = inputGlyphs[i];
                         int markFound = MarkCoverageTable.FindPosition(glyphPos.GlyphIndex);
                         if (markFound > -1)
                         {
@@ -852,13 +852,13 @@ namespace Typography.OpenFont.Tables
                     //
                     for (int i = startAt; i < lim; ++i) //start at 1
                     {
-                        NewGlyphPos glyphPos = inputGlyphs[i];
+                        GlyphPos glyphPos = inputGlyphs[i];
                         int markFound = MarkCoverage1.FindPosition(glyphPos.GlyphIndex);
                         if (markFound > -1)
                         {
                             //this is mark glyph
                             //then-> look back for base 
-                            NewGlyphPos prev_pos = inputGlyphs[i - 1];
+                            GlyphPos prev_pos = inputGlyphs[i - 1];
                             int baseFound = MarkCoverage2.FindPosition(prev_pos.GlyphIndex);
                             if (baseFound > -1)
                             {
@@ -874,7 +874,7 @@ namespace Typography.OpenFont.Tables
                                     int actualBasePos = FindActualBaseGlyphBackward(inputGlyphs, i - 1);
                                     if (actualBasePos > -1)
                                     {
-                                        NewGlyphPos prev_pos2 = inputGlyphs[actualBasePos];
+                                        GlyphPos prev_pos2 = inputGlyphs[actualBasePos];
                                         glyphPos.OffsetX += (short)((prev_pos2.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord));
                                     }
                                 }
