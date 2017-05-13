@@ -425,7 +425,7 @@ namespace Typography.OpenFont
         }
     }
 
-    public class GlyphPos
+    class GlyphPos
     {
         public readonly ushort glyphIndex;
         public short xoffset;
