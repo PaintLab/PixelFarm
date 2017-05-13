@@ -381,7 +381,7 @@ namespace Typography.TextLayout
                                     outputGlyphPlanList.Add(new GlyphPlan(
                                         glyph_pos.GlyphIndex,
                                         cx + abc.x_offset * pxscale + glyph_pos.OffsetX,
-                                        (short)(cy + glyph_pos.OffsetY  ),
+                                        (short)(cy + glyph_pos.OffsetY),
                                         advW));
 
                                     cx += advW;
@@ -969,9 +969,10 @@ namespace Typography.TextLayout
         }
         public void AppendGlyphOffset(int index, short appendOffsetX, short appendOffsetY)
         {
-            InternalGlyphPos glyphPos = _glyphs[index];
-            glyphPos.xoffset += appendOffsetX;
-            glyphPos.yoffset += appendOffsetY;
+            InternalGlyphPos existing = _glyphs[index];
+            existing.xoffset += appendOffsetX;
+            existing.yoffset += appendOffsetY;
+            _glyphs[index] = existing;
         }
         public GlyphPos this[int index]
         {
@@ -994,22 +995,20 @@ namespace Typography.TextLayout
         {
             return _glyphs[index].glyphIndex;
         }
-        public void SetGlyphOffset(int index, short offsetX, short offsetY)
-        {
-
-        }
+        
     }
 
-    class InternalGlyphPos
+    struct InternalGlyphPos
     {
         public readonly ushort glyphIndex;
         public short xoffset;
         public short yoffset;
-        Glyph _glyph;
+        readonly Glyph _glyph;
         public InternalGlyphPos(ushort glyphIndex, Glyph glyph)
         {
             this.glyphIndex = glyphIndex;
             this._glyph = glyph;
+            xoffset = yoffset = 0;
         }
         public GlyphClassKind classKind
         {
@@ -1022,6 +1021,7 @@ namespace Typography.TextLayout
                 return _glyph.AdvanceWidth;
             }
         }
+
 
 #if DEBUG
         public override string ToString()
