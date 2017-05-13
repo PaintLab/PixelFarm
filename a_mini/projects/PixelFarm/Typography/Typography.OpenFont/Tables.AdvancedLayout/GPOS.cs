@@ -616,13 +616,14 @@ namespace Typography.OpenFont.Tables
                     int j = inputGlyphs.Count;
                     for (int i = 1; i < j; ++i) //start at 1
                     {
-                        GlyphPos glyphPos = inputGlyphs[i];
-                        int markFound = MarkCoverageTable.FindPosition(glyphPos.GlyphIndex);
+                        ushort glyph_advW;
+                        int markFound = MarkCoverageTable.FindPosition(inputGlyphs.GetGlyphIndex(i, out glyph_advW));
                         if (markFound > -1)
                         {
                             //this is mark glyph
                             //then-> look back for base
-                            int baseFound = BaseCoverageTable.FindPosition(inputGlyphs[i - 1].GlyphIndex);
+                            ushort prev_glyph_adv_w;
+                            int baseFound = BaseCoverageTable.FindPosition(inputGlyphs.GetGlyphIndex(i - 1, out prev_glyph_adv_w));
                             if (baseFound > -1)
                             {
                                 ushort markClass = this.MarkArrayTable.GetMarkClass(markFound);
@@ -636,16 +637,15 @@ namespace Typography.OpenFont.Tables
 
                                 }
 #endif
-                                //glyphPos.OffsetX += (short)((-inputGlyphs[i - 1].AdvWidth + basePointForMark.xcoord - markAnchorPoint.xcoord));
-                                //glyphPos.OffsetY += (short)(basePointForMark.ycoord - markAnchorPoint.ycoord);
+
                                 inputGlyphs.AppendGlyphOffset(
                                     i,
-                                    (short)((-inputGlyphs[i - 1].AdvWidth + basePointForMark.xcoord - markAnchorPoint.xcoord)),
+                                    (short)((-prev_glyph_adv_w + basePointForMark.xcoord - markAnchorPoint.xcoord)),
                                     (short)(basePointForMark.ycoord - markAnchorPoint.ycoord)
                                     );
                             }
                         }
-                        xpos += glyphPos.AdvWidth;
+                        xpos += glyph_advW;
                     }
                 }
 
@@ -856,14 +856,14 @@ namespace Typography.OpenFont.Tables
                     //
                     for (int i = startAt; i < lim; ++i) //start at 1
                     {
-                        GlyphPos glyphPos = inputGlyphs[i];
-                        int markFound = MarkCoverage1.FindPosition(glyphPos.GlyphIndex);
+                        ushort glyph_adv_w;
+                        int markFound = MarkCoverage1.FindPosition(inputGlyphs.GetGlyphIndex(i, out glyph_adv_w));
                         if (markFound > -1)
                         {
                             //this is mark glyph
                             //then-> look back for base 
-                            GlyphPos prev_pos = inputGlyphs[i - 1];
-                            int baseFound = MarkCoverage2.FindPosition(prev_pos.GlyphIndex);
+                            ushort prev_pos_adv_w;
+                            int baseFound = MarkCoverage2.FindPosition(inputGlyphs.GetGlyphIndex(i - 1, out prev_pos_adv_w));
                             if (baseFound > -1)
                             {
                                 int markClassId = this.Mark1ArrayTable.GetMarkClass(markFound);
@@ -871,32 +871,29 @@ namespace Typography.OpenFont.Tables
                                 AnchorPoint mark1Anchor = this.Mark1ArrayTable.GetAnchorPoint(markFound);
 
                                 //TODO: review here 
-
                                 if (mark1Anchor.ycoord < 0)
                                 {
                                     //eg. น้ำ
-                                    //change yoffset of prev pos
-                                    //prev_pos.OffsetY += (short)(-mark1Anchor.ycoord);  
-                                    inputGlyphs.AppendGlyphOffset(i - 1, 0, (short)(-mark1Anchor.ycoord));//*** PREV
+                                    //change yoffset of prev pos 
+                                    inputGlyphs.AppendGlyphOffset(i - 1 /*PREV*/, 0, (short)(-mark1Anchor.ycoord));
                                     int actualBasePos = FindActualBaseGlyphBackward(inputGlyphs, i - 1);
                                     if (actualBasePos > -1)
                                     {
-                                        GlyphPos prev_pos2 = inputGlyphs[actualBasePos];
-                                        //glyphPos.OffsetX += (short)((prev_pos2.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord));
+                                        short offset_x, offset_y;
+                                        inputGlyphs.GetOffset(actualBasePos, out offset_x, out offset_y);
                                         inputGlyphs.AppendGlyphOffset(
                                             i,
-                                            (short)(prev_pos2.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord), 
+                                            (short)(offset_x + mark2BaseAnchor.xcoord - mark1Anchor.xcoord),
                                             0);
                                     }
                                 }
                                 else
                                 {
-                                    //glyphPos.OffsetY += (short)(mark1Anchor.ycoord);
-                                    //glyphPos.OffsetX += (short)((prev_pos.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord));
-                                    //
+                                    short offset_x, offset_y;
+                                    inputGlyphs.GetOffset(i - 1/*PREV*/, out offset_x, out offset_y);
                                     inputGlyphs.AppendGlyphOffset(
                                          i,
-                                         (short)(prev_pos.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord),
+                                         (short)(offset_x + mark2BaseAnchor.xcoord - mark1Anchor.xcoord),
                                          mark1Anchor.ycoord);
                                 }
                             }

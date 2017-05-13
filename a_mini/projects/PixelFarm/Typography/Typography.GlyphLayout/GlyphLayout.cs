@@ -42,11 +42,50 @@ namespace Typography.TextLayout
 
     }
 
+    public struct GlyphPos
+    {
+        readonly ushort _glyphIndex;
+        readonly ushort _advW;
+        short _offsetX;
+        short _offsetY;
+        public GlyphPos(ushort glyphIndex,
+            short offsetX,
+            short offsetY,
+            ushort advW)
+        {
+            _glyphIndex = glyphIndex;
+            _offsetX = offsetX;
+            _offsetY = offsetY;
+            _advW = advW;
+        }
+        public ushort GlyphIndex
+        {
+            get
+            {
+                return _glyphIndex;
+            }
+        }
+        public short OffsetX
+        {
+            get { return _offsetX; }
+        }
+        public short OffsetY
+        {
+            get { return _offsetY; }
+        }
+        public ushort AdvWidth
+        {
+            get
+            {
+                return _advW;
+            }
+        }
+    }
     public struct GlyphPlan
     {
         public readonly ushort glyphIndex;//2
-       
-        public GlyphPlan(ushort glyphIndex, float exactX, short exactY, float extactAdvX)
+
+        public GlyphPlan(ushort glyphIndex, float exactX, float exactY, float extactAdvX)
         {
             this.glyphIndex = glyphIndex;
             this.ExactX = exactX;
@@ -325,7 +364,7 @@ namespace Typography.TextLayout
         public static void ReadOutput(this GlyphLayout glyphLayout, List<GlyphPlan> outputGlyphPlanList)
         {
 
-            IGlyphPositions glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
+            GlyphPosStream glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
             int finalGlyphCount = glyphPositions.Count;
             int cx = 0;
             short cy = 0;
@@ -345,6 +384,8 @@ namespace Typography.TextLayout
                         //so we need a modified glyph metrix info from the fitting engine.
                         //--------------------------------------
                         IGridFittingEngine gridFittingEngine = glyphLayout.GridFittingEngine;
+                        gridFittingEngine = null;
+
                         if (gridFittingEngine != null)
                         {
                             //use grid fitting engine
@@ -392,12 +433,7 @@ namespace Typography.TextLayout
                             for (int i = 0; i < finalGlyphCount; ++i)
                             {
                                 GlyphPos glyph_pos = glyphPositions[i];
-
-                                //--------------------------------------------------
-                                //version 1:
-                                //original, no horizontal grid fit
                                 int advW = (int)(glyph_pos.AdvWidth * pxscale);
-
                                 outputGlyphPlanList.Add(new GlyphPlan(
                                     glyph_pos.GlyphIndex,
                                     cx + glyph_pos.OffsetX * pxscale,
@@ -765,11 +801,18 @@ namespace Typography.TextLayout
         {
             return _glyphs[index].classKind;
         }
-        public ushort GetGlyphIndex(int index)
+        public ushort GetGlyphIndex(int index, out ushort advW)
         {
-            return _glyphs[index].glyphIndex;
+            InternalGlyphPos pos = _glyphs[index];
+            advW = pos.AdvWidth;
+            return pos.glyphIndex;
         }
-
+        public void GetOffset(int index, out short offsetX, out short offsetY)
+        {
+            InternalGlyphPos pos = _glyphs[index];
+            offsetX = pos.xoffset;
+            offsetY = pos.yoffset;
+        }
     }
 
     struct InternalGlyphPos
