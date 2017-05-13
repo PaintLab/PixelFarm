@@ -345,6 +345,7 @@ namespace Typography.OpenFont
         void GetOffset(int index, out short offsetX, out short offsetY);
     }
 
+    
 
 
     namespace Extensions
