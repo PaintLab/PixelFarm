@@ -213,7 +213,7 @@ namespace Typography.OpenFont.Tables
         {
             public GPOS OwnerGPos;
 
-            public abstract void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len);
+            public abstract void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len);
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace Typography.OpenFont.Tables
                 this.subTableOffsets = subTableOffsets;
                 this.markFilteringSet = markFilteringSet;
             }
-            public void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+            public void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
             {
 
                 int j = subTables.Count;
@@ -332,7 +332,7 @@ namespace Typography.OpenFont.Tables
                     private set;
                 }
                 public CoverageTable CoverageTable { get; set; }
-                public override void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -416,7 +416,7 @@ namespace Typography.OpenFont.Tables
                     get;
                     set;
                 }
-                public override void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -608,21 +608,21 @@ namespace Typography.OpenFont.Tables
                 public BaseArrayTable BaseArrayTable { get; set; }
                 public MarkArrayTable MarkArrayTable { get; set; }
 
-                public override void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
                 {
                     int xpos = 0;
-                    //find marker
-                    int x = 0;
+                    //find marker  
+
                     int j = inputGlyphs.Count;
                     for (int i = 1; i < j; ++i) //start at 1
                     {
-                        GlyphPos glyphPos = inputGlyphs[i];
-                        int markFound = MarkCoverageTable.FindPosition(glyphPos.glyphIndex);
+                        NewGlyphPos glyphPos = inputGlyphs[i];
+                        int markFound = MarkCoverageTable.FindPosition(glyphPos.GlyphIndex);
                         if (markFound > -1)
                         {
                             //this is mark glyph
                             //then-> look back for base
-                            int baseFound = BaseCoverageTable.FindPosition(inputGlyphs[i - 1].glyphIndex);
+                            int baseFound = BaseCoverageTable.FindPosition(inputGlyphs[i - 1].GlyphIndex);
                             if (baseFound > -1)
                             {
                                 ushort markClass = this.MarkArrayTable.GetMarkClass(markFound);
@@ -630,16 +630,14 @@ namespace Typography.OpenFont.Tables
                                 AnchorPoint markAnchorPoint = this.MarkArrayTable.GetAnchorPoint(markFound);
                                 BaseRecord baseRecord = BaseArrayTable.GetBaseRecords(baseFound);
                                 AnchorPoint basePointForMark = baseRecord.anchors[markClass];
-
-                                glyphPos.xoffset += (short)((-inputGlyphs[i - 1].AdvWidth + basePointForMark.xcoord - markAnchorPoint.xcoord));
-
 #if DEBUG
                                 if (markAnchorPoint.ycoord != 0)
                                 {
 
                                 }
 #endif
-                                glyphPos.yoffset += (short)(basePointForMark.ycoord - markAnchorPoint.ycoord);
+                                glyphPos.OffsetX += (short)((-inputGlyphs[i - 1].AdvWidth + basePointForMark.xcoord - markAnchorPoint.xcoord));
+                                glyphPos.OffsetY += (short)(basePointForMark.ycoord - markAnchorPoint.ycoord);
 
                             }
                         }
@@ -772,7 +770,7 @@ namespace Typography.OpenFont.Tables
                 public CoverageTable LigatureCoverage { get; set; }
                 public MarkArrayTable MarkArrayTable { get; set; }
                 public LigatureArrayTable LigatureArrayTable { get; set; }
-                public override void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -839,7 +837,7 @@ namespace Typography.OpenFont.Tables
                 public CoverageTable MarkCoverage2 { get; set; }
                 public MarkArrayTable Mark1ArrayTable { get; set; }
                 public Mark2ArrayTable Mark2ArrayTable { get; set; } // Mark2 attachment points used to attach Mark1 glyphs to a specific Mark2 glyph. 
-                public override void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
                 {
                     //find marker 
                     if (startAt == 0)
@@ -854,14 +852,14 @@ namespace Typography.OpenFont.Tables
                     //
                     for (int i = startAt; i < lim; ++i) //start at 1
                     {
-                        GlyphPos glyphPos = inputGlyphs[i];
-                        int markFound = MarkCoverage1.FindPosition(glyphPos.glyphIndex);
+                        NewGlyphPos glyphPos = inputGlyphs[i];
+                        int markFound = MarkCoverage1.FindPosition(glyphPos.GlyphIndex);
                         if (markFound > -1)
                         {
                             //this is mark glyph
                             //then-> look back for base 
-                            GlyphPos prev_pos = inputGlyphs[i - 1];
-                            int baseFound = MarkCoverage2.FindPosition(prev_pos.glyphIndex);
+                            NewGlyphPos prev_pos = inputGlyphs[i - 1];
+                            int baseFound = MarkCoverage2.FindPosition(prev_pos.GlyphIndex);
                             if (baseFound > -1)
                             {
                                 int markClassId = this.Mark1ArrayTable.GetMarkClass(markFound);
@@ -872,30 +870,29 @@ namespace Typography.OpenFont.Tables
                                 if (mark1Anchor.ycoord < 0)
                                 {
                                     //eg. น้ำ
-                                    prev_pos.yoffset += (short)(-mark1Anchor.ycoord);
+                                    prev_pos.OffsetY += (short)(-mark1Anchor.ycoord);
                                     int actualBasePos = FindActualBaseGlyphBackward(inputGlyphs, i - 1);
                                     if (actualBasePos > -1)
                                     {
-                                        GlyphPos prev_pos2 = inputGlyphs[actualBasePos];
-                                        glyphPos.xoffset += (short)((prev_pos2.xoffset + mark2BaseAnchor.xcoord - mark1Anchor.xcoord));
+                                        NewGlyphPos prev_pos2 = inputGlyphs[actualBasePos];
+                                        glyphPos.OffsetX += (short)((prev_pos2.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord));
                                     }
                                 }
                                 else
                                 {
-                                    glyphPos.yoffset += (short)(mark1Anchor.ycoord);
-                                    glyphPos.xoffset += (short)((prev_pos.xoffset + mark2BaseAnchor.xcoord - mark1Anchor.xcoord));
+                                    glyphPos.OffsetY += (short)(mark1Anchor.ycoord);
+                                    glyphPos.OffsetX += (short)((prev_pos.OffsetX + mark2BaseAnchor.xcoord - mark1Anchor.xcoord));
                                 }
                             }
                         }
                     }
                 }
             }
-            static int FindActualBaseGlyphBackward(List<GlyphPos> inputGlyphs, int startAt)
+            static int FindActualBaseGlyphBackward(GlyphPosStream inputGlyphs, int startAt)
             {
                 for (int i = startAt; i >= 0; --i)
                 {
-                    GlyphPos glyphPos = inputGlyphs[i];
-                    if (glyphPos.classKind <= GlyphClassKind.Base)
+                    if (inputGlyphs.GetGlyphClassKind(i) <= GlyphClassKind.Base)
                     {
                         return i;
                     }
@@ -1054,7 +1051,7 @@ namespace Typography.OpenFont.Tables
 
                 public CoverageTable CoverageTable { get; set; }
                 public PosRuleSetTable[] PosRuleSetTables { get; set; }
-                public override void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -1065,7 +1062,7 @@ namespace Typography.OpenFont.Tables
                 public ushort ClassDefOffset { get; set; }
                 public CoverageTable CoverageTable { get; set; }
                 public PosClassSetTable[] PosClassSetTables { get; set; }
-                public override void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -1075,7 +1072,7 @@ namespace Typography.OpenFont.Tables
             {
                 public CoverageTable[] CoverageTables { get; set; }
                 public PosLookupRecord[] PosLookupRecords { get; set; }
-                public override void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -1086,7 +1083,7 @@ namespace Typography.OpenFont.Tables
 
                 public CoverageTable CoverageTable { get; set; }
                 public PosRuleSetTable[] PosRuleSetTables { get; set; }
-                public override void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -1107,7 +1104,7 @@ namespace Typography.OpenFont.Tables
                 public ushort LookaheadClassDefOffset { get; set; }
 
 
-                public override void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }
@@ -1131,7 +1128,7 @@ namespace Typography.OpenFont.Tables
                 //struct 	PosLookupRecord[PosCount] 	Array of PosLookupRecords,in design order
 
 
-                public override void DoGlyphPosition(List<GlyphPos> inputGlyphs, int startAt, int len)
+                public override void DoGlyphPosition(GlyphPosStream inputGlyphs, int startAt, int len)
                 {
                     throw new NotImplementedException();
                 }

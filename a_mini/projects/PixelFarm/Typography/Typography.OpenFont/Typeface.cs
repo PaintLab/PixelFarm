@@ -334,9 +334,97 @@ namespace Typography.OpenFont
         }
     }
 
+    public struct NewGlyphPos
+    {
+        GlyphPos _glyphPos;
+        internal NewGlyphPos(GlyphPos glyphPos)
+        {
+            this._glyphPos = glyphPos;
+        }
+        public ushort GlyphIndex
+        {
+            get
+            {
+                return _glyphPos.glyphIndex;
+            }
+        }
+        public short OffsetX
+        {
+            get { return _glyphPos.xoffset; }
+            set
+            {
+                _glyphPos.xoffset = value;
+            }
+        }
+        public short OffsetY
+        {
+            get { return _glyphPos.yoffset; }
+            set
+            {
+                _glyphPos.yoffset = value;
+            }
+        }
+        public ushort AdvWidth
+        {
+            get
+            {
+                return _glyphPos.AdvWidth;
+            }
+        }
+    }
 
-    //------------------------------------------------------------------------------------------------------
-    //TODO: review this class again
+    /// <summary>
+    /// glyph position stream
+    /// </summary>
+    public class GlyphPosStream
+    {
+        List<GlyphPos> _glyphs = new List<GlyphPos>();
+        int _index; //current index
+
+        /// <summary>
+        /// current index
+        /// </summary>
+        public int Index
+        {
+            get { return _index; }
+            set
+            {
+                _index = value;
+            }
+        }
+        public int Count
+        {
+            get
+            {
+                return _glyphs.Count;
+            }
+        }
+        public void Clear()
+        {
+            _glyphs.Clear();
+        }
+        public void AddGlyph(ushort glyphIndex, Glyph glyph)
+        {
+            _glyphs.Add(new GlyphPos(glyphIndex, glyph));
+        }
+        public NewGlyphPos this[int index]
+        {
+            get { return new NewGlyphPos(_glyphs[index]); }
+        }
+        public GlyphClassKind GetGlyphClassKind(int index)
+        {
+            return _glyphs[index].classKind;
+        }
+        public ushort GetGlyphIndex(int index)
+        {
+            return _glyphs[index].glyphIndex;
+        }
+        public void SetGlyphOffset(int index, short offsetX, short offsetY)
+        {
+
+        }
+    }
+
     public class GlyphPos
     {
         public readonly ushort glyphIndex;
@@ -359,7 +447,7 @@ namespace Typography.OpenFont
                 return _glyph.AdvanceWidth;
             }
         }
-         
+
 #if DEBUG
         public override string ToString()
         {

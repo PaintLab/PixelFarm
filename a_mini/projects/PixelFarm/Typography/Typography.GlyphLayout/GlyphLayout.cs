@@ -163,10 +163,11 @@ namespace Typography.TextLayout
         bool _needPlanUpdate;
         IGridFittingEngine _gridFittingEngine;
         float _pxscale;
-        
+
         internal GlyphIndexList _inputGlyphs = new GlyphIndexList();
-        internal List<GlyphPos> _glyphPositions = new List<GlyphPos>();
+        internal GlyphPosStream _glyphPositions = new GlyphPosStream();
         internal List<GlyphPlan> _myGlyphPlans = new List<GlyphPlan>();
+
 
         public GlyphLayout()
         {
@@ -194,8 +195,8 @@ namespace Typography.TextLayout
             {
                 _gridFittingEngine = value;
             }
-        } 
-        public bool EnableLigature { get; set; } 
+        }
+        public bool EnableLigature { get; set; }
         public Typeface Typeface
         {
             get { return _typeface; }
@@ -275,10 +276,7 @@ namespace Typography.TextLayout
                 }
                 //
                 //this is original value WITHOUT fit-to-grid adjust
-                _glyphPositions.Add(new GlyphPos(
-                    glyIndex,
-                    orgGlyph)
-                   );
+                _glyphPositions.AddGlyph(glyIndex, orgGlyph);
             }
             PositionTechnique posTech = this.PositionTechnique;
             if (_gpos != null && len > 1 && posTech == PositionTechnique.OpenFont)
@@ -290,7 +288,7 @@ namespace Typography.TextLayout
             //then we will scale it to target scale later 
 
         }
-      
+
         void UpdateLayoutPlan()
         {
             GlyphLayoutPlanContext context = _layoutPlanCollection.GetPlanOrCreate(this._typeface, this._scriptLang);
@@ -339,7 +337,7 @@ namespace Typography.TextLayout
         public static void ReadOutput(this GlyphLayout glyphLayout, List<GlyphPlan> outputGlyphPlanList)
         {
 
-            List<GlyphPos> glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
+            GlyphPosStream glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
             int finalGlyphCount = glyphPositions.Count;
             int cx = 0;
             short cy = 0;
@@ -368,8 +366,9 @@ namespace Typography.TextLayout
                             for (int i = 0; i < finalGlyphCount; ++i)
                             {
                                 //get glyph's ABC from grid fitting engine
-                                GlyphPos glyphPos = glyphPositions[i];
-                                ABC abc = gridFittingEngine.GetABC(glyphPos.glyphIndex);
+
+                                NewGlyphPos glyph_pos = glyphPositions[i];
+                                ABC abc = gridFittingEngine.GetABC(glyph_pos.GlyphIndex);
 
                                 if (!abc.IsEmpty)
                                 {
@@ -377,10 +376,12 @@ namespace Typography.TextLayout
                                     //version 1:
                                     //original, no horizontal grid fit
                                     int advW = abc.w + abc.x_offset;
+                                    //create final glyph plan here ***
+
                                     outputGlyphPlanList.Add(new GlyphPlan(
-                                        glyphPos.glyphIndex,
-                                        cx + abc.x_offset + glyphPos.xoffset,
-                                        (short)(cy + glyphPos.yoffset),
+                                        glyph_pos.GlyphIndex,
+                                        cx + abc.x_offset + glyph_pos.OffsetX,
+                                        (short)(cy + glyph_pos.OffsetY),
                                         advW));
 
                                     cx += advW;
@@ -390,11 +391,11 @@ namespace Typography.TextLayout
                                     //--------------------------------------------------
                                     //version 1:
                                     //original, no horizontal grid fit
-                                    int advW = (int)(glyphPos.AdvWidth * pxscale);
+                                    int advW = (int)(glyph_pos.AdvWidth * pxscale);
                                     outputGlyphPlanList.Add(new GlyphPlan(
-                                        glyphPos.glyphIndex,
-                                        cx + glyphPos.xoffset,
-                                        (short)(cy + glyphPos.yoffset),
+                                        glyph_pos.GlyphIndex,
+                                        cx + glyph_pos.OffsetX,
+                                        (short)(cy + glyph_pos.OffsetY),
                                         advW));
 
                                     cx += advW;
@@ -407,17 +408,17 @@ namespace Typography.TextLayout
                             float prev_diff_from_xmax = 0;
                             for (int i = 0; i < finalGlyphCount; ++i)
                             {
-                                GlyphPos glyphPos = glyphPositions[i];
+                                NewGlyphPos glyph_pos = glyphPositions[i];
 
                                 //--------------------------------------------------
                                 //version 1:
                                 //original, no horizontal grid fit
-                                int advW = (int)(glyphPos.AdvWidth * pxscale);
+                                int advW = (int)(glyph_pos.AdvWidth * pxscale);
 
                                 outputGlyphPlanList.Add(new GlyphPlan(
-                                    glyphPos.glyphIndex,
-                                    cx + glyphPos.xoffset,
-                                    (short)(cy + glyphPos.yoffset),
+                                    glyph_pos.GlyphIndex,
+                                    cx + glyph_pos.OffsetX,
+                                    (short)(cy + glyph_pos.OffsetY),
                                     advW));
                                 cx += advW;
 
