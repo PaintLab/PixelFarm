@@ -359,16 +359,7 @@ namespace Typography.OpenFont
                 return _glyph.AdvanceWidth;
             }
         }
-        public Bounds Bounds
-        {
-            get { return _glyph.Bounds; }
-        }
-        public void GetLeftAndRightBearing(out short leftBearing, out short rightBearing)
-        {
-            Bounds b = _glyph.Bounds;
-            leftBearing = b.XMin;
-            rightBearing = (short)(this.AdvWidth - b.XMax);
-        }
+         
 #if DEBUG
         public override string ToString()
         {
