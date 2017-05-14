@@ -30,8 +30,8 @@ namespace Typography.Contours
         float newX;
         float newY;
         //----------------------------------------  
-        //float _adjust_fit_x;
-        float _adjust_fit_y;
+        //float _adjust_fit_x; //not use 
+        float _adjust_fit_y; //px scale specific y fitting value
         //------------------------------------- 
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Typography.Contours
         internal void ResetFitAdjustValues()
         {
             _adjust_fit_y = 0;
-            // _adjust_fit_x = 0
+            //_adjust_fit_x = 0
         }
 
         internal void GetFitXY(float pxscale, out float x, out float y)

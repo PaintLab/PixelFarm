@@ -302,9 +302,11 @@ namespace Typography.Contours
 
                 for (int e = edgeCount - 1; e >= 0; --e)
                 {
+
+                    //TODO: review here again        
                     EdgeLine ee = h_edges[e];
-                    ee.P.FitAdjustY = avg_ydiff;
-                    ee.Q.FitAdjustY = avg_ydiff;
+                    ee.P.FitAdjustY = avg_ydiff;//assign px scale specific fit value
+                    ee.Q.FitAdjustY = avg_ydiff;//assign px scale specific fit value
                 }
             }
             //---------------------------------------------------------
@@ -379,7 +381,6 @@ namespace Typography.Contours
         void GenerateContourOutput(IGlyphTranslator tx, GlyphContour contour)
         {
 
-
             List<GlyphPoint> points = contour.flattenPoints;
             int j = points.Count;
             if (j == 0) return;
@@ -387,7 +388,7 @@ namespace Typography.Contours
             Bounds controlBounds = this.OriginalGlyphControlBounds;
             //walk along the edge in the contour to generate new edge output
             float pxscale = this._pxScale;
-            float fit_x_offset = _avg_x_fitOffset; 
+            float fit_x_offset = _avg_x_fitOffset;
 #if DEBUG
             dbugWriteLine("===begin===" + fit_x_offset);
             if (!dbugUseHorizontalFitValue)
@@ -396,7 +397,8 @@ namespace Typography.Contours
             }
 #endif
             //------------------------------------------------- 
-            fit_x_offset = 0;//force, not use fit_x_offset at this step
+            fit_x_offset = 0;//force, not use fit_x_offset at this step, use in debug mode
+            //------------------------------------------------- 
             bool useGridFit = EnableGridFit;
             //TODO: review here 
             float fit_x, fit_y;

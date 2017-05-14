@@ -195,14 +195,25 @@ namespace Typography.Contours
             {
                 GlyphContour cnt = contours[i];
                 cnt.CreateGlyphEdges();
-                //
+                //this is a new found after fitting process
                 cnt.FindBounds(ref _bounds_minX, ref _bounds_minY, ref _bounds_maxX, ref _bounds_maxY);
             }
         }
-
+        /// <summary>
+        /// min x after fitting process
+        /// </summary>
         public float MinX { get { return _bounds_minX; } }
+        /// <summary>
+        /// min y after fitting process
+        /// </summary>
         public float MinY { get { return _bounds_minY; } }
+        /// <summary>
+        /// max x after fitting process
+        /// </summary>
         public float MaxX { get { return _bounds_maxX; } }
+        /// <summary>
+        ///  max y after fitting process
+        /// </summary>
         public float MaxY { get { return _bounds_maxY; } }
 
         /// <summary>

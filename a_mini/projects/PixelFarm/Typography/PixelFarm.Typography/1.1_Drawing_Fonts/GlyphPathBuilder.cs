@@ -1,8 +1,8 @@
 ﻿//MIT, 2016-2017, WinterDev
-
-using Typography.OpenFont;
-using System.Collections.Generic;
+ 
 using System;
+using System.Collections.Generic;
+using Typography.OpenFont;
 using Typography.TextLayout;
 
 namespace Typography.Contours

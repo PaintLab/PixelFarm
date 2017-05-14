@@ -100,7 +100,7 @@ namespace Typography.Contours
                     GlyphPoint p0 = f_points[i - 1];
                     GlyphPoint p1 = f_points[i];
                     total += (p1.OX - p0.OX) * (p1.OY + p0.OY);
-                 
+
                 }
                 //the last one
                 {
@@ -116,7 +116,7 @@ namespace Typography.Contours
 
         internal void CreateGlyphEdges()
         {
-            int lim = flattenPoints.Count - 1;            
+            int lim = flattenPoints.Count - 1;
             GlyphPoint p = null, q = null;
             OutsideEdgeLine edgeLine = null;
             edges = new List<OutsideEdgeLine>();
@@ -156,9 +156,9 @@ namespace Typography.Contours
             else
             {
                 //not found
-            } 
+            }
         }
-        
+
         internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
             int j = edges.Count;
@@ -167,13 +167,19 @@ namespace Typography.Contours
             {
                 edges[i].SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
             }
-            //calculate edge cutpoint             
+            //calculate edge cutpoint  
             for (int i = flattenPoints.Count - 1; i >= 0; --i)
             {
                 UpdateNewEdgeCut(flattenPoints[i]);
             }
         }
-
+        /// <summary>
+        /// find bounds of new fit glyph
+        /// </summary>
+        /// <param name="minX"></param>
+        /// <param name="minY"></param>
+        /// <param name="maxX"></param>
+        /// <param name="maxY"></param>
         internal void FindBounds(ref float minX, ref float minY, ref float maxX, ref float maxY)
         {
             for (int i = flattenPoints.Count - 1; i >= 0; --i)
