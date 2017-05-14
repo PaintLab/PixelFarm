@@ -142,6 +142,63 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
+    
+        public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int startAt, int len)
+        {
+
+            //1. update some props.. 
+            //2. update current type face
+            UpdateTypefaceAndGlyphBuilder();
+            Typeface typeface = _glyphPathBuilder.Typeface;
+            //3. layout glyphs with selected layout technique
+            //TODO: review this again, we should use pixel?
+
+            float fontSizePoint = this.FontSizeInPoints;
+            _outputGlyphPlans.Clear();
+            _glyphLayout.Layout(typeface, text, startAt, len, _outputGlyphPlans);
+            TextPrinterHelper.CopyGlyphPlans(renderVx, _outputGlyphPlans, typeface.CalculateToPixelScaleFromPointSize(fontSizePoint));
+
+        }
+
+        public override void DrawCaret(float x, float y)
+        {
+
+            //        public override void DrawCaret(float xpos, float ypos)
+            //        {
+            //            CanvasPainter p = this.TargetCanvasPainter;
+            //            PixelFarm.Drawing.Color prevColor = p.StrokeColor;
+            //            p.StrokeColor = PixelFarm.Drawing.Color.Red;
+            //            p.Line(xpos, ypos, xpos, ypos + this.FontAscendingPx);
+            //            p.StrokeColor = prevColor;
+            //        }
+
+            //throw new NotImplementedException();
+        }
+
+        void UpdateTypefaceAndGlyphBuilder()
+        {
+            //1. update _glyphPathBuilder for current typeface
+            UpdateGlyphLayoutSettings();
+        }
+        void UpdateGlyphLayoutSettings()
+        {
+            if (this._font == null)
+            {
+                //this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
+                ChangeFont(canvasPainter.CurrentFont);
+            }
+
+            //2.1 
+            _glyphPathBuilder.SetHintTechnique(this.HintTechnique);
+            //2.2
+            _glyphLayout.Typeface = this.Typeface;
+            _glyphLayout.ScriptLang = this.ScriptLang;
+            _glyphLayout.PositionTechnique = this.PositionTechnique;
+            _glyphLayout.EnableLigature = this.EnableLigature;
+            //3.
+            //color...
+        }
+
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
             float ox = canvasPainter.OriginX;
@@ -230,63 +287,6 @@ namespace PixelFarm.Drawing.Fonts
             //restore prev origin
             canvasPainter.SetOrigin(ox, oy);
         }
-        public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int startAt, int len)
-        {
-
-            //1. update some props.. 
-            //2. update current type face
-            UpdateTypefaceAndGlyphBuilder();
-            Typeface typeface = _glyphPathBuilder.Typeface;
-            //3. layout glyphs with selected layout technique
-            //TODO: review this again, we should use pixel?
-
-            float fontSizePoint = this.FontSizeInPoints;
-            _outputGlyphPlans.Clear();
-            _glyphLayout.Layout(typeface, text, startAt, len, _outputGlyphPlans);
-            TextPrinterHelper.CopyGlyphPlans(renderVx, _outputGlyphPlans, typeface.CalculateToPixelScaleFromPointSize(fontSizePoint));
-
-        }
-
-        public override void DrawCaret(float x, float y)
-        {
-
-            //        public override void DrawCaret(float xpos, float ypos)
-            //        {
-            //            CanvasPainter p = this.TargetCanvasPainter;
-            //            PixelFarm.Drawing.Color prevColor = p.StrokeColor;
-            //            p.StrokeColor = PixelFarm.Drawing.Color.Red;
-            //            p.Line(xpos, ypos, xpos, ypos + this.FontAscendingPx);
-            //            p.StrokeColor = prevColor;
-            //        }
-
-            //throw new NotImplementedException();
-        }
-
-        void UpdateTypefaceAndGlyphBuilder()
-        {
-            //1. update _glyphPathBuilder for current typeface
-            UpdateGlyphLayoutSettings();
-        }
-        void UpdateGlyphLayoutSettings()
-        {
-            if (this._font == null)
-            {
-                //this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
-                ChangeFont(canvasPainter.CurrentFont);
-            }
-
-            //2.1 
-            _glyphPathBuilder.SetHintTechnique(this.HintTechnique);
-            //2.2
-            _glyphLayout.Typeface = this.Typeface;
-            _glyphLayout.ScriptLang = this.ScriptLang;
-            _glyphLayout.PositionTechnique = this.PositionTechnique;
-            _glyphLayout.EnableLigature = this.EnableLigature;
-            //3.
-            //color...
-        }
-
-
         public override void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, int startAt, int len, float x, float y)
         {
             CanvasPainter canvasPainter = this.TargetCanvasPainter;
