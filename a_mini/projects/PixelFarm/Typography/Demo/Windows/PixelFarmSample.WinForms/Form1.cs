@@ -56,7 +56,7 @@ namespace SampleWinForms
             //default
             //set script lang,
             //test with Thai for 'complex script' 
-            _current_script = Typography.OpenFont.ScriptLangs.Thai;
+            _current_script = Typography.OpenFont.ScriptLangs.Latin;
             _devGdiTextPrinter.ScriptLang = _current_script;
             _devGdiTextPrinter.PositionTechnique = PositionTechnique.OpenFont;
 
