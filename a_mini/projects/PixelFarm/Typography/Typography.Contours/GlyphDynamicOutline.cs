@@ -361,7 +361,7 @@ namespace Typography.Contours
 
         }
         /// <summary>
-        /// average horizontal diff to fit the grid, this result come from fitting process
+        /// pxscale-specific, average horizontal diff to fit the grid, this result come from fitting process
         /// </summary>
         public float AvgXFitOffset
         {

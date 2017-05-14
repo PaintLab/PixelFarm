@@ -15,6 +15,15 @@ namespace PixelFarm.Drawing.Fonts
 
     public class VxsTextPrinter : DevTextPrinterBase, ITextPrinter
     {
+
+
+
+        class GlyphMeshData
+        {
+            public VertexStore vxsStore;
+            public float avgXOffsetToFit;
+
+        }
         /// <summary>
         /// target canvas
         /// </summary>
@@ -28,7 +37,7 @@ namespace PixelFarm.Drawing.Fonts
         Dictionary<InstalledFont, Typeface> _cachedTypefaces = new Dictionary<InstalledFont, Typeface>();
         List<GlyphPlan> _outputGlyphPlans = new List<GlyphPlan>();
         //         
-        GlyphMeshCollection<VertexStore> hintGlyphCollection = new GlyphMeshCollection<VertexStore>();
+        GlyphMeshCollection<GlyphMeshData> hintGlyphCollection = new GlyphMeshCollection<GlyphMeshData>();
         VertexStorePool _vxsPool = new VertexStorePool();
         GlyphTranslatorToVxs _tovxs = new GlyphTranslatorToVxs();
         Typeface _currentTypeface;
@@ -166,8 +175,8 @@ namespace PixelFarm.Drawing.Fonts
                 //PERFORMANCE revisit here 
                 //if we have create a vxs we can cache it for later use?
                 //-----------------------------------  
-                VertexStore glyphVxs;
-                if (!hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphVxs))
+                GlyphMeshData glyphMeshData;
+                if (!hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphMeshData))
                 {
                     //if not found then create new glyph vxs and cache it
                     _glyphPathBuilder.SetHintTechnique(this.HintTechnique);
@@ -178,10 +187,11 @@ namespace PixelFarm.Drawing.Fonts
 
                     //TODO: review here, 
                     //float pxScale = _glyphPathBuilder.GetPixelScale();
-                    glyphVxs = new VertexStore();
-                    _tovxs.WriteOutput(glyphVxs, _vxsPool);
-                    //
-                    hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphVxs);
+                    glyphMeshData = new GlyphMeshData();
+                    glyphMeshData.vxsStore = new VertexStore();
+                    glyphMeshData.avgXOffsetToFit = _glyphPathBuilder.AvgLeftXOffsetToFit;
+                    _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+                    hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphMeshData);
                 }
 
                 g_x = (float)(glyphPlan.x * scale + x);
@@ -215,7 +225,7 @@ namespace PixelFarm.Drawing.Fonts
                 }
 
                 canvasPainter.SetOrigin(g_x, g_y);
-                canvasPainter.Fill(glyphVxs);
+                canvasPainter.Fill(glyphMeshData.vxsStore);
             }
             //restore prev origin
             canvasPainter.SetOrigin(ox, oy);
@@ -312,19 +322,22 @@ namespace PixelFarm.Drawing.Fonts
                 //PERFORMANCE revisit here 
                 //if we have create a vxs we can cache it for later use?
                 //-----------------------------------  
-                VertexStore glyphVxs;
-                if (!hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphVxs))
+                GlyphMeshData glyphMeshData;
+                if (!hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphMeshData))
                 {
                     _tovxs.Reset();
                     //if not found then create new glyph vxs and cache it
                     _glyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, fontSizePoint);
                     _glyphPathBuilder.ReadShapes(_tovxs);
+                    float avgLeftXOffsetToFit = _glyphPathBuilder.AvgLeftXOffsetToFit;
                     //------------------
                     //TODO: review here,  
-                    glyphVxs = new VertexStore();
-                    _tovxs.WriteOutput(glyphVxs, _vxsPool); 
+                    glyphMeshData = new GlyphMeshData();
+                    glyphMeshData.vxsStore = new VertexStore();//create vertex store to hold a result                    
+                    glyphMeshData.avgXOffsetToFit = avgLeftXOffsetToFit;
+                    _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
                     //------------------
-                    hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphVxs);
+                    hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphMeshData);
                 }
 
                 g_x = glyphPlan.ExactX + x;
@@ -359,7 +372,7 @@ namespace PixelFarm.Drawing.Fonts
 
 
                 canvasPainter.SetOrigin(g_x, g_y);
-                canvasPainter.Fill(glyphVxs);
+                canvasPainter.Fill(glyphMeshData.vxsStore);
             }
             //restore prev origin
             canvasPainter.SetOrigin(ox, oy);
