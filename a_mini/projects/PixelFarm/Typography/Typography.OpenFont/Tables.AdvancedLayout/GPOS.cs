@@ -401,12 +401,12 @@ namespace Typography.OpenFont.Tables
             }
 
             /// <summary>
-            /// Lookup Type 2: Pair Adjustment Positioning Subtable
+            /// Lookup Type 2, Format1: Pair Adjustment Positioning Subtable
             /// </summary>
-            class LkSubTableType2 : LookupSubTable
+            class LkSubTableType2Fmt1 : LookupSubTable
             {
                 PairSetTable[] pairSetTables;
-                public LkSubTableType2(PairSetTable[] pairSetTables)
+                public LkSubTableType2Fmt1(PairSetTable[] pairSetTables)
                 {
                     this.pairSetTables = pairSetTables;
                 }
@@ -417,7 +417,40 @@ namespace Typography.OpenFont.Tables
                 }
                 public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
-                    throw new NotImplementedException();
+                    //
+                   
+                    //find marker  
+                    CoverageTable covTable = this.CoverageTable;
+                    int lim = inputGlyphs.Count - 1;
+                    bool needFlush = false;
+                    for (int i = 0; i < lim; ++i) //start at 0
+                    {
+
+                        ushort glyph_advW;
+                        int firstGlyphFound = covTable.FindPosition(inputGlyphs.GetGlyphIndex(i, out glyph_advW));
+                        if (firstGlyphFound > -1)
+                        {
+                            //test this with Palatino A-Y sequence
+                            PairSetTable pairSet = this.pairSetTables[firstGlyphFound];
+                            //check second glyph 
+                            ushort second_glyph_w;
+                            ushort second_glyph_index = inputGlyphs.GetGlyphIndex(i + 1, out second_glyph_w);
+                            PairSet foundPairSet;
+                            if (pairSet.FindPairSet(second_glyph_index, out foundPairSet))
+                            {
+                                ValueRecord v1 = foundPairSet.value1;
+                                ValueRecord v2 = foundPairSet.value2;
+                                //TODO: recheck for vertical writing ...
+                                inputGlyphs.AppendGlyphAdvance(i, v1.XAdvance, 0);
+                                inputGlyphs.AppendGlyphAdvance(i + 1, v2.XAdvance, 0);
+                                needFlush = true;
+                            }
+                        }
+                    }
+                    if (needFlush)
+                    {
+                        inputGlyphs.FlushNewGlyphAdvance();
+                    }
                 }
             }
             /// <summary>
@@ -478,14 +511,15 @@ namespace Typography.OpenFont.Tables
                 //uint16 	PairValueCount 	    Number of PairValueRecords
                 //struct 	PairValueRecord[PairValueCount] 	Array of PairValueRecords-ordered by GlyphID of the second glyph
                 //-----------------
-                //A PairValueRecord specifies the second glyph in a pair (SecondGlyph) and defines a ValueRecord for each glyph (Value1 and Value2). If ValueFormat1 is set to zero (0) in the PairPos subtable, ValueRecord1 will be empty; similarly, if ValueFormat2 is 0, Value2 will be empty.
+                //A PairValueRecord specifies the second glyph in a pair (SecondGlyph) and defines a ValueRecord for each glyph (Value1 and Value2). 
+                //If ValueFormat1 is set to zero (0) in the PairPos subtable, ValueRecord1 will be empty; similarly, if ValueFormat2 is 0, Value2 will be empty.
 
                 //Example 4 at the end of this chapter shows a PairPosFormat1 subtable that defines two cases of pair kerning.
                 //PairValueRecord
-                //Value 	Type 	Description
-                //GlyphID 	SecondGlyph 	GlyphID of second glyph in the pair-first glyph is listed in the Coverage table
-                //ValueRecord 	Value1 	Positioning data for the first glyph in the pair
-                //ValueRecord 	Value2 	Positioning data for the second glyph in the pair
+                //Value 	    Type 	        Description
+                //GlyphID 	    SecondGlyph 	GlyphID of second glyph in the pair-first glyph is listed in the Coverage table
+                //ValueRecord 	Value1 	        Positioning data for the first glyph in the pair
+                //ValueRecord 	Value2 	        Positioning data for the second glyph in the pair
                 //-----------------------------------------------
 
                 //PairPosFormat2 subtable: Class pair adjustment
@@ -550,7 +584,7 @@ namespace Typography.OpenFont.Tables
                                     pairSetTable.ReadFrom(reader, value1Format, value2Format);
                                     pairSetTables[n] = pairSetTable;
                                 }
-                                var subTable = new LkSubTableType2(pairSetTables);
+                                var subTable = new LkSubTableType2Fmt1(pairSetTables);
                                 //coverage        
                                 subTable.CoverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverage);
                                 subTables.Add(subTable);
@@ -558,7 +592,7 @@ namespace Typography.OpenFont.Tables
                             break;
                         case 2:
                             {
-                                //.... 
+                                //.... TODO: implement this
                                 ushort coverage = reader.ReadUInt16();
                                 ushort value1Format = reader.ReadUInt16();
                                 ushort value2Format = reader.ReadUInt16();
