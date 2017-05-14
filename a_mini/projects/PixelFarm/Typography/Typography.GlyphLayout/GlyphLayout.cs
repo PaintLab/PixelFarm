@@ -265,6 +265,7 @@ namespace Typography.TextLayout
                 //this is original value WITHOUT fit-to-grid adjust
                 _glyphPositions.AddGlyph(glyIndex, orgGlyph);
             }
+
             PositionTechnique posTech = this.PositionTechnique;
             if (_gpos != null && len > 1 && posTech == PositionTechnique.OpenFont)
             {
@@ -709,6 +710,7 @@ namespace Typography.TextLayout
     class GlyphPosStream : IGlyphPositions
     {
         List<InternalGlyphPos> _glyphs = new List<InternalGlyphPos>();
+        List<short> _updateAdvanceWList = new List<short>();
         int _index; //current index
 
         /// <summary>
@@ -732,11 +734,14 @@ namespace Typography.TextLayout
         public void Clear()
         {
             _glyphs.Clear();
+            _updateAdvanceWList.Clear();
         }
         public void AddGlyph(ushort glyphIndex, Glyph glyph)
         {
             _glyphs.Add(new InternalGlyphPos(glyphIndex, glyph));
+            _updateAdvanceWList.Add(0);//append blank 
         }
+
         public void AppendGlyphOffset(int index, short appendOffsetX, short appendOffsetY)
         {
             InternalGlyphPos existing = _glyphs[index];
@@ -767,6 +772,36 @@ namespace Typography.TextLayout
             InternalGlyphPos pos = _glyphs[index];
             offsetX = pos.xoffset;
             offsetY = pos.yoffset;
+        }
+        public void AppendGlyphAdvance(int index, short appendAdvX, short appendAdvY)
+        {
+            short existing = _updateAdvanceWList[index];
+            _updateAdvanceWList[index] = (short)(existing + appendAdvX);
+
+            //TODO: review for appendY
+        }
+        public void FlushNewGlyphAdvance()
+        {
+            int lim = _glyphs.Count - 1;
+            short total_advW = 0;
+            InternalGlyphPos p_next;
+            for (int i = 0; i < lim; ++i)
+            {
+                //----------------------------------------
+                //update advance i => affect the pos of i+1
+                //----------------------------------------
+                short advW_update = _updateAdvanceWList[i];
+                p_next = _glyphs[i + 1];
+                //TODO: review offset Y for vertical writing direction
+                total_advW += advW_update;
+                p_next.xoffset += total_advW;
+                _glyphs[i + 1] = p_next;//set back
+                _updateAdvanceWList[i] = 0;//clear
+            }
+            //and the last one
+            p_next = _glyphs[lim];
+            p_next.xoffset += total_advW;
+            _glyphs[lim] = p_next;//set back
         }
     }
 
