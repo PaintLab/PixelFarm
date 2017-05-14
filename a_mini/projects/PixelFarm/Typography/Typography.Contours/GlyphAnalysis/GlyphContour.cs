@@ -12,7 +12,7 @@ namespace Typography.Contours
 
         public List<GlyphPart> parts = new List<GlyphPart>();
         internal List<GlyphPoint> flattenPoints; //original flatten points 
-
+        List<OutsideEdgeLine> edges;
         bool analyzed;
         bool analyzedClockDirection;
         bool isClockwise;
@@ -116,11 +116,11 @@ namespace Typography.Contours
 
         internal void CreateGlyphEdges()
         {
-            int lim = flattenPoints.Count - 1;
-            edges = new List<OutsideEdgeLine>();
+            int lim = flattenPoints.Count - 1;            
             GlyphPoint p = null, q = null;
             OutsideEdgeLine edgeLine = null;
-
+            edges = new List<OutsideEdgeLine>();
+            //
             for (int i = 0; i < lim; ++i)
             {
                 //in order ...
@@ -156,10 +156,9 @@ namespace Typography.Contours
             else
             {
                 //not found
-            }
-
+            } 
         }
-        List<OutsideEdgeLine> edges;
+        
         internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
             int j = edges.Count;

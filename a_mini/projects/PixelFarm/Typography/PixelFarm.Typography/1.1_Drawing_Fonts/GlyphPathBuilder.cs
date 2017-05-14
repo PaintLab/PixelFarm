@@ -93,8 +93,28 @@ namespace Typography.Contours
                 float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
                 //we will scale back later, so at this step we devide it with toPixelScale
                 _latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
+                //-------------------------------------------------
+                //this is original control bounds
+                //we use this to decide minor shift direction
+                //scaled values
 
+                //float one_px = 1 / pxscale;
+                //bool atLeast1PxLeft = controlBounds.XMin >= one_px;  //at least 1 px left
+
+                //float s_xmin = controlBounds.XMin * pxscale;
+                //float s_ymin = controlBounds.YMin * pxscale;
+                //float s_xmax = controlBounds.XMax * pxscale;
+                //float s_ymax = controlBounds.YMax * pxscale;
+                //float s_advance_w = OriginalAdvanceWidth * pxscale; 
+                //------------------------------------------------- 
+                //experiment
+                //for subpixel rendering 
+                //fit_x_offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
                 _latestDynamicOutline.GenerateOutput(tx, toPixelScale);
+
+                //average horizontal diff to fit the grid, this result come from fitting process
+                float avg_xdiff = _latestDynamicOutline.AvgXFitOffset;
+
                 this.LeftXControl = 0;
             }
             else

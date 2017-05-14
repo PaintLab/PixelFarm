@@ -30,7 +30,7 @@ namespace Typography.Contours
         float newX;
         float newY;
         //----------------------------------------  
-        float _adjust_fit_x;
+        //float _adjust_fit_x;
         float _adjust_fit_y;
         //------------------------------------- 
 
@@ -78,20 +78,19 @@ namespace Typography.Contours
         public float Y { get { return this.newY; } }
 
 
-
-        public float FitAdjustX
-        {
-            get { return _adjust_fit_x; }
-            internal set
-            {
-                _adjust_fit_x = value;
-
-#if DEBUG
-                _dbug_has_adjust_x = true;
-                _dbug_fit_analyzed = true;
-#endif
-            }
-        }
+        //in this version, we don't use this _adjust_fit_x for each point
+        //public float FitAdjustX
+        //{
+        //  get { return _adjust_fit_x; }
+        //  internal set
+        //  {
+        //      _adjust_fit_x = value;
+        //#if DEBUG
+        //      _dbug_has_adjust_x = true;
+        //      _dbug_fit_analyzed = true;
+        //#endif
+        //  }
+        //}
         public float FitAdjustY
         {
             get
@@ -110,13 +109,14 @@ namespace Typography.Contours
 
         internal void ResetFitAdjustValues()
         {
-            _adjust_fit_x = _adjust_fit_y = 0;
+            _adjust_fit_y = 0;
+            // _adjust_fit_x = 0
         }
 
         internal void GetFitXY(float pxscale, out float x, out float y)
         {
-            x = (this.newX * pxscale);
-            y = (this.newY * pxscale) + _adjust_fit_y; 
+            x = this.newX * pxscale;
+            y = (this.newY * pxscale) + _adjust_fit_y;
         }
 
         internal void SetXY(float x, float y)
