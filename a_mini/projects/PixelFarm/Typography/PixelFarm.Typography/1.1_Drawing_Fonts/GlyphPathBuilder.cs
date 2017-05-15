@@ -2,26 +2,41 @@
 
 using System;
 using System.Collections.Generic;
+using PixelFarm.Agg;
+
 using Typography.OpenFont;
 using Typography.TextLayout;
 
 namespace Typography.Contours
 {
-
+    class GlyphMeshData
+    {
+        public VertexStore vxsStore;
+        public float avgXOffsetToFit;
+    }
 
     class PixelScaleLayoutEngine : IPixelScaleLayout
     {
         Typeface _typeface;
         float _pxscale = 1;//default
-
+        GlyphMeshCollection<GlyphMeshData> _hintGlyphCollection;
         public PixelScaleLayoutEngine()
         {
+        }
+        public GlyphMeshCollection<GlyphMeshData> MeshCollection
+        {
+            get { return _hintGlyphCollection; }
+            set
+            {
+                _hintGlyphCollection = value;
+            }
         }
         public void SetFont(Typeface typeface, float pxscale)
         {
             _typeface = typeface;
             _pxscale = pxscale;
         }
+
         public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
 

@@ -2,28 +2,22 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+
+using PixelFarm.Agg;
+
 using Typography.Contours;
 using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.TextLayout;
 
 
-using PixelFarm.Agg;
+
 
 namespace PixelFarm.Drawing.Fonts
 {
 
     public class VxsTextPrinter : DevTextPrinterBase, ITextPrinter
     {
-
-
-
-        class GlyphMeshData
-        {
-            public VertexStore vxsStore;
-            public float avgXOffsetToFit;
-
-        }
         /// <summary>
         /// target canvas
         /// </summary>
@@ -37,11 +31,11 @@ namespace PixelFarm.Drawing.Fonts
         Dictionary<InstalledFont, Typeface> _cachedTypefaces = new Dictionary<InstalledFont, Typeface>();
         List<GlyphPlan> _outputGlyphPlans = new List<GlyphPlan>();
         //         
-        GlyphMeshCollection<GlyphMeshData> hintGlyphCollection = new GlyphMeshCollection<GlyphMeshData>();
+        GlyphMeshCollection<GlyphMeshData> _hintGlyphCollection = new GlyphMeshCollection<GlyphMeshData>();
         VertexStorePool _vxsPool = new VertexStorePool();
         GlyphTranslatorToVxs _tovxs = new GlyphTranslatorToVxs();
         Typeface _currentTypeface;
-
+        PixelScaleLayoutEngine _pxScaleEngine;
 
         public VxsTextPrinter(CanvasPainter canvasPainter, IFontLoader fontLoader)
         {
@@ -49,7 +43,9 @@ namespace PixelFarm.Drawing.Fonts
             this._fontLoader = fontLoader;
 
             //assign px scale layout engine for final layout
-            _glyphLayout.PxScaleLayout = new PixelScaleLayoutEngine();
+            _pxScaleEngine = new PixelScaleLayoutEngine(); 
+            _pxScaleEngine.MeshCollection = _hintGlyphCollection;
+            _glyphLayout.PxScaleLayout = _pxScaleEngine;
             //
         }
         public CanvasPainter TargetCanvasPainter { get; set; }
@@ -218,7 +214,7 @@ namespace PixelFarm.Drawing.Fonts
             int j = glyphPlans.Length;
             //---------------------------------------------------
             //consider use cached glyph, to increase performance 
-            hintGlyphCollection.SetCacheInfo(typeface, fontSizePoint, this.HintTechnique);
+            _hintGlyphCollection.SetCacheInfo(typeface, fontSizePoint, this.HintTechnique);
             //---------------------------------------------------
             GlyphPosPixelSnapKind x_snap = this.GlyphPosPixelSnapX;
             GlyphPosPixelSnapKind y_snap = this.GlyphPosPixelSnapY;
@@ -235,7 +231,7 @@ namespace PixelFarm.Drawing.Fonts
                 //if we have create a vxs we can cache it for later use?
                 //-----------------------------------  
                 GlyphMeshData glyphMeshData;
-                if (!hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphMeshData))
+                if (!_hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphMeshData))
                 {
                     //if not found then create new glyph vxs and cache it
                     _glyphPathBuilder.SetHintTechnique(this.HintTechnique);
@@ -250,7 +246,7 @@ namespace PixelFarm.Drawing.Fonts
                     glyphMeshData.vxsStore = new VertexStore();
                     glyphMeshData.avgXOffsetToFit = _glyphPathBuilder.AvgLeftXOffsetToFit;
                     _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
-                    hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphMeshData);
+                    _hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphMeshData);
                 }
 
                 g_x = (float)(glyphPlan.x * scale + x);
@@ -307,7 +303,7 @@ namespace PixelFarm.Drawing.Fonts
 
             //---------------------------------------------------
             //consider use cached glyph, to increase performance 
-            hintGlyphCollection.SetCacheInfo(typeface, fontSizePoint, this.HintTechnique);
+            _hintGlyphCollection.SetCacheInfo(typeface, fontSizePoint, this.HintTechnique);
             //---------------------------------------------------
             GlyphPosPixelSnapKind x_snap = this.GlyphPosPixelSnapX;
             GlyphPosPixelSnapKind y_snap = this.GlyphPosPixelSnapY;
@@ -325,7 +321,7 @@ namespace PixelFarm.Drawing.Fonts
                 //if we have create a vxs we can cache it for later use?
                 //-----------------------------------  
                 GlyphMeshData glyphMeshData;
-                if (!hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphMeshData))
+                if (!_hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphMeshData))
                 {
                     _tovxs.Reset();
                     //if not found then create new glyph vxs and cache it
@@ -338,7 +334,7 @@ namespace PixelFarm.Drawing.Fonts
                     glyphMeshData.avgXOffsetToFit = _glyphPathBuilder.AvgLeftXOffsetToFit;
                     _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
                     //------------------
-                    hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphMeshData);
+                    _hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphMeshData);
                 }
 
                 g_x = glyphPlan.ExactX + x;
