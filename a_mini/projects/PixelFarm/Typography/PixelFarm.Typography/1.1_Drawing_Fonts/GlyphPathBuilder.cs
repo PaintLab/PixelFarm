@@ -18,6 +18,7 @@ namespace Typography.Contours
     {
         class GlyphMeshData
         {
+            public GlyphDynamicOutline dynamicOutline;
             public VertexStore vxsStore;
             public float avgXOffsetToFit;
         }
@@ -40,6 +41,10 @@ namespace Typography.Contours
 
         public GlyphMeshStore()
         {
+            //---------------- 
+            //float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
+            ////we will scale back later, so at this step we devide it with toPixelScale
+            //_latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
 
         }
         public void SetHintTechnique(HintTechnique hintTech)
@@ -71,22 +76,18 @@ namespace Typography.Contours
             if (_currentGlyphBuilder == null)
             {
                 _currentGlyphBuilder = new GlyphPathBuilder(typeface);
-
             }
             //----------------------------------------------
             this._currentFontSizeInPoints = fontSizeInPoints;
             //------------------------------------------ 
             _hintGlyphCollection.SetCacheInfo(typeface, this._currentFontSizeInPoints, _currentHintTech);
         }
-
-
-
         /// <summary>
-        /// get glyph mesh from current font setting
+        /// get existing or create new one from current font setting
         /// </summary>
         /// <param name="glyphIndex"></param>
         /// <returns></returns>
-        public VertexStore GetGlyphMesh(ushort glyphIndex)
+        GlyphMeshData InternalGetGlyphMesh(ushort glyphIndex)
         {
             GlyphMeshData glyphMeshData;
             if (!_hintGlyphCollection.TryGetCacheGlyph(glyphIndex, out glyphMeshData))
@@ -97,25 +98,39 @@ namespace Typography.Contours
                 GlyphDynamicOutline dynamicOutline = _currentGlyphBuilder.LatestGlyphFitOutline;
                 //-----------------------------------  
                 glyphMeshData = new GlyphMeshData();
-                _currentGlyphBuilder.ReadShapes(null);//read shape data witout generating vxs
                 glyphMeshData.avgXOffsetToFit = dynamicOutline.AvgXFitOffset;
+                glyphMeshData.dynamicOutline = dynamicOutline;
                 _hintGlyphCollection.RegisterCachedGlyph(glyphIndex, glyphMeshData);
                 //-----------------------------------    
             }
+            return glyphMeshData;
+        }
+        /// <summary>
+        /// get glyph left offset-to-fit value from current font setting
+        /// </summary>
+        /// <param name="glyphIndex"></param>
+        /// <returns></returns>
+        public float GetGlyphLeftOffsetControl(ushort glyphIndex)
+        {
+            return InternalGetGlyphMesh(glyphIndex).avgXOffsetToFit;
+        }
 
+        /// <summary>
+        /// get glyph mesh from current font setting
+        /// </summary>
+        /// <param name="glyphIndex"></param>
+        /// <returns></returns>
+        public VertexStore GetGlyphMesh(ushort glyphIndex)
+        {
+            GlyphMeshData glyphMeshData = InternalGetGlyphMesh(glyphIndex);
             if (glyphMeshData.vxsStore == null)
             {
                 //build vxs
                 _tovxs.Reset();
-                //----------------
 
-                //float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
-                ////we will scale back later, so at this step we devide it with toPixelScale
-                //_latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
-                //_latestDynamicOutline.GenerateOutput(tx, toPixelScale);
-                ////average horizontal diff to fit the grid, this result come from fitting process ***
-                //this.AvgLeftXOffsetToFit = _latestDynamicOutline.AvgXFitOffset;
-
+                float pxscale = _currentTypeface.CalculateToPixelScaleFromPointSize(_currentFontSizeInPoints);
+                GlyphDynamicOutline dynamicOutline = glyphMeshData.dynamicOutline;
+                dynamicOutline.GenerateOutput(_tovxs, pxscale);
                 glyphMeshData.vxsStore = new VertexStore();
                 //----------------
                 _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
@@ -249,8 +264,10 @@ namespace Typography.Contours
         public GlyphPathBuilder(Typeface typeface)
             : base(typeface)
         {
+
             //for specific typeface ***
-            //
+            //float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
+            //_latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
         }
 
 #if DEBUG
@@ -264,7 +281,7 @@ namespace Typography.Contours
         /// </summary>
         public float GlyphDynamicEdgeOffset { get; set; }
 
-        protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph, float sizeInPoints)
+        protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph)
         {
             //not use interperter so we need to scale it with our mechanism
             //this demonstrate our auto hint engine ***
@@ -272,7 +289,7 @@ namespace Typography.Contours
             _latestDynamicOutline = null;//reset
             if (this.UseTrueTypeInstructions)
             {
-                base.FitCurrentGlyph(glyphIndex, glyph, sizeInPoints);
+                base.FitCurrentGlyph(glyphIndex, glyph);
             }
             else
             {
@@ -298,16 +315,8 @@ namespace Typography.Contours
                         //add more information for later scaling process
                         _latestDynamicOutline.OriginalAdvanceWidth = glyph.OriginalAdvanceWidth;
                         _latestDynamicOutline.OriginalGlyphControlBounds = glyph.Bounds;
-
-                        float toPixelScale = Typeface.CalculateToPixelScale(sizeInPoints);
-                        if (toPixelScale < 0)
-                        {
-                            toPixelScale = 1;
-                        }
-                        float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
-                        //we will scale back later, so at this step we devide it with toPixelScale
-                        _latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
-                        //--------------------------------------------- 
+                        //
+                        _latestDynamicOutline.GenerateOutput(null, Typeface.CalculateToPixelScale(RecentFontSizeInPixels));
                         _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
                     }
                 }
@@ -326,14 +335,13 @@ namespace Typography.Contours
             {
                 //read from our auto hint fitoutline
                 //need scale from original.
+
                 float toPixelScale = Typeface.CalculateToPixelScale(RecentFontSizeInPixels);
                 if (toPixelScale < 0)
                 {
                     toPixelScale = 1;
                 }
                 _latestDynamicOutline.GenerateOutput(tx, toPixelScale);
-                //average horizontal diff to fit the grid, this result come from fitting process ***
-
             }
             else
             {
