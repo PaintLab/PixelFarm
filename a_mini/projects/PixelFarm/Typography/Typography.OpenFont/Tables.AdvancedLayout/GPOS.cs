@@ -417,24 +417,20 @@ namespace Typography.OpenFont.Tables
                 }
                 public override void DoGlyphPosition(IGlyphPositions inputGlyphs, int startAt, int len)
                 {
-                    //
-                   
-                    //find marker  
+                    //find marker   
                     CoverageTable covTable = this.CoverageTable;
                     int lim = inputGlyphs.Count - 1;
-                    bool needFlush = false;
                     for (int i = 0; i < lim; ++i) //start at 0
                     {
-
                         ushort glyph_advW;
-                        int firstGlyphFound = covTable.FindPosition(inputGlyphs.GetGlyphIndex(i, out glyph_advW));
+                        int firstGlyphFound = covTable.FindPosition(inputGlyphs.GetGlyph(i, out glyph_advW));
                         if (firstGlyphFound > -1)
                         {
                             //test this with Palatino A-Y sequence
                             PairSetTable pairSet = this.pairSetTables[firstGlyphFound];
                             //check second glyph 
                             ushort second_glyph_w;
-                            ushort second_glyph_index = inputGlyphs.GetGlyphIndex(i + 1, out second_glyph_w);
+                            ushort second_glyph_index = inputGlyphs.GetGlyph(i + 1, out second_glyph_w);
                             PairSet foundPairSet;
                             if (pairSet.FindPairSet(second_glyph_index, out foundPairSet))
                             {
@@ -443,14 +439,10 @@ namespace Typography.OpenFont.Tables
                                 //TODO: recheck for vertical writing ...
                                 inputGlyphs.AppendGlyphAdvance(i, v1.XAdvance, 0);
                                 inputGlyphs.AppendGlyphAdvance(i + 1, v2.XAdvance, 0);
-                                needFlush = true;
                             }
                         }
                     }
-                    if (needFlush)
-                    {
-                        inputGlyphs.FlushNewGlyphAdvance();
-                    }
+
                 }
             }
             /// <summary>
@@ -651,13 +643,13 @@ namespace Typography.OpenFont.Tables
                     {
 
                         ushort glyph_advW;
-                        int markFound = MarkCoverageTable.FindPosition(inputGlyphs.GetGlyphIndex(i, out glyph_advW));
+                        int markFound = MarkCoverageTable.FindPosition(inputGlyphs.GetGlyph(i, out glyph_advW));
                         if (markFound > -1)
                         {
                             //this is mark glyph
                             //then-> look back for base
                             ushort prev_glyph_adv_w;
-                            int baseFound = BaseCoverageTable.FindPosition(inputGlyphs.GetGlyphIndex(i - 1, out prev_glyph_adv_w));
+                            int baseFound = BaseCoverageTable.FindPosition(inputGlyphs.GetGlyph(i - 1, out prev_glyph_adv_w));
                             if (baseFound > -1)
                             {
                                 ushort markClass = this.MarkArrayTable.GetMarkClass(markFound);
@@ -884,13 +876,13 @@ namespace Typography.OpenFont.Tables
                     for (int i = startAt; i < lim; ++i) //start at 1
                     {
                         ushort glyph_adv_w;
-                        int markFound = MarkCoverage1.FindPosition(inputGlyphs.GetGlyphIndex(i, out glyph_adv_w));
+                        int markFound = MarkCoverage1.FindPosition(inputGlyphs.GetGlyph(i, out glyph_adv_w));
                         if (markFound > -1)
                         {
                             //this is mark glyph
                             //then-> look back for base 
                             ushort prev_pos_adv_w;
-                            int baseFound = MarkCoverage2.FindPosition(inputGlyphs.GetGlyphIndex(i - 1, out prev_pos_adv_w));
+                            int baseFound = MarkCoverage2.FindPosition(inputGlyphs.GetGlyph(i - 1, out prev_pos_adv_w));
                             if (baseFound > -1)
                             {
                                 int markClassId = this.Mark1ArrayTable.GetMarkClass(markFound);

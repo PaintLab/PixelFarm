@@ -48,6 +48,9 @@ namespace PixelFarm.Drawing.Fonts
             this.canvasPainter = canvasPainter;
             this._fontLoader = fontLoader;
 
+            //assign px scale layout engine for final layout
+            _glyphLayout.PxScaleLayout = new PixelScaleLayoutEngine();
+            //
         }
         public CanvasPainter TargetCanvasPainter { get; set; }
 
@@ -137,12 +140,12 @@ namespace PixelFarm.Drawing.Fonts
                     _glyphPathBuilder = new GlyphPathBuilder(value);
                 }
                 //assign grid fitting engine to layout
-                _glyphLayout.GridFittingEngine = _glyphPathBuilder;
+                //_glyphLayout.GridFittingEngine = _glyphPathBuilder;
                 OnFontSizeChanged();
             }
         }
 
-    
+
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int startAt, int len)
         {
 
@@ -153,11 +156,10 @@ namespace PixelFarm.Drawing.Fonts
             //3. layout glyphs with selected layout technique
             //TODO: review this again, we should use pixel?
 
-            float fontSizePoint = this.FontSizeInPoints;
+            float pxscale = typeface.CalculateToPixelScaleFromPointSize(FontSizeInPoints);
             _outputGlyphPlans.Clear();
             _glyphLayout.Layout(typeface, text, startAt, len, _outputGlyphPlans);
-            TextPrinterHelper.CopyGlyphPlans(renderVx, _outputGlyphPlans, typeface.CalculateToPixelScaleFromPointSize(fontSizePoint));
-
+            TextPrinterHelper.CopyGlyphPlans(renderVx, _outputGlyphPlans, pxscale);
         }
 
         public override void DrawCaret(float x, float y)
@@ -329,12 +331,11 @@ namespace PixelFarm.Drawing.Fonts
                     //if not found then create new glyph vxs and cache it
                     _glyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, fontSizePoint);
                     _glyphPathBuilder.ReadShapes(_tovxs);
-                    float avgLeftXOffsetToFit = _glyphPathBuilder.AvgLeftXOffsetToFit;
                     //------------------
                     //TODO: review here,  
                     glyphMeshData = new GlyphMeshData();
                     glyphMeshData.vxsStore = new VertexStore();//create vertex store to hold a result                    
-                    glyphMeshData.avgXOffsetToFit = avgLeftXOffsetToFit;
+                    glyphMeshData.avgXOffsetToFit = _glyphPathBuilder.AvgLeftXOffsetToFit;
                     _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
                     //------------------
                     hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphMeshData);
@@ -384,8 +385,12 @@ namespace PixelFarm.Drawing.Fonts
             _outputGlyphPlans.Clear();
 
             //
-            _glyphLayout.PixelScale = _glyphPathBuilder.Typeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
+            float pxscale = _glyphPathBuilder.Typeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
             _glyphLayout.GenerateGlyphPlans(text, startAt, len, _outputGlyphPlans, null);
+            //-----
+            //we (fine) adjust horizontal fit here
+
+            //-----
             DrawFromGlyphPlans(_outputGlyphPlans, (float)x, (float)y);
         }
         public override void DrawString(char[] textBuffer, int startAt, int len, float x, float y)
@@ -393,10 +398,15 @@ namespace PixelFarm.Drawing.Fonts
             UpdateGlyphLayoutSettings();
             _outputGlyphPlans.Clear();
             //             
-            _glyphLayout.PixelScale = _glyphPathBuilder.Typeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
+            _glyphLayout.PxScale = _glyphPathBuilder.Typeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
             _glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _outputGlyphPlans, null);
-            DrawFromGlyphPlans(_outputGlyphPlans, x, y);
 
+            //-----
+            //we (fine) adjust horizontal fit here
+            //this step we need grid fitting information
+
+            //-----
+            DrawFromGlyphPlans(_outputGlyphPlans, x, y);
         }
 
     }
