@@ -12,58 +12,42 @@ using Typography.TextLayout;
 
 namespace Typography.Contours
 {
-    class GlyphMeshData
-    {
-        public VertexStore vxsStore;
-        public float avgXOffsetToFit;
-    }
 
-    class HintedFontStore
+
+    class GlyphMeshStore
     {
-        //this is app-specific class
+        class GlyphMeshData
+        {
+            public VertexStore vxsStore;
+            public float avgXOffsetToFit;
+        }
+        /// <summary>
+        /// store typeface and its builder
+        /// </summary>
         Dictionary<Typeface, GlyphPathBuilder> _cacheGlyphPathBuilders = new Dictionary<Typeface, GlyphPathBuilder>();
-        Dictionary<InstalledFont, Typeface> _cachedTypefaces = new Dictionary<InstalledFont, Typeface>();
+        /// <summary>
+        /// glyph mesh data for specific condition
+        /// </summary>
         GlyphMeshCollection<GlyphMeshData> _hintGlyphCollection = new GlyphMeshCollection<GlyphMeshData>();
-        GlyphPathBuilder _glyphPathBuilder;
+
+        GlyphPathBuilder _currentGlyphBuilder;
         Typeface _currentTypeface;
-        float _fontSizeInPoints;
-        HintTechnique _hintTech;
-        VertexStorePool _vxsPool = new VertexStorePool();
+        float _currentFontSizeInPoints;
+        HintTechnique _currentHintTech;
+
+        VertexStorePool _vxsPool = new VertexStorePool(); //TODO: review pool again
         GlyphTranslatorToVxs _tovxs = new GlyphTranslatorToVxs();
 
-        public HintedFontStore()
+        public GlyphMeshStore()
         {
 
         }
-        public void SetHintTech(Typography.Contours.HintTechnique hintTech)
+        public void SetHintTechnique(HintTechnique hintTech)
         {
-            _hintTech = hintTech;
-            _glyphPathBuilder.SetHintTechnique(hintTech);
-        }
-        public void SetFont(Typeface value)
-        {
-
-            if (_glyphPathBuilder != null && !_cacheGlyphPathBuilders.ContainsKey(value))
-            {
-                //store current typeface to cache
-                _cacheGlyphPathBuilders[_currentTypeface] = _glyphPathBuilder;
-            }
-            _currentTypeface = value;
-            _glyphPathBuilder = null;
-            if (value == null) return;
-
-            //----------------------------
-            //check if we have this in cache ?
-            //if we don't have it, this _currentTypeface will set to null ***                  
-            _cacheGlyphPathBuilders.TryGetValue(_currentTypeface, out _glyphPathBuilder);
-            if (_glyphPathBuilder == null)
-            {
-                _glyphPathBuilder = new GlyphPathBuilder(value);
-
-            }
-
+            _currentHintTech = hintTech;
 
         }
+
         /// <summary>
         /// set current font
         /// </summary>
@@ -71,40 +55,73 @@ namespace Typography.Contours
         /// <param name="fontSizeInPoints"></param>
         public void SetFont(Typeface typeface, float fontSizeInPoints)
         {
-            SetFont(typeface);
-            this._fontSizeInPoints = fontSizeInPoints;
+            if (_currentGlyphBuilder != null && !_cacheGlyphPathBuilders.ContainsKey(typeface))
+            {
+                //store current typeface to cache
+                _cacheGlyphPathBuilders[_currentTypeface] = _currentGlyphBuilder;
+            }
+            _currentTypeface = typeface;
+            _currentGlyphBuilder = null;
+            if (typeface == null) return;
+
+            //----------------------------
+            //check if we have this in cache ?
+            //if we don't have it, this _currentTypeface will set to null ***                  
+            _cacheGlyphPathBuilders.TryGetValue(_currentTypeface, out _currentGlyphBuilder);
+            if (_currentGlyphBuilder == null)
+            {
+                _currentGlyphBuilder = new GlyphPathBuilder(typeface);
+
+            }
+            //----------------------------------------------
+            this._currentFontSizeInPoints = fontSizeInPoints;
             //------------------------------------------ 
-            _hintGlyphCollection.SetCacheInfo(typeface, this._fontSizeInPoints, _hintTech);
+            _hintGlyphCollection.SetCacheInfo(typeface, this._currentFontSizeInPoints, _currentHintTech);
         }
-        public bool TryGetTypeface(InstalledFont instFont, out Typeface found)
-        {
-            return _cachedTypefaces.TryGetValue(instFont, out found);
-        }
-        public void RegisterTypeface(InstalledFont instFont, Typeface typeface)
-        {
-            _cachedTypefaces[instFont] = typeface;
-        }
-        public GlyphMeshData GetGlyphMesh(ushort glyphIndex)
+
+
+
+        /// <summary>
+        /// get glyph mesh from current font setting
+        /// </summary>
+        /// <param name="glyphIndex"></param>
+        /// <returns></returns>
+        public VertexStore GetGlyphMesh(ushort glyphIndex)
         {
             GlyphMeshData glyphMeshData;
             if (!_hintGlyphCollection.TryGetCacheGlyph(glyphIndex, out glyphMeshData))
             {
                 //if not found then create new glyph vxs and cache it
-                _glyphPathBuilder.SetHintTechnique(_hintTech);
-                _glyphPathBuilder.BuildFromGlyphIndex(glyphIndex, _fontSizeInPoints);
+                _currentGlyphBuilder.SetHintTechnique(_currentHintTech);
+                _currentGlyphBuilder.BuildFromGlyphIndex(glyphIndex, _currentFontSizeInPoints);
+                GlyphDynamicOutline dynamicOutline = _currentGlyphBuilder.LatestGlyphFitOutline;
                 //-----------------------------------  
-                _tovxs.Reset();
-                _glyphPathBuilder.ReadShapes(_tovxs);
-
-                //TODO: review here, 
-                //float pxScale = _glyphPathBuilder.GetPixelScale();
                 glyphMeshData = new GlyphMeshData();
-                glyphMeshData.vxsStore = new VertexStore();
-                glyphMeshData.avgXOffsetToFit = _glyphPathBuilder.AvgLeftXOffsetToFit;
-                _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+                _currentGlyphBuilder.ReadShapes(null);//read shape data witout generating vxs
+                glyphMeshData.avgXOffsetToFit = dynamicOutline.AvgXFitOffset;
                 _hintGlyphCollection.RegisterCachedGlyph(glyphIndex, glyphMeshData);
+                //-----------------------------------    
             }
-            return glyphMeshData;
+
+            if (glyphMeshData.vxsStore == null)
+            {
+                //build vxs
+                _tovxs.Reset();
+                //----------------
+
+                //float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
+                ////we will scale back later, so at this step we devide it with toPixelScale
+                //_latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
+                //_latestDynamicOutline.GenerateOutput(tx, toPixelScale);
+                ////average horizontal diff to fit the grid, this result come from fitting process ***
+                //this.AvgLeftXOffsetToFit = _latestDynamicOutline.AvgXFitOffset;
+
+                glyphMeshData.vxsStore = new VertexStore();
+                //----------------
+                _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+
+            }
+            return glyphMeshData.vxsStore;
 
         }
     }
@@ -112,12 +129,12 @@ namespace Typography.Contours
     class PixelScaleLayoutEngine : IPixelScaleLayout
     {
         Typeface _typeface;
-        HintedFontStore _hintedFontStore;
+        GlyphMeshStore _hintedFontStore;
         float _fontSizeInPoints;
         public PixelScaleLayoutEngine()
         {
         }
-        public HintedFontStore HintedFontStore
+        public GlyphMeshStore HintedFontStore
         {
             get { return _hintedFontStore; }
             set
@@ -146,7 +163,6 @@ namespace Typography.Contours
             //at this state, we need exact info at this specific pxscale
             //
             _hintedFontStore.SetFont(_typeface, this._fontSizeInPoints); //?
-
 
 
             for (int i = 0; i < finalGlyphCount; ++i)
@@ -248,7 +264,7 @@ namespace Typography.Contours
         /// </summary>
         public float GlyphDynamicEdgeOffset { get; set; }
 
-        protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph)
+        protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph, float sizeInPoints)
         {
             //not use interperter so we need to scale it with our mechanism
             //this demonstrate our auto hint engine ***
@@ -256,7 +272,7 @@ namespace Typography.Contours
             _latestDynamicOutline = null;//reset
             if (this.UseTrueTypeInstructions)
             {
-                base.FitCurrentGlyph(glyphIndex, glyph);
+                base.FitCurrentGlyph(glyphIndex, glyph, sizeInPoints);
             }
             else
             {
@@ -282,6 +298,15 @@ namespace Typography.Contours
                         //add more information for later scaling process
                         _latestDynamicOutline.OriginalAdvanceWidth = glyph.OriginalAdvanceWidth;
                         _latestDynamicOutline.OriginalGlyphControlBounds = glyph.Bounds;
+
+                        float toPixelScale = Typeface.CalculateToPixelScale(sizeInPoints);
+                        if (toPixelScale < 0)
+                        {
+                            toPixelScale = 1;
+                        }
+                        float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
+                        //we will scale back later, so at this step we devide it with toPixelScale
+                        _latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
                         //--------------------------------------------- 
                         _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
                     }
@@ -301,27 +326,21 @@ namespace Typography.Contours
             {
                 //read from our auto hint fitoutline
                 //need scale from original.
-                float toPixelScale = Typeface.CalculateToPixelScale(this.RecentFontSizeInPixels);
+                float toPixelScale = Typeface.CalculateToPixelScale(RecentFontSizeInPixels);
                 if (toPixelScale < 0)
                 {
                     toPixelScale = 1;
                 }
-                float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
-                //we will scale back later, so at this step we devide it with toPixelScale
-                _latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
                 _latestDynamicOutline.GenerateOutput(tx, toPixelScale);
                 //average horizontal diff to fit the grid, this result come from fitting process ***
-                this.AvgLeftXOffsetToFit = _latestDynamicOutline.AvgXFitOffset;
+
             }
             else
             {
                 base.ReadShapes(tx);
             }
         }
-        /// <summary>
-        /// (pxscale-specific) average left x offset to fit point,
-        /// </summary>
-        public float AvgLeftXOffsetToFit { get; set; }
+
         public GlyphDynamicOutline LatestGlyphFitOutline
         {
             get

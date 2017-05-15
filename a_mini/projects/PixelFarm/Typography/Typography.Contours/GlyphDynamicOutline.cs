@@ -173,15 +173,18 @@ namespace Typography.Contours
                 }
             }
 
-            List<GlyphContour> contours = this._contours;
-            int j = contours.Count;
-            tx.BeginRead(j);
-            for (int i = 0; i < j; ++i)
+            if (tx != null)
             {
-                //generate in order of contour
-                GenerateContourOutput(tx, contours[i]);
+                List<GlyphContour> contours = this._contours;
+                int j = contours.Count;
+                tx.BeginRead(j);
+                for (int i = 0; i < j; ++i)
+                {
+                    //generate in order of contour
+                    GenerateContourOutput(tx, contours[i]);
+                }
+                tx.EndRead();
             }
-            tx.EndRead();
         }
 
         struct FitDiffCollector
@@ -369,7 +372,6 @@ namespace Typography.Contours
         }
         void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
-
             //collect all centroid lines from each line CentroidLineHub
             _allCentroidLines = new List<CentroidLine>();
             int j = lineHubs.Count;
