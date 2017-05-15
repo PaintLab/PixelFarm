@@ -22,7 +22,7 @@ namespace Typography.TextLayout
 
     public interface IPixelScaleLayout
     {
-        void SetFont(Typeface typeface, float pxscale);
+        void SetFont(Typeface typeface, float fontSizeInPoints);
         void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList);
     }
 
@@ -144,7 +144,14 @@ namespace Typography.TextLayout
             PositionTechnique = PositionTechnique.OpenFont;
             ScriptLang = ScriptLangs.Latin;
         }
-        public float PxScale { get; set; }
+        public float FontSizeInPoints { get; set; }
+        public float PixelScale
+        {
+            get
+            {
+                return _typeface.CalculateToPixelScale(this.FontSizeInPoints);
+            }
+        }
         public PositionTechnique PositionTechnique { get; set; }
         public ScriptLang ScriptLang
         {
@@ -297,18 +304,18 @@ namespace Typography.TextLayout
             GlyphPosStream glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
             int finalGlyphCount = glyphPositions.Count;
             //------------------------ 
-            IPixelScaleLayout pxscaleLayout = glyphLayout.PxScaleLayout;
+            IPixelScaleLayout pxscaleLayout = glyphLayout.PxScaleLayout; 
             if (pxscaleLayout != null)
             {
                 //use custom pixel scale layout engine 
 
-                pxscaleLayout.SetFont(glyphLayout.Typeface, glyphLayout.PxScale);
+                pxscaleLayout.SetFont(glyphLayout.Typeface, glyphLayout.FontSizeInPoints);
                 pxscaleLayout.Layout(glyphPositions, outputGlyphPlanList);
             }
             else
             {
                 //default scale
-                float pxscale = glyphLayout.PxScale;
+                float pxscale = glyphLayout.PixelScale;
                 double cx = 0;
                 short cy = 0;
                 for (int i = 0; i < finalGlyphCount; ++i)

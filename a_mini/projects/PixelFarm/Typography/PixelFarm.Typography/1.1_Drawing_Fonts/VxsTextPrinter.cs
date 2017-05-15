@@ -10,9 +10,6 @@ using Typography.OpenFont;
 using Typography.Rendering;
 using Typography.TextLayout;
 
-
-
-
 namespace PixelFarm.Drawing.Fonts
 {
 
@@ -25,26 +22,23 @@ namespace PixelFarm.Drawing.Fonts
         IFontLoader _fontLoader;
         RequestFont _font;
         //-----------------------------------------------------------
-        GlyphPathBuilder _glyphPathBuilder;
+
         GlyphLayout _glyphLayout = new GlyphLayout();
-        Dictionary<Typeface, GlyphPathBuilder> _cacheGlyphPathBuilders = new Dictionary<Typeface, GlyphPathBuilder>();
-        Dictionary<InstalledFont, Typeface> _cachedTypefaces = new Dictionary<InstalledFont, Typeface>();
         List<GlyphPlan> _outputGlyphPlans = new List<GlyphPlan>();
-        //         
-        GlyphMeshCollection<GlyphMeshData> _hintGlyphCollection = new GlyphMeshCollection<GlyphMeshData>();
-        VertexStorePool _vxsPool = new VertexStorePool();
-        GlyphTranslatorToVxs _tovxs = new GlyphTranslatorToVxs();
         Typeface _currentTypeface;
         PixelScaleLayoutEngine _pxScaleEngine;
+        HintedFontStore _hintFontStore;
+
 
         public VxsTextPrinter(CanvasPainter canvasPainter, IFontLoader fontLoader)
         {
             this.canvasPainter = canvasPainter;
             this._fontLoader = fontLoader;
+            _hintFontStore = new HintedFontStore();
 
             //assign px scale layout engine for final layout
-            _pxScaleEngine = new PixelScaleLayoutEngine(); 
-            _pxScaleEngine.MeshCollection = _hintGlyphCollection;
+            _pxScaleEngine = new PixelScaleLayoutEngine();
+            _pxScaleEngine.HintedFontStore = _hintFontStore;
             _glyphLayout.PxScaleLayout = _pxScaleEngine;
             //
         }
@@ -55,10 +49,11 @@ namespace PixelFarm.Drawing.Fonts
             //1.  resolve actual font file
             this._font = font;
             InstalledFont installedFont = _fontLoader.GetFont(font.Name, font.Style.ConvToInstalledFontStyle());
-
             Typeface foundTypeface;
-            if (!_cachedTypefaces.TryGetValue(installedFont, out foundTypeface))
+
+            if (!_hintFontStore.TryGetTypeface(installedFont, out foundTypeface))
             {
+                //if not found then create a new one
                 //if not found
                 //create the new one
                 using (FileStream fs = new FileStream(installedFont.FontPath, FileMode.Open, FileAccess.Read))
@@ -66,7 +61,7 @@ namespace PixelFarm.Drawing.Fonts
                     var reader = new OpenFontReader();
                     foundTypeface = reader.Read(fs);
                 }
-                _cachedTypefaces[installedFont] = foundTypeface;
+                _hintFontStore.RegisterTypeface(installedFont, foundTypeface);
             }
 
             this.Typeface = foundTypeface;
@@ -86,17 +81,17 @@ namespace PixelFarm.Drawing.Fonts
 
         protected override void OnFontSizeChanged()
         {
-            //update some font matrix property  
-            if (_glyphPathBuilder != null)
+            //update some font matrics property   
+            Typeface currentTypeface = _currentTypeface;
+            if (currentTypeface != null)
             {
-
-                Typeface currentTypeface = _glyphPathBuilder.Typeface;
                 float pointToPixelScale = currentTypeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
                 this.FontAscendingPx = currentTypeface.Ascender * pointToPixelScale;
                 this.FontDescedingPx = currentTypeface.Descender * pointToPixelScale;
                 this.FontLineGapPx = currentTypeface.LineGap * pointToPixelScale;
                 this.FontLineSpacingPx = FontAscendingPx - FontDescedingPx + FontLineGapPx;
             }
+            
         }
         public override GlyphLayout GlyphLayoutMan
         {
@@ -116,27 +111,12 @@ namespace PixelFarm.Drawing.Fonts
             {
 
                 if (_currentTypeface == value) return;
+                //
                 // 
                 //switch to another font              
-                if (_glyphPathBuilder != null && !_cacheGlyphPathBuilders.ContainsKey(value))
-                {
-                    //store current typeface to cache
-                    _cacheGlyphPathBuilders[_currentTypeface] = _glyphPathBuilder;
-                }
+                _hintFontStore.SetFont(value);
                 //reset
                 _currentTypeface = value;
-                _glyphPathBuilder = null;
-                if (value == null) return;
-                //----------------------------
-                //check if we have this in cache ?
-                //if we don't have it, this _currentTypeface will set to null ***                  
-                _cacheGlyphPathBuilders.TryGetValue(_currentTypeface, out _glyphPathBuilder);
-                if (_glyphPathBuilder == null)
-                {
-                    _glyphPathBuilder = new GlyphPathBuilder(value);
-                }
-                //assign grid fitting engine to layout
-                //_glyphLayout.GridFittingEngine = _glyphPathBuilder;
                 OnFontSizeChanged();
             }
         }
@@ -148,7 +128,7 @@ namespace PixelFarm.Drawing.Fonts
             //1. update some props.. 
             //2. update current type face
             UpdateTypefaceAndGlyphBuilder();
-            Typeface typeface = _glyphPathBuilder.Typeface;
+            Typeface typeface = _currentTypeface;// _glyphPathBuilder.Typeface;
             //3. layout glyphs with selected layout technique
             //TODO: review this again, we should use pixel?
 
@@ -186,8 +166,8 @@ namespace PixelFarm.Drawing.Fonts
                 ChangeFont(canvasPainter.CurrentFont);
             }
 
-            //2.1 
-            _glyphPathBuilder.SetHintTechnique(this.HintTechnique);
+            //2.1              
+            _hintFontStore.SetHintTech(this.HintTechnique);
             //2.2
             _glyphLayout.Typeface = this.Typeface;
             _glyphLayout.ScriptLang = this.ScriptLang;
@@ -205,17 +185,16 @@ namespace PixelFarm.Drawing.Fonts
             //1. update some props.. 
             //2. update current type face
             UpdateTypefaceAndGlyphBuilder();
-            Typeface typeface = _glyphPathBuilder.Typeface;
+            _hintFontStore.SetFont(_currentTypeface, this.FontSizeInPoints);
             //3. layout glyphs with selected layout technique
             //TODO: review this again, we should use pixel? 
             float fontSizePoint = this.FontSizeInPoints;
-            float scale = typeface.CalculateToPixelScaleFromPointSize(fontSizePoint);
+            float scale = _currentTypeface.CalculateToPixelScaleFromPointSize(fontSizePoint);
             RenderVxGlyphPlan[] glyphPlans = renderVx.glyphList;
             int j = glyphPlans.Length;
             //---------------------------------------------------
             //consider use cached glyph, to increase performance 
-            _hintGlyphCollection.SetCacheInfo(typeface, fontSizePoint, this.HintTechnique);
-            //---------------------------------------------------
+
             GlyphPosPixelSnapKind x_snap = this.GlyphPosPixelSnapX;
             GlyphPosPixelSnapKind y_snap = this.GlyphPosPixelSnapY;
             float g_x = 0;
@@ -230,25 +209,7 @@ namespace PixelFarm.Drawing.Fonts
                 //PERFORMANCE revisit here 
                 //if we have create a vxs we can cache it for later use?
                 //-----------------------------------  
-                GlyphMeshData glyphMeshData;
-                if (!_hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphMeshData))
-                {
-                    //if not found then create new glyph vxs and cache it
-                    _glyphPathBuilder.SetHintTechnique(this.HintTechnique);
-                    _glyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, fontSizePoint);
-                    //-----------------------------------  
-                    _tovxs.Reset();
-                    _glyphPathBuilder.ReadShapes(_tovxs);
-
-                    //TODO: review here, 
-                    //float pxScale = _glyphPathBuilder.GetPixelScale();
-                    glyphMeshData = new GlyphMeshData();
-                    glyphMeshData.vxsStore = new VertexStore();
-                    glyphMeshData.avgXOffsetToFit = _glyphPathBuilder.AvgLeftXOffsetToFit;
-                    _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
-                    _hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphMeshData);
-                }
-
+                GlyphMeshData glyphMeshData = _hintFontStore.GetGlyphMesh(glyphPlan.glyphIndex);
                 g_x = (float)(glyphPlan.x * scale + x);
                 g_y = (float)glyphPlan.y * scale;
 
@@ -288,12 +249,12 @@ namespace PixelFarm.Drawing.Fonts
         public override void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, int startAt, int len, float x, float y)
         {
             CanvasPainter canvasPainter = this.TargetCanvasPainter;
-            Typeface typeface = _glyphPathBuilder.Typeface;
+            //Typeface typeface = _glyphPathBuilder.Typeface;
             //3. layout glyphs with selected layout technique
             //TODO: review this again, we should use pixel?
 
             float fontSizePoint = this.FontSizeInPoints;
-            float scale = typeface.CalculateToPixelScaleFromPointSize(fontSizePoint);
+            float scale = _currentTypeface.CalculateToPixelScaleFromPointSize(fontSizePoint);
 
 
             //4. render each glyph
@@ -303,7 +264,8 @@ namespace PixelFarm.Drawing.Fonts
 
             //---------------------------------------------------
             //consider use cached glyph, to increase performance 
-            _hintGlyphCollection.SetCacheInfo(typeface, fontSizePoint, this.HintTechnique);
+            _hintFontStore.SetFont(_currentTypeface, fontSizePoint);
+            //_hintGlyphCollection.SetCacheInfo(typeface, fontSizePoint, this.HintTechnique);
             //---------------------------------------------------
             GlyphPosPixelSnapKind x_snap = this.GlyphPosPixelSnapX;
             GlyphPosPixelSnapKind y_snap = this.GlyphPosPixelSnapY;
@@ -320,22 +282,23 @@ namespace PixelFarm.Drawing.Fonts
                 //PERFORMANCE revisit here 
                 //if we have create a vxs we can cache it for later use?
                 //-----------------------------------  
-                GlyphMeshData glyphMeshData;
-                if (!_hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphMeshData))
-                {
-                    _tovxs.Reset();
-                    //if not found then create new glyph vxs and cache it
-                    _glyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, fontSizePoint);
-                    _glyphPathBuilder.ReadShapes(_tovxs);
-                    //------------------
-                    //TODO: review here,  
-                    glyphMeshData = new GlyphMeshData();
-                    glyphMeshData.vxsStore = new VertexStore();//create vertex store to hold a result                    
-                    glyphMeshData.avgXOffsetToFit = _glyphPathBuilder.AvgLeftXOffsetToFit;
-                    _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
-                    //------------------
-                    _hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphMeshData);
-                }
+                GlyphMeshData glyphMeshData = _hintFontStore.GetGlyphMesh(glyphPlan.glyphIndex);
+
+                //if (!_hintGlyphCollection.TryGetCacheGlyph(glyphPlan.glyphIndex, out glyphMeshData))
+                //{
+                //    _tovxs.Reset();
+                //    //if not found then create new glyph vxs and cache it
+                //    _glyphPathBuilder.BuildFromGlyphIndex(glyphPlan.glyphIndex, fontSizePoint);
+                //    _glyphPathBuilder.ReadShapes(_tovxs);
+                //    //------------------
+                //    //TODO: review here,  
+                //    glyphMeshData = new GlyphMeshData();
+                //    glyphMeshData.vxsStore = new VertexStore();//create vertex store to hold a result                    
+                //    glyphMeshData.avgXOffsetToFit = _glyphPathBuilder.AvgLeftXOffsetToFit;
+                //    _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+                //    //------------------
+                //    _hintGlyphCollection.RegisterCachedGlyph(glyphPlan.glyphIndex, glyphMeshData);
+                //}
 
                 g_x = glyphPlan.ExactX + x;
                 g_y = glyphPlan.ExactY;
@@ -381,7 +344,7 @@ namespace PixelFarm.Drawing.Fonts
             _outputGlyphPlans.Clear();
 
             //
-            float pxscale = _glyphPathBuilder.Typeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
+            float pxscale = _currentTypeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
             _glyphLayout.GenerateGlyphPlans(text, startAt, len, _outputGlyphPlans, null);
             //-----
             //we (fine) adjust horizontal fit here
@@ -394,7 +357,7 @@ namespace PixelFarm.Drawing.Fonts
             UpdateGlyphLayoutSettings();
             _outputGlyphPlans.Clear();
             //             
-            _glyphLayout.PxScale = _glyphPathBuilder.Typeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
+            _glyphLayout.FontSizeInPoints = this.FontSizeInPoints;
             _glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _outputGlyphPlans, null);
 
             //-----

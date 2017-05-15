@@ -4,8 +4,11 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.Agg;
 
+using PixelFarm.Drawing.Fonts;
+
 using Typography.OpenFont;
 using Typography.TextLayout;
+
 
 namespace Typography.Contours
 {
@@ -15,28 +18,118 @@ namespace Typography.Contours
         public float avgXOffsetToFit;
     }
 
+    class HintedFontStore
+    {
+        //this is app-specific class
+        Dictionary<Typeface, GlyphPathBuilder> _cacheGlyphPathBuilders = new Dictionary<Typeface, GlyphPathBuilder>();
+        Dictionary<InstalledFont, Typeface> _cachedTypefaces = new Dictionary<InstalledFont, Typeface>();
+        GlyphMeshCollection<GlyphMeshData> _hintGlyphCollection = new GlyphMeshCollection<GlyphMeshData>();
+        GlyphPathBuilder _glyphPathBuilder;
+        Typeface _currentTypeface;
+        float _fontSizeInPoints;
+        HintTechnique _hintTech;
+        VertexStorePool _vxsPool = new VertexStorePool();
+        GlyphTranslatorToVxs _tovxs = new GlyphTranslatorToVxs();
+
+        public HintedFontStore()
+        {
+
+        }
+        public void SetHintTech(Typography.Contours.HintTechnique hintTech)
+        {
+            _hintTech = hintTech;
+            _glyphPathBuilder.SetHintTechnique(hintTech);
+        }
+        public void SetFont(Typeface value)
+        {
+
+            if (_glyphPathBuilder != null && !_cacheGlyphPathBuilders.ContainsKey(value))
+            {
+                //store current typeface to cache
+                _cacheGlyphPathBuilders[_currentTypeface] = _glyphPathBuilder;
+            }
+            _currentTypeface = value;
+            _glyphPathBuilder = null;
+            if (value == null) return;
+
+            //----------------------------
+            //check if we have this in cache ?
+            //if we don't have it, this _currentTypeface will set to null ***                  
+            _cacheGlyphPathBuilders.TryGetValue(_currentTypeface, out _glyphPathBuilder);
+            if (_glyphPathBuilder == null)
+            {
+                _glyphPathBuilder = new GlyphPathBuilder(value);
+
+            }
+
+
+        }
+        /// <summary>
+        /// set current font
+        /// </summary>
+        /// <param name="typeface"></param>
+        /// <param name="fontSizeInPoints"></param>
+        public void SetFont(Typeface typeface, float fontSizeInPoints)
+        {
+            SetFont(typeface);
+            this._fontSizeInPoints = fontSizeInPoints;
+            //------------------------------------------ 
+            _hintGlyphCollection.SetCacheInfo(typeface, this._fontSizeInPoints, _hintTech);
+        }
+        public bool TryGetTypeface(InstalledFont instFont, out Typeface found)
+        {
+            return _cachedTypefaces.TryGetValue(instFont, out found);
+        }
+        public void RegisterTypeface(InstalledFont instFont, Typeface typeface)
+        {
+            _cachedTypefaces[instFont] = typeface;
+        }
+        public GlyphMeshData GetGlyphMesh(ushort glyphIndex)
+        {
+            GlyphMeshData glyphMeshData;
+            if (!_hintGlyphCollection.TryGetCacheGlyph(glyphIndex, out glyphMeshData))
+            {
+                //if not found then create new glyph vxs and cache it
+                _glyphPathBuilder.SetHintTechnique(_hintTech);
+                _glyphPathBuilder.BuildFromGlyphIndex(glyphIndex, _fontSizeInPoints);
+                //-----------------------------------  
+                _tovxs.Reset();
+                _glyphPathBuilder.ReadShapes(_tovxs);
+
+                //TODO: review here, 
+                //float pxScale = _glyphPathBuilder.GetPixelScale();
+                glyphMeshData = new GlyphMeshData();
+                glyphMeshData.vxsStore = new VertexStore();
+                glyphMeshData.avgXOffsetToFit = _glyphPathBuilder.AvgLeftXOffsetToFit;
+                _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+                _hintGlyphCollection.RegisterCachedGlyph(glyphIndex, glyphMeshData);
+            }
+            return glyphMeshData;
+
+        }
+    }
+
     class PixelScaleLayoutEngine : IPixelScaleLayout
     {
         Typeface _typeface;
-        float _pxscale = 1;//default
-        GlyphMeshCollection<GlyphMeshData> _hintGlyphCollection;
+        HintedFontStore _hintedFontStore;
+        float _fontSizeInPoints;
         public PixelScaleLayoutEngine()
         {
         }
-        public GlyphMeshCollection<GlyphMeshData> MeshCollection
+        public HintedFontStore HintedFontStore
         {
-            get { return _hintGlyphCollection; }
+            get { return _hintedFontStore; }
             set
             {
-                _hintGlyphCollection = value;
+                _hintedFontStore = value;
             }
         }
-        public void SetFont(Typeface typeface, float pxscale)
+        public void SetFont(Typeface typeface, float fontSizeInPoints)
         {
             _typeface = typeface;
-            _pxscale = pxscale;
+            _fontSizeInPoints = fontSizeInPoints;
         }
-
         public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
 
@@ -46,9 +139,16 @@ namespace Typography.Contours
             //to specific pixel scale
             //
             int finalGlyphCount = posStream.Count;
-            float pxscale = this._pxscale;
+            float pxscale = _typeface.CalculateToPixelScaleFromPointSize(this._fontSizeInPoints);
             double cx = 0;
             short cy = 0;
+            //
+            //at this state, we need exact info at this specific pxscale
+            //
+            _hintedFontStore.SetFont(_typeface, this._fontSizeInPoints); //?
+
+
+
             for (int i = 0; i < finalGlyphCount; ++i)
             {
                 short offsetX, offsetY, advW;
@@ -59,15 +159,20 @@ namespace Typography.Contours
                 float exact_y = (float)(cy + offsetY * pxscale);
 
 
-
                 outputGlyphPlanList.Add(new GlyphPlan(
                     glyphIndex,
                     exact_x,
                     exact_y,
                     exact_w));
+                //
                 cx += exact_w;
             }
         }
+
+
+
+
+
         //public ABC GetABC(ushort glyphIndex)
         //{
 
