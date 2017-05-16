@@ -125,6 +125,7 @@ namespace Typography.TextLayout
     /// </summary>
     public class GlyphLayout
     {
+
         GlyphLayoutPlanCollection _layoutPlanCollection = new GlyphLayoutPlanCollection();
         Typeface _typeface;
         ScriptLang _scriptLang;
@@ -132,7 +133,6 @@ namespace Typography.TextLayout
         GlyphSetPosition _gpos;
         bool _needPlanUpdate;
         IPixelScaleLayout _pxscaleLayout;
-
 
         internal GlyphIndexList _inputGlyphs = new GlyphIndexList();
         internal GlyphPosStream _glyphPositions = new GlyphPosStream();
@@ -149,7 +149,8 @@ namespace Typography.TextLayout
         {
             get
             {
-                return _typeface.CalculateToPixelScale(this.FontSizeInPoints);
+                //to pixel scale from size in point
+                return _typeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
             }
         }
         public PositionTechnique PositionTechnique { get; set; }
@@ -304,7 +305,7 @@ namespace Typography.TextLayout
             GlyphPosStream glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
             int finalGlyphCount = glyphPositions.Count;
             //------------------------ 
-            IPixelScaleLayout pxscaleLayout = glyphLayout.PxScaleLayout; 
+            IPixelScaleLayout pxscaleLayout = glyphLayout.PxScaleLayout;
             if (pxscaleLayout != null)
             {
                 //use custom pixel scale layout engine 

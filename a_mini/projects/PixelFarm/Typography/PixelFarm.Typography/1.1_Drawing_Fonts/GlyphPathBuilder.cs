@@ -185,9 +185,13 @@ namespace Typography.Contours
                 short offsetX, offsetY, advW;
                 ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
 
+                float leftControl = _hintedFontStore.GetGlyphLeftOffsetControl(glyphIndex);
+
                 float exact_w = advW * pxscale;
-                float exact_x = (float)(cx + offsetX * pxscale);
                 float exact_y = (float)(cy + offsetY * pxscale);
+                float exact_x = (int)Math.Round((float)(cx + offsetX * pxscale));
+                exact_x += leftControl;
+                exact_w += leftControl;
 
 
                 outputGlyphPlanList.Add(new GlyphPlan(
