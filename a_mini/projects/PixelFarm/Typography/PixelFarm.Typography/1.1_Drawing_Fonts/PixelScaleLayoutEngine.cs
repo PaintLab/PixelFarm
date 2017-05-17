@@ -316,7 +316,7 @@ namespace Typography.Contours
                                     //{
                                     //    cx += 1;
                                     //}
-                                    if (fine_h > 1)
+                                    if (fine_h > 1.1f)
                                     {
                                         //o-i
                                         cx -= 1;
