@@ -56,10 +56,7 @@ namespace Typography.Contours
         {
             //
             Glyph glyph = _typeface.GetGlyphByIndex(glyphIndex);
-            if (!glyph.HasAdvWidth)
-            {
-                glyph.AdvanceWidth = _typeface.GetHAdvanceWidthFromGlyphIndex(glyphIndex);
-            }
+            
 
             this._outputGlyphPoints = glyph.GlyphPoints;
             this._outputContours = glyph.EndPoints;

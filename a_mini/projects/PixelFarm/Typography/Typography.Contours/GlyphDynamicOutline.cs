@@ -21,7 +21,7 @@ namespace Typography.Contours
         bool _needAdjustGridFitValues;
 
         /// <summary>
-        /// x offset (start from abstract origin) to fit the grid
+        /// pixel-size-specific x offset (start from abstract origin) to fit the grid
         /// </summary>
         float _avg_x_fitOffset = 0;
         BoneGroupingHelper _groupingHelper;
@@ -168,22 +168,23 @@ namespace Typography.Contours
                 //
                 if (_needAdjustGridFitValues)
                 {
-                    AdjustFitValues();
+                    ReCalculateFittingValues();
                     _needAdjustGridFitValues = false;
                 }
             }
 
-            List<GlyphContour> contours = this._contours;
-
-            //
-            int j = contours.Count;
-            tx.BeginRead(j);
-            for (int i = 0; i < j; ++i)
+            if (tx != null)
             {
-                //generate in order of contour
-                GenerateContourOutput(tx, contours[i]);
+                List<GlyphContour> contours = this._contours;
+                int j = contours.Count;
+                tx.BeginRead(j);
+                for (int i = 0; i < j; ++i)
+                {
+                    //generate in order of contour
+                    GenerateContourOutput(tx, contours[i]);
+                }
+                tx.EndRead();
             }
-            tx.EndRead();
         }
 
         struct FitDiffCollector
@@ -197,6 +198,7 @@ namespace Typography.Contours
 
             public void Collect(float diff, float groupLen)
             {
+                //group len for weighting 
                 if (diff < 0)
                 {
                     negative_diff += (diff * groupLen);
@@ -241,13 +243,16 @@ namespace Typography.Contours
                     return 0;
                 }
             }
+
+
         }
 
         /// <summary>
         /// adjust vertical fitting value
         /// </summary>
-        void AdjustFitValues()
+        void ReCalculateFittingValues()
         {
+            //(1) 
             //clear all prev adjust value
             for (int i = _contours.Count - 1; i >= 0; --i)
             {
@@ -263,12 +268,12 @@ namespace Typography.Contours
             //we can use that without recalculation
 
             //--------------------
+            //(2)
             //select Horizontal BoneGroups for Vertical fitting:
             //for veritical fitting, we apply fitting value to each group.
             //each group may not need the same value.
             //--------------------
             List<BoneGroup> selectedHBoneGroups = _groupingHelper.SelectedHorizontalBoneGroups;
-
             for (int i = selectedHBoneGroups.Count - 1; i >= 0; --i)
             {
 
@@ -288,7 +293,8 @@ namespace Typography.Contours
                 //and add a total summary to this 
                 FitDiffCollector y_fitDiffCollector = new FitDiffCollector();
                 float groupLen = boneGroup.approxLength;
-                for (int e = 0; e < edgeCount; ++e)
+                //
+                for (int e = edgeCount - 1; e >= 0; --e)
                 {
                     EdgeLine ee = h_edges[e];
                     //p                    
@@ -299,16 +305,17 @@ namespace Typography.Contours
 
                 float avg_ydiff = y_fitDiffCollector.CalculateProperDiff();
 
-                for (int e = 0; e < edgeCount; ++e)
+                for (int e = edgeCount - 1; e >= 0; --e)
                 {
+
+                    //TODO: review here again        
                     EdgeLine ee = h_edges[e];
-                    GlyphPoint p_pnt = ee.P;
-                    GlyphPoint q_pnt = ee.Q;
-                    p_pnt.FitAdjustY = avg_ydiff;
-                    q_pnt.FitAdjustY = avg_ydiff;
+                    ee.P.FitAdjustY = avg_ydiff;//assign px scale specific fit value
+                    ee.Q.FitAdjustY = avg_ydiff;//assign px scale specific fit value
                 }
             }
             //---------------------------------------------------------
+            //(3)
             //vertical group for horizontal fit:
             //this different from the vertical fitting.
             //we calculate the value as a whole.
@@ -351,13 +358,15 @@ namespace Typography.Contours
                     x_fitDiffCollector.Collect(MyMath.CalculateDiffToFit(ee.Q.X * _pxScale), groupLen);
                     //}
                 }
-                break; //only left most first long group
+                //TODO: review here ***
+                break; //only left most first long group ?
             }
+            //(4)
             _avg_x_fitOffset = x_fitDiffCollector.CalculateProperDiff();
 
         }
         /// <summary>
-        /// average horizontal diff to fit the grid
+        /// pxscale-specific, average horizontal diff to fit the grid, this result come from fitting process
         /// </summary>
         public float AvgXFitOffset
         {
@@ -365,7 +374,6 @@ namespace Typography.Contours
         }
         void CollectAllCentroidLines(List<CentroidLineHub> lineHubs)
         {
-
             //collect all centroid lines from each line CentroidLineHub
             _allCentroidLines = new List<CentroidLine>();
             int j = lineHubs.Count;
@@ -374,11 +382,8 @@ namespace Typography.Contours
                 _allCentroidLines.AddRange(lineHubs[i].GetAllCentroidLines().Values);
             }
         }
-        void GenerateContourOutput(
-            IGlyphTranslator tx,
-            GlyphContour contour)
+        void GenerateContourOutput(IGlyphTranslator tx, GlyphContour contour)
         {
-
 
             List<GlyphPoint> points = contour.flattenPoints;
             int j = points.Count;
@@ -388,24 +393,6 @@ namespace Typography.Contours
             //walk along the edge in the contour to generate new edge output
             float pxscale = this._pxScale;
             float fit_x_offset = _avg_x_fitOffset;
-
-            //this is original control bounds
-            //we use this to decide minor shift direction
-            //scaled values
-
-            //float one_px = 1 / pxscale;
-            //bool atLeast1PxLeft = controlBounds.XMin >= one_px;  //at least 1 px left
-
-            //float s_xmin = controlBounds.XMin * pxscale;
-            //float s_ymin = controlBounds.YMin * pxscale;
-            //float s_xmax = controlBounds.XMax * pxscale;
-            //float s_ymax = controlBounds.YMax * pxscale;
-            //float s_advance_w = OriginalAdvanceWidth * pxscale; 
-            //------------------------------------------------- 
-            //experiment
-            //for subpixel rendering 
-            fit_x_offset -= -0.33f; //use use with subpixel, we shift it to the left 1/3 of 1 px 
-
 #if DEBUG
             dbugWriteLine("===begin===" + fit_x_offset);
             if (!dbugUseHorizontalFitValue)
@@ -414,7 +401,8 @@ namespace Typography.Contours
             }
 #endif
             //------------------------------------------------- 
-
+            fit_x_offset = 0;//force, not use fit_x_offset at this step, use in debug mode
+            //------------------------------------------------- 
             bool useGridFit = EnableGridFit;
             //TODO: review here 
             float fit_x, fit_y;

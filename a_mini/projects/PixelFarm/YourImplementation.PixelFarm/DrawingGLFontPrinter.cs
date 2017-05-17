@@ -50,7 +50,7 @@ namespace PixelFarm.DrawingGL
             textPrinter = new VxsTextPrinter(_aggPainter, openFontStore);
             _aggPainter.TextPrinter = textPrinter;
         }
-        public Typography.Rendering.HintTechnique HintTechnique
+        public Typography.Contours.HintTechnique HintTechnique
         {
             get { return textPrinter.HintTechnique; }
             set { textPrinter.HintTechnique = value; }

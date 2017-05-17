@@ -41,7 +41,7 @@ namespace SampleWinForms
         InstalledFont _selectedInstallFont;
 
         UI.DebugGlyphVisualizer debugGlyphVisualizer = new UI.DebugGlyphVisualizer();
-
+        Typography.OpenFont.ScriptLang _current_script;
 
         public Form1()
         {
@@ -56,8 +56,8 @@ namespace SampleWinForms
             //default
             //set script lang,
             //test with Thai for 'complex script' 
-
-            _devGdiTextPrinter.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;
+            _current_script = Typography.OpenFont.ScriptLangs.Latin;
+            _devGdiTextPrinter.ScriptLang = _current_script;
             _devGdiTextPrinter.PositionTechnique = PositionTechnique.OpenFont;
 
 
@@ -300,7 +300,8 @@ namespace SampleWinForms
 
                 _devVxsTextPrinter = new VxsTextPrinter(painter, _openFontStore);
                 _devVxsTextPrinter.TargetCanvasPainter = painter;
-                _devVxsTextPrinter.ScriptLang = _devGdiTextPrinter.ScriptLang;
+
+                _devVxsTextPrinter.ScriptLang = _current_script;
                 _devVxsTextPrinter.PositionTechnique = _devGdiTextPrinter.PositionTechnique;
                 _devGdiTextPrinter.TargetGraphics = g;
             }

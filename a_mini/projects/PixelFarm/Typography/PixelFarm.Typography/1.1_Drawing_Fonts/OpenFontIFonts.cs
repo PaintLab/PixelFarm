@@ -22,10 +22,10 @@ namespace LayoutFarm
             typefaceStore = new TypefaceStore();
             typefaceStore.FontCollection = InstalledFontCollection.GetSharedFontCollection(null);
             glyhLayout = new GlyphLayout();
-            
+
             glyhLayout.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;//test conplex script
             glyhLayout.PositionTechnique = PositionTechnique.OpenFont;
-
+            //assign fitting engine
 
 
             //
@@ -67,6 +67,8 @@ namespace LayoutFarm
             glyhLayout.Typeface = typeface;
             MeasuredStringBox result;
             float scale = typeface.CalculateToPixelScaleFromPointSize(font.SizeInPoints);
+
+            //measure string at specific px scale
             glyhLayout.MeasureString(str, startAt, len, out result, scale);
 
             return new Size((int)result.width, (int)result.CalculateLineHeight());

@@ -123,8 +123,8 @@ namespace SampleWinForms.UI
             _pxscale = scale;
             this._infoView.PxScale = scale;
 
-            var leftControl = this.LeftXControl;
-            var left2 = leftControl * scale;
+
+            var left2 = 0;
             int floor_1 = (int)left2;
             float diff = left2 - floor_1;
             //----------------------------------------------------
@@ -201,11 +201,7 @@ namespace SampleWinForms.UI
             }
 #endif
         }
-        public float LeftXControl
-        {
-            get { return builder.LeftXControl; }
-        }
-
+        
         public bool DrawDynamicOutline { get; set; }
         public bool DrawRegenerateOutline { get; set; }
         public bool DrawEndLineHub { get; set; }
