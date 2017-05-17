@@ -21,6 +21,7 @@ namespace Typography.Contours
         public short minY;
         public short maxX;
         public short maxY;
+
     }
     class GlyphMeshStore
     {
@@ -189,34 +190,69 @@ namespace Typography.Contours
             _typeface = typeface;
             _fontSizeInPoints = fontSizeInPoints;
         }
+
+        struct NewABC
+        {
+            float pxscale;
+            public short offsetX;
+            public short offsetY;
+            public ushort orgAdvW;
+
+            public float s_offsetX;
+            public float s_offsetY;
+            public float s_advW;
+            public float s_xmin;
+            public float s_xmax;
+            public GlyphControlParameters controlPars;
+            public float s_avgToFit;
+
+            public float org_a;
+            public float org_c;
+
+            public float s_a;
+            public float s_c;
+            float c_per_a;
+
+
+            public int final_advW; //this is approximate final advWidth for this glyph 
+
+
+            public float c_diff;
+            public float s_xmax_to_final_advance;
+
+            public void SetData(GlyphControlParameters controlPars, short offsetX, short offsetY, ushort orgAdvW)
+            {
+                this.controlPars = controlPars;
+                this.offsetX = offsetX;
+                this.offsetY = offsetY;
+                this.orgAdvW = orgAdvW;
+                s_avgToFit = controlPars.avgXOffsetToFit;
+                org_a = controlPars.minX;
+                org_c = orgAdvW - controlPars.maxX;
+                c_per_a = org_c / org_a;
+            }
+            public void SetScale(float pxscale)
+            {
+                this.pxscale = pxscale;
+                s_offsetX = pxscale * offsetX;
+                s_offsetY = pxscale * offsetY;
+                s_advW = pxscale * orgAdvW;
+                s_xmin = pxscale * controlPars.minX;
+                s_xmax = pxscale * controlPars.maxX;
+                //--------------------------------------
+                s_a = pxscale * org_a;
+                s_c = pxscale * org_c;
+                //--------------------------------------
+
+                final_advW = (int)Math.Round(s_advW); //***  
+                s_xmax_to_final_advance = final_advW - s_xmax;
+                c_diff = final_advW - s_advW;
+            }
+
+        }
         public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
 
-            //float pxscale = glyphLayout.PixelScale;
-            //double cx = 0;
-            //short cy = 0;
-            //for (int i = 0; i < finalGlyphCount; ++i)
-            //{
-            //    GlyphPos glyph_pos = glyphPositions[i];
-            //    float advW = glyph_pos.advanceW * pxscale;
-            //    float exact_x = (float)(cx + glyph_pos.OffsetX * pxscale);
-            //    float exact_y = (float)(cy + glyph_pos.OffsetY * pxscale);
-
-            //    outputGlyphPlanList.Add(new GlyphPlan(
-            //        glyph_pos.glyphIndex,
-            //        exact_x,
-            //        exact_y,
-            //        advW));
-            //    cx += advW;
-            //}
-
-
-
-            //if we want to do grid fitting layout
-            //:
-            //our pxscale should known the best about how to fit the glyph result
-            //to specific pixel scale
-            //
             int finalGlyphCount = posStream.Count;
             float pxscale = _typeface.CalculateToPixelScaleFromPointSize(this._fontSizeInPoints);
             float onepx = 1 / pxscale;
@@ -226,207 +262,113 @@ namespace Typography.Contours
             //
             //at this state, we need exact info at this specific pxscale
             //
-            _hintedFontStore.SetFont(_typeface, this._fontSizeInPoints); //? 
-
-
-
-            //for (int i = 0; i < finalGlyphCount; ++i)
-            //{
-            //    short offsetX, offsetY, advW; //all from pen-pos
-            //    ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
-
-            //    float exact_advW = advW * pxscale;
-            //    float exact_x = (float)(cx + offsetX * pxscale);
-            //    float exact_y = (float)(cy + offsetY * pxscale);
-
-            //    outputGlyphPlanList.Add(new GlyphPlan(
-            //        glyphIndex,
-            //        exact_x,
-            //        exact_y,
-            //        exact_advW));
-            //    cx += exact_advW;
-            //}
-
+            _hintedFontStore.SetFont(_typeface, this._fontSizeInPoints);
+            NewABC current_ABC = new NewABC();
+            NewABC prev_ABC = new NewABC();
 
             for (int i = 0; i < finalGlyphCount; ++i)
             {
                 short offsetX, offsetY, advW; //all from pen-pos
                 ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
+                GlyphControlParameters controlPars = _hintedFontStore.GetControlPars(glyphIndex);
+                current_ABC.SetData(controlPars, offsetX, offsetY, (ushort)advW);
+                current_ABC.SetScale(pxscale);
+                //-------------------------------------------------------------
 
-                float exact_advW = advW * pxscale;
-                float exact_x = (float)(cx + offsetX * pxscale);
-                float exact_y = (float)(cy + offsetY * pxscale);
+                if (i > 0)
+                {
+                    //ideal interspace
+                    float idealInterGlyphSpace = prev_ABC.s_c + current_ABC.s_a;
+                    if (idealInterGlyphSpace > 1 - 0.5f)
+                    {
+                        //please ensure that we have interspace atleast 1px
+                        //if not we just insert 1 px  ***
+
+                        if (idealInterGlyphSpace < 2 - 0.33f)
+                        {
+                            float diff1 = current_ABC.s_a + prev_ABC.c_diff;
+                            if (diff1 < 0)
+                            {
+                                //need more space
+                                //i-o
+                                cx += 1;
+                            }
+                            else
+                            {
+                                float test0 = current_ABC.s_a + prev_ABC.c_diff;
+                                if (test0 > 1)
+                                {
+
+                                    cx -= 1;
+                                }
+                                else
+                                {
+                                    //i-i
+                                    //o-o
+                                    //o-i
+                                    float fine_h = -prev_ABC.s_avgToFit + prev_ABC.c_diff + current_ABC.s_a;
+                                    //if (fine_h < 0)
+                                    //{
+                                    //    cx -= 1;
+                                    //}
+
+                                    //if (prev_ABC.c_diff * 2 < current_ABC.s_a)
+                                    //{
+                                    //    cx += 1;
+                                    //}
+                                    if (fine_h > 1)
+                                    {
+                                        //o-i
+                                        cx -= 1;
+                                    }
+
+                                    //Console.WriteLine("avg:" + prev_ABC.s_avgToFit +
+                                    //        ", c_diff:" + prev_ABC.c_diff +
+                                    //        ", s_a:" + current_ABC.s_a +
+                                    //        ", need:" + (prev_ABC.c_diff - prev_ABC.s_avgToFit) +
+                                    //        ", test0:" + test0);
+
+                                }
+                            }
+                        }
+                        else
+                        {
+                        }
+                    }
+                    else
+                    {
+                        if (current_ABC.s_a < 0)
+                        {
+                            // eg i-j seq
+                            cx++;
+                        }
+                    }
+                }
+                //------------------------------------------------------------- 
+                float exact_x = (float)(cx + current_ABC.s_offsetX);
+                float exact_y = (float)(cy + current_ABC.s_offsetY);
 
                 //check if the current position can create a sharp glyph
                 int exact_x_floor = (int)exact_x;
-                GlyphControlParameters controlPars = _hintedFontStore.GetControlPars(glyphIndex);
                 float x_offset_to_fit = controlPars.avgXOffsetToFit;
-
-                //
                 //offset range that can produce sharp glyph (by observation)
-                //is between x_offset_to_fit - 0.3f to x_offset_to_fit + 0.3f
-                //               
-                float i_x = exact_x_floor + x_offset_to_fit;
+                //is between x_offset_to_fit - 0.3f to x_offset_to_fit + 0.3f 
+                float final_x = exact_x_floor + x_offset_to_fit;
+                int final_w = current_ABC.final_advW;
 
-
-
-                float final_x = i_x;
-                //-----------
                 outputGlyphPlanList.Add(new GlyphPlan(
                     glyphIndex,
                     final_x,
                     exact_y,
-                   (int)exact_advW));
+                    final_w));
+                cx += current_ABC.final_advW;
 
-                Console.WriteLine(exact_x + "+" + x_offset_to_fit + "=>" + final_x);
+                //-----------------------------------------------
+                prev_ABC = current_ABC;//add to prev
 
-                cx += (int)exact_advW;
+                // Console.WriteLine(exact_x + "+" + (x_offset_to_fit) + "=>" + final_x);
             }
-
-
-
-
-            //for (int i = 0; i < finalGlyphCount; ++i)
-            //{
-
-            //    short offsetX, offsetY, advW; //all from pen-pos
-            //    ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
-            //    //
-            //    GlyphControlParameters controlPars = _hintedFontStore.GetControlPars(glyphIndex);
-            //    float x_offset_to_fit = controlPars.avgXOffsetToFit;
-            //    //
-            //    float s_minX = controlPars.minX * pxscale;
-            //    float s_maxX = controlPars.maxX * pxscale;
-
-            //    //---
-            //    float exact_w = advW * pxscale;
-            //    float exact_y = (float)(cy + offsetY * pxscale);
-            //    float exact_x = (int)Math.Round((float)(cx + offsetX * pxscale));
-            //    //---
-            //    float new_x = exact_x + x_offset_to_fit;
-            //    float new_w = exact_w + x_offset_to_fit;
-            //    float new_xmin = s_minX + x_offset_to_fit;
-            //    float new_xmax = s_maxX + x_offset_to_fit;
-            //    //--- 
-
-            //    //if (s_minX >= 0 && new_xmin < 0)
-            //    //{
-            //    //    exact_x += 1;
-            //    //    //move org to left 1 px
-            //    //    if (new_xmax + 0.66f > s_maxX)
-            //    //    {
-            //    //        exact_w = (int)Math.Ceiling(exact_w);
-            //    //    }
-            //    //} 
-
-            //    new_w = (short)Math.Round(new_w);
-            //    //---
-            //    outputGlyphPlanList.Add(new GlyphPlan(
-            //        glyphIndex,
-            //        new_x,
-            //        exact_y,
-            //        new_w));
-            //    //
-            //    cx += new_w;
-            //}
         }
-
-
-        //    for (int i = 0; i<finalGlyphCount; ++i)
-        //    {
-        //        short offsetX, offsetY, advW;
-        //ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
-        ////
-        //GlyphControlParameters controlPars = _hintedFontStore.GetControlPars(glyphIndex);
-        //float leftControl = controlPars.avgXOffsetToFit;
-        //float s_minX = controlPars.minX * pxscale;
-        //float s_maxX = controlPars.maxX * pxscale;
-
-        ////---
-        //float exact_w = advW * pxscale;
-        //float exact_y = (float)(cy + offsetY * pxscale);
-        //float exact_x = (int)Math.Round((float)(cx + offsetX * pxscale));
-        ////---
-        //float new_x = exact_x + leftControl;
-        //float new_w = exact_w + leftControl;
-        //float new_xmin = s_minX + leftControl;
-        //float new_xmax = s_maxX + leftControl;
-        ////---
-
-
-
-        ////if (s_minX >= 0 && new_xmin < 0)
-        ////{
-        ////    exact_x += 1;
-        ////    //move org to left 1 px
-        ////    if (new_xmax + 0.66f > s_maxX)
-        ////    {
-        ////        exact_w = (int)Math.Ceiling(exact_w);
-        ////    }
-        ////} 
-
-        //new_w = (short) Math.Round(new_w);
-        ////---
-        //outputGlyphPlanList.Add(new GlyphPlan(
-        //    glyphIndex,
-        //    new_x,
-        //    exact_y,
-        //    new_w));
-        //        //
-        //        cx += new_w;
-        //    }
-
-
-
-        //public ABC GetABC(ushort glyphIndex)
-        //{
-
-        //    GlyphDynamicOutline found;
-        //    if (_fitoutlineCollection.TryGetValue(glyphIndex, out found))
-        //    {
-        //        //evaluate at current pxscale
-        //        float avg_xdiffOffset = found.AvgXFitOffset - 0.33f;//-0.33f for subpix rendering
-        //        Bounds orgBounds = found.OriginalGlyphControlBounds;
-        //        //---
-        //        //this is the scaled of original value
-        //        float s_advanced = found.OriginalAdvanceWidth * _fit_pxscale;
-        //        float s_minX = orgBounds.XMin * _fit_pxscale;
-        //        float s_maxX = orgBounds.XMax * _fit_pxscale;
-        //        //---
-        //        float new_xmin = s_minX + avg_xdiffOffset;
-        //        float new_xmax = s_maxX + avg_xdiffOffset;
-        //        float new_advanced = s_advanced + avg_xdiffOffset;
-
-        //        //---
-        //        ABC abc = new ABC();
-
-        //        if (s_minX >= 0 && new_xmin < 0)
-        //        {
-        //            abc.x_offset = 1;
-        //            //move org to left 1 px
-        //            if (new_xmax + 0.66f > s_maxX)
-        //            {
-        //                new_advanced = (int)Math.Ceiling(new_advanced);
-        //            }
-        //        }
-        //        //else if (s_minX < 0.5f)
-        //        //{
-        //        //    //abc.x_offset = 1;
-        //        //    ////move org to left 1 px
-        //        //    //if (new_xmax + 0.66f > new_advanced)
-        //        //    //{
-        //        //    //    new_advanced = (int)Math.Ceiling(new_advanced);
-        //        //    //}
-        //        //}
-        //        abc.w = (short)Math.Round(new_advanced);
-        //        return abc;
-        //    }
-        //    else
-        //    {
-        //        return new ABC();
-        //    }
-
-        //}
     }
 
     public class GlyphPathBuilder : GlyphPathBuilderBase

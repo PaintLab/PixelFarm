@@ -243,6 +243,8 @@ namespace Typography.Contours
                     return 0;
                 }
             }
+
+
         }
 
         /// <summary>
