@@ -105,7 +105,7 @@ namespace SampleWinForms
             lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.None);
             lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Half);
             lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Integer);
-            lstGlyphSnapX.SelectedIndex = 2;//integer             
+            lstGlyphSnapX.SelectedIndex = 0;//integer             
             lstGlyphSnapX.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
             //---------- 
             //snapY  
