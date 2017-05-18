@@ -392,7 +392,7 @@ namespace Typography.Contours
             Bounds controlBounds = this.OriginalGlyphControlBounds;
             //walk along the edge in the contour to generate new edge output
             float pxscale = this._pxScale;
-            float fit_x_offset = _avg_x_fitOffset;
+            float fit_x_offset = 0;
 #if DEBUG
             dbugWriteLine("===begin===" + fit_x_offset);
             if (!dbugUseHorizontalFitValue)
@@ -401,7 +401,7 @@ namespace Typography.Contours
             }
 #endif
             //------------------------------------------------- 
-            fit_x_offset = 0;//force, not use fit_x_offset at this step, use in debug mode
+            fit_x_offset = 0.33f;//force, not use fit_x_offset at this step, use in debug mode
             //------------------------------------------------- 
             bool useGridFit = EnableGridFit;
             //TODO: review here 
