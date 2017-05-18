@@ -63,8 +63,8 @@ namespace PixelFarm.Agg
         SingleLineBuffer _grayScaleLine = new SingleLineBuffer();
         LcdDistributionLut _currentLcdLut = null;
 
-        //----------------
-        InternalBrightnessAndContrastAdjustment _brightnessAndContrast = new InternalBrightnessAndContrastAdjustment();
+        ////----------------
+        //InternalBrightnessAndContrastAdjustment _brightnessAndContrast = new InternalBrightnessAndContrastAdjustment();
 
 
         internal ScanlineSubPixelRasterizer()
@@ -74,7 +74,7 @@ namespace PixelFarm.Agg
             //
             //I try adjust color distribution with img filter
             //set contrast =0 => disable this filter
-            _brightnessAndContrast.Contrast = 30;
+            //_brightnessAndContrast.Contrast = 30;
         }
         public LcdDistributionLut LcdLut
         {
@@ -84,18 +84,17 @@ namespace PixelFarm.Agg
                 _currentLcdLut = value;
             }
         }
-        public int ContrastAdjustmentValue
-        {
-            get { return _brightnessAndContrast.Contrast; }
-            set { _brightnessAndContrast.Contrast = value; }
+        //public int ContrastAdjustmentValue
+        //{
+        //    get { return _brightnessAndContrast.Contrast; }
+        //    set { _brightnessAndContrast.Contrast = value; }
 
-        }
-        public int BrightnessAdjustmentValue
-        {
-            get { return _brightnessAndContrast.Brightness; }
-            set { _brightnessAndContrast.Brightness = value; }
-
-        }
+        //}
+        //public int BrightnessAdjustmentValue
+        //{
+        //    get { return _brightnessAndContrast.Brightness; }
+        //    set { _brightnessAndContrast.Brightness = value; } 
+        //}
 
         public void RenderScanlines(
             IImageReaderWriter dest,
@@ -108,7 +107,7 @@ namespace PixelFarm.Agg
             int dbugMinScanlineCount = 0;
 #endif
             //----------------------------------------------------------------------------
-            _brightnessAndContrast.UpdateIfNeed(); //update values if need
+            //_brightnessAndContrast.UpdateIfNeed(); //update values if need
             //----------------------------------------------------------------------------
 
             //1. ensure single line buffer width
@@ -237,8 +236,8 @@ namespace PixelFarm.Agg
 
             }
 
-            bool useContrastFilter = this.ContrastAdjustmentValue != 0;
-            useContrastFilter = false;
+            //bool useContrastFilter = this.ContrastAdjustmentValue != 0;
+            //useContrastFilter = false;
             while (srcW > 3)
             {
                 //------------
@@ -277,10 +276,10 @@ namespace PixelFarm.Agg
 
                 }
 
-                if (useContrastFilter)
-                {
-                    _brightnessAndContrast.ApplyBytes(ref e_2, ref e_1, ref e_0);
-                }
+                //if (useContrastFilter)
+                //{
+                //    _brightnessAndContrast.ApplyBytes(ref e_2, ref e_1, ref e_0);
+                //}
 
                 //
                 //4. blend 3 pixels 
@@ -327,10 +326,10 @@ namespace PixelFarm.Agg
                         {
 
 
-                            if (useContrastFilter)
-                            {
-                                _brightnessAndContrast.ApplyBytes(ref ec_r3, ref ec_r2, ref ec_r1);
-                            }
+                            //if (useContrastFilter)
+                            //{
+                            //    _brightnessAndContrast.ApplyBytes(ref ec_r3, ref ec_r2, ref ec_r1);
+                            //}
 
                             //1st round
                             byte exc0 = destImgBuffer[destImgIndex];//existing color
@@ -356,10 +355,10 @@ namespace PixelFarm.Agg
                         break;
                     case 4:
                         {
-                            if (useContrastFilter)
-                            {
-                                _brightnessAndContrast.ApplyBytes(ref ec_r3, ref ec_r2, ref ec_r1);
-                            }
+                            //if (useContrastFilter)
+                            //{
+                            //    _brightnessAndContrast.ApplyBytes(ref ec_r3, ref ec_r2, ref ec_r1);
+                            //}
 
                             //1st round
                             byte ec0 = destImgBuffer[destImgIndex];//existing color
