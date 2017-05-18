@@ -336,25 +336,14 @@ namespace SampleWinForms.UI
             TreeNode nodeEdge = new TreeNode();
             nodeEdge.Tag = nodeInfo;
             nodeEdge.Text = "e id=" + edge.dbugId + ",count="
-                + _testEdgeCount + " :(" + pnt_P.newX + "," + pnt_P.newY + ")" +
+                + _testEdgeCount + " : " + pnt_P.ToString() +
+                "=>" + pnt_Q.ToString();
 
-                "=>(" + pnt_Q.newX + "," + pnt_Q.newY + ") ";
             if (edge.dbugNoPerpendicularBone)
             {
                 nodeEdge.Text += "_X_ (no perpendicular_bone)";
             }
-
-
-            //}
-            //if (!edge.dbugHasRelatedBone)
-            //{
-            //    nodeEdge.Text += "_X_ (no perpendicular_bone)";
-            //}
-
-            //if (edge.cutPointOnBone != System.Numerics.Vector2.Zero)
-            //{
-            //    nodeEdge.Text += " cut:" + edge.cutPointOnBone;
-            //}
+             
             _tessEdgesNode.Nodes.Add(nodeEdge);
             //------------------------------- 
 

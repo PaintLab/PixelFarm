@@ -12,20 +12,17 @@ namespace Typography.Contours
         List<GlyphContour> _contours;
         List<CentroidLineHub> _lineHubs;
 
-
         float _bounds_minX, _bounds_minY, _bounds_maxX, _bounds_maxY;
-
-        public GlyphIntermediateOutline(Polygon polygon, List<GlyphContour> contours)
+        public GlyphIntermediateOutline(
+            List<GlyphContour> contours,
+            Polygon polygon,
+            Polygon[] subPolygons)
         {
             //init value
-            _bounds_minX = _bounds_minY = float.MaxValue;
-            _bounds_maxX = _bounds_maxY = float.MinValue;
-
 
             this._contours = contours;
-
             //1. create centroid line hubs: 
-            CreateCentroidLineHubs(polygon);
+            CreateCentroidLineHubs(polygon, subPolygons);
             //2. create bone joints (create joint before bone)
             CreateBoneJoints();
             //3. create bones 
@@ -34,15 +31,37 @@ namespace Typography.Contours
             CreateGlyphEdges();
         }
 
-        void CreateCentroidLineHubs(Polygon polygon)
+        void CreateCentroidLineHubs(Polygon polygon, Polygon[] subPolygons)
         {
-
             List<GlyphTriangle> triangles = new List<GlyphTriangle>();
-#if DEBUG
-            this._dbugpolygon = polygon; //for debug only ***
-            EdgeLine.s_dbugTotalId = 0;//reset
-            this._dbugTriangles = triangles;
+            _lineHubs = new List<CentroidLineHub>();
+#if DEBUG            
+            EdgeLine.s_dbugTotalId = 0;//reset 
+            this._dbugTriangles = new List<GlyphTriangle>();
 #endif
+
+            //main polygon
+            CreateCentroidLineHubs(polygon, triangles, _lineHubs);
+#if DEBUG
+            _dbugTriangles.AddRange(triangles);
+#endif
+            if (subPolygons != null)
+            {
+                int j = subPolygons.Length;
+
+                for (int i = 0; i < j; ++i)
+                {
+
+                    triangles.Clear();//clear, reuse it
+                    CreateCentroidLineHubs(subPolygons[i], triangles, _lineHubs);
+#if DEBUG
+                    _dbugTriangles.AddRange(triangles);
+#endif
+                }
+            }
+        }
+        static void CreateCentroidLineHubs(Polygon polygon, List<GlyphTriangle> triangles, List<CentroidLineHub> outputLineHubs)
+        {
 
             //create triangle list from given DelaunayTriangle polygon.
             // Generate GlyphTriangle triangle from DelaunayTriangle 
@@ -130,9 +149,9 @@ namespace Typography.Contours
 
             //--------------------------------------------------------------
             //copy to list, we not use the centroidLineHubs anymore
-            _lineHubs = new List<CentroidLineHub>(centroidLineHubs.Values);
-
+            outputLineHubs.AddRange(centroidLineHubs.Values);
         }
+
         void CreateBoneJoints()
         {
             int lineHubCount = _lineHubs.Count;
@@ -166,6 +185,9 @@ namespace Typography.Contours
 
         void CreateGlyphEdges()
         {
+            //reset bounds
+            _bounds_minX = _bounds_minY = float.MaxValue;
+            _bounds_maxX = _bounds_maxY = float.MinValue;
 
             List<GlyphContour> contours = this._contours;
             int j = contours.Count;
@@ -173,14 +195,25 @@ namespace Typography.Contours
             {
                 GlyphContour cnt = contours[i];
                 cnt.CreateGlyphEdges();
-                //
+                //this is a new found after fitting process
                 cnt.FindBounds(ref _bounds_minX, ref _bounds_minY, ref _bounds_maxX, ref _bounds_maxY);
             }
         }
-
+        /// <summary>
+        /// min x after fitting process
+        /// </summary>
         public float MinX { get { return _bounds_minX; } }
+        /// <summary>
+        /// min y after fitting process
+        /// </summary>
         public float MinY { get { return _bounds_minY; } }
+        /// <summary>
+        /// max x after fitting process
+        /// </summary>
         public float MaxX { get { return _bounds_maxX; } }
+        /// <summary>
+        ///  max y after fitting process
+        /// </summary>
         public float MaxY { get { return _bounds_maxY; } }
 
         /// <summary>
@@ -211,6 +244,8 @@ namespace Typography.Contours
                     otherHub.AddLineHubConnection(analyzingHub);
                     //also set head connection from joint to this analyzing hub
                     analyzingHub.SetHeadConnnection(foundOnBr, foundOnJoint);
+                    //
+                    //TODO: review this, why return here?
                     return;
                 }
             }
@@ -242,7 +277,7 @@ namespace Typography.Contours
 
 #if DEBUG
 
-        Polygon _dbugpolygon;
+
         List<GlyphTriangle> _dbugTriangles;
         public List<GlyphTriangle> dbugGetTriangles()
         {

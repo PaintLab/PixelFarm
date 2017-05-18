@@ -20,11 +20,7 @@ namespace Typography.Contours
         EdgeLine _tipEdge_q;
 
         float _fitX, _fitY;
-
-#if DEBUG
-        public readonly int dbugId = dbugTotalId++;
-        public static int dbugTotalId;
-#endif
+ 
         internal GlyphBoneJoint(
             InsideEdgeLine p_contact_edge,
             InsideEdgeLine q_contact_edge)
@@ -103,12 +99,7 @@ namespace Typography.Contours
                 return new Vector2(_fitX, _fitY);
             }
         }
-        public float GetLeftMostRib()
-        {
-            //TODO: revisit this again
 
-            return 0;
-        }
         /// <summary>
         /// calculate distance^2 from contact point to specific point v
         /// </summary>
@@ -168,17 +159,31 @@ namespace Typography.Contours
         {
             return this.P_Tri == tri || this.Q_Tri == tri;
         }
+        /// <summary>
+        /// adjust this bone joint to fit with given gridboxW and H
+        /// </summary>
+        /// <param name="gridW"></param>
+        /// <param name="gridH"></param>
+        internal void AdjustFitXY(int gridW, int gridH)
+        {
 
+            Vector2 jointPos = this.OriginalJointPos;
+            //set fit (x,y) to joint, then we will evaluate bone slope again (next step)
+            this.SetFitXY(
+                MyMath.FitToHalfGrid(jointPos.X, gridW), //use half?
+                MyMath.FitToHalfGrid(jointPos.Y, gridH));//use half?
+        }
 #if DEBUG
+        public readonly int dbugId = dbugTotalId++;
+        public static int dbugTotalId;
+
         public override string ToString()
         {
             return "id:" + dbugId + " " + this.OriginalJointPos.ToString();
         }
 
         public EdgeLine dbugGetEdge_P() { return _p_contact_edge; }
-        public EdgeLine dbugGetEdge_Q() { return _q_contact_edge; }
-
-
+        public EdgeLine dbugGetEdge_Q() { return _q_contact_edge; } 
         public void dbugGetCentroidBoneCenters(out float cx0, out float cy0, out float cx1, out float cy1)
         {
 

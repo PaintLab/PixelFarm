@@ -20,21 +20,18 @@ namespace Typography.Contours
         CurveInbetween,
     }
 
+
     public class GlyphPoint
     {
-        readonly float x; //original x
-        readonly float y; //original y
-        public readonly PointKind kind;
+        readonly float _ox; //original x
+        readonly float _oy; //original y
+        readonly PointKind kind;
 
-        /// <summary>
-        /// calculated x and y  
-        /// </summary>
-        public float newX;
-        public float newY;
-        //---------------------------------------- 
-        public float fit_NewX;
-        public float fit_NewY;
-        public bool fit_analyzed;
+        float newX;
+        float newY;
+        //----------------------------------------  
+        //float _adjust_fit_x; //not use 
+        float _adjust_fit_y; //px scale specific y fitting value
         //------------------------------------- 
 
         /// <summary>
@@ -48,21 +45,86 @@ namespace Typography.Contours
 
         public GlyphPoint(float x, float y, PointKind kind)
         {
-            this.x = this.newX = x;
-            this.y = this.newY = y;
+            this._ox = this.newX = x;
+            this._oy = this.newY = y;
             this.kind = kind;
         }
         public int SeqNo { get; internal set; }
+        public PointKind PointKind
+        {
+            get
+            {
+                return this.kind;
+            }
+        }
+
+        internal bool IsPartOfHorizontalEdge { get; set; }
 
         /// <summary>
         /// original X
         /// </summary>
-        public float OX { get { return this.x; } }
+        public float OX { get { return this._ox; } }
         /// <summary>
         /// original Y
         /// </summary>
-        public float OY { get { return this.y; } }
+        public float OY { get { return this._oy; } }
+        /// <summary>
+        /// modified X
+        /// </summary>
+        public float X { get { return this.newX; } }
+        /// <summary>
+        /// modified Y
+        /// </summary>
+        public float Y { get { return this.newY; } }
 
+
+        //in this version, we don't use this _adjust_fit_x for each point
+        //public float FitAdjustX
+        //{
+        //  get { return _adjust_fit_x; }
+        //  internal set
+        //  {
+        //      _adjust_fit_x = value;
+        //#if DEBUG
+        //      _dbug_has_adjust_x = true;
+        //      _dbug_fit_analyzed = true;
+        //#endif
+        //  }
+        //}
+        public float FitAdjustY
+        {
+            get
+            {
+                return _adjust_fit_y;
+            }
+            internal set
+            {
+                _adjust_fit_y = value;
+#if DEBUG
+                _dbug_has_adjust_y = true;
+                _dbug_fit_analyzed = true;
+#endif 
+            }
+        }
+
+        internal void ResetFitAdjustValues()
+        {
+            _adjust_fit_y = 0;
+            //_adjust_fit_x = 0
+        }
+
+        internal void GetFitXY(float pxscale, out float x, out float y)
+        {
+            x = this.newX * pxscale;
+            y = (this.newY * pxscale) + _adjust_fit_y;
+        }
+
+        internal void SetNewXY(float x, float y)
+        {
+            this.newX = x;
+            this.newY = y;
+        }
+        //-----------
 
         /// <summary>
         /// outside inward edge
@@ -121,11 +183,13 @@ namespace Typography.Contours
 
         internal static bool SameCoordAs(GlyphPoint a, GlyphPoint b)
         {
-            return a.x == b.x && a.y == b.y;
+            return a._ox == b._ox && a._oy == b._oy;
         }
 
 #if DEBUG
-
+        bool _dbug_fit_analyzed;
+        bool _dbug_has_adjust_x;
+        bool _dbug_has_adjust_y;
         public readonly int dbugId = dbugTotalId++;
         static int dbugTotalId;
         internal GlyphPart dbugOwnerPart;  //link back to owner part
@@ -135,9 +199,8 @@ namespace Typography.Contours
         {
             //TODO: review adjust value again
             return this.dbugId + " :" +
-                    (x + "," + y + " " + kind.ToString());
+                    (_ox + "," + _oy + " " + PointKind.ToString());
         }
-
 #endif
     }
 

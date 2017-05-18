@@ -50,7 +50,7 @@ namespace PixelFarm.DrawingGL
             textPrinter = new VxsTextPrinter(_aggPainter, openFontStore);
             _aggPainter.TextPrinter = textPrinter;
         }
-        public Typography.Rendering.HintTechnique HintTechnique
+        public Typography.Contours.HintTechnique HintTechnique
         {
             get { return textPrinter.HintTechnique; }
             set { textPrinter.HintTechnique = value; }
@@ -194,8 +194,8 @@ namespace PixelFarm.DrawingGL
             //create text printer for use with canvas painter 
             this.painter = painter;
             this.canvas2d = painter.Canvas;
-            GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
-            GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer;
+            //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
+            //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer;
 
             _fontLoader = fontLoader;
             ChangeFont(painter.CurrentFont);
@@ -276,25 +276,7 @@ namespace PixelFarm.DrawingGL
                 _glBmp = _loadedGlyphs.GetOrCreateNewOne(simpleFontAtlas);
             }
         }
-        /// <summary>
-        /// describe how to adjust pixel snaping
-        /// </summary>
-        public GlyphPosPixelSnapKind GlyphPosPixelSnapX { get; set; }
-        public GlyphPosPixelSnapKind GlyphPosPixelSnapY { get; set; }
-
-        //static float SnapInteger(float value)
-        //{
-        //    int floor_value = (int)value;
-        //    return (value - floor_value >= (1f / 2f)) ? floor_value + 1 : floor_value;
-        //}
-        //static float SnapHalf(float value)
-        //{
-        //    int floor_value = (int)value;
-        //    //round to int 0, 0.5,1.0
-        //    return (value - floor_value >= (2f / 3f)) ? floor_value + 1 : //else->
-        //           (value - floor_value >= (1f / 3f)) ? floor_value + 0.5f : floor_value;
-
-        //}
+       
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
 
@@ -325,8 +307,7 @@ namespace PixelFarm.DrawingGL
             // ideal_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture);
             // ideal_y = (float)(y + (glyph.y * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
             //--------------------------
-            GlyphPosPixelSnapKind x_snap = this.GlyphPosPixelSnapX;
-            GlyphPosPixelSnapKind y_snap = this.GlyphPosPixelSnapY;
+
             float g_x = 0;
             float g_y = 0;
             int baseY = (int)Math.Round(y);
@@ -343,34 +324,7 @@ namespace PixelFarm.DrawingGL
                 //TODO: review precise height in float
                 //-------------------------------------- 
                 PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
-                g_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                g_y = (float)((glyph.y * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
-                switch (x_snap)
-                {
-                    default: throw new NotSupportedException();
-                    case GlyphPosPixelSnapKind.Integer:
-                        g_x = GlyphLayoutExtensions.SnapInteger(g_x);
-                        break;
-                    case GlyphPosPixelSnapKind.Half:
-                        g_x = GlyphLayoutExtensions.SnapHalf(g_x);
-                        break;
-                    case GlyphPosPixelSnapKind.None:
-                        break;
-                }
-                switch (y_snap)
-                {
-                    default: throw new NotSupportedException();
-                    case GlyphPosPixelSnapKind.Integer:
-                        g_y = baseY + GlyphLayoutExtensions.SnapInteger(g_y);   //use baseY not y
-                        break;
-                    case GlyphPosPixelSnapKind.Half:
-                        g_y = baseY + GlyphLayoutExtensions.SnapHalf(g_y);
-                        break;
-                    case GlyphPosPixelSnapKind.None:
-                        //use Y not baseY
-                        g_y = (float)y + g_y;
-                        break;
-                }
+
 
                 switch (textureKind)
                 {
@@ -421,9 +375,7 @@ namespace PixelFarm.DrawingGL
             float g_y = 0;
             int baseY = (int)Math.Round(y);
             float scale = 1;
-            GlyphPosPixelSnapKind x_snap = this.GlyphPosPixelSnapX;
-            GlyphPosPixelSnapKind y_snap = this.GlyphPosPixelSnapY;
-
+           
             for (int i = 0; i < n; ++i)
             {
                 //PERF:
@@ -444,124 +396,7 @@ namespace PixelFarm.DrawingGL
                 //--------------------------
                 g_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
                 g_y = (float)((glyph.y * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
-                switch (x_snap)
-                {
-                    default: throw new NotSupportedException();
-                    case GlyphPosPixelSnapKind.Integer:
-                        g_x = GlyphLayoutExtensions.SnapInteger(g_x);
-                        break;
-                    case GlyphPosPixelSnapKind.Half:
-                        g_x = GlyphLayoutExtensions.SnapHalf(g_x);
-                        break;
-                    case GlyphPosPixelSnapKind.None:
-                        break;
-                }
-                switch (y_snap)
-                {
-                    default: throw new NotSupportedException();
-                    case GlyphPosPixelSnapKind.Integer:
-                        g_y = baseY + GlyphLayoutExtensions.SnapInteger(g_y);   //use baseY not y
-                        break;
-                    case GlyphPosPixelSnapKind.Half:
-                        g_y = baseY + GlyphLayoutExtensions.SnapHalf(g_y);
-                        break;
-                    case GlyphPosPixelSnapKind.None:
-                        //use Y not baseY
-                        g_y = (float)y + g_y;
-                        break;
-                }
 
-                //switch (x_snap)
-                //{
-                //    default: throw new NotSupportedException();
-                //    case GlyphPosPixelSnapKind.Integer:
-                //        {
-                //            g_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                //            int floor_x = (int)g_x;
-
-                //            //round to int 0,1
-                //            if (g_x - floor_x >= (1f / 2f))
-                //            {
-                //                g_x = floor_x + 1;
-                //            }
-                //            else
-                //            {
-                //                g_x = floor_x;
-                //            }
-                //        }
-                //        break;
-                //    case GlyphPosPixelSnapKind.Half:
-                //        {
-                //            g_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
-                //                                                                                                //adjust
-                //            int floor_x = (int)g_x;
-                //            //round to int 0, 0.5,1.0
-                //            if (g_x - floor_x >= (2f / 3f))
-                //            {
-                //                g_x = floor_x + 1;
-                //            }
-                //            else if (g_x - floor_x >= (1f / 3f))
-                //            {
-                //                g_x = floor_x + 0.5f;
-                //            }
-                //            else
-                //            {
-                //                g_x = floor_x;
-                //            }
-                //        }
-                //        break;
-                //    case GlyphPosPixelSnapKind.None:
-                //        g_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture);
-                //        break;
-                //}
-                ////
-                //switch (y_snap)
-                //{
-                //    default: throw new NotSupportedException();
-                //    case GlyphPosPixelSnapKind.Integer:
-                //        //use baseY not y
-                //        {
-                //            g_y = (float)((glyph.y * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
-                //            int floor_y = (int)g_y;
-                //            //round to int 0,1
-                //            if (g_y - floor_y >= (1f / 2f))
-                //            {
-                //                g_y = floor_y + 1;
-                //            }
-                //            else
-                //            {
-                //                g_y = floor_y;
-                //            }
-                //            g_y = baseY + g_y;
-                //        }
-                //        break;
-                //    case GlyphPosPixelSnapKind.Half:
-                //        //review here
-                //        //use baseY not y
-                //        {
-                //            g_y = (float)((glyph.y * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
-                //            int floor_y = (int)g_y;
-                //            //round to int 0, 0.5,1.0
-                //            if (g_y - floor_y >= (2f / 3f))
-                //            {
-                //                g_y = floor_y + 1;
-                //            }
-                //            else if (g_x - floor_y >= (1f / 3f))
-                //            {
-                //                g_y = floor_y + 0.5f;
-                //            }
-                //            else
-                //            {
-                //                g_y = floor_y;
-                //            }
-                //            g_y = baseY + g_y;
-                //        }
-                //        break;
-                //    case GlyphPosPixelSnapKind.None:
-                //        //use Y not baseY
-                //        g_y = (float)(y + (glyph.y * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
-                //        break;
-                //}
                 switch (textureKind)
                 {
                     case Typography.Rendering.TextureKind.Msdf:

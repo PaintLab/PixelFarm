@@ -14,20 +14,14 @@ namespace Typography.Contours
 
         //temp store centroid pair, we can clear it after AnalyzeEdgesAndCreateBoneJoints()
         List<GlyphCentroidPair> _centroid_pairs = new List<GlyphCentroidPair>();
+        //
         //joint list is created from each centroid pair
         public List<GlyphBoneJoint> _joints = new List<GlyphBoneJoint>();
-        //bone list is created from linking each joint list
         public List<GlyphBone> bones = new List<GlyphBone>();
-        public List<BoneGroup> boneGroups;
-
 
         internal CentroidLine()
         {
         }
-
-#if DEBUG
-        internal GlyphTriangle dbugStartTri;
-#endif
         /// <summary>
         /// add a centroid pair
         /// </summary>
@@ -49,41 +43,37 @@ namespace Typography.Contours
                 //create bone joint (and tip edge) in each pair                
                 _joints.Add(pairs[i].AnalyzeEdgesAndCreateBoneJoint());
             }
+
+            //we dont' use it anymore
+            _centroid_pairs.Clear();
+            _centroid_pairs = null;
         }
         /// <summary>
         /// apply grid box to all bones in this line
         /// </summary>
         /// <param name="gridW"></param>
         /// <param name="gridH"></param>
-        public void ApplyGridBox(int gridW, int gridH)
+        public void ApplyGridBox(List<BoneGroup> boneGroups, int gridW, int gridH)
         {
-            //1.
-            //apply grid box to each joint
-            int j = _joints.Count;
-            for (int i = 0; i < j; ++i)
+            //1. apply grid box to each joint
+            for (int i = _joints.Count - 1; i >= 0; --i)
             {
-                GlyphBoneJoint joint = _joints[i];
-                Vector2 jointPos = joint.OriginalJointPos;
-                //set fit (x,y) to joint, then we will evaluate bone slope again (next step)
-                joint.SetFitXY(
-                    MyMath.FitToHalfGrid(jointPos.X, gridW), //use fit half
-                    MyMath.FitToHalfGrid(jointPos.Y, gridH));//use fit half
+                _joints[i].AdjustFitXY(gridW, gridH);
             }
             //2. (re) calculate slope for all bones.
-            j = bones.Count;
-            for (int i = 0; i < j; ++i)
+            for (int i = bones.Count - 1; i >= 0; --i)
             {
                 bones[i].EvaluateSlope();
             }
             //3. re-grouping 
-            j = bones.Count;
-            this.boneGroups = new List<BoneGroup>();
-
+            int j = bones.Count;
             BoneGroup boneGroup = new BoneGroup(this); //new group
             boneGroup.slopeKind = LineSlopeKind.Other;
+            //
             float approxLen = 0;
             float ypos_sum = 0;
             float xpos_sum = 0;
+
             for (int i = 0; i < j; ++i)
             {
                 GlyphBone bone = bones[i];
@@ -95,12 +85,12 @@ namespace Typography.Contours
                     //add existing to list and create a new group
                     if (boneGroup.count > 0)
                     {
-                        //
+                        //add existing bone group to bone-group list
                         boneGroup.approxLength = approxLen;
-                        boneGroup.y_pos = ypos_sum / boneGroup.count;
-                        boneGroup.x_pos = xpos_sum / boneGroup.count;
+                        boneGroup.avg_x = xpos_sum / boneGroup.count;
+                        boneGroup.avg_y = ypos_sum / boneGroup.count;
                         //
-                        this.boneGroups.Add(boneGroup);
+                        boneGroups.Add(boneGroup);
                     }
                     // 
                     boneGroup = new BoneGroup(this);
@@ -110,23 +100,26 @@ namespace Typography.Contours
                     boneGroup.count++;
                     approxLen = bone.EvaluateFitLength(); //reset
                     //
-                    ypos_sum = mid_pos.Y;
                     xpos_sum = mid_pos.X;
+                    ypos_sum = mid_pos.Y;
+
                 }
                 else
                 {
                     boneGroup.count++;
                     approxLen += bone.EvaluateFitLength(); //append
-                    ypos_sum += mid_pos.Y;
+                    //
                     xpos_sum += mid_pos.X;
+                    ypos_sum += mid_pos.Y;
                 }
             }
+            //
             if (boneGroup.count > 0)
             {
                 boneGroup.approxLength = approxLen;
-                boneGroup.y_pos = ypos_sum / boneGroup.count;
-                boneGroup.x_pos = xpos_sum / boneGroup.count;
-                this.boneGroups.Add(boneGroup);
+                boneGroup.avg_x = xpos_sum / boneGroup.count;
+                boneGroup.avg_y = ypos_sum / boneGroup.count;
+                boneGroups.Add(boneGroup);
             }
         }
 
@@ -151,25 +144,34 @@ namespace Typography.Contours
             }
             return null;
         }
+#if DEBUG
+        internal GlyphTriangle dbugStartTri;
+#endif
     }
 
     struct BoneGroupingHelper
     {
-        //this is helper class
+        //this is a helper***
+
         List<BoneGroup> _selectedHorizontalBoneGroups;
         List<BoneGroup> _selectedVerticalBoneGroups;
+        List<BoneGroup> _tmpBoneGroups;
         List<EdgeLine> tmpEdges;
+        int gridBoxW, gridBoxH;
 
         public static BoneGroupingHelper CreateBoneGroupingHelper()
         {
             BoneGroupingHelper helper = new BoneGroupingHelper();
             helper._selectedHorizontalBoneGroups = new List<BoneGroup>();
             helper._selectedVerticalBoneGroups = new List<BoneGroup>();
+            helper._tmpBoneGroups = new List<BoneGroup>();
             helper.tmpEdges = new List<EdgeLine>();
             return helper;
         }
-        public void Reset()
+        public void Reset(int gridBoxW, int gridBoxH)
         {
+            this.gridBoxW = gridBoxW;
+            this.gridBoxH = gridBoxH;
             _selectedHorizontalBoneGroups.Clear();
             _selectedVerticalBoneGroups.Clear();
         }
@@ -177,12 +179,14 @@ namespace Typography.Contours
         public List<BoneGroup> SelectedVerticalBoneGroups { get { return _selectedVerticalBoneGroups; } }
         public void CollectBoneGroups(CentroidLine line)
         {
-            List<BoneGroup> boneGroups = line.boneGroups;
-            int j = boneGroups.Count;
-            for (int i = 0; i < j; ++i)
+            //
+            _tmpBoneGroups.Clear();
+            line.ApplyGridBox(_tmpBoneGroups, gridBoxW, gridBoxH);
+            // 
+            for (int i = _tmpBoneGroups.Count - 1; i >= 0; --i)
             {
                 //this version, we focus on horizontal bone group
-                BoneGroup boneGroup = boneGroups[i];
+                BoneGroup boneGroup = _tmpBoneGroups[i];
                 switch (boneGroup.slopeKind)
                 {
                     case LineSlopeKind.Horizontal:
@@ -190,50 +194,115 @@ namespace Typography.Contours
                         break;
                     case LineSlopeKind.Vertical:
                         _selectedVerticalBoneGroups.Add(boneGroup);
-                        break;
+                        break; 
                 }
             }
+            _tmpBoneGroups.Clear();
         }
         public void AnalyzeHorizontalBoneGroups()
         {
-            MarkTooSmallBones(_selectedHorizontalBoneGroups);
+            if (_selectedHorizontalBoneGroups.Count == 0) return;
+            //
+            //for Horizontal group analysis, we don't include short bone 
+            Mark_ShortBones(_selectedHorizontalBoneGroups); //SHORT BONES
             //arrange by y-pos for horizontal group
-            _selectedHorizontalBoneGroups.Sort((bg0, bg1) => bg0.y_pos.CompareTo(bg1.y_pos));
+            _selectedHorizontalBoneGroups.Sort((bg0, bg1) => bg0.avg_y.CompareTo(bg1.avg_y));
             //
             //collect outside edge of horizontal group
             for (int i = _selectedHorizontalBoneGroups.Count - 1; i >= 0; --i)
             {
                 _selectedHorizontalBoneGroups[i].CollectOutsideEdges(tmpEdges);
             }
-
         }
+
         public void AnalyzeVerticalBoneGroups()
         {
-            MarkTooSmallBones(_selectedVerticalBoneGroups);
+            if (_selectedVerticalBoneGroups.Count == 0) return;
+            //
+            //for vertical group analysis, we use only long bones
+            Mark_LongBones(_selectedVerticalBoneGroups); //LONG BONES
             //arrange by x-pos for vertical
-            _selectedVerticalBoneGroups.Sort((bg0, bg1) => bg0.x_pos.CompareTo(bg1.x_pos));
+            _selectedVerticalBoneGroups.Sort((bg0, bg1) => bg0.avg_x.CompareTo(bg1.avg_x));
             //
             //collect outside edge of vertical group
             for (int i = _selectedVerticalBoneGroups.Count - 1; i >= 0; --i)
             {
                 _selectedVerticalBoneGroups[i].CollectOutsideEdges(tmpEdges);
             }
-
         }
-        static void MarkTooSmallBones(List<BoneGroup> boneGroups)
+
+        static void Mark_LongBones(List<BoneGroup> boneGroups)
         {
+
+            int boneGroupsCount = boneGroups.Count;
+            if (boneGroupsCount == 0)
+            {
+                return;
+            }
+            else if (boneGroupsCount == 1)
+            {
+                //eg 1 group
+                //makr this long bone
+                boneGroups[0]._lengKind = BoneGroupSumLengthKind.Long;
+                return;
+            }
+            else
+            {
+                //----------------------
+                //use median ?,
+                boneGroups.Sort((bg0, bg1) => bg0.approxLength.CompareTo(bg1.approxLength));
+                int groupCount = boneGroups.Count;
+                //median
+                int mid_index = groupCount / 2;
+                BoneGroup bonegroup = boneGroups[mid_index];
+                float upper_limit = bonegroup.approxLength * 2;
+                bool foundSomeLongBone = false;
+                for (int i = groupCount - 1; i >= mid_index; --i)
+                {
+                    //from end to mid_index => since the list is sorted
+                    bonegroup = boneGroups[i];
+                    if (bonegroup.approxLength > upper_limit)
+                    {
+                        foundSomeLongBone = true;
+                        bonegroup._lengKind = BoneGroupSumLengthKind.Long;
+                    }
+                    else
+                    {
+                        //since to list is sorted                    
+                        break;
+                    }
+                }
+                //----------------------
+                if (!foundSomeLongBone)
+                {
+                    for (int i = groupCount - 1; i >= mid_index; --i)
+                    {
+                        boneGroups[i]._lengKind = BoneGroupSumLengthKind.Long;
+                    }
+                }
+            }
+        }
+        static void Mark_ShortBones(List<BoneGroup> boneGroups)
+        {
+
+            int boneGroupsCount = boneGroups.Count;
+            if (boneGroupsCount < 2) { return; }
+            //----------------------
+            //use median ?,
             boneGroups.Sort((bg0, bg1) => bg0.approxLength.CompareTo(bg1.approxLength));
             int groupCount = boneGroups.Count;
             //median
             int mid_index = groupCount / 2;
             BoneGroup bonegroup = boneGroups[mid_index];
-            float lower_limit = bonegroup.approxLength / 4;
+            float lower_limit = bonegroup.approxLength / 2;
             for (int i = 0; i < mid_index; ++i)
             {
+                //from start to mid_index => since the list is sorted
+
                 bonegroup = boneGroups[i];
                 if (bonegroup.approxLength < lower_limit)
                 {
-                    bonegroup.toBeRemoved = true;
+                    bonegroup._lengKind = BoneGroupSumLengthKind.Short;
                 }
                 else
                 {
@@ -242,6 +311,13 @@ namespace Typography.Contours
                 }
             }
         }
+    }
+
+    enum BoneGroupSumLengthKind : byte
+    {
+        General,
+        Short,
+        Long
     }
 
     class BoneGroup
@@ -255,35 +331,32 @@ namespace Typography.Contours
         /// member count in this group
         /// </summary>
         public int count;
-
         /// <summary>
         /// approximation of summation of bone length in this group
         /// </summary>
         public float approxLength;
 
-        public float y_pos;
-        public float x_pos;
-        public float minY, maxY;
-        public float minX, maxX;
-
-
+        /// <summary>
+        /// average x pos of this group
+        /// </summary>
+        public float avg_x;
+        /// <summary>
+        /// average y pos of this group
+        /// </summary>
+        public float avg_y;
 
         public EdgeLine[] edges;
 
-        /// <summary>
-        /// marked as tobeRemoved, 
-        /// </summary>
-        public bool toBeRemoved;
+        public BoneGroupSumLengthKind _lengKind;
 
         internal readonly CentroidLine ownerCentroidLine;
         public BoneGroup(CentroidLine ownerCentroidLine)
         {
             this.ownerCentroidLine = ownerCentroidLine;
-        }
-
+        } 
         internal void CollectOutsideEdges(List<EdgeLine> tmpEdges)
         {
-            tmpEdges.Clear(); // 
+            tmpEdges.Clear();
             int index = this.startIndex;
             for (int n = this.count - 1; n >= 0; --n)
             {
@@ -294,14 +367,12 @@ namespace Typography.Contours
             }
             //
             if (tmpEdges.Count == 0) return;
-            //---------------------
-            EdgeLine[] edges = tmpEdges.ToArray();
-            this.edges = edges;
-            //find minY and maxY for vertical fit
-            float minY = float.MaxValue;
-            float maxY = float.MinValue;
-            float minX = float.MaxValue;
-            float maxX = float.MinValue;
+            this.edges = tmpEdges.ToArray();
+        }
+
+        public void CalculateBounds(ref float minX, ref float minY, ref float maxX, ref float maxY)
+        {
+
             for (int e = edges.Length - 1; e >= 0; --e)
             {
                 EdgeLine edge = edges[e];
@@ -313,19 +384,13 @@ namespace Typography.Contours
                 MyMath.FindMinMax(ref minY, ref maxY, (float)edge.PY);
                 MyMath.FindMinMax(ref minY, ref maxY, (float)edge.QY);
             }
-            //-------------------
-            this.maxY = maxY;
-            this.minY = minY;
-            //-------------------
-            this.minX = minX;
-            this.maxX = maxX;
 
         }
 
 #if DEBUG
         public override string ToString()
         {
-            return slopeKind + ",x:" + x_pos + ",y:" + y_pos + ",s:" + startIndex + ":" + count + " len:" + approxLength;
+            return slopeKind + ",x:" + avg_x + ",y:" + avg_y + ",s:" + startIndex + ":" + count + " len:" + approxLength;
         }
 #endif
     }
@@ -418,37 +483,44 @@ namespace Typography.Contours
             foreach (CentroidLine line in _lines.Values)
             {
                 List<GlyphBoneJoint> jointlist = line._joints;
+                //start with empty bone list
                 List<GlyphBone> glyphBones = line.bones;
                 int j = jointlist.Count;
 
+                if (j == 0) { continue; }
+                //
+                GlyphBoneJoint joint = jointlist[0]; //first 
+                {
+                    GlyphTriangle firstTri = joint.P_Tri;
+                    //test 3 edges, find edge that is inside
+                    //and the joint is not the same as first_pair.BoneJoint
+                    CreateTipBoneIfNeed(firstTri.e0 as InsideEdgeLine, joint, newlyCreatedBones, glyphBones);
+                    CreateTipBoneIfNeed(firstTri.e1 as InsideEdgeLine, joint, newlyCreatedBones, glyphBones);
+                    CreateTipBoneIfNeed(firstTri.e2 as InsideEdgeLine, joint, newlyCreatedBones, glyphBones);
+                }
+
                 for (int i = 0; i < j; ++i)
                 {
-                    if (i == 0)
-                    {
-                        //find connection from 
-                        //first tri of  centroid line
-                        //to other joint
-                        GlyphBoneJoint firstJoint = jointlist[i];
-                        GlyphTriangle firstTri = firstJoint.P_Tri;
-
-                        //test 3 edges, find edge that is inside
-                        //and the joint is not the same as first_pair.BoneJoint
-                        CreateTipBoneIfNeed(firstTri.e0 as InsideEdgeLine, firstJoint, newlyCreatedBones, glyphBones);
-                        CreateTipBoneIfNeed(firstTri.e1 as InsideEdgeLine, firstJoint, newlyCreatedBones, glyphBones);
-                        CreateTipBoneIfNeed(firstTri.e2 as InsideEdgeLine, firstJoint, newlyCreatedBones, glyphBones);
-                        //------------
-                    }
-
                     //for each GlyphCentroidPair                    
-                    //create bone that link the GlyphBoneJoint of the pair 
-
-                    GlyphBoneJoint joint = jointlist[i];
+                    //create bone that link the GlyphBoneJoint of the pair  
+                    joint = jointlist[i];
+                    //if (joint.dbugId > 20)
+                    //{
+                    //}
                     if (joint.TipEdgeP != null)
                     {
-
                         GlyphBone tipBone = new GlyphBone(joint, joint.TipEdgeP);
                         newlyCreatedBones.Add(tipBone);
                         glyphBones.Add(tipBone);
+                    }
+                    //----------------------------------------------------- 
+                    if (i < j - 1)
+                    {
+                        //not the last one
+                        GlyphBoneJoint nextJoint = jointlist[i + 1];
+                        GlyphBone bone = new GlyphBone(joint, nextJoint);
+                        newlyCreatedBones.Add(bone);
+                        glyphBones.Add(bone);
                     }
 
                     if (joint.TipEdgeQ != null)
@@ -457,38 +529,22 @@ namespace Typography.Contours
                         newlyCreatedBones.Add(tipBone);
                         glyphBones.Add(tipBone);
                     }
-                    //----------------------------------------------------- 
-                    if (i < j - 1)
-                    {
-                        //not the last one 
-                        //has tip end 
-                        GlyphBoneJoint nextJoint = jointlist[i + 1];
-                        GlyphBone bone = new GlyphBone(joint, nextJoint);
-                        newlyCreatedBones.Add(bone);
-                        glyphBones.Add(bone);
-                    }
-                    else
-                    {
-                        //the last one ...
-                        if (j > 1)
-                        {
-
-                            GlyphBoneJoint last_joint = jointlist[j - 1];
-                            //P
-                            GlyphTriangle lastTri = last_joint.P_Tri;
-                            CreateTipBoneIfNeed(lastTri.e0 as InsideEdgeLine, last_joint, newlyCreatedBones, glyphBones);
-                            CreateTipBoneIfNeed(lastTri.e1 as InsideEdgeLine, last_joint, newlyCreatedBones, glyphBones);
-                            CreateTipBoneIfNeed(lastTri.e2 as InsideEdgeLine, last_joint, newlyCreatedBones, glyphBones);
-
-                            // Q
-                            lastTri = last_joint.Q_Tri;
-                            CreateTipBoneIfNeed(lastTri.e0 as InsideEdgeLine, last_joint, newlyCreatedBones, glyphBones);
-                            CreateTipBoneIfNeed(lastTri.e1 as InsideEdgeLine, last_joint, newlyCreatedBones, glyphBones);
-                            CreateTipBoneIfNeed(lastTri.e2 as InsideEdgeLine, last_joint, newlyCreatedBones, glyphBones);
-
-                        }
-                    }
                 }
+
+
+                //for (int i = 1; i < j; ++i)
+                //{
+                //    joint = jointlist[i]; //first 
+                //    {
+                //        GlyphTriangle tri = joint.P_Tri;
+                //        //test 3 edges, find edge that is inside
+                //        //and the joint is not the same as first_pair.BoneJoint
+                //        CreateTipBoneIfNeed(tri.e0 as InsideEdgeLine, joint, newlyCreatedBones, glyphBones);
+                //        CreateTipBoneIfNeed(tri.e1 as InsideEdgeLine, joint, newlyCreatedBones, glyphBones);
+                //        CreateTipBoneIfNeed(tri.e2 as InsideEdgeLine, joint, newlyCreatedBones, glyphBones);
+                //    } 
+                //}
+
             }
         }
 
@@ -646,7 +702,7 @@ namespace Typography.Contours
         public static Vector2 GetHeadPosition(this CentroidLine line)
         {
             //after create bone process
-            var bones = line.bones;
+            List<GlyphBone> bones = line.bones;
             if (bones.Count == 0)
             {
                 return Vector2.Zero;

@@ -22,6 +22,7 @@ namespace Typography.Contours
         /// </summary>
         float _recentPixelScale;
         bool _useInterpreter;
+        
         public GlyphPathBuilderBase(Typeface typeface)
         {
             _typeface = typeface;
@@ -56,6 +57,8 @@ namespace Typography.Contours
         {
             //
             Glyph glyph = _typeface.GetGlyphByIndex(glyphIndex);
+
+
             this._outputGlyphPoints = glyph.GlyphPoints;
             this._outputContours = glyph.EndPoints;
 
@@ -69,10 +72,12 @@ namespace Typography.Contours
             else
             {
                 _recentPixelScale = Typeface.CalculateToPixelScale(RecentFontSizeInPixels);
+                IsSizeChanged = true;
             }
             //-------------------------------------
             FitCurrentGlyph(glyphIndex, glyph);
         }
+        protected bool IsSizeChanged { get; set; }
         protected float RecentFontSizeInPixels { get; private set; }
         protected virtual void FitCurrentGlyph(ushort glyphIndex, Glyph glyph)
         {
@@ -94,6 +99,9 @@ namespace Typography.Contours
             //read output from glyph points
             tx.Read(this._outputGlyphPoints, this._outputContours, _recentPixelScale);
         }
+
+
+
     }
 
     public static class GlyphPathBuilderExtensions

@@ -41,7 +41,7 @@ namespace SampleWinForms
         InstalledFont _selectedInstallFont;
 
         UI.DebugGlyphVisualizer debugGlyphVisualizer = new UI.DebugGlyphVisualizer();
-
+        Typography.OpenFont.ScriptLang _current_script;
 
         public Form1()
         {
@@ -56,8 +56,8 @@ namespace SampleWinForms
             //default
             //set script lang,
             //test with Thai for 'complex script' 
-
-            _devGdiTextPrinter.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;
+            _current_script = Typography.OpenFont.ScriptLangs.Latin;
+            _devGdiTextPrinter.ScriptLang = _current_script;
             _devGdiTextPrinter.PositionTechnique = PositionTechnique.OpenFont;
 
 
@@ -67,9 +67,9 @@ namespace SampleWinForms
             //----------
             txtInputChar.TextChanged += (s, e) => UpdateRenderOutput();
             //----------
+            cmbRenderChoices.Items.Add(RenderChoice.RenderWithTextPrinterAndMiniAgg);
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithMiniAgg_SingleGlyph);
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithGdiPlusPath);
-            cmbRenderChoices.Items.Add(RenderChoice.RenderWithTextPrinterAndMiniAgg);
             cmbRenderChoices.Items.Add(RenderChoice.RenderWithMsdfGen);
             cmbRenderChoices.SelectedIndex = 0;
             cmbRenderChoices.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
@@ -98,23 +98,7 @@ namespace SampleWinForms
             lstEdgeOffset.Items.Add(10f);
             lstEdgeOffset.SelectedIndex = 0;
             lstEdgeOffset.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
-            //---------- 
-            //---------- 
-            //snapX
-            //---------- 
-            lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.None);
-            lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Half);
-            lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Integer);
-            lstGlyphSnapX.SelectedIndex = 2;//integer             
-            lstGlyphSnapX.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
-            //---------- 
-            //snapY  
-            lstGlyphSnapY.Items.Add(GlyphPosPixelSnapKind.None);
-            lstGlyphSnapY.Items.Add(GlyphPosPixelSnapKind.Half);
-            lstGlyphSnapY.Items.Add(GlyphPosPixelSnapKind.Integer);
-            lstGlyphSnapY.SelectedIndex = 2;//integer
-            lstGlyphSnapY.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
-            //---------- 
+
             //share text printer to our sample textbox
             //but you can create another text printer that specific to text textbox control
             Graphics gx = this.sampleTextBox1.CreateGraphics();
@@ -141,7 +125,7 @@ namespace SampleWinForms
             chkDrawCentroidBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawGlyphBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDynamicOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
-            chkMinorOffset.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkSetPrinterLayoutForLcdSubPix.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawTriangles.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
@@ -149,16 +133,9 @@ namespace SampleWinForms
             chkDrawPerpendicularLine.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawGlyphPoint.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkTestGridFit.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkUseHorizontalFitAlign.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkWriteFitOutputToConsole.CheckedChanged += (s, e) => UpdateRenderOutput();
 
-            ////----------
-            //txtGlyphBoneCount.KeyDown += (s, e) =>
-            //{
-            //    if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
-            //};
-            //txtGlyphBoneStartAt.KeyDown += (s, e) =>
-            //{
-            //    if (e.KeyCode == Keys.Enter) UpdateRenderOutput();
-            //};
             //---------- 
             //1. create font collection             
             installedFontCollection = new InstalledFontCollection();
@@ -252,7 +229,10 @@ namespace SampleWinForms
             //string inputstr = "8";
             //string inputstr = "#";
             //string inputstr = "a";
-            string inputstr = "e";
+            //string inputstr = "e";
+            //string inputstr = "l";
+            //string inputstr = "t";
+            string inputstr = "i";
             //string inputstr = "Å";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";
@@ -262,11 +242,8 @@ namespace SampleWinForms
             //----------------
             this.txtInputChar.Text = inputstr;
             this.chkFillBackground.Checked = true;
-
-
+            _readyToRender = true;
         }
-
-
 
         enum RenderChoice
         {
@@ -280,8 +257,8 @@ namespace SampleWinForms
         void Form1_Load(object sender, EventArgs e)
         {
             this.Text = "Render with PixelFarm";
-            this.lstFontSizes.SelectedIndex = lstFontSizes.Items.Count - 3;
-            //this.lstFontSizes.SelectedIndex = 0; 
+            this.lstFontSizes.SelectedIndex = 0;// lstFontSizes.Items.Count - 3;
+
             var installedFont = lstFontList.SelectedItem as InstalledFont;
             if (installedFont != null)
             {
@@ -289,9 +266,11 @@ namespace SampleWinForms
             }
 
         }
-
+        bool _readyToRender;
         void UpdateRenderOutput()
         {
+            if (!_readyToRender) return;
+            //
             if (g == null)
             {
                 destImg = new ActualImage(800, 600, PixelFormat.ARGB32);
@@ -302,18 +281,22 @@ namespace SampleWinForms
 
                 painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
-
                 _devVxsTextPrinter = new VxsTextPrinter(painter, _openFontStore);
                 _devVxsTextPrinter.TargetCanvasPainter = painter;
-                _devVxsTextPrinter.ScriptLang = _devGdiTextPrinter.ScriptLang;
+                _devVxsTextPrinter.ScriptLang = _current_script;
                 _devVxsTextPrinter.PositionTechnique = _devGdiTextPrinter.PositionTechnique;
-                _devGdiTextPrinter.TargetGraphics = g;
+                _devGdiTextPrinter.TargetGraphics = g; 
             }
 
             if (string.IsNullOrEmpty(this.txtInputChar.Text))
             {
                 return;
             }
+
+            //test option use be used with lcd subpixel rendering.
+            //this demonstrate how we shift a pixel for subpixel rendering tech
+            _devVxsTextPrinter.UseWithLcdSubPixelRenderingTechnique = chkSetPrinterLayoutForLcdSubPix.Checked;
+
 
             var hintTech = (HintTechnique)lstHintList.SelectedItem;
 
@@ -330,9 +313,12 @@ namespace SampleWinForms
                         selectedTextPrinter.HintTechnique = hintTech;
                         selectedTextPrinter.PositionTechnique = (PositionTechnique)cmbPositionTech.SelectedItem;
 
-                        selectedTextPrinter.GlyphPosPixelSnapX = (GlyphPosPixelSnapKind)this.lstGlyphSnapX.SelectedItem;
-                        selectedTextPrinter.GlyphPosPixelSnapY = (GlyphPosPixelSnapKind)this.lstGlyphSnapY.SelectedItem;
-                        //
+#if DEBUG
+                        GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
+                        GlyphDynamicOutline.dbugActualPosToConsole = chkWriteFitOutputToConsole.Checked;
+                        GlyphDynamicOutline.dbugUseHorizontalFitValue = chkUseHorizontalFitAlign.Checked;
+#endif
+
                         selectedTextPrinter.DrawString(this.txtInputChar.Text.ToCharArray(), 0, 0);
 
                     }
@@ -349,14 +335,18 @@ namespace SampleWinForms
                         selectedTextPrinter.FontSizeInPoints = _fontSizeInPts;
                         selectedTextPrinter.HintTechnique = hintTech;
                         selectedTextPrinter.PositionTechnique = (PositionTechnique)cmbPositionTech.SelectedItem;
-                        selectedTextPrinter.GlyphPosPixelSnapX = (GlyphPosPixelSnapKind)this.lstGlyphSnapX.SelectedItem;
-                        selectedTextPrinter.GlyphPosPixelSnapY = (GlyphPosPixelSnapKind)this.lstGlyphSnapY.SelectedItem;
+
                         //test print 3 lines
+#if DEBUG
+                        GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
+                        GlyphDynamicOutline.dbugActualPosToConsole = chkWriteFitOutputToConsole.Checked;
+                        GlyphDynamicOutline.dbugUseHorizontalFitValue = chkUseHorizontalFitAlign.Checked;
+#endif
 
                         char[] printTextBuffer = this.txtInputChar.Text.ToCharArray();
                         float x_pos = 0, y_pos = 200;
                         float lineSpacingPx = selectedTextPrinter.FontLineSpacingPx;
-                        for (int i = 0; i < 3; ++i)
+                        for (int i = 0; i < 1; ++i)
                         {
                             selectedTextPrinter.DrawString(printTextBuffer, x_pos, y_pos);
                             y_pos -= lineSpacingPx;
@@ -430,7 +420,7 @@ namespace SampleWinForms
             debugGlyphVisualizer.CanvasPainter = painter;
             debugGlyphVisualizer.FillBackGround = chkFillBackground.Checked;
             debugGlyphVisualizer.DrawBorder = chkBorder.Checked;
-            debugGlyphVisualizer.OffsetMinorX = chkMinorOffset.Checked;
+
             debugGlyphVisualizer.ShowTess = chkShowTess.Checked;
             debugGlyphVisualizer.WalkTrianglesAndEdges = this.chkDrawTriangles.Checked;
             debugGlyphVisualizer.DrawEndLineHub = this.chkDrawLineHubConn.Checked;
@@ -443,7 +433,9 @@ namespace SampleWinForms
             debugGlyphVisualizer.DrawGlyphPoint = chkDrawGlyphPoint.Checked;
 
 #if DEBUG
-            Typography.Contours.GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
+            GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
+            GlyphDynamicOutline.dbugActualPosToConsole = chkWriteFitOutputToConsole.Checked;
+            GlyphDynamicOutline.dbugUseHorizontalFitValue = chkUseHorizontalFitAlign.Checked;
 #endif
 
 
@@ -451,7 +443,6 @@ namespace SampleWinForms
 
             debugGlyphVisualizer.RenderChar(testChar, (HintTechnique)lstHintList.SelectedItem);
             //---------------------------------------------------- 
-            this.txtLeftXControl.Text = debugGlyphVisualizer.MinorOffsetInfo;
 
             //--------------------------
             if (chkShowGrid.Checked)

@@ -29,6 +29,7 @@ namespace Typography.Contours
             //fit to grid 
             //1. lower
             int floor = ((int)(value / gridSize) * gridSize);
+
             //2. midpoint
             float remaining = value - floor;
             float halfGrid = gridSize / 2f;
@@ -45,15 +46,7 @@ namespace Typography.Contours
             {
                 return floor;
             }
-#if DEBUG
-            //int result = (remaining > halfGrid) ? floor + gridSize : floor;
-            ////if (result % gridSize != 0)
-            ////{
-            ////}
-            //return result;
-#else
-            return (remaining > halfGrid) ? floor + gridSize : floor;
-#endif
+
         }
         public static double AngleBetween(Vector2 vector1, Vector2 vector2)
         {
@@ -619,26 +612,37 @@ namespace Typography.Contours
 
 
         internal static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
-        internal static readonly double _15degreeToRad = MyMath.DegreesToRadians(15);
         internal static readonly double _03degreeToRad = MyMath.DegreesToRadians(3);
-        internal static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
-
-
-
-        internal static float FindDiffToFitInteger(float actualValue)
+        /// <summary>
+        /// compare d0, d1, d2 return min value by index 0 or 1 or 2
+        /// </summary>
+        /// <param name="d0"></param>
+        /// <param name="d1"></param>
+        /// <param name="d2"></param>
+        /// <returns></returns>
+        static int FindMinByIndex(double d0, double d1, double d2)
         {
-            int floor = (int)actualValue;
-            float diff = actualValue - floor;
-            if (diff >= 0.5)
+            unsafe
             {
-                //move up
-                return (floor + 1) - actualValue;
-            }
-            else
-            {
-                //move down
-                return actualValue - floor;
+                double* tmpArr = stackalloc double[3];
+                tmpArr[0] = d0;
+                tmpArr[1] = d1;
+                tmpArr[2] = d2;
+
+                int minAt = -1;
+                double currentMin = double.MaxValue;
+                for (int i = 0; i < 3; ++i)
+                {
+                    double d = tmpArr[i];
+                    if (d < currentMin)
+                    {
+                        currentMin = d;
+                        minAt = i;
+                    }
+                }
+                return minAt;
             }
         }
+
     }
 }

@@ -112,9 +112,10 @@ namespace Typography.Contours
             this.curX = latestMoveToX;
             this.curY = latestMoveToY;
 
-            if (currentCnt != null)
+            if (currentCnt != null &&
+                currentCnt.parts.Count > 0)
             {
-                this.contours.Add(currentCnt);
+                this.contours.Add(currentCnt); 
                 currentCnt = null;
             }
             //

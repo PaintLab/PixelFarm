@@ -12,7 +12,7 @@ namespace Typography.Contours
 
         public List<GlyphPart> parts = new List<GlyphPart>();
         internal List<GlyphPoint> flattenPoints; //original flatten points 
-
+        List<OutsideEdgeLine> edges;
         bool analyzed;
         bool analyzedClockDirection;
         bool isClockwise;
@@ -93,12 +93,14 @@ namespace Typography.Contours
                 //if it's negative the curve is counter-clockwise. (The result is twice the enclosed area, with a +/- convention.)
                 int j = flattenPoints.Count;
                 double total = 0;
+
+
                 for (int i = 1; i < j; ++i)
                 {
                     GlyphPoint p0 = f_points[i - 1];
                     GlyphPoint p1 = f_points[i];
                     total += (p1.OX - p0.OX) * (p1.OY + p0.OY);
-                    i += 2;
+
                 }
                 //the last one
                 {
@@ -115,10 +117,10 @@ namespace Typography.Contours
         internal void CreateGlyphEdges()
         {
             int lim = flattenPoints.Count - 1;
-            edges = new List<OutsideEdgeLine>();
             GlyphPoint p = null, q = null;
             OutsideEdgeLine edgeLine = null;
-
+            edges = new List<OutsideEdgeLine>();
+            //
             for (int i = 0; i < lim; ++i)
             {
                 //in order ...
@@ -155,9 +157,8 @@ namespace Typography.Contours
             {
                 //not found
             }
-
         }
-        List<OutsideEdgeLine> edges;
+
         internal void ApplyNewEdgeOffsetFromMasterOutline(float newEdgeOffsetFromMasterOutline)
         {
             int j = edges.Count;
@@ -166,20 +167,26 @@ namespace Typography.Contours
             {
                 edges[i].SetDynamicEdgeOffsetFromMasterOutline(newEdgeOffsetFromMasterOutline);
             }
-            //calculate edge cutpoint             
+            //calculate edge cutpoint  
             for (int i = flattenPoints.Count - 1; i >= 0; --i)
             {
                 UpdateNewEdgeCut(flattenPoints[i]);
             }
         }
-
+        /// <summary>
+        /// find bounds of new fit glyph
+        /// </summary>
+        /// <param name="minX"></param>
+        /// <param name="minY"></param>
+        /// <param name="maxX"></param>
+        /// <param name="maxY"></param>
         internal void FindBounds(ref float minX, ref float minY, ref float maxX, ref float maxY)
-        {   
+        {
             for (int i = flattenPoints.Count - 1; i >= 0; --i)
             {
                 GlyphPoint p = flattenPoints[i];
-                MyMath.FindMinMax(ref minX, ref maxX, p.newX);
-                MyMath.FindMinMax(ref minY, ref maxY, p.newY);
+                MyMath.FindMinMax(ref minX, ref maxX, p.X);
+                MyMath.FindMinMax(ref minY, ref maxY, p.Y);
             }
         }
 
@@ -198,8 +205,7 @@ namespace Typography.Contours
             Vector2 cutpoint;
             if (MyMath.FindCutPoint(e0._newDynamicMidPoint, tmp_e0_q, e1._newDynamicMidPoint, tmp_e1_p, out cutpoint))
             {
-                p.newX = cutpoint.X;
-                p.newY = cutpoint.Y;
+                p.SetNewXY(cutpoint.X, cutpoint.Y);
             }
             else
             {
