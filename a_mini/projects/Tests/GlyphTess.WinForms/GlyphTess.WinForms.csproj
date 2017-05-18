@@ -36,52 +36,52 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\DrawingGL.Text\GlyphTranslatorToPath.cs">
       <Link>DrawingGL.Text\GlyphTranslatorToPath.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\DrawingGL\CurveFlattener.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\DrawingGL\CurveFlattener.cs">
       <Link>DrawingGL\CurveFlattener.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\DrawingGL\Path.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\DrawingGL\Path.cs">
       <Link>DrawingGL\Path.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\DrawingGL\Primitives.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\DrawingGL\Primitives.cs">
       <Link>DrawingGL\Primitives.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\DrawingGL\TessTool.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\DrawingGL\TessTool.cs">
       <Link>DrawingGL\TessTool.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\GlyphPathBuilder\GlyphPathBuilder.cs">
       <Link>GlyphPathBuilder\GlyphPathBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\GlyphPathBuilderBase.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\GlyphPathBuilder\GlyphPathBuilderBase.cs">
       <Link>GlyphPathBuilder\GlyphPathBuilderBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\GlyphPathBuilder\HintTechnique.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\GlyphPathBuilder\HintTechnique.cs">
       <Link>GlyphPathBuilder\HintTechnique.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\Tesselate\ActiveRegion.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\Tesselate\ActiveRegion.cs">
       <Link>Tess\ActiveRegion.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\Tesselate\ContourVertex.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\Tesselate\ContourVertex.cs">
       <Link>Tess\ContourVertex.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\Tesselate\Dictionary.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\Tesselate\Dictionary.cs">
       <Link>Tess\Dictionary.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\Tesselate\Face.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\Tesselate\Face.cs">
       <Link>Tess\Face.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\Tesselate\HalfEdge.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\Tesselate\HalfEdge.cs">
       <Link>Tess\HalfEdge.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\Tesselate\MaxFirstList.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\Tesselate\MaxFirstList.cs">
       <Link>Tess\MaxFirstList.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\Tesselate\mesh.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\Tesselate\mesh.cs">
       <Link>Tess\mesh.cs</Link>
     </Compile>
-    <Compile Include="..\..\Shared\Tesselate\Tesselator.cs">
+    <Compile Include="..\..\PixelFarm\Typography\Demo\Shared\Tesselate\Tesselator.cs">
       <Link>Tess\Tesselator.cs</Link>
     </Compile>
     <Compile Include="Form1.cs">
@@ -115,13 +115,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
-      <Project>{c6807d05-09be-4313-9f8b-bd2d51c55819}</Project>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
+      <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
       <Name>Typography.GlyphLayout</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
-      <Project>{f7d71e61-9342-4dd7-9afd-69045f2ec98b}</Project>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
+      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenFont</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.Contours\Typography.Contours.csproj">
+      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
+      <Name>Typography.Contours</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

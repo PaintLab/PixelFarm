@@ -110,8 +110,7 @@ namespace Typography.OpenFont
                 EBLCTable fontBmpTable = ReadTableIfExists(tables, input, new EBLCTable());
                 //---------------------------------------------
                 //about truetype instruction init
-
-
+                 
 
                 //--------------------------------------------- 
                 var typeface = new Typeface(

@@ -1,5 +1,5 @@
 ﻿//MIT, 2016-2017, WinterDev
- 
+
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Collections.Generic;
@@ -100,9 +100,8 @@ namespace SampleWinForms
         public override void DrawString(char[] textBuffer, int startAt, int len, float x, float y)
         {
             UpdateGlyphLayoutSettings();
-            _outputGlyphPlans.Clear();
-            this._glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _outputGlyphPlans, null);
-
+            _outputGlyphPlans.Clear(); 
+            this._glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _outputGlyphPlans, null); 
             DrawFromGlyphPlans(_outputGlyphPlans, x, y);
         }
         void UpdateGlyphLayoutSettings()
@@ -124,7 +123,7 @@ namespace SampleWinForms
 
             //draw data in glyph plan 
             //3. render each glyph 
-            
+
             float sizeInPoints = this.FontSizeInPoints;
             float scale = _currentTypeface.CalculateToPixelScaleFromPointSize(sizeInPoints);
             //
@@ -156,8 +155,8 @@ namespace SampleWinForms
                 }
                 //------
                 //then move pen point to the position we want to draw a glyph
-                float tx = x + glyphPlan.x * scale;
-                float ty = y + glyphPlan.y * scale;
+                float tx = x + glyphPlan.ExactX;
+                float ty = y + glyphPlan.ExactY;
                 g.TranslateTransform(tx, ty);
 
                 if (FillBackground)

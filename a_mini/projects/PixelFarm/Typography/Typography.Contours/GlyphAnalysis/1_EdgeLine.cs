@@ -35,13 +35,13 @@ namespace Typography.Contours
             this._glyphPoint_P = p;
             this._glyphPoint_Q = q;
 
-
-            //new dynamic mid point is calculate from original X,Y
-
-
+            //new dynamic mid point is calculate from original X,Y 
             //-------------------------------
             //analyze angle and slope kind
             //-------------------------------  
+
+            //slope kind is evaluated
+
             SlopeAngleNoDirection = this.GetSlopeAngleNoDirection();
             if (QX == PX)
             {
@@ -57,6 +57,7 @@ namespace Typography.Contours
                 else if (SlopeAngleNoDirection < _01degreeToRad)
                 {
                     SlopeKind = LineSlopeKind.Horizontal;
+                    p.IsPartOfHorizontalEdge = q.IsPartOfHorizontalEdge = true;
                 }
                 else
                 {
@@ -82,7 +83,7 @@ namespace Typography.Contours
         /// </summary>
         public double QY { get { return this._glyphPoint_Q.OY; } }
 
-        
+
         public bool IsTip { get; internal set; }
 
         internal Vector2 GetOriginalEdgeVector()
@@ -123,6 +124,7 @@ namespace Typography.Contours
         {
             get { return !this.IsOutside; }
         }
+        //
         public bool IsUpper
         {
             get;
@@ -145,7 +147,7 @@ namespace Typography.Contours
 
         static readonly double _85degreeToRad = MyMath.DegreesToRadians(85);
         static readonly double _01degreeToRad = MyMath.DegreesToRadians(1);
-        static readonly double _90degreeToRad = MyMath.DegreesToRadians(90);
+       
         internal bool _earlyInsideAnalysis;
         internal bool ContainsGlyphPoint(GlyphPoint p)
         {
@@ -283,10 +285,8 @@ namespace Typography.Contours
         }
     }
     public class InsideEdgeLine : EdgeLine
-    {   /// <summary>
-        /// contact to another edge
-        /// </summary>
-        internal InsideEdgeLine contactToEdge;
+    {   
+        
         internal GlyphBoneJoint inside_joint;
         internal InsideEdgeLine(GlyphTriangle ownerTriangle, GlyphPoint p, GlyphPoint q)
             : base(ownerTriangle, p, q)

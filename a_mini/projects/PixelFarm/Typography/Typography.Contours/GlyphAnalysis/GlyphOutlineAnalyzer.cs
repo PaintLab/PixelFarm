@@ -10,7 +10,9 @@ namespace Typography.Contours
     public class GlyphOutlineAnalyzer
     {
         GlyphPartFlattener _glyphFlattener = new GlyphPartFlattener();
-        GlyphContourBuilder _glyphToCountor = new GlyphContourBuilder();
+        GlyphContourBuilder _glyphToContour = new GlyphContourBuilder();
+        List<Poly2Tri.Polygon> waitingHoles = new List<Poly2Tri.Polygon>();
+
         public GlyphOutlineAnalyzer()
         {
 
@@ -26,9 +28,9 @@ namespace Typography.Contours
         {
 
             //1. convert original glyph point to contour
-            _glyphToCountor.Read(glyphPoints, glyphContours);
+            _glyphToContour.Read(glyphPoints, glyphContours);
             //2. get result as list of contour
-            List<GlyphContour> contours = _glyphToCountor.GetContours();
+            List<GlyphContour> contours = _glyphToContour.GetContours();
 
             int cnt_count = contours.Count;
             //
@@ -47,7 +49,7 @@ namespace Typography.Contours
             }
             else
             {
-                return null;
+                return GlyphDynamicOutline.CreateBlankDynamicOutline();
             }
         }
 
@@ -56,48 +58,96 @@ namespace Typography.Contours
         /// </summary>
         /// <param name="flattenContours"></param>
         /// <returns></returns>
-        static GlyphDynamicOutline CreateDynamicOutline(List<GlyphContour> flattenContours)
+        GlyphDynamicOutline CreateDynamicOutline(List<GlyphContour> flattenContours)
         {
-
-            int cntCount = flattenContours.Count;
-            GlyphContour cnt = flattenContours[0]; //first contour
             //--------------------------
-            //TODO: review here, add hole or not 
-            //first polygon
-            Poly2Tri.Polygon mainPolygon = CreatePolygon(cnt.flattenPoints);//first contour        
-            bool isClockWise = cnt.IsClosewise();
-            //review is hole or not here
+            //TODO: review here, add hole or not  
+            // more than 1 contours, no hole => eg.  i, j, ;,  etc
+            // more than 1 contours, with hole => eg.  a,e ,   etc  
+
+            //closewise => not hole  
+            waitingHoles.Clear();
+            int cntCount = flattenContours.Count;
+            Poly2Tri.Polygon mainPolygon = null;
+            //
+            //this version if it is a hole=> we add it to main polygon
+            //TODO: add to more proper polygon ***
             //eg i
             //-------------------------- 
-            for (int n = 1; n < cntCount; ++n)
+            List<Poly2Tri.Polygon> otherPolygons = null;
+            for (int n = 0; n < cntCount; ++n)
             {
-                cnt = flattenContours[n];
-                //IsHole is correct after we Analyze() the glyph contour
-                Poly2Tri.Polygon subPolygon = CreatePolygon(cnt.flattenPoints);
-                //TODO: review here 
-                mainPolygon.AddHole(subPolygon);
-                //if (cnt.IsClosewise())
-                //{ 
-                //}
-                //if (cnt.IsClosewise())
-                //{
-                //    mainPolygon.AddHole(subPolygon);
-                //}
-                //else
-                //{
-                //    //TODO: review here
-                //    //the is a complete separate part                   
-                //    //eg i j has 2 part (dot over i and j etc)
-                //}
+                GlyphContour cnt = flattenContours[n];
+                if (cnt.IsClosewise())
+                {
+                    //not a hole
+                    if (mainPolygon == null)
+                    {
+                        //if we don't have mainPolygon before
+                        //this is main polygon
+                        mainPolygon = CreatePolygon(cnt.flattenPoints);
+
+                        if (waitingHoles.Count > 0)
+                        {
+                            //flush all waiting holes to the main polygon
+                            int j = waitingHoles.Count;
+                            for (int i = 0; i < j; ++i)
+                            {
+                                mainPolygon.AddHole(waitingHoles[i]);
+                            }
+                            waitingHoles.Clear();
+                        }
+                    }
+                    else
+                    {
+                        //if we already have a main polygon
+                        //then this is another sub polygon
+                        //IsHole is correct after we Analyze() the glyph contour
+                        Poly2Tri.Polygon subPolygon = CreatePolygon(cnt.flattenPoints);
+                        if (otherPolygons == null)
+                        {
+                            otherPolygons = new List<Poly2Tri.Polygon>();
+                        }
+                        otherPolygons.Add(subPolygon);
+                    }
+                }
+                else
+                {
+                    //this is a hole
+                    Poly2Tri.Polygon subPolygon = CreatePolygon(cnt.flattenPoints);
+                    if (mainPolygon == null)
+                    {
+                        //add to waiting polygon
+                        waitingHoles.Add(subPolygon);
+                    }
+                    else
+                    {
+                        //add to mainPolygon
+                        mainPolygon.AddHole(subPolygon);
+                    }
+                }
+            }
+            if (waitingHoles.Count > 0)
+            {
+                throw new NotSupportedException();
             }
             //------------------------------------------
             //2. tri angulate 
             Poly2Tri.P2T.Triangulate(mainPolygon); //that poly is triangulated 
 
+            Poly2Tri.Polygon[] subPolygons = (otherPolygons != null) ? otherPolygons.ToArray() : null;
+            if (subPolygons != null)
+            {
+                for (int i = subPolygons.Length - 1; i >= 0; --i)
+                {
+                    Poly2Tri.P2T.Triangulate(subPolygons[i]);
+                }
+            }
+
             //3. intermediate outline is used inside this lib 
             //and then convert intermediate outline to dynamic outline
             return new GlyphDynamicOutline(
-                new GlyphIntermediateOutline(mainPolygon, flattenContours));
+                new GlyphIntermediateOutline(flattenContours, mainPolygon, subPolygons));
         }
 
 
