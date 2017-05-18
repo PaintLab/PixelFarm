@@ -391,8 +391,8 @@ namespace Typography.Contours
             //------------------------------------------------- 
             Bounds controlBounds = this.OriginalGlyphControlBounds;
             //walk along the edge in the contour to generate new edge output
-            float pxscale = this._pxScale; 
-            float fineSubPixelRenderingOffset = 0;
+            float pxscale = this._pxScale;
+
 
 #if DEBUG
             //            dbugWriteLine("===begin===" + fit_x_offset);
@@ -411,7 +411,7 @@ namespace Typography.Contours
             float fit_x, fit_y;
             points[0].GetFitXY(pxscale, out fit_x, out fit_y);
             //
-            tx.MoveTo(fit_x + fineSubPixelRenderingOffset, fit_y);
+            tx.MoveTo(fit_x, fit_y);
 #if DEBUG
             // dbugWriteOutput("M", fit_x, fit_x + fit_x_offset, fit_y);
 #endif
@@ -420,7 +420,7 @@ namespace Typography.Contours
             {
                 //try to fit to grid  
                 points[i].GetFitXY(pxscale, out fit_x, out fit_y);
-                tx.LineTo(fit_x + fineSubPixelRenderingOffset, fit_y);
+                tx.LineTo(fit_x, fit_y);
 #if DEBUG
                 //for debug
                 //dbugWriteOutput("L", fit_x, fit_x + fit_x_offset, fit_y);

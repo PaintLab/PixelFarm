@@ -122,8 +122,6 @@ namespace Typography.Contours
                 glyphMeshData.dynamicOutline = dynamicOutline;
                 Bounds orgGlyphBounds = dynamicOutline.OriginalGlyphControlBounds;
 
-
-
                 _hintGlyphCollection.RegisterCachedGlyph(glyphIndex, glyphMeshData);
                 //-----------------------------------    
             }
@@ -181,6 +179,9 @@ namespace Typography.Contours
                 _hintedFontStore = value;
             }
         }
+
+        public bool UseWithLcdSubPixelRenderingTechnique { get; set; }
+
         public void SetFont(Typeface typeface, float fontSizeInPoints)
         {
             _typeface = typeface;
@@ -359,7 +360,13 @@ namespace Typography.Contours
                 float x_offset_to_fit = controlPars.avgXOffsetToFit;
                 //offset range that can produce sharp glyph (by observation)
                 //is between x_offset_to_fit - 0.3f to x_offset_to_fit + 0.3f 
+
                 float final_x = exact_x_floor + x_offset_to_fit;
+                if (UseWithLcdSubPixelRenderingTechnique)
+                {
+                    final_x += 0.33f;
+                }
+
                 outputGlyphPlanList.Add(new GlyphPlan(
                     glyphIndex,
                     final_x,
