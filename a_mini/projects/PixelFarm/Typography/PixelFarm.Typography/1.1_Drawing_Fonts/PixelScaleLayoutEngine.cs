@@ -64,7 +64,7 @@ namespace Typography.Contours
 
         public GlyphMeshStore()
         {
-         
+
         }
         public void SetHintTechnique(HintTechnique hintTech)
         {
@@ -187,7 +187,7 @@ namespace Typography.Contours
             _fontSizeInPoints = fontSizeInPoints;
         }
 
-        struct NewABC
+        struct FineABC
         {
             float pxscale;
             public short offsetX;
@@ -252,28 +252,28 @@ namespace Typography.Contours
             }
 
 
-            public float user_start_x;
-            public float user_x_max;
-            public float user_exect_endAt;
-            public int user_glyph_w;
-            public float user_x_diff;
-            public float user_c_diff;
-            /// <summary>
-            /// set actual user's xpos, then we can approximate pos fi
-            /// </summary>
-            /// <param name="user_set_xpos"></param>
-            public void SetFinalExactXPos(float user_start_x, int user_set_w)
-            {
-                this.user_start_x = user_start_x;
-                //
-                //approximate actual pixel pos
-                user_x_max = user_start_x + s_xmax;
-                this.user_glyph_w = user_set_w;
+            //public float user_start_x;
+            //public float user_x_max;
+            //public float user_exect_endAt;
+            //public int user_glyph_w;
+            //public float user_x_diff;
+            //public float user_c_diff;
+            ///// <summary>
+            ///// set actual user's xpos, then we can approximate pos fi
+            ///// </summary>
+            ///// <param name="user_set_xpos"></param>
+            //public void SetFinalExactXPos(float user_start_x, int user_set_w)
+            //{
+            //    this.user_start_x = user_start_x;
+            //    //
+            //    //approximate actual pixel pos
+            //    user_x_max = user_start_x + s_xmax;
+            //    this.user_glyph_w = user_set_w;
 
-                user_exect_endAt = user_start_x + s_advW;
-                user_c_diff = user_exect_endAt - user_x_max;
-                user_x_diff = user_start_x + user_set_w - user_exect_endAt;
-            }
+            //    user_exect_endAt = user_start_x + s_advW;
+            //    user_c_diff = user_exect_endAt - user_x_max;
+            //    user_x_diff = user_start_x + user_set_w - user_exect_endAt;
+            //}
         }
         public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
@@ -288,8 +288,8 @@ namespace Typography.Contours
             //at this state, we need exact info at this specific pxscale
             //
             _hintedFontStore.SetFont(_typeface, this._fontSizeInPoints);
-            NewABC current_ABC = new NewABC();
-            NewABC prev_ABC = new NewABC();
+            FineABC current_ABC = new FineABC();
+            FineABC prev_ABC = new FineABC();
 
             for (int i = 0; i < finalGlyphCount; ++i)
             {
@@ -369,16 +369,13 @@ namespace Typography.Contours
                 float x_offset_to_fit = controlPars.avgXOffsetToFit;
                 //offset range that can produce sharp glyph (by observation)
                 //is between x_offset_to_fit - 0.3f to x_offset_to_fit + 0.3f 
-                float final_x = exact_x_floor + x_offset_to_fit;
-
-
+                float final_x = exact_x_floor + x_offset_to_fit; 
                 outputGlyphPlanList.Add(new GlyphPlan(
                     glyphIndex,
                     final_x,
                     exact_y,
                     current_ABC.final_advW));
-                //
-                current_ABC.SetFinalExactXPos(final_x, current_ABC.final_advW);
+                // 
                 //
                 cx += current_ABC.final_advW;
                 //-----------------------------------------------
