@@ -1,11 +1,11 @@
 ﻿//MIT, 2016-2017, WinterDev
 
 using System;
-using System.Collections.Generic; 
-using Typography.OpenFont;  
+using System.Collections.Generic;
+using Typography.OpenFont;
 namespace Typography.Contours
 {
-     
+
     public class GlyphPathBuilder : GlyphPathBuilderBase
     {
         GlyphOutlineAnalyzer _fitShapeAnalyzer = new GlyphOutlineAnalyzer();
@@ -66,10 +66,25 @@ namespace Typography.Contours
                         //add more information for later scaling process
                         _latestDynamicOutline.OriginalAdvanceWidth = glyph.OriginalAdvanceWidth;
                         _latestDynamicOutline.OriginalGlyphControlBounds = glyph.Bounds;
+                        //store to our dynamic outline collection
+                        //so we can reuse it
+                        _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
+                        //-------------------
                         //
                         _latestDynamicOutline.GenerateOutput(null, Typeface.CalculateToPixelScale(RecentFontSizeInPixels));
-                        _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
+                        //-------------------
+
                     }
+                    else
+                    {
+                        if (IsSizeChanged)
+                        {
+                            _latestDynamicOutline.GenerateOutput(null, Typeface.CalculateToPixelScale(RecentFontSizeInPixels));
+                            IsSizeChanged = false;
+                        }
+                    }
+
+
                 }
             }
         }

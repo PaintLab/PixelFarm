@@ -205,7 +205,7 @@ namespace Typography.Contours
             Vector2 cutpoint;
             if (MyMath.FindCutPoint(e0._newDynamicMidPoint, tmp_e0_q, e1._newDynamicMidPoint, tmp_e1_p, out cutpoint))
             {
-                p.SetXY(cutpoint.X, cutpoint.Y);
+                p.SetNewXY(cutpoint.X, cutpoint.Y);
             }
             else
             {

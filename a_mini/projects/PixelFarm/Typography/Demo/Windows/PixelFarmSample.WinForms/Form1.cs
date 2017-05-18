@@ -98,23 +98,7 @@ namespace SampleWinForms
             lstEdgeOffset.Items.Add(10f);
             lstEdgeOffset.SelectedIndex = 0;
             lstEdgeOffset.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
-            //---------- 
-            //---------- 
-            //snapX
-            //---------- 
-            lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.None);
-            lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Half);
-            lstGlyphSnapX.Items.Add(GlyphPosPixelSnapKind.Integer);
-            lstGlyphSnapX.SelectedIndex = 0;//integer             
-            lstGlyphSnapX.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
-            //---------- 
-            //snapY  
-            lstGlyphSnapY.Items.Add(GlyphPosPixelSnapKind.None);
-            lstGlyphSnapY.Items.Add(GlyphPosPixelSnapKind.Half);
-            lstGlyphSnapY.Items.Add(GlyphPosPixelSnapKind.Integer);
-            lstGlyphSnapY.SelectedIndex = 2;//integer
-            lstGlyphSnapY.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
-            //---------- 
+
             //share text printer to our sample textbox
             //but you can create another text printer that specific to text textbox control
             Graphics gx = this.sampleTextBox1.CreateGraphics();
@@ -141,7 +125,7 @@ namespace SampleWinForms
             chkDrawCentroidBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawGlyphBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDynamicOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
-            chkMinorOffset.CheckedChanged += (s, e) => UpdateRenderOutput();
+            chkSetPrinterLayoutForLcdSubPix.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawTriangles.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
@@ -297,19 +281,22 @@ namespace SampleWinForms
 
                 painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
-
                 _devVxsTextPrinter = new VxsTextPrinter(painter, _openFontStore);
                 _devVxsTextPrinter.TargetCanvasPainter = painter;
-
                 _devVxsTextPrinter.ScriptLang = _current_script;
                 _devVxsTextPrinter.PositionTechnique = _devGdiTextPrinter.PositionTechnique;
-                _devGdiTextPrinter.TargetGraphics = g;
+                _devGdiTextPrinter.TargetGraphics = g; 
             }
 
             if (string.IsNullOrEmpty(this.txtInputChar.Text))
             {
                 return;
             }
+
+            //test option use be used with lcd subpixel rendering.
+            //this demonstrate how we shift a pixel for subpixel rendering tech
+            _devVxsTextPrinter.UseWithLcdSubPixelRenderingTechnique = chkSetPrinterLayoutForLcdSubPix.Checked;
+
 
             var hintTech = (HintTechnique)lstHintList.SelectedItem;
 
@@ -326,9 +313,6 @@ namespace SampleWinForms
                         selectedTextPrinter.HintTechnique = hintTech;
                         selectedTextPrinter.PositionTechnique = (PositionTechnique)cmbPositionTech.SelectedItem;
 
-                        selectedTextPrinter.GlyphPosPixelSnapX = (GlyphPosPixelSnapKind)this.lstGlyphSnapX.SelectedItem;
-                        selectedTextPrinter.GlyphPosPixelSnapY = (GlyphPosPixelSnapKind)this.lstGlyphSnapY.SelectedItem;
-                        //
 #if DEBUG
                         GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
                         GlyphDynamicOutline.dbugActualPosToConsole = chkWriteFitOutputToConsole.Checked;
@@ -351,8 +335,7 @@ namespace SampleWinForms
                         selectedTextPrinter.FontSizeInPoints = _fontSizeInPts;
                         selectedTextPrinter.HintTechnique = hintTech;
                         selectedTextPrinter.PositionTechnique = (PositionTechnique)cmbPositionTech.SelectedItem;
-                        selectedTextPrinter.GlyphPosPixelSnapX = (GlyphPosPixelSnapKind)this.lstGlyphSnapX.SelectedItem;
-                        selectedTextPrinter.GlyphPosPixelSnapY = (GlyphPosPixelSnapKind)this.lstGlyphSnapY.SelectedItem;
+
                         //test print 3 lines
 #if DEBUG
                         GlyphDynamicOutline.dbugTestNewGridFitting = chkTestGridFit.Checked;
@@ -437,7 +420,7 @@ namespace SampleWinForms
             debugGlyphVisualizer.CanvasPainter = painter;
             debugGlyphVisualizer.FillBackGround = chkFillBackground.Checked;
             debugGlyphVisualizer.DrawBorder = chkBorder.Checked;
-            debugGlyphVisualizer.OffsetMinorX = chkMinorOffset.Checked;
+
             debugGlyphVisualizer.ShowTess = chkShowTess.Checked;
             debugGlyphVisualizer.WalkTrianglesAndEdges = this.chkDrawTriangles.Checked;
             debugGlyphVisualizer.DrawEndLineHub = this.chkDrawLineHubConn.Checked;
@@ -460,7 +443,6 @@ namespace SampleWinForms
 
             debugGlyphVisualizer.RenderChar(testChar, (HintTechnique)lstHintList.SelectedItem);
             //---------------------------------------------------- 
-            this.txtLeftXControl.Text = debugGlyphVisualizer.MinorOffsetInfo;
 
             //--------------------------
             if (chkShowGrid.Checked)
