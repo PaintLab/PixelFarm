@@ -1,12 +1,11 @@
 ﻿//MIT, 2016-2017, WinterDev
 
-using Typography.OpenFont;
-using System.Collections.Generic;
-
+using System;
+using System.Collections.Generic; 
+using Typography.OpenFont;  
 namespace Typography.Contours
 {
-
-
+     
     public class GlyphPathBuilder : GlyphPathBuilderBase
     {
         GlyphOutlineAnalyzer _fitShapeAnalyzer = new GlyphOutlineAnalyzer();
@@ -16,12 +15,18 @@ namespace Typography.Contours
         public GlyphPathBuilder(Typeface typeface)
             : base(typeface)
         {
+
+            //for specific typeface ***
+            //float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
+            //_latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
         }
+
 #if DEBUG
         public bool dbugAlwaysDoCurveAnalysis;
 
-#endif 
-        public float LeftXControl { get; set; }
+#endif
+
+
         /// <summary>
         /// glyph dynamic edge offset
         /// </summary>
@@ -29,7 +34,7 @@ namespace Typography.Contours
 
         protected override void FitCurrentGlyph(ushort glyphIndex, Glyph glyph)
         {
-            //not use interperter so we need to scale it with our machnism
+            //not use interperter so we need to scale it with our mechanism
             //this demonstrate our auto hint engine ***
             //you can change this to your own hint engine***   
             _latestDynamicOutline = null;//reset
@@ -45,8 +50,7 @@ namespace Typography.Contours
                     {
 
                         //---------------------------------------------
-                        //test code
-
+                        //test code 
                         //GlyphContourBuilder contBuilder = new GlyphContourBuilder();
                         //contBuilder.Reset();
                         //int x = 100, y = 120, w = 700, h = 200; 
@@ -59,16 +63,20 @@ namespace Typography.Contours
                         _latestDynamicOutline = _fitShapeAnalyzer.CreateDynamicOutline(
                             this._outputGlyphPoints,
                             this._outputContours);
+                        //add more information for later scaling process
+                        _latestDynamicOutline.OriginalAdvanceWidth = glyph.OriginalAdvanceWidth;
+                        _latestDynamicOutline.OriginalGlyphControlBounds = glyph.Bounds;
+                        //
+                        _latestDynamicOutline.GenerateOutput(null, Typeface.CalculateToPixelScale(RecentFontSizeInPixels));
                         _fitoutlineCollection.Add(glyphIndex, _latestDynamicOutline);
-
-
-                        this.LeftXControl = _latestDynamicOutline.LeftControlPositionX;
                     }
                 }
             }
         }
         public override void ReadShapes(IGlyphTranslator tx)
         {
+            //read output shape from dynamic outline
+
             if (this.UseTrueTypeInstructions)
             {
                 base.ReadShapes(tx);
@@ -78,17 +86,13 @@ namespace Typography.Contours
             {
                 //read from our auto hint fitoutline
                 //need scale from original.
-                float toPixelScale = Typeface.CalculateToPixelScale(this.RecentFontSizeInPixels);
+
+                float toPixelScale = Typeface.CalculateToPixelScale(RecentFontSizeInPixels);
                 if (toPixelScale < 0)
                 {
                     toPixelScale = 1;
                 }
-                float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
-                //we will scale back later, so at this step we devide it with toPixelScale
-                _latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
-
                 _latestDynamicOutline.GenerateOutput(tx, toPixelScale);
-                this.LeftXControl = _latestDynamicOutline.LeftControlPositionX;
             }
             else
             {
@@ -103,6 +107,7 @@ namespace Typography.Contours
                 return _latestDynamicOutline;
             }
         }
+
 
     }
 }

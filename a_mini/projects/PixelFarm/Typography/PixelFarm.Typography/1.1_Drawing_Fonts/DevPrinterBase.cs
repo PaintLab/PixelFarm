@@ -9,7 +9,7 @@ namespace Typography.Rendering
     /// </summary>
     public abstract class DevTextPrinterBase
     {
-        HintTechnique _hintTech;
+        Typography.Contours.HintTechnique _hintTech;
         public DevTextPrinterBase()
         {
             FontSizeInPoints = 14;//
@@ -29,7 +29,7 @@ namespace Typography.Rendering
         public GlyphPosPixelSnapKind GlyphPosPixelSnapY { get; set; }
         //
 
-        public HintTechnique HintTechnique
+        public Typography.Contours.HintTechnique HintTechnique
         {
             get { return _hintTech; }
             set
