@@ -269,7 +269,7 @@ namespace PixelFarm.Drawing.Fonts
                 //-----------------------------------  
                 VertexStore vxs = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
                 g_x = glyphPlan.ExactX + x;
-                g_y = glyphPlan.ExactY;
+                g_y = glyphPlan.ExactY + y;
 
                 canvasPainter.SetOrigin(g_x, g_y);
                 canvasPainter.Fill(vxs);
