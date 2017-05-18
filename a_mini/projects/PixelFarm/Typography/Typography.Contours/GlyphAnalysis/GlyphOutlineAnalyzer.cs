@@ -11,6 +11,8 @@ namespace Typography.Contours
     {
         GlyphPartFlattener _glyphFlattener = new GlyphPartFlattener();
         GlyphContourBuilder _glyphToContour = new GlyphContourBuilder();
+        List<Poly2Tri.Polygon> waitingHoles = new List<Poly2Tri.Polygon>();
+
         public GlyphOutlineAnalyzer()
         {
 
@@ -56,43 +58,78 @@ namespace Typography.Contours
         /// </summary>
         /// <param name="flattenContours"></param>
         /// <returns></returns>
-        static GlyphDynamicOutline CreateDynamicOutline(List<GlyphContour> flattenContours)
+        GlyphDynamicOutline CreateDynamicOutline(List<GlyphContour> flattenContours)
         {
-
-            int cntCount = flattenContours.Count;
-            GlyphContour cnt = flattenContours[0]; //first contour 
             //--------------------------
             //TODO: review here, add hole or not  
             // more than 1 contours, no hole => eg.  i, j, ;,  etc
             // more than 1 contours, with hole => eg.  a,e ,   etc  
-            //closewise => not hole
-            Poly2Tri.Polygon mainPolygon = CreatePolygon(cnt.flattenPoints);//first contour         
+
+            //closewise => not hole  
+            waitingHoles.Clear();
+            int cntCount = flattenContours.Count;
+            Poly2Tri.Polygon mainPolygon = null;
             //
             //this version if it is a hole=> we add it to main polygon
             //TODO: add to more proper polygon ***
             //eg i
             //-------------------------- 
             List<Poly2Tri.Polygon> otherPolygons = null;
-            for (int n = 1; n < cntCount; ++n)
+            for (int n = 0; n < cntCount; ++n)
             {
-                cnt = flattenContours[n];
-                //IsHole is correct after we Analyze() the glyph contour
-                Poly2Tri.Polygon subPolygon = CreatePolygon(cnt.flattenPoints);
-
+                GlyphContour cnt = flattenContours[n];
                 if (cnt.IsClosewise())
                 {
                     //not a hole
-                    if (otherPolygons == null)
+                    if (mainPolygon == null)
                     {
-                        otherPolygons = new List<Poly2Tri.Polygon>();
+                        //if we don't have mainPolygon before
+                        //this is main polygon
+                        mainPolygon = CreatePolygon(cnt.flattenPoints);
+
+                        if (waitingHoles.Count > 0)
+                        {
+                            //flush all waiting holes to the main polygon
+                            int j = waitingHoles.Count;
+                            for (int i = 0; i < j; ++i)
+                            {
+                                mainPolygon.AddHole(waitingHoles[i]);
+                            }
+                            waitingHoles.Clear();
+                        }
                     }
-                    otherPolygons.Add(subPolygon);
+                    else
+                    {
+                        //if we already have a main polygon
+                        //then this is another sub polygon
+                        //IsHole is correct after we Analyze() the glyph contour
+                        Poly2Tri.Polygon subPolygon = CreatePolygon(cnt.flattenPoints);
+                        if (otherPolygons == null)
+                        {
+                            otherPolygons = new List<Poly2Tri.Polygon>();
+                        }
+                        otherPolygons.Add(subPolygon);
+                    }
                 }
                 else
                 {
-                    //hole, A subtraction polygon fully contained inside this polygon
-                    mainPolygon.AddHole(subPolygon);
+                    //this is a hole
+                    Poly2Tri.Polygon subPolygon = CreatePolygon(cnt.flattenPoints);
+                    if (mainPolygon == null)
+                    {
+                        //add to waiting polygon
+                        waitingHoles.Add(subPolygon);
+                    }
+                    else
+                    {
+                        //add to mainPolygon
+                        mainPolygon.AddHole(subPolygon);
+                    }
                 }
+            }
+            if (waitingHoles.Count > 0)
+            {
+                throw new NotSupportedException();
             }
             //------------------------------------------
             //2. tri angulate 
