@@ -187,93 +187,85 @@ namespace Typography.Contours
             _fontSizeInPoints = fontSizeInPoints;
         }
 
+
         struct FineABC
         {
-            float pxscale;
-            public short offsetX;
-            public short offsetY;
-            public ushort orgAdvW;
+            //this struct is used for local calculation (in a method) only
+            //not suite for storing data / pass data between methods
 
+            /// <summary>
+            /// avg x to fit value, this is calculated value from dynamic layout
+            /// </summary>
+            public float s_avg_x_ToFit;
+
+            /// <summary>
+            /// scaled offsetX
+            /// </summary>
             public float s_offsetX;
+            /// <summary>
+            /// scaled offsetY
+            /// </summary>
             public float s_offsetY;
+            /// <summary>
+            ///  scaled advance width
+            /// </summary>
             public float s_advW;
+            /// <summary>
+            /// scaled x min
+            /// </summary>
             public float s_xmin;
+            /// <summary>
+            /// scaled x max
+            /// </summary>
             public float s_xmax;
-            public GlyphControlParameters controlPars;
-            public float s_avgToFit;
-
-            public float org_a;
-            public float org_c;
-
+            /// <summary>
+            /// scaled a part
+            /// </summary>
             public float s_a;
-            public float s_a_lim;
+            /// <summary>
+            /// scaled c part
+            /// </summary>
             public float s_c;
-            //float c_per_a;
 
-
-            public int final_advW; //this is approximate final advWidth for this glyph 
+            /// <summary>
+            /// approximate final advance width for this glyph
+            /// </summary>
+            public int final_advW;
 
 
             public float c_diff;
             public float s_xmax_to_final_advance;
 
-            public void SetData(GlyphControlParameters controlPars, short offsetX, short offsetY, ushort orgAdvW)
+            public void SetData(float pxscale, GlyphControlParameters controlPars, short offsetX, short offsetY, ushort orgAdvW)
             {
-                this.controlPars = controlPars;
-                this.offsetX = offsetX;
-                this.offsetY = offsetY;
-                this.orgAdvW = orgAdvW;
-                s_avgToFit = controlPars.avgXOffsetToFit;
-                org_a = controlPars.minX;
-                org_c = orgAdvW - controlPars.maxX;
-                if (org_c < 0)
+
+                s_avg_x_ToFit = controlPars.avgXOffsetToFit;
+                float o_a = controlPars.minX;
+                float o_c = (short)(orgAdvW - controlPars.maxX);
+
+                if (o_c < 0)
                 {
-                    org_c = 0;
+                    //TODO: review here ...
+                    //? 
+                    o_c = 0;
                 }
-                //c_per_a = org_c / org_a;
-            }
-            public void SetScale(float pxscale)
-            {
-                this.pxscale = pxscale;
+                //-----------------
+                //calculate...  
                 s_offsetX = pxscale * offsetX;
                 s_offsetY = pxscale * offsetY;
                 s_advW = pxscale * orgAdvW;
                 s_xmin = pxscale * controlPars.minX;
                 s_xmax = pxscale * controlPars.maxX;
-                //--------------------------------------
-                s_a = pxscale * org_a;
-                s_c = pxscale * org_c;
-                s_a_lim = (s_a > 0) ? s_a : 0;
-                //--------------------------------------
-
-                final_advW = (int)Math.Round(s_advW); //***  
+                s_a = pxscale * o_a;
+                s_c = pxscale * o_c;
+                //--------------------------------------   
+                final_advW = ((s_advW - (int)s_advW) > 0.5) ?
+                                (int)(s_advW + 1) : //round
+                                (int)(s_advW);
                 s_xmax_to_final_advance = final_advW - s_xmax;
                 c_diff = final_advW - s_advW;
             }
 
-
-            //public float user_start_x;
-            //public float user_x_max;
-            //public float user_exect_endAt;
-            //public int user_glyph_w;
-            //public float user_x_diff;
-            //public float user_c_diff;
-            ///// <summary>
-            ///// set actual user's xpos, then we can approximate pos fi
-            ///// </summary>
-            ///// <param name="user_set_xpos"></param>
-            //public void SetFinalExactXPos(float user_start_x, int user_set_w)
-            //{
-            //    this.user_start_x = user_start_x;
-            //    //
-            //    //approximate actual pixel pos
-            //    user_x_max = user_start_x + s_xmax;
-            //    this.user_glyph_w = user_set_w;
-
-            //    user_exect_endAt = user_start_x + s_advW;
-            //    user_c_diff = user_exect_endAt - user_x_max;
-            //    user_x_diff = user_start_x + user_set_w - user_exect_endAt;
-            //}
         }
         public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
@@ -296,10 +288,8 @@ namespace Typography.Contours
                 short offsetX, offsetY, advW; //all from pen-pos
                 ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
                 GlyphControlParameters controlPars = _hintedFontStore.GetControlPars(glyphIndex);
-                current_ABC.SetData(controlPars, offsetX, offsetY, (ushort)advW);
-                current_ABC.SetScale(pxscale);
+                current_ABC.SetData(pxscale, controlPars, offsetX, offsetY, (ushort)advW);
                 //-------------------------------------------------------------
-
                 if (i > 0)
                 {
                     //ideal interspace
@@ -311,11 +301,11 @@ namespace Typography.Contours
                         //please ensure that we have interspace atleast 1px
                         //if not we just insert 1 px  ***
 
+                        //TODO: review here,
+                        //0.66f come from  2/3f of a pixel  
                         if (idealInterGlyphSpace < 1 + 0.66f)
                         {
-
-                            float fine_h = -prev_ABC.s_avgToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avgToFit;
-                            //if (fine_h < 0 && fine_h < -0.33)
+                            float fine_h = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
                             if (fine_h < 0)
                             {
                                 //need more space
@@ -334,7 +324,7 @@ namespace Typography.Contours
                         }
                         else
                         {
-                            if (-prev_ABC.s_avgToFit + current_ABC.s_avgToFit > 0.5f)
+                            if (-prev_ABC.s_avg_x_ToFit + current_ABC.s_avg_x_ToFit > 0.5f)
                             {
                                 cx--;
                             }
@@ -342,7 +332,7 @@ namespace Typography.Contours
                     }
                     else
                     {
-                        float idealInterGlyphSpace2 = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
+                        float idealInterGlyphSpace2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
 
                         if (idealInterGlyphSpace2 < 0)
                         {
@@ -369,7 +359,7 @@ namespace Typography.Contours
                 float x_offset_to_fit = controlPars.avgXOffsetToFit;
                 //offset range that can produce sharp glyph (by observation)
                 //is between x_offset_to_fit - 0.3f to x_offset_to_fit + 0.3f 
-                float final_x = exact_x_floor + x_offset_to_fit; 
+                float final_x = exact_x_floor + x_offset_to_fit;
                 outputGlyphPlanList.Add(new GlyphPlan(
                     glyphIndex,
                     final_x,
