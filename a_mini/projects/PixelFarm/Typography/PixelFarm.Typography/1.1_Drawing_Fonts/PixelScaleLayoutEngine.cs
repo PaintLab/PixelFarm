@@ -210,8 +210,9 @@ namespace Typography.Contours
             public float org_c;
 
             public float s_a;
+            public float s_a_lim;
             public float s_c;
-            float c_per_a;
+            //float c_per_a;
 
 
             public int final_advW; //this is approximate final advWidth for this glyph 
@@ -229,11 +230,11 @@ namespace Typography.Contours
                 s_avgToFit = controlPars.avgXOffsetToFit;
                 org_a = controlPars.minX;
                 org_c = orgAdvW - controlPars.maxX;
-                if(org_c < 0)
+                if (org_c < 0)
                 {
                     org_c = 0;
                 }
-                c_per_a = org_c / org_a;
+                //c_per_a = org_c / org_a;
             }
             public void SetScale(float pxscale)
             {
@@ -246,6 +247,7 @@ namespace Typography.Contours
                 //--------------------------------------
                 s_a = pxscale * org_a;
                 s_c = pxscale * org_c;
+                s_a_lim = (s_a > 0) ? s_a : 0;
                 //--------------------------------------
 
                 final_advW = (int)Math.Round(s_advW); //***  
@@ -305,16 +307,19 @@ namespace Typography.Contours
                 if (i > 0)
                 {
                     //ideal interspace
+                    //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
+                    //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
                     float idealInterGlyphSpace = prev_ABC.s_c + current_ABC.s_a;
                     if (idealInterGlyphSpace > 1 - 0.5f)
                     {
                         //please ensure that we have interspace atleast 1px
                         //if not we just insert 1 px  ***
 
-                        if (idealInterGlyphSpace < 2 - 0.33f)
+                        if (idealInterGlyphSpace < 1 + 0.66f)
                         {
 
                             float fine_h = -prev_ABC.s_avgToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avgToFit;
+                            //if (fine_h < 0 && fine_h < -0.33)
                             if (fine_h < 0)
                             {
                                 //need more space
@@ -387,14 +392,29 @@ namespace Typography.Contours
                         }
                         else
                         {
+                            if (-prev_ABC.s_avgToFit + current_ABC.s_avgToFit > 0.5f)
+                            {
+                                cx--;
+                            }
                         }
                     }
                     else
                     {
-                        if (current_ABC.s_a < -0.33)
+                        float idealInterGlyphSpace2 = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
+
+                        if (idealInterGlyphSpace2 < 0)
                         {
                             // eg i-j seq
                             cx++;
+                        }
+                        else
+                        {
+
+                            if (prev_ABC.s_xmax_to_final_advance < 0)
+                            {
+                                //f-f
+                                cx++;
+                            }
                         }
                     }
                 }
