@@ -125,7 +125,7 @@ namespace SampleWinForms
             chkDrawCentroidBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawGlyphBone.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDynamicOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
-            chkMinorOffset.CheckedChanged += (s, e) => UpdateRenderOutput();
+            //chkMinorOffset.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawTriangles.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkDrawRegenerateOutline.CheckedChanged += (s, e) => UpdateRenderOutput();
             chkBorder.CheckedChanged += (s, e) => UpdateRenderOutput();
@@ -417,7 +417,7 @@ namespace SampleWinForms
             debugGlyphVisualizer.CanvasPainter = painter;
             debugGlyphVisualizer.FillBackGround = chkFillBackground.Checked;
             debugGlyphVisualizer.DrawBorder = chkBorder.Checked;
-            debugGlyphVisualizer.OffsetMinorX = chkMinorOffset.Checked;
+            
             debugGlyphVisualizer.ShowTess = chkShowTess.Checked;
             debugGlyphVisualizer.WalkTrianglesAndEdges = this.chkDrawTriangles.Checked;
             debugGlyphVisualizer.DrawEndLineHub = this.chkDrawLineHubConn.Checked;
@@ -440,8 +440,7 @@ namespace SampleWinForms
 
             debugGlyphVisualizer.RenderChar(testChar, (HintTechnique)lstHintList.SelectedItem);
             //---------------------------------------------------- 
-            this.txtLeftXControl.Text = debugGlyphVisualizer.MinorOffsetInfo;
-
+          
             //--------------------------
             if (chkShowGrid.Checked)
             {

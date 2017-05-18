@@ -52,8 +52,6 @@
             this.sampleTextBox1 = new SampleWinForms.SampleTextBox();
             this.chkDrawGlyphBone = new System.Windows.Forms.CheckBox();
             this.chkDynamicOutline = new System.Windows.Forms.CheckBox();
-            this.txtLeftXControl = new System.Windows.Forms.TextBox();
-            this.chkMinorOffset = new System.Windows.Forms.CheckBox();
             this.chkDrawTriangles = new System.Windows.Forms.CheckBox();
             this.chkDrawRegenerateOutline = new System.Windows.Forms.CheckBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
@@ -301,24 +299,6 @@
             this.chkDynamicOutline.Text = "Show DynamicOutline";
             this.chkDynamicOutline.UseVisualStyleBackColor = true;
             // 
-            // txtLeftXControl
-            // 
-            this.txtLeftXControl.Location = new System.Drawing.Point(1006, 380);
-            this.txtLeftXControl.Name = "txtLeftXControl";
-            this.txtLeftXControl.Size = new System.Drawing.Size(217, 20);
-            this.txtLeftXControl.TabIndex = 52;
-            this.txtLeftXControl.Text = "0";
-            // 
-            // chkMinorOffset
-            // 
-            this.chkMinorOffset.AutoSize = true;
-            this.chkMinorOffset.Location = new System.Drawing.Point(1006, 357);
-            this.chkMinorOffset.Name = "chkMinorOffset";
-            this.chkMinorOffset.Size = new System.Drawing.Size(80, 17);
-            this.chkMinorOffset.TabIndex = 53;
-            this.chkMinorOffset.Text = "Offset to Fit";
-            this.chkMinorOffset.UseVisualStyleBackColor = true;
-            // 
             // chkDrawTriangles
             // 
             this.chkDrawTriangles.AutoSize = true;
@@ -443,8 +423,6 @@
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.chkDrawRegenerateOutline);
             this.Controls.Add(this.chkDrawTriangles);
-            this.Controls.Add(this.chkMinorOffset);
-            this.Controls.Add(this.txtLeftXControl);
             this.Controls.Add(this.chkDynamicOutline);
             this.Controls.Add(this.chkDrawGlyphBone);
             this.Controls.Add(this.sampleTextBox1);
@@ -503,8 +481,6 @@
         private SampleTextBox sampleTextBox1;
         private System.Windows.Forms.CheckBox chkDrawGlyphBone;
         private System.Windows.Forms.CheckBox chkDynamicOutline;
-        private System.Windows.Forms.TextBox txtLeftXControl;
-        private System.Windows.Forms.CheckBox chkMinorOffset;
         private System.Windows.Forms.CheckBox chkDrawTriangles;
         private System.Windows.Forms.CheckBox chkDrawRegenerateOutline;
         private System.Windows.Forms.TreeView treeView1;
