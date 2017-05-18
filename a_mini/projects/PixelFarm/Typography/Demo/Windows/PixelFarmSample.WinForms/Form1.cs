@@ -285,9 +285,7 @@ namespace SampleWinForms
                 _devVxsTextPrinter.TargetCanvasPainter = painter;
                 _devVxsTextPrinter.ScriptLang = _current_script;
                 _devVxsTextPrinter.PositionTechnique = _devGdiTextPrinter.PositionTechnique;
-                _devGdiTextPrinter.TargetGraphics = g;
-
-               
+                _devGdiTextPrinter.TargetGraphics = g; 
             }
 
             if (string.IsNullOrEmpty(this.txtInputChar.Text))
