@@ -392,23 +392,26 @@ namespace Typography.Contours
             Bounds controlBounds = this.OriginalGlyphControlBounds;
             //walk along the edge in the contour to generate new edge output
             float pxscale = this._pxScale;
-            float fit_x_offset = 0;
+
+
 #if DEBUG
-            dbugWriteLine("===begin===" + fit_x_offset);
-            if (!dbugUseHorizontalFitValue)
-            {
-                fit_x_offset = 0;
-            }
+            //            dbugWriteLine("===begin===" + fit_x_offset);
+            //            if (!dbugUseHorizontalFitValue)
+            //            {
+            //                fit_x_offset = 0;
+            //            }
 #endif
+
             //------------------------------------------------- 
-            fit_x_offset = 0.33f;//force, not use fit_x_offset at this step, use in debug mode
+            //fineSubPixelRenderingOffset = 0.33f;
+
             //------------------------------------------------- 
-            bool useGridFit = EnableGridFit;
+
             //TODO: review here 
             float fit_x, fit_y;
             points[0].GetFitXY(pxscale, out fit_x, out fit_y);
             //
-            tx.MoveTo(fit_x + fit_x_offset, fit_y);
+            tx.MoveTo(fit_x, fit_y);
 #if DEBUG
             // dbugWriteOutput("M", fit_x, fit_x + fit_x_offset, fit_y);
 #endif
@@ -417,7 +420,7 @@ namespace Typography.Contours
             {
                 //try to fit to grid  
                 points[i].GetFitXY(pxscale, out fit_x, out fit_y);
-                tx.LineTo(fit_x + fit_x_offset, fit_y);
+                tx.LineTo(fit_x, fit_y);
 #if DEBUG
                 //for debug
                 //dbugWriteOutput("L", fit_x, fit_x + fit_x_offset, fit_y);
@@ -426,11 +429,9 @@ namespace Typography.Contours
             //close 
             tx.CloseContour();
 #if DEBUG
-            dbugWriteLine("===end===");
+            //dbugWriteLine("===end===");
 #endif
         }
-
-
 #if DEBUG
         void dbugWriteLine(string text)
         {

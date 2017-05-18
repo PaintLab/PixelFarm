@@ -62,6 +62,7 @@
             this.chkTestGridFit = new System.Windows.Forms.CheckBox();
             this.chkWriteFitOutputToConsole = new System.Windows.Forms.CheckBox();
             this.chkUseHorizontalFitAlign = new System.Windows.Forms.CheckBox();
+            this.chkSetPrinterLayoutForLcdSubPix = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -408,11 +409,22 @@
             this.chkUseHorizontalFitAlign.Text = "Use H_Fit Align";
             this.chkUseHorizontalFitAlign.UseVisualStyleBackColor = true;
             // 
+            // chkSetPrinterLayoutForLcdSubPix
+            // 
+            this.chkSetPrinterLayoutForLcdSubPix.AutoSize = true;
+            this.chkSetPrinterLayoutForLcdSubPix.Location = new System.Drawing.Point(885, 294);
+            this.chkSetPrinterLayoutForLcdSubPix.Name = "chkSetPrinterLayoutForLcdSubPix";
+            this.chkSetPrinterLayoutForLcdSubPix.Size = new System.Drawing.Size(130, 17);
+            this.chkSetPrinterLayoutForLcdSubPix.TabIndex = 65;
+            this.chkSetPrinterLayoutForLcdSubPix.Text = "Layout For LcdSubPix";
+            this.chkSetPrinterLayoutForLcdSubPix.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1393, 857);
+            this.Controls.Add(this.chkSetPrinterLayoutForLcdSubPix);
             this.Controls.Add(this.chkUseHorizontalFitAlign);
             this.Controls.Add(this.chkWriteFitOutputToConsole);
             this.Controls.Add(this.chkTestGridFit);
@@ -491,6 +503,7 @@
         private System.Windows.Forms.CheckBox chkTestGridFit;
         private System.Windows.Forms.CheckBox chkWriteFitOutputToConsole;
         private System.Windows.Forms.CheckBox chkUseHorizontalFitAlign;
+        private System.Windows.Forms.CheckBox chkSetPrinterLayoutForLcdSubPix;
     }
 }
 
