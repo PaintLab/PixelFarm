@@ -36,7 +36,6 @@ namespace PixelFarm.Drawing.Fonts
             this.canvasPainter = canvasPainter;
             this._fontLoader = fontLoader;
 
-
             _glyphMeshStore = new GlyphMeshStore();
             //
             _pxScaleEngine = new PixelScaleLayoutEngine();
@@ -53,6 +52,17 @@ namespace PixelFarm.Drawing.Fonts
         void RegisterTypeface(InstalledFont instFont, Typeface typeface)
         {
             _cachedTypefaces[instFont] = typeface;
+        }
+        /// <summary>
+        /// for layout that use with our  lcd subpixel rendering technique 
+        /// </summary>
+        public bool UseWithLcdSubPixelRenderingTechnique
+        {
+            get { return _pxScaleEngine.UseWithLcdSubPixelRenderingTechnique; }
+            set
+            {
+                _pxScaleEngine.UseWithLcdSubPixelRenderingTechnique = value;
+            }
         }
         public void ChangeFont(RequestFont font)
         {
