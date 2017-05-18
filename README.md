@@ -62,7 +62,13 @@ Hardware and Software 2D Rendering Library
 
 
 
-	---
+	--- 
+	
+![autofit_hfit01](https://cloud.githubusercontent.com/assets/7447159/26182259/282de0f4-3ba1-11e7-83ab-84ac1911526d.png)
+
+ 
+
+---
  
 License:
 
