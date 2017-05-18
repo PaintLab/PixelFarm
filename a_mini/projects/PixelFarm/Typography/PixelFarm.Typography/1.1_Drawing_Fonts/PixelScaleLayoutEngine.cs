@@ -302,9 +302,8 @@ namespace Typography.Contours
                         //please ensure that we have interspace atleast 1px
                         //if not we just insert 1 px  ***
 
-                        //TODO: review here,
-                        //0.66f come from  2/3f of a pixel  
-                        if (idealInterGlyphSpace < 1 + 0.66f)
+                        //TODO: review here,                       
+                        if (idealInterGlyphSpace < 1 + 0.33f)
                         {
                             float fine_h = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
                             if (fine_h < 0)
@@ -316,7 +315,7 @@ namespace Typography.Contours
                             else
                             {
 
-                                if (fine_h > 1)
+                                if (fine_h > 1.33)
                                 {
                                     //o-i
                                     cx -= 1;
@@ -325,6 +324,8 @@ namespace Typography.Contours
                         }
                         else
                         {
+                            //q-u
+
                             if (-prev_ABC.s_avg_x_ToFit + current_ABC.s_avg_x_ToFit > 0.5f)
                             {
                                 cx--;
