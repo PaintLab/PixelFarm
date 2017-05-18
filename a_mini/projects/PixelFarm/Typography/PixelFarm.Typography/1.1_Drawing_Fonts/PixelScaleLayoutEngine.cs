@@ -64,11 +64,7 @@ namespace Typography.Contours
 
         public GlyphMeshStore()
         {
-            //---------------- 
-            //float offsetLenFromMasterOutline = GlyphDynamicEdgeOffset;
-            ////we will scale back later, so at this step we devide it with toPixelScale
-            //_latestDynamicOutline.SetDynamicEdgeOffsetFromMasterOutline(offsetLenFromMasterOutline / toPixelScale);
-
+         
         }
         public void SetHintTechnique(HintTechnique hintTech)
         {
@@ -334,61 +330,7 @@ namespace Typography.Contours
                                     //o-i
                                     cx -= 1;
                                 }
-
-
                             }
-                            //float diff1 = current_ABC.s_a + prev_ABC.c_diff;
-                            //if (diff1 < 0)
-                            //{
-                            //    //need more space
-                            //    //i-o
-                            //    cx += 1;
-                            //}
-                            //else
-                            //{
-                            //    float test0 = current_ABC.s_a + prev_ABC.c_diff;
-                            //    if (test0 > 1)
-                            //    {
-
-                            //        cx -= 1;
-                            //    }
-                            //    else
-                            //    {
-                            //        //i-i
-                            //        //o-o
-                            //        //o-i
-
-                            //        //if ((prev_ABC.user_c_diff + current_ABC.s_a) > 1.1f)
-                            //        //{
-                            //        //    //o-i
-                            //        //    cx -= 1;
-                            //        //}
-                            //        //else
-                            //        //{
-                            //        float fine_h = -prev_ABC.s_avgToFit + prev_ABC.c_diff + current_ABC.s_a;
-                            //        //if (fine_h < 0)
-                            //        //{
-                            //        //    cx -= 1;
-                            //        //}
-
-                            //        //if (prev_ABC.c_diff * 2 < current_ABC.s_a)
-                            //        //{
-                            //        //    cx += 1;
-                            //        //}
-                            //        if (fine_h > 1.1f)
-                            //        {
-                            //            //o-i
-                            //            cx -= 1;
-                            //        }
-                            //        //}
-                            //        //Console.WriteLine("avg:" + prev_ABC.s_avgToFit +
-                            //        //        ", c_diff:" + prev_ABC.c_diff +
-                            //        //        ", s_a:" + current_ABC.s_a +
-                            //        //        ", need:" + (prev_ABC.c_diff - prev_ABC.s_avgToFit) +
-                            //        //        ", test0:" + test0);
-
-                            //    }
-                            //}
                         }
                         else
                         {
