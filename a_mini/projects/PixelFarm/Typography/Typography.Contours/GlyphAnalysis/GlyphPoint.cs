@@ -119,7 +119,7 @@ namespace Typography.Contours
             y = (this.newY * pxscale) + _adjust_fit_y;
         }
 
-        internal void SetXY(float x, float y)
+        internal void SetNewXY(float x, float y)
         {
             this.newX = x;
             this.newY = y;
