@@ -353,9 +353,7 @@ namespace Typography.Contours
         public BoneGroup(CentroidLine ownerCentroidLine)
         {
             this.ownerCentroidLine = ownerCentroidLine;
-        }
-
-
+        } 
         internal void CollectOutsideEdges(List<EdgeLine> tmpEdges)
         {
             tmpEdges.Clear();

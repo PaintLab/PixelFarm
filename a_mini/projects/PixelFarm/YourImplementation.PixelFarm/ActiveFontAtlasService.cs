@@ -64,7 +64,7 @@ namespace PixelFarm.DrawingGL
                 {
                     //creationParams.hintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction;
                     //creationParams.hintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction_VerticalOnly;
-                    creationParams.hintTechnique = Typography.Rendering.HintTechnique.CustomAutoFit;
+                    creationParams.hintTechnique = Typography.Contours.HintTechnique.CustomAutoFit;
                     
                 }
                 //

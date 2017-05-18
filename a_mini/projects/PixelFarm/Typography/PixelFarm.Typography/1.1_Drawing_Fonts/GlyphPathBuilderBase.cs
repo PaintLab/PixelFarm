@@ -56,6 +56,8 @@ namespace Typography.Contours
         {
             //
             Glyph glyph = _typeface.GetGlyphByIndex(glyphIndex);
+            
+
             this._outputGlyphPoints = glyph.GlyphPoints;
             this._outputContours = glyph.EndPoints;
 
@@ -94,6 +96,9 @@ namespace Typography.Contours
             //read output from glyph points
             tx.Read(this._outputGlyphPoints, this._outputContours, _recentPixelScale);
         }
+
+
+
     }
 
     public static class GlyphPathBuilderExtensions

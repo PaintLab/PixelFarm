@@ -26,7 +26,7 @@ namespace SampleWinForms.UI
         {
             _printer = printer;
         }
-        
+
         public float X { get; set; }
         public float Y { get; set; }
         public void SetCharIndexFromPos(float x, float y)
@@ -73,7 +73,7 @@ namespace SampleWinForms.UI
                 {
                     UserCharToGlyphIndexMap map = userCharToGlyphIndexMap[caret_index - 1];
                     GlyphPlan p = glyphPlans[map.glyphIndexListOffset_plus1 + map.len - 2];
-                    _printer.DrawCaret(X + ((p.x + p.advX) * toPxScale), this.Y);
+                    _printer.DrawCaret(X + p.ExactRight, this.Y);
                 }
             }
             else
