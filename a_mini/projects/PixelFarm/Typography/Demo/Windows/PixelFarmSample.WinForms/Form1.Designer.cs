@@ -50,14 +50,8 @@
             this.lstHintList = new System.Windows.Forms.ListBox();
             this.chkShowSampleTextBox = new System.Windows.Forms.CheckBox();
             this.sampleTextBox1 = new SampleWinForms.SampleTextBox();
-            this.lstGlyphSnapX = new System.Windows.Forms.ListBox();
-            this.lstGlyphSnapY = new System.Windows.Forms.ListBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.chkDrawGlyphBone = new System.Windows.Forms.CheckBox();
             this.chkDynamicOutline = new System.Windows.Forms.CheckBox();
-            this.txtLeftXControl = new System.Windows.Forms.TextBox();
-            this.chkMinorOffset = new System.Windows.Forms.CheckBox();
             this.chkDrawTriangles = new System.Windows.Forms.CheckBox();
             this.chkDrawRegenerateOutline = new System.Windows.Forms.CheckBox();
             this.treeView1 = new System.Windows.Forms.TreeView();
@@ -283,40 +277,6 @@
             this.sampleTextBox1.TabIndex = 40;
             this.sampleTextBox1.Visible = false;
             // 
-            // lstGlyphSnapX
-            // 
-            this.lstGlyphSnapX.FormattingEnabled = true;
-            this.lstGlyphSnapX.Location = new System.Drawing.Point(884, 320);
-            this.lstGlyphSnapX.Name = "lstGlyphSnapX";
-            this.lstGlyphSnapX.Size = new System.Drawing.Size(120, 69);
-            this.lstGlyphSnapX.TabIndex = 43;
-            // 
-            // lstGlyphSnapY
-            // 
-            this.lstGlyphSnapY.FormattingEnabled = true;
-            this.lstGlyphSnapY.Location = new System.Drawing.Point(884, 421);
-            this.lstGlyphSnapY.Name = "lstGlyphSnapY";
-            this.lstGlyphSnapY.Size = new System.Drawing.Size(120, 69);
-            this.lstGlyphSnapY.TabIndex = 44;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(882, 306);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 13);
-            this.label1.TabIndex = 45;
-            this.label1.Text = "SnapX";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(882, 405);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(39, 13);
-            this.label3.TabIndex = 46;
-            this.label3.Text = "SnapY";
-            // 
             // chkDrawGlyphBone
             // 
             this.chkDrawGlyphBone.AutoSize = true;
@@ -338,24 +298,6 @@
             this.chkDynamicOutline.TabIndex = 51;
             this.chkDynamicOutline.Text = "Show DynamicOutline";
             this.chkDynamicOutline.UseVisualStyleBackColor = true;
-            // 
-            // txtLeftXControl
-            // 
-            this.txtLeftXControl.Location = new System.Drawing.Point(1006, 380);
-            this.txtLeftXControl.Name = "txtLeftXControl";
-            this.txtLeftXControl.Size = new System.Drawing.Size(217, 20);
-            this.txtLeftXControl.TabIndex = 52;
-            this.txtLeftXControl.Text = "0";
-            // 
-            // chkMinorOffset
-            // 
-            this.chkMinorOffset.AutoSize = true;
-            this.chkMinorOffset.Location = new System.Drawing.Point(1006, 357);
-            this.chkMinorOffset.Name = "chkMinorOffset";
-            this.chkMinorOffset.Size = new System.Drawing.Size(80, 17);
-            this.chkMinorOffset.TabIndex = 53;
-            this.chkMinorOffset.Text = "Offset to Fit";
-            this.chkMinorOffset.UseVisualStyleBackColor = true;
             // 
             // chkDrawTriangles
             // 
@@ -481,14 +423,8 @@
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.chkDrawRegenerateOutline);
             this.Controls.Add(this.chkDrawTriangles);
-            this.Controls.Add(this.chkMinorOffset);
-            this.Controls.Add(this.txtLeftXControl);
             this.Controls.Add(this.chkDynamicOutline);
             this.Controls.Add(this.chkDrawGlyphBone);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.lstGlyphSnapY);
-            this.Controls.Add(this.lstGlyphSnapX);
             this.Controls.Add(this.sampleTextBox1);
             this.Controls.Add(this.chkShowSampleTextBox);
             this.Controls.Add(this.lstHintList);
@@ -543,14 +479,8 @@
         private System.Windows.Forms.ListBox lstHintList;
         private System.Windows.Forms.CheckBox chkShowSampleTextBox;
         private SampleTextBox sampleTextBox1;
-        private System.Windows.Forms.ListBox lstGlyphSnapX;
-        private System.Windows.Forms.ListBox lstGlyphSnapY;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckBox chkDrawGlyphBone;
         private System.Windows.Forms.CheckBox chkDynamicOutline;
-        private System.Windows.Forms.TextBox txtLeftXControl;
-        private System.Windows.Forms.CheckBox chkMinorOffset;
         private System.Windows.Forms.CheckBox chkDrawTriangles;
         private System.Windows.Forms.CheckBox chkDrawRegenerateOutline;
         private System.Windows.Forms.TreeView treeView1;

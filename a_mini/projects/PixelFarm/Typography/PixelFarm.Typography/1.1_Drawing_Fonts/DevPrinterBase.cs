@@ -24,10 +24,6 @@ namespace Typography.Rendering
         public float FontDescedingPx { get; set; }
         public float FontLineGapPx { get; set; }
         public float FontLineSpacingPx { get; set; }
-        //
-        public GlyphPosPixelSnapKind GlyphPosPixelSnapX { get; set; }
-        public GlyphPosPixelSnapKind GlyphPosPixelSnapY { get; set; }
-        //
 
         public Typography.Contours.HintTechnique HintTechnique
         {
