@@ -200,8 +200,8 @@ namespace PixelFarm.Drawing.Fonts
             //---------------------------------------------------
             //consider use cached glyph, to increase performance 
 
-            GlyphPosPixelSnapKind x_snap = this.GlyphPosPixelSnapX;
-            GlyphPosPixelSnapKind y_snap = this.GlyphPosPixelSnapY;
+            //GlyphPosPixelSnapKind x_snap = this.GlyphPosPixelSnapX;
+            //GlyphPosPixelSnapKind y_snap = this.GlyphPosPixelSnapY;
             float g_x = 0;
             float g_y = 0;
             float baseY = (int)y;
@@ -217,33 +217,6 @@ namespace PixelFarm.Drawing.Fonts
                 VertexStore vxs = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
                 g_x = (float)(glyphPlan.x * scale + x);
                 g_y = (float)glyphPlan.y * scale;
-
-                switch (x_snap)
-                {
-                    default: throw new NotSupportedException();
-                    case GlyphPosPixelSnapKind.Integer:
-                        g_x = GlyphLayoutExtensions.SnapToFitInteger(g_x);
-                        break;
-                    case GlyphPosPixelSnapKind.Half:
-                        g_x = GlyphLayoutExtensions.SnapHalf(g_x);
-                        break;
-                    case GlyphPosPixelSnapKind.None:
-                        break;
-                }
-                switch (y_snap)
-                {
-                    default: throw new NotSupportedException();
-                    case GlyphPosPixelSnapKind.Integer:
-                        g_y = baseY + GlyphLayoutExtensions.SnapToFitInteger(g_y);   //use baseY not y
-                        break;
-                    case GlyphPosPixelSnapKind.Half:
-                        g_y = baseY + GlyphLayoutExtensions.SnapHalf(g_y);
-                        break;
-                    case GlyphPosPixelSnapKind.None:
-                        //use Y not baseY
-                        g_y = (float)y + g_y;
-                        break;
-                }
 
                 canvasPainter.SetOrigin(g_x, g_y);
                 canvasPainter.Fill(vxs);
@@ -272,9 +245,6 @@ namespace PixelFarm.Drawing.Fonts
             _glyphMeshStore.SetFont(_currentTypeface, fontSizePoint);
             //_hintGlyphCollection.SetCacheInfo(typeface, fontSizePoint, this.HintTechnique);
             //---------------------------------------------------
-            GlyphPosPixelSnapKind x_snap = this.GlyphPosPixelSnapX;
-            GlyphPosPixelSnapKind y_snap = this.GlyphPosPixelSnapY;
-
 
             float g_x = 0;
             float g_y = 0;
@@ -290,32 +260,6 @@ namespace PixelFarm.Drawing.Fonts
                 VertexStore vxs = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
                 g_x = glyphPlan.ExactX + x;
                 g_y = glyphPlan.ExactY;
-                switch (x_snap)
-                {
-                    default: throw new NotSupportedException();
-                    case GlyphPosPixelSnapKind.Integer:
-                        g_x = GlyphLayoutExtensions.SnapToFitInteger(g_x);
-                        break;
-                    case GlyphPosPixelSnapKind.Half:
-                        g_x = GlyphLayoutExtensions.SnapHalf(g_x);
-                        break;
-                    case GlyphPosPixelSnapKind.None:
-                        break;
-                }
-                switch (y_snap)
-                {
-                    default: throw new NotSupportedException();
-                    case GlyphPosPixelSnapKind.Integer:
-                        g_y = baseY + GlyphLayoutExtensions.SnapToFitInteger(g_y);   //use baseY not y
-                        break;
-                    case GlyphPosPixelSnapKind.Half:
-                        g_y = baseY + GlyphLayoutExtensions.SnapHalf(g_y);
-                        break;
-                    case GlyphPosPixelSnapKind.None:
-                        //use Y not baseY
-                        g_y = (float)y + g_y;
-                        break;
-                }
 
                 canvasPainter.SetOrigin(g_x, g_y);
                 canvasPainter.Fill(vxs);

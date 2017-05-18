@@ -715,18 +715,6 @@ namespace Typography.TextLayout
     }
 
     /// <summary>
-    /// how to pos a glyph on specific point
-    /// </summary>
-    public enum GlyphPosPixelSnapKind : byte
-    {
-        Integer,//default
-        Half,
-        None
-    }
-
-
-
-    /// <summary>
     /// glyph position stream
     /// </summary>
     class GlyphPosStream : IGlyphPositions
