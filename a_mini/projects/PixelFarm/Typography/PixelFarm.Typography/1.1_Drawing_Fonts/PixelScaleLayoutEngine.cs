@@ -297,59 +297,78 @@ namespace Typography.Contours
                     //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
                     //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
                     float idealInterGlyphSpace = prev_ABC.s_c + current_ABC.s_a;
-                    if (idealInterGlyphSpace > 1 - 0.5f)
+                    float sum2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+
+                    if (idealInterGlyphSpace > 1 - 0.33f)
                     {
                         //please ensure that we have interspace atleast 1px
                         //if not we just insert 1 px  ***
 
+                        float prev_offset = -prev_ABC.s_avg_x_ToFit;
+                        float current_offset = current_ABC.s_avg_x_ToFit;
+                        float sum = prev_offset + current_offset;
+                        //sum = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+                        if (sum >= 0.33f)
+                        {
+                            cx -= 1;
+                        }
+                        else if (sum <= -0.33f)
+                        {
+                            cx += 1;
+                        }
                         //TODO: review here,                       
-                        if (idealInterGlyphSpace < 1 + 0.33f)
-                        {
-                            float fine_h = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
-                            if (fine_h < 0)
-                            {
-                                //need more space
-                                //i-o
-                                cx += 1;
-                            }
-                            else
-                            {
+                        //if (idealInterGlyphSpace < 1 + 0.33f)
+                        //{
+                        //    float fine_h = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+                        //    if (fine_h < 0)
+                        //    {
+                        //        //need more space
+                        //        //i-o
+                        //        cx += 1;
+                        //    }
+                        //    else
+                        //    {
 
-                                if (fine_h > 1.33)
-                                {
-                                    //o-i
-                                    cx -= 1;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            //q-u
+                        //        if (fine_h > 1.33)
+                        //        {
+                        //            //o-i
+                        //            cx -= 1;
+                        //        }
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    //q-u
 
-                            if (-prev_ABC.s_avg_x_ToFit + current_ABC.s_avg_x_ToFit > 0.5f)
-                            {
-                                cx--;
-                            }
-                        }
+                        //    if (-prev_ABC.s_avg_x_ToFit + current_ABC.s_avg_x_ToFit > 0.5f)
+                        //    {
+                        //        cx--;
+                        //    }
+                        //}
                     }
                     else
                     {
-                        float idealInterGlyphSpace2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
 
-                        if (idealInterGlyphSpace2 < 0)
-                        {
-                            // eg i-j seq
-                            cx++;
-                        }
-                        else
-                        {
+                        float prev_offset = -prev_ABC.s_avg_x_ToFit;
+                        float current_offset = current_ABC.s_avg_x_ToFit;
+                        float sum = prev_offset + current_offset;
 
-                            if (prev_ABC.s_xmax_to_final_advance < 0)
-                            {
-                                //f-f
-                                cx++;
-                            }
-                        }
+                        //float idealInterGlyphSpace2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+
+                        //if (idealInterGlyphSpace2 < 0)
+                        //{
+                        //    // eg i-j seq
+                        //    cx++;
+                        //}
+                        //else
+                        //{
+
+                        //    if (prev_ABC.s_xmax_to_final_advance < 0)
+                        //    {
+                        //        //f-f
+                        //        cx++;
+                        //    }
+                        //}
                     }
                 }
                 //------------------------------------------------------------- 
