@@ -248,7 +248,7 @@ namespace Typography.Contours
                 {
                     //TODO: review here ...
                     //? 
-                    o_c = 0;
+                    //o_c = 0;
                 }
                 //-----------------
                 //calculate...  
@@ -297,58 +297,139 @@ namespace Typography.Contours
                     //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
                     //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
                     float idealInterGlyphSpace = prev_ABC.s_c + current_ABC.s_a;
-                    if (idealInterGlyphSpace > 1 - 0.5f)
+                    float sum2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+
+                    if (idealInterGlyphSpace > 1 - 0.33f)
                     {
                         //please ensure that we have interspace atleast 1px
                         //if not we just insert 1 px  ***
 
-                        //TODO: review here,
-                        //0.66f come from  2/3f of a pixel  
-                        if (idealInterGlyphSpace < 1 + 0.66f)
-                        {
-                            float fine_h = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
-                            if (fine_h < 0)
-                            {
-                                //need more space
-                                //i-o
-                                cx += 1;
-                            }
-                            else
-                            {
+                        float prev_offset = -prev_ABC.s_avg_x_ToFit;
+                        float current_offset = current_ABC.s_avg_x_ToFit;
+                        //float sum = prev_offset + current_offset + prev_ABC.s_xmax_to_final_advance;
+                        //sum = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+                        float sum = prev_offset + current_offset + prev_ABC.c_diff;
+                        float sum3 = idealInterGlyphSpace + sum;
 
-                                if (fine_h > 1)
-                                {
-                                    //o-i
-                                    cx -= 1;
-                                }
-                            }
+                        float diff1 = sum3 - idealInterGlyphSpace;
+
+                        if (sum3 <= 1-0.33f)
+                        {
+                            cx += 1;
+                        }
+                        else if (sum3 >= 1.5)
+                        {
+                            cx--;
                         }
                         else
                         {
-                            if (-prev_ABC.s_avg_x_ToFit + current_ABC.s_avg_x_ToFit > 0.5f)
-                            {
-                                cx--;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        float idealInterGlyphSpace2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
 
-                        if (idealInterGlyphSpace2 < 0)
+                        }
+
+
+                        //if (sum >= 0.33f)
+                        //{
+                        //    cx -= 1;
+                        //}
+                        //else if (sum <= -0.33f)
+                        //{
+                        //    cx += 1;
+                        //}
+                        //else if (sum3 >= 1.5)
+                        //{
+                        //    cx--;
+                        //}
+                        //TODO: review here,                       
+                        //if (idealInterGlyphSpace < 1 + 0.33f)
+                        //{
+                        //    float fine_h = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+                        //    if (fine_h < 0)
+                        //    {
+                        //        //need more space
+                        //        //i-o
+                        //        cx += 1;
+                        //    }
+                        //    else
+                        //    {
+
+                        //        if (fine_h > 1.33)
+                        //        {
+                        //            //o-i
+                        //            cx -= 1;
+                        //        }
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    //q-u
+
+                        //    if (-prev_ABC.s_avg_x_ToFit + current_ABC.s_avg_x_ToFit > 0.5f)
+                        //    {
+                        //        cx--;
+                        //    }
+                        //}
+                    }
+                    else if (idealInterGlyphSpace < 0)
+                    {
+                        //request small 
+                        float prev_offset = -prev_ABC.s_avg_x_ToFit;
+                        float current_offset = current_ABC.s_avg_x_ToFit;
+                        float sum = prev_offset + current_offset;
+                        float sum3 = idealInterGlyphSpace + sum;
+                        if (sum >= 0.33)
                         {
-                            // eg i-j seq
+                            //f-o
+                            cx--;
+                        }
+                        else if (sum <= -0.33)
+                        {
+                            //f-f
+                            //fo
                             cx++;
                         }
                         else
                         {
-
-                            if (prev_ABC.s_xmax_to_final_advance < 0)
-                            {
-                                //f-f
-                                cx++;
-                            }
+                            //t-t
                         }
+                    }
+                    else
+                    {
+                        //request small 
+                        float prev_offset = -prev_ABC.s_avg_x_ToFit;
+                        float current_offset = current_ABC.s_avg_x_ToFit;
+                        float sum = prev_offset + current_offset;
+                        float sum3 = idealInterGlyphSpace + sum;
+
+                        if (sum >= 0.33)
+                        {
+                            //f-o
+                            cx--;
+                        }
+                        else if (sum <= -0.33)
+                        {
+                            //f-f
+                            cx++;
+                        }
+                        else
+                        {
+                            //t-t
+                        }
+                        //float idealInterGlyphSpace2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+
+                        //if (idealInterGlyphSpace2 < 0)
+                        //{
+                        //    // eg i-j seq
+                        //    cx++;
+                        //}
+                        //else
+                        //{
+
+                        //    if (prev_ABC.s_xmax_to_final_advance < 0)
+                        //    {
+                        //        //f-f
+                        //        cx++;
+                        //    }
+                        //}
                     }
                 }
                 //------------------------------------------------------------- 
