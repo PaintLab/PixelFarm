@@ -248,7 +248,7 @@ namespace Typography.Contours
                 {
                     //TODO: review here ...
                     //? 
-                    o_c = 0;
+                    //o_c = 0;
                 }
                 //-----------------
                 //calculate...  
@@ -306,16 +306,39 @@ namespace Typography.Contours
 
                         float prev_offset = -prev_ABC.s_avg_x_ToFit;
                         float current_offset = current_ABC.s_avg_x_ToFit;
-                        float sum = prev_offset + current_offset;
+                        //float sum = prev_offset + current_offset + prev_ABC.s_xmax_to_final_advance;
                         //sum = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
-                        if (sum >= 0.33f)
-                        {
-                            cx -= 1;
-                        }
-                        else if (sum <= -0.33f)
+                        float sum = prev_offset + current_offset + prev_ABC.c_diff;
+                        float sum3 = idealInterGlyphSpace + sum;
+
+                        float diff1 = sum3 - idealInterGlyphSpace;
+
+                        if (sum3 <= 1-0.33f)
                         {
                             cx += 1;
                         }
+                        else if (sum3 >= 1.5)
+                        {
+                            cx--;
+                        }
+                        else
+                        {
+
+                        }
+
+
+                        //if (sum >= 0.33f)
+                        //{
+                        //    cx -= 1;
+                        //}
+                        //else if (sum <= -0.33f)
+                        //{
+                        //    cx += 1;
+                        //}
+                        //else if (sum3 >= 1.5)
+                        //{
+                        //    cx--;
+                        //}
                         //TODO: review here,                       
                         //if (idealInterGlyphSpace < 1 + 0.33f)
                         //{
@@ -346,13 +369,51 @@ namespace Typography.Contours
                         //    }
                         //}
                     }
-                    else
+                    else if (idealInterGlyphSpace < 0)
                     {
-
+                        //request small 
                         float prev_offset = -prev_ABC.s_avg_x_ToFit;
                         float current_offset = current_ABC.s_avg_x_ToFit;
                         float sum = prev_offset + current_offset;
+                        float sum3 = idealInterGlyphSpace + sum;
+                        if (sum >= 0.33)
+                        {
+                            //f-o
+                            cx--;
+                        }
+                        else if (sum <= -0.33)
+                        {
+                            //f-f
+                            //fo
+                            cx++;
+                        }
+                        else
+                        {
+                            //t-t
+                        }
+                    }
+                    else
+                    {
+                        //request small 
+                        float prev_offset = -prev_ABC.s_avg_x_ToFit;
+                        float current_offset = current_ABC.s_avg_x_ToFit;
+                        float sum = prev_offset + current_offset;
+                        float sum3 = idealInterGlyphSpace + sum;
 
+                        if (sum >= 0.33)
+                        {
+                            //f-o
+                            cx--;
+                        }
+                        else if (sum <= -0.33)
+                        {
+                            //f-f
+                            cx++;
+                        }
+                        else
+                        {
+                            //t-t
+                        }
                         //float idealInterGlyphSpace2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
 
                         //if (idealInterGlyphSpace2 < 0)
