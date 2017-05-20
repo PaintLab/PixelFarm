@@ -264,6 +264,9 @@ namespace Typography.Contours
                                 (int)(s_advW + 1) : //round
                                 (int)(s_advW);
                 s_xmax_to_final_advance = final_advW - s_xmax;
+                //c_diff is final adv to expected advW len 
+                //value > 0; it is round to upper integer (ceiling)
+                //value< 0; it is rounded to lower integer (floor)
                 c_diff = final_advW - s_advW;
             }
 
