@@ -313,7 +313,7 @@ namespace Typography.Contours
 
                         float diff1 = sum3 - idealInterGlyphSpace;
 
-                        if (sum3 <= 1-0.33f)
+                        if (sum3 <= 1 - 0.33f)
                         {
                             cx += 1;
                         }
@@ -461,6 +461,144 @@ namespace Typography.Contours
 
                 // Console.WriteLine(exact_x + "+" + (x_offset_to_fit) + "=>" + final_x);
             }
+        }
+
+
+
+
+        public void Layout2(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
+        {
+
+            int finalGlyphCount = posStream.Count;
+            float pxscale = _typeface.CalculateToPixelScaleFromPointSize(this._fontSizeInPoints);
+            float onepx = 1 / pxscale;
+            //
+            double cx = 0;
+            short cy = 0;
+            //
+            //at this state, we need exact info at this specific pxscale
+            //
+            _hintedFontStore.SetFont(_typeface, this._fontSizeInPoints);
+            FineABC current_ABC = new FineABC();
+            FineABC prev_ABC = new FineABC();
+
+            for (int i = 0; i < finalGlyphCount; ++i)
+            {
+                short offsetX, offsetY, advW; //all from pen-pos
+                ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
+                GlyphControlParameters controlPars = _hintedFontStore.GetControlPars(glyphIndex);
+                current_ABC.SetData(pxscale, controlPars, offsetX, offsetY, (ushort)advW);
+                //-------------------------------------------------------------
+                if (i > 0)
+                {
+                    //ideal interspace
+                    //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
+                    //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
+                    float idealInterGlyphSpace = prev_ABC.s_c + current_ABC.s_a;
+                    float sum2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+
+                    if (idealInterGlyphSpace > 1 - 0.33f)
+                    {
+                        //please ensure that we have interspace atleast 1px
+                        //if not we just insert 1 px  ***
+
+                        float prev_offset = -prev_ABC.s_avg_x_ToFit;
+                        float current_offset = current_ABC.s_avg_x_ToFit;
+                        float sum = prev_offset + current_offset;
+                        //sum = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+                        if (sum >= 0.33f)
+                        {
+                            cx -= 1;
+                        }
+                        else if (sum <= -0.33f)
+                        {
+                            cx += 1;
+                        }
+                        //TODO: review here,                       
+                        //if (idealInterGlyphSpace < 1 + 0.33f)
+                        //{
+                        //    float fine_h = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+                        //    if (fine_h < 0)
+                        //    {
+                        //        //need more space
+                        //        //i-o
+                        //        cx += 1;
+                        //    }
+                        //    else
+                        //    {
+
+                        //        if (fine_h > 1.33)
+                        //        {
+                        //            //o-i
+                        //            cx -= 1;
+                        //        }
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    //q-u
+
+                        //    if (-prev_ABC.s_avg_x_ToFit + current_ABC.s_avg_x_ToFit > 0.5f)
+                        //    {
+                        //        cx--;
+                        //    }
+                        //}
+                    }
+                    else
+                    {
+
+                        float prev_offset = -prev_ABC.s_avg_x_ToFit;
+                        float current_offset = current_ABC.s_avg_x_ToFit;
+                        float sum = prev_offset + current_offset;
+
+                        //float idealInterGlyphSpace2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+
+                        //if (idealInterGlyphSpace2 < 0)
+                        //{
+                        //    // eg i-j seq
+                        //    cx++;
+                        //}
+                        //else
+                        //{
+
+                        //    if (prev_ABC.s_xmax_to_final_advance < 0)
+                        //    {
+                        //        //f-f
+                        //        cx++;
+                        //    }
+                        //}
+                    }
+                }
+                //------------------------------------------------------------- 
+                float exact_x = (float)(cx + current_ABC.s_offsetX);
+                float exact_y = (float)(cy + current_ABC.s_offsetY);
+
+                //check if the current position can create a sharp glyph
+                int exact_x_floor = (int)exact_x;
+                float x_offset_to_fit = controlPars.avgXOffsetToFit;
+                //offset range that can produce sharp glyph (by observation)
+                //is between x_offset_to_fit - 0.3f to x_offset_to_fit + 0.3f 
+
+                float final_x = exact_x_floor + x_offset_to_fit;
+                if (UseWithLcdSubPixelRenderingTechnique)
+                {
+                    final_x += 0.33f;
+                }
+
+                outputGlyphPlanList.Add(new GlyphPlan(
+                    glyphIndex,
+                    final_x,
+                    exact_y,
+                    current_ABC.final_advW));
+                // 
+                //
+                cx += current_ABC.final_advW;
+                //-----------------------------------------------
+                prev_ABC = current_ABC;//add to prev
+
+                // Console.WriteLine(exact_x + "+" + (x_offset_to_fit) + "=>" + final_x);
+            }
+
         }
     }
 }
