@@ -271,7 +271,7 @@ namespace Typography.Contours
             }
 
         }
-        public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
+        public void Layout2(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
 
             int finalGlyphCount = posStream.Count;
@@ -469,7 +469,7 @@ namespace Typography.Contours
 
 
 
-        public void Layout2(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
+        public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
 
             int finalGlyphCount = posStream.Count;
