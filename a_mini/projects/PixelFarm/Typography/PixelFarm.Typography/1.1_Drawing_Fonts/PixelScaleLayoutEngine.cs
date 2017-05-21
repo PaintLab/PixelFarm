@@ -220,11 +220,11 @@ namespace Typography.Contours
             /// </summary>
             public float s_xmax;
             /// <summary>
-            /// scaled a part
+            /// distance, scaled a part
             /// </summary>
             public float s_a;
             /// <summary>
-            /// scaled c part
+            /// distance, scaled c part
             /// </summary>
             public float s_c;
 
@@ -235,15 +235,23 @@ namespace Typography.Contours
 
 
             public float c_diff;
-            public float s_xmax_to_final_advance;
+            public float m_c;
+            public float m_a;
 
+#if DEBUG
+            public bool dbugIsPrev;
+#endif
             public void SetData(float pxscale, GlyphControlParameters controlPars, short offsetX, short offsetY, ushort orgAdvW)
             {
 
+#if DEBUG
+                dbugIsPrev = false;
+#endif
                 s_avg_x_ToFit = controlPars.avgXOffsetToFit;
+
+
                 float o_a = controlPars.minX;
                 float o_c = (short)(orgAdvW - controlPars.maxX);
-
                 if (o_c < 0)
                 {
                     //TODO: review here ...
@@ -263,15 +271,31 @@ namespace Typography.Contours
                 final_advW = ((s_advW - (int)s_advW) > 0.5) ?
                                 (int)(s_advW + 1) : //round
                                 (int)(s_advW);
-                s_xmax_to_final_advance = final_advW - s_xmax;
-                //c_diff is final adv to expected advW len 
-                //value > 0; it is round to upper integer (ceiling)
-                //value< 0; it is rounded to lower integer (floor)
+                //
                 c_diff = final_advW - s_advW;
+                //
+                m_c = final_advW - (s_xmax + s_avg_x_ToFit);
+                m_a = s_avg_x_ToFit + s_xmin;
             }
 
+            public float M_C_Diff { get { return m_c - s_c; } }
+            public float M_A_Diff { get { return m_a - s_a; } }
+#if DEBUG
+            public override string ToString()
+            {
+                if (dbugIsPrev)
+                {
+                    return "m_c:" + m_c + ",diff:" + M_C_Diff;
+                }
+                else
+                {
+                    return "m_a" + m_a + ",diff:" + M_A_Diff;
+                }
+            }
+#endif
         }
-        public void Layout2(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
+
+        public void LayoutY(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
 
             int finalGlyphCount = posStream.Count;
@@ -296,11 +320,214 @@ namespace Typography.Contours
                 //-------------------------------------------------------------
                 if (i > 0)
                 {
-                    //ideal interspace
-                    //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
-                    //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
+                    //
+                    float ideal_inter_glyph_space = prev_ABC.s_c + current_ABC.s_a;
+                    float actual_inter_glyph_space = prev_ABC.m_c + current_ABC.m_a;
+
+                    float space_diff = actual_inter_glyph_space - ideal_inter_glyph_space;
+                    float space_diff_abs = Math.Abs(space_diff);
+                    if (space_diff_abs > 0.1f)
+                    {
+
+                        if (space_diff < 0)
+                        {
+                            //new space is shorter than ideal space 
+                            //we have 2 choices to increate this space
+                            //1. cx--
+                            //2. cx++
+
+
+                            if (current_ABC.M_A_Diff > prev_ABC.M_C_Diff)
+                            {
+                                if (current_ABC.M_A_Diff < 0.33f)
+                                {
+                                    cx += 1;
+                                }
+                            }
+                            else
+                            {
+                                if (prev_ABC.M_C_Diff >= 0.33f)
+                                {
+                                    cx -= 1;
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            //new space is larger than ideal space 
+                            //we have 2 choices to increate this space
+                            //1. cx--
+                            //2. cx++
+                            if (current_ABC.M_A_Diff > prev_ABC.M_C_Diff)
+                            {
+                                if (current_ABC.M_A_Diff >= 0.33f)
+                                {
+                                    cx += 1;
+                                }
+                            }
+                            else
+                            {
+                                if (prev_ABC.M_C_Diff >= 0.33f)
+                                {
+                                    cx -= 1;
+                                }
+
+                            }
+
+                        }
+                    }
+                    else
+                    {
+
+
+                    }
+
+                    //if (actual_inter_glyph_space > 0.33f)
+                    //{
+                    //    cx += 1;
+                    //}
+                    //else if (actual_inter_glyph_space < -0.33f)
+                    //{
+                    //    cx += 1;
+                    //}
+                    //if (idealInterGlyphSpace > 1 - 0.33f)
+                    //{
+                    //    //please ensure that we have interspace atleast 1px
+                    //    //if not we just insert 1 px  ***
+
+                    //    float prev_offset = -prev_ABC.s_avg_x_ToFit;
+                    //    float current_offset = current_ABC.s_avg_x_ToFit;
+                    //    float sum = prev_offset + current_offset + prev_ABC.c_diff;
+                    //    float sum3 = idealInterGlyphSpace + sum;
+
+                    //    float diff1 = sum3 - idealInterGlyphSpace;
+
+                    //    if (sum3 <= 1 - 0.33f)
+                    //    {
+                    //        cx += 1;
+                    //    }
+                    //    else if (sum3 >= 1.5)
+                    //    {
+                    //        cx--;
+                    //    }
+                    //    else
+                    //    {
+
+                    //    }
+                    //}
+                    //else if (idealInterGlyphSpace < 0)
+                    //{
+                    //    //request small 
+                    //    float prev_offset = -prev_ABC.s_avg_x_ToFit;
+                    //    float current_offset = current_ABC.s_avg_x_ToFit;
+                    //    float sum = prev_offset + current_offset;
+                    //    float sum3 = idealInterGlyphSpace + sum;
+                    //    if (sum >= 0.33)
+                    //    {
+                    //        //f-o
+                    //        cx--;
+                    //    }
+                    //    else if (sum <= -0.33)
+                    //    {
+                    //        //f-f
+                    //        //fo
+                    //        cx++;
+                    //    }
+                    //    else
+                    //    {
+                    //        //t-t
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    //request small 
+                    //    float prev_offset = -prev_ABC.s_avg_x_ToFit;
+                    //    float current_offset = current_ABC.s_avg_x_ToFit;
+                    //    float sum = prev_offset + current_offset;
+                    //    float sum3 = idealInterGlyphSpace + sum;
+
+                    //    if (sum >= 0.33)
+                    //    {
+                    //        //f-o
+                    //        cx--;
+                    //    }
+                    //    else if (sum <= -0.33)
+                    //    {
+                    //        //f-f
+                    //        cx++;
+                    //    }
+                    //    else
+                    //    {
+                    //        //t-t
+                    //    }
+
+                    //}
+                }
+                //------------------------------------------------------------- 
+                float exact_x = (float)(cx + current_ABC.s_offsetX);
+                float exact_y = (float)(cy + current_ABC.s_offsetY);
+
+                //check if the current position can create a sharp glyph
+                int exact_x_floor = (int)exact_x;
+                float x_offset_to_fit = current_ABC.s_avg_x_ToFit;
+                //offset range that can produce sharp glyph (by observation)
+                //is between x_offset_to_fit - 0.3f to x_offset_to_fit + 0.3f 
+
+                float final_x = exact_x_floor + x_offset_to_fit;
+                if (UseWithLcdSubPixelRenderingTechnique)
+                {
+                    final_x += 0.33f;
+                }
+
+                outputGlyphPlanList.Add(new GlyphPlan(
+                    glyphIndex,
+                    final_x,
+                    exact_y,
+                    current_ABC.final_advW));
+                // 
+                //
+                cx += current_ABC.final_advW;
+                //-----------------------------------------------
+                prev_ABC = current_ABC;//add to prev
+#if DEBUG
+                prev_ABC.dbugIsPrev = true;
+#endif
+                // Console.WriteLine(exact_x + "+" + (x_offset_to_fit) + "=>" + final_x);
+            }
+        }
+
+
+        public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
+        {
+
+            int finalGlyphCount = posStream.Count;
+            float pxscale = _typeface.CalculateToPixelScaleFromPointSize(this._fontSizeInPoints);
+            float onepx = 1 / pxscale;
+            //
+            double cx = 0;
+            short cy = 0;
+            //
+            //at this state, we need exact info at this specific pxscale
+            //
+            _hintedFontStore.SetFont(_typeface, this._fontSizeInPoints);
+            FineABC current_ABC = new FineABC();
+            FineABC prev_ABC = new FineABC();
+
+
+            for (int i = 0; i < finalGlyphCount; ++i)
+            {
+                short offsetX, offsetY, advW; //all from pen-pos
+                ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
+                GlyphControlParameters controlPars = _hintedFontStore.GetControlPars(glyphIndex);
+                current_ABC.SetData(pxscale, controlPars, offsetX, offsetY, (ushort)advW);
+                //-------------------------------------------------------------
+                float fine_adjust = 0;
+                if (i > 0)
+                {
+                    //
                     float idealInterGlyphSpace = prev_ABC.s_c + current_ABC.s_a;
-                    float sum2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
+
 
                     if (idealInterGlyphSpace > 1 - 0.33f)
                     {
@@ -309,16 +536,22 @@ namespace Typography.Contours
 
                         float prev_offset = -prev_ABC.s_avg_x_ToFit;
                         float current_offset = current_ABC.s_avg_x_ToFit;
-                        //float sum = prev_offset + current_offset + prev_ABC.s_xmax_to_final_advance;
-                        //sum = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
                         float sum = prev_offset + current_offset + prev_ABC.c_diff;
                         float sum3 = idealInterGlyphSpace + sum;
 
                         float diff1 = sum3 - idealInterGlyphSpace;
 
-                        if (sum3 <= 1 - 0.33f)
+
+                        if (sum3 <= 1 - 0.2f)
                         {
-                            cx += 1;
+                            if (sum3 > 0.33f)
+                            {
+                                cx++;
+                            }
+                            else
+                            {
+                                fine_adjust = 0.3f;
+                            }
                         }
                         else if (sum3 >= 1.5)
                         {
@@ -326,51 +559,12 @@ namespace Typography.Contours
                         }
                         else
                         {
+                             
 
                         }
 
 
-                        //if (sum >= 0.33f)
-                        //{
-                        //    cx -= 1;
-                        //}
-                        //else if (sum <= -0.33f)
-                        //{
-                        //    cx += 1;
-                        //}
-                        //else if (sum3 >= 1.5)
-                        //{
-                        //    cx--;
-                        //}
-                        //TODO: review here,                       
-                        //if (idealInterGlyphSpace < 1 + 0.33f)
-                        //{
-                        //    float fine_h = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
-                        //    if (fine_h < 0)
-                        //    {
-                        //        //need more space
-                        //        //i-o
-                        //        cx += 1;
-                        //    }
-                        //    else
-                        //    {
 
-                        //        if (fine_h > 1.33)
-                        //        {
-                        //            //o-i
-                        //            cx -= 1;
-                        //        }
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    //q-u
-
-                        //    if (-prev_ABC.s_avg_x_ToFit + current_ABC.s_avg_x_ToFit > 0.5f)
-                        //    {
-                        //        cx--;
-                        //    }
-                        //}
                     }
                     else if (idealInterGlyphSpace < 0)
                     {
@@ -411,28 +605,14 @@ namespace Typography.Contours
                         else if (sum <= -0.33)
                         {
                             //f-f
+                            //fine_adjust = 0.33f;
                             cx++;
                         }
                         else
                         {
                             //t-t
                         }
-                        //float idealInterGlyphSpace2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
 
-                        //if (idealInterGlyphSpace2 < 0)
-                        //{
-                        //    // eg i-j seq
-                        //    cx++;
-                        //}
-                        //else
-                        //{
-
-                        //    if (prev_ABC.s_xmax_to_final_advance < 0)
-                        //    {
-                        //        //f-f
-                        //        cx++;
-                        //    }
-                        //}
                     }
                 }
                 //------------------------------------------------------------- 
@@ -441,7 +621,7 @@ namespace Typography.Contours
 
                 //check if the current position can create a sharp glyph
                 int exact_x_floor = (int)exact_x;
-                float x_offset_to_fit = controlPars.avgXOffsetToFit;
+                float x_offset_to_fit = current_ABC.s_avg_x_ToFit;
                 //offset range that can produce sharp glyph (by observation)
                 //is between x_offset_to_fit - 0.3f to x_offset_to_fit + 0.3f 
 
@@ -453,7 +633,7 @@ namespace Typography.Contours
 
                 outputGlyphPlanList.Add(new GlyphPlan(
                     glyphIndex,
-                    final_x,
+                    final_x + fine_adjust,
                     exact_y,
                     current_ABC.final_advW));
                 // 
@@ -469,7 +649,7 @@ namespace Typography.Contours
 
 
 
-        public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
+        public void Layout2(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
 
             int finalGlyphCount = posStream.Count;
@@ -494,9 +674,7 @@ namespace Typography.Contours
                 //-------------------------------------------------------------
                 if (i > 0)
                 {
-                    //ideal interspace
-                    //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
-                    //float idealInterGlyphSpace = -prev_ABC.s_avgToFit + prev_ABC.s_c + current_ABC.s_a + current_ABC.s_avgToFit;
+                    //ideal interspace 
                     float idealInterGlyphSpace = prev_ABC.s_c + current_ABC.s_a;
                     float sum2 = -prev_ABC.s_avg_x_ToFit + prev_ABC.c_diff + current_ABC.s_a + current_ABC.s_avg_x_ToFit;
 
@@ -578,7 +756,7 @@ namespace Typography.Contours
 
                 //check if the current position can create a sharp glyph
                 int exact_x_floor = (int)exact_x;
-                float x_offset_to_fit = controlPars.avgXOffsetToFit;
+                float x_offset_to_fit = current_ABC.s_avg_x_ToFit;
                 //offset range that can produce sharp glyph (by observation)
                 //is between x_offset_to_fit - 0.3f to x_offset_to_fit + 0.3f 
 
