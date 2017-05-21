@@ -550,7 +550,7 @@ namespace Typography.Contours
                             }
                             else
                             {
-                                fine_adjust = 0.3f;
+                                
                             }
                         }
                         else if (sum3 >= 1.5)
