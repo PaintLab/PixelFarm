@@ -276,6 +276,9 @@ namespace Typography.Contours
                 //
                 m_c = final_advW - (s_xmax + s_avg_x_ToFit);
                 m_a = s_avg_x_ToFit + s_xmin;
+
+
+
             }
 
             public float M_C_Diff { get { return m_c - s_c; } }
@@ -294,6 +297,8 @@ namespace Typography.Contours
             }
 #endif
         }
+
+
 
         public void LayoutY(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
@@ -497,7 +502,6 @@ namespace Typography.Contours
             }
         }
 
-
         public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
 
@@ -522,98 +526,108 @@ namespace Typography.Contours
                 GlyphControlParameters controlPars = _hintedFontStore.GetControlPars(glyphIndex);
                 current_ABC.SetData(pxscale, controlPars, offsetX, offsetY, (ushort)advW);
                 //-------------------------------------------------------------
-                float fine_adjust = 0;
+
+
                 if (i > 0)
                 {
-                    //
-                    float idealInterGlyphSpace = prev_ABC.s_c + current_ABC.s_a;
-
-
-                    if (idealInterGlyphSpace > 1 - 0.33f)
+                    float ideal_space = prev_ABC.s_c + current_ABC.s_a; //ideal inter-glyph space
+                    float sum_x_fit = -prev_ABC.s_avg_x_ToFit + current_ABC.s_avg_x_ToFit;
+                    if (ideal_space >= 0)
                     {
-                        //please ensure that we have interspace atleast 1px
-                        //if not we just insert 1 px  ***
-
-                        float prev_offset = -prev_ABC.s_avg_x_ToFit;
-                        float current_offset = current_ABC.s_avg_x_ToFit;
-                        float sum = prev_offset + current_offset + prev_ABC.c_diff;
-                        float sum3 = idealInterGlyphSpace + sum;
-
-                        float diff1 = sum3 - idealInterGlyphSpace;
-
-
-                        if (sum3 <= 1 - 0.2f)
+                        //m-a
+                        //i-i
+                        //o-p
+                        //positive ideal space
+                        if (ideal_space > 1 - 0.33f)
                         {
-                            if (sum3 > 0.33f)
+                            //need 1 px space
+                            sum_x_fit += prev_ABC.c_diff;
+                            float m_space = ideal_space + sum_x_fit; //modified space
+
+                            if (ideal_space < 1.5f)
                             {
+                                if (m_space >= 1.5f)
+                                {
+                                    //o-p
+                                    m_space -= 0.5f;
+                                    cx--;
+                                }
+                            }
+
+                            if (m_space <= 1 - 0.2f)
+                            {
+
+                                if (m_space > 0.33f)
+                                {
+                                    //m-a
+                                    if (Math.Abs(sum_x_fit) > 0.1)
+                                    {
+                                        cx++;
+                                    }
+                                }
+                                else
+                                {
+                                }
+                            }
+                            else
+                            {
+                            }
+                        }
+                        else
+                        {
+                            //request small   
+                            float m_space = ideal_space + sum_x_fit; //modified space
+                            if (sum_x_fit >= 0.33)
+                            {
+                                //f-o
+                                cx--;
+                            }
+                            else if (sum_x_fit <= -0.33)
+                            {
+                                //f-f
+                                //fine_adjust = 0.33f;
                                 cx++;
                             }
                             else
                             {
-                                
+                                //t-t
                             }
-                        }
-                        else if (sum3 >= 1.5)
-                        {
-                            cx--;
-                        }
-                        else
-                        {
-                             
-
-                        }
-
-
-
-                    }
-                    else if (idealInterGlyphSpace < 0)
-                    {
-                        //request small 
-                        float prev_offset = -prev_ABC.s_avg_x_ToFit;
-                        float current_offset = current_ABC.s_avg_x_ToFit;
-                        float sum = prev_offset + current_offset;
-                        float sum3 = idealInterGlyphSpace + sum;
-                        if (sum >= 0.33)
-                        {
-                            //f-o
-                            cx--;
-                        }
-                        else if (sum <= -0.33)
-                        {
-                            //f-f
-                            //fo
-                            cx++;
-                        }
-                        else
-                        {
-                            //t-t
                         }
                     }
                     else
                     {
-                        //request small 
-                        float prev_offset = -prev_ABC.s_avg_x_ToFit;
-                        float current_offset = current_ABC.s_avg_x_ToFit;
-                        float sum = prev_offset + current_offset;
-                        float sum3 = idealInterGlyphSpace + sum;
+                        //f-f
+                        //f-o
 
-                        if (sum >= 0.33)
+                        //negative ideal space
+                        if (ideal_space < -0.33f)
                         {
-                            //f-o
-                            cx--;
-                        }
-                        else if (sum <= -0.33)
-                        {
-                            //f-f
-                            //fine_adjust = 0.33f;
-                            cx++;
+                            //too negative
                         }
                         else
                         {
-                            //t-t
+                            sum_x_fit += prev_ABC.c_diff;
+                            float m_space = ideal_space + sum_x_fit; //modified space
+
+                            //ideal space is small to negative side 
+                            if (sum_x_fit >= 0.33)
+                            {
+                                cx--;
+                            }
+                            else if (sum_x_fit <= -0.33)
+                            {
+
+                                cx++;
+                            }
+                            else
+                            {
+                                //f-f
+                            }
+
                         }
 
                     }
+
                 }
                 //------------------------------------------------------------- 
                 float exact_x = (float)(cx + current_ABC.s_offsetX);
@@ -633,7 +647,7 @@ namespace Typography.Contours
 
                 outputGlyphPlanList.Add(new GlyphPlan(
                     glyphIndex,
-                    final_x + fine_adjust,
+                    final_x,
                     exact_y,
                     current_ABC.final_advW));
                 // 
@@ -641,7 +655,9 @@ namespace Typography.Contours
                 cx += current_ABC.final_advW;
                 //-----------------------------------------------
                 prev_ABC = current_ABC;//add to prev
-
+#if DEBUG
+                prev_ABC.dbugIsPrev = true;
+#endif
                 // Console.WriteLine(exact_x + "+" + (x_offset_to_fit) + "=>" + final_x);
             }
         }
