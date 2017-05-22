@@ -236,8 +236,8 @@ namespace Typography.Contours
 
             public float m_c;
             public float m_a;
-            public float m_a_adjust;
-            public float m_c_adjust;
+            public short m_a_adjust; //-1,0,1
+            public short m_c_adjust; //-1,0,1
 
 
             public float m_max;
@@ -324,7 +324,7 @@ namespace Typography.Contours
             float pxscale = _typeface.CalculateToPixelScaleFromPointSize(this._fontSizeInPoints);
             float onepx = 1 / pxscale;
             //
-            double cx = 0;
+            int cx = 0;
             short cy = 0;
             //
             //at this state, we need exact info at this specific pxscale
@@ -343,7 +343,9 @@ namespace Typography.Contours
 
                 if (i > 0)
                 {
-                    float ideal_space = prev_ABC.s_c + current_ABC.s_a; //ideal inter-glyph space
+                    //inter-glyph space
+                    //ideal space
+                    float ideal_space = prev_ABC.s_c + current_ABC.s_a;
                     //actual space
                     float actual_space = prev_ABC.m_c + current_ABC.m_a;
 
@@ -412,7 +414,7 @@ namespace Typography.Contours
                 //
                 cx += current_ABC.final_advW;
                 //-----------------------------------------------
-                prev_ABC = current_ABC;//add to prev
+                prev_ABC = current_ABC;//copy current to prev
 #if DEBUG
                 prev_ABC.dbugIsPrev = true;
 #endif
