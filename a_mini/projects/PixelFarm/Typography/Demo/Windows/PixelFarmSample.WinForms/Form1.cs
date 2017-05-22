@@ -233,8 +233,8 @@ namespace SampleWinForms
             //string inputstr = "l";
             //string inputstr = "t";
             //string inputstr = "i";
-            //string inputstr = "ma";
-            string inputstr = "po";
+            string inputstr = "ma";
+            //string inputstr = "po";
             //string inputstr = "Å";
             //string inputstr = "fi";
             //string inputstr = "ก่นกิ่น";

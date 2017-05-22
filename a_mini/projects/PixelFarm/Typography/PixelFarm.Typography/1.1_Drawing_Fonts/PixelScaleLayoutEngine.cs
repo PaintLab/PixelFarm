@@ -237,7 +237,11 @@ namespace Typography.Contours
             public float c_diff;
             public float m_c;
             public float m_a;
+            public float m_a_adjust;
+            public float m_c_adjust;
 
+            public float m_min;
+            public float m_max;
 #if DEBUG
             public bool dbugIsPrev;
 #endif
@@ -277,10 +281,31 @@ namespace Typography.Contours
                 m_c = final_advW - (s_xmax + s_avg_x_ToFit);
                 m_a = s_avg_x_ToFit + s_xmin;
 
+                if (m_a < 0.5f)
+                {
+                    m_a_adjust = 1;
+                }
+                else
+                {
+                    m_a_adjust = 0;
+                }
 
+                if (final_advW - m_c > 1f)
+                {
+                    m_c_adjust = -1;
+                }
+                else
+                {
+                    m_c = 0;
+                }
+
+                m_min = s_xmin + s_avg_x_ToFit;
+                m_max = s_xmax + s_avg_x_ToFit;
+                //--------------------------------------   
 
             }
-
+            public bool maIsLonger { get { return m_a > s_a; } }
+            public bool mcIsShorter { get { return m_c < s_c; } }
             public float M_C_Diff { get { return m_c - s_c; } }
             public float M_A_Diff { get { return m_a - s_a; } }
 #if DEBUG
@@ -518,7 +543,6 @@ namespace Typography.Contours
             FineABC current_ABC = new FineABC();
             FineABC prev_ABC = new FineABC();
 
-
             for (int i = 0; i < finalGlyphCount; ++i)
             {
                 short offsetX, offsetY, advW; //all from pen-pos
@@ -527,72 +551,150 @@ namespace Typography.Contours
                 current_ABC.SetData(pxscale, controlPars, offsetX, offsetY, (ushort)advW);
                 //-------------------------------------------------------------
 
-
                 if (i > 0)
                 {
                     float ideal_space = prev_ABC.s_c + current_ABC.s_a; //ideal inter-glyph space
+                    //actual space
+                    float actual_space = prev_ABC.m_c + current_ABC.m_a;
                     float sum_x_fit = -prev_ABC.s_avg_x_ToFit + current_ABC.s_avg_x_ToFit;
+
                     if (ideal_space >= 0)
                     {
                         //m-a
                         //i-i
                         //o-p
-                        //positive ideal space
-                        if (ideal_space > 1 - 0.33f)
+
+                        if (actual_space - 0.8 > ideal_space)
                         {
-                            //need 1 px space
-                            sum_x_fit += prev_ABC.c_diff;
-                            float m_space = ideal_space + sum_x_fit; //modified space
+                            cx--;
+                        }
 
-                            if (ideal_space < 1.5f)
+                        //significant or not
+
+                        if (actual_space < ideal_space)
+                        {
+                            if (prev_ABC.final_advW + prev_ABC.m_c_adjust < prev_ABC.m_max)
                             {
-                                if (m_space >= 1.5f)
-                                {
-                                    //o-p
-                                    m_space -= 0.5f;
-                                    cx--;
-                                }
+                                cx += current_ABC.m_a_adjust;
                             }
 
-                            if (m_space <= 1 - 0.2f)
-                            {
-
-                                if (m_space > 0.33f)
-                                {
-                                    //m-a
-                                    if (Math.Abs(sum_x_fit) > 0.1)
-                                    {
-                                        cx++;
-                                    }
-                                }
-                                else
-                                {
-                                }
-                            }
-                            else
-                            {
-                            }
                         }
                         else
                         {
-                            //request small   
-                            float m_space = ideal_space + sum_x_fit; //modified space
-                            if (sum_x_fit >= 0.33)
+                            if (prev_ABC.final_advW + prev_ABC.m_c_adjust > prev_ABC.m_max)
                             {
-                                //f-o
-                                cx--;
-                            }
-                            else if (sum_x_fit <= -0.33)
-                            {
-                                //f-f
-                                //fine_adjust = 0.33f;
-                                cx++;
-                            }
-                            else
-                            {
-                                //t-t
+                                cx += prev_ABC.m_c_adjust;
                             }
                         }
+
+
+                        //if (actual_space < ideal_space)
+                        //{
+                        //    //check what to do
+                        //    //actual space is less than ideal
+                        //    //
+                        //    float ideal_space_r = (int)Math.Round(ideal_space);
+                        //    float actual_space_r = (int)Math.Round(actual_space);
+
+                        //    float r_diff = actual_space_r - ideal_space_r;
+                        //    if (r_diff == 0)
+                        //    {
+                        //        //to close,
+                        //        //
+
+                        //    }
+                        //    else
+                        //    {
+
+
+                        //    }
+                        //    if (prev_ABC.mcIsShorter)
+                        //    {
+
+
+                        //    }
+
+                        //}
+
+                        //if (ideal_space > 1 - 0.33f)
+                        //{
+                        //    //need 1 px space
+                        //    sum_x_fit += prev_ABC.c_diff;
+                        //    float m_space = ideal_space + sum_x_fit; //modified space
+
+                        //    if (ideal_space < 1.5f)
+                        //    {
+                        //        if (m_space >= 1.5f)
+                        //        {
+                        //            //o-p
+                        //            m_space -= 0.5f;
+                        //            cx--;
+                        //        }
+                        //    }
+
+                        //    if (m_space <= 1 - 0.2f)
+                        //    {
+
+                        //        if (m_space > 0.33f)
+                        //        {
+                        //            //m-a
+                        //            //do nothing or cx++
+
+
+                        //            if (Math.Abs(sum_x_fit) > 0.1)
+                        //            {
+                        //                cx++;
+                        //            }
+                        //        }
+                        //        else if (m_space < 0)
+                        //        {
+                        //            if (Math.Abs(sum_x_fit) > 0.1)
+                        //            {
+                        //                cx++;
+                        //            }
+                        //        }
+                        //        else
+                        //        {
+                        //            if (Math.Abs(sum_x_fit) > 0.1)
+                        //            {
+                        //                cx++;
+                        //            }
+                        //        }
+                        //    }
+                        //    else
+                        //    {
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    //request small   
+                        //    float m_space = ideal_space + sum_x_fit; //modified space
+                        //    if (sum_x_fit >= 0.33)
+                        //    {
+                        //        if (m_space > 0.5f)
+                        //        {
+                        //            //the space is large than request
+                        //            //check what to do
+
+
+                        //        }
+                        //        else
+                        //        {
+                        //            //f-o
+                        //            cx--;
+                        //        }
+                        //    }
+                        //    else if (sum_x_fit <= -0.33)
+                        //    {
+                        //        //f-f
+                        //        //fine_adjust = 0.33f;
+                        //        cx++;
+                        //    }
+                        //    else
+                        //    {
+                        //        //t-t
+                        //    }
+                        //}
                     }
                     else
                     {
