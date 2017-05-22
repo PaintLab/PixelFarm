@@ -360,6 +360,10 @@ namespace Typography.Contours
                         {
                             ideal_space = 0 + current_ABC.s_a;
                         }
+                        if (ideal_space < 0)
+                        {
+                            ideal_space = 0;
+                        }
                     }
                     if (ideal_space >= 0)
                     {
