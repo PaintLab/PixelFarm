@@ -322,7 +322,10 @@ namespace Typography.Contours
 
             int finalGlyphCount = posStream.Count;
             float pxscale = _typeface.CalculateToPixelScaleFromPointSize(this._fontSizeInPoints);
-            float onepx = 1 / pxscale;
+
+#if DEBUG
+            float dbug_onepx = 1 / pxscale;
+#endif
             //
             int cx = 0;
             short cy = 0;
