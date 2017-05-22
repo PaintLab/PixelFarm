@@ -170,7 +170,9 @@ namespace Typography.Contours
         float _fontSizeInPoints;
         public PixelScaleLayoutEngine()
         {
+            UseWithLcdSubPixelRenderingTechnique = true;//default
         }
+
         public GlyphMeshStore HintedFontStore
         {
             get { return _hintedFontStore; }
@@ -181,6 +183,10 @@ namespace Typography.Contours
         }
 
         public bool UseWithLcdSubPixelRenderingTechnique { get; set; }
+        /// <summary>
+        /// fit the glyph along alignment direction (horizontal, vertical)
+        /// </summary>
+        public bool UseWritingDirectionFitAligment { get; set; }
 
         public void SetFont(Typeface typeface, float fontSizeInPoints)
         {
@@ -316,13 +322,46 @@ namespace Typography.Contours
 #endif
         }
 
+        
+
+        void LayoutWithoutHorizontalFitAlign(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
+        {
+            //the default OpenFont layout without fit-to-writing alignment
+            int finalGlyphCount = posStream.Count;
+            float pxscale = _typeface.CalculateToPixelScaleFromPointSize(this._fontSizeInPoints);
+            double cx = 0;
+            short cy = 0;
+
+            for (int i = 0; i < finalGlyphCount; ++i)
+            {
+                short offsetX, offsetY, advW; //all from pen-pos
+                ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
+
+                float s_advW = advW * pxscale;
+                float exact_x = (float)(cx + offsetX * pxscale);
+                float exact_y = (float)(cy + offsetY * pxscale);
+
+                outputGlyphPlanList.Add(new GlyphPlan(
+                   glyphIndex,
+                    exact_x,
+                    exact_y,
+                    advW));
+                cx += s_advW;
+            }
+        }
 
         public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
 
+            if (!UseWithLcdSubPixelRenderingTechnique)
+            {
+                //layout without fit to alignment direction
+                LayoutWithoutHorizontalFitAlign(posStream, outputGlyphPlanList);
+                return; //early exit
+            }
+            //------------------------------
             int finalGlyphCount = posStream.Count;
             float pxscale = _typeface.CalculateToPixelScaleFromPointSize(this._fontSizeInPoints);
-
 #if DEBUG
             float dbug_onepx = 1 / pxscale;
 #endif
