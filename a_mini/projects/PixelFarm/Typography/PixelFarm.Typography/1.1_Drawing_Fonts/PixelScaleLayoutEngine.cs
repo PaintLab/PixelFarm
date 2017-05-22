@@ -234,17 +234,13 @@ namespace Typography.Contours
             public int final_advW;
 
 
-            public float c_diff;
             public float m_c;
             public float m_a;
             public float m_a_adjust;
             public float m_c_adjust;
 
-            public float m_min;
+
             public float m_max;
-#if DEBUG
-            public bool dbugIsPrev;
-#endif
             public void SetData(float pxscale, GlyphControlParameters controlPars, short offsetX, short offsetY, ushort orgAdvW)
             {
 
@@ -271,22 +267,11 @@ namespace Typography.Contours
                 s_xmax = pxscale * controlPars.maxX;
                 s_a = pxscale * o_a;
                 s_c = pxscale * o_c;
-                //-------------------------------------- 
-                //when it shift to fit x
-                //float m_xmin = s_xmin + s_avg_x_ToFit;
-                //float m_xmax = s_xmax + s_avg_x_ToFit;
-                //s_a,s_c distance are preserved
-                //check adjust value after modified with s_avg_x_ToFit
-                //if (s_xmin < 0.5)
-                //{
-                //    m_a_adjust = 1;
-                //}
 
                 final_advW = ((s_advW - (int)s_advW) > 0.5) ?
                                 (int)(s_advW + 1) : //round
                                 (int)(s_advW);
-                //
-                c_diff = final_advW - s_advW;
+
                 //
                 m_c = final_advW - (s_xmax + s_avg_x_ToFit);
                 m_a = s_avg_x_ToFit + s_xmin;
@@ -309,31 +294,29 @@ namespace Typography.Contours
                     m_c = 0;
                 }
 
-                m_min = s_xmin + s_avg_x_ToFit;
+
                 m_max = s_xmax + s_avg_x_ToFit;
-                //--------------------------------------   
 
             }
-            public bool maIsLonger { get { return m_a > s_a; } }
-            public bool mcIsShorter { get { return m_c < s_c; } }
-            public float M_C_Diff { get { return m_c - s_c; } }
-            public float M_A_Diff { get { return m_a - s_a; } }
 #if DEBUG
+            public bool dbugIsPrev;
+            float dbug_M_C_Diff { get { return m_c - s_c; } }
+            float dbug_M_A_Diff { get { return m_a - s_a; } }
             public override string ToString()
             {
                 if (dbugIsPrev)
                 {
-                    return "m_c:" + m_c + ",diff:" + M_C_Diff;
+                    return "m_c:" + m_c + ",diff:" + dbug_M_C_Diff;
                 }
                 else
                 {
-                    return "m_a" + m_a + ",diff:" + M_A_Diff;
+                    return "m_a" + m_a + ",diff:" + dbug_M_A_Diff;
                 }
             }
 #endif
         }
 
-      
+
         public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
 
@@ -363,7 +346,7 @@ namespace Typography.Contours
                     float ideal_space = prev_ABC.s_c + current_ABC.s_a; //ideal inter-glyph space
                     //actual space
                     float actual_space = prev_ABC.m_c + current_ABC.m_a;
-                    float sum_x_fit = -prev_ABC.s_avg_x_ToFit + current_ABC.s_avg_x_ToFit;
+
                     if (ideal_space < 0)
                     {
                         //f-f
@@ -378,7 +361,7 @@ namespace Typography.Contours
                         //m-a
                         //i-i
                         //o-p 
-                        if (actual_space > 1 && actual_space - 0.5 > ideal_space)
+                        if (actual_space > 1.5 && actual_space - 0.5 > ideal_space)
                         {
                             cx--;
                         }
@@ -413,8 +396,6 @@ namespace Typography.Contours
                 //check if the current position can create a sharp glyph
                 int exact_x_floor = (int)exact_x;
                 float x_offset_to_fit = current_ABC.s_avg_x_ToFit;
-                //offset range that can produce sharp glyph (by observation)
-                //is between x_offset_to_fit - 0.3f to x_offset_to_fit + 0.3f 
 
                 float final_x = exact_x_floor + x_offset_to_fit;
                 if (UseWithLcdSubPixelRenderingTechnique)
@@ -438,7 +419,7 @@ namespace Typography.Contours
                 // Console.WriteLine(exact_x + "+" + (x_offset_to_fit) + "=>" + final_x);
             }
         }
-         
- 
+
+
     }
 }
