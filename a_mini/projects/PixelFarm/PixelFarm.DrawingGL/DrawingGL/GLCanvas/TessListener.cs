@@ -37,7 +37,7 @@ namespace PixelFarm.DrawingGL
         List<Vertex> inputVertextList;
         List<Vertex> tempVertextList = new List<Vertex>();
         public List<Vertex> resultVertexList = new List<Vertex>();
-        public List<int> resultIndexList = new List<int>();
+        public List<ushort> resultIndexList = new List<ushort>();
 
         public Tesselator.TriangleListType triangleListType;
         public TessListener2()
@@ -90,7 +90,7 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                resultIndexList.Add(index);
+                resultIndexList.Add((ushort)index);
                 resultVertexList.Add(this.inputVertextList[index]);
                 // Console.WriteLine("v_cb:" + index + ":(" + inputVertextList[index] + ")");
             }
@@ -219,7 +219,7 @@ namespace PixelFarm.DrawingGL
             return vtx;
         }
 
-        public int[] TessPolygon2(float[] vertex2dCoords, int[] contourEndPoints, out int areaCount)
+        public ushort[] TessPolygon2(float[] vertex2dCoords, int[] contourEndPoints, out int areaCount)
         {
             vertexts.Clear();//reset
             //
