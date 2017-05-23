@@ -15,6 +15,7 @@ namespace OpenTK.Graphics.ES20
             GL.VertexAttribPointer(this.location, 2, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
             GL.EnableVertexAttribArray(this.location);
         }
+
         /// <summary>
         /// load pure vector2f, from start array
         /// </summary>
@@ -46,6 +47,22 @@ namespace OpenTK.Graphics.ES20
                  2 * sizeof(float), //total size
                 (IntPtr)(vertices));
             GL.EnableVertexAttribArray(this.location);
+        }
+        public void UseVertexAttrBuffer(int vertextBufferObjectIndex)
+        {
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertextBufferObjectIndex);
+            GL.VertexAttribPointer(this.location,
+                2,
+                VertexAttribPointerType.Float,
+                false,
+                2 * sizeof(float),
+                0);
+            GL.EnableVertexAttribArray(this.location);
+        }
+        public void UnbindVertexAttrBuffer()
+        {
+            // IMPORTANT: Unbind from the buffer when we're done with it.
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
         }
     }
     public struct ShaderVtxAttrib3f

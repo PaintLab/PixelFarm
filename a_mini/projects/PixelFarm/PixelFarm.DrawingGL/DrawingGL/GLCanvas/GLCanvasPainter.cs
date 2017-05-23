@@ -36,7 +36,9 @@ namespace PixelFarm.DrawingGL
             _rectInt = new RectInt(0, 0, w, h);
             arcTool = new Arc();
             CurrentFont = new RequestFont("tahoma", 14);
+            UseVertexBufferObjectForRenderVx = true;
         }
+        public bool UseVertexBufferObjectForRenderVx { get; set; }
         public override void SetOrigin(float ox, float oy)
         {
             _canvas.SetCanvasOrigin((int)ox, (int)oy);
