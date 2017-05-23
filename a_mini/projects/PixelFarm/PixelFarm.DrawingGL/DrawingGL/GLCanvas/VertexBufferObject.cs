@@ -22,7 +22,7 @@ namespace PixelFarm.DrawingGL
         /// <summary>
         /// set up vertex data, we don't store the vertex array,or index array here
         /// </summary>
-        public void SetupVertexData(float[] _vertextBuffer, int[] _indexBuffer)
+        public void SetupVertexData(float[] _vertextBuffer, ushort[] _indexBuffer)
         {
             if (isInit)
             {

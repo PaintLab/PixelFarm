@@ -79,7 +79,7 @@ namespace PixelFarm.DrawingGL
             contourEnds[0] = coordXYs.Length - 1;
             indexListArray = tess.TessPolygon2(coordXYs, contourEnds, out this.tessAreaTriangleCount);
         }
-        public int[] indexListArray;
+        public ushort[] indexListArray;
 
     }
 
