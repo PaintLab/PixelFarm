@@ -87,13 +87,15 @@ namespace PixelFarm.DrawingGL
 
     class SmoothBorderBuilder
     {
+        List<float> expandCoords = new List<float>();
         public float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
         {
+            expandCoords.Clear();
             float[] coords = coordXYs;
             int coordCount = coordXYs.Length;
             //from user input coords
             //expand it
-            List<float> expandCoords = new List<float>(); //TODO: review this again***
+            //TODO: review this again***
             int lim = coordCount - 2;
             for (int i = 0; i < lim;)
             {
@@ -103,12 +105,17 @@ namespace PixelFarm.DrawingGL
             //close coord
             CreateLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
 
-            borderTriangleStripCount = (coordCount) * 2;
-            return expandCoords.ToArray();
+            borderTriangleStripCount = coordCount * 2;
+            //
+            float[] result = expandCoords.ToArray();
+            expandCoords.Clear();
+            //
+            return result;
         }
         static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
         {
             //create wiht no line join
+            //TODO: implement line join ***
             float dx = x2 - x1;
             float dy = y2 - y1;
             float rad1 = (float)System.Math.Atan2(
