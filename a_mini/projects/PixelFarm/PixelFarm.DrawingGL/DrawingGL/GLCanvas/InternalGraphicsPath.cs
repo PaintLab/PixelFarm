@@ -93,7 +93,7 @@ namespace PixelFarm.DrawingGL
             int coordCount = coordXYs.Length;
             //from user input coords
             //expand it
-            List<float> expandCoords = new List<float>();
+            List<float> expandCoords = new List<float>(); //TODO: review this again***
             int lim = coordCount - 2;
             for (int i = 0; i < lim;)
             {

@@ -509,17 +509,18 @@ namespace PixelFarm.DrawingGL
                         float prevWidth = StrokeWidth;
 
                         StrokeColor = color;
-                        StrokeWidth = 0.5f; //TODO: review this ***
+                        StrokeWidth = 2f; //TODO: review this ***
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             Figure f = figures[i];
                             if (f.SupportVertexBuffer)
                             {
+                                float[] tessArea = f.GetAreaTess(this.tessTool);
                                 f.InitVertexBufferIfNeed(this.tessTool);
                                 //draw area
                                 basicFillShader.FillTriangles(f.VBOArea, f.TessAreaTriangleCount, color);
                                 //draw smooth border
-
+                                smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(), f.BorderTriangleStripCount);
                             }
                             else
                             {
@@ -531,7 +532,7 @@ namespace PixelFarm.DrawingGL
                                 }
                             }
                         }
-                        StrokeWidth = prevWidth;
+                        StrokeWidth = prevWidth; //restore back
                     }
                     break;
             }
