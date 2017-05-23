@@ -127,8 +127,13 @@ namespace PixelFarm.DrawingGL
             coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1);
         }
     }
+    /// <summary>
+    /// a wrapper of internal private class
+    /// </summary>
     public struct InternalGraphicsPath
     {
+        //since Figure is private=> we use this to expose to public
+
         internal readonly List<Figure> figures;
         private InternalGraphicsPath(List<Figure> figures)
         {
