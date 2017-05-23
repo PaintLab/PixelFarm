@@ -54,11 +54,11 @@ namespace PixelFarm.DrawingGL
                 return _vboArea;
             }
         }
-        public float[] GetSmoothBorders()
+        public float[] GetSmoothBorders(SmoothBorderBuilder smoothBorderBuilder)
         {
             if (smoothBorderTess == null)
             {
-                return smoothBorderTess = SmoothBorderBuilder.BuildSmoothBorders(coordXYs, out borderTriangleStripCount);
+                return smoothBorderTess = smoothBorderBuilder.BuildSmoothBorders(coordXYs, out borderTriangleStripCount);
             }
             return smoothBorderTess;
         }
@@ -85,9 +85,9 @@ namespace PixelFarm.DrawingGL
 
 
 
-    static class SmoothBorderBuilder
+    class SmoothBorderBuilder
     {
-        public static float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
+        public float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
         {
             float[] coords = coordXYs;
             int coordCount = coordXYs.Length;
