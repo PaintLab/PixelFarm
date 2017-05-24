@@ -1,10 +1,8 @@
 ﻿//MIT, 2014-2017, WinterDev
 
 using System;
-using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
 
-using PixelFarm.Agg;
 namespace PixelFarm.DrawingGL
 {
 
@@ -40,7 +38,7 @@ namespace PixelFarm.DrawingGL
         TessTool tessTool;
         FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer 
         SmoothBorderBuilder smoothBorderBuilder = new SmoothBorderBuilder();
-       
+
 
         internal CanvasGL2d(int canvasW, int canvasH)
         {
@@ -72,7 +70,7 @@ namespace PixelFarm.DrawingGL
             sdfShader = new DrawingGL.SingleChannelSdf(shaderRes);
             //-----------------------------------------------------------------------
             //tools
-          
+
             tessTool = new TessTool();
             //-----------------------------------------------------------------------
 
@@ -528,7 +526,9 @@ namespace PixelFarm.DrawingGL
                                 //draw area
                                 basicFillShader.FillTriangles(f.VBOArea, f.TessAreaTriangleCount, color);
                                 //draw smooth border
-                                smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(smoothBorderBuilder), f.BorderTriangleStripCount);
+                                smoothLineShader.DrawTriangleStrips(
+                                    f.GetSmoothBorders(smoothBorderBuilder),
+                                    f.BorderTriangleStripCount);
                             }
                             else
                             {
@@ -536,7 +536,9 @@ namespace PixelFarm.DrawingGL
                                 if (tessArea != null)
                                 {
                                     basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);
-                                    smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(smoothBorderBuilder), f.BorderTriangleStripCount);
+                                    smoothLineShader.DrawTriangleStrips(
+                                        f.GetSmoothBorders(smoothBorderBuilder),
+                                        f.BorderTriangleStripCount);
                                 }
                             }
                         }

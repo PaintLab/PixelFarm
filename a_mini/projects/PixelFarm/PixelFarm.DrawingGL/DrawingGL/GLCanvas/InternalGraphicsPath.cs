@@ -13,7 +13,7 @@ namespace PixelFarm.DrawingGL
         //---------
         //system tess ...
         public float[] areaTess;
-        float[] smoothBorderTess;
+        float[] smoothBorderTess; //smooth border result
         int borderTriangleStripCount;
         int tessAreaTriangleCount;
         //---------
@@ -60,7 +60,7 @@ namespace PixelFarm.DrawingGL
         {
             if (smoothBorderTess == null)
             {
-                return smoothBorderTess = 
+                return smoothBorderTess =
                     smoothBorderBuilder.BuildSmoothBorders(coordXYs, out borderTriangleStripCount);
             }
             return smoothBorderTess;
@@ -76,7 +76,7 @@ namespace PixelFarm.DrawingGL
             }
             return areaTess;
         }
-        public void GetAreaTess2(TessTool tess)
+        void GetAreaTess2(TessTool tess)
         {
             //triangle list
             contourEnds[0] = coordXYs.Length - 1;
