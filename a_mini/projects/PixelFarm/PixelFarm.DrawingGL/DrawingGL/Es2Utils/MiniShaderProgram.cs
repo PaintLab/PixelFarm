@@ -1,9 +1,10 @@
 ﻿//MIT, 2014-2017, WinterDev
 
 using System;
- 
+
 namespace OpenTK.Graphics.ES20
 {
+     
     public struct ShaderVtxAttrib2f
     {
         readonly int location;
@@ -49,22 +50,20 @@ namespace OpenTK.Graphics.ES20
                 (IntPtr)(vertices));
             GL.EnableVertexAttribArray(this.location);
         }
-        public void UseVertexAttrBuffer(int vertextBufferObjectIndex)
+        /// <summary>
+        /// load latest server side data
+        /// </summary>
+        public void LoadLatest()
         {
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vertextBufferObjectIndex);
             GL.VertexAttribPointer(this.location,
                 2,
                 VertexAttribPointerType.Float,
                 false,
                 2 * sizeof(float),
                 0);
-            GL.EnableVertexAttribArray(this.location);
+            GL.EnableVertexAttribArray(this.location);            
         }
-        public void UnbindVertexAttrBuffer()
-        {
-            // IMPORTANT: Unbind from the buffer when we're done with it.
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-        }
+
     }
     public struct ShaderVtxAttrib3f
     {
@@ -87,6 +86,19 @@ namespace OpenTK.Graphics.ES20
                 false,
                 3 * sizeof(float), //total size
                 vertices);
+            GL.EnableVertexAttribArray(this.location);
+        }
+        /// <summary>
+        /// load latest server side data
+        /// </summary>
+        public void LoadLatest()
+        {
+            GL.VertexAttribPointer(this.location,
+                3,
+                VertexAttribPointerType.Float,
+                false,
+                3 * sizeof(float),
+                0);
             GL.EnableVertexAttribArray(this.location);
         }
     }
@@ -115,6 +127,21 @@ namespace OpenTK.Graphics.ES20
                         (IntPtr)h);
                 }
             }
+            GL.EnableVertexAttribArray(this.location);
+        }
+
+
+        /// <summary>
+        /// load latest server side data
+        /// </summary>
+        public void LoadLatest()
+        {
+            GL.VertexAttribPointer(this.location,
+                4,
+                VertexAttribPointerType.Float,
+                false,
+                4 * sizeof(float),
+                0);
             GL.EnableVertexAttribArray(this.location);
         }
     }
