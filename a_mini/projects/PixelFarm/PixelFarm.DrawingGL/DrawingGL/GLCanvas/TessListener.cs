@@ -180,8 +180,8 @@ namespace PixelFarm.DrawingGL
 
     class TessTool
     {
-        internal readonly Tesselator tess;
-        internal readonly TessListener tessListener;
+        readonly Tesselator tess;
+        readonly TessListener tessListener;
         public TessTool() : this(new Tesselator() { WindingRule = Tesselator.WindingRuleType.Odd }) { }
         public TessTool(Tesselator tess)
         {
@@ -189,21 +189,21 @@ namespace PixelFarm.DrawingGL
             this.tessListener = new TessListener();
             tessListener.Connect(tess, true);
         }
-
-        void InternalTessPolygon(float[] vertex2dCoords, int[] contourEndPoints)
+        public bool TessPolygon(float[] vertex2dCoords, int[] contourEndPoints)
         {
             //internal tess the polygon
 
             int ncoords = vertex2dCoords.Length / 2;
             tessListener.ResetAndLoadInputVertexList(ncoords);
+            if (ncoords == 0) return false;
             //-----------------------
+            //this support sub contour in the same array of  vertex2dCoords
             tess.BeginPolygon();
-            int nContourCount = contourEndPoints.Length;
-            int beginAt = 0;
-
-            for (int m = 0; m < nContourCount; ++m)
+            if (contourEndPoints == null)
             {
-                int thisContourEndAt = (contourEndPoints[m] + 1) / 2;
+                //only 1 contour
+                int beginAt = 0;
+                int thisContourEndAt = vertex2dCoords.Length / 2;
                 tess.BeginContour();
                 for (int i = beginAt; i < thisContourEndAt; ++i)
                 {
@@ -213,31 +213,67 @@ namespace PixelFarm.DrawingGL
                 }
                 beginAt = thisContourEndAt + 1;
                 tess.EndContour();
+
+            }
+            else
+            {
+                //may have more than 1 contour
+                int nContourCount = contourEndPoints.Length;
+                int beginAt = 0;
+                for (int m = 0; m < nContourCount; ++m)
+                {
+                    int thisContourEndAt = (contourEndPoints[m] + 1) / 2;
+                    tess.BeginContour();
+                    for (int i = beginAt; i < thisContourEndAt; ++i)
+                    {
+                        tess.AddVertex(
+                            vertex2dCoords[i << 1], //*2
+                            vertex2dCoords[(i << 1) + 1], 0, i); //*2+1
+                    }
+                    beginAt = thisContourEndAt + 1;
+                    tess.EndContour();
+                }
             }
             tess.EndPolygon();
             //-----------------------
+            return true;
         }
 
-        public float[] TessPolygon(float[] vertex2dCoords, int[] contourEndPoints, out int areaCount)
-        {
+        public List<ushort> TessIndexList { get { return tessListener.resultIndexList; } }
+        public List<TessTempVertex> TempVertexList { get { return tessListener.tempVertexList; } }
 
-            int orgVertexCount = vertex2dCoords.Length / 2; //original vertex count (our 2d vertex has float x and y)
-            //
-            if (orgVertexCount == 0) { areaCount = 0; return null; }
-            //-----------------------------   
-            InternalTessPolygon(vertex2dCoords, contourEndPoints);
+    }
+
+
+    static class TessToolExtensions
+    {
+        /// <summary>
+        /// tess and read result as triangle list vertex array (for GLES draw-array)
+        /// </summary>
+        /// <param name="tessTool"></param>
+        /// <param name="vertex2dCoords"></param>
+        /// <param name="contourEndPoints"></param>
+        /// <param name="vertexCount"></param>
+        /// <returns></returns>
+        public static float[] TessAsTriVertexArray(this TessTool tessTool, float[] vertex2dCoords, int[] contourEndPoints, out int vertexCount)
+        {
+            if (!tessTool.TessPolygon(vertex2dCoords, contourEndPoints))
+            {
+                vertexCount = 0;
+                return null;
+            }
             //results
             //1.
-            List<ushort> indexList = tessListener.resultIndexList;
+            List<ushort> indexList = tessTool.TessIndexList;
             //2.
-            List<TessTempVertex> tempVertexList = tessListener.tempVertexList;
+            List<TessTempVertex> tempVertexList = tessTool.TempVertexList;
             //3.
-            areaCount = indexList.Count;
-            //-----------------------------   
-            int j = indexList.Count;
-            float[] vtx = new float[j * 2];//***
+            vertexCount = indexList.Count;
+            //-----------------------------    
+            int orgVertexCount = vertex2dCoords.Length;
+            float[] vtx = new float[vertexCount * 2];//***
             int n = 0;
-            for (int p = 0; p < j; ++p)
+            for (int p = 0; p < vertexCount; ++p)
             {
                 ushort index = indexList[p];
                 if (index >= orgVertexCount)
@@ -257,46 +293,57 @@ namespace PixelFarm.DrawingGL
             }
             //triangle list
             return vtx;
+
         }
-
-        public ushort[] TessPolygon2(float[] vertex2dCoords, int[] contourEndPoints, out float[] outputCoords, out int areaCount)
+        /// <summary>
+        /// tess and read result as triangle list index array (for GLES draw element)
+        /// </summary>
+        /// <param name="tessTool"></param>
+        /// <param name="vertex2dCoords"></param>
+        /// <param name="contourEndPoints"></param>
+        /// <param name="outputCoords"></param>
+        /// <param name="vertexCount"></param>
+        /// <returns></returns>
+        public static ushort[] TessAsTriIndexArray(this TessTool tessTool,
+            float[] vertex2dCoords,
+            int[] contourEndPoints,
+            out float[] outputCoords,
+            out int vertexCount)
         {
-
-            int ncoords = vertex2dCoords.Length / 2;  //original vertex count (our 2d vertex has float x and y)
-            if (ncoords == 0) { areaCount = 0; outputCoords = null; return null; }
-            //-----------------------------   
-            InternalTessPolygon(vertex2dCoords, contourEndPoints);
-            //-----------------------------  
+            if (!tessTool.TessPolygon(vertex2dCoords, contourEndPoints))
+            {
+                vertexCount = 0;
+                outputCoords = null;
+                return null; //* early exit
+            }
             //results
             //1.
-            List<ushort> indexList = tessListener.resultIndexList;
+            List<ushort> indexList = tessTool.TessIndexList;
             //2.
-            List<TessTempVertex> tempVertexList = tessListener.tempVertexList;
+            List<TessTempVertex> tempVertexList = tessTool.TempVertexList;
             //3.
-            areaCount = indexList.Count;
+            vertexCount = indexList.Count;
             //-----------------------------   
-            //if we have some tempVertex in  tempVertexList
-            //then create a new array and append with original and new tempVertex list
-            //but if we have only original => just send the original 
 
-            int tempVertListCount = tessListener.tempVertexList.Count;
+            //create a new array and append with original and new tempVertex list 
+            int tempVertListCount = tempVertexList.Count;
             outputCoords = new float[vertex2dCoords.Length + tempVertListCount * 2];
+            //1. copy original array
             Array.Copy(vertex2dCoords, outputCoords, vertex2dCoords.Length);
+            //2. append with newly create vertex (from tempVertList)
             int endAt = vertex2dCoords.Length + tempVertListCount;
-
             int p = 0;
-            int q = vertex2dCoords.Length;
+            int q = vertex2dCoords.Length; //start adding at
             for (int i = vertex2dCoords.Length; i < endAt; ++i)
             {
-                TessTempVertex v = tessListener.tempVertexList[p];
+                TessTempVertex v = tempVertexList[p];
                 outputCoords[q] = (float)v.m_X;
                 outputCoords[q + 1] = (float)v.m_Y;
                 p++;
                 q += 2;
             }
 
-            return tessListener.resultIndexList.ToArray();
-
+            return indexList.ToArray();
         }
     }
 }

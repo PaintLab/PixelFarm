@@ -486,7 +486,7 @@ namespace PixelFarm.DrawingGL
                             {
                                 basicFillShader.FillTriangles(
                                     f.GetAreaTessAsVBO(tessTool),
-                                    f.TessAreaTriangleCount,
+                                    f.TessAreaVertexCount,
                                     color);
                             }
                             else
@@ -494,7 +494,7 @@ namespace PixelFarm.DrawingGL
                                 float[] tessArea = f.GetAreaTess(this.tessTool);
                                 if (tessArea != null)
                                 {
-                                    this.basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);
+                                    this.basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
                                 }
                             }
                         }
@@ -514,16 +514,18 @@ namespace PixelFarm.DrawingGL
                         StrokeColor = color;
                         StrokeWidth = 1.5f; //TODO: review this ***
                         //
+                        float[] tessArea;
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             //draw each sub-path 
                             Figure f = igpth.GetFig(i);
                             if (f.SupportVertexBuffer)
                             {
+                                //TODO: review here again
                                 //draw area
                                 basicFillShader.FillTriangles(
                                     f.GetAreaTessAsVBO(tessTool),
-                                    f.TessAreaTriangleCount,
+                                    f.TessAreaVertexCount,
                                     color);
                                 //draw smooth border
                                 smoothLineShader.DrawTriangleStrips(
@@ -532,10 +534,10 @@ namespace PixelFarm.DrawingGL
                             }
                             else
                             {
-                                float[] tessArea = f.GetAreaTess(this.tessTool);
-                                if (tessArea != null)
-                                {
-                                    basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);
+                                if ((tessArea = f.GetAreaTess(this.tessTool)) != null)
+                                {    //draw area
+                                    basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                                    //draw smooth border
                                     smoothLineShader.DrawTriangleStrips(
                                         f.GetSmoothBorders(smoothBorderBuilder),
                                         f.BorderTriangleStripCount);
@@ -587,7 +589,7 @@ namespace PixelFarm.DrawingGL
                             //-------------------------------------   
                             if (tessArea != null)
                             {
-                                this.basicFillShader.FillTriangles(tessArea, fig.TessAreaTriangleCount, PixelFarm.Drawing.Color.Black);
+                                this.basicFillShader.FillTriangles(tessArea, fig.TessAreaVertexCount, PixelFarm.Drawing.Color.Black);
                             }
                             //-------------------------------------- 
                             //render color
