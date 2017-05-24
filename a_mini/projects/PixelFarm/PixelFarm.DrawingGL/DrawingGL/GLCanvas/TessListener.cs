@@ -48,6 +48,10 @@ namespace PixelFarm.DrawingGL
         }
         public void BeginCallBack(Tesselator.TriangleListType type)
         {
+            if (type != Tesselator.TriangleListType.Triangles)
+            {
+
+            }
             this.triangleListType = type;
 
             //what type of triangle list
@@ -84,6 +88,20 @@ namespace PixelFarm.DrawingGL
             //Assert.AreEqual(GetNextOutputAsInt(), index); 
             if (index < 0)
             {
+
+                if (resultIndexList.Count > 0)
+                {
+                    //degeneration vx?
+                    //TODO: review here
+                    ushort latestValue = resultIndexList[resultIndexList.Count - 1];
+                    resultIndexList.Add(latestValue);
+                }
+                else
+                {
+                    resultIndexList.Add(0);
+                }
+              
+
                 //use data from temp store***
                 resultVertexList.Add(this.tempVertextList[-index]);
                 //Console.WriteLine("temp_v_cb:" + index + ":(" + tempVertextList[-index] + ")");
