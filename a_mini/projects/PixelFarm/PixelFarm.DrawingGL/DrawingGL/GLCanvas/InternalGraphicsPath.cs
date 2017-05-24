@@ -8,14 +8,14 @@ namespace PixelFarm.DrawingGL
     {
         //TODO: review here again***
 
-        int[] contourEnds = new int[1];
+
         public float[] coordXYs; //this is user provide coord
         //---------
         //system tess ...
         public float[] areaTess;
-        float[] smoothBorderTess;
-        int borderTriangleStripCount;
-        int tessAreaTriangleCount;
+        float[] smoothBorderTess; //smooth border result
+        int _borderTriangleStripCount;
+        int _tessAreaVertexCount;
         //---------
         public ushort[] indexListArray;
         float[] tessXYCoords2;
@@ -26,8 +26,8 @@ namespace PixelFarm.DrawingGL
         {
             this.coordXYs = coordXYs;
         }
-        public int BorderTriangleStripCount { get { return borderTriangleStripCount; } }
-        public int TessAreaTriangleCount { get { return tessAreaTriangleCount; } }
+        public int BorderTriangleStripCount { get { return _borderTriangleStripCount; } }
+        public int TessAreaVertexCount { get { return _tessAreaVertexCount; } }
 
         public bool SupportVertexBuffer
         {
@@ -35,33 +35,14 @@ namespace PixelFarm.DrawingGL
             set;
 
         }
-        public void InitVertexBufferIfNeed(TessTool tess)
-        {
-            if (_vboArea == null)
-            {
-                GetAreaTess2(tess);
-                _vboArea = new VertexBufferObject();
-                _vboArea.CreateBuffers(tessXYCoords2, indexListArray);
-                //after we create the _vboArea
-                //we may clear tessXYCoords2 (set to null).                
-            }
-        }
-        /// <summary>
-        /// vertex buffer of the solid area part
-        /// </summary>
-        public VertexBufferObject VBOArea
-        {
-            get
-            {
-                return _vboArea;
-            }
-        }
+
+
         public float[] GetSmoothBorders(SmoothBorderBuilder smoothBorderBuilder)
         {
             if (smoothBorderTess == null)
             {
-                return smoothBorderTess = 
-                    smoothBorderBuilder.BuildSmoothBorders(coordXYs, out borderTriangleStripCount);
+                return smoothBorderTess =
+                    smoothBorderBuilder.BuildSmoothBorders(coordXYs, out _borderTriangleStripCount);
             }
             return smoothBorderTess;
         }
@@ -70,17 +51,25 @@ namespace PixelFarm.DrawingGL
         {
             if (areaTess == null)
             {
-                //triangle list
-                contourEnds[0] = coordXYs.Length - 1;
-                return areaTess = tess.TessPolygon(coordXYs, contourEnds, out this.tessAreaTriangleCount);
+                //triangle list                
+                return areaTess = tess.TessAsTriVertexArray(coordXYs, null, out this._tessAreaVertexCount);
             }
             return areaTess;
         }
-        public void GetAreaTess2(TessTool tess)
+        /// <summary>
+        /// vertex buffer of the solid area part
+        /// </summary>
+        public VertexBufferObject GetAreaTessAsVBO(TessTool tess)
         {
-            //triangle list
-            contourEnds[0] = coordXYs.Length - 1;
-            indexListArray = tess.TessPolygon2(coordXYs, contourEnds, out tessXYCoords2, out this.tessAreaTriangleCount);
+            if (_vboArea == null)
+            {
+                //tess
+                indexListArray = tess.TessAsTriIndexArray(coordXYs, null,
+                    out tessXYCoords2, out this._tessAreaVertexCount);
+                _vboArea = new VertexBufferObject();
+                _vboArea.CreateBuffers(tessXYCoords2, indexListArray);
+            }
+            return _vboArea;
         }
 
     }
@@ -101,11 +90,11 @@ namespace PixelFarm.DrawingGL
             int lim = coordCount - 2;
             for (int i = 0; i < lim;)
             {
-                CreateLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
+                CreateSmoothLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
                 i += 2;
             }
             //close coord
-            CreateLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
+            CreateSmoothLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
 
             borderTriangleStripCount = coordCount * 2;
             //
@@ -114,20 +103,20 @@ namespace PixelFarm.DrawingGL
             //
             return result;
         }
-        static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
+        static void CreateSmoothLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
         {
-            //create wiht no line join
+
+            //create with no line join
             //TODO: implement line join ***
             //we can calculate rad on server-side, so=> reduce num of vertex
-            float dx = x2 - x1;
-            float dy = y2 - y1;
+
             float rad1 = (float)System.Math.Atan2(
                    y2 - y1,  //dy
                    x2 - x1); //dx
-            coords.Add(x1); coords.Add(y1); coords.Add(0); coords.Add(rad1);
-            coords.Add(x1); coords.Add(y1); coords.Add(1); coords.Add(rad1);
-            coords.Add(x2); coords.Add(y2); coords.Add(0); coords.Add(rad1);
-            coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1);
+            coords.Add(x1); coords.Add(y1); coords.Add(0); coords.Add(rad1); //1 vertex
+            coords.Add(x1); coords.Add(y1); coords.Add(1); coords.Add(rad1); //1 vertex
+            coords.Add(x2); coords.Add(y2); coords.Add(0); coords.Add(rad1); //1 vertex
+            coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1); //1 vertex
         }
     }
     /// <summary>
