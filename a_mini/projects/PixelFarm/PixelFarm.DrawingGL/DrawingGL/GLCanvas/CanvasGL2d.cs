@@ -3,8 +3,8 @@
 using System;
 using System.Collections.Generic;
 using OpenTK.Graphics.ES20;
-using Tesselate;
 
+using PixelFarm.Agg;
 namespace PixelFarm.DrawingGL
 {
 
@@ -40,6 +40,7 @@ namespace PixelFarm.DrawingGL
         TessTool tessTool;
         FrameBuffer _currentFrameBuffer;//default = null, system provide frame buffer 
         SmoothBorderBuilder smoothBorderBuilder = new SmoothBorderBuilder();
+       
 
         internal CanvasGL2d(int canvasW, int canvasH)
         {
@@ -64,16 +65,14 @@ namespace PixelFarm.DrawingGL
             blurShader = new BlurShader(shaderRes);
             glesTextureShader = new OpenGLESTextureShader(shaderRes);
             invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(shaderRes); //used with stencil  ***
-            // tessListener.Connect(tess,          
-            //Tesselate.Tesselator.WindingRuleType.Odd, true);
+
             conv3x3TextureShader = new Conv3x3TextureShader(shaderRes);
             msdfShader = new DrawingGL.MultiChannelSdf(shaderRes);
-
-
             msdfSubPixelRenderingShader = new DrawingGL.MultiChannelSubPixelRenderingSdf(shaderRes);
             sdfShader = new DrawingGL.SingleChannelSdf(shaderRes);
             //-----------------------------------------------------------------------
-
+            //tools
+          
             tessTool = new TessTool();
             //-----------------------------------------------------------------------
 
@@ -548,6 +547,7 @@ namespace PixelFarm.DrawingGL
                     break;
             }
         }
+
         public void FillGfxPath(Drawing.Brush brush, InternalGraphicsPath igpth)
         {
             switch (brush.BrushKind)
