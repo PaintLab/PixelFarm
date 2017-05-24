@@ -44,6 +44,7 @@ namespace PixelFarm.DrawingGL
         public int Height { get { return h; } }
         void InitFrameBuffer()
         {
+            
             GL.GenFramebuffers(1, out frameBufferId);
             //switch to this (custom) framebuffer
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, frameBufferId);

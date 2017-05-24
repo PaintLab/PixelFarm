@@ -42,7 +42,7 @@ namespace OpenTkEssTest
             //-------------------------------
             if (!isInit)
             {
-                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
+                glbmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.png");
                 isInit = true;
             }
             if (frameBuffer.FrameBufferId > 0)

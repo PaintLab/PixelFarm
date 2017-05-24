@@ -1,34 +1,48 @@
 ﻿//MIT, 2016-2017, WinterDev
 
 using System.Collections.Generic;
-using PixelFarm.Agg;
+
 namespace PixelFarm.DrawingGL
 {
     class Figure
     {
         //TODO: review here again***
 
-        int[] contourEnds = new int[1];
+
         public float[] coordXYs; //this is user provide coord
         //---------
         //system tess ...
         public float[] areaTess;
-        float[] smoothBorderTess;
-        int borderTriangleStripCount;
-        int tessAreaTriangleCount;
+        float[] smoothBorderTess; //smooth border result
+        int _borderTriangleStripCount;
+        int _tessAreaVertexCount;
+        //---------
+        public ushort[] indexListArray;
+        float[] tessXYCoords2;
+        //---------
+        VertexBufferObject _vboArea;
+        //---------
         public Figure(float[] coordXYs)
         {
             this.coordXYs = coordXYs;
         }
-        public int BorderTriangleStripCount { get { return borderTriangleStripCount; } }
-        public int TessAreaTriangleCount { get { return tessAreaTriangleCount; } }
+        public int BorderTriangleStripCount { get { return _borderTriangleStripCount; } }
+        public int TessAreaVertexCount { get { return _tessAreaVertexCount; } }
+
+        public bool SupportVertexBuffer
+        {
+            get;
+            set;
+
+        }
 
 
-        public float[] GetSmoothBorders()
+        public float[] GetSmoothBorders(SmoothBorderBuilder smoothBorderBuilder)
         {
             if (smoothBorderTess == null)
             {
-                return smoothBorderTess = SmoothBorderBuilder.BuildSmoothBorders(coordXYs, out borderTriangleStripCount);
+                return smoothBorderTess =
+                    smoothBorderBuilder.BuildSmoothBorders(coordXYs, out _borderTriangleStripCount);
             }
             return smoothBorderTess;
         }
@@ -37,137 +51,126 @@ namespace PixelFarm.DrawingGL
         {
             if (areaTess == null)
             {
-                //triangle list
-                contourEnds[0] = coordXYs.Length - 1;
-                return areaTess = tess.TessPolygon(coordXYs, contourEnds, out this.tessAreaTriangleCount);
+                //triangle list                
+                return areaTess = tess.TessAsTriVertexArray(coordXYs, null, out this._tessAreaVertexCount);
             }
             return areaTess;
         }
+        /// <summary>
+        /// vertex buffer of the solid area part
+        /// </summary>
+        public VertexBufferObject GetAreaTessAsVBO(TessTool tess)
+        {
+            if (_vboArea == null)
+            {
+                //tess
+                indexListArray = tess.TessAsTriIndexArray(coordXYs, null,
+                    out tessXYCoords2, out this._tessAreaVertexCount);
+                _vboArea = new VertexBufferObject();
+                _vboArea.CreateBuffers(tessXYCoords2, indexListArray);
+            }
+            return _vboArea;
+        }
+
     }
 
 
 
-    static class SmoothBorderBuilder
+    class SmoothBorderBuilder
     {
-        public static float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
+        List<float> expandCoords = new List<float>();
+        public float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
         {
+            expandCoords.Clear();
             float[] coords = coordXYs;
             int coordCount = coordXYs.Length;
             //from user input coords
             //expand it
-            List<float> expandCoords = new List<float>();
+            //TODO: review this again***
             int lim = coordCount - 2;
             for (int i = 0; i < lim;)
             {
-                CreateLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
+                CreateSmoothLineSegment(expandCoords, coords[i], coords[i + 1], coords[i + 2], coords[i + 3]);
                 i += 2;
             }
             //close coord
-            CreateLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
+            CreateSmoothLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
 
-            borderTriangleStripCount = (coordCount) * 2;
-            return expandCoords.ToArray();
+            borderTriangleStripCount = coordCount * 2;
+            //
+            float[] result = expandCoords.ToArray();
+            expandCoords.Clear();
+            //
+            return result;
         }
-        static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
+        static void CreateSmoothLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
         {
-            //create wiht no line join
-            float dx = x2 - x1;
-            float dy = y2 - y1;
+
+            //create with no line join
+            //TODO: implement line join ***
+            //we can calculate rad on server-side, so=> reduce num of vertex
+
             float rad1 = (float)System.Math.Atan2(
                    y2 - y1,  //dy
                    x2 - x1); //dx
-            coords.Add(x1); coords.Add(y1); coords.Add(0); coords.Add(rad1);
-            coords.Add(x1); coords.Add(y1); coords.Add(1); coords.Add(rad1);
-            coords.Add(x2); coords.Add(y2); coords.Add(0); coords.Add(rad1);
-            coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1);
+            coords.Add(x1); coords.Add(y1); coords.Add(0); coords.Add(rad1); //1 vertex
+            coords.Add(x1); coords.Add(y1); coords.Add(1); coords.Add(rad1); //1 vertex
+            coords.Add(x2); coords.Add(y2); coords.Add(0); coords.Add(rad1); //1 vertex
+            coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1); //1 vertex
         }
     }
+    /// <summary>
+    /// a wrapper of internal private class
+    /// </summary>
     public struct InternalGraphicsPath
     {
-        internal readonly List<Figure> figures;
-        private InternalGraphicsPath(List<Figure> figures)
-        {
-            this.figures = figures;
-        }
-        public static InternalGraphicsPath CreatePolygonGraphicsPath(float[] xycoords)
-        {
-            List<Figure> figures = new List<Figure>(1);
-            figures.Add(new Figure(xycoords));
-            return new InternalGraphicsPath(figures);
-        }
-        public static InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
-        {
-            VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
-            double prevX = 0;
-            double prevY = 0;
-            double prevMoveToX = 0;
-            double prevMoveToY = 0;
-            //TODO: reivew here 
-            //about how to reuse this list
-            List<List<float>> allXYlist = new List<List<float>>(); //all include sub path
-            List<float> xylist = new List<float>();
-            allXYlist.Add(xylist);
-            bool isAddToList = true;
-            //bool vxsMoreThan1 =  vxsSnap.VxsHasMoreThanOnePart;
-            for (;;)
-            {
-                double x, y;
-                VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);
-                switch (cmd)
-                {
-                    case PixelFarm.Agg.VertexCmd.MoveTo:
-                        if (!isAddToList)
-                        {
-                            allXYlist.Add(xylist);
-                            isAddToList = true;
-                        }
-                        prevMoveToX = prevX = x;
-                        prevMoveToY = prevY = y;
-                        xylist.Add((float)x);
-                        xylist.Add((float)y);
-                        break;
-                    case PixelFarm.Agg.VertexCmd.LineTo:
-                        xylist.Add((float)x);
-                        xylist.Add((float)y);
-                        prevX = x;
-                        prevY = y;
-                        break;
-                    case PixelFarm.Agg.VertexCmd.Close:
-                        //from current point 
-                        xylist.Add((float)prevMoveToX);
-                        xylist.Add((float)prevMoveToY);
-                        prevX = prevMoveToX;
-                        prevY = prevMoveToY;
-                        //xylist = new List<float>();
-                        //isAddToList = false;
-                        break;
-                    case VertexCmd.CloseAndEndFigure:
-                        //from current point 
-                        xylist.Add((float)prevMoveToX);
-                        xylist.Add((float)prevMoveToY);
-                        prevX = prevMoveToX;
-                        prevY = prevMoveToY;
-                        //
-                        xylist = new List<float>();
-                        isAddToList = false;
-                        break;
-                    case PixelFarm.Agg.VertexCmd.NoMore:
-                        goto EXIT_LOOP;
-                    default:
-                        throw new System.NotSupportedException();
-                }
-            }
-            EXIT_LOOP:
+        //since Figure is private=> we use this to expose to public
 
-            int j = allXYlist.Count;
-            List<Figure> figures = new List<Figure>(j);
-            for (int i = 0; i < j; ++i)
+
+        readonly Figure _figure;
+        readonly List<Figure> figures;
+        internal InternalGraphicsPath(List<Figure> figures)
+        {
+
+            this.figures = figures;
+            _figure = null;
+        }
+        internal InternalGraphicsPath(Figure fig)
+        {
+            this.figures = null;
+            _figure = fig;
+        }
+
+
+        internal int FigCount
+        {
+            get
             {
-                figures.Add(new Figure(allXYlist[i].ToArray()));
+                if (_figure != null)
+                {
+                    return 1;
+                }
+                if (figures != null)
+                {
+                    return figures.Count;
+                }
+                return 0;
             }
-            return new InternalGraphicsPath(figures);
+        }
+        internal Figure GetFig(int index)
+        {
+            if (index == 0)
+            {
+                return _figure ?? figures[0];
+            }
+            else
+            {
+                return figures[index];
+            }
         }
     }
+
+
 
     class GLRenderVx : PixelFarm.Drawing.RenderVx
     {

@@ -50,12 +50,12 @@ namespace Tesselate
         enum ProcessingState
         {
             Dormant, InPolygon, InContour
-        };
+        }
         // We cache vertex data for single-contour polygons so that we can
         // try a quick-and-dirty decomposition first.
         const int MAX_CACHE_SIZE = 100;
         public const double MAX_COORD = 1.0e150;
-        public struct Vertex
+        struct Vertex
         {
             public double x;
             public double y;
@@ -68,6 +68,11 @@ namespace Tesselate
         //    public int vertexIndex;
         //}
 
+        public struct CombineParameters
+        {
+            public int d0, d1, d2, d3;
+            public double w0, w1, w2, w3;
+        }
         public enum TriangleListType
         {
             LineLoop,
@@ -91,10 +96,11 @@ namespace Tesselate
         public WindingRuleType windingRule;	// rule for determining polygon interior
         public Dictionary edgeDictionary;		/* edge dictionary for sweep line */
         public MiniCollection.MaxFirstList<ContourVertex> vertexPriorityQue = new MiniCollection.MaxFirstList<ContourVertex>();
-        public ContourVertex currentSweepVertex;		/* current sweep event being processed */
+        public ContourVertex currentSweepVertex;        /* current sweep event being processed */
+
         public delegate void CallCombineDelegate(
-            double c1, double c2, double c3, int[] data4,
-            double[] weight4, out int outData);
+            double c1, double c2, double c3, ref CombineParameters combinePars, out int outData);
+
         public CallCombineDelegate callCombine;
         /*** state needed for rendering callbacks (see render.c) ***/
 
@@ -115,8 +121,8 @@ namespace Tesselate
         /*** state needed to cache single-contour polygons for renderCache() */
 
         bool emptyCache;		/* empty cache on next vertex() call */
-        public int cacheCount;		/* number of cached vertices */
-        public Vertex[] simpleVertexCache = new Vertex[MAX_CACHE_SIZE];	/* the vertex data */
+        public int cacheCount;      /* number of cached vertices */
+        Vertex[] simpleVertexCache = new Vertex[MAX_CACHE_SIZE];	/* the vertex data */
         int[] indexCached = new int[MAX_CACHE_SIZE];
         public Tesselator()
         {
@@ -205,13 +211,12 @@ namespace Tesselate
             }
         }
 
-        public void CallCombine(double v0, double v1, double v2, int[] data4,
-            double[] weight4, out int outData)
+        public void CallCombine(double v0, double v1, double v2, ref CombineParameters combinePars, out int outData)
         {
             outData = 0;
             if (callCombine != null)
             {
-                callCombine(v0, v1, v2, data4, weight4, out outData);
+                callCombine(v0, v1, v2, ref combinePars, out outData);
             }
         }
 

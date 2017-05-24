@@ -74,6 +74,9 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\TextureFontStore.cs">
       <Link>DrawingGL\GLCanvas\TextureFontStore.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\VertexBufferObject.cs">
+      <Link>DrawingGL\GLCanvas\VertexBufferObject.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\VertexPositionColor.cs">
       <Link>DrawingGL\GLCanvas\VertexPositionColor.cs</Link>
     </Compile>

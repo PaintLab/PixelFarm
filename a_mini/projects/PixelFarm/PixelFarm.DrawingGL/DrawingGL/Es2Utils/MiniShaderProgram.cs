@@ -1,11 +1,13 @@
 ﻿//MIT, 2014-2017, WinterDev
 
 using System;
+
 namespace OpenTK.Graphics.ES20
 {
+     
     public struct ShaderVtxAttrib2f
     {
-        internal readonly int location;
+        readonly int location;
         public ShaderVtxAttrib2f(int location)
         {
             this.location = location;
@@ -15,6 +17,7 @@ namespace OpenTK.Graphics.ES20
             GL.VertexAttribPointer(this.location, 2, VertexAttribPointerType.Float, false, totalFieldCount * sizeof(float), (IntPtr)vertexH);
             GL.EnableVertexAttribArray(this.location);
         }
+
         /// <summary>
         /// load pure vector2f, from start array
         /// </summary>
@@ -47,10 +50,24 @@ namespace OpenTK.Graphics.ES20
                 (IntPtr)(vertices));
             GL.EnableVertexAttribArray(this.location);
         }
+        /// <summary>
+        /// load latest server side data
+        /// </summary>
+        public void LoadLatest()
+        {
+            GL.VertexAttribPointer(this.location,
+                2,
+                VertexAttribPointerType.Float,
+                false,
+                2 * sizeof(float),
+                0);
+            GL.EnableVertexAttribArray(this.location);            
+        }
+
     }
     public struct ShaderVtxAttrib3f
     {
-        internal readonly int location;
+        readonly int location;
         public ShaderVtxAttrib3f(int location)
         {
             this.location = location;
@@ -71,10 +88,23 @@ namespace OpenTK.Graphics.ES20
                 vertices);
             GL.EnableVertexAttribArray(this.location);
         }
+        /// <summary>
+        /// load latest server side data
+        /// </summary>
+        public void LoadLatest()
+        {
+            GL.VertexAttribPointer(this.location,
+                3,
+                VertexAttribPointerType.Float,
+                false,
+                3 * sizeof(float),
+                0);
+            GL.EnableVertexAttribArray(this.location);
+        }
     }
     public struct ShaderVtxAttrib4f
     {
-        internal readonly int location;
+        readonly int location;
         public ShaderVtxAttrib4f(int location)
         {
             this.location = location;
@@ -97,6 +127,21 @@ namespace OpenTK.Graphics.ES20
                         (IntPtr)h);
                 }
             }
+            GL.EnableVertexAttribArray(this.location);
+        }
+
+
+        /// <summary>
+        /// load latest server side data
+        /// </summary>
+        public void LoadLatest()
+        {
+            GL.VertexAttribPointer(this.location,
+                4,
+                VertexAttribPointerType.Float,
+                false,
+                4 * sizeof(float),
+                0);
             GL.EnableVertexAttribArray(this.location);
         }
     }
@@ -156,7 +201,7 @@ namespace OpenTK.Graphics.ES20
     }
     public struct ShaderUniformVar2
     {
-        internal readonly int location;
+        readonly int location;
         public ShaderUniformVar2(int location)
         {
             this.location = location;
@@ -176,7 +221,7 @@ namespace OpenTK.Graphics.ES20
     }
     public struct ShaderUniformVar3
     {
-        internal readonly int location;
+        readonly int location;
         public ShaderUniformVar3(int location)
         {
             this.location = location;
@@ -196,7 +241,7 @@ namespace OpenTK.Graphics.ES20
     }
     public struct ShaderUniformVar4
     {
-        internal readonly int location;
+        readonly int location;
         public ShaderUniformVar4(int location)
         {
             this.location = location;

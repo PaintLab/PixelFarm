@@ -76,6 +76,18 @@ namespace PixelFarm.DrawingGL
             a_position.LoadPureV2f(polygon2dVertices);
             GL.DrawArrays(BeginMode.Triangles, 0, nelements);
         }
+        public void FillTriangles(VertexBufferObject vbo, int nelements, Drawing.Color color)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            //--------------------------------------------    
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+
+            vbo.Bind();
+            a_position.LoadLatest();
+            GL.DrawElements(BeginMode.Triangles, nelements, DrawElementsType.UnsignedShort, 0);
+            vbo.UnBind(); //important, call unbind after finish call.
+        }
         public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, Drawing.Color color)
         {
             SetCurrent();
