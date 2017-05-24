@@ -14,11 +14,12 @@ using System.Collections.Generic;
 using Tesselate;
 namespace PixelFarm.DrawingGL
 {
-    public struct Vertex
+
+    struct TessTempVertex
     {
         public double m_X;
         public double m_Y;
-        public Vertex(double x, double y)
+        public TessTempVertex(double x, double y)
         {
             m_X = x;
             m_Y = y;
@@ -36,9 +37,8 @@ namespace PixelFarm.DrawingGL
     /// listen and handle the event from tesslator
     /// </summary>
     class TessListener
-    {
-        //List<Vertex> inputVertextList;
-        internal List<Vertex> tempVertextList = new List<Vertex>();
+    {   
+        internal List<TessTempVertex> tempVertextList = new List<TessTempVertex>();
         //internal List<Vertex> resultVertexList = new List<Vertex>();
         internal List<ushort> resultIndexList = new List<ushort>();
         int inputVertexCount;
@@ -48,7 +48,7 @@ namespace PixelFarm.DrawingGL
         {
             //empty not use
             //not use first item in temp
-            tempVertextList.Add(new Vertex(0, 0));
+            tempVertextList.Add(new TessTempVertex(0, 0));
         }
         public void BeginCallBack(Tesselator.TriangleListType type)
         {
@@ -142,7 +142,7 @@ namespace PixelFarm.DrawingGL
             //----------------------------------------------------------------------
             outData = -this.tempVertextList.Count;
             //----------------------------------------
-            tempVertextList.Add(new Vertex(v0, v1));
+            tempVertextList.Add(new TessTempVertex(v0, v1));
             //----------------------------------------
         }
 
@@ -233,7 +233,7 @@ namespace PixelFarm.DrawingGL
 
             int originalVertexCount = ncoords;
             List<ushort> indexList = tessListener.resultIndexList;
-            List<Vertex> tempVertexList = tessListener.tempVertextList;
+            List<TessTempVertex> tempVertexList = tessListener.tempVertextList;
 
             //-----------------------------   
             //switch how to fill polygon
@@ -246,7 +246,7 @@ namespace PixelFarm.DrawingGL
                 if (index >= ncoords)
                 {
                     //extra coord (newly created)
-                    Vertex extraVertex = tempVertexList[index - ncoords];
+                    TessTempVertex extraVertex = tempVertexList[index - ncoords];
                     vtx[n] = (float)extraVertex.m_X;
                     vtx[n + 1] = (float)extraVertex.m_Y;
                 }
@@ -300,7 +300,7 @@ namespace PixelFarm.DrawingGL
             tess.EndPolygon();
             //-----------------------
             List<ushort> vertextList = tessListener.resultIndexList;
-            List<Vertex> tempVertexList = tessListener.tempVertextList;
+            List<TessTempVertex> tempVertexList = tessListener.tempVertextList;
             //-----------------------------   
             areaCount = vertextList.Count;
 
@@ -313,7 +313,7 @@ namespace PixelFarm.DrawingGL
             int q = vertex2dCoords.Length;
             for (int i = vertex2dCoords.Length; i < endAt; ++i)
             {
-                Vertex v = tessListener.tempVertextList[p];
+                TessTempVertex v = tessListener.tempVertextList[p];
                 outputCoords[q] = (float)v.m_X;
                 outputCoords[q + 1] = (float)v.m_Y;
                 p++;
