@@ -37,7 +37,7 @@ namespace PixelFarm.DrawingGL
         public void InitVertexBufferIfNeed(TessTool tess)
         {
             if (_vboArea == null)
-            { 
+            {
                 GetAreaTess2(tess);
                 //create index buffer
                 _vboArea = new VertexBufferObject();
@@ -134,18 +134,27 @@ namespace PixelFarm.DrawingGL
     {
         //since Figure is private=> we use this to expose to public
 
-        internal readonly List<Figure> figures;
+
+        readonly Figure _figure;
+        readonly List<Figure> figures;
         private InternalGraphicsPath(List<Figure> figures)
         {
+
             this.figures = figures;
+            _figure = null;
         }
-        public static InternalGraphicsPath CreatePolygonGraphicsPath(float[] xycoords)
+        private InternalGraphicsPath(Figure fig)
         {
-            List<Figure> figures = new List<Figure>(1);
-            figures.Add(new Figure(xycoords));
-            return new InternalGraphicsPath(figures);
+            this.figures = null;
+            _figure = fig;
+
         }
-        public static InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
+
+        internal static InternalGraphicsPath CreatePolygonGraphicsPath(float[] xycoords)
+        {
+            return new InternalGraphicsPath(new Figure(xycoords));
+        }
+        internal static InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
         {
             VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
             double prevX = 0;
@@ -217,7 +226,36 @@ namespace PixelFarm.DrawingGL
             }
             return new InternalGraphicsPath(figures);
         }
+
+        internal int FigCount
+        {
+            get
+            {
+                if (_figure != null)
+                {
+                    return 1;
+                }
+                if (figures != null)
+                {
+                    return figures.Count;
+                }
+                return 0;
+            }
+        }
+        internal Figure GetFig(int index)
+        {
+            if (index == 0)
+            {
+                return _figure ?? figures[0];
+            }
+            else
+            {
+                return figures[index];
+            }
+        }
     }
+
+
 
     class GLRenderVx : PixelFarm.Drawing.RenderVx
     {

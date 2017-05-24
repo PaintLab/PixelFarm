@@ -480,11 +480,13 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.No:
                     {
-                        List<Figure> figures = igpth.figures;
-                        int subPathCount = figures.Count;
+
+
+                        int subPathCount = igpth.FigCount;
+
                         for (int i = 0; i < subPathCount; ++i)
                         {
-                            Figure f = figures[i];
+                            Figure f = igpth.GetFig(i);
                             if (f.SupportVertexBuffer)
                             {
                                 f.InitVertexBufferIfNeed(this.tessTool);
@@ -498,23 +500,20 @@ namespace PixelFarm.DrawingGL
                                     this.basicFillShader.FillTriangles(tessArea, f.TessAreaTriangleCount, color);
                                 }
                             }
-
                         }
                     }
                     break;
                 case CanvasSmoothMode.Smooth:
                     {
 
-                        List<Figure> figures = igpth.figures;
-                        int subPathCount = figures.Count;
+
+                        int subPathCount = igpth.FigCount;
                         float saved_Width = StrokeWidth;
                         Drawing.Color saved_Color = StrokeColor;
-
                         //temp set stroke width to 2 amd stroke color
                         //to the same as bg color (for smooth border).
                         //and it will be set back later.
-                        //
-
+                        // 
                         StrokeColor = color;
                         StrokeWidth = 2f; //TODO: review this ***
                         //
@@ -522,7 +521,7 @@ namespace PixelFarm.DrawingGL
                         {
                             //draw each sub-path
                             //
-                            Figure f = figures[i];
+                            Figure f = igpth.GetFig(i);
                             if (f.SupportVertexBuffer)
                             {
 
@@ -562,11 +561,11 @@ namespace PixelFarm.DrawingGL
                 case Drawing.BrushKind.LinearGradient:
                 case Drawing.BrushKind.Texture:
                     {
-                        List<Figure> figures = igpth.figures;
-                        int m = figures.Count;
+
+                        int m = igpth.FigCount;
                         for (int b = 0; b < m; ++b)
                         {
-                            Figure fig = figures[b];
+                            Figure fig = igpth.GetFig(b);
                             GL.ClearStencil(0); //set value for clearing stencil buffer 
                             //actual clear here
                             GL.Clear(ClearBufferMask.StencilBufferBit);
@@ -669,11 +668,11 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.No:
                     {
-                        List<Figure> figures = igpth.figures;
-                        int subPathCount = figures.Count;
+                         
+                        int subPathCount = igpth.FigCount;
                         for (int i = 0; i < subPathCount; ++i)
                         {
-                            Figure f = figures[i];
+                            Figure f = igpth.GetFig(i);
                             float[] coordXYs = f.coordXYs;
                             unsafe
                             {
@@ -687,15 +686,18 @@ namespace PixelFarm.DrawingGL
                     break;
                 case CanvasSmoothMode.Smooth:
                     {
+
                         StrokeColor = color;
                         StrokeWidth = 1f;
-                        List<Figure> figures = igpth.figures;
-                        int subPathCount = figures.Count;
+
+                        int subPathCount = igpth.FigCount;
                         for (int i = 0; i < subPathCount; ++i)
                         {
-                            Figure f = figures[i];
+                            Figure f = igpth.GetFig(i);
                             smoothLineShader.DrawTriangleStrips(f.GetSmoothBorders(smoothBorderBuilder), f.BorderTriangleStripCount);
                         }
+
+                        //restore back 
                     }
                     break;
             }
@@ -710,7 +712,7 @@ namespace PixelFarm.DrawingGL
                     {
                         int borderTriAngleCount;
 
-                        float[] triangles = smoothBorderBuilder.BuildSmoothBorders( 
+                        float[] triangles = smoothBorderBuilder.BuildSmoothBorders(
                             CreatePolyLineRectCoords(x, y, w, h), out borderTriAngleCount);
                         smoothLineShader.DrawTriangleStrips(triangles, borderTriAngleCount);
                     }
