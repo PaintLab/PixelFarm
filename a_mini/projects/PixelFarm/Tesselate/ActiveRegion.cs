@@ -448,7 +448,9 @@ namespace Tesselate
                 e = e.nextEdgeCCWAroundOrigin;
             } while (e != eLast);
             /* Walk *all* right-going edges from e.Org, in the dictionary order,
-             * updating the winding numbers of each region, and re-linking the mesh
+             * updating the winding numbers of ea
+             * 
+             * ch region, and re-linking the mesh
              * edges to match the dictionary ordering (if necessary).
              */
             if (eTopLeft == null)

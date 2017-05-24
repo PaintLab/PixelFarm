@@ -35,7 +35,7 @@ namespace PixelFarm.DrawingGL
     public class TessListener2
     {
         List<Vertex> inputVertextList;
-        List<Vertex> tempVertextList = new List<Vertex>();
+        internal List<Vertex> tempVertextList = new List<Vertex>();
         public List<Vertex> resultVertexList = new List<Vertex>();
         public List<ushort> resultIndexList = new List<ushort>();
 
@@ -89,19 +89,7 @@ namespace PixelFarm.DrawingGL
             if (index < 0)
             {
 
-                if (resultIndexList.Count > 0)
-                {
-                    //degeneration vx?
-                    //TODO: review here
-                    ushort latestValue = resultIndexList[resultIndexList.Count - 1];
-                    resultIndexList.Add(latestValue);
-                }
-                else
-                {
-                    resultIndexList.Add(0);
-                }
-              
-
+                resultIndexList.Add((ushort)(inputVertextList.Count + (-index)));
                 //use data from temp store***
                 resultVertexList.Add(this.tempVertextList[-index]);
                 //Console.WriteLine("temp_v_cb:" + index + ":(" + tempVertextList[-index] + ")");
@@ -237,12 +225,12 @@ namespace PixelFarm.DrawingGL
             return vtx;
         }
 
-        public ushort[] TessPolygon2(float[] vertex2dCoords, int[] contourEndPoints, out int areaCount)
+        public ushort[] TessPolygon2(float[] vertex2dCoords, int[] contourEndPoints, out float[] outputCoords, out int areaCount)
         {
             vertexts.Clear();//reset
             //
             int ncoords = vertex2dCoords.Length / 2;
-            if (ncoords == 0) { areaCount = 0; return null; }
+            if (ncoords == 0) { areaCount = 0; outputCoords = null; return null; }
 
             int nn = 0;
             for (int i = 0; i < ncoords; ++i)
@@ -271,6 +259,23 @@ namespace PixelFarm.DrawingGL
             //-----------------------
             List<Vertex> vertextList = tessListener.resultVertexList;
             areaCount = vertextList.Count;
+
+            int tempVertListCount = tessListener.tempVertextList.Count;
+            outputCoords = new float[vertex2dCoords.Length + tempVertListCount * 2];
+            Array.Copy(vertex2dCoords, outputCoords, vertex2dCoords.Length);
+            int endAt = vertex2dCoords.Length + tempVertListCount;
+
+            int p = 0;
+            int q = vertex2dCoords.Length;
+            for (int i = vertex2dCoords.Length; i < endAt; ++i)
+            {
+                Vertex v = tessListener.tempVertextList[p];
+                outputCoords[q] = (float)v.m_X;
+                outputCoords[q + 1] = (float)v.m_Y;
+                p++;
+                q += 2;
+            }
+
             return tessListener.resultIndexList.ToArray();
 
         }

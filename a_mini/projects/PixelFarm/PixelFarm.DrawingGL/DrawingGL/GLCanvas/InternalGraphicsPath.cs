@@ -40,7 +40,8 @@ namespace PixelFarm.DrawingGL
                 GetAreaTess2(tess);
                 //create index buffer
                 _vboArea = new VertexBufferObject();
-                _vboArea.CreateBuffers(coordXYs, indexListArray);
+
+                _vboArea.CreateBuffers(tessXYCoords2, indexListArray);
             }
         }
         /// <summary>
@@ -76,10 +77,10 @@ namespace PixelFarm.DrawingGL
         {
             //triangle list
             contourEnds[0] = coordXYs.Length - 1;
-            indexListArray = tess.TessPolygon2(coordXYs, contourEnds, out this.tessAreaTriangleCount);
+            indexListArray = tess.TessPolygon2(coordXYs, contourEnds, out tessXYCoords2, out this.tessAreaTriangleCount);
         }
         public ushort[] indexListArray;
-
+        float[] tessXYCoords2;
     }
 
 
@@ -148,7 +149,7 @@ namespace PixelFarm.DrawingGL
             this.figures = null;
             _figure = fig;
         }
-      
+
 
         internal int FigCount
         {
