@@ -38,8 +38,7 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     class TessListener
     {   
-        internal List<TessTempVertex> tempVertextList = new List<TessTempVertex>();
-        //internal List<Vertex> resultVertexList = new List<Vertex>();
+        internal List<TessTempVertex> tempVertextList = new List<TessTempVertex>(); 
         internal List<ushort> resultIndexList = new List<ushort>();
         int inputVertexCount;
 
@@ -171,11 +170,8 @@ namespace PixelFarm.DrawingGL
             this.inputVertexCount = inputVertexCount;
             //1. reset
             this.triangleListType = Tesselator.TriangleListType.LineLoop;//?
-            this.tempVertextList.Clear();
-            //this.resultVertexList.Clear();
-            resultIndexList.Clear();
-            //2. load new input
-            //this.inputVertextList = inputVertextList;
+            this.tempVertextList.Clear(); 
+            resultIndexList.Clear(); 
         }
     }
 
@@ -196,18 +192,10 @@ namespace PixelFarm.DrawingGL
 
         public float[] TessPolygon(float[] vertex2dCoords, int[] contourEndPoints, out int areaCount)
         {
-            //vertexts.Clear();//reset
-            //
+            
             int ncoords = vertex2dCoords.Length / 2;
             if (ncoords == 0) { areaCount = 0; return null; }
-
-            //int nn = 0;
-            //for (int i = 0; i < ncoords; ++i)
-            //{
-            //    vertexts.Add(new Vertex(vertex2dCoords[nn++], vertex2dCoords[nn++]));
-            //}
-            //-----------------------
-            //prepare input data
+             
             tessListener.ResetAndLoadInputVertexList(ncoords);
             //-----------------------
             tess.BeginPolygon();
@@ -265,18 +253,10 @@ namespace PixelFarm.DrawingGL
 
         public ushort[] TessPolygon2(float[] vertex2dCoords, int[] contourEndPoints, out float[] outputCoords, out int areaCount)
         {
-            //vertexts.Clear();//reset
-            //
+             
             int ncoords = vertex2dCoords.Length / 2;
             if (ncoords == 0) { areaCount = 0; outputCoords = null; return null; }
-
-            //int nn = 0;
-            ////prepare input data
-            //for (int i = 0; i < ncoords; ++i)
-            //{
-            //    vertexts.Add(new Vertex(vertex2dCoords[nn++], vertex2dCoords[nn++]));
-            //}
-            //-----------------------
+ 
             tessListener.ResetAndLoadInputVertexList(ncoords);
             //-----------------------
             tess.BeginPolygon();
