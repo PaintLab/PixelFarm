@@ -82,12 +82,11 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //--------------------------------------------    
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-            a_position.UseVertexAttrBuffer(vbo.VertextBufferIndex);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, vbo.IndexBufferIndex);
+
+            vbo.Bind();
+            a_position.LoadLatest();
             GL.DrawElements(BeginMode.Triangles, nelements, DrawElementsType.UnsignedShort, 0);
-            //
-            a_position.UnbindVertexAttrBuffer();
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
+            vbo.UnBind(); //important, call unbind after finish call.
         }
         public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, Drawing.Color color)
         {

@@ -37,11 +37,11 @@ namespace PixelFarm.DrawingGL
         public void InitVertexBufferIfNeed(TessTool tess)
         {
             if (_vboArea == null)
-            {
-                _vboArea = new VertexBufferObject();
+            { 
                 GetAreaTess2(tess);
                 //create index buffer
-                _vboArea.SetupVertexData(coordXYs, indexListArray);
+                _vboArea = new VertexBufferObject();
+                _vboArea.CreateBuffers(coordXYs, indexListArray);
             }
         }
         /// <summary>
