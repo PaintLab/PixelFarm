@@ -515,7 +515,7 @@ namespace PixelFarm.DrawingGL
                         //and it will be set back later.
                         // 
                         StrokeColor = color;
-                        StrokeWidth = 2f; //TODO: review this ***
+                        StrokeWidth = 1.5f; //TODO: review this ***
                         //
                         for (int i = 0; i < subPathCount; ++i)
                         {
@@ -668,7 +668,7 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.No:
                     {
-                         
+
                         int subPathCount = igpth.FigCount;
                         for (int i = 0; i < subPathCount; ++i)
                         {
