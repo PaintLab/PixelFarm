@@ -16,7 +16,9 @@ namespace PixelFarm.DrawingGL
         float[] smoothBorderTess;
         int borderTriangleStripCount;
         int tessAreaTriangleCount;
-
+        //---------
+        public ushort[] indexListArray;
+        float[] tessXYCoords2;
         //---------
         VertexBufferObject _vboArea;
         //---------
@@ -38,10 +40,10 @@ namespace PixelFarm.DrawingGL
             if (_vboArea == null)
             {
                 GetAreaTess2(tess);
-                //create index buffer
                 _vboArea = new VertexBufferObject();
-
                 _vboArea.CreateBuffers(tessXYCoords2, indexListArray);
+                //after we create the _vboArea
+                //we may clear tessXYCoords2 (set to null).                
             }
         }
         /// <summary>
@@ -58,7 +60,8 @@ namespace PixelFarm.DrawingGL
         {
             if (smoothBorderTess == null)
             {
-                return smoothBorderTess = smoothBorderBuilder.BuildSmoothBorders(coordXYs, out borderTriangleStripCount);
+                return smoothBorderTess = 
+                    smoothBorderBuilder.BuildSmoothBorders(coordXYs, out borderTriangleStripCount);
             }
             return smoothBorderTess;
         }
@@ -79,8 +82,7 @@ namespace PixelFarm.DrawingGL
             contourEnds[0] = coordXYs.Length - 1;
             indexListArray = tess.TessPolygon2(coordXYs, contourEnds, out tessXYCoords2, out this.tessAreaTriangleCount);
         }
-        public ushort[] indexListArray;
-        float[] tessXYCoords2;
+
     }
 
 

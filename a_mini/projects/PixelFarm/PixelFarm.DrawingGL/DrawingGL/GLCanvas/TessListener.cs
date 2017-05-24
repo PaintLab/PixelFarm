@@ -32,15 +32,18 @@ namespace PixelFarm.DrawingGL
 
     }
 
-    public class TessListener2
+    /// <summary>
+    /// listen and handle the event from tesslator
+    /// </summary>
+    class TessListener
     {
         List<Vertex> inputVertextList;
         internal List<Vertex> tempVertextList = new List<Vertex>();
-        public List<Vertex> resultVertexList = new List<Vertex>();
-        public List<ushort> resultIndexList = new List<ushort>();
+        internal List<Vertex> resultVertexList = new List<Vertex>();
+        internal List<ushort> resultIndexList = new List<ushort>();
 
         public Tesselator.TriangleListType triangleListType;
-        public TessListener2()
+        public TessListener()
         {
             //empty not use
             //not use first item in temp
@@ -139,7 +142,13 @@ namespace PixelFarm.DrawingGL
             tempVertextList.Add(new Vertex(v0, v1));
             //----------------------------------------
         }
-        public void Connect(Tesselate.Tesselator tesselator, bool setEdgeFlag)
+
+        /// <summary>
+        /// connect to actual Tesselator
+        /// </summary>
+        /// <param name="tesselator"></param>
+        /// <param name="setEdgeFlag"></param>
+        public void Connect(Tesselator tesselator, bool setEdgeFlag)
         {
             tesselator.callBegin = BeginCallBack;
             tesselator.callEnd = EndCallBack;
@@ -150,27 +159,33 @@ namespace PixelFarm.DrawingGL
                 tesselator.callEdgeFlag = EdgeFlagCallBack;
             }
         }
-        public void Reset(List<Vertex> vertextList)
+        /// <summary>
+        /// clear previous results and load a new input vertex list
+        /// </summary>
+        /// <param name="inputVertextList"></param>
+        public void ResetAndLoadInputVertexList(List<Vertex> inputVertextList)
         {
+            //1. reset
             this.triangleListType = Tesselator.TriangleListType.LineLoop;//?
             this.tempVertextList.Clear();
             this.resultVertexList.Clear();
-            this.inputVertextList = vertextList;
             resultIndexList.Clear();
+            //2. load new input
+            this.inputVertextList = inputVertextList;
         }
     }
 
 
     class TessTool
     {
-        internal readonly Tesselate.Tesselator tess;
-        internal readonly TessListener2 tessListener;
+        internal readonly Tesselator tess;
+        internal readonly TessListener tessListener;
         List<Vertex> vertexts = new List<Vertex>();
         public TessTool() : this(new Tesselator() { WindingRule = Tesselator.WindingRuleType.Odd }) { }
-        public TessTool(Tesselate.Tesselator tess)
+        public TessTool(Tesselator tess)
         {
             this.tess = tess;
-            this.tessListener = new TessListener2();
+            this.tessListener = new TessListener();
             tessListener.Connect(tess, true);
         }
 
@@ -188,7 +203,8 @@ namespace PixelFarm.DrawingGL
                 vertexts.Add(new Vertex(vertex2dCoords[nn++], vertex2dCoords[nn++]));
             }
             //-----------------------
-            tessListener.Reset(vertexts);
+            //prepare input data
+            tessListener.ResetAndLoadInputVertexList(vertexts);
             //-----------------------
             tess.BeginPolygon();
             int nContourCount = contourEndPoints.Length;
@@ -233,12 +249,13 @@ namespace PixelFarm.DrawingGL
             if (ncoords == 0) { areaCount = 0; outputCoords = null; return null; }
 
             int nn = 0;
+            //prepare input data
             for (int i = 0; i < ncoords; ++i)
             {
                 vertexts.Add(new Vertex(vertex2dCoords[nn++], vertex2dCoords[nn++]));
             }
             //-----------------------
-            tessListener.Reset(vertexts);
+            tessListener.ResetAndLoadInputVertexList(vertexts);
             //-----------------------
             tess.BeginPolygon();
             int nContourCount = contourEndPoints.Length;
