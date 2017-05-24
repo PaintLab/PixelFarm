@@ -477,8 +477,6 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.No:
                     {
-
-
                         int subPathCount = igpth.FigCount;
 
                         for (int i = 0; i < subPathCount; ++i)
@@ -486,8 +484,10 @@ namespace PixelFarm.DrawingGL
                             Figure f = igpth.GetFig(i);
                             if (f.SupportVertexBuffer)
                             {
-                                f.InitVertexBufferIfNeed(this.tessTool);
-                                basicFillShader.FillTriangles(f.VBOArea, f.TessAreaTriangleCount, color);
+                                basicFillShader.FillTriangles(
+                                    f.GetAreaTessAsVBO(tessTool),
+                                    f.TessAreaTriangleCount,
+                                    color);
                             }
                             else
                             {
@@ -516,15 +516,15 @@ namespace PixelFarm.DrawingGL
                         //
                         for (int i = 0; i < subPathCount; ++i)
                         {
-                            //draw each sub-path
-                            //
+                            //draw each sub-path 
                             Figure f = igpth.GetFig(i);
                             if (f.SupportVertexBuffer)
                             {
-
-                                f.InitVertexBufferIfNeed(this.tessTool);
                                 //draw area
-                                basicFillShader.FillTriangles(f.VBOArea, f.TessAreaTriangleCount, color);
+                                basicFillShader.FillTriangles(
+                                    f.GetAreaTessAsVBO(tessTool),
+                                    f.TessAreaTriangleCount,
+                                    color);
                                 //draw smooth border
                                 smoothLineShader.DrawTriangleStrips(
                                     f.GetSmoothBorders(smoothBorderBuilder),
