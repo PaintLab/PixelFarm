@@ -8,7 +8,7 @@ using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.DrawingGL
 {
-    class VertexBufferObject : IDisposable
+    public class VertexBufferObject : IDisposable
     {
 
         int _vertextBufferIndex; // array buffer
