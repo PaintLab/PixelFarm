@@ -42,7 +42,9 @@ namespace OpenTkEssTest
                  400, 50,
                  450, 50,
                  410, 100,
-                 350, 100
+                 350, 100,
+                 200,50,
+                 100,20
               });
         }
         protected override void DemoClosing()
@@ -64,15 +66,22 @@ namespace OpenTkEssTest
             canvas2d.Clear(PixelFarm.Drawing.Color.Blue);
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2;
-            painter.FillColor = PixelFarm.Drawing.Color.Yellow;
-            painter.FillRenderVx(polygon1);
+            //-------------------------------
+            //painter.FillColor = PixelFarm.Drawing.Color.Yellow;
+            //painter.FillRenderVx(polygon1);
             //-------------------------------
             //painter.FillColor = PixelFarm.Drawing.Color.Red;
             //painter.FillRenderVx(polygon2);
             //////-------------------------------
-            //painter.FillColor = PixelFarm.Drawing.Color.Magenta;
-            //painter.FillRenderVx(polygon3);
-            SwapBuffers();
+            painter.FillColor = PixelFarm.Drawing.Color.Magenta;
+            try
+            {
+                painter.FillRenderVx(polygon3);
+                SwapBuffers();
+            }
+            catch (Exception ex)
+            {
+            }
         }
     }
 }
