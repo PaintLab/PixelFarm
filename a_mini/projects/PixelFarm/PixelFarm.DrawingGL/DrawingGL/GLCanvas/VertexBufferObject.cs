@@ -8,26 +8,46 @@ using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.DrawingGL
 {
-    public class VertexBufferObject : IDisposable
-    {
-        //TODO: consider implement generic version of this***
 
+    class VertexBufferObject : IDisposable
+    {
+        //TODO: consider implement generic version of this*** 
         int _vertextBufferIndex; //index to 'server-side' memory
         int _indexBufferIndex; //index to 'server-side' memory 
-        bool isInit;
+        bool _hasData;
         public VertexBufferObject()
         {
-
+            //TODO: review how to create vbo object
+        }
+        /// <summary>
+        /// unload data from server-side mem
+        /// </summary>
+        public void Clear()
+        {
+            unsafe
+            {
+                if (_vertextBufferIndex > 0 || _indexBufferIndex > 0)
+                {
+                    int* toDeleteBufferIndexArr = stackalloc int[2];
+                    toDeleteBufferIndexArr[0] = _vertextBufferIndex;
+                    toDeleteBufferIndexArr[1] = _indexBufferIndex;
+                    GL.DeleteBuffers(_vertextBufferIndex, toDeleteBufferIndexArr);
+                    _vertextBufferIndex = _indexBufferIndex = 0;
+                }
+                _hasData = false;
+            }
         }
         /// <summary>
         /// set up vertex data, we don't store the vertex array,or index array here
         /// </summary>
         public void SetupVertexData(float[] _vertextBuffer, ushort[] _indexBuffer)
         {
-            if (isInit)
+
+            if (_hasData)
             {
                 throw new NotSupportedException();
             }
+
             unsafe
             {
                 if (_vertextBuffer != null)
@@ -62,26 +82,13 @@ namespace PixelFarm.DrawingGL
                     GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
                 }
             }
-            isInit = true;
+            _hasData = true;
         }
         public void Dispose()
         {
-            unsafe
-            {
-                if (_vertextBufferIndex > 0 || _indexBufferIndex > 0)
-                {
-                    int* toDeleteBufferIndexArr = stackalloc int[2];
-                    toDeleteBufferIndexArr[0] = _vertextBufferIndex;
-                    toDeleteBufferIndexArr[1] = _indexBufferIndex;
-                    GL.DeleteBuffers(_vertextBufferIndex, toDeleteBufferIndexArr);
-                    _vertextBufferIndex = _indexBufferIndex = 0;
-                }
-            }
+            Clear();
         }
         public int VertextBufferIndex { get { return _vertextBufferIndex; } }
         public int IndexBufferIndex { get { return _indexBufferIndex; } }
-
-
-
     }
 }
