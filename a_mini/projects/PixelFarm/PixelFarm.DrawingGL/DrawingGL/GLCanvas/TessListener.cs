@@ -37,10 +37,11 @@ namespace PixelFarm.DrawingGL
     /// </summary>
     class TessListener
     {
-        List<Vertex> inputVertextList;
+        //List<Vertex> inputVertextList;
         internal List<Vertex> tempVertextList = new List<Vertex>();
-        internal List<Vertex> resultVertexList = new List<Vertex>();
+        //internal List<Vertex> resultVertexList = new List<Vertex>();
         internal List<ushort> resultIndexList = new List<ushort>();
+        int inputVertexCount;
 
         public Tesselator.TriangleListType triangleListType;
         public TessListener()
@@ -91,16 +92,15 @@ namespace PixelFarm.DrawingGL
             //Assert.AreEqual(GetNextOutputAsInt(), index); 
             if (index < 0)
             {
-
-                resultIndexList.Add((ushort)(inputVertextList.Count + (-index)));
+                resultIndexList.Add((ushort)(inputVertexCount + (-index)));
                 //use data from temp store***
-                resultVertexList.Add(this.tempVertextList[-index]);
+                //resultVertexList.Add(this.tempVertextList[-index]);
                 //Console.WriteLine("temp_v_cb:" + index + ":(" + tempVertextList[-index] + ")");
             }
             else
             {
                 resultIndexList.Add((ushort)index);
-                resultVertexList.Add(this.inputVertextList[index]);
+                //resultVertexList.Add(this.inputVertextList[index]);
                 // Console.WriteLine("v_cb:" + index + ":(" + inputVertextList[index] + ")");
             }
         }
@@ -166,15 +166,16 @@ namespace PixelFarm.DrawingGL
         /// clear previous results and load a new input vertex list
         /// </summary>
         /// <param name="inputVertextList"></param>
-        public void ResetAndLoadInputVertexList(List<Vertex> inputVertextList)
+        public void ResetAndLoadInputVertexList(int inputVertexCount)
         {
+            this.inputVertexCount = inputVertexCount;
             //1. reset
             this.triangleListType = Tesselator.TriangleListType.LineLoop;//?
             this.tempVertextList.Clear();
-            this.resultVertexList.Clear();
+            //this.resultVertexList.Clear();
             resultIndexList.Clear();
             //2. load new input
-            this.inputVertextList = inputVertextList;
+            //this.inputVertextList = inputVertextList;
         }
     }
 
@@ -183,7 +184,7 @@ namespace PixelFarm.DrawingGL
     {
         internal readonly Tesselator tess;
         internal readonly TessListener tessListener;
-        List<Vertex> vertexts = new List<Vertex>();
+        //List<Vertex> vertexts = new List<Vertex>();
         public TessTool() : this(new Tesselator() { WindingRule = Tesselator.WindingRuleType.Odd }) { }
         public TessTool(Tesselator tess)
         {
@@ -195,48 +196,66 @@ namespace PixelFarm.DrawingGL
 
         public float[] TessPolygon(float[] vertex2dCoords, int[] contourEndPoints, out int areaCount)
         {
-            vertexts.Clear();//reset
+            //vertexts.Clear();//reset
             //
             int ncoords = vertex2dCoords.Length / 2;
             if (ncoords == 0) { areaCount = 0; return null; }
 
-            int nn = 0;
-            for (int i = 0; i < ncoords; ++i)
-            {
-                vertexts.Add(new Vertex(vertex2dCoords[nn++], vertex2dCoords[nn++]));
-            }
+            //int nn = 0;
+            //for (int i = 0; i < ncoords; ++i)
+            //{
+            //    vertexts.Add(new Vertex(vertex2dCoords[nn++], vertex2dCoords[nn++]));
+            //}
             //-----------------------
             //prepare input data
-            tessListener.ResetAndLoadInputVertexList(vertexts);
+            tessListener.ResetAndLoadInputVertexList(ncoords);
             //-----------------------
             tess.BeginPolygon();
             int nContourCount = contourEndPoints.Length;
             int beginAt = 0;
+            int n = 0;
             for (int m = 0; m < nContourCount; ++m)
             {
                 int thisContourEndAt = (contourEndPoints[m] + 1) / 2;
                 tess.BeginContour();
                 for (int i = beginAt; i < thisContourEndAt; ++i)
                 {
-                    Vertex v = vertexts[i];
-                    tess.AddVertex(v.m_X, v.m_Y, 0, i);
+                    n = i * 2;
+                    tess.AddVertex(
+                        vertex2dCoords[n],
+                        vertex2dCoords[n + 1], 0, i);
                 }
                 beginAt = thisContourEndAt + 1;
                 tess.EndContour();
             }
             tess.EndPolygon();
             //-----------------------
-            List<Vertex> vertextList = tessListener.resultVertexList;
+
+            int originalVertexCount = ncoords;
+            List<ushort> indexList = tessListener.resultIndexList;
+            List<Vertex> tempVertexList = tessListener.tempVertextList;
+
             //-----------------------------   
             //switch how to fill polygon
-            int j = vertextList.Count;
-            float[] vtx = new float[j * 2];
-            int n = 0;
+            int j = indexList.Count;
+            float[] vtx = new float[j * 2];//***
+            n = 0; //reset
             for (int p = 0; p < j; ++p)
             {
-                var v = vertextList[p];
-                vtx[n] = (float)v.m_X;
-                vtx[n + 1] = (float)v.m_Y;
+                ushort index = indexList[p];
+                if (index >= ncoords)
+                {
+                    //extra coord (newly created)
+                    Vertex extraVertex = tempVertexList[index - ncoords];
+                    vtx[n] = (float)extraVertex.m_X;
+                    vtx[n + 1] = (float)extraVertex.m_Y;
+                }
+                else
+                {
+                    //original corrd
+                    vtx[n] = (float)vertex2dCoords[index * 2];
+                    vtx[n + 1] = (float)vertex2dCoords[(index * 2) + 1];
+                }
                 n += 2;
             }
             //triangle list
@@ -246,38 +265,43 @@ namespace PixelFarm.DrawingGL
 
         public ushort[] TessPolygon2(float[] vertex2dCoords, int[] contourEndPoints, out float[] outputCoords, out int areaCount)
         {
-            vertexts.Clear();//reset
+            //vertexts.Clear();//reset
             //
             int ncoords = vertex2dCoords.Length / 2;
             if (ncoords == 0) { areaCount = 0; outputCoords = null; return null; }
 
-            int nn = 0;
-            //prepare input data
-            for (int i = 0; i < ncoords; ++i)
-            {
-                vertexts.Add(new Vertex(vertex2dCoords[nn++], vertex2dCoords[nn++]));
-            }
+            //int nn = 0;
+            ////prepare input data
+            //for (int i = 0; i < ncoords; ++i)
+            //{
+            //    vertexts.Add(new Vertex(vertex2dCoords[nn++], vertex2dCoords[nn++]));
+            //}
             //-----------------------
-            tessListener.ResetAndLoadInputVertexList(vertexts);
+            tessListener.ResetAndLoadInputVertexList(ncoords);
             //-----------------------
             tess.BeginPolygon();
             int nContourCount = contourEndPoints.Length;
             int beginAt = 0;
+            int n = 0;
             for (int m = 0; m < nContourCount; ++m)
             {
                 int thisContourEndAt = (contourEndPoints[m] + 1) / 2;
                 tess.BeginContour();
                 for (int i = beginAt; i < thisContourEndAt; ++i)
                 {
-                    Vertex v = vertexts[i];
-                    tess.AddVertex(v.m_X, v.m_Y, 0, i);
+                    n = i * 2;
+                    tess.AddVertex(
+                        vertex2dCoords[n],
+                        vertex2dCoords[n + 1], 0, i);
                 }
                 beginAt = thisContourEndAt + 1;
                 tess.EndContour();
             }
             tess.EndPolygon();
             //-----------------------
-            List<Vertex> vertextList = tessListener.resultVertexList;
+            List<ushort> vertextList = tessListener.resultIndexList;
+            List<Vertex> tempVertexList = tessListener.tempVertextList;
+            //-----------------------------   
             areaCount = vertextList.Count;
 
             int tempVertListCount = tessListener.tempVertextList.Count;
