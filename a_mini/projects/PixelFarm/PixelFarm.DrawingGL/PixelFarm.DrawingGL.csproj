@@ -45,6 +45,7 @@
     <Compile Include="DrawingGL\GLCanvas\InternalGraphicsPath.cs" />
     <Compile Include="DrawingGL\GLCanvas\SvgArc.cs" />
     <Compile Include="DrawingGL\GLCanvas\TessListener.cs" />
+    <Compile Include="DrawingGL\GLCanvas\VertexBufferObject.cs" />
     <Compile Include="DrawingGL\GLCanvas\VertexPositionColor.cs" />
     <Compile Include="DrawingGL\GLShader\BasicFillShader.cs" />
     <Compile Include="DrawingGL\GLShader\FilterEffectShaders.cs" />

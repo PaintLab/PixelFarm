@@ -241,6 +241,8 @@ namespace SampleWinForms
             //string inputstr = "ญญู";
             //string inputstr = "ป่า"; //for gpos test 
             //string inputstr = "快速上手";
+            //string inputstr = "啊";
+
             //----------------
             this.txtInputChar.Text = inputstr;
             this.chkFillBackground.Checked = true;
@@ -287,7 +289,7 @@ namespace SampleWinForms
                 _devVxsTextPrinter.TargetCanvasPainter = painter;
                 _devVxsTextPrinter.ScriptLang = _current_script;
                 _devVxsTextPrinter.PositionTechnique = _devGdiTextPrinter.PositionTechnique;
-                _devGdiTextPrinter.TargetGraphics = g; 
+                _devGdiTextPrinter.TargetGraphics = g;
             }
 
             if (string.IsNullOrEmpty(this.txtInputChar.Text))

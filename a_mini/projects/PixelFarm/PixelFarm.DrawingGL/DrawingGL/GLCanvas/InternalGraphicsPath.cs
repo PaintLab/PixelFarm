@@ -16,6 +16,10 @@ namespace PixelFarm.DrawingGL
         float[] smoothBorderTess;
         int borderTriangleStripCount;
         int tessAreaTriangleCount;
+
+        //---------
+        VertexBufferObject _vboArea;
+        //---------
         public Figure(float[] coordXYs)
         {
             this.coordXYs = coordXYs;
@@ -23,12 +27,38 @@ namespace PixelFarm.DrawingGL
         public int BorderTriangleStripCount { get { return borderTriangleStripCount; } }
         public int TessAreaTriangleCount { get { return tessAreaTriangleCount; } }
 
-
-        public float[] GetSmoothBorders()
+        public bool SupportVertexBuffer
+        {
+            get
+            {
+                return true;
+            }
+        }
+        public void InitVertexBufferIfNeed(TessTool tess)
+        {
+            if (_vboArea == null)
+            {
+                _vboArea = new VertexBufferObject();
+                GetAreaTess2(tess);
+                //create index buffer
+                _vboArea.SetupVertexData(coordXYs, indexListArray);
+            }
+        }
+        /// <summary>
+        /// vertex buffer of the solid area part
+        /// </summary>
+        public VertexBufferObject VBOArea
+        {
+            get
+            {
+                return _vboArea;
+            }
+        }
+        public float[] GetSmoothBorders(SmoothBorderBuilder smoothBorderBuilder)
         {
             if (smoothBorderTess == null)
             {
-                return smoothBorderTess = SmoothBorderBuilder.BuildSmoothBorders(coordXYs, out borderTriangleStripCount);
+                return smoothBorderTess = smoothBorderBuilder.BuildSmoothBorders(coordXYs, out borderTriangleStripCount);
             }
             return smoothBorderTess;
         }
@@ -43,19 +73,29 @@ namespace PixelFarm.DrawingGL
             }
             return areaTess;
         }
+        public void GetAreaTess2(TessTool tess)
+        {
+            //triangle list
+            contourEnds[0] = coordXYs.Length - 1;
+            indexListArray = tess.TessPolygon2(coordXYs, contourEnds, out this.tessAreaTriangleCount);
+        }
+        public ushort[] indexListArray;
+
     }
 
 
 
-    static class SmoothBorderBuilder
+    class SmoothBorderBuilder
     {
-        public static float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
+        List<float> expandCoords = new List<float>();
+        public float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
         {
+            expandCoords.Clear();
             float[] coords = coordXYs;
             int coordCount = coordXYs.Length;
             //from user input coords
             //expand it
-            List<float> expandCoords = new List<float>();
+            //TODO: review this again***
             int lim = coordCount - 2;
             for (int i = 0; i < lim;)
             {
@@ -65,12 +105,17 @@ namespace PixelFarm.DrawingGL
             //close coord
             CreateLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
 
-            borderTriangleStripCount = (coordCount) * 2;
-            return expandCoords.ToArray();
+            borderTriangleStripCount = coordCount * 2;
+            //
+            float[] result = expandCoords.ToArray();
+            expandCoords.Clear();
+            //
+            return result;
         }
         static void CreateLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
         {
             //create wiht no line join
+            //TODO: implement line join ***
             float dx = x2 - x1;
             float dy = y2 - y1;
             float rad1 = (float)System.Math.Atan2(
@@ -82,8 +127,13 @@ namespace PixelFarm.DrawingGL
             coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1);
         }
     }
+    /// <summary>
+    /// a wrapper of internal private class
+    /// </summary>
     public struct InternalGraphicsPath
     {
+        //since Figure is private=> we use this to expose to public
+
         internal readonly List<Figure> figures;
         private InternalGraphicsPath(List<Figure> figures)
         {
