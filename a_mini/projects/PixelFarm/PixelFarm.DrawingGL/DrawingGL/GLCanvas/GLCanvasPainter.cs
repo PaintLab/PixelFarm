@@ -26,7 +26,7 @@ namespace PixelFarm.DrawingGL
         Stroke _aggStroke = new Stroke(1);
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
-
+        InternalGraphicsPathBuilder _igfxPathBuilder;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
         public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
         {
@@ -37,6 +37,8 @@ namespace PixelFarm.DrawingGL
             arcTool = new Arc();
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
+            //tools
+            _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
         }
         public bool UseVertexBufferObjectForRenderVx { get; set; }
         public override void SetOrigin(float ox, float oy)
@@ -189,7 +191,7 @@ namespace PixelFarm.DrawingGL
         public override void Draw(VertexStore vxs)
         {
             _canvas.DrawGfxPath(this._strokeColor,
-                InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
+                _igfxPathBuilder.CreateGraphicsPath(vxs));
         }
 
         public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
@@ -203,7 +205,8 @@ namespace PixelFarm.DrawingGL
             _aggStroke.Width = this.StrokeWidth;
 
             var v2 = GetFreeVxs();
-            _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(_aggStroke.MakeVxs(v1, v2))));
+            _canvas.DrawGfxPath(_canvas.StrokeColor,
+                _igfxPathBuilder.CreateGraphicsPath(_aggStroke.MakeVxs(v1, v2)));
             ReleaseVxs(ref v2);
             ReleaseVxs(ref v1);
         }
@@ -282,7 +285,7 @@ namespace PixelFarm.DrawingGL
         {
             _canvas.FillGfxPath(
                 _fillColor,
-                InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs))
+                _igfxPathBuilder.CreateGraphicsPath(vxs)
                 );
         }
 
@@ -290,13 +293,13 @@ namespace PixelFarm.DrawingGL
         {
             _canvas.FillGfxPath(
                 _fillColor,
-               InternalGraphicsPath.CreateGraphicsPath(snap));
+              _igfxPathBuilder.CreateGraphicsPath(snap));
         }
         public override void Draw(VertexStoreSnap snap)
         {
             _canvas.DrawGfxPath(
              this._strokeColor,
-             InternalGraphicsPath.CreateGraphicsPath(snap)
+             _igfxPathBuilder.CreateGraphicsPath(snap)
              );
         }
 
@@ -312,7 +315,7 @@ namespace PixelFarm.DrawingGL
             //create round rect vxs
 
             var vxs = roundRect.MakeVxs(GetFreeVxs());
-            _canvas.FillGfxPath(_fillColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
+            _canvas.FillGfxPath(_fillColor, _igfxPathBuilder.CreateGraphicsPath(vxs));
             ReleaseVxs(ref vxs);
         }
         public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
@@ -324,7 +327,7 @@ namespace PixelFarm.DrawingGL
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
             _aggStroke.MakeVxs(roundRect.MakeVxs(v1), v2);
-            _canvas.DrawGfxPath(_strokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(v2)));
+            _canvas.DrawGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(v2));
             ReleaseVxs(ref v2);
             ReleaseVxs(ref v1);
         }
@@ -337,7 +340,7 @@ namespace PixelFarm.DrawingGL
             double ry = Math.Abs(top - y);
             ellipse.Reset(x, y, rx, ry);
             VertexStore vxs = ellipse.MakeVxs(GetFreeVxs());
-            _canvas.DrawGfxPath(_strokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs)));
+            _canvas.DrawGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(vxs));
             ReleaseVxs(ref vxs);
         }
         public override void FillEllipse(double left, double bottom, double right, double top)
@@ -482,7 +485,9 @@ namespace PixelFarm.DrawingGL
             //
             for (int i = 0; i < numPath; ++i)
             {
-                _canvas.FillGfxPath(colors[i], InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(vxs, pathIndexs[i])));
+                _canvas.FillGfxPath(colors[i],
+                    _igfxPathBuilder.CreateGraphicsPath(
+                        new VertexStoreSnap(vxs, pathIndexs[i])));
             }
         }
         public override void Rectangle(double left, double bottom, double right, double top)
@@ -501,13 +506,15 @@ namespace PixelFarm.DrawingGL
         //-----------------------------------------------------------------------------------------------------------------
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
-            //store internal gfx path inside render vx
-            return new GLRenderVx(InternalGraphicsPath.CreateGraphicsPath(snap));
+            //store internal gfx path inside render vx 
+            return new GLRenderVx(_igfxPathBuilder.CreateGraphicsPathForRenderVx(snap));
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
             //store internal gfx path inside render vx
-            return new GLRenderVx(InternalGraphicsPath.CreatePolygonGraphicsPath(xycoords));
+            Figure fig = new Figure(xycoords);
+            fig.SupportVertexBuffer = true;
+            return new GLRenderVx(new InternalGraphicsPath(fig));
         }
 
         struct CenterFormArc
@@ -632,7 +639,7 @@ namespace PixelFarm.DrawingGL
 
 
             var v3 = _aggStroke.MakeVxs(v1, GetFreeVxs());
-            _canvas.DrawGfxPath(_canvas.StrokeColor, InternalGraphicsPath.CreateGraphicsPath(new VertexStoreSnap(v3)));
+            _canvas.DrawGfxPath(_canvas.StrokeColor, _igfxPathBuilder.CreateGraphicsPath(v3));
 
             ReleaseVxs(ref v3);
             ReleaseVxs(ref v1);
@@ -841,5 +848,106 @@ namespace PixelFarm.DrawingGL
             arc.Init(x, y, rx, ry, -(angleStart), -(angleExtent));
             return arc;
         }
+
+        //================
+
+        struct InternalGraphicsPathBuilder
+        {
+            //helper struct
+
+            List<float> xylist;
+            public static InternalGraphicsPathBuilder CreateNew()
+            {
+                InternalGraphicsPathBuilder builder = new InternalGraphicsPathBuilder();
+                builder.xylist = new List<float>();
+                return builder;
+            }
+            public InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap)
+            {
+                return CreateGraphicsPath(vxsSnap, false);
+            }
+            public InternalGraphicsPath CreateGraphicsPath(VertexStore vxs)
+            {
+                return CreateGraphicsPath(new VertexStoreSnap(vxs), false);
+            }
+            public InternalGraphicsPath CreateGraphicsPathForRenderVx(VertexStoreSnap vxsSnap)
+            {
+                return CreateGraphicsPath(vxsSnap, true);
+            }
+            InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap, bool buildForRenderVx)
+            {
+                VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
+                double prevX = 0;
+                double prevY = 0;
+                double prevMoveToX = 0;
+                double prevMoveToY = 0;
+
+                xylist.Clear();
+                //TODO: reivew here 
+                //about how to reuse this list 
+
+                bool isAddToList = true;
+                //result...
+                List<Figure> figures = new List<Figure>();
+
+                for (;;)
+                {
+                    double x, y;
+                    VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);
+                    switch (cmd)
+                    {
+                        case PixelFarm.Agg.VertexCmd.MoveTo:
+                            if (!isAddToList)
+                            {
+                                isAddToList = true;
+                            }
+                            prevMoveToX = prevX = x;
+                            prevMoveToY = prevY = y;
+                            xylist.Add((float)x);
+                            xylist.Add((float)y);
+                            break;
+                        case PixelFarm.Agg.VertexCmd.LineTo:
+                            xylist.Add((float)x);
+                            xylist.Add((float)y);
+                            prevX = x;
+                            prevY = y;
+                            break;
+                        case PixelFarm.Agg.VertexCmd.Close:
+                            //from current point 
+                            xylist.Add((float)prevMoveToX);
+                            xylist.Add((float)prevMoveToY);
+                            prevX = prevMoveToX;
+                            prevY = prevMoveToY;
+
+                            break;
+                        case VertexCmd.CloseAndEndFigure:
+                            //from current point 
+                            {
+                                xylist.Add((float)prevMoveToX);
+                                xylist.Add((float)prevMoveToY);
+                                prevX = prevMoveToX;
+                                prevY = prevMoveToY;
+                                //
+
+                                Figure newfig = new Figure(xylist.ToArray());
+                                newfig.SupportVertexBuffer = buildForRenderVx;
+                                figures.Add(newfig);
+                                //-----------
+                                xylist.Clear();
+                                isAddToList = false;
+                            }
+                            break;
+                        case PixelFarm.Agg.VertexCmd.NoMore:
+                            goto EXIT_LOOP;
+                        default:
+                            throw new System.NotSupportedException();
+                    }
+                }
+                EXIT_LOOP:
+
+                return new InternalGraphicsPath(figures);
+            }
+        }
+
     }
 }
