@@ -874,8 +874,9 @@ namespace PixelFarm.DrawingGL
             {
                 return CreateGraphicsPath(vxsSnap, true);
             }
+  
             InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap, bool buildForRenderVx)
-            {
+            { 
                 VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
                 double prevX = 0;
                 double prevY = 0;
@@ -944,7 +945,6 @@ namespace PixelFarm.DrawingGL
                     }
                 }
                 EXIT_LOOP:
-
                 return new InternalGraphicsPath(figures);
             }
         }

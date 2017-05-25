@@ -345,5 +345,45 @@ namespace PixelFarm.DrawingGL
 
             return indexList.ToArray();
         }
+        /// <summary>
+        /// tess and read result as triangle list index array (for GLES draw element)
+        /// </summary>
+        /// <param name="tessTool"></param>
+        /// <param name="vertex2dCoords"></param>
+        /// <param name="contourEndPoints"></param>
+        /// <param name="outputCoords"></param>
+        /// <param name="vertexCount"></param>
+        /// <returns></returns>
+        internal static void TessAndAddIntoIndexArrayList(this TessTool tessTool,
+            float[] vertex2dCoords,
+            int[] contourEndPoints,
+            MultiPartTessResult multipartTessResult,
+            out int vertexCount)
+        {
+            if (!tessTool.TessPolygon(vertex2dCoords, contourEndPoints))
+            {
+                vertexCount = 0;
+                return;
+            }
+            multipartTessResult.BeginPart();
+            //results
+            //1.
+            List<ushort> indexList = tessTool.TessIndexList;
+            //2.
+            List<TessTempVertex> tempVertexList = tessTool.TempVertexList;
+            //3.
+            vertexCount = indexList.Count;
+            //-----------------------------  
+            //create a new array and append with original and new tempVertex list 
+            multipartTessResult.AddTessCoords(vertex2dCoords);
+            //2. append with newly create vertex (from tempVertList)
+            int tempVertListCount = tempVertexList.Count;
+            for (int i = 0; i < tempVertListCount; ++i)
+            {
+                TessTempVertex v = tempVertexList[i];
+                multipartTessResult.AddTessCoord((float)v.m_X, (float)v.m_Y);
+            }
+            multipartTessResult.EndPart();
+        }
     }
 }

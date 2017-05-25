@@ -6,9 +6,7 @@ namespace PixelFarm.DrawingGL
 {
     class Figure
     {
-        //TODO: review here again***
-
-
+        //TODO: review here again*** 
         public float[] coordXYs; //this is user provide coord
         //---------
         //system tess ...
@@ -74,8 +72,6 @@ namespace PixelFarm.DrawingGL
 
     }
 
-
-
     class SmoothBorderBuilder
     {
         List<float> expandCoords = new List<float>();
@@ -119,6 +115,52 @@ namespace PixelFarm.DrawingGL
             coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1); //1 vertex
         }
     }
+
+
+    class MultiPartTessResult
+    {
+        List<float> _allCoords = new List<float>();
+        List<ushort> _allArrayIndexList = new List<ushort>();
+        List<PartRange> _partIndexList = new List<PartRange>();
+
+        int _currentPartBeginAt = 0;
+
+        struct PartRange
+        {
+            public int begin;
+            public int vertexCount;
+        }
+        public int BeginPart()
+        {
+            return _currentPartBeginAt = _partIndexList.Count;
+        }
+        public void EndPart()
+        {
+            //end current part
+            int count = _allArrayIndexList.Count - _currentPartBeginAt;
+            //
+            PartRange p = new PartRange();
+            p.begin = _currentPartBeginAt;
+            p.vertexCount = count;
+            //
+            _partIndexList.Add(p);
+        }
+        public void Clear()
+        {
+            _allCoords.Clear();
+        }
+        public void AddTessCoord(float x, float y)
+        {
+            _allCoords.Add(x);
+            _allCoords.Add(y);
+        }
+        public void AddTessCoords(float[] xy)
+        {
+            _allCoords.AddRange(xy);
+        }
+    }
+
+
     /// <summary>
     /// a wrapper of internal private class
     /// </summary>
@@ -128,19 +170,26 @@ namespace PixelFarm.DrawingGL
 
 
         readonly Figure _figure;
+        internal readonly MultiPartTessResult _mutltiPartTess;
         readonly List<Figure> figures;
         internal InternalGraphicsPath(List<Figure> figures)
         {
-
-            this.figures = figures;
             _figure = null;
+            _mutltiPartTess = null;
+            this.figures = figures;
         }
         internal InternalGraphicsPath(Figure fig)
         {
             this.figures = null;
+            this._mutltiPartTess = null;
             _figure = fig;
         }
-
+        internal InternalGraphicsPath(MultiPartTessResult _mutltiPartTess)
+        {
+            this._figure = null;
+            this.figures = null;
+            this._mutltiPartTess = _mutltiPartTess;
+        }
 
         internal int FigCount
         {

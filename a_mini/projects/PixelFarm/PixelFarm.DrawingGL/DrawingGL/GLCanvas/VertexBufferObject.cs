@@ -105,8 +105,7 @@ namespace PixelFarm.DrawingGL
         public bool HasData
         {
             get { return _hasData; }
-        }
-
-
+        }        
     }
+
 }
