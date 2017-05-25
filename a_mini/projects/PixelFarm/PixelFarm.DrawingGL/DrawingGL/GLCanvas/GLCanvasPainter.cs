@@ -470,9 +470,6 @@ namespace PixelFarm.DrawingGL
             this.Fill(roundRect.MakeVxs(v1));
             ReleaseVxs(ref v1);
         }
-
-
-
         public override void Line(double x1, double y1, double x2, double y2)
         {
             _canvas.StrokeColor = _strokeColor;
@@ -507,9 +504,10 @@ namespace PixelFarm.DrawingGL
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
             //store internal gfx path inside render vx 
-            MultiPartTessResult multipartTessResult = new MultiPartTessResult();
-            _igfxPathBuilder.CreateGraphicsPathForRenderVx(snap, multipartTessResult, this._canvas.GetTessTool());
-            return new GLRenderVx(multipartTessResult);
+            //MultiPartTessResult multipartTessResult = new MultiPartTessResult();             
+            //_igfxPathBuilder.CreateGraphicsPathForRenderVx(snap, multipartTessResult, this._canvas.GetTessTool());
+            InternalGraphicsPath p = _igfxPathBuilder.CreateGraphicsPathForRenderVx(snap);
+            return new GLRenderVx(p);
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
@@ -871,7 +869,7 @@ namespace PixelFarm.DrawingGL
             {
                 return CreateGraphicsPath(new VertexStoreSnap(vxs), false);
             }
-            public InternalGraphicsPath CreateGraphicsPathForRenderVx2(VertexStoreSnap vxsSnap)
+            public InternalGraphicsPath CreateGraphicsPathForRenderVx(VertexStoreSnap vxsSnap)
             {
                 return CreateGraphicsPath(vxsSnap, true);
             }
@@ -950,18 +948,18 @@ namespace PixelFarm.DrawingGL
             }
 
 
-            internal void CreateGraphicsPathForRenderVx(VertexStoreSnap vxsSnap, MultiPartTessResult multipartTessResult, TessTool tessTool)
+            internal void CreateGraphicsPathForRenderVx2(VertexStoreSnap vxsSnap, MultiPartTessResult multipartTessResult, TessTool tessTool)
             {
-                 
+
                 VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
                 double prevX = 0;
                 double prevY = 0;
                 double prevMoveToX = 0;
-                double prevMoveToY = 0; 
+                double prevMoveToY = 0;
                 xylist.Clear();
                 //TODO: reivew here 
                 //about how to reuse this list  
-                bool isAddToList = true; 
+                bool isAddToList = true;
                 for (;;)
                 {
                     double x, y;

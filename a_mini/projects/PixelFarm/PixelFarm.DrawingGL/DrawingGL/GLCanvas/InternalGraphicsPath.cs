@@ -146,6 +146,10 @@ namespace PixelFarm.DrawingGL
             //
             _partIndexList.Add(p);
         }
+        public void AddVertexIndexList(List<ushort> arr)
+        {
+            _allArrayIndexList.AddRange(arr);
+        }
         public void Clear()
         {
             _allCoords.Clear();
@@ -165,13 +169,25 @@ namespace PixelFarm.DrawingGL
         }
 
         VertexBufferObject _vbo;
-        public void InitMultiPartVBO()
+        void InitMultiPartVBOIfNeed()
         {
             if (_vbo != null) return;
             //
             _vbo = new VertexBufferObject();
             _vbo.CreateBuffers(_allCoords.ToArray(), _allArrayIndexList.ToArray(), _partIndexList.ToArray());
         }
+        public VertexBufferObject GetVBO()
+        {
+            InitMultiPartVBOIfNeed();
+            return _vbo;
+        }
+        public PartRange GetPartRange(int index)
+        {
+            return _partIndexList[index];
+        }
+        public List<float> GetAllCoords() { return _allCoords; }
+        public List<ushort> getAllArrayIndexList() { return _allArrayIndexList; }
+
     }
 
 

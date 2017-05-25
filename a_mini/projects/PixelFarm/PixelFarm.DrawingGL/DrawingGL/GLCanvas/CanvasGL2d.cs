@@ -510,7 +510,7 @@ namespace PixelFarm.DrawingGL
                 case CanvasSmoothMode.Smooth:
                     {
 
-                        
+
                         int subPathCount = multipartTessResult.PartCount;
                         float saved_Width = StrokeWidth;
                         Drawing.Color saved_Color = StrokeColor;
@@ -520,37 +520,56 @@ namespace PixelFarm.DrawingGL
                         // 
                         StrokeColor = color;
                         StrokeWidth = 1.5f; //TODO: review this ***
-                        //
-                        float[] tessArea;
+
+
+                        VertexBufferObject vbo = multipartTessResult.GetVBO();
+                        basicFillShader.FillTriangles(
+                               vbo,
+                               vbo.VertexCount,
+                               color);
                         for (int i = 0; i < subPathCount; ++i)
                         {
-                            //draw each sub-path 
-                            Figure f = igpth.GetFig(i);
-                            if (f.SupportVertexBuffer)
-                            {
-                                //TODO: review here again
-                                //draw area
-                                basicFillShader.FillTriangles(
-                                    f.GetAreaTessAsVBO(tessTool),
-                                    f.TessAreaVertexCount,
-                                    color);
-                                //draw smooth border
-                                smoothLineShader.DrawTriangleStrips(
-                                    f.GetSmoothBorders(smoothBorderBuilder),
-                                    f.BorderTriangleStripCount);
-                            }
-                            else
-                            {
-                                if ((tessArea = f.GetAreaTess(this.tessTool)) != null)
-                                {    //draw area
-                                    basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
-                                    //draw smooth border
-                                    smoothLineShader.DrawTriangleStrips(
-                                        f.GetSmoothBorders(smoothBorderBuilder),
-                                        f.BorderTriangleStripCount);
-                                }
-                            }
+                            PartRange p = multipartTessResult.GetPartRange(i);
+                            int begin = p.begin;
+                            int count = p.vertexCount;
+
+                            //basicFillShader.FillTriangles(
+                            //      f.GetAreaTessAsVBO(tessTool),
+                            //      f.TessAreaVertexCount,
+                            //      color);
+
                         }
+                        //
+                        //float[] tessArea;
+                        //for (int i = 0; i < subPathCount; ++i)
+                        //{
+                        //    //draw each sub-path 
+                        //    Figure f = igpth.GetFig(i);
+                        //    if (f.SupportVertexBuffer)
+                        //    {
+                        //        //TODO: review here again
+                        //        //draw area
+                        //        basicFillShader.FillTriangles(
+                        //            f.GetAreaTessAsVBO(tessTool),
+                        //            f.TessAreaVertexCount,
+                        //            color);
+                        //        //draw smooth border
+                        //        smoothLineShader.DrawTriangleStrips(
+                        //            f.GetSmoothBorders(smoothBorderBuilder),
+                        //            f.BorderTriangleStripCount);
+                        //    }
+                        //    else
+                        //    {
+                        //        if ((tessArea = f.GetAreaTess(this.tessTool)) != null)
+                        //        {    //draw area
+                        //            basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                        //            //draw smooth border
+                        //            smoothLineShader.DrawTriangleStrips(
+                        //                f.GetSmoothBorders(smoothBorderBuilder),
+                        //                f.BorderTriangleStripCount);
+                        //        }
+                        //    }
+                        //}
                         //restore stroke width and color
                         StrokeWidth = saved_Width; //restore back
                         StrokeColor = saved_Color;

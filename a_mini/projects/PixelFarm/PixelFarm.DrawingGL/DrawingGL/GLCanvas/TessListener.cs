@@ -374,15 +374,16 @@ namespace PixelFarm.DrawingGL
             //3.
             vertexCount = indexList.Count;
             //-----------------------------  
-            //create a new array and append with original and new tempVertex list 
+
             multipartTessResult.AddTessCoords(vertex2dCoords);
-            //2. append with newly create vertex (from tempVertList)
+            //append with newly create vertex(from tempVertList)
             int tempVertListCount = tempVertexList.Count;
             for (int i = 0; i < tempVertListCount; ++i)
             {
                 TessTempVertex v = tempVertexList[i];
                 multipartTessResult.AddTessCoord((float)v.m_X, (float)v.m_Y);
             }
+            multipartTessResult.AddVertexIndexList(indexList);
             multipartTessResult.EndPart();
         }
     }
