@@ -507,7 +507,9 @@ namespace PixelFarm.DrawingGL
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
             //store internal gfx path inside render vx 
-            return new GLRenderVx(_igfxPathBuilder.CreateGraphicsPathForRenderVx(snap));
+            MultiPartTessResult multipartTessResult = new MultiPartTessResult();
+            _igfxPathBuilder.CreateGraphicsPathForRenderVx(snap, multipartTessResult, this._canvas.GetTessTool());
+            return new GLRenderVx(multipartTessResult);
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
@@ -848,7 +850,6 @@ namespace PixelFarm.DrawingGL
             arc.Init(x, y, rx, ry, -(angleStart), -(angleExtent));
             return arc;
         }
-
         //================
 
         struct InternalGraphicsPathBuilder
@@ -870,13 +871,14 @@ namespace PixelFarm.DrawingGL
             {
                 return CreateGraphicsPath(new VertexStoreSnap(vxs), false);
             }
-            public InternalGraphicsPath CreateGraphicsPathForRenderVx(VertexStoreSnap vxsSnap)
+            public InternalGraphicsPath CreateGraphicsPathForRenderVx2(VertexStoreSnap vxsSnap)
             {
                 return CreateGraphicsPath(vxsSnap, true);
             }
-  
+
+
             InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap, bool buildForRenderVx)
-            { 
+            {
                 VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
                 double prevX = 0;
                 double prevY = 0;
@@ -894,8 +896,7 @@ namespace PixelFarm.DrawingGL
                 for (;;)
                 {
                     double x, y;
-                    VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);
-                    switch (cmd)
+                    switch (vxsIter.GetNextVertex(out x, out y))
                     {
                         case PixelFarm.Agg.VertexCmd.MoveTo:
                             if (!isAddToList)
@@ -946,6 +947,75 @@ namespace PixelFarm.DrawingGL
                 }
                 EXIT_LOOP:
                 return new InternalGraphicsPath(figures);
+            }
+
+
+            internal void CreateGraphicsPathForRenderVx(VertexStoreSnap vxsSnap, MultiPartTessResult multipartTessResult, TessTool tessTool)
+            {
+                 
+                VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
+                double prevX = 0;
+                double prevY = 0;
+                double prevMoveToX = 0;
+                double prevMoveToY = 0; 
+                xylist.Clear();
+                //TODO: reivew here 
+                //about how to reuse this list  
+                bool isAddToList = true; 
+                for (;;)
+                {
+                    double x, y;
+                    switch (vxsIter.GetNextVertex(out x, out y))
+                    {
+                        case PixelFarm.Agg.VertexCmd.MoveTo:
+                            if (!isAddToList)
+                            {
+                                isAddToList = true;
+                            }
+                            prevMoveToX = prevX = x;
+                            prevMoveToY = prevY = y;
+                            xylist.Add((float)x);
+                            xylist.Add((float)y);
+                            break;
+                        case PixelFarm.Agg.VertexCmd.LineTo:
+                            xylist.Add((float)x);
+                            xylist.Add((float)y);
+                            prevX = x;
+                            prevY = y;
+                            break;
+                        case PixelFarm.Agg.VertexCmd.Close:
+                            //from current point 
+                            xylist.Add((float)prevMoveToX);
+                            xylist.Add((float)prevMoveToY);
+                            prevX = prevMoveToX;
+                            prevY = prevMoveToY;
+
+                            break;
+                        case VertexCmd.CloseAndEndFigure:
+                            //from current point 
+                            {
+                                xylist.Add((float)prevMoveToX);
+                                xylist.Add((float)prevMoveToY);
+                                prevX = prevMoveToX;
+                                prevY = prevMoveToY;
+                                //
+                                int localVertexCount;
+                                //TODO: review here, how to send xylist as buffer***
+                                tessTool.TessAndAddToMultiPartResult(xylist.ToArray(), null, multipartTessResult, out localVertexCount);
+                                //-----------
+                                xylist.Clear();
+                                isAddToList = false;
+                            }
+                            break;
+                        case PixelFarm.Agg.VertexCmd.NoMore:
+                            return;
+                        default:
+                            throw new System.NotSupportedException();
+                    }
+                }
+
+
+
             }
         }
 

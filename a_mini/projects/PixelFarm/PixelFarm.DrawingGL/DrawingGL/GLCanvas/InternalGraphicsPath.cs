@@ -65,13 +65,18 @@ namespace PixelFarm.DrawingGL
                 indexListArray = tess.TessAsTriIndexArray(coordXYs, null,
                     out tessXYCoords2, out this._tessAreaVertexCount);
                 _vboArea = new VertexBufferObject();
-                _vboArea.CreateBuffers(tessXYCoords2, indexListArray);
+                _vboArea.CreateBuffers(tessXYCoords2, indexListArray, null);
             }
             return _vboArea;
         }
 
     }
 
+    public struct PartRange
+    {
+        public int begin;
+        public int vertexCount;
+    }
     class SmoothBorderBuilder
     {
         List<float> expandCoords = new List<float>();
@@ -125,11 +130,7 @@ namespace PixelFarm.DrawingGL
 
         int _currentPartBeginAt = 0;
 
-        struct PartRange
-        {
-            public int begin;
-            public int vertexCount;
-        }
+
         public int BeginPart()
         {
             return _currentPartBeginAt = _partIndexList.Count;
@@ -157,6 +158,19 @@ namespace PixelFarm.DrawingGL
         public void AddTessCoords(float[] xy)
         {
             _allCoords.AddRange(xy);
+        }
+        public int PartCount
+        {
+            get { return _partIndexList.Count; }
+        }
+
+        VertexBufferObject _vbo;
+        public void InitMultiPartVBO()
+        {
+            if (_vbo != null) return;
+            //
+            _vbo = new VertexBufferObject();
+            _vbo.CreateBuffers(_allCoords.ToArray(), _allArrayIndexList.ToArray(), _partIndexList.ToArray());
         }
     }
 
@@ -224,9 +238,14 @@ namespace PixelFarm.DrawingGL
     class GLRenderVx : PixelFarm.Drawing.RenderVx
     {
         internal InternalGraphicsPath gxpth;
+        internal MultiPartTessResult multipartTessResult;
         public GLRenderVx(InternalGraphicsPath gxpth)
         {
             this.gxpth = gxpth;
+        }
+        public GLRenderVx(MultiPartTessResult multipartTessResult)
+        {
+            this.multipartTessResult = multipartTessResult;
         }
     }
     class GLRenderVxFormattedString : PixelFarm.Drawing.RenderVxFormattedString

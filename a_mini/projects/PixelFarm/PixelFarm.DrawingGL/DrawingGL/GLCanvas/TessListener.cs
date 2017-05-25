@@ -354,7 +354,7 @@ namespace PixelFarm.DrawingGL
         /// <param name="outputCoords"></param>
         /// <param name="vertexCount"></param>
         /// <returns></returns>
-        internal static void TessAndAddIntoIndexArrayList(this TessTool tessTool,
+        internal static void TessAndAddToMultiPartResult(this TessTool tessTool,
             float[] vertex2dCoords,
             int[] contourEndPoints,
             MultiPartTessResult multipartTessResult,
