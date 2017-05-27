@@ -504,10 +504,20 @@ namespace PixelFarm.DrawingGL
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
             //store internal gfx path inside render vx 
-            //MultiPartTessResult multipartTessResult = new MultiPartTessResult();             
-            //_igfxPathBuilder.CreateGraphicsPathForRenderVx(snap, multipartTessResult, this._canvas.GetTessTool());
-            InternalGraphicsPath p = _igfxPathBuilder.CreateGraphicsPathForRenderVx(snap);
-            return new GLRenderVx(p);
+
+            //1.
+            //InternalGraphicsPath p = _igfxPathBuilder.CreateGraphicsPathForRenderVx(snap);
+            //return new GLRenderVx(p);
+
+            //2.
+            MultiPartTessResult multipartTessResult = new MultiPartTessResult();
+            _igfxPathBuilder.CreateGraphicsPathForRenderVx2(snap,
+                multipartTessResult,
+                _canvas.GetTessTool(),
+                _canvas.GetSmoothBorderBuilder());
+            return new GLRenderVx(multipartTessResult);
+
+
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
@@ -946,9 +956,11 @@ namespace PixelFarm.DrawingGL
                 EXIT_LOOP:
                 return new InternalGraphicsPath(figures);
             }
-
-
-            internal void CreateGraphicsPathForRenderVx2(VertexStoreSnap vxsSnap, MultiPartTessResult multipartTessResult, TessTool tessTool)
+            internal void CreateGraphicsPathForRenderVx2(
+                VertexStoreSnap vxsSnap,
+                MultiPartTessResult multipartTessResult,
+                TessTool tessTool,
+                SmoothBorderBuilder borderBuilder)
             {
 
                 VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
@@ -960,6 +972,8 @@ namespace PixelFarm.DrawingGL
                 //TODO: reivew here 
                 //about how to reuse this list  
                 bool isAddToList = true;
+                borderBuilder.Clear();
+
                 for (;;)
                 {
                     double x, y;
@@ -1011,9 +1025,6 @@ namespace PixelFarm.DrawingGL
                             throw new System.NotSupportedException();
                     }
                 }
-
-
-
             }
         }
 

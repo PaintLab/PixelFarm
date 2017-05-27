@@ -80,6 +80,42 @@ namespace PixelFarm.DrawingGL
     class SmoothBorderBuilder
     {
         List<float> expandCoords = new List<float>();
+        float _x0, _y0;
+        float _moveX, _moveY;
+        int _coordCount = 0;
+        public void Clear()
+        {
+            _x0 = _y0 = 0;
+            _coordCount = 0;
+            expandCoords.Clear();
+        }
+        public void MoveTo(float x0, float y0)
+        {
+            _moveX = _x0 = x0;
+            _moveY = _y0 = y0;
+            _coordCount = 2;
+        }
+        public void LineTo(float x1, float y1)
+        {
+            CreateSmoothLineSegment(expandCoords, _x0, _y0, _x0 = x1, _y0 = y1);
+            _coordCount += 2;
+        }
+        public void CloseContour()
+        {
+            CreateSmoothLineSegment(expandCoords, _x0, _y0, _x0 = _moveX, _y0 = _moveY);
+            //not add new coord
+        }
+
+        public float[] BuildSmoothBorder(out int borderTriangleStripCount)
+        {
+            //build smooth border from existing 
+            borderTriangleStripCount = _coordCount * 2;
+            //
+            float[] result = expandCoords.ToArray();
+            expandCoords.Clear();
+            //
+            return result;
+        }
         public float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
         {
             expandCoords.Clear();

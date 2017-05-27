@@ -429,9 +429,6 @@ namespace PixelFarm.DrawingGL
         }
 
 
-
-
-
         public void DrawImageWithSdf(GLBitmap bmp, float x, float y, float scale)
         {
             sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
@@ -883,7 +880,6 @@ namespace PixelFarm.DrawingGL
         }
 
         internal TessTool GetTessTool() { return tessTool; }
-
-
+        internal SmoothBorderBuilder GetSmoothBorderBuilder() { return smoothBorderBuilder; }
     }
 }
