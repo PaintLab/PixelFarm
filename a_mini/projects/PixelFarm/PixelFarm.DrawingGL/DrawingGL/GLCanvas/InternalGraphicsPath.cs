@@ -74,8 +74,28 @@ namespace PixelFarm.DrawingGL
 
     public struct PartRange
     {
-        public int begin;
+        public int beginElemIndex;
         public int vertexCount;
+#if DEBUG
+        public override string ToString()
+        {
+            return beginElemIndex + ":" + vertexCount;
+        }
+#endif
+    }
+    public struct VBOPart
+    {
+        public readonly VertexBufferObject vbo;
+        public readonly PartRange partRange;
+        public VBOPart(VertexBufferObject vbo, PartRange partRange)
+        {
+            this.vbo = vbo;
+            this.partRange = partRange;
+        }
+        public override string ToString()
+        {
+            return partRange.ToString();
+        }
     }
     class SmoothBorderBuilder
     {
@@ -160,24 +180,28 @@ namespace PixelFarm.DrawingGL
 
     class MultiPartTessResult
     {
+        //--------------------------------------------------
+        //area 
         List<float> _allCoords = new List<float>();
         List<ushort> _allArrayIndexList = new List<ushort>();
         List<PartRange> _partIndexList = new List<PartRange>();
+        //--------------------------------------------------
+        //border
+        List<float[]> smoothBorders = new List<float[]>();
 
-        int _currentPartBeginAt = 0;
-
+        int _currentPartBeginElementIndex = 0;
 
         public int BeginPart()
         {
-            return _currentPartBeginAt = _partIndexList.Count;
+            return _currentPartBeginElementIndex = _allArrayIndexList.Count;
         }
         public void EndPart()
         {
             //end current part
-            int count = _allArrayIndexList.Count - _currentPartBeginAt;
+            int count = _allArrayIndexList.Count - _currentPartBeginElementIndex;
             //
             PartRange p = new PartRange();
-            p.begin = _currentPartBeginAt;
+            p.beginElemIndex = _currentPartBeginElementIndex;
             p.vertexCount = count;
             //
             _partIndexList.Add(p);
@@ -223,7 +247,11 @@ namespace PixelFarm.DrawingGL
         }
         public List<float> GetAllCoords() { return _allCoords; }
         public List<ushort> getAllArrayIndexList() { return _allArrayIndexList; }
-
+        //--------------------------------------------------
+        public void AddSmoothBorders(float[] smoothBorderArr)
+        {
+            smoothBorders.Add(smoothBorderArr);
+        }
     }
 
 

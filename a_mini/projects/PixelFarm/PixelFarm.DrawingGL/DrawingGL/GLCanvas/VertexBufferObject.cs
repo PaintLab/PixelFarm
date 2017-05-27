@@ -95,12 +95,18 @@ namespace PixelFarm.DrawingGL
                 _hasData = false;
             }
         }
+        /// <summary>
+        /// bind array buffer and element array buffer
+        /// </summary>
         public void Bind()
         {
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertextBufferIndex);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferIndex);
         }
+        /// <summary>
+        /// unbine array buffer and element array buffer
+        /// </summary>
         public void UnBind()
         {
             // IMPORTANT: Unbind from the buffer when we're done with it.

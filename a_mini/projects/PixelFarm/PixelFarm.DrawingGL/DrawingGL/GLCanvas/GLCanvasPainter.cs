@@ -988,10 +988,12 @@ namespace PixelFarm.DrawingGL
                             prevMoveToY = prevY = y;
                             xylist.Add((float)x);
                             xylist.Add((float)y);
+                            borderBuilder.MoveTo((float)x, (float)y);
                             break;
                         case PixelFarm.Agg.VertexCmd.LineTo:
                             xylist.Add((float)x);
                             xylist.Add((float)y);
+                            borderBuilder.LineTo((float)x, (float)y);
                             prevX = x;
                             prevY = y;
                             break;
@@ -999,6 +1001,7 @@ namespace PixelFarm.DrawingGL
                             //from current point 
                             xylist.Add((float)prevMoveToX);
                             xylist.Add((float)prevMoveToY);
+                            borderBuilder.LineTo((float)prevMoveToX, (float)prevMoveToY);
                             prevX = prevMoveToX;
                             prevY = prevMoveToY;
 
@@ -1013,7 +1016,18 @@ namespace PixelFarm.DrawingGL
                                 //
                                 int localVertexCount;
                                 //TODO: review here, how to send xylist as buffer***
+
+
+                                borderBuilder.CloseContour();
+
+                                int borderTriangleStripCount;
+                                float[] borders = borderBuilder.BuildSmoothBorder(out borderTriangleStripCount);
                                 tessTool.TessAndAddToMultiPartResult(xylist.ToArray(), null, multipartTessResult, out localVertexCount);
+                                if (borders == null)
+                                {
+
+                                }
+                                multipartTessResult.AddSmoothBorders(borders);
                                 //-----------
                                 xylist.Clear();
                                 isAddToList = false;

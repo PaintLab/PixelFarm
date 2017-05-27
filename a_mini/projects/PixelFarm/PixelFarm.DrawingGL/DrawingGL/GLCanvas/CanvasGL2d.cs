@@ -516,25 +516,17 @@ namespace PixelFarm.DrawingGL
                         //and it will be set back later.
                         // 
                         StrokeColor = color;
-                        StrokeWidth = 1.5f; //TODO: review this ***
-
+                        StrokeWidth = 1.5f; //TODO: review this *** 
 
                         VertexBufferObject vbo = multipartTessResult.GetVBO();
-                        basicFillShader.FillTriangles(
-                               vbo,
-                               vbo.VertexCount,
-                               color);
+                        //basicFillShader.FillTriangles(
+                        //       vbo,
+                        //       vbo.VertexCount,
+                        //       color);
                         for (int i = 0; i < subPathCount; ++i)
                         {
                             PartRange p = multipartTessResult.GetPartRange(i);
-                            int begin = p.begin;
-                            int count = p.vertexCount;
-
-                            //basicFillShader.FillTriangles(
-                            //      f.GetAreaTessAsVBO(tessTool),
-                            //      f.TessAreaVertexCount,
-                            //      color);
-
+                            basicFillShader.FillTriangles(new VBOPart(vbo, p), color);
                         }
                         //
                         //float[] tessArea;

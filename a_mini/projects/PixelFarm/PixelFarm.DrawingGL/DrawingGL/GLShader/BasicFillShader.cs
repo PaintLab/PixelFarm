@@ -88,6 +88,22 @@ namespace PixelFarm.DrawingGL
             GL.DrawElements(BeginMode.Triangles, nelements, DrawElementsType.UnsignedShort, 0);
             vbo.UnBind(); //important, call unbind after finish call.
         }
+        public void FillTriangles(VBOPart vboPart, Drawing.Color color)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            //--------------------------------------------  
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+
+            vboPart.vbo.Bind();
+            a_position.LoadLatest();
+            GL.DrawElements(BeginMode.Triangles,
+                vboPart.partRange.vertexCount,
+                DrawElementsType.UnsignedShort,
+                vboPart.partRange.beginElemIndex * 2);
+
+            vboPart.vbo.UnBind();
+        }
         public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, Drawing.Color color)
         {
             SetCurrent();
