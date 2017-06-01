@@ -31,10 +31,7 @@ namespace PixelFarm.DrawingGL
         {
             get;
             set;
-
         }
-
-
         public float[] GetSmoothBorders(SmoothBorderBuilder smoothBorderBuilder)
         {
             if (smoothBorderTess == null)
@@ -74,12 +71,19 @@ namespace PixelFarm.DrawingGL
 
     public struct PartRange
     {
-        public int beginElemIndex;
-        public int vertexCount;
+        public readonly int beginVertexAt;
+        public readonly int beginElemIndexAt;
+        public readonly int elemCount;
+        public PartRange(int beginVertexAt, int beginElemIndexAt, int elemCount)
+        {
+            this.beginVertexAt = beginVertexAt;
+            this.beginElemIndexAt = beginElemIndexAt;
+            this.elemCount = elemCount;
+        }
 #if DEBUG
         public override string ToString()
         {
-            return beginElemIndex + ":" + vertexCount;
+            return beginElemIndexAt + ":" + elemCount;
         }
 #endif
     }
@@ -190,21 +194,26 @@ namespace PixelFarm.DrawingGL
         List<float[]> smoothBorders = new List<float[]>();
 
         int _currentPartBeginElementIndex = 0;
-
+        int _currentPartFirstComponentStartAt = 0;
+        public MultiPartTessResult()
+        {
+        }
         public int BeginPart()
         {
+            if (_allArrayIndexList.Count > 0)
+            {
+
+            }
+            _currentPartFirstComponentStartAt = _allCoords.Count;
             return _currentPartBeginElementIndex = _allArrayIndexList.Count;
         }
         public void EndPart()
         {
-            //end current part
-            int count = _allArrayIndexList.Count - _currentPartBeginElementIndex;
-            //
-            PartRange p = new PartRange();
-            p.beginElemIndex = _currentPartBeginElementIndex;
-            p.vertexCount = count;
-            //
-            _partIndexList.Add(p);
+            _partIndexList.Add(
+                new PartRange(
+                    _currentPartFirstComponentStartAt,
+                    _currentPartBeginElementIndex,
+                    _allArrayIndexList.Count - _currentPartBeginElementIndex));
         }
         public void AddVertexIndexList(List<ushort> arr)
         {
