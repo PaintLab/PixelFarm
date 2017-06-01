@@ -95,14 +95,21 @@ namespace PixelFarm.DrawingGL
             //--------------------------------------------  
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
 
-            vboPart.vbo.Bind();
-            a_position.LoadLatest();
-            GL.DrawElements(BeginMode.Triangles,
-                vboPart.partRange.vertexCount,
-                DrawElementsType.UnsignedShort,
-                vboPart.partRange.beginElemIndex * 2);
+            //--------------------------------------------  
+            //note (A):
+            //from https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glVertexAttribPointer.xml
+            //... If a non-zero named buffer object is bound to the GL_ARRAY_BUFFER target (see glBindBuffer)
+            //while a generic vertex attribute array is specified,
+            //pointer is treated as **a byte offset** into the buffer object's data store. 
 
+            vboPart.vbo.Bind();
+            a_position.LoadLatest(vboPart.partRange.beginVertexAt * 4); //*4 => see note (A) above, so offset => beginVertexAt * sizeof(float)
+            GL.DrawElements(BeginMode.Triangles,
+                vboPart.partRange.elemCount,
+                DrawElementsType.UnsignedShort,
+                vboPart.partRange.beginElemIndexAt * 2);  //*2 => see note (A) above, so offset=> beginElemIndexAt *sizeof(ushort)
             vboPart.vbo.UnBind();
+
         }
         public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, Drawing.Color color)
         {
