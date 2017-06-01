@@ -364,8 +364,8 @@ namespace PixelFarm.DrawingGL
             {
                 vertexCount = 0;
                 return;
-            }
-            multipartTessResult.BeginPart();
+            } 
+            //-----------------------------  
             //results
             //1.
             List<ushort> indexList = tessTool.TessIndexList;
@@ -374,7 +374,7 @@ namespace PixelFarm.DrawingGL
             //3.
             vertexCount = indexList.Count;
             //-----------------------------  
-
+            multipartTessResult.BeginPart();
             multipartTessResult.AddTessCoords(vertex2dCoords);
             //append with newly create vertex(from tempVertList)
             int tempVertListCount = tempVertexList.Count;
