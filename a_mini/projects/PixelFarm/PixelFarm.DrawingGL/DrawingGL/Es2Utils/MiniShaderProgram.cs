@@ -4,7 +4,7 @@ using System;
 
 namespace OpenTK.Graphics.ES20
 {
-     
+
     public struct ShaderVtxAttrib2f
     {
         readonly int location;
@@ -46,22 +46,23 @@ namespace OpenTK.Graphics.ES20
                 2, //float2
                 VertexAttribPointerType.Float,
                 false,
-                 2 * sizeof(float), //total size
+                 2 * sizeof(float),
                 (IntPtr)(vertices));
             GL.EnableVertexAttribArray(this.location);
         }
         /// <summary>
         /// load latest server side data
         /// </summary>
-        public void LoadLatest()
+        public void LoadLatest(int offset=0)
         {
             GL.VertexAttribPointer(this.location,
                 2,
                 VertexAttribPointerType.Float,
                 false,
                 2 * sizeof(float),
-                0);
-            GL.EnableVertexAttribArray(this.location);            
+                offset);
+            GL.EnableVertexAttribArray(this.location);
+            
         }
 
     }

@@ -11,18 +11,23 @@ namespace PixelFarm.DrawingGL
     public class VertexBufferObject : IDisposable
     {
 
+        int _vertexCount;
         int _vertextBufferIndex; // array buffer
         int _indexBufferIndex; // element buffer
         bool _hasData;
+
         public VertexBufferObject()
         {
             //TODO: review how to create vbo object
         }
-
+        public int VertexCount
+        {
+            get { return _vertexCount; }
+        }
         /// <summary>
         /// set up vertex data, we don't store the vertex array,or index array here
         /// </summary>
-        public void CreateBuffers(float[] _vertextBuffer, ushort[] _indexBuffer)
+        public void CreateBuffers(float[] _vertextBuffer, ushort[] _indexBuffer, PartRange[] multipartIndex)
         {
 
             if (_hasData)
@@ -32,6 +37,8 @@ namespace PixelFarm.DrawingGL
 
             unsafe
             {
+                _vertexCount = _indexBuffer.Length;
+                //
                 if (_vertextBuffer != null)
                 {
                     //1.
@@ -88,12 +95,18 @@ namespace PixelFarm.DrawingGL
                 _hasData = false;
             }
         }
+        /// <summary>
+        /// bind array buffer and element array buffer
+        /// </summary>
         public void Bind()
         {
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertextBufferIndex);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferIndex);
         }
+        /// <summary>
+        /// unbine array buffer and element array buffer
+        /// </summary>
         public void UnBind()
         {
             // IMPORTANT: Unbind from the buffer when we're done with it.
@@ -106,7 +119,6 @@ namespace PixelFarm.DrawingGL
         {
             get { return _hasData; }
         }
-
-
     }
+
 }

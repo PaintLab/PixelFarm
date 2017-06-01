@@ -429,9 +429,6 @@ namespace PixelFarm.DrawingGL
         }
 
 
-
-
-
         public void DrawImageWithSdf(GLBitmap bmp, float x, float y, float scale)
         {
             sdfShader.ForegroundColor = PixelFarm.Drawing.Color.Black;
@@ -463,14 +460,115 @@ namespace PixelFarm.DrawingGL
         public void FillRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
             GLRenderVx glRenderVx = (GLRenderVx)renderVx;
-            FillGfxPath(color, glRenderVx.gxpth);
+            if (glRenderVx.multipartTessResult != null)
+            {
+                FillGfxPath(color, glRenderVx.multipartTessResult);
+            }
+            else
+            {
+                FillGfxPath(color, glRenderVx.gxpth);
+            }
         }
         public void DrawRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
             GLRenderVx glRenderVx = (GLRenderVx)renderVx;
             DrawGfxPath(color, glRenderVx.gxpth);
         }
-        //-------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------- 
+        void FillGfxPath(Drawing.Color color, MultiPartTessResult multipartTessResult)
+        {
+            switch (SmoothMode)
+            {
+                case CanvasSmoothMode.No:
+                    {
+                        throw new NotSupportedException();
+                        //int subPathCount = igpth.FigCount;
+                        //for (int i = 0; i < subPathCount; ++i)
+                        //{
+                        //    Figure f = igpth.GetFig(i);
+                        //    if (f.SupportVertexBuffer)
+                        //    {
+                        //        basicFillShader.FillTriangles(
+                        //            f.GetAreaTessAsVBO(tessTool),
+                        //            f.TessAreaVertexCount,
+                        //            color);
+                        //    }
+                        //    else
+                        //    {
+                        //        float[] tessArea = f.GetAreaTess(this.tessTool);
+                        //        if (tessArea != null)
+                        //        {
+                        //            this.basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                        //        }
+                        //    }
+                        //}
+                    }
+                    break;
+                case CanvasSmoothMode.Smooth:
+                    {
+
+
+                        int subPathCount = multipartTessResult.PartCount;
+                        float saved_Width = StrokeWidth;
+                        Drawing.Color saved_Color = StrokeColor;
+                        //temp set stroke width to 2 amd stroke color
+                        //to the same as bg color (for smooth border).
+                        //and it will be set back later.
+                        // 
+                        StrokeColor = color;
+                        StrokeWidth = 1.5f; //TODO: review this *** 
+
+                        VertexBufferObject vbo = multipartTessResult.GetVBO();
+                        //basicFillShader.FillTriangles(
+                        //       vbo,
+                        //       vbo.VertexCount,
+                        //       color);
+                        for (int i = 0; i < subPathCount; ++i)
+                        {
+                            PartRange p = multipartTessResult.GetPartRange(i);
+                            basicFillShader.FillTriangles(new VBOPart(vbo, p), color);
+                        }
+                        //
+                        //float[] tessArea;
+                        //for (int i = 0; i < subPathCount; ++i)
+                        //{
+                        //    //draw each sub-path 
+                        //    Figure f = igpth.GetFig(i);
+                        //    if (f.SupportVertexBuffer)
+                        //    {
+                        //        //TODO: review here again
+                        //        //draw area
+                        //        basicFillShader.FillTriangles(
+                        //            f.GetAreaTessAsVBO(tessTool),
+                        //            f.TessAreaVertexCount,
+                        //            color);
+                        //        //draw smooth border
+                        //        smoothLineShader.DrawTriangleStrips(
+                        //            f.GetSmoothBorders(smoothBorderBuilder),
+                        //            f.BorderTriangleStripCount);
+                        //    }
+                        //    else
+                        //    {
+                        //        if ((tessArea = f.GetAreaTess(this.tessTool)) != null)
+                        //        {    //draw area
+                        //            basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                        //            //draw smooth border
+                        //            smoothLineShader.DrawTriangleStrips(
+                        //                f.GetSmoothBorders(smoothBorderBuilder),
+                        //                f.BorderTriangleStripCount);
+                        //        }
+                        //    }
+                        //}
+                        //restore stroke width and color
+                        StrokeWidth = saved_Width; //restore back
+                        StrokeColor = saved_Color;
+                    }
+                    break;
+            }
+
+
+
+        }
         public void FillGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
         {
             switch (SmoothMode)
@@ -773,8 +871,7 @@ namespace PixelFarm.DrawingGL
             };
         }
 
-
-
-
+        internal TessTool GetTessTool() { return tessTool; }
+        internal SmoothBorderBuilder GetSmoothBorderBuilder() { return smoothBorderBuilder; }
     }
 }
