@@ -481,7 +481,7 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.No:
                     {
-                        int subPathCount = multipartTessResult.PartCount;
+
                         float saved_Width = StrokeWidth;
                         Drawing.Color saved_Color = StrokeColor;
                         //temp set stroke width to 2 amd stroke color
@@ -489,7 +489,7 @@ namespace PixelFarm.DrawingGL
                         //and it will be set back later.
                         // 
                         StrokeColor = color;
-                        StrokeWidth = 1.5f; //TODO: review this *** 
+                        StrokeWidth = 1.2f; //TODO: review this *** 
 
                         basicFillShader.FillTriangles(multipartTessResult, color);
 
@@ -501,8 +501,6 @@ namespace PixelFarm.DrawingGL
                 case CanvasSmoothMode.Smooth:
                     {
 
-
-                        int subPathCount = multipartTessResult.PartCount;
                         float saved_Width = StrokeWidth;
                         Drawing.Color saved_Color = StrokeColor;
                         //temp set stroke width to 2 amd stroke color
@@ -513,7 +511,8 @@ namespace PixelFarm.DrawingGL
                         StrokeWidth = 1.2f; //TODO: review this *** 
 
                         basicFillShader.FillTriangles(multipartTessResult, color);
-                        //
+
+                        //add smooth border
                         smoothLineShader.DrawTriangleStrips(multipartTessResult);
 
                         //restore stroke width and color
