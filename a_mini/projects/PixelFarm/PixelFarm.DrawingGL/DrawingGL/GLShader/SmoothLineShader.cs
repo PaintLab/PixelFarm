@@ -131,12 +131,25 @@ namespace PixelFarm.DrawingGL
             CheckViewMatrix();
             //--------------------
 
+
             _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
             a_position.LoadPureV4f(coords);
             //because original stroke width is the width of both side of
             //the line, but u_linewidth is the half of the strokeWidth
             u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
+        }
+        public void DrawTriangleStrips(MultiPartTessResult multipartTessResult)
+        {
+            System.Collections.Generic.List<SmoothBorderSet> borderSets = multipartTessResult.GetAllSmoothBorderSet();
+            int j = borderSets.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                SmoothBorderSet borderSet = borderSets[i];
+                DrawTriangleStrips(
+                  borderSet.smoothBorderArr,
+                  borderSet.vertexStripCount);
+            }
         }
     }
 }
