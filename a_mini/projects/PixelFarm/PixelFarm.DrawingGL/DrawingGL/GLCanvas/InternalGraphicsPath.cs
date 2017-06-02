@@ -189,12 +189,15 @@ namespace PixelFarm.DrawingGL
         List<float> _allCoords = new List<float>();
         List<ushort> _allArrayIndexList = new List<ushort>();
         List<PartRange> _partIndexList = new List<PartRange>();
-        //--------------------------------------------------
-        //border
-        List<float[]> smoothBorders = new List<float[]>();
-
         int _currentPartBeginElementIndex = 0;
         int _currentPartFirstComponentStartAt = 0;
+        VertexBufferObject _vbo;
+        //--------------------------------------------------
+        //border
+        List<SmoothBorderSet> smoothBorders = new List<SmoothBorderSet>();
+        VertexBufferObject _vbo_smoothBorder;
+
+
         public MultiPartTessResult()
         {
         }
@@ -237,7 +240,7 @@ namespace PixelFarm.DrawingGL
             get { return _partIndexList.Count; }
         }
 
-        VertexBufferObject _vbo;
+
         void InitMultiPartVBOIfNeed()
         {
             if (_vbo != null) return;
@@ -255,14 +258,53 @@ namespace PixelFarm.DrawingGL
             return _partIndexList[index];
         }
         public List<float> GetAllCoords() { return _allCoords; }
-        public List<ushort> getAllArrayIndexList() { return _allArrayIndexList; }
+        public List<ushort> GetAllArrayIndexList() { return _allArrayIndexList; }
         //--------------------------------------------------
-        public void AddSmoothBorders(float[] smoothBorderArr)
+        public void AddSmoothBorders(float[] smoothBorderArr, int vertexStripCount)
         {
-            smoothBorders.Add(smoothBorderArr);
+            smoothBorders.Add(new SmoothBorderSet(smoothBorderArr, vertexStripCount));
+        }
+        public List<SmoothBorderSet> GetAllSmoothBorderSet()
+        {
+            return this.smoothBorders;
+        }
+        void InitMultiPartBorderVBOIfNeed()
+        {
+            if (_vbo_smoothBorder != null) return;
+            //
+            _vbo_smoothBorder = new VertexBufferObject();
+            List<SmoothBorderSet> borderSets = this.smoothBorders;
+            int j = borderSets.Count;
+            PartRange[] partRanges = new PartRange[j];
+            int currentFirstComponentStartAt = 0;
+            List<float> expandedBorderCoords = new List<float>();
+            for (int i = 0; i < j; ++i)
+            {
+                SmoothBorderSet borderSet = borderSets[i];
+                //create part range
+                partRanges[i] = new PartRange(currentFirstComponentStartAt, 0, borderSet.vertexStripCount);
+                currentFirstComponentStartAt += borderSet.vertexStripCount;
+                expandedBorderCoords.AddRange(borderSet.smoothBorderArr);
+            }
+            _vbo_smoothBorder.CreateBuffers(expandedBorderCoords.ToArray(), null, partRanges);
+        }
+        public VertexBufferObject GetBorderVBO()
+        {
+            InitMultiPartBorderVBOIfNeed();
+            return _vbo_smoothBorder;
+        }
+
+    }
+    struct SmoothBorderSet
+    {
+        public readonly float[] smoothBorderArr;
+        public readonly int vertexStripCount;
+        public SmoothBorderSet(float[] smoothBorderArr, int vertexStripCount)
+        {
+            this.smoothBorderArr = smoothBorderArr;
+            this.vertexStripCount = vertexStripCount;
         }
     }
-
 
     /// <summary>
     /// a wrapper of internal private class

@@ -11,7 +11,7 @@ namespace PixelFarm.DrawingGL
     public class VertexBufferObject : IDisposable
     {
 
-        int _vertexCount;
+
         int _vertextBufferIndex; // array buffer
         int _indexBufferIndex; // element buffer
         bool _hasData;
@@ -20,10 +20,7 @@ namespace PixelFarm.DrawingGL
         {
             //TODO: review how to create vbo object
         }
-        public int VertexCount
-        {
-            get { return _vertexCount; }
-        }
+
         /// <summary>
         /// set up vertex data, we don't store the vertex array,or index array here
         /// </summary>
@@ -37,7 +34,7 @@ namespace PixelFarm.DrawingGL
 
             unsafe
             {
-                _vertexCount = _indexBuffer.Length;
+
                 //
                 if (_vertextBuffer != null)
                 {
@@ -102,7 +99,10 @@ namespace PixelFarm.DrawingGL
         {
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertextBufferIndex);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferIndex);
+            if (_indexBufferIndex > 0)
+            {
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferIndex);
+            }
         }
         /// <summary>
         /// unbine array buffer and element array buffer

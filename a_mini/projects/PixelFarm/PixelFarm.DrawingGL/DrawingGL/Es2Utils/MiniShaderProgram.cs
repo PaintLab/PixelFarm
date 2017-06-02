@@ -53,7 +53,7 @@ namespace OpenTK.Graphics.ES20
         /// <summary>
         /// load latest server side data
         /// </summary>
-        public void LoadLatest(int offset=0)
+        public void LoadLatest(int offset = 0)
         {
             GL.VertexAttribPointer(this.location,
                 2,
@@ -62,7 +62,7 @@ namespace OpenTK.Graphics.ES20
                 2 * sizeof(float),
                 offset);
             GL.EnableVertexAttribArray(this.location);
-            
+
         }
 
     }
@@ -135,14 +135,14 @@ namespace OpenTK.Graphics.ES20
         /// <summary>
         /// load latest server side data
         /// </summary>
-        public void LoadLatest()
+        public void LoadLatest(int offset = 0)
         {
             GL.VertexAttribPointer(this.location,
                 4,
                 VertexAttribPointerType.Float,
                 false,
                 4 * sizeof(float),
-                0);
+                offset);
             GL.EnableVertexAttribArray(this.location);
         }
     }
