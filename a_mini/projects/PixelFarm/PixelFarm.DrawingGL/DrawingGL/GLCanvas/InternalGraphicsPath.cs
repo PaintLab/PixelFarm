@@ -191,7 +191,7 @@ namespace PixelFarm.DrawingGL
         List<PartRange> _partIndexList = new List<PartRange>();
         //--------------------------------------------------
         //border
-        List<float[]> smoothBorders = new List<float[]>();
+        List<SmoothBorderSet> smoothBorders = new List<SmoothBorderSet>();
 
         int _currentPartBeginElementIndex = 0;
         int _currentPartFirstComponentStartAt = 0;
@@ -257,12 +257,25 @@ namespace PixelFarm.DrawingGL
         public List<float> GetAllCoords() { return _allCoords; }
         public List<ushort> getAllArrayIndexList() { return _allArrayIndexList; }
         //--------------------------------------------------
-        public void AddSmoothBorders(float[] smoothBorderArr)
+        public void AddSmoothBorders(float[] smoothBorderArr, int vertexStripCount)
         {
-            smoothBorders.Add(smoothBorderArr);
+            smoothBorders.Add(new SmoothBorderSet(smoothBorderArr, vertexStripCount));
+        }
+        public List<SmoothBorderSet> GetAllSmoothBorderSet()
+        {
+            return this.smoothBorders;
         }
     }
-
+    struct SmoothBorderSet
+    {
+        public readonly float[] smoothBorderArr;
+        public readonly int vertexStripCount;
+        public SmoothBorderSet(float[] smoothBorderArr, int vertexStripCount)
+        {
+            this.smoothBorderArr = smoothBorderArr;
+            this.vertexStripCount = vertexStripCount;
+        }
+    }
 
     /// <summary>
     /// a wrapper of internal private class

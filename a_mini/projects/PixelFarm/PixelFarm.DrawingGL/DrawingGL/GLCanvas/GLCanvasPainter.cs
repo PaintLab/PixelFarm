@@ -1023,11 +1023,11 @@ namespace PixelFarm.DrawingGL
                                 int borderTriangleStripCount;
                                 float[] borders = borderBuilder.BuildSmoothBorder(out borderTriangleStripCount);
                                 tessTool.TessAndAddToMultiPartResult(xylist.ToArray(), null, multipartTessResult, out localVertexCount);
-                                if (borders == null)
-                                {
+                                //if (borders == null)
+                                //{
 
-                                }
-                                multipartTessResult.AddSmoothBorders(borders);
+                                //}
+                                multipartTessResult.AddSmoothBorders(borders, borderTriangleStripCount);
                                 //-----------
                                 xylist.Clear();
                                 isAddToList = false;

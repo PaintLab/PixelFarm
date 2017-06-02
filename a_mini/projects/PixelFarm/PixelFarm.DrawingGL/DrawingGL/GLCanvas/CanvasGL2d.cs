@@ -514,6 +514,16 @@ namespace PixelFarm.DrawingGL
 
                         basicFillShader.FillTriangles(multipartTessResult, color);
 
+                        System.Collections.Generic.List<SmoothBorderSet> borderSets = multipartTessResult.GetAllSmoothBorderSet();
+                        int j = borderSets.Count;
+                        for (int i = 0; i < j; ++i)
+                        {
+                            SmoothBorderSet borderSet = borderSets[i];
+                            smoothLineShader.DrawTriangleStrips(
+                              borderSet.smoothBorderArr,
+                              borderSet.vertexStripCount);
+                        }
+
                         //VertexBufferObject vbo = multipartTessResult.GetVBO();
                         ////basicFillShader.FillTriangles(
                         ////       vbo,
