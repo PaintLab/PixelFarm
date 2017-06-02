@@ -258,7 +258,7 @@ namespace PixelFarm.DrawingGL
             return _partIndexList[index];
         }
         public List<float> GetAllCoords() { return _allCoords; }
-        public List<ushort> getAllArrayIndexList() { return _allArrayIndexList; }
+        public List<ushort> GetAllArrayIndexList() { return _allArrayIndexList; }
         //--------------------------------------------------
         public void AddSmoothBorders(float[] smoothBorderArr, int vertexStripCount)
         {
@@ -293,6 +293,7 @@ namespace PixelFarm.DrawingGL
             InitMultiPartBorderVBOIfNeed();
             return _vbo_smoothBorder;
         }
+
     }
     struct SmoothBorderSet
     {

@@ -150,24 +150,30 @@ namespace PixelFarm.DrawingGL
             //the line, but u_linewidth is the half of the strokeWidth
             u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
             //
-            //a_position.LoadPureV4f(coords);
-            //GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
+
             //--------------------
             VertexBufferObject borderVBO = multipartTessResult.GetBorderVBO();
+            borderVBO.Bind();
+
             System.Collections.Generic.List<SmoothBorderSet> borderSets = multipartTessResult.GetAllSmoothBorderSet();
+
             int j = borderSets.Count;
+            int lastIndex = 0;
+            int vstripCount = 0;
+            a_position.LoadLatest(); //load all smooth line vertex
+
             for (int i = 0; i < j; ++i)
             {
-                SmoothBorderSet borderSet = borderSets[i]; 
-                a_position.LoadPureV4f(borderSet.smoothBorderArr);
-                //because original stroke width is the width of both side of
-                //the line, but u_linewidth is the half of the strokeWidth            
-                GL.DrawArrays(BeginMode.TriangleStrip, 0, borderSet.vertexStripCount);
-
+                SmoothBorderSet borderSet = borderSets[i];
+                GL.DrawArrays(BeginMode.TriangleStrip, lastIndex, vstripCount = borderSet.vertexStripCount);
+                lastIndex += vstripCount;
             }
+            borderVBO.UnBind();
         }
-        public void DrawTriangleStrips2(MultiPartTessResult multipartTessResult)
-        {   
+
+#if DEBUG
+        public void dbugDrawTriangleStrips(MultiPartTessResult multipartTessResult)
+        {
             //backup
             System.Collections.Generic.List<SmoothBorderSet> borderSets = multipartTessResult.GetAllSmoothBorderSet();
             int j = borderSets.Count;
@@ -179,5 +185,6 @@ namespace PixelFarm.DrawingGL
                   borderSet.vertexStripCount);
             }
         }
+#endif
     }
 }
