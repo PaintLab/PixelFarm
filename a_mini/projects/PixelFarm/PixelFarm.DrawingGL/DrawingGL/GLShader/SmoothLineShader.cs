@@ -133,14 +133,42 @@ namespace PixelFarm.DrawingGL
 
 
             _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
+            u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
+            //
             a_position.LoadPureV4f(coords);
             //because original stroke width is the width of both side of
-            //the line, but u_linewidth is the half of the strokeWidth
-            u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
+            //the line, but u_linewidth is the half of the strokeWidth            
             GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
         }
         public void DrawTriangleStrips(MultiPartTessResult multipartTessResult)
         {
+            SetCurrent();
+            CheckViewMatrix();
+            //--------------------
+            _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
+            //because original stroke width is the width of both side of
+            //the line, but u_linewidth is the half of the strokeWidth
+            u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
+            //
+            //a_position.LoadPureV4f(coords);
+            //GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
+            //--------------------
+            VertexBufferObject borderVBO = multipartTessResult.GetBorderVBO();
+            System.Collections.Generic.List<SmoothBorderSet> borderSets = multipartTessResult.GetAllSmoothBorderSet();
+            int j = borderSets.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                SmoothBorderSet borderSet = borderSets[i]; 
+                a_position.LoadPureV4f(borderSet.smoothBorderArr);
+                //because original stroke width is the width of both side of
+                //the line, but u_linewidth is the half of the strokeWidth            
+                GL.DrawArrays(BeginMode.TriangleStrip, 0, borderSet.vertexStripCount);
+
+            }
+        }
+        public void DrawTriangleStrips2(MultiPartTessResult multipartTessResult)
+        {   
+            //backup
             System.Collections.Generic.List<SmoothBorderSet> borderSets = multipartTessResult.GetAllSmoothBorderSet();
             int j = borderSets.Count;
             for (int i = 0; i < j; ++i)
