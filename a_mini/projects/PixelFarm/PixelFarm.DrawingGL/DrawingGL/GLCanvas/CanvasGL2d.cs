@@ -481,27 +481,21 @@ namespace PixelFarm.DrawingGL
             {
                 case CanvasSmoothMode.No:
                     {
-                        throw new NotSupportedException();
-                        //int subPathCount = igpth.FigCount;
-                        //for (int i = 0; i < subPathCount; ++i)
-                        //{
-                        //    Figure f = igpth.GetFig(i);
-                        //    if (f.SupportVertexBuffer)
-                        //    {
-                        //        basicFillShader.FillTriangles(
-                        //            f.GetAreaTessAsVBO(tessTool),
-                        //            f.TessAreaVertexCount,
-                        //            color);
-                        //    }
-                        //    else
-                        //    {
-                        //        float[] tessArea = f.GetAreaTess(this.tessTool);
-                        //        if (tessArea != null)
-                        //        {
-                        //            this.basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
-                        //        }
-                        //    }
-                        //}
+                        int subPathCount = multipartTessResult.PartCount;
+                        float saved_Width = StrokeWidth;
+                        Drawing.Color saved_Color = StrokeColor;
+                        //temp set stroke width to 2 amd stroke color
+                        //to the same as bg color (for smooth border).
+                        //and it will be set back later.
+                        // 
+                        StrokeColor = color;
+                        StrokeWidth = 1.5f; //TODO: review this *** 
+
+                        basicFillShader.FillTriangles(multipartTessResult, color);
+
+                        //restore stroke width and color
+                        StrokeWidth = saved_Width; //restore back
+                        StrokeColor = saved_Color;
                     }
                     break;
                 case CanvasSmoothMode.Smooth:
@@ -518,16 +512,18 @@ namespace PixelFarm.DrawingGL
                         StrokeColor = color;
                         StrokeWidth = 1.5f; //TODO: review this *** 
 
-                        VertexBufferObject vbo = multipartTessResult.GetVBO();
-                        //basicFillShader.FillTriangles(
-                        //       vbo,
-                        //       vbo.VertexCount,
-                        //       color);
-                        for (int i = 0; i < subPathCount; ++i)
-                        {
-                            PartRange p = multipartTessResult.GetPartRange(i);
-                            basicFillShader.FillTriangles(new VBOPart(vbo, p), color);
-                        }
+                        basicFillShader.FillTriangles(multipartTessResult, color);
+
+                        //VertexBufferObject vbo = multipartTessResult.GetVBO();
+                        ////basicFillShader.FillTriangles(
+                        ////       vbo,
+                        ////       vbo.VertexCount,
+                        ////       color);
+                        //for (int i = 0; i < subPathCount; ++i)
+                        //{
+                        //    PartRange p = multipartTessResult.GetPartRange(i);
+                        //    basicFillShader.FillTriangles(new VBOPart(vbo, p), color);
+                        //}
                         //
                         //float[] tessArea;
                         //for (int i = 0; i < subPathCount; ++i)
