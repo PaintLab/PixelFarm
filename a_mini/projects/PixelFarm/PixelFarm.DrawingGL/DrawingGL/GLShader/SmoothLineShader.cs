@@ -149,7 +149,7 @@ namespace PixelFarm.DrawingGL
             //because original stroke width is the width of both side of
             //the line, but u_linewidth is the half of the strokeWidth
             u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
-            //
+
 
             //--------------------
             VertexBufferObject borderVBO = multipartTessResult.GetBorderVBO();
@@ -160,7 +160,7 @@ namespace PixelFarm.DrawingGL
             int j = borderSets.Count;
             int lastIndex = 0;
             int vstripCount = 0;
-            a_position.LoadLatest(); //load all smooth line vertex
+            a_position.LoadLatest(); //load all smooth line vertex - bind once
 
             for (int i = 0; i < j; ++i)
             {
@@ -168,9 +168,9 @@ namespace PixelFarm.DrawingGL
                 GL.DrawArrays(BeginMode.TriangleStrip, lastIndex, vstripCount = borderSet.vertexStripCount);
                 lastIndex += vstripCount;
             }
-            borderVBO.UnBind();
+            //
+            borderVBO.UnBind(); //unbind
         }
-
 #if DEBUG
         public void dbugDrawTriangleStrips(MultiPartTessResult multipartTessResult)
         {
