@@ -189,12 +189,15 @@ namespace PixelFarm.DrawingGL
         List<float> _allCoords = new List<float>();
         List<ushort> _allArrayIndexList = new List<ushort>();
         List<PartRange> _partIndexList = new List<PartRange>();
+        int _currentPartBeginElementIndex = 0;
+        int _currentPartFirstComponentStartAt = 0;
+        VertexBufferObject _vbo;
         //--------------------------------------------------
         //border
         List<SmoothBorderSet> smoothBorders = new List<SmoothBorderSet>();
+        VertexBufferObject _vbo_smoothBorder;
 
-        int _currentPartBeginElementIndex = 0;
-        int _currentPartFirstComponentStartAt = 0;
+
         public MultiPartTessResult()
         {
         }
@@ -237,7 +240,7 @@ namespace PixelFarm.DrawingGL
             get { return _partIndexList.Count; }
         }
 
-        VertexBufferObject _vbo;
+
         void InitMultiPartVBOIfNeed()
         {
             if (_vbo != null) return;
