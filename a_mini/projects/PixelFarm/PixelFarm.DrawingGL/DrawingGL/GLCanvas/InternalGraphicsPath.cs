@@ -268,6 +268,31 @@ namespace PixelFarm.DrawingGL
         {
             return this.smoothBorders;
         }
+        void InitMultiPartBorderVBOIfNeed()
+        {
+            if (_vbo_smoothBorder != null) return;
+            //
+            _vbo_smoothBorder = new VertexBufferObject();
+            List<SmoothBorderSet> borderSets = this.smoothBorders;
+            int j = borderSets.Count;
+            PartRange[] partRanges = new PartRange[j];
+            int currentFirstComponentStartAt = 0;
+            List<float> expandedBorderCoords = new List<float>();
+            for (int i = 0; i < j; ++i)
+            {
+                SmoothBorderSet borderSet = borderSets[i];
+                //create part range
+                partRanges[i] = new PartRange(currentFirstComponentStartAt, 0, borderSet.vertexStripCount);
+                currentFirstComponentStartAt += borderSet.vertexStripCount;
+                expandedBorderCoords.AddRange(borderSet.smoothBorderArr);
+            }
+            _vbo_smoothBorder.CreateBuffers(expandedBorderCoords.ToArray(), null, partRanges);
+        }
+        public VertexBufferObject GetBorderVBO()
+        {
+            InitMultiPartBorderVBOIfNeed();
+            return _vbo_smoothBorder;
+        }
     }
     struct SmoothBorderSet
     {
