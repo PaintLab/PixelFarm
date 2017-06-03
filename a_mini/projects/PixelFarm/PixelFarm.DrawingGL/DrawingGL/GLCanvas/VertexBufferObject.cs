@@ -19,8 +19,16 @@ namespace PixelFarm.DrawingGL
         public VertexBufferObject()
         {
             //TODO: review how to create vbo object
-        }
 
+#if DEBUG
+            dbugId = dbugTotoalId++;
+            Console.WriteLine(dbugId);
+#endif
+        }
+#if DEBUG
+        readonly int dbugId = 0;
+        static int dbugTotoalId = 0;
+#endif
         /// <summary>
         /// set up vertex data, we don't store the vertex array,or index array here
         /// </summary>
