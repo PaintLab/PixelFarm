@@ -48,26 +48,27 @@ namespace OpenTkEssTest
             //version 2:
 
             {
-                //MultiPartPolygon mutiPartPolygon = new MultiPartPolygon();
-                //int j = lionShape.NumPaths;
-                //int[] pathList = lionShape.PathIndexList;
-                //for (int i = 0; i < j; ++i)
-                //{
-                //    //from lionvxs extract each part                      
-                //    //fetch data and add to multipart polygon
-                //    mutiPartPolygon.AddVertexSnap(new VertexStoreSnap(lionVxs, pathList[i]));
-                //}
-                ////then create single render vx
-                //RenderVx renderVx = painter.CreatePolygonRenderVx(mutiPartPolygon);
-            }
-            //
-            {
+                MultiPartPolygon mutiPartPolygon = new MultiPartPolygon();
                 int j = lionShape.NumPaths;
                 int[] pathList = lionShape.PathIndexList;
                 for (int i = 0; i < j; ++i)
                 {
-                    lionRenderVxList.Add(painter.CreateRenderVx(new VertexStoreSnap(lionVxs, pathList[i])));
+                    //from lionvxs extract each part                      
+                    //fetch data and add to multipart polygon
+                    mutiPartPolygon.AddVertexSnap(new VertexStoreSnap(lionVxs, pathList[i]));
                 }
+                //then create single render vx
+                RenderVx renderVx = painter.CreatePolygonRenderVx(mutiPartPolygon);
+                lionRenderVxList.Add(renderVx);
+            }
+            //
+            {
+                //int j = lionShape.NumPaths;
+                //int[] pathList = lionShape.PathIndexList;
+                //for (int i = 0; i < j; ++i)
+                //{
+                //    lionRenderVxList.Add(painter.CreateRenderVx(new VertexStoreSnap(lionVxs, pathList[i])));
+                //}
             }
 
         }
