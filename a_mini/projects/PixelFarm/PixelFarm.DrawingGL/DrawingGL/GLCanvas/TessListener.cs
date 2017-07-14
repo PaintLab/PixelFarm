@@ -270,9 +270,10 @@ namespace PixelFarm.DrawingGL
             //3.
             vertexCount = indexList.Count;
             //-----------------------------    
-            int orgVertexCount = vertex2dCoords.Length;
+            int orgVertexCount = vertex2dCoords.Length / 2;
             float[] vtx = new float[vertexCount * 2];//***
             int n = 0;
+
             for (int p = 0; p < vertexCount; ++p)
             {
                 ushort index = indexList[p];
@@ -364,7 +365,7 @@ namespace PixelFarm.DrawingGL
             {
                 vertexCount = 0;
                 return;
-            } 
+            }
             //-----------------------------  
             //results
             //1.
