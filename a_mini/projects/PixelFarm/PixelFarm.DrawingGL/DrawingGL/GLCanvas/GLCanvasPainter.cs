@@ -528,6 +528,8 @@ namespace PixelFarm.DrawingGL
         {
             //store internal gfx path inside render vx
             MultiPartTessResult multipartTessResult = new MultiPartTessResult();
+            VertexStore vxs = new VertexStore();
+            VertexStoreSnap snap = new VertexStoreSnap(vxs);
             _igfxPathBuilder.CreateGraphicsPathForRenderVx2(snap,
                 multipartTessResult,
                 _canvas.GetTessTool(),
@@ -1049,6 +1051,9 @@ namespace PixelFarm.DrawingGL
                TessTool tessTool,
                SmoothBorderBuilder borderBuilder)
             {
+                VertexStore vxs = new VertexStore();
+                VertexStoreSnap vxsSnap = new VertexStoreSnap(vxs);
+
                 List<float[]> expandCoordsList = mpolygon.expandCoordsList;
                 int j = expandCoordsList.Count;
                 for (int i = 0; i < j; ++i)
@@ -1065,10 +1070,6 @@ namespace PixelFarm.DrawingGL
                         {
 
                         }
-
-
-
-
                     }
                 }
                 //---------------------------------------------
