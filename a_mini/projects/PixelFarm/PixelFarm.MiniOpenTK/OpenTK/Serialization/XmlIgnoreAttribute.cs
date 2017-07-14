@@ -3,8 +3,8 @@
 using System;
 namespace OpenTK
 {
-#if NETSTANDARD1_6
-    public class Serializable : Attribute
+#if NETSTANDARD1_6 || NETCOREAPP1_1
+    public class SerializableAttribute : Attribute
     {
 
     }
@@ -15,7 +15,7 @@ namespace OpenTK
     }
 }
 
-#if NETSTANDARD1_6
+#if NETSTANDARD1_6 || NETCOREAPP1_1
 namespace System.Security
 {
     public class SuppressUnmanagedCodeSecurity : Attribute { }
@@ -25,11 +25,6 @@ namespace System.Runtime.Serialization
     public interface ISerializable { }
 
 }
-namespace System.Threading
-{
-    public class Thread
-    {
-    }
-}
+ 
 
 #endif

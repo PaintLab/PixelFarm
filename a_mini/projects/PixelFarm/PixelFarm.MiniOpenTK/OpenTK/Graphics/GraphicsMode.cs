@@ -319,8 +319,11 @@ namespace OpenTK.Graphics
                 {
                     if (defaultMode == null)
                     {
-                        Debug.Print("Creating default GraphicsMode ({0}, {1}, {2}, {3}, {4}, {5}, {6}).", DisplayDevice.Default.BitsPerPixel,
-                                    16, 0, 0, 0, 2, false);
+                        Debug.WriteLine(
+                            string.Format(
+                              "Creating default GraphicsMode ({0}, {1}, {2}, {3}, {4}, {5}, {6}).",
+                                     DisplayDevice.Default.BitsPerPixel,
+                                    16, 0, 0, 0, 2, false));
                         defaultMode = new GraphicsMode(DisplayDevice.Default.BitsPerPixel, 16, 0, 0, 0, 2, false);
                     }
                     return defaultMode;

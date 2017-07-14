@@ -145,7 +145,8 @@ namespace OpenTK
 
             rebuildExtensionList = true;
             time.Stop();
-            Debug.Print("{0} extensions loaded in {1} ms.", supported, time.Elapsed.TotalMilliseconds);
+            Debug.Write(string.Format("{0} extensions loaded in {1} ms.", supported, time.Elapsed.TotalMilliseconds));
+
             time.Reset();
         }
 
@@ -182,11 +183,23 @@ namespace OpenTK
         Delegate LoadDelegate(string name, Type signature)
         {
             MethodInfo m;
+
             return
                 GetExtensionDelegate(name, signature) ??
                 (CoreFunctionMap.TryGetValue((name.Substring(2)), out m) ?
-                Delegate.CreateDelegate(signature, m) : null);
+                CreateDelegate1(signature, m) : null);
         }
+        Delegate CreateDelegate1(Type signature, MethodInfo m)
+        {
+
+#if NETCOREAPP1_1
+            return m.CreateDelegate(signature);
+#else
+            return Delegate.CreateDelegate(signature, m);
+#endif
+
+        }
+
 
         #endregion
 
