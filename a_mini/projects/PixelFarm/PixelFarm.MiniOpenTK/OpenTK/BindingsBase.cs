@@ -187,9 +187,9 @@ namespace OpenTK
             return
                 GetExtensionDelegate(name, signature) ??
                 (CoreFunctionMap.TryGetValue((name.Substring(2)), out m) ?
-                CreateDelegate1(signature, m) : null);
+                CreateDelegate(signature, m) : null);
         }
-        Delegate CreateDelegate1(Type signature, MethodInfo m)
+        static Delegate CreateDelegate(Type signature, MethodInfo m)
         {
 
 #if NETCOREAPP1_1
