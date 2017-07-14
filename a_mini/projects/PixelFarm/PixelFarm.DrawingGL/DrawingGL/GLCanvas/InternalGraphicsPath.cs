@@ -182,6 +182,37 @@ namespace PixelFarm.DrawingGL
     }
 
 
+    public class MultiPartPolygon
+    {
+        internal List<float[]> expandCoordsList = new List<float[]>();
+        internal List<float> _tempCoords = new List<float>();
+        internal List<int> shapeIndexList = new List<int>();
+        public MultiPartPolygon()
+        {
+
+        }
+
+        public void AddVertexSnap(PixelFarm.Agg.VertexStoreSnap vxsSnap)
+        {
+            //begin new snap vxs
+            _tempCoords.Clear();
+            var iter = vxsSnap.GetVertexSnapIter();
+            double x, y;
+            PixelFarm.Agg.VertexCmd cmd;
+            shapeIndexList.Add(shapeIndexList.Count);
+            while ((cmd = iter.GetNextVertex(out x, out y)) != Agg.VertexCmd.NoMore)
+            {
+                //add command to
+                _tempCoords.Add((float)x);
+                _tempCoords.Add((float)y);
+            }
+            //
+            expandCoordsList.Add(_tempCoords.ToArray());
+            _tempCoords.Clear();
+        }
+
+    }
+
     class MultiPartTessResult
     {
         //--------------------------------------------------
