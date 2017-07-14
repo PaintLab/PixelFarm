@@ -516,8 +516,6 @@ namespace PixelFarm.DrawingGL
                 _canvas.GetTessTool(),
                 _canvas.GetSmoothBorderBuilder());
             return new GLRenderVx(multipartTessResult);
-
-
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
@@ -526,7 +524,16 @@ namespace PixelFarm.DrawingGL
             fig.SupportVertexBuffer = true;
             return new GLRenderVx(new InternalGraphicsPath(fig));
         }
-
+        public RenderVx CreatePolygonRenderVx(MultiPartPolygon mpolygon)
+        {
+            //store internal gfx path inside render vx
+            MultiPartTessResult multipartTessResult = new MultiPartTessResult();
+            _igfxPathBuilder.CreateGraphicsPathForRenderVx2(snap,
+                multipartTessResult,
+                _canvas.GetTessTool(),
+                _canvas.GetSmoothBorderBuilder());
+            return new GLRenderVx(multipartTessResult);
+        }
         struct CenterFormArc
         {
             public double cx;
@@ -1014,6 +1021,109 @@ namespace PixelFarm.DrawingGL
                                 prevX = prevMoveToX;
                                 prevY = prevMoveToY;
                                 //
+
+                                //TODO: review here, how to send xylist as buffer*** 
+                                borderBuilder.CloseContour();
+
+                                int borderTriangleStripCount;
+                                float[] borders = borderBuilder.BuildSmoothBorder(out borderTriangleStripCount);
+                                int localVertexCount;
+                                tessTool.TessAndAddToMultiPartResult(xylist.ToArray(), null, multipartTessResult, out localVertexCount);
+
+                                multipartTessResult.AddSmoothBorders(borders, borderTriangleStripCount);
+                                //-----------
+                                xylist.Clear();
+                                isAddToList = false;
+                            }
+                            break;
+                        case PixelFarm.Agg.VertexCmd.NoMore:
+                            return;
+                        default:
+                            throw new System.NotSupportedException();
+                    }
+                }
+            }
+            internal void CreateGraphicsPathForRenderVx2(
+               MultiPartPolygon mpolygon,
+               MultiPartTessResult multipartTessResult,
+               TessTool tessTool,
+               SmoothBorderBuilder borderBuilder)
+            {
+                List<float[]> expandCoordsList = mpolygon.expandCoordsList;
+                int j = expandCoordsList.Count;
+                for (int i = 0; i < j; ++i)
+                {
+                    float[] expandCoords = expandCoordsList[i];
+                    //area
+                    int localVertexCount;
+                    tessTool.TessAndAddToMultiPartResult(expandCoords, null, multipartTessResult, out localVertexCount);
+                    int m = expandCoords.Length;
+                    //borders  
+                    for (int n = 0; n < m; ++n)
+                    {
+                        if (n == 0)
+                        {
+
+                        }
+
+
+
+
+                    }
+                }
+                //---------------------------------------------
+
+                VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
+                double prevX = 0;
+                double prevY = 0;
+                double prevMoveToX = 0;
+                double prevMoveToY = 0;
+                xylist.Clear();
+                //TODO: reivew here 
+                //about how to reuse this list  
+                bool isAddToList = true;
+                borderBuilder.Clear();
+
+                for (;;)
+                {
+                    double x, y;
+                    switch (vxsIter.GetNextVertex(out x, out y))
+                    {
+                        case PixelFarm.Agg.VertexCmd.MoveTo:
+                            if (!isAddToList)
+                            {
+                                isAddToList = true;
+                            }
+                            prevMoveToX = prevX = x;
+                            prevMoveToY = prevY = y;
+                            xylist.Add((float)x);
+                            xylist.Add((float)y);
+                            borderBuilder.MoveTo((float)x, (float)y);
+                            break;
+                        case PixelFarm.Agg.VertexCmd.LineTo:
+                            xylist.Add((float)x);
+                            xylist.Add((float)y);
+                            borderBuilder.LineTo((float)x, (float)y);
+                            prevX = x;
+                            prevY = y;
+                            break;
+                        case PixelFarm.Agg.VertexCmd.Close:
+                            //from current point 
+                            xylist.Add((float)prevMoveToX);
+                            xylist.Add((float)prevMoveToY);
+                            borderBuilder.LineTo((float)prevMoveToX, (float)prevMoveToY);
+                            prevX = prevMoveToX;
+                            prevY = prevMoveToY;
+
+                            break;
+                        case VertexCmd.CloseAndEndFigure:
+                            //from current point 
+                            {
+                                xylist.Add((float)prevMoveToX);
+                                xylist.Add((float)prevMoveToY);
+                                prevX = prevMoveToX;
+                                prevY = prevMoveToY;
+                                //
                                 int localVertexCount;
                                 //TODO: review here, how to send xylist as buffer***
 
@@ -1023,7 +1133,7 @@ namespace PixelFarm.DrawingGL
                                 int borderTriangleStripCount;
                                 float[] borders = borderBuilder.BuildSmoothBorder(out borderTriangleStripCount);
                                 tessTool.TessAndAddToMultiPartResult(xylist.ToArray(), null, multipartTessResult, out localVertexCount);
-                               
+
                                 multipartTessResult.AddSmoothBorders(borders, borderTriangleStripCount);
                                 //-----------
                                 xylist.Clear();
