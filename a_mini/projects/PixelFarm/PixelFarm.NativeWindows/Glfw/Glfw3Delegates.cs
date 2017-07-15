@@ -45,14 +45,25 @@ namespace Pencil.Gaming
             foreach (FieldInfo fi in fields)
             {
                 MethodInfo mi = glfwInterop.GetMethod(fi.Name, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-                Delegate function = Delegate.CreateDelegate(fi.FieldType, mi);
-                fi.SetValue(null, function);
+                fi.SetValue(null, CreateDelegate(fi.FieldType, mi));
             }
 #if DEBUG
             sw.Stop();
             Console.WriteLine("Copying GLFW delegates took {0} milliseconds.", sw.ElapsedMilliseconds);
 #endif
         }
+
+        static Delegate CreateDelegate(Type signature, MethodInfo m)
+        {
+
+#if NETCOREAPP1_1
+            return m.CreateDelegate(signature);
+#else
+            return Delegate.CreateDelegate(signature, m);
+#endif
+
+        }
+
 
 #pragma warning disable 0649
 
@@ -63,7 +74,8 @@ namespace Pencil.Gaming
         [SuppressUnmanagedCodeSecurity]
         internal delegate void GetVersion(out int major, out int minor, out int rev);
         [SuppressUnmanagedCodeSecurity]
-        internal delegate sbyte* GetVersionString();
+        //internal delegate sbyte* GetVersionString();
+        internal delegate IntPtr GetVersionString();
         [SuppressUnmanagedCodeSecurity]
         internal delegate GlfwErrorFun SetErrorCallback(GlfwErrorFun cbfun);
         [SuppressUnmanagedCodeSecurity]
@@ -75,7 +87,8 @@ namespace Pencil.Gaming
         [SuppressUnmanagedCodeSecurity]
         internal delegate void GetMonitorPhysicalSize(GlfwMonitorPtr monitor, out int width, out int height);
         [SuppressUnmanagedCodeSecurity]
-        internal delegate sbyte* GetMonitorName(GlfwMonitorPtr monitor);
+        //internal delegate sbyte* GetMonitorName(GlfwMonitorPtr monitor);
+        internal delegate IntPtr GetMonitorName(GlfwMonitorPtr monitor);
         [SuppressUnmanagedCodeSecurity]
         internal delegate GlfwVidMode* GetVideoModes(GlfwMonitorPtr monitor, out int count);
         [SuppressUnmanagedCodeSecurity]
@@ -171,11 +184,13 @@ namespace Pencil.Gaming
         [SuppressUnmanagedCodeSecurity]
         internal delegate byte* GetJoystickButtons(Joystick joy, out int numbuttons);
         [SuppressUnmanagedCodeSecurity]
-        internal delegate sbyte* GetJoystickName(Joystick joy);
+        //internal delegate sbyte* GetJoystickName(Joystick joy);
+        internal delegate IntPtr GetJoystickName(Joystick joy);
         [SuppressUnmanagedCodeSecurity]
         internal delegate void SetClipboardString(GlfwWindowPtr window, [MarshalAs(UnmanagedType.LPStr)] string @string);
         [SuppressUnmanagedCodeSecurity]
-        internal delegate sbyte* GetClipboardString(GlfwWindowPtr window);
+        //internal delegate sbyte* GetClipboardString(GlfwWindowPtr window);
+        internal delegate IntPtr GetClipboardString(GlfwWindowPtr window);
         [SuppressUnmanagedCodeSecurity]
         internal delegate double GetTime();
         [SuppressUnmanagedCodeSecurity]
