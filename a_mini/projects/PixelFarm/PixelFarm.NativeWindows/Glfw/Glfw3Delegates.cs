@@ -41,14 +41,13 @@ namespace Pencil.Gaming
 #if DEBUG
             Console.WriteLine("GLFW interop: {0}", glfwInterop.Name);
 #endif
-            FieldInfo current_f = null;
+
             try
             {
 
                 FieldInfo[] fields = typeof(GlfwDelegates).GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
                 foreach (FieldInfo fi in fields)
                 {
-                    current_f = fi;
                     MethodInfo mi = glfwInterop.GetMethod(fi.Name, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
                     fi.SetValue(null, CreateDelegate(fi.FieldType, mi));
                 }
@@ -78,10 +77,9 @@ namespace Pencil.Gaming
         internal static string StrFromSbyte(sbyte* value)
         {
 #if NETCOREAPP1_1
-            unsafe
-            {
-                return new string(GlfwDelegates.glfwGetVersionString());
-            }
+            
+            return GlfwDelegates.StrFromSbyte(GlfwDelegates.glfwGetVersionString());                 
+          
 #else
             IntPtr value1 = (IntPtr)GlfwDelegates.glfwGetVersionString();
             return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(value1);
