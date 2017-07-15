@@ -42,10 +42,9 @@ namespace Pencil.Gaming
         }
         public static string GetVersionString()
         {
-            return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(
-                GlfwDelegates.glfwGetVersionString());
-            //return new string(GlfwDelegates.glfwGetVersionString());
+            return GlfwDelegates.StrFromSbyte(GlfwDelegates.glfwGetVersionString());
         }
+
         private static GlfwErrorFun errorCallback;
         public static GlfwErrorFun SetErrorCallback(GlfwErrorFun cbfun)
         {
@@ -77,9 +76,7 @@ namespace Pencil.Gaming
         }
         public static string GetMonitorName(GlfwMonitorPtr monitor)
         {
-            return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(
-                GlfwDelegates.glfwGetMonitorName(monitor));
-            //return new string(GlfwDelegates.glfwGetMonitorName(monitor));
+            return GlfwDelegates.StrFromSbyte(GlfwDelegates.glfwGetMonitorName(monitor));
         }
         public static GlfwVidMode[] GetVideoModes(GlfwMonitorPtr monitor)
         {
@@ -363,9 +360,7 @@ namespace Pencil.Gaming
         }
         public static string GetJoystickName(Joystick joy)
         {
-            return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(
-                GlfwDelegates.glfwGetJoystickName(joy));
-            //return new string(GlfwDelegates.glfwGetJoystickName(joy));
+            return GlfwDelegates.StrFromSbyte(GlfwDelegates.glfwGetJoystickName(joy));
         }
         public static void SetClipboardString(GlfwWindowPtr window, string @string)
         {
@@ -373,9 +368,8 @@ namespace Pencil.Gaming
         }
         public static string GetClipboardString(GlfwWindowPtr window)
         {
-            return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(
-                GlfwDelegates.glfwGetClipboardString(window));
-            //return new string(GlfwDelegates.glfwGetClipboardString(window));
+
+            return GlfwDelegates.StrFromSbyte(GlfwDelegates.glfwGetClipboardString(window));
         }
         public static double GetTime()
         {
