@@ -469,6 +469,12 @@ namespace PixelFarm.DrawingGL
                 FillGfxPath(color, glRenderVx.gxpth);
             }
         }
+        public void FillRenderVx(Drawing.Color color, MultiPartTessResult multiPartTessResult, int index)
+        {
+
+            FillGfxPath(color, multiPartTessResult, index);
+
+        }
         public void DrawRenderVx(Drawing.Color color, Drawing.RenderVx renderVx)
         {
             GLRenderVx glRenderVx = (GLRenderVx)renderVx;
@@ -513,7 +519,7 @@ namespace PixelFarm.DrawingGL
                         basicFillShader.FillTriangles(multipartTessResult, color);
 
                         //add smooth border
-                       // smoothLineShader.DrawTriangleStrips(multipartTessResult);
+                        // smoothLineShader.DrawTriangleStrips(multipartTessResult);
 
                         //restore stroke width and color
                         StrokeWidth = saved_Width; //restore back
@@ -521,9 +527,53 @@ namespace PixelFarm.DrawingGL
                     }
                     break;
             }
+        }
+        void FillGfxPath(Drawing.Color color, MultiPartTessResult multipartTessResult, int index)
+        {
+            switch (SmoothMode)
+            {
+                case CanvasSmoothMode.No:
+                    {
 
+                        float saved_Width = StrokeWidth;
+                        Drawing.Color saved_Color = StrokeColor;
+                        //temp set stroke width to 2 amd stroke color
+                        //to the same as bg color (for smooth border).
+                        //and it will be set back later.
+                        // 
+                        StrokeColor = color;
+                        StrokeWidth = 1.2f; //TODO: review this *** 
 
+                        basicFillShader.FillTriangles(multipartTessResult, index, color);
 
+                        //restore stroke width and color
+                        StrokeWidth = saved_Width; //restore back
+                        StrokeColor = saved_Color;
+                    }
+                    break;
+                case CanvasSmoothMode.Smooth:
+                    {
+
+                        float saved_Width = StrokeWidth;
+                        Drawing.Color saved_Color = StrokeColor;
+                        //temp set stroke width to 2 amd stroke color
+                        //to the same as bg color (for smooth border).
+                        //and it will be set back later.
+                        // 
+                        StrokeColor = color;
+                        StrokeWidth = 1.2f; //TODO: review this *** 
+
+                        basicFillShader.FillTriangles(multipartTessResult, index, color);
+
+                        //add smooth border
+                        // smoothLineShader.DrawTriangleStrips(multipartTessResult);
+
+                        //restore stroke width and color
+                        StrokeWidth = saved_Width; //restore back
+                        StrokeColor = saved_Color;
+                    }
+                    break;
+            }
         }
         public void FillGfxPath(Drawing.Color color, InternalGraphicsPath igpth)
         {

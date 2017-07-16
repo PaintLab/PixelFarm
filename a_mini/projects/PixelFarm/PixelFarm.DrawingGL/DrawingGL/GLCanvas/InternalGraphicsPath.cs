@@ -187,6 +187,7 @@ namespace PixelFarm.DrawingGL
         internal List<float[]> expandCoordsList = new List<float[]>();
         internal List<int[]> contourEndPoints = new List<int[]>();
 
+
         List<float> _tempCoords = new List<float>();
         List<int> _tempEndPoints = new List<int>();
 
@@ -202,6 +203,7 @@ namespace PixelFarm.DrawingGL
             //begin new snap vxs
             _tempCoords.Clear();
             _tempEndPoints.Clear();
+
             var iter = vxsSnap.GetVertexSnapIter();
             double x, y;
             PixelFarm.Agg.VertexCmd cmd;
@@ -227,16 +229,19 @@ namespace PixelFarm.DrawingGL
 
             if (_tempCoords.Count > 0)
             {
+
                 expandCoordsList.Add(_tempCoords.ToArray());
                 contourEndPoints.Add(_tempEndPoints.ToArray());
             }
+
+
             _tempCoords.Clear();
             _tempEndPoints.Clear();
         }
 
     }
 
-    class MultiPartTessResult
+    public class MultiPartTessResult
     {
         //--------------------------------------------------
         //area 
@@ -252,7 +257,7 @@ namespace PixelFarm.DrawingGL
         VertexBufferObject _vbo_smoothBorder;
 
 
-        public MultiPartTessResult()
+        internal MultiPartTessResult()
         {
         }
         public int BeginPart()
@@ -349,7 +354,7 @@ namespace PixelFarm.DrawingGL
         }
 
     }
-    struct SmoothBorderSet
+    public struct SmoothBorderSet
     {
         public readonly float[] smoothBorderArr;
         public readonly int vertexStripCount;

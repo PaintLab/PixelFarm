@@ -507,15 +507,7 @@ namespace PixelFarm.DrawingGL
 
             //1.
             InternalGraphicsPath p = _igfxPathBuilder.CreateGraphicsPathForRenderVx(snap);
-            return new GLRenderVx(p);
-
-            ////2.
-            //MultiPartTessResult multipartTessResult = new MultiPartTessResult();
-            //_igfxPathBuilder.CreateGraphicsPathForRenderVx2(snap,
-            //    multipartTessResult,
-            //    _canvas.GetTessTool(),
-            //    _canvas.GetSmoothBorderBuilder());
-            //return new GLRenderVx(multipartTessResult);
+            return new GLRenderVx(p); 
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
@@ -524,16 +516,17 @@ namespace PixelFarm.DrawingGL
             fig.SupportVertexBuffer = true;
             return new GLRenderVx(new InternalGraphicsPath(fig));
         }
-        public RenderVx CreatePolygonRenderVx(MultiPartPolygon multipartPolygon)
+        public MultiPartTessResult CreateMultiPartTessResult(MultiPartPolygon multipartPolygon)
         {
             //store internal gfx path inside render vx
             MultiPartTessResult multipartTessResult = new MultiPartTessResult();
 
-            _igfxPathBuilder.CreateGraphicsPathForRenderVx2(multipartPolygon,
+            _igfxPathBuilder.CreateGraphicsPathForMultiPartRenderVx(multipartPolygon,
                 multipartTessResult,
                 _canvas.GetTessTool(),
                 _canvas.GetSmoothBorderBuilder());
-            return new GLRenderVx(multipartTessResult);
+            return multipartTessResult;
+
         }
         struct CenterFormArc
         {
@@ -964,8 +957,8 @@ namespace PixelFarm.DrawingGL
                 EXIT_LOOP:
                 return new InternalGraphicsPath(figures);
             }
-          
-            internal void CreateGraphicsPathForRenderVx2(
+
+            internal void CreateGraphicsPathForMultiPartRenderVx(
                MultiPartPolygon multipartPolygon,
                MultiPartTessResult multipartTessResult,
                TessTool tessTool,

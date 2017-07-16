@@ -143,6 +143,36 @@ namespace PixelFarm.DrawingGL
 
             vbo.UnBind();
         }
+        public void FillTriangles(MultiPartTessResult multipartTessResult, int index, Drawing.Color color)
+        {
+
+            SetCurrent();
+            CheckViewMatrix();
+            //--------------------------------------------  
+            u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
+
+            //--------------------------------------------  
+            //note (A):
+            //from https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glVertexAttribPointer.xml
+            //... If a non-zero named buffer object is bound to the GL_ARRAY_BUFFER target (see glBindBuffer)
+            //while a generic vertex attribute array is specified,
+            //pointer is treated as **a byte offset** into the buffer object's data store. 
+            VertexBufferObject vbo = multipartTessResult.GetVBO();
+            int subPathCount = multipartTessResult.PartCount;
+            vbo.Bind();
+
+
+            PartRange p = multipartTessResult.GetPartRange(index);
+            a_position.LoadLatest(p.beginVertexAt * 4); //*4 => see note (A) above, so offset => beginVertexAt * sizeof(float)
+            GL.DrawElements(BeginMode.Triangles,
+               p.elemCount,
+               DrawElementsType.UnsignedShort,
+               p.beginElemIndexAt * 2);  //*2 => see note (A) above, so offset=> beginElemIndexAt *sizeof(ushort)
+
+
+
+            vbo.UnBind();
+        }
         public unsafe void DrawLineLoopWithVertexBuffer(float* polygon2dVertices, int nelements, Drawing.Color color)
         {
             SetCurrent();

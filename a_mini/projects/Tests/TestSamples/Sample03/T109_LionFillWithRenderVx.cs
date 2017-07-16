@@ -17,6 +17,9 @@ namespace OpenTkEssTest
         VertexStore lionVxs;
         GLCanvasPainter painter;
         List<RenderVx> lionRenderVxList = new List<RenderVx>();
+        int drawVersion = 0;
+        MultiPartTessResult multipartTessResult;
+
         protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
@@ -44,14 +47,14 @@ namespace OpenTkEssTest
             //{
             //    lionRenderVxList.Add(painter.CreateRenderVx(new VertexStoreSnap(lionVxs, pathList[i])));
             //}
-            ////-------------
-
-
+            ////------------- 
             //version 2:
             {
+                drawVersion = 2;
                 MultiPartPolygon mutiPartPolygon = new MultiPartPolygon();
                 int j = lionShape.NumPaths;
                 int[] pathList = lionShape.PathIndexList;
+                Color[] colors = lionShape.Colors;
                 for (int i = 0; i < j; ++i)
                 {
                     //from lionvxs extract each part                      
@@ -61,24 +64,11 @@ namespace OpenTkEssTest
                     //{
                     //    break;
                     //}
-
                     mutiPartPolygon.AddVertexSnap(new VertexStoreSnap(lionVxs, pathList[i]));
                 }
-
-
                 //then create single render vx
-                RenderVx renderVx = painter.CreatePolygonRenderVx(mutiPartPolygon);
-                lionRenderVxList.Add(renderVx);
-            }
-
-            //
-            {
-                //int j = lionShape.NumPaths;
-                //int[] pathList = lionShape.PathIndexList;
-                //for (int i = 0; i < j; ++i)
-                //{
-                //    lionRenderVxList.Add(painter.CreateRenderVx(new VertexStoreSnap(lionVxs, pathList[i])));
-                //}
+                this.multipartTessResult = painter.CreateMultiPartTessResult(mutiPartPolygon);
+                //create render vx for the multipart test result                 
             }
 
         }
@@ -92,12 +82,28 @@ namespace OpenTkEssTest
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.ClearColorBuffer();
             //-------------------------------
-
-            int j = lionRenderVxList.Count;
-            Color[] colors = lionShape.Colors;
-            for (int i = 0; i < j; ++i)
+            if (drawVersion == 2)
             {
-                canvas2d.FillRenderVx(colors[i], lionRenderVxList[i]);
+
+                Color[] colors = lionShape.Colors;
+                if (multipartTessResult != null)
+                {
+                    int j = multipartTessResult.PartCount;
+                    for (int i = 0; i < j; ++i)
+                    {
+                        canvas2d.FillRenderVx(colors[i], multipartTessResult, i);
+                    }
+                }
+
+            }
+            else
+            {
+                int j = lionRenderVxList.Count;
+                Color[] colors = lionShape.Colors;
+                for (int i = 0; i < j; ++i)
+                {
+                    canvas2d.FillRenderVx(colors[i], lionRenderVxList[i]);
+                }
             }
             //-------------------------------
             SwapBuffers();
