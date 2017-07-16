@@ -207,6 +207,7 @@ namespace PixelFarm.DrawingGL
                 if (cmd == Agg.VertexCmd.Close || cmd == Agg.VertexCmd.CloseAndEndFigure)
                 {
                     //temp fix1
+                    //some vertex snap may has more than 1 part
                     expandCoordsList.Add(_tempCoords.ToArray());
                     _tempCoords.Clear();
                     //contourEndPoints.Add(index);                    
