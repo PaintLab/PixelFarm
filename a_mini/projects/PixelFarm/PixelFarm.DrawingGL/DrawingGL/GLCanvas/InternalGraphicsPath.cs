@@ -201,22 +201,23 @@ namespace PixelFarm.DrawingGL
             double x, y;
             PixelFarm.Agg.VertexCmd cmd;
 
-            int index = 0;
+            //int index = 0;
             while ((cmd = iter.GetNextVertex(out x, out y)) != Agg.VertexCmd.NoMore)
             {
                 if (cmd == Agg.VertexCmd.Close || cmd == Agg.VertexCmd.CloseAndEndFigure)
                 {
                     //temp fix1
                     //some vertex snap may has more than 1 part
-                    expandCoordsList.Add(_tempCoords.ToArray());
-                    _tempCoords.Clear();
+                    //expandCoordsList.Add(_tempCoords.ToArray());
+                    //_tempCoords.Clear();
                     //contourEndPoints.Add(index);                    
+                    contourEndPoints.Add(_tempCoords.Count - 1);
                 }
                 //add command to
                 _tempCoords.Add((float)x);
                 _tempCoords.Add((float)y);
                 //
-                index++;
+                //index++;
             }
 
             if (_tempCoords.Count > 0)

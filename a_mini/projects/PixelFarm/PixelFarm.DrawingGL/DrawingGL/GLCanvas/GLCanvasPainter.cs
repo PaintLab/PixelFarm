@@ -1055,7 +1055,7 @@ namespace PixelFarm.DrawingGL
                 List<float[]> expandCoordsList = multipartPolygon.expandCoordsList;
                 int[] endPoints = multipartPolygon.contourEndPoints.ToArray();
                 //endPoints = null;
-                endPoints = null;
+               // endPoints = null;
                 //
                 int listCount = expandCoordsList.Count;
                 for (int i = 0; i < listCount; ++i)
