@@ -186,7 +186,8 @@ namespace PixelFarm.DrawingGL
     {
         internal List<float[]> expandCoordsList = new List<float[]>();
         List<float> _tempCoords = new List<float>();
-        //internal List<int> shapeIndexList = new List<int>();
+        internal List<int> contourEndPoints = new List<int>();
+
         public MultiPartPolygon()
         {
 
@@ -199,20 +200,28 @@ namespace PixelFarm.DrawingGL
             var iter = vxsSnap.GetVertexSnapIter();
             double x, y;
             PixelFarm.Agg.VertexCmd cmd;
-            //int shapeIndexListCount = shapeIndexList.Count; 
-            //shapeIndexList.Add(shapeIndexListCount);
-            int tt = 0;
+
+            int index = 0;
             while ((cmd = iter.GetNextVertex(out x, out y)) != Agg.VertexCmd.NoMore)
             {
+                if (cmd == Agg.VertexCmd.Close || cmd == Agg.VertexCmd.CloseAndEndFigure)
+                {
+                    //temp fix1
+                    expandCoordsList.Add(_tempCoords.ToArray());
+                    _tempCoords.Clear();
+                    //contourEndPoints.Add(index);                    
+                }
                 //add command to
                 _tempCoords.Add((float)x);
                 _tempCoords.Add((float)y);
-
-                tt++;
+                //
+                index++;
             }
 
-            //
-            expandCoordsList.Add(_tempCoords.ToArray());
+            if (_tempCoords.Count > 0)
+            {
+                expandCoordsList.Add(_tempCoords.ToArray());
+            }
             _tempCoords.Clear();
         }
 
