@@ -130,6 +130,8 @@ namespace PixelFarm.DrawingGL
             vbo.Bind();
             for (int i = 0; i < subPathCount; ++i)
             {
+                //if (i !=7)
+                //    continue;
                 PartRange p = multipartTessResult.GetPartRange(i);
                 a_position.LoadLatest(p.beginVertexAt * 4); //*4 => see note (A) above, so offset => beginVertexAt * sizeof(float)
                 GL.DrawElements(BeginMode.Triangles,

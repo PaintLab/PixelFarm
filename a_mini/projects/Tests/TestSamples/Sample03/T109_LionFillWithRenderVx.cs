@@ -56,8 +56,11 @@ namespace OpenTkEssTest
                 {
                     //from lionvxs extract each part                      
                     //fetch data and add to multipart polygon
+                   // if (i != 7) continue;
                     mutiPartPolygon.AddVertexSnap(new VertexStoreSnap(lionVxs, pathList[i]));
                 }
+
+
                 //then create single render vx
                 RenderVx renderVx = painter.CreatePolygonRenderVx(mutiPartPolygon);
                 lionRenderVxList.Add(renderVx);
