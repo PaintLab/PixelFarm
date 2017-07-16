@@ -61,6 +61,7 @@ namespace OpenTkEssTest
                     //{
                     //    break;
                     //}
+
                     mutiPartPolygon.AddVertexSnap(new VertexStoreSnap(lionVxs, pathList[i]));
                 }
 
