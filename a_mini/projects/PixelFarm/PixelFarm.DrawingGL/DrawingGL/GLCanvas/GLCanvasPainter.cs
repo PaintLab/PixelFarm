@@ -524,11 +524,11 @@ namespace PixelFarm.DrawingGL
             fig.SupportVertexBuffer = true;
             return new GLRenderVx(new InternalGraphicsPath(fig));
         }
-        public RenderVx CreatePolygonRenderVx(MultiPartPolygon mpolygon)
+        public RenderVx CreatePolygonRenderVx(MultiPartPolygon multipartPolygon)
         {
             //store internal gfx path inside render vx
             MultiPartTessResult multipartTessResult = new MultiPartTessResult();
-            _igfxPathBuilder.CreateGraphicsPathForRenderVx2(mpolygon,
+            _igfxPathBuilder.CreateGraphicsPathForRenderVx2(multipartPolygon,
                 multipartTessResult,
                 _canvas.GetTessTool(),
                 _canvas.GetSmoothBorderBuilder());

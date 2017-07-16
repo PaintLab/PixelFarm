@@ -36,17 +36,18 @@ namespace OpenTkEssTest
             aff.TransformToVxs(lionShape.Path.Vxs, lionVxs);
             //convert lion vxs to renderVx
 
-            //-------------
-            //version 1:
+            ////-------------
+            ////version 1:
             //int j = lionShape.NumPaths;
-            //int[] pathList = lionShape.PathIndexList; 
+            //int[] pathList = lionShape.PathIndexList;
             //for (int i = 0; i < j; ++i)
             //{
             //    lionRenderVxList.Add(painter.CreateRenderVx(new VertexStoreSnap(lionVxs, pathList[i])));
             //}
-            //-------------
-            //version 2:
+            ////-------------
 
+
+            //version 2:
             {
                 MultiPartPolygon mutiPartPolygon = new MultiPartPolygon();
                 int j = lionShape.NumPaths;
@@ -61,6 +62,7 @@ namespace OpenTkEssTest
                 RenderVx renderVx = painter.CreatePolygonRenderVx(mutiPartPolygon);
                 lionRenderVxList.Add(renderVx);
             }
+
             //
             {
                 //int j = lionShape.NumPaths;
