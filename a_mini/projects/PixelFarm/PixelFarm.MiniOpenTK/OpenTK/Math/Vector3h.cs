@@ -34,7 +34,7 @@ namespace OpenTK
     /// 3-component Vector of the Half type. Occupies 6 Byte total.
     /// </summary>
     [Serializable, StructLayout(LayoutKind.Sequential)]
-    public struct Vector3h : ISerializable, IEquatable<Vector3h>
+    public struct Vector3h : IEquatable<Vector3h>
     {
         #region Public Fields
 
@@ -271,25 +271,25 @@ namespace OpenTK
 
         #region ISerializable
 
-        /// <summary>Constructor used by ISerializable to deserialize the object.</summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public Vector3h(SerializationInfo info, StreamingContext context)
-        {
-            this.X = (Half)info.GetValue("X", typeof(Half));
-            this.Y = (Half)info.GetValue("Y", typeof(Half));
-            this.Z = (Half)info.GetValue("Z", typeof(Half));
-        }
+        ///// <summary>Constructor used by ISerializable to deserialize the object.</summary>
+        ///// <param name="info"></param>
+        ///// <param name="context"></param>
+        //public Vector3h(SerializationInfo info, StreamingContext context)
+        //{
+        //    this.X = (Half)info.GetValue("X", typeof(Half));
+        //    this.Y = (Half)info.GetValue("Y", typeof(Half));
+        //    this.Z = (Half)info.GetValue("Z", typeof(Half));
+        //}
 
-        /// <summary>Used by ISerialize to serialize the object.</summary>
-        /// <param name="info"></param>
-        /// <param name="context"></param>
-        public void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            info.AddValue("X", this.X);
-            info.AddValue("Y", this.Y);
-            info.AddValue("Z", this.Z);
-        }
+        ///// <summary>Used by ISerialize to serialize the object.</summary>
+        ///// <param name="info"></param>
+        ///// <param name="context"></param>
+        //public void GetObjectData(SerializationInfo info, StreamingContext context)
+        //{
+        //    info.AddValue("X", this.X);
+        //    info.AddValue("Y", this.Y);
+        //    info.AddValue("Z", this.Z);
+        //}
 
         #endregion ISerializable
 

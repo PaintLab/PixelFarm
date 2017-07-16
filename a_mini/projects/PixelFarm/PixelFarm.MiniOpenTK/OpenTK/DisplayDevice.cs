@@ -67,8 +67,8 @@ namespace OpenTK
             IsPrimary = primary;
             this.available_resolutions.AddRange(availableResolutions);
             this.bounds = bounds == Rectangle.Empty ? currentResolution.Bounds : bounds;
-            Debug.Print("DisplayDevice {0} ({1}) supports {2} resolutions.",
-                available_displays.Count, primary ? "primary" : "secondary", available_resolutions.Count);
+            Debug.WriteLine(string.Format("DisplayDevice {0} ({1}) supports {2} resolutions.",
+                available_displays.Count, primary ? "primary" : "secondary", available_resolutions.Count));
         }
 
         #endregion

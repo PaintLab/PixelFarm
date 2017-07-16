@@ -356,7 +356,6 @@ namespace Tesselate
         public void AddVertex(double x, double y, double z, int data)
         {
             double tmp;
-            double[] clamped = new double[3];
             RequireState(ProcessingState.InContour);
             if (emptyCache)
             {
