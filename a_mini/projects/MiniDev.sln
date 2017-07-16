@@ -149,9 +149,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.Contours", "Pixe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlyphTess.WinForms", "Tests\GlyphTess.WinForms\GlyphTess.WinForms.csproj", "{56DCAE82-671D-409E-A3B3-BF4834756D3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniOpenTK.NetCore", "PixelFarm\PixelFarm.MiniOpenTK.NetCore\PixelFarm.MiniOpenTK.NetCore.csproj", "{118E626D-0353-48CF-8225-4C0C33336BCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PixelFarm.MiniOpenTK.NetCore", "PixelFarm\PixelFarm.MiniOpenTK.NetCore\PixelFarm.MiniOpenTK.NetCore.csproj", "{118E626D-0353-48CF-8225-4C0C33336BCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.NativeWindows.NetCore", "PixelFarm\PixelFarm.NativeWindows.NetCore\PixelFarm.NativeWindows.NetCore.csproj", "{395E0BEB-7E5B-4E8A-96C6-6FAAEE141B6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PixelFarm.NativeWindows.NetCore", "PixelFarm\PixelFarm.NativeWindows.NetCore\PixelFarm.NativeWindows.NetCore.csproj", "{395E0BEB-7E5B-4E8A-96C6-6FAAEE141B6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
