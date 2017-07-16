@@ -1065,7 +1065,10 @@ namespace PixelFarm.DrawingGL
                     //area
                     int localVertexCount;
 
-                    tessTool.TessAndAddToMultiPartResult(expandCoords, endPoints, multipartTessResult, out localVertexCount);
+                    tessTool.TessAndAddToMultiPartResult(expandCoords,
+                        endPoints,
+                        multipartTessResult, 
+                        out localVertexCount);
 
                     int m = expandCoords.Length;
                     //borders  
