@@ -56,7 +56,11 @@ namespace OpenTkEssTest
                 {
                     //from lionvxs extract each part                      
                     //fetch data and add to multipart polygon
-                   // if (i != 7) continue;
+                    //if (i != 4) continue;
+                    //if (i > 1)
+                    //{
+                    //    break;
+                    //}
                     mutiPartPolygon.AddVertexSnap(new VertexStoreSnap(lionVxs, pathList[i]));
                 }
 

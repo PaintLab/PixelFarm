@@ -1053,21 +1053,22 @@ namespace PixelFarm.DrawingGL
                 //a multipart polygon contains a  list of  expand coord (x,y) set.
 
                 List<float[]> expandCoordsList = multipartPolygon.expandCoordsList;
-                int[] endPoints = multipartPolygon.contourEndPoints.ToArray();
+                List<int[]> endPointList = multipartPolygon.contourEndPoints;
                 //endPoints = null;
-               // endPoints = null;
+                // endPoints = null;
                 //
                 int listCount = expandCoordsList.Count;
                 for (int i = 0; i < listCount; ++i)
                 {
                     //expand x,y
                     float[] expandCoords = expandCoordsList[i];
+                    int[] endPoints = endPointList[i];
                     //area
                     int localVertexCount;
 
                     tessTool.TessAndAddToMultiPartResult(expandCoords,
                         endPoints,
-                        multipartTessResult, 
+                        multipartTessResult,
                         out localVertexCount);
 
                     int m = expandCoords.Length;
