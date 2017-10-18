@@ -563,7 +563,7 @@ namespace PixelFarm.DrawingGL
                         StrokeColor = color;
                         StrokeWidth = 1.2f; //TODO: review this *** 
 
-                        basicFillShader.FillTriangles(multipartTessResult, index, color);
+                        //basicFillShader.FillTriangles(multipartTessResult, index, color);
 
                         //add smooth border
                         smoothLineShader.DrawTriangleStrips(multipartTessResult, index, color);

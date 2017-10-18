@@ -288,10 +288,12 @@ namespace PixelFarm.DrawingGL
         }
         public int BeginPart()
         {
+#if DEBUG
             if (_allArrayIndexList.Count > 0)
             {
 
             }
+#endif
             _currentPartFirstComponentStartAt = _allCoords.Count;
             return _currentPartBeginElementIndex = _allArrayIndexList.Count;
         }
@@ -372,8 +374,8 @@ namespace PixelFarm.DrawingGL
                 SmoothBorderSet borderSet = borderSets[i];
                 //create part range
                 partRanges[i] = new PartRange(currentFirstComponentStartAt, 0, borderSet.vertexStripCount);
-                currentFirstComponentStartAt += expandedBorderCoords.Count;
                 expandedBorderCoords.AddRange(borderSet.smoothBorderArr);
+                currentFirstComponentStartAt += borderSet.smoothBorderArr.Length;
             }
             _borderPartRanges = partRanges;
             _vbo_smoothBorder.CreateBuffers(expandedBorderCoords.ToArray(), null, partRanges);

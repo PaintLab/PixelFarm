@@ -125,21 +125,6 @@ namespace PixelFarm.DrawingGL
             u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
         }
-        public void DrawTriangleStrips(float[] coords, int ncount)
-        {
-            SetCurrent();
-            CheckViewMatrix();
-            //--------------------
-
-
-            _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
-            u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
-            //
-            a_position.LoadPureV4f(coords);
-            //because original stroke width is the width of both side of
-            //the line, but u_linewidth is the half of the strokeWidth            
-            GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
-        }
         public void DrawTriangleStrips(MultiPartTessResult multipartTessResult)
         {
             SetCurrent();
@@ -169,6 +154,22 @@ namespace PixelFarm.DrawingGL
             //
             borderVBO.UnBind(); //unbind
         }
+        public void DrawTriangleStrips(float[] coords, int ncount)
+        {
+            SetCurrent();
+            CheckViewMatrix();
+            //--------------------
+
+
+            _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
+            u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
+            //
+            a_position.LoadPureV4f(coords);
+            //because original stroke width is the width of both side of
+            //the line, but u_linewidth is the half of the strokeWidth            
+            GL.DrawArrays(BeginMode.TriangleStrip, 0, ncount);
+        }
+       
         public void DrawTriangleStrips(MultiPartTessResult multipartTessResult, int index, PixelFarm.Drawing.Color color)
         {
 
@@ -214,6 +215,9 @@ namespace PixelFarm.DrawingGL
             PartRange p = multipartTessResult.GetBorderPartRange(index);
             a_position.LoadLatest(p.beginVertexAt * 4);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, p.elemCount);
+
+            //a_position.LoadLatest();
+            //GL.DrawArrays(BeginMode.TriangleStrip, p.beginVertexAt, p.elemCount);
 
             //GL.DrawElements(BeginMode.TriangleStrip,
             //   p.elemCount,

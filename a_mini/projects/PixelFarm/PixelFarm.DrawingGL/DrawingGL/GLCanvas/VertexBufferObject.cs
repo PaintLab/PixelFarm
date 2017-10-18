@@ -52,7 +52,7 @@ namespace PixelFarm.DrawingGL
                     fixed (void* vertDataPtr = &_vertextBuffer[0])
                     {
                         GL.BufferData(BufferTarget.ArrayBuffer,
-                            new IntPtr(_vertextBuffer.Length * 4),
+                            new IntPtr(_vertextBuffer.Length * 4), //size in byte
                             new IntPtr(vertDataPtr),
                             BufferUsage.StaticDraw);   //this version we use static draw
                     }
