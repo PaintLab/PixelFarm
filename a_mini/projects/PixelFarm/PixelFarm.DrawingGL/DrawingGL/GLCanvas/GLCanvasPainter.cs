@@ -507,7 +507,7 @@ namespace PixelFarm.DrawingGL
 
             //1.
             InternalGraphicsPath p = _igfxPathBuilder.CreateGraphicsPathForRenderVx(snap);
-            return new GLRenderVx(p); 
+            return new GLRenderVx(p);
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
@@ -525,6 +525,7 @@ namespace PixelFarm.DrawingGL
                 multipartTessResult,
                 _canvas.GetTessTool(),
                 _canvas.GetSmoothBorderBuilder());
+            //
             return multipartTessResult;
 
         }
@@ -902,7 +903,7 @@ namespace PixelFarm.DrawingGL
                 //result...
                 List<Figure> figures = new List<Figure>();
 
-                for (;;)
+                for (; ; )
                 {
                     double x, y;
                     switch (vxsIter.GetNextVertex(out x, out y))
@@ -984,14 +985,24 @@ namespace PixelFarm.DrawingGL
                         multipartTessResult,
                         out localVertexCount);
 
-                    int m = expandCoords.Length;
+                    int m = endPoints.Length;
                     //borders  
+                    //build smooth border 
+
+                    int latest_endPoint = 0;
                     for (int n = 0; n < m; ++n)
                     {
-                        if (n == 0)
+                        if (m > 1)
                         {
 
                         }
+                        int endPoint = endPoints[n];
+                        int len = (endPoint - latest_endPoint) + 1;
+                        int borderTriangleStripCount;
+                        //expand coords for draw array
+                        float[] smoothSegBorders = borderBuilder.BuildSmoothBorders(expandCoords, latest_endPoint, len, out borderTriangleStripCount);
+                        latest_endPoint += len + 2;
+                        multipartTessResult.AddSmoothBorders(smoothSegBorders, borderTriangleStripCount);
                     }
                 }
             }

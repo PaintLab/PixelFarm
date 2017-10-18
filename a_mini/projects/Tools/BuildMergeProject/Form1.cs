@@ -411,22 +411,22 @@ namespace BuildMergeProject
             //    true);//after link project is created, we remove the targetProjectFile 
         }
         SolutionMx slnMx;
-        SolutionListViewController _slnListViewController;
+        //SolutionListViewController _slnListViewController;
         private void cmdReadSln_Click(object sender, EventArgs e)
         {
-            //read sln file 
+            ////read sln file 
             slnMx = new SolutionMx();
             slnMx.ReadSolution(@"D:\projects\PixelFarm-dev\a_mini\projects\MiniDev.sln");
-            _slnListViewController = new SolutionListViewController();
-            _slnListViewController.SetSolutionListView(this.listView1);
-            _slnListViewController.SetMergePlanListView(this.listView2);
-            _slnListViewController.SetProjectReferenceListView(this.lstAsmReferenceList);
-            _slnListViewController.LoadSolutionMx(slnMx);
+            //_slnListViewController = new SolutionListViewController();
+            //_slnListViewController.SetSolutionListView(this.listView1);
+            //_slnListViewController.SetMergePlanListView(this.listView2);
+            //_slnListViewController.SetProjectReferenceListView(this.lstAsmReferenceList);
+            //_slnListViewController.LoadSolutionMx(slnMx);
         }
 
         private void cmdBuildSelectedMergePro_Click(object sender, EventArgs e)
         {
-            _slnListViewController.BuildMergeProjectFromSelectedItem();
+            //_slnListViewController.BuildMergeProjectFromSelectedItem();
         }
 
         private void Form1_Load(object sender, EventArgs e)

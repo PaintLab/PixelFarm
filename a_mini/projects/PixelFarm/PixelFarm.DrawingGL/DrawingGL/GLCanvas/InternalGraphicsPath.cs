@@ -130,7 +130,7 @@ namespace PixelFarm.DrawingGL
             //not add new coord
         }
 
-        public float[] BuildSmoothBorder(out int borderTriangleStripCount)
+        float[] BuildSmoothBorder(out int borderTriangleStripCount)
         {
             //build smooth border from existing 
             borderTriangleStripCount = _coordCount * 2;
@@ -158,6 +158,34 @@ namespace PixelFarm.DrawingGL
             CreateSmoothLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
 
             borderTriangleStripCount = coordCount * 2;
+            //
+            float[] result = expandCoords.ToArray();
+            expandCoords.Clear();
+            //
+            return result;
+        }
+        public float[] BuildSmoothBorders(float[] coordXYs, int segStartAt, int len, out int borderTriangleStripCount)
+        {
+            expandCoords.Clear();
+            float[] coords = coordXYs;
+            //from user input coords
+            //expand it
+            //TODO: review this again***
+            if (segStartAt > 0)
+            {
+
+            }
+            int lim = (segStartAt + len);
+            for (int i = segStartAt; i < lim;)
+            {
+                CreateSmoothLineSegment(expandCoords,/*x0*/ coords[i], /*y0*/coords[i + 1],/*x1*/ coords[i + 2],/*y1*/ coords[i + 3]);
+                i += 2;
+            }
+            //close coord
+            int last = segStartAt + len;
+            CreateSmoothLineSegment(expandCoords, coords[last], coords[last + 1], coords[segStartAt], coords[segStartAt + 1]);
+
+            borderTriangleStripCount = (len + 2) * 2;
             //
             float[] result = expandCoords.ToArray();
             expandCoords.Clear();
@@ -195,9 +223,6 @@ namespace PixelFarm.DrawingGL
         {
 
         }
-
-
-
         public void AddVertexSnap(PixelFarm.Agg.VertexStoreSnap vxsSnap)
         {
             //begin new snap vxs
@@ -207,7 +232,7 @@ namespace PixelFarm.DrawingGL
             var iter = vxsSnap.GetVertexSnapIter();
             double x, y;
             PixelFarm.Agg.VertexCmd cmd;
-            int totalCount = 0;
+            int totalXYCount = 0;
             //int index = 0;
             while ((cmd = iter.GetNextVertex(out x, out y)) != Agg.VertexCmd.NoMore)
             {
@@ -219,19 +244,19 @@ namespace PixelFarm.DrawingGL
                     //_tempCoords.Clear();
                     //contourEndPoints.Add(index);                    
                     //contourEndPoints.Add(_tempCoords.Count - 1);
-                    _tempEndPoints.Add(totalCount - 1);
+                    _tempEndPoints.Add(totalXYCount - 1);
                 }
                 //add command to
                 _tempCoords.Add((float)x);
                 _tempCoords.Add((float)y);
-                totalCount += 2;
+                totalXYCount += 2;
             }
 
             if (_tempCoords.Count > 0)
             {
-
                 expandCoordsList.Add(_tempCoords.ToArray());
                 contourEndPoints.Add(_tempEndPoints.ToArray());
+
             }
 
 
@@ -248,6 +273,7 @@ namespace PixelFarm.DrawingGL
         List<float> _allCoords = new List<float>();
         List<ushort> _allArrayIndexList = new List<ushort>();
         List<PartRange> _partIndexList = new List<PartRange>();
+
         int _currentPartBeginElementIndex = 0;
         int _currentPartFirstComponentStartAt = 0;
         VertexBufferObject _vbo;
@@ -255,7 +281,7 @@ namespace PixelFarm.DrawingGL
         //border
         List<SmoothBorderSet> smoothBorders = new List<SmoothBorderSet>();
         VertexBufferObject _vbo_smoothBorder;
-
+        PartRange[] _borderPartRanges;
 
         internal MultiPartTessResult()
         {
@@ -323,6 +349,10 @@ namespace PixelFarm.DrawingGL
         {
             smoothBorders.Add(new SmoothBorderSet(smoothBorderArr, vertexStripCount));
         }
+        public PartRange GetBorderPartRange(int index)
+        {
+            return _borderPartRanges[index];
+        }
         public List<SmoothBorderSet> GetAllSmoothBorderSet()
         {
             return this.smoothBorders;
@@ -342,9 +372,10 @@ namespace PixelFarm.DrawingGL
                 SmoothBorderSet borderSet = borderSets[i];
                 //create part range
                 partRanges[i] = new PartRange(currentFirstComponentStartAt, 0, borderSet.vertexStripCount);
-                currentFirstComponentStartAt += borderSet.vertexStripCount;
+                currentFirstComponentStartAt += expandedBorderCoords.Count;
                 expandedBorderCoords.AddRange(borderSet.smoothBorderArr);
             }
+            _borderPartRanges = partRanges;
             _vbo_smoothBorder.CreateBuffers(expandedBorderCoords.ToArray(), null, partRanges);
         }
         public VertexBufferObject GetBorderVBO()

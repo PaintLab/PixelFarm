@@ -519,7 +519,7 @@ namespace PixelFarm.DrawingGL
                         basicFillShader.FillTriangles(multipartTessResult, color);
 
                         //add smooth border
-                        // smoothLineShader.DrawTriangleStrips(multipartTessResult);
+                        smoothLineShader.DrawTriangleStrips(multipartTessResult);
 
                         //restore stroke width and color
                         StrokeWidth = saved_Width; //restore back
@@ -566,7 +566,7 @@ namespace PixelFarm.DrawingGL
                         basicFillShader.FillTriangles(multipartTessResult, index, color);
 
                         //add smooth border
-                        // smoothLineShader.DrawTriangleStrips(multipartTessResult);
+                        smoothLineShader.DrawTriangleStrips(multipartTessResult, index, color);
 
                         //restore stroke width and color
                         StrokeWidth = saved_Width; //restore back
