@@ -37,21 +37,56 @@ namespace Pencil.Gaming
             Stopwatch sw = new Stopwatch();
             sw.Start();
 #endif
-            Type glfwInterop = (IntPtr.Size == 8) ? typeof(Glfw64) : typeof(Glfw32);
+
+            bool is64BitsApp = System.Runtime.InteropServices.Marshal.SizeOf(typeof(IntPtr)) == 8; //this check if app is 32 or 64 bits
+            //Type glfwInterop = (IntPtr.Size == 8) ? typeof(Glfw64) : typeof(Glfw32); //this check actual machine 32 or 64 bits, not app is 32 or 64 bits
+            Type glfwInterop = (is64BitsApp) ? typeof(Glfw64) : typeof(Glfw32);
 #if DEBUG
             Console.WriteLine("GLFW interop: {0}", glfwInterop.Name);
 #endif
-            FieldInfo[] fields = typeof(GlfwDelegates).GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-            foreach (FieldInfo fi in fields)
+
+            try
             {
-                MethodInfo mi = glfwInterop.GetMethod(fi.Name, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-                Delegate function = Delegate.CreateDelegate(fi.FieldType, mi);
-                fi.SetValue(null, function);
+
+                FieldInfo[] fields = typeof(GlfwDelegates).GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+                foreach (FieldInfo fi in fields)
+                {
+                    MethodInfo mi = glfwInterop.GetMethod(fi.Name, BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+                    fi.SetValue(null, CreateDelegate(fi.FieldType, mi));
+                }
             }
+            catch (Exception ex)
+            {
+
+            }
+
 #if DEBUG
             sw.Stop();
             Console.WriteLine("Copying GLFW delegates took {0} milliseconds.", sw.ElapsedMilliseconds);
 #endif
+        }
+
+        static Delegate CreateDelegate(Type signature, MethodInfo m)
+        {
+
+#if NETCOREAPP1_1
+            return m.CreateDelegate(signature);
+#else
+            return Delegate.CreateDelegate(signature, m);
+#endif 
+
+        }
+
+        internal static string StrFromSbyte(sbyte* value)
+        {
+#if NETCOREAPP1_1
+            
+            return GlfwDelegates.StrFromSbyte(GlfwDelegates.glfwGetVersionString());                 
+          
+#else
+            IntPtr value1 = (IntPtr)GlfwDelegates.glfwGetVersionString();
+            return System.Runtime.InteropServices.Marshal.PtrToStringAnsi(value1);
+#endif 
         }
 
 #pragma warning disable 0649

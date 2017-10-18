@@ -270,9 +270,10 @@ namespace PixelFarm.DrawingGL
             //3.
             vertexCount = indexList.Count;
             //-----------------------------    
-            int orgVertexCount = vertex2dCoords.Length;
+            int orgVertexCount = vertex2dCoords.Length / 2;
             float[] vtx = new float[vertexCount * 2];//***
             int n = 0;
+
             for (int p = 0; p < vertexCount; ++p)
             {
                 ushort index = indexList[p];
@@ -344,6 +345,47 @@ namespace PixelFarm.DrawingGL
             }
 
             return indexList.ToArray();
+        }
+        /// <summary>
+        /// tess and read result as triangle list index array (for GLES draw element)
+        /// </summary>
+        /// <param name="tessTool"></param>
+        /// <param name="vertex2dCoords"></param>
+        /// <param name="contourEndPoints"></param>
+        /// <param name="outputCoords"></param>
+        /// <param name="vertexCount"></param>
+        /// <returns></returns>
+        internal static void TessAndAddToMultiPartResult(this TessTool tessTool,
+            float[] vertex2dCoords,
+            int[] contourEndPoints,
+            MultiPartTessResult multipartTessResult,
+            out int vertexCount)
+        {
+            if (!tessTool.TessPolygon(vertex2dCoords, contourEndPoints))
+            {
+                vertexCount = 0;
+                return;
+            }
+            //-----------------------------  
+            //results
+            //1.
+            List<ushort> indexList = tessTool.TessIndexList;
+            //2.
+            List<TessTempVertex> tempVertexList = tessTool.TempVertexList;
+            //3.
+            vertexCount = indexList.Count;
+            //-----------------------------  
+            multipartTessResult.BeginPart();
+            multipartTessResult.AddTessCoords(vertex2dCoords);
+            //append with newly create vertex(from tempVertList)
+            int tempVertListCount = tempVertexList.Count;
+            for (int i = 0; i < tempVertListCount; ++i)
+            {
+                TessTempVertex v = tempVertexList[i];
+                multipartTessResult.AddTessCoord((float)v.m_X, (float)v.m_Y);
+            }
+            multipartTessResult.AddVertexIndexList(indexList);
+            multipartTessResult.EndPart();
         }
     }
 }
