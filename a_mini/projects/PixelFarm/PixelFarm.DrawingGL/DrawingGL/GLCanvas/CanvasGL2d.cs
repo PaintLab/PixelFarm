@@ -563,7 +563,7 @@ namespace PixelFarm.DrawingGL
                         StrokeColor = color;
                         StrokeWidth = 1.2f; //TODO: review this *** 
 
-                        //basicFillShader.FillTriangles(multipartTessResult, index, color);
+                        basicFillShader.FillTriangles(multipartTessResult, index, color);
 
                         //add smooth border
                         smoothLineShader.DrawTriangleStrips(multipartTessResult, index, color);
@@ -640,8 +640,8 @@ namespace PixelFarm.DrawingGL
                             {
                                 if ((tessArea = f.GetAreaTess(this.tessTool)) != null)
                                 {    //draw area
-                                   // basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
-                                    //draw smooth border
+                                     // basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                                     //draw smooth border
                                     smoothLineShader.DrawTriangleStrips(
                                         f.GetSmoothBorders(smoothBorderBuilder),
                                         f.BorderTriangleStripCount);
