@@ -128,32 +128,6 @@ namespace PixelFarm.DrawingGL
         public void DrawTriangleStrips(MultiPartTessResult multipartTessResult)
         {
             throw new NotSupportedException();
-            //SetCurrent();
-            //CheckViewMatrix();
-            ////--------------------
-            //_canvasShareResource.AssignStrokeColorToVar(u_solidColor);
-            ////because original stroke width is the width of both side of
-            ////the line, but u_linewidth is the half of the strokeWidth
-            //u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
-            ////--------------------
-            //VertexBufferObject borderVBO = multipartTessResult.GetBorderVBO();
-            //borderVBO.Bind();
-
-            //System.Collections.Generic.List<SmoothBorderSet> borderSets = multipartTessResult.GetAllSmoothBorderSet();
-
-            //int j = borderSets.Count;
-            //int lastIndex = 0;
-            //int vstripCount = 0;
-            //a_position.LoadLatest(); //load all smooth line vertex - bind once
-
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    SmoothBorderSet borderSet = borderSets[i];
-            //    GL.DrawArrays(BeginMode.TriangleStrip, lastIndex, vstripCount = borderSet.vertexStripCount);
-            //    lastIndex += vstripCount;
-            //}
-            ////
-            //borderVBO.UnBind(); //unbind
         }
         public void DrawTriangleStrips(float[] coords, int ncount)
         {
@@ -172,29 +146,12 @@ namespace PixelFarm.DrawingGL
         public void DrawTriangleStrips(MultiPartTessResult multipartTessResult, int index, PixelFarm.Drawing.Color color)
         {
 
-            //SetCurrent();
-            //CheckViewMatrix();
-            ////--------------------------------------------  
-            //u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
-
-            ////--------------------------------------------  
             ////note (A):
             ////from https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glVertexAttribPointer.xml
             ////... If a non-zero named buffer object is bound to the GL_ARRAY_BUFFER target (see glBindBuffer)
             ////while a generic vertex attribute array is specified,
             ////pointer is treated as **a byte offset** into the buffer object's data store. 
-            //VertexBufferObject vbo = multipartTessResult.GetVBO();
-            //int subPathCount = multipartTessResult.PartCount;
-            //vbo.Bind();
 
-
-            //PartRange p = multipartTessResult.GetPartRange(index);
-            //a_position.LoadLatest(p.beginVertexAt * 4); //*4 => see note (A) above, so offset => beginVertexAt * sizeof(float)
-            //GL.DrawElements(BeginMode.Triangles,
-            //   p.elemCount,
-            //   DrawElementsType.UnsignedShort,
-            //   p.beginElemIndexAt * 2);  //*2 => see note (A) above, so offset=> beginElemIndexAt *sizeof(ushort) 
-            //vbo.UnBind();
 
             SetCurrent();
             CheckViewMatrix();
@@ -208,10 +165,6 @@ namespace PixelFarm.DrawingGL
             //--------------------
             VertexBufferObject borderVBO = multipartTessResult.GetBorderVBO();
             borderVBO.Bind();
-            //int j = borderSets.Count;
-            //int lastIndex = 0;
-            //int vstripCount = 0;
-
             BorderPart p = multipartTessResult.GetBorderPartRange(index);
             //get part range from border part
             int borderSetIndex = p.beginAtBorderSetIndex;
@@ -221,18 +174,6 @@ namespace PixelFarm.DrawingGL
                 a_position.LoadLatest(borderset.beginVertexAt * 4);
                 GL.DrawArrays(BeginMode.TriangleStrip, 0, borderset.elemCount);
             }
-
-            //a_position.LoadLatest();
-            //GL.DrawArrays(BeginMode.TriangleStrip, p.beginVertexAt, p.elemCount);
-
-            //GL.DrawElements(BeginMode.TriangleStrip,
-            //   p.elemCount,
-            //   DrawElementsType.UnsignedShort,
-            //   p.beginElemIndexAt * 2);  //*2 => see note (A) above, so offset=> beginElemIndexAt *sizeof(ushort) 
-
-            //lastIndex += vstripCount;
-
-            //
             borderVBO.UnBind(); //unbind
         }
 #if DEBUG
