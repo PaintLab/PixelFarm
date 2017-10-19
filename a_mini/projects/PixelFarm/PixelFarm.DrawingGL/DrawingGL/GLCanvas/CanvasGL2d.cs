@@ -639,9 +639,10 @@ namespace PixelFarm.DrawingGL
                             else
                             {
                                 if ((tessArea = f.GetAreaTess(this.tessTool)) != null)
-                                {    //draw area
-                                     // basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
-                                     //draw smooth border
+                                {   
+                                    //draw area
+                                    basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                                    //draw smooth border
                                     smoothLineShader.DrawTriangleStrips(
                                         f.GetSmoothBorders(smoothBorderBuilder),
                                         f.BorderTriangleStripCount);
@@ -819,7 +820,6 @@ namespace PixelFarm.DrawingGL
                 case CanvasSmoothMode.Smooth:
                     {
                         int borderTriAngleCount;
-
                         float[] triangles = smoothBorderBuilder.BuildSmoothBorders(
                             CreatePolyLineRectCoords(x, y, w, h), out borderTriAngleCount);
                         smoothLineShader.DrawTriangleStrips(triangles, borderTriAngleCount);
