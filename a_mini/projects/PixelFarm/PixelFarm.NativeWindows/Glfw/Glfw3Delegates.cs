@@ -37,7 +37,10 @@ namespace Pencil.Gaming
             Stopwatch sw = new Stopwatch();
             sw.Start();
 #endif
-            Type glfwInterop = (IntPtr.Size == 8) ? typeof(Glfw64) : typeof(Glfw32);
+
+            bool is64BitsApp = System.Runtime.InteropServices.Marshal.SizeOf(typeof(IntPtr)) == 8; //this check if app is 32 or 64 bits
+            //Type glfwInterop = (IntPtr.Size == 8) ? typeof(Glfw64) : typeof(Glfw32); //this check actual machine 32 or 64 bits, not app is 32 or 64 bits
+            Type glfwInterop = (is64BitsApp) ? typeof(Glfw64) : typeof(Glfw32);
 #if DEBUG
             Console.WriteLine("GLFW interop: {0}", glfwInterop.Name);
 #endif
