@@ -233,23 +233,35 @@ namespace PixelFarm.DrawingGL
             double x, y;
             PixelFarm.Agg.VertexCmd cmd;
             int totalXYCount = 0;
-            //int index = 0;
+            int index = 0;
+            float latestMoveToX = 0, latestMoveToY = 0;
+            float latestX = 0, latestY = 0;
             while ((cmd = iter.GetNextVertex(out x, out y)) != Agg.VertexCmd.NoMore)
             {
                 if (cmd == Agg.VertexCmd.Close || cmd == Agg.VertexCmd.CloseAndEndFigure)
                 {
+                    index = 0; //reset
                     //temp fix1
-                    //some vertex snap may has more than 1 part
-                    //expandCoordsList.Add(_tempCoords.ToArray());
-                    //_tempCoords.Clear();
-                    //contourEndPoints.Add(index);                    
-                    //contourEndPoints.Add(_tempCoords.Count - 1);
+                    //some vertex snap may has more than 1 part 
                     _tempEndPoints.Add(totalXYCount - 1);
+                    _tempCoords.Add(latestMoveToX);
+                    _tempCoords.Add(latestMoveToY);
+                    latestX = latestMoveToX = (float)x;
+                    latestY = latestMoveToY = (float)y;
                 }
-                //add command to
-                _tempCoords.Add((float)x);
-                _tempCoords.Add((float)y);
+                else
+                {   
+                    _tempCoords.Add(latestX = (float)x);
+                    _tempCoords.Add(latestY = (float)y);
+                    if (index == 0)
+                    {
+                        latestMoveToX = latestX;
+                        latestMoveToY = latestY;
+                    } 
+                    index++;
+                }
                 totalXYCount += 2;
+
             }
 
             if (_tempCoords.Count > 0)
