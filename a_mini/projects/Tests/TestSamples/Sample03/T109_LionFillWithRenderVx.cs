@@ -17,7 +17,7 @@ namespace OpenTkEssTest
         VertexStore lionVxs;
         GLCanvasPainter painter;
         List<RenderVx> lionRenderVxList = new List<RenderVx>();
-        int drawVersion = 0;
+        int tmpDrawVersion = 0;
         MultiPartTessResult multipartTessResult;
 
         protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
@@ -50,7 +50,7 @@ namespace OpenTkEssTest
             ////------------- 
             //version 2:
             {
-                drawVersion = 2;
+                tmpDrawVersion = 2;
                 MultiPartPolygon mutiPartPolygon = new MultiPartPolygon();
                 int j = lionShape.NumPaths;
                 int[] pathList = lionShape.PathIndexList;
@@ -82,7 +82,7 @@ namespace OpenTkEssTest
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
             canvas2d.ClearColorBuffer();
             //-------------------------------
-            if (drawVersion == 2)
+            if (tmpDrawVersion == 2)
             {
 
                 Color[] colors = lionShape.Colors;

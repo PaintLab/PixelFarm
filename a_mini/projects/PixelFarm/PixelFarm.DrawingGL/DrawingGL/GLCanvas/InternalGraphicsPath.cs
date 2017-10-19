@@ -87,6 +87,11 @@ namespace PixelFarm.DrawingGL
         }
 #endif
     }
+    public struct BorderPart
+    {
+        public int beginAtBorderSetIndex;
+        public int count;
+    }
     public struct VBOPart
     {
         public readonly VertexBufferObject vbo;
@@ -130,7 +135,7 @@ namespace PixelFarm.DrawingGL
             //not add new coord
         }
 
-        public float[] BuildSmoothBorder(out int borderTriangleStripCount)
+        float[] BuildSmoothBorder(out int borderTriangleStripCount)
         {
             //build smooth border from existing 
             borderTriangleStripCount = _coordCount * 2;
@@ -158,6 +163,34 @@ namespace PixelFarm.DrawingGL
             CreateSmoothLineSegment(expandCoords, coords[coordCount - 2], coords[coordCount - 1], coords[0], coords[1]);
 
             borderTriangleStripCount = coordCount * 2;
+            //
+            float[] result = expandCoords.ToArray();
+            expandCoords.Clear();
+            //
+            return result;
+        }
+        public float[] BuildSmoothBorders(float[] coordXYs, int segStartAt, int len, out int borderTriangleStripCount)
+        {
+            expandCoords.Clear();
+            float[] coords = coordXYs;
+            //from user input coords
+            //expand it
+            //TODO: review this again***
+            if (segStartAt > 0)
+            {
+
+            }
+            int lim = (segStartAt + len);
+            for (int i = segStartAt; i < lim;)
+            {
+                CreateSmoothLineSegment(expandCoords,/*x0*/ coords[i], /*y0*/coords[i + 1],/*x1*/ coords[i + 2],/*y1*/ coords[i + 3]);
+                i += 2;
+            }
+            //close coord
+            int last = segStartAt + len;
+            CreateSmoothLineSegment(expandCoords, coords[last], coords[last + 1], coords[segStartAt], coords[segStartAt + 1]);
+
+            borderTriangleStripCount = (len + 2) * 2;
             //
             float[] result = expandCoords.ToArray();
             expandCoords.Clear();
@@ -195,9 +228,6 @@ namespace PixelFarm.DrawingGL
         {
 
         }
-
-
-
         public void AddVertexSnap(PixelFarm.Agg.VertexStoreSnap vxsSnap)
         {
             //begin new snap vxs
@@ -207,31 +237,43 @@ namespace PixelFarm.DrawingGL
             var iter = vxsSnap.GetVertexSnapIter();
             double x, y;
             PixelFarm.Agg.VertexCmd cmd;
-            int totalCount = 0;
-            //int index = 0;
+            int totalXYCount = 0;
+            int index = 0;
+            float latestMoveToX = 0, latestMoveToY = 0;
+            float latestX = 0, latestY = 0;
             while ((cmd = iter.GetNextVertex(out x, out y)) != Agg.VertexCmd.NoMore)
             {
                 if (cmd == Agg.VertexCmd.Close || cmd == Agg.VertexCmd.CloseAndEndFigure)
                 {
+                    index = 0; //reset
                     //temp fix1
-                    //some vertex snap may has more than 1 part
-                    //expandCoordsList.Add(_tempCoords.ToArray());
-                    //_tempCoords.Clear();
-                    //contourEndPoints.Add(index);                    
-                    //contourEndPoints.Add(_tempCoords.Count - 1);
-                    _tempEndPoints.Add(totalCount - 1);
+                    //some vertex snap may has more than 1 part 
+                    _tempEndPoints.Add(totalXYCount - 1);
+                    _tempCoords.Add(latestMoveToX);
+                    _tempCoords.Add(latestMoveToY);
+                    latestX = latestMoveToX = (float)x;
+                    latestY = latestMoveToY = (float)y;
                 }
-                //add command to
-                _tempCoords.Add((float)x);
-                _tempCoords.Add((float)y);
-                totalCount += 2;
+                else
+                {
+                    _tempCoords.Add(latestX = (float)x);
+                    _tempCoords.Add(latestY = (float)y);
+                    if (index == 0)
+                    {
+                        latestMoveToX = latestX;
+                        latestMoveToY = latestY;
+                    }
+                    index++;
+                }
+                totalXYCount += 2;
+
             }
 
             if (_tempCoords.Count > 0)
             {
-
                 expandCoordsList.Add(_tempCoords.ToArray());
                 contourEndPoints.Add(_tempEndPoints.ToArray());
+
             }
 
 
@@ -248,24 +290,23 @@ namespace PixelFarm.DrawingGL
         List<float> _allCoords = new List<float>();
         List<ushort> _allArrayIndexList = new List<ushort>();
         List<PartRange> _partIndexList = new List<PartRange>();
+
         int _currentPartBeginElementIndex = 0;
         int _currentPartFirstComponentStartAt = 0;
         VertexBufferObject _vbo;
         //--------------------------------------------------
         //border
+        List<BorderPart> _borderParts = new List<BorderPart>();
         List<SmoothBorderSet> smoothBorders = new List<SmoothBorderSet>();
         VertexBufferObject _vbo_smoothBorder;
-
+        PartRange[] _borderPartRanges;
 
         internal MultiPartTessResult()
         {
         }
         public int BeginPart()
         {
-            if (_allArrayIndexList.Count > 0)
-            {
 
-            }
             _currentPartFirstComponentStartAt = _allCoords.Count;
             return _currentPartBeginElementIndex = _allArrayIndexList.Count;
         }
@@ -319,14 +360,33 @@ namespace PixelFarm.DrawingGL
         public List<float> GetAllCoords() { return _allCoords; }
         public List<ushort> GetAllArrayIndexList() { return _allArrayIndexList; }
         //--------------------------------------------------
+        int _currentBorderPartBeginAt;
+        public void BeginBorderPart()
+        {
+            //begin new border part
+            _currentBorderPartBeginAt = smoothBorders.Count;
+        }
+        public void EndBorderPart()
+        {
+            //add to list
+            BorderPart borderPart = new BorderPart();
+            borderPart.beginAtBorderSetIndex = _currentBorderPartBeginAt;
+            borderPart.count = smoothBorders.Count - _currentBorderPartBeginAt;
+            _borderParts.Add(borderPart);
+        }
         public void AddSmoothBorders(float[] smoothBorderArr, int vertexStripCount)
         {
             smoothBorders.Add(new SmoothBorderSet(smoothBorderArr, vertexStripCount));
         }
-        public List<SmoothBorderSet> GetAllSmoothBorderSet()
+        public BorderPart GetBorderPartRange(int index)
         {
-            return this.smoothBorders;
+            return _borderParts[index];
         }
+        public PartRange GetSmoothBorderPartRange(int index)
+        {
+            return _borderPartRanges[index];
+        }
+
         void InitMultiPartBorderVBOIfNeed()
         {
             if (_vbo_smoothBorder != null) return;
@@ -334,6 +394,7 @@ namespace PixelFarm.DrawingGL
             _vbo_smoothBorder = new VertexBufferObject();
             List<SmoothBorderSet> borderSets = this.smoothBorders;
             int j = borderSets.Count;
+
             PartRange[] partRanges = new PartRange[j];
             int currentFirstComponentStartAt = 0;
             List<float> expandedBorderCoords = new List<float>();
@@ -342,9 +403,10 @@ namespace PixelFarm.DrawingGL
                 SmoothBorderSet borderSet = borderSets[i];
                 //create part range
                 partRanges[i] = new PartRange(currentFirstComponentStartAt, 0, borderSet.vertexStripCount);
-                currentFirstComponentStartAt += borderSet.vertexStripCount;
                 expandedBorderCoords.AddRange(borderSet.smoothBorderArr);
+                currentFirstComponentStartAt += borderSet.smoothBorderArr.Length;
             }
+            _borderPartRanges = partRanges;
             _vbo_smoothBorder.CreateBuffers(expandedBorderCoords.ToArray(), null, partRanges);
         }
         public VertexBufferObject GetBorderVBO()
@@ -352,8 +414,10 @@ namespace PixelFarm.DrawingGL
             InitMultiPartBorderVBOIfNeed();
             return _vbo_smoothBorder;
         }
-
     }
+
+
+
     public struct SmoothBorderSet
     {
         public readonly float[] smoothBorderArr;
