@@ -111,7 +111,7 @@ namespace PixelFarm.DrawingGL
 
     class SmoothBorderBuilder
     {
-        List<float> expandCoords = new List<float>(); 
+        List<float> expandCoords = new List<float>();
 
         public float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
         {
@@ -161,7 +161,7 @@ namespace PixelFarm.DrawingGL
             expandCoords.Clear();
             //
             return result;
-        }
+        } 
         static void CreateSmoothLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
         {
             //create with no line join
@@ -179,7 +179,7 @@ namespace PixelFarm.DrawingGL
             coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1); //1 vertex
         }
     }
-     
+
 
     public class MultiPartPolygon
     {

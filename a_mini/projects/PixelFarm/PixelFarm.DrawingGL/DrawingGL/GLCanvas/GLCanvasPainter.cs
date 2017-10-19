@@ -985,20 +985,20 @@ namespace PixelFarm.DrawingGL
                         multipartTessResult,
                         out localVertexCount);
 
-                    int m = endPoints.Length;
                     //borders  
                     //build smooth border  
+                    int m = endPoints.Length;
                     int latest_endPoint = 0;
                     multipartTessResult.BeginBorderPart();
                     for (int n = 0; n < m; ++n)
-                    {   
-                        int endPoint = endPoints[n];
-                        int len = (endPoint - latest_endPoint) + 1;
+                    {
+                        int endPoint = endPoints[n]; //'x' , not include 'y'
+                        int len = (endPoint - latest_endPoint) + 1; //so len we add +1 for 'y'
                         int borderTriangleStripCount;
                         //expand coords for draw array
-                        float[] smoothSegBorders = borderBuilder.BuildSmoothBorders(expandCoords, latest_endPoint, len, out borderTriangleStripCount);
+                        float[] smoothBorderXYs = borderBuilder.BuildSmoothBorders(expandCoords, latest_endPoint, len, out borderTriangleStripCount);
                         latest_endPoint += len + 2;
-                        multipartTessResult.AddSmoothBorders(smoothSegBorders, borderTriangleStripCount);
+                        multipartTessResult.AddSmoothBorders(smoothBorderXYs, borderTriangleStripCount);
                     }
                     multipartTessResult.EndBorderPart();
                 }
