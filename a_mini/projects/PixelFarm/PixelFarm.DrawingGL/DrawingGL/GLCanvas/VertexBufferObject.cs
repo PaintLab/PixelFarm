@@ -11,18 +11,28 @@ namespace PixelFarm.DrawingGL
     public class VertexBufferObject : IDisposable
     {
 
+
         int _vertextBufferIndex; // array buffer
         int _indexBufferIndex; // element buffer
         bool _hasData;
+
         public VertexBufferObject()
         {
             //TODO: review how to create vbo object
-        }
 
+#if DEBUG
+            dbugId = dbugTotoalId++;
+            Console.WriteLine(dbugId);
+#endif
+        }
+#if DEBUG
+        readonly int dbugId = 0;
+        static int dbugTotoalId = 0;
+#endif
         /// <summary>
         /// set up vertex data, we don't store the vertex array,or index array here
         /// </summary>
-        public void CreateBuffers(float[] _vertextBuffer, ushort[] _indexBuffer)
+        public void CreateBuffers(float[] _vertextBuffer, ushort[] _indexBuffer, PartRange[] multipartIndex)
         {
 
             if (_hasData)
@@ -32,6 +42,8 @@ namespace PixelFarm.DrawingGL
 
             unsafe
             {
+
+                //
                 if (_vertextBuffer != null)
                 {
                     //1.
@@ -40,7 +52,7 @@ namespace PixelFarm.DrawingGL
                     fixed (void* vertDataPtr = &_vertextBuffer[0])
                     {
                         GL.BufferData(BufferTarget.ArrayBuffer,
-                            new IntPtr(_vertextBuffer.Length * 4),
+                            new IntPtr(_vertextBuffer.Length * 4), //size in byte
                             new IntPtr(vertDataPtr),
                             BufferUsage.StaticDraw);   //this version we use static draw
                     }
@@ -88,12 +100,21 @@ namespace PixelFarm.DrawingGL
                 _hasData = false;
             }
         }
+        /// <summary>
+        /// bind array buffer and element array buffer
+        /// </summary>
         public void Bind()
         {
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertextBufferIndex);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferIndex);
+            if (_indexBufferIndex > 0)
+            {
+                GL.BindBuffer(BufferTarget.ElementArrayBuffer, _indexBufferIndex);
+            }
         }
+        /// <summary>
+        /// unbine array buffer and element array buffer
+        /// </summary>
         public void UnBind()
         {
             // IMPORTANT: Unbind from the buffer when we're done with it.
@@ -106,7 +127,6 @@ namespace PixelFarm.DrawingGL
         {
             get { return _hasData; }
         }
-
-
     }
+
 }

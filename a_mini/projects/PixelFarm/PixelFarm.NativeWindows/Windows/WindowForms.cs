@@ -32,45 +32,6 @@ namespace PixelFarm.Forms
         }
 
     }
-    public class Form : Control
-    {
-        IntPtr _handle;
-        public Form()
-        {
-            CreateNativeCefWindowHandle();
-        }
-        internal Form(IntPtr hwnd)
-        {
-            this._handle = hwnd;
-        }
-        public void Hide() { }
-        public override IntPtr Handle
-        {
-            get
-            {
-                return _handle;
-            }
-        }
-        void CreateNativeCefWindowHandle()
-        {
-
-        }
-        public void Invoke(Delegate ac) { }
-        public virtual void Close() { }
-        public event EventHandler<FormClosingEventArgs> FormClosing;
-        public event EventHandler<FormClosedEventArgs> FormClosed;
-
-        //public static new Form CreateFromNativeWindowHwnd(IntPtr hwnd)
-        //{
-        //    Form newControl = new Form(hwnd);
-        //    newControl.TopLevelControl = newControl;
-        //    return newControl;
-        //}
-
-    }
-
-
-
     public class ControlCollection
     {
         Control owner;
@@ -98,6 +59,36 @@ namespace PixelFarm.Forms
             children.Clear();
         }
     }
+    public class Form : Control
+    {
+         
+        public Form()
+        {
+            CreateNativeCefWindowHandle();
+        } 
+        public void Hide() { }
+        
+        void CreateNativeCefWindowHandle()
+        {
+
+        }
+        public void Invoke(Delegate ac) { }
+        public virtual void Close() { }
+        public event EventHandler<FormClosingEventArgs> FormClosing;
+        public event EventHandler<FormClosedEventArgs> FormClosed;
+
+        //public static new Form CreateFromNativeWindowHwnd(IntPtr hwnd)
+        //{
+        //    Form newControl = new Form(hwnd);
+        //    newControl.TopLevelControl = newControl;
+        //    return newControl;
+        //}
+
+    }
+
+
+
+
 
     public class Control : IDisposable
     {
@@ -183,6 +174,12 @@ namespace PixelFarm.Forms
         public static Control CreateFromNativeWindowHwnd(IntPtr hwnd)
         {
             Control newControl = new Control();
+            Control.SetNativeHandle(newControl, hwnd);
+            return newControl;
+        }
+        public static Form CreateFromNativeWindowHwnd2(IntPtr hwnd)
+        {
+            Form newControl = new Form();
             Control.SetNativeHandle(newControl, hwnd);
             return newControl;
         }

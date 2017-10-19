@@ -470,9 +470,6 @@ namespace PixelFarm.DrawingGL
             this.Fill(roundRect.MakeVxs(v1));
             ReleaseVxs(ref v1);
         }
-
-
-
         public override void Line(double x1, double y1, double x2, double y2)
         {
             _canvas.StrokeColor = _strokeColor;
@@ -507,7 +504,10 @@ namespace PixelFarm.DrawingGL
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
             //store internal gfx path inside render vx 
-            return new GLRenderVx(_igfxPathBuilder.CreateGraphicsPathForRenderVx(snap));
+
+            //1.
+            InternalGraphicsPath p = _igfxPathBuilder.CreateGraphicsPathForRenderVx(snap);
+            return new GLRenderVx(p);
         }
         public RenderVx CreatePolygonRenderVx(float[] xycoords)
         {
@@ -516,7 +516,19 @@ namespace PixelFarm.DrawingGL
             fig.SupportVertexBuffer = true;
             return new GLRenderVx(new InternalGraphicsPath(fig));
         }
+        public MultiPartTessResult CreateMultiPartTessResult(MultiPartPolygon multipartPolygon)
+        {
+            //store internal gfx path inside render vx
+            MultiPartTessResult multipartTessResult = new MultiPartTessResult();
 
+            _igfxPathBuilder.CreateGraphicsPathForMultiPartRenderVx(multipartPolygon,
+                multipartTessResult,
+                _canvas.GetTessTool(),
+                _canvas.GetSmoothBorderBuilder());
+            //
+            return multipartTessResult;
+
+        }
         struct CenterFormArc
         {
             public double cx;
@@ -848,7 +860,6 @@ namespace PixelFarm.DrawingGL
             arc.Init(x, y, rx, ry, -(angleStart), -(angleExtent));
             return arc;
         }
-
         //================
 
         struct InternalGraphicsPathBuilder
@@ -874,6 +885,8 @@ namespace PixelFarm.DrawingGL
             {
                 return CreateGraphicsPath(vxsSnap, true);
             }
+
+
             InternalGraphicsPath CreateGraphicsPath(VertexStoreSnap vxsSnap, bool buildForRenderVx)
             {
                 VertexSnapIter vxsIter = vxsSnap.GetVertexSnapIter();
@@ -890,11 +903,10 @@ namespace PixelFarm.DrawingGL
                 //result...
                 List<Figure> figures = new List<Figure>();
 
-                for (;;)
+                for (; ; )
                 {
                     double x, y;
-                    VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);
-                    switch (cmd)
+                    switch (vxsIter.GetNextVertex(out x, out y))
                     {
                         case PixelFarm.Agg.VertexCmd.MoveTo:
                             if (!isAddToList)
@@ -944,8 +956,52 @@ namespace PixelFarm.DrawingGL
                     }
                 }
                 EXIT_LOOP:
-
                 return new InternalGraphicsPath(figures);
+            }
+
+            internal void CreateGraphicsPathForMultiPartRenderVx(
+               MultiPartPolygon multipartPolygon,
+               MultiPartTessResult multipartTessResult,
+               TessTool tessTool,
+               SmoothBorderBuilder borderBuilder)
+            {
+                //a multipart polygon contains a  list of  expand coord (x,y) set.
+
+                List<float[]> expandCoordsList = multipartPolygon.expandCoordsList;
+                List<int[]> endPointList = multipartPolygon.contourEndPoints;
+
+
+                int listCount = expandCoordsList.Count;
+                for (int i = 0; i < listCount; ++i)
+                {
+                    //expand x,y
+                    float[] expandCoords = expandCoordsList[i];
+                    int[] endPoints = endPointList[i];
+                    //area
+                    int localVertexCount;
+
+                    tessTool.TessAndAddToMultiPartResult(expandCoords,
+                        endPoints,
+                        multipartTessResult,
+                        out localVertexCount);
+
+                    int m = endPoints.Length;
+                    //borders  
+                    //build smooth border  
+                    int latest_endPoint = 0;
+                    multipartTessResult.BeginBorderPart();
+                    for (int n = 0; n < m; ++n)
+                    {   
+                        int endPoint = endPoints[n];
+                        int len = (endPoint - latest_endPoint) + 1;
+                        int borderTriangleStripCount;
+                        //expand coords for draw array
+                        float[] smoothSegBorders = borderBuilder.BuildSmoothBorders(expandCoords, latest_endPoint, len, out borderTriangleStripCount);
+                        latest_endPoint += len + 2;
+                        multipartTessResult.AddSmoothBorders(smoothSegBorders, borderTriangleStripCount);
+                    }
+                    multipartTessResult.EndBorderPart();
+                }
             }
         }
 

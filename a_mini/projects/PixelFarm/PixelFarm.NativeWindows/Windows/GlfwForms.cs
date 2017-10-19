@@ -323,8 +323,8 @@ namespace PixelFarm.Forms
             //TODO: implement detail methods 
             switch (action)
             {
-                default:
-                    throw new NotFiniteNumberException();
+
+                default: throw new NotSupportedException();
                 case KeyActionKind.Press:
                     f.OnMouseDown(btn, f._latestMouseX, f._latestMouseY);
                     break;
@@ -351,7 +351,7 @@ namespace PixelFarm.Forms
         {
             switch (keyAction)
             {
-                default: throw new NotFiniteNumberException();
+                default: throw new NotSupportedException();
                 case KeyActionKind.Press:
                     f.OnKeyDown(key, scanCode, mods);
                     break;

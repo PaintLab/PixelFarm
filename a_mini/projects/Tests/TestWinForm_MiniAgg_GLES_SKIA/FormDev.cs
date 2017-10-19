@@ -426,8 +426,13 @@ namespace Mini
 
         private void cmdTestColorBlend_Click(object sender, EventArgs e)
         {
-            FormTestColorBlend formTestColorBlend = new Mini.FormTestColorBlend();
-            formTestColorBlend.Show();
+            //double r0 = Math.Atan2(0, 1);
+            //double r90 = Math.Atan2(1, 0); 
+            //double r180 = Math.Atan2(0, -1);
+            //double r270 = Math.Atan2(-1, 0);
+
+            //FormTestColorBlend formTestColorBlend = new Mini.FormTestColorBlend();
+            //formTestColorBlend.Show();
 
         }
     }

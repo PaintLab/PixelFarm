@@ -7,9 +7,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using OpenTK.Graphics;
 namespace OpenTK.Platform.Dummy
 {
@@ -20,6 +17,16 @@ namespace OpenTK.Platform.Dummy
     /// </summary>
     internal sealed class DummyGLContext : DesktopGraphicsContext
     {
+        class Thread
+        {
+            //dummy thread
+
+            public static Thread CurrentThread;
+
+        }
+
+
+
         // This mode is not real. To receive a real mode we'd have to create a temporary context, which is not desirable!
         bool vsync;
         static int handle_count;

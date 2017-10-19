@@ -492,14 +492,15 @@ namespace BuildTextureFonts
             //msdf(default) – generates a multi - channel signed distance field using my new method.
 
             //char[] fontChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".ToCharArray();
-            char[] fontChars = new char[] { (char)'l' };
+            char[] fontChars = new char[] { (char)'X' };
             int j = fontChars.Length;
             for (int i = 0; i < j; ++i)
             {
                 char c = fontChars[i];
                 //msdf
                 //string args = @"msdfgen msdf -font C:\Windows\Fonts\tahoma.ttf 'A' -o msdf.png -size 32 32 -pxrange 4 -autoframe -testrender render_msdf.png 1024 1024";
-                MsdfParameters pars = new MsdfParameters(@"C:\Windows\Fonts\tahoma.ttf", c);
+                //MsdfParameters pars = new MsdfParameters(@"C:\Windows\Fonts\tahoma.ttf", c);
+                MsdfParameters pars = new MsdfParameters(@"d:\\WImageTest\\shardailes.ttf", c);
                 pars.enableRenderTestFile = false;
                 string[] splitStr = pars.GetArgs();
                 MyFtLib.MyFtMSDFGEN(splitStr.Length, splitStr);
@@ -530,7 +531,7 @@ namespace BuildTextureFonts
             MyFtLib.ContourAddLinearSegment(cnt, 1.64f, 18.23f, 3.84f, 18.23f);
             MyFtLib.ContourAddLinearSegment(cnt, 3.84f, 18.23f, 3.84f, 0);
 
- 
+
             double s_left, s_bottom, s_right, s_top;
             MyFtLib.ShapeFindBounds(shape, out s_left, out s_bottom, out s_right, out s_top);
 

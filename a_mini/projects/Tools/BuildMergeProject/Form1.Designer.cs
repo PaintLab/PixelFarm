@@ -40,7 +40,7 @@
             this.cmdReadSln = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.lstPreset = new System.Windows.Forms.ListBox();
-            this.listView2 = new System.Windows.Forms.ListView();
+            this.lstSlnList = new System.Windows.Forms.ListView();
             this.lstAsmReferenceList = new System.Windows.Forms.ListBox();
             this.cmdBuildSelectedMergePro = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -162,15 +162,15 @@
             this.lstPreset.Size = new System.Drawing.Size(167, 82);
             this.lstPreset.TabIndex = 13;
             // 
-            // listView2
+            // lstSlnList
             // 
-            this.listView2.FullRowSelect = true;
-            this.listView2.Location = new System.Drawing.Point(596, 44);
-            this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(260, 205);
-            this.listView2.TabIndex = 14;
-            this.listView2.UseCompatibleStateImageBehavior = false;
-            this.listView2.View = System.Windows.Forms.View.Details;
+            this.lstSlnList.FullRowSelect = true;
+            this.lstSlnList.Location = new System.Drawing.Point(596, 44);
+            this.lstSlnList.Name = "lstSlnList";
+            this.lstSlnList.Size = new System.Drawing.Size(260, 205);
+            this.lstSlnList.TabIndex = 14;
+            this.lstSlnList.UseCompatibleStateImageBehavior = false;
+            this.lstSlnList.View = System.Windows.Forms.View.Details;
             // 
             // lstAsmReferenceList
             // 
@@ -197,7 +197,7 @@
             this.ClientSize = new System.Drawing.Size(1241, 674);
             this.Controls.Add(this.cmdBuildSelectedMergePro);
             this.Controls.Add(this.lstAsmReferenceList);
-            this.Controls.Add(this.listView2);
+            this.Controls.Add(this.lstSlnList);
             this.Controls.Add(this.lstPreset);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.cmdReadSln);
@@ -231,7 +231,7 @@
         private System.Windows.Forms.Button cmdReadSln;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ListBox lstPreset;
-        private System.Windows.Forms.ListView listView2;
+        private System.Windows.Forms.ListView lstSlnList;
         private System.Windows.Forms.ListBox lstAsmReferenceList;
         private System.Windows.Forms.Button cmdBuildSelectedMergePro;
     }

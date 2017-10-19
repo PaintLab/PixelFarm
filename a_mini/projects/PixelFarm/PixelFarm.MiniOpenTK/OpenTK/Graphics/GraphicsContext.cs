@@ -11,8 +11,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-using System.Threading;
-
 using OpenTK.Platform;
 namespace OpenTK.Graphics
 {
@@ -39,15 +37,15 @@ namespace OpenTK.Graphics
 
 
 
-        // Necessary to allow creation of dummy GraphicsContexts (see CreateDummyContext static method).
-        GraphicsContext(ContextHandle handle)
-        {
-            implementation = new OpenTK.Platform.Dummy.DummyGLContext(handle);
-            lock (SyncRoot)
-            {
-                available_contexts.Add((implementation as IGraphicsContextInternal).Context, new WeakReference(this));
-            }
-        }
+        //// Necessary to allow creation of dummy GraphicsContexts (see CreateDummyContext static method).
+        //GraphicsContext(ContextHandle handle)
+        //{
+        //    implementation = new OpenTK.Platform.Dummy.DummyGLContext(handle);
+        //    lock (SyncRoot)
+        //    {
+        //        available_contexts.Add((implementation as IGraphicsContextInternal).Context, new WeakReference(this));
+        //    }
+        //}
 
         /// <summary>
         /// Constructs a new GraphicsContext with the specified GraphicsMode and attaches it to the specified window.
@@ -83,14 +81,14 @@ namespace OpenTK.Graphics
                     major = 1;
                 if (minor < 0)
                     minor = 0;
-                Debug.Print("Creating GraphicsContext.");
+                Debug.Write("Creating GraphicsContext.");
                 try
                 {
-                    Debug.Indent();
-                    Debug.Print("GraphicsMode: {0}", mode);
-                    Debug.Print("IWindowInfo: {0}", window);
-                    Debug.Print("GraphicsContextFlags: {0}", flags);
-                    Debug.Print("Requested version: {0}.{1}", major, minor);
+                    //Debug.Indent();
+                    Debug.Write(string.Format("GraphicsMode: {0}", mode));
+                    Debug.Write(string.Format("IWindowInfo: {0}", window));
+                    Debug.Write(string.Format("GraphicsContextFlags: {0}", flags));
+                    Debug.Write(string.Format("Requested version: {0}.{1}", major, minor));
                     IGraphicsContext shareContext = shareContext = FindSharedContext();
                     // Todo: Add a DummyFactory implementing IPlatformFactory.
                     if (designMode)
@@ -130,7 +128,7 @@ namespace OpenTK.Graphics
                 }
                 finally
                 {
-                    Debug.Unindent();
+                    //Debug.Unindent();
                 }
             }
         }
@@ -139,15 +137,15 @@ namespace OpenTK.Graphics
 
 
 
-        /// <summary>
-        /// Constructs a new GraphicsContext from a pre-existing context created outside of OpenTK.
-        /// </summary>
-        /// <param name="handle">The handle of the existing context. This must be a valid, unique handle that is not known to OpenTK.</param>
-        /// <param name="window">The window this context is bound to. This must be a valid window obtained through Utilities.CreateWindowInfo.</param>
-        /// <exception cref="GraphicsContextException">Occurs if handle is identical to a context already registered with OpenTK.</exception>
-        public GraphicsContext(ContextHandle handle, IWindowInfo window)
-            : this(handle, window, null, 1, 0, GraphicsContextFlags.Default)
-        { }
+        ///// <summary>
+        ///// Constructs a new GraphicsContext from a pre-existing context created outside of OpenTK.
+        ///// </summary>
+        ///// <param name="handle">The handle of the existing context. This must be a valid, unique handle that is not known to OpenTK.</param>
+        ///// <param name="window">The window this context is bound to. This must be a valid window obtained through Utilities.CreateWindowInfo.</param>
+        ///// <exception cref="GraphicsContextException">Occurs if handle is identical to a context already registered with OpenTK.</exception>
+        //public GraphicsContext(ContextHandle handle, IWindowInfo window)
+        //    : this(handle, window, null, 1, 0, GraphicsContextFlags.Default)
+        //{ }
 
         /// <summary>
         /// Constructs a new GraphicsContext from a pre-existing context created outside of OpenTK.
@@ -160,32 +158,32 @@ namespace OpenTK.Graphics
         /// <param name="minor">The minor version of the context (e.g. "1" for "2.1").</param>
         /// <param name="flags">A bitwise combination of <see cref="GraphicsContextFlags"/> that describe this context.</param>
         /// <exception cref="GraphicsContextException">Occurs if handle is identical to a context already registered with OpenTK.</exception>
-        public GraphicsContext(ContextHandle handle, IWindowInfo window, IGraphicsContext shareContext, int major, int minor, GraphicsContextFlags flags)
-        {
-            lock (SyncRoot)
-            {
-                IsExternal = true;
-                if (handle == ContextHandle.Zero)
-                {
-                    implementation = new OpenTK.Platform.Dummy.DummyGLContext(handle);
-                }
-                else if (available_contexts.ContainsKey(handle))
-                {
-                    throw new GraphicsContextException("Context already exists.");
-                }
-                else
-                {
-                    switch ((flags & GraphicsContextFlags.Embedded) == GraphicsContextFlags.Embedded)
-                    {
-                        case false: implementation = Factory.Default.CreateGLContext(handle, window, shareContext, direct_rendering, major, minor, flags); break;
-                        case true: implementation = Factory.Embedded.CreateGLContext(handle, window, shareContext, direct_rendering, major, minor, flags); break;
-                    }
-                }
+        //public GraphicsContext(ContextHandle handle, IWindowInfo window, IGraphicsContext shareContext, int major, int minor, GraphicsContextFlags flags)
+        //{
+        //    lock (SyncRoot)
+        //    {
+        //        IsExternal = true;
+        //        if (handle == ContextHandle.Zero)
+        //        {
+        //            implementation = new OpenTK.Platform.Dummy.DummyGLContext(handle);
+        //        }
+        //        else if (available_contexts.ContainsKey(handle))
+        //        {
+        //            throw new GraphicsContextException("Context already exists.");
+        //        }
+        //        else
+        //        {
+        //            switch ((flags & GraphicsContextFlags.Embedded) == GraphicsContextFlags.Embedded)
+        //            {
+        //                case false: implementation = Factory.Default.CreateGLContext(handle, window, shareContext, direct_rendering, major, minor, flags); break;
+        //                case true: implementation = Factory.Embedded.CreateGLContext(handle, window, shareContext, direct_rendering, major, minor, flags); break;
+        //            }
+        //        }
 
-                available_contexts.Add((implementation as IGraphicsContextInternal).Context, new WeakReference(this));
-                (this as IGraphicsContextInternal).LoadAll();
-            }
-        }
+        //        available_contexts.Add((implementation as IGraphicsContextInternal).Context, new WeakReference(this));
+        //        (this as IGraphicsContextInternal).LoadAll();
+        //    }
+        //}
 
 
 
@@ -211,36 +209,36 @@ namespace OpenTK.Graphics
         }
 
 
-        /// <summary>
-        /// Creates a dummy GraphicsContext to allow OpenTK to work with contexts created by external libraries.
-        /// </summary>
-        /// <returns>A new, dummy GraphicsContext instance.</returns>
-        /// <remarks>
-        /// <para>Instances created by this method will not be functional. Instance methods will have no effect.</para>
-        /// <para>This method requires that a context is current on the calling thread.</para>
-        /// </remarks>
-        public static GraphicsContext CreateDummyContext()
-        {
-            ContextHandle handle = GetCurrentContext();
-            if (handle == ContextHandle.Zero)
-                throw new InvalidOperationException("No GraphicsContext is current on the calling thread.");
-            return CreateDummyContext(handle);
-        }
+        ///// <summary>
+        ///// Creates a dummy GraphicsContext to allow OpenTK to work with contexts created by external libraries.
+        ///// </summary>
+        ///// <returns>A new, dummy GraphicsContext instance.</returns>
+        ///// <remarks>
+        ///// <para>Instances created by this method will not be functional. Instance methods will have no effect.</para>
+        ///// <para>This method requires that a context is current on the calling thread.</para>
+        ///// </remarks>
+        //public static GraphicsContext CreateDummyContext()
+        //{
+        //    ContextHandle handle = GetCurrentContext();
+        //    if (handle == ContextHandle.Zero)
+        //        throw new InvalidOperationException("No GraphicsContext is current on the calling thread.");
+        //    return CreateDummyContext(handle);
+        //}
 
-        /// <summary>
-        /// Creates a dummy GraphicsContext to allow OpenTK to work with contexts created by external libraries.
-        /// </summary>
-        /// <param name="handle">The handle of a context.</param>
-        /// <returns>A new, dummy GraphicsContext instance.</returns>
-        /// <remarks>
-        /// <para>Instances created by this method will not be functional. Instance methods will have no effect.</para>
-        /// </remarks>
-        public static GraphicsContext CreateDummyContext(ContextHandle handle)
-        {
-            if (handle == ContextHandle.Zero)
-                throw new ArgumentOutOfRangeException("handle");
-            return new GraphicsContext(handle);
-        }
+        ///// <summary>
+        ///// Creates a dummy GraphicsContext to allow OpenTK to work with contexts created by external libraries.
+        ///// </summary>
+        ///// <param name="handle">The handle of a context.</param>
+        ///// <returns>A new, dummy GraphicsContext instance.</returns>
+        ///// <remarks>
+        ///// <para>Instances created by this method will not be functional. Instance methods will have no effect.</para>
+        ///// </remarks>
+        //public static GraphicsContext CreateDummyContext(ContextHandle handle)
+        //{
+        //    if (handle == ContextHandle.Zero)
+        //        throw new ArgumentOutOfRangeException("handle");
+        //    return new GraphicsContext(handle);
+        //}
 
         /// <summary>
         /// Checks if a GraphicsContext exists in the calling thread and throws a GraphicsContextMissingException if it doesn't.
@@ -350,7 +348,7 @@ namespace OpenTK.Graphics
                             object target = available_contexts[handle].Target;
                             return (GraphicsContext)target;
                             //return (GraphicsContext)available_contexts[handle].Target;
-                        }                         
+                        }
                     }
                     return null;
                 }
@@ -541,7 +539,8 @@ namespace OpenTK.Graphics
         {
             if (!IsDisposed)
             {
-                Debug.Print("Disposing context {0}.", (this as IGraphicsContextInternal).Context.ToString());
+                Debug.Write(
+                    string.Format("Disposing context {0}.", (this as IGraphicsContextInternal).Context.ToString()));
                 lock (SyncRoot)
                 {
                     available_contexts.Remove((this as IGraphicsContextInternal).Context);
