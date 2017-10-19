@@ -87,6 +87,11 @@ namespace PixelFarm.DrawingGL
         }
 #endif
     }
+    public struct BorderPart
+    {
+        public int beginAtBorderSetIndex;
+        public int count;
+    }
     public struct VBOPart
     {
         public readonly VertexBufferObject vbo;
@@ -250,14 +255,14 @@ namespace PixelFarm.DrawingGL
                     latestY = latestMoveToY = (float)y;
                 }
                 else
-                {   
+                {
                     _tempCoords.Add(latestX = (float)x);
                     _tempCoords.Add(latestY = (float)y);
                     if (index == 0)
                     {
                         latestMoveToX = latestX;
                         latestMoveToY = latestY;
-                    } 
+                    }
                     index++;
                 }
                 totalXYCount += 2;
@@ -291,6 +296,7 @@ namespace PixelFarm.DrawingGL
         VertexBufferObject _vbo;
         //--------------------------------------------------
         //border
+        List<BorderPart> _borderParts = new List<BorderPart>();
         List<SmoothBorderSet> smoothBorders = new List<SmoothBorderSet>();
         VertexBufferObject _vbo_smoothBorder;
         PartRange[] _borderPartRanges;
@@ -300,12 +306,7 @@ namespace PixelFarm.DrawingGL
         }
         public int BeginPart()
         {
-#if DEBUG
-            if (_allArrayIndexList.Count > 0)
-            {
 
-            }
-#endif
             _currentPartFirstComponentStartAt = _allCoords.Count;
             return _currentPartBeginElementIndex = _allArrayIndexList.Count;
         }
@@ -359,18 +360,33 @@ namespace PixelFarm.DrawingGL
         public List<float> GetAllCoords() { return _allCoords; }
         public List<ushort> GetAllArrayIndexList() { return _allArrayIndexList; }
         //--------------------------------------------------
+        int _currentBorderPartBeginAt;
+        public void BeginBorderPart()
+        {
+            //begin new border part
+            _currentBorderPartBeginAt = smoothBorders.Count;
+        }
+        public void EndBorderPart()
+        {
+            //add to list
+            BorderPart borderPart = new BorderPart();
+            borderPart.beginAtBorderSetIndex = _currentBorderPartBeginAt;
+            borderPart.count = smoothBorders.Count - _currentBorderPartBeginAt;
+            _borderParts.Add(borderPart);
+        }
         public void AddSmoothBorders(float[] smoothBorderArr, int vertexStripCount)
         {
             smoothBorders.Add(new SmoothBorderSet(smoothBorderArr, vertexStripCount));
         }
-        public PartRange GetBorderPartRange(int index)
+        public BorderPart GetBorderPartRange(int index)
+        {
+            return _borderParts[index];
+        }
+        public PartRange GetSmoothBorderPartRange(int index)
         {
             return _borderPartRanges[index];
         }
-        public List<SmoothBorderSet> GetAllSmoothBorderSet()
-        {
-            return this.smoothBorders;
-        }
+
         void InitMultiPartBorderVBOIfNeed()
         {
             if (_vbo_smoothBorder != null) return;
@@ -378,6 +394,7 @@ namespace PixelFarm.DrawingGL
             _vbo_smoothBorder = new VertexBufferObject();
             List<SmoothBorderSet> borderSets = this.smoothBorders;
             int j = borderSets.Count;
+
             PartRange[] partRanges = new PartRange[j];
             int currentFirstComponentStartAt = 0;
             List<float> expandedBorderCoords = new List<float>();
@@ -397,8 +414,10 @@ namespace PixelFarm.DrawingGL
             InitMultiPartBorderVBOIfNeed();
             return _vbo_smoothBorder;
         }
-
     }
+
+
+
     public struct SmoothBorderSet
     {
         public readonly float[] smoothBorderArr;

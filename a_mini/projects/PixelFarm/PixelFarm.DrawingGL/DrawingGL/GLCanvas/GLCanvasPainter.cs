@@ -987,15 +987,11 @@ namespace PixelFarm.DrawingGL
 
                     int m = endPoints.Length;
                     //borders  
-                    //build smooth border 
-
+                    //build smooth border  
                     int latest_endPoint = 0;
+                    multipartTessResult.BeginBorderPart();
                     for (int n = 0; n < m; ++n)
-                    {
-                        if (m > 1)
-                        {
-
-                        }
+                    {   
                         int endPoint = endPoints[n];
                         int len = (endPoint - latest_endPoint) + 1;
                         int borderTriangleStripCount;
@@ -1004,6 +1000,7 @@ namespace PixelFarm.DrawingGL
                         latest_endPoint += len + 2;
                         multipartTessResult.AddSmoothBorders(smoothSegBorders, borderTriangleStripCount);
                     }
+                    multipartTessResult.EndBorderPart();
                 }
             }
         }

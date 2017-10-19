@@ -640,7 +640,7 @@ namespace PixelFarm.DrawingGL
                             {
                                 if ((tessArea = f.GetAreaTess(this.tessTool)) != null)
                                 {    //draw area
-                                    basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
+                                   // basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
                                     //draw smooth border
                                     smoothLineShader.DrawTriangleStrips(
                                         f.GetSmoothBorders(smoothBorderBuilder),
