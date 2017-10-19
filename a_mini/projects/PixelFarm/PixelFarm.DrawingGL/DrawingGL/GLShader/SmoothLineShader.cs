@@ -99,27 +99,36 @@ namespace PixelFarm.DrawingGL
                 u_matrix.SetData(_canvasShareResource.OrthoView.data);
             }
         }
+
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
-            float dx = x2 - x1;
-            float dy = y2 - y1;
-            float rad1 = (float)Math.Atan2(
-                   y2 - y1,  //dy
-                   x2 - x1); //dx
-            float[] vtxs = new float[] {
-                x1, y1,0,rad1,
-                x1, y1,1,rad1,
-                x2, y2,0,rad1,
-                //-------
-                x2, y2,1,rad1
-            };
-            //--------------------
+            //float dx = x2 - x1;
+            //float dy = y2 - y1; 
             SetCurrent();
             CheckViewMatrix();
             //--------------------
-
             _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
-            a_position.LoadPureV4f(vtxs);
+            unsafe
+            {
+                float rad1 = (float)Math.Atan2(
+                  y2 - y1,  //dy
+                  x2 - x1); //dx
+                //float[] vtxs = new float[] {
+                //    x1, y1,0,rad1,
+                //    x1, y1,1,rad1,
+                //    x2, y2,0,rad1,
+                //    //-------
+                //    x2, y2,1,rad1
+                //}; 
+                //-------------------- 
+                float* vtxs = stackalloc float[4 * 4];
+                vtxs[0] = x1; vtxs[1] = y1; vtxs[2] = 0; vtxs[3] = rad1;
+                vtxs[4] = x1; vtxs[5] = y1; vtxs[6] = 1; vtxs[7] = rad1;
+                vtxs[8] = x2; vtxs[9] = y2; vtxs[10] = 0; vtxs[11] = rad1;
+                vtxs[12] = x2; vtxs[13] = y2; vtxs[14] = 1; vtxs[15] = rad1;
+                a_position.LoadPureV4fUnsafe(vtxs);
+            }             
+           
             //because original stroke width is the width of both side of
             //the line, but u_linewidth is the half of the strokeWidth
             u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
@@ -150,8 +159,7 @@ namespace PixelFarm.DrawingGL
             ////from https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glVertexAttribPointer.xml
             ////... If a non-zero named buffer object is bound to the GL_ARRAY_BUFFER target (see glBindBuffer)
             ////while a generic vertex attribute array is specified,
-            ////pointer is treated as **a byte offset** into the buffer object's data store. 
-
+            ////pointer is treated as **a byte offset** into the buffer object's data store.  
 
             SetCurrent();
             CheckViewMatrix();

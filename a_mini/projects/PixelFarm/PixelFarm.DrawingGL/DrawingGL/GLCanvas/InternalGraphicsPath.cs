@@ -106,45 +106,13 @@ namespace PixelFarm.DrawingGL
             return partRange.ToString();
         }
     }
+
+
+
     class SmoothBorderBuilder
     {
-        List<float> expandCoords = new List<float>();
-        float _x0, _y0;
-        float _moveX, _moveY;
-        int _coordCount = 0;
-        public void Clear()
-        {
-            _x0 = _y0 = 0;
-            _coordCount = 0;
-            expandCoords.Clear();
-        }
-        public void MoveTo(float x0, float y0)
-        {
-            _moveX = _x0 = x0;
-            _moveY = _y0 = y0;
-            _coordCount = 2;
-        }
-        public void LineTo(float x1, float y1)
-        {
-            CreateSmoothLineSegment(expandCoords, _x0, _y0, _x0 = x1, _y0 = y1);
-            _coordCount += 2;
-        }
-        public void CloseContour()
-        {
-            CreateSmoothLineSegment(expandCoords, _x0, _y0, _x0 = _moveX, _y0 = _moveY);
-            //not add new coord
-        }
+        List<float> expandCoords = new List<float>(); 
 
-        float[] BuildSmoothBorder(out int borderTriangleStripCount)
-        {
-            //build smooth border from existing 
-            borderTriangleStripCount = _coordCount * 2;
-            //
-            float[] result = expandCoords.ToArray();
-            expandCoords.Clear();
-            //
-            return result;
-        }
         public float[] BuildSmoothBorders(float[] coordXYs, out int borderTriangleStripCount)
         {
             expandCoords.Clear();
@@ -176,10 +144,7 @@ namespace PixelFarm.DrawingGL
             //from user input coords
             //expand it
             //TODO: review this again***
-            if (segStartAt > 0)
-            {
 
-            }
             int lim = (segStartAt + len);
             for (int i = segStartAt; i < lim;)
             {
@@ -199,10 +164,11 @@ namespace PixelFarm.DrawingGL
         }
         static void CreateSmoothLineSegment(List<float> coords, float x1, float y1, float x2, float y2)
         {
-
             //create with no line join
             //TODO: implement line join ***
-            //we can calculate rad on server-side, so=> reduce num of vertex
+            //we can calculate rad on server-side (GPU), so=> reduce num of vertex
+
+            //from https://blog.mapbox.com/drawing-antialiased-lines-with-opengl-8766f34192dc
 
             float rad1 = (float)System.Math.Atan2(
                    y2 - y1,  //dy
@@ -213,7 +179,7 @@ namespace PixelFarm.DrawingGL
             coords.Add(x2); coords.Add(y2); coords.Add(1); coords.Add(rad1); //1 vertex
         }
     }
-
+     
 
     public class MultiPartPolygon
     {
