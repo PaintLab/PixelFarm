@@ -174,11 +174,8 @@ namespace SampleWinForms
             //
             _typefaceStore = new TypefaceStore();
             _typefaceStore.FontCollection = installedFontCollection;
-            //set default font for current text printer
-            // selectedTextPrinter.Typeface = _typefaceStore.GetTypeface(selectedFF);
-            //---------- 
-
-
+            
+             
             if (selected_index < 0) { selected_index = 0; }
             lstFontList.SelectedIndex = selected_index;
             lstFontList.SelectedIndexChanged += (s, e) =>
