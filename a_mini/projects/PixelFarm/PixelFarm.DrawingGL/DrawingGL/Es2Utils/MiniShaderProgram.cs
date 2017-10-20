@@ -120,17 +120,20 @@ namespace OpenTK.Graphics.ES20
             {
                 fixed (float* h = &vertices[0])
                 {
-                    GL.VertexAttribPointer(location,
-                        4, //float4
-                        VertexAttribPointerType.Float,
-                        false,
-                        4 * sizeof(float), //total size
-                        (IntPtr)h);
+                    LoadPureV4fUnsafe(h);
                 }
             }
+        }
+        public unsafe void LoadPureV4fUnsafe(float* vertices)
+        {
+            GL.VertexAttribPointer(location,
+                       4, //float4
+                       VertexAttribPointerType.Float,
+                       false,
+                       4 * sizeof(float), //total size
+                       (IntPtr)vertices);
             GL.EnableVertexAttribArray(this.location);
         }
-
 
         /// <summary>
         /// load latest server side data

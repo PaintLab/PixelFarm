@@ -4,22 +4,6 @@ using System.Collections.Generic;
 using Typography.OpenFont;
 namespace Typography.TextLayout
 {
-    public struct ABC
-    {
-        public short a;
-        public short b;
-        public short c;
-        public short w;
-        public short x_offset;
-        public bool IsEmpty
-        {
-            get
-            {
-                return a == 0 && (b == 0) && (c == 0) && (w == 0) && (x_offset == 0);
-            }
-        }
-    }
-
     public interface IPixelScaleLayout
     {
         void SetFont(Typeface typeface, float fontSizeInPoints);
@@ -28,32 +12,22 @@ namespace Typography.TextLayout
 
     public struct GlyphPlan
     {
-        public readonly ushort glyphIndex;//2 
-        public GlyphPlan(ushort glyphIndex, float exactX, float exactY, float extactAdvX)
+
+        public readonly ushort glyphIndex;
+        public GlyphPlan(ushort glyphIndex, float exactX, float exactY, float exactAdvX)
         {
             this.glyphIndex = glyphIndex;
             this.ExactX = exactX;
             this.ExactY = exactY;
-            this.AdvanceX = extactAdvX;
+            this.AdvanceX = exactAdvX;
         }
+        public float AdvanceX { get; private set; }
         public float ExactY { get; private set; }
         public float ExactX { get; private set; }
-        public float ExactRight
-        {
-            get
-            {
-                return ExactX + AdvanceX;
-            }
-        }
-        public float AdvanceX
-        {
-            get;
-            private set;
-        }
-        public bool AdvanceMoveForward
-        {
-            get { return this.AdvanceX > 0; }
-        }
+
+        public float ExactRight { get { return ExactX + AdvanceX; } }
+        public bool AdvanceMoveForward { get { return this.AdvanceX > 0; } }
+
 #if DEBUG
         public override string ToString()
         {
@@ -209,9 +183,25 @@ namespace Typography.TextLayout
             _inputGlyphs.Clear();
             for (int i = 0; i < len; ++i)
             {
+                //this is important!
+                //-----------------------
+                // from @samhocevar's PR: (https://github.com/LayoutFarm/Typography/pull/56/commits/b71c7cf863531ebf5caa478354d3249bde40b96e)
+                //In many places, "char" is not a valid type to handle characters, because it
+                //only supports 16 bits.In order to handle the full range of Unicode characters,
+                //we need to use "int".
+                //This allows characters such as 🙌 or 𐐷 or to be treated as single codepoints even
+                //though they are encoded as two "char"s in a C# string.
+                //-----------------------
+
                 //convert input char to input glyphs
-                char c = str[startAt + i];
-                _inputGlyphs.AddGlyph(c, typeface.LookupIndex(c));
+                char ch = str[startAt + i];
+                int codepoint = ch;
+                if (ch >= 0xd800 && ch <= 0xdbff && i + 1 < len)
+                {
+                    ++i;
+                    codepoint = char.ConvertToUtf32(ch, str[startAt + i]);
+                }
+                _inputGlyphs.AddGlyph(codepoint, typeface.LookupIndex(codepoint));
             }
             //----------------------------------------------  
             //glyph substitution            
@@ -334,7 +324,7 @@ namespace Typography.TextLayout
                     cx += advW;
                 }
             }
-        } 
+        }
         /// <summary>
         /// read latest layout output
         /// </summary>
@@ -389,7 +379,7 @@ namespace Typography.TextLayout
             //}
         }
         public static void Layout(this GlyphLayout glyphLayout, Typeface typeface, char[] str, int startAt, int len, List<GlyphPlan> outputGlyphList)
-        {
+        {   
             glyphLayout.Typeface = typeface;
             glyphLayout.Layout(str, startAt, len);
             glyphLayout.ReadOutput(outputGlyphList);
@@ -398,13 +388,7 @@ namespace Typography.TextLayout
         {
             glyphLayout.Layout(str, startAt, len);
             glyphLayout.ReadOutput(outputGlyphList);
-        }
-        //public static void Layout(this GlyphLayout glyphLayout, char[] str, int startAt, int len, GlyphReadOutputDelegate readDel)
-        //{
-        //    glyphLayout.Layout(str, startAt, len);
-        //    glyphLayout.ReadOutput(readDel);
-
-        //}
+        } 
         public static void GenerateGlyphPlans(this GlyphLayout glyphLayout,
                   char[] textBuffer,
                   int startAt,

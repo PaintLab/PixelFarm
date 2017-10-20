@@ -79,6 +79,9 @@ namespace Typography.Contours
         /// <param name="fontSizeInPoints"></param>
         public void SetFont(Typeface typeface, float fontSizeInPoints)
         {
+            //temp fix,            
+
+
             if (_currentGlyphBuilder != null && !_cacheGlyphPathBuilders.ContainsKey(typeface))
             {
                 //store current typeface to cache
@@ -98,6 +101,10 @@ namespace Typography.Contours
             }
             //----------------------------------------------
             this._currentFontSizeInPoints = fontSizeInPoints;
+
+            //@prepare'note, 2017-10-20
+            //temp fix, temp disable customfit if we build emoji font
+            _currentGlyphBuilder.TemporaryDisableCustomFit = (typeface.COLRTable != null) && (typeface.CPALTable != null);
             //------------------------------------------ 
             _hintGlyphCollection.SetCacheInfo(typeface, this._currentFontSizeInPoints, _currentHintTech);
         }
@@ -117,11 +124,14 @@ namespace Typography.Contours
                 GlyphDynamicOutline dynamicOutline = _currentGlyphBuilder.LatestGlyphFitOutline;
                 //-----------------------------------  
                 glyphMeshData = new GlyphMeshData();
-                glyphMeshData.avgXOffsetToFit = dynamicOutline.AvgXFitOffset;
-                glyphMeshData.orgBounds = dynamicOutline.OriginalGlyphControlBounds;
-                glyphMeshData.dynamicOutline = dynamicOutline;
-                Bounds orgGlyphBounds = dynamicOutline.OriginalGlyphControlBounds;
 
+                if (dynamicOutline != null)
+                {
+                    //has dynamic outline data
+                    glyphMeshData.avgXOffsetToFit = dynamicOutline.AvgXFitOffset;
+                    glyphMeshData.orgBounds = dynamicOutline.OriginalGlyphControlBounds;
+                    glyphMeshData.dynamicOutline = dynamicOutline;
+                }
                 _hintGlyphCollection.RegisterCachedGlyph(glyphIndex, glyphMeshData);
                 //-----------------------------------    
             }
@@ -149,13 +159,24 @@ namespace Typography.Contours
             {
                 //build vxs
                 _tovxs.Reset();
-
                 float pxscale = _currentTypeface.CalculateToPixelScaleFromPointSize(_currentFontSizeInPoints);
                 GlyphDynamicOutline dynamicOutline = glyphMeshData.dynamicOutline;
-                dynamicOutline.GenerateOutput(_tovxs, pxscale);
-                glyphMeshData.vxsStore = new VertexStore();
-                //----------------
-                _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+                if (dynamicOutline != null)
+                {
+                    dynamicOutline.GenerateOutput(_tovxs, pxscale);
+                    glyphMeshData.vxsStore = new VertexStore();
+                    _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+                }
+                else
+                {
+                    //no dynamic outline
+                    glyphMeshData.vxsStore = new VertexStore();
+                    _currentGlyphBuilder.ReadShapes(_tovxs);
+                    //TODO: review here,
+                    //float pxScale = _glyphPathBuilder.GetPixelScale(); 
+                    _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+                }
+
 
             }
             return glyphMeshData.vxsStore;
@@ -322,7 +343,7 @@ namespace Typography.Contours
 #endif
         }
 
-        
+
 
         void LayoutWithoutHorizontalFitAlign(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
         {
