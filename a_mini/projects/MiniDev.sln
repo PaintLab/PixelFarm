@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniAgg", "PixelFarm\MiniAgg\MiniAgg.csproj", "{4D5CE655-58FA-4523-8E46-738B941E9E47}"
 EndProject
@@ -153,7 +153,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PixelFarm.MiniOpenTK.NetCor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PixelFarm.NativeWindows.NetCore", "PixelFarm\PixelFarm.NativeWindows.NetCore\PixelFarm.NativeWindows.NetCore.csproj", "{395E0BEB-7E5B-4E8A-96C6-6FAAEE141B6D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5_Typography_Shared", "5_Typography_Shared", "{B8B3271D-359F-402F-AA0C-877ECAAA7AB4}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.OpenFont", "PixelFarm\Typography\Typography.OpenFont\Typography.OpenFont.shproj", "{235A071B-8D06-40AE-A5C5-B1CE59715EE9}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		PixelFarm\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{235a071b-8d06-40ae-a5c5-b1ce59715ee9}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Compatibility-GLFW2|Any CPU = Compatibility-GLFW2|Any CPU
 		Compatibility-GLFW2|iPhone = Compatibility-GLFW2|iPhone
@@ -6467,5 +6474,9 @@ Global
 		{56DCAE82-671D-409E-A3B3-BF4834756D3F} = {13F19F93-8CDB-4AC4-BF06-51C144FA54C1}
 		{118E626D-0353-48CF-8225-4C0C33336BCC} = {F00A8DC8-8DD5-4D62-99EE-A1F34FA2F50F}
 		{395E0BEB-7E5B-4E8A-96C6-6FAAEE141B6D} = {D4DC1DFA-C3BB-445F-9689-87889DF12580}
+		{235A071B-8D06-40AE-A5C5-B1CE59715EE9} = {B8B3271D-359F-402F-AA0C-877ECAAA7AB4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AD5DF903-2497-45EE-B3DC-1FAF5DA8F05C}
 	EndGlobalSection
 EndGlobal
