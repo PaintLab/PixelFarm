@@ -84,7 +84,7 @@ namespace SampleWinForms
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction);
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction_VerticalOnly);
             lstHintList.Items.Add(HintTechnique.CustomAutoFit);
-            lstHintList.SelectedIndex = 3;
+            lstHintList.SelectedIndex = 0;
             lstHintList.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
             //edge offset
             lstEdgeOffset.Items.Add(0f);
