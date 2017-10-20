@@ -84,7 +84,7 @@ namespace SampleWinForms
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction);
             lstHintList.Items.Add(HintTechnique.TrueTypeInstruction_VerticalOnly);
             lstHintList.Items.Add(HintTechnique.CustomAutoFit);
-            lstHintList.SelectedIndex = 3;
+            lstHintList.SelectedIndex = 0;
             lstHintList.SelectedIndexChanged += (s, e) => UpdateRenderOutput();
             //edge offset
             lstEdgeOffset.Items.Add(0f);
@@ -174,11 +174,8 @@ namespace SampleWinForms
             //
             _typefaceStore = new TypefaceStore();
             _typefaceStore.FontCollection = installedFontCollection;
-            //set default font for current text printer
-            // selectedTextPrinter.Typeface = _typefaceStore.GetTypeface(selectedFF);
-            //---------- 
-
-
+            
+             
             if (selected_index < 0) { selected_index = 0; }
             lstFontList.SelectedIndex = selected_index;
             lstFontList.SelectedIndexChanged += (s, e) =>
