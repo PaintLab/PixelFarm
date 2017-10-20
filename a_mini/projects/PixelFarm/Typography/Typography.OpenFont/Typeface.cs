@@ -167,7 +167,7 @@ namespace Typography.OpenFont
         }
 
 
-        CharacterMap _selectedCmap;
+       
         private Dictionary<int, ushort> _codepointToGlyphs = new Dictionary<int, ushort>();
 
         public ushort LookupIndex(int codepoint)
