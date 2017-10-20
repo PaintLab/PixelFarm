@@ -257,7 +257,6 @@ namespace PixelFarm.Drawing.Fonts
             //---------------------------------------------------
             //consider use cached glyph, to increase performance 
             _glyphMeshStore.SetFont(_currentTypeface, fontSizePoint);
-            //_hintGlyphCollection.SetCacheInfo(typeface, fontSizePoint, this.HintTechnique);
             //---------------------------------------------------
 
             float g_x = 0;

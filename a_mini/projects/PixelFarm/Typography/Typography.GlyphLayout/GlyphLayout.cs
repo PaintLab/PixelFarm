@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Typography.OpenFont;
 namespace Typography.TextLayout
-{   
+{
     public interface IPixelScaleLayout
     {
         void SetFont(Typeface typeface, float fontSizeInPoints);
@@ -12,32 +12,22 @@ namespace Typography.TextLayout
 
     public struct GlyphPlan
     {
-        public readonly ushort glyphIndex;//2 
-        public GlyphPlan(ushort glyphIndex, float exactX, float exactY, float extactAdvX)
+
+        public readonly ushort glyphIndex;
+        public GlyphPlan(ushort glyphIndex, float exactX, float exactY, float exactAdvX)
         {
             this.glyphIndex = glyphIndex;
             this.ExactX = exactX;
             this.ExactY = exactY;
-            this.AdvanceX = extactAdvX;
+            this.AdvanceX = exactAdvX;
         }
+        public float AdvanceX { get; private set; }
         public float ExactY { get; private set; }
         public float ExactX { get; private set; }
-        public float ExactRight
-        {
-            get
-            {
-                return ExactX + AdvanceX;
-            }
-        }
-        public float AdvanceX
-        {
-            get;
-            private set;
-        }
-        public bool AdvanceMoveForward
-        {
-            get { return this.AdvanceX > 0; }
-        }
+
+        public float ExactRight { get { return ExactX + AdvanceX; } }
+        public bool AdvanceMoveForward { get { return this.AdvanceX > 0; } }
+
 #if DEBUG
         public override string ToString()
         {
@@ -334,7 +324,7 @@ namespace Typography.TextLayout
                     cx += advW;
                 }
             }
-        } 
+        }
         /// <summary>
         /// read latest layout output
         /// </summary>
