@@ -79,6 +79,9 @@ namespace Typography.Contours
         /// <param name="fontSizeInPoints"></param>
         public void SetFont(Typeface typeface, float fontSizeInPoints)
         {
+            //temp fix,            
+
+
             if (_currentGlyphBuilder != null && !_cacheGlyphPathBuilders.ContainsKey(typeface))
             {
                 //store current typeface to cache
@@ -98,6 +101,10 @@ namespace Typography.Contours
             }
             //----------------------------------------------
             this._currentFontSizeInPoints = fontSizeInPoints;
+
+            //@prepare'note, 2017-10-20
+            //temp fix, temp disable customfit if we build emoji font
+            _currentGlyphBuilder.TemporaryDisableCustomFit = (typeface.COLRTable != null) && (typeface.CPALTable != null);
             //------------------------------------------ 
             _hintGlyphCollection.SetCacheInfo(typeface, this._currentFontSizeInPoints, _currentHintTech);
         }
@@ -163,13 +170,13 @@ namespace Typography.Contours
                 else
                 {
                     //no dynamic outline
-                    glyphMeshData.vxsStore = new VertexStore(); 
-                    _currentGlyphBuilder.ReadShapes(_tovxs); 
+                    glyphMeshData.vxsStore = new VertexStore();
+                    _currentGlyphBuilder.ReadShapes(_tovxs);
                     //TODO: review here,
                     //float pxScale = _glyphPathBuilder.GetPixelScale(); 
                     _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
                 }
-               
+
 
             }
             return glyphMeshData.vxsStore;

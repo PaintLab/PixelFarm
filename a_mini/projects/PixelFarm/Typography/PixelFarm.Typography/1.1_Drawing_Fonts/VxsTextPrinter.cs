@@ -265,18 +265,16 @@ namespace PixelFarm.Drawing.Fonts
             if (!hasColorGlyphs)
             {
                 for (int i = startAt; i < endBefore; ++i)
-                {
-                    GlyphPlan glyphPlan = glyphPlanList[i];
-                    //-----------------------------------
+                {   //-----------------------------------
                     //TODO: review here ***
                     //PERFORMANCE revisit here 
                     //if we have create a vxs we can cache it for later use?
-                    //-----------------------------------  
-
+                    //-----------------------------------   
+                    GlyphPlan glyphPlan = glyphPlanList[i]; 
                     g_x = glyphPlan.ExactX + x;
                     g_y = glyphPlan.ExactY + y;
-
                     canvasPainter.SetOrigin(g_x, g_y);
+                    //-----------------------------------   
                     canvasPainter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                 }
             }
@@ -293,10 +291,11 @@ namespace PixelFarm.Drawing.Fonts
                     g_x = glyphPlan.ExactX + x;
                     g_y = glyphPlan.ExactY + y;
                     canvasPainter.SetOrigin(g_x, g_y);
-                    //------------ 
+                    //-----------------------------------  
                     ushort colorLayerStart;
                     if (colrTable.LayerIndices.TryGetValue(glyphPlan.glyphIndex, out colorLayerStart))
                     {
+                        //TODO: optimize this                        
                         //we found color info for this glyph 
                         ushort colorLayerCount = colrTable.LayerCounts[glyphPlan.glyphIndex];
                         byte r, g, b, a;

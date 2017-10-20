@@ -379,7 +379,7 @@ namespace Typography.TextLayout
             //}
         }
         public static void Layout(this GlyphLayout glyphLayout, Typeface typeface, char[] str, int startAt, int len, List<GlyphPlan> outputGlyphList)
-        {
+        {   
             glyphLayout.Typeface = typeface;
             glyphLayout.Layout(str, startAt, len);
             glyphLayout.ReadOutput(outputGlyphList);
@@ -388,13 +388,7 @@ namespace Typography.TextLayout
         {
             glyphLayout.Layout(str, startAt, len);
             glyphLayout.ReadOutput(outputGlyphList);
-        }
-        //public static void Layout(this GlyphLayout glyphLayout, char[] str, int startAt, int len, GlyphReadOutputDelegate readDel)
-        //{
-        //    glyphLayout.Layout(str, startAt, len);
-        //    glyphLayout.ReadOutput(readDel);
-
-        //}
+        } 
         public static void GenerateGlyphPlans(this GlyphLayout glyphLayout,
                   char[] textBuffer,
                   int startAt,
