@@ -102,6 +102,8 @@ namespace Typography.OpenFont
                 GPOS gpos = ReadTableIfExists(tables, input, new GPOS());
                 BASE baseTable = ReadTableIfExists(tables, input, new BASE());
                 VerticalHeader vhea = ReadTableIfExists(tables, input, new VerticalHeader());
+                COLR colr = ReadTableIfExists(tables, input, new COLR());
+                CPAL cpal = ReadTableIfExists(tables, input, new CPAL());
                 if (vhea != null)
                 {
                     VerticalMatric vmtx = ReadTableIfExists(tables, input, new VerticalMatric(vhea.NumOfLongVerMatrics));
@@ -130,7 +132,10 @@ namespace Typography.OpenFont
                 //control values table
                 CvtTable cvtTable = ReadTableIfExists(tables, input, new CvtTable());
 
-                typeface.ControlValues = cvtTable.controlValues;
+                if (cvtTable != null)
+                {
+                    typeface.ControlValues = cvtTable.controlValues;
+                }
                 if (fpgmTable != null)
                 {
                     typeface.FpgmProgramBuffer = fpgmTable.programBuffer;
@@ -145,7 +150,9 @@ namespace Typography.OpenFont
                     gdef,
                     gsub,
                     gpos,
-                    baseTable);
+                    baseTable,
+                    colr,
+                    cpal);
                 return typeface;
             }
         }
