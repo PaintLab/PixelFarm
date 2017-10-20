@@ -1,8 +1,7 @@
 ﻿// Copyright © 2017 Sam Hocevar <sam@hocevar.net>, WinterDev
 // Apache2
 
-using System;
-using System.Collections.Generic;
+
 using System.IO;
 
 namespace Typography.OpenFont.Tables
@@ -21,15 +20,16 @@ namespace Typography.OpenFont.Tables
             ushort version = reader.ReadUInt16();
             ushort entryCount = reader.ReadUInt16(); // XXX: unused?
             ushort paletteCount = reader.ReadUInt16();
-            ushort colorCount = reader.ReadUInt16();
+            ColorCount = reader.ReadUInt16();
             uint colorsOffset = reader.ReadUInt32();
 
             Palettes = Utils.ReadUInt16Array(reader, paletteCount);
 
             reader.BaseStream.Seek(offset + colorsOffset, SeekOrigin.Begin);
-            _colorRBGABuffer = reader.ReadBytes(4 * colorCount);
+            _colorRBGABuffer = reader.ReadBytes(4 * ColorCount);
         }
         public ushort[] Palettes { get; private set; }
+        public ushort ColorCount { get; private set; }
         public void GetColor(int colorIndex, out byte r, out byte g, out byte b, out byte a)
         {
             byte[] colorRBGABuffer = _colorRBGABuffer;
@@ -38,7 +38,7 @@ namespace Typography.OpenFont.Tables
             g = colorRBGABuffer[startAt + 1];
             b = colorRBGABuffer[startAt + 2];
             a = colorRBGABuffer[startAt + 3];
-        } 
+        }
     }
 }
 
