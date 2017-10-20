@@ -82,9 +82,7 @@ namespace Typography.Contours
                             _latestDynamicOutline.GenerateOutput(null, Typeface.CalculateToPixelScale(RecentFontSizeInPixels));
                             IsSizeChanged = false;
                         }
-                    }
-
-
+                    } 
                 }
             }
         }

@@ -273,12 +273,12 @@ namespace PixelFarm.Drawing.Fonts
                     //PERFORMANCE revisit here 
                     //if we have create a vxs we can cache it for later use?
                     //-----------------------------------  
-                    VertexStore vxs = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
+
                     g_x = glyphPlan.ExactX + x;
                     g_y = glyphPlan.ExactY + y;
 
                     canvasPainter.SetOrigin(g_x, g_y);
-                    canvasPainter.Fill(vxs);
+                    canvasPainter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                 }
             }
             else
@@ -304,15 +304,14 @@ namespace PixelFarm.Drawing.Fonts
                         for (int c = colorLayerStart; c < colorLayerStart + colorLayerCount; ++c)
                         {
                             ushort gIndex = colrTable.GlyphLayers[c];
-                           
+
                             int palette = 0; // FIXME: assume palette 0 for now 
                             cpalTable.GetColor(
                                 cpalTable.Palettes[palette] + colrTable.GlyphPalettes[c], //index
-                                out r, out g, out b, out a); 
-                            //----------- 
-                            VertexStore vxs = _glyphMeshStore.GetGlyphMesh(gIndex);
+                                out r, out g, out b, out a);
+                            //-----------  
                             canvasPainter.FillColor = new Color(r, g, b);//? a component
-                            canvasPainter.Fill(vxs); 
+                            canvasPainter.Fill(_glyphMeshStore.GetGlyphMesh(gIndex));
                         }
                     }
                     else
@@ -321,9 +320,8 @@ namespace PixelFarm.Drawing.Fonts
                         //TODO: review here ***
                         //PERFORMANCE revisit here 
                         //if we have create a vxs we can cache it for later use?
-                        //-----------------------------------
-                        VertexStore vxs = _glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex);
-                        canvasPainter.Fill(vxs);
+                        //----------------------------------- 
+                        canvasPainter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                     }
                 }
                 canvasPainter.FillColor = originalFillColor; //restore color
