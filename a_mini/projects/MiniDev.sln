@@ -67,7 +67,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.MiniAgg",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Triangulation", "PixelFarm\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj", "{C5E5802D-6A45-4FE9-BAE7-5F0AE91D72C1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5_Typography", "5_Typography", "{C1FD503F-59E2-4016-8AEA-831AC3231430}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.2_Typography", "5.2_Typography", "{C1FD503F-59E2-4016-8AEA-831AC3231430}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.MsdfGen", "PixelFarm\Typography\Typography.MsdfGen\Typography.MsdfGen.csproj", "{8F69AB8D-174A-4912-9328-CAE8EDA5564B}"
 EndProject
@@ -133,7 +133,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.One", "x_
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GdiPlusSample.WinForms", "PixelFarm\Typography\Demo\Windows\GdiPlusSample.WinForms\GdiPlusSample.WinForms.csproj", "{0DABB64B-3D8C-4447-A129-619390ED0E87}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.6_Temp_TypographyTest", "0.6_Temp_TypographyTest", "{4C756F6E-0731-4B44-835B-57A0F8BA733B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.6_DevTest_Typography", "0.6_DevTest_Typography", "{4C756F6E-0731-4B44-835B-57A0F8BA733B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextBoxSample.WinForms", "PixelFarm\Typography\Demo\Windows\TextBoxSample.WinForms\TextBoxSample.WinForms.csproj", "{7E00196D-3E47-412A-8F1D-41DF082502F0}"
 EndProject
@@ -153,7 +153,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PixelFarm.MiniOpenTK.NetCor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PixelFarm.NativeWindows.NetCore", "PixelFarm\PixelFarm.NativeWindows.NetCore\PixelFarm.NativeWindows.NetCore.csproj", "{395E0BEB-7E5B-4E8A-96C6-6FAAEE141B6D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5_Typography_Shared", "5_Typography_Shared", "{B8B3271D-359F-402F-AA0C-877ECAAA7AB4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.1_Typography_Shared", "5.1_Typography_Shared", "{B8B3271D-359F-402F-AA0C-877ECAAA7AB4}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Typography.OpenFont", "PixelFarm\Typography\Typography.OpenFont\Typography.OpenFont.shproj", "{235A071B-8D06-40AE-A5C5-B1CE59715EE9}"
 EndProject

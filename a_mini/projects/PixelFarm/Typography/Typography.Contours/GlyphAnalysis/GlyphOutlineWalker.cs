@@ -101,6 +101,7 @@ namespace Typography.Contours
         }
         void DrawBoneLinks(CentroidLine line)
         {
+#if DEBUG
             List<GlyphBone> glyphBones = line.bones;
             int glyphBoneCount = glyphBones.Count;
             int startAt = 0;
@@ -114,7 +115,7 @@ namespace Typography.Contours
                 nn++;
             }
             OnEndDrawingBoneLinks();
-
+#endif
             ////draw link between each branch to center of hub
             //var brHead = branch.GetHeadPosition();
             //painter.Line(
@@ -129,7 +130,9 @@ namespace Typography.Contours
             //     PixelFarm.Drawing.Color.Red);
 
         }
-        //
+
+
+#if DEBUG
         protected abstract void OnTriangle(int triAngleId, EdgeLine e0, EdgeLine e1, EdgeLine e2, double centroidX, double centroidY);
 
         protected abstract void OnCentroidLine(double px, double py, double qx, double qy);
@@ -140,9 +143,9 @@ namespace Typography.Contours
         protected abstract void OnEndDrawingBoneLinks();
         protected abstract void OnDrawBone(GlyphBone bone, int boneIndex);
         protected abstract void OnBegingLineHub(float centerX, float centerY);
-        protected abstract void OnEndLineHub(float centerX, float centerY, GlyphBoneJoint joint);
-
+        protected abstract void OnEndLineHub(float centerX, float centerY, GlyphBoneJoint joint); 
         protected abstract void OnGlyphEdgeN(EdgeLine edge);
         //
+#endif
     }
 }
