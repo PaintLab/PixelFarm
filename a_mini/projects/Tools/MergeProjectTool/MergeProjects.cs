@@ -3,19 +3,27 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.Build.Construction;
-using Microsoft.Build.Evaluation;
 using System.IO;
 using System.Xml;
+using System.Diagnostics;
+using System.Reflection;
+
+using Microsoft.Build.Construction;
+using Microsoft.Build.Evaluation; 
 
 namespace BuildMergeProject
 {
-    enum ProjectAsmReferenceKind
+    public static class StartupConfig
+    {
+        public static string defaultSln;
+    }
+
+    public enum ProjectAsmReferenceKind
     {
         ProjectReference,
         Reference
     }
-    class ProjectAsmReference
+    public class ProjectAsmReference
     {
 
         public ProjectAsmReference(ProjectItem proItem, ProjectAsmReferenceKind kind)
@@ -36,7 +44,7 @@ namespace BuildMergeProject
     }
 
 
-    static class GlobalLoadedProject
+    public static class GlobalLoadedProject
     {
         static Dictionary<string, Project> s_loadedProjects = new Dictionary<string, Project>();
         public static Project LoadProject(string projectFilename)
@@ -50,7 +58,8 @@ namespace BuildMergeProject
             return found;
         }
     }
-    class SolutionMx
+
+    public class SolutionMx
     {
         public Solution _currentSolution;
         public string SolutionDir { get; set; }
@@ -242,10 +251,7 @@ namespace BuildMergeProject
         }
     }
 
-
-
-
-    static class LinkProjectConverter
+    public static class LinkProjectConverter
     {
         public static void ConvertToLinkProject2(SolutionMx slnMx, string srcProject, string autoGenFolder, bool removeOriginalSrcProject)
         {
@@ -341,7 +347,7 @@ namespace BuildMergeProject
             return compileNodes;
         }
     }
-    class MergeProject
+    public class MergeProject
     {
         List<ToMergeProject> subProjects = new List<ToMergeProject>();
         public List<string> _asmReferences = new List<string>();
@@ -508,7 +514,7 @@ namespace BuildMergeProject
         }
 
     }
-    class ToMergeProject
+    public class ToMergeProject
     {
         List<ProjectItem> allItems = new List<ProjectItem>();
         public string ProjectFileName { get; set; }
@@ -566,14 +572,11 @@ namespace BuildMergeProject
             return absFilenames;
         }
     }
-}
-namespace BuildMergeProject
-{
-    //from http://stackoverflow.com/questions/707107/parsing-visual-studio-solution-files
-    using System.Diagnostics;
-    using System.Reflection;
+
+
     public class Solution
     {
+        //from http://stackoverflow.com/questions/707107/parsing-visual-studio-solution-files
         //internal class SolutionParser
         //Name: Microsoft.Build.Construction.SolutionParser
         //Assembly: Microsoft.Build, Version=4.0.0.0

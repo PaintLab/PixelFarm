@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace BuildMergeProject
 {
 
-    class SolutionListViewController
+    public class SolutionListViewController
     {
         SolutionMx _solutionMx;
         ListView _listview;
@@ -222,17 +222,11 @@ namespace BuildMergeProject
             string rightPart;
             string beginAt = _solutionMx.BuildPathRelativeToSolution(Application.ExecutablePath, out rightPart);
 
-            string targetProjectName = _currentSelectedMergePro.ProjectName;//  "PixelFarm.MiniAgg.One";
+            string targetProjectName = _currentSelectedMergePro.ProjectName;
             string targetProjectFile = targetProjectName + ".csproj";
             string saveProjectName = beginAt + "x_autogen\\" + targetProjectName + "\\" + targetProjectFile;
             string[] asmReferences = mergePro._asmReferences.ToArray();
-
-            //mergePro.MergeAndSave(saveProjectName,
-            //   targetProjectName,
-            //   "v2.0",
-            //   " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
-            //   asmReferences);
-
+             
             //-----------
             mergePro.MergeAndSave(saveProjectName,
                targetProjectName,

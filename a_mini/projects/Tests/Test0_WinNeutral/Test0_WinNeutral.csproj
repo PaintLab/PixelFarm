@@ -36,6 +36,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinNeutral\LayoutFarm.Platforms.WinNeutral.csproj">
+      <Project>{2854a4f1-0110-4b47-b773-9a5fd462755e}</Project>
+      <Name>LayoutFarm.Platforms.WinNeutral</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
@@ -47,10 +51,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinNeutral\LayoutFarm.Platforms.WinNeutral.csproj">
-      <Project>{2854a4f1-0110-4b47-b773-9a5fd462755e}</Project>
-      <Name>LayoutFarm.Platforms.WinNeutral</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj">
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
