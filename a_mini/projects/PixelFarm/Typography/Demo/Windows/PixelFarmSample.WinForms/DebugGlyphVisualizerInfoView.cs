@@ -293,6 +293,7 @@ namespace SampleWinForms.UI
         {
             if (!_clearInfoView) { return; }
             //-------------- 
+#if DEBUG
             EdgeLine p_contactEdge = joint.dbugGetEdge_Q();
             //mid point
             var jointPos = joint.OriginalJointPos;
@@ -311,10 +312,12 @@ namespace SampleWinForms.UI
             {
                 jointNode.Nodes.Add(new TreeNode() { Text = "tip_q:" + joint.TipPointQ, Tag = new NodeInfo(NodeInfoKind.RibEndPoint, joint.TipPointQ) });
             }
+#endif
         }
         public void ShowEdge(EdgeLine edge)
         {
-            HasDebugMark = false; //reset for this 
+#if DEBUG
+            HasDebugMark = false; //reset for this  
 
             //---------------
             if (_testEdgeCount == _addDebugMarkOnEdgeNo)
@@ -348,6 +351,7 @@ namespace SampleWinForms.UI
             //------------------------------- 
 
             _edgeLines.Add(edge);
+#endif
         }
         public void ShowGlyphEdge(EdgeLine e, float x0, float y0, float x1, float y1)
         {
