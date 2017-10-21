@@ -10,6 +10,7 @@ namespace Typography.OpenFont.Tables
     {
         public override string Name { get { return "CPAL"; } }
 
+
         byte[] _colorRBGABuffer;
         // Read the CPAL table
         // https://www.microsoft.com/typography/otspec/cpal.htm
