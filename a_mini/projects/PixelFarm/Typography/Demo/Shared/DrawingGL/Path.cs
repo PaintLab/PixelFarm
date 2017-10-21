@@ -120,14 +120,14 @@ namespace DrawingGL
             this.nTessElements = nTessElements;
 
         }
-        //public float OffsetX
-        //{
-        //    get { return glyphPlan.x; }
-        //}
-        //public float OffsetY
-        //{
-        //    get { return glyphPlan.y; }
-        //}
+        public float OffsetX
+        {
+            get { return glyphPlan.ExactX; }
+        }
+        public float OffsetY
+        {
+            get { return glyphPlan.ExactY; }
+        }
 
     }
     public class TextRun
