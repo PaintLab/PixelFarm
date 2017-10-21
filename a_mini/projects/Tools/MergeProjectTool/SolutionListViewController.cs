@@ -226,13 +226,7 @@ namespace BuildMergeProject
             string targetProjectFile = targetProjectName + ".csproj";
             string saveProjectName = beginAt + "x_autogen\\" + targetProjectName + "\\" + targetProjectFile;
             string[] asmReferences = mergePro._asmReferences.ToArray();
-
-            //mergePro.MergeAndSave(saveProjectName,
-            //   targetProjectName,
-            //   "v2.0",
-            //   " PIXEL_FARM,PIXEL_FARM_NET20",//additional define constant
-            //   asmReferences);
-
+             
             //-----------
             mergePro.MergeAndSave(saveProjectName,
                targetProjectName,
