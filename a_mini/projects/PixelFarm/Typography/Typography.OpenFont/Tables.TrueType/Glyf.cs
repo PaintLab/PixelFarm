@@ -80,8 +80,8 @@ namespace Typography.OpenFont.Tables
 #endif
                 _glyphs[glyphIndex] = ReadCompositeGlyph(_glyphs, reader, tableOffset, glyphIndex);
             }
-
         }
+
         static bool HasFlag(SimpleGlyphFlag target, SimpleGlyphFlag test)
         {
             return (target & test) == test;
@@ -179,6 +179,7 @@ namespace Typography.OpenFont.Tables
             XSignOrSame = 1 << 4,
             YSignOrSame = 1 << 5
         }
+
         static Glyph ReadSimpleGlyph(BinaryReader reader, int contourCount, Bounds bounds)
         {
             //https://www.microsoft.com/typography/OTSPEC/glyf.htm
@@ -250,8 +251,6 @@ namespace Typography.OpenFont.Tables
             SCALED_COMPONENT_OFFSET = 1 << 11,
             UNSCALED_COMPONENT_OFFSET = 1 << 12
         }
-
-
 
         Glyph ReadCompositeGlyph(Glyph[] createdGlyphs, BinaryReader reader, uint tableOffset, int compositeGlyphIndex)
         {
@@ -474,6 +473,5 @@ namespace Typography.OpenFont.Tables
 
             return finalGlyph ?? Glyph.Empty;
         }
-
     }
 }

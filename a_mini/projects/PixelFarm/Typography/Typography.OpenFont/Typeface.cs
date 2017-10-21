@@ -340,7 +340,7 @@ namespace Typography.OpenFont
 
         public static class TypefaceExtensions
         {
-            public static bool DoseSupportUnicode(
+            public static bool DoesSupportUnicode(
                 this Typeface typeface,
                 UnicodeLangBits unicodeLangBits)
             {

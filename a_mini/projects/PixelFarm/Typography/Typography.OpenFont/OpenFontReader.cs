@@ -101,9 +101,9 @@ namespace Typography.OpenFont
                 GSUB gsub = ReadTableIfExists(tables, input, new GSUB());
                 GPOS gpos = ReadTableIfExists(tables, input, new GPOS());
                 BASE baseTable = ReadTableIfExists(tables, input, new BASE());
-                VerticalHeader vhea = ReadTableIfExists(tables, input, new VerticalHeader());
                 COLR colr = ReadTableIfExists(tables, input, new COLR());
                 CPAL cpal = ReadTableIfExists(tables, input, new CPAL());
+                VerticalHeader vhea = ReadTableIfExists(tables, input, new VerticalHeader());
                 if (vhea != null)
                 {
                     VerticalMatric vmtx = ReadTableIfExists(tables, input, new VerticalMatric(vhea.NumOfLongVerMatrics));
@@ -111,8 +111,7 @@ namespace Typography.OpenFont
 
                 EBLCTable fontBmpTable = ReadTableIfExists(tables, input, new EBLCTable());
                 //---------------------------------------------
-                //about truetype instruction init
-                 
+                //about truetype instruction init 
 
                 //--------------------------------------------- 
                 var typeface = new Typeface(
@@ -131,7 +130,6 @@ namespace Typography.OpenFont
                 FpgmTable fpgmTable = ReadTableIfExists(tables, input, new FpgmTable());
                 //control values table
                 CvtTable cvtTable = ReadTableIfExists(tables, input, new CvtTable());
-
                 if (cvtTable != null)
                 {
                     typeface.ControlValues = cvtTable.controlValues;
