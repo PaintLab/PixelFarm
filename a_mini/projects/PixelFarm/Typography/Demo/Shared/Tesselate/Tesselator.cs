@@ -60,6 +60,14 @@ namespace Tesselate
             public double x;
             public double y;
         }
+
+        //public struct VertexAndIndex
+        //{
+        //    public double x;
+        //    public double y;
+        //    public int vertexIndex;
+        //}
+
         public enum TriangleListType
         {
             LineLoop,
@@ -106,9 +114,9 @@ namespace Tesselate
         public CallMeshDelegate callMesh;
         /*** state needed to cache single-contour polygons for renderCache() */
 
-        bool emptyCache;        /* empty cache on next vertex() call */
-        int cacheCount;      /* number of cached vertices */
-        Vertex[] simpleVertexCache = new Vertex[MAX_CACHE_SIZE];	/* the vertex data */
+        bool emptyCache;		/* empty cache on next vertex() call */
+        public int cacheCount;		/* number of cached vertices */
+        public Vertex[] simpleVertexCache = new Vertex[MAX_CACHE_SIZE];	/* the vertex data */
         int[] indexCached = new int[MAX_CACHE_SIZE];
         public Tesselator()
         {

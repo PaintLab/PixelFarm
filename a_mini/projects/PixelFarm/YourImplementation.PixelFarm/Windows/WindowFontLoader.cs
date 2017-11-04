@@ -14,7 +14,7 @@ namespace PixelFarm.Drawing
             //iterate
             var installFontsWin32 = new InstallFontsProviderWin32();
             installFontCollection.SetFontNameDuplicatedHandler((f1, f2) => FontNameDuplicatedDecision.Skip);
-            installFontCollection.LoadWindowsSystemFonts();
+            installFontCollection.LoadSystemFonts();
             _defaultFontNotFoundHandler = (fontCollection, fontName, subfamName, style) =>
             {
                 //TODO: implement font not found mapping here

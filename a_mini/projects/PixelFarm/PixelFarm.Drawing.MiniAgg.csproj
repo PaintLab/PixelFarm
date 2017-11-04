@@ -46,7 +46,7 @@
     <Compile Include="MiniAgg.Complements\1_Base\ProxyImage.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\Queue.cs" />
     <Compile Include="MiniAgg.Complements\1_Base\ScanlineRasToDestBitmapRendererExtension.cs" />
-    <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGenGourand.cs" />
+    <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGenGouraud.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGenGouraudRGBA.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGradient.cs" />
     <Compile Include="MiniAgg.Complements\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
