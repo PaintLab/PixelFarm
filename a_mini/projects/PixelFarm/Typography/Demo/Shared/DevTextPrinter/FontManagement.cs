@@ -7,17 +7,6 @@ using Typography.OpenFont;
 namespace Typography.Rendering
 {
 
-    public interface IFontface
-    {
-        string FontName { get; }
-        string FontSubFamily { get; }
-    }
-
-    public class FontRequest
-    {
-        public string FontName { get; set; }
-        public InstalledFontStyle Style { get; set; }
-    }
 
     public class InstalledFont
     {
@@ -40,14 +29,6 @@ namespace Typography.Rendering
             return FontName + " " + FontSubFamily;
         }
 #endif
-    }
-    public interface IInstalledFontProvider
-    {
-        IEnumerable<string> GetInstalledFontIter();
-    }
-    public interface IFontLoader
-    {
-        InstalledFont GetFont(string fontName, InstalledFontStyle style);
     }
 
 
@@ -77,10 +58,9 @@ namespace Typography.Rendering
     [Flags]
     public enum InstalledFontStyle
     {
-        Others = 0,
-        Normal = 1,
-        Bold = 1 << 2,
-        Italic = 1 << 3,
+        Normal = 0,
+        Bold = 1 << 1,
+        Italic = 1 << 2,
     }
 
     public delegate InstalledFont FontNotFoundHandler(InstalledFontCollection fontCollection, string fontName, string fontSubFam, InstalledFontStyle wellknownStyle);
@@ -218,7 +198,7 @@ namespace Typography.Rendering
         {
             switch (subFamName.ToUpper())
             {
-                default: return InstalledFontStyle.Others;
+                default:
                 case "NORMAL":
                 case "REGULAR":
                     return InstalledFontStyle.Normal;
@@ -258,7 +238,7 @@ namespace Typography.Rendering
             {
                 var reader = new OpenFontReader();
                 PreviewFontInfo previewFont = reader.ReadPreview(stream);
-                if (previewFont.fontName == "" || previewFont.fontName.StartsWith("\0"))
+                if (string.IsNullOrEmpty(previewFont.fontName))
                 {
                     //err!
                     return false;
@@ -416,33 +396,48 @@ namespace Typography.Rendering
     {
         public static void LoadFontsFromFolder(this InstalledFontCollection fontCollection, string folder)
         {
-            //1. font dir
-            foreach (string file in Directory.GetFiles(folder))
+            try
             {
-                //eg. this is our custom font folder
-                string ext = Path.GetExtension(file).ToLower();
-                switch (ext)
+                // 1. font dir
+                foreach (string file in Directory.GetFiles(folder))
                 {
-                    default: break;
-                    case ".ttf":
-                    case ".otf":
-                        fontCollection.AddFont(new FontFileStreamProvider(file));
-                        break;
+                    //eg. this is our custom font folder
+                    string ext = Path.GetExtension(file).ToLower();
+                    switch (ext)
+                    {
+                        default: break;
+                        case ".ttf":
+                        case ".otf":
+                            fontCollection.AddFont(new FontFileStreamProvider(file));
+                            break;
+                    }
                 }
 
+                //2. browse recursively; on Linux, fonts are organised in subdirectories
+                foreach (string subfolder in Directory.GetDirectories(folder))
+                {
+                    LoadFontsFromFolder(fontCollection, subfolder);
+                }
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                return;
             }
         }
-        public static void LoadWindowsSystemFonts(this InstalledFontCollection fontCollection)
+        public static void LoadSystemFonts(this InstalledFontCollection fontCollection)
         {
-            LoadFontsFromFolder(fontCollection, "c:\\Windows\\Fonts"); 
-        }
-        public static void LoadMacSystemFonts(this InstalledFontCollection fontCollection)
-        {
-            //implement
-        }
-        public static void LoadLinuxSystemFonts(this InstalledFontCollection fontCollection)
-        {
-            //implement
+            // Windows system fonts
+            LoadFontsFromFolder(fontCollection, "c:\\Windows\\Fonts");
+
+            // These are reasonable places to look for fonts on Linux
+            LoadFontsFromFolder(fontCollection, "/usr/share/fonts");
+            LoadFontsFromFolder(fontCollection, "/usr/share/wine/fonts");
+            LoadFontsFromFolder(fontCollection, "/usr/share/texlive/texmf-dist/fonts");
+            LoadFontsFromFolder(fontCollection, "/usr/share/texmf/fonts");
+
+            // OS X system fonts (https://support.apple.com/en-us/HT201722)
+            LoadFontsFromFolder(fontCollection, "/System/Library/Fonts");
+            LoadFontsFromFolder(fontCollection, "/Library/Fonts");
         }
     }
 }
