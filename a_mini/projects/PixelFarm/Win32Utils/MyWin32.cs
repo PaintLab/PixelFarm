@@ -423,9 +423,6 @@ namespace Win32
         }
 
 
-
-        /*       BOOL GetCharABCWidths(
-         HDC hdc,                  UINT uFirstChar,          UINT uLastChar,           LPABC lpabc             );*/
         [DllImport("gdi32.dll")]
         public static extern bool GetCharWidth32(IntPtr hdc, uint uFirstChar, uint uLastChar, ref int width);
         [DllImport("gdi32.dll")]
