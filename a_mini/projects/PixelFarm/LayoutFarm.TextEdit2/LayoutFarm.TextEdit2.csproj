@@ -111,6 +111,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LayoutFarm.ClientPlatforms\LayoutFarm.ClientPlatforms.csproj">
+      <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
+      <Name>LayoutFarm.ClientPlatforms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
       <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing.Core</Name>
@@ -122,10 +126,6 @@
     <ProjectReference Include="..\LayoutFarm.BaseRenderer\LayoutFarm.BaseRenderer.csproj">
       <Project>{20048075-A2F3-4B97-B3C6-BEA794429741}</Project>
       <Name>LayoutFarm.BaseRenderer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LayoutFarm.ClientPlatforms\LayoutFarm.ClientPlatforms.csproj">
-      <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
-      <Name>LayoutFarm.ClientPlatforms</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
