@@ -56,10 +56,6 @@
       <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
       <Name>LayoutFarm.ClientPlatforms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.MiniAgg.csproj">
-      <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
-      <Name>PixelFarm.Drawing.MiniAgg</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
