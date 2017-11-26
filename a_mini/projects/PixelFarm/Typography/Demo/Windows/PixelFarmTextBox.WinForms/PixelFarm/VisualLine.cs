@@ -10,15 +10,13 @@ namespace SampleWinForms.UI
     class VisualLine
     {
 
-        Line _line;
-        DevTextPrinterBase _printer;
-
-        float toPxScale = 1;
+        SmallLine _line;
+        DevTextPrinterBase _printer; 
         public VisualLine()
         {
 
         }
-        public void BindLine(Line line)
+        public void BindLine(SmallLine line)
         {
             this._line = line;
         }
@@ -26,15 +24,11 @@ namespace SampleWinForms.UI
         {
             _printer = printer;
         }
-        public void BindPrinter(object printer)
-        {
-            // _printer = printer;
-        }
         public float X { get; set; }
         public float Y { get; set; }
         public void SetCharIndexFromPos(float x, float y)
         {
-            _line.SetCharIndexFromPos(x, y, toPxScale);
+            _line.SetCharIndexFromPos(x, y);
         }
 
         public void Draw()
@@ -44,17 +38,16 @@ namespace SampleWinForms.UI
             List<UserCharToGlyphIndexMap> userCharToGlyphIndexMap = _line._userCharToGlyphMap;
             if (_line.ContentChanged)
             {
+                //TODO: or font face/font-size change 
                 //re-calculate 
                 char[] textBuffer = _line._charBuffer.ToArray();
                 glyphPlans.Clear();
-
-
                 userCharToGlyphIndexMap.Clear();
-
                 //read glyph plan and userCharToGlyphIndexMap                 
+                _printer.GlyphLayoutMan.FontSizeInPoints = _printer.FontSizeInPoints;
                 _printer.GlyphLayoutMan.GenerateGlyphPlans(textBuffer, 0, textBuffer.Length, glyphPlans, userCharToGlyphIndexMap);
 
-                toPxScale = _printer.Typeface.CalculateToPixelScaleFromPointSize(_printer.FontSizeInPoints);
+ 
                 _line.ContentChanged = false;
             }
 
@@ -76,7 +69,7 @@ namespace SampleWinForms.UI
                 {
                     UserCharToGlyphIndexMap map = userCharToGlyphIndexMap[caret_index - 1];
                     GlyphPlan p = glyphPlans[map.glyphIndexListOffset_plus1 + map.len - 2];
-                    _printer.DrawCaret(X + ((p.ExactX + p.AdvanceX)), this.Y);
+                    _printer.DrawCaret(X + (p.ExactX + p.AdvanceX), this.Y);
                 }
             }
             else
