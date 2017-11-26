@@ -63,9 +63,9 @@
       <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
       <Name>LayoutFarm.BaseRenderer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LayoutFarm.ClientPlatforms\LayoutFarm.ClientPlatforms.csproj">
+    <ProjectReference Include="..\LayoutFarm.ClientPlatforms\PixelFarm.PlatformBridge.csproj">
       <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
-      <Name>LayoutFarm.ClientPlatforms</Name>
+      <Name>PixelFarm.PlatformBridge</Name>
     </ProjectReference>
     <ProjectReference Include="..\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj">
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
