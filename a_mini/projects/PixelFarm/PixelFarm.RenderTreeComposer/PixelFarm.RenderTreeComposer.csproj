@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CDEFD12B-956C-4686-AE8A-F89C3280C95F}</ProjectGuid>
+    <ProjectGuid>{D88D86CD-6732-45E7-8FC9-49449EA9C737}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LayoutFarm.PlatformBase</RootNamespace>
-    <AssemblyName>LayoutFarm.PlatformBase</AssemblyName>
+    <RootNamespace>PixelFarm.RenderTreeComposer</RootNamespace>
+    <AssemblyName>PixelFarm.RenderTreeComposer</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;GL_ENABLE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -25,7 +25,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;GL_ENABLE</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -33,23 +33,24 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SkiaCanvasViewport.cs" />
-    <Compile Include="OpenGLCanvasViewport.cs" />
-    <Compile Include="CanvasViewport.cs" />
-    <Compile Include="dbugHelper.cs" />
-    <Compile Include="InnerViewportKind.cs" />
-    <Compile Include="MyUITimer.cs" />
-    <Compile Include="PlatformBootStrap\BootStrapSkia.cs" />
+    <Compile Include="0_MyRootGraphic.cs" />
+    <Compile Include="TopWindowRenderBox.cs" />
+    <Compile Include="1_Events\GraphicsTimerTasksManager.cs" />
+    <Compile Include="1_Events\MyIntervalTaskEventArgs.cs" />
+    <Compile Include="1_Events\RenderElementEventPortal.cs" />
+    <Compile Include="1_Events\ToNotifySizeChangedEvent.cs" />
+    <Compile Include="1_Events\TopWindowEventRoot.cs" />
+    <Compile Include="1_Events\UIHoverMonitor.cs" />
+    <Compile Include="2_ContentManagers\ImageCacheSystem.cs" />
+    <Compile Include="2_ContentManagers\ImageContentManager.cs" />
+    <Compile Include="2_ContentManagers\TextContentManager.cs" />
+    <Compile Include="ClientBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
-      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
-      <Name>PixelFarm.Drawing.GLES2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.MiniAgg.csproj">
-      <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
-      <Name>PixelFarm.Drawing.MiniAgg</Name>
+    <ProjectReference Include="..\PixelFarm.RenderTree\PixelFarm.RenderTree.csproj">
+      <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
+      <Name>PixelFarm.RenderTree</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
@@ -58,18 +59,6 @@
     <ProjectReference Include="..\PixelFarm.PlatformBridge\PixelFarm.PlatformBridge.csproj">
       <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
       <Name>PixelFarm.PlatformBridge</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.RenderTree\PixelFarm.RenderTree.csproj">
-      <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
-      <Name>PixelFarm.RenderTree</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
-      <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
-      <Name>Typography.OpenFont</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
-      <Name>PixelFarm.Typography</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
