@@ -31,7 +31,7 @@ using PixelFarm.Agg.Transform;
 namespace PixelFarm.Agg
 {
 
-    public static class TransformExtensions
+    public static class VertexStoreTransformExtensions
     {
         public static void TransformToVertexSnap(this Affine affine, VertexStore src, VertexStore output)
         {

@@ -37,12 +37,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="1_Canvas\KnownColors.cs" />
     <Compile Include="1_Canvas\RenderVx.cs" />
     <Compile Include="2_Drawing\1_ImageBinder.cs" />
@@ -60,6 +54,12 @@
     <Compile Include="3_Drawing_Fonts\ITextPrinter.cs" />
     <Compile Include="3_Drawing_Fonts\ScriptCode.cs" />
     <Compile Include="3_Drawing_Fonts\WriteDirection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

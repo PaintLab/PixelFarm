@@ -105,10 +105,6 @@
     <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
-      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
       <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
       <Name>PixelFarm.Drawing.GLES2</Name>
@@ -117,9 +113,9 @@
       <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
       <Name>PixelFarm.Drawing.MiniAgg</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
-      <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
-      <Name>PixelFarm.DrawingCanvas</Name>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
