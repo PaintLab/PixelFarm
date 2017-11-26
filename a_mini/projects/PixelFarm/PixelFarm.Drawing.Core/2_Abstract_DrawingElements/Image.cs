@@ -1,6 +1,6 @@
 ﻿//MIT, 2014-2017, WinterDev
 
-using System;
+
 namespace PixelFarm.Drawing
 {
     public abstract class Image : System.IDisposable
