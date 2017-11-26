@@ -18,15 +18,13 @@ namespace TestGraphicPackage2
             //temp
             //TODO: fix this , 
             //set data dir before load
-            Typography.TextBreak.CustomBreakerBuilder.DataDir = @"../../Deps_I18N/LayoutFarm.TextBreak/icu58/brkitr_src/dictionaries";
+            Typography.TextBreak.CustomBreakerBuilder.DataDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries";
 
             LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
             //RootDemoPath.Path = @"..\Data";
             //you can use your font loader
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
             PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
-
-
             ////------------------------------- 
             formDemoList = new LayoutFarm.Dev.FormDemoList();
             formDemoList.LoadDemoList(typeof(Program));
