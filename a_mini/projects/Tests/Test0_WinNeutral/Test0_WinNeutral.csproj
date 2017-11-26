@@ -40,7 +40,7 @@
       <Project>{2854a4f1-0110-4b47-b773-9a5fd462755e}</Project>
       <Name>LayoutFarm.Platforms.WinNeutral</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Core\PixelFarm.Drawing.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
