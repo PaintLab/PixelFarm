@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
-    public enum ScriptCode
-    {
-        Latin,
-    }
+   
     public sealed class ScriptLang
     {
         public readonly string fullname;

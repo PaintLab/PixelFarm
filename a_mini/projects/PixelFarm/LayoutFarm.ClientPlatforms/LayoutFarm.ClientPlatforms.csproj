@@ -44,7 +44,6 @@
     <Compile Include="Events\UIEventArgs.cs" />
     <Compile Include="Events\UIEventNames.cs" />
     <Compile Include="Common\Keys.cs" />
-    <Compile Include="IScriptable\JsScriptAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

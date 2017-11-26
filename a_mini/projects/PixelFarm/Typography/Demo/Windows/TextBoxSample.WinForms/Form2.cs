@@ -26,7 +26,7 @@ namespace SampleWinForms
 
             //choose Thai script for 'complex script' testing.
             //you can change this to test other script.
-            _currentTextPrinter.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;
+            _currentTextPrinter.ScriptLang = Typography.OpenFont.ScriptLangs.Latin;
             //----------
             button1.Click += (s, e) => UpdateRenderOutput();
             //simple load test fonts from local test dir
@@ -53,7 +53,7 @@ namespace SampleWinForms
             //but you can create another text printer that specific to text textbox control
             _textBoxControllerForGdi.TextPrinter = _currentTextPrinter;
             _textBoxControllerForGdi.BindHostGraphics(this.sampleTextBox1.CreateGraphics());
-            //---------- 
+          
             this.sampleTextBox1.SetController(_textBoxControllerForGdi);
 
             //---------- 
@@ -62,7 +62,6 @@ namespace SampleWinForms
             installedFontCollection = new InstalledFontCollection();
             //set some essential handler
             installedFontCollection.SetFontNameDuplicatedHandler((f1, f2) => FontNameDuplicatedDecision.Skip);
-
             foreach (string file in Directory.GetFiles("../../../TestFonts", "*.ttf"))
             {
                 //eg. this is our custom font folder  

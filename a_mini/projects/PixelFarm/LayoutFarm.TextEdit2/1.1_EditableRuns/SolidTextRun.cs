@@ -3,7 +3,7 @@
 using System;
 using System.Text;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
+
 namespace LayoutFarm.Text
 {
     class SolidTextRun : EditableRun
@@ -172,7 +172,7 @@ namespace LayoutFarm.Text
         {
             return this.Root.IFonts.MeasureString(buffer, 0,
                 length, GetFont());
-         
+
         }
         protected RequestFont GetFont()
         {
