@@ -780,6 +780,23 @@
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\MyMath.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\Rect.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphDynamicOutline.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreaker.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\CustomBreakerBuilder.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\CustomDict.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\LaoDictionaryBreakingEngine.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\ThaiDictionaryBreakingEngine.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextFlow\Dom\EditableTextBlockLayoutEngine.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextFlow\Dom\EditableTextLine.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextFlow\Dom\IRun.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextFlow\Dom\TextBuffer.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextFlow\Dom\TextRun.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextFlow\Layout\SingleLineLayoutEngine.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextFlow\Simple\SmallLine.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.TextFlow\TextLexer\TextLexer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

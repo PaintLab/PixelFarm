@@ -131,6 +131,14 @@
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
       <Name>Typography.OpenFont</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.csproj">
+      <Project>{09ec5531-d272-40db-87a4-b2d353846cc2}</Project>
+      <Name>Typography.TextBreak</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.TextFlow\Typography.TextFlow.csproj">
+      <Project>{a17b5a62-09af-45d5-9d9f-1fd1b9ab50f7}</Project>
+      <Name>Typography.TextFlow</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Win32Utils\Win32Utils.csproj">
       <Project>{b9c23586-913d-4ee8-b266-bd58fbd0133b}</Project>
       <Name>Win32Utils</Name>
