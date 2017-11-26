@@ -53,6 +53,7 @@
             this.cmdBuildSelectedMergePro.TabIndex = 22;
             this.cmdBuildSelectedMergePro.Text = "Build Merge";
             this.cmdBuildSelectedMergePro.UseVisualStyleBackColor = true;
+            this.cmdBuildSelectedMergePro.Click += new System.EventHandler(this.cmdBuildSelectedMergePro_Click);
             // 
             // lstAsmReferenceList
             // 
