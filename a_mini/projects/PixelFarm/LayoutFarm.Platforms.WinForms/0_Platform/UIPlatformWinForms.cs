@@ -4,7 +4,7 @@ namespace LayoutFarm.UI
 {
     public class UIPlatformWinForm : UIPlatform
     {
-        static UIPlatformWinForm platform;
+        public static UIPlatformWinForm platform;
         static UIPlatformWinForm()
         {
 

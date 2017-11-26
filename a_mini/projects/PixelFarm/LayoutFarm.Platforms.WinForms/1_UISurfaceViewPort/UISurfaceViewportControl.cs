@@ -28,12 +28,12 @@ namespace LayoutFarm.UI
                 return UIPlatformWinForm.GetDefault();
             }
         }
-
+#if GL_ENABLE
         IntPtr hh1;
         OpenGL.GpuOpenGLSurfaceView openGLSurfaceView;
         CanvasGL2d canvas2d;
         GLCanvasPainter canvasPainter;
-
+#endif
         void HandleGLPaint(object sender, System.EventArgs e)
         {
             //canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
@@ -67,6 +67,7 @@ namespace LayoutFarm.UI
             {
                 case InnerViewportKind.GL:
                     {
+#if GL_ENABLE
                         //temp not suppport  
                         //TODO: review here
                         //PixelFarm.Drawing.DrawingGL.CanvasGLPortal.Start();
@@ -117,7 +118,7 @@ namespace LayoutFarm.UI
                        
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLCanvas(canvasPainter, 0, 0, view.Width, view.Height);
                         bridge.SetCanvas(myGLCanvas1);
-
+#endif
                     }
                     break;
 #if __SKIA__
