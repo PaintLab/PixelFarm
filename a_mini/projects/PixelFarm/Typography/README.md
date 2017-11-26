@@ -104,6 +104,8 @@ please note that baseline of 啊 is not correct
 
 _pic 1: show GSUB's  glyph ligature, see f-i_
 
+(see more : https://github.com/LayoutFarm/Typography/issues/80#issuecomment-344943446)
+
 ---
 
 **2. GPOS**
@@ -132,6 +134,7 @@ _pic 3: test with Thai glyph (complex script) , shows glyph substitution_
 
 _pic 4: test with Thai glyph (complex script)_
 
+(see more: https://github.com/LayoutFarm/Typography/issues/82#issue-274483803)
 
 ---
 
@@ -154,6 +157,25 @@ _pic 2: FireFoxEmoji.ttf from https://github.com/mozilla/fxemoji_
 ![typo_symbol3](https://user-images.githubusercontent.com/245089/31382300-77f4a52c-adb7-11e7-9510-1e07a76f41ab.png)
 
 _pic 3: Segoe UI Emoji Normal, Win 10_
+
+
+**Advanced Emoji Ligature**
+
+>This is 👩🏾‍👨🏾‍👧🏾‍👶🏾  “Family - Woman: Medium-Dark Skin Tone, Man: Medium-Dark Skin Tone, Girl: Medium-Dark Skin Tone, Baby: Medium-Dark Skin Tone” without `ccmp` ligatures:
+
+>![image](https://user-images.githubusercontent.com/245089/32985721-fb7cef62-ccc0-11e7-8bef-90ee4ae27a04.png)
+
+>And here it is with `ccmp`:
+ 
+
+![image](https://user-images.githubusercontent.com/7447159/32997655-5a380fbe-cdc5-11e7-87ba-18f51c44e2ef.png)
+
+_pic 4: Say with Emoji?_
+
+
+(see: https://github.com/LayoutFarm/Typography/issues/18)
+
+(see more sam's work at https://github.com/samhocevar/emoji.wpf)
 
 ---
 

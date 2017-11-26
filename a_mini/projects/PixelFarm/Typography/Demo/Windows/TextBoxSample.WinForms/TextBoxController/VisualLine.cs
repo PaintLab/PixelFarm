@@ -10,7 +10,7 @@ namespace SampleWinForms.UI
     class VisualLine
     {
 
-        Line _line;
+        SmallLine _line;
         DevTextPrinterBase _printer;
 
         float toPxScale = 1;
@@ -18,7 +18,7 @@ namespace SampleWinForms.UI
         {
 
         }
-        public void BindLine(Line line)
+        public void BindLine(SmallLine line)
         {
             this._line = line;
         }
@@ -31,7 +31,7 @@ namespace SampleWinForms.UI
         public float Y { get; set; }
         public void SetCharIndexFromPos(float x, float y)
         {
-            _line.SetCharIndexFromPos(x, y, toPxScale);
+            _line.SetCharIndexFromPos(x, y);
         }
 
         public void Draw()
@@ -43,8 +43,7 @@ namespace SampleWinForms.UI
             {
                 //re-calculate 
                 char[] textBuffer = _line._charBuffer.ToArray();
-                glyphPlans.Clear();
-
+                glyphPlans.Clear(); 
 
                 userCharToGlyphIndexMap.Clear();
 

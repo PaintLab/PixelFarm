@@ -21,10 +21,7 @@ namespace LayoutFarm
             this._fontloader = fontloader;
             typefaceStore = new TypefaceStore();
             typefaceStore.FontCollection = InstalledFontCollection.GetSharedFontCollection(null);
-            glyphLayout = new GlyphLayout();
-
-            //assign fitting engine 
-            //
+            glyphLayout = new GlyphLayout(); //create glyph layout with default value
             userGlyphPlanList = new List<GlyphPlan>();
             userCharToGlyphMapList = new List<UserCharToGlyphIndexMap>();
         }

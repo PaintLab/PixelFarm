@@ -1,11 +1,11 @@
 ﻿//Apache2, 2016-2017,  WinterDev
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace Typography.OpenFont.Tables
 {
-
     ////////////////////////////////////////////////////////////////
     //https://www.microsoft.com/typography/developers/opentype/detail.htm 
     //GSUB Table
@@ -31,203 +31,32 @@ namespace Typography.OpenFont.Tables
 
     ////////////////////////////////////////////////////////////////
 
-    public partial class GSUB : TableEntry
+    public partial class GSUB : GlyphShapingTableEntry
     {
-        //from https://www.microsoft.com/typography/otspec/GSUB.htm
+        public override string Name { get { return "GSUB"; } }
 
-        ScriptList scriptList = new ScriptList();
-        FeatureList featureList = new FeatureList();
-        List<LookupTable> lookupList = new List<LookupTable>();
-
-        long gsubTableStartAt;
-        public override string Name
+        protected override void ReadLookupTable(BinaryReader reader, long lookupTablePos,
+                                                ushort lookupType, ushort lookupFlags,
+                                                ushort[] subTableOffsets, ushort markFilteringSet)
         {
-            get { return "GSUB"; }
-        }
-        protected override void ReadContentFrom(BinaryReader reader)
-        {
-            //----------
-            gsubTableStartAt = reader.BaseStream.Position;
-            //----------
-            //1. header
-            //GSUB Header
-
-            //The GSUB table begins with a header that contains a version number for the table (Version) and
-            //offsets to a three tables: ScriptList, FeatureList, and LookupList. 
-            //For descriptions of each of these tables, see the chapter, 
-            //OpenType Common Table Formats. Example 1 at the end of this chapter shows a GSUB Header table definition.
-
-            //GSUB Header, Version 1.0
-            //Type 	Name 	Description
-            //uint16 	MajorVersion 	Major version of the GSUB table, = 1
-            //uint16 	MinorVersion 	Minor version of the GSUB table, = 0
-            //Offset16 	ScriptList 	Offset to ScriptList table, from beginning of GSUB table
-            //Offset16 	FeatureList 	Offset to FeatureList table, from beginning of GSUB table
-            //Offset16 	LookupList 	Offset to LookupList table, from beginning of GSUB table
-
-            //GSUB Header, Version 1.1
-            //Type 	Name 	Description
-            //uint16 	MajorVersion 	Major version of the GSUB table, = 1
-            //uint16 	MinorVersion 	Minor version of the GSUB table, = 1
-            //Offset16 	ScriptList 	Offset to ScriptList table, from beginning of GSUB table
-            //Offset16 	FeatureList 	Offset to FeatureList table, from beginning of GSUB table
-            //Offset16 	LookupList 	Offset to LookupList table, from beginning of GSUB table
-            //Offset32 	FeatureVariations 	Offset to FeatureVariations table, from beginning of the GSUB table (may be NULL)
-            //--------------------
-            MajorVersion = reader.ReadUInt16();
-            MinorVersion = reader.ReadUInt16();
-            ushort scriptListOffset = reader.ReadUInt16();//from beginning of GSUB table
-            ushort featureListOffset = reader.ReadUInt16();//from beginning of GSUB table
-            ushort lookupListOffset = reader.ReadUInt16();//from beginning of GSUB table
-            uint featureVariations = (MinorVersion == 1) ? reader.ReadUInt32() : 0;//from beginning of GSUB table
-            //-----------------------
-            //1. scriptlist 
-            scriptList = ScriptList.CreateFrom(reader, gsubTableStartAt + scriptListOffset);
-            //-----------------------
-            //2. feature list             
-            featureList = FeatureList.CreateFrom(reader, gsubTableStartAt + featureListOffset);
-            //-----------------------
-            //3. lookup list 
-            ReadLookupListTable(reader, gsubTableStartAt + lookupListOffset);
-            //-----------------------
-            //4. feature variations
-            if (featureVariations > 0)
+            LookupTable lookupTable = new LookupTable(lookupType, lookupFlags, markFilteringSet);
+            foreach (long subTableOffset in subTableOffsets)
             {
-                reader.BaseStream.Seek(this.Header.Offset + featureVariations, SeekOrigin.Begin);
-                ReadFeatureVariations(reader);
+                LookupSubTable subTable = lookupTable.ReadSubTable(reader, lookupTablePos + subTableOffset);
+                subTable.OwnerGSub = this;
+                lookupTable.SubTables.Add(subTable);
             }
+            LookupList.Add(lookupTable);
         }
 
-        public ushort MajorVersion { get; private set; }
-        public ushort MinorVersion { get; private set; }
-
-        public ScriptList ScriptList { get { return scriptList; } }
-        public FeatureList FeatureList { get { return featureList; } }
-        public IList<LookupTable> LookupList { get { return lookupList; } }
-
-
-        void ReadLookupListTable(BinaryReader reader, long lookupListHeadPos)
-        {
-            reader.BaseStream.Seek(lookupListHeadPos, SeekOrigin.Begin);
-            //
-            //------
-            //https://www.microsoft.com/typography/otspec/chapter2.htm
-            //------------------------------
-            //LookupList table
-            //------------------------------
-            //Type 	    Name 	            Description
-            //uint16 	LookupCount 	    Number of lookups in this table
-            //Offset16 	Lookup[LookupCount] Array of offsets to Lookup tables-from beginning of LookupList -zero based (first lookup is Lookup index = 0)
-            //------------------------------
-            //Lookup Table
-            //A Lookup table (Lookup) defines the specific conditions, type, and results of a substitution or positioning action that is used to implement a feature. For example, a substitution operation requires a list of target glyph indices to be replaced, a list of replacement glyph indices, and a description of the type of substitution action.
-
-            //Each Lookup table may contain only one type of information (LookupType), determined by whether the lookup is part of a GSUB or GPOS table. GSUB supports eight LookupTypes, and GPOS supports nine LookupTypes (for details about LookupTypes, see the GSUB and GPOS chapters of the document).
-
-            //Each LookupType is defined with one or more subtables, and each subtable definition provides a different representation format. The format is determined by the content of the information required for an operation and by required storage efficiency. When glyph information is best presented in more than one format, a single lookup may contain more than one subtable, as long as all the subtables are the same LookupType. For example, within a given lookup, a glyph index array format may best represent one set of target glyphs, whereas a glyph index range format may be better for another set of target glyphs.
-
-            //During text processing, a client applies a lookup to each glyph in the string before moving to the next lookup. A lookup is finished for a glyph after the client makes the substitution/positioning operation. To move to the “next” glyph, the client will typically skip all the glyphs that participated in the lookup operation: glyphs that were substituted/positioned as well as any other glyphs that formed a context for the operation. However, in the case of pair positioning operations (i.e., kerning), the “next” glyph in a sequence may be the second glyph of the positioned pair (see pair positioning lookup for details).
-
-            //A Lookup table contains a LookupType, specified as an integer, that defines the type of information stored in the lookup. The LookupFlag specifies lookup qualifiers that assist a text-processing client in substituting or positioning glyphs. The SubTableCount specifies the total number of SubTables. The SubTable array specifies offsets, measured from the beginning of the Lookup table, to each SubTable enumerated in the SubTable array.
-            //------------------------------
-            //Lookup table
-            //------------------------------
-            //Type 	    Name 	        Description
-            //uint16 	LookupType 	    Different enumerations for GSUB and GPOS
-            //uint16 	LookupFlag 	    Lookup qualifiers
-            //uint16 	SubTableCount 	Number of SubTables for this lookup
-            //Offset16 	SubTable[SubTableCount] 	Array of offsets to SubTables-from beginning of Lookup table
-            //unit16 	MarkFilteringSet
-            //------------------------------
-            ushort lookupCount = reader.ReadUInt16();
-            ushort[] lookupOffsets = Utils.ReadUInt16Array(reader, lookupCount);
-            //----------------------------------------------
-            //load each sub table
-            //https://www.microsoft.com/typography/otspec/chapter2.htm
-            for (int i = 0; i < lookupCount; ++i)
-            {
-                long lookupTablePos = lookupListHeadPos + lookupOffsets[i];
-                reader.BaseStream.Seek(lookupTablePos, SeekOrigin.Begin);
-
-                ushort lookupType = reader.ReadUInt16();//Each Lookup table may contain only one type of information (LookupType)
-                ushort lookupFlags = reader.ReadUInt16();
-                ushort subTableCount = reader.ReadUInt16();
-                //Each LookupType is defined with one or more subtables, and each subtable definition provides a different representation format
-                //
-                uint[] subTableOffsets = Utils.ReadUInt16ArrayAsUInt32Array(reader, subTableCount);
-
-                ushort markFilteringSet =
-                    ((lookupFlags & 0x0010) == 0x0010) ? reader.ReadUInt16() : (ushort)0;
-
-                //
-                //https://www.microsoft.com/typography/otspec/gsub.htm#ES
-                //LookupType 7: Extension Substitution
-                //This lookup provides a mechanism whereby any other lookup type's subtables are stored 
-                //at a 32-bit offset location in the 'GSUB' table. 
-                //This is needed if the total size of the subtables exceeds the 16-bit
-                //limits of the various other offsets in the 'GSUB' table. 
-                //In this specification,
-                //the subtable stored at the 32-bit offset location is termed the “extension” subtable.
-                //---
-                //This subtable type uses one format: ExtensionSubstFormat1.
-                //7.1 Extension Substitution Subtable Format 1
-                //Type Name    Description
-                //uint16  substFormat Format identifier.Set to 1.
-                //uint16 extensionLookupType     Lookup type of subtable referenced by extensionOffset(that is, the extension subtable).
-                //Offset32 extensionOffset     Offset to the extension subtable, of lookup type extensionLookupType, relative to the start of the ExtensionSubstFormat1 subtable.
-                //---
-                //
-                // Substitution Lookup Record
-                //
-                // When an OpenType layout engine encounters a LookupType 7 Lookup table, it shall:
-                //
-                // Proceed as though the Lookup table's LookupType field were set to the ExtensionLookupType of the subtables.
-                // Proceed as though each extension subtable referenced by ExtensionOffset replaced the LookupType 7 subtable that referenced it.
-
-                if (lookupType == 7)
-                {
-                    for (int j = 0; j < subTableCount; ++j)
-                    {
-                        reader.BaseStream.Seek(lookupTablePos + subTableOffsets[j], SeekOrigin.Begin);
-                        ushort version = reader.ReadUInt16(); // must be 1
-                        lookupType = reader.ReadUInt16(); // must all be the same and != 7
-                        subTableOffsets[j] += reader.ReadUInt32();
-                    }
-                }
-
-
-                lookupList.Add(
-                    new LookupTable(
-                        this,
-                        lookupTablePos,
-                        lookupType,
-                        lookupFlags,
-                        subTableCount,
-                        subTableOffsets,//Array of offsets to SubTables-from beginning of Lookup table
-                        markFilteringSet));
-            }
-            //----------------------------------------------
-            //read each lookup record content ...
-            for (int i = 0; i < lookupCount; ++i)
-            {
-                LookupTable lookupRecord = lookupList[i];
-                //set origin
-                reader.BaseStream.Seek(lookupListHeadPos + lookupOffsets[i], SeekOrigin.Begin);
-                lookupRecord.ReadRecordContent(reader);
-
-                //assign gsub owner**
-                foreach (LookupSubTable subtable in lookupRecord.SubTables)
-                {
-                    subtable.OwnerGSub = this;
-                }
-            }
-            //----------------------------------------------
-        }
-        void ReadFeatureVariations(BinaryReader reader)
+        protected override void ReadFeatureVariations(BinaryReader reader, long featureVariationsBeginAt)
         {
             Utils.WarnUnimplemented("GSUB feature variations");
         }
 
+        private List<LookupTable> _lookupList = new List<LookupTable>();
+
+        public IList<LookupTable> LookupList { get { return _lookupList; } }
 
         /// <summary>
         /// sub table of a lookup list
@@ -235,56 +64,33 @@ namespace Typography.OpenFont.Tables
         public class LookupTable
         {
             //--------------------------
-            long lookupTablePos;
-            //--------------------------
-            public readonly ushort lookupType;
+            public ushort lookupType { get; private set; }
             public readonly ushort lookupFlags;
-            public readonly ushort subTableCount;
-
-            //the original offset is ushort[],
-            //but sometimes it is extended to 32 bits by 
-            //LookupType 7: Extension Substitution
-            //so we extend this to uint[] 
-
-            public readonly uint[] subTableOffsets;
             public readonly ushort markFilteringSet;
             //--------------------------
-            List<LookupSubTable> subTables = new List<LookupSubTable>();
-            GSUB ownerGsubTable;
-            public LookupTable(
-                GSUB owner,
-                long lookupTablePos,
-                ushort lookupType,
-                ushort lookupFlags,
-                ushort subTableCount,
-                uint[] subTableOffsets,
-                ushort markFilteringSet
-                 )
+            List<LookupSubTable> _subTables = new List<LookupSubTable>();
+            public LookupTable(ushort lookupType, ushort lookupFlags, ushort markFilteringSet)
             {
-                this.ownerGsubTable = owner;
-                this.lookupTablePos = lookupTablePos;
                 this.lookupType = lookupType;
                 this.lookupFlags = lookupFlags;
-                this.subTableCount = subTableCount;
-                this.subTableOffsets = subTableOffsets;
                 this.markFilteringSet = markFilteringSet;
             }
-            public GSUB GSubTable
+            public IList<LookupSubTable> SubTables
             {
-                get { return this.ownerGsubTable; }
-            }
-            public List<LookupSubTable> SubTables
-            {
-                get { return subTables; }
+                get { return _subTables; }
             }
             public bool DoSubstitutionAt(IGlyphIndexList inputGlyphs, int pos, int len)
             {
-                bool hasChanged = false;
-                foreach (LookupSubTable subTable in subTables)
+                foreach (LookupSubTable subTable in SubTables)
                 {
-                    hasChanged = subTable.DoSubstitutionAt(inputGlyphs, pos, len) || hasChanged;
+                    // We return after the first substitution, as explained in the spec:
+                    // "A lookup is finished for a glyph after the client locates the target
+                    // glyph or glyph context and performs a substitution, if specified."
+                    // https://www.microsoft.com/typography/otspec/gsub.htm
+                    if (subTable.DoSubstitutionAt(inputGlyphs, pos, len))
+                        return true;
                 }
-                return hasChanged;
+                return false;
             }
 #if DEBUG
             public override string ToString()
@@ -293,41 +99,22 @@ namespace Typography.OpenFont.Tables
             }
 #endif
 
-            public string ForUseWithFeatureId
-            {
-                get;
-                set;
-            }
-            public void ReadRecordContent(BinaryReader reader)
+            public LookupSubTable ReadSubTable(BinaryReader reader, long subTableStartAt)
             {
                 switch (lookupType)
                 {
-                    default: throw new NotSupportedException();
-                    case 1:
-                        ReadLookupType1(reader);
-                        break;
-                    case 2:
-                        ReadLookupType2(reader);
-                        break;
-                    case 3:
-                        ReadLookupType3(reader);
-                        break;
-                    case 4:
-                        ReadLookupType4(reader);
-                        break;
-                    case 5:
-                        ReadLookupType5(reader);
-                        break;
-                    case 6:
-                        ReadLookupType6(reader);
-                        break;
-                    case 7:
-                        ReadLookupType7(reader);
-                        break;
-                    case 8:
-                        ReadLookupType8(reader);
-                        break;
+                    case 1: return ReadLookupType1(reader, subTableStartAt);
+                    case 2: return ReadLookupType2(reader, subTableStartAt);
+                    case 3: return ReadLookupType3(reader, subTableStartAt);
+                    case 4: return ReadLookupType4(reader, subTableStartAt);
+                    case 5: return ReadLookupType5(reader, subTableStartAt);
+                    case 6: return ReadLookupType6(reader, subTableStartAt);
+                    case 7: return ReadLookupType7(reader, subTableStartAt);
+                    case 8: return ReadLookupType8(reader, subTableStartAt);
                 }
+
+                Utils.WarnUnimplemented("GSUB Lookup Type {0}", lookupType);
+                return new NullLookupSubTable();
             }
 
             /// <summary>
@@ -388,10 +175,8 @@ namespace Typography.OpenFont.Tables
             /// LookupType 1: Single Substitution Subtable
             /// </summary>
             /// <param name="reader"></param>
-            void ReadLookupType1(BinaryReader reader)
+            LookupSubTable ReadLookupType1(BinaryReader reader, long subTableStartAt)
             {
-
-
                 //---------------------
                 //LookupType 1: Single Substitution Subtable
                 //Single substitution (SingleSubst) subtables tell a client to replace a single glyph with another glyph. 
@@ -441,40 +226,28 @@ namespace Typography.OpenFont.Tables
                 //GlyphID 	Substitute[GlyphCount] 	Array of substitute GlyphIDs-ordered by Coverage Index 
                 //---------------------------------
 
-                int j = subTableOffsets.Length;
-                for (int i = 0; i < j; ++i)
-                {
-                    //move to read pos
-                    long subTableStartAt = lookupTablePos + subTableOffsets[i];
-                    reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
-                    //-----------------------
+                reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
 
-                    ushort format = reader.ReadUInt16();
-                    ushort coverage = reader.ReadUInt16();
-                    switch (format)
+                ushort format = reader.ReadUInt16();
+                ushort coverage = reader.ReadUInt16();
+                switch (format)
+                {
+                    default: throw new NotSupportedException();
+                    case 1:
                     {
-                        default: throw new NotSupportedException();
-                        case 1:
-                            {
-                                short deltaGlyph = reader.ReadInt16();
-                                CoverageTable coverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverage);
-                                var subTable = new LkSubTableT1Fmt1(coverageTable, deltaGlyph);
-                                this.subTables.Add(subTable);
-                            }
-                            break;
-                        case 2:
-                            {
-                                ushort glyphCount = reader.ReadUInt16();
-                                ushort[] substituteGlyphs = Utils.ReadUInt16Array(reader, glyphCount); // 	Array of substitute GlyphIDs-ordered by Coverage Index                                 
-                                CoverageTable coverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverage);
-                                var subTable = new LkSubTableT1Fmt2(coverageTable, substituteGlyphs);
-                                this.subTables.Add(subTable);
-                            }
-                            break;
+                        short deltaGlyph = reader.ReadInt16();
+                        CoverageTable coverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverage);
+                        return new LkSubTableT1Fmt1(coverageTable, deltaGlyph);
+                    }
+                    case 2:
+                    {
+                        ushort glyphCount = reader.ReadUInt16();
+                        ushort[] substituteGlyphs = Utils.ReadUInt16Array(reader, glyphCount); // 	Array of substitute GlyphIDs-ordered by Coverage Index                                 
+                        CoverageTable coverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverage);
+                        return new LkSubTableT1Fmt2(coverageTable, substituteGlyphs);
                     }
                 }
             }
-
 
             class LkSubTableT2 : LookupSubTable
             {
@@ -503,13 +276,13 @@ namespace Typography.OpenFont.Tables
                     this.substituteGlyphs = substituteGlyphs;
                 }
             }
+
             /// <summary>
             /// LookupType 2: Multiple Substitution Subtable
             /// </summary>
             /// <param name="reader"></param>
-            void ReadLookupType2(BinaryReader reader)
+            LookupSubTable ReadLookupType2(BinaryReader reader, long subTableStartAt)
             {
-
                 //LookupType 2: Multiple Substitution Subtable 
                 //A Multiple Substitution (MultipleSubst) subtable replaces a single glyph with more than one glyph, 
                 //as when multiple glyphs replace a single ligature. 
@@ -536,40 +309,33 @@ namespace Typography.OpenFont.Tables
                 //uint16 	GlyphCount 	            Number of glyph IDs  in the Substitute array. This should always be greater than 0.
                 //uint16 	Substitute[GlyphCount]  String of glyph IDs  to substitute
                 //----------------------
-                int j = subTableOffsets.Length;
-                for (int i = 0; i < j; ++i)
+                reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
+                ushort format = reader.ReadUInt16();
+                switch (format)
                 {
-                    //move to read pos
-                    long subTableStartAt = lookupTablePos + subTableOffsets[i];
-                    reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
-                    ushort format = reader.ReadUInt16();
-                    switch (format)
+                    default: throw new NotSupportedException();
+                    case 1:
                     {
-                        default: throw new NotSupportedException();
-                        case 1:
-                            {
-                                ushort coverageOffset = reader.ReadUInt16();
-                                ushort seqCount = reader.ReadUInt16();
-                                ushort[] seqOffsets = Utils.ReadUInt16Array(reader, seqCount);
+                        ushort coverageOffset = reader.ReadUInt16();
+                        ushort seqCount = reader.ReadUInt16();
+                        ushort[] seqOffsets = Utils.ReadUInt16Array(reader, seqCount);
 
-                                var subTable = new LkSubTableT2();
-                                subTable.SeqTables = new SequenceTable[seqCount];
-                                for (int n = 0; n < seqCount; ++n)
-                                {
-                                    reader.BaseStream.Seek(subTableStartAt + seqOffsets[n], SeekOrigin.Begin);
-                                    ushort glyphCount = reader.ReadUInt16();
-                                    subTable.SeqTables[n] = new SequenceTable(
-                                        Utils.ReadUInt16Array(reader, glyphCount));
-                                }
-                                subTable.CoverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverageOffset);
+                        var subTable = new LkSubTableT2();
+                        subTable.SeqTables = new SequenceTable[seqCount];
+                        for (int n = 0; n < seqCount; ++n)
+                        {
+                            reader.BaseStream.Seek(subTableStartAt + seqOffsets[n], SeekOrigin.Begin);
+                            ushort glyphCount = reader.ReadUInt16();
+                            subTable.SeqTables[n] = new SequenceTable(
+                                Utils.ReadUInt16Array(reader, glyphCount));
+                        }
+                        subTable.CoverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverageOffset);
 
-                                this.subTables.Add(subTable);
-                            }
-                            break;
+                        return subTable;
                     }
-                    //------------------------------------------------------------- 
                 }
             }
+
             /// <summary>
             /// LookupType 3: Alternate Substitution Subtable
             /// </summary>
@@ -590,7 +356,7 @@ namespace Typography.OpenFont.Tables
             /// LookupType 3: Alternate Substitution Subtable 
             /// </summary>
             /// <param name="reader"></param>
-            void ReadLookupType3(BinaryReader reader)
+            LookupSubTable ReadLookupType3(BinaryReader reader, long subTableStartAt)
             {
                 //LookupType 3: Alternate Substitution Subtable
 
@@ -629,35 +395,28 @@ namespace Typography.OpenFont.Tables
                 //uint16  Alternate[GlyphCount]   Array of alternate glyph IDs -in arbitrary order
                 //-----------------------
 
-                int j = subTableOffsets.Length;
-                for (int i = 0; i < j; ++i)
+                reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
+
+                ushort format = reader.ReadUInt16(); //The subtable has one format: AlternateSubstFormat1.
+                switch (format)
                 {
-                    //move to read pos
-                    long subTableStartAt = lookupTablePos + subTableOffsets[i];
-                    reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
-                    //
-                    ushort format = reader.ReadUInt16(); //The subtable has one format: AlternateSubstFormat1.
-                    switch (format)
+                    default: throw new NotSupportedException();
+                    case 1:
                     {
-                        default: throw new NotSupportedException();
-                        case 1:
-                            {
-                                ushort coverageOffset = reader.ReadUInt16();
-                                ushort alternativeSetCount = reader.ReadUInt16();
-                                ushort[] alternativeTableOffsets = Utils.ReadUInt16Array(reader, alternativeSetCount);
+                        ushort coverageOffset = reader.ReadUInt16();
+                        ushort alternativeSetCount = reader.ReadUInt16();
+                        ushort[] alternativeTableOffsets = Utils.ReadUInt16Array(reader, alternativeSetCount);
 
-                                LkSubTableT3 subTable = new LkSubTableT3();
-                                AlternativeSetTable[] alternativeSetTables = new AlternativeSetTable[alternativeSetCount];
-                                subTable.AlternativeSetTables = alternativeSetTables;
-                                for (int n = 0; n < alternativeSetCount; ++n)
-                                {
-                                    alternativeSetTables[n] = AlternativeSetTable.CreateFrom(reader, subTableStartAt + alternativeTableOffsets[n]);
-                                }
-                                subTable.CoverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverageOffset);
+                        LkSubTableT3 subTable = new LkSubTableT3();
+                        AlternativeSetTable[] alternativeSetTables = new AlternativeSetTable[alternativeSetCount];
+                        subTable.AlternativeSetTables = alternativeSetTables;
+                        for (int n = 0; n < alternativeSetCount; ++n)
+                        {
+                            alternativeSetTables[n] = AlternativeSetTable.CreateFrom(reader, subTableStartAt + alternativeTableOffsets[n]);
+                        }
+                        subTable.CoverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverageOffset);
 
-                                this.subTables.Add(subTable);
-                            }
-                            break;
+                        return subTable;
                     }
                 }
             }
@@ -709,7 +468,7 @@ namespace Typography.OpenFont.Tables
                             }
                             if (allMatched)
                             {
-                                // remove all matches and replace with selected glyph                                     
+                                // remove all matches and replace with selected glyph
                                 glyphIndices.Replace(pos, compLen + 1, lig.GlyphId);
                                 return true;
                             }
@@ -790,7 +549,7 @@ namespace Typography.OpenFont.Tables
             /// LookupType 4: Ligature Substitution Subtable
             /// </summary>
             /// <param name="reader"></param>
-            void ReadLookupType4(BinaryReader reader)
+            LookupSubTable ReadLookupType4(BinaryReader reader, long subTableStartAt)
             {
                 //LookupType 4: Ligature Substitution Subtable
 
@@ -851,44 +610,40 @@ namespace Typography.OpenFont.Tables
                 //uint16 	LigGlyph 	GlyphID of ligature to substitute
                 //uint16 	CompCount 	Number of components in the ligature
                 //uint16 	Component[CompCount - 1] 	Array of component GlyphIDs-start with the second component-ordered in writing direction
-                //-----------------------------
-                int j = subTableOffsets.Length;
-                for (int i = 0; i < j; ++i)
-                {
-                    //move to read pos
-                    long subTableStartAt = lookupTablePos + subTableOffsets[i];
-                    reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
-                    ushort format = reader.ReadUInt16();
-                    switch (format)
-                    {
-                        default: throw new NotSupportedException();
-                        case 1:
-                            {
-                                ushort coverageOffset = reader.ReadUInt16();
-                                ushort ligSetCount = reader.ReadUInt16();
-                                ushort[] ligSetOffsets = Utils.ReadUInt16Array(reader, ligSetCount);
-                                LkSubTableT4 subTable = new LkSubTableT4();
-                                LigatureSetTable[] ligSetTables = subTable.LigatureSetTables = new LigatureSetTable[ligSetCount];
-                                for (int n = 0; n < ligSetCount; ++n)
-                                {
-                                    ligSetTables[n] = LigatureSetTable.CreateFrom(reader, subTableStartAt + ligSetOffsets[n]);
-                                }
-                                subTable.CoverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverageOffset);
-                                this.subTables.Add(subTable);
 
-                            }
-                            break;
+                reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
+
+                ushort format = reader.ReadUInt16();
+                switch (format)
+                {
+                    default: throw new NotSupportedException();
+                    case 1:
+                    {
+                        ushort coverageOffset = reader.ReadUInt16();
+                        ushort ligSetCount = reader.ReadUInt16();
+                        ushort[] ligSetOffsets = Utils.ReadUInt16Array(reader, ligSetCount);
+                        LkSubTableT4 subTable = new LkSubTableT4();
+                        LigatureSetTable[] ligSetTables = subTable.LigatureSetTables = new LigatureSetTable[ligSetCount];
+                        for (int n = 0; n < ligSetCount; ++n)
+                        {
+                            ligSetTables[n] = LigatureSetTable.CreateFrom(reader, subTableStartAt + ligSetOffsets[n]);
+                        }
+                        subTable.CoverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverageOffset);
+                        return subTable;
                     }
                 }
             }
+
             /// <summary>
             /// LookupType 5: Contextual Substitution Subtable
             /// </summary>
             /// <param name="reader"></param>
-            void ReadLookupType5(BinaryReader reader)
+            LookupSubTable ReadLookupType5(BinaryReader reader, long subTableStartAt)
             {
                 Utils.WarnUnimplemented("Lookup Subtable Type 5");
+                return new NullLookupSubTable();
             }
+
             class ChainSubRuleSetTable
             {
                 //ChainSubRuleSet table: All contexts beginning with the same glyph
@@ -1096,19 +851,17 @@ namespace Typography.OpenFont.Tables
             //-------------------------------------------------------------
             class LkSubTableT6Fmt1 : LookupSubTable
             {
-
                 public CoverageTable CoverageTable { get; set; }
                 public ChainSubRuleSetTable[] SubRuleSets { get; set; }
                 public override bool DoSubstitutionAt(IGlyphIndexList glyphIndices, int pos, int len)
                 {
-                    throw new NotImplementedException();
+                    Utils.WarnUnimplemented("Lookup Subtable Type 6 Format 1");
+                    return false;
                 }
             }
 
-
             class LkSubTableT6Fmt2 : LookupSubTable
             {
-
                 public CoverageTable CoverageTable { get; set; }
                 public ClassDefTable BacktrackClassDef { get; set; }
                 public ClassDefTable InputClassDef { get; set; }
@@ -1121,61 +874,64 @@ namespace Typography.OpenFont.Tables
                 }
             }
 
-
             class LkSubTableT6Fmt3 : LookupSubTable
             {
-
                 public CoverageTable[] BacktrackingCoverages { get; set; }
                 public CoverageTable[] InputCoverages { get; set; }
                 public CoverageTable[] LookaheadCoverages { get; set; }
                 public SubstLookupRecord[] SubstLookupRecords { get; set; }
+
                 public override bool DoSubstitutionAt(IGlyphIndexList glyphIndices, int pos, int len)
                 {
-                    ushort cur_glyphIndex = glyphIndices[pos];
-                    //check if this is in input coverage or not
-                    if (CoverageTable.IsInRange(InputCoverages, cur_glyphIndex))
+                    int inputLength = InputCoverages.Length;
+
+                    // Check that there are enough context glyphs
+                    if (pos < BacktrackingCoverages.Length ||
+                        inputLength + LookaheadCoverages.Length > len)
                     {
-                        //check back tracking or look ahead
-                        if (BacktrackingCoverages.Length > 0 && LookaheadCoverages.Length > 0)
+                        return false;
+                    }
+
+                    // Check all coverages: if any of them does not match, abort substitution
+                    for (int i = 0; i < InputCoverages.Length; ++i)
+                    {
+                        if (InputCoverages[i].FindPosition(glyphIndices[pos + i]) < 0)
                         {
-                            throw new NotSupportedException();
-                        }
-
-                        //has previous glyph
-                        if (pos > 0 && CoverageTable.IsInRange(BacktrackingCoverages, glyphIndices[pos - 1]))
-                        {
-                            //match!, then
-                            //do substitution
-                            ushort replaceAt = SubstLookupRecords[0].sequenceIndex;
-                            ushort lookupIndex = SubstLookupRecords[0].lookupListIndex;
-#if DEBUG
-                            if (replaceAt != 0)
-                            {
-
-                            }
-#endif
-                            LookupTable anotherLookup = this.OwnerGSub.LookupList[lookupIndex];
-                            return anotherLookup.DoSubstitutionAt(glyphIndices, pos + replaceAt, 1);//?
-                        }
-
-                        //has next glyph
-                        if (len > 1 && CoverageTable.IsInRange(LookaheadCoverages, glyphIndices[pos + 1]))
-                        {
-                            //match!, then
-                            //do substitution
-                            ushort replaceAt = SubstLookupRecords[0].sequenceIndex;
-                            ushort lookupIndex = SubstLookupRecords[0].lookupListIndex;
-#if DEBUG
-                            if (replaceAt != 0)
-                            {
-
-                            }
-#endif
-                            LookupTable anotherLookup = this.OwnerGSub.LookupList[lookupIndex];
-                            return anotherLookup.DoSubstitutionAt(glyphIndices, pos + replaceAt, 1);//?
+                            return false;
                         }
                     }
-                    return false;
+
+                    for (int i = 0; i < BacktrackingCoverages.Length; ++i)
+                    {
+                        if (BacktrackingCoverages[i].FindPosition(glyphIndices[pos - 1 - i]) < 0)
+                        {
+                            return false;
+                        }
+                    }
+
+                    for (int i = 0; i < LookaheadCoverages.Length; ++i)
+                    {
+                        if (LookaheadCoverages[i].FindPosition(glyphIndices[pos + inputLength + i]) < 0)
+                        {
+                            return false;
+                        }
+                    }
+
+                    // It's a match! Perform substitutions and return true if anything changed
+                    bool hasChanged = false;
+                    foreach (SubstLookupRecord lookupRecord in SubstLookupRecords)
+                    {
+                        ushort replaceAt = lookupRecord.sequenceIndex;
+                        ushort lookupIndex = lookupRecord.lookupListIndex;
+
+                        LookupTable anotherLookup = OwnerGSub.LookupList[lookupIndex];
+                        if (anotherLookup.DoSubstitutionAt(glyphIndices, pos + replaceAt, len - replaceAt))
+                        {
+                            hasChanged = true;
+                        }
+                    }
+
+                    return hasChanged;
                 }
             }
 
@@ -1183,7 +939,7 @@ namespace Typography.OpenFont.Tables
             /// LookupType 6: Chaining Contextual Substitution Subtable
             /// </summary>
             /// <param name="reader"></param>
-            void ReadLookupType6(BinaryReader reader)
+            LookupSubTable ReadLookupType6(BinaryReader reader, long subTableStartAt)
             {
                 //LookupType 6: Chaining Contextual Substitution Subtable
                 //A Chaining Contextual Substitution subtable (ChainContextSubst) describes glyph substitutions in context with an ability to look back and/or look ahead
@@ -1194,124 +950,116 @@ namespace Typography.OpenFont.Tables
                 //-----------------------
                 //TODO: impl here
 
-                foreach (long subTableOffset in subTableOffsets)
+                reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
+
+                ushort format = reader.ReadUInt16();
+                switch (format)
                 {
-                    //move to read pos
-                    long subTableStartAt = lookupTablePos + subTableOffset;
-                    reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
-                    ushort format = reader.ReadUInt16();
-                    switch (format)
+                    default: throw new NotSupportedException();
+                    case 1:
                     {
-                        default: throw new NotSupportedException();
-                        case 1:
-                            {
-                                //6.1 Chaining Context Substitution Format 1: Simple Chaining Context Glyph Substitution 
-                                //-------------------------------
-                                //ChainContextSubstFormat1 subtable: Simple context glyph substitution
-                                //-------------------------------
-                                //Type  	Name 	        Description
-                                //uint16 	SubstFormat 	Format identifier-format = 1
-                                //Offset16 	Coverage 	    Offset to Coverage table-from beginning of Substitution table
-                                //uint16 	ChainSubRuleSetCount 	Number of ChainSubRuleSet tables-must equal GlyphCount in Coverage table
-                                //Offset16 	ChainSubRuleSet[ChainSubRuleSetCount] 	Array of offsets to ChainSubRuleSet tables-from beginning of Substitution table-ordered by Coverage Index
-                                //-------------------------------
+                        //6.1 Chaining Context Substitution Format 1: Simple Chaining Context Glyph Substitution 
+                        //-------------------------------
+                        //ChainContextSubstFormat1 subtable: Simple context glyph substitution
+                        //-------------------------------
+                        //Type  	Name 	        Description
+                        //uint16 	SubstFormat 	Format identifier-format = 1
+                        //Offset16 	Coverage 	    Offset to Coverage table-from beginning of Substitution table
+                        //uint16 	ChainSubRuleSetCount 	Number of ChainSubRuleSet tables-must equal GlyphCount in Coverage table
+                        //Offset16 	ChainSubRuleSet[ChainSubRuleSetCount] 	Array of offsets to ChainSubRuleSet tables-from beginning of Substitution table-ordered by Coverage Index
+                        //-------------------------------
 
-                                var subTable = new LkSubTableT6Fmt1();
-                                ushort coverage = reader.ReadUInt16();
-                                ushort chainSubRulesetCount = reader.ReadUInt16();
-                                ushort[] chainSubRulesetOffsets = Utils.ReadUInt16Array(reader, chainSubRulesetCount);
-                                ChainSubRuleSetTable[] subRuleSets = subTable.SubRuleSets = new ChainSubRuleSetTable[chainSubRulesetCount];
-                                for (int n = 0; n < chainSubRulesetCount; ++n)
-                                {
-                                    subRuleSets[n] = ChainSubRuleSetTable.CreateFrom(reader, subTableStartAt + chainSubRulesetOffsets[n]);
-                                }
-                                //----------------------------
-                                subTable.CoverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverage);
-                                this.subTables.Add(subTable);
-                            }
-                            break;
-                        case 2:
-                            {
-                                //-------------------
-                                //ChainContextSubstFormat2 subtable: Class-based chaining context glyph substitution
-                                //-------------------
-                                //Type 	    Name 	            Description
-                                //uint16 	SubstFormat 	    Format identifier-format = 2
-                                //Offset16 	Coverage 	        Offset to Coverage table-from beginning of Substitution table
-                                //Offset16 	BacktrackClassDef 	Offset to glyph ClassDef table containing backtrack sequence data-from beginning of Substitution table
-                                //Offset16 	InputClassDef 	    Offset to glyph ClassDef table containing input sequence data-from beginning of Substitution table
-                                //Offset16 	LookaheadClassDef 	Offset to glyph ClassDef table containing lookahead sequence data-from beginning of Substitution table
-                                //uint16 	ChainSubClassSetCnt 	Number of ChainSubClassSet tables
-                                //Offset16 	ChainSubClassSet[ChainSubClassSetCnt] 	Array of offsets to ChainSubClassSet tables-from beginning of Substitution table-ordered by input class-may be NULL
-                                //-------------------
-                                var subTable = new LkSubTableT6Fmt2();
-                                ushort coverage = reader.ReadUInt16();
-                                ushort backtrackClassDefOffset = reader.ReadUInt16();
-                                ushort inputClassDefOffset = reader.ReadUInt16();
-                                ushort lookaheadClassDefOffset = reader.ReadUInt16();
-                                ushort chainSubClassSetCount = reader.ReadUInt16();
-                                ushort[] chainSubClassSetOffsets = Utils.ReadUInt16Array(reader, chainSubClassSetCount);
-                                //
-                                subTable.BacktrackClassDef = ClassDefTable.CreateFrom(reader, subTableStartAt + backtrackClassDefOffset);
-                                subTable.InputClassDef = ClassDefTable.CreateFrom(reader, subTableStartAt + inputClassDefOffset);
-                                subTable.LookaheadClassDef = ClassDefTable.CreateFrom(reader, subTableStartAt + lookaheadClassDefOffset);
-                                if (chainSubClassSetCount != 0)
-                                {
-                                    ChainSubClassSet[] chainSubClassSets = subTable.ChainSubClassSets = new ChainSubClassSet[chainSubClassSetCount];
-                                    for (int n = 0; n < chainSubClassSetCount; ++n)
-                                    {
-                                        chainSubClassSets[n] = ChainSubClassSet.CreateFrom(reader, subTableStartAt + chainSubClassSetOffsets[n]);
-                                    }
-                                }
-
-                                subTable.CoverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverage);
-                                this.subTables.Add(subTable);
-                            }
-                            break;
-                        case 3:
-                            {
-                                //-------------------
-                                //6.3 Chaining Context Substitution Format 3: Coverage-based Chaining Context Glyph Substitution
-                                //-------------------
-                                //uint16 	BacktrackGlyphCount 	Number of glyphs in the backtracking sequence
-                                //Offset16 	Coverage[BacktrackGlyphCount] 	Array of offsets to coverage tables in backtracking sequence, in glyph sequence order
-                                //uint16 	InputGlyphCount 	Number of glyphs in input sequence
-                                //Offset16 	Coverage[InputGlyphCount] 	Array of offsets to coverage tables in input sequence, in glyph sequence order
-                                //uint16 	LookaheadGlyphCount 	Number of glyphs in lookahead sequence
-                                //Offset16 	Coverage[LookaheadGlyphCount] 	Array of offsets to coverage tables in lookahead sequence, in glyph sequence order
-                                //uint16 	SubstCount 	Number of SubstLookupRecords
-                                //struct 	SubstLookupRecord[SubstCount] 	Array of SubstLookupRecords, in design order
-                                //-------------------
-                                LkSubTableT6Fmt3 subTable = new LkSubTableT6Fmt3();
-                                ushort backtrackingGlyphCount = reader.ReadUInt16();
-                                ushort[] backtrackingCoverageOffsets = Utils.ReadUInt16Array(reader, backtrackingGlyphCount);
-                                ushort inputGlyphCount = reader.ReadUInt16();
-                                ushort[] inputGlyphCoverageOffsets = Utils.ReadUInt16Array(reader, inputGlyphCount);
-                                ushort lookAheadGlyphCount = reader.ReadUInt16();
-                                ushort[] lookAheadCoverageOffsets = Utils.ReadUInt16Array(reader, lookAheadGlyphCount);
-                                ushort substCount = reader.ReadUInt16();
-                                subTable.SubstLookupRecords = SubstLookupRecord.CreateSubstLookupRecords(reader, substCount);
-                                //
-                                subTable.BacktrackingCoverages = CoverageTable.CreateMultipleCoverageTables(subTableStartAt, backtrackingCoverageOffsets, reader);
-                                subTable.InputCoverages = CoverageTable.CreateMultipleCoverageTables(subTableStartAt, inputGlyphCoverageOffsets, reader);
-                                subTable.LookaheadCoverages = CoverageTable.CreateMultipleCoverageTables(subTableStartAt, lookAheadCoverageOffsets, reader);
-
-
-                                subTables.Add(subTable);
-                            }
-                            break;
+                        var subTable = new LkSubTableT6Fmt1();
+                        ushort coverage = reader.ReadUInt16();
+                        ushort chainSubRulesetCount = reader.ReadUInt16();
+                        ushort[] chainSubRulesetOffsets = Utils.ReadUInt16Array(reader, chainSubRulesetCount);
+                        ChainSubRuleSetTable[] subRuleSets = subTable.SubRuleSets = new ChainSubRuleSetTable[chainSubRulesetCount];
+                        for (int n = 0; n < chainSubRulesetCount; ++n)
+                        {
+                            subRuleSets[n] = ChainSubRuleSetTable.CreateFrom(reader, subTableStartAt + chainSubRulesetOffsets[n]);
+                        }
+                        //----------------------------
+                        subTable.CoverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverage);
+                        return subTable;
                     }
-                    //------------------------------------------------------------- 
+                    case 2:
+                    {
+                        //-------------------
+                        //ChainContextSubstFormat2 subtable: Class-based chaining context glyph substitution
+                        //-------------------
+                        //Type 	    Name 	            Description
+                        //uint16 	SubstFormat 	    Format identifier-format = 2
+                        //Offset16 	Coverage 	        Offset to Coverage table-from beginning of Substitution table
+                        //Offset16 	BacktrackClassDef 	Offset to glyph ClassDef table containing backtrack sequence data-from beginning of Substitution table
+                        //Offset16 	InputClassDef 	    Offset to glyph ClassDef table containing input sequence data-from beginning of Substitution table
+                        //Offset16 	LookaheadClassDef 	Offset to glyph ClassDef table containing lookahead sequence data-from beginning of Substitution table
+                        //uint16 	ChainSubClassSetCnt 	Number of ChainSubClassSet tables
+                        //Offset16 	ChainSubClassSet[ChainSubClassSetCnt] 	Array of offsets to ChainSubClassSet tables-from beginning of Substitution table-ordered by input class-may be NULL
+                        //-------------------
+                        var subTable = new LkSubTableT6Fmt2();
+                        ushort coverage = reader.ReadUInt16();
+                        ushort backtrackClassDefOffset = reader.ReadUInt16();
+                        ushort inputClassDefOffset = reader.ReadUInt16();
+                        ushort lookaheadClassDefOffset = reader.ReadUInt16();
+                        ushort chainSubClassSetCount = reader.ReadUInt16();
+                        ushort[] chainSubClassSetOffsets = Utils.ReadUInt16Array(reader, chainSubClassSetCount);
+                        //
+                        subTable.BacktrackClassDef = ClassDefTable.CreateFrom(reader, subTableStartAt + backtrackClassDefOffset);
+                        subTable.InputClassDef = ClassDefTable.CreateFrom(reader, subTableStartAt + inputClassDefOffset);
+                        subTable.LookaheadClassDef = ClassDefTable.CreateFrom(reader, subTableStartAt + lookaheadClassDefOffset);
+                        if (chainSubClassSetCount != 0)
+                        {
+                            ChainSubClassSet[] chainSubClassSets = subTable.ChainSubClassSets = new ChainSubClassSet[chainSubClassSetCount];
+                            for (int n = 0; n < chainSubClassSetCount; ++n)
+                            {
+                                chainSubClassSets[n] = ChainSubClassSet.CreateFrom(reader, subTableStartAt + chainSubClassSetOffsets[n]);
+                            }
+                        }
+
+                        subTable.CoverageTable = CoverageTable.CreateFrom(reader, subTableStartAt + coverage);
+                        return subTable;
+                    }
+                    case 3:
+                    {
+                        //-------------------
+                        //6.3 Chaining Context Substitution Format 3: Coverage-based Chaining Context Glyph Substitution
+                        //-------------------
+                        //uint16 	BacktrackGlyphCount 	Number of glyphs in the backtracking sequence
+                        //Offset16 	Coverage[BacktrackGlyphCount] 	Array of offsets to coverage tables in backtracking sequence, in glyph sequence order
+                        //uint16 	InputGlyphCount 	Number of glyphs in input sequence
+                        //Offset16 	Coverage[InputGlyphCount] 	Array of offsets to coverage tables in input sequence, in glyph sequence order
+                        //uint16 	LookaheadGlyphCount 	Number of glyphs in lookahead sequence
+                        //Offset16 	Coverage[LookaheadGlyphCount] 	Array of offsets to coverage tables in lookahead sequence, in glyph sequence order
+                        //uint16 	SubstCount 	Number of SubstLookupRecords
+                        //struct 	SubstLookupRecord[SubstCount] 	Array of SubstLookupRecords, in design order
+                        //-------------------
+                        LkSubTableT6Fmt3 subTable = new LkSubTableT6Fmt3();
+                        ushort backtrackingGlyphCount = reader.ReadUInt16();
+                        ushort[] backtrackingCoverageOffsets = Utils.ReadUInt16Array(reader, backtrackingGlyphCount);
+                        ushort inputGlyphCount = reader.ReadUInt16();
+                        ushort[] inputGlyphCoverageOffsets = Utils.ReadUInt16Array(reader, inputGlyphCount);
+                        ushort lookAheadGlyphCount = reader.ReadUInt16();
+                        ushort[] lookAheadCoverageOffsets = Utils.ReadUInt16Array(reader, lookAheadGlyphCount);
+                        ushort substCount = reader.ReadUInt16();
+                        subTable.SubstLookupRecords = SubstLookupRecord.CreateSubstLookupRecords(reader, substCount);
+
+                        subTable.BacktrackingCoverages = CoverageTable.CreateMultipleCoverageTables(subTableStartAt, backtrackingCoverageOffsets, reader);
+                        subTable.InputCoverages = CoverageTable.CreateMultipleCoverageTables(subTableStartAt, inputGlyphCoverageOffsets, reader);
+                        subTable.LookaheadCoverages = CoverageTable.CreateMultipleCoverageTables(subTableStartAt, lookAheadCoverageOffsets, reader);
+
+                        return subTable;
+                    }
                 }
             }
+
             /// <summary>
             /// LookupType 7: Extension Substitution
             /// </summary>
             /// <param name="reader"></param>
-            void ReadLookupType7(BinaryReader reader)
+            LookupSubTable ReadLookupType7(BinaryReader reader, long subTableStartAt)
             {
-
                 //LookupType 7: Extension Substitution
+                //https://www.microsoft.com/typography/otspec/gsub.htm#ES
 
                 //This lookup provides a mechanism whereby any other lookup type's subtables are stored at a 32-bit offset location in the 'GSUB' table. 
                 //This is needed if the total size of the subtables exceeds the 16-bit limits of the various other offsets in the 'GSUB' table.
@@ -1342,34 +1090,30 @@ namespace Typography.OpenFont.Tables
                 //In addition, a LookupListIndex identifies the lookup to be applied at the glyph position specified by the SequenceIndex.
 
                 //The contextual substitution subtables defined in Examples 7, 8, and 9 at the end of this chapter show SubstLookupRecords.
-                int j = subTableOffsets.Length;
-                for (int i = 0; i < j; ++i)
+                reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
+                ushort format = reader.ReadUInt16();
+                ushort extensionLookupType = reader.ReadUInt16();
+                uint extensionOffset = reader.ReadUInt32();
+                if (extensionLookupType == 7)
                 {
-                    //move to read pos
-                    long subTableStartAt = lookupTablePos + subTableOffsets[i];
-                    reader.BaseStream.Seek(subTableStartAt, SeekOrigin.Begin);
-                    ushort format = reader.ReadUInt16();
-                    ushort extensionLookupType = reader.ReadUInt16();
-                    uint extensionOffset = reader.ReadUInt32();
-                    if (extensionLookupType == 7)
-                    {
-                        throw new NotSupportedException();
-                    }
+                    throw new NotSupportedException();
                 }
-                //TODO: impl more , this is not complete!
-                return;
-                throw new NotImplementedException();
+                // Simply read the lookup table again with updated offsets
+                lookupType = extensionLookupType;
+                LookupSubTable subTable = ReadSubTable(reader, subTableStartAt + extensionOffset);
+                // FIXME: this is a bit hackish, try to find a better construct
+                lookupType = 7;
+                return subTable;
             }
 
             /// <summary>
             /// LookupType 8: Reverse Chaining Contextual Single Substitution Subtable
             /// </summary>
             /// <param name="reader"></param>
-            void ReadLookupType8(BinaryReader reader)
+            LookupSubTable ReadLookupType8(BinaryReader reader, long subTableStartAt)
             {
                 throw new NotImplementedException();
             }
         }
-
     }
 }
