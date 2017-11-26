@@ -40,7 +40,7 @@
             this.listView2.FullRowSelect = true;
             this.listView2.Location = new System.Drawing.Point(3, 3);
             this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(260, 205);
+            this.listView2.Size = new System.Drawing.Size(606, 205);
             this.listView2.TabIndex = 23;
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Details;
@@ -60,7 +60,7 @@
             this.lstAsmReferenceList.FormattingEnabled = true;
             this.lstAsmReferenceList.Location = new System.Drawing.Point(3, 214);
             this.lstAsmReferenceList.Name = "lstAsmReferenceList";
-            this.lstAsmReferenceList.Size = new System.Drawing.Size(260, 251);
+            this.lstAsmReferenceList.Size = new System.Drawing.Size(606, 251);
             this.lstAsmReferenceList.TabIndex = 21;
             // 
             // lstPreset
@@ -73,7 +73,7 @@
             // 
             // listView1
             // 
-            this.listView1.Location = new System.Drawing.Point(269, 3);
+            this.listView1.Location = new System.Drawing.Point(615, 10);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(367, 498);
             this.listView1.TabIndex = 19;
@@ -90,7 +90,7 @@
             this.Controls.Add(this.lstPreset);
             this.Controls.Add(this.listView1);
             this.Name = "MergeProjectsToolBox";
-            this.Size = new System.Drawing.Size(651, 567);
+            this.Size = new System.Drawing.Size(1003, 567);
             this.ResumeLayout(false);
 
         }
