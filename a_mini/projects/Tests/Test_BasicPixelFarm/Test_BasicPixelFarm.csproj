@@ -137,13 +137,13 @@
       <Project>{09ec5531-d272-40db-87a4-b2d353846cc2}</Project>
       <Name>LayoutFarm.TextBreak</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.BaseRenderer\LayoutFarm.BaseRenderer.csproj">
+    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.BaseRenderer\PixelFarm.RenderTree.csproj">
       <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
-      <Name>LayoutFarm.BaseRenderer</Name>
+      <Name>PixelFarm.RenderTree</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.ComposerCore\LayoutFarm.ComposerCore.csproj">
+    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.ComposerCore\PixelFarm.RenderTreeComposer.csproj">
       <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
-      <Name>LayoutFarm.ComposerCore</Name>
+      <Name>PixelFarm.RenderTreeComposer</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\LayoutFarm.Platforms.WinForms.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>

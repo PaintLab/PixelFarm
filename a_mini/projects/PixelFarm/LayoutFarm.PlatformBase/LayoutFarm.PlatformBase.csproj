@@ -43,9 +43,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LayoutFarm.BaseRenderer\LayoutFarm.BaseRenderer.csproj">
+    <ProjectReference Include="..\LayoutFarm.BaseRenderer\PixelFarm.RenderTree.csproj">
       <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
-      <Name>LayoutFarm.BaseRenderer</Name>
+      <Name>PixelFarm.RenderTree</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
       <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>

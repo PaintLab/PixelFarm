@@ -78,13 +78,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LayoutFarm.BaseRenderer\LayoutFarm.BaseRenderer.csproj">
+    <ProjectReference Include="..\LayoutFarm.BaseRenderer\PixelFarm.RenderTree.csproj">
       <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
-      <Name>LayoutFarm.BaseRenderer</Name>
+      <Name>PixelFarm.RenderTree</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LayoutFarm.ComposerCore\LayoutFarm.ComposerCore.csproj">
+    <ProjectReference Include="..\LayoutFarm.ComposerCore\PixelFarm.RenderTreeComposer.csproj">
       <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
-      <Name>LayoutFarm.ComposerCore</Name>
+      <Name>PixelFarm.RenderTreeComposer</Name>
     </ProjectReference>
     <ProjectReference Include="..\LayoutFarm.TextEdit\LayoutFarm.TextEdit.csproj">
       <Project>{3ee0a791-af18-46ac-b13e-5ddc393091a8}</Project>
