@@ -9,7 +9,7 @@ namespace TypeMirror
     /// <summary>
     /// very base reflection helper
     /// </summary>
-    static class SimpleReflectionHelper
+    public static class SimpleReflectionHelper
     {
         public delegate string FieldNameEvaluationHandler(System.Reflection.FieldInfo f);
 
