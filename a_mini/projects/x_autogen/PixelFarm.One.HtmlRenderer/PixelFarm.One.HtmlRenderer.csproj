@@ -35,6 +35,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\LayoutFarm.PlatformBase\CanvasViewport.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\LayoutFarm.PlatformBase\dbugHelper.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\LayoutFarm.PlatformBase\InnerViewportKind.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\LayoutFarm.PlatformBase\MyUITimer.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\LayoutFarm.PlatformBase\OpenGLCanvasViewport.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\LayoutFarm.PlatformBase\PlatformBootStrap\BootStrapSkia.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\LayoutFarm.PlatformBase\SkiaCanvasViewport.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\Win32Utils\MyWin32.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\Win32Utils\NativeTextWin32.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\Win32Utils\NativeWin32MemoryDc.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\YourImplementation.PixelFarm\ActiveFontAtlasService.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\..\YourImplementation.PixelFarm\DrawingGLFontPrinter.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\0_Platform\UIPlatformWinForms.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\1_UISurfaceViewport\UISurfaceViewportControl.Designer.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\2_Bridge_WinForm\TopWindowBridgeWinForm.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\2_Bridge_WinForm\TopWindowBridgeWinForm_dbug.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\2_GLES2\1_GpuOpenGLSurfaceView.Designer.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\2_GLES2\3_MyTopWindowBridgeOpenGL.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\1_CpuSurfaceView.Designer.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\3_SurfaceViewForGdiPlus_and_Skia\AbstractCompletionWindow.Designer.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\4_GdiPlus\1_GdiPlusCanvasViewport.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\4_GdiPlus\CanvasCollection.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\4_GdiPlus\Conv.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\4_GdiPlus\QuadPages.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.Platforms.WinForms\4_Skia\3_MyTopWindowBridgeSkia.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.TextEdit\1.1_EditableRuns\dbugMultiTextManRecorder.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.TextEdit\1.1_EditableRuns\EditableRun.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\LayoutFarm.TextEdit\1.1_EditableRuns\EditableRunCharLocation.cs" />
@@ -187,9 +217,6 @@
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\MiniAgg\08_ImageResampling\ImageInterpolationQuality.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\MiniAgg\08_ImageResampling\ImageTransform.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\MiniAgg\09_ImgFilters\InternalBrightnessAndContrastAdjustment.cs" />
-    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\..\win32utils\MyWin32.cs" />
-    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\..\win32utils\NativeTextWin32.cs" />
-    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\..\win32utils\NativeWin32MemoryDc.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\0_Start\WinGdiPlusPlatform.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Canvas\1_MyGdiPlusCanvas_Specific.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\Canvas\2_MyGdiPlusCanvas_CoordinateAndClip.cs" />
