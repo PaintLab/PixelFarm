@@ -153,8 +153,8 @@
     <Compile Include="..\PixelFarm.Vectors\3_Transform\Viewport.cs">
       <Link>1_Vectors\3_Transform\Viewport.cs</Link>
     </Compile>
-    <Compile Include="5_PixelFarm_Agg\ActualImage.cs" />
-    <Compile Include="5_PixelFarm_Agg\PixelFormat.cs" />
+    <Compile Include="3_Agg_PixelBuffer\ActualImage.cs" />
+    <Compile Include="3_Agg_PixelBuffer\PixelFormat.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\BoundingRect.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\StrokeGen_Old.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\VertexSourceExtensions.cs" />
@@ -184,8 +184,8 @@
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\SimpleRect.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\VertexData.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VertexSource\VertexStoreBuilder.cs" />
-    <Compile Include="MiniAggGraphics.Buffer\AggMemMx.cs" />
-    <Compile Include="MiniAggGraphics.Buffer\NativeBufferMx.cs" />
+    <Compile Include="3_Agg_PixelBuffer\AggMemMx.cs" />
+    <Compile Include="3_Agg_PixelBuffer\NativeBufferMx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
