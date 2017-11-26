@@ -22,7 +22,15 @@ using System;
 
 namespace PixelFarm.Agg
 {
-
+    /// <summary>
+    /// agg buffer's pixel format
+    /// </summary>
+    public enum PixelFormat
+    {
+        ARGB32,
+        RGB24,
+        GrayScale8,
+    }
     public sealed class ActualImage : PixelFarm.Drawing.Image
     {
         int width;
