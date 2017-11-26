@@ -35,15 +35,15 @@
   <ItemGroup>
     <Compile Include="0_MyRootGraphic.cs" />
     <Compile Include="TopWindowRenderBox.cs" />
-    <Compile Include="7_Events\GraphicsTimerTasksManager.cs" />
-    <Compile Include="7_Events\MyIntervalTaskEventArgs.cs" />
-    <Compile Include="7_Events\RenderElementEventPortal.cs" />
-    <Compile Include="7_Events\ToNotifySizeChangedEvent.cs" />
-    <Compile Include="7_Events\TopWindowEventRoot.cs" />
-    <Compile Include="7_Events\UIHoverMonitor.cs" />
-    <Compile Include="8_ContentManagers\ImageCacheSystem.cs" />
-    <Compile Include="8_ContentManagers\ImageContentManager.cs" />
-    <Compile Include="8_ContentManagers\TextContentManager.cs" />
+    <Compile Include="1_Events\GraphicsTimerTasksManager.cs" />
+    <Compile Include="1_Events\MyIntervalTaskEventArgs.cs" />
+    <Compile Include="1_Events\RenderElementEventPortal.cs" />
+    <Compile Include="1_Events\ToNotifySizeChangedEvent.cs" />
+    <Compile Include="1_Events\TopWindowEventRoot.cs" />
+    <Compile Include="1_Events\UIHoverMonitor.cs" />
+    <Compile Include="2_ContentManagers\ImageCacheSystem.cs" />
+    <Compile Include="2_ContentManagers\ImageContentManager.cs" />
+    <Compile Include="2_ContentManagers\TextContentManager.cs" />
     <Compile Include="ClientBinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -52,13 +52,9 @@
       <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
       <Name>LayoutFarm.BaseRenderer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LayoutFarm.ClientPlatforms\LayoutFarm.ClientPlatforms.csproj">
+    <ProjectReference Include="..\LayoutFarm.ClientPlatforms\PixelFarm.PlatformBridge.csproj">
       <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
-      <Name>LayoutFarm.ClientPlatforms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.Drawing.MiniAgg.csproj">
-      <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
-      <Name>PixelFarm.Drawing.MiniAgg</Name>
+      <Name>PixelFarm.PlatformBridge</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
