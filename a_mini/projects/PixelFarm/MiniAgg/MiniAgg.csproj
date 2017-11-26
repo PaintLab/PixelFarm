@@ -34,9 +34,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="00_Context\ImageGraphics2D_RenderImages.cs" />
     <Compile Include="02_PixelBuffer\ChildImage.cs" />
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />

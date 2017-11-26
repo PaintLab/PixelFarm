@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniAgg.Complements", "Pixe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesselate", "PixelFarm\Tesselate\Tesselate.csproj", "{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.0_DrawingCanvas", "2.0_DrawingCanvas", "{4E282417-77BB-480C-84A1-72A44F229AC1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.0_DrawingCanvas_Implmentation", "2.0_DrawingCanvas_Implmentation", "{4E282417-77BB-480C-84A1-72A44F229AC1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.2_DevTest_WinForms", "0.2_DevTest_WinForms", "{13F19F93-8CDB-4AC4-BF06-51C144FA54C1}"
 EndProject
