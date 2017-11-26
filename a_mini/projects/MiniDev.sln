@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesselate", "PixelFarm\Tess
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.2_DevTest_WinForms", "0.2_DevTest_WinForms", "{13F19F93-8CDB-4AC4-BF06-51C144FA54C1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1_Drawing", "1_Drawing", "{2EF747E4-862C-4B3E-B865-765B5385D7AC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.1_Drawing", "1.1_Drawing", "{2EF747E4-862C-4B3E-B865-765B5385D7AC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing", "PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj", "{51D63482-5697-4B16-8401-506965624657}"
 EndProject
@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.OpenFont", "Pixe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniOpenTK", "PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj", "{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_GraphicsHost", "2_GraphicsHost", "{D4DC1DFA-C3BB-445F-9689-87889DF12580}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.2_GraphicsHost", "1.2_GraphicsHost", "{D4DC1DFA-C3BB-445F-9689-87889DF12580}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMirror", "PixelFarm\TypeMirror\TypeMirror.csproj", "{68F1DAF6-2B35-476E-B2F8-5EADBC823935}"
 EndProject
@@ -85,7 +85,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWinForm_MiniAgg_GLES_SK
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YourImplementation.PixelFarm", "PixelFarm\YourImplementation.PixelFarm\YourImplementation.PixelFarm.csproj", "{8963DD34-CE0A-42CD-B3B2-D73031B8F0A0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4_ClientPlatforms", "4_ClientPlatforms", "{0BDC62C6-1F5C-4645-BE3E-AF5360347A7E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_ClientPlatforms", "3_ClientPlatforms", "{0BDC62C6-1F5C-4645-BE3E-AF5360347A7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.RenderTree", "PixelFarm\PixelFarm.RenderTree\PixelFarm.RenderTree.csproj", "{20048075-A2F3-4B97-B3C6-BEA794429741}"
 EndProject
@@ -155,7 +155,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.TextFlow", "Pixe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutFarm.TextEdit", "PixelFarm\LayoutFarm.TextEdit\LayoutFarm.TextEdit.csproj", "{3EE0A791-AF18-46AC-B13E-5DDC393091A8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_RenderTree", "3_RenderTree", "{56561998-B760-4457-AC07-DB64E54CA106}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2_RenderTree", "2_RenderTree", "{56561998-B760-4457-AC07-DB64E54CA106}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.TextBreak", "PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.csproj", "{09EC5531-D272-40DB-87A4-B2D353846CC2}"
 EndProject
