@@ -110,10 +110,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LayoutFarm.BaseRenderer\PixelFarm.RenderTree.csproj">
-      <Project>{20048075-A2F3-4B97-B3C6-BEA794429741}</Project>
-      <Name>PixelFarm.RenderTree</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
@@ -121,6 +117,10 @@
     <ProjectReference Include="..\PixelFarm.PlatformBridge\PixelFarm.PlatformBridge.csproj">
       <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
       <Name>PixelFarm.PlatformBridge</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.RenderTree\PixelFarm.RenderTree.csproj">
+      <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
+      <Name>PixelFarm.RenderTree</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

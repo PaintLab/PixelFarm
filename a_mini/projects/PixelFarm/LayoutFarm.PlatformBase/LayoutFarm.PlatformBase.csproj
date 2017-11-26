@@ -43,10 +43,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LayoutFarm.BaseRenderer\PixelFarm.RenderTree.csproj">
-      <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
-      <Name>PixelFarm.RenderTree</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
       <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
       <Name>PixelFarm.Drawing.GLES2</Name>
@@ -62,6 +58,10 @@
     <ProjectReference Include="..\PixelFarm.PlatformBridge\PixelFarm.PlatformBridge.csproj">
       <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
       <Name>PixelFarm.PlatformBridge</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.RenderTree\PixelFarm.RenderTree.csproj">
+      <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
+      <Name>PixelFarm.RenderTree</Name>
     </ProjectReference>
     <ProjectReference Include="..\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
