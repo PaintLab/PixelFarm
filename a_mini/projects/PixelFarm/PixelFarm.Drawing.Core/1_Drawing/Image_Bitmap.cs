@@ -28,25 +28,5 @@ namespace PixelFarm.Drawing
         {
             img.innerImage = innerImage;
         }
-        //public abstract BitmapData LockBits();
-        //public abstract void UnlockBits(BitmapData bmpdata);
-
-        //public BitmapData LockBits()
-        //{
-        //    BitmapData bmpData = new BitmapData();
-        //    return bmpData;
-        //}
-        //public void UnlockBits(BitmapData bmpdata)
-        //{
-
-        //}
     }
-
-    //public abstract class BitmapData
-    //{
-    //    public abstract IntPtr Scan0
-    //    {
-    //        get;
-    //    }
-    //}
 }

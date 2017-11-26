@@ -23,11 +23,7 @@ namespace LayoutFarm
             typefaceStore.FontCollection = InstalledFontCollection.GetSharedFontCollection(null);
             glyphLayout = new GlyphLayout();
 
-            glyphLayout.ScriptLang = Typography.OpenFont.ScriptLangs.Thai;//test conplex script
-            glyphLayout.PositionTechnique = PositionTechnique.OpenFont;
-            //assign fitting engine
-
-
+            //assign fitting engine 
             //
             userGlyphPlanList = new List<GlyphPlan>();
             userCharToGlyphMapList = new List<UserCharToGlyphIndexMap>();

@@ -1,8 +1,13 @@
-﻿using System;
+﻿//MIT, 2014-2017, WinterDev, 
+
+using System;
 using System.Runtime.InteropServices;
 
 namespace PixelFarm.Drawing.Imaging
 {
+
+    //used in "Tools"
+
     static class NativeImageMethods
     {
         const string myfontLib = "myft.dll";

@@ -33,9 +33,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="NativeText\NativeDll.cs" />
     <Compile Include="NativeText\NativeTextBreaker.cs" />
     <Compile Include="NativeText\TextBreaker.cs" />
