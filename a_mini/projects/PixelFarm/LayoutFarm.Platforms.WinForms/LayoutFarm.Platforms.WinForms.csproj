@@ -117,10 +117,6 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.Drawing.Core\PixelFarm.Drawing.Core.csproj">
-      <Project>{51D63482-5697-4B16-8401-506965624657}</Project>
-      <Name>PixelFarm.Drawing.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
       <Project>{1AA171E3-523C-4DD5-A169-DE6322991FF5}</Project>
       <Name>PixelFarm.Drawing.GdiPlus</Name>
@@ -140,6 +136,10 @@
     <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
       <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
       <Name>PixelFarm.DrawingCanvas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>

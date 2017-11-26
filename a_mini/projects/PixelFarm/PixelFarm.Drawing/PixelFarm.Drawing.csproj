@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PixelFarm.Drawing</RootNamespace>
-    <AssemblyName>PixelFarm.Drawing.Core</AssemblyName>
+    <AssemblyName>PixelFarm.Drawing</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,28 +34,28 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\BurningMineCurve\CurveUtils\CubicBezier.cs">
-      <Link>9_PixelFarm_AggVertex_More\BurningMineCurves\CubicBezier.cs</Link>
+      <Link>1_Vectors\4_BurningMineCurves\CubicBezier.cs</Link>
     </Compile>
     <Compile Include="..\BurningMineCurve\CurveUtils\CurveBuilder.cs">
-      <Link>9_PixelFarm_AggVertex_More\BurningMineCurves\CurveBuilder.cs</Link>
+      <Link>1_Vectors\4_BurningMineCurves\CurveBuilder.cs</Link>
     </Compile>
     <Compile Include="..\BurningMineCurve\CurveUtils\CurveFit.cs">
-      <Link>9_PixelFarm_AggVertex_More\BurningMineCurves\CurveFit.cs</Link>
+      <Link>1_Vectors\4_BurningMineCurves\CurveFit.cs</Link>
     </Compile>
     <Compile Include="..\BurningMineCurve\CurveUtils\CurveFitBase.cs">
-      <Link>9_PixelFarm_AggVertex_More\BurningMineCurves\CurveFitBase.cs</Link>
+      <Link>1_Vectors\4_BurningMineCurves\CurveFitBase.cs</Link>
     </Compile>
     <Compile Include="..\BurningMineCurve\CurveUtils\CurvePreprocess.cs">
-      <Link>9_PixelFarm_AggVertex_More\BurningMineCurves\CurvePreprocess.cs</Link>
+      <Link>1_Vectors\4_BurningMineCurves\CurvePreprocess.cs</Link>
     </Compile>
     <Compile Include="..\BurningMineCurve\CurveUtils\Spline.cs">
-      <Link>9_PixelFarm_AggVertex_More\BurningMineCurves\Spline.cs</Link>
+      <Link>1_Vectors\4_BurningMineCurves\Spline.cs</Link>
     </Compile>
     <Compile Include="..\BurningMineCurve\CurveUtils\SplineBuilder.cs">
-      <Link>9_PixelFarm_AggVertex_More\BurningMineCurves\SplineBuilder.cs</Link>
+      <Link>1_Vectors\4_BurningMineCurves\SplineBuilder.cs</Link>
     </Compile>
     <Compile Include="..\BurningMineCurve\CurveUtils\VectorHelper.cs">
-      <Link>9_PixelFarm_AggVertex_More\BurningMineCurves\VectorHelper.cs</Link>
+      <Link>1_Vectors\4_BurningMineCurves\VectorHelper.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.Vectors\1_VectorMaths\AggBasics.cs">
       <Link>1_Vectors\1_VectorMaths\AggBasics.cs</Link>
@@ -190,6 +190,7 @@
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
