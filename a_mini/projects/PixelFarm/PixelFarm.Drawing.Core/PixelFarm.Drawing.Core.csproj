@@ -165,7 +165,7 @@
     <Compile Include="2_DrawingAbstract\Color.cs" />
     <Compile Include="2_DrawingAbstract\DashStyle.cs" />
     <Compile Include="2_DrawingAbstract\GraphicsPath.cs" />
-    <Compile Include="2_DrawingAbstract\Image_Bitmap.cs" />
+    <Compile Include="2_DrawingAbstract\Image.cs" />
     <Compile Include="2_DrawingAbstract\Region.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\0_VertexCommandAndOrientation.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\1_VertexStore.cs" />
@@ -174,7 +174,7 @@
     <Compile Include="7_PixelFarm_AggVertex_Core\Stroke.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\StrokeGenerator.cs" />
     <Compile Include="7_PixelFarm_AggVertex_Core\StrokeMath.cs" />
-    <Compile Include="5_PixelFarm_Agg\TransformExtensions.cs" />
+    <Compile Include="7_PixelFarm_AggVertex_Core\TransformExtensions.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\HitTest\VertexHitTester.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VectorClipping\cliper.cs" />
     <Compile Include="9_PixelFarm_AggVertex_More\VectorClipping\VxsClipping.cs" />

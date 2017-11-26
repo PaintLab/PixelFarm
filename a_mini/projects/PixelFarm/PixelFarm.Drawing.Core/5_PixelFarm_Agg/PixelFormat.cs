@@ -21,6 +21,9 @@
 
 namespace PixelFarm.Agg
 {
+    /// <summary>
+    /// agg buffer's pixel format
+    /// </summary>
     public enum PixelFormat
     {
         ARGB32,
