@@ -1754,6 +1754,60 @@
     <Compile Include="..\..\PixelFarm\Typography\PixelFarm.Typography\6_AggTexture\AggGlyphTextureGen.cs">
       <Link>PixelFarm\Typography\PixelFarm.Typography\6_AggTexture\AggGlyphTextureGen.cs</Link>
     </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\0_GlyphTriangle.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\0_GlyphTriangle.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\1_EdgeLine.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\1_EdgeLine.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\2_GlyphCentroidPair.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\2_GlyphCentroidPair.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\3_GlyphBoneJoint.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\3_GlyphBoneJoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\4_GlyphBone.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\4_GlyphBone.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\5_CentroidLineAndHub.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\5_CentroidLineAndHub.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\CurveGen.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\CurveGen.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphContour.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphContour.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphContourBuilder.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphContourBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphIntermediateOutline.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphIntermediateOutline.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphOutlineAnalyzer.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphOutlineAnalyzer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphOutlineWalker.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphOutlineWalker.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphPartFlattener.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphPartFlattener.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphParts.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphParts.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphPoint.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\MyMath.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\MyMath.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\Rect.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphAnalysis\Rect.cs</Link>
+    </Compile>
+    <Compile Include="..\..\PixelFarm\Typography\Typography.Contours\GlyphDynamicOutline.cs">
+      <Link>PixelFarm\Typography\Typography.Contours\GlyphDynamicOutline.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

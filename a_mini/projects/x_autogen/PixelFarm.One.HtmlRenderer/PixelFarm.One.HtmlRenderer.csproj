@@ -608,6 +608,24 @@
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\ScriptLangConv.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\3_FontFaceImpl\TextureFontLoader.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\PixelFarm.Typography\6_AggTexture\AggGlyphTextureGen.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\0_GlyphTriangle.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\1_EdgeLine.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\2_GlyphCentroidPair.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\3_GlyphBoneJoint.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\4_GlyphBone.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\5_CentroidLineAndHub.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\CurveGen.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphContour.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphContourBuilder.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphIntermediateOutline.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphOutlineAnalyzer.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphOutlineWalker.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphPartFlattener.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphParts.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\GlyphPoint.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\MyMath.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphAnalysis\Rect.cs" />
+    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.One.HtmlRenderer\..\..\PixelFarm\Typography\Typography.Contours\GlyphDynamicOutline.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
