@@ -231,8 +231,8 @@ namespace PdfSharp.Drawing.Pdf
 
         public void DrawRectangle(XPen pen, XBrush brush, double x, double y, double width, double height)
         {
-            Debug.Assert(pen != null);
-            Debug.Assert(brush != null);
+            Debug.Assert(!(pen == null && brush == null));
+             
             //
 
             const string format = Config.SignificantFigures3;
@@ -370,8 +370,7 @@ namespace PdfSharp.Drawing.Pdf
         public void DrawPath(XPen pen, XBrush brush, XGraphicsPath path)
         {
 
-            Debug.Assert(pen != null);
-            Debug.Assert(brush != null);
+            Debug.Assert(!(pen == null && brush == null));
             //
             Realize(pen, brush);
             AppendPath(path._corePath);
