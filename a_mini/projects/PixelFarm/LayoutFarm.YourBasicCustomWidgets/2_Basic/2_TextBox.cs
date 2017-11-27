@@ -1,10 +1,10 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
-using System; 
+using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
- 
+
 using LayoutFarm.Text;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
@@ -50,7 +50,7 @@ namespace LayoutFarm.CustomWidgets
                 if (textEditRenderElement != null)
                 {
                     textEditRenderElement.CurrentTextSpanStyle = value;
-                     
+
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace LayoutFarm.CustomWidgets
                             //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
                             //-----------------------------------
                             //but for general 
-                            var textspan = textEditRenderElement.CreateEditableTextRun(splitBuffer);
+                            EditableRun textspan = textEditRenderElement.CreateEditableTextRun(splitBuffer);
                             textEditRenderElement.AddTextRun(textspan);
                         }
                     }
@@ -191,7 +191,7 @@ namespace LayoutFarm.CustomWidgets
                 }
                 tbox.BackgroundColor = this.backgroundColor;
                 tbox.SetController(this);
-                
+
                 if (this.textSurfaceListener != null)
                 {
                     tbox.TextSurfaceListener = textSurfaceListener;

@@ -52,19 +52,7 @@ namespace PixelFarm.Drawing.WinGdi
             //4.
             win32MemDc.ClearClipRect();
 
-            //ReleaseHdc();
-            //IntPtr gxdc = gx.GetHdc();
-            //MyWin32.SetViewportOrgEx(gxdc, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
-            //System.Drawing.Rectangle clipRect =
-            //    System.Drawing.Rectangle.Intersect(logicalTextBox.ToRect(), currentClipRect);
-            //clipRect.Offset(CanvasOrgX, CanvasOrgY);
-            //MyWin32.SetRectRgn(hRgn, clipRect.X, clipRect.Y, clipRect.Right, clipRect.Bottom);
-            //MyWin32.SelectClipRgn(gxdc, hRgn);
-            //NativeTextWin32.TextOut(gxdc, logicalTextBox.X, logicalTextBox.Y, buffer, buffer.Length); 
-            //MyWin32.SelectClipRgn(gxdc, IntPtr.Zero); 
-            //MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero); 
-            //gx.ReleaseHdc();
-
+            
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
@@ -159,7 +147,7 @@ namespace PixelFarm.Drawing.WinGdi
             {
 
                 this.currentTextFont = value;
-                win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).ToHfont());
+                win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).CachedHFont());
             }
         }
         public override Color CurrentTextColor

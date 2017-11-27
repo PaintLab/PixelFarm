@@ -261,33 +261,32 @@ namespace LayoutFarm.Text
                 {
                     case DIFF_FONT_SAME_TEXT_COLOR:
                         {
-                            var prevFont = canvas.CurrentFont;
-                            canvas.CurrentFont = style.FontInfo;
+                            RequestFont prevFont = canvas.CurrentFont;
                             canvas.DrawText(this.mybuffer,
-                               new Rectangle(0, 0, bWidth, bHeight),
-                               style.ContentHAlign);
-                            canvas.CurrentFont = prevFont;
+                                new Rectangle(0, 0, bWidth, bHeight),
+                                style.ContentHAlign);
                         }
                         break;
                     case DIFF_FONT_DIFF_TEXT_COLOR:
                         {
-                            var prevFont = canvas.CurrentFont;
-                            var prevColor = canvas.CurrentTextColor;
+                            RequestFont prevFont = canvas.CurrentFont;
+                            Color prevColor = canvas.CurrentTextColor;
                             canvas.CurrentFont = style.FontInfo;
                             canvas.CurrentTextColor = style.FontColor;
                             canvas.DrawText(this.mybuffer,
-                               new Rectangle(0, 0, bWidth, bHeight),
-                               style.ContentHAlign);
+                                 new Rectangle(0, 0, bWidth, bHeight),
+                                 style.ContentHAlign);
                             canvas.CurrentFont = prevFont;
                             canvas.CurrentTextColor = prevColor;
                         }
                         break;
                     case SAME_FONT_DIFF_TEXT_COLOR:
                         {
-                            var prevColor = canvas.CurrentTextColor;
+                            Color prevColor = canvas.CurrentTextColor;
+                            canvas.CurrentTextColor = style.FontColor;
                             canvas.DrawText(this.mybuffer,
-                            new Rectangle(0, 0, bWidth, bHeight),
-                            style.ContentHAlign);
+                                new Rectangle(0, 0, bWidth, bHeight),
+                                style.ContentHAlign);
                             canvas.CurrentTextColor = prevColor;
                         }
                         break;
