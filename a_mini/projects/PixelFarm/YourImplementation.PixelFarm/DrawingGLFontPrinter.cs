@@ -7,6 +7,7 @@ using PixelFarm.Agg;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using Typography.TextLayout;
+#if GL_ENABLE
 
 namespace PixelFarm.DrawingGL
 {
@@ -438,3 +439,6 @@ namespace PixelFarm.DrawingGL
     }
 
 }
+
+
+#endif

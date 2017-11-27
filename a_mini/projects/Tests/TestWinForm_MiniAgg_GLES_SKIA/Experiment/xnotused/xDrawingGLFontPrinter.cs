@@ -47,7 +47,7 @@
 //            textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
 //            aggPainter.TextPrinter = textPrinter;
 //        }
-//        public Typography.Rendering.HintTechnique HintTechnique
+//        public Typography.Contours.HintTechnique HintTechnique
 //        {
 //            get { return textPrinter.HintTechnique; }
 //            set { textPrinter.HintTechnique = value; }
@@ -170,11 +170,11 @@
 //        //-----------
 //        public void DrawString(char[] buffer, int startAt, int len, double x, double y)
 //        {
-//            int j = buffer.Length; 
+//            int j = buffer.Length;
 //            //resolve font from painter?  
 //            glyphPlans.Clear();
-//            _glyphLayout.Layout(_typeface, font.SizeInPoints, buffer, startAt, len, glyphPlans); 
-//            int n = glyphPlans.Count; 
+//            _glyphLayout.Layout(_typeface, font.SizeInPoints, buffer, startAt, len, glyphPlans);
+//            int n = glyphPlans.Count;
 //            Typography.Rendering.GlyphImage totalGlyphImg = simpleFontAtlas.TotalGlyph;
 
 //            //PERF:
@@ -196,7 +196,7 @@
 //                    {
 //                        continue;
 //                    }
-//                    PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect); 
+//                    PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
 //                    switch (textureKind)
 //                    {
 //                        case Typography.Rendering.TextureKind.Msdf:

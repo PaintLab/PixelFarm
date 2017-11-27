@@ -64,8 +64,8 @@ namespace Mini
                 //4. texture atlas based font texture 
                 //------------
                 //resolve request font 
-                var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
-                canvasPainter.TextPrinter = printer;
+                //var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
+                //canvasPainter.TextPrinter = printer;
             }
 
             //-----------------------------------------------
