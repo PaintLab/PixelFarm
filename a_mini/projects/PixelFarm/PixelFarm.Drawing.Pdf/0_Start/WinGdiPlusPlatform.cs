@@ -1,26 +1,27 @@
 ﻿//BSD, 2014-2017, WinterDev 
 
 using PixelFarm.Drawing.Fonts;
-namespace PixelFarm.Drawing.WinGdi
+
+namespace PixelFarm.Drawing.Pdf
 {
-    public static class WinGdiPlusPlatform
+    public static class PdfPlaform
     {
 
-        static WinGdiPlusPlatform()
+        static PdfPlaform()
         {
 
             PixelFarm.Agg.AggBuffMx.SetNaiveBufferImpl(new Win32AggBuffMx());
-            //3. set default encoing
-            WinGdiTextService.SetDefaultEncoding(System.Text.Encoding.ASCII);
+            //3. set default encoding
+           // WinGdiTextService.SetDefaultEncoding(System.Text.Encoding.ASCII);
         }
 
         public static void SetFontEncoding(System.Text.Encoding encoding)
         {
-            WinGdiTextService.SetDefaultEncoding(encoding);
+            //WinGdiTextService.SetDefaultEncoding(encoding);
         }
         public static void SetFontLoader(IFontLoader fontLoader)
         {
-            WinGdiFontFace.SetFontLoader(fontLoader);
+           // WinGdiFontFace.SetFontLoader(fontLoader);
         }
     }
 

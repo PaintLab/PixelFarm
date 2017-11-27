@@ -15,7 +15,7 @@
 
 
 using Win32;
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Pdf
 {
     partial class MyGdiPlusCanvas
     {
@@ -159,7 +159,8 @@ namespace PixelFarm.Drawing.WinGdi
             {
 
                 this.currentTextFont = value;
-                win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).ToHfont());
+                throw new System.NotSupportedException();
+                //win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).ToHfont());
             }
         }
         public override Color CurrentTextColor

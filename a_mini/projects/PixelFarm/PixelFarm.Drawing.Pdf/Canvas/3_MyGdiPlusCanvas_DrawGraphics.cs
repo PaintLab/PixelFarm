@@ -16,7 +16,7 @@
 using System;
 using System.Collections.Generic;
 using Win32;
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Pdf
 {
     partial class MyGdiPlusCanvas
     {
@@ -65,14 +65,14 @@ namespace PixelFarm.Drawing.WinGdi
                 c.R,
                 c.G,
                 c.B));
-        } 
+        }
         public override void DrawPath(GraphicsPath gfxPath)
         {
-            gx.DrawPath(internalPen, ResolveGraphicsPath(gfxPath)); 
+            gx.DrawPath(internalPen, ResolveGraphicsPath(gfxPath));
         }
         public override void FillRectangle(Brush brush, float left, float top, float width, float height)
         {
-            
+
             switch (brush.BrushKind)
             {
                 case BrushKind.Solid:
@@ -192,15 +192,15 @@ namespace PixelFarm.Drawing.WinGdi
                 var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
                 if (cacheBmp == null)
                 {
-
-                    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,
-                        image.Height,
-                        System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    //
-                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
-                    //
-                    Image.SetCacheInnerImage(image, bmp);
-                    return bmp;
+                    throw new NotSupportedException();
+                    //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,
+                    //    image.Height,
+                    //    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    ////
+                    //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
+                    ////
+                    //Image.SetCacheInnerImage(image, bmp);
+                    //return bmp;
                 }
                 else
                 {
@@ -243,7 +243,7 @@ namespace PixelFarm.Drawing.WinGdi
                 }
                 //loop draw
                 var inner = ResolveInnerBmp(image);
-                for (int i = 0; i < j; )
+                for (int i = 0; i < j;)
                 {
                     gx.DrawImage(inner,
                         destAndSrcPairs[i].ToRectF(),

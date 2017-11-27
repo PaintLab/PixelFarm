@@ -13,7 +13,7 @@
 // - Sun Tsu,
 // "The Art of War"
 
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Pdf
 {
     partial class MyGdiPlusCanvas
     {

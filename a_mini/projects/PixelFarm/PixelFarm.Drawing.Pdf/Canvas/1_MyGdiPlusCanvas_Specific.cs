@@ -16,7 +16,7 @@
 using System;
 using System.Collections.Generic;
 using Win32;
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Pdf
 {
     public partial class MyGdiPlusCanvas : Canvas, IDisposable
     {

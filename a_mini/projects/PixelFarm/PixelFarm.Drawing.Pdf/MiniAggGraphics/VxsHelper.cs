@@ -4,7 +4,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using PixelFarm.Agg;
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Pdf
 {
     public static class VxsHelper
     {

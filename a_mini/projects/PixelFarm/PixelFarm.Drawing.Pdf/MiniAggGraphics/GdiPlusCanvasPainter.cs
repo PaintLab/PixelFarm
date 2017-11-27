@@ -4,8 +4,9 @@ using System;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 
-namespace PixelFarm.Drawing.WinGdi
+namespace PixelFarm.Drawing.Pdf
 {
+    class WinGdiFont { }
     public class GdiPlusCanvasPainter : CanvasPainter
     {
         System.Drawing.Graphics _gfx;
@@ -127,7 +128,8 @@ namespace PixelFarm.Drawing.WinGdi
             set
             {
                 _currentFont = value;
-                _winGdiFont = WinGdiFontSystem.GetWinGdiFont(value);
+                throw new System.NotSupportedException();
+                //_winGdiFont = WinGdiFontSystem.GetWinGdiFont(value);
             }
         }
         public override Color FillColor

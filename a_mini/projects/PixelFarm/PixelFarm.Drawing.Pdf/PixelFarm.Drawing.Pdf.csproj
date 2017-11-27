@@ -50,9 +50,6 @@
     <Compile Include="Canvas\3_MyGdiPlusCanvas_DrawGraphics.cs" />
     <Compile Include="Canvas\4_MyGdiPlusCanvas_TextAndFonts.cs" />
     <Compile Include="Canvas\Conv.cs" />
-    <Compile Include="Implementation\BitmapHelper.cs" />
-    <Compile Include="Implementation\GdiPlusBitmapBackBuffer.cs" />
-    <Compile Include="Implementation\Region.cs" />
     <Compile Include="MiniAggGraphics\BufferBitmapStore.cs" />
     <Compile Include="MiniAggGraphics\GdiPlusCanvasPainter.cs" />
     <Compile Include="MiniAggGraphics\GdiPlusRenderVx.cs" />

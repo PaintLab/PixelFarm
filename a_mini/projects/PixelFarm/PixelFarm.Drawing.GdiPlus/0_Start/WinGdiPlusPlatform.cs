@@ -10,7 +10,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
 
             PixelFarm.Agg.AggBuffMx.SetNaiveBufferImpl(new Win32AggBuffMx());
-            //3. set default encoing
+            //3. set default encoding
             WinGdiTextService.SetDefaultEncoding(System.Text.Encoding.ASCII);
         }
 
