@@ -24,10 +24,8 @@ namespace LayoutFarm.Text
         {
             this.actualLineWidth = lineWidth;
             this.actualLineHeight = lineHeight;
+          
         }
-
-
-
         public void LocalSuspendLineReArrange()
         {
             lineFlags |= LOCAL_SUSPEND_LINE_REARRANGE;
