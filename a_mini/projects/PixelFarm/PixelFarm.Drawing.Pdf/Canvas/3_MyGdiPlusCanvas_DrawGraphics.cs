@@ -15,7 +15,7 @@
 
 using System;
 using System.Collections.Generic;
-using Win32;
+//using Win32;
 namespace PixelFarm.Drawing.Pdf
 {
     partial class MyGdiPlusCanvas
@@ -32,7 +32,7 @@ namespace PixelFarm.Drawing.Pdf
             }
             set
             {
-                this.internalPen.Color = ConvColor(this.strokeColor = value);
+                //this.internalPen.Color = ConvColor(this.strokeColor = value);
             }
         }
         public override float StrokeWidth
@@ -43,32 +43,32 @@ namespace PixelFarm.Drawing.Pdf
             }
             set
             {
-                this.internalPen.Width = this.strokeWidth = value;
+                //this.internalPen.Width = this.strokeWidth = value;
             }
         }
 
         public override void RenderTo(IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea)
         {
 
-            MyWin32.SetViewportOrgEx(win32MemDc.DC, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
-            MyWin32.BitBlt(
-                destHdc, destArea.X, destArea.Y, destArea.Width, destArea.Height, //dest
-                win32MemDc.DC, sourceX, sourceY, MyWin32.SRCCOPY); //src
-            MyWin32.SetViewportOrgEx(win32MemDc.DC, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
+            //MyWin32.SetViewportOrgEx(win32MemDc.DC, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
+            //MyWin32.BitBlt(
+            //    destHdc, destArea.X, destArea.Y, destArea.Width, destArea.Height, //dest
+            //    win32MemDc.DC, sourceX, sourceY, MyWin32.SRCCOPY); //src
+            //MyWin32.SetViewportOrgEx(win32MemDc.DC, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
 
         }
         public override void ClearSurface(PixelFarm.Drawing.Color c)
         {
 
-            gx.Clear(System.Drawing.Color.FromArgb(
-                c.A,
-                c.R,
-                c.G,
-                c.B));
+            //gx.Clear(System.Drawing.Color.FromArgb(
+            //    c.A,
+            //    c.R,
+            //    c.G,
+            //    c.B));
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {
-            gx.DrawPath(internalPen, ResolveGraphicsPath(gfxPath));
+            //gx.DrawPath(internalPen, ResolveGraphicsPath(gfxPath));
         }
         public override void FillRectangle(Brush brush, float left, float top, float width, float height)
         {
@@ -78,27 +78,27 @@ namespace PixelFarm.Drawing.Pdf
                 case BrushKind.Solid:
                     {
                         //use default solid brush
-                        SolidBrush solidBrush = (SolidBrush)brush;
-                        var prevColor = internalSolidBrush.Color;
-                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
-                        gx.FillRectangle(internalSolidBrush, left, top, width, height);
-                        internalSolidBrush.Color = prevColor;
+                        //SolidBrush solidBrush = (SolidBrush)brush;
+                        //var prevColor = internalSolidBrush.Color;
+                        //internalSolidBrush.Color = ConvColor(solidBrush.Color);
+                        //gx.FillRectangle(internalSolidBrush, left, top, width, height);
+                        //internalSolidBrush.Color = prevColor;
                     }
                     break;
                 case BrushKind.LinearGradient:
                     {
-                        //draw with gradient
-                        LinearGradientBrush linearBrush = (LinearGradientBrush)brush;
-                        var colors = linearBrush.GetColors();
-                        var points = linearBrush.GetStopPoints();
-                        using (var linearGradBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
-                             points[0].ToPointF(),
-                             points[1].ToPointF(),
-                             ConvColor(colors[0]),
-                             ConvColor(colors[1])))
-                        {
-                            gx.FillRectangle(linearGradBrush, left, top, width, height);
-                        }
+                        ////draw with gradient
+                        //LinearGradientBrush linearBrush = (LinearGradientBrush)brush;
+                        //var colors = linearBrush.GetColors();
+                        //var points = linearBrush.GetStopPoints();
+                        //using (var linearGradBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
+                        //     points[0].ToPointF(),
+                        //     points[1].ToPointF(),
+                        //     ConvColor(colors[0]),
+                        //     ConvColor(colors[1])))
+                        //{
+                        //    gx.FillRectangle(linearGradBrush, left, top, width, height);
+                        //}
                     }
                     break;
                 case BrushKind.GeometryGradient:
@@ -118,22 +118,22 @@ namespace PixelFarm.Drawing.Pdf
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
 
-            internalSolidBrush.Color = ConvColor(color);
-            gx.FillRectangle(internalSolidBrush, left, top, width, height);
+            //internalSolidBrush.Color = ConvColor(color);
+            //gx.FillRectangle(internalSolidBrush, left, top, width, height);
         }
 
 
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
 
-            internalPen.Color = ConvColor(color);
-            gx.DrawRectangle(internalPen, left, top, width, height);
+            //internalPen.Color = ConvColor(color);
+            //gx.DrawRectangle(internalPen, left, top, width, height);
         }
 
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
 
-            gx.DrawLine(internalPen, x1, y1, x2, y2);
+            //gx.DrawLine(internalPen, x1, y1, x2, y2);
         }
 
 
@@ -173,47 +173,47 @@ namespace PixelFarm.Drawing.Pdf
         {
             get
             {
-
-                return (SmoothingMode)(gx.SmoothingMode);
+                throw new NotSupportedException();
+                //return (SmoothingMode)(gx.SmoothingMode);
             }
             set
             {
 
-                gx.SmoothingMode = (System.Drawing.Drawing2D.SmoothingMode)value;
+                //gx.SmoothingMode = (System.Drawing.Drawing2D.SmoothingMode)value;
             }
         }
 
-        static System.Drawing.Bitmap ResolveInnerBmp(Image image)
-        {
+        //static System.Drawing.Bitmap ResolveInnerBmp(Image image)
+        //{
 
-            if (image is PixelFarm.Agg.ActualImage)
-            {
-                //this is known image
-                var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
-                if (cacheBmp == null)
-                {
-                    throw new NotSupportedException();
-                    //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,
-                    //    image.Height,
-                    //    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                    ////
-                    //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
-                    ////
-                    //Image.SetCacheInnerImage(image, bmp);
-                    //return bmp;
-                }
-                else
-                {
-                    //check if cache image is update or not 
-                    return cacheBmp;
-                }
-            }
-            else
-            {
-                //other image
-                return Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
-            }
-        }
+        //    if (image is PixelFarm.Agg.ActualImage)
+        //    {
+        //        //this is known image
+        //        var cacheBmp = Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
+        //        if (cacheBmp == null)
+        //        {
+        //            throw new NotSupportedException();
+        //            //System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image.Width,
+        //            //    image.Height,
+        //            //    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        //            ////
+        //            //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize((PixelFarm.Agg.ActualImage)image, bmp);
+        //            ////
+        //            //Image.SetCacheInnerImage(image, bmp);
+        //            //return bmp;
+        //        }
+        //        else
+        //        {
+        //            //check if cache image is update or not 
+        //            return cacheBmp;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //other image
+        //        return Image.GetCacheInnerImage(image) as System.Drawing.Bitmap;
+        //    }
+        //}
 
         /// <summary>
         /// Draws the specified portion of the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
@@ -225,33 +225,33 @@ namespace PixelFarm.Drawing.Pdf
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
 
-            gx.DrawImage(ResolveInnerBmp(image),
-                destRect.ToRectF(),
-                srcRect.ToRectF(),
-                System.Drawing.GraphicsUnit.Pixel);
+            //gx.DrawImage(ResolveInnerBmp(image),
+            //    destRect.ToRectF(),
+            //    srcRect.ToRectF(),
+            //    System.Drawing.GraphicsUnit.Pixel);
         }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
 
-            int j = destAndSrcPairs.Length;
-            if (j > 1)
-            {
-                if ((j % 2) != 0)
-                {
-                    //make it even number
-                    j -= 1;
-                }
-                //loop draw
-                var inner = ResolveInnerBmp(image);
-                for (int i = 0; i < j;)
-                {
-                    gx.DrawImage(inner,
-                        destAndSrcPairs[i].ToRectF(),
-                        destAndSrcPairs[i + 1].ToRectF(),
-                        System.Drawing.GraphicsUnit.Pixel);
-                    i += 2;
-                }
-            }
+            //int j = destAndSrcPairs.Length;
+            //if (j > 1)
+            //{
+            //    if ((j % 2) != 0)
+            //    {
+            //        //make it even number
+            //        j -= 1;
+            //    }
+            //    //loop draw
+            //    var inner = ResolveInnerBmp(image);
+            //    for (int i = 0; i < j;)
+            //    {
+            //        gx.DrawImage(inner,
+            //            destAndSrcPairs[i].ToRectF(),
+            //            destAndSrcPairs[i + 1].ToRectF(),
+            //            System.Drawing.GraphicsUnit.Pixel);
+            //        i += 2;
+            //    }
+            //}
         }
         /// <summary>
         /// Draws the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
@@ -260,30 +260,30 @@ namespace PixelFarm.Drawing.Pdf
         public override void DrawImage(Image image, RectangleF destRect)
         {
 
-            System.Drawing.Bitmap inner = ResolveInnerBmp(image);
-            if (image.IsReferenceImage)
-            {
-                gx.DrawImage(inner,
-                    destRect.ToRectF(),
-                     new System.Drawing.RectangleF(
-                         image.ReferenceX, image.ReferenceY,
-                         image.Width, image.Height),
-                    System.Drawing.GraphicsUnit.Pixel);
-            }
-            else
-            {
-                gx.DrawImage(inner, destRect.ToRectF());
-            }
+            //System.Drawing.Bitmap inner = ResolveInnerBmp(image);
+            //if (image.IsReferenceImage)
+            //{
+            //    gx.DrawImage(inner,
+            //        destRect.ToRectF(),
+            //         new System.Drawing.RectangleF(
+            //             image.ReferenceX, image.ReferenceY,
+            //             image.Width, image.Height),
+            //        System.Drawing.GraphicsUnit.Pixel);
+            //}
+            //else
+            //{
+            //    gx.DrawImage(inner, destRect.ToRectF());
+            //}
         }
         public override void FillPath(Color color, GraphicsPath gfxPath)
         {
 
-            //solid color
-            var prevColor = internalSolidBrush.Color;
-            internalSolidBrush.Color = ConvColor(color);
-            System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(gfxPath);
-            gx.FillPath(internalSolidBrush, innerPath);
-            internalSolidBrush.Color = prevColor;
+            ////solid color
+            //var prevColor = internalSolidBrush.Color;
+            //internalSolidBrush.Color = ConvColor(color);
+            //System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(gfxPath);
+            //gx.FillPath(internalSolidBrush, innerPath);
+            //internalSolidBrush.Color = prevColor;
         }
         /// <summary>
         /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
@@ -292,132 +292,132 @@ namespace PixelFarm.Drawing.Pdf
         public override void FillPath(Brush brush, GraphicsPath path)
         {
 
-            switch (brush.BrushKind)
-            {
-                case BrushKind.Solid:
-                    {
-                        SolidBrush solidBrush = (SolidBrush)brush;
-                        var prevColor = internalSolidBrush.Color;
-                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
-                        //
-                        System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
-                        gx.FillPath(internalSolidBrush, innerPath);
-                        //
-                        internalSolidBrush.Color = prevColor;
-                    }
-                    break;
-                case BrushKind.LinearGradient:
-                    {
-                        LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
-                        var prevColor = internalSolidBrush.Color;
-                        internalSolidBrush.Color = ConvColor(solidBrush.Color);
-                        //
-                        System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
-                        gx.FillPath(internalSolidBrush, innerPath);
-                        //
-                        internalSolidBrush.Color = prevColor;
-                    }
-                    break;
-                default:
-                    {
-                    }
-                    break;
-            }
+            //switch (brush.BrushKind)
+            //{
+            //    case BrushKind.Solid:
+            //        {
+            //            SolidBrush solidBrush = (SolidBrush)brush;
+            //            var prevColor = internalSolidBrush.Color;
+            //            internalSolidBrush.Color = ConvColor(solidBrush.Color);
+            //            //
+            //            System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
+            //            gx.FillPath(internalSolidBrush, innerPath);
+            //            //
+            //            internalSolidBrush.Color = prevColor;
+            //        }
+            //        break;
+            //    case BrushKind.LinearGradient:
+            //        {
+            //            LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
+            //            var prevColor = internalSolidBrush.Color;
+            //            internalSolidBrush.Color = ConvColor(solidBrush.Color);
+            //            //
+            //            System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
+            //            gx.FillPath(internalSolidBrush, innerPath);
+            //            //
+            //            internalSolidBrush.Color = prevColor;
+            //        }
+            //        break;
+            //    default:
+            //        {
+            //        }
+            //        break;
+            //}
         }
-        static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(GraphicsPath path)
-        {
-            //convert from graphics path to internal presentation
-            System.Drawing.Drawing2D.GraphicsPath innerPath = path.InnerPath as System.Drawing.Drawing2D.GraphicsPath;
-            if (innerPath != null)
-            {
-                return innerPath;
-            }
-            //--------
-            innerPath = new System.Drawing.Drawing2D.GraphicsPath();
-            path.InnerPath = innerPath;
-            List<float> points;
-            List<PathCommand> cmds;
-            GraphicsPath.GetPathData(path, out points, out cmds);
-            int j = cmds.Count;
-            int p_index = 0;
-            for (int i = 0; i < j; ++i)
-            {
-                PathCommand cmd = cmds[i];
-                switch (cmd)
-                {
-                    default:
-                        throw new NotSupportedException();
-                    case PathCommand.Arc:
-                        innerPath.AddArc(
-                            points[p_index],
-                            points[p_index + 1],
-                            points[p_index + 2],
-                            points[p_index + 3],
-                            points[p_index + 4],
-                            points[p_index + 5]);
-                        p_index += 6;
-                        break;
-                    case PathCommand.Bezier:
-                        innerPath.AddBezier(
-                            points[p_index],
-                            points[p_index + 1],
-                            points[p_index + 2],
-                            points[p_index + 3],
-                            points[p_index + 4],
-                            points[p_index + 5],
-                            points[p_index + 6],
-                            points[p_index + 7]);
-                        p_index += 8;
-                        break;
-                    case PathCommand.CloseFigure:
-                        innerPath.CloseFigure();
-                        break;
-                    case PathCommand.Ellipse:
-                        innerPath.AddEllipse(
-                            points[p_index],
-                            points[p_index + 1],
-                            points[p_index + 2],
-                            points[p_index + 3]);
-                        p_index += 4;
-                        break;
-                    case PathCommand.Line:
-                        innerPath.AddLine(
-                            points[p_index],
-                            points[p_index + 1],
-                            points[p_index + 2],
-                            points[p_index + 3]);
-                        p_index += 4;
-                        break;
-                    case PathCommand.Rect:
-                        innerPath.AddRectangle(
-                           new System.Drawing.RectangleF(
-                          points[p_index],
-                          points[p_index + 1],
-                          points[p_index + 2],
-                          points[p_index + 3]));
-                        p_index += 4;
-                        break;
-                    case PathCommand.StartFigure:
-                        break;
-                }
-            }
+        //static System.Drawing.Drawing2D.GraphicsPath ResolveGraphicsPath(GraphicsPath path)
+        //{
+        //    //convert from graphics path to internal presentation
+        //    System.Drawing.Drawing2D.GraphicsPath innerPath = path.InnerPath as System.Drawing.Drawing2D.GraphicsPath;
+        //    if (innerPath != null)
+        //    {
+        //        return innerPath;
+        //    }
+        //    //--------
+        //    innerPath = new System.Drawing.Drawing2D.GraphicsPath();
+        //    path.InnerPath = innerPath;
+        //    List<float> points;
+        //    List<PathCommand> cmds;
+        //    GraphicsPath.GetPathData(path, out points, out cmds);
+        //    int j = cmds.Count;
+        //    int p_index = 0;
+        //    for (int i = 0; i < j; ++i)
+        //    {
+        //        PathCommand cmd = cmds[i];
+        //        switch (cmd)
+        //        {
+        //            default:
+        //                throw new NotSupportedException();
+        //            case PathCommand.Arc:
+        //                innerPath.AddArc(
+        //                    points[p_index],
+        //                    points[p_index + 1],
+        //                    points[p_index + 2],
+        //                    points[p_index + 3],
+        //                    points[p_index + 4],
+        //                    points[p_index + 5]);
+        //                p_index += 6;
+        //                break;
+        //            case PathCommand.Bezier:
+        //                innerPath.AddBezier(
+        //                    points[p_index],
+        //                    points[p_index + 1],
+        //                    points[p_index + 2],
+        //                    points[p_index + 3],
+        //                    points[p_index + 4],
+        //                    points[p_index + 5],
+        //                    points[p_index + 6],
+        //                    points[p_index + 7]);
+        //                p_index += 8;
+        //                break;
+        //            case PathCommand.CloseFigure:
+        //                innerPath.CloseFigure();
+        //                break;
+        //            case PathCommand.Ellipse:
+        //                innerPath.AddEllipse(
+        //                    points[p_index],
+        //                    points[p_index + 1],
+        //                    points[p_index + 2],
+        //                    points[p_index + 3]);
+        //                p_index += 4;
+        //                break;
+        //            case PathCommand.Line:
+        //                innerPath.AddLine(
+        //                    points[p_index],
+        //                    points[p_index + 1],
+        //                    points[p_index + 2],
+        //                    points[p_index + 3]);
+        //                p_index += 4;
+        //                break;
+        //            case PathCommand.Rect:
+        //                innerPath.AddRectangle(
+        //                   new System.Drawing.RectangleF(
+        //                  points[p_index],
+        //                  points[p_index + 1],
+        //                  points[p_index + 2],
+        //                  points[p_index + 3]));
+        //                p_index += 4;
+        //                break;
+        //            case PathCommand.StartFigure:
+        //                break;
+        //        }
+        //    }
 
 
-            return innerPath;
-        }
+        //    return innerPath;
+        //}
         public override void FillPolygon(Brush brush, PointF[] points)
         {
 
-            var pps = ConvPointFArray(points);
-            //use internal solid color            
-            gx.FillPolygon(brush.InnerBrush as System.Drawing.Brush, pps);
+            //var pps = ConvPointFArray(points);
+            ////use internal solid color            
+            //gx.FillPolygon(brush.InnerBrush as System.Drawing.Brush, pps);
         }
         public override void FillPolygon(Color color, PointF[] points)
         {
 
-            var pps = ConvPointFArray(points);
-            internalSolidBrush.Color = ConvColor(color);
-            gx.FillPolygon(this.internalSolidBrush, pps);
+            //var pps = ConvPointFArray(points);
+            //internalSolidBrush.Color = ConvColor(color);
+            //gx.FillPolygon(this.internalSolidBrush, pps);
         }
 
         ////==========================================================

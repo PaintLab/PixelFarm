@@ -30,14 +30,14 @@ namespace PixelFarm.Drawing.Pdf
         public override void SetCanvasOrigin(int x, int y)
         {
 
-            //----------- 
-            int total_dx = x - canvasOriginX;
-            int total_dy = y - canvasOriginY;
-            this.gx.TranslateTransform(total_dx, total_dy);
-            //clip rect move to another direction***
-            this.currentClipRect.Offset(-total_dx, -total_dy);
-            this.canvasOriginX = x;
-            this.canvasOriginY = y;
+            ////----------- 
+            //int total_dx = x - canvasOriginX;
+            //int total_dy = y - canvasOriginY;
+            //this.gx.TranslateTransform(total_dx, total_dy);
+            ////clip rect move to another direction***
+            //this.currentClipRect.Offset(-total_dx, -total_dy);
+            //this.canvasOriginX = x;
+            //this.canvasOriginY = y;
         }
 
         public override int CanvasOriginX
@@ -58,11 +58,11 @@ namespace PixelFarm.Drawing.Pdf
         public override void SetClipRect(Rectangle rect, CombineMode combineMode = CombineMode.Replace)
         {
 
-            gx.SetClip(
-               this.currentClipRect = new System.Drawing.Rectangle(
-                    rect.X, rect.Y,
-                    rect.Width, rect.Height),
-                    (System.Drawing.Drawing2D.CombineMode)combineMode);
+            //gx.SetClip(
+            //   this.currentClipRect = new System.Drawing.Rectangle(
+            //        rect.X, rect.Y,
+            //        rect.Width, rect.Height),
+            //        (System.Drawing.Drawing2D.CombineMode)combineMode);
         }
         public bool IntersectsWith(Rectangle clientRect)
         {
@@ -71,32 +71,33 @@ namespace PixelFarm.Drawing.Pdf
 
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
-            this.clipRectStack.Push(currentClipRect);
-            System.Drawing.Rectangle intersectResult =
-                  System.Drawing.Rectangle.Intersect(
-                  System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
-                  new System.Drawing.Rectangle(0, 0, width, height));
-            currentClipRect = intersectResult;
-            if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
-            {
-                //not intersec?
-                return false;
-            }
-            else
-            {
-                updateArea = Conv.ToRect(intersectResult);
-                gx.SetClip(intersectResult);
-                return true;
-            }
+            throw new System.NotSupportedException();
+            //this.clipRectStack.Push(currentClipRect);
+            //System.Drawing.Rectangle intersectResult =
+            //      System.Drawing.Rectangle.Intersect(
+            //      System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
+            //      new System.Drawing.Rectangle(0, 0, width, height));
+            //currentClipRect = intersectResult;
+            //if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
+            //{
+            //    //not intersec?
+            //    return false;
+            //}
+            //else
+            //{
+            //    //updateArea = Conv.ToRect(intersectResult);
+            //    //gx.SetClip(intersectResult);
+            //    return true;
+            //}
         }
         public override void PopClipAreaRect()
         {
-            if (clipRectStack.Count > 0)
-            {
+            //if (clipRectStack.Count > 0)
+            //{
 
-                currentClipRect = clipRectStack.Pop();
-                gx.SetClip(currentClipRect);
-            }
+            //    currentClipRect = clipRectStack.Pop();
+            //    gx.SetClip(currentClipRect);
+            //}
         }
 
 
@@ -105,7 +106,8 @@ namespace PixelFarm.Drawing.Pdf
         {
             get
             {
-                return currentClipRect.ToRect();
+                throw new System.NotSupportedException();
+                //return currentClipRect.ToRect();
             }
         }
 

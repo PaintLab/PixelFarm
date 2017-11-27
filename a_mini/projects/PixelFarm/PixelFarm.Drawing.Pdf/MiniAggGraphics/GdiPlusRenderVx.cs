@@ -6,7 +6,7 @@ namespace PixelFarm.Drawing.Pdf
     class WinGdiRenderVx : RenderVx
     {
         internal VertexStoreSnap snap;
-        internal System.Drawing.Drawing2D.GraphicsPath path;
+        //internal System.Drawing.Drawing2D.GraphicsPath path;
         public WinGdiRenderVx(VertexStoreSnap snap)
         {
             this.snap = snap;
