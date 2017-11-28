@@ -48,6 +48,11 @@ namespace LayoutFarm
             canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
             updateArea.Offset(myviewportX, myviewportY);
             this.DrawBoxContent(canvas, updateArea);
+
+#if DEBUG
+            //for debug
+            // canvas.dbug_DrawCrossRect(Color.Red,updateArea);
+#endif
             canvas.OffsetCanvasOrigin(myviewportX, myviewportY);
             updateArea.Offset(-myviewportX, -myviewportY);
         }

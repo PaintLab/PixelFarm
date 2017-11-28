@@ -413,10 +413,7 @@ namespace LayoutFarm.CustomWidgets
                             var element = this.GetChild(i) as UIBox;
                             if (element != null)
                             {
-                                //if (element.dbugBreakMe)
-                                //{
-
-                                //}
+                                
                                 element.PerformContentLayout();
                                 //int elemH = element.HasSpecificHeight ?
                                 //    element.Height :

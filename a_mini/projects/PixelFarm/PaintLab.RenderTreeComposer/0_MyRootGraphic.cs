@@ -8,7 +8,7 @@ namespace LayoutFarm.UI
 {
     public sealed class MyRootGraphic : RootGraphic, ITopWindowEventRootProvider
     {
-        List<RenderElement> layoutQueue = new List<RenderElement>();
+
         List<ToNotifySizeChangedEvent> tobeNotifySizeChangedList = new List<ToNotifySizeChangedEvent>();
         List<RenderElementRequest> renderRequestList = new List<RenderElementRequest>();
         GraphicsTimerTaskManager graphicTimerTaskMan;
@@ -93,14 +93,12 @@ namespace LayoutFarm.UI
             InvokeClearingBeforeRender();
             this.LayoutQueueClearing = false;
             this.ClearRenderRequests();
-            if (layoutQueue.Count == 0)
-            {
-                return;
-            }
             ClearNotificationSizeChangeList();
         }
         void ClearNotificationSizeChangeList()
         {
+            LayoutFarm.EventQueueSystem.CentralEventQueue.InvokeEventQueue();
+
         }
 
         public override RequestFont DefaultTextEditFontInfo
@@ -215,24 +213,6 @@ namespace LayoutFarm.UI
             {
                 this.topWindowEventRoot.CurrentKeyboardFocusedElement = owner;
             }
-        }
-
-        public override void AddToLayoutQueue(RenderElement renderElement)
-        {
-#if DEBUG
-            RootGraphic dbugVisualRoot = this;
-#endif
-            if (renderElement.IsInLayoutQueue)
-            {
-                return;
-            }
-            renderElement.IsInLayoutQueue = true;
-#if DEBUG
-            dbugVisualRoot.dbug_PushLayoutTraceMessage(RootGraphic.dbugMsg_ADD_TO_LAYOUT_QUEUE, renderElement);
-#endif
-
-            renderElement.IsInLayoutQueue = true;
-            layoutQueue.Add(renderElement);
         }
 
 

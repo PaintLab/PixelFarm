@@ -76,7 +76,7 @@
     <Compile Include="Demo2\2.3_Demo_SingleLineTextBox_WithSuggestion.cs" />
     <Compile Include="Demo2\2.4_Demo_SingleTextLine_With_Compartment.cs" />
     <Compile Include="Demo2\2.5_Demo_MultiLineTextBox_WithSugggestion.cs" />
-    <Compile Include="Demo2\2.6_Demo_MultiLineTextBox_WithSugggestion.cs" />
+    <Compile Include="Demo2\2.6_Demo_MultiLineText_WithSuggestionPopupWin.cs" />
     <Compile Include="YourImplementation\DemoBase.cs" />
     <Compile Include="YourImplementation\FormCanvasHelper.cs" />
     <Compile Include="YourImplementation\FormDemoList.cs">
