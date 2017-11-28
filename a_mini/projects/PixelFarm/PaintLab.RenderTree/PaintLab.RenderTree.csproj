@@ -61,6 +61,8 @@
     <Compile Include="5_HitTest\HitChain.cs" />
     <Compile Include="6_debug\dbugHitTracker.cs" />
     <Compile Include="6_debug\IdbugOutputWindow.cs" />
+    <Compile Include="7_ContentMx\1_ImageBinder.cs" />
+    <Compile Include="8_EventQueue\EventQueueSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

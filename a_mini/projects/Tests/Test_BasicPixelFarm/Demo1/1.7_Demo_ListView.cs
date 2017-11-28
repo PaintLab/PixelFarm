@@ -25,6 +25,7 @@ namespace LayoutFarm
                 {
                     listItem.BackColor = KnownColors.FromKnownColor(KnownColor.Orange);
                 }
+                listItem.Text = "A" + i;
                 listview.AddItem(listItem);
             }
         }

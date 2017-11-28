@@ -316,7 +316,7 @@ namespace LayoutFarm.CustomWidgets
         public ListItem(int width, int height)
             : base(width, height)
         {
-            //this.RegisterNativeEvent(1 << UIEventIdentifier.NE_MOUSE_DOWN);
+
             this.TransparentAllMouseEvents = true;
         }
         public override RenderElement CurrentPrimaryRenderElement

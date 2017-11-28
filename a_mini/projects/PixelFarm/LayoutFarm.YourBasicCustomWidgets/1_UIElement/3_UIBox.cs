@@ -27,7 +27,7 @@ namespace LayoutFarm.UI
         }
         public virtual void Focus()
         {
-            //make this keyboard focus able
+            //make this keyboard focusable
             if (this.HasReadyRenderElement)
             {
                 //focus
