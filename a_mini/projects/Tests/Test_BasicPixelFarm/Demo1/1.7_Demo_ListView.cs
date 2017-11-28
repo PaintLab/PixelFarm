@@ -26,6 +26,7 @@ namespace LayoutFarm
                 }
                 listview.AddItem(listItem);
             }
+            listview.PerformContentLayout();
         }
     }
 }

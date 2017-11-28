@@ -3,6 +3,7 @@
 using System;
 using PixelFarm.Drawing;
 using LayoutFarm.RenderBoxes;
+
 namespace LayoutFarm
 {
     public interface IRenderElement
@@ -51,7 +52,7 @@ namespace LayoutFarm
 
         public abstract void ClearRenderRequests();
         public abstract void AddToLayoutQueue(RenderElement renderElement);
- 
+
         public event EventHandler ClearingBeforeRender;
         public void InvokeClearingBeforeRender()
         {

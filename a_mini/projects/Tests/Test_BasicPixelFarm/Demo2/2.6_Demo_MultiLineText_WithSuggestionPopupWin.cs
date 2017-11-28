@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm
 {
-    [DemoNote("2.6 MultiLineText_WithSuggestionPopupWin")]
+    [DemoNote("2.6 Demo_MultiLineText_WithSuggestionPopupWin")]
     class Demo_MultiLineText_WithSuggestionPopupWin : DemoBase
     {
         LayoutFarm.CustomWidgets.TextBox textbox;
@@ -179,6 +179,7 @@ namespace LayoutFarm
                 sgBox.Show();
                 //TODO: implement selectedIndex suggestion hint here
                 sgBox.SelectedIndex = 0;
+
                 //move listview under caret position 
                 var caretPos = textbox.CaretPosition;
                 //temp fixed
@@ -190,6 +191,7 @@ namespace LayoutFarm
                 }
 
                 sgBox.SetLocation(textBoxGlobalOffset.X + caretPos.X, caretPos.Y + 70);
+                sgBox.EnsureSelectedItemVisible();
             }
             else
             {
@@ -518,7 +520,14 @@ Zimbabwe");
         public int SelectedIndex
         {
             get { return this.listView.SelectedIndex; }
-            set { this.listView.SelectedIndex = value; }
+            set
+            {
+                this.listView.SelectedIndex = value;
+            }
+        }
+        public void EnsureSelectedItemVisible()
+        {
+            listView.EnsureSelectedItemVisible();
         }
         public bool Visible
         {

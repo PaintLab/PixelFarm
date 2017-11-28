@@ -3,7 +3,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
@@ -46,7 +45,10 @@ namespace LayoutFarm.CustomWidgets
             this.panel = simpleBox;
             uiList.AddUI(panel);
         }
-
+        public override void PerformContentLayout()
+        {
+            panel.PerformContentLayout();
+        }
         void simpleBox_KeyDown(object sender, UIKeyEventArgs e)
         {
             if (selectedItem != null && ListItemKeyboardEvent != null)
