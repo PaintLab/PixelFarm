@@ -75,9 +75,6 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\RenderVx.cs">
       <Link>2_DrawingCanvas\1_Canvas\RenderVx.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\2_Drawing\1_ImageBinder.cs">
-      <Link>2_DrawingCanvas\2_Drawing\1_ImageBinder.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\2_Drawing\FontStyle.cs">
       <Link>2_DrawingCanvas\2_Drawing\FontStyle.cs</Link>
     </Compile>
