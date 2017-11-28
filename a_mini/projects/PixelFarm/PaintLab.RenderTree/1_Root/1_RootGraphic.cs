@@ -15,7 +15,7 @@ namespace LayoutFarm
     }
 
 
-    public abstract partial class RootGraphic : IRootGraphics
+    public abstract partial class RootGraphic
     {
         public delegate void PaintToOutputWindowDelegate();
         protected PaintToOutputWindowDelegate paintToOutputWindowHandler;
