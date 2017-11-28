@@ -8,6 +8,14 @@ namespace LayoutFarm
         protected override void OnStartDemo(SampleViewport viewport)
         {
             var textbox = new LayoutFarm.CustomWidgets.TextBox(400, 30, false);
+            var textSpanStyle = new Text.TextSpanStyle();
+
+            //test with various font style
+            textSpanStyle.FontInfo = new PixelFarm.Drawing.RequestFont("tahoma", 18);
+            textSpanStyle.FontColor = new PixelFarm.Drawing.Color(255, 0, 0);
+            //set default style
+            textbox.DefaultSpanStyle = textSpanStyle;
+
             viewport.AddContent(textbox);
             textbox.InvalidateGraphics();
         }

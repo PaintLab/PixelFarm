@@ -368,6 +368,10 @@ namespace LayoutFarm.Text
             }
             return null;
         }
+        /// <summary>
+        /// append to last
+        /// </summary>
+        /// <param name="line"></param>
         void AppendLine(EditableTextLine line)
         {
             if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
@@ -555,7 +559,7 @@ namespace LayoutFarm.Text
             if (lines != null)
             {
                 int j = lines.Count;
-                if (insertAt > j - 1)
+                if (insertAt >= j)
                 {
                     AppendLine(textLine);
                 }
@@ -584,8 +588,9 @@ namespace LayoutFarm.Text
                 lineCollection = lines;
                 FlowLayerHasMultiLines = true;
                 int j = lines.Count;
-                if (insertAt > j - 1)
+                if (insertAt >= j)
                 {
+                    //append last
                     AppendLine(textLine);
                 }
                 else

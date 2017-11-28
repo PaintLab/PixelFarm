@@ -22,7 +22,7 @@ namespace LayoutFarm.Text
             bool isMultiLine)
             : base(rootgfx, width, height)
         {
-            GlobalCaretController.RegisterCaretBlink(rootgfx);            
+            GlobalCaretController.RegisterCaretBlink(rootgfx);
             myCaret = new CaretRenderElement(rootgfx, 2, 17);
             myCaret.TransparentForAllEvents = true;
             this.MayHasViewport = true;
@@ -46,8 +46,12 @@ namespace LayoutFarm.Text
         public TextSpanStyle CurrentTextSpanStyle
         {
             get { return this.currentSpanStyle; }
-            set { this.currentSpanStyle = value; }
+            set
+            {
+                this.currentSpanStyle = value;
+            }
         }
+
         public TextMan TextMan
         {
             get
@@ -177,6 +181,8 @@ namespace LayoutFarm.Text
 
         internal void SwapCaretState()
         {
+            //TODO: review here ***
+
             this.stateShowCaret = !stateShowCaret;
             this.InvalidateGraphics();
             //int swapcount = dbugCaretSwapCount++;
@@ -857,6 +863,7 @@ namespace LayoutFarm.Text
         {
             //----------------------
             Point textManCaretPos = internalTextLayerController.CaretPos;
+            myCaret.SetHeight(internalTextLayerController.CurrentCaretHeight);
             textManCaretPos.Offset(-ViewportX, -ViewportY);
             //----------------------  
             if (textManCaretPos.X >= this.Width)

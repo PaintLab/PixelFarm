@@ -1,6 +1,6 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
-using System; 
+using System;
 using System.Collections.Generic;
 using System.Text;
 using PixelFarm.Drawing;
@@ -227,6 +227,7 @@ namespace LayoutFarm.Text
 
         public void SplitToNewLine()
         {
+
             EditableRun lineBreakRun = new EditableTextRun(this.Root, '\n', this.CurrentSpanStyle);
             EditableRun currentRun = CurrentTextRun;
             if (CurrentLine.IsBlankLine)

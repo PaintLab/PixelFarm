@@ -10,7 +10,9 @@ namespace LayoutFarm.Text
         {
             if (afterTextRun == null)
             {
-                this.EndWithLineBreak = true; EditableTextLine newline = editableFlowLayer.InsertNewLine(currentLineNumber + 1);
+                this.EndWithLineBreak = true;
+                EditableTextLine newline = editableFlowLayer.InsertNewLine(currentLineNumber + 1);
+                //
                 if (editableFlowLayer.LineCount - 1 != newline.LineNumber)
                 {
                     newline.EndWithLineBreak = true;
@@ -19,7 +21,9 @@ namespace LayoutFarm.Text
             }
             if (afterTextRun.NextTextRun == null)
             {
-                this.EndWithLineBreak = true; EditableTextLine newline = editableFlowLayer.InsertNewLine(currentLineNumber + 1);
+                this.EndWithLineBreak = true;
+                EditableTextLine newline = editableFlowLayer.InsertNewLine(currentLineNumber + 1);
+                //
                 if (editableFlowLayer.LineCount - 1 != newline.LineNumber)
                 {
                     newline.EndWithLineBreak = true;
@@ -36,7 +40,10 @@ namespace LayoutFarm.Text
                     }
                 }
 
-                this.EndWithLineBreak = true; this.LocalSuspendLineReArrange(); EditableTextLine newTextline = editableFlowLayer.InsertNewLine(currentLineNumber + 1);
+                this.EndWithLineBreak = true;
+                this.LocalSuspendLineReArrange();
+                EditableTextLine newTextline = editableFlowLayer.InsertNewLine(currentLineNumber + 1);
+                //
                 int j = tempTextRuns.Count;
                 newTextline.LocalSuspendLineReArrange(); int cx = 0;
                 for (int i = 0; i < j; ++i)
@@ -68,6 +75,7 @@ namespace LayoutFarm.Text
                 }
                 this.EndWithLineBreak = true;
                 EditableTextLine newTextline = editableFlowLayer.InsertNewLine(currentLineNumber + 1);
+                //
                 this.LocalSuspendLineReArrange();
                 newTextline.LocalSuspendLineReArrange();
                 int j = tempTextRuns.Count;
