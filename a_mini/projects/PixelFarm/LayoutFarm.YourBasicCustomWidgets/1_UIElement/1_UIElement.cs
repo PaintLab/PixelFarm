@@ -127,11 +127,6 @@ namespace LayoutFarm.UI
         {
             //add to layout queue
             UISystem.AddToLayoutQueue(this);
-
-            //if (this.HasReadyRenderElement)
-            //{
-            //    this.CurrentPrimaryRenderElement.Root.AddToLayoutQueue(this.CurrentPrimaryRenderElement);
-            //}
         }
         protected virtual void OnContentLayout()
         {
