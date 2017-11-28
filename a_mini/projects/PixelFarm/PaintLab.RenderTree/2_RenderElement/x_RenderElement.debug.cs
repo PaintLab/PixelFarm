@@ -162,11 +162,7 @@ namespace LayoutFarm
                 }
             }
 
-            if (this.IsInLayoutQueue)
-            {
-                info += "[Q]";
-            }
-
+         
             return info;
         }
         public int dbug_BeginArr;

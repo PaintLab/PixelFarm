@@ -14,7 +14,6 @@ namespace LayoutFarm
 #endif
     }
 
-
     public abstract partial class RootGraphic
     {
         public delegate void PaintToOutputWindowDelegate();

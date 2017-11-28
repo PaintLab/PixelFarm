@@ -34,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_MyRootGraphic.cs" />
+    <Compile Include="1_Events\EventQueueSystem.cs" />
     <Compile Include="TopWindowRenderBox.cs" />
     <Compile Include="1_Events\GraphicsTimerTasksManager.cs" />
     <Compile Include="1_Events\MyIntervalTaskEventArgs.cs" />

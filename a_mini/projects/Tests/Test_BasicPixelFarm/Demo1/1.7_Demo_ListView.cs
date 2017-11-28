@@ -11,6 +11,7 @@ namespace LayoutFarm
             var listview = new LayoutFarm.CustomWidgets.ListView(300, 400);
             listview.SetLocation(10, 10);
             listview.BackColor = KnownColors.FromKnownColor(KnownColor.LightGray);
+            //add list view to viewport
             viewport.AddContent(listview);
             //add 
             for (int i = 0; i < 10; ++i)
@@ -26,7 +27,6 @@ namespace LayoutFarm
                 }
                 listview.AddItem(listItem);
             }
-            listview.PerformContentLayout();
         }
     }
 }

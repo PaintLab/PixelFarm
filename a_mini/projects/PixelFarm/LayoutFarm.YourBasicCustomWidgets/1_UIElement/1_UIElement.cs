@@ -1,7 +1,33 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
+using System.Collections.Generic;
 namespace LayoutFarm.UI
 {
+    public static class UISystem
+    {
+        static Queue<UIElement> s_layoutQueue = new Queue<UIElement>();
+        static UISystem()
+        {
+            LayoutFarm.EventQueueSystem.CentralEventQueue.RegisterEventQueue(ClearLayoutQueue);
+        }
+        internal static void AddToLayoutQueue(UIElement ui)
+        {
+            if (ui.IsInLayoutQueue) return;
+            s_layoutQueue.Enqueue(ui);
+            ui.IsInLayoutQueue = true;
+        }
+        public static void ClearLayoutQueue()
+        {
+            int count = s_layoutQueue.Count;
+            for (int i = count - 1; i >= 0; --i)
+            {
+                UIElement ui = s_layoutQueue.Dequeue();
+                UIElement.InvokeContentLayout(ui);
+                ui.IsInLayoutQueue = false;
+            }
+        }
+    }
+
     public abstract partial class UIElement : IEventListener
     {
 
@@ -11,6 +37,8 @@ namespace LayoutFarm.UI
         public UIElement()
         {
         }
+
+        internal bool IsInLayoutQueue { get; set; }
 
         public abstract RenderElement GetPrimaryRenderElement(RootGraphic rootgfx);
         public bool TransparentAllMouseEvents
@@ -98,10 +126,12 @@ namespace LayoutFarm.UI
         public void InvalidateLayout()
         {
             //add to layout queue
-            if (this.HasReadyRenderElement)
-            {
-                this.CurrentPrimaryRenderElement.Root.AddToLayoutQueue(this.CurrentPrimaryRenderElement);
-            }
+            UISystem.AddToLayoutQueue(this);
+
+            //if (this.HasReadyRenderElement)
+            //{
+            //    this.CurrentPrimaryRenderElement.Root.AddToLayoutQueue(this.CurrentPrimaryRenderElement);
+            //}
         }
         protected virtual void OnContentLayout()
         {
@@ -119,6 +149,10 @@ namespace LayoutFarm.UI
         public abstract void Walk(UIVisitor visitor);
         protected virtual void OnGuestTalk(UIGuestTalkEventArgs e)
         {
+        }
+        internal static void InvokeContentLayout(UIElement ui)
+        {
+            ui.OnContentLayout();
         }
 
 #if DEBUG
