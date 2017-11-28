@@ -49,6 +49,7 @@ namespace LayoutFarm.CustomWidgets
         {
             panel.PerformContentLayout();
         }
+
         void simpleBox_KeyDown(object sender, UIKeyEventArgs e)
         {
             if (selectedItem != null && ListItemKeyboardEvent != null)
@@ -313,10 +314,12 @@ namespace LayoutFarm.CustomWidgets
         CustomTextRun listItemText;
         string itemText;
         Color backColor;
+        RequestFont font;
+
+
         public ListItem(int width, int height)
             : base(width, height)
         {
-
             this.TransparentAllMouseEvents = true;
         }
         public override RenderElement CurrentPrimaryRenderElement
@@ -336,9 +339,18 @@ namespace LayoutFarm.CustomWidgets
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = this.backColor;
                 element.SetController(this);
-
+                //
                 listItemText = new CustomTextRun(rootgfx, 200, this.Height);
-                
+                if (font != null)
+                {
+                    listItemText.RequestFont = font;
+                    //TODO: review how to find 
+                    int blankLineHeight = (int)rootgfx.IFonts.MeasureBlankLineHeight(font);
+                    listItemText.SetHeight(blankLineHeight);
+                    element.SetHeight(blankLineHeight);
+                }
+
+
                 element.AddChild(listItemText);
                 listItemText.TransparentForAllEvents = true;
                 if (this.itemText != null)
@@ -367,11 +379,21 @@ namespace LayoutFarm.CustomWidgets
             get { return this.itemText; }
             set
             {
+                //set content has some effect to its layout
                 this.itemText = value;
                 if (listItemText != null)
                 {
                     listItemText.Text = value;
                 }
+            }
+        }
+        public override void SetFont(RequestFont font)
+        {
+            //set content has some effect to its layout
+            this.font = font;
+            if (font != null && HasReadyRenderElement)
+            {
+                listItemText.RequestFont = font;
             }
         }
         //-----------------  

@@ -99,6 +99,10 @@ namespace LayoutFarm.UI
                 this.CurrentPrimaryRenderElement.SetSize(_width, _height);
             }
         }
+        public virtual void SetFont(RequestFont font)
+        {
+
+        }
         public void SetBounds(int left, int top, int width, int height)
         {
             SetLocation(left, top);

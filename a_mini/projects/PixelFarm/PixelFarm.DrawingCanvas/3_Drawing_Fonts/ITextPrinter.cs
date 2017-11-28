@@ -8,6 +8,7 @@ namespace PixelFarm.Drawing
     public interface IFonts
     {
         float MeasureWhitespace(RequestFont f);
+        float MeasureBlankLineHeight(RequestFont f);
         Size MeasureString(char[] str, int startAt, int len, RequestFont font);
         Size MeasureString(char[] str, int startAt, int len, RequestFont font,
             float maxWidth, out int charFit,

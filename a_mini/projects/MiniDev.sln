@@ -161,7 +161,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.Drawing.Pdf", "Pi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.HtmlRender.Windows.One", "x_merge_projects\PixelFarm.HtmlRender.Windows.One\PixelFarm.HtmlRender.Windows.One.csproj", "{774DB5ED-672B-410D-B2EF-C0BCF2F30271}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutFarm.RenderTreeComposer", "PixelFarm\PaintLab.RenderTreeComposer\LayoutFarm.RenderTreeComposer.csproj", "{D88D86CD-6732-45E7-8FC9-49449EA9C737}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.RenderTreeComposer", "PixelFarm\PaintLab.RenderTreeComposer\PaintLab.RenderTreeComposer.csproj", "{D88D86CD-6732-45E7-8FC9-49449EA9C737}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

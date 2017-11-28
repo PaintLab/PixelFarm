@@ -74,24 +74,19 @@ namespace PixelFarm.Drawing.WinGdi
             MyWin32.SelectObject(win32MemDc.DC, winFont.CachedHFont());
             return winFont;
         }
+        /// <summary>
+        /// measure blank line height in px
+        /// </summary>
+        /// <param name="font"></param>
+        /// <returns></returns>
+        public static int MeasureBlankLineHeight(RequestFont font)
+        {
+            WinGdiFont winFont = WinGdiFontSystem.GetWinGdiFont(font);
+            return (int)winFont.RecommendedLineSpacingInPixels;
+        }
         public static Size MeasureString(char[] buff, int startAt, int len, RequestFont font)
         {
-            //if (_useGdiPlusTextRendering)
-            //{
-            //    ReleaseHdc();
-            //    _characterRanges[0] = new System.Drawing.CharacterRange(0, len);
-            //    _stringFormat.SetMeasurableCharacterRanges(_characterRanges);
-            //    System.Drawing.Font font2 = (System.Drawing.Font)font.InnerFont;
 
-            //    var size = gx.MeasureCharacterRanges(
-            //        new string(buff, startAt, len),
-            //        font2,
-            //        System.Drawing.RectangleF.Empty,
-            //        _stringFormat)[0].GetBounds(gx).Size;
-            //    return new PixelFarm.Drawing.Size((int)Math.Round(size.Width), (int)Math.Round(size.Height));
-            //}
-            //else
-            //{
             SetFont(font);
             PixelFarm.Drawing.Size size = new Size();
             if (buff.Length > 0)
@@ -104,9 +99,8 @@ namespace PixelFarm.Drawing.WinGdi
                     }
                 }
             }
-
             return size;
-            //}
+
         }
         /// <summary>
         /// Measure the width and height of string <paramref name="str"/> when drawn on device context HDC
@@ -327,8 +321,6 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return this.charAbcWidths;
         }
-
-
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             throw new NotImplementedException();
@@ -400,6 +392,10 @@ namespace PixelFarm.Drawing.WinGdi
             WinGdiTextService.CalculateGlyphAdvancePos(str, startAt, len, font, glyphXAdvances);
         }
 
+        public float MeasureBlankLineHeight(RequestFont f)
+        {
+            return WinGdiTextService.MeasureBlankLineHeight(f);
+        }
     }
 
     struct FontFaceKey

@@ -76,5 +76,14 @@ namespace LayoutFarm
         {
             throw new NotImplementedException();
         }
+        public int MeasureBlankLineHeight(RequestFont f)
+        {
+            throw new NotImplementedException();
+        }
+
+        float IFonts.MeasureBlankLineHeight(RequestFont f)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -44,7 +44,10 @@ namespace LayoutFarm.CustomWidgets
         public RequestFont RequestFont
         {
             get { return _font; }
-            set { _font = value; }
+            set
+            {
+                _font = value;
+            }
         }
         public override void CustomDrawToThisCanvas(Canvas canvas, Rectangle updateArea)
         {
