@@ -48,7 +48,7 @@ namespace PixelFarm.Drawing.Fonts
         {
 
             //1. read font info
-            NOpenFontFace openFont = (NOpenFontFace)OpenFontLoader.LoadFont(typeface, creationParams.scriptLang, creationParams.writeDirection);
+            NOpenFontFace openFont = (NOpenFontFace)OpenFontLoader.LoadFont(typeface);
 
             //------------------------
             SimpleFontAtlasBuilder atlas1 = null;

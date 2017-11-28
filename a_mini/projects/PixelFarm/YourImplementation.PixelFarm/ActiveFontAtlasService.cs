@@ -65,7 +65,7 @@ namespace PixelFarm.DrawingGL
                     //creationParams.hintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction;
                     creationParams.hintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction_VerticalOnly;
                     //creationParams.hintTechnique = Typography.Contours.HintTechnique.CustomAutoFit;
-                    
+
                 }
                 //
                 ff = TextureFontLoader.LoadFont(fontfile, creationParams, out fontAtlas);
