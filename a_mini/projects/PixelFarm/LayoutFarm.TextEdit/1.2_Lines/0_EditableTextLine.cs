@@ -30,8 +30,9 @@ namespace LayoutFarm.Text
 #endif
         internal EditableTextLine(EditableTextFlowLayer ownerFlowLayer)
         {
+
             this.editableFlowLayer = ownerFlowLayer;
-            this.actualLineHeight = DEFAULT_LINE_HEIGHT;
+            this.actualLineHeight = DEFAULT_LINE_HEIGHT; //we start with default line height
 #if DEBUG
             this.dbugLineId = dbugLineTotalCount;
             dbugLineTotalCount++;
@@ -59,18 +60,24 @@ namespace LayoutFarm.Text
         {
             EditableRun r = this.FirstRun;
             int maxHeight = 2;
-            int lw = 0;
+            int accumWidth = 0;
             while (r != null)
             {
                 if (r.Height > maxHeight)
                 {
                     maxHeight = r.Height;
                 }
-                lw += r.Width;
+                accumWidth += r.Width;
                 r = r.NextTextRun;
             }
-            this.actualLineWidth = lw;
+            this.actualLineWidth = accumWidth;
             this.actualLineHeight = maxHeight;
+
+            if (this.Count == 0)
+            {
+                //no span
+                this.actualLineHeight = EditableTextLine.DEFAULT_LINE_HEIGHT;
+            }
         }
         internal bool HitTestCore(HitChain hitChain)
         {

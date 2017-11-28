@@ -451,7 +451,14 @@ namespace LayoutFarm.Text
                 return textLineWriter.IsOnStartOfLine;
             }
         }
-
+        public int CurrentCaretHeight
+        {
+            get
+            {
+                EditableRun currentRun = this.CurrentTextRun;
+                return (currentRun != null) ? currentRun.Height : 14;
+            }
+        }
         public Point CaretPos
         {
             get

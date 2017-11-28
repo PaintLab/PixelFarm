@@ -71,7 +71,7 @@ namespace PixelFarm.Drawing.WinGdi
         static WinGdiFont SetFont(RequestFont font)
         {
             WinGdiFont winFont = WinGdiFontSystem.GetWinGdiFont(font);
-            MyWin32.SelectObject(win32MemDc.DC, winFont.ToHfont());
+            MyWin32.SelectObject(win32MemDc.DC, winFont.CachedHFont());
             return winFont;
         }
         public static Size MeasureString(char[] buff, int startAt, int len, RequestFont font)
@@ -301,9 +301,7 @@ namespace PixelFarm.Drawing.WinGdi
             logFont.lfItalic = (byte)(((style & FontStyle.Italic) == FontStyle.Italic) ? 1 : 0);
             return MyWin32.CreateFontIndirect(ref logFont);
         }
-
-
-        public System.IntPtr ToHfont()
+        public System.IntPtr CachedHFont()
         {
             return this.hfont;
         }
