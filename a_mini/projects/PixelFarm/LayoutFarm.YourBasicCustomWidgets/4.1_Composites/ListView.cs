@@ -34,8 +34,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             uiList = new UICollection(this);
-            //panel for listview items
-            //
+
             var simpleBox = new SimpleBox(width, height);
             simpleBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             simpleBox.BackColor = Color.LightGray;
@@ -55,32 +54,6 @@ namespace LayoutFarm.CustomWidgets
                 e.UIEventName = UIEventName.KeyDown;
                 ListItemKeyboardEvent(this, e);
             }
-            //switch (e.KeyCode)
-            //{
-            //    case UIKeys.Down:
-            //        {
-            //            e.CancelBubbling = true;
-            //            SelectedIndex++;
-            //        } break;
-            //    case UIKeys.Up:
-            //        {
-            //            e.CancelBubbling = true;
-            //            SelectedIndex--;
-            //        } break;
-            //    case UIKeys.Enter:
-            //        {
-            //            //accept selected item?
-
-            //            if (selectedItem != null && ListItemKeyboardEvent != null)
-            //            {
-            //                ListItemKeyboardEvent(this, e);
-            //            }
-            //        }
-            //        break;
-            //    case UIKeys.Escape:
-            //        //
-            //        break;
-            //}
         }
         void panel_MouseDoubleClick(object sender, UIMouseEventArgs e)
         {
