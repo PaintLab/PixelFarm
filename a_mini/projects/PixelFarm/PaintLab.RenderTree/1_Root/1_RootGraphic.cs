@@ -50,7 +50,7 @@ namespace LayoutFarm
         //-------------------------------------------------------------------------
 
         public abstract void ClearRenderRequests();
-        public abstract void AddToLayoutQueue(RenderElement renderElement);
+        
 
         public event EventHandler ClearingBeforeRender;
         public void InvokeClearingBeforeRender()

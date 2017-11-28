@@ -215,24 +215,6 @@ namespace LayoutFarm.UI
             }
         }
 
-        public override void AddToLayoutQueue(RenderElement renderElement)
-        {
-//#if DEBUG
-//            RootGraphic dbugVisualRoot = this;
-//#endif
-//            if (renderElement.IsInLayoutQueue)
-//            {
-//                return;
-//            }
-//            renderElement.IsInLayoutQueue = true;
-//#if DEBUG
-//            dbugVisualRoot.dbug_PushLayoutTraceMessage(RootGraphic.dbugMsg_ADD_TO_LAYOUT_QUEUE, renderElement);
-//#endif
-
-//            renderElement.IsInLayoutQueue = true;
-//            layoutQueue.Enqueue(renderElement);
-        }
-
 
 
 #if DEBUG
