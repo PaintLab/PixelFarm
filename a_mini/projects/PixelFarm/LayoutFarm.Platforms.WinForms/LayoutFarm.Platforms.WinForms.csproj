@@ -117,6 +117,10 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj">
+      <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
+      <Name>PaintLab.PlatformBridge</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PaintLab.RenderTree\PaintLab.RenderTree.csproj">
       <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
       <Name>PaintLab.RenderTree</Name>
@@ -148,10 +152,6 @@
     <ProjectReference Include="..\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj">
       <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
       <Name>PixelFarm.OpenTKWinForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.PlatformBridge\PixelFarm.PlatformBridge.csproj">
-      <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
-      <Name>PixelFarm.PlatformBridge</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>

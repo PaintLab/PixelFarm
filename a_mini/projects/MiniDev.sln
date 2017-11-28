@@ -89,7 +89,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_ClientPlatforms", "3_Clie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.RenderTree", "PixelFarm\PaintLab.RenderTree\PaintLab.RenderTree.csproj", "{20048075-A2F3-4B97-B3C6-BEA794429741}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.PlatformBridge", "PixelFarm\PixelFarm.PlatformBridge\PixelFarm.PlatformBridge.csproj", "{465CB0FF-C9FA-4371-AD10-51C6DFF537B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.PlatformBridge", "PixelFarm\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj", "{465CB0FF-C9FA-4371-AD10-51C6DFF537B8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutFarm.PlatformBase", "PixelFarm\LayoutFarm.PlatformBase\LayoutFarm.PlatformBase.csproj", "{CDEFD12B-956C-4686-AE8A-F89C3280C95F}"
 EndProject
