@@ -7,8 +7,8 @@
     <ProjectGuid>{D88D86CD-6732-45E7-8FC9-49449EA9C737}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.RenderTreeComposer</RootNamespace>
-    <AssemblyName>PixelFarm.RenderTreeComposer</AssemblyName>
+    <RootNamespace>PaintLab.RenderTreeComposer</RootNamespace>
+    <AssemblyName>PaintLab.RenderTreeComposer</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -48,9 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.RenderTree\PixelFarm.RenderTree.csproj">
+    <ProjectReference Include="..\PaintLab.RenderTree\PaintLab.RenderTree.csproj">
       <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
-      <Name>PixelFarm.RenderTree</Name>
+      <Name>PaintLab.RenderTree</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>

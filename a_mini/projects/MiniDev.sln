@@ -87,7 +87,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YourImplementation.PixelFar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_ClientPlatforms", "3_ClientPlatforms", "{0BDC62C6-1F5C-4645-BE3E-AF5360347A7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.RenderTree", "PixelFarm\PixelFarm.RenderTree\PixelFarm.RenderTree.csproj", "{20048075-A2F3-4B97-B3C6-BEA794429741}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.RenderTree", "PixelFarm\PaintLab.RenderTree\PaintLab.RenderTree.csproj", "{20048075-A2F3-4B97-B3C6-BEA794429741}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.PlatformBridge", "PixelFarm\PixelFarm.PlatformBridge\PixelFarm.PlatformBridge.csproj", "{465CB0FF-C9FA-4371-AD10-51C6DFF537B8}"
 EndProject
@@ -105,7 +105,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test0_Dev", "Tests\Test0_De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_BasicPixelFarm", "Tests\Test_BasicPixelFarm\Test_BasicPixelFarm.csproj", "{E8DF35E8-8765-47C2-BC1A-B686A058062C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.RenderTreeComposer", "PixelFarm\PixelFarm.RenderTreeComposer\PixelFarm.RenderTreeComposer.csproj", "{D88D86CD-6732-45E7-8FC9-49449EA9C737}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.RenderTreeComposer", "PixelFarm\PaintLab.RenderTreeComposer\PaintLab.RenderTreeComposer.csproj", "{D88D86CD-6732-45E7-8FC9-49449EA9C737}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0.4_DevTest_GUI", "0.4_DevTest_GUI", "{B106C6A9-1647-4267-824B-896486A6E697}"
 EndProject
