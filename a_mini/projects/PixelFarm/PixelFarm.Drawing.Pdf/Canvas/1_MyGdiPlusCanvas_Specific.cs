@@ -1,21 +1,5 @@
-﻿//BSD, 2014-2017, WinterDev
-//ArthurHub  , Jose Manuel Menendez Poo
-
-// "Therefore those skilled at the unorthodox
-// are infinite as heaven and earth,
-// inexhaustible as the great rivers.
-// When they come to an end,
-// they begin again,
-// like the days and months;
-// they die and are reborn,
-// like the four seasons."
-// 
-// - Sun Tsu,
-// "The Art of War"
-
+﻿//BSD, 2014-2017, WinterDev 
 using System;
-using System.Collections.Generic;
-//using Win32;
 namespace PixelFarm.Drawing.Pdf
 {
     public partial class MyGdiPlusCanvas : Canvas, IDisposable
