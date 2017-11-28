@@ -338,6 +338,7 @@ namespace LayoutFarm.CustomWidgets
                 element.SetController(this);
 
                 listItemText = new CustomTextRun(rootgfx, 200, this.Height);
+                
                 element.AddChild(listItemText);
                 listItemText.TransparentForAllEvents = true;
                 if (this.itemText != null)

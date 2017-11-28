@@ -67,8 +67,7 @@ namespace PixelFarm.Drawing.Skia
             textFill = new SKPaint();
             textFill.IsAntialias = true;
             //---------------------------------------            
-             
-            //---------------------------------------
+              
             this.CurrentFont = new RequestFont("tahoma", 14);
             this.CurrentTextColor = Color.Black;
             //---------------------------------------

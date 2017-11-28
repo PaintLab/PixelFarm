@@ -3,16 +3,19 @@
 using PixelFarm.Drawing;
 namespace LayoutFarm.CustomWidgets
 {
+
     public class CustomTextRun : RenderElement
     {
         char[] textBuffer;
         Color textColor;
+        RequestFont _font;
 #if DEBUG
         public bool dbugBreak;
 #endif
         public CustomTextRun(RootGraphic rootgfx, int width, int height)
             : base(rootgfx, width, height)
         {
+            _font = rootgfx.DefaultTextEditFontInfo;
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
@@ -38,12 +41,18 @@ namespace LayoutFarm.CustomWidgets
             get { return this.textColor; }
             set { this.textColor = value; }
         }
+        public RequestFont RequestFont
+        {
+            get { return _font; }
+            set { _font = value; }
+        }
         public override void CustomDrawToThisCanvas(Canvas canvas, Rectangle updateArea)
         {
             if (this.textBuffer != null)
             {
                 var prevColor = canvas.CurrentTextColor;
                 canvas.CurrentTextColor = textColor;
+                canvas.CurrentFont = _font;
                 canvas.DrawText(this.textBuffer, this.X, this.Y);
                 canvas.CurrentTextColor = prevColor;
             }
