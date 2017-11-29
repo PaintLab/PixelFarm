@@ -1,5 +1,5 @@
 ﻿//Apache2, 2014-2017, WinterDev
- 
+
 namespace LayoutFarm
 {
     [DemoNote("1.10 MultipleImages")]
@@ -7,15 +7,16 @@ namespace LayoutFarm
     {
         protected override void OnStartDemo(SampleViewport viewport)
         {
-            ImageBinder imgBinder = new ClientImageBinder(null);
+            ImageBinder imgBinder = new ClientImageBinder();
             imgBinder.SetImage(LoadBitmap("../../Data/imgs/favorites32.png"));
+
 
             for (int i = 0; i < 100; ++i)
             {
-				//share 1 img binder with multiple img boxes
+                //share 1 img binder with multiple img boxes
                 var imgBox = new CustomWidgets.ImageBox(imgBinder.Image.Width, imgBinder.Image.Height);
                 imgBox.ImageBinder = imgBinder;
-                imgBox.SetLocation(i * 10, i * 10);
+                imgBox.SetLocation(i * 10, 20);
                 viewport.AddContent(imgBox);
             }
 

@@ -5,6 +5,10 @@ namespace LayoutFarm
     public class ClientImageBinder : ImageBinder
     {
         UI.IEventListener listener;
+        public ClientImageBinder()
+            : base(null)
+        {
+        }
         public ClientImageBinder(string src)
             : base(src)
         {
