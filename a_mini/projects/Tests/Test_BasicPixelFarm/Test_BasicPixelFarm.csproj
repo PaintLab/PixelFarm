@@ -118,6 +118,7 @@
     <EmbeddedResource Include="YourImplementation\FormPrint.resx">
       <DependentUpon>FormPrint.cs</DependentUpon>
     </EmbeddedResource>
+    <Compile Include="Demo1.1\1.10_Demo_Images.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
