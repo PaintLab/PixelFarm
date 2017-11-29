@@ -48,6 +48,7 @@
     <Compile Include="..\..\pixelfarm\win32utils\NativeWin32MemoryDc.cs">
       <Link>YourImplementation\Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
+    <Compile Include="Demo1.1\1.12_SmallAnimation.cs" />
     <Compile Include="Demo3\3.1_Demo_Visible.cs" />
     <Compile Include="Demo3\3.2_Demo_ControllerBox.cs" />
     <Compile Include="Demo3\3.3_Demo_ControllerBox2.cs" />
@@ -76,7 +77,7 @@
     <Compile Include="Demo2\2.3_Demo_SingleLineTextBox_WithSuggestion.cs" />
     <Compile Include="Demo2\2.4_Demo_SingleTextLine_With_Compartment.cs" />
     <Compile Include="Demo2\2.5_Demo_MultiLineTextBox_WithSugggestion.cs" />
-    <Compile Include="Demo2\2.6_Demo_MultiLineTextBox_WithSugggestion.cs" />
+    <Compile Include="Demo2\2.6_Demo_MultiLineText_WithSuggestionPopupWin.cs" />
     <Compile Include="YourImplementation\DemoBase.cs" />
     <Compile Include="YourImplementation\FormCanvasHelper.cs" />
     <Compile Include="YourImplementation\FormDemoList.cs">
@@ -118,6 +119,7 @@
     <EmbeddedResource Include="YourImplementation\FormPrint.resx">
       <DependentUpon>FormPrint.cs</DependentUpon>
     </EmbeddedResource>
+    <Compile Include="Demo1.1\1.10_Demo_Images.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -141,13 +143,13 @@
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
       <Name>LayoutFarm.YourBasicCustomWidgets</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
+      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
+      <Name>PaintLab.AbstractPlatform</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\PaintLab.RenderTreeComposer.csproj">
       <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
       <Name>PaintLab.RenderTreeComposer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.RenderTree\PaintLab.RenderTree.csproj">
-      <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
-      <Name>PaintLab.RenderTree</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
       <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
@@ -172,10 +174,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj">
       <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
       <Name>PixelFarm.OpenTKWinForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.PlatformBridge\PixelFarm.PlatformBridge.csproj">
-      <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
-      <Name>PixelFarm.PlatformBridge</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>

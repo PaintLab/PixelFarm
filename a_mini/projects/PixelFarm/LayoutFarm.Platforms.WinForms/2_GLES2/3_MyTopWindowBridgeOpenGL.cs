@@ -1,5 +1,6 @@
 ﻿//Apache2, 2014-2017, WinterDev
 #if GL_ENABLE 
+using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
 
@@ -93,6 +94,10 @@ namespace LayoutFarm.UI.OpenGL
             this.openGLViewport.PaintMe();
             windowControl.SwapBuffers();
             //Console.WriteLine("<" + innumber); 
+        }
+        public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
+        {
+            throw new NotImplementedException();
         }
         protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
         {

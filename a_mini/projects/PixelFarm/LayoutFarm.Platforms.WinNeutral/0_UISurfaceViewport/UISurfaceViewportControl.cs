@@ -23,7 +23,7 @@ namespace LayoutFarm.UI.WinNeutral
         {
 
         }
-        public LayoutFarm.UI.UIPlatform Platform
+        public UIPlatform Platform
         {
             get { return LayoutFarm.UI.UIPlatformWinNeutral.platform; }
         }

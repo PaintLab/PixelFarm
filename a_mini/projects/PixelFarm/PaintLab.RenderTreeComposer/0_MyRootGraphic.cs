@@ -8,7 +8,7 @@ namespace LayoutFarm.UI
 {
     public sealed class MyRootGraphic : RootGraphic, ITopWindowEventRootProvider
     {
-        List<RenderElement> layoutQueue = new List<RenderElement>();
+
         List<ToNotifySizeChangedEvent> tobeNotifySizeChangedList = new List<ToNotifySizeChangedEvent>();
         List<RenderElementRequest> renderRequestList = new List<RenderElementRequest>();
         GraphicsTimerTaskManager graphicTimerTaskMan;
@@ -20,17 +20,15 @@ namespace LayoutFarm.UI
 
         RequestFont _defaultTextEditFont; //TODO: review here
         IFonts _ifonts;
-        UITimer _timer;
         public MyRootGraphic(
             int width, int height,
-            IFonts ifonts,
-            UITimer timer)
+            IFonts ifonts)
             : base(width, height)
         {
 
-            this._timer = timer;
+
             this._ifonts = ifonts;
-            this.graphicTimerTaskMan = new GraphicsTimerTaskManager(this, timer);
+            this.graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = new RequestFont("tahoma", 10);
 
 #if DEBUG
@@ -60,7 +58,7 @@ namespace LayoutFarm.UI
 
         public override RootGraphic CreateNewOne(int w, int h)
         {
-            return new MyRootGraphic(w, h, this._ifonts, this._timer);
+            return new MyRootGraphic(w, h, this._ifonts);
         }
         public ITopWindowEventRoot TopWinEventPortal
         {
@@ -93,14 +91,12 @@ namespace LayoutFarm.UI
             InvokeClearingBeforeRender();
             this.LayoutQueueClearing = false;
             this.ClearRenderRequests();
-            if (layoutQueue.Count == 0)
-            {
-                return;
-            }
             ClearNotificationSizeChangeList();
         }
         void ClearNotificationSizeChangeList()
         {
+            LayoutFarm.EventQueueSystem.CentralEventQueue.InvokeEventQueue();
+
         }
 
         public override RequestFont DefaultTextEditFontInfo
@@ -215,24 +211,6 @@ namespace LayoutFarm.UI
             {
                 this.topWindowEventRoot.CurrentKeyboardFocusedElement = owner;
             }
-        }
-
-        public override void AddToLayoutQueue(RenderElement renderElement)
-        {
-#if DEBUG
-            RootGraphic dbugVisualRoot = this;
-#endif
-            if (renderElement.IsInLayoutQueue)
-            {
-                return;
-            }
-            renderElement.IsInLayoutQueue = true;
-#if DEBUG
-            dbugVisualRoot.dbug_PushLayoutTraceMessage(RootGraphic.dbugMsg_ADD_TO_LAYOUT_QUEUE, renderElement);
-#endif
-
-            renderElement.IsInLayoutQueue = true;
-            layoutQueue.Add(renderElement);
         }
 
 

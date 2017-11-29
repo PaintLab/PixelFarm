@@ -16,6 +16,8 @@ namespace LayoutFarm
         Image _image;
         string _imageSource;
         LazyLoadImageFunc lazyLoadImgFunc;
+        public event System.EventHandler ImageChanged;
+
 #if DEBUG
         static int dbugTotalId;
         public int dbugId = dbugTotalId++;
@@ -82,13 +84,14 @@ namespace LayoutFarm
         }
         protected virtual void OnImageChanged()
         {
+            ImageChanged?.Invoke(this, System.EventArgs.Empty);
         }
         public bool HasLazyFunc
         {
             get { return this.lazyLoadImgFunc != null; }
         }
 
-        public void SetLazyFunc(LazyLoadImageFunc lazyLoadFunc)
+        public void SetLazyLoaderFunc(LazyLoadImageFunc lazyLoadFunc)
         {
             this.lazyLoadImgFunc = lazyLoadFunc;
         }
@@ -107,6 +110,7 @@ namespace LayoutFarm
                 this.State = ImageBinderState.NoImage;
             }
         }
+
     }
 
 

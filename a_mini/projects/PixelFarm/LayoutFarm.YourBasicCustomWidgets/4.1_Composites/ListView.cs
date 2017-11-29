@@ -3,7 +3,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
@@ -34,8 +33,7 @@ namespace LayoutFarm.CustomWidgets
             : base(width, height)
         {
             uiList = new UICollection(this);
-            //panel for listview items
-            //
+
             var simpleBox = new SimpleBox(width, height);
             simpleBox.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             simpleBox.BackColor = Color.LightGray;
@@ -47,6 +45,10 @@ namespace LayoutFarm.CustomWidgets
             this.panel = simpleBox;
             uiList.AddUI(panel);
         }
+        public override void PerformContentLayout()
+        {
+            panel.PerformContentLayout();
+        }
 
         void simpleBox_KeyDown(object sender, UIKeyEventArgs e)
         {
@@ -55,32 +57,6 @@ namespace LayoutFarm.CustomWidgets
                 e.UIEventName = UIEventName.KeyDown;
                 ListItemKeyboardEvent(this, e);
             }
-            //switch (e.KeyCode)
-            //{
-            //    case UIKeys.Down:
-            //        {
-            //            e.CancelBubbling = true;
-            //            SelectedIndex++;
-            //        } break;
-            //    case UIKeys.Up:
-            //        {
-            //            e.CancelBubbling = true;
-            //            SelectedIndex--;
-            //        } break;
-            //    case UIKeys.Enter:
-            //        {
-            //            //accept selected item?
-
-            //            if (selectedItem != null && ListItemKeyboardEvent != null)
-            //            {
-            //                ListItemKeyboardEvent(this, e);
-            //            }
-            //        }
-            //        break;
-            //    case UIKeys.Escape:
-            //        //
-            //        break;
-            //}
         }
         void panel_MouseDoubleClick(object sender, UIMouseEventArgs e)
         {
@@ -338,10 +314,12 @@ namespace LayoutFarm.CustomWidgets
         CustomTextRun listItemText;
         string itemText;
         Color backColor;
+        RequestFont font;
+
+
         public ListItem(int width, int height)
             : base(width, height)
         {
-            //this.RegisterNativeEvent(1 << UIEventIdentifier.NE_MOUSE_DOWN);
             this.TransparentAllMouseEvents = true;
         }
         public override RenderElement CurrentPrimaryRenderElement
@@ -361,8 +339,18 @@ namespace LayoutFarm.CustomWidgets
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = this.backColor;
                 element.SetController(this);
-
+                //
                 listItemText = new CustomTextRun(rootgfx, 200, this.Height);
+                if (font != null)
+                {
+                    listItemText.RequestFont = font;
+                    //TODO: review how to find 
+                    int blankLineHeight = (int)rootgfx.IFonts.MeasureBlankLineHeight(font);
+                    listItemText.SetHeight(blankLineHeight);
+                    element.SetHeight(blankLineHeight);
+                }
+
+
                 element.AddChild(listItemText);
                 listItemText.TransparentForAllEvents = true;
                 if (this.itemText != null)
@@ -391,11 +379,21 @@ namespace LayoutFarm.CustomWidgets
             get { return this.itemText; }
             set
             {
+                //set content has some effect to its layout
                 this.itemText = value;
                 if (listItemText != null)
                 {
                     listItemText.Text = value;
                 }
+            }
+        }
+        public override void SetFont(RequestFont font)
+        {
+            //set content has some effect to its layout
+            this.font = font;
+            if (font != null && HasReadyRenderElement)
+            {
+                listItemText.RequestFont = font;
             }
         }
         //-----------------  

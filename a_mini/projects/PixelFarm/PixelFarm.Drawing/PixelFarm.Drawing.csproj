@@ -57,9 +57,6 @@
     <Compile Include="..\burningminecurve\curveutils\VectorHelper.cs">
       <Link>1_DrawingCore\1_Vectors\4_BurningMineCurves\VectorHelper.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\0_Start\IRootGraphics.cs">
-      <Link>2_DrawingCanvas\0_Start\IRootGraphics.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\Canvas.cs">
       <Link>2_DrawingCanvas\1_Canvas\Canvas.cs</Link>
     </Compile>
@@ -77,9 +74,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\RenderVx.cs">
       <Link>2_DrawingCanvas\1_Canvas\RenderVx.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\2_Drawing\1_ImageBinder.cs">
-      <Link>2_DrawingCanvas\2_Drawing\1_ImageBinder.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\2_Drawing\FontStyle.cs">
       <Link>2_DrawingCanvas\2_Drawing\FontStyle.cs</Link>

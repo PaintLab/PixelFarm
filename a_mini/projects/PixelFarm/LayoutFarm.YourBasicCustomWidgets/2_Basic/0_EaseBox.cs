@@ -161,7 +161,14 @@ namespace LayoutFarm.CustomWidgets
                 this.MouseLeave(this, e);
             }
         }
-
+        protected override void OnMouseEnter(UIMouseEventArgs e)
+        {
+            base.OnMouseEnter(e);
+        }
+        protected override void OnMouseHover(UIMouseEventArgs e)
+        {
+            base.OnMouseHover(e);
+        }
         protected override void OnMouseUp(UIMouseEventArgs e)
         {
             if (this.MouseUp != null)
@@ -413,10 +420,7 @@ namespace LayoutFarm.CustomWidgets
                             var element = this.GetChild(i) as UIBox;
                             if (element != null)
                             {
-                                //if (element.dbugBreakMe)
-                                //{
-
-                                //}
+                                
                                 element.PerformContentLayout();
                                 //int elemH = element.HasSpecificHeight ?
                                 //    element.Height :

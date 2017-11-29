@@ -14,7 +14,7 @@ namespace LayoutFarm
             viewport.AddContent(treeView);
             //prepare node icon
 
-            ImageBinder nodeOpen = new ClientImageBinder(null);
+            ImageBinder nodeOpen = new ClientImageBinder();
             nodeOpen.SetImage(LoadBitmap("../../Data/imgs/arrow_open.png"));
 
             //add 

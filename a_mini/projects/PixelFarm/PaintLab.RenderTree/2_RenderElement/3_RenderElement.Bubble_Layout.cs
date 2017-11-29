@@ -33,19 +33,19 @@ namespace LayoutFarm
             this.dbug_ValidateRecalculateSizeEpisode++;
 #endif
         }
-        public bool IsInLayoutQueue
-        {
-            get
-            {
-                return (uiLayoutFlags & RenderElementConst.LY_IN_LAYOUT_QUEUE) != 0;
-            }
-            set
-            {
-                uiLayoutFlags = value ?
-                      uiLayoutFlags | RenderElementConst.LY_IN_LAYOUT_QUEUE :
-                      uiLayoutFlags & ~RenderElementConst.LY_IN_LAYOUT_QUEUE;
-            }
-        }
+        //public bool IsInLayoutQueue
+        //{
+        //    get
+        //    {
+        //        return (uiLayoutFlags & RenderElementConst.LY_IN_LAYOUT_QUEUE) != 0;
+        //    }
+        //    set
+        //    {
+        //        uiLayoutFlags = value ?
+        //              uiLayoutFlags | RenderElementConst.LY_IN_LAYOUT_QUEUE :
+        //              uiLayoutFlags & ~RenderElementConst.LY_IN_LAYOUT_QUEUE;
+        //    }
+        //}
 
         public bool NeedReCalculateContentSize
         {

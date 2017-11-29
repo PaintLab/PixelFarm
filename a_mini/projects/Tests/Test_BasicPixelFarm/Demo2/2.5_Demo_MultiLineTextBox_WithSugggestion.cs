@@ -45,6 +45,7 @@ namespace LayoutFarm
                         if (listView.Visible && listView.SelectedIndex < listView.ItemCount - 1)
                         {
                             listView.SelectedIndex++;
+                            listView.EnsureSelectedItemVisible();
                             e.PreventDefault = true;
                         }
                     }
@@ -54,6 +55,7 @@ namespace LayoutFarm
                         if (listView.Visible && listView.SelectedIndex > 0)
                         {
                             listView.SelectedIndex--;
+                            listView.EnsureSelectedItemVisible();
                             e.PreventDefault = true;
                         }
                     }
@@ -139,6 +141,7 @@ namespace LayoutFarm
                 //temp fixed
                 //TODO: review here
                 listView.SetLocation(textbox.Left + caretPos.X, textbox.Top + caretPos.Y + 20);
+                listView.EnsureSelectedItemVisible();
             }
             else
             {
