@@ -50,26 +50,27 @@ namespace LayoutFarm.Dev
             //viewport.PaintMe();
             //ShowFormLayoutInspector(viewport); 
         }
+
+        LayoutFarm.UI.UISurfaceViewportControl _latestviewport;
+        Form _latest_formCanvas;
         public void RunDemo(DemoBase selectedDemo)
         {
-            LayoutFarm.UI.UISurfaceViewportControl viewport;
 
-            Form formCanvas;
-            CreateReadyForm(out viewport, out formCanvas);
+            CreateReadyForm(out _latestviewport, out _latest_formCanvas);
 
-            selectedDemo.StartDemo(new SampleViewport(viewport));
-            viewport.TopDownRecalculateContent();
+            selectedDemo.StartDemo(new SampleViewport(_latestviewport));
+            _latestviewport.TopDownRecalculateContent();
             //==================================================  
-            viewport.PaintMe();
+            _latestviewport.PaintMe();
 
             if (this.chkShowLayoutInspector.Checked)
             {
-                ShowFormLayoutInspector(viewport);
+                ShowFormLayoutInspector(_latestviewport);
             }
 
             if (this.chkShowFormPrint.Checked)
             {
-                ShowFormPrint(viewport);
+                ShowFormPrint(_latestviewport);
             }
 
         }
@@ -179,6 +180,28 @@ namespace LayoutFarm.Dev
 
         private void chkShowFormPrint_CheckedChanged(object sender, EventArgs e)
         {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+
+
+            int w = _latestviewport.Width;
+            int h = _latestviewport.Height;
+
+            //create target gdi+ bmp 
+            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h))
+            {
+                System.Drawing.Imaging.BitmapData bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h),
+                System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                //
+                this._latestviewport.PaintToPixelBuffer(bmpData.Scan0);
+                //
+                bmp.UnlockBits(bmpData);
+                bmp.Save("d:\\WImageTest\\001.png");
+            }
 
         }
     }

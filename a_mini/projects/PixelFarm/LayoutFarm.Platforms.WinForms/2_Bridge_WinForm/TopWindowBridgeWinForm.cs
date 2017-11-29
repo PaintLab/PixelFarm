@@ -46,6 +46,7 @@ namespace LayoutFarm.UI
             this.PaintToOutputWindow();
         }
         public abstract void PaintToOutputWindow();
+        public abstract void CopyOutputPixelBuffer(int x, int y, int w, int h,IntPtr outputBuffer);
 
         public void UpdateCanvasViewportSize(int w, int h)
         {
