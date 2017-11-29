@@ -42,15 +42,8 @@ namespace LayoutFarm.ContentManagers
         bool working = false;
         public ImageContentManager(UIPlatform platform)
         {
-            //timImageLoadMonitor = platform.CreateUITimer();
-            //TODO: review here****
-            //timImageLoadMonitor.Interval = 50;//30 ms check state             
-            //timImageLoadMonitor.Tick += TimImageLoadMonitor_Tick;
-            //timImageLoadMonitor.Enabled = true;
-            UITimerTask timImageLoad = new UITimerTask(TimImageLoadMonitor_Tick);
-            timImageLoad.IntervalInMillisec = 50;           
-            UI.UIPlatform.RegisterTimerTask(timImageLoad);
-            timImageLoad.Enabled = true;
+            //TODO: review here**** 
+            UIPlatform.RegisterTimerTask(50, TimImageLoadMonitor_Tick);
         }
 
         void TimImageLoadMonitor_Tick(UITimerTask timer_task)

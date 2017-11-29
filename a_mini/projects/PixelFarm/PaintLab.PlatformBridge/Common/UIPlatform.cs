@@ -18,6 +18,13 @@ namespace LayoutFarm.UI
         {
             UIMsgQueueSystem.InternalMsgPumpRegister(uiTimer);
         }
+        public static void RegisterTimerTask(int intervalMillisec, UITimerTask.TimerTick timerTick)
+        {
+            UITimerTask timerTask = new UITimerTask(timerTick);
+            timerTask.IntervalInMillisec = intervalMillisec;
+            UIMsgQueueSystem.InternalMsgPumpRegister(timerTask);
+            timerTask.Enabled = true;
+        }
         protected static void InvokeMsgPumpOneStep()
         {
             UIMsgQueueSystem.InternalMsgPumpOneStep();

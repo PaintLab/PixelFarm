@@ -49,8 +49,11 @@ namespace LayoutFarm.UI
             internal set;
         }
 
-        public bool RemoveFromQueue { get; set; }
-
+        internal bool RemoveFromQueue { get; set; }
+        public void Remove()
+        {
+            RemoveFromQueue = true;
+        }
         //TODO: review here
         int _remaining;
         internal static bool CountDown(UITimerTask timer_task, int decrement)
