@@ -34,7 +34,7 @@ namespace LayoutFarm.ContentManagers
         LinkedList<ImageBinder> inputList = new LinkedList<ImageBinder>();
         LinkedList<ImageBinder> outputList = new LinkedList<ImageBinder>();
         ImageCacheSystem imageCacheLevel0 = new ImageCacheSystem();
-       
+
         bool hasSomeInputHint;
         //bool hasSomeOutputHint;
         object outputListSync = new object();
@@ -47,8 +47,13 @@ namespace LayoutFarm.ContentManagers
             //timImageLoadMonitor.Interval = 50;//30 ms check state             
             //timImageLoadMonitor.Tick += TimImageLoadMonitor_Tick;
             //timImageLoadMonitor.Enabled = true;
+            UITimerTask timImageLoad = new UITimerTask(TimImageLoadMonitor_Tick);
+            timImageLoad.IntervalInMillisec = 50;           
+            UI.UIPlatform.RegisterTimerTask(timImageLoad);
+            timImageLoad.Enabled = true;
         }
-        private void TimImageLoadMonitor_Tick(object sender, EventArgs e)
+
+        void TimImageLoadMonitor_Tick(UITimerTask timer_task)
         {
             lock (inputListSync)
             {
