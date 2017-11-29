@@ -23,7 +23,7 @@ namespace LayoutFarm
                 {
                     //test start animation  
                     int nsteps = 40;
-                    UI.UIPlatform.RegisterTimerTask(20, timer =>
+                    UIPlatform.RegisterTimerTask(20, timer =>
                     {
                         imgBox.SetLocation(imgBox.Left, imgBox.Top + 10);
                         nsteps--;

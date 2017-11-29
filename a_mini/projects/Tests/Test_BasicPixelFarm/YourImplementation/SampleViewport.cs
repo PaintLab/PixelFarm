@@ -1,5 +1,5 @@
 ﻿//Apache2, 2014-2017, WinterDev
- 
+
 
 namespace LayoutFarm
 {
@@ -15,7 +15,7 @@ namespace LayoutFarm
             this.primaryScreenWorkingAreaW = workingArea.Width;
             this.primaryScreenWorkingAreaH = workingArea.Height;
         }
-        public LayoutFarm.UI.UIPlatform Platform
+        public UIPlatform Platform
         {
             get
             {
