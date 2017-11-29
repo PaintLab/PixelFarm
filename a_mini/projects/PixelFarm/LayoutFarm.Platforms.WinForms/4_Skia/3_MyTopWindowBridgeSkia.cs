@@ -48,10 +48,10 @@ namespace LayoutFarm.UI.Skia
             this.canvasViewport.PaintMe(hdc);
             Win32.MyWin32.ReleaseDC(this.windowControl.Handle, hdc);
         }
-        //public void PrintToCanvas(PixelFarm.Drawing.WinGdi.MyGdiPlusCanvas canvas)
-        //{
-        //    this.canvasViewport.PaintMe(canvas);
-        //}
+        public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
+        {
+            throw new NotImplementedException();
+        }
         protected override void ChangeCursorStyle(MouseCursorStyle cursorStyle)
         {
             switch (cursorStyle)

@@ -1,5 +1,6 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
+using System;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
@@ -7,23 +8,39 @@ namespace LayoutFarm.CustomWidgets
     {
         CustomImageRenderBox imgRenderBox;
         ImageBinder imageBinder;
+        EventHandler imgChangedSubscribe;
         public ImageBox(int width, int height)
             : base(width, height)
         {
+            imgChangedSubscribe = (s, e) => OnContentUpdate();
         }
         public ImageBinder ImageBinder
         {
             get { return this.imageBinder; }
             set
             {
+                if (imageBinder != null)
+                {
+                    //remove prev sub
+                    imageBinder.ImageChanged -= imgChangedSubscribe;
+                }
+
                 this.imageBinder = value;
+
                 if (this.imgRenderBox != null)
                 {
                     this.imgRenderBox.ImageBinder = value;
                     this.InvalidateGraphics();
                 }
+
+                if (value != null)
+                {
+                    //subscribe img changed?
+                    value.ImageChanged += imgChangedSubscribe;
+                }
             }
         }
+
         protected override bool HasReadyRenderElement
         {
             get { return imgRenderBox != null; }

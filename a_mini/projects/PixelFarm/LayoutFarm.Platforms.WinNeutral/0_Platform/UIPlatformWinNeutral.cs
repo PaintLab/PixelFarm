@@ -2,9 +2,16 @@
 
 namespace LayoutFarm.UI
 {
+    //platform specific code 
     public class UIPlatformWinNeutral : UIPlatform
     {
         PixelFarm.Drawing.Fonts.OpenFontStore s_fontStore;
+
+        static UIPlatformWinNeutral()
+        {
+            //setup, 
+        }
+
         private UIPlatformWinNeutral()
         {
             LayoutFarm.UI.Clipboard.SetUIPlatform(this);
@@ -25,10 +32,8 @@ namespace LayoutFarm.UI
 
             }
         }
-        public override UITimer CreateUITimer()
-        {
-            return new MyUITimer();
-        }
+       
+
         public override void ClearClipboardData()
         {
             throw new System.NotSupportedException();

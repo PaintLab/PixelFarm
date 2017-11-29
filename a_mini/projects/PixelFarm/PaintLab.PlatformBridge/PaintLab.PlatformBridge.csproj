@@ -8,8 +8,8 @@
     <ProjectGuid>{465CB0FF-C9FA-4371-AD10-51C6DFF537B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PixelFarm.PlatformBridge</RootNamespace>
-    <AssemblyName>PixelFarm.PlatformBridge</AssemblyName>
+    <RootNamespace>PaintLab.PlatformBridge</RootNamespace>
+    <AssemblyName>PaintLab.PlatformBridge</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -34,7 +34,6 @@
     <Compile Include="Common\ExtensionAttribute.cs" />
     <Compile Include="Common\IPlatformWindowBox.cs" />
     <Compile Include="Common\UIPlatform.cs" />
-    <Compile Include="Common\UITimer.cs" />
     <Compile Include="Common\UITimerTask.cs" />
     <Compile Include="Common\Clipboard.cs" />
     <Compile Include="Events\IEventListener.cs" />
@@ -46,7 +45,9 @@
     <Compile Include="Common\Keys.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

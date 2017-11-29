@@ -14,6 +14,7 @@ namespace LayoutFarm
             //add list view to viewport
             viewport.AddContent(listview);
             //add 
+            RequestFont listItemFont = new RequestFont("tahoma", 18);
             for (int i = 0; i < 10; ++i)
             {
                 var listItem = new LayoutFarm.CustomWidgets.ListItem(400, 20);
@@ -25,6 +26,8 @@ namespace LayoutFarm
                 {
                     listItem.BackColor = KnownColors.FromKnownColor(KnownColor.Orange);
                 }
+                listItem.SetFont(listItemFont);
+                listItem.Text = "A" + i;
                 listview.AddItem(listItem);
             }
         }

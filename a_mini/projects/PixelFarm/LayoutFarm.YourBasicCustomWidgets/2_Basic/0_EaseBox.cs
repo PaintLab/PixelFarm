@@ -161,7 +161,14 @@ namespace LayoutFarm.CustomWidgets
                 this.MouseLeave(this, e);
             }
         }
-
+        protected override void OnMouseEnter(UIMouseEventArgs e)
+        {
+            base.OnMouseEnter(e);
+        }
+        protected override void OnMouseHover(UIMouseEventArgs e)
+        {
+            base.OnMouseHover(e);
+        }
         protected override void OnMouseUp(UIMouseEventArgs e)
         {
             if (this.MouseUp != null)

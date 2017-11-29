@@ -110,12 +110,12 @@ namespace LayoutFarm.UI
                         //printer.HintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction_VerticalOnly;
                         //printer.UseSubPixelRendering = true;
                         //canvasPainter.TextPrinter = printer;
-                        var openFontStore = new PixelFarm.Drawing.Fonts.OpenFontStore(); 
+                        var openFontStore = new PixelFarm.Drawing.Fonts.OpenFontStore();
                         var printer = new GLBmpGlyphTextPrinter(canvasPainter, openFontStore);
                         canvasPainter.TextPrinter = printer;
 
                         //
-                       
+
                         var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLCanvas(canvasPainter, 0, 0, view.Width, view.Height);
                         bridge.SetCanvas(myGLCanvas1);
 #endif
@@ -151,8 +151,6 @@ namespace LayoutFarm.UI
                     break;
             }
         }
-
-
         void InitializeComponent()
         {
             this.SuspendLayout();
@@ -174,15 +172,11 @@ namespace LayoutFarm.UI
         {
             this.winBridge.PaintToOutputWindowFullMode();
         }
-        public void PrintMe(PixelFarm.Drawing.WinGdi.MyGdiPlusCanvas targetCanvas)
+        public void PaintToPixelBuffer(IntPtr outputPixelBuffer)
         {
-            //paint to external canvas    
-            var winBridge = (GdiPlus.MyTopWindowBridgeGdiPlus)this.winBridge;
-            if (winBridge != null)
-            {
-                winBridge.PrintToCanvas(targetCanvas);
-            }
+            winBridge.CopyOutputPixelBuffer(0, 0, this.Width, this.Height, outputPixelBuffer);
         }
+
 #if DEBUG
         public IdbugOutputWindow IdebugOutputWin
         {

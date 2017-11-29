@@ -46,11 +46,13 @@ namespace LayoutFarm.Dev
                 case dbugLayoutMsgOwnerKind.Layer:
                     {
                         RenderElementLayer layer = (RenderElementLayer)msg.owner;
-                    } break;
+                    }
+                    break;
                 case dbugLayoutMsgOwnerKind.Line:
                     {
 
-                    } break;
+                    }
+                    break;
                 case dbugLayoutMsgOwnerKind.VisualElement:
                     {
                         RenderElement ve = (RenderElement)msg.owner;
@@ -59,7 +61,8 @@ namespace LayoutFarm.Dev
 
                         vwport.PaintMe();
 
-                    } break;
+                    }
+                    break;
 
             }
 #endif
@@ -79,11 +82,13 @@ namespace LayoutFarm.Dev
                     {
                         RenderElementLayer layer =
                            (RenderElementLayer)msg.owner;
-                    } break;
+                    }
+                    break;
                 case dbugLayoutMsgOwnerKind.Line:
                     {
 
-                    } break;
+                    }
+                    break;
                 case dbugLayoutMsgOwnerKind.VisualElement:
                     {
                         RenderElement ve = (RenderElement)msg.owner;
@@ -92,7 +97,8 @@ namespace LayoutFarm.Dev
 
                         vwport.PaintMe();
 
-                    } break;
+                    }
+                    break;
 
             }
 #endif
@@ -144,7 +150,7 @@ namespace LayoutFarm.Dev
 
                 FileStream fs = new FileStream("c:\\WImageTest\\invalidate\\lim_" + Guid.NewGuid().ToString() + ".txt", FileMode.Create);
                 StreamWriter strmWriter = new StreamWriter(fs);
-                strmWriter.AutoFlush = true; 
+                strmWriter.AutoFlush = true;
 
                 for (int i = 0; i < j; ++i)
                 {
@@ -248,8 +254,8 @@ namespace LayoutFarm.Dev
                 StreamWriter strmWriter = new StreamWriter(fs);
                 for (int i = 0; i < j; ++i)
                 {
-                    strmWriter.WriteLine(lastestMessages[i].ToString()); 
-                } 
+                    strmWriter.WriteLine(lastestMessages[i].ToString());
+                }
                 strmWriter.Close();
                 fs.Close();
                 fs.Dispose();
@@ -269,9 +275,8 @@ namespace LayoutFarm.Dev
         private void toolStripButton1_Click_1(object sender, EventArgs e)
         {
 #if DEBUG
-           vwport.PaintMeFullMode();
-#endif
-
+            vwport.PaintMeFullMode();
+#endif 
 
         }
 

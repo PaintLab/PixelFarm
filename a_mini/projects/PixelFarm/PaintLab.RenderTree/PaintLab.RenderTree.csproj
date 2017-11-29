@@ -40,7 +40,7 @@
     <Compile Include="1_Root\1_RootGraphic.cs" />
     <Compile Include="1_Root\1_RootGraphic_p1_dbug.cs" />
     <Compile Include="1_Root\1_RootGraphic_p2_dbug.cs" />
-    <Compile Include="0_Start\dbugCoreConst.cs" />
+    <Compile Include="6_debug\dbugCoreConst.cs" />
     <Compile Include="4_Boxes\IBoxElement.cs" />
     <Compile Include="1_Root\3_GraphicsTimerTask.cs" />
     <Compile Include="6_debug\dbugVisualEvalScrollBarTrace.cs" />
@@ -61,6 +61,8 @@
     <Compile Include="5_HitTest\HitChain.cs" />
     <Compile Include="6_debug\dbugHitTracker.cs" />
     <Compile Include="6_debug\IdbugOutputWindow.cs" />
+    <Compile Include="7_ContentMx\1_ImageBinder.cs" />
+    <Compile Include="8_EventQueue\EventQueueSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

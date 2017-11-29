@@ -27,7 +27,7 @@ namespace LayoutFarm.UI
         }
         public virtual void Focus()
         {
-            //make this keyboard focus able
+            //make this keyboard focusable
             if (this.HasReadyRenderElement)
             {
                 //focus
@@ -98,6 +98,10 @@ namespace LayoutFarm.UI
             {
                 this.CurrentPrimaryRenderElement.SetSize(_width, _height);
             }
+        }
+        public virtual void SetFont(RequestFont font)
+        {
+
         }
         public void SetBounds(int left, int top, int width, int height)
         {

@@ -39,8 +39,10 @@ namespace LayoutFarm
             this.iTopBoxEventPortal = this.topWinBoxEventPortal = new RenderElementEventPortal(topRenderElement);
             this.rootgfx = topRenderElement.Root;
             this.hoverMonitoringTask = new UIHoverMonitorTask(OnMouseHover);
+            //
+            UIPlatform.RegisterTimerTask(hoverMonitoringTask);
+            
         }
-
         public IEventListener CurrentKeyboardFocusedElement
         {
             get
@@ -121,7 +123,7 @@ namespace LayoutFarm
             DateTime snapMouseUpTime = DateTime.Now;
             TimeSpan timediff = snapMouseUpTime - lastTimeMouseUp;
 
-           
+
             if (this.isDragging)
             {
                 if (draggingElement != null)
@@ -149,7 +151,7 @@ namespace LayoutFarm
             }
             else
             {
-                e.IsAlsoDoubleClick = timediff.Milliseconds < dblClickSense;  
+                e.IsAlsoDoubleClick = timediff.Milliseconds < dblClickSense;
                 iTopBoxEventPortal.PortalMouseUp(e);
             }
             this.lastTimeMouseUp = snapMouseUpTime;
@@ -326,7 +328,7 @@ namespace LayoutFarm
                 delta);
         }
         //--------------------------------------------------------------------
-        void OnMouseHover(object sender, EventArgs e)
+        void OnMouseHover(UITimerTask timerTask)
         {
             return;
             //HitTestCoreWithPrevChainHint(hitPointChain.LastestRootX, hitPointChain.LastestRootY);

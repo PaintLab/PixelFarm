@@ -118,14 +118,12 @@
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\burningminecurve\curveutils\Spline.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\burningminecurve\curveutils\SplineBuilder.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\burningminecurve\curveutils\VectorHelper.cs" />
-    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCanvas\0_Start\IRootGraphics.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCanvas\1_Canvas\Canvas.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCanvas\1_Canvas\CanvasOptions.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCanvas\1_Canvas\CanvasPainter.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCanvas\1_Canvas\CanvasPaintToOutputDelegate.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCanvas\1_Canvas\KnownColors.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCanvas\1_Canvas\RenderVx.cs" />
-    <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCanvas\2_Drawing\1_ImageBinder.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCanvas\2_Drawing\FontStyle.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCanvas\2_Drawing\RequestFont.cs" />
     <Compile Include="D:\projects\PixelFarm\a_mini\projects\x_merge_projects\PixelFarm.MiniAgg.One\..\..\PixelFarm\PixelFarm.Drawing\..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ActualFont.cs" />

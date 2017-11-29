@@ -128,6 +128,8 @@ namespace PixelFarm.Drawing
             return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
         }
 
+        
+
         //-------------
         /// <summary>
         /// resolved actual font

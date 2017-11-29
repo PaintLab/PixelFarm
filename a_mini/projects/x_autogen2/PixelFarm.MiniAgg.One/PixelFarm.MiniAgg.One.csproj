@@ -290,9 +290,6 @@
     <Compile Include="..\..\PixelFarm\burningminecurve\curveutils\VectorHelper.cs">
       <Link>PixelFarm\burningminecurve\curveutils\VectorHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\0_Start\IRootGraphics.cs">
-      <Link>PixelFarm\PixelFarm.DrawingCanvas\0_Start\IRootGraphics.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\1_Canvas\Canvas.cs">
       <Link>PixelFarm\PixelFarm.DrawingCanvas\1_Canvas\Canvas.cs</Link>
     </Compile>
@@ -310,9 +307,6 @@
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\1_Canvas\RenderVx.cs">
       <Link>PixelFarm\PixelFarm.DrawingCanvas\1_Canvas\RenderVx.cs</Link>
-    </Compile>
-    <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\2_Drawing\1_ImageBinder.cs">
-      <Link>PixelFarm\PixelFarm.DrawingCanvas\2_Drawing\1_ImageBinder.cs</Link>
     </Compile>
     <Compile Include="..\..\PixelFarm\PixelFarm.DrawingCanvas\2_Drawing\FontStyle.cs">
       <Link>PixelFarm\PixelFarm.DrawingCanvas\2_Drawing\FontStyle.cs</Link>
