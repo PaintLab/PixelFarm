@@ -328,7 +328,7 @@ namespace LayoutFarm
                 delta);
         }
         //--------------------------------------------------------------------
-        void OnMouseHover()
+        void OnMouseHover(UITimerTask timerTask)
         {
             return;
             //HitTestCoreWithPrevChainHint(hitPointChain.LastestRootX, hitPointChain.LastestRootY);

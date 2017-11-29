@@ -1,6 +1,6 @@
-﻿//Apache2, 2014-2017, WinterDev
+﻿//MIT, 2014-2017, WinterDev
 
-
+using System.Collections.Generic;
 namespace LayoutFarm.UI
 {
 
@@ -8,7 +8,7 @@ namespace LayoutFarm.UI
     {
         TimerTick tickAction;
         int _intervalInMillisec;
-        public delegate void TimerTick();
+        public delegate void TimerTick(UITimerTask timerTask);
 
         public UITimerTask(TimerTick tickAction)
         {
@@ -20,11 +20,7 @@ namespace LayoutFarm.UI
             get;
             set;
         }
-        public bool IsInQueue
-        {
-            get;
-            set;
-        }
+
         /// <summary>
         /// interval of this timer in ms
         /// </summary>
@@ -41,7 +37,7 @@ namespace LayoutFarm.UI
         protected virtual void InvokeAction()
         {
             //direct invoke action
-            tickAction();
+            tickAction(this);
         }
         public virtual void Reset()
         {
@@ -50,22 +46,67 @@ namespace LayoutFarm.UI
         {
             //TODO: review this member accessibility here
             get;
-            set;
+            internal set;
         }
 
+        public bool RemoveFromQueue { get; set; }
 
         //TODO: review here
         int _remaining;
-        public static void CountDown(UITimerTask timer_task, int decrement)
+        internal static bool CountDown(UITimerTask timer_task, int decrement)
         {
             timer_task._remaining -= decrement;
             if (timer_task._remaining <= 0)
             {
                 timer_task._remaining = timer_task._intervalInMillisec;//reset
                 //invoke action
-                timer_task.tickAction();
-
+                timer_task.InvokeAction();
+                if (timer_task.RunOnce)
+                {
+                    timer_task.RemoveFromQueue = true;
+                }
+                return true;
             }
+            return false;
         }
+    }
+
+    static class UIMsgQueueSystem
+    {
+
+        static Queue<UITimerTask> s_uiTimerTasks = new Queue<UITimerTask>();
+        internal static int MinUICountDownInMillisec = 10; //default
+        internal static void InternalMsgPumpRegister(UITimerTask timerTask)
+        {
+            if (timerTask.IsRegistered || timerTask.IntervalInMillisec <= 0)
+                return;
+            //
+            s_uiTimerTasks.Enqueue(timerTask);
+            timerTask.IsRegistered = true;
+        }
+        internal static void InternalMsgPumpOneStep()
+        {
+            //platform must invoke this in UI/msg queue thread ***
+            for (int i = s_uiTimerTasks.Count - 1; i >= 0; --i)
+            {
+                //just snap 
+                UITimerTask timer_task = s_uiTimerTasks.Dequeue();
+                if (timer_task.Enabled)
+                {
+                    UITimerTask.CountDown(timer_task, MinUICountDownInMillisec);
+                }
+                if (timer_task.RemoveFromQueue)
+                {
+                    timer_task.IsRegistered = false;
+                    //don't enqueue back 
+                }
+                else
+                {   //add back to the queue
+                    s_uiTimerTasks.Enqueue(timer_task);
+                }
+            }
+
+        }
+
     }
 }

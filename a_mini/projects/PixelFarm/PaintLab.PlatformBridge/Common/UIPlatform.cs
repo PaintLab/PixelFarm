@@ -16,8 +16,15 @@ namespace LayoutFarm.UI
         }
         public static void RegisterTimerTask(UITimerTask uiTimer)
         {
-            ui_plaform.InternalRegisterTimerTask(uiTimer);
+            UIMsgQueueSystem.InternalMsgPumpRegister(uiTimer);
         }
-        protected abstract void InternalRegisterTimerTask(UITimerTask timerTask);
+        protected static void InvokeMsgPumpOneStep()
+        {
+            UIMsgQueueSystem.InternalMsgPumpOneStep();
+        }
+        protected static void SetUIMsgMinTimerCounterBackInMillisec(int millisec)
+        {
+            UIMsgQueueSystem.MinUICountDownInMillisec = millisec;
+        }
     }
 }

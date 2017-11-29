@@ -10,22 +10,23 @@ namespace LayoutFarm.UI
     {
         static Timer s_uiTimer = new Timer();
         //we create a hidden window form for invoke other task in 
-        //UI thread
-        static List<UITimerTask> s_uiTimerTasks = new List<UITimerTask>();
+        //UI thread 
         static Form s_msg_window = new Form();
-
         static bool s_isInit = false;
-        const int MIN_INTERVAL = 10;
         static UITimerManager()
         {
-            s_uiTimer.Interval = MIN_INTERVAL; //minimum msg queue timer ?, TODO: review here
         }
-        public static void Init()
+        static bool s_readyToInvoke;
+        public delegate void SimpleAction();
+        static SimpleAction s_timerAction;
+        public static void Init(int minInterval, SimpleAction timerAction)
         {
             if (s_isInit) return;
             //
             s_isInit = true;
+            s_timerAction = timerAction;
             s_msg_window.Visible = false;
+            s_uiTimer.Interval = minInterval;
             s_uiTimer.Tick += timer_tick;
             // 
             //force form to created?
@@ -33,10 +34,7 @@ namespace LayoutFarm.UI
             s_uiTimer.Enabled = true;//last
         }
 
-        static bool s_readyToInvoke;
-        delegate void SimpleAction();
-
-        private static void timer_tick(object sender, System.EventArgs e)
+        static void timer_tick(object sender, System.EventArgs e)
         {
             if (!s_readyToInvoke)
             {
@@ -50,32 +48,11 @@ namespace LayoutFarm.UI
             {
                 //stop all timer
                 s_uiTimer.Enabled = false; //temporary pause
-
-                int j = s_uiTimerTasks.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    UITimerTask ui_task = s_uiTimerTasks[i];
-                    if (ui_task.Enabled)
-                    {
-                        UITimerTask.CountDown(ui_task, MIN_INTERVAL);
-                    }
-                }
-
+                s_timerAction();
                 s_uiTimer.Enabled = true;//enable again
             }));
             //TODO: review here,again eg.post custom msg to the window event queue?
         }
-        public static bool RegisterTimerTask(UITimerTask timerTask)
-        {   
-
-            if (timerTask.IsRegistered) return false;
-            if (timerTask.IntervalInMillisec <= 0) return false;
-            //
-            s_uiTimerTasks.Add(timerTask);
-            timerTask.IsRegistered = true;
-            return true;
-        }
-
     }
 
 
@@ -87,15 +64,13 @@ namespace LayoutFarm.UI
             //actual timer
             //for msg queue
             //
-            UITimerManager.Init();
+            SetUIMsgMinTimerCounterBackInMillisec(10);
+            UITimerManager.Init(10, InvokeMsgPumpOneStep);
         }
+
         public static UIPlatformWinForm GetDefault()
         {
             return platform;
-        }
-        protected override void InternalRegisterTimerTask(UITimerTask timerTask)
-        {
-            UITimerManager.RegisterTimerTask(timerTask);
         }
 
 

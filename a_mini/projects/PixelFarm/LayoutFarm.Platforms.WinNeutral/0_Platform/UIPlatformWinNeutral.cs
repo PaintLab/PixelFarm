@@ -32,10 +32,7 @@ namespace LayoutFarm.UI
 
             }
         }
-        protected override void InternalRegisterTimerTask(UITimerTask timerTask)
-        {
-            //TODO: implement this again
-        }
+       
 
         public override void ClearClipboardData()
         {

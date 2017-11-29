@@ -100,7 +100,7 @@ namespace LayoutFarm.UI
 #endif
 
 
-        void graphicTimer1_Tick()
+        void graphicTimer1_Tick(UITimerTask timerTask)
         {
             //-------------------------------------------------
             tickAccum += fastPlanInterval;
