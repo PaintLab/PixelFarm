@@ -51,10 +51,6 @@
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
       <Name>LayoutFarm.YourBasicCustomWidgets</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj">
-      <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
-      <Name>PaintLab.PlatformBridge</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
@@ -82,10 +78,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj">
       <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
       <Name>PixelFarm.OpenTKWinForms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PaintLab.RenderTree\PaintLab.RenderTree.csproj">
-      <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
-      <Name>PaintLab.RenderTree</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>

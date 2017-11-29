@@ -82,13 +82,9 @@
       <Project>{3ee0a791-af18-46ac-b13e-5ddc393091a8}</Project>
       <Name>LayoutFarm.TextEdit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj">
-      <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
-      <Name>PaintLab.PlatformBridge</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PaintLab.RenderTree\PaintLab.RenderTree.csproj">
-      <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
-      <Name>PaintLab.RenderTree</Name>
+    <ProjectReference Include="..\PaintLab.AbstractPlatform\PaintLab.AbstractPlatform.csproj">
+      <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
+      <Name>PaintLab.AbstractPlatform</Name>
     </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing.MiniAgg.csproj">
       <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>

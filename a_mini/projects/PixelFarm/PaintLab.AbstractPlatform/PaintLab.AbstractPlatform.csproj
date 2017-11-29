@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D2CC5CEF-3003-4A5D-A532-8EB7E4FA40F2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PaintLab.AbstractPlatform</RootNamespace>
+    <AssemblyName>PaintLab.AbstractPlatform</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\PaintLab.PlatformBridge\Common\Clipboard.cs">
+      <Link>PlatformBridge\Common\Clipboard.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Common\ExtensionAttribute.cs">
+      <Link>PlatformBridge\Common\ExtensionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Common\IPlatformWindowBox.cs">
+      <Link>PlatformBridge\Common\IPlatformWindowBox.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Common\Keys.cs">
+      <Link>PlatformBridge\Common\Keys.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Common\UIPlatform.cs">
+      <Link>PlatformBridge\Common\UIPlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Common\UITimer.cs">
+      <Link>PlatformBridge\Common\UITimer.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Common\UITimerTask.cs">
+      <Link>PlatformBridge\Common\UITimerTask.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Events\IEventListener.cs">
+      <Link>PlatformBridge\Events\IEventListener.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Events\IEventPortal.cs">
+      <Link>PlatformBridge\Events\IEventPortal.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Events\ITopWindowEventRoot.cs">
+      <Link>PlatformBridge\Events\ITopWindowEventRoot.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Events\ScrollSurfaceRequestEventArgs.cs">
+      <Link>PlatformBridge\Events\ScrollSurfaceRequestEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Events\UIEventArgs.cs">
+      <Link>PlatformBridge\Events\UIEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.PlatformBridge\Events\UIEventNames.cs">
+      <Link>PlatformBridge\Events\UIEventNames.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\1_Root\1_RootGraphic.cs">
+      <Link>RenderTree\1_Root\1_RootGraphic.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\1_Root\1_RootGraphic_p1_dbug.cs">
+      <Link>RenderTree\1_Root\1_RootGraphic_p1_dbug.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\1_Root\1_RootGraphic_p2_dbug.cs">
+      <Link>RenderTree\1_Root\1_RootGraphic_p2_dbug.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\1_Root\2_RenderRequest.cs">
+      <Link>RenderTree\1_Root\2_RenderRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\1_Root\3_GraphicsTimerTask.cs">
+      <Link>RenderTree\1_Root\3_GraphicsTimerTask.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\0_RenderElement.cs">
+      <Link>RenderTree\2_RenderElement\0_RenderElement.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\1_RenderElement.ElementPositioning_NoBoundChanged.cs">
+      <Link>RenderTree\2_RenderElement\1_RenderElement.ElementPositioning_NoBoundChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\2_RenderElement.ElementPositioning_1_WithSizeChanged.cs">
+      <Link>RenderTree\2_RenderElement\2_RenderElement.ElementPositioning_1_WithSizeChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\3_RenderElement.Bubble_Layout.cs">
+      <Link>RenderTree\2_RenderElement\3_RenderElement.Bubble_Layout.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\4_RenderElement.Bubble_Repaint.cs">
+      <Link>RenderTree\2_RenderElement\4_RenderElement.Bubble_Repaint.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\RenderElementConst.cs">
+      <Link>RenderTree\2_RenderElement\RenderElementConst.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\RenderElement_IParentLink.cs">
+      <Link>RenderTree\2_RenderElement\RenderElement_IParentLink.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\x_RenderElement.debug.cs">
+      <Link>RenderTree\2_RenderElement\x_RenderElement.debug.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\2_RenderElement\x_RenderElement_LocationHelper.cs">
+      <Link>RenderTree\2_RenderElement\x_RenderElement_LocationHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\3_Layers\0_IParentLink.cs">
+      <Link>RenderTree\3_Layer\0_IParentLink.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\3_Layers\1_RenderElementLayer.cs">
+      <Link>RenderTree\3_Layer\1_RenderElementLayer.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\3_Layers\2_PlainLayer.cs">
+      <Link>RenderTree\3_Layer\2_PlainLayer.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\4_Boxes\IBoxElement.cs">
+      <Link>RenderTree\4_Boxes\IBoxElement.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\4_Boxes\RenderBoxBase.cs">
+      <Link>RenderTree\4_Boxes\RenderBoxBase.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\5_HitTest\HitChain.cs">
+      <Link>RenderTree\5_HitTest\HitChain.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\6_debug\dbug.cs">
+      <Link>RenderTree\6_debug\dbug.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\6_debug\dbugCoreConst.cs">
+      <Link>RenderTree\6_debug\dbugCoreConst.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\6_debug\dbugHitTracker.cs">
+      <Link>RenderTree\6_debug\dbugHitTracker.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\6_debug\dbugVisitorMessage.cs">
+      <Link>RenderTree\6_debug\dbugVisitorMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\6_debug\dbugVisualEvalScrollBarTrace.cs">
+      <Link>RenderTree\6_debug\dbugVisualEvalScrollBarTrace.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\6_debug\dbugVisualInvalidationTracer.cs">
+      <Link>RenderTree\6_debug\dbugVisualInvalidationTracer.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\6_debug\dbugVisualLayoutTracer.cs">
+      <Link>RenderTree\6_debug\dbugVisualLayoutTracer.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\6_debug\IdbugOutputWindow.cs">
+      <Link>RenderTree\6_debug\IdbugOutputWindow.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\7_ContentMx\1_ImageBinder.cs">
+      <Link>RenderTree\7_ContentMx\1_ImageBinder.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs">
+      <Link>RenderTree\8_EventQueue\EventQueueSystem.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
