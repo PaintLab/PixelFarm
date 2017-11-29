@@ -1,8 +1,5 @@
 ﻿//Apache2, 2014-2017, WinterDev
-
-using System.Collections.Generic;
-using PixelFarm.Drawing;
-using LayoutFarm.UI;
+ 
 namespace LayoutFarm
 {
     [DemoNote("1.10 MultipleImages")]
