@@ -48,9 +48,6 @@
     <Compile Include="..\LayoutFarm.PlatformBase\InnerViewportKind.cs">
       <Link>0_Shared\InnerViewportKind.cs</Link>
     </Compile>
-    <Compile Include="..\LayoutFarm.PlatformBase\MyUITimer.cs">
-      <Link>0_Shared\MyUITimer.cs</Link>
-    </Compile>
     <Compile Include="..\LayoutFarm.PlatformBase\OpenGLCanvasViewport.cs">
       <Link>3_OpenGL\OpenGLCanvasViewport.cs</Link>
     </Compile>

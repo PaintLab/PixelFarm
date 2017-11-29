@@ -34,7 +34,6 @@
     <Compile Include="Common\ExtensionAttribute.cs" />
     <Compile Include="Common\IPlatformWindowBox.cs" />
     <Compile Include="Common\UIPlatform.cs" />
-    <Compile Include="Common\UITimer.cs" />
     <Compile Include="Common\UITimerTask.cs" />
     <Compile Include="Common\Clipboard.cs" />
     <Compile Include="Events\IEventListener.cs" />
@@ -45,6 +44,9 @@
     <Compile Include="Events\UIEventNames.cs" />
     <Compile Include="Common\Keys.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

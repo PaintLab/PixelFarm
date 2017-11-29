@@ -26,7 +26,7 @@ namespace LayoutFarm.UI
             PixelFarm.Drawing.Fonts.IFontLoader fontLoader = s_fontstore;
             //2. 
             PixelFarm.Drawing.IFonts ifont = null;
-             
+
             switch (internalViewportKind)
             {
                 default:
@@ -42,13 +42,14 @@ namespace LayoutFarm.UI
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontLoader);
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontEncoding(System.Text.Encoding.ASCII);
             //
-             
+
             //---------------------------------------------------------------------------
-            UITimer timer = s_platform.CreateUITimer();
+            
             MyRootGraphic myRootGfx = new MyRootGraphic(
                w, h,
-               ifont,
-               timer);
+               ifont
+               );
+
             //---------------------------------------------------------------------------
 
             var innerViewport = canvasViewport = new LayoutFarm.UI.UISurfaceViewportControl();

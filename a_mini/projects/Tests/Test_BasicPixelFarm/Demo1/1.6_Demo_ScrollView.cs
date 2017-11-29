@@ -16,8 +16,8 @@ namespace LayoutFarm
             {
                 e.SetResultImage(LoadBitmap(e.ImagSource));
             };
-            AddScrollView1(viewport, 0, 0);
-            //AddScrollView2(viewport, 250, 0);
+            //AddScrollView1(viewport, 0, 0);
+            AddScrollView2(viewport, 250, 0);
         }
         void LazyImageLoad(ImageBinder binder)
         {
@@ -79,16 +79,17 @@ namespace LayoutFarm
             viewport.AddContent(panel);
             //-------------------------  
             //load images...
+
+            string[] fileNames = System.IO.Directory.GetFiles("../../Data/imgs", "0*.jpg");
+            //select only
+
+
             int lastY = 0;
-            for (int i = 0; i < 5; ++i)
+            for (int i = 0; i < fileNames.Length; ++i) //5 imgs
             {
                 var imgbox = new LayoutFarm.CustomWidgets.ImageBox(36, 400);
-                //if (!System.IO.File.Exists("../../images/0" + (i + 1) + ".jpg"))
-                //{
-                //}
-                ClientImageBinder binder = new ClientImageBinder("../../images/0" + (i + 1) + ".jpg");
-                binder.SetOwner(imgbox);
-                binder.SetLazyFunc(LazyImageLoad);
+                ClientImageBinder binder = new ClientImageBinder(fileNames[i]);
+                binder.SetLazyLoaderFunc(LazyImageLoad); 
                 //if use lazy img load func
                 imageContentMan.AddRequestImage(binder);
                 imgbox.ImageBinder = binder;
