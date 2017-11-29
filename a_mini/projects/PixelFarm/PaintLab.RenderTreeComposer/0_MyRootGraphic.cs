@@ -20,17 +20,15 @@ namespace LayoutFarm.UI
 
         RequestFont _defaultTextEditFont; //TODO: review here
         IFonts _ifonts;
-        UITimer _timer;
         public MyRootGraphic(
             int width, int height,
-            IFonts ifonts,
-            UITimer timer)
+            IFonts ifonts)
             : base(width, height)
         {
 
-            this._timer = timer;
+
             this._ifonts = ifonts;
-            this.graphicTimerTaskMan = new GraphicsTimerTaskManager(this, timer);
+            this.graphicTimerTaskMan = new GraphicsTimerTaskManager(this);
             _defaultTextEditFont = new RequestFont("tahoma", 10);
 
 #if DEBUG
@@ -60,7 +58,7 @@ namespace LayoutFarm.UI
 
         public override RootGraphic CreateNewOne(int w, int h)
         {
-            return new MyRootGraphic(w, h, this._ifonts, this._timer);
+            return new MyRootGraphic(w, h, this._ifonts);
         }
         public ITopWindowEventRoot TopWinEventPortal
         {

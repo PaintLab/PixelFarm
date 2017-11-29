@@ -48,6 +48,7 @@
     <Compile Include="..\..\pixelfarm\win32utils\NativeWin32MemoryDc.cs">
       <Link>YourImplementation\Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
+    <Compile Include="Demo1.1\1.12_SmallAnimation.cs" />
     <Compile Include="Demo3\3.1_Demo_Visible.cs" />
     <Compile Include="Demo3\3.2_Demo_ControllerBox.cs" />
     <Compile Include="Demo3\3.3_Demo_ControllerBox2.cs" />

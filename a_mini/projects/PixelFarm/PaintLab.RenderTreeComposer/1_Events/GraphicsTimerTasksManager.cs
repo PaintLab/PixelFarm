@@ -11,29 +11,30 @@ namespace LayoutFarm.UI
         List<GraphicsTimerTask> fastIntervalTaskList = new List<GraphicsTimerTask>();
         List<GraphicsTimerTask> caretIntervalTaskList = new List<GraphicsTimerTask>();
         RootGraphic rootgfx;
-        UITimer uiTimer1;
+
         int fastPlanInterval = 20;//ms 
-        int caretBlinkInterval = 500;//ms (2 fps)
+        int caretBlinkInterval = 400;//ms (2 fps)
         int tickAccum = 0;
         bool enableCaretBlink = true;
-        public GraphicsTimerTaskManager(RootGraphic rootgfx, UITimer timer)
+        UITimerTask uiTimerTask;
+        public GraphicsTimerTaskManager(RootGraphic rootgfx)
         {
             this.rootgfx = rootgfx;
-            this.uiTimer1 = timer;
-            //--------------------------------------
-            uiTimer1.Interval = fastPlanInterval; //fast task plan
-            uiTimer1.Tick += new EventHandler(graphicTimer1_Tick);
-            uiTimer1.Enabled = true;
-            //--------------------------------------
+
+            //register timer task
+            uiTimerTask = new UITimerTask(graphicTimer1_Tick);
+            uiTimerTask.IntervalInMillisec = fastPlanInterval; //fast task plan
+            UIPlatform.RegisterTimerTask(uiTimerTask);
+            uiTimerTask.Enabled = true;
         }
         public bool Enabled
         {
-            get { return this.uiTimer1.Enabled; }
-            set { this.uiTimer1.Enabled = value; }
+            get { return this.uiTimerTask.Enabled; }
+            set { this.uiTimerTask.Enabled = value; }
         }
         public void CloseAllWorkers()
         {
-            this.uiTimer1.Enabled = false;
+            this.uiTimerTask.Enabled = false;
         }
         public void StartCaretBlinkTask()
         {
@@ -99,7 +100,7 @@ namespace LayoutFarm.UI
 #endif
 
 
-        void graphicTimer1_Tick(object sender, EventArgs e)
+        void graphicTimer1_Tick()
         {
             //-------------------------------------------------
             tickAccum += fastPlanInterval;

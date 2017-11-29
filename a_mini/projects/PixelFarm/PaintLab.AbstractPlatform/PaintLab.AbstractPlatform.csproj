@@ -48,9 +48,6 @@
     <Compile Include="..\PaintLab.PlatformBridge\Common\UIPlatform.cs">
       <Link>PlatformBridge\Common\UIPlatform.cs</Link>
     </Compile>
-    <Compile Include="..\PaintLab.PlatformBridge\Common\UITimer.cs">
-      <Link>PlatformBridge\Common\UITimer.cs</Link>
-    </Compile>
     <Compile Include="..\PaintLab.PlatformBridge\Common\UITimerTask.cs">
       <Link>PlatformBridge\Common\UITimerTask.cs</Link>
     </Compile>
