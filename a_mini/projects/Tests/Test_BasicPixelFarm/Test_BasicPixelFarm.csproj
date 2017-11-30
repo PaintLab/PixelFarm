@@ -49,6 +49,21 @@
       <Link>YourImplementation\Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
     <Compile Include="Demo1.1\1.12_SmallAnimation.cs" />
+    <Compile Include="Demo1.2\1.13_ColorBlender.cs" />
+    <Compile Include="Demo1.2\ColorBlender\Algorithms\Analogue.cs" />
+    <Compile Include="Demo1.2\ColorBlender\Algorithms\ClassicBlend.cs" />
+    <Compile Include="Demo1.2\ColorBlender\Algorithms\ColorExplorer.cs" />
+    <Compile Include="Demo1.2\ColorBlender\Algorithms\Complementary.cs" />
+    <Compile Include="Demo1.2\ColorBlender\Algorithms\SingleHue.cs" />
+    <Compile Include="Demo1.2\ColorBlender\Algorithms\SplitComplementary.cs" />
+    <Compile Include="Demo1.2\ColorBlender\Algorithms\Square.cs" />
+    <Compile Include="Demo1.2\ColorBlender\Algorithms\Triadic.cs" />
+    <Compile Include="Demo1.2\ColorBlender\Blend.cs" />
+    <Compile Include="Demo1.2\ColorBlender\ColorMatch.cs" />
+    <Compile Include="Demo1.2\ColorBlender\HSV.cs" />
+    <Compile Include="Demo1.2\ColorBlender\IAlgorithm.cs" />
+    <Compile Include="Demo1.2\ColorBlender\MathHelpers.cs" />
+    <Compile Include="Demo1.2\ColorBlender\RGB.cs" />
     <Compile Include="Demo3\3.1_Demo_Visible.cs" />
     <Compile Include="Demo3\3.2_Demo_ControllerBox.cs" />
     <Compile Include="Demo3\3.3_Demo_ControllerBox2.cs" />
@@ -70,6 +85,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleViewportExtension.cs" />
+    <Compile Include="SimpleDelegates.cs" />
     <Compile Include="x_unused\x_MyGlfwForm.cs" />
     <Compile Include="x_unused\x_notusedOpenGLPortal.cs" />
     <Compile Include="Demo2\2.1_Demo_SingleLineTextBox.cs" />
