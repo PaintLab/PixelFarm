@@ -21,18 +21,42 @@ namespace LayoutFarm.ColorBlenderSample
 
         //
         SimpleBox pure_rgbBox;
-        SimpleBox final_box_algo1;
 
         ScrollBar r_sc, g_sc, b_sc;
+        ListView lstvw_blendAlgo;
 
-
+        IAlgorithm blenderAlgo;
         protected override void OnStartDemo(SampleViewport viewport)
         {
 
             colorMatch = new ColorMatch();
             colorMatch.VariationsRGB = new RGB[7];
             colorMatch.VariationsHSV = new RGB[9];
+            blenderAlgo = colorMatch.Algorithms[0];
+            //
 
+            {
+                lstvw_blendAlgo = new ListView(200, 400);
+                lstvw_blendAlgo.SetLocation(500, 20);
+                viewport.AddContent(lstvw_blendAlgo);
+                lstvw_blendAlgo.ListItemMouseEvent += (s, e) =>
+                {
+                    if (lstvw_blendAlgo.SelectedIndex > -1)
+                    {
+                        blenderAlgo = colorMatch.Algorithms[lstvw_blendAlgo.SelectedIndex];
+                        UpdateAllComponents();
+                    }
+                };
+
+                //add item
+                foreach (IAlgorithm algo in colorMatch.Algorithms)
+                {
+                    ListItem listItem = new ListItem(200, 20);
+                    listItem.Text = algo.GetType().Name;
+                    listItem.Tag = algo;
+                    lstvw_blendAlgo.AddItem(listItem);
+                }
+            }
 
             //start RGB value
             byte r_value = 200;
@@ -53,7 +77,7 @@ namespace LayoutFarm.ColorBlenderSample
                 pure_rgbBox.SetLocation(0, 0);
                 viewport.AddContent(pure_rgbBox);
             }
-            
+
             //R
             {
 
@@ -95,7 +119,7 @@ namespace LayoutFarm.ColorBlenderSample
                 });
                 viewport.AddContent(b_sc);
                 viewport.AddContent(b_sampleBox);
-            } 
+            }
             _component_ready = true;
         }
 
@@ -171,6 +195,7 @@ namespace LayoutFarm.ColorBlenderSample
             pure_rgbBox.BackColor = new PixelFarm.Drawing.Color(r, g, b);
 
             //the update ColorMatch
+            colorMatch.CurrentAlgorithm = blenderAlgo;
             colorMatch.CurrentRGB = new RGB(r, g, b);
             colorMatch.CurrentHSV = colorMatch.CurrentRGB.ToHSV();
             colorMatch.CurrentRGB = colorMatch.CurrentHSV.ToRGB();//?
@@ -202,6 +227,16 @@ namespace LayoutFarm.ColorBlenderSample
         public static PixelFarm.Drawing.Color ToPixelFarmColor(this RGB rgbColor)
         {
             return new PixelFarm.Drawing.Color((byte)rgbColor.R, (byte)rgbColor.G, (byte)rgbColor.B);
+        }
+    }
+
+    static class ListViewItemExtensions
+    {
+        public static void AddItem(this ListView lstView, string text)
+        {
+            ListItem listItem = new ListItem(lstView.Width, 20);
+            listItem.Text = text;
+            lstView.AddItem(listItem);
         }
     }
 
