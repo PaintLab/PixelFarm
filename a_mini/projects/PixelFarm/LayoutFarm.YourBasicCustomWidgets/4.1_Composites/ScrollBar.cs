@@ -6,6 +6,108 @@ using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
     public delegate void ScrollBarEvaluator(ScrollBar scBar, out double onePixelFore, out int scrollBoxHeight);
+
+
+
+    struct ScrollRangeLogic
+    {
+        float maxValue;
+        float minValue;
+        float largeChange;
+        float smallChange;
+        float currentValue;
+
+
+        public ScrollRangeLogic(float min, float max, float largeChange, float smallChange)
+        {
+            this.maxValue = max;
+            this.minValue = min;
+            this.currentValue = min;//start at min value
+            this.largeChange = largeChange;
+            this.smallChange = smallChange;
+            //validate values
+        }
+
+        public float MaxValue
+        {
+            get { return maxValue; }
+            set { maxValue = value; }
+        }
+        public float MinValue
+        {
+            get { return minValue; }
+            set { minValue = value; }
+        }
+        public float LargeChange
+        {
+            get { return largeChange; }
+            set
+            {
+                largeChange = value;
+            }
+        }
+        public float SmallChange
+        {
+            get { return smallChange; }
+            set
+            {
+                smallChange = value;
+            }
+        }
+        public float CurrentValue
+        {
+            get
+            {
+                return currentValue;
+            }
+        }
+        public bool SetValue(float value)
+        {
+            //how to handle over-range value
+            //throw ?
+            //auto reset?
+            float tmpValue = value;
+            if (tmpValue < minValue)
+            {
+                tmpValue = minValue;
+            }
+            else if (tmpValue > maxValue)
+            {
+                tmpValue = maxValue;
+            }
+            //changed?
+            bool valueChanged = tmpValue != currentValue;
+            this.currentValue = tmpValue;
+            return valueChanged;
+        }
+
+        public float ValueRange
+        {
+            get { return maxValue - minValue; }
+        }
+
+        public bool SmallStepToMax()
+        {
+            return SetValue(this.currentValue + smallChange);
+
+        }
+        public bool SmallStepToMin()
+        {
+            return SetValue(this.currentValue - smallChange);
+        }
+        public bool LargeStepToMax()
+        {
+            return SetValue(this.currentValue + largeChange);
+        }
+        public bool LargeStepToMin()
+        {
+            return SetValue(this.currentValue - largeChange);
+        }
+    }
+
+
+
+
     public class ScrollBar : UIBox
     {
         CustomRenderBox mainBox;
@@ -13,11 +115,9 @@ namespace LayoutFarm.CustomWidgets
         ScrollBarButton maxButton;
         ScrollBarButton scrollButton;
         ScrollBarEvaluator customScrollBarEvaluator;
-        float maxValue;
-        float minValue;
-        float smallChange;
-        float largeChange;
-        float scrollValue;
+
+        ScrollRangeLogic scrollRangeLogic; 
+
         double onePixelFor = 1;
         protected int minmax_boxHeight = 15;
         const int SCROLL_BOX_SIZE_LIMIT = 10;
@@ -82,14 +182,8 @@ namespace LayoutFarm.CustomWidgets
 
         public void StepSmallToMax()
         {
-            if (this.scrollValue + smallChange <= this.MaxValue)
-            {
-                scrollValue = this.scrollValue + smallChange;
-            }
-            else
-            {
-                scrollValue = this.MaxValue;
-            }
+
+            scrollRangeLogic.SmallStepToMax();
             //---------------------------
             //update visual presentation             
             UpdateScrollButtonPosition();
@@ -100,14 +194,8 @@ namespace LayoutFarm.CustomWidgets
         }
         public void StepSmallToMin()
         {
-            if (this.scrollValue - smallChange >= this.minValue)
-            {
-                scrollValue = this.scrollValue - smallChange;
-            }
-            else
-            {
-                scrollValue = this.MinValue;
-            }
+
+            scrollRangeLogic.SmallStepToMin();
             //---------------------------
             //update visual presentation   
             UpdateScrollButtonPosition();
@@ -178,7 +266,7 @@ namespace LayoutFarm.CustomWidgets
         //----------------------------------------------------------------------- 
         int CalculateThumbPosition()
         {
-            return (int)(this.scrollValue / this.onePixelFor);
+            return (int)(scrollRangeLogic.CurrentValue / this.onePixelFor);
         }
 
         void SetupMinButtonProperties(RenderElement container)
@@ -261,13 +349,13 @@ namespace LayoutFarm.CustomWidgets
                 //--------------------------
                 //calculate scroll length ratio
                 //scroll button height is ratio with real scroll length
-                float contentLength = this.maxValue - this.minValue;
+                float contentLength = scrollRangeLogic.ValueRange;
                 //2. 
                 float physicalScrollLength = this.Height - (this.minmax_boxHeight + this.minmax_boxHeight);
                 //3.  
                 if (contentLength < physicalScrollLength)
                 {
-                    int nsteps = (int)Math.Round(contentLength / smallChange);
+                    int nsteps = (int)Math.Round(contentLength / scrollRangeLogic.SmallChange);
                     //small change value reflect thumbbox size 
                     int eachStepLength = (int)(physicalScrollLength / (float)(nsteps + 2));
                     scrollBoxLength = eachStepLength * 2;
@@ -338,7 +426,7 @@ namespace LayoutFarm.CustomWidgets
                 //calculate value from position 
 
                 int currentMarkAt = (newYPos - minmax_boxHeight);
-                this.scrollValue = (float)(onePixelFor * currentMarkAt);
+                scrollRangeLogic.SetValue((float)(onePixelFor * currentMarkAt));
                 newYPos = CalculateThumbPosition() + minmax_boxHeight;
                 scroll_button.SetLocation(pos.X, newYPos);
                 if (this.UserScroll != null)
@@ -397,7 +485,7 @@ namespace LayoutFarm.CustomWidgets
             {
                 //calculate scroll length ratio
                 //scroll button height is ratio with real scroll length
-                float contentLength = this.maxValue - this.minValue;
+                float contentLength = scrollRangeLogic.ValueRange;
                 //2. 
                 float physicalScrollLength = this.Width - (this.minmax_boxHeight + this.minmax_boxHeight);
                 //3. 
@@ -431,7 +519,7 @@ namespace LayoutFarm.CustomWidgets
                 //3.  
                 if (contentLength < physicalScrollLength)
                 {
-                    int nsteps = (int)Math.Round(contentLength / smallChange);
+                    int nsteps = (int)Math.Round(contentLength / scrollRangeLogic.SmallChange);
                     //small change value reflect thumbbox size 
                     int eachStepLength = (int)(physicalScrollLength / (float)(nsteps + 2));
                     scrollBoxLength = eachStepLength * 2;
@@ -502,14 +590,14 @@ namespace LayoutFarm.CustomWidgets
                 //calculate value from position 
 
                 int currentMarkAt = (newXPos - minmax_boxHeight);
-                this.scrollValue = (float)(onePixelFor * currentMarkAt);
+                this.scrollRangeLogic.SetValue((float)(onePixelFor * currentMarkAt));
+
                 newXPos = CalculateThumbPosition() + minmax_boxHeight;
                 scroll_button.SetLocation(newXPos, pos.Y);
                 if (this.UserScroll != null)
                 {
                     this.UserScroll(this, EventArgs.Empty);
                 }
-
                 e.StopPropagation();
             };
             ////-------------------------------------------
@@ -545,8 +633,6 @@ namespace LayoutFarm.CustomWidgets
             //    }
             //};
         }
-
-
         //----------------------------------------------------------------------- 
         public void SetupScrollBar(ScrollBarCreationParameters creationParameters)
         {
@@ -555,42 +641,47 @@ namespace LayoutFarm.CustomWidgets
         }
         public float MaxValue
         {
-            get { return this.maxValue; }
+            get { return this.scrollRangeLogic.MaxValue; }
             set
             {
-                this.maxValue = value;
+                this.scrollRangeLogic.MaxValue = value;
+                //need update 
             }
         }
         public float MinValue
         {
-            get { return this.minValue; }
+            get { return this.scrollRangeLogic.MinValue; }
             set
             {
-                this.minValue = value;
+                this.scrollRangeLogic.MinValue = value;
+                //need update 
             }
         }
         public float SmallChange
         {
-            get { return this.smallChange; }
+            get { return scrollRangeLogic.SmallChange; }
             set
             {
-                this.smallChange = value;
+                scrollRangeLogic.SmallChange = value;
+                //need update 
             }
         }
         public float LargeChange
         {
-            get { return this.largeChange; }
+            get { return scrollRangeLogic.LargeChange; }
             set
             {
-                this.largeChange = value;
+                scrollRangeLogic.LargeChange = value;
+                //need update 
             }
         }
         public float ScrollValue
         {
-            get { return this.scrollValue; }
+            get { return scrollRangeLogic.CurrentValue; }
             set
             {
-                this.scrollValue = value;
+                scrollRangeLogic.SetValue(value);
+                //need update 
             }
         }
         //-----------------------------------------------------------------------
@@ -673,6 +764,7 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
     }
+
 
 
 
