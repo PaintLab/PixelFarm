@@ -3,86 +3,206 @@
 // (from https://github.com/wieslawsoltes/ColorBlender)
 //MIT, 2017, WinterDev
 
+using System;
 using ColorBlender;
 using ColorBlender.Algorithms;
+using LayoutFarm.CustomWidgets;
 
-namespace LayoutFarm
+namespace LayoutFarm.ColorBlenderSample
 {
     [DemoNote("1.13 ColorBlenderExample")]
     class DemoColorBlender : DemoBase
     {
         ColorMatch colorMatch;
+        SimpleBox r_sampleBox, g_sampleBox, b_sampleBox;
+        SimpleBox[] rgb_varBoxes;
+        SimpleBox[] hsv_varBoxes;
+        SimpleBox[] swatch_Boxes;
+
+        //
+        SimpleBox pure_rgbBox;
+        SimpleBox final_box_algo1;
+
+        ScrollBar r_sc, g_sc, b_sc;
+
+
         protected override void OnStartDemo(SampleViewport viewport)
         {
 
+            colorMatch = new ColorMatch();
+            colorMatch.VariationsRGB = new RGB[7];
+            colorMatch.VariationsHSV = new RGB[9];
+
+
+            //start RGB value
+            byte r_value = 200;
+            byte g_value = 46;
+            byte b_value = 49;
+
+
+            CreateRBGVarBoxes(viewport, 20, 250);
+            CreateHsvVarBoxes(viewport, 20, 300);
+            CreateSwatchBoxes(viewport, 20, 350);
+
+            {
+                pure_rgbBox = new SimpleBox(50, 50);
+                pure_rgbBox.BackColor = new PixelFarm.Drawing.Color(
+                    (byte)r_value,
+                    (byte)b_value,
+                    (byte)g_value);
+                pure_rgbBox.SetLocation(0, 0);
+                viewport.AddContent(pure_rgbBox);
+            }
             
-            //-------------------------------------
+            //R
             {
-                //horizontal scrollbar
-                var scbar = new LayoutFarm.CustomWidgets.ScrollBar(200, 15);
-                scbar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
-                scbar.SetLocation(80, 10);
-                scbar.MinValue = 0;
-                scbar.MaxValue = 255*10;
-                scbar.SmallChange = 1;
-                viewport.AddContent(scbar);
+
+                CreateRBGScrollBarAndSampleColorBox(80, 80, out r_sc, out r_sampleBox, (n_scrollBar, n_sampleBox) =>
+                {
+                    if (_component_ready)
+                    {
+                        n_sampleBox.BackColor = new PixelFarm.Drawing.Color((byte)(n_scrollBar.ScrollValue / 10), 0, 0);
+                        UpdateAllComponents();
+                    }
+
+                });
+                viewport.AddContent(r_sc);
+                viewport.AddContent(r_sampleBox);
             }
+            //G 
             {
-                //horizontal scrollbar
-                var scbar = new LayoutFarm.CustomWidgets.ScrollBar(200, 15);
-                scbar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
-                scbar.SetLocation(80, 40);
-                scbar.MinValue = 0;
-                scbar.MaxValue = 255 * 10;
-                scbar.SmallChange = 1;
-                viewport.AddContent(scbar);
-            }
 
+                CreateRBGScrollBarAndSampleColorBox(80, 120, out g_sc, out g_sampleBox, (n_scrollBar, n_sampleBox) =>
+                {
+                    if (_component_ready)
+                    {
+                        n_sampleBox.BackColor = new PixelFarm.Drawing.Color(0, (byte)(n_scrollBar.ScrollValue / 10), 0);
+                        UpdateAllComponents();
+                    }
+                });
+                viewport.AddContent(g_sc);
+                viewport.AddContent(g_sampleBox);
+            }
+            //B
             {
-                //horizontal scrollbar
-                var scbar = new LayoutFarm.CustomWidgets.ScrollBar(200, 15);
-                scbar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
-                scbar.SetLocation(80, 80);
-                scbar.MinValue = 0;
-                scbar.MaxValue = 255 * 10;
-                scbar.SmallChange = 1;
-                viewport.AddContent(scbar);
+                CreateRBGScrollBarAndSampleColorBox(80, 160, out b_sc, out b_sampleBox, (n_scrollBar, n_sampleBox) =>
+                {
+                    if (_component_ready)
+                    {
+                        n_sampleBox.BackColor = new PixelFarm.Drawing.Color(0, 0, (byte)(n_scrollBar.ScrollValue / 10));
+                        UpdateAllComponents();
+                    }
+                });
+                viewport.AddContent(b_sc);
+                viewport.AddContent(b_sampleBox);
+            } 
+            _component_ready = true;
+        }
+
+        void CreateRBGVarBoxes(SampleViewport viewport, int x, int y)
+        {
+            rgb_varBoxes = new SimpleBox[7];
+            for (int i = 0; i < 7; ++i)
+            {
+                SimpleBox rgb_varBox = new SimpleBox(40, 40);
+                rgb_varBox.SetLocation(x + (i * 40), y);
+                rgb_varBoxes[i] = rgb_varBox;
+                viewport.AddContent(rgb_varBox);
             }
-            //-------------------------------------
+        }
+        void CreateSwatchBoxes(SampleViewport viewport, int x, int y)
+        {
+            swatch_Boxes = new SimpleBox[6];
+            for (int i = 0; i < 6; ++i)
+            {
+                SimpleBox swatchBox = new SimpleBox(40, 40);
+                swatchBox.SetLocation(x + (i * 40), y);
+                swatch_Boxes[i] = swatchBox;
+                viewport.AddContent(swatchBox);
+            }
+        }
+        void CreateHsvVarBoxes(SampleViewport viewport, int x, int y)
+        {
+            hsv_varBoxes = new SimpleBox[9];
+            for (int i = 0; i < 9; ++i)
+            {
+                SimpleBox hsv_varBox = new SimpleBox(40, 40);
+                hsv_varBox.SetLocation(x + (i * 40), y);
+                hsv_varBoxes[i] = hsv_varBox;
+                viewport.AddContent(hsv_varBox);
+            }
+        }
+        void CreateRBGScrollBarAndSampleColorBox(
+           int x, int y,
+           out ScrollBar scBar,
+           out SimpleBox sampleBox,
+           SimpleAction<ScrollBar, SimpleBox> pairAction
+           )
+        {
+            //horizontal scrollbar
+            scBar = new LayoutFarm.CustomWidgets.ScrollBar(300, 15);
 
-
-
-            colorMatch = new ColorMatch(213, 46, 49);
-            RGB rgbValue = colorMatch.CurrentRGB;
-
-            int x = 300;
-            int y = 20;
-
-            var cmd_R = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
-            cmd_R.BackColor = new PixelFarm.Drawing.Color((byte)rgbValue.R, 0, 0);
-            cmd_R.SetLocation(x, y);
-
-            var cmd_G = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
-            cmd_G.BackColor = new PixelFarm.Drawing.Color(0, (byte)rgbValue.G, 0);
-            cmd_G.SetLocation(x + 30, y + 0);
-
+            //TODO: add mx with layout engine
+            scBar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
+            scBar.SetLocation(x, y);
+            scBar.MinValue = 0;
+            scBar.MaxValue = 255 * 10;
+            scBar.SmallChange = 1;
             //
-            var cmd_B = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
-            cmd_B.BackColor = new PixelFarm.Drawing.Color(0, 0, (byte)rgbValue.B);
-            cmd_B.SetLocation(x + 60, y + 0);
+            scBar.ScrollValue = 0;//init
+                                  // 
+            sampleBox = new SimpleBox(30, 30);
+            sampleBox.SetLocation(x + 350, y);
+            // 
+            var n_scBar = scBar;
+            var n_sampleBox = sampleBox;
+            scBar.UserScroll += (s, e) => pairAction(n_scBar, n_sampleBox);
 
-            var cmd_RGB = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
-            cmd_RGB.BackColor = new PixelFarm.Drawing.Color((byte)rgbValue.R,
-                (byte)rgbValue.G, (byte)rgbValue.B);
-            cmd_RGB.SetLocation(x + 90, y + 0);
+            pairAction(n_scBar, n_sampleBox);
+        }
+        bool _component_ready = false;
 
+        void UpdateAllComponents()
+        {
+            byte r = (byte)(r_sc.ScrollValue / 10);
+            byte g = (byte)(g_sc.ScrollValue / 10);
+            byte b = (byte)(b_sc.ScrollValue / 10);
 
+            pure_rgbBox.BackColor = new PixelFarm.Drawing.Color(r, g, b);
 
-            viewport.AddContent(cmd_R);
-            viewport.AddContent(cmd_G);
-            viewport.AddContent(cmd_B);
-            viewport.AddContent(cmd_RGB);
+            //the update ColorMatch
+            colorMatch.CurrentRGB = new RGB(r, g, b);
+            colorMatch.CurrentHSV = colorMatch.CurrentRGB.ToHSV();
+            colorMatch.CurrentRGB = colorMatch.CurrentHSV.ToRGB();//?
+            colorMatch.Update();
+            //then present color match results
+            //1. rgb variants
+            for (int i = 0; i < 7; ++i)
+            {
+                rgb_varBoxes[i].BackColor = colorMatch.VariationsRGB[i].ToPixelFarmColor();
+            }
+            //2. hsv variants
+            for (int i = 0; i < 9; ++i)
+            {
+                hsv_varBoxes[i].BackColor = colorMatch.VariationsHSV[i].ToPixelFarmColor();
+            }
+            //3. swatch box
+            Blend blend = colorMatch.CurrentBlend;
+            for (int i = 0; i < 6; ++i)
+            {
+                swatch_Boxes[i].BackColor = blend.Colors[i].ToRGB().ToPixelFarmColor();
+            }
+
         }
 
     }
+
+    static class ColorBlenderToPixelFarmExtensions
+    {
+        public static PixelFarm.Drawing.Color ToPixelFarmColor(this RGB rgbColor)
+        {
+            return new PixelFarm.Drawing.Color((byte)rgbColor.R, (byte)rgbColor.G, (byte)rgbColor.B);
+        }
+    }
+
 }

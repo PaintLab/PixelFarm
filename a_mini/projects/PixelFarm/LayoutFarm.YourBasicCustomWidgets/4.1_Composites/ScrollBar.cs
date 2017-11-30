@@ -12,7 +12,7 @@ namespace LayoutFarm.CustomWidgets
         ScrollBarButton minButton;
         ScrollBarButton maxButton;
         ScrollBarButton scrollButton;
-        ScrollBarEvaluator customeScrollBarEvaluator;
+        ScrollBarEvaluator customScrollBarEvaluator;
         float maxValue;
         float minValue;
         float smallChange;
@@ -245,16 +245,16 @@ namespace LayoutFarm.CustomWidgets
         }
         public void SetCustomScrollBarEvaluator(ScrollBarEvaluator scrollBarEvaluator)
         {
-            this.customeScrollBarEvaluator = scrollBarEvaluator;
+            this.customScrollBarEvaluator = scrollBarEvaluator;
         }
         void EvaluateVerticalScrollBarProperties()
         {
             int scrollBoxLength = 1;
             //--------------------------
             //if use external evaluator
-            if (customeScrollBarEvaluator != null)
+            if (customScrollBarEvaluator != null)
             {
-                customeScrollBarEvaluator(this, out this.onePixelFor, out scrollBoxLength);
+                customScrollBarEvaluator(this, out this.onePixelFor, out scrollBoxLength);
             }
             else
             {
@@ -389,9 +389,9 @@ namespace LayoutFarm.CustomWidgets
             int scrollBoxLength = 1;
             //--------------------------
             //if use external evaluator
-            if (customeScrollBarEvaluator != null)
+            if (customScrollBarEvaluator != null)
             {
-                customeScrollBarEvaluator(this, out this.onePixelFor, out scrollBoxLength);
+                customScrollBarEvaluator(this, out this.onePixelFor, out scrollBoxLength);
             }
             else
             {
