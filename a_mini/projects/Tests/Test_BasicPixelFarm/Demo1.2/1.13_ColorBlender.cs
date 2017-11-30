@@ -4,9 +4,9 @@
 //MIT, 2017, WinterDev
 
 using System;
-using ColorBlender;
-using ColorBlender.Algorithms;
 using LayoutFarm.CustomWidgets;
+//
+using ColorBlender;
 
 namespace LayoutFarm.ColorBlenderSample
 {
