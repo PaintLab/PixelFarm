@@ -5,7 +5,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public delegate void ScrollBarEvaluator(IRangeBox scBar, out double onePixelFore, out int scrollBoxHeight);
+    public delegate void ScrollBarEvaluator(SliderBox scBar, out double onePixelFore, out int scrollBoxHeight);
 
 
 
@@ -105,13 +105,8 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-    public interface IRangeBox
-    {
-        int PhysicalScrollLength { get; }
-        float MaxValue { get; set; }
-        int ScrollBoxSizeLimit { get; }
-    }
-    public class SliderBox : UIBox, IRangeBox
+
+    public class SliderBox : UIBox
     {
 
         ScrollRangeLogic scrollRangeLogic;
@@ -672,7 +667,7 @@ namespace LayoutFarm.CustomWidgets
             visitor.EndElement();
         }
     }
-    public class ScrollBar : UIBox, IRangeBox
+    public class ScrollBar : UIBox
     {
         ScrollBarButton minButton;
         ScrollBarButton maxButton;
@@ -718,11 +713,12 @@ namespace LayoutFarm.CustomWidgets
         }
         public ScrollBarType ScrollBarType
         {
-            get;
-            set;
+            get { return slideBox.ScrollBarType; }
+            set { slideBox.ScrollBarType = value; }
         }
         //--------------------------------------------------------------------------
 
+        public SliderBox SliderBox { get { return slideBox; } }
         public int MinMaxButtonHeight { get { return minmax_boxHeight; } }
         public int ScrollBoxSizeLimit { get { return slideBox.ScrollBoxSizeLimit; } }
 
@@ -1000,9 +996,9 @@ namespace LayoutFarm.CustomWidgets
 
     public class ScrollingRelation
     {
-        ScrollBar scBar;
+        SliderBox scBar;
         IScrollable scrollableSurface;
-        public ScrollingRelation(ScrollBar scBar, IScrollable scrollableSurface)
+        public ScrollingRelation(SliderBox scBar, IScrollable scrollableSurface)
         {
             this.scBar = scBar;
             this.scrollableSurface = scrollableSurface;
@@ -1024,7 +1020,7 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupVerticalScrollRelation()
         {
-            this.scBar.SetCustomScrollBarEvaluator((IRangeBox sc, out double onePixelFor, out int scrollBoxLength) =>
+            this.scBar.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
             {
                 int physicalScrollLength = sc.PhysicalScrollLength;
                 onePixelFor = 1;
@@ -1067,7 +1063,7 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupHorizontalScrollRelation()
         {
-            this.scBar.SetCustomScrollBarEvaluator((IRangeBox sc, out double onePixelFor, out int scrollBoxLength) =>
+            this.scBar.SetCustomScrollBarEvaluator((SliderBox sc, out double onePixelFor, out int scrollBoxLength) =>
             {
                 //horizontal scroll bar
                 int physicalScrollLength = sc.PhysicalScrollLength;

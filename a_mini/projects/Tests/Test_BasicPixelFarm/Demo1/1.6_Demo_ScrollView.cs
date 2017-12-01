@@ -40,7 +40,7 @@ namespace LayoutFarm
                 vscbar.SmallChange = 20;
                 viewport.AddContent(vscbar);
                 //add relation between viewpanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar, panel);
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, panel);
             }
             //-------------------------  
             {
@@ -53,7 +53,7 @@ namespace LayoutFarm
                 hscbar.SmallChange = 20;
                 viewport.AddContent(hscbar);
                 //add relation between viewpanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar, panel);
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
 
             //add content to panel
@@ -89,7 +89,7 @@ namespace LayoutFarm
             {
                 var imgbox = new LayoutFarm.CustomWidgets.ImageBox(36, 400);
                 ClientImageBinder binder = new ClientImageBinder(fileNames[i]);
-                binder.SetLazyLoaderFunc(LazyImageLoad); 
+                binder.SetLazyLoaderFunc(LazyImageLoad);
                 //if use lazy img load func
                 imageContentMan.AddRequestImage(binder);
                 imgbox.ImageBinder = binder;
@@ -119,7 +119,7 @@ namespace LayoutFarm
                 vscbar.SmallChange = 20;
                 viewport.AddContent(vscbar);
                 //add relation between viewpanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar, panel);
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, panel);
             }
             //-------------------------  
             {
@@ -132,7 +132,7 @@ namespace LayoutFarm
                 hscbar.SmallChange = 20;
                 viewport.AddContent(hscbar);
                 //add relation between viewpanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar, panel);
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
             panel.PerformContentLayout();
         }
