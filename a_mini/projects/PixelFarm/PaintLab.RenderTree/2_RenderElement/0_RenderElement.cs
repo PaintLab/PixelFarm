@@ -25,12 +25,9 @@ namespace LayoutFarm
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;
             //if (dbug_obj_id == 57)
-            //{
+            //{ 
+            //}
 
-            //}
-            //if(this.dbug_obj_id ==6)
-            //{
-            //}
             //this.dbug_SetFixedElementCode(this.GetType().Name);
 #endif
         }
@@ -261,6 +258,7 @@ namespace LayoutFarm
             int testX;
             int testY;
             hitChain.GetTestPoint(out testX, out testY);
+
             if ((testY >= b_top && testY <= (b_top + b_height)
             && (testX >= b_left && testX <= (b_left + b_width))))
             {
@@ -305,7 +303,47 @@ namespace LayoutFarm
             }
             else
             {
-                return false;
+                //not visual hit on this object..
+                if (this.needClipArea)
+                {
+                    return false;
+                }
+
+                //---
+                //if this RenderElement not need clip area
+                //we should test on its child
+
+                int preTestCount = hitChain.Count;
+
+                if (this.MayHasViewport)
+                {
+                    hitChain.OffsetTestPoint(
+                        -b_left + this.ViewportX,
+                        -b_top + this.ViewportY);
+                }
+                else
+                {
+                    hitChain.OffsetTestPoint(-b_left, -b_top);
+                }
+
+
+                if (this.MayHasChild)
+                {
+                    this.ChildrenHitTestCore(hitChain);
+                }
+
+                if (this.MayHasViewport)
+                {
+                    hitChain.OffsetTestPoint(
+                            b_left - this.ViewportX,
+                            b_top - this.ViewportY);
+                }
+                else
+                {
+                    hitChain.OffsetTestPoint(b_left, b_top);
+                }
+
+                return hitChain.Count > preTestCount;
             }
         }
 
