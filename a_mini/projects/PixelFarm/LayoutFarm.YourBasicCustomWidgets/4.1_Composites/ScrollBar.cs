@@ -743,21 +743,12 @@ namespace LayoutFarm.CustomWidgets
 
 
         public void StepSmallToMax()
-        {
-
-            slideBox.StepSmallToMax();
-            if (this.UserScroll != null)
-            {
-                this.UserScroll(this, EventArgs.Empty);
-            }
+        { 
+            slideBox.StepSmallToMax(); 
         }
         public void StepSmallToMin()
         {
-            slideBox.StepSmallToMin();
-            if (this.UserScroll != null)
-            {
-                this.UserScroll(this, EventArgs.Empty);
-            }
+            slideBox.StepSmallToMin(); 
         }
 
         //--------------------------------------------------------------------------
@@ -923,10 +914,7 @@ namespace LayoutFarm.CustomWidgets
                 slideBox.ScrollValue = value;
             }
         }
-        //-----------------------------------------------------------------------
-
-        public event EventHandler<EventArgs> UserScroll;
-
+      
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
             if (e.Delta < 0)
