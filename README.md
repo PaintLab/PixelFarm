@@ -113,3 +113,4 @@ MIT, 2013, Antonie Blom, from  https://github.com/andykorth/Pencil.Gaming
 
 MIT, 2017, Wiesław Šoltés, ColorBlender, https://github.com/wieslawsoltes/ColorBlender
 
+BSD, 2015, Darren David darren-code@lookorfeel.com, https://github.com/nobutaka/EasingCurvePresets

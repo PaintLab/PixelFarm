@@ -49,6 +49,8 @@
       <Link>YourImplementation\Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
     <Compile Include="Demo1.1\1.12_SmallAnimation.cs" />
+    <Compile Include="Demo1.1\1.14_Demo_EasingFuncs.cs" />
+    <Compile Include="Demo1.1\PennerDoubleAnimation.cs" />
     <Compile Include="Demo1.2\1.13_ColorBlender.cs" />
     <Compile Include="Demo1.2\ColorBlender\Algorithms\Analogue.cs" />
     <Compile Include="Demo1.2\ColorBlender\Algorithms\ClassicBlend.cs" />
