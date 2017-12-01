@@ -50,7 +50,7 @@ namespace LayoutFarm
         //-------------------------------------------------------------------------
 
         public abstract void ClearRenderRequests();
-        
+
 
         public event EventHandler ClearingBeforeRender;
         public void InvokeClearingBeforeRender()
@@ -176,6 +176,8 @@ namespace LayoutFarm
                 {
                     //elemClientRect.Offset(globalX, globalY);
                     elemClientRect.Offset(globalPoint);
+
+                    //****
                     if (fromElement.HasDoubleScrollableSurface)
                     {
                         //container.VisualScrollableSurface.WindowRootNotifyInvalidArea(elementClientRect);
@@ -183,7 +185,12 @@ namespace LayoutFarm
 
                     Rectangle elementRect = fromElement.RectBounds;
                     elementRect.Offset(fromElement.ViewportX, fromElement.ViewportY);
-                    elemClientRect.Intersect(elementRect);
+
+                    if (fromElement.NeedClipArea)
+                    {
+                        elemClientRect.Intersect(elementRect);
+                    }                    
+
                     globalPoint.X = -fromElement.ViewportX;
                     globalPoint.Y = -fromElement.ViewportY;
                     //globalX = -fromElement.ViewportX;
