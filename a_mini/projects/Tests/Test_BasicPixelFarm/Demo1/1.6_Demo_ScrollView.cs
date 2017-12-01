@@ -27,6 +27,7 @@ namespace LayoutFarm
         void AddScrollView1(SampleViewport viewport, int x, int y)
         {
             var panel = new LayoutFarm.CustomWidgets.SimpleBox(200, 175);
+            panel.NeedClipArea = true;
             panel.SetLocation(x + 30, y + 30);
             panel.BackColor = Color.LightGray;
             viewport.AddContent(panel);
@@ -40,7 +41,7 @@ namespace LayoutFarm
                 vscbar.SmallChange = 20;
                 viewport.AddContent(vscbar);
                 //add relation between viewpanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar, panel);
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, panel);
             }
             //-------------------------  
             {
@@ -53,7 +54,7 @@ namespace LayoutFarm
                 hscbar.SmallChange = 20;
                 viewport.AddContent(hscbar);
                 //add relation between viewpanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar, panel);
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
 
             //add content to panel
@@ -73,6 +74,7 @@ namespace LayoutFarm
         void AddScrollView2(SampleViewport viewport, int x, int y)
         {
             var panel = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
+            panel.NeedClipArea = true;
             panel.SetLocation(x + 30, y + 30);
             panel.BackColor = Color.LightGray;
             panel.ContentLayoutKind = CustomWidgets.BoxContentLayoutKind.VerticalStack;
@@ -89,7 +91,7 @@ namespace LayoutFarm
             {
                 var imgbox = new LayoutFarm.CustomWidgets.ImageBox(36, 400);
                 ClientImageBinder binder = new ClientImageBinder(fileNames[i]);
-                binder.SetLazyLoaderFunc(LazyImageLoad); 
+                binder.SetLazyLoaderFunc(LazyImageLoad);
                 //if use lazy img load func
                 imageContentMan.AddRequestImage(binder);
                 imgbox.ImageBinder = binder;
@@ -119,7 +121,7 @@ namespace LayoutFarm
                 vscbar.SmallChange = 20;
                 viewport.AddContent(vscbar);
                 //add relation between viewpanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar, panel);
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(vscbar.SliderBox, panel);
             }
             //-------------------------  
             {
@@ -132,7 +134,7 @@ namespace LayoutFarm
                 hscbar.SmallChange = 20;
                 viewport.AddContent(hscbar);
                 //add relation between viewpanel and scroll bar 
-                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar, panel);
+                var scRelation = new LayoutFarm.CustomWidgets.ScrollingRelation(hscbar.SliderBox, panel);
             }
             panel.PerformContentLayout();
         }

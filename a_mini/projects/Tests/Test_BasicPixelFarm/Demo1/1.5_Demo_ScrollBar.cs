@@ -7,6 +7,21 @@ namespace LayoutFarm
     {
         protected override void OnStartDemo(SampleViewport viewport)
         {
+
+
+            //----------------------------------------------------------------
+            {
+                var slideBox = new LayoutFarm.CustomWidgets.SliderBox(15, 200);
+                slideBox.SetLocation(10, 400);
+                slideBox.MinValue = 0;
+                slideBox.MaxValue = 100;
+                slideBox.SmallChange = 50; 
+                viewport.AddContent(slideBox);
+                slideBox.ScrollValue = 150;
+            }
+            //----------------------------------------------------------------
+
+
             //----------------------------------------------------------------
             {
                 var scbar = new LayoutFarm.CustomWidgets.ScrollBar(15, 200);
@@ -14,7 +29,9 @@ namespace LayoutFarm
                 scbar.MinValue = 0;
                 scbar.MaxValue = 100;
                 scbar.SmallChange = 50;
+                scbar.ScrollValue = 150;
                 viewport.AddContent(scbar);
+
             }
             //----------------------------------------------------------------
             {
