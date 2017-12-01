@@ -27,6 +27,7 @@ namespace LayoutFarm
         void AddScrollView1(SampleViewport viewport, int x, int y)
         {
             var panel = new LayoutFarm.CustomWidgets.SimpleBox(200, 175);
+            panel.NeedClipArea = true;
             panel.SetLocation(x + 30, y + 30);
             panel.BackColor = Color.LightGray;
             viewport.AddContent(panel);
@@ -73,6 +74,7 @@ namespace LayoutFarm
         void AddScrollView2(SampleViewport viewport, int x, int y)
         {
             var panel = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
+            panel.NeedClipArea = true;
             panel.SetLocation(x + 30, y + 30);
             panel.BackColor = Color.LightGray;
             panel.ContentLayoutKind = CustomWidgets.BoxContentLayoutKind.VerticalStack;

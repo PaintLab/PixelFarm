@@ -121,6 +121,7 @@ namespace LayoutFarm.CustomWidgets
         public SliderBox(int width, int height)
             : base(width, height)
         {
+            
         }
         public override RenderElement CurrentPrimaryRenderElement
         {
@@ -341,7 +342,7 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupVerticalScrollButtonProperties(RenderElement container)
         {
-            var scroll_button = new ScrollBarButton(this.Width, 10, this); //create with default value
+            var scroll_button = new ScrollBarButton(this.Width+10, SCROLL_BOX_SIZE_LIMIT, this); //create with default value
             scroll_button.BackColor = KnownColors.FromKnownColor(KnownColor.DarkBlue);
             int thumbPosY = CalculateThumbPosition();
             scroll_button.SetLocation(0, thumbPosY);
@@ -503,7 +504,9 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupHorizontalScrollButtonProperties(RenderElement container)
         {
-            var scroll_button = new ScrollBarButton(10, this.Height, this); //create with default value
+            //TODO: use 'theme-concept' eg. css
+
+            var scroll_button = new ScrollBarButton(SCROLL_BOX_SIZE_LIMIT, this.Height, this); //create with default value
             scroll_button.BackColor = KnownColors.FromKnownColor(KnownColor.DarkBlue);
             int thumbPosX = CalculateThumbPosition();
             scroll_button.SetLocation(thumbPosX, 0);

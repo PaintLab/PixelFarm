@@ -13,11 +13,14 @@ namespace LayoutFarm
         IParentLink parentLink;
         object controller;
         int propFlags;
+        bool needClipArea;
+
         public RenderElement(RootGraphic rootGfx, int width, int height)
         {
             this.b_width = width;
             this.b_height = height;
             this.rootGfx = rootGfx;
+
 #if DEBUG
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;
@@ -36,6 +39,14 @@ namespace LayoutFarm
         protected static void DirectSetRootGraphics(RenderElement r, RootGraphic rootgfx)
         {
             r.rootGfx = rootgfx;
+        }
+        public bool NeedClipArea
+        {
+            get { return needClipArea; }
+            set
+            {
+                needClipArea = value;
+            }
         }
         public RootGraphic Root
         {
@@ -311,8 +322,35 @@ namespace LayoutFarm
             dbugVRoot.dbug_drawLevel++;
 #endif
 
-            if (canvas.PushClipAreaRect(b_width, b_height, ref updateArea))
+            if (needClipArea)
             {
+                //some elem may need clip for its child
+                //some may not need
+                if (canvas.PushClipAreaRect(b_width, b_height, ref updateArea))
+                {
+#if DEBUG
+                    if (dbugVRoot.dbug_RecordDrawingChain)
+                    {
+                        dbugVRoot.dbug_AddDrawElement(this, canvas);
+                    }
+#endif
+                    //------------------------------------------ 
+                    this.CustomDrawToThisCanvas(canvas, updateArea);
+                    //------------------------------------------
+                    propFlags |= RenderElementConst.IS_GRAPHIC_VALID;
+#if DEBUG
+                    debug_RecordPostDrawInfo(canvas);
+#endif
+                }
+                else
+                {
+                }
+                canvas.PopClipAreaRect();
+#if DEBUG
+            }
+            else
+            {
+
 #if DEBUG
                 if (dbugVRoot.dbug_RecordDrawingChain)
                 {
@@ -326,12 +364,11 @@ namespace LayoutFarm
 #if DEBUG
                 debug_RecordPostDrawInfo(canvas);
 #endif
+
+
+
             }
-            else
-            {
-            }
-            canvas.PopClipAreaRect();
-#if DEBUG
+
             dbugVRoot.dbug_drawLevel--;
 #endif
         }
