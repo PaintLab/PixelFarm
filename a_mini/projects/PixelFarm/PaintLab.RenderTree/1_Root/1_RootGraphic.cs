@@ -141,6 +141,11 @@ namespace LayoutFarm
             Point globalPoint = new Point();
             bool isBubbleUp = false;
 #if DEBUG
+            //if (fromElement.dbug_ObjectNote == "panel")
+            //{
+
+            //}
+
             int dbug_ncount = 0;
             dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, dbug_ncount, ">> :" + elemClientRect.ToString());
 #endif
@@ -160,17 +165,13 @@ namespace LayoutFarm
 #endif
                     return;
                 }
-                //--------------------------------------------------------------------- 
-
-
 #if DEBUG
                 dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, dbug_ncount, ">> ");
 #endif
 
                 globalPoint.Offset(fromElement.X, fromElement.Y);
                 //globalX += fromElement.BubbleUpX;
-                //globalY += fromElement.BubbleUpY;
-
+                //globalY += fromElement.BubbleUpY; 
 
                 if (fromElement.MayHasViewport && isBubbleUp)
                 {
@@ -186,10 +187,7 @@ namespace LayoutFarm
                     Rectangle elementRect = fromElement.RectBounds;
                     elementRect.Offset(fromElement.ViewportX, fromElement.ViewportY);
 
-                    if (fromElement.NeedClipArea)
-                    {
-                        elemClientRect.Intersect(elementRect);
-                    }                    
+                    elemClientRect.Intersect(elementRect);
 
                     globalPoint.X = -fromElement.ViewportX;
                     globalPoint.Y = -fromElement.ViewportY;
@@ -208,7 +206,9 @@ namespace LayoutFarm
                     {
                         dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "BLOCKED3: ");
                     }
+
 #endif
+
 
                     var parentLink = fromElement.MyParentLink;
                     if (parentLink == null)

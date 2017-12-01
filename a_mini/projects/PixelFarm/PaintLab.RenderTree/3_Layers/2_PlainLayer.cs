@@ -80,8 +80,12 @@ namespace LayoutFarm.RenderBoxes
             this.BeginDrawingChildContent();
             foreach (RenderElement child in this.GetDrawingIter())
             {
-                if (child.IntersectsWith(ref updateArea))
+
+                if (child.IntersectsWith(ref updateArea) ||
+                   !child.NeedClipArea)
                 {
+                    //if the child not need clip
+                    //its children (if exist) may intersect 
                     int x = child.X;
                     int y = child.Y;
                     canvasPage.OffsetCanvasOrigin(x, y);
@@ -90,6 +94,7 @@ namespace LayoutFarm.RenderBoxes
                     canvasPage.OffsetCanvasOrigin(-x, -y);
                     updateArea.Offset(x, y);
                 }
+
             }
 
             this.FinishDrawingChildContent();
