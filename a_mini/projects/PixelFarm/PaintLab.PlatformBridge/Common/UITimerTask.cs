@@ -29,7 +29,8 @@ namespace LayoutFarm.UI
             get { return _intervalInMillisec; }
             set
             {
-                _remaining = _intervalInMillisec = value;
+                _intervalInMillisec = value;
+                _remaining = 0;
             }
         }
         public bool RunOnce { get; set; }

@@ -44,13 +44,13 @@ namespace LayoutFarm
             re.rootGfx.InvalidateGraphicArea(re, ref rect);
         }
 
-        public static void InvalidateGraphicLocalArea(RenderElement re, Rectangle localArea)
+        public static void InvalidateGraphicLocalArea(RenderElement elem, Rectangle localArea)
         {
             if (localArea.Height == 0 || localArea.Width == 0)
             {
                 return;
             }
-            RootInvalidateGraphicArea(re, ref localArea);
+            RootInvalidateGraphicArea(elem, ref localArea);
         }
 
         //TODO: review this again
