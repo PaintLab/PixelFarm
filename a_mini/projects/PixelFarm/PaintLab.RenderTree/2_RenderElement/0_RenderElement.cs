@@ -403,8 +403,6 @@ namespace LayoutFarm
                 debug_RecordPostDrawInfo(canvas);
 #endif
 
-
-
             }
 
             dbugVRoot.dbug_drawLevel--;

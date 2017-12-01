@@ -170,29 +170,28 @@ namespace LayoutFarm
 #endif
 
                 globalPoint.Offset(fromElement.X, fromElement.Y);
-                //globalX += fromElement.BubbleUpX;
-                //globalY += fromElement.BubbleUpY; 
 
                 if (fromElement.MayHasViewport && isBubbleUp)
                 {
-                    //elemClientRect.Offset(globalX, globalY);
+
                     elemClientRect.Offset(globalPoint);
 
                     //****
+#if DEBUG
+                    //TODO: review here
                     if (fromElement.HasDoubleScrollableSurface)
                     {
                         //container.VisualScrollableSurface.WindowRootNotifyInvalidArea(elementClientRect);
                     }
-
+#endif
                     Rectangle elementRect = fromElement.RectBounds;
                     elementRect.Offset(fromElement.ViewportX, fromElement.ViewportY);
-
-                    elemClientRect.Intersect(elementRect);
-
+                    if (fromElement.NeedClipArea)
+                    {
+                        elemClientRect.Intersect(elementRect);
+                    }
                     globalPoint.X = -fromElement.ViewportX;
                     globalPoint.Y = -fromElement.ViewportY;
-                    //globalX = -fromElement.ViewportX;
-                    //globalY = -fromElement.ViewportY;
                 }
 
                 if (fromElement.IsTopWindow)
