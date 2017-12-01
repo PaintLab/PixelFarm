@@ -38,6 +38,7 @@ namespace LayoutFarm.CustomWidgets
             this.desiredHeight = height;
             this.desiredWidth = width;
         }
+        public bool NeedClipArea { get; set;}
 
         protected override bool HasReadyRenderElement
         {
@@ -102,6 +103,7 @@ namespace LayoutFarm.CustomWidgets
             if (primElement == null)
             {
                 var renderE = new CustomRenderBox(rootgfx, this.Width, this.Height);
+                renderE.NeedClipArea = this.NeedClipArea;
                 BuildChildrenRenderElement(renderE);
                 this.primElement = renderE;
             }
@@ -420,7 +422,7 @@ namespace LayoutFarm.CustomWidgets
                             var element = this.GetChild(i) as UIBox;
                             if (element != null)
                             {
-                                
+
                                 element.PerformContentLayout();
                                 //int elemH = element.HasSpecificHeight ?
                                 //    element.Height :

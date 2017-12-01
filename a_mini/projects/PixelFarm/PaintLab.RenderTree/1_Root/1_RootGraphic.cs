@@ -50,7 +50,7 @@ namespace LayoutFarm
         //-------------------------------------------------------------------------
 
         public abstract void ClearRenderRequests();
-        
+
 
         public event EventHandler ClearingBeforeRender;
         public void InvokeClearingBeforeRender()
@@ -141,6 +141,11 @@ namespace LayoutFarm
             Point globalPoint = new Point();
             bool isBubbleUp = false;
 #if DEBUG
+            //if (fromElement.dbug_ObjectNote == "panel")
+            //{
+
+            //}
+
             int dbug_ncount = 0;
             dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, dbug_ncount, ">> :" + elemClientRect.ToString());
 #endif
@@ -160,34 +165,33 @@ namespace LayoutFarm
 #endif
                     return;
                 }
-                //--------------------------------------------------------------------- 
-
-
 #if DEBUG
                 dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, dbug_ncount, ">> ");
 #endif
 
                 globalPoint.Offset(fromElement.X, fromElement.Y);
-                //globalX += fromElement.BubbleUpX;
-                //globalY += fromElement.BubbleUpY;
-
 
                 if (fromElement.MayHasViewport && isBubbleUp)
                 {
-                    //elemClientRect.Offset(globalX, globalY);
+
                     elemClientRect.Offset(globalPoint);
+
+                    //****
+#if DEBUG
+                    //TODO: review here
                     if (fromElement.HasDoubleScrollableSurface)
                     {
                         //container.VisualScrollableSurface.WindowRootNotifyInvalidArea(elementClientRect);
                     }
-
+#endif
                     Rectangle elementRect = fromElement.RectBounds;
                     elementRect.Offset(fromElement.ViewportX, fromElement.ViewportY);
-                    elemClientRect.Intersect(elementRect);
+                    if (fromElement.NeedClipArea)
+                    {
+                        elemClientRect.Intersect(elementRect);
+                    }
                     globalPoint.X = -fromElement.ViewportX;
                     globalPoint.Y = -fromElement.ViewportY;
-                    //globalX = -fromElement.ViewportX;
-                    //globalY = -fromElement.ViewportY;
                 }
 
                 if (fromElement.IsTopWindow)
@@ -201,7 +205,9 @@ namespace LayoutFarm
                     {
                         dbugWriteStopGfxBubbleUp(fromElement, ref dbug_ncount, 0, "BLOCKED3: ");
                     }
+
 #endif
+
 
                     var parentLink = fromElement.MyParentLink;
                     if (parentLink == null)

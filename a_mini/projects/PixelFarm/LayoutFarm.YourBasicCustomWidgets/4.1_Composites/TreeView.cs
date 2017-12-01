@@ -22,6 +22,7 @@ namespace LayoutFarm.CustomWidgets
             this.panel = new SimpleBox(width, height);
             panel.ContentLayoutKind = BoxContentLayoutKind.VerticalStack;
             panel.BackColor = Color.LightGray;
+            panel.NeedClipArea = true;
             uiList = new UICollection(this);
             uiList.AddUI(panel);
         }
@@ -151,6 +152,7 @@ namespace LayoutFarm.CustomWidgets
         public TreeNode(int width, int height)
             : base(width, height)
         {
+            
         }
         public ImageBinder NodeIconImage
         {
@@ -181,6 +183,7 @@ namespace LayoutFarm.CustomWidgets
                 element.SetLocation(this.Left, this.Top);
                 element.BackColor = this.backColor;
                 element.HasSpecificSize = true;
+                element.NeedClipArea = true;
                 //-----------------------------
                 // create default layer for node content
 

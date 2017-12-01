@@ -180,7 +180,7 @@ namespace LayoutFarm.ColorBlenderSample
             // 
             var n_scBar = scBar;
             var n_sampleBox = sampleBox;
-            scBar.UserScroll += (s, e) => pairAction(n_scBar, n_sampleBox);
+            scBar.SliderBox.UserScroll += (s, e) => pairAction(n_scBar, n_sampleBox);
 
             pairAction(n_scBar, n_sampleBox);
         }
