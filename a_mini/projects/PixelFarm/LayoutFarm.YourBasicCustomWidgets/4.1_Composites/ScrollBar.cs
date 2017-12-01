@@ -5,7 +5,7 @@ using PixelFarm.Drawing;
 using LayoutFarm.UI;
 namespace LayoutFarm.CustomWidgets
 {
-    public delegate void ScrollBarEvaluator(ScrollBar scBar, out double onePixelFore, out int scrollBoxHeight);
+    public delegate void ScrollBarEvaluator(IRangeBox scBar, out double onePixelFore, out int scrollBoxHeight);
 
 
 
@@ -105,19 +105,584 @@ namespace LayoutFarm.CustomWidgets
         }
     }
 
-
-
-
-    public class ScrollBar : UIBox
+    public interface IRangeBox
     {
+        int PhysicalScrollLength { get; }
+        float MaxValue { get; set; }
+        int ScrollBoxSizeLimit { get; }
+    }
+    public class SliderBox : UIBox, IRangeBox
+    {
+
+        ScrollRangeLogic scrollRangeLogic;
         CustomRenderBox mainBox;
+        //
+
+        ScrollBarEvaluator customScrollBarEvaluator;
+        ScrollBarButton scrollButton;
+
+        double onePixelFor = 1;
+        const int SCROLL_BOX_SIZE_LIMIT = 10;
+        public SliderBox(int width, int height)
+            : base(width, height)
+        {
+        }
+        public override RenderElement CurrentPrimaryRenderElement
+        {
+            get { return this.mainBox; }
+        }
+        protected override bool HasReadyRenderElement
+        {
+            get { return this.mainBox != null; }
+        }
+        public override RenderElement GetPrimaryRenderElement(RootGraphic rootgfx)
+        {
+            if (mainBox == null)
+            {
+                switch (this.ScrollBarType)
+                {
+                    case ScrollBarType.Horizontal:
+                        {
+                            CreateHScrollbarContent(rootgfx);
+                        }
+                        break;
+                    default:
+                        {
+                            CreateVScrollbarContent(rootgfx);
+                        }
+                        break;
+                }
+            }
+            return mainBox;
+        }
+        public ScrollBarType ScrollBarType
+        {
+            get;
+            set;
+        }
+        //--------------------------------------------------------------------------
+
+
+        public int ScrollBoxSizeLimit { get { return SCROLL_BOX_SIZE_LIMIT; } }
+
+        public int PhysicalScrollLength
+        {
+            get
+            {
+                if (ScrollBarType == ScrollBarType.Vertical)
+                {
+                    return this.Height;
+                }
+                else
+                {
+                    return this.Width;
+                }
+            }
+        }
+
+
+
+        public void StepSmallToMax()
+        {
+
+            scrollRangeLogic.SmallStepToMax();
+            //---------------------------
+            //update visual presentation             
+            UpdateScrollButtonPosition();
+            if (this.UserScroll != null)
+            {
+                this.UserScroll(this, EventArgs.Empty);
+            }
+        }
+        public void StepSmallToMin()
+        {
+
+            scrollRangeLogic.SmallStepToMin();
+            //---------------------------
+            //update visual presentation   
+            UpdateScrollButtonPosition();
+            if (this.UserScroll != null)
+            {
+                this.UserScroll(this, EventArgs.Empty);
+            }
+        }
+
+        void UpdateScrollButtonPosition()
+        {
+            if (scrollButton == null) return;
+            switch (this.ScrollBarType)
+            {
+                default:
+                case ScrollBarType.Vertical:
+                    {
+                        int thumbPosY = CalculateThumbPosition();
+                        scrollButton.SetLocation(0, thumbPosY);
+                    }
+                    break;
+                case ScrollBarType.Horizontal:
+                    {
+                        int thumbPosX = CalculateThumbPosition();
+                        scrollButton.SetLocation(thumbPosX, 0);
+                    }
+                    break;
+            }
+        }
+
+
+        //--------------------------------------------------------------------------
+        void CreateVScrollbarContent(RootGraphic rootgfx)
+        {
+            CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
+            bgBox.HasSpecificSize = true;
+            bgBox.SetController(this);
+            bgBox.SetLocation(this.Left, this.Top);
+
+            SetupVerticalScrollButtonProperties(bgBox);
+            //--------------
+            this.mainBox = bgBox;
+        }
+        void CreateHScrollbarContent(RootGraphic rootgfx)
+        {
+            CustomRenderBox bgBox = new CustomRenderBox(rootgfx, this.Width, this.Height);
+            bgBox.HasSpecificSize = true;
+            bgBox.SetController(this);
+            bgBox.SetLocation(this.Left, this.Top);
+
+            SetupHorizontalScrollButtonProperties(bgBox);
+            //--------------
+            this.mainBox = bgBox;
+        }
+
+        //----------------------------------------------------------------------- 
+        int CalculateThumbPosition()
+        {
+            return (int)(scrollRangeLogic.CurrentValue / this.onePixelFor);
+        }
+
+
+        public void ReEvaluateScrollBar()
+        {
+            if (this.scrollButton == null)
+            {
+                return;
+            }
+            //-------------------------
+            switch (this.ScrollBarType)
+            {
+                default:
+                case ScrollBarType.Vertical:
+                    {
+                        EvaluateVerticalScrollBarProperties();
+                    }
+                    break;
+                case ScrollBarType.Horizontal:
+                    {
+                        EvaluateHorizontalScrollBarProperties();
+                    }
+                    break;
+            }
+        }
+        public void SetCustomScrollBarEvaluator(ScrollBarEvaluator scrollBarEvaluator)
+        {
+            this.customScrollBarEvaluator = scrollBarEvaluator;
+        }
+        void EvaluateVerticalScrollBarProperties()
+        {
+            int scrollBoxLength = 1;
+            //--------------------------
+            //if use external evaluator
+            if (customScrollBarEvaluator != null)
+            {
+                customScrollBarEvaluator(this, out this.onePixelFor, out scrollBoxLength);
+            }
+            else
+            {
+                //--------------------------
+                //calculate scroll length ratio
+                //scroll button height is ratio with real scroll length
+                float contentLength = scrollRangeLogic.ValueRange;
+                //2. 
+                float physicalScrollLength = this.Height;
+                //3.  
+                if (contentLength < physicalScrollLength)
+                {
+                    int nsteps = (int)Math.Round(contentLength / scrollRangeLogic.SmallChange);
+                    //small change value reflect thumbbox size 
+                    int eachStepLength = (int)(physicalScrollLength / (float)(nsteps + 2));
+                    scrollBoxLength = eachStepLength * 2;
+                    this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                }
+                else
+                {
+                    scrollBoxLength = (int)((physicalScrollLength * physicalScrollLength) / contentLength);
+                    //small change value reflect thumbbox size
+                    // scrollBoxLength = (int)(ratio1 * this.SmallChange);
+                    //thumbbox should not smaller than minimum limit 
+                    if (scrollBoxLength < SCROLL_BOX_SIZE_LIMIT)
+                    {
+                        scrollBoxLength = SCROLL_BOX_SIZE_LIMIT;
+                        this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    }
+                    else
+                    {
+                        //float physicalSmallEach = (physicalScrollLength / contentLength) * smallChange;
+                        //this.onePixelFor = contentLength / (physicalScrollLength - physicalSmallEach);
+                        this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    }
+                }
+            }
+            if (this.ScrollBarType == ScrollBarType.Horizontal)
+            {
+                throw new NotSupportedException();
+            }
+            else
+            {
+                //vertical scrollbar
+                this.scrollButton.SetSize(
+                    this.scrollButton.Width,
+                    scrollBoxLength);
+                this.InvalidateOuterGraphics();
+            }
+        }
+        void SetupVerticalScrollButtonProperties(RenderElement container)
+        {
+            var scroll_button = new ScrollBarButton(this.Width, 10, this); //create with default value
+            scroll_button.BackColor = KnownColors.FromKnownColor(KnownColor.DarkBlue);
+            int thumbPosY = CalculateThumbPosition();
+            scroll_button.SetLocation(0, thumbPosY);
+            container.AddChild(scroll_button);
+            this.scrollButton = scroll_button;
+            //----------------------------
+            EvaluateVerticalScrollBarProperties();
+            //----------------------------
+            //3. drag
+            scroll_button.MouseDrag += (s, e) =>
+            {
+                //dragging ...
+                //find y-diff   
+
+                Point pos = scroll_button.Position;
+                //if vscroll bar then move only y axis 
+                int newYPos = (int)(pos.Y + e.DiffCapturedY);
+                //clamp!
+                if (newYPos >= this.Height - (scrollButton.Height))
+                {
+                    newYPos = this.Height - (scrollButton.Height);
+                }
+                else if (newYPos < 0)
+                {
+                    newYPos = 0;
+                }
+
+                //calculate value from position 
+
+                int currentMarkAt = newYPos;
+                scrollRangeLogic.SetValue((float)(onePixelFor * currentMarkAt));
+                newYPos = CalculateThumbPosition();
+                scroll_button.SetLocation(pos.X, newYPos);
+                if (this.UserScroll != null)
+                {
+                    this.UserScroll(this, EventArgs.Empty);
+                }
+
+                e.StopPropagation();
+            };
+            //----------------------------
+            //scroll_button.MouseLeave += (s, e) =>
+            //{
+            //    if (e.IsDragging)
+            //    {
+            //        Point pos = scroll_button.Position;
+            //        //if vscroll bar then move only y axis 
+            //        int newYPos = (int)(pos.Y + e.YDiff);
+            //        //clamp!
+            //        if (newYPos >= this.Height - (minmax_boxHeight + scrollButton.Height))
+            //        {
+            //            newYPos = this.Height - (minmax_boxHeight + scrollButton.Height);
+            //        }
+            //        else if (newYPos < minmax_boxHeight)
+            //        {
+            //            newYPos = minmax_boxHeight;
+            //        }
+
+            //        //calculate value from position 
+
+            //        int currentMarkAt = (newYPos - minmax_boxHeight);
+            //        this.scrollValue = (float)(onePixelFor * currentMarkAt);
+            //        newYPos = CalculateThumbPosition() + minmax_boxHeight;
+            //        scroll_button.SetLocation(pos.X, newYPos);
+            //        if (this.UserScroll != null)
+            //        {
+            //            this.UserScroll(this, EventArgs.Empty);
+            //        }
+
+            //        e.StopPropagation();
+            //    }
+            //};
+        }
+
+        //---------------------------------------------------------------------------
+        //horizontal scrollbar
+        void EvaluateHorizontalScrollBarProperties()
+        {
+            int scrollBoxLength = 1;
+            //--------------------------
+            //if use external evaluator
+            if (customScrollBarEvaluator != null)
+            {
+                customScrollBarEvaluator(this, out this.onePixelFor, out scrollBoxLength);
+            }
+            else
+            {
+                //calculate scroll length ratio
+                //scroll button height is ratio with real scroll length
+                float contentLength = scrollRangeLogic.ValueRange;
+                //2. 
+                float physicalScrollLength = this.Width;
+                //3. 
+                //double ratio1 = physicalScrollLength / contentLength;
+                //if (contentLength < physicalScrollLength)
+                //{
+                //    int nsteps = (int)Math.Round(contentLength / smallChange);
+                //    //small change value reflect thumbbox size
+                //    // thumbBoxLength = (int)(ratio1 * this.SmallChange);
+                //    int eachStepLength = (int)(physicalScrollLength / (float)(nsteps + 2));
+                //    scrollBoxLength = eachStepLength * 2;
+                //    //float physicalSmallEach = (physicalScrollLength / contentLength) * smallChange;
+                //    //this.onePixelFor = contentLength / (physicalScrollLength);
+                //    this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                //}
+                //else
+                //{
+                //    scrollBoxLength = (int)(ratio1 * this.SmallChange);
+                //    //thumbbox should not smaller than minimum limit 
+                //    if (scrollBoxLength < SCROLL_BOX_SIZE_LIMIT)
+                //    {
+                //        scrollBoxLength = SCROLL_BOX_SIZE_LIMIT;
+                //        this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                //    }
+                //    else
+                //    {
+                //        float physicalSmallEach = (physicalScrollLength / contentLength) * smallChange;
+                //        this.onePixelFor = contentLength / (physicalScrollLength - physicalSmallEach);
+                //    }
+                //}
+                //3.  
+                if (contentLength < physicalScrollLength)
+                {
+                    int nsteps = (int)Math.Round(contentLength / scrollRangeLogic.SmallChange);
+                    //small change value reflect thumbbox size 
+                    int eachStepLength = (int)(physicalScrollLength / (float)(nsteps + 2));
+                    scrollBoxLength = eachStepLength * 2;
+                    this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                }
+                else
+                {
+                    scrollBoxLength = (int)((physicalScrollLength * physicalScrollLength) / contentLength);
+                    //small change value reflect thumbbox size
+                    // scrollBoxLength = (int)(ratio1 * this.SmallChange);
+                    //thumbbox should not smaller than minimum limit 
+                    if (scrollBoxLength < SCROLL_BOX_SIZE_LIMIT)
+                    {
+                        scrollBoxLength = SCROLL_BOX_SIZE_LIMIT;
+                        this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    }
+                    else
+                    {
+                        //float physicalSmallEach = (physicalScrollLength / contentLength) * smallChange;
+                        //this.onePixelFor = contentLength / (physicalScrollLength - physicalSmallEach);
+                        this.onePixelFor = contentLength / (physicalScrollLength - scrollBoxLength);
+                    }
+                }
+            }
+            if (this.ScrollBarType == ScrollBarType.Horizontal)
+            {
+                this.scrollButton.SetSize(
+                    scrollBoxLength,
+                    this.scrollButton.Height);
+            }
+            else
+            {
+                throw new NotSupportedException();
+            }
+        }
+        void SetupHorizontalScrollButtonProperties(RenderElement container)
+        {
+            var scroll_button = new ScrollBarButton(10, this.Height, this); //create with default value
+            scroll_button.BackColor = KnownColors.FromKnownColor(KnownColor.DarkBlue);
+            int thumbPosX = CalculateThumbPosition();
+            scroll_button.SetLocation(thumbPosX, 0);
+            container.AddChild(scroll_button);
+            this.scrollButton = scroll_button;
+            //----------------------------
+
+            EvaluateHorizontalScrollBarProperties();
+            //----------------------------
+            //3. drag
+
+
+            scroll_button.MouseDrag += (s, e) =>
+            {
+                //dragging ...
+
+                Point pos = scroll_button.Position;
+
+                int newXPos = (int)(pos.X + e.DiffCapturedX);
+                //clamp!
+                if (newXPos >= this.Width - (scrollButton.Width))
+                {
+                    newXPos = this.Width - (scrollButton.Width);
+                }
+                else if (newXPos < 0)
+                {
+                    newXPos = 0;
+                }
+
+                //calculate value from position 
+
+                int currentMarkAt = newXPos;
+                this.scrollRangeLogic.SetValue((float)(onePixelFor * currentMarkAt));
+
+                newXPos = CalculateThumbPosition();
+                scroll_button.SetLocation(newXPos, pos.Y);
+                if (this.UserScroll != null)
+                {
+                    this.UserScroll(this, EventArgs.Empty);
+                }
+                e.StopPropagation();
+            };
+            ////-------------------------------------------
+            ////4.
+            //scroll_button.MouseLeave += (s, e) =>
+            //{
+            //    if (e.IsDragging)
+            //    {
+            //        Point pos = scroll_button.Position;
+            //        //if vscroll bar then move only y axis 
+            //        int newXPos = (int)(pos.X + e.XDiff);
+            //        //clamp!
+            //        if (newXPos >= this.Width - (minmax_boxHeight + scrollButton.Width))
+            //        {
+            //            newXPos = this.Width - (minmax_boxHeight + scrollButton.Width);
+            //        }
+            //        else if (newXPos < minmax_boxHeight)
+            //        {
+            //            newXPos = minmax_boxHeight;
+            //        }
+
+            //        //calculate value from position 
+
+            //        int currentMarkAt = (newXPos - minmax_boxHeight);
+            //        this.scrollValue = (float)(onePixelFor * currentMarkAt);
+            //        newXPos = CalculateThumbPosition() + minmax_boxHeight;
+            //        scroll_button.SetLocation(newXPos, pos.Y);
+            //        if (this.UserScroll != null)
+            //        {
+            //            this.UserScroll(this, EventArgs.Empty);
+            //        }
+            //        e.StopPropagation();
+            //    }
+            //};
+        }
+        //----------------------------------------------------------------------- 
+        public void SetupScrollBar(ScrollBarCreationParameters creationParameters)
+        {
+            this.MaxValue = creationParameters.maximum;
+            this.MinValue = creationParameters.minmum;
+        }
+        public float MaxValue
+        {
+            get { return this.scrollRangeLogic.MaxValue; }
+            set
+            {
+                this.scrollRangeLogic.MaxValue = value;
+                //need update 
+            }
+        }
+        public float MinValue
+        {
+            get { return this.scrollRangeLogic.MinValue; }
+            set
+            {
+                this.scrollRangeLogic.MinValue = value;
+                //need update 
+            }
+        }
+        public float SmallChange
+        {
+            get { return scrollRangeLogic.SmallChange; }
+            set
+            {
+                scrollRangeLogic.SmallChange = value;
+                //need update 
+            }
+        }
+        public float LargeChange
+        {
+            get { return scrollRangeLogic.LargeChange; }
+            set
+            {
+                scrollRangeLogic.LargeChange = value;
+                //need update 
+            }
+        }
+        public float ScrollValue
+        {
+            get { return scrollRangeLogic.CurrentValue; }
+            set
+            {
+                scrollRangeLogic.SetValue(value);
+                //need update 
+                ReEvaluateScrollBar();
+                UpdateScrollButtonPosition();
+            }
+        }
+        //-----------------------------------------------------------------------
+
+        public event EventHandler<EventArgs> UserScroll;
+        //tempfix here
+        internal void ChildNotifyMouseWheel(UIMouseEventArgs e)
+        {
+            if (e.Delta < 0)
+            {   //scroll down
+                this.StepSmallToMax();
+            }
+            else
+            {
+                //up
+                this.StepSmallToMin();
+            }
+        }
+        protected override void OnMouseWheel(UIMouseEventArgs e)
+        {
+            if (e.Delta < 0)
+            {   //scroll down
+                this.StepSmallToMax();
+            }
+            else
+            {
+                //up
+                this.StepSmallToMin();
+            }
+        }
+        public override void Walk(UIVisitor visitor)
+        {
+            visitor.BeginElement(this, "scrollbar");
+            this.Describe(visitor);
+            visitor.EndElement();
+        }
+    }
+    public class ScrollBar : UIBox, IRangeBox
+    {
         ScrollBarButton minButton;
         ScrollBarButton maxButton;
+
+
+        ScrollRangeLogic scrollRangeLogic;
+        CustomRenderBox mainBox;
+
         ScrollBarButton scrollButton;
         ScrollBarEvaluator customScrollBarEvaluator;
-
-        ScrollRangeLogic scrollRangeLogic; 
-
         double onePixelFor = 1;
         protected int minmax_boxHeight = 15;
         const int SCROLL_BOX_SIZE_LIMIT = 10;
@@ -207,6 +772,7 @@ namespace LayoutFarm.CustomWidgets
 
         void UpdateScrollButtonPosition()
         {
+            if (scrollButton == null) return;
             switch (this.ScrollBarType)
             {
                 default:
@@ -575,7 +1141,7 @@ namespace LayoutFarm.CustomWidgets
                 //dragging ...
 
                 Point pos = scroll_button.Position;
-                //if vscroll bar then move only y axis 
+
                 int newXPos = (int)(pos.X + e.DiffCapturedX);
                 //clamp!
                 if (newXPos >= this.Width - (minmax_boxHeight + scrollButton.Width))
@@ -682,24 +1248,27 @@ namespace LayoutFarm.CustomWidgets
             {
                 scrollRangeLogic.SetValue(value);
                 //need update 
+                ReEvaluateScrollBar();
+                UpdateScrollButtonPosition();
             }
         }
         //-----------------------------------------------------------------------
 
         public event EventHandler<EventArgs> UserScroll;
         //tempfix here
-        internal void ChildNotifyMouseWheel(UIMouseEventArgs e)
-        {
-            if (e.Delta < 0)
-            {   //scroll down
-                this.StepSmallToMax();
-            }
-            else
-            {
-                //up
-                this.StepSmallToMin();
-            }
-        }
+
+        //internal void ChildNotifyMouseWheel(UIMouseEventArgs e)
+        //{
+        //    if (e.Delta < 0)
+        //    {   //scroll down
+        //        this.StepSmallToMax();
+        //    }
+        //    else
+        //    {
+        //        //up
+        //        this.StepSmallToMin();
+        //    }
+        //}
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
             if (e.Delta < 0)
@@ -740,21 +1309,23 @@ namespace LayoutFarm.CustomWidgets
     }
 
 
+
+
     class ScrollBarButton : EaseBox
     {
-        public ScrollBarButton(int w, int h, ScrollBar owner)
+        public ScrollBarButton(int w, int h, IEventListener owner)
             : base(w, h)
         {
             this.OwnerScrollBar = owner;
         }
-        internal ScrollBar OwnerScrollBar
+        IEventListener OwnerScrollBar
         {
             get;
             set;
         }
         protected override void OnMouseWheel(UIMouseEventArgs e)
         {
-            this.OwnerScrollBar.ChildNotifyMouseWheel(e);
+            this.OwnerScrollBar.ListenMouseWheel(e);
         }
 
         public override void Walk(UIVisitor visitor)
@@ -794,7 +1365,7 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupVerticalScrollRelation()
         {
-            this.scBar.SetCustomScrollBarEvaluator((ScrollBar sc, out double onePixelFor, out int scrollBoxLength) =>
+            this.scBar.SetCustomScrollBarEvaluator((IRangeBox sc, out double onePixelFor, out int scrollBoxLength) =>
             {
                 int physicalScrollLength = sc.PhysicalScrollLength;
                 onePixelFor = 1;
@@ -837,7 +1408,7 @@ namespace LayoutFarm.CustomWidgets
         }
         void SetupHorizontalScrollRelation()
         {
-            this.scBar.SetCustomScrollBarEvaluator((ScrollBar sc, out double onePixelFor, out int scrollBoxLength) =>
+            this.scBar.SetCustomScrollBarEvaluator((IRangeBox sc, out double onePixelFor, out int scrollBoxLength) =>
             {
                 //horizontal scroll bar
                 int physicalScrollLength = sc.PhysicalScrollLength;
