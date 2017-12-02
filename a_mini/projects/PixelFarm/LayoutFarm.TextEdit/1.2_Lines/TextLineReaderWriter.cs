@@ -407,7 +407,8 @@ namespace LayoutFarm.Text
             {
                 if (currentTextRun != null)
                 {
-                    if (charIndex < 0)
+
+                    if (charIndex < 0 && CharCount == 0)
                     {
                         return '\0';
                     }
