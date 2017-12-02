@@ -407,6 +407,15 @@ namespace LayoutFarm.Text
         {
             return textLineWriter.GetCurrentPointInfo();
         }
+
+        public void MoveCharIndexToNextCaretStop()
+        {
+
+        }
+        public void MoveCaretToPrevStop()
+        {
+
+        }
         public int CharIndex
         {
             get

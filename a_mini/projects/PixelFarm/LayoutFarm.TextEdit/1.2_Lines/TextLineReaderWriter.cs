@@ -85,7 +85,7 @@ namespace LayoutFarm.Text
             EditableTextLine.InnerDoJoinWithNextLine(this.CurrentLine);
             EnsureCurrentTextRun();
         }
-        char Delete()
+        char BackSpaceOneChar()
         {
             if (CurrentTextRun == null)
             {
@@ -208,16 +208,18 @@ namespace LayoutFarm.Text
             EnsureCurrentTextRun(charIndex);
         }
 
-        public char DoBackspace()
+        public char DoBackspaceOneChar()
         {
-            return Delete();
+            //simulate backspace keystroke
+            return BackSpaceOneChar();
         }
-        public char DoDelete()
+        public char DoDeleteOneChar()
         {
             if (CharIndex < CurrentLine.CharCount - 1)
             {
+                //simulate backspace keystroke
                 CharIndex++;
-                return Delete();
+                return BackSpaceOneChar();
             }
             else
             {
@@ -607,9 +609,6 @@ namespace LayoutFarm.Text
                 }
             }
         }
-
-
-
         public int CharIndex
         {
             get
@@ -655,39 +654,6 @@ namespace LayoutFarm.Text
                                 return;
                             }
 
-                        //TODO: review here again*** 
-                        //temp comment out
-
-                        //case 1:
-                        //    {
-                        //        if (charIndex + 1 >= rCharOffset + currentTextRun.CharacterCount)
-                        //        {
-                        //            MoveToNextTextRun();
-                        //        }
-                        //        else
-                        //        {
-                        //            charIndex++;
-                        //            //move caret right side for single char
-                        //            caretXPos += currentTextRun.GetSingleCharWidth(charIndex - rCharOffset);
-                        //        }
-                        //    }
-                        //    break;
-                        //case -1:
-                        //    {
-                        //        if (charIndex - 1 < rCharOffset)
-                        //        {
-                        //            MoveToPreviousTextRun();
-                        //        }
-                        //        else
-                        //        {
-                        //            if (charIndex > -1)
-                        //            {  //move caret left side for single char
-                        //                caretXPos -= currentTextRun.GetSingleCharWidth(charIndex - rCharOffset);
-                        //                charIndex--;
-                        //            }
-                        //        }
-                        //    }
-                        //    break;
                         default:
                             {
                                 if (diff > 0)

@@ -1,6 +1,8 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
 using System;
+using System.Globalization;
+
 namespace LayoutFarm.Text
 {
     partial class InternalTextLayerController
@@ -20,7 +22,7 @@ namespace LayoutFarm.Text
             if (removedRange.IsEmpty())
             {
                 updateJustCurrentLine = true;
-                char deletedChar = textLineWriter.DoDelete();
+                char deletedChar = textLineWriter.DoDeleteOneChar();
                 //some language
 
                 if (deletedChar == '\0')
@@ -37,10 +39,35 @@ namespace LayoutFarm.Text
                         new DocActionDeleteChar(
                             deletedChar, textLineWriter.LineNumber, textLineWriter.CharIndex));
                     char nextChar = textLineWriter.NextChar;
-                    if (nextChar != '\0' && textLineWriter.NextCharWidth < 1)
+
+
+                    if (nextChar != '\0')
                     {
-                        //recursive
-                        DoDelete();
+                        var unicodeCatg = char.GetUnicodeCategory(nextChar);
+                        switch (unicodeCatg)
+                        {
+                            case UnicodeCategory.SpaceSeparator:
+                            case UnicodeCategory.LineSeparator:
+                            case UnicodeCategory.ParagraphSeparator:
+                            case UnicodeCategory.Control:
+                                break;
+                            case UnicodeCategory.UppercaseLetter:
+                            case UnicodeCategory.LowercaseLetter:
+                            case UnicodeCategory.TitlecaseLetter:
+                            case UnicodeCategory.ModifierLetter:
+                            case UnicodeCategory.OtherLetter:
+                            case UnicodeCategory.DecimalDigitNumber:
+                                break;
+                            case UnicodeCategory.NonSpacingMark:
+                            case UnicodeCategory.SpacingCombiningMark:
+                            case UnicodeCategory.EnclosingMark:
+                                //recursive
+                                return DoDelete();
+                            default:
+                                break;
+                        }
+                        
+                        
                     }
                 }
             }
@@ -77,7 +104,7 @@ namespace LayoutFarm.Text
             else
             {
                 updateJustCurrentLine = true;
-                char deletedChar = textLineWriter.DoBackspace();
+                char deletedChar = textLineWriter.DoBackspaceOneChar();
                 if (deletedChar == '\0')
                 {
                     if (!IsOnFirstLine)
