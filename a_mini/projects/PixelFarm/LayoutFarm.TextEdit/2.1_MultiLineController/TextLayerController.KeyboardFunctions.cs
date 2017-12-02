@@ -23,10 +23,11 @@ namespace LayoutFarm.Text
             {
                 updateJustCurrentLine = true;
                 char deletedChar = textLineWriter.DoDeleteOneChar();
-                //some language
 
                 if (deletedChar == '\0')
                 {
+                    //end of this line
+
                     commandHistory.AddDocAction(
                         new DocActionJoinWithNextLine(
                             textLineWriter.LineNumber, textLineWriter.CharIndex));
@@ -38,8 +39,9 @@ namespace LayoutFarm.Text
                     commandHistory.AddDocAction(
                         new DocActionDeleteChar(
                             deletedChar, textLineWriter.LineNumber, textLineWriter.CharIndex));
-                    char nextChar = textLineWriter.NextChar;
 
+                    
+                    char nextChar = textLineWriter.NextChar;
 
                     if (nextChar != '\0')
                     {
@@ -66,8 +68,6 @@ namespace LayoutFarm.Text
                             default:
                                 break;
                         }
-                        
-                        
                     }
                 }
             }
@@ -107,6 +107,9 @@ namespace LayoutFarm.Text
                 char deletedChar = textLineWriter.DoBackspaceOneChar();
                 if (deletedChar == '\0')
                 {
+                    //end of current line
+
+
                     if (!IsOnFirstLine)
                     {
                         CurrentLineNumber--;
