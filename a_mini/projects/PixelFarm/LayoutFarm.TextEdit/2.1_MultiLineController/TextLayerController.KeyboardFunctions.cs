@@ -7,6 +7,34 @@ namespace LayoutFarm.Text
 {
     partial class InternalTextLayerController
     {
+
+        static bool CanCaretStopOnThisChar(char c)
+        {
+            var unicodeCatg = char.GetUnicodeCategory(c);
+            switch (unicodeCatg)
+            {
+                case UnicodeCategory.SpaceSeparator:
+                case UnicodeCategory.LineSeparator:
+                case UnicodeCategory.ParagraphSeparator:
+                case UnicodeCategory.Control:
+                    break;
+                case UnicodeCategory.UppercaseLetter:
+                case UnicodeCategory.LowercaseLetter:
+                case UnicodeCategory.TitlecaseLetter:
+                case UnicodeCategory.ModifierLetter:
+                case UnicodeCategory.OtherLetter:
+                case UnicodeCategory.DecimalDigitNumber:
+                    break;
+                case UnicodeCategory.NonSpacingMark:
+                case UnicodeCategory.SpacingCombiningMark:
+                case UnicodeCategory.EnclosingMark:
+                    //recursive
+                    return false;
+                default:
+                    break;
+            }
+            return true;
+        }
         public VisualSelectionRangeSnapShot DoDelete()
         {
             //recursive
@@ -27,7 +55,6 @@ namespace LayoutFarm.Text
                 if (deletedChar == '\0')
                 {
                     //end of this line
-
                     commandHistory.AddDocAction(
                         new DocActionJoinWithNextLine(
                             textLineWriter.LineNumber, textLineWriter.CharIndex));
@@ -39,34 +66,14 @@ namespace LayoutFarm.Text
                     commandHistory.AddDocAction(
                         new DocActionDeleteChar(
                             deletedChar, textLineWriter.LineNumber, textLineWriter.CharIndex));
-
-                    
                     char nextChar = textLineWriter.NextChar;
 
                     if (nextChar != '\0')
                     {
-                        var unicodeCatg = char.GetUnicodeCategory(nextChar);
-                        switch (unicodeCatg)
+                        if (!CanCaretStopOnThisChar(nextChar))
                         {
-                            case UnicodeCategory.SpaceSeparator:
-                            case UnicodeCategory.LineSeparator:
-                            case UnicodeCategory.ParagraphSeparator:
-                            case UnicodeCategory.Control:
-                                break;
-                            case UnicodeCategory.UppercaseLetter:
-                            case UnicodeCategory.LowercaseLetter:
-                            case UnicodeCategory.TitlecaseLetter:
-                            case UnicodeCategory.ModifierLetter:
-                            case UnicodeCategory.OtherLetter:
-                            case UnicodeCategory.DecimalDigitNumber:
-                                break;
-                            case UnicodeCategory.NonSpacingMark:
-                            case UnicodeCategory.SpacingCombiningMark:
-                            case UnicodeCategory.EnclosingMark:
-                                //recursive
-                                return DoDelete();
-                            default:
-                                break;
+                            //TODO: review return range here again
+                            return DoDelete();
                         }
                     }
                 }

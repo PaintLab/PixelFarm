@@ -297,8 +297,9 @@ namespace LayoutFarm.Text
 
                 this.updateJustCurrentLine = selectionRange.IsOnTheSameLine;
                 CancelSelect();
-                CharIndex++;
-                CharIndex--;
+                //?
+                //CharIndex++;
+                //CharIndex--;
             }
         }
 
@@ -408,40 +409,90 @@ namespace LayoutFarm.Text
             return textLineWriter.GetCurrentPointInfo();
         }
 
-         
-        
+
+        public void TryMoveCaretTo(int value)
+        {
+            if (textLineWriter.CharIndex < 0 && value < -1)
+            {
+                if (textLineWriter.HasPrevLine)
+                {
+                    textLineWriter.MoveToPrevLine();
+                    DoEnd();
+                }
+            }
+            else
+            {
+                int lineLength = textLineWriter.CharCount;
+                if (textLineWriter.CharIndex >= lineLength - 1 && value > lineLength - 1)
+                {
+                    if (textLineWriter.HasNextLine)
+                    {
+                        textLineWriter.MoveToNextLine();
+                    }
+                }
+                else
+                {
+                    textLineWriter.CharIndex = value;
+                    //check if we can stop at this char or not
+                    char nextChar = textLineWriter.NextChar;
+                    if (nextChar != '\0' && !CanCaretStopOnThisChar(nextChar))
+                    {
+                        int lineCharCount = textLineWriter.CharCount;
+                        int tmp_index = value + 1;
+                        while ((nextChar != '\0' && !CanCaretStopOnThisChar(nextChar)) && tmp_index < lineCharCount)
+                        {
+                            textLineWriter.CharIndex++;
+                            nextChar = textLineWriter.NextChar;
+                            tmp_index++;
+                        }
+
+                    }
+
+
+                }
+            }
+        }
+        public void TryMoveCaretForward()
+        {
+            //move caret forward 1 key stroke
+            TryMoveCaretTo(textLineWriter.CharIndex + 1);
+        }
+        public void TryMoveCaretBackward()
+        {
+            TryMoveCaretTo(textLineWriter.CharIndex - 1);
+        }
         public int CharIndex
         {
             get
             {
                 return textLineWriter.CharIndex;
             }
-            set
-            {
-                if (textLineWriter.CharIndex < 0 && value < -1)
-                {
-                    if (textLineWriter.HasPrevLine)
-                    {
-                        textLineWriter.MoveToPrevLine();
-                        DoEnd();
-                    }
-                }
-                else
-                {
-                    int lineLength = textLineWriter.CharCount;
-                    if (textLineWriter.CharIndex >= lineLength - 1 && value > lineLength - 1)
-                    {
-                        if (textLineWriter.HasNextLine)
-                        {
-                            textLineWriter.MoveToNextLine();
-                        }
-                    }
-                    else
-                    {
-                        textLineWriter.CharIndex = value;
-                    }
-                }
-            }
+            //set
+            //{
+            //    //if (textLineWriter.CharIndex < 0 && value < -1)
+            //    //{
+            //    //    if (textLineWriter.HasPrevLine)
+            //    //    {
+            //    //        textLineWriter.MoveToPrevLine();
+            //    //        DoEnd();
+            //    //    }
+            //    //}
+            //    //else
+            //    //{
+            //    //    int lineLength = textLineWriter.CharCount;
+            //    //    if (textLineWriter.CharIndex >= lineLength - 1 && value > lineLength - 1)
+            //    //    {
+            //    //        if (textLineWriter.HasNextLine)
+            //    //        {
+            //    //            textLineWriter.MoveToNextLine();
+            //    //        }
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        textLineWriter.CharIndex = value;
+            //    //    }
+            //    //}
+            //}
         }
         public bool IsOnEndOfLine
         {

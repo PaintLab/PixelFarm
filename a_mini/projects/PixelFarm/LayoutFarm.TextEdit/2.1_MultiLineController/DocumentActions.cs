@@ -30,13 +30,13 @@ namespace LayoutFarm.Text
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.CharIndex = startCharIndex;
+            textLayer.TryMoveCaretTo(startCharIndex);
             textLayer.DoBackspace();
         }
         public override void InvokeRedo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.CharIndex = startCharIndex;
+            textLayer.TryMoveCaretTo(startCharIndex);
             textLayer.AddCharToCurrentLine(c);
         }
     }
@@ -56,7 +56,7 @@ namespace LayoutFarm.Text
         public override void InvokeRedo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.CharIndex = startCharIndex;
+            textLayer.TryMoveCaretTo(startCharIndex);
             textLayer.SplitCurrentLineIntoNewLine();
         }
     }
@@ -66,17 +66,17 @@ namespace LayoutFarm.Text
             : base(lineNumber, charIndex)
         {
         }
-        public override void InvokeUndo(InternalTextLayerController textdom)
+        public override void InvokeUndo(InternalTextLayerController textLayer)
         {
-            textdom.CurrentLineNumber = startLineNumber;
-            textdom.CharIndex = startCharIndex;
-            textdom.SplitCurrentLineIntoNewLine();
+            textLayer.CurrentLineNumber = startLineNumber;
+            textLayer.TryMoveCaretTo(startCharIndex);
+            textLayer.SplitCurrentLineIntoNewLine();
         }
-        public override void InvokeRedo(InternalTextLayerController textdom)
+        public override void InvokeRedo(InternalTextLayerController textLayer)
         {
-            textdom.CurrentLineNumber = startLineNumber;
-            textdom.CharIndex = startCharIndex;
-            textdom.DoDelete();
+            textLayer.CurrentLineNumber = startLineNumber;
+            textLayer.TryMoveCaretTo(startCharIndex);
+            textLayer.DoDelete();
         }
     }
 
@@ -92,13 +92,13 @@ namespace LayoutFarm.Text
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.CharIndex = startCharIndex;
+            textLayer.TryMoveCaretTo(startCharIndex);
             textLayer.AddCharToCurrentLine(c);
         }
         public override void InvokeRedo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.CharIndex = startCharIndex;
+            textLayer.TryMoveCaretTo(startCharIndex);
             textLayer.DoDelete();
         }
     }
@@ -124,10 +124,10 @@ namespace LayoutFarm.Text
         public override void InvokeRedo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.CharIndex = startCharIndex;
+            textLayer.TryMoveCaretTo(startCharIndex);
             textLayer.StartSelect();
             textLayer.CurrentLineNumber = endLineNumber;
-            textLayer.CharIndex = endCharIndex;
+            textLayer.TryMoveCaretTo(endCharIndex);
             textLayer.EndSelect();
             textLayer.DoDelete();
         }
@@ -155,27 +155,27 @@ namespace LayoutFarm.Text
             this.endLineNumber = endLineNumber;
             this.endCharIndex = endCharIndex;
         }
-        public override void InvokeUndo(InternalTextLayerController textdom)
+        public override void InvokeUndo(InternalTextLayerController textLayer)
         {
-            textdom.CurrentLineNumber = startLineNumber;
-            textdom.CharIndex = startCharIndex;
-            textdom.StartSelect();
-            textdom.CurrentLineNumber = endLineNumber;
-            textdom.CharIndex = endCharIndex;
-            textdom.EndSelect();
-            textdom.DoDelete();
+            textLayer.CurrentLineNumber = startLineNumber;
+            textLayer.TryMoveCaretTo(startCharIndex);
+            textLayer.StartSelect();
+            textLayer.CurrentLineNumber = endLineNumber;
+            textLayer.TryMoveCaretTo(endCharIndex);
+            textLayer.EndSelect();
+            textLayer.DoDelete();
         }
-        public override void InvokeRedo(InternalTextLayerController textdom)
+        public override void InvokeRedo(InternalTextLayerController textLayer)
         {
-            textdom.CurrentLineNumber = startLineNumber;
-            textdom.CharIndex = startCharIndex;
+            textLayer.CurrentLineNumber = startLineNumber;
+            textLayer.TryMoveCaretTo(startCharIndex);
             if (singleInsertTextRun != null)
             {
-                textdom.AddTextRunToCurrentLine(singleInsertTextRun);
+                textLayer.AddTextRunToCurrentLine(singleInsertTextRun);
             }
             else
             {
-                textdom.AddTextRunsToCurrentLine(insertingTextRuns);
+                textLayer.AddTextRunsToCurrentLine(insertingTextRuns);
             }
         }
     }
@@ -196,10 +196,10 @@ namespace LayoutFarm.Text
         public override void InvokeUndo(InternalTextLayerController textLayer)
         {
             textLayer.CurrentLineNumber = startLineNumber;
-            textLayer.CharIndex = startCharIndex;
+            textLayer.TryMoveCaretTo(startCharIndex);
             textLayer.StartSelect();
             textLayer.CurrentLineNumber = endLineNumber;
-            textLayer.CharIndex = endCharIndex;
+            textLayer.TryMoveCaretTo(endCharIndex);
             textLayer.EndSelect();
         }
         public override void InvokeRedo(InternalTextLayerController textLayer)

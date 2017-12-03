@@ -252,9 +252,9 @@ namespace LayoutFarm.Text
                 VisualPointInfo pointInfo = internalTextLayerController.GetCurrentPointInfo();
                 int lineCharacterIndex = pointInfo.LineCharIndex;
                 int localselIndex = pointInfo.LocalSelectedIndex;
-                internalTextLayerController.CharIndex = lineCharacterIndex - localselIndex - 1;
+                internalTextLayerController.TryMoveCaretTo(lineCharacterIndex - localselIndex - 1);
                 internalTextLayerController.StartSelect();
-                internalTextLayerController.CharIndex += textRun.CharacterCount;
+                internalTextLayerController.TryMoveCaretTo(internalTextLayerController.CharIndex + textRun.CharacterCount);
                 internalTextLayerController.EndSelect();
             }
         }
@@ -594,35 +594,27 @@ namespace LayoutFarm.Text
                         Point currentCaretPos = Point.Empty;
                         if (!isMultiLine)
                         {
-                            while (!internalTextLayerController.IsOnStartOfLine)
+                            if (!internalTextLayerController.IsOnStartOfLine)
                             {
                                 Point prvCaretPos = internalTextLayerController.CaretPos;
-                                internalTextLayerController.CharIndex--;
+                                internalTextLayerController.TryMoveCaretBackward();
                                 currentCaretPos = internalTextLayerController.CaretPos;
-                                if (currentCaretPos.X != prvCaretPos.X)
-                                {
-                                    break;
-                                }
                             }
                         }
                         else
                         {
                             if (internalTextLayerController.IsOnStartOfLine)
                             {
-                                internalTextLayerController.CharIndex--;
+                                internalTextLayerController.TryMoveCaretBackward();
                                 currentCaretPos = internalTextLayerController.CaretPos;
                             }
                             else
                             {
-                                while (!internalTextLayerController.IsOnStartOfLine)
+                                if (!internalTextLayerController.IsOnStartOfLine)
                                 {
                                     Point prvCaretPos = internalTextLayerController.CaretPos;
-                                    internalTextLayerController.CharIndex--;
+                                    internalTextLayerController.TryMoveCaretBackward();
                                     currentCaretPos = internalTextLayerController.CaretPos;
-                                    if (currentCaretPos.X != prvCaretPos.X)
-                                    {
-                                        break;
-                                    }
                                 }
                             }
                         }
@@ -666,7 +658,8 @@ namespace LayoutFarm.Text
                             while (!internalTextLayerController.IsOnEndOfLine)
                             {
                                 Point prvCaretPos = internalTextLayerController.CaretPos;
-                                internalTextLayerController.CharIndex++;
+                                //internalTextLayerController.CharIndex++;
+                                internalTextLayerController.TryMoveCaretForward();
                                 currentCaretPos = internalTextLayerController.CaretPos;
                                 if (currentCaretPos.X != prvCaretPos.X)
                                 {
@@ -682,7 +675,7 @@ namespace LayoutFarm.Text
                         {
                             if (internalTextLayerController.IsOnEndOfLine)
                             {
-                                internalTextLayerController.CharIndex++;
+                                internalTextLayerController.TryMoveCaretForward();
                                 currentCaretPos = internalTextLayerController.CaretPos;
                             }
                             else
@@ -690,7 +683,7 @@ namespace LayoutFarm.Text
                                 while (!internalTextLayerController.IsOnEndOfLine)
                                 {
                                     Point prvCaretPos = internalTextLayerController.CaretPos;
-                                    internalTextLayerController.CharIndex++;
+                                    internalTextLayerController.TryMoveCaretForward();
                                     currentCaretPos = internalTextLayerController.CaretPos;
                                     if (currentCaretPos.X != prvCaretPos.X)
                                     {
@@ -748,11 +741,11 @@ namespace LayoutFarm.Text
                             internalTextLayerController.CurrentLineNumber++;
                             if (verticalExpectedCharIndex > internalTextLayerController.CurrentLineCharCount - 1)
                             {
-                                internalTextLayerController.CharIndex = internalTextLayerController.CurrentLineCharCount - 1;
+                                internalTextLayerController.TryMoveCaretTo(internalTextLayerController.CurrentLineCharCount - 1);
                             }
                             else
                             {
-                                internalTextLayerController.CharIndex = verticalExpectedCharIndex;
+                                internalTextLayerController.TryMoveCaretTo(verticalExpectedCharIndex);
                             }
                             //----------------------------
 
@@ -808,11 +801,11 @@ namespace LayoutFarm.Text
                             internalTextLayerController.CurrentLineNumber--;
                             if (verticalExpectedCharIndex > internalTextLayerController.CurrentLineCharCount - 1)
                             {
-                                internalTextLayerController.CharIndex = internalTextLayerController.CurrentLineCharCount - 1;
+                                internalTextLayerController.TryMoveCaretTo(internalTextLayerController.CurrentLineCharCount - 1);
                             }
                             else
                             {
-                                internalTextLayerController.CharIndex = verticalExpectedCharIndex;
+                                internalTextLayerController.TryMoveCaretTo(verticalExpectedCharIndex);
                             }
 
                             //----------------------------

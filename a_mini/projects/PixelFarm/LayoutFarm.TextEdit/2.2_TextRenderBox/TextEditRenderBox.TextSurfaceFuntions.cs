@@ -54,7 +54,7 @@ namespace LayoutFarm.Text
             {
                 if (internalTextLayerController != null)
                 {
-                    internalTextLayerController.CharIndex = value;
+                    internalTextLayerController.TryMoveCaretTo(value);
                 }
             }
         }

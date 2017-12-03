@@ -315,10 +315,7 @@ namespace LayoutFarm.Text
             get { return _i_charIndex; }
             set
             {
-                if (value == 0 || value == 1)
-                {
 
-                }
                 _i_charIndex = value;
             }
         }
@@ -699,7 +696,8 @@ namespace LayoutFarm.Text
                                     {
                                         if (rCharOffset - 1 < value)
                                         {
-                                            charIndex = value; caretXPos = rPixelOffset + currentTextRun.GetRunWidth(charIndex - rCharOffset + 1);
+                                            charIndex = value;
+                                            caretXPos = rPixelOffset + currentTextRun.GetRunWidth(charIndex - rCharOffset + 1);
 #if DEBUG
                                             if (dbugTextManRecorder != null)
                                             {
