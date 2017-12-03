@@ -126,7 +126,7 @@ namespace LayoutFarm.Text
             //------------------------
             if (e.IsControlCharacter)
             {
-                OnKeyDown(e);
+                KeyDown(e);
                 return;
             }
 
@@ -225,7 +225,7 @@ namespace LayoutFarm.Text
             }
         }
 
-        public void OnMouseDown(UIMouseEventArgs e)
+        public void MouseDown(UIMouseEventArgs e)
         {
             if (e.Button == UIMouseButtons.Left)
             {
@@ -243,7 +243,7 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        public void OnDoubleClick(UIMouseEventArgs e)
+        public void DoubleClick(UIMouseEventArgs e)
         {
             internalTextLayerController.CancelSelect();
             EditableRun textRun = this.CurrentTextRun;
@@ -258,7 +258,7 @@ namespace LayoutFarm.Text
                 internalTextLayerController.EndSelect();
             }
         }
-        public void OnDrag(UIMouseEventArgs e)
+        public void Drag(UIMouseEventArgs e)
         {
             if (!isDragBegin)
             {
@@ -285,7 +285,7 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        public void OnDragEnd(UIMouseEventArgs e)
+        public void DragEnd(UIMouseEventArgs e)
         {
             isDragBegin = false;
             if ((UIMouseButtons)e.Button == UIMouseButtons.Left)
@@ -312,14 +312,14 @@ namespace LayoutFarm.Text
                 return Rectangle.Empty;
             }
         }
-        public void OnMouseUp(UIMouseEventArgs e)
+        public void MouseUp(UIMouseEventArgs e)
         {
         }
-        public void OnKeyUp(UIKeyEventArgs e)
+        public void KeyUp(UIKeyEventArgs e)
         {
             this.SetCaretState(true);
         }
-        public void OnKeyDown(UIKeyEventArgs e)
+        public void KeyDown(UIKeyEventArgs e)
         {
             this.SetCaretState(true);
             if (!e.HasKeyData)
@@ -537,7 +537,7 @@ namespace LayoutFarm.Text
             {
                 case UIKeys.Home:
                     {
-                        OnKeyDown(e);
+                        KeyDown(e);
                         return true;
                     }
                 case UIKeys.Return:

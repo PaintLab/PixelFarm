@@ -255,7 +255,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
-            textEditRenderElement.OnDoubleClick(e);
+            textEditRenderElement.DoubleClick(e);
             e.CancelBubbling = true;
         }
         protected override void OnKeyPress(UIKeyEventArgs e)
@@ -265,12 +265,12 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnKeyDown(UIKeyEventArgs e)
         {
-            textEditRenderElement.OnKeyDown(e);
+            textEditRenderElement.KeyDown(e);
             e.CancelBubbling = true;
         }
         protected override void OnKeyUp(UIKeyEventArgs e)
         {
-            textEditRenderElement.OnKeyUp(e);
+            textEditRenderElement.KeyUp(e);
             e.CancelBubbling = true;
         }
         protected override bool OnProcessDialogKey(UIKeyEventArgs e)
@@ -288,7 +288,7 @@ namespace LayoutFarm.CustomWidgets
             e.MouseCursorStyle = MouseCursorStyle.IBeam;
             e.CancelBubbling = true;
             e.CurrentContextElement = this;
-            textEditRenderElement.OnMouseDown(e);
+            textEditRenderElement.MouseDown(e);
         }
         protected override void OnLostKeyboardFocus(UIFocusEventArgs e)
         {
@@ -299,7 +299,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (e.IsDragging)
             {
-                textEditRenderElement.OnDrag(e);
+                textEditRenderElement.Drag(e);
                 e.CancelBubbling = true;
                 e.MouseCursorStyle = MouseCursorStyle.IBeam;
             }
@@ -308,11 +308,11 @@ namespace LayoutFarm.CustomWidgets
         {
             if (e.IsDragging)
             {
-                textEditRenderElement.OnDragEnd(e);
+                textEditRenderElement.DragEnd(e);
             }
             else
             {
-                textEditRenderElement.OnMouseUp(e);
+                textEditRenderElement.MouseUp(e);
             }
             e.MouseCursorStyle = MouseCursorStyle.Default;
             e.CancelBubbling = true;
