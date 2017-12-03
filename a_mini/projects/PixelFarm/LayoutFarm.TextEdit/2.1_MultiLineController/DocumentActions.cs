@@ -104,10 +104,10 @@ namespace LayoutFarm.Text
     }
     class DocActionDeleteRange : DocumentAction
     {
-        LinkedList<EditableRun> deletedTextRuns;
+        List<EditableRun> deletedTextRuns;
         int endLineNumber;
         int endCharIndex;
-        public DocActionDeleteRange(LinkedList<EditableRun> deletedTextRuns, int startLineNum, int startColumnNum,
+        public DocActionDeleteRange(List<EditableRun> deletedTextRuns, int startLineNum, int startColumnNum,
             int endLineNum, int endColumnNum)
             : base(startLineNum, startColumnNum)
         {

@@ -782,11 +782,9 @@ namespace LayoutFarm.Text
         {
             currentLine.CopyLineContent(stBuilder);
         }
-        public LinkedList<EditableRun> CopySelectedTextRuns(VisualSelectionRange selectionRange)
+        public void CopySelectedTextRuns(VisualSelectionRange selectionRange, List<EditableRun> output)
         {
-            LinkedList<EditableRun> output = new LinkedList<EditableRun>();
             currentLine.Copy(selectionRange, output);
-            return output;
         }
 
         public int LineNumber

@@ -193,11 +193,13 @@ namespace LayoutFarm.Text
             textLineWriter.CharIndex = startPoint.LineCharIndex;
             if (selectionRange.IsOnTheSameLine)
             {
-                LinkedList<EditableRun> tobeDeleteTextRun = textLineWriter.CopySelectedTextRuns(selectionRange);
-                if (tobeDeleteTextRun != null)
+                List<EditableRun> tobeDeleteTextRuns = new List<EditableRun>();
+                textLineWriter.CopySelectedTextRuns(selectionRange, tobeDeleteTextRuns);
+                if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.Count > 0)
                 {
+
                     commandHistory.AddDocAction(
-                    new DocActionDeleteRange(tobeDeleteTextRun,
+                    new DocActionDeleteRange(tobeDeleteTextRuns,
                         selSnapshot.startLineNum,
                         selSnapshot.startColumnNum,
                         selSnapshot.endLineNum,
@@ -210,11 +212,12 @@ namespace LayoutFarm.Text
             {
                 int startPointLindId = startPoint.LineId;
                 int startPointCharIndex = startPoint.LineCharIndex;
-                LinkedList<EditableRun> tobeDeleteTextRun = textLineWriter.CopySelectedTextRuns(selectionRange);
-                if (tobeDeleteTextRun != null)
+                List<EditableRun> tobeDeleteTextRuns = new List<EditableRun>();
+                textLineWriter.CopySelectedTextRuns(selectionRange, tobeDeleteTextRuns);
+                if (tobeDeleteTextRuns != null && tobeDeleteTextRuns.Count > 0)
                 {
                     commandHistory.AddDocAction(
-                    new DocActionDeleteRange(tobeDeleteTextRun,
+                    new DocActionDeleteRange(tobeDeleteTextRuns,
                         selSnapshot.startLineNum,
                         selSnapshot.startColumnNum,
                         selSnapshot.endLineNum,
@@ -445,10 +448,7 @@ namespace LayoutFarm.Text
                             nextChar = textLineWriter.NextChar;
                             tmp_index++;
                         }
-
                     }
-
-
                 }
             }
         }
@@ -467,32 +467,6 @@ namespace LayoutFarm.Text
             {
                 return textLineWriter.CharIndex;
             }
-            //set
-            //{
-            //    //if (textLineWriter.CharIndex < 0 && value < -1)
-            //    //{
-            //    //    if (textLineWriter.HasPrevLine)
-            //    //    {
-            //    //        textLineWriter.MoveToPrevLine();
-            //    //        DoEnd();
-            //    //    }
-            //    //}
-            //    //else
-            //    //{
-            //    //    int lineLength = textLineWriter.CharCount;
-            //    //    if (textLineWriter.CharIndex >= lineLength - 1 && value > lineLength - 1)
-            //    //    {
-            //    //        if (textLineWriter.HasNextLine)
-            //    //        {
-            //    //            textLineWriter.MoveToNextLine();
-            //    //        }
-            //    //    }
-            //    //    else
-            //    //    {
-            //    //        textLineWriter.CharIndex = value;
-            //    //    }
-            //    //}
-            //}
         }
         public bool IsOnEndOfLine
         {

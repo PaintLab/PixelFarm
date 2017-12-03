@@ -153,8 +153,9 @@ namespace LayoutFarm.Text
                 selectionRange.SwapIfUnOrder();
                 if (selectionRange.IsOnTheSameLine)
                 {
-                    LinkedList<EditableRun> runs = textLineWriter.CopySelectedTextRuns(selectionRange);
-                    foreach (EditableRun t in runs)
+                    List<EditableRun> copyRuns = new List<EditableRun>();
+                    textLineWriter.CopySelectedTextRuns(selectionRange, copyRuns);
+                    foreach (EditableRun t in copyRuns)
                     {
                         t.CopyContentToStringBuilder(stBuilder);
                     }
@@ -164,8 +165,9 @@ namespace LayoutFarm.Text
                     VisualPointInfo startPoint = selectionRange.StartPoint;
                     CurrentLineNumber = startPoint.LineId;
                     textLineWriter.CharIndex = startPoint.LineCharIndex;
-                    LinkedList<EditableRun> runs = textLineWriter.CopySelectedTextRuns(selectionRange);
-                    foreach (EditableRun t in runs)
+                    List<EditableRun> copyRuns = new List<EditableRun>();
+                    textLineWriter.CopySelectedTextRuns(selectionRange, copyRuns);
+                    foreach (EditableRun t in copyRuns)
                     {
                         t.CopyContentToStringBuilder(stBuilder);
                     }
