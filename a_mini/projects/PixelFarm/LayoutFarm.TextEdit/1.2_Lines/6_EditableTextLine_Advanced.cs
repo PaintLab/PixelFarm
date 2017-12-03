@@ -10,7 +10,7 @@ namespace LayoutFarm.Text
         {
             line.JoinWithNextLine();
         }
-        internal void JoinWithNextLine()
+        void JoinWithNextLine()
         {
             if (!IsLastLine)
             {
@@ -654,21 +654,30 @@ namespace LayoutFarm.Text
                     }
                     else if (IsLastLine)
                     {
-                        if (tobeCutRun.PrevTextRun.IsLineBreak)
+                        if (tobeCutRun.PrevTextRun != null)
                         {
-                            if (tobeCutRun.NextTextRun != null)
+                            if (tobeCutRun.PrevTextRun.IsLineBreak)
                             {
-                                infoTextRun = tobeCutRun.NextTextRun;
+                                if (tobeCutRun.NextTextRun != null)
+                                {
+                                    infoTextRun = tobeCutRun.NextTextRun;
+                                }
+                                else
+                                {
+                                    infoTextRun = null;
+                                }
                             }
                             else
                             {
-                                infoTextRun = null;
+                                infoTextRun = tobeCutRun.PrevTextRun;
                             }
                         }
                         else
                         {
-                            infoTextRun = tobeCutRun.PrevTextRun;
+
                         }
+
+                      
                     }
                     else
                     {

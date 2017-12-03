@@ -283,7 +283,7 @@ namespace LayoutFarm.Text
         EditableTextLine currentLine;
         int currentLineY = 0;
         EditableRun currentTextRun;
-        int charIndex = -1;
+
         int caretXPos = 0;
         /// <summary>
         /// character offset of this run, start from start line, this value is reset for every current run
@@ -306,6 +306,20 @@ namespace LayoutFarm.Text
             if (currentLine.FirstRun != null)
             {
                 currentTextRun = currentLine.FirstRun;
+            }
+        }
+
+        int _i_charIndex;
+        int charIndex
+        {
+            get { return _i_charIndex; }
+            set
+            {
+                if (value == 0 || value == 1)
+                {
+
+                }
+                _i_charIndex = value;
             }
         }
         protected RootGraphic Root
