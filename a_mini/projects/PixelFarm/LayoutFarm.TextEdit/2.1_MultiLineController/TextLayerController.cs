@@ -413,7 +413,7 @@ namespace LayoutFarm.Text
         }
 
 
-        public void TryMoveCaretTo(int value)
+        public void TryMoveCaretTo(int value, bool backward = false)
         {
             if (textLineWriter.CharIndex < 0 && value < -1)
             {
@@ -437,18 +437,38 @@ namespace LayoutFarm.Text
                 {
                     textLineWriter.CharIndex = value;
                     //check if we can stop at this char or not
-                    char nextChar = textLineWriter.NextChar;
-                    if (nextChar != '\0' && !CanCaretStopOnThisChar(nextChar))
+                    if (backward)
                     {
-                        int lineCharCount = textLineWriter.CharCount;
-                        int tmp_index = value + 1;
-                        while ((nextChar != '\0' && !CanCaretStopOnThisChar(nextChar)) && tmp_index < lineCharCount)
+                        char nextChar = textLineWriter.NextChar;
+                        if (nextChar != '\0' && !CanCaretStopOnThisChar(nextChar))
                         {
-                            textLineWriter.CharIndex++;
-                            nextChar = textLineWriter.NextChar;
-                            tmp_index++;
+
+                            int tmp_index = value + 1;
+                            while ((nextChar != '\0' && !CanCaretStopOnThisChar(nextChar)) && tmp_index > 0)
+                            {
+                                textLineWriter.CharIndex--;
+                                nextChar = textLineWriter.NextChar;
+                                tmp_index--;
+                            }
                         }
                     }
+                    else
+                    {
+                        char nextChar = textLineWriter.NextChar;
+                        if (nextChar != '\0' && !CanCaretStopOnThisChar(nextChar))
+                        {
+                            int lineCharCount = textLineWriter.CharCount;
+                            int tmp_index = value + 1;
+                            while ((nextChar != '\0' && !CanCaretStopOnThisChar(nextChar)) && tmp_index < lineCharCount)
+                            {
+                                textLineWriter.CharIndex++;
+                                nextChar = textLineWriter.NextChar;
+                                tmp_index++;
+                            }
+                        }
+
+                    }
+
                 }
             }
         }
@@ -459,7 +479,7 @@ namespace LayoutFarm.Text
         }
         public void TryMoveCaretBackward()
         {
-            TryMoveCaretTo(textLineWriter.CharIndex - 1);
+            TryMoveCaretTo(textLineWriter.CharIndex - 1, true);
         }
         public int CharIndex
         {

@@ -412,6 +412,7 @@ namespace LayoutFarm.Text
         {
             visualFlowLayer.CopyContentToStringBuilder(stBuilder);
         }
+        
         public char NextChar
         {
             get
