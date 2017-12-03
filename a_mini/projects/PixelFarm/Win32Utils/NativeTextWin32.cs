@@ -25,11 +25,13 @@ namespace PixelFarm.Drawing.WinGdi
 
         static float whitespaceSize = -1;
         static char[] whitespace = new char[1];
-        static Encoding s_en = System.Text.Encoding.ASCII;
+        static Encoding s_en;
         static WinGdiTextService()
         {
+            s_en = System.Text.Encoding.ASCII;
             win32MemDc = new NativeWin32MemoryDc(2, 2);
             whitespace[0] = ' ';
+
         }
         public static void SetDefaultEncoding(Encoding en)
         {
@@ -370,7 +372,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
     }
 
-    class Gdi32IFonts : IFonts
+    public class Gdi32IFonts : IFonts
     {
         public float MeasureWhitespace(RequestFont f)
         {
@@ -457,7 +459,7 @@ namespace PixelFarm.Drawing.WinGdi
             return latestWinFont = found;
         }
     }
-    class WinGdiFontFace : FontFace
+    public class WinGdiFontFace : FontFace
     {
         FontFace nopenTypeFontFace;
         FontStyle style;
@@ -525,7 +527,7 @@ namespace Win32
 {
 
 
-    class NativeTextWin32
+    public class NativeTextWin32
     {
 
         const string GDI32 = "gdi32.dll";

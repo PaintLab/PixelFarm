@@ -22,7 +22,7 @@ namespace Win32
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct BitMapInfo
+    public struct BitMapInfo
     {
         public int biSize;
         public int biWidth;
@@ -44,7 +44,7 @@ namespace Win32
 
     /* Bitmap Header Definition */
     [StructLayout(LayoutKind.Sequential)]
-    unsafe struct BITMAP
+    public unsafe struct BITMAP
     {
         public int bmType;
         public int bmWidth;
@@ -55,7 +55,7 @@ namespace Win32
         public void* bmBits;
     }
     [StructLayout(LayoutKind.Sequential)]
-    struct RGBQUAD
+    public struct RGBQUAD
     {
         public int bmType;
         public int bmWidth;
@@ -67,7 +67,7 @@ namespace Win32
     }
 
 
-    static class MyWin32
+    public static class MyWin32
     {
         //this is platform specific ***
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]

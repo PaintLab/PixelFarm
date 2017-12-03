@@ -23,6 +23,7 @@ namespace TestGraphicPackage2
             LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
             //RootDemoPath.Path = @"..\Data";
             //you can use your font loader
+          
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
             PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
             ////------------------------------- 

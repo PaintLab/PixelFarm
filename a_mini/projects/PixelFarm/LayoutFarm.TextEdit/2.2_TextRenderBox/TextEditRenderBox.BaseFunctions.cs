@@ -432,11 +432,12 @@ namespace LayoutFarm.Text
                         {
                             if (Clipboard.ContainUnicodeText())
                             {
-                                internalTextLayerController.AddTextRunsToCurrentLine(
-                                    new EditableRun[]{
-                                        new EditableTextRun(this.Root,
-                                            Clipboard.GetUnicodeText(), this.CurrentTextSpanStyle)
-                                           });
+                                //1. we need to parse multi-line to single line
+                                //this may need text-break services
+
+                                internalTextLayerController.AddUnformattedStringToCurrentLine(
+                                    Clipboard.GetUnicodeText(), this.currentSpanStyle);
+
                                 EnsureCaretVisible();
                             }
                         }
@@ -657,18 +658,18 @@ namespace LayoutFarm.Text
                         {
                             //while (!internalTextLayerController.IsOnEndOfLine)
                             //{
-                                Point prvCaretPos = internalTextLayerController.CaretPos;
-                                //internalTextLayerController.CharIndex++;
-                                internalTextLayerController.TryMoveCaretForward();
-                                currentCaretPos = internalTextLayerController.CaretPos;
-                                //if (currentCaretPos.X != prvCaretPos.X)
-                                //{
-                                //    int nextCharWidth = internalTextLayerController.GetNextCharacterWidth();
-                                //    if (nextCharWidth > 0)
-                                //    {
-                                //        break;
-                                //    }
-                                //}
+                            Point prvCaretPos = internalTextLayerController.CaretPos;
+                            //internalTextLayerController.CharIndex++;
+                            internalTextLayerController.TryMoveCaretForward();
+                            currentCaretPos = internalTextLayerController.CaretPos;
+                            //if (currentCaretPos.X != prvCaretPos.X)
+                            //{
+                            //    int nextCharWidth = internalTextLayerController.GetNextCharacterWidth();
+                            //    if (nextCharWidth > 0)
+                            //    {
+                            //        break;
+                            //    }
+                            //}
                             //}
                         }
                         else
@@ -682,18 +683,18 @@ namespace LayoutFarm.Text
                             {
                                 //while (!internalTextLayerController.IsOnEndOfLine)
                                 //{
-                                    Point prvCaretPos = internalTextLayerController.CaretPos;
-                                    internalTextLayerController.TryMoveCaretForward();
-                                    currentCaretPos = internalTextLayerController.CaretPos;
-                                    //if (currentCaretPos.X != prvCaretPos.X)
-                                    //{
-                                    //    //forward check next caret
-                                    //    int nextCharWidth = internalTextLayerController.GetNextCharacterWidth();
-                                    //    if (nextCharWidth > 0)
-                                    //    {
-                                    //        break;
-                                    //    }
-                                    //}
+                                Point prvCaretPos = internalTextLayerController.CaretPos;
+                                internalTextLayerController.TryMoveCaretForward();
+                                currentCaretPos = internalTextLayerController.CaretPos;
+                                //if (currentCaretPos.X != prvCaretPos.X)
+                                //{
+                                //    //forward check next caret
+                                //    int nextCharWidth = internalTextLayerController.GetNextCharacterWidth();
+                                //    if (nextCharWidth > 0)
+                                //    {
+                                //        break;
+                                //    }
+                                //}
                                 //}
                             }
                         }

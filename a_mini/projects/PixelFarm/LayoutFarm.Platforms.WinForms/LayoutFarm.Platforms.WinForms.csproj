@@ -61,15 +61,6 @@
     <Compile Include="..\LayoutFarm.PlatformBase\SkiaCanvasViewport.cs">
       <Link>4_Skia\SkiaCanvasViewport.cs</Link>
     </Compile>
-    <Compile Include="..\Win32Utils\MyWin32.cs">
-      <Link>Win32Utils\MyWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\Win32Utils\NativeTextWin32.cs">
-      <Link>Win32Utils\NativeTextWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\Win32Utils\NativeWin32MemoryDc.cs">
-      <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
-    </Compile>
     <Compile Include="..\YourImplementation.PixelFarm\ActiveFontAtlasService.cs">
       <Link>0_Platform\ActiveFontAtlasService.cs</Link>
     </Compile>

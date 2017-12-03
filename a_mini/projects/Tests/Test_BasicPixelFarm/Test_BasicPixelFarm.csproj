@@ -42,12 +42,6 @@
     <Compile Include="..\..\pixelfarm\win32utils\MyWin32.cs">
       <Link>YourImplementation\Win32Utils\MyWin32.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\win32utils\NativeTextWin32.cs">
-      <Link>YourImplementation\Win32Utils\NativeTextWin32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\pixelfarm\win32utils\NativeWin32MemoryDc.cs">
-      <Link>YourImplementation\Win32Utils\NativeWin32MemoryDc.cs</Link>
-    </Compile>
     <Compile Include="Demo1.1\1.12_SmallAnimation.cs" />
     <Compile Include="Demo1.1\1.14_Demo_EasingFuncs.cs" />
     <Compile Include="Demo1.1\1.15_Demo_Drag2.cs" />

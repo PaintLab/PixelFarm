@@ -79,7 +79,31 @@ namespace LayoutFarm.Text
                 }
             }
         }
+        public void AddUnformattedStringToCurrentLine(string str, TextSpanStyle initTextSpanStyle)
+        {
+            //this should be a text-service work ***
+            using (System.IO.StringReader reader = new System.IO.StringReader(str))
+            {
+                string line = reader.ReadLine();
+                List<EditableTextRun> runs = new List<EditableTextRun>();
+                RootGraphic root = visualTextSurface.Root;
+                int lineCount = 0;
+                while (line != null)
+                {
+                    if (lineCount > 0)
+                    {
+                        runs.Add(new EditableTextRun(root, '\n', initTextSpanStyle));
+                    }
 
+                    runs.Add(new EditableTextRun(root, line, initTextSpanStyle));
+                    line = reader.ReadLine();
+                    lineCount++;
+                }
+
+                AddTextRunsToCurrentLine(runs.ToArray());
+            }
+
+        }
         public void AddTextRunsToCurrentLine(IEnumerable<EditableRun> textRuns)
         {
             RemoveSelectedText();

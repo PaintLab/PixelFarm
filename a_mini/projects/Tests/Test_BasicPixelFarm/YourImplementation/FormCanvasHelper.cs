@@ -40,7 +40,7 @@ namespace LayoutFarm.UI
             //PixelFarm.Drawing.WinGdi.Gdi32IFonts ifonts2 = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
             PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(fontLoader);
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(fontLoader);
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontEncoding(System.Text.Encoding.ASCII);
+          
             //
 
             //---------------------------------------------------------------------------

@@ -110,10 +110,7 @@ namespace LayoutFarm.Text
             }
             else
             {
-                //TODO: review here again
-
-
-
+                //TODO: review here again 
                 int len = mybuffer.Length;
                 size = CalculateDrawingStringSize(this.mybuffer, len);
                 //when we update run width we should store
