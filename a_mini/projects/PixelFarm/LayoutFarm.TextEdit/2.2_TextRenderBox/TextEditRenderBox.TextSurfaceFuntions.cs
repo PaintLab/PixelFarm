@@ -37,27 +37,7 @@ namespace LayoutFarm.Text
             base.ClearAllChildren();
         }
 
-        public int Column
-        {
-            get
-            {
-                if (internalTextLayerController != null)
-                {
-                    return internalTextLayerController.CharIndex;
-                }
-                else
-                {
-                    return -1;
-                }
-            }
-            set
-            {
-                if (internalTextLayerController != null)
-                {
-                    internalTextLayerController.TryMoveCaretTo(value);
-                }
-            }
-        }
+
 
         static Stack<StringBuilder> stringBuilderPool = new Stack<StringBuilder>();
         static StringBuilder GetFreeStringBuilder()

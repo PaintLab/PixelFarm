@@ -64,7 +64,7 @@ namespace LayoutFarm.UI
             int count = hitChain.Count;
             if (count > 0)
             {
-                var hitInfo = hitChain.GetHitInfo(count - 1);
+                HitInfo hitInfo = hitChain.GetHitInfo(count - 1);
                 e.ExactHitObject = hitInfo.hitElement;
             }
         }

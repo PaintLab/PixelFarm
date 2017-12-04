@@ -98,51 +98,55 @@ namespace LayoutFarm.CustomWidgets
                     return;
                 }
                 //---------------                 
-                var reader = new System.IO.StringReader(value);
-                string line = reader.ReadLine();
-                int lineCount = 0;
-                while (line != null)
+                using (var reader = new System.IO.StringReader(value))
                 {
-                    if (lineCount > 0)
+                    string line = reader.ReadLine(); // line
+                    int lineCount = 0;
+                    while (line != null)
                     {
-                        textEditRenderElement.SplitCurrentLineToNewLine();
-                    }
-
-                    //create textspan
-                    //user can parse text line to smaller span
-                    //eg. split by whitespace 
-
-                    if (this.TextSplitter != null)
-                    {
-                        //parse with textsplitter 
-                        var buffer = value.ToCharArray();
-                        foreach (var splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
+                        if (lineCount > 0)
                         {
-                            var startIndex = splitBound.startIndex;
-                            var length = splitBound.length;
-                            var splitBuffer = new char[length];
-                            Array.Copy(buffer, startIndex, splitBuffer, 0, length);
+                            textEditRenderElement.SplitCurrentLineToNewLine();
+                        }
 
-                            //TODO: review
-                            //this just test ***  that text box can hold freeze text run
-                            //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
-                            //-----------------------------------
-                            //but for general 
-                            EditableRun textspan = textEditRenderElement.CreateEditableTextRun(splitBuffer);
+                        //create textspan
+                        //user can parse text line to smaller span
+                        //eg. split by whitespace 
+
+                        if (this.TextSplitter != null)
+                        {
+                            //parse with textsplitter 
+                            //TODO: review here ***
+                            //we should encapsulte the detail of this ?
+                            //1.technique, 2. performance
+                            char[] buffer = value.ToCharArray();
+                            foreach (Composers.TextSplitBound splitBound in TextSplitter.ParseWordContent(buffer, 0, buffer.Length))
+                            {
+                                int startIndex = splitBound.startIndex;
+                                int length = splitBound.length;
+                                char[] splitBuffer = new char[length];
+                                Array.Copy(buffer, startIndex, splitBuffer, 0, length);
+
+                                //TODO: review
+                                //this just test ***  that text box can hold freeze text run
+                                //var textspan = textEditRenderElement.CreateFreezeTextRun(splitBuffer);
+                                //-----------------------------------
+                                //but for general 
+                                EditableRun textspan = textEditRenderElement.CreateEditableTextRun(splitBuffer);
+                                textEditRenderElement.AddTextRun(textspan);
+                            }
+                        }
+                        else
+                        {
+                            var textspan = textEditRenderElement.CreateEditableTextRun(line);
                             textEditRenderElement.AddTextRun(textspan);
                         }
-                    }
-                    else
-                    {
-                        var textspan = textEditRenderElement.CreateEditableTextRun(line);
-                        textEditRenderElement.AddTextRun(textspan);
-                    }
 
 
-                    lineCount++;
-                    line = reader.ReadLine();
+                        lineCount++;
+                        line = reader.ReadLine();
+                    }
                 }
-
                 this.InvalidateGraphics();
             }
         }
