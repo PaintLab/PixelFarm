@@ -23,7 +23,7 @@ namespace LayoutFarm.Text
                     cx = lastTextRun.Right;
                 }
 
-                foreach (EditableRun r in lowerLine)
+                foreach (EditableRun r in lowerLine._runs)
                 {
                     this.AddLast(r);
                     EditableRun.DirectSetLocation(r, cx, 0);
@@ -738,7 +738,7 @@ namespace LayoutFarm.Text
                 return;
             }
 
-            foreach (EditableRun t in this)
+            foreach (EditableRun t in _runs)
             {
                 if (t != tobeCutRun)
                 {
@@ -769,7 +769,7 @@ namespace LayoutFarm.Text
         {
             int accTextRunWidth = 0; int accTextRunCharCount = 0;
             EditableRun lastestTextRun = null;
-            foreach (EditableRun t in this)
+            foreach (EditableRun t in this._runs)
             {
                 lastestTextRun = t;
                 int thisTextRunWidth = t.Width;
@@ -811,7 +811,7 @@ namespace LayoutFarm.Text
             int rCharOffset = 0;
             int rPixelOffset = 0;
             EditableRun lastestRun = null;
-            foreach (EditableRun r in this)
+            foreach (EditableRun r in this._runs)
             {
                 lastestRun = r;
                 int thisCharCount = lastestRun.CharacterCount;
@@ -847,7 +847,7 @@ namespace LayoutFarm.Text
                 if (tobeRemovedNode.List != null)
                 {
                     EditableRun tmpv = tobeRemovedNode.Value;
-                    base.Remove(tobeRemovedNode);
+                    _runs.Remove(tobeRemovedNode);
                     newSplitedLine.AddLast(tmpv);
                 }
                 else

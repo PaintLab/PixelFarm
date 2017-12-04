@@ -15,11 +15,9 @@ namespace TestGraphicPackage2
             //-------------------------------
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //temp
-            //TODO: fix this , 
-            //set data dir before load
-            Typography.TextBreak.CustomBreakerBuilder.DataDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries";
+            
 
+            Typography.TextBreak.CustomBreakerBuilder.DataDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries";
             LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
             //RootDemoPath.Path = @"..\Data";
             //you can use your font loader

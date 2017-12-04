@@ -1,18 +1,18 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 namespace LayoutFarm.Text
 {
     partial class EditableTextLine
     {
         void AddNormalRunToLast(EditableRun v)
         {
-            v.SetInternalLinkedNode(base.AddLast(v), this);
+            v.SetInternalLinkedNode(_runs.AddLast(v), this);
         }
         void AddNormalRunToFirst(EditableRun v)
         {
-            v.SetInternalLinkedNode(base.AddFirst(v), this);
+            v.SetInternalLinkedNode(_runs.AddFirst(v), this);
         }
 
         static LinkedListNode<EditableRun> GetLineLinkedNode(EditableRun ve)
@@ -21,13 +21,13 @@ namespace LayoutFarm.Text
         }
         void AddNormalRunBefore(EditableRun beforeVisualElement, EditableRun v)
         {
-            v.SetInternalLinkedNode(base.AddBefore(GetLineLinkedNode(beforeVisualElement), v), this);
+            v.SetInternalLinkedNode(_runs.AddBefore(GetLineLinkedNode(beforeVisualElement), v), this);
         }
         void AddNormalRunAfter(EditableRun afterVisualElement, EditableRun v)
         {
-            v.SetInternalLinkedNode(base.AddAfter(GetLineLinkedNode(afterVisualElement), v), this);
+            v.SetInternalLinkedNode(_runs.AddAfter(GetLineLinkedNode(afterVisualElement), v), this);
         }
-        public new void Clear()
+        public void Clear()
         {
             LinkedListNode<EditableRun> curNode = this.First;
             while (curNode != null)
@@ -36,10 +36,10 @@ namespace LayoutFarm.Text
                 curNode = curNode.Next;
             }
 
-            base.Clear();
+            _runs.Clear();
         }
 
-        public new void Remove(EditableRun v)
+        public void Remove(EditableRun v)
         {
 #if DEBUG
             if (v.IsLineBreak)
@@ -49,7 +49,7 @@ namespace LayoutFarm.Text
 #endif
 
 
-            base.Remove(GetLineLinkedNode(v));
+            _runs.Remove(GetLineLinkedNode(v));
             EditableRun.RemoveParentLink(v);
             if ((this.lineFlags & LOCAL_SUSPEND_LINE_REARRANGE) != 0)
             {

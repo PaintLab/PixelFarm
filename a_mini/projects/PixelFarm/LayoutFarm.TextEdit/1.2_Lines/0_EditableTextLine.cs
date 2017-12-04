@@ -11,9 +11,10 @@ namespace LayoutFarm.Text
 #if DEBUG
     [DebuggerDisplay("ELN {dbugShortLineInfo}")]
 #endif
-    sealed partial class EditableTextLine : LinkedList<EditableRun>
+    sealed partial class EditableTextLine
     {
-        
+        LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
+
         internal EditableTextFlowLayer editableFlowLayer;
         int currentLineNumber;
         int actualLineHeight;
@@ -39,9 +40,29 @@ namespace LayoutFarm.Text
             dbugLineTotalCount++;
 #endif
         }
+        public int Count
+        {
+            get { return _runs.Count; }
+        }
+        public LinkedListNode<EditableRun> First
+        {
+            get { return _runs.First; }
+        }
+        public LinkedListNode<EditableRun> Last
+        {
+            get { return _runs.Last; }
+        }
+
         RootGraphic Root
         {
             get { return this.OwnerElement.Root; }
+        }
+        public IEnumerable<EditableRun> GetTextRunIter()
+        {
+            foreach (EditableRun r in _runs)
+            {
+                yield return r;
+            }
         }
         internal EditableRun LastRun
         {
@@ -216,22 +237,18 @@ namespace LayoutFarm.Text
                 }
             }
         }
-
-
-
         public int CharCount
         {
             get
             {
                 int charCount = 0;
-                foreach (EditableRun r in this)
+                foreach (EditableRun r in this._runs)
                 {
                     charCount += r.CharacterCount;
                 }
                 return charCount;
             }
         }
-
         public int LineBottom
         {
             get

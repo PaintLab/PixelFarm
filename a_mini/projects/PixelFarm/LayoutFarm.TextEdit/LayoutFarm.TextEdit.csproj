@@ -70,7 +70,6 @@
     <Compile Include="1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs" />
     <Compile Include="1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs" />
     <Compile Include="1.2_Lines\6_EditableTextLine_Advanced.cs" />
-    <Compile Include="1.2_Lines\7_EditableTextLine_SuppressNativeCollectionMethods.cs" />
     <Compile Include="1.2_Lines\TextLineReaderWriter.cs" />
     <Compile Include="1.3_Layer\1_EditableTextFlowLayer.cs" />
     <Compile Include="1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs" />

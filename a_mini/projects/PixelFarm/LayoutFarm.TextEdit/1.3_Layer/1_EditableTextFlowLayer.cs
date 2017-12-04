@@ -11,7 +11,6 @@ namespace LayoutFarm.Text
     {
         object lineCollection;
         public event EventHandler Reflow;
-        new TextEditRenderBox owner;
 
         public EditableTextFlowLayer(TextEditRenderBox owner)
             : base(owner)
@@ -23,7 +22,7 @@ namespace LayoutFarm.Text
         }
         public TextSpanStyle CurrentTextSpanStyle
         {
-            get { return this.owner.CurrentTextSpanStyle; }
+            get { return ((TextEditRenderBox)this.owner).CurrentTextSpanStyle; }
         }
         public void SetUseDoubleCanvas(bool useWithWidth, bool useWithHeight)
         {
@@ -432,7 +431,7 @@ namespace LayoutFarm.Text
                     EditableTextLine newLine = null;
                     line.ValidateContentArrangement();
                     bool isFirstRunInThisLine = true;
-                    foreach (EditableRun currentRun in line)
+                    foreach (EditableRun currentRun in line.GetTextRunIter())
                     {
 #if DEBUG
                         vinv_dbug_BeginSetElementBound(currentRun);
@@ -659,7 +658,7 @@ namespace LayoutFarm.Text
                 {
                     if (currentLine == stopLine)
                     {
-                        foreach (EditableRun r in currentLine)
+                        foreach (EditableRun r in currentLine.GetTextRunIter())
                         {
                             if (r == stopRun)
                             {
@@ -674,7 +673,7 @@ namespace LayoutFarm.Text
                     }
                     else
                     {
-                        foreach (EditableRun r in currentLine)
+                        foreach (EditableRun r in currentLine.GetTextRunIter())
                         {
                             yield return r;
                         }
