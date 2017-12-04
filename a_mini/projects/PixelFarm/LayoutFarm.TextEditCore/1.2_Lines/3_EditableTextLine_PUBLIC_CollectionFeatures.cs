@@ -3,7 +3,7 @@
 using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
-    partial class EditableTextLine : LayoutFarm.RenderBoxes.IParentLink
+    partial class EditableTextLine
     {
         public void AddLast(EditableRun v)
         {
@@ -66,24 +66,24 @@ namespace LayoutFarm.Text
         {
             _runs.Remove(GetLineLinkedNode(v));
         }
-        RenderElement RenderBoxes.IParentLink.ParentRenderElement
-        {
-            get { return this.OwnerFlowLayer.OwnerRenderElement; }
-        }
-        void RenderBoxes.IParentLink.AdjustLocation(ref Point p)
-        {
-            p.Y += this.LineTop;
-        }
+        //        RenderElement RenderBoxes.IParentLink.ParentRenderElement
+        //        {
+        //            get { return this.OwnerFlowLayer.OwnerRenderElement; }
+        //        }
+        //        void RenderBoxes.IParentLink.AdjustLocation(ref Point p)
+        //        {
+        //            p.Y += this.LineTop;
+        //        }
 
-        RenderElement RenderBoxes.IParentLink.FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
-        {
-            return null;
-        }
-#if DEBUG
-        string RenderBoxes.IParentLink.dbugGetLinkInfo()
-        {
-            return "editable-link";
-        }
-#endif
+        //        RenderElement RenderBoxes.IParentLink.FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
+        //        {
+        //            return null;
+        //        }
+        //#if DEBUG
+        //        string RenderBoxes.IParentLink.dbugGetLinkInfo()
+        //        {
+        //            return "editable-link";
+        //        }
+        //#endif
     }
 }

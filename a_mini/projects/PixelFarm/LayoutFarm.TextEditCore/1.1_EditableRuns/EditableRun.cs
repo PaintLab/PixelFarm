@@ -5,20 +5,60 @@ using System.Collections.Generic;
 using System.Text;
 namespace LayoutFarm.Text
 {
-    /// <summary>
-    /// any run
-    /// </summary>
-    public abstract class EditableRun : RenderElement
+    public abstract class EditableRun
     {
+        bool _isSizeValid;
         //1. owner is a textline
         EditableTextLine ownerTextLine;
         //TODO: review this again -> change to list,
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
+        public EditableRun()
+        {
+            IsBlockElement = false;
+        }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Right
+        {
+            get
+            {
+                return X + Width;
+            }
+        }
+        public void SetSize(int width, int height)
+        {
+            this.Width = width;
+            this.Height = height;
+        }
 
-        public EditableRun(RootGraphic gfx)
-            : base(gfx, 10, 10)
+        public bool HasParent
+        {
+            get { return _editableRunInternalLinkedNode != null; }
+        }
+
+        internal static void RemoveParentLink(EditableRun run)
+        {
+            run._editableRunInternalLinkedNode = null;
+        }
+        public void MarkValidContentArrangement()
         {
 
+        }
+        public void MarkHasValidCalculateSize()
+        {
+            _isSizeValid = true;
+        }
+        public bool IsBlockElement
+        {
+            get;
+            set;
+        }
+        public void SetLocation(int x, int y)
+        {
+            this.X = x;
+            this.Y = y;
         }
         public abstract char GetChar(int index);
         internal bool IsLineBreak { get; set; }
@@ -28,10 +68,6 @@ namespace LayoutFarm.Text
         //--------------------
         //model
         public abstract EditableRunCharLocation GetCharacterFromPixelOffset(int pixelOffset);
-
-
-
-
         /// <summary>
         /// get run width from start (left**) to charOffset
         /// </summary>
@@ -107,29 +143,26 @@ namespace LayoutFarm.Text
         {
             this.ownerTextLine = ownerTextLine;
             this._editableRunInternalLinkedNode = linkedNode;
-            EditableRun.SetParentLink(this, ownerTextLine);
         }
-        //----------------------------------------------------------------------
-        public override void TopDownReCalculateContentSize()
-        {
-            InnerTextRunTopDownReCalculateContentSize(this);
-        }
+        ////----------------------------------------------------------------------
+        //public override void TopDownReCalculateContentSize()
+        //{
+        //    InnerTextRunTopDownReCalculateContentSize(this);
+        //}
 
         public static void InnerTextRunTopDownReCalculateContentSize(EditableRun ve)
         {
-#if DEBUG
-            dbug_EnterTopDownReCalculateContent(ve);
-#endif
+            //#if DEBUG
+            //            dbug_EnterTopDownReCalculateContent(ve);
+            //#endif
 
+            //
             ve.UpdateRunWidth();
-#if DEBUG
-            dbug_ExitTopDownReCalculateContent(ve);
-#endif
+            //
+            //#if DEBUG
+            //            dbug_ExitTopDownReCalculateContent(ve);
+            //#endif
         }
-
-
-
-
         //--------------------
         //presentation of this run
         public abstract TextSpanStyle SpanStyle { get; }
@@ -137,24 +170,24 @@ namespace LayoutFarm.Text
 
 
 #if DEBUG
-        public override string dbug_FullElementDescription()
-        {
-            string user_elem_id = null;
-            if (user_elem_id != null)
-            {
-                return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
-                    + " i" + dbug_obj_id + "a " + ((EditableRun)this).Text + ",(ID " + user_elem_id + ") " + dbug_GetLayoutInfo();
-            }
-            else
-            {
-                return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
-                 + " i" + dbug_obj_id + "a " + ((EditableRun)this).Text + " " + dbug_GetLayoutInfo();
-            }
-        }
-        public override string ToString()
-        {
-            return "[" + this.dbug_obj_id + "]" + Text;
-        }
+        //public override string dbug_FullElementDescription()
+        //{
+        //    string user_elem_id = null;
+        //    if (user_elem_id != null)
+        //    {
+        //        return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
+        //            + " i" + dbug_obj_id + "a " + ((EditableRun)this).Text + ",(ID " + user_elem_id + ") " + dbug_GetLayoutInfo();
+        //    }
+        //    else
+        //    {
+        //        return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
+        //         + " i" + dbug_obj_id + "a " + ((EditableRun)this).Text + " " + dbug_GetLayoutInfo();
+        //    }
+        //}
+        //public override string ToString()
+        //{
+        //    return "[" + this.dbug_obj_id + "]" + Text;
+        //}
 #endif
     }
 }

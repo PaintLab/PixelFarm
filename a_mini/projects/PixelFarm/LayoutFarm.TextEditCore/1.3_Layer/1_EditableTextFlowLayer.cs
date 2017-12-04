@@ -3,34 +3,68 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using PixelFarm.Drawing;
-using LayoutFarm.RenderBoxes;
+
+
 namespace LayoutFarm.Text
 {
-    partial class EditableTextFlowLayer : RenderElementLayer
+    public interface HitChain
     {
-        object lineCollection;
-        public event EventHandler Reflow;
+        int TestPointX { get; }
+        int TestPointY { get; }
+    }
+    public interface TextEditRenderBox
+    {
 
-     
+        void NotifyTextContentSizeChanged();
+        TextSurfaceEventListener TextSurfaceEventListener { get;  }
+        void SetTextSurfaceEventListner(TextSurfaceEventListener listener);
+
+    }
+    /// <summary>
+    /// layer is a collection of line
+    /// </summary>
+    partial class EditableTextFlowLayer
+    {
+
+        protected int layerFlags;
+        protected const int IS_LAYER_HIDDEN = 1 << (14 - 1);
+        protected const int IS_GROUND_LAYER = 1 << (15 - 1);
+        protected const int MAY_HAS_OTHER_OVERLAP_CHILD = 1 << (16 - 1);
+        protected const int DOUBLE_BACKCANVAS_WIDTH = 1 << (18 - 1);
+        protected const int DOUBLE_BACKCANVAS_HEIGHT = 1 << (19 - 1);
+        protected const int CONTENT_DRAWING = 1 << (22 - 1);
+        protected const int ARRANGEMENT_VALID = 1 << (23 - 1);
+        protected const int HAS_CALCULATE_SIZE = 1 << (24 - 1);
+        protected const int FLOWLAYER_HAS_MULTILINE = 1 << (25 - 1);
+
+
+        object lineCollection;
+        //public event EventHandler Reflow;
+        TextEditRenderBox owner;
 
         public EditableTextFlowLayer(TextEditRenderBox owner)
-            : base(owner)
         {
             this.owner = owner;
             //start with single line per layer
             //and can be changed to multiline
             lineCollection = new EditableTextLine(this);
         }
+        int ContainerWidth
+        {
+            get { return 400; } //fix?
+        }
         public TextSpanStyle CurrentTextSpanStyle
         {
-            get { return ((TextEditRenderBox)this.owner).CurrentTextSpanStyle; }
-        }
-        public void SetUseDoubleCanvas(bool useWithWidth, bool useWithHeight)
-        {
-            this.SetDoubleCanvas(useWithWidth, useWithHeight);
+            get; set;
         }
 
+        public int DefaultWidth
+        {
+            get
+            {
+                return 200;
+            }
+        }
         public bool FlowLayerHasMultiLines
         {
             get
@@ -93,110 +127,7 @@ namespace LayoutFarm.Text
             }
         }
 
-        public override void DrawChildContent(Canvas canvas, Rectangle updateArea)
-        {
-            if ((layerFlags & IS_LAYER_HIDDEN) != 0)
-            {
-                return;
-            }
-
-            this.BeginDrawingChildContent();
-            if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
-            {
-                List<EditableTextLine> lines = (List<EditableTextLine>)lineCollection;
-                int renderAreaTop = updateArea.Top;
-                int renderAreaBottom = updateArea.Bottom;
-                bool foundFirstLine = false;
-                int j = lines.Count;
-                for (int i = 0; i < j; ++i)
-                {
-                    EditableTextLine line = lines[i];
-#if DEBUG
-                    if (this.OwnerRenderElement is RenderBoxBase)
-                    {
-                        debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
-                    }
-#endif
-
-                    int y = line.Top;
-                    LinkedListNode<EditableRun> curNode = line.First;
-                    if (!foundFirstLine)
-                    {
-                        if (y + line.ActualLineHeight < renderAreaTop)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            foundFirstLine = true;
-                        }
-                    }
-                    else
-                    {
-                        if (y > renderAreaBottom)
-                        {
-                            break;
-                        }
-                    }
-
-                    updateArea.OffsetY(-y);
-                    canvas.OffsetCanvasOriginY(y);
-                    while (curNode != null)
-                    {
-                        EditableRun child = curNode.Value;
-                        if (child.IntersectOnHorizontalWith(ref updateArea))
-                        {
-                            int x = child.X;
-                            canvas.OffsetCanvasOriginX(x);
-                            updateArea.OffsetX(-x);
-                            child.DrawToThisCanvas(canvas, updateArea);
-                            canvas.OffsetCanvasOriginX(-x);
-                            updateArea.OffsetX(x);
-                        }
-                        curNode = curNode.Next;
-                    }
-                    canvas.OffsetCanvasOriginY(-y);
-                    updateArea.OffsetY(y);
-                }
-            }
-            else
-            {
-                EditableTextLine line = (EditableTextLine)lineCollection;
-#if DEBUG
-                if (OwnerRenderElement is RenderBoxBase)
-                {
-                    debug_RecordLineInfo((RenderBoxBase)OwnerRenderElement, line);
-                }
-#endif
-
-                LinkedListNode<EditableRun> curNode = line.First;
-                if (curNode != null)
-                {
-                    int y = line.Top;
-                    canvas.OffsetCanvasOriginY(y);
-                    updateArea.OffsetY(-y);
-                    while (curNode != null)
-                    {
-                        EditableRun child = curNode.Value;
-                        if (child.IntersectOnHorizontalWith(ref updateArea))
-                        {
-                            int x = child.X;
-                            canvas.OffsetCanvasOriginX(x);
-                            updateArea.OffsetX(-x);
-                            child.DrawToThisCanvas(canvas, updateArea);
-                            canvas.OffsetCanvasOriginX(-x);
-                            updateArea.OffsetX(x);
-                        }
-                        curNode = curNode.Next;
-                    }
-                    canvas.OffsetCanvasOriginY(-y);
-                    updateArea.OffsetY(y);
-                }
-            }
-            this.FinishDrawingChildContent();
-        }
-
-        public override bool HitTestCore(HitChain hitChain)
+        public bool HitTestCore(HitChain hitChain)
         {
             if ((layerFlags & IS_LAYER_HIDDEN) == 0)
             {
@@ -204,7 +135,7 @@ namespace LayoutFarm.Text
                 {
                     List<EditableTextLine> lines = (List<EditableTextLine>)lineCollection;
                     int j = lines.Count;
-                    int testYPos = hitChain.TestPoint.Y;
+                    int testYPos = hitChain.TestPointY;
                     for (int i = 0; i < j; ++i)
                     {
                         EditableTextLine line = lines[i];
@@ -268,33 +199,34 @@ namespace LayoutFarm.Text
             return new Size(maxWidth, maxHeightInRow);
         }
 
-        public override void TopDownReArrangeContent()
+        public void TopDownReArrangeContent()
         {
             //vinv_IsInTopDownReArrangePhase = true;
-#if DEBUG
-            vinv_dbug_EnterLayerReArrangeContent(this);
-#endif
-            //this.BeginLayerLayoutUpdate();
+            //#if DEBUG
+            //            vinv_dbug_EnterLayerReArrangeContent(this);
+            //#endif
+            //            //this.BeginLayerLayoutUpdate();
 
-            RenderBoxBase container = this.OwnerRenderElement as RenderBoxBase;
-            if (container != null)
-            {
-                PerformHorizontalFlowArrange(0, container.Width, 0);
-            }
+            //            RenderBoxBase container = this.OwnerRenderElement as RenderBoxBase;
+            //            if (container != null)
+            //            {
+            PerformHorizontalFlowArrange(0, ContainerWidth, 0);
+            //            }
 
-            if (Reflow != null)
-            {
-                Reflow(this, EventArgs.Empty);
-            }
+            //            if (Reflow != null)
+            //            {
+            //                Reflow(this, EventArgs.Empty);
+            //            }
 
-            //this.EndLayerLayoutUpdate();
-#if DEBUG
-            vinv_dbug_ExitLayerReArrangeContent();
-#endif
+            //            //this.EndLayerLayoutUpdate();
+            //#if DEBUG
+            //            vinv_dbug_ExitLayerReArrangeContent();
+            //#endif
         }
 
-
-        public override void TopDownReCalculateContentSize()
+        void vinv_dbug_ExitLayerReCalculateContent() { }
+        void vinv_dbug_EnterLayerReCalculateContent(object o) { }
+        public void TopDownReCalculateContentSize()
         {
 #if DEBUG
 
@@ -317,7 +249,18 @@ namespace LayoutFarm.Text
 #endif
         }
 
-
+        public int Width { get; set; }
+        public int Height { get; set; }
+        void SetPostCalculateLayerContentSize(int w, int h)
+        {
+            this.Width = w;
+            this.Height = h;
+        }
+        void SetPostCalculateLayerContentSize(Size s)
+        {
+            this.Width = s.Width;
+            this.Height = s.Height;
+        }
         internal EditableTextLine GetTextLine(int lineId)
         {
             List<EditableTextLine> lines = lineCollection as List<EditableTextLine>;
@@ -396,6 +339,16 @@ namespace LayoutFarm.Text
                 FlowLayerHasMultiLines = true;
             }
         }
+        void vinv_dbug_EndSetElementBound()
+        {
+
+        }
+        void vinv_dbug_EndSetElementBound(object o)
+        {
+
+        }
+        void vinv_dbug_BeginSetElementBound(object o) { }
+
         void PerformHorizontalFlowArrangeForMultilineText(
             int ownerClientLeft, int ownerClientWidth,
             int ownerClientTop)
@@ -447,7 +400,8 @@ namespace LayoutFarm.Text
                             {
                                 maxHeightInRow = v_desired_height;
                             }
-                            EditableRun.DirectSetLocation(currentRun, curX, 0);
+
+                            currentRun.SetLocation(curX, 0);
                             if (v_desired_height > maxHeightInRow)
                             {
                                 maxHeightInRow = v_desired_height;
@@ -457,8 +411,7 @@ namespace LayoutFarm.Text
                                 v_desired_width = ownerClientWidth;
                             }
 
-                            EditableRun.DirectSetSize(currentRun,
-                                    v_desired_width, v_desired_height);
+                            currentRun.SetSize(v_desired_width, v_desired_height);
                             currentRun.MarkValidContentArrangement();
                             curX += v_desired_width;
                             isFirstRunInThisLine = false;
@@ -498,9 +451,12 @@ namespace LayoutFarm.Text
                                 {
                                     maxHeightInRow = v_desired_height;
                                 }
-                                EditableRun.DirectSetLocation(currentRun, curX, 0);
-                                EditableRun.DirectSetSize(currentRun,
-                                       v_desired_width, v_desired_height);
+
+
+                                currentRun.SetLocation(curX, 0);
+                                currentRun.SetSize(v_desired_width, v_desired_height);
+
+
                                 currentRun.MarkValidContentArrangement();
                                 curX += v_desired_width;
                             }
@@ -522,8 +478,13 @@ namespace LayoutFarm.Text
             }
             ValidateArrangement();
         }
+        void ValidateArrangement()
+        {
+
+        }
         void PerformHorizontalFlowArrange(
-            int ownerClientLeft, int ownerClientWidth,
+            int ownerClientLeft,
+            int ownerClientWidth,
             int ownerClientTop)
         {
             if (lineCollection == null)
@@ -694,30 +655,30 @@ namespace LayoutFarm.Text
         }
 
 #if DEBUG
-        void debug_RecordLineInfo(RenderBoxBase owner, EditableTextLine line)
-        {
-            RootGraphic visualroot = this.dbugVRoot;
-            if (visualroot.dbug_RecordDrawingChain)
-            {
-            }
-        }
+        //void debug_RecordLineInfo(RenderBoxBase owner, EditableTextLine line)
+        //{
+        //    RootGraphic visualroot = this.dbugVRoot;
+        //    if (visualroot.dbug_RecordDrawingChain)
+        //    {
+        //    }
+        //}
 
-        public override void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
-        {
-            writer.Add(new dbugLayoutMsg(
-                this, this.ToString()));
-            writer.EnterNewLevel();
-            foreach (EditableRun child in this.dbugGetDrawingIter2())
-            {
-                child.dbug_DumpVisualProps(writer);
-            }
-            writer.LeaveCurrentLevel();
-        }
-        public override string ToString()
-        {
-            return "editable flow layer " + "(L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +
-                this.PostCalculateContentSize.ToString() + " of " + this.OwnerRenderElement.dbug_FullElementDescription();
-        }
+        //public override void dbug_DumpElementProps(dbugLayoutMsgWriter writer)
+        //{
+        //    writer.Add(new dbugLayoutMsg(
+        //        this, this.ToString()));
+        //    writer.EnterNewLevel();
+        //    foreach (EditableRun child in this.dbugGetDrawingIter2())
+        //    {
+        //        child.dbug_DumpVisualProps(writer);
+        //    }
+        //    writer.LeaveCurrentLevel();
+        //}
+        //public override string ToString()
+        //{
+        //    return "editable flow layer " + "(L" + dbug_layer_id + this.dbugLayerState + ") postcal:" +
+        //        this.PostCalculateContentSize.ToString() + " of " + this.OwnerRenderElement.dbug_FullElementDescription();
+        //}
         public IEnumerable<EditableRun> dbugGetDrawingIter2()
         {
             if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)

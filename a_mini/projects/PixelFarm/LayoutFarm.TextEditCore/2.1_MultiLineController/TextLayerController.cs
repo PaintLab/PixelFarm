@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
+
     public class TextMan
     {
         InternalTextLayerController innerTextMan;
@@ -16,8 +17,7 @@ namespace LayoutFarm.Text
         }
         public void AttachTextDomListener(TextSurfaceEventListener listener)
         {
-            
-            this.visualTextSurface.TextSurfaceListener = listener;
+            this.visualTextSurface.SetTextSurfaceEventListner(listener);             
         }
         public void AddTextRunsToCurrentLine(IEnumerable<EditableRun> textRuns)
         {
@@ -230,7 +230,7 @@ namespace LayoutFarm.Text
                 }
             }
             CancelSelect();
-            TextEditRenderBox.NotifyTextContentSizeChanged(visualTextSurface);
+            visualTextSurface.NotifyTextContentSizeChanged();
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -265,7 +265,7 @@ namespace LayoutFarm.Text
             textLineWriter.SplitToNewLine();
             CurrentLineNumber++;
             updateJustCurrentLine = false;
-            TextEditRenderBox.NotifyTextContentSizeChanged(visualTextSurface);
+            visualTextSurface.NotifyTextContentSizeChanged();
         }
         public TextSpanStyle GetFirstTextStyleInSelectedRange()
         {
@@ -573,7 +573,7 @@ namespace LayoutFarm.Text
         void JoinWithNextLine()
         {
             textLineWriter.JoinWithNextLine();
-            TextEditRenderBox.NotifyTextContentSizeChanged(visualTextSurface);
+            visualTextSurface.NotifyTextContentSizeChanged();
         }
         public void UndoLastAction()
         {

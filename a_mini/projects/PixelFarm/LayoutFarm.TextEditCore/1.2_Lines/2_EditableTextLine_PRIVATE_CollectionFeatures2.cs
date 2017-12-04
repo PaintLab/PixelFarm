@@ -51,7 +51,8 @@ namespace LayoutFarm.Text
                     EditableRun t = tempTextRuns[i];
                     this.Remove(t);
                     newTextline.AddLast(t);
-                    RenderElement.DirectSetLocation(t, cx, 0);
+                    t.SetLocation(cx, 0);
+                   
                     cx += t.Width;
                 }
 

@@ -33,6 +33,29 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="0_port\port.cs" />
+    <Compile Include="1.1_EditableRuns\dbugMultiTextManRecorder.cs" />
+    <Compile Include="1.1_EditableRuns\EditableRun.cs" />
+    <Compile Include="1.1_EditableRuns\EditableRunCharLocation.cs" />
+    <Compile Include="1.1_EditableRuns\EditableTextSpan.cs" />
+    <Compile Include="1.1_EditableRuns\SolidTextRun.cs" />
+    <Compile Include="1.1_EditableRuns\TextSpanSytle.cs" />
+    <Compile Include="1.1_EditableRuns\VisualPointInfo.cs" />
+    <Compile Include="1.1_EditableRuns\VisualSelectionRange.cs" />
+    <Compile Include="1.2_Lines\0_EditableTextLine.cs" />
+    <Compile Include="1.2_Lines\1_EditableTextLine_CORE_Collection.cs" />
+    <Compile Include="1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs" />
+    <Compile Include="1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs" />
+    <Compile Include="1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs" />
+    <Compile Include="1.2_Lines\6_EditableTextLine_Advanced.cs" />
+    <Compile Include="1.2_Lines\TextLineReaderWriter.cs" />
+    <Compile Include="1.3_Layer\1_EditableTextFlowLayer.cs" />
+    <Compile Include="1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs" />
+    <Compile Include="2.1_MultiLineController\DocumentActions.cs" />
+    <Compile Include="2.1_MultiLineController\TextLayerController.cs" />
+    <Compile Include="2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs" />
+    <Compile Include="2.1_MultiLineController\TextLayerController.TextFunctions.cs" />
+    <Compile Include="2.1_MultiLineController\TextSurfaceEventListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
