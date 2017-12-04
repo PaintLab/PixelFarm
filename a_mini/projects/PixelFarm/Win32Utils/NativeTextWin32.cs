@@ -28,14 +28,14 @@ namespace PixelFarm.Drawing.WinGdi
         static Encoding s_en;
         static WinGdiTextService()
         {
-            s_en = System.Text.Encoding.ASCII;
+            s_en = Encoding.Default; //use platform's default encoding
             win32MemDc = new NativeWin32MemoryDc(2, 2);
             whitespace[0] = ' ';
 
         }
-        public static void SetDefaultEncoding(Encoding en)
+        public static void SetDefaultEncoding(Encoding encoding)
         {
-            s_en = en;
+            s_en = encoding;
         }
 
         const int MAX_CODEPOINT_NO = 255;
