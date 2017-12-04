@@ -364,18 +364,29 @@ namespace LayoutFarm.UI
                     });
                 }
                 //---------------------------------------------------------------
+                if (e.IsAlsoDoubleClick)
+                {
+                    ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
+                    {
+                        listener.ListenMouseDoubleClick(e);
+                        //------------------------------------------------------- 
+                        //retrun true to stop this loop (no further bubble up)
+                        //return false to bubble this to upper control       
+                        return e.CancelBubbling || !listener.BypassAllMouseEvents;
+                    });
+                }
                 if (!e.CancelBubbling)
                 {
                     if (e.IsAlsoDoubleClick)
                     {
-                        ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
-                        {
-                            listener.ListenMouseDoubleClick(e);
-                            //------------------------------------------------------- 
-                            //retrun true to stop this loop (no further bubble up)
-                            //return false to bubble this to upper control       
-                            return e.CancelBubbling || !listener.BypassAllMouseEvents;
-                        });
+                        //ForEachEventListenerBubbleUp(e, hitPointChain, listener =>
+                        //{
+                        //    listener.ListenMouseDoubleClick(e);
+                        //    //------------------------------------------------------- 
+                        //    //retrun true to stop this loop (no further bubble up)
+                        //    //return false to bubble this to upper control       
+                        //    return e.CancelBubbling || !listener.BypassAllMouseEvents;
+                        //});
                     }
                     else
                     {
@@ -711,7 +722,7 @@ namespace LayoutFarm.UI
             get { return dbugRootGfx; }
             set
             {
-                
+
                 this.dbugRootGfx = value;
                 this._previousChain.dbugHitTracker = this.dbugRootGraphics.dbugHitTracker;
             }

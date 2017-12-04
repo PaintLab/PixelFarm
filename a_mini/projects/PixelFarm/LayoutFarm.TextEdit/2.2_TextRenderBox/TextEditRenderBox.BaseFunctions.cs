@@ -126,7 +126,7 @@ namespace LayoutFarm.Text
             //------------------------
             if (e.IsControlCharacter)
             {
-                KeyDown(e);
+                HandleKeyDown(e);
                 return;
             }
 
@@ -225,25 +225,36 @@ namespace LayoutFarm.Text
             }
         }
 
-        public void MouseDown(UIMouseEventArgs e)
+        public void HandleMouseDown(UIMouseEventArgs e)
         {
             if (e.Button == UIMouseButtons.Left)
             {
                 InvalidateGraphicOfCurrentLineArea();
-                internalTextLayerController.SetCaretPos(e.X, e.Y);
-                if (internalTextLayerController.SelectionRange != null)
+
+                if (!e.Shift)
                 {
-                    Rectangle r = GetSelectionUpdateArea();
-                    internalTextLayerController.CancelSelect();
-                    InvalidateGraphicLocalArea(this, r);
+                    internalTextLayerController.SetCaretPos(e.X, e.Y);
+                    if (internalTextLayerController.SelectionRange != null)
+                    {
+                        Rectangle r = GetSelectionUpdateArea();
+                        internalTextLayerController.CancelSelect();
+                        InvalidateGraphicLocalArea(this, r);
+                    }
+                    else
+                    {
+                        InvalidateGraphicOfCurrentLineArea();
+                    }
                 }
                 else
                 {
+                    internalTextLayerController.StartSelectIfNoSelection();
+                    internalTextLayerController.SetCaretPos(e.X, e.Y);
+                    internalTextLayerController.EndSelect();
                     InvalidateGraphicOfCurrentLineArea();
                 }
             }
         }
-        public void DoubleClick(UIMouseEventArgs e)
+        public void HandleDoubleClick(UIMouseEventArgs e)
         {
             internalTextLayerController.CancelSelect();
             EditableRun textRun = this.CurrentTextRun;
@@ -258,7 +269,7 @@ namespace LayoutFarm.Text
                 internalTextLayerController.EndSelect();
             }
         }
-        public void Drag(UIMouseEventArgs e)
+        public void HandleDrag(UIMouseEventArgs e)
         {
             if (!isDragBegin)
             {
@@ -285,7 +296,7 @@ namespace LayoutFarm.Text
                 }
             }
         }
-        public void DragEnd(UIMouseEventArgs e)
+        public void HandleDragEnd(UIMouseEventArgs e)
         {
             isDragBegin = false;
             if ((UIMouseButtons)e.Button == UIMouseButtons.Left)
@@ -312,14 +323,15 @@ namespace LayoutFarm.Text
                 return Rectangle.Empty;
             }
         }
-        public void MouseUp(UIMouseEventArgs e)
+        public void HandleMouseUp(UIMouseEventArgs e)
         {
+            //empty?
         }
-        public void KeyUp(UIKeyEventArgs e)
+        public void HandleKeyUp(UIKeyEventArgs e)
         {
             this.SetCaretState(true);
         }
-        public void KeyDown(UIKeyEventArgs e)
+        public void HandleKeyDown(UIKeyEventArgs e)
         {
             this.SetCaretState(true);
             if (!e.HasKeyData)
@@ -524,7 +536,8 @@ namespace LayoutFarm.Text
         {
             get { return this.internalTextLayerController.CaretPos; }
         }
-        public bool OnProcessDialogKey(UIKeyEventArgs e)
+
+        public bool HandleProcessDialogKey(UIKeyEventArgs e)
         {
             UIKeys keyData = (UIKeys)e.KeyData;
             SetCaretState(true);
@@ -537,7 +550,7 @@ namespace LayoutFarm.Text
             {
                 case UIKeys.Home:
                     {
-                        KeyDown(e);
+                        HandleKeyDown(e);
                         return true;
                     }
                 case UIKeys.Return:

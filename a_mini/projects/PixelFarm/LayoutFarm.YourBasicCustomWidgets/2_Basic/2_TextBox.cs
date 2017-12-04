@@ -255,7 +255,7 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnDoubleClick(UIMouseEventArgs e)
         {
-            textEditRenderElement.DoubleClick(e);
+            textEditRenderElement.HandleDoubleClick(e);
             e.CancelBubbling = true;
         }
         protected override void OnKeyPress(UIKeyEventArgs e)
@@ -265,17 +265,17 @@ namespace LayoutFarm.CustomWidgets
         }
         protected override void OnKeyDown(UIKeyEventArgs e)
         {
-            textEditRenderElement.KeyDown(e);
+            textEditRenderElement.HandleKeyDown(e);
             e.CancelBubbling = true;
         }
         protected override void OnKeyUp(UIKeyEventArgs e)
         {
-            textEditRenderElement.KeyUp(e);
+            textEditRenderElement.HandleKeyUp(e);
             e.CancelBubbling = true;
         }
         protected override bool OnProcessDialogKey(UIKeyEventArgs e)
         {
-            if (textEditRenderElement.OnProcessDialogKey(e))
+            if (textEditRenderElement.HandleProcessDialogKey(e))
             {
                 e.CancelBubbling = true;
                 return true;
@@ -288,7 +288,7 @@ namespace LayoutFarm.CustomWidgets
             e.MouseCursorStyle = MouseCursorStyle.IBeam;
             e.CancelBubbling = true;
             e.CurrentContextElement = this;
-            textEditRenderElement.MouseDown(e);
+            textEditRenderElement.HandleMouseDown(e);
         }
         protected override void OnLostKeyboardFocus(UIFocusEventArgs e)
         {
@@ -299,7 +299,7 @@ namespace LayoutFarm.CustomWidgets
         {
             if (e.IsDragging)
             {
-                textEditRenderElement.Drag(e);
+                textEditRenderElement.HandleDrag(e);
                 e.CancelBubbling = true;
                 e.MouseCursorStyle = MouseCursorStyle.IBeam;
             }
@@ -308,11 +308,11 @@ namespace LayoutFarm.CustomWidgets
         {
             if (e.IsDragging)
             {
-                textEditRenderElement.DragEnd(e);
+                textEditRenderElement.HandleDragEnd(e);
             }
             else
             {
-                textEditRenderElement.MouseUp(e);
+                textEditRenderElement.HandleMouseUp(e);
             }
             e.MouseCursorStyle = MouseCursorStyle.Default;
             e.CancelBubbling = true;
