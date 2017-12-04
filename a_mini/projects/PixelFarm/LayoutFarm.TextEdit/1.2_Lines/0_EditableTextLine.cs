@@ -13,6 +13,7 @@ namespace LayoutFarm.Text
 #endif
     sealed partial class EditableTextLine : LinkedList<EditableRun>
     {
+        
         internal EditableTextFlowLayer editableFlowLayer;
         int currentLineNumber;
         int actualLineHeight;
