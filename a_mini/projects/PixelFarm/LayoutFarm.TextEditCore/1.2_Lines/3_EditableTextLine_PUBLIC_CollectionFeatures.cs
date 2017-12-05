@@ -1,6 +1,6 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
-using PixelFarm.Drawing;
+ 
 namespace LayoutFarm.Text
 {
     partial class EditableTextLine

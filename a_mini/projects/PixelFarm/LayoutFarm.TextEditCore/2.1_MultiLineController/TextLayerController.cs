@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using PixelFarm.Drawing;
+
 namespace LayoutFarm.Text
 {
 
@@ -17,7 +17,7 @@ namespace LayoutFarm.Text
         }
         public void AttachTextDomListener(TextSurfaceEventListener listener)
         {
-            this.visualTextSurface.SetTextSurfaceEventListner(listener);             
+            this.visualTextSurface.SetTextSurfaceEventListner(listener);
         }
         public void AddTextRunsToCurrentLine(IEnumerable<EditableRun> textRuns)
         {

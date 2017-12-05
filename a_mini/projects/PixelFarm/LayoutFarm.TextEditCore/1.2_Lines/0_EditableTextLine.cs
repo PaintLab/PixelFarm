@@ -4,16 +4,6 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Text;
-using PixelFarm.Drawing;
-using LayoutFarm.RenderBoxes;
-namespace PixelFarm.Drawing
-{
-    class s1 { }
-}
-namespace LayoutFarm.RenderBoxes
-{
-    class s1 { }
-}
 
 namespace LayoutFarm.Text
 {

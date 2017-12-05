@@ -1,8 +1,9 @@
-﻿
+﻿ 
 namespace LayoutFarm.Text
 {
     public interface TextSurfaceEventListener { }
 
+    public class RequestFont { }
 
     public static class FontService1
     {
