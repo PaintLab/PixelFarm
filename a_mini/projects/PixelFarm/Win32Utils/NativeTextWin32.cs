@@ -523,6 +523,8 @@ namespace PixelFarm.Drawing.WinGdi
     }
 
 }
+
+
 namespace Win32
 {
 

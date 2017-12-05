@@ -29,7 +29,7 @@ namespace LayoutFarm.Text
         static int dbugLineTotalCount = 0;
         internal int dbugLineId;
 #endif
-        public EditableTextLine(EditableTextFlowLayer ownerFlowLayer)
+        internal EditableTextLine(EditableTextFlowLayer ownerFlowLayer)
         {
 
             this.editableFlowLayer = ownerFlowLayer;

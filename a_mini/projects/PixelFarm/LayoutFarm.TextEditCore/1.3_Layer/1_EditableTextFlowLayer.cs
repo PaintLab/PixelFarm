@@ -13,12 +13,9 @@ namespace LayoutFarm.Text
         int TestPointY { get; }
     }
     public interface TextEditRenderBox
-    {
-
-        void NotifyTextContentSizeChanged();
+    {        void NotifyTextContentSizeChanged();
         TextSurfaceEventListener TextSurfaceEventListener { get; }
         void SetTextSurfaceEventListner(TextSurfaceEventListener listener);
-
     }
     /// <summary>
     /// layer is a collection of line

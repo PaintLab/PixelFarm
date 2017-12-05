@@ -1,4 +1,4 @@
-﻿ 
+﻿
 namespace LayoutFarm.Text
 {
     public interface TextSurfaceEventListener { }
@@ -7,26 +7,33 @@ namespace LayoutFarm.Text
 
     public static class FontService1
     {
+        static TextLayerFontService s_fontService;
+        public static void RegisterFontService(TextLayerFontService fontService)
+        {
+            s_fontService = fontService;
+        }
         public static RequestFont DefaultFont
         {
-            get;
-            set;
-        }
+            get
+            {
+                return s_fontService.DefaultFont;
+            }
+        } 
         public static void CalculateGlyphAdvancePos(char[] buffer, int start, int len, RequestFont font, int[] outputGlyphPos)
         {
-
-            //glyphPositions = new int[len];
-
-            //Root.IFonts.CalculateGlyphAdvancePos(mybuffer, 0, len, GetFont(), glyphPositions);
+            s_fontService.CalculateGlyphAdvancePos(buffer, start, len, font, outputGlyphPos);
         }
         public static Size MeasureString(char[] buffer, int start, int len, RequestFont r)
         {
-            throw new System.NotSupportedException();
-            //return this.Root.IFonts.MeasureString(buffer, 0,
-            //     length, fontInfo);
-            return new Size();
+            return s_fontService.MeasureString(buffer, start, len, r); 
         }
+    }
 
+    public interface TextLayerFontService
+    {
+        RequestFont DefaultFont { get; }
+        void CalculateGlyphAdvancePos(char[] buffer, int start, int len, RequestFont font, int[] outputGlyphPos);
+        Size MeasureString(char[] buffer, int start, int len, RequestFont r);
     }
 
     public struct Point

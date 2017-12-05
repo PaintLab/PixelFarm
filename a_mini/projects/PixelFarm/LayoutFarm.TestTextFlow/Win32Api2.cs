@@ -1,8 +1,7 @@
-//MIT, 2014-2017, WinterDev
+﻿//MIT, 2014-2017, WinterDev
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using PixelFarm.Drawing;
 
 namespace Win32
 {
@@ -513,10 +512,10 @@ namespace Win32
             return ((high << 0x10) | (low & 0xffff));
         }
 
-        public static int ColorToWin32(PixelFarm.Drawing.Color c)
-        {
-            return ((c.R | (c.G << 8)) | (c.B << 0x10));
-        }
+        //public static int ColorToWin32(PixelFarm.Drawing.Color c)
+        //{
+        //    return ((c.R | (c.G << 8)) | (c.B << 0x10));
+        //}
 
         /// <summary>
         /// Create a compatible memory HDC from the given HDC.<br/>
