@@ -26,7 +26,7 @@ namespace LayoutFarm.Text
         public static readonly VisualSelectionRangeSnapShot Empty = new VisualSelectionRangeSnapShot();
     }
 
-    class VisualSelectionRange
+    public class VisualSelectionRange
     {
         EditableVisualPointInfo startPoint = null;
         EditableVisualPointInfo endPoint = null;

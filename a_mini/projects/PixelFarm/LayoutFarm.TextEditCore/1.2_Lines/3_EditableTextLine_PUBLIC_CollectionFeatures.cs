@@ -1,6 +1,6 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
- 
+
 namespace LayoutFarm.Text
 {
     partial class EditableTextLine
@@ -65,25 +65,6 @@ namespace LayoutFarm.Text
         internal void UnsafeRemoveVisualElement(EditableRun v)
         {
             _runs.Remove(GetLineLinkedNode(v));
-        }
-        //        RenderElement RenderBoxes.IParentLink.ParentRenderElement
-        //        {
-        //            get { return this.OwnerFlowLayer.OwnerRenderElement; }
-        //        }
-        //        void RenderBoxes.IParentLink.AdjustLocation(ref Point p)
-        //        {
-        //            p.Y += this.LineTop;
-        //        }
-
-        //        RenderElement RenderBoxes.IParentLink.FindOverlapedChildElementAtPoint(RenderElement afterThisChild, Point point)
-        //        {
-        //            return null;
-        //        }
-        //#if DEBUG
-        //        string RenderBoxes.IParentLink.dbugGetLinkInfo()
-        //        {
-        //            return "editable-link";
-        //        }
-        //#endif
+        } 
     }
 }

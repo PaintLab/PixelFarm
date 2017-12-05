@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 namespace LayoutFarm.Text
 {
-    partial class EditableTextFlowLayer
+    public partial class EditableTextFlowLayer
     {
         public IEnumerable<EditableRun> GetRenderElementReverseIter()
         {

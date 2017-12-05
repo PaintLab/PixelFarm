@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 namespace LayoutFarm.Text
 {
-    class TextLineWriter : TextLineReader
+    public class TextLineWriter : TextLineReader
     {
         BackGroundTextLineWriter backgroundWriter;
         public TextLineWriter(EditableTextFlowLayer textLayer)
@@ -270,7 +270,7 @@ namespace LayoutFarm.Text
         }
     }
 
-    abstract class TextLineReader
+    public abstract class TextLineReader
     {
 #if DEBUG
         static int dbugTotalId;

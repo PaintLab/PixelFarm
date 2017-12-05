@@ -10,7 +10,7 @@ namespace LayoutFarm.Text
 #if DEBUG
     [DebuggerDisplay("ELN {dbugShortLineInfo}")]
 #endif
-    sealed partial class EditableTextLine
+    public sealed partial class EditableTextLine
     {
         LinkedList<EditableRun> _runs = new LinkedList<EditableRun>();
 
@@ -29,7 +29,7 @@ namespace LayoutFarm.Text
         static int dbugLineTotalCount = 0;
         internal int dbugLineId;
 #endif
-        internal EditableTextLine(EditableTextFlowLayer ownerFlowLayer)
+        public EditableTextLine(EditableTextFlowLayer ownerFlowLayer)
         {
 
             this.editableFlowLayer = ownerFlowLayer;

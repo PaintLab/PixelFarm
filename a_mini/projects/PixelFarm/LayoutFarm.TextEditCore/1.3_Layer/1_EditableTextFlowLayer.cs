@@ -16,7 +16,7 @@ namespace LayoutFarm.Text
     {
 
         void NotifyTextContentSizeChanged();
-        TextSurfaceEventListener TextSurfaceEventListener { get;  }
+        TextSurfaceEventListener TextSurfaceEventListener { get; }
         void SetTextSurfaceEventListner(TextSurfaceEventListener listener);
 
     }
@@ -39,20 +39,19 @@ namespace LayoutFarm.Text
 
 
         object lineCollection;
-        //public event EventHandler Reflow;
-        TextEditRenderBox owner;
+        ////public event EventHandler Reflow;
+        //TextEditRenderBox owner;
 
-        public EditableTextFlowLayer(TextEditRenderBox owner)
+        public EditableTextFlowLayer()
         {
-            this.owner = owner;
+
+
+            //this.owner = owner;
             //start with single line per layer
             //and can be changed to multiline
             lineCollection = new EditableTextLine(this);
         }
-        int ContainerWidth
-        {
-            get { return 400; } //fix?
-        }
+
         public TextSpanStyle CurrentTextSpanStyle
         {
             get; set;
@@ -210,7 +209,7 @@ namespace LayoutFarm.Text
             //            RenderBoxBase container = this.OwnerRenderElement as RenderBoxBase;
             //            if (container != null)
             //            {
-            PerformHorizontalFlowArrange(0, ContainerWidth, 0);
+            PerformHorizontalFlowArrange(0, this.Width, 0);
             //            }
 
             //            if (Reflow != null)

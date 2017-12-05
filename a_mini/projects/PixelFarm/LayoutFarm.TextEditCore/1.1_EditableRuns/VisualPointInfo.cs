@@ -108,7 +108,7 @@ namespace LayoutFarm.Text
     }
 
 
-    class EditableVisualPointInfo : VisualPointInfo
+    public class EditableVisualPointInfo : VisualPointInfo
     {
         EditableTextLine line;
         internal EditableVisualPointInfo(EditableTextLine line, int index)
