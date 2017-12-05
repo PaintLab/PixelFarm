@@ -52,13 +52,6 @@ namespace LayoutFarm.Text
             }
         }
 
-        public TextMan TextMan
-        {
-            get
-            {
-                return this.internalTextLayerController.TextMan;
-            }
-        }
         public static void NotifyTextContentSizeChanged(TextEditRenderBox ts)
         {
             ts.BoxEvaluateScrollBar();

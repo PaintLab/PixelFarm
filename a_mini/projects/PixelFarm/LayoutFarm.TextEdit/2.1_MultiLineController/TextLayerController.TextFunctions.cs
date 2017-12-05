@@ -13,16 +13,28 @@ namespace LayoutFarm.Text
         }
         public void ReplaceLine(int lineNum, IEnumerable<EditableRun> textruns)
         {
-            if (textLineWriter.LineNumber == backGroundTextLineWriter.LineNumber)
+            if (textLineWriter.LineNumber == lineNum)
             {
-                int prevIndex = textLineWriter.CharIndex;
+                //on the sameline
                 textLineWriter.ReplaceCurrentLine(textruns);
             }
             else
             {
-                backGroundTextLineWriter.MoveToLine(lineNum);
-                backGroundTextLineWriter.ReplaceCurrentLine(textruns);
+                int cur_line = textLineWriter.LineNumber;
+                textLineWriter.MoveToLine(lineNum);
+                textLineWriter.ReplaceCurrentLine(textruns);
+                textLineWriter.MoveToLine(cur_line);
             }
+            //if (textLineWriter.LineNumber == backGroundTextLineWriter.LineNumber)
+            //{
+            //    int prevIndex = textLineWriter.CharIndex;
+            //    textLineWriter.ReplaceCurrentLine(textruns);
+            //}
+            //else
+            //{
+            //    backGroundTextLineWriter.MoveToLine(lineNum);
+            //    backGroundTextLineWriter.ReplaceCurrentLine(textruns);
+            //}
         }
         public void LoadTextRun(IEnumerable<EditableRun> runs)
         {
@@ -204,8 +216,20 @@ namespace LayoutFarm.Text
         }
         public void CopyLine(int lineNum, StringBuilder output)
         {
-            backGroundTextLineWriter.MoveToLine(lineNum);
-            backGroundTextLineWriter.CopyLineContent(output);
+            if (textLineWriter.LineNumber == lineNum)
+            {
+                //on the sameline
+                textLineWriter.CopyLineContent(output);
+            }
+            else
+            {
+                int cur_line = textLineWriter.LineNumber;
+                textLineWriter.MoveToLine(lineNum);
+                textLineWriter.CopyLineContent(output);
+                textLineWriter.MoveToLine(cur_line);
+            }
+            //backGroundTextLineWriter.MoveToLine(lineNum);
+            //backGroundTextLineWriter.CopyLineContent(output);
         }
 
         public void StartSelect()

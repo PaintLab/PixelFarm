@@ -5,45 +5,45 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
-    public class TextMan
-    {
-        InternalTextLayerController innerTextMan;
-        TextEditRenderBox visualTextSurface;
-        internal TextMan(InternalTextLayerController innerTextMan, TextEditRenderBox visualTextSurface)
-        {
-            this.innerTextMan = innerTextMan;
-            this.visualTextSurface = visualTextSurface;
-        }
-        public void AttachTextDomListener(TextSurfaceEventListener listener)
-        {
-            
-            this.visualTextSurface.TextSurfaceListener = listener;
-        }
-        public void AddTextRunsToCurrentLine(IEnumerable<EditableRun> textRuns)
-        {
-            this.innerTextMan.AddTextRunsToCurrentLine(textRuns);
-        }
-        public void SplitCurrentLineIntoNewLine()
-        {
-            this.innerTextMan.SplitCurrentLineIntoNewLine();
-        }
+    //public class TextMan
+    //{
+    //    InternalTextLayerController innerTextMan;
+    //    TextEditRenderBox visualTextSurface;
+    //    internal TextMan(InternalTextLayerController innerTextMan, TextEditRenderBox visualTextSurface)
+    //    {
+    //        this.innerTextMan = innerTextMan;
+    //        this.visualTextSurface = visualTextSurface;
+    //    }
+    //    public void AttachTextDomListener(TextSurfaceEventListener listener)
+    //    {
+
+    //        this.visualTextSurface.TextSurfaceListener = listener;
+    //    }
+    //    public void AddTextRunsToCurrentLine(IEnumerable<EditableRun> textRuns)
+    //    {
+    //        this.innerTextMan.AddTextRunsToCurrentLine(textRuns);
+    //    }
+    //    public void SplitCurrentLineIntoNewLine()
+    //    {
+    //        this.innerTextMan.SplitCurrentLineIntoNewLine();
+    //    }
 
 
-        public EditableRun CurrentTextRun
-        {
-            get
-            {
-                return this.innerTextMan.CurrentTextRun;
-            }
-        }
-        public int CurrentTextRunCharIndex
-        {
-            get
-            {
-                return this.innerTextMan.CurrentTextRunCharIndex;
-            }
-        }
-    }
+    //    public EditableRun CurrentTextRun
+    //    {
+    //        get
+    //        {
+    //            return this.innerTextMan.CurrentTextRun;
+    //        }
+    //    }
+    //    public int CurrentTextRunCharIndex
+    //    {
+    //        get
+    //        {
+    //            return this.innerTextMan.CurrentTextRunCharIndex;
+    //        }
+    //    }
+    //}
 
 
     partial class InternalTextLayerController
@@ -52,10 +52,10 @@ namespace LayoutFarm.Text
         internal bool updateJustCurrentLine = true;
         bool enableUndoHistoryRecording = true;
         DocumentCommandCollection commandHistory;
-        BackGroundTextLineWriter backGroundTextLineWriter;
+        //BackGroundTextLineWriter backGroundTextLineWriter;
         TextLineWriter textLineWriter;
         TextEditRenderBox visualTextSurface;
-        TextMan textMan;
+        //TextMan textMan;
 #if DEBUG
         dbugMultiTextManRecorder dbugTextManRecorder;
         internal bool dbugEnableTextManRecorder = false;
@@ -67,9 +67,9 @@ namespace LayoutFarm.Text
         {
             this.visualTextSurface = visualTextSurface;
             textLineWriter = new TextLineWriter(textLayer);
-            backGroundTextLineWriter = textLineWriter.GetBackgroundWriter();
+            //backGroundTextLineWriter = textLineWriter.GetBackgroundWriter();
             commandHistory = new DocumentCommandCollection(this);
-            this.textMan = new TextMan(this, visualTextSurface);
+            //this.textMan = new TextMan(this, visualTextSurface);
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -80,13 +80,13 @@ namespace LayoutFarm.Text
             }
 #endif
         }
-        public TextMan TextMan
-        {
-            get
-            {
-                return this.textMan;
-            }
-        }
+        //public TextMan TextMan
+        //{
+        //    get
+        //    {
+        //        return this.textMan;
+        //    }
+        //}
 
         public bool EnableUndoHistoryRecording
         {

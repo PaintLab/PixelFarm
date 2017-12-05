@@ -6,37 +6,37 @@ namespace LayoutFarm.Text
 {
     public partial class EditableTextFlowLayer
     {
-        public IEnumerable<EditableRun> GetRenderElementReverseIter()
-        {
-            if (lineCollection != null)
-            {
-                if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
-                {
-                    List<EditableTextLine> lines = (List<EditableTextLine>)lineCollection;
-                    int j = lines.Count;
-                    for (int i = lines.Count; i > -1; --i)
-                    {
-                        EditableTextLine ln = lines[i];
-                        LinkedListNode<EditableRun> veNode = ln.Last;
-                        while (veNode != null)
-                        {
-                            yield return veNode.Value;
-                            veNode = veNode.Previous;
-                        }
-                    }
-                }
-                else
-                {
-                    EditableTextLine ln = (EditableTextLine)lineCollection;
-                    LinkedListNode<EditableRun> veNode = ln.Last;
-                    while (veNode != null)
-                    {
-                        yield return veNode.Value;
-                        veNode = veNode.Previous;
-                    }
-                }
-            }
-        }
+        //public IEnumerable<EditableRun> GetRenderElementReverseIter()
+        //{
+        //    if (lineCollection != null)
+        //    {
+        //        if ((layerFlags & FLOWLAYER_HAS_MULTILINE) != 0)
+        //        {
+        //            List<EditableTextLine> lines = (List<EditableTextLine>)lineCollection;
+        //            int j = lines.Count;
+        //            for (int i = lines.Count; i > -1; --i)
+        //            {
+        //                EditableTextLine ln = lines[i];
+        //                LinkedListNode<EditableRun> veNode = ln.Last;
+        //                while (veNode != null)
+        //                {
+        //                    yield return veNode.Value;
+        //                    veNode = veNode.Previous;
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            EditableTextLine ln = (EditableTextLine)lineCollection;
+        //            LinkedListNode<EditableRun> veNode = ln.Last;
+        //            while (veNode != null)
+        //            {
+        //                yield return veNode.Value;
+        //                veNode = veNode.Previous;
+        //            }
+        //        }
+        //    }
+        //}
         public IEnumerable<EditableRun> GetRenderElementIter()
         {
             if (lineCollection != null)

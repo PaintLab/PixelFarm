@@ -1,9 +1,62 @@
-﻿
+﻿using System.Collections.Generic;
+
 namespace LayoutFarm.Text
 {
+    public enum FontStyle : byte
+    {
+        Regular = 0,
+        Bold = 1,
+        Italic = 1 << 1,
+        Underline = 1 << 2,
+        Strikeout = 1 << 3
+    }
+    public struct FontKey
+    {
+
+        public readonly int FontNameIndex;
+        public readonly float FontSize;
+        public readonly FontStyle FontStyle;
+
+        public FontKey(string fontname, float fontSize, FontStyle fs)
+        {
+            //font name/ not filename
+            this.FontNameIndex = RegisterFontName(fontname.ToLower());
+            this.FontSize = fontSize;
+            this.FontStyle = fs;
+        }
+
+        static Dictionary<string, int> registerFontNames = new Dictionary<string, int>();
+        static FontKey()
+        {
+            RegisterFontName(""); //blank font name
+        }
+        static int RegisterFontName(string fontName)
+        {
+            fontName = fontName.ToUpper();
+            int found;
+            if (!registerFontNames.TryGetValue(fontName, out found))
+            {
+                int nameIndex = registerFontNames.Count;
+                registerFontNames.Add(fontName, nameIndex);
+                return nameIndex;
+            }
+            return found;
+        }
+    }
     public interface TextSurfaceEventListener { }
 
-    public class RequestFont { }
+    public abstract class RequestFont
+    {
+        public FontKey FontKey { get; set; }
+        public string Name { get; set; }
+        public float SizeInPoints { get; set; }
+        public RequestFont(string name, float sizeInPnt, FontStyle style)
+        {
+            this.Name = name;
+            this.FontKey = new FontKey(name, sizeInPnt, style);
+            this.SizeInPoints = sizeInPnt;
+        }
+    }
 
     public static class FontService1
     {
@@ -18,14 +71,14 @@ namespace LayoutFarm.Text
             {
                 return s_fontService.DefaultFont;
             }
-        } 
+        }
         public static void CalculateGlyphAdvancePos(char[] buffer, int start, int len, RequestFont font, int[] outputGlyphPos)
         {
             s_fontService.CalculateGlyphAdvancePos(buffer, start, len, font, outputGlyphPos);
         }
         public static Size MeasureString(char[] buffer, int start, int len, RequestFont r)
         {
-            return s_fontService.MeasureString(buffer, start, len, r); 
+            return s_fontService.MeasureString(buffer, start, len, r);
         }
     }
 

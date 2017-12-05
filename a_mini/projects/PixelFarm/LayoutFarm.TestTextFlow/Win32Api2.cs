@@ -2,9 +2,478 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using LayoutFarm.Text;
+using System.Collections.Generic;
 
 namespace Win32
 {
+
+    public class ActualFont { }
+    class WinGdiFontFace
+    {
+        public WinGdiFontFace(string name)
+        {
+            this.Name = name;
+        }
+        public string Name { get; set; }
+    }
+
+
+    class WinGdiFont : ActualFont
+    {
+        /// <summary>
+        /// font 'em' height?
+        /// </summary>
+        float fontSizeInPoints;
+        float emSizeInPixels;
+        float ascendInPixels;
+        float descentInPixels;
+        float linegapInPixels;
+        WinGdiFontFace fontFace;
+        int[] charWidths;
+        NativeTextWin32.FontABC[] charAbcWidths;
+
+        IntPtr hfont;
+        FontStyle fontStyle;
+        public WinGdiFont(WinGdiFontFace fontFace, float sizeInPoints, FontStyle style)
+        {
+
+            this.fontFace = fontFace;
+            this.fontSizeInPoints = sizeInPoints;
+            this.fontStyle = style;
+
+            this.fontSizeInPoints = sizeInPoints;
+            //this.emSizeInPixels = PixelFarm.Drawing.RequestFont.ConvEmSizeInPointsToPixels(this.fontSizeInPoints);
+            this.hfont = InitFont(fontFace.Name, sizeInPoints, style);
+            //------------------------------------------------------------------
+            //create gdi font from font data
+            //build font matrix             ;
+            WinGdiTextService.MeasureCharWidths(hfont, out charWidths, out charAbcWidths);
+            //float scale = fontFace.GetScale(sizeInPoints);
+            //ascendInPixels = fontFace.AscentInDzUnit * scale;
+            //descentInPixels = fontFace.DescentInDzUnit * scale;
+            //linegapInPixels = fontFace.LineGapInDzUnit * scale;
+
+            //------------------------------------------------------------------
+
+
+            //int emHeightInDzUnit = f.FontFamily.GetEmHeight(f.Style);
+            //this.ascendInPixels = Font.ConvEmSizeInPointsToPixels((f.FontFamily.GetCellAscent(f.Style) / emHeightInDzUnit));
+            //this.descentInPixels = Font.ConvEmSizeInPointsToPixels((f.FontFamily.GetCellDescent(f.Style) / emHeightInDzUnit));
+
+            ////--------------
+            ////we build font glyph, this is just win32 glyph
+            ////
+            //int j = charAbcWidths.Length;
+            //fontGlyphs = new FontGlyph[j];
+            //for (int i = 0; i < j; ++i)
+            //{
+            //    FontGlyph glyph = new FontGlyph();
+            //    glyph.horiz_adv_x = charWidths[i] << 6;
+            //    fontGlyphs[i] = glyph;
+            //}
+
+        }
+        public string FontName
+        {
+            get { return fontFace.Name; }
+        }
+        public FontStyle FontStyle
+        {
+            get { return fontStyle; }
+        }
+
+        static int s_POINTS_PER_INCH = 72; //default value
+        static int s_PIXELS_PER_INCH = 96; //default value
+
+        static float ConvEmSizeInPointsToPixels(float emsizeInPoint)
+        {
+            return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
+        }
+
+        static IntPtr InitFont(string fontName, float emHeight, FontStyle style)
+        {
+            //see: MSDN, LOGFONT structure
+            //https://msdn.microsoft.com/en-us/library/windows/desktop/dd145037(v=vs.85).aspx
+            MyWin32.LOGFONT logFont = new MyWin32.LOGFONT();
+            MyWin32.SetFontName(ref logFont, fontName);
+            logFont.lfHeight = -(int)ConvEmSizeInPointsToPixels(emHeight);//minus **
+            logFont.lfCharSet = 1;//default
+            logFont.lfQuality = 0;//default
+
+            MyWin32.LOGFONT_FontWeight weight =
+                ((style & FontStyle.Bold) == FontStyle.Bold) ?
+                MyWin32.LOGFONT_FontWeight.FW_BOLD :
+                MyWin32.LOGFONT_FontWeight.FW_REGULAR;
+            logFont.lfWeight = (int)weight;
+            //
+            logFont.lfItalic = (byte)(((style & FontStyle.Italic) == FontStyle.Italic) ? 1 : 0);
+            return MyWin32.CreateFontIndirect(ref logFont);
+        }
+        public System.IntPtr CachedHFont()
+        {
+            return this.hfont;
+        }
+        //public override float SizeInPoints
+        //{
+        //    get { return fontSizeInPoints; }
+        //}
+        //public override float SizeInPixels
+        //{
+        //    get { return emSizeInPixels; }
+        //}
+        //protected override void OnDispose()
+        //{ 
+        //    //TODO: review here 
+        //    MyWin32.DeleteObject(hfont);
+        //    hfont = IntPtr.Zero; 
+        //} 
+        internal NativeTextWin32.FontABC[] GetInteralABCArray()
+        {
+            return this.charAbcWidths;
+        }
+        //public override FontGlyph GetGlyphByIndex(uint glyphIndex)
+        //{
+        //    throw new NotImplementedException();
+        //}
+        //public override FontGlyph GetGlyph(char c)
+        //{
+        //    //convert c to glyph index
+        //    //temp fix  
+        //    throw new NotImplementedException();
+        //}
+        //public override FontFace FontFace
+        //{
+        //    get
+        //    {
+        //        throw new NotImplementedException();
+        //    }
+        //}
+        //public override float AscentInPixels
+        //{
+        //    get
+        //    {
+        //        return ascendInPixels;
+        //    }
+        //}
+        //public override float LineGapInPixels
+        //{
+        //    get { return linegapInPixels; }
+        //}
+        //public override float RecommendedLineSpacingInPixels
+        //{
+        //    get { return AscentInPixels - DescentInPixels + LineGapInPixels; }
+        //}
+        //public override float DescentInPixels
+        //{
+        //    get
+        //    {
+        //        return descentInPixels;
+        //    }
+        //}
+        //public void AssignToRequestFont(RequestFont r)
+        //{
+        //    SetCacheActualFont(r, this);
+        //}
+        public static WinGdiFont GetCacheFontAsWinGdiFont(RequestFont r)
+        {
+            RequestFontImpl requestFontImpl = (RequestFontImpl)r;
+            return requestFontImpl._platformFont;
+        }
+    }
+    class RequestFontImpl : RequestFont
+    {
+        public RequestFontImpl(
+            string fontName, float sizeInPts, FontStyle style = FontStyle.Regular)
+            : base(fontName, sizeInPts, style)
+        {
+
+
+        }
+        public WinGdiFont _platformFont;
+    }
+
+    class TextLayerFontServiceImpl : TextLayerFontService
+    {
+        public RequestFontImpl _defaultFont;
+        public TextLayerFontServiceImpl()
+        {
+
+            //_defaultFont._platformFont = WinGdiFontSystem.GetWinGdiFont(_defaultFont);
+        }
+        public RequestFont DefaultFont
+        {
+            get
+            {
+                return _defaultFont;
+            }
+        }
+        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
+        {
+            WinGdiTextService.CalculateGlyphAdvancePos(str, startAt, len, font, glyphXAdvances);
+        }
+        public LayoutFarm.Text.Size MeasureString(char[] buffer, int start, int len, RequestFont r)
+        {
+
+            return WinGdiTextService.MeasureString(buffer, start, len, r);
+        }
+    }
+
+
+
+
+    struct FontFaceKey
+    {
+        public readonly int FontNameIndex;
+        public readonly FontStyle FontStyle;
+        public FontFaceKey(FontKey fontKey)
+        {
+            this.FontNameIndex = fontKey.FontNameIndex;
+            this.FontStyle = fontKey.FontStyle;
+        }
+    }
+
+
+    class WinGdiFontSystem
+    {
+
+        static RequestFont latestFont;
+        static WinGdiFont latestWinFont;
+        static Dictionary<FontKey, WinGdiFont> registerFonts = new Dictionary<FontKey, WinGdiFont>();
+        static Dictionary<FontFaceKey, WinGdiFontFace> winGdiFonFaces = new Dictionary<FontFaceKey, WinGdiFontFace>();
+
+        public static WinGdiFont GetWinGdiFont(RequestFont f)
+        {
+            if (f == null)
+            {
+                throw new NotSupportedException();
+            }
+            if (f == latestFont)
+            {
+                return latestWinFont;
+            }
+            WinGdiFont actualFontInside = WinGdiFont.GetCacheFontAsWinGdiFont(f);
+            if (actualFontInside != null)
+            {
+                return actualFontInside;
+            }
+            //-----
+            //need to create a new one
+            //get register font or create the new one
+            FontKey key = f.FontKey;
+            WinGdiFont found;
+            if (!registerFonts.TryGetValue(key, out found))
+            {
+                //create the new one and register                  
+                //create fontface
+                FontFaceKey fontfaceKey = new FontFaceKey(key);
+                WinGdiFontFace fontface;
+                if (!winGdiFonFaces.TryGetValue(fontfaceKey, out fontface))
+                {
+                    //create new 
+                    fontface = new WinGdiFontFace(f.Name);
+                    winGdiFonFaces.Add(fontfaceKey, fontface);
+                }
+
+                var winGdiFont = new WinGdiFont(fontface, f.SizeInPoints, FontStyle.Regular);
+                found = winGdiFont;
+                registerFonts.Add(key, found);//cache here
+            }
+            latestFont = f;
+            RequestFontImpl reqFont = (RequestFontImpl)f;
+            if (reqFont._platformFont == null)
+            {
+                reqFont._platformFont = found;
+            }
+
+            //found.AssignToRequestFont(f);
+            return latestWinFont = found;
+        }
+    }
+    public static class WinGdiTextService
+    {
+        //TODO: consider use uniscribe
+
+        static NativeWin32MemoryDc win32MemDc;
+
+        //=====================================
+        //static 
+        static readonly int[] _charFit = new int[1];
+        static readonly int[] _charFitWidth = new int[1000];
+
+        static float whitespaceSize = -1;
+        static char[] whitespace = new char[1];
+        static Encoding s_en;
+        static WinGdiTextService()
+        {
+            s_en = Encoding.Default; //use platform's default encoding
+            win32MemDc = new NativeWin32MemoryDc(2, 2);
+            whitespace[0] = ' ';
+
+        }
+        public static void SetDefaultEncoding(Encoding encoding)
+        {
+            s_en = encoding;
+        }
+
+        const int MAX_CODEPOINT_NO = 255;
+        internal static void MeasureCharWidths(IntPtr hFont,
+            out int[] charWidths,
+            out NativeTextWin32.FontABC[] abcSizes)
+        {
+
+            //only in ascii range
+            //current version
+            charWidths = new int[MAX_CODEPOINT_NO + 1]; // 
+            MyWin32.SelectObject(win32MemDc.DC, hFont);
+            unsafe
+            {
+                //see: https://msdn.microsoft.com/en-us/library/ms404377(v=vs.110).aspx
+                //A code page contains 256 code points and is zero-based.
+                //In most code pages, code points 0 through 127 represent the ASCII character set,
+                //and code points 128 through 255 differ significantly between code pages
+                abcSizes = new NativeTextWin32.FontABC[MAX_CODEPOINT_NO + 1];
+                fixed (NativeTextWin32.FontABC* abc = abcSizes)
+                {
+                    NativeTextWin32.GetCharABCWidths(win32MemDc.DC, (uint)0, (uint)MAX_CODEPOINT_NO, abc);
+                }
+                for (int i = 0; i < (MAX_CODEPOINT_NO + 1); ++i)
+                {
+                    charWidths[i] = abcSizes[i].Sum;
+                }
+
+            }
+        }
+
+        public static float MeasureWhitespace(RequestFont f)
+        {
+            return whitespaceSize = MeasureString(whitespace, 0, 1, f).Width;
+        }
+        static WinGdiFont SetFont(RequestFont font)
+        {
+            WinGdiFont winFont = WinGdiFontSystem.GetWinGdiFont(font);
+            MyWin32.SelectObject(win32MemDc.DC, winFont.CachedHFont());
+            return winFont;
+        }
+        /// <summary>
+        /// measure blank line height in px
+        /// </summary>
+        /// <param name="font"></param>
+        /// <returns></returns>
+        public static int MeasureBlankLineHeight(RequestFont font)
+        {
+            return 14;//temp fix
+            //WinGdiFont winFont = WinGdiFontSystem.GetWinGdiFont(font);
+            //return (int)winFont.RecommendedLineSpacingInPixels;
+        }
+        public static Size MeasureString(char[] buff, int startAt, int len, RequestFont font)
+        {
+
+            SetFont(font);
+            var size = new Size();
+            if (buff.Length > 0)
+            {
+                unsafe
+                {
+                    fixed (char* startAddr = &buff[0])
+                    {
+                        NativeTextWin32.UnsafeGetTextExtentPoint32(win32MemDc.DC, startAddr + startAt, len, ref size);
+                    }
+                }
+            }
+            return size;
+
+        }
+        /// <summary>
+        /// Measure the width and height of string <paramref name="str"/> when drawn on device context HDC
+        /// using the given font <paramref name="font"/>.<br/>
+        /// Restrict the width of the string and get the number of characters able to fit in the restriction and
+        /// the width those characters take.
+        /// </summary>
+        /// <param name="str">the string to measure</param>
+        /// <param name="font">the font to measure string with</param>
+        /// <param name="maxWidth">the max width to render the string in</param>
+        /// <param name="charFit">the number of characters that will fit under <see cref="maxWidth"/> restriction</param>
+        /// <param name="charFitWidth"></param>
+        /// <returns>the size of the string</returns>
+        public static Size MeasureString(char[] buff, int startAt, int len, RequestFont font, float maxWidth, out int charFit, out int charFitWidth)
+        {
+            //if (_useGdiPlusTextRendering)
+            //{
+            //    ReleaseHdc();
+            //    throw new NotSupportedException("Char fit string measuring is not supported for GDI+ text rendering");
+            //}
+            //else
+            //{
+            SetFont(font);
+            if (buff.Length == 0)
+            {
+                charFit = 0;
+                charFitWidth = 0;
+                return Size.Empty;
+            }
+            var size = new Size();
+            unsafe
+            {
+                fixed (char* startAddr = &buff[0])
+                {
+                    NativeTextWin32.UnsafeGetTextExtentExPoint(
+                        win32MemDc.DC, startAddr + startAt, len,
+                        (int)Math.Round(maxWidth), _charFit, _charFitWidth, ref size);
+                }
+            }
+            charFit = _charFit[0];
+            charFitWidth = charFit > 0 ? _charFitWidth[charFit - 1] : 0;
+            return size;
+            //}
+        }
+        //==============================================
+
+        public static void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
+        {
+            unsafe
+            {
+                if (len == 0)
+                {
+                    return;
+                }
+
+                WinGdiFont winfont = SetFont(font);
+                //ushort* glyhIndics = stackalloc ushort[len];
+                //fixed (char* s = &str[startAt])
+                //{
+                //    NativeTextWin32.GetGlyphIndices(
+                //        win32MemDc.DC,
+                //        s,
+                //        len,
+                //        glyhIndics,
+                //        0);
+                //}
+                byte[] encoding = s_en.GetBytes(str, startAt, len);
+                NativeTextWin32.FontABC[] abcWidths = winfont.GetInteralABCArray();
+                for (int i = 0; i < len; ++i)
+                {
+                    //ushort glyphIndex = *(glyhIndics + i);
+                    int enc_index = encoding[i];
+                    if (enc_index == 0)
+                    {
+                        break;//?
+                    }
+                    glyphXAdvances[i] = abcWidths[enc_index].Sum;
+                }
+            }
+        }
+        public static ActualFont GetWinGdiFont(RequestFont f)
+        {
+            return WinGdiFontSystem.GetWinGdiFont(f);
+        }
+    }
+
+
+
+
+
+
     [StructLayout(LayoutKind.Sequential)]
     struct BlendFunction
     {
@@ -69,6 +538,7 @@ namespace Win32
 
     public static class MyWin32
     {
+        //TODO: review here again***
         //this is platform specific ***
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
         public static unsafe extern void memset(byte* dest, byte c, int byteCount);

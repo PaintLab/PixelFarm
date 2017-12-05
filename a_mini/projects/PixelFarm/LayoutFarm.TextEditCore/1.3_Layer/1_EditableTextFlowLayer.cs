@@ -13,7 +13,8 @@ namespace LayoutFarm.Text
         int TestPointY { get; }
     }
     public interface TextEditRenderBox
-    {        void NotifyTextContentSizeChanged();
+    {
+        void NotifyTextContentSizeChanged();
         TextSurfaceEventListener TextSurfaceEventListener { get; }
         void SetTextSurfaceEventListner(TextSurfaceEventListener listener);
     }
@@ -36,30 +37,19 @@ namespace LayoutFarm.Text
 
 
         object lineCollection;
-        ////public event EventHandler Reflow;
-        //TextEditRenderBox owner;
 
         public EditableTextFlowLayer()
         {
-
-
-            //this.owner = owner;
             //start with single line per layer
             //and can be changed to multiline
             lineCollection = new EditableTextLine(this);
         }
-
+        public int Width { get; set; }
+        public int Height { get; set; }
         public TextSpanStyle CurrentTextSpanStyle
         {
-            get; set;
-        }
-
-        public int DefaultWidth
-        {
-            get
-            {
-                return 200;
-            }
+            get;
+            set;
         }
         public bool FlowLayerHasMultiLines
         {
@@ -245,8 +235,7 @@ namespace LayoutFarm.Text
 #endif
         }
 
-        public int Width { get; set; }
-        public int Height { get; set; }
+       
         void SetPostCalculateLayerContentSize(int w, int h)
         {
             this.Width = w;
@@ -446,12 +435,9 @@ namespace LayoutFarm.Text
                                 if (v_desired_height > maxHeightInRow)
                                 {
                                     maxHeightInRow = v_desired_height;
-                                }
-
-
+                                } 
                                 currentRun.SetLocation(curX, 0);
-                                currentRun.SetSize(v_desired_width, v_desired_height);
-
+                                currentRun.SetSize(v_desired_width, v_desired_height); 
 
                                 currentRun.MarkValidContentArrangement();
                                 curX += v_desired_width;

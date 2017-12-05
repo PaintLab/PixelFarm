@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Text;
 namespace LayoutFarm.Text
 {
-    public class TextLineWriter : TextLineReader
+     class TextLineWriter : TextLineReader
     {
-        BackGroundTextLineWriter backgroundWriter;
+        
         public TextLineWriter(EditableTextFlowLayer textLayer)
             : base(textLayer)
         {
@@ -19,17 +19,17 @@ namespace LayoutFarm.Text
                 return this.TextLayer.CurrentTextSpanStyle;
             }
         }
-        internal BackGroundTextLineWriter GetBackgroundWriter()
-        {
-            if (backgroundWriter == null)
-            {
-                backgroundWriter = new BackGroundTextLineWriter(this.TextLayer);
-#if DEBUG
-                backgroundWriter.dbugTextManRecorder = this.dbugTextManRecorder;
-#endif
-            }
-            return backgroundWriter;
-        }
+//        internal BackGroundTextLineWriter GetBackgroundWriter()
+//        {
+//            if (backgroundWriter == null)
+//            {
+//                backgroundWriter = new BackGroundTextLineWriter(this.TextLayer);
+//#if DEBUG
+//                backgroundWriter.dbugTextManRecorder = this.dbugTextManRecorder;
+//#endif
+//            }
+//            return backgroundWriter;
+//        }
         public void Reload(IEnumerable<EditableRun> runs)
         {
             this.TextLayer.Reload(runs);
@@ -261,6 +261,8 @@ namespace LayoutFarm.Text
 
             this.TextLayer.TopDownReCalculateContentSize();
             EnsureCurrentTextRun();
+            //
+            
         }
         public EditableVisualPointInfo[] SplitSelectedText(VisualSelectionRange selectionRange)
         {
@@ -641,12 +643,12 @@ namespace LayoutFarm.Text
                     throw new NotSupportedException("index out of range");
                 }
 
-#if DEBUG
-                if (value > 10)
-                {
+                //#if DEBUG
+                //                if (value > 10)
+                //                {
 
-                }
-#endif
+                //                }
+                //#endif
 
                 if (value == -1)
                 {
@@ -827,11 +829,5 @@ namespace LayoutFarm.Text
         }
         #endregion
     }
-    class BackGroundTextLineWriter : TextLineWriter
-    {
-        public BackGroundTextLineWriter(EditableTextFlowLayer visualElementLayer)
-            : base(visualElementLayer)
-        {
-        }
-    }
+    
 }

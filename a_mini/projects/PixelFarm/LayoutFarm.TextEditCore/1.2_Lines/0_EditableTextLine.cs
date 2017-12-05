@@ -209,7 +209,7 @@ namespace LayoutFarm.Text
             get
             {
                 //TODO: review here again
-                return new Rectangle(0, lineTop, this.editableFlowLayer.DefaultWidth, 17);
+                return new Rectangle(0, lineTop, this.editableFlowLayer.Width, 17);
             }
         }
         internal IEnumerable<EditableRun> GetVisualElementForward(EditableRun startVisualElement)
