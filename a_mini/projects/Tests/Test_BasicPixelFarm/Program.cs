@@ -16,19 +16,16 @@ namespace TestGraphicPackage2
 #endif
             //-------------------------------
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            //test Typography's custom text break, 
-            Typography.TextBreak.CustomBreakerBuilder.Setup(@"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries");
-            //default text breaker, this bridge between 
-            LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker(); 
-
+            Application.SetCompatibleTextRenderingDefault(false); 
             //you can use your font loader
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
+            YourImplementation.BootStrapWinGdi.SetupDefaultValues();
 
 #if GL_ENABLE
-            PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
+            YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
 #endif
+            //default text breaker, this bridge between 
+            LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
+
             ////------------------------------- 
             formDemoList = new LayoutFarm.Dev.FormDemoList();
             formDemoList.LoadDemoList(typeof(Program));
