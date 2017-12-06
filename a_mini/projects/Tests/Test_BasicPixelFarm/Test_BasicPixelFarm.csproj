@@ -208,10 +208,6 @@
       <Project>{8963dd34-ce0a-42cd-b3b2-d73031b8f0a0}</Project>
       <Name>YourImplementation.PixelFarm</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Test0_Dev\Test0_Dev.csproj">
-      <Project>{3b23a8fc-89f0-415d-b5d3-2740bc86d09c}</Project>
-      <Name>Test0_Dev</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

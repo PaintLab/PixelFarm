@@ -28,7 +28,7 @@ namespace PixelFarm.Drawing
                     case "HELVETICA":
                         return fontCollection.GetFont("Arial", style);
                     case "TAHOMA":
-                        //default font must found
+                        //default font must be found
                         //if not throw err 
                         //this prevent infinit loop
                         throw new System.NotSupportedException();

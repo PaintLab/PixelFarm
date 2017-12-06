@@ -18,13 +18,14 @@ namespace TestGraphicPackage2
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            //test Typography's custom text break, 
+            Typography.TextBreak.CustomBreakerBuilder.Setup(@"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries");
+            //default text breaker, this bridge between 
+            LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker(); 
 
-            Typography.TextBreak.CustomBreakerBuilder.DataDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries";
-            LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
-            //RootDemoPath.Path = @"..\Data";
             //you can use your font loader
-
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
+
 #if GL_ENABLE
             PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
 #endif
