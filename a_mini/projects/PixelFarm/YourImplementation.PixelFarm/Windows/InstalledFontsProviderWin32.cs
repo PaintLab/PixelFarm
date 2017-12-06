@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing
     /// <summary>
     /// provide installed font from Windows directory
     /// </summary>
-    public class InstallFontsProviderWin32 : IInstalledFontProvider
+    public class InstalledFontsProviderWin32 : IInstalledFontProvider
     {
         public IEnumerable<string> GetInstalledFontIter()
         {
