@@ -39,9 +39,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\pixelfarm\win32utils\MyWin32.cs">
-      <Link>YourImplementation\Win32Utils\MyWin32.cs</Link>
-    </Compile>
     <Compile Include="Demo1.1\1.12_SmallAnimation.cs" />
     <Compile Include="Demo1.1\1.14_Demo_EasingFuncs.cs" />
     <Compile Include="Demo1.1\1.15_Demo_Drag2.cs" />
@@ -81,8 +78,6 @@
     <Compile Include="Demo1\1.9_Demo_TreeView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SampleViewportExtension.cs" />
-    <Compile Include="SimpleDelegates.cs" />
     <Compile Include="x_unused\x_MyGlfwForm.cs" />
     <Compile Include="x_unused\x_notusedOpenGLPortal.cs" />
     <Compile Include="Demo2\2.1_Demo_SingleLineTextBox.cs" />
@@ -91,28 +86,6 @@
     <Compile Include="Demo2\2.4_Demo_SingleTextLine_With_Compartment.cs" />
     <Compile Include="Demo2\2.5_Demo_MultiLineTextBox_WithSugggestion.cs" />
     <Compile Include="Demo2\2.6_Demo_MultiLineText_WithSuggestionPopupWin.cs" />
-    <Compile Include="YourImplementation\DemoBase.cs" />
-    <Compile Include="YourImplementation\FormCanvasHelper.cs" />
-    <Compile Include="YourImplementation\FormDemoList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="YourImplementation\FormDemoList.Designer.cs">
-      <DependentUpon>FormDemoList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="YourImplementation\FormLayoutInspector.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="YourImplementation\FormLayoutInspector.Designer.cs">
-      <DependentUpon>FormLayoutInspector.cs</DependentUpon>
-    </Compile>
-    <Compile Include="YourImplementation\FormPrint.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="YourImplementation\FormPrint.Designer.cs">
-      <DependentUpon>FormPrint.cs</DependentUpon>
-    </Compile>
-    <Compile Include="YourImplementation\MyTextBreaker.cs" />
-    <Compile Include="YourImplementation\SampleViewport.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -122,16 +95,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="YourImplementation\FormDemoList.resx">
-      <DependentUpon>FormDemoList.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="YourImplementation\FormLayoutInspector.resx">
-      <DependentUpon>FormLayoutInspector.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="YourImplementation\FormPrint.resx">
-      <DependentUpon>FormPrint.cs</DependentUpon>
-    </EmbeddedResource>
     <Compile Include="Demo1.1\1.10_Demo_Images.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -168,10 +131,6 @@
       <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
       <Name>PixelFarm.Drawing.GdiPlus</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
-      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
-      <Name>PixelFarm.Drawing.GLES2</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.MiniAgg.csproj">
       <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
       <Name>PixelFarm.Drawing.MiniAgg</Name>
@@ -179,14 +138,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
-      <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
-      <Name>PixelFarm.MiniOpenTK</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj">
-      <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
-      <Name>PixelFarm.OpenTKWinForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
@@ -207,6 +158,10 @@
     <ProjectReference Include="..\..\PixelFarm\YourImplementation.PixelFarm\YourImplementation.PixelFarm.csproj">
       <Project>{8963dd34-ce0a-42cd-b3b2-d73031b8f0a0}</Project>
       <Name>YourImplementation.PixelFarm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Test_Demo01\Test_Demo01.csproj">
+      <Project>{3e30e0d2-1cd7-42cc-9555-614105ef9c56}</Project>
+      <Name>Test_Demo01</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
