@@ -169,7 +169,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutFarm.TextFlow", "Pixe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutFarm.TestTextFlow", "PixelFarm\LayoutFarm.TestTextFlow\LayoutFarm.TestTextFlow.csproj", "{FAB87D02-52FB-47CF-9FBD-AAD7B86C42A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_Demo01", "Tests\Test_Demo01\Test_Demo01.csproj", "{3E30E0D2-1CD7-42CC-9555-614105EF9C56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormTestBed", "Tests\WinFormTestBed\WinFormTestBed.csproj", "{3E30E0D2-1CD7-42CC-9555-614105EF9C56}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
