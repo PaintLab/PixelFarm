@@ -12,14 +12,21 @@ namespace LayoutFarm.Text
         EditableTextLine ownerTextLine;
         //TODO: review this again -> change to list,
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
+
         public EditableRun()
         {
-            IsBlockElement = false;
+            IsInlineBlockElement = false;
         }
-        public int Width { get; set; }
-        public int Height { get; set; }
+
         public int X { get; set; }
         public int Y { get; set; }
+        public void SetLocation(int x, int y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+        public int Width { get; private set; }
+        public int Height { get; private set; }
         public int Right
         {
             get
@@ -44,22 +51,23 @@ namespace LayoutFarm.Text
         }
         public void MarkValidContentArrangement()
         {
-
+            //the span is marked as invalid content arrangement when
+            //1. change text content
+            //2. chnage font (style, name, size) 
         }
         public void MarkHasValidCalculateSize()
         {
+            //the span is marked as invalid content arrangement when
+            //1. change text content
+            //2. chnage font (style, name, size) 
             _isSizeValid = true;
         }
-        public bool IsBlockElement
+        public bool IsInlineBlockElement
         {
             get;
-            set;
+            private set;
         }
-        public void SetLocation(int x, int y)
-        {
-            this.X = x;
-            this.Y = y;
-        }
+
         public abstract char GetChar(int index);
         internal bool IsLineBreak { get; set; }
         internal abstract bool IsInsertable { get; }
@@ -74,7 +82,6 @@ namespace LayoutFarm.Text
         /// <param name="charOffset"></param>
         /// <returns></returns>
         public abstract int GetRunWidth(int charOffset);
-
         ///////////////////////////////////////////////////////////////
         //edit funcs
         internal abstract void InsertAfter(int index, char c);

@@ -18,7 +18,7 @@ namespace LayoutFarm.Text
         TextEditRenderBox visualTextSurface;
        
 #if DEBUG
-        dbugMultiTextManRecorder dbugTextManRecorder;
+        debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
 #endif
 
@@ -34,10 +34,10 @@ namespace LayoutFarm.Text
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder = new dbugMultiTextManRecorder();
-                textLineWriter.dbugTextManRecorder = dbugTextManRecorder;
+                _dbugActivityRecorder = new debugActivityRecorder();
+                textLineWriter.dbugTextManRecorder = _dbugActivityRecorder;
                 throw new NotSupportedException();
-                dbugTextManRecorder.Start(null);
+                _dbugActivityRecorder.Start(null);
             }
 #endif
         }
@@ -62,8 +62,8 @@ namespace LayoutFarm.Text
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder.WriteInfo("TxLMan::AddCharToCurrentLine " + c);
-                dbugTextManRecorder.BeginContext();
+                _dbugActivityRecorder.WriteInfo("TxLMan::AddCharToCurrentLine " + c);
+                _dbugActivityRecorder.BeginContext();
             }
 #endif
             if (SelectionRange != null)
@@ -71,7 +71,7 @@ namespace LayoutFarm.Text
 #if DEBUG
                 if (dbugEnableTextManRecorder)
                 {
-                    dbugTextManRecorder.WriteInfo(SelectionRange);
+                    _dbugActivityRecorder.WriteInfo(SelectionRange);
                 }
 #endif
                 RemoveSelectedText();
@@ -90,7 +90,7 @@ namespace LayoutFarm.Text
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder.EndContext();
+                _dbugActivityRecorder.EndContext();
             }
 #endif
         }
@@ -107,8 +107,8 @@ namespace LayoutFarm.Text
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder.WriteInfo("TxLMan::RemoveSelectedText");
-                dbugTextManRecorder.BeginContext();
+                _dbugActivityRecorder.WriteInfo("TxLMan::RemoveSelectedText");
+                _dbugActivityRecorder.BeginContext();
             }
 #endif
 
@@ -117,8 +117,8 @@ namespace LayoutFarm.Text
 #if DEBUG
                 if (dbugEnableTextManRecorder)
                 {
-                    dbugTextManRecorder.WriteInfo("NO_SEL_RANGE");
-                    dbugTextManRecorder.EndContext();
+                    _dbugActivityRecorder.WriteInfo("NO_SEL_RANGE");
+                    _dbugActivityRecorder.EndContext();
                 }
 #endif
                 return VisualSelectionRangeSnapShot.Empty;
@@ -128,14 +128,14 @@ namespace LayoutFarm.Text
 #if DEBUG
                 if (dbugEnableTextManRecorder)
                 {
-                    dbugTextManRecorder.WriteInfo("!RANGE_ON_SAME_POINT");
+                    _dbugActivityRecorder.WriteInfo("!RANGE_ON_SAME_POINT");
                 }
 #endif
                 CancelSelect();
 #if DEBUG
                 if (dbugEnableTextManRecorder)
                 {
-                    dbugTextManRecorder.EndContext();
+                    _dbugActivityRecorder.EndContext();
                 }
 #endif
                 return VisualSelectionRangeSnapShot.Empty;
@@ -188,7 +188,7 @@ namespace LayoutFarm.Text
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder.EndContext();
+                _dbugActivityRecorder.EndContext();
             }
 #endif
             return selSnapshot;

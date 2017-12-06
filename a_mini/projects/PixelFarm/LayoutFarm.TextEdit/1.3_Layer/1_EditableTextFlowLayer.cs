@@ -12,8 +12,6 @@ namespace LayoutFarm.Text
         object lineCollection;
         public event EventHandler Reflow;
 
-     
-
         public EditableTextFlowLayer(TextEditRenderBox owner)
             : base(owner)
         {

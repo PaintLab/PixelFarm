@@ -241,7 +241,7 @@ namespace LayoutFarm.Text
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder.WriteInfo("TxLMan::StartSelect");
+                _dbugActivityRecorder.WriteInfo("TxLMan::StartSelect");
             }
 #endif
         }
@@ -252,7 +252,7 @@ namespace LayoutFarm.Text
 #if DEBUG
                 if (dbugEnableTextManRecorder)
                 {
-                    dbugTextManRecorder.WriteInfo("TxLMan::EndSelect");
+                    _dbugActivityRecorder.WriteInfo("TxLMan::EndSelect");
                 }
 #endif
                 selectionRange.EndPoint = GetCurrentPointInfo();
@@ -264,7 +264,7 @@ namespace LayoutFarm.Text
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder.WriteInfo("TxLMan::CancelSelect");
+                _dbugActivityRecorder.WriteInfo("TxLMan::CancelSelect");
             }
 #endif
             selectionRange = null;

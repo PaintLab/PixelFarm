@@ -276,7 +276,7 @@ namespace LayoutFarm.Text
 #if DEBUG
         static int dbugTotalId;
         int dbug_MyId;
-        public dbugMultiTextManRecorder dbugTextManRecorder;
+        public debugActivityRecorder dbugTextManRecorder;
 #endif
 
         EditableTextFlowLayer visualFlowLayer;

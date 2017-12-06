@@ -41,8 +41,8 @@ namespace LayoutFarm.Text
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder.WriteInfo("TxLMan::DoDelete");
-                dbugTextManRecorder.BeginContext();
+                _dbugActivityRecorder.WriteInfo("TxLMan::DoDelete");
+                _dbugActivityRecorder.BeginContext();
             }
 #endif
 
@@ -79,7 +79,7 @@ namespace LayoutFarm.Text
                 }
             }
 #if DEBUG
-            if (dbugEnableTextManRecorder) dbugTextManRecorder.EndContext();
+            if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
 #endif
 
             return removedRange;
@@ -94,8 +94,8 @@ namespace LayoutFarm.Text
             if (dbugEnableTextManRecorder)
             {
                 dbug_BackSpaceCount++;
-                dbugTextManRecorder.WriteInfo("TxLMan::DoBackSpace");
-                dbugTextManRecorder.BeginContext();
+                _dbugActivityRecorder.WriteInfo("TxLMan::DoBackSpace");
+                _dbugActivityRecorder.BeginContext();
             }
 #endif
 
@@ -104,7 +104,7 @@ namespace LayoutFarm.Text
             {
                 CancelSelect();
 #if DEBUG
-                if (dbugEnableTextManRecorder) dbugTextManRecorder.EndContext();
+                if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
 #endif
                 return true;
             }
@@ -127,7 +127,7 @@ namespace LayoutFarm.Text
                         JoinWithNextLine();
                     }
 #if DEBUG
-                    if (dbugEnableTextManRecorder) dbugTextManRecorder.EndContext();
+                    if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
 #endif
                     return false;
                 }
@@ -137,7 +137,7 @@ namespace LayoutFarm.Text
                             new DocActionDeleteChar(
                                 deletedChar, textLineWriter.LineNumber, textLineWriter.CharIndex));
 #if DEBUG
-                    if (dbugEnableTextManRecorder) dbugTextManRecorder.EndContext();
+                    if (dbugEnableTextManRecorder) _dbugActivityRecorder.EndContext();
 #endif
                     return true;
                 }
@@ -148,15 +148,15 @@ namespace LayoutFarm.Text
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder.WriteInfo("TxLMan::DoEnd");
-                dbugTextManRecorder.BeginContext();
+                _dbugActivityRecorder.WriteInfo("TxLMan::DoEnd");
+                _dbugActivityRecorder.BeginContext();
             }
 #endif
             textLineWriter.CharIndex = textLineWriter.CharCount - 1;
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder.EndContext();
+                _dbugActivityRecorder.EndContext();
             }
 #endif
         }
@@ -165,15 +165,15 @@ namespace LayoutFarm.Text
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder.WriteInfo("TxLMan::DoHome");
-                dbugTextManRecorder.BeginContext();
+                _dbugActivityRecorder.WriteInfo("TxLMan::DoHome");
+                _dbugActivityRecorder.BeginContext();
             }
 #endif
             textLineWriter.CharIndex = -1;
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
-                dbugTextManRecorder.EndContext();
+                _dbugActivityRecorder.EndContext();
             }
 #endif
         }

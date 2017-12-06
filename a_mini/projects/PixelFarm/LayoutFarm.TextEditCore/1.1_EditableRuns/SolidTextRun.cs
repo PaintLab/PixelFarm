@@ -267,64 +267,7 @@ namespace LayoutFarm.Text
                 return !this.SpanStyle.IsEmpty();
             }
         }
-        //public override void CustomDrawToThisCanvas(Canvas canvas, Rectangle updateArea)
-        //{
-        //    int bWidth = this.Width;
-        //    int bHeight = this.Height;
-        //    canvas.FillRectangle(Color.Yellow, updateArea.Left, updateArea.Top, updateArea.Width, updateArea.Height);
-        //    if (!this.HasStyle)
-        //    {
-        //        canvas.DrawText(this.mybuffer, new Rectangle(0, 0, bWidth, bHeight), 0);
-        //    }
-        //    else
-        //    {
-        //        TextSpanStyle style = this.SpanStyle;
-        //        switch (EvaluateFontAndTextColor(canvas, style))
-        //        {
-        //            case DIFF_FONT_SAME_TEXT_COLOR:
-        //                {
-        //                    var prevFont = canvas.CurrentFont;
-        //                    canvas.CurrentFont = style.FontInfo;
-        //                    canvas.DrawText(this.mybuffer,
-        //                       new Rectangle(0, 0, bWidth, bHeight),
-        //                       style.ContentHAlign);
-        //                    canvas.CurrentFont = prevFont;
-        //                }
-        //                break;
-        //            case DIFF_FONT_DIFF_TEXT_COLOR:
-        //                {
-        //                    var prevFont = canvas.CurrentFont;
-        //                    var prevColor = canvas.CurrentTextColor;
-        //                    canvas.CurrentFont = style.FontInfo;
-        //                    canvas.CurrentTextColor = style.FontColor;
-        //                    canvas.DrawText(this.mybuffer,
-        //                       new Rectangle(0, 0, bWidth, bHeight),
-        //                       style.ContentHAlign);
-        //                    canvas.CurrentFont = prevFont;
-        //                    canvas.CurrentTextColor = prevColor;
-        //                }
-        //                break;
-        //            case SAME_FONT_DIFF_TEXT_COLOR:
-        //                {
-        //                    var prevColor = canvas.CurrentTextColor;
-        //                    canvas.DrawText(this.mybuffer,
-        //                    new Rectangle(0, 0, bWidth, bHeight),
-        //                    style.ContentHAlign);
-        //                    canvas.CurrentTextColor = prevColor;
-        //                }
-        //                break;
-        //            default:
-        //                {
-        //                    canvas.DrawText(this.mybuffer,
-        //                       new Rectangle(0, 0, bWidth, bHeight),
-        //                       style.ContentHAlign);
-        //                }
-        //                break;
-        //        }
-        //    }
-        //}
-
-
+        
         public override EditableRunCharLocation GetCharacterFromPixelOffset(int pixelOffset)
         {
             if (pixelOffset < Width)

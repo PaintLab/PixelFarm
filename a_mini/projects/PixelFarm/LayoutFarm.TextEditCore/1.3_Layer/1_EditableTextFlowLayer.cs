@@ -18,6 +18,9 @@ namespace LayoutFarm.Text
         TextSurfaceEventListener TextSurfaceEventListener { get; }
         void SetTextSurfaceEventListner(TextSurfaceEventListener listener);
     }
+
+
+
     /// <summary>
     /// layer is a collection of line
     /// </summary>
@@ -380,7 +383,7 @@ namespace LayoutFarm.Text
                         int v_desired_height = currentRun.Height;
                         if (isFirstRunInThisLine)
                         {
-                            lastestIsBlock = currentRun.IsBlockElement;
+                            lastestIsBlock = currentRun.IsInlineBlockElement;
                             if (v_desired_height > maxHeightInRow)
                             {
                                 maxHeightInRow = v_desired_height;
@@ -403,7 +406,7 @@ namespace LayoutFarm.Text
                         }
                         else
                         {
-                            if (lastestIsBlock || currentRun.IsBlockElement ||
+                            if (lastestIsBlock || currentRun.IsInlineBlockElement ||
                             (curX + v_desired_width > ownerClientRight))
                             {
                                 newLine = new EditableTextLine(this);
@@ -431,7 +434,7 @@ namespace LayoutFarm.Text
                             }
                             else
                             {
-                                lastestIsBlock = currentRun.IsBlockElement;
+                                lastestIsBlock = currentRun.IsInlineBlockElement;
                                 if (v_desired_height > maxHeightInRow)
                                 {
                                     maxHeightInRow = v_desired_height;

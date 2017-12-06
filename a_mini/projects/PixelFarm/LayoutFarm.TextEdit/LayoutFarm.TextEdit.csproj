@@ -57,7 +57,7 @@
   <ItemGroup>
     <Compile Include="1.1_EditableRuns\SolidTextRun.cs" />
     <Compile Include="2.2_TextRenderBox\CaretRenderElement.cs" />
-    <Compile Include="1.1_EditableRuns\dbugMultiTextManRecorder.cs" />
+    <Compile Include="1.2_Lines\debugActivityRecorder.cs" />
     <Compile Include="1.1_EditableRuns\EditableTextSpan.cs" />
     <Compile Include="1.1_EditableRuns\EditableRun.cs" />
     <Compile Include="1.1_EditableRuns\TextSpanSytle.cs" />
