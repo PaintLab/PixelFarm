@@ -2,7 +2,7 @@
 {
     public static class TestBedStartup
     {
-        public static void StartSetup()
+        public static void Setup()
         {
 #if GL_ENABLE
             OpenTK.Toolkit.Init();

@@ -11,7 +11,7 @@ namespace TestGraphicPackage2
         static void Main()
         {
 
-            YourImplementation.TestBedStartup.StartSetup(); 
+            YourImplementation.TestBedStartup.Setup(); 
             //-------------------------------
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false); 
