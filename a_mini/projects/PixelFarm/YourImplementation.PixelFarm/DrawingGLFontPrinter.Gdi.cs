@@ -89,7 +89,7 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
-            Win32.NativeTextWin32.WIN32SIZE win32Size;
+            Win32.Size win32Size;
             unsafe
             {
                 fixed (char* bufferHead = &textBuffer[0])
@@ -97,8 +97,8 @@ namespace PixelFarm.DrawingGL
                     Win32.NativeTextWin32.GetTextExtentPoint32Char(memdc.DC, bufferHead, textBuffer.Length, out win32Size);
                 }
             }
-            bmpWidth = win32Size.Width;
-            bmpHeight = win32Size.Height;
+            bmpWidth = win32Size.W;
+            bmpHeight = win32Size.H;
 
             var actualImg = new Agg.ActualImage(bmpWidth, bmpHeight, Agg.PixelFormat.ARGB32);
             //------------------------------------------------------
