@@ -1,7 +1,7 @@
 //MIT, 2014-2017, WinterDev
 using System;
 using System.Runtime.InteropServices;
-using System.Text;
+
 
 namespace Win32
 {
@@ -88,7 +88,7 @@ namespace Win32
     }
 
 
-
+    [System.Security.SuppressUnmanagedCodeSecurity]
     static partial class MyWin32
     {
         //this is platform specific ***
@@ -396,7 +396,7 @@ namespace Win32
 
     }
 
-
+    [System.Security.SuppressUnmanagedCodeSecurity]
     class NativeTextWin32
     {
         const string GDI32 = "gdi32.dll";
