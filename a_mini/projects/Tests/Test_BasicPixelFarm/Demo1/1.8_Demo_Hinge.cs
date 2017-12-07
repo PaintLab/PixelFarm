@@ -7,8 +7,11 @@ namespace LayoutFarm
     class Demo_Hinge : DemoBase
     {
         ImageBinder arrowBmp;
+        SampleViewport viewport;
+
         protected override void OnStartDemo(SampleViewport viewport)
         {
+            this.viewport = viewport;
             var comboBox1 = CreateComboBox(20, 20);
             viewport.AddContent(comboBox1);
             var comboBox2 = CreateComboBox(50, 50);
@@ -19,13 +22,7 @@ namespace LayoutFarm
             menuItem.AddSubMenuItem(menuItem2);
             viewport.AddContent(menuItem);
         }
-        static ImageBinder LoadImageBinder(string filename)
-        {
-            ImageBinder binder = new ClientImageBinder(filename);
-            binder.SetImage(DemoBase.LoadBitmap(filename));
-            binder.State = ImageBinderState.Loaded;
-            return binder;
-        }
+
         LayoutFarm.CustomWidgets.ComboBox CreateComboBox(int x, int y)
         {
             var comboBox = new CustomWidgets.ComboBox(400, 20);
@@ -41,7 +38,7 @@ namespace LayoutFarm
             //load bitmap with gdi+                
             if (arrowBmp == null)
             {
-                arrowBmp = LoadImageBinder("../../Data/imgs/arrow_open.png");
+                arrowBmp = viewport.GetImageBinder2("../../Data/imgs/arrow_open.png");
             }
             LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.Image.Width, arrowBmp.Image.Height);
             imgBox.ImageBinder = arrowBmp;
@@ -74,7 +71,7 @@ namespace LayoutFarm
             landPart.AddChild(imgBox);
             return comboBox;
         }
-      
+
         LayoutFarm.CustomWidgets.MenuItem CreateMenuItem(int x, int y)
         {
             var mnuItem = new CustomWidgets.MenuItem(150, 20);
@@ -88,10 +85,10 @@ namespace LayoutFarm
             //add small px to land part
             //image
             //load bitmap with gdi+        
-            
+
             if (arrowBmp == null)
             {
-                arrowBmp = LoadImageBinder("../../Data/imgs/arrow_open.png");
+                arrowBmp = this.viewport.GetImageBinder2("../../Data/imgs/arrow_open.png");
             }
             LayoutFarm.CustomWidgets.ImageBox imgBox = new CustomWidgets.ImageBox(arrowBmp.ImageWidth, arrowBmp.ImageHeight);
             imgBox.ImageBinder = arrowBmp;
@@ -132,6 +129,6 @@ namespace LayoutFarm
             return mnuItem;
         }
 
-      
+
     }
 }

@@ -18,14 +18,7 @@ namespace LayoutFarm
         {
             get { return ""; }
         }
-        public static Image LoadBitmap(string filename)
-        {
-            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
-            DemoBitmap bmp = new DemoBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
-            return bmp;
-        }
-
-
+        
     }
     sealed class DemoBitmap : Image
     {

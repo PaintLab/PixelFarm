@@ -66,7 +66,7 @@
     </Compile>
     <Compile Include="YourImplementation\MyTextBreaker.cs" />
     <Compile Include="YourImplementation\SampleViewport.cs" />
-    <Compile Include="YourImplStartUp.cs" />
+    <Compile Include="TestBedStartup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\LayoutFarm.Platforms.WinForms.csproj">
