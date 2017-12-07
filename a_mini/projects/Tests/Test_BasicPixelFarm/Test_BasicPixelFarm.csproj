@@ -35,7 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
@@ -126,14 +125,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj">
-      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
-      <Name>PixelFarm.Typography</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\YourImplementation.PixelFarm\YourImplementation.PixelFarm.csproj">
-      <Project>{8963dd34-ce0a-42cd-b3b2-d73031b8f0a0}</Project>
-      <Name>YourImplementation.PixelFarm</Name>
     </ProjectReference>
     <ProjectReference Include="..\WinFormTestBed\WinFormTestBed.csproj">
       <Project>{3e30e0d2-1cd7-42cc-9555-614105ef9c56}</Project>
