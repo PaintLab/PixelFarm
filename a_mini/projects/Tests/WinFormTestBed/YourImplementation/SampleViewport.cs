@@ -1,27 +1,50 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
-
+using PixelFarm.Drawing;
+using LayoutFarm.ContentManagers;
 namespace LayoutFarm
 {
     public class SampleViewport
     {
+        ImageContentManager imageContentMan;
         LayoutFarm.UI.UISurfaceViewportControl vw;
         int primaryScreenWorkingAreaW;
         int primaryScreenWorkingAreaH;
         public SampleViewport(LayoutFarm.UI.UISurfaceViewportControl vw)
         {
+
+
+
             this.vw = vw;
             var workingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
             this.primaryScreenWorkingAreaW = workingArea.Width;
             this.primaryScreenWorkingAreaH = workingArea.Height;
-        }
-        public UIPlatform Platform
-        {
-            get
+
+            //--------------
+            imageContentMan = new ImageContentManager(vw.Platform);
+            imageContentMan.ImageLoadingRequest += (s, e) =>
             {
-                return vw.Platform;
-            }
+                e.SetResultImage(LoadBitmap(e.ImagSource));
+            };
         }
+        public static Image LoadBitmap(string filename)
+        {
+            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
+            DemoBitmap bmp = new DemoBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
+            return bmp;
+        }
+        void LazyImageLoad(ImageBinder binder)
+        {
+            //load here as need
+            imageContentMan.AddRequestImage(binder);
+        }
+        ////public UIPlatform Platform
+        ////{
+        ////    get
+        ////    {
+        ////        return vw.Platform;
+        ////    }
+        ////}
         public int PrimaryScreenWidth
         {
             get { return this.primaryScreenWorkingAreaW; }
@@ -43,5 +66,26 @@ namespace LayoutFarm
         {
             get { return this.vw.RootGfx; }
         }
+        public ImageBinder GetImageBinder(string src)
+        {
+            ClientImageBinder clientImgBinder = new ClientImageBinder(src);
+            clientImgBinder.SetLazyLoaderFunc(LazyImageLoad);
+            //if use lazy img load func
+            imageContentMan.AddRequestImage(clientImgBinder);
+            return clientImgBinder;
+        }
+
+        public Image LoadImage(string imgName)
+        {
+            return LoadBitmap(imgName);
+        }
+        public ImageBinder GetImageBinder2(string src)
+        {
+            ClientImageBinder clientImgBinder = new ClientImageBinder(src);
+            clientImgBinder.SetImage(LoadBitmap(src));
+            clientImgBinder.State = ImageBinderState.Loaded;
+            return clientImgBinder;
+        }
+
     }
 }

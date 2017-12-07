@@ -47,28 +47,36 @@ namespace PixelFarm.DrawingGL
         }
         public void Dispose()
         {
-            //TODO: review here 
-            Win32.MyWin32.DeleteObject(hfont);
+            //TODO: review here             
+            _defautInitFont.Dispose();
+            _defautInitFont = null;
+
             hfont = IntPtr.Zero;
             memdc.Dispose();
         }
+
+        Win32.Win32Font _defautInitFont;
         void InitFont(string fontName, int emHeight)
         {
-            Win32.MyWin32.LOGFONT logFont = new Win32.MyWin32.LOGFONT();
-            Win32.MyWin32.SetFontName(ref logFont, fontName);
-            logFont.lfHeight = emHeight;
-            logFont.lfCharSet = 1;//default
-            logFont.lfQuality = 0;//default
-            hfont = Win32.MyWin32.CreateFontIndirect(ref logFont);
-            Win32.MyWin32.SelectObject(memdc.DC, hfont);
+            Win32.Win32Font font = Win32.FontHelper.CreateWin32Font(fontName, emHeight, false, false);
+            memdc.SetFont(font.GetHFont());
+            _defautInitFont = font;
+
+            //Win32.MyWin32.LOGFONT logFont = new Win32.MyWin32.LOGFONT();
+            //Win32.MyWin32.SetFontName(ref logFont, fontName);
+            //logFont.lfHeight = emHeight;
+            //logFont.lfCharSet = 1;//default
+            //logFont.lfQuality = 0;//default
+            //hfont = Win32.MyWin32.CreateFontIndirect(ref logFont);
+            //Win32.MyWin32.SelectObject(memdc.DC, hfont);
         }
 
 
         public void DrawString(char[] textBuffer, int startAt, int len, double x, double y)
         {
-            //TODO: review performan 
-            Win32.MyWin32.PatBlt(memdc.DC, 0, 0, bmpWidth, bmpHeight, Win32.MyWin32.WHITENESS);
-            Win32.NativeTextWin32.TextOut(memdc.DC, 0, 0, textBuffer, textBuffer.Length);
+            //TODO: review performance              
+            memdc.PatBlt(Win32.NativeWin32MemoryDc.PatBltColor.White, 0, 0, bmpWidth, bmpHeight);
+            memdc.TextOut(textBuffer);
             // Win32.Win32Utils.BitBlt(hdc, 0, 0, bmpWidth, 50, memHdc, 0, 0, Win32.MyWin32.SRCCOPY);
             //---------------
             int stride = 4 * ((bmpWidth * 32 + 31) / 32);
@@ -89,17 +97,8 @@ namespace PixelFarm.DrawingGL
                 }
             }
 
-            Win32.NativeTextWin32.WIN32SIZE win32Size;
-            unsafe
-            {
-                fixed (char* bufferHead = &textBuffer[0])
-                {
-                    Win32.NativeTextWin32.GetTextExtentPoint32Char(memdc.DC, bufferHead, textBuffer.Length, out win32Size);
-                }
-            }
-            bmpWidth = win32Size.Width;
-            bmpHeight = win32Size.Height;
 
+            memdc.MeasureTextSize(textBuffer, out bmpWidth, out bmpHeight);
             var actualImg = new Agg.ActualImage(bmpWidth, bmpHeight, Agg.PixelFormat.ARGB32);
             //------------------------------------------------------
             //copy bmp from specific bmp area 

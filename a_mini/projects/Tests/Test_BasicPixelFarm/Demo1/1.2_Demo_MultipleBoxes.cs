@@ -11,7 +11,7 @@ namespace LayoutFarm
         LayoutFarm.CustomWidgets.CheckBox currentSingleCheckedBox;
         protected override void OnStartDemo(SampleViewport viewport)
         {
-            SetupImageList();
+            SetupImageList(viewport);
             for (int i = 1; i < 5; ++i)
             {
                 var textbox = new LayoutFarm.CustomWidgets.SimpleBox(30, 30);
@@ -21,8 +21,8 @@ namespace LayoutFarm
             //--------------------
             //image box
             //load bitmap with gdi+           
-            ImageBinder imgBinder = new ClientImageBinder();
-            imgBinder.SetImage(LoadBitmap("../../Data/imgs/favorites32.png"));
+            ImageBinder imgBinder = viewport.GetImageBinder2("../../Data/imgs/favorites32.png");
+
             var imgBox = new CustomWidgets.ImageBox(imgBinder.Image.Width, imgBinder.Image.Height);
             imgBox.ImageBinder = imgBinder;
             viewport.AddContent(imgBox);
@@ -117,14 +117,14 @@ namespace LayoutFarm
             }
         }
 
-        static void SetupImageList()
+        static void SetupImageList(SampleViewport viewport)
         {
             if (!LayoutFarm.CustomWidgets.ResImageList.HasImages)
             {
                 //set imagelists
                 var imgdic = new Dictionary<CustomWidgets.ImageName, Image>();
-                imgdic[CustomWidgets.ImageName.CheckBoxUnChecked] = LoadBitmap("../../Data/imgs/arrow_close.png");
-                imgdic[CustomWidgets.ImageName.CheckBoxChecked] = LoadBitmap("../../Data/imgs/arrow_open.png");
+                imgdic[CustomWidgets.ImageName.CheckBoxUnChecked] = viewport.LoadImage("../../Data/imgs/arrow_close.png");
+                imgdic[CustomWidgets.ImageName.CheckBoxChecked] = viewport.LoadImage("../../Data/imgs/arrow_open.png");
                 LayoutFarm.CustomWidgets.ResImageList.SetImageList(imgdic);
             }
         }

@@ -38,9 +38,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\pixelfarm\win32utils\MyWin32.cs">
-      <Link>YourImplementation\Win32Utils\MyWin32.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleViewportExtension.cs" />
     <Compile Include="SimpleDelegates.cs" />
@@ -66,7 +63,7 @@
     </Compile>
     <Compile Include="YourImplementation\MyTextBreaker.cs" />
     <Compile Include="YourImplementation\SampleViewport.cs" />
-    <Compile Include="YourImplStartUp.cs" />
+    <Compile Include="TestBedStartup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\LayoutFarm.Platforms.WinForms.csproj">

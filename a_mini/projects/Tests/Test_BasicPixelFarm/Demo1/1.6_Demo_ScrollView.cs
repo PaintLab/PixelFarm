@@ -2,28 +2,19 @@
 
 using PixelFarm.Drawing;
 using LayoutFarm.UI;
-using LayoutFarm.ContentManagers;
+
 namespace LayoutFarm
 {
     [DemoNote("1.6 ScrollView")]
     class Demo_ScrollView : DemoBase
     {
-        ImageContentManager imageContentMan;
+
         protected override void OnStartDemo(SampleViewport viewport)
         {
-            imageContentMan = new ImageContentManager(viewport.Platform);
-            imageContentMan.ImageLoadingRequest += (s, e) =>
-            {
-                e.SetResultImage(LoadBitmap(e.ImagSource));
-            };
             //AddScrollView1(viewport, 0, 0);
             AddScrollView2(viewport, 250, 0);
         }
-        void LazyImageLoad(ImageBinder binder)
-        {
-            //load here as need
-            imageContentMan.AddRequestImage(binder);
-        }
+
         void AddScrollView1(SampleViewport viewport, int x, int y)
         {
             var panel = new LayoutFarm.CustomWidgets.SimpleBox(200, 175);
@@ -90,10 +81,9 @@ namespace LayoutFarm
             for (int i = 0; i < fileNames.Length; ++i) //5 imgs
             {
                 var imgbox = new LayoutFarm.CustomWidgets.ImageBox(36, 400);
-                ClientImageBinder binder = new ClientImageBinder(fileNames[i]);
-                binder.SetLazyLoaderFunc(LazyImageLoad);
-                //if use lazy img load func
-                imageContentMan.AddRequestImage(binder);
+                ImageBinder binder = viewport.GetImageBinder(fileNames[i]); 
+               
+                
                 imgbox.ImageBinder = binder;
                 imgbox.BackColor = Color.OrangeRed;
                 imgbox.SetLocation(0, lastY);
