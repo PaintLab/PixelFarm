@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Text;
 namespace LayoutFarm.Text
 {
+    /// <summary>
+    /// any run
+    /// </summary>
     public abstract class EditableRun : RenderElement
     {
         //1. owner is a textline
@@ -27,8 +30,8 @@ namespace LayoutFarm.Text
         public abstract EditableRunCharLocation GetCharacterFromPixelOffset(int pixelOffset);
 
 
-        
-        
+
+
         /// <summary>
         /// get run width from start (left**) to charOffset
         /// </summary>
@@ -123,10 +126,10 @@ namespace LayoutFarm.Text
             dbug_ExitTopDownReCalculateContent(ve);
 #endif
         }
-        
-        
-        
-        
+
+
+
+
         //--------------------
         //presentation of this run
         public abstract TextSpanStyle SpanStyle { get; }

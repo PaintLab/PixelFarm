@@ -7,10 +7,13 @@ namespace LayoutFarm.Text
         public Color FontColor;
         public RequestFont FontInfo;
         public byte ContentHAlign;
-        public static readonly TextSpanStyle Empty = new TextSpanStyle();
+        
         public bool IsEmpty()
         {
             return this.FontInfo == null;
         }
+
+
+        public static readonly TextSpanStyle Empty = new TextSpanStyle();
     }
 }

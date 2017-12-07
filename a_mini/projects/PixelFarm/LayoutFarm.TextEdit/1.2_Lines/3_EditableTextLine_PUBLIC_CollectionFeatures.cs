@@ -5,7 +5,7 @@ namespace LayoutFarm.Text
 {
     partial class EditableTextLine : LayoutFarm.RenderBoxes.IParentLink
     {
-        public new void AddLast(EditableRun v)
+        public void AddLast(EditableRun v)
         {
             if (!v.IsLineBreak)
             {
@@ -16,7 +16,7 @@ namespace LayoutFarm.Text
                 AddLineBreakAfter(this.LastRun);
             }
         }
-        public new void AddFirst(EditableRun v)
+        public void AddFirst(EditableRun v)
         {
             if (!v.IsLineBreak)
             {
@@ -52,19 +52,19 @@ namespace LayoutFarm.Text
 
         internal void UnsafeAddLast(EditableRun run)
         {
-            run.SetInternalLinkedNode(base.AddLast(run), this);
+            run.SetInternalLinkedNode(_runs.AddLast(run), this);
         }
         internal void UnsafeAddFirst(EditableRun run)
         {
-            run.SetInternalLinkedNode(base.AddFirst(run), this);
+            run.SetInternalLinkedNode(_runs.AddFirst(run), this);
         }
         internal void UnsafeAddAfter(EditableRun after, EditableRun run)
         {
-            run.SetInternalLinkedNode(base.AddAfter(GetLineLinkedNode(after), run), this);
+            run.SetInternalLinkedNode(_runs.AddAfter(GetLineLinkedNode(after), run), this);
         }
         internal void UnsafeRemoveVisualElement(EditableRun v)
         {
-            base.Remove(GetLineLinkedNode(v));
+            _runs.Remove(GetLineLinkedNode(v));
         }
         RenderElement RenderBoxes.IParentLink.ParentRenderElement
         {

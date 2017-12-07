@@ -8,7 +8,7 @@ namespace LayoutFarm.Text
 {
     class TextLineWriter : TextLineReader
     {
-        BackGroundTextLineWriter backgroundWriter;
+        //BackGroundTextLineWriter backgroundWriter;
         public TextLineWriter(EditableTextFlowLayer textLayer)
             : base(textLayer)
         {
@@ -20,17 +20,17 @@ namespace LayoutFarm.Text
                 return this.TextLayer.CurrentTextSpanStyle;
             }
         }
-        internal BackGroundTextLineWriter GetBackgroundWriter()
-        {
-            if (backgroundWriter == null)
-            {
-                backgroundWriter = new BackGroundTextLineWriter(this.TextLayer);
-#if DEBUG
-                backgroundWriter.dbugTextManRecorder = this.dbugTextManRecorder;
-#endif
-            }
-            return backgroundWriter;
-        }
+//        internal BackGroundTextLineWriter GetBackgroundWriter()
+//        {
+//            if (backgroundWriter == null)
+//            {
+//                backgroundWriter = new BackGroundTextLineWriter(this.TextLayer);
+//#if DEBUG
+//                backgroundWriter.dbugTextManRecorder = this.dbugTextManRecorder;
+//#endif
+//            }
+//            return backgroundWriter;
+//        }
         public void Reload(IEnumerable<EditableRun> runs)
         {
             this.TextLayer.Reload(runs);
@@ -85,7 +85,7 @@ namespace LayoutFarm.Text
             EditableTextLine.InnerDoJoinWithNextLine(this.CurrentLine);
             EnsureCurrentTextRun();
         }
-        char Delete()
+        char BackSpaceOneChar()
         {
             if (CurrentTextRun == null)
             {
@@ -208,16 +208,18 @@ namespace LayoutFarm.Text
             EnsureCurrentTextRun(charIndex);
         }
 
-        public char DoBackspace()
+        public char DoBackspaceOneChar()
         {
-            return Delete();
+            //simulate backspace keystroke
+            return BackSpaceOneChar();
         }
-        public char DoDelete()
+        public char DoDeleteOneChar()
         {
             if (CharIndex < CurrentLine.CharCount - 1)
             {
+                //simulate backspace keystroke
                 CharIndex++;
-                return Delete();
+                return BackSpaceOneChar();
             }
             else
             {
@@ -274,14 +276,14 @@ namespace LayoutFarm.Text
 #if DEBUG
         static int dbugTotalId;
         int dbug_MyId;
-        public dbugMultiTextManRecorder dbugTextManRecorder;
+        public debugActivityRecorder dbugTextManRecorder;
 #endif
 
         EditableTextFlowLayer visualFlowLayer;
         EditableTextLine currentLine;
         int currentLineY = 0;
         EditableRun currentTextRun;
-        int charIndex = -1;
+
         int caretXPos = 0;
         /// <summary>
         /// character offset of this run, start from start line, this value is reset for every current run
@@ -304,6 +306,17 @@ namespace LayoutFarm.Text
             if (currentLine.FirstRun != null)
             {
                 currentTextRun = currentLine.FirstRun;
+            }
+        }
+
+        int _i_charIndex;
+        int charIndex
+        {
+            get { return _i_charIndex; }
+            set
+            {
+
+                _i_charIndex = value;
             }
         }
         protected RootGraphic Root
@@ -399,13 +412,15 @@ namespace LayoutFarm.Text
         {
             visualFlowLayer.CopyContentToStringBuilder(stBuilder);
         }
+        
         public char NextChar
         {
             get
             {
                 if (currentTextRun != null)
                 {
-                    if (charIndex < 0)
+
+                    if (charIndex < 0 && CharCount == 0)
                     {
                         return '\0';
                     }
@@ -607,9 +622,6 @@ namespace LayoutFarm.Text
                 }
             }
         }
-
-
-
         public int CharIndex
         {
             get
@@ -655,39 +667,6 @@ namespace LayoutFarm.Text
                                 return;
                             }
 
-                        //TODO: review here again*** 
-                        //temp comment out
-
-                        //case 1:
-                        //    {
-                        //        if (charIndex + 1 >= rCharOffset + currentTextRun.CharacterCount)
-                        //        {
-                        //            MoveToNextTextRun();
-                        //        }
-                        //        else
-                        //        {
-                        //            charIndex++;
-                        //            //move caret right side for single char
-                        //            caretXPos += currentTextRun.GetSingleCharWidth(charIndex - rCharOffset);
-                        //        }
-                        //    }
-                        //    break;
-                        //case -1:
-                        //    {
-                        //        if (charIndex - 1 < rCharOffset)
-                        //        {
-                        //            MoveToPreviousTextRun();
-                        //        }
-                        //        else
-                        //        {
-                        //            if (charIndex > -1)
-                        //            {  //move caret left side for single char
-                        //                caretXPos -= currentTextRun.GetSingleCharWidth(charIndex - rCharOffset);
-                        //                charIndex--;
-                        //            }
-                        //        }
-                        //    }
-                        //    break;
                         default:
                             {
                                 if (diff > 0)
@@ -718,7 +697,8 @@ namespace LayoutFarm.Text
                                     {
                                         if (rCharOffset - 1 < value)
                                         {
-                                            charIndex = value; caretXPos = rPixelOffset + currentTextRun.GetRunWidth(charIndex - rCharOffset + 1);
+                                            charIndex = value;
+                                            caretXPos = rPixelOffset + currentTextRun.GetRunWidth(charIndex - rCharOffset + 1);
 #if DEBUG
                                             if (dbugTextManRecorder != null)
                                             {
@@ -803,11 +783,9 @@ namespace LayoutFarm.Text
         {
             currentLine.CopyLineContent(stBuilder);
         }
-        public LinkedList<EditableRun> CopySelectedTextRuns(VisualSelectionRange selectionRange)
+        public void CopySelectedTextRuns(VisualSelectionRange selectionRange, List<EditableRun> output)
         {
-            LinkedList<EditableRun> output = new LinkedList<EditableRun>();
             currentLine.Copy(selectionRange, output);
-            return output;
         }
 
         public int LineNumber
@@ -850,11 +828,11 @@ namespace LayoutFarm.Text
         }
         #endregion
     }
-    class BackGroundTextLineWriter : TextLineWriter
-    {
-        public BackGroundTextLineWriter(EditableTextFlowLayer visualElementLayer)
-            : base(visualElementLayer)
-        {
-        }
-    }
+    //class BackGroundTextLineWriter : TextLineWriter
+    //{
+    //    public BackGroundTextLineWriter(EditableTextFlowLayer visualElementLayer)
+    //        : base(visualElementLayer)
+    //    {
+    //    }
+    //}
 }

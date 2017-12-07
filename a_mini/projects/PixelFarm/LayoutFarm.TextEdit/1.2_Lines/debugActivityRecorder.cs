@@ -9,7 +9,7 @@ namespace LayoutFarm.Text
     {
         public const string dbugRootFolder = "d:\\WImageTest";
     }
-    public class dbugMultiTextManRecorder
+    public class debugActivityRecorder
     {
         StreamWriter strmWriter;
         string outputFileName = null;
@@ -17,7 +17,7 @@ namespace LayoutFarm.Text
         int indentCount = 0;
         int myTraceCount = 0;
         static int tracerCount = 0;
-        public dbugMultiTextManRecorder()
+        public debugActivityRecorder()
         {
             myTraceCount = tracerCount;
             ++tracerCount;

@@ -12,7 +12,7 @@ namespace PixelFarm.Drawing
         public WindowsFontLoader()
         {
             //iterate
-            var installFontsWin32 = new InstallFontsProviderWin32();
+            var installFontsWin32 = new InstalledFontsProviderWin32();
             installFontCollection.SetFontNameDuplicatedHandler((f1, f2) => FontNameDuplicatedDecision.Skip);
             installFontCollection.LoadSystemFonts();
             _defaultFontNotFoundHandler = (fontCollection, fontName, subfamName, style) =>
@@ -28,7 +28,7 @@ namespace PixelFarm.Drawing
                     case "HELVETICA":
                         return fontCollection.GetFont("Arial", style);
                     case "TAHOMA":
-                        //default font must found
+                        //default font must be found
                         //if not throw err 
                         //this prevent infinit loop
                         throw new System.NotSupportedException();

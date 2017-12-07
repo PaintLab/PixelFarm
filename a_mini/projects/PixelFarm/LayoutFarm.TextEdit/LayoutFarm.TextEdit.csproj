@@ -57,8 +57,8 @@
   <ItemGroup>
     <Compile Include="1.1_EditableRuns\SolidTextRun.cs" />
     <Compile Include="2.2_TextRenderBox\CaretRenderElement.cs" />
-    <Compile Include="1.1_EditableRuns\dbugMultiTextManRecorder.cs" />
-    <Compile Include="1.1_EditableRuns\EditableTextSpan.cs" />
+    <Compile Include="1.2_Lines\debugActivityRecorder.cs" />
+    <Compile Include="1.1_EditableRuns\EditableTextRun.cs" />
     <Compile Include="1.1_EditableRuns\EditableRun.cs" />
     <Compile Include="1.1_EditableRuns\TextSpanSytle.cs" />
     <Compile Include="1.1_EditableRuns\EditableRunCharLocation.cs" />
@@ -70,7 +70,6 @@
     <Compile Include="1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs" />
     <Compile Include="1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs" />
     <Compile Include="1.2_Lines\6_EditableTextLine_Advanced.cs" />
-    <Compile Include="1.2_Lines\7_EditableTextLine_SuppressNativeCollectionMethods.cs" />
     <Compile Include="1.2_Lines\TextLineReaderWriter.cs" />
     <Compile Include="1.3_Layer\1_EditableTextFlowLayer.cs" />
     <Compile Include="1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs" />

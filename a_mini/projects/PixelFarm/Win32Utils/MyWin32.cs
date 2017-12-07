@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using PixelFarm.Drawing;
 
 namespace Win32
 {
@@ -22,7 +23,7 @@ namespace Win32
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    struct BitMapInfo
+    public struct BitMapInfo
     {
         public int biSize;
         public int biWidth;
@@ -44,7 +45,7 @@ namespace Win32
 
     /* Bitmap Header Definition */
     [StructLayout(LayoutKind.Sequential)]
-    unsafe struct BITMAP
+    public unsafe struct BITMAP
     {
         public int bmType;
         public int bmWidth;
@@ -55,7 +56,7 @@ namespace Win32
         public void* bmBits;
     }
     [StructLayout(LayoutKind.Sequential)]
-    struct RGBQUAD
+    public struct RGBQUAD
     {
         public int bmType;
         public int bmWidth;
@@ -67,7 +68,7 @@ namespace Win32
     }
 
 
-    static class MyWin32
+    public static class MyWin32
     {
         //this is platform specific ***
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
@@ -160,7 +161,10 @@ namespace Win32
         [StructLayout(LayoutKind.Sequential)]
         public struct _BLENDFUNCTION
         {
-            public byte BlendOp; public byte BlendFlags; public byte SourceConstantAlpha; public byte AlphaFormat;
+            public byte BlendOp;
+            public byte BlendFlags;
+            public byte SourceConstantAlpha;
+            public byte AlphaFormat;
             public _BLENDFUNCTION(byte alphaValue)
             {
                 BlendOp = AC_SRC_OVER;
