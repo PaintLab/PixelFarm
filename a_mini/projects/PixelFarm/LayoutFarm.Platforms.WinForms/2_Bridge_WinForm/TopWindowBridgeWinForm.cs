@@ -6,7 +6,7 @@ using PixelFarm.Drawing;
 namespace LayoutFarm.UI
 {
     /// <summary>
-    /// this class is specific bridge for WinForms
+    /// this class is specific bridge for WinForms***
     /// </summary>
     abstract partial class TopWindowBridgeWinForm
     {
@@ -46,12 +46,19 @@ namespace LayoutFarm.UI
             this.PaintToOutputWindow();
         }
         public abstract void PaintToOutputWindow();
-        public abstract void CopyOutputPixelBuffer(int x, int y, int w, int h,IntPtr outputBuffer);
+        public abstract void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer);
 
         public void UpdateCanvasViewportSize(int w, int h)
         {
             this.canvasViewport.UpdateCanvasViewportSize(w, h);
         }
+
+        [System.Runtime.InteropServices.DllImport("user32.dll"), System.Security.SuppressUnmanagedCodeSecurity]
+        protected static extern IntPtr GetDC(IntPtr hWnd);
+        [System.Runtime.InteropServices.DllImport("user32.dll"), System.Security.SuppressUnmanagedCodeSecurity]
+        protected static extern int ReleaseDC(IntPtr hWnd, IntPtr hDc);
+
+
 
         public void Close()
         {

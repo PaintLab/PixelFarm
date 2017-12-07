@@ -76,7 +76,13 @@ namespace Win32
         public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string className, string windowName);
         [DllImport("user32.dll")]
         public static extern int GetWindowTextLength(IntPtr hWnd);
-        //
+
+        [DllImport("user32.dll")]
+        public static extern int GetWindowText(IntPtr hWnd, StringBuilder winText, int maxCount);
+
+        [DllImport("user32.dll")]
+        public static extern int GetClassName(IntPtr hWnd, StringBuilder className, int maxCount);
+
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindow(IntPtr hWnd, int wCmd);
         public static string GetWinTitle(IntPtr handle)

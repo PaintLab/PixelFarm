@@ -22,7 +22,7 @@ namespace Win32
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct BitMapInfo
+    struct BitMapInfo
     {
         public int biSize;
         public int biWidth;
@@ -42,7 +42,7 @@ namespace Win32
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct BITMAP
+    unsafe struct BITMAP
     {
         public int bmType;
         public int bmWidth;
@@ -53,7 +53,7 @@ namespace Win32
         public void* bmBits;
     }
     [StructLayout(LayoutKind.Sequential)]
-    public struct RGBQUAD
+    struct RGBQUAD
     {
         public int bmType;
         public int bmWidth;
@@ -66,7 +66,7 @@ namespace Win32
 
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct Rectangle
+    struct Rectangle
     {
         public int X;
         public int Y;
@@ -74,14 +74,14 @@ namespace Win32
         public int H;
     }
     [StructLayout(LayoutKind.Sequential)]
-    public struct Size
+    struct Size
     {
         public int W;
         public int H;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct Point
+    struct Point
     {
         public int X;
         public int Y;
@@ -89,7 +89,7 @@ namespace Win32
 
 
 
-    public static partial class MyWin32
+    static partial class MyWin32
     {
         //this is platform specific ***
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
@@ -99,7 +99,7 @@ namespace Win32
         [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
         public static unsafe extern int memcmp(byte* dest, byte* src, int byteCount);
         //----------
-
+        //DC
         [DllImport("gdi32.dll", ExactSpelling = true)]
         public static extern bool DeleteDC(IntPtr hdc);
         [DllImport("gdi32.dll", ExactSpelling = true)]
@@ -189,7 +189,7 @@ namespace Win32
         public const int WHITENESS = 0x00FF0062;/* dest = WHITE                    */
         public const int CBM_Init = 0x04;
         [DllImport("gdi32.dll")]
-        public static extern bool Rectangle(IntPtr hDC, int l, int t, int r, int b); 
+        public static extern bool Rectangle(IntPtr hDC, int l, int t, int r, int b);
 
         [DllImport("gdi32.dll")]
         public static extern bool GetTextExtentPoint32(IntPtr hdc, string lpstring, int c, out Size size);
@@ -220,7 +220,7 @@ namespace Win32
         }
 
         [DllImport("gdi32.dll", CharSet = CharSet.Unicode)] //need -> unicode
-        public extern static IntPtr CreateFontIndirect(ref LOGFONT logFont); 
+        public extern static IntPtr CreateFontIndirect(ref LOGFONT logFont);
 
         public static unsafe void SetFontName(ref LOGFONT logFont, string fontName)
         {
@@ -282,12 +282,6 @@ namespace Win32
 
 
         [DllImport("user32.dll")]
-        public static extern int GetWindowText(IntPtr hWnd, StringBuilder winText, int maxCount);
-
-        [DllImport("user32.dll")]
-        public static extern int GetClassName(IntPtr hWnd, StringBuilder className, int maxCount);
-
-        [DllImport("user32.dll")]
         public static extern IntPtr GetTopWindow(IntPtr hWnd);
         [DllImport("user32.dll")]
         public static extern IntPtr GetParent(IntPtr hWnd);
@@ -299,8 +293,8 @@ namespace Win32
         public static extern bool FlashWindow(IntPtr hwnd, bool bInvert);
         [DllImport("kernel32.dll")]
         public static extern int GetLastError();
-         
-      
+
+
 
         public const int WM_KEYDOWN = 0x0100;
         public const int WM_KEYUP = 0x0101;
@@ -394,39 +388,21 @@ namespace Win32
             MyWin32.DeleteObject(dib);
             MyWin32.DeleteDC(memoryHdc);
         }
-        const int s_POINTS_PER_INCH = 72;
-        static float ConvEmSizeInPointsToPixels(float emsizeInPoint, float pixels_per_inch)
+        internal const int s_POINTS_PER_INCH = 72;
+        internal static float ConvEmSizeInPointsToPixels(float emsizeInPoint, float pixels_per_inch)
         {
             return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * pixels_per_inch);
         }
-        public static IntPtr CreateFontHelper(string fontName, float emHeight, bool bold, bool italic, float pixels_per_inch = 96)
-        {
-            //see: MSDN, LOGFONT structure
-            //https://msdn.microsoft.com/en-us/library/windows/desktop/dd145037(v=vs.85).aspx
-            MyWin32.LOGFONT logFont = new MyWin32.LOGFONT();
-            MyWin32.SetFontName(ref logFont, fontName);
-            logFont.lfHeight = -(int)ConvEmSizeInPointsToPixels(emHeight, pixels_per_inch);//minus **
-            logFont.lfCharSet = 1;//default
-            logFont.lfQuality = 0;//default
 
-            //
-            MyWin32.LOGFONT_FontWeight weight =
-                bold ?
-                MyWin32.LOGFONT_FontWeight.FW_BOLD :
-                MyWin32.LOGFONT_FontWeight.FW_REGULAR;
-            logFont.lfWeight = (int)weight;
-            //
-            logFont.lfItalic = (byte)(italic ? 1 : 0);
-            return MyWin32.CreateFontIndirect(ref logFont);
-        }
     }
 
-    public class NativeTextWin32
+
+    class NativeTextWin32
     {
         const string GDI32 = "gdi32.dll";
         [DllImport(GDI32)]
         public static extern bool GetCharWidth32(IntPtr hdc, uint uFirstChar, uint uLastChar, ref int width);
-       
+
         [DllImport(GDI32, CharSet = CharSet.Unicode)]
         public static extern bool TextOut(IntPtr hdc, int nXStart, int nYStart,
             [MarshalAs(UnmanagedType.LPWStr)]string charBuffer, int cbstring);
