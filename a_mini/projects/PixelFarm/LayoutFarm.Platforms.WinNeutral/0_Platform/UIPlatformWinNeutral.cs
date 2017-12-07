@@ -19,7 +19,7 @@ namespace LayoutFarm.UI
             s_fontStore = new PixelFarm.Drawing.Fonts.OpenFontStore();
 
             //no gdi+
-            PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(s_fontStore);
+            // PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(s_fontStore);
             //gles2 
             //
             PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(s_fontStore);
@@ -32,7 +32,7 @@ namespace LayoutFarm.UI
 
             }
         }
-       
+
 
         public override void ClearClipboardData()
         {
@@ -47,10 +47,12 @@ namespace LayoutFarm.UI
             throw new System.NotSupportedException();
         }
 
-        PixelFarm.Drawing.WinGdi.Gdi32IFonts _gdiPlusIFonts = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
+        // PixelFarm.Drawing.WinGdi.Gdi32IFonts _gdiPlusIFonts = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
         public PixelFarm.Drawing.IFonts GetIFonts()
         {
-            return this._gdiPlusIFonts;
+            throw new System.NotSupportedException();
+
+        //    return this._gdiPlusIFonts;
         }
 
         public static readonly UIPlatformWinNeutral platform = new UIPlatformWinNeutral();

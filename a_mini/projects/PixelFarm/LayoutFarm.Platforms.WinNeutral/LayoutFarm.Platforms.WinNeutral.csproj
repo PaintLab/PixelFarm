@@ -60,9 +60,6 @@
     <Compile Include="..\Win32Utils\MyWin32.cs">
       <Link>MyWin32.cs</Link>
     </Compile>
-    <Compile Include="..\Win32Utils\NativeTextWin32.cs">
-      <Link>NativeTextWin32.cs</Link>
-    </Compile>
     <Compile Include="..\Win32Utils\NativeWin32MemoryDc.cs">
       <Link>NativeWin32MemoryDc.cs</Link>
     </Compile>

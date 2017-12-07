@@ -1,7 +1,6 @@
 ﻿//BSD, 2014-2017, WinterDev  
 
 using System;
-using PixelFarm.Drawing;
 
 namespace Win32
 {
@@ -89,10 +88,7 @@ namespace Win32
             //convert to win32 colorv
             MyWin32.SetTextColor(memHdc, (b & 0xFF) << 16 | (g & 0xFF) << 8 | r);
         }
-        public void SetClipRect(Rectangle r)
-        {
-            SetClipRect(r.Left, r.Top, r.Width, r.Height);
-        }
+       
         public void SetClipRect(int x, int y, int w, int h)
         {
             if (hRgn == IntPtr.Zero)
