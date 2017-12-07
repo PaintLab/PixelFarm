@@ -1,4 +1,6 @@
-﻿namespace YourImplementation
+﻿using System;
+using System.Windows.Forms;
+namespace YourImplementation
 {
     public static class TestBedStartup
     {
@@ -15,7 +17,16 @@
 #endif
             //default text breaker, this bridge between 
             LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
-
+        }
+        public static void RunDemoList(Type mainType)
+        {
+            //-------------------------------
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            ////------------------------------- 
+            var formDemoList = new LayoutFarm.Dev.FormDemoList();
+            formDemoList.LoadDemoList(mainType);
+            Application.Run(formDemoList);
         }
     }
 }
