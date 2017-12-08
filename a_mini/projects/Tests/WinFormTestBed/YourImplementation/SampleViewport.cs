@@ -12,9 +12,6 @@ namespace LayoutFarm
         int primaryScreenWorkingAreaH;
         public SampleViewport(LayoutFarm.UI.UISurfaceViewportControl vw)
         {
-
-
-
             this.vw = vw;
             var workingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
             this.primaryScreenWorkingAreaW = workingArea.Width;
@@ -38,13 +35,7 @@ namespace LayoutFarm
             //load here as need
             imageContentMan.AddRequestImage(binder);
         }
-        ////public UIPlatform Platform
-        ////{
-        ////    get
-        ////    {
-        ////        return vw.Platform;
-        ////    }
-        ////}
+
         public int PrimaryScreenWidth
         {
             get { return this.primaryScreenWorkingAreaW; }
@@ -58,7 +49,7 @@ namespace LayoutFarm
             this.vw.AddContent(renderElement);
         }
 
-        public LayoutFarm.UI.UISurfaceViewportControl ViewportControl
+        internal LayoutFarm.UI.UISurfaceViewportControl ViewportControl
         {
             get { return this.vw; }
         }
