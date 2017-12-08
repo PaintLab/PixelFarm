@@ -6,6 +6,7 @@ using PixelFarm.Drawing.Fonts;
 
 namespace PixelFarm.DrawingGL
 {
+#if GL_ENABLE
     /// <summary>
     /// this use win gdi only
     /// </summary>
@@ -142,5 +143,5 @@ namespace PixelFarm.DrawingGL
             throw new NotImplementedException();
         }
     }
-
+#endif
 }

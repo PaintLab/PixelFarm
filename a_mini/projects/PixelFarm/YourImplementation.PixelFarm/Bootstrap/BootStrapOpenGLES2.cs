@@ -6,7 +6,7 @@ using PixelFarm.Drawing.Fonts;
 namespace YourImplementation
 {
 
-
+#if GL_ENABLE
     public static class BootStrapOpenGLES2
     {
         public static readonly IFontLoader myFontLoader = new WindowsFontLoader();
@@ -16,6 +16,6 @@ namespace YourImplementation
             PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
         }
     }
-
+#endif
 
 }
