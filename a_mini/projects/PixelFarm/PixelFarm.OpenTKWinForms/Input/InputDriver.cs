@@ -18,8 +18,15 @@ namespace OpenTK
 
         public InputDriver(GameWindow parent)
         {
+
+#if DEBUG
             if (parent == null)
                 throw new ArgumentException("A valid window (IWindowInfo) must be specified to construct an InputDriver");
+#endif
+            if(parent== null)
+            {
+                return;
+            }
             switch (Environment.OSVersion.Platform)
             {
                 case PlatformID.Win32Windows:
@@ -48,45 +55,45 @@ namespace OpenTK
             }
         }
 
-        #endregion
+#endregion
 
-        #region --- IInputDriver Members ---
+#region --- IInputDriver Members ---
 
         public void Poll()
         {
             inputDriver.Poll();
         }
 
-        #endregion
+#endregion
 
-        #region --- IKeyboardDriver Members ---
+#region --- IKeyboardDriver Members ---
 
         public IList<KeyboardDevice> Keyboard
         {
             get { return inputDriver.Keyboard; }
         }
 
-        #endregion
+#endregion
 
-        #region --- IMouseDriver Members ---
+#region --- IMouseDriver Members ---
 
         public IList<MouseDevice> Mouse
         {
             get { return inputDriver.Mouse; }
         }
 
-        #endregion
+#endregion
 
-        #region --- IJoystickDriver Members ---
+#region --- IJoystickDriver Members ---
 
         public IList<JoystickDevice> Joysticks
         {
             get { return inputDriver.Joysticks; }
         }
 
-        #endregion
+#endregion
 
-        #region --- IDisposable Members ---
+#region --- IDisposable Members ---
 
         private bool disposed;
         public void Dispose()
@@ -113,6 +120,6 @@ namespace OpenTK
             this.Dispose(false);
         }
 
-        #endregion
+#endregion
     }
 }
