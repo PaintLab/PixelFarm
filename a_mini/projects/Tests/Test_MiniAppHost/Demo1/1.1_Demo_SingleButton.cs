@@ -9,8 +9,10 @@ namespace LayoutFarm
         protected override void OnStartDemo(IViewport viewport)
         {
             IUIRootElement root = viewport.Root;
-            IUIElement sampleButton = root.CreateElement2(BasicUIElementKind.SimpleBox);
+            IUIBoxElement sampleButton = (IUIBoxElement)root.CreateElement2(BasicUIElementKind.SimpleBox);
+
             root.AddContent(sampleButton);
+            sampleButton.SetLocation(20, 20);
             int count = 0;
             //sampleButton.MouseDown += new EventHandler<UIMouseEventArgs>((s, e2) =>
             //{

@@ -14,9 +14,19 @@ namespace PaintLab
     {
 
     }
+     
     public interface IUIElement
     {
 
+    }
+    public interface IUIBoxElement : IUIElement
+    {
+        int Width { get; }
+        int Height { get; }
+        int Top { get; }
+        int Left { get; }
+        void SetSize(int w, int h);
+        void SetLocation(int left, int top);
     }
     public interface IUIRootElement
     {

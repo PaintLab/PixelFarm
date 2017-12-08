@@ -39,7 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IAppHost.cs" />
+    <Compile Include="Interfaces\Interfaces.cs" />
+    <Compile Include="Interfaces_Impl\InterfaceImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleViewportExtension.cs" />
     <Compile Include="SimpleDelegates.cs" />
