@@ -61,14 +61,6 @@ namespace PixelFarm.DrawingGL
             Win32.Win32Font font = Win32.FontHelper.CreateWin32Font(fontName, emHeight, false, false);
             memdc.SetFont(font.GetHFont());
             _defautInitFont = font;
-
-            //Win32.MyWin32.LOGFONT logFont = new Win32.MyWin32.LOGFONT();
-            //Win32.MyWin32.SetFontName(ref logFont, fontName);
-            //logFont.lfHeight = emHeight;
-            //logFont.lfCharSet = 1;//default
-            //logFont.lfQuality = 0;//default
-            //hfont = Win32.MyWin32.CreateFontIndirect(ref logFont);
-            //Win32.MyWin32.SelectObject(memdc.DC, hfont);
         }
 
 
@@ -77,6 +69,7 @@ namespace PixelFarm.DrawingGL
             //TODO: review performance              
             memdc.PatBlt(Win32.NativeWin32MemoryDc.PatBltColor.White, 0, 0, bmpWidth, bmpHeight);
             memdc.TextOut(textBuffer);
+            //memdc.BitBltTo(destHdc);
             // Win32.Win32Utils.BitBlt(hdc, 0, 0, bmpWidth, 50, memHdc, 0, 0, Win32.MyWin32.SRCCOPY);
             //---------------
             int stride = 4 * ((bmpWidth * 32 + 31) / 32);
