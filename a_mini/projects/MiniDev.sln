@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniAgg", "PixelFarm\PixelFarm.MiniAgg\MiniAgg.csproj", "{4D5CE655-58FA-4523-8E46-738B941E9E47}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniAgg", "PixelFarm\PixelFarm.MiniAgg\PixelFarm.MiniAgg.csproj", "{4D5CE655-58FA-4523-8E46-738B941E9E47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniAgg.Complements", "PixelFarm\PixelFarm.MiniAgg.Complements\MiniAgg.Complements.csproj", "{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniAgg.Complements", "PixelFarm\PixelFarm.MiniAgg.Complements\PixelFarm.MiniAgg.Complements.csproj", "{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesselate", "PixelFarm\Tesselate\Tesselate.csproj", "{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}"
 EndProject

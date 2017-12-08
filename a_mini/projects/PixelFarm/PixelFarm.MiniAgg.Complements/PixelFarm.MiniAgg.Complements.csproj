@@ -8,8 +8,8 @@
     <ProjectGuid>{AE0DF71E-9B14-4197-B55A-E1E0CE0683C7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniAgg.Complements</RootNamespace>
-    <AssemblyName>MiniAgg.Complements</AssemblyName>
+    <RootNamespace>PixelFarm.MiniAgg.Complements</RootNamespace>
+    <AssemblyName>PixelFarm.MiniAgg.Complements</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -70,9 +70,9 @@
       <Project>{fde310c7-9c58-47f9-a6af-3f518613bc4b}</Project>
       <Name>PixelFarm.DrawingCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.MiniAgg\MiniAgg.csproj">
+    <ProjectReference Include="..\PixelFarm.MiniAgg\PixelFarm.MiniAgg.csproj">
       <Project>{4D5CE655-58FA-4523-8E46-738B941E9E47}</Project>
-      <Name>MiniAgg</Name>
+      <Name>PixelFarm.MiniAgg</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

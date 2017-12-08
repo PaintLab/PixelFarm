@@ -8,8 +8,8 @@
     <ProjectGuid>{4D5CE655-58FA-4523-8E46-738B941E9E47}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MiniAgg</RootNamespace>
-    <AssemblyName>MiniAgg</AssemblyName>
+    <RootNamespace>PixelFarm.MiniAgg</RootNamespace>
+    <AssemblyName>PixelFarm.MiniAgg</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
