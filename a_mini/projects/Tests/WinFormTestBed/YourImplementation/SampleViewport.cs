@@ -1,10 +1,12 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
+using PaintLab;
 using PixelFarm.Drawing;
 using LayoutFarm.ContentManagers;
+
 namespace LayoutFarm
 {
-    public class SampleViewport
+    public class SampleViewport : IViewport
     {
         ImageContentManager imageContentMan;
         LayoutFarm.UI.UISurfaceViewportControl vw;
@@ -78,5 +80,93 @@ namespace LayoutFarm
             return clientImgBinder;
         }
 
+        //----------------------------------------
+
+        UIRootElement _uiRootElement;
+
+        IUIRootElement IViewport.Root
+        {
+            get
+            {
+                if (_uiRootElement == null)
+                {
+                    _uiRootElement = new UIRootElement();
+                    _uiRootElement._viewport = this;
+                }
+                return _uiRootElement;
+            }
+        }
+        MyAppHost _myAppHost;
+        IAppHost IViewport.AppHost
+        {
+            get
+            {
+                if (_myAppHost == null)
+                {
+                    _myAppHost = new MyAppHost();
+                    _myAppHost.clientViewport = this;
+                }
+                return _myAppHost;
+            }
+        }
+    }
+
+    //---------------
+    struct MyUIElement : IUIElement, System.IEquatable<MyUIElement>
+    {
+        internal readonly UI.UIElement uiElem;
+        public MyUIElement(UI.UIElement uiElem)
+        {
+            this.uiElem = uiElem;
+        }
+
+        public bool Equals(MyUIElement other)
+        {
+            return this.uiElem == other.uiElem;
+        }
+    }
+    class UIRootElement : IUIRootElement
+    {
+        internal SampleViewport _viewport;
+        public void AddContent(IUIElement uiElement)
+        {
+            var myUI = (MyUIElement)uiElement;
+            _viewport.AddContent(myUI.uiElem);
+        }
+        public IUIElement CreateElement(string elemName)
+        {
+            switch (elemName)
+            {
+                default:
+                    return Wrap(new CustomWidgets.SimpleBox(10, 10));
+                case UIElemNameConst.simple_box:
+                    return Wrap(new CustomWidgets.SimpleBox(10, 10));
+                case UIElemNameConst.h_scroll_bar:
+                    {
+                        var scBar = new CustomWidgets.ScrollBar(10, 10);
+                        scBar.ScrollBarType = CustomWidgets.ScrollBarType.Horizontal;
+                        return Wrap(scBar);
+                    }
+                case UIElemNameConst.v_scroll_bar:
+                    {
+                        var scBar = new CustomWidgets.ScrollBar(10, 10);
+                        scBar.ScrollBarType = CustomWidgets.ScrollBarType.Vertical;
+                        return Wrap(scBar);
+                    }
+                case UIElemNameConst.textbox:
+                    {
+                        var textBox = new CustomWidgets.TextBox(10, 10, false);
+                        return Wrap(textBox);
+                    }
+            }
+        }
+        static MyUIElement Wrap(LayoutFarm.UI.UIElement ui)
+        {
+            return new MyUIElement(ui);
+        }
+    }
+    class MyAppHost : IAppHost
+    {
+        internal IViewport clientViewport;
     }
 }
