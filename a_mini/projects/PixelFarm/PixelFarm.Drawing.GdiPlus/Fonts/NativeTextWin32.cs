@@ -1,20 +1,22 @@
 ﻿//MIT, 2014-2017, WinterDev
 
 using System;
+using System.Collections.Generic;
+using System.Text;
+
+
+
+using PixelFarm.Drawing.Fonts;
+
 
 namespace PixelFarm.Drawing.WinGdi
 {
+
     using Win32;
-    using System.Text;
-    using PixelFarm.Drawing.Fonts;
-    using System.Collections.Generic;
-
-    public static class WinGdiTextService
+    static class WinGdiTextService
     {
-        //TODO: consider use uniscribe
-
+        //TODO: consider use uniscribe 
         static NativeWin32MemoryDc win32MemDc;
-
         //=====================================
         //static 
         static readonly int[] _charFit = new int[1];
@@ -366,7 +368,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
     }
 
-    public class Gdi32IFonts : IFonts
+    class Gdi32IFonts : IFonts
     {
         public float MeasureWhitespace(RequestFont f)
         {
@@ -456,7 +458,7 @@ namespace PixelFarm.Drawing.WinGdi
             return latestWinFont = found;
         }
     }
-    public class WinGdiFontFace : FontFace
+    class WinGdiFontFace : FontFace
     {
         FontFace nopenTypeFontFace;
         FontStyle style;
@@ -519,4 +521,4 @@ namespace PixelFarm.Drawing.WinGdi
         }
     }
 
-} 
+}

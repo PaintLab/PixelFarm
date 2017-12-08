@@ -384,8 +384,9 @@ namespace LayoutFarm
                 {
                 }
                 canvas.PopClipAreaRect();
-#if DEBUG
+
             }
+
             else
             {
 
@@ -404,7 +405,7 @@ namespace LayoutFarm
 #endif
 
             }
-
+#if DEBUG
             dbugVRoot.dbug_drawLevel--;
 #endif
         }
