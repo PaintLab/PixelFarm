@@ -22,6 +22,10 @@ namespace PixelFarm.Drawing.WinGdi
         {
             WinGdiFontFace.SetFontLoader(fontLoader);
         }
+        public static IFonts GetIFonts()
+        {
+            return new Gdi32IFonts();
+        }
     }
 
 
