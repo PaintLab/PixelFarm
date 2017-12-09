@@ -61,7 +61,7 @@
       <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
       <Name>PixelFarm.Drawing.GdiPlus</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.MiniAgg.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.MiniAgg\PixelFarm.Drawing.MiniAgg.csproj">
       <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
       <Name>PixelFarm.Drawing.MiniAgg</Name>
     </ProjectReference>

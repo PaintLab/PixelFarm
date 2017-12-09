@@ -279,10 +279,6 @@
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
       <Name>PixelFarm.Typography</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\YourImplementation.PixelFarm\YourImplementation.PixelFarm.csproj">
-      <Project>{8963dd34-ce0a-42cd-b3b2-d73031b8f0a0}</Project>
-      <Name>YourImplementation.PixelFarm</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
       <Name>TestSamples</Name>

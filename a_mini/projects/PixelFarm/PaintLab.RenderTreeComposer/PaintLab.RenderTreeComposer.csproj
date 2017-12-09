@@ -33,8 +33,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="0_MyRootGraphic.cs" />
-    <Compile Include="TopWindowRenderBox.cs" />
+    <Compile Include="0_Bootstrap\BootStrapOpenGLES2.cs" />
+    <Compile Include="0_Bootstrap\BootStrapWinGdi.cs" />
+    <Compile Include="3_RenderTreeRoot\0_MyRootGraphic.cs" />
+    <Compile Include="3_RenderTreeRoot\TopWindowRenderBox.cs" />
     <Compile Include="1_Events\GraphicsTimerTasksManager.cs" />
     <Compile Include="1_Events\MyIntervalTaskEventArgs.cs" />
     <Compile Include="1_Events\RenderElementEventPortal.cs" />
@@ -44,7 +46,13 @@
     <Compile Include="2_ContentManagers\ImageCacheSystem.cs" />
     <Compile Include="2_ContentManagers\ImageContentManager.cs" />
     <Compile Include="2_ContentManagers\TextContentManager.cs" />
-    <Compile Include="ClientBinder.cs" />
+    <Compile Include="2_ContentManagers\ClientBinder.cs" />
+    <Compile Include="4_FontServices\ActiveFontAtlasService.cs" />
+    <Compile Include="4_FontServices\DrawingGLFontPrinter.cs" />
+    <Compile Include="4_FontServices\DrawingGLFontPrinter.Gdi.cs" />
+    <Compile Include="4_FontServices\NativeFontStore.cs" />
+    <Compile Include="5_Windows\InstalledFontsProviderWin32.cs" />
+    <Compile Include="5_Windows\WindowFontLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -52,9 +60,37 @@
       <Project>{d2cc5cef-3003-4a5d-a532-8eb7e4fa40f2}</Project>
       <Name>PaintLab.AbstractPlatform</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
+      <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
+      <Name>PixelFarm.Drawing.GdiPlus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
+      <Project>{c6807d05-09be-4313-9f8b-bd2d51c55819}</Project>
+      <Name>Typography.GlyphLayout</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
+      <Project>{f7d71e61-9342-4dd7-9afd-69045f2ec98b}</Project>
+      <Name>Typography.OpenFont</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj">
+      <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
+      <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Typography.Contours\Typography.Contours.csproj">
+      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
+      <Name>Typography.Contours</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.csproj">
+      <Project>{09ec5531-d272-40db-87a4-b2d353846cc2}</Project>
+      <Name>Typography.TextBreak</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Typography.TextFlow\Typography.TextFlow.csproj">
+      <Project>{a17b5a62-09af-45d5-9d9f-1fd1b9ab50f7}</Project>
+      <Name>Typography.TextFlow</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
