@@ -71,6 +71,7 @@ namespace OpenTK.Platform.Windows
         // Prevent BeforeFieldInit optimization, and initialize 'size' fields.
         static API()
         {
+#if DEBUG
             RawInputHeaderSize = Marshal.SizeOf(typeof(RawInputHeader));
             RawInputSize = Marshal.SizeOf(typeof(RawInput));
             RawMouseSize = Marshal.SizeOf(typeof(RawMouse));
@@ -80,6 +81,7 @@ namespace OpenTK.Platform.Windows
             PixelFormatDescriptorVersion = 1;
             PixelFormatDescriptorSize = (short)Marshal.SizeOf(typeof(PixelFormatDescriptor));
             WindowInfoSize = Marshal.SizeOf(typeof(WindowInfo));
+#endif
         }
 
         internal static readonly short PixelFormatDescriptorSize;
@@ -1323,13 +1325,13 @@ namespace OpenTK.Platform.Windows
         #region IntPtr NextRawInputStructure(IntPtr data)
 
         /* From winuser.h
-        #ifdef _WIN64
-        #define RAWINPUT_ALIGN(x)   (((x) + sizeof(QWORD) - 1) & ~(sizeof(QWORD) - 1))
-        #else   // _WIN64
-        #define RAWINPUT_ALIGN(x)   (((x) + sizeof(DWORD) - 1) & ~(sizeof(DWORD) - 1))
-        #endif  // _WIN64
+# ifdef _WIN64
+#define RAWINPUT_ALIGN(x)   (((x) + sizeof(QWORD) - 1) & ~(sizeof(QWORD) - 1))
+#else   // _WIN64
+#define RAWINPUT_ALIGN(x)   (((x) + sizeof(DWORD) - 1) & ~(sizeof(DWORD) - 1))
+#endif  // _WIN64
 
-        #define NEXTRAWINPUTBLOCK(ptr) ((PRAWINPUT)RAWINPUT_ALIGN((ULONG_PTR)((PBYTE)(ptr) + (ptr)->header.dwSize)))
+#define NEXTRAWINPUTBLOCK(ptr) ((PRAWINPUT)RAWINPUT_ALIGN((ULONG_PTR)((PBYTE)(ptr) + (ptr)->header.dwSize)))
         */
 
         internal static IntPtr NextRawInputStructure(IntPtr data)
@@ -1750,18 +1752,18 @@ namespace OpenTK.Platform.Windows
         DWORD  dmNup;
       }
       DWORD  dmDisplayFrequency; 
-    #if(WINVER >= 0x0400) 
+#if (WINVER >= 0x0400) 
       DWORD  dmICMMethod;
       DWORD  dmICMIntent;
       DWORD  dmMediaType;
       DWORD  dmDitherType;
       DWORD  dmReserved1;
       DWORD  dmReserved2;
-    #if (WINVER >= 0x0500) || (_WIN32_WINNT >= 0x0400)
+#if (WINVER >= 0x0500) || (_WIN32_WINNT >= 0x0400)
       DWORD  dmPanningWidth;
       DWORD  dmPanningHeight;
-    #endif
-    #endif 
+#endif
+#endif
     } DEVMODE; 
     */
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]

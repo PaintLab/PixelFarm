@@ -28,6 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -159,7 +160,103 @@
     <Compile Include="..\PaintLab.RenderTree\8_EventQueue\EventQueueSystem.cs">
       <Link>RenderTree\8_EventQueue\EventQueueSystem.cs</Link>
     </Compile>
+    <Compile Include="..\PaintLab.Text\1.1_EditableRuns\EditableRun.cs">
+      <Link>Text\1.1_EditableTextRuns\EditableRun.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.1_EditableRuns\EditableRunCharLocation.cs">
+      <Link>Text\1.1_EditableTextRuns\EditableRunCharLocation.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.1_EditableRuns\EditableTextRun.cs">
+      <Link>Text\1.1_EditableTextRuns\EditableTextRun.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.1_EditableRuns\SolidTextRun.cs">
+      <Link>Text\1.1_EditableTextRuns\SolidTextRun.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.1_EditableRuns\TextSpanSytle.cs">
+      <Link>Text\1.1_EditableTextRuns\TextSpanSytle.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.1_EditableRuns\VisualPointInfo.cs">
+      <Link>Text\1.1_EditableTextRuns\VisualPointInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.1_EditableRuns\VisualSelectionRange.cs">
+      <Link>Text\1.1_EditableTextRuns\VisualSelectionRange.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.2_Lines\0_EditableTextLine.cs">
+      <Link>Text\1.2_Lines\0_EditableTextLine.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.2_Lines\1_EditableTextLine_CORE_Collection.cs">
+      <Link>Text\1.2_Lines\1_EditableTextLine_CORE_Collection.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs">
+      <Link>Text\1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs">
+      <Link>Text\1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs">
+      <Link>Text\1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.2_Lines\6_EditableTextLine_Advanced.cs">
+      <Link>Text\1.2_Lines\6_EditableTextLine_Advanced.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.2_Lines\debugActivityRecorder.cs">
+      <Link>Text\1.2_Lines\debugActivityRecorder.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.2_Lines\TextLineReaderWriter.cs">
+      <Link>Text\1.2_Lines\TextLineReaderWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.3_Layer\1_EditableTextFlowLayer.cs">
+      <Link>Text\1.3_Layers\1_EditableTextFlowLayer.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs">
+      <Link>Text\1.3_Layers\1_EditableTextFlowLayer_CORE_Collection.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.1_MultiLineController\DocumentActions.cs">
+      <Link>Text\2.1_MultiLineController\DocumentActions.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.1_MultiLineController\TextLayerController.cs">
+      <Link>Text\2.1_MultiLineController\TextLayerController.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs">
+      <Link>Text\2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.1_MultiLineController\TextLayerController.TextFunctions.cs">
+      <Link>Text\2.1_MultiLineController\TextLayerController.TextFunctions.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.1_MultiLineController\TextSurfaceEventListener.cs">
+      <Link>Text\2.1_MultiLineController\TextSurfaceEventListener.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.2_TextRenderBox\CaretRenderElement.cs">
+      <Link>Text\2.2_TextRenderBox\CaretRenderElement.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.2_TextRenderBox\CustomRenderSurface.cs">
+      <Link>Text\2.2_TextRenderBox\CustomRenderSurface.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.2_TextRenderBox\GlobalCaretController.cs">
+      <Link>Text\2.2_TextRenderBox\GlobalCaretController.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.2_TextRenderBox\RenderSurfaceScrollRelation.cs">
+      <Link>Text\2.2_TextRenderBox\RenderSurfaceScrollRelation.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.2_TextRenderBox\StyleHelper.cs">
+      <Link>Text\2.2_TextRenderBox\StyleHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs">
+      <Link>Text\2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.2_TextRenderBox\TextEditRenderBox.cs">
+      <Link>Text\2.2_TextRenderBox\TextEditRenderBox.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs">
+      <Link>Text\2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs</Link>
+    </Compile>
+    <Compile Include="..\PaintLab.Text\2.2_TextRenderBox\VisualPaintEventArgs.cs">
+      <Link>Text\2.2_TextRenderBox\VisualPaintEventArgs.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IO\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
@@ -167,6 +264,5 @@
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -73,17 +73,21 @@ namespace LayoutFarm
             //-------------------------  
             //load images...
 
-            string[] fileNames = System.IO.Directory.GetFiles("../../Data/imgs", "0*.jpg");
+            //check folder before load
+            string[] fileNames = new string[0];
+
+            if (System.IO.Directory.Exists("../../Data/imgs"))
+            {
+                fileNames = System.IO.Directory.GetFiles("../../Data/imgs", "0*.jpg");
+            }
             //select only
-
-
             int lastY = 0;
             for (int i = 0; i < fileNames.Length; ++i) //5 imgs
             {
                 var imgbox = new LayoutFarm.CustomWidgets.ImageBox(36, 400);
-                ImageBinder binder = viewport.GetImageBinder(fileNames[i]); 
-               
-                
+                ImageBinder binder = viewport.GetImageBinder(fileNames[i]);
+
+
                 imgbox.ImageBinder = binder;
                 imgbox.BackColor = Color.OrangeRed;
                 imgbox.SetLocation(0, lastY);

@@ -24,7 +24,7 @@ namespace Mini
             Application.SetCompatibleTextRenderingDefault(false);
             RootDemoPath.Path = @"..\Data";
             //you can use your font loader
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
+            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.GetFontLoader());
             PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
 
             Application.Run(new FormDev());

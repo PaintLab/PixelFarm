@@ -31,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\burningminecurve\curveutils\CubicBezier.cs">
@@ -57,53 +58,86 @@
     <Compile Include="..\burningminecurve\curveutils\VectorHelper.cs">
       <Link>1_DrawingCore\1_Vectors\4_BurningMineCurves\VectorHelper.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\Canvas.cs">
-      <Link>2_DrawingCanvas\1_Canvas\Canvas.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\CanvasOptions.cs">
-      <Link>2_DrawingCanvas\1_Canvas\CanvasOptions.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\CanvasPainter.cs">
       <Link>2_DrawingCanvas\1_Canvas\CanvasPainter.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\CanvasPaintToOutputDelegate.cs">
-      <Link>2_DrawingCanvas\1_Canvas\CanvasPaintToOutputDelegate.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\KnownColors.cs">
-      <Link>2_DrawingCanvas\1_Canvas\KnownColors.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\RenderVx.cs">
-      <Link>2_DrawingCanvas\1_Canvas\RenderVx.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\2_Drawing\FontStyle.cs">
-      <Link>2_DrawingCanvas\2_Drawing\FontStyle.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\2_Drawing\RequestFont.cs">
-      <Link>2_DrawingCanvas\2_Drawing\RequestFont.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ActualFont.cs">
-      <Link>2_DrawingCanvas\3_Drawing_Fonts\ActualFont.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\FontFace.cs">
-      <Link>2_DrawingCanvas\3_Drawing_Fonts\FontFace.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\FontGlyph.cs">
       <Link>2_DrawingCanvas\3_Drawing_Fonts\FontGlyph.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\FontKey.cs">
-      <Link>2_DrawingCanvas\3_Drawing_Fonts\FontKey.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ITextPrinter.cs">
       <Link>2_DrawingCanvas\3_Drawing_Fonts\ITextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ScriptCode.cs">
-      <Link>2_DrawingCanvas\3_Drawing_Fonts\ScriptCode.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\WriteDirection.cs">
-      <Link>2_DrawingCanvas\3_Drawing_Fonts\WriteDirection.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\1_Vectors\5_Clipper\cliper.cs">
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\1_Vectors\5_Clipper\cliper.cs">
       <Link>1_DrawingCore\1_Vectors\5_Clipper\cliper.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\3_Agg_PixelBuffer\ActualImage.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\3_Agg_PixelBuffer\ActualImage.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\3_Agg_PixelBuffer\AggMemMx.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\3_Agg_PixelBuffer\AggMemMx.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\3_Agg_PixelBuffer\NativeBufferMx.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\3_Agg_PixelBuffer\NativeBufferMx.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\4_Agg_Vertex\0_VertexCommandAndOrientation.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\4_Agg_Vertex\0_VertexCommandAndOrientation.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\4_Agg_Vertex\1_VertexStore.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\4_Agg_Vertex\1_VertexStore.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\4_Agg_Vertex\2_VertexStoreSnap.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\4_Agg_Vertex\2_VertexStoreSnap.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\4_Agg_Vertex\VertexHitTester.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\4_Agg_Vertex\VertexHitTester.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\4_Agg_Vertex\VertexStoreExtensions.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\4_Agg_Vertex\VertexStoreExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\4_Agg_Vertex\VertexStoreTransformExtensions.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\4_Agg_Vertex\VertexStoreTransformExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\4_Agg_Vertex\VxsClipping.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\4_Agg_Vertex\VxsClipping.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\BoundingRect.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\BoundingRect.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\LineCapAndJoin.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\LineCapAndJoin.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\Stroke.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\Stroke.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\StrokeGenerator.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\StrokeGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\StrokeGen_Old.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\StrokeGen_Old.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\StrokeMath.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\StrokeMath.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\CurveFlattener.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\CurveFlattener.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\LineWalker.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\LineWalker.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\PathWriter.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\PathWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\RoundedRect.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\RoundedRect.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\SimpleRect.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\SimpleRect.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\VertexData.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\VertexData.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\VertexStoreBuilder.cs">
+      <Link>2_DrawingCanvas\4_DrawingCore\5_Agg_DrawElements\VertexSource\VertexStoreBuilder.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs">
       <Link>1_DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs</Link>
@@ -126,77 +160,44 @@
     <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Region.cs">
       <Link>1_DrawingCore\2_Abstract_DrawingElements\Region.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Agg_PixelBuffer\ActualImage.cs">
-      <Link>1_DrawingCore\3_Agg_PixelBuffer\ActualImage.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\Canvas.cs">
+      <Link>1_DrawingCore\3_Canvas\Canvas.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Agg_PixelBuffer\AggMemMx.cs">
-      <Link>1_DrawingCore\3_Agg_PixelBuffer\AggMemMx.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\CanvasOptions.cs">
+      <Link>1_DrawingCore\3_Canvas\CanvasOptions.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Agg_PixelBuffer\NativeBufferMx.cs">
-      <Link>1_DrawingCore\3_Agg_PixelBuffer\NativeBufferMx.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\CanvasPaintToOutputDelegate.cs">
+      <Link>1_DrawingCore\3_Canvas\CanvasPaintToOutputDelegate.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_Agg_Vertex\0_VertexCommandAndOrientation.cs">
-      <Link>1_DrawingCore\4_Agg_Vertex\0_VertexCommandAndOrientation.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\KnownColors.cs">
+      <Link>1_DrawingCore\3_Canvas\KnownColors.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_Agg_Vertex\1_VertexStore.cs">
-      <Link>1_DrawingCore\4_Agg_Vertex\1_VertexStore.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\RenderVx.cs">
+      <Link>1_DrawingCore\3_Canvas\RenderVx.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_Agg_Vertex\2_VertexStoreSnap.cs">
-      <Link>1_DrawingCore\4_Agg_Vertex\2_VertexStoreSnap.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\ActualFont.cs">
+      <Link>1_DrawingCore\4_Request_Fonts\ActualFont.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_Agg_Vertex\VertexHitTester.cs">
-      <Link>1_DrawingCore\4_Agg_Vertex\VertexHitTester.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\FontFace.cs">
+      <Link>1_DrawingCore\4_Request_Fonts\FontFace.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_Agg_Vertex\VertexStoreExtensions.cs">
-      <Link>1_DrawingCore\4_Agg_Vertex\VertexStoreExtensions.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\FontKey.cs">
+      <Link>1_DrawingCore\4_Request_Fonts\FontKey.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_Agg_Vertex\VertexStoreTransformExtensions.cs">
-      <Link>1_DrawingCore\4_Agg_Vertex\VertexStoreTransformExtensions.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\FontStyle.cs">
+      <Link>1_DrawingCore\4_Request_Fonts\FontStyle.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_Agg_Vertex\VxsClipping.cs">
-      <Link>1_DrawingCore\4_Agg_Vertex\VxsClipping.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\RequestFont.cs">
+      <Link>1_DrawingCore\4_Request_Fonts\RequestFont.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\BoundingRect.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\BoundingRect.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\ScriptCode.cs">
+      <Link>1_DrawingCore\4_Request_Fonts\ScriptCode.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\LineCapAndJoin.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\LineCapAndJoin.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\WriteDirection.cs">
+      <Link>1_DrawingCore\4_Request_Fonts\WriteDirection.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\Stroke.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\Stroke.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\StrokeGenerator.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\StrokeGenerator.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\StrokeGen_Old.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\StrokeGen_Old.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\StrokeMath.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\StrokeMath.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\VertexSource\CurveFlattener.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\VertexSource\CurveFlattener.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\VertexSource\LineWalker.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\VertexSource\LineWalker.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\VertexSource\PathWriter.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\VertexSource\PathWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\VertexSource\RoundedRect.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\VertexSource\RoundedRect.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\VertexSource\SimpleRect.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\VertexSource\SimpleRect.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\VertexSource\VertexData.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\VertexSource\VertexData.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\5_Agg_DrawElements\VertexSource\VertexStoreBuilder.cs">
-      <Link>1_DrawingCore\5_Agg_DrawElements\VertexSource\VertexStoreBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\ForNet20\ExtensionAttribute.cs">
-      <Link>1_DrawingCore\ForNet20\ExtensionAttribute.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
+      <Link>1_DrawingCore\ExtensionAttribute.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggCanvasPainter.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggCanvasPainter.cs</Link>

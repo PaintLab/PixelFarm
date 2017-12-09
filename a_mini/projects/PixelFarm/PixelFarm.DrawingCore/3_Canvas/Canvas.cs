@@ -66,7 +66,6 @@ namespace PixelFarm.Drawing
         //------------------------------------------------------
         //buffer
         public abstract void ClearSurface(Color c);
-        //public abstract void CopyFrom(Canvas sourceCanvas, int logicalSrcX, int logicalSrcY, Rectangle destArea);
         public abstract void RenderTo(System.IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea);
         //------------------------------------------------------- 
 

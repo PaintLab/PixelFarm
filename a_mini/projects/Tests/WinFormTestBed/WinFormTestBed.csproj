@@ -7,8 +7,8 @@
     <ProjectGuid>{3E30E0D2-1CD7-42CC-9555-614105EF9C56}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test_Demo01</RootNamespace>
-    <AssemblyName>Test_Demo01</AssemblyName>
+    <RootNamespace>WinFormTestBed</RootNamespace>
+    <AssemblyName>WinFormTestBed</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -38,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\Interfaces.cs" />
+    <Compile Include="Interfaces_Impl\InterfaceImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleViewportExtension.cs" />
     <Compile Include="SimpleDelegates.cs" />
@@ -66,9 +69,9 @@
     <Compile Include="TestBedStartup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\LayoutFarm.Platforms.WinForms.csproj">
-      <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
-      <Name>LayoutFarm.Platforms.WinForms</Name>
+    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.MiniWinForms\LayoutFarm.Platforms.MiniWinForms.csproj">
+      <Project>{53bdc3f9-61b4-4fec-af57-ad311420d424}</Project>
+      <Name>LayoutFarm.Platforms.MiniWinForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>

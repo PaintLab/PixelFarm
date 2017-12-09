@@ -7,15 +7,10 @@ namespace TestGraphicPackage2
     {
 
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-
             YourImplementation.TestBedStartup.Setup();
             YourImplementation.TestBedStartup.RunDemoList(typeof(Program));
-
-        }
-
-    }
-
-
+        } 
+    } 
 }

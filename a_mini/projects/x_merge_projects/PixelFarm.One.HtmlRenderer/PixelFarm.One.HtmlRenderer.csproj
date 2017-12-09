@@ -43,10 +43,6 @@
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
       <Name>LayoutFarm.Platforms.WinForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.TextEdit\LayoutFarm.TextEdit.csproj">
-      <Project>{3ee0a791-af18-46ac-b13e-5ddc393091a8}</Project>
-      <Name>LayoutFarm.TextEdit</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
       <Name>LayoutFarm.YourBasicCustomWidgets</Name>

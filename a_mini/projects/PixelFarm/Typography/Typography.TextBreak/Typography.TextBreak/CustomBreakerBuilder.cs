@@ -23,6 +23,11 @@ namespace Typography.TextBreak
         }
         static void InitAllDics()
         {
+            if (DataDir == null)
+            {
+                return;
+            }
+
             if (thaiDicBreakingEngine == null)
             {
                 var customDic = new CustomDic();
@@ -40,7 +45,7 @@ namespace Typography.TextBreak
                 customDic.SetCharRange(laoDicBreakingEngine.FirstUnicodeChar, laoDicBreakingEngine.LastUnicodeChar);
                 customDic.LoadFromTextfile(DataDir + "/laodict.txt");
             }
-           
+
         }
         static string DataDir
         {

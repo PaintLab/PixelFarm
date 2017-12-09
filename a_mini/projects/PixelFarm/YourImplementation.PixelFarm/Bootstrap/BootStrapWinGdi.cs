@@ -7,12 +7,28 @@ namespace YourImplementation
 {
     public static class BootStrapWinGdi
     {
-        public static readonly IFontLoader myFontLoader = new WindowsFontLoader();
+        static IFontLoader myFontLoader;
+        public static IFontLoader GetFontLoader()
+        {
+#if DEBUG
+           if(myFontLoader==null){
+           }
+#endif
+            return myFontLoader;
+        }
         public static void SetupDefaultValues()
         {
+            myFontLoader = new WindowsFontLoader();
             //test Typography's custom text break, 
-            Typography.TextBreak.CustomBreakerBuilder.Setup(@"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries");
-          
+            //check if we have that data?
+
+            string typographyDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries";
+            if (System.IO.Directory.Exists(typographyDir))
+            {
+                Typography.TextBreak.CustomBreakerBuilder.Setup(typographyDir);
+            }
+
+
             PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.myFontLoader);
         }
 

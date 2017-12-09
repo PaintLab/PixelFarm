@@ -1,10 +1,12 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
+using PaintLab;
 using PixelFarm.Drawing;
 using LayoutFarm.ContentManagers;
+
 namespace LayoutFarm
 {
-    public class SampleViewport
+    public class SampleViewport : IViewport
     {
         ImageContentManager imageContentMan;
         LayoutFarm.UI.UISurfaceViewportControl vw;
@@ -12,9 +14,6 @@ namespace LayoutFarm
         int primaryScreenWorkingAreaH;
         public SampleViewport(LayoutFarm.UI.UISurfaceViewportControl vw)
         {
-
-
-
             this.vw = vw;
             var workingArea = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
             this.primaryScreenWorkingAreaW = workingArea.Width;
@@ -38,13 +37,7 @@ namespace LayoutFarm
             //load here as need
             imageContentMan.AddRequestImage(binder);
         }
-        ////public UIPlatform Platform
-        ////{
-        ////    get
-        ////    {
-        ////        return vw.Platform;
-        ////    }
-        ////}
+
         public int PrimaryScreenWidth
         {
             get { return this.primaryScreenWorkingAreaW; }
@@ -58,7 +51,7 @@ namespace LayoutFarm
             this.vw.AddContent(renderElement);
         }
 
-        public LayoutFarm.UI.UISurfaceViewportControl ViewportControl
+        internal LayoutFarm.UI.UISurfaceViewportControl ViewportControl
         {
             get { return this.vw; }
         }
@@ -87,5 +80,36 @@ namespace LayoutFarm
             return clientImgBinder;
         }
 
+        //----------------------------------------
+
+        UIRootElement _uiRootElement;
+
+        IUIRootElement IViewport.Root
+        {
+            get
+            {
+                if (_uiRootElement == null)
+                {
+                    _uiRootElement = new UIRootElement();
+                    _uiRootElement._viewport = this;
+                }
+                return _uiRootElement;
+            }
+        }
+        MyAppHost _myAppHost;
+        IAppHost IViewport.AppHost
+        {
+            get
+            {
+                if (_myAppHost == null)
+                {
+                    _myAppHost = new MyAppHost();
+                    _myAppHost.clientViewport = this;
+                }
+                return _myAppHost;
+            }
+        }
     }
+
+   
 }

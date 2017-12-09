@@ -1,10 +1,24 @@
 ﻿//Apache2, 2014-2017, WinterDev
 using System;
 using PixelFarm.Drawing;
-
+using PaintLab;
 namespace LayoutFarm
 {
 
+    public abstract class DemoBase2
+    {
+        public void StartDemo(IViewport viewport)
+        {
+            OnStartDemo(viewport);
+        }
+        protected virtual void OnStartDemo(IViewport viewport)
+        {
+        }
+        public virtual string Desciption
+        {
+            get { return ""; }
+        }
+    }
     public abstract class DemoBase
     {
         public void StartDemo(SampleViewport viewport)
@@ -18,7 +32,6 @@ namespace LayoutFarm
         {
             get { return ""; }
         }
-        
     }
     sealed class DemoBitmap : Image
     {
@@ -82,6 +95,8 @@ namespace LayoutFarm
     {
         public readonly Type DemoType;
         public readonly string DemoNote;
+        public int demoBaseTypeKind; // 0,1
+
         public DemoInfo(Type demoType, string demoNote)
         {
             this.DemoType = demoType;

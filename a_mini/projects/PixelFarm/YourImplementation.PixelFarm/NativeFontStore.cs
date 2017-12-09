@@ -9,6 +9,7 @@ using System.Collections.Generic;
 namespace PixelFarm.DrawingGL
 {
 
+#if GL_ENABLE
 #if DEBUG
     class NativeFontStore
     {
@@ -81,5 +82,6 @@ namespace PixelFarm.DrawingGL
         }
     }
 
+#endif
 #endif
 }
