@@ -4,6 +4,7 @@
 using System;
 namespace PixelFarm.Drawing.Fonts
 {
+    
     public abstract class FontFace : IDisposable
     {
         public bool HasKerning { get; set; }

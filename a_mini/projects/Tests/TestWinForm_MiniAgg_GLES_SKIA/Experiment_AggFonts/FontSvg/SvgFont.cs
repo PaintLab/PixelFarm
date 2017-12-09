@@ -45,17 +45,17 @@ namespace PixelFarm.Drawing.Fonts
         }
         public FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
-            FontGlyph glyph;
+            MyFontGlyph glyph;
             //temp 
             if (!cachedGlyphsByIndex.TryGetValue(glyphIndex, out glyph))
             {
                 //create font glyph for this font size
-                FontGlyph originalGlyph = fontface.GetGlyphByIndex((int)glyphIndex);
+                MyFontGlyph originalGlyph = (MyFontGlyph)fontface.GetGlyphByIndex((int)glyphIndex);
 
                 VertexStore characterGlyph = new VertexStore();
                 scaleTx.TransformToVxs(originalGlyph.originalVxs, characterGlyph);
 
-                glyph = new FontGlyph();
+                glyph = new MyFontGlyph();
                 glyph.originalVxs = characterGlyph;
                 //then flatten it
                 glyph.flattenVxs = curveFlattner.MakeVxs(characterGlyph, new VertexStore());
@@ -70,15 +70,17 @@ namespace PixelFarm.Drawing.Fonts
             if (!cachedGlyphs.TryGetValue(c, out glyph))
             {
                 //create font glyph for this font size
-                var originalGlyph = fontface.GetGlyphForCharacter(c);
+                MyFontGlyph originalGlyph = (MyFontGlyph)fontface.GetGlyphForCharacter(c);
                 VertexStore characterGlyph = new VertexStore();
                 scaleTx.TransformToVxs(originalGlyph.originalVxs, characterGlyph);
-                glyph = new FontGlyph();
-                glyph.horiz_adv_x = originalGlyph.horiz_adv_x;
-                glyph.originalVxs = characterGlyph;
+
+                MyFontGlyph myFontGlyph = new MyFontGlyph();
+                glyph = myFontGlyph;
+                myFontGlyph.horiz_adv_x = originalGlyph.horiz_adv_x;
+                myFontGlyph.originalVxs = characterGlyph;
                 //then flatten it
 
-                glyph.flattenVxs = curveFlattner.MakeVxs(characterGlyph, new VertexStore());
+                myFontGlyph.flattenVxs = curveFlattner.MakeVxs(characterGlyph, new VertexStore());
 
                 cachedGlyphs.Add(c, glyph);
             }

@@ -3,7 +3,20 @@
 using System;
 namespace PixelFarm.Drawing.Fonts
 {
-
+    /// <summary>
+    /// provide information about a glyph
+    /// </summary>
+    public abstract class FontGlyph
+    {
+        //metrics
+        public int horiz_adv_x;
+        public string glyphName;
+        public int unicode;
+        /// <summary>
+        /// code point/glyph index?
+        /// </summary>
+        public int codePoint;
+    }
     /// <summary>
     /// specific fontface + size + style
     /// </summary>

@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 
 namespace PixelFarm.Drawing.Fonts
 {
-    class NativeFontGlyph : FontGlyph
+    class NativeFontGlyph : MyFontGlyph
     {
         /// <summary>
         /// original 8bpp image buffer
@@ -284,7 +284,7 @@ namespace PixelFarm.Drawing.Fonts
             //TODO: clear resource here 
 
         }
-        public FontGlyph GetGlyph(char c)
+        public override FontGlyph GetGlyph(char c)
         {
             FontGlyph found;
             if (!dicGlyphs.TryGetValue(c, out found))
@@ -294,7 +294,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             return found;
         }
-        public FontGlyph GetGlyphByIndex(uint glyphIndex)
+        public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             FontGlyph found;
             if (!dicGlyphs2.TryGetValue(glyphIndex, out found))

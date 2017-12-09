@@ -6,13 +6,10 @@ using System.Runtime.InteropServices;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
-    /// <summary>
-    /// provide information about a glyph
-    /// </summary>
-    public class FontGlyph
-    {
 
-        public GlyphMatrix glyphMatrix; 
+    public class MyFontGlyph : FontGlyph
+    {
+        public GlyphMatrix glyphMatrix;
         /// <summary>
         /// 32 bpp image for render
         /// </summary>
@@ -27,16 +24,8 @@ namespace PixelFarm.Drawing.Fonts
         /// </summary>
         public VertexStore flattenVxs;
         //----------------------------
-        //metrics
-        public int horiz_adv_x;
-        public string glyphName;
-        public int unicode;
-        /// <summary>
-        /// code point/glyph index?
-        /// </summary>
-        public int codePoint;
+ 
     }
-
 
 
     [StructLayout(LayoutKind.Sequential)]

@@ -160,19 +160,19 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
-        //public override FontGlyph GetGlyph(char c)
-        //{
-        //    return GetGlyphByIndex((uint)typeFace.LookupIndex(c));
-        //}
-        //public override FontGlyph GetGlyphByIndex(uint glyphIndex)
-        //{
-        //    //1.  
-        //    FontGlyph fontGlyph = new FontGlyph();
-        //    fontGlyph.flattenVxs = GetGlyphVxs(glyphIndex);
-        //    fontGlyph.horiz_adv_x = typeFace.GetHAdvanceWidthFromGlyphIndex((int)glyphIndex);
+        public override FontGlyph GetGlyph(char c)
+        {
+            return GetGlyphByIndex((uint)typeFace.LookupIndex(c));
+        }
+        public override FontGlyph GetGlyphByIndex(uint glyphIndex)
+        {
+            //1.  
+            MyFontGlyph fontGlyph = new MyFontGlyph();
+            fontGlyph.flattenVxs = GetGlyphVxs(glyphIndex);
+            fontGlyph.horiz_adv_x = typeFace.GetHAdvanceWidthFromGlyphIndex((int)glyphIndex);
 
-        //    return fontGlyph;
-        //}
+            return fontGlyph;
+        }
         protected override void OnDispose()
         {
 
