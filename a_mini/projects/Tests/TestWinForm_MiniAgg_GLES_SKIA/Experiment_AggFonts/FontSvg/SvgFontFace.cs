@@ -26,7 +26,7 @@ using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 namespace PixelFarm.Drawing.Fonts
 {
-    class SvgFontFace  
+    class SvgFontFace
     {
         class Panos_1
         {
@@ -117,7 +117,7 @@ namespace PixelFarm.Drawing.Fonts
             }
         }
 
-        protected   void OnDispose()
+        protected void OnDispose()
         {
         }
         public SvgFont GetFontAtSpecificSize(int emsize)
@@ -125,7 +125,7 @@ namespace PixelFarm.Drawing.Fonts
             SvgFont found;
             if (!stockFonts.TryGetValue(emsize, out found))
             {
-                found = new SvgFont(this,"", FontStyle.Regular, emsize);
+                found = new SvgFont(this, "", FontStyle.Regular, emsize);
                 stockFonts.Add(emsize, found);
             }
             return found;
@@ -190,7 +190,7 @@ namespace PixelFarm.Drawing.Fonts
 
         FontGlyph CreateGlyphFromSVGGlyphData(string svgGlyphData)
         {
-            FontGlyph newGlyph = new FontGlyph();
+            MyFontGlyph newGlyph = new MyFontGlyph();
             if (!GetIntValue(svgGlyphData, "horiz-adv-x", out newGlyph.horiz_adv_x))
             {
                 newGlyph.horiz_adv_x = horiz_adv_x;
