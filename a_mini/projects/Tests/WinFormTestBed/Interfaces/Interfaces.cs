@@ -1,6 +1,13 @@
 ﻿//Apache2, 2017, WinterDev
 namespace PaintLab
 {
+
+    //this is an optional*** interface
+    //that bridge our platform to another app world
+    //with this interface,
+    //the app dose not know about the backend engine.
+    //suite for general client
+
     public interface IAppHost
     {
 
@@ -14,7 +21,7 @@ namespace PaintLab
     {
 
     }
-     
+
     public interface IUIElement
     {
 
