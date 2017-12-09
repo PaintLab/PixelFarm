@@ -40,6 +40,21 @@ namespace InterfaceGen
             {
                 CollectPublicType(type, onlyPublicTypes);
             }
+            //--
+            //write output to the text file
+            StringBuilder stbuilder = new StringBuilder();
+            foreach (Type publicType in onlyPublicTypes)
+            {
+                stbuilder.Append("public interface ");
+                stbuilder.AppendLine(publicType.Name);
+                stbuilder.AppendLine("{");
+                //write each public member name 
+                MemberInfo[] allPublicMembers = publicType.GetMembers(BindingFlags.DeclaredOnly);
+
+
+                stbuilder.AppendLine("}");
+                stbuilder.AppendLine();
+            }
         }
         static void CollectPublicType(Type t, List<Type> typeList)
         {

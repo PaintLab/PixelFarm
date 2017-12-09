@@ -39,52 +39,52 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\AggBasics.cs">
-      <Link>1_Vectors\1_VectorMaths\AggBasics.cs</Link>
+      <Link>1_Vectors\AggBasics.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\AggMath.cs">
-      <Link>1_Vectors\1_VectorMaths\AggMath.cs</Link>
+      <Link>1_Vectors\AggMath.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\AxisAlignedBoundingBox.cs">
-      <Link>1_Vectors\1_VectorMaths\AxisAlignedBoundingBox.cs</Link>
+      <Link>1_Vectors\AxisAlignedBoundingBox.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\BezierCurve.cs">
-      <Link>1_Vectors\1_VectorMaths\BezierCurve.cs</Link>
+      <Link>1_Vectors\BezierCurve.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\BezierCurveCubic.cs">
-      <Link>1_Vectors\1_VectorMaths\BezierCurveCubic.cs</Link>
+      <Link>1_Vectors\BezierCurveCubic.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\BezierCurveQuadric.cs">
-      <Link>1_Vectors\1_VectorMaths\BezierCurveQuadric.cs</Link>
+      <Link>1_Vectors\BezierCurveQuadric.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\MathHelper.cs">
-      <Link>1_Vectors\1_VectorMaths\MathHelper.cs</Link>
+      <Link>1_Vectors\MathHelper.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\Matrix4x4.cs">
-      <Link>1_Vectors\1_VectorMaths\Matrix4x4.cs</Link>
+      <Link>1_Vectors\Matrix4x4.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\MyVector2.cs">
-      <Link>1_Vectors\1_VectorMaths\MyVector2.cs</Link>
+      <Link>1_Vectors\MyVector2.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\Quaternion.cs">
-      <Link>1_Vectors\1_VectorMaths\Quaternion.cs</Link>
+      <Link>1_Vectors\Quaternion.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\Ray.cs">
-      <Link>1_Vectors\1_VectorMaths\Ray.cs</Link>
+      <Link>1_Vectors\Ray.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\Vector2.cs">
-      <Link>1_Vectors\1_VectorMaths\Vector2.cs</Link>
+      <Link>1_Vectors\Vector2.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\Vector3.cs">
-      <Link>1_Vectors\1_VectorMaths\Vector3.cs</Link>
+      <Link>1_Vectors\Vector3.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\Vector3Float.cs">
-      <Link>1_Vectors\1_VectorMaths\Vector3Float.cs</Link>
+      <Link>1_Vectors\Vector3Float.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\Vector4.cs">
-      <Link>1_Vectors\1_VectorMaths\Vector4.cs</Link>
+      <Link>1_Vectors\Vector4.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\BasicGeometries.cs">
-      <Link>1_Vectors\BasicGeometries.cs</Link>
+      <Link>2_Abstract_DrawingElements\BasicGeometries.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Rectangle.cs">
       <Link>2_Abstract_DrawingElements\Rectangle.cs</Link>
