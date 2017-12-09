@@ -13,6 +13,12 @@ namespace LayoutFarm
 
             root.AddContent(sampleButton);
             sampleButton.SetLocation(20, 20);
+
+            IUIBoxElement textbox = (IUIBoxElement)root.CreateElement2(BasicUIElementKind.TextBox);
+            root.AddContent(textbox);
+            textbox.SetLocation(20, 60);
+            textbox.SetSize(100, 24);
+
             int count = 0;
             //sampleButton.MouseDown += new EventHandler<UIMouseEventArgs>((s, e2) =>
             //{

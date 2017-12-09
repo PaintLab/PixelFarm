@@ -45,6 +45,7 @@ namespace InterfaceGen
             StringBuilder stbuilder = new StringBuilder();
             foreach (Type publicType in onlyPublicTypes)
             {
+                
                 stbuilder.Append("public interface ");
                 stbuilder.AppendLine(publicType.Name);
                 stbuilder.AppendLine("{");
