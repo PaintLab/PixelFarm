@@ -39,10 +39,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\pixelfarm\yourimplementation.pixelfarm\ActiveFontAtlasService.cs">
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\ActiveFontAtlasService.cs">
       <Link>Impl\DrawingGL\ActiveFontAtlasService.cs</Link>
     </Compile>
-    <Compile Include="..\..\pixelfarm\yourimplementation.pixelfarm\DrawingGLFontPrinter.cs">
+    <Compile Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\4_FontServices\DrawingGLFontPrinter.cs">
       <Link>Impl\DrawingGL\DrawingGLFontPrinter.cs</Link>
     </Compile>
     <Compile Include="GLFWProgram.cs" />

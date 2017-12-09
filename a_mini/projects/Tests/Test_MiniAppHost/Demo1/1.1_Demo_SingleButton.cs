@@ -19,11 +19,15 @@ namespace LayoutFarm
             textbox.SetLocation(20, 60);
             textbox.SetSize(100, 24);
 
+            IUIEventListener evListener = root.CreateEventListener();
             int count = 0;
-            //sampleButton.MouseDown += new EventHandler<UIMouseEventArgs>((s, e2) =>
-            //{
-            //    Console.WriteLine("click :" + (count++));
-            //});
+            evListener.MouseDown += (e) =>
+            {
+                System.Console.WriteLine("click :" + (count++));
+            };
+
+
+            sampleButton.AttachEventListener(evListener); 
         }
     }
 }

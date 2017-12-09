@@ -68,8 +68,9 @@ namespace Mini
                 AggCanvasPainter aggPainter = new AggCanvasPainter(imgGfx2d);
                 //set text printer for agg canvas painter
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
-                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
-                aggPainter.TextPrinter = textPrinter;
+                throw new NotSupportedException(); //review here again
+                //VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
+                //aggPainter.TextPrinter = textPrinter;
 
                 painter = aggPainter;
             }

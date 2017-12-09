@@ -28,11 +28,14 @@ namespace LayoutFarm.Dev
             this.toolStripButton1.Click += new EventHandler(this.toolStripButton1_Click);
 #endif
 
-            listBox2.MouseDown += new MouseEventHandler(listBox2_MouseDown);
-            listBox3.MouseDown += new MouseEventHandler(listBox3_MouseDown);
+            //listBox2.MouseDown += listBox2_MouseDown;
+            //listBox3.MouseDown += listBox3_MouseDown;
+
+            listBox2.MouseDown += ListBox2_MouseDown;
+            listBox3.MouseDown += ListBox3_MouseDown1;
         }
 
-        void listBox3_MouseDown(object sender, MouseEventArgs e)
+        private void ListBox3_MouseDown1(object sender, System.Windows.Forms.MouseEventArgs e)
         {
 
 #if DEBUG
@@ -68,8 +71,9 @@ namespace LayoutFarm.Dev
 #endif
         }
 
-        void listBox2_MouseDown(object sender, MouseEventArgs e)
+        private void ListBox2_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
+
 #if DEBUG
             dbugLayoutMsg msg = listBox2.SelectedItem as dbugLayoutMsg;
             if (msg == null)
@@ -103,6 +107,7 @@ namespace LayoutFarm.Dev
             }
 #endif
         }
+
 
 #if DEBUG
         RenderElement lastestSelectVE;

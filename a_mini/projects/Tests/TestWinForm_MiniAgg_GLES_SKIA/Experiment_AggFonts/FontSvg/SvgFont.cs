@@ -14,8 +14,8 @@ namespace PixelFarm.Drawing.Fonts
         int emSizeInPoints;
         int emSizeInPixels;
         float currentEmScalling;
-        Dictionary<char, FontGlyph> cachedGlyphs = new Dictionary<char, FontGlyph>();
-        Dictionary<uint, FontGlyph> cachedGlyphsByIndex = new Dictionary<uint, FontGlyph>();
+        Dictionary<char, MyFontGlyph> cachedGlyphs = new Dictionary<char, MyFontGlyph>();
+        Dictionary<uint, MyFontGlyph> cachedGlyphsByIndex = new Dictionary<uint, MyFontGlyph>();
         Affine scaleTx;
         string fontName;
         FontStyle fontStyle;
@@ -66,7 +66,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public FontGlyph GetGlyph(char c)
         {
-            FontGlyph glyph;
+            MyFontGlyph glyph;
             if (!cachedGlyphs.TryGetValue(c, out glyph))
             {
                 //create font glyph for this font size
