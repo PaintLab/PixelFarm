@@ -319,16 +319,16 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return this.charAbcWidths;
         }
-        public override FontGlyph GetGlyphByIndex(uint glyphIndex)
-        {
-            throw new NotImplementedException();
-        }
-        public override FontGlyph GetGlyph(char c)
-        {
-            //convert c to glyph index
-            //temp fix  
-            throw new NotImplementedException();
-        }
+        //public override FontGlyph GetGlyphByIndex(uint glyphIndex)
+        //{
+        //    throw new NotImplementedException();
+        //}
+        //public override FontGlyph GetGlyph(char c)
+        //{
+        //    //convert c to glyph index
+        //    //temp fix  
+        //    throw new NotImplementedException();
+        //}
         public override FontFace FontFace
         {
             get

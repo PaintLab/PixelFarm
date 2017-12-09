@@ -34,6 +34,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="2_Drawing\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
@@ -103,21 +104,9 @@
     <Compile Include="..\pixelfarm.vectors\3_transform\Viewport.cs">
       <Link>Sub1\1_Vectors\3_Transform\Viewport.cs</Link>
     </Compile>
-    <Compile Include="1_Canvas\Canvas.cs" />
-    <Compile Include="1_Canvas\CanvasOptions.cs" />
     <Compile Include="1_Canvas\CanvasPainter.cs" />
-    <Compile Include="1_Canvas\CanvasPaintToOutputDelegate.cs" />
-    <Compile Include="1_Canvas\KnownColors.cs" />
-    <Compile Include="1_Canvas\RenderVx.cs" />
-    <Compile Include="3_Drawing_Fonts\ActualFont.cs" />
-    <Compile Include="3_Drawing_Fonts\FontFace.cs" />
     <Compile Include="3_Drawing_Fonts\FontGlyph.cs" />
-    <Compile Include="3_Drawing_Fonts\FontKey.cs" />
-    <Compile Include="2_Drawing\RequestFont.cs" />
-    <Compile Include="2_Drawing\FontStyle.cs" />
     <Compile Include="3_Drawing_Fonts\ITextPrinter.cs" />
-    <Compile Include="3_Drawing_Fonts\ScriptCode.cs" />
-    <Compile Include="3_Drawing_Fonts\WriteDirection.cs" />
     <Compile Include="4_DrawingCore\1_Vectors\5_Clipper\cliper.cs" />
     <Compile Include="4_DrawingCore\3_Agg_PixelBuffer\ActualImage.cs" />
     <Compile Include="4_DrawingCore\3_Agg_PixelBuffer\AggMemMx.cs" />
