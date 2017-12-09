@@ -14,7 +14,6 @@ namespace LayoutFarm
         {
             this.uiElem = uiElem;
         }
-
         public int Width
         {
             get
@@ -50,8 +49,6 @@ namespace LayoutFarm
                 return (box != null) ? box.Left : 0;
             }
         }
-
-
         public bool Equals(MyUIElement other)
         {
             return this.uiElem == other.uiElem;

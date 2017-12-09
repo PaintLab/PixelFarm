@@ -13,6 +13,9 @@ namespace PixelFarm.Drawing
         Rect,
         Bezier,
     }
+
+
+
     public sealed class GraphicsPath : System.IDisposable
     {
 

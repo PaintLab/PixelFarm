@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;PIXEL_FARM,PIXEL_FARM_NET20</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -37,21 +37,111 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\burningminecurve\curveutils\CubicBezier.cs">
+      <Link>Sub1\1_Vectors\4_BurningMineCurves\CubicBezier.cs</Link>
+    </Compile>
+    <Compile Include="..\burningminecurve\curveutils\CurveBuilder.cs">
+      <Link>Sub1\1_Vectors\4_BurningMineCurves\CurveBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\burningminecurve\curveutils\CurveFit.cs">
+      <Link>Sub1\1_Vectors\4_BurningMineCurves\CurveFit.cs</Link>
+    </Compile>
+    <Compile Include="..\burningminecurve\curveutils\CurveFitBase.cs">
+      <Link>Sub1\1_Vectors\4_BurningMineCurves\CurveFitBase.cs</Link>
+    </Compile>
+    <Compile Include="..\burningminecurve\curveutils\CurvePreprocess.cs">
+      <Link>Sub1\1_Vectors\4_BurningMineCurves\CurvePreprocess.cs</Link>
+    </Compile>
+    <Compile Include="..\burningminecurve\curveutils\Spline.cs">
+      <Link>Sub1\1_Vectors\4_BurningMineCurves\Spline.cs</Link>
+    </Compile>
+    <Compile Include="..\burningminecurve\curveutils\SplineBuilder.cs">
+      <Link>Sub1\1_Vectors\4_BurningMineCurves\SplineBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\burningminecurve\curveutils\VectorHelper.cs">
+      <Link>Sub1\1_Vectors\4_BurningMineCurves\VectorHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\2_geometry\Arc.cs">
+      <Link>Sub1\1_Vectors\1_Geometry\Arc.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\2_geometry\BezireCurve.cs">
+      <Link>Sub1\1_Vectors\1_Geometry\BezireCurve.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\2_geometry\BSpline.cs">
+      <Link>Sub1\1_Vectors\1_Geometry\BSpline.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\2_geometry\Collections.cs">
+      <Link>Sub1\1_Vectors\1_Geometry\Collections.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\2_geometry\Curves.cs">
+      <Link>Sub1\1_Vectors\1_Geometry\Curves.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\2_geometry\Ellipse.cs">
+      <Link>Sub1\1_Vectors\1_Geometry\Ellipse.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\2_geometry\RectD.cs">
+      <Link>Sub1\1_Vectors\1_Geometry\RectD.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\2_geometry\RectInt.cs">
+      <Link>Sub1\1_Vectors\1_Geometry\RectInt.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\3_transform\1_Affine.cs">
+      <Link>Sub1\1_Vectors\3_Transform\1_Affine.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\3_transform\2_Bilinear.cs">
+      <Link>Sub1\1_Vectors\3_Transform\2_Bilinear.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\3_transform\3_Perspective.cs">
+      <Link>Sub1\1_Vectors\3_Transform\3_Perspective.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\3_transform\4_SimulEqGeneral.cs">
+      <Link>Sub1\1_Vectors\3_Transform\4_SimulEqGeneral.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\3_transform\ICoordTransformer.cs">
+      <Link>Sub1\1_Vectors\3_Transform\ICoordTransformer.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\3_transform\Viewport.cs">
+      <Link>Sub1\1_Vectors\3_Transform\Viewport.cs</Link>
+    </Compile>
+    <Compile Include="1_Canvas\Canvas.cs" />
+    <Compile Include="1_Canvas\CanvasOptions.cs" />
+    <Compile Include="1_Canvas\CanvasPainter.cs" />
+    <Compile Include="1_Canvas\CanvasPaintToOutputDelegate.cs" />
     <Compile Include="1_Canvas\KnownColors.cs" />
     <Compile Include="1_Canvas\RenderVx.cs" />
     <Compile Include="3_Drawing_Fonts\ActualFont.cs" />
     <Compile Include="3_Drawing_Fonts\FontFace.cs" />
     <Compile Include="3_Drawing_Fonts\FontGlyph.cs" />
     <Compile Include="3_Drawing_Fonts\FontKey.cs" />
-    <Compile Include="1_Canvas\Canvas.cs" />
-    <Compile Include="1_Canvas\CanvasOptions.cs" />
-    <Compile Include="1_Canvas\CanvasPainter.cs" />
-    <Compile Include="1_Canvas\CanvasPaintToOutputDelegate.cs" />
     <Compile Include="2_Drawing\RequestFont.cs" />
     <Compile Include="2_Drawing\FontStyle.cs" />
     <Compile Include="3_Drawing_Fonts\ITextPrinter.cs" />
     <Compile Include="3_Drawing_Fonts\ScriptCode.cs" />
     <Compile Include="3_Drawing_Fonts\WriteDirection.cs" />
+    <Compile Include="4_DrawingCore\1_Vectors\5_Clipper\cliper.cs" />
+    <Compile Include="4_DrawingCore\3_Agg_PixelBuffer\ActualImage.cs" />
+    <Compile Include="4_DrawingCore\3_Agg_PixelBuffer\AggMemMx.cs" />
+    <Compile Include="4_DrawingCore\3_Agg_PixelBuffer\NativeBufferMx.cs" />
+    <Compile Include="4_DrawingCore\4_Agg_Vertex\0_VertexCommandAndOrientation.cs" />
+    <Compile Include="4_DrawingCore\4_Agg_Vertex\1_VertexStore.cs" />
+    <Compile Include="4_DrawingCore\4_Agg_Vertex\2_VertexStoreSnap.cs" />
+    <Compile Include="4_DrawingCore\4_Agg_Vertex\VertexHitTester.cs" />
+    <Compile Include="4_DrawingCore\4_Agg_Vertex\VertexStoreExtensions.cs" />
+    <Compile Include="4_DrawingCore\4_Agg_Vertex\VertexStoreTransformExtensions.cs" />
+    <Compile Include="4_DrawingCore\4_Agg_Vertex\VxsClipping.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\BoundingRect.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\LineCapAndJoin.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\Stroke.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\StrokeGenerator.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\StrokeGen_Old.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\StrokeMath.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\VertexSource\CurveFlattener.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\VertexSource\LineWalker.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\VertexSource\PathWriter.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\VertexSource\RoundedRect.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\VertexSource\SimpleRect.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\VertexSource\VertexData.cs" />
+    <Compile Include="4_DrawingCore\5_Agg_DrawElements\VertexSource\VertexStoreBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PixelFarm.DrawingCore\PixelFarm.DrawingCore.csproj">
