@@ -83,7 +83,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestGLES_GLFW", "Tests\Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWinForm_MiniAgg_GLES_SKIA", "Tests\TestWinForm_MiniAgg_GLES_SKIA\TestWinForm_MiniAgg_GLES_SKIA.csproj", "{A634550F-EDAD-4A1D-872C-730C2FD8C1C9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.2_Actual_Platform", "2.2_Actual_Platform", "{0BDC62C6-1F5C-4645-BE3E-AF5360347A7E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.2_BackEnd_Platform", "2.2_BackEnd_Platform", "{0BDC62C6-1F5C-4645-BE3E-AF5360347A7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LayoutFarm.PlatformBase", "PixelFarm\LayoutFarm.PlatformBase\LayoutFarm.PlatformBase.csproj", "{CDEFD12B-956C-4686-AE8A-F89C3280C95F}"
 EndProject
@@ -143,7 +143,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.DrawingCore", "Pi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.TextFlow", "PixelFarm\Typography\Typography.TextFlow\Typography.TextFlow.csproj", "{A17B5A62-09AF-45D5-9D9F-1FD1B9AB50F7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1_PaintLab.Platform", "2.1_PaintLab.Platform", "{56561998-B760-4457-AC07-DB64E54CA106}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1_FrontEnd_Platform", "2.1_FrontEnd_Platform", "{56561998-B760-4457-AC07-DB64E54CA106}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.TextBreak", "PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.csproj", "{09EC5531-D272-40DB-87A4-B2D353846CC2}"
 EndProject
