@@ -105,6 +105,7 @@
       <Link>Sub1\1_Vectors\3_Transform\Viewport.cs</Link>
     </Compile>
     <Compile Include="1_Canvas\CanvasPainter.cs" />
+    <Compile Include="3_Drawing_Fonts\ActualFont.cs" />
     <Compile Include="3_Drawing_Fonts\FontGlyph.cs" />
     <Compile Include="3_Drawing_Fonts\ITextPrinter.cs" />
     <Compile Include="4_DrawingCore\1_Vectors\5_Clipper\cliper.cs" />

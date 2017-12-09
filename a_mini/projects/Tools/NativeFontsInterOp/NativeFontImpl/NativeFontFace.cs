@@ -284,7 +284,7 @@ namespace PixelFarm.Drawing.Fonts
             //TODO: clear resource here 
 
         }
-        public override FontGlyph GetGlyph(char c)
+        public FontGlyph GetGlyph(char c)
         {
             FontGlyph found;
             if (!dicGlyphs.TryGetValue(c, out found))
@@ -294,7 +294,7 @@ namespace PixelFarm.Drawing.Fonts
             }
             return found;
         }
-        public override FontGlyph GetGlyphByIndex(uint glyphIndex)
+        public FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             FontGlyph found;
             if (!dicGlyphs2.TryGetValue(glyphIndex, out found))
