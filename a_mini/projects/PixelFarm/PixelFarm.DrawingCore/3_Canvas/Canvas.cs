@@ -98,4 +98,26 @@ namespace PixelFarm.Drawing
         public abstract void DrawText(char[] buffer, int startAt, int len, Rectangle logicalTextBox, int textAlignment);
         //-------------------------------------------------------
     }
+
+    public enum SmoothingMode
+    {
+        AntiAlias = 4,
+        Default = 0,
+        HighQuality = 2,
+        HighSpeed = 1,
+        Invalid = -1,
+        None = 3
+    }
+    public enum CanvasOrientation
+    {
+        LeftTop,
+        LeftBottom,
+    }
+    public enum CanvasBackEnd
+    {
+        Software,
+        Hardware,
+        HardwareWithSoftwareFallback
+    }
+    public delegate void CanvasInvalidateDelegate(Rectangle paintArea);
 }

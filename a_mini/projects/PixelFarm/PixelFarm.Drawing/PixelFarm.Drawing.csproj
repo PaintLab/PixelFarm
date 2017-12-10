@@ -58,10 +58,10 @@
     <Compile Include="..\burningminecurve\curveutils\VectorHelper.cs">
       <Link>1_DrawingCore\1_Vectors\4_BurningMineCurves\VectorHelper.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\AggColorExtensions.cs">
+    <Compile Include="..\PixelFarm.DrawingCanvas\2_Canvas\AggColorExtensions.cs">
       <Link>2_DrawingCanvas\1_Canvas\AggColorExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\CanvasPainter.cs">
+    <Compile Include="..\PixelFarm.DrawingCanvas\2_Canvas\CanvasPainter.cs">
       <Link>2_DrawingCanvas\1_Canvas\CanvasPainter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ITextPrinter.cs">
@@ -169,20 +169,11 @@
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\Canvas.cs">
       <Link>1_DrawingCore\3_Canvas\Canvas.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\CanvasOptions.cs">
-      <Link>1_DrawingCore\3_Canvas\CanvasOptions.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\CanvasPaintToOutputDelegate.cs">
-      <Link>1_DrawingCore\3_Canvas\CanvasPaintToOutputDelegate.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\RenderVx.cs">
       <Link>1_DrawingCore\3_Canvas\RenderVx.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\FontStyle.cs">
-      <Link>1_DrawingCore\4_Request_Fonts\FontStyle.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\RequestFont.cs">
-      <Link>1_DrawingCore\4_Request_Fonts\RequestFont.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\RequestFont.cs">
+      <Link>1_DrawingCore\3_Canvas\RequestFont.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
       <Link>1_DrawingCore\ExtensionAttribute.cs</Link>

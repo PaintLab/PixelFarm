@@ -177,6 +177,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.Text", "PixelFarm\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_YourImplementation", "3_YourImplementation", "{8BE95464-61A5-4C0A-99F8-DA6E32C52B78}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.1_SubModules_Drawing", "4.1_SubModules_Drawing", "{76F8DC2A-D629-4F6F-A6E9-814C2DD78FF3}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PixelFarm\Typography\Typography.OpenFont\Typography.OpenFont.projitems*{235a071b-8d06-40ae-a5c5-b1ce59715ee9}*SharedItemsImports = 13
