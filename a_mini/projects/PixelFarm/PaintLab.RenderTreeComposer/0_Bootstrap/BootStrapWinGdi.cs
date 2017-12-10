@@ -1,7 +1,7 @@
 ﻿//MIT, 2017, WinterDev
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
+using Typography.TextServices;
 
 namespace YourImplementation
 {
@@ -11,8 +11,9 @@ namespace YourImplementation
         public static IFontLoader GetFontLoader()
         {
 #if DEBUG
-           if(myFontLoader==null){
-           }
+            if (myFontLoader == null)
+            {
+            }
 #endif
             return myFontLoader;
         }

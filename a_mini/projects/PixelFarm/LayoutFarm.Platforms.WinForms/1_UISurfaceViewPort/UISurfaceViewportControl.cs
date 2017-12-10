@@ -110,7 +110,7 @@ namespace LayoutFarm.UI
                         //printer.HintTechnique = Typography.Rendering.HintTechnique.TrueTypeInstruction_VerticalOnly;
                         //printer.UseSubPixelRendering = true;
                         //canvasPainter.TextPrinter = printer;
-                        var openFontStore = new PixelFarm.Drawing.Fonts.OpenFontStore();
+                        var openFontStore = new Typography.TextServices.OpenFontStore();
                         var printer = new GLBmpGlyphTextPrinter(canvasPainter, openFontStore);
                         canvasPainter.TextPrinter = printer;
 

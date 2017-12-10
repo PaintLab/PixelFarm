@@ -3,18 +3,20 @@ using System;
 using System.Windows.Forms;
 using PixelFarm.Drawing;
 
+
+using Typography.TextServices;
 namespace LayoutFarm.UI
 {
     public static partial class FormCanvasHelper
     {
         static LayoutFarm.UI.UIPlatformWinForm s_platform;
-        static PixelFarm.Drawing.Fonts.IFontLoader s_fontstore;
+        static IFontLoader s_fontstore;
         static void InitWinform()
         {
             if (s_platform != null) return;
             //----------------------------------------------------
             s_platform = new LayoutFarm.UI.UIPlatformWinForm();
-            s_fontstore = new PixelFarm.Drawing.Fonts.OpenFontStore();
+            s_fontstore = new OpenFontStore();
         }
         public static Form CreateNewFormCanvas(
             int w, int h,
@@ -23,7 +25,7 @@ namespace LayoutFarm.UI
         {
             //1. init
             InitWinform();
-            PixelFarm.Drawing.Fonts.IFontLoader fontLoader = s_fontstore;
+            IFontLoader fontLoader = s_fontstore;
             //2. 
             PixelFarm.Drawing.IFonts ifont = null;
 

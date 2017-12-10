@@ -1,6 +1,7 @@
 ﻿//MIT, 2014-2017, WinterDev
 using System;
 using PixelFarm.DrawingGL;
+using Typography.TextServices;
 
 namespace Mini
 {
@@ -98,8 +99,8 @@ namespace Mini
     public static class DemoHelper
     {
         static LoadImageDelegate s_LoadImgDel;
-        static PixelFarm.Drawing.Fonts.IInstalledFontProvider s_fontProvider;
-        public static void RegisterFontProvider(PixelFarm.Drawing.Fonts.IInstalledFontProvider fontProvider)
+        static IInstalledFontProvider s_fontProvider;
+        public static void RegisterFontProvider(IInstalledFontProvider fontProvider)
         {
             s_fontProvider = fontProvider;
         }
@@ -107,7 +108,7 @@ namespace Mini
         {
             s_LoadImgDel = loadImgDel;
         }
-        public static PixelFarm.Drawing.Fonts.IInstalledFontProvider GetRegisterInstalledFontProvider()
+        public static IInstalledFontProvider GetRegisterInstalledFontProvider()
         {
             return s_fontProvider;
         }

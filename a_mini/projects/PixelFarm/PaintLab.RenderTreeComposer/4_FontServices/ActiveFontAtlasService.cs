@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 
+using Typography.TextServices;
 
 namespace PixelFarm.DrawingGL
 {

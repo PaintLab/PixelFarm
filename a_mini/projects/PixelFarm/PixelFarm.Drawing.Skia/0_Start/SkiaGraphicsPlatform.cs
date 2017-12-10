@@ -1,7 +1,7 @@
 ﻿//BSD, 2014-2017, WinterDev 
 
 using System.Collections.Generic;
-using PixelFarm.Drawing.Fonts;
+using Typography.TextServices;
 namespace PixelFarm.Drawing.Skia
 {
     public static class SkiaGraphicsPlatform

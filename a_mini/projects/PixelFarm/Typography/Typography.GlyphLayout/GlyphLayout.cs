@@ -143,6 +143,10 @@ namespace Typography.TextLayout
                 _scriptLang = value;
             }
         }
+        /// <summary>
+        /// when read output, please scale to pixel unitd
+        /// </summary>
+        public bool UsePxScaleOnReadOutput { get; set; }
 
         public bool EnableLigature { get; set; }
         public bool EnableComposition { get; set; }

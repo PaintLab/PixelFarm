@@ -1,5 +1,5 @@
 ﻿//MIT, 2014-2017, WinterDev    
-namespace PixelFarm.Drawing.Fonts
+namespace Typography.TextServices
 {
     public class OpenFontStore : IFontLoader
     {
@@ -16,30 +16,31 @@ namespace PixelFarm.Drawing.Fonts
 
 
             _defaultFontNotFoundHandler = (fontCollection, fontName, subfamName, style) =>
-             {
-                 //TODO: implement font not found mapping here
-                 //_fontsMapping["monospace"] = "Courier New";
-                 //_fontsMapping["Helvetica"] = "Arial";
-                 fontName = fontName.ToUpper();
-                 switch (fontName)
-                 {
-                     case "MONOSPACE":
-                         return fontCollection.GetFont("Courier New", style);
-                     case "HELVETICA":
-                         return fontCollection.GetFont("Arial", style);
-                     case "TAHOMA":
-                         //default font must found
-                         //if not throw err 
-                         //this prevent infinit loop
-                         throw new System.NotSupportedException();
-                     default:
-                         return fontCollection.GetFont("tahoma", style);
-                 }
-             };
+            {
+                //TODO: implement font not found mapping here
+                //_fontsMapping["monospace"] = "Courier New";
+                //_fontsMapping["Helvetica"] = "Arial";
+                fontName = fontName.ToUpper();
+                switch (fontName)
+                {
+                    case "MONOSPACE":
+                        return fontCollection.GetFont("Courier New", style);
+                    case "HELVETICA":
+                        return fontCollection.GetFont("Arial", style);
+                    case "TAHOMA":
+                        //default font must found
+                        //if not throw err 
+                        //this prevent infinit loop
+                        throw new System.NotSupportedException();
+                    default:
+                        return fontCollection.GetFont("tahoma", style);
+                }
+            };
 
         }
         public InstalledFont GetFont(string fontName, InstalledFontStyle style)
         {
+            //check if we have this font in the collection or not
             InstalledFont found = installFontCollection.GetFont(fontName, style);
             if (found == null)
             {
@@ -60,7 +61,5 @@ namespace PixelFarm.Drawing.Fonts
         {
             this.fontNotFoundHandler = fontNotFoundHandler;
         }
-
-
     }
 }

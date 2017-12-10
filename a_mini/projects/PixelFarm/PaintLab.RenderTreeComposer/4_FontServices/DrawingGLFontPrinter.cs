@@ -7,6 +7,7 @@ using PixelFarm.Agg;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using Typography.TextLayout;
+using Typography.TextServices;
 #if GL_ENABLE
 
 namespace PixelFarm.DrawingGL
@@ -46,7 +47,7 @@ namespace PixelFarm.DrawingGL
 
             //set default1
             _aggPainter.CurrentFont = canvasPainter.CurrentFont;
-            var openFontStore = new PixelFarm.Drawing.Fonts.OpenFontStore();
+            var openFontStore = new Typography.TextServices.OpenFontStore();
             textPrinter = new VxsTextPrinter(_aggPainter, openFontStore);
             _aggPainter.TextPrinter = textPrinter;
         }
@@ -184,7 +185,7 @@ namespace PixelFarm.DrawingGL
         CanvasGL2d canvas2d;
         GLCanvasPainter painter;
         SimpleFontAtlas simpleFontAtlas;
-        IFontLoader _fontLoader;
+        Typography.TextServices.IFontLoader _fontLoader;
         GLBitmap _glBmp;
         RequestFont font;
 

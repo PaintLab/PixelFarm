@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using Typography.OpenFont;
 
-namespace PixelFarm.Drawing.Fonts
+
+namespace Typography.TextServices
 {
-
-
     public class InstalledFont
     {
         internal InstalledFont(string fontName,

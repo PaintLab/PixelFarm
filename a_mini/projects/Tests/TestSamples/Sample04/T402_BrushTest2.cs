@@ -5,6 +5,8 @@ using PixelFarm.Drawing;
 using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.Fonts;
+using Typography.TextServices;
+
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "402")]
