@@ -57,8 +57,6 @@
     <Compile Include="3_Canvas\RenderVx.cs" />
     <Compile Include="4_RequestFonts\FontStyle.cs" />
     <Compile Include="4_RequestFonts\RequestFont.cs" />
-    <Compile Include="4_RequestFonts\ScriptCode.cs" />
-    <Compile Include="4_RequestFonts\WriteDirection.cs" />
     <Compile Include="ExtensionAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
