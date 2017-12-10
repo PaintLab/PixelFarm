@@ -175,11 +175,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintLab.Text", "PixelFarm\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_YourImplementation", "3_YourImplementation", "{8BE95464-61A5-4C0A-99F8-DA6E32C52B78}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.0_Drawing_Core", "2.0_Drawing_Core", "{1FFAB66A-292D-402A-9505-35FA36942F4B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1_Drawing_Core", "2.1_Drawing_Core", "{1FFAB66A-292D-402A-9505-35FA36942F4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.0_BackEnd_Foundamental_Tech", "1.0_BackEnd_Foundamental_Tech", "{40520F7C-15E7-446F-8C15-E38A93A7B4B9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1_Drawing_Core_Supported_Tech", "2.1_Drawing_Core_Supported_Tech", "{AC10C2FA-8476-4818-ABFF-2E83739B8A57}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.0_Drawing_Foundamental_Tech", "2.0_Drawing_Foundamental_Tech", "{AC10C2FA-8476-4818-ABFF-2E83739B8A57}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
