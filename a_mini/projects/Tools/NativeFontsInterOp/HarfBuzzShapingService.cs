@@ -15,7 +15,7 @@ namespace PixelFarm.Drawing.Text
     public sealed class HarfBuzzShapingService : TextShapingService
     {
         Dictionary<string, FontFace> nativeFontFaces = new Dictionary<string, FontFace>();
-        Dictionary<FontKey, NativeFont> specificFontSize = new Dictionary<FontKey, NativeFont>();
+        Dictionary<int, NativeFont> specificFontSize = new Dictionary<int, NativeFont>();
 
         protected override void GetGlyphPosImpl(ActualFont actualFont, char[] buffer,
             int startAt, int len,
@@ -54,15 +54,16 @@ namespace PixelFarm.Drawing.Text
                     }
                     glyphPlans.Add(new GlyphPlan((ushort)propGlyph.codepoint, 0, 0, (ushort)propGlyph.x_advance));
                 }
-
             }
-
         }
         NativeFont ResolveForNativeFont(ActualFont actualFont)
         {
             NativeFont nativeFont;
             FontFace fontface = actualFont.FontFace;
-            FontKey key = new FontKey(fontface.Name, actualFont.SizeInPoints, FontStyle.Regular);
+
+            var reqFont = new RequestFont(fontface.Name, actualFont.SizeInPoints, FontStyle.Regular);
+            int key = reqFont.GetHashCode();
+
             if (specificFontSize.TryGetValue(key, out nativeFont))
             {
                 return nativeFont;

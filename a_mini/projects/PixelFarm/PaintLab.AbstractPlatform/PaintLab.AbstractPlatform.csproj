@@ -253,6 +253,7 @@
     <Compile Include="..\PaintLab.Text\2.2_TextRenderBox\VisualPaintEventArgs.cs">
       <Link>Text\2.2_TextRenderBox\VisualPaintEventArgs.cs</Link>
     </Compile>
+    <Compile Include="Accessories\KnownColors.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

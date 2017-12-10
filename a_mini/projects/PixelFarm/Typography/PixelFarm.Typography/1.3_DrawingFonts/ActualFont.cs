@@ -1,12 +1,14 @@
 ﻿//MIT, 2014-2017, WinterDev
 
 using System;
+using PixelFarm.Agg;
+using System.Collections.Generic;
 namespace PixelFarm.Drawing.Fonts
 {
     /// <summary>
     /// provide information about a glyph
     /// </summary>
-    public abstract class FontGlyph
+    public class FontGlyph
     {
         //metrics
         public int horiz_adv_x;
@@ -16,6 +18,22 @@ namespace PixelFarm.Drawing.Fonts
         /// code point/glyph index?
         /// </summary>
         public int codePoint;
+
+        public GlyphMatrix glyphMatrix;
+        /// <summary>
+        /// 32 bpp image for render
+        /// </summary>
+        public ActualImage glyphImage32;
+        //----------------------------
+        /// <summary>
+        /// original glyph outline
+        /// </summary>
+        public VertexStore originalVxs;
+        /// <summary>
+        /// flaten version of original glyph outline
+        /// </summary>
+        public VertexStore flattenVxs;
+        //----------------------------
     }
     /// <summary>
     /// specific fontface + size + style
@@ -58,14 +76,34 @@ namespace PixelFarm.Drawing.Fonts
 
         protected static ActualFont GetCacheActualFont(RequestFont r)
         {
-            return RequestFont.GetCacheActualFont(r);
+            //throw new NotSupportedException();
+            //return RequestFont.GetCacheActualFont(r);
+            return CacheFont.GetCacheActualFont(r);
         }
         protected static void SetCacheActualFont(RequestFont r, ActualFont a)
         {
-            RequestFont.SetCacheActualFont(r, a);
+            CacheFont.SetCacheActualFont(r, a);
+            //throw new NotSupportedException();
+            //RequestFont.SetCacheActualFont(r, a);
         }
     }
 
+    static class CacheFont
+    {
+        static Dictionary<int, ActualFont> s_actualFonts = new Dictionary<int, ActualFont>();
+        public static ActualFont GetCacheActualFont(RequestFont r)
+        {
+            ActualFont font;
+            s_actualFonts.TryGetValue(r.FontKey, out font);
+            return font;
+        }
+        public static void SetCacheActualFont(RequestFont r, ActualFont a)
+        {
+            s_actualFonts[r.FontKey] = a;
+            //throw new NotSupportedException();
+            //RequestFont.SetCacheActualFont(r, a);
+        }
+    }
 
 
 }

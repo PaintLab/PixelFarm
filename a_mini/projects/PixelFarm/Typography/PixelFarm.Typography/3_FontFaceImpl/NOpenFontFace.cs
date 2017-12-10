@@ -167,7 +167,7 @@ namespace PixelFarm.Drawing.Fonts
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             //1.  
-            MyFontGlyph fontGlyph = new MyFontGlyph();
+            FontGlyph fontGlyph = new  FontGlyph();
             fontGlyph.flattenVxs = GetGlyphVxs(glyphIndex);
             fontGlyph.horiz_adv_x = typeFace.GetHAdvanceWidthFromGlyphIndex((int)glyphIndex);
 
