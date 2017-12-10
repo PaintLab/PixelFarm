@@ -267,9 +267,9 @@
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\TypeMirror\TypeMirror.csproj">
+    <ProjectReference Include="..\..\PixelFarm\TypeMirror\BackEnd.TypeMirror.csproj">
       <Project>{68F1DAF6-2B35-476E-B2F8-5EADBC823935}</Project>
-      <Name>TypeMirror</Name>
+      <Name>BackEnd.TypeMirror</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
