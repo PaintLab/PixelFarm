@@ -243,9 +243,9 @@ namespace PixelFarm.DrawingGL
             }
 
             _typeface = (Typography.OpenFont.Typeface)fontImp.FontFace.GetInternalTypeface();
-            float srcTextureScale = _typeface.CalculateToPixelScaleFromPointSize(simpleFontAtlas.OriginalFontSizePts);
+            float srcTextureScale = _typeface.CalculateScaleToPixelFromPointSize(simpleFontAtlas.OriginalFontSizePts);
             //scale at request
-            float targetTextureScale = _typeface.CalculateToPixelScaleFromPointSize(font.SizeInPoints);
+            float targetTextureScale = _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
             _finalTextureScale = targetTextureScale / srcTextureScale;
         }
         public void Dispose()
@@ -287,7 +287,7 @@ namespace PixelFarm.DrawingGL
             //resolve font from painter?  
             glyphPlans.Clear();
             _glyphLayout.Layout(_typeface, buffer, startAt, len, glyphPlans);
-            float scale = _typeface.CalculateToPixelScaleFromPointSize(font.SizeInPoints);
+            float scale = _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
 
             //--------------------------
             //TODO:
@@ -436,7 +436,7 @@ namespace PixelFarm.DrawingGL
             glyphPlans.Clear();
             _glyphLayout.Layout(_typeface, buffer, startAt, len, glyphPlans);
 
-            TextPrinterHelper.CopyGlyphPlans(renderVx, glyphPlans, _typeface.CalculateToPixelScaleFromPointSize(font.SizeInPoints));
+            TextPrinterHelper.CopyGlyphPlans(renderVx, glyphPlans, _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
         }
     }
 

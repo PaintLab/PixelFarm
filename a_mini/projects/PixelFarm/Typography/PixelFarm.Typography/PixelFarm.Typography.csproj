@@ -113,7 +113,7 @@
     <Compile Include="3_FontFaceImpl\TextureFontLoader.cs" />
     <Compile Include="6_AggTexture\AggGlyphTextureGen.cs" />
     <Compile Include="1.1_Drawing_Fonts\GlyphPathBuilderBase.cs" />
-    <Compile Include="1.2_\FontStyleExtensions.cs" />
+    <Compile Include="1.1_Drawing_Fonts\FontStyleExtensions.cs" />
     <Compile Include="1.3_DrawingFonts\ActualFont.cs" />
     <Compile Include="1.3_DrawingFonts\FontFace.cs" />
     <Compile Include="1.3_DrawingFonts\FontGlyph.cs" />

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 using PixelFarm.Agg;
 using Typography.OpenFont;
-using Typography.Rendering;
 using Typography.Contours;
 
 namespace PixelFarm.Drawing.Fonts
@@ -53,7 +52,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public override float GetScale(float pointSize)
         {
-            return typeface.CalculateToPixelScaleFromPointSize(pointSize);
+            return typeface.CalculateScaleToPixelFromPointSize(pointSize);
         }
         public override int AscentInDzUnit
         {
@@ -89,7 +88,7 @@ namespace PixelFarm.Drawing.Fonts
             this.style = style;
             this.typeFace = ownerFace.Typeface;
             //calculate scale *** 
-            scale = typeFace.CalculateToPixelScaleFromPointSize(sizeInPoints);
+            scale = typeFace.CalculateScaleToPixelFromPointSize(sizeInPoints);
         }
         public override float SizeInPoints
         {
@@ -167,7 +166,7 @@ namespace PixelFarm.Drawing.Fonts
         public override FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
             //1.  
-            FontGlyph fontGlyph = new  FontGlyph();
+            FontGlyph fontGlyph = new FontGlyph();
             fontGlyph.flattenVxs = GetGlyphVxs(glyphIndex);
             fontGlyph.horiz_adv_x = typeFace.GetHAdvanceWidthFromGlyphIndex((int)glyphIndex);
 

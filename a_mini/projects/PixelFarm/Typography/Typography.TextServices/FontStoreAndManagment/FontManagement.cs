@@ -87,7 +87,7 @@ namespace Typography.TextServices
         Dictionary<InstalledFont, Typeface> _loadedTypefaces = new Dictionary<InstalledFont, Typeface>();
         public TypefaceStore()
         {
-
+            
         }
         /// <summary>
         /// font collection of the store
