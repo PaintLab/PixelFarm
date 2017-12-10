@@ -247,21 +247,21 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}</Project>
-      <Name>PixelFarm.MiniOpenTK</Name>
+      <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeWindows\BackEnd.NativeWindows.csproj">
       <Project>{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}</Project>
-      <Name>PixelFarm.NativeWindows</Name>
+      <Name>BackEnd.NativeWindows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj">
       <Project>{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}</Project>
-      <Name>PixelFarm.OpenTKWinForms</Name>
+      <Name>BackEnd.OpenTKWinForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\BackEnd.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
-      <Name>PixelFarm.SkiaSharp</Name>
+      <Name>BackEnd.SkiaSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>

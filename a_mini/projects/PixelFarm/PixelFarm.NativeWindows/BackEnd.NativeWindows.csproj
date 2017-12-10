@@ -78,9 +78,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+    <ProjectReference Include="..\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
-      <Name>PixelFarm.MiniOpenTK</Name>
+      <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

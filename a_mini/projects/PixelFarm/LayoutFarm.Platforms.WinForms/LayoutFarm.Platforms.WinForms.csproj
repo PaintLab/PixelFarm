@@ -125,17 +125,17 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+    <ProjectReference Include="..\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
-      <Name>PixelFarm.MiniOpenTK</Name>
+      <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj">
+    <ProjectReference Include="..\PixelFarm.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj">
       <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
-      <Name>PixelFarm.OpenTKWinForms</Name>
+      <Name>BackEnd.OpenTKWinForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
+    <ProjectReference Include="..\PixelFarm.SkiaSharp\BackEnd.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
-      <Name>PixelFarm.SkiaSharp</Name>
+      <Name>BackEnd.SkiaSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>

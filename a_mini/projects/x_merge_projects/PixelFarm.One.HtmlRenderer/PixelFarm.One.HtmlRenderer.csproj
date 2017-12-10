@@ -75,17 +75,17 @@
       <Project>{9450c9fb-5a70-4e47-bec3-b0a98a9c7d15}</Project>
       <Name>PixelFarm.Drawing.Skia</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
-      <Name>PixelFarm.MiniOpenTK</Name>
+      <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj">
       <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
-      <Name>PixelFarm.OpenTKWinForms</Name>
+      <Name>BackEnd.OpenTKWinForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\BackEnd.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
-      <Name>PixelFarm.SkiaSharp</Name>
+      <Name>BackEnd.SkiaSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj">
       <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>

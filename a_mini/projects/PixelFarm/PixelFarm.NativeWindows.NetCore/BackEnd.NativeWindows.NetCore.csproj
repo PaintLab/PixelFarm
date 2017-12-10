@@ -31,13 +31,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.MiniOpenTK.NetCore\PixelFarm.MiniOpenTK.NetCore.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="0_Init\" />
     <Folder Include="Glfw\" />
     <Folder Include="Windows\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.MiniOpenTK.NetCore\BackEnd.MiniOpenTK.NetCore.csproj" />
   </ItemGroup>
 
 </Project>
