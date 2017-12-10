@@ -8,6 +8,8 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Imaging;
 using Mini;
 using PixelFarm.Drawing.WinGdi;
+using PixelFarm.Drawing;
+
 namespace PixelFarm.Agg.Sample_LionAlphaMask2
 {
     [Info(OrderCode = "05")]

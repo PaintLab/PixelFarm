@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+
 using PixelFarm.Agg;
 using PixelFarm.VectorMath;
 namespace Mini.WinForms
@@ -168,7 +169,7 @@ namespace Mini.WinForms
             }
             set
             {
-                _myBrushPath.FillColor = PixelFarm.AggColorExtensions.Make(
+                _myBrushPath.FillColor = PixelFarm.Drawing.AggColorExtensions.Make(
                         (byte)value.R,
                         (byte)value.G,
                         (byte)value.B,

@@ -1,6 +1,5 @@
-﻿using System;
-using PixelFarm.Drawing;
-namespace PixelFarm
+﻿using System; 
+namespace PixelFarm.Drawing
 {   
     public static class AggColorExtensions
     {
