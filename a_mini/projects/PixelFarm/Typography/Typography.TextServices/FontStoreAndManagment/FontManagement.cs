@@ -87,7 +87,7 @@ namespace Typography.TextServices
         Dictionary<InstalledFont, Typeface> _loadedTypefaces = new Dictionary<InstalledFont, Typeface>();
         public TypefaceStore()
         {
-            
+
         }
         /// <summary>
         /// font collection of the store
@@ -463,5 +463,23 @@ namespace Typography.TextServices
             LoadFontsFromFolder(fontCollection, "/System/Library/Fonts");
             LoadFontsFromFolder(fontCollection, "/Library/Fonts");
         }
+
+
+        //for Windows , how to find Windows' Font Directory from Windows Registry
+        //        string[] localMachineFonts = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts", false).GetValueNames();
+        //        // get parent of System folder to have Windows folder
+        //        DirectoryInfo dirWindowsFolder = Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.System));
+        //        string strFontsFolder = Path.Combine(dirWindowsFolder.FullName, "Fonts");
+        //        RegistryKey regKey = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts");
+        //        //---------------------------------------- 
+        //        foreach (string winFontName in localMachineFonts)
+        //        {
+        //            string f = (string)regKey.GetValue(winFontName);
+        //            if (f.EndsWith(".ttf") || f.EndsWith(".otf"))
+        //            {
+        //                yield return Path.Combine(strFontsFolder, f);
+        //            }
+        //        }
+
     }
 }

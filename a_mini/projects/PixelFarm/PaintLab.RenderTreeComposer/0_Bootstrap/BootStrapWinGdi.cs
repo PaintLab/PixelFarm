@@ -19,7 +19,7 @@ namespace YourImplementation
         }
         public static void SetupDefaultValues()
         {
-            myFontLoader = new WindowsFontLoader();
+            myFontLoader = new OpenFontStore();
             //test Typography's custom text break, 
             //check if we have that data?
 

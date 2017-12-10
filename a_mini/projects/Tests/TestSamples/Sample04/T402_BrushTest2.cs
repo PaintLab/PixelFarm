@@ -27,7 +27,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            var win32InstallFontProvider = DemoHelper.GetRegisterInstalledFontProvider();
+            
             InstalledFontCollection collection = new InstalledFontCollection();
             collection.LoadSystemFonts();
             InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Normal);
