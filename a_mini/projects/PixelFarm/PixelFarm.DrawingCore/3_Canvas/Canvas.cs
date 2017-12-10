@@ -47,14 +47,17 @@ namespace PixelFarm.Drawing
         public abstract void SetCanvasOrigin(int x, int y);
         public void OffsetCanvasOrigin(int dx, int dy)
         {
+            //TODO: review offset function
             this.SetCanvasOrigin(this.CanvasOriginX + dx, this.CanvasOriginY + dy);
         }
         public void OffsetCanvasOriginX(int dx)
         {
+            //TODO: review offset function
             this.OffsetCanvasOrigin(dx, 0);
         }
         public void OffsetCanvasOriginY(int dy)
         {
+            //TODO: review offset function
             this.OffsetCanvasOrigin(0, dy);
         }
         //---------------------------------------------------------------------
