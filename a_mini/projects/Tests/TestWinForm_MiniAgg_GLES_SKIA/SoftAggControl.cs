@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Imaging;
+using PixelFarm.Drawing.Fonts;
 
 namespace Mini
 {
@@ -68,8 +69,8 @@ namespace Mini
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
                 //TODO: review text printer here again***
-                //VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
-                //aggPainter.TextPrinter = textPrinter; 
+                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter,YourImplementation.BootStrapWinGdi.GetFontLoader());
+                aggPainter.TextPrinter = textPrinter;
                 painter = aggPainter;
             }
             painter.Clear(PixelFarm.Drawing.Color.White);
