@@ -91,17 +91,32 @@ namespace PixelFarm.Drawing
                 }
                 return found;
             }
+            public override int GetHashCode()
+            {
+                return CalculateGetHasCode(this.FontNameIndex, this.FontSize, (int)this.FontStyle);
+            }
+            static int CalculateGetHasCode(int nameIndex, float fontSize, int fontstyle)
+            {
+                unchecked
+                {
+                    int hash = 17;
+                    hash = hash * 31 + nameIndex.GetHashCode();
+                    hash = hash * 31 + fontSize.GetHashCode();
+                    hash = hash * 31 + fontstyle.GetHashCode();
+                    return hash;
+                }
+            }
         }
-         
+
         static int s_POINTS_PER_INCH = 72; //default value
         static int s_PIXELS_PER_INCH = 96; //default value
-         
+
         //public WriteDirection WriteDirection { get; set; }
         //public ScriptLang ScriptLang { get; set; }
         public static float ConvEmSizeInPointsToPixels(float emsizeInPoint)
         {
             return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
-        } 
+        }
     }
 
 }
