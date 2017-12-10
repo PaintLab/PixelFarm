@@ -65,7 +65,7 @@ namespace PixelFarm.Drawing
         public abstract Rectangle CurrentClipRect { get; }
         //------------------------------------------------------
         //buffer
-        public abstract void ClearSurface(Color c);
+        public abstract void Clear(Color c);
         public abstract void RenderTo(System.IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea);
         //------------------------------------------------------- 
 

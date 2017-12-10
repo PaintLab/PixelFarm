@@ -67,6 +67,12 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ITextPrinter.cs">
       <Link>2_DrawingCanvas\3_Drawing_Fonts\ITextPrinter.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ScriptCode.cs">
+      <Link>2_DrawingCanvas\3_Drawing_Fonts\ScriptCode.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\WriteDirection.cs">
+      <Link>2_DrawingCanvas\3_Drawing_Fonts\WriteDirection.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\4_DrawingCore\1_Vectors\5_Clipper\cliper.cs">
       <Link>1_DrawingCore\1_Vectors\5_Clipper\cliper.cs</Link>
     </Compile>
@@ -177,12 +183,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\RequestFont.cs">
       <Link>1_DrawingCore\4_Request_Fonts\RequestFont.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\ScriptCode.cs">
-      <Link>1_DrawingCore\4_Request_Fonts\ScriptCode.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\WriteDirection.cs">
-      <Link>1_DrawingCore\4_Request_Fonts\WriteDirection.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
       <Link>1_DrawingCore\ExtensionAttribute.cs</Link>

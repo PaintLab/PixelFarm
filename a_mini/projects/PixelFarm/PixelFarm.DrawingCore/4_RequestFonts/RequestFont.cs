@@ -20,8 +20,8 @@ namespace PixelFarm.Drawing
         int _fontKey;
         public RequestFont(string facename, float fontSizeInPts, FontStyle style = FontStyle.Regular)
         {
-            WriteDirection = WriteDirection.LTR;
-            ScriptLang = ScriptLangs.Latin;//default
+            //WriteDirection = WriteDirection.LTR;
+            //ScriptLang = ScriptLangs.Latin;//default
 
             //Lang = "en";//default
             Name = facename;
@@ -91,97 +91,33 @@ namespace PixelFarm.Drawing
                 }
                 return found;
             }
+            public override int GetHashCode()
+            {
+                return CalculateGetHasCode(this.FontNameIndex, this.FontSize, (int)this.FontStyle);
+            }
+            static int CalculateGetHasCode(int nameIndex, float fontSize, int fontstyle)
+            {
+                //modified from https://stackoverflow.com/questions/1646807/quick-and-simple-hash-code-combinations
+                unchecked
+                {
+                    int hash = 17;
+                    hash = hash * 31 + nameIndex.GetHashCode();
+                    hash = hash * 31 + fontSize.GetHashCode();
+                    hash = hash * 31 + fontstyle.GetHashCode();
+                    return hash;
+                }
+            }
         }
 
-        //public float DescentInPixels
-        //{
-        //    get
-        //    {
-
-        //        if (_actualFont != null)
-        //        {
-        //            return (float)_actualFont.DescentInPixels;
-        //        }
-        //        else
-        //        {
-        //            throw new NotSupportedException();
-        //        }
-        //    }
-        //}
-
-        //public float AscentInPixels
-        //{
-        //    get
-        //    {
-
-        //        if (_actualFont != null)
-        //        {
-        //            return (float)_actualFont.AscentInPixels;
-        //        }
-        //        else
-        //        {
-        //            throw new NotSupportedException();
-        //        }
-        //    }
-        //}
-        //public float LineGapInPixels
-        //{
-        //    get
-        //    {
-
-        //        if (_actualFont != null)
-        //        {
-        //            return (float)_actualFont.LineGapInPixels;
-        //        }
-        //        else
-        //        {
-        //            throw new NotSupportedException();
-        //        }
-        //    }
-        //}
         static int s_POINTS_PER_INCH = 72; //default value
         static int s_PIXELS_PER_INCH = 96; //default value
 
-
-        //public float SizeInPixels
-        //{
-        //    get
-        //    {
-        //        if (_actualFont != null)
-        //        {
-        //            return (float)_actualFont.SizeInPixels;
-        //        }
-        //        else
-        //        {
-        //            return ConvEmSizeInPointsToPixels(SizeInPoints);
-        //        }
-        //    }
-        //}
-        //--------------------------
-        //data for shaping engine
-
-        public WriteDirection WriteDirection { get; set; }
-        public ScriptLang ScriptLang { get; set; }
+        //public WriteDirection WriteDirection { get; set; }
+        //public ScriptLang ScriptLang { get; set; }
         public static float ConvEmSizeInPointsToPixels(float emsizeInPoint)
         {
             return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
         }
-
-
-
-        ////-------------
-        ///// <summary>
-        ///// resolved actual font
-        ///// </summary>
-        //ActualFont _actualFont;
-        //internal static void SetCacheActualFont(RequestFont r, ActualFont f)
-        //{
-        //    r._actualFont = f;
-        //}
-        //internal static ActualFont GetCacheActualFont(RequestFont r)
-        //{
-        //    return r._actualFont;
-        //}
     }
 
 }

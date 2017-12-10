@@ -80,7 +80,7 @@ namespace LayoutFarm.UI.Skia
 #endif
 
             //1. clear sk surface
-            mySkCanvas.ClearSurface(PixelFarm.Drawing.Color.White);
+            mySkCanvas.Clear(PixelFarm.Drawing.Color.White);
             //2. render to the surface
             UpdateAllArea(mySkCanvas, rootGraphics.TopWindowRenderBox);
             //3. copy bitmap buffer from the surface and render to final hdc
