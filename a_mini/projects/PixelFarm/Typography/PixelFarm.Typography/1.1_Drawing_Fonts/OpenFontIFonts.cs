@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
+using PixelFarm.Drawing.Fonts; 
 
 using Typography.OpenFont;
 using Typography.TextLayout;
@@ -103,14 +103,8 @@ namespace LayoutFarm
 
             //measure string at specific px scale
             glyphLayout.MeasureString(str, startAt, len, out result, scale);
-            return new Size((int)result.width, (int)result.CalculateLineHeight());
-
-        }
-        public Size MeasureString(char[] str, int startAt, int len, RequestFont font, float maxWidth, out int charFit, out int charFitWidth)
-        {
-            throw new NotImplementedException();
-        }
-
+            return new Size((int)result.width, (int)result.CalculateLineHeight()); 
+        } 
 
         public int MeasureBlankLineHeight(RequestFont font)
         {

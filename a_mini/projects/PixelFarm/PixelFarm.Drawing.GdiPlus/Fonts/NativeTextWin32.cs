@@ -378,13 +378,13 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return WinGdiTextService.MeasureString(buff, startAt, len, font);
         }
-        public PixelFarm.Drawing.Size MeasureString(char[] buff, int startAt, int len, RequestFont font,
-            float maxWidth,
-            out int charFit,
-            out int charFitWidth)
-        {
-            return WinGdiTextService.MeasureString(buff, startAt, len, font, maxWidth, out charFit, out charFitWidth);
-        }
+        //public PixelFarm.Drawing.Size MeasureString(char[] buff, int startAt, int len, RequestFont font,
+        //    float maxWidth,
+        //    out int charFit,
+        //    out int charFitWidth)
+        //{
+        //    return WinGdiTextService.MeasureString(buff, startAt, len, font, maxWidth, out charFit, out charFitWidth);
+        //}
         public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
         {
             WinGdiTextService.CalculateGlyphAdvancePos(str, startAt, len, font, glyphXAdvances);

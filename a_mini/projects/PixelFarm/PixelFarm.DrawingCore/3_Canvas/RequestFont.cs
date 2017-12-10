@@ -141,11 +141,14 @@ namespace PixelFarm.Drawing
         }
 
 
-        //------------------       
+        //------------------ 
+        //caching ...
         //store latest platform's actual font  as WeakReference
         //access this by PixelFarm.Drawing.Internal.RequestFontCacheAccess
         internal int _platform_id;//resolve by system id
         internal WeakReference _latestResolved; //result of the actual font, we store it as weak reference
+        internal int _whitespace_width;
+        internal int _general_lineHeight;
     }
 
     namespace Internal
@@ -161,15 +164,18 @@ namespace PixelFarm.Drawing
             {
                 reqFont._platform_id = 0;
                 reqFont._latestResolved = null;
+                reqFont._whitespace_width = reqFont._general_lineHeight = 0;
             }
-            public static void SetActualFont(RequestFont reqFont, int platform_id, object platformFont)
+            public static void SetActualFont(RequestFont reqFont,
+                int platform_id,
+                object platformFont)
             {
                 //replace 
                 reqFont._platform_id = platform_id;
                 reqFont._latestResolved = new WeakReference(platformFont);
             }
             public static T GetActualFont<T>(RequestFont reqFont, int platform_id)
-                where T : class
+             where T : class
             {
                 if (reqFont._platform_id == platform_id &&
                     reqFont._latestResolved.IsAlive)
@@ -177,6 +183,38 @@ namespace PixelFarm.Drawing
                     return reqFont._latestResolved.Target as T;
                 }
                 return null;
+            }
+            public static int GetWhitespaceWidth(RequestFont reqFont, int platform_id)
+            {
+                if (reqFont._platform_id == platform_id &&
+                    reqFont._latestResolved.IsAlive)
+                {
+                    return reqFont._whitespace_width;
+                }
+                return 0;
+            }
+            public static void SetWhitespaceWidth(RequestFont reqFont,
+                int platform_id,
+                int whitespaceW)
+            {
+                reqFont._platform_id = platform_id;
+                reqFont._whitespace_width = whitespaceW;
+            }
+            public static int GetLinespaceHeight(RequestFont reqFont, int platform_id)
+            {
+                if (reqFont._platform_id == platform_id &&
+                    reqFont._latestResolved.IsAlive)
+                {
+                    return reqFont._general_lineHeight;
+                }
+                return 0;
+            }
+            public static void SetLineSpaceHeight(RequestFont reqFont,
+               int platform_id,
+               int height)
+            {
+                reqFont._platform_id = platform_id;
+                reqFont._general_lineHeight = height;
             }
         }
     }
