@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -42,12 +40,9 @@ namespace OpenTK.Input
     /// </remarks>
     public class KeyboardKeyEventArgs : EventArgs
     {
-        #region Fields
 
         Key key;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new KeyboardEventArgs instance.
@@ -63,9 +58,7 @@ namespace OpenTK.Input
             Key = args.Key;
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Gets the <see cref="Key"/> that generated this event.
@@ -76,6 +69,5 @@ namespace OpenTK.Input
             internal set { key = value; }
         }
 
-        #endregion
     }
 }

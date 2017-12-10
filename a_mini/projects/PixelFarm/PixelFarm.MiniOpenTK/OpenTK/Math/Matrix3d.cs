@@ -1,4 +1,3 @@
-#region --- License ---
 /*
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 
@@ -20,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -33,7 +31,6 @@ namespace OpenTK
     [StructLayout(LayoutKind.Sequential)]
     public struct Matrix3d : IEquatable<Matrix3d>
     {
-    #region Fields & Access
 
         /// <summary>Row 0, Column 0</summary>
         public double R0C0;
@@ -216,9 +213,7 @@ namespace OpenTK
             };
         }
 
-    #endregion
 
-    #region Constructors
 
         /// <summary>Constructs left matrix with the same components as the given matrix.</summary>
         /// <param name="vector">The matrix whose components to copy.</param>
@@ -315,9 +310,7 @@ namespace OpenTK
             R2C2 = 1 - 2 * (xx + yy);
         }
 
-    #endregion
 
-    #region Equality
 
         /// <summary>Indicates whether the current matrix is equal to another matrix.</summary>
         /// <param name="matrix">The OpenTK.Matrix3d structure to compare with.</param>
@@ -409,9 +402,7 @@ namespace OpenTK
                 System.Math.Abs(left.R2C2 - right.R2C2) <= tolerance;
         }
 
-    #endregion
 
-    #region Arithmetic Operators
 
 
         /// <summary>Add left matrix to this matrix.</summary>
@@ -621,9 +612,7 @@ namespace OpenTK
         }
 
 
-    #endregion
 
-    #region Functions
 
         public double Determinant
         {
@@ -664,9 +653,7 @@ namespace OpenTK
             result.R2C2 = matrix.R2C2;
         }
 
-    #endregion
 
-    #region Transformation Functions
 
         public void Transform(ref Vector3d vector)
         {
@@ -769,9 +756,7 @@ namespace OpenTK
             //return new Quaterniond(ref this);
         }
 
-    #endregion
 
-    #region Constants
 
         /// <summary>The identity matrix.</summary>
         public static readonly Matrix3d Identity = new Matrix3d
@@ -789,9 +774,7 @@ namespace OpenTK
             0, 0, 0
         );
 
-    #endregion
 
-    #region HashCode
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
@@ -803,9 +786,7 @@ namespace OpenTK
                 R2C0.GetHashCode() ^ R2C1.GetHashCode() ^ R2C2.GetHashCode();
         }
 
-    #endregion
 
-    #region String
 
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>A System.String containing left fully qualified type name.</returns>
@@ -820,7 +801,6 @@ namespace OpenTK
                 R2C0, R2C1, R2C2);
         }
 
-    #endregion
     }
 #endif
 #pragma warning restore 3019

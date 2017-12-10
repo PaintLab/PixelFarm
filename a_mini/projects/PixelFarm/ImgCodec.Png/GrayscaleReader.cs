@@ -13,14 +13,11 @@ namespace ImageTools.IO.Png
     /// </summary>
     sealed class GrayscaleReader : IColorReader
     {
-        #region Fields
 
         private int _row;
         private bool _useAlpha;
 
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GrayscaleReader"/> class.
@@ -32,9 +29,7 @@ namespace ImageTools.IO.Png
             _useAlpha = useAlpha;
         }
 
-        #endregion
 
-        #region IPngFormatHandler Members
 
         /// <summary>
         /// Reads the specified scanline.
@@ -77,6 +72,5 @@ namespace ImageTools.IO.Png
             _row++;
         }
 
-        #endregion
     }
 }

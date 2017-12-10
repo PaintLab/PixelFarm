@@ -536,7 +536,6 @@ namespace Tesselate
             this.mesh = null;
         }
 
-        #region CodeFromRender
         class FaceCount
         {
             public FaceCount(int _size, HalfEdge _eStart, RenderDelegate _render)
@@ -995,6 +994,5 @@ namespace Tesselate
             this.CallEnd();
             return true;
         }
-        #endregion
     }
 }

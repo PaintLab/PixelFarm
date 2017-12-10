@@ -725,7 +725,6 @@ namespace LayoutFarm.Text
         }
 
 
-        #region Secondary Method
         public bool IsOnEndOfLine
         {
             get
@@ -826,7 +825,6 @@ namespace LayoutFarm.Text
                 return currentLine.OwnerFlowLayer;
             }
         }
-        #endregion
     }
     //class BackGroundTextLineWriter : TextLineWriter
     //{

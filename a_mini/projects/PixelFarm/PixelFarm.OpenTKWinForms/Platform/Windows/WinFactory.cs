@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -34,7 +32,6 @@ namespace OpenTK.Platform.Windows
     using OpenTK.Input;
     class WinFactory : IPlatformFactory
     {
-        #region IPlatformFactory Members
 
         DesktopBackend desktopBackEnd;
         public WinFactory(DesktopBackend desktopBackEnd)
@@ -84,6 +81,5 @@ namespace OpenTK.Platform.Windows
                 return new WMInput(null);
         }
 
-        #endregion
     }
 }

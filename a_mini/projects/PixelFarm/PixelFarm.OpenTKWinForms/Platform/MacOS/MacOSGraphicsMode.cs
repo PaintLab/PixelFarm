@@ -6,7 +6,6 @@ namespace OpenTK.Platform.MacOS
     using Graphics;
     class MacOSGraphicsMode : IGraphicsMode
     {
-        #region IGraphicsMode Members
 
         public GraphicsMode SelectGraphicsMode(ColorFormat color, int depth, int stencil, int samples, ColorFormat accum, int buffers, bool stereo)
         {
@@ -16,6 +15,5 @@ namespace OpenTK.Platform.MacOS
             return gfx;
         }
 
-        #endregion
     }
 }

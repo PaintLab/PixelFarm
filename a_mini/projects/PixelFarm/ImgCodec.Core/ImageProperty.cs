@@ -15,7 +15,6 @@ namespace ImageTools
     /// </summary>
     public sealed class ImageProperty : IEquatable<ImageProperty>
     {
-        #region Invariant
 
 #if !WINDOWS_PHONE
 
@@ -25,9 +24,7 @@ namespace ImageTools
         }
 #endif
 
-        #endregion
 
-        #region Properties
 
         private string _name;
         /// <summary>
@@ -53,9 +50,7 @@ namespace ImageTools
         /// <value>The value of this property.</value>
         public string Value { get; set; }
 
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageProperty"/> class
@@ -73,9 +68,7 @@ namespace ImageTools
             Value = value;
         }
 
-        #endregion
 
-        #region IEquatable<ImageProperty> Members
 
         /// <summary>
         /// Determines whether the specified <see cref="T:System.Object"/> is 
@@ -140,6 +133,5 @@ namespace ImageTools
             return hashCode;
         }
 
-        #endregion
     }
 }

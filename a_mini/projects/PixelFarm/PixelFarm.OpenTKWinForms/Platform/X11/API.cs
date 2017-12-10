@@ -1,9 +1,7 @@
-#region --- License ---
 /* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * Contributions from Erik Ylvisaker
  * See license.txt for license info
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -17,7 +15,6 @@ using System.Diagnostics;
 
 namespace OpenTK.Platform.X11
 {
-    #region Types
 
     // using XID = System.Int32;
     using Window = System.IntPtr;
@@ -41,13 +38,10 @@ namespace OpenTK.Platform.X11
     using Rotation = System.UInt16;
     using Status = System.Int32;
     using SizeID = System.UInt16;
-    #endregion
 
-    #region internal static class API
 
     internal static class API
     {
-        #region --- Fields ---
 
         private const string _dll_name = "libX11";
         private const string _dll_name_vid = "libXxf86vm";
@@ -61,7 +55,6 @@ namespace OpenTK.Platform.X11
         internal static int ScreenCount { get { return screenCount; } }
 
         internal static object Lock = new object();
-        #endregion
 
         static API()
         {
@@ -99,7 +92,6 @@ namespace OpenTK.Platform.X11
         //[DllImport(_dll_name, EntryPoint = "XCreateColormap")]
         //extern public static IntPtr CreateColormap(Display display, Window window, IntPtr visual, int alloc);
 
-        #region Window handling
 
         [Obsolete("Use XCreateWindow instead")]
         [DllImport(_dll_name, EntryPoint = "XCreateWindow")]
@@ -136,11 +128,9 @@ namespace OpenTK.Platform.X11
         extern public static void MapWindow(Display display, Window window);
         [DllImport(_dll_name, EntryPoint = "XMapRaised")]
         extern public static void MapRaised(Display display, Window window);
-        #endregion
 
         [DllImport(_dll_name, EntryPoint = "XDefaultVisual")]
         extern public static IntPtr DefaultVisual(Display display, int screen_number);
-        #region XFree
 
         /// <summary>
         /// Frees the memory used by an X structure. Only use on unmanaged structures!
@@ -148,9 +138,7 @@ namespace OpenTK.Platform.X11
         /// <param name="buffer">A pointer to the structure that will be freed.</param>
         [DllImport(_dll_name, EntryPoint = "XFree")]
         extern public static void Free(IntPtr buffer);
-        #endregion
 
-        #region Event queue management
 
         [System.Security.SuppressUnmanagedCodeSecurity]
         [DllImport(_dll_name, EntryPoint = "XEventsQueued")]
@@ -220,9 +208,7 @@ namespace OpenTK.Platform.X11
         [DllImport(_dll_name, EntryPoint = "XCheckMaskEvent")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool CheckMaskEvent(Display display, EventMask event_mask, ref XEvent event_return);
-        #endregion
 
-        #region Pointer and Keyboard functions
 
         [DllImport(_dll_name, EntryPoint = "XGrabPointer")]
         extern public static ErrorCodes GrabPointer(Display display, IntPtr grab_window,
@@ -267,9 +253,7 @@ namespace OpenTK.Platform.X11
         /// <remarks> The minimum number of KeyCodes returned is never less than 8, and the maximum number of KeyCodes returned is never greater than 255. Not all KeyCodes in this range are required to have corresponding keys.</remarks>
         [DllImport(_dll_name, EntryPoint = "XDisplayKeycodes")]
         public static extern void DisplayKeycodes(Display display, ref int min_keycodes_return, ref int max_keycodes_return);
-        #endregion
 
-        #region Xf86VidMode internal structures
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct XF86VidModeModeLine
@@ -391,9 +375,7 @@ namespace OpenTK.Platform.X11
             float green;                   /* Green Gamma value */
             float blue;                    /* Blue Gamma value */
         }
-        #endregion
 
-        #region libXxf86vm Functions
 
         [DllImport(_dll_name_vid)]
         extern public static bool XF86VidModeQueryExtension(
@@ -515,16 +497,12 @@ XF86VidModeGetGammaRampSize(
     int *size);
          * */
 
-        #endregion
 
         [DllImport(_dll_name, EntryPoint = "XLookupKeysym")]
         public static extern KeySym LookupKeysym(ref XKeyEvent key_event, int index);
     }
-    #endregion
 
-    #region X11 Structures
 
-    #region internal class XVisualInfo
 
     [StructLayout(LayoutKind.Sequential)]
     struct XVisualInfo
@@ -546,9 +524,7 @@ XF86VidModeGetGammaRampSize(
         }
     }
 
-    #endregion
 
-    #region internal class SetWindowAttributes
 
     [StructLayout(LayoutKind.Sequential), Obsolete("Use XSetWindowAttributes instead")]
     internal class SetWindowAttributes
@@ -615,9 +591,7 @@ XF86VidModeGetGammaRampSize(
         public Cursor cursor;
     }
 
-    #endregion
 
-    #region internal struct SizeHints
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct SizeHints
@@ -640,18 +614,14 @@ XF86VidModeGetGammaRampSize(
         /* this structure may be extended in the future */
     }
 
-    #endregion
 
-    #region internal struct XRRScreenSize
 
     internal struct XRRScreenSize
     {
         internal int Width, Height;
         internal int MWidth, MHeight;
     };
-    #endregion
 
-    #region unsafe internal struct Screen
 
     unsafe internal struct Screen
     {
@@ -674,9 +644,7 @@ XF86VidModeGetGammaRampSize(
         long root_input_mask;    /* initial root input mask */
     }
 
-    #endregion
 
-    #region unsafe internal class XExtData
 
     unsafe internal class XExtData
     {
@@ -686,9 +654,7 @@ XF86VidModeGetGammaRampSize(
         FreePrivateDelegate FreePrivate;    /* called to free private storage */
         XPointer private_data;    /* buffer private to this extension. */
     };
-    #endregion
 
-    #region Motif
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct MotifWmHints
@@ -745,11 +711,8 @@ XF86VidModeGetGammaRampSize(
         FullApplicationModal = 3
     }
 
-    #endregion
 
-    #endregion
 
-    #region X11 Constants and Enums
 
     internal struct Constants
     {
@@ -860,7 +823,6 @@ XF86VidModeGetGammaRampSize(
         //CWStackMode    = (1<<6),
     }
 
-    #region XKey
 
     /// <summary>
     /// Defines LATIN-1 and miscellaneous keys.
@@ -1171,7 +1133,6 @@ XF86VidModeGetGammaRampSize(
         asciitilde = 0x007e,  /* U+007E TILDE */
     }
 
-    #endregion
 
 #pragma warning disable 1591
 
@@ -1203,7 +1164,6 @@ XF86VidModeGetGammaRampSize(
         All = 0x1FF,
     }
 
-    #region internal enum MouseMask
 
     internal enum MouseMask
     {
@@ -1230,14 +1190,11 @@ XF86VidModeGetGammaRampSize(
         Mod5Mask = (1 << 7),
     }
 
-    #endregion
 
-    #endregion
 
     internal static partial class Functions
     {
         internal const string X11Library = "libX11";
-        #region XCreateWindow
 
         /// <summary>
         /// The XCreateWindow function creates an unmapped subwindow for a specified parent window, returns the window ID of the created window, and causes the X server to generate a CreateNotify event. The created window is placed on top in the stacking order with respect to siblings.
@@ -1267,9 +1224,7 @@ XF86VidModeGetGammaRampSize(
         public extern static Window XCreateWindow(Display display, Window parent,
             int x, int y, int width, int height, int border_width, int depth,
             int @class, IntPtr visual, UIntPtr valuemask, ref XSetWindowAttributes attributes);
-        #endregion
 
-        #region XChangeWindowAttributes
 
         [DllImport(X11Library)]
         internal static extern void XChangeWindowAttributes(Display display, Window w, UIntPtr valuemask, ref XSetWindowAttributes attributes);
@@ -1278,9 +1233,7 @@ XF86VidModeGetGammaRampSize(
             XChangeWindowAttributes(display, w, (UIntPtr)valuemask, ref attributes);
         }
 
-        #endregion
 
-        #region XQueryKeymap
 
         /*
         /// <summary>
@@ -1301,9 +1254,7 @@ XF86VidModeGetGammaRampSize(
         /// <remarks>Note that the logical state of a device (as seen by client applications) may lag the physical state if device event processing is frozen.</remarks>
         [DllImport(X11Library, EntryPoint = "XQueryKeymap")]
         extern public static void XQueryKeymap(IntPtr display, byte[] keys);
-        #endregion
 
-        #region XMaskEvent
 
         /// <summary>
         /// The XMaskEvent() function searches the event queue for the events associated with the specified mask. When it finds a match, XMaskEvent() removes that event and copies it into the specified XEvent structure. The other events stored in the queue are not discarded. If the event you requested is not in the queue, XMaskEvent() flushes the output buffer and blocks until one is received.
@@ -1313,9 +1264,7 @@ XF86VidModeGetGammaRampSize(
         /// <param name="e">Returns the matched event's associated structure.</param>
         [DllImport(X11Library, EntryPoint = "XMaskEvent")]
         extern public static void XMaskEvent(IntPtr display, EventMask event_mask, ref XEvent e);
-        #endregion
 
-        #region XPutBackEvent
 
         /// <summary>
         /// The XPutBackEvent() function pushes an event back onto the head of the display's event queue by copying the event into the queue. This can be useful if you read an event and then decide that you would rather deal with it later. There is no limit to the number of times in succession that you can call XPutBackEvent().
@@ -1324,9 +1273,7 @@ XF86VidModeGetGammaRampSize(
         /// <param name="event">Specifies the event.</param>
         [DllImport(X11Library, EntryPoint = "XPutBackEvent")]
         public static extern void XPutBackEvent(IntPtr display, ref XEvent @event);
-        #endregion
 
-        #region Xrandr
 
         const string XrandrLibrary = "libXrandr.so.2";
         [DllImport(XrandrLibrary)]
@@ -1423,17 +1370,12 @@ XF86VidModeGetGammaRampSize(
 
         [DllImport(XrandrLibrary)]
         public static extern Time XRRTimes(Display dpy, int screen, out Time config_timestamp);
-        #endregion
 
-        #region Display, Screen and Window functions
 
-        #region XScreenCount
 
         [DllImport(X11Library)]
         public static extern int XScreenCount(Display display);
-        #endregion
 
-        #region XListDepths
 
         [DllImport(X11Library)]
         unsafe static extern int* XListDepths(Display display, int screen_number, int* count_return);
@@ -1452,9 +1394,7 @@ XF86VidModeGetGammaRampSize(
             }
         }
 
-        #endregion
 
-        #endregion
     }
     /*
     [StructLayout(LayoutKind.Sequential)]

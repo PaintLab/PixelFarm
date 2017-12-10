@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -35,15 +33,12 @@ namespace OpenTK.Platform.Egl
     // Holds information about an EGL window.
     class EglWindowInfo : IWindowInfo
     {
-        #region Fields
 
         IntPtr handle;
         IntPtr display;
         IntPtr surface;
         bool disposed;
-        #endregion
 
-        #region Constructiors
 
         public EglWindowInfo(IntPtr handle, IntPtr display)
         {
@@ -58,9 +53,7 @@ namespace OpenTK.Platform.Egl
             Surface = surface;
         }
 
-        #endregion
 
-        #region Public Members
 
         public IntPtr Handle { get { return handle; } private set { handle = value; } }
 
@@ -98,9 +91,7 @@ namespace OpenTK.Platform.Egl
                     Debug.Print("[Warning] Failed to destroy {0}:{1}.", Surface.GetType().Name, Surface);
         }
 
-        #endregion
 
-        #region IDisposable Members
 
         public void Dispose()
         {
@@ -129,6 +120,5 @@ namespace OpenTK.Platform.Egl
             Dispose(false);
         }
 
-        #endregion
     }
 }

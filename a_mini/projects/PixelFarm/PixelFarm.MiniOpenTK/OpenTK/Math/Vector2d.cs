@@ -1,4 +1,3 @@
-#region --- License ---
 /*
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 
@@ -20,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -31,7 +29,6 @@ namespace OpenTK
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector2d : IEquatable<Vector2d>
     {
-        #region Fields
 
         /// <summary>The X coordinate of this instance.</summary>
         public double X;
@@ -57,9 +54,7 @@ namespace OpenTK
         /// Defines the size of the Vector2d struct in bytes.
         /// </summary>
         public static readonly int SizeInBytes = Marshal.SizeOf(new Vector2d());
-        #endregion
 
-        #region Constructors
 
         /// <summary>Constructs left vector with the given coordinates.</summary>
         /// <param name="x">The X coordinate.</param>
@@ -70,13 +65,9 @@ namespace OpenTK
             this.Y = y;
         }
 
-        #endregion
 
-        #region Public Members
 
-        #region Instance
 
-        #region public void Add()
 
         /// <summary>Add the Vector passed as parameter to this instance.</summary>
         /// <param name="right">Right operand. This parameter is only read from.</param>
@@ -97,9 +88,7 @@ namespace OpenTK
             this.Y += right.Y;
         }
 
-        #endregion public void Add()
 
-        #region public void Sub()
 
         /// <summary>Subtract the Vector passed as parameter from this instance.</summary>
         /// <param name="right">Right operand. This parameter is only read from.</param>
@@ -120,9 +109,7 @@ namespace OpenTK
             this.Y -= right.Y;
         }
 
-        #endregion public void Sub()
 
-        #region public void Mult()
 
         /// <summary>Multiply this instance by a scalar.</summary>
         /// <param name="f">Scalar operand.</param>
@@ -133,9 +120,7 @@ namespace OpenTK
             this.Y *= f;
         }
 
-        #endregion public void Mult()
 
-        #region public void Div()
 
         /// <summary>Divide this instance by a scalar.</summary>
         /// <param name="f">Scalar operand.</param>
@@ -147,9 +132,7 @@ namespace OpenTK
             this.Y *= mult;
         }
 
-        #endregion public void Div()
 
-        #region public double Length
 
         /// <summary>
         /// Gets the length (magnitude) of the vector.
@@ -163,9 +146,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public double LengthSquared
 
         /// <summary>
         /// Gets the square of the vector length (magnitude).
@@ -183,9 +164,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public Vector2d PerpendicularRight
 
         /// <summary>
         /// Gets the perpendicular vector on the right side of this vector.
@@ -198,9 +177,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public Vector2d PerpendicularLeft
 
         /// <summary>
         /// Gets the perpendicular vector on the left side of this vector.
@@ -213,9 +190,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public void Normalize()
 
         /// <summary>
         /// Scales the Vector2 to unit length.
@@ -227,9 +202,7 @@ namespace OpenTK
             Y *= scale;
         }
 
-        #endregion
 
-        #region public void Scale()
 
         /// <summary>
         /// Scales the current Vector2 by the given amounts.
@@ -262,15 +235,10 @@ namespace OpenTK
             this.Y *= scale.Y;
         }
 
-        #endregion public void Scale()
 
-        #endregion
 
-        #region Static
 
-        #region Obsolete
 
-        #region Sub
 
         /// <summary>
         /// Subtract one Vector from another
@@ -299,9 +267,7 @@ namespace OpenTK
             result.Y = a.Y - b.Y;
         }
 
-        #endregion
 
-        #region Mult
 
         /// <summary>
         /// Multiply a vector and a scalar
@@ -330,9 +296,7 @@ namespace OpenTK
             result.Y = a.Y * d;
         }
 
-        #endregion
 
-        #region Div
 
         /// <summary>
         /// Divide a vector by a scalar
@@ -363,11 +327,8 @@ namespace OpenTK
             result.Y = a.Y * mult;
         }
 
-        #endregion
 
-        #endregion
 
-        #region Add
 
         /// <summary>
         /// Adds two vectors.
@@ -392,9 +353,7 @@ namespace OpenTK
             result = new Vector2d(a.X + b.X, a.Y + b.Y);
         }
 
-        #endregion
 
-        #region Subtract
 
         /// <summary>
         /// Subtract one Vector from another
@@ -419,9 +378,7 @@ namespace OpenTK
             result = new Vector2d(a.X - b.X, a.Y - b.Y);
         }
 
-        #endregion
 
-        #region Multiply
 
         /// <summary>
         /// Multiplies a vector by a scalar.
@@ -469,9 +426,7 @@ namespace OpenTK
             result = new Vector2d(vector.X * scale.X, vector.Y * scale.Y);
         }
 
-        #endregion
 
-        #region Divide
 
         /// <summary>
         /// Divides a vector by a scalar.
@@ -519,9 +474,7 @@ namespace OpenTK
             result = new Vector2d(vector.X / scale.X, vector.Y / scale.Y);
         }
 
-        #endregion
 
-        #region Min
 
         /// <summary>
         /// Calculate the component-wise minimum of two vectors
@@ -548,9 +501,7 @@ namespace OpenTK
             result.Y = a.Y < b.Y ? a.Y : b.Y;
         }
 
-        #endregion
 
-        #region Max
 
         /// <summary>
         /// Calculate the component-wise maximum of two vectors
@@ -577,9 +528,7 @@ namespace OpenTK
             result.Y = a.Y > b.Y ? a.Y : b.Y;
         }
 
-        #endregion
 
-        #region Clamp
 
         /// <summary>
         /// Clamp a vector to the given minimum and maximum vectors
@@ -608,9 +557,7 @@ namespace OpenTK
             result.Y = vec.Y < min.Y ? min.Y : vec.Y > max.Y ? max.Y : vec.Y;
         }
 
-        #endregion
 
-        #region Normalize
 
         /// <summary>
         /// Scale a vector to unit length
@@ -637,9 +584,7 @@ namespace OpenTK
             result.Y = vec.Y * scale;
         }
 
-        #endregion
 
-        #region NormalizeFast
 
         /// <summary>
         /// Scale a vector to approximately unit length
@@ -666,9 +611,7 @@ namespace OpenTK
             result.Y = vec.Y * scale;
         }
 
-        #endregion
 
-        #region Dot
 
         /// <summary>
         /// Calculate the dot (scalar) product of two vectors
@@ -692,9 +635,7 @@ namespace OpenTK
             result = left.X * right.X + left.Y * right.Y;
         }
 
-        #endregion
 
-        #region Lerp
 
         /// <summary>
         /// Returns a new Vector that is the linear blend of the 2 given Vectors
@@ -723,9 +664,7 @@ namespace OpenTK
             result.Y = blend * (b.Y - a.Y) + a.Y;
         }
 
-        #endregion
 
-        #region Barycentric
 
         /// <summary>
         /// Interpolate 3 Vectors using Barycentric coordinates
@@ -761,9 +700,7 @@ namespace OpenTK
             Add(ref result, ref temp, out result);
         }
 
-        #endregion
 
-        #region Transform
 
         /// <summary>
         /// Transforms a vector by a quaternion rotation.
@@ -793,11 +730,8 @@ namespace OpenTK
             result = new Vector2d(v.X, v.Y);
         }
 
-        #endregion
 
-        #endregion
 
-        #region Operators
 
         /// <summary>
         /// Adds two instances.
@@ -915,11 +849,8 @@ namespace OpenTK
             return new Vector2((float)v2d.X, (float)v2d.Y);
         }
 
-        #endregion
 
-        #region Overrides
 
-        #region public override string ToString()
 
         /// <summary>
         /// Returns a System.String that represents the current instance.
@@ -930,9 +861,7 @@ namespace OpenTK
             return String.Format("({0}, {1})", X, Y);
         }
 
-        #endregion
 
-        #region public override int GetHashCode()
 
         /// <summary>
         /// Returns the hashcode for this instance.
@@ -943,9 +872,7 @@ namespace OpenTK
             return X.GetHashCode() ^ Y.GetHashCode();
         }
 
-        #endregion
 
-        #region public override bool Equals(object obj)
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
@@ -959,13 +886,9 @@ namespace OpenTK
             return this.Equals((Vector2d)obj);
         }
 
-        #endregion
 
-        #endregion
 
-        #endregion
 
-        #region IEquatable<Vector2d> Members
 
         /// <summary>Indicates whether the current vector is equal to another vector.</summary>
         /// <param name="other">A vector to compare with this vector.</param>
@@ -977,6 +900,5 @@ namespace OpenTK
                 Y == other.Y;
         }
 
-        #endregion
     }
 }

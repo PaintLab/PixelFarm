@@ -13,7 +13,6 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
 
                                         private void InitializeComponent()
         {
@@ -195,7 +194,6 @@
 
         }
 
-        #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;

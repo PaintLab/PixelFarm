@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -38,7 +36,6 @@ namespace OpenTK
     public static class Configuration
     {
         static bool runningOnWindows, runningOnUnix, runningOnX11, runningOnMacOS, runningOnLinux, runningOnMono;
-        #region --- Constructors ---
 
         // Detects the underlying OS and runtime.
         static Configuration()
@@ -92,18 +89,13 @@ namespace OpenTK
                 RunningOnMono ? "Mono" : ".Net");
         }
 
-        #endregion
 
-        #region --- Public Methods ---
 
-        #region public static bool RunningOnWindows
 
         /// <summary>Gets a System.Boolean indicating whether OpenTK is running on a Windows platform.</summary>
         public static bool RunningOnWindows { get { return runningOnWindows; } }
 
-        #endregion
 
-        #region public static bool RunningOnX11
 
         /// <summary>Gets a System.Boolean indicating whether OpenTK is running on an X11 platform.</summary>
         public static bool RunningOnX11
@@ -119,34 +111,25 @@ namespace OpenTK
             get { return runningOnUnix; }
         }
 
-        #endregion
 
-        #region public static bool RunningOnLinux
 
         /// <summary>Gets a System.Boolean indicating whether OpenTK is running on an X11 platform.</summary>
         public static bool RunningOnLinux { get { return runningOnLinux; } }
 
-        #endregion
 
-        #region public static bool RunningOnMacOS
 
         /// <summary>Gets a System.Boolean indicating whether OpenTK is running on a MacOS platform.</summary>
         public static bool RunningOnMacOS { get { return runningOnMacOS; } }
 
-        #endregion
 
-        #region public static bool RunningOnMono
 
         /// <summary>
         /// Gets a System.Boolean indicating whether OpenTK is running on the Mono runtime.
         /// </summary>
         public static bool RunningOnMono { get { return runningOnMono; } }
 
-        #endregion
 
-        #region --- Private Methods ---
 
-        #region private static string DetectUnixKernel()
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         struct utsname
@@ -188,10 +171,7 @@ namespace OpenTK
 
         [DllImport("libc")]
         private static extern void uname(out utsname uname_struct);
-        #endregion
 
-        #endregion
 
-        #endregion
     }
 }

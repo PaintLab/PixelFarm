@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Diagnostics;
@@ -43,7 +41,6 @@ namespace OpenTK.Platform.Windows
     /// </summary>
     internal sealed class WinGLNative : INativeWindow2, IInputDriver
     {
-        #region Fields
 
         const ExtendedWindowStyle ParentStyleEx = ExtendedWindowStyle.WindowEdge | ExtendedWindowStyle.ApplicationWindow;
         const ExtendedWindowStyle ChildStyleEx = 0;
@@ -84,9 +81,7 @@ namespace OpenTK.Platform.Windows
         const long ExtendedBit = 1 << 24;           // Used to distinguish left and right control, alt and enter keys.
         static readonly uint ShiftRightScanCode = Functions.MapVirtualKey(VirtualKeys.RSHIFT, 0);         // Used to distinguish left and right shift keys.
         KeyPressEventArgs key_press = new KeyPressEventArgs((char)0);
-        #endregion
 
-        #region Contructors
 
         public WinGLNative(int x, int y, int width, int height, string title, GameWindowFlags options, DisplayDevice device)
         {
@@ -119,17 +114,13 @@ namespace OpenTK.Platform.Windows
             mice.Add(mouse);
         }
 
-        #endregion
 
-        #region Private Members
 
-        #region WindowProcedure
 
         IntPtr WindowProcedure(IntPtr handle, WindowMessage message, IntPtr wParam, IntPtr lParam)
         {
             switch (message)
             {
-                #region Size / Move / Style events
 
                 case WindowMessage.ACTIVATE:
                     // See http://msdn.microsoft.com/en-us/library/ms646274(VS.85).aspx (WM_ACTIVATE notification):
@@ -227,9 +218,7 @@ namespace OpenTK.Platform.Windows
                     }
 
                     break;
-                #endregion
 
-                #region Input events
 
                 case WindowMessage.CHAR:
                     if (IntPtr.Size == 4)
@@ -369,9 +358,7 @@ namespace OpenTK.Platform.Windows
                 case WindowMessage.KILLFOCUS:
                     keyboard.ClearKeys();
                     break;
-                #endregion
 
-                #region Creation / Destruction events
 
                 case WindowMessage.CREATE:
                     CreateStruct cs = (CreateStruct)Marshal.PtrToStructure(lParam, typeof(CreateStruct));
@@ -408,7 +395,6 @@ namespace OpenTK.Platform.Windows
                     if (Closed != null)
                         Closed(this, EventArgs.Empty);
                     break;
-                    #endregion
             }
 
             return Functions.DefWindowProc(handle, message, wParam, lParam);
@@ -447,9 +433,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region IsIdle
 
         bool IsIdle
         {
@@ -460,9 +444,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region CreateWindow
 
         IntPtr CreateWindow(int x, int y, int width, int height, string title, GameWindowFlags options, DisplayDevice device, IntPtr parentHandle)
         {
@@ -518,9 +500,7 @@ namespace OpenTK.Platform.Windows
             return handle;
         }
 
-        #endregion
 
-        #region DestroyWindow
 
         /// <summary>
         /// Starts the teardown sequence for the current window.
@@ -535,7 +515,6 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
         void HideBorder()
         {
@@ -565,11 +544,8 @@ namespace OpenTK.Platform.Windows
             suppress_resize--;
         }
 
-        #endregion
 
-        #region INativeWindow Members
 
-        #region Bounds
 
         public Rectangle Bounds
         {
@@ -581,9 +557,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region Location
 
         public Point Location
         {
@@ -595,9 +569,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region Size
 
         public Size Size
         {
@@ -609,9 +581,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region ClientRectangle
 
         public Rectangle ClientRectangle
         {
@@ -629,9 +599,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region ClientSize
 
         public Size ClientSize
         {
@@ -648,9 +616,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region Width
 
         public int Width
         {
@@ -658,9 +624,7 @@ namespace OpenTK.Platform.Windows
             set { ClientRectangle = new Rectangle(0, 0, value, Height); }
         }
 
-        #endregion
 
-        #region Height
 
         public int Height
         {
@@ -668,9 +632,7 @@ namespace OpenTK.Platform.Windows
             set { ClientRectangle = new Rectangle(0, 0, Width, value); }
         }
 
-        #endregion
 
-        #region X
 
         public int X
         {
@@ -678,9 +640,7 @@ namespace OpenTK.Platform.Windows
             set { Location = new Point(value, Y); }
         }
 
-        #endregion
 
-        #region Y
 
         public int Y
         {
@@ -688,9 +648,7 @@ namespace OpenTK.Platform.Windows
             set { Location = new Point(X, value); }
         }
 
-        #endregion
 
-        #region Icon
 
         public Icon Icon
         {
@@ -709,18 +667,14 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region Focused
 
         public bool Focused
         {
             get { return focused; }
         }
 
-        #endregion
 
-        #region Title
 
         StringBuilder sb_title = new StringBuilder(256);
         public string Title
@@ -739,9 +693,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region Visible
 
         public bool Visible
         {
@@ -767,24 +719,18 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region Exists
 
         public bool Exists { get { return exists; } }
 
-        #endregion
 
-        #region Close
 
         public void Close()
         {
             Functions.PostMessage(window.WindowHandle, WindowMessage.CLOSE, IntPtr.Zero, IntPtr.Zero);
         }
 
-        #endregion
 
-        #region public WindowState WindowState
 
         public WindowState WindowState
         {
@@ -864,9 +810,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region public WindowBorder WindowBorder
 
         public WindowBorder WindowBorder
         {
@@ -931,9 +875,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region PointToClient
 
         public Point PointToClient(Point point)
         {
@@ -944,18 +886,14 @@ namespace OpenTK.Platform.Windows
             return point;
         }
 
-        #endregion
 
-        #region PointToScreen
 
         public Point PointToScreen(Point p)
         {
             throw new NotImplementedException();
         }
 
-        #endregion
 
-        #region Events
 
         public event EventHandler<EventArgs> Idle;
         public event EventHandler<EventArgs> Load;
@@ -976,13 +914,9 @@ namespace OpenTK.Platform.Windows
         public event EventHandler<KeyPressEventArgs> KeyPress;
         public event EventHandler<EventArgs> MouseEnter;
         public event EventHandler<EventArgs> MouseLeave;
-        #endregion
 
-        #endregion
 
-        #region INativeGLWindow Members
 
-        #region public void ProcessEvents()
 
         private int ret;
         MSG msg;
@@ -1010,65 +944,50 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region public IInputDriver InputDriver
 
         public IInputDriver InputDriver
         {
             get { return this; }
         }
 
-        #endregion
 
-        #region public IWindowInfo WindowInfo
 
         public IWindowInfo WindowInfo
         {
             get { return child_window; }
         }
 
-        #endregion
 
-        #endregion
 
-        #region IInputDriver Members
 
         public void Poll()
         {
             joystick_driver.Poll();
         }
 
-        #endregion
 
-        #region IKeyboardDriver Members
 
         public IList<KeyboardDevice> Keyboard
         {
             get { return keyboards; }
         }
 
-        #endregion
 
-        #region IMouseDriver Members
 
         public IList<MouseDevice> Mouse
         {
             get { return mice; }
         }
 
-        #endregion
 
-        #region IJoystickDriver Members
 
         public IList<JoystickDevice> Joysticks
         {
             get { return joystick_driver.Joysticks; }
         }
 
-        #endregion
 
-        #region IDisposable Members
 
         public void Dispose()
         {
@@ -1101,6 +1020,5 @@ namespace OpenTK.Platform.Windows
             Dispose(false);
         }
 
-        #endregion
     }
 }

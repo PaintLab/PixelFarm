@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library, except where noted.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -35,9 +33,7 @@ namespace OpenTK
 {
     class WinGLControl : IGLControl
     {
-        #region P/Invoke declarations
 
-        #region Message
 
         struct MSG
         {
@@ -55,9 +51,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region Point
 
         struct POINT
         {
@@ -80,29 +74,20 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region PeekMessage
 
         [System.Security.SuppressUnmanagedCodeSecurity]
         [System.Runtime.InteropServices.DllImport("User32.dll")]
         static extern bool PeekMessage(ref MSG msg, IntPtr hWnd, int messageFilterMin, int messageFilterMax, int flags);
-        #endregion
 
-        #region
 
-        #endregion
 
-        #endregion
 
-        #region Fields
 
         MSG msg = new MSG();
         IWindowInfo window_info;
         GraphicsMode mode;
-        #endregion
 
-        #region Constructors
 
         public WinGLControl(GraphicsMode mode, Control control)
         {
@@ -110,9 +95,7 @@ namespace OpenTK
             window_info = Utilities.CreateWindowsWindowInfo(control.Handle);
         }
 
-        #endregion
 
-        #region IGLControl Members
 
         public IGraphicsContext CreateContext(int major, int minor, GraphicsContextFlags flags)
         {
@@ -133,6 +116,5 @@ namespace OpenTK
             }
         }
 
-        #endregion
     }
 }

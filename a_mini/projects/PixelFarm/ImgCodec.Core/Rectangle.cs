@@ -15,7 +15,6 @@ namespace ImageTools
     /// </summary>
     public struct Rectangle : IEquatable<Rectangle>
     {
-        #region Data Members
 
         /// <summary>
         /// Zero rectangle with no width and no height.
@@ -128,9 +127,7 @@ namespace ImageTools
             set { _y = value; }
         }
 
-        #endregion
 
-        #region Methods
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Rectangle"/> struct
@@ -160,9 +157,7 @@ namespace ImageTools
         {
         }
 
-        #endregion
 
-        #region IEquatable<Rectangle> Members
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
@@ -242,6 +237,5 @@ namespace ImageTools
             return !left.Equals(right);
         }
 
-        #endregion
     }
 }

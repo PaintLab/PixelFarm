@@ -1,10 +1,8 @@
-﻿#region --- License ---
-/* Licensed under the MIT/X11 license.
+﻿/* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing details.
  */
-#endregion
 
 // #define READALL
 // uncomment so ALL fields read from file are interpreted and filled. Necessary to implement uncompressed DDS
@@ -24,21 +22,16 @@ namespace Examples.TextureLoaders
     /// </summary>
     static class ImageDDS
     {
-        #region Constants
         private const byte HeaderSizeInBytes = 128; // all non-image data together is 128 Bytes
         private const uint BitMask = 0x00000007; // bits = 00 00 01 11
         private static NotImplementedException Unfinished = new NotImplementedException("ERROR: Only 2 Dimensional DXT1/3/5 compressed images for now. 1D/3D Textures may not be compressed according to spec.");
-        #endregion Constants
 
-        #region Simplified In-Memory representation of the Image
         private static bool _IsCompressed;
         private static int _Width, _Height, _Depth, _MipMapCount;
         private static int _BytesForMainSurface; // must be handled with care when implementing uncompressed formats!
         private static byte _BytesPerBlock;
         private static PixelInternalFormat _PixelInternalFormat;
-        #endregion Simplified In-Memory representation of the Image
 
-        #region Flag Enums
         [Flags] // Surface Description
         private enum eDDSD : uint
         {
@@ -138,9 +131,7 @@ namespace Examples.TextureLoaders
             CUBEMAP_ALL_FACES = 0x0000FC00,
             VOLUME = 0x00200000 // for 3D Textures
         }
-        #endregion Flag Enums
 
-        #region Private Members
         private static string idString; // 4 bytes, must be "DDS "
         private static UInt32 dwSize; // Size of structure is 124 bytes, 128 including all sub-structs and the header
         private static UInt32 dwFlags; // Flags to indicate valid fields.
@@ -169,7 +160,6 @@ namespace Examples.TextureLoaders
 #if READALL
         private static UInt32[] dwReserved2; // 3 = 2 + 1 UInt32
 #endif
-        #endregion Private Members
 
         ///// <summary>
         ///// This function will generate, bind and fill a Texture Object with a DXT1/3/5 compressed Texture in .dds Format.
@@ -182,7 +172,6 @@ namespace Examples.TextureLoaders
         ///// <param name="dimension">0 if invalid, will output what was loaded (typically Texture1D/2D/3D or Cubemap)</param>
         //public static void LoadFromDisk(string filename, out uint texturehandle, out TextureTarget dimension)
         //{
-        //    //#region Prep data
         //    //// invalidate whatever it was before
         //    //dimension = (TextureTarget)0;
         //    //texturehandle = TextureLoaderParameters.OpenGLDefaultTexture;
@@ -197,14 +186,11 @@ namespace Examples.TextureLoaders
         //    //_BytesPerBlock = 0;
         //    //_PixelInternalFormat = PixelInternalFormat.Rgba8;
         //    //byte[] _RawDataFromFile;
-        //    //#endregion
 
-        //    //#region Try
         //    //try // Exceptions will be thrown if any Problem occurs while working on the file. 
         //    //{
         //    //    _RawDataFromFile = File.ReadAllBytes(@filename);
 
-        //    //    #region Translate Header to less cryptic representation
         //    //    ConvertDX9Header(ref _RawDataFromFile); // The first 128 Bytes of the file is non-image data
 
         //    //    // start by checking if all forced flags are present. Flags indicate valid fields, but aren't written by every tool .....
@@ -217,7 +203,6 @@ namespace Examples.TextureLoaders
         //    //        )
         //    //        throw new ArgumentException("ERROR: File has invalid signature or missing Flags.");
 
-        //    //    #region Examine Flags
         //    //    if (CheckFlag(dwFlags, (uint)eDDSD.WIDTH))
         //    //        _Width = (int)dwWidth;
         //    //    else
@@ -272,9 +257,7 @@ namespace Examples.TextureLoaders
         //    //        _BytesForMainSurface = (int)dwPitchOrLinearSize;
         //    //        _IsCompressed = true;
         //    //    }
-        //    //    #endregion Examine Flags
 
-        //    //    #region Examine Pixel Format, anything but DXTn will fail atm.
         //    //    if (CheckFlag(pfFlags, (uint)eDDPF.FOURCC))
         //    //        switch ((eFOURCC)pfFourCC)
         //    //        {
@@ -301,7 +284,6 @@ namespace Examples.TextureLoaders
         //    //    else
         //    //        throw Unfinished;
         //    //    // pf*Bitmasks should be examined here
-        //    //    #endregion
 
         //    //    // Works, but commented out because some texture authoring tools don't set this flag.
         //    //    /* Safety Check, if file is only 1x 2D surface without mipmaps, eDDSCAPS.COMPLEX should not be set
@@ -313,13 +295,9 @@ namespace Examples.TextureLoaders
 
         //    //    if (TextureLoaderParameters.Verbose)
         //    //        Trace.WriteLine("\n" + GetDescriptionFromMemory(filename, dimension));
-        //    //    #endregion Translate Header to less cryptic representation
 
-        //    //    #region send the Texture to GL
-        //    //    #region Generate and Bind Handle
         //    //    GL.GenTextures(1, out texturehandle);
         //    //    GL.BindTexture(dimension, texturehandle);
-        //    //    #endregion Generate and Bind Handle
 
         //    //    int Cursor = HeaderSizeInBytes;
         //    //    // foreach face in the cubemap, get all it's mipmaps levels. Only one iteration for Texture2D
@@ -330,7 +308,6 @@ namespace Examples.TextureLoaders
         //    //        int Height = _Height;
         //    //        for (int Level = 0; Level < _MipMapCount; Level++) // start at base image
         //    //        {
-        //    //            #region determine Dimensions
         //    //            int BlocksPerRow = (Width + 3) >> 2;
         //    //            int BlocksPerColumn = (Height + 3) >> 2;
         //    //            int SurfaceBlockCount = BlocksPerRow * BlocksPerColumn; //   // DXTn stores Texels in 4x4 blocks, a Color block is 8 Bytes, an Alpha block is 8 Bytes for DXT3/5
@@ -339,12 +316,10 @@ namespace Examples.TextureLoaders
         //    //            // this check must evaluate to false for 2D and Cube maps, or it's impossible to determine MipMap sizes.
         //    //            if (TextureLoaderParameters.Verbose && Level == 0 && _IsCompressed && _BytesForMainSurface != SurfaceSizeInBytes)
         //    //                Trace.WriteLine("Warning: Calculated byte-count of main image differs from what was read from file.");
-        //    //            #endregion determine Dimensions
 
         //    //            // skip mipmaps smaller than a 4x4 Pixels block, which is the smallest DXTn unit.
         //    //            if (Width > 2 && Height > 2)
         //    //            { // Note: there could be a potential problem with non-power-of-two cube maps
-        //    //                #region Prepare Array for TexImage
         //    //                byte[] RawDataOfSurface = new byte[SurfaceSizeInBytes];
         //    //                if (!TextureLoaderParameters.FlipImages)
         //    //                { // no changes to the image, copy as is
@@ -359,7 +334,6 @@ namespace Examples.TextureLoaders
         //    //                        {
         //    //                            int target = (targetColumn * BlocksPerRow + row) * _BytesPerBlock;
         //    //                            int source = (sourceColumn * BlocksPerRow + row) * _BytesPerBlock + Cursor;
-        //    //                            #region Swap Bytes
         //    //                            switch (_PixelInternalFormat)
         //    //                            {
         //    //                                case (PixelInternalFormat)ExtTextureCompressionS3tc.CompressedRgbS3tcDxt1Ext:
@@ -416,13 +390,10 @@ namespace Examples.TextureLoaders
         //    //                                default:
         //    //                                    throw new ArgumentException("ERROR: Should have never arrived here! Bad _PixelInternalFormat! Should have been dealt with much earlier.");
         //    //                            }
-        //    //                            #endregion Swap Bytes
         //    //                        }
         //    //                    }
         //    //                }
-        //    //                #endregion Prepare Array for TexImage
 
-        //    //                #region Create TexImage
         //    //                switch (dimension)
         //    //                {
         //    //                    case TextureTarget.Texture2D:
@@ -451,9 +422,7 @@ namespace Examples.TextureLoaders
         //    //                        throw new ArgumentException("ERROR: Use DXT for 2D Images only. Cannot evaluate " + dimension);
         //    //                }
         //    //                GL.Finish();
-        //    //                #endregion Create TexImage
 
-        //    //                #region Query Success
         //    //                int width, height, internalformat, compressed;
         //    //                switch (dimension)
         //    //                {
@@ -482,7 +451,6 @@ namespace Examples.TextureLoaders
         //    //                    GL.DeleteTextures(1, ref texturehandle);
         //    //                    throw new ArgumentException("ERROR: Something went wrong after GL.CompressedTexImage(); Last GL Error: " + GLError.ToString());
         //    //                }
-        //    //                #endregion Query Success
         //    //            }
         //    //            else
         //    //            {
@@ -490,7 +458,6 @@ namespace Examples.TextureLoaders
         //    //                    trueMipMapCount = Level - 1; // The current Level is invalid
         //    //            }
 
-        //    //            #region Prepare the next MipMap level
         //    //            Width /= 2;
         //    //            if (Width < 1)
         //    //                Width = 1;
@@ -498,10 +465,8 @@ namespace Examples.TextureLoaders
         //    //            if (Height < 1)
         //    //                Height = 1;
         //    //            Cursor += SurfaceSizeInBytes;
-        //    //            #endregion Prepare the next MipMap level
         //    //        }
 
-        //    //        #region Set States properly
         //    //        GL.TexParameter(dimension, (TextureParameterName)All.TextureBaseLevel, 0);
         //    //        GL.TexParameter(dimension, (TextureParameterName)All.TextureMaxLevel, trueMipMapCount);
 
@@ -510,10 +475,8 @@ namespace Examples.TextureLoaders
 
         //    //        if (TextureLoaderParameters.Verbose)
         //    //            Trace.WriteLine("Verification: GL: " + GL.GetError().ToString() + " TextureMaxLevel: " + TexMaxLevel + ((TexMaxLevel == trueMipMapCount) ? " (Correct.)" : " (Wrong!)"));
-        //    //        #endregion Set States properly
         //    //    }
 
-        //    //    #region Set Texture Parameters
         //    //    GL.TexParameter(dimension, TextureParameterName.TextureMinFilter, (int)TextureLoaderParameters.MinificationFilter);
         //    //    GL.TexParameter(dimension, TextureParameterName.TextureMagFilter, (int)TextureLoaderParameters.MagnificationFilter);
 
@@ -527,11 +490,9 @@ namespace Examples.TextureLoaders
         //    //    {
         //    //        throw new ArgumentException("Error setting Texture Parameters. GL Error: " + GLError);
         //    //    }
-        //    //    #endregion Set Texture Parameters
 
         //    //    // If it made it here without throwing any Exception the result is a valid Texture.
         //    //    return; // success
-        //    //    #endregion send the Texture to GL
         //    //}
         //    //catch (Exception e)
         //    //{
@@ -544,10 +505,8 @@ namespace Examples.TextureLoaders
         //    //{
         //    //    _RawDataFromFile = null; // clarity, not really needed
         //    //}
-        //    //#endregion Try
         //}
 
-        #region Helpers
         private static void ConvertDX9Header(ref byte[] input)
         {
             UInt32 offset = 0;
@@ -664,9 +623,7 @@ namespace Examples.TextureLoaders
             Result = Result | (uint)(ThreeBits[0][3] << 21);
             return Result;
         }
-        #endregion Helpers
 
-        #region String Representations
         private static string GetDescriptionFromFile(string filename)
         {
             return "\n--> Header of " + filename +
@@ -703,6 +660,5 @@ namespace Examples.TextureLoaders
                    "\nBytes for Main Image: " + _BytesForMainSurface +
                    "\nMipMaps: " + _MipMapCount;
         }
-        #endregion String Representations
     }
 }
