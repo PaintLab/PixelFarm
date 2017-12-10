@@ -152,6 +152,11 @@ namespace PixelFarm.Drawing
     {
         public static class RequestFontCacheAccess
         {
+            static int s_totalCacheSystemId;
+            public static int GetNewCacheSystemId()
+            {
+                return ++s_totalCacheSystemId;
+            }
             public static void ClearCache(RequestFont reqFont)
             {
                 reqFont._platform_id = 0;

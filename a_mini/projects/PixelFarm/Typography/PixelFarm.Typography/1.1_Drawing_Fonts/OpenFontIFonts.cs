@@ -21,13 +21,14 @@ namespace LayoutFarm
 
         Dictionary<int, Typeface> _resolvedTypefaceCache = new Dictionary<int, Typeface>();
 
-        static int _totalSystemId = 0;
-        int _system_id = ++_totalSystemId;
 
+        readonly int _system_id;
 
         public OpenFontIFonts(IFontLoader fontloader)
         {
-            this._fontloader = fontloader;
+            _fontloader = fontloader;
+            _system_id = PixelFarm.Drawing.Internal.RequestFontCacheAccess.GetNewCacheSystemId();
+
             typefaceStore = new TypefaceStore();
             typefaceStore.FontCollection = InstalledFontCollection.GetSharedFontCollection(null);
             glyphLayout = new GlyphLayout(); //create glyph layout with default value
@@ -62,7 +63,6 @@ namespace LayoutFarm
             }
         }
 
-
         Typeface ResolveTypeface(RequestFont font)
         {
             //from user's request font
@@ -89,7 +89,10 @@ namespace LayoutFarm
             PixelFarm.Drawing.Internal.RequestFontCacheAccess.SetActualFont(font, _system_id, typeface);
             return typeface;
         }
-
+        public float MeasureWhitespace(RequestFont f)
+        {
+            throw new NotImplementedException();
+        }
         public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
         {
             Typeface typeface = ResolveTypeface(font);
@@ -108,19 +111,16 @@ namespace LayoutFarm
             throw new NotImplementedException();
         }
 
-        public float MeasureWhitespace(RequestFont f)
-        {
-            throw new NotImplementedException();
-        }
+
         public int MeasureBlankLineHeight(RequestFont font)
         {
-            Typeface typeface = typefaceStore.GetTypeface(font.Name, InstalledFontStyle.Normal);
-            return typeface.LineSpacing;
+            Typeface typeface = ResolveTypeface(font);
+            return (int)(typeface.LineSpacing * typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
         }
-
-        float IFonts.MeasureBlankLineHeight(RequestFont f)
+        float IFonts.MeasureBlankLineHeight(RequestFont font)
         {
-            throw new NotImplementedException();
+            Typeface typeface = ResolveTypeface(font);
+            return typeface.LineSpacing * typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
         }
     }
 }
