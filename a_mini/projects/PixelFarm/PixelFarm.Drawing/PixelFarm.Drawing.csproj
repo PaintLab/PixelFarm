@@ -169,9 +169,6 @@
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\CanvasPaintToOutputDelegate.cs">
       <Link>1_DrawingCore\3_Canvas\CanvasPaintToOutputDelegate.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\KnownColors.cs">
-      <Link>1_DrawingCore\3_Canvas\KnownColors.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\RenderVx.cs">
       <Link>1_DrawingCore\3_Canvas\RenderVx.cs</Link>
     </Compile>

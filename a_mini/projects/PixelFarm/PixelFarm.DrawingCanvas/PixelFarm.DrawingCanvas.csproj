@@ -34,7 +34,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="2_Drawing\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

@@ -102,7 +102,6 @@
     <Compile Include="3_Canvas\Canvas.cs" />
     <Compile Include="3_Canvas\CanvasOptions.cs" />
     <Compile Include="3_Canvas\CanvasPaintToOutputDelegate.cs" />
-    <Compile Include="3_Canvas\KnownColors.cs" />
     <Compile Include="3_Canvas\RenderVx.cs" />
     <Compile Include="4_RequestFonts\ActualFont.cs" />
     <Compile Include="4_RequestFonts\FontFace.cs" />
