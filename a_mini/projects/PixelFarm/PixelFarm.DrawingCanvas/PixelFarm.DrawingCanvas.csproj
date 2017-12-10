@@ -150,7 +150,6 @@
     </Compile>
     <Compile Include="1_Canvas\AggColorExtensions.cs" />
     <Compile Include="1_Canvas\CanvasPainter.cs" />
-    <Compile Include="3_Drawing_Fonts\FontGlyph.cs" />
     <Compile Include="3_Drawing_Fonts\ITextPrinter.cs" />
     <Compile Include="4_DrawingCore\1_Vectors\5_Clipper\cliper.cs" />
     <Compile Include="4_DrawingCore\3_Agg_PixelBuffer\ActualImage.cs" />

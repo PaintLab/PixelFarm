@@ -168,7 +168,7 @@ namespace Mini.WinForms
             }
             set
             {
-                _myBrushPath.FillColor = PixelFarm.Drawing.Color.Make(
+                _myBrushPath.FillColor = PixelFarm.AggColorExtensions.Make(
                         (byte)value.R,
                         (byte)value.G,
                         (byte)value.B,

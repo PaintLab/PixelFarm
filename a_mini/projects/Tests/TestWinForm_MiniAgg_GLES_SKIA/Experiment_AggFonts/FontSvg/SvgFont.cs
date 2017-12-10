@@ -14,8 +14,8 @@ namespace PixelFarm.Drawing.Fonts
         int emSizeInPoints;
         int emSizeInPixels;
         float currentEmScalling;
-        Dictionary<char, MyFontGlyph> cachedGlyphs = new Dictionary<char, MyFontGlyph>();
-        Dictionary<uint, MyFontGlyph> cachedGlyphsByIndex = new Dictionary<uint, MyFontGlyph>();
+        Dictionary<char, FontGlyph> cachedGlyphs = new Dictionary<char, FontGlyph>();
+        Dictionary<uint, FontGlyph> cachedGlyphsByIndex = new Dictionary<uint, FontGlyph>();
         Affine scaleTx;
         string fontName;
         FontStyle fontStyle;
@@ -45,17 +45,17 @@ namespace PixelFarm.Drawing.Fonts
         }
         public FontGlyph GetGlyphByIndex(uint glyphIndex)
         {
-            MyFontGlyph glyph;
+            FontGlyph glyph;
             //temp 
             if (!cachedGlyphsByIndex.TryGetValue(glyphIndex, out glyph))
             {
                 //create font glyph for this font size
-                MyFontGlyph originalGlyph = (MyFontGlyph)fontface.GetGlyphByIndex((int)glyphIndex);
+                FontGlyph originalGlyph = (FontGlyph)fontface.GetGlyphByIndex((int)glyphIndex);
 
                 VertexStore characterGlyph = new VertexStore();
                 scaleTx.TransformToVxs(originalGlyph.originalVxs, characterGlyph);
 
-                glyph = new MyFontGlyph();
+                glyph = new FontGlyph();
                 glyph.originalVxs = characterGlyph;
                 //then flatten it
                 glyph.flattenVxs = curveFlattner.MakeVxs(characterGlyph, new VertexStore());
@@ -66,15 +66,15 @@ namespace PixelFarm.Drawing.Fonts
         }
         public FontGlyph GetGlyph(char c)
         {
-            MyFontGlyph glyph;
+            FontGlyph glyph;
             if (!cachedGlyphs.TryGetValue(c, out glyph))
             {
                 //create font glyph for this font size
-                MyFontGlyph originalGlyph = (MyFontGlyph)fontface.GetGlyphForCharacter(c);
+                FontGlyph originalGlyph = (FontGlyph)fontface.GetGlyphForCharacter(c);
                 VertexStore characterGlyph = new VertexStore();
                 scaleTx.TransformToVxs(originalGlyph.originalVxs, characterGlyph);
 
-                MyFontGlyph myFontGlyph = new MyFontGlyph();
+                FontGlyph myFontGlyph = new FontGlyph();
                 glyph = myFontGlyph;
                 myFontGlyph.horiz_adv_x = originalGlyph.horiz_adv_x;
                 myFontGlyph.originalVxs = characterGlyph;

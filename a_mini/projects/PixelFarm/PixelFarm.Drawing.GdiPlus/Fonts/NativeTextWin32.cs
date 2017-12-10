@@ -405,16 +405,15 @@ namespace PixelFarm.Drawing.WinGdi
         {
             //internal use only
             public readonly int FontNameIndex;
-            public readonly FontStyle FontStyle;
-            public FontFaceKey(FontKey fontKey)
+            public FontFaceKey(int fontNameIndex)
             {
-                this.FontNameIndex = fontKey.FontNameIndex;
-                this.FontStyle = fontKey.FontStyle;
+                this.FontNameIndex = fontNameIndex; 
             }
+
         }
         static RequestFont latestFont;
         static WinGdiFont latestWinFont;
-        static Dictionary<FontKey, WinGdiFont> registerFonts = new Dictionary<FontKey, WinGdiFont>();
+        static Dictionary<int, WinGdiFont> registerFonts = new Dictionary<int, WinGdiFont>();
         static Dictionary<FontFaceKey, WinGdiFontFace> winGdiFonFaces = new Dictionary<FontFaceKey, WinGdiFontFace>();
 
         public static WinGdiFont GetWinGdiFont(RequestFont f)
@@ -435,7 +434,7 @@ namespace PixelFarm.Drawing.WinGdi
             //-----
             //need to create a new one
             //get register font or create the new one
-            FontKey key = f.FontKey;
+            int key = f.FontKey;
             WinGdiFont found;
             if (!registerFonts.TryGetValue(key, out found))
             {

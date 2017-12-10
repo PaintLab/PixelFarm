@@ -55,9 +55,6 @@
     <Compile Include="3_Canvas\CanvasOptions.cs" />
     <Compile Include="3_Canvas\CanvasPaintToOutputDelegate.cs" />
     <Compile Include="3_Canvas\RenderVx.cs" />
-    <Compile Include="4_RequestFonts\ActualFont.cs" />
-    <Compile Include="4_RequestFonts\FontFace.cs" />
-    <Compile Include="4_RequestFonts\FontKey.cs" />
     <Compile Include="4_RequestFonts\FontStyle.cs" />
     <Compile Include="4_RequestFonts\RequestFont.cs" />
     <Compile Include="4_RequestFonts\ScriptCode.cs" />

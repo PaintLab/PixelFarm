@@ -190,7 +190,7 @@ namespace PixelFarm.Drawing.Fonts
 
         FontGlyph CreateGlyphFromSVGGlyphData(string svgGlyphData)
         {
-            MyFontGlyph newGlyph = new MyFontGlyph();
+            FontGlyph newGlyph = new FontGlyph();
             if (!GetIntValue(svgGlyphData, "horiz-adv-x", out newGlyph.horiz_adv_x))
             {
                 newGlyph.horiz_adv_x = horiz_adv_x;

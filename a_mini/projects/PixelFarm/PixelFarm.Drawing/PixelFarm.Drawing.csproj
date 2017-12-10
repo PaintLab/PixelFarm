@@ -64,9 +64,6 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\CanvasPainter.cs">
       <Link>2_DrawingCanvas\1_Canvas\CanvasPainter.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\FontGlyph.cs">
-      <Link>2_DrawingCanvas\3_Drawing_Fonts\FontGlyph.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\3_Drawing_Fonts\ITextPrinter.cs">
       <Link>2_DrawingCanvas\3_Drawing_Fonts\ITextPrinter.cs</Link>
     </Compile>
@@ -174,15 +171,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\RenderVx.cs">
       <Link>1_DrawingCore\3_Canvas\RenderVx.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\ActualFont.cs">
-      <Link>1_DrawingCore\4_Request_Fonts\ActualFont.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\FontFace.cs">
-      <Link>1_DrawingCore\4_Request_Fonts\FontFace.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\FontKey.cs">
-      <Link>1_DrawingCore\4_Request_Fonts\FontKey.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\4_RequestFonts\FontStyle.cs">
       <Link>1_DrawingCore\4_Request_Fonts\FontStyle.cs</Link>

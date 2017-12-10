@@ -1,9 +1,11 @@
 ﻿//MIT, 2014-2017, WinterDev
 
 using System;
+using System.Collections.Generic;
 using PixelFarm.Drawing.Fonts;
 namespace PixelFarm.Drawing
 {
+
     /// <summary>
     /// user request for font
     /// </summary>
@@ -15,7 +17,7 @@ namespace PixelFarm.Drawing
         /// font size in points unit
         /// </summary>
         float sizeInPoints;
-        FontKey fontKey;
+        int _fontKey;
         public RequestFont(string facename, float fontSizeInPts, FontStyle style = FontStyle.Regular)
         {
             WriteDirection = WriteDirection.LTR;
@@ -25,16 +27,16 @@ namespace PixelFarm.Drawing
             Name = facename;
             SizeInPoints = fontSizeInPts;
             Style = style;
-            fontKey = new FontKey(facename, fontSizeInPts, style);
 
+            this._fontKey = (new InternalFontKey(facename, fontSizeInPts, style)).GetHashCode();
             //TODO: review here ***
             //temp fix 
             //we need font height*** 
             //this.Height = SizeInPixels;
         }
-        public FontKey FontKey
+        public int FontKey
         {
-            get { return this.fontKey; }
+            get { return this._fontKey; }
         }
 
         /// <summary>
@@ -54,70 +56,107 @@ namespace PixelFarm.Drawing
                 sizeInPoints = value;
             }
         }
-        public float DescentInPixels
-        {
-            get
-            {
 
-                if (_actualFont != null)
+
+
+        struct InternalFontKey
+        {
+
+            public readonly int FontNameIndex;
+            public readonly float FontSize;
+            public readonly FontStyle FontStyle;
+
+            public InternalFontKey(string fontname, float fontSize, FontStyle fs)
+            {
+                //font name/ not filename
+                this.FontNameIndex = RegisterFontName(fontname.ToLower());
+                this.FontSize = fontSize;
+                this.FontStyle = fs;
+            }
+
+            static Dictionary<string, int> registerFontNames = new Dictionary<string, int>();
+            static InternalFontKey()
+            {
+                RegisterFontName(""); //blank font name
+            }
+            static int RegisterFontName(string fontName)
+            {
+                fontName = fontName.ToUpper();
+                int found;
+                if (!registerFontNames.TryGetValue(fontName, out found))
                 {
-                    return (float)_actualFont.DescentInPixels;
+                    int nameIndex = registerFontNames.Count;
+                    registerFontNames.Add(fontName, nameIndex);
+                    return nameIndex;
                 }
-                else
-                {
-                    throw new NotSupportedException();
-                }
+                return found;
             }
         }
 
-        public float AscentInPixels
-        {
-            get
-            {
+        //public float DescentInPixels
+        //{
+        //    get
+        //    {
 
-                if (_actualFont != null)
-                {
-                    return (float)_actualFont.AscentInPixels;
-                }
-                else
-                {
-                    throw new NotSupportedException();
-                }
-            }
-        }
-        public float LineGapInPixels
-        {
-            get
-            {
+        //        if (_actualFont != null)
+        //        {
+        //            return (float)_actualFont.DescentInPixels;
+        //        }
+        //        else
+        //        {
+        //            throw new NotSupportedException();
+        //        }
+        //    }
+        //}
 
-                if (_actualFont != null)
-                {
-                    return (float)_actualFont.LineGapInPixels;
-                }
-                else
-                {
-                    throw new NotSupportedException();
-                }
-            }
-        }
+        //public float AscentInPixels
+        //{
+        //    get
+        //    {
+
+        //        if (_actualFont != null)
+        //        {
+        //            return (float)_actualFont.AscentInPixels;
+        //        }
+        //        else
+        //        {
+        //            throw new NotSupportedException();
+        //        }
+        //    }
+        //}
+        //public float LineGapInPixels
+        //{
+        //    get
+        //    {
+
+        //        if (_actualFont != null)
+        //        {
+        //            return (float)_actualFont.LineGapInPixels;
+        //        }
+        //        else
+        //        {
+        //            throw new NotSupportedException();
+        //        }
+        //    }
+        //}
         static int s_POINTS_PER_INCH = 72; //default value
         static int s_PIXELS_PER_INCH = 96; //default value
 
 
-        public float SizeInPixels
-        {
-            get
-            {
-                if (_actualFont != null)
-                {
-                    return (float)_actualFont.SizeInPixels;
-                }
-                else
-                {
-                    return ConvEmSizeInPointsToPixels(SizeInPoints);
-                }
-            }
-        }
+        //public float SizeInPixels
+        //{
+        //    get
+        //    {
+        //        if (_actualFont != null)
+        //        {
+        //            return (float)_actualFont.SizeInPixels;
+        //        }
+        //        else
+        //        {
+        //            return ConvEmSizeInPointsToPixels(SizeInPoints);
+        //        }
+        //    }
+        //}
         //--------------------------
         //data for shaping engine
 
@@ -128,21 +167,21 @@ namespace PixelFarm.Drawing
             return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
         }
 
-        
 
-        //-------------
-        /// <summary>
-        /// resolved actual font
-        /// </summary>
-        ActualFont _actualFont;
-        internal static void SetCacheActualFont(RequestFont r, ActualFont f)
-        {
-            r._actualFont = f;
-        }
-        internal static ActualFont GetCacheActualFont(RequestFont r)
-        {
-            return r._actualFont;
-        }
+
+        ////-------------
+        ///// <summary>
+        ///// resolved actual font
+        ///// </summary>
+        //ActualFont _actualFont;
+        //internal static void SetCacheActualFont(RequestFont r, ActualFont f)
+        //{
+        //    r._actualFont = f;
+        //}
+        //internal static ActualFont GetCacheActualFont(RequestFont r)
+        //{
+        //    return r._actualFont;
+        //}
     }
 
 }

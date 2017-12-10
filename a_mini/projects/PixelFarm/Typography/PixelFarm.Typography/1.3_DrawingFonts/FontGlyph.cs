@@ -6,28 +6,7 @@ using System.Runtime.InteropServices;
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Fonts
 {
-
-    public class MyFontGlyph : FontGlyph
-    {
-        public GlyphMatrix glyphMatrix;
-        /// <summary>
-        /// 32 bpp image for render
-        /// </summary>
-        public ActualImage glyphImage32;
-        //----------------------------
-        /// <summary>
-        /// original glyph outline
-        /// </summary>
-        public VertexStore originalVxs;
-        /// <summary>
-        /// flaten version of original glyph outline
-        /// </summary>
-        public VertexStore flattenVxs;
-        //----------------------------
- 
-    }
-
-
+     
     [StructLayout(LayoutKind.Sequential)]
     public struct GlyphMatrix
     {
