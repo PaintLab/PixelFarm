@@ -1,15 +1,11 @@
-﻿#region --- License ---
-/* Copyright (c) 2007 Stefanos Apostolopoulos
+﻿/* Copyright (c) 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  */
-#endregion
 
-#region --- Using directives ---
 
 using System;
 using OpenTK.Input;
 using System.Diagnostics;
-#endregion
 
 namespace OpenTK.Input
 {
@@ -27,7 +23,6 @@ namespace OpenTK.Input
         private IntPtr devID;
         private bool repeat;
         private KeyboardKeyEventArgs args = new KeyboardKeyEventArgs();
-        #region --- Constructors ---
 
        
         static KeyboardDevice()
@@ -35,9 +30,7 @@ namespace OpenTK.Input
             allKeyValueCount = TypeMirror.SimpleReflectionHelper.GetEnumValues<Key>().Count;
         }
       
-        #endregion
 
-        #region --- IKeyboard members ---
 
         /// <summary>
         /// Gets a value indicating the status of the specified Key.
@@ -102,7 +95,6 @@ namespace OpenTK.Input
             internal set { devID = value; }
         }
 
-        #region public bool KeyRepeat
 
         /// <summary>
         /// Gets or sets a System.Boolean indicating key repeat status.
@@ -126,27 +118,20 @@ namespace OpenTK.Input
             set { repeat = value; }
         }
 
-        #endregion
 
-        #region KeyDown
 
         /// <summary>
         /// Occurs when a key is pressed.
         /// </summary>
         public event EventHandler<KeyboardKeyEventArgs> KeyDown;
-        #endregion
 
-        #region KeyUp
 
         /// <summary>
         /// Occurs when a key is released.
         /// </summary>
         public event EventHandler<KeyboardKeyEventArgs> KeyUp;
-        #endregion
 
-        #endregion
 
-        #region --- IInputDevice Members ---
 
         /// <summary>
         /// Gets a <see cref="System.String"/> which describes this instance.
@@ -165,9 +150,7 @@ namespace OpenTK.Input
             get { return InputDeviceType.Keyboard; }
         }
 
-        #endregion
 
-        #region --- Public Methods ---
 
         /// <summary>Returns the hash code for this KeyboardDevice.</summary>
         /// <returns>A 32-bit signed integer hash code.</returns>
@@ -188,11 +171,8 @@ namespace OpenTK.Input
                 DeviceID, Description, NumberOfKeys, NumberOfFunctionKeys, NumberOfLeds);
         }
 
-        #endregion
 
-        #region --- Internal Methods ---
 
-        #region internal void ClearKeys()
 
         internal void ClearKeys()
         {
@@ -201,8 +181,6 @@ namespace OpenTK.Input
                     this[(Key)i] = false;
         }
 
-        #endregion
 
-        #endregion
     }
 }

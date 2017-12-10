@@ -1,12 +1,10 @@
-﻿#region --- License ---
-/* Licensed under the MIT/X11 license.
+﻿/* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
  * 
  * Contributions by Georg W�chter.
  */
-#endregion
 
 using System.Numerics;
 
@@ -27,7 +25,6 @@ namespace Typography.Contours
     //[Serializable]
     struct BezierCurveCubic
     {
-        #region Fields
 
         /// <summary>
         /// Start anchor point.
@@ -53,9 +50,7 @@ namespace Typography.Contours
         /// the original curve, 5.0f i.e. stands for a curve that has always a distance
         /// of 5.f to the original curve at any point.</remarks>
         public float Parallel;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new <see cref="BezierCurveCubic"/>.
@@ -90,9 +85,7 @@ namespace Typography.Contours
             this.SecondControlPoint = secondControlPoint;
         }
 
-        #endregion
 
-        #region Functions
 
         /// <summary>
         /// Calculates the point with the specified t.
@@ -152,7 +145,6 @@ namespace Typography.Contours
         //    return (float)length;
         //}
 
-        #endregion
     }
 
     /// <summary>
@@ -161,7 +153,6 @@ namespace Typography.Contours
     //[Serializable]
     public struct BezierCurveQuadric
     {
-        #region Fields
 
         /// <summary>
         /// Start anchor point.
@@ -183,9 +174,7 @@ namespace Typography.Contours
         /// the original curve, 5.0f i.e. stands for a curve that has always a distance
         /// of 5.f to the original curve at any point.</remarks>
         public float Parallel;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new <see cref="BezierCurveQuadric"/>.
@@ -216,9 +205,7 @@ namespace Typography.Contours
             this.ControlPoint = controlPoint;
         }
 
-        #endregion
 
-        #region Functions
 
         /// <summary>
         /// Calculates the point with the specified t.
@@ -275,6 +262,5 @@ namespace Typography.Contours
             return (float)length;
         }
 
-        #endregion
     }
 }

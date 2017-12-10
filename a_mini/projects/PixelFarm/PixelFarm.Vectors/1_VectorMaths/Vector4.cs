@@ -1,4 +1,3 @@
-#region --- License ---
 /*
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 
@@ -20,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -31,7 +29,6 @@ namespace PixelFarm.VectorMath
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector4 : IEquatable<Vector4>
     {
-        #region Fields
 
         /// <summary>
         /// The X component of the Vector4d.
@@ -77,9 +74,7 @@ namespace PixelFarm.VectorMath
         /// Defines the size of the Vector4d struct in bytes.
         /// </summary>
         public static readonly int SizeInBytes = Marshal.SizeOf(new Vector4());
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new Vector4d.
@@ -145,11 +140,8 @@ namespace PixelFarm.VectorMath
             w = v.w;
         }
 
-        #endregion
 
-        #region Public Members
 
-        #region Properties
 
         public double this[int index]
         {
@@ -192,11 +184,8 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
-        #region Instance
 
-        #region public double Length
 
         /// <summary>
         /// Gets the length (magnitude) of the vector.
@@ -211,9 +200,7 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
-        #region public double LengthSquared
 
         /// <summary>
         /// Gets the square of the vector length (magnitude).
@@ -231,9 +218,7 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
-        #region public void Normalize()
 
         /// <summary>
         /// Scales the Vector4d to unit length.
@@ -247,17 +232,11 @@ namespace PixelFarm.VectorMath
             w *= scale;
         }
 
-        #endregion
 
-        #region public void Scale()
 
-        #endregion public void Scale()
 
-        #endregion
 
-        #region Static
 
-        #region Add
 
         /// <summary>
         /// Adds two vectors.
@@ -282,9 +261,7 @@ namespace PixelFarm.VectorMath
             result = new Vector4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w);
         }
 
-        #endregion
 
-        #region Subtract
 
         /// <summary>
         /// Subtract one Vector from another
@@ -309,9 +286,7 @@ namespace PixelFarm.VectorMath
             result = new Vector4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w);
         }
 
-        #endregion
 
-        #region Multiply
 
         /// <summary>
         /// Multiplies a vector by a scalar.
@@ -359,9 +334,7 @@ namespace PixelFarm.VectorMath
             result = new Vector4(vector.x * scale.x, vector.y * scale.y, vector.z * scale.z, vector.w * scale.w);
         }
 
-        #endregion
 
-        #region Divide
 
         /// <summary>
         /// Divides a vector by a scalar.
@@ -409,9 +382,7 @@ namespace PixelFarm.VectorMath
             result = new Vector4(vector.x / scale.x, vector.y / scale.y, vector.z / scale.z, vector.w / scale.w);
         }
 
-        #endregion
 
-        #region Min
 
         /// <summary>
         /// Calculate the component-wise minimum of two vectors
@@ -442,9 +413,7 @@ namespace PixelFarm.VectorMath
             result.w = a.w < b.w ? a.w : b.w;
         }
 
-        #endregion
 
-        #region Max
 
         /// <summary>
         /// Calculate the component-wise maximum of two vectors
@@ -475,9 +444,7 @@ namespace PixelFarm.VectorMath
             result.w = a.w > b.w ? a.w : b.w;
         }
 
-        #endregion
 
-        #region Clamp
 
         /// <summary>
         /// Clamp a vector to the given minimum and maximum vectors
@@ -510,9 +477,7 @@ namespace PixelFarm.VectorMath
             result.w = vec.y < min.w ? min.w : vec.w > max.w ? max.w : vec.w;
         }
 
-        #endregion
 
-        #region Normalize
 
         /// <summary>
         /// Scale a vector to unit length
@@ -543,9 +508,7 @@ namespace PixelFarm.VectorMath
             result.w = vec.w * scale;
         }
 
-        #endregion
 
-        #region Dot
 
         /// <summary>
         /// Calculate the dot product of two vectors
@@ -569,9 +532,7 @@ namespace PixelFarm.VectorMath
             result = left.x * right.x + left.y * right.y + left.z * right.z + left.w * right.w;
         }
 
-        #endregion
 
-        #region Lerp
 
         /// <summary>
         /// Returns a new Vector that is the linear blend of the 2 given Vectors
@@ -604,9 +565,7 @@ namespace PixelFarm.VectorMath
             result.w = blend * (b.w - a.w) + a.w;
         }
 
-        #endregion
 
-        #region Barycentric
 
         /// <summary>
         /// Interpolate 3 Vectors using Barycentric coordinates
@@ -642,9 +601,7 @@ namespace PixelFarm.VectorMath
             Add(ref result, ref temp, out result);
         }
 
-        #endregion
 
-        #region Transform
 
         /// <summary>Transform a Vector by the given Matrix</summary>
         /// <param name="vec">The vector to transform</param>
@@ -698,11 +655,8 @@ namespace PixelFarm.VectorMath
             result = new Vector4(v.X, v.Y, v.Z, v.W);
         }
 
-        #endregion
 
-        #endregion
 
-        #region Swizzle
 
         /// <summary>
         /// Gets or sets an OpenTK.Vector2d with the X and Y components of this instance.
@@ -714,9 +668,7 @@ namespace PixelFarm.VectorMath
         /// </summary>
         public Vector3 Xyz { get { return new Vector3(x, y, z); } set { x = value.x; y = value.y; z = value.z; } }
 
-        #endregion
 
-        #region Operators
 
         /// <summary>
         /// Adds two instances.
@@ -830,11 +782,8 @@ namespace PixelFarm.VectorMath
             return !left.Equals(right);
         }
 
-        #endregion
 
-        #region Overrides
 
-        #region public override string ToString()
 
         /// <summary>
         /// Returns a System.String that represents the current Vector4d.
@@ -855,9 +804,7 @@ namespace PixelFarm.VectorMath
             return x.ToString(format) + ", " + y.ToString(format) + ", " + z.ToString(format) + ", " + w.ToString(format);
         }
 
-        #endregion
 
-        #region public override int GetHashCode()
 
         /// <summary>
         /// Returns the hashcode for this instance.
@@ -868,9 +815,7 @@ namespace PixelFarm.VectorMath
             return new { x, y, z, w }.GetHashCode();
         }
 
-        #endregion
 
-        #region public override bool Equals(object obj)
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
@@ -884,13 +829,9 @@ namespace PixelFarm.VectorMath
             return this.Equals((Vector4)obj);
         }
 
-        #endregion
 
-        #endregion
 
-        #endregion
 
-        #region IEquatable<Vector4d> Members
 
         /// <summary>Indicates whether the current vector is equal to another vector.</summary>
         /// <param name="other">A vector to compare with this vector.</param>
@@ -904,6 +845,5 @@ namespace PixelFarm.VectorMath
                 w == other.w;
         }
 
-        #endregion
     }
 }

@@ -37,7 +37,6 @@ namespace Examples.Shapes
             }
 
             PrimitiveMode = OpenTK.Graphics.OpenGL.BeginMode.Triangles;
-            #region Get Array Dimensions
             uint
                 VertexCount = 0,
                 IndexCount = 0;
@@ -51,17 +50,13 @@ namespace Examples.Shapes
 
             VertexArray = new VertexT2dN3dV3d[VertexCount];
             IndexArray = new uint[IndexCount];
-            #endregion Get Array Dimensions
 
             List<Chunk> AllChunks = new List<Chunk>();
-            #region Build a temporary List of all loose pieces
             foreach (MengerCube c in Cubes)
             {
                 c.GetVboAndIbo(ref AllChunks);
             }
-            #endregion Build a temporary List of all loose pieces
 
-            #region Assemble pieces into a single VBO and IBO
             VertexCount = 0;
             IndexCount = 0;
             foreach (Chunk ch in AllChunks)
@@ -80,7 +75,6 @@ namespace Examples.Shapes
                 IndexCount += (uint)ch.Indices.Length;
             }
 
-            #endregion Assemble pieces into a single VBO and IBO
 
             AllChunks.Clear();
         }

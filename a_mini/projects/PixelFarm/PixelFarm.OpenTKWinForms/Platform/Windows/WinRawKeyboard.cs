@@ -1,10 +1,7 @@
-﻿#region --- License ---
-/* Copyright (c) 2007 Stefanos Apostolopoulos
+﻿/* Copyright (c) 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  */
-#endregion
 
-#region --- Using directives ---
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +10,6 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Microsoft.Win32;
 using OpenTK.Input;
-#endregion
 
 namespace OpenTK.Platform.Windows
 {
@@ -21,7 +17,6 @@ namespace OpenTK.Platform.Windows
     {
         private List<KeyboardDevice> keyboards = new List<KeyboardDevice>();
         private IntPtr window;
-        #region --- Constructors ---
 
         internal WinRawKeyboard()
             : this(IntPtr.Zero)
@@ -37,9 +32,7 @@ namespace OpenTK.Platform.Windows
             Debug.Unindent();
         }
 
-        #endregion
 
-        #region internal static void UpdateKeyboardList()
 
         internal void UpdateKeyboardList()
         {
@@ -107,9 +100,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region internal void RegisterKeyboardDevice(Keyboard kb)
 
         internal void RegisterKeyboardDevice(KeyboardDevice kb)
         {
@@ -135,9 +126,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region internal bool ProcessKeyboardEvent(API.RawInput rin)
 
         /// <summary>
         /// Processes raw input events.
@@ -194,9 +183,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region --- IInputDevice Members ---
 
         public string Description
         {
@@ -208,18 +195,14 @@ namespace OpenTK.Platform.Windows
             get { return Input.InputDeviceType.Keyboard; }
         }
 
-        #endregion
 
-        #region --- IKeyboardDriver Members ---
 
         public IList<KeyboardDevice> Keyboard
         {
             get { return keyboards; }
         }
 
-        #endregion
 
-        #region --- IDisposable Members ---
 
         private bool disposed;
         public void Dispose()
@@ -245,6 +228,5 @@ namespace OpenTK.Platform.Windows
             Dispose(false);
         }
 
-        #endregion
     }
 }

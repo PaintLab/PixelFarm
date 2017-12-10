@@ -39,9 +39,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\LayoutFarm.Platforms.WinForms.csproj">
+    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
       <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
-      <Name>LayoutFarm.Platforms.WinForms</Name>
+      <Name>PaintLab.Platforms.WinForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
@@ -75,17 +75,17 @@
       <Project>{9450c9fb-5a70-4e47-bec3-b0a98a9c7d15}</Project>
       <Name>PixelFarm.Drawing.Skia</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
-      <Name>PixelFarm.MiniOpenTK</Name>
+      <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj">
       <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
-      <Name>PixelFarm.OpenTKWinForms</Name>
+      <Name>BackEnd.OpenTKWinForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\BackEnd.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
-      <Name>PixelFarm.SkiaSharp</Name>
+      <Name>BackEnd.SkiaSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Triangulation\PixelFarm.Triangulation.csproj">
       <Project>{c5e5802d-6a45-4fe9-bae7-5f0ae91d72c1}</Project>
@@ -95,9 +95,9 @@
       <Project>{ae37de1f-22f7-49ee-8732-fc6bc8dc58d9}</Project>
       <Name>Tesselate</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\TypeMirror\TypeMirror.csproj">
+    <ProjectReference Include="..\..\PixelFarm\TypeMirror\BackEnd.TypeMirror.csproj">
       <Project>{68f1daf6-2b35-476e-b2f8-5eadbc823935}</Project>
-      <Name>TypeMirror</Name>
+      <Name>BackEnd.TypeMirror</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\FontAtlas\FontAtlas.csproj">
       <Project>{64c28aab-e2ef-45c1-a674-5660d462882f}</Project>
@@ -131,9 +131,9 @@
       <Project>{a17b5a62-09af-45d5-9d9f-1fd1b9ab50f7}</Project>
       <Name>Typography.TextFlow</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\Win32Utils\Win32Utils.csproj">
+    <ProjectReference Include="..\..\PixelFarm\Win32Utils\BackEnd.Win32Utils.csproj">
       <Project>{b9c23586-913d-4ee8-b266-bd58fbd0133b}</Project>
-      <Name>Win32Utils</Name>
+      <Name>BackEnd.Win32Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

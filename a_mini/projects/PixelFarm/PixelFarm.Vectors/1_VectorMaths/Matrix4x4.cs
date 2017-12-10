@@ -1,4 +1,3 @@
-#region --- License ---
 /*
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 
@@ -49,7 +48,6 @@ of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.
 */
 
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -63,7 +61,6 @@ namespace PixelFarm.VectorMath
     [StructLayout(LayoutKind.Sequential)]
     public struct Matrix4X4 : IEquatable<Matrix4X4>
     {
-        #region Fields
 
         /// <summary>
         /// Top row of the matrix
@@ -85,9 +82,7 @@ namespace PixelFarm.VectorMath
         /// The identity matrix
         /// </summary>
         public static Matrix4X4 Identity = new Matrix4X4(Vector4.UnitX, Vector4.UnitY, Vector4.UnitZ, Vector4.UnitW);
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new instance.
@@ -143,11 +138,8 @@ namespace PixelFarm.VectorMath
             Row3 = new Vector4(double16[12], double16[13], double16[14], double16[15]);
         }
 
-        #endregion
 
-        #region Public Members
 
-        #region Properties
 
         /// <summary>
         /// The determinant of this matrix
@@ -286,9 +278,7 @@ namespace PixelFarm.VectorMath
         /// </summary>
         public double M44 { get { return Row3.w; } set { Row3.w = value; } }
 
-        #endregion
 
-        #region Instance
 
         public double this[int row, int column]
         {
@@ -371,7 +361,6 @@ namespace PixelFarm.VectorMath
             return rotation;
         }
 
-        #region public void Invert()
 
         /// <summary>
         /// Converts this instance into its inverse.
@@ -381,9 +370,7 @@ namespace PixelFarm.VectorMath
             this = Matrix4X4.Invert(this);
         }
 
-        #endregion
 
-        #region public void Transpose()
 
         /// <summary>
         /// Converts this instance into its transpose.
@@ -393,13 +380,9 @@ namespace PixelFarm.VectorMath
             this = Matrix4X4.Transpose(this);
         }
 
-        #endregion
 
-        #endregion
 
-        #region Static
 
-        #region CreateFromAxisAngle
 
         /// <summary>
         /// Build a rotation matrix from the specified axis/angle rotation.
@@ -432,9 +415,7 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-        #endregion
 
-        #region CreateRotation[XYZ]
 
         public static Matrix4X4 CreateRotation(Vector3 radians)
         {
@@ -567,9 +548,7 @@ namespace PixelFarm.VectorMath
             return CreateRotation(q);
         }
 
-        #endregion
 
-        #region CreateTranslation
 
         /// <summary>
         /// Creates a translation matrix.
@@ -621,9 +600,7 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-        #endregion
 
-        #region CreateOrthographic
 
         /// <summary>
         /// Creates an orthographic projection matrix.
@@ -653,9 +630,7 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-        #endregion
 
-        #region CreateOrthographicOffCenter
 
         /// <summary>
         /// Creates an orthographic projection matrix.
@@ -699,9 +674,7 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-        #endregion
 
-        #region CreatePerspectiveFieldOfView
 
         /// <summary>
         /// Creates a perspective projection matrix.
@@ -765,9 +738,7 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-        #endregion
 
-        #region CreatePerspectiveOffCenter
 
         /// <summary>
         /// Creates an perspective projection matrix.
@@ -839,9 +810,7 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-        #endregion
 
-        #region CreateScale
 
         /// <summary>
         /// Build a scaling matrix
@@ -880,9 +849,7 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-        #endregion
 
-        #region Camera Helper Functions
 
         /// <summary>
         /// Build a world space to camera space matrix
@@ -962,9 +929,7 @@ namespace PixelFarm.VectorMath
             return Frustum(xMin, xMax, yMin, yMax, near, far);
         }
 
-        #endregion
 
-        #region Multiply Functions
 
         /// <summary>
         /// Multiplies two instances.
@@ -1006,9 +971,7 @@ namespace PixelFarm.VectorMath
             result.M44 = left.M41 * right.M14 + left.M42 * right.M24 + left.M43 * right.M34 + left.M44 * right.M44;
         }
 
-        #endregion
 
-        #region Invert Functions
 
         /// <summary>
         /// Calculate the inverse of the given matrix
@@ -1116,9 +1079,7 @@ namespace PixelFarm.VectorMath
             return mat;
         }
 
-        #endregion
 
-        #region Transpose
 
         /// <summary>
         /// Calculate the transpose of the given matrix
@@ -1144,11 +1105,8 @@ namespace PixelFarm.VectorMath
             result.Row3 = mat.Column3;
         }
 
-        #endregion
 
-        #endregion
 
-        #region Operators
 
         /// <summary>
         /// Matrix multiplication
@@ -1183,11 +1141,8 @@ namespace PixelFarm.VectorMath
             return !left.Equals(right);
         }
 
-        #endregion
 
-        #region Overrides
 
-        #region public override string ToString()
 
         /// <summary>
         /// Returns a System.String that represents the current Matrix44.
@@ -1198,9 +1153,7 @@ namespace PixelFarm.VectorMath
             return String.Format("{0}\n{1}\n{2}\n{3}", Row0, Row1, Row2, Row3);
         }
 
-        #endregion
 
-        #region public override int GetHashCode()
 
         /// <summary>
         /// Returns the hashcode for this instance.
@@ -1211,9 +1164,7 @@ namespace PixelFarm.VectorMath
             return new { Row0, Row1, Row2, Row3 }.GetHashCode();
         }
 
-        #endregion
 
-        #region public override bool Equals(object obj)
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
@@ -1227,13 +1178,9 @@ namespace PixelFarm.VectorMath
             return this.Equals((Matrix4X4)obj);
         }
 
-        #endregion
 
-        #endregion
 
-        #endregion
 
-        #region IEquatable<Matrix4d> Members
 
         /// <summary>Indicates whether the current matrix is equal to another matrix.</summary>
         /// <param name="other">An matrix to compare with this matrix.</param>
@@ -1247,7 +1194,6 @@ namespace PixelFarm.VectorMath
                 Row3 == other.Row3;
         }
 
-        #endregion
 
         public float[] GetAsFloatArray()
         {

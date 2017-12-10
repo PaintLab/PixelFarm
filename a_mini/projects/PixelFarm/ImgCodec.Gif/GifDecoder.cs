@@ -17,7 +17,6 @@ namespace ImageTools.IO.Gif
     /// </summary>
     public class GifDecoder : IImageDecoder
     {
-        #region Constants
 
         private const byte ExtensionIntroducer = 0x21;
         private const byte Terminator = 0;
@@ -29,9 +28,7 @@ namespace ImageTools.IO.Gif
         private const byte PlainTextLabel = 0x01;
         private const byte GraphicControlLabel = 0xF9;
 
-        #endregion
 
-        #region Fields
 
         private ExtendedImage _image;
         private Stream _stream;
@@ -40,9 +37,7 @@ namespace ImageTools.IO.Gif
         private byte[] _currentFrame;
         private GifGraphicsControlExtension _graphicsControl;
 
-        #endregion
 
-        #region IImageDecoder Members
 
         /// <summary>
         /// Gets the size of the header for this image type.
@@ -425,6 +420,5 @@ namespace ImageTools.IO.Gif
             }
         }
 
-        #endregion
     }
 }

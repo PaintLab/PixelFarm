@@ -1,10 +1,8 @@
-﻿#region --- License ---
-/* Licensed under the MIT/X11 license.
+﻿/* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
  */
-#endregion
 
 using System;
 using OpenTK.Graphics;
@@ -31,7 +29,6 @@ namespace OpenTK.Platform.Dummy
         bool vsync;
         static int handle_count;
         Thread current_thread;
-        #region --- Constructors ---
 
         public DummyGLContext()
             : this(new ContextHandle(new IntPtr(++handle_count)))
@@ -45,9 +42,7 @@ namespace OpenTK.Platform.Dummy
             Handle = handle;
         }
 
-        #endregion
 
-        #region --- IGraphicsContext Members ---
 
         public void CreateContext(bool direct, IGraphicsContext source)
         {
@@ -95,12 +90,9 @@ namespace OpenTK.Platform.Dummy
         public override void LoadAll()
         { }
 
-        #endregion
 
-        #region --- IDisposable Members ---
 
         public override void Dispose() { IsDisposed = true; }
 
-        #endregion
     }
 }

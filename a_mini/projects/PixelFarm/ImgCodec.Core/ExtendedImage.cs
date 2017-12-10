@@ -26,7 +26,6 @@ namespace ImageTools
     [DebuggerDisplay("Image: {PixelWidth}x{PixelHeight}")]
     public sealed partial class ExtendedImage : SimpleImage
     {
-        #region Constants
 
         /// <summary>
         /// The default density value (dots per inch) in x direction. The default value is 75 dots per inch.
@@ -37,9 +36,7 @@ namespace ImageTools
         /// </summary>
         public const int DefaultDensityY = 75;
 
-        #endregion
 
-        #region Invariant
 
 #if !WINDOWS_PHONE
 
@@ -50,9 +47,7 @@ namespace ImageTools
         }
 #endif
 
-        #endregion
 
-        #region Properties
 
 
         ///// <summary>
@@ -102,7 +97,6 @@ namespace ImageTools
         }
 
 
-        #endregion
 
 
 

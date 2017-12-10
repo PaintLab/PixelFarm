@@ -69,9 +69,9 @@
     <Compile Include="TestBedStartup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.MiniWinForms\LayoutFarm.Platforms.MiniWinForms.csproj">
+    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.MiniWinForms\PaintLab.Platforms.MiniWinForms.csproj">
       <Project>{53bdc3f9-61b4-4fec-af57-ad311420d424}</Project>
-      <Name>LayoutFarm.Platforms.MiniWinForms</Name>
+      <Name>PaintLab.Platforms.MiniWinForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>

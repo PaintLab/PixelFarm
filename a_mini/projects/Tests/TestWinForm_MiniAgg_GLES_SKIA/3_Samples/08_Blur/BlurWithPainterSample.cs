@@ -10,7 +10,7 @@ using PixelFarm.Agg.VertexSource;
 using Mini;
 using System;
 using PixelFarm.Drawing.Fonts;
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Sample_Blur2
 {
 
@@ -160,7 +160,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             //{
             //    s2 = shadow_persp.TransformToVxs(m_pathVxs);
             //}
-            p.FillColor = PixelFarm.AggColorExtensions.Make(0.2f, 0.3f, 0f);
+            p.FillColor = AggColorExtensions.Make(0.2f, 0.3f, 0f);
             p.Fill(s2);
             //---------------------------------------------------------------------------------------------------------
             //shadow 

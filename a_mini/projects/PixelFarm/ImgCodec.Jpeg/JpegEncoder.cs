@@ -18,7 +18,6 @@ namespace ImageTools.IO.Jpeg
     /// </summary>
     public class JpegEncoder : IImageEncoder
     {
-        #region Properties
 
         private Color _transparentColor = Color.FromArgb(0, 255, 255, 255);
         /// <summary>
@@ -45,9 +44,7 @@ namespace ImageTools.IO.Jpeg
             set { _quality = value; }
         }
 
-        #endregion
 
-        #region IImageEncoder Members
 
         /// <summary>
         /// Gets the default file extension for this encoder.
@@ -143,6 +140,5 @@ namespace ImageTools.IO.Jpeg
             fluxCoreJpegEncoder.Encode();
         }
 
-        #endregion
     }
 }

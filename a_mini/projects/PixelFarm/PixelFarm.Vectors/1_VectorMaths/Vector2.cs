@@ -1,4 +1,3 @@
-#region --- License ---
 /*
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 
@@ -20,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -31,7 +29,6 @@ namespace PixelFarm.VectorMath
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector2 : IEquatable<Vector2>
     {
-        #region Fields
 
         /// <summary>The X coordinate of this instance.</summary>
         public double x;
@@ -57,9 +54,7 @@ namespace PixelFarm.VectorMath
         /// Defines the size of the Vector2d struct in bytes.
         /// </summary>
         public static readonly int SizeInBytes = Marshal.SizeOf(new Vector2());
-        #endregion
 
-        #region Constructors
 
         /// <summary>Constructs left vector with the given coordinates.</summary>
         /// <param name="x">The X coordinate.</param>
@@ -82,9 +77,7 @@ namespace PixelFarm.VectorMath
             return new Vector2(Math.Cos(atan) * newLength,
                         Math.Sin(atan) * newLength);
         }
-        #endregion
 
-        #region Properties
 
         public double this[int index]
         {
@@ -117,13 +110,9 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
-        #region Public Members
 
-        #region Instance
 
-        #region public double Length
 
         /// <summary>
         /// Gets the length (magnitude) of the vector.
@@ -137,9 +126,7 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
-        #region public double LengthSquared
 
         /// <summary>
         /// Gets the square of the vector length (magnitude).
@@ -157,7 +144,6 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
         public Vector2 RotateInDegree(double deg)
         {
@@ -181,7 +167,6 @@ namespace PixelFarm.VectorMath
             return MathHelper.Range0ToTau(GetAngle());
         }
 
-        #region public Vector2d PerpendicularRight
 
         /// <summary>
         /// Gets the perpendicular vector on the right side of this vector.
@@ -200,9 +185,7 @@ namespace PixelFarm.VectorMath
                 return new Vector2(Y, -X);
             }
         }
-        #endregion
 
-        #region public Vector2d PerpendicularLeft
 
         /// <summary>
         /// Gets the perpendicular vector on the left side of this vector.
@@ -212,9 +195,7 @@ namespace PixelFarm.VectorMath
             return new Vector2(-y, x);
         }
 
-        #endregion
 
-        #region public void Normalize()
 
         /// <summary>
         /// Returns a normalized Vector of this.
@@ -237,13 +218,9 @@ namespace PixelFarm.VectorMath
             y *= scale;
         }
 
-        #endregion
 
-        #endregion
 
-        #region Static
 
-        #region Add
 
         /// <summary>
         /// Adds two vectors.
@@ -268,9 +245,7 @@ namespace PixelFarm.VectorMath
             result = new Vector2(a.x + b.x, a.y + b.y);
         }
 
-        #endregion
 
-        #region Subtract
 
         /// <summary>
         /// Subtract one Vector from another
@@ -295,9 +270,7 @@ namespace PixelFarm.VectorMath
             result = new Vector2(a.x - b.x, a.y - b.y);
         }
 
-        #endregion
 
-        #region Multiply
 
         /// <summary>
         /// Multiplies a vector by a scalar.
@@ -345,9 +318,7 @@ namespace PixelFarm.VectorMath
             result = new Vector2(vector.x * scale.x, vector.y * scale.y);
         }
 
-        #endregion
 
-        #region Divide
 
         /// <summary>
         /// Divides a vector by a scalar.
@@ -395,9 +366,7 @@ namespace PixelFarm.VectorMath
             result = new Vector2(vector.x / scale.x, vector.y / scale.y);
         }
 
-        #endregion
 
-        #region Min
 
         /// <summary>
         /// Calculate the component-wise minimum of two vectors
@@ -424,9 +393,7 @@ namespace PixelFarm.VectorMath
             result.y = a.y < b.y ? a.y : b.y;
         }
 
-        #endregion
 
-        #region Max
 
         /// <summary>
         /// Calculate the component-wise maximum of two vectors
@@ -453,9 +420,7 @@ namespace PixelFarm.VectorMath
             result.y = a.y > b.y ? a.y : b.y;
         }
 
-        #endregion
 
-        #region Clamp
 
         /// <summary>
         /// Clamp a vector to the given minimum and maximum vectors
@@ -484,9 +449,7 @@ namespace PixelFarm.VectorMath
             result.y = vec.y < min.y ? min.y : vec.y > max.y ? max.y : vec.y;
         }
 
-        #endregion
 
-        #region Normalize
 
         /// <summary>
         /// Scale a vector to unit length
@@ -513,9 +476,7 @@ namespace PixelFarm.VectorMath
             result.y = vec.y * scale;
         }
 
-        #endregion
 
-        #region Dot
 
         /// <summary>
         /// Calculate the dot (scalar) product of two vectors
@@ -539,9 +500,7 @@ namespace PixelFarm.VectorMath
             result = left.x * right.x + left.y * right.y;
         }
 
-        #endregion
 
-        #region Cross
 
         /// <summary>
         /// Calculate the cross product of two vectors
@@ -554,9 +513,7 @@ namespace PixelFarm.VectorMath
             return left.x * right.y - left.y * right.x;
         }
 
-        #endregion
 
-        #region Rotate
         //public static Vector2 Rotate(Vector2 toRotate, double radians)
         //{
         //    Vector2 temp;
@@ -572,9 +529,7 @@ namespace PixelFarm.VectorMath
         //    output.x = input.x * Cos - input.y * Sin;
         //    output.y = input.y * Cos + input.x * Sin;
         //}
-        #endregion
 
-        #region Lerp
 
         /// <summary>
         /// Returns a new Vector that is the linear blend of the 2 given Vectors
@@ -603,9 +558,7 @@ namespace PixelFarm.VectorMath
             result.y = blend * (b.y - a.y) + a.y;
         }
 
-        #endregion
 
-        #region Barycentric
 
         /// <summary>
         /// Interpolate 3 Vectors using Barycentric coordinates
@@ -641,9 +594,7 @@ namespace PixelFarm.VectorMath
             Add(ref result, ref temp, out result);
         }
 
-        #endregion
 
-        #region Transform
 
         /// <summary>
         /// Transforms a vector by a quaternion rotation.
@@ -673,9 +624,7 @@ namespace PixelFarm.VectorMath
             result = new Vector2(v.X, v.Y);
         }
 
-        #endregion
 
-        #region ComponentMin
 
         /// <summary>
         /// Calculate the component-wise minimum of two vectors
@@ -702,9 +651,7 @@ namespace PixelFarm.VectorMath
             result.y = a.y < b.y ? a.y : b.y;
         }
 
-        #endregion
 
-        #region ComponentMax
 
         /// <summary>
         /// Calculate the component-wise maximum of two vectors
@@ -731,11 +678,8 @@ namespace PixelFarm.VectorMath
             result.y = a.y > b.y ? a.y : b.y;
         }
 
-        #endregion
 
-        #endregion
 
-        #region Operators
 
         /// <summary>
         /// Adds two instances.
@@ -850,11 +794,8 @@ namespace PixelFarm.VectorMath
             return !left.Equals(right);
         }
 
-        #endregion
 
-        #region Overrides
 
-        #region public override string ToString()
 
         /// <summary>
         /// Returns a System.String that represents the current instance.
@@ -865,9 +806,7 @@ namespace PixelFarm.VectorMath
             return String.Format("({0}, {1})", x, y);
         }
 
-        #endregion
 
-        #region public override int GetHashCode()
 
         /// <summary>
         /// Returns the hashcode for this instance.
@@ -878,9 +817,7 @@ namespace PixelFarm.VectorMath
             return new { x, y }.GetHashCode();
         }
 
-        #endregion
 
-        #region public override bool Equals(object obj)
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
@@ -894,13 +831,9 @@ namespace PixelFarm.VectorMath
             return this.Equals((Vector2)obj);
         }
 
-        #endregion
 
-        #endregion
 
-        #endregion
 
-        #region IEquatable<Vector2d> Members
 
         /// <summary>Indicates whether the current vector is equal to another vector.</summary>
         /// <param name="other">A vector to compare with this vector.</param>
@@ -935,7 +868,6 @@ namespace PixelFarm.VectorMath
             get { return this.y; }
             set { this.y = value; }
         }
-        #endregion
 
     }
 }

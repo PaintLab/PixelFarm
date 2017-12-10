@@ -96,7 +96,6 @@ namespace Examples.Shapes
 
             private void DrawSide(eSides side, ref List<Chunk> chunks)
             {
-                #region Setup constants for current direction
 
                 double _Zero = 0.0; // 0/3
                 double _Three = 0.3333333333333; // 1/3
@@ -178,9 +177,7 @@ namespace Examples.Shapes
                         throw new NotImplementedException("Unknown enum value: " + side);
                 }
 
-                #endregion Setup constants for current direction
 
-                #region Set Normal
 
                 Vector3d FaceNormal;
                 switch (side)
@@ -206,7 +203,6 @@ namespace Examples.Shapes
                     default:
                         throw new NotImplementedException("Unknown enum value: " + side);
                 }
-                #endregion Set Normal
 
                 bool FaceIsVisible = false;
                 foreach (eSides s in VisibleSides)
@@ -220,7 +216,6 @@ namespace Examples.Shapes
 
                 if (FaceIsVisible)
                 {
-                    #region Define Layer1 Vertices
                     Chunk Layer1 = new Chunk(8, 8 * 3);
                     Layer1.Vertices[0].TexCoord = new Vector2d(_Zero, _Zero);
                     Layer1.Vertices[0].Normal = FaceNormal;
@@ -246,9 +241,7 @@ namespace Examples.Shapes
                     Layer1.Vertices[7].TexCoord = new Vector2d(_Three, _Six);
                     Layer1.Vertices[7].Normal = FaceNormal;
                     Vector3d.Lerp(ref P1, ref P3, _Six, out Layer1.Vertices[7].Position);
-                    #endregion Define Layer1 Vertices
 
-                    #region Define Layer1 Indices
                     Layer1.Indices[0] = 0;
                     Layer1.Indices[1] = 5;
                     Layer1.Indices[2] = 4;
@@ -274,10 +267,8 @@ namespace Examples.Shapes
                     Layer1.Indices[22] = 4;
                     Layer1.Indices[23] = 7;
                     chunks.Add(Layer1);
-                    #endregion Define Layer1 Indices
                 }
 
-                #region Define Layer2 Vertices
                 Chunk Layer2 = new Chunk(12, 8 * 3);
                 Vector3d T0, T1, T2, T3;
                 Vector3d.Lerp(ref P0, ref P4, _Six, out T0);
@@ -320,9 +311,7 @@ namespace Examples.Shapes
                 Layer2.Vertices[11].TexCoord = new Vector2d(_Three, _Three);
                 Layer2.Vertices[11].Normal = FaceNormal;
                 Vector3d.Lerp(ref Layer2.Vertices[7].Position, ref Layer2.Vertices[0].Position, _Six, out Layer2.Vertices[11].Position);
-                #endregion Define Layer2 Vertices
 
-                #region Define Layer2 Indices
                 Layer2.Indices[0] = 0;
                 Layer2.Indices[1] = 2;
                 Layer2.Indices[2] = 11;
@@ -348,7 +337,6 @@ namespace Examples.Shapes
                 Layer2.Indices[22] = 8;
                 Layer2.Indices[23] = 9;
                 chunks.Add(Layer2);
-                #endregion Define Layer2 Indices
             }
         }
     }

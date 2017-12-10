@@ -5,12 +5,10 @@ namespace Examples.Shapes
 {
     public sealed class TorusKnot : DrawableShape
     {
-        #region Constants
         // hard minimums to make sure the created Torusknot is 3D
         private const int MINShapeVertices = 3;
         private const int MINPathSteps = 32;
         private const double TwoPi = (2.0 * System.Math.PI);
-        #endregion Constants
 
         public TorusKnot(int pathsteps, int shapevertices, double radius, int p, int q, int TexCount, bool useDL)
             : base(useDL)
@@ -20,7 +18,6 @@ namespace Examples.Shapes
             //Trace.Assert(TexCount > 1, "at least 1 Texture set is required.");
             PrimitiveMode = OpenTK.Graphics.OpenGL.BeginMode.TriangleStrip;
             Vector3d[] PathPositions = new Vector3d[pathsteps];
-            #region Find the center Points for each step on the path
 
             for (int i = 0; i < pathsteps; i++)
             {
@@ -32,9 +29,7 @@ namespace Examples.Shapes
                                                  (r * System.Math.Cos(AngleTimesQ)),
                                                  (r * System.Math.Sin(AngleTimesP)));
             }
-            #endregion Find the center Points for each step on the path
 
-            #region Find the Torus length
             Vector3d result;
             double[] Lengths = new double[pathsteps];
             Vector3d.Subtract(ref PathPositions[pathsteps - 1], ref PathPositions[0], out result);
@@ -47,10 +42,8 @@ namespace Examples.Shapes
                 TotalLength += result.Length;
             }
             //Trace.WriteLine("the TorusKnot's length is: " + TotalLength + " ");
-            #endregion Find the Torus length
 
             VertexArray = new VertexT2dN3dV3d[pathsteps * shapevertices];
-            #region Loft a circle Shape along the path
             double TwoPiThroughVert = TwoPi / shapevertices; // precalc for reuse
             for (uint i = 0; i < pathsteps; i++)
             {
@@ -82,11 +75,9 @@ namespace Examples.Shapes
                     VertexArray[index].TexCoord = new Vector2d((double)(i / TotalLength / TexCount), j / (shapevertices - 1.0));
                 }
             }
-            #endregion Loft a circle Shape along the path
 
             PathPositions = null; // not needed anymore
             uint currentindex = 0;
-            #region Build a Triangle strip from the Vertices
             IndexArray = new uint[pathsteps * (shapevertices * 2 + 2)]; // 2 triangles per vertex, +2 due to added degenerate triangles
             for (uint i = 0; i < pathsteps; i++)
             {
@@ -106,7 +97,6 @@ namespace Examples.Shapes
                 IndexArray[currentindex++] = RowCurrent;
                 IndexArray[currentindex++] = RowBelow;
             }
-            #endregion Build a Triangle strip from the Vertices
         }
     }
 }

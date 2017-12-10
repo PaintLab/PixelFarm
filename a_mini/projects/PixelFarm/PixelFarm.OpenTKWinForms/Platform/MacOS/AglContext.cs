@@ -313,7 +313,6 @@ namespace OpenTK.Platform.MacOS
         }
 
 
-        #region IGraphicsContext Members
 
         bool firstSwap = false;
         public override void SwapBuffers()
@@ -360,9 +359,7 @@ namespace OpenTK.Platform.MacOS
             }
         }
 
-        #endregion
 
-        #region IDisposable Members
 
         ~AglContext()
         {
@@ -406,9 +403,7 @@ namespace OpenTK.Platform.MacOS
             IsDisposed = true;
         }
 
-        #endregion
 
-        #region IGraphicsContextInternal Members
 
         private const string Library = "libdl.dylib";
         [DllImport(Library, EntryPoint = "NSIsSymbolNameDefined")]
@@ -428,6 +423,5 @@ namespace OpenTK.Platform.MacOS
             return symbol;
         }
 
-        #endregion
     }
 }

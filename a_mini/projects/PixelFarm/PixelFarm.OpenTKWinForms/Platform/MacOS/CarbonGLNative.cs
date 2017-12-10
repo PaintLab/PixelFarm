@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -37,7 +35,6 @@ namespace OpenTK.Platform.MacOS
     using Graphics;
     class CarbonGLNative : INativeWindow
     {
-        #region Fields
 
         CarbonWindowInfo window;
         CarbonInput mInputDriver;
@@ -60,16 +57,12 @@ namespace OpenTK.Platform.MacOS
         bool mMouseIn = false;
         bool mIsActive = false;
         Icon mIcon;
-        #endregion
 
-        #region AGL Device Hack
 
         static internal Dictionary<IntPtr, WeakReference> WindowRefMap { get { return mWindows; } }
         internal DisplayDevice TargetDisplayDevice { get { return mDisplayDevice; } }
 
-        #endregion
 
-        #region Constructors
 
         static CarbonGLNative()
         {
@@ -100,9 +93,7 @@ namespace OpenTK.Platform.MacOS
             mDisplayDevice = device;
         }
 
-        #endregion
 
-        #region IDisposable
 
         public void Dispose()
         {
@@ -133,9 +124,7 @@ namespace OpenTK.Platform.MacOS
             Dispose(false);
         }
 
-        #endregion
 
-        #region Private Members
 
         void DisposeUPP()
         {
@@ -581,9 +570,7 @@ namespace OpenTK.Platform.MacOS
             clientRectangle = new Rectangle(0, 0, r.Width, r.Height);
         }
 
-        #endregion
 
-        #region INativeWindow Members
 
         public void ProcessEvents()
         {
@@ -925,7 +912,6 @@ namespace OpenTK.Platform.MacOS
             }
         }
 
-        #region --- Event wrappers ---
 
         private void OnKeyPress(KeyPressEventArgs keyPressArgs)
         {
@@ -978,7 +964,6 @@ namespace OpenTK.Platform.MacOS
                 FocusedChanged(this, EventArgs.Empty);
         }
 
-        #endregion
 
         public event EventHandler<EventArgs> Idle;
         public event EventHandler<EventArgs> Load;
@@ -999,6 +984,5 @@ namespace OpenTK.Platform.MacOS
         public event EventHandler<KeyPressEventArgs> KeyPress;
         public event EventHandler<EventArgs> MouseEnter;
         public event EventHandler<EventArgs> MouseLeave;
-        #endregion
     }
 }

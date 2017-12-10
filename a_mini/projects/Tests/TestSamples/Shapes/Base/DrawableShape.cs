@@ -1,8 +1,6 @@
-﻿#region --- License ---
-/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
+﻿/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  */
-#endregion
 
 using System;
 using OpenTK;
@@ -44,11 +42,9 @@ namespace Examples.Shapes
             }
         }
 
-        #region Display List
 
         private bool UseDisplayList;
         private int DisplayListHandle = 0;
-        #endregion Display List
 
         public DrawableShape(bool useDisplayList)
         {
@@ -58,7 +54,6 @@ namespace Examples.Shapes
             IndexArray = null;
         }
 
-        #region Convert to VBO
 
         public void GetArraysforVBO(out BeginMode primitives, out VertexT2dN3dV3d[] vertices, out uint[] indices)
         {
@@ -102,7 +97,6 @@ namespace Examples.Shapes
             indices = IndexArray;
         }
 
-        #endregion Convert to VBO
 
         private void DrawImmediateMode()
         {
@@ -151,7 +145,6 @@ namespace Examples.Shapes
             //        GL.CallList(DisplayListHandle);
         }
 
-        #region IDisposable Members
 
         /// <summary>
         /// Removes reference to VertexArray and IndexArray.
@@ -171,6 +164,5 @@ namespace Examples.Shapes
             //    }
         }
 
-        #endregion
     }
 }
