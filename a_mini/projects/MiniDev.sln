@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.OpenFont", "Pixe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.MiniOpenTK", "PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj", "{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.3_GraphicsHost", "2.3_GraphicsHost", "{D4DC1DFA-C3BB-445F-9689-87889DF12580}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1_BackEnd_Host", "2.1_BackEnd_Host", "{D4DC1DFA-C3BB-445F-9689-87889DF12580}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeMirror", "PixelFarm\TypeMirror\TypeMirror.csproj", "{68F1DAF6-2B35-476E-B2F8-5EADBC823935}"
 EndProject
@@ -143,7 +143,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PixelFarm.DrawingCore", "Pi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.TextFlow", "PixelFarm\Typography\Typography.TextFlow\Typography.TextFlow.csproj", "{A17B5A62-09AF-45D5-9D9F-1FD1B9AB50F7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1_FrontEnd_Platform", "2.1_FrontEnd_Platform", "{56561998-B760-4457-AC07-DB64E54CA106}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.3_FrontEnd_Platform", "2.3_FrontEnd_Platform", "{56561998-B760-4457-AC07-DB64E54CA106}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Typography.TextBreak", "PixelFarm\Typography\Typography.TextBreak\Typography.TextBreak\Typography.TextBreak.csproj", "{09EC5531-D272-40DB-87A4-B2D353846CC2}"
 EndProject
