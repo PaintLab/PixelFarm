@@ -31,7 +31,7 @@ namespace OpenTkEssTest
             InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Normal);
             FontFace tahomaFace = OpenFontLoader.LoadFont(tahomaFont.FontPath);
             ActualFont actualFont = tahomaFace.GetFontAtPointSize(72);
-            MyFontGlyph glyph = (MyFontGlyph)actualFont.GetGlyph('K');
+            FontGlyph glyph = (FontGlyph)actualFont.GetGlyph('K');
 
             //var svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
             ////PathWriter p01 = new PathWriter();

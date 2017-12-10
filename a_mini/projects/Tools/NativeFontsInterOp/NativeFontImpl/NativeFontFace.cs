@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 
 namespace PixelFarm.Drawing.Fonts
 {
-    class NativeFontGlyph : MyFontGlyph
+    class NativeFontGlyph : FontGlyph
     {
         /// <summary>
         /// original 8bpp image buffer

@@ -189,6 +189,7 @@ namespace PixelFarm.DrawingGL
         RequestFont font;
 
 
+        ScriptLang _defaultScriptLang = ScriptLangs.Latin;//review here again
         public GLBmpGlyphTextPrinter(GLCanvasPainter painter, IFontLoader fontLoader)
         {
             //create text printer for use with canvas painter 
@@ -199,7 +200,7 @@ namespace PixelFarm.DrawingGL
 
             _fontLoader = fontLoader;
             ChangeFont(painter.CurrentFont);
-            this._glyphLayout.ScriptLang = painter.CurrentFont.GetOpenFontScriptLang();
+            this._glyphLayout.ScriptLang = ScriptLangConv.GetOpenFontScriptLang(_defaultScriptLang.shortname);
 
             _loadedGlyphs = new GLBitmapCache<SimpleFontAtlas>(atlas =>
             {
@@ -229,7 +230,7 @@ namespace PixelFarm.DrawingGL
             //we resolve it to actual font
 
             this.font = font;
-            this._glyphLayout.ScriptLang = font.GetOpenFontScriptLang();
+            this._glyphLayout.ScriptLang = ScriptLangConv.GetOpenFontScriptLang(_defaultScriptLang.shortname);
 
             SimpleFontAtlas foundFontAtlas;
             ActualFont fontImp = ActiveFontAtlasService.GetTextureFontAtlasOrCreateNew(_fontLoader, font, out foundFontAtlas);
@@ -276,7 +277,7 @@ namespace PixelFarm.DrawingGL
                 _glBmp = _loadedGlyphs.GetOrCreateNewOne(simpleFontAtlas);
             }
         }
-       
+
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
 
@@ -375,7 +376,7 @@ namespace PixelFarm.DrawingGL
             float g_y = 0;
             int baseY = (int)Math.Round(y);
             float scale = 1;
-           
+
             for (int i = 0; i < n; ++i)
             {
                 //PERF:

@@ -28,6 +28,7 @@ namespace PixelFarm.DrawingGL
 
         static Dictionary<FontTextureKey, TextureAtlasCache> s_cachedFontAtlas = new Dictionary<FontTextureKey, TextureAtlasCache>();
 
+        static ScriptLang scLang = ScriptLangs.Latin;
         public static ActualFont GetTextureFontAtlasOrCreateNew(
             IFontLoader fontLoader,
             RequestFont font,
@@ -36,7 +37,7 @@ namespace PixelFarm.DrawingGL
             //check if we have created this font
             var key = new FontTextureKey();
             key.fontName = font.Name;
-            key.scriptLang = font.ScriptLang.shortname;
+            key.scriptLang = scLang.shortname;
             key.sizeInPoint = font.SizeInPoints;
             key.fontStyle = font.Style;
             //------------------------
@@ -50,7 +51,7 @@ namespace PixelFarm.DrawingGL
                 //TODO: review
                 TextureFontCreationParams creationParams = new TextureFontCreationParams();
                 creationParams.originalFontSizeInPoint = font.SizeInPoints;
-                creationParams.scriptLang = font.ScriptLang;
+                creationParams.scriptLang = scLang;
                 creationParams.writeDirection = WriteDirection.LTR;//default 
                 //TODO: review here, langBits can be created with scriptLang ?
                 creationParams.langBits = new Typography.OpenFont.Tables.UnicodeLangBits[]
