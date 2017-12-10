@@ -97,6 +97,7 @@ namespace PixelFarm.Drawing
             }
             static int CalculateGetHasCode(int nameIndex, float fontSize, int fontstyle)
             {
+                //modified from https://stackoverflow.com/questions/1646807/quick-and-simple-hash-code-combinations
                 unchecked
                 {
                     int hash = 17;
