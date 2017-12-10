@@ -1,4 +1,3 @@
-#region --- License ---
 /*
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 
@@ -20,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -36,13 +34,10 @@ namespace OpenTK
     [StructLayout(LayoutKind.Sequential)]
     public struct Quaterniond : IEquatable<Quaterniond>
     {
-        #region Fields
 
         Vector3d xyz;
         double w;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Construct a new Quaterniond from vector and w components
@@ -66,11 +61,8 @@ namespace OpenTK
             : this(new Vector3d(x, y, z), w)
         { }
 
-        #endregion
 
-        #region Public Members
 
-        #region Properties
 
         /// <summary>
         /// Gets or sets an OpenTK.Vector3d with the X, Y and Z components of this instance.
@@ -109,11 +101,8 @@ namespace OpenTK
         /// </summary>
         public double W { get { return w; } set { w = value; } }
 
-        #endregion
 
-        #region Instance
 
-        #region ToAxisAngle
 
         /// <summary>
         /// Convert the current quaternion to axis angle representation
@@ -153,9 +142,7 @@ namespace OpenTK
             return result;
         }
 
-        #endregion
 
-        #region public double Length
 
         /// <summary>
         /// Gets the length (magnitude) of the Quaterniond.
@@ -169,9 +156,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public double LengthSquared
 
         /// <summary>
         /// Gets the square of the Quaterniond length (magnitude).
@@ -184,9 +169,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public void Normalize()
 
         /// <summary>
         /// Scales the Quaterniond to unit length.
@@ -198,9 +181,7 @@ namespace OpenTK
             W *= scale;
         }
 
-        #endregion
 
-        #region public void Conjugate()
 
         /// <summary>
         /// Convert this Quaterniond to its conjugate
@@ -210,21 +191,15 @@ namespace OpenTK
             Xyz = -Xyz;
         }
 
-        #endregion
 
-        #endregion
 
-        #region Static
 
-        #region Fields
 
         /// <summary>
         /// Defines the identity quaternion.
         /// </summary>
         public readonly static Quaterniond Identity = new Quaterniond(0, 0, 0, 1);
-        #endregion
 
-        #region Add
 
         /// <summary>
         /// Add two quaternions
@@ -252,9 +227,7 @@ namespace OpenTK
                 left.W + right.W);
         }
 
-        #endregion
 
-        #region Sub
 
         /// <summary>
         /// Subtracts two instances.
@@ -282,9 +255,7 @@ namespace OpenTK
                 left.W - right.W);
         }
 
-        #endregion
 
-        #region Mult
 
         /// <summary>
         /// Multiplies two instances.
@@ -362,9 +333,7 @@ namespace OpenTK
             return new Quaterniond(quaternion.X * scale, quaternion.Y * scale, quaternion.Z * scale, quaternion.W * scale);
         }
 
-        #endregion
 
-        #region Conjugate
 
         /// <summary>
         /// Get the conjugate of the given Quaterniond
@@ -386,9 +355,7 @@ namespace OpenTK
             result = new Quaterniond(-q.Xyz, q.W);
         }
 
-        #endregion
 
-        #region Invert
 
         /// <summary>
         /// Get the inverse of the given Quaterniond
@@ -421,9 +388,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region Normalize
 
         /// <summary>
         /// Scale the given Quaterniond to unit length
@@ -448,9 +413,7 @@ namespace OpenTK
             result = new Quaterniond(q.Xyz * scale, q.W * scale);
         }
 
-        #endregion
 
-        #region FromAxisAngle
 
         /// <summary>
         /// Build a Quaterniond from the given axis and angle
@@ -470,9 +433,7 @@ namespace OpenTK
             return Normalize(result);
         }
 
-        #endregion
 
-        #region Slerp
 
         /// <summary>
         /// Do Spherical linear interpolation between two quaternions 
@@ -536,11 +497,8 @@ namespace OpenTK
                 return Identity;
         }
 
-        #endregion
 
-        #endregion
 
-        #region Operators
 
         /// <summary>
         /// Adds two instances.
@@ -625,11 +583,8 @@ namespace OpenTK
             return !left.Equals(right);
         }
 
-        #endregion
 
-        #region Overrides
 
-        #region public override string ToString()
 
         /// <summary>
         /// Returns a System.String that represents the current Quaterniond.
@@ -640,9 +595,7 @@ namespace OpenTK
             return String.Format("V: {0}, W: {1}", Xyz, W);
         }
 
-        #endregion
 
-        #region public override bool Equals (object o)
 
         /// <summary>
         /// Compares this object instance to another object for equality. 
@@ -655,9 +608,7 @@ namespace OpenTK
             return this == (Quaterniond)other;
         }
 
-        #endregion
 
-        #region public override int GetHashCode ()
 
         /// <summary>
         /// Provides the hash code for this object. 
@@ -668,15 +619,11 @@ namespace OpenTK
             return Xyz.GetHashCode() ^ W.GetHashCode();
         }
 
-        #endregion
 
-        #endregion
 
-        #endregion
 
 #if false
 
-        #region Fields
 
         /// <summary>The W component of the Quaterniond.</summary>
         public double W;
@@ -690,9 +637,7 @@ namespace OpenTK
         /// <summary>The Z component of the Quaterniond.</summary>
         public double Z;
 
-        #endregion
         
-        #region Constructors
 
         /// <summary>Constructs left Quaterniond that is left copy of the given Quaterniond.</summary>
         /// <param name="quaterniond">The Quaterniond to copy.</param>
@@ -773,9 +718,7 @@ namespace OpenTK
             if (matrix[1, 0] - matrix[0, 1] < 0) Z = -Z;
         }
 
-        #endregion
 
-        #region Arithmetic Operators
 
         public void Add(ref Quaterniond Quaterniond)
         {
@@ -893,9 +836,7 @@ namespace OpenTK
             result.Z = Quaterniond.Z / scalar;
         }
 
-        #endregion
         
-        #region Functions
 
         public double Modulus
         {
@@ -1236,9 +1177,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
         
-        #region HashCode
 
         /// <summary>Returns the hash code for this instance.</summary>
         /// <returns>A 32-bit signed integer that is the hash code for this instance.</returns>
@@ -1248,9 +1187,7 @@ namespace OpenTK
             return W.GetHashCode() ^ X.GetHashCode() ^ Y.GetHashCode() ^ Z.GetHashCode();
         }
 
-        #endregion
         
-        #region String and Parse
 
         /// <summary>Returns the fully qualified type name of this instance.</summary>
         /// <returns>A System.String containing left fully qualified type name.</returns>
@@ -1273,9 +1210,7 @@ namespace OpenTK
             result.Z = double.Parse(match.Result("${z}"));
         }
 
-        #endregion
         
-        #region Constants
 
         /// <summary>A quaterion with all zero components.</summary>
         public static readonly Quaterniond Zero = new Quaterniond(0, 0, 0, 0);
@@ -1295,11 +1230,9 @@ namespace OpenTK
         /// <summary>A quaterion representing the Z axis.</summary>
         public static readonly Quaterniond ZAxis = new Quaterniond(0, 0, 0, 1);
 
-        #endregion
 
 #endif
 
-        #region IEquatable<Quaterniond> Members
 
         /// <summary>
         /// Compares this Quaterniond instance to another Quaterniond for equality. 
@@ -1311,6 +1244,5 @@ namespace OpenTK
             return Xyz == other.Xyz && W == other.W;
         }
 
-        #endregion
     }
 }

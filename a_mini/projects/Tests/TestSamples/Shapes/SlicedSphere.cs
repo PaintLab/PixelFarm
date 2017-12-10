@@ -65,7 +65,6 @@ namespace Examples.Shapes
             {
                 for (int s = 0; s < (int)subdivs; s++)
                 {
-                    #region Assemble Chunks and convert to Arrays
                     List<Chunk> AllChunks = new List<Chunk>();
                     for (uint i = 0; i < IndexArray.Length; i += 3)
                     {
@@ -80,7 +79,6 @@ namespace Examples.Shapes
 
                     Chunk.GetArray(ref AllChunks, out VertexArray, out IndexArray);
                     AllChunks.Clear();
-                    #endregion Assemble Chunks and convert to Arrays
                 }
             }
 
@@ -162,7 +160,6 @@ namespace Examples.Shapes
             c.Vertices[4].Position = c.Vertices[4].Normal * Scale;
             Vector2d.Lerp(ref second.TexCoord, ref third.TexCoord, 0.5, out c.Vertices[4].TexCoord);
             c.Vertices[5] = third;
-            #region Indices
             c.Indices[0] = 0;
             c.Indices[1] = 1;
             c.Indices[2] = 2;
@@ -175,7 +172,6 @@ namespace Examples.Shapes
             c.Indices[9] = 2;
             c.Indices[10] = 4;
             c.Indices[11] = 5;
-            #endregion Indices
         }
     }
 }

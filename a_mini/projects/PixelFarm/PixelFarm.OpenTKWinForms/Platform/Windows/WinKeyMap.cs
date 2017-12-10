@@ -1,8 +1,6 @@
-﻿#region --- License ---
-/* Copyright (c) 2007 Stefanos Apostolopoulos
+﻿/* Copyright (c) 2007 Stefanos Apostolopoulos
  * See license.txt for license information
  */
-#endregion
 
 using System;
 using System.Collections.Generic;

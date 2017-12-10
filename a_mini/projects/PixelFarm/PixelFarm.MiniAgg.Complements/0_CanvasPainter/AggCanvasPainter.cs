@@ -2,7 +2,6 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
 using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.VertexSource;
 
@@ -123,7 +122,7 @@ namespace PixelFarm.Agg
         {
             _vxsPool.Release(ref vxs);
         }
-         
+
         public override void FillCircle(double x, double y, double radius)
         {
             ellipse.Reset(x, y, radius, radius);
@@ -161,7 +160,7 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v2);
         }
 
-        
+
         /// <summary>
         /// draw line
         /// </summary>
@@ -208,7 +207,7 @@ namespace PixelFarm.Agg
 
         }
 
-        
+
         public override void Rectangle(double left, double bottom, double right, double top)
         {
             simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
@@ -220,7 +219,7 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v1);
             ReleaseVxs(ref v2);
         }
-         
+
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
             if (right < left || top < bottom)

@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -35,21 +33,16 @@ namespace OpenTK.Input
     /// </summary>
     public static class Mouse
     {
-        #region Fields
 
         //static IMouseDriver driver;
 
-        #endregion
 
-        #region Constructors
 
         static Mouse()
         {
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Retrieves the MouseState for the specified mouse device.
@@ -61,6 +54,5 @@ namespace OpenTK.Input
             throw new NotImplementedException();
         }
 
-        #endregion
     }
 }

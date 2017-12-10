@@ -28,6 +28,7 @@ namespace PixelFarm.DrawingGL
 
         static Dictionary<FontTextureKey, TextureAtlasCache> s_cachedFontAtlas = new Dictionary<FontTextureKey, TextureAtlasCache>();
 
+        //TODO: review here again
         static ScriptLang scLang = ScriptLangs.Latin;
         public static ActualFont GetTextureFontAtlasOrCreateNew(
             IFontLoader fontLoader,

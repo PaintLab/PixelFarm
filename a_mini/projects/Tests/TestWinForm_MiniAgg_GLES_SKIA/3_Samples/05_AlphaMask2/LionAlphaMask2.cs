@@ -8,6 +8,8 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Imaging;
 using Mini;
 using PixelFarm.Drawing.WinGdi;
+using PixelFarm.Drawing;
+
 namespace PixelFarm.Agg.Sample_LionAlphaMask2
 {
     [Info(OrderCode = "05")]
@@ -163,11 +165,11 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     ellipseForMask.Reset(Width / 2, Height / 2, 110, 110, 100);
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
                     v1.Clear();
-                    sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, AggColorExtensions.Make(0, 0, 0, 255));
+                    sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new Color(255, 0, 0, 0));
                     ellipseForMask.Reset(ellipseForMask.originX, ellipseForMask.originY, ellipseForMask.radiusX - 10, ellipseForMask.radiusY - 10, 100);
                     rasterizer.AddPath(ellipseForMask.MakeVertexSnap(v1));
                     v1.Clear();
-                    sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, AggColorExtensions.Make(255, 0, 0, 255));
+                    sclineRasToBmp.RenderWithColor(clippingProxy, rasterizer, sclnPack, new Color(255, 255, 0, 0));
                 }
                 else
                 {

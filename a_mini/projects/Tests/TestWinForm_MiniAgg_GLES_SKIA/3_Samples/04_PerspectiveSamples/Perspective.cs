@@ -6,6 +6,7 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.VertexSource;
 using Mini;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Sample_Perspective
 {
     [Info(OrderCode = "04")]

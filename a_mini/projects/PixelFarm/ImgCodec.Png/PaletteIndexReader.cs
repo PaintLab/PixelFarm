@@ -14,15 +14,12 @@ namespace ImageTools.IO.Png
     /// </summary>
     sealed class PaletteIndexReader : IColorReader
     {
-        #region Fields
 
         private int _row;
         private byte[] _palette;
         private byte[] _paletteAlpha;
 
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PaletteIndexReader"/> class.
@@ -38,9 +35,7 @@ namespace ImageTools.IO.Png
             _paletteAlpha = paletteAlpha;
         }
 
-        #endregion
 
-        #region IColorReader Members
 
         /// <summary>
         /// Reads the specified scanline.
@@ -90,6 +85,5 @@ namespace ImageTools.IO.Png
             _row++;
         }
 
-        #endregion
     }
 }

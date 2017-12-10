@@ -1,8 +1,6 @@
-﻿#region --- License ---
-/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
+﻿/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -31,7 +29,6 @@ namespace OpenTK.Platform.X11
         }
 
 #if false
-        #region static Delegate LoadDelegate(string name, Type signature)
 
         /// <summary>
         /// Creates a System.Delegate that can be used to call an OpenGL function, core or extension.
@@ -57,9 +54,7 @@ namespace OpenTK.Platform.X11
             return d;
         }
 
-        #endregion
 
-        #region private static Delegate GetExtensionDelegate(string name, Type signature)
 
         /// <summary>
         /// Creates a System.Delegate that can be used to call a dynamically exported OpenGL function.
@@ -82,16 +77,13 @@ namespace OpenTK.Platform.X11
                 return Marshal.GetDelegateForFunctionPointer(address, signature);
         }
 
-        #endregion
 
-        #region internal static void LoadAll
 
         public static void LoadAll()
         {
             OpenTK.Platform.Utilities.LoadExtensions(typeof(Glx));
         }
 
-        #endregion
 #endif
     }
 }

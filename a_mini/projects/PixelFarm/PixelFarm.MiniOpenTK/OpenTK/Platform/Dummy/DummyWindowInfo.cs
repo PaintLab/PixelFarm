@@ -5,12 +5,10 @@ namespace OpenTK.Platform.Dummy
 {
     public class DummyWindowInfo : IWindowInfo
     {
-        #region IDisposable Members
 
         public void Dispose()
         {
         }
 
-        #endregion
     }
 }

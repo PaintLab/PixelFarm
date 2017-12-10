@@ -69,7 +69,6 @@ namespace PixelFarm.Agg
         public float Blue0To1 { get { return blue; } }
         public float Alpha0To1 { get { return alpha; } }
 
-        #region Defined Colors
         public static readonly ColorRGBAf White = new ColorRGBAf(1, 1, 1, 1);
         public static readonly ColorRGBAf Black = new ColorRGBAf(0, 0, 0, 1);
         public static readonly ColorRGBAf Red = new ColorRGBAf(1, 0, 0, 1);
@@ -78,9 +77,7 @@ namespace PixelFarm.Agg
         public static readonly ColorRGBAf Cyan = new ColorRGBAf(0, 1, 1, 1);
         public static readonly ColorRGBAf Magenta = new ColorRGBAf(1, 0, 1, 1);
         public static readonly ColorRGBAf Yellow = new ColorRGBAf(1, 1, 0, 1);
-        #endregion // Defined Colors
 
-        #region Constructors
         public ColorRGBAf(double r_, double g_, double b_)
         {
             red = (float)r_;
@@ -130,9 +127,7 @@ namespace PixelFarm.Agg
             this = FromWaveLength(wavelen, gamma);
         }
 
-        #endregion Constructors
 
-        #region HSL
         // Given H,S,L,A in range of 0-1
         // Returns a Color (RGB struct) in range of 0-255
         public static ColorRGBAf FromHSL(double hue0To1, double saturation0To1, double lightness0To1, double alpha = 1)
@@ -289,7 +284,6 @@ namespace PixelFarm.Agg
             return FromHSL(hue0To1, saturation0To1, lightness0To1);
         }
 
-        #endregion // HSL
 
         public static bool operator ==(ColorRGBAf a, ColorRGBAf b)
         {

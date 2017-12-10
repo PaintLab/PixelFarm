@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2008 the Open Toolkit library, except where noted.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -38,7 +36,6 @@ namespace OpenTK.Graphics
     [Serializable]
     public struct Color4 : IEquatable<Color4>
     {
-        #region Fields
 
         /// <summary>
         /// The red component of this Color4 structure.
@@ -56,9 +53,7 @@ namespace OpenTK.Graphics
         /// The alpha component of this Color4 structure.
         /// </summary>
         public float A;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new Color4 structure from the specified components.
@@ -99,9 +94,7 @@ namespace OpenTK.Graphics
         //    : this(color.R, color.G, color.B, color.A)
         //{ }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Converts this color to an integer representation with 8 bits per channel.
@@ -194,7 +187,6 @@ namespace OpenTK.Graphics
             return String.Format("{{(R, G, B, A) = ({0}, {1}, {2}, {3})}}", R.ToString(), G.ToString(), B.ToString(), A.ToString());
         }
 
-        #region System colors
 
         /// <summary>
         /// Gets the system color with (R, G, B, A) = (255, 255, 255, 0).
@@ -901,11 +893,8 @@ namespace OpenTK.Graphics
         /// </summary>
         public static Color4 YellowGreen { get { return new Color4(154, 205, 50, 255); } }
 
-        #endregion
 
-        #endregion
 
-        #region IEquatable<Color4> Members
 
         /// <summary>
         /// Compares whether this Color4 structure is equal to the specified Color4.
@@ -921,6 +910,5 @@ namespace OpenTK.Graphics
                 this.A == other.A;
         }
 
-        #endregion
     }
 }

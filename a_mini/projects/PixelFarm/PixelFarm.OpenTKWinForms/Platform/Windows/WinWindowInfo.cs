@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -39,7 +37,6 @@ namespace OpenTK.Platform.Windows
         IntPtr handle, dc;
         WinWindowInfo parent;
         bool disposed;
-        #region --- Constructors ---
 
         /// <summary>
         /// Constructs a new instance.
@@ -59,9 +56,7 @@ namespace OpenTK.Platform.Windows
             this.parent = parent;
         }
 
-        #endregion
 
-        #region --- Public Methods ---
 
         /// <summary>
         /// Gets or sets the handle of the window.
@@ -87,7 +82,6 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #region public override string ToString()
 
         /// <summary>Returns a System.String that represents the current window.</summary>
         /// <returns>A System.String that represents the current window.</returns>
@@ -117,13 +111,9 @@ namespace OpenTK.Platform.Windows
             return handle.GetHashCode();
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- IDisposable ---
 
-        #region public void Dispose()
 
         /// <summary>Releases the unmanaged resources consumed by this instance.</summary>
         public void Dispose()
@@ -132,9 +122,7 @@ namespace OpenTK.Platform.Windows
             GC.SuppressFinalize(this);
         }
 
-        #endregion
 
-        #region void Dispose(bool manual)
 
         void Dispose(bool manual)
         {
@@ -153,17 +141,13 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region ~WinWindowInfo()
 
         ~WinWindowInfo()
         {
             this.Dispose(false);
         }
 
-        #endregion
 
-        #endregion
     }
 }

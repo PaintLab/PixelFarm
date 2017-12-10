@@ -36,13 +36,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\pixelfarm.vectors\2_geometry\BasicGeometries.cs">
-      <Link>2_Abstract_DrawingElements\BasicGeometries.cs</Link>
+      <Link>1_Geometries\BasicGeometries.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Rectangle.cs">
-      <Link>2_Abstract_DrawingElements\Rectangle.cs</Link>
+      <Link>1_Geometries\Rectangle.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\RectangleF.cs">
-      <Link>2_Abstract_DrawingElements\RectangleF.cs</Link>
+      <Link>1_Geometries\RectangleF.cs</Link>
     </Compile>
     <Compile Include="2_Abstract_DrawingElements\Brushes_Pens.cs" />
     <Compile Include="2_Abstract_DrawingElements\Color.cs" />
@@ -52,11 +52,8 @@
     <Compile Include="2_Abstract_DrawingElements\Image.cs" />
     <Compile Include="2_Abstract_DrawingElements\Region.cs" />
     <Compile Include="3_Canvas\Canvas.cs" />
-    <Compile Include="3_Canvas\CanvasOptions.cs" />
-    <Compile Include="3_Canvas\CanvasPaintToOutputDelegate.cs" />
     <Compile Include="3_Canvas\RenderVx.cs" />
-    <Compile Include="4_RequestFonts\FontStyle.cs" />
-    <Compile Include="4_RequestFonts\RequestFont.cs" />
+    <Compile Include="3_Canvas\RequestFont.cs" />
     <Compile Include="ExtensionAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

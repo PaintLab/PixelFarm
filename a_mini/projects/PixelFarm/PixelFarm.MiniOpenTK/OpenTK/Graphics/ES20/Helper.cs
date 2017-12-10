@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -37,7 +35,6 @@ namespace OpenTK.Graphics.ES20
     {
         const string Library = "libGLESv2.dll";
         static readonly object sync_root = new object();
-        #region --- Protected Members ---
 
         /// <summary>
         /// Returns a synchronization token unique for the GL class.
@@ -47,9 +44,7 @@ namespace OpenTK.Graphics.ES20
             get { return sync_root; }
         }
 
-        #endregion
 
-        #region Helper Overloads
 
 #pragma warning disable 3019
 #pragma warning disable 1591
@@ -59,7 +54,6 @@ namespace OpenTK.Graphics.ES20
         // Note: Mono 1.9.1 truncates StringBuilder results (for 'out string' parameters).
         // We work around this issue by doubling the StringBuilder capacity.
 
-        #region public static void ClearColor() overloads
 
         //public static void ClearColor(LayoutFarm.Drawing.Color color)
         //{
@@ -71,9 +65,7 @@ namespace OpenTK.Graphics.ES20
             GL.ClearColor(color.R, color.G, color.B, color.A);
         }
 
-        #endregion
 
-        #region public static void BlendColor() overloads
 
         //public static void BlendColor(LayoutFarm.Drawing.Color color)
         //{
@@ -85,9 +77,7 @@ namespace OpenTK.Graphics.ES20
             GL.BlendColor(color.R, color.G, color.B, color.A);
         }
 
-        #endregion
 
-        #region Uniform
 
         [CLSCompliant(false)]
         public static void Uniform2(int location, ref Vector2 vector)
@@ -144,11 +134,8 @@ namespace OpenTK.Graphics.ES20
         }
 
 
-        #endregion
 
-        #region Shaders
 
-        #region GetActiveAttrib
 
         public static string GetActiveAttrib(int program, int index, out int size, out ActiveAttribType type)
         {
@@ -159,9 +146,7 @@ namespace OpenTK.Graphics.ES20
             return sb.ToString();
         }
 
-        #endregion
 
-        #region GetActiveUniform
 
         public static string GetActiveUniform(int program, int uniformIndex, out int size, out ActiveUniformType type)
         {
@@ -172,9 +157,7 @@ namespace OpenTK.Graphics.ES20
             return sb.ToString();
         }
 
-        #endregion
 
-        #region public static void ShaderSource(Int32 shader, System.String @string)
 
         public static void ShaderSource(Int32 shader, System.String @string)
         {
@@ -185,9 +168,7 @@ namespace OpenTK.Graphics.ES20
             }
         }
 
-        #endregion
 
-        #region public static string GetShaderInfoLog(Int32 shader)
 
         public static string GetShaderInfoLog(Int32 shader)
         {
@@ -196,9 +177,7 @@ namespace OpenTK.Graphics.ES20
             return info;
         }
 
-        #endregion
 
-        #region public static void GetShaderInfoLog(Int32 shader, out string info)
 
         public static void GetShaderInfoLog(Int32 shader, out string info)
         {
@@ -217,9 +196,7 @@ namespace OpenTK.Graphics.ES20
             }
         }
 
-        #endregion
 
-        #region public static string GetProgramInfoLog(Int32 program)
 
         public static string GetProgramInfoLog(Int32 program)
         {
@@ -228,9 +205,7 @@ namespace OpenTK.Graphics.ES20
             return info;
         }
 
-        #endregion
 
-        #region public static void GetProgramInfoLog(Int32 program, out string info)
 
         public static void GetProgramInfoLog(Int32 program, out string info)
         {
@@ -248,11 +223,8 @@ namespace OpenTK.Graphics.ES20
             }
         }
 
-        #endregion
 
-        #endregion
 
-        #region public static void VertexAttrib2(Int32 index, ref Vector2 v)
 
         [CLSCompliant(false)]
         public static void VertexAttrib2(Int32 index, ref Vector2 v)
@@ -260,9 +232,7 @@ namespace OpenTK.Graphics.ES20
             GL.VertexAttrib2(index, v.X, v.Y);
         }
 
-        #endregion
 
-        #region public static void VertexAttrib3(Int32 index, ref Vector3 v)
 
         [CLSCompliant(false)]
         public static void VertexAttrib3(Int32 index, ref Vector3 v)
@@ -270,9 +240,7 @@ namespace OpenTK.Graphics.ES20
             GL.VertexAttrib3(index, v.X, v.Y, v.Z);
         }
 
-        #endregion
 
-        #region public static void VertexAttrib4(Int32 index, ref Vector4 v)
 
         [CLSCompliant(false)]
         public static void VertexAttrib4(Int32 index, ref Vector4 v)
@@ -280,36 +248,28 @@ namespace OpenTK.Graphics.ES20
             GL.VertexAttrib4(index, v.X, v.Y, v.Z, v.W);
         }
 
-        #endregion
 
-        #region public static void VertexAttrib2(Int32 index, Vector2 v)
 
         public static void VertexAttrib2(Int32 index, Vector2 v)
         {
             GL.VertexAttrib2(index, v.X, v.Y);
         }
 
-        #endregion
 
-        #region public static void VertexAttrib3(Int32 index, Vector3 v)
 
         public static void VertexAttrib3(Int32 index, Vector3 v)
         {
             GL.VertexAttrib3(index, v.X, v.Y, v.Z);
         }
 
-        #endregion
 
-        #region public static void VertexAttrib4(Int32 index, Vector4 v)
 
         public static void VertexAttrib4(Int32 index, Vector4 v)
         {
             GL.VertexAttrib4(index, v.X, v.Y, v.Z, v.W);
         }
 
-        #endregion
 
-        #region VertexAttribPointer
 
         public static void VertexAttribPointer(int index, int size, VertexAttribPointerType type, bool normalized, int stride, int offset)
         {
@@ -322,18 +282,14 @@ namespace OpenTK.Graphics.ES20
             VertexAttribPointer(index, size, type, normalized, stride, (IntPtr)offset);
         }
 
-        #endregion
 
-        #region DrawElements
 
         public static void DrawElements(BeginMode mode, int count, DrawElementsType type, int offset)
         {
             DrawElements(mode, count, type, new IntPtr(offset));
         }
 
-        #endregion
 
-        #region public static int GenTexture()
 
         public static int GenTexture()
         {
@@ -342,18 +298,14 @@ namespace OpenTK.Graphics.ES20
             return id;
         }
 
-        #endregion
 
-        #region public static void DeleteTexture(int id)
 
         public static void DeleteTexture(int id)
         {
             DeleteTextures(1, ref id);
         }
 
-        #endregion
 
-        #region Get[Float|Double]
 
         public static void GetFloat(GetPName pname, out Vector2 vector)
         {
@@ -391,9 +343,7 @@ namespace OpenTK.Graphics.ES20
             }
         }
 
-        #endregion
 
-        #region Viewport
         //----------------------------
         public static void Viewport(float w, float h)
         {
@@ -411,13 +361,11 @@ namespace OpenTK.Graphics.ES20
             GL.Viewport(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
         }
 #endif
-        #endregion
 
 #pragma warning restore 3019
 #pragma warning restore 1591
 #pragma warning restore 1572
 #pragma warning restore 1573
 
-        #endregion
     }
 }

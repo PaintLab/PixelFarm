@@ -1,11 +1,8 @@
-﻿#region --- License ---
-/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
+﻿/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * Contributions from Erik Ylvisaker
  * See license.txt for license info
  */
-#endregion
 
-#region --- Using Directives ---
 
 using System;
 using System.Collections.Generic;
@@ -14,7 +11,6 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-#endregion
 
 namespace OpenTK.Platform.Windows
 {
@@ -30,7 +26,6 @@ namespace OpenTK.Platform.Windows
         static bool wgl_loaded;
         const string opengl32Name = "OPENGL32.DLL";
         bool vsync_supported;
-        #region --- Contructors ---
 
         static WinGLContext()
         {
@@ -149,11 +144,8 @@ namespace OpenTK.Platform.Windows
             Handle = handle;
         }
 
-        #endregion
 
-        #region --- IGraphicsContext Members ---
 
-        #region SwapBuffers
 
         public override void SwapBuffers()
         {
@@ -162,9 +154,7 @@ namespace OpenTK.Platform.Windows
                     "Failed to swap buffers for context {0} current. Error: {1}", this, Marshal.GetLastWin32Error()));
         }
 
-        #endregion
 
-        #region MakeCurrent
 
         public override void MakeCurrent(IWindowInfo window)
         {
@@ -181,18 +171,14 @@ namespace OpenTK.Platform.Windows
                 throw new GraphicsContextException(String.Format(
                     "Failed to make context {0} current. Error: {1}", this, Marshal.GetLastWin32Error()));
         }
-        #endregion
 
-        #region IsCurrent
 
         public override bool IsCurrent
         {
             get { return Wgl.GetCurrentContext() == Handle.Handle; }
         }
 
-        #endregion
 
-        #region public bool VSync
 
         /// <summary>
         /// Gets or sets a System.Boolean indicating whether SwapBuffer calls are synced to the screen refresh rate.
@@ -210,9 +196,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region void LoadAll()
 
         public override void LoadAll()
         {
@@ -222,35 +206,25 @@ namespace OpenTK.Platform.Windows
             base.LoadAll();
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- IGLContextInternal Members ---
 
-        #region IWindowInfo IGLContextInternal.Info
         /*
         IWindowInfo IGraphicsContextInternal.Info
         {
             get { return (IWindowInfo)windowInfo; }
         }
         */
-        #endregion
 
-        #region GetAddress
 
         public override IntPtr GetAddress(string function_string)
         {
             return Wgl.Imports.GetProcAddress(function_string);
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- Private Methods ---
 
-        #region void SetGraphicsModePFD(GraphicsMode format, WinWindowInfo window)
 
         void SetGraphicsModePFD(GraphicsMode mode, WinWindowInfo window)
         {
@@ -265,22 +239,16 @@ namespace OpenTK.Platform.Windows
                 throw new GraphicsContextException(String.Format(
                     "Requested GraphicsMode not available. SetPixelFormat error: {0}", Marshal.GetLastWin32Error()));
         }
-        #endregion
 
-        #region void SetGraphicsModeARB(GraphicsMode format, IWindowInfo window)
 
         void SetGraphicsModeARB(GraphicsMode format, IWindowInfo window)
         {
             throw new NotImplementedException();
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- Internal Methods ---
 
-        #region internal IntPtr DeviceContext
 
         internal IntPtr DeviceContext
         {
@@ -291,11 +259,8 @@ namespace OpenTK.Platform.Windows
         }
 
 
-        #endregion
 
-        #endregion
 
-        #region --- Overrides ---
 
         /// <summary>Returns a System.String describing this OpenGL context.</summary>
         /// <returns>A System.String describing this OpenGL context.</returns>
@@ -304,9 +269,7 @@ namespace OpenTK.Platform.Windows
             return (this as IGraphicsContextInternal).Context.ToString();
         }
 
-        #endregion
 
-        #region --- IDisposable Members ---
 
         public override void Dispose()
         {
@@ -336,7 +299,6 @@ namespace OpenTK.Platform.Windows
             Dispose(false);
         }
 
-        #region private void DestroyContext()
 
         private void DestroyContext()
         {
@@ -361,8 +323,6 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #endregion
     }
 }

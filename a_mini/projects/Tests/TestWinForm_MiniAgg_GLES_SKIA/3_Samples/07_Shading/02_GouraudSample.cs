@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics;
+using PixelFarm.Drawing;
 using Mini;
 namespace PixelFarm.Agg.Sample_Gouraud
 {

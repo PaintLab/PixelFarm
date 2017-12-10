@@ -20,7 +20,6 @@
             base.Dispose(disposing);
         }
 
-        #region Component Designer generated code
 
         /// <summary> 
         /// Required method for Designer support - do not modify 
@@ -139,7 +138,6 @@
 
         }
 
-        #endregion
 
         private System.Windows.Forms.Panel pnlView;
         private System.Windows.Forms.TrackBar trackB;

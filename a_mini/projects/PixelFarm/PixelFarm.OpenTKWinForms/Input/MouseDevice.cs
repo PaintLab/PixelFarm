@@ -1,6 +1,5 @@
 ﻿#define COMPAT_REV1519 // Keeps compatibility with revision 1519
 
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -25,7 +24,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -41,7 +39,6 @@ namespace OpenTK.Input
     {
         static int allMouseButtonValueCount = 0;
 
-        #region --- Fields ---
 
         string description;
         IntPtr id;
@@ -64,11 +61,8 @@ namespace OpenTK.Input
         Point pos_last_accessed = new Point();
 #endif
 
-        #endregion
 
-        #region --- IInputDevice Members ---
 
-        #region public string Description
 
         /// <summary>
         /// Gets a string describing this MouseDevice.
@@ -79,9 +73,7 @@ namespace OpenTK.Input
             internal set { description = value; }
         }
 
-        #endregion
 
-        #region public InputDeviceType DeviceType
 
         /// <summary>
         /// Gets a value indicating the InputDeviceType of this InputDevice. 
@@ -91,13 +83,9 @@ namespace OpenTK.Input
             get { return InputDeviceType.Mouse; }
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- Public Members ---
 
-        #region public int NumberOfButtons
 
         /// <summary>
         /// Gets an integer representing the number of buttons on this MouseDevice.
@@ -108,9 +96,7 @@ namespace OpenTK.Input
             internal set { numButtons = value; }
         }
 
-        #endregion
 
-        #region public int NumberOfWheels
 
         /// <summary>
         /// Gets an integer representing the number of wheels on this MouseDevice.
@@ -121,9 +107,7 @@ namespace OpenTK.Input
             internal set { numWheels = value; }
         }
 
-        #endregion
 
-        #region public IntPtr DeviceID
 
         /// <summary>
         /// Gets an IntPtr representing a device dependent ID.
@@ -134,9 +118,7 @@ namespace OpenTK.Input
             internal set { id = value; }
         }
 
-        #endregion
 
-        #region public int Wheel
 
         /// <summary>
         /// Gets the absolute wheel position in integer units.
@@ -166,9 +148,7 @@ namespace OpenTK.Input
             }
         }
 
-        #endregion
 
-        #region public int X
 
         /// <summary>
         /// Gets an integer representing the absolute x position of the pointer, in window pixel coordinates.
@@ -178,9 +158,7 @@ namespace OpenTK.Input
             get { return pos.X; }
         }
 
-        #endregion
 
-        #region public int Y
 
         /// <summary>
         /// Gets an integer representing the absolute y position of the pointer, in window pixel coordinates.
@@ -190,9 +168,7 @@ namespace OpenTK.Input
             get { return pos.Y; }
         }
 
-        #endregion
 
-        #region public bool this[MouseButton b]
 
         /// <summary>
         /// Gets a System.Boolean indicating the state of the specified MouseButton.
@@ -220,13 +196,9 @@ namespace OpenTK.Input
             }
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- Internal Members ---
 
-        #region internal Point Position
 
         /// <summary>
         /// Sets a System.Drawing.Point representing the absolute position of the pointer, in window pixel coordinates.
@@ -245,11 +217,8 @@ namespace OpenTK.Input
             }
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- Events ---
 
         /// <summary>
         /// Occurs when the mouse's position is moved.
@@ -267,7 +236,6 @@ namespace OpenTK.Input
         /// Occurs when one of the mouse wheels is moved.
         /// </summary>
         public event EventHandler<MouseWheelEventArgs> WheelChanged = delegate { };
-        #region --- Overrides ---
 
         /// <summary>
         /// Calculates the hash code for this instance.
@@ -288,15 +256,11 @@ namespace OpenTK.Input
                 DeviceID, Description, NumberOfButtons, NumberOfWheels);
         }
 
-        #endregion
 
-        #endregion
 
-        #region COMPAT_REV1519
 
 #if COMPAT_REV1519
 
-        #region public int WheelDelta
 
         /// <summary>
         /// Gets an integer representing the relative wheel movement.
@@ -312,9 +276,7 @@ namespace OpenTK.Input
             }
         }
 
-        #endregion
 
-        #region public int XDelta
 
         /// <summary>
         /// Gets an integer representing the relative x movement of the pointer, in pixel coordinates.
@@ -330,9 +292,7 @@ namespace OpenTK.Input
             }
         }
 
-        #endregion
 
-        #region public int YDelta
 
         /// <summary>
         /// Gets an integer representing the relative y movement of the pointer, in pixel coordinates.
@@ -348,14 +308,11 @@ namespace OpenTK.Input
             }
         }
 
-        #endregion
 
 #endif
 
-        #endregion
     }
 
-    #region Event Arguments
 
     /// <summary>
     /// Defines the event data for <see cref="MouseDevice"/> events.
@@ -369,12 +326,9 @@ namespace OpenTK.Input
     /// </remarks>
     public class MouseEventArgs : EventArgs
     {
-        #region Fields
 
         int x, y;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new instance.
@@ -403,9 +357,7 @@ namespace OpenTK.Input
         {
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Gets the X position of the mouse for the event.
@@ -422,7 +374,6 @@ namespace OpenTK.Input
         /// </summary>
         public Point Position { get { return new Point(x, y); } }
 
-        #endregion
     }
 
     /// <summary>
@@ -437,12 +388,9 @@ namespace OpenTK.Input
     /// </remarks>
     public class MouseMoveEventArgs : MouseEventArgs
     {
-        #region Fields
 
         int x_delta, y_delta;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new <see cref="MouseMoveEventArgs"/> instance.
@@ -472,9 +420,7 @@ namespace OpenTK.Input
         {
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Gets the change in X position produced by this event.
@@ -486,7 +432,6 @@ namespace OpenTK.Input
         /// </summary>
         public int YDelta { get { return y_delta; } internal set { y_delta = value; } }
 
-        #endregion
     }
 
     /// <summary>
@@ -501,13 +446,10 @@ namespace OpenTK.Input
     /// </remarks>
     public class MouseButtonEventArgs : MouseEventArgs
     {
-        #region Fields
 
         MouseButton button;
         bool pressed;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new <see cref="MouseButtonEventArgs"/> instance.
@@ -537,9 +479,7 @@ namespace OpenTK.Input
         {
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// The mouse button for the event.
@@ -551,7 +491,6 @@ namespace OpenTK.Input
         /// </summary>
         public bool IsPressed { get { return pressed; } internal set { pressed = value; } }
 
-        #endregion
     }
 
     /// <summary>
@@ -566,13 +505,10 @@ namespace OpenTK.Input
     /// </remarks>
     public class MouseWheelEventArgs : MouseEventArgs
     {
-        #region Fields
 
         float value;
         float delta;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new <see cref="MouseWheelEventArgs"/> instance.
@@ -602,9 +538,7 @@ namespace OpenTK.Input
         {
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Gets the value of the wheel in integer units.
@@ -628,8 +562,6 @@ namespace OpenTK.Input
         /// </summary>
         public float DeltaPrecise { get { return delta; } internal set { delta = value; } }
 
-        #endregion
     }
 
-    #endregion
 }

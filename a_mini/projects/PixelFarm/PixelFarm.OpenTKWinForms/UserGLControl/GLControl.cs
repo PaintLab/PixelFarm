@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library, except where noted.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -57,7 +55,6 @@ namespace OpenTK
         // the premature Resize event and raise it as soon as the handle
         // is ready.
         bool resize_event_suppressed;
-        #region --- Constructors ---
 
         /// <summary>
         /// Constructs a new GLControl.
@@ -100,9 +97,7 @@ namespace OpenTK
         {
             this.format = mode;
         }
-        #endregion
 
-        #region --- Private  Methods ---
 
         IGLControl Implementation
         {
@@ -123,9 +118,7 @@ namespace OpenTK
                 RecreateHandle();
         }
 
-        #endregion
 
-        #region --- Protected Methods ---
 
         /// <summary>Raises the HandleCreated event.</summary>
         /// <param name="e">Not used.</param>
@@ -220,11 +213,8 @@ namespace OpenTK
             base.OnParentChanged(e);
         }
 
-        #endregion
 
-        #region --- Public Methods ---
 
-        #region public void SwapBuffers()
 
         /// <summary>
         /// Swaps the front and back buffers, presenting the rendered scene to the screen.
@@ -235,9 +225,7 @@ namespace OpenTK
             Context.SwapBuffers();
         }
 
-        #endregion
 
-        #region public void MakeCurrent()
 
         /// <summary>
         /// Makes the underlying this GLControl current in the calling thread.
@@ -249,9 +237,7 @@ namespace OpenTK
             Context.MakeCurrent(Implementation.WindowInfo);
         }
 
-        #endregion
 
-        #region public bool IsIdle
 
         /// <summary>
         /// Gets a value indicating whether the current thread contains pending system messages.
@@ -266,9 +252,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public IGraphicsContext Context
 
         /// <summary>
         /// Gets an interface to the underlying GraphicsContext used by this GLControl.
@@ -284,9 +268,7 @@ namespace OpenTK
             private set { context = value; }
         }
 
-        #endregion
 
-        #region public float AspectRatio
 
         /// <summary>
         /// Gets the aspect ratio of this GLControl.
@@ -301,9 +283,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public bool VSync
 
         /// <summary>
         /// Gets or sets a value indicating whether vsync is active for this GLControl.
@@ -335,9 +315,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public GraphicsMode GraphicsMode
 
         /// <summary>
         /// Gets the GraphicsMode of the GraphicsContext attached to this GLControl.
@@ -354,9 +332,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region WindowInfo
 
         /// <summary>
         /// Gets the <see cref="OpenTK.Platform.IWindowInfo"/> for this instance.
@@ -384,9 +360,7 @@ namespace OpenTK
             }
             return IntPtr.Zero;
         }
-        #endregion
 
-        #region public Bitmap GrabScreenshot()
 
         /// <summary>Grabs a screenshot of the frontbuffer contents.</summary>
         /// <returns>A System.Drawing.Bitmap, containing the contents of the frontbuffer.</returns>
@@ -409,8 +383,6 @@ namespace OpenTK
             //return bmp;
         }
 
-        #endregion
 
-        #endregion
     }
 }

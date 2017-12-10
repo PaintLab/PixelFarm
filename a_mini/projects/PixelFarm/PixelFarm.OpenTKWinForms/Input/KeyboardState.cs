@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -35,20 +33,15 @@ namespace OpenTK.Input
     /// </summary>
     public struct KeyboardState : IEquatable<KeyboardState>
     {
-        #region Fields
 
         const int NumKeys = ((int)Key.LastKey + 16) / 32;
         // Todo: The following line triggers bogus CS0214 in gmcs 2.0.1, sigh...
         // Need to add a workaround using either ExplicitLayout or another trick.
         //unsafe fixed int Keys[NumKeys];
 
-        #endregion
 
-        #region Constructors
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Gets a <see cref="System.Boolean"/> indicating whether this key is down.
@@ -68,9 +61,7 @@ namespace OpenTK.Input
             return ReadBit((int)key) == 0;
         }
 
-        #endregion
 
-        #region Internal Members
 
         internal int ReadBit(int offset)
         {
@@ -85,9 +76,7 @@ namespace OpenTK.Input
             //unsafe { Keys[offset / 32] = Keys[offset / 32] ^ (~(int)bit << (offset % 32)); }
         }
 
-        #endregion
 
-        #region IEquatable<KeyboardState> Members
 
         /// <summary>
         /// Compares two KeyboardState instances.
@@ -99,6 +88,5 @@ namespace OpenTK.Input
             throw new NotImplementedException();
         }
 
-        #endregion
     }
 }

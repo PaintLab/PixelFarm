@@ -1,10 +1,8 @@
-﻿#region --- License ---
-/* Licensed under the MIT/X11 license.
+﻿/* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -17,7 +15,6 @@ namespace OpenTK
 {
     class X11GLControl : IGLControl
     {
-        #region P/Invokes
 
         [DllImport("libX11")]
         static extern IntPtr XCreateColormap(IntPtr display, IntPtr window, IntPtr visual, int alloc);
@@ -50,14 +47,11 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region Fields
 
         GraphicsMode mode;
         IWindowInfo window_info;
         IntPtr display;
-        #endregion
 
      
         internal X11GLControl(GraphicsMode mode, Control control)
@@ -93,7 +87,6 @@ namespace OpenTK
 
         }
         
-        #region IGLControl Members
 
         public IGraphicsContext CreateContext(int major, int minor, GraphicsContextFlags flags)
         {
@@ -113,9 +106,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region Private Members
 
         static object GetStaticFieldValue(Type type, string fieldName)
         {
@@ -129,6 +120,5 @@ namespace OpenTK
                 System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).SetValue(null, value);
         }
 
-        #endregion
     }
 }

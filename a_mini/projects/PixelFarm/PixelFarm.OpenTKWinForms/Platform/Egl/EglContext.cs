@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using OpenTK.Graphics;
@@ -33,14 +31,11 @@ namespace OpenTK.Platform.Egl
 {
     class EglContext : EmbeddedGraphicsContext
     {
-        #region Fields
 
         EglWindowInfo WindowInfo;
         IntPtr HandleAsEGLContext { get { return Handle.Handle; } set { Handle = new ContextHandle(value); } }
         bool vsync = true;   // Default vsync value is defined as 1 (true) in EGL.
-        #endregion
 
-        #region Constructors
 
         public EglContext(GraphicsMode mode, EglWindowInfo window, IGraphicsContext sharedContext,
             int major, int minor, GraphicsContextFlags flags)
@@ -86,9 +81,7 @@ namespace OpenTK.Platform.Egl
         {
             get { return this.WindowInfo; }
         }
-        #endregion
 
-        #region IGraphicsContext Members
 
         public override void SwapBuffers()
         {
@@ -128,18 +121,14 @@ namespace OpenTK.Platform.Egl
             }
         }
 
-        #endregion
 
-        #region IGraphicsContextInternal Members
 
         public override IntPtr GetAddress(string function)
         {
             return Egl.GetProcAddress(function);
         }
 
-        #endregion
 
-        #region IDisposable Members
 
         public override void Dispose()
         {
@@ -171,6 +160,5 @@ namespace OpenTK.Platform.Egl
             Dispose(false);
         }
 
-        #endregion
     }
 }

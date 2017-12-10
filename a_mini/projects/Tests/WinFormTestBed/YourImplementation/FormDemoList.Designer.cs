@@ -13,7 +13,6 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
 
         private void InitializeComponent()
         {
@@ -108,7 +107,6 @@
 
         }
 
-        #endregion
 
         private System.Windows.Forms.CheckBox chkShowLayoutInspector;
         private System.Windows.Forms.ListBox lstHtmlTestFiles;

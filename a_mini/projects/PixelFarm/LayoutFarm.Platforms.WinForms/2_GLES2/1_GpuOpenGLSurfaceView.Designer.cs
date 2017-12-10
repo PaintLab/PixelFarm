@@ -21,7 +21,6 @@ namespace LayoutFarm.UI.OpenGL
             base.Dispose(disposing);
         }
 
-#region Component Designer generated code
 
         /// <summary> 
         /// Required method for Designer support - do not modify 
@@ -33,7 +32,6 @@ namespace LayoutFarm.UI.OpenGL
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         }
 
-#endregion
     }
 }
 #endif

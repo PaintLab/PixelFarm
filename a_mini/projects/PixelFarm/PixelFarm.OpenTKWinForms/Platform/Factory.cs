@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -33,12 +31,9 @@ namespace OpenTK.Platform
     using Graphics;
     sealed class Factory2 : IPlatformFactory
     {
-        #region Fields
 
         static IPlatformFactory default_implementation, embedded_implementation;
-        #endregion
 
-        #region Constructors
 
         static Factory2()
         {
@@ -59,9 +54,7 @@ namespace OpenTK.Platform
                 Default = Embedded;
         }
 
-        #endregion
 
-        #region Public Members
 
         public static IPlatformFactory Default
         {
@@ -75,9 +68,7 @@ namespace OpenTK.Platform
             private set { embedded_implementation = value; }
         }
 
-        #endregion
 
-        #region IPlatformFactory Members
 
         public INativeWindow CreateNativeWindow(int x, int y, int width, int height, string title,
             GraphicsMode mode, GameWindowFlags options, DisplayDevice device)
@@ -118,12 +109,9 @@ namespace OpenTK.Platform
 
         class UnsupportedPlatform : IPlatformFactory
         {
-            #region Fields
 
             static readonly string error_string = "Please, refer to http://www.opentk.com for more information.";
-            #endregion
 
-            #region IPlatformFactory Members
 
             public INativeWindow CreateNativeWindow(int x, int y, int width, int height, string title, GraphicsMode mode, GameWindowFlags options, DisplayDevice device)
             {
@@ -165,9 +153,7 @@ namespace OpenTK.Platform
                 throw new PlatformNotSupportedException(error_string);
             }
 
-            #endregion
         }
 
-        #endregion
     }
 }
