@@ -25,7 +25,6 @@ namespace PixelFarm.Agg
     {
         protected override void InnerMemCopy(byte[] dest_buffer, int dest_startAt, byte[] src_buffer, int src_StartAt, int len)
         {
-
             System.Buffer.BlockCopy(
                 src_buffer, src_StartAt, dest_buffer, dest_startAt, len);
         }

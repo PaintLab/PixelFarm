@@ -70,11 +70,11 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\3_Agg_PixelBuffer\ActualImage.cs">
       <Link>2_DrawingCanvas\3_Agg_PixelBuffer\ActualImage.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\3_Agg_PixelBuffer\AggBuffMx.cs">
+      <Link>2_DrawingCanvas\3_Agg_PixelBuffer\AggBuffMx.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\3_Agg_PixelBuffer\AggMemMx.cs">
       <Link>2_DrawingCanvas\3_Agg_PixelBuffer\AggMemMx.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\3_Agg_PixelBuffer\NativeBufferMx.cs">
-      <Link>2_DrawingCanvas\3_Agg_PixelBuffer\NativeBufferMx.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\4_Agg_Vertex\0_VertexCommandAndOrientation.cs">
       <Link>2_DrawingCanvas\4_AggVertex\0_VertexCommandAndOrientation.cs</Link>

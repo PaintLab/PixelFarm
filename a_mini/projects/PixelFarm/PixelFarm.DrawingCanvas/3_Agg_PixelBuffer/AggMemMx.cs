@@ -25,18 +25,14 @@ using System;
 namespace PixelFarm.Agg
 {
     public static class AggMemMx
-    {
-
-
+    {   
         //----------------------------------------------------------filling_rule_e
         public static void memcpy(byte[] dest,
             int destIndex, byte[] source,
             int sourceIndex, int count)
         {
             AggBuffMx.MemCopy(dest, destIndex, source, sourceIndex, count);
-        }
-
-
+        } 
         public static void memmove(byte[] dest, int destIndex, byte[] source, int sourceIndex, int Count)
         {
             if (source != dest
@@ -48,9 +44,7 @@ namespace PixelFarm.Agg
             {
                 throw new Exception("this code needs to be tested");
             }
-        }
-
-
+        } 
         public static void memset(byte[] dest, int destIndex, byte byteValue, int count)
         {
             AggBuffMx.MemSet(dest, destIndex, byteValue, count);
