@@ -51,8 +51,6 @@
     <Compile Include="4_FontServices\DrawingGLFontPrinter.cs" />
     <Compile Include="4_FontServices\DrawingGLFontPrinter.Gdi.cs" />
     <Compile Include="4_FontServices\NativeFontStore.cs" />
-    <Compile Include="5_Windows\InstalledFontsProviderWin32.cs" />
-    <Compile Include="5_Windows\WindowFontLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
