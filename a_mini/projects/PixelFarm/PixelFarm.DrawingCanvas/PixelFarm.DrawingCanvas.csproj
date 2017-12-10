@@ -61,6 +61,51 @@
     <Compile Include="..\burningminecurve\curveutils\VectorHelper.cs">
       <Link>Sub1\1_Vectors\4_BurningMineCurves\VectorHelper.cs</Link>
     </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\AggBasics.cs">
+      <Link>1_Vectors\AggBasics.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\AggMath.cs">
+      <Link>1_Vectors\AggMath.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\AxisAlignedBoundingBox.cs">
+      <Link>1_Vectors\AxisAlignedBoundingBox.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\BezierCurve.cs">
+      <Link>1_Vectors\BezierCurve.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\BezierCurveCubic.cs">
+      <Link>1_Vectors\BezierCurveCubic.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\BezierCurveQuadric.cs">
+      <Link>1_Vectors\BezierCurveQuadric.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\MathHelper.cs">
+      <Link>1_Vectors\MathHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\Matrix4x4.cs">
+      <Link>1_Vectors\Matrix4x4.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\MyVector2.cs">
+      <Link>1_Vectors\MyVector2.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\Quaternion.cs">
+      <Link>1_Vectors\Quaternion.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\Ray.cs">
+      <Link>1_Vectors\Ray.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\Vector2.cs">
+      <Link>1_Vectors\Vector2.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\Vector3.cs">
+      <Link>1_Vectors\Vector3.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\Vector3Float.cs">
+      <Link>1_Vectors\Vector3Float.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.vectors\1_vectormaths\Vector4.cs">
+      <Link>1_Vectors\Vector4.cs</Link>
+    </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Arc.cs">
       <Link>Sub1\1_Vectors\1_Geometry\Arc.cs</Link>
     </Compile>
@@ -103,6 +148,7 @@
     <Compile Include="..\pixelfarm.vectors\3_transform\Viewport.cs">
       <Link>Sub1\1_Vectors\3_Transform\Viewport.cs</Link>
     </Compile>
+    <Compile Include="1_Canvas\AggColorExtensions.cs" />
     <Compile Include="1_Canvas\CanvasPainter.cs" />
     <Compile Include="3_Drawing_Fonts\FontGlyph.cs" />
     <Compile Include="3_Drawing_Fonts\ITextPrinter.cs" />

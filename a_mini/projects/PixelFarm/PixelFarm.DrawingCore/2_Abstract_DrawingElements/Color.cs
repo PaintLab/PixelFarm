@@ -172,17 +172,8 @@ namespace PixelFarm.Drawing
         public uint ToABGR()
         {
             return (uint)((this.a << 24) | (this.b << 16) | (this.g << 8) | this.r);
-        }
-
-
-
-
-        public const int COVER_SHIFT = 8;
-        public const int COVER_SIZE = 1 << COVER_SHIFT;  //----cover_size 
-        public const int COVER_MASK = COVER_SIZE - 1;    //----cover_mask   
-        public const int BASE_SHIFT = 8;
-        public const int BASE_SCALE = (1 << BASE_SHIFT);
-        public const int BASE_MASK = (BASE_SCALE - 1);
+        } 
+        
         public byte Red0To255
         {
             get { return r; }
@@ -200,53 +191,8 @@ namespace PixelFarm.Drawing
             get { return a; }
         }
 
-        //------------------------------------------
-        public static Color Make(double r_, double g_, double b_, double a_)
-        {
-            return new Color(
-               ((byte)Agg.AggBasics.uround(a_ * (double)BASE_MASK)),
-               ((byte)Agg.AggBasics.uround(r_ * (double)BASE_MASK)),
-               ((byte)Agg.AggBasics.uround(g_ * (double)BASE_MASK)),
-               ((byte)Agg.AggBasics.uround(b_ * (double)BASE_MASK))
-               );
-        }
-        public static Color Make(double r_, double g_, double b_)
-        {
-            return new Color(
-               ((byte)Agg.AggBasics.uround(BASE_MASK)),
-               ((byte)Agg.AggBasics.uround(r_ * (double)BASE_MASK)),
-               ((byte)Agg.AggBasics.uround(g_ * (double)BASE_MASK)),
-               ((byte)Agg.AggBasics.uround(b_ * (double)BASE_MASK)));
-        }
-        //------------------------------------------
-        public static Color Make(float r_, float g_, float b_)
-        {
-            return new Color(
-               ((byte)Agg.AggBasics.uround_f(BASE_MASK)),
-               ((byte)Agg.AggBasics.uround_f(r_ * (float)BASE_MASK)),
-               ((byte)Agg.AggBasics.uround_f(g_ * (float)BASE_MASK)),
-               ((byte)Agg.AggBasics.uround_f(b_ * (float)BASE_MASK))
-              );
-        }
-        public static Color Make(float r_, float g_, float b_, float a_)
-        {
-            return new Color(
-               ((byte)Agg.AggBasics.uround_f(a_ * (float)BASE_MASK)),
-               ((byte)Agg.AggBasics.uround_f(r_ * (float)BASE_MASK)),
-               ((byte)Agg.AggBasics.uround_f(g_ * (float)BASE_MASK)),
-               ((byte)Agg.AggBasics.uround_f(b_ * (float)BASE_MASK))
-               );
-        }
-        //------------------------------------------
-        public static Color Make(int r_, int g_, int b_, int a_)
-        {
-            return new Color(
-               (byte)Math.Min(Math.Max(a_, 0), 255),
-               (byte)Math.Min(Math.Max(r_, 0), 255),
-               (byte)Math.Min(Math.Max(g_, 0), 255),
-               (byte)Math.Min(Math.Max(b_, 0), 255)
-               );
-        }
+     
+       
 
         public Color CreateGradient(Color another, float colorDistanceRatio)
         {
@@ -285,11 +231,7 @@ namespace PixelFarm.Drawing
             return new Color(alpha, red, green, blue);
         }
 
-        static public Color operator *(Color A, float b)
-        {
-            float conv = b / 255f;
-            return Make(A.r * conv, A.g * conv, A.b * conv, A.a * conv);
-        }
+        
 
         //public void AddColor(ColorRGBA c, int cover)
         //{
@@ -335,10 +277,7 @@ namespace PixelFarm.Drawing
             return new Color(255, (byte)((v >> 16) & 0xFF), (byte)((v >> 8) & 0xFF), ((byte)(v & 0xFF)));
         }
 
-        public Color Blend(Color other, float weight)
-        {
-            return this * (1 - weight) + other * weight;
-        }
+       
 #if DEBUG
         public override string ToString()
         {

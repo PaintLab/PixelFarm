@@ -58,6 +58,9 @@
     <Compile Include="..\burningminecurve\curveutils\VectorHelper.cs">
       <Link>1_DrawingCore\1_Vectors\4_BurningMineCurves\VectorHelper.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\AggColorExtensions.cs">
+      <Link>2_DrawingCanvas\1_Canvas\AggColorExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\1_Canvas\CanvasPainter.cs">
       <Link>2_DrawingCanvas\1_Canvas\CanvasPainter.cs</Link>
     </Compile>
