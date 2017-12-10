@@ -134,13 +134,45 @@ namespace PixelFarm.Drawing
         }
 
         static int s_POINTS_PER_INCH = 72; //default value
-        static int s_PIXELS_PER_INCH = 96; //default value
-
-        //public WriteDirection WriteDirection { get; set; }
-        //public ScriptLang ScriptLang { get; set; }
+        static int s_PIXELS_PER_INCH = 96; //default value         
         public static float ConvEmSizeInPointsToPixels(float emsizeInPoint)
         {
             return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
+        }
+
+
+        //------------------       
+        //store latest platform's actual font  as WeakReference
+        //access this by PixelFarm.Drawing.Internal.RequestFontCacheAccess
+        internal int _platform_id;//resolve by system id
+        internal WeakReference _latestResolved; //result of the actual font, we store it as weak reference
+    }
+
+    namespace Internal
+    {
+        public static class RequestFontCacheAccess
+        {
+            public static void ClearCache(RequestFont reqFont)
+            {
+                reqFont._platform_id = 0;
+                reqFont._latestResolved = null;
+            }
+            public static void SetActualFont(RequestFont reqFont, int platform_id, object platformFont)
+            {
+                //replace 
+                reqFont._platform_id = platform_id;
+                reqFont._latestResolved = new WeakReference(platformFont);
+            }
+            public static T GetActualFont<T>(RequestFont reqFont, int platform_id)
+                where T : class
+            {
+                if (reqFont._platform_id == platform_id &&
+                    reqFont._latestResolved.IsAlive)
+                {
+                    return reqFont._latestResolved.Target as T;
+                }
+                return null;
+            }
         }
     }
 

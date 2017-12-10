@@ -2,9 +2,12 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
+using PixelFarm.Drawing.Fonts;
+
 using Typography.OpenFont;
 using Typography.TextLayout;
 using Typography.TextServices;
+
 namespace LayoutFarm
 {
     public class OpenFontIFonts : IFonts
@@ -15,6 +18,12 @@ namespace LayoutFarm
         GlyphLayout glyphLayout;
         List<GlyphPlan> userGlyphPlanList;
         List<UserCharToGlyphIndexMap> userCharToGlyphMapList;
+
+        Dictionary<int, Typeface> _resolvedTypefaceCache = new Dictionary<int, Typeface>();
+
+        static int _totalSystemId = 0;
+        int _system_id = ++_totalSystemId;
+
 
         public OpenFontIFonts(IFontLoader fontloader)
         {
@@ -28,42 +37,69 @@ namespace LayoutFarm
         public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
         {
 
-
-            ////from font
-            ////resolve for typeface
-            //userGlyphPlanList.Clear();
-            //userCharToGlyphMapList.Clear();
-            //// 
-            //Typeface typeface = typefaceStore.GetTypeface(font.Name, InstalledFontStyle.Normal);
-            //glyphLayout.Typeface = typeface;
-            //glyphLayout.GenerateGlyphPlans(str, startAt, len, userGlyphPlanList, userCharToGlyphMapList);
-            ////
-            ////
-            //float scale = typeface.CalculateToPixelScaleFromPointSize(font.SizeInPoints);
-            //int j = glyphXAdvances.Length;
-            //double actualX = 0;
-            //for (int i = 0; i < j; ++i)
-            //{
-            //    GlyphPlan p = userGlyphPlanList[i];
-            //    double actualAdvX = p.advX * scale;
-            //    double newX = actualX + actualAdvX;
-
-            //    glyphXAdvances[i] = (int)Math.Round(newX - actualX);
-            //    actualX = newX;
-            //}
-
-        }
-        public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
-        {
-            //resolve type face
+            //layout  
+            //from font
+            //resolve for typeface
+            userGlyphPlanList.Clear();
+            userCharToGlyphMapList.Clear();
+            // 
             Typeface typeface = typefaceStore.GetTypeface(font.Name, InstalledFontStyle.Normal);
             glyphLayout.Typeface = typeface;
+            glyphLayout.GenerateGlyphPlans(str, startAt, len, userGlyphPlanList, userCharToGlyphMapList);
+
+            //
+            //
+            float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+            int endBefore = startAt + len;
+
+            for (int i = startAt; i < endBefore; ++i)
+            {
+                GlyphPlan glyphPlan = userGlyphPlanList[i];
+                float tx = glyphPlan.ExactX;
+                float ty = glyphPlan.ExactY;
+                double actualAdvX = glyphPlan.AdvanceX;
+                glyphXAdvances[i] = (int)Math.Round(actualAdvX);
+            }
+        }
+
+
+        Typeface ResolveTypeface(RequestFont font)
+        {
+            //from user's request font
+            //resolve to actual Typeface
+
+            //get data from...
+            //cache level-0 (attached inside the request font)
+            Typeface typeface = PixelFarm.Drawing.Internal.RequestFontCacheAccess.GetActualFont<Typeface>(font, _system_id);
+            if (typeface != null) return typeface;
+            //
+            //cache level-1 (stored in this Ifonts)
+            if (!_resolvedTypefaceCache.TryGetValue(font.FontKey, out typeface))
+            {
+
+                //not found ask the typeface store to load that font
+                typeface = typefaceStore.GetTypeface(font.Name, font.Style.ConvToInstalledFontStyle());
+                if (typeface == null)
+                    throw new NotSupportedException();
+                //
+                //cache here (level-1)
+                _resolvedTypefaceCache.Add(font.FontKey, typeface);
+            }
+            //and cache into level-0
+            PixelFarm.Drawing.Internal.RequestFontCacheAccess.SetActualFont(font, _system_id, typeface);
+            return typeface;
+        }
+
+        public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
+        {
+            Typeface typeface = ResolveTypeface(font);
+            glyphLayout.Typeface = typeface;
             MeasuredStringBox result;
-            float scale = typeface.CalculateToPixelScaleFromPointSize(font.SizeInPoints);
+            float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+            glyphLayout.FontSizeInPoints = font.SizeInPoints;
 
             //measure string at specific px scale
             glyphLayout.MeasureString(str, startAt, len, out result, scale);
-
             return new Size((int)result.width, (int)result.CalculateLineHeight());
 
         }
@@ -76,9 +112,10 @@ namespace LayoutFarm
         {
             throw new NotImplementedException();
         }
-        public int MeasureBlankLineHeight(RequestFont f)
+        public int MeasureBlankLineHeight(RequestFont font)
         {
-            throw new NotImplementedException();
+            Typeface typeface = typefaceStore.GetTypeface(font.Name, InstalledFontStyle.Normal);
+            return typeface.LineSpacing;
         }
 
         float IFonts.MeasureBlankLineHeight(RequestFont f)

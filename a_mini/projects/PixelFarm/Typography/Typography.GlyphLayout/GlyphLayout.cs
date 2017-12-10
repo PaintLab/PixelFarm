@@ -127,7 +127,7 @@ namespace Typography.TextLayout
             {
                 //to pixel scale from size in point
                 if (_typeface == null) return 1;
-                return _typeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
+                return _typeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPoints);
             }
         }
         public PositionTechnique PositionTechnique { get; set; }
@@ -331,11 +331,34 @@ namespace Typography.TextLayout
             GlyphPosStream glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
             int finalGlyphCount = glyphPositions.Count;
             //------------------------ 
+            if (!glyphLayout.UsePxScaleOnReadOutput)
+            {
+                //use original size, design unit
+                //default scale 
+                double cx = 0;
+                short cy = 0;
+                for (int i = 0; i < finalGlyphCount; ++i)
+                {
+                    GlyphPos glyph_pos = glyphPositions[i];
+                    float advW = glyph_pos.advanceW * 1;
+                    float exact_x = (float)(cx + glyph_pos.OffsetX * 1);
+                    float exact_y = (float)(cy + glyph_pos.OffsetY * 1);
+
+                    outputGlyphPlanList.Add(new GlyphPlan(
+                        glyph_pos.glyphIndex,
+                        exact_x,
+                        exact_y,
+                        advW));
+                    cx += advW;
+                }
+                return;
+            }
+
+            //
             IPixelScaleLayout pxscaleLayout = glyphLayout.PxScaleLayout;
             if (pxscaleLayout != null)
             {
-                //use custom pixel scale layout engine 
-
+                //use custom pixel scale layout engine  
                 pxscaleLayout.SetFont(glyphLayout.Typeface, glyphLayout.FontSizeInPoints);
                 pxscaleLayout.Layout(glyphPositions, outputGlyphPlanList);
             }
