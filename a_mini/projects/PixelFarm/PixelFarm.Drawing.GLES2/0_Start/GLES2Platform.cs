@@ -2,6 +2,7 @@
 
 using PixelFarm.Drawing.Fonts;
 using PixelFarm.DrawingGL;
+using Typography.TextServices;
 
 namespace PixelFarm.Drawing.GLES2
 {

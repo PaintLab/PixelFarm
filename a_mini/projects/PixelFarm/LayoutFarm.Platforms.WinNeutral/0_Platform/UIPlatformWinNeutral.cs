@@ -1,11 +1,12 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
+using Typography.TextServices;
 namespace LayoutFarm.UI
 {
     //platform specific code 
     public class UIPlatformWinNeutral : UIPlatform
     {
-        PixelFarm.Drawing.Fonts.OpenFontStore s_fontStore;
+        OpenFontStore s_fontStore;
 
         static UIPlatformWinNeutral()
         {
@@ -16,7 +17,7 @@ namespace LayoutFarm.UI
         {
             LayoutFarm.UI.Clipboard.SetUIPlatform(this);
 
-            s_fontStore = new PixelFarm.Drawing.Fonts.OpenFontStore();
+            s_fontStore = new OpenFontStore();
 
             //no gdi+
             // PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(s_fontStore);
@@ -52,7 +53,7 @@ namespace LayoutFarm.UI
         {
             throw new System.NotSupportedException();
 
-        //    return this._gdiPlusIFonts;
+            //    return this._gdiPlusIFonts;
         }
 
         public static readonly UIPlatformWinNeutral platform = new UIPlatformWinNeutral();

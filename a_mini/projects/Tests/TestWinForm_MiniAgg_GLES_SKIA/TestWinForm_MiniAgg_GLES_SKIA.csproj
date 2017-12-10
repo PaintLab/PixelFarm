@@ -283,6 +283,10 @@
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
       <Name>PixelFarm.Typography</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.TextServices\Typography.TextServices.csproj">
+      <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
+      <Name>Typography.TextServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>
       <Name>TestSamples</Name>

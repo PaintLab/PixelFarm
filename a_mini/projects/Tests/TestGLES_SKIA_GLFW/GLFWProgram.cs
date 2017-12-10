@@ -1,11 +1,14 @@
 ﻿//MIT, 2016-2017, WinterDev
 using System;
+using SkiaSharp;
+
 using Pencil.Gaming;
 using PixelFarm;
 using PixelFarm.Forms;
 using OpenTK.Graphics.ES20;
-using SkiaSharp;
 using OpenTkEssTest;
+
+using Typography.TextServices;
 
 namespace TestGlfw
 {
@@ -125,11 +128,11 @@ namespace TestGlfw
     {
 
         static Mini.GLDemoContext demoContext2 = null;
-        static PixelFarm.Drawing.Fonts.OpenFontStore s_fontstore;
+        static OpenFontStore s_fontstore;
 
         public GlfwGLES2()
         {
-            s_fontstore = new PixelFarm.Drawing.Fonts.OpenFontStore();
+            s_fontstore = new OpenFontStore();
         }
         public override void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
         {

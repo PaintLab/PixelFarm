@@ -8,6 +8,8 @@
 using System;
 using System.Runtime.InteropServices;
 using System.IO;
+using Typography.TextServices;
+
 namespace PixelFarm.Drawing.Fonts
 {
     public static class FreeTypeFontLoader
