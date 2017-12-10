@@ -169,12 +169,12 @@ namespace Mini.WinForms
             }
             set
             {
-                _myBrushPath.FillColor = PixelFarm.Drawing.AggColorExtensions.Make(
-                        (byte)value.R,
-                        (byte)value.G,
-                        (byte)value.B,
-                        (byte)value.A
-                    );
+                _myBrushPath.FillColor = new PixelFarm.Drawing.Color(
+                     value.A,
+                     value.R,
+                     value.G,
+                     value.B
+                );
             }
         }
         public override void Offset(int dx, int dy)
