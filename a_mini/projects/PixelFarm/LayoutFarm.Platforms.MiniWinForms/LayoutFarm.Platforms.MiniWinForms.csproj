@@ -40,6 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\LayoutFarm.PlatformBase\BootStrapSkia.cs">
+      <Link>0_Platform\BootStrapSkia.cs</Link>
+    </Compile>
     <Compile Include="..\layoutfarm.platformbase\CanvasViewport.cs">
       <Link>0_Shared\CanvasViewport.cs</Link>
     </Compile>
@@ -48,9 +51,6 @@
     </Compile>
     <Compile Include="..\layoutfarm.platformbase\InnerViewportKind.cs">
       <Link>0_Shared\InnerViewportKind.cs</Link>
-    </Compile>
-    <Compile Include="..\layoutfarm.platformbase\platformbootstrap\BootStrapSkia.cs">
-      <Link>0_Platform\BootStrapSkia.cs</Link>
     </Compile>
     <Compile Include="..\LayoutFarm.Platforms.WinForms\0_Platform\UIPlatformWinForms.cs">
       <Link>0_Platform\UIPlatformWinForms.cs</Link>
