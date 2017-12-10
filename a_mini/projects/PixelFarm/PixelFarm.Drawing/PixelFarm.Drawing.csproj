@@ -136,14 +136,14 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\5_Agg_DrawElements\VertexSource\VertexStoreBuilder.cs">
       <Link>2_DrawingCanvas\5_AggDrawingElements\VertexSource\VertexStoreBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\6_Drawing_Fonts\ITextPrinter.cs">
-      <Link>2_DrawingCanvas\6_DrawingFonts\ITextPrinter.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCanvas\6_Typography\ITextPrinter.cs">
+      <Link>2_DrawingCanvas\6_Typography\ITextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\6_Drawing_Fonts\ScriptCode.cs">
-      <Link>2_DrawingCanvas\6_DrawingFonts\ScriptCode.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCanvas\6_Typography\ScriptCode.cs">
+      <Link>2_DrawingCanvas\6_Typography\ScriptCode.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\6_Drawing_Fonts\WriteDirection.cs">
-      <Link>2_DrawingCanvas\6_DrawingFonts\WriteDirection.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCanvas\6_Typography\WriteDirection.cs">
+      <Link>2_DrawingCanvas\6_Typography\WriteDirection.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs">
       <Link>1_DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs</Link>

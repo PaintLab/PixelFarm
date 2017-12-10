@@ -1,12 +1,14 @@
 ﻿////MIT, 2014-2017, WinterDev
 
+ 
+
 namespace PixelFarm.Drawing
 {
-    /// <summary>
-    /// review this name again
-    /// </summary>
+     
     public interface IFonts
     {
+        //review this name again
+
         float MeasureWhitespace(RequestFont f);
         float MeasureBlankLineHeight(RequestFont f);
         Size MeasureString(char[] str, int startAt, int len, RequestFont font);
@@ -17,9 +19,10 @@ namespace PixelFarm.Drawing
             int len, RequestFont font, int[] glyphXAdvances);
     }
 
-}
-namespace PixelFarm.Drawing.Fonts
-{
+
+    /// <summary>
+    /// for printing a string to target canvas
+    /// </summary>
     public interface ITextPrinter
     {
 

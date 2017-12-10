@@ -1,8 +1,7 @@
 ﻿using System;
 using PixelFarm.Drawing;
 namespace PixelFarm
-{
-
+{   
     public static class AggColorExtensions
     {
         public const int COVER_SHIFT = 8;

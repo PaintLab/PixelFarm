@@ -150,9 +150,9 @@
     </Compile>
     <Compile Include="2_Canvas\AggColorExtensions.cs" />
     <Compile Include="2_Canvas\CanvasPainter.cs" />
-    <Compile Include="6_Drawing_Fonts\ITextPrinter.cs" />
-    <Compile Include="6_Drawing_Fonts\ScriptCode.cs" />
-    <Compile Include="6_Drawing_Fonts\WriteDirection.cs" />
+    <Compile Include="6_Typography\ITextPrinter.cs" />
+    <Compile Include="6_Typography\ScriptCode.cs" />
+    <Compile Include="6_Typography\WriteDirection.cs" />
     <Compile Include="1_Vectors\5_Clipper\cliper.cs" />
     <Compile Include="3_Agg_PixelBuffer\ActualImage.cs" />
     <Compile Include="3_Agg_PixelBuffer\AggMemMx.cs" />
