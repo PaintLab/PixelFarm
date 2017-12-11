@@ -481,13 +481,17 @@ namespace Typography.TextLayout
             int j = outputGlyphPlans.Count;
             Typeface currentTypeface = glyphLayout.Typeface;
 
+
+            Typography.OpenFont.Extensions.LineSpacingChoice sel_linespcingChoice;
             if (j == 0)
             {
                 //not scale
+
                 strBox = new MeasuredStringBox(0,
                     currentTypeface.Ascender * scale,
                     currentTypeface.Descender * scale,
-                    currentTypeface.LineGap * scale);
+                    currentTypeface.LineGap * scale,
+                    Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface, out sel_linespcingChoice) * scale);
 
             }
             else
@@ -496,7 +500,8 @@ namespace Typography.TextLayout
                 strBox = new MeasuredStringBox((lastOne.ExactRight) * scale,
                         currentTypeface.Ascender * scale,
                         currentTypeface.Descender * scale,
-                        currentTypeface.LineGap * scale);
+                        currentTypeface.LineGap * scale,
+                        Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface, out sel_linespcingChoice) * scale);
             }
         }
     }

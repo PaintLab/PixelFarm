@@ -7,6 +7,8 @@ using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
 using Typography.TextLayout;
 using Typography.TextServices;
+using Typography.OpenFont.Extensions;
+
 
 namespace LayoutFarm
 {
@@ -26,9 +28,10 @@ namespace LayoutFarm
 
         public OpenFontIFonts()
         {
+            //
+
 
             _system_id = PixelFarm.Drawing.Internal.RequestFontCacheAccess.GetNewCacheSystemId();
-
             typefaceStore = new TypefaceStore();
             typefaceStore.FontCollection = InstalledFontCollection.GetSharedFontCollection(null);
             glyphLayout = new GlyphLayout(); //create glyph layout with default value
@@ -103,18 +106,50 @@ namespace LayoutFarm
 
             //measure string at specific px scale
             glyphLayout.MeasureString(str, startAt, len, out result, scale);
-            return new Size((int)result.width, (int)result.CalculateLineHeight());
+            return new Size((int)result.width, (int)Math.Round(result.CalculateLineHeight()));
         }
 
         public int MeasureBlankLineHeight(RequestFont font)
         {
+            LineSpacingChoice sel_linespcingChoice;
             Typeface typeface = ResolveTypeface(font);
-            return (int)(typeface.LineSpacing * typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
+            return (int)(typeface.CalculateRecommendLineSpacing(out sel_linespcingChoice) *
+                typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
         }
         float IFonts.MeasureBlankLineHeight(RequestFont font)
         {
+            LineSpacingChoice sel_linespcingChoice;
             Typeface typeface = ResolveTypeface(font);
-            return typeface.LineSpacing * typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+            return (int)(typeface.CalculateRecommendLineSpacing(out sel_linespcingChoice) *
+                typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
         }
+
+
+
+        //-----------------------------------
+        static OpenFontIFonts()
+        {
+
+            CurrentEnv.CurrentOSName = (IsOnMac()) ?
+                         CurrentOSName.Mac :
+                         CurrentOSName.Windows;
+        }
+        static bool _s_evaluatedOS;
+        static bool _s_onMac;
+        static bool IsOnMac()
+        {
+
+            if (_s_evaluatedOS) return _s_onMac;
+            // 
+            _s_evaluatedOS = true;
+#if NETCORE
+                return _s_onMac=  System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(
+                  System.Runtime.InteropServices.OSPlatform.OSX);                    
+#else
+
+            return _s_onMac = (System.Environment.OSVersion.Platform == System.PlatformID.MacOSX);
+#endif
+        }
+
     }
 }
