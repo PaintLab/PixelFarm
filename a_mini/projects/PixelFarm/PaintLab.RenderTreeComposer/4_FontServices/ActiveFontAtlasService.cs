@@ -56,10 +56,10 @@ namespace PixelFarm.DrawingGL
                 creationParams.scriptLang = scLang;
                 creationParams.writeDirection = WriteDirection.LTR;//default 
                 //TODO: review here, langBits can be created with scriptLang ?
-                creationParams.langBits = new Typography.OpenFont.Tables.UnicodeLangBits[]
+                creationParams.langBits = new Typography.OpenFont.UnicodeLangBits[]
                 {
-                    Typography.OpenFont.Tables.UnicodeLangBits.BasicLatin,//0-127 
-                    Typography.OpenFont.Tables.UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
+                    Typography.OpenFont.UnicodeLangBits.BasicLatin,//0-127 
+                    Typography.OpenFont.UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
                 };
                 //
                 creationParams.textureKind = Typography.Rendering.TextureKind.AggSubPixel;
