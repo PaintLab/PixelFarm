@@ -62,7 +62,7 @@ namespace Typography.TextBreak
             BreakingEngine currentEngine = breakingEngine = SelectEngine(charBuff[startAt]);
             //----------------------------------------
             //select breaking engine
-            for (;;)
+            for (; ; )
             {
                 //----------------------------------------
                 currentEngine.BreakWord(visitor, charBuff, startAt, charBuff.Length - startAt);
@@ -119,7 +119,7 @@ namespace Typography.TextBreak
             {
                 BreakSpan sp = new BreakSpan();
                 sp.startAt = c_index;
-                sp.len = breakAtList[i] - c_index;
+                sp.len = (ushort)(breakAtList[i] - c_index);
                 c_index += sp.len;
                 i++;
                 yield return sp;
@@ -129,7 +129,7 @@ namespace Typography.TextBreak
             {
                 BreakSpan sp = new BreakSpan();
                 sp.startAt = c_index;
-                sp.len = textLength - c_index;
+                sp.len = (ushort)(textLength - c_index);
                 yield return sp;
             }
         }

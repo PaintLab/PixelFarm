@@ -8,7 +8,7 @@ using Typography.OpenFont;
 using Typography.TextLayout;
 using Typography.TextServices;
 using Typography.OpenFont.Extensions;
-
+using Typography.TextBreak;
 
 namespace LayoutFarm
 {
@@ -22,6 +22,7 @@ namespace LayoutFarm
         List<UserCharToGlyphIndexMap> userCharToGlyphMapList;
 
         Dictionary<int, Typeface> _resolvedTypefaceCache = new Dictionary<int, Typeface>();
+        CustomBreaker _textBreaker;
 
 
         readonly int _system_id;
@@ -35,8 +36,6 @@ namespace LayoutFarm
             glyphLayout = new GlyphLayout(); //create glyph layout with default value
             userGlyphPlanList = new List<GlyphPlan>();
             userCharToGlyphMapList = new List<UserCharToGlyphIndexMap>();
-
-
 
             //script lang has a potentail effect on how the layout engine instance work.
             //
@@ -61,8 +60,6 @@ namespace LayoutFarm
                 //set script lang to the engine
                 glyphLayout.ScriptLang = scLang;
             }
-
-
         }
         public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
         {
@@ -124,9 +121,34 @@ namespace LayoutFarm
         }
         public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
         {
-            //input string may contain more than 1 script lang,
+            //NOET:at this moment, simple operation
+            //may not be simple... 
+
+            //-------------------
+            //input string may contain more than 1 script lang
             //user can parse it by other parser
             //but in this code, we use our Typography' parser
+            //-------------------
+            //user must setup the CustomBreakerBuilder before use              
+            if (_textBreaker == null)
+            {
+                _textBreaker = CustomBreakerBuilder.NewCustomBreaker();
+
+
+                //--------------------------
+                _textBreaker.BreakWords(str, 0);
+                foreach (BreakSpan breakSpan in _textBreaker.GetBreakSpanIter())
+                {
+                    //at this point
+                    //we assume that 1 break span 
+                    //has 1 script lang, and we examine it
+                    //with sample char
+                    char sample = str[breakSpan.startAt];
+
+                }
+                //--------------------------
+            }
+
 
 
             Typeface typeface = ResolveTypeface(font);
