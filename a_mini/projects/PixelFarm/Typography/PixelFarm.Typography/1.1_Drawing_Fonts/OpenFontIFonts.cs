@@ -124,6 +124,11 @@ namespace LayoutFarm
         }
         public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
         {
+            //input string may contain more than 1 script lang,
+            //user can parse it by other parser
+            //but in this code, we use our Typography' parser
+
+
             Typeface typeface = ResolveTypeface(font);
             glyphLayout.Typeface = typeface;
             MeasuredStringBox result;
