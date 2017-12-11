@@ -33,6 +33,57 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\BreakEngine.cs">
+      <Link>Typography.TextBreak\BreakEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\BreakingEngine.cs">
+      <Link>Typography.TextBreak\BreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\CustomBreaker.cs">
+      <Link>Typography.TextBreak\CustomBreaker.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\CustomBreakerBuilder.cs">
+      <Link>Typography.TextBreak\CustomBreakerBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\CustomDict.cs">
+      <Link>Typography.TextBreak\CustomDict.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\EngBreakingEngine.cs">
+      <Link>Typography.TextBreak\EngBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\LaoDictionaryBreakingEngine.cs">
+      <Link>Typography.TextBreak\LaoDictionaryBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\ThaiDictionaryBreakingEngine.cs">
+      <Link>Typography.TextBreak\ThaiDictionaryBreakingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextBreak\Typography.TextBreak\WordVisitor.cs">
+      <Link>Typography.TextBreak\WordVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextFlow\Dom\EditableTextBlockLayoutEngine.cs">
+      <Link>Typography.TextFlow\Dom\EditableTextBlockLayoutEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextFlow\Dom\EditableTextLine.cs">
+      <Link>Typography.TextFlow\Dom\EditableTextLine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextFlow\Dom\IRun.cs">
+      <Link>Typography.TextFlow\Dom\IRun.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextFlow\Dom\TextBuffer.cs">
+      <Link>Typography.TextFlow\Dom\TextBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextFlow\Dom\TextRun.cs">
+      <Link>Typography.TextFlow\Dom\TextRun.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextFlow\Layout\SingleLineLayoutEngine.cs">
+      <Link>Typography.TextFlow\Layout\SingleLineLayoutEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextFlow\Simple\SmallLine.cs">
+      <Link>Typography.TextFlow\Simple\SmallLine.cs</Link>
+    </Compile>
+    <Compile Include="..\Typography.TextFlow\TextLexer\TextLexer.cs">
+      <Link>Typography.TextFlow\TextLexer\TextLexer.cs</Link>
+    </Compile>
     <Compile Include="FontStoreAndManagment\IFontLoader.cs" />
     <Compile Include="FontStoreAndManagment\OpenFontStore.cs" />
     <Compile Include="IcuData\LangCodes.cs" />
