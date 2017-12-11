@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts; 
+using PixelFarm.Drawing.Fonts;
 
 using Typography.OpenFont;
 using Typography.TextLayout;
@@ -13,7 +13,7 @@ namespace LayoutFarm
     public class OpenFontIFonts : IFonts
     {
 
-        IFontLoader _fontloader;
+
         TypefaceStore typefaceStore;
         GlyphLayout glyphLayout;
         List<GlyphPlan> userGlyphPlanList;
@@ -24,9 +24,9 @@ namespace LayoutFarm
 
         readonly int _system_id;
 
-        public OpenFontIFonts(IFontLoader fontloader)
+        public OpenFontIFonts()
         {
-            _fontloader = fontloader;
+
             _system_id = PixelFarm.Drawing.Internal.RequestFontCacheAccess.GetNewCacheSystemId();
 
             typefaceStore = new TypefaceStore();
@@ -103,8 +103,8 @@ namespace LayoutFarm
 
             //measure string at specific px scale
             glyphLayout.MeasureString(str, startAt, len, out result, scale);
-            return new Size((int)result.width, (int)result.CalculateLineHeight()); 
-        } 
+            return new Size((int)result.width, (int)result.CalculateLineHeight());
+        }
 
         public int MeasureBlankLineHeight(RequestFont font)
         {
