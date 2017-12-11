@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="FontStoreAndManagment\IFontLoader.cs" />
     <Compile Include="FontStoreAndManagment\OpenFontStore.cs" />
+    <Compile Include="IcuData\LangCodes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShapingEngine\CRC32.cs" />
     <Compile Include="ShapingEngine\TextShapingServices.cs" />

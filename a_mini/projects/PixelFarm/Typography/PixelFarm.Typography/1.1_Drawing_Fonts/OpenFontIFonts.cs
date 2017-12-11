@@ -28,15 +28,41 @@ namespace LayoutFarm
 
         public OpenFontIFonts()
         {
-            //
-
-
+            // 
             _system_id = PixelFarm.Drawing.Internal.RequestFontCacheAccess.GetNewCacheSystemId();
             typefaceStore = new TypefaceStore();
             typefaceStore.FontCollection = InstalledFontCollection.GetSharedFontCollection(null);
             glyphLayout = new GlyphLayout(); //create glyph layout with default value
             userGlyphPlanList = new List<GlyphPlan>();
             userCharToGlyphMapList = new List<UserCharToGlyphIndexMap>();
+
+
+
+            //script lang has a potentail effect on how the layout engine instance work.
+            //
+            //so try to set default script lang to the layout engine instance
+            //from current system default value...
+            //user can set this to other choices...
+            //eg. directly specific the script lang 
+
+            //System.Text.Encoding defaultEncoding = System.Text.Encoding.Default;
+            var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
+            Typography.OpenFont.ScriptLang scLang = null;
+            string langFullName;
+            if (IcuData.TryGetFullLanguageNameFromLangCode(
+                 currentCulture.TwoLetterISOLanguageName,
+                 currentCulture.ThreeLetterISOLanguageName,
+                 out langFullName))
+            {
+                scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLangFromLanguageName(langFullName);
+            }
+            if (scLang != null)
+            {
+                //set script lang to the engine
+                glyphLayout.ScriptLang = scLang;
+            }
+
+
         }
         public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
         {
