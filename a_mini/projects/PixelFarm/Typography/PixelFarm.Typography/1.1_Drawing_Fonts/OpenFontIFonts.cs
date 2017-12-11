@@ -26,6 +26,7 @@ namespace LayoutFarm
 
 
         readonly int _system_id;
+        Typography.OpenFont.ScriptLang _defaultScLang;
 
         public OpenFontIFonts()
         {
@@ -45,6 +46,8 @@ namespace LayoutFarm
             //eg. directly specific the script lang 
 
             //System.Text.Encoding defaultEncoding = System.Text.Encoding.Default;
+            _defaultScLang = glyphLayout.ScriptLang;
+
             var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
             Typography.OpenFont.ScriptLang scLang = null;
             string langFullName;
@@ -54,12 +57,16 @@ namespace LayoutFarm
                  out langFullName))
             {
                 scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLangFromLanguageName(langFullName);
+
             }
             if (scLang != null)
             {
                 //set script lang to the engine
                 glyphLayout.ScriptLang = scLang;
+                _defaultScLang = scLang;
             }
+
+
         }
         public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
         {
@@ -135,6 +142,7 @@ namespace LayoutFarm
                 _textBreaker = CustomBreakerBuilder.NewCustomBreaker();
 
 
+
                 //--------------------------
                 _textBreaker.BreakWords(str, 0);
                 foreach (BreakSpan breakSpan in _textBreaker.GetBreakSpanIter())
@@ -144,7 +152,18 @@ namespace LayoutFarm
                     //has 1 script lang, and we examine it
                     //with sample char
                     char sample = str[breakSpan.startAt];
+                    //
+                    Typography.OpenFont.ScriptLang found;
+                    if (Typography.OpenFont.ScriptLangs.TryGetScriptLang(sample, out found))
+                    {
 
+                    }
+                    else
+                    {
+                        //not found
+                        //use default
+                        found = _defaultScLang;
+                    }
                 }
                 //--------------------------
             }
