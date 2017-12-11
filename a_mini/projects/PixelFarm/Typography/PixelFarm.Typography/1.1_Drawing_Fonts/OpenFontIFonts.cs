@@ -140,34 +140,30 @@ namespace LayoutFarm
             if (_textBreaker == null)
             {
                 _textBreaker = CustomBreakerBuilder.NewCustomBreaker();
-
-
-
-                //--------------------------
-                _textBreaker.BreakWords(str, 0);
-                foreach (BreakSpan breakSpan in _textBreaker.GetBreakSpanIter())
-                {
-                    //at this point
-                    //we assume that 1 break span 
-                    //has 1 script lang, and we examine it
-                    //with sample char
-                    char sample = str[breakSpan.startAt];
-                    //
-                    Typography.OpenFont.ScriptLang found;
-                    if (Typography.OpenFont.ScriptLangs.TryGetScriptLang(sample, out found))
-                    {
-
-                    }
-                    else
-                    {
-                        //not found
-                        //use default
-                        found = _defaultScLang;
-                    }
-                }
-                //--------------------------
             }
 
+            _textBreaker.BreakWords(str, 0);
+            foreach (BreakSpan breakSpan in _textBreaker.GetBreakSpanIter())
+            {
+                //at this point
+                //we assume that 1 break span 
+                //has 1 script lang, and we examine it
+                //with sample char
+                char sample = str[breakSpan.startAt];
+                //
+                Typography.OpenFont.ScriptLang found;
+                if (Typography.OpenFont.ScriptLangs.TryGetScriptLang(sample, out found))
+                {
+
+                }
+                else
+                {
+                    //not found
+                    //use default
+                    found = _defaultScLang;
+                }
+            }
+            //--------------------------
 
 
             Typeface typeface = ResolveTypeface(font);
