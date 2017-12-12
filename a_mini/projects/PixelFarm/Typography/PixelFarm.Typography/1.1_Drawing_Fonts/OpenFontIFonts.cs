@@ -85,7 +85,7 @@ namespace LayoutFarm
 
             //
             //
-            float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+            //float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
             int endBefore = startAt + len;
 
             for (int i = startAt; i < endBefore; ++i)

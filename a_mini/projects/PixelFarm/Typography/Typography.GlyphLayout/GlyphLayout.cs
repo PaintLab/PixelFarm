@@ -67,6 +67,9 @@ namespace Typography.TextLayout
                 return _glyphPlans.Count;
             }
         }
+
+
+
     }
     public enum PositionTechnique
     {
@@ -483,11 +486,11 @@ namespace Typography.TextLayout
                   char[] textBuffer,
                   int startAt,
                   int len,
-                  GlyphPlanList userGlyphPlanList,
+                  GlyphPlanList outputGlyphPlanList,
                   List<UserCharToGlyphIndexMap> charToGlyphMapList)
         {
             //generate glyph plan based on its current setting
-            glyphLayout.Layout(textBuffer, startAt, len, userGlyphPlanList);
+            glyphLayout.Layout(textBuffer, startAt, len, outputGlyphPlanList);
             //note that we print to userGlyphPlanList
             //---------------- 
             //3. user char to glyph index map
@@ -525,8 +528,21 @@ namespace Typography.TextLayout
             }
             else
             {
-                GlyphPlan lastOne = outputGlyphPlans[j - 1];
-                strBox = new MeasuredStringBox(lastOne.ExactRight * scale,
+                //TEST, 
+                //if you want to snap each glyph to grid (1px or 0.5px) by ROUNDING
+                //we can do it here,this produces a predictable caret position result
+                //
+
+                int accumW = 0;
+                for (int i = 0; i < j; ++i)
+                {
+                    GlyphPlan glyphPlan = outputGlyphPlans[i];
+                    float scaleW = glyphPlan.AdvanceX * scale;
+                    //select proper integer version
+                    accumW += (int)Math.Round(scaleW);
+                }
+
+                strBox = new MeasuredStringBox(accumW,
                         currentTypeface.Ascender * scale,
                         currentTypeface.Descender * scale,
                         currentTypeface.LineGap * scale,
