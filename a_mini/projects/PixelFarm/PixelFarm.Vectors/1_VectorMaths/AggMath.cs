@@ -25,8 +25,63 @@
 using System;
 namespace PixelFarm.Agg
 {
-    partial class AggMath
+    public static partial class AggMath
     {
+        public static bool is_equal_eps(double v1, double v2, double epsilon)
+        {
+            return Math.Abs(v1 - v2) <= (epsilon);
+        }
+        //------------------------------------------------------------------deg2rad
+        public static double deg2rad(double deg)
+        {
+            return deg * (Math.PI / 180.0);
+        }
+
+        //------------------------------------------------------------------rad2deg
+        public static double rad2deg(double rad)
+        {
+            return rad * (180.0 / Math.PI);
+        }
+
+        public static int iround(double v)
+        {
+            unchecked
+            {
+                return (int)((v < 0.0) ? v - 0.5 : v + 0.5);
+            }
+        }
+        public static int iround_f(float v)
+        {
+            unchecked
+            {
+                return (int)((v < 0.0) ? v - 0.5 : v + 0.5);
+            }
+        }
+        public static int iround(double v, int saturationLimit)
+        {
+            if (v < (double)(-saturationLimit)) return -saturationLimit;
+            if (v > (double)(saturationLimit)) return saturationLimit;
+            return iround(v);
+        }
+
+        public static int uround(double v)
+        {
+            return (int)(uint)(v + 0.5);
+        }
+        public static int uround_f(float v)
+        {
+            return (int)(uint)(v + 0.5);
+        }
+        public static int ufloor(double v)
+        {
+            return (int)(uint)(v);
+        }
+
+        public static int uceil(double v)
+        {
+            return (int)(uint)(Math.Ceiling(v));
+        }
+
         //------------------------------------------------------vertex_dist_epsilon
         // Coinciding points maximal distance (Epsilon)
         public const double VERTEX_DISTANCE_EPSILON = 1e-14;
