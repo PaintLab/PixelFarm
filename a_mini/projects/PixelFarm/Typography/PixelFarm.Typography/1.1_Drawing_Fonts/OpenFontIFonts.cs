@@ -13,7 +13,7 @@ using Typography.TextBreak;
 
 namespace LayoutFarm
 {
-    public class OpenFontIFonts : IFonts
+    public class OpenFontTextService : ITextService
     {
         //TODO: this class should be a Typography Service 
         //plan: remove dependcy on IFonts here
@@ -30,7 +30,7 @@ namespace LayoutFarm
         readonly int _system_id;
         Typography.OpenFont.ScriptLang _defaultScLang;
 
-        public OpenFontIFonts()
+        public OpenFontTextService()
         {
             // 
             _system_id = PixelFarm.Drawing.Internal.RequestFontCacheAccess.GetNewCacheSystemId();
@@ -230,7 +230,7 @@ namespace LayoutFarm
             return (int)(typeface.CalculateRecommendLineSpacing(out sel_linespcingChoice) *
                 typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
         }
-        float IFonts.MeasureBlankLineHeight(RequestFont font)
+        float ITextService.MeasureBlankLineHeight(RequestFont font)
         {
             LineSpacingChoice sel_linespcingChoice;
             Typeface typeface = ResolveTypeface(font);
@@ -241,7 +241,7 @@ namespace LayoutFarm
 
 
         //-----------------------------------
-        static OpenFontIFonts()
+        static OpenFontTextService()
         {
 
             CurrentEnv.CurrentOSName = (IsOnMac()) ?

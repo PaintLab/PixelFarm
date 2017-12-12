@@ -5,7 +5,7 @@ namespace PixelFarm.Drawing
 
     //implement this interface to handler font measurement/ glyph layout position
     //see current implementation in Gdi32IFonts and OpenFontIFonts
-    public interface IFonts
+    public interface ITextService
     {
         //review this name again
         float MeasureWhitespace(RequestFont f);
@@ -13,8 +13,7 @@ namespace PixelFarm.Drawing
         Size MeasureString(char[] str, int startAt, int len, RequestFont font);
         void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font,
             int[] outputXAdvaces, out int outputTotalW);
-    }
-
+    } 
 
     /// <summary>
     /// for printing a string to target canvas

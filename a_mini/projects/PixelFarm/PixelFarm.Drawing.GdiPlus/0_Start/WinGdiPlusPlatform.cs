@@ -19,7 +19,7 @@ namespace PixelFarm.Drawing.WinGdi
         {
             WinGdiFontFace.SetFontLoader(fontLoader);
         }
-        public static IFonts GetIFonts()
+        public static ITextService GetIFonts()
         {
             return new Gdi32IFonts();
         }
