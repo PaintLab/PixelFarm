@@ -7,7 +7,7 @@ namespace Typography.TextLayout
     public interface IPixelScaleLayout
     {
         void SetFont(Typeface typeface, float fontSizeInPoints);
-        void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList);
+        void Layout(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList);
     }
 
     public struct GlyphPlan
@@ -36,7 +36,41 @@ namespace Typography.TextLayout
 #endif
     }
 
+    public class GlyphPlanList
+    {
+        List<GlyphPlan> _glyphPlans = new List<GlyphPlan>();
+        float _accumAdvanceX;
 
+        public void Clear()
+        {
+            _glyphPlans.Clear();
+            _accumAdvanceX = 0;
+        }
+        public void Append(GlyphPlan glyphPlan)
+        {
+            _glyphPlans.Add(glyphPlan);
+            _accumAdvanceX += glyphPlan.AdvanceX;
+        }
+        public float AccumAdvanceX { get { return _accumAdvanceX; } }
+
+        public GlyphPlan this[int index]
+        {
+            get
+            {
+                return _glyphPlans[index];
+            }
+        }
+        public int Count
+        {
+            get
+            {
+                return _glyphPlans.Count;
+            }
+        }
+
+
+
+    }
     public enum PositionTechnique
     {
         None,
@@ -110,7 +144,7 @@ namespace Typography.TextLayout
 
         internal GlyphIndexList _inputGlyphs = new GlyphIndexList();
         internal GlyphPosStream _glyphPositions = new GlyphPosStream();
-        internal List<GlyphPlan> _myGlyphPlans = new List<GlyphPlan>();
+        internal GlyphPlanList _myGlyphPlans = new GlyphPlanList();
 
         public GlyphLayout()
         {
@@ -326,7 +360,7 @@ namespace Typography.TextLayout
         /// <summary>
         /// read latest layout output into outputGlyphPlanList
         /// </summary>
-        public static void ReadOutput(this GlyphLayout glyphLayout, List<GlyphPlan> outputGlyphPlanList)
+        public static void ReadOutput(this GlyphLayout glyphLayout, GlyphPlanList outputGlyphPlanList)
         {
             GlyphPosStream glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
             int finalGlyphCount = glyphPositions.Count;
@@ -344,7 +378,7 @@ namespace Typography.TextLayout
                     float exact_x = (float)(cx + glyph_pos.OffsetX * 1);
                     float exact_y = (float)(cy + glyph_pos.OffsetY * 1);
 
-                    outputGlyphPlanList.Add(new GlyphPlan(
+                    outputGlyphPlanList.Append(new GlyphPlan(
                         glyph_pos.glyphIndex,
                         exact_x,
                         exact_y,
@@ -375,7 +409,7 @@ namespace Typography.TextLayout
                     float exact_x = (float)(cx + glyph_pos.OffsetX * pxscale);
                     float exact_y = (float)(cy + glyph_pos.OffsetY * pxscale);
 
-                    outputGlyphPlanList.Add(new GlyphPlan(
+                    outputGlyphPlanList.Append(new GlyphPlan(
                         glyph_pos.glyphIndex,
                         exact_x,
                         exact_y,
@@ -437,13 +471,13 @@ namespace Typography.TextLayout
             //    cx += glyphPos.AdvWidth;
             //}
         }
-        public static void Layout(this GlyphLayout glyphLayout, Typeface typeface, char[] str, int startAt, int len, List<GlyphPlan> outputGlyphList)
+        public static void Layout(this GlyphLayout glyphLayout, Typeface typeface, char[] str, int startAt, int len, GlyphPlanList outputGlyphList)
         {
             glyphLayout.Typeface = typeface;
             glyphLayout.Layout(str, startAt, len);
             glyphLayout.ReadOutput(outputGlyphList);
         }
-        public static void Layout(this GlyphLayout glyphLayout, char[] str, int startAt, int len, List<GlyphPlan> outputGlyphList)
+        public static void Layout(this GlyphLayout glyphLayout, char[] str, int startAt, int len, GlyphPlanList outputGlyphList)
         {
             glyphLayout.Layout(str, startAt, len);
             glyphLayout.ReadOutput(outputGlyphList);
@@ -452,11 +486,11 @@ namespace Typography.TextLayout
                   char[] textBuffer,
                   int startAt,
                   int len,
-                  List<GlyphPlan> userGlyphPlanList,
+                  GlyphPlanList outputGlyphPlanList,
                   List<UserCharToGlyphIndexMap> charToGlyphMapList)
         {
             //generate glyph plan based on its current setting
-            glyphLayout.Layout(textBuffer, startAt, len, userGlyphPlanList);
+            glyphLayout.Layout(textBuffer, startAt, len, outputGlyphPlanList);
             //note that we print to userGlyphPlanList
             //---------------- 
             //3. user char to glyph index map
@@ -473,30 +507,45 @@ namespace Typography.TextLayout
                 int len, out MeasuredStringBox strBox, float scale)
         {
             //TODO: consider extension method
-            List<GlyphPlan> outputGlyphPlans = glyphLayout._myGlyphPlans;
+            GlyphPlanList outputGlyphPlans = glyphLayout._myGlyphPlans;
             outputGlyphPlans.Clear();
             glyphLayout.Layout(textBuffer, startAt, len, outputGlyphPlans);
 
             //
             int j = outputGlyphPlans.Count;
-            Typeface currentTypeface = glyphLayout.Typeface;
-
+            Typeface currentTypeface = glyphLayout.Typeface; 
             if (j == 0)
             {
                 //not scale
+
                 strBox = new MeasuredStringBox(0,
                     currentTypeface.Ascender * scale,
                     currentTypeface.Descender * scale,
-                    currentTypeface.LineGap * scale);
+                    currentTypeface.LineGap * scale,
+                    Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface) * scale);
 
             }
             else
             {
-                GlyphPlan lastOne = outputGlyphPlans[j - 1];
-                strBox = new MeasuredStringBox((lastOne.ExactRight) * scale,
+                //TEST, 
+                //if you want to snap each glyph to grid (1px or 0.5px) by ROUNDING
+                //we can do it here,this produces a predictable caret position result
+                //
+
+                int accumW = 0;
+                for (int i = 0; i < j; ++i)
+                {
+                    GlyphPlan glyphPlan = outputGlyphPlans[i];
+                    float scaleW = glyphPlan.AdvanceX * scale;
+                    //select proper integer version
+                    accumW += (int)Math.Round(scaleW);
+                }
+
+                strBox = new MeasuredStringBox(accumW,
                         currentTypeface.Ascender * scale,
                         currentTypeface.Descender * scale,
-                        currentTypeface.LineGap * scale);
+                        currentTypeface.LineGap * scale,
+                        Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface) * scale);
             }
         }
     }

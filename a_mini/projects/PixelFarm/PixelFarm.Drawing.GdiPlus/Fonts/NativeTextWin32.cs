@@ -370,6 +370,10 @@ namespace PixelFarm.Drawing.WinGdi
 
     class Gdi32IFonts : IFonts
     {
+        public Gdi32IFonts()
+        {
+
+        }
         public float MeasureWhitespace(RequestFont f)
         {
             return WinGdiTextService.MeasureWhitespace(f);
@@ -407,7 +411,7 @@ namespace PixelFarm.Drawing.WinGdi
             public readonly int FontNameIndex;
             public FontFaceKey(int fontNameIndex)
             {
-                this.FontNameIndex = fontNameIndex; 
+                this.FontNameIndex = fontNameIndex;
             }
 
         }

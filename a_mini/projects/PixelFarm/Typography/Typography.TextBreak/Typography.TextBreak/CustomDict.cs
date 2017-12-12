@@ -211,7 +211,8 @@ namespace Typography.TextBreak
     public struct BreakSpan
     {
         public int startAt;
-        public int len;
+        public ushort len;
+
     }
 
 

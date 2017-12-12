@@ -16,9 +16,9 @@ namespace LayoutFarm.Composers
         }
         public void DoBreak(char[] inputBuffer, int startIndex, int len, List<int> breakAtList)
         {
-            myTextBreaker.BreakWords(inputBuffer, startIndex);
+            myTextBreaker.BreakWords(inputBuffer, startIndex, len);
             myTextBreaker.LoadBreakAtList(breakAtList);
 
         }
-    } 
+    }
 }
