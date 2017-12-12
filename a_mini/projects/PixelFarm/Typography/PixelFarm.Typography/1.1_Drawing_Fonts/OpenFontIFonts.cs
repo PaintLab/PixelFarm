@@ -162,7 +162,7 @@ namespace LayoutFarm
 
 
             int cur_startAt = startAt;
-            _textBreaker.BreakWords(str, cur_startAt);
+            _textBreaker.BreakWords(str, cur_startAt, len);
 
             float accumW = 0;
             float accumH = 0;
