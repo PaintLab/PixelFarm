@@ -7,13 +7,13 @@ namespace PixelFarm.Drawing
     //see current implementation in Gdi32IFonts and OpenFontIFonts
     public interface ITextService
     {
-        //review this name again
+
         float MeasureWhitespace(RequestFont f);
         float MeasureBlankLineHeight(RequestFont f);
         Size MeasureString(char[] str, int startAt, int len, RequestFont font);
         void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font,
             int[] outputXAdvaces, out int outputTotalW);
-    } 
+    }
 
     /// <summary>
     /// for printing a string to target canvas

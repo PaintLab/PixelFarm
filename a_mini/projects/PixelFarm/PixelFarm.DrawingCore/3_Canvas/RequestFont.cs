@@ -31,7 +31,7 @@ using System;
 using System.Collections.Generic;
 namespace PixelFarm.Drawing
 {
-
+    [Flags]
     public enum FontStyle : byte
     {
         Regular = 0,
@@ -43,7 +43,7 @@ namespace PixelFarm.Drawing
 
 
     /// <summary>
-    /// user request for font
+    /// user request font specification
     /// </summary>
     public sealed class RequestFont
     {
@@ -135,8 +135,12 @@ namespace PixelFarm.Drawing
 
         static int s_POINTS_PER_INCH = 72; //default value
         static int s_PIXELS_PER_INCH = 96; //default value         
+
         public static float ConvEmSizeInPointsToPixels(float emsizeInPoint)
         {
+            //TODO: review here again, should be platform-specific funcs?
+
+
             return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * (float)s_PIXELS_PER_INCH);
         }
 
