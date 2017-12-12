@@ -453,7 +453,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
             VertexCmd cmd;
             double x, y;
-            for (;;)
+            for (; ; )
             {
                 cmd = GetNextVertex(out x, out y);
                 switch (cmd)

@@ -31,18 +31,15 @@ namespace PixelFarm.Agg
         {
             return Math.Abs(v1 - v2) <= (epsilon);
         }
-        //------------------------------------------------------------------deg2rad
-        public static double deg2rad(double deg)
+       
+        public static double deg2rad(double degree)
         {
-            return deg * (Math.PI / 180.0);
+            return degree * (Math.PI / 180d);
         }
-
-        //------------------------------------------------------------------rad2deg
-        public static double rad2deg(double rad)
+        public static double rad2deg(double degree)
         {
-            return rad * (180.0 / Math.PI);
+            return degree * (180d / Math.PI);
         }
-
         public static int iround(double v)
         {
             unchecked
@@ -81,7 +78,7 @@ namespace PixelFarm.Agg
         {
             return (int)(uint)(Math.Ceiling(v));
         }
-
+        
         //------------------------------------------------------vertex_dist_epsilon
         // Coinciding points maximal distance (Epsilon)
         public const double VERTEX_DISTANCE_EPSILON = 1e-14;
@@ -554,13 +551,6 @@ namespace PixelFarm.Agg
             }
         }
 
-        public static double DegToRad(double degree)
-        {
-            return degree * (Math.PI / 180d);
-        }
-        public static double RadToDeg(double degree)
-        {
-            return degree * (180d / Math.PI);
-        }
+       
     }
 }
