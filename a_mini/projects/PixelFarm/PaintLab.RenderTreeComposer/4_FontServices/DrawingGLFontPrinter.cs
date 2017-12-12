@@ -266,7 +266,7 @@ namespace PixelFarm.DrawingGL
 
 
         //-----------
-        List<GlyphPlan> glyphPlans = new List<GlyphPlan>();
+        GlyphPlanList glyphPlans = new GlyphPlanList();
         Typography.OpenFont.Typeface _typeface;
         float _finalTextureScale = 1;
         //-----------

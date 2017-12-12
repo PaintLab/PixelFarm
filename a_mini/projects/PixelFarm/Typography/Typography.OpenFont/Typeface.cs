@@ -471,6 +471,11 @@ namespace Typography.OpenFont
                 return hhea.Ascent + hhea.Descent + hhea.LineGap;
             }
 
+            public static int CalculateRecommendLineSpacing(this Typeface typeface)
+            {
+                LineSpacingChoice choice;
+                return CalculateRecommendLineSpacing(typeface, out choice);
+            }
             public static int CalculateRecommendLineSpacing(this Typeface typeface, out LineSpacingChoice choice)
             {
                 //check if we are on Windows env or macOS eve
@@ -532,17 +537,6 @@ namespace Typography.OpenFont
         }
 
 
-        public static class UnicodeLangBitsExtension
-        {
-            public static UnicodeRangeInfo ToUnicodeRangeInfo(this UnicodeLangBits unicodeLangBits)
-            {
-                long bits = (long)unicodeLangBits;
-                int bitpos = (int)(bits >> 32);
-                int lower32 = (int)(bits & 0xFFFFFFFF);
-                return new UnicodeRangeInfo(bitpos,
-                    lower32 >> 16,
-                    lower32 & 0xFFFF);
-            }
-        }
+
     }
 }

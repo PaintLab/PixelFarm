@@ -5,26 +5,30 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 
 using Typography.OpenFont;
-using Typography.TextLayout;
-using Typography.TextServices;
 using Typography.OpenFont.Extensions;
 
+using Typography.TextLayout;
+using Typography.TextServices;
+using Typography.TextBreak;
 
 namespace LayoutFarm
 {
     public class OpenFontIFonts : IFonts
     {
-
+        //TODO: this class should be a Typography Service 
+        //plan: remove dependcy on IFonts here
 
         TypefaceStore typefaceStore;
         GlyphLayout glyphLayout;
-        List<GlyphPlan> userGlyphPlanList;
+        GlyphPlanList userGlyphPlanList;
         List<UserCharToGlyphIndexMap> userCharToGlyphMapList;
 
         Dictionary<int, Typeface> _resolvedTypefaceCache = new Dictionary<int, Typeface>();
+        CustomBreaker _textBreaker;
 
 
         readonly int _system_id;
+        Typography.OpenFont.ScriptLang _defaultScLang;
 
         public OpenFontIFonts()
         {
@@ -33,10 +37,8 @@ namespace LayoutFarm
             typefaceStore = new TypefaceStore();
             typefaceStore.FontCollection = InstalledFontCollection.GetSharedFontCollection(null);
             glyphLayout = new GlyphLayout(); //create glyph layout with default value
-            userGlyphPlanList = new List<GlyphPlan>();
+            userGlyphPlanList = new GlyphPlanList();
             userCharToGlyphMapList = new List<UserCharToGlyphIndexMap>();
-
-
 
             //script lang has a potentail effect on how the layout engine instance work.
             //
@@ -46,6 +48,8 @@ namespace LayoutFarm
             //eg. directly specific the script lang 
 
             //System.Text.Encoding defaultEncoding = System.Text.Encoding.Default;
+            _defaultScLang = glyphLayout.ScriptLang;
+
             var currentCulture = System.Threading.Thread.CurrentThread.CurrentCulture;
             Typography.OpenFont.ScriptLang scLang = null;
             string langFullName;
@@ -55,11 +59,13 @@ namespace LayoutFarm
                  out langFullName))
             {
                 scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLangFromLanguageName(langFullName);
+
             }
             if (scLang != null)
             {
                 //set script lang to the engine
                 glyphLayout.ScriptLang = scLang;
+                _defaultScLang = scLang;
             }
 
 
@@ -122,24 +128,102 @@ namespace LayoutFarm
         {
             throw new NotImplementedException();
         }
+
+        List<MeasuredStringBox> _reusableMeasureBoxList = new List<MeasuredStringBox>();
+
         public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
         {
-            //input string may contain more than 1 script lang,
-            //user can parse it by other parser
-            //but in this code, we use our Typography' parser
-
-
             Typeface typeface = ResolveTypeface(font);
+
+            if (str.Length < 1)
+            {
+                return new Size(0, typeface.CalculateRecommendLineSpacing());
+            }
+
+            _reusableMeasureBoxList.Clear(); //reset 
+
             glyphLayout.Typeface = typeface;
-            MeasuredStringBox result;
             float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
             glyphLayout.FontSizeInPoints = font.SizeInPoints;
 
-            //measure string at specific px scale
-            glyphLayout.MeasureString(str, startAt, len, out result, scale);
-            return new Size((int)result.width, (int)Math.Round(result.CalculateLineHeight()));
-        }
+            //NOET:at this moment, simple operation
+            //may not be simple... 
 
+            //-------------------
+            //input string may contain more than 1 script lang
+            //user can parse it by other parser
+            //but in this code, we use our Typography' parser
+            //-------------------
+            //user must setup the CustomBreakerBuilder before use              
+            if (_textBreaker == null)
+            {
+                _textBreaker = CustomBreakerBuilder.NewCustomBreaker();
+            }
+
+
+            int cur_startAt = startAt;
+            _textBreaker.BreakWords(str, cur_startAt, len);
+
+            float accumW = 0;
+            float accumH = 0;
+
+
+
+            foreach (BreakSpan breakSpan in _textBreaker.GetBreakSpanIter())
+            {
+                //at this point
+                //we assume that 1 break span 
+                //has 1 script lang, and we examine it
+                //with sample char
+                char sample = str[breakSpan.startAt];
+                if (sample == ' ')
+                {
+                    //whitespace
+                    glyphLayout.ScriptLang = _defaultScLang;
+                }
+                else if (char.IsWhiteSpace(sample))
+                {
+                    //other whitespace
+                    glyphLayout.ScriptLang = _defaultScLang;
+                }
+                else
+                {
+                    //
+                    Typography.OpenFont.ScriptLang scLang;
+                    if (Typography.OpenFont.ScriptLangs.TryGetScriptLang(sample, out scLang))
+                    {
+                        //we should decide to use
+                        //current typeface
+                        //or ask for alternate typeface 
+                        //if  the current type face is not support the request scriptLang
+                        // 
+                    }
+                    else
+                    {
+                        //not found
+                        //use default
+                        scLang = _defaultScLang;
+                    }
+                    glyphLayout.ScriptLang = scLang;
+                }
+
+                MeasuredStringBox result;
+                //measure string at specific px scale
+
+                glyphLayout.MeasureString(str, breakSpan.startAt, breakSpan.len, out result, scale);
+                ConcatMeasureBox(ref accumW, ref accumH, ref result);
+            }
+            return new Size((int)accumW, (int)accumH);
+        }
+        static void ConcatMeasureBox(ref float accumW, ref float accumH, ref MeasuredStringBox measureBox)
+        {
+            accumW += measureBox.width;
+            float h = measureBox.CalculateLineHeight();
+            if (h > accumH)
+            {
+                accumH = h;
+            }
+        }
         public int MeasureBlankLineHeight(RequestFont font)
         {
             LineSpacingChoice sel_linespcingChoice;
