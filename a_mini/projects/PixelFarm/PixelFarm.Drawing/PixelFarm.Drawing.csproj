@@ -136,12 +136,6 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\6_Typography\ITextPrinter.cs">
       <Link>2_DrawingCanvas\6_Typography\ITextPrinter.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\6_Typography\ScriptCode.cs">
-      <Link>2_DrawingCanvas\6_Typography\ScriptCode.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\6_Typography\WriteDirection.cs">
-      <Link>2_DrawingCanvas\6_Typography\WriteDirection.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs">
       <Link>1_DrawingCore\2_Abstract_DrawingElements\Brushes_Pens.cs</Link>
     </Compile>

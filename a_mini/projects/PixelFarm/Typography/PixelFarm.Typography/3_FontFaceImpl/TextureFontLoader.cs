@@ -4,9 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using PixelFarm.Agg;
-using Typography.OpenFont;
-using Typography.OpenFont.Tables;
-using Typography.OpenFont.Extensions;
+using Typography.OpenFont; 
 
 using Typography.Contours;
 using Typography.Rendering;
@@ -23,6 +21,26 @@ namespace PixelFarm.Drawing.Fonts
         public float originalFontSizeInPoint;
         public UnicodeLangBits[] langBits;
         public HintTechnique hintTechnique;
+    }
+    public enum WriteDirection
+    {
+        Unknown,
+        /// <summary>
+        /// left-to-right
+        /// </summary>
+        LTR = 4,
+        /// <summary>
+        /// right-to-right
+        /// </summary>
+        RTL,
+        /// <summary>
+        /// top-to-bottom
+        /// </summary>
+        TTB,
+        /// <summary>
+        /// bottom-to-top
+        /// </summary>
+        BTT
     }
     public static class TextureFontLoader
     {
