@@ -24,7 +24,7 @@ namespace PixelFarm.Drawing.Fonts
         RequestFont _reqFont;
         //----------------------------------------------------------- 
         GlyphLayout _glyphLayout = new GlyphLayout();
-        List<GlyphPlan> _outputGlyphPlans = new List<GlyphPlan>();
+        GlyphPlanList _outputGlyphPlans = new GlyphPlanList();
         Typeface _currentTypeface;
         PixelScaleLayoutEngine _pxScaleEngine;
         GlyphMeshStore _glyphMeshStore;
@@ -156,13 +156,13 @@ namespace PixelFarm.Drawing.Fonts
 
         public override void DrawCaret(float x, float y)
         {
-           
+
             CanvasPainter p = this.TargetCanvasPainter;
             PixelFarm.Drawing.Color prevColor = p.StrokeColor;
             p.StrokeColor = PixelFarm.Drawing.Color.Red;
             p.Line(x, y, x, y + this.FontAscendingPx);
             p.StrokeColor = prevColor;
-             
+
         }
 
         void UpdateTypefaceAndGlyphBuilder()
@@ -231,7 +231,7 @@ namespace PixelFarm.Drawing.Fonts
             //restore prev origin
             canvasPainter.SetOrigin(ox, oy);
         }
-        public override void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, int startAt, int len, float x, float y)
+        public override void DrawFromGlyphPlans(GlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
         {
             CanvasPainter canvasPainter = this.TargetCanvasPainter;
             //Typeface typeface = _glyphPathBuilder.Typeface;
@@ -252,7 +252,7 @@ namespace PixelFarm.Drawing.Fonts
             bool hasColorGlyphs = (colrTable != null) && (cpalTable != null);
 
             //---------------------------------------------------
-            
+
             _glyphMeshStore.SetFont(_currentTypeface, fontSizePoint);
             //---------------------------------------------------
 
@@ -359,7 +359,7 @@ namespace PixelFarm.Drawing.Fonts
 
     public static class TextPrinterHelper
     {
-        public static void CopyGlyphPlans(RenderVxFormattedString renderVx, List<GlyphPlan> glyphPlans, float scale)
+        public static void CopyGlyphPlans(RenderVxFormattedString renderVx, GlyphPlanList glyphPlans, float scale)
         {
             int n = glyphPlans.Count;
             //copy 

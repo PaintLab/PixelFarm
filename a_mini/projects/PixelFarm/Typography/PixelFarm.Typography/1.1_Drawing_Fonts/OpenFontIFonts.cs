@@ -20,7 +20,7 @@ namespace LayoutFarm
 
         TypefaceStore typefaceStore;
         GlyphLayout glyphLayout;
-        List<GlyphPlan> userGlyphPlanList;
+        GlyphPlanList userGlyphPlanList;
         List<UserCharToGlyphIndexMap> userCharToGlyphMapList;
 
         Dictionary<int, Typeface> _resolvedTypefaceCache = new Dictionary<int, Typeface>();
@@ -37,7 +37,7 @@ namespace LayoutFarm
             typefaceStore = new TypefaceStore();
             typefaceStore.FontCollection = InstalledFontCollection.GetSharedFontCollection(null);
             glyphLayout = new GlyphLayout(); //create glyph layout with default value
-            userGlyphPlanList = new List<GlyphPlan>();
+            userGlyphPlanList = new GlyphPlanList();
             userCharToGlyphMapList = new List<UserCharToGlyphIndexMap>();
 
             //script lang has a potentail effect on how the layout engine instance work.

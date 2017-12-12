@@ -7,7 +7,7 @@ namespace Typography.TextLayout
     public interface IPixelScaleLayout
     {
         void SetFont(Typeface typeface, float fontSizeInPoints);
-        void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList);
+        void Layout(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList);
     }
 
     public struct GlyphPlan
@@ -36,7 +36,32 @@ namespace Typography.TextLayout
 #endif
     }
 
-
+    public class GlyphPlanList
+    {
+        List<GlyphPlan> _glyphPlans = new List<GlyphPlan>();
+        public void Clear()
+        {
+            _glyphPlans.Clear();
+        }
+        public void Append(GlyphPlan g)
+        {
+            _glyphPlans.Add(g);
+        }
+        public GlyphPlan this[int index]
+        {
+            get
+            {
+                return _glyphPlans[index];
+            }
+        }
+        public int Count
+        {
+            get
+            {
+                return _glyphPlans.Count;
+            }
+        }
+    }
     public enum PositionTechnique
     {
         None,
@@ -110,7 +135,7 @@ namespace Typography.TextLayout
 
         internal GlyphIndexList _inputGlyphs = new GlyphIndexList();
         internal GlyphPosStream _glyphPositions = new GlyphPosStream();
-        internal List<GlyphPlan> _myGlyphPlans = new List<GlyphPlan>();
+        internal GlyphPlanList _myGlyphPlans = new GlyphPlanList();
 
         public GlyphLayout()
         {
@@ -326,7 +351,7 @@ namespace Typography.TextLayout
         /// <summary>
         /// read latest layout output into outputGlyphPlanList
         /// </summary>
-        public static void ReadOutput(this GlyphLayout glyphLayout, List<GlyphPlan> outputGlyphPlanList)
+        public static void ReadOutput(this GlyphLayout glyphLayout, GlyphPlanList outputGlyphPlanList)
         {
             GlyphPosStream glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
             int finalGlyphCount = glyphPositions.Count;
@@ -344,7 +369,7 @@ namespace Typography.TextLayout
                     float exact_x = (float)(cx + glyph_pos.OffsetX * 1);
                     float exact_y = (float)(cy + glyph_pos.OffsetY * 1);
 
-                    outputGlyphPlanList.Add(new GlyphPlan(
+                    outputGlyphPlanList.Append(new GlyphPlan(
                         glyph_pos.glyphIndex,
                         exact_x,
                         exact_y,
@@ -375,7 +400,7 @@ namespace Typography.TextLayout
                     float exact_x = (float)(cx + glyph_pos.OffsetX * pxscale);
                     float exact_y = (float)(cy + glyph_pos.OffsetY * pxscale);
 
-                    outputGlyphPlanList.Add(new GlyphPlan(
+                    outputGlyphPlanList.Append(new GlyphPlan(
                         glyph_pos.glyphIndex,
                         exact_x,
                         exact_y,
@@ -437,13 +462,13 @@ namespace Typography.TextLayout
             //    cx += glyphPos.AdvWidth;
             //}
         }
-        public static void Layout(this GlyphLayout glyphLayout, Typeface typeface, char[] str, int startAt, int len, List<GlyphPlan> outputGlyphList)
+        public static void Layout(this GlyphLayout glyphLayout, Typeface typeface, char[] str, int startAt, int len, GlyphPlanList outputGlyphList)
         {
             glyphLayout.Typeface = typeface;
             glyphLayout.Layout(str, startAt, len);
             glyphLayout.ReadOutput(outputGlyphList);
         }
-        public static void Layout(this GlyphLayout glyphLayout, char[] str, int startAt, int len, List<GlyphPlan> outputGlyphList)
+        public static void Layout(this GlyphLayout glyphLayout, char[] str, int startAt, int len, GlyphPlanList outputGlyphList)
         {
             glyphLayout.Layout(str, startAt, len);
             glyphLayout.ReadOutput(outputGlyphList);
@@ -452,7 +477,7 @@ namespace Typography.TextLayout
                   char[] textBuffer,
                   int startAt,
                   int len,
-                  List<GlyphPlan> userGlyphPlanList,
+                  GlyphPlanList userGlyphPlanList,
                   List<UserCharToGlyphIndexMap> charToGlyphMapList)
         {
             //generate glyph plan based on its current setting
@@ -473,7 +498,7 @@ namespace Typography.TextLayout
                 int len, out MeasuredStringBox strBox, float scale)
         {
             //TODO: consider extension method
-            List<GlyphPlan> outputGlyphPlans = glyphLayout._myGlyphPlans;
+            GlyphPlanList outputGlyphPlans = glyphLayout._myGlyphPlans;
             outputGlyphPlans.Clear();
             glyphLayout.Layout(textBuffer, startAt, len, outputGlyphPlans);
 
