@@ -471,6 +471,11 @@ namespace Typography.OpenFont
                 return hhea.Ascent + hhea.Descent + hhea.LineGap;
             }
 
+            public static int CalculateRecommendLineSpacing(this Typeface typeface)
+            {
+                LineSpacingChoice choice;
+                return CalculateRecommendLineSpacing(typeface, out choice);
+            }
             public static int CalculateRecommendLineSpacing(this Typeface typeface, out LineSpacingChoice choice)
             {
                 //check if we are on Windows env or macOS eve
@@ -532,6 +537,6 @@ namespace Typography.OpenFont
         }
 
 
-       
+
     }
 }

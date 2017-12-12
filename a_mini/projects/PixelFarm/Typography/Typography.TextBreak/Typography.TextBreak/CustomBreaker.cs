@@ -56,8 +56,15 @@ namespace Typography.TextBreak
         {
             //conver to char buffer 
             int j = charBuff.Length;
+            if(j < 1)
+            {
+                textLength = 0;
+                return;
+            }
             textLength = j;
+            
             visitor.LoadText(charBuff, 0);
+            
             //---------------------------------------- 
             BreakingEngine currentEngine = breakingEngine = SelectEngine(charBuff[startAt]);
             //----------------------------------------

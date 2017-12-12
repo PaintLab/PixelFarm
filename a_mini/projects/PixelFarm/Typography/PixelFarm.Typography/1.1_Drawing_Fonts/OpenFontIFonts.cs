@@ -5,16 +5,18 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 
 using Typography.OpenFont;
+using Typography.OpenFont.Extensions;
+
 using Typography.TextLayout;
 using Typography.TextServices;
-using Typography.OpenFont.Extensions;
 using Typography.TextBreak;
 
 namespace LayoutFarm
 {
     public class OpenFontIFonts : IFonts
     {
-
+        //TODO: this class should be a Typography Service 
+        //plan: remove dependcy on IFonts here
 
         TypefaceStore typefaceStore;
         GlyphLayout glyphLayout;
@@ -126,8 +128,24 @@ namespace LayoutFarm
         {
             throw new NotImplementedException();
         }
+
+        List<MeasuredStringBox> _reusableMeasureBoxList = new List<MeasuredStringBox>();
+
         public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
         {
+            Typeface typeface = ResolveTypeface(font);
+
+            if (str.Length < 1)
+            {
+                return new Size(0, typeface.CalculateRecommendLineSpacing());
+            }
+
+            _reusableMeasureBoxList.Clear(); //reset 
+
+            glyphLayout.Typeface = typeface;
+            float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+            glyphLayout.FontSizeInPoints = font.SizeInPoints;
+
             //NOET:at this moment, simple operation
             //may not be simple... 
 
@@ -142,7 +160,15 @@ namespace LayoutFarm
                 _textBreaker = CustomBreakerBuilder.NewCustomBreaker();
             }
 
-            _textBreaker.BreakWords(str, 0);
+
+            int cur_startAt = startAt;
+            _textBreaker.BreakWords(str, cur_startAt);
+
+            float accumW = 0;
+            float accumH = 0;
+
+
+
             foreach (BreakSpan breakSpan in _textBreaker.GetBreakSpanIter())
             {
                 //at this point
@@ -150,33 +176,54 @@ namespace LayoutFarm
                 //has 1 script lang, and we examine it
                 //with sample char
                 char sample = str[breakSpan.startAt];
-                //
-                Typography.OpenFont.ScriptLang found;
-                if (Typography.OpenFont.ScriptLangs.TryGetScriptLang(sample, out found))
+                if (sample == ' ')
                 {
-
+                    //whitespace
+                    glyphLayout.ScriptLang = _defaultScLang;
+                }
+                else if (char.IsWhiteSpace(sample))
+                {
+                    //other whitespace
+                    glyphLayout.ScriptLang = _defaultScLang;
                 }
                 else
                 {
-                    //not found
-                    //use default
-                    found = _defaultScLang;
+                    //
+                    Typography.OpenFont.ScriptLang scLang;
+                    if (Typography.OpenFont.ScriptLangs.TryGetScriptLang(sample, out scLang))
+                    {
+                        //we should decide to use
+                        //current typeface
+                        //or ask for alternate typeface 
+                        //if  the current type face is not support the request scriptLang
+                        // 
+                    }
+                    else
+                    {
+                        //not found
+                        //use default
+                        scLang = _defaultScLang;
+                    }
+                    glyphLayout.ScriptLang = scLang;
                 }
+
+                MeasuredStringBox result;
+                //measure string at specific px scale
+
+                glyphLayout.MeasureString(str, breakSpan.startAt, breakSpan.len, out result, scale);
+                ConcatMeasureBox(ref accumW, ref accumH, ref result);
             }
-            //--------------------------
-
-
-            Typeface typeface = ResolveTypeface(font);
-            glyphLayout.Typeface = typeface;
-            MeasuredStringBox result;
-            float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
-            glyphLayout.FontSizeInPoints = font.SizeInPoints;
-
-            //measure string at specific px scale
-            glyphLayout.MeasureString(str, startAt, len, out result, scale);
-            return new Size((int)result.width, (int)Math.Round(result.CalculateLineHeight()));
+            return new Size((int)accumW, (int)accumH);
         }
-
+        static void ConcatMeasureBox(ref float accumW, ref float accumH, ref MeasuredStringBox measureBox)
+        {
+            accumW += measureBox.width;
+            float h = measureBox.CalculateLineHeight();
+            if (h > accumH)
+            {
+                accumH = h;
+            }
+        }
         public int MeasureBlankLineHeight(RequestFont font)
         {
             LineSpacingChoice sel_linespcingChoice;
