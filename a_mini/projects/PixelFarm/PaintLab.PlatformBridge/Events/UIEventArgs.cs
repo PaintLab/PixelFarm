@@ -144,13 +144,7 @@ namespace LayoutFarm.UI
                 return y;
             }
         }
-
-        public void OffsetCanvasOrigin(int dx, int dy)
-        {
-            x += dx;
-            y += dy;
-        }
-        //-----------------------------------------------
+ 
         public bool IsCanceled
         {
             get;

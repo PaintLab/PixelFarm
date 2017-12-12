@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Diagnostics;
@@ -32,7 +30,6 @@ namespace OpenTK.Platform.X11
 {
     class X11Factory : IPlatformFactory
     {
-        #region Constructors
 
         public X11Factory()
         {
@@ -40,9 +37,7 @@ namespace OpenTK.Platform.X11
             Debug.Print("Initializing threaded X: {0}.", result != 0 ? "success" : "failed");
         }
 
-        #endregion
 
-        #region IPlatformFactory Members
 
         public virtual INativeWindow CreateNativeWindow(int x, int y, int width, int height, string title, GraphicsMode mode, GameWindowFlags options, DisplayDevice device)
         {
@@ -82,6 +77,5 @@ namespace OpenTK.Platform.X11
             throw new NotImplementedException();
         }
 
-        #endregion
     }
 }

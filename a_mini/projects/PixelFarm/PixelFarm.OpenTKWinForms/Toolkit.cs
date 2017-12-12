@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -35,12 +33,9 @@ namespace OpenTK
     /// </summary>
     public static class Toolkit
     {
-        #region Constructors
 
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Initializes OpenTK. This method is necessary only if you are using OpenTK
@@ -71,6 +66,5 @@ namespace OpenTK
         }
         static bool hasDefault;
         static object syncRoot = new object();
-        #endregion
     }
 }

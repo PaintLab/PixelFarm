@@ -59,7 +59,7 @@ namespace PixelFarm.Drawing.GLES2
             //MyWin32.SetViewportOrgEx(gxdc, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
             //gx.ReleaseHdc();
         }
-        public override void ClearSurface(PixelFarm.Drawing.Color c)
+        public override void Clear(PixelFarm.Drawing.Color c)
         {
             painter1.Clear(c);
         }

@@ -14,7 +14,6 @@
             base.Dispose(disposing);
         }
 
-        #region Component Designer generated code
 
         private void InitializeComponent()
         {
@@ -28,6 +27,5 @@
 
         }
 
-        #endregion
     }
 }

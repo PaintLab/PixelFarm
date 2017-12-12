@@ -13,7 +13,6 @@ namespace ImageTools.IO.Png
     /// </summary>
     sealed class PngColorTypeInformation
     {
-        #region Properties
 
         /// <summary>
         /// Gets an array with the bit depths that are supported for the color type
@@ -35,9 +34,7 @@ namespace ImageTools.IO.Png
         /// <value>The scanline factor.</value>
         public int ChannelsPerColor { get; private set; }
 
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PngColorTypeInformation"/> class with 
@@ -55,9 +52,7 @@ namespace ImageTools.IO.Png
             SupportedBitDepths = supportedBitDepths;
         }
 
-        #endregion
 
-        #region Methods
 
         /// <summary>
         /// Creates the color reader for the color type where this object is create for.
@@ -71,6 +66,5 @@ namespace ImageTools.IO.Png
             return ScanlineReaderFactory(palette, paletteAlpha);
         }
 
-        #endregion
     }
 }

@@ -80,7 +80,7 @@ namespace LayoutFarm.UI.Skia
 #endif
 
             //1. clear sk surface
-            mySkCanvas.ClearSurface(PixelFarm.Drawing.Color.White);
+            mySkCanvas.Clear(PixelFarm.Drawing.Color.White);
             //2. render to the surface
             UpdateAllArea(mySkCanvas, rootGraphics.TopWindowRenderBox);
             //3. copy bitmap buffer from the surface and render to final hdc
@@ -103,13 +103,13 @@ namespace LayoutFarm.UI.Skia
             //copy skia pixels to our dc
             unsafe
             {
-                Win32.MyWin32.memcpy((byte*)memdc.PPVBits, (byte*)h, internalSizeW * 4 * internalSizwH);
+                //Win32.MyWin32.memcpy((byte*)memdc.PPVBits, (byte*)h, internalSizeW * 4 * internalSizwH);
+                memdc.CopyPixelBitsToOutput((byte*)h);
             }
             backBmp.UnlockPixels();
 
-            //bitblt to target
-            Win32.MyWin32.BitBlt(hdc, 0, 0, internalSizeW, internalSizwH, memdc.DC, 0, 0, Win32.MyWin32.SRCCOPY);
-
+            //bitblt to target             
+            memdc.BitBltTo(hdc);
             //var bmpdata = tmpBmp.LockBits(new System.Drawing.Rectangle(0, 0, w1, h1),
             //    System.Drawing.Imaging.ImageLockMode.ReadWrite,
             //    System.Drawing.Imaging.PixelFormat.Format32bppArgb);

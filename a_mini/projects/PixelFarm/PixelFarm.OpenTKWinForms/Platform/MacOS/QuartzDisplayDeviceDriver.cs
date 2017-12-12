@@ -100,7 +100,6 @@ namespace OpenTK.Platform.MacOS
                 return IntPtr.Zero;
         }
 
-        #region IDisplayDeviceDriver Members
 
         Dictionary<IntPtr, IntPtr> storedModes = new Dictionary<IntPtr, IntPtr>();
         List<IntPtr> displaysCaptured = new List<IntPtr>();
@@ -155,6 +154,5 @@ namespace OpenTK.Platform.MacOS
             return false;
         }
 
-        #endregion
     }
 }

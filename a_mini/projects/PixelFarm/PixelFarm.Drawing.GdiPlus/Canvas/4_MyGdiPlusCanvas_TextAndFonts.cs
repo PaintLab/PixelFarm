@@ -52,7 +52,7 @@ namespace PixelFarm.Drawing.WinGdi
             //4.
             win32MemDc.ClearClipRect();
 
-            
+
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
@@ -73,7 +73,7 @@ namespace PixelFarm.Drawing.WinGdi
                 //2. offset to canvas origin 
                 clipRect.Offset(canvasOriginX, canvasOriginY);
                 //3. set rect rgn
-                win32MemDc.SetClipRect(clipRect);
+                win32MemDc.SetClipRect(clipRect.X, clipRect.Y, clipRect.Width, clipRect.Height);
 
                 unsafe
                 {
@@ -111,7 +111,7 @@ namespace PixelFarm.Drawing.WinGdi
                 //2. offset to canvas origin 
                 clipRect.Offset(canvasOriginX, canvasOriginY);
                 //3. set rect rgn
-                win32MemDc.SetClipRect(clipRect);
+                win32MemDc.SetClipRect(clipRect.X, clipRect.Y, clipRect.Width, clipRect.Height);
 
                 unsafe
                 {

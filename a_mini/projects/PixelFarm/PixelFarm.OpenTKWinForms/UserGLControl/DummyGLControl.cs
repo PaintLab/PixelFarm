@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library, except where noted.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using OpenTK.Graphics;
@@ -32,7 +30,6 @@ namespace OpenTK
 {
     class DummyGLControl : IGLControl
     {
-        #region IGLControl Members
 
         public IGraphicsContext CreateContext(int major, int minor, GraphicsContextFlags flags)
         {
@@ -49,6 +46,5 @@ namespace OpenTK
             get { return Utilities.CreateDummyWindowInfo(); }
         }
 
-        #endregion
     }
 }

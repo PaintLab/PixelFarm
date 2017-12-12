@@ -1,4 +1,3 @@
-#region --- License ---
 /*
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 
@@ -20,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-#endregion
 
 using System;
 using System.IO;
@@ -36,7 +34,6 @@ namespace OpenTK
     [Serializable, StructLayout(LayoutKind.Sequential)]
     public struct Vector4h : IEquatable<Vector4h>
     {
-        #region Public Fields
 
         /// <summary>The X component of the Half4.</summary>
         public Half X;
@@ -46,9 +43,7 @@ namespace OpenTK
         public Half Z;
         /// <summary>The W component of the Half4.</summary>
         public Half W;
-        #endregion Public Fields
 
-        #region Constructors
 
         /// <summary>
         /// The new Half4 instance will avoid conversion and copy directly from the Half parameters.
@@ -202,9 +197,7 @@ namespace OpenTK
             W = new Half(v.W, throwOnError);
         }
 
-        #endregion Constructors
 
-        #region Swizzle
 
         /// <summary>
         /// Gets or sets an OpenTK.Vector2h with the X and Y components of this instance.
@@ -218,9 +211,7 @@ namespace OpenTK
         [XmlIgnore]
         public Vector3h Xyz { get { return new Vector3h(X, Y, Z); } set { X = value.X; Y = value.Y; Z = value.Z; } }
 
-        #endregion
 
-        #region Half -> Single
 
         /// <summary>
         /// Returns this Half4 instance's contents as Vector4.
@@ -239,9 +230,7 @@ namespace OpenTK
             return new Vector4d(X, Y, Z, W);
         }
 
-        #endregion Half -> Single
 
-        #region Conversions
 
         /// <summary>Converts OpenTK.Vector4 to OpenTK.Half4.</summary>
         /// <param name="v4f">The Vector4 to convert.</param>
@@ -285,15 +274,11 @@ namespace OpenTK
             return result;
         }
 
-        #endregion Conversions
 
-        #region Constants
 
         /// <summary>The size in bytes for an instance of the Half4 struct is 8.</summary>
         public static readonly int SizeInBytes = 8;
-        #endregion Constants
 
-        //#region ISerializable
 
         ///// <summary>Constructor used by ISerializable to deserialize the object.</summary>
         ///// <param name="info"></param>
@@ -317,9 +302,7 @@ namespace OpenTK
         //    info.AddValue("W", this.W);
         //}
 
-        //#endregion ISerializable
 
-        #region Binary dump
 
         /// <summary>Updates the X,Y,Z and W components of this instance by reading from a Stream.</summary>
         /// <param name="bin">A BinaryReader instance associated with an open Stream.</param>
@@ -341,9 +324,7 @@ namespace OpenTK
             W.ToBinaryStream(bin);
         }
 
-        #endregion Binary dump
 
-        #region IEquatable<Half4> Members
 
         /// <summary>Returns a value indicating whether this instance is equal to a specified OpenTK.Half4 vector.</summary>
         /// <param name="other">OpenTK.Half4 to compare to this instance..</param>
@@ -353,9 +334,7 @@ namespace OpenTK
             return (this.X.Equals(other.X) && this.Y.Equals(other.Y) && this.Z.Equals(other.Z) && this.W.Equals(other.W));
         }
 
-        #endregion
 
-        #region ToString()
 
         /// <summary>Returns a string that contains this Half4's numbers in human-legible form.</summary>
         public override string ToString()
@@ -363,9 +342,7 @@ namespace OpenTK
             return String.Format("({0}, {1}, {2}, {3})", X.ToString(), Y.ToString(), Z.ToString(), W.ToString());
         }
 
-        #endregion ToString()
 
-        #region BitConverter
 
         /// <summary>Returns the Half4 as an array of bytes.</summary>
         /// <param name="h">The Half4 to convert.</param>
@@ -402,6 +379,5 @@ namespace OpenTK
             return h4;
         }
 
-        #endregion BitConverter
     }
 }

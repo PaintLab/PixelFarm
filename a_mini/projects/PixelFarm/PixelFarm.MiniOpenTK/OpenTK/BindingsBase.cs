@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -38,7 +36,6 @@ namespace OpenTK
     /// </summary>
     public abstract class BindingsBase
     {
-        #region Fields
 
         /// <summary>
         /// A reflection handle to the nested type that contains the function delegates.
@@ -53,9 +50,7 @@ namespace OpenTK
         /// </summary>
         readonly protected SortedList<string, MethodInfo> CoreFunctionMap = new SortedList<string, MethodInfo>();
         bool rebuildExtensionList = true;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new BindingsBase instance.
@@ -75,9 +70,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region Protected Members
 
         /// <summary>
         /// Gets or sets a <see cref="System.Boolean"/> that indicates whether the list of supported extensions may have changed.
@@ -112,11 +105,8 @@ namespace OpenTK
         /// unique objects, but all instances of ES10.GL should return the same object.</remarks>
         protected abstract object SyncRoot { get; }
 
-        #endregion
 
-        #region Internal Members
 
-        #region LoadEntryPoints
 
         public void LoadEntryPoints()
         {
@@ -150,9 +140,7 @@ namespace OpenTK
             time.Reset();
         }
 
-        #endregion
 
-        #region LoadEntryPoint
 
         internal bool LoadEntryPoint(string function)
         {
@@ -171,13 +159,9 @@ namespace OpenTK
             return @new != null;
         }
 
-        #endregion
 
-        #endregion
 
-        #region Private Members
 
-        #region LoadDelegate
 
         // Tries to load the specified core or extension function.
         Delegate LoadDelegate(string name, Type signature)
@@ -201,9 +185,7 @@ namespace OpenTK
         }
 
 
-        #endregion
 
-        #region GetExtensionDelegate
 
         // Creates a System.Delegate that can be used to call a dynamically exported OpenGL function.
         internal Delegate GetExtensionDelegate(string name, Type signature)
@@ -221,8 +203,6 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #endregion
     }
 }

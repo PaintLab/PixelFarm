@@ -44,9 +44,6 @@
     <Compile Include="..\..\PixelFarm\Win32Utils\MyWin32.cs">
       <Link>Win32Utils\MyWin32.cs</Link>
     </Compile>
-    <Compile Include="..\..\PixelFarm\Win32Utils\NativeTextWin32.cs">
-      <Link>Win32Utils\NativeTextWin32.cs</Link>
-    </Compile>
     <Compile Include="..\..\PixelFarm\Win32Utils\NativeWin32MemoryDc.cs">
       <Link>Win32Utils\NativeWin32MemoryDc.cs</Link>
     </Compile>
@@ -81,7 +78,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.MiniAgg.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.MiniAgg\PixelFarm.Drawing.MiniAgg.csproj">
       <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
       <Name>PixelFarm.Drawing.MiniAgg</Name>
     </ProjectReference>
@@ -108,6 +105,10 @@
     <ProjectReference Include="..\..\PixelFarm\Typography\Typography.Contours\Typography.Contours.csproj">
       <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
       <Name>Typography.Contours</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.TextServices\Typography.TextServices.csproj">
+      <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
+      <Name>Typography.TextServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\NativeFontsInterOp\NativeFontsInterOp.csproj">
       <Project>{821c2f8b-45e4-4242-970d-ae64780970b2}</Project>

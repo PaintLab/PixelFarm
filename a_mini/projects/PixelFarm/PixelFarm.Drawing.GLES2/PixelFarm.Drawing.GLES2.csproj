@@ -132,13 +132,9 @@
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+    <ProjectReference Include="..\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}</Project>
-      <Name>PixelFarm.MiniOpenTK</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tesselate\Tesselate.csproj">
-      <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
-      <Name>Tesselate</Name>
+      <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
     <ProjectReference Include="..\Typography\Build\N20\Typography.OpenFont\Typography.OpenFont.csproj">
       <Project>{29ed0dfe-373c-4e98-bd4b-43f8e5fb16f6}</Project>
@@ -147,6 +143,10 @@
     <ProjectReference Include="..\Typography\PixelFarm.Typography\PixelFarm.Typography.csproj">
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
       <Name>PixelFarm.Typography</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography\Typography.TextServices\Typography.TextServices.csproj">
+      <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
+      <Name>Typography.TextServices</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

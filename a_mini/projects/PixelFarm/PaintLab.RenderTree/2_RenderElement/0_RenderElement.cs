@@ -20,14 +20,9 @@ namespace LayoutFarm
             this.b_width = width;
             this.b_height = height;
             this.rootGfx = rootGfx;
-
 #if DEBUG
             dbug_totalObjectId++;
             dbug_obj_id = dbug_totalObjectId;
-            //if (dbug_obj_id == 57)
-            //{ 
-            //}
-
             //this.dbug_SetFixedElementCode(this.GetType().Name);
 #endif
         }
@@ -384,8 +379,9 @@ namespace LayoutFarm
                 {
                 }
                 canvas.PopClipAreaRect();
-#if DEBUG
+
             }
+
             else
             {
 
@@ -404,7 +400,7 @@ namespace LayoutFarm
 #endif
 
             }
-
+#if DEBUG
             dbugVRoot.dbug_drawLevel--;
 #endif
         }

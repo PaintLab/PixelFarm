@@ -227,6 +227,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\PixelFarm\PaintLab.RenderTreeComposer\PaintLab.YourImplementation.csproj">
+      <Project>{d88d86cd-6732-45e7-8fc9-49449ea9c737}</Project>
+      <Name>PaintLab.YourImplementation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
       <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
       <Name>PixelFarm.Drawing.GdiPlus</Name>
@@ -239,37 +243,33 @@
       <Project>{9450c9fb-5a70-4e47-bec3-b0a98a9c7d15}</Project>
       <Name>PixelFarm.Drawing.Skia</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.MiniAgg.csproj">
-      <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
-      <Name>PixelFarm.Drawing.MiniAgg</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\PixelFarm.MiniOpenTK.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
       <Project>{7C154E68-1709-4D5D-AB76-833FEBE4B3B2}</Project>
-      <Name>PixelFarm.MiniOpenTK</Name>
+      <Name>BackEnd.MiniOpenTK</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeWindows\PixelFarm.NativeWindows.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.NativeWindows\BackEnd.NativeWindows.csproj">
       <Project>{198D20B3-0DBD-4C8C-8F0D-0D0FD9C61D43}</Project>
-      <Name>PixelFarm.NativeWindows</Name>
+      <Name>BackEnd.NativeWindows</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\PixelFarm.OpenTKWinForms.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj">
       <Project>{4CF14DCE-F731-4060-B92B-F1ACFDF9803D}</Project>
-      <Name>PixelFarm.OpenTKWinForms</Name>
+      <Name>BackEnd.OpenTKWinForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\PixelFarm.SkiaSharp.csproj">
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.SkiaSharp\BackEnd.SkiaSharp.csproj">
       <Project>{fb828375-3017-44d8-8357-59207224906d}</Project>
-      <Name>PixelFarm.SkiaSharp</Name>
+      <Name>BackEnd.SkiaSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Tesselate\Tesselate.csproj">
       <Project>{AE37DE1F-22F7-49EE-8732-FC6BC8DC58D9}</Project>
       <Name>Tesselate</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\TypeMirror\TypeMirror.csproj">
+    <ProjectReference Include="..\..\PixelFarm\TypeMirror\BackEnd.TypeMirror.csproj">
       <Project>{68F1DAF6-2B35-476E-B2F8-5EADBC823935}</Project>
-      <Name>TypeMirror</Name>
+      <Name>BackEnd.TypeMirror</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c48f2c17-3c32-4f27-a96c-60a9d86df9cf}</Project>
@@ -283,9 +283,9 @@
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
       <Name>PixelFarm.Typography</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\YourImplementation.PixelFarm\YourImplementation.PixelFarm.csproj">
-      <Project>{8963dd34-ce0a-42cd-b3b2-d73031b8f0a0}</Project>
-      <Name>YourImplementation.PixelFarm</Name>
+    <ProjectReference Include="..\..\PixelFarm\Typography\Typography.TextServices\Typography.TextServices.csproj">
+      <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
+      <Name>Typography.TextServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestSamples\TestSamples.csproj">
       <Project>{18ec3701-c6a5-429d-8c65-19ed4a2c2fed}</Project>

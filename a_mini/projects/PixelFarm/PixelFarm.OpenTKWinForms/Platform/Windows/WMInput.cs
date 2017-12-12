@@ -1,8 +1,6 @@
-﻿#region --- License ---
-/* Copyright (c) 2007 Stefanos Apostolopoulos
+﻿/* Copyright (c) 2007 Stefanos Apostolopoulos
  * See license.txt for license information
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -16,7 +14,6 @@ namespace OpenTK.Platform.Windows
     // Input driver for legacy (pre XP) Windows platforms.
     sealed class WMInput : System.Windows.Forms.NativeWindow, IInputDriver
     {
-        #region --- Fields ---
 
         WinMMJoystick joystick_driver = new WinMMJoystick();
         // Driver supports only one keyboard and mouse;
@@ -29,9 +26,7 @@ namespace OpenTK.Platform.Windows
         const long ExtendedBit = 1 << 24;
         // Used to distinguish left and right shift keys.
         static readonly uint ShiftRightScanCode = Functions.MapVirtualKey(VirtualKeys.RSHIFT, 0);
-        #endregion
 
-        #region --- Constructor ---
 
         public WMInput(WinWindowInfo parent)
         {
@@ -51,9 +46,7 @@ namespace OpenTK.Platform.Windows
             mice.Add(mouse);
         }
 
-        #endregion
 
-        #region protected override void WndProc(ref Message msg)
 
         bool mouse_about_to_enter = false;
         protected override void WndProc(ref Message msg)
@@ -199,49 +192,37 @@ namespace OpenTK.Platform.Windows
             base.WndProc(ref msg);
         }
 
-        #endregion
 
-        #region --- IInputDriver Members ---
 
-        #region IInputDriver Members
 
         public void Poll()
         {
             joystick_driver.Poll();
         }
 
-        #endregion
 
-        #region IKeyboardDriver Members
 
         public IList<KeyboardDevice> Keyboard
         {
             get { return keyboards; }
         }
 
-        #endregion
 
-        #region IMouseDriver Members
 
         public IList<MouseDevice> Mouse
         {
             get { return mice; }
         }
 
-        #endregion
 
-        #region IJoystickDriver Members
 
         public IList<JoystickDevice> Joysticks
         {
             get { return joystick_driver.Joysticks; }
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- IDisposable Members ---
 
         private bool disposed;
         public void Dispose()
@@ -265,6 +246,5 @@ namespace OpenTK.Platform.Windows
             Dispose(false);
         }
 
-        #endregion
     }
 }

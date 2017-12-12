@@ -1,8 +1,4 @@
-﻿#if NET20
-namespace System.Runtime.CompilerServices
-{
-    public partial class ExtensionAttribute : Attribute { }
-}
+﻿#if NET20 
 namespace System
 {
     public static class StringExtensions

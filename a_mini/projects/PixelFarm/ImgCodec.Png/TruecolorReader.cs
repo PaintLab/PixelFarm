@@ -16,14 +16,11 @@ namespace ImageTools.IO.Png
     /// </summary>
     sealed class TrueColorReader : IColorReader
     {
-        #region Fields
 
         private int _row;
         private bool _useAlpha;
 
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TrueColorReader"/> class.
@@ -35,9 +32,7 @@ namespace ImageTools.IO.Png
             _useAlpha = useAlpha;
         }
 
-        #endregion
 
-        #region IPngFormatHandler Members
 
         /// <summary>
         /// Reads the specified scanline.
@@ -72,6 +67,5 @@ namespace ImageTools.IO.Png
             _row++;
         }
 
-        #endregion
     }
 }

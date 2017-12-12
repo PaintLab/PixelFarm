@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -45,16 +43,13 @@ namespace OpenTK.Graphics.OpenGL
     // as that would cause infinite recursion!
     struct ErrorHelper : IDisposable
     {
-#region Fields
 
         static readonly object SyncRoot = new object();
         static readonly Dictionary<GraphicsContext, List<ErrorCode>> ContextErrors =
             new Dictionary<GraphicsContext, List<ErrorCode>>();
         readonly GraphicsContext Context;
 
-#endregion
 
-#region Constructors
 
         public ErrorHelper(IGraphicsContext context)
         {
@@ -70,9 +65,7 @@ namespace OpenTK.Graphics.OpenGL
             ResetErrors();
         }
 
-#endregion
 
-#region Public Members
 
         // Retrieve all OpenGL errors to clear the error list.
         // See http://www.opengl.org/documentation/specs/man_pages/hardcopy/GL/html/gl/geterror.html
@@ -121,16 +114,13 @@ namespace OpenTK.Graphics.OpenGL
             }
         }
 
-#endregion
 
-#region IDisposable Members
 
         public void Dispose()
         {
             CheckErrors();
         }
 
-#endregion
     }
 }
 #endif

@@ -16,20 +16,15 @@ namespace ImageTools.IO.Png
     /// </summary>
     public class PngEncoder : IImageEncoder
     {
-        #region Constants
 
         private const int MaxBlockSize = 0xFFFF;
 
-        #endregion
 
-        #region Fields
 
         private Stream _stream;
         private ExtendedImage _image;
 
-        #endregion
 
-        #region IImageEncoder Members
 
         /// <summary>
         /// Gets or sets a value indicating whether this encoder
@@ -449,6 +444,5 @@ namespace ImageTools.IO.Png
             stream.Write(buffer, 0, 4);
         }
 
-        #endregion
     }
 }

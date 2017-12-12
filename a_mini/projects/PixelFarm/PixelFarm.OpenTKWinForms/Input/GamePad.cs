@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 namespace OpenTK.Input
@@ -33,13 +31,11 @@ namespace OpenTK.Input
     /// </summary>
     public class GamePad
     {
-        #region Constructors
 
         static GamePad()
         {
             throw new NotImplementedException();
         }
 
-        #endregion
     }
 }

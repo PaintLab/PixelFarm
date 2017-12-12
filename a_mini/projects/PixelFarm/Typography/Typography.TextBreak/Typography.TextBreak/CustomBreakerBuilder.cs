@@ -2,7 +2,7 @@
 // some code from icu-project
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
- 
+
 
 namespace Typography.TextBreak
 {
@@ -12,8 +12,22 @@ namespace Typography.TextBreak
         static LaoDictionaryBreakingEngine laoDicBreakingEngine;
         static bool isInit;
 
+        public static void Setup(string dataDir)
+        {
+            if (isInit) return;
+
+            DataDir = dataDir;
+            InitAllDics();
+
+            isInit = true;
+        }
         static void InitAllDics()
         {
+            if (DataDir == null)
+            {
+                return;
+            }
+
             if (thaiDicBreakingEngine == null)
             {
                 var customDic = new CustomDic();
@@ -31,8 +45,9 @@ namespace Typography.TextBreak
                 customDic.SetCharRange(laoDicBreakingEngine.FirstUnicodeChar, laoDicBreakingEngine.LastUnicodeChar);
                 customDic.LoadFromTextfile(DataDir + "/laodict.txt");
             }
+
         }
-        public static string DataDir
+        static string DataDir
         {
             get;
             set;

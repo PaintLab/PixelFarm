@@ -1,12 +1,10 @@
-﻿#region --- License ---
-/* Licensed under the MIT/X11 license.
+﻿/* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
  * 
  * Contributions by Andy Gill, James Talton and Georg Wächter.
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +17,6 @@ namespace OpenTK
     [Obsolete("Use OpenTK.MathHelper instead.")]
     public static class Functions
     {
-        #region NextPowerOfTwo
 
         /// <summary>
         /// Returns the next power of two that is larger than the specified number.
@@ -65,9 +62,7 @@ namespace OpenTK
             return System.Math.Pow(2, System.Math.Ceiling(System.Math.Log((double)n, 2)));
         }
 
-        #endregion
 
-        #region Factorial
 
         /// <summary>Calculates the factorial of a given natural number.
         /// </summary>
@@ -81,9 +76,7 @@ namespace OpenTK
             return result;
         }
 
-        #endregion
 
-        #region BinomialCoefficient
 
         /// <summary>
         /// Calculates the binomial coefficient <paramref name="n"/> above <paramref name="k"/>.
@@ -96,9 +89,7 @@ namespace OpenTK
             return Factorial(n) / (Factorial(k) * Factorial(n - k));
         }
 
-        #endregion
 
-        #region InverseSqrtFast
 
         /// <summary>
         /// Returns an approximation of the inverse square root of left number.
@@ -152,9 +143,7 @@ namespace OpenTK
 #endif
         }
 
-        #endregion
 
-        #region DegreesToRadians
 
         const float DEG_TO_RAD = (float)System.Math.PI / 180.0f;
         /// <summary>
@@ -178,9 +167,7 @@ namespace OpenTK
             return radians * radToDeg;
         }
 
-        #endregion
 
-        #region Mathematical constants
 
         /// <summary>
         /// Obsolete. Do not use.
@@ -206,9 +193,7 @@ namespace OpenTK
         /// Obsolete. Do not use.
         /// </summary>
         public static readonly double DTOR = PIF / 180.0d;
-        #endregion
 
-        #region Swap
 
         /// <summary>
         /// Swaps two float values.
@@ -234,15 +219,12 @@ namespace OpenTK
             b = temp;
         }
 
-        #endregion
     }
 
 #if false
     public static partial class Math
     {
-    #region --- Vectors ---
 
-    #region --- Addition ---
 
         /// <summary>
         /// Adds the given Vector2 to the current Vector3.
@@ -334,15 +316,11 @@ namespace OpenTK
             return new Vector4(left).Add(right);
         }
 
-    #endregion
-
-    #region --- Subtraction ---
 
 
 
-    #endregion
 
-    #region --- Cross ---
+
 
         /// <summary>
         /// Computes the cross product between the current and the given Vector3. The current Vector3 is set to the result of the computation.
@@ -354,9 +332,7 @@ namespace OpenTK
             return new Vector3(left).Cross(right);
         }
 
-    #endregion
 
-    #endregion
     }
 #endif
 }

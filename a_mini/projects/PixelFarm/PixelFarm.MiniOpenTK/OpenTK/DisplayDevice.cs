@@ -1,10 +1,8 @@
-#region --- License ---
 /* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK team.
  * This notice may not be removed.
  * See license.txt for licensing detailed licensing details.
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -26,7 +24,6 @@ namespace OpenTK
         // TODO: Does not detect changes to primary device.
         // TODO: Mono does not support System.Windows.Forms.Screen.BitsPerPixel -- find workaround!
 
-        #region --- Fields ---
 
         DisplayResolution current_resolution = new DisplayResolution(), original_resolution;
         List<DisplayResolution> available_resolutions = new List<DisplayResolution>();
@@ -38,9 +35,7 @@ namespace OpenTK
         static readonly object display_lock = new object();
         static DisplayDevice primary_display;
         static Platform.IDisplayDeviceDriver implementation;
-        #endregion
 
-        #region --- Constructors ---
 
         static DisplayDevice()
         {
@@ -71,11 +66,8 @@ namespace OpenTK
                 available_displays.Count, primary ? "primary" : "secondary", available_resolutions.Count));
         }
 
-        #endregion
 
-        #region --- Public Methods ---
 
-        #region public Rectangle Bounds
 
         /// <summary>
         /// Gets the bounds of this instance in pixel coordinates..
@@ -91,23 +83,17 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public int Width
 
         /// <summary>Gets a System.Int32 that contains the width of this display in pixels.</summary>
         public int Width { get { return current_resolution.Width; } }
 
-        #endregion
 
-        #region public int Height
 
         /// <summary>Gets a System.Int32 that contains the height of this display in pixels.</summary>
         public int Height { get { return current_resolution.Height; } }
 
-        #endregion
 
-        #region public int BitsPerPixel
 
         /// <summary>Gets a System.Int32 that contains number of bits per pixel of this display. Typical values include 8, 16, 24 and 32.</summary>
         public int BitsPerPixel
@@ -116,9 +102,7 @@ namespace OpenTK
             set { current_resolution.BitsPerPixel = value; }
         }
 
-        #endregion
 
-        #region public float RefreshRate
 
         /// <summary>
         /// Gets a System.Single representing the vertical refresh rate of this display.
@@ -129,9 +113,7 @@ namespace OpenTK
             set { current_resolution.RefreshRate = value; }
         }
 
-        #endregion
 
-        #region public bool IsPrimary
 
         /// <summary>Gets a System.Boolean that indicates whether this Display is the primary Display in systems with multiple Displays.</summary>
         public bool IsPrimary
@@ -150,9 +132,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public DisplayResolution SelectResolution(int width, int height, int bitsPerPixel, float refreshRate)
 
         /// <summary>
         /// Selects an available resolution that matches the specified parameters.
@@ -182,9 +162,7 @@ namespace OpenTK
             return resolution;
         }
 
-        #endregion
 
-        #region public IList<DisplayResolution> AvailableResolutions
 
         /// <summary>
         /// Gets the list of <see cref="DisplayResolution"/> objects available on this device.
@@ -199,9 +177,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public void ChangeResolution(DisplayResolution resolution)
 
         /// <summary>Changes the resolution of the DisplayDevice.</summary>
         /// <param name="resolution">The resolution to set. <see cref="DisplayDevice.SelectResolution"/></param>
@@ -227,9 +203,7 @@ namespace OpenTK
             //effect.FadeIn();
         }
 
-        #endregion
 
-        #region public void ChangeResolution(int width, int height, int bitsPerPixel, float refreshRate)
 
         /// <summary>Changes the resolution of the DisplayDevice.</summary>
         /// <param name="width">The new width of the DisplayDevice.</param>
@@ -242,9 +216,7 @@ namespace OpenTK
             this.ChangeResolution(this.SelectResolution(width, height, bitsPerPixel, refreshRate));
         }
 
-        #endregion
 
-        #region public void RestoreResolution()
 
         /// <summary>Restores the original resolution of the DisplayDevice.</summary>
         /// <exception cref="Graphics.GraphicsModeException">Thrown if the original resolution could not be restored.</exception>
@@ -264,9 +236,7 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region public static IList<DisplayDevice> AvailableDisplays
 
         /// <summary>
         /// Gets the list of available <see cref="DisplayDevice"/> objects.
@@ -276,9 +246,7 @@ namespace OpenTK
             get { return available_displays_readonly; }
         }
 
-        #endregion
 
-        #region public static DisplayDevice Default
 
         /// <summary>Gets the default (primary) display of this system.</summary>
         public static DisplayDevice Default
@@ -289,13 +257,9 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- Private Methods ---
 
-        #region DisplayResolution FindResolution(int width, int height, int bitsPerPixel, float refreshRate)
 
         DisplayResolution FindResolution(int width, int height, int bitsPerPixel, float refreshRate)
         {
@@ -309,13 +273,9 @@ namespace OpenTK
             });
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- Overrides ---
 
-        #region public override string ToString()
 
         /// <summary>
         /// Returns a System.String representing this DisplayDevice.
@@ -327,9 +287,7 @@ namespace OpenTK
                 Bounds.ToString(), available_resolutions.Count);
         }
 
-        #endregion
 
-        #region public override bool Equals(object obj)
 
         ///// <summary>Determines whether the specified DisplayDevices are equal.</summary>
         ///// <param name="obj">The System.Object to check against.</param>
@@ -348,9 +306,7 @@ namespace OpenTK
         //    return false;
         //}
 
-        #endregion
 
-        #region public override int GetHashCode()
 
         ///// <summary>Returns a unique hash representing this DisplayDevice.</summary>
         ///// <returns>A System.Int32 that may serve as a hash code for this DisplayDevice.</returns>
@@ -359,12 +315,9 @@ namespace OpenTK
         //    return current_resolution.GetHashCode() ^ IsPrimary.GetHashCode() ^ available_resolutions.Count;
         //}
 
-        #endregion
 
-        #endregion
     }
 
-    #region --- FadeEffect ---
 #if false
     class FadeEffect : IDisposable
     {
@@ -468,7 +421,6 @@ namespace OpenTK
                 form.Visible = false;
         }
 
-    #region IDisposable Members
 
         public void Dispose()
         {
@@ -476,8 +428,6 @@ namespace OpenTK
                 form.Dispose();
         }
 
-    #endregion
     }
 #endif
-    #endregion
 }

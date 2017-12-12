@@ -22,10 +22,10 @@ namespace OpenTkEssTest
         protected override void OnPainterReady(CanvasPainter painter)
         {
             font1 = new PixelFarm.Drawing.RequestFont("tahoma", 10);
-            font1.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
+            
             //
             font2 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
-            font2.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
+             
             painter.UseSubPixelRendering = true;
             painter.CurrentFont = font1;
         }
@@ -126,11 +126,8 @@ namespace OpenTkEssTest
         }
         protected override void OnPainterReady(CanvasPainter painter)
         {
-            font1 = new PixelFarm.Drawing.RequestFont("tahoma", 11);
-            font1.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
-            //
-            font2 = new PixelFarm.Drawing.RequestFont("tahoma", 16);
-            font2.ScriptLang = PixelFarm.Drawing.Fonts.ScriptLangs.Thai; //for test complex script
+            font1 = new PixelFarm.Drawing.RequestFont("tahoma", 11); 
+            font2 = new PixelFarm.Drawing.RequestFont("tahoma", 16); 
             painter.UseSubPixelRendering = true;
             painter.CurrentFont = font1;
             //-------------- 

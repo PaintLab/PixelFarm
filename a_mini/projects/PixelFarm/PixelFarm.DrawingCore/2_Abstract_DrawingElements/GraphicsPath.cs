@@ -13,6 +13,9 @@ namespace PixelFarm.Drawing
         Rect,
         Bezier,
     }
+
+     
+
     public sealed class GraphicsPath : System.IDisposable
     {
 
@@ -95,9 +98,7 @@ namespace PixelFarm.Drawing
             points.Add(p3.X); points.Add(p3.Y);
             points.Add(p4.X); points.Add(p4.Y);
 
-        }
-
-
+        } 
         public static void GetPathData(GraphicsPath p, out List<float> points, out List<PathCommand> cmds)
         {
             points = p.points;

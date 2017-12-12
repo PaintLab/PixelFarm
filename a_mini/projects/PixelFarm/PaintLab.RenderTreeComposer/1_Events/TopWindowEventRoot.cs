@@ -41,7 +41,7 @@ namespace LayoutFarm
             this.hoverMonitoringTask = new UIHoverMonitorTask(OnMouseHover);
             //
             UIPlatform.RegisterTimerTask(hoverMonitoringTask);
-            
+
         }
         public IEventListener CurrentKeyboardFocusedElement
         {
@@ -81,6 +81,11 @@ namespace LayoutFarm
             this.isDragging = false;
             UIMouseEventArgs e = GetFreeMouseEvent();
             SetUIMouseEventArgsInfo(e, x, y, button, 0);
+            //
+            e.Shift = lastKeydownWithShift;
+            e.Alt = lastKeydownWithAlt;
+            e.Ctrl = lastKeydownWithControl;
+            //
             e.PreviousMouseDown = this.latestMouseDown;
             iTopBoxEventPortal.PortalMouseDown(e);
             this.currentMouseActiveElement = this.latestMouseDown = e.CurrentContextElement;
@@ -159,6 +164,8 @@ namespace LayoutFarm
             this.localMouseDownX = this.localMouseDownY = 0;
             this.mouseCursorStyle = e.MouseCursorStyle;
             ReleaseMouseEvent(e);
+
+
         }
         void ITopWindowEventRoot.RootMouseMove(int x, int y, UIMouseButtons button)
         {
@@ -288,6 +295,8 @@ namespace LayoutFarm
             //----------------------------------------------------
             ReleaseKeyEvent(e);
             StartCaretBlink();
+
+            lastKeydownWithShift = lastKeydownWithControl = lastKeydownWithAlt = false;
         }
         bool ITopWindowEventRoot.RootProcessDialogKey(int keyData)
         {
@@ -326,6 +335,8 @@ namespace LayoutFarm
                (UIMouseButtons)button,
                 0,
                 delta);
+
+
         }
         //--------------------------------------------------------------------
         void OnMouseHover(UITimerTask timerTask)
@@ -401,6 +412,7 @@ namespace LayoutFarm
         void ReleaseMouseEvent(UIMouseEventArgs e)
         {
             e.Clear();
+            //TODO: review event stock here again
             this.stockMouseEvents.Push(e);
         }
     }

@@ -1,10 +1,7 @@
-﻿#region --- License ---
-/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
+﻿/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  */
-#endregion
 
-#region --- Using directives ---
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +10,6 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Windows.Forms;
 using OpenTK.Input;
-#endregion
 
 namespace OpenTK.Platform.Windows
 {
@@ -27,7 +23,6 @@ namespace OpenTK.Platform.Windows
         int rawInputStructSize = API.RawInputSize;
         private WinRawKeyboard keyboardDriver;
         private WinRawMouse mouseDriver;
-        #region --- Constructors ---
 
         internal WinRawInput(WinWindowInfo parent)
         {
@@ -41,9 +36,7 @@ namespace OpenTK.Platform.Windows
             //AllocateBuffer();
         }
 
-        #endregion
 
-        #region internal static int DeviceCount
 
         internal static int DeviceCount
         {
@@ -54,9 +47,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region protected override void WndProc(ref Message msg)
 
         /// <summary>
         /// Processes the input Windows Message, routing the buffer to the correct Keyboard, Mouse or HID.
@@ -115,11 +106,8 @@ namespace OpenTK.Platform.Windows
             base.WndProc(ref msg);
         }
 
-        #endregion
 
-        #region --- IInputDriver Members ---
 
-        #region IInputDriver Members
 
         public void Poll()
         {
@@ -186,38 +174,29 @@ namespace OpenTK.Platform.Windows
 #endif
         }
 
-        #endregion
 
-        #region IKeyboardDriver Members
 
         public IList<KeyboardDevice> Keyboard
         {
             get { return keyboardDriver.Keyboard; }
         }
 
-        #endregion
 
-        #region IMouseDriver Members
 
         public IList<MouseDevice> Mouse
         {
             get { return mouseDriver.Mouse; }
         }
 
-        #endregion
 
-        #region IJoystickDriver Members
 
         public IList<JoystickDevice> Joysticks
         {
             get { throw new NotImplementedException(); }
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- IDisposable Members ---
 
         private bool disposed;
         public void Dispose()
@@ -245,6 +224,5 @@ namespace OpenTK.Platform.Windows
             Dispose(false);
         }
 
-        #endregion
     }
 }

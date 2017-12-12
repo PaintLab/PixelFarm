@@ -1,4 +1,3 @@
-#region --- License ---
 /*
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 
@@ -54,7 +53,6 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#endregion --- License ---
 
 using System;
 using System.IO;
@@ -76,12 +74,9 @@ namespace OpenTK
     [Serializable, StructLayout(LayoutKind.Sequential)]
     public struct Half :  IComparable<Half>, IFormattable, IEquatable<Half>
     {
-        #region Internal Field
 
         UInt16 bits;
-        #endregion Internal Field
 
-        #region Properties
 
         /// <summary>Returns true if the Half is zero.</summary>
         public bool IsZero { get { return (bits == 0) || (bits == 0x8000); } }
@@ -95,9 +90,7 @@ namespace OpenTK
         /// <summary>Returns true if the Half represents negative infinity.</summary>
         public bool IsNegativeInfinity { get { return (bits == 64512); } }
 
-        #endregion Properties
 
-        #region Constructors
 
         /// <summary>
         /// The new Half instance will convert the parameter into 16-bit half-precision floating-point.
@@ -145,9 +138,7 @@ namespace OpenTK
         /// <param name="throwOnError">Enable checks that will throw if the conversion result is not meaningful.</param>
         public Half(Double d, bool throwOnError) : this((Single)d, throwOnError) { }
 
-        #endregion Constructors
 
-        #region Single -> Half
 
         /// <summary>Ported from OpenEXR's IlmBase 1.0.1</summary>
         private UInt16 SingleToHalf(Int32 si32)
@@ -233,9 +224,7 @@ namespace OpenTK
             }
         }
 
-        #endregion Single -> Half
 
-        #region Half -> Single
 
         /// <summary>Converts the 16-bit half to 32-bit floating-point.</summary>
         /// <returns>A single-precision floating-point number.</returns>
@@ -301,9 +290,7 @@ namespace OpenTK
             return (sign << 31) | (exponent << 23) | mantissa;
         }
 
-        #endregion Half -> Single
 
-        #region Conversions
 
         /// <summary>
         /// Converts a System.Single to a OpenTK.Half.
@@ -361,9 +348,7 @@ namespace OpenTK
             return (double)h.ToSingle();
         }
 
-        #endregion Conversions
 
-        #region Constants
 
         /// <summary>The size in bytes for an instance of the Half struct.</summary>
         public static readonly Int32 SizeInBytes = 2;
@@ -375,9 +360,7 @@ namespace OpenTK
         public static readonly Single MaxValue = 65504.0f;
         /// <summary>Smallest positive e for which half (1.0 + e) != half (1.0)</summary>
         public static readonly Single Epsilon = 0.00097656f;
-        #endregion Constants
 
-        //#region ISerializable
 
         ///// <summary>Constructor used by ISerializable to deserialize the object.</summary>
         ///// <param name="info"></param>
@@ -395,9 +378,7 @@ namespace OpenTK
         //    info.AddValue("bits", this.bits);
         //}
 
-        //#endregion ISerializable
 
-        #region Binary dump
 
         /// <summary>Updates the Half by reading from a Stream.</summary>
         /// <param name="bin">A BinaryReader instance associated with an open Stream.</param>
@@ -413,9 +394,7 @@ namespace OpenTK
             bin.Write(this.bits);
         }
 
-        #endregion Binary dump
 
-        #region IEquatable<Half> Members
 
         const int maxUlps = 1;
         /// <summary>
@@ -441,9 +420,7 @@ namespace OpenTK
             return false;
         }
 
-        #endregion
 
-        #region IComparable<Half> Members
 
         /// <summary>
         /// Compares this instance to a specified half-precision floating-point number
@@ -467,9 +444,7 @@ namespace OpenTK
             return ((float)this).CompareTo((float)other);
         }
 
-        #endregion IComparable<Half> Members
 
-        #region IFormattable Members
 
         /// <summary>Converts this Half into a human-legible string representation.</summary>
         /// <returns>The string representation of this instance.</returns>
@@ -487,9 +462,7 @@ namespace OpenTK
             return this.ToSingle().ToString(format, formatProvider);
         }
 
-        #endregion IFormattable Members
 
-        #region String -> Half
 
         /// <summary>Converts the string representation of a number to a half-precision floating-point equivalent.</summary>
         /// <param name="s">String representation of the number to convert.</param>
@@ -535,9 +508,7 @@ namespace OpenTK
             return b;
         }
 
-        #endregion String -> Half
 
-        #region BitConverter
 
         /// <summary>Returns the Half as an array of bytes.</summary>
         /// <param name="h">The Half to convert.</param>
@@ -558,6 +529,5 @@ namespace OpenTK
             return h;
         }
 
-        #endregion BitConverter
     }
 }

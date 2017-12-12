@@ -53,6 +53,9 @@
     <Compile Include="..\ImgCodec.Core\FlippingType.cs">
       <Link>Core\FlippingType.cs</Link>
     </Compile>
+    <Compile Include="..\ImgCodec.Core\Helpers\ExtensionAttribute.cs">
+      <Link>Core\Helpers\ExtensionAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\ImgCodec.Core\Helpers\ForNet20.cs">
       <Link>Core\Helpers\ForNet20.cs</Link>
     </Compile>
