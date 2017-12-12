@@ -208,12 +208,11 @@ namespace LayoutFarm
                 }
 
                 MeasuredStringBox result;
-                //measure string at specific px scale
-
+                //measure string at specific px scale 
                 glyphLayout.MeasureString(str, breakSpan.startAt, breakSpan.len, out result, scale);
                 ConcatMeasureBox(ref accumW, ref accumH, ref result);
             }
-            return new Size((int)accumW, (int)accumH);
+            return new Size((int)Math.Round(accumW), (int)Math.Round(accumH));
         }
         static void ConcatMeasureBox(ref float accumW, ref float accumH, ref MeasuredStringBox measureBox)
         {
