@@ -39,14 +39,20 @@ namespace Typography.TextLayout
     public class GlyphPlanList
     {
         List<GlyphPlan> _glyphPlans = new List<GlyphPlan>();
+        float _accumAdvanceX;
+
         public void Clear()
         {
             _glyphPlans.Clear();
+            _accumAdvanceX = 0;
         }
-        public void Append(GlyphPlan g)
+        public void Append(GlyphPlan glyphPlan)
         {
-            _glyphPlans.Add(g);
+            _glyphPlans.Add(glyphPlan);
+            _accumAdvanceX += glyphPlan.AdvanceX;
         }
+        public float AccumAdvanceX { get { return _accumAdvanceX; } }
+
         public GlyphPlan this[int index]
         {
             get
@@ -505,8 +511,6 @@ namespace Typography.TextLayout
             //
             int j = outputGlyphPlans.Count;
             Typeface currentTypeface = glyphLayout.Typeface;
-
-
             Typography.OpenFont.Extensions.LineSpacingChoice sel_linespcingChoice;
             if (j == 0)
             {
@@ -522,7 +526,7 @@ namespace Typography.TextLayout
             else
             {
                 GlyphPlan lastOne = outputGlyphPlans[j - 1];
-                strBox = new MeasuredStringBox((lastOne.ExactRight) * scale,
+                strBox = new MeasuredStringBox(lastOne.ExactRight * scale,
                         currentTypeface.Ascender * scale,
                         currentTypeface.Descender * scale,
                         currentTypeface.LineGap * scale,
