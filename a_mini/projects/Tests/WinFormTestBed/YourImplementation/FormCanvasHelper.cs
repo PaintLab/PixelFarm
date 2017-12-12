@@ -27,15 +27,15 @@ namespace LayoutFarm.UI
             InitWinform();
             IFontLoader fontLoader = s_fontstore;
             //2. 
-            PixelFarm.Drawing.IFonts ifont = null; 
+            PixelFarm.Drawing.ITextService ifont = null; 
             switch (internalViewportKind)
             {
                 default:
                     //ifont = PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.GetIFonts();
-                    ifont = new OpenFontIFonts();
+                    ifont = new OpenFontTextService();
                     break;
                 case InnerViewportKind.GL:
-                    ifont = new OpenFontIFonts();
+                    ifont = new OpenFontTextService();
                     break;
 
             }

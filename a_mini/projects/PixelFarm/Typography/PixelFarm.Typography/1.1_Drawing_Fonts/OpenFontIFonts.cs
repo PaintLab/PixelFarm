@@ -13,7 +13,7 @@ using Typography.TextBreak;
 
 namespace LayoutFarm
 {
-    public class OpenFontIFonts : IFonts
+    public class OpenFontTextService : ITextService
     {
         //TODO: this class should be a Typography Service 
         //plan: remove dependcy on IFonts here
@@ -30,7 +30,7 @@ namespace LayoutFarm
         readonly int _system_id;
         Typography.OpenFont.ScriptLang _defaultScLang;
 
-        public OpenFontIFonts()
+        public OpenFontTextService()
         {
             // 
             _system_id = PixelFarm.Drawing.Internal.RequestFontCacheAccess.GetNewCacheSystemId();
@@ -70,7 +70,7 @@ namespace LayoutFarm
 
 
         }
-        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
+        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances, out int outputTotalW)
         {
 
             //layout  
@@ -85,7 +85,7 @@ namespace LayoutFarm
 
             float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
             int endBefore = startAt + len;
-
+            outputTotalW = 0;
             for (int i = startAt; i < endBefore; ++i)
             {
                 GlyphPlan glyphPlan = userGlyphPlanList[i];
@@ -93,9 +93,8 @@ namespace LayoutFarm
                 float ty = glyphPlan.ExactY;
                 double actualAdvX = glyphPlan.AdvanceX;
 
-                //if you want to snap each glyph to grid ... => Round it
-
-                glyphXAdvances[i] = (int)Math.Round(actualAdvX * scale);
+                //if you want to snap each glyph to grid ... => Round it 
+                outputTotalW += glyphXAdvances[i] = (int)Math.Round(actualAdvX * scale);
             }
         }
 
@@ -231,7 +230,7 @@ namespace LayoutFarm
             return (int)(typeface.CalculateRecommendLineSpacing(out sel_linespcingChoice) *
                 typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
         }
-        float IFonts.MeasureBlankLineHeight(RequestFont font)
+        float ITextService.MeasureBlankLineHeight(RequestFont font)
         {
             LineSpacingChoice sel_linespcingChoice;
             Typeface typeface = ResolveTypeface(font);
@@ -242,7 +241,7 @@ namespace LayoutFarm
 
 
         //-----------------------------------
-        static OpenFontIFonts()
+        static OpenFontTextService()
         {
 
             CurrentEnv.CurrentOSName = (IsOnMac()) ?

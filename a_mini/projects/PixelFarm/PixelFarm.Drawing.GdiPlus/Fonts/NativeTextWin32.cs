@@ -145,10 +145,11 @@ namespace PixelFarm.Drawing.WinGdi
         }
         //==============================================
 
-        public static void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
+        public static void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances, out int outputTotalW)
         {
             unsafe
             {
+                outputTotalW = 0;
                 if (len == 0)
                 {
                     return;
@@ -167,6 +168,7 @@ namespace PixelFarm.Drawing.WinGdi
                 //}
                 byte[] encoding = s_en.GetBytes(str, startAt, len);
                 NativeTextWin32.FontABC[] abcWidths = winfont.GetInteralABCArray();
+                int totalW = 0;
                 for (int i = 0; i < len; ++i)
                 {
                     //ushort glyphIndex = *(glyhIndics + i);
@@ -175,8 +177,9 @@ namespace PixelFarm.Drawing.WinGdi
                     {
                         break;//?
                     }
-                    glyphXAdvances[i] = abcWidths[enc_index].Sum;
+                    totalW += glyphXAdvances[i] = abcWidths[enc_index].Sum;
                 }
+
             }
             //unsafe
             //{
@@ -368,7 +371,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
     }
 
-    class Gdi32IFonts : IFonts
+    class Gdi32IFonts : ITextService
     {
         public Gdi32IFonts()
         {
@@ -389,9 +392,9 @@ namespace PixelFarm.Drawing.WinGdi
         //{
         //    return WinGdiTextService.MeasureString(buff, startAt, len, font, maxWidth, out charFit, out charFitWidth);
         //}
-        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
+        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances, out int outputTotalW)
         {
-            WinGdiTextService.CalculateGlyphAdvancePos(str, startAt, len, font, glyphXAdvances);
+            WinGdiTextService.CalculateGlyphAdvancePos(str, startAt, len, font, glyphXAdvances,out outputTotalW);
         }
 
         public float MeasureBlankLineHeight(RequestFont f)

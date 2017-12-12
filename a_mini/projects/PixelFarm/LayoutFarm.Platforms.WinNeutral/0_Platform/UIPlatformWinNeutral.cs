@@ -49,7 +49,7 @@ namespace LayoutFarm.UI
         }
 
         // PixelFarm.Drawing.WinGdi.Gdi32IFonts _gdiPlusIFonts = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
-        public PixelFarm.Drawing.IFonts GetIFonts()
+        public PixelFarm.Drawing.ITextService GetIFonts()
         {
             throw new System.NotSupportedException();
 

@@ -3,13 +3,17 @@
 using System;
 using System.Text;
 using PixelFarm.Drawing;
+
 namespace LayoutFarm.Text
 {
     class EditableTextRun : EditableRun
     {
+
         TextSpanStyle spanStyle;
+
         char[] mybuffer; //each editable run has it own (dynamic) char buffer
         int[] glyphPositions = null;//TODO: review here-> change this to caret stop position
+
         public EditableTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
             : base(gfx)
         {
@@ -97,30 +101,33 @@ namespace LayoutFarm.Text
         {
             get { return new string(mybuffer); }
         }
-
-        static readonly char[] emptyline = new char[] { 'I' };
-
         internal override void UpdateRunWidth()
         {
             Size size;
             if (IsLineBreak)
             {
-                size = CalculateDrawingStringSize(emptyline, 1);
+                //we should not store this as a text run
+                //if this is a linebreak it should be encoded at the end of this visual line
+
+                size = new Size(0, (int)Math.Round(Root.IFonts.MeasureBlankLineHeight(GetFont())));
                 glyphPositions = new int[0];
             }
             else
             {
+
+
+
+
                 //TODO: review here again 
+                //1. after GSUB process, output glyph may be more or less 
+                //than original input char buffer(mybuffer)
+                //2. 
                 int len = mybuffer.Length;
-                size = CalculateDrawingStringSize(this.mybuffer, len);
-                //when we update run width we should store
-                //cache of each char x-advance?
-                //or calculate it every time ? 
-                //TODO: review this,
-                //if we have enough length, -> we don't need to alloc every time. 
+
                 glyphPositions = new int[len];
-                Root.IFonts.CalculateGlyphAdvancePos(mybuffer, 0, len, GetFont(), glyphPositions);
-                //TextServices.IFonts.CalculateGlyphAdvancePos(mybuffer, 0, len, GetFont(), glyphPositions);
+                int outputTotalW;
+                Root.IFonts.CalculateGlyphAdvancePos(mybuffer, 0, len, GetFont(), glyphPositions, out outputTotalW);
+                size = new Size(outputTotalW, (int)Math.Round(Root.IFonts.MeasureBlankLineHeight(GetFont())));
             }
             //---------
             this.SetSize(size.Width, size.Height);
@@ -161,6 +168,11 @@ namespace LayoutFarm.Text
         }
         public override void SetStyle(TextSpanStyle spanStyle)
         {
+            //TODO: review this again
+            //update style may affect the 'visual' layout of the span
+            //the span may expand large or shrink down
+            //so we invalidate graphics area pre and post
+
             this.InvalidateGraphics();
             this.spanStyle = spanStyle;
             this.InvalidateGraphics();

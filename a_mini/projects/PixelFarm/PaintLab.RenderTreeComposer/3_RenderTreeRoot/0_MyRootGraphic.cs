@@ -19,10 +19,10 @@ namespace LayoutFarm.UI
 
 
         RequestFont _defaultTextEditFont; //TODO: review here
-        IFonts _ifonts;
+        ITextService _ifonts;
         public MyRootGraphic(
             int width, int height,
-            IFonts ifonts)
+            ITextService ifonts)
             : base(width, height)
         {
 
@@ -48,7 +48,7 @@ namespace LayoutFarm.UI
                     this.FlushAccumGraphics();
                 });
         }
-        public override IFonts IFonts
+        public override ITextService IFonts
         {
             get
             {

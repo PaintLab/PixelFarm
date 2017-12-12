@@ -105,7 +105,7 @@ namespace LayoutFarm.Text
         {
             Size size;
             if (IsLineBreak)
-            {
+            { 
                 size = CalculateDrawingStringSize(emptyline, 1);
                 glyphPositions = new int[0];
             }

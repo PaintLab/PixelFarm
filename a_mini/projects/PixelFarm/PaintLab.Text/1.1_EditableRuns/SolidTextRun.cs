@@ -113,13 +113,13 @@ namespace LayoutFarm.Text
             get { return new string(mybuffer); }
         }
 
-        internal static readonly char[] emptyline = new char[] { 'I' };
+        
         internal override void UpdateRunWidth()
         {
             Size size;
             if (IsLineBreak)
             {
-                size = CalculateDrawingStringSize(emptyline, 1);
+                size = new Size(0, (int)Math.Round(Root.IFonts.MeasureBlankLineHeight(GetFont()))); 
             }
             else
             {
