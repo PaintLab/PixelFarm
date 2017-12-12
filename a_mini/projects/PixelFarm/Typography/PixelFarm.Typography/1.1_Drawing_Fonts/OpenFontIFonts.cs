@@ -70,7 +70,7 @@ namespace LayoutFarm
 
 
         }
-        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances)
+        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances, out int outputTotalW)
         {
 
             //layout  
@@ -85,7 +85,7 @@ namespace LayoutFarm
 
             float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
             int endBefore = startAt + len;
-
+            outputTotalW = 0;
             for (int i = startAt; i < endBefore; ++i)
             {
                 GlyphPlan glyphPlan = userGlyphPlanList[i];
@@ -93,9 +93,8 @@ namespace LayoutFarm
                 float ty = glyphPlan.ExactY;
                 double actualAdvX = glyphPlan.AdvanceX;
 
-                //if you want to snap each glyph to grid ... => Round it
-
-                glyphXAdvances[i] = (int)Math.Round(actualAdvX * scale);
+                //if you want to snap each glyph to grid ... => Round it 
+                outputTotalW += glyphXAdvances[i] = (int)Math.Round(actualAdvX * scale);
             }
         }
 

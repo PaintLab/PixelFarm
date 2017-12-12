@@ -8,9 +8,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         static WinGdiPlusPlatform()
         {
-
-            PixelFarm.Agg.AggBuffMx.SetNaiveBufferImpl(new Win32AggBuffMx());
-           
+            PixelFarm.Agg.AggBuffMx.SetNaiveBufferImpl(new Win32AggBuffMx());           
         }
 
         public static void SetFontEncoding(System.Text.Encoding encoding)

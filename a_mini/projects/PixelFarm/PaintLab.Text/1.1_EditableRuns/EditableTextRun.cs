@@ -98,29 +98,33 @@ namespace LayoutFarm.Text
             get { return new string(mybuffer); }
         }
 
-        static readonly char[] emptyline = new char[] { 'I' };
 
         internal override void UpdateRunWidth()
         {
             Size size;
             if (IsLineBreak)
             {
-                size = CalculateDrawingStringSize(emptyline, 1);
+                size = new Size(0, (int)Math.Round(Root.IFonts.MeasureBlankLineHeight(GetFont())));
                 glyphPositions = new int[0];
             }
             else
             {
+                //
                 //TODO: review here again 
+                //1. after GSUB process, output glyph may be more or less 
+                //than original input char buffer(mybuffer)
+                //2. 
                 int len = mybuffer.Length;
-                size = CalculateDrawingStringSize(this.mybuffer, len);
+                //size = CalculateDrawingStringSize(this.mybuffer, len);
                 //when we update run width we should store
                 //cache of each char x-advance?
                 //or calculate it every time ? 
                 //TODO: review this,
                 //if we have enough length, -> we don't need to alloc every time. 
                 glyphPositions = new int[len];
-                Root.IFonts.CalculateGlyphAdvancePos(mybuffer, 0, len, GetFont(), glyphPositions);
-                //TextServices.IFonts.CalculateGlyphAdvancePos(mybuffer, 0, len, GetFont(), glyphPositions);
+                int outputTotalW;
+                Root.IFonts.CalculateGlyphAdvancePos(mybuffer, 0, len, GetFont(), glyphPositions,out outputTotalW);
+                size = new Size(outputTotalW, (int)Math.Round(Root.IFonts.MeasureBlankLineHeight(GetFont())));
             }
             //---------
             this.SetSize(size.Width, size.Height);
