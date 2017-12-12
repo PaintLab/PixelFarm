@@ -188,7 +188,7 @@ namespace PixelFarm.Agg.VertexSource
             double dx2 = x2 - cx;
             double dy2 = y2 - cy;
             double len = Math.Sqrt(dx1 * dx1 + dy1 * dy1) + Math.Sqrt(dx2 * dx2 + dy2 * dy2);
-            m_num_steps = (int)AggBasics.uround(len * 0.25 * m_scale);
+            m_num_steps = (int)AggMath.uround(len * 0.25 * m_scale);
             if (m_num_steps < 4)
             {
                 m_num_steps = 4;
@@ -473,7 +473,7 @@ namespace PixelFarm.Agg.VertexSource
             double len = (Math.Sqrt(dx1 * dx1 + dy1 * dy1) +
                           Math.Sqrt(dx2 * dx2 + dy2 * dy2) +
                           Math.Sqrt(dx3 * dx3 + dy3 * dy3)) * 0.25 * m_scale;
-            m_num_steps = (int)AggBasics.uround(len);
+            m_num_steps = (int)AggMath.uround(len);
             if (m_num_steps < 4)
             {
                 m_num_steps = 4;

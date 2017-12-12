@@ -43,8 +43,8 @@ namespace PixelFarm.Agg
             float inv_g = (float)(1.0 / g);
             for (int i = GAMMA_SIZE - 1; i >= 0; --i)
             {
-                m_dir_gamma[i] = (byte)AggBasics.uround(Math.Pow(i / (float)GAMMA_MASK, m_gamma) * (float)GAMMA_MASK);
-                m_inv_gamma[i] = (byte)AggBasics.uround(Math.Pow(i / (float)GAMMA_MASK, inv_g) * (float)GAMMA_MASK);
+                m_dir_gamma[i] = (byte)AggMath.uround(Math.Pow(i / (float)GAMMA_MASK, m_gamma) * (float)GAMMA_MASK);
+                m_inv_gamma[i] = (byte)AggMath.uround(Math.Pow(i / (float)GAMMA_MASK, inv_g) * (float)GAMMA_MASK);
             }
         }
 

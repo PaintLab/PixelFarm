@@ -61,11 +61,11 @@ namespace PixelFarm.Agg
                 double k = (y - m_y1) * m_1dy;
                 if (k < 0.0) k = 0.0;
                 if (k > 1.0) k = 1.0;
-                m_r = m_r1 + AggBasics.iround(m_dr * k);
-                m_g = m_g1 + AggBasics.iround(m_dg * k);
-                m_b = m_b1 + AggBasics.iround(m_db * k);
-                m_a = m_a1 + AggBasics.iround(m_da * k);
-                m_x = AggBasics.iround((m_x1 + m_dx * k) * (double)SUBPIXEL_SCALE);
+                m_r = m_r1 + AggMath.iround(m_dr * k);
+                m_g = m_g1 + AggMath.iround(m_dg * k);
+                m_b = m_b1 + AggMath.iround(m_db * k);
+                m_a = m_a1 + AggMath.iround(m_da * k);
+                m_x = AggMath.iround((m_x1 + m_dx * k) * (double)SUBPIXEL_SCALE);
             }
 
             public double m_x1;

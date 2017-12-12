@@ -61,9 +61,9 @@ namespace PixelFarm.Agg.Gradients
         //---------------------------------------------------------------------
         public void Setup(double r, double fx, double fy)
         {
-            m_r = AggBasics.iround(r * SpanGenGradient.GR_SUBPIX_SCALE);
-            m_fx = AggBasics.iround(fx * SpanGenGradient.GR_SUBPIX_SCALE);
-            m_fy = AggBasics.iround(fy * SpanGenGradient.GR_SUBPIX_SCALE);
+            m_r = AggMath.iround(r * SpanGenGradient.GR_SUBPIX_SCALE);
+            m_fx = AggMath.iround(fx * SpanGenGradient.GR_SUBPIX_SCALE);
+            m_fy = AggMath.iround(fy * SpanGenGradient.GR_SUBPIX_SCALE);
             UpdateValues();
         }
 
@@ -79,7 +79,7 @@ namespace PixelFarm.Agg.Gradients
             double dy = y - m_fy;
             double d2 = dx * m_fy - dy * m_fx;
             double d3 = m_r2 * (dx * dx + dy * dy) - d2 * d2;
-            return AggBasics.iround((dx * m_fx + dy * m_fy + System.Math.Sqrt(System.Math.Abs(d3))) * m_mul);
+            return AggMath.iround((dx * m_fx + dy * m_fy + System.Math.Sqrt(System.Math.Abs(d3))) * m_mul);
         }
 
         //---------------------------------------------------------------------
@@ -160,7 +160,7 @@ namespace PixelFarm.Agg.Gradients
     {
         public int Calculate(int x, int y, int d)
         {
-            return (int)AggBasics.uround(System.Math.Abs(System.Math.Atan2((double)(y), (double)(x))) * (double)(d) / System.Math.PI);
+            return (int)AggMath.uround(System.Math.Abs(System.Math.Atan2((double)(y), (double)(x))) * (double)(d) / System.Math.PI);
         }
     }
 

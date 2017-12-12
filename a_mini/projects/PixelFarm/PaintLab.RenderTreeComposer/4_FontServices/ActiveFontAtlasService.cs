@@ -6,11 +6,12 @@ using System.Collections.Generic;
 
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
-
+using Typography.OpenFont;
 using Typography.TextServices;
 
 namespace PixelFarm.DrawingGL
 {
+
     static class ActiveFontAtlasService
     {
         struct FontTextureKey

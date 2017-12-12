@@ -43,7 +43,7 @@ namespace PixelFarm.Agg.Lines
             {
                 return false;
             }
-            return (len = AggBasics.uround(Math.Sqrt(dx * dx + dy * dy))) > SIGDIFF;
+            return (len = AggMath.uround(Math.Sqrt(dx * dx + dy * dy))) > SIGDIFF;
         }
     }
 

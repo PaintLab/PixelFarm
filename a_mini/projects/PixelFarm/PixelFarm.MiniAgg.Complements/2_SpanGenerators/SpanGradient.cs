@@ -42,8 +42,8 @@ namespace PixelFarm.Agg
             this.m_interpolator = inter;
             this.m_grValueCalculator = gvc;
             this.m_colorsProvider = m_colorsProvider;
-            m_d1 = AggBasics.iround(d1 * GR_SUBPIX_SCALE);
-            m_d2 = AggBasics.iround(d2 * GR_SUBPIX_SCALE);
+            m_d1 = AggMath.iround(d1 * GR_SUBPIX_SCALE);
+            m_d2 = AggMath.iround(d2 * GR_SUBPIX_SCALE);
             dd = m_d2 - m_d1;
             if (dd < 1) dd = 1;
             stepRatio = (float)m_colorsProvider.GradientSteps / (float)dd;

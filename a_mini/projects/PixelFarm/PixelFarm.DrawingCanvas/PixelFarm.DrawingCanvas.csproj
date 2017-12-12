@@ -61,8 +61,71 @@
     <Compile Include="..\burningminecurve\curveutils\VectorHelper.cs">
       <Link>1_Vectors\4_BurningMineCurves\VectorHelper.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.vectors\1_vectormaths\AggBasics.cs">
-      <Link>1_Vectors\1_VectorMaths\AggBasics.cs</Link>
+    <Compile Include="..\pixelfarm.triangulation\delaunay\AdvancingFront.cs">
+      <Link>1_Vectors\7_Triangulation\Delaunay\AdvancingFront.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\delaunay\AdvancingFrontNode.cs">
+      <Link>1_Vectors\7_Triangulation\Delaunay\AdvancingFrontNode.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\delaunay\DelaunayTriangle.cs">
+      <Link>1_Vectors\7_Triangulation\Delaunay\DelaunayTriangle.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\delaunay\DTSweep.cs">
+      <Link>1_Vectors\7_Triangulation\Delaunay\DTSweep.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\delaunay\DTSweepConstraint.cs">
+      <Link>1_Vectors\7_Triangulation\Delaunay\DTSweepConstraint.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\delaunay\DTSweepContext.cs">
+      <Link>1_Vectors\7_Triangulation\Delaunay\DTSweepContext.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\delaunay\DTSweepDebugContext.cs">
+      <Link>1_Vectors\7_Triangulation\Delaunay\DTSweepDebugContext.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\delaunay\PointOnEdgeException.cs">
+      <Link>1_Vectors\7_Triangulation\Delaunay\PointOnEdgeException.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\P2T.cs">
+      <Link>1_Vectors\7_Triangulation\P2T.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\polygon\Polygon.cs">
+      <Link>1_Vectors\7_Triangulation\Polygon\Polygon.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\sets\ConstrainedPointSet.cs">
+      <Link>1_Vectors\7_Triangulation\Sets\ConstrainedPointSet.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\sets\PointSet.cs">
+      <Link>1_Vectors\7_Triangulation\Sets\PointSet.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\triangulation\ITriangulatable.cs">
+      <Link>1_Vectors\7_Triangulation\Triangulation\ITriangulatable.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\triangulation\Orientation.cs">
+      <Link>1_Vectors\7_Triangulation\Triangulation\Orientation.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\triangulation\TriangulationAlgorithm.cs">
+      <Link>1_Vectors\7_Triangulation\Triangulation\TriangulationAlgorithm.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\triangulation\TriangulationContext.cs">
+      <Link>1_Vectors\7_Triangulation\Triangulation\TriangulationContext.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\triangulation\TriangulationDebugContext.cs">
+      <Link>1_Vectors\7_Triangulation\Triangulation\TriangulationDebugContext.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\triangulation\TriangulationMode.cs">
+      <Link>1_Vectors\7_Triangulation\Triangulation\TriangulationMode.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\triangulation\TriangulationPoint.cs">
+      <Link>1_Vectors\7_Triangulation\Triangulation\TriangulationPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\triangulation\TriangulationUtil.cs">
+      <Link>1_Vectors\7_Triangulation\Triangulation\TriangulationUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\util\PointGenerator.cs">
+      <Link>1_Vectors\7_Triangulation\Utils\PointGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.triangulation\util\PolygonGenerator.cs">
+      <Link>1_Vectors\7_Triangulation\Utils\PolygonGenerator.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\AggMath.cs">
       <Link>1_Vectors\1_VectorMaths\AggMath.cs</Link>
@@ -107,28 +170,28 @@
       <Link>1_Vectors\1_VectorMaths\Vector4.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Arc.cs">
-      <Link>1_Vectors\1_Geometry\Arc.cs</Link>
+      <Link>1_Vectors\2_Geometry\Arc.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\BezireCurve.cs">
-      <Link>1_Vectors\1_Geometry\BezireCurve.cs</Link>
+      <Link>1_Vectors\2_Geometry\BezireCurve.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\BSpline.cs">
-      <Link>1_Vectors\1_Geometry\BSpline.cs</Link>
+      <Link>1_Vectors\2_Geometry\BSpline.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Collections.cs">
-      <Link>1_Vectors\1_Geometry\Collections.cs</Link>
+      <Link>1_Vectors\2_Geometry\Collections.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Curves.cs">
-      <Link>1_Vectors\1_Geometry\Curves.cs</Link>
+      <Link>1_Vectors\2_Geometry\Curves.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Ellipse.cs">
-      <Link>1_Vectors\1_Geometry\Ellipse.cs</Link>
+      <Link>1_Vectors\2_Geometry\Ellipse.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\RectD.cs">
-      <Link>1_Vectors\1_Geometry\RectD.cs</Link>
+      <Link>1_Vectors\2_Geometry\RectD.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\RectInt.cs">
-      <Link>1_Vectors\1_Geometry\RectInt.cs</Link>
+      <Link>1_Vectors\2_Geometry\RectInt.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\3_transform\1_Affine.cs">
       <Link>1_Vectors\3_Transform\1_Affine.cs</Link>
@@ -148,12 +211,36 @@
     <Compile Include="..\pixelfarm.vectors\3_transform\Viewport.cs">
       <Link>1_Vectors\3_Transform\Viewport.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.Vectors\5_Clipper\cliper.cs">
+      <Link>1_Vectors\5_Clipper\cliper.cs</Link>
+    </Compile>
+    <Compile Include="..\tesselate\ActiveRegion.cs">
+      <Link>1_Vectors\6_Tesselate\ActiveRegion.cs</Link>
+    </Compile>
+    <Compile Include="..\tesselate\ContourVertex.cs">
+      <Link>1_Vectors\6_Tesselate\ContourVertex.cs</Link>
+    </Compile>
+    <Compile Include="..\tesselate\Dictionary.cs">
+      <Link>1_Vectors\6_Tesselate\Dictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\tesselate\Face.cs">
+      <Link>1_Vectors\6_Tesselate\Face.cs</Link>
+    </Compile>
+    <Compile Include="..\tesselate\HalfEdge.cs">
+      <Link>1_Vectors\6_Tesselate\HalfEdge.cs</Link>
+    </Compile>
+    <Compile Include="..\tesselate\MaxFirstList.cs">
+      <Link>1_Vectors\6_Tesselate\MaxFirstList.cs</Link>
+    </Compile>
+    <Compile Include="..\tesselate\mesh.cs">
+      <Link>1_Vectors\6_Tesselate\mesh.cs</Link>
+    </Compile>
+    <Compile Include="..\tesselate\Tesselator.cs">
+      <Link>1_Vectors\6_Tesselate\Tesselator.cs</Link>
+    </Compile>
     <Compile Include="2_Canvas\AggColorExtensions.cs" />
     <Compile Include="2_Canvas\CanvasPainter.cs" />
     <Compile Include="6_Typography\ITextPrinter.cs" />
-    <Compile Include="6_Typography\ScriptCode.cs" />
-    <Compile Include="6_Typography\WriteDirection.cs" />
-    <Compile Include="1_Vectors\5_Clipper\cliper.cs" />
     <Compile Include="3_Agg_PixelBuffer\ActualImage.cs" />
     <Compile Include="3_Agg_PixelBuffer\AggMemMx.cs" />
     <Compile Include="3_Agg_PixelBuffer\AggBuffMx.cs" />
