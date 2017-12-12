@@ -37,7 +37,7 @@ namespace PixelFarm.Agg.Lines
     {
         public static int Convert(double x)
         {
-            return AggBasics.iround(
+            return AggMath.iround(
                 x * LineAA.SUBPIXEL_SCALE,
                 LineAA.SUBPIXEL_COORD);
         }

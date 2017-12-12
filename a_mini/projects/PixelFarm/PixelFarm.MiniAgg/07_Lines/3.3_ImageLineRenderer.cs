@@ -130,10 +130,10 @@ namespace PixelFarm.Agg.Lines
             // 0000000000
             // 0000000000
 
-            m_height = (int)AggBasics.uceil(src.Height);
-            m_width = (int)AggBasics.uceil(src.Width);
-            m_width_hr = (int)AggBasics.uround(src.Width * LineAA.SUBPIXEL_SCALE);
-            m_half_height_hr = (int)AggBasics.uround(src.Height * LineAA.SUBPIXEL_SCALE / 2);
+            m_height = (int)AggMath.uceil(src.Height);
+            m_width = (int)AggMath.uceil(src.Width);
+            m_width_hr = (int)AggMath.uround(src.Width * LineAA.SUBPIXEL_SCALE);
+            m_half_height_hr = (int)AggMath.uround(src.Height * LineAA.SUBPIXEL_SCALE / 2);
             m_offset_y_hr = m_dilation_hr + m_half_height_hr - LineAA.SUBPIXEL_SCALE / 2;
             m_half_height_hr += LineAA.SUBPIXEL_SCALE / 2;
             int bufferWidth = m_width + m_dilation * 2;
@@ -628,7 +628,7 @@ namespace PixelFarm.Agg.Lines
         public double StartX
         {
             get { return (double)(m_start) / LineAA.SUBPIXEL_SCALE; }
-            set { m_start = AggBasics.iround(value * LineAA.SUBPIXEL_SCALE); }
+            set { m_start = AggMath.iround(value * LineAA.SUBPIXEL_SCALE); }
         }
 
 

@@ -66,7 +66,7 @@ namespace PixelFarm.Agg
                 double x = (double)i / (double)ImgSubPixConst.SCALE;
                 double y = filter.CalculateWeight(x);
                 m_weight_array[pivot + i] =
-                m_weight_array[pivot - i] = AggBasics.iround(y * ImgFilterConst.SCALE);
+                m_weight_array[pivot - i] = AggMath.iround(y * ImgFilterConst.SCALE);
             }
             int end = (Diameter << ImgSubPixConst.SHIFT) - 1;
             m_weight_array[0] = m_weight_array[end];
@@ -126,7 +126,7 @@ namespace PixelFarm.Agg
                     for (j = 0; j < m_diameter; j++)
                     {
                         sum += m_weight_array[j * (int)ImgSubPixConst.SCALE + i] =
-                            (int)AggBasics.iround(m_weight_array[j * (int)ImgSubPixConst.SCALE + i] * k);
+                            (int)AggMath.iround(m_weight_array[j * (int)ImgSubPixConst.SCALE + i] * k);
                     }
 
                     sum -= (int)ImgFilterConst.SCALE;
@@ -157,7 +157,7 @@ namespace PixelFarm.Agg
         void ReallocLut(double radius)
         {
             m_radius = radius;
-            m_diameter = AggBasics.uceil(radius) * 2;
+            m_diameter = AggMath.uceil(radius) * 2;
             m_start = -(m_diameter / 2 - 1);
             int size = m_diameter << ImgSubPixConst.SHIFT;
             if (size > m_weight_array.Length)

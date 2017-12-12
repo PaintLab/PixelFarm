@@ -478,9 +478,6 @@
     <Compile Include="..\PixelFarm.Triangulation\Util\PolygonGenerator.cs">
       <Link>4_Triangulation\Utils\PolygonGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.vectors\1_vectormaths\AggBasics.cs">
-      <Link>2_DrawingCanvas\1_Vectors\1_VectorMaths\AggBasics.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\AggMath.cs">
       <Link>2_DrawingCanvas\1_Vectors\1_VectorMaths\AggMath.cs</Link>
     </Compile>

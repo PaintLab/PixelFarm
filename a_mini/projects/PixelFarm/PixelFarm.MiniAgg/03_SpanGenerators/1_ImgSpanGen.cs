@@ -58,8 +58,8 @@ namespace PixelFarm.Agg
         {
             m_dx_dbl = dx;
             m_dy_dbl = dy;
-            m_dx_int = AggBasics.iround(dx * img_subpix_const.SCALE);
-            m_dy_int = AggBasics.iround(dy * img_subpix_const.SCALE);
+            m_dx_int = AggMath.iround(dx * img_subpix_const.SCALE);
+            m_dy_int = AggMath.iround(dy * img_subpix_const.SCALE);
         }
         public void SetFilterOffset(double d) { SetFilterOffset(d, d); }
         public void Prepare() { }

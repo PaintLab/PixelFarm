@@ -83,8 +83,8 @@ namespace PixelFarm.Agg.Lines
                 return;
             }
 
-            x = AggBasics.iround(tx);
-            y = AggBasics.iround(ty);
+            x = AggMath.iround(tx);
+            y = AggMath.iround(ty);
         }
         /// <summary>
         /// fix_degeneration_bisectrix_start
@@ -95,7 +95,7 @@ namespace PixelFarm.Agg.Lines
         public static void FixDegenBisectrixStart(LineParameters lp,
                                                ref int x, ref int y)
         {
-            int d = AggBasics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
+            int d = AggMath.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
                             (double)(y - lp.y2) * (double)(lp.x2 - lp.x1)) / lp.len);
             if (d < SUBPIXEL_SCALE / 2)
             {
@@ -112,7 +112,7 @@ namespace PixelFarm.Agg.Lines
         public static void FixDegenBisectrixEnd(LineParameters lp,
                                              ref int x, ref int y)
         {
-            int d = AggBasics.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
+            int d = AggMath.iround(((double)(x - lp.x2) * (double)(lp.y2 - lp.y1) -
                             (double)(y - lp.y2) * (double)(lp.x2 - lp.x1)) / lp.len);
             if (d < SUBPIXEL_SCALE / 2)
             {

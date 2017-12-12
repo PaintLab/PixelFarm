@@ -61,9 +61,6 @@
     <Compile Include="..\burningminecurve\curveutils\VectorHelper.cs">
       <Link>1_Vectors\4_BurningMineCurves\VectorHelper.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.vectors\1_vectormaths\AggBasics.cs">
-      <Link>1_Vectors\1_VectorMaths\AggBasics.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.vectors\1_vectormaths\AggMath.cs">
       <Link>1_Vectors\1_VectorMaths\AggMath.cs</Link>
     </Compile>
