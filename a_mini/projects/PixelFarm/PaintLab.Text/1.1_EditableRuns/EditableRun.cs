@@ -23,7 +23,7 @@ namespace LayoutFarm.Text
         public abstract char GetChar(int index);
         internal bool IsLineBreak { get; set; }
         internal abstract bool IsInsertable { get; }
-        public abstract string Text { get; }
+        public abstract string GetText();
         public abstract int CharacterCount { get; }
         //--------------------
         //model
@@ -143,17 +143,17 @@ namespace LayoutFarm.Text
             if (user_elem_id != null)
             {
                 return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
-                    + " i" + dbug_obj_id + "a " + ((EditableRun)this).Text + ",(ID " + user_elem_id + ") " + dbug_GetLayoutInfo();
+                    + " i" + dbug_obj_id + "a " + ((EditableRun)this).GetText() + ",(ID " + user_elem_id + ") " + dbug_GetLayoutInfo();
             }
             else
             {
                 return dbug_FixedElementCode + dbug_GetBoundInfo() + " "
-                 + " i" + dbug_obj_id + "a " + ((EditableRun)this).Text + " " + dbug_GetLayoutInfo();
+                 + " i" + dbug_obj_id + "a " + ((EditableRun)this).GetText() + " " + dbug_GetLayoutInfo();
             }
         }
         public override string ToString()
         {
-            return "[" + this.dbug_obj_id + "]" + Text;
+            return "[" + this.dbug_obj_id + "]" + GetText();
         }
 #endif
     }

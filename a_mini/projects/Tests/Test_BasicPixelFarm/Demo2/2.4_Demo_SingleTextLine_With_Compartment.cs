@@ -110,7 +110,7 @@ namespace LayoutFarm
             }
             //-------------------------------------------------------------------------
             //In this example  all country name start with Captial letter so ...
-            string currentTextSpanText = textbox.CurrentTextSpan.Text.ToUpper();
+            string currentTextSpanText = textbox.CurrentTextSpan.GetText().ToUpper();
             char firstChar = currentTextSpanText[0];
             List<string> keywords;
             if (words.TryGetValue(firstChar, out keywords))

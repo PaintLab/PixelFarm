@@ -142,7 +142,7 @@ namespace LayoutFarm
             //-------------------------------------------------------------------------
             //sample parse ...
             //In this example  all country name start with Captial letter so ...
-            string currentTextSpanText = textbox.CurrentTextSpan.Text.ToUpper();
+            string currentTextSpanText = textbox.CurrentTextSpan.GetText().ToUpper();
             //analyze content
             var textBuffer = currentTextSpanText.ToCharArray();
             var results = new List<LayoutFarm.Composers.TextSplitBound>();

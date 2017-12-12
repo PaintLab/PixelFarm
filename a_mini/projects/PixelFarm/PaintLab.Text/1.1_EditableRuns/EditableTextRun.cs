@@ -6,11 +6,13 @@ using PixelFarm.Drawing;
 
 namespace LayoutFarm.Text
 {
+
+
+
     class EditableTextRun : EditableRun
     {
 
         TextSpanStyle spanStyle;
-
         char[] mybuffer; //each editable run has it own (dynamic) char buffer
         int[] glyphPositions = null;//TODO: review here-> change this to caret stop position
 
@@ -43,6 +45,7 @@ namespace LayoutFarm.Text
             if (str != null && str.Length > 0)
             {
                 mybuffer = str.ToCharArray();
+                //special treament
                 if (mybuffer.Length == 1 && mybuffer[0] == '\n')
                 {
                     this.IsLineBreak = true;
@@ -61,7 +64,7 @@ namespace LayoutFarm.Text
         }
         public override EditableRun Clone()
         {
-            return new EditableTextRun(this.Root, this.Text, this.SpanStyle);
+            return new EditableTextRun(this.Root, this.GetText(), this.SpanStyle);
         }
         public override EditableRun Copy(int startIndex)
         {
@@ -97,9 +100,9 @@ namespace LayoutFarm.Text
         {
             return CalculateDrawingStringSize(mybuffer, charOffset).Width;
         }
-        public override string Text
+        public override string GetText()
         {
-            get { return new string(mybuffer); }
+            return new string(mybuffer);
         }
         internal override void UpdateRunWidth()
         {

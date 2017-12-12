@@ -51,7 +51,7 @@ namespace LayoutFarm.Text
         }
         public override EditableRun Clone()
         {
-            return new SolidTextRun(this.Root, this.Text, this.SpanStyle);
+            return new SolidTextRun(this.Root, this.GetText(), this.SpanStyle);
         }
         public override EditableRun Copy(int startIndex)
         {
@@ -90,28 +90,16 @@ namespace LayoutFarm.Text
             {
                 throw new Exception("string must be null or zero length");
             }
-        }
-        //public override int GetSingleCharWidth(int index)
-        //{
-        //    // return this.Width;
-        //    return GetCharacterWidth(mybuffer[index]);
-        //}
-        //char[] singleChars = new char[1];
-        //int GetCharacterWidth(char c)
-        //{
-        //    singleChars[0] = c;
-        //    return (int)TextServices.IFonts.MeasureString(singleChars, 0, 1, GetFont()).Width;
-        //}
-        //------------------
+        } 
         public override int GetRunWidth(int charOffset)
-        {
-            //return this.Width;
+        { 
             return CalculateDrawingStringSize(mybuffer, charOffset).Width;
         }
-        public override string Text
+        public override string GetText()
         {
-            get { return new string(mybuffer); }
+            return new string(mybuffer);
         }
+       
 
         
         internal override void UpdateRunWidth()
