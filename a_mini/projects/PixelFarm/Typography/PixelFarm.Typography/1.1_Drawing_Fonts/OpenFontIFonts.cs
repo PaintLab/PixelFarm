@@ -83,8 +83,6 @@ namespace LayoutFarm
             glyphLayout.Typeface = typeface;
             glyphLayout.GenerateGlyphPlans(str, startAt, len, userGlyphPlanList, userCharToGlyphMapList);
 
-            //
-            //
             float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
             int endBefore = startAt + len;
 
@@ -94,7 +92,10 @@ namespace LayoutFarm
                 float tx = glyphPlan.ExactX;
                 float ty = glyphPlan.ExactY;
                 double actualAdvX = glyphPlan.AdvanceX;
-                glyphXAdvances[i] = (int)Math.Round(actualAdvX);
+
+                //if you want to snap each glyph to grid ... => Round it
+
+                glyphXAdvances[i] = (int)Math.Round(actualAdvX * scale);
             }
         }
 
@@ -208,12 +209,11 @@ namespace LayoutFarm
                 }
 
                 MeasuredStringBox result;
-                //measure string at specific px scale
-
+                //measure string at specific px scale 
                 glyphLayout.MeasureString(str, breakSpan.startAt, breakSpan.len, out result, scale);
                 ConcatMeasureBox(ref accumW, ref accumH, ref result);
             }
-            return new Size((int)accumW, (int)accumH);
+            return new Size((int)Math.Round(accumW), (int)Math.Round(accumH));
         }
         static void ConcatMeasureBox(ref float accumW, ref float accumH, ref MeasuredStringBox measureBox)
         {
