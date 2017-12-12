@@ -1,5 +1,4 @@
-﻿#region --- License ---
-/*
+﻿/*
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -20,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -33,13 +31,10 @@ namespace PixelFarm.VectorMath
     [StructLayout(LayoutKind.Sequential)]
     public struct Quaternion : IEquatable<Quaternion>
     {
-        #region Fields
 
         Vector3 xyz;
         double w;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Construct a new Quaterniond from vector and w components
@@ -75,11 +70,8 @@ namespace PixelFarm.VectorMath
             Normalize();
         }
 
-        #endregion
 
-        #region Public Members
 
-        #region Properties
 
         /// <summary>
         /// Gets or sets an OpenTK.Vector3d with the X, Y and Z components of this instance.
@@ -106,11 +98,8 @@ namespace PixelFarm.VectorMath
         /// </summary>
         public double W { get { return w; } set { w = value; } }
 
-        #endregion
 
-        #region Instance
 
-        #region ToAxisAngle
 
         /// <summary>
         /// Convert the current quaternion to axis angle representation
@@ -150,9 +139,7 @@ namespace PixelFarm.VectorMath
             return result;
         }
 
-        #endregion
 
-        #region public double Length
 
         /// <summary>
         /// Gets the length (magnitude) of the Quaterniond.
@@ -166,9 +153,7 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
-        #region public double LengthSquared
 
         /// <summary>
         /// Gets the square of the Quaterniond length (magnitude).
@@ -181,9 +166,7 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
-        #region public void Normalize()
 
         /// <summary>
         /// Scales the Quaterniond to unit length.
@@ -195,9 +178,7 @@ namespace PixelFarm.VectorMath
             W *= scale;
         }
 
-        #endregion
 
-        #region public void Conjugate()
 
         /// <summary>
         /// Convert this Quaterniond to its conjugate
@@ -207,21 +188,15 @@ namespace PixelFarm.VectorMath
             Xyz = -Xyz;
         }
 
-        #endregion
 
-        #endregion
 
-        #region Static
 
-        #region Fields
 
         /// <summary>
         /// Defines the identity quaternion.
         /// </summary>
         public readonly static Quaternion Identity = new Quaternion(0, 0, 0, 1);
-        #endregion
 
-        #region Add
 
         /// <summary>
         /// Add two quaternions
@@ -249,9 +224,7 @@ namespace PixelFarm.VectorMath
                 left.W + right.W);
         }
 
-        #endregion
 
-        #region Sub
 
         /// <summary>
         /// Subtracts two instances.
@@ -279,9 +252,7 @@ namespace PixelFarm.VectorMath
                 left.W - right.W);
         }
 
-        #endregion
 
-        #region Mult
 
         /// <summary>
         /// Multiplies two instances.
@@ -359,9 +330,7 @@ namespace PixelFarm.VectorMath
             return new Quaternion(quaternion.X * scale, quaternion.Y * scale, quaternion.Z * scale, quaternion.W * scale);
         }
 
-        #endregion
 
-        #region Conjugate
 
         /// <summary>
         /// Get the conjugate of the given Quaterniond
@@ -383,9 +352,7 @@ namespace PixelFarm.VectorMath
             result = new Quaternion(-q.Xyz, q.W);
         }
 
-        #endregion
 
-        #region Invert
 
         /// <summary>
         /// Get the inverse of the given Quaterniond
@@ -418,9 +385,7 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
-        #region Normalize
 
         /// <summary>
         /// Scale the given Quaterniond to unit length
@@ -445,9 +410,7 @@ namespace PixelFarm.VectorMath
             result = new Quaternion(q.Xyz * scale, q.W * scale);
         }
 
-        #endregion
 
-        #region FromEulerAngles
 
         public static Quaternion FromEulerAngles(Vector3 rotation)
         {
@@ -458,9 +421,7 @@ namespace PixelFarm.VectorMath
             return zRotation * yRotation * xRotation;
         }
 
-        #endregion
 
-        #region FromAxisAngle
 
         /// <summary>
         /// Build a Quaterniond from the given axis and angle
@@ -483,9 +444,7 @@ namespace PixelFarm.VectorMath
             return Normalize(result);
         }
 
-        #endregion
 
-        #region Slerp
 
         /// <summary>
         /// Do Spherical linear interpolation between two quaternions 
@@ -549,11 +508,8 @@ namespace PixelFarm.VectorMath
                 return Identity;
         }
 
-        #endregion
 
-        #endregion
 
-        #region Operators
 
         /// <summary>
         /// Adds two instances.
@@ -638,11 +594,8 @@ namespace PixelFarm.VectorMath
             return !left.Equals(right);
         }
 
-        #endregion
 
-        #region Overrides
 
-        #region public override string ToString()
 
         /// <summary>
         /// Returns a System.String that represents the current Quaterniond.
@@ -653,9 +606,7 @@ namespace PixelFarm.VectorMath
             return String.Format("V: {0}, W: {1}", Xyz, W);
         }
 
-        #endregion
 
-        #region public override bool Equals (object o)
 
         /// <summary>
         /// Compares this object instance to another object for equality. 
@@ -668,9 +619,7 @@ namespace PixelFarm.VectorMath
             return this == (Quaternion)other;
         }
 
-        #endregion
 
-        #region public override int GetHashCode ()
 
         /// <summary>
         /// Provides the hash code for this object. 
@@ -681,13 +630,9 @@ namespace PixelFarm.VectorMath
             return new { Xyz.x, Xyz.y, Xyz.z, W }.GetHashCode();
         }
 
-        #endregion
 
-        #endregion
 
-        #endregion
 
-        #region IEquatable<Quaterniond> Members
 
         /// <summary>
         /// Compares this Quaterniond instance to another Quaterniond for equality. 
@@ -699,6 +644,5 @@ namespace PixelFarm.VectorMath
             return Xyz == other.Xyz && W == other.W;
         }
 
-        #endregion
     }
 }

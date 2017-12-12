@@ -7,9 +7,8 @@ namespace LayoutFarm
     {
         protected override void OnStartDemo(SampleViewport viewport)
         {
-            ImageBinder imgBinder = new ClientImageBinder();
-            //force load image
-            imgBinder.SetImage(LoadBitmap("../../Data/imgs/favorites32.png"));
+            ImageBinder imgBinder = viewport.GetImageBinder2("../../Data/imgs/favorites32.png");
+            
             for (int i = 0; i < 100; ++i)
             {
                 //share 1 img binder with multiple img boxes

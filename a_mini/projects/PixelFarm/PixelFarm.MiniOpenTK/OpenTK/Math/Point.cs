@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -36,13 +34,10 @@ namespace OpenTK
     /// </summary>
     public struct Point : IEquatable<Point>
     {
-    #region Fields
 
         int x, y;
 
-    #endregion
 
-    #region Constructors
 
         /// <summary>
         /// Constructs a new Point instance.
@@ -56,9 +51,7 @@ namespace OpenTK
             Y = y;
         }
 
-    #endregion
 
-    #region Public Members
 
         /// <summary>
         /// Gets a <see cref="System.Boolean"/> that indicates whether this instance is empty or zero.
@@ -214,9 +207,7 @@ namespace OpenTK
             return String.Format("{{{0}, {1}}}", X, Y);
         }
 
-    #endregion
 
-    #region IEquatable<Point> Members
 
         /// <summary>
         /// Indicates whether this instance is equal to the specified Point.
@@ -228,7 +219,6 @@ namespace OpenTK
             return X == other.X && Y == other.Y;
         }
 
-    #endregion
     }
 #endif
 }

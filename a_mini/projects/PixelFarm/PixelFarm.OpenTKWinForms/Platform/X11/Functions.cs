@@ -1,10 +1,8 @@
-#region --- License ---
 /* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -12,7 +10,6 @@ using System.Text;
 using System.Runtime.InteropServices;
 namespace OpenTK.Platform.X11
 {
-    #region Types
 
     // using XID = System.Int32;
     using Window = System.IntPtr;
@@ -36,11 +33,8 @@ namespace OpenTK.Platform.X11
     using Rotation = System.UInt16;
     using Status = System.Int32;
     using SizeID = System.UInt16;
-    #endregion
 
-    #region Structs
 
-    #endregion
 
     internal static partial class Functions
     {

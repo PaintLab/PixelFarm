@@ -1,7 +1,7 @@
 //MIT, 2014-2017, WinterDev
 using System;
 using System.Runtime.InteropServices;
-using System.Text;
+
 
 namespace Win32
 {
@@ -41,8 +41,6 @@ namespace Win32
         public byte bmiColors_rgbReserved;
     }
 
-
-    /* Bitmap Header Definition */
     [StructLayout(LayoutKind.Sequential)]
     unsafe struct BITMAP
     {
@@ -67,7 +65,31 @@ namespace Win32
     }
 
 
-    static class MyWin32
+    [StructLayout(LayoutKind.Sequential)]
+    struct Rectangle
+    {
+        public int X;
+        public int Y;
+        public int W;
+        public int H;
+    }
+    [StructLayout(LayoutKind.Sequential)]
+    struct Size
+    {
+        public int W;
+        public int H;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    struct Point
+    {
+        public int X;
+        public int Y;
+    }
+
+
+    [System.Security.SuppressUnmanagedCodeSecurity]
+    static partial class MyWin32
     {
         //this is platform specific ***
         [DllImport("msvcrt.dll", EntryPoint = "memset", CallingConvention = CallingConvention.Cdecl)]
@@ -77,39 +99,7 @@ namespace Win32
         [DllImport("msvcrt.dll", EntryPoint = "memcpy", CallingConvention = CallingConvention.Cdecl)]
         public static unsafe extern int memcmp(byte* dest, byte* src, int byteCount);
         //----------
-
-        [DllImport("kernel32.dll", ExactSpelling = true)]
-        public static extern IntPtr GlobalAlloc(int flags, int size);
-        [DllImport("kernel32.dll", ExactSpelling = true)]
-        public static extern IntPtr GlobalLock(IntPtr handle);
-        [DllImport("kernel32.dll", ExactSpelling = true)]
-        public static extern bool GlobalUnlock(IntPtr handle);
-        [DllImport("kernel32.dll", ExactSpelling = true)]
-        public static extern IntPtr GlobalFree(IntPtr handle);
-        [DllImport("user32.dll", ExactSpelling = true)]
-        public static extern int GetMessagePos();
-        [DllImport("user32.dll", ExactSpelling = true)]
-        public static extern int GetMessageTime();
-        [DllImport("user32.dll", ExactSpelling = true)]
-        public static extern IntPtr GetActiveWindow();
-        [DllImport("user32.dll", ExactSpelling = true)]
-        public static extern int GetWindowThreadProcessId(IntPtr hwnd, object dwProcessId);
-        [DllImport("gdi32.dll")]
-        public static extern int SetDCBrushColor(IntPtr hdc, int crColor);
-        [DllImport("gdi32.dll")]
-        public static extern int SetDCPenColor(IntPtr hdc, int crColor);
-        [DllImport("gdi32.dll")]
-        public static extern int GetDCBrushColor(IntPtr hdc);
-        [DllImport("gdi32.dll")]
-        public static extern int GetDCPenColor(IntPtr hdc);
-        [DllImport("gdi32.dll")]
-        public static extern int SaveDC(IntPtr hdc);
-        [DllImport("gdi32.dll")]
-        public static extern bool RestoreDC(IntPtr hdc, int nSaveDC);
-        [DllImport("gdi32.dll", ExactSpelling = true)]
-        public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
-        [DllImport("gdi32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr CreateDC(string szdriver, string szdevice, string szoutput, IntPtr devmode);
+        //DC
         [DllImport("gdi32.dll", ExactSpelling = true)]
         public static extern bool DeleteDC(IntPtr hdc);
         [DllImport("gdi32.dll", ExactSpelling = true)]
@@ -132,7 +122,7 @@ namespace Win32
         );
         [DllImport("gdi32.dll", SetLastError = true)]
         internal static extern IntPtr GetStockObject(int index);
-
+        // 
         [DllImport("gdi32.dll")]
         public static extern IntPtr CreateRectRgn(int left, int top, int right, int bottom);
         [DllImport("gdi32.dll")]
@@ -140,7 +130,7 @@ namespace Win32
         [DllImport("gdi32.dll")]
         public static extern bool SetRectRgn(IntPtr hrgn, int left, int top, int right, int bottom);
         [DllImport("gdi32.dll")]
-        public static extern int GetRgnBox(IntPtr hrgn, ref Win32Rect lprc);
+        public static extern int GetRgnBox(IntPtr hrgn, ref Rectangle lprc);
         [DllImport("gdi32.dll")]
         public static extern int SelectClipRgn(IntPtr hdc, IntPtr hrgn);
         public const int NULLREGION = 1;
@@ -153,6 +143,7 @@ namespace Win32
         public static extern bool BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSource, int dwRop);
         [DllImport("gdi32.dll")]
         public static extern bool PatBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, int dwRop);
+        //
         [DllImport("Msimg32.dll")]
         public static extern bool AlphaBlend(IntPtr hdc, int nXOriginDest,
             int nYOriginDest, int nWidthDest, int nHeightDest, IntPtr hdcSrc,
@@ -160,7 +151,10 @@ namespace Win32
         [StructLayout(LayoutKind.Sequential)]
         public struct _BLENDFUNCTION
         {
-            public byte BlendOp; public byte BlendFlags; public byte SourceConstantAlpha; public byte AlphaFormat;
+            public byte BlendOp;
+            public byte BlendFlags;
+            public byte SourceConstantAlpha;
+            public byte AlphaFormat;
             public _BLENDFUNCTION(byte alphaValue)
             {
                 BlendOp = AC_SRC_OVER;
@@ -177,7 +171,7 @@ namespace Win32
         [DllImport("gdi32.dll")]
         public static extern bool OffsetViewportOrgEx(IntPtr hdc, int nXOffset, int nYOffset, out IntPtr lpPoint);
         [DllImport("gdi32.dll")]
-        public static unsafe extern bool GetViewportOrgEx(IntPtr hdc, MyWin32.POINT* p);
+        public static unsafe extern bool GetViewportOrgEx(IntPtr hdc, Point* p);
         public const int SRCCOPY = 0x00CC0020;/* dest = source                   */
         public const int SRCPAINT = 0x00EE0086;/* dest = source OR dest           */
         public const int SRCAND = 0x008800C6; /* dest = source AND dest          */
@@ -196,22 +190,9 @@ namespace Win32
         public const int CBM_Init = 0x04;
         [DllImport("gdi32.dll")]
         public static extern bool Rectangle(IntPtr hDC, int l, int t, int r, int b);
-        [DllImport("user32.dll")]
-        public static extern bool FrameRect(IntPtr hDC, ref MyWin32.Win32Rect rect, IntPtr hBrush);
-        [StructLayout(LayoutKind.Sequential)]
-        public struct WIN32SIZE
-        {
-            public int Width;
-            public int Height;
-            public WIN32SIZE(int w, int h)
-            {
-                this.Width = w;
-                this.Height = h;
-            }
-        }
 
         [DllImport("gdi32.dll")]
-        public static extern bool GetTextExtentPoint32(IntPtr hdc, string lpstring, int c, out WIN32SIZE size);
+        public static extern bool GetTextExtentPoint32(IntPtr hdc, string lpstring, int c, out Size size);
         [DllImport("gdi32.dll")]
         public static extern IntPtr CreateSolidBrush(int crColor);
         [DllImport("gdi32.dll")]
@@ -240,35 +221,6 @@ namespace Win32
 
         [DllImport("gdi32.dll", CharSet = CharSet.Unicode)] //need -> unicode
         public extern static IntPtr CreateFontIndirect(ref LOGFONT logFont);
-
-
-        const int s_POINTS_PER_INCH = 72;
-        static float ConvEmSizeInPointsToPixels(float emsizeInPoint, float pixels_per_inch)
-        {
-            return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * pixels_per_inch);
-        }
-        public static IntPtr CreateFontHelper(string fontName, float emHeight, bool bold, bool italic, float pixels_per_inch = 96)
-        {
-            //see: MSDN, LOGFONT structure
-            //https://msdn.microsoft.com/en-us/library/windows/desktop/dd145037(v=vs.85).aspx
-            MyWin32.LOGFONT logFont = new MyWin32.LOGFONT();
-            MyWin32.SetFontName(ref logFont, fontName);
-            logFont.lfHeight = -(int)ConvEmSizeInPointsToPixels(emHeight, pixels_per_inch);//minus **
-            logFont.lfCharSet = 1;//default
-            logFont.lfQuality = 0;//default
-
-            //
-            MyWin32.LOGFONT_FontWeight weight =
-                bold ?
-                MyWin32.LOGFONT_FontWeight.FW_BOLD :
-                MyWin32.LOGFONT_FontWeight.FW_REGULAR;
-            logFont.lfWeight = (int)weight;
-            //
-            logFont.lfItalic = (byte)(italic ? 1 : 0);
-            return MyWin32.CreateFontIndirect(ref logFont);
-        }
-
-
 
         public static unsafe void SetFontName(ref LOGFONT logFont, string fontName)
         {
@@ -319,40 +271,16 @@ namespace Win32
         /* Background Modes */
         public const int _SetBkMode_TRANSPARENT = 1;
         public const int _SetBkMode_OPAQUE = 2;
-        [DllImport("gdi32.dll")]
-        public static extern IntPtr CreatePen(int fnPenStyle, int nWidth, int crColor);
-        [DllImport("gdi32.dll", ExactSpelling = true)]
-        public static extern int SetDIBitsToDevice(IntPtr hdc, int xdst, int ydst,
-                                                int width, int height, int xsrc, int ysrc, int start, int lines,
-                                                IntPtr bitsptr, IntPtr bmiptr, int color);
+
         [DllImport("gdi32.dll")]
         public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
-        [DllImport("gdi32.dll")]
-        public static extern int SetDIBits(IntPtr hdc, IntPtr hBitmap, uint uStartScan, uint cScanLines, IntPtr lpbitmapArray, IntPtr lpBitmapData, uint fuColorUse);
-        [DllImport("gdi32.dll")]
-        public static extern IntPtr CreateDIBitmap(IntPtr hdc, IntPtr lpBitmapInfo, int fdwInt, IntPtr lpbInit, IntPtr BitmapInfo, uint fuUsage);
+
         [DllImport("gdi32.dll")]
         public static extern int LineTo(IntPtr hdc, int nXEnd, int nYEnd);
         [DllImport("gdi32.dll")]
         public static extern bool MoveToEx(IntPtr hdc, int X, int Y, int lpPoint);
-        [DllImport("gdi32.dll")]
-        public static extern bool RoundRect(IntPtr hdc, int nLeftRect, int nTopRect, int nRightRect, int nButtomRect, int nWidth, int nHeight);
-        [DllImport("user32.dll")]
-        public static extern int FillRect(IntPtr hdc, ref Win32Rect rect, IntPtr hBrush);
-        [DllImport("gdi32.dll")]
-        public static extern bool FillRgn(IntPtr hdc, IntPtr hRgn, IntPtr hBrush);
-        [DllImport("user32.dll")]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-        [DllImport("user32.dll")]
-        public static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string className, string windowName);
-        [DllImport("user32.dll")]
-        public static extern int GetWindowText(IntPtr hWnd, StringBuilder winText, int maxCount);
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetWindow(IntPtr hWnd, int wCmd);
-        [DllImport("user32.dll")]
-        public static extern int GetClassName(IntPtr hWnd, StringBuilder className, int maxCount);
-        [DllImport("user32.dll")]
-        public static extern int GetWindowTextLength(IntPtr hWnd);
+
+
         [DllImport("user32.dll")]
         public static extern IntPtr GetTopWindow(IntPtr hWnd);
         [DllImport("user32.dll")]
@@ -365,82 +293,9 @@ namespace Win32
         public static extern bool FlashWindow(IntPtr hwnd, bool bInvert);
         [DllImport("kernel32.dll")]
         public static extern int GetLastError();
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
-        {
-            public int X;
-            public int Y;
-            public POINT(int x, int y)
-            {
-                this.X = x;
-                this.Y = y;
-            }
-        }
 
 
 
-
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct Win32Rect
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-            public Win32Rect(int x, int y, int w, int h)
-            {
-                Left = x;
-                Top = y;
-                Right = x + w;
-                Bottom = y + h;
-            }
-            public static Win32Rect FromRTLB(int left, int top, int right, int bottom)
-            {
-                Win32Rect rect = new Win32Rect();
-                rect.Left = left;
-                rect.Top = top;
-                rect.Right = right;
-                rect.Bottom = bottom;
-                return rect;
-            }
-
-            public static readonly Win32Rect Empty = new Win32Rect(0, 0, 0, 0);
-        }
-        [StructLayout(LayoutKind.Sequential)]
-        public struct ABC
-        {
-            public int abcA;
-            public uint abcB;
-            public int abcC;
-        }
-        [StructLayout(LayoutKind.Sequential)]
-        public struct ABCFLOAT
-        {
-            public float abcfA;
-            public float abcfB;
-            public float abcfC;
-        }
-
-
-        [DllImport("gdi32.dll")]
-        public static extern bool GetCharWidth32(IntPtr hdc, uint uFirstChar, uint uLastChar, ref int width);
-        [DllImport("gdi32.dll")]
-        public static extern bool GetCharABCWidths(IntPtr hdc, uint uFirstChar, uint uLastChar, [Out]ABC[] lpabc);
-        [DllImport("gdi32.dll")]
-        public static extern bool GetCharABCWidthsFloat(IntPtr hdc, uint uFirstChar, uint uLastChar, [In, Out]ABCFLOAT[] lpabc);
-        [DllImport("user32.dll")]
-        public static extern IntPtr WindowFromPoint(POINT point);
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetForegroundWindow();
-        [DllImport("user32.dll")]
-        public static extern bool SetWindowPos(IntPtr hWnd, int hWndInsertAfter, int x, int y, int cx, int cy, int flags);
-        [DllImport("user32.dll")]
-        public static extern bool PostMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-        [DllImport("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
-        [DllImport("user32.dll")]
-        public static extern int LoadKeyboardLayout(string pwszKLID, int flags);
         public const int WM_KEYDOWN = 0x0100;
         public const int WM_KEYUP = 0x0101;
         public const int WM_LBUTTONDOWN = 0x0201;
@@ -483,19 +338,6 @@ namespace Win32
         public const int WM_NCMOUSEMOVE = 0x00A0;
         public const int WM_MOVING = 0x0216;
         public const int WM_ACTIVATEAPP = 0x001C;
-        public static string GetWinTitle(IntPtr handle)
-        {
-            int winTxtLength = GetWindowTextLength(handle);
-            StringBuilder stBuilder = new StringBuilder(winTxtLength + 1);
-            GetWindowText(handle, stBuilder, stBuilder.Capacity);
-            return stBuilder.ToString();
-        }
-        public static string GetClassName(IntPtr handle)
-        {
-            StringBuilder stBuilder = new StringBuilder(100);
-            GetClassName(handle, stBuilder, stBuilder.Capacity);
-            return stBuilder.ToString();
-        }
         public static int SignedLOWORD(int n)
         {
             return (short)(n & 0xffff);
@@ -507,11 +349,6 @@ namespace Win32
         public static int MAKELONG(int low, int high)
         {
             return ((high << 0x10) | (low & 0xffff));
-        }
-
-        public static int ColorToWin32(PixelFarm.Drawing.Color c)
-        {
-            return ((c.R | (c.G << 8)) | (c.B << 0x10));
         }
 
         /// <summary>
@@ -551,69 +388,245 @@ namespace Win32
             MyWin32.DeleteObject(dib);
             MyWin32.DeleteDC(memoryHdc);
         }
-        //[DllImport("user32.dll")]
-        //public static extern bool IsWindowVisible(IntPtr hWnd);
-        //[DllImport("user32.dll")]
-        //public static extern IntPtr WindowFromDC(IntPtr hdc);
-        ///// <summary>
-        ///// Retrieves the dimensions of the bounding rectangle of the specified window. The dimensions are given in screen coordinates that are relative to the upper-left corner of the screen.
-        ///// </summary>
-        ///// <remarks>
-        ///// In conformance with conventions for the RECT structure, the bottom-right coordinates of the returned rectangle are exclusive. In other words, 
-        ///// the pixel at (right, bottom) lies immediately outside the rectangle.
-        ///// </remarks>
-        ///// <param name="hWnd">A handle to the window.</param>
-        ///// <param name="lpRect">A pointer to a RECT structure that receives the screen coordinates of the upper-left and lower-right corners of the window.</param>
-        ///// <returns>If the function succeeds, the return value is nonzero.</returns>
-        //[DllImport("User32", SetLastError = true)]
-        //public static extern int GetWindowRect(IntPtr hWnd, out Rectangle lpRect);
-        ///// <summary>
-        ///// Retrieves the dimensions of the bounding rectangle of the specified window. The dimensions are given in screen coordinates that are relative to the upper-left corner of the screen.
-        ///// </summary>
-        ///// <remarks>
-        ///// In conformance with conventions for the RECT structure, the bottom-right coordinates of the returned rectangle are exclusive. In other words, 
-        ///// the pixel at (right, bottom) lies immediately outside the rectangle.
-        ///// </remarks>
-        ///// <param name="handle">A handle to the window.</param>
-        ///// <returns>RECT structure that receives the screen coordinates of the upper-left and lower-right corners of the window.</returns>
-        //public static Rectangle GetWindowRectangle(IntPtr handle)
-        //{
-        //    Rectangle rect;
-        //    GetWindowRect(handle, out rect);
-        //    return new Rectangle(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top);
+        internal const int s_POINTS_PER_INCH = 72;
+        internal static float ConvEmSizeInPointsToPixels(float emsizeInPoint, float pixels_per_inch)
+        {
+            return (int)(((float)emsizeInPoint / (float)s_POINTS_PER_INCH) * pixels_per_inch);
+        }
+
+    }
+
+    [System.Security.SuppressUnmanagedCodeSecurity]
+    class NativeTextWin32
+    {
+        const string GDI32 = "gdi32.dll";
+        [DllImport(GDI32)]
+        public static extern bool GetCharWidth32(IntPtr hdc, uint uFirstChar, uint uLastChar, ref int width);
+
+        [DllImport(GDI32, CharSet = CharSet.Unicode)]
+        public static extern bool TextOut(IntPtr hdc, int nXStart, int nYStart,
+            [MarshalAs(UnmanagedType.LPWStr)]string charBuffer, int cbstring);
+        [DllImport(GDI32, CharSet = CharSet.Unicode)]
+        public static extern bool TextOut(IntPtr hdc, int nXStart, int nYStart, char[] charBuffer, int cbstring);
+        [DllImport(GDI32, EntryPoint = "TextOutW")]
+        public static unsafe extern bool TextOutUnsafe(IntPtr hdc, int x, int y, char* s, int len);
+        [DllImport(GDI32)]
+        public static unsafe extern bool ExtTextOut(IntPtr hdc, int x, int y, uint fuOptions,
+            Rectangle* lpRect, char[] charBuffer, int cbCount, object arrayOfSpaceValues);
+        [DllImport(GDI32, CharSet = CharSet.Unicode)]
+        public static extern bool GetTextExtentPoint32(IntPtr hdc, char[] charBuffer, int c, out Size size);
+        [DllImport(GDI32, EntryPoint = "GetTextExtentPoint32", CharSet = CharSet.Unicode)]
+        public static unsafe extern bool GetTextExtentPoint32Char(IntPtr hdc, char* ch, int c, out Size size);
+        public const int ETO_OPAQUE = 0x0002;
+        public const int ETO_CLIPPED = 0x0004;
+        [DllImport(GDI32, EntryPoint = "GetTextExtentPoint32W", CharSet = CharSet.Unicode)]
+        public static extern int GetTextExtentPoint32(IntPtr hdc, [MarshalAs(UnmanagedType.LPWStr)] string str, int len, ref Size size);
+        [DllImport(GDI32, EntryPoint = "GetTextExtentPoint32W", CharSet = CharSet.Unicode)]
+        public static unsafe extern int UnsafeGetTextExtentPoint32(
+            IntPtr hdc, char* str, int len, ref Size size);
+        [DllImport(GDI32, EntryPoint = "GetTextExtentExPointW", CharSet = CharSet.Unicode)]
+        public static extern bool GetTextExtentExPoint(IntPtr hDc, [MarshalAs(UnmanagedType.LPWStr)]string str, int nLength, int nMaxExtent, int[] lpnFit, int[] alpDx, ref Size size);
+        [DllImport(GDI32, EntryPoint = "GetTextExtentExPointW", CharSet = CharSet.Unicode)]
+        public static unsafe extern bool UnsafeGetTextExtentExPoint(
+            IntPtr hDc, char* str, int len, int nMaxExtent, int[] lpnFit, int[] alpDx, ref Size size);
+        /// <summary>
+        /// translates a string into an array of glyph indices. The function can be used to determine whether a glyph exists in a font.
+        /// This function attempts to identify a single-glyph representation for each character in the string pointed to by lpstr. 
+        /// While this is useful for certain low-level purposes (such as manipulating font files), higher-level applications that wish to map a string to glyphs will typically wish to use the Uniscribe functions.
+        /// </summary>
+        /// <param name="hdc"></param>
+        /// <param name="text"></param>
+        /// <param name="c">The length of both the length of the string pointed to by lpstr and the size (in WORDs) of the buffer pointed to by pgi.</param>
+        /// <param name="buffer">This buffer must be of dimension c. On successful return, contains an array of glyph indices corresponding to the characters in the string</param>
+        /// <param name="fl">(0 | GGI_MARK_NONEXISTING_GLYPHS) Specifies how glyphs should be handled if they are not supported. This parameter can be the following value.</param>
+        /// <returns>If the function succeeds, it returns the number of bytes (for the ANSI function) or WORDs (for the Unicode function) converted.</returns>
+        [DllImport(GDI32, CharSet = CharSet.Unicode)]
+        public static extern unsafe int GetGlyphIndices(IntPtr hdc, char* text, int c, ushort* glyIndexBuffer, int fl);
+
+        [DllImport(GDI32)]
+        public static unsafe extern int GetCharABCWidths(IntPtr hdc, uint uFirstChar, uint uLastChar, void* lpabc);
+        [DllImport(GDI32)]
+        public static unsafe extern int GetCharABCWidthsFloat(IntPtr hdc, uint uFirstChar, uint uLastChar, void* lpabc);
+
+        public const int GGI_MARK_NONEXISTING_GLYPHS = 0X0001;
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct FontABC
+        {
+            public int abcA;
+            public uint abcB;
+            public int abcC;
+            public int Sum
+            {
+                get
+                {
+                    return abcA + (int)abcB + abcC;
+                }
+            }
+        }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct ABCFloat
+        {
+            /// <summary>Specifies the A spacing of the character. The A spacing is the distance to add to the current
+            /// position before drawing the character glyph.</summary>
+            public float abcfA;
+            /// <summary>Specifies the B spacing of the character. The B spacing is the width of the drawn portion of
+            /// the character glyph.</summary>
+            public float abcfB;
+            /// <summary>Specifies the C spacing of the character. The C spacing is the distance to add to the current
+            /// position to provide white space to the right of the character glyph.</summary>
+            public float abcfC;
+        }
+        [DllImport(GDI32, CharSet = CharSet.Unicode)]
+        public static unsafe extern int GetCharacterPlacement(IntPtr hdc, char* str, int nCount,
+            int nMaxExtent, ref GCP_RESULTS lpResults, int dwFlags);
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public unsafe struct GCP_RESULTS
+        {
+            public int lStructSize;
+            public char* lpOutString;
+            public uint* lpOrder;
+            public int* lpDx;
+            public int* lpCaretPos;
+            public char* lpClass;
+            public char* lpGlyphs;
+            public uint nGlyphs;
+            public int nMaxFit;
+        }
+        //            DWORD GetCharacterPlacement(
+        //  _In_    HDC           hdc,
+        //  _In_    LPCTSTR       lpString,
+        //  _In_    int           nCount,
+        //  _In_    int           nMaxExtent,
+        //  _Inout_ LPGCP_RESULTS lpResults,
+        //  _In_    DWORD         dwFlags
+        //);
+
+        //    typedef struct _OUTLINETEXTMETRICW {
+        //UINT    otmSize;
+        //TEXTMETRICW otmTextMetrics;
+        //BYTE    otmFiller;
+        //PANOSE  otmPanoseNumber;
+        //UINT    otmfsSelection;
+        //UINT    otmfsType;
+        // int    otmsCharSlopeRise;
+        // int    otmsCharSlopeRun;
+        // int    otmItalicAngle;
+        //UINT    otmEMSquare;
+        // int    otmAscent;
+        // int    otmDescent;
+        //UINT    otmLineGap;
+        //UINT    otmsCapEmHeight;
+        //UINT    otmsXHeight;
+        //RECT    otmrcFontBox;
+        // int    otmMacAscent;
+        // int    otmMacDescent;
+        //UINT    otmMacLineGap;
+        //UINT    otmusMinimumPPEM;
+        //POINT   otmptSubscriptSize;
+        //POINT   otmptSubscriptOffset;
+        //POINT   otmptSuperscriptSize;
+        //POINT   otmptSuperscriptOffset;
+        //UINT    otmsStrikeoutSize;
+        // int    otmsStrikeoutPosition;
+        // int    otmsUnderscoreSize;
+        // int    otmsUnderscorePosition;
+        //PSTR    otmpFamilyName;
+        //PSTR    otmpFaceName;
+        //PSTR    otmpStyleName;
+        //PSTR    otmpFullName;
         //}
 
-        //[DllImport("User32.dll")]
-        //public static extern bool MoveWindow(IntPtr handle, int x, int y, int width, int height, bool redraw);
-        //[DllImport("gdi32.dll")]
-        //public static extern int SetBkMode(IntPtr hdc, int mode);
-        //[DllImport("gdi32.dll")]
-        //public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiObj);
-        //[DllImport("gdi32.dll")]
-        //public static extern int SetTextColor(IntPtr hdc, int color);
-        //[DllImport("gdi32.dll")]
-        //public static extern IntPtr CreateRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect);
+        [StructLayout(LayoutKind.Sequential)]
+        public struct PANOSE
+        {
+            byte bFamilyType;
+            byte bSerifStyle;
+            byte bWeight;
+            byte bProportion;
+            byte bContrast;
+            byte bStrokeVariation;
+            byte bArmStyle;
+            byte bLetterform;
+            byte bMidline;
+            byte bXHeight;
+        }
 
-        //[DllImport("gdi32.dll")]
-        //public static extern int SelectClipRgn(IntPtr hdc, IntPtr hrgn);
-        //[DllImport("gdi32.dll")]
-        //public static extern bool DeleteObject(IntPtr hObject);
-        //[DllImport("gdi32.dll")]
-        //[return: MarshalAs(UnmanagedType.Bool)]
-        //public static extern bool BitBlt(IntPtr hdc, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, int dwRop);
-        //[DllImport("gdi32.dll", EntryPoint = "GdiAlphaBlend")]
-        //public static extern bool AlphaBlend(IntPtr hdcDest, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest, IntPtr hdcSrc, int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, BlendFunction blendFunction);
-        //[DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
-        //public static extern bool DeleteDC(IntPtr hdc);
-        //[DllImport("gdi32.dll", ExactSpelling = true, SetLastError = true)]
-        //public static extern IntPtr CreateCompatibleDC(IntPtr hdc);
-        ///// <summary>
-        ///// Const for BitBlt copy raster-operation code.
-        ///// </summary>
-        //public const int BitBltCopy = 0x00CC0020;
-        ///// <summary>
-        ///// Const for BitBlt paint raster-operation code.
-        ///// </summary>
-        //public const int BitBltPaint = 0x00EE0086;
+        [StructLayout(LayoutKind.Sequential)]
+        public unsafe struct _OUTLINETEXTMETRICW
+        {
+            uint otmSize;
+            TEXTMETRICW otmTextMetrics;
+            byte otmFiller;
+            PANOSE otmPanoseNumber;
+            uint otmfsSelection;
+            uint otmfsType;
+            int otmsCharSlopeRise;
+            int otmsCharSlopeRun;
+            int otmItalicAngle;
+            uint otmEMSquare;
+            int otmAscent;
+            int otmDescent;
+            uint otmLineGap;
+            uint otmsCapEmHeight;
+            uint otmsXHeight;
+            Rectangle otmrcFontBox;
+            int otmMacAscent;
+            int otmMacDescent;
+            uint otmMacLineGap;
+            uint otmusMinimumPPEM;
+            Point otmptSubscriptSize;
+            Point otmptSubscriptOffset;
+            Point otmptSuperscriptSize;
+            Point otmptSuperscriptOffset;
+            uint otmsStrikeoutSize;
+            int otmsStrikeoutPosition;
+            int otmsUnderscoreSize;
+            int otmsUnderscorePosition;
+            char* otmpFamilyName;
+            char* otmpFaceName;
+            char* otmpStyleName;
+            char* otmpFullName;
+        }
+        [StructLayout(LayoutKind.Sequential)]
+        public struct TEXTMETRICW
+        {
+            int tmHeight;
+            int tmAscent;
+            int tmDescent;
+            int tmInternalLeading;
+            int tmExternalLeading;
+            int tmAveCharWidth;
+            int tmMaxCharWidth;
+            int tmWeight;
+            int tmOverhang;
+            int tmDigitizedAspectX;
+            int tmDigitizedAspectY;
+            char tmFirstChar;
+            char tmLastChar;
+            char tmDefaultChar;
+            char tmBreakChar;
+            byte tmItalic;
+            byte tmUnderlined;
+            byte tmStruckOut;
+            byte tmPitchAndFamily;
+            byte tmCharSet;
+        }
+
+
+
+#if DEBUG
+        public static void dbugDrawTextOrigin(IntPtr hdc, int x, int y)
+        {
+            MyWin32.Rectangle(hdc, x, y, x + 20, y + 20);
+            MyWin32.MoveToEx(hdc, x, y, 0);
+            MyWin32.LineTo(hdc, x + 20, y + 20);
+            MyWin32.MoveToEx(hdc, x, y + 20, 0);
+            MyWin32.LineTo(hdc, x + 20, y);
+        }
+#endif
+
+
     }
 }

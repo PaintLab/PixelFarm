@@ -1,11 +1,12 @@
 ﻿//Apache2, 2014-2017, WinterDev
 
+using Typography.TextServices;
 namespace LayoutFarm.UI
 {
     //platform specific code 
     public class UIPlatformWinNeutral : UIPlatform
     {
-        PixelFarm.Drawing.Fonts.OpenFontStore s_fontStore;
+        OpenFontStore s_fontStore;
 
         static UIPlatformWinNeutral()
         {
@@ -16,10 +17,10 @@ namespace LayoutFarm.UI
         {
             LayoutFarm.UI.Clipboard.SetUIPlatform(this);
 
-            s_fontStore = new PixelFarm.Drawing.Fonts.OpenFontStore();
+            s_fontStore = new OpenFontStore();
 
             //no gdi+
-            PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(s_fontStore);
+            // PixelFarm.Drawing.WinGdi.WinGdiFontFace.SetFontLoader(s_fontStore);
             //gles2 
             //
             PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(s_fontStore);
@@ -32,7 +33,7 @@ namespace LayoutFarm.UI
 
             }
         }
-       
+
 
         public override void ClearClipboardData()
         {
@@ -47,10 +48,12 @@ namespace LayoutFarm.UI
             throw new System.NotSupportedException();
         }
 
-        PixelFarm.Drawing.WinGdi.Gdi32IFonts _gdiPlusIFonts = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
-        public PixelFarm.Drawing.IFonts GetIFonts()
+        // PixelFarm.Drawing.WinGdi.Gdi32IFonts _gdiPlusIFonts = new PixelFarm.Drawing.WinGdi.Gdi32IFonts();
+        public PixelFarm.Drawing.ITextService GetIFonts()
         {
-            return this._gdiPlusIFonts;
+            throw new System.NotSupportedException();
+
+            //    return this._gdiPlusIFonts;
         }
 
         public static readonly UIPlatformWinNeutral platform = new UIPlatformWinNeutral();

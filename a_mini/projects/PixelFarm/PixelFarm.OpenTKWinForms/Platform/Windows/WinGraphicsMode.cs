@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -39,21 +37,16 @@ namespace OpenTK.Platform.Windows
     {
         // Todo: Get rid of the System.Windows.Forms.Control dependency.
 
-        #region --- Fields ---
 
         // To avoid recursion when calling GraphicsMode.Default
         bool creating;
-        #endregion
 
-        #region --- Constructors ---
 
         public WinGraphicsMode()
         {
         }
 
-        #endregion
 
-        #region --- IGraphicsMode Members ---
 
         public GraphicsMode SelectGraphicsMode(ColorDepth color, int depth, int stencil, int samples, ColorDepth accum,
                                                int buffers, bool stereo)
@@ -76,11 +69,8 @@ namespace OpenTK.Platform.Windows
             return mode;
         }
 
-        #endregion
 
-        #region --- Private Methods ---
 
-        #region SelectGraphicsModePFD
 
         GraphicsMode SelectGraphicsModePFD(ColorDepth color, int depth, int stencil, int samples, ColorDepth accum,
             int buffers, bool stereo)
@@ -137,9 +127,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region SelectGraphicsModeARB
 
         GraphicsMode SelectGraphicsModeARB(ColorDepth color, int depth, int stencil, int samples, ColorDepth accum,
             int buffers, bool stereo)
@@ -239,9 +227,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #endregion
     }
 }
 

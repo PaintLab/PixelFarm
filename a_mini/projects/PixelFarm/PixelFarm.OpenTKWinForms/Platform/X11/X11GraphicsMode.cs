@@ -1,10 +1,8 @@
-#region --- License ---
 /* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -20,15 +18,12 @@ namespace OpenTK.Platform.X11
         // It seems the Choose* methods do not take multisampling into account (at least on some
         // drivers).
 
-        #region Constructors
 
         public X11GraphicsMode()
         {
         }
 
-        #endregion
 
-        #region IGraphicsMode Members
 
         public GraphicsMode SelectGraphicsMode(ColorFormat color, int depth, int stencil, int samples, ColorFormat accum,
                                                int buffers, bool stereo)
@@ -75,9 +70,7 @@ namespace OpenTK.Platform.X11
             return gfx;
         }
 
-        #endregion
 
-        #region Private Members
 
         // See http://publib.boulder.ibm.com/infocenter/systems/index.jsp?topic=/com.ibm.aix.opengl/doc/openglrf/glXChooseFBConfig.htm
         // for the attribute declarations. Note that the attributes are different than those used in Glx.ChooseVisual.
@@ -249,6 +242,5 @@ namespace OpenTK.Platform.X11
             }
         }
 
-        #endregion
     }
 }

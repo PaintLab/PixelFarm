@@ -1,4 +1,3 @@
-#region --- License ---
 /*
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 
@@ -20,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -36,7 +34,6 @@ namespace PixelFarm.VectorMath
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector3 : IEquatable<Vector3>
     {
-        #region Fields
 
         /// <summary>
         /// The X component of the Vector3.
@@ -50,9 +47,7 @@ namespace PixelFarm.VectorMath
         /// The Z component of the Vector3.
         /// </summary>
         public double z;
-        #endregion // Fields
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new Vector3.
@@ -115,9 +110,7 @@ namespace PixelFarm.VectorMath
         }
 
 
-        #endregion
 
-        #region Properties
 
         public double this[int index]
         {
@@ -155,13 +148,9 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
-        #region Public Members
 
-        #region Instance
 
-        #region public double Length
 
         /// <summary>
         /// Gets the length (magnitude) of the vector.
@@ -177,9 +166,7 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
-        #region public double LengthSquared
 
         /// <summary>
         /// Gets the square of the vector length (magnitude).
@@ -199,9 +186,7 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion
 
-        #region public void Normalize()
 
         /// <summary>
         /// Returns a normalized Vector of this.
@@ -225,22 +210,16 @@ namespace PixelFarm.VectorMath
             z *= scale;
         }
 
-        #endregion
 
-        #region public double[] ToArray()
 
         public double[] ToArray()
         {
             return new double[] { x, y, z };
         }
 
-        #endregion
 
-        #endregion
 
-        #region Static
 
-        #region Fields
 
         /// <summary>
         /// Defines a unit-length Vector3d that points towards the X-axis.
@@ -274,9 +253,7 @@ namespace PixelFarm.VectorMath
         /// Defines the size of the Vector3d struct in bytes.
         /// </summary>
         public static readonly int SizeInBytes = Marshal.SizeOf(new Vector3());
-        #endregion
 
-        #region Add
 
         /// <summary>
         /// Adds two vectors.
@@ -301,9 +278,7 @@ namespace PixelFarm.VectorMath
             result = new Vector3(a.x + b.x, a.y + b.y, a.z + b.z);
         }
 
-        #endregion
 
-        #region Subtract
 
         /// <summary>
         /// Subtract one Vector from another
@@ -328,9 +303,7 @@ namespace PixelFarm.VectorMath
             result = new Vector3(a.x - b.x, a.y - b.y, a.z - b.z);
         }
 
-        #endregion
 
-        #region Multiply
 
         /// <summary>
         /// Multiplies a vector by a scalar.
@@ -378,9 +351,7 @@ namespace PixelFarm.VectorMath
             result = new Vector3(vector.x * scale.x, vector.y * scale.y, vector.z * scale.z);
         }
 
-        #endregion
 
-        #region Divide
 
         /// <summary>
         /// Divides a vector by a scalar.
@@ -428,9 +399,7 @@ namespace PixelFarm.VectorMath
             result = new Vector3(vector.x / scale.x, vector.y / scale.y, vector.z / scale.z);
         }
 
-        #endregion
 
-        #region ComponentMin
 
         /// <summary>
         /// Calculate the component-wise minimum of two vectors
@@ -459,9 +428,7 @@ namespace PixelFarm.VectorMath
             result.z = a.z < b.z ? a.z : b.z;
         }
 
-        #endregion
 
-        #region ComponentMax
 
         /// <summary>
         /// Calculate the component-wise maximum of two vectors
@@ -490,9 +457,7 @@ namespace PixelFarm.VectorMath
             result.z = a.z > b.z ? a.z : b.z;
         }
 
-        #endregion
 
-        #region Min
 
         /// <summary>
         /// Returns the Vector3d with the minimum magnitude
@@ -505,9 +470,7 @@ namespace PixelFarm.VectorMath
             return left.LengthSquared < right.LengthSquared ? left : right;
         }
 
-        #endregion
 
-        #region Max
 
         /// <summary>
         /// Returns the Vector3d with the minimum magnitude
@@ -520,9 +483,7 @@ namespace PixelFarm.VectorMath
             return left.LengthSquared >= right.LengthSquared ? left : right;
         }
 
-        #endregion
 
-        #region Clamp
 
         /// <summary>
         /// Clamp a vector to the given minimum and maximum vectors
@@ -553,9 +514,7 @@ namespace PixelFarm.VectorMath
             result.z = vec.z < min.z ? min.z : vec.z > max.z ? max.z : vec.z;
         }
 
-        #endregion
 
-        #region Normalize
 
         /// <summary>
         /// Scale a vector to unit length
@@ -584,9 +543,7 @@ namespace PixelFarm.VectorMath
             result.z = vec.z * scale;
         }
 
-        #endregion
 
-        #region Dot
 
         /// <summary>
         /// Calculate the dot (scalar) product of two vectors
@@ -610,9 +567,7 @@ namespace PixelFarm.VectorMath
             result = left.x * right.x + left.y * right.y + left.z * right.z;
         }
 
-        #endregion
 
-        #region Cross
 
         /// <summary>
         /// Caclulate the cross (vector) product of two vectors
@@ -641,9 +596,7 @@ namespace PixelFarm.VectorMath
                 left.x * right.y - left.y * right.x);
         }
 
-        #endregion // Cross
 
-        #region Utility
         /// <summary>
         /// Checks if 3 points are collinear (all lie on the same line).
         /// </summary>
@@ -679,9 +632,7 @@ namespace PixelFarm.VectorMath
             }
         }
 
-        #endregion // Utility
 
-        #region Lerp
 
         /// <summary>
         /// Returns a new Vector that is the linear blend of the 2 given Vectors
@@ -712,9 +663,7 @@ namespace PixelFarm.VectorMath
             result.z = blend * (b.z - a.z) + a.z;
         }
 
-        #endregion
 
-        #region Barycentric
 
         /// <summary>
         /// Interpolate 3 Vectors using Barycentric coordinates
@@ -750,9 +699,7 @@ namespace PixelFarm.VectorMath
             Add(ref result, ref temp, out result);
         }
 
-        #endregion
 
-        #region Transform
 
         /// <summary>Transform a direction vector by the given Matrix
         /// Assumes the matrix has a bottom row of (0,0,0,1), that is the translation part is ignored.
@@ -990,9 +937,7 @@ namespace PixelFarm.VectorMath
             result.z = v.z / v.w;
         }
 
-        #endregion
 
-        #region CalculateAngle
 
         /// <summary>
         /// Calculates the angle (in radians) between two vectors.
@@ -1018,11 +963,8 @@ namespace PixelFarm.VectorMath
             result = System.Math.Acos(temp / (first.Length * second.Length));
         }
 
-        #endregion
 
-        #endregion
 
-        #region Swizzle
 
         /// <summary>
         /// Gets or sets an OpenTK.Vector2d with the X and Y components of this instance.
@@ -1030,9 +972,7 @@ namespace PixelFarm.VectorMath
         [JsonIgnoreAttribute]
         public Vector2 Xy { get { return new Vector2(x, y); } set { x = value.x; y = value.y; } }
 
-        #endregion
 
-        #region Operators
 
         /// <summary>
         /// Adds two instances.
@@ -1165,11 +1105,8 @@ namespace PixelFarm.VectorMath
             return !left.Equals(right);
         }
 
-        #endregion
 
-        #region Overrides
 
-        #region public override string ToString()
 
         /// <summary>
         /// Returns a System.String that represents the current Vector3.
@@ -1180,9 +1117,7 @@ namespace PixelFarm.VectorMath
             return String.Format("[{0}, {1}, {2}]", x, y, z);
         }
 
-        #endregion
 
-        #region public override int GetHashCode()
 
         /// <summary>
         /// Returns the hashcode for this instance.
@@ -1193,9 +1128,7 @@ namespace PixelFarm.VectorMath
             return new { x, y, z }.GetHashCode();
         }
 
-        #endregion
 
-        #region public override bool Equals(object obj)
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
@@ -1227,13 +1160,9 @@ namespace PixelFarm.VectorMath
             return false;
         }
 
-        #endregion
 
-        #endregion
 
-        #endregion
 
-        #region IEquatable<Vector3> Members
 
         /// <summary>Indicates whether the current vector is equal to another vector.</summary>
         /// <param name="other">A vector to compare with this vector.</param>
@@ -1246,7 +1175,6 @@ namespace PixelFarm.VectorMath
                 z == other.z;
         }
 
-        #endregion
 
         public static double ComponentMax(Vector3 vector3)
         {

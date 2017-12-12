@@ -1,4 +1,3 @@
-#region --- License ---
 /*
 Copyright (c) 2006 - 2008 The Open Toolkit library.
 
@@ -20,7 +19,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
-#endregion
 
 using System;
 using System.IO;
@@ -32,15 +30,12 @@ namespace OpenTK
     [Serializable, StructLayout(LayoutKind.Sequential)]
     public struct Vector2h : IEquatable<Vector2h>
     {
-        #region Fields
 
         /// <summary>The X component of the Half2.</summary>
         public Half X;
         /// <summary>The Y component of the Half2.</summary>
         public Half Y;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// The new Half2 instance will avoid conversion and copy directly from the Half parameters.
@@ -166,9 +161,7 @@ namespace OpenTK
             Y = new Half(v.Y, throwOnError);
         }
 
-        #endregion Constructors
 
-        #region Half -> Single
 
         /// <summary>
         /// Returns this Half2 instance's contents as Vector2.
@@ -187,9 +180,7 @@ namespace OpenTK
             return new Vector2d(X, Y);
         }
 
-        #endregion Half -> Single
 
-        #region Conversions
 
         /// <summary>Converts OpenTK.Vector2 to OpenTK.Half2.</summary>
         /// <param name="v">The Vector2 to convert.</param>
@@ -223,15 +214,11 @@ namespace OpenTK
             return new Vector2d(h.X, h.Y);
         }
 
-        #endregion Conversions
 
-        #region Constants
 
         /// <summary>The size in bytes for an instance of the Half2 struct is 4.</summary>
         public static readonly int SizeInBytes = 4;
-        #endregion Constants
 
-        //#region ISerializable
 
         ///// <summary>Constructor used by ISerializable to deserialize the object.</summary>
         ///// <param name="info"></param>
@@ -251,9 +238,7 @@ namespace OpenTK
         //    info.AddValue("Y", this.Y);
         //}
 
-        //#endregion ISerializable
 
-        #region Binary dump
 
         /// <summary>Updates the X and Y components of this instance by reading from a Stream.</summary>
         /// <param name="bin">A BinaryReader instance associated with an open Stream.</param>
@@ -271,9 +256,7 @@ namespace OpenTK
             Y.ToBinaryStream(bin);
         }
 
-        #endregion Binary dump
 
-        #region IEquatable<Half2> Members
 
         /// <summary>Returns a value indicating whether this instance is equal to a specified OpenTK.Half2 vector.</summary>
         /// <param name="other">OpenTK.Half2 to compare to this instance..</param>
@@ -283,9 +266,7 @@ namespace OpenTK
             return (this.X.Equals(other.X) && this.Y.Equals(other.Y));
         }
 
-        #endregion
 
-        #region ToString()
 
         /// <summary>Returns a string that contains this Half2's numbers in human-legible form.</summary>
         public override string ToString()
@@ -293,9 +274,7 @@ namespace OpenTK
             return String.Format("({0}, {1})", X.ToString(), Y.ToString());
         }
 
-        #endregion ToString()
 
-        #region BitConverter
 
         /// <summary>Returns the Half2 as an array of bytes.</summary>
         /// <param name="h">The Half2 to convert.</param>
@@ -324,6 +303,5 @@ namespace OpenTK
             return h2;
         }
 
-        #endregion BitConverter
     }
 }

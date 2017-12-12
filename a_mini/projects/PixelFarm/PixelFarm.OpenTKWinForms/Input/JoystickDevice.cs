@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2008 the Open Toolkit library, except where noted.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -34,7 +32,6 @@ namespace OpenTK.Input
     /// </summary>
     public abstract class JoystickDevice : IInputDevice
     {
-        #region Fields
 
         int id;
         string description;
@@ -42,9 +39,7 @@ namespace OpenTK.Input
         JoystickButtonCollection button_collection;
         JoystickMoveEventArgs move_args = new JoystickMoveEventArgs(0, 0, 0);
         JoystickButtonEventArgs button_args = new JoystickButtonEventArgs(0, false);
-        #endregion
 
-        #region Constructors
 
         internal JoystickDevice(int id, int axes, int buttons)
         {
@@ -57,9 +52,7 @@ namespace OpenTK.Input
             button_collection = new JoystickButtonCollection(buttons);
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Gets a JoystickAxisCollection containing the state of each axis on this instance. Values are normalized in the [-1, 1] range.
@@ -71,9 +64,7 @@ namespace OpenTK.Input
         /// </summary>
         public JoystickButtonCollection Button { get { return button_collection; } }
 
-        #endregion
 
-        #region IInputDevice Members
 
         /// <summary>
         /// Gets a System.String containing a unique description for this instance.
@@ -92,9 +83,7 @@ namespace OpenTK.Input
             get { return InputDeviceType.Hid; }
         }
 
-        #endregion
 
-        #region Events
 
         /// <summary>
         /// Occurs when an axis of this JoystickDevice instance is moved.
@@ -111,9 +100,7 @@ namespace OpenTK.Input
         /// </summary>
         public EventHandler<JoystickButtonEventArgs> ButtonUp =
             delegate (object sender, JoystickButtonEventArgs e) { };
-        #endregion
 
-        #region Internal Members
 
         internal int Id
         {
@@ -142,10 +129,8 @@ namespace OpenTK.Input
             }
         }
 
-        #endregion
     }
 
-    #region JoystickDevice<TDetail> : JoystickDevice
 
     // Provides platform-specific information about the relevant JoystickDevice.
     internal sealed class JoystickDevice<TDetail> : JoystickDevice
@@ -157,9 +142,7 @@ namespace OpenTK.Input
         internal TDetail Details;
     }
 
-    #endregion
 
-    #region Event Arguments
 
     /// <summary>
     /// The base class for JoystickDevice event arguments.
@@ -174,13 +157,10 @@ namespace OpenTK.Input
     /// </summary>
     public class JoystickButtonEventArgs : EventArgs
     {
-        #region Fields
 
         JoystickButton button;
         bool pressed;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JoystickButtonEventArgs"/> class.
@@ -193,9 +173,7 @@ namespace OpenTK.Input
             this.pressed = pressed;
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// The index of the joystick button for the event.
@@ -207,7 +185,6 @@ namespace OpenTK.Input
         /// </summary>
         public bool Pressed { get { return pressed; } internal set { this.pressed = value; } }
 
-        #endregion
     }
 
     /// <summary>
@@ -216,14 +193,11 @@ namespace OpenTK.Input
     /// </summary>
     public class JoystickMoveEventArgs : JoystickEventArgs
     {
-        #region Fields
 
         JoystickAxis axis;
         float value;
         float delta;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JoystickMoveEventArgs"/> class.
@@ -238,9 +212,7 @@ namespace OpenTK.Input
             this.delta = delta;
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Gets a System.Int32 representing the index of the axis that was moved.
@@ -257,12 +229,9 @@ namespace OpenTK.Input
         /// </summary>
         public float Delta { get { return delta; } internal set { this.delta = value; } }
 
-        #endregion
     }
 
-    #endregion
 
-    #region JoystickButton
 
     /// <summary>
     /// Defines available JoystickDevice buttons.
@@ -303,21 +272,16 @@ namespace OpenTK.Input
         Button15,
     }
 
-    #endregion
 
-    #region JoystickButtonCollection
 
     /// <summary>
     /// Defines a collection of JoystickButtons.
     /// </summary>
     public sealed class JoystickButtonCollection
     {
-        #region Fields
 
         bool[] button_state;
-        #endregion
 
-        #region Constructors
 
         internal JoystickButtonCollection(int numButtons)
         {
@@ -326,9 +290,7 @@ namespace OpenTK.Input
             button_state = new bool[numButtons];
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Gets a System.Boolean indicating whether the JoystickButton with the specified index is pressed.
@@ -360,12 +322,9 @@ namespace OpenTK.Input
             get { return button_state.Length; }
         }
 
-        #endregion
     }
 
-    #endregion
 
-    #region JoystickAxis
 
     /// <summary>
     /// Defines available JoystickDevice axes.
@@ -394,21 +353,16 @@ namespace OpenTK.Input
         Axis9,
     }
 
-    #endregion
 
-    #region JoystickAxisCollection
 
     /// <summary>
     /// Defines a collection of JoystickAxes.
     /// </summary>
     public sealed class JoystickAxisCollection
     {
-        #region Fields
 
         float[] axis_state;
-        #endregion
 
-        #region Constructors
 
         internal JoystickAxisCollection(int numAxes)
         {
@@ -417,9 +371,7 @@ namespace OpenTK.Input
             axis_state = new float[numAxes];
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Gets a System.Single indicating the absolute position of the JoystickAxis with the specified index.
@@ -451,8 +403,6 @@ namespace OpenTK.Input
             get { return axis_state.Length; }
         }
 
-        #endregion
     }
 
-    #endregion
 }

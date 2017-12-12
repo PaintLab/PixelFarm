@@ -20,7 +20,6 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
 
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -62,7 +61,6 @@
 
         }
 
-        #endregion
 
         private SkiaSharp.Views.Desktop.SKGLControl glControl;
         private SkiaSharp.Views.Desktop.SKControl canvas;

@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -36,14 +34,11 @@ namespace OpenTK
     /// </summary>
     public struct Rectangle : IEquatable<Rectangle>
     {
-    #region Fields
 
         Point location;
         Size size;
 
-    #endregion
 
-    #region Constructors
 
         /// <summary>
         /// Constructs a new Rectangle instance.
@@ -68,9 +63,7 @@ namespace OpenTK
             : this(new Point(x, y), new Size(width, height))
         { }
 
-    #endregion
 
-    #region Public Members
 
         /// <summary>
         /// Gets or sets the x coordinate of the Rectangle.
@@ -301,9 +294,7 @@ namespace OpenTK
         }
 
 
-    #endregion
 
-    #region IEquatable<Rectangle> Members
 
         /// <summary>
         /// Indicates whether this instance is equal to the specified Rectangle.
@@ -316,7 +307,6 @@ namespace OpenTK
                 Size.Equals(other.Size);
         }
 
-    #endregion
     }
 #endif
 }

@@ -92,7 +92,6 @@ namespace Examples.Shapes
             Vector2d.Add(ref TexCoordD, ref TexCoordBC, out TexCoordD);
             Vector2d.Add(ref TexCoordD, ref TexCoordCA, out TexCoordD);
             TexCoordD /= 3.0;
-            #region 1
             first.APosition = this.APosition;
             first.ATexCoord = this.ATexCoord;
             first.BPosition = CenterAB;
@@ -104,8 +103,6 @@ namespace Examples.Shapes
             temp /= 3.0;
             temp += this.Normal * -1.0;
             first.DPosition = temp;
-            #endregion 1
-            #region 2
             second.APosition = CenterAB;
             second.ATexCoord = TexCoordAB;
             second.BPosition = this.BPosition;
@@ -117,8 +114,6 @@ namespace Examples.Shapes
             temp /= 3.0;
             temp += this.Normal * -1.0;
             second.DPosition = temp;
-            #endregion 2
-            #region 3
             third.APosition = CenterBC;
             third.ATexCoord = TexCoordBC;
             third.BPosition = this.CPosition;
@@ -130,8 +125,6 @@ namespace Examples.Shapes
             temp /= 3.0;
             temp += this.Normal * -1.0;
             third.DPosition = temp;
-            #endregion 3
-            #region 4
             fourth.APosition = CenterAB;
             fourth.ATexCoord = TexCoordAB;
             fourth.BPosition = CenterD;
@@ -140,8 +133,6 @@ namespace Examples.Shapes
             fourth.CTexCoord = TexCoordCA;
             SierpinskiTetrahedron.FindNormal(ref CenterAB, ref CenterD, ref CenterCA, out fourth.Normal);
             fourth.DPosition = E;
-            #endregion 4
-            #region 5
             fifth.APosition = CenterAB;
             fifth.ATexCoord = TexCoordAB;
             fifth.BPosition = CenterBC;
@@ -150,8 +141,6 @@ namespace Examples.Shapes
             fifth.CTexCoord = TexCoordD;
             SierpinskiTetrahedron.FindNormal(ref CenterAB, ref CenterBC, ref CenterD, out fifth.Normal);
             fifth.DPosition = E;
-            #endregion 5
-            #region 6
             sixth.APosition = CenterBC;
             sixth.ATexCoord = TexCoordBC;
             sixth.BPosition = CenterCA;
@@ -160,7 +149,6 @@ namespace Examples.Shapes
             sixth.CTexCoord = TexCoordD;
             SierpinskiTetrahedron.FindNormal(ref CenterBC, ref CenterCA, ref CenterD, out sixth.Normal);
             sixth.DPosition = E;
-            #endregion 6
         }
 
         /// <summary>Returns 3 Vertices which form a CCW triangle.</summary>

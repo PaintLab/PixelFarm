@@ -41,9 +41,9 @@ namespace LayoutFarm.UI.GdiPlus
         }
         public override void PaintToOutputWindow()
         {
-            IntPtr hdc = Win32.MyWin32.GetDC(this.windowControl.Handle);
+            IntPtr hdc = GetDC(this.windowControl.Handle);
             this.gdiPlusViewport.PaintMe(hdc);
-            Win32.MyWin32.ReleaseDC(this.windowControl.Handle, hdc);
+            ReleaseDC(this.windowControl.Handle, hdc);
         }
         public override void CopyOutputPixelBuffer(int x, int y, int w, int h, IntPtr outputBuffer)
         {
@@ -57,13 +57,14 @@ namespace LayoutFarm.UI.GdiPlus
             {
                 //create new memdc
                 Win32.NativeWin32MemoryDc memDc = new Win32.NativeWin32MemoryDc(w, h);
-                Win32.MyWin32.PatBlt(memDc.DC, x, y, w, h, Win32.MyWin32.WHITENESS);
+                memDc.PatBlt(Win32.NativeWin32MemoryDc.PatBltColor.White);
                 //TODO: check if we need to set init font/brush/pen for the new DC or not
                 gdiPlusViewport.FullMode = true;
                 //pain to the destination dc
                 this.gdiPlusViewport.PaintMe(memDc.DC);
                 IntPtr outputBits = memDc.PPVBits;
-                Win32.MyWin32.memcpy((byte*)outputBuffer, (byte*)memDc.PPVBits, w * 4 * h);
+                //Win32.MyWin32.memcpy((byte*)outputBuffer, (byte*)memDc.PPVBits, w * 4 * h);
+                memDc.CopyPixelBitsToOutput((byte*)outputBuffer);
                 memDc.Dispose();
             }
 

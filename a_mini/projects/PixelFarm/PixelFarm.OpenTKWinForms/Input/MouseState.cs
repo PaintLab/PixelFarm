@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -35,15 +33,12 @@ namespace OpenTK.Input
     /// </summary>
     public struct MouseState : IEquatable<MouseState>
     {
-        #region Constructors
 
         internal MouseState(MouseButton[] buttons)
         {
         }
 
-        #endregion
 
-        #region IEquatable<MouseState> Members
 
         /// <summary>
         /// Compares two MouseState instances for equality.
@@ -55,6 +50,5 @@ namespace OpenTK.Input
             throw new NotImplementedException();
         }
 
-        #endregion
     }
 }

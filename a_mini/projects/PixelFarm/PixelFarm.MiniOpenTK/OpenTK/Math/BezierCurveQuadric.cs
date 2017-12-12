@@ -1,4 +1,3 @@
-#region --- License ---
 /* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
@@ -6,7 +5,6 @@
  * 
  * Contributions by Georg W�chter.
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +17,6 @@ namespace OpenTK
     [Serializable]
     public struct BezierCurveQuadric
     {
-        #region Fields
 
         /// <summary>
         /// Start anchor point.
@@ -41,9 +38,7 @@ namespace OpenTK
         /// the original curve, 5.0f i.e. stands for a curve that has always a distance
         /// of 5.f to the orignal curve at any point.</remarks>
         public float Parallel;
-        #endregion
 
-        #region Constructors
 
         /// <summary>
         /// Constructs a new <see cref="BezierCurveQuadric"/>.
@@ -74,9 +69,7 @@ namespace OpenTK
             this.ControlPoint = controlPoint;
         }
 
-        #endregion
 
-        #region Functions
 
         /// <summary>
         /// Calculates the point with the specified t.
@@ -133,6 +126,5 @@ namespace OpenTK
             return length;
         }
 
-        #endregion
     }
 }

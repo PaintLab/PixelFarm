@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -34,14 +32,11 @@ namespace OpenTK.Graphics
     // Provides the foundation for all IGraphicsContext implementations.
     public abstract class GraphicsContextBase : IGraphicsContext, IGraphicsContextInternal
     {
-        #region Fields
 
         bool disposed;
         protected ContextHandle Handle;
         protected GraphicsMode Mode;
-        #endregion
 
-        #region IGraphicsContext Members
 
         public abstract void SwapBuffers();
         public abstract void MakeCurrent(IWindowInfo window);
@@ -65,9 +60,7 @@ namespace OpenTK.Graphics
             set { throw new NotImplementedException(); }
         }
 
-        #endregion
 
-        #region IGraphicsContextInternal Members
 
         public IGraphicsContext Implementation { get { return this; } }
 
@@ -75,11 +68,8 @@ namespace OpenTK.Graphics
         public ContextHandle Context { get { return Handle; } }
 
         public abstract IntPtr GetAddress(string function);
-        #endregion
 
-        #region IDisposable Members
 
         public abstract void Dispose();
-        #endregion
     }
 }

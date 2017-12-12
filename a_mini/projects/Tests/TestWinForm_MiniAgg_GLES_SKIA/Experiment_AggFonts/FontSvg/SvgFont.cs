@@ -50,7 +50,7 @@ namespace PixelFarm.Drawing.Fonts
             if (!cachedGlyphsByIndex.TryGetValue(glyphIndex, out glyph))
             {
                 //create font glyph for this font size
-                FontGlyph originalGlyph = fontface.GetGlyphByIndex((int)glyphIndex);
+                FontGlyph originalGlyph = (FontGlyph)fontface.GetGlyphByIndex((int)glyphIndex);
 
                 VertexStore characterGlyph = new VertexStore();
                 scaleTx.TransformToVxs(originalGlyph.originalVxs, characterGlyph);
@@ -70,15 +70,17 @@ namespace PixelFarm.Drawing.Fonts
             if (!cachedGlyphs.TryGetValue(c, out glyph))
             {
                 //create font glyph for this font size
-                var originalGlyph = fontface.GetGlyphForCharacter(c);
+                FontGlyph originalGlyph = (FontGlyph)fontface.GetGlyphForCharacter(c);
                 VertexStore characterGlyph = new VertexStore();
                 scaleTx.TransformToVxs(originalGlyph.originalVxs, characterGlyph);
-                glyph = new FontGlyph();
-                glyph.horiz_adv_x = originalGlyph.horiz_adv_x;
-                glyph.originalVxs = characterGlyph;
+
+                FontGlyph myFontGlyph = new FontGlyph();
+                glyph = myFontGlyph;
+                myFontGlyph.horiz_adv_x = originalGlyph.horiz_adv_x;
+                myFontGlyph.originalVxs = characterGlyph;
                 //then flatten it
 
-                glyph.flattenVxs = curveFlattner.MakeVxs(characterGlyph, new VertexStore());
+                myFontGlyph.flattenVxs = curveFlattner.MakeVxs(characterGlyph, new VertexStore());
 
                 cachedGlyphs.Add(c, glyph);
             }

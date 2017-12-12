@@ -1,6 +1,6 @@
 ﻿//BSD, 2014-2017, WinterDev 
 
-using PixelFarm.Drawing.Fonts;
+using Typography.TextServices;
 namespace PixelFarm.Drawing.WinGdi
 {
     public static class WinGdiPlusPlatform
@@ -8,10 +8,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         static WinGdiPlusPlatform()
         {
-
-            PixelFarm.Agg.AggBuffMx.SetNaiveBufferImpl(new Win32AggBuffMx());
-            //3. set default encoding
-            WinGdiTextService.SetDefaultEncoding(System.Text.Encoding.ASCII);
+            PixelFarm.Agg.AggBuffMx.SetNaiveBufferImpl(new Win32AggBuffMx());           
         }
 
         public static void SetFontEncoding(System.Text.Encoding encoding)
@@ -21,6 +18,10 @@ namespace PixelFarm.Drawing.WinGdi
         public static void SetFontLoader(IFontLoader fontLoader)
         {
             WinGdiFontFace.SetFontLoader(fontLoader);
+        }
+        public static ITextService GetIFonts()
+        {
+            return new Gdi32IFonts();
         }
     }
 

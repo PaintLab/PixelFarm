@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -39,16 +37,12 @@ namespace OpenTK.Platform.X11
         int screen;
         XVisualInfo visualInfo;
         EventMask eventMask;
-        #region --- Constructors ---
 
-        #region X11WindowInfo()
 
         /// <summary>Constructs a new X11WindowInfo class.</summary>
         public X11WindowInfo() { }
 
-        #endregion
 
-        #region X11WindowInfo(IntPtr handle, X11WindowInfo parent)
 
         /// <summary>
         /// Constructs a new X11WindowInfo class from the specified window handle and parent.
@@ -68,11 +62,8 @@ namespace OpenTK.Platform.X11
             }
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- Public Methods ---
 
         /// <summary>Gets or sets the handle of the window.</summary>
         public IntPtr WindowHandle { get { return handle; } set { handle = value; } }
@@ -89,9 +80,7 @@ namespace OpenTK.Platform.X11
         /// <summary>Gets or sets the X11 EventMask.</summary>
         public EventMask EventMask { get { return eventMask; } set { eventMask = value; } }
 
-        #endregion
 
-        #region --- IDisposable Members ---
 
         /// <summary>
         /// Disposes of this X11WindowInfo instance.
@@ -100,11 +89,8 @@ namespace OpenTK.Platform.X11
         {
         }
 
-        #endregion
 
-        #region --- Overrides ---
 
-        #region public override string ToString()
 
         /// <summary>Returns a System.String that represents the current window.</summary>
         /// <returns>A System.String that represents the current window.</returns>
@@ -114,7 +100,6 @@ namespace OpenTK.Platform.X11
                 this.Display, this.Screen, this.WindowHandle, this.Parent != null ? this.Parent.ToString() : "null");
         }
 
-        #endregion
 
         /// <summary>Checks if <c>this</c> and <c>obj</c> reference the same win32 window.</summary>
         /// <param name="obj">The object to check against.</param>
@@ -137,6 +122,5 @@ namespace OpenTK.Platform.X11
             return handle.GetHashCode() ^ display.GetHashCode();
         }
 
-        #endregion
     }
 }

@@ -1,10 +1,8 @@
-#region --- License ---
 /* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -29,7 +27,6 @@ namespace OpenTK.Platform.X11
         // Keep the time when the config of each screen was last updated.
         static List<IntPtr> lastConfigUpdate = new List<IntPtr>();
         static bool xinerama_supported, xrandr_supported, xf86_supported;
-        #region --- Constructors ---
 
         static X11DisplayDevice()
         {
@@ -84,9 +81,7 @@ namespace OpenTK.Platform.X11
 
         internal X11DisplayDevice() { }
 
-        #endregion
 
-        #region --- Private Methods ---
 
         static bool QueryXinerama(List<DisplayDevice> devices)
         {
@@ -190,16 +185,13 @@ namespace OpenTK.Platform.X11
             return false;
         }
 
-        #region static int[] FindAvailableDepths(int screen)
 
         static int[] FindAvailableDepths(int screen)
         {
             return Functions.XListDepths(API.DefaultDisplay, screen);
         }
 
-        #endregion
 
-        #region static XRRScreenSize[] FindAvailableResolutions(int screen)
 
         static XRRScreenSize[] FindAvailableResolutions(int screen)
         {
@@ -210,9 +202,7 @@ namespace OpenTK.Platform.X11
             return resolutions;
         }
 
-        #endregion
 
-        #region static float FindCurrentRefreshRate(int screen)
 
         static float FindCurrentRefreshRate(int screen)
         {
@@ -225,16 +215,13 @@ namespace OpenTK.Platform.X11
             return (float)rate;
         }
 
-        #endregion
 
-        #region private static int FindCurrentDepth(int screen)
 
         private static int FindCurrentDepth(int screen)
         {
             return (int)Functions.XDefaultDepth(API.DefaultDisplay, screen);
         }
 
-        #endregion
 
         static bool ChangeResolutionXRandR(DisplayDevice device, DisplayResolution resolution)
         {
@@ -263,9 +250,7 @@ namespace OpenTK.Platform.X11
             return false;
         }
 
-        #endregion
 
-        #region --- IDisplayDeviceDriver Members ---
 
         public bool TryChangeResolution(DisplayDevice device, DisplayResolution resolution)
         {
@@ -291,9 +276,7 @@ namespace OpenTK.Platform.X11
             return TryChangeResolution(device, null);
         }
 
-        #endregion
 
-        #region NativeMethods
 
         static class NativeMethods
         {
@@ -335,6 +318,5 @@ namespace OpenTK.Platform.X11
             public short Height;
         }
 
-        #endregion
     }
 }

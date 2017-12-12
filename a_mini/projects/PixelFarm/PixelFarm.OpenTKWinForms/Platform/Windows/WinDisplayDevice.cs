@@ -1,10 +1,8 @@
-#region --- License ---
 /* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK team.
  * This notice may not be removed.
  * See license.txt for licensing detailed licensing details.
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +17,6 @@ namespace OpenTK.Platform.Windows
         static object display_lock = new object();
         static Dictionary<DisplayDevice, string> available_device_names =
             new Dictionary<DisplayDevice, string>();    // Needed for ChangeDisplaySettingsEx
-        #region --- Constructors ---
 
         /// <summary>Queries available display devices and display resolutions.</summary>
         static WinDisplayDeviceDriver()
@@ -85,11 +82,8 @@ namespace OpenTK.Platform.Windows
         {
         }
 
-        #endregion
 
-        #region --- IDisplayDeviceDriver Members ---
 
-        #region public bool TryChangeResolution(OpenTK.Graphics.DisplayDevice device, DisplayResolution resolution)
 
         public bool TryChangeResolution(DisplayDevice device, DisplayResolution resolution)
         {
@@ -112,17 +106,13 @@ namespace OpenTK.Platform.Windows
                     ChangeDisplaySettingsEnum.Fullscreen, IntPtr.Zero);
         }
 
-        #endregion
 
-        #region public TryRestoreResolution TryRestoreResolution(OpenTK.Graphics.DisplayDevice device)
 
         public bool TryRestoreResolution(DisplayDevice device)
         {
             return TryChangeResolution(device, null);
         }
 
-        #endregion
 
-        #endregion
     }
 }

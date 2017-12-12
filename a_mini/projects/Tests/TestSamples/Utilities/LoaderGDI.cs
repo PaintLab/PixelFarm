@@ -1,10 +1,8 @@
-#region --- License ---
 /* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing details.
  */
-#endregion
 
 // TODO: Find paint program that can properly export 8/16-bit Textures and make sure they are loaded correctly.
 
@@ -34,7 +32,6 @@ namespace Examples.TextureLoaders
         //          GL.GenTextures(1, out texturehandle);
         //          GL.BindTexture(dimension, texturehandle);
 
-        //          #region Load Texture
         //          OpenTK.Graphics.OpenGL.PixelInternalFormat pif;
         //          OpenTK.Graphics.OpenGL.PixelFormat pf;
         //          OpenTK.Graphics.OpenGL.PixelType pt;
@@ -108,9 +105,7 @@ namespace Examples.TextureLoaders
         //          }
 
         //          CurrentBitmap.UnlockBits(Data);
-        //          #endregion Load Texture
 
-        //          #region Set Texture Parameters
         //          GL.TexParameter(dimension, TextureParameterName.TextureMinFilter, (int)TextureLoaderParameters.MinificationFilter);
         //          GL.TexParameter(dimension, TextureParameterName.TextureMagFilter, (int)TextureLoaderParameters.MagnificationFilter);
 
@@ -124,7 +119,6 @@ namespace Examples.TextureLoaders
         //          {
         //              throw new ArgumentException("Error setting Texture Parameters. GL Error: " + GLError);
         //          }
-        //          #endregion Set Texture Parameters
 
         //          return; // success
         //      }

@@ -43,13 +43,11 @@ namespace Examples.Shapes
                     break;
             }
 
-            #region Temporary Storage
 
             List<Chunk> AllChunks = new List<Chunk>();
             OpenTK.Graphics.OpenGL.BeginMode TemporaryMode;
             VertexT2dN3dV3d[] TemporaryVBO;
             uint[] TemporaryIBO;
-            #endregion Temporary Storage
 
             Vector3d FrontTopRightEdge = new Vector3d(+Width - radius, +Height - radius, +Length - radius);
             Vector3d FrontTopLeftEdge = new Vector3d(+Width - radius, +Height - radius, -Length + radius);
@@ -59,7 +57,6 @@ namespace Examples.Shapes
             Vector3d BackTopLeftEdge = new Vector3d(-Width + radius, +Height - radius, -Length + radius);
             Vector3d BackBottomRightEdge = new Vector3d(-Width + radius, -Height + radius, +Length - radius);
             Vector3d BackBottomLeftEdge = new Vector3d(-Width + radius, -Height + radius, -Length + radius);
-            #region 8 sliced Spheres
             SlicedSphere tempSphere;
             Vector3d tempVector = Vector3d.Zero;
             SlicedSphere.eDir[] tempEdge = new SlicedSphere.eDir[1];
@@ -109,9 +106,7 @@ namespace Examples.Shapes
                 tempSphere.Dispose();
                 AllChunks.Add(new Chunk(ref TemporaryVBO, ref TemporaryIBO));
             }
-            #endregion 8 sliced Spheres
 
-            #region 12 sliced Hoses
 
             SlicedHose tempHose;
             SlicedHose.eSide tempSide = SlicedHose.eSide.BackBottom;
@@ -121,7 +116,6 @@ namespace Examples.Shapes
             {
                 switch (i)
                 {
-                    #region Around X Axis
                     case 0:
                         tempSide = SlicedHose.eSide.BottomRight;
                         tempHoseStart = BackBottomRightEdge;
@@ -142,8 +136,6 @@ namespace Examples.Shapes
                         tempHoseStart = BackBottomLeftEdge;
                         tempHoseEnd = FrontBottomLeftEdge;
                         break;
-                    #endregion Around X Axis
-                    #region Around Y Axis
                     case 4:
                         tempSide = SlicedHose.eSide.FrontRight;
                         tempHoseStart = FrontBottomRightEdge;
@@ -164,8 +156,6 @@ namespace Examples.Shapes
                         tempHoseStart = FrontBottomLeftEdge;
                         tempHoseEnd = FrontTopLeftEdge;
                         break;
-                    #endregion Around Y Axis
-                    #region Around Z Axis
                     case 8:
                         tempSide = SlicedHose.eSide.FrontTop;
                         tempHoseStart = FrontTopRightEdge;
@@ -186,7 +176,6 @@ namespace Examples.Shapes
                         tempHoseStart = FrontBottomRightEdge;
                         tempHoseEnd = FrontBottomLeftEdge;
                         break;
-                        #endregion Around Z Axis
                 }
                 tempHose = new SlicedHose(tempSide,
                                              hoseSubDivs,
@@ -198,9 +187,7 @@ namespace Examples.Shapes
                 tempHose.Dispose();
                 AllChunks.Add(new Chunk(ref TemporaryVBO, ref TemporaryIBO));
             }
-            #endregion 12 sliced Hoses
 
-            #region 6 quads for the sides
 
             VertexT2dN3dV3d[] tempVBO = new VertexT2dN3dV3d[4];
             uint[] tempIBO = new uint[6] { 0, 1, 2, 0, 2, 3 }; // all quads share this IBO
@@ -251,13 +238,10 @@ namespace Examples.Shapes
             tempVBO[2].Position = BackBottomLeftEdge - new Vector3d(0.0, 0.0, radius);
             tempVBO[3].Position = BackTopLeftEdge - new Vector3d(0.0, 0.0, radius);
             AllChunks.Add(new Chunk(ref tempVBO, ref tempIBO));
-            #endregion 6 quads for the sides
 
-            #region Final Assembly of Chunks
             PrimitiveMode = OpenTK.Graphics.OpenGL.BeginMode.Triangles;
             Chunk.GetArray(ref AllChunks, out VertexArray, out IndexArray);
             AllChunks.Clear();
-            #endregion Final Assembly of Chunks
         }
     }
 }

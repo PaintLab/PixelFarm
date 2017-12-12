@@ -17,47 +17,37 @@ namespace OpenTK.Platform.MacOS
             dummy_joystick_list.Add(new JoystickDevice<object>(0, 0, 0));
         }
 
-        #region IInputDriver Members
 
         public void Poll()
         {
         }
 
-        #endregion
 
-        #region IKeyboardDriver Members
 
         public IList<KeyboardDevice> Keyboard
         {
             get { return dummy_keyboard_list; }
         }
 
-        #endregion
 
-        #region IMouseDriver Members
 
         public IList<MouseDevice> Mouse
         {
             get { return dummy_mice_list; }
         }
 
-        #endregion
 
-        #region IJoystickDriver Members
 
         public IList<JoystickDevice> Joysticks
         {
             get { return dummy_joystick_list; }
         }
 
-        #endregion
 
-        #region IDisposable Members
 
         public void Dispose()
         {
         }
 
-        #endregion
     }
 }

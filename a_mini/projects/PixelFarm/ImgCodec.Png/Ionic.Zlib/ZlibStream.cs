@@ -320,7 +320,6 @@ namespace Ionic.Zlib
             _baseStream = new ZlibBaseStream(stream, mode, level, ZlibStreamFlavor.ZLIB, leaveOpen);
         }
 
-        #region Zlib properties
 
         /// <summary>
         /// This property sets the flush behavior on the stream.
@@ -382,9 +381,7 @@ namespace Ionic.Zlib
             get { return this._baseStream._z.TotalBytesOut; }
         }
 
-        #endregion
 
-        #region System.IO.Stream methods
 
         /// <summary>
         ///   Dispose the stream.
@@ -610,7 +607,6 @@ namespace Ionic.Zlib
                 if (_disposed) throw new ObjectDisposedException("ZlibStream");
             _baseStream.Write(buffer, offset, count);
         }
-        #endregion
 
 
         /// <summary>

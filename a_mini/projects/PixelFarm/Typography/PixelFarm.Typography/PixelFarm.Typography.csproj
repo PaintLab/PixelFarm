@@ -36,10 +36,6 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm.Drawing.MiniAgg.csproj">
-      <Project>{99a570d0-492a-453d-8b97-7f40489c10e0}</Project>
-      <Name>PixelFarm.Drawing.MiniAgg</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
@@ -55,6 +51,10 @@
     <ProjectReference Include="..\Typography.Contours\Typography.Contours.csproj">
       <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
       <Name>Typography.Contours</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Typography.TextServices\Typography.TextServices.csproj">
+      <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
+      <Name>Typography.TextServices</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -102,13 +102,9 @@
     <Compile Include="1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs" />
     <Compile Include="1.1_Drawing_Fonts\GlyphMeshCollection.cs" />
     <Compile Include="1.1_Drawing_Fonts\HintTechnique.cs" />
-    <Compile Include="1.1_Drawing_Fonts\FontManagement.cs" />
     <Compile Include="1.1_Drawing_Fonts\OpenFontIFonts.cs" />
     <Compile Include="1.1_Drawing_Fonts\PixelScaleLayoutEngine.cs" />
-    <Compile Include="1.2_\IInstalledFontProvider.cs" />
-    <Compile Include="2_Drawing_Text\IFontLoader.cs" />
     <Compile Include="2_Drawing_Text\ManagedShapingService.cs" />
-    <Compile Include="2_Drawing_Text\OpenFontStore.cs" />
     <Compile Include="3_FontFaceImpl\NOpenFontFace.cs" />
     <Compile Include="3_FontFaceImpl\OpenFontLoader.cs" />
     <Compile Include="2_Drawing_Text\TextShapingAndLayoutService.cs" />
@@ -117,7 +113,10 @@
     <Compile Include="3_FontFaceImpl\TextureFontLoader.cs" />
     <Compile Include="6_AggTexture\AggGlyphTextureGen.cs" />
     <Compile Include="1.1_Drawing_Fonts\GlyphPathBuilderBase.cs" />
-    <Compile Include="1.2_\FontStyleExtensions.cs" />
+    <Compile Include="1.1_Drawing_Fonts\FontStyleExtensions.cs" />
+    <Compile Include="1.3_DrawingFonts\ActualFont.cs" />
+    <Compile Include="1.3_DrawingFonts\FontFace.cs" />
+    <Compile Include="1.3_DrawingFonts\FontGlyph.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,12 +1,10 @@
-﻿#region --- License ---
-/* Licensed under the MIT/X11 license.
+﻿/* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
  * 
  * Contributions by Andy Gill, James Talton and Georg Wächter.
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -18,7 +16,6 @@ namespace OpenTK
     /// </summary>
     public static class MathHelper
     {
-        #region Fields
 
         /// <summary>
         /// Defines the value of Pi as a <see cref="System.Single"/>.
@@ -60,11 +57,8 @@ namespace OpenTK
         /// Defines the base-2 logarithm of E.
         /// </summary>
         public const float Log2E = 1.442695041f;
-        #endregion
 
-        #region Public Members
 
-        #region NextPowerOfTwo
 
         /// <summary>
         /// Returns the next power of two that is larger than the specified number.
@@ -110,9 +104,7 @@ namespace OpenTK
             return System.Math.Pow(2, System.Math.Ceiling(System.Math.Log((double)n, 2)));
         }
 
-        #endregion
 
-        #region Factorial
 
         /// <summary>Calculates the factorial of a given natural number.
         /// </summary>
@@ -126,9 +118,7 @@ namespace OpenTK
             return result;
         }
 
-        #endregion
 
-        #region BinomialCoefficient
 
         /// <summary>
         /// Calculates the binomial coefficient <paramref name="n"/> above <paramref name="k"/>.
@@ -141,9 +131,7 @@ namespace OpenTK
             return Factorial(n) / (Factorial(k) * Factorial(n - k));
         }
 
-        #endregion
 
-        #region InverseSqrtFast
 
         /// <summary>
         /// Returns an approximation of the inverse square root of left number.
@@ -197,9 +185,7 @@ namespace OpenTK
 #endif
         }
 
-        #endregion
 
-        #region DegreesToRadians
 
         /// <summary>
         /// Convert degrees to radians
@@ -223,9 +209,7 @@ namespace OpenTK
             return radians * radToDeg;
         }
 
-        #endregion
 
-        #region Swap
 
         /// <summary>
         /// Swaps two double values.
@@ -251,8 +235,6 @@ namespace OpenTK
             b = temp;
         }
 
-        #endregion
 
-        #endregion
     }
 }

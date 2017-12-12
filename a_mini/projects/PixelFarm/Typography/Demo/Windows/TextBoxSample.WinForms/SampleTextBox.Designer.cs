@@ -20,7 +20,6 @@
             base.Dispose(disposing);
         }
 
-        #region Component Designer generated code
 
         /// <summary> 
         /// Required method for Designer support - do not modify 
@@ -40,6 +39,5 @@
 
         }
 
-        #endregion
     }
 }

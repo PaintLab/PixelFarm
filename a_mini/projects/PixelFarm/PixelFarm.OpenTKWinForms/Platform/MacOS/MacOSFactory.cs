@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -33,7 +31,6 @@ namespace OpenTK.Platform.MacOS
     using Graphics;
     class MacOSFactory : IPlatformFactory
     {
-        #region IPlatformFactory Members
 
         public virtual INativeWindow CreateNativeWindow(int x, int y, int width, int height, string title, GraphicsMode mode, GameWindowFlags options, DisplayDevice device)
         {
@@ -73,6 +70,5 @@ namespace OpenTK.Platform.MacOS
             throw new NotImplementedException();
         }
 
-        #endregion
     }
 }

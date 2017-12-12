@@ -1,8 +1,6 @@
-#region --- License ---
 /* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -32,7 +30,6 @@ namespace OpenTK.Platform.X11
         IntPtr[] keysyms;
         //bool disposed;
 
-        #region --- Constructors ---
 
         /// <summary>
         /// Constructs a new X11Input driver. Creates a hidden InputOnly window, child to
@@ -81,9 +78,7 @@ namespace OpenTK.Platform.X11
             Debug.Unindent();
         }
 
-        #endregion
 
-        #region private void InternalPoll()
 #if false
         private void InternalPoll()
         {
@@ -132,9 +127,7 @@ namespace OpenTK.Platform.X11
             }
         }
 #endif
-        #endregion
 
-        #region internal void ProcessEvent(ref XEvent e)
 
         internal void ProcessEvent(ref XEvent e)
         {
@@ -191,38 +184,29 @@ namespace OpenTK.Platform.X11
             }
         }
 
-        #endregion
 
-        #region --- IInputDriver Members ---
 
-        #region public IList<Keyboard> Keyboard
 
         public IList<KeyboardDevice> Keyboard
         {
             get { return dummy_keyboard_list; }//return keyboardDriver.Keyboard;
         }
 
-        #endregion
 
-        #region public IList<Mouse> Mouse
 
         public IList<MouseDevice> Mouse
         {
             get { return (IList<MouseDevice>)dummy_mice_list; } //return mouseDriver.Mouse;
         }
 
-        #endregion
 
-        #region public IList<JoystickDevice> Joysticks
 
         public IList<JoystickDevice> Joysticks
         {
             get { return joystick_driver.Joysticks; }
         }
 
-        #endregion
 
-        #region public void Poll()
 
         /// <summary>
         /// Polls and updates state of all keyboard, mouse and joystick devices.
@@ -232,11 +216,8 @@ namespace OpenTK.Platform.X11
             joystick_driver.Poll();
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- IDisposable Members ---
 
         public void Dispose()
         {
@@ -265,6 +246,5 @@ namespace OpenTK.Platform.X11
         //    this.Dispose(false);
         //}
 
-        #endregion
     }
 }
