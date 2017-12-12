@@ -515,7 +515,7 @@
       <Link>2_DrawingCanvas\1_Vectors\2_Geometry\Arc.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\BasicGeometries.cs">
-      <Link>1_DrawingCore\1_Geometry\BasicGeometries.cs</Link>
+      <Link>1_DrawingCore\2_Geometry\BasicGeometries.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\BezireCurve.cs">
       <Link>2_DrawingCanvas\1_Vectors\2_Geometry\BezireCurve.cs</Link>
@@ -533,10 +533,10 @@
       <Link>2_DrawingCanvas\1_Vectors\2_Geometry\Ellipse.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Rectangle.cs">
-      <Link>1_DrawingCore\1_Geometry\Rectangle.cs</Link>
+      <Link>1_DrawingCore\2_Geometry\Rectangle.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\RectangleF.cs">
-      <Link>1_DrawingCore\1_Geometry\RectangleF.cs</Link>
+      <Link>1_DrawingCore\2_Geometry\RectangleF.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\RectD.cs">
       <Link>2_DrawingCanvas\1_Vectors\2_Geometry\RectD.cs</Link>

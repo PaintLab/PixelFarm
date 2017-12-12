@@ -170,28 +170,28 @@
       <Link>1_Vectors\1_VectorMaths\Vector4.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Arc.cs">
-      <Link>1_Vectors\1_Geometry\Arc.cs</Link>
+      <Link>1_Vectors\2_Geometry\Arc.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\BezireCurve.cs">
-      <Link>1_Vectors\1_Geometry\BezireCurve.cs</Link>
+      <Link>1_Vectors\2_Geometry\BezireCurve.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\BSpline.cs">
-      <Link>1_Vectors\1_Geometry\BSpline.cs</Link>
+      <Link>1_Vectors\2_Geometry\BSpline.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Collections.cs">
-      <Link>1_Vectors\1_Geometry\Collections.cs</Link>
+      <Link>1_Vectors\2_Geometry\Collections.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Curves.cs">
-      <Link>1_Vectors\1_Geometry\Curves.cs</Link>
+      <Link>1_Vectors\2_Geometry\Curves.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\Ellipse.cs">
-      <Link>1_Vectors\1_Geometry\Ellipse.cs</Link>
+      <Link>1_Vectors\2_Geometry\Ellipse.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\RectD.cs">
-      <Link>1_Vectors\1_Geometry\RectD.cs</Link>
+      <Link>1_Vectors\2_Geometry\RectD.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\2_geometry\RectInt.cs">
-      <Link>1_Vectors\1_Geometry\RectInt.cs</Link>
+      <Link>1_Vectors\2_Geometry\RectInt.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\3_transform\1_Affine.cs">
       <Link>1_Vectors\3_Transform\1_Affine.cs</Link>
