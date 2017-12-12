@@ -1,4 +1,3 @@
-//#region License
 ////
 //// The Open Toolkit Library License
 ////
@@ -23,7 +22,6 @@
 //// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 //// OTHER DEALINGS IN THE SOFTWARE.
 ////
-//#endregion
 
 //using System;
 //using System.Collections.Generic;
@@ -33,7 +31,6 @@
 //using System.Reflection;
 //namespace OpenTK
 //{
-//    #region BlittableValueType<T>
 
 //    /// <summary>
 //    /// Checks whether the specified type parameter is a blittable value type.
@@ -44,13 +41,10 @@
 //    /// </remarks>
 //    public static class BlittableValueType<T>
 //    {
-//        #region Fields
 
 //        static readonly Type Type;
 //        static readonly int stride;
-//        #endregion
 
-//        #region Constructors
 
 //        static BlittableValueType()
 //        {
@@ -64,9 +58,7 @@
 //            }
 //        }
 
-//        #endregion
 
-//        #region Public Members
 
 //        /// <summary>
 //        /// Gets the size of the type in bytes or 0 for non-blittable types.
@@ -76,7 +68,6 @@
 //        /// </remarks>
 //        public static int Stride { get { return stride; } }
 
-//        #region Check
 
 //        /// <summary>
 //        /// Checks whether the current typename T is blittable.
@@ -99,11 +90,8 @@
 //            return CheckType(type);
 //        }
 
-//        #endregion
 
-//        #endregion
 
-//        #region Private Members
 
 //        // Checks whether the parameter is a primitive type or consists of primitive types recursively.
 //        // Throws a NotSupportedException if it is not.
@@ -137,12 +125,9 @@
 //            return true;
 //        }
 
-//        #endregion
 //    }
 
-//    #endregion
 
-//    #region BlittableValueType
 
 //    /// <summary>
 //    /// Checks whether the specified type parameter is a blittable value type.
@@ -153,7 +138,6 @@
 //    /// </remarks>
 //    public static class BlittableValueType
 //    {
-//        #region Check
 
 //        /// <summary>
 //        /// Checks whether type is a blittable value type.
@@ -206,9 +190,7 @@
 //            return BlittableValueType<T>.Check();
 //        }
 
-//        #endregion
 
-//        #region StrideOf
 
 //        /// <summary>
 //        /// Returns the size of the specified value type in bytes or 0 if the type is not blittable.
@@ -266,8 +248,6 @@
 //            return BlittableValueType<T>.Stride;
 //        }
 
-//        #endregion
 //    }
 
-//    #endregion
 //}

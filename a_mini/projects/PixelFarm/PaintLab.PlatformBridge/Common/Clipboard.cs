@@ -5,11 +5,8 @@ namespace LayoutFarm.UI
     public static class Clipboard
     {
         static UIPlatform currentUIPlatform;
-        static string textdata;
         public static void Clear()
         {
-            //textdata = null;
-
         }
         public static void SetText(string text)
         {
@@ -18,7 +15,7 @@ namespace LayoutFarm.UI
         }
         public static bool ContainUnicodeText()
         {
-            return textdata != null;
+            return currentUIPlatform.GetClipboardData() != null;
         }
         public static string GetUnicodeText()
         {

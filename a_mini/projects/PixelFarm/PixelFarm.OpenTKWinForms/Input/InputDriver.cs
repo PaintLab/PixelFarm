@@ -1,8 +1,6 @@
-﻿#region --- License ---
-/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
+﻿/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -14,12 +12,18 @@ namespace OpenTK
     internal class InputDriver : IInputDriver
     {
         private IInputDriver inputDriver;
-        #region --- Constructors ---
 
         public InputDriver(GameWindow parent)
         {
+
+#if DEBUG
             if (parent == null)
                 throw new ArgumentException("A valid window (IWindowInfo) must be specified to construct an InputDriver");
+#endif
+            if(parent== null)
+            {
+                return;
+            }
             switch (Environment.OSVersion.Platform)
             {
                 case PlatformID.Win32Windows:
@@ -48,45 +52,35 @@ namespace OpenTK
             }
         }
 
-        #endregion
 
-        #region --- IInputDriver Members ---
 
         public void Poll()
         {
             inputDriver.Poll();
         }
 
-        #endregion
 
-        #region --- IKeyboardDriver Members ---
 
         public IList<KeyboardDevice> Keyboard
         {
             get { return inputDriver.Keyboard; }
         }
 
-        #endregion
 
-        #region --- IMouseDriver Members ---
 
         public IList<MouseDevice> Mouse
         {
             get { return inputDriver.Mouse; }
         }
 
-        #endregion
 
-        #region --- IJoystickDriver Members ---
 
         public IList<JoystickDevice> Joysticks
         {
             get { return inputDriver.Joysticks; }
         }
 
-        #endregion
 
-        #region --- IDisposable Members ---
 
         private bool disposed;
         public void Dispose()
@@ -113,6 +107,5 @@ namespace OpenTK
             this.Dispose(false);
         }
 
-        #endregion
     }
 }

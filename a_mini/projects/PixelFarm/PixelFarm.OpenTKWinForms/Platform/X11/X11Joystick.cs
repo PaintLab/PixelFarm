@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2008 the Open Toolkit library, except where noted.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -36,14 +34,11 @@ namespace OpenTK.Platform.X11
 
     sealed class X11Joystick : IJoystickDriver
     {
-        #region Fields
 
         List<JoystickDevice> sticks = new List<JoystickDevice>();
         IList<JoystickDevice> sticks_readonly;
         bool disposed;
-        #endregion
 
-        #region Constructors
 
         public X11Joystick()
         {
@@ -73,9 +68,7 @@ namespace OpenTK.Platform.X11
             }
         }
 
-        #endregion
 
-        #region IJoystickDriver
 
         public int DeviceCount
         {
@@ -115,9 +108,7 @@ namespace OpenTK.Platform.X11
             }
         }
 
-        #endregion
 
-        #region Private Members
 
         JoystickDevice<X11JoyDetails> OpenJoystick(string base_path, int number)
         {
@@ -152,7 +143,6 @@ namespace OpenTK.Platform.X11
             return stick;
         }
 
-        #region UnsafeNativeMethods
 
         struct JoystickEvent
         {
@@ -197,11 +187,8 @@ namespace OpenTK.Platform.X11
             unsafe public static extern IntPtr read(int fd, void* buffer, UIntPtr count);
         }
 
-        #endregion
 
-        #endregion
 
-        #region IDisposable Members
 
         public void Dispose()
         {
@@ -231,6 +218,5 @@ namespace OpenTK.Platform.X11
             Dispose(false);
         }
 
-        #endregion
     }
 }

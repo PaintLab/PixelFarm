@@ -1,9 +1,7 @@
-#region --- License ---
 /* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * Contributions from Erik Ylvisaker
  * See license.txt for license info
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -14,7 +12,6 @@ using System.Security;
 
 namespace OpenTK.Platform.X11
 {
-    #region Enums
 
     enum GLXAttribute : int
     {
@@ -249,7 +246,6 @@ namespace OpenTK.Platform.X11
         BAD_ENUM = 7,   /* unused? */
     }
 
-    #endregion
 
     /// \internal
     /// <summary>
@@ -257,7 +253,6 @@ namespace OpenTK.Platform.X11
     /// </summary>
     partial class Glx
     {
-        #region GLX functions
 
         [DllImport(Library, EntryPoint = "glXIsDirect")]
         public static extern bool IsDirect(IntPtr dpy, IntPtr context);
@@ -296,7 +291,6 @@ namespace OpenTK.Platform.X11
         public static extern IntPtr GetProcAddress([MarshalAs(UnmanagedType.LPTStr)] string procName);
         [DllImport(Library, EntryPoint = "glXGetConfig")]
         public static extern int GetConfig(IntPtr dpy, ref XVisualInfo vis, GLXAttribute attrib, out int value);
-        #region glXChooseVisual
 
         [DllImport(Library, EntryPoint = "glXChooseVisual")]
         public extern static IntPtr ChooseVisual(IntPtr dpy, int screen, IntPtr attriblist);
@@ -319,9 +313,7 @@ namespace OpenTK.Platform.X11
         // Returns a pointer to an XVisualInfo structure.
         [DllImport(Library, EntryPoint = "glXGetVisualFromFBConfig")]
         public unsafe extern static IntPtr GetVisualFromFBConfig(IntPtr dpy, IntPtr fbconfig);
-        #endregion
 
-        #region Extensions
 
         public partial class Sgi
         {
@@ -333,7 +325,6 @@ namespace OpenTK.Platform.X11
 
         public partial class Arb
         {
-            #region CreateContextAttribs
 
             unsafe public static IntPtr CreateContextAttribs(IntPtr display, IntPtr fbconfig, IntPtr share_context, bool direct, int* attribs)
             {
@@ -351,7 +342,6 @@ namespace OpenTK.Platform.X11
                 }
             }
 
-            #endregion
         }
 
         internal static partial class Delegates
@@ -364,9 +354,7 @@ namespace OpenTK.Platform.X11
             unsafe public static CreateContextAttribsARB glXCreateContextAttribsARB = null;
         }
 
-        #endregion
 
-        #endregion
     }
 }
 

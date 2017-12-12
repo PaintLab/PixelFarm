@@ -1,8 +1,6 @@
-﻿#region --- License ---
-/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
+﻿/* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -22,7 +20,6 @@ namespace OpenTK.Platform.Windows
     {
         private List<MouseDevice> mice = new List<MouseDevice>();
         private IntPtr window;
-        #region --- Constructors ---
 
         internal WinRawMouse()
             : this(IntPtr.Zero)
@@ -38,16 +35,13 @@ namespace OpenTK.Platform.Windows
             Debug.Unindent();
         }
 
-        #endregion
 
-        #region --- IMouseDriver Members ---
 
         public IList<MouseDevice> Mouse
         {
             get { return mice; }
         }
 
-        #region public int RegisterDevices()
 
         public int RegisterDevices()
         {
@@ -111,11 +105,8 @@ namespace OpenTK.Platform.Windows
             return count;
         }
 
-        #endregion
 
-        #endregion
 
-        #region internal void RegisterRawDevice(OpenTK.Input.Mouse mouse)
 
         internal void RegisterRawDevice(OpenTK.Input.MouseDevice mouse)
         {
@@ -144,9 +135,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region internal bool ProcessEvent(API.RawInput rin)
 
         /// <summary>
         /// Processes raw input events.
@@ -195,17 +184,13 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region public void Poll()
 
         public void Poll()
         {
         }
 
-        #endregion
 
-        #region --- IDisposable Members ---
 
         private bool disposed;
         public void Dispose()
@@ -231,6 +216,5 @@ namespace OpenTK.Platform.Windows
             Dispose(false);
         }
 
-        #endregion
     }
 }

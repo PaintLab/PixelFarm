@@ -1,12 +1,9 @@
-#region --- License ---
 /* Copyright (c) 2006-2008 the OpenTK team.
  * See license.txt for license info
  * 
  * Contributions by Andy Gill.
  */
-#endregion
 
-#region --- Using Directives ---
 
 using System;
 using System.Collections.Generic;
@@ -17,7 +14,6 @@ using System.Diagnostics;
 using System.Reflection.Emit;
 
 
-#endregion
 
 #if ENABLE_DESKTOP_OPENGL
 namespace OpenTK.Graphics.OpenGL
@@ -49,24 +45,19 @@ namespace OpenTK.Graphics.OpenGL
     /// <see href="http://opengl.org/registry/"/>
     public sealed partial class GL : GraphicsBindingsBase
     {
-#region --- Fields ---
 
         internal const string Library = "opengl32.dll";
 
         static SortedList<string, bool> AvailableExtensions = new SortedList<string, bool>();
         static readonly object sync_root = new object();
 
-#endregion
 
-#region --- Constructor ---
 
         static GL()
         {
         }
 
-#endregion
 
-#region --- Public Members ---
 
         /// <summary>
         /// Loads all OpenGL entry points (core and extension).
@@ -78,9 +69,7 @@ namespace OpenTK.Graphics.OpenGL
             new GL().LoadEntryPoints();
         }
 
-#endregion
 
-#region --- Protected Members ---
 
         /// <summary>
         /// Returns a synchronization token unique for the GL class.
@@ -90,9 +79,7 @@ namespace OpenTK.Graphics.OpenGL
             get { return sync_root; }
         }
 
-#endregion
 
-#region --- GL Overloads ---
 
 #pragma warning disable 3019
 #pragma warning disable 1591
@@ -102,7 +89,6 @@ namespace OpenTK.Graphics.OpenGL
         // Note: Mono 1.9.1 truncates StringBuilder results (for 'out string' parameters).
         // We work around this issue by doubling the StringBuilder capacity.
 
-#region public static void Color[34]() overloads
 
         public static void Color3(LayoutFarm.Drawing.Color color)
         {
@@ -129,9 +115,7 @@ namespace OpenTK.Graphics.OpenGL
             GL.Color4(color.R, color.G, color.B, color.A);
         }
 
-#endregion
 
-#region public static void ClearColor() overloads
 
         public static void ClearColor(LayoutFarm.Drawing.Color color)
         {
@@ -143,9 +127,7 @@ namespace OpenTK.Graphics.OpenGL
             GL.ClearColor(color.R, color.G, color.B, color.A);
         }
 
-#endregion
 
-#region public static void BlendColor() overloads
 
         public static void BlendColor(LayoutFarm.Drawing.Color color)
         {
@@ -157,9 +139,7 @@ namespace OpenTK.Graphics.OpenGL
             GL.BlendColor(color.R, color.G, color.B, color.A);
         }
 
-#endregion
 
-#region public static void Material() overloads
 
         public static void Material(MaterialFace face, MaterialParameter pname, Vector4 @params)
         {
@@ -171,9 +151,7 @@ namespace OpenTK.Graphics.OpenGL
             unsafe { GL.Material(face, pname, (float*)&@params); }
         }
 
-#endregion
 
-#region public static void Light() overloads
 
         public static void Light(LightName name, LightParameter pname, Vector4 @params)
         {
@@ -185,9 +163,7 @@ namespace OpenTK.Graphics.OpenGL
             unsafe { GL.Light(name, pname, (float*)&@params); }
         }
 
-#endregion
 
-#region Normal|RasterPos|Vertex|TexCoord|Rotate|Scale|Translate|*Matrix
 
         public static void Normal3(Vector3 normal)
         {
@@ -418,7 +394,6 @@ namespace OpenTK.Graphics.OpenGL
             }
         }
 
-#region Uniform
 
         [CLSCompliant(false)]
         public static void Uniform2(int location, ref Vector2 vector)
@@ -463,13 +438,9 @@ namespace OpenTK.Graphics.OpenGL
             GL.Uniform4(location, quaternion.X, quaternion.Y, quaternion.Z, quaternion.W);
         }
 
-#endregion
 
-#endregion
 
-#region Shaders
 
-#region GetActiveAttrib
 
         public static string GetActiveAttrib(int program, int index, out int size, out ActiveAttribType type)
         {
@@ -481,9 +452,7 @@ namespace OpenTK.Graphics.OpenGL
             return sb.ToString();
         }
 
-#endregion
 
-#region GetActiveUniform
 
         public static string GetActiveUniform(int program, int uniformIndex, out int size, out ActiveUniformType type)
         {
@@ -495,9 +464,7 @@ namespace OpenTK.Graphics.OpenGL
             return sb.ToString();
         }
 
-#endregion
 
-#region GetActiveUniformName
 
         public static string GetActiveUniformName(int program, int uniformIndex)
         {
@@ -509,9 +476,7 @@ namespace OpenTK.Graphics.OpenGL
             return sb.ToString();
         }
 
-#endregion
 
-#region GetActiveUniformBlockName
 
         public static string GetActiveUniformBlockName(int program, int uniformIndex)
         {
@@ -523,9 +488,7 @@ namespace OpenTK.Graphics.OpenGL
             return sb.ToString();
         }
 
-#endregion
 
-#region public static void ShaderSource(Int32 shader, System.String @string)
 
         public static void ShaderSource(Int32 shader, System.String @string)
         {
@@ -536,9 +499,7 @@ namespace OpenTK.Graphics.OpenGL
             }
         }
 
-#endregion
 
-#region public static string GetShaderInfoLog(Int32 shader)
 
         public static string GetShaderInfoLog(Int32 shader)
         {
@@ -547,9 +508,7 @@ namespace OpenTK.Graphics.OpenGL
             return info;
         }
 
-#endregion
 
-#region public static void GetShaderInfoLog(Int32 shader, out string info)
 
         public static void GetShaderInfoLog(Int32 shader, out string info)
         {
@@ -568,9 +527,7 @@ namespace OpenTK.Graphics.OpenGL
             }
         }
 
-#endregion
 
-#region public static string GetProgramInfoLog(Int32 program)
 
         public static string GetProgramInfoLog(Int32 program)
         {
@@ -579,9 +536,7 @@ namespace OpenTK.Graphics.OpenGL
             return info;
         }
 
-#endregion
 
-#region public static void GetProgramInfoLog(Int32 program, out string info)
 
         public static void GetProgramInfoLog(Int32 program, out string info)
         {
@@ -599,11 +554,8 @@ namespace OpenTK.Graphics.OpenGL
             }
         }
 
-#endregion
 
-#endregion
 
-#region public static void PointParameter(PointSpriteCoordOriginParameter param)
 
         /// <summary>
         /// Helper function that defines the coordinate origin of the Point Sprite.
@@ -617,9 +569,7 @@ namespace OpenTK.Graphics.OpenGL
             GL.PointParameter(PointParameterName.PointSpriteCoordOrigin, (int)param);
         }
 
-#endregion
 
-#region VertexAttrib|MultiTexCoord
 
         [CLSCompliant(false)]
         public static void VertexAttrib2(Int32 index, ref Vector2 v)
@@ -717,9 +667,7 @@ namespace OpenTK.Graphics.OpenGL
             GL.MultiTexCoord4(target, v.X, v.Y, v.Z, v.W);
         }
 
-#endregion
 
-#region Rect
 
         public static void Rect(LayoutFarm.Drawing.RectangleF rect)
         {
@@ -743,9 +691,7 @@ namespace OpenTK.Graphics.OpenGL
             GL.Rect(rect.Left, rect.Top, rect.Right, rect.Bottom);
         }
 
-#endregion
 
-#region public static int GenTexture()
 
         public static int GenTexture()
         {
@@ -754,9 +700,7 @@ namespace OpenTK.Graphics.OpenGL
             return id;
         }
 
-#endregion
 
-#region DeleteTexture
 
         public static void DeleteTexture(int id)
         {
@@ -769,9 +713,7 @@ namespace OpenTK.Graphics.OpenGL
             DeleteTextures(1, ref id);
         }
 
-#endregion
 
-#region [Vertex|Normal|Index|Color|FogCoord|VertexAttrib]Pointer
 
         public static void VertexPointer(int size, VertexPointerType type, int stride, int offset)
         {
@@ -813,18 +755,14 @@ namespace OpenTK.Graphics.OpenGL
             VertexAttribPointer(index, size, type, normalized, stride, (IntPtr)offset);
         }
 
-#endregion
 
-#region DrawElements
 
         public static void DrawElements(BeginMode mode, int count, DrawElementsType type, int offset)
         {
             DrawElements(mode, count, type, new IntPtr(offset));
         }
 
-#endregion
 
-#region Get[Float|Double]
 
         public static void GetFloat(GetPName pname, out Vector2 vector)
         {
@@ -898,9 +836,7 @@ namespace OpenTK.Graphics.OpenGL
             }
         }
 
-#endregion
 
-#region Viewport
 
         public static void Viewport(LayoutFarm.Drawing.Size size)
         {
@@ -927,9 +863,7 @@ namespace OpenTK.Graphics.OpenGL
             GL.Viewport(rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
         }
 #endif
-#endregion
 
-#region TexEnv
 
         public static void TexEnv(TextureEnvTarget target, TextureEnvParameter pname, LayoutFarm.Drawing.Color color)
         {
@@ -948,9 +882,7 @@ namespace OpenTK.Graphics.OpenGL
             }
         }
 
-#endregion
 
-#region Obsolete
 
         [AutoGenerated(Category = "Version11Deprecated", Version = "1.1", EntryPoint = "glDisableClientState")]
         [Obsolete("Use DisableClientState(ArrayCap) instead.")]
@@ -1012,14 +944,12 @@ namespace OpenTK.Graphics.OpenGL
             GetActiveUniforms(program, uniformCount, uniformIndices, (ActiveUniformParameter)pname, @params);
         }
 
-#endregion
 
 #pragma warning restore 3019
 #pragma warning restore 1591
 #pragma warning restore 1572
 #pragma warning restore 1573
 
-#endregion
     }
 }
 

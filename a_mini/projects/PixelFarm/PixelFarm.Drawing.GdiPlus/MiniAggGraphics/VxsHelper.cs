@@ -66,7 +66,7 @@ namespace PixelFarm.Drawing.WinGdi
             double prevMoveToY = 0;
             var brush_path = new System.Drawing.Drawing2D.GraphicsPath(FillMode.Winding);//*** winding for overlapped path  
 
-            for (;;)
+            for (; ; )
             {
                 double x, y;
                 VertexCmd cmd = vxsIter.GetNextVertex(out x, out y);

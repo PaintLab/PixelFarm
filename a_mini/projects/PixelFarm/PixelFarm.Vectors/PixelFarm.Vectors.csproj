@@ -32,9 +32,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="1_VectorMaths\AggBasics.cs" />
     <Compile Include="1_VectorMaths\AggMath.cs" />
     <Compile Include="1_VectorMaths\AxisAlignedBoundingBox.cs" />

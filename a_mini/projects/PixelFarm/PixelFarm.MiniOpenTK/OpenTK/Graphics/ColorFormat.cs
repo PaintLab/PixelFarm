@@ -1,10 +1,8 @@
-﻿#region --- License ---
-/* Licensed under the MIT/X11 license.
+﻿/* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -21,7 +19,6 @@ namespace OpenTK.Graphics
         byte red, green, blue, alpha;
         bool isIndexed;
         int bitsPerPixel;
-        #region --- Constructors ---
 
         /// <summary>
         /// Constructs a new ColorFormat with the specified aggregate bits per pixel.
@@ -91,9 +88,7 @@ namespace OpenTK.Graphics
                 this.isIndexed = true;
         }
 
-        #endregion
 
-        #region --- Public Methods ---
 
         /// <summary>Gets the bits per pixel for the Red channel.</summary>
         public int Red { get { return red; } private set { red = (byte)value; } }
@@ -108,9 +103,7 @@ namespace OpenTK.Graphics
         /// <summary>Gets the sum of Red, Green, Blue and Alpha bits per pixel.</summary>
         public int BitsPerPixel { get { return bitsPerPixel; } private set { bitsPerPixel = value; } }
 
-        #endregion
 
-        #region --- Operator Overloads ---
 
         /// <summary>
         /// Converts the specified bpp into a new ColorFormat.
@@ -127,9 +120,7 @@ namespace OpenTK.Graphics
         //    return mode.BitsPerPixel;
         //}
 
-        #endregion
 
-        #region --- Overrides ---
 
         /// <summary>
         /// Indicates whether this instance and a specified object are equal.
@@ -189,6 +180,5 @@ namespace OpenTK.Graphics
             return string.Format("{0} ({1})", BitsPerPixel, (IsIndexed ? " indexed" : Red.ToString() + Green.ToString() + Blue.ToString() + Alpha.ToString()));
         }
 
-        #endregion
     }
 }

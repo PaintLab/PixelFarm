@@ -57,7 +57,7 @@ namespace PixelFarm.Drawing.WinGdi
             MyWin32.SetViewportOrgEx(win32MemDc.DC, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
 
         }
-        public override void ClearSurface(PixelFarm.Drawing.Color c)
+        public override void Clear(PixelFarm.Drawing.Color c)
         {
 
             gx.Clear(System.Drawing.Color.FromArgb(

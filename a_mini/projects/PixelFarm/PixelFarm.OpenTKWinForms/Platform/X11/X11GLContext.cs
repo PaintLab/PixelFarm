@@ -1,8 +1,6 @@
-#region --- License ---
 /* Copyright (c) 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +17,6 @@ namespace OpenTK.Platform.X11
     /// </summary>
     internal sealed class X11GLContext : DesktopGraphicsContext
     {
-        #region Fields
 
         // We assume that we cannot move a GL context to a different display connection.
         // For this reason, we'll "lock" onto the display of the window used in the context
@@ -30,9 +27,7 @@ namespace OpenTK.Platform.X11
         bool vsync_supported;
         int vsync_interval;
         bool glx_loaded;
-        #endregion
 
-        #region --- Constructors ---
 
         public X11GLContext(GraphicsMode mode, IWindowInfo window, IGraphicsContext shared, bool direct,
             int major, int minor, GraphicsContextFlags flags)
@@ -190,9 +185,7 @@ namespace OpenTK.Platform.X11
             }
         }
 
-        #endregion
 
-        #region --- Private Methods ---
 
         IntPtr Display
         {
@@ -207,7 +200,6 @@ namespace OpenTK.Platform.X11
             }
         }
 
-        #region XVisualInfo SelectVisual(GraphicsMode mode, X11WindowInfo currentWindow)
 
         XVisualInfo SelectVisual(GraphicsMode mode, X11WindowInfo currentWindow)
         {
@@ -227,7 +219,6 @@ namespace OpenTK.Platform.X11
             return info;
         }
 
-        #endregion
 
         bool SupportsExtension(X11WindowInfo window, string e)
         {
@@ -245,11 +236,8 @@ namespace OpenTK.Platform.X11
             return !String.IsNullOrEmpty(extensions) && extensions.Contains(e);
         }
 
-        #endregion
 
-        #region --- IGraphicsContext Members ---
 
-        #region SwapBuffers()
 
         public override void SwapBuffers()
         {
@@ -262,9 +250,7 @@ namespace OpenTK.Platform.X11
             }
         }
 
-        #endregion
 
-        #region MakeCurrent
 
         public override void MakeCurrent(IWindowInfo window)
         {
@@ -313,9 +299,7 @@ namespace OpenTK.Platform.X11
             currentWindow = (X11WindowInfo)window;
         }
 
-        #endregion
 
-        #region IsCurrent
 
         public override bool IsCurrent
         {
@@ -328,9 +312,7 @@ namespace OpenTK.Platform.X11
             }
         }
 
-        #endregion
 
-        #region VSync
 
         public override bool VSync
         {
@@ -354,9 +336,7 @@ namespace OpenTK.Platform.X11
             }
         }
 
-        #endregion
 
-        #region GetAddress
 
         public override IntPtr GetAddress(string function)
         {
@@ -366,9 +346,7 @@ namespace OpenTK.Platform.X11
             }
         }
 
-        #endregion
 
-        #region LoadAll
 
         public override void LoadAll()
         {
@@ -378,21 +356,14 @@ namespace OpenTK.Platform.X11
             base.LoadAll();
         }
 
-        #endregion
 
-        #endregion
 
-        #region --- IGLContextInternal Members ---
 
-        #region IWindowInfo IGLContextInternal.Info
 
         //IWindowInfo IGraphicsContextInternal.Info { get { return window; } }
 
-        #endregion
 
-        #endregion
 
-        #region --- IDisposable Members ---
 
         public override void Dispose()
         {
@@ -433,6 +404,5 @@ namespace OpenTK.Platform.X11
             this.Dispose(false);
         }
 
-        #endregion
     }
 }

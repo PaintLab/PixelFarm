@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -43,7 +41,6 @@ namespace OpenTK.Platform.MacOS
         bool isControl = false;
         bool goFullScreenHack = false;
         bool goWindowedHack = false;
-        #region Constructors
 
         /// <summary>
         /// Constructs a new instance with the specified parameters.
@@ -58,9 +55,7 @@ namespace OpenTK.Platform.MacOS
             this.isControl = isControl;
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Gets the window reference for this instance.
@@ -98,9 +93,7 @@ namespace OpenTK.Platform.MacOS
                 this.WindowRef);
         }
 
-        #endregion
 
-        #region IDisposable Members
 
         public void Dispose()
         {
@@ -130,6 +123,5 @@ namespace OpenTK.Platform.MacOS
             Dispose(false);
         }
 
-        #endregion
     }
 }

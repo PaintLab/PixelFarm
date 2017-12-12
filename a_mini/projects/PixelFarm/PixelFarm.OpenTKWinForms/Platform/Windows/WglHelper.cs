@@ -1,11 +1,9 @@
-#region --- License ---
 /* Copyright (c) 2006, 2007 Stefanos Apostolopoulos
  * See license.txt for license info
  *
  * Date: 12/8/2007
  * Time: 6:43 ��
  */
-#endregion
 
 using System;
 using System.Runtime.InteropServices;
@@ -14,7 +12,6 @@ namespace OpenTK.Platform.Windows
 {
     internal partial class Wgl
     {
-        #region --- Constructors ---
 
         static Wgl()
         {
@@ -27,9 +24,7 @@ namespace OpenTK.Platform.Windows
             LoadAll();
         }
 
-        #endregion
 
-        #region --- Fields ---
 
         internal const string Library = "OPENGL32.DLL";
         private static Assembly assembly;
@@ -37,9 +32,7 @@ namespace OpenTK.Platform.Windows
         private static Type delegatesClass;
         private static Type importsClass;
         private static bool rebuildExtensionList = true;
-        #endregion
 
-        #region static Delegate LoadDelegate(string name, Type signature)
 
         /// <summary>
         /// Creates a System.Delegate that can be used to call an OpenGL function, core or extension.
@@ -63,9 +56,7 @@ namespace OpenTK.Platform.Windows
             return d;
         }
 
-        #endregion
 
-        #region private static Delegate GetExtensionDelegate(string name, Type signature)
 
         /// <summary>
         /// Creates a System.Delegate that can be used to call a dynamically exported OpenGL function.
@@ -91,9 +82,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region public static void LoadAll()
 
         /// <summary>
         /// Loads all Wgl entry points, core and extensions.
@@ -103,9 +92,7 @@ namespace OpenTK.Platform.Windows
             OpenTK.Platform.Utilities.LoadExtensions(typeof(Wgl));
         }
 
-        #endregion
 
-        #region public static bool Load(string function)
 
         /// <summary>
         /// Loads the given Wgl entry point.
@@ -117,9 +104,7 @@ namespace OpenTK.Platform.Windows
             return OpenTK.Platform.Utilities.TryLoadExtension(typeof(Wgl), function);
         }
 
-        #endregion
 
-        #region public static partial class Arb
 
         /// <summary>Contains ARB extensions for WGL.</summary>
         public static partial class Arb
@@ -156,9 +141,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion 
 
-        #region public static partial class Ext
 
         /// <summary>Contains EXT extensions for WGL.</summary>
         public static partial class Ext
@@ -186,6 +169,5 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
     }
 }

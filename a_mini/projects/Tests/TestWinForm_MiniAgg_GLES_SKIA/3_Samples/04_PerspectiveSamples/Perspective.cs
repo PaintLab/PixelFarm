@@ -6,6 +6,7 @@ using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.VertexSource;
 using Mini;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Sample_Perspective
 {
     [Info(OrderCode = "04")]
@@ -116,13 +117,13 @@ namespace PixelFarm.Agg.Sample_Perspective
                     var v1 = GetFreeVxs();
                     var trans_ell = GetFreeVxs();
                     txBilinear.TransformToVxs(ell.MakeVxs(v1), trans_ell);
-                    painter.FillColor = Drawing.Color.Make(0.5f, 0.3f, 0.0f, 0.3f);
+                    painter.FillColor = AggColorExtensions.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(trans_ell);
                     //-------------------------------------------------------------
                     //outline
                     double prevStrokeWidth = painter.StrokeWidth;
                     painter.StrokeWidth = 3;
-                    painter.StrokeColor = Drawing.Color.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                    painter.StrokeColor = AggColorExtensions.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(trans_ell);
                     painter.StrokeWidth = prevStrokeWidth;
 
@@ -133,7 +134,7 @@ namespace PixelFarm.Agg.Sample_Perspective
             else
             {
                 RectD r = lionShape.Bounds;
-            
+
                 var txPerspective = new Perspective(
                    r.Left, r.Bottom, r.Right, r.Top,
                     quadPolygonControl.GetInnerCoords());
@@ -157,12 +158,12 @@ namespace PixelFarm.Agg.Sample_Perspective
                     VertexStore v2 = GetFreeVxs();
                     VertexStore transformedEll = GetFreeVxs();
                     txPerspective.TransformToVxs(filledEllipse.MakeVxs(v2), transformedEll);
-                    painter.FillColor = Drawing.Color.Make(0.5f, 0.3f, 0.0f, 0.3f);
+                    painter.FillColor = AggColorExtensions.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(transformedEll);
                     //-------------------------------------------------------- 
                     var prevStrokeW = painter.StrokeWidth;
                     painter.StrokeWidth = 3;
-                    painter.StrokeColor = Drawing.Color.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                    painter.StrokeColor = AggColorExtensions.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(transformedEll);
                     painter.StrokeWidth = prevStrokeW;
                     ReleaseVxs(ref v2);
@@ -173,7 +174,7 @@ namespace PixelFarm.Agg.Sample_Perspective
 
             //--------------------------
             // Render the "quad" tool and controls
-            painter.FillColor = Drawing.Color.Make(0f, 0.3f, 0.5f, 0.6f);
+            painter.FillColor = AggColorExtensions.Make(0f, 0.3f, 0.5f, 0.6f);
             var v4 = GetFreeVxs();
             painter.Fill(quadPolygonControl.MakeVxs(v4));
             ReleaseVxs(ref v4);

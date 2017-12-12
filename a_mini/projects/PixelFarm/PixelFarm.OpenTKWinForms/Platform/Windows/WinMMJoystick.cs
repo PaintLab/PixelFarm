@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2008 the Open Toolkit library, except where noted.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -37,7 +35,6 @@ namespace OpenTK.Platform.Windows
 {
     sealed class WinMMJoystick : IJoystickDriver
     {
-        #region Fields
 
         List<JoystickDevice> sticks = new List<JoystickDevice>();
         IList<JoystickDevice> sticks_readonly;
@@ -47,9 +44,7 @@ namespace OpenTK.Platform.Windows
         //static readonly string RegstryJoyCurrent = @"CurrentJoystickSettings";
 
         bool disposed;
-        #endregion
 
-        #region Constructors
 
         public WinMMJoystick()
         {
@@ -66,9 +61,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region Private Members
 
         JoystickDevice<WinMMJoyDetails> OpenJoystick(int number)
         {
@@ -125,9 +118,7 @@ namespace OpenTK.Platform.Windows
             return stick;
         }
 
-        #endregion
 
-        #region IJoystickDriver
 
         public int DeviceCount
         {
@@ -224,9 +215,7 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
 
-        #region IDisposable
 
         public void Dispose()
         {
@@ -251,9 +240,7 @@ namespace OpenTK.Platform.Windows
             Dispose(false);
         }
 
-        #endregion
 
-        #region UnsafeNativeMethods
 
         [Flags]
         enum JoystickFlags
@@ -368,9 +355,7 @@ namespace OpenTK.Platform.Windows
             public static extern int joyGetNumDevs();
         }
 
-        #endregion
 
-        #region enum PovType
 
         [Flags]
         enum PovType
@@ -381,9 +366,7 @@ namespace OpenTK.Platform.Windows
             Continuous = 0x4
         }
 
-        #endregion
 
-        #region struct WinMMJoyDetails
 
         struct WinMMJoyDetails
         {
@@ -410,6 +393,5 @@ namespace OpenTK.Platform.Windows
             }
         }
 
-        #endregion
     }
 }

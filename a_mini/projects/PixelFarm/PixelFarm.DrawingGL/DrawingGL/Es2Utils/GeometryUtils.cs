@@ -14,14 +14,12 @@
 //            http://www.opengles-book.com
 
 
-#region Using Directives
 
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using OpenTK;
 using OpenTK.Graphics;
-#endregion
 
 
 namespace OpenTK.Graphics.ES20

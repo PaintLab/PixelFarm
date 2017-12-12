@@ -539,7 +539,6 @@ namespace Ionic.Zlib
             _baseStream = new ZlibBaseStream(stream, mode, level, ZlibStreamFlavor.GZIP, leaveOpen);
         }
 
-        #region Zlib properties
 
         /// <summary>
         /// This property sets the flush behavior on the stream.
@@ -606,9 +605,7 @@ namespace Ionic.Zlib
             }
         }
 
-        #endregion
 
-        #region Stream methods
 
         /// <summary>
         ///   Dispose the stream.
@@ -849,7 +846,6 @@ namespace Ionic.Zlib
 
             _baseStream.Write(buffer, offset, count);
         }
-        #endregion
 
 
         internal static readonly System.DateTime _unixEpoch = new System.DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);

@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -45,7 +43,6 @@ namespace OpenTK
             window_info = Utilities.CreateMacOSCarbonWindowInfo(control.Handle, false, true);
         }
 
-        #region IGLControl Members
 
         public IGraphicsContext CreateContext(int major, int minor, GraphicsContextFlags flags)
         {
@@ -71,6 +68,5 @@ namespace OpenTK
             }
         }
 
-        #endregion
     }
 }

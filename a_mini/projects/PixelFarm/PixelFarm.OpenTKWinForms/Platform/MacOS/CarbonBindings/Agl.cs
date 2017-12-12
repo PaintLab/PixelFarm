@@ -325,7 +325,6 @@ namespace OpenTK.Platform.MacOS
         /*
          ** Current state functions
          */
-        #region --- aglSetCurrentContext ---
 
         [DllImport(agl, EntryPoint = "aglSetCurrentContext")]
         static extern byte _aglSetCurrentContext(AGLContext ctx);
@@ -338,7 +337,6 @@ namespace OpenTK.Platform.MacOS
                 return false;
         }
 
-        #endregion
 
         [DllImport(agl)]
         internal static extern AGLContext aglGetCurrentContext();

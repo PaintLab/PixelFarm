@@ -5,6 +5,8 @@ using PixelFarm.Drawing;
 using Mini;
 using PixelFarm.DrawingGL;
 using PixelFarm.Drawing.Fonts;
+using Typography.TextServices;
+
 namespace OpenTkEssTest
 {
     [Info(OrderCode = "402")]
@@ -25,13 +27,13 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            var win32InstallFontProvider = DemoHelper.GetRegisterInstalledFontProvider();
+            
             InstalledFontCollection collection = new InstalledFontCollection();
             collection.LoadSystemFonts();
             InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Normal);
             FontFace tahomaFace = OpenFontLoader.LoadFont(tahomaFont.FontPath);
             ActualFont actualFont = tahomaFace.GetFontAtPointSize(72);
-            FontGlyph glyph = actualFont.GetGlyph('K');
+            FontGlyph glyph = (FontGlyph)actualFont.GetGlyph('K');
 
             //var svgFont = svgFontStore.LoadFont("svg-LiberationSansFont", 300);
             ////PathWriter p01 = new PathWriter();

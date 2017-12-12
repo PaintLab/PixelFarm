@@ -1,4 +1,3 @@
-#region License
 //
 // The Open Toolkit Library License
 //
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -35,13 +33,10 @@ namespace OpenTK.Input
     /// </summary>
     public static class Keyboard
     {
-        #region Fields
 
         //static IKeyboardDriver driver;
 
-        #endregion
 
-        #region Constructors
 
         static Keyboard()
         {
@@ -49,9 +44,7 @@ namespace OpenTK.Input
             //driver = Platform.Factory.Default.CreateKeyboardDriver();
         }
 
-        #endregion
 
-        #region Public Members
 
         /// <summary>
         /// Retrieves the KeyboardState for the default keyboard device.
@@ -72,6 +65,5 @@ namespace OpenTK.Input
             return new KeyboardState();
         }
 
-        #endregion
     }
 }

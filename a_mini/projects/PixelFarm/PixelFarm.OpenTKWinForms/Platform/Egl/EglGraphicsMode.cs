@@ -1,5 +1,4 @@
-﻿#region License
-//
+﻿//
 // The Open Toolkit Library License
 //
 // Copyright (c) 2006 - 2009 the Open Toolkit library.
@@ -23,7 +22,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -33,7 +31,6 @@ namespace OpenTK.Platform.Egl
 {
     class EglGraphicsMode : IGraphicsMode
     {
-        #region IGraphicsMode Members
 
         public EglWindowInfo window;
 
@@ -92,6 +89,5 @@ namespace OpenTK.Platform.Egl
 
         }
 
-        #endregion
     }
 }

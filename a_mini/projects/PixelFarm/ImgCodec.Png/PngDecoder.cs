@@ -37,14 +37,12 @@ namespace ImageTools.IO.Png
     /// </remarks>
     public class PngDecoder : IImageDecoder
     {
-        #region Fields
 
         private static readonly Dictionary<int, PngColorTypeInformation> _colorTypes = new Dictionary<int, PngColorTypeInformation>();
         private ExtendedImage _image;
         private Stream _stream;
         private PngHeader _header;
 
-        #endregion
 
         static PngDecoder()
         {
@@ -69,7 +67,6 @@ namespace ImageTools.IO.Png
                     (p, a) => new TrueColorReader(true)));
         }
 
-        #region IImageDecoder Members
 
         /// <summary>
         /// Gets the size of the header for this image type.
@@ -588,6 +585,5 @@ namespace ImageTools.IO.Png
             return numBytes;
         }
 
-        #endregion
     }
 }

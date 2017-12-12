@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Reflection;
 
 using Microsoft.Build.Construction;
-using Microsoft.Build.Evaluation; 
+using Microsoft.Build.Evaluation;
 
 namespace BuildMergeProject
 {
@@ -459,9 +459,6 @@ namespace BuildMergeProject
                 List<string> allAbsFiles = toMergePro.GetAllAbsoluteFilenames();
                 foreach (string filename in allAbsFiles)
                 {
-
-
-
                     string onlyFileName = Path.GetFileName(filename);
                     if (onlyFileName == "ExtensionAttribute.cs")
                     {

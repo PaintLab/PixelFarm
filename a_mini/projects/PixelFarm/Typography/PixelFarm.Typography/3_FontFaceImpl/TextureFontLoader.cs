@@ -519,7 +519,7 @@ namespace PixelFarm.Drawing.Fonts
     public static class IFontLoaderTextureFontExtensions
     {
 
-        public static SimpleFontAtlas LoadFont(IFontLoader fontLoader, RequestFont r)
+        public static SimpleFontAtlas LoadFont(Typography.TextServices.IFontLoader fontLoader, RequestFont r)
         {
             throw new System.NotSupportedException();
         }

@@ -156,7 +156,7 @@ namespace Typography.Contours
             {
                 //build vxs
                 _tovxs.Reset();
-                float pxscale = _currentTypeface.CalculateToPixelScaleFromPointSize(_currentFontSizeInPoints);
+                float pxscale = _currentTypeface.CalculateScaleToPixelFromPointSize(_currentFontSizeInPoints);
                 GlyphDynamicOutline dynamicOutline = glyphMeshData.dynamicOutline;
                 if (dynamicOutline != null)
                 {
@@ -342,11 +342,11 @@ namespace Typography.Contours
 
 
 
-        void LayoutWithoutHorizontalFitAlign(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
+        void LayoutWithoutHorizontalFitAlign(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList)
         {
             //the default OpenFont layout without fit-to-writing alignment
             int finalGlyphCount = posStream.Count;
-            float pxscale = _typeface.CalculateToPixelScaleFromPointSize(this._fontSizeInPoints);
+            float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
             double cx = 0;
             short cy = 0;
 
@@ -359,7 +359,7 @@ namespace Typography.Contours
                 float exact_x = (float)(cx + offsetX * pxscale);
                 float exact_y = (float)(cy + offsetY * pxscale);
 
-                outputGlyphPlanList.Add(new GlyphPlan(
+                outputGlyphPlanList.Append(new GlyphPlan(
                    glyphIndex,
                     exact_x,
                     exact_y,
@@ -368,7 +368,7 @@ namespace Typography.Contours
             }
         }
 
-        public void Layout(IGlyphPositions posStream, List<GlyphPlan> outputGlyphPlanList)
+        public void Layout(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList)
         {
 
             if (!UseWithLcdSubPixelRenderingTechnique)
@@ -379,7 +379,7 @@ namespace Typography.Contours
             }
             //------------------------------
             int finalGlyphCount = posStream.Count;
-            float pxscale = _typeface.CalculateToPixelScaleFromPointSize(this._fontSizeInPoints);
+            float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
 #if DEBUG
             float dbug_onepx = 1 / pxscale;
 #endif
@@ -469,7 +469,7 @@ namespace Typography.Contours
                     final_x += 0.33f;
                 }
 
-                outputGlyphPlanList.Add(new GlyphPlan(
+                outputGlyphPlanList.Append(new GlyphPlan(
                     glyphIndex,
                     final_x,
                     exact_y,

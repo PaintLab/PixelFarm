@@ -63,7 +63,7 @@ namespace PixelFarm.Drawing.Skia
             //MyWin32.SetViewportOrgEx(win32MemDc.DC, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
 
         }
-        public override void ClearSurface(PixelFarm.Drawing.Color c)
+        public override void Clear(PixelFarm.Drawing.Color c)
         {
             skCanvas.Clear(Conv1.ConvToColor(c));
         }

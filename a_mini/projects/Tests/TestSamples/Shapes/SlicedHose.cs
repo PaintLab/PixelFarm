@@ -34,7 +34,6 @@ namespace Examples.Shapes
             double TexCoordStart = 0f, TexCoordEnd = 0f;
             switch (side)
             {
-                #region Around X Axis
                 case eSide.BottomRight:
                     start = -Vector3d.UnitY;
                     end = Vector3d.UnitZ;
@@ -59,8 +58,6 @@ namespace Examples.Shapes
                     TexCoordStart = 0.75;
                     TexCoordEnd = 1.0;
                     break;
-                #endregion Around X Axis
-                #region Around Y Axis
                 case eSide.FrontRight:
                     start = Vector3d.UnitX;
                     end = Vector3d.UnitZ;
@@ -85,8 +82,6 @@ namespace Examples.Shapes
                     TexCoordStart = 0.75;
                     TexCoordEnd = 1.0;
                     break;
-                #endregion Around Y Axis
-                #region Around Z Axis
                 case eSide.FrontBottom:
                     start = -Vector3d.UnitY;
                     end = Vector3d.UnitX;
@@ -111,7 +106,6 @@ namespace Examples.Shapes
                     TexCoordStart = 0.75;
                     TexCoordEnd = 1.0;
                     break;
-                    #endregion Around Z Axis
 
             }
 

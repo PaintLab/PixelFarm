@@ -104,7 +104,7 @@ namespace LayoutFarm.UI.OpenGL
             {
                 return;
             }
-            canvas.ClearSurface(Color.White);
+            canvas.Clear(Color.White);
             ////test draw rect
             //canvas.StrokeColor = PixelFarm.Drawing.Color.Blue;
             //canvas.DrawRectangle(Color.Blue, 20, 20, 200, 200);

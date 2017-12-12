@@ -1,10 +1,8 @@
-#region --- License ---
 /* Licensed under the MIT/X11 license.
  * Copyright (c) 2006-2008 the OpenTK Team.
  * This notice may not be removed from any source distribution.
  * See license.txt for licensing detailed licensing details.
  */
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +17,6 @@ namespace OpenTK.Graphics
     /// </summary>
     public sealed class GraphicsContext : IGraphicsContext, IGraphicsContextInternal
     {
-        #region --- Fields ---
 
         IGraphicsContext implementation;  // The actual render context implementation for the underlying platform.
         bool disposed;
@@ -33,7 +30,6 @@ namespace OpenTK.Graphics
         readonly static object SyncRoot = new object();
         // Maps OS-specific context handles to GraphicsContext weak references.
         readonly static Dictionary<ContextHandle, WeakReference> available_contexts = new Dictionary<ContextHandle, WeakReference>();
-        #endregion
 
 
 
