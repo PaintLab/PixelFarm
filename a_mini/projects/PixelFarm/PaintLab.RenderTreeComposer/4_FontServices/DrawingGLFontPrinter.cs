@@ -8,6 +8,8 @@ using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using Typography.TextLayout;
 using Typography.TextServices;
+using Typography.OpenFont;
+
 #if GL_ENABLE
 
 namespace PixelFarm.DrawingGL
