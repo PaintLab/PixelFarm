@@ -83,9 +83,7 @@ namespace LayoutFarm
             glyphLayout.Typeface = typeface;
             glyphLayout.GenerateGlyphPlans(str, startAt, len, userGlyphPlanList, userCharToGlyphMapList);
 
-            //
-            //
-            //float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+            float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
             int endBefore = startAt + len;
 
             for (int i = startAt; i < endBefore; ++i)
@@ -94,7 +92,10 @@ namespace LayoutFarm
                 float tx = glyphPlan.ExactX;
                 float ty = glyphPlan.ExactY;
                 double actualAdvX = glyphPlan.AdvanceX;
-                glyphXAdvances[i] = (int)Math.Round(actualAdvX);
+
+                //if you want to snap each glyph to grid ... => Round it
+
+                glyphXAdvances[i] = (int)Math.Round(actualAdvX * scale);
             }
         }
 

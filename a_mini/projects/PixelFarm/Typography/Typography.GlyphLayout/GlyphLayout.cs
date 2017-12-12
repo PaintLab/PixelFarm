@@ -513,8 +513,7 @@ namespace Typography.TextLayout
 
             //
             int j = outputGlyphPlans.Count;
-            Typeface currentTypeface = glyphLayout.Typeface;
-            Typography.OpenFont.Extensions.LineSpacingChoice sel_linespcingChoice;
+            Typeface currentTypeface = glyphLayout.Typeface; 
             if (j == 0)
             {
                 //not scale
@@ -523,7 +522,7 @@ namespace Typography.TextLayout
                     currentTypeface.Ascender * scale,
                     currentTypeface.Descender * scale,
                     currentTypeface.LineGap * scale,
-                    Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface, out sel_linespcingChoice) * scale);
+                    Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface) * scale);
 
             }
             else
@@ -546,7 +545,7 @@ namespace Typography.TextLayout
                         currentTypeface.Ascender * scale,
                         currentTypeface.Descender * scale,
                         currentTypeface.LineGap * scale,
-                        Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface, out sel_linespcingChoice) * scale);
+                        Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface) * scale);
             }
         }
     }
