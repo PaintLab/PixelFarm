@@ -207,7 +207,7 @@ namespace PixelFarm.Agg
 
             static int MulDiv(int a, int b, int c)
             {
-                return AggBasics.iround_f((float)a * (float)b / (float)c);
+                return AggMath.iround_f((float)a * (float)b / (float)c);
             }
         }
     }

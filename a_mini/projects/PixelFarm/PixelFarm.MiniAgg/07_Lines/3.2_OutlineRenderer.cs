@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Lines
             s_gamma_none = new byte[AA_SCALE];
             for (int i = AA_SCALE - 1; i >= 0; --i)
             {
-                s_gamma_none[i] = (byte)(AggBasics.uround(((float)(i) / AA_MASK) * AA_MASK));
+                s_gamma_none[i] = (byte)(AggMath.uround(((float)(i) / AA_MASK) * AA_MASK));
             }
         }
 
@@ -78,7 +78,7 @@ namespace PixelFarm.Agg.Lines
         }
         byte[] GetProfileBuffer(double w)
         {
-            m_subpixel_width = (int)AggBasics.uround(w * SUBPIX_SCALE);
+            m_subpixel_width = (int)AggMath.uround(w * SUBPIX_SCALE);
             int size = m_subpixel_width + SUBPIX_SCALE * 6;
             if (size > m_profile.Length)
             {
@@ -101,7 +101,7 @@ namespace PixelFarm.Agg.Lines
                 for (int i = AA_SCALE - 1; i >= 0; --i)
                 {
                     //pass i to gamma func ***
-                    m_gamma[i] = (byte)(AggBasics.uround(gamma_function.GetGamma((float)(i) / AA_MASK) * AA_MASK));
+                    m_gamma[i] = (byte)(AggMath.uround(gamma_function.GetGamma((float)(i) / AA_MASK) * AA_MASK));
                 }
             }
         }
@@ -405,7 +405,7 @@ namespace PixelFarm.Agg.Lines
                     if (flags != 0)
                     {
                         LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
-                                           AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
+                                           AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         Line0NoClip(lp2);
                     }
                     else
@@ -450,7 +450,7 @@ namespace PixelFarm.Agg.Lines
                     if (flags != 0)
                     {
                         LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
-                                           AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
+                                           AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if (((int)flags & 1) != 0)
                         {
                             sx = x1 + (y2 - y1);
@@ -508,7 +508,7 @@ namespace PixelFarm.Agg.Lines
                     if (flags != 0)
                     {
                         LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
-                                           AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
+                                           AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if ((flags & 2) != 0)
                         {
                             ex = x2 + (y2 - y1);
@@ -571,7 +571,7 @@ namespace PixelFarm.Agg.Lines
                     if (flags != 0)
                     {
                         LineParameters lp2 = new LineParameters(x1, y1, x2, y2,
-                            AggBasics.uround(AggMath.calc_distance(x1, y1, x2, y2)));
+                            AggMath.uround(AggMath.calc_distance(x1, y1, x2, y2)));
                         if ((flags & 1) != 0)
                         {
                             sx = x1 + (y2 - y1);

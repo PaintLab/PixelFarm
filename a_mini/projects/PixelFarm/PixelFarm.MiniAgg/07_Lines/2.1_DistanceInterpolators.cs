@@ -81,7 +81,7 @@ namespace PixelFarm.Agg.Lines
         {
             m_dx = (x2 - x1);
             m_dy = (y2 - y1);
-            m_dist = (AggBasics.iround((double)(x + LineAA.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
+            m_dist = (AggMath.iround((double)(x + LineAA.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
                           (double)(y + LineAA.SUBPIXEL_SCALE / 2 - y2) * (double)(m_dx)));
             m_dx <<= LineAA.SUBPIXEL_SHIFT;
             m_dy <<= LineAA.SUBPIXEL_SHIFT;
@@ -173,7 +173,7 @@ namespace PixelFarm.Agg.Lines
             m_dy = (y2 - y1);
             m_dx_start = (LineAA.Mr(sx) - LineAA.Mr(x1));
             m_dy_start = (LineAA.Mr(sy) - LineAA.Mr(y1));
-            m_dist = (AggBasics.iround((double)(x + LineAA.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
+            m_dist = (AggMath.iround((double)(x + LineAA.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
                           (double)(y + LineAA.SUBPIXEL_SCALE / 2 - y2) * (double)(m_dx)));
             m_dist_start = ((LineAA.Mr(x + LineAA.SUBPIXEL_SCALE / 2) - LineAA.Mr(sx)) * m_dy_start -
                          (LineAA.Mr(y + LineAA.SUBPIXEL_SCALE / 2) - LineAA.Mr(sy)) * m_dx_start);
@@ -190,7 +190,7 @@ namespace PixelFarm.Agg.Lines
             m_dy = (y2 - y1);
             m_dx_start = (LineAA.Mr(ex) - LineAA.Mr(x2));
             m_dy_start = (LineAA.Mr(ey) - LineAA.Mr(y2));
-            m_dist = (AggBasics.iround((double)(x + LineAA.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
+            m_dist = (AggMath.iround((double)(x + LineAA.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
                           (double)(y + LineAA.SUBPIXEL_SCALE / 2 - y2) * (double)(m_dx)));
             m_dist_start = ((LineAA.Mr(x + LineAA.SUBPIXEL_SCALE / 2) - LineAA.Mr(ex)) * m_dy_start -
                          (LineAA.Mr(y + LineAA.SUBPIXEL_SCALE / 2) - LineAA.Mr(ey)) * m_dx_start);
@@ -318,7 +318,7 @@ namespace PixelFarm.Agg.Lines
                 m_dy_start = (LineAA.Mr(sy) - LineAA.Mr(y1));
                 m_dx_end = (LineAA.Mr(ex) - LineAA.Mr(x2));
                 m_dy_end = (LineAA.Mr(ey) - LineAA.Mr(y2));
-                m_dist = (AggBasics.iround((double)(x + LineAA.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
+                m_dist = (AggMath.iround((double)(x + LineAA.SUBPIXEL_SCALE / 2 - x2) * (double)(m_dy) -
                               (double)(y + LineAA.SUBPIXEL_SCALE / 2 - y2) * (double)(m_dx)));
                 m_dist_start = ((LineAA.Mr(x + LineAA.SUBPIXEL_SCALE / 2) - LineAA.Mr(sx)) * m_dy_start -
                              (LineAA.Mr(y + LineAA.SUBPIXEL_SCALE / 2) - LineAA.Mr(sy)) * m_dx_start);

@@ -22,7 +22,7 @@
 using System;
 namespace PixelFarm.Agg
 {
-    public static class AggBasics
+    public static partial class AggMath
     {
         public static bool is_equal_eps(double v1, double v2, double epsilon)
         {

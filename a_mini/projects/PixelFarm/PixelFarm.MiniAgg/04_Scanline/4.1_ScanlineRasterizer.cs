@@ -145,7 +145,7 @@ namespace PixelFarm.Agg
         //from vector clipper
         static int upscale(double v)
         {
-            return AggBasics.iround(v * poly_subpix.SCALE);
+            return AggMath.iround(v * poly_subpix.SCALE);
         }
         static int upscale(int v)
         {
@@ -173,7 +173,7 @@ namespace PixelFarm.Agg
         {
             for (int i = AA_SCALE - 1; i >= 0; --i)
             {
-                m_gammaLut[i] = (int)AggBasics.uround(
+                m_gammaLut[i] = (int)AggMath.uround(
                     gamma_function.GetGamma((float)(i) / AA_MASK) * AA_MASK);
             }
         }

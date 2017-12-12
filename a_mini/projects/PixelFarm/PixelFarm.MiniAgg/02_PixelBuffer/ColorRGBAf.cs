@@ -49,19 +49,19 @@ namespace PixelFarm.Agg
         public float alpha;
         public int Red0To255
         {
-            get { return AggBasics.uround_f(red * (float)BASE_MASK); }
+            get { return AggMath.uround_f(red * (float)BASE_MASK); }
         }
         public int Green0To255
         {
-            get { return AggBasics.uround_f(green * (float)BASE_MASK); }
+            get { return AggMath.uround_f(green * (float)BASE_MASK); }
         }
         public int Blue0To255
         {
-            get { return AggBasics.uround_f(blue * (float)BASE_MASK); }
+            get { return AggMath.uround_f(blue * (float)BASE_MASK); }
         }
         public int Alpha0To255
         {
-            get { return AggBasics.uround_f(alpha * (float)BASE_MASK); }
+            get { return AggMath.uround_f(alpha * (float)BASE_MASK); }
         }
 
         public float Red0To1 { get { return red; } }

@@ -25,7 +25,7 @@
 using System;
 namespace PixelFarm.Agg
 {
-    public static class AggMath
+    partial class AggMath
     {
         //------------------------------------------------------vertex_dist_epsilon
         // Coinciding points maximal distance (Epsilon)
@@ -457,7 +457,7 @@ namespace PixelFarm.Agg
             }
 
             // Apply recurrence down from current max order
-            for (;;)
+            for (; ; )
             {
                 double c3 = 0;
                 double c2 = 1E-30;

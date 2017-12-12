@@ -547,15 +547,15 @@ namespace PixelFarm.Agg.Transform
 
         bool is_identity()
         {
-            return AggBasics.is_equal_eps(sx, 1.0, EPSILON) &&
-                   AggBasics.is_equal_eps(shy, 0.0, EPSILON) &&
-                   AggBasics.is_equal_eps(w0, 0.0, EPSILON) &&
-                   AggBasics.is_equal_eps(shx, 0.0, EPSILON) &&
-                   AggBasics.is_equal_eps(sy, 1.0, EPSILON) &&
-                   AggBasics.is_equal_eps(w1, 0.0, EPSILON) &&
-                   AggBasics.is_equal_eps(tx, 0.0, EPSILON) &&
-                   AggBasics.is_equal_eps(ty, 0.0, EPSILON) &&
-                   AggBasics.is_equal_eps(w2, 1.0, EPSILON);
+            return AggMath.is_equal_eps(sx, 1.0, EPSILON) &&
+                   AggMath.is_equal_eps(shy, 0.0, EPSILON) &&
+                   AggMath.is_equal_eps(w0, 0.0, EPSILON) &&
+                   AggMath.is_equal_eps(shx, 0.0, EPSILON) &&
+                   AggMath.is_equal_eps(sy, 1.0, EPSILON) &&
+                   AggMath.is_equal_eps(w1, 0.0, EPSILON) &&
+                   AggMath.is_equal_eps(tx, 0.0, EPSILON) &&
+                   AggMath.is_equal_eps(ty, 0.0, EPSILON) &&
+                   AggMath.is_equal_eps(w2, 1.0, EPSILON);
         }
 
         //public bool is_equal(Perspective m)
