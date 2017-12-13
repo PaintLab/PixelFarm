@@ -18,7 +18,8 @@ namespace Test_TreeCollection
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            //test segment tree, 
+            //with overlapped segment ...
             TreeSegment t1 = new TreeSegment(0, 10);
             TreeSegment t2 = new TreeSegment(8, 20);
             SegmentTree<TreeSegment> tree1 = new SegmentTree<TreeSegment>();
@@ -28,6 +29,13 @@ namespace Test_TreeCollection
             {
 
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            RedBlackTreeTests tests = new RedBlackTreeTests();
+            tests.TestAddBug();
+            tests.TestRemoveBug();
         }
     }
 }

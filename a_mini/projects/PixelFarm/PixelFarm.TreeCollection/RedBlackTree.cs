@@ -32,13 +32,13 @@ using System.Diagnostics;
 //from namespace Mono.TextEditor.Utils
 namespace PixelFarm.TreeCollection
 {
-    enum RedBlackColor : byte
+    public enum RedBlackColor : byte
     {
         Black = 0,
         Red = 1
     }
 
-    interface IRedBlackTreeNode
+    public interface IRedBlackTreeNode
     {
         IRedBlackTreeNode Parent { get; set; }
         IRedBlackTreeNode Left { get; set; }
@@ -49,7 +49,7 @@ namespace PixelFarm.TreeCollection
         void UpdateAugmentedData();
     }
 
-    static class RedBlackTreeExtensionMethods
+    public static class RedBlackTreeExtensionMethods
     {
         public static bool IsLeaf(this IRedBlackTreeNode node)
         {
@@ -127,7 +127,7 @@ namespace PixelFarm.TreeCollection
         }
     }
 
-    class RedBlackTree<T> : ICollection<T> where T : class, IRedBlackTreeNode
+    public class RedBlackTree<T> : ICollection<T> where T : class, IRedBlackTreeNode
     {
         public T Root { get; set; }
 
@@ -528,7 +528,7 @@ namespace PixelFarm.TreeCollection
 
         #endregion
 
-        internal class RedBlackTreeNodeEventArgs : EventArgs
+        public class RedBlackTreeNodeEventArgs : EventArgs
         {
             public T Node { get; private set; }
 
