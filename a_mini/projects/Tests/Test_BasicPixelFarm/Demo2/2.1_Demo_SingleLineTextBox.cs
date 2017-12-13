@@ -7,7 +7,7 @@ namespace LayoutFarm
     {
         protected override void OnStartDemo(SampleViewport viewport)
         {
-            var textbox = new LayoutFarm.CustomWidgets.TextBox(800, 30, false);
+            var textbox = new LayoutFarm.CustomWidgets.TextBox(100, 30, false);
             var textSpanStyle = new Text.TextSpanStyle();
 
             //test with various font style
