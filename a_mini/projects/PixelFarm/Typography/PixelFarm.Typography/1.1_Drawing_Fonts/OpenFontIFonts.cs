@@ -124,7 +124,7 @@ namespace LayoutFarm
             TextBuffer textBuffer = new TextBuffer(str);
 
             int j = mylineSegs.Count;
-          
+            int pos = 0;
             for (int i = 0; i < j; ++i)
             {
                 userGlyphPlanList.Clear();
@@ -144,7 +144,7 @@ namespace LayoutFarm
 
                 int seqLen = seq.len;
                 int endAt = seq.startAt + seqLen;
-                int pos = 0;
+              
                 for (int s = seq.startAt; s < endAt; ++s)
                 {
                     GlyphPlan glyphPlan = planList[s];
