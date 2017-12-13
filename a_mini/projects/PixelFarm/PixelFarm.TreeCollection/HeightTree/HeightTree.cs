@@ -315,7 +315,7 @@ namespace PixelFarm.TreeCollection
         {
             lock (tree)
             {
-                var node = GetNodeByLine(lineNumber);
+                HeightNode node = GetNodeByLine(lineNumber);
                 if (node == null)
                     throw new Exception("No node for line number " + lineNumber + " found. (maxLine=" + tree.Root.totalCount + ")");
                 int nodeStartLine = node.GetLineNumber();

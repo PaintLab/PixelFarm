@@ -40,7 +40,9 @@ namespace Test_TreeCollection
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            HeightTests heightTest = new HeightTests();
+            heightTest.Setup();
+            heightTest.TestHeightChanged();
         }
     }
 }
