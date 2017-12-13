@@ -13,6 +13,8 @@ using Typography.TextBreak;
 
 namespace LayoutFarm
 {
+
+
     public class OpenFontTextService : ITextService
     {
         //TODO: this class should be a Typography Service 
@@ -23,6 +25,7 @@ namespace LayoutFarm
         GlyphPlanList userGlyphPlanList;
         List<UserCharToGlyphIndexMap> userCharToGlyphMapList;
 
+        TextShapingService _shapingServices;
         Dictionary<int, Typeface> _resolvedTypefaceCache = new Dictionary<int, Typeface>();
         CustomBreaker _textBreaker;
 
@@ -39,6 +42,8 @@ namespace LayoutFarm
             glyphLayout = new GlyphLayout(); //create glyph layout with default value
             userGlyphPlanList = new GlyphPlanList();
             userCharToGlyphMapList = new List<UserCharToGlyphIndexMap>();
+            //
+            _shapingServices = new TextShapingService(null, glyphLayout);
 
             //script lang has a potentail effect on how the layout engine instance work.
             //
@@ -110,30 +115,54 @@ namespace LayoutFarm
             Typeface typeface = typefaceStore.GetTypeface(font.Name, InstalledFontStyle.Normal);
             glyphLayout.Typeface = typeface;
 
+
             MyLineSegmentList mylineSegs = (MyLineSegmentList)lineSegs;
             float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+
             outputTotalW = 0;
             char[] str = mylineSegs._str;
+            TextBuffer textBuffer = new TextBuffer(str);
+
             int j = mylineSegs.Count;
             for (int i = 0; i < j; ++i)
             {
                 userGlyphPlanList.Clear();
                 userCharToGlyphMapList.Clear();
 
+                //get each segment
                 MyLineSegment lineSeg = mylineSegs.GetSegment(i);
                 glyphLayout.ScriptLang = lineSeg.scriptLang;
-                glyphLayout.GenerateGlyphPlans(str, lineSeg.StartAt, lineSeg.Length, userGlyphPlanList, userCharToGlyphMapList);
-
+                _shapingServices.SetCurrentFont(typeface, font.SizeInPoints, lineSeg.scriptLang);
                 //
-                int glyphPlanCount = userCharToGlyphMapList.Count;
-                for (int m = 0; m < glyphPlanCount; ++m)
+                //CACHING ...., reduce number of GSUB/GPOS
+                //
+                //we cache used line segment for a while
+                //we ask for caching context for a specific typeface and font size 
+                GlyphPlanSequence seq = _shapingServices.LayoutText(textBuffer, lineSeg.StartAt, lineSeg.Length); 
+                GlyphPlanList planList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(seq);
+
+                int seqLen = seq.len;
+                int endAt = seq.startAt + seqLen;
+                int pos = 0;
+                for (int s = seq.startAt; s < endAt; ++s)
                 {
-                    GlyphPlan glyphPlan = userGlyphPlanList[m];
+                    GlyphPlan glyphPlan = planList[s];
                     float tx = glyphPlan.ExactX;
                     float ty = glyphPlan.ExactY;
                     double actualAdvX = glyphPlan.AdvanceX;
-                    outputTotalW += glyphXAdvances[m] = (int)Math.Round(actualAdvX * scale);
+                    outputTotalW += glyphXAdvances[pos] = (int)Math.Round(actualAdvX * scale);
+                    pos++;
                 }
+
+                //int glyphPlanCount = userCharToGlyphMapList.Count;
+                //for (int m = 0; m < glyphPlanCount; ++m)
+                //{
+                //    GlyphPlan glyphPlan = userGlyphPlanList[m];
+                //    float tx = glyphPlan.ExactX;
+                //    float ty = glyphPlan.ExactY;
+                //    double actualAdvX = glyphPlan.AdvanceX;
+                //    outputTotalW += glyphXAdvances[m] = (int)Math.Round(actualAdvX * scale);
+                //}
             }
             lineHeight = (int)Math.Round(typeface.CalculateRecommendLineSpacing() * scale);
         }
@@ -294,6 +323,7 @@ namespace LayoutFarm
 
             public MyLineSegment(MyLineSegmentList owner, int startAt, int len)
             {
+                this.owner = owner;
                 this.startAt = startAt;
                 this.len = len;
             }
@@ -307,7 +337,11 @@ namespace LayoutFarm
             }
             public string GetText()
             {
-                throw new NotImplementedException();
+                return owner.GetSegmentText(this.startAt, len);
+            }
+            public int GetHashKey()
+            {
+                return owner.GetHashKey(this.startAt, len);
             }
         }
         class MyLineSegmentList : ILineSegmentList
@@ -318,7 +352,6 @@ namespace LayoutFarm
             int _len;
             public MyLineSegmentList(char[] str, int startAt, int len)
             {
-
                 this._str = str;
                 this._startAt = startAt;
                 this._len = len;
@@ -338,8 +371,17 @@ namespace LayoutFarm
             public MyLineSegment GetSegment(int index)
             {
                 return _segments[index];
-            } 
-        } 
+            }
+            public string GetSegmentText(int segmentOffset, int len)
+            {
+                //start at 
+                return new string(_str, _startAt + segmentOffset, len);
+            }
+            public int GetHashKey(int segmentOffset, int len)
+            {
+                return Typography.TextServices.CRC32.CalculateCRC32(_str, _startAt + segmentOffset, len);
+            }
+        }
         List<MyLineSegment> _resuableLineSegments = new List<MyLineSegment>();
 
         public ILineSegmentList BreakToLineSegments(char[] str, int startAt, int len)
@@ -380,8 +422,7 @@ namespace LayoutFarm
                         //we should decide using current typeface 
                         //or asking for alternate typeface 
                         //if  the current type face is not support the request scriptLang
-                        // 
-
+                        //  
                         //use default
                         scLang = _defaultScLang;
                     }
