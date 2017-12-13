@@ -55,9 +55,11 @@ namespace Typography.TextBreak
         public void BreakWords(char[] charBuff, int startAt, int len)
         {
             //conver to char buffer 
+            
             int j = charBuff.Length;
             if (j < 1)
             {
+                visitor.ResetText();
                 _endAt = 0;
                 return;
             }

@@ -385,22 +385,31 @@ namespace PixelFarm.Drawing.WinGdi
         {
             return WinGdiTextService.MeasureString(buff, startAt, len, font);
         }
-        //public PixelFarm.Drawing.Size MeasureString(char[] buff, int startAt, int len, RequestFont font,
-        //    float maxWidth,
-        //    out int charFit,
-        //    out int charFitWidth)
-        //{
-        //    return WinGdiTextService.MeasureString(buff, startAt, len, font, maxWidth, out charFit, out charFitWidth);
-        //}
-        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances, out int outputTotalW)
+
+
+        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len,
+            RequestFont font, int[] glyphXAdvances, out int outputTotalW, out int outputLineHeight)
         {
-            WinGdiTextService.CalculateGlyphAdvancePos(str, startAt, len, font, glyphXAdvances,out outputTotalW);
+
+            WinGdiTextService.CalculateGlyphAdvancePos(str, startAt, len, font, glyphXAdvances, out outputTotalW);
+            outputLineHeight = WinGdiTextService.MeasureBlankLineHeight(font);
         }
 
         public float MeasureBlankLineHeight(RequestFont f)
         {
             return WinGdiTextService.MeasureBlankLineHeight(f);
         }
+
+        public ILineSegmentList BreakToLineSegments(char[] str, int startAt, int len)
+        {
+            throw new NotImplementedException();
+        }
+        public void CalculateGlyphAdvancePos(ILineSegmentList lineSegs, RequestFont font, int[] glyphXAdvances, out int outputTotalW, out int outputLineHeight)
+        {
+            throw new NotImplementedException();
+        }
+        public bool SupportsWordBreak { get { return false; } }
+
     }
 
 

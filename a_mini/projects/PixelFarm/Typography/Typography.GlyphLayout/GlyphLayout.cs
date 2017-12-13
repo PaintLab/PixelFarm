@@ -68,7 +68,7 @@ namespace Typography.TextLayout
             }
         }
 
-
+        
 
     }
     public enum PositionTechnique

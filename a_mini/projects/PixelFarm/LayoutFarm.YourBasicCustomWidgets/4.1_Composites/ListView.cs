@@ -344,7 +344,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     listItemText.RequestFont = font;
                     //TODO: review how to find 
-                    int blankLineHeight = (int)rootgfx.IFonts.MeasureBlankLineHeight(font);
+                    int blankLineHeight = (int)rootgfx.TextServices.MeasureBlankLineHeight(font);
                     listItemText.SetHeight(blankLineHeight);
                     element.SetHeight(blankLineHeight);
                 }

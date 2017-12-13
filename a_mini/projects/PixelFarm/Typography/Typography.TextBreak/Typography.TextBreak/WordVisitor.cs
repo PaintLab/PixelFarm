@@ -41,7 +41,21 @@ namespace Typography.TextBreak
             this.startIndex = currentIndex = index;
             this.currentChar = buffer[currentIndex];
             breakAtList.Clear();
+            tempCandidateBreaks.Clear();
             latestBreakAt = 0;
+        }
+        static char[] s_empty = new char[0];
+        public void ResetText()
+        {
+            
+            buffer = s_empty;
+            this.bufferLen = 0;        
+            startIndex = 0;
+            this.currentChar = '\0';
+            breakAtList.Clear();
+            tempCandidateBreaks.Clear();
+            latestBreakAt = 0;
+
         }
         public VisitorState State
         {

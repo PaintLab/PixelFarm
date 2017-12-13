@@ -10,17 +10,23 @@ namespace Typography.TextServices
         //this class is optional
         //it provide cache for previous 'used/ wellknown' Word-glyphPlans for a specific font
         // 
-        TextServiceHub _hub;
+        //TextServiceHub _hub;
         TextShapingContext _currentShapingContext;
         Dictionary<TextShapingContextKey, TextShapingContext> _registerShapingContexts = new Dictionary<TextShapingContextKey, TextShapingContext>();
         GlyphLayout _glyphLayout;
 
 
-        internal TextShapingService(TextServiceHub hub)
+        public TextShapingService(TextServiceHub hub)
         {
-            this._hub = hub;
+            //this._hub = hub;
             //create glyph layout instance with default setting
             _glyphLayout = new GlyphLayout();
+        }
+        public TextShapingService(TextServiceHub hub, GlyphLayout glyphLayout)
+        {
+            //this._hub = hub;
+            //create glyph layout instance with default setting
+            _glyphLayout = glyphLayout;
         }
 
         public ScriptLang CurrentScriptLang
@@ -28,27 +34,18 @@ namespace Typography.TextServices
             get { return _glyphLayout.ScriptLang; }
         }
 
-        public void SetCurrentFont(string fontname, InstalledFontStyle fontStyle, float fontSizeInPts, ScriptLang scLang = null)
+        public void SetCurrentFont(Typeface typeface, float fontSizeInPts, ScriptLang scLang)
         {
-            InstalledFont installedFont = _hub._openFontStore.GetFont(fontname, fontStyle);
-            if (installedFont == null) return;//not found request font
-
             if (scLang != null)
             {
                 _glyphLayout.ScriptLang = scLang;
             }
 
-            var key = new TextShapingContextKey(installedFont, _glyphLayout.ScriptLang);
+            var key = new TextShapingContextKey(typeface, _glyphLayout.ScriptLang);
             if (!_registerShapingContexts.TryGetValue(key, out _currentShapingContext))
             {
                 //not found
-                //the create the new one
-                Typeface typeface;
-                using (var fs = new System.IO.FileStream(installedFont.FontPath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
-                {
-                    var reader = new OpenFontReader();
-                    typeface = reader.Read(fs);
-                }
+                //the create the new one 
                 var shapingContext = new TextShapingContext(typeface, _glyphLayout.ScriptLang);
                 //shaping context setup ...
                 _registerShapingContexts.Add(key, shapingContext);
@@ -57,6 +54,7 @@ namespace Typography.TextServices
 
             _glyphLayout.FontSizeInPoints = fontSizeInPts;
         }
+
         public void SetCurrentScriptLang(ScriptLang scLang)
         {
             _glyphLayout.ScriptLang = scLang;
@@ -77,7 +75,7 @@ namespace Typography.TextServices
         {
             return _currentShapingContext.Layout(_glyphLayout, buffer, start, len);
         }
-
+ 
 
         internal void ClearAllRegisteredShapingContext()
         {
@@ -87,18 +85,18 @@ namespace Typography.TextServices
         struct TextShapingContextKey
         {
 
-            readonly InstalledFont _installedFont;
+            readonly Typeface _typeface;
             readonly ScriptLang _scLang;
 
-            public TextShapingContextKey(InstalledFont installedFont, ScriptLang scLang)
+            public TextShapingContextKey(Typeface installedFont, ScriptLang scLang)
             {
-                this._installedFont = installedFont;
+                this._typeface = installedFont;
                 this._scLang = scLang;
             }
 #if DEBUG
             public override string ToString()
             {
-                return _installedFont + " " + _scLang;
+                return _typeface + " " + _scLang;
             }
 #endif
         }
