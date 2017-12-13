@@ -5,7 +5,6 @@ using System;
 using System.Numerics;
 using Typography.Contours;
 using Typography.OpenFont;
-using Typography.Rendering;
 
 namespace SampleWinForms.UI
 {
@@ -119,7 +118,7 @@ namespace SampleWinForms.UI
             RectD bounds = new RectD();
             BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref bounds);
             //----------------------------------------------------
-            float scale = _typeface.CalculateToPixelScaleFromPointSize(_sizeInPoint);
+            float scale = _typeface.CalculateScaleToPixelFromPointSize(_sizeInPoint);
             _pxscale = scale;
             this._infoView.PxScale = scale;
 
@@ -201,7 +200,7 @@ namespace SampleWinForms.UI
             }
 #endif
         }
-        
+
         public bool DrawDynamicOutline { get; set; }
         public bool DrawRegenerateOutline { get; set; }
         public bool DrawEndLineHub { get; set; }

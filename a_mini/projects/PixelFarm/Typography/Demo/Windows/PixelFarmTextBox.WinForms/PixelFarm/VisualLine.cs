@@ -11,7 +11,7 @@ namespace SampleWinForms.UI
     {
 
         SmallLine _line;
-        DevTextPrinterBase _printer; 
+        DevTextPrinterBase _printer;
         public VisualLine()
         {
 
@@ -34,7 +34,7 @@ namespace SampleWinForms.UI
         public void Draw()
         {
 
-            List<GlyphPlan> glyphPlans = _line._glyphPlans;
+            GlyphPlanList glyphPlans = _line._glyphPlans;
             List<UserCharToGlyphIndexMap> userCharToGlyphIndexMap = _line._userCharToGlyphMap;
             if (_line.ContentChanged)
             {
@@ -47,7 +47,7 @@ namespace SampleWinForms.UI
                 _printer.GlyphLayoutMan.FontSizeInPoints = _printer.FontSizeInPoints;
                 _printer.GlyphLayoutMan.GenerateGlyphPlans(textBuffer, 0, textBuffer.Length, glyphPlans, userCharToGlyphIndexMap);
 
- 
+
                 _line.ContentChanged = false;
             }
 

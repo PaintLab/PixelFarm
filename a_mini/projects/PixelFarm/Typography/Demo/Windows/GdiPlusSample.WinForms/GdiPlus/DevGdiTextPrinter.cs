@@ -79,7 +79,7 @@ namespace SampleWinForms
             //update some font matrix property  
             if (_currentTypeface != null)
             {
-                float pointToPixelScale = _currentTypeface.CalculateToPixelScaleFromPointSize(this.FontSizeInPoints);
+                float pointToPixelScale = _currentTypeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPoints);
                 this.FontAscendingPx = _currentTypeface.Ascender * pointToPixelScale;
                 this.FontDescedingPx = _currentTypeface.Descender * pointToPixelScale;
                 this.FontLineGapPx = _currentTypeface.LineGap * pointToPixelScale;
@@ -96,7 +96,7 @@ namespace SampleWinForms
             this.TargetGraphics.DrawLine(Pens.Red, x, y, x, y + this.FontAscendingPx);
         }
 
-        List<GlyphPlan> _outputGlyphPlans = new List<GlyphPlan>();//for internal use
+        GlyphPlanList _outputGlyphPlans = new GlyphPlanList();//for internal use
         public override void DrawString(char[] textBuffer, int startAt, int len, float x, float y)
         {
             UpdateGlyphLayoutSettings();
@@ -118,7 +118,7 @@ namespace SampleWinForms
             _fillBrush.Color = this.FillColor;
             _outlinePen.Color = this.OutlineColor;
         }
-        public override void DrawFromGlyphPlans(List<GlyphPlan> glyphPlanList, int startAt, int len, float x, float y)
+        public override void DrawFromGlyphPlans(GlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
         {
             UpdateVisualOutputSettings();
 
@@ -126,7 +126,7 @@ namespace SampleWinForms
             //3. render each glyph 
 
             float sizeInPoints = this.FontSizeInPoints;
-            float scale = _currentTypeface.CalculateToPixelScaleFromPointSize(sizeInPoints);
+            float scale = _currentTypeface.CalculateScaleToPixelFromPointSize(sizeInPoints);
             //
             _glyphMeshCollections.SetCacheInfo(this.Typeface, sizeInPoints, this.HintTechnique);
 

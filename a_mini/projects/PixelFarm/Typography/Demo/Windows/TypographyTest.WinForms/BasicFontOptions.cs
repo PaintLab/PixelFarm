@@ -5,7 +5,7 @@ using System.IO;
 using Typography.OpenFont;
 using Typography.TextLayout;
 
-using PixelFarm.Drawing.Fonts;
+using Typography.TextServices;
 
 namespace TypographyTest
 {
@@ -22,7 +22,7 @@ namespace TypographyTest
     public class BasicFontOptions
     {
         public event EventHandler UpdateRenderOutput;
-        public event EventHandler<TypefaceChangedEventArgs> TypefaceChanged; 
+        public event EventHandler<TypefaceChangedEventArgs> TypefaceChanged;
 
         TypefaceStore _typefaceStore;
         InstalledFontCollection _installedFontCollection;

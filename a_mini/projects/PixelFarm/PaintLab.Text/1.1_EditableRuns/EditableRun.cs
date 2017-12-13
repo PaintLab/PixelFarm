@@ -12,7 +12,7 @@ namespace LayoutFarm.Text
     {
         //1. owner is a textline
         EditableTextLine ownerTextLine;
-        //TODO: review this again -> change to list,
+        
         LinkedListNode<EditableRun> _editableRunInternalLinkedNode;
 
         public EditableRun(RootGraphic gfx)

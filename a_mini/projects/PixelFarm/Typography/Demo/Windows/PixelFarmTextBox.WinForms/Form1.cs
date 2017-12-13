@@ -73,8 +73,8 @@ namespace PixelFarmTextBox.WinForms
             g = this.sampleTextBox1.CreateGraphics();
 
             painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
-
-            _devVxsTextPrinter = new VxsTextPrinter(painter, _basicOptions.OpenFontStore);
+            var openFontStore = new Typography.TextServices.OpenFontStore();
+            _devVxsTextPrinter = new VxsTextPrinter(painter, openFontStore);
 
             _devVxsTextPrinter.ScriptLang = _basicOptions.ScriptLang;
             _devVxsTextPrinter.PositionTechnique = Typography.TextLayout.PositionTechnique.OpenFont;
@@ -161,7 +161,7 @@ namespace PixelFarmTextBox.WinForms
             editableTextBlockLayoutEngine.FontSizeInPts = _basicOptions.FontSizeInPoints;
             editableTextBlockLayoutEngine.LoadText("ABCD\r\n   EFGH!");
             editableTextBlockLayoutEngine.DoLayout();
-            
+
             //then we render the output to the screen  
             //see UpdateRenderOutput() code 
             //clear previous draw
@@ -195,7 +195,7 @@ namespace PixelFarmTextBox.WinForms
                     //
                     GlyphPlanSequence seq = textRun.GetGlyphPlanSeq();
                     _devVxsTextPrinter.DrawFromGlyphPlans(
-                        seq.UnsafeGetInteralGlyphPlanList(),
+                        GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(seq),
                         seq.startAt,
                         seq.len,
                         x, y);
