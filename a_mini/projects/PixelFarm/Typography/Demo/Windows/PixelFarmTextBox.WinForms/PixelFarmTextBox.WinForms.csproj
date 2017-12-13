@@ -95,6 +95,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c6807d05-09be-4313-9f8b-bd2d51c55819}</Project>
       <Name>Typography.GlyphLayout</Name>
@@ -107,13 +111,9 @@
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
       <Name>PixelFarm.Typography</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Typography.EditableTextFlow\Typography.EditableTextFlow.csproj">
-      <Project>{a17b5a62-09af-45d5-9d9f-1fd1b9ab50f7}</Project>
-      <Name>Typography.EditableTextFlow</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\x_autogen2\PixelFarm.MiniAgg.One\PixelFarm.MiniAgg.One.csproj">
-      <Project>{fb5f78f5-c921-405d-8f21-42f7c15c2ad9}</Project>
-      <Name>PixelFarm.MiniAgg.One</Name>
+    <ProjectReference Include="..\..\..\Typography.TextServices\Typography.TextServices.csproj">
+      <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
+      <Name>Typography.TextServices</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

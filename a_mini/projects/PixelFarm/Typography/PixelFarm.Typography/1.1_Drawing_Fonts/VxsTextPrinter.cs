@@ -185,6 +185,7 @@ namespace PixelFarm.Drawing.Fonts
             _glyphLayout.ScriptLang = this.ScriptLang;
             _glyphLayout.PositionTechnique = this.PositionTechnique;
             _glyphLayout.EnableLigature = this.EnableLigature;
+            _glyphLayout.UsePxScaleOnReadOutput = true;
             //3.
             //color...
         }
