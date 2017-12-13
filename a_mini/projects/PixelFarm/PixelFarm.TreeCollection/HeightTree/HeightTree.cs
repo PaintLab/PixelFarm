@@ -48,16 +48,75 @@ namespace PixelFarm.TreeCollection
     }
 
 
-    public class TextEditorData
+    public interface IMultiLineDocument
     {
-        public TextEditorData()
-        {
-            this.LineHeight = 14;
-        }
-        public int LineHeight { get; set; }
-        public int LineCount { get; set; }
+        /// <summary>
+        /// general line height
+        /// </summary>
+        int LineHeight { get; }
+        int LineCount { get; }
+        event EventHandler<TextChangeEventArgs> TextChanged;
+        event EventHandler FoldTreeUpdated;
+        DocumentLocation OffsetToLocation(int offset);
+        int OffsetToLineNumber(int offset);
+        bool IsDisposed { get; }
+        //List<TextLineMarker> extendingTextMarkers = new List<TextLineMarker>();
+        //public IEnumerable<DocumentLine> LinesWithExtendingTextMarkers
+        //{
+        //    get
+        //    {
+        //        foreach (var marker in extendingTextMarkers)
+        //        {
+        //            var line = marker.LineSegment;
+        //            if (line != null)
+        //                yield return line;
+        //        }
+        //    }
+        //}
 
+        //public int OffsetToLineNumber(int offset)
+        //{
+        //    var snapshot = this.currentSnapshot;
+
+        //    if (offset < 0 || offset > snapshot.Length)
+        //        return 0;
+        //    return snapshot.GetLineFromPosition(offset).LineNumber + 1;
+        //}
+
+        //public DocumentLocation OffsetToLocation(int offset)
+        //{
+        //    IDocumentLine line = this.GetLineByOffset(offset);
+        //    if (line == null)
+        //        return DocumentLocation.Empty;
+
+        //    var col = System.Math.Max(1, System.Math.Min(line.LengthIncludingDelimiter, offset - line.Offset) + 1);
+        //    return new DocumentLocation(line.LineNumber, col);
+        //}
+
+        //public int LocationToOffset(int line, int column)
+        //{
+        //    if (line > this.LineCount || line < DocumentLocation.MinLine)
+        //        return -1;
+        //    DocumentLine documentLine = GetLine(line);
+        //    return System.Math.Min(Length, documentLine.Offset + System.Math.Max(0, System.Math.Min(documentLine.Length, column - 1)));
+        //}
+        //public int LocationToOffset(DocumentLocation location)
+        //{
+        //    return LocationToOffset(location.Line, location.Column);
+        //}
+
+        //public DocumentLocation OffsetToLocation(int offset)
+        //{
+        //    IDocumentLine line = this.GetLineByOffset(offset);
+        //    if (line == null)
+        //        return DocumentLocation.Empty;
+
+        //    var col = System.Math.Max(1, System.Math.Min(line.LengthIncludingDelimiter, offset - line.Offset) + 1);
+        //    return new DocumentLocation(line.LineNumber, col);
+        //}
     }
+
+
     /// <summary>
     /// The height tree stores the heights of lines and provides a performant conversion between y and lineNumber.
     /// It takes care of message bubble heights and the height of folded sections.
@@ -66,7 +125,7 @@ namespace PixelFarm.TreeCollection
     {
         // TODO: Add support for line word wrap to the text editor - with the height tree this is possible.
         internal RedBlackTree<HeightNode> tree = new RedBlackTree<HeightNode>();
-        readonly TextEditorData editor;
+        readonly IMultiLineDocument _multiLineDoc;
 
         public double TotalHeight
         {
@@ -84,43 +143,50 @@ namespace PixelFarm.TreeCollection
             }
         }
 
-        public HeightTree(TextEditorData editor)
+        public HeightTree(IMultiLineDocument editor)
         {
-            this.editor = editor;
+            this._multiLineDoc = editor;
+            editor.TextChanged += Document_TextChanged;
+            editor.FoldTreeUpdated += HandleFoldTreeUpdated;
             //this.editor.Document.TextChanged += Document_TextChanged; ;
             //this.editor.Document.FoldTreeUpdated += HandleFoldTreeUpdated;
         }
 
 
-        //void Document_TextChanged(object sender, MonoDevelop.Core.Text.TextChangeEventArgs e)
-        //{
-        //    var oldHeight = TotalHeight;
-        //    Rebuild();
-        //    if ((int)oldHeight != (int)TotalHeight)
-        //    {
-        //        for (int i = 0; i < e.TextChanges.Count; ++i)
-        //        {
-        //            var change = e.TextChanges[i];
-        //            var lineNumber = this.editor.OffsetToLineNumber(change.NewOffset);
-        //            OnLineUpdateFrom(new HeightChangedEventArgs(lineNumber - 1));
-        //        }
-        //    }
-        //}
+        void Document_TextChanged(object sender, TextChangeEventArgs e)
+        {
+            var oldHeight = TotalHeight;
+            Rebuild();
+            if ((int)oldHeight != (int)TotalHeight)
+            {
+                for (int i = 0; i < e.TextChanges.Count; ++i)
+                {
+                    var change = e.TextChanges[i];
+                    var lineNumber = this._multiLineDoc.OffsetToLineNumber(change.NewOffset);
+                    OnLineUpdateFrom(new HeightChangedEventArgs(lineNumber - 1));
+                }
+            }
+        }
 
 
         public void Dispose()
         {
+            _multiLineDoc.TextChanged -= Document_TextChanged;
+            _multiLineDoc.FoldTreeUpdated -= HandleFoldTreeUpdated;
             //this.editor.Document.TextChanged -= Document_TextChanged; ;
             //this.editor.Document.FoldTreeUpdated -= HandleFoldTreeUpdated;
         }
 
-        //void HandleFoldTreeUpdated(object sender, EventArgs e)
-        //{
-        //    Application.Invoke((o, args) =>
-        //    {
-        //        Rebuild();
-        //    });
-        //}
+        void HandleFoldTreeUpdated(object sender, EventArgs e)
+        {
+            //TODO: review here 
+            //we ...
+            Rebuild();
+            //Application.Invoke((o, args) =>
+            //{
+            //  Rebuild();
+            //});
+        }
 
         void RemoveLine(int line)
         {
@@ -173,7 +239,7 @@ namespace PixelFarm.TreeCollection
                 var newLine = new HeightNode()
                 {
                     count = 1,
-                    height = editor.LineHeight
+                    height = _multiLineDoc.LineHeight
                 };
 
                 try
@@ -204,44 +270,45 @@ namespace PixelFarm.TreeCollection
         bool rebuild;
         public void Rebuild()
         {
-            //lock (tree)
-            //{
-            //    if (editor.IsDisposed)
-            //        return;
-            //    rebuild = true;
-            //    try
-            //    {
-            //        markers.Clear();
-            //        tree.Count = 1;
-            //        double h = editor.LineCount * editor.LineHeight;
-            //        tree.Root = new HeightNode()
-            //        {
-            //            height = h,
-            //            totalHeight = h,
-            //            totalCount = editor.LineCount,
-            //            totalVisibleCount = editor.LineCount,
-            //            count = editor.LineCount
-            //        };
+            lock (tree)
+            {
+                if (_multiLineDoc.IsDisposed)
+                    return;
+                rebuild = true;
+                try
+                {
+                    //markers.Clear();
+                    tree.Count = 1;
+                    double h = _multiLineDoc.LineCount * _multiLineDoc.LineHeight;
+                    tree.Root = new HeightNode()
+                    {
+                        height = h,
+                        totalHeight = h,
+                        totalCount = _multiLineDoc.LineCount,
+                        totalVisibleCount = _multiLineDoc.LineCount,
+                        count = _multiLineDoc.LineCount
+                    };
 
-            //        foreach (var extendedTextMarkerLine in editor.Document.LinesWithExtendingTextMarkers)
-            //        {
-            //            int lineNumber = extendedTextMarkerLine.LineNumber;
-            //            double height = editor.GetLineHeight(extendedTextMarkerLine);
-            //            SetLineHeight(lineNumber, height);
-            //        }
+                    //TODO: review
+                    //foreach (var extendedTextMarkerLine in editor.Document.LinesWithExtendingTextMarkers)
+                    //{
+                    //    int lineNumber = extendedTextMarkerLine.LineNumber;
+                    //    double height = editor.GetLineHeight(extendedTextMarkerLine);
+                    //    SetLineHeight(lineNumber, height);
+                    //}
 
-            //        foreach (var segment in editor.Document.FoldedSegments.ToArray())
-            //        {
-            //            int start = editor.OffsetToLineNumber(segment.Offset);
-            //            int end = editor.OffsetToLineNumber(segment.EndOffset);
-            //            segment.Marker = Fold(start, end - start);
-            //        }
-            //    }
-            //    finally
-            //    {
-            //        rebuild = false;
-            //    }
-            //}
+                    //foreach (var segment in editor.Document.FoldedSegments.ToArray())
+                    //{
+                    //    int start = editor.OffsetToLineNumber(segment.Offset);
+                    //    int end = editor.OffsetToLineNumber(segment.EndOffset);
+                    //    segment.Marker = Fold(start, end - start);
+                    //}
+                }
+                finally
+                {
+                    rebuild = false;
+                }
+            }
         }
 
         public void SetLineHeight(int lineNumber, double height)
@@ -262,7 +329,7 @@ namespace PixelFarm.TreeCollection
                         InsertAfter(node, new HeightNode()
                         {
                             count = remainingLineCount,
-                            height = editor.LineHeight * remainingLineCount,
+                            height = _multiLineDoc.LineHeight * remainingLineCount,
                             foldLevel = node.foldLevel
                         }
                         );
@@ -274,7 +341,7 @@ namespace PixelFarm.TreeCollection
                     remainingLineCount = node.count - newLineCount - 1;
                     if (newLineCount != node.count)
                     {
-                        double newHeight = editor.LineHeight * newLineCount;
+                        double newHeight = _multiLineDoc.LineHeight * newLineCount;
                         ChangeHeight(node, newLineCount, newHeight);
                     }
 
@@ -291,7 +358,7 @@ namespace PixelFarm.TreeCollection
                         InsertAfter(newNode, new HeightNode()
                         {
                             count = remainingLineCount,
-                            height = editor.LineHeight * remainingLineCount,
+                            height = _multiLineDoc.LineHeight * remainingLineCount,
                             foldLevel = node.foldLevel
                         }
                         );
@@ -397,7 +464,7 @@ namespace PixelFarm.TreeCollection
             {
                 var node = GetNodeByY(y);
                 if (node == null)
-                    return y < 0 ? DocumentLocation.MinLine + (int)(y / editor.LineHeight) : tree.Root.totalCount + (int)((y - tree.Root.totalHeight) / editor.LineHeight);
+                    return y < 0 ? DocumentLocation.MinLine + (int)(y / _multiLineDoc.LineHeight) : tree.Root.totalCount + (int)((y - tree.Root.totalHeight) / _multiLineDoc.LineHeight);
                 int lineOffset = 0;
                 if (node.foldLevel == 0)
                 {
@@ -444,8 +511,8 @@ namespace PixelFarm.TreeCollection
         {
             if (logicalLine < DocumentLocation.MinLine)
                 return DocumentLocation.MinLine;
-            if (logicalLine > editor.LineCount)
-                return editor.LineCount;
+            if (logicalLine > _multiLineDoc.LineCount)
+                return _multiLineDoc.LineCount;
             return logicalLine;
         }
 
@@ -504,7 +571,7 @@ namespace PixelFarm.TreeCollection
             {
                 var splittedNode = new HeightNode();
                 splittedNode.count = linesBefore;
-                splittedNode.height = linesBefore * editor.LineHeight;
+                splittedNode.height = linesBefore * _multiLineDoc.LineHeight;
                 splittedNode.foldLevel = node.foldLevel;
                 if (splittedNode.count > 0)
                     InsertBefore(node, splittedNode);
@@ -520,12 +587,12 @@ namespace PixelFarm.TreeCollection
             InsertAfter(node, new HeightNode()
             {
                 count = node.count - 1,
-                height = (node.count - 1) * editor.LineHeight,
+                height = (node.count - 1) * _multiLineDoc.LineHeight,
                 foldLevel = node.foldLevel
             });
 
             node.count = 1;
-            node.height = editor.LineHeight;
+            node.height = _multiLineDoc.LineHeight;
             node.UpdateAugmentedData();
             return node;
         }
