@@ -20,17 +20,17 @@ namespace LayoutFarm.Text
                 return this.TextLayer.CurrentTextSpanStyle;
             }
         }
-//        internal BackGroundTextLineWriter GetBackgroundWriter()
-//        {
-//            if (backgroundWriter == null)
-//            {
-//                backgroundWriter = new BackGroundTextLineWriter(this.TextLayer);
-//#if DEBUG
-//                backgroundWriter.dbugTextManRecorder = this.dbugTextManRecorder;
-//#endif
-//            }
-//            return backgroundWriter;
-//        }
+        //        internal BackGroundTextLineWriter GetBackgroundWriter()
+        //        {
+        //            if (backgroundWriter == null)
+        //            {
+        //                backgroundWriter = new BackGroundTextLineWriter(this.TextLayer);
+        //#if DEBUG
+        //                backgroundWriter.dbugTextManRecorder = this.dbugTextManRecorder;
+        //#endif
+        //            }
+        //            return backgroundWriter;
+        //        }
         public void Reload(IEnumerable<EditableRun> runs)
         {
             this.TextLayer.Reload(runs);
@@ -412,7 +412,7 @@ namespace LayoutFarm.Text
         {
             visualFlowLayer.CopyContentToStringBuilder(stBuilder);
         }
-        
+
         public char NextChar
         {
             get
@@ -550,77 +550,82 @@ namespace LayoutFarm.Text
                 return charIndex - rCharOffset;
             }
         }
+        /// <summary>
+        /// try set caret x pos to nearest request value
+        /// </summary>
+        /// <param name="value"></param>
+        public void TrySetCaretXPos(int value)
+        {
+            if (currentTextRun == null)
+            {
+                charIndex = -1;
+                caretXPos = 0;
+                rCharOffset = 0;
+                rPixelOffset = 0;
+                return;
+            }
+            int pixDiff = value - caretXPos;
+            if (pixDiff > 0)
+            {
+                do
+                {
+                    int thisTextRunPixelLength = currentTextRun.Width;
+                    if (rPixelOffset + thisTextRunPixelLength > value)
+                    {
+                        EditableRunCharLocation foundLocation = EditableRun.InnerGetCharacterFromPixelOffset(currentTextRun, value - rPixelOffset);
+                        if (foundLocation.charIndex == -1)
+                        {
+                            if (!(MoveToPreviousTextRun()))
+                            {
+                                charIndex = -1;
+                                caretXPos = 0;
+                            }
+                        }
+                        else
+                        {
+                            caretXPos = rPixelOffset + foundLocation.pixelOffset; charIndex = rCharOffset + foundLocation.charIndex;
+                        }
+                        return;
+                    }
+                } while (MoveToNextTextRun());
+                caretXPos = rPixelOffset + currentTextRun.Width;
+                charIndex = rCharOffset + currentTextRun.CharacterCount - 1;
+                return;
+            }
+            else if (pixDiff < 0)
+            {
+                do
+                {
+                    if (value >= rPixelOffset)
+                    {
+                        EditableRunCharLocation foundLocation = EditableRun.InnerGetCharacterFromPixelOffset(currentTextRun, value - rPixelOffset);
+                        if (foundLocation.charIndex == -1)
+                        {
+                            if (!MoveToPreviousTextRun())
+                            {
+                                charIndex = -1;
+                                caretXPos = 0;
+                            }
+                        }
+                        else
+                        {
+                            caretXPos = rPixelOffset + foundLocation.pixelOffset; charIndex = rCharOffset + foundLocation.charIndex;
+                        }
+                        return;
+                    }
+                } while (MoveToPreviousTextRun());//
+                caretXPos = 0;
+                charIndex = -1;
+                return;
+            }
+        }
         public int CaretXPos
         {
             get
             {
                 return caretXPos;
             }
-            set
-            {
-                if (currentTextRun == null)
-                {
-                    charIndex = -1;
-                    caretXPos = 0;
-                    rCharOffset = 0;
-                    rPixelOffset = 0;
-                    return;
-                }
-                int pixDiff = value - caretXPos;
-                if (pixDiff > 0)
-                {
-                    do
-                    {
-                        int thisTextRunPixelLength = currentTextRun.Width;
-                        if (rPixelOffset + thisTextRunPixelLength > value)
-                        {
-                            EditableRunCharLocation foundLocation = EditableRun.InnerGetCharacterFromPixelOffset(currentTextRun, value - rPixelOffset);
-                            if (foundLocation.charIndex == -1)
-                            {
-                                if (!(MoveToPreviousTextRun()))
-                                {
-                                    charIndex = -1;
-                                    caretXPos = 0;
-                                }
-                            }
-                            else
-                            {
-                                caretXPos = rPixelOffset + foundLocation.pixelOffset; charIndex = rCharOffset + foundLocation.charIndex;
-                            }
-                            return;
-                        }
-                    } while (MoveToNextTextRun());
-                    caretXPos = rPixelOffset + currentTextRun.Width;
-                    charIndex = rCharOffset + currentTextRun.CharacterCount - 1;
-                    return;
-                }
-                else if (pixDiff < 0)
-                {
-                    do
-                    {
-                        if (value >= rPixelOffset)
-                        {
-                            EditableRunCharLocation foundLocation = EditableRun.InnerGetCharacterFromPixelOffset(currentTextRun, value - rPixelOffset);
-                            if (foundLocation.charIndex == -1)
-                            {
-                                if (!MoveToPreviousTextRun())
-                                {
-                                    charIndex = -1;
-                                    caretXPos = 0;
-                                }
-                            }
-                            else
-                            {
-                                caretXPos = rPixelOffset + foundLocation.pixelOffset; charIndex = rCharOffset + foundLocation.charIndex;
-                            }
-                            return;
-                        }
-                    } while (MoveToPreviousTextRun());//
-                    caretXPos = 0;
-                    charIndex = -1;
-                    return;
-                }
-            }
+
         }
         public int CharIndex
         {

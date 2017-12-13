@@ -43,6 +43,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Render!";
             this.button1.UseVisualStyleBackColor = true;
+             
             // 
             // txtInputChar
             // 
@@ -100,7 +101,7 @@
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load_1);
+            
             this.ResumeLayout(false);
             this.PerformLayout();
 

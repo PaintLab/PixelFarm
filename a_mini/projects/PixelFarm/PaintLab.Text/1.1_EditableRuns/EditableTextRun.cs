@@ -114,7 +114,7 @@ namespace LayoutFarm.Text
 
         public override int GetRunWidth(int charOffset)
         {
-            return CalculateDrawingStringSize(mybuffer, charOffset).Width;
+            return CalculateDrawingStringSize(charOffset).Width;
         }
         public override string GetText()
         {
@@ -215,11 +215,28 @@ namespace LayoutFarm.Text
             this.InvalidateGraphics();
             UpdateRunWidth();
         }
-        Size CalculateDrawingStringSize(char[] buffer, int length)
+        Size CalculateDrawingStringSize(int length)
         {
+            if (!_content_unparsed)
+            {
+                //the content is parsed
+                if (this.mybuffer.Length == length)
+                {
+                    return this.Size;
+                }
+                else
+                {
+                    //ca
+                    int total = 0;
+                    for (int i = 0; i < length; ++i)
+                    {
+                        total += this.outputGlyphAdvanceList[i];
+                    }
+                    return new Size(total, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
+                }
+            }
             PixelFarm.Drawing.RequestFont fontInfo = GetFont();
-            return this.Root.TextServices.MeasureString(buffer, 0,
-                 length, fontInfo);
+            return this.Root.TextServices.MeasureString(this.mybuffer, 0, length, fontInfo);
         }
         protected PixelFarm.Drawing.RequestFont GetFont()
         {

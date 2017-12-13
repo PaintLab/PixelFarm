@@ -898,6 +898,13 @@ namespace LayoutFarm.Text
                 ScrollBy(textManCaretPos.X - this.X, 0);
             }
 
+            Size innerContentSize = this.InnerContentSize;
+            if (ViewportX > 0 && innerContentSize.Width - ViewportX < this.Width)
+            {
+                ScrollTo(this.InnerContentSize.Width - ViewportX, 0);
+            }
+            
+
             if (internalTextLayerController.updateJustCurrentLine)
             {
                 InvalidateGraphicOfCurrentLineArea();

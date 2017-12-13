@@ -7,8 +7,8 @@
     <ProjectGuid>{E6078FC1-3AE0-4E33-AE7C-75E7AAAC7A02}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PaintLab.Text</RootNamespace>
-    <AssemblyName>PaintLab.Text</AssemblyName>
+    <RootNamespace>PaintLab.RenderTree.TextSurface</RootNamespace>
+    <AssemblyName>PaintLab.RenderTree.TextSurface</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

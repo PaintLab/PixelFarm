@@ -528,9 +528,7 @@ namespace SampleWinForms
                 atlasBuilder.SaveFontInfo("d:\\WImageTest\\a_info.xml");
             }
         }
-        private void Form1_Load_1(object sender, EventArgs e)
-        {
-
-        }
+        
+      
     }
 }
