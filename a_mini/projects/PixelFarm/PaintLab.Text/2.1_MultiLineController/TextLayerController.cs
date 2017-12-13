@@ -5,57 +5,16 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
-    //public class TextMan
-    //{
-    //    InternalTextLayerController innerTextMan;
-    //    TextEditRenderBox visualTextSurface;
-    //    internal TextMan(InternalTextLayerController innerTextMan, TextEditRenderBox visualTextSurface)
-    //    {
-    //        this.innerTextMan = innerTextMan;
-    //        this.visualTextSurface = visualTextSurface;
-    //    }
-    //    public void AttachTextDomListener(TextSurfaceEventListener listener)
-    //    {
-
-    //        this.visualTextSurface.TextSurfaceListener = listener;
-    //    }
-    //    public void AddTextRunsToCurrentLine(IEnumerable<EditableRun> textRuns)
-    //    {
-    //        this.innerTextMan.AddTextRunsToCurrentLine(textRuns);
-    //    }
-    //    public void SplitCurrentLineIntoNewLine()
-    //    {
-    //        this.innerTextMan.SplitCurrentLineIntoNewLine();
-    //    }
-
-
-    //    public EditableRun CurrentTextRun
-    //    {
-    //        get
-    //        {
-    //            return this.innerTextMan.CurrentTextRun;
-    //        }
-    //    }
-    //    public int CurrentTextRunCharIndex
-    //    {
-    //        get
-    //        {
-    //            return this.innerTextMan.CurrentTextRunCharIndex;
-    //        }
-    //    }
-    //}
-
+     
 
     partial class InternalTextLayerController
     {
         VisualSelectionRange selectionRange;
         internal bool updateJustCurrentLine = true;
         bool enableUndoHistoryRecording = true;
-        DocumentCommandCollection commandHistory;
-        //BackGroundTextLineWriter backGroundTextLineWriter;
+        DocumentCommandCollection commandHistory; 
         TextLineWriter textLineWriter;
-        TextEditRenderBox visualTextSurface;
-        //TextMan textMan;
+        TextEditRenderBox visualTextSurface; 
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
@@ -66,10 +25,8 @@ namespace LayoutFarm.Text
             EditableTextFlowLayer textLayer)
         {
             this.visualTextSurface = visualTextSurface;
-            textLineWriter = new TextLineWriter(textLayer);
-            //backGroundTextLineWriter = textLineWriter.GetBackgroundWriter();
-            commandHistory = new DocumentCommandCollection(this);
-            //this.textMan = new TextMan(this, visualTextSurface);
+            textLineWriter = new TextLineWriter(textLayer); 
+            commandHistory = new DocumentCommandCollection(this); 
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -80,14 +37,7 @@ namespace LayoutFarm.Text
             }
 #endif
         }
-        //public TextMan TextMan
-        //{
-        //    get
-        //    {
-        //        return this.textMan;
-        //    }
-        //}
-
+       
         public bool EnableUndoHistoryRecording
         {
             get
