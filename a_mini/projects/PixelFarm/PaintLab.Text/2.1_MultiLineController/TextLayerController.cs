@@ -5,16 +5,16 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 namespace LayoutFarm.Text
 {
-     
+
 
     partial class InternalTextLayerController
     {
         VisualSelectionRange selectionRange;
         internal bool updateJustCurrentLine = true;
         bool enableUndoHistoryRecording = true;
-        DocumentCommandCollection commandHistory; 
+        DocumentCommandCollection commandHistory;
         TextLineWriter textLineWriter;
-        TextEditRenderBox visualTextSurface; 
+        TextEditRenderBox visualTextSurface;
 #if DEBUG
         debugActivityRecorder _dbugActivityRecorder;
         internal bool dbugEnableTextManRecorder = false;
@@ -25,8 +25,8 @@ namespace LayoutFarm.Text
             EditableTextFlowLayer textLayer)
         {
             this.visualTextSurface = visualTextSurface;
-            textLineWriter = new TextLineWriter(textLayer); 
-            commandHistory = new DocumentCommandCollection(this); 
+            textLineWriter = new TextLineWriter(textLayer);
+            commandHistory = new DocumentCommandCollection(this);
 #if DEBUG
             if (dbugEnableTextManRecorder)
             {
@@ -37,7 +37,7 @@ namespace LayoutFarm.Text
             }
 #endif
         }
-       
+
         public bool EnableUndoHistoryRecording
         {
             get
@@ -475,7 +475,7 @@ namespace LayoutFarm.Text
                         calculatedLineId = line.LineNumber;
                     }
                     this.CurrentLineNumber = calculatedLineId;
-                    this.textLineWriter.CaretXPos = value.X;
+                    this.textLineWriter.TrySetCaretXPos(value.X);
                 }
             }
         }
@@ -495,7 +495,7 @@ namespace LayoutFarm.Text
                     calculatedLineId = line.LineNumber;
                 }
                 this.CurrentLineNumber = calculatedLineId;
-                this.textLineWriter.CaretXPos = x;
+                this.textLineWriter.TrySetCaretXPos(x);
             }
         }
         public Rectangle CurrentLineArea
