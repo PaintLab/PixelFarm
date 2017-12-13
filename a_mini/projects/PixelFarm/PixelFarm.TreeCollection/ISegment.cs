@@ -26,7 +26,7 @@
 
 
 //from namespace MonoDevelop.Core.Text
-namespace PaintLab.TreeCollection
+namespace PixelFarm.TreeCollection
 {
     /// <summary>
     /// An (Offset,Length)-pair.

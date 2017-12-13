@@ -30,7 +30,7 @@ using System.Text;
 using System.Diagnostics;
 
 //from namespace MonoDevelop.Ide.Editor
-namespace PaintLab.TreeCollection
+namespace PixelFarm.TreeCollection
 {
 
     static class MyEnumerable
