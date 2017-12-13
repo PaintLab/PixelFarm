@@ -14,7 +14,7 @@ namespace LayoutFarm.Text
 
         TextSpanStyle spanStyle;
 
-        int[] glyphPositions = null;//TODO: review here-> change this to caret stop position
+        int[] outputGlyphAdvanceList = null;//TODO: review here-> change this to caret stop position
 
         ILineSegmentList _lineSegs;
 
@@ -129,7 +129,7 @@ namespace LayoutFarm.Text
                 //if this is a linebreak it should be encoded at the end of this visual line
 
                 size = new Size(0, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
-                glyphPositions = new int[0];
+                outputGlyphAdvanceList = new int[0];
             }
             else
             {
@@ -149,10 +149,10 @@ namespace LayoutFarm.Text
                     //
                     _content_unparsed = false;
                     //output glyph position
-                    glyphPositions = new int[len];
+                    outputGlyphAdvanceList = new int[len];
 
                     int outputTotalW, outputLineHeight;
-                    Root.TextServices.CalculateGlyphAdvancePos(_lineSegs, GetFont(), glyphPositions, out outputTotalW, out outputLineHeight);
+                    Root.TextServices.CalculateGlyphAdvancePos(_lineSegs, GetFont(), outputGlyphAdvanceList, out outputTotalW, out outputLineHeight);
                     size = new Size(outputTotalW, outputLineHeight);
 
                 }
@@ -161,9 +161,9 @@ namespace LayoutFarm.Text
 
                     _content_unparsed = false;
                     int len = mybuffer.Length;
-                    glyphPositions = new int[len];
+                    outputGlyphAdvanceList = new int[len];
                     int outputTotalW, outputLineHeight;
-                    Root.TextServices.CalculateGlyphAdvancePos(mybuffer, 0, len, GetFont(), glyphPositions, out outputTotalW, out outputLineHeight);
+                    Root.TextServices.CalculateGlyphAdvancePos(mybuffer, 0, len, GetFont(), outputGlyphAdvanceList, out outputTotalW, out outputLineHeight);
                     size = new Size(outputTotalW, outputLineHeight);
                 }
 
@@ -356,12 +356,12 @@ namespace LayoutFarm.Text
         {
             if (pixelOffset < Width)
             {
-                int j = glyphPositions.Length;
+                int j = outputGlyphAdvanceList.Length;
                 int accWidth = 0;
                 for (int i = 0; i < j; i++)
                 {
 
-                    int charW = glyphPositions[i];
+                    int charW = outputGlyphAdvanceList[i];
                     if (accWidth + charW > pixelOffset)
                     {
                         //stop at this

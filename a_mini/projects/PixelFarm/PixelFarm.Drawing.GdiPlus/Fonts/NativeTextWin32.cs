@@ -145,7 +145,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         //==============================================
 
-        public static void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances, out int outputTotalW)
+        public static void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW)
         {
             unsafe
             {
@@ -177,7 +177,7 @@ namespace PixelFarm.Drawing.WinGdi
                     {
                         break;//?
                     }
-                    totalW += glyphXAdvances[i] = abcWidths[enc_index].Sum;
+                    totalW += outputGlyphAdvances[i] = abcWidths[enc_index].Sum;
                 }
 
             }
@@ -388,10 +388,10 @@ namespace PixelFarm.Drawing.WinGdi
 
 
         public void CalculateGlyphAdvancePos(char[] str, int startAt, int len,
-            RequestFont font, int[] glyphXAdvances, out int outputTotalW, out int outputLineHeight)
+            RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
         {
 
-            WinGdiTextService.CalculateGlyphAdvancePos(str, startAt, len, font, glyphXAdvances, out outputTotalW);
+            WinGdiTextService.CalculateGlyphAdvancePos(str, startAt, len, font, outputGlyphAdvances, out outputTotalW);
             outputLineHeight = WinGdiTextService.MeasureBlankLineHeight(font);
         }
 

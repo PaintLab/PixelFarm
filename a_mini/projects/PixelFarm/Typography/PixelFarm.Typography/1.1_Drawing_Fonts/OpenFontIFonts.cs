@@ -13,7 +13,7 @@ using Typography.TextBreak;
 
 namespace LayoutFarm
 {
-
+    //TODO: optimize this...
 
     public class OpenFontTextService : ITextService
     {
@@ -76,7 +76,7 @@ namespace LayoutFarm
 
         }
 
-        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances, out int outputTotalW, out int outputLineHeight)
+        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
         {
 
             //layout  
@@ -100,11 +100,11 @@ namespace LayoutFarm
                 double actualAdvX = glyphPlan.AdvanceX;
 
                 //if you want to snap each glyph to grid ... => Round it 
-                outputTotalW += glyphXAdvances[i] = (int)Math.Round(actualAdvX * scale);
+                outputTotalW += outputGlyphAdvances[i] = (int)Math.Round(actualAdvX * scale);
             }
             outputLineHeight = (int)Math.Round(typeface.CalculateRecommendLineSpacing() * scale);
         }
-        public void CalculateGlyphAdvancePos(ILineSegmentList lineSegs, RequestFont font, int[] glyphXAdvances, out int outputTotalW, out int lineHeight)
+        public void CalculateGlyphAdvancePos(ILineSegmentList lineSegs, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int lineHeight)
         {
 
             //layout  
@@ -124,6 +124,7 @@ namespace LayoutFarm
             TextBuffer textBuffer = new TextBuffer(str);
 
             int j = mylineSegs.Count;
+          
             for (int i = 0; i < j; ++i)
             {
                 userGlyphPlanList.Clear();
@@ -138,7 +139,7 @@ namespace LayoutFarm
                 //
                 //we cache used line segment for a while
                 //we ask for caching context for a specific typeface and font size 
-                GlyphPlanSequence seq = _shapingServices.LayoutText(textBuffer, lineSeg.StartAt, lineSeg.Length); 
+                GlyphPlanSequence seq = _shapingServices.LayoutText(textBuffer, lineSeg.StartAt, lineSeg.Length);
                 GlyphPlanList planList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(seq);
 
                 int seqLen = seq.len;
@@ -150,7 +151,7 @@ namespace LayoutFarm
                     float tx = glyphPlan.ExactX;
                     float ty = glyphPlan.ExactY;
                     double actualAdvX = glyphPlan.AdvanceX;
-                    outputTotalW += glyphXAdvances[pos] = (int)Math.Round(actualAdvX * scale);
+                    outputTotalW += outputGlyphAdvances[pos] = (int)Math.Round(actualAdvX * scale);
                     pos++;
                 }
 
@@ -167,20 +168,21 @@ namespace LayoutFarm
             lineHeight = (int)Math.Round(typeface.CalculateRecommendLineSpacing() * scale);
         }
 
+
+
         Typeface ResolveTypeface(RequestFont font)
         {
             //from user's request font
             //resolve to actual Typeface
 
-            //get data from...
-            //cache level-0 (attached inside the request font)
+            //get data from... 
+            //cache level-1 (attached inside the request font)
             Typeface typeface = PixelFarm.Drawing.Internal.RequestFontCacheAccess.GetActualFont<Typeface>(font, _system_id);
             if (typeface != null) return typeface;
             //
-            //cache level-1 (stored in this Ifonts)
+            //cache level-2 (stored in this Ifonts)
             if (!_resolvedTypefaceCache.TryGetValue(font.FontKey, out typeface))
             {
-
                 //not found ask the typeface store to load that font
                 typeface = typefaceStore.GetTypeface(font.Name, font.Style.ConvToInstalledFontStyle());
                 if (typeface == null)
@@ -291,19 +293,13 @@ namespace LayoutFarm
                 accumH = h;
             }
         }
-        public int MeasureBlankLineHeight(RequestFont font)
-        {
-            LineSpacingChoice sel_linespcingChoice;
-            Typeface typeface = ResolveTypeface(font);
-            return (int)(typeface.CalculateRecommendLineSpacing(out sel_linespcingChoice) *
-                typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
-        }
+
         float ITextService.MeasureBlankLineHeight(RequestFont font)
         {
             LineSpacingChoice sel_linespcingChoice;
             Typeface typeface = ResolveTypeface(font);
-            return (int)(typeface.CalculateRecommendLineSpacing(out sel_linespcingChoice) *
-                typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
+            return (int)(Math.Round(typeface.CalculateRecommendLineSpacing(out sel_linespcingChoice) *
+                                    typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints)));
         }
 
         public bool SupportsWordBreak
