@@ -33,12 +33,12 @@ using System.Diagnostics;
 namespace PixelFarm.TreeCollection
 {
 
-    static class MyEnumerable
+    /// <summary>
+    /// Provides immutable empty list instances.
+    /// </summary>
+    static class Empty<T>
     {
-        public static T[] Empty<T>()
-        {
-            return new T[0];
-        }
+        public static readonly T[] Array = new T[0]; 
     }
 
     /// <summary>
@@ -127,7 +127,7 @@ namespace PixelFarm.TreeCollection
         public IEnumerable<T> GetSegmentsOverlapping(ISegment segment)
         {
             if (segment.Offset < 0)
-                return MyEnumerable.Empty<T>();
+                return Empty<T>.Array;
             return GetSegmentsOverlapping(segment.Offset, segment.Length);
         }
 
