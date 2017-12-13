@@ -33,11 +33,20 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExtensionAttribute.cs" />
-    <Compile Include="ISegment.cs" />
+    <Compile Include="Set1\ExtensionAttribute.cs" />
+    <Compile Include="Set1\HeightTree.cs" />
+    <Compile Include="Set0\ISegment.cs" />
+    <Compile Include="Set1\ITextSource.cs" />
+    <Compile Include="Set1\ITextSourceVersion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RedBlackTree.cs" />
-    <Compile Include="SegmentTree.cs" />
+    <Compile Include="Set0\RedBlackTree.cs" />
+    <Compile Include="Set0\SegmentTree.cs" />
+    <Compile Include="Set1\StringTextSource.cs" />
+    <Compile Include="Set1\TextChangeEventArgs.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Set1\DocumentLocation.cs" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
