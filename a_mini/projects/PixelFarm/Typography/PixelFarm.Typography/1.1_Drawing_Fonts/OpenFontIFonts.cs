@@ -338,12 +338,8 @@ namespace LayoutFarm
             public MyLineSegment GetSegment(int index)
             {
                 return _segments[index];
-            }
-
-
-        }
-
-
+            } 
+        } 
         List<MyLineSegment> _resuableLineSegments = new List<MyLineSegment>();
 
         public ILineSegmentList BreakToLineSegments(char[] str, int startAt, int len)
@@ -376,19 +372,16 @@ namespace LayoutFarm
                 }
                 else
                 {
-                    //
+
                     Typography.OpenFont.ScriptLang scLang;
-                    if (Typography.OpenFont.ScriptLangs.TryGetScriptLang(sample, out scLang))
-                    {
-                        //we should decide to use
-                        //current typeface
-                        //or ask for alternate typeface 
-                        //if  the current type face is not support the request scriptLang
-                        // 
-                    }
-                    else
+                    if (!Typography.OpenFont.ScriptLangs.TryGetScriptLang(sample, out scLang))
                     {
                         //not found
+                        //we should decide using current typeface 
+                        //or asking for alternate typeface 
+                        //if  the current type face is not support the request scriptLang
+                        // 
+
                         //use default
                         scLang = _defaultScLang;
                     }
