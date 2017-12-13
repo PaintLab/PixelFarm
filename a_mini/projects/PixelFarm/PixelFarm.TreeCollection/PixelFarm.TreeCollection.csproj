@@ -33,7 +33,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Set1\ExtensionAttribute.cs" />
+    <Compile Include="ExtensionAttribute.cs" />
     <Compile Include="Set1\HeightTree.cs" />
     <Compile Include="Set0\ISegment.cs" />
     <Compile Include="Set1\ITextSource.cs" />

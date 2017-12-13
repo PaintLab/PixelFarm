@@ -25,6 +25,8 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+
+
 namespace PixelFarm.TreeCollection
 {
     public class HashSet<T>
