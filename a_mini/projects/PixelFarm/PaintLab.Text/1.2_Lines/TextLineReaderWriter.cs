@@ -478,7 +478,7 @@ namespace LayoutFarm.Text
                     else
                     {
                         return currentTextRun.GetRunWidth(charIndex - rCharOffset + 1) -
-                            currentTextRun.GetRunWidth(charIndex - rCharOffset);
+                                currentTextRun.GetRunWidth(charIndex - rCharOffset);
                     }
                 }
                 else

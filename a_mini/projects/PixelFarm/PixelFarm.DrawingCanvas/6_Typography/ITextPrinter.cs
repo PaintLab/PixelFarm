@@ -2,6 +2,18 @@
 
 namespace PixelFarm.Drawing
 {
+    public interface ILineSegmentList
+    {
+        int Count { get; }
+        ILineSegment this[int index] { get; }
+
+    }
+    public interface ILineSegment
+    {
+        string GetText();
+        int Length { get; }
+        int StartAt { get; }
+    }
 
     //implement this interface to handler font measurement/ glyph layout position
     //see current implementation in Gdi32IFonts and OpenFontIFonts
@@ -10,9 +22,15 @@ namespace PixelFarm.Drawing
 
         float MeasureWhitespace(RequestFont f);
         float MeasureBlankLineHeight(RequestFont f);
+        //
+        bool SupportsWordBreak { get; }
+        ILineSegmentList BreakToLineSegments(char[] str, int startAt, int len);
+        //
         Size MeasureString(char[] str, int startAt, int len, RequestFont font);
         void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font,
-            int[] outputXAdvaces, out int outputTotalW);
+            int[] outputXAdvances, out int outputTotalW, out int lineHeight);
+
+        void CalculateGlyphAdvancePos(ILineSegmentList lineSegs, RequestFont font, int[] outputXAdvances, out int outputTotalW, out int lineHeight);
     }
 
     /// <summary>

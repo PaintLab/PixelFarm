@@ -48,7 +48,7 @@ namespace LayoutFarm.UI
                     this.FlushAccumGraphics();
                 });
         }
-        public override ITextService IFonts
+        public override ITextService TextServices
         {
             get
             {
