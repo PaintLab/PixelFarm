@@ -107,7 +107,7 @@ namespace LayoutFarm.Text
             Size size;
             if (IsLineBreak)
             {
-                size = new Size(0, (int)Math.Round(Root.IFonts.MeasureBlankLineHeight(GetFont()))); 
+                size = new Size(0, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont()))); 
             }
             else
             {
@@ -158,7 +158,7 @@ namespace LayoutFarm.Text
         }
         Size CalculateDrawingStringSize(char[] buffer, int length)
         {
-            return this.Root.IFonts.MeasureString(buffer, 0,
+            return this.Root.TextServices.MeasureString(buffer, 0,
                 length, GetFont());
 
         }

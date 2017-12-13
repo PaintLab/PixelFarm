@@ -13,8 +13,10 @@ namespace LayoutFarm.Text
     {
 
         TextSpanStyle spanStyle;
-        char[] mybuffer; //each editable run has it own (dynamic) char buffer
+
         int[] glyphPositions = null;//TODO: review here-> change this to caret stop position
+
+        ILineSegmentList _lineSegs;
 
         public EditableTextRun(RootGraphic gfx, char[] copyBuffer, TextSpanStyle style)
             : base(gfx)
@@ -22,14 +24,14 @@ namespace LayoutFarm.Text
             //we need font info (in style) for evaluating the size fo this span
             //without font info we can't measure the size of this span
             this.spanStyle = style;
-            this.mybuffer = copyBuffer;
+            set_newContent(copyBuffer);
             UpdateRunWidth();
         }
         public EditableTextRun(RootGraphic gfx, char c, TextSpanStyle style)
             : base(gfx)
         {
             this.spanStyle = style;
-            mybuffer = new char[] { c };
+            set_newContent(new char[] { c });
             if (c == '\n')
             {
                 //TODO: review line break span
@@ -44,7 +46,7 @@ namespace LayoutFarm.Text
             this.spanStyle = style;
             if (str != null && str.Length > 0)
             {
-                mybuffer = str.ToCharArray();
+                set_newContent(str.ToCharArray());
                 //special treament
                 if (mybuffer.Length == 1 && mybuffer[0] == '\n')
                 {
@@ -56,6 +58,20 @@ namespace LayoutFarm.Text
             {
                 throw new Exception("string must be null or zero length");
             }
+        }
+        //each editable run has it own (dynamic) char buffer
+
+
+        char[] _mybuffer;
+        char[] mybuffer
+        {
+            get { return _mybuffer; }
+        }
+        bool _content_unparsed;
+        void set_newContent(char[] newbuffer)
+        {
+            _mybuffer = newbuffer;
+            _content_unparsed = true;
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
@@ -112,30 +128,48 @@ namespace LayoutFarm.Text
                 //we should not store this as a text run
                 //if this is a linebreak it should be encoded at the end of this visual line
 
-                size = new Size(0, (int)Math.Round(Root.IFonts.MeasureBlankLineHeight(GetFont())));
+                size = new Size(0, (int)Math.Round(Root.TextServices.MeasureBlankLineHeight(GetFont())));
                 glyphPositions = new int[0];
             }
             else
             {
-
-
-
-
                 //TODO: review here again 
                 //1. after GSUB process, output glyph may be more or less 
                 //than original input char buffer(mybuffer)
                 //2. 
-                int len = mybuffer.Length;
+                if (Root.TextServices.SupportsWordBreak)
+                {
 
-                glyphPositions = new int[len];
-                int outputTotalW;
-                Root.IFonts.CalculateGlyphAdvancePos(mybuffer, 0, len, GetFont(), glyphPositions, out outputTotalW);
-                size = new Size(outputTotalW, (int)Math.Round(Root.IFonts.MeasureBlankLineHeight(GetFont())));
+                    int len = mybuffer.Length;
+                    if (_content_unparsed)
+                    {
+                        //parse the content first
+                        _lineSegs = Root.TextServices.BreakToLineSegments(mybuffer, 0, len);
+                    }
+                    //
+                    _content_unparsed = false;
+                    //output glyph position
+                    glyphPositions = new int[len];
+
+                    int outputTotalW, outputLineHeight;
+                    Root.TextServices.CalculateGlyphAdvancePos(_lineSegs, GetFont(), glyphPositions, out outputTotalW, out outputLineHeight);
+                    size = new Size(outputTotalW, outputLineHeight);
+
+                }
+                else
+                {
+
+                    _content_unparsed = false;
+                    int len = mybuffer.Length;
+                    glyphPositions = new int[len];
+                    int outputTotalW, outputLineHeight;
+                    Root.TextServices.CalculateGlyphAdvancePos(mybuffer, 0, len, GetFont(), glyphPositions, out outputTotalW, out outputLineHeight);
+                    size = new Size(outputTotalW, outputLineHeight);
+                }
+
             }
             //---------
             this.SetSize(size.Width, size.Height);
-
-            //---------
             MarkHasValidCalculateSize();
         }
         public override char GetChar(int index)
@@ -184,7 +218,7 @@ namespace LayoutFarm.Text
         Size CalculateDrawingStringSize(char[] buffer, int length)
         {
             PixelFarm.Drawing.RequestFont fontInfo = GetFont();
-            return this.Root.IFonts.MeasureString(buffer, 0,
+            return this.Root.TextServices.MeasureString(buffer, 0,
                  length, fontInfo);
         }
         protected PixelFarm.Drawing.RequestFont GetFont()
@@ -399,7 +433,7 @@ namespace LayoutFarm.Text
             {
                 throw new NotSupportedException();
             }
-            this.mybuffer = newBuff;
+            set_newContent(newBuff);
             UpdateRunWidth();
         }
         internal override EditableRun Remove(int startIndex, int length, bool withFreeRun)
@@ -419,7 +453,7 @@ namespace LayoutFarm.Text
                 }
 
                 Array.Copy(mybuffer, startIndex + length, newBuff, startIndex, oldLexLength - startIndex - length);
-                this.mybuffer = newBuff;
+                set_newContent(newBuff);
                 UpdateRunWidth();
             }
 

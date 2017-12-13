@@ -70,7 +70,8 @@ namespace LayoutFarm
 
 
         }
-        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances, out int outputTotalW)
+
+        public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] glyphXAdvances, out int outputTotalW, out int outputLineHeight)
         {
 
             //layout  
@@ -96,6 +97,45 @@ namespace LayoutFarm
                 //if you want to snap each glyph to grid ... => Round it 
                 outputTotalW += glyphXAdvances[i] = (int)Math.Round(actualAdvX * scale);
             }
+            outputLineHeight = (int)Math.Round(typeface.CalculateRecommendLineSpacing() * scale);
+        }
+        public void CalculateGlyphAdvancePos(ILineSegmentList lineSegs, RequestFont font, int[] glyphXAdvances, out int outputTotalW, out int lineHeight)
+        {
+
+            //layout  
+            //from font
+            //resolve for typeface
+
+            // 
+            Typeface typeface = typefaceStore.GetTypeface(font.Name, InstalledFontStyle.Normal);
+            glyphLayout.Typeface = typeface;
+
+            MyLineSegmentList mylineSegs = (MyLineSegmentList)lineSegs;
+            float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+            outputTotalW = 0;
+            char[] str = mylineSegs._str;
+            int j = mylineSegs.Count;
+            for (int i = 0; i < j; ++i)
+            {
+                userGlyphPlanList.Clear();
+                userCharToGlyphMapList.Clear();
+
+                MyLineSegment lineSeg = mylineSegs.GetSegment(i);
+                glyphLayout.ScriptLang = lineSeg.scriptLang;
+                glyphLayout.GenerateGlyphPlans(str, lineSeg.StartAt, lineSeg.Length, userGlyphPlanList, userCharToGlyphMapList);
+
+                //
+                int glyphPlanCount = userCharToGlyphMapList.Count;
+                for (int m = 0; m < glyphPlanCount; ++m)
+                {
+                    GlyphPlan glyphPlan = userGlyphPlanList[m];
+                    float tx = glyphPlan.ExactX;
+                    float ty = glyphPlan.ExactY;
+                    double actualAdvX = glyphPlan.AdvanceX;
+                    outputTotalW += glyphXAdvances[m] = (int)Math.Round(actualAdvX * scale);
+                }
+            }
+            lineHeight = (int)Math.Round(typeface.CalculateRecommendLineSpacing() * scale);
         }
 
         Typeface ResolveTypeface(RequestFont font)
@@ -168,7 +208,6 @@ namespace LayoutFarm
             float accumH = 0;
 
 
-
             foreach (BreakSpan breakSpan in _textBreaker.GetBreakSpanIter())
             {
                 //at this point
@@ -238,8 +277,130 @@ namespace LayoutFarm
                 typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
         }
 
+        public bool SupportsWordBreak
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        class MyLineSegment : ILineSegment
+        {
+            MyLineSegmentList owner;
+            int startAt;
+            int len;
+            internal ScriptLang scriptLang;
+
+            public MyLineSegment(MyLineSegmentList owner, int startAt, int len)
+            {
+                this.startAt = startAt;
+                this.len = len;
+            }
+            public int Length
+            {
+                get { return len; }
+            }
+            public int StartAt
+            {
+                get { return startAt; }
+            }
+            public string GetText()
+            {
+                throw new NotImplementedException();
+            }
+        }
+        class MyLineSegmentList : ILineSegmentList
+        {
+            MyLineSegment[] _segments;
+            internal char[] _str;
+            int _startAt;
+            int _len;
+            public MyLineSegmentList(char[] str, int startAt, int len)
+            {
+
+                this._str = str;
+                this._startAt = startAt;
+                this._len = len;
+            }
+            public ILineSegment this[int index]
+            {
+                get { return _segments[index]; }
+            }
+            public int Count
+            {
+                get { return _segments.Length; }
+            }
+            public void SetResultLineSegments(MyLineSegment[] segments)
+            {
+                this._segments = segments;
+            }
+            public MyLineSegment GetSegment(int index)
+            {
+                return _segments[index];
+            }
 
 
+        }
+
+
+        List<MyLineSegment> _resuableLineSegments = new List<MyLineSegment>();
+
+        public ILineSegmentList BreakToLineSegments(char[] str, int startAt, int len)
+        {
+            _resuableLineSegments.Clear();
+            //user must setup the CustomBreakerBuilder before use              
+            if (_textBreaker == null)
+            {
+                _textBreaker = CustomBreakerBuilder.NewCustomBreaker();
+            }
+            MyLineSegmentList lineSegs = new MyLineSegmentList(str, startAt, len);
+            int cur_startAt = startAt;
+            _textBreaker.BreakWords(str, cur_startAt, len);
+
+            foreach (BreakSpan breakSpan in _textBreaker.GetBreakSpanIter())
+            {
+                MyLineSegment lineSeg = new MyLineSegment(lineSegs, breakSpan.startAt, breakSpan.len);
+                //set segment kind/ script lang
+                char sample = str[breakSpan.startAt];
+                ScriptLang selectedScriptLang = null;
+                if (sample == ' ')
+                {
+                    //whitespace
+                    selectedScriptLang = _defaultScLang;
+                }
+                else if (char.IsWhiteSpace(sample))
+                {
+                    //other whitespace
+                    selectedScriptLang = _defaultScLang;
+                }
+                else
+                {
+                    //
+                    Typography.OpenFont.ScriptLang scLang;
+                    if (Typography.OpenFont.ScriptLangs.TryGetScriptLang(sample, out scLang))
+                    {
+                        //we should decide to use
+                        //current typeface
+                        //or ask for alternate typeface 
+                        //if  the current type face is not support the request scriptLang
+                        // 
+                    }
+                    else
+                    {
+                        //not found
+                        //use default
+                        scLang = _defaultScLang;
+                    }
+                    selectedScriptLang = scLang;
+                }
+                lineSeg.scriptLang = selectedScriptLang;
+                _resuableLineSegments.Add(lineSeg);
+            }
+
+            lineSegs.SetResultLineSegments(_resuableLineSegments.ToArray());
+            return lineSegs;
+        }
         //-----------------------------------
         static OpenFontTextService()
         {
@@ -250,6 +411,8 @@ namespace LayoutFarm
         }
         static bool _s_evaluatedOS;
         static bool _s_onMac;
+
+
         static bool IsOnMac()
         {
 
@@ -264,6 +427,9 @@ namespace LayoutFarm
             return _s_onMac = (System.Environment.OSVersion.Platform == System.PlatformID.MacOSX);
 #endif
         }
+
+
+
 
     }
 }
