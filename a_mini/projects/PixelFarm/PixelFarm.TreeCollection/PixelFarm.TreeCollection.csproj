@@ -43,6 +43,10 @@
     <Compile Include="General\SegmentTree.cs" />
     <Compile Include="HeightTree\StringTextSource.cs" />
     <Compile Include="HeightTree\TextChangeEventArgs.cs" />
+    <Compile Include="TextDocument\IDocumentLine.cs" />
+    <Compile Include="TextDocument\IReadonlyTextDocument.cs" />
+    <Compile Include="TextDocument\UnicodeNewLine.cs" />
+    <Compile Include="Utils\Diff.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HeightTree\DocumentLocation.cs" />
