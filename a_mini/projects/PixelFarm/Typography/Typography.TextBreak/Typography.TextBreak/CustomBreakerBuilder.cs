@@ -4,29 +4,31 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 
 
+using System.IO;
 namespace Typography.TextBreak
 {
+    public interface IIcuDataProvider
+    {
+        Stream GetDataStream(string strmUrl);
+    }
     public static class CustomBreakerBuilder
     {
         static ThaiDictionaryBreakingEngine thaiDicBreakingEngine;
         static LaoDictionaryBreakingEngine laoDicBreakingEngine;
         static bool isInit;
-
-        public static void Setup(string dataDir)
+        static IIcuDataProvider s_dataProvider;
+        public static void Setup(IIcuDataProvider dataProvider)
         {
             if (isInit) return;
 
-            DataDir = dataDir;
+            s_dataProvider = dataProvider;
             InitAllDics();
 
             isInit = true;
         }
         static void InitAllDics()
         {
-            if (DataDir == null)
-            {
-                return;
-            }
+             
 
             if (thaiDicBreakingEngine == null)
             {
@@ -34,8 +36,11 @@ namespace Typography.TextBreak
                 thaiDicBreakingEngine = new ThaiDictionaryBreakingEngine();
                 thaiDicBreakingEngine.SetDictionaryData(customDic);//add customdic to the breaker
                 customDic.SetCharRange(thaiDicBreakingEngine.FirstUnicodeChar, thaiDicBreakingEngine.LastUnicodeChar);
-                customDic.LoadFromTextfile(DataDir + "/thaidict.txt");
-                //customDic.LoadFromTextfile(DataDir + "/thaidict_testonly.txt");
+
+                using (Stream data = s_dataProvider.GetDataStream("thaidict.txt"))
+                {
+                    customDic.LoadFromDataStream(data);
+                }
             }
             if (laoDicBreakingEngine == null)
             {
@@ -43,15 +48,14 @@ namespace Typography.TextBreak
                 laoDicBreakingEngine = new LaoDictionaryBreakingEngine();
                 laoDicBreakingEngine.SetDictionaryData(customDic);//add customdic to the breaker
                 customDic.SetCharRange(laoDicBreakingEngine.FirstUnicodeChar, laoDicBreakingEngine.LastUnicodeChar);
-                customDic.LoadFromTextfile(DataDir + "/laodict.txt");
+                using (Stream data = s_dataProvider.GetDataStream("laodict.txt"))
+                {
+                    customDic.LoadFromDataStream(data);
+                }
             }
 
         }
-        static string DataDir
-        {
-            get;
-            set;
-        }
+         
         public static CustomBreaker NewCustomBreaker()
         {
             if (!isInit)
