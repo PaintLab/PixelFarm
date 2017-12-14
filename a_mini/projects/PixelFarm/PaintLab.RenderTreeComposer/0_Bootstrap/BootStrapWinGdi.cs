@@ -23,7 +23,8 @@ namespace YourImplementation
             //test Typography's custom text break, 
             //check if we have that data?
 
-            string typographyDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries";
+            //string typographyDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu58/brkitr_src/dictionaries";
+            string typographyDir = @"../../PixelFarm/Typography/Typography.TextBreak/icu60/brkitr_src/dictionaries";
             if (System.IO.Directory.Exists(typographyDir))
             {
                 Typography.TextBreak.CustomBreakerBuilder.Setup(typographyDir);
