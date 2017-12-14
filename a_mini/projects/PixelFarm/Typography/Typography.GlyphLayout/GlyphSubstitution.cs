@@ -43,7 +43,6 @@ namespace Typography.TextLayout
         {
             get { return _language; }
         }
-
         /// <summary>
         /// enable GSUB type 4, ligation (liga)
         /// </summary>
@@ -52,8 +51,12 @@ namespace Typography.TextLayout
             get { return _enableLigation; }
             set
             {
-                _mustRebuildTables = value != _enableLigation;//test change before accept value
+                if (value != _enableLigation)
+                {   //test change before accept value
+                    _mustRebuildTables = true;
+                }
                 _enableLigation = value;
+
             }
         }
 
@@ -65,11 +68,15 @@ namespace Typography.TextLayout
             get { return _enableComposition; }
             set
             {
-                _mustRebuildTables = value != _enableComposition;//test change before accept value
+                if (value != _enableComposition)
+                {
+                    //test change before accept value
+                    _mustRebuildTables = true;
+                }
                 _enableComposition = value;
+
             }
         }
-
         private readonly string _language;
         private bool _enableLigation = true; // enable by default
         private bool _enableComposition = true;
