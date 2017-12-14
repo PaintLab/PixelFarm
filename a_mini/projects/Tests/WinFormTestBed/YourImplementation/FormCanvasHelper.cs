@@ -1,10 +1,10 @@
 ﻿//Apache2, 2014-2017, WinterDev
 using System;
 using System.Windows.Forms;
+
 using PixelFarm.Drawing;
-
-
 using Typography.TextServices;
+
 namespace LayoutFarm.UI
 {
     public static partial class FormCanvasHelper
@@ -27,7 +27,7 @@ namespace LayoutFarm.UI
             InitWinform();
             IFontLoader fontLoader = s_fontstore;
             //2. 
-            PixelFarm.Drawing.ITextService ifont = null; 
+            PixelFarm.Drawing.ITextService ifont = null;
             switch (internalViewportKind)
             {
                 default:
@@ -58,11 +58,12 @@ namespace LayoutFarm.UI
 
             canvasViewport.InitRootGraphics(myRootGfx, myRootGfx.TopWinEventPortal, internalViewportKind);
             canvasViewport.Bounds =
-                new System.Drawing.Rectangle(0, 0,
+                new System.Drawing.Rectangle(10, 10,
                     screenClientAreaRect.Width,
                     screenClientAreaRect.Height);
             //---------------------- 
             Form form1 = new Form();
+            //LayoutFarm.Dev.FormNoBorder form1 = new Dev.FormNoBorder();
             form1.Controls.Add(canvasViewport);
             //----------------------
             MakeFormCanvas(form1, canvasViewport);
@@ -81,8 +82,10 @@ namespace LayoutFarm.UI
             };
             //----------------------
             return form1;
-
         }
+
+
+
         public static void MakeFormCanvas(Form form1, LayoutFarm.UI.UISurfaceViewportControl surfaceViewportControl)
         {
             form1.FormClosing += (s, e) =>

@@ -147,7 +147,7 @@ namespace LayoutFarm.Dev
 
             viewport.PaintMe();
 
-            formCanvas.WindowState = FormWindowState.Maximized;
+            //formCanvas.WindowState = FormWindowState.Maximized;
             formCanvas.Show();
         }
 

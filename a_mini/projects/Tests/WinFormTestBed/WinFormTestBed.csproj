@@ -58,6 +58,12 @@
     <Compile Include="YourImplementation\FormLayoutInspector.Designer.cs">
       <DependentUpon>FormLayoutInspector.cs</DependentUpon>
     </Compile>
+    <Compile Include="YourImplementation\FormNoBorder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="YourImplementation\FormNoBorder.Designer.cs">
+      <DependentUpon>FormNoBorder.cs</DependentUpon>
+    </Compile>
     <Compile Include="YourImplementation\FormPrint.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +127,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="YourImplementation\FormLayoutInspector.resx">
       <DependentUpon>FormLayoutInspector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="YourImplementation\FormNoBorder.resx">
+      <DependentUpon>FormNoBorder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="YourImplementation\FormPrint.resx">
       <DependentUpon>FormPrint.cs</DependentUpon>
