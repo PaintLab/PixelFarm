@@ -55,10 +55,13 @@ namespace Typography.TextServices
                  currentCulture.ThreeLetterISOLanguageName,
                  out langFullName))
             {
+                scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLangFromLanguageName(langFullName);
                 SetDefaultScriptLang(scLang);
-                SetCurrentScriptLang(Typography.OpenFont.ScriptLangs.GetRegisteredScriptLangFromLanguageName(langFullName));
+                SetCurrentScriptLang(scLang);
                 return true;
             }
+
+            throw new System.NotSupportedException();
             return false;
         }
         public void SetDefaultScriptLang(ScriptLang scLang)
