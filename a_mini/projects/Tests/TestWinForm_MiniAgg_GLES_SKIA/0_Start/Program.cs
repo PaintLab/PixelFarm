@@ -14,12 +14,12 @@ namespace Mini
         [STAThread]
         static void Main()
         {
-
+            OpenTK.Toolkit.Init();
             //---------------------------------------------------
             //register image loader
             Mini.DemoHelper.RegisterImageLoader(LoadImage);
             //----------------------------
-            OpenTK.Toolkit.Init();
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             RootDemoPath.Path = @"..\Data";

@@ -18,7 +18,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -83,9 +83,9 @@
     <Compile Include="TestBedStartup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.MiniWinForms\PaintLab.Platforms.MiniWinForms.csproj">
-      <Project>{53bdc3f9-61b4-4fec-af57-ad311420d424}</Project>
-      <Name>PaintLab.Platforms.MiniWinForms</Name>
+    <ProjectReference Include="..\..\PixelFarm\LayoutFarm.Platforms.WinForms\PaintLab.Platforms.WinForms.csproj">
+      <Project>{4602b28b-eeec-4a69-854c-b00b8b616837}</Project>
+      <Name>PaintLab.Platforms.WinForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\LayoutFarm.YourBasicCustomWidgets\LayoutFarm.YourBasicCustomWidgets.csproj">
       <Project>{6317f5f0-bc4b-4bfd-b3c0-73c05c2aa11e}</Project>
@@ -102,6 +102,10 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GdiPlus\PixelFarm.Drawing.GdiPlus.csproj">
       <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
       <Name>PixelFarm.Drawing.GdiPlus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
+      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
+      <Name>PixelFarm.Drawing.GLES2</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>

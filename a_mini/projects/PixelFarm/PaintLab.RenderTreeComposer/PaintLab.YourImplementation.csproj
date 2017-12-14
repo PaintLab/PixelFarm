@@ -17,9 +17,10 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;GL_ENABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +34,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="0_Bootstrap\CommonTextServiceSetup.cs" />
     <Compile Include="0_Bootstrap\BootStrapOpenGLES2.cs" />
     <Compile Include="0_Bootstrap\BootStrapWinGdi.cs" />
     <Compile Include="3_RenderTreeRoot\0_MyRootGraphic.cs" />
@@ -62,9 +64,21 @@
       <Project>{1aa171e3-523c-4dd5-a169-de6322991ff5}</Project>
       <Name>PixelFarm.Drawing.GdiPlus</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
+      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
+      <Name>PixelFarm.Drawing.GLES2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
       <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.MiniOpenTK\BackEnd.MiniOpenTK.csproj">
+      <Project>{7c154e68-1709-4d5d-ab76-833febe4b3b2}</Project>
+      <Name>BackEnd.MiniOpenTK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.OpenTKWinForms\BackEnd.OpenTKWinForms.csproj">
+      <Project>{4cf14dce-f731-4060-b92b-f1acfdf9803d}</Project>
+      <Name>BackEnd.OpenTKWinForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\Typography\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c6807d05-09be-4313-9f8b-bd2d51c55819}</Project>

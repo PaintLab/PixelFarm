@@ -1,87 +1,87 @@
-﻿//MIT, 2016-2017, WinterDev
+﻿////MIT, 2016-2017, WinterDev
 
-using System;
-using PixelFarm.Drawing;
-using PixelFarm.Drawing.Fonts;
-using System.Collections.Generic;
+//using System;
+//using PixelFarm.Drawing;
+//using PixelFarm.Drawing.Fonts;
+//using System.Collections.Generic;
+
+//using Typography.TextServices;
+//namespace PixelFarm.DrawingGL
+//{
+
+//#if GL_ENABLE
+//#if DEBUG
+//    class NativeFontStore
+//    {
+//        //TODO: review here again ***
+
+//        Dictionary<InstalledFont, FontFace> fonts = new Dictionary<InstalledFont, FontFace>();
+//        Dictionary<FontKey, ActualFont> registerFonts = new Dictionary<FontKey, ActualFont>();
+//        //--------------------------------------------------
 
 
-namespace PixelFarm.DrawingGL
-{
+//        //public override float GetCharWidth(RequestFont f, char c)
+//        //{
+//        //    return GLES2PlatformFontMx.Default.ResolveForGdiFont(f).GetGlyph(c).horiz_adv_x >> 6;
+//        //    //NativeFont font = nativeFontStore.GetResolvedNativeFont(f);
+//        //    //return font.GetGlyph(c).horiz_adv_x >> 6;
+//        //} 
+//        //============================================== 
 
-#if GL_ENABLE
-#if DEBUG
-    class NativeFontStore
-    {
-        //TODO: review here again ***
+//        public NativeFontStore()
+//        {
 
-        Dictionary<InstalledFont, FontFace> fonts = new Dictionary<InstalledFont, FontFace>();
-        Dictionary<FontKey, ActualFont> registerFonts = new Dictionary<FontKey, ActualFont>();
-        //--------------------------------------------------
+//        }
+//        public ActualFont LoadFont(string fontName, float fontSizeInPoints)
+//        {
+//            //find install font from fontname
+//            InstalledFont found = PixelFarm.Drawing.GLES2.GLES2Platform.GetInstalledFont(fontName, InstalledFontStyle.Normal);
+//            if (found == null)
+//            {
+//                return null;
+//            }
 
+//            FontFace fontFace;
+//            if (!fonts.TryGetValue(found, out fontFace))
+//            {
+//                throw new NotSupportedException("revisit freetype impl");
+//                //convert to freetype data
 
-        //public override float GetCharWidth(RequestFont f, char c)
-        //{
-        //    return GLES2PlatformFontMx.Default.ResolveForGdiFont(f).GetGlyph(c).horiz_adv_x >> 6;
-        //    //NativeFont font = nativeFontStore.GetResolvedNativeFont(f);
-        //    //return font.GetGlyph(c).horiz_adv_x >> 6;
-        //} 
-        //============================================== 
+//                //TODO: review here
+//                //fontFace = FreeTypeFontLoader.LoadFont(found,
+//                //    GLES2PlatformFontMx.defaultScriptLang
+//                //    GLES2PlatformFontMx.defaultHbDirection,
+//                //    GLES2PlatformFontMx.defaultScriptCode);
+//                //fontFace = FreeTypeFontLoader.LoadFont(found,
+//                //     "en",
+//                //     HBDirection.HB_DIRECTION_RTL);
 
-        public NativeFontStore()
-        {
+//                if (fontFace == null)
+//                {
+//                    throw new NotSupportedException();
+//                }
+//                fonts.Add(found, fontFace);//register
+//            }
+//            //-----------
+//            //create font at specific size from this fontface
+//            FontKey fontKey = new FontKey(fontName, fontSizeInPoints, FontStyle.Regular);
+//            ActualFont createdFont;
+//            if (!registerFonts.TryGetValue(fontKey, out createdFont))
+//            {
+//                createdFont = fontFace.GetFontAtPointSize(fontSizeInPoints);
+//            }
+//            //-----------
+//            return createdFont;
+//        }
 
-        }
-        public ActualFont LoadFont(string fontName, float fontSizeInPoints)
-        {
-            //find install font from fontname
-            InstalledFont found = PixelFarm.Drawing.GLES2.GLES2Platform.GetInstalledFont(fontName, InstalledFontStyle.Normal);
-            if (found == null)
-            {
-                return null;
-            }
+//        public ActualFont GetResolvedNativeFont(RequestFont reqFont)
+//        {
+//            ActualFont found;
+//            registerFonts.TryGetValue(reqFont.FontKey, out found);
+//            return found;
+//        }
+//    }
 
-            FontFace fontFace;
-            if (!fonts.TryGetValue(found, out fontFace))
-            {
-                throw new NotSupportedException("revisit freetype impl");
-                //convert to freetype data
-
-                //TODO: review here
-                //fontFace = FreeTypeFontLoader.LoadFont(found,
-                //    GLES2PlatformFontMx.defaultScriptLang
-                //    GLES2PlatformFontMx.defaultHbDirection,
-                //    GLES2PlatformFontMx.defaultScriptCode);
-                //fontFace = FreeTypeFontLoader.LoadFont(found,
-                //     "en",
-                //     HBDirection.HB_DIRECTION_RTL);
-
-                if (fontFace == null)
-                {
-                    throw new NotSupportedException();
-                }
-                fonts.Add(found, fontFace);//register
-            }
-            //-----------
-            //create font at specific size from this fontface
-            FontKey fontKey = new FontKey(fontName, fontSizeInPoints, FontStyle.Regular);
-            ActualFont createdFont;
-            if (!registerFonts.TryGetValue(fontKey, out createdFont))
-            {
-                createdFont = fontFace.GetFontAtPointSize(fontSizeInPoints);
-            }
-            //-----------
-            return createdFont;
-        }
-
-        public ActualFont GetResolvedNativeFont(RequestFont reqFont)
-        {
-            ActualFont found;
-            registerFonts.TryGetValue(reqFont.FontKey, out found);
-            return found;
-        }
-    }
-
-#endif
-#endif
-}
+//#endif
+//#endif
+//}
