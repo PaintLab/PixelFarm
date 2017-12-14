@@ -102,7 +102,7 @@
     <Compile Include="1.1_Drawing_Fonts\GlyphTranslatorToVxs.cs" />
     <Compile Include="1.1_Drawing_Fonts\GlyphMeshCollection.cs" />
     <Compile Include="1.1_Drawing_Fonts\HintTechnique.cs" />
-    <Compile Include="1.1_Drawing_Fonts\OpenFontIFonts.cs" />
+    <Compile Include="1.1_Drawing_Fonts\OpenFontTextService.cs" />
     <Compile Include="1.1_Drawing_Fonts\PixelScaleLayoutEngine.cs" />
     <Compile Include="2_Drawing_Text\ManagedShapingService.cs" />
     <Compile Include="3_FontFaceImpl\NOpenFontFace.cs" />
