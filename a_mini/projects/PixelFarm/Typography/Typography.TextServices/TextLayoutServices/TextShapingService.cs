@@ -207,7 +207,7 @@ namespace Typography.TextServices
                 seqCol.Register(hashValue, planSeq);
             }
             //---
-            //on unscale font=> we scale it to final font size
+            //on unscale font=> we use original 
 
 
 
