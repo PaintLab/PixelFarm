@@ -27,7 +27,7 @@ namespace Typography.TextBreak
         }
         public char FirstChar { get { return firstChar; } }
         public char LastChar { get { return lastChar; } }
-        public void LoadFromTextfile(string filename)
+        public void LoadFromDataStream(Stream dataStream)
         {
             //once only            
             if (textBuffer != null)
@@ -38,14 +38,16 @@ namespace Typography.TextBreak
             {
                 throw new NotSupportedException();
             }
+            if (dataStream == null)
+                return;
 
             //---------------
             Dictionary<char, DevelopingWordGroup> wordGroups = new Dictionary<char, DevelopingWordGroup>();
-            using (FileStream fs = new FileStream(filename, FileMode.Open))
-            using (StreamReader reader = new StreamReader(fs))
+
+            using (StreamReader reader = new StreamReader(dataStream))
             {
                 //init with filesize
-                textBuffer = new TextBuffer((int)fs.Length);
+                textBuffer = new TextBuffer((int)dataStream.Length);
                 string line = reader.ReadLine();
                 while (line != null)
                 {
@@ -82,7 +84,7 @@ namespace Typography.TextBreak
                 }
 
                 reader.Close();
-                fs.Close();
+
             }
             //------------------------------------------------------------------
             textBuffer.Freeze();
