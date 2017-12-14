@@ -16,13 +16,11 @@ namespace LayoutFarm
 
     public class OpenFontTextService : ITextService
     {
-
-
         /// <summary>
         /// instance of Typography lib's text service
         /// </summary>
         TextServices _typographyTxtServices;
-        Dictionary<int, Typeface> _resolvedTypefaceCache = new Dictionary<int, Typeface>(); 
+        Dictionary<int, Typeface> _resolvedTypefaceCache = new Dictionary<int, Typeface>();
         readonly int _system_id;
         public OpenFontTextService()
         {
@@ -45,41 +43,11 @@ namespace LayoutFarm
             // ... or specific the scriptlang manully, eg. ...
             //_shapingServices.SetDefaultScriptLang(scLang);
             //_shapingServices.SetCurrentScriptLang(scLang);
-            //---------------
-
+            //--------------- 
         }
-
         public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
         {
-
-            Typeface typeface = ResolveTypeface(font);
-            _typographyTxtServices.SetCurrentFont(typeface, font.SizeInPoints);
-            _typographyTxtServices.CalculateGlyphAdvancePos(str, startAt, len, outputGlyphAdvances, out outputTotalW, out outputLineHeight);
-
-            ////layout  
-            ////from font
-            ////resolve for typeface
-            //userGlyphPlanList.Clear();
-            //userCharToGlyphMapList.Clear();
-            //// 
-            //Typeface typeface = typefaceStore.GetTypeface(font.Name, InstalledFontStyle.Normal);
-            //glyphLayout.Typeface = typeface;
-            //glyphLayout.GenerateGlyphPlans(str, startAt, len, userGlyphPlanList, userCharToGlyphMapList);
-
-            //float scale = typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
-            //int endBefore = startAt + len;
-            //outputTotalW = 0;
-            //for (int i = startAt; i < endBefore; ++i)
-            //{
-            //    GlyphPlan glyphPlan = userGlyphPlanList[i];
-            //    float tx = glyphPlan.ExactX;
-            //    float ty = glyphPlan.ExactY;
-            //    double actualAdvX = glyphPlan.AdvanceX;
-
-            //    //if you want to snap each glyph to grid ... => Round it 
-            //    outputTotalW += outputGlyphAdvances[i] = (int)Math.Round(actualAdvX * scale);
-            //}
-            //outputLineHeight = (int)Math.Round(typeface.CalculateRecommendLineSpacing() * scale);
+            CalculateGlyphAdvancePos(this.BreakToLineSegments(str, startAt, len), font, outputGlyphAdvances, out outputTotalW, out outputLineHeight);
         }
         public void CalculateGlyphAdvancePos(ILineSegmentList lineSegs, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int lineHeight)
         {
@@ -87,8 +55,7 @@ namespace LayoutFarm
             //layout  
             //from font
             //resolve for typeface
-            // 
-
+            //  
             Typeface typeface = ResolveTypeface(font);
             _typographyTxtServices.SetCurrentFont(typeface, font.SizeInPoints);
 
@@ -130,16 +97,6 @@ namespace LayoutFarm
                     outputTotalW += outputGlyphAdvances[pos] = (int)Math.Round(actualAdvX * scale);
                     pos++;
                 }
-
-                //int glyphPlanCount = userCharToGlyphMapList.Count;
-                //for (int m = 0; m < glyphPlanCount; ++m)
-                //{
-                //    GlyphPlan glyphPlan = userGlyphPlanList[m];
-                //    float tx = glyphPlan.ExactX;
-                //    float ty = glyphPlan.ExactY;
-                //    double actualAdvX = glyphPlan.AdvanceX;
-                //    outputTotalW += glyphXAdvances[m] = (int)Math.Round(actualAdvX * scale);
-                //}
             }
             lineHeight = (int)Math.Round(typeface.CalculateRecommendLineSpacing() * scale);
         }
@@ -174,9 +131,7 @@ namespace LayoutFarm
         public float MeasureWhitespace(RequestFont f)
         {
             throw new NotImplementedException();
-        }
-
-
+        } 
         public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
         {
             Typeface typeface = ResolveTypeface(font);
