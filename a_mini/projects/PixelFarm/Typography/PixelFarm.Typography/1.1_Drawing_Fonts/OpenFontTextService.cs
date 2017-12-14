@@ -16,8 +16,6 @@ namespace LayoutFarm
 
     public class OpenFontTextService : ITextService
     {
-
-
         /// <summary>
         /// instance of Typography lib's text service
         /// </summary>
@@ -99,16 +97,6 @@ namespace LayoutFarm
                     outputTotalW += outputGlyphAdvances[pos] = (int)Math.Round(actualAdvX * scale);
                     pos++;
                 }
-
-                //int glyphPlanCount = userCharToGlyphMapList.Count;
-                //for (int m = 0; m < glyphPlanCount; ++m)
-                //{
-                //    GlyphPlan glyphPlan = userGlyphPlanList[m];
-                //    float tx = glyphPlan.ExactX;
-                //    float ty = glyphPlan.ExactY;
-                //    double actualAdvX = glyphPlan.AdvanceX;
-                //    outputTotalW += glyphXAdvances[m] = (int)Math.Round(actualAdvX * scale);
-                //}
             }
             lineHeight = (int)Math.Round(typeface.CalculateRecommendLineSpacing() * scale);
         }
@@ -143,9 +131,7 @@ namespace LayoutFarm
         public float MeasureWhitespace(RequestFont f)
         {
             throw new NotImplementedException();
-        }
-
-
+        } 
         public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
         {
             Typeface typeface = ResolveTypeface(font);
