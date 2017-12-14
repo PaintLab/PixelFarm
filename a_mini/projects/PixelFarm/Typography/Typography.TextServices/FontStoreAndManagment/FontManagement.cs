@@ -63,7 +63,7 @@ namespace Typography.TextServices
         Italic = 1 << 3,
     }
 
-    public delegate void FirstInitFontCollection(InstalledFontCollection fontCollection);
+    public delegate void FirstInitFontCollectionDelegate(InstalledFontCollection fontCollection);
 
     public delegate InstalledFont FontNotFoundHandler(InstalledFontCollection fontCollection, string fontName, string fontSubFam, InstalledFontStyle wellknownStyle);
     public delegate FontNameDuplicatedDecision FontNameDuplicatedHandler(InstalledFont existing, InstalledFont newAddedFont);
@@ -203,7 +203,7 @@ namespace Typography.TextServices
 
 
         static InstalledFontCollection s_sharedFontCollection;
-        public static InstalledFontCollection GetSharedFontCollection(FirstInitFontCollection initdel)
+        public static InstalledFontCollection GetSharedFontCollection(FirstInitFontCollectionDelegate initdel)
         {
             if (s_sharedFontCollection == null)
             {

@@ -88,9 +88,8 @@
     <Compile Include="FontStoreAndManagment\OpenFontStore.cs" />
     <Compile Include="IcuData\LangCodes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextLayoutServices\CRC32.cs" />
-    <Compile Include="TextLayoutServices\TextShapingService.cs" />
-    <Compile Include="TextServiceHub.cs" />
+    <Compile Include="Utils\CRC32.cs" />
+    <Compile Include="TextServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
