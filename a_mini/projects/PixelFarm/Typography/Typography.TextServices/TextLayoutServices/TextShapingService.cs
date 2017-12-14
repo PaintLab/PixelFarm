@@ -88,9 +88,9 @@ namespace Typography.TextServices
             readonly Typeface _typeface;
             readonly ScriptLang _scLang;
 
-            public TextShapingContextKey(Typeface installedFont, ScriptLang scLang)
+            public TextShapingContextKey(Typeface typeface, ScriptLang scLang)
             {
-                this._typeface = installedFont;
+                this._typeface = typeface;
                 this._scLang = scLang;
             }
 #if DEBUG
