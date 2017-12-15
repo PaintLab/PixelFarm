@@ -1,4 +1,5 @@
-#region Header
+//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of transformation extension methods for the WriteableBitmap class.
@@ -14,7 +15,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 using System;
 
@@ -35,7 +35,6 @@ namespace System.Windows.Media.Imaging
 #endif
  static partial class WriteableBitmapExtensions
     {
-        #region Enums
 
         /// <summary>
         /// The interpolation method.
@@ -69,11 +68,8 @@ namespace System.Windows.Media.Imaging
             Horizontal
         }
 
-        #endregion
 
-        #region Methods
 
-        #region Crop
 
         /// <summary>
         /// Creates a new cropped WriteableBitmap.
@@ -129,9 +125,7 @@ namespace System.Windows.Media.Imaging
             return bmp.Crop((int)region.X, (int)region.Y, (int)region.Width, (int)region.Height);
         }
 
-        #endregion
 
-        #region Resize
 
         /// <summary>
         /// Creates a new resized WriteableBitmap.
@@ -184,7 +178,7 @@ namespace System.Windows.Media.Imaging
 #if WPF
         public static int[] Resize(int* pixels, int widthSource, int heightSource, int width, int height, Interpolation interpolation)
 #else
-      public static int[] Resize(int[] pixels, int widthSource, int heightSource, int width, int height, Interpolation interpolation)
+        public static int[] Resize(int[] pixels, int widthSource, int heightSource, int width, int height, Interpolation interpolation)
 #endif
         {
             var pd = new int[width * height];
@@ -214,7 +208,7 @@ namespace System.Windows.Media.Imaging
                 }
             }
 
-               // Bilinear
+            // Bilinear
             else if (interpolation == Interpolation.Bilinear)
             {
                 var srcIdx = 0;
@@ -304,9 +298,7 @@ namespace System.Windows.Media.Imaging
             return pd;
         }
 
-        #endregion
 
-        #region Rotate
 
         /// <summary>
         /// Rotates the bitmap in 90° steps clockwise and returns a new rotated WriteableBitmap.
@@ -556,9 +548,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region Flip
 
         /// <summary>
         /// Flips (reflects the image) either vertical or horizontal.
@@ -616,8 +606,6 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #endregion
     }
 }

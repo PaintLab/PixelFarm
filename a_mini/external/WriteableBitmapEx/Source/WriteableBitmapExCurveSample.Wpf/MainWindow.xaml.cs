@@ -43,15 +43,12 @@ namespace WriteableBitmapExCurveSample.Wpf
             _lastTime = timeNow;
         }
 
-        #region Consts
 
         private const int PointSize = 10;
         private const int PointSizeHalf = PointSize >> 1;
         private const int PointCount = 3000;
 
-        #endregion
 
-        #region Fields
 
         private WriteableBitmap writeableBmp;
         private List<ControlPoint> points;
@@ -60,15 +57,11 @@ namespace WriteableBitmapExCurveSample.Wpf
         private bool isInDelete;
         private Plant plant;
 
-        #endregion
 
-        #region Properties
 
         public float Tension { get; set; }
 
-        #endregion
 
-        #region Methods
 
         private void Init()
         {
@@ -219,9 +212,7 @@ namespace WriteableBitmapExCurveSample.Wpf
             }
         }
 
-        #endregion
 
-        #region Eventhandler
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -377,6 +368,5 @@ namespace WriteableBitmapExCurveSample.Wpf
             }
         }
 
-        #endregion
     }
 }

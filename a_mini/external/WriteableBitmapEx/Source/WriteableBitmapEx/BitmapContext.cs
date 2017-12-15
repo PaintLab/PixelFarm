@@ -1,4 +1,4 @@
-﻿#region Header
+﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of extension methods for the WriteableBitmap class.
@@ -14,7 +14,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -202,7 +201,7 @@ namespace System.Windows.Media.Imaging
             var pixels = _writeableBitmap.Pixels;
             Array.Clear(pixels, 0, pixels.Length);
         }
- 
+
 #endif
 
 #if NETFX_CORE

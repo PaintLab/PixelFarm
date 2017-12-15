@@ -1,5 +1,4 @@
-﻿#region Header
-//
+﻿//
 //   Project:           WriteableBitmapEx - Silverlight WriteableBitmap extensions
 //   Description:       A control point for a spline curve.
 //
@@ -14,7 +13,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 
 using System.Windows;

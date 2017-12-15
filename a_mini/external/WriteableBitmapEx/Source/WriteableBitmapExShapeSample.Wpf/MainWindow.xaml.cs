@@ -16,16 +16,13 @@ namespace WriteableBitmapExShapeSample.Wpf
 {
     public partial class MainWindow : Window
     {
-        #region Fields
 
         private WriteableBitmap writeableBmp;
         private int shapeCount;
         private static Random rand = new Random();
         private int frameCounter = 0;
 
-        #endregion
 
-        #region Contructors
 
         /// <summary>
         /// MainPage!
@@ -35,9 +32,7 @@ namespace WriteableBitmapExShapeSample.Wpf
             InitializeComponent();
         }
 
-        #endregion
 
-        #region Methods
 
         private void Init()
         {
@@ -296,9 +291,7 @@ namespace WriteableBitmapExShapeSample.Wpf
             return (int)(0xFF000000 | (uint)rand.Next(0xFFFFFF));
         }
 
-        #endregion
 
-        #region Eventhandler
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -332,6 +325,5 @@ namespace WriteableBitmapExShapeSample.Wpf
             DrawStaticShapes();
         }
 
-        #endregion
     }
 }

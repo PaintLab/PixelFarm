@@ -1,4 +1,4 @@
-#region Header
+//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of interchange extension methods for the WriteableBitmap class.
@@ -13,8 +13,7 @@
 //   Copyright © 2009-2015 Rene Schulte and WriteableBitmapEx Contributors
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
-//
-#endregion
+// 
 
 using System;
 using System.IO;
@@ -42,9 +41,7 @@ namespace System.Windows.Media.Imaging
 #endif
  static partial class WriteableBitmapExtensions
     {
-        #region Methods
 
-        #region Byte Array
 
         /// <summary>
         /// Copies the Pixels from the WriteableBitmap into a ARGB byte array starting at a specific Pixels index.
@@ -131,9 +128,7 @@ namespace System.Windows.Media.Imaging
             return bmp.FromByteArray(buffer, 0, buffer.Length);
         }
 
-        #endregion
 
-        #region TGA File
 
         /// <summary>
         /// Writes the WriteableBitmap as a TGA image to a stream. 
@@ -197,7 +192,7 @@ namespace System.Windows.Media.Imaging
             (byte)(height & 0x00FF),
             (byte)((height & 0xFF00) >> 8),
             32, // 32 bit bitmap
-            0 
+            0
          };
 
                 // Write header and data
@@ -209,21 +204,19 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region Resource
 #if !NETFX_CORE
-      /// <summary>
-      /// Loads an image from the applications resource file and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
-      /// </summary>
-      /// <param name="bmp">The WriteableBitmap.</param>
-      /// <param name="relativePath">Only the relative path to the resource file. The assembly name is retrieved automatically.</param>
-      /// <returns>A new WriteableBitmap containing the pixel data.</returns>
-      [Obsolete("Please use BitmapFactory.FromResource instead of this FromResource method.")]
-      public static WriteableBitmap FromResource(this WriteableBitmap bmp, string relativePath)
-      {
-         return BitmapFactory.FromResource(relativePath);
-      }
+        /// <summary>
+        /// Loads an image from the applications resource file and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
+        /// </summary>
+        /// <param name="bmp">The WriteableBitmap.</param>
+        /// <param name="relativePath">Only the relative path to the resource file. The assembly name is retrieved automatically.</param>
+        /// <returns>A new WriteableBitmap containing the pixel data.</returns>
+        [Obsolete("Please use BitmapFactory.FromResource instead of this FromResource method.")]
+        public static WriteableBitmap FromResource(this WriteableBitmap bmp, string relativePath)
+        {
+            return BitmapFactory.FromResource(relativePath);
+        }
 #endif
 
 #if NETFX_CORE
@@ -312,33 +305,31 @@ namespace System.Windows.Media.Imaging
             return BitmapFactory.FromPixelBuffer(pixelBuffer, width, height);
         }
 #else
-      ///// <summary>
-      ///// Loads an image from the applications content and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
-      ///// </summary>
-      ///// <param name="bmp">The WriteableBitmap.</param>
-      ///// <param name="relativePath">Only the relative path to the content file.</param>
-      ///// <returns>A new WriteableBitmap containing the pixel data.</returns>
-      //[Obsolete("Please use BitmapFactory.FromContent instead of this FromContent method.")]
-      //public static WriteableBitmap FromContent(this WriteableBitmap bmp, string relativePath)
-      //{
-      //   return BitmapFactory.FromContent(relativePath);
-      //}
+        ///// <summary>
+        ///// Loads an image from the applications content and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
+        ///// </summary>
+        ///// <param name="bmp">The WriteableBitmap.</param>
+        ///// <param name="relativePath">Only the relative path to the content file.</param>
+        ///// <returns>A new WriteableBitmap containing the pixel data.</returns>
+        //[Obsolete("Please use BitmapFactory.FromContent instead of this FromContent method.")]
+        //public static WriteableBitmap FromContent(this WriteableBitmap bmp, string relativePath)
+        //{
+        //   return BitmapFactory.FromContent(relativePath);
+        //}
 
-      ///// <summary>
-      ///// Loads the data from an image stream and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
-      ///// </summary>
-      ///// <param name="bmp">The WriteableBitmap.</param>
-      ///// <param name="stream">The stream with the image data.</param>
-      ///// <returns>A new WriteableBitmap containing the pixel data.</returns>
-      //[Obsolete("Please use BitmapFactory.FromStream instead of this FromStream method.")]
-      //public static WriteableBitmap FromStream(this WriteableBitmap bmp, Stream stream)
-      //{
-      //   return BitmapFactory.FromStream(stream);
-      //}
+        ///// <summary>
+        ///// Loads the data from an image stream and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
+        ///// </summary>
+        ///// <param name="bmp">The WriteableBitmap.</param>
+        ///// <param name="stream">The stream with the image data.</param>
+        ///// <returns>A new WriteableBitmap containing the pixel data.</returns>
+        //[Obsolete("Please use BitmapFactory.FromStream instead of this FromStream method.")]
+        //public static WriteableBitmap FromStream(this WriteableBitmap bmp, Stream stream)
+        //{
+        //   return BitmapFactory.FromStream(stream);
+        //}
 #endif
 
-        #endregion
 
-        #endregion
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+//
+using System;
 using System.Runtime;
 using System.Runtime.InteropServices;
 

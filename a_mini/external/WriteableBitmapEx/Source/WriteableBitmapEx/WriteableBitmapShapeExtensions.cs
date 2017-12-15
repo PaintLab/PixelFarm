@@ -1,4 +1,4 @@
-﻿#region Header
+﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of extension methods for the WriteableBitmap class.
@@ -14,7 +14,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 using System;
 
@@ -33,11 +32,8 @@ namespace System.Windows.Media.Imaging
 #endif
  static partial class WriteableBitmapExtensions
     {
-        #region Methods
 
-        #region Draw Shapes
 
-        #region Polyline, Triangle, Quad
 
         /// <summary>
         /// Draws a polyline. Add the first point also at the end of the array if the line should be closed.
@@ -208,9 +204,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region Rectangle
 
         /// <summary>
         /// Draws a rectangle.
@@ -294,9 +288,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region Ellipse
 
         /// <summary>
         /// A Fast Bresenham Type Algorithm For Drawing Ellipses http://homepage.smc.edu/kennedy_john/belipse.pdf 
@@ -480,10 +472,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #endregion
 
-        #endregion
     }
 }

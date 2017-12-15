@@ -1,4 +1,5 @@
-﻿#region Header
+﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+//
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of extension methods for the WriteableBitmap class.
@@ -14,7 +15,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 using System;
 
@@ -33,15 +33,11 @@ namespace System.Windows.Media.Imaging
 #endif
  static partial class WriteableBitmapExtensions
     {
-        #region Fields
 
         internal const int SizeOfArgb = 4;
 
-        #endregion
 
-        #region Methods
 
-        #region General
 
         public static int ConvertColor(double opacity, Color color)
         {
@@ -134,9 +130,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region ForEach
 
         /// <summary>
         /// Applies the given function to all the pixels of the bitmap in 
@@ -207,9 +201,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region Get Pixel / Brightness
 
         /// <summary>
         /// Gets the color of the pixel at the x, y coordinate as integer.  
@@ -280,11 +272,8 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region SetPixel
 
-        #region Without alpha
 
         /// <summary>
         /// Sets the color of the pixel using a precalculated index (faster). 
@@ -321,9 +310,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region With alpha
 
         /// <summary>
         /// Sets the color of the pixel including the alpha value and using a precalculated index (faster). 
@@ -362,9 +349,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region With System.Windows.Media.Color
 
         /// <summary>
         /// Sets the color of the pixel using a precalculated index (faster). 
@@ -471,10 +456,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #endregion
 
-        #endregion
     }
 }

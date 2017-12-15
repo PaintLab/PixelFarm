@@ -1,4 +1,7 @@
-﻿using System;
+﻿//MIT, 2017, WinterDev
+//example and test for WritableBitmap (https://github.com/teichgraf/WriteableBitmapEx) on Gdi+
+
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 

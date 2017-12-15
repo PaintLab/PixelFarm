@@ -1,5 +1,4 @@
-﻿#region Header
-//
+﻿//
 //   Project:           Silverlight procedural Plant
 //
 //   Changed by:        $Author: unknown $
@@ -13,7 +12,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 using System.Windows;
 using System;

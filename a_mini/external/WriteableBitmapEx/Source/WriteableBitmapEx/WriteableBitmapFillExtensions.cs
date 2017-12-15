@@ -1,4 +1,4 @@
-#region Header
+//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of extension methods for the WriteableBitmap class.
@@ -14,7 +14,7 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
+
 
 using System;
 using System.Collections.Generic;
@@ -34,11 +34,8 @@ namespace System.Windows.Media.Imaging
 #endif
  static partial class WriteableBitmapExtensions
     {
-        #region Methods
 
-        #region Fill Shapes
 
-        #region Rectangle
 
         /// <summary>
         /// Draws a filled rectangle.
@@ -158,9 +155,7 @@ namespace System.Windows.Media.Imaging
         }
 
 
-        #endregion
 
-        #region Ellipse
 
         /// <summary>
         /// A Fast Bresenham Type Algorithm For Drawing filled ellipses http://homepage.smc.edu/kennedy_john/belipse.pdf 
@@ -414,9 +409,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region Polygon, Triangle, Quad
 
         /// <summary>
         /// Draws a filled polygon. Add the first point also at the end of the array if the line should be closed.
@@ -539,7 +532,6 @@ namespace System.Windows.Media.Imaging
         }
 
 
-        #region Multiple (possibly nested) Polygons
         /// <summary>
         /// Helper class for storing the data of an edge.
         /// </summary>
@@ -649,7 +641,6 @@ namespace System.Windows.Media.Imaging
         /// <param name="color">The color for the polygon.</param>
         public static void FillPolygonsEvenOdd(this WriteableBitmap bmp, int[][] polygons, int color)
         {
-            #region Algorithm
 
             // Algorithm:
             // This is using a scanline algorithm which is kept similar to the one the FillPolygon() method is using,
@@ -668,7 +659,6 @@ namespace System.Windows.Media.Imaging
             //     containing no more than 4 edges at any moment, regardless of the smoothness of the rendering of the 
             //     letter into two polygons.
 
-            #endregion
 
             int polygonCount = polygons.Length;
             if (polygonCount == 0)
@@ -816,7 +806,6 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
         /// <summary>
         /// Draws a filled quad.
@@ -888,9 +877,7 @@ namespace System.Windows.Media.Imaging
             bmp.FillPolygon(new int[] { x1, y1, x2, y2, x3, y3, x1, y1 }, color);
         }
 
-        #endregion
 
-        #region Beziér
 
         /// <summary>
         /// Draws a filled, cubic Beziér spline defined by start, end and two control points.
@@ -1012,9 +999,7 @@ namespace System.Windows.Media.Imaging
             bmp.FillPolygon(list.ToArray(), color);
         }
 
-        #endregion
 
-        #region Cardinal
 
         /// <summary>
         /// Computes the discrete segment points of a Cardinal spline (cubic) defined by four control points.
@@ -1196,10 +1181,7 @@ namespace System.Windows.Media.Imaging
             bmp.FillPolygon(list.ToArray(), color);
         }
 
-        #endregion
 
-        #endregion
 
-        #endregion
     }
 }

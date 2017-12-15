@@ -9,7 +9,6 @@ namespace WriteableBitmapExBlitSample.Wpf
 {
     public partial class MainWindow
     {
-        #region Fields
 
         WriteableBitmap bmp;
         WriteableBitmap circleBmp;
@@ -21,9 +20,7 @@ namespace WriteableBitmapExBlitSample.Wpf
         private double _lastTime;
         private double _lowestFrameTime;
 
-        #endregion
 
-        #region Contructors
 
         public MainWindow()
         {
@@ -43,9 +40,7 @@ namespace WriteableBitmapExBlitSample.Wpf
             this.MouseMove += new MouseEventHandler(MainPage_MouseMove);
         }
 
-        #endregion
 
-        #region Methods
 
         static WriteableBitmap LoadBitmap(string path)
         {
@@ -56,9 +51,7 @@ namespace WriteableBitmapExBlitSample.Wpf
             }
         }
 
-        #endregion
 
-        #region Eventhandler
 
         void MainPage_MouseMove(object sender, MouseEventArgs e)
         {
@@ -89,6 +82,5 @@ namespace WriteableBitmapExBlitSample.Wpf
             }
         }
 
-        #endregion
     }
 }

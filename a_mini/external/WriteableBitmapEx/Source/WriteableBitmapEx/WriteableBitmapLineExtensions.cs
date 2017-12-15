@@ -1,4 +1,4 @@
-﻿#region Header
+﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of draw line extension and helper methods for the WriteableBitmap class.
@@ -14,7 +14,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -33,7 +32,6 @@ namespace System.Windows.Media.Imaging
 #endif
  static partial class WriteableBitmapExtensions
     {
-        #region Normal line
 
         /// <summary>
         /// Draws a colored line by connecting two points using the Bresenham algorithm.
@@ -562,9 +560,7 @@ namespace System.Windows.Media.Imaging
                 }
             }
         }
-        #endregion
 
-        #region Penned line
 
         /// <summary>
         /// Bitfields used to partition the space into 9 regions
@@ -743,9 +739,7 @@ namespace System.Windows.Media.Imaging
             return code;
         }
 
-        #endregion
 
-        #region Anti-alias line
 
         /// <summary>
         /// Draws an anti-aliased, alpha blended, colored line by connecting two points using Wu's antialiasing algorithm
@@ -1187,9 +1181,7 @@ namespace System.Windows.Media.Imaging
             );
         }
 
-        #endregion
 
-        #region Helper
 
         internal static bool CohenSutherlandLineClipWithViewPortOffset(Rect viewPort, ref float xi0, ref float yi0, ref float xi1, ref float yi1, int offset)
         {
@@ -1362,6 +1354,5 @@ namespace System.Windows.Media.Imaging
             return destPixel;
         }
 
-        #endregion
     }
 }

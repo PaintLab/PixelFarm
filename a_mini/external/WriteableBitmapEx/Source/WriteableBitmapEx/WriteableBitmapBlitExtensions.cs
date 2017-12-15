@@ -1,4 +1,5 @@
-﻿#region Header
+﻿//MIT, 2009-2015, Bill Reiss, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+//
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of blit (copy) extension methods for the WriteableBitmap class.
@@ -14,7 +15,7 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
+
 
 using System;
 
@@ -39,7 +40,6 @@ namespace System.Windows.Media.Imaging
         private const int WhiteG = 255;
         private const int WhiteB = 255;
 
-        #region Enum
 
         /// <summary>
         /// The blending mode.
@@ -82,9 +82,7 @@ namespace System.Windows.Media.Imaging
             None
         }
 
-        #endregion
 
-        #region Methods
 
         /// <summary>
         /// Copies (blits) the pixels from the WriteableBitmap source to the destination WriteableBitmap (this).
@@ -699,6 +697,5 @@ namespace System.Windows.Media.Imaging
         }
 
 
-        #endregion
     }
 }
