@@ -1,6 +1,6 @@
 ﻿//MIT, 2014-2017, WinterDev
 
-
+using System;
 namespace PixelFarm.Drawing
 {
     public abstract class Image : System.IDisposable
@@ -20,14 +20,25 @@ namespace PixelFarm.Drawing
 
         public abstract byte[] CopyInternalBitmapBuffer();
         //--------
-        System.IDisposable innerImage;
-        public static System.IDisposable GetCacheInnerImage(Image img)
+        WeakReference innerImage;
+        public static object GetCacheInnerImage(Image img)
         {
-            return img.innerImage;
+            if (img.innerImage != null && img.innerImage.IsAlive)
+            {
+                return img.innerImage.Target;
+            }
+            return null;
         }
-        public static void SetCacheInnerImage(Image img, System.IDisposable innerImage)
+        public static void ClearCache(Image img)
         {
-            img.innerImage = innerImage;
+            if (img != null)
+            {
+                img.innerImage = null;
+            }
+        }
+        public static void SetCacheInnerImage(Image img, object o)
+        {
+            img.innerImage = new WeakReference(o);
         }
     }
 }
