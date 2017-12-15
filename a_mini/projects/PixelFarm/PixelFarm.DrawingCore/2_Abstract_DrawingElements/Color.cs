@@ -63,6 +63,7 @@
 using System;
 namespace PixelFarm.Drawing
 {
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
     public struct Color
     {
         byte r, g, b, a;
@@ -135,7 +136,10 @@ namespace PixelFarm.Drawing
             }
             return false;
         }
-
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
         public static readonly Color Empty = new Color(0, 0, 0, 0);
         public static readonly Color Transparent = new Color(0, 255, 255, 255);
         public static readonly Color White = new Color(255, 255, 255, 255);
@@ -151,10 +155,7 @@ namespace PixelFarm.Drawing
         public static readonly Color DeepPink = new Color(0xFF, 0xFF, 0x14, 0x93);
         public static readonly Color Magenta = new Color(0xFF, 0xFF, 0, 0xFF);
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+       
         public static bool operator ==(Color c1, Color c2)
         {
             return (uint)((c1.a << 24) | (c1.r << 16) | (c1.g << 8) | (c1.b)) ==
@@ -172,8 +173,8 @@ namespace PixelFarm.Drawing
         public uint ToABGR()
         {
             return (uint)((this.a << 24) | (this.b << 16) | (this.g << 8) | this.r);
-        } 
-        
+        }
+
         public byte Red0To255
         {
             get { return r; }
@@ -191,8 +192,8 @@ namespace PixelFarm.Drawing
             get { return a; }
         }
 
-     
-       
+
+
 
         public Color CreateGradient(Color another, float colorDistanceRatio)
         {
@@ -231,7 +232,7 @@ namespace PixelFarm.Drawing
             return new Color(alpha, red, green, blue);
         }
 
-        
+
 
         //public void AddColor(ColorRGBA c, int cover)
         //{
@@ -277,7 +278,7 @@ namespace PixelFarm.Drawing
             return new Color(255, (byte)((v >> 16) & 0xFF), (byte)((v >> 8) & 0xFF), ((byte)(v & 0xFF)));
         }
 
-       
+
 #if DEBUG
         public override string ToString()
         {

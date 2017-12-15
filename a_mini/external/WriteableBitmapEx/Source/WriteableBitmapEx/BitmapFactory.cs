@@ -187,7 +187,7 @@ namespace System.Windows.Media.Imaging
 #if NET20
             return null;
 #else
-                   using (var bmpStream = Application.GetResourceStream(new Uri(relativePath, UriKind.Relative)).Stream)
+            using (var bmpStream = Application.GetResourceStream(new Uri(relativePath, UriKind.Relative)).Stream)
             {
                 return FromStream(bmpStream);
             }

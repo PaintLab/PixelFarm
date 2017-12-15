@@ -8,20 +8,25 @@ namespace System
     public delegate R Func<T, R>(T t1);
     public delegate R Func<T1, T2, R>(T1 t1, T2 t2);
     public delegate R Func<T1, T2, T3, R>(T1 t1, T2 t2, T3 t3);
-
 }
+namespace System.Runtime.InteropServices
+{
+    public partial class TargetedPatchingOptOutAttribute : Attribute
+    {
+        public TargetedPatchingOptOutAttribute(string msg) { }
+    }
+}
+namespace System.Runtime.CompilerServices
+{
+    public partial class ExtensionAttribute : Attribute { }
+}
+
 namespace System.Windows.Media.Imaging
 {
-    public class GeneralTransform
+    public abstract class GeneralTransform
     {
-        public Rect TransformBounds(Rect r1)
-        {
-            return new Rect();
-        }
-        public Point Transform(Point p)
-        {
-            return new Point();
-        }
+        public abstract Rect TransformBounds(Rect r1);
+        public abstract Point Transform(Point p);
         MatrixTransform _inverseVersion;
         public MatrixTransform Inverse
         {
@@ -35,15 +40,32 @@ namespace System.Windows.Media.Imaging
                 return _inverseVersion;
             }
         }
-        public Rect TransformBounds()
-        {
-            return new Rect();
-        }
+
     }
     public class MatrixTransform : GeneralTransform
     {
+        System.Drawing.Drawing2D.Matrix mm1 = new System.Drawing.Drawing2D.Matrix();
 
+        System.Drawing.PointF[] _tmp = new Drawing.PointF[1];
 
+        public override Point Transform(Point p)
+        {
+            _tmp[0] = new Drawing.PointF((float)p.X, (float)p.Y);
+            mm1.TransformPoints(_tmp);
+            return new Point(_tmp[0].X, _tmp[0].Y);
+        }
+
+        System.Drawing.PointF[] _tmp2 = new Drawing.PointF[4];
+        public override Rect TransformBounds(Rect r1)
+        {
+            _tmp2[0] = new Drawing.PointF((float)r1.Left, (float)r1.Top);
+            _tmp2[1] = new Drawing.PointF((float)r1.Right, (float)r1.Top);
+            _tmp2[2] = new Drawing.PointF((float)r1.Right, (float)r1.Bottom);
+            _tmp2[3] = new Drawing.PointF((float)r1.Left, (float)r1.Bottom);
+            //find a new bound
+
+            return new Rect(_tmp2[0].X, _tmp2[0].Y, _tmp2[2].X - _tmp[0].X, _tmp2[2].Y - _tmp2[1].Y);
+        }
     }
 
 
@@ -174,6 +196,22 @@ namespace System.Windows.Media.Imaging
             return (uint)((c1.A << 24) | (c1.R << 16) | (c1.G << 8) | (c1.B)) !=
                   (uint)((c2.A << 24) | (c2.R << 16) | (c2.G << 8) | (c2.B));
         }
+        public override bool Equals(object obj)
+        {
+            if (obj is Color)
+            {
+                Color c = (Color)obj;
+                return c.A == this.A &&
+                    c.B == this.B &&
+                    c.R == this.R &&
+                    c.G == this.G;
+            }
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
     public struct Colors
     {
@@ -182,37 +220,22 @@ namespace System.Windows.Media.Imaging
     }
     public class WriteableBitmap
     {
+        //in this version , only 32 bits
+
         public WriteableBitmap(int w, int h)
+        {
+
+        }
+        public WriteableBitmap(int w, int h, int[] orgBuffer)
         {
             this.PixelWidth = w;
             this.PixelHeight = h;
+            this.Pixels = orgBuffer;
         }
-        public int PixelWidth { get; set; }
-        public int PixelHeight { get; set; }
-        public int[] Pixels { get; set; }
+        public int PixelWidth { get; private set; }
+        public int PixelHeight { get; private set; }
+        public int[] Pixels { get; private set; }
     }
 
-
-    //public static class BitmapContext
-    //{
-    //    public static void BlockCopy()
-    //    {
-    //    }
-    //}
-}
-namespace System.Runtime.InteropServices
-{
-    public partial class TargetedPatchingOptOutAttribute : Attribute
-    {
-        public TargetedPatchingOptOutAttribute(string msg)
-        {
-
-        }
-    }
-}
-
-namespace System.Runtime.CompilerServices
-{
-    public partial class ExtensionAttribute : Attribute { }
 }
 

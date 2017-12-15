@@ -63,11 +63,14 @@ namespace PixelFarm.Agg.Sample_Images
             }
         }
 
+        AffinePlan[] affinePlan1 = new[] { AffinePlan.Translate(0, 200) }; //test
         public override void Draw(CanvasPainter p)
         {
             p.Clear(Drawing.Color.White);
-            p.DrawImage(actualImage, 0, 200);
+            //p.DrawImage(actualImage, 0, 200);
+            p.DrawImage(actualImage, affinePlan1);
             p.DrawImage(actualImage, affinePlans);
+            //p.DrawImage(actualImage, 100,200);
 
             //p.FillColor = Drawing.Color.Blue;
             //p.FillRectangle(0, 0, 5, 5);
