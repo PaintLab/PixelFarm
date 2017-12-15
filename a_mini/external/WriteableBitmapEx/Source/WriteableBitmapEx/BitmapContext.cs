@@ -158,6 +158,53 @@ namespace System.Windows.Media.Imaging
 #endif
         }
 
+#if NET20
+        public int[] Pixels { get { return _writeableBitmap.Pixels; } }
+        public void Dispose() { }
+
+        /// <summary>
+        /// Gets the length of the Pixels array 
+        /// </summary>
+        public int Length { get { return _writeableBitmap.Pixels.Length; } }
+
+        /// <summary>
+        /// Performs a Copy operation from source BitmapContext to destination BitmapContext
+        /// </summary>
+        /// <remarks>Equivalent to calling Buffer.BlockCopy in Silverlight, or native memcpy in WPF</remarks>
+        public static void BlockCopy(BitmapContext src, int srcOffset, BitmapContext dest, int destOffset, int count)
+        {
+            Buffer.BlockCopy(src.Pixels, srcOffset, dest.Pixels, destOffset, count);
+        }
+
+        /// <summary>
+        /// Performs a Copy operation from source Array to destination BitmapContext
+        /// </summary>
+        /// <remarks>Equivalent to calling Buffer.BlockCopy in Silverlight, or native memcpy in WPF</remarks>
+        public static void BlockCopy(Array src, int srcOffset, BitmapContext dest, int destOffset, int count)
+        {
+            Buffer.BlockCopy(src, srcOffset, dest.Pixels, destOffset, count);
+        }
+
+        /// <summary>
+        /// Performs a Copy operation from source BitmapContext to destination Array
+        /// </summary>
+        /// <remarks>Equivalent to calling Buffer.BlockCopy in Silverlight, or native memcpy in WPF</remarks>
+        public static void BlockCopy(BitmapContext src, int srcOffset, Array dest, int destOffset, int count)
+        {
+            Buffer.BlockCopy(src.Pixels, srcOffset, dest, destOffset, count);
+        }
+
+        /// <summary>
+        /// Clears the BitmapContext, filling the underlying bitmap with zeros
+        /// </summary>
+        public void Clear()
+        {
+            var pixels = _writeableBitmap.Pixels;
+            Array.Clear(pixels, 0, pixels.Length);
+        }
+ 
+#endif
+
 #if NETFX_CORE
         private unsafe void CopyPixels()
         {
