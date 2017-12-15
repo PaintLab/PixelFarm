@@ -143,7 +143,7 @@ namespace PixelFarm.Agg.Imaging
             //} 
         }
 
-        public static void CopyFromGdiPlusBitmapSameSize(
+        public static void CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(
            Bitmap windowsBitmap,
            ActualImage actualImage)
         {
@@ -154,8 +154,8 @@ namespace PixelFarm.Agg.Imaging
                       new Rectangle(0, 0,
                           w,
                           h),
-                          System.Drawing.Imaging.ImageLockMode.ReadWrite,
-                          windowsBitmap.PixelFormat);
+                          System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                          System.Drawing.Imaging.PixelFormat.Format32bppArgb); //read as 32 bits
             IntPtr scan0 = bitmapData1.Scan0;
             int stride = bitmapData1.Stride;
 
@@ -169,8 +169,7 @@ namespace PixelFarm.Agg.Imaging
                 byte* src = (byte*)scan0;
                 for (int y = h; y > 0; --y)
                 {
-                    // byte* target = targetH + ((y - 1) * stride);
-
+                    // byte* target = targetH + ((y - 1) * stride); 
                     System.Runtime.InteropServices.Marshal.Copy(
                           (IntPtr)src,//src
                           targetBuffer, startRowAt, stride);

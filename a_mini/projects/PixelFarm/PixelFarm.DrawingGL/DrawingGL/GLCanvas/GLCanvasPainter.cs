@@ -219,6 +219,8 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawImage(ActualImage actualImage, double x, double y)
         {
+            
+
             GLBitmap glBmp = new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
             _canvas.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();

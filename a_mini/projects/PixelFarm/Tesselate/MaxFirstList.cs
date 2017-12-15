@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 namespace MiniCollection
 {
+
+    //TODO: review this again....
     //-----
     //design for our tess only
     //not for general use.
@@ -23,7 +25,7 @@ namespace MiniCollection
             return this.Data.ToString();
         }
 #endif
-    }
+    } 
 
     public class MaxFirstList<T>
         where T : IComparable<T>

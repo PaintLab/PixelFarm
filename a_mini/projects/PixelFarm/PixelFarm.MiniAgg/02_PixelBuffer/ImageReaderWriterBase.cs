@@ -643,12 +643,7 @@ namespace PixelFarm.Agg
                            actualImage.Height,
                            actualImage.BitDepth,
                            ActualImage.GetBuffer(actualImage),
-                           pixelBlenderRGBA ?? (pixelBlenderRGBA = new PixelBlenderBGRA()));
-                        //Attach(actualImage.Width,
-                        //    actualImage.Height,
-                        //    actualImage.BitDepth,
-                        //    ActualImage.GetBuffer(actualImage),
-                        //    pixelBlenderRGBA ?? (pixelBlenderRGBA = new PixelBlenderGammaBGRA(0.8f)));
+                           pixelBlenderRGBA ?? (pixelBlenderRGBA = new PixelBlenderBGRA())); 
                     }
                     break;
                 case PixelFormat.GrayScale8:
@@ -661,6 +656,11 @@ namespace PixelFarm.Agg
                     }
                     break;
                 case PixelFormat.RGB24:
+                    {
+
+
+                    }
+                    break;
                 default:
                     {
                         throw new NotSupportedException();

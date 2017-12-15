@@ -39,9 +39,11 @@ namespace PixelFarm.Agg.Sample_Images
     public class BasicBitmapRendering : DemoBase
     {
         ActualImage actualImage;
+
         public override void Init()
         {
-            this.actualImage = LoadImage(RootDemoPath.Path + "\\plain01.png");
+            //actualImage2 = LoadImage(RootDemoPath.Path + "\\plain01.png");
+            actualImage = LoadImage(RootDemoPath.Path + "\\02.jpg");
         }
 
         static ActualImage LoadImage(string filename)
@@ -52,23 +54,24 @@ namespace PixelFarm.Agg.Sample_Images
                 //read to image buffer 
                 int bmpW = bmp.Width;
                 int bmpH = bmp.Height;
-                ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFormat.ARGB32);
-                BitmapHelper.CopyFromGdiPlusBitmapSameSize(bmp, actualImage);
-                return actualImage;
+                ActualImage img = new ActualImage(bmpW, bmpH, PixelFormat.ARGB32);
+                BitmapHelper.CopyFromGdiPlusBitmapSameSizeTo32BitsBuffer(bmp, img);
+                return img;
             }
         }
 
         public override void Draw(CanvasPainter p)
         {
+
             p.DrawImage(actualImage, 0, 0);
-            p.DrawImage(actualImage,
-                    AffinePlan.Translate(actualImage.Width * 2, actualImage.Height * 2),
-                    AffinePlan.Scale(0.5));
-            p.FillColor = Drawing.Color.Blue;
-            p.FillRectangle(0, 0, 5, 5);
-            p.FillColor = Drawing.Color.Green;
-            p.FillRectangle(actualImage.Width, actualImage.Height,
-                actualImage.Width + 5, actualImage.Height + 5);
+            //p.DrawImage(actualImage,
+            //        AffinePlan.Translate(actualImage.Width * 2, actualImage.Height * 2),
+            //        AffinePlan.Scale(0.5));
+            //p.FillColor = Drawing.Color.Blue;
+            //p.FillRectangle(0, 0, 5, 5);
+            //p.FillColor = Drawing.Color.Green;
+            //p.FillRectangle(actualImage.Width, actualImage.Height,
+            //    actualImage.Width + 5, actualImage.Height + 5); 
         }
         public override void MouseDrag(int x, int y)
         {

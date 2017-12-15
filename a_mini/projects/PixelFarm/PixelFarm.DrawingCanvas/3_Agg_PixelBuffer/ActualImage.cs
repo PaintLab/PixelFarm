@@ -76,7 +76,7 @@ namespace PixelFarm.Agg
                     throw new NotSupportedException();
             }
         }
-        private ActualImage() { }
+     
 
         public override void Dispose()
         {
