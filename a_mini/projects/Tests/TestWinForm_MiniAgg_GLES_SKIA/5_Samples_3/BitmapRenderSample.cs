@@ -39,11 +39,14 @@ namespace PixelFarm.Agg.Sample_Images
     public class BasicBitmapRendering : DemoBase
     {
         ActualImage actualImage;
-
+        AffinePlan[] affinePlans;
         public override void Init()
         {
             //actualImage2 = LoadImage(RootDemoPath.Path + "\\plain01.png");
             actualImage = LoadImage(RootDemoPath.Path + "\\02.jpg");
+            affinePlans = new AffinePlan[] {
+                AffinePlan.Translate(actualImage.Width * 2, actualImage.Height * 2),
+                AffinePlan.Scale(0.5)};
         }
 
         static ActualImage LoadImage(string filename)
@@ -62,11 +65,10 @@ namespace PixelFarm.Agg.Sample_Images
 
         public override void Draw(CanvasPainter p)
         {
+            p.Clear(Drawing.Color.White);
+            p.DrawImage(actualImage, 0, 200);
+            p.DrawImage(actualImage, affinePlans);
 
-            p.DrawImage(actualImage, 0, 0);
-            //p.DrawImage(actualImage,
-            //        AffinePlan.Translate(actualImage.Width * 2, actualImage.Height * 2),
-            //        AffinePlan.Scale(0.5));
             //p.FillColor = Drawing.Color.Blue;
             //p.FillRectangle(0, 0, 5, 5);
             //p.FillColor = Drawing.Color.Green;

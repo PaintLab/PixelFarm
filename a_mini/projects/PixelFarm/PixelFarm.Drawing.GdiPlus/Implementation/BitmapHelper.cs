@@ -164,12 +164,13 @@ namespace PixelFarm.Agg.Imaging
 
             unsafe
             {
+                
                 //target 
                 int startRowAt = ((h - 1) * stride);
                 byte* src = (byte*)scan0;
                 for (int y = h; y > 0; --y)
                 {
-                    // byte* target = targetH + ((y - 1) * stride); 
+                   
                     System.Runtime.InteropServices.Marshal.Copy(
                           (IntPtr)src,//src
                           targetBuffer, startRowAt, stride);
