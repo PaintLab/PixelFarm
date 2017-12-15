@@ -3,13 +3,12 @@
 using System;
 namespace PixelFarm.Drawing
 {
-    public abstract class Image : System.IDisposable
+
+    public abstract class Image : IDisposable
     {
         public abstract void Dispose();
         public abstract int Width { get; }
         public abstract int Height { get; }
-
-
         public Size Size
         {
             get { return new Size(this.Width, this.Height); }
@@ -18,7 +17,8 @@ namespace PixelFarm.Drawing
         public abstract int ReferenceX { get; }
         public abstract int ReferenceY { get; }
 
-        public abstract byte[] CopyInternalBitmapBuffer();
+        public abstract void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest);
+
         //--------
         WeakReference innerImage;
         public static object GetCacheInnerImage(Image img)
@@ -40,5 +40,31 @@ namespace PixelFarm.Drawing
         {
             img.innerImage = new WeakReference(o);
         }
+
+
+
+
+        //----------------------------
+        public enum RequestType
+        {
+            Rent,
+            Copy
+        }
+        public struct ImgBufferRequestArgs
+        {
+            public ImgBufferRequestArgs(int requestPixelFormat, RequestType reqType)
+            {
+                this.RequestType = reqType;
+                this.RequestPixelFormat = requestPixelFormat;
+                this.OutputBuffer = null;
+               
+            }
+            public int RequestPixelFormat { get; private set; }
+            public RequestType RequestType { get; private set; }
+
+            public byte[] OutputBuffer { get; set; }
+
+        }
     }
+
 }

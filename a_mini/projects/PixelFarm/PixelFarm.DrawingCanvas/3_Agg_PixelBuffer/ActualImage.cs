@@ -19,6 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using PixelFarm.Drawing;
 
 namespace PixelFarm.Agg
 {
@@ -113,26 +114,6 @@ namespace PixelFarm.Agg
 
 
 
-        ////----------------
-        //MyBitmapData lockingBmp;
-        //public override BitmapData LockBits()
-        //{
-        //    return this.lockingBmp = new Agg.ActualImage.MyBitmapData(pixelBuffer);
-        //}
-        //public override void UnlockBits(BitmapData bmpdata)
-        //{
-        //    if (bmpdata == lockingBmp)
-        //    {
-        //        this.lockingBmp.Dispose();
-        //        lockingBmp = null;
-        //    }
-        //    else
-        //    {
-        //        throw new System.NotSupportedException();
-        //    }
-        //}
-        //----------------
-
         public static byte[] GetBuffer(ActualImage img)
         {
             return img.pixelBuffer;
@@ -186,7 +167,7 @@ namespace PixelFarm.Agg
             return img;
         }
 
-        public override byte[] CopyInternalBitmapBuffer()
+        public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
         {
             if (pixelFormat != PixelFormat.ARGB32)
             {
@@ -194,8 +175,9 @@ namespace PixelFarm.Agg
             }
             byte[] newBuff = new byte[this.pixelBuffer.Length];
             Buffer.BlockCopy(this.pixelBuffer, 0, newBuff, 0, newBuff.Length);
-            return newBuff;
+            buffRequest.OutputBuffer = newBuff;
         }
+        
 
 
         public static int CalculateStride(int width, PixelFormat format)

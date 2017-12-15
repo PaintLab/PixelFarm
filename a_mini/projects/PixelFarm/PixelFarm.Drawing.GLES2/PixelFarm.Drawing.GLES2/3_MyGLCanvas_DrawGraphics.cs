@@ -189,7 +189,10 @@ namespace PixelFarm.Drawing.GLES2
                 //we should create 'borrow' method ? => send direct exact ptr to img buffer
 
                 //for now, create a new one -- after we copy we, don't use it
-                byte[] copy = image.CopyInternalBitmapBuffer();
+
+                var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
+                image.RequestInternalBuffer(ref req);
+                byte[] copy = req.OutputBuffer;
                 var glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, copy, false);
                 Image.SetCacheInnerImage(image, glBmp);
                 return glBmp;
