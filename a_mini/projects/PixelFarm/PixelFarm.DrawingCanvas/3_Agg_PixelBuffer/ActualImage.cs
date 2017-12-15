@@ -110,6 +110,9 @@ namespace PixelFarm.Agg
         public int Stride { get { return this.stride; } }
         public int BitDepth { get { return this.bitDepth; } }
         public bool IsBigEndian { get; set; }
+
+
+
         ////----------------
         //MyBitmapData lockingBmp;
         //public override BitmapData LockBits()
@@ -185,10 +188,41 @@ namespace PixelFarm.Agg
 
         public override byte[] CopyInternalBitmapBuffer()
         {
+            if (pixelFormat != PixelFormat.ARGB32)
+            {
+                throw new NotSupportedException();
+            }
             byte[] newBuff = new byte[this.pixelBuffer.Length];
             Buffer.BlockCopy(this.pixelBuffer, 0, newBuff, 0, newBuff.Length);
             return newBuff;
         }
+
+
+        public static int CalculateStride(int width, PixelFormat format)
+        {
+            //stride calcuation helper
+
+            switch (format)
+            {
+                case PixelFormat.ARGB32:
+                    return width * (32 / 8);
+                case PixelFormat.GrayScale8:
+                    {
+                        const int bitDepth = 8; //bit per pixel
+                        const int bytesPerPixel = (bitDepth + 7) / 8;
+                        return 4 * ((width * bytesPerPixel + 3) / 4);
+                    }
+                case PixelFormat.RGB24:
+                    {
+                        const int bitDepth = 24; //bit per pixel
+                        const int bytesPerPixel = (bitDepth + 7) / 8;
+                        return 4 * ((width * bytesPerPixel + 3) / 4);
+                    }
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
 
 
         //class MyBitmapData : PixelFarm.Drawing.BitmapData, IDisposable

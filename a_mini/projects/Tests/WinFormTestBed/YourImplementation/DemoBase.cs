@@ -61,10 +61,13 @@ namespace LayoutFarm
 
         public override byte[] CopyInternalBitmapBuffer()
         {
+           
             var bmpData = innerImage.LockBits(new System.Drawing.Rectangle(0, 0, width, height),
                 System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                 innerImage.PixelFormat);
-            int size = bmpData.Stride * bmpData.Height;
+                System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            int stride = PixelFarm.Agg.ActualImage.CalculateStride(bmpData.Width, PixelFarm.Agg.PixelFormat.ARGB32);
+            int size = stride * bmpData.Height;
             byte[] newBuff = new byte[size];
             System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, newBuff, 0, size);
             innerImage.UnlockBits(bmpData);
