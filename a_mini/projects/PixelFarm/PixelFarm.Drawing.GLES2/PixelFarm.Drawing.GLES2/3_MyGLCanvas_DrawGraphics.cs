@@ -144,16 +144,16 @@ namespace PixelFarm.Drawing.GLES2
         /// <exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception>
         public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
-            //TODO: review here 
-            //painter1.DrawImage(image, destRect.X, destRect.Y);
-            throw new MyGLCanvasException();
-            //gx.DrawImage(image.InnerImage as System.Drawing.Image,
-            //    destRect.ToRectF(),
-            //    srcRect.ToRectF(),
-            //    System.Drawing.GraphicsUnit.Pixel);
+            DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
+            if (glbmp != null)
+            {
+                painter1.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, this.Height - destRect.Top);
+            }
         }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
+            //...
+
             throw new MyGLCanvasException();
             //int j = destAndSrcPairs.Length;
             //if (j > 1)
@@ -208,7 +208,7 @@ namespace PixelFarm.Drawing.GLES2
             {
                 painter1.Canvas.DrawImage(glbmp, destRect.X, this.Height - destRect.Y, destRect.Width, destRect.Height);
             }
- 
+
         }
         public override void FillPath(Color color, GraphicsPath gfxPath)
         {
