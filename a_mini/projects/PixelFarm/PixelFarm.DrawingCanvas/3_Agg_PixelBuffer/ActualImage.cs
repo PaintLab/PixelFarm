@@ -31,6 +31,7 @@ namespace PixelFarm.Agg
         RGB24,
         GrayScale8,
     }
+
     public sealed class ActualImage : PixelFarm.Drawing.Image
     {
         int width;
@@ -180,6 +181,13 @@ namespace PixelFarm.Agg
                 }
             }
             return img;
+        }
+
+        public override byte[] CopyInternalBitmapBuffer()
+        {
+            byte[] newBuff = new byte[this.pixelBuffer.Length];
+            Buffer.BlockCopy(this.pixelBuffer, 0, newBuff, 0, newBuff.Length);
+            return newBuff;
         }
 
 

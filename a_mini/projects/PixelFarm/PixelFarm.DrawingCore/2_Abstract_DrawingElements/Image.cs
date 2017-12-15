@@ -18,6 +18,7 @@ namespace PixelFarm.Drawing
         public abstract int ReferenceX { get; }
         public abstract int ReferenceY { get; }
 
+        public abstract byte[] CopyInternalBitmapBuffer();
         //--------
         System.IDisposable innerImage;
         public static System.IDisposable GetCacheInnerImage(Image img)

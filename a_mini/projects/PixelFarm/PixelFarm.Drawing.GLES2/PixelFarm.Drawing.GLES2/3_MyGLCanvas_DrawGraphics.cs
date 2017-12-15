@@ -175,26 +175,40 @@ namespace PixelFarm.Drawing.GLES2
             //    }
             //}
         }
+
+        DrawingGL.GLBitmap ResolveForGLBitmap(Image image)
+        {
+            var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
+            if (cacheBmp != null)
+            {
+                return cacheBmp;
+            }
+            else
+            {
+                //TODO: review here
+                //we should create 'borrow' method ? => send direct exact ptr to img buffer
+
+                //for now, create a new one -- after we copy we, don't use it
+                byte[] copy = image.CopyInternalBitmapBuffer();
+                var glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, copy, false);
+                Image.SetCacheInnerImage(image, glBmp);
+                return glBmp;
+            }
+        }
         /// <summary>
         /// Draws the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
         /// </summary>
         /// <param name="image"><see cref="T:System.Drawing.Image"/> to draw. </param><param name="destRect"><see cref="T:System.Drawing.Rectangle"/> structure that specifies the location and size of the drawn image. </param><exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
         public override void DrawImage(Image image, RectangleF destRect)
         {
-            throw new MyGLCanvasException();
-            //if (image.IsReferenceImage)
-            //{
-            //    gx.DrawImage(image.InnerImage as System.Drawing.Image,
-            //        destRect.ToRectF(),
-            //         new System.Drawing.RectangleF(
-            //             image.ReferenceX, image.ReferenceY,
-            //             image.Width, image.Height),
-            //        System.Drawing.GraphicsUnit.Pixel);
-            //}
-            //else
-            //{
-            //    gx.DrawImage(image.InnerImage as System.Drawing.Image, destRect.ToRectF());
-            //}
+            //1. image from outside
+            //resolve to internal presentation 
+            DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
+            if (glbmp != null)
+            {
+                painter1.Canvas.DrawImage(glbmp, destRect.X, this.Height - destRect.Y, destRect.Width, destRect.Height);
+            }
+ 
         }
         public override void FillPath(Color color, GraphicsPath gfxPath)
         {
