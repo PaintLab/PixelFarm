@@ -5,8 +5,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.VertexSource;
-using PixelFarm.Drawing.Fonts;
+using PixelFarm.Agg.VertexSource; 
 
 
 namespace PixelFarm.DrawingGL

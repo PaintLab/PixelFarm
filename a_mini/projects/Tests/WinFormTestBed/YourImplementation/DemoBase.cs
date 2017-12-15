@@ -41,6 +41,7 @@ namespace LayoutFarm
         byte[] rawImageBuffer;
         public DemoBitmap(int w, int h, byte[] rawImageBuffer, bool isInvertedImg = false)
         {
+            
             this.width = w;
             this.height = h;
             this.rawImageBuffer = rawImageBuffer;
