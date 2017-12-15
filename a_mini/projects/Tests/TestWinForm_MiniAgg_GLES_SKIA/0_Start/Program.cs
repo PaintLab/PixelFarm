@@ -14,21 +14,24 @@ namespace Mini
         [STAThread]
         static void Main()
         {
-            OpenTK.Toolkit.Init();
+
+
+            RootDemoPath.Path = @"..\Data";
+#if GL_ENABLE
+            YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
+#endif
+            //you can use your font loader
+            YourImplementation.BootStrapWinGdi.SetupDefaultValues();
+            //default text breaker, this bridge between              
+
+
             //---------------------------------------------------
             //register image loader
             Mini.DemoHelper.RegisterImageLoader(LoadImage);
             //----------------------------
-            
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            RootDemoPath.Path = @"..\Data";
-            //you can use your font loader
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.GetFontLoader());
-#if GL_ENABLE
-            //PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
-#endif
-
             Application.Run(new FormDev());
         }
         static PixelFarm.Agg.ActualImage LoadImage(string filename)
