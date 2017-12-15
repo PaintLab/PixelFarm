@@ -218,7 +218,7 @@ namespace System.Windows.Media.Imaging
     }
     public struct Colors
     {
-        public static Color White = new Color();
+        public static Color White = Color.FromArgb(255, 255, 255, 255);
 
     }
     public class WriteableBitmap
