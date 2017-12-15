@@ -220,8 +220,7 @@ namespace System.Windows.Media.Imaging
     }
     public class WriteableBitmap
     {
-        //in this version , only 32 bits
-
+        //in this version , only 32 bits 
         public WriteableBitmap(int w, int h)
         {
 
@@ -236,6 +235,8 @@ namespace System.Windows.Media.Imaging
         public int PixelHeight { get; private set; }
         public int[] Pixels { get; private set; }
     }
+
+
 
 }
 

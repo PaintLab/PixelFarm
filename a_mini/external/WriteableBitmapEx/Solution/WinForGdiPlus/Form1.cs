@@ -18,28 +18,23 @@ namespace WinFormGdiPlus
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Bitmap bmp1 = new Bitmap(400, 500);
-            var bmpdata = bmp1.LockBits(new Rectangle(0, 0, bmp1.Width, bmp1.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            using (Bitmap bmp1 = new Bitmap(400, 500))
+            using (var bmplock = bmp1.Lock())
+            {
+                WriteableBitmap wb = bmplock.GetWritableBitmap();
+                //lines
+                wb.DrawLine(0, 0, 100, 100, System.Windows.Media.Imaging.Color.FromArgb(255, 255, 0, 0)); //red
+                wb.DrawLine(0, 100, 100, 0, System.Windows.Media.Imaging.Color.FromArgb(255, 0, 0, 255)); //blue
 
-            int bufferLenInBytes = bmpdata.Stride * bmpdata.Height;
-            int[] buffer = new int[bufferLenInBytes / 4];
+                wb.DrawLineAa(100, 0, 200, 100, System.Windows.Media.Imaging.Color.FromArgb(255, 255, 0, 0));
+                wb.DrawLineAa(100, 100, 200, 0, System.Windows.Media.Imaging.Color.FromArgb(255, 0, 0, 255)); //blue 
+                wb.DrawEllipse(200, 0, 300, 100, System.Windows.Media.Imaging.Color.FromArgb(255, 255, 0, 0));
 
-            System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, bufferLenInBytes / 4);
+                //
+                bmplock.WriteAndUnlock();
 
-            WriteableBitmap wb = new WriteableBitmap(bmp1.Width, bmp1.Height, buffer);
-
-            //lines
-            wb.DrawLine(0, 0, 100, 100, System.Windows.Media.Imaging.Color.FromArgb(255, 255, 0, 0)); //red
-            wb.DrawLine(0, 100, 100, 0, System.Windows.Media.Imaging.Color.FromArgb(255, 0, 0, 255)); //blue
-
-            wb.DrawLineAa(100, 0, 200, 100, System.Windows.Media.Imaging.Color.FromArgb(255, 255, 0, 0));
-            wb.DrawLineAa(100, 100, 200, 0, System.Windows.Media.Imaging.Color.FromArgb(255, 0, 0, 255)); //blue
-
-            //-------
-            //write back
-            System.Runtime.InteropServices.Marshal.Copy(buffer, 0, bmpdata.Scan0, bufferLenInBytes / 4);
-            bmp1.UnlockBits(bmpdata);
-            bmp1.Save("d:\\WImageTest\\a0002.png");
+                bmp1.Save("d:\\WImageTest\\a0002.png");
+            }
 
         }
     }
