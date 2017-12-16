@@ -8,12 +8,12 @@ namespace WinFormGdiPlus
     public class ParticleEmitter
     {
 
-        public Point Center { get; set; }
+        public PointD Center { get; set; }
         public List<Particle> Particles = new List<Particle>();
         Random rand = new Random();
-        public WriteableBitmap TargetBitmap;
-        public WriteableBitmap ParticleBitmap;
-        Rect sourceRect = new Rect(0, 0, 32, 32);
+        public BitmapBuffer TargetBitmap;
+        public BitmapBuffer ParticleBitmap;
+        RectD sourceRect = new RectD(0, 0, 32, 32);
         double elapsedRemainder;
         double updateInterval = .003;
         HslColor particleColor = new HslColor();
@@ -35,7 +35,7 @@ namespace WinFormGdiPlus
             double angle = Math.PI * 2 * rand.Next(10000) / 10000;
             p.Velocity.X = Math.Sin(angle) * speed;
             p.Velocity.Y = Math.Cos(angle) * speed;
-            p.Position = new Point(Center.X - 16, Center.Y - 16);
+            p.Position = new PointD(Center.X - 16, Center.Y - 16);
             p.Color = particleColor.ToColor();
             p.Lifespan = .5 + rand.Next(200) / 1000d;
             p.Initiailize();

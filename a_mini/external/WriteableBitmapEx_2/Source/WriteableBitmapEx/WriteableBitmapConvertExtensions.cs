@@ -34,7 +34,7 @@ namespace PixelFarm.Agg
         /// <param name="offset">The starting Pixels index.</param>
         /// <param name="count">The number of Pixels to copy, -1 for all</param>
         /// <returns>The color buffer as byte ARGB values.</returns>
-        public static byte[] ToByteArray(this WriteableBitmap bmp, int offset, int count)
+        public static byte[] ToByteArray(this BitmapBuffer bmp, int offset, int count)
         {
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
@@ -57,7 +57,7 @@ namespace PixelFarm.Agg
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="count">The number of pixels to copy.</param>
         /// <returns>The color buffer as byte ARGB values.</returns>
-        public static byte[] ToByteArray(this WriteableBitmap bmp, int count)
+        public static byte[] ToByteArray(this BitmapBuffer bmp, int count)
         {
             return bmp.ToByteArray(0, count);
         }
@@ -67,7 +67,7 @@ namespace PixelFarm.Agg
         /// </summary>
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <returns>The color buffer as byte ARGB values.</returns>
-        public static byte[] ToByteArray(this WriteableBitmap bmp)
+        public static byte[] ToByteArray(this BitmapBuffer bmp)
         {
             return bmp.ToByteArray(0, -1);
         }
@@ -80,7 +80,7 @@ namespace PixelFarm.Agg
         /// <param name="count">The number of bytes to copy from the buffer.</param>
         /// <param name="buffer">The color buffer as byte ARGB values.</param>
         /// <returns>The WriteableBitmap that was passed as parameter.</returns>
-        public static WriteableBitmap FromByteArray(this WriteableBitmap bmp, byte[] buffer, int offset, int count)
+        public static BitmapBuffer FromByteArray(this BitmapBuffer bmp, byte[] buffer, int offset, int count)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -96,7 +96,7 @@ namespace PixelFarm.Agg
         /// <param name="count">The number of bytes to copy from the buffer.</param>
         /// <param name="buffer">The color buffer as byte ARGB values.</param>
         /// <returns>The WriteableBitmap that was passed as parameter.</returns>
-        public static WriteableBitmap FromByteArray(this WriteableBitmap bmp, byte[] buffer, int count)
+        public static BitmapBuffer FromByteArray(this BitmapBuffer bmp, byte[] buffer, int count)
         {
             return bmp.FromByteArray(buffer, 0, count);
         }
@@ -107,7 +107,7 @@ namespace PixelFarm.Agg
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="buffer">The color buffer as byte ARGB values.</param>
         /// <returns>The WriteableBitmap that was passed as parameter.</returns>
-        public static WriteableBitmap FromByteArray(this WriteableBitmap bmp, byte[] buffer)
+        public static BitmapBuffer FromByteArray(this BitmapBuffer bmp, byte[] buffer)
         {
             return bmp.FromByteArray(buffer, 0, buffer.Length);
         }
@@ -120,7 +120,7 @@ namespace PixelFarm.Agg
         /// </summary>
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="destination">The destination stream.</param>
-        public static void WriteTga(this WriteableBitmap bmp, Stream destination)
+        public static void WriteTga(this BitmapBuffer bmp, Stream destination)
         {
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {

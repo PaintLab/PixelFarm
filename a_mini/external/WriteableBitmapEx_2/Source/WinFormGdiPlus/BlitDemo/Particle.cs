@@ -6,9 +6,9 @@ namespace WinFormGdiPlus
     public class Particle
     {
 
-        public Point Position;
-        public Point Velocity;
-        public Color Color;
+        public PointD Position;
+        public PointD Velocity;
+        public ColorInt Color;
         public double Lifespan;
         public double Elapsed;
 

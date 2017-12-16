@@ -28,7 +28,7 @@ namespace PixelFarm.Agg
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="points">The points of the polyline in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, ..., xn, yn).</param>
         /// <param name="color">The color for the line.</param>
-        public static void DrawPolyline(this WriteableBitmap bmp, int[] points, Color color)
+        public static void DrawPolyline(this BitmapBuffer bmp, int[] points, ColorInt color)
         {
 
             bmp.DrawPolyline(points, ConvertColor(color));
@@ -40,7 +40,7 @@ namespace PixelFarm.Agg
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="points">The points of the polyline in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, ..., xn, yn).</param>
         /// <param name="color">The color for the line.</param>
-        public static void DrawPolyline(this WriteableBitmap bmp, int[] points, int color)
+        public static void DrawPolyline(this BitmapBuffer bmp, int[] points, int color)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -68,7 +68,7 @@ namespace PixelFarm.Agg
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="points">The points of the polyline in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, ..., xn, yn).</param>
         /// <param name="color">The color for the line.</param>
-        public static void DrawPolylineAa(this WriteableBitmap bmp, int[] points, Color color)
+        public static void DrawPolylineAa(this BitmapBuffer bmp, int[] points, ColorInt color)
         {
             bmp.DrawPolylineAa(points, ConvertColor(color));
         }
@@ -79,7 +79,7 @@ namespace PixelFarm.Agg
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="points">The points of the polyline in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, ..., xn, yn).</param>
         /// <param name="color">The color for the line.</param>
-        public static void DrawPolylineAa(this WriteableBitmap bmp, int[] points, int color)
+        public static void DrawPolylineAa(this BitmapBuffer bmp, int[] points, int color)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -112,7 +112,7 @@ namespace PixelFarm.Agg
         /// <param name="x3">The x-coordinate of the 3rd point.</param>
         /// <param name="y3">The y-coordinate of the 3rd point.</param>
         /// <param name="color">The color.</param>
-        public static void DrawTriangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, Color color)
+        public static void DrawTriangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, ColorInt color)
         {
           
             bmp.DrawTriangle(x1, y1, x2, y2, x3, y3, ConvertColor(color));
@@ -129,7 +129,7 @@ namespace PixelFarm.Agg
         /// <param name="x3">The x-coordinate of the 3rd point.</param>
         /// <param name="y3">The y-coordinate of the 3rd point.</param>
         /// <param name="color">The color.</param>
-        public static void DrawTriangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, int color)
+        public static void DrawTriangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int color)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -156,7 +156,7 @@ namespace PixelFarm.Agg
         /// <param name="x4">The x-coordinate of the 4th point.</param>
         /// <param name="y4">The y-coordinate of the 4th point.</param>
         /// <param name="color">The color.</param>
-        public static void DrawQuad(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, Color color)
+        public static void DrawQuad(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, ColorInt color)
         {
            
             bmp.DrawQuad(x1, y1, x2, y2, x3, y3, x4, y4, ConvertColor(color));
@@ -175,7 +175,7 @@ namespace PixelFarm.Agg
         /// <param name="x4">The x-coordinate of the 4th point.</param>
         /// <param name="y4">The y-coordinate of the 4th point.</param>
         /// <param name="color">The color.</param>
-        public static void DrawQuad(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int color)
+        public static void DrawQuad(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int color)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -202,7 +202,7 @@ namespace PixelFarm.Agg
         /// <param name="x2">The x-coordinate of the bounding rectangle's right side.</param>
         /// <param name="y2">The y-coordinate of the bounding rectangle's bottom side.</param>
         /// <param name="color">The color.</param>
-        public static void DrawRectangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color)
+        public static void DrawRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
          
             bmp.DrawRectangle(x1, y1, x2, y2, ConvertColor(color));
@@ -218,7 +218,7 @@ namespace PixelFarm.Agg
         /// <param name="x2">The x-coordinate of the bounding rectangle's right side.</param>
         /// <param name="y2">The y-coordinate of the bounding rectangle's bottom side.</param>
         /// <param name="color">The color.</param>
-        public static void DrawRectangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int color)
+        public static void DrawRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -286,7 +286,7 @@ namespace PixelFarm.Agg
         /// <param name="x2">The x-coordinate of the bounding rectangle's right side.</param>
         /// <param name="y2">The y-coordinate of the bounding rectangle's bottom side.</param>
         /// <param name="color">The color for the line.</param>
-        public static void DrawEllipse(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color)
+        public static void DrawEllipse(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
         
             bmp.DrawEllipse(x1, y1, x2, y2, ConvertColor(color));
@@ -302,7 +302,7 @@ namespace PixelFarm.Agg
         /// <param name="x2">The x-coordinate of the bounding rectangle's right side.</param>
         /// <param name="y2">The y-coordinate of the bounding rectangle's bottom side.</param>
         /// <param name="color">The color for the line.</param>
-        public static void DrawEllipse(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int color)
+        public static void DrawEllipse(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color)
         {
             // Calc center and radius
             int xr = (x2 - x1) >> 1;
@@ -322,7 +322,7 @@ namespace PixelFarm.Agg
         /// <param name="xr">The radius of the ellipse in x-direction.</param>
         /// <param name="yr">The radius of the ellipse in y-direction.</param>
         /// <param name="color">The color for the line.</param>
-        public static void DrawEllipseCentered(this WriteableBitmap bmp, int xc, int yc, int xr, int yr, Color color)
+        public static void DrawEllipseCentered(this BitmapBuffer bmp, int xc, int yc, int xr, int yr, ColorInt color)
         { 
             bmp.DrawEllipseCentered(xc, yc, xr, yr, ConvertColor(color));
         }
@@ -337,7 +337,7 @@ namespace PixelFarm.Agg
         /// <param name="xr">The radius of the ellipse in x-direction.</param>
         /// <param name="yr">The radius of the ellipse in y-direction.</param>
         /// <param name="color">The color for the line.</param>
-        public static void DrawEllipseCentered(this WriteableBitmap bmp, int xc, int yc, int xr, int yr, int color)
+        public static void DrawEllipseCentered(this BitmapBuffer bmp, int xc, int yc, int xr, int yr, int color)
         {
             // Use refs for faster access (really important!) speeds up a lot!
             using (var context = bmp.GetBitmapContext())

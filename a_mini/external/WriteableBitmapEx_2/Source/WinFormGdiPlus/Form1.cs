@@ -2,7 +2,7 @@
 //example and test for WritableBitmap (https://github.com/teichgraf/WriteableBitmapEx) on Gdi+
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+ 
 
 using System.Drawing;
 using System.Text;
@@ -23,25 +23,25 @@ namespace WinFormGdiPlus
             using (Bitmap bmp1 = new Bitmap(400, 500))
             using (var bmplock = bmp1.Lock())
             {
-                WriteableBitmap wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
                 //lines
 
                 int y = 0;
 
-                wb.DrawLine(0, y, 100, y + 100, PixelFarm.Agg.Color.FromArgb(255, 255, 0, 0)); //red
-                wb.DrawLine(0, y + 100, 100, y + 0, PixelFarm.Agg.Color.FromArgb(255, 0, 0, 255)); //blue
+                wb.DrawLine(0, y, 100, y + 100, PixelFarm.Agg.ColorInt.FromArgb(255, 255, 0, 0)); //red
+                wb.DrawLine(0, y + 100, 100, y + 0, PixelFarm.Agg.ColorInt.FromArgb(255, 0, 0, 255)); //blue
 
-                wb.DrawLineAa(100, y, 200, y + 100, PixelFarm.Agg.Color.FromArgb(255, 255, 0, 0));
-                wb.DrawLineAa(100, y + 100, 200, y + 0, PixelFarm.Agg.Color.FromArgb(255, 0, 0, 255)); //blue 
+                wb.DrawLineAa(100, y, 200, y + 100, PixelFarm.Agg.ColorInt.FromArgb(255, 255, 0, 0));
+                wb.DrawLineAa(100, y + 100, 200, y + 0, PixelFarm.Agg.ColorInt.FromArgb(255, 0, 0, 255)); //blue 
 
 
                 //----------
                 y += 150;
-                wb.DrawLineDDA(0, y, 100, y + 100, PixelFarm.Agg.Color.FromArgb(255, 255, 0, 0)); //red
-                wb.DrawLineDDA(0, y + 100, 100, y + 0, PixelFarm.Agg.Color.FromArgb(255, 0, 0, 255)); //blue
+                wb.DrawLineDDA(0, y, 100, y + 100, PixelFarm.Agg.ColorInt.FromArgb(255, 255, 0, 0)); //red
+                wb.DrawLineDDA(0, y + 100, 100, y + 0, PixelFarm.Agg.ColorInt.FromArgb(255, 0, 0, 255)); //blue
 
 
-                wb.DrawEllipse(200, 0, 300, 100, PixelFarm.Agg.Color.FromArgb(255, 255, 0, 0));
+                wb.DrawEllipse(200, 0, 300, 100, PixelFarm.Agg.ColorInt.FromArgb(255, 255, 0, 0));
 
                 //
                 bmplock.WriteAndUnlock();
@@ -56,11 +56,11 @@ namespace WinFormGdiPlus
             using (Bitmap bmp1 = new Bitmap(400, 500))
             using (var bmplock = bmp1.Lock())
             {
-                WriteableBitmap wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
 
                 int y = 0;
-                wb.FillRectangle(5, 5, 20, 20, PixelFarm.Agg.Color.FromArgb(255, 255, 0, 0));
-                wb.FillTriangle(100, 0, 150, 150, 200, 0, PixelFarm.Agg.Color.FromArgb(255, 0, 0, 255));
+                wb.FillRectangle(5, 5, 20, 20, PixelFarm.Agg.ColorInt.FromArgb(255, 255, 0, 0));
+                wb.FillTriangle(100, 0, 150, 150, 200, 0, PixelFarm.Agg.ColorInt.FromArgb(255, 0, 0, 255));
                 bmplock.WriteAndUnlock();
                 bmp1.Save("d:\\WImageTest\\a0003.png");
             }
@@ -73,18 +73,18 @@ namespace WinFormGdiPlus
             using (Bitmap dest = new Bitmap(400, 500))
             using (var dstLock = dest.Lock())
             {
-                WriteableBitmap dstWb = dstLock.GetWritableBitmap();
-                WriteableBitmap srcWb = srcLock.GetWritableBitmap();
+                BitmapBuffer dstWb = dstLock.GetWritableBitmap();
+                BitmapBuffer srcWb = srcLock.GetWritableBitmap();
                 int y = 0;
-                dstWb.Clear(PixelFarm.Agg.Color.FromArgb(255, 255, 255, 255));
+                dstWb.Clear(PixelFarm.Agg.ColorInt.FromArgb(255, 255, 255, 255));
 
-                dstWb.Blit(new Rect(10, 10, src.Width, src.Height),
+                dstWb.Blit(new RectD(10, 10, src.Width, src.Height),
                         srcWb,
-                        new Rect(0, 0, src.Width, src.Height), WriteableBitmapExtensions.BlendMode.None
+                        new RectD(0, 0, src.Width, src.Height), WriteableBitmapExtensions.BlendMode.None
                         );
-                dstWb.Blit(new Rect(100, 100, src.Width * 2, src.Height * 2),
+                dstWb.Blit(new RectD(100, 100, src.Width * 2, src.Height * 2),
                        srcWb,
-                       new Rect(0, 0, src.Width, src.Height), WriteableBitmapExtensions.BlendMode.None
+                       new RectD(0, 0, src.Width, src.Height), WriteableBitmapExtensions.BlendMode.None
                        );
 
                 dstLock.WriteAndUnlock();

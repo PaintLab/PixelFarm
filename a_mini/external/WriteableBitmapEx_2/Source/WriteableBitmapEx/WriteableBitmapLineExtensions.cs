@@ -31,7 +31,7 @@ namespace PixelFarm.Agg
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLineBresenham(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color, Rect? clipRect = null)
+        public static void DrawLineBresenham(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
             bmp.DrawLineBresenham(x1, y1, x2, y2, ConvertColor(color), clipRect);
@@ -47,7 +47,7 @@ namespace PixelFarm.Agg
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLineBresenham(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int color, Rect? clipRect = null)
+        public static void DrawLineBresenham(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -166,7 +166,7 @@ namespace PixelFarm.Agg
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLineDDA(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color, Rect? clipRect = null)
+        public static void DrawLineDDA(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
             bmp.DrawLineDDA(x1, y1, x2, y2, ConvertColor(color), clipRect);
@@ -182,7 +182,7 @@ namespace PixelFarm.Agg
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLineDDA(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int color, Rect? clipRect = null)
+        public static void DrawLineDDA(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -198,7 +198,7 @@ namespace PixelFarm.Agg
                 int clipY2 = h;
                 if (clipRect.HasValue)
                 {
-                    Rect c = clipRect.Value;
+                    RectD c = clipRect.Value;
                     clipX1 = (int)c.X;
                     clipX2 = (int)(c.X + c.Width);
                     clipY1 = (int)c.Y;
@@ -250,7 +250,7 @@ namespace PixelFarm.Agg
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLine(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color, Rect? clipRect = null)
+        public static void DrawLine(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
             bmp.DrawLine(x1, y1, x2, y2, ConvertColor(color), clipRect);
@@ -266,7 +266,7 @@ namespace PixelFarm.Agg
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLine(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int color, Rect? clipRect = null)
+        public static void DrawLine(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -287,7 +287,7 @@ namespace PixelFarm.Agg
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLine(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, Rect? clipRect = null)
+        public static void DrawLine(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             // Get clip coordinates
             int clipX1 = 0;
@@ -296,7 +296,7 @@ namespace PixelFarm.Agg
             int clipY2 = pixelHeight;
             if (clipRect.HasValue)
             {
-                Rect c = clipRect.Value;
+                RectD c = clipRect.Value;
                 clipX1 = (int)c.X;
                 clipX2 = (int)(c.X + c.Width);
                 clipY1 = (int)c.Y;
@@ -304,7 +304,7 @@ namespace PixelFarm.Agg
             }
 
             // Perform cohen-sutherland clipping if either point is out of the viewport
-            if (!CohenSutherlandLineClip(new Rect(clipX1, clipY1, clipX2 - clipX1, clipY2 - clipY1), ref x1, ref y1, ref x2, ref y2)) return;
+            if (!CohenSutherlandLineClip(new RectD(clipX1, clipY1, clipX2 - clipX1, clipY2 - clipY1), ref x1, ref y1, ref x2, ref y2)) return;
 
             int[] pixels = context.Pixels;
 
@@ -570,7 +570,7 @@ namespace PixelFarm.Agg
         /// <param name="x2">The x-coordinate of the end point.</param>
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="penBmp">The pen bitmap.</param>
-        public static void DrawLinePenned(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, WriteableBitmap penBmp, Rect? clipRect = null)
+        public static void DrawLinePenned(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, BitmapBuffer penBmp, RectD? clipRect = null)
         {
 
             using (var context = bmp.GetBitmapContext())
@@ -592,7 +592,7 @@ namespace PixelFarm.Agg
         /// <param name="x2">The x-coordinate of the end point.</param>
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="pen">The pen context.</param>
-        public static void DrawLinePenned(BitmapContext context, int w, int h, int x1, int y1, int x2, int y2, BitmapContext pen, Rect? clipRect = null)
+        public static void DrawLinePenned(BitmapContext context, int w, int h, int x1, int y1, int x2, int y2, BitmapContext pen, RectD? clipRect = null)
         {
             // Edge case where lines that went out of vertical bounds clipped instead of disappearing
             if ((y1 < 0 && y2 < 0) || (y1 > h && y2 > h))
@@ -602,11 +602,11 @@ namespace PixelFarm.Agg
                 return;
 
             // Perform cohen-sutherland clipping if either point is out of the viewport
-            if (!CohenSutherlandLineClip(clipRect ?? new Rect(0, 0, w, h), ref x1, ref y1, ref x2, ref y2)) return;
+            if (!CohenSutherlandLineClip(clipRect ?? new RectD(0, 0, w, h), ref x1, ref y1, ref x2, ref y2)) return;
 
             int size = pen.WriteableBitmap.PixelWidth;
             int pw = size;
-            var srcRect = new Rect(0, 0, size, size);
+            var srcRect = new RectD(0, 0, size, size);
 
             // Distance start and end point
             int dx = x2 - x1;
@@ -662,7 +662,7 @@ namespace PixelFarm.Agg
             int y = y1;
             int error = el >> 1;
 
-            var destRect = new Rect(x, y, size, size);
+            var destRect = new RectD(x, y, size, size);
 
             if (y < h && y >= 0 && x < w && x >= 0)
             {
@@ -694,7 +694,7 @@ namespace PixelFarm.Agg
                 if (y < h && y >= 0 && x < w && x >= 0)
                 {
                     //Blit(context, w, h, destRect, pen, srcRect, pw);
-                    Blit(context, w, h, new Rect(x, y, size, size), pen, srcRect, pw);
+                    Blit(context, w, h, new RectD(x, y, size, size), pen, srcRect, pw);
                     //Blit(context.WriteableBitmap, destRect, pen.WriteableBitmap, srcRect);
                     //pixels[y * w + x] = color;
                 }
@@ -710,7 +710,7 @@ namespace PixelFarm.Agg
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
         /// <returns></returns>
-        private static byte ComputeOutCode(Rect extents, double x, double y)
+        private static byte ComputeOutCode(RectD extents, double x, double y)
         {
             // initialized as being inside of clip window
             byte code = INSIDE;
@@ -743,7 +743,7 @@ namespace PixelFarm.Agg
         /// <param name="sg">Premultiplied green color component</param>
         /// <param name="sb">Premultiplied blue color component</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLineWu(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int sa, int sr, int sg, int sb, Rect? clipRect = null)
+        public static void DrawLineWu(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int sa, int sr, int sg, int sb, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -767,10 +767,10 @@ namespace PixelFarm.Agg
         /// <param name="sg">Premultiplied green color component</param>
         /// <param name="sb">Premultiplied blue color component</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLineWu(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int sa, int sr, int sg, int sb, Rect? clipRect = null)
+        public static void DrawLineWu(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int sa, int sr, int sg, int sb, RectD? clipRect = null)
         {
             // Perform cohen-sutherland clipping if either point is out of the viewport
-            if (!CohenSutherlandLineClip(clipRect ?? new Rect(0, 0, pixelWidth, pixelHeight), ref x1, ref y1, ref x2, ref y2)) return;
+            if (!CohenSutherlandLineClip(clipRect ?? new RectD(0, 0, pixelWidth, pixelHeight), ref x1, ref y1, ref x2, ref y2)) return;
 
             int[] pixels = context.Pixels;
 
@@ -930,7 +930,7 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, int strokeThickness, Rect? clipRect = null)
+        public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, int strokeThickness, RectD? clipRect = null)
         {
             AAWidthLine(pixelWidth, pixelHeight, context, x1, y1, x2, y2, strokeThickness, color, clipRect);
         }
@@ -945,7 +945,7 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int color, int strokeThickness, Rect? clipRect = null)
+        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, int strokeThickness, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -963,7 +963,7 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, Color color, int strokeThickness, Rect? clipRect = null)
+        public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
         {
 
             AAWidthLine(pixelWidth, pixelHeight, context, x1, y1, x2, y2, strokeThickness, ConvertColor(color), clipRect);
@@ -979,7 +979,7 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color, int strokeThickness, Rect? clipRect = null)
+        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
         {
 
             using (var context = bmp.GetBitmapContext())
@@ -998,7 +998,7 @@ namespace PixelFarm.Agg
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// </summary> 
-        public static void DrawLineAa(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color, Rect? clipRect = null)
+        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
             bmp.DrawLineAa(x1, y1, x2, y2, ConvertColor(color), clipRect);
@@ -1014,7 +1014,7 @@ namespace PixelFarm.Agg
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// </summary> 
-        public static void DrawLineAa(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int color, Rect? clipRect = null)
+        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -1034,12 +1034,12 @@ namespace PixelFarm.Agg
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// </summary> 
-        public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, Rect? clipRect = null)
+        public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             if ((x1 == x2) && (y1 == y2)) return; // edge case causing invDFloat to overflow, found by Shai Rubinshtein
 
             // Perform cohen-sutherland clipping if either point is out of the viewport
-            if (!CohenSutherlandLineClip(clipRect ?? new Rect(0, 0, pixelWidth, pixelHeight), ref x1, ref y1, ref x2, ref y2)) return;
+            if (!CohenSutherlandLineClip(clipRect ?? new RectD(0, 0, pixelWidth, pixelHeight), ref x1, ref y1, ref x2, ref y2)) return;
 
             if (x1 < 1) x1 = 1;
             if (x1 > pixelWidth - 2) x1 = pixelWidth - 2;
@@ -1171,14 +1171,14 @@ namespace PixelFarm.Agg
 
 
 
-        internal static bool CohenSutherlandLineClipWithViewPortOffset(Rect viewPort, ref float xi0, ref float yi0, ref float xi1, ref float yi1, int offset)
+        internal static bool CohenSutherlandLineClipWithViewPortOffset(RectD viewPort, ref float xi0, ref float yi0, ref float xi1, ref float yi1, int offset)
         {
-            Rect viewPortWithOffset = new Rect(viewPort.X - offset, viewPort.Y - offset, viewPort.Width + 2 * offset, viewPort.Height + 2 * offset);
+            RectD viewPortWithOffset = new RectD(viewPort.X - offset, viewPort.Y - offset, viewPort.Width + 2 * offset, viewPort.Height + 2 * offset);
 
             return CohenSutherlandLineClip(viewPortWithOffset, ref xi0, ref yi0, ref xi1, ref yi1);
         }
 
-        internal static bool CohenSutherlandLineClip(Rect extents, ref float xi0, ref float yi0, ref float xi1, ref float yi1)
+        internal static bool CohenSutherlandLineClip(RectD extents, ref float xi0, ref float yi0, ref float xi1, ref float yi1)
         {
             // Fix #SC-1555: Log(0) issue
             // CohenSuzerland line clipping algorithm returns NaN when point has infinity value
@@ -1209,7 +1209,7 @@ namespace PixelFarm.Agg
             return d;
         }
 
-        internal static bool CohenSutherlandLineClip(Rect extents, ref int xi0, ref int yi0, ref int xi1, ref int yi1)
+        internal static bool CohenSutherlandLineClip(RectD extents, ref int xi0, ref int yi0, ref int xi1, ref int yi1)
         {
             double x0 = xi0;
             double y0 = yi0;
@@ -1234,7 +1234,7 @@ namespace PixelFarm.Agg
         /// </summary>
         /// <remarks>See http://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm for details</remarks>
         /// <returns>a list of two points in the resulting clipped line, or zero</returns>
-        internal static bool CohenSutherlandLineClip(Rect extents, ref double x0, ref double y0, ref double x1, ref double y1)
+        internal static bool CohenSutherlandLineClip(RectD extents, ref double x0, ref double y0, ref double x1, ref double y1)
         {
             // compute outcodes for P0, P1, and whatever point lies outside the clip rectangle
             byte outcode0 = ComputeOutCode(extents, x0, y0);

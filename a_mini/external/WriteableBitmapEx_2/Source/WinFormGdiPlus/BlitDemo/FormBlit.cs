@@ -44,7 +44,7 @@ namespace WinFormGdiPlus
             timer1 = new Timer();
             timer1.Interval = 30;
             timer1.Tick += (s1, e1) => this.Invoke(new MethodInvoker(() => UpdateRenderFrame()));
-            particleSourceRect = new Rect(0, 0, 64, 64);
+            particleSourceRect = new RectD(0, 0, 64, 64);
 
             //bmp = BitmapFactory.New(640, 480);
             //bmp.Clear(Colors.Black);
@@ -67,7 +67,7 @@ namespace WinFormGdiPlus
             //render! 
             using (var bmplock = destBmp.Lock())
             {
-                WriteableBitmap wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
                 emitter.TargetBitmap = wb;
                 emitter.ParticleBitmap = particleBmp;
 
@@ -98,16 +98,16 @@ namespace WinFormGdiPlus
 
         }
 
-        WriteableBitmap circleBmp;
-        WriteableBitmap particleBmp;
-        Rect particleSourceRect;
+        BitmapBuffer circleBmp;
+        BitmapBuffer particleBmp;
+        RectD particleSourceRect;
         ParticleEmitter emitter = new ParticleEmitter();
         DateTime lastUpdate = DateTime.Now;
 
         private double _lastTime;
         private double _lowestFrameTime;
 
-        static WriteableBitmap LoadBitmapAsReadonly(string path)
+        static BitmapBuffer LoadBitmapAsReadonly(string path)
         {
             using (Bitmap bmp = new Bitmap(path))
             using (var lockBmp = new LockBmp(bmp))
@@ -126,31 +126,31 @@ namespace WinFormGdiPlus
             //start ...
             UpdateRenderFrame();
         }
-        public static WriteableBitmap Overlay(WriteableBitmap bmp, WriteableBitmap overlay, PixelFarm.Agg.Point location)
+        public static BitmapBuffer Overlay(BitmapBuffer bmp, BitmapBuffer overlay, PixelFarm.Agg.PointD location)
         {
             var result = bmp.Clone();
-            var size = new PixelFarm.Agg.Size(overlay.PixelWidth, overlay.PixelHeight);
-            result.Blit(new PixelFarm.Agg.Rect(location, size), overlay,
-                new Rect(new PixelFarm.Agg.Point(0, 0), size),
+            var size = new PixelFarm.Agg.SizeD(overlay.PixelWidth, overlay.PixelHeight);
+            result.Blit(new PixelFarm.Agg.RectD(location, size), overlay,
+                new RectD(new PixelFarm.Agg.PointD(0, 0), size),
                 WriteableBitmapExtensions.BlendMode.Multiply);
             return result;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            WriteableBitmap unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
-            WriteableBitmap sticker = LoadBitmapAsReadonly("../../01.jpg");
+            BitmapBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
+            BitmapBuffer sticker = LoadBitmapAsReadonly("../../01.jpg");
 
-            WriteableBitmap overlayResult = Overlay(unmodifiedBmp, sticker, new PixelFarm.Agg.Point(10, 10));
+            BitmapBuffer overlayResult = Overlay(unmodifiedBmp, sticker, new PixelFarm.Agg.PointD(10, 10));
 
             using (var bmplock = destBmp.Lock())
             {
-                WriteableBitmap wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
                 wb.Clear(Colors.Black);
 
-                wb.Blit(new Rect(0, 0, overlayResult.PixelWidth, overlayResult.PixelHeight),
+                wb.Blit(new RectD(0, 0, overlayResult.PixelWidth, overlayResult.PixelHeight),
                         overlayResult,
-                        new Rect(0, 0, overlayResult.PixelWidth, overlayResult.PixelHeight));
+                        new RectD(0, 0, overlayResult.PixelWidth, overlayResult.PixelHeight));
 
                 bmplock.WriteAndUnlock();
 

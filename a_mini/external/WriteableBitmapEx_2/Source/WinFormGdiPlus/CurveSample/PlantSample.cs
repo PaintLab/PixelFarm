@@ -42,7 +42,7 @@ namespace WinFormGdiPlus.PlantDemo
             this.Y = y;
         }
 
-        public Vector(Point point)
+        public Vector(PointD point)
            : this((int)point.X, (int)point.Y)
         {
         }
@@ -230,7 +230,7 @@ namespace WinFormGdiPlus.PlantDemo
         public int BranchAngleVariance { get; set; }
         public float GrowthRate { get; set; }
         public int MaxGenerations { get; set; }
-        public Color Color { get; set; }
+        public ColorInt Color { get; set; }
         public Vector Start { get; private set; }
         public Vector Scale { get; private set; }
         public List<BranchPoint> BranchPoints { get; private set; }
@@ -249,7 +249,7 @@ namespace WinFormGdiPlus.PlantDemo
             this.BranchAngleVariance = 10;
             this.MaxGenerations = int.MaxValue;
             //this.BranchDegression    = 0;
-            this.Color = Color.FromArgb(255, 100, 150, 0);
+            this.Color = ColorInt.FromArgb(255, 100, 150, 0);
             this.Start = Vector.Zero;
             this.Scale = Vector.One;
             this.BendingFactor = 0.4f;
@@ -343,7 +343,7 @@ namespace WinFormGdiPlus.PlantDemo
             return GrowthRate + r;
         }
 
-        public void Draw(WriteableBitmap writeableBmp)
+        public void Draw(BitmapBuffer writeableBmp)
         {
             if (writeableBmp != null)
             {
@@ -359,7 +359,7 @@ namespace WinFormGdiPlus.PlantDemo
             }
         }
 
-        private void Draw(WriteableBitmap writeableBmp, Branch branch)
+        private void Draw(BitmapBuffer writeableBmp, Branch branch)
         {
             int[] pts = new int[]
             {
@@ -406,7 +406,7 @@ namespace WinFormGdiPlus.PlantDemo
         {
         }
 
-        public ControlPoint(Point point)
+        public ControlPoint(PointD point)
            : this((int)point.X, (int)point.Y)
         {
         }

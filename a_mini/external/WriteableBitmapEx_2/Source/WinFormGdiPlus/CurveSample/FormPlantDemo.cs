@@ -1,8 +1,23 @@
-﻿using System;
+﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+//
+//
+//   Project:           WriteableBitmapEx - WriteableBitmap extensions
+//   Description:       Collection of extension methods for the WriteableBitmap class.
+//
+//   Changed by:        $Author: unknown $
+//   Changed on:        $Date: 2015-03-05 18:18:24 +0100 (Do, 05 Mrz 2015) $
+//   Changed in:        $Revision: 113191 $
+//   Project:           $URL: https://writeablebitmapex.svn.codeplex.com/svn/trunk/Source/WriteableBitmapEx/WriteableBitmapBaseExtensions.cs $
+//   Id:                $Id: WriteableBitmapBaseExtensions.cs 113191 2015-03-05 17:18:24Z unknown $
+//
+//
+//   Copyright © 2009-2015 Rene Schulte and WriteableBitmapEx Contributors
+//
+//   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
+//
+
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 
 using WinFormGdiPlus.PlantDemo;
@@ -26,7 +41,7 @@ namespace WinFormGdiPlus
             using (System.Drawing.Bitmap bmp1 = new System.Drawing.Bitmap(panel1.Width, panel1.Height))
             using (var bmplock = bmp1.Lock())
             {
-                WriteableBitmap wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
 
                 Draw(wb);
                 bmplock.WriteAndUnlock();
@@ -141,7 +156,7 @@ namespace WinFormGdiPlus
             }
         }
 
-        private void Draw(WriteableBitmap writeableBmp)
+        private void Draw(BitmapBuffer writeableBmp)
         {
 
 
@@ -172,7 +187,7 @@ namespace WinFormGdiPlus
             }
         }
 
-        private void DrawPoints(WriteableBitmap writeableBmp)
+        private void DrawPoints(BitmapBuffer writeableBmp)
         {
             foreach (var p in points)
             {
@@ -184,7 +199,7 @@ namespace WinFormGdiPlus
             }
         }
 
-        private void DrawPoint(WriteableBitmap writeableBmp, ControlPoint p, Color color)
+        private void DrawPoint(BitmapBuffer writeableBmp, ControlPoint p, ColorInt color)
         {
             var x1 = p.X - PointSizeHalf;
             var y1 = p.Y - PointSizeHalf;
@@ -193,7 +208,7 @@ namespace WinFormGdiPlus
             writeableBmp.DrawRectangle(x1, y1, x2, y2, color);
         }
 
-        private void DrawBeziers(WriteableBitmap writeableBmp)
+        private void DrawBeziers(BitmapBuffer writeableBmp)
         {
             if (points.Count > 3)
             {
@@ -201,7 +216,7 @@ namespace WinFormGdiPlus
             }
         }
 
-        private void DrawCardinal(WriteableBitmap writeableBmp)
+        private void DrawCardinal(BitmapBuffer writeableBmp)
         {
             if (points.Count > 2)
             {
