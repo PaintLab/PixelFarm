@@ -7,8 +7,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using PixelFarm.Agg;
 
-using System.Windows.Media.Imaging;
 namespace WinFormGdiPlus
 {
     public partial class Form1 : Form
@@ -28,20 +28,20 @@ namespace WinFormGdiPlus
 
                 int y = 0;
 
-                wb.DrawLine(0, y, 100, y + 100, System.Windows.Media.Imaging.Color.FromArgb(255, 255, 0, 0)); //red
-                wb.DrawLine(0, y + 100, 100, y + 0, System.Windows.Media.Imaging.Color.FromArgb(255, 0, 0, 255)); //blue
+                wb.DrawLine(0, y, 100, y + 100, PixelFarm.Agg.Color.FromArgb(255, 255, 0, 0)); //red
+                wb.DrawLine(0, y + 100, 100, y + 0, PixelFarm.Agg.Color.FromArgb(255, 0, 0, 255)); //blue
 
-                wb.DrawLineAa(100, y, 200, y + 100, System.Windows.Media.Imaging.Color.FromArgb(255, 255, 0, 0));
-                wb.DrawLineAa(100, y + 100, 200, y + 0, System.Windows.Media.Imaging.Color.FromArgb(255, 0, 0, 255)); //blue 
+                wb.DrawLineAa(100, y, 200, y + 100, PixelFarm.Agg.Color.FromArgb(255, 255, 0, 0));
+                wb.DrawLineAa(100, y + 100, 200, y + 0, PixelFarm.Agg.Color.FromArgb(255, 0, 0, 255)); //blue 
 
 
                 //----------
                 y += 150;
-                wb.DrawLineDDA(0, y, 100, y + 100, System.Windows.Media.Imaging.Color.FromArgb(255, 255, 0, 0)); //red
-                wb.DrawLineDDA(0, y + 100, 100, y + 0, System.Windows.Media.Imaging.Color.FromArgb(255, 0, 0, 255)); //blue
+                wb.DrawLineDDA(0, y, 100, y + 100, PixelFarm.Agg.Color.FromArgb(255, 255, 0, 0)); //red
+                wb.DrawLineDDA(0, y + 100, 100, y + 0, PixelFarm.Agg.Color.FromArgb(255, 0, 0, 255)); //blue
 
 
-                wb.DrawEllipse(200, 0, 300, 100, System.Windows.Media.Imaging.Color.FromArgb(255, 255, 0, 0));
+                wb.DrawEllipse(200, 0, 300, 100, PixelFarm.Agg.Color.FromArgb(255, 255, 0, 0));
 
                 //
                 bmplock.WriteAndUnlock();
@@ -59,8 +59,8 @@ namespace WinFormGdiPlus
                 WriteableBitmap wb = bmplock.GetWritableBitmap();
 
                 int y = 0;
-                wb.FillRectangle(5, 5, 20, 20, System.Windows.Media.Imaging.Color.FromArgb(255, 255, 0, 0));
-                wb.FillTriangle(100, 0, 150, 150, 200, 0, System.Windows.Media.Imaging.Color.FromArgb(255, 0, 0, 255));
+                wb.FillRectangle(5, 5, 20, 20, PixelFarm.Agg.Color.FromArgb(255, 255, 0, 0));
+                wb.FillTriangle(100, 0, 150, 150, 200, 0, PixelFarm.Agg.Color.FromArgb(255, 0, 0, 255));
                 bmplock.WriteAndUnlock();
                 bmp1.Save("d:\\WImageTest\\a0003.png");
             }
@@ -76,7 +76,7 @@ namespace WinFormGdiPlus
                 WriteableBitmap dstWb = dstLock.GetWritableBitmap();
                 WriteableBitmap srcWb = srcLock.GetWritableBitmap();
                 int y = 0;
-                dstWb.Clear(System.Windows.Media.Imaging.Color.FromArgb(255, 255, 255, 255));
+                dstWb.Clear(PixelFarm.Agg.Color.FromArgb(255, 255, 255, 255));
 
                 dstWb.Blit(new Rect(10, 10, src.Width, src.Height),
                         srcWb,

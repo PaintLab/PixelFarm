@@ -16,10 +16,9 @@
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
 
+
 using System;
-
-
-namespace System.Windows.Media.Imaging
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// Collection of transformation extension methods for the WriteableBitmap class.

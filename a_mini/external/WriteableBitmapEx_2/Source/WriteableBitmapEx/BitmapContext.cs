@@ -15,8 +15,8 @@
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
 
-
-namespace System.Windows.Media.Imaging
+using System;
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// Read Write Mode for the BitmapContext.

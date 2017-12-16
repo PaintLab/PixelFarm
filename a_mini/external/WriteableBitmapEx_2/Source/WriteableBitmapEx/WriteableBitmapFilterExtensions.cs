@@ -15,7 +15,8 @@
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
 
-namespace System.Windows.Media.Imaging
+using System;
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// Collection of filter / convolution extension methods for the WriteableBitmap class.
@@ -86,11 +87,11 @@ namespace System.Windows.Media.Imaging
 
             if ((kw & 1) == 0)
             {
-                throw new InvalidOperationException("Kernel width must be odd!");
+                throw new System.InvalidOperationException("Kernel width must be odd!");
             }
             if ((kh & 1) == 0)
             {
-                throw new InvalidOperationException("Kernel height must be odd!");
+                throw new System.InvalidOperationException("Kernel height must be odd!");
             }
 
             using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))

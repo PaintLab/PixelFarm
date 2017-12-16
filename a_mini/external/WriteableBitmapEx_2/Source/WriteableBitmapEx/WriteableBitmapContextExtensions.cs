@@ -17,7 +17,7 @@
 
 
 
-namespace System.Windows.Media.Imaging
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// Provides the WriteableBitmap context pixel data

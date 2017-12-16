@@ -1,9 +1,7 @@
 ﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
-//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 using System;
 using System.Collections.Generic;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using PixelFarm.Agg;
 
 namespace WinFormGdiPlus
 {

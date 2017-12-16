@@ -28,7 +28,8 @@ namespace WinFormGdiPlus
     {
         Bitmap _bmp;
         BitmapData _bmpdata;
-        System.Windows.Media.Imaging.WriteableBitmap _writeableBitmap;
+
+        PixelFarm.Agg.WriteableBitmap _writeableBitmap;
         int bufferLenInBytes;
         public LockBmp(Bitmap bmp)
         {
@@ -39,7 +40,7 @@ namespace WinFormGdiPlus
             _writeableBitmap = null;
             bufferLenInBytes = 0;
         }
-        public System.Windows.Media.Imaging.WriteableBitmap GetWritableBitmap()
+        public PixelFarm.Agg.WriteableBitmap GetWritableBitmap()
         {
             if (_writeableBitmap != null) return _writeableBitmap;
             //
@@ -48,7 +49,7 @@ namespace WinFormGdiPlus
             int[] buffer = new int[bufferLenInBytes / 4];
             System.Runtime.InteropServices.Marshal.Copy(_bmpdata.Scan0, buffer, 0, bufferLenInBytes / 4);
 
-            return _writeableBitmap = new System.Windows.Media.Imaging.WriteableBitmap(_bmp.Width, _bmp.Height, buffer);
+            return _writeableBitmap = new PixelFarm.Agg.WriteableBitmap(_bmp.Width, _bmp.Height, buffer);
         }
         public void WriteAndUnlock()
         {

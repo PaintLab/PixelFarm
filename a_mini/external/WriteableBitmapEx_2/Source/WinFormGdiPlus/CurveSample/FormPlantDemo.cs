@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using WinFormGdiPlus.PlantDemo;
-using System.Windows.Media.Imaging;
+using PixelFarm.Agg;
 
 namespace WinFormGdiPlus
 {

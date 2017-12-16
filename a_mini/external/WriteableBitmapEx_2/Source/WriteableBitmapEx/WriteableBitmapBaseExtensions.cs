@@ -16,7 +16,8 @@
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
 
-namespace System.Windows.Media.Imaging
+using System;
+namespace PixelFarm.Agg
 
 {
     /// <summary>
@@ -25,7 +26,7 @@ namespace System.Windows.Media.Imaging
     public static partial class WriteableBitmapExtensions
     {
 
-        internal const int SizeOfArgb = 4; 
+        internal const int SizeOfArgb = 4;
 
         public static int ConvertColor(double opacity, Color color)
         {

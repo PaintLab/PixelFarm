@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using System.Windows.Media.Imaging;
+using PixelFarm.Agg;
 namespace WinFormGdiPlus
 {
     public partial class FormShape : Form
@@ -136,7 +136,8 @@ namespace WinFormGdiPlus
                 int yc = h >> 1;
                 // Animate base size with sine
                 int r0 = (int)((w + h) * 0.07 * s) + 10;
-                System.Windows.Media.Imaging.Color color_brown = System.Windows.Media.Imaging.Color.FromArgb(
+
+                PixelFarm.Agg.Color color_brown = PixelFarm.Agg.Color.FromArgb(
                     255, System.Drawing.Color.Brown.R, System.Drawing.Color.Brown.G, System.Drawing.Color.Brown.B);
 
                 writeableBmp.DrawEllipseCentered(xc, yc, r0, r0, color_brown);
@@ -256,7 +257,7 @@ namespace WinFormGdiPlus
                                          rand.Next(w3rd + w6th, w3rd * 2), rand.Next(h - h6th, h), GetRandomColor());
                 writeableBmp.DrawEllipseCentered(w - w6th, h - h6th, w6th >> 1, h6th >> 1, GetRandomColor());
 
-                
+
                 // Draw Grid
                 writeableBmp.DrawLine(0, h3rd, w, h3rd, Colors.Black);
                 writeableBmp.DrawLine(0, 2 * h3rd, w, 2 * h3rd, Colors.Black);

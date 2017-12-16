@@ -18,7 +18,7 @@
 
 using System.IO;
 
-namespace System.Windows.Media.Imaging
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// Collection of interchange extension methods for the WriteableBitmap class.

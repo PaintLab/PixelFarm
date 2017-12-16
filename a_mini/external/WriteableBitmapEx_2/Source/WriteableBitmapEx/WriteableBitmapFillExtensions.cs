@@ -19,9 +19,7 @@
 using System;
 using System.Collections.Generic;
 
-
-namespace System.Windows.Media.Imaging
-
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// Collection of extension methods for the WriteableBitmap class.

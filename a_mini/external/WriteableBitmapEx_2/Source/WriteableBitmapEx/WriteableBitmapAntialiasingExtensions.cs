@@ -16,7 +16,8 @@
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
 
-namespace System.Windows.Media.Imaging
+using System;
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// Collection of draw extension methods for the Silverlight WriteableBitmap class.

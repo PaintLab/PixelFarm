@@ -17,11 +17,8 @@
 //
 
 
-using System;
 
-
-namespace System.Windows.Media.Imaging
-
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// Collection of blit (copy) extension methods for the WriteableBitmap class.

@@ -4,7 +4,7 @@ using System;
 using System.Runtime;
 using System.Runtime.InteropServices;
 
-namespace System.Windows.Media.Imaging
+namespace PixelFarm.Agg
 {
     internal static class NativeMethods
     {
