@@ -159,9 +159,11 @@ namespace PixelFarm.DrawingBuffer
                 int idx;
                 double ii;
                 double jj;
+                //
                 int sr = 0;
                 int sg = 0;
                 int sb = 0;
+                //
                 int dr, dg, db;
                 int sourcePixel;
                 int sa = 0;
@@ -245,10 +247,14 @@ namespace PixelFarm.DrawingBuffer
                                         sg = ((sourcePixel >> 8) & 0xff);
                                         sb = ((sourcePixel) & 0xff);
 
-                                        if (sr != color.R || sg != color.G || sb != color.B)
+                                        if (!color.EqualsOnRGB(sr, sg, sb))
                                         {
                                             destPixels[idx] = sourcePixel;
                                         }
+                                        //if (sr != color.R || sg != color.G || sb != color.B)
+                                        //{
+                                        //    destPixels[idx] = sourcePixel;
+                                        //}
 
                                     }
                                     else if (blendMode == BlendMode.Mask)

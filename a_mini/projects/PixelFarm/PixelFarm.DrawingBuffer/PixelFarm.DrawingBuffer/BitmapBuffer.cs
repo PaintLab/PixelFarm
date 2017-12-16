@@ -203,23 +203,23 @@ namespace PixelFarm.DrawingBuffer
 
         public static bool operator ==(ColorInt c1, ColorInt c2)
         {
-            return (uint)((c1.A << 24) | (c1.R << 16) | (c1.G << 8) | (c1.B)) ==
-                   (uint)((c2.A << 24) | (c2.R << 16) | (c2.G << 8) | (c2.B));
+            return (uint)((c1._a << 24) | (c1._r << 16) | (c1._g << 8) | (c1._b)) ==
+                   (uint)((c2._a << 24) | (c2._r << 16) | (c2._g << 8) | (c2._b));
         }
         public static bool operator !=(ColorInt c1, ColorInt c2)
         {
-            return (uint)((c1.A << 24) | (c1.R << 16) | (c1.G << 8) | (c1.B)) !=
-                  (uint)((c2.A << 24) | (c2.R << 16) | (c2.G << 8) | (c2.B));
+            return (uint)((c1._a << 24) | (c1._r << 16) | (c1._g << 8) | (c1._b)) !=
+                  (uint)((c2._a << 24) | (c2._r << 16) | (c2._g << 8) | (c2._b));
         }
         public override bool Equals(object obj)
         {
             if (obj is ColorInt)
             {
                 ColorInt c = (ColorInt)obj;
-                return c.A == this.A &&
-                    c.B == this.B &&
-                    c.R == this.R &&
-                    c.G == this.G;
+                return c._a == this._a &&
+                    c._b == this._b &&
+                    c._r == this._r &&
+                    c._g == this._g;
             }
             return false;
         }
@@ -245,7 +245,21 @@ namespace PixelFarm.DrawingBuffer
              | ((byte)((_r * a) >> 8) << 16)
              | ((byte)((_g * a) >> 8) << 8)
              | ((byte)((_b * a) >> 8));
-
+        }
+        /// <summary>
+        /// check if this color is equals on another compare on RGB only, not alpha
+        /// </summary>
+        /// <param name="another"></param>
+        /// <returns></returns>
+        public bool EqualsOnRGB(ref ColorInt c2)
+        {
+            return (uint)((this._r << 16) | (this._g << 8) | (this._b)) ==
+                (uint)((c2._r << 16) | (c2._g << 8) | (c2._b));
+        }
+        public bool EqualsOnRGB(int c2_r, int c2_g, int c2_b)
+        {
+            return (uint)((this._r << 16) | (this._g << 8) | (this._b)) ==
+                (uint)((c2_r << 16) | (c2_g << 8) | (c2_b));
         }
     }
     public struct Colors
@@ -272,6 +286,9 @@ namespace PixelFarm.DrawingBuffer
         }
         public int PixelWidth { get; private set; }
         public int PixelHeight { get; private set; }
+        /// <summary>
+        /// pre-multiplied alpha color pixels
+        /// </summary>
         public int[] Pixels { get; private set; }
     }
 }
