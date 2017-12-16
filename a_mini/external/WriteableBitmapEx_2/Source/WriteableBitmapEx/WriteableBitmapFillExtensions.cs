@@ -449,7 +449,7 @@ namespace PixelFarm.Agg
 
                 bool noBlending = !doAlphaBlend || sa == 255;
 
-                var pixels = context.Pixels;
+                int[] pixels = context.Pixels;
                 int pn = points.Length;
                 int pnh = points.Length >> 1;
                 int[] intersectionsX = new int[pnh];
@@ -676,7 +676,7 @@ namespace PixelFarm.Agg
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
                 int h = context.Height;
-                var pixels = context.Pixels;
+                int[] pixels = context.Pixels;
 
                 // Register edges, and find y max
                 List<Edge> edges = new List<Edge>();

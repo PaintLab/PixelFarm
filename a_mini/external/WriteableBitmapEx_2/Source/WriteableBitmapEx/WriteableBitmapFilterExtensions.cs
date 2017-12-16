@@ -313,16 +313,16 @@ namespace PixelFarm.Agg
         {
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                var nWidth = context.Width;
-                var nHeight = context.Height;
-                var px = context.Pixels;
-                var result = BitmapFactory.New(nWidth, nHeight);
+                int nWidth = context.Width;
+                int nHeight = context.Height;
+                int[] px = context.Pixels;
+                WriteableBitmap result = BitmapFactory.New(nWidth, nHeight);
 
                 using (var dest = result.GetBitmapContext())
                 {
                     int[] rp = dest.Pixels;
                     int len = context.Length;
-                    for (var i = 0; i < len; i++)
+                    for (int i = 0; i < len; i++)
                     {
                         // Extract
                         int c = px[i];

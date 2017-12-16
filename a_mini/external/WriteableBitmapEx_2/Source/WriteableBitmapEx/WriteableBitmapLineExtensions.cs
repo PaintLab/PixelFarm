@@ -189,7 +189,7 @@ namespace PixelFarm.Agg
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
                 int h = context.Height;
-                var pixels = context.Pixels;
+                int[] pixels = context.Pixels;
 
                 // Get clip coordinates
                 int clipX1 = 0;
@@ -198,7 +198,7 @@ namespace PixelFarm.Agg
                 int clipY2 = h;
                 if (clipRect.HasValue)
                 {
-                    var c = clipRect.Value;
+                    Rect c = clipRect.Value;
                     clipX1 = (int)c.X;
                     clipX2 = (int)(c.X + c.Width);
                     clipY1 = (int)c.Y;
@@ -296,7 +296,7 @@ namespace PixelFarm.Agg
             int clipY2 = pixelHeight;
             if (clipRect.HasValue)
             {
-                var c = clipRect.Value;
+                Rect c = clipRect.Value;
                 clipX1 = (int)c.X;
                 clipX2 = (int)(c.X + c.Width);
                 clipY1 = (int)c.Y;
@@ -540,7 +540,7 @@ namespace PixelFarm.Agg
                 int indexBaseValue = y1 * pixelWidth;
 
                 // Walk the line!
-                var inc = (pixelWidth << PRECISION_SHIFT) + incx;
+                int inc = (pixelWidth << PRECISION_SHIFT) + incx;
                 for (int y = y1; y <= y2; ++y)
                 {
                     pixels[indexBaseValue + (index >> PRECISION_SHIFT)] = color;
@@ -572,13 +572,13 @@ namespace PixelFarm.Agg
         /// <param name="penBmp">The pen bitmap.</param>
         public static void DrawLinePenned(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, WriteableBitmap penBmp, Rect? clipRect = null)
         {
+
             using (var context = bmp.GetBitmapContext())
+            using (var penContext = penBmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                using (var penContext = penBmp.GetBitmapContext(ReadWriteMode.ReadOnly))
-                {
-                    DrawLinePenned(context, bmp.PixelWidth, bmp.PixelHeight, x1, y1, x2, y2, penContext, clipRect);
-                }
+                DrawLinePenned(context, bmp.PixelWidth, bmp.PixelHeight, x1, y1, x2, y2, penContext, clipRect);
             }
+
         }
 
         /// <summary>
@@ -1154,7 +1154,7 @@ namespace PixelFarm.Agg
         /// <param name="sg">Source green component (0..255)</param> 
         private static void AlphaBlendNormalOnPremultiplied(BitmapContext context, int index, int sa, uint srb, uint sg)
         {
-            var pixels = context.Pixels;
+            int[] pixels = context.Pixels;
             uint destPixel = (uint)pixels[index];
 
             uint da = (destPixel >> 24);
@@ -1173,7 +1173,7 @@ namespace PixelFarm.Agg
 
         internal static bool CohenSutherlandLineClipWithViewPortOffset(Rect viewPort, ref float xi0, ref float yi0, ref float xi1, ref float yi1, int offset)
         {
-            var viewPortWithOffset = new Rect(viewPort.X - offset, viewPort.Y - offset, viewPort.Width + 2 * offset, viewPort.Height + 2 * offset);
+            Rect viewPortWithOffset = new Rect(viewPort.X - offset, viewPort.Y - offset, viewPort.Width + 2 * offset, viewPort.Height + 2 * offset);
 
             return CohenSutherlandLineClip(viewPortWithOffset, ref xi0, ref yi0, ref xi1, ref yi1);
         }

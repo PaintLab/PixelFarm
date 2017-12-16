@@ -126,7 +126,7 @@ namespace PixelFarm.Agg
                 return;
             }
 #if WPF
-            var isPrgba = source.Format == PixelFormats.Pbgra32 || source.Format == PixelFormats.Prgba64 || source.Format == PixelFormats.Prgba128Float;
+            bool isPrgba = source.Format == PixelFormats.Pbgra32 || source.Format == PixelFormats.Prgba64 || source.Format == PixelFormats.Prgba128Float;
 #endif
             int dw = (int)destRect.Width;
             int dh = (int)destRect.Height;

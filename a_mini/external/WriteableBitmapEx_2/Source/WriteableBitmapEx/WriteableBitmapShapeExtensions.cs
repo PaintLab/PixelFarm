@@ -90,7 +90,7 @@ namespace PixelFarm.Agg
                 int x1 = points[0];
                 int y1 = points[1];
 
-                for (var i = 2; i < points.Length; i += 2)
+                for (int i = 2; i < points.Length; i += 2)
                 {
                     int x2 = points[i];
                     int y2 = points[i + 1];
@@ -224,9 +224,9 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
-                var w = context.Width;
-                var h = context.Height;
-                var pixels = context.Pixels;
+                int w = context.Width;
+                int h = context.Height;
+                int[] pixels = context.Pixels;
 
                 // Check boundaries
                 if ((x1 < 0 && x2 < 0) || (y1 < 0 && y2 < 0)
@@ -245,15 +245,15 @@ namespace PixelFarm.Agg
                 if (x2 >= w) { x2 = w - 1; }
                 if (y2 >= h) { y2 = h - 1; }
 
-                var startY = y1 * w;
-                var endY = y2 * w;
+                int startY = y1 * w;
+                int endY = y2 * w;
 
-                var offset2 = endY + x1;
-                var endOffset = startY + x2;
-                var startYPlusX1 = startY + x1;
+                int offset2 = endY + x1;
+                int endOffset = startY + x2;
+                int startYPlusX1 = startY + x1;
 
                 // top and bottom horizontal scanlines
-                for (var x = startYPlusX1; x <= endOffset; x++)
+                for (int x = startYPlusX1; x <= endOffset; x++)
                 {
                     pixels[x] = color; // top horizontal line
                     pixels[offset2] = color; // bottom horizontal line
@@ -266,7 +266,7 @@ namespace PixelFarm.Agg
                 endOffset = startYPlusX1 + w;
                 offset2 -= w;
 
-                for (var y = startY + x2 + w; y <= offset2; y += w)
+                for (int y = startY + x2 + w; y <= offset2; y += w)
                 {
                     pixels[y] = color; // right vertical line
                     pixels[endOffset] = color; // left vertical line
@@ -345,9 +345,9 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
 
-                var pixels = context.Pixels;
-                var w = context.Width;
-                var h = context.Height;
+                int[] pixels = context.Pixels;
+                int w = context.Width;
+                int h = context.Height;
 
                 // Avoid endless loop
                 if (xr < 1 || yr < 1)
