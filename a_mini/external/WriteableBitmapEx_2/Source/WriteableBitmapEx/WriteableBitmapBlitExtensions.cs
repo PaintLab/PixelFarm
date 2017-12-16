@@ -128,27 +128,27 @@ namespace PixelFarm.Agg
 #if WPF
             var isPrgba = source.Format == PixelFormats.Pbgra32 || source.Format == PixelFormats.Prgba64 || source.Format == PixelFormats.Prgba128Float;
 #endif
-            var dw = (int)destRect.Width;
-            var dh = (int)destRect.Height;
+            int dw = (int)destRect.Width;
+            int dh = (int)destRect.Height;
 
             using (var srcContext = source.GetBitmapContext(ReadWriteMode.ReadOnly))
             using (var destContext = bmp.GetBitmapContext())
             {
 
-                var sourceWidth = srcContext.Width;
-                var dpw = destContext.Width;
-                var dph = destContext.Height;
+                int sourceWidth = srcContext.Width;
+                int dpw = destContext.Width;
+                int dph = destContext.Height;
 
-                var intersect = new Rect(0, 0, dpw, dph);
+                Rect intersect = new Rect(0, 0, dpw, dph);
                 intersect.Intersect(destRect);
                 if (intersect.IsEmpty)
                 {
                     return;
                 }
 
-                var sourcePixels = srcContext.Pixels;
-                var destPixels = destContext.Pixels;
-                var sourceLength = srcContext.Length;
+                int[] sourcePixels = srcContext.Pixels;
+                int[] destPixels = destContext.Pixels;
+                int sourceLength = srcContext.Length;
 
                 int sourceIdx = -1;
                 int px = (int)destRect.X;
@@ -171,9 +171,9 @@ namespace PixelFarm.Agg
                 int cg = color.G;
                 int cb = color.B;
                 bool tinted = color != Colors.White;
-                var sw = (int)sourceRect.Width;
-                var sdx = sourceRect.Width / destRect.Width;
-                var sdy = sourceRect.Height / destRect.Height;
+                int sw = (int)sourceRect.Width;
+                double sdx = sourceRect.Width / destRect.Width;
+                double sdy = sourceRect.Height / destRect.Height;
                 int sourceStartX = (int)sourceRect.X;
                 int sourceStartY = (int)sourceRect.Y;
                 int lastii, lastjj;
@@ -195,10 +195,10 @@ namespace PixelFarm.Agg
                         if (blendMode == BlendMode.None && !tinted)
                         {
                             sourceIdx = (int)ii + (int)jj * sourceWidth;
-                            var offset = x < 0 ? -x : 0;
-                            var xx = x + offset;
-                            var wx = sourceWidth - offset;
-                            var len = xx + wx < dpw ? wx : dpw - xx;
+                            int offset = x < 0 ? -x : 0;
+                            int xx = x + offset;
+                            int wx = sourceWidth - offset;
+                            int len = xx + wx < dpw ? wx : dpw - xx;
                             if (len > sw) len = sw;
                             if (len > dw) len = dw;
                             BitmapContext.BlockCopy(srcContext, (sourceIdx + offset) * 4, destContext, (idx + offset) * 4, len * 4);
@@ -283,7 +283,7 @@ namespace PixelFarm.Agg
                                             db = ((destPixel) & 0xff);
                                             if (blendMode == BlendMode.Alpha)
                                             {
-                                                var isa = 255 - sa;
+                                                int isa = 255 - sa;
 #if NETFX_CORE
                                                      // Special case for WinRT since it does not use pARGB (pre-multiplied alpha)
                                                      destPixel = ((da & 0xff) << 24) |
@@ -377,11 +377,11 @@ namespace PixelFarm.Agg
                 return;
             }
 #if WPF
-            var isPrgba = srcContext.Format == PixelFormats.Pbgra32 || srcContext.Format == PixelFormats.Prgba64 || srcContext.Format == PixelFormats.Prgba128Float;
+            bool isPrgba = srcContext.Format == PixelFormats.Pbgra32 || srcContext.Format == PixelFormats.Prgba64 || srcContext.Format == PixelFormats.Prgba128Float;
 #endif
 
-            var sourcePixels = srcContext.Pixels;
-            var destPixels = destContext.Pixels;
+            int[] sourcePixels = srcContext.Pixels;
+            int[] destPixels = destContext.Pixels;
             int sourceLength = srcContext.Length;
             int sourceIdx = -1;
             int px = (int)destRect.X;
@@ -399,9 +399,9 @@ namespace PixelFarm.Agg
             int sa = 0;
             int da;
 
-            var sw = (int)sourceRect.Width;
-            var sdx = sourceRect.Width / destRect.Width;
-            var sdy = sourceRect.Height / destRect.Height;
+            int sw = (int)sourceRect.Width;
+            double sdx = sourceRect.Width / destRect.Width;
+            double sdy = sourceRect.Height / destRect.Height;
             int sourceStartX = (int)sourceRect.X;
             int sourceStartY = (int)sourceRect.Y;
             int lastii, lastjj;
@@ -409,7 +409,7 @@ namespace PixelFarm.Agg
             lastjj = -1;
             jj = sourceStartY;
             y = py;
-            for (var j = 0; j < dh; j++)
+            for (int j = 0; j < dh; j++)
             {
                 if (y >= 0 && y < dph)
                 {
@@ -419,7 +419,7 @@ namespace PixelFarm.Agg
                     sourcePixel = sourcePixels[0];
 
                     // Pixel by pixel copying
-                    for (var i = 0; i < dw; i++)
+                    for (int i = 0; i < dw; i++)
                     {
                         if (x >= 0 && x < dpw)
                         {
@@ -519,10 +519,10 @@ namespace PixelFarm.Agg
             {
                 if (transform == null) transform = new MatrixTransform();
 
-                var destPixels = destContext.Pixels;
+                int[] destPixels = destContext.Pixels;
                 int destWidth = destContext.Width;
                 int destHeight = destContext.Height;
-                var inverse = transform.Inverse;
+                MatrixTransform inverse = transform.Inverse;
                 if (shouldClear) destContext.Clear();
 
                 using (BitmapContext sourceContext = source.GetBitmapContext(ReadWriteMode.ReadOnly))

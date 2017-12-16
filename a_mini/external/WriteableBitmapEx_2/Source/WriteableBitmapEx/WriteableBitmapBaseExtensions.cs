@@ -63,23 +63,23 @@ namespace PixelFarm.Agg
         /// <param name="color">The color used for filling.</param>
         public static void Clear(this WriteableBitmap bmp, Color color)
         {
-            var col = ConvertColor(color);
+            int col = ConvertColor(color);
             using (var context = bmp.GetBitmapContext())
             {
-                var pixels = context.Pixels;
-                var w = context.Width;
-                var h = context.Height;
-                var len = w * ARGB_SIZE;
+                int[] pixels = context.Pixels;
+                int w = context.Width;
+                int h = context.Height;
+                int len = w * ARGB_SIZE;
 
                 // Fill first line
-                for (var x = 0; x < w; x++)
+                for (int x = 0; x < w; x++)
                 {
                     pixels[x] = col;
                 }
 
                 // Copy first line
-                var blockHeight = 1;
-                var y = 1;
+                int blockHeight = 1;
+                int y = 1;
                 while (y < h)
                 {
                     BitmapContext.BlockCopy(context, 0, context, y * len, blockHeight * len);
@@ -131,7 +131,7 @@ namespace PixelFarm.Agg
         {
             using (var context = bmp.GetBitmapContext())
             {
-                var pixels = context.Pixels;
+                int[] pixels = context.Pixels;
                 int w = context.Width;
                 int h = context.Height;
                 int index = 0;
@@ -140,8 +140,7 @@ namespace PixelFarm.Agg
                 {
                     for (int x = 0; x < w; x++)
                     {
-                        var color = func(x, y);
-                        pixels[index++] = ConvertColor(color);
+                        pixels[index++] = ConvertColor(func(x, y));
                     }
                 }
             }
@@ -157,19 +156,19 @@ namespace PixelFarm.Agg
         {
             using (var context = bmp.GetBitmapContext())
             {
-                var pixels = context.Pixels;
-                var w = context.Width;
-                var h = context.Height;
-                var index = 0;
+                int[] pixels = context.Pixels;
+                int w = context.Width;
+                int h = context.Height;
+                int index = 0;
 
-                for (var y = 0; y < h; y++)
+                for (int y = 0; y < h; y++)
                 {
-                    for (var x = 0; x < w; x++)
+                    for (int x = 0; x < w; x++)
                     {
-                        var c = pixels[index];
+                        int c = pixels[index];
 
                         // Premultiplied Alpha!
-                        var a = (byte)(c >> 24);
+                        byte a = (byte)(c >> 24);
                         // Prevent division by zero
                         int ai = a;
                         if (ai == 0)
@@ -178,12 +177,12 @@ namespace PixelFarm.Agg
                         }
                         // Scale inverse alpha to use cheap integer mul bit shift
                         ai = ((255 << 8) / ai);
-                        var srcColor = Color.FromArgb(a,
+                        Color srcColor = Color.FromArgb(a,
                                                       (byte)((((c >> 16) & 0xFF) * ai) >> 8),
                                                       (byte)((((c >> 8) & 0xFF) * ai) >> 8),
                                                       (byte)((((c & 0xFF) * ai) >> 8)));
 
-                        var color = func(x, y, srcColor);
+                        Color color = func(x, y, srcColor);
                         pixels[index++] = ConvertColor(color);
                     }
                 }
@@ -220,8 +219,8 @@ namespace PixelFarm.Agg
         {
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                var c = context.Pixels[y * context.Width + x];
-                var a = (byte)(c >> 24);
+                int c = context.Pixels[y * context.Width + x];
+                byte a = (byte)(c >> 24);
 
                 // Prevent division by zero
                 int ai = a;
@@ -251,10 +250,10 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 // Extract color components
-                var c = context.Pixels[y * context.Width + x];
-                var r = (byte)(c >> 16);
-                var g = (byte)(c >> 8);
-                var b = (byte)(c);
+                int c = context.Pixels[y * context.Width + x];
+                byte r = (byte)(c >> 16);
+                byte g = (byte)(c >> 8);
+                byte b = (byte)(c);
 
                 // Convert to gray with constant factors 0.2126, 0.7152, 0.0722
                 return (byte)((r * 6966 + g * 23436 + b * 2366) >> 15);
@@ -381,7 +380,7 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
                 // Add one to use mul and cheap bit shift for multiplicaltion
-                var ai = a + 1;
+                int ai = a + 1;
                 context.Pixels[index] = (a << 24)
                            | ((byte)((color.R * ai) >> 8) << 16)
                            | ((byte)((color.G * ai) >> 8) << 8)
@@ -403,7 +402,7 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
                 // Add one to use mul and cheap bit shift for multiplicaltion
-                var ai = a + 1;
+                int ai = a + 1;
                 context.Pixels[y * context.Width + x] = (a << 24)
                                              | ((byte)((color.R * ai) >> 8) << 16)
                                              | ((byte)((color.G * ai) >> 8) << 8)

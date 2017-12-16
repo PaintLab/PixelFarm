@@ -189,14 +189,14 @@ namespace PixelFarm.Agg
                     int[] p = srcContext.Pixels;
                     int length = srcContext.Length;
 
-                    for (var i = 0; i < length; i++)
+                    for (int i = 0; i < length; i++)
                     {
                         // Extract
-                        var c = p[i];
-                        var a = (c >> 24) & 0xff;
-                        var r = (c >> 16) & 0xff;
-                        var g = (c >> 8) & 0xff;
-                        var b = (c) & 0xff;
+                        int c = p[i];
+                        int a = (c >> 24) & 0xff;
+                        int r = (c >> 16) & 0xff;
+                        int g = (c >> 8) & 0xff;
+                        int b = (c) & 0xff;
 
                         // Invert
                         r = 255 - r;
@@ -272,9 +272,9 @@ namespace PixelFarm.Agg
 
                 using (var dest = result.GetBitmapContext())
                 {
-                    var rp = dest.Pixels;
-                    var len = context.Length;
-                    for (var i = 0; i < len; i++)
+                    int[] rp = dest.Pixels;
+                    int len = context.Length;
+                    for (int i = 0; i < len; i++)
                     {
                         // Extract
                         int c = px[i];

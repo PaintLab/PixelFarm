@@ -193,19 +193,19 @@ namespace PixelFarm.Agg
                 int tx2, ty2;
 
                 // Calculate factors
-                var sx1 = tension * (x3 - x1);
-                var sy1 = tension * (y3 - y1);
-                var sx2 = tension * (x4 - x2);
-                var sy2 = tension * (y4 - y2);
-                var ax = sx1 + sx2 + 2 * x2 - 2 * x3;
-                var ay = sy1 + sy2 + 2 * y2 - 2 * y3;
-                var bx = -2 * sx1 - sx2 - 3 * x2 + 3 * x3;
-                var by = -2 * sy1 - sy2 - 3 * y2 + 3 * y3;
+                float sx1 = tension * (x3 - x1);
+                float sy1 = tension * (y3 - y1);
+                float sx2 = tension * (x4 - x2);
+                float sy2 = tension * (y4 - y2);
+                float ax = sx1 + sx2 + 2 * x2 - 2 * x3;
+                float ay = sy1 + sy2 + 2 * y2 - 2 * y3;
+                float bx = -2 * sx1 - sx2 - 3 * x2 + 3 * x3;
+                float by = -2 * sy1 - sy2 - 3 * y2 + 3 * y3;
 
                 // Interpolate
-                for (var t = step; t <= 1; t += step)
+                for (float t = step; t <= 1; t += step)
                 {
-                    var tSq = t * t;
+                    float tSq = t * t;
 
                     tx2 = (int)(ax * tSq * t + bx * tSq + sx1 * t + x2);
                     ty2 = (int)(ay * tSq * t + by * tSq + sy1 * t + y2);

@@ -61,8 +61,8 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
-                var w = context.Width;
-                var h = context.Height;
+                int w = context.Width;
+                int h = context.Height;
 
                 int sa = ((color >> 24) & 0xff);
                 int sr = ((color >> 16) & 0xff);
@@ -71,7 +71,7 @@ namespace PixelFarm.Agg
 
                 bool noBlending = !doAlphaBlend || sa == 255;
 
-                var pixels = context.Pixels;
+                int[] pixels = context.Pixels;
 
                 // Check boundaries
                 if ((x1 < 0 && x2 < 0) || (y1 < 0 && y2 < 0)
@@ -99,18 +99,18 @@ namespace PixelFarm.Agg
                 }
 
                 // Fill first line
-                var startY = y1 * w;
-                var startYPlusX1 = startY + x1;
-                var endOffset = startY + x2;
-                for (var idx = startYPlusX1; idx < endOffset; idx++)
+                int startY = y1 * w;
+                int startYPlusX1 = startY + x1;
+                int endOffset = startY + x2;
+                for (int idx = startYPlusX1; idx < endOffset; idx++)
                 {
                     pixels[idx] = noBlending ? color : AlphaBlendColors(pixels[idx], sa, sr, sg, sb);
                 }
 
                 // Copy first line
-                var len = (x2 - x1);
-                var srcOffsetBytes = startYPlusX1 * ARGB_SIZE;
-                var offset2 = y2 * w + x1;
+                int len = (x2 - x1);
+                int srcOffsetBytes = startYPlusX1 * ARGB_SIZE;
+                int offset2 = y2 * w + x1;
 
                 //plan...
                 if (noBlending)
@@ -122,7 +122,7 @@ namespace PixelFarm.Agg
 
                 }
 
-                for (var y = startYPlusX1 + w; y < offset2; y += w)
+                for (int y = startYPlusX1 + w; y < offset2; y += w)
                 {
                     if (noBlending)
                     {
@@ -230,7 +230,7 @@ namespace PixelFarm.Agg
             // Use refs for faster access (really important!) speeds up a lot!
             using (var context = bmp.GetBitmapContext())
             {
-                var pixels = context.Pixels;
+                int[] pixels = context.Pixels;
                 int w = context.Width;
                 int h = context.Height;
 
@@ -917,14 +917,14 @@ namespace PixelFarm.Agg
         private static List<int> ComputeBezierPoints(int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2)
         {
             // Determine distances between controls points (bounding rect) to find the optimal stepsize
-            var minX = Math.Min(x1, Math.Min(cx1, Math.Min(cx2, x2)));
-            var minY = Math.Min(y1, Math.Min(cy1, Math.Min(cy2, y2)));
-            var maxX = Math.Max(x1, Math.Max(cx1, Math.Max(cx2, x2)));
-            var maxY = Math.Max(y1, Math.Max(cy1, Math.Max(cy2, y2)));
+            int minX = Math.Min(x1, Math.Min(cx1, Math.Min(cx2, x2)));
+            int minY = Math.Min(y1, Math.Min(cy1, Math.Min(cy2, y2)));
+            int maxX = Math.Max(x1, Math.Max(cx1, Math.Max(cx2, x2)));
+            int maxY = Math.Max(y1, Math.Max(cy1, Math.Max(cy2, y2)));
 
             // Get slope
-            var lenx = maxX - minX;
-            var len = maxY - minY;
+            int lenx = maxX - minX;
+            int len = maxY - minY;
             if (lenx > len)
             {
                 len = lenx;
@@ -935,16 +935,16 @@ namespace PixelFarm.Agg
             if (len != 0)
             {
                 // Init vars
-                var step = STEP_FACTOR / len;
+                float step = STEP_FACTOR / len;
                 int tx = x1;
                 int ty = y1;
 
                 // Interpolate
-                for (var t = 0f; t <= 1; t += step)
+                for (float t = 0f; t <= 1; t += step)
                 {
-                    var tSq = t * t;
-                    var t1 = 1 - t;
-                    var t1Sq = t1 * t1;
+                    float tSq = t * t;
+                    float t1 = 1 - t;
+                    float t1Sq = t1 * t1;
 
                     tx = (int)(t1 * t1Sq * x1 + 3 * t * t1Sq * cx1 + 3 * t1 * tSq * cx2 + t * tSq * x2);
                     ty = (int)(t1 * t1Sq * y1 + 3 * t * t1Sq * cy1 + 3 * t1 * tSq * cy2 + t * tSq * y2);
@@ -1041,14 +1041,14 @@ namespace PixelFarm.Agg
         private static List<int> ComputeSegmentPoints(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, float tension)
         {
             // Determine distances between controls points (bounding rect) to find the optimal stepsize
-            var minX = Math.Min(x1, Math.Min(x2, Math.Min(x3, x4)));
-            var minY = Math.Min(y1, Math.Min(y2, Math.Min(y3, y4)));
-            var maxX = Math.Max(x1, Math.Max(x2, Math.Max(x3, x4)));
-            var maxY = Math.Max(y1, Math.Max(y2, Math.Max(y3, y4)));
+            int minX = Math.Min(x1, Math.Min(x2, Math.Min(x3, x4)));
+            int minY = Math.Min(y1, Math.Min(y2, Math.Min(y3, y4)));
+            int maxX = Math.Max(x1, Math.Max(x2, Math.Max(x3, x4)));
+            int maxY = Math.Max(y1, Math.Max(y2, Math.Max(y3, y4)));
 
             // Get slope
-            var lenx = maxX - minX;
-            var len = maxY - minY;
+            int lenx = maxX - minX;
+            int len = maxY - minY;
             if (lenx > len)
             {
                 len = lenx;
@@ -1059,22 +1059,22 @@ namespace PixelFarm.Agg
             if (len != 0)
             {
                 // Init vars
-                var step = STEP_FACTOR / len;
+                float step = STEP_FACTOR / len;
 
                 // Calculate factors
-                var sx1 = tension * (x3 - x1);
-                var sy1 = tension * (y3 - y1);
-                var sx2 = tension * (x4 - x2);
-                var sy2 = tension * (y4 - y2);
-                var ax = sx1 + sx2 + 2 * x2 - 2 * x3;
-                var ay = sy1 + sy2 + 2 * y2 - 2 * y3;
-                var bx = -2 * sx1 - sx2 - 3 * x2 + 3 * x3;
-                var by = -2 * sy1 - sy2 - 3 * y2 + 3 * y3;
+                float sx1 = tension * (x3 - x1);
+                float sy1 = tension * (y3 - y1);
+                float sx2 = tension * (x4 - x2);
+                float sy2 = tension * (y4 - y2);
+                float ax = sx1 + sx2 + 2 * x2 - 2 * x3;
+                float ay = sy1 + sy2 + 2 * y2 - 2 * y3;
+                float bx = -2 * sx1 - sx2 - 3 * x2 + 3 * x3;
+                float by = -2 * sy1 - sy2 - 3 * y2 + 3 * y3;
 
                 // Interpolate
-                for (var t = 0f; t <= 1; t += step)
+                for (float t = 0f; t <= 1; t += step)
                 {
-                    var tSq = t * t;
+                    float tSq = t * t;
 
                     int tx = (int)(ax * tSq * t + bx * tSq + sx1 * t + x2);
                     int ty = (int)(ay * tSq * t + by * tSq + sy1 * t + y2);
@@ -1123,7 +1123,7 @@ namespace PixelFarm.Agg
                 tension);
 
             // Middle segments
-            int i; 
+            int i;
             for (i = 2; i < points.Length - 4; i += 2)
             {
                 list.AddRange(ComputeSegmentPoints(
@@ -1173,7 +1173,7 @@ namespace PixelFarm.Agg
             int pn = points.Length;
 
             // First segment
-            var list = ComputeSegmentPoints(points[pn - 2], points[pn - 1], points[0], points[1], points[2], points[3],
+            List<int> list = ComputeSegmentPoints(points[pn - 2], points[pn - 1], points[0], points[1], points[2], points[3],
                 points[4], points[5], tension);
 
             // Middle segments

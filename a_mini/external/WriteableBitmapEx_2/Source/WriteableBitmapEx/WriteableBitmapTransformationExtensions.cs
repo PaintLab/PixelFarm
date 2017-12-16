@@ -95,8 +95,8 @@ namespace PixelFarm.Agg
                 {
                     for (int line = 0; line < height; line++)
                     {
-                        var srcOff = ((y + line) * srcWidth + x) * ARGB_SIZE;
-                        var dstOff = line * width * ARGB_SIZE;
+                        int srcOff = ((y + line) * srcWidth + x) * ARGB_SIZE;
+                        int dstOff = line * width * ARGB_SIZE;
                         BitmapContext.BlockCopy(srcContext, srcOff, destContext, dstOff, width * ARGB_SIZE);
                     }
 
@@ -171,9 +171,9 @@ namespace PixelFarm.Agg
         public static int[] Resize(int[] pixels, int widthSource, int heightSource, int width, int height, Interpolation interpolation)
 #endif
         {
-            var pd = new int[width * height];
-            var xs = (float)widthSource / width;
-            var ys = (float)heightSource / height;
+            int[] pd = new int[width * height];
+            float xs = (float)widthSource / width;
+            float ys = (float)heightSource / height;
 
             float fracx, fracy, ifracx, ifracy, sx, sy, l0, l1, rf, gf, bf;
             int c, x0, x1, y0, y1;
@@ -301,10 +301,10 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 // Use refs for faster access (really important!) speeds up a lot!
-                var w = context.Width;
-                var h = context.Height;
-                var p = context.Pixels;
-                var i = 0;
+                int w = context.Width;
+                int h = context.Height;
+                int[] p = context.Pixels;
+                int i = 0;
                 WriteableBitmap result = null;
                 angle %= 360;
 
@@ -416,7 +416,7 @@ namespace PixelFarm.Agg
                 }
                 else
                 {
-                    var rad = angle / (180 / Math.PI);
+                    double rad = angle / (180 / Math.PI);
                     newWidth = (int)Math.Ceiling(Math.Abs(Math.Sin(rad) * iHeight) + Math.Abs(Math.Cos(rad) * iWidth));
                     newHeight = (int)Math.Ceiling(Math.Abs(Math.Sin(rad) * iWidth) + Math.Abs(Math.Cos(rad) * iHeight));
                 }
@@ -526,7 +526,7 @@ namespace PixelFarm.Agg
                             if (iAlpha < 0) iAlpha = 0;
                             if (iAlpha > 255) iAlpha = 255;
 
-                            var a = iAlpha + 1;
+                            int a = iAlpha + 1;
                             newp[i * newWidth + j] = (iAlpha << 24)
                                                    | ((byte)((iRed * a) >> 8) << 16)
                                                    | ((byte)((iGreen * a) >> 8) << 8)
@@ -551,10 +551,10 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 // Use refs for faster access (really important!) speeds up a lot!
-                var w = context.Width;
-                var h = context.Height;
-                var p = context.Pixels;
-                var i = 0;
+                int w = context.Width;
+                int h = context.Height;
+                int[] p = context.Pixels;
+                int i = 0;
                 WriteableBitmap result = null;
 
                 if (flipMode == FlipMode.Horizontal)
