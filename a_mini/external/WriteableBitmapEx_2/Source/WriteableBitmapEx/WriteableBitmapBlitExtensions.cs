@@ -19,22 +19,14 @@
 
 using System;
 
-#if NETFX_CORE
-using Windows.Foundation;
 
-namespace Windows.UI.Xaml.Media.Imaging
-#else
 namespace System.Windows.Media.Imaging
-#endif
+
 {
     /// <summary>
     /// Collection of blit (copy) extension methods for the WriteableBitmap class.
     /// </summary>
-    public
-#if WPF
-    unsafe
-#endif
- static partial class WriteableBitmapExtensions
+    public static partial class WriteableBitmapExtensions
     {
         private const int WhiteR = 255;
         private const int WhiteG = 255;
@@ -147,7 +139,7 @@ namespace System.Windows.Media.Imaging
 
             using (var srcContext = source.GetBitmapContext(ReadWriteMode.ReadOnly))
             using (var destContext = bmp.GetBitmapContext())
-            { 
+            {
 
                 var sourceWidth = srcContext.Width;
                 var dpw = destContext.Width;

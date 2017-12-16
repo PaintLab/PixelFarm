@@ -15,26 +15,13 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-using System;
 
-#if NETFX_CORE
-using Windows.Foundation;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI;
-
-namespace Windows.UI.Xaml.Media.Imaging
-#else
 namespace System.Windows.Media.Imaging
-#endif
 {
     /// <summary>
     /// Collection of draw extension methods for the Silverlight WriteableBitmap class.
     /// </summary>
-    public
-#if !SILVERLIGHT 
-       unsafe 
-#endif
- static partial class WriteableBitmapExtensions
+    public unsafe static partial class WriteableBitmapExtensions
     {
         private static readonly int[] leftEdgeX = new int[8192];
         private static readonly int[] rightEdgeX = new int[8192];

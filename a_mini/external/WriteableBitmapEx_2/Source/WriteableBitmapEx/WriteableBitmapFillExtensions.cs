@@ -19,20 +19,14 @@
 using System;
 using System.Collections.Generic;
 
-#if NETFX_CORE
-namespace Windows.UI.Xaml.Media.Imaging
-#else
+
 namespace System.Windows.Media.Imaging
-#endif
+
 {
     /// <summary>
     /// Collection of extension methods for the WriteableBitmap class.
     /// </summary>
-    public
-#if WPF
- unsafe
-#endif
- static partial class WriteableBitmapExtensions
+    public static partial class WriteableBitmapExtensions
     {
 
 

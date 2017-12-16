@@ -15,17 +15,8 @@
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
 
-using System;
-using System.Collections.Generic;
 
-#if NETFX_CORE
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Collections.Concurrent;
-
-namespace Windows.UI.Xaml.Media.Imaging
-#else
 namespace System.Windows.Media.Imaging
-#endif
 {
     /// <summary>
     /// Read Write Mode for the BitmapContext.
@@ -47,11 +38,7 @@ namespace System.Windows.Media.Imaging
     /// A disposable cross-platform wrapper around a WriteableBitmap, allowing a common API for Silverlight + WPF with locking + unlocking if necessary
     /// </summary>
     /// <remarks>Attempting to put as many preprocessor hacks in this file, to keep the rest of the codebase relatively clean</remarks>
-    public
-#if WPF
- unsafe
-#endif
- struct BitmapContext : IDisposable
+    public struct BitmapContext : IDisposable
     {
         private readonly WriteableBitmap _writeableBitmap;
         private readonly ReadWriteMode _mode;

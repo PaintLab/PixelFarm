@@ -15,31 +15,15 @@
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 // 
 
-using System;
+
 using System.IO;
-using System.Reflection;
 
-#if NETFX_CORE
-using Windows.ApplicationModel.Resources;
-using Windows.Storage;
-using Windows.Storage.Streams;
-using System.Threading.Tasks;
-using Windows.Graphics.Imaging;
-using System.Runtime.InteropServices.WindowsRuntime;
-
-namespace Windows.UI.Xaml.Media.Imaging
-#else
 namespace System.Windows.Media.Imaging
-#endif
 {
     /// <summary>
     /// Collection of interchange extension methods for the WriteableBitmap class.
     /// </summary>
-    public
-#if WPF
- unsafe
-#endif
- static partial class WriteableBitmapExtensions
+    public static partial class WriteableBitmapExtensions
     {
 
 
@@ -203,133 +187,5 @@ namespace System.Windows.Media.Imaging
                 }
             }
         }
-
-
-#if !NETFX_CORE
-        /// <summary>
-        /// Loads an image from the applications resource file and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
-        /// </summary>
-        /// <param name="bmp">The WriteableBitmap.</param>
-        /// <param name="relativePath">Only the relative path to the resource file. The assembly name is retrieved automatically.</param>
-        /// <returns>A new WriteableBitmap containing the pixel data.</returns>
-        [Obsolete("Please use BitmapFactory.FromResource instead of this FromResource method.")]
-        public static WriteableBitmap FromResource(this WriteableBitmap bmp, string relativePath)
-        {
-            return BitmapFactory.FromResource(relativePath);
-        }
-#endif
-
-#if NETFX_CORE
-        /// <summary>
-        /// Loads an image from the applications content and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
-        /// </summary>
-        /// <param name="bmp">The WriteableBitmap.</param>
-        /// <param name="uri">The URI to the content file.</param>
-        /// <param name="pixelFormat">The pixel format of the stream data. If Unknown is provided as param, the default format of the BitmapDecoder is used.</param>
-        /// <returns>A new WriteableBitmap containing the pixel data.</returns>
-        [Obsolete("Please use BitmapFactory.FromContent instead of this FromContent method.")]
-        public static Task<WriteableBitmap> FromContent(this WriteableBitmap bmp, Uri uri, BitmapPixelFormat pixelFormat = BitmapPixelFormat.Unknown)
-        {
-            return BitmapFactory.FromContent(uri, pixelFormat);
-        }
-
-        /// <summary>
-        /// Loads the data from an image stream and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
-        /// </summary>
-        /// <param name="bmp">The WriteableBitmap.</param>
-        /// <param name="stream">The stream with the image data.</param>
-        /// <param name="pixelFormat">The pixel format of the stream data. If Unknown is provided as param, the default format of the BitmapDecoder is used.</param>
-        /// <returns>A new WriteableBitmap containing the pixel data.</returns>
-        [Obsolete("Please use BitmapFactory.FromStream instead of this FromStream method.")]
-        public static Task<WriteableBitmap> FromStream(this WriteableBitmap bmp, Stream stream, BitmapPixelFormat pixelFormat = BitmapPixelFormat.Unknown)
-        {
-            return BitmapFactory.FromStream(stream, pixelFormat);
-        }
-
-        /// <summary>
-        /// Loads the data from an image stream and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
-        /// </summary>
-        /// <param name="bmp">The WriteableBitmap.</param>
-        /// <param name="stream">The stream with the image data.</param>
-        /// <param name="pixelFormat">The pixel format of the stream data. If Unknown is provided as param, the default format of the BitmapDecoder is used.</param>
-        /// <returns>A new WriteableBitmap containing the pixel data.</returns>
-        [Obsolete("Please use BitmapFactory.FromStream instead of this FromStream method.")]
-        public static Task<WriteableBitmap> FromStream(this WriteableBitmap bmp, IRandomAccessStream stream, BitmapPixelFormat pixelFormat = BitmapPixelFormat.Unknown)
-        {
-            return BitmapFactory.FromStream(stream, pixelFormat);
-        }
-
-        /// <summary>
-        /// Encodes the data from a WriteableBitmap into a stream.
-        /// </summary>
-        /// <param name="bmp">The WriteableBitmap.</param>
-        /// <param name="destinationStream">The stream which will take the image data.</param>
-        /// <param name="encoderId">The encoder GUID to use like BitmapEncoder.JpegEncoderId etc.</param>
-        public static async Task ToStream(this WriteableBitmap bmp, IRandomAccessStream destinationStream, Guid encoderId)
-        {
-            // Copy buffer to pixels
-            byte[] pixels;
-            using (var stream = bmp.PixelBuffer.AsStream())
-            {
-                pixels = new byte[(uint)stream.Length];
-                await stream.ReadAsync(pixels, 0, pixels.Length);
-            }
-
-            // Encode pixels into stream
-            var encoder = await BitmapEncoder.CreateAsync(encoderId, destinationStream);
-            encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied, (uint)bmp.PixelWidth, (uint)bmp.PixelHeight, 96, 96, pixels);
-            await encoder.FlushAsync();
-        }
-
-        /// <summary>
-        /// Encodes the data from a WriteableBitmap as JPEG into a stream.
-        /// </summary>
-        /// <param name="bmp">The WriteableBitmap.</param>
-        /// <param name="destinationStream">The stream which will take the JPEG image data.</param>
-        public static async Task ToStreamAsJpeg(this WriteableBitmap bmp, IRandomAccessStream destinationStream)
-        {
-            await ToStream(bmp, destinationStream, BitmapEncoder.JpegEncoderId);
-        }
-
-        /// <summary>
-        /// Loads the data from a pixel buffer like the RenderTargetBitmap provides and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
-        /// </summary>
-        /// <param name="bmp">The WriteableBitmap.</param>
-        /// <param name="pixelBuffer">The source pixel buffer with the image data.</param>
-        /// <param name="width">The width of the image data.</param>
-        /// <param name="height">The height of the image data.</param>
-        /// <returns>A new WriteableBitmap containing the pixel data.</returns>
-        [Obsolete("Please use BitmapFactory.FromPixelBuffer instead of this FromPixelBuffer method.")]
-        public static Task<WriteableBitmap> FromPixelBuffer(this WriteableBitmap bmp, IBuffer pixelBuffer, int width, int height)
-        {
-            return BitmapFactory.FromPixelBuffer(pixelBuffer, width, height);
-        }
-#else
-        ///// <summary>
-        ///// Loads an image from the applications content and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
-        ///// </summary>
-        ///// <param name="bmp">The WriteableBitmap.</param>
-        ///// <param name="relativePath">Only the relative path to the content file.</param>
-        ///// <returns>A new WriteableBitmap containing the pixel data.</returns>
-        //[Obsolete("Please use BitmapFactory.FromContent instead of this FromContent method.")]
-        //public static WriteableBitmap FromContent(this WriteableBitmap bmp, string relativePath)
-        //{
-        //   return BitmapFactory.FromContent(relativePath);
-        //}
-
-        ///// <summary>
-        ///// Loads the data from an image stream and returns a new WriteableBitmap. The passed WriteableBitmap is not used.
-        ///// </summary>
-        ///// <param name="bmp">The WriteableBitmap.</param>
-        ///// <param name="stream">The stream with the image data.</param>
-        ///// <returns>A new WriteableBitmap containing the pixel data.</returns>
-        //[Obsolete("Please use BitmapFactory.FromStream instead of this FromStream method.")]
-        //public static WriteableBitmap FromStream(this WriteableBitmap bmp, Stream stream)
-        //{
-        //   return BitmapFactory.FromStream(stream);
-        //}
-#endif
-
-
     }
 }

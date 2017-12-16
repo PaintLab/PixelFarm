@@ -15,22 +15,10 @@
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
 
-using System;
-using System.Collections.Generic;
-
-#if NETFX_CORE
-using Windows.Foundation;
-
-namespace Windows.UI.Xaml.Media.Imaging
-#else
 namespace System.Windows.Media.Imaging
-#endif
+
 {
-    public
-#if WPF
-        unsafe
-#endif
- static partial class WriteableBitmapExtensions
+    public static partial class WriteableBitmapExtensions
     {
 
         /// <summary>
@@ -607,7 +595,7 @@ namespace System.Windows.Media.Imaging
         public static void DrawLinePenned(BitmapContext context, int w, int h, int x1, int y1, int x2, int y2, BitmapContext pen, Rect? clipRect = null)
         {
             // Edge case where lines that went out of vertical bounds clipped instead of disappearing
-            if((y1 < 0 && y2 < 0) || (y1 > h && y2 > h))
+            if ((y1 < 0 && y2 < 0) || (y1 > h && y2 > h))
                 return;
 
             if (x1 == x2 && y1 == y2)
