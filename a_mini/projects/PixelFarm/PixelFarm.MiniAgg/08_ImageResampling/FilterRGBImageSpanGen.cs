@@ -34,7 +34,7 @@ namespace PixelFarm.Agg.Imaging
     class FilterRGBImageSpanGen : FilterImageSpanGenerator
     {
         const int BASE_MASK = 255;
-        const int DOWNSCALE_SHIFT = (int)ImageFilterLookUpTable.ImgFilterConst.SHIFT;
+        const int DOWNSCALE_SHIFT = ImageFilterLookUpTable.ImgFilterConst.SHIFT;
         //--------------------------------------------------------------------
         public FilterRGBImageSpanGen(IImageReaderWriter src,
                             ISpanInterpolator inter,
