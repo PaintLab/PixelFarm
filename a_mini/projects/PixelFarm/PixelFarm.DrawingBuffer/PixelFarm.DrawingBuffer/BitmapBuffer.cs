@@ -138,7 +138,7 @@ namespace PixelFarm.DrawingBuffer
                 return this.Left;
             }
 
-            private set
+            set
             {
                 this.Left = value;
             }
@@ -173,16 +173,32 @@ namespace PixelFarm.DrawingBuffer
     }
     public struct ColorInt
     {
-        public byte R, G, B, A;
+        byte _r, _g, _b, _a;
+
+        public byte R { get { return _r; } }
+        public byte G { get { return _g; } }
+        public byte B { get { return _b; } }
+        public byte A { get { return _a; } }
+
+        public static ColorInt NewAlpha(ColorInt oldColor, byte a)
+        {
+            ColorInt c = new ColorInt();
+            c._r = oldColor._r;
+            c._g = oldColor._g;
+            c._b = oldColor._b;
+            c._a = a;
+            return c;
+        }
         public static ColorInt FromArgb(byte a, byte r, byte g, byte b)
         {
             ColorInt c = new ColorInt();
-            c.R = r;
-            c.G = g;
-            c.B = b;
-            c.A = a;
+            c._r = r;
+            c._g = g;
+            c._b = b;
+            c._a = a;
             return c;
         }
+
         public static bool operator ==(ColorInt c1, ColorInt c2)
         {
             return (uint)((c1.A << 24) | (c1.R << 16) | (c1.G << 8) | (c1.B)) ==

@@ -28,17 +28,15 @@ namespace PixelFarm.DrawingBuffer
 
         internal const int ARGB_SIZE = 4;
 
-        public static int ConvertColor(double opacity, ColorInt color)
-        {
-            if (opacity < 0.0 || opacity > 1.0)
-            {
-                throw new ArgumentOutOfRangeException("opacity", "Opacity must be between 0.0 and 1.0");
-            }
-
-            color.A = (byte)(color.A * opacity);
-
-            return ConvertColor(color);
-        }
+        //public static int ConvertColor(double opacity, ColorInt color)
+        //{
+        //    if (opacity < 0.0 || opacity > 1.0)
+        //    {
+        //        throw new ArgumentOutOfRangeException("opacity", "Opacity must be between 0.0 and 1.0");
+        //    } 
+        //    color.A = (byte)(color.A * opacity); 
+        //    return ConvertColor(color);
+        //}
 
         public static int ConvertColor(ColorInt color)
         {
