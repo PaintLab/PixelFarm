@@ -882,26 +882,26 @@ namespace PixelFarm.Agg
 
 
 
-        /// <summary>
-        /// Draws a filled, cubic Beziér spline defined by start, end and two control points.
-        /// </summary>
-        /// <param name="x1">The x-coordinate of the start point.</param>
-        /// <param name="y1">The y-coordinate of the start point.</param>
-        /// <param name="cx1">The x-coordinate of the 1st control point.</param>
-        /// <param name="cy1">The y-coordinate of the 1st control point.</param>
-        /// <param name="cx2">The x-coordinate of the 2nd control point.</param>
-        /// <param name="cy2">The y-coordinate of the 2nd control point.</param>
-        /// <param name="x2">The x-coordinate of the end point.</param>
-        /// <param name="y2">The y-coordinate of the end point.</param>
-        /// <param name="color">The color.</param>
-        /// <param name="context">The context with the pixels.</param>
-        /// <param name="w">The width of the bitmap.</param>
-        /// <param name="h">The height of the bitmap.</param> 
-        [Obsolete("Obsolete, left for compatibility reasons. Please use List<int> ComputeBezierPoints(int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2) instead.")]
-        private static List<int> ComputeBezierPoints(int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2, int color, BitmapContext context, int w, int h)
-        {
-            return ComputeBezierPoints(x1, y1, cx1, cy1, cx2, cy2, x2, y1);
-        }
+        ///// <summary>
+        ///// Draws a filled, cubic Beziér spline defined by start, end and two control points.
+        ///// </summary>
+        ///// <param name="x1">The x-coordinate of the start point.</param>
+        ///// <param name="y1">The y-coordinate of the start point.</param>
+        ///// <param name="cx1">The x-coordinate of the 1st control point.</param>
+        ///// <param name="cy1">The y-coordinate of the 1st control point.</param>
+        ///// <param name="cx2">The x-coordinate of the 2nd control point.</param>
+        ///// <param name="cy2">The y-coordinate of the 2nd control point.</param>
+        ///// <param name="x2">The x-coordinate of the end point.</param>
+        ///// <param name="y2">The y-coordinate of the end point.</param>
+        ///// <param name="color">The color.</param>
+        ///// <param name="context">The context with the pixels.</param>
+        ///// <param name="w">The width of the bitmap.</param>
+        ///// <param name="h">The height of the bitmap.</param> 
+        //[Obsolete("Obsolete, left for compatibility reasons. Please use List<int> ComputeBezierPoints(int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2) instead.")]
+        //private static List<int> ComputeBezierPoints(int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2, int color, BitmapContext context, int w, int h)
+        //{
+        //    return ComputeBezierPoints(x1, y1, cx1, cy1, cx2, cy2, x2, y1);
+        //}
 
         /// <summary>
         /// Draws a filled, cubic Beziér spline defined by start, end and two control points.
@@ -1115,20 +1115,32 @@ namespace PixelFarm.Agg
         public static void FillCurve(this WriteableBitmap bmp, int[] points, float tension, int color)
         {
             // First segment
-            var list = ComputeSegmentPoints(points[0], points[1], points[0], points[1], points[2], points[3], points[4],
-                points[5], tension);
+            List<int> list = ComputeSegmentPoints(
+                points[0], points[1], //?
+                points[0], points[1],//?
+                points[2], points[3],
+                points[4], points[5],
+                tension);
 
             // Middle segments
-            int i;
+            int i; 
             for (i = 2; i < points.Length - 4; i += 2)
             {
-                list.AddRange(ComputeSegmentPoints(points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2],
-                    points[i + 3], points[i + 4], points[i + 5], tension));
+                list.AddRange(ComputeSegmentPoints(
+                    points[i - 2], points[i - 1],
+                    points[i], points[i + 1],
+                    points[i + 2], points[i + 3],
+                    points[i + 4], points[i + 5],
+                    tension));
             }
 
             // Last segment
-            list.AddRange(ComputeSegmentPoints(points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2],
-                points[i + 3], points[i + 2], points[i + 3], tension));
+            list.AddRange(ComputeSegmentPoints(
+                points[i - 2], points[i - 1],
+                points[i], points[i + 1],
+                points[i + 2], points[i + 3],
+                points[i + 2], points[i + 3],
+                tension));
 
             // Fill
             bmp.FillPolygon(list.ToArray(), color);

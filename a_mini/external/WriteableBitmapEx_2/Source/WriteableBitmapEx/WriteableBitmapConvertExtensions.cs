@@ -164,20 +164,20 @@ namespace PixelFarm.Agg
 
                 // Create header
                 var header = new byte[]
-         {
-            0, // ID length
-            0, // no color map
-            2, // uncompressed, true color
-            0, 0, 0, 0,
-            0,
-            0, 0, 0, 0, // x and y origin
-            (byte)(width & 0x00FF),
-            (byte)((width & 0xFF00) >> 8),
-            (byte)(height & 0x00FF),
-            (byte)((height & 0xFF00) >> 8),
-            32, // 32 bit bitmap
-            0
-         };
+                 {
+                    0, // ID length
+                    0, // no color map
+                    2, // uncompressed, true color
+                    0, 0, 0, 0,
+                    0,
+                    0, 0, 0, 0, // x and y origin
+                    (byte)(width & 0x00FF),
+                    (byte)((width & 0xFF00) >> 8),
+                    (byte)(height & 0x00FF),
+                    (byte)((height & 0xFF00) >> 8),
+                    32, // 32 bit bitmap
+                    0
+                 };
 
                 // Write header and data
                 using (var writer = new BinaryWriter(destination))

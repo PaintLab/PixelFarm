@@ -453,7 +453,8 @@ namespace PixelFarm.Agg
                                     dr = ((destPixel >> 16) & 0xff);
                                     dg = ((destPixel >> 8) & 0xff);
                                     db = ((destPixel) & 0xff);
-                                    var isa = 255 - sa;
+                                    int isa = 255 - sa;
+
 #if NETFX_CORE
                                     // Special case for WinRT since it does not use pARGB (pre-multiplied alpha)
                                     destPixel = ((da & 0xff) << 24) |

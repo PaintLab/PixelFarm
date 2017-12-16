@@ -110,7 +110,7 @@ namespace PixelFarm.Agg
         {
             using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                var result = BitmapFactory.New(srcContext.Width, srcContext.Height);
+                WriteableBitmap result = BitmapFactory.New(srcContext.Width, srcContext.Height);
                 using (var destContext = result.GetBitmapContext())
                 {
                     BitmapContext.BlockCopy(srcContext, 0, destContext, 0, srcContext.Length * ARGB_SIZE);
@@ -260,9 +260,6 @@ namespace PixelFarm.Agg
                 return (byte)((r * 6966 + g * 23436 + b * 2366) >> 15);
             }
         }
-
-
-
 
         /// <summary>
         /// Sets the color of the pixel using a precalculated index (faster). 
