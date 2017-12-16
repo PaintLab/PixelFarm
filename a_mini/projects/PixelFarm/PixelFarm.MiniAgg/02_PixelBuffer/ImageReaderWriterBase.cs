@@ -23,6 +23,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
 {
+
     public abstract class ImageReaderWriterBase : IImageReaderWriter
     {
         const int BASE_MASK = 255;
@@ -42,13 +43,13 @@ namespace PixelFarm.Agg
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
         IPixelBlender recieveBlender;
-        //--------------------------------------------
-
-
+        //-------------------------------------------- 
+        public byte[] GetBuffer()
+        {
+            return m_ByteBuffer;
+        }
         protected void Attach(int width, int height, int bitsPerPixel, byte[] imgbuffer, IPixelBlender recieveBlender)
         {
-
-
 
             if (width <= 0 || height <= 0)
             {
@@ -270,11 +271,6 @@ namespace PixelFarm.Agg
             {
                 throw new Exception("You do not have enough strideInBytes to hold the width and pixel distance you have described.");
             }
-        }
-
-        public byte[] GetBuffer()
-        {
-            return m_ByteBuffer;
         }
 
 
@@ -643,7 +639,7 @@ namespace PixelFarm.Agg
                            actualImage.Height,
                            actualImage.BitDepth,
                            ActualImage.GetBuffer(actualImage),
-                           pixelBlenderRGBA ?? (pixelBlenderRGBA = new PixelBlenderBGRA())); 
+                           pixelBlenderRGBA ?? (pixelBlenderRGBA = new PixelBlenderBGRA()));
                     }
                     break;
                 case PixelFormat.GrayScale8:
