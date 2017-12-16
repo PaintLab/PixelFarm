@@ -234,7 +234,7 @@ namespace PixelFarm.DrawingBuffer
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        public int ToPreMulAlphaColor()
+        public int ToPreMultAlphaColor()
         {
             //see more at https://github.com/PaintLab/PixelFarm/issues/12
             if (_a == 0) return 0; //for premultiplied alpha => this return (0,0,0,0) NOT (r,g,b,0)

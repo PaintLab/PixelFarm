@@ -39,7 +39,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
 
-            bmp.FillRectangle(x1, y1, x2, y2, color.ToPreMulAlphaColor());
+            bmp.FillRectangle(x1, y1, x2, y2, color.ToPreMultAlphaColor());
         }
 
         /// <summary>
@@ -55,12 +55,16 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="doAlphaBlend">True if alpha blending should be performed or false if not.</param>
         public static void FillRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, bool doAlphaBlend = false)
         {
+            
+
             using (var context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
                 int h = context.Height;
 
+                //color is in the 'pre-multiplied' alpha color
+                //get each color component
                 int sa = ((color >> 24) & 0xff);
                 int sr = ((color >> 16) & 0xff);
                 int sg = ((color >> 8) & 0xff);
@@ -99,6 +103,9 @@ namespace PixelFarm.DrawingBuffer
                 int startY = y1 * w;
                 int startYPlusX1 = startY + x1;
                 int endOffset = startY + x2;
+                
+
+
                 for (int idx = startYPlusX1; idx < endOffset; idx++)
                 {
                     pixels[idx] = noBlending ? color : AlphaBlendColors(pixels[idx], sa, sr, sg, sb);
@@ -170,7 +177,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillEllipse(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
 
-            bmp.FillEllipse(x1, y1, x2, y2, color.ToPreMulAlphaColor());
+            bmp.FillEllipse(x1, y1, x2, y2, color.ToPreMultAlphaColor());
         }
 
         /// <summary>
@@ -206,7 +213,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillEllipseCentered(this BitmapBuffer bmp, int xc, int yc, int xr, int yr, ColorInt color)
         {
 
-            bmp.FillEllipseCentered(xc, yc, xr, yr, color.ToPreMulAlphaColor());
+            bmp.FillEllipseCentered(xc, yc, xr, yr, color.ToPreMultAlphaColor());
         }
 
 
@@ -420,7 +427,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillPolygon(this BitmapBuffer bmp, int[] points, ColorInt color)
         {
 
-            bmp.FillPolygon(points, color.ToPreMulAlphaColor());
+            bmp.FillPolygon(points, color.ToPreMultAlphaColor());
         }
 
         /// <summary>
@@ -623,7 +630,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillPolygonsEvenOdd(this BitmapBuffer bmp, int[][] polygons, ColorInt color)
         {
 
-            FillPolygonsEvenOdd(bmp, polygons, color.ToPreMulAlphaColor());
+            FillPolygonsEvenOdd(bmp, polygons, color.ToPreMultAlphaColor());
         }
 
         /// <summary>
@@ -823,7 +830,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillQuad(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, ColorInt color)
         {
 
-            bmp.FillQuad(x1, y1, x2, y2, x3, y3, x4, y4, color.ToPreMulAlphaColor());
+            bmp.FillQuad(x1, y1, x2, y2, x3, y3, x4, y4, color.ToPreMultAlphaColor());
         }
 
         /// <summary>
@@ -858,7 +865,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillTriangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, ColorInt color)
         {
 
-            bmp.FillTriangle(x1, y1, x2, y2, x3, y3, color.ToPreMulAlphaColor());
+            bmp.FillTriangle(x1, y1, x2, y2, x3, y3, color.ToPreMultAlphaColor());
         }
 
         /// <summary>
@@ -967,7 +974,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the spline.</param>
         public static void FillBeziers(this BitmapBuffer bmp, int[] points, ColorInt color)
         {
-            bmp.FillBeziers(points, color.ToPreMulAlphaColor());
+            bmp.FillBeziers(points, color.ToPreMultAlphaColor());
         }
 
         /// <summary>
@@ -1097,7 +1104,7 @@ namespace PixelFarm.DrawingBuffer
         public static void FillCurve(this BitmapBuffer bmp, int[] points, float tension, ColorInt color)
         {
 
-            bmp.FillCurve(points, tension, color.ToPreMulAlphaColor());
+            bmp.FillCurve(points, tension, color.ToPreMultAlphaColor());
         }
 
         /// <summary>
@@ -1152,7 +1159,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the spline.</param>
         public static void FillCurveClosed(this BitmapBuffer bmp, int[] points, float tension, ColorInt color)
         {
-            bmp.FillCurveClosed(points, tension, color.ToPreMulAlphaColor());
+            bmp.FillCurveClosed(points, tension, color.ToPreMultAlphaColor());
         }
 
         /// <summary>

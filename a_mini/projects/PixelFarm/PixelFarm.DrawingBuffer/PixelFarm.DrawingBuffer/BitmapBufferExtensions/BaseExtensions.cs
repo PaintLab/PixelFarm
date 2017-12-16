@@ -47,7 +47,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color used for filling.</param>
         public static void Clear(this BitmapBuffer bmp, ColorInt color)
         {
-            int colr = color.ToPreMulAlphaColor();
+            int colr = color.ToPreMultAlphaColor();
             using (var context = bmp.GetBitmapContext())
             {
                 int[] pixels = context.Pixels;
@@ -124,7 +124,7 @@ namespace PixelFarm.DrawingBuffer
                 {
                     for (int x = 0; x < w; x++)
                     {
-                        pixels[index++] = func(x, y).ToPreMulAlphaColor();
+                        pixels[index++] = func(x, y).ToPreMultAlphaColor();
                     }
                 }
             }
@@ -167,7 +167,7 @@ namespace PixelFarm.DrawingBuffer
                                                       (byte)((((c & 0xFF) * ai) >> 8)));
 
 
-                        pixels[index++] = func(x, y, srcColor).ToPreMulAlphaColor();
+                        pixels[index++] = func(x, y, srcColor).ToPreMultAlphaColor();
                     }
                 }
             }
@@ -330,7 +330,7 @@ namespace PixelFarm.DrawingBuffer
         {
             using (var context = bmp.GetBitmapContext())
             {
-                context.Pixels[index] = color.ToPreMulAlphaColor();
+                context.Pixels[index] = color.ToPreMultAlphaColor();
             }
         }
 
@@ -346,7 +346,7 @@ namespace PixelFarm.DrawingBuffer
         {
             using (var context = bmp.GetBitmapContext())
             {
-                context.Pixels[y * context.Width + x] = color.ToPreMulAlphaColor();
+                context.Pixels[y * context.Width + x] = color.ToPreMultAlphaColor();
             }
         }
 
@@ -362,7 +362,7 @@ namespace PixelFarm.DrawingBuffer
         {
             using (var context = bmp.GetBitmapContext())
             {
-                context.Pixels[index] = color.ToPreMulAlphaColor();
+                context.Pixels[index] = color.ToPreMultAlphaColor();
             }
         }
 
@@ -380,7 +380,7 @@ namespace PixelFarm.DrawingBuffer
             using (var context = bmp.GetBitmapContext())
             {
                 // Add one to use mul and cheap bit shift for multiplicaltion
-                context.Pixels[y * context.Width + x] = color.ToPreMulAlphaColor();
+                context.Pixels[y * context.Width + x] = color.ToPreMultAlphaColor();
             }
         }
 
