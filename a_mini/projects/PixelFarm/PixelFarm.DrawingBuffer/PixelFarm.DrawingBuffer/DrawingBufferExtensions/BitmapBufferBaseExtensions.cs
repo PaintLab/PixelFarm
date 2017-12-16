@@ -61,7 +61,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color used for filling.</param>
         public static void Clear(this BitmapBuffer bmp, ColorInt color)
         {
-            int col = ConvertColor(color);
+            int colr = ConvertColor(color);
             using (var context = bmp.GetBitmapContext())
             {
                 int[] pixels = context.Pixels;
@@ -72,7 +72,7 @@ namespace PixelFarm.DrawingBuffer
                 // Fill first line
                 for (int x = 0; x < w; x++)
                 {
-                    pixels[x] = col;
+                    pixels[x] = colr;
                 }
 
                 // Copy first line
@@ -118,14 +118,14 @@ namespace PixelFarm.DrawingBuffer
         }
 
 
-
+#if DEBUG
         /// <summary>
         /// Applies the given function to all the pixels of the bitmap in 
         /// order to set their color.
         /// </summary>
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="func">The function to apply. With parameters x, y and a color as a result</param>
-        public static void ForEach(this BitmapBuffer bmp, Func<int, int, ColorInt> func)
+        public static void dbugForEach(this BitmapBuffer bmp, Func<int, int, ColorInt> func)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -150,7 +150,7 @@ namespace PixelFarm.DrawingBuffer
         /// </summary>
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="func">The function to apply. With parameters x, y, source color and a color as a result</param>
-        public static void ForEach(this BitmapBuffer bmp, Func<int, int, ColorInt, ColorInt> func)
+        public static void dbugForEach(this BitmapBuffer bmp, Func<int, int, ColorInt, ColorInt> func)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -188,7 +188,6 @@ namespace PixelFarm.DrawingBuffer
         }
 
 
-
         /// <summary>
         /// Gets the color of the pixel at the x, y coordinate as integer.  
         /// For best performance this method should not be used in iterative real-time scenarios. Implement the code directly inside a loop.
@@ -197,7 +196,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="x">The x coordinate of the pixel.</param>
         /// <param name="y">The y coordinate of the pixel.</param>
         /// <returns>The color of the pixel at x, y.</returns>
-        public static int GetPixeli(this BitmapBuffer bmp, int x, int y)
+        public static int dbugGetPixeli(this BitmapBuffer bmp, int x, int y)
         {
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
@@ -213,7 +212,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="x">The x coordinate of the pixel.</param>
         /// <param name="y">The y coordinate of the pixel.</param>
         /// <returns>The color of the pixel at x, y as a Color struct.</returns>
-        public static ColorInt GetPixel(this BitmapBuffer bmp, int x, int y)
+        public static ColorInt dbugGetPixel(this BitmapBuffer bmp, int x, int y)
         {
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
@@ -235,7 +234,7 @@ namespace PixelFarm.DrawingBuffer
                                      (byte)((((c & 0xFF) * ai) >> 8)));
             }
         }
-
+#endif
         /// <summary>
         /// Gets the brightness / luminance of the pixel at the x, y coordinate as byte.
         /// </summary>
