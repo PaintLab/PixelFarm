@@ -243,6 +243,7 @@ namespace System.Windows.Media.Imaging
         public static Color White = Color.FromArgb(255, 255, 255, 255);
         public static Color Black = Color.FromArgb(255, 0, 0, 0);
         public static Color Red = Color.FromArgb(255, 255, 0, 0);
+        public static Color Blue = Color.FromArgb(255, 0, 0, 255);
     }
     public class WriteableBitmap
     {

@@ -109,5 +109,11 @@ namespace WinFormGdiPlus
             FormBlit formBlit = new FormBlit();
             formBlit.Show();
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            FormPlantDemo formPlant = new FormPlantDemo();
+            formPlant.Show();
+        }
     }
 }

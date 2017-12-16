@@ -81,6 +81,13 @@
     <Compile Include="BlitDemo\Particle.cs" />
     <Compile Include="BlitDemo\HslColor.cs" />
     <Compile Include="BlitDemo\ParticleEmitter.cs" />
+    <Compile Include="CurveSample\FormPlantDemo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CurveSample\FormPlantDemo.Designer.cs">
+      <DependentUpon>FormPlantDemo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CurveSample\PlantSample.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -109,6 +116,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WritableBitmapEx\NativeMethods.cs" />
+    <EmbeddedResource Include="CurveSample\FormPlantDemo.resx">
+      <DependentUpon>FormPlantDemo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
