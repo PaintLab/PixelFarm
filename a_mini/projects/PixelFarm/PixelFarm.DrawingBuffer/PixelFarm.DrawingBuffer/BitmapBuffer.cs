@@ -138,7 +138,7 @@ namespace PixelFarm.DrawingBuffer
                 return this.Left;
             }
 
-            set
+            private set
             {
                 this.Left = value;
             }
@@ -169,7 +169,7 @@ namespace PixelFarm.DrawingBuffer
             this.Height = h;
         }
         public double Width { get; private set; }
-        public double Height { get; private  set; }
+        public double Height { get; private set; }
     }
     public struct ColorInt
     {
