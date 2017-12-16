@@ -103,5 +103,11 @@ namespace WinFormGdiPlus
             FormFill formFill = new FormFill();
             formFill.Show();
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            FormBlit formBlit = new FormBlit();
+            formBlit.Show();
+        }
     }
 }

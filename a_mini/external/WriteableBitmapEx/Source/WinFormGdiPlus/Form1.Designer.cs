@@ -103,6 +103,7 @@
             this.button7.TabIndex = 6;
             this.button7.Text = "FormBlit";
             this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Form1
             // 
