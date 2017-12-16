@@ -98,7 +98,7 @@ namespace PixelFarm.DrawingBuffer
             {
                 int w = srcContext.Width;
                 int h = srcContext.Height;
-                BitmapBuffer result = BitmapFactory.New(w, h);
+                BitmapBuffer result = BitmapBufferFactory.New(w, h);
 
                 using (var resultContext = result.GetBitmapContext())
                 {
@@ -182,7 +182,7 @@ namespace PixelFarm.DrawingBuffer
         {
             using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                var result = BitmapFactory.New(srcContext.Width, srcContext.Height);
+                var result = BitmapBufferFactory.New(srcContext.Width, srcContext.Height);
                 using (var resultContext = result.GetBitmapContext())
                 {
                     int[] rp = resultContext.Pixels;
@@ -226,7 +226,7 @@ namespace PixelFarm.DrawingBuffer
                 int nWidth = context.Width;
                 int nHeight = context.Height;
                 int[] px = context.Pixels;
-                BitmapBuffer result = BitmapFactory.New(nWidth, nHeight);
+                BitmapBuffer result = BitmapBufferFactory.New(nWidth, nHeight);
 
                 using (var dest = result.GetBitmapContext())
                 {
@@ -268,7 +268,7 @@ namespace PixelFarm.DrawingBuffer
                 int nWidth = context.Width;
                 int nHeight = context.Height;
                 int[] px = context.Pixels;
-                BitmapBuffer result = BitmapFactory.New(nWidth, nHeight);
+                BitmapBuffer result = BitmapBufferFactory.New(nWidth, nHeight);
 
                 using (var dest = result.GetBitmapContext())
                 {
@@ -316,7 +316,7 @@ namespace PixelFarm.DrawingBuffer
                 int nWidth = context.Width;
                 int nHeight = context.Height;
                 int[] px = context.Pixels;
-                BitmapBuffer result = BitmapFactory.New(nWidth, nHeight);
+                BitmapBuffer result = BitmapBufferFactory.New(nWidth, nHeight);
 
                 using (var dest = result.GetBitmapContext())
                 {
@@ -364,7 +364,7 @@ namespace PixelFarm.DrawingBuffer
                 int nWidth = context.Width;
                 int nHeight = context.Height;
                 int[] srcPixels = context.Pixels;
-                BitmapBuffer result = BitmapFactory.New(nWidth, nHeight);
+                BitmapBuffer result = BitmapBufferFactory.New(nWidth, nHeight);
 
                 using (var dest = result.GetBitmapContext())
                 {

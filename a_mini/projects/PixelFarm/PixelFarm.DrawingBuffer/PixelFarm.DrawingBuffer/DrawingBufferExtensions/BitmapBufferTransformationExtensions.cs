@@ -80,7 +80,7 @@ namespace PixelFarm.DrawingBuffer
                 // If the rectangle is completely out of the bitmap
                 if (x > srcWidth || y > srcHeight)
                 {
-                    return BitmapFactory.New(0, 0);
+                    return BitmapBufferFactory.New(0, 0);
                 }
 
                 // Clamp to boundaries
@@ -90,7 +90,7 @@ namespace PixelFarm.DrawingBuffer
                 if (y + height > srcHeight) height = srcHeight - y;
 
                 // Copy the pixels line by line using fast BlockCopy
-                BitmapBuffer result = BitmapFactory.New(width, height);
+                BitmapBuffer result = BitmapBufferFactory.New(width, height);
                 using (var destContext = result.GetBitmapContext())
                 {
                     for (int line = 0; line < height; line++)
@@ -131,7 +131,7 @@ namespace PixelFarm.DrawingBuffer
             {
                 int[] pd = Resize(srcContext, srcContext.Width, srcContext.Height, width, height, interpolation);
 
-                BitmapBuffer result = BitmapFactory.New(width, height);
+                BitmapBuffer result = BitmapBufferFactory.New(width, height);
                 using (var dstContext = result.GetBitmapContext())
                 {
                     BitmapContext.BlockCopy(pd, 0, dstContext, 0, ARGB_SIZE * pd.Length);
@@ -310,7 +310,7 @@ namespace PixelFarm.DrawingBuffer
 
                 if (angle > 0 && angle <= 90)
                 {
-                    result = BitmapFactory.New(h, w);
+                    result = BitmapBufferFactory.New(h, w);
                     using (var destContext = result.GetBitmapContext())
                     {
                         var rp = destContext.Pixels;
@@ -327,7 +327,7 @@ namespace PixelFarm.DrawingBuffer
                 }
                 else if (angle > 90 && angle <= 180)
                 {
-                    result = BitmapFactory.New(w, h);
+                    result = BitmapBufferFactory.New(w, h);
                     using (var destContext = result.GetBitmapContext())
                     {
                         var rp = destContext.Pixels;
@@ -344,7 +344,7 @@ namespace PixelFarm.DrawingBuffer
                 }
                 else if (angle > 180 && angle <= 270)
                 {
-                    result = BitmapFactory.New(h, w);
+                    result = BitmapBufferFactory.New(h, w);
                     using (var destContext = result.GetBitmapContext())
                     {
                         int[] rp = destContext.Pixels;
@@ -428,7 +428,7 @@ namespace PixelFarm.DrawingBuffer
                 iDestCentreX = newWidth / 2;
                 iDestCentreY = newHeight / 2;
 
-                BitmapBuffer bmBilinearInterpolation = BitmapFactory.New(newWidth, newHeight);
+                BitmapBuffer bmBilinearInterpolation = BitmapBufferFactory.New(newWidth, newHeight);
 
                 using (var bilinearContext = bmBilinearInterpolation.GetBitmapContext())
                 {
@@ -559,7 +559,7 @@ namespace PixelFarm.DrawingBuffer
 
                 if (flipMode == FlipMode.Horizontal)
                 {
-                    result = BitmapFactory.New(w, h);
+                    result = BitmapBufferFactory.New(w, h);
                     using (var destContext = result.GetBitmapContext())
                     {
                         int[] rp = destContext.Pixels;
@@ -576,7 +576,7 @@ namespace PixelFarm.DrawingBuffer
                 }
                 else if (flipMode == FlipMode.Vertical)
                 {
-                    result = BitmapFactory.New(w, h);
+                    result = BitmapBufferFactory.New(w, h);
                     using (var destContext = result.GetBitmapContext())
                     {
                         int[] rp = destContext.Pixels;

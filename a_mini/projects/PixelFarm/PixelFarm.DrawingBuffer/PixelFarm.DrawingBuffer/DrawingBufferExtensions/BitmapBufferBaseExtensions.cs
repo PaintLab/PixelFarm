@@ -94,7 +94,7 @@ namespace PixelFarm.DrawingBuffer
         {
             using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                BitmapBuffer result = BitmapFactory.New(srcContext.Width, srcContext.Height);
+                BitmapBuffer result = BitmapBufferFactory.New(srcContext.Width, srcContext.Height);
                 using (var destContext = result.GetBitmapContext())
                 {
                     BitmapContext.BlockCopy(srcContext, 0, destContext, 0, srcContext.Length * ARGB_SIZE);

@@ -20,7 +20,7 @@ namespace PixelFarm.DrawingBuffer
     /// <summary>
     /// Cross-platform factory for WriteableBitmaps
     /// </summary>
-    public static class BitmapFactory
+    public static class BitmapBufferFactory
     {
         /// <summary>
         /// Creates a new WriteableBitmap of the specified width and height
