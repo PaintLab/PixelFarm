@@ -173,6 +173,8 @@ namespace PixelFarm.DrawingBuffer
     }
     public struct ColorInt
     {
+        //see https://github.com/PaintLab/PixelFarm/issues/12
+        //we store color as 'straight alpha'
         byte _r, _g, _b, _a;
 
         public byte R { get { return _r; } }
@@ -180,7 +182,7 @@ namespace PixelFarm.DrawingBuffer
         public byte B { get { return _b; } }
         public byte A { get { return _a; } }
 
-        public static ColorInt NewAlpha(ColorInt oldColor, byte a)
+        public static ColorInt CreateNew(ColorInt oldColor, byte a)
         {
             ColorInt c = new ColorInt();
             c._r = oldColor._r;

@@ -25,11 +25,11 @@ namespace WinFormGdiPlus
             if (Elapsed > Lifespan)
             {
 
-                Color = PixelFarm.DrawingBuffer.ColorInt.NewAlpha(Color, 0);
+                Color = PixelFarm.DrawingBuffer.ColorInt.CreateNew(Color, 0);
                 return;
             }
      
-            Color = PixelFarm.DrawingBuffer.ColorInt.NewAlpha(Color, (byte)(255 - ((255 * Elapsed)) / Lifespan));
+            Color = PixelFarm.DrawingBuffer.ColorInt.CreateNew(Color, (byte)(255 - ((255 * Elapsed)) / Lifespan));
             Position.X += Velocity.X * elapsedSeconds;
             Position.Y += Velocity.Y * elapsedSeconds;
         }
