@@ -30,7 +30,7 @@ namespace PixelFarm.Agg
             byte* dst,
             byte* src,
             int count);
-        
+
         // Win32 memory set function
         //[DllImport("ntdll.dll")]
         //[DllImport("coredll.dll", EntryPoint = "memset", SetLastError = false)]

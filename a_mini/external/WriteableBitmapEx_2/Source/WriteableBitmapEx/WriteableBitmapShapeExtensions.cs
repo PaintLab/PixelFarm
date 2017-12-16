@@ -21,7 +21,7 @@ namespace PixelFarm.Agg
     /// Collection of extension methods for the WriteableBitmap class.
     /// </summary>
     public static partial class WriteableBitmapExtensions
-    {   
+    {
         /// <summary>
         /// Draws a polyline. Add the first point also at the end of the array if the line should be closed.
         /// </summary>
@@ -458,8 +458,5 @@ namespace PixelFarm.Agg
                 }
             }
         }
-
-
-
     }
 }

@@ -26,7 +26,7 @@ namespace PixelFarm.Agg
     public static partial class WriteableBitmapExtensions
     {
 
-        internal const int SizeOfArgb = 4;
+        internal const int ARGB_SIZE = 4;
 
         public static int ConvertColor(double opacity, Color color)
         {
@@ -69,7 +69,7 @@ namespace PixelFarm.Agg
                 var pixels = context.Pixels;
                 var w = context.Width;
                 var h = context.Height;
-                var len = w * SizeOfArgb;
+                var len = w * ARGB_SIZE;
 
                 // Fill first line
                 for (var x = 0; x < w; x++)
@@ -113,7 +113,7 @@ namespace PixelFarm.Agg
                 var result = BitmapFactory.New(srcContext.Width, srcContext.Height);
                 using (var destContext = result.GetBitmapContext())
                 {
-                    BitmapContext.BlockCopy(srcContext, 0, destContext, 0, srcContext.Length * SizeOfArgb);
+                    BitmapContext.BlockCopy(srcContext, 0, destContext, 0, srcContext.Length * ARGB_SIZE);
                 }
                 return result;
             }
@@ -444,8 +444,5 @@ namespace PixelFarm.Agg
                 context.Pixels[y * context.Width + x] = color;
             }
         }
-
-
-
     }
 }

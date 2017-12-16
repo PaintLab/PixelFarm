@@ -46,28 +46,6 @@ namespace PixelFarm.Agg
 #endif
         }
 
-#if WPF
-        /// <summary>
-        /// Converts the input BitmapSource to the Pbgra32 format WriteableBitmap which is internally used by the WriteableBitmapEx.
-        /// </summary>
-        /// <param name="source">The source bitmap.</param>
-        /// <returns></returns>
-        public static WriteableBitmap ConvertToPbgra32Format(BitmapSource source)
-        {
-            // Convert to Pbgra32 if it's a different format
-            if (source.Format == PixelFormats.Pbgra32)
-            {
-                return new WriteableBitmap(source);
-            }
-
-            var formatedBitmapSource = new FormatConvertedBitmap();
-            formatedBitmapSource.BeginInit();
-            formatedBitmapSource.Source = source;
-            formatedBitmapSource.DestinationFormat = PixelFormats.Pbgra32;
-            formatedBitmapSource.EndInit();
-            return new WriteableBitmap(formatedBitmapSource);
-        }
-#endif 
 
     }
 }

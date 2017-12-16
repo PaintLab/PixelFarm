@@ -44,7 +44,7 @@ namespace PixelFarm.Agg
                     count = context.Length;
                 }
 
-                var len = count * SizeOfArgb;
+                var len = count * ARGB_SIZE;
                 var result = new byte[len]; // ARGB
                 BitmapContext.BlockCopy(context, offset, result, 0, len);
                 return result;
@@ -127,7 +127,7 @@ namespace PixelFarm.Agg
                 int width = context.Width;
                 int height = context.Height;
                 var pixels = context.Pixels;
-                byte[] data = new byte[context.Length * SizeOfArgb];
+                byte[] data = new byte[context.Length * ARGB_SIZE];
 
                 // Copy bitmap data as BGRA
                 int offsetSource = 0;
@@ -157,7 +157,7 @@ namespace PixelFarm.Agg
                         data[offsetDest] = (byte)((((c & 0xFF) * ai) >> 8));           // B
 
                         offsetSource++;
-                        offsetDest += SizeOfArgb;
+                        offsetDest += ARGB_SIZE;
                     }
                     offsetDest -= width8;
                 }

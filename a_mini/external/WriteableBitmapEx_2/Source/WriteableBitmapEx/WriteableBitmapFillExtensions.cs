@@ -109,7 +109,7 @@ namespace PixelFarm.Agg
 
                 // Copy first line
                 var len = (x2 - x1);
-                var srcOffsetBytes = startYPlusX1 * SizeOfArgb;
+                var srcOffsetBytes = startYPlusX1 * ARGB_SIZE;
                 var offset2 = y2 * w + x1;
 
                 //plan...
@@ -126,7 +126,7 @@ namespace PixelFarm.Agg
                 {
                     if (noBlending)
                     {
-                        BitmapContext.BlockCopy(context, srcOffsetBytes, context, y * SizeOfArgb, len * SizeOfArgb);
+                        BitmapContext.BlockCopy(context, srcOffsetBytes, context, y * ARGB_SIZE, len * ARGB_SIZE);
                         continue;
                     }
 

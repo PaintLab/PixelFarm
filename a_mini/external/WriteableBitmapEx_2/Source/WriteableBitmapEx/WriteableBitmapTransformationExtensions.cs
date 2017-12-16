@@ -95,9 +95,9 @@ namespace PixelFarm.Agg
                 {
                     for (var line = 0; line < height; line++)
                     {
-                        var srcOff = ((y + line) * srcWidth + x) * SizeOfArgb;
-                        var dstOff = line * width * SizeOfArgb;
-                        BitmapContext.BlockCopy(srcContext, srcOff, destContext, dstOff, width * SizeOfArgb);
+                        var srcOff = ((y + line) * srcWidth + x) * ARGB_SIZE;
+                        var dstOff = line * width * ARGB_SIZE;
+                        BitmapContext.BlockCopy(srcContext, srcOff, destContext, dstOff, width * ARGB_SIZE);
                     }
 
                     return result;
@@ -134,7 +134,7 @@ namespace PixelFarm.Agg
                 var result = BitmapFactory.New(width, height);
                 using (var dstContext = result.GetBitmapContext())
                 {
-                    BitmapContext.BlockCopy(pd, 0, dstContext, 0, SizeOfArgb * pd.Length);
+                    BitmapContext.BlockCopy(pd, 0, dstContext, 0, ARGB_SIZE * pd.Length);
                 }
                 return result;
             }
@@ -595,7 +595,6 @@ namespace PixelFarm.Agg
                 return result;
             }
         }
-
 
     }
 }

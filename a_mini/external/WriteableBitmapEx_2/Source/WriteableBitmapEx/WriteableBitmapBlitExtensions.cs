@@ -25,9 +25,6 @@ namespace PixelFarm.Agg
     /// </summary>
     public static partial class WriteableBitmapExtensions
     {
-        private const int WhiteR = 255;
-        private const int WhiteG = 255;
-        private const int WhiteB = 255;
 
 
         /// <summary>
@@ -369,7 +366,6 @@ namespace PixelFarm.Agg
 
         public static void Blit(BitmapContext destContext, int dpw, int dph, Rect destRect, BitmapContext srcContext, Rect sourceRect, int sourceWidth)
         {
-            const BlendMode blendMode = BlendMode.Alpha;
 
             int dw = (int)destRect.Width;
             int dh = (int)destRect.Height;
@@ -684,7 +680,5 @@ namespace PixelFarm.Agg
                 }
             }
         }
-
-
     }
 }

@@ -317,7 +317,5 @@ namespace PixelFarm.Agg
                 DrawCurveSegment(points[i], points[i + 1], points[i + 2], points[i + 3], points[0], points[1], points[2], points[3], tension, color, context, w, h);
             }
         }
-
-
     }
 }

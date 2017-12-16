@@ -397,7 +397,5 @@ namespace PixelFarm.Agg
                 return result;
             }
         }
-
-
     }
 }
