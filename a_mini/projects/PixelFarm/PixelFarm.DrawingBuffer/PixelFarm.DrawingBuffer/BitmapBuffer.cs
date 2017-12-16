@@ -26,7 +26,7 @@ namespace PixelFarm.DrawingBuffer
         //System.Drawing.PointF[] _tmp = new System.Drawing.PointF[1]; 
         public override PointD Transform(PointD p)
         {
-            throw new System.NotImplementedException(); 
+            throw new System.NotImplementedException();
             //_tmp[0] = new System.Drawing.PointF((float)p.X, (float)p.Y);
             //mm1.TransformPoints(_tmp);
             //return new PointD(_tmp[0].X, _tmp[0].Y);
@@ -61,10 +61,10 @@ namespace PixelFarm.DrawingBuffer
             this.Width = size.Width;
             this.Height = size.Height;
         }
-        public double Left { get; set; }
-        public double Top { get; set; }
-        public double Width { get; set; }
-        public double Height { get; set; }
+        public double Left { get; private set; }
+        public double Top { get; private set; }
+        public double Width { get; private set; }
+        public double Height { get; private set; }
         public double X { get { return this.Left; } }
         public double Y { get { return this.Top; } }
         public double Bottom { get { return Y + Height; } }
@@ -129,8 +129,8 @@ namespace PixelFarm.DrawingBuffer
             this.Left = x;
             this.Top = y;
         }
-        public double Left { get; set; }
-        public double Top { get; set; }
+        public double Left { get; private set; }
+        public double Top { get; private set; }
         public double X
         {
             get
@@ -168,8 +168,8 @@ namespace PixelFarm.DrawingBuffer
             this.Width = w;
             this.Height = h;
         }
-        public double Width { get; set; }
-        public double Height { get; set; }
+        public double Width { get; private set; }
+        public double Height { get; private  set; }
     }
     public struct ColorInt
     {
