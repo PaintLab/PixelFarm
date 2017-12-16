@@ -29,8 +29,7 @@
 
 using PixelFarm.Drawing;
 using System.Collections.Generic;
-using System;
-//using Mono.Simd;
+using System; 
 
 namespace PixelFarm.Agg.Imaging
 {
