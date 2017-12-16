@@ -70,7 +70,7 @@ namespace WinFormGdiPlus
             using (Bitmap bmp1 = new Bitmap(400, 500))
             using (var bmplock = bmp1.Lock())
             {
-                BmpBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
                 switch (sampleName)
                 {
                     case SampleName.StaticShapes:
@@ -94,7 +94,7 @@ namespace WinFormGdiPlus
         /// <summary>
         /// Draws the different types of shapes.
         /// </summary>
-        private void DrawStaticShapes(BmpBuffer writeableBmp)
+        private void DrawStaticShapes(BitmapBuffer writeableBmp)
         {
             // HideShapeCountText();
             if (writeableBmp != null)
@@ -198,7 +198,7 @@ namespace WinFormGdiPlus
         /// <summary>
         /// Draws random shapes.
         /// </summary>
-        private void DrawShapes(BmpBuffer writeableBmp)
+        private void DrawShapes(BitmapBuffer writeableBmp)
         {
             // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
             using (writeableBmp.GetBitmapContext())
@@ -248,7 +248,7 @@ namespace WinFormGdiPlus
         private float time;
         private const float timeStep = 0.01f;
 
-        private void DrawFillDemo(BmpBuffer writeableBmp)
+        private void DrawFillDemo(BitmapBuffer writeableBmp)
         {
             if (writeableBmp == null)
                 return;

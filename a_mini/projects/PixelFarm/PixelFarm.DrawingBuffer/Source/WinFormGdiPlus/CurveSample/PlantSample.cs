@@ -343,7 +343,7 @@ namespace WinFormGdiPlus.PlantDemo
             return GrowthRate + r;
         }
 
-        public void Draw(BmpBuffer writeableBmp)
+        public void Draw(BitmapBuffer writeableBmp)
         {
             if (writeableBmp != null)
             {
@@ -359,7 +359,7 @@ namespace WinFormGdiPlus.PlantDemo
             }
         }
 
-        private void Draw(BmpBuffer writeableBmp, Branch branch)
+        private void Draw(BitmapBuffer writeableBmp, Branch branch)
         {
             int[] pts = new int[]
             {

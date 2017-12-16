@@ -40,7 +40,7 @@ namespace PixelFarm.DrawingBuffer
     /// <remarks>Attempting to put as many preprocessor hacks in this file, to keep the rest of the codebase relatively clean</remarks>
     public struct BitmapContext : IDisposable
     {
-        private readonly BmpBuffer _writeableBitmap;
+        private readonly BitmapBuffer _writeableBitmap;
         private readonly ReadWriteMode _mode;
 
         private readonly int _pixelWidth;
@@ -49,7 +49,7 @@ namespace PixelFarm.DrawingBuffer
         /// <summary>
         /// The Bitmap
         /// </summary>
-        public BmpBuffer WriteableBitmap { get { return _writeableBitmap; } }
+        public BitmapBuffer WriteableBitmap { get { return _writeableBitmap; } }
 
         /// <summary>
         /// Width of the bitmap
@@ -65,7 +65,7 @@ namespace PixelFarm.DrawingBuffer
         /// Creates an instance of a BitmapContext, with default mode = ReadWrite
         /// </summary>
         /// <param name="writeableBitmap"></param>
-        public BitmapContext(BmpBuffer writeableBitmap)
+        public BitmapContext(BitmapBuffer writeableBitmap)
             : this(writeableBitmap, ReadWriteMode.ReadWrite)
         {
         }
@@ -75,7 +75,7 @@ namespace PixelFarm.DrawingBuffer
         /// </summary>
         /// <param name="writeableBitmap"></param>
         /// <param name="mode"></param>
-        public BitmapContext(BmpBuffer writeableBitmap, ReadWriteMode mode)
+        public BitmapContext(BitmapBuffer writeableBitmap, ReadWriteMode mode)
         {
             _writeableBitmap = writeableBitmap;
             _mode = mode;

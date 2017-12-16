@@ -78,7 +78,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="source">The source WriteableBitmap.</param>
         /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
         /// <param name="blendMode">The blending mode <see cref="BlendMode"/>.</param>
-        public static void Blit(this BmpBuffer bmp, RectD destRect, BmpBuffer source, RectD sourceRect, BlendMode blendMode)
+        public static void Blit(this BitmapBuffer bmp, RectD destRect, BitmapBuffer source, RectD sourceRect, BlendMode blendMode)
         {
             Blit(bmp, destRect, source, sourceRect, Colors.White, blendMode);
         }
@@ -90,7 +90,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="destRect">The rectangle that defines the destination region.</param>
         /// <param name="source">The source WriteableBitmap.</param>
         /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
-        public static void Blit(this BmpBuffer bmp, RectD destRect, BmpBuffer source, RectD sourceRect)
+        public static void Blit(this BitmapBuffer bmp, RectD destRect, BitmapBuffer source, RectD sourceRect)
         {
             Blit(bmp, destRect, source, sourceRect, Colors.White, BlendMode.Alpha);
         }
@@ -104,7 +104,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
         /// <param name="color">If not Colors.White, will tint the source image. A partially transparent color and the image will be drawn partially transparent.</param>
         /// <param name="blendMode">The blending mode <see cref="BlendMode"/>.</param>
-        public static void Blit(this BmpBuffer bmp, PointD destPosition, BmpBuffer source, RectD sourceRect, ColorInt color, BlendMode blendMode)
+        public static void Blit(this BitmapBuffer bmp, PointD destPosition, BitmapBuffer source, RectD sourceRect, ColorInt color, BlendMode blendMode)
         {
             var destRect = new RectD(destPosition, new SizeD(sourceRect.Width, sourceRect.Height));
             Blit(bmp, destRect, source, sourceRect, color, blendMode);
@@ -119,7 +119,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
         /// <param name="color">If not Colors.White, will tint the source image. A partially transparent color and the image will be drawn partially transparent. If the BlendMode is ColorKeying, this color will be used as color key to mask all pixels with this value out.</param>
         /// <param name="blendMode">The blending mode <see cref="BlendMode"/>.</param>
-        internal static void Blit(this BmpBuffer bmp, RectD destRect, BmpBuffer source, RectD sourceRect, ColorInt color, BlendMode blendMode)
+        internal static void Blit(this BitmapBuffer bmp, RectD destRect, BitmapBuffer source, RectD sourceRect, ColorInt color, BlendMode blendMode)
         {
             if (color.A == 0)
             {
@@ -509,7 +509,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="shouldClear">If true, the the destination bitmap will be set to all clear (0) before rendering.</param>
         /// <param name="opacity">opacity of the source bitmap to render, between 0 and 1 inclusive</param>
         /// <param name="transform">Transformation to apply</param>
-        public static void BlitRender(this BmpBuffer bmp, BmpBuffer source, bool shouldClear = true, float opacity = 1f, GeneralTransform transform = null)
+        public static void BlitRender(this BitmapBuffer bmp, BitmapBuffer source, bool shouldClear = true, float opacity = 1f, GeneralTransform transform = null)
         {
             const int PRECISION_SHIFT = 10;
             const int PRECISION_VALUE = (1 << PRECISION_SHIFT);

@@ -247,16 +247,16 @@ namespace PixelFarm.DrawingBuffer
     }
 
 
-    public class BmpBuffer
+    public class BitmapBuffer
     {
         //in this version , only 32 bits 
-        public BmpBuffer(int w, int h)
+        public BitmapBuffer(int w, int h)
         {
             this.PixelWidth = w;
             this.PixelHeight = h;
             this.Pixels = new int[w * h];
         }
-        public BmpBuffer(int w, int h, int[] orgBuffer)
+        public BitmapBuffer(int w, int h, int[] orgBuffer)
         {
             this.PixelWidth = w;
             this.PixelHeight = h;

@@ -11,8 +11,8 @@ namespace WinFormGdiPlus
         public PointD Center { get; set; }
         public List<Particle> Particles = new List<Particle>();
         Random rand = new Random();
-        public BmpBuffer TargetBitmap;
-        public BmpBuffer ParticleBitmap;
+        public BitmapBuffer TargetBitmap;
+        public BitmapBuffer ParticleBitmap;
         RectD sourceRect = new RectD(0, 0, 32, 32);
         double elapsedRemainder;
         double updateInterval = .003;

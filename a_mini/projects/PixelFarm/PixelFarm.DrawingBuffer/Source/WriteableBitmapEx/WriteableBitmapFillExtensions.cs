@@ -39,7 +39,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="x2">The x-coordinate of the bounding rectangle's right side.</param>
         /// <param name="y2">The y-coordinate of the bounding rectangle's bottom side.</param>
         /// <param name="color">The color.</param>
-        public static void FillRectangle(this BmpBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
+        public static void FillRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
 
             bmp.FillRectangle(x1, y1, x2, y2, ConvertColor(color));
@@ -56,7 +56,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the bounding rectangle's bottom side.</param>
         /// <param name="color">The color.</param>
         /// <param name="doAlphaBlend">True if alpha blending should be performed or false if not.</param>
-        public static void FillRectangle(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int color, bool doAlphaBlend = false)
+        public static void FillRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, bool doAlphaBlend = false)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -170,7 +170,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="x2">The x-coordinate of the bounding rectangle's right side.</param>
         /// <param name="y2">The y-coordinate of the bounding rectangle's bottom side.</param>
         /// <param name="color">The color for the line.</param>
-        public static void FillEllipse(this BmpBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
+        public static void FillEllipse(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
 
             bmp.FillEllipse(x1, y1, x2, y2, ConvertColor(color));
@@ -186,7 +186,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="x2">The x-coordinate of the bounding rectangle's right side.</param>
         /// <param name="y2">The y-coordinate of the bounding rectangle's bottom side.</param>
         /// <param name="color">The color for the line.</param>
-        public static void FillEllipse(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int color)
+        public static void FillEllipse(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color)
         {
             // Calc center and radius
             int xr = (x2 - x1) >> 1;
@@ -206,7 +206,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="xr">The radius of the ellipse in x-direction.</param>
         /// <param name="yr">The radius of the ellipse in y-direction.</param>
         /// <param name="color">The color for the line.</param>
-        public static void FillEllipseCentered(this BmpBuffer bmp, int xc, int yc, int xr, int yr, ColorInt color)
+        public static void FillEllipseCentered(this BitmapBuffer bmp, int xc, int yc, int xr, int yr, ColorInt color)
         {
 
             bmp.FillEllipseCentered(xc, yc, xr, yr, ConvertColor(color));
@@ -225,7 +225,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="yr">The radius of the ellipse in y-direction.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="doAlphaBlend">True if alpha blending should be performed or false if not.</param>
-        public static void FillEllipseCentered(this BmpBuffer bmp, int xc, int yc, int xr, int yr, int color, bool doAlphaBlend = false)
+        public static void FillEllipseCentered(this BitmapBuffer bmp, int xc, int yc, int xr, int yr, int color, bool doAlphaBlend = false)
         {
             // Use refs for faster access (really important!) speeds up a lot!
             using (var context = bmp.GetBitmapContext())
@@ -420,7 +420,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="points">The points of the polygon in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, ..., xn, yn).</param>
         /// <param name="color">The color for the line.</param>
-        public static void FillPolygon(this BmpBuffer bmp, int[] points, ColorInt color)
+        public static void FillPolygon(this BitmapBuffer bmp, int[] points, ColorInt color)
         {
 
             bmp.FillPolygon(points, ConvertColor(color));
@@ -434,7 +434,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="points">The points of the polygon in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, ..., xn, yn).</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="doAlphaBlend">True if alpha blending should be performed or false if not.</param>
-        public static void FillPolygon(this BmpBuffer bmp, int[] points, int color, bool doAlphaBlend = false)
+        public static void FillPolygon(this BitmapBuffer bmp, int[] points, int color, bool doAlphaBlend = false)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -623,7 +623,7 @@ namespace PixelFarm.DrawingBuffer
         /// therefore the array is interpreted as (x1, y1, x2, y2, ..., xn, yn).
         /// </param>
         /// <param name="color">The color for the polygon.</param>
-        public static void FillPolygonsEvenOdd(this BmpBuffer bmp, int[][] polygons, ColorInt color)
+        public static void FillPolygonsEvenOdd(this BitmapBuffer bmp, int[][] polygons, ColorInt color)
         {
 
             FillPolygonsEvenOdd(bmp, polygons, ConvertColor(color));
@@ -642,7 +642,7 @@ namespace PixelFarm.DrawingBuffer
         /// therefore the array is interpreted as (x1, y1, x2, y2, ..., xn, yn).
         /// </param>
         /// <param name="color">The color for the polygon.</param>
-        public static void FillPolygonsEvenOdd(this BmpBuffer bmp, int[][] polygons, int color)
+        public static void FillPolygonsEvenOdd(this BitmapBuffer bmp, int[][] polygons, int color)
         {
 
             // Algorithm:
@@ -823,7 +823,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="x4">The x-coordinate of the 4th point.</param>
         /// <param name="y4">The y-coordinate of the 4th point.</param>
         /// <param name="color">The color.</param>
-        public static void FillQuad(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, ColorInt color)
+        public static void FillQuad(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, ColorInt color)
         {
 
             bmp.FillQuad(x1, y1, x2, y2, x3, y3, x4, y4, ConvertColor(color));
@@ -842,7 +842,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="x4">The x-coordinate of the 4th point.</param>
         /// <param name="y4">The y-coordinate of the 4th point.</param>
         /// <param name="color">The color.</param>
-        public static void FillQuad(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int color)
+        public static void FillQuad(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int color)
         {
             bmp.FillPolygon(new int[] { x1, y1, x2, y2, x3, y3, x4, y4, x1, y1 }, color);
         }
@@ -858,7 +858,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="x3">The x-coordinate of the 3rd point.</param>
         /// <param name="y3">The y-coordinate of the 3rd point.</param>
         /// <param name="color">The color.</param>
-        public static void FillTriangle(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, ColorInt color)
+        public static void FillTriangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, ColorInt color)
         {
 
             bmp.FillTriangle(x1, y1, x2, y2, x3, y3, ConvertColor(color));
@@ -875,7 +875,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="x3">The x-coordinate of the 3rd point.</param>
         /// <param name="y3">The y-coordinate of the 3rd point.</param>
         /// <param name="color">The color.</param>
-        public static void FillTriangle(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int color)
+        public static void FillTriangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int color)
         {
             bmp.FillPolygon(new int[] { x1, y1, x2, y2, x3, y3, x1, y1 }, color);
         }
@@ -968,7 +968,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="points">The points for the curve in x and y pairs, therefore the array is interpreted as (x1, y1, cx1, cy1, cx2, cy2, x2, y2, cx3, cx4 ..., xn, yn).</param>
         /// <param name="color">The color for the spline.</param>
-        public static void FillBeziers(this BmpBuffer bmp, int[] points, ColorInt color)
+        public static void FillBeziers(this BitmapBuffer bmp, int[] points, ColorInt color)
         {
             bmp.FillBeziers(points, ConvertColor(color));
         }
@@ -981,7 +981,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="points">The points for the curve in x and y pairs, therefore the array is interpreted as (x1, y1, cx1, cy1, cx2, cy2, x2, y2, cx3, cx4 ..., xn, yn).</param>
         /// <param name="color">The color for the spline.</param>
-        public static void FillBeziers(this BmpBuffer bmp, int[] points, int color)
+        public static void FillBeziers(this BitmapBuffer bmp, int[] points, int color)
         {
             // Compute Bezier curve
             int x1 = points[0];
@@ -1097,7 +1097,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="points">The points for the curve in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, x3, y3, x4, y4, x1, x2 ..., xn, yn).</param>
         /// <param name="tension">The tension of the curve defines the shape. Usually between 0 and 1. 0 would be a straight line.</param>
         /// <param name="color">The color for the spline.</param>
-        public static void FillCurve(this BmpBuffer bmp, int[] points, float tension, ColorInt color)
+        public static void FillCurve(this BitmapBuffer bmp, int[] points, float tension, ColorInt color)
         {
 
             bmp.FillCurve(points, tension, ConvertColor(color));
@@ -1111,7 +1111,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="points">The points for the curve in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, x3, y3, x4, y4, x1, x2 ..., xn, yn).</param>
         /// <param name="tension">The tension of the curve defines the shape. Usually between 0 and 1. 0 would be a straight line.</param>
         /// <param name="color">The color for the spline.</param>
-        public static void FillCurve(this BmpBuffer bmp, int[] points, float tension, int color)
+        public static void FillCurve(this BitmapBuffer bmp, int[] points, float tension, int color)
         {
             // First segment
             List<int> list = ComputeSegmentPoints(
@@ -1153,7 +1153,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="points">The points for the curve in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, x3, y3, x4, y4, x1, x2 ..., xn, yn).</param>
         /// <param name="tension">The tension of the curve defines the shape. Usually between 0 and 1. 0 would be a straight line.</param>
         /// <param name="color">The color for the spline.</param>
-        public static void FillCurveClosed(this BmpBuffer bmp, int[] points, float tension, ColorInt color)
+        public static void FillCurveClosed(this BitmapBuffer bmp, int[] points, float tension, ColorInt color)
         {
             bmp.FillCurveClosed(points, tension, ConvertColor(color));
         }
@@ -1166,7 +1166,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="points">The points for the curve in x and y pairs, therefore the array is interpreted as (x1, y1, x2, y2, x3, y3, x4, y4, x1, x2 ..., xn, yn).</param>
         /// <param name="tension">The tension of the curve defines the shape. Usually between 0 and 1. 0 would be a straight line.</param>
         /// <param name="color">The color for the spline.</param>
-        public static void FillCurveClosed(this BmpBuffer bmp, int[] points, float tension, int color)
+        public static void FillCurveClosed(this BitmapBuffer bmp, int[] points, float tension, int color)
         {
             int pn = points.Length;
 

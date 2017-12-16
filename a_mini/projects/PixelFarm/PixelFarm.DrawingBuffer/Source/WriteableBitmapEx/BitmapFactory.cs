@@ -29,11 +29,11 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="pixelWidth"></param>
         /// <param name="pixelHeight"></param>
         /// <returns></returns>
-        public static BmpBuffer New(int pixelWidth, int pixelHeight)
+        public static BitmapBuffer New(int pixelWidth, int pixelHeight)
         {
             if (pixelHeight < 1) pixelHeight = 1;
             if (pixelWidth < 1) pixelWidth = 1;
-            return new BmpBuffer(pixelWidth, pixelHeight);
+            return new BitmapBuffer(pixelWidth, pixelHeight);
         }
     }
 }

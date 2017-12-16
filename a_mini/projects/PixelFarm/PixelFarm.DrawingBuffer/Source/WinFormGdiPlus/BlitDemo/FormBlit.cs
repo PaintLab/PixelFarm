@@ -67,7 +67,7 @@ namespace WinFormGdiPlus
             //render! 
             using (var bmplock = destBmp.Lock())
             {
-                BmpBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
                 emitter.TargetBitmap = wb;
                 emitter.ParticleBitmap = particleBmp;
 
@@ -98,8 +98,8 @@ namespace WinFormGdiPlus
 
         }
 
-        BmpBuffer circleBmp;
-        BmpBuffer particleBmp;
+        BitmapBuffer circleBmp;
+        BitmapBuffer particleBmp;
         RectD particleSourceRect;
         ParticleEmitter emitter = new ParticleEmitter();
         DateTime lastUpdate = DateTime.Now;
@@ -107,7 +107,7 @@ namespace WinFormGdiPlus
         private double _lastTime;
         private double _lowestFrameTime;
 
-        static BmpBuffer LoadBitmapAsReadonly(string path)
+        static BitmapBuffer LoadBitmapAsReadonly(string path)
         {
             using (Bitmap bmp = new Bitmap(path))
             using (var lockBmp = new LockBmp(bmp))
@@ -126,7 +126,7 @@ namespace WinFormGdiPlus
             //start ...
             UpdateRenderFrame();
         }
-        public static BmpBuffer Overlay(BmpBuffer bmp, BmpBuffer overlay, PixelFarm.DrawingBuffer.PointD location)
+        public static BitmapBuffer Overlay(BitmapBuffer bmp, BitmapBuffer overlay, PixelFarm.DrawingBuffer.PointD location)
         {
             var result = bmp.Clone();
             var size = new PixelFarm.DrawingBuffer.SizeD(overlay.PixelWidth, overlay.PixelHeight);
@@ -138,14 +138,14 @@ namespace WinFormGdiPlus
 
         private void button2_Click(object sender, EventArgs e)
         {
-            BmpBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
-            BmpBuffer sticker = LoadBitmapAsReadonly("../../01.jpg");
+            BitmapBuffer unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
+            BitmapBuffer sticker = LoadBitmapAsReadonly("../../01.jpg");
 
-            BmpBuffer overlayResult = Overlay(unmodifiedBmp, sticker, new PixelFarm.DrawingBuffer.PointD(10, 10));
+            BitmapBuffer overlayResult = Overlay(unmodifiedBmp, sticker, new PixelFarm.DrawingBuffer.PointD(10, 10));
 
             using (var bmplock = destBmp.Lock())
             {
-                BmpBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
                 wb.Clear(Colors.Black);
 
                 wb.Blit(new RectD(0, 0, overlayResult.PixelWidth, overlayResult.PixelHeight),

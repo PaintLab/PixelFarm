@@ -41,7 +41,7 @@ namespace WinFormGdiPlus
             using (System.Drawing.Bitmap bmp1 = new System.Drawing.Bitmap(panel1.Width, panel1.Height))
             using (var bmplock = bmp1.Lock())
             {
-                BmpBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
 
                 Draw(wb);
                 bmplock.WriteAndUnlock();
@@ -156,7 +156,7 @@ namespace WinFormGdiPlus
             }
         }
 
-        private void Draw(BmpBuffer writeableBmp)
+        private void Draw(BitmapBuffer writeableBmp)
         {
 
 
@@ -187,7 +187,7 @@ namespace WinFormGdiPlus
             }
         }
 
-        private void DrawPoints(BmpBuffer writeableBmp)
+        private void DrawPoints(BitmapBuffer writeableBmp)
         {
             foreach (var p in points)
             {
@@ -199,7 +199,7 @@ namespace WinFormGdiPlus
             }
         }
 
-        private void DrawPoint(BmpBuffer writeableBmp, ControlPoint p, ColorInt color)
+        private void DrawPoint(BitmapBuffer writeableBmp, ControlPoint p, ColorInt color)
         {
             var x1 = p.X - PointSizeHalf;
             var y1 = p.Y - PointSizeHalf;
@@ -208,7 +208,7 @@ namespace WinFormGdiPlus
             writeableBmp.DrawRectangle(x1, y1, x2, y2, color);
         }
 
-        private void DrawBeziers(BmpBuffer writeableBmp)
+        private void DrawBeziers(BitmapBuffer writeableBmp)
         {
             if (points.Count > 3)
             {
@@ -216,7 +216,7 @@ namespace WinFormGdiPlus
             }
         }
 
-        private void DrawCardinal(BmpBuffer writeableBmp)
+        private void DrawCardinal(BitmapBuffer writeableBmp)
         {
             if (points.Count > 2)
             {

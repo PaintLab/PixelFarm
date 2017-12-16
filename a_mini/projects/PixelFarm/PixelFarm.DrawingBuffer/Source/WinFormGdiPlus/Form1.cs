@@ -23,7 +23,7 @@ namespace WinFormGdiPlus
             using (Bitmap bmp1 = new Bitmap(400, 500))
             using (var bmplock = bmp1.Lock())
             {
-                BmpBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
                 //lines
 
                 int y = 0;
@@ -56,7 +56,7 @@ namespace WinFormGdiPlus
             using (Bitmap bmp1 = new Bitmap(400, 500))
             using (var bmplock = bmp1.Lock())
             {
-                BmpBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
 
                 int y = 0;
                 wb.FillRectangle(5, 5, 20, 20, PixelFarm.DrawingBuffer.ColorInt.FromArgb(255, 255, 0, 0));
@@ -73,8 +73,8 @@ namespace WinFormGdiPlus
             using (Bitmap dest = new Bitmap(400, 500))
             using (var dstLock = dest.Lock())
             {
-                BmpBuffer dstWb = dstLock.GetWritableBitmap();
-                BmpBuffer srcWb = srcLock.GetWritableBitmap();
+                BitmapBuffer dstWb = dstLock.GetWritableBitmap();
+                BitmapBuffer srcWb = srcLock.GetWritableBitmap();
                 int y = 0;
                 dstWb.Clear(PixelFarm.DrawingBuffer.ColorInt.FromArgb(255, 255, 255, 255));
 

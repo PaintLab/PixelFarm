@@ -67,7 +67,7 @@ namespace WinFormGdiPlus
             using (Bitmap bmp1 = new Bitmap(400, 500))
             using (var bmplock = bmp1.Lock())
             {
-                BmpBuffer wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
                 switch (sampleName)
                 {
                     case SampleName.DrawEllipses:
@@ -105,7 +105,7 @@ namespace WinFormGdiPlus
         /// <summary>
         /// Draws circles that decrease in size to build a flower that is animated
         /// </summary>
-        private void DrawEllipsesFlower(BmpBuffer writeableBmp)
+        private void DrawEllipsesFlower(BitmapBuffer writeableBmp)
         {
             if (writeableBmp == null)
                 return;
@@ -168,7 +168,7 @@ namespace WinFormGdiPlus
         /// <summary>
         /// Draws random ellipses
         /// </summary>
-        private void DrawEllipses(BmpBuffer writeableBmp)
+        private void DrawEllipses(BitmapBuffer writeableBmp)
         {
             // Init some size vars
             int w = writeableBmp.PixelWidth - 2;
@@ -195,7 +195,7 @@ namespace WinFormGdiPlus
         /// <summary>
         /// Draws the different types of shapes.
         /// </summary>
-        private void DrawStaticShapes(BmpBuffer writeableBmp)
+        private void DrawStaticShapes(BitmapBuffer writeableBmp)
         {
             // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
             using (writeableBmp.GetBitmapContext())

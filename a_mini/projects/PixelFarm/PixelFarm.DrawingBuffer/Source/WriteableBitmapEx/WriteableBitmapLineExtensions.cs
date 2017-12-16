@@ -31,7 +31,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLineBresenham(this BmpBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
+        public static void DrawLineBresenham(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
             bmp.DrawLineBresenham(x1, y1, x2, y2, ConvertColor(color), clipRect);
@@ -47,7 +47,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLineBresenham(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
+        public static void DrawLineBresenham(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -166,7 +166,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLineDDA(this BmpBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
+        public static void DrawLineDDA(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
             bmp.DrawLineDDA(x1, y1, x2, y2, ConvertColor(color), clipRect);
@@ -182,7 +182,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLineDDA(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
+        public static void DrawLineDDA(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -250,7 +250,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLine(this BmpBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
+        public static void DrawLine(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
             bmp.DrawLine(x1, y1, x2, y2, ConvertColor(color), clipRect);
@@ -266,7 +266,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLine(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
+        public static void DrawLine(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -570,7 +570,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="x2">The x-coordinate of the end point.</param>
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="penBmp">The pen bitmap.</param>
-        public static void DrawLinePenned(this BmpBuffer bmp, int x1, int y1, int x2, int y2, BmpBuffer penBmp, RectD? clipRect = null)
+        public static void DrawLinePenned(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, BitmapBuffer penBmp, RectD? clipRect = null)
         {
 
             using (var context = bmp.GetBitmapContext())
@@ -743,7 +743,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="sg">Premultiplied green color component</param>
         /// <param name="sb">Premultiplied blue color component</param>
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
-        public static void DrawLineWu(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int sa, int sr, int sg, int sb, RectD? clipRect = null)
+        public static void DrawLineWu(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int sa, int sr, int sg, int sb, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -945,7 +945,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int color, int strokeThickness, RectD? clipRect = null)
+        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, int strokeThickness, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
@@ -979,7 +979,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the line.</param>
         /// <param name="strokeThickness">The stroke thickness of the line.</param>
         /// </summary>
-        public static void DrawLineAa(this BmpBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
+        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
         {
 
             using (var context = bmp.GetBitmapContext())
@@ -998,7 +998,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// </summary> 
-        public static void DrawLineAa(this BmpBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
+        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
             bmp.DrawLineAa(x1, y1, x2, y2, ConvertColor(color), clipRect);
@@ -1014,7 +1014,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="y2">The y-coordinate of the end point.</param>
         /// <param name="color">The color for the line.</param>
         /// </summary> 
-        public static void DrawLineAa(this BmpBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
+        public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int color, RectD? clipRect = null)
         {
             using (var context = bmp.GetBitmapContext())
             {
