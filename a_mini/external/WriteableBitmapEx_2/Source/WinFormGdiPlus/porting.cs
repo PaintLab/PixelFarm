@@ -24,7 +24,7 @@ namespace System.Runtime.CompilerServices
     public partial class ExtensionAttribute : Attribute { }
 }
 
-namespace System.Windows.Media.Imaging
+namespace PixelFarm.Agg
 {
     public abstract class GeneralTransform
     {
@@ -49,22 +49,22 @@ namespace System.Windows.Media.Imaging
     {
         System.Drawing.Drawing2D.Matrix mm1 = new System.Drawing.Drawing2D.Matrix();
 
-        System.Drawing.PointF[] _tmp = new Drawing.PointF[1];
+        System.Drawing.PointF[] _tmp = new System.Drawing.PointF[1];
 
         public override Point Transform(Point p)
         {
-            _tmp[0] = new Drawing.PointF((float)p.X, (float)p.Y);
+            _tmp[0] = new System.Drawing.PointF((float)p.X, (float)p.Y);
             mm1.TransformPoints(_tmp);
             return new Point(_tmp[0].X, _tmp[0].Y);
         }
 
-        System.Drawing.PointF[] _tmp2 = new Drawing.PointF[4];
+        System.Drawing.PointF[] _tmp2 = new System.Drawing.PointF[4];
         public override Rect TransformBounds(Rect r1)
         {
-            _tmp2[0] = new Drawing.PointF((float)r1.Left, (float)r1.Top);
-            _tmp2[1] = new Drawing.PointF((float)r1.Right, (float)r1.Top);
-            _tmp2[2] = new Drawing.PointF((float)r1.Right, (float)r1.Bottom);
-            _tmp2[3] = new Drawing.PointF((float)r1.Left, (float)r1.Bottom);
+            _tmp2[0] = new System.Drawing.PointF((float)r1.Left, (float)r1.Top);
+            _tmp2[1] = new System.Drawing.PointF((float)r1.Right, (float)r1.Top);
+            _tmp2[2] = new System.Drawing.PointF((float)r1.Right, (float)r1.Bottom);
+            _tmp2[3] = new System.Drawing.PointF((float)r1.Left, (float)r1.Bottom);
             //find a new bound
 
             return new Rect(_tmp2[0].X, _tmp2[0].Y, _tmp2[2].X - _tmp[0].X, _tmp2[2].Y - _tmp2[1].Y);

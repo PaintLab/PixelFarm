@@ -17,7 +17,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows.Media.Imaging;
+using PixelFarm.Agg;
 namespace WinFormGdiPlus.PlantDemo
 {
 

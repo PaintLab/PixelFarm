@@ -17,27 +17,16 @@
 //
 
 using System;
+namespace PixelFarm.Agg
 
-#if NETFX_CORE
-namespace Windows.UI.Xaml.Media.Imaging
-#else
-namespace System.Windows.Media.Imaging
-#endif
 {
     /// <summary>
     /// Collection of extension methods for the WriteableBitmap class.
     /// </summary>
-    public
-#if WPF 
-    unsafe 
-#endif
- static partial class WriteableBitmapExtensions
+    public static partial class WriteableBitmapExtensions
     {
 
         internal const int SizeOfArgb = 4;
-
-
-
 
         public static int ConvertColor(double opacity, Color color)
         {

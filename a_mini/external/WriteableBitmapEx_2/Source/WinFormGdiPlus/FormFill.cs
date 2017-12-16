@@ -18,13 +18,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.Windows.Media.Imaging;
 
+using PixelFarm.Agg;
 namespace WinFormGdiPlus
 {
     public partial class FormFill : Form
@@ -184,7 +181,7 @@ namespace WinFormGdiPlus
                     writeableBmp.FillRectangle(rand.Next(2 * w3, 2 * w3 + w6), rand.Next(2 * h3, 2 * h3 + h6),
                            rand.Next(2 * w3 + w6, w), rand.Next(2 * h3 + h6, h), GetRandomColor(), true);
 
-                    System.Windows.Media.Imaging.Color black = System.Windows.Media.Imaging.Color.FromArgb(255, 0, 0, 0);
+                    PixelFarm.Agg.Color black = PixelFarm.Agg.Color.FromArgb(255, 0, 0, 0);
                     // Draw Grid
                     writeableBmp.DrawLine(0, h3, w, h3, Colors.Black);
                     writeableBmp.DrawLine(0, 2 * h3, w, 2 * h3, Colors.Black);

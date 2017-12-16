@@ -22,9 +22,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.Windows.Media.Imaging;
+using PixelFarm.Agg;
 
 namespace WinFormGdiPlus
 {
@@ -127,12 +126,12 @@ namespace WinFormGdiPlus
             //start ...
             UpdateRenderFrame();
         }
-        public static WriteableBitmap Overlay(WriteableBitmap bmp, WriteableBitmap overlay, System.Windows.Media.Imaging.Point location)
+        public static WriteableBitmap Overlay(WriteableBitmap bmp, WriteableBitmap overlay, PixelFarm.Agg.Point location)
         {
             var result = bmp.Clone();
-            var size = new System.Windows.Media.Imaging.Size(overlay.PixelWidth, overlay.PixelHeight);
-            result.Blit(new Rect(location, size), overlay,
-                new Rect(new System.Windows.Media.Imaging.Point(0, 0), size),
+            var size = new PixelFarm.Agg.Size(overlay.PixelWidth, overlay.PixelHeight);
+            result.Blit(new PixelFarm.Agg.Rect(location, size), overlay,
+                new Rect(new PixelFarm.Agg.Point(0, 0), size),
                 WriteableBitmapExtensions.BlendMode.Multiply);
             return result;
         }
@@ -142,7 +141,7 @@ namespace WinFormGdiPlus
             WriteableBitmap unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
             WriteableBitmap sticker = LoadBitmapAsReadonly("../../01.jpg");
 
-            WriteableBitmap overlayResult = Overlay(unmodifiedBmp, sticker, new System.Windows.Media.Imaging.Point(10, 10));
+            WriteableBitmap overlayResult = Overlay(unmodifiedBmp, sticker, new PixelFarm.Agg.Point(10, 10));
 
             using (var bmplock = destBmp.Lock())
             {

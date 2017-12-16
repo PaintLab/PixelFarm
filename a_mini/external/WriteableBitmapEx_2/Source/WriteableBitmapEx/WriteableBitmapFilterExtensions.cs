@@ -16,21 +16,12 @@
 //
 
 using System;
-
-#if NETFX_CORE
-namespace Windows.UI.Xaml.Media.Imaging
-#else
-namespace System.Windows.Media.Imaging
-#endif
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// Collection of filter / convolution extension methods for the WriteableBitmap class.
     /// </summary>
-    public
-#if WPF
- unsafe
-#endif
- static partial class WriteableBitmapExtensions
+    public static partial class WriteableBitmapExtensions
     {
 
         ///<summary>
@@ -96,11 +87,11 @@ namespace System.Windows.Media.Imaging
 
             if ((kw & 1) == 0)
             {
-                throw new InvalidOperationException("Kernel width must be odd!");
+                throw new System.InvalidOperationException("Kernel width must be odd!");
             }
             if ((kh & 1) == 0)
             {
-                throw new InvalidOperationException("Kernel height must be odd!");
+                throw new System.InvalidOperationException("Kernel height must be odd!");
             }
 
             using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))

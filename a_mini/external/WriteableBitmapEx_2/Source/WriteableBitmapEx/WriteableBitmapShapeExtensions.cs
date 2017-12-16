@@ -15,26 +15,13 @@
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
 
-using System;
-
-#if NETFX_CORE
-namespace Windows.UI.Xaml.Media.Imaging
-#else
-namespace System.Windows.Media.Imaging
-#endif
+namespace PixelFarm.Agg
 {
     /// <summary>
     /// Collection of extension methods for the WriteableBitmap class.
     /// </summary>
-    public
-#if WPF
-    unsafe
-#endif
- static partial class WriteableBitmapExtensions
-    {
-
-
-
+    public static partial class WriteableBitmapExtensions
+    {   
         /// <summary>
         /// Draws a polyline. Add the first point also at the end of the array if the line should be closed.
         /// </summary>
