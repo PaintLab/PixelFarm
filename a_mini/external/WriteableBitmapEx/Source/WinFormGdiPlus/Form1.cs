@@ -91,5 +91,11 @@ namespace WinFormGdiPlus
                 dest.Save("d:\\WImageTest\\a0004.png");
             }
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            FormShape formShape = new FormShape();
+            formShape.Show();
+        }
     }
 }

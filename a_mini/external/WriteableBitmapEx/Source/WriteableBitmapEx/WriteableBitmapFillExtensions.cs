@@ -119,6 +119,17 @@ namespace System.Windows.Media.Imaging
                 var len = (x2 - x1);
                 var srcOffsetBytes = startYPlusX1 * SizeOfArgb;
                 var offset2 = y2 * w + x1;
+
+                //plan...
+                if (noBlending)
+                {
+
+                }
+                else
+                {
+
+                }
+
                 for (var y = startYPlusX1 + w; y < offset2; y += w)
                 {
                     if (noBlending)
@@ -169,7 +180,7 @@ namespace System.Windows.Media.Imaging
         /// <param name="color">The color for the line.</param>
         public static void FillEllipse(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color)
         {
-            var col = ConvertColor(color);
+            int col = ConvertColor(color);
             bmp.FillEllipse(x1, y1, x2, y2, col);
         }
 
@@ -205,7 +216,7 @@ namespace System.Windows.Media.Imaging
         /// <param name="color">The color for the line.</param>
         public static void FillEllipseCentered(this WriteableBitmap bmp, int xc, int yc, int xr, int yr, Color color)
         {
-            var col = ConvertColor(color);
+            int col = ConvertColor(color);
             bmp.FillEllipseCentered(xc, yc, xr, yr, col);
         }
 

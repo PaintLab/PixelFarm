@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{9422AB9D-341B-4B72-8611-86418707B2E8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>WinForGdiPlus</RootNamespace>
-    <AssemblyName>WinForGdiPlus</AssemblyName>
+    <RootNamespace>WinFormGdiPlus</RootNamespace>
+    <AssemblyName>WinFormGdiPlus</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,7 +35,6 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Source\WriteableBitmapEx\BitmapContext.cs">
@@ -83,12 +82,21 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormShape.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormShape.Designer.cs">
+      <DependentUpon>FormShape.cs</DependentUpon>
+    </Compile>
     <Compile Include="porting.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WritableBitmapEx\NativeMethods.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormShape.resx">
+      <DependentUpon>FormShape.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -98,6 +106,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
