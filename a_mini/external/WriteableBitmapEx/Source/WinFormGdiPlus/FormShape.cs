@@ -19,7 +19,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 using System.Drawing;
 using System.Text;
@@ -30,9 +29,16 @@ namespace WinFormGdiPlus
     public partial class FormShape : Form
     {
 
-        private int shapeCount;
+        private int shapeCount = 100;
         private static Random rand = new Random();
         private int frameCounter = 0;
+
+        enum SampleName
+        {
+            DrawStaticShapes,
+            DrawEllipses,
+            DrawEllipsesFlower,
+        }
 
         public FormShape()
         {
@@ -42,16 +48,39 @@ namespace WinFormGdiPlus
         }
         private void FormShape_Load(object sender, EventArgs e)
         {
-
+            this.listBox1.Items.AddRange(
+                new object[]
+                {
+                    SampleName.DrawEllipses,
+                    SampleName.DrawEllipsesFlower,
+                    SampleName.DrawStaticShapes
+                });
+            listBox1.SelectedIndex = 0;
+            listBox1.SelectedIndexChanged += (s1, e1) => RenderSelectedSample();
         }
-        private void button1_Click(object sender, EventArgs e)
+        void RenderSelectedSample()
         {
+            SampleName sampleName = (SampleName)listBox1.SelectedItem;
+
+            //render!
             using (Graphics g = this.panel1.CreateGraphics())
             using (Bitmap bmp1 = new Bitmap(400, 500))
             using (var bmplock = bmp1.Lock())
             {
                 WriteableBitmap wb = bmplock.GetWritableBitmap();
-                DrawStaticShapes(wb);
+                switch (sampleName)
+                {
+                    case SampleName.DrawEllipses:
+                        DrawEllipses(wb);
+                        break;
+                    case SampleName.DrawEllipsesFlower:
+                        DrawEllipsesFlower(wb);
+                        break;
+                    case SampleName.DrawStaticShapes:
+                        DrawStaticShapes(wb);
+                        break;
+                }
+
                 bmplock.WriteAndUnlock();
                 //
 
@@ -59,6 +88,11 @@ namespace WinFormGdiPlus
                 g.DrawImage(bmp1, 0, 0);
             }
         }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            RenderSelectedSample();
+        }
+
         /// <summary>
         /// Random color fully opaque
         /// </summary>
@@ -68,6 +102,95 @@ namespace WinFormGdiPlus
             return (int)(0xFF000000 | (uint)rand.Next(0xFFFFFF));
         }
 
+        /// <summary>
+        /// Draws circles that decrease in size to build a flower that is animated
+        /// </summary>
+        private void DrawEllipsesFlower(WriteableBitmap writeableBmp)
+        {
+            if (writeableBmp == null)
+                return;
+
+            // Init some size vars
+            int w = writeableBmp.PixelWidth - 2;
+            int h = writeableBmp.PixelHeight - 2;
+
+            // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
+            using (writeableBmp.GetBitmapContext())
+            {
+                // Increment frame counter
+                if (++frameCounter >= int.MaxValue || frameCounter < 1)
+                {
+                    frameCounter = 1;
+                }
+                double s = Math.Sin(frameCounter * 0.01);
+                if (s < 0)
+                {
+                    s *= -1;
+                }
+
+                // Clear 
+                writeableBmp.Clear();
+
+                // Draw center circle
+                int xc = w >> 1;
+                int yc = h >> 1;
+                // Animate base size with sine
+                int r0 = (int)((w + h) * 0.07 * s) + 10;
+                System.Windows.Media.Imaging.Color color_brown = System.Windows.Media.Imaging.Color.FromArgb(
+                    255, System.Drawing.Color.Brown.R, System.Drawing.Color.Brown.G, System.Drawing.Color.Brown.B);
+
+                writeableBmp.DrawEllipseCentered(xc, yc, r0, r0, color_brown);
+
+                // Draw outer circles
+                int dec = (int)((w + h) * 0.0045f);
+                int r = (int)((w + h) * 0.025f);
+                int offset = r0 + r;
+                for (int i = 1; i < 6 && r > 1; i++)
+                {
+                    for (double f = 1; f < 7; f += 0.7)
+                    {
+                        // Calc postion based on unit circle
+                        int xc2 = (int)(Math.Sin(frameCounter * 0.002 * i + f) * offset + xc);
+                        int yc2 = (int)(Math.Cos(frameCounter * 0.002 * i + f) * offset + yc);
+                        int col = (int)(0xFFFF0000 | (uint)(0x1A * i) << 8 | (uint)(0x20 * f));
+                        writeableBmp.DrawEllipseCentered(xc2, yc2, r, r, col);
+                    }
+                    // Next ring
+                    offset += r;
+                    r -= dec;
+                    offset += r;
+                }
+
+                // Invalidates on exit of using block
+            }
+        }
+        /// <summary>
+        /// Draws random ellipses
+        /// </summary>
+        private void DrawEllipses(WriteableBitmap writeableBmp)
+        {
+            // Init some size vars
+            int w = writeableBmp.PixelWidth - 2;
+            int h = writeableBmp.PixelHeight - 2;
+            int wh = w >> 1;
+            int hh = h >> 1;
+
+            // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
+            using (writeableBmp.GetBitmapContext())
+            {
+                // Clear 
+                writeableBmp.Clear();
+
+                // Draw Ellipses
+                for (int i = 0; i < shapeCount; i++)
+                {
+                    writeableBmp.DrawEllipse(rand.Next(wh), rand.Next(hh), rand.Next(wh, w), rand.Next(hh, h),
+                                             GetRandomColor());
+                }
+
+                // Invalidates on exit of using block
+            }
+        }
         /// <summary>
         /// Draws the different types of shapes.
         /// </summary>
@@ -133,12 +256,12 @@ namespace WinFormGdiPlus
                                          rand.Next(w3rd + w6th, w3rd * 2), rand.Next(h - h6th, h), GetRandomColor());
                 writeableBmp.DrawEllipseCentered(w - w6th, h - h6th, w6th >> 1, h6th >> 1, GetRandomColor());
 
-                System.Windows.Media.Imaging.Color black = System.Windows.Media.Imaging.Color.FromArgb(255, 0, 0, 0);
+                
                 // Draw Grid
-                writeableBmp.DrawLine(0, h3rd, w, h3rd, black);
-                writeableBmp.DrawLine(0, 2 * h3rd, w, 2 * h3rd, black);
-                writeableBmp.DrawLine(w3rd, 0, w3rd, h, black);
-                writeableBmp.DrawLine(2 * w3rd, 0, 2 * w3rd, h, black);
+                writeableBmp.DrawLine(0, h3rd, w, h3rd, Colors.Black);
+                writeableBmp.DrawLine(0, 2 * h3rd, w, 2 * h3rd, Colors.Black);
+                writeableBmp.DrawLine(w3rd, 0, w3rd, h, Colors.Black);
+                writeableBmp.DrawLine(2 * w3rd, 0, 2 * w3rd, h, Colors.Black);
 
                 // Invalidates on exit of using block
             }

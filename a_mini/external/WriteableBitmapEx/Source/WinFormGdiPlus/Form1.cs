@@ -97,5 +97,11 @@ namespace WinFormGdiPlus
             FormShape formShape = new FormShape();
             formShape.Show();
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            FormFill formFill = new FormFill();
+            formFill.Show();
+        }
     }
 }
