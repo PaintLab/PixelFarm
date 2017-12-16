@@ -2,7 +2,7 @@
 //example and test for WritableBitmap (https://github.com/teichgraf/WriteableBitmapEx) on Gdi+
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+ 
 
 using System.Drawing;
 using System.Text;
