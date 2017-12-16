@@ -53,11 +53,11 @@ namespace System.Windows.Media.Imaging
 
         public static int ConvertColor(Color color)
         {
-            var col = 0;
+            int col = 0;
 
             if (color.A != 0)
             {
-                var a = color.A + 1;
+                int a = color.A + 1;
                 col = (color.A << 24)
                   | ((byte)((color.R * a) >> 8) << 16)
                   | ((byte)((color.G * a) >> 8) << 8)

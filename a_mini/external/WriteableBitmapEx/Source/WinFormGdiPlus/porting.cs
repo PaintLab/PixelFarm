@@ -159,8 +159,30 @@ namespace System.Windows.Media.Imaging
         }
         public double Left { get; set; }
         public double Top { get; set; }
-        public double X { get { return this.Left; } }
-        public double Y { get { return this.Top; } }
+        public double X
+        {
+            get
+            {
+                return this.Left;
+            }
+
+            set
+            {
+                this.Left = value;
+            }
+        }
+        public double Y
+        {
+            get
+            {
+                return this.Top;
+            }
+            set
+            {
+                this.Top = value;
+            }
+
+        }
     }
     public struct Size
     {
@@ -219,14 +241,18 @@ namespace System.Windows.Media.Imaging
     public struct Colors
     {
         public static Color White = Color.FromArgb(255, 255, 255, 255);
-
+        public static Color Black = Color.FromArgb(255, 0, 0, 0);
+        public static Color Red = Color.FromArgb(255, 255, 0, 0);
+        public static Color Blue = Color.FromArgb(255, 0, 0, 255);
     }
     public class WriteableBitmap
     {
         //in this version , only 32 bits 
         public WriteableBitmap(int w, int h)
         {
-
+            this.PixelWidth = w;
+            this.PixelHeight = h;
+            this.Pixels = new int[w * h];
         }
         public WriteableBitmap(int w, int h, int[] orgBuffer)
         {

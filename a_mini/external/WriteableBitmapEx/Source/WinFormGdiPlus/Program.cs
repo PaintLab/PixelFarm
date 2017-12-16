@@ -33,7 +33,6 @@ namespace WinFormGdiPlus
         public LockBmp(Bitmap bmp)
         {
             _bmp = bmp;
-
             _bmpdata = _bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
                 System.Drawing.Imaging.ImageLockMode.ReadWrite,
                 System.Drawing.Imaging.PixelFormat.Format32bppArgb);

@@ -91,5 +91,29 @@ namespace WinFormGdiPlus
                 dest.Save("d:\\WImageTest\\a0004.png");
             }
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            FormShape formShape = new FormShape();
+            formShape.Show();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            FormFill formFill = new FormFill();
+            formFill.Show();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            FormBlit formBlit = new FormBlit();
+            formBlit.Show();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            FormPlantDemo formPlant = new FormPlantDemo();
+            formPlant.Show();
+        }
     }
 }

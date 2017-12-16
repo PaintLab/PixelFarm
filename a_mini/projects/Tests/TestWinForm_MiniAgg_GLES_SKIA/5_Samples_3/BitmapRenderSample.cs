@@ -45,8 +45,7 @@ namespace PixelFarm.Agg.Sample_Images
             //actualImage2 = LoadImage(RootDemoPath.Path + "\\plain01.png");
             actualImage = LoadImage(RootDemoPath.Path + "\\02.jpg");
             affinePlans = new AffinePlan[] {
-                AffinePlan.Translate(actualImage.Width * 2, actualImage.Height * 2),
-                AffinePlan.Scale(0.5)};
+                AffinePlan.Translate(50, 50) };
         }
 
         static ActualImage LoadImage(string filename)
@@ -68,7 +67,7 @@ namespace PixelFarm.Agg.Sample_Images
         {
             p.Clear(Drawing.Color.White);
             //p.DrawImage(actualImage, 0, 200);
-            p.DrawImage(actualImage, affinePlan1);
+          //  p.DrawImage(actualImage, affinePlan1);
             p.DrawImage(actualImage, affinePlans);
             //p.DrawImage(actualImage, 100,200);
 
