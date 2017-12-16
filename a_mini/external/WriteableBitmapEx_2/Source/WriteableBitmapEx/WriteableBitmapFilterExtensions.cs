@@ -64,7 +64,7 @@ namespace PixelFarm.Agg
         /// <returns>A new WriteableBitmap that is a filtered version of the input.</returns>
         public static WriteableBitmap Convolute(this WriteableBitmap bmp, int[,] kernel)
         {
-            var kernelFactorSum = 0;
+            int kernelFactorSum = 0;
             foreach (var b in kernel)
             {
                 kernelFactorSum += b;
@@ -82,8 +82,8 @@ namespace PixelFarm.Agg
         /// <returns>A new WriteableBitmap that is a filtered version of the input.</returns>
         public static WriteableBitmap Convolute(this WriteableBitmap bmp, int[,] kernel, int kernelFactorSum, int kernelOffsetSum)
         {
-            var kh = kernel.GetUpperBound(0) + 1;
-            var kw = kernel.GetUpperBound(1) + 1;
+            int kh = kernel.GetUpperBound(0) + 1;
+            int kw = kernel.GetUpperBound(1) + 1;
 
             if ((kw & 1) == 0)
             {
@@ -96,30 +96,30 @@ namespace PixelFarm.Agg
 
             using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                var w = srcContext.Width;
-                var h = srcContext.Height;
-                var result = BitmapFactory.New(w, h);
+                int w = srcContext.Width;
+                int h = srcContext.Height;
+                WriteableBitmap result = BitmapFactory.New(w, h);
 
                 using (var resultContext = result.GetBitmapContext())
                 {
-                    var pixels = srcContext.Pixels;
-                    var resultPixels = resultContext.Pixels;
-                    var index = 0;
-                    var kwh = kw >> 1;
-                    var khh = kh >> 1;
+                    int[] pixels = srcContext.Pixels;
+                    int[] resultPixels = resultContext.Pixels;
+                    int index = 0;
+                    int kwh = kw >> 1;
+                    int khh = kh >> 1;
 
-                    for (var y = 0; y < h; y++)
+                    for (int y = 0; y < h; y++)
                     {
-                        for (var x = 0; x < w; x++)
+                        for (int x = 0; x < w; x++)
                         {
-                            var a = 0;
-                            var r = 0;
-                            var g = 0;
-                            var b = 0;
+                            int a = 0;
+                            int r = 0;
+                            int g = 0;
+                            int b = 0;
 
-                            for (var kx = -kwh; kx <= kwh; kx++)
+                            for (int kx = -kwh; kx <= kwh; kx++)
                             {
-                                var px = kx + x;
+                                int px = kx + x;
                                 // Repeat pixels at borders
                                 if (px < 0)
                                 {
@@ -130,9 +130,9 @@ namespace PixelFarm.Agg
                                     px = w - 1;
                                 }
 
-                                for (var ky = -khh; ky <= khh; ky++)
+                                for (int ky = -khh; ky <= khh; ky++)
                                 {
-                                    var py = ky + y;
+                                    int py = ky + y;
                                     // Repeat pixels at borders
                                     if (py < 0)
                                     {
@@ -143,8 +143,8 @@ namespace PixelFarm.Agg
                                         py = h - 1;
                                     }
 
-                                    var col = pixels[py * w + px];
-                                    var k = kernel[ky + kwh, kx + khh];
+                                    int col = pixels[py * w + px];
+                                    int k = kernel[ky + kwh, kx + khh];
                                     a += ((col >> 24) & 0x000000FF) * k;
                                     r += ((col >> 16) & 0x000000FF) * k;
                                     g += ((col >> 8) & 0x000000FF) * k;
@@ -152,16 +152,16 @@ namespace PixelFarm.Agg
                                 }
                             }
 
-                            var ta = ((a / kernelFactorSum) + kernelOffsetSum);
-                            var tr = ((r / kernelFactorSum) + kernelOffsetSum);
-                            var tg = ((g / kernelFactorSum) + kernelOffsetSum);
-                            var tb = ((b / kernelFactorSum) + kernelOffsetSum);
+                            int ta = ((a / kernelFactorSum) + kernelOffsetSum);
+                            int tr = ((r / kernelFactorSum) + kernelOffsetSum);
+                            int tg = ((g / kernelFactorSum) + kernelOffsetSum);
+                            int tb = ((b / kernelFactorSum) + kernelOffsetSum);
 
                             // Clamp to byte boundaries
-                            var ba = (byte)((ta > 255) ? 255 : ((ta < 0) ? 0 : ta));
-                            var br = (byte)((tr > 255) ? 255 : ((tr < 0) ? 0 : tr));
-                            var bg = (byte)((tg > 255) ? 255 : ((tg < 0) ? 0 : tg));
-                            var bb = (byte)((tb > 255) ? 255 : ((tb < 0) ? 0 : tb));
+                            byte ba = (byte)((ta > 255) ? 255 : ((ta < 0) ? 0 : ta));
+                            byte br = (byte)((tr > 255) ? 255 : ((tr < 0) ? 0 : tr));
+                            byte bg = (byte)((tg > 255) ? 255 : ((tg < 0) ? 0 : tg));
+                            byte bb = (byte)((tb > 255) ? 255 : ((tb < 0) ? 0 : tb));
 
                             resultPixels[index++] = (ba << 24) | (br << 16) | (bg << 8) | (bb);
                         }
@@ -185,18 +185,18 @@ namespace PixelFarm.Agg
                 var result = BitmapFactory.New(srcContext.Width, srcContext.Height);
                 using (var resultContext = result.GetBitmapContext())
                 {
-                    var rp = resultContext.Pixels;
-                    var p = srcContext.Pixels;
-                    var length = srcContext.Length;
+                    int[] rp = resultContext.Pixels;
+                    int[] p = srcContext.Pixels;
+                    int length = srcContext.Length;
 
-                    for (var i = 0; i < length; i++)
+                    for (int i = 0; i < length; i++)
                     {
                         // Extract
-                        var c = p[i];
-                        var a = (c >> 24) & 0x000000FF;
-                        var r = (c >> 16) & 0x000000FF;
-                        var g = (c >> 8) & 0x000000FF;
-                        var b = (c) & 0x000000FF;
+                        int c = p[i];
+                        int a = (c >> 24) & 0xff;
+                        int r = (c >> 16) & 0xff;
+                        int g = (c >> 8) & 0xff;
+                        int b = (c) & 0xff;
 
                         // Invert
                         r = 255 - r;
@@ -223,27 +223,26 @@ namespace PixelFarm.Agg
         {
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                var nWidth = context.Width;
-                var nHeight = context.Height;
-                var px = context.Pixels;
-                var result = BitmapFactory.New(nWidth, nHeight);
+                int nWidth = context.Width;
+                int nHeight = context.Height;
+                int[] px = context.Pixels;
+                WriteableBitmap result = BitmapFactory.New(nWidth, nHeight);
 
                 using (var dest = result.GetBitmapContext())
                 {
-                    var rp = dest.Pixels;
-                    var len = context.Length;
-                    for (var i = 0; i < len; i++)
+                    int[] rp = dest.Pixels;
+                    int len = context.Length;
+                    for (int i = 0; i < len; i++)
                     {
                         // Extract
-                        var c = px[i];
-                        var a = (c >> 24) & 0x000000FF;
-                        var r = (c >> 16) & 0x000000FF;
-                        var g = (c >> 8) & 0x000000FF;
-                        var b = (c) & 0x000000FF;
+                        int c = px[i];
+                        int a = (c >> 24) & 0xff;
+                        int r = (c >> 16) & 0xff;
+                        int g = (c >> 8) & 0xff;
+                        int b = (c) & 0xff;
 
                         // Convert to gray with constant factors 0.2126, 0.7152, 0.0722
-                        var gray = (r * 6966 + g * 23436 + b * 2366) >> 15;
-                        r = g = b = gray;
+                        r = g = b = ((r * 6966 + g * 23436 + b * 2366) >> 15);
 
                         // Set
                         rp[i] = (a << 24) | (r << 16) | (g << 8) | b;
@@ -262,29 +261,30 @@ namespace PixelFarm.Agg
         /// <returns>The new WriteableBitmap.</returns>
         public static WriteableBitmap AdjustContrast(this WriteableBitmap bmp, double level)
         {
-            var factor = (int)((259.0 * (level + 255.0)) / (255.0 * (259.0 - level)) * 255.0);
+            int factor = (int)((259.0 * (level + 255.0)) / (255.0 * (259.0 - level)) * 255.0);
 
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                var nWidth = context.Width;
-                var nHeight = context.Height;
-                var px = context.Pixels;
-                var result = BitmapFactory.New(nWidth, nHeight);
+                int nWidth = context.Width;
+                int nHeight = context.Height;
+                int[] px = context.Pixels;
+                WriteableBitmap result = BitmapFactory.New(nWidth, nHeight);
 
                 using (var dest = result.GetBitmapContext())
                 {
-                    var rp = dest.Pixels;
-                    var len = context.Length;
-                    for (var i = 0; i < len; i++)
+                    int[] rp = dest.Pixels;
+                    int len = context.Length;
+                    for (int i = 0; i < len; i++)
                     {
                         // Extract
-                        var c = px[i];
-                        var a = (c >> 24) & 0x000000FF;
-                        var r = (c >> 16) & 0x000000FF;
-                        var g = (c >> 8) & 0x000000FF;
-                        var b = (c) & 0x000000FF;
+                        int c = px[i];
+                        int a = (c >> 24) & 0xff;
+                        int r = (c >> 16) & 0xff;
+                        int g = (c >> 8) & 0xff;
+                        int b = (c) & 0xff;
 
                         // Adjust contrast based on computed factor
+                        //TODO: create lookup table for this
                         r = ((factor * (r - 128)) >> 8) + 128;
                         g = ((factor * (g - 128)) >> 8) + 128;
                         b = ((factor * (b - 128)) >> 8) + 128;
@@ -313,30 +313,31 @@ namespace PixelFarm.Agg
         {
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                var nWidth = context.Width;
-                var nHeight = context.Height;
-                var px = context.Pixels;
-                var result = BitmapFactory.New(nWidth, nHeight);
+                int nWidth = context.Width;
+                int nHeight = context.Height;
+                int[] px = context.Pixels;
+                WriteableBitmap result = BitmapFactory.New(nWidth, nHeight);
 
                 using (var dest = result.GetBitmapContext())
                 {
-                    var rp = dest.Pixels;
-                    var len = context.Length;
-                    for (var i = 0; i < len; i++)
+                    int[] rp = dest.Pixels;
+                    int len = context.Length;
+                    for (int i = 0; i < len; i++)
                     {
                         // Extract
-                        var c = px[i];
-                        var a = (c >> 24) & 0x000000FF;
-                        var r = (c >> 16) & 0x000000FF;
-                        var g = (c >> 8) & 0x000000FF;
-                        var b = (c) & 0x000000FF;
+                        int c = px[i];
+                        int a = (c >> 24) & 0xff;
+                        int r = (c >> 16) & 0xff;
+                        int g = (c >> 8) & 0xff;
+                        int b = (c) & 0xff;
 
                         // Brightness adjustment
+                        //TODO: create lookup table for this
                         r += nLevel;
                         g += nLevel;
                         b += nLevel;
 
-                        // Clamp
+                        // Clamp                    
                         r = r < 0 ? 0 : r > 255 ? 255 : r;
                         g = g < 0 ? 0 : g > 255 ? 255 : g;
                         b = b < 0 ? 0 : b > 255 ? 255 : b;
@@ -360,26 +361,27 @@ namespace PixelFarm.Agg
         {
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                var nWidth = context.Width;
-                var nHeight = context.Height;
-                var px = context.Pixels;
-                var result = BitmapFactory.New(nWidth, nHeight);
+                int nWidth = context.Width;
+                int nHeight = context.Height;
+                int[] srcPixels = context.Pixels;
+                WriteableBitmap result = BitmapFactory.New(nWidth, nHeight);
 
                 using (var dest = result.GetBitmapContext())
                 {
-                    var rp = dest.Pixels;
+                    int[] rp = dest.Pixels;
                     var gammaCorrection = 1.0 / value;
-                    var len = context.Length;
-                    for (var i = 0; i < len; i++)
+                    int len = context.Length;
+                    for (int i = 0; i < len; i++)
                     {
                         // Extract
-                        var c = px[i];
-                        var a = (c >> 24) & 0x000000FF;
-                        var r = (c >> 16) & 0x000000FF;
-                        var g = (c >> 8) & 0x000000FF;
-                        var b = (c) & 0x000000FF;
+                        int c = srcPixels[i];
+                        int a = (c >> 24) & 0xff;
+                        int r = (c >> 16) & 0xff;
+                        int g = (c >> 8) & 0xff;
+                        int b = (c) & 0xff;
 
-                        // Gamma adjustment
+                        //Gamma adjustment
+                        //TODO: create gamma-lookup table for this
                         r = (int)(255.0 * Math.Pow((r / 255.0), gammaCorrection));
                         g = (int)(255.0 * Math.Pow((g / 255.0), gammaCorrection));
                         b = (int)(255.0 * Math.Pow((b / 255.0), gammaCorrection));
@@ -397,7 +399,5 @@ namespace PixelFarm.Agg
                 return result;
             }
         }
-
-
     }
 }

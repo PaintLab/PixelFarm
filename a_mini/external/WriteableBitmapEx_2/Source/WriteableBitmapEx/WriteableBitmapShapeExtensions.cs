@@ -21,7 +21,7 @@ namespace PixelFarm.Agg
     /// Collection of extension methods for the WriteableBitmap class.
     /// </summary>
     public static partial class WriteableBitmapExtensions
-    {   
+    {
         /// <summary>
         /// Draws a polyline. Add the first point also at the end of the array if the line should be closed.
         /// </summary>
@@ -30,8 +30,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void DrawPolyline(this WriteableBitmap bmp, int[] points, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawPolyline(points, col);
+
+            bmp.DrawPolyline(points, ConvertColor(color));
         }
 
         /// <summary>
@@ -45,15 +45,15 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
-                var w = context.Width;
-                var h = context.Height;
-                var x1 = points[0];
-                var y1 = points[1];
+                int w = context.Width;
+                int h = context.Height;
+                int x1 = points[0];
+                int y1 = points[1];
 
-                for (var i = 2; i < points.Length; i += 2)
+                for (int i = 2; i < points.Length; i += 2)
                 {
-                    var x2 = points[i];
-                    var y2 = points[i + 1];
+                    int x2 = points[i];
+                    int y2 = points[i + 1];
 
                     DrawLine(context, w, h, x1, y1, x2, y2, color);
                     x1 = x2;
@@ -70,8 +70,7 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void DrawPolylineAa(this WriteableBitmap bmp, int[] points, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawPolylineAa(points, col);
+            bmp.DrawPolylineAa(points, ConvertColor(color));
         }
 
         /// <summary>
@@ -85,15 +84,15 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
-                var w = context.Width;
-                var h = context.Height;
-                var x1 = points[0];
-                var y1 = points[1];
+                int w = context.Width;
+                int h = context.Height;
+                int x1 = points[0];
+                int y1 = points[1];
 
-                for (var i = 2; i < points.Length; i += 2)
+                for (int i = 2; i < points.Length; i += 2)
                 {
-                    var x2 = points[i];
-                    var y2 = points[i + 1];
+                    int x2 = points[i];
+                    int y2 = points[i + 1];
 
                     DrawLineAa(context, w, h, x1, y1, x2, y2, color);
                     x1 = x2;
@@ -115,8 +114,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void DrawTriangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawTriangle(x1, y1, x2, y2, x3, y3, col);
+          
+            bmp.DrawTriangle(x1, y1, x2, y2, x3, y3, ConvertColor(color));
         }
 
         /// <summary>
@@ -159,8 +158,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void DrawQuad(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawQuad(x1, y1, x2, y2, x3, y3, x4, y4, col);
+           
+            bmp.DrawQuad(x1, y1, x2, y2, x3, y3, x4, y4, ConvertColor(color));
         }
 
         /// <summary>
@@ -205,8 +204,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void DrawRectangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawRectangle(x1, y1, x2, y2, col);
+         
+            bmp.DrawRectangle(x1, y1, x2, y2, ConvertColor(color));
         }
 
         /// <summary>
@@ -224,9 +223,9 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
-                var w = context.Width;
-                var h = context.Height;
-                var pixels = context.Pixels;
+                int w = context.Width;
+                int h = context.Height;
+                int[] pixels = context.Pixels;
 
                 // Check boundaries
                 if ((x1 < 0 && x2 < 0) || (y1 < 0 && y2 < 0)
@@ -245,15 +244,15 @@ namespace PixelFarm.Agg
                 if (x2 >= w) { x2 = w - 1; }
                 if (y2 >= h) { y2 = h - 1; }
 
-                var startY = y1 * w;
-                var endY = y2 * w;
+                int startY = y1 * w;
+                int endY = y2 * w;
 
-                var offset2 = endY + x1;
-                var endOffset = startY + x2;
-                var startYPlusX1 = startY + x1;
+                int offset2 = endY + x1;
+                int endOffset = startY + x2;
+                int startYPlusX1 = startY + x1;
 
                 // top and bottom horizontal scanlines
-                for (var x = startYPlusX1; x <= endOffset; x++)
+                for (int x = startYPlusX1; x <= endOffset; x++)
                 {
                     pixels[x] = color; // top horizontal line
                     pixels[offset2] = color; // bottom horizontal line
@@ -266,7 +265,7 @@ namespace PixelFarm.Agg
                 endOffset = startYPlusX1 + w;
                 offset2 -= w;
 
-                for (var y = startY + x2 + w; y <= offset2; y += w)
+                for (int y = startY + x2 + w; y <= offset2; y += w)
                 {
                     pixels[y] = color; // right vertical line
                     pixels[endOffset] = color; // left vertical line
@@ -289,8 +288,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void DrawEllipse(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawEllipse(x1, y1, x2, y2, col);
+        
+            bmp.DrawEllipse(x1, y1, x2, y2, ConvertColor(color));
         }
 
         /// <summary>
@@ -324,9 +323,8 @@ namespace PixelFarm.Agg
         /// <param name="yr">The radius of the ellipse in y-direction.</param>
         /// <param name="color">The color for the line.</param>
         public static void DrawEllipseCentered(this WriteableBitmap bmp, int xc, int yc, int xr, int yr, Color color)
-        {
-            var col = ConvertColor(color);
-            bmp.DrawEllipseCentered(xc, yc, xr, yr, col);
+        { 
+            bmp.DrawEllipseCentered(xc, yc, xr, yr, ConvertColor(color));
         }
 
         /// <summary>
@@ -345,9 +343,9 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
 
-                var pixels = context.Pixels;
-                var w = context.Width;
-                var h = context.Height;
+                int[] pixels = context.Pixels;
+                int w = context.Width;
+                int h = context.Height;
 
                 // Avoid endless loop
                 if (xr < 1 || yr < 1)
@@ -458,8 +456,5 @@ namespace PixelFarm.Agg
                 }
             }
         }
-
-
-
     }
 }

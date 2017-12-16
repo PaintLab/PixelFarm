@@ -41,8 +41,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void FillRectangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillRectangle(x1, y1, x2, y2, col);
+
+            bmp.FillRectangle(x1, y1, x2, y2, ConvertColor(color));
         }
 
         /// <summary>
@@ -61,8 +61,8 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
-                var w = context.Width;
-                var h = context.Height;
+                int w = context.Width;
+                int h = context.Height;
 
                 int sa = ((color >> 24) & 0xff);
                 int sr = ((color >> 16) & 0xff);
@@ -71,7 +71,7 @@ namespace PixelFarm.Agg
 
                 bool noBlending = !doAlphaBlend || sa == 255;
 
-                var pixels = context.Pixels;
+                int[] pixels = context.Pixels;
 
                 // Check boundaries
                 if ((x1 < 0 && x2 < 0) || (y1 < 0 && y2 < 0)
@@ -99,18 +99,18 @@ namespace PixelFarm.Agg
                 }
 
                 // Fill first line
-                var startY = y1 * w;
-                var startYPlusX1 = startY + x1;
-                var endOffset = startY + x2;
-                for (var idx = startYPlusX1; idx < endOffset; idx++)
+                int startY = y1 * w;
+                int startYPlusX1 = startY + x1;
+                int endOffset = startY + x2;
+                for (int idx = startYPlusX1; idx < endOffset; idx++)
                 {
                     pixels[idx] = noBlending ? color : AlphaBlendColors(pixels[idx], sa, sr, sg, sb);
                 }
 
                 // Copy first line
-                var len = (x2 - x1);
-                var srcOffsetBytes = startYPlusX1 * SizeOfArgb;
-                var offset2 = y2 * w + x1;
+                int len = (x2 - x1);
+                int srcOffsetBytes = startYPlusX1 * ARGB_SIZE;
+                int offset2 = y2 * w + x1;
 
                 //plan...
                 if (noBlending)
@@ -122,11 +122,11 @@ namespace PixelFarm.Agg
 
                 }
 
-                for (var y = startYPlusX1 + w; y < offset2; y += w)
+                for (int y = startYPlusX1 + w; y < offset2; y += w)
                 {
                     if (noBlending)
                     {
-                        BitmapContext.BlockCopy(context, srcOffsetBytes, context, y * SizeOfArgb, len * SizeOfArgb);
+                        BitmapContext.BlockCopy(context, srcOffsetBytes, context, y * ARGB_SIZE, len * ARGB_SIZE);
                         continue;
                     }
 
@@ -172,8 +172,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void FillEllipse(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color)
         {
-            int col = ConvertColor(color);
-            bmp.FillEllipse(x1, y1, x2, y2, col);
+
+            bmp.FillEllipse(x1, y1, x2, y2, ConvertColor(color));
         }
 
         /// <summary>
@@ -208,8 +208,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void FillEllipseCentered(this WriteableBitmap bmp, int xc, int yc, int xr, int yr, Color color)
         {
-            int col = ConvertColor(color);
-            bmp.FillEllipseCentered(xc, yc, xr, yr, col);
+
+            bmp.FillEllipseCentered(xc, yc, xr, yr, ConvertColor(color));
         }
 
 
@@ -230,7 +230,7 @@ namespace PixelFarm.Agg
             // Use refs for faster access (really important!) speeds up a lot!
             using (var context = bmp.GetBitmapContext())
             {
-                var pixels = context.Pixels;
+                int[] pixels = context.Pixels;
                 int w = context.Width;
                 int h = context.Height;
 
@@ -422,8 +422,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void FillPolygon(this WriteableBitmap bmp, int[] points, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillPolygon(points, col);
+
+            bmp.FillPolygon(points, ConvertColor(color));
         }
 
         /// <summary>
@@ -449,7 +449,7 @@ namespace PixelFarm.Agg
 
                 bool noBlending = !doAlphaBlend || sa == 255;
 
-                var pixels = context.Pixels;
+                int[] pixels = context.Pixels;
                 int pn = points.Length;
                 int pnh = points.Length >> 1;
                 int[] intersectionsX = new int[pnh];
@@ -625,8 +625,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the polygon.</param>
         public static void FillPolygonsEvenOdd(this WriteableBitmap bmp, int[][] polygons, Color color)
         {
-            var col = ConvertColor(color);
-            FillPolygonsEvenOdd(bmp, polygons, col);
+
+            FillPolygonsEvenOdd(bmp, polygons, ConvertColor(color));
         }
 
         /// <summary>
@@ -676,7 +676,7 @@ namespace PixelFarm.Agg
                 // Use refs for faster access (really important!) speeds up a lot!
                 int w = context.Width;
                 int h = context.Height;
-                var pixels = context.Pixels;
+                int[] pixels = context.Pixels;
 
                 // Register edges, and find y max
                 List<Edge> edges = new List<Edge>();
@@ -825,8 +825,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void FillQuad(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillQuad(x1, y1, x2, y2, x3, y3, x4, y4, col);
+
+            bmp.FillQuad(x1, y1, x2, y2, x3, y3, x4, y4, ConvertColor(color));
         }
 
         /// <summary>
@@ -860,8 +860,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void FillTriangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillTriangle(x1, y1, x2, y2, x3, y3, col);
+
+            bmp.FillTriangle(x1, y1, x2, y2, x3, y3, ConvertColor(color));
         }
 
         /// <summary>
@@ -882,26 +882,26 @@ namespace PixelFarm.Agg
 
 
 
-        /// <summary>
-        /// Draws a filled, cubic Beziér spline defined by start, end and two control points.
-        /// </summary>
-        /// <param name="x1">The x-coordinate of the start point.</param>
-        /// <param name="y1">The y-coordinate of the start point.</param>
-        /// <param name="cx1">The x-coordinate of the 1st control point.</param>
-        /// <param name="cy1">The y-coordinate of the 1st control point.</param>
-        /// <param name="cx2">The x-coordinate of the 2nd control point.</param>
-        /// <param name="cy2">The y-coordinate of the 2nd control point.</param>
-        /// <param name="x2">The x-coordinate of the end point.</param>
-        /// <param name="y2">The y-coordinate of the end point.</param>
-        /// <param name="color">The color.</param>
-        /// <param name="context">The context with the pixels.</param>
-        /// <param name="w">The width of the bitmap.</param>
-        /// <param name="h">The height of the bitmap.</param> 
-        [Obsolete("Obsolete, left for compatibility reasons. Please use List<int> ComputeBezierPoints(int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2) instead.")]
-        private static List<int> ComputeBezierPoints(int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2, int color, BitmapContext context, int w, int h)
-        {
-            return ComputeBezierPoints(x1, y1, cx1, cy1, cx2, cy2, x2, y1);
-        }
+        ///// <summary>
+        ///// Draws a filled, cubic Beziér spline defined by start, end and two control points.
+        ///// </summary>
+        ///// <param name="x1">The x-coordinate of the start point.</param>
+        ///// <param name="y1">The y-coordinate of the start point.</param>
+        ///// <param name="cx1">The x-coordinate of the 1st control point.</param>
+        ///// <param name="cy1">The y-coordinate of the 1st control point.</param>
+        ///// <param name="cx2">The x-coordinate of the 2nd control point.</param>
+        ///// <param name="cy2">The y-coordinate of the 2nd control point.</param>
+        ///// <param name="x2">The x-coordinate of the end point.</param>
+        ///// <param name="y2">The y-coordinate of the end point.</param>
+        ///// <param name="color">The color.</param>
+        ///// <param name="context">The context with the pixels.</param>
+        ///// <param name="w">The width of the bitmap.</param>
+        ///// <param name="h">The height of the bitmap.</param> 
+        //[Obsolete("Obsolete, left for compatibility reasons. Please use List<int> ComputeBezierPoints(int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2) instead.")]
+        //private static List<int> ComputeBezierPoints(int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2, int color, BitmapContext context, int w, int h)
+        //{
+        //    return ComputeBezierPoints(x1, y1, cx1, cy1, cx2, cy2, x2, y1);
+        //}
 
         /// <summary>
         /// Draws a filled, cubic Beziér spline defined by start, end and two control points.
@@ -917,14 +917,14 @@ namespace PixelFarm.Agg
         private static List<int> ComputeBezierPoints(int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2)
         {
             // Determine distances between controls points (bounding rect) to find the optimal stepsize
-            var minX = Math.Min(x1, Math.Min(cx1, Math.Min(cx2, x2)));
-            var minY = Math.Min(y1, Math.Min(cy1, Math.Min(cy2, y2)));
-            var maxX = Math.Max(x1, Math.Max(cx1, Math.Max(cx2, x2)));
-            var maxY = Math.Max(y1, Math.Max(cy1, Math.Max(cy2, y2)));
+            int minX = Math.Min(x1, Math.Min(cx1, Math.Min(cx2, x2)));
+            int minY = Math.Min(y1, Math.Min(cy1, Math.Min(cy2, y2)));
+            int maxX = Math.Max(x1, Math.Max(cx1, Math.Max(cx2, x2)));
+            int maxY = Math.Max(y1, Math.Max(cy1, Math.Max(cy2, y2)));
 
             // Get slope
-            var lenx = maxX - minX;
-            var len = maxY - minY;
+            int lenx = maxX - minX;
+            int len = maxY - minY;
             if (lenx > len)
             {
                 len = lenx;
@@ -935,16 +935,16 @@ namespace PixelFarm.Agg
             if (len != 0)
             {
                 // Init vars
-                var step = StepFactor / len;
+                float step = STEP_FACTOR / len;
                 int tx = x1;
                 int ty = y1;
 
                 // Interpolate
-                for (var t = 0f; t <= 1; t += step)
+                for (float t = 0f; t <= 1; t += step)
                 {
-                    var tSq = t * t;
-                    var t1 = 1 - t;
-                    var t1Sq = t1 * t1;
+                    float tSq = t * t;
+                    float t1 = 1 - t;
+                    float t1Sq = t1 * t1;
 
                     tx = (int)(t1 * t1Sq * x1 + 3 * t * t1Sq * cx1 + 3 * t1 * tSq * cx2 + t * tSq * x2);
                     ty = (int)(t1 * t1Sq * y1 + 3 * t * t1Sq * cy1 + 3 * t1 * tSq * cy2 + t * tSq * y2);
@@ -970,8 +970,7 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the spline.</param>
         public static void FillBeziers(this WriteableBitmap bmp, int[] points, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillBeziers(points, col);
+            bmp.FillBeziers(points, ConvertColor(color));
         }
 
         /// <summary>
@@ -1041,14 +1040,14 @@ namespace PixelFarm.Agg
         private static List<int> ComputeSegmentPoints(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, float tension)
         {
             // Determine distances between controls points (bounding rect) to find the optimal stepsize
-            var minX = Math.Min(x1, Math.Min(x2, Math.Min(x3, x4)));
-            var minY = Math.Min(y1, Math.Min(y2, Math.Min(y3, y4)));
-            var maxX = Math.Max(x1, Math.Max(x2, Math.Max(x3, x4)));
-            var maxY = Math.Max(y1, Math.Max(y2, Math.Max(y3, y4)));
+            int minX = Math.Min(x1, Math.Min(x2, Math.Min(x3, x4)));
+            int minY = Math.Min(y1, Math.Min(y2, Math.Min(y3, y4)));
+            int maxX = Math.Max(x1, Math.Max(x2, Math.Max(x3, x4)));
+            int maxY = Math.Max(y1, Math.Max(y2, Math.Max(y3, y4)));
 
             // Get slope
-            var lenx = maxX - minX;
-            var len = maxY - minY;
+            int lenx = maxX - minX;
+            int len = maxY - minY;
             if (lenx > len)
             {
                 len = lenx;
@@ -1059,22 +1058,22 @@ namespace PixelFarm.Agg
             if (len != 0)
             {
                 // Init vars
-                var step = StepFactor / len;
+                float step = STEP_FACTOR / len;
 
                 // Calculate factors
-                var sx1 = tension * (x3 - x1);
-                var sy1 = tension * (y3 - y1);
-                var sx2 = tension * (x4 - x2);
-                var sy2 = tension * (y4 - y2);
-                var ax = sx1 + sx2 + 2 * x2 - 2 * x3;
-                var ay = sy1 + sy2 + 2 * y2 - 2 * y3;
-                var bx = -2 * sx1 - sx2 - 3 * x2 + 3 * x3;
-                var by = -2 * sy1 - sy2 - 3 * y2 + 3 * y3;
+                float sx1 = tension * (x3 - x1);
+                float sy1 = tension * (y3 - y1);
+                float sx2 = tension * (x4 - x2);
+                float sy2 = tension * (y4 - y2);
+                float ax = sx1 + sx2 + 2 * x2 - 2 * x3;
+                float ay = sy1 + sy2 + 2 * y2 - 2 * y3;
+                float bx = -2 * sx1 - sx2 - 3 * x2 + 3 * x3;
+                float by = -2 * sy1 - sy2 - 3 * y2 + 3 * y3;
 
                 // Interpolate
-                for (var t = 0f; t <= 1; t += step)
+                for (float t = 0f; t <= 1; t += step)
                 {
-                    var tSq = t * t;
+                    float tSq = t * t;
 
                     int tx = (int)(ax * tSq * t + bx * tSq + sx1 * t + x2);
                     int ty = (int)(ay * tSq * t + by * tSq + sy1 * t + y2);
@@ -1100,8 +1099,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the spline.</param>
         public static void FillCurve(this WriteableBitmap bmp, int[] points, float tension, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillCurve(points, tension, col);
+
+            bmp.FillCurve(points, tension, ConvertColor(color));
         }
 
         /// <summary>
@@ -1115,20 +1114,32 @@ namespace PixelFarm.Agg
         public static void FillCurve(this WriteableBitmap bmp, int[] points, float tension, int color)
         {
             // First segment
-            var list = ComputeSegmentPoints(points[0], points[1], points[0], points[1], points[2], points[3], points[4],
-                points[5], tension);
+            List<int> list = ComputeSegmentPoints(
+                points[0], points[1], //?
+                points[0], points[1],//?
+                points[2], points[3],
+                points[4], points[5],
+                tension);
 
             // Middle segments
             int i;
             for (i = 2; i < points.Length - 4; i += 2)
             {
-                list.AddRange(ComputeSegmentPoints(points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2],
-                    points[i + 3], points[i + 4], points[i + 5], tension));
+                list.AddRange(ComputeSegmentPoints(
+                    points[i - 2], points[i - 1],
+                    points[i], points[i + 1],
+                    points[i + 2], points[i + 3],
+                    points[i + 4], points[i + 5],
+                    tension));
             }
 
             // Last segment
-            list.AddRange(ComputeSegmentPoints(points[i - 2], points[i - 1], points[i], points[i + 1], points[i + 2],
-                points[i + 3], points[i + 2], points[i + 3], tension));
+            list.AddRange(ComputeSegmentPoints(
+                points[i - 2], points[i - 1],
+                points[i], points[i + 1],
+                points[i + 2], points[i + 3],
+                points[i + 2], points[i + 3],
+                tension));
 
             // Fill
             bmp.FillPolygon(list.ToArray(), color);
@@ -1144,8 +1155,7 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the spline.</param>
         public static void FillCurveClosed(this WriteableBitmap bmp, int[] points, float tension, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillCurveClosed(points, tension, col);
+            bmp.FillCurveClosed(points, tension, ConvertColor(color));
         }
 
         /// <summary>
@@ -1161,7 +1171,7 @@ namespace PixelFarm.Agg
             int pn = points.Length;
 
             // First segment
-            var list = ComputeSegmentPoints(points[pn - 2], points[pn - 1], points[0], points[1], points[2], points[3],
+            List<int> list = ComputeSegmentPoints(points[pn - 2], points[pn - 1], points[0], points[1], points[2], points[3],
                 points[4], points[5], tension);
 
             // Middle segments

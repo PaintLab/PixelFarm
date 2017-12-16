@@ -34,7 +34,7 @@ namespace PixelFarm.Agg
 
             if (lineWidth <= 0) return;
 
-            var buffer = context.Pixels;
+            int[] buffer = context.Pixels;
 
             if (y1 > y2)
             {
@@ -65,14 +65,14 @@ namespace PixelFarm.Agg
                 if (y2 >= height)
                     y2 = height - 1;
 
-                for (var x = (int)x1; x <= x2; x++)
+                for (int x = (int)x1; x <= x2; x++)
                 {
-                    for (var y = (int)y1; y <= y2; y++)
+                    for (int y = (int)y1; y <= y2; y++)
                     {
-                        var a = (byte)((color & 0xff000000) >> 24);
-                        var r = (byte)((color & 0x00ff0000) >> 16);
-                        var g = (byte)((color & 0x0000ff00) >> 8);
-                        var b = (byte)((color & 0x000000ff) >> 0);
+                        byte a = (byte)((color & 0xff000000) >> 24);
+                        byte r = (byte)((color & 0x00ff0000) >> 16);
+                        byte g = (byte)((color & 0x0000ff00) >> 8);
+                        byte b = (byte)((color & 0x000000ff) >> 0);
 
                         byte rs, gs, bs;
                         byte rd, gd, bd;
@@ -117,14 +117,14 @@ namespace PixelFarm.Agg
                 if (x1 < 0) x1 = 0;
                 if (x2 >= width) x2 = width - 1;
 
-                for (var x = (int)x1; x <= x2; x++)
+                for (int x = (int)x1; x <= x2; x++)
                 {
-                    for (var y = (int)y1; y <= y2; y++)
+                    for (int y = (int)y1; y <= y2; y++)
                     {
-                        var a = (byte)((color & 0xff000000) >> 24);
-                        var r = (byte)((color & 0x00ff0000) >> 16);
-                        var g = (byte)((color & 0x0000ff00) >> 8);
-                        var b = (byte)((color & 0x000000ff) >> 0);
+                        byte a = (byte)((color & 0xff000000) >> 24);
+                        byte r = (byte)((color & 0x00ff0000) >> 16);
+                        byte g = (byte)((color & 0x0000ff00) >> 8);
+                        byte b = (byte)((color & 0x000000ff) >> 0);
 
                         Byte rs, gs, bs;
                         Byte rd, gd, bd;
@@ -164,8 +164,8 @@ namespace PixelFarm.Agg
             float dx = x2 - x1;
             float dy = y2 - y1;
 
-            var xtot = (float)(w * dy / Math.Sqrt(dx * dx + dy * dy));
-            var ytot = (float)(w * dx / Math.Sqrt(dx * dx + dy * dy));
+            float xtot = (float)(w * dy / Math.Sqrt(dx * dx + dy * dy));
+            float ytot = (float)(w * dx / Math.Sqrt(dx * dx + dy * dy));
 
             float sm = dx * dy / (dx * dx + dy * dy);
 
@@ -182,17 +182,17 @@ namespace PixelFarm.Agg
             float sx = -xtot;
             float sy = +ytot;
 
-            var ix1 = (int)x1;
-            var iy1 = (int)y1;
+            int ix1 = (int)x1;
+            int iy1 = (int)y1;
 
-            var ix2 = (int)x2;
-            var iy2 = (int)y2;
+            int ix2 = (int)x2;
+            int iy2 = (int)y2;
 
-            var ix3 = (int)(x1 + sx);
-            var iy3 = (int)(y1 + sy);
+            int ix3 = (int)(x1 + sx);
+            int iy3 = (int)(y1 + sy);
 
-            var ix4 = (int)(x2 + sx);
-            var iy4 = (int)(y2 + sy);
+            int ix4 = (int)(x2 + sx);
+            int iy4 = (int)(y2 + sy);
 
             if (lineWidth == 2)
             {
@@ -258,10 +258,10 @@ namespace PixelFarm.Agg
 
                 for (int x = leftEdgeX[y]; x <= rightEdgeX[y]; x++)
                 {
-                    var a = (byte)((color & 0xff000000) >> 24);
-                    var r = (byte)((color & 0x00ff0000) >> 16);
-                    var g = (byte)((color & 0x0000ff00) >> 8);
-                    var b = (byte)((color & 0x000000ff) >> 0);
+                    byte a = (byte)((color & 0xff000000) >> 24);
+                    byte r = (byte)((color & 0x00ff0000) >> 16);
+                    byte g = (byte)((color & 0x0000ff00) >> 8);
+                    byte b = (byte)((color & 0x000000ff) >> 0);
 
                     Byte rs, gs, bs;
                     Byte rd, gd, bd;
@@ -303,7 +303,7 @@ namespace PixelFarm.Agg
             if (x1 == x2) return;
             if (y1 == y2) return;
 
-            var buffer = context.Pixels;
+            int[] buffer = context.Pixels;
 
             if (y1 > y2)
             {
@@ -326,10 +326,10 @@ namespace PixelFarm.Agg
 
             UInt16 e = 0;
 
-            var a = (byte)((color & 0xff000000) >> 24);
-            var r = (byte)((color & 0x00ff0000) >> 16);
-            var g = (byte)((color & 0x0000ff00) >> 8);
-            var b = (byte)((color & 0x000000ff) >> 0);
+            byte a = (byte)((color & 0xff000000) >> 24);
+            byte r = (byte)((color & 0x00ff0000) >> 16);
+            byte g = (byte)((color & 0x0000ff00) >> 8);
+            byte b = (byte)((color & 0x000000ff) >> 0);
 
             Byte rs, gs, bs;
             Byte rd, gd, bd;

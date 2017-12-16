@@ -44,8 +44,8 @@ namespace PixelFarm.Agg
                     count = context.Length;
                 }
 
-                var len = count * SizeOfArgb;
-                var result = new byte[len]; // ARGB
+                int len = count * ARGB_SIZE;
+                byte[] result = new byte[len]; // ARGB
                 BitmapContext.BlockCopy(context, offset, result, 0, len);
                 return result;
             }
@@ -126,8 +126,8 @@ namespace PixelFarm.Agg
             {
                 int width = context.Width;
                 int height = context.Height;
-                var pixels = context.Pixels;
-                byte[] data = new byte[context.Length * SizeOfArgb];
+                int[] pixels = context.Pixels;
+                byte[] data = new byte[context.Length * ARGB_SIZE];
 
                 // Copy bitmap data as BGRA
                 int offsetSource = 0;
@@ -140,7 +140,7 @@ namespace PixelFarm.Agg
                     {
                         // Account for pre-multiplied alpha
                         int c = pixels[offsetSource];
-                        var a = (byte)(c >> 24);
+                        byte a = (byte)(c >> 24);
 
                         // Prevent division by zero
                         int ai = a;
@@ -157,27 +157,27 @@ namespace PixelFarm.Agg
                         data[offsetDest] = (byte)((((c & 0xFF) * ai) >> 8));           // B
 
                         offsetSource++;
-                        offsetDest += SizeOfArgb;
+                        offsetDest += ARGB_SIZE;
                     }
                     offsetDest -= width8;
                 }
 
                 // Create header
                 var header = new byte[]
-         {
-            0, // ID length
-            0, // no color map
-            2, // uncompressed, true color
-            0, 0, 0, 0,
-            0,
-            0, 0, 0, 0, // x and y origin
-            (byte)(width & 0x00FF),
-            (byte)((width & 0xFF00) >> 8),
-            (byte)(height & 0x00FF),
-            (byte)((height & 0xFF00) >> 8),
-            32, // 32 bit bitmap
-            0
-         };
+                 {
+                    0, // ID length
+                    0, // no color map
+                    2, // uncompressed, true color
+                    0, 0, 0, 0,
+                    0,
+                    0, 0, 0, 0, // x and y origin
+                    (byte)(width & 0x00FF),
+                    (byte)((width & 0xFF00) >> 8),
+                    (byte)(height & 0x00FF),
+                    (byte)((height & 0xFF00) >> 8),
+                    32, // 32 bit bitmap
+                    0
+                 };
 
                 // Write header and data
                 using (var writer = new BinaryWriter(destination))

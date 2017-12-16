@@ -33,41 +33,7 @@ namespace PixelFarm.Agg
         {
             if (pixelHeight < 1) pixelHeight = 1;
             if (pixelWidth < 1) pixelWidth = 1;
-#if NET20
             return new WriteableBitmap(pixelWidth, pixelHeight);
-#endif
-
-#if SILVERLIGHT
-            return new WriteableBitmap(pixelWidth, pixelHeight);
-#elif WPF
-            return new WriteableBitmap(pixelWidth, pixelHeight, 96.0, 96.0, PixelFormats.Pbgra32, null);
-#elif NETFX_CORE
-         return new WriteableBitmap(pixelWidth, pixelHeight);
-#endif
         }
-
-#if WPF
-        /// <summary>
-        /// Converts the input BitmapSource to the Pbgra32 format WriteableBitmap which is internally used by the WriteableBitmapEx.
-        /// </summary>
-        /// <param name="source">The source bitmap.</param>
-        /// <returns></returns>
-        public static WriteableBitmap ConvertToPbgra32Format(BitmapSource source)
-        {
-            // Convert to Pbgra32 if it's a different format
-            if (source.Format == PixelFormats.Pbgra32)
-            {
-                return new WriteableBitmap(source);
-            }
-
-            var formatedBitmapSource = new FormatConvertedBitmap();
-            formatedBitmapSource.BeginInit();
-            formatedBitmapSource.Source = source;
-            formatedBitmapSource.DestinationFormat = PixelFormats.Pbgra32;
-            formatedBitmapSource.EndInit();
-            return new WriteableBitmap(formatedBitmapSource);
-        }
-#endif 
-
     }
 }
