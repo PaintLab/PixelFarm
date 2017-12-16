@@ -33,19 +33,7 @@ namespace PixelFarm.Agg
         {
             if (pixelHeight < 1) pixelHeight = 1;
             if (pixelWidth < 1) pixelWidth = 1;
-#if NET20
             return new WriteableBitmap(pixelWidth, pixelHeight);
-#endif
-
-#if SILVERLIGHT
-            return new WriteableBitmap(pixelWidth, pixelHeight);
-#elif WPF
-            return new WriteableBitmap(pixelWidth, pixelHeight, 96.0, 96.0, PixelFormats.Pbgra32, null);
-#elif NETFX_CORE
-         return new WriteableBitmap(pixelWidth, pixelHeight);
-#endif
         }
-
-
     }
 }
