@@ -23,7 +23,7 @@ namespace PixelFarm.DrawingBuffer
     /// <summary>
     /// Collection of interchange extension methods for the WriteableBitmap class.
     /// </summary>
-    public static partial class WriteableBitmapExtensions
+    public static partial class BitmapBufferExtensions
     {
 
 

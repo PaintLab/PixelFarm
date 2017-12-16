@@ -20,7 +20,7 @@ namespace PixelFarm.DrawingBuffer
     /// <summary>
     /// Collection of extension methods for the WriteableBitmap class.
     /// </summary>
-    public static partial class WriteableBitmapExtensions
+    public static partial class BitmapBufferExtensions
     {
         /// <summary>
         /// Draws a polyline. Add the first point also at the end of the array if the line should be closed.

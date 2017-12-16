@@ -132,7 +132,7 @@ namespace WinFormGdiPlus
             var size = new PixelFarm.DrawingBuffer.SizeD(overlay.PixelWidth, overlay.PixelHeight);
             result.Blit(new PixelFarm.DrawingBuffer.RectD(location, size), overlay,
                 new RectD(new PixelFarm.DrawingBuffer.PointD(0, 0), size),
-                WriteableBitmapExtensions.BlendMode.Multiply);
+                BitmapBufferExtensions.BlendMode.Multiply);
             return result;
         }
 

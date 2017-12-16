@@ -24,11 +24,8 @@ namespace PixelFarm.DrawingBuffer
     /// <summary>
     /// Collection of extension methods for the WriteableBitmap class.
     /// </summary>
-    public static partial class WriteableBitmapExtensions
-    {
-
-
-
+    public static partial class BitmapBufferExtensions
+    { 
         /// <summary>
         /// Draws a filled rectangle.
         /// x2 has to be greater than x1 and y2 has to be greater than y1.

@@ -21,7 +21,7 @@ namespace PixelFarm.DrawingBuffer
     /// <summary>
     /// Collection of filter / convolution extension methods for the WriteableBitmap class.
     /// </summary>
-    public static partial class WriteableBitmapExtensions
+    public static partial class BitmapBufferExtensions
     {
 
         ///<summary>

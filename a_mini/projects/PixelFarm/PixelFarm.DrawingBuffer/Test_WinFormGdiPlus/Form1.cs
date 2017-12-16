@@ -80,11 +80,11 @@ namespace WinFormGdiPlus
 
                 dstWb.Blit(new RectD(10, 10, src.Width, src.Height),
                         srcWb,
-                        new RectD(0, 0, src.Width, src.Height), WriteableBitmapExtensions.BlendMode.None
+                        new RectD(0, 0, src.Width, src.Height), BitmapBufferExtensions.BlendMode.None
                         );
                 dstWb.Blit(new RectD(100, 100, src.Width * 2, src.Height * 2),
                        srcWb,
-                       new RectD(0, 0, src.Width, src.Height), WriteableBitmapExtensions.BlendMode.None
+                       new RectD(0, 0, src.Width, src.Height), BitmapBufferExtensions.BlendMode.None
                        );
 
                 dstLock.WriteAndUnlock();

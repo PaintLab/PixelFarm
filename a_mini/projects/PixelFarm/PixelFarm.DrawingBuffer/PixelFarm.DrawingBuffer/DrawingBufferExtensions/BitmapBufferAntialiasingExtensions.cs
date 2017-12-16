@@ -22,7 +22,7 @@ namespace PixelFarm.DrawingBuffer
     /// <summary>
     /// Collection of draw extension methods for the Silverlight WriteableBitmap class.
     /// </summary>
-    public unsafe static partial class WriteableBitmapExtensions
+    public unsafe static partial class BitmapBufferExtensions
     {
         private static readonly int[] leftEdgeX = new int[8192];
         private static readonly int[] rightEdgeX = new int[8192];

@@ -65,7 +65,7 @@ namespace WinFormGdiPlus
                     for (int i = 0; i < Particles.Count; i++)
                     {
                         Particle p = Particles[i];
-                        TargetBitmap.Blit(p.Position, ParticleBitmap, sourceRect, p.Color, WriteableBitmapExtensions.BlendMode.Additive);
+                        TargetBitmap.Blit(p.Position, ParticleBitmap, sourceRect, p.Color, BitmapBufferExtensions.BlendMode.Additive);
                     }
                 }
             }

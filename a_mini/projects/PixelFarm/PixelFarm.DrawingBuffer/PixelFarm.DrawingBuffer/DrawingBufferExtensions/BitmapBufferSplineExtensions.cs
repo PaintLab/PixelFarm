@@ -21,7 +21,7 @@ namespace PixelFarm.DrawingBuffer
     /// <summary>
     /// Collection of draw spline extension methods for the WriteableBitmap class.
     /// </summary>
-    public static partial class WriteableBitmapExtensions
+    public static partial class BitmapBufferExtensions
     {
 
         const float STEP_FACTOR = 2f; 

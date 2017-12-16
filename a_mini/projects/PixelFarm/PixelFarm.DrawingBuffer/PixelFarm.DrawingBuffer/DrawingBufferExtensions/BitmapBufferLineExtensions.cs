@@ -18,7 +18,7 @@ using System;
 namespace PixelFarm.DrawingBuffer
 
 {
-    public static partial class WriteableBitmapExtensions
+    public static partial class BitmapBufferExtensions
     {
 
         /// <summary>

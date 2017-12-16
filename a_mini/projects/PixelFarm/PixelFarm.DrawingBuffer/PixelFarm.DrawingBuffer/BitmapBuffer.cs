@@ -1,28 +1,4 @@
-﻿//MIT, 2017, WinterDev
-//example and test for WritableBitmap (https://github.com/teichgraf/WriteableBitmapEx) on Gdi+
-
-using System;
-
-//for .NET 2.0 
-namespace System
-{
-    public delegate R Func<R>();
-    public delegate R Func<T, R>(T t1);
-    public delegate R Func<T1, T2, R>(T1 t1, T2 t2);
-    public delegate R Func<T1, T2, T3, R>(T1 t1, T2 t2, T3 t3);
-}
-namespace System.Runtime.InteropServices
-{
-    public partial class TargetedPatchingOptOutAttribute : Attribute
-    {
-        public TargetedPatchingOptOutAttribute(string msg) { }
-    }
-}
-namespace System.Runtime.CompilerServices
-{
-    public partial class ExtensionAttribute : Attribute { }
-}
-
+﻿using System;
 namespace PixelFarm.DrawingBuffer
 {
     public abstract class GeneralTransform
@@ -46,32 +22,29 @@ namespace PixelFarm.DrawingBuffer
     }
     public class MatrixTransform : GeneralTransform
     {
-        System.Drawing.Drawing2D.Matrix mm1 = new System.Drawing.Drawing2D.Matrix();
-
-        System.Drawing.PointF[] _tmp = new System.Drawing.PointF[1];
-
+        //System.Drawing.Drawing2D.Matrix mm1 = new System.Drawing.Drawing2D.Matrix(); 
+        //System.Drawing.PointF[] _tmp = new System.Drawing.PointF[1]; 
         public override PointD Transform(PointD p)
         {
-            _tmp[0] = new System.Drawing.PointF((float)p.X, (float)p.Y);
-            mm1.TransformPoints(_tmp);
-            return new PointD(_tmp[0].X, _tmp[0].Y);
+            throw new System.NotImplementedException(); 
+            //_tmp[0] = new System.Drawing.PointF((float)p.X, (float)p.Y);
+            //mm1.TransformPoints(_tmp);
+            //return new PointD(_tmp[0].X, _tmp[0].Y);
         }
 
-        System.Drawing.PointF[] _tmp2 = new System.Drawing.PointF[4];
+        //System.Drawing.PointF[] _tmp2 = new System.Drawing.PointF[4];
         public override RectD TransformBounds(RectD r1)
         {
-            _tmp2[0] = new System.Drawing.PointF((float)r1.Left, (float)r1.Top);
-            _tmp2[1] = new System.Drawing.PointF((float)r1.Right, (float)r1.Top);
-            _tmp2[2] = new System.Drawing.PointF((float)r1.Right, (float)r1.Bottom);
-            _tmp2[3] = new System.Drawing.PointF((float)r1.Left, (float)r1.Bottom);
-            //find a new bound
+            throw new System.NotImplementedException();
+            //_tmp2[0] = new System.Drawing.PointF((float)r1.Left, (float)r1.Top);
+            //_tmp2[1] = new System.Drawing.PointF((float)r1.Right, (float)r1.Top);
+            //_tmp2[2] = new System.Drawing.PointF((float)r1.Right, (float)r1.Bottom);
+            //_tmp2[3] = new System.Drawing.PointF((float)r1.Left, (float)r1.Bottom);
+            ////find a new bound
 
-            return new RectD(_tmp2[0].X, _tmp2[0].Y, _tmp2[2].X - _tmp[0].X, _tmp2[2].Y - _tmp2[1].Y);
+            //return new RectD(_tmp2[0].X, _tmp2[0].Y, _tmp2[2].X - _tmp[0].X, _tmp2[2].Y - _tmp2[1].Y);
         }
     }
-
-
-
     public struct RectD
     {
         public RectD(double left, double top, double width, double height)
@@ -198,7 +171,6 @@ namespace PixelFarm.DrawingBuffer
         public double Width { get; set; }
         public double Height { get; set; }
     }
-
     public struct ColorInt
     {
         public byte R, G, B, A;
@@ -245,8 +217,6 @@ namespace PixelFarm.DrawingBuffer
         public static ColorInt Red = ColorInt.FromArgb(255, 255, 0, 0);
         public static ColorInt Blue = ColorInt.FromArgb(255, 0, 0, 255);
     }
-
-
     public class BitmapBuffer
     {
         //in this version , only 32 bits 
@@ -266,8 +236,4 @@ namespace PixelFarm.DrawingBuffer
         public int PixelHeight { get; private set; }
         public int[] Pixels { get; private set; }
     }
-
-
-
 }
-
