@@ -36,17 +36,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapBuffer.cs" />
-    <Compile Include="BitmapBufferExtensions\BitmapBufferAntialiasingExtensions.cs" />
-    <Compile Include="BitmapBufferExtensions\BitmapBufferBaseExtensions.cs" />
-    <Compile Include="BitmapBufferExtensions\BitmapBufferBlitExtensions.cs" />
-    <Compile Include="BitmapBufferExtensions\BitmapBufferContextExtensions.cs" />
-    <Compile Include="BitmapBufferExtensions\BitmapBufferConvertExtensions.cs" />
-    <Compile Include="BitmapBufferExtensions\BitmapBufferFillExtensions.cs" />
-    <Compile Include="BitmapBufferExtensions\BitmapBufferFilterExtensions.cs" />
-    <Compile Include="BitmapBufferExtensions\BitmapBufferLineExtensions.cs" />
-    <Compile Include="BitmapBufferExtensions\BitmapBufferShapeExtensions.cs" />
-    <Compile Include="BitmapBufferExtensions\BitmapBufferSplineExtensions.cs" />
-    <Compile Include="BitmapBufferExtensions\BitmapBufferTransformationExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\AntialiasingExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BaseExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BlitExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\ConvertExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\FillExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\FilterExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\LineExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\ShapeExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\SplineExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\TransformationExtensions.cs" />
     <Compile Include="BitmapContext.cs" />
     <Compile Include="BitmapBufferFactory.cs" />
     <Compile Include="NativeMethods.cs" />
