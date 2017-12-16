@@ -41,8 +41,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void FillRectangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillRectangle(x1, y1, x2, y2, col);
+
+            bmp.FillRectangle(x1, y1, x2, y2, ConvertColor(color));
         }
 
         /// <summary>
@@ -172,8 +172,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void FillEllipse(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color)
         {
-            int col = ConvertColor(color);
-            bmp.FillEllipse(x1, y1, x2, y2, col);
+
+            bmp.FillEllipse(x1, y1, x2, y2, ConvertColor(color));
         }
 
         /// <summary>
@@ -208,8 +208,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void FillEllipseCentered(this WriteableBitmap bmp, int xc, int yc, int xr, int yr, Color color)
         {
-            int col = ConvertColor(color);
-            bmp.FillEllipseCentered(xc, yc, xr, yr, col);
+
+            bmp.FillEllipseCentered(xc, yc, xr, yr, ConvertColor(color));
         }
 
 
@@ -422,8 +422,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void FillPolygon(this WriteableBitmap bmp, int[] points, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillPolygon(points, col);
+
+            bmp.FillPolygon(points, ConvertColor(color));
         }
 
         /// <summary>
@@ -625,8 +625,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the polygon.</param>
         public static void FillPolygonsEvenOdd(this WriteableBitmap bmp, int[][] polygons, Color color)
         {
-            var col = ConvertColor(color);
-            FillPolygonsEvenOdd(bmp, polygons, col);
+
+            FillPolygonsEvenOdd(bmp, polygons, ConvertColor(color));
         }
 
         /// <summary>
@@ -825,8 +825,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void FillQuad(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillQuad(x1, y1, x2, y2, x3, y3, x4, y4, col);
+
+            bmp.FillQuad(x1, y1, x2, y2, x3, y3, x4, y4, ConvertColor(color));
         }
 
         /// <summary>
@@ -860,8 +860,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void FillTriangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillTriangle(x1, y1, x2, y2, x3, y3, col);
+
+            bmp.FillTriangle(x1, y1, x2, y2, x3, y3, ConvertColor(color));
         }
 
         /// <summary>
@@ -970,8 +970,7 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the spline.</param>
         public static void FillBeziers(this WriteableBitmap bmp, int[] points, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillBeziers(points, col);
+            bmp.FillBeziers(points, ConvertColor(color));
         }
 
         /// <summary>
@@ -1100,8 +1099,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the spline.</param>
         public static void FillCurve(this WriteableBitmap bmp, int[] points, float tension, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillCurve(points, tension, col);
+
+            bmp.FillCurve(points, tension, ConvertColor(color));
         }
 
         /// <summary>
@@ -1156,8 +1155,7 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the spline.</param>
         public static void FillCurveClosed(this WriteableBitmap bmp, int[] points, float tension, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.FillCurveClosed(points, tension, col);
+            bmp.FillCurveClosed(points, tension, ConvertColor(color));
         }
 
         /// <summary>

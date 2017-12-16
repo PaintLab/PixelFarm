@@ -182,8 +182,8 @@ namespace PixelFarm.Agg
                                                       (byte)((((c >> 8) & 0xFF) * ai) >> 8),
                                                       (byte)((((c & 0xFF) * ai) >> 8)));
 
-                        Color color = func(x, y, srcColor);
-                        pixels[index++] = ConvertColor(color);
+
+                        pixels[index++] = ConvertColor(func(x, y, srcColor));
                     }
                 }
             }

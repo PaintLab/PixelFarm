@@ -33,8 +33,8 @@ namespace PixelFarm.Agg
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
         public static void DrawLineBresenham(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color, Rect? clipRect = null)
         {
-            var col = ConvertColor(color);
-            bmp.DrawLineBresenham(x1, y1, x2, y2, col, clipRect);
+
+            bmp.DrawLineBresenham(x1, y1, x2, y2, ConvertColor(color), clipRect);
         }
 
         /// <summary>
@@ -168,8 +168,8 @@ namespace PixelFarm.Agg
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
         public static void DrawLineDDA(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color, Rect? clipRect = null)
         {
-            var col = ConvertColor(color);
-            bmp.DrawLineDDA(x1, y1, x2, y2, col, clipRect);
+
+            bmp.DrawLineDDA(x1, y1, x2, y2, ConvertColor(color), clipRect);
         }
 
         /// <summary>
@@ -252,8 +252,8 @@ namespace PixelFarm.Agg
         /// <param name="clipRect">The region in the image to restrict drawing to.</param>
         public static void DrawLine(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color, Rect? clipRect = null)
         {
-            var col = ConvertColor(color);
-            bmp.DrawLine(x1, y1, x2, y2, col, clipRect);
+
+            bmp.DrawLine(x1, y1, x2, y2, ConvertColor(color), clipRect);
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace PixelFarm.Agg
             // Perform cohen-sutherland clipping if either point is out of the viewport
             if (!CohenSutherlandLineClip(new Rect(clipX1, clipY1, clipX2 - clipX1, clipY2 - clipY1), ref x1, ref y1, ref x2, ref y2)) return;
 
-            var pixels = context.Pixels;
+            int[] pixels = context.Pixels;
 
             // Distance start and end point
             int dx = x2 - x1;
@@ -965,8 +965,8 @@ namespace PixelFarm.Agg
         /// </summary>
         public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, Color color, int strokeThickness, Rect? clipRect = null)
         {
-            var col = ConvertColor(color);
-            AAWidthLine(pixelWidth, pixelHeight, context, x1, y1, x2, y2, strokeThickness, col, clipRect);
+
+            AAWidthLine(pixelWidth, pixelHeight, context, x1, y1, x2, y2, strokeThickness, ConvertColor(color), clipRect);
         }
 
         /// <summary> 
@@ -981,10 +981,10 @@ namespace PixelFarm.Agg
         /// </summary>
         public static void DrawLineAa(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color, int strokeThickness, Rect? clipRect = null)
         {
-            var col = ConvertColor(color);
+
             using (var context = bmp.GetBitmapContext())
             {
-                AAWidthLine(bmp.PixelWidth, bmp.PixelHeight, context, x1, y1, x2, y2, strokeThickness, col, clipRect);
+                AAWidthLine(bmp.PixelWidth, bmp.PixelHeight, context, x1, y1, x2, y2, strokeThickness, ConvertColor(color), clipRect);
             }
         }
 
@@ -1000,8 +1000,8 @@ namespace PixelFarm.Agg
         /// </summary> 
         public static void DrawLineAa(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color, Rect? clipRect = null)
         {
-            var col = ConvertColor(color);
-            bmp.DrawLineAa(x1, y1, x2, y2, col, clipRect);
+
+            bmp.DrawLineAa(x1, y1, x2, y2, ConvertColor(color), clipRect);
         }
 
         /// <summary> 

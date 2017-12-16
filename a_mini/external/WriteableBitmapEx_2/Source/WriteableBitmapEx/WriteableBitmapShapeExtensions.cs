@@ -30,8 +30,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void DrawPolyline(this WriteableBitmap bmp, int[] points, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawPolyline(points, col);
+
+            bmp.DrawPolyline(points, ConvertColor(color));
         }
 
         /// <summary>
@@ -70,8 +70,7 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void DrawPolylineAa(this WriteableBitmap bmp, int[] points, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawPolylineAa(points, col);
+            bmp.DrawPolylineAa(points, ConvertColor(color));
         }
 
         /// <summary>
@@ -115,8 +114,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void DrawTriangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawTriangle(x1, y1, x2, y2, x3, y3, col);
+          
+            bmp.DrawTriangle(x1, y1, x2, y2, x3, y3, ConvertColor(color));
         }
 
         /// <summary>
@@ -159,8 +158,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void DrawQuad(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawQuad(x1, y1, x2, y2, x3, y3, x4, y4, col);
+           
+            bmp.DrawQuad(x1, y1, x2, y2, x3, y3, x4, y4, ConvertColor(color));
         }
 
         /// <summary>
@@ -205,8 +204,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color.</param>
         public static void DrawRectangle(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawRectangle(x1, y1, x2, y2, col);
+         
+            bmp.DrawRectangle(x1, y1, x2, y2, ConvertColor(color));
         }
 
         /// <summary>
@@ -289,8 +288,8 @@ namespace PixelFarm.Agg
         /// <param name="color">The color for the line.</param>
         public static void DrawEllipse(this WriteableBitmap bmp, int x1, int y1, int x2, int y2, Color color)
         {
-            var col = ConvertColor(color);
-            bmp.DrawEllipse(x1, y1, x2, y2, col);
+        
+            bmp.DrawEllipse(x1, y1, x2, y2, ConvertColor(color));
         }
 
         /// <summary>
@@ -324,9 +323,8 @@ namespace PixelFarm.Agg
         /// <param name="yr">The radius of the ellipse in y-direction.</param>
         /// <param name="color">The color for the line.</param>
         public static void DrawEllipseCentered(this WriteableBitmap bmp, int xc, int yc, int xr, int yr, Color color)
-        {
-            var col = ConvertColor(color);
-            bmp.DrawEllipseCentered(xc, yc, xr, yr, col);
+        { 
+            bmp.DrawEllipseCentered(xc, yc, xr, yr, ConvertColor(color));
         }
 
         /// <summary>
