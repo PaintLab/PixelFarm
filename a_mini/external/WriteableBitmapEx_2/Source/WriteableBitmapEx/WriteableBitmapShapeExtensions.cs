@@ -45,15 +45,15 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
-                var w = context.Width;
-                var h = context.Height;
-                var x1 = points[0];
-                var y1 = points[1];
+                int w = context.Width;
+                int h = context.Height;
+                int x1 = points[0];
+                int y1 = points[1];
 
-                for (var i = 2; i < points.Length; i += 2)
+                for (int i = 2; i < points.Length; i += 2)
                 {
-                    var x2 = points[i];
-                    var y2 = points[i + 1];
+                    int x2 = points[i];
+                    int y2 = points[i + 1];
 
                     DrawLine(context, w, h, x1, y1, x2, y2, color);
                     x1 = x2;
@@ -85,15 +85,15 @@ namespace PixelFarm.Agg
             using (var context = bmp.GetBitmapContext())
             {
                 // Use refs for faster access (really important!) speeds up a lot!
-                var w = context.Width;
-                var h = context.Height;
-                var x1 = points[0];
-                var y1 = points[1];
+                int w = context.Width;
+                int h = context.Height;
+                int x1 = points[0];
+                int y1 = points[1];
 
                 for (var i = 2; i < points.Length; i += 2)
                 {
-                    var x2 = points[i];
-                    var y2 = points[i + 1];
+                    int x2 = points[i];
+                    int y2 = points[i + 1];
 
                     DrawLineAa(context, w, h, x1, y1, x2, y2, color);
                     x1 = x2;

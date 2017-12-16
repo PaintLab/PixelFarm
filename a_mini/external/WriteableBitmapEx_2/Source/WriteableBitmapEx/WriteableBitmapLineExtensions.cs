@@ -772,7 +772,7 @@ namespace PixelFarm.Agg
             // Perform cohen-sutherland clipping if either point is out of the viewport
             if (!CohenSutherlandLineClip(clipRect ?? new Rect(0, 0, pixelWidth, pixelHeight), ref x1, ref y1, ref x2, ref y2)) return;
 
-            var pixels = context.Pixels;
+            int[] pixels = context.Pixels;
 
             const ushort INTENSITY_BITS = 8;
             const short NUM_LEVELS = 1 << INTENSITY_BITS; // 256
@@ -1051,9 +1051,9 @@ namespace PixelFarm.Agg
             if (y2 < 1) y2 = 1;
             if (y2 > pixelHeight - 2) y2 = pixelHeight - 2;
 
-            var addr = y1 * pixelWidth + x1;
-            var dx = x2 - x1;
-            var dy = y2 - y1;
+            int addr = y1 * pixelWidth + x1;
+            int dx = x2 - x1;
+            int dy = y2 - y1;
 
             int du;
             int dv;
@@ -1063,9 +1063,9 @@ namespace PixelFarm.Agg
             int vincr;
 
             // Extract color
-            var a = (color >> 24) & 0xFF;
-            var srb = (uint)(color & 0x00FF00FF);
-            var sg = (uint)((color >> 8) & 0xFF);
+            int a = (color >> 24) & 0xFF;
+            uint srb = (uint)(color & 0x00FF00FF);
+            uint sg = (uint)((color >> 8) & 0xFF);
 
             // By switching to (u,v), we combine all eight octants 
             int adx = dx, ady = dy;
@@ -1095,27 +1095,27 @@ namespace PixelFarm.Agg
                 if (dx < 0) vincr = -vincr;
             }
 
-            var uend = u + du;
-            var d = (dv << 1) - du;        // Initial value as in Bresenham's 
-            var incrS = dv << 1;    // &#916;d for straight increments 
-            var incrD = (dv - du) << 1;    // &#916;d for diagonal increments
+            int uend = u + du;
+            int d = (dv << 1) - du;        // Initial value as in Bresenham's 
+            int incrS = dv << 1;    // &#916;d for straight increments 
+            int incrD = (dv - du) << 1;    // &#916;d for diagonal increments
 
-            var invDFloat = 1.0 / (4.0 * Math.Sqrt(du * du + dv * dv));   // Precomputed inverse denominator 
-            var invD2DuFloat = 0.75 - 2.0 * (du * invDFloat);   // Precomputed constant
+            double invDFloat = 1.0 / (4.0 * Math.Sqrt(du * du + dv * dv));   // Precomputed inverse denominator 
+            double invD2DuFloat = 0.75 - 2.0 * (du * invDFloat);   // Precomputed constant
 
             const int PRECISION_SHIFT = 10; // result distance should be from 0 to 1 << PRECISION_SHIFT, mapping to a range of 0..1 
             const int PRECISION_MULTIPLIER = 1 << PRECISION_SHIFT;
-            var invD = (int)(invDFloat * PRECISION_MULTIPLIER);
-            var invD2Du = (int)(invD2DuFloat * PRECISION_MULTIPLIER * a);
-            var zeroDot75 = (int)(0.75 * PRECISION_MULTIPLIER * a);
+            int invD = (int)(invDFloat * PRECISION_MULTIPLIER);
+            int invD2Du = (int)(invD2DuFloat * PRECISION_MULTIPLIER * a);
+            int zeroDot75 = (int)(0.75 * PRECISION_MULTIPLIER * a);
 
-            var invDMulAlpha = invD * a;
-            var duMulInvD = du * invDMulAlpha; // used to help optimize twovdu * invD 
-            var dMulInvD = d * invDMulAlpha; // used to help optimize twovdu * invD 
+            int invDMulAlpha = invD * a;
+            int duMulInvD = du * invDMulAlpha; // used to help optimize twovdu * invD 
+            int dMulInvD = d * invDMulAlpha; // used to help optimize twovdu * invD 
             //int twovdu = 0;    // Numerator of distance; starts at 0 
-            var twovduMulInvD = 0; // since twovdu == 0 
-            var incrSMulInvD = incrS * invDMulAlpha;
-            var incrDMulInvD = incrD * invDMulAlpha;
+            int twovduMulInvD = 0; // since twovdu == 0 
+            int incrSMulInvD = incrS * invDMulAlpha;
+            int incrDMulInvD = incrD * invDMulAlpha;
 
             do
             {
@@ -1155,11 +1155,11 @@ namespace PixelFarm.Agg
         private static void AlphaBlendNormalOnPremultiplied(BitmapContext context, int index, int sa, uint srb, uint sg)
         {
             var pixels = context.Pixels;
-            var destPixel = (uint)pixels[index];
+            uint destPixel = (uint)pixels[index];
 
-            var da = (destPixel >> 24);
-            var dg = ((destPixel >> 8) & 0xff);
-            var drb = destPixel & 0x00FF00FF;
+            uint da = (destPixel >> 24);
+            uint dg = ((destPixel >> 8) & 0xff);
+            uint drb = destPixel & 0x00FF00FF; //please note 0x00FF00FF
 
             // blend with high-quality alpha and lower quality but faster 1-off RGBs 
             pixels[index] = (int)(
@@ -1187,7 +1187,7 @@ namespace PixelFarm.Agg
             double x1 = ClipToInt(xi1);
             double y1 = ClipToInt(yi1);
 
-            var isValid = CohenSutherlandLineClip(extents, ref x0, ref y0, ref x1, ref y1);
+            bool isValid = CohenSutherlandLineClip(extents, ref x0, ref y0, ref x1, ref y1);
 
             // Update the clipped line
             xi0 = (float)x0;
@@ -1216,7 +1216,7 @@ namespace PixelFarm.Agg
             double x1 = xi1;
             double y1 = yi1;
 
-            var isValid = CohenSutherlandLineClip(extents, ref x0, ref y0, ref x1, ref y1);
+            bool isValid = CohenSutherlandLineClip(extents, ref x0, ref y0, ref x1, ref y1);
 
             // Update the clipped line
             xi0 = (int)x0;

@@ -935,7 +935,7 @@ namespace PixelFarm.Agg
             if (len != 0)
             {
                 // Init vars
-                var step = StepFactor / len;
+                var step = STEP_FACTOR / len;
                 int tx = x1;
                 int ty = y1;
 
@@ -1059,7 +1059,7 @@ namespace PixelFarm.Agg
             if (len != 0)
             {
                 // Init vars
-                var step = StepFactor / len;
+                var step = STEP_FACTOR / len;
 
                 // Calculate factors
                 var sx1 = tension * (x3 - x1);

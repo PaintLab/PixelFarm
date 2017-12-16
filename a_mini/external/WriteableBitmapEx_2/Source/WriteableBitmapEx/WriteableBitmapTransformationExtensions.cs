@@ -74,8 +74,8 @@ namespace PixelFarm.Agg
         {
             using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                var srcWidth = srcContext.Width;
-                var srcHeight = srcContext.Height;
+                int srcWidth = srcContext.Width;
+                int srcHeight = srcContext.Height;
 
                 // If the rectangle is completely out of the bitmap
                 if (x > srcWidth || y > srcHeight)
@@ -90,10 +90,10 @@ namespace PixelFarm.Agg
                 if (y + height > srcHeight) height = srcHeight - y;
 
                 // Copy the pixels line by line using fast BlockCopy
-                var result = BitmapFactory.New(width, height);
+                WriteableBitmap result = BitmapFactory.New(width, height);
                 using (var destContext = result.GetBitmapContext())
                 {
-                    for (var line = 0; line < height; line++)
+                    for (int line = 0; line < height; line++)
                     {
                         var srcOff = ((y + line) * srcWidth + x) * ARGB_SIZE;
                         var dstOff = line * width * ARGB_SIZE;
@@ -129,9 +129,9 @@ namespace PixelFarm.Agg
         {
             using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
-                var pd = Resize(srcContext, srcContext.Width, srcContext.Height, width, height, interpolation);
+                int[] pd = Resize(srcContext, srcContext.Width, srcContext.Height, width, height, interpolation);
 
-                var result = BitmapFactory.New(width, height);
+                WriteableBitmap result = BitmapFactory.New(width, height);
                 using (var dstContext = result.GetBitmapContext())
                 {
                     BitmapContext.BlockCopy(pd, 0, dstContext, 0, ARGB_SIZE * pd.Length);
@@ -183,10 +183,10 @@ namespace PixelFarm.Agg
             // Nearest Neighbor
             if (interpolation == Interpolation.NearestNeighbor)
             {
-                var srcIdx = 0;
-                for (var y = 0; y < height; y++)
+                int srcIdx = 0;
+                for (int y = 0; y < height; y++)
                 {
-                    for (var x = 0; x < width; x++)
+                    for (int x = 0; x < width; x++)
                     {
                         sx = x * xs;
                         sy = y * ys;
@@ -201,10 +201,10 @@ namespace PixelFarm.Agg
             // Bilinear
             else if (interpolation == Interpolation.Bilinear)
             {
-                var srcIdx = 0;
-                for (var y = 0; y < height; y++)
+                int srcIdx = 0;
+                for (int y = 0; y < height; y++)
                 {
-                    for (var x = 0; x < width; x++)
+                    for (int x = 0; x < width; x++)
                     {
                         sx = x * xs;
                         sy = y * ys;
@@ -314,11 +314,11 @@ namespace PixelFarm.Agg
                     using (var destContext = result.GetBitmapContext())
                     {
                         var rp = destContext.Pixels;
-                        for (var x = 0; x < w; x++)
+                        for (int x = 0; x < w; x++)
                         {
-                            for (var y = h - 1; y >= 0; y--)
+                            for (int y = h - 1; y >= 0; y--)
                             {
-                                var srcInd = y * w + x;
+                                int srcInd = y * w + x;
                                 rp[i] = p[srcInd];
                                 i++;
                             }
@@ -331,11 +331,11 @@ namespace PixelFarm.Agg
                     using (var destContext = result.GetBitmapContext())
                     {
                         var rp = destContext.Pixels;
-                        for (var y = h - 1; y >= 0; y--)
+                        for (int y = h - 1; y >= 0; y--)
                         {
-                            for (var x = w - 1; x >= 0; x--)
+                            for (int x = w - 1; x >= 0; x--)
                             {
-                                var srcInd = y * w + x;
+                                int srcInd = y * w + x;
                                 rp[i] = p[srcInd];
                                 i++;
                             }
@@ -347,12 +347,12 @@ namespace PixelFarm.Agg
                     result = BitmapFactory.New(h, w);
                     using (var destContext = result.GetBitmapContext())
                     {
-                        var rp = destContext.Pixels;
-                        for (var x = w - 1; x >= 0; x--)
+                        int[] rp = destContext.Pixels;
+                        for (int x = w - 1; x >= 0; x--)
                         {
-                            for (var y = 0; y < h; y++)
+                            for (int y = 0; y < h; y++)
                             {
-                                var srcInd = y * w + x;
+                                int srcInd = y * w + x;
                                 rp[i] = p[srcInd];
                                 i++;
                             }
@@ -428,13 +428,13 @@ namespace PixelFarm.Agg
                 iDestCentreX = newWidth / 2;
                 iDestCentreY = newHeight / 2;
 
-                var bmBilinearInterpolation = BitmapFactory.New(newWidth, newHeight);
+                WriteableBitmap bmBilinearInterpolation = BitmapFactory.New(newWidth, newHeight);
 
                 using (var bilinearContext = bmBilinearInterpolation.GetBitmapContext())
                 {
-                    var newp = bilinearContext.Pixels;
-                    var oldp = bmpContext.Pixels;
-                    var oldw = bmpContext.Width;
+                    int[] newp = bilinearContext.Pixels;
+                    int[] oldp = bmpContext.Pixels;
+                    int oldw = bmpContext.Width;
 
                     // assigning pixels of destination image from source image
                     // with bilinear interpolation
@@ -494,10 +494,10 @@ namespace PixelFarm.Agg
                             fDeltaX = fTrueX - iFloorX;
                             fDeltaY = fTrueY - iFloorY;
 
-                            var clrTopLeft = oldp[iFloorY * oldw + iFloorX];
-                            var clrTopRight = oldp[iFloorY * oldw + iCeilingX];
-                            var clrBottomLeft = oldp[iCeilingY * oldw + iFloorX];
-                            var clrBottomRight = oldp[iCeilingY * oldw + iCeilingX];
+                            int clrTopLeft = oldp[iFloorY * oldw + iFloorX];
+                            int clrTopRight = oldp[iFloorY * oldw + iCeilingX];
+                            int clrBottomLeft = oldp[iCeilingY * oldw + iFloorX];
+                            int clrBottomRight = oldp[iCeilingY * oldw + iCeilingX];
 
                             fTopAlpha = (1 - fDeltaX) * ((clrTopLeft >> 24) & 0xFF) + fDeltaX * ((clrTopRight >> 24) & 0xFF);
                             fTopRed = (1 - fDeltaX) * ((clrTopLeft >> 16) & 0xFF) + fDeltaX * ((clrTopRight >> 16) & 0xFF);
@@ -562,12 +562,12 @@ namespace PixelFarm.Agg
                     result = BitmapFactory.New(w, h);
                     using (var destContext = result.GetBitmapContext())
                     {
-                        var rp = destContext.Pixels;
-                        for (var y = h - 1; y >= 0; y--)
+                        int[] rp = destContext.Pixels;
+                        for (int y = h - 1; y >= 0; y--)
                         {
-                            for (var x = 0; x < w; x++)
+                            for (int x = 0; x < w; x++)
                             {
-                                var srcInd = y * w + x;
+                                int srcInd = y * w + x;
                                 rp[i] = p[srcInd];
                                 i++;
                             }
@@ -579,12 +579,12 @@ namespace PixelFarm.Agg
                     result = BitmapFactory.New(w, h);
                     using (var destContext = result.GetBitmapContext())
                     {
-                        var rp = destContext.Pixels;
-                        for (var y = 0; y < h; y++)
+                        int[] rp = destContext.Pixels;
+                        for (int y = 0; y < h; y++)
                         {
-                            for (var x = w - 1; x >= 0; x--)
+                            for (int x = w - 1; x >= 0; x--)
                             {
-                                var srcInd = y * w + x;
+                                int srcInd = y * w + x;
                                 rp[i] = p[srcInd];
                                 i++;
                             }

@@ -24,9 +24,7 @@ namespace PixelFarm.Agg
     public static partial class WriteableBitmapExtensions
     {
 
-        private const float StepFactor = 2f;
-
-
+        const float STEP_FACTOR = 2f; 
 
 
         /// <summary>
@@ -64,14 +62,14 @@ namespace PixelFarm.Agg
         public static void DrawBezier(this WriteableBitmap bmp, int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2, int color)
         {
             // Determine distances between controls points (bounding rect) to find the optimal stepsize
-            var minX = Math.Min(x1, Math.Min(cx1, Math.Min(cx2, x2)));
-            var minY = Math.Min(y1, Math.Min(cy1, Math.Min(cy2, y2)));
-            var maxX = Math.Max(x1, Math.Max(cx1, Math.Max(cx2, x2)));
-            var maxY = Math.Max(y1, Math.Max(cy1, Math.Max(cy2, y2)));
+            int minX = Math.Min(x1, Math.Min(cx1, Math.Min(cx2, x2)));
+            int minY = Math.Min(y1, Math.Min(cy1, Math.Min(cy2, y2)));
+            int maxX = Math.Max(x1, Math.Max(cx1, Math.Max(cx2, x2)));
+            int maxY = Math.Max(y1, Math.Max(cy1, Math.Max(cy2, y2)));
 
             // Get slope
-            var lenx = maxX - minX;
-            var len = maxY - minY;
+            int lenx = maxX - minX;
+            int len = maxY - minY;
             if (lenx > len)
             {
                 len = lenx;
@@ -87,17 +85,17 @@ namespace PixelFarm.Agg
                     int h = context.Height;
 
                     // Init vars
-                    var step = StepFactor / len;
+                    float step = STEP_FACTOR / len;
                     int tx1 = x1;
                     int ty1 = y1;
                     int tx2, ty2;
 
                     // Interpolate
-                    for (var t = step; t <= 1; t += step)
+                    for (float t = step; t <= 1; t += step)
                     {
-                        var tSq = t * t;
-                        var t1 = 1 - t;
-                        var t1Sq = t1 * t1;
+                        float tSq = t * t;
+                        float t1 = 1 - t;
+                        float t1Sq = t1 * t1;
 
                         tx2 = (int)(t1 * t1Sq * x1 + 3 * t * t1Sq * cx1 + 3 * t1 * tSq * cx2 + t * tSq * x2);
                         ty2 = (int)(t1 * t1Sq * y1 + 3 * t * t1Sq * cy1 + 3 * t1 * tSq * cy2 + t * tSq * y2);
@@ -172,14 +170,14 @@ namespace PixelFarm.Agg
         private static void DrawCurveSegment(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, float tension, int color, BitmapContext context, int w, int h)
         {
             // Determine distances between controls points (bounding rect) to find the optimal stepsize
-            var minX = Math.Min(x1, Math.Min(x2, Math.Min(x3, x4)));
-            var minY = Math.Min(y1, Math.Min(y2, Math.Min(y3, y4)));
-            var maxX = Math.Max(x1, Math.Max(x2, Math.Max(x3, x4)));
-            var maxY = Math.Max(y1, Math.Max(y2, Math.Max(y3, y4)));
+            int minX = Math.Min(x1, Math.Min(x2, Math.Min(x3, x4)));
+            int minY = Math.Min(y1, Math.Min(y2, Math.Min(y3, y4)));
+            int maxX = Math.Max(x1, Math.Max(x2, Math.Max(x3, x4)));
+            int maxY = Math.Max(y1, Math.Max(y2, Math.Max(y3, y4)));
 
             // Get slope
-            var lenx = maxX - minX;
-            var len = maxY - minY;
+            int lenx = maxX - minX;
+            int len = maxY - minY;
             if (lenx > len)
             {
                 len = lenx;
@@ -189,7 +187,7 @@ namespace PixelFarm.Agg
             if (len != 0)
             {
                 // Init vars
-                var step = StepFactor / len;
+                float step = STEP_FACTOR / len;
                 int tx1 = x2;
                 int ty1 = y2;
                 int tx2, ty2;
