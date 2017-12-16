@@ -34,7 +34,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawLineBresenham(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
-            bmp.DrawLineBresenham(x1, y1, x2, y2, ConvertColor(color), clipRect);
+            bmp.DrawLineBresenham(x1, y1, x2, y2, color.ToPreMulAlphaColor(), clipRect);
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawLineDDA(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
-            bmp.DrawLineDDA(x1, y1, x2, y2, ConvertColor(color), clipRect);
+            bmp.DrawLineDDA(x1, y1, x2, y2, color.ToPreMulAlphaColor(), clipRect);
         }
 
         /// <summary>
@@ -253,7 +253,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawLine(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
-            bmp.DrawLine(x1, y1, x2, y2, ConvertColor(color), clipRect);
+            bmp.DrawLine(x1, y1, x2, y2, color.ToPreMulAlphaColor(), clipRect);
         }
 
         /// <summary>
@@ -966,7 +966,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawLineAa(BitmapContext context, int pixelWidth, int pixelHeight, int x1, int y1, int x2, int y2, ColorInt color, int strokeThickness, RectD? clipRect = null)
         {
 
-            AAWidthLine(pixelWidth, pixelHeight, context, x1, y1, x2, y2, strokeThickness, ConvertColor(color), clipRect);
+            AAWidthLine(pixelWidth, pixelHeight, context, x1, y1, x2, y2, strokeThickness, color.ToPreMulAlphaColor(), clipRect);
         }
 
         /// <summary> 
@@ -984,7 +984,7 @@ namespace PixelFarm.DrawingBuffer
 
             using (var context = bmp.GetBitmapContext())
             {
-                AAWidthLine(bmp.PixelWidth, bmp.PixelHeight, context, x1, y1, x2, y2, strokeThickness, ConvertColor(color), clipRect);
+                AAWidthLine(bmp.PixelWidth, bmp.PixelHeight, context, x1, y1, x2, y2, strokeThickness, color.ToPreMulAlphaColor(), clipRect);
             }
         }
 
@@ -1001,7 +1001,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawLineAa(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color, RectD? clipRect = null)
         {
 
-            bmp.DrawLineAa(x1, y1, x2, y2, ConvertColor(color), clipRect);
+            bmp.DrawLineAa(x1, y1, x2, y2, color.ToPreMulAlphaColor(), clipRect);
         }
 
         /// <summary> 

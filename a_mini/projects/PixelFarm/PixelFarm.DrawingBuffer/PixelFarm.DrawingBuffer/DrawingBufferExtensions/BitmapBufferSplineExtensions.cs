@@ -43,7 +43,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawBezier(this BitmapBuffer bmp, int x1, int y1, int cx1, int cy1, int cx2, int cy2, int x2, int y2, ColorInt color)
         {
          
-            bmp.DrawBezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2, ConvertColor(color));
+            bmp.DrawBezier(x1, y1, cx1, cy1, cx2, cy2, x2, y2, color.ToPreMulAlphaColor());
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawBeziers(this BitmapBuffer bmp, int[] points, ColorInt color)
         {
             
-            bmp.DrawBeziers(points, ConvertColor(color));
+            bmp.DrawBeziers(points, color.ToPreMulAlphaColor());
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawCurve(this BitmapBuffer bmp, int[] points, float tension, ColorInt color)
         {
          
-            bmp.DrawCurve(points, tension, ConvertColor(color));
+            bmp.DrawCurve(points, tension, color.ToPreMulAlphaColor());
         }
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawCurveClosed(this BitmapBuffer bmp, int[] points, float tension, ColorInt color)
         {
             
-            bmp.DrawCurveClosed(points, tension, ConvertColor(color));
+            bmp.DrawCurveClosed(points, tension, color.ToPreMulAlphaColor());
         }
 
         /// <summary>

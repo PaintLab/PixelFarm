@@ -227,6 +227,26 @@ namespace PixelFarm.DrawingBuffer
         {
             return base.GetHashCode();
         }
+
+
+        /// <summary>
+        /// convert to 'premultiplied alpha' and arrange to int value
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public int ToPreMulAlphaColor()
+        {
+            //see more at https://github.com/PaintLab/PixelFarm/issues/12
+            if (_a == 0) return 0; //for premultiplied alpha => this return (0,0,0,0) NOT (r,g,b,0)
+            //
+            int a = _a + 1; // Add one to use mul and cheap bit shift for multiplicaltion
+
+            return (_a << 24)
+             | ((byte)((_r * a) >> 8) << 16)
+             | ((byte)((_g * a) >> 8) << 8)
+             | ((byte)((_b * a) >> 8));
+
+        }
     }
     public struct Colors
     {

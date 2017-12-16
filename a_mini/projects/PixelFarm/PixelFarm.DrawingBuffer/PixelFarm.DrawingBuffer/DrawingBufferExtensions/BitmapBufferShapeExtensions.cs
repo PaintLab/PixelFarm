@@ -31,7 +31,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawPolyline(this BitmapBuffer bmp, int[] points, ColorInt color)
         {
 
-            bmp.DrawPolyline(points, ConvertColor(color));
+            bmp.DrawPolyline(points, color.ToPreMulAlphaColor());
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the line.</param>
         public static void DrawPolylineAa(this BitmapBuffer bmp, int[] points, ColorInt color)
         {
-            bmp.DrawPolylineAa(points, ConvertColor(color));
+            bmp.DrawPolylineAa(points, color.ToPreMulAlphaColor());
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawTriangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, ColorInt color)
         {
           
-            bmp.DrawTriangle(x1, y1, x2, y2, x3, y3, ConvertColor(color));
+            bmp.DrawTriangle(x1, y1, x2, y2, x3, y3, color.ToPreMulAlphaColor());
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawQuad(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, ColorInt color)
         {
            
-            bmp.DrawQuad(x1, y1, x2, y2, x3, y3, x4, y4, ConvertColor(color));
+            bmp.DrawQuad(x1, y1, x2, y2, x3, y3, x4, y4, color.ToPreMulAlphaColor());
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawRectangle(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
          
-            bmp.DrawRectangle(x1, y1, x2, y2, ConvertColor(color));
+            bmp.DrawRectangle(x1, y1, x2, y2, color.ToPreMulAlphaColor());
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace PixelFarm.DrawingBuffer
         public static void DrawEllipse(this BitmapBuffer bmp, int x1, int y1, int x2, int y2, ColorInt color)
         {
         
-            bmp.DrawEllipse(x1, y1, x2, y2, ConvertColor(color));
+            bmp.DrawEllipse(x1, y1, x2, y2, color.ToPreMulAlphaColor());
         }
 
         /// <summary>
@@ -324,7 +324,7 @@ namespace PixelFarm.DrawingBuffer
         /// <param name="color">The color for the line.</param>
         public static void DrawEllipseCentered(this BitmapBuffer bmp, int xc, int yc, int xr, int yr, ColorInt color)
         { 
-            bmp.DrawEllipseCentered(xc, yc, xr, yr, ConvertColor(color));
+            bmp.DrawEllipseCentered(xc, yc, xr, yr, color.ToPreMulAlphaColor());
         }
 
         /// <summary>
