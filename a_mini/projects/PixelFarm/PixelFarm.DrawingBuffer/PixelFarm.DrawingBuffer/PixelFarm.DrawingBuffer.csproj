@@ -36,20 +36,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapBuffer.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapBufferAntialiasingExtensions.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapBufferBaseExtensions.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapBufferBlitExtensions.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapBufferContextExtensions.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapBufferConvertExtensions.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapBufferFillExtensions.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapBufferFilterExtensions.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapBufferLineExtensions.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapBufferShapeExtensions.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapBufferSplineExtensions.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapBufferTransformationExtensions.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapContext.cs" />
-    <Compile Include="DrawingBufferExtensions\BitmapFactory.cs" />
-    <Compile Include="DrawingBufferExtensions\NativeMethods.cs" />
+    <Compile Include="BitmapBufferExtensions\BitmapBufferAntialiasingExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BitmapBufferBaseExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BitmapBufferBlitExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BitmapBufferContextExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BitmapBufferConvertExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BitmapBufferFillExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BitmapBufferFilterExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BitmapBufferLineExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BitmapBufferShapeExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BitmapBufferSplineExtensions.cs" />
+    <Compile Include="BitmapBufferExtensions\BitmapBufferTransformationExtensions.cs" />
+    <Compile Include="BitmapContext.cs" />
+    <Compile Include="BitmapBufferFactory.cs" />
+    <Compile Include="NativeMethods.cs" />
     <Compile Include="Porting\porting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
