@@ -67,7 +67,7 @@ namespace WinFormGdiPlus
             using (Bitmap bmp1 = new Bitmap(400, 500))
             using (var bmplock = bmp1.Lock())
             {
-                WriteableBitmap wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
                 switch (sampleName)
                 {
                     case SampleName.DrawEllipses:
@@ -105,7 +105,7 @@ namespace WinFormGdiPlus
         /// <summary>
         /// Draws circles that decrease in size to build a flower that is animated
         /// </summary>
-        private void DrawEllipsesFlower(WriteableBitmap writeableBmp)
+        private void DrawEllipsesFlower(BitmapBuffer writeableBmp)
         {
             if (writeableBmp == null)
                 return;
@@ -137,7 +137,7 @@ namespace WinFormGdiPlus
                 // Animate base size with sine
                 int r0 = (int)((w + h) * 0.07 * s) + 10;
 
-                PixelFarm.Agg.Color color_brown = PixelFarm.Agg.Color.FromArgb(
+                PixelFarm.Agg.ColorInt color_brown = PixelFarm.Agg.ColorInt.FromArgb(
                     255, System.Drawing.Color.Brown.R, System.Drawing.Color.Brown.G, System.Drawing.Color.Brown.B);
 
                 writeableBmp.DrawEllipseCentered(xc, yc, r0, r0, color_brown);
@@ -168,7 +168,7 @@ namespace WinFormGdiPlus
         /// <summary>
         /// Draws random ellipses
         /// </summary>
-        private void DrawEllipses(WriteableBitmap writeableBmp)
+        private void DrawEllipses(BitmapBuffer writeableBmp)
         {
             // Init some size vars
             int w = writeableBmp.PixelWidth - 2;
@@ -195,7 +195,7 @@ namespace WinFormGdiPlus
         /// <summary>
         /// Draws the different types of shapes.
         /// </summary>
-        private void DrawStaticShapes(WriteableBitmap writeableBmp)
+        private void DrawStaticShapes(BitmapBuffer writeableBmp)
         {
             // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
             using (writeableBmp.GetBitmapContext())

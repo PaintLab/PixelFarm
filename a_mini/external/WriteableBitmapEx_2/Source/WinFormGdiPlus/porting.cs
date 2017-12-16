@@ -28,8 +28,8 @@ namespace PixelFarm.Agg
 {
     public abstract class GeneralTransform
     {
-        public abstract Rect TransformBounds(Rect r1);
-        public abstract Point Transform(Point p);
+        public abstract RectD TransformBounds(RectD r1);
+        public abstract PointD Transform(PointD p);
         MatrixTransform _inverseVersion;
         public MatrixTransform Inverse
         {
@@ -51,15 +51,15 @@ namespace PixelFarm.Agg
 
         System.Drawing.PointF[] _tmp = new System.Drawing.PointF[1];
 
-        public override Point Transform(Point p)
+        public override PointD Transform(PointD p)
         {
             _tmp[0] = new System.Drawing.PointF((float)p.X, (float)p.Y);
             mm1.TransformPoints(_tmp);
-            return new Point(_tmp[0].X, _tmp[0].Y);
+            return new PointD(_tmp[0].X, _tmp[0].Y);
         }
 
         System.Drawing.PointF[] _tmp2 = new System.Drawing.PointF[4];
-        public override Rect TransformBounds(Rect r1)
+        public override RectD TransformBounds(RectD r1)
         {
             _tmp2[0] = new System.Drawing.PointF((float)r1.Left, (float)r1.Top);
             _tmp2[1] = new System.Drawing.PointF((float)r1.Right, (float)r1.Top);
@@ -67,22 +67,22 @@ namespace PixelFarm.Agg
             _tmp2[3] = new System.Drawing.PointF((float)r1.Left, (float)r1.Bottom);
             //find a new bound
 
-            return new Rect(_tmp2[0].X, _tmp2[0].Y, _tmp2[2].X - _tmp[0].X, _tmp2[2].Y - _tmp2[1].Y);
+            return new RectD(_tmp2[0].X, _tmp2[0].Y, _tmp2[2].X - _tmp[0].X, _tmp2[2].Y - _tmp2[1].Y);
         }
     }
 
 
 
-    public struct Rect
+    public struct RectD
     {
-        public Rect(double left, double top, double width, double height)
+        public RectD(double left, double top, double width, double height)
         {
             this.Left = left;
             this.Top = top;
             this.Width = width;
             this.Height = height;
         }
-        public Rect(Point location, Size size)
+        public RectD(PointD location, SizeD size)
         {
             this.Left = location.Left;
             this.Top = location.Top;
@@ -106,29 +106,29 @@ namespace PixelFarm.Agg
                     && this.Width == 0 && this.Height == 0;
             }
         }
-        private bool IntersectsWithInclusive(Rect r)
+        private bool IntersectsWithInclusive(RectD r)
         {
             return !((Left > r.Right) || (Right < r.Left) ||
                 (Top > r.Bottom) || (Bottom < r.Top));
         }
-        public static Rect Intersect(Rect a, Rect b)
+        public static RectD Intersect(RectD a, RectD b)
         {
             // MS.NET returns a non-empty rectangle if the two rectangles
             // touch each other
             if (!a.IntersectsWithInclusive(b))
-                return new Rect(0, 0, 0, 0);
-            return Rect.FromLTRB(
+                return new RectD(0, 0, 0, 0);
+            return RectD.FromLTRB(
                 Math.Max(a.Left, b.Left),
                 Math.Max(a.Top, b.Top),
                 Math.Min(a.Right, b.Right),
                 Math.Min(a.Bottom, b.Bottom));
         }
 
-        public static Rect FromLTRB(double left, double top, double right, double bottom)
+        public static RectD FromLTRB(double left, double top, double right, double bottom)
         {
             // MS.NET returns a non-empty rectangle if the two rectangles
             // touch each other
-            return new Rect(left, top, right - left, bottom - top);
+            return new RectD(left, top, right - left, bottom - top);
         }
 
         /// <summary>
@@ -140,19 +140,19 @@ namespace PixelFarm.Agg
         ///	and another Rectangle.
         /// </remarks>
 
-        public void Intersect(Rect rect)
+        public void Intersect(RectD rect)
         {
-            this = Rect.Intersect(this, rect);
+            this = RectD.Intersect(this, rect);
         }
     }
-    public struct Point
+    public struct PointD
     {
-        public Point(int x, int y)
+        public PointD(int x, int y)
         {
             this.Left = x;
             this.Top = y;
         }
-        public Point(double x, double y)
+        public PointD(double x, double y)
         {
             this.Left = x;
             this.Top = y;
@@ -184,14 +184,14 @@ namespace PixelFarm.Agg
 
         }
     }
-    public struct Size
+    public struct SizeD
     {
-        public Size(int w, int h)
+        public SizeD(int w, int h)
         {
             this.Width = w;
             this.Height = h;
         }
-        public Size(double w, double h)
+        public SizeD(double w, double h)
         {
             this.Width = w;
             this.Height = h;
@@ -199,33 +199,34 @@ namespace PixelFarm.Agg
         public double Width { get; set; }
         public double Height { get; set; }
     }
-    public struct Color
+
+    public struct ColorInt
     {
         public byte R, G, B, A;
-        public static Color FromArgb(byte a, byte r, byte g, byte b)
+        public static ColorInt FromArgb(byte a, byte r, byte g, byte b)
         {
-            Color c = new Color();
+            ColorInt c = new ColorInt();
             c.R = r;
             c.G = g;
             c.B = b;
             c.A = a;
             return c;
         }
-        public static bool operator ==(Color c1, Color c2)
+        public static bool operator ==(ColorInt c1, ColorInt c2)
         {
             return (uint)((c1.A << 24) | (c1.R << 16) | (c1.G << 8) | (c1.B)) ==
                    (uint)((c2.A << 24) | (c2.R << 16) | (c2.G << 8) | (c2.B));
         }
-        public static bool operator !=(Color c1, Color c2)
+        public static bool operator !=(ColorInt c1, ColorInt c2)
         {
             return (uint)((c1.A << 24) | (c1.R << 16) | (c1.G << 8) | (c1.B)) !=
                   (uint)((c2.A << 24) | (c2.R << 16) | (c2.G << 8) | (c2.B));
         }
         public override bool Equals(object obj)
         {
-            if (obj is Color)
+            if (obj is ColorInt)
             {
-                Color c = (Color)obj;
+                ColorInt c = (ColorInt)obj;
                 return c.A == this.A &&
                     c.B == this.B &&
                     c.R == this.R &&
@@ -240,21 +241,23 @@ namespace PixelFarm.Agg
     }
     public struct Colors
     {
-        public static Color White = Color.FromArgb(255, 255, 255, 255);
-        public static Color Black = Color.FromArgb(255, 0, 0, 0);
-        public static Color Red = Color.FromArgb(255, 255, 0, 0);
-        public static Color Blue = Color.FromArgb(255, 0, 0, 255);
+        public static ColorInt White = ColorInt.FromArgb(255, 255, 255, 255);
+        public static ColorInt Black = ColorInt.FromArgb(255, 0, 0, 0);
+        public static ColorInt Red = ColorInt.FromArgb(255, 255, 0, 0);
+        public static ColorInt Blue = ColorInt.FromArgb(255, 0, 0, 255);
     }
-    public class WriteableBitmap
+
+
+    public class BitmapBuffer
     {
         //in this version , only 32 bits 
-        public WriteableBitmap(int w, int h)
+        public BitmapBuffer(int w, int h)
         {
             this.PixelWidth = w;
             this.PixelHeight = h;
             this.Pixels = new int[w * h];
         }
-        public WriteableBitmap(int w, int h, int[] orgBuffer)
+        public BitmapBuffer(int w, int h, int[] orgBuffer)
         {
             this.PixelWidth = w;
             this.PixelHeight = h;

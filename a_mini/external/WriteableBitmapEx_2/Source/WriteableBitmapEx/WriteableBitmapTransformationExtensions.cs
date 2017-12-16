@@ -70,7 +70,7 @@ namespace PixelFarm.Agg
         /// <param name="width">The width of the rectangle that defines the crop region.</param>
         /// <param name="height">The height of the rectangle that defines the crop region.</param>
         /// <returns>A new WriteableBitmap that is a cropped version of the input.</returns>
-        public static WriteableBitmap Crop(this WriteableBitmap bmp, int x, int y, int width, int height)
+        public static BitmapBuffer Crop(this BitmapBuffer bmp, int x, int y, int width, int height)
         {
             using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
@@ -90,7 +90,7 @@ namespace PixelFarm.Agg
                 if (y + height > srcHeight) height = srcHeight - y;
 
                 // Copy the pixels line by line using fast BlockCopy
-                WriteableBitmap result = BitmapFactory.New(width, height);
+                BitmapBuffer result = BitmapFactory.New(width, height);
                 using (var destContext = result.GetBitmapContext())
                 {
                     for (int line = 0; line < height; line++)
@@ -110,7 +110,7 @@ namespace PixelFarm.Agg
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="region">The rectangle that defines the crop region.</param>
         /// <returns>A new WriteableBitmap that is a cropped version of the input.</returns>
-        public static WriteableBitmap Crop(this WriteableBitmap bmp, Rect region)
+        public static BitmapBuffer Crop(this BitmapBuffer bmp, RectD region)
         {
             return bmp.Crop((int)region.X, (int)region.Y, (int)region.Width, (int)region.Height);
         }
@@ -125,13 +125,13 @@ namespace PixelFarm.Agg
         /// <param name="height">The new desired height.</param>
         /// <param name="interpolation">The interpolation method that should be used.</param>
         /// <returns>A new WriteableBitmap that is a resized version of the input.</returns>
-        public static WriteableBitmap Resize(this WriteableBitmap bmp, int width, int height, Interpolation interpolation)
+        public static BitmapBuffer Resize(this BitmapBuffer bmp, int width, int height, Interpolation interpolation)
         {
             using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 int[] pd = Resize(srcContext, srcContext.Width, srcContext.Height, width, height, interpolation);
 
-                WriteableBitmap result = BitmapFactory.New(width, height);
+                BitmapBuffer result = BitmapFactory.New(width, height);
                 using (var dstContext = result.GetBitmapContext())
                 {
                     BitmapContext.BlockCopy(pd, 0, dstContext, 0, ARGB_SIZE * pd.Length);
@@ -296,7 +296,7 @@ namespace PixelFarm.Agg
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="angle">The angle in degrees the bitmap should be rotated in 90° steps clockwise.</param>
         /// <returns>A new WriteableBitmap that is a rotated version of the input.</returns>
-        public static WriteableBitmap Rotate(this WriteableBitmap bmp, int angle)
+        public static BitmapBuffer Rotate(this BitmapBuffer bmp, int angle)
         {
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
@@ -305,7 +305,7 @@ namespace PixelFarm.Agg
                 int h = context.Height;
                 int[] p = context.Pixels;
                 int i = 0;
-                WriteableBitmap result = null;
+                BitmapBuffer result = null;
                 angle %= 360;
 
                 if (angle > 0 && angle <= 90)
@@ -374,7 +374,7 @@ namespace PixelFarm.Agg
         /// <param name="angle">Arbitrary angle in 360 Degrees (positive = clockwise).</param>
         /// <param name="crop">if true: keep the size, false: adjust canvas to new size</param>
         /// <returns>A new WriteableBitmap that is a rotated version of the input.</returns>
-        public static WriteableBitmap RotateFree(this WriteableBitmap bmp, double angle, bool crop = true)
+        public static BitmapBuffer RotateFree(this BitmapBuffer bmp, double angle, bool crop = true)
         {
             // rotating clockwise, so it's negative relative to Cartesian quadrants
             double cnAngle = -1.0 * (Math.PI / 180) * angle;
@@ -428,7 +428,7 @@ namespace PixelFarm.Agg
                 iDestCentreX = newWidth / 2;
                 iDestCentreY = newHeight / 2;
 
-                WriteableBitmap bmBilinearInterpolation = BitmapFactory.New(newWidth, newHeight);
+                BitmapBuffer bmBilinearInterpolation = BitmapFactory.New(newWidth, newHeight);
 
                 using (var bilinearContext = bmBilinearInterpolation.GetBitmapContext())
                 {
@@ -546,7 +546,7 @@ namespace PixelFarm.Agg
         /// <param name="bmp">The WriteableBitmap.</param>
         /// <param name="flipMode">The flip mode.</param>
         /// <returns>A new WriteableBitmap that is a flipped version of the input.</returns>
-        public static WriteableBitmap Flip(this WriteableBitmap bmp, FlipMode flipMode)
+        public static BitmapBuffer Flip(this BitmapBuffer bmp, FlipMode flipMode)
         {
             using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
@@ -555,7 +555,7 @@ namespace PixelFarm.Agg
                 int h = context.Height;
                 int[] p = context.Pixels;
                 int i = 0;
-                WriteableBitmap result = null;
+                BitmapBuffer result = null;
 
                 if (flipMode == FlipMode.Horizontal)
                 {

@@ -70,7 +70,7 @@ namespace WinFormGdiPlus
             using (Bitmap bmp1 = new Bitmap(400, 500))
             using (var bmplock = bmp1.Lock())
             {
-                WriteableBitmap wb = bmplock.GetWritableBitmap();
+                BitmapBuffer wb = bmplock.GetWritableBitmap();
                 switch (sampleName)
                 {
                     case SampleName.StaticShapes:
@@ -94,7 +94,7 @@ namespace WinFormGdiPlus
         /// <summary>
         /// Draws the different types of shapes.
         /// </summary>
-        private void DrawStaticShapes(WriteableBitmap writeableBmp)
+        private void DrawStaticShapes(BitmapBuffer writeableBmp)
         {
             // HideShapeCountText();
             if (writeableBmp != null)
@@ -181,7 +181,7 @@ namespace WinFormGdiPlus
                     writeableBmp.FillRectangle(rand.Next(2 * w3, 2 * w3 + w6), rand.Next(2 * h3, 2 * h3 + h6),
                            rand.Next(2 * w3 + w6, w), rand.Next(2 * h3 + h6, h), GetRandomColor(), true);
 
-                    PixelFarm.Agg.Color black = PixelFarm.Agg.Color.FromArgb(255, 0, 0, 0);
+                    PixelFarm.Agg.ColorInt black = PixelFarm.Agg.ColorInt.FromArgb(255, 0, 0, 0);
                     // Draw Grid
                     writeableBmp.DrawLine(0, h3, w, h3, Colors.Black);
                     writeableBmp.DrawLine(0, 2 * h3, w, 2 * h3, Colors.Black);
@@ -198,7 +198,7 @@ namespace WinFormGdiPlus
         /// <summary>
         /// Draws random shapes.
         /// </summary>
-        private void DrawShapes(WriteableBitmap writeableBmp)
+        private void DrawShapes(BitmapBuffer writeableBmp)
         {
             // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
             using (writeableBmp.GetBitmapContext())
@@ -248,7 +248,7 @@ namespace WinFormGdiPlus
         private float time;
         private const float timeStep = 0.01f;
 
-        private void DrawFillDemo(WriteableBitmap writeableBmp)
+        private void DrawFillDemo(BitmapBuffer writeableBmp)
         {
             if (writeableBmp == null)
                 return;

@@ -34,7 +34,7 @@ namespace WinFormGdiPlus
             return (byte)pct;
         }
 
-        public static HslColor FromColor(Color c)
+        public static HslColor FromColor(ColorInt c)
         {
             return HslColor.FromArgb(c.A, c.R, c.G, c.B);
         }
@@ -131,7 +131,7 @@ namespace WinFormGdiPlus
             return p;
         }
 
-        public Color ToColor()
+        public ColorInt ToColor()
         {
             double q = 0;
             if (L < .5)
@@ -147,7 +147,7 @@ namespace WinFormGdiPlus
             double r = getComponent(norm(hk + (1.0 / 3.0)), p, q);
             double g = getComponent(norm(hk), p, q);
             double b = getComponent(norm(hk - (1.0 / 3.0)), p, q);
-            return Color.FromArgb(PctToByte(A), PctToByte(r), PctToByte(g), PctToByte(b));
+            return ColorInt.FromArgb(PctToByte(A), PctToByte(r), PctToByte(g), PctToByte(b));
         }
 
     }

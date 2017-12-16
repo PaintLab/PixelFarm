@@ -78,7 +78,7 @@ namespace PixelFarm.Agg
         /// <param name="source">The source WriteableBitmap.</param>
         /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
         /// <param name="blendMode">The blending mode <see cref="BlendMode"/>.</param>
-        public static void Blit(this WriteableBitmap bmp, Rect destRect, WriteableBitmap source, Rect sourceRect, BlendMode blendMode)
+        public static void Blit(this BitmapBuffer bmp, RectD destRect, BitmapBuffer source, RectD sourceRect, BlendMode blendMode)
         {
             Blit(bmp, destRect, source, sourceRect, Colors.White, blendMode);
         }
@@ -90,7 +90,7 @@ namespace PixelFarm.Agg
         /// <param name="destRect">The rectangle that defines the destination region.</param>
         /// <param name="source">The source WriteableBitmap.</param>
         /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
-        public static void Blit(this WriteableBitmap bmp, Rect destRect, WriteableBitmap source, Rect sourceRect)
+        public static void Blit(this BitmapBuffer bmp, RectD destRect, BitmapBuffer source, RectD sourceRect)
         {
             Blit(bmp, destRect, source, sourceRect, Colors.White, BlendMode.Alpha);
         }
@@ -104,9 +104,9 @@ namespace PixelFarm.Agg
         /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
         /// <param name="color">If not Colors.White, will tint the source image. A partially transparent color and the image will be drawn partially transparent.</param>
         /// <param name="blendMode">The blending mode <see cref="BlendMode"/>.</param>
-        public static void Blit(this WriteableBitmap bmp, Point destPosition, WriteableBitmap source, Rect sourceRect, Color color, BlendMode blendMode)
+        public static void Blit(this BitmapBuffer bmp, PointD destPosition, BitmapBuffer source, RectD sourceRect, ColorInt color, BlendMode blendMode)
         {
-            var destRect = new Rect(destPosition, new Size(sourceRect.Width, sourceRect.Height));
+            var destRect = new RectD(destPosition, new SizeD(sourceRect.Width, sourceRect.Height));
             Blit(bmp, destRect, source, sourceRect, color, blendMode);
         }
 
@@ -119,7 +119,7 @@ namespace PixelFarm.Agg
         /// <param name="sourceRect">The rectangle that will be copied from the source to the destination.</param>
         /// <param name="color">If not Colors.White, will tint the source image. A partially transparent color and the image will be drawn partially transparent. If the BlendMode is ColorKeying, this color will be used as color key to mask all pixels with this value out.</param>
         /// <param name="blendMode">The blending mode <see cref="BlendMode"/>.</param>
-        internal static void Blit(this WriteableBitmap bmp, Rect destRect, WriteableBitmap source, Rect sourceRect, Color color, BlendMode blendMode)
+        internal static void Blit(this BitmapBuffer bmp, RectD destRect, BitmapBuffer source, RectD sourceRect, ColorInt color, BlendMode blendMode)
         {
             if (color.A == 0)
             {
@@ -139,7 +139,7 @@ namespace PixelFarm.Agg
                 int dpw = destContext.Width;
                 int dph = destContext.Height;
 
-                Rect intersect = new Rect(0, 0, dpw, dph);
+                RectD intersect = new RectD(0, 0, dpw, dph);
                 intersect.Intersect(destRect);
                 if (intersect.IsEmpty)
                 {
@@ -364,13 +364,13 @@ namespace PixelFarm.Agg
             }
         }
 
-        public static void Blit(BitmapContext destContext, int dpw, int dph, Rect destRect, BitmapContext srcContext, Rect sourceRect, int sourceWidth)
+        public static void Blit(BitmapContext destContext, int dpw, int dph, RectD destRect, BitmapContext srcContext, RectD sourceRect, int sourceWidth)
         {
 
             int dw = (int)destRect.Width;
             int dh = (int)destRect.Height;
 
-            Rect intersect = new Rect(0, 0, dpw, dph);
+            RectD intersect = new RectD(0, 0, dpw, dph);
             intersect.Intersect(destRect);
             if (intersect.IsEmpty)
             {
@@ -509,7 +509,7 @@ namespace PixelFarm.Agg
         /// <param name="shouldClear">If true, the the destination bitmap will be set to all clear (0) before rendering.</param>
         /// <param name="opacity">opacity of the source bitmap to render, between 0 and 1 inclusive</param>
         /// <param name="transform">Transformation to apply</param>
-        public static void BlitRender(this WriteableBitmap bmp, WriteableBitmap source, bool shouldClear = true, float opacity = 1f, GeneralTransform transform = null)
+        public static void BlitRender(this BitmapBuffer bmp, BitmapBuffer source, bool shouldClear = true, float opacity = 1f, GeneralTransform transform = null)
         {
             const int PRECISION_SHIFT = 10;
             const int PRECISION_VALUE = (1 << PRECISION_SHIFT);
@@ -531,9 +531,9 @@ namespace PixelFarm.Agg
                     int sourceWidth = sourceContext.Width;
                     int sourceHeight = sourceContext.Height;
 
-                    Rect sourceRect = new Rect(0, 0, sourceWidth, sourceHeight);
-                    Rect destRect = new Rect(0, 0, destWidth, destHeight);
-                    Rect bounds = transform.TransformBounds(sourceRect);
+                    RectD sourceRect = new RectD(0, 0, sourceWidth, sourceHeight);
+                    RectD destRect = new RectD(0, 0, destWidth, destHeight);
+                    RectD bounds = transform.TransformBounds(sourceRect);
                     bounds.Intersect(destRect);
 
                     int startX = (int)bounds.Left;
@@ -546,9 +546,9 @@ namespace PixelFarm.Agg
                     Point oneZero = inverse.TransformPoint(new Point(startX + 1, startY));
                     Point zeroOne = inverse.TransformPoint(new Point(startX, startY + 1));
 #else
-                    Point zeroZero = inverse.Transform(new Point(startX, startY));
-                    Point oneZero = inverse.Transform(new Point(startX + 1, startY));
-                    Point zeroOne = inverse.Transform(new Point(startX, startY + 1));
+                    PointD zeroZero = inverse.Transform(new PointD(startX, startY));
+                    PointD oneZero = inverse.Transform(new PointD(startX + 1, startY));
+                    PointD zeroOne = inverse.Transform(new PointD(startX, startY + 1));
 #endif
                     float sourceXf = ((float)zeroZero.X);
                     float sourceYf = ((float)zeroZero.Y);
