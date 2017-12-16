@@ -127,5 +127,39 @@ namespace WinFormGdiPlus
             //start ...
             UpdateRenderFrame();
         }
+        public static WriteableBitmap Overlay(WriteableBitmap bmp, WriteableBitmap overlay, System.Windows.Media.Imaging.Point location)
+        {
+            var result = bmp.Clone();
+            var size = new System.Windows.Media.Imaging.Size(overlay.PixelWidth, overlay.PixelHeight);
+            result.Blit(new Rect(location, size), overlay,
+                new Rect(new System.Windows.Media.Imaging.Point(0, 0), size),
+                WriteableBitmapExtensions.BlendMode.Multiply);
+            return result;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            WriteableBitmap unmodifiedBmp = LoadBitmapAsReadonly("../../02.jpg");
+            WriteableBitmap sticker = LoadBitmapAsReadonly("../../01.jpg");
+
+            WriteableBitmap overlayResult = Overlay(unmodifiedBmp, sticker, new System.Windows.Media.Imaging.Point(10, 10));
+
+            using (var bmplock = destBmp.Lock())
+            {
+                WriteableBitmap wb = bmplock.GetWritableBitmap();
+                wb.Clear(Colors.Black);
+
+                wb.Blit(new Rect(0, 0, overlayResult.PixelWidth, overlayResult.PixelHeight),
+                        overlayResult,
+                        new Rect(0, 0, overlayResult.PixelWidth, overlayResult.PixelHeight));
+
+                bmplock.WriteAndUnlock();
+
+                g.Clear(System.Drawing.Color.White);
+                g.DrawImage(destBmp, 0, 0);
+            }
+
+
+        }
     }
 }

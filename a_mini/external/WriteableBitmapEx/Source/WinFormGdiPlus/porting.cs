@@ -249,7 +249,9 @@ namespace System.Windows.Media.Imaging
         //in this version , only 32 bits 
         public WriteableBitmap(int w, int h)
         {
-
+            this.PixelWidth = w;
+            this.PixelHeight = h;
+            this.Pixels = new int[w * h];
         }
         public WriteableBitmap(int w, int h, int[] orgBuffer)
         {
