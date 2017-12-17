@@ -118,7 +118,7 @@ namespace PixelFarm.Agg
         {
             return img.pixelBuffer;
         }
-        public static int[] GetBuffer2(ActualImage img)
+        public static int[] CopyImgBuffer(ActualImage img)
         {
 
             int[] buff2 = new int[img.width * img.height];
