@@ -20,7 +20,7 @@ namespace PixelFarm.DrawingGL
         RectInt _clipBox;
 
         RoundedRect roundRect;
-        Arc arcTool;
+        Arc _arcTool;
         Ellipse ellipse = new Ellipse();
         Stroke _aggStroke = new Stroke(1);
         RequestFont _requestFont;
@@ -33,7 +33,7 @@ namespace PixelFarm.DrawingGL
             _width = w;
             _height = h;
             _clipBox = new RectInt(0, 0, w, h);
-            arcTool = new Arc();
+            _arcTool = new Arc();
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
             //tools
@@ -562,13 +562,13 @@ namespace PixelFarm.DrawingGL
                  arcSize == SvgArcSize.Large,
                  arcSweep == SvgArcSweep.Negative,
                  endX, endY, ref centerFormArc);
-            arcTool.Init(centerFormArc.cx, centerFormArc.cy, rx, ry,
+            _arcTool.Init(centerFormArc.cx, centerFormArc.cy, rx, ry,
                 centerFormArc.radStartAngle,
                 (centerFormArc.radStartAngle + centerFormArc.radSweepDiff));
 
             VertexStore v1 = GetFreeVxs();
             bool stopLoop = false;
-            foreach (VertexData vertexData in arcTool.GetVertexIter())
+            foreach (VertexData vertexData in _arcTool.GetVertexIter())
             {
                 switch (vertexData.command)
                 {
