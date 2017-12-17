@@ -111,9 +111,9 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 351, 100 + 290);
                         ps2.LineTo(100 + 354, 100 + 374);
                         ps2.CloseFigure();
-                        p.FillColor = AggColorExtensions.Make(0f, 0f, 0f, 0.1f);
+                        p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
                         p.Fill(ps1.MakeVertexSnap());
-                        p.FillColor = AggColorExtensions.Make(0f, 0.6f, 0f, 0.1f);
+                        p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
                         p.Fill(ps2.MakeVertexSnap());
                         CreateAndRenderCombined(p, ps1.MakeVertexSnap(), ps2.MakeVertexSnap());
                     }
@@ -148,12 +148,12 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         ps2.LineTo(100 + 351, 100 + 290);
                         ps2.LineTo(100 + 354, 100 + 374);
                         ps2.CloseFigure();
-                        p.FillColor = AggColorExtensions.Make(0f, 0f, 0f, 0.1f);
+                        p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
                         p.Fill(ps1.MakeVertexSnap());
                         //graphics2D.Render(ps1.MakeVertexSnap(), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
                         var vxs = ps2.Vxs;
                         //graphics2D.Render(stroke.MakeVxs(vxs), ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
-                        p.FillColor = AggColorExtensions.Make(0f, 0.6f, 0f, 0.1f);
+                        p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
                         var v1 = GetFreeVxs();
                         p.Fill(stroke.MakeVxs(vxs, v1));
                         ReleaseVxs(ref v1);
@@ -190,17 +190,17 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         mtx2.TransformToVxs(arrows.Vxs, trans_arrows);
 
 
-                        p.FillColor = AggColorExtensions.Make(0.5f, 0.5f, 0f, 0.1f);
+                        p.FillColor = ColorEx.Make(0.5f, 0.5f, 0f, 0.1f);
                         p.Fill(trans_gb_poly);
                         //graphics2D.Render(trans_gb_poly, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
                         //stroke_gb_poly.Width = 0.1;
-                        p.FillColor = AggColorExtensions.Make(0, 0, 0);
+                        p.FillColor = ColorEx.Make(0, 0, 0);
                         var v1 = GetFreeVxs();
                         p.Fill(new Stroke(0.1).MakeVxs(trans_gb_poly, v1));
                         ReleaseVxs(ref v1);
                         //graphics2D.Render(new Stroke(0.1).MakeVxs(trans_gb_poly), ColorRGBAf.MakeColorRGBA(0, 0, 0));
                         //graphics2D.Render(trans_arrows, ColorRGBAf.MakeColorRGBA(0f, 0.5f, 0.5f, 0.1f));
-                        p.FillColor = AggColorExtensions.Make(0f, 0.5f, 0.5f, 0.1f);
+                        p.FillColor = ColorEx.Make(0f, 0.5f, 0.5f, 0.1f);
                         p.Fill(trans_arrows);
                         CreateAndRenderCombined(p, new VertexStoreSnap(trans_gb_poly), new VertexStoreSnap(trans_arrows));
                     }
@@ -219,7 +219,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         //
                         VertexStore s1 = GetFreeVxs();
                         mtx.TransformToVxs(gb_poly.Vxs, s1);
-                        p.FillColor = AggColorExtensions.Make(0.5f, 0.5f, 0f, 0.1f);
+                        p.FillColor = ColorEx.Make(0.5f, 0.5f, 0f, 0.1f);
                         p.Fill(s1);
                         //graphics2D.Render(s1, ColorRGBAf.MakeColorRGBA(0.5f, 0.5f, 0f, 0.1f));
 
@@ -232,7 +232,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
                         p.Fill(new Stroke(0.1).MakeVxs(s1, v1));
                         var stroke_vxs = new Stroke(15).MakeVxs(sp.MakeVxs(v2), v3);
-                        p.FillColor = AggColorExtensions.Make(0.0f, 0.5f, 0.5f, 0.1f);// XUolorRXBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f);
+                        p.FillColor = ColorEx.Make(0.0f, 0.5f, 0.5f, 0.1f);// XUolorRXBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f);
                         p.Fill(stroke_vxs);
                         //graphics2D.Render(stroke_vxs, ColorRGBAf.MakeColorRGBA(0.0f, 0.5f, 0.5f, 0.1f));
                         CreateAndRenderCombined(p, new VertexStoreSnap(s1), new VertexStoreSnap(stroke_vxs));
@@ -312,11 +312,11 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
                         var curveVxs = new VertexStore();
                         curveFlattener.MakeVxs(t_glyph, curveVxs);
                         CreateAndRenderCombined(p, new VertexStoreSnap(sp1), new VertexStoreSnap(curveVxs));
-                        p.FillColor = AggColorExtensions.Make(0f, 0f, 0f, 0.1f);
+                        p.FillColor = ColorEx.Make(0f, 0f, 0f, 0.1f);
                         p.Fill(stroke.MakeVxs(sp1, v3));
                         //graphics2D.Render(stroke.MakeVxs(sp1), ColorRGBAf.MakeColorRGBA(0f, 0f, 0f, 0.1f));
 
-                        p.FillColor = AggColorExtensions.Make(0f, 0.6f, 0f, 0.1f);
+                        p.FillColor = ColorEx.Make(0f, 0.6f, 0f, 0.1f);
                         p.Fill(curveVxs);
                         //graphics2D.Render(curveVxs, ColorRGBAf.MakeColorRGBA(0f, 0.6f, 0f, 0.1f));
 
@@ -356,7 +356,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
 
             if (combined != null)
             {
-                p.FillColor = AggColorExtensions.Make(0.5f, 0.0f, 0f, 0.5f);
+                p.FillColor = ColorEx.Make(0.5f, 0.0f, 0f, 0.5f);
                 p.Fill(new VertexStoreSnap(combined[0]));
                 //graphics2D.Render(new VertexStoreSnap(combined[0]), ColorRGBAf.MakeColorRGBA(0.5f, 0.0f, 0f, 0.5f));
             }
