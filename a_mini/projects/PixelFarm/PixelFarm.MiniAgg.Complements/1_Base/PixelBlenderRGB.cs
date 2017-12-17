@@ -146,12 +146,13 @@ namespace PixelFarm.Agg.Imaging
      */
 
 
+
+#if DEBUG
     public abstract class PixelBlenderBaseBGR
     {
         public int NumPixelBits { get { return 24; } }
         public const byte BASE_MASK = 255;
     }
-#if DEBUG
     public sealed class PixelBlenderBGR : PixelBlenderBaseBGR, IPixelBlender
     {
         //for 24 bits color
