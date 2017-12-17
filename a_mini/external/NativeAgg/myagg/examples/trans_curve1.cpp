@@ -304,7 +304,7 @@ int agg_main(int argc, char* argv[])
 {
     HDC dc = ::GetDC(0);
     the_application app(dc, pix_format, flip_y);
-    app.caption("AGG Example. Non-linear \"Along-A-Curve\" Transformer");
+    app.caption(L"AGG Example. Non-linear \"Along-A-Curve\" Transformer");
 
     if(app.init(600, 600, agg::window_resize))
     {

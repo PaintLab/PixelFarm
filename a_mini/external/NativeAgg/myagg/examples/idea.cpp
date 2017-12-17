@@ -350,7 +350,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(pix_format, flip_y);
-    app.caption("AGG Example. Idea");
+    app.caption(L"AGG Example. Idea");
 
     if(app.init(250, 280, agg::window_resize))
     {

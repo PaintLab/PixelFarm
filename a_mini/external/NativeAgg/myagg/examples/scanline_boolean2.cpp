@@ -663,7 +663,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgr24, flip_y);
-    app.caption("AGG Example. Scanline Boolean");
+    app.caption(L"AGG Example. Scanline Boolean");
 
     if(app.init(655, 520, agg::window_resize))
     {
