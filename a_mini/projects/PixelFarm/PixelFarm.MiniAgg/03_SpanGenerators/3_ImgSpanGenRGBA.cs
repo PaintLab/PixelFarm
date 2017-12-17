@@ -113,10 +113,16 @@ namespace PixelFarm.Agg.Imaging
 #if true
                     do
                     {
-                        outputColors[startIndex].blue = (byte)srcBuffer[bufferIndex++];
-                        outputColors[startIndex].green = (byte)srcBuffer[bufferIndex++];
-                        outputColors[startIndex].red = (byte)srcBuffer[bufferIndex++];
-                        outputColors[startIndex].alpha = (byte)srcBuffer[bufferIndex++];
+                        //TODO: review here, match component?
+                        //ORDER IS IMPORTANT!
+                        //TODO : use CO (color order instead)
+                        byte b = (byte)srcBuffer[bufferIndex++];
+                        byte g = (byte)srcBuffer[bufferIndex++];
+                        byte r = (byte)srcBuffer[bufferIndex++];
+                        byte a = (byte)srcBuffer[bufferIndex++];
+
+                        outputColors[startIndex] = Drawing.Color.FromArgb(a, r, g, b);
+
                         ++startIndex;
                     } while (--len != 0);
 #else
@@ -305,10 +311,17 @@ namespace PixelFarm.Agg.Imaging
                         }
                     }
 
-                    outputColors[startIndex].red = (byte)accColor0;
-                    outputColors[startIndex].green = (byte)accColor1;
-                    outputColors[startIndex].blue = (byte)accColor2;
-                    outputColors[startIndex].alpha = (byte)accColor3;
+                    outputColors[startIndex] = PixelFarm.Drawing.Color.FromArgb(
+                        (byte)accColor3,
+                        (byte)accColor0,
+                        (byte)accColor1,
+                        (byte)accColor2
+                        );
+
+                    //outputColors[startIndex].red = (byte)accColor0;
+                    //outputColors[startIndex].green = (byte)accColor1;
+                    //outputColors[startIndex].blue = (byte)accColor2;
+                    //outputColors[startIndex].alpha = (byte)accColor3;
                     ++startIndex;
                     spanInterpolator.Next();
                 } while (--len != 0);
