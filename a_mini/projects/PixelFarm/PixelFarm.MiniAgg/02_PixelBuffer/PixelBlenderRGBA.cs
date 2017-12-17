@@ -84,7 +84,7 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="bufferOffset"></param>
         /// <param name="sourceColor"></param>
         void BlendPixel(byte[] buffer, int bufferOffset, Color sourceColor);
-         
+
         /// <summary>
         /// blend source color to dest buffer with specific blend function of this PixelBlender
         /// </summary>
@@ -131,32 +131,100 @@ namespace PixelFarm.Agg.Imaging
 
         public void BlendPixel(byte[] buffer, int bufferOffset, Color sourceColor)
         {
-            //unsafe
+
+
+            //img's buffer destination is pre-multiplied alpha color
+            //this blend color from 'Straight alpha color' to  image buffer target
+            //so we use => Straight alpha
+            //result = (source.RGB* source.A) + (dest.RGB* (1 - source.A))
+
+            // version 2
+            unsafe
             {
-                //img's buffer destination is pre-multiplied alpha color
-                //this blend color from 'Straight alpha color' to  image buffer target
-                //so we use => Straight alpha
-                //result = (source.RGB* source.A) + (dest.RGB* (1 - source.A))
-                unchecked
+                fixed (byte* head = &buffer[bufferOffset])
                 {
-                    if (sourceColor.alpha == 255)
-                    {
-                        buffer[bufferOffset + CO.R] = (byte)(sourceColor.red);
-                        buffer[bufferOffset + CO.G] = (byte)(sourceColor.green);
-                        buffer[bufferOffset + CO.B] = (byte)(sourceColor.blue);
-                        buffer[bufferOffset + CO.A] = (byte)(sourceColor.alpha);
-                    }
-                    else
-                    {
-                        byte r = buffer[bufferOffset + CO.R];
-                        byte g = buffer[bufferOffset + CO.G];
-                        byte b = buffer[bufferOffset + CO.B];
-                        byte a = buffer[bufferOffset + CO.A];
-                        buffer[bufferOffset + CO.R] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
-                        buffer[bufferOffset + CO.G] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
-                        buffer[bufferOffset + CO.B] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
-                        buffer[bufferOffset + CO.A] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorEx.BASE_SHIFT));
-                    }
+                    Blend32PixelInternal((int*)(IntPtr)head, sourceColor);
+                }
+            }
+
+            ////version 1
+            //unchecked
+            //{
+            //    if (sourceColor.alpha == 255)
+            //    { 
+            //        buffer[bufferOffset + CO.A] = (byte)(sourceColor.alpha);
+            //        buffer[bufferOffset + CO.R] = (byte)(sourceColor.red);
+            //        buffer[bufferOffset + CO.G] = (byte)(sourceColor.green);
+            //        buffer[bufferOffset + CO.B] = (byte)(sourceColor.blue); 
+            //    }
+            //    else
+            //    {
+            //        byte r = buffer[bufferOffset + CO.R];
+            //        byte g = buffer[bufferOffset + CO.G];
+            //        byte b = buffer[bufferOffset + CO.B];
+            //        byte a = buffer[bufferOffset + CO.A];
+            //        buffer[bufferOffset + CO.R] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
+            //        buffer[bufferOffset + CO.G] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
+            //        buffer[bufferOffset + CO.B] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
+            //        buffer[bufferOffset + CO.A] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorEx.BASE_SHIFT));
+            //    }
+            //}
+
+        }
+        static unsafe void Blend32PixelInternal(int* ptr, Color sc, int coverageValue)
+        {
+            //calculate new alpha
+            int src_a = (byte)((sc.alpha * coverageValue + 255) >> 8);
+            //after apply the alpha
+            unchecked
+            {
+                if (src_a == 255)
+                {
+                    *ptr = sc.ToARGB(); //just copy
+                }
+                else
+                {
+                    int dest = *ptr;
+                    //separate each component
+                    byte a = (byte)((dest >> 24) & 0xff);
+                    byte r = (byte)((dest >> 16) & 0xff);
+                    byte g = (byte)((dest >> 8) & 0xff);
+                    byte b = (byte)((dest) & 0xff);
+
+
+                    *ptr =
+                     ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
+                     ((byte)(((sc.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                     ((byte)(((sc.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT) << 8) |
+                     ((byte)(((sc.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
+                }
+            }
+
+        }
+        static unsafe void Blend32PixelInternal(int* ptr, Color sc)
+        {
+            unchecked
+            {
+                if (sc.alpha == 255)
+                {
+                    *ptr = sc.ToARGB(); //just copy
+                }
+                else
+                {
+                    int dest = *ptr;
+                    //separate each component
+                    byte a = (byte)((dest >> 24) & 0xff);
+                    byte r = (byte)((dest >> 16) & 0xff);
+                    byte g = (byte)((dest >> 8) & 0xff);
+                    byte b = (byte)((dest) & 0xff);
+
+                    byte src_a = sc.alpha;
+
+                    *ptr =
+                     ((byte)((src_a + a) - ((src_a * a + BASE_MASK) >> ColorEx.BASE_SHIFT)) << 24) |
+                     ((byte)(((sc.red - r) * src_a + (r << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 16) |
+                     ((byte)(((sc.green - g) * src_a + (g << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT) << 8) |
+                     ((byte)(((sc.blue - b) * src_a + (b << ColorEx.BASE_SHIFT)) >> ColorEx.BASE_SHIFT));
                 }
             }
         }
@@ -170,28 +238,128 @@ namespace PixelFarm.Agg.Imaging
                 int cover = covers[coversIndex];
                 if (cover == 255)
                 {
-                    do
+                    //version 1
+                    //do
+                    //{
+                    //    BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset++]);
+                    //    bufferOffset += 4;
+                    //}
+                    //while (--count != 0);
+
+                    //version 2
+                    //unsafe
+                    //{
+                    //    fixed (byte* head = &destBuffer[bufferOffset])
+                    //    {
+                    //        int* header2 = (int*)(IntPtr)head;
+                    //        do
+                    //        {
+                    //            Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++]);
+                    //            header2++;//move next
+                    //        }
+                    //        while (--count != 0);
+                    //    }
+                    //}
+                    //------------------------------
+                    //version 3: similar to version 2, but have a plan
+                    unsafe
                     {
-                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset++]);
-                        bufferOffset += 4;
+                        fixed (byte* head = &destBuffer[bufferOffset])
+                        {
+                            int* header2 = (int*)(IntPtr)head;
+
+                            if (count % 2 != 0)
+                            {
+                                //odd
+                                //
+                                Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++]);
+                                header2++;//move next
+                                count--;
+                            }
+                            //  
+                            while (count > 0)
+                            {
+                                //now count is even number
+                                //---------
+                                //1
+                                Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++]);
+                                header2++;//move next
+                                count--;
+                                //---------
+                                //2
+                                Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++]);
+                                header2++;//move next
+                                count--;
+                            }
+
+                        }
                     }
-                    while (--count != 0);
                 }
                 else
                 {
-                    do
+                    ////version 1
+                    //do
+                    //{
+                    //    BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
+                    //    bufferOffset += 4;
+                    //    ++sourceColorsOffset;
+                    //}
+                    //while (--count != 0);
+
+                    ////version 2 
+                    //unsafe
+                    //{
+                    //    fixed (byte* head = &destBuffer[bufferOffset])
+                    //    {
+                    //        int* header2 = (int*)(IntPtr)head;
+                    //        do
+                    //        {
+
+                    //            //Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++].NewFromChangeCoverage(cover));
+                    //            Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++], cover);
+                    //            header2++;//move next
+                    //        }
+                    //        while (--count != 0);
+                    //    }
+                    //}
+                    //------------------------------
+                    //version 3: similar to version 2, but have a plan
+                    unsafe
                     {
-                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
-                        bufferOffset += 4;
-                        ++sourceColorsOffset;
+                        fixed (byte* head = &destBuffer[bufferOffset])
+                        {
+                            int* header2 = (int*)(IntPtr)head;
+
+                            if (count % 2 != 0)
+                            {
+                                //odd
+                                //
+                                Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++], cover);
+                                header2++;//move next
+                                count--;
+                            }
+                            while (count > 0)
+                            {
+                                //Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++].NewFromChangeCoverage(cover));
+                                //1.
+                                Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++], cover);
+                                header2++;//move next
+                                count--;
+                                //2.
+                                Blend32PixelInternal(header2, sourceColors[sourceColorsOffset++], cover);
+                                header2++;//move next
+                                count--;
+                            }
+
+                        }
                     }
-                    while (--count != 0);
                 }
             }
             else
             {
                 do
                 {
+                    //cover may diff in each loop
                     int cover = covers[coversIndex++];
                     if (cover == 255)
                     {
@@ -216,15 +384,72 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="count"></param>
         public void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count)
         {
-            do
+            //version 1
+            //do
+            //{
+            //    buffer[bufferOffset + CO.A] = sourceColor.alpha;
+            //    buffer[bufferOffset + CO.R] = sourceColor.red;
+            //    buffer[bufferOffset + CO.G] = sourceColor.green;
+            //    buffer[bufferOffset + CO.B] = sourceColor.blue;
+            //    bufferOffset += 4;
+            //}
+            //while (--count != 0);
+
+            ////version 2, copy a same color
+            //unsafe
+            //{
+            //    unchecked
+            //    {
+            //        fixed (byte* ptr_byte = &buffer[bufferOffset])
+            //        {
+            //            //TODO: consider use memcpy() impl***
+            //            int* ptr = (int*)(IntPtr)ptr_byte;
+            //            int argb = sourceColor.ToARGB();
+            //            do
+            //            {
+            //                *ptr = argb;
+            //                ptr++; //move next
+            //            }
+            //            while (--count != 0);
+            //        }
+            //    }
+            //}
+            //version 3, copy a same color
+            unsafe
             {
-                buffer[bufferOffset + CO.A] = sourceColor.alpha;
-                buffer[bufferOffset + CO.R] = sourceColor.red;
-                buffer[bufferOffset + CO.G] = sourceColor.green;
-                buffer[bufferOffset + CO.B] = sourceColor.blue;
-                bufferOffset += 4;
+                unchecked
+                {
+                    fixed (byte* ptr_byte = &buffer[bufferOffset])
+                    {
+                        //TODO: consider use memcpy() impl***
+                        int* ptr = (int*)(IntPtr)ptr_byte;
+                        int argb = sourceColor.ToARGB();
+
+                        //---------
+                        if ((count % 2) != 0)
+                        {
+                            *ptr = argb;
+                            ptr++; //move next
+                            count--;
+                        }
+
+                        while (count > 0)
+                        {
+                            //-----------
+                            //1.
+                            *ptr = argb;
+                            ptr++; //move next
+                            count--;
+                            //-----------
+                            //2
+                            *ptr = argb;
+                            ptr++; //move next
+                            count--;
+                        }
+
+                    }
+                }
             }
-            while (--count != 0);
         }
         /// <summary>
         ///  direct set source color to destination buffer 
