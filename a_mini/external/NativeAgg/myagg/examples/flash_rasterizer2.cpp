@@ -509,7 +509,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgra32, flip_y);
-    app.caption("AGG Example - Flash Rasterizer");
+    app.caption(L"AGG Example - Flash Rasterizer");
     const char* fname = "shapes.txt";
     if(argc > 1) fname = argv[1];
     if(!app.open(fname))

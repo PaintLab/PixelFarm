@@ -550,7 +550,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgr24, flip_y);
-    app.caption("AGG Example. Alpha-Mask as a Polygon Clipper");
+    app.caption(L"AGG Example. Alpha-Mask as a Polygon Clipper");
 
     if(app.init(640, 520, agg::window_resize))
     {

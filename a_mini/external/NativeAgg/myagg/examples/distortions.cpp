@@ -675,7 +675,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgr24, flip_y);
-    app.caption("Image and Gradient Distortions");
+    app.caption(L"Image and Gradient Distortions");
 
     const char* img_name = "spheres";
     if(argc >= 2) img_name = argv[1];

@@ -588,7 +588,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgr24, flip_y);
-    app.caption("AGG Example. Anti-Aliasing Test");
+    app.caption(L"AGG Example. Anti-Aliasing Test");
 
     if(app.init(480, 350, agg::window_resize))
     {
