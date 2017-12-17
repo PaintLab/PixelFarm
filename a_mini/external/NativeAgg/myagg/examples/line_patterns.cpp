@@ -295,7 +295,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgr24, flip_y);
-    app.caption("AGG Example. Drawing Lines with Image Patterns");
+    app.caption(L"AGG Example. Drawing Lines with Image Patterns");
 
     if(!app.load_img(0, "1") ||
        !app.load_img(1, "2") ||

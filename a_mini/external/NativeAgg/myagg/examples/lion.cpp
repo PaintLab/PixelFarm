@@ -28,7 +28,7 @@
 enum flip_y_e { flip_y = true };  
 
 unsigned parse_lion(agg::path_storage& ps, agg::rgba8* colors, unsigned* path_idx); 
-unsigned parse_lion2(void* mem,int len,int start,agg::path_storage& ps, agg::rgba8* colors, unsigned* path_idx); 
+//unsigned parse_lion2(void* mem,int len,int start,agg::path_storage& ps, agg::rgba8* colors, unsigned* path_idx); 
  
 
 class MyBasicCanvas ;
