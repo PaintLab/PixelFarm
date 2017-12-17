@@ -296,7 +296,7 @@ namespace PixelFarm.Agg
         }
         public Color GetPixel(int x, int y)
         {
-            return recieveBlender.PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
+            return recieveBlender.PixelToColorRGBA(m_ByteBuffer, GetBufferOffsetXY(x, y));
         }
         public int GetBufferOffsetXY(int x, int y)
         {
@@ -623,14 +623,25 @@ namespace PixelFarm.Agg
         {
         }
 
+        /// <summary>
+        /// load image to the reader/writer
+        /// </summary>
+        /// <param name="actualImage"></param>
         public void ReloadImage(ActualImage actualImage)
         {
+
             if (this.actualImage == actualImage)
             {
                 return;
             }
+
+            //in this version we support actual images
+            //in 2 formats : 
+            //1. 32 bits ARGB
+            //2. 8  bits gray scale
+            //
+
             this.actualImage = actualImage;
-            //calculate image stride
             switch (actualImage.PixelFormat)
             {
                 case PixelFormat.ARGB32:
@@ -649,12 +660,6 @@ namespace PixelFarm.Agg
                           actualImage.BitDepth,
                           ActualImage.GetBuffer(actualImage),
                           pixelBlenderGray ?? (pixelBlenderGray = new PixelBlenderGray(1)));
-                    }
-                    break;
-                case PixelFormat.RGB24:
-                    {
-
-
                     }
                     break;
                 default:

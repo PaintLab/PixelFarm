@@ -153,7 +153,7 @@ namespace PixelFarm.Agg.Imaging
 
     public sealed class PixelBlenderBGR : PixelBlenderBaseBGR, IPixelBlender
     {
-        public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
+        public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
             return new Color(
                 buffer[bufferOffset + CO.R],
@@ -260,7 +260,7 @@ namespace PixelFarm.Agg.Imaging
             m_gamma = g;
         }
 
-        public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
+        public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
             return new Color(buffer[bufferOffset + CO.R], buffer[bufferOffset + CO.G], buffer[bufferOffset + CO.B]);
         }
@@ -316,7 +316,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
+        public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
             return new Color(
                 buffer[bufferOffset + CO.R],

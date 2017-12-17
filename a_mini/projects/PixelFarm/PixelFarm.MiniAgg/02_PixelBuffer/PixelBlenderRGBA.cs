@@ -33,14 +33,69 @@ using System;
 
 namespace PixelFarm.Agg.Imaging
 {
+    /// <summary>
+    /// look up table helper for clamp value from 9 bits to 8 bits
+    /// </summary>
+    static class ClampFrom9To8Bits
+    {
+        internal static readonly int[] _ = new int[1 << 9];
+        static ClampFrom9To8Bits()
+        {
+            //this is a clamp table
+            //9 bits to 8 bits
+            //if we don't use this clamp table
+            for (int i = _.Length - 1; i >= 0; --i)
+            {
+                _[i] = Math.Min(i, 255);
+            }
+        }
+    }
+
+
+
     public interface IPixelBlender
     {
+        /// <summary>
+        /// info 
+        /// </summary>
         int NumPixelBits { get; }
 
-        Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset);
+        Color PixelToColorRGBA(byte[] buffer, int bufferOffset);
+
+        /// <summary>
+        /// copy source color and set to dest buffer
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="bufferOffset"></param>
+        /// <param name="sourceColor"></param>
+        /// <param name="count"></param>
         void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count);
+        /// <summary>
+        /// copy source color and set to dest buffer
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="bufferOffset"></param>
+        /// <param name="sourceColor"></param>
         void CopyPixel(byte[] buffer, int bufferOffset, Color sourceColor);
+        /// <summary>
+        /// blend source color to dest buffer with specific blend function of this PixelBlender
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="bufferOffset"></param>
+        /// <param name="sourceColor"></param>
         void BlendPixel(byte[] buffer, int bufferOffset, Color sourceColor);
+
+        /// <summary>
+        /// blend source color to dest buffer with specific blend function of this PixelBlender
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="bufferOffset"></param>
+        /// <param name="sourceColors"></param>
+        /// <param name="sourceColorsOffset"></param>
+        /// <param name="sourceCovers"></param>
+        /// <param name="sourceCoversOffset"></param>
+        /// <param name="firstCoverForAll"></param>
+        /// <param name="count"></param>
         void BlendPixels(byte[] buffer, int bufferOffset, Color[] sourceColors, int sourceColorsOffset, byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count);
     }
 
@@ -75,17 +130,6 @@ namespace PixelFarm.Agg.Imaging
 
         public PixelBlenderBGRA()
         {
-        }
-        public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
-        {
-            //TODO: review here
-            //change  if the buffer is pre-mul
-            return new Color(
-                buffer[bufferOffset + CO.A],
-                buffer[bufferOffset + CO.R],
-                buffer[bufferOffset + CO.G],
-                buffer[bufferOffset + CO.B]
-                );
         }
 
         public void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count)
@@ -186,6 +230,20 @@ namespace PixelFarm.Agg.Imaging
                 while (--count != 0);
             }
         }
+
+        public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
+        {
+            //TODO: review here ...
+            //
+            //change if the buffer is pre-mul or not
+            return new Color(
+                buffer[bufferOffset + CO.A],
+                buffer[bufferOffset + CO.R],
+                buffer[bufferOffset + CO.G],
+                buffer[bufferOffset + CO.B]
+                );
+        }
+
     }
 
 
@@ -204,7 +262,7 @@ namespace PixelFarm.Agg.Imaging
 
             this.m_gamma = found;
         }
-        public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
+        public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
             return new Color(
                 buffer[bufferOffset + CO.A],
@@ -259,23 +317,12 @@ namespace PixelFarm.Agg.Imaging
 
     public sealed class PixelBlenderPreMultBGRA : PixelBlenderBGRABase, IPixelBlender
     {
-        static readonly int[] m_Saturate9BitToByte = new int[1 << 9];
+
         public PixelBlenderPreMultBGRA()
         {
-            
-            if (m_Saturate9BitToByte[2] == 0)
-            {
-
-                //init the look-up table (once)
-                int len = m_Saturate9BitToByte.Length;
-                for (int i = 0; i < len; i++)
-                {
-                    m_Saturate9BitToByte[i] = Math.Min(i, 255);
-                }
-            }
         }
 
-        public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
+        public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
             return new Color(buffer[bufferOffset + CO.A],
                 buffer[bufferOffset + CO.R],
@@ -329,14 +376,14 @@ namespace PixelFarm.Agg.Imaging
 					pDestBuffer[bufferOffset + ImageBuffer.OrderA] = 255;
 					            
 #else
-                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.R] * oneOverAlpha + 255) >> 8) + sourceColor.red];
-                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.G] * oneOverAlpha + 255) >> 8) + sourceColor.green];
-                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.B] * oneOverAlpha + 255) >> 8) + sourceColor.blue];
+                    int r = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * oneOverAlpha + 255) >> 8) + sourceColor.red];
+                    int g = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * oneOverAlpha + 255) >> 8) + sourceColor.green];
+                    int b = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * oneOverAlpha + 255) >> 8) + sourceColor.blue];
                     int a = pDestBuffer[bufferOffset + CO.A];
                     pDestBuffer[bufferOffset + CO.R] = (byte)r;
                     pDestBuffer[bufferOffset + CO.G] = (byte)g;
                     pDestBuffer[bufferOffset + CO.B] = (byte)b;
-                    pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - m_Saturate9BitToByte[(oneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                    pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(oneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
 #endif
                 }
             }
@@ -370,14 +417,14 @@ namespace PixelFarm.Agg.Imaging
                                 int OneOverAlpha = BASE_MASK - sourceColor.alpha;
                                 unchecked
                                 {
-                                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                                    int r = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                                    int g = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                                    int b = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
                                     int a = pDestBuffer[bufferOffset + CO.A];
                                     pDestBuffer[bufferOffset + CO.R] = (byte)r;
                                     pDestBuffer[bufferOffset + CO.G] = (byte)g;
                                     pDestBuffer[bufferOffset + CO.B] = (byte)b;
-                                    pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                                    pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                                 }
                             }
 #endif
@@ -407,14 +454,14 @@ namespace PixelFarm.Agg.Imaging
                                 int OneOverAlpha = BASE_MASK - alpha;
                                 unchecked
                                 {
-                                    int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                    int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                    int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                                    int r = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                                    int g = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                                    int b = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
                                     int a = pDestBuffer[bufferOffset + CO.A];
                                     pDestBuffer[bufferOffset + CO.R] = (byte)r;
                                     pDestBuffer[bufferOffset + CO.G] = (byte)g;
                                     pDestBuffer[bufferOffset + CO.B] = (byte)b;
-                                    pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                                    pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                                 }
                             }
                             sourceColorsOffset++;
@@ -441,14 +488,14 @@ namespace PixelFarm.Agg.Imaging
                         int OneOverAlpha = BASE_MASK - alpha;
                         unchecked
                         {
-                            int r = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                            int g = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                            int b = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                            int r = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                            int g = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                            int b = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
                             int a = pDestBuffer[bufferOffset + CO.A];
                             pDestBuffer[bufferOffset + CO.R] = (byte)r;
                             pDestBuffer[bufferOffset + CO.G] = (byte)g;
                             pDestBuffer[bufferOffset + CO.B] = (byte)b;
-                            pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - m_Saturate9BitToByte[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                            pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                         }
                     }
                     sourceColorsOffset++;
@@ -459,23 +506,19 @@ namespace PixelFarm.Agg.Imaging
         }
     }
 
+
+
+#if DEBUG
     public sealed class PixelBlenderPolyColorPreMultBGRA : PixelBlenderBGRABase, IPixelBlender
     {
-        static int[] m_Saturate9BitToByte = new int[1 << 9];
+
         Color polyColor;
         public PixelBlenderPolyColorPreMultBGRA(Color polyColor)
         {
             this.polyColor = polyColor;
-            if (m_Saturate9BitToByte[2] == 0)
-            {
-                for (int i = 0; i < m_Saturate9BitToByte.Length; i++)
-                {
-                    m_Saturate9BitToByte[i] = Math.Min(i, 255);
-                }
-            }
         }
 
-        public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
+        public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
             return new Color(buffer[bufferOffset + CO.A], buffer[bufferOffset + CO.R], buffer[bufferOffset + CO.G], buffer[bufferOffset + CO.B]);
         }
@@ -503,16 +546,16 @@ namespace PixelFarm.Agg.Imaging
         {
             //unsafe
             {
-                int sourceA = (byte)(m_Saturate9BitToByte[(polyColor.Alpha0To255 * sourceColor.alpha + 255) >> 8]);
+                int sourceA = (byte)(ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.alpha + 255) >> 8]);
                 int oneOverAlpha = BASE_MASK - sourceA;
                 unchecked
                 {
-                    int sourceR = (byte)(m_Saturate9BitToByte[(polyColor.Alpha0To255 * sourceColor.red + 255) >> 8]);
-                    int sourceG = (byte)(m_Saturate9BitToByte[(polyColor.Alpha0To255 * sourceColor.green + 255) >> 8]);
-                    int sourceB = (byte)(m_Saturate9BitToByte[(polyColor.Alpha0To255 * sourceColor.blue + 255) >> 8]);
-                    int destR = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.R] * oneOverAlpha + 255) >> 8) + sourceR];
-                    int destG = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.G] * oneOverAlpha + 255) >> 8) + sourceG];
-                    int destB = m_Saturate9BitToByte[((pDestBuffer[bufferOffset + CO.B] * oneOverAlpha + 255) >> 8) + sourceB];
+                    int sourceR = (byte)(ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.red + 255) >> 8]);
+                    int sourceG = (byte)(ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.green + 255) >> 8]);
+                    int sourceB = (byte)(ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.blue + 255) >> 8]);
+                    int destR = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * oneOverAlpha + 255) >> 8) + sourceR];
+                    int destG = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * oneOverAlpha + 255) >> 8) + sourceG];
+                    int destB = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * oneOverAlpha + 255) >> 8) + sourceB];
                     // TODO: calculated the correct dest alpha
                     //int destA = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
 
@@ -620,6 +663,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
     }
+#endif //DEBUG
 }
 
 
