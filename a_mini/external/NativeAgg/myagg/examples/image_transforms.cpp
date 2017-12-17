@@ -419,7 +419,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgra32, flip_y);
-    app.caption("Image Affine Transformations with filtering");
+    app.caption(L"Image Affine Transformations with filtering");
 
     const char* img_name = "spheres";
     if(argc >= 2) img_name = argv[1];

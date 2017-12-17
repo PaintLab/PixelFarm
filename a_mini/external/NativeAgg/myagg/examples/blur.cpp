@@ -307,7 +307,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgr24, flip_y);
-    app.caption("AGG Example. Gaussian and Stack Blur");
+    app.caption(L"AGG Example. Gaussian and Stack Blur");
 
     if(app.init(440, 330, 0))
     {

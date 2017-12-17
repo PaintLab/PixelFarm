@@ -363,7 +363,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(pix_format, flip_y);
-    app.caption("AGG Example. Alpha channel gradient");
+    app.caption(L"AGG Example. Alpha channel gradient");
 
     if(app.init(400, 320, agg::window_resize))
     {

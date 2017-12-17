@@ -265,7 +265,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(pix_format, flip_y);
-    app.caption("AGG Example. Pattern Perspective Transformations");
+    app.caption(L"AGG Example. Pattern Perspective Transformations");
 
     const char* img_name = "agg";
     if(argc >= 2) img_name = argv[1];
