@@ -145,12 +145,13 @@ namespace PixelFarm.Agg.Imaging
         };
      */
 
+
     public abstract class PixelBlenderBaseBGR
     {
         public int NumPixelBits { get { return 24; } }
         public const byte BASE_MASK = 255;
     }
-
+#if DEBUG
     public sealed class PixelBlenderBGR : PixelBlenderBaseBGR, IPixelBlender
     {
         //for 24 bits color
@@ -235,7 +236,7 @@ namespace PixelFarm.Agg.Imaging
                         BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
                     }
                     else
-                    {                         
+                    {
                         BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                     }
                     bufferOffset += 3;
@@ -245,6 +246,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
     };
+
     public sealed class BlenderGammaBGR : PixelBlenderBaseBGR, IPixelBlender
     {
         GammaLookUpTable m_gamma;
@@ -415,6 +417,9 @@ namespace PixelFarm.Agg.Imaging
             }
         }
     };
+
+
+#endif
     /*
 //======================================================blender_rgba_plain
 template<class ColorT, class Order> struct blender_rgba_plain

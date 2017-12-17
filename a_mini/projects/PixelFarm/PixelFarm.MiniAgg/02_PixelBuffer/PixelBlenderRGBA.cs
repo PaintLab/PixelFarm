@@ -84,7 +84,7 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="bufferOffset"></param>
         /// <param name="sourceColor"></param>
         void BlendPixel(byte[] buffer, int bufferOffset, Color sourceColor);
-
+         
         /// <summary>
         /// blend source color to dest buffer with specific blend function of this PixelBlender
         /// </summary>
