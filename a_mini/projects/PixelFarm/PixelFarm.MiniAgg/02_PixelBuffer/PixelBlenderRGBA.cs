@@ -29,7 +29,7 @@
 
 using PixelFarm.Drawing;
 using System.Collections.Generic;
-using System; 
+using System;
 
 namespace PixelFarm.Agg.Imaging
 {
@@ -53,11 +53,33 @@ namespace PixelFarm.Agg.Imaging
 
     public sealed class PixelBlenderBGRA : PixelBlenderBGRABase, IPixelBlender
     {
+        //from https://microsoft.github.io/Win2D/html/PremultipliedAlpha.htm
+        //1. Straight alpha
+        //result = (source.RGB* source.A) + (dest.RGB* (1 - source.A))
+        //---
+        //2. Premultiplied alpha
+        //result = source.RGB + (dest.RGB * (1 - source.A))
+        //---
+        //3. Converting between alpha formats
+        //3.1 from straight to premult
+        //premultiplied.R = (byte) (straight.R* straight.A / 255);
+        //premultiplied.G = (byte) (straight.G* straight.A / 255);
+        //premultiplied.B = (byte) (straight.B* straight.A / 255);
+        //premultiplied.A = straight.A;
+        //3.2 from premult to strait
+        //straight.R = premultiplied.R  * ((1/straight.A) * 255);
+        //straight.G = premultiplied.G  * ((1/straight.A) * 255);
+        //straight.B = premultiplied.B  * ((1/straight.A) * 255);
+        //straight.A = premultiplied.A;
+
+
         public PixelBlenderBGRA()
         {
         }
         public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
         {
+            //TODO: review here
+            //change  if the buffer is pre-mul
             return new Color(
                 buffer[bufferOffset + CO.A],
                 buffer[bufferOffset + CO.R],
@@ -102,10 +124,10 @@ namespace PixelFarm.Agg.Imaging
                     }
                     else
                     {
-                        int r = buffer[bufferOffset + CO.R];
-                        int g = buffer[bufferOffset + CO.G];
-                        int b = buffer[bufferOffset + CO.B];
-                        int a = buffer[bufferOffset + CO.A];
+                        byte r = buffer[bufferOffset + CO.R];
+                        byte g = buffer[bufferOffset + CO.G];
+                        byte b = buffer[bufferOffset + CO.B];
+                        byte a = buffer[bufferOffset + CO.A];
                         buffer[bufferOffset + CO.R] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
                         buffer[bufferOffset + CO.G] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
                         buffer[bufferOffset + CO.B] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
@@ -216,10 +238,10 @@ namespace PixelFarm.Agg.Imaging
         {
             unchecked
             {
-                int r = buffer[bufferOffset + CO.R];
-                int g = buffer[bufferOffset + CO.G];
-                int b = buffer[bufferOffset + CO.B];
-                int a = buffer[bufferOffset + CO.A];
+                byte r = buffer[bufferOffset + CO.R];
+                byte g = buffer[bufferOffset + CO.G];
+                byte b = buffer[bufferOffset + CO.B];
+                byte a = buffer[bufferOffset + CO.A];
                 buffer[bufferOffset + CO.R] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
                 buffer[bufferOffset + CO.G] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
                 buffer[bufferOffset + CO.B] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
@@ -240,9 +262,13 @@ namespace PixelFarm.Agg.Imaging
         static readonly int[] m_Saturate9BitToByte = new int[1 << 9];
         public PixelBlenderPreMultBGRA()
         {
+            
             if (m_Saturate9BitToByte[2] == 0)
             {
-                for (int i = 0; i < m_Saturate9BitToByte.Length; i++)
+
+                //init the look-up table (once)
+                int len = m_Saturate9BitToByte.Length;
+                for (int i = 0; i < len; i++)
                 {
                     m_Saturate9BitToByte[i] = Math.Min(i, 255);
                 }
