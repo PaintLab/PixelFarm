@@ -441,19 +441,22 @@ namespace PixelFarm.Agg
                     int bufferOffset = GetBufferOffsetXY(x, y);
                     do
                     {
-                        byte oldAlpha = sourceColor.A;
-                        //TODO:review here, sourceColor mat not changed
-                        sourceColor.alpha = (byte)(((int)(sourceColor.A) * ((int)(covers[coversIndex++]) + 1)) >> 8);
-                        if (sourceColor.alpha == BASE_MASK)
+                        //byte oldAlpha = sourceColor.A;
+                        ////TODO:review here, sourceColor mat not changed
+                        //sourceColor.alpha = (byte)(((int)(sourceColor.A) * ((int)(covers[coversIndex++]) + 1)) >> 8); 
+
+                        //TODO: review here again
+                        Color newcolor = sourceColor.NewFromChangeCoverage(covers[coversIndex++]);
+                        if (newcolor.alpha == BASE_MASK)
                         {
-                            recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, sourceColor);
+                            recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, newcolor);
                         }
                         else
                         {
-                            recieveBlender.BlendPixel(m_ByteBuffer, bufferOffset, sourceColor);
+                            recieveBlender.BlendPixel(m_ByteBuffer, bufferOffset, newcolor);
                         }
                         bufferOffset += scanWidthBytes;
-                        sourceColor.alpha = oldAlpha;
+                        //sourceColor.alpha = oldAlpha;
                     }
                     while (--len != 0);
                 }
@@ -570,7 +573,7 @@ namespace PixelFarm.Agg
             {
                 //if (sourceColor.m_A != 0)
                 {
-                    sourceColor.alpha = (byte)((sourceColor.alpha * (cover + 1)) >> 8);
+
 #if false // we blend regardless of the alpha so that we can get Light Opacity working (used this way we have addative and faster blending in one blender) LBB
                     if (sourceColor.m_A == base_mask)
                     {
@@ -579,7 +582,7 @@ namespace PixelFarm.Agg
                     else
 #endif
                     {
-                        recieveBlender.BlendPixel(destBuffer, bufferOffset, sourceColor);
+                        recieveBlender.BlendPixel(destBuffer, bufferOffset, sourceColor.NewFromChangeCoverage(cover));
                     }
                 }
             }

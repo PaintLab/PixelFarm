@@ -153,8 +153,14 @@ namespace PixelFarm.Agg.Imaging
 
     public sealed class PixelBlenderBGR : PixelBlenderBaseBGR, IPixelBlender
     {
+        //for 24 bits color
+
         public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
+            //check this again
+            //since we get pre-multiplied color from buffer
+            //and put it to a 'straight color', we should convert it
+
             return new Color(
                 buffer[bufferOffset + CO.R],
                 buffer[bufferOffset + CO.G],
@@ -212,8 +218,7 @@ namespace PixelFarm.Agg.Imaging
                 {
                     do
                     {
-                        sourceColors[sourceColorsOffset].alpha = (byte)((sourceColors[sourceColorsOffset].A * cover + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                         bufferOffset += 3;
                         ++sourceColorsOffset;
                     }
@@ -230,10 +235,8 @@ namespace PixelFarm.Agg.Imaging
                         BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
                     }
                     else
-                    {
-                        Color color = sourceColors[sourceColorsOffset];
-                        color.alpha = (byte)((color.A * (cover) + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, color);
+                    {                         
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                     }
                     bufferOffset += 3;
                     ++sourceColorsOffset;
@@ -385,9 +388,8 @@ namespace PixelFarm.Agg.Imaging
                 {
                     do
                     {
-                        sourceColors[sourceColorsOffset].alpha = (byte)((sourceColors[sourceColorsOffset].A * cover + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
-                        bufferOffset += 3;
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
+                        bufferOffset += 3; //*** 24 bits?
                         ++sourceColorsOffset;
                     }
                     while (--count != 0);
@@ -404,9 +406,7 @@ namespace PixelFarm.Agg.Imaging
                     }
                     else
                     {
-                        Color color = sourceColors[sourceColorsOffset];
-                        color.alpha = (byte)((color.alpha * (cover) + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, color);
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                     }
                     bufferOffset += 3;
                     ++sourceColorsOffset;

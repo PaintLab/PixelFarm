@@ -39,7 +39,7 @@ namespace PixelFarm.Agg.Imaging
         int bytesBetweenPixelsInclusive;
         public PixelBlenderGray(int bytesBetweenPixelsInclusive)
         {
-            this.bytesBetweenPixelsInclusive = bytesBetweenPixelsInclusive; 
+            this.bytesBetweenPixelsInclusive = bytesBetweenPixelsInclusive;
         }
 
         public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
@@ -100,8 +100,7 @@ namespace PixelFarm.Agg.Imaging
                 {
                     do
                     {
-                        sourceColors[sourceColorsOffset].alpha = (byte)((sourceColors[sourceColorsOffset].alpha * cover + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                         bufferOffset += bytesBetweenPixelsInclusive;
                         ++sourceColorsOffset;
                     }
@@ -119,9 +118,7 @@ namespace PixelFarm.Agg.Imaging
                     }
                     else
                     {
-                        Color color = sourceColors[sourceColorsOffset];
-                        color.alpha = (byte)((color.alpha * (cover) + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, color);
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                     }
                     bufferOffset += bytesBetweenPixelsInclusive;
                     ++sourceColorsOffset;
@@ -193,8 +190,7 @@ namespace PixelFarm.Agg.Imaging
                 {
                     do
                     {
-                        sourceColors[sourceColorsOffset].alpha = (byte)((sourceColors[sourceColorsOffset].alpha * cover + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                         bufferOffset += bytesBetweenPixelsInclusive;
                         ++sourceColorsOffset;
                     }
@@ -212,9 +208,7 @@ namespace PixelFarm.Agg.Imaging
                     }
                     else
                     {
-                        Color color = sourceColors[sourceColorsOffset];
-                        color.alpha = (byte)((color.alpha * (cover) + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, color);
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                     }
                     bufferOffset += bytesBetweenPixelsInclusive;
                     ++sourceColorsOffset;
@@ -288,8 +282,7 @@ namespace PixelFarm.Agg.Imaging
                 {
                     do
                     {
-                        sourceColors[sourceColorsOffset].alpha = (byte)((sourceColors[sourceColorsOffset].alpha * cover + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                         bufferOffset += bytesBetweenPixelsInclusive;
                         ++sourceColorsOffset;
                     }
@@ -307,9 +300,7 @@ namespace PixelFarm.Agg.Imaging
                     }
                     else
                     {
-                        Color color = sourceColors[sourceColorsOffset];
-                        color.alpha = (byte)((color.alpha * (cover) + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, color);
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                     }
                     bufferOffset += bytesBetweenPixelsInclusive;
                     ++sourceColorsOffset;

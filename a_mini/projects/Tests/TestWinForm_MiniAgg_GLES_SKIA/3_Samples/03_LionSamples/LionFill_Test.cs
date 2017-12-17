@@ -127,7 +127,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                 var colorBuffer = lionShape.Colors;
                 for (int i = lionShape.NumPaths - 1; i >= 0; --i)
                 {
-                    colorBuffer[i].alpha = alpha;
+                    colorBuffer[i] = colorBuffer[i].NewFromChangeAlpha(alpha);
                 }
             }
         }

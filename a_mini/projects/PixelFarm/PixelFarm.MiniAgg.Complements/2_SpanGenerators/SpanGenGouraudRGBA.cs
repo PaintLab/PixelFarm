@@ -190,10 +190,13 @@ namespace PixelFarm.Agg
                 if (vb < 0) { vb = 0; } else if (vb > lim) { vb = (int)lim; }
                 if (va < 0) { va = 0; } else if (va > lim) { va = (int)lim; }
 
-                outputColors[startIndex].red = (byte)vr;
-                outputColors[startIndex].green = (byte)vg;
-                outputColors[startIndex].blue = (byte)vb;
-                outputColors[startIndex].alpha = (byte)va;
+                //outputColors[startIndex].red = (byte)vr;
+                //outputColors[startIndex].green = (byte)vg;
+                //outputColors[startIndex].blue = (byte)vb;
+                //outputColors[startIndex].alpha = (byte)va;
+
+                outputColors[startIndex] = Color.FromArgb((byte)va, (byte)vr, (byte)vg, (byte)vb);
+
                 line_r.Next(SUBPIXEL_SCALE);
                 line_g.Next(SUBPIXEL_SCALE);
                 line_b.Next(SUBPIXEL_SCALE);
@@ -211,10 +214,17 @@ namespace PixelFarm.Agg
             //-------------------------
             while (len != 0 && nlen > 0)
             {
-                outputColors[startIndex].red = ((byte)line_r.y());
-                outputColors[startIndex].green = ((byte)line_g.y());
-                outputColors[startIndex].blue = ((byte)line_b.y());
-                outputColors[startIndex].alpha = ((byte)line_a.y());
+                //outputColors[startIndex].red = ((byte)line_r.y());
+                //outputColors[startIndex].green = ((byte)line_g.y());
+                //outputColors[startIndex].blue = ((byte)line_b.y());
+                //outputColors[startIndex].alpha = ((byte)line_a.y());
+
+                outputColors[startIndex] = Color.FromArgb(
+                    (byte)line_a.y(),
+                    (byte)line_r.y(),
+                    (byte)line_g.y(),
+                    (byte)line_b.y()
+                    );
                 line_r.Next(SUBPIXEL_SCALE);
                 line_g.Next(SUBPIXEL_SCALE);
                 line_b.Next(SUBPIXEL_SCALE);
@@ -238,10 +248,11 @@ namespace PixelFarm.Agg
                 if (vb < 0) { vb = 0; } else if (vb > lim) { vb = (int)lim; }
                 if (va < 0) { va = 0; } else if (va > lim) { va = (int)lim; }
 
-                outputColors[startIndex].red = ((byte)vr);
-                outputColors[startIndex].green = ((byte)vg);
-                outputColors[startIndex].blue = ((byte)vb);
-                outputColors[startIndex].alpha = ((byte)va);
+                //outputColors[startIndex].red = ((byte)vr);
+                //outputColors[startIndex].green = ((byte)vg);
+                //outputColors[startIndex].blue = ((byte)vb);
+                //outputColors[startIndex].alpha = ((byte)va);
+                outputColors[startIndex] = Color.FromArgb(((byte)va), ((byte)vr), ((byte)vg), ((byte)vb));
                 line_r.Next(SUBPIXEL_SCALE);
                 line_g.Next(SUBPIXEL_SCALE);
                 line_b.Next(SUBPIXEL_SCALE);
