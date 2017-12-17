@@ -29,7 +29,7 @@ struct path_attributes
     agg::rgba8 fill_color;
     agg::rgba8 stroke_color;
     double     stroke_width;
-	PM_REMOVE
+	/*PM_REMOVE*/
     path_attributes() {}
     path_attributes(unsigned idx, 
                     const agg::rgba8& fill,
