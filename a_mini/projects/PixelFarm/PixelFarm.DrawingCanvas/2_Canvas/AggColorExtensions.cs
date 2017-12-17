@@ -1,7 +1,11 @@
-﻿using System; 
+﻿using System;
 namespace PixelFarm.Drawing
-{   
-    public static class AggColorExtensions
+{
+
+    /// <summary>
+    /// Agg's Color Extension
+    /// </summary>
+    public static class ColorEx
     {
         public const int COVER_SHIFT = 8;
         public const int COVER_SIZE = 1 << COVER_SHIFT;  //----cover_size 
@@ -54,7 +58,7 @@ namespace PixelFarm.Drawing
         public static Color mul(this Color A, float b)
         {
             float conv = b / 255f;
-            return AggColorExtensions.Make(A.R * conv, A.B * conv, A.B * conv, A.A * conv);
+            return ColorEx.Make(A.R * conv, A.B * conv, A.B * conv, A.A * conv);
         }
         //------------------------------------------
         public static Color Make(int r_, int g_, int b_, int a_)

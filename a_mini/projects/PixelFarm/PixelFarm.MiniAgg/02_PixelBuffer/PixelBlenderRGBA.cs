@@ -128,10 +128,10 @@ namespace PixelFarm.Agg.Imaging
                         byte g = buffer[bufferOffset + CO.G];
                         byte b = buffer[bufferOffset + CO.B];
                         byte a = buffer[bufferOffset + CO.A];
-                        buffer[bufferOffset + CO.R] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
-                        buffer[bufferOffset + CO.G] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
-                        buffer[bufferOffset + CO.B] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
-                        buffer[bufferOffset + CO.A] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)AggColorExtensions.BASE_SHIFT));
+                        buffer[bufferOffset + CO.R] = (byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
+                        buffer[bufferOffset + CO.G] = (byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
+                        buffer[bufferOffset + CO.B] = (byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
+                        buffer[bufferOffset + CO.A] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorEx.BASE_SHIFT));
                     }
                 }
             }
@@ -242,10 +242,10 @@ namespace PixelFarm.Agg.Imaging
                 byte g = buffer[bufferOffset + CO.G];
                 byte b = buffer[bufferOffset + CO.B];
                 byte a = buffer[bufferOffset + CO.A];
-                buffer[bufferOffset + CO.R] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
-                buffer[bufferOffset + CO.G] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
-                buffer[bufferOffset + CO.B] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
-                buffer[CO.A] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)AggColorExtensions.BASE_SHIFT));
+                buffer[bufferOffset + CO.R] = m_gamma.inv((byte)(((sourceColor.red - r) * sourceColor.alpha + (r << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
+                buffer[bufferOffset + CO.G] = m_gamma.inv((byte)(((sourceColor.green - g) * sourceColor.alpha + (g << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
+                buffer[bufferOffset + CO.B] = m_gamma.inv((byte)(((sourceColor.blue - b) * sourceColor.alpha + (b << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
+                buffer[CO.A] = (byte)((sourceColor.alpha + a) - ((sourceColor.alpha * a + BASE_MASK) >> (int)ColorEx.BASE_SHIFT));
             }
         }
 

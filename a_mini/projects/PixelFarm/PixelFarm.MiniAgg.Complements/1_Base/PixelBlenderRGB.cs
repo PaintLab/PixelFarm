@@ -186,9 +186,9 @@ namespace PixelFarm.Agg.Imaging
                 int r = buffer[bufferOffset + CO.R];
                 int g = buffer[bufferOffset + CO.G];
                 int b = buffer[bufferOffset + CO.B];
-                buffer[bufferOffset + CO.R] = (byte)(((sourceColor.R - r) * sourceColor.A + (r << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
-                buffer[bufferOffset + CO.G] = (byte)(((sourceColor.G - g) * sourceColor.A + (g << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
-                buffer[bufferOffset + CO.B] = (byte)(((sourceColor.B - b) * sourceColor.A + (b << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
+                buffer[bufferOffset + CO.R] = (byte)(((sourceColor.R - r) * sourceColor.A + (r << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
+                buffer[bufferOffset + CO.G] = (byte)(((sourceColor.G - g) * sourceColor.A + (g << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
+                buffer[bufferOffset + CO.B] = (byte)(((sourceColor.B - b) * sourceColor.A + (b << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
             }
         }
 
@@ -289,9 +289,9 @@ namespace PixelFarm.Agg.Imaging
                 int r = buffer[bufferOffset + CO.R];
                 int g = buffer[bufferOffset + CO.G];
                 int b = buffer[bufferOffset + CO.B];
-                buffer[bufferOffset + CO.R] = m_gamma.inv((byte)(((sourceColor.R - r) * sourceColor.A + (r << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
-                buffer[bufferOffset + CO.G] = m_gamma.inv((byte)(((sourceColor.G - g) * sourceColor.A + (g << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
-                buffer[bufferOffset + CO.B] = m_gamma.inv((byte)(((sourceColor.B - b) * sourceColor.A + (b << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
+                buffer[bufferOffset + CO.R] = m_gamma.inv((byte)(((sourceColor.R - r) * sourceColor.A + (r << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
+                buffer[bufferOffset + CO.G] = m_gamma.inv((byte)(((sourceColor.G - g) * sourceColor.A + (g << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
+                buffer[bufferOffset + CO.B] = m_gamma.inv((byte)(((sourceColor.B - b) * sourceColor.A + (b << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
             }
         }
 
