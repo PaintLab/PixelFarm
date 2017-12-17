@@ -16,7 +16,9 @@ namespace PixelFarm.Drawing.GLES2
         }
 
         public static CanvasGL2d CreateCanvasGL2d(int w, int h)
-        {
+        {            
+            //the canvas may need some init modules
+            //so we start the canvass internaly here
             return new CanvasGL2d(w, h);
         }
 
