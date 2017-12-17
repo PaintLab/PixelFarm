@@ -38,7 +38,7 @@ namespace PixelFarm.Agg.Imaging
     /// </summary>
     static class ClampFrom9To8Bits
     {
-        internal static readonly int[] _ = new int[1 << 9];
+        internal static readonly byte[] _ = new byte[1 << 9];
         static ClampFrom9To8Bits()
         {
             //this is a clamp table
@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Imaging
             //if we don't use this clamp table
             for (int i = _.Length - 1; i >= 0; --i)
             {
-                _[i] = Math.Min(i, 255);
+                _[i] = (byte)Math.Min(i, 255);
             }
         }
     }
@@ -128,35 +128,15 @@ namespace PixelFarm.Agg.Imaging
         //straight.A = premultiplied.A;
 
 
-        public PixelBlenderBGRA()
-        {
-        }
 
-        public void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count)
-        {
-            do
-            {
-                buffer[bufferOffset + CO.A] = sourceColor.alpha;
-                buffer[bufferOffset + CO.R] = sourceColor.red;
-                buffer[bufferOffset + CO.G] = sourceColor.green;
-                buffer[bufferOffset + CO.B] = sourceColor.blue;
-                bufferOffset += 4;
-            }
-            while (--count != 0);
-        }
-
-        public void CopyPixel(byte[] buffer, int bufferOffset, Color sourceColor)
-        {
-            buffer[bufferOffset + CO.R] = sourceColor.red;
-            buffer[bufferOffset + CO.G] = sourceColor.green;
-            buffer[bufferOffset + CO.B] = sourceColor.blue;
-            buffer[bufferOffset + CO.A] = sourceColor.alpha;
-            bufferOffset += 4;
-        }
         public void BlendPixel(byte[] buffer, int bufferOffset, Color sourceColor)
         {
             //unsafe
             {
+                //img's buffer destination is pre-multiplied alpha color
+                //this blend color from 'Straight alpha color' to  image buffer target
+                //so we use => Straight alpha
+                //result = (source.RGB* source.A) + (dest.RGB* (1 - source.A))
                 unchecked
                 {
                     if (sourceColor.alpha == 255)
@@ -230,12 +210,47 @@ namespace PixelFarm.Agg.Imaging
                 while (--count != 0);
             }
         }
-
+        /// <summary>
+        /// direct set source color to destination buffer
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="bufferOffset"></param>
+        /// <param name="sourceColor"></param>
+        /// <param name="count"></param>
+        public void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count)
+        {
+            do
+            {
+                buffer[bufferOffset + CO.A] = sourceColor.alpha;
+                buffer[bufferOffset + CO.R] = sourceColor.red;
+                buffer[bufferOffset + CO.G] = sourceColor.green;
+                buffer[bufferOffset + CO.B] = sourceColor.blue;
+                bufferOffset += 4;
+            }
+            while (--count != 0);
+        }
+        /// <summary>
+        ///  direct set source color to destination buffer 
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="bufferOffset"></param>
+        /// <param name="sourceColor"></param>
+        public void CopyPixel(byte[] buffer, int bufferOffset, Color sourceColor)
+        {
+            buffer[bufferOffset + CO.R] = sourceColor.red;
+            buffer[bufferOffset + CO.G] = sourceColor.green;
+            buffer[bufferOffset + CO.B] = sourceColor.blue;
+            buffer[bufferOffset + CO.A] = sourceColor.alpha;
+            bufferOffset += 4;
+        }
         public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
-            //TODO: review here ...
-            //
-            //change if the buffer is pre-mul or not
+            //TODO: review here ...             
+            //check if the buffer is pre-multiplied color?
+            //if yes=> this is not correct, 
+            //we must convert the pixel from pre-multiplied color 
+            //to the 'straight alpha color'
+
             return new Color(
                 buffer[bufferOffset + CO.A],
                 buffer[bufferOffset + CO.R],
@@ -247,6 +262,7 @@ namespace PixelFarm.Agg.Imaging
     }
 
 
+    
     public sealed class PixelBlenderGammaBGRA : PixelBlenderBGRABase, IPixelBlender
     {
         GammaLookUpTable m_gamma;
@@ -315,15 +331,36 @@ namespace PixelFarm.Agg.Imaging
         }
     }
 
+    /// <summary>
+    /// pre-multiplied alpha rgba
+    /// </summary>
     public sealed class PixelBlenderPreMultBGRA : PixelBlenderBGRABase, IPixelBlender
     {
-
+        //from https://microsoft.github.io/Win2D/html/PremultipliedAlpha.htm
+        //1. Straight alpha
+        //result = (source.RGB* source.A) + (dest.RGB* (1 - source.A))
+        //---
+        //2. Premultiplied alpha
+        //result = source.RGB + (dest.RGB * (1 - source.A))
+        //---
+        //3. Converting between alpha formats
+        //3.1 from straight to premult
+        //premultiplied.R = (byte) (straight.R* straight.A / 255);
+        //premultiplied.G = (byte) (straight.G* straight.A / 255);
+        //premultiplied.B = (byte) (straight.B* straight.A / 255);
+        //premultiplied.A = straight.A;
+        //3.2 from premult to strait
+        //straight.R = premultiplied.R  * ((1/straight.A) * 255);
+        //straight.G = premultiplied.G  * ((1/straight.A) * 255);
+        //straight.B = premultiplied.B  * ((1/straight.A) * 255);
+        //straight.A = premultiplied.A;
         public PixelBlenderPreMultBGRA()
         {
         }
 
         public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
+            //TODO: review here, this may not correct for pre-multiplied alpha RGB
             return new Color(buffer[bufferOffset + CO.A],
                 buffer[bufferOffset + CO.R],
                 buffer[bufferOffset + CO.G],
@@ -332,14 +369,15 @@ namespace PixelFarm.Agg.Imaging
 
         public void CopyPixels(byte[] buffer, int bufferOffset, Color sourceColor, int count)
         {
-            for (int i = 0; i < count; i++)
+            do
             {
                 buffer[bufferOffset + CO.R] = sourceColor.red;
                 buffer[bufferOffset + CO.G] = sourceColor.green;
                 buffer[bufferOffset + CO.B] = sourceColor.blue;
                 buffer[bufferOffset + CO.A] = sourceColor.alpha;
                 bufferOffset += 4;
-            }
+
+            } while (--count != 0);
         }
         public void CopyPixel(byte[] buffer, int bufferOffset, Color sourceColor)
         {
@@ -349,7 +387,7 @@ namespace PixelFarm.Agg.Imaging
             buffer[bufferOffset + CO.A] = sourceColor.alpha;
         }
 
-        public void BlendPixel(byte[] pDestBuffer, int bufferOffset, Color sourceColor)
+        public void BlendPixel(byte[] buffer, int bufferOffset, Color sourceColor)
         {
             //unsafe
             {
@@ -376,20 +414,20 @@ namespace PixelFarm.Agg.Imaging
 					pDestBuffer[bufferOffset + ImageBuffer.OrderA] = 255;
 					            
 #else
-                    int r = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * oneOverAlpha + 255) >> 8) + sourceColor.red];
-                    int g = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * oneOverAlpha + 255) >> 8) + sourceColor.green];
-                    int b = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * oneOverAlpha + 255) >> 8) + sourceColor.blue];
-                    int a = pDestBuffer[bufferOffset + CO.A];
-                    pDestBuffer[bufferOffset + CO.R] = (byte)r;
-                    pDestBuffer[bufferOffset + CO.G] = (byte)g;
-                    pDestBuffer[bufferOffset + CO.B] = (byte)b;
-                    pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(oneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                    byte r = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.R] * oneOverAlpha + 255) >> 8) + sourceColor.red];
+                    byte g = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.G] * oneOverAlpha + 255) >> 8) + sourceColor.green];
+                    byte b = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.B] * oneOverAlpha + 255) >> 8) + sourceColor.blue];
+                    byte a = buffer[bufferOffset + CO.A];
+                    buffer[bufferOffset + CO.R] = r;
+                    buffer[bufferOffset + CO.G] = g;
+                    buffer[bufferOffset + CO.B] = b;
+                    buffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(oneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
 #endif
                 }
             }
         }
 
-        public void BlendPixels(byte[] pDestBuffer, int bufferOffset,
+        public void BlendPixels(byte[] buffer, int bufferOffset,
             Color[] sourceColors, int sourceColorsOffset,
             byte[] sourceCovers, int sourceCoversOffset, bool firstCoverForAll, int count)
         {
@@ -407,24 +445,24 @@ namespace PixelFarm.Agg.Imaging
                             Color sourceColor = sourceColors[sourceColorsOffset];
                             if (sourceColor.alpha == 255)
                             {
-                                pDestBuffer[bufferOffset + CO.R] = (byte)sourceColor.red;
-                                pDestBuffer[bufferOffset + CO.G] = (byte)sourceColor.green;
-                                pDestBuffer[bufferOffset + CO.B] = (byte)sourceColor.blue;
-                                pDestBuffer[bufferOffset + CO.A] = 255;
+                                buffer[bufferOffset + CO.R] = sourceColor.red;
+                                buffer[bufferOffset + CO.G] = sourceColor.green;
+                                buffer[bufferOffset + CO.B] = sourceColor.blue;
+                                buffer[bufferOffset + CO.A] = 255;
                             }
                             else
                             {
                                 int OneOverAlpha = BASE_MASK - sourceColor.alpha;
                                 unchecked
                                 {
-                                    int r = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                    int g = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                    int b = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                                    int a = pDestBuffer[bufferOffset + CO.A];
-                                    pDestBuffer[bufferOffset + CO.R] = (byte)r;
-                                    pDestBuffer[bufferOffset + CO.G] = (byte)g;
-                                    pDestBuffer[bufferOffset + CO.B] = (byte)b;
-                                    pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                                    byte r = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                                    byte g = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                                    byte b = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                                    byte a = buffer[bufferOffset + CO.A];
+                                    buffer[bufferOffset + CO.R] = r;
+                                    buffer[bufferOffset + CO.G] = g;
+                                    buffer[bufferOffset + CO.B] = b;
+                                    buffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                                 }
                             }
 #endif
@@ -444,24 +482,24 @@ namespace PixelFarm.Agg.Imaging
                             }
                             else if (alpha == 255)
                             {
-                                pDestBuffer[bufferOffset + CO.R] = (byte)sourceColor.red;
-                                pDestBuffer[bufferOffset + CO.G] = (byte)sourceColor.green;
-                                pDestBuffer[bufferOffset + CO.B] = (byte)sourceColor.blue;
-                                pDestBuffer[bufferOffset + CO.A] = (byte)alpha;
+                                buffer[bufferOffset + CO.R] = sourceColor.red;
+                                buffer[bufferOffset + CO.G] = sourceColor.green;
+                                buffer[bufferOffset + CO.B] = sourceColor.blue;
+                                buffer[bufferOffset + CO.A] = (byte)alpha;
                             }
                             else
                             {
                                 int OneOverAlpha = BASE_MASK - alpha;
                                 unchecked
                                 {
-                                    int r = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                                    int g = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                                    int b = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                                    int a = pDestBuffer[bufferOffset + CO.A];
-                                    pDestBuffer[bufferOffset + CO.R] = (byte)r;
-                                    pDestBuffer[bufferOffset + CO.G] = (byte)g;
-                                    pDestBuffer[bufferOffset + CO.B] = (byte)b;
-                                    pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                                    byte r = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                                    byte g = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                                    byte b = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                                    byte a = buffer[bufferOffset + CO.A];
+                                    buffer[bufferOffset + CO.R] = r;
+                                    buffer[bufferOffset + CO.G] = g;
+                                    buffer[bufferOffset + CO.B] = b;
+                                    buffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                                 }
                             }
                             sourceColorsOffset++;
@@ -478,24 +516,24 @@ namespace PixelFarm.Agg.Imaging
                     int alpha = (sourceColor.alpha * sourceCovers[sourceCoversOffset] + 255) / 256;
                     if (alpha == 255)
                     {
-                        pDestBuffer[bufferOffset + CO.R] = (byte)sourceColor.red;
-                        pDestBuffer[bufferOffset + CO.G] = (byte)sourceColor.green;
-                        pDestBuffer[bufferOffset + CO.B] = (byte)sourceColor.blue;
-                        pDestBuffer[bufferOffset + CO.A] = (byte)alpha;
+                        buffer[bufferOffset + CO.R] = (byte)sourceColor.red;
+                        buffer[bufferOffset + CO.G] = (byte)sourceColor.green;
+                        buffer[bufferOffset + CO.B] = (byte)sourceColor.blue;
+                        buffer[bufferOffset + CO.A] = (byte)alpha;
                     }
                     else if (alpha > 0)
                     {
                         int OneOverAlpha = BASE_MASK - alpha;
                         unchecked
                         {
-                            int r = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
-                            int g = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
-                            int b = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
-                            int a = pDestBuffer[bufferOffset + CO.A];
-                            pDestBuffer[bufferOffset + CO.R] = (byte)r;
-                            pDestBuffer[bufferOffset + CO.G] = (byte)g;
-                            pDestBuffer[bufferOffset + CO.B] = (byte)b;
-                            pDestBuffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
+                            byte r = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.R] * OneOverAlpha + 255) >> 8) + sourceColor.red];
+                            byte g = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.G] * OneOverAlpha + 255) >> 8) + sourceColor.green];
+                            byte b = ClampFrom9To8Bits._[((buffer[bufferOffset + CO.B] * OneOverAlpha + 255) >> 8) + sourceColor.blue];
+                            byte a = buffer[bufferOffset + CO.A];
+                            buffer[bufferOffset + CO.R] = r;
+                            buffer[bufferOffset + CO.G] = g;
+                            buffer[bufferOffset + CO.B] = b;
+                            buffer[bufferOffset + CO.A] = (byte)(BASE_MASK - ClampFrom9To8Bits._[(OneOverAlpha * (BASE_MASK - a) + 255) >> 8]);
                         }
                     }
                     sourceColorsOffset++;
@@ -505,8 +543,6 @@ namespace PixelFarm.Agg.Imaging
             }
         }
     }
-
-
 
 #if DEBUG
     public sealed class PixelBlenderPolyColorPreMultBGRA : PixelBlenderBGRABase, IPixelBlender
@@ -550,18 +586,18 @@ namespace PixelFarm.Agg.Imaging
                 int oneOverAlpha = BASE_MASK - sourceA;
                 unchecked
                 {
-                    int sourceR = (byte)(ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.red + 255) >> 8]);
-                    int sourceG = (byte)(ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.green + 255) >> 8]);
-                    int sourceB = (byte)(ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.blue + 255) >> 8]);
-                    int destR = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * oneOverAlpha + 255) >> 8) + sourceR];
-                    int destG = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * oneOverAlpha + 255) >> 8) + sourceG];
-                    int destB = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * oneOverAlpha + 255) >> 8) + sourceB];
+                    byte sourceR = ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.red + 255) >> 8];
+                    byte sourceG = ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.green + 255) >> 8];
+                    byte sourceB = ClampFrom9To8Bits._[(polyColor.Alpha0To255 * sourceColor.blue + 255) >> 8];
+                    byte destR = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.R] * oneOverAlpha + 255) >> 8) + sourceR];
+                    byte destG = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.G] * oneOverAlpha + 255) >> 8) + sourceG];
+                    byte destB = ClampFrom9To8Bits._[((pDestBuffer[bufferOffset + CO.B] * oneOverAlpha + 255) >> 8) + sourceB];
                     // TODO: calculated the correct dest alpha
                     //int destA = pDestBuffer[bufferOffset + ImageBuffer.OrderA];
 
-                    pDestBuffer[bufferOffset + CO.R] = (byte)destR;
-                    pDestBuffer[bufferOffset + CO.G] = (byte)destG;
-                    pDestBuffer[bufferOffset + CO.B] = (byte)destB;
+                    pDestBuffer[bufferOffset + CO.R] = destR;
+                    pDestBuffer[bufferOffset + CO.G] = destG;
+                    pDestBuffer[bufferOffset + CO.B] = destB;
                     //pDestBuffer[bufferOffset + ImageBuffer.OrderA] = (byte)(base_mask - m_Saturate9BitToByte[(oneOverAlpha * (base_mask - a) + 255) >> 8]);
                 }
             }
