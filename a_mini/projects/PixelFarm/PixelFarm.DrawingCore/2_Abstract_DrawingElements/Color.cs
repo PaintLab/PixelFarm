@@ -166,15 +166,18 @@ namespace PixelFarm.Drawing
             return (uint)((c1._a << 24) | (c1._r << 16) | (c1._g << 8) | (c1._b)) !=
                   (uint)((c2._a << 24) | (c2._r << 16) | (c2._g << 8) | (c2._b));
         }
-        //public uint ToARGB()
-        //{
-        //    return (uint)((this.a << 24) | (this.r << 16) | (this.g << 8) | this.b);
-        //}
+        public int ToARGB()
+        {
+            return ((this._a << 24) | (this._r << 16) | (this._g << 8) | this._b);
+        }
         public uint ToABGR()
         {
             return (uint)((this._a << 24) | (this._b << 16) | (this._g << 8) | this._r);
         }
-
+        //public int ToABGRi()
+        //{
+        //    return ((this._a << 24) | (this._b << 16) | (this._g << 8) | this._r);
+        //}
         public byte Red0To255
         {
             get { return _r; }

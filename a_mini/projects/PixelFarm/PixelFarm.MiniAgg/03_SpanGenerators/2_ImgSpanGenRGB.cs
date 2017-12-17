@@ -27,8 +27,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
-using img_filter_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgFilterConst;
+using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst; 
 namespace PixelFarm.Agg.Imaging
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
