@@ -17,7 +17,7 @@ namespace PixelFarm.DrawingGL
         int _height;
         Color _fillColor;
         Color _strokeColor;
-        RectInt _rectInt;
+        RectInt _clipBox;
 
         RoundedRect roundRect;
         Arc arcTool;
@@ -32,7 +32,7 @@ namespace PixelFarm.DrawingGL
             _canvas = canvas;
             _width = w;
             _height = h;
-            _rectInt = new RectInt(0, 0, w, h);
+            _clipBox = new RectInt(0, 0, w, h);
             arcTool = new Arc();
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
@@ -65,12 +65,12 @@ namespace PixelFarm.DrawingGL
         {
             get
             {
-                return _rectInt;
+                return _clipBox;
             }
 
             set
             {
-                _rectInt = value;
+                _clipBox = value;
             }
         }
         public override SmoothingMode SmoothingMode
