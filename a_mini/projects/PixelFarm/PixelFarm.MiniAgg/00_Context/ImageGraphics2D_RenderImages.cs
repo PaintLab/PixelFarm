@@ -260,9 +260,8 @@ namespace PixelFarm.Agg
             var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
                 source,
                 Drawing.Color.Black,
-                new SpanInterpolatorLinear(sourceRectTransform));
-
-            var v2 = destRectTransform.TransformToVxs(v1, GetFreeVxs());
+                new SpanInterpolatorLinear(sourceRectTransform)); 
+            VertexStore v2 = destRectTransform.TransformToVxs(v1, GetFreeVxs());
             Render(v2, imgSpanGen);
             //
             ReleaseVxs(ref v1);

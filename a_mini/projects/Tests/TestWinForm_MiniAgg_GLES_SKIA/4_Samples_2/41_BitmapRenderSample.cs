@@ -44,6 +44,7 @@ namespace PixelFarm.Agg.Sample_Images
         {
             //actualImage2 = LoadImage(RootDemoPath.Path + "\\plain01.png");
             actualImage = LoadImage(RootDemoPath.Path + "\\02.jpg");
+
             affinePlans = new AffinePlan[] {
                 AffinePlan.Translate(50, 50) };
         }
@@ -66,9 +67,9 @@ namespace PixelFarm.Agg.Sample_Images
         public override void Draw(CanvasPainter p)
         {
             p.Clear(Drawing.Color.White);
-            //p.DrawImage(actualImage, 0, 200);
-          //  p.DrawImage(actualImage, affinePlan1);
-            p.DrawImage(actualImage, affinePlans);
+            p.DrawImage(actualImage, 0, 200);
+            //  p.DrawImage(actualImage, affinePlan1);
+            //p.DrawImage(actualImage, affinePlans);
             //p.DrawImage(actualImage, 100,200);
 
             //p.FillColor = Drawing.Color.Blue;
