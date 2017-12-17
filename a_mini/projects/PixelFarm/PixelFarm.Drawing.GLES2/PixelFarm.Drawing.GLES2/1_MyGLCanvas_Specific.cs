@@ -92,10 +92,10 @@ namespace PixelFarm.Drawing.GLES2
         int CanvasOrgY { get { return (int)this.canvasOriginY; } }
 
 
-        //=====================================
-        //static 
-        static readonly int[] _charFit = new int[1];
-        static readonly int[] _charFitWidth = new int[1000];
+        ////=====================================
+        ////static 
+        //static readonly int[] _charFit = new int[1];
+        //static readonly int[] _charFitWidth = new int[1000];
 
         //debug
 #if DEBUG
