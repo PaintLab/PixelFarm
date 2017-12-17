@@ -100,12 +100,12 @@ namespace PixelFarm.Drawing
         public byte alpha
         {
             get { return this._a; }
-            set { this._a = value; }
+
         }
 
-        public byte red { get { return this._r; } set { this._r = value; } }
-        public byte green { get { return this._g; } set { this._g = value; } }
-        public byte blue { get { return this._b; } set { this._b = value; } }
+        public byte red { get { return this._r; } }
+        public byte green { get { return this._g; } }
+        public byte blue { get { return this._b; } }
 
 
         public static Color FromArgb(int a, Color c)
@@ -155,7 +155,7 @@ namespace PixelFarm.Drawing
         public static readonly Color DeepPink = new Color(0xFF, 0xFF, 0x14, 0x93);
         public static readonly Color Magenta = new Color(0xFF, 0xFF, 0, 0xFF);
 
-       
+
         public static bool operator ==(Color c1, Color c2)
         {
             return (uint)((c1._a << 24) | (c1._r << 16) | (c1._g << 8) | (c1._b)) ==
@@ -214,7 +214,7 @@ namespace PixelFarm.Drawing
             return new Color(a, r, g, b);
         }
 
-        static public Color operator +(Color A, Color B)
+        public static Color operator +(Color A, Color B)
         {
             byte r = (byte)((A._r + B._r) > 255 ? 255 : (A._r + B._r));
             byte g = (byte)((A._g + B._g) > 255 ? 255 : (A._g + B._g));
@@ -223,7 +223,7 @@ namespace PixelFarm.Drawing
             return new Color(a, r, g, b);
         }
 
-        static public Color operator -(Color A, Color B)
+        public static Color operator -(Color A, Color B)
         {
             byte red = (byte)((A._r - B._r) < 0 ? 0 : (A._r - B._r));
             byte green = (byte)((A._g - B._g) < 0 ? 0 : (A._g - B._g));
@@ -232,8 +232,29 @@ namespace PixelFarm.Drawing
             return new Color(alpha, red, green, blue);
         }
 
-
-
+        /// <summary>
+        /// rgb= original rgb
+        /// alpha= (byte)((color.alpha * (cover) + 255) >> 8);
+        /// </summary>
+        /// <param name="cover"></param>
+        /// <returns></returns>
+        public Color NewFromChangeCoverage(int cover)
+        {
+            return new Color(
+                (byte)((_a * cover + 255) >> 8),
+                _r, _g, _b);
+        }
+        /// <summary>
+        /// new color from changing the alpha value
+        /// </summary>
+        /// <param name="alpha"></param>
+        /// <returns></returns>
+        public Color NewFromChangeAlpha(byte alpha)
+        {
+            return new Color(
+                 alpha,
+                _r, _g, _b);
+        }
         //public void AddColor(ColorRGBA c, int cover)
         //{
         //    int cr, cg, cb, ca;
