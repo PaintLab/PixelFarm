@@ -21,7 +21,7 @@ namespace SampleWinForms
     {
         Graphics g;
         AggCanvasPainter painter;
-        ImageGraphics2D imgGfx2d;
+        AggRenderSurface imgGfx2d;
         ActualImage destImg;
         Bitmap winBmp;
 
@@ -113,7 +113,7 @@ namespace SampleWinForms
             if (g == null)
             {
                 destImg = new ActualImage(800, 600, PixelFormat.ARGB32);
-                imgGfx2d = new ImageGraphics2D(destImg); //no platform
+                imgGfx2d = new AggRenderSurface(destImg); //no platform
                 painter = new AggCanvasPainter(imgGfx2d);
                 winBmp = new Bitmap(destImg.Width, destImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 g = this.CreateGraphics();

@@ -73,7 +73,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             if (painter == null) { return; }
 
             //
-            Graphics2D gx = painter.Graphics;
+            AggRenderSurface gx = painter.Graphics;
             SpanGenGouraudRGBA gouraudSpanGen = new SpanGenGouraudRGBA();
             gx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma));
             double d = this.DilationValue;

@@ -34,7 +34,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="00_Context\ImageGraphics2D_RenderImages.cs" />
+    <Compile Include="00_Context\AggRenderSurface_RenderImages.cs" />
     <Compile Include="02_PixelBuffer\ChildImage.cs" />
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="02_PixelBuffer\ColorRGBAf.cs" />
@@ -72,11 +72,10 @@
     <Compile Include="08_ImageResampling\ImageFilterLookupTable.cs" />
     <Compile Include="08_ImageResampling\FilterImageSpanGenerator.ImageBufferAccessor.cs" />
     <Compile Include="02_PixelBuffer\GammaLookUpTable.cs" />
-    <Compile Include="00_Context\Graphics2D.cs" />
     <Compile Include="07_Lines\3.3_ImageLineRenderer.cs" />
     <Compile Include="02_PixelBuffer\IImageReaderWriter.cs" />
     <Compile Include="02_PixelBuffer\ImageReaderWriterBase.cs" />
-    <Compile Include="00_Context\ImageGraphics2D.cs" />
+    <Compile Include="00_Context\AggRenderSurface.cs" />
     <Compile Include="02_PixelBuffer\PixelBlenderRGBA.cs" />
     <Compile Include="04_Scanline\1_Scanline.cs" />
     <Compile Include="07_Lines\3.2_OutlineRenderer.cs" />

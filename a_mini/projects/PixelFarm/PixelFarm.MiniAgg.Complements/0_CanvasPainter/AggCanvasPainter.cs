@@ -9,7 +9,7 @@ namespace PixelFarm.Agg
 {
     public class AggCanvasPainter : CanvasPainter
     {
-        ImageGraphics2D gx;
+        AggRenderSurface gx;
         Stroke stroke;
         Color fillColor;
         Color strokeColor;
@@ -34,17 +34,15 @@ namespace PixelFarm.Agg
         int ellipseGenNSteps = 10;
         SmoothingMode _smoothingMode;
 
-        public AggCanvasPainter(ImageGraphics2D graphic2d)
+        public AggCanvasPainter(AggRenderSurface graphic2d)
         {
             this.gx = graphic2d;
             this.sclineRas = gx.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
             this.scline = graphic2d.ScanlinePacked8;
-            this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
-
-
+            this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap; 
         }
-        public Graphics2D Graphics
+        public AggRenderSurface Graphics
         {
             get { return this.gx; }
         }

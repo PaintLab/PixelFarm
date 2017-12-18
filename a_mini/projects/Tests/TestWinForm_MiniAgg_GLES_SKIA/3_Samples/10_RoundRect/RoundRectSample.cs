@@ -116,7 +116,7 @@ namespace PixelFarm.Agg.Sample_RoundRect
             double d = this.SubPixelOffset;
             AggCanvasPainter p2 = p as AggCanvasPainter;
             IPixelBlender prevBlender = null;
-            Graphics2D gx = null;
+            AggRenderSurface gx = null;
             if (p2 != null)
             {
                 //for agg only

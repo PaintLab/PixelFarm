@@ -66,7 +66,7 @@ namespace PixelFarm.Agg
         //    gx.Render(vxs, Color.Black);
         //}
 
-        public static void Rectangle(this Graphics2D gx, double left, double bottom, double right, double top, Color color, double strokeWidth = 1)
+        public static void Rectangle(this AggRenderSurface gx, double left, double bottom, double right, double top, Color color, double strokeWidth = 1)
         {
             stroke.Width = strokeWidth;
             simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
@@ -79,34 +79,34 @@ namespace PixelFarm.Agg
             RelaseVxs(ref v1);
             RelaseVxs(ref v2);
         }
-        public static void Rectangle(this Graphics2D gx, RectD rect, Color color, double strokeWidth = 1)
+        public static void Rectangle(this AggRenderSurface gx, RectD rect, Color color, double strokeWidth = 1)
         {
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color, strokeWidth);
         }
 
-        public static void Rectangle(this Graphics2D gx, RectInt rect, Color color)
+        public static void Rectangle(this AggRenderSurface gx, RectInt rect, Color color)
         {
             gx.Rectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, color);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectD rect, Color fillColor)
+        public static void FillRectangle(this AggRenderSurface gx, RectD rect, Color fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, RectInt rect, Color fillColor)
+        public static void FillRectangle(this AggRenderSurface gx, RectInt rect, Color fillColor)
         {
             gx.FillRectangle(rect.Left, rect.Bottom, rect.Right, rect.Top, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx,
+        public static void FillRectangle(this AggRenderSurface gx,
             Vector2 leftBottom,
             Vector2 rightTop, Color fillColor)
         {
             gx.FillRectangle(leftBottom.x, leftBottom.y, rightTop.x, rightTop.y, fillColor);
         }
 
-        public static void FillRectangle(this Graphics2D gx, double left,
+        public static void FillRectangle(this AggRenderSurface gx, double left,
             double bottom, double right, double top, Color fillColor)
         {
             if (right < left || top < bottom)
@@ -119,14 +119,14 @@ namespace PixelFarm.Agg
             gx.Render(simpleRect.MakeVertexSnap(v1), fillColor);
             RelaseVxs(ref v1);
         }
-        public static void Circle(this Graphics2D g, double x, double y, double radius, Color color)
+        public static void Circle(this AggRenderSurface g, double x, double y, double radius, Color color)
         {
             ellipse.Set(x, y, radius, radius);
             var v1 = GetFreeVxs();
             g.Render(ellipse.MakeVxs(v1), color);
             RelaseVxs(ref v1);
         }
-        public static void Circle(this Graphics2D g, Vector2 origin, double radius, Color color)
+        public static void Circle(this AggRenderSurface g, Vector2 origin, double radius, Color color)
         {
             Circle(g, origin.x, origin.y, radius, color);
         }

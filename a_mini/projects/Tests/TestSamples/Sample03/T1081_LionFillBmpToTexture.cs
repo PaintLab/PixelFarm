@@ -22,7 +22,7 @@ namespace OpenTkEssTest
         //---------------------------
 
         ActualImage aggImage;
-        ImageGraphics2D imgGfx2d;
+        AggRenderSurface imgGfx2d;
         AggCanvasPainter aggPainter;
 
         //---------------------------
@@ -43,7 +43,7 @@ namespace OpenTkEssTest
             RectD lionBounds = lionShape.Bounds;
             //-------------
             aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
-            imgGfx2d = new ImageGraphics2D(aggImage);
+            imgGfx2d = new AggRenderSurface(aggImage);
             aggPainter = new AggCanvasPainter(imgGfx2d);
 
 

@@ -151,7 +151,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
             }
 
             //-----------------------
-            Graphics2D graphics2D = p1.Graphics;
+            AggRenderSurface graphics2D = p1.Graphics;
             //var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             //int width = widgetsSubImage.Width;
             //int height = widgetsSubImage.Height; 

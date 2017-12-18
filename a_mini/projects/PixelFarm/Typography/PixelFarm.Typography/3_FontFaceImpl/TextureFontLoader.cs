@@ -300,7 +300,7 @@ namespace PixelFarm.Drawing.Fonts
                 //-------------------------------------------- 
                 //create glyph img 
                 ActualImage img = new Agg.ActualImage(w, h, PixelFormat.ARGB32);
-                ImageGraphics2D imgCanvas2d = new Agg.ImageGraphics2D(img);
+                AggRenderSurface imgCanvas2d = new Agg.AggRenderSurface(img);
                 AggCanvasPainter painter = new Agg.AggCanvasPainter(imgCanvas2d);
                 painter.FillColor = Color.Black;
                 painter.StrokeColor = Color.Black;
@@ -413,7 +413,7 @@ namespace PixelFarm.Drawing.Fonts
                 //-------------------------------------------- 
                 //create glyph img 
                 ActualImage img = new Agg.ActualImage(w, h, PixelFormat.ARGB32);
-                ImageGraphics2D imgCanvas2d = new Agg.ImageGraphics2D(img);
+                AggRenderSurface imgCanvas2d = new Agg.AggRenderSurface(img);
                 AggCanvasPainter painter = new Agg.AggCanvasPainter(imgCanvas2d);
                 //we use white glyph on black bg for this texture                
                 painter.Clear(Color.Black); //fill with black

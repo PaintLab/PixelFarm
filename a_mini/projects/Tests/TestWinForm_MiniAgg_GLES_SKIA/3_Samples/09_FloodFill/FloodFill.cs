@@ -24,7 +24,7 @@ namespace PixelFarm.Agg.Sample_FloodFill
         {
             BackgroundColor = Color.White;
             imageToFillOn = new ActualImage(400, 300, PixelFormat.ARGB32);
-            ImageGraphics2D imageToFillGraphics = Graphics2D.CreateFromImage(imageToFillOn);
+            AggRenderSurface imageToFillGraphics = new AggRenderSurface(imageToFillOn);
             imageToFillGraphics.Clear(Color.White);
             //imageToFillGraphics.DrawString("Click to fill", 20, 30);
             imageToFillGraphics.Circle(new Vector2(200, 150), 35, Color.Black);
