@@ -10,11 +10,11 @@ namespace OpenTkEssTest
     [Info("T105_Stencil")]
     public class T105_Stencil : DemoBase
     {
-        CanvasGL2d canvas2d;
+        RenderSurface canvas2d;
         GLCanvasPainter painter;
         PixelFarm.Drawing.RenderVx stencilPolygon;
         PixelFarm.Drawing.RenderVx rectPolygon;
-        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter;

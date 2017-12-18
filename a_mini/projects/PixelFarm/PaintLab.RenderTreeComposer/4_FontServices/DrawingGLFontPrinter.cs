@@ -25,7 +25,7 @@ namespace PixelFarm.DrawingGL
         VxsTextPrinter textPrinter;
         int bmpWidth;
         int bmpHeight;
-        CanvasGL2d canvas;
+        RenderSurface canvas;
         GLCanvasPainter canvasPainter;
 
         public AggTextSpanPrinter(GLCanvasPainter canvasPainter, int w, int h)
@@ -184,7 +184,7 @@ namespace PixelFarm.DrawingGL
 
         //--------
         GlyphLayout _glyphLayout = new GlyphLayout();
-        CanvasGL2d canvas2d;
+        RenderSurface canvas2d;
         GLCanvasPainter painter;
         SimpleFontAtlas simpleFontAtlas;
         Typography.TextServices.IFontLoader _fontLoader;

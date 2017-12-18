@@ -26,12 +26,12 @@ namespace OpenTkEssTest
         AggCanvasPainter aggPainter;
 
         //---------------------------
-        CanvasGL2d canvas2d;
+        RenderSurface canvas2d;
         SpriteShape lionShape;
         GLCanvasPainter painter;
 
         GLBitmap glBmp;
-        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter;

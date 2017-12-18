@@ -9,11 +9,11 @@ namespace OpenTkEssTest
     [Info("T401_MsdfTest1")]
     public class T401_MsdfTest1 : DemoBase
     {
-        CanvasGL2d canvas2d;
+        RenderSurface canvas2d;
         bool resInit;
         GLBitmap msdf_bmp;
         GLBitmap sdf_bmp;
-        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
 

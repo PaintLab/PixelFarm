@@ -12,7 +12,7 @@ namespace PixelFarm.DrawingGL
 {
     public sealed class GLCanvasPainter : CanvasPainter
     {
-        CanvasGL2d _canvas;
+        RenderSurface _canvas;
         int _width;
         int _height;
         Color _fillColor;
@@ -27,7 +27,7 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         InternalGraphicsPathBuilder _igfxPathBuilder;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
-        public GLCanvasPainter(CanvasGL2d canvas)
+        public GLCanvasPainter(RenderSurface canvas)
         {
             _canvas = canvas;
             _width = canvas.CanvasWidth;
@@ -44,7 +44,7 @@ namespace PixelFarm.DrawingGL
         {
             _canvas.SetCanvasOrigin((int)ox, (int)oy);
         }
-        public CanvasGL2d Canvas { get { return this._canvas; } }
+        public RenderSurface Canvas { get { return this._canvas; } }
 
         public override RequestFont CurrentFont
         {

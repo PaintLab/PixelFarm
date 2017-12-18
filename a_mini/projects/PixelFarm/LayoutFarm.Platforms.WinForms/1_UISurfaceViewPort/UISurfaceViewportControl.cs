@@ -33,7 +33,7 @@ namespace LayoutFarm.UI
 #if GL_ENABLE
         IntPtr hh1;
         OpenGL.GpuOpenGLSurfaceView openGLSurfaceView;
-        CanvasGL2d canvas2d;
+        RenderSurface canvas2d;
         GLCanvasPainter canvasPainter;
 #endif
         void HandleGLPaint(object sender, System.EventArgs e)

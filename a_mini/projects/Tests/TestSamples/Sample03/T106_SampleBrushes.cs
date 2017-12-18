@@ -10,13 +10,13 @@ namespace OpenTkEssTest
     [Info("T106_SampleBrushes")]
     public class T106_SampleBrushes : DemoBase
     {
-        CanvasGL2d canvas2d;
+        RenderSurface canvas2d;
         GLCanvasPainter painter;
         RenderVx polygon1;
         RenderVx polygon2;
         RenderVx polygon3;
 
-        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter;

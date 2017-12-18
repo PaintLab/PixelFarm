@@ -36,7 +36,7 @@ namespace Mini
 
             demo.Width = w;
             demo.Height = h;
-            CanvasGL2d canvas2d;
+            RenderSurface canvas2d;
             GLCanvasPainter canvasPainter;
             demo.BuildCustomDemoGLContext(out canvas2d, out canvasPainter);
             if (canvas2d == null)

@@ -11,11 +11,11 @@ namespace OpenTkEssTest
     [Info("T111_FrameBuffer")]
     public class T111_FrameBuffer : DemoBase
     {
-        CanvasGL2d canvas2d;
+        RenderSurface canvas2d;
         GLCanvasPainter painter;
         FrameBuffer frameBuffer;
         bool isInit;
-        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter;

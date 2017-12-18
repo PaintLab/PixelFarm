@@ -15,11 +15,11 @@ namespace PixelFarm.Drawing.GLES2
             GLES2PlatformFontMx.AddTextureFontInfo(fontName, xmlGlyphPos, glypBitmap);
         }
 
-        public static CanvasGL2d CreateCanvasGL2d(int w, int h)
+        public static RenderSurface CreateCanvasGL2d(int w, int h)
         {            
             //the canvas may need some init modules
             //so we start the canvass internaly here
-            return new CanvasGL2d(w, h);
+            return new RenderSurface(w, h);
         }
 
         public static void SetFontLoader(IFontLoader fontLoader)

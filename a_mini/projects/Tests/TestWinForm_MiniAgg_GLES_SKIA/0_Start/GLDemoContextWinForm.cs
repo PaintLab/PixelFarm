@@ -12,7 +12,7 @@ namespace Mini
         DemoBase demobase;
         OpenTK.MyGLControl glControl;
         IntPtr hh1;
-        CanvasGL2d canvas2d;
+        RenderSurface canvas2d;
         GLCanvasPainter canvasPainter;
 
         public void LoadGLControl(OpenTK.MyGLControl glControl)

@@ -19,8 +19,8 @@ namespace PixelFarm.DrawingGL
         IntPtr hfont;
         int bmpWidth = 200;
         int bmpHeight = 50;
-        CanvasGL2d canvas;
-        public WinGdiFontPrinter(CanvasGL2d canvas, int w, int h)
+        RenderSurface canvas;
+        public WinGdiFontPrinter(RenderSurface canvas, int w, int h)
         {
             this.canvas = canvas;
             _width = w;

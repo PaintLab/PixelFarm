@@ -5,8 +5,10 @@ using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.DrawingGL
 {
-
-    public sealed class CanvasGL2d
+    /// <summary>
+    /// internal GLES2 render surface
+    /// </summary>
+    public sealed class RenderSurface
     {
         SmoothLineShader smoothLineShader;
         InvertAlphaLineSmoothShader invertAlphaFragmentShader;
@@ -40,7 +42,7 @@ namespace PixelFarm.DrawingGL
         SmoothBorderBuilder smoothBorderBuilder = new SmoothBorderBuilder();
 
 
-        internal CanvasGL2d(int canvasW, int canvasH)
+        internal RenderSurface(int canvasW, int canvasH)
         {
             //-------------
             //y axis points upward (like other OpenGL)

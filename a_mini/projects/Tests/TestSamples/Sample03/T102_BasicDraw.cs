@@ -9,11 +9,11 @@ namespace OpenTkEssTest
     [Info("T102_BasicDraw")]
     public class T102_BasicDraw : DemoBase
     {
-        CanvasGL2d canvas2d;
+        RenderSurface canvas2d;
         GLCanvasPainter painter;
         PixelFarm.Drawing.RenderVx polygon1;
         PixelFarm.Drawing.RenderVx polygon2;
-        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter;
