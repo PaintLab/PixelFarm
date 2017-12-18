@@ -57,8 +57,8 @@ namespace OpenTK
         /// </summary>
         public BindingsBase()
         {
-            DelegatesClass = this.GetType().GetNestedType("Delegates", BindingFlags.Static | BindingFlags.NonPublic);
-            CoreClass = this.GetType().GetNestedType("Core", BindingFlags.Static | BindingFlags.NonPublic);
+            //version 2
+            SetupDelegatesAndCoreTypes(out DelegatesClass, out CoreClass);
             if (CoreClass != null)
             {
                 MethodInfo[] methods = CoreClass.GetMethods(BindingFlags.Static | BindingFlags.NonPublic);
@@ -68,8 +68,22 @@ namespace OpenTK
                     CoreFunctionMap.Add(m.Name, m);
                 }
             }
+
+            //version 1
+            //DelegatesClass = this.GetType().GetNestedType("Delegates", BindingFlags.Static | BindingFlags.NonPublic);
+            //CoreClass = this.GetType().GetNestedType("Core", BindingFlags.Static | BindingFlags.NonPublic);
+            //if (CoreClass != null)
+            //{
+            //    MethodInfo[] methods = CoreClass.GetMethods(BindingFlags.Static | BindingFlags.NonPublic);
+            //    CoreFunctionMap = new SortedList<string, MethodInfo>(methods.Length); // Avoid resizing
+            //    foreach (MethodInfo m in methods)
+            //    {
+            //        CoreFunctionMap.Add(m.Name, m);
+            //    }
+            //}
         }
 
+        protected abstract void SetupDelegatesAndCoreTypes(out Type delType, out Type coreType);
 
 
         /// <summary>

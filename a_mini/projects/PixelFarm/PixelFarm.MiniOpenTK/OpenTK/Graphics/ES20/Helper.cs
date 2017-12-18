@@ -36,6 +36,17 @@ namespace OpenTK.Graphics.ES20
         const string Library = "libGLESv2.dll";
         static readonly object sync_root = new object();
 
+        //this is my extensions
+        static GL()
+        {
+
+        }
+
+        protected override void SetupDelegatesAndCoreTypes(out Type delType, out Type coreType)
+        {
+            delType = typeof(Delegates);
+            coreType = typeof(Core);
+        }
         /// <summary>
         /// Returns a synchronization token unique for the GL class.
         /// </summary>
@@ -43,8 +54,6 @@ namespace OpenTK.Graphics.ES20
         {
             get { return sync_root; }
         }
-
-
 
 #pragma warning disable 3019
 #pragma warning disable 1591

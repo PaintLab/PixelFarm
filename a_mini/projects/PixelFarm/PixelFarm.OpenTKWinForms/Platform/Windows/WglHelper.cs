@@ -15,10 +15,18 @@ namespace OpenTK.Platform.Windows
 
         static Wgl()
         {
-            assembly = Assembly.GetExecutingAssembly();
-            wglClass = assembly.GetType("OpenTK.Platform.Windows.Wgl");
-            delegatesClass = wglClass.GetNestedType("Delegates", BindingFlags.Static | BindingFlags.NonPublic);
-            importsClass = wglClass.GetNestedType("Imports", BindingFlags.Static | BindingFlags.NonPublic);
+
+            //version 1
+            //assembly = Assembly.GetExecutingAssembly();
+            //wglClass = assembly.GetType("OpenTK.Platform.Windows.Wgl");
+            //delegatesClass = wglClass.GetNestedType("Delegates", BindingFlags.Static | BindingFlags.NonPublic);
+            //importsClass = wglClass.GetNestedType("Imports", BindingFlags.Static | BindingFlags.NonPublic);
+
+            //version 2:
+            wglClass = typeof(Wgl);
+            assembly = wglClass.Assembly;
+            delegatesClass = typeof(Wgl.Delegates);
+            importsClass = typeof(Wgl.Imports);
             // Ensure core entry points are ready prior to accessing any method.
             // Resolves bug [#993]: "Possible bug in GraphicsContext.CreateDummyContext()" 
             LoadAll();
@@ -83,26 +91,79 @@ namespace OpenTK.Platform.Windows
         }
 
 
-
+        static WglExtensionLoader wglExtensionLoader;
         /// <summary>
         /// Loads all Wgl entry points, core and extensions.
         /// </summary>
-        public static void LoadAll()
+        public static GLExtensionLoader LoadAll()
         {
-            OpenTK.Platform.Utilities.LoadExtensions(typeof(Wgl));
+            if (wglExtensionLoader == null)
+            {
+                wglExtensionLoader = new WglExtensionLoader();
+                OpenTK.Platform.Utilities.LoadExtensions(wglExtensionLoader);
+            }
+            return wglExtensionLoader;
+        }
+        public static void ClearExtensionLoader()
+        {
+            wglExtensionLoader = null;
         }
 
 
 
-        /// <summary>
-        /// Loads the given Wgl entry point.
-        /// </summary>
-        /// <param name="function">The name of the function to load.</param>
-        /// <returns></returns>
-        public static bool Load(string function)
+        class WglExtensionLoader : GLExtensionLoader
         {
-            return OpenTK.Platform.Utilities.TryLoadExtension(typeof(Wgl), function);
+
+            System.Collections.Generic.Dictionary<string, bool> loadedExtNames;
+            public WglExtensionLoader()
+            {
+            }
+            public override bool SupportFuncName(string funcName)
+            {
+                if (loadedExtNames != null)
+                {
+                    return loadedExtNames.ContainsKey(funcName);
+                }
+                return false;
+            }
+            public override int LoadDelegates()
+            {
+                loadedExtNames = new System.Collections.Generic.Dictionary<string, bool>();
+                int supported = 0;
+                Type extensions_class = typeof(Wgl.Delegates);
+                //get all fields
+                FieldInfo[] delegates = extensions_class.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+                //
+                if (delegates == null)
+                    throw new InvalidOperationException("The specified type does not have any loadable extensions.");
+                //
+                foreach (FieldInfo f in delegates)
+                {
+                    //so... this field name must be preserved!
+                    Delegate d = Wgl.LoadDelegate(f.Name, f.FieldType);
+                    if (d != null)
+                    {
+                        loadedExtNames.Add(f.Name, true);
+                        ++supported;
+                    }
+                    f.SetValue(null, d);
+                }
+                Wgl.rebuildExtensionList = true;
+
+                return supported;
+            }
         }
+
+
+        ///// <summary>
+        ///// Loads the given Wgl entry point.
+        ///// </summary>
+        ///// <param name="functionName">The name of the function to load.</param>
+        ///// <returns></returns>
+        //public static bool Load(string functionName)
+        //{
+        //    return OpenTK.Platform.Utilities.TryLoadExtension(typeof(Wgl), functionName);
+        //}
 
 
 
