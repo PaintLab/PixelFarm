@@ -14,8 +14,8 @@ namespace LayoutFarm.Dev
             this.Load += new EventHandler(Form1_Load);
             //------
             this.cmbPlatformSelector.Items.Add(InnerViewportKind.GdiPlus);
-            this.cmbPlatformSelector.Items.Add(InnerViewportKind.Skia);
             this.cmbPlatformSelector.Items.Add(InnerViewportKind.GL);
+            this.cmbPlatformSelector.Items.Add(InnerViewportKind.Skia);
             this.cmbPlatformSelector.SelectedIndex = 0;//set default
 
 
