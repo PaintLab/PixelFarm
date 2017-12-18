@@ -244,7 +244,7 @@
     <Compile Include="6_Typography\ITextPrinter.cs" />
     <Compile Include="3_Agg_PixelBuffer\ActualImage.cs" />
     <Compile Include="3_Agg_PixelBuffer\AggMemMx.cs" />
-    <Compile Include="0_BufferMx\AggBuffMx.cs" />
+    <Compile Include="0_BufferMx\NativeMemMx.cs" />
     <Compile Include="4_Agg_Vertex\0_VertexCommandAndOrientation.cs" />
     <Compile Include="4_Agg_Vertex\1_VertexStore.cs" />
     <Compile Include="4_Agg_Vertex\2_VertexStoreSnap.cs" />
