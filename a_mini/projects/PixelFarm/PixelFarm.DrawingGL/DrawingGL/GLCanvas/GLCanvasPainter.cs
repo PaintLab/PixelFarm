@@ -209,19 +209,43 @@ namespace PixelFarm.DrawingGL
             ReleaseVxs(ref v2);
             ReleaseVxs(ref v1);
         }
-
+        DrawingGL.GLBitmap ResolveForGLBitmap(Image image)
+        {
+            var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
+            if (cacheBmp != null)
+            {
+                return cacheBmp;
+            }
+            else
+            {
+                //TODO: review here
+                //we should create 'borrow' method ? => send direct exact ptr to img buffer 
+                //for now, create a new one -- after we copy we, don't use it 
+                var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
+                image.RequestInternalBuffer(ref req);
+                byte[] copy = req.OutputBuffer;
+                var glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
+                Image.SetCacheInnerImage(image, glBmp);
+                return glBmp;
+            }
+        }
         public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
         {
             //create gl bmp
-            GLBitmap glBmp = new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
-            _canvas.DrawImage(glBmp, 0, 0);
-            glBmp.Dispose();
+            GLBitmap glBmp = ResolveForGLBitmap(actualImage);// new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
+            if (glBmp != null)
+            {
+                _canvas.DrawImage(glBmp, 0, 0);
+            }
+
         }
         public override void DrawImage(ActualImage actualImage, double x, double y)
         {
             GLBitmap glBmp = new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
-            _canvas.DrawImage(glBmp, (float)x, (float)y);
-            glBmp.Dispose();
+            if (glBmp != null)
+            {
+                _canvas.DrawImage(glBmp, (float)x, (float)y);
+            }
         }
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
         {
