@@ -21,6 +21,7 @@ namespace LayoutFarm.UI
         public UISurfaceViewportControl()
         {
             InitializeComponent();
+            this.panel1.Visible = false;
         }
         public UIPlatform Platform
         {
@@ -81,8 +82,9 @@ namespace LayoutFarm.UI
                         openGLSurfaceView = view;
                         //view.Dock = DockStyle.Fill;
                         //this.Controls.Add(view);
+                        this.panel1.Visible = true;
                         this.panel1.Controls.Add(view);
-                            
+
                         //--------------------------------------- 
                         view.Bind(bridge);
                         this.winBridge = bridge;
