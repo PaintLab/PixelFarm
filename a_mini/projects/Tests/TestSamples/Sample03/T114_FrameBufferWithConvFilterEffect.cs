@@ -10,14 +10,14 @@ namespace OpenTkEssTest
     [Info("T114_FrameBuffer")]
     public class T114_FrameBufferWithConvFilterEffect : DemoBase
     {
-        RenderSurface canvas2d;
+        GLRenderSurface canvas2d;
         GLCanvasPainter painter;
         FrameBuffer frameBuffer;
 
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
-        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter;

@@ -12,7 +12,7 @@ namespace OpenTkEssTest
     [Info("T109_LionFillWithRenderVx")]
     public class T109_LionFillWithRenderVx : DemoBase
     {
-        RenderSurface canvas2d;
+        GLRenderSurface canvas2d;
         SpriteShape lionShape;
         VertexStore lionVxs;
         GLCanvasPainter painter;
@@ -20,7 +20,7 @@ namespace OpenTkEssTest
         int tmpDrawVersion = 0;
         MultiPartTessResult multipartTessResult;
 
-        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter;

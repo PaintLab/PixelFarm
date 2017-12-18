@@ -11,14 +11,14 @@ namespace OpenTkEssTest
     [Info("T404_FontAtlas")]
     public class T404_FontAtlas : DemoBase
     {
-        RenderSurface canvas2d;
+        GLRenderSurface canvas2d;
         bool resInit;
         GLBitmap msdf_bmp;
         GLCanvasPainter painter;
         PixelFarm.Agg.ActualImage totalImg;
         SimpleFontAtlas fontAtlas;
 
-        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter;

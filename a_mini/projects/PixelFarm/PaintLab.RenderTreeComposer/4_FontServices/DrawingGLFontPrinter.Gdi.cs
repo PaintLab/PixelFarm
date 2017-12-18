@@ -19,10 +19,10 @@ namespace PixelFarm.DrawingGL
         IntPtr hfont;
         int bmpWidth = 200;
         int bmpHeight = 50;
-        RenderSurface canvas;
-        public WinGdiFontPrinter(RenderSurface canvas, int w, int h)
+        GLRenderSurface _glsf;
+        public WinGdiFontPrinter(GLRenderSurface glsf, int w, int h)
         {
-            this.canvas = canvas;
+            this._glsf = glsf;
             _width = w;
             _height = h;
             bmpWidth = w;
@@ -129,7 +129,7 @@ namespace PixelFarm.DrawingGL
             }
             //------------------------------------------------------
             GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, false);
-            canvas.DrawImage(glBmp, (float)x, (float)y);
+            _glsf.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();
         }
 

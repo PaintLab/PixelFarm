@@ -9,9 +9,9 @@ namespace OpenTkEssTest
     [Info("T110_DrawText")]
     public class T110_DrawText : DemoBase
     {
-        RenderSurface canvas2d;
+        GLRenderSurface canvas2d;
         GLCanvasPainter painter;
-        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
         {
             this.canvas2d = canvasGL;
             this.painter = painter; 

@@ -29,7 +29,7 @@ namespace TestGlfw
     }
     class GlfwSkia : GlfwAppBase
     {
-        static PixelFarm.DrawingGL.RenderSurface canvasGL2d;
+        static PixelFarm.DrawingGL.GLRenderSurface canvasGL2d;
         static MyNativeRGBA32BitsImage myImg;
         public GlfwSkia()
         {

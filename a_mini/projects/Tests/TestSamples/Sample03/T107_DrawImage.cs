@@ -9,24 +9,24 @@ namespace OpenTkEssTest
     [Info("T107_SampleDrawImage")]
     public class T107_SampleDrawImage : DemoBase
     {
-        RenderSurface canvas2d;
+        GLRenderSurface _glsf;
         bool resInit;
         GLBitmap glbmp;
-        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
         {
-            this.canvas2d = canvasGL;
+            this._glsf = canvasGL;
 
         }
 
         protected override void DemoClosing()
         {
-            canvas2d.Dispose();
+            _glsf.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            canvas2d.ClearColorBuffer();
+            _glsf.SmoothMode = CanvasSmoothMode.Smooth;
+            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsf.ClearColorBuffer();
             if (!resInit)
             {
                 //glbmp = LoadTexture(@"..\logo-dark.jpg");
@@ -35,9 +35,9 @@ namespace OpenTkEssTest
                 resInit = true;
             }
 
-            canvas2d.DrawSubImage(glbmp, 10, 10, 100, 100, 200, 400);
-            canvas2d.DrawImage(glbmp, 0, 300);
-            canvas2d.DrawImageWithBlurX(glbmp, 0, 600);
+            _glsf.DrawSubImage(glbmp, 10, 10, 100, 100, 200, 400);
+            _glsf.DrawImage(glbmp, 0, 300);
+            _glsf.DrawImageWithBlurX(glbmp, 0, 600);
             SwapBuffers();
         }
     }

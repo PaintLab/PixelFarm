@@ -10,35 +10,35 @@ namespace OpenTkEssTest
     [Info("T113_FrameBuffer")]
     public class T113_FrameBufferWithBlur : DemoBase
     {
-        RenderSurface canvas2d;
+        GLRenderSurface _glsf;
         GLCanvasPainter painter;
         FrameBuffer frameBuffer;
         FrameBuffer frameBuffer2;
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
-        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
         {
-            this.canvas2d = canvasGL;
+            this._glsf = canvasGL;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
-            frameBuffer = canvas2d.CreateFrameBuffer(this.Width, this.Height);
+            frameBuffer = _glsf.CreateFrameBuffer(this.Width, this.Height);
             frameBufferNeedUpdate = true;
             //------------ 
-            frameBuffer2 = canvas2d.CreateFrameBuffer(this.Width, this.Height);
+            frameBuffer2 = _glsf.CreateFrameBuffer(this.Width, this.Height);
         }
         protected override void DemoClosing()
         {
-            canvas2d.Dispose();
+            _glsf.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            canvas2d.Clear(PixelFarm.Drawing.Color.White);
-            canvas2d.ClearColorBuffer();
+            _glsf.SmoothMode = CanvasSmoothMode.Smooth;
+            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsf.Clear(PixelFarm.Drawing.Color.White);
+            _glsf.ClearColorBuffer();
             //-------------------------------
             if (!isInit)
             {
@@ -51,30 +51,30 @@ namespace OpenTkEssTest
                 {
                     //------------------------------------------------------------------------------------           
                     //framebuffer
-                    canvas2d.AttachFrameBuffer(frameBuffer);
+                    _glsf.AttachFrameBuffer(frameBuffer);
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
-                    canvas2d.Clear(PixelFarm.Drawing.Color.Red);
-                    canvas2d.DrawImageWithBlurX(glbmp, 0, 300);
-                    canvas2d.DetachFrameBuffer();
+                    _glsf.Clear(PixelFarm.Drawing.Color.Red);
+                    _glsf.DrawImageWithBlurX(glbmp, 0, 300);
+                    _glsf.DetachFrameBuffer();
                     //------------------------------------------------------------------------------------  
                     //framebuffer2
-                    canvas2d.AttachFrameBuffer(frameBuffer2);
+                    _glsf.AttachFrameBuffer(frameBuffer2);
                     GLBitmap bmp2 = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
                     bmp2.IsBigEndianPixel = true;
-                    canvas2d.DrawImageWithBlurY(bmp2, 0, 300);
-                    canvas2d.DetachFrameBuffer();
+                    _glsf.DrawImageWithBlurY(bmp2, 0, 300);
+                    _glsf.DetachFrameBuffer();
                     //------------------------------------------------------------------------------------  
                     //after release current, we move back to default frame buffer again***
                     frameBufferNeedUpdate = false;
 
                 }
-                canvas2d.DrawFrameBuffer(frameBuffer2, 15, 300);
+                _glsf.DrawFrameBuffer(frameBuffer2, 15, 300);
             }
             else
             {
-                canvas2d.Clear(PixelFarm.Drawing.Color.Blue);
+                _glsf.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
             SwapBuffers();

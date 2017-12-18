@@ -8,7 +8,7 @@ namespace PixelFarm.DrawingGL
     /// <summary>
     /// internal GLES2 render surface
     /// </summary>
-    public sealed class RenderSurface
+    public sealed class GLRenderSurface
     {
         SmoothLineShader smoothLineShader;
         InvertAlphaLineSmoothShader invertAlphaFragmentShader;
@@ -30,8 +30,8 @@ namespace PixelFarm.DrawingGL
 
         int canvasOriginX = 0;
         int canvasOriginY = 0;
-        int _canvasW;
-        int _canvasH;
+        int _width;
+        int _height;
 
         MyMat4 orthoView;
         MyMat4 flipVerticalView;
@@ -42,7 +42,7 @@ namespace PixelFarm.DrawingGL
         SmoothBorderBuilder smoothBorderBuilder = new SmoothBorderBuilder();
 
 
-        internal RenderSurface(int canvasW, int canvasH)
+        internal GLRenderSurface(int width, int height)
         {
             //-------------
             //y axis points upward (like other OpenGL)
@@ -50,14 +50,14 @@ namespace PixelFarm.DrawingGL
             //please NOTE: left lower corner of the canvas is (0,0)
             //-------------
 
-            this._canvasW = canvasW;
-            this._canvasH = canvasH;
+            this._width = width;
+            this._height = height;
             //setup viewport size,
             //we need W:H ratio= 1:1 , square viewport
-            int max = Math.Max(canvasW, canvasH);
+            int max = Math.Max(width, height);
             orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
 
-            flipVerticalView = MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -canvasH, 0));
+            flipVerticalView = MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -height, 0));
             orthoAndFlip = orthoView * flipVerticalView;
             //-----------------------------------------------------------------------
             shaderRes = new CanvasToShaderSharedResource();
@@ -98,15 +98,15 @@ namespace PixelFarm.DrawingGL
 
             GL.ClearColor(1, 1, 1, 1);
             //-------------------------------------------------------------------------------
-            GL.Viewport(0, 0, canvasW, canvasH);
+            GL.Viewport(0, 0, width, height);
         }
         public int CanvasWidth
         {
-            get { return _canvasW; }
+            get { return _width; }
         }
         public int CanvasHeight
         {
-            get { return _canvasH; }
+            get { return _height; }
         }
         bool _flipY;
         public bool FlipY
@@ -861,7 +861,7 @@ namespace PixelFarm.DrawingGL
         {
             //int originalW = 800;
             //set new viewport
-            GL.Viewport(x, y, _canvasW, _canvasH);
+            GL.Viewport(x, y, _width, _height);
             //GL.MatrixMode(MatrixMode.Projection);
             //GL.LoadIdentity();
             //GL.Ortho(0, originalW, 0, originalW, 0.0, 100.0);

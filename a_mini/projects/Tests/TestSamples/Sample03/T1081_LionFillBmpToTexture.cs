@@ -26,14 +26,14 @@ namespace OpenTkEssTest
         AggCanvasPainter aggPainter;
 
         //---------------------------
-        RenderSurface canvas2d;
+        GLRenderSurface _glsf;
         SpriteShape lionShape;
         GLCanvasPainter painter;
 
         GLBitmap glBmp;
-        protected override void OnGLContextReady(RenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
         {
-            this.canvas2d = canvasGL;
+            this._glsf = canvasGL;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -53,7 +53,7 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            canvas2d.Dispose();
+            _glsf.Dispose();
         }
         static void DrawLion(CanvasPainter p, SpriteShape shape, VertexStore myvxs)
         {
@@ -68,11 +68,11 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            canvas2d.ClearColorBuffer();
+            _glsf.SmoothMode = CanvasSmoothMode.Smooth;
+            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsf.ClearColorBuffer();
             //-------------------------------
-            canvas2d.DrawImage(glBmp, 0, 600);
+            _glsf.DrawImage(glBmp, 0, 600);
             SwapBuffers();
         }
     }
