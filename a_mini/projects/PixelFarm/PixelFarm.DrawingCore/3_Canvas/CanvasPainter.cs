@@ -18,7 +18,7 @@
 // 
 // Class to output the vertex source of a string as a run of glyphs.
 //----------------------------------------------------------------------------
-using System;
+ 
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing
 {
