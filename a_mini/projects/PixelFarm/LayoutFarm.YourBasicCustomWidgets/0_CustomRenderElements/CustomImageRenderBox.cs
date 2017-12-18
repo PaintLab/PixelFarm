@@ -31,6 +31,7 @@ namespace LayoutFarm.CustomWidgets
                 {
                     case ImageBinderState.Loaded:
                         {
+                            //canvas.FillRectangle(Color.Red, 0, 0, this.Width, this.Height);
                             canvas.DrawImage(imageBinder.Image,
                                 new RectangleF(0, 0, this.Width, this.Height));
                         }
