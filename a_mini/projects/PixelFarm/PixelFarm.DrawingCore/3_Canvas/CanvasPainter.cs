@@ -28,8 +28,9 @@ namespace PixelFarm.Drawing
         //who implement this class
         //1. AggCanvasPainter
         //2. GdiPlushCanvasPainter
-        //3.
-
+        //3. GLCanvasPainter
+        //4. SkiaCanvasPainter
+        //5. PdfCanvasPainter
 
         public abstract float OriginX { get; }
         public abstract float OriginY { get; }
