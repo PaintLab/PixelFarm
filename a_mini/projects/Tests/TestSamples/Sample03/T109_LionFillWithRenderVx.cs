@@ -12,7 +12,7 @@ namespace OpenTkEssTest
     [Info("T109_LionFillWithRenderVx")]
     public class T109_LionFillWithRenderVx : DemoBase
     {
-        GLRenderSurface canvas2d;
+        GLRenderSurface _glsf;
         SpriteShape lionShape;
         VertexStore lionVxs;
         GLCanvasPainter painter;
@@ -20,9 +20,9 @@ namespace OpenTkEssTest
         int tmpDrawVersion = 0;
         MultiPartTessResult multipartTessResult;
 
-        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
         {
-            this.canvas2d = canvasGL;
+            this._glsf = glsf;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -74,13 +74,13 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            canvas2d.Dispose();
+            _glsf.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            canvas2d.ClearColorBuffer();
+            _glsf.SmoothMode = CanvasSmoothMode.Smooth;
+            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsf.ClearColorBuffer();
             //-------------------------------
             if (tmpDrawVersion == 2)
             {
@@ -91,7 +91,7 @@ namespace OpenTkEssTest
                     int j = multipartTessResult.PartCount;
                     for (int i = 0; i < j; ++i)
                     {
-                        canvas2d.FillRenderVx(colors[i], multipartTessResult, i);
+                        _glsf.FillRenderVx(colors[i], multipartTessResult, i);
                     }
                 }
 
@@ -102,7 +102,7 @@ namespace OpenTkEssTest
                 Color[] colors = lionShape.Colors;
                 for (int i = 0; i < j; ++i)
                 {
-                    canvas2d.FillRenderVx(colors[i], lionRenderVxList[i]);
+                    _glsf.FillRenderVx(colors[i], lionRenderVxList[i]);
                 }
             }
             //-------------------------------

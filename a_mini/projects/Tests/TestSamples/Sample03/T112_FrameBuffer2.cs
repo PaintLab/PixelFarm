@@ -10,34 +10,34 @@ namespace OpenTkEssTest
     [Info("T112_FrameBuffer")]
     public class T112_FrameBuffer : DemoBase
     {
-        GLRenderSurface canvas2d;
+        GLRenderSurface _glsf;
         GLCanvasPainter painter;
         FrameBuffer frameBuffer;
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
-        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
         {
-            this.canvas2d = canvasGL;
+            this._glsf = glsf;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            frameBuffer = canvas2d.CreateFrameBuffer(this.Width, this.Height);
+            frameBuffer = _glsf.CreateFrameBuffer(this.Width, this.Height);
             frameBufferNeedUpdate = true;
             //------------ 
         }
         protected override void DemoClosing()
         {
-            canvas2d.Dispose();
+            _glsf.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            canvas2d.Clear(PixelFarm.Drawing.Color.White);
-            canvas2d.ClearColorBuffer();
+            _glsf.SmoothMode = CanvasSmoothMode.Smooth;
+            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsf.Clear(PixelFarm.Drawing.Color.White);
+            _glsf.ClearColorBuffer();
             //-------------------------------
             if (!isInit)
             {
@@ -48,23 +48,23 @@ namespace OpenTkEssTest
             {
                 if (frameBufferNeedUpdate)
                 {
-                    canvas2d.AttachFrameBuffer(frameBuffer);
+                    _glsf.AttachFrameBuffer(frameBuffer);
                     //------------------------------------------------------------------------------------  
                     //after make the frameBuffer current
                     //then all drawing command will apply to frameBuffer
                     //do draw to frame buffer here                                        
-                    canvas2d.Clear(PixelFarm.Drawing.Color.Red);
-                    canvas2d.DrawImage(glbmp, 0, 300);
+                    _glsf.Clear(PixelFarm.Drawing.Color.Red);
+                    _glsf.DrawImage(glbmp, 0, 300);
                     //------------------------------------------------------------------------------------  
-                    canvas2d.DetachFrameBuffer();
+                    _glsf.DetachFrameBuffer();
                     //after release current, we move back to default frame buffer again***
                     frameBufferNeedUpdate = false;
                 }
-                canvas2d.DrawFrameBuffer(frameBuffer, 15, 300);
+                _glsf.DrawFrameBuffer(frameBuffer, 15, 300);
             }
             else
             {
-                canvas2d.Clear(PixelFarm.Drawing.Color.Blue);
+                _glsf.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
             SwapBuffers();

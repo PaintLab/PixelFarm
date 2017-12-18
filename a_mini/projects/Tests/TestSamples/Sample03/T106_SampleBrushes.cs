@@ -16,9 +16,9 @@ namespace OpenTkEssTest
         RenderVx polygon2;
         RenderVx polygon3;
 
-        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
         {
-            this._glsf = canvasGL;
+            this._glsf = glsf;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()

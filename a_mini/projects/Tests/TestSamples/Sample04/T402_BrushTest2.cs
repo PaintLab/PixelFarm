@@ -13,15 +13,15 @@ namespace OpenTkEssTest
     [Info("T402_BrushTest2")]
     public class T402_BrushTest2 : DemoBase
     {
-        GLRenderSurface canvas2d;
+        GLRenderSurface _glsf;
         GLCanvasPainter painter;
         RenderVx glyph_vx;
         LinearGradientBrush linearGrBrush2;
         PixelFarm.Agg.VertexStoreSnap tempSnap1;
         //  PixelFarm.Drawing.Fonts.SvgFontStore svgFontStore = new PixelFarm.Drawing.Fonts.SvgFontStore();
-        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
         {
-            this.canvas2d = canvasGL;
+            this._glsf = glsf;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -115,13 +115,13 @@ namespace OpenTkEssTest
         //}
         protected override void DemoClosing()
         {
-            canvas2d.Dispose();
+            _glsf.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            canvas2d.ClearColorBuffer();
+            _glsf.SmoothMode = CanvasSmoothMode.Smooth;
+            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsf.ClearColorBuffer();
             painter.FillColor = PixelFarm.Drawing.Color.Black;
             //painter.FillRectLBWH(0, 0, 150, 150);
             //GLBitmap glBmp = LoadTexture("..\\logo-dark.jpg");

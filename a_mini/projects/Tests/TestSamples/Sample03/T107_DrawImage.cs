@@ -12,9 +12,9 @@ namespace OpenTkEssTest
         GLRenderSurface _glsf;
         bool resInit;
         GLBitmap glbmp;
-        protected override void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
         {
-            this._glsf = canvasGL;
+            this._glsf = glsf;
 
         }
 

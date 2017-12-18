@@ -5,8 +5,9 @@ using OpenTK.Graphics.ES20;
 
 namespace PixelFarm.DrawingGL
 {
+
     /// <summary>
-    /// internal GLES2 render surface
+    /// GLES2 render surface, This is not intended to be used directly from your code
     /// </summary>
     public sealed class GLRenderSurface
     {

@@ -13,7 +13,7 @@ namespace OpenTkEssTest
         GLCanvasPainter painter;
         PixelFarm.Drawing.RenderVx polygon1;
         PixelFarm.Drawing.RenderVx polygon2;
-        protected override void OnGLContextReady(GLRenderSurface glsf, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
         {
             this._glsf = glsf;
             this.painter = painter;

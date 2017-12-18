@@ -65,22 +65,22 @@ namespace Mini
 
         //----------------------------------------------------
         //for GL
-        public virtual void BuildCustomDemoGLContext(out GLRenderSurface canvasGL, out GLCanvasPainter painter)
+        public virtual void BuildCustomDemoGLContext(out GLRenderSurface glsf, out GLCanvasPainter painter)
         {
-            canvasGL = null;
+            glsf = null;
             painter = null;
         }
-        public static void InvokeGLContextReady(DemoBase demo, GLRenderSurface canvasGL, GLCanvasPainter painter)
+        public static void InvokeGLContextReady(DemoBase demo, GLRenderSurface glsf, GLCanvasPainter painter)
         {
             demo._painter = painter;
-            demo.OnGLContextReady(canvasGL, painter);
+            demo.OnGLSurfaceReady(glsf, painter);
             demo.OnReadyForInitGLShaderProgram();
         }
         public static void InvokePainterReady(DemoBase demo, CanvasPainter painter)
         {
             demo.OnPainterReady(painter);
         }
-        protected virtual void OnGLContextReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
+        protected virtual void OnGLSurfaceReady(GLRenderSurface canvasGL, GLCanvasPainter painter)
         {
 
         }
