@@ -39,7 +39,7 @@ namespace OpenTkEssTest
             //System.Runtime.InteropServices.Marshal.Copy(bmpdata.Scan0, buffer, 0, buffer.Length);
             //totalImg.UnlockBits(bmpdata);
             var glyph = new Typography.Rendering.GlyphImage(totalImg.Width, totalImg.Height);
-            glyph.SetImageBuffer(PixelFarm.Agg.ActualImage.GetBuffer2(actualImg), false);
+            glyph.SetImageBuffer(PixelFarm.Agg.ActualImage.CopyImgBuffer(actualImg), false);
             fontAtlas.TotalGlyph = glyph;
         }
         protected override void DemoClosing()

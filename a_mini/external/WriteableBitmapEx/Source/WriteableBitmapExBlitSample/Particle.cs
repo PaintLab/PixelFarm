@@ -1,5 +1,4 @@
-﻿#region Header
-//
+﻿//
 //   Project:           WriteableBitmapEx - Silverlight WriteableBitmap extensions
 //   Description:       Blit Sample for the WriteableBitmap extension methods.
 //
@@ -14,7 +13,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 #if NETFX_CORE
 using Windows.UI.Xaml.Media;
@@ -33,7 +31,6 @@ namespace WriteableBitmapExBlitSample
 {
    public class Particle
    {
-      #region Fields
 
       public Point Position;
       public Point Velocity;
@@ -41,9 +38,7 @@ namespace WriteableBitmapExBlitSample
       public double Lifespan;
       public double Elapsed;
 
-      #endregion
 
-      #region Methods
 
       public void Initiailize()
       {
@@ -63,6 +58,5 @@ namespace WriteableBitmapExBlitSample
          Position.Y += Velocity.Y * elapsedSeconds;
       }
 
-      #endregion
    }
 }

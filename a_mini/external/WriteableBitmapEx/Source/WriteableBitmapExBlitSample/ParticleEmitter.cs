@@ -1,5 +1,4 @@
-﻿#region Header
-//
+﻿//
 //   Project:           WriteableBitmapEx - Silverlight WriteableBitmap extensions
 //   Description:       Blit Sample for the WriteableBitmap extension methods.
 //
@@ -14,7 +13,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 using System;
 
@@ -35,7 +33,6 @@ namespace WriteableBitmapExBlitSample
 {
    public class ParticleEmitter
    {
-      #region Fields
 
       public Point Center { get; set; }
       public List<Particle> Particles = new List<Particle>();
@@ -47,9 +44,7 @@ namespace WriteableBitmapExBlitSample
       double updateInterval = .003;
       HslColor particleColor = new HslColor();
 
-      #endregion
 
-      #region Contructors
 
       public ParticleEmitter()
       {
@@ -57,9 +52,7 @@ namespace WriteableBitmapExBlitSample
          particleColor.L *= .75;
       }
 
-      #endregion
 
-      #region Methods
 
       void CreateParticle()
       {
@@ -93,7 +86,7 @@ namespace WriteableBitmapExBlitSample
           }
           using (TargetBitmap.GetBitmapContext())
           {
-              using (ParticleBitmap.GetBitmapContext())
+              using (ParticleBitmap.GetBitmapContext(ReadWriteMode.ReadOnly))
               {
                   for (int i = 0; i < Particles.Count; i++)
                   {
@@ -103,6 +96,5 @@ namespace WriteableBitmapExBlitSample
               }
           }
       }
-      #endregion
    }
 }

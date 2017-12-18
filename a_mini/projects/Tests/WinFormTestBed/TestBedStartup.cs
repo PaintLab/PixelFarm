@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define GL_ENABLE
+using System;
 using System.Windows.Forms;
 namespace YourImplementation
 {
@@ -6,15 +7,11 @@ namespace YourImplementation
     {
         public static void Setup()
         {
-#if GL_ENABLE
-            OpenTK.Toolkit.Init();
+#if GL_ENABLE 
+            YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
 #endif
             //you can use your font loader
             YourImplementation.BootStrapWinGdi.SetupDefaultValues();
-
-#if GL_ENABLE
-            YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
-#endif
             //default text breaker, this bridge between 
             LayoutFarm.Composers.Default.TextBreaker = new LayoutFarm.Composers.MyManagedTextBreaker();
         }

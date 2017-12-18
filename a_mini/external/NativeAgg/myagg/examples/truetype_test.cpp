@@ -453,7 +453,7 @@ int agg_main(int argc, char* argv[])
 {
     HDC dc = ::GetDC(0);
     the_application app(dc, agg::pix_format_bgr24, flip);
-    app.caption("AGG Example. Rendering TrueType Fonts with WinAPI");
+    app.caption(L"AGG Example. Rendering TrueType Fonts with WinAPI");
 
     if(app.init(640, 520, agg::window_resize))
     {

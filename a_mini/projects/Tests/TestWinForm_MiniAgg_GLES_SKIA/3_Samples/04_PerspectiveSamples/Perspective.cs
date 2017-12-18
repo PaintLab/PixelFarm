@@ -117,13 +117,13 @@ namespace PixelFarm.Agg.Sample_Perspective
                     var v1 = GetFreeVxs();
                     var trans_ell = GetFreeVxs();
                     txBilinear.TransformToVxs(ell.MakeVxs(v1), trans_ell);
-                    painter.FillColor = AggColorExtensions.Make(0.5f, 0.3f, 0.0f, 0.3f);
+                    painter.FillColor = ColorEx.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(trans_ell);
                     //-------------------------------------------------------------
                     //outline
                     double prevStrokeWidth = painter.StrokeWidth;
                     painter.StrokeWidth = 3;
-                    painter.StrokeColor = AggColorExtensions.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                    painter.StrokeColor = ColorEx.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(trans_ell);
                     painter.StrokeWidth = prevStrokeWidth;
 
@@ -158,12 +158,12 @@ namespace PixelFarm.Agg.Sample_Perspective
                     VertexStore v2 = GetFreeVxs();
                     VertexStore transformedEll = GetFreeVxs();
                     txPerspective.TransformToVxs(filledEllipse.MakeVxs(v2), transformedEll);
-                    painter.FillColor = AggColorExtensions.Make(0.5f, 0.3f, 0.0f, 0.3f);
+                    painter.FillColor = ColorEx.Make(0.5f, 0.3f, 0.0f, 0.3f);
                     painter.Fill(transformedEll);
                     //-------------------------------------------------------- 
                     var prevStrokeW = painter.StrokeWidth;
                     painter.StrokeWidth = 3;
-                    painter.StrokeColor = AggColorExtensions.Make(0.0f, 0.3f, 0.2f, 1.0f);
+                    painter.StrokeColor = ColorEx.Make(0.0f, 0.3f, 0.2f, 1.0f);
                     painter.Draw(transformedEll);
                     painter.StrokeWidth = prevStrokeW;
                     ReleaseVxs(ref v2);
@@ -174,7 +174,7 @@ namespace PixelFarm.Agg.Sample_Perspective
 
             //--------------------------
             // Render the "quad" tool and controls
-            painter.FillColor = AggColorExtensions.Make(0f, 0.3f, 0.5f, 0.6f);
+            painter.FillColor = ColorEx.Make(0f, 0.3f, 0.5f, 0.6f);
             var v4 = GetFreeVxs();
             painter.Fill(quadPolygonControl.MakeVxs(v4));
             ReleaseVxs(ref v4);

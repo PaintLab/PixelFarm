@@ -19,6 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using PixelFarm.Drawing;
 
 namespace PixelFarm.Agg
 {
@@ -31,6 +32,7 @@ namespace PixelFarm.Agg
         RGB24,
         GrayScale8,
     }
+
     public sealed class ActualImage : PixelFarm.Drawing.Image
     {
         int width;
@@ -74,7 +76,7 @@ namespace PixelFarm.Agg
                     throw new NotSupportedException();
             }
         }
-        private ActualImage() { }
+
 
         public override void Dispose()
         {
@@ -109,31 +111,14 @@ namespace PixelFarm.Agg
         public int Stride { get { return this.stride; } }
         public int BitDepth { get { return this.bitDepth; } }
         public bool IsBigEndian { get; set; }
-        ////----------------
-        //MyBitmapData lockingBmp;
-        //public override BitmapData LockBits()
-        //{
-        //    return this.lockingBmp = new Agg.ActualImage.MyBitmapData(pixelBuffer);
-        //}
-        //public override void UnlockBits(BitmapData bmpdata)
-        //{
-        //    if (bmpdata == lockingBmp)
-        //    {
-        //        this.lockingBmp.Dispose();
-        //        lockingBmp = null;
-        //    }
-        //    else
-        //    {
-        //        throw new System.NotSupportedException();
-        //    }
-        //}
-        //----------------
+
+
 
         public static byte[] GetBuffer(ActualImage img)
         {
             return img.pixelBuffer;
         }
-        public static int[] GetBuffer2(ActualImage img)
+        public static int[] CopyImgBuffer(ActualImage img)
         {
 
             int[] buff2 = new int[img.width * img.height];
@@ -181,6 +166,49 @@ namespace PixelFarm.Agg
             }
             return img;
         }
+
+        public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
+        {
+            if (pixelFormat != PixelFormat.ARGB32)
+            {
+                throw new NotSupportedException();
+            }
+            byte[] newBuff = new byte[this.pixelBuffer.Length];
+            Buffer.BlockCopy(this.pixelBuffer, 0, newBuff, 0, newBuff.Length);
+            buffRequest.OutputBuffer = newBuff;
+        }
+
+
+
+        public static int CalculateStride(int width, PixelFormat format, out int bitDepth, out int bytesPerPixel)
+        {
+            //stride calcuation helper
+
+            switch (format)
+            {
+                case PixelFormat.ARGB32:
+                    {
+                        bitDepth = 32;
+                        bytesPerPixel = (bitDepth + 7) / 8;
+                        return width * (32 / 8);
+                    }
+                case PixelFormat.GrayScale8:
+                    {
+                        bitDepth = 8; //bit per pixel
+                        bytesPerPixel = (bitDepth + 7) / 8;
+                        return 4 * ((width * bytesPerPixel + 3) / 4);
+                    }
+                case PixelFormat.RGB24:
+                    {
+                        bitDepth = 24; //bit per pixel
+                        bytesPerPixel = (bitDepth + 7) / 8;
+                        return 4 * ((width * bytesPerPixel + 3) / 4);
+                    }
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
 
 
         //class MyBitmapData : PixelFarm.Drawing.BitmapData, IDisposable

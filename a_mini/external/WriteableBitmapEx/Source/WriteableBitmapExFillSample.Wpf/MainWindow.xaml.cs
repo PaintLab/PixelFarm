@@ -16,7 +16,6 @@ namespace WriteableBitmapExFillSample.Wpf
 {
     public partial class MainWindow : Window
     {
-        #region Inner class
 
         private class Circle
         {
@@ -32,9 +31,7 @@ namespace WriteableBitmapExFillSample.Wpf
             }
         }
 
-        #endregion
 
-        #region Fields
 
         private WriteableBitmap writeableBmp;
         private int shapeCount;
@@ -43,9 +40,7 @@ namespace WriteableBitmapExFillSample.Wpf
         private float time;
         private const float timeStep = 0.01f;
 
-        #endregion
 
-        #region Contructors
 
         /// <summary>
         /// MainPage!
@@ -55,9 +50,7 @@ namespace WriteableBitmapExFillSample.Wpf
             InitializeComponent();
         }
 
-        #endregion
 
-        #region Methods
 
         private void Init()
         {
@@ -348,9 +341,7 @@ namespace WriteableBitmapExFillSample.Wpf
             }
         }
 
-        #endregion
 
-        #region Eventhandler
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -377,6 +368,5 @@ namespace WriteableBitmapExFillSample.Wpf
             Reset();
         }
 
-        #endregion
     }
 }

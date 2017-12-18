@@ -1,4 +1,4 @@
-#region Header
+//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of transformation extension methods for the WriteableBitmap class.
@@ -14,7 +14,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 using System;
 
@@ -33,7 +32,6 @@ namespace System.Windows.Media.Imaging
 #endif
  static partial class WriteableBitmapExtensions
     {
-        #region Kernels
 
         ///<summary>
         /// Gaussian blur kernel with the size 5x5
@@ -64,11 +62,8 @@ namespace System.Windows.Media.Imaging
                                                  { 0, -2,  0}
                                               };
 
-        #endregion
 
-        #region Methods
 
-        #region Convolute
 
         /// <summary>
         /// Creates a new filtered WriteableBitmap.
@@ -185,9 +180,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region Invert
 
         /// <summary>
         /// Creates a new inverted WriteableBitmap and returns it.
@@ -196,7 +189,7 @@ namespace System.Windows.Media.Imaging
         /// <returns>The new inverted WriteableBitmap.</returns>
         public static WriteableBitmap Invert(this WriteableBitmap bmp)
         {
-            using (var srcContext = bmp.GetBitmapContext())
+            using (var srcContext = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 var result = BitmapFactory.New(srcContext.Width, srcContext.Height);
                 using (var resultContext = result.GetBitmapContext())
@@ -228,9 +221,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region Color transformations
 
         /// <summary>
         /// Creates a new WriteableBitmap which is the grayscaled version of this one and returns it. The gray values are equal to the brightness values. 
@@ -239,7 +230,7 @@ namespace System.Windows.Media.Imaging
         /// <returns>The new gray WriteableBitmap.</returns>
         public static WriteableBitmap Gray(this WriteableBitmap bmp)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 var nWidth = context.Width;
                 var nHeight = context.Height;
@@ -282,7 +273,7 @@ namespace System.Windows.Media.Imaging
         {
             var factor = (int)((259.0 * (level + 255.0)) / (255.0 * (259.0 - level)) * 255.0);
 
-            using (var context = bmp.GetBitmapContext())
+            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 var nWidth = context.Width;
                 var nHeight = context.Height;
@@ -329,7 +320,7 @@ namespace System.Windows.Media.Imaging
         /// <returns>The new WriteableBitmap.</returns>
         public static WriteableBitmap AdjustBrightness(this WriteableBitmap bmp, int nLevel)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 var nWidth = context.Width;
                 var nHeight = context.Height;
@@ -376,7 +367,7 @@ namespace System.Windows.Media.Imaging
         /// <returns>The new WriteableBitmap.</returns>
         public static WriteableBitmap AdjustGamma(this WriteableBitmap bmp, double value)
         {
-            using (var context = bmp.GetBitmapContext())
+            using (var context = bmp.GetBitmapContext(ReadWriteMode.ReadOnly))
             {
                 var nWidth = context.Width;
                 var nHeight = context.Height;
@@ -416,8 +407,6 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #endregion
     }
 }

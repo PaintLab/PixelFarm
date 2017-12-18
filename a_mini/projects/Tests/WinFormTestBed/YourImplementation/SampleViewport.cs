@@ -28,7 +28,7 @@ namespace LayoutFarm
         }
         public static Image LoadBitmap(string filename)
         {
-            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename);
+            System.Drawing.Bitmap gdiBmp = new System.Drawing.Bitmap(filename); 
             DemoBitmap bmp = new DemoBitmap(gdiBmp.Width, gdiBmp.Height, gdiBmp);
             return bmp;
         }
@@ -111,5 +111,5 @@ namespace LayoutFarm
         }
     }
 
-   
+
 }

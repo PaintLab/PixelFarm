@@ -32,7 +32,7 @@ namespace PixelFarm.Agg
             get { return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering; }
             set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelRendering : ScanlineRenderMode.Default; }
         }
-        Affine BuildImageBoundsPath(
+        static Affine BuildImageBoundsPath(
             int srcW, int srcH,
             VertexStore drawImageRectPath,
             double destX, double destY,
@@ -74,10 +74,10 @@ namespace PixelFarm.Agg
             drawImageRectPath.AddCloseFigure();
             return Affine.NewMatix(plan);
         }
-        Affine BuildImageBoundsPath(
-           int srcW, int srcH,
-           VertexStore drawImageRectPath,
-           double destX, double destY)
+        static Affine BuildImageBoundsPath(
+            int srcW, int srcH,
+            VertexStore drawImageRectPath,
+            double destX, double destY)
         {
             AffinePlan plan = new AffinePlan();
             if (destX != 0 || destY != 0)
@@ -208,7 +208,7 @@ namespace PixelFarm.Agg
                 var interpolator = new SpanInterpolatorLinear(sourceRectTransform);
                 var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(source, Drawing.Color.Black, interpolator);
 
-                
+
                 var v1 = destRectTransform.TransformToVxs(imgBoundsPath, GetFreeVxs());
                 Render(v1, imgSpanGen);
                 ReleaseVxs(ref v1);
@@ -260,9 +260,8 @@ namespace PixelFarm.Agg
             var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
                 source,
                 Drawing.Color.Black,
-                new SpanInterpolatorLinear(sourceRectTransform));
-
-            var v2 = destRectTransform.TransformToVxs(v1, GetFreeVxs());
+                new SpanInterpolatorLinear(sourceRectTransform)); 
+            VertexStore v2 = destRectTransform.TransformToVxs(v1, GetFreeVxs());
             Render(v2, imgSpanGen);
             //
             ReleaseVxs(ref v1);

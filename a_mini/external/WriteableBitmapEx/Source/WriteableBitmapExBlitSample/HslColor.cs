@@ -1,5 +1,4 @@
-﻿#region Header
-//
+﻿//
 //   Project:           WriteableBitmapEx - Silverlight WriteableBitmap extensions
 //   Description:       Blit Sample for the WriteableBitmap extension methods.
 //
@@ -14,7 +13,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 #if NETFX_CORE
 using System;
@@ -31,7 +29,6 @@ namespace WriteableBitmapExBlitSample
 {
    public struct HslColor
    {
-      #region Fields
 
       // value from 0 to 1 
       public double A;
@@ -42,9 +39,7 @@ namespace WriteableBitmapExBlitSample
       // value from 0 to 1 
       public double L;
 
-      #endregion
 
-      #region Methods
 
       private static double ByteToPct(byte v)
       {
@@ -178,6 +173,5 @@ namespace WriteableBitmapExBlitSample
          return Color.FromArgb(PctToByte(A), PctToByte(r), PctToByte(g), PctToByte(b));
       }
 
-      #endregion
    }
 }

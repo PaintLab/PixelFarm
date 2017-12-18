@@ -23,6 +23,7 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
 {
+
     public abstract class ImageReaderWriterBase : IImageReaderWriter
     {
         const int BASE_MASK = 255;
@@ -42,13 +43,13 @@ namespace PixelFarm.Agg
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
         IPixelBlender recieveBlender;
-        //--------------------------------------------
-
-
+        //-------------------------------------------- 
+        public byte[] GetBuffer()
+        {
+            return m_ByteBuffer;
+        }
         protected void Attach(int width, int height, int bitsPerPixel, byte[] imgbuffer, IPixelBlender recieveBlender)
         {
-
-
 
             if (width <= 0 || height <= 0)
             {
@@ -272,11 +273,6 @@ namespace PixelFarm.Agg
             }
         }
 
-        public byte[] GetBuffer()
-        {
-            return m_ByteBuffer;
-        }
-
 
 
         public static void CopySubBufferToInt32Array(ImageReaderWriterBase buff, int mx, int my, int w, int h, int[] buffer)
@@ -300,7 +296,7 @@ namespace PixelFarm.Agg
         }
         public Color GetPixel(int x, int y)
         {
-            return recieveBlender.PixelToColorRGBA_Bytes(m_ByteBuffer, GetBufferOffsetXY(x, y));
+            return recieveBlender.PixelToColorRGBA(m_ByteBuffer, GetBufferOffsetXY(x, y));
         }
         public int GetBufferOffsetXY(int x, int y)
         {
@@ -445,19 +441,22 @@ namespace PixelFarm.Agg
                     int bufferOffset = GetBufferOffsetXY(x, y);
                     do
                     {
-                        byte oldAlpha = sourceColor.A;
-                        //TODO:review here, sourceColor mat not changed
-                        sourceColor.alpha = (byte)(((int)(sourceColor.A) * ((int)(covers[coversIndex++]) + 1)) >> 8);
-                        if (sourceColor.alpha == BASE_MASK)
+                        //byte oldAlpha = sourceColor.A;
+                        ////TODO:review here, sourceColor mat not changed
+                        //sourceColor.alpha = (byte)(((int)(sourceColor.A) * ((int)(covers[coversIndex++]) + 1)) >> 8); 
+
+                        //TODO: review here again
+                        Color newcolor = sourceColor.NewFromChangeCoverage(covers[coversIndex++]);
+                        if (newcolor.alpha == BASE_MASK)
                         {
-                            recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, sourceColor);
+                            recieveBlender.CopyPixel(m_ByteBuffer, bufferOffset, newcolor);
                         }
                         else
                         {
-                            recieveBlender.BlendPixel(m_ByteBuffer, bufferOffset, sourceColor);
+                            recieveBlender.BlendPixel(m_ByteBuffer, bufferOffset, newcolor);
                         }
                         bufferOffset += scanWidthBytes;
-                        sourceColor.alpha = oldAlpha;
+                        //sourceColor.alpha = oldAlpha;
                     }
                     while (--len != 0);
                 }
@@ -574,7 +573,7 @@ namespace PixelFarm.Agg
             {
                 //if (sourceColor.m_A != 0)
                 {
-                    sourceColor.alpha = (byte)((sourceColor.alpha * (cover + 1)) >> 8);
+
 #if false // we blend regardless of the alpha so that we can get Light Opacity working (used this way we have addative and faster blending in one blender) LBB
                     if (sourceColor.m_A == base_mask)
                     {
@@ -583,7 +582,7 @@ namespace PixelFarm.Agg
                     else
 #endif
                     {
-                        recieveBlender.BlendPixel(destBuffer, bufferOffset, sourceColor);
+                        recieveBlender.BlendPixel(destBuffer, bufferOffset, sourceColor.NewFromChangeCoverage(cover));
                     }
                 }
             }
@@ -627,14 +626,25 @@ namespace PixelFarm.Agg
         {
         }
 
+        /// <summary>
+        /// load image to the reader/writer
+        /// </summary>
+        /// <param name="actualImage"></param>
         public void ReloadImage(ActualImage actualImage)
         {
+
             if (this.actualImage == actualImage)
             {
                 return;
             }
+
+            //in this version we support actual images
+            //in 2 formats : 
+            //1. 32 bits ARGB
+            //2. 8  bits gray scale
+            //
+
             this.actualImage = actualImage;
-            //calculate image stride
             switch (actualImage.PixelFormat)
             {
                 case PixelFormat.ARGB32:
@@ -644,11 +654,6 @@ namespace PixelFarm.Agg
                            actualImage.BitDepth,
                            ActualImage.GetBuffer(actualImage),
                            pixelBlenderRGBA ?? (pixelBlenderRGBA = new PixelBlenderBGRA()));
-                        //Attach(actualImage.Width,
-                        //    actualImage.Height,
-                        //    actualImage.BitDepth,
-                        //    ActualImage.GetBuffer(actualImage),
-                        //    pixelBlenderRGBA ?? (pixelBlenderRGBA = new PixelBlenderGammaBGRA(0.8f)));
                     }
                     break;
                 case PixelFormat.GrayScale8:
@@ -660,7 +665,6 @@ namespace PixelFarm.Agg
                           pixelBlenderGray ?? (pixelBlenderGray = new PixelBlenderGray(1)));
                     }
                     break;
-                case PixelFormat.RGB24:
                 default:
                     {
                         throw new NotSupportedException();

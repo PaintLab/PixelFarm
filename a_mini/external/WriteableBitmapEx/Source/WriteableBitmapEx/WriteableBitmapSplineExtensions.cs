@@ -1,4 +1,4 @@
-﻿#region Header
+﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of draw spline extension methods for the WriteableBitmap class.
@@ -14,7 +14,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 using System;
 
@@ -33,15 +32,11 @@ namespace System.Windows.Media.Imaging
 #endif
  static partial class WriteableBitmapExtensions
     {
-        #region Fields
 
         private const float StepFactor = 2f;
 
-        #endregion
 
-        #region Methods
 
-        #region Beziér
 
         /// <summary>
         /// Draws a cubic Beziér spline defined by start, end and two control points.
@@ -165,9 +160,7 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #region Cardinal
 
         /// <summary>
         /// Draws a segment of a Cardinal spline (cubic) defined by four control points.
@@ -334,8 +327,6 @@ namespace System.Windows.Media.Imaging
             }
         }
 
-        #endregion
 
-        #endregion
     }
 }

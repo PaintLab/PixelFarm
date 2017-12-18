@@ -267,7 +267,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgra32, flip_y);
-    app.caption("Image transformation filters comparison");
+    app.caption(L"Image transformation filters comparison");
 
     if(app.init(500, 340, 0))
     {

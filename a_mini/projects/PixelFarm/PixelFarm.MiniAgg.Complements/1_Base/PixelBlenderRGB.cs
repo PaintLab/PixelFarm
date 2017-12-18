@@ -145,16 +145,24 @@ namespace PixelFarm.Agg.Imaging
         };
      */
 
+
+
+#if DEBUG
     public abstract class PixelBlenderBaseBGR
     {
         public int NumPixelBits { get { return 24; } }
         public const byte BASE_MASK = 255;
     }
-
     public sealed class PixelBlenderBGR : PixelBlenderBaseBGR, IPixelBlender
     {
-        public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
+        //for 24 bits color
+
+        public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
+            //check this again
+            //since we get pre-multiplied color from buffer
+            //and put it to a 'straight color', we should convert it
+
             return new Color(
                 buffer[bufferOffset + CO.R],
                 buffer[bufferOffset + CO.G],
@@ -186,9 +194,9 @@ namespace PixelFarm.Agg.Imaging
                 int r = buffer[bufferOffset + CO.R];
                 int g = buffer[bufferOffset + CO.G];
                 int b = buffer[bufferOffset + CO.B];
-                buffer[bufferOffset + CO.R] = (byte)(((sourceColor.R - r) * sourceColor.A + (r << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
-                buffer[bufferOffset + CO.G] = (byte)(((sourceColor.G - g) * sourceColor.A + (g << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
-                buffer[bufferOffset + CO.B] = (byte)(((sourceColor.B - b) * sourceColor.A + (b << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT);
+                buffer[bufferOffset + CO.R] = (byte)(((sourceColor.R - r) * sourceColor.A + (r << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
+                buffer[bufferOffset + CO.G] = (byte)(((sourceColor.G - g) * sourceColor.A + (g << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
+                buffer[bufferOffset + CO.B] = (byte)(((sourceColor.B - b) * sourceColor.A + (b << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT);
             }
         }
 
@@ -212,8 +220,7 @@ namespace PixelFarm.Agg.Imaging
                 {
                     do
                     {
-                        sourceColors[sourceColorsOffset].alpha = (byte)((sourceColors[sourceColorsOffset].A * cover + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                         bufferOffset += 3;
                         ++sourceColorsOffset;
                     }
@@ -231,9 +238,7 @@ namespace PixelFarm.Agg.Imaging
                     }
                     else
                     {
-                        Color color = sourceColors[sourceColorsOffset];
-                        color.alpha = (byte)((color.A * (cover) + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, color);
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                     }
                     bufferOffset += 3;
                     ++sourceColorsOffset;
@@ -242,6 +247,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
     };
+
     public sealed class BlenderGammaBGR : PixelBlenderBaseBGR, IPixelBlender
     {
         GammaLookUpTable m_gamma;
@@ -260,7 +266,7 @@ namespace PixelFarm.Agg.Imaging
             m_gamma = g;
         }
 
-        public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
+        public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
             return new Color(buffer[bufferOffset + CO.R], buffer[bufferOffset + CO.G], buffer[bufferOffset + CO.B]);
         }
@@ -289,9 +295,9 @@ namespace PixelFarm.Agg.Imaging
                 int r = buffer[bufferOffset + CO.R];
                 int g = buffer[bufferOffset + CO.G];
                 int b = buffer[bufferOffset + CO.B];
-                buffer[bufferOffset + CO.R] = m_gamma.inv((byte)(((sourceColor.R - r) * sourceColor.A + (r << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
-                buffer[bufferOffset + CO.G] = m_gamma.inv((byte)(((sourceColor.G - g) * sourceColor.A + (g << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
-                buffer[bufferOffset + CO.B] = m_gamma.inv((byte)(((sourceColor.B - b) * sourceColor.A + (b << (int)AggColorExtensions.BASE_SHIFT)) >> (int)AggColorExtensions.BASE_SHIFT));
+                buffer[bufferOffset + CO.R] = m_gamma.inv((byte)(((sourceColor.R - r) * sourceColor.A + (r << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
+                buffer[bufferOffset + CO.G] = m_gamma.inv((byte)(((sourceColor.G - g) * sourceColor.A + (g << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
+                buffer[bufferOffset + CO.B] = m_gamma.inv((byte)(((sourceColor.B - b) * sourceColor.A + (b << (int)ColorEx.BASE_SHIFT)) >> (int)ColorEx.BASE_SHIFT));
             }
         }
 
@@ -316,7 +322,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        public Color PixelToColorRGBA_Bytes(byte[] buffer, int bufferOffset)
+        public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {
             return new Color(
                 buffer[bufferOffset + CO.R],
@@ -385,9 +391,8 @@ namespace PixelFarm.Agg.Imaging
                 {
                     do
                     {
-                        sourceColors[sourceColorsOffset].alpha = (byte)((sourceColors[sourceColorsOffset].A * cover + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset]);
-                        bufferOffset += 3;
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
+                        bufferOffset += 3; //*** 24 bits?
                         ++sourceColorsOffset;
                     }
                     while (--count != 0);
@@ -404,9 +409,7 @@ namespace PixelFarm.Agg.Imaging
                     }
                     else
                     {
-                        Color color = sourceColors[sourceColorsOffset];
-                        color.alpha = (byte)((color.alpha * (cover) + 255) >> 8);
-                        BlendPixel(destBuffer, bufferOffset, color);
+                        BlendPixel(destBuffer, bufferOffset, sourceColors[sourceColorsOffset].NewFromChangeCoverage(cover));
                     }
                     bufferOffset += 3;
                     ++sourceColorsOffset;
@@ -415,6 +418,9 @@ namespace PixelFarm.Agg.Imaging
             }
         }
     };
+
+
+#endif
     /*
 //======================================================blender_rgba_plain
 template<class ColorT, class Order> struct blender_rgba_plain

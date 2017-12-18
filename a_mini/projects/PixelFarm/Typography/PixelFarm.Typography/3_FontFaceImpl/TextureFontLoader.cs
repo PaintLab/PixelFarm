@@ -309,7 +309,7 @@ namespace PixelFarm.Drawing.Fonts
                 var glyphImage = new GlyphImage(w, h);
                 glyphImage.TextureOffsetX = dx;
                 glyphImage.TextureOffsetY = dy;
-                glyphImage.SetImageBuffer(ActualImage.GetBuffer2(img), false);
+                glyphImage.SetImageBuffer(ActualImage.CopyImgBuffer(img), false);
                 //copy data from agg canvas to glyph image
                 atlasBuilder.AddGlyph(gindex, glyphImage);
 
@@ -431,7 +431,7 @@ namespace PixelFarm.Drawing.Fonts
                 var glyphImage = new GlyphImage(w, h);
                 glyphImage.TextureOffsetX = dx;
                 glyphImage.TextureOffsetY = dy;
-                glyphImage.SetImageBuffer(ActualImage.GetBuffer2(img), false);
+                glyphImage.SetImageBuffer(ActualImage.CopyImgBuffer(img), false);
                 //copy data from agg canvas to glyph image
                 atlasBuilder.AddGlyph(gindex, glyphImage);
 

@@ -111,7 +111,7 @@ namespace PixelFarm.Agg.Imaging
                 throw new Exception("You need to have your x1 and y1 be the lower left corner of your sub image.");
             }
             RectInt boundsRect = new RectInt(x1, y1, x2, y2);
-            if (boundsRect.Clip(new RectInt(0, 0, (int)sourceImage.Width - 1, (int)sourceImage.Height - 1)))
+            if (boundsRect.Clip(new RectInt(0, 0, sourceImage.Width - 1, sourceImage.Height - 1)))
             {
                 SetDimmensionAndFormat(boundsRect.Width, boundsRect.Height, sourceImage.Stride, sourceImage.BitDepth, sourceImage.BytesBetweenPixelsInclusive);
                 int bufferOffset = sourceImage.GetBufferOffsetXY(boundsRect.Left, boundsRect.Bottom);
@@ -135,7 +135,7 @@ namespace PixelFarm.Agg.Imaging
             this.bufferOffset = bufferFirstPixel = bufferOffset;
             if (strideInBytes < 0)
             {
-                int addAmount = -((int)((int)height - 1) * strideInBytes);
+                int addAmount = -((height - 1) * strideInBytes);
                 bufferFirstPixel = addAmount + bufferOffset;
             }
             SetUpLookupTables();

@@ -482,7 +482,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgra32, flip_y);
-    app.caption("AGG Example");
+    app.caption(L"AGG Example");
 
     if(app.init(400, 400, 0))//agg::window_resize))
     {

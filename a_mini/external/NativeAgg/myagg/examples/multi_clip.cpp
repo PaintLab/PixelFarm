@@ -354,7 +354,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(pix_format, flip_y);
-    app.caption("AGG Example. Clipping to multiple rectangle regions");
+    app.caption(L"AGG Example. Clipping to multiple rectangle regions");
 
     if(app.init(512, 400, agg::window_resize))
     {

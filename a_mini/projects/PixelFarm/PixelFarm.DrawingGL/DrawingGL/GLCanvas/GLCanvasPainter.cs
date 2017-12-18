@@ -6,7 +6,6 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.Drawing.Fonts;
 
 
 namespace PixelFarm.DrawingGL
@@ -18,23 +17,23 @@ namespace PixelFarm.DrawingGL
         int _height;
         Color _fillColor;
         Color _strokeColor;
-        RectInt _rectInt;
+        RectInt _clipBox;
 
         RoundedRect roundRect;
-        Arc arcTool;
+        Arc _arcTool;
         Ellipse ellipse = new Ellipse();
         Stroke _aggStroke = new Stroke(1);
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
         InternalGraphicsPathBuilder _igfxPathBuilder;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
-        public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
+        public GLCanvasPainter(CanvasGL2d canvas)
         {
             _canvas = canvas;
-            _width = w;
-            _height = h;
-            _rectInt = new RectInt(0, 0, w, h);
-            arcTool = new Arc();
+            _width = canvas.CanvasWidth;
+            _height = canvas.CanvasHeight;
+            _clipBox = new RectInt(0, 0, _width, _height);
+            _arcTool = new Arc();
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
             //tools
@@ -66,12 +65,12 @@ namespace PixelFarm.DrawingGL
         {
             get
             {
-                return _rectInt;
+                return _clipBox;
             }
 
             set
             {
-                _rectInt = value;
+                _clipBox = value;
             }
         }
         public override SmoothingMode SmoothingMode
@@ -563,13 +562,13 @@ namespace PixelFarm.DrawingGL
                  arcSize == SvgArcSize.Large,
                  arcSweep == SvgArcSweep.Negative,
                  endX, endY, ref centerFormArc);
-            arcTool.Init(centerFormArc.cx, centerFormArc.cy, rx, ry,
+            _arcTool.Init(centerFormArc.cx, centerFormArc.cy, rx, ry,
                 centerFormArc.radStartAngle,
                 (centerFormArc.radStartAngle + centerFormArc.radSweepDiff));
 
             VertexStore v1 = GetFreeVxs();
             bool stopLoop = false;
-            foreach (VertexData vertexData in arcTool.GetVertexIter())
+            foreach (VertexData vertexData in _arcTool.GetVertexIter())
             {
                 switch (vertexData.command)
                 {
