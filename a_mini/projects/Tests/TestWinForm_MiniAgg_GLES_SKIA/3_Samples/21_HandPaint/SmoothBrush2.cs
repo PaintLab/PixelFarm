@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using PixelFarm.VectorMath; 
 using Mini;
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Samples
 {
     public enum SmoothBrushMode
@@ -24,7 +24,7 @@ namespace PixelFarm.Agg.Samples
     [Info("SmoothBrush2")]
     public class SmoothBrush2 : DemoBase
     {
-        Point latestMousePoint;
+        PixelFarm.Drawing.Point latestMousePoint;
         List<MyBrushPath> myBrushPathList = new List<MyBrushPath>();
         //CanvasPainter p;
         MyBrushPath currentBrushPath;
@@ -217,7 +217,7 @@ namespace PixelFarm.Agg.Samples
                         //bottom point
                         currentBrushPath.AddPointAtFirst((int)newBottomPoint.X, (int)newBottomPoint.Y);
                         currentBrushPath.AddPointAtLast((int)newTopPoint.X, (int)newTopPoint.Y);
-                        latestMousePoint = new Point(x, y);
+                        latestMousePoint = new PixelFarm.Drawing.Point(x, y);
                     }
                     break;
             }
@@ -236,7 +236,7 @@ namespace PixelFarm.Agg.Samples
                     break;
                 case Samples.EditMode.Draw:
                     {
-                        latestMousePoint = new Point(x, y);
+                        latestMousePoint = new PixelFarm.Drawing.Point(x, y);
                         currentBrushPath = new MyBrushPath();
                         switch (BrushMode)
                         {

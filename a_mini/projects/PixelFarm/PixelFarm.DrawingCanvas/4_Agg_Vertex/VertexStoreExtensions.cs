@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg.VertexSource;
+using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg

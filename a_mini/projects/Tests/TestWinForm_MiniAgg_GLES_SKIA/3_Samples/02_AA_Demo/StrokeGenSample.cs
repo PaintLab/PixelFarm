@@ -7,6 +7,7 @@
 
 
 using PixelFarm.Agg.VertexSource;
+using PixelFarm.Drawing;
 using Mini;
 
 namespace PixelFarm.Agg.Sample_Draw

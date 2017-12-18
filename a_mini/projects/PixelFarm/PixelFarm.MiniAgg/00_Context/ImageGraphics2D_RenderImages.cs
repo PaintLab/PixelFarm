@@ -23,6 +23,7 @@ using System;
 using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
     partial class ImageGraphics2D

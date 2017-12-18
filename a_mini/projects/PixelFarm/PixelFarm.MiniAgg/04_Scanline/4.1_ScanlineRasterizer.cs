@@ -33,8 +33,11 @@
 //----------------------------------------------------------------------------
 
 using poly_subpix = PixelFarm.Agg.PolySubPix;
+using PixelFarm.Drawing;
+
 namespace PixelFarm.Agg
 {
+    
     //==================================================rasterizer_scanline_aa
     // Polygon rasterizer that is used to render filled polygons with 
     // high-quality Anti-Aliasing. Internally, by default, the class uses 

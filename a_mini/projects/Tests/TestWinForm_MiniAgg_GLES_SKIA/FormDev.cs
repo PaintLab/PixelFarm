@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using PixelFarm.Agg;
+using PixelFarm.Drawing;
 namespace Mini
 {
     partial class FormDev : Form
@@ -230,7 +231,7 @@ namespace Mini
             {
                 //MatterHackers.StackBlur2.FastBlur32RGBA(bmp, 15);
 
-                var rct = new Rectangle(0, 0, bmp.Width, bmp.Height);
+                var rct = new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
                 //assign dimension info and copy buffer 
                 var bitmapData = bmp.LockBits(rct, System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
                 int bmpStride = bitmapData.Stride;
@@ -320,7 +321,7 @@ namespace Mini
 
             using (Graphics g = this.pictureBox1.CreateGraphics())
             {
-                g.SmoothingMode = SmoothingMode.HighQuality;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                 g.Clear(System.Drawing.Color.White);
                 //convert Agg vxs to bitmap
                 int bmpW = 500;
@@ -329,7 +330,7 @@ namespace Mini
                 {
                     ActualImage actualImage = new ActualImage(bmpW, bmpH, PixelFarm.Agg.PixelFormat.ARGB32);
                     Graphics2D gfx = Graphics2D.CreateFromImage(actualImage);
-                    var vxs = new VertexStore();
+                    var vxs = new PixelFarm.Drawing.VertexStore();
                     //vxs.AddMoveTo(0, 0);
                     ////vxs.AddP3c(100, 0);
                     ////vxs.AddP3c(100,150);
@@ -349,7 +350,7 @@ namespace Mini
                     //test subpixel rendering 
 
 
-                    vxs = vxs.TranslateToNewVxs(15, 0, new VertexStore());
+                    vxs = vxs.TranslateToNewVxs(15, 0, new PixelFarm.Drawing.VertexStore());
                     gfx.UseSubPixelRendering = true;
                     gfx.Render(vxs, PixelFarm.Drawing.Color.Black);
                     PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(
@@ -358,7 +359,7 @@ namespace Mini
                      );
                     //-----------------------------------------
                     bufferBmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-                    g.DrawImage(bufferBmp, new Point(0, 30));
+                    g.DrawImage(bufferBmp, new System.Drawing.Point(0, 30));
                 }
             }
         }

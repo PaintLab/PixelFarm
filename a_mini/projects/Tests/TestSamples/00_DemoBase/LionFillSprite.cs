@@ -1,5 +1,6 @@
 ﻿using System;
 using PixelFarm.Agg.Transform;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
     public class LionFillSprite : BasicSprite

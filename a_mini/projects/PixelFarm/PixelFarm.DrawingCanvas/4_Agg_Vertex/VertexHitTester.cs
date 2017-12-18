@@ -53,7 +53,7 @@ namespace PixelFarm.Agg
         //
         // Input 2D polygon _pgon_ with _numverts_ number of vertices and test point
         // _point_, returns 1 if inside, 0 if outside.
-        public static bool IsPointInVxs(VertexStore vxs, double tx, double ty)
+        public static bool IsPointInVxs(PixelFarm.Drawing.VertexStore vxs, double tx, double ty)
         {
             int m_num_points = vxs.Count;
             if (m_num_points < 3) return false;

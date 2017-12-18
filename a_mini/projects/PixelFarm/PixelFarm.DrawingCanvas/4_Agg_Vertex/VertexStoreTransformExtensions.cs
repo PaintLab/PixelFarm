@@ -28,6 +28,7 @@
 //#include "agg_basics.h"
 
 using PixelFarm.Agg.Transform;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
 

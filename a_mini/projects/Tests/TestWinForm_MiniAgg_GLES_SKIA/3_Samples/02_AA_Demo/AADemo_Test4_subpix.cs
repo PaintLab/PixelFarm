@@ -1,5 +1,6 @@
 ﻿//MIT, 2017, WinterDev 
 using System;
+using PixelFarm.Drawing;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest4
 {

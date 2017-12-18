@@ -17,7 +17,7 @@ namespace OpenTkEssTest
         GLCanvasPainter painter;
         RenderVx glyph_vx;
         LinearGradientBrush linearGrBrush2;
-        PixelFarm.Agg.VertexStoreSnap tempSnap1;
+        VertexStoreSnap tempSnap1;
         //  PixelFarm.Drawing.Fonts.SvgFontStore svgFontStore = new PixelFarm.Drawing.Fonts.SvgFontStore();
         protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
         {
@@ -27,7 +27,7 @@ namespace OpenTkEssTest
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            
+
             InstalledFontCollection collection = new InstalledFontCollection();
             collection.LoadSystemFonts();
             InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Normal);
@@ -56,7 +56,7 @@ namespace OpenTkEssTest
             //var curveFlattener = new CurveFlattener();
             //var m_pathVxs2 = curveFlattener.MakeVxs(m_pathVxs);
 
-            glyph_vx = painter.CreateRenderVx(tempSnap1 = new PixelFarm.Agg.VertexStoreSnap(glyph.flattenVxs));
+            glyph_vx = painter.CreateRenderVx(tempSnap1 = new PixelFarm.Drawing.VertexStoreSnap(glyph.flattenVxs));
 
             linearGrBrush2 = new LinearGradientBrush(
                new PointF(0, 0), Color.Red,

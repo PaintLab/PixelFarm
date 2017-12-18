@@ -227,7 +227,7 @@ namespace PixelFarm.Drawing.Fonts
         void BuildOutlineGlyph(NativeFontGlyph fontGlyph, int pxsize)
         {
             NativeFontGlyphBuilder.BuildGlyphOutline(fontGlyph);
-            Agg.VertexStore vxs = new Agg.VertexStore();
+            VertexStore vxs = new VertexStore();
             NativeFontGlyphBuilder.FlattenVxs(fontGlyph.originalVxs, vxs);
             fontGlyph.flattenVxs = vxs;
         }

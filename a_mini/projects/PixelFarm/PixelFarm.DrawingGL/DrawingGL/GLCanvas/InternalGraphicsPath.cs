@@ -194,7 +194,7 @@ namespace PixelFarm.DrawingGL
         {
 
         }
-        public void AddVertexSnap(PixelFarm.Agg.VertexStoreSnap vxsSnap)
+        public void AddVertexSnap(PixelFarm.Drawing.VertexStoreSnap vxsSnap)
         {
             //begin new snap vxs
             _tempCoords.Clear();

@@ -142,7 +142,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 for (int i = 0; i < j; ++i)
                 {
                     p.StrokeColor = colors[i];
-                    p.Draw(new VertexStoreSnap(vxs, pathList[i]));
+                    p.Draw(new PixelFarm.Drawing.VertexStoreSnap(vxs, pathList[i]));
 
                 }
                 //not agg   
@@ -199,7 +199,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 for (int i = 0; i < j; ++i)
                 {
                     rasterizer.RenderVertexSnap(
-                        new VertexStoreSnap(vxs,
+                        new PixelFarm.Drawing.VertexStoreSnap(vxs,
                             lionShape.PathIndexList[i]),
                             lionShape.Colors[i]);
                 }

@@ -1,5 +1,6 @@
 ﻿//BSD, 2014-2017, WinterDev
 
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
     /// <summary>
