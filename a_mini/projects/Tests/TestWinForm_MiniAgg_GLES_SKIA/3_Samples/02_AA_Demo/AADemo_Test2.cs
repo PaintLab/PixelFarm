@@ -87,12 +87,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             set;
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             //this specific for agg
-            if (p is PixelFarm.Agg.AggCanvasPainter)
+            if (p is PixelFarm.Agg.AggPainter)
             {
-                PixelFarm.Agg.AggCanvasPainter p2 = (PixelFarm.Agg.AggCanvasPainter)p;
+                PixelFarm.Agg.AggPainter p2 = (PixelFarm.Agg.AggPainter)p;
                 AggRenderSurface gx = p2.Graphics;
                 var childImage = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
                 //IRecieveBlenderByte rasterBlender = new BlenderBGRA(); 

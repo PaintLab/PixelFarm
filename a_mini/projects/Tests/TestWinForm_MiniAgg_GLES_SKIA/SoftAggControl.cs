@@ -19,7 +19,7 @@ namespace Mini
         int myWidth = 800;
         int myHeight = 600;
         GdiBitmapBackBuffer bitmapBackBuffer;
-        PixelFarm.Drawing.CanvasPainter painter;
+        PixelFarm.Drawing.Painter painter;
 
         bool _useGdiPlusOutput;
         bool _gdiAntiAlias;
@@ -68,7 +68,7 @@ namespace Mini
             else
             {
                 AggRenderSurface imgGfx2d = Initialize(myWidth, myHeight, 32);
-                AggCanvasPainter aggPainter = new AggCanvasPainter(imgGfx2d);
+                AggPainter aggPainter = new AggPainter(imgGfx2d);
                 //set text printer for agg canvas painter
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 

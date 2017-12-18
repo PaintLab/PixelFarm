@@ -7,7 +7,7 @@ using PixelFarm.Agg.VertexSource;
 
 namespace PixelFarm.Agg
 {
-    public class AggCanvasPainter : CanvasPainter
+    public class AggPainter : Painter
     {
         AggRenderSurface gx;
         Stroke stroke;
@@ -34,7 +34,7 @@ namespace PixelFarm.Agg
         int ellipseGenNSteps = 10;
         SmoothingMode _smoothingMode;
 
-        public AggCanvasPainter(AggRenderSurface graphic2d)
+        public AggPainter(AggRenderSurface graphic2d)
         {
             this.gx = graphic2d;
             this.sclineRas = gx.ScanlineRasterizer;

@@ -160,8 +160,8 @@
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\Canvas.cs">
       <Link>1_DrawingCore\3_Canvas\Canvas.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\CanvasPainter.cs">
-      <Link>1_DrawingCore\3_Canvas\CanvasPainter.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\Painter.cs">
+      <Link>1_DrawingCore\3_Canvas\Painter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\RenderVx.cs">
       <Link>1_DrawingCore\3_Canvas\RenderVx.cs</Link>

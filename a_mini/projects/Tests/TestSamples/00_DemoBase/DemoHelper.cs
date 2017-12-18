@@ -6,7 +6,7 @@ using Typography.TextServices;
 namespace Mini
 {
 
-    public delegate void SetupPainterDel(GLCanvasPainter painter);
+    public delegate void SetupPainterDel(GLPainter painter);
 
     public class GLDemoContext
     {
@@ -37,7 +37,7 @@ namespace Mini
             demo.Width = w;
             demo.Height = h;
             GLRenderSurface glsf;
-            GLCanvasPainter canvasPainter;
+            GLPainter canvasPainter;
             demo.BuildCustomDemoGLContext(out glsf, out canvasPainter);
             if (glsf == null)
             {
@@ -49,7 +49,7 @@ namespace Mini
 
                 //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
                 glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max);
-                canvasPainter = new GLCanvasPainter(glsf);
+                canvasPainter = new GLPainter(glsf);
 
                 //create text printer for opengl 
                 //----------------------

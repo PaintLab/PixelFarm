@@ -22,7 +22,7 @@ namespace PixelFarm.Agg.Sample_Draw
         {
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             p.Clear(Drawing.Color.White);
             //g.UseSubPixelRendering = true; 
@@ -46,7 +46,7 @@ namespace PixelFarm.Agg.Sample_Draw
         {
 
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             int width = 800;
             int height = 600;

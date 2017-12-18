@@ -319,14 +319,14 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             resultBmp.UnlockBits(resultBmpData);
             return resultBmp;
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             if (p is GdiPlusCanvasPainter)
             {
                 DrawWithWinGdi((GdiPlusCanvasPainter)p);
                 return;
             }
-            AggCanvasPainter p2 = (AggCanvasPainter)p;
+            AggPainter p2 = (AggPainter)p;
             AggRenderSurface gx = p2.Graphics;
             var widgetsSubImage = gx.DestImage;
             var scline = gx.ScanlinePacked8;

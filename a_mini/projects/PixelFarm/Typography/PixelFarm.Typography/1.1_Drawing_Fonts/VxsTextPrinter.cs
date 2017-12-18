@@ -19,7 +19,7 @@ namespace PixelFarm.Drawing.Fonts
         /// <summary>
         /// target canvas
         /// </summary>
-        CanvasPainter canvasPainter;
+        Painter canvasPainter;
         IFontLoader _fontLoader;
         RequestFont _reqFont;
         //----------------------------------------------------------- 
@@ -32,7 +32,7 @@ namespace PixelFarm.Drawing.Fonts
         Dictionary<InstalledFont, Typeface> _cachedTypefaces = new Dictionary<InstalledFont, Typeface>();
         //-----------------------------------------------------------
 
-        public VxsTextPrinter(CanvasPainter canvasPainter, IFontLoader fontLoader)
+        public VxsTextPrinter(Painter canvasPainter, IFontLoader fontLoader)
         {
             this.canvasPainter = canvasPainter;
             this._fontLoader = fontLoader;
@@ -45,7 +45,7 @@ namespace PixelFarm.Drawing.Fonts
             _glyphLayout.PxScaleLayout = _pxScaleEngine; //assign the pxscale-layout-engine to main glyphLayout engine
 
         }
-        public CanvasPainter TargetCanvasPainter { get; set; }
+        public Painter TargetCanvasPainter { get; set; }
         bool TryGetTypeface(InstalledFont instFont, out Typeface found)
         {
             return _cachedTypefaces.TryGetValue(instFont, out found);
@@ -157,7 +157,7 @@ namespace PixelFarm.Drawing.Fonts
         public override void DrawCaret(float x, float y)
         {
 
-            CanvasPainter p = this.TargetCanvasPainter;
+            Painter p = this.TargetCanvasPainter;
             PixelFarm.Drawing.Color prevColor = p.StrokeColor;
             p.StrokeColor = PixelFarm.Drawing.Color.Red;
             p.Line(x, y, x, y + this.FontAscendingPx);
@@ -234,7 +234,7 @@ namespace PixelFarm.Drawing.Fonts
         }
         public override void DrawFromGlyphPlans(GlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
         {
-            CanvasPainter canvasPainter = this.TargetCanvasPainter;
+            Painter canvasPainter = this.TargetCanvasPainter;
             //Typeface typeface = _glyphPathBuilder.Typeface;
             //3. layout glyphs with selected layout technique
             //TODO: review this again, we should use pixel?

@@ -11,13 +11,13 @@ namespace PixelFarm.Drawing.GLES2
     public partial class MyGLCanvas : Canvas, IDisposable
     {
 
-        GLCanvasPainter painter1;
+        GLPainter painter1;
         bool isDisposed;
         Stack<Rectangle> clipRectStack = new Stack<Rectangle>();
         Rectangle currentClipRect;
 
         public MyGLCanvas(
-           GLCanvasPainter painter, //*** we wrap around GLCanvasPainter *** 
+           GLPainter painter, //*** we wrap around GLCanvasPainter *** 
            int width,
            int height)
         {

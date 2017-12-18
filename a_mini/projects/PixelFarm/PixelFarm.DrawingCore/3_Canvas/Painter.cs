@@ -23,7 +23,7 @@ using PixelFarm.Agg;
 namespace PixelFarm.Drawing
 {
 
-    public abstract class CanvasPainter
+    public abstract class Painter
     {
         //who implement this class
         //1. AggCanvasPainter

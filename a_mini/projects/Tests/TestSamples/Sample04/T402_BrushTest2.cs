@@ -14,12 +14,12 @@ namespace OpenTkEssTest
     public class T402_BrushTest2 : DemoBase
     {
         GLRenderSurface _glsf;
-        GLCanvasPainter painter;
+        GLPainter painter;
         RenderVx glyph_vx;
         LinearGradientBrush linearGrBrush2;
         VertexStoreSnap tempSnap1;
         //  PixelFarm.Drawing.Fonts.SvgFontStore svgFontStore = new PixelFarm.Drawing.Fonts.SvgFontStore();
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
             this._glsf = glsf;
             this.painter = painter;

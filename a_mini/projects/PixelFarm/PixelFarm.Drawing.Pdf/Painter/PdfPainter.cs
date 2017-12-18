@@ -7,7 +7,7 @@ using PixelFarm.Agg.Transform;
 namespace PixelFarm.Drawing.Pdf
 {
 
-    public class PdfCanvasPainter : CanvasPainter
+    public class PdfPainter : Painter
     {
         //System.Drawing.Graphics _gfx;
         //System.Drawing.Bitmap _gfxBmp;
@@ -30,7 +30,7 @@ namespace PixelFarm.Drawing.Pdf
 
         SmoothingMode _smoothingMode;
 
-        public PdfCanvasPainter()
+        public PdfPainter()
         {
         }
 

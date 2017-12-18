@@ -11,13 +11,13 @@ namespace OpenTkEssTest
     public class T113_FrameBufferWithBlur : DemoBase
     {
         GLRenderSurface _glsf;
-        GLCanvasPainter painter;
+        GLPainter painter;
         FrameBuffer frameBuffer;
         FrameBuffer frameBuffer2;
         GLBitmap glbmp;
         bool isInit;
         bool frameBufferNeedUpdate;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
             this._glsf = glsf;
             this.painter = painter;

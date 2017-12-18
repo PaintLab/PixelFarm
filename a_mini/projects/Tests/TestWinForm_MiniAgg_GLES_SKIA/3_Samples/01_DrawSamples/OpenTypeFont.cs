@@ -116,9 +116,9 @@ namespace PixelFarm.Agg.Sample_Draw
             set;
         }
 
-        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            AggCanvasPainter aggPainter = (AggCanvasPainter)p;
+            AggPainter aggPainter = (AggPainter)p;
 
             //---------------- 
             //5. use PixelFarm's Agg to render to bitmap...

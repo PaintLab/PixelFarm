@@ -34,7 +34,7 @@ namespace PixelFarm.Agg.SimplePainter
 
         }
 
-        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
 
             //1.

@@ -139,7 +139,7 @@ namespace PixelFarm.Agg.Sample_Blur2
                    x, y,
                    1));
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             //create painter             
             p.SetClipBox(0, 0, Width, Height);

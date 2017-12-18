@@ -56,7 +56,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             set;
         }
         //template<class Scanline, class Ras> 
-        public void RenderGourand(CanvasPainter p)
+        public void RenderGourand(Painter p)
         {
             float alpha = this.AlphaValue;
             float brc = 1;
@@ -69,7 +69,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             ////span_allocator span_alloc = new span_allocator(); 
 
             //specific for agg
-            AggCanvasPainter painter = p as AggCanvasPainter;
+            AggPainter painter = p as AggPainter;
             if (painter == null) { return; }
 
             //
@@ -128,7 +128,7 @@ namespace PixelFarm.Agg.Sample_Gouraud
             tmpVxs.Clear();
         }
         VertexStore _tmpVxs = new VertexStore();
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             p.Clear(Drawing.Color.White);
 #if true

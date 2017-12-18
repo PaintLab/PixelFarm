@@ -9,7 +9,7 @@ namespace Mini
 #if DEBUG
     public static class dbugVxsDrawPoints
     {
-        public static void DrawVxsPoints(VertexStore vxs, PixelFarm.Drawing.CanvasPainter p)
+        public static void DrawVxsPoints(VertexStore vxs, PixelFarm.Drawing.Painter p)
         {
             int j = vxs.Count;
             for (int i = 0; i < j; ++i)
