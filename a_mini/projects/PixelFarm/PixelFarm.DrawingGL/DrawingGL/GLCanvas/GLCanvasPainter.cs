@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using PixelFarm.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
-using PixelFarm.Agg.VertexSource; 
+using PixelFarm.Agg.VertexSource;
 
 
 namespace PixelFarm.DrawingGL
@@ -27,12 +27,12 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         InternalGraphicsPathBuilder _igfxPathBuilder;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
-        public GLCanvasPainter(CanvasGL2d canvas, int w, int h)
+        public GLCanvasPainter(CanvasGL2d canvas)
         {
             _canvas = canvas;
-            _width = w;
-            _height = h;
-            _clipBox = new RectInt(0, 0, w, h);
+            _width = canvas.CanvasWidth;
+            _height = canvas.CanvasHeight;
+            _clipBox = new RectInt(0, 0, _width, _height);
             _arcTool = new Arc();
             CurrentFont = new RequestFont("tahoma", 14);
             UseVertexBufferObjectForRenderVx = true;
@@ -218,7 +218,7 @@ namespace PixelFarm.DrawingGL
             glBmp.Dispose();
         }
         public override void DrawImage(ActualImage actualImage, double x, double y)
-        {  
+        {
             GLBitmap glBmp = new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
             _canvas.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();

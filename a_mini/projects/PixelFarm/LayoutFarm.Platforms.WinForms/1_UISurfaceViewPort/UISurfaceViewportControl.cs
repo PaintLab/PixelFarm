@@ -93,7 +93,7 @@ namespace LayoutFarm.UI
                         //---------------
                         //canvas2d.FlipY = true;//
                         //---------------
-                        canvasPainter = new GLCanvasPainter(canvas2d, max, max);
+                        canvasPainter = new GLCanvasPainter(canvas2d);
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------

@@ -28,8 +28,8 @@ namespace PixelFarm.DrawingGL
 
         int canvasOriginX = 0;
         int canvasOriginY = 0;
-        int canvasW;
-        int canvasH;
+        int _canvasW;
+        int _canvasH;
 
         MyMat4 orthoView;
         MyMat4 flipVerticalView;
@@ -48,8 +48,8 @@ namespace PixelFarm.DrawingGL
             //please NOTE: left lower corner of the canvas is (0,0)
             //-------------
 
-            this.canvasW = canvasW;
-            this.canvasH = canvasH;
+            this._canvasW = canvasW;
+            this._canvasH = canvasH;
             //setup viewport size,
             //we need W:H ratio= 1:1 , square viewport
             int max = Math.Max(canvasW, canvasH);
@@ -98,7 +98,14 @@ namespace PixelFarm.DrawingGL
             //-------------------------------------------------------------------------------
             GL.Viewport(0, 0, canvasW, canvasH);
         }
-
+        public int CanvasWidth
+        {
+            get { return _canvasW; }
+        }
+        public int CanvasHeight
+        {
+            get { return _canvasH; }
+        }
         bool _flipY;
         public bool FlipY
         {
@@ -852,7 +859,7 @@ namespace PixelFarm.DrawingGL
         {
             //int originalW = 800;
             //set new viewport
-            GL.Viewport(x, y, canvasW, canvasH);
+            GL.Viewport(x, y, _canvasW, _canvasH);
             //GL.MatrixMode(MatrixMode.Projection);
             //GL.LoadIdentity();
             //GL.Ortho(0, originalW, 0, originalW, 0.0, 100.0);
