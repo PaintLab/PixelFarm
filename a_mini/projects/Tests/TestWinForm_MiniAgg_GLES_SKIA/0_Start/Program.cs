@@ -8,13 +8,41 @@ namespace Mini
     static class Program
     {
 
+
+        static unsafe void LookAsIntArray(IntPtr array)
+        {
+            int* a = (int*)array;
+            int data = *a;
+            byte R = (byte)(data & 0xff);
+            byte G = (byte)((data >> 8) & 0xff);
+            byte B = (byte)((data >> 16) & 0xff);
+            byte A = (byte)((data >> 24) & 0xff);
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+            byte[] bb = new byte[] { 0/*R*/, 1/*G*/, 2/*B*/, 3/*A*/ };
+            bool isLittleEnd = BitConverter.IsLittleEndian;
 
+            int data = BitConverter.ToInt32(bb, 0);
+
+            byte R = (byte)(data & 0xff);
+            byte G = (byte)((data >> 8) & 0xff);
+            byte B = (byte)((data >> 16) & 0xff);
+            byte A = (byte)((data >> 24) & 0xff);
+            //---------------------------------------------
+
+            unsafe
+            {
+                fixed (byte* h = &bb[0])
+                {
+                    LookAsIntArray((IntPtr)h);
+                }
+            }
 
             RootDemoPath.Path = @"..\Data";
 #if GL_ENABLE

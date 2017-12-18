@@ -160,7 +160,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgr24, flip_y);
-    app.caption("AGG Example. Rounded rectangle with gamma-correction & stuff");
+    app.caption(L"AGG Example. Rounded rectangle with gamma-correction & stuff");
 
     if(app.init(600, 400, agg::window_resize))
     {

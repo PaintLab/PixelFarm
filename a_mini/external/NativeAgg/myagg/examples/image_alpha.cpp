@@ -216,7 +216,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgr24, flip_y);
-    app.caption("Image Affine Transformations with Alpha-function");
+    app.caption(L"Image Affine Transformations with Alpha-function");
 
     const char* img_name = "spheres";
     if(argc >= 2) img_name = argv[1];

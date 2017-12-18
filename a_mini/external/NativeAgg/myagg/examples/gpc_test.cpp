@@ -670,7 +670,7 @@ if(fd)
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgr24, flip_y);
-    app.caption("AGG Example. General Polygon Clipping (GPC)");
+    app.caption(L"AGG Example. General Polygon Clipping (GPC)");
 
     if(app.init(640, 520, agg::window_resize))
     {

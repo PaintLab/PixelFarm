@@ -18,10 +18,11 @@ namespace PixelFarm.Drawing.GLES2
 {
     partial class MyGLCanvas
     {
-        int left;
-        int top;
-        int right;
-        int bottom;
+        int _left;
+        int _top;
+        int _width;
+        int _height;
+
         int canvasOriginX = 0;
         int canvasOriginY = 0;
         Rectangle invalidateArea;
@@ -98,49 +99,49 @@ namespace PixelFarm.Drawing.GLES2
         {
             get
             {
-                return top;
+                return _top;
             }
         }
         public override int Left
         {
             get
             {
-                return left;
+                return _left;
             }
         }
         public override int Width
         {
             get
             {
-                return right - left;
+                return _width;
             }
         }
         public override int Height
         {
             get
             {
-                return bottom - top;
+                return _height;
             }
         }
         public override int Bottom
         {
             get
             {
-                return bottom;
+                return _top + _height;
             }
         }
         public override int Right
         {
             get
             {
-                return right;
+                return _left + _width;
             }
         }
         public override Rectangle Rect
         {
             get
             {
-                return Rectangle.FromLTRB(left, top, right, bottom);
+                return new Rectangle(_left, _top, _width, _height);
             }
         }
         public override Rectangle InvalidateArea

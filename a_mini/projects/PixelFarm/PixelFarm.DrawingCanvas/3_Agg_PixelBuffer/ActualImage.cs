@@ -76,7 +76,7 @@ namespace PixelFarm.Agg
                     throw new NotSupportedException();
             }
         }
-        private ActualImage() { }
+
 
         public override void Dispose()
         {
@@ -118,7 +118,7 @@ namespace PixelFarm.Agg
         {
             return img.pixelBuffer;
         }
-        public static int[] GetBuffer2(ActualImage img)
+        public static int[] CopyImgBuffer(ActualImage img)
         {
 
             int[] buff2 = new int[img.width * img.height];
@@ -177,27 +177,31 @@ namespace PixelFarm.Agg
             Buffer.BlockCopy(this.pixelBuffer, 0, newBuff, 0, newBuff.Length);
             buffRequest.OutputBuffer = newBuff;
         }
-        
 
 
-        public static int CalculateStride(int width, PixelFormat format)
+
+        public static int CalculateStride(int width, PixelFormat format, out int bitDepth, out int bytesPerPixel)
         {
             //stride calcuation helper
 
             switch (format)
             {
                 case PixelFormat.ARGB32:
-                    return width * (32 / 8);
+                    {
+                        bitDepth = 32;
+                        bytesPerPixel = (bitDepth + 7) / 8;
+                        return width * (32 / 8);
+                    }
                 case PixelFormat.GrayScale8:
                     {
-                        const int bitDepth = 8; //bit per pixel
-                        const int bytesPerPixel = (bitDepth + 7) / 8;
+                        bitDepth = 8; //bit per pixel
+                        bytesPerPixel = (bitDepth + 7) / 8;
                         return 4 * ((width * bytesPerPixel + 3) / 4);
                     }
                 case PixelFormat.RGB24:
                     {
-                        const int bitDepth = 24; //bit per pixel
-                        const int bytesPerPixel = (bitDepth + 7) / 8;
+                        bitDepth = 24; //bit per pixel
+                        bytesPerPixel = (bitDepth + 7) / 8;
                         return 4 * ((width * bytesPerPixel + 3) / 4);
                     }
                 default:

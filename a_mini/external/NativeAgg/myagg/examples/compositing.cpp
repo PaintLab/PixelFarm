@@ -394,7 +394,7 @@ int agg_main(int argc, char* argv[])
     the_application app(pix_format, flip_y);
     app.caption(L"AGG Example. Compositing Modes");
 
-	const char* img_name = "c:\\WImageTest\\1.bmp";
+	const char* img_name = "d:\\WImageTest\\1.bmp";
     if(argc >= 2) img_name = argv[1];
     if(!app.load_img(1, img_name)) 
     {
@@ -414,7 +414,7 @@ int agg_main(int argc, char* argv[])
     }
 
 
-    if(app.init(600, 400, agg::window_resize))
+    if(app.init(800, 600, agg::window_resize))
     {
         return app.run();
     }

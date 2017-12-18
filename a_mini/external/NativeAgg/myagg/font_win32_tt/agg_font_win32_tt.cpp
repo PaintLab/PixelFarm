@@ -469,7 +469,7 @@ namespace agg
             }
             else
             {
-                m_cur_font = ::CreateFont(-h,                     // height of font
+                m_cur_font = ::CreateFontA(-h,                     // height of font
                                           w,                      // average character width
                                           0,                      // angle of escapement
                                           0,                      // base-line orientation angle

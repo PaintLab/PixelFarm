@@ -1,4 +1,4 @@
-﻿//BSD 2014,2015 WinterDev 
+﻿//BSD, 2014-2017, WinterDev 
 //adapt from Paper.js
 
 using System;

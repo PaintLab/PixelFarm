@@ -1,4 +1,5 @@
-﻿#region Header
+﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+//
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of extension methods for the WriteableBitmap class.
@@ -14,7 +15,7 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
+
 
 using System;
 using System.IO;
@@ -48,6 +49,9 @@ namespace System.Windows.Media.Imaging
         {
             if (pixelHeight < 1) pixelHeight = 1;
             if (pixelWidth < 1) pixelWidth = 1;
+#if NET20
+            return new WriteableBitmap(pixelWidth, pixelHeight);
+#endif
 
 #if SILVERLIGHT
             return new WriteableBitmap(pixelWidth, pixelHeight);
@@ -181,10 +185,15 @@ namespace System.Windows.Media.Imaging
         /// <returns>A new WriteableBitmap containing the pixel data.</returns>
         public static WriteableBitmap FromContent(string relativePath)
         {
+#if NET20
+            return null;
+#else
             using (var bmpStream = Application.GetResourceStream(new Uri(relativePath, UriKind.Relative)).Stream)
             {
                 return FromStream(bmpStream);
             }
+#endif
+
         }
 
         /// <summary>
@@ -194,6 +203,10 @@ namespace System.Windows.Media.Imaging
         /// <returns>A new WriteableBitmap containing the pixel data.</returns>
         public static WriteableBitmap FromStream(Stream stream)
         {
+#if NET20
+            return null;
+#else
+
             var bmpi = new BitmapImage();
 #if SILVERLIGHT
             bmpi.SetSource(stream);
@@ -207,6 +220,7 @@ namespace System.Windows.Media.Imaging
             var bmp = new WriteableBitmap(bmpi);
             bmpi.UriSource = null;
             return bmp;
+#endif
         }
 #endif
 

@@ -71,10 +71,18 @@ namespace PixelFarm.Agg
             g += weight * ptr[sourceOffset + CO.G];
             b += weight * ptr[sourceOffset + CO.B];
             a += weight * ptr[sourceOffset + CO.A];
-            destBuffer[destBufferOffset].red = (byte)(r >> LineAA.SUBPIXEL_SHIFT * 2);
-            destBuffer[destBufferOffset].green = (byte)(g >> LineAA.SUBPIXEL_SHIFT * 2);
-            destBuffer[destBufferOffset].blue = (byte)(b >> LineAA.SUBPIXEL_SHIFT * 2);
-            destBuffer[destBufferOffset].alpha = (byte)(a >> LineAA.SUBPIXEL_SHIFT * 2);
+            //destBuffer[destBufferOffset].red = (byte)(r >> LineAA.SUBPIXEL_SHIFT * 2);
+            //destBuffer[destBufferOffset].green = (byte)(g >> LineAA.SUBPIXEL_SHIFT * 2);
+            //destBuffer[destBufferOffset].blue = (byte)(b >> LineAA.SUBPIXEL_SHIFT * 2);
+            //destBuffer[destBufferOffset].alpha = (byte)(a >> LineAA.SUBPIXEL_SHIFT * 2);
+
+
+            destBuffer[destBufferOffset] = Color.FromArgb(
+                (byte)(a >> LineAA.SUBPIXEL_SHIFT * 2),
+                (byte)(r >> LineAA.SUBPIXEL_SHIFT * 2),
+                (byte)(g >> LineAA.SUBPIXEL_SHIFT * 2),
+                (byte)(b >> LineAA.SUBPIXEL_SHIFT * 2)
+                );
         }
     }
 }

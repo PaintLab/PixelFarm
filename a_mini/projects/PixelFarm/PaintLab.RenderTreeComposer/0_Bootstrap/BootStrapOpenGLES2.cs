@@ -11,6 +11,7 @@ namespace YourImplementation
         static bool s_initInit;
         public static void SetupDefaultValues()
         {
+            //init once
             if (s_initInit) return;
             //----
             s_initInit = true;

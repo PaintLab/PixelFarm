@@ -26,7 +26,7 @@ namespace PixelFarm.Agg
     public static class CO
     {
 
-#if !RGBA
+#if  !RGBA
         //eg OpenGL, 
         /// <summary>
         /// order b
@@ -37,7 +37,7 @@ namespace PixelFarm.Agg
         /// </summary>
         public const int G = 1;
         /// <summary>
-        /// order b
+        /// order r
         /// </summary>
         public const int R = 2;
         /// <summary>
@@ -56,7 +56,7 @@ namespace PixelFarm.Agg
         /// </summary>
         public const int G = 1;
         /// <summary>
-        /// order b
+        /// order r
         /// </summary>
         public const int R = 0;
         /// <summary>

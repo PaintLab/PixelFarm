@@ -2,7 +2,6 @@
 
 using System;
 using OpenTK.Graphics.ES20;
-using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
@@ -192,8 +191,6 @@ namespace PixelFarm.DrawingGL
 
             }
         }
-
-
 #if DEBUG
 
         public readonly int dbugId = dbugIdTotal++;

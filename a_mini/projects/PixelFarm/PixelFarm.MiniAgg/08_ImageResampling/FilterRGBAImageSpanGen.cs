@@ -85,11 +85,11 @@ namespace PixelFarm.Agg.Imaging
                 int x_hr2 = x_hr;
                 int sourceIndex;
                 byte[] buff = BaseGetSpan(x_lr, y_lr, len_x_lr, out sourceIndex);
-                for (;;)
+                for (; ; )
                 {
                     int weight_y = weight_array[y_hr];
                     x_hr = x_hr2;
-                    for (;;)
+                    for (; ; )
                     {
                         int weight = (weight_y * weight_array[x_hr] +
                                       img_filter_const.SCALE / 2) >>
@@ -130,10 +130,13 @@ namespace PixelFarm.Agg.Imaging
                 else if (c3 > BASE_MASK) { c3 = BASE_MASK; }
 
 
-                outputColors[startIndex].red = (byte)c0;
-                outputColors[startIndex].green = (byte)c1;
-                outputColors[startIndex].blue = (byte)c2;
-                outputColors[startIndex].alpha = (byte)c3;
+                //outputColors[startIndex].red = (byte)c0;
+                //outputColors[startIndex].green = (byte)c1;
+                //outputColors[startIndex].blue = (byte)c2;
+                //outputColors[startIndex].alpha = (byte)c3;
+
+                outputColors[startIndex] = Drawing.Color.FromArgb((byte)c3, (byte)c0, (byte)c1, (byte)c2);
+
                 startIndex++;
                 spanInterpolator.Next();
             } while (--len != 0);
