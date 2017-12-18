@@ -31,7 +31,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\Release\</OutputPath>
-    <DefineConstants>TRACE;__DESKTOP__</DefineConstants>
+    <DefineConstants>TRACE;__DESKTOP__,GL_ENABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

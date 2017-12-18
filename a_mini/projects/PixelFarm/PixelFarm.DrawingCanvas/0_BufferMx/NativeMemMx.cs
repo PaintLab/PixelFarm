@@ -5,7 +5,7 @@ namespace PixelFarm.Agg
 
 
     [System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class
-    public static class AggBuffMx
+    static class NaitveMemMx
     {
         //check this ....
         //for cross platform code
