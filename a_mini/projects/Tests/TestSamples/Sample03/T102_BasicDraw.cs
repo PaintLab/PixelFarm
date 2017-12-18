@@ -45,7 +45,7 @@ namespace OpenTkEssTest
         void Test2()
         {
             _glsf.ClearColorBuffer();
-            _glsf.SmoothMode = CanvasSmoothMode.Smooth;
+            _glsf.SmoothMode = SmoothMode.Smooth;
             _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
             _glsf.StrokeWidth = 1;
             painter.StrokeWidth = 1;

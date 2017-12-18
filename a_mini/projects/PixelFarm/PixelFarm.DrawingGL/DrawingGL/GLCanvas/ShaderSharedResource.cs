@@ -2,10 +2,12 @@
 
 namespace PixelFarm.DrawingGL
 {
+
+
     /// <summary>
-    /// sharing data between canvas and shaders
+    /// sharing data between GLRenderSurface and shaders
     /// </summary>
-    class CanvasToShaderSharedResource
+    class ShaderSharedResource
     {
         /// <summary>
         /// stroke width here is the sum of both side of the line.

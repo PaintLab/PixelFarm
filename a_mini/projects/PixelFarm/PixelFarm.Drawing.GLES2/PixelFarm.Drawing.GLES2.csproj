@@ -44,26 +44,26 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\Es2Utils\MiniShaderProgram.cs">
       <Link>DrawingGL\Es2Utils\MiniShaderProgram.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\CanvasGL2d.cs">
-      <Link>DrawingGL\GLCanvas\CanvasGL2d.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\CanvasSmoothMode.cs">
-      <Link>DrawingGL\GLCanvas\CanvasSmoothMode.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\CanvasToShaderSharedResource.cs">
-      <Link>DrawingGL\GLCanvas\CanvasToShaderSharedResource.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\GLCanvasPainter.cs">
       <Link>DrawingGL\GLCanvas\GLCanvasPainter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\GLGradientColorProvider.cs">
       <Link>DrawingGL\GLCanvas\GLGradientColorProvider.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\GLRenderSurface.cs">
+      <Link>DrawingGL\GLCanvas\GLRenderSurface.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\ImageFillStyle.cs">
       <Link>DrawingGL\GLCanvas\ImageFillStyle.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\InternalGraphicsPath.cs">
       <Link>DrawingGL\GLCanvas\InternalGraphicsPath.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\ShaderSharedResource.cs">
+      <Link>DrawingGL\GLCanvas\ShaderSharedResource.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\SmoothMode.cs">
+      <Link>DrawingGL\GLCanvas\SmoothMode.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\SvgArc.cs">
       <Link>DrawingGL\GLCanvas\SvgArc.cs</Link>

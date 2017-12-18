@@ -13,8 +13,8 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar1 u_linewidth;
         Drawing.Color _strokeColor;
         float _strokeWidth = 0.5f;
-        public InvertAlphaLineSmoothShader(CanvasToShaderSharedResource canvasShareResource)
-             : base(canvasShareResource)
+        public InvertAlphaLineSmoothShader(ShaderSharedResource shareRes)
+             : base(shareRes)
         {
             //-------------------------------------------------------------------------------
             string vs = @"                   
@@ -102,10 +102,10 @@ namespace PixelFarm.DrawingGL
         void CheckViewMatrix()
         {
             int version = 0;
-            if (orthoviewVersion != (version = _canvasShareResource.OrthoViewVersion))
+            if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
             {
                 orthoviewVersion = version;
-                u_matrix.SetData(_canvasShareResource.OrthoView.data);
+                u_matrix.SetData(_shareRes.OrthoView.data);
             }
         }
 

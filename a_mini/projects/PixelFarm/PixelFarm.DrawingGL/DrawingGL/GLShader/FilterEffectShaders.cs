@@ -7,8 +7,8 @@ namespace PixelFarm.DrawingGL
     {
         ShaderUniformVar1 _horizontal;
         ShaderUniformVar1 _isBigEndian;
-        public BlurShader(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public BlurShader(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
             BuildShaderV3();
         }
@@ -257,8 +257,8 @@ namespace PixelFarm.DrawingGL
         float[] kernels;
         float kernelWeight;
         float toDrawImgW = 1, toDrawImgH = 1;
-        public Conv3x3TextureShader(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public Conv3x3TextureShader(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
             //--------------------------------------------------------------------------
             string vs = @"

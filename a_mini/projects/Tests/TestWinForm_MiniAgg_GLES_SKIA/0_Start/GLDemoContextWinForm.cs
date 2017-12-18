@@ -45,7 +45,7 @@ namespace Mini
                 //the we create for it
                 int max = Math.Max(glControl.Width, glControl.Height);
                 _glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max);
-                _glsf.SmoothMode = CanvasSmoothMode.Smooth;//set anti-alias  
+                _glsf.SmoothMode = SmoothMode.Smooth;//set anti-alias  
                 canvasPainter = new GLCanvasPainter(_glsf);
                 //create text printer for opengl 
                 //----------------------
@@ -84,7 +84,7 @@ namespace Mini
         }
         void HandleGLPaint(object sender, System.EventArgs e)
         {
-            _glsf.SmoothMode = CanvasSmoothMode.Smooth;
+            _glsf.SmoothMode = SmoothMode.Smooth;
             _glsf.StrokeColor = PixelFarm.Drawing.Color.Black;
             _glsf.ClearColorBuffer();
             //example

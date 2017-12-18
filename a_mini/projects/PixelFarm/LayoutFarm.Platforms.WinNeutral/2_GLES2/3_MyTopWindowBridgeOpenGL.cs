@@ -30,7 +30,7 @@ namespace LayoutFarm.UI.OpenGL
         }
         void HandleGLPaint(object sender, System.EventArgs e)
         {
-            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
+            canvas2d.SmoothMode = SmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
             canvas2d.ClearColorBuffer();
             //example

@@ -2,7 +2,7 @@
 
 namespace PixelFarm.DrawingGL
 {
-    public enum CanvasSmoothMode
+    public enum SmoothMode
     {
         No,
         Smooth

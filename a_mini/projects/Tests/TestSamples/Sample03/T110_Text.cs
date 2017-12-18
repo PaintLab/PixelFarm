@@ -25,7 +25,7 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsf.SmoothMode = CanvasSmoothMode.Smooth;
+            _glsf.SmoothMode = SmoothMode.Smooth;
             _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
             _glsf.ClearColorBuffer();
             _glsf.Clear(PixelFarm.Drawing.Color.Red);

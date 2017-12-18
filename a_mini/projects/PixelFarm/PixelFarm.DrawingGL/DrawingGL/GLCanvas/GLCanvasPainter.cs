@@ -85,10 +85,10 @@ namespace PixelFarm.DrawingGL
                 {
                     case SmoothingMode.HighQuality:
                     case SmoothingMode.AntiAlias:
-                        _glsf.SmoothMode = CanvasSmoothMode.Smooth;
+                        _glsf.SmoothMode = SmoothMode.Smooth;
                         break;
                     default:
-                        _glsf.SmoothMode = CanvasSmoothMode.No;
+                        _glsf.SmoothMode = SmoothMode.No;
                         break;
                 }
 
@@ -155,12 +155,12 @@ namespace PixelFarm.DrawingGL
         {
             get
             {
-                return _glsf.SmoothMode == CanvasSmoothMode.Smooth;
+                return _glsf.SmoothMode == SmoothMode.Smooth;
             }
 
             set
             {
-                _glsf.SmoothMode = value ? CanvasSmoothMode.Smooth : CanvasSmoothMode.No;
+                _glsf.SmoothMode = value ? SmoothMode.Smooth : SmoothMode.No;
             }
         }
 

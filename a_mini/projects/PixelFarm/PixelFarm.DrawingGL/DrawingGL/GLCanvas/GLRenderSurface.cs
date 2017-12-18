@@ -25,7 +25,7 @@ namespace PixelFarm.DrawingGL
         MultiChannelSubPixelRenderingSdf msdfSubPixelRenderingShader;
         SingleChannelSdf sdfShader;
         //-----------------------------------------------------------
-        CanvasToShaderSharedResource shaderRes;
+        ShaderSharedResource _shareRes;
 
         //tools---------------------------------
 
@@ -61,23 +61,23 @@ namespace PixelFarm.DrawingGL
             flipVerticalView = MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -height, 0));
             orthoAndFlip = orthoView * flipVerticalView;
             //-----------------------------------------------------------------------
-            shaderRes = new CanvasToShaderSharedResource();
-            shaderRes.OrthoView = orthoView;
+            _shareRes = new ShaderSharedResource();
+            _shareRes.OrthoView = orthoView;
             //----------------------------------------------------------------------- 
-            basicFillShader = new BasicFillShader(shaderRes);
-            smoothLineShader = new SmoothLineShader(shaderRes);
-            rectFillShader = new RectFillShader(shaderRes);
-            gdiImgTextureShader = new GdiImageTextureShader(shaderRes);
-            gdiImgTextureWithWhiteTransparentShader = new GdiImageTextureWithWhiteTransparentShader(shaderRes);
-            textureSubPixRendering = new ImageTextureWithSubPixelRenderingShader(shaderRes);
-            blurShader = new BlurShader(shaderRes);
-            glesTextureShader = new OpenGLESTextureShader(shaderRes);
-            invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(shaderRes); //used with stencil  ***
+            basicFillShader = new BasicFillShader(_shareRes);
+            smoothLineShader = new SmoothLineShader(_shareRes);
+            rectFillShader = new RectFillShader(_shareRes);
+            gdiImgTextureShader = new GdiImageTextureShader(_shareRes);
+            gdiImgTextureWithWhiteTransparentShader = new GdiImageTextureWithWhiteTransparentShader(_shareRes);
+            textureSubPixRendering = new ImageTextureWithSubPixelRenderingShader(_shareRes);
+            blurShader = new BlurShader(_shareRes);
+            glesTextureShader = new OpenGLESTextureShader(_shareRes);
+            invertAlphaFragmentShader = new InvertAlphaLineSmoothShader(_shareRes); //used with stencil  ***
 
-            conv3x3TextureShader = new Conv3x3TextureShader(shaderRes);
-            msdfShader = new DrawingGL.MultiChannelSdf(shaderRes);
-            msdfSubPixelRenderingShader = new DrawingGL.MultiChannelSubPixelRenderingSdf(shaderRes);
-            sdfShader = new DrawingGL.SingleChannelSdf(shaderRes);
+            conv3x3TextureShader = new Conv3x3TextureShader(_shareRes);
+            msdfShader = new DrawingGL.MultiChannelSdf(_shareRes);
+            msdfSubPixelRenderingShader = new DrawingGL.MultiChannelSubPixelRenderingSdf(_shareRes);
+            sdfShader = new DrawingGL.SingleChannelSdf(_shareRes);
             //-----------------------------------------------------------------------
             //tools
 
@@ -120,11 +120,11 @@ namespace PixelFarm.DrawingGL
             {
                 if (this._flipY = value)
                 {
-                    shaderRes.OrthoView = orthoAndFlip;
+                    _shareRes.OrthoView = orthoAndFlip;
                 }
                 else
                 {
-                    shaderRes.OrthoView = orthoView;
+                    _shareRes.OrthoView = orthoView;
                 }
             }
         }
@@ -133,7 +133,7 @@ namespace PixelFarm.DrawingGL
         {
         }
 
-        public CanvasSmoothMode SmoothMode
+        public SmoothMode SmoothMode
         {
             get;
             set;
@@ -189,22 +189,22 @@ namespace PixelFarm.DrawingGL
         }
         public float StrokeWidth
         {
-            get { return shaderRes._strokeWidth; }
+            get { return _shareRes._strokeWidth; }
             set
             {
-                shaderRes._strokeWidth = value;
+                _shareRes._strokeWidth = value;
             }
         }
         public Drawing.Color StrokeColor
         {
-            get { return shaderRes.StrokeColor; }
-            set { shaderRes.StrokeColor = value; }
+            get { return _shareRes.StrokeColor; }
+            set { _shareRes.StrokeColor = value; }
         }
         public void DrawLine(float x1, float y1, float x2, float y2)
         {
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.Smooth:
+                case SmoothMode.Smooth:
                     {
                         this.smoothLineShader.DrawLine(x1, y1, x2, y2);
                     }
@@ -218,7 +218,7 @@ namespace PixelFarm.DrawingGL
                         else
                         {
                             //TODO: review stroke with for smooth line shader again
-                            shaderRes._strokeWidth = this.StrokeWidth;
+                            _shareRes._strokeWidth = this.StrokeWidth;
                             this.smoothLineShader.DrawLine(x1, y1, x2, y2);
                         }
                     }
@@ -502,7 +502,7 @@ namespace PixelFarm.DrawingGL
         {
             switch (SmoothMode)
             {
-                case CanvasSmoothMode.No:
+                case SmoothMode.No:
                     {
 
                         float saved_Width = StrokeWidth;
@@ -521,7 +521,7 @@ namespace PixelFarm.DrawingGL
                         StrokeColor = saved_Color;
                     }
                     break;
-                case CanvasSmoothMode.Smooth:
+                case SmoothMode.Smooth:
                     {
 
                         float saved_Width = StrokeWidth;
@@ -549,7 +549,7 @@ namespace PixelFarm.DrawingGL
         {
             switch (SmoothMode)
             {
-                case CanvasSmoothMode.No:
+                case SmoothMode.No:
                     {
 
                         float saved_Width = StrokeWidth;
@@ -568,7 +568,7 @@ namespace PixelFarm.DrawingGL
                         StrokeColor = saved_Color;
                     }
                     break;
-                case CanvasSmoothMode.Smooth:
+                case SmoothMode.Smooth:
                     {
 
                         float saved_Width = StrokeWidth;
@@ -596,7 +596,7 @@ namespace PixelFarm.DrawingGL
         {
             switch (SmoothMode)
             {
-                case CanvasSmoothMode.No:
+                case SmoothMode.No:
                     {
                         int subPathCount = igpth.FigCount;
 
@@ -621,7 +621,7 @@ namespace PixelFarm.DrawingGL
                         }
                     }
                     break;
-                case CanvasSmoothMode.Smooth:
+                case SmoothMode.Smooth:
                     {
 
 
@@ -792,7 +792,7 @@ namespace PixelFarm.DrawingGL
         {
             switch (SmoothMode)
             {
-                case CanvasSmoothMode.No:
+                case SmoothMode.No:
                     {
 
                         int subPathCount = igpth.FigCount;
@@ -810,7 +810,7 @@ namespace PixelFarm.DrawingGL
                         }
                     }
                     break;
-                case CanvasSmoothMode.Smooth:
+                case SmoothMode.Smooth:
                     {
 
                         StrokeColor = color;
@@ -834,7 +834,7 @@ namespace PixelFarm.DrawingGL
         {
             switch (this.SmoothMode)
             {
-                case CanvasSmoothMode.Smooth:
+                case SmoothMode.Smooth:
                     {
                         int borderTriAngleCount;
                         float[] triangles = smoothBorderBuilder.BuildSmoothBorders(
