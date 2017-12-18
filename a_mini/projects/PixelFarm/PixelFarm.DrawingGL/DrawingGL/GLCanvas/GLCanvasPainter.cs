@@ -239,7 +239,7 @@ namespace PixelFarm.DrawingGL
                 return glBmp;
             }
         }
-        public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
+        public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //create gl bmp
             GLBitmap glBmp = ResolveForGLBitmap(actualImage);// new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
@@ -249,7 +249,7 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-        public override void DrawImage(ActualImage actualImage, double x, double y)
+        public override void DrawImage(Image actualImage, double x, double y)
         {
             GLBitmap glBmp = ResolveForGLBitmap(actualImage);
             if (glBmp != null)

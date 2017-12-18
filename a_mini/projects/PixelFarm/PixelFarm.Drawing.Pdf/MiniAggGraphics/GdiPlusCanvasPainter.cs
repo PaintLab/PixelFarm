@@ -6,7 +6,7 @@ using PixelFarm.Agg.Transform;
 
 namespace PixelFarm.Drawing.Pdf
 {
-    class WinGdiFont { }
+
     public class GdiPlusCanvasPainter : CanvasPainter
     {
         //System.Drawing.Graphics _gfx;
@@ -23,7 +23,7 @@ namespace PixelFarm.Drawing.Pdf
         bool _useSubPixelRendering;
         //BufferBitmapStore _bmpStore;
         RequestFont _currentFont;
-        WinGdiFont _winGdiFont;
+
 
         Agg.VertexSource.RoundedRect roundRect;
 
@@ -258,7 +258,7 @@ namespace PixelFarm.Drawing.Pdf
             //     endX, endY);
         }
 
-        public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
+        public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 
             //using (System.Drawing.Bitmap srcBmp = CreateBmpBRGA(actualImage))
@@ -304,7 +304,7 @@ namespace PixelFarm.Drawing.Pdf
         //{
         //    _gfx.DrawImage(bmp, x, y);
         //}
-        public override void DrawImage(ActualImage actualImage, double x, double y)
+        public override void DrawImage(Image actualImage, double x, double y)
         {
             ////create Gdi bitmap from actual image
             //int w = actualImage.Width;
@@ -366,7 +366,7 @@ namespace PixelFarm.Drawing.Pdf
         /// <param name="vxs"></param>
         public override void Fill(VertexStore vxs)
         {
-           // VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs), _fillColor);
+            // VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs), _fillColor);
         }
         /// <summary>
         /// we do NOT store snap/vxs
@@ -374,11 +374,11 @@ namespace PixelFarm.Drawing.Pdf
         /// <param name="snap"></param>
         public override void Fill(VertexStoreSnap snap)
         {
-           // VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
+            // VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
         }
         public override void FillCircle(double x, double y, double radius)
         {
-          //  _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
+            //  _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
         }
 
         //public override void FillCircle(double x, double y, double radius, Drawing.Color color)

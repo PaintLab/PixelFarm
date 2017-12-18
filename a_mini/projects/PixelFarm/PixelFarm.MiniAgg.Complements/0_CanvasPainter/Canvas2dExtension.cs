@@ -22,6 +22,7 @@ using System;
 using PixelFarm.Drawing;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
+
 namespace PixelFarm.Agg
 {
     public static class Canvas2dExtension

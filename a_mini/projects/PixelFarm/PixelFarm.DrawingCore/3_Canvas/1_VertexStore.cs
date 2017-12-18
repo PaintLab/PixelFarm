@@ -76,14 +76,14 @@ namespace PixelFarm.Agg
 
         public VertexCmd GetVertex(int index, out double x, out double y)
         {
-             
+
             x = m_coord_xy[index << 1];
             y = m_coord_xy[(index << 1) + 1];
             return (VertexCmd)m_cmds[index];
         }
         public void GetVertexXY(int index, out double x, out double y)
         {
-           
+
             x = m_coord_xy[index << 1];
             y = m_coord_xy[(index << 1) + 1];
         }
@@ -276,7 +276,7 @@ namespace PixelFarm.Agg
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        internal static void AddP2c(this VertexStore vxs, double x, double y)
+        public static void AddP2c(this VertexStore vxs, double x, double y)
         {
             vxs.AddVertex(x, y, VertexCmd.P2c);
         }
@@ -285,7 +285,7 @@ namespace PixelFarm.Agg
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        internal static void AddP3c(this VertexStore vxs, double x, double y)
+        public static void AddP3c(this VertexStore vxs, double x, double y)
         {
             vxs.AddVertex(x, y, VertexCmd.P3c);
         }

@@ -421,15 +421,31 @@ namespace PixelFarm.Agg
             this.sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithSpan(this.gx.DestImage, sclineRas, scline, spanGen);
         }
-        public override void DrawImage(ActualImage actualImage, double x, double y)
+        public override void DrawImage(Image img, double x, double y)
         {
-            this.sharedImageWriterReader.ReloadImage(actualImage);
-            this.gx.Render(this.sharedImageWriterReader, x, y);
+            //check image caching system
+            if (img is ActualImage)
+            {
+                this.sharedImageWriterReader.ReloadImage((ActualImage)img);
+                this.gx.Render(this.sharedImageWriterReader, x, y);
+            }
+            else
+            {
+                //TODO:
+            }
+
         }
-        public override void DrawImage(ActualImage actualImage, params Transform.AffinePlan[] affinePlans)
+        public override void DrawImage(Image img, params Transform.AffinePlan[] affinePlans)
         {
-            this.sharedImageWriterReader.ReloadImage(actualImage);
-            this.gx.Render(sharedImageWriterReader, affinePlans);
+            if (img is ActualImage)
+            {
+                this.sharedImageWriterReader.ReloadImage((ActualImage)img);
+                this.gx.Render(sharedImageWriterReader, affinePlans);
+            }
+            else
+            {
+                //TODO:
+            }
         }
 
         //----------------------

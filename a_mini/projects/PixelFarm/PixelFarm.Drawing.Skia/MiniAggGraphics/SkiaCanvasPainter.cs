@@ -255,7 +255,7 @@ namespace PixelFarm.Drawing.Skia
             }
         }
 
-        public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
+        public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 
             throw new NotSupportedException();
@@ -284,56 +284,60 @@ namespace PixelFarm.Drawing.Skia
             //    _bmpStore.RelaseBmp(bmp);
             //}
         }
-        public override void DrawImage(ActualImage actualImage, double x, double y)
+        public override void DrawImage(Image img, double x, double y)
         {
-            //create Gdi bitmap from actual image
-            int w = actualImage.Width;
-            int h = actualImage.Height;
-            switch (actualImage.PixelFormat)
+            if (img is ActualImage)
             {
-                case Agg.PixelFormat.ARGB32:
-                    {
-
-                        using (SKBitmap newBmp = new SKBitmap(actualImage.Width, actualImage.Height))
+                ActualImage actualImage = (ActualImage)img;
+                //create Gdi bitmap from actual image
+                int w = actualImage.Width;
+                int h = actualImage.Height;
+                switch (actualImage.PixelFormat)
+                {
+                    case Agg.PixelFormat.ARGB32:
                         {
-                            newBmp.LockPixels();
-                            byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
-                            System.Runtime.InteropServices.Marshal.Copy(
-                            actualImgBuffer,
-                            0,
-                            newBmp.GetPixels(),
-                             actualImgBuffer.Length);
-                            newBmp.UnlockPixels();
+
+                            using (SKBitmap newBmp = new SKBitmap(actualImage.Width, actualImage.Height))
+                            {
+                                newBmp.LockPixels();
+                                byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
+                                System.Runtime.InteropServices.Marshal.Copy(
+                                actualImgBuffer,
+                                0,
+                                newBmp.GetPixels(),
+                                 actualImgBuffer.Length);
+                                newBmp.UnlockPixels();
+                            }
+                            //newBmp.internalBmp.LockPixels();
+                            //byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
+
+                            //System.Runtime.InteropServices.Marshal.Copy(
+                            //     actualImgBuffer,
+                            //     0,
+                            //      newBmp.internalBmp.GetPixels(),
+                            //      actualImgBuffer.Length);
+
+                            //newBmp.internalBmp.UnlockPixels();
+                            //return newBmp;
+
+                            //copy data from acutal buffer to internal representation bitmap
+                            //using (MySkBmp bmp = MySkBmp.CopyFrom(actualImage))
+                            //{
+                            //    _skCanvas.DrawBitmap(bmp.internalBmp, (float)x, (float)y);
+                            //}
                         }
-                        //newBmp.internalBmp.LockPixels();
-                        //byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
-
-                        //System.Runtime.InteropServices.Marshal.Copy(
-                        //     actualImgBuffer,
-                        //     0,
-                        //      newBmp.internalBmp.GetPixels(),
-                        //      actualImgBuffer.Length);
-
-                        //newBmp.internalBmp.UnlockPixels();
-                        //return newBmp;
-
-                        //copy data from acutal buffer to internal representation bitmap
-                        //using (MySkBmp bmp = MySkBmp.CopyFrom(actualImage))
-                        //{
-                        //    _skCanvas.DrawBitmap(bmp.internalBmp, (float)x, (float)y);
-                        //}
-                    }
-                    break;
-                case Agg.PixelFormat.RGB24:
-                    {
-                    }
-                    break;
-                case Agg.PixelFormat.GrayScale8:
-                    {
-                    }
-                    break;
-                default:
-                    throw new NotSupportedException();
+                        break;
+                    case Agg.PixelFormat.RGB24:
+                        {
+                        }
+                        break;
+                    case Agg.PixelFormat.GrayScale8:
+                        {
+                        }
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
             }
         }
         public override void DrawString(string text, double x, double y)
@@ -484,7 +488,7 @@ namespace PixelFarm.Drawing.Skia
         {
             _skCanvas.DrawLine((float)left, (float)top, (float)right, (float)bottom, _stroke);
         }
-        
+
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
             _skCanvas.ClipRect(new SKRect(x1, y1, x2, y2));

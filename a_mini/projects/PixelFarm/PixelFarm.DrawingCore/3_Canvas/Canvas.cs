@@ -95,6 +95,7 @@ namespace PixelFarm.Drawing
         public abstract void DrawLine(float x1, float y1, float x2, float y2);
         //-------------------------------------------------------
         //rects 
+
         public abstract void FillRectangle(Color color, float left, float top, float width, float height);
         public abstract void FillRectangle(Brush brush, float left, float top, float width, float height);
         public abstract void DrawRectangle(Color color, float left, float top, float width, float height);

@@ -275,33 +275,35 @@ namespace PixelFarm.Drawing.WinGdi
                  endX, endY);
         }
 
-        public override void DrawImage(ActualImage actualImage, params AffinePlan[] affinePlans)
+        public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 
-            using (System.Drawing.Bitmap srcBmp = CreateBmpBRGA(actualImage))
-            {
-                var bmp = _bmpStore.GetFreeBmp();
-                using (var g2 = System.Drawing.Graphics.FromImage(bmp))
-                {
-                    //we can use recycle tmpVxsStore
-                    Affine destRectTransform = Affine.NewMatix(affinePlans);
-                    double x0 = 0, y0 = 0, x1 = bmp.Width, y1 = bmp.Height;
-                    destRectTransform.Transform(ref x0, ref y0);
-                    destRectTransform.Transform(ref x0, ref y1);
-                    destRectTransform.Transform(ref x1, ref y1);
-                    destRectTransform.Transform(ref x1, ref y0);
-                    var matrix = new System.Drawing.Drawing2D.Matrix(
-                       (float)destRectTransform.m11, (float)destRectTransform.m12,
-                       (float)destRectTransform.m21, (float)destRectTransform.m22,
-                       (float)destRectTransform.dx, (float)destRectTransform.dy);
-                    g2.Clear(System.Drawing.Color.Transparent);
-                    g2.Transform = matrix;
-                    //------------------------
-                    g2.DrawImage(srcBmp, new System.Drawing.PointF(0, 0));
-                    this._gfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
-                }
-                _bmpStore.RelaseBmp(bmp);
-            }
+            throw new NotSupportedException();
+
+            //using (System.Drawing.Bitmap srcBmp = CreateBmpBRGA(actualImage))
+            //{
+            //    var bmp = _bmpStore.GetFreeBmp();
+            //    using (var g2 = System.Drawing.Graphics.FromImage(bmp))
+            //    {
+            //        //we can use recycle tmpVxsStore
+            //        Affine destRectTransform = Affine.NewMatix(affinePlans);
+            //        double x0 = 0, y0 = 0, x1 = bmp.Width, y1 = bmp.Height;
+            //        destRectTransform.Transform(ref x0, ref y0);
+            //        destRectTransform.Transform(ref x0, ref y1);
+            //        destRectTransform.Transform(ref x1, ref y1);
+            //        destRectTransform.Transform(ref x1, ref y0);
+            //        var matrix = new System.Drawing.Drawing2D.Matrix(
+            //           (float)destRectTransform.m11, (float)destRectTransform.m12,
+            //           (float)destRectTransform.m21, (float)destRectTransform.m22,
+            //           (float)destRectTransform.dx, (float)destRectTransform.dy);
+            //        g2.Clear(System.Drawing.Color.Transparent);
+            //        g2.Transform = matrix;
+            //        //------------------------
+            //        g2.DrawImage(srcBmp, new System.Drawing.PointF(0, 0));
+            //        this._gfx.DrawImage(bmp, new System.Drawing.Point(0, 0));
+            //    }
+            //    _bmpStore.RelaseBmp(bmp);
+            //}
         }
 
         static System.Drawing.Bitmap CreateBmpBRGA(ActualImage actualImage)
@@ -321,33 +323,38 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _gfx.DrawImage(bmp, x, y);
         }
-        public override void DrawImage(ActualImage actualImage, double x, double y)
+        public override void DrawImage(Image img, double x, double y)
         {
-            //create Gdi bitmap from actual image
-            int w = actualImage.Width;
-            int h = actualImage.Height;
-            switch (actualImage.PixelFormat)
+            if (img is ActualImage)
             {
-                case Agg.PixelFormat.ARGB32:
-                    {
-                        //copy data from acutal buffer to internal representation bitmap
-                        using (var bmp = CreateBmpBRGA(actualImage))
+                ActualImage actualImage = (ActualImage)img;
+                //create Gdi bitmap from actual image
+                int w = actualImage.Width;
+                int h = actualImage.Height;
+                switch (actualImage.PixelFormat)
+                {
+                    case Agg.PixelFormat.ARGB32:
                         {
-                            this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
+                            //copy data from acutal buffer to internal representation bitmap
+                            using (var bmp = CreateBmpBRGA(actualImage))
+                            {
+                                this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
+                            }
                         }
-                    }
-                    break;
-                case Agg.PixelFormat.RGB24:
-                    {
-                    }
-                    break;
-                case Agg.PixelFormat.GrayScale8:
-                    {
-                    }
-                    break;
-                default:
-                    throw new NotSupportedException();
+                        break;
+                    case Agg.PixelFormat.RGB24:
+                        {
+                        }
+                        break;
+                    case Agg.PixelFormat.GrayScale8:
+                        {
+                        }
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
             }
+            
         }
         public override void DrawString(string text, double x, double y)
         {

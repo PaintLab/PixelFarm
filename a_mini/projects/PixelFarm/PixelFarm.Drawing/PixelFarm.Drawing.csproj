@@ -61,8 +61,8 @@
     <Compile Include="..\PixelFarm.DrawingCanvas\0_BufferMx\NativeMemMx.cs">
       <Link>2_DrawingCanvas\0_BufferMx\NativeMemMx.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\2_Canvas\CanvasPainter.cs">
-      <Link>2_DrawingCanvas\2_Canvas\CanvasPainter.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCanvas\2_Canvas\CanvasPainterExtensions.cs">
+      <Link>2_DrawingCanvas\2_Canvas\CanvasPainterExtensions.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\2_Canvas\ColorEx.cs">
       <Link>2_DrawingCanvas\2_Canvas\ColorEx.cs</Link>
@@ -72,15 +72,6 @@
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\3_Agg_PixelBuffer\AggMemMx.cs">
       <Link>2_DrawingCanvas\3_Agg_PixelBuffer\AggMemMx.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\4_Agg_Vertex\0_VertexCommandAndOrientation.cs">
-      <Link>2_DrawingCanvas\4_AggVertex\0_VertexCommandAndOrientation.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\4_Agg_Vertex\1_VertexStore.cs">
-      <Link>2_DrawingCanvas\4_AggVertex\1_VertexStore.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingCanvas\4_Agg_Vertex\2_VertexStoreSnap.cs">
-      <Link>2_DrawingCanvas\4_AggVertex\2_VertexStoreSnap.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCanvas\4_Agg_Vertex\VertexHitTester.cs">
       <Link>2_DrawingCanvas\4_AggVertex\VertexHitTester.cs</Link>
@@ -157,8 +148,20 @@
     <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Region.cs">
       <Link>1_DrawingCore\2_Abstract_DrawingElements\Region.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\0_VertexCommandAndOrientation.cs">
+      <Link>1_DrawingCore\3_Canvas\0_VertexCommandAndOrientation.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\1_VertexStore.cs">
+      <Link>1_DrawingCore\3_Canvas\1_VertexStore.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\2_VertexStoreSnap.cs">
+      <Link>1_DrawingCore\3_Canvas\2_VertexStoreSnap.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\Canvas.cs">
       <Link>1_DrawingCore\3_Canvas\Canvas.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\CanvasPainter.cs">
+      <Link>1_DrawingCore\3_Canvas\CanvasPainter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\RenderVx.cs">
       <Link>1_DrawingCore\3_Canvas\RenderVx.cs</Link>
@@ -541,8 +544,8 @@
     <Compile Include="..\pixelfarm.vectors\2_geometry\RectD.cs">
       <Link>2_DrawingCanvas\1_Vectors\2_Geometry\RectD.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.vectors\2_geometry\RectInt.cs">
-      <Link>2_DrawingCanvas\1_Vectors\2_Geometry\RectInt.cs</Link>
+    <Compile Include="..\PixelFarm.Vectors\2_Geometry\RectInt.cs">
+      <Link>1_DrawingCore\2_Geometry\RectInt.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\3_transform\1_Affine.cs">
       <Link>2_DrawingCanvas\1_Vectors\3_Transform\1_Affine.cs</Link>
@@ -555,6 +558,9 @@
     </Compile>
     <Compile Include="..\pixelfarm.vectors\3_transform\4_SimulEqGeneral.cs">
       <Link>2_DrawingCanvas\1_Vectors\3_Transform\4_SimulEqGeneral.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.Vectors\3_Transform\AffinePlan.cs">
+      <Link>1_DrawingCore\2_Geometry\AffinePlan.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.vectors\3_transform\ICoordTransformer.cs">
       <Link>2_DrawingCanvas\1_Vectors\3_Transform\ICoordTransformer.cs</Link>
