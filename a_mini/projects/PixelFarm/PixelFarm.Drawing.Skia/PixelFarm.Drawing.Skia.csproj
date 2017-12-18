@@ -67,9 +67,9 @@
     <Compile Include="Canvas\4_MySkiaCanvas_TextAndFonts.cs" />
     <Compile Include="Canvas\Conv.cs" />
     <Compile Include="Implementation\BitmapHelper.cs" />
-    <Compile Include="MiniAggGraphics\SkiaCanvasPainter.cs" />
-    <Compile Include="MiniAggGraphics\SkiaRenderVx.cs" />
-    <Compile Include="MiniAggGraphics\VxsHelper.cs" />
+    <Compile Include="Painter\SkiaCanvasPainter.cs" />
+    <Compile Include="Painter\SkiaRenderVx.cs" />
+    <Compile Include="Painter\VxsHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

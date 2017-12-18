@@ -40,8 +40,8 @@
     <Compile Include="Canvas\3_MyPdfCanvas_DrawGraphics.cs" />
     <Compile Include="Canvas\4_MyPdfCanvas_TextAndFonts.cs" />
     <Compile Include="Canvas\Conv.cs" />
-    <Compile Include="MiniAggGraphics\GdiPlusCanvasPainter.cs" />
-    <Compile Include="MiniAggGraphics\GdiPlusRenderVx.cs" />
+    <Compile Include="Painter\PdfCanvasPainter.cs" />
+    <Compile Include="Painter\PdfRenderVx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

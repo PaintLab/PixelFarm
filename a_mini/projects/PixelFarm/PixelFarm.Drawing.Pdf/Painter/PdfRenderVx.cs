@@ -3,18 +3,18 @@
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing.Pdf
 {
-    class WinGdiRenderVx : RenderVx
+    class PdfRenderVx : RenderVx
     {
         internal VertexStoreSnap snap;
         //internal System.Drawing.Drawing2D.GraphicsPath path;
-        public WinGdiRenderVx(VertexStoreSnap snap)
+        public PdfRenderVx(VertexStoreSnap snap)
         {
             this.snap = snap;
         }
     }
-    class WinGdiRenderVxFormattedString : RenderVxFormattedString
+    class PdfRenderVxFormattedString : RenderVxFormattedString
     {
-        public WinGdiRenderVxFormattedString(string str)
+        public PdfRenderVxFormattedString(string str)
         {
             this.OriginalString = str;
         }
