@@ -44,11 +44,11 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\Es2Utils\MiniShaderProgram.cs">
       <Link>DrawingGL\Es2Utils\MiniShaderProgram.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\GLCanvasPainter.cs">
-      <Link>DrawingGL\GLCanvas\GLCanvasPainter.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\GLGradientColorProvider.cs">
       <Link>DrawingGL\GLCanvas\GLGradientColorProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\GLPainter.cs">
+      <Link>DrawingGL\GLCanvas\GLPainter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\GLRenderSurface.cs">
       <Link>DrawingGL\GLCanvas\GLRenderSurface.cs</Link>
