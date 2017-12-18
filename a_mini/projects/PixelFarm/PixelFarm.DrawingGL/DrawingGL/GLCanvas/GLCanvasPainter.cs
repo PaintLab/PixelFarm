@@ -218,13 +218,23 @@ namespace PixelFarm.DrawingGL
             }
             else
             {
-                //TODO: review here
-                //we should create 'borrow' method ? => send direct exact ptr to img buffer 
-                //for now, create a new one -- after we copy we, don't use it 
-                var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
-                image.RequestInternalBuffer(ref req);
-                byte[] copy = req.OutputBuffer;
-                var glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
+                GLBitmap glBmp = null;
+                if (image is ActualImage)
+                {
+                    ActualImage actualImage = (ActualImage)image;
+                    glBmp = new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
+                }
+                else
+                {
+                    //TODO: review here
+                    //we should create 'borrow' method ? => send direct exact ptr to img buffer 
+                    //for now, create a new one -- after we copy we, don't use it 
+                    var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
+                    image.RequestInternalBuffer(ref req);
+                    byte[] copy = req.OutputBuffer;
+                    glBmp = new GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
+                }
+
                 Image.SetCacheInnerImage(image, glBmp);
                 return glBmp;
             }
@@ -241,7 +251,7 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawImage(ActualImage actualImage, double x, double y)
         {
-            GLBitmap glBmp = new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
+            GLBitmap glBmp = ResolveForGLBitmap(actualImage);
             if (glBmp != null)
             {
                 _canvas.DrawImage(glBmp, (float)x, (float)y);
