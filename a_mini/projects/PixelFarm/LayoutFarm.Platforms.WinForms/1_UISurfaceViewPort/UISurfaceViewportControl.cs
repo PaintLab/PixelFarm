@@ -75,8 +75,8 @@ namespace LayoutFarm.UI
                         var bridge = new OpenGL.MyTopWindowBridgeOpenGL(rootgfx, topWinEventRoot);
                         var view = new OpenGL.GpuOpenGLSurfaceView();
 
-                        view.Width = 800;
-                        view.Height = 600;
+                        view.Width = 1200;
+                        view.Height = 1200;
                         openGLSurfaceView = view;
                         //view.Dock = DockStyle.Fill;
                         this.Controls.Add(view);
@@ -116,7 +116,7 @@ namespace LayoutFarm.UI
 
                         //
 
-                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLCanvas(canvasPainter, 0, 0, view.Width, view.Height);
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLCanvas(canvasPainter, view.Width, view.Height);
                         bridge.SetCanvas(myGLCanvas1);
 #endif
                     }

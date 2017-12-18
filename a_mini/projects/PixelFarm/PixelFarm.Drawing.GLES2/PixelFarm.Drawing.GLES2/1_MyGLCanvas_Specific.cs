@@ -15,10 +15,9 @@ namespace PixelFarm.Drawing.GLES2
         bool isDisposed;
         Stack<Rectangle> clipRectStack = new Stack<Rectangle>();
         Rectangle currentClipRect;
-        
+
         public MyGLCanvas(
-           GLCanvasPainter painter, //*** we wrap around GLCanvasPainter ***
-           int left, int top,
+           GLCanvasPainter painter, //*** we wrap around GLCanvasPainter *** 
            int width,
            int height)
         {
@@ -26,10 +25,10 @@ namespace PixelFarm.Drawing.GLES2
             //set painter first
             this.painter1 = painter;
             //----------------
-            this.left = left;
-            this.top = top;
-            this.right = left + width;
-            this.bottom = top + height;
+            this._left = 0; //default start at 0,0
+            this._top = 0;
+            this._width = width;
+            this._height = height;
 
             currentClipRect = new Rectangle(0, 0, width, height);
 
@@ -107,7 +106,7 @@ namespace PixelFarm.Drawing.GLES2
 
         public override void dbug_DrawRuler(int x)
         {
-            int canvas_top = this.top;
+            int canvas_top = this._top;
             int canvas_bottom = this.Bottom;
             for (int y = canvas_top; y < canvas_bottom; y += 10)
             {

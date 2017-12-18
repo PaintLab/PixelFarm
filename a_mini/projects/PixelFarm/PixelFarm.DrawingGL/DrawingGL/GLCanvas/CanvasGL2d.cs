@@ -42,13 +42,20 @@ namespace PixelFarm.DrawingGL
 
         internal CanvasGL2d(int canvasW, int canvasH)
         {
+            //-------------
+            //y axis points upward (like other OpenGL)
+            //x axis points to right.
+            //please NOTE: left lower corner of the canvas is (0,0)
+            //-------------
+
             this.canvasW = canvasW;
             this.canvasH = canvasH;
-            ////setup viewport size
+            //setup viewport size,
+            //we need W:H ratio= 1:1 , square viewport
             int max = Math.Max(canvasW, canvasH);
-            ////square viewport 
-            orthoView = MyMat4.ortho(0, max, 0, max, 0, 1);
-            flipVerticalView = MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -max, 0));
+            orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
+
+            flipVerticalView = MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -canvasH, 0));
             orthoAndFlip = orthoView * flipVerticalView;
             //-----------------------------------------------------------------------
             shaderRes = new CanvasToShaderSharedResource();
@@ -639,7 +646,7 @@ namespace PixelFarm.DrawingGL
                             else
                             {
                                 if ((tessArea = f.GetAreaTess(this.tessTool)) != null)
-                                {   
+                                {
                                     //draw area
                                     basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
                                     //draw smooth border
