@@ -26,7 +26,7 @@ namespace Mini
         GetGLControlDisplay _getGLControlDisplay;
         GetGLSurface _getGLSurface;
         GLCanvasPainter _painter;
-
+        
         public virtual void Draw(CanvasPainter p) { }
         public void CloseDemo()
         {

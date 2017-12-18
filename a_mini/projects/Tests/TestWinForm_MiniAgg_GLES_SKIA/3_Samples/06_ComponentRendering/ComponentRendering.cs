@@ -2,6 +2,7 @@
 //MatterHackers
 
 using System;
+using PixelFarm.Drawing;
 using PixelFarm.Agg.Imaging;
 using Mini;
 namespace PixelFarm.Agg
