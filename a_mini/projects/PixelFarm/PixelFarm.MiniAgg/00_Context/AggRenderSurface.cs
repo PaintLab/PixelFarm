@@ -25,7 +25,7 @@ using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.Transform;
 namespace PixelFarm.Agg
 {
-    public sealed partial class ImageGraphics2D : Graphics2D
+    public sealed partial class AggRenderSurface
     {
         MyImageReaderWriter destImageReaderWriter;
         ScanlinePacked8 sclinePack8;
@@ -41,7 +41,7 @@ namespace PixelFarm.Agg
         ImageInterpolationQuality imgInterpolationQuality = ImageInterpolationQuality.Bilinear;
 
         ActualImage destImage;
-        public ImageGraphics2D(ActualImage destImage)
+        public AggRenderSurface(ActualImage destImage)
         {
             //create from actual image
             this.destImage = destImage;
@@ -61,11 +61,21 @@ namespace PixelFarm.Agg
             this.sclinePack8 = new ScanlinePacked8();
             this.currentBlender = this.pixBlenderRGBA32 = new PixelBlenderBGRA();
         }
-        public override ScanlinePacked8 ScanlinePacked8
+
+
+        public ScanlineRasterizer ScanlineRasterizer
+        {
+            get { return sclineRas; }
+        }
+        public ActualImage DestActualImage
+        {
+            get { return this.destActualImage; }
+        }
+        public ScanlinePacked8 ScanlinePacked8
         {
             get { return this.sclinePack8; }
         }
-        public override IPixelBlender PixelBlender
+        public IPixelBlender PixelBlender
         {
             get
             {
@@ -76,19 +86,19 @@ namespace PixelFarm.Agg
                 this.currentBlender = value;
             }
         }
-        public override ImageReaderWriterBase DestImage
+        public ImageReaderWriterBase DestImage
         {
             get { return this.destImageReaderWriter; }
         }
-        public override ScanlineRasToDestBitmapRenderer ScanlineRasToDestBitmap
+        public ScanlineRasToDestBitmapRenderer ScanlineRasToDestBitmap
         {
             get { return this.sclineRasToBmp; }
         }
-        public override void SetClippingRect(RectInt rect)
+        public void SetClippingRect(RectInt rect)
         {
             ScanlineRasterizer.SetClipBox(rect);
         }
-        public override RectInt GetClippingRect()
+        public RectInt GetClippingRect()
         {
             return ScanlineRasterizer.GetVectorClipBox();
         }
@@ -107,7 +117,7 @@ namespace PixelFarm.Agg
         {
             _vxsPool.Release(ref vxs);
         }
-        public override void Clear(Color color)
+        public void Clear(Color color)
         {
             RectInt clippingRectInt = GetClippingRect();
             var destImage = this.DestImage;
@@ -227,7 +237,7 @@ namespace PixelFarm.Agg
         /// </summary>
         /// <param name="vxsSnap"></param>
         /// <param name="color"></param>
-        public override void Render(VertexStoreSnap vxsSnap, Drawing.Color color)
+        public void Render(VertexStoreSnap vxsSnap, Drawing.Color color)
         {
             //reset rasterizer before render each vertextSnap 
             //-----------------------------
@@ -252,5 +262,47 @@ namespace PixelFarm.Agg
             unchecked { destImageChanged++; };
             //-----------------------------
         }
+
+
+
+        /// <summary>
+        /// we do NOT store vxs
+        /// </summary>
+        /// <param name="vxs"></param>
+        /// <param name="c"></param>
+        public void Render(VertexStore vxs, Drawing.Color c)
+        {
+            Render(new VertexStoreSnap(vxs), c);
+        }
+        ActualImage destActualImage;
+        ScanlineRasterizer sclineRas;
+        Affine currentTxMatrix = Affine.IdentityMatrix;
+        public Affine CurrentTransformMatrix
+        {
+            get { return this.currentTxMatrix; }
+            set
+            {
+                this.currentTxMatrix = value;
+            }
+        }
+#if DEBUG
+        VertexStore dbug_v1 = new VertexStore(8);
+        VertexStore dbug_v2 = new VertexStore();
+        Stroke dbugStroke = new Stroke(1);
+        public void dbugLine(double x1, double y1, double x2, double y2, Drawing.Color color)
+        {
+
+
+            dbug_v1.AddMoveTo(x1, y1);
+            dbug_v1.AddLineTo(x2, y2);
+            //dbug_v1.AddStop();
+
+            dbugStroke.MakeVxs(dbug_v1, dbug_v2);
+            Render(dbug_v2, color);
+            dbug_v1.Clear();
+            dbug_v2.Clear();
+        }
+#endif
+
     }
 }

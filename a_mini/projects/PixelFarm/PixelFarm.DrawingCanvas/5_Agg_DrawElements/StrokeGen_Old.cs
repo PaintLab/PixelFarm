@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.VectorMath;
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
 

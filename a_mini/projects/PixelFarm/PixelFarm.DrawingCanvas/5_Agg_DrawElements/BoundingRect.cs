@@ -22,6 +22,7 @@
 //
 //----------------------------------------------------------------------------
 
+using PixelFarm.Drawing;
 
 namespace PixelFarm.Agg
 {
@@ -33,7 +34,7 @@ namespace PixelFarm.Agg
         {
             return GetBoundingRect(vxs, gi, num,
                 out boundingRect.Left,
-                out boundingRect.Bottom, 
+                out boundingRect.Bottom,
                 out boundingRect.Right,
                 out boundingRect.Top);
         }

@@ -1,7 +1,8 @@
 ﻿//BSD, 2014-2017, WinterDev
 
 using System.Collections.Generic;
-namespace PixelFarm.Agg
+using PixelFarm.Agg;
+namespace PixelFarm.Drawing
 {
     //----------------------------------------
     public struct VertexSnapIter

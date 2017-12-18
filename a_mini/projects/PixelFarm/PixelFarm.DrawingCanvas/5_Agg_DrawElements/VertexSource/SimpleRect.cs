@@ -21,7 +21,7 @@
 // Rounded rectangle vertex generator
 //
 //----------------------------------------------------------------------------
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.VertexSource
 {
     //------------------------------------------------------------rounded_rect

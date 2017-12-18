@@ -19,6 +19,7 @@
 //----------------------------------------------------------------------------
 
 using PixelFarm.VectorMath;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.VertexSource
 {
 

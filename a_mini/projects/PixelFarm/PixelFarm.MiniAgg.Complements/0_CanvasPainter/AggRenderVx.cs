@@ -1,5 +1,6 @@
 ﻿//MIT, 2016-2017, WinterDev
 
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
     class AggRenderVx : PixelFarm.Drawing.RenderVx

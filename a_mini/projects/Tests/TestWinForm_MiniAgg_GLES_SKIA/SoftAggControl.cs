@@ -5,11 +5,13 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using PixelFarm.Agg;
-using PixelFarm.Agg.Imaging; 
+using PixelFarm.Agg.Imaging;
 using PixelFarm.Drawing.Fonts;
+
 
 namespace Mini
 {
+   
     public partial class SoftAggControl : UserControl
     {
         bool isMouseDown;
@@ -17,12 +19,13 @@ namespace Mini
         int myWidth = 800;
         int myHeight = 600;
         GdiBitmapBackBuffer bitmapBackBuffer;
-        PixelFarm.Drawing.CanvasPainter painter;
+        CanvasPainter painter;
+
         bool _useGdiPlusOutput;
         bool _gdiAntiAlias;
         Graphics thisGfx;//for output
         Bitmap bufferBmp = null;
-        Rectangle bufferBmpRect;
+        System.Drawing.Rectangle bufferBmpRect;
         public SoftAggControl()
         {
             bitmapBackBuffer = new GdiBitmapBackBuffer();
@@ -64,7 +67,7 @@ namespace Mini
             }
             else
             {
-                ImageGraphics2D imgGfx2d = Initialize(myWidth, myHeight, 32);
+                AggRenderSurface imgGfx2d = Initialize(myWidth, myHeight, 32);
                 AggCanvasPainter aggPainter = new AggCanvasPainter(imgGfx2d);
                 //set text printer for agg canvas painter
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
@@ -76,7 +79,7 @@ namespace Mini
             }
             painter.Clear(PixelFarm.Drawing.Color.White);
         }
-        ImageGraphics2D Initialize(int width, int height, int bitDepth)
+        AggRenderSurface Initialize(int width, int height, int bitDepth)
         {
             if (width > 0 && height > 0)
             {
@@ -89,7 +92,7 @@ namespace Mini
                 {
                     var actualImage = new ActualImage(width, height, PixelFormat.ARGB32);
                     bitmapBackBuffer.Initialize(width, height, bitDepth, actualImage);
-                    return Graphics2D.CreateFromImage(actualImage);
+                    return new AggRenderSurface(actualImage);
                 }
             }
             throw new NotSupportedException();

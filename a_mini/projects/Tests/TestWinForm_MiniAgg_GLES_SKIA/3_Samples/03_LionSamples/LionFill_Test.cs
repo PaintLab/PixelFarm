@@ -68,7 +68,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
     //--------------------------------------------------
     public class LionFill : SimpleSprite
     {
-        VertexStore vxStorage;
+        PixelFarm.Drawing.VertexStore vxStorage;
         SpriteShape lionShape;
         byte alpha;
         public LionFill()
@@ -153,7 +153,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                 );
                 //convert
                 //System.Collections.Generic.List<VertexData> list = new System.Collections.Generic.List<VertexData>();
-                vxStorage = new VertexStore();
+                vxStorage = new PixelFarm.Drawing.VertexStore();
                 transform.TransformToVxs(lionShape.Path.Vxs, vxStorage);
                 //transformedPathStorage = new VertexSourceApplyTransform(lionShape.Path, transform);
                 //transformedPathStorage.DoTransform(list);
@@ -169,7 +169,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
                 for (int i = 0; i < j; ++i)
                 {
                     p.FillColor = colors[i];
-                    p.Fill(new VertexStoreSnap(vxStorage, pathList[i]));
+                    p.Fill(new PixelFarm.Drawing.VertexStoreSnap(vxStorage, pathList[i]));
                     //graphics2D.Render(new VertexStoreSnap(vxStorage, pathList[i]), colors[i]);
                 }
             }

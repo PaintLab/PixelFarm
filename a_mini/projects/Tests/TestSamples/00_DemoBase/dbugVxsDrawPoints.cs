@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg;
+using PixelFarm.Drawing;
 namespace Mini
 {
 #if DEBUG

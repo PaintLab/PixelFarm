@@ -142,7 +142,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 for (int i = 0; i < j; ++i)
                 {
                     p.StrokeColor = colors[i];
-                    p.Draw(new VertexStoreSnap(vxs, pathList[i]));
+                    p.Draw(new PixelFarm.Drawing.VertexStoreSnap(vxs, pathList[i]));
 
                 }
                 //not agg   
@@ -151,7 +151,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
             }
 
             //-----------------------
-            Graphics2D graphics2D = p1.Graphics;
+            AggRenderSurface graphics2D = p1.Graphics;
             //var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             //int width = widgetsSubImage.Width;
             //int height = widgetsSubImage.Height; 
@@ -199,7 +199,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                 for (int i = 0; i < j; ++i)
                 {
                     rasterizer.RenderVertexSnap(
-                        new VertexStoreSnap(vxs,
+                        new PixelFarm.Drawing.VertexStoreSnap(vxs,
                             lionShape.PathIndexList[i]),
                             lionShape.Colors[i]);
                 }

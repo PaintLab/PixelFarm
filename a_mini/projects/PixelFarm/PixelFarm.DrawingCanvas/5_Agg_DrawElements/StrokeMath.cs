@@ -22,8 +22,10 @@
 // Stroke math
 //
 //----------------------------------------------------------------------------
-
 using System;
+using PixelFarm.Drawing;
+
+
 namespace PixelFarm.Agg
 {
     public struct Vertex2d

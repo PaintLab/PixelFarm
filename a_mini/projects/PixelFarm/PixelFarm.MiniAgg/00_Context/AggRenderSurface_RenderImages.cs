@@ -23,11 +23,12 @@ using System;
 using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.Transform;
 using PixelFarm.VectorMath;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
-    partial class ImageGraphics2D
+    partial class AggRenderSurface
     {
-        public override bool UseSubPixelRendering
+        public bool UseSubPixelRendering
         {
             get { return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering; }
             set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelRendering : ScanlineRenderMode.Default; }
@@ -260,7 +261,7 @@ namespace PixelFarm.Agg
             var imgSpanGen = new ImgSpanGenRGBA_BilinearClip(
                 source,
                 Drawing.Color.Black,
-                new SpanInterpolatorLinear(sourceRectTransform)); 
+                new SpanInterpolatorLinear(sourceRectTransform));
             VertexStore v2 = destRectTransform.TransformToVxs(v1, GetFreeVxs());
             Render(v2, imgSpanGen);
             //

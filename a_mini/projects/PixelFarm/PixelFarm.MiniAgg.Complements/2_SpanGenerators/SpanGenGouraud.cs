@@ -17,7 +17,7 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
     //Gouraud shading

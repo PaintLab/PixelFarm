@@ -327,7 +327,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                 return;
             }
             AggCanvasPainter p2 = (AggCanvasPainter)p;
-            Graphics2D gx = p2.Graphics;
+            AggRenderSurface gx = p2.Graphics;
             var widgetsSubImage = gx.DestImage;
             var scline = gx.ScanlinePacked8;
             int width = (int)widgetsSubImage.Width;

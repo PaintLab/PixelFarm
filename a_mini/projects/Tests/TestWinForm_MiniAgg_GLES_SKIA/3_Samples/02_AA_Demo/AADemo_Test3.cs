@@ -15,7 +15,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
         double m_size;
         Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
-        Graphics2D gfx;
+        AggRenderSurface gfx;
         AggLcdDistributionLookupTable lcdLut;
         double primary = 1;
         public CustomScanlineRasToBmp_EnlargedSubPixelRendering(double size, ActualImage destImage)
@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
-            gfx = Graphics2D.CreateFromImage(destImage);
+            gfx = new AggRenderSurface(destImage);
             lcdLut = new Sample_AADemoTest3.AggLcdDistributionLookupTable(primary, 2.0 / 9, 1.0 / 9);
         }
         static float mix(float farColor, float nearColor, float weight)
@@ -244,7 +244,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             if (p is PixelFarm.Agg.AggCanvasPainter)
             {
                 var p2 = (PixelFarm.Agg.AggCanvasPainter)p;
-                Graphics2D gx = p2.Graphics;
+                AggRenderSurface gx = p2.Graphics;
                 var widgetsSubImage = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
                 gx.UseSubPixelRendering = false;
                 IPixelBlender NormalBlender = new PixelBlenderBGRA();

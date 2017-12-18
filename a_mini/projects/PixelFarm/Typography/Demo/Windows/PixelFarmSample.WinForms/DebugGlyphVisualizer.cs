@@ -1,5 +1,6 @@
 ﻿//MIT, 2014-2017, WinterDev
 using PixelFarm.Agg;
+using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using System;
 using System.Numerics;
@@ -104,7 +105,7 @@ namespace SampleWinForms.UI
             var ps = txToVxs1.dbugGetPathWriter();
             _infoView.ShowOrgBorderInfo(ps.Vxs);
 #endif
-            VertexStore vxs = new VertexStore();
+            PixelFarm.Drawing.VertexStore vxs = new PixelFarm.Drawing.VertexStore();
 
             txToVxs1.WriteOutput(vxs, _vxsPool);
             //----------------------------------------------------
@@ -116,7 +117,7 @@ namespace SampleWinForms.UI
             painter.Clear(PixelFarm.Drawing.Color.White);
 
             RectD bounds = new RectD();
-            BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref bounds);
+            BoundingRect.GetBoundingRect(new PixelFarm.Drawing.VertexStoreSnap(vxs), ref bounds);
             //----------------------------------------------------
             float scale = _typeface.CalculateScaleToPixelFromPointSize(_sizeInPoint);
             _pxscale = scale;

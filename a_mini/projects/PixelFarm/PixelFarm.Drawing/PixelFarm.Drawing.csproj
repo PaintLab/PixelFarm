@@ -250,14 +250,11 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\Image\Transposer.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\Image\Transposer.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\00_Context\Graphics2D.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\Graphics2D.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\00_Context\AggRenderSurface.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\AggRenderSurface.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\00_Context\ImageGraphics2D.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\ImageGraphics2D.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\00_Context\ImageGraphics2D_RenderImages.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\ImageGraphics2D_RenderImages.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\00_Context\AggRenderSurface_RenderImages.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\AggRenderSurface_RenderImages.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\ChildImage.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ChildImage.cs</Link>

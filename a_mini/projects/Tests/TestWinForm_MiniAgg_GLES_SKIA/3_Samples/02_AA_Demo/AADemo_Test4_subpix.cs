@@ -1,5 +1,7 @@
 ﻿//MIT, 2017, WinterDev 
 using System;
+using PixelFarm.Drawing;
+using PixelFarm.Agg;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest4
 {
@@ -205,7 +207,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
             ActualImage glyphImg = new ActualImage(100, 100, PixelFormat.ARGB32);
-            ImageGraphics2D glyph2d = new ImageGraphics2D(glyphImg);
+            AggRenderSurface glyph2d = new AggRenderSurface(glyphImg);
             AggCanvasPainter painter = new AggCanvasPainter(glyph2d);
 
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
@@ -247,7 +249,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
             ActualImage glyphImg = new ActualImage(100, 100, PixelFormat.ARGB32);
-            ImageGraphics2D glyph2d = new ImageGraphics2D(glyphImg);
+            AggRenderSurface glyph2d = new AggRenderSurface(glyphImg);
             AggCanvasPainter painter = new AggCanvasPainter(glyph2d);
             //
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;

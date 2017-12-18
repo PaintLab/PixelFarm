@@ -30,6 +30,7 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
     public abstract class BasicSprite

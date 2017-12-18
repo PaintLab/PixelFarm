@@ -13,13 +13,13 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
         double m_size;
         Square m_square;
         ScanlineUnpacked8 m_sl = new ScanlineUnpacked8();
-        Graphics2D gfx;
+        AggRenderSurface gfx;
         public CustomScanlineRasToBmp_EnlargedV2(double size, ActualImage destImage)
         {
             this.ScanlineRenderMode = Agg.ScanlineRenderMode.Custom;
             m_size = size;
             m_square = new Square(size);
-            gfx = Graphics2D.CreateFromImage(destImage);
+            gfx = new AggRenderSurface(destImage);
         }
         protected override void CustomRenderSingleScanLine(IImageReaderWriter destImage, Scanline scanline, Color color)
         {
@@ -48,7 +48,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             }
         }
     }
-  
+
     //---------------------------
     [Info(OrderCode = "02")]
     [Info("Demonstration of the Anti-Aliasing principle with Subpixel Accuracy. The triangle "
@@ -93,7 +93,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             if (p is PixelFarm.Agg.AggCanvasPainter)
             {
                 PixelFarm.Agg.AggCanvasPainter p2 = (PixelFarm.Agg.AggCanvasPainter)p;
-                Graphics2D gx = p2.Graphics;
+                AggRenderSurface gx = p2.Graphics;
                 var childImage = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
                 //IRecieveBlenderByte rasterBlender = new BlenderBGRA(); 
                 var rasterGamma = new ChildImage(childImage, new PixelBlenderGammaBGRA(this.GammaValue));

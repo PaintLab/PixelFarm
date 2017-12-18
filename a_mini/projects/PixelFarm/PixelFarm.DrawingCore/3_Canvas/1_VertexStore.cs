@@ -20,7 +20,8 @@
 
 #define UNSAFE_VER 
 
-namespace PixelFarm.Agg
+using PixelFarm.Agg;
+namespace PixelFarm.Drawing
 {
     public sealed class VertexStore
     {

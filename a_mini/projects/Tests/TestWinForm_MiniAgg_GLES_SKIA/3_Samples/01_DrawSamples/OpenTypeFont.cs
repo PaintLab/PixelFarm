@@ -15,7 +15,7 @@ using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
 using Typography.Contours;
 using Typography.TextServices;
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Sample_Draw
 {
     [Info(OrderCode = "01")]
