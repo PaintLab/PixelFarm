@@ -231,9 +231,9 @@ namespace PixelFarm.Agg
                     case 32:
                         imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
                         break;
-                    case 24:
-                        imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
-                        break;
+                    //case 24:
+                    //    imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
+                    //    break;
                     case 8:
                         imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
                         break;
@@ -384,9 +384,9 @@ namespace PixelFarm.Agg
                     case 32:
                         imgSpanGen = new ImgSpanGenRGBA_NN_StepXBy1(source, interpolator);
                         break;
-                    case 24:
-                        imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
-                        break;
+                    //case 24:
+                    //    imgSpanGen = new ImgSpanGenRGB_NNStepXby1(source, interpolator);
+                    //    break;
                     case 8:
                         imgSpanGen = new ImgSpanGenGray_NNStepXby1(source, interpolator);
                         break;
