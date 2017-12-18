@@ -33,6 +33,7 @@ namespace OpenTK.Graphics.ES20
 
     partial class GL
     {
+        //method name of this class must be perserved
         internal static partial class Core
         {
             [System.Security.SuppressUnmanagedCodeSecurity()]

@@ -40,15 +40,15 @@ namespace OpenTK
         /// <summary>
         /// A reflection handle to the nested type that contains the function delegates.
         /// </summary>
-        readonly protected Type DelegatesClass;
+        readonly Type DelegatesClass;
         /// <summary>
         /// A refection handle to the nested type that contains core functions (i.e. not extensions).
         /// </summary>
-        readonly protected Type CoreClass;
+        readonly Type CoreClass;
         /// <summary>
         /// A mapping of core function names to MethodInfo handles.
         /// </summary>
-        readonly protected SortedList<string, MethodInfo> CoreFunctionMap = new SortedList<string, MethodInfo>();
+        readonly SortedList<string, MethodInfo> s_CoreFunctionMap = new SortedList<string, MethodInfo>();
         bool rebuildExtensionList = true;
 
 
@@ -61,11 +61,12 @@ namespace OpenTK
             SetupDelegatesAndCoreTypes(out DelegatesClass, out CoreClass);
             if (CoreClass != null)
             {
+                //method name of 'CoreClass' must be preserved
                 MethodInfo[] methods = CoreClass.GetMethods(BindingFlags.Static | BindingFlags.NonPublic);
-                CoreFunctionMap = new SortedList<string, MethodInfo>(methods.Length); // Avoid resizing
+                s_CoreFunctionMap = new SortedList<string, MethodInfo>(methods.Length); // Avoid resizing
                 foreach (MethodInfo m in methods)
                 {
-                    CoreFunctionMap.Add(m.Name, m);
+                    s_CoreFunctionMap.Add(m.Name, m);
                 }
             }
 
@@ -83,7 +84,7 @@ namespace OpenTK
             //}
         }
 
-        protected abstract void SetupDelegatesAndCoreTypes(out Type delType, out Type coreType);
+        protected abstract void SetupDelegatesAndCoreTypes(out Type delegatesClass, out Type coreClass);
 
 
         /// <summary>
@@ -119,9 +120,6 @@ namespace OpenTK
         /// unique objects, but all instances of ES10.GL should return the same object.</remarks>
         protected abstract object SyncRoot { get; }
 
-
-
-
         public void LoadEntryPoints()
         {
             // Using reflection is more than 3 times faster than directly loading delegates on the first
@@ -138,6 +136,9 @@ namespace OpenTK
             time.Start();
             foreach (FieldInfo f in delegates)
             {
+                //-------------------------------
+                //field name myst be preserved
+                //-------------------------------
                 Delegate d = LoadDelegate(f.Name, f.FieldType);
                 if (d != null)
                     ++supported;
@@ -156,22 +157,22 @@ namespace OpenTK
 
 
 
-        internal bool LoadEntryPoint(string function)
-        {
-            FieldInfo f = DelegatesClass.GetField(function, BindingFlags.Static | BindingFlags.NonPublic);
-            if (f == null)
-                return false;
-            Delegate old = f.GetValue(null) as Delegate;
-            Delegate @new = LoadDelegate(f.Name, f.FieldType);
-            lock (SyncRoot)
-            {
-                if (old.Target != @new.Target)
-                {
-                    f.SetValue(null, @new);
-                }
-            }
-            return @new != null;
-        }
+        //internal bool LoadEntryPoint(string function)
+        //{
+        //    FieldInfo f = DelegatesClass.GetField(function, BindingFlags.Static | BindingFlags.NonPublic);
+        //    if (f == null)
+        //        return false;
+        //    Delegate old = f.GetValue(null) as Delegate;
+        //    Delegate @new = LoadDelegate(f.Name, f.FieldType);
+        //    lock (SyncRoot)
+        //    {
+        //        if (old.Target != @new.Target)
+        //        {
+        //            f.SetValue(null, @new);
+        //        }
+        //    }
+        //    return @new != null;
+        //}
 
 
 
@@ -184,7 +185,7 @@ namespace OpenTK
 
             return
                 GetExtensionDelegate(name, signature) ??
-                (CoreFunctionMap.TryGetValue((name.Substring(2)), out m) ?
+                (s_CoreFunctionMap.TryGetValue((name.Substring(2)), out m) ?
                 CreateDelegate(signature, m) : null);
         }
         static Delegate CreateDelegate(Type signature, MethodInfo m)

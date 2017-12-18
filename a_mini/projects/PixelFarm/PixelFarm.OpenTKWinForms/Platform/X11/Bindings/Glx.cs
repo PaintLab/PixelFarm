@@ -254,10 +254,10 @@ namespace OpenTK.Platform.X11
     partial class Glx
     {
 
-        protected override void SetupDelegatesAndCoreTypes(out Type delType, out Type coreType)
+        protected override void SetupDelegatesAndCoreTypes(out Type delegatesClass, out Type coreClass)
         {
-            delType = typeof(Delegates);
-            coreType = null;
+            delegatesClass = typeof(Delegates);
+            coreClass = null;
         }
 
         [DllImport(Library, EntryPoint = "glXIsDirect")]

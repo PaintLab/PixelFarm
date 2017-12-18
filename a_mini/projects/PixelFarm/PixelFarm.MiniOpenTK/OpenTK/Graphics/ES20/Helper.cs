@@ -42,10 +42,10 @@ namespace OpenTK.Graphics.ES20
 
         }
 
-        protected override void SetupDelegatesAndCoreTypes(out Type delType, out Type coreType)
+        protected override void SetupDelegatesAndCoreTypes(out Type delegatesClass, out Type coreClass)
         {
-            delType = typeof(Delegates);
-            coreType = typeof(Core);
+            delegatesClass = typeof(Delegates); //field name of 
+            coreClass = typeof(Core); //method name of 'Core'  must be preserved
         }
         /// <summary>
         /// Returns a synchronization token unique for the GL class.
