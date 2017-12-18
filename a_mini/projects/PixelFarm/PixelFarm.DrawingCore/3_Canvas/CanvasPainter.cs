@@ -19,9 +19,8 @@
 // Class to output the vertex source of a string as a run of glyphs.
 //----------------------------------------------------------------------------
 using System;
-using PixelFarm.Drawing;
- 
-namespace PixelFarm.Agg
+using PixelFarm.Agg;
+namespace PixelFarm.Drawing
 {
 
     public abstract class CanvasPainter
@@ -61,7 +60,7 @@ namespace PixelFarm.Agg
         //------------------------------------------------------- 
 
         public abstract void DrawImage(Image actualImage, double x, double y);
-        public abstract void DrawImage(Image actualImage, params Transform.AffinePlan[] affinePlans);
+        public abstract void DrawImage(Image actualImage, params Agg.Transform.AffinePlan[] affinePlans);
         public abstract void DoFilterBlurStack(RectInt area, int r);
         public abstract void DoFilterBlurRecursive(RectInt area, int r);
         //-------------------------------------------------------

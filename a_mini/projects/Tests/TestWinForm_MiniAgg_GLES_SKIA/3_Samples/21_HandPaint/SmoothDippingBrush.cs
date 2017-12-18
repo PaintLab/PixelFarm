@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+ 
 using PixelFarm.VectorMath;
 using Mini;
 namespace PixelFarm.Agg.Samples
@@ -11,14 +12,14 @@ namespace PixelFarm.Agg.Samples
     [Info("SmoothDrippingBrush")]
     public class SmoothDrippingBrushExample : DemoBase
     {
-        Point latestMousePoint;
+        PixelFarm.VectorMath.Point latestMousePoint;
         List<MyBrushPath> myBrushPathList = new List<MyBrushPath>();
-        CanvasPainter p;
+        PixelFarm.Drawing.CanvasPainter p;
         MyBrushPath currentBrushPath;
         public override void Init()
         {
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
         {
             p.Clear(Drawing.Color.White);
             p.FillColor = Drawing.Color.Black;

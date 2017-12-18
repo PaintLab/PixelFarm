@@ -333,7 +333,7 @@ namespace SampleWinForms
             g.DrawImage(winBmp, new Point(30, 20));
         }
 
-        void RenderGrids(int width, int height, int sqSize, CanvasPainter p)
+        void RenderGrids(int width, int height, int sqSize, PixelFarm.Drawing.CanvasPainter p)
         {
             //render grid 
             p.FillColor = PixelFarm.Drawing.Color.Gray;

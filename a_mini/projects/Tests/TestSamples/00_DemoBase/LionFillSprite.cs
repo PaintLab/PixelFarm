@@ -43,7 +43,7 @@ namespace PixelFarm.Agg
             return result;
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
         {
             if (myvxs == null)
             {

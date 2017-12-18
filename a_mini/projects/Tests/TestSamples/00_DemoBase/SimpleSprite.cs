@@ -55,7 +55,7 @@ namespace Mini
             }
         }
 
-        public virtual void OnDraw(CanvasPainter p)
+        public virtual void OnDraw(PixelFarm.Drawing.CanvasPainter p)
         {
         }
         protected void UpdateTransform(double width, double height, double x, double y)

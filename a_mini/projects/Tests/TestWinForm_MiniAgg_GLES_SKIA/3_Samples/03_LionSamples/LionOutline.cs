@@ -52,7 +52,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
             lionFill = new LionOutlineSprite();
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
         {
             lionFill.Draw(p);
 
@@ -116,7 +116,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
             get;
             set;
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
         {
             int strokeWidth = 1;
             int width = p.Width;

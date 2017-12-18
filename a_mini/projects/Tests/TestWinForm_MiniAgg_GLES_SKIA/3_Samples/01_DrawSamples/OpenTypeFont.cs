@@ -116,7 +116,7 @@ namespace PixelFarm.Agg.Sample_Draw
             set;
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
         {
             AggCanvasPainter aggPainter = (AggCanvasPainter)p;
 

@@ -3,6 +3,7 @@
 
 using System;
 using Mini;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Sample_ScanlineBoolean
 {
     [Info(OrderCode = "31")]

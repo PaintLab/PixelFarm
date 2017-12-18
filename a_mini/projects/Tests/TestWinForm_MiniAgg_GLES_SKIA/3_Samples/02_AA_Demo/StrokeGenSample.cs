@@ -47,7 +47,7 @@ namespace PixelFarm.Agg.Sample_Draw
         {
             get; set;
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
         {
             var aggPainter = p as PixelFarm.Agg.AggCanvasPainter;
             if (aggPainter == null)
@@ -254,7 +254,7 @@ namespace PixelFarm.Agg.Sample_Draw
             aggPainter.Draw(vxs);
             aggPainter.LineDashGen = null;
         }
-        void DrawD(CanvasPainter painter)
+        void DrawD(PixelFarm.Drawing.CanvasPainter painter)
         {
             PathWriter ps = new PathWriter();
             painter.Clear(PixelFarm.Drawing.Color.White);
@@ -280,7 +280,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
             painter.Draw(ps.Vxs, PixelFarm.Drawing.Color.Red);
         }
-        void DrawE(CanvasPainter painter)
+        void DrawE(PixelFarm.Drawing.CanvasPainter painter)
         {
             PathWriter ps = new PathWriter();
             painter.Clear(PixelFarm.Drawing.Color.White);

@@ -17,7 +17,7 @@ namespace PixelFarm.Agg.Sample_Gradient
         {
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
         {
             if (p is AggCanvasPainter)
             {

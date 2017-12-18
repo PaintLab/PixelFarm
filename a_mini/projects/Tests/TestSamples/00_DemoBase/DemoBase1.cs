@@ -1,9 +1,10 @@
 ﻿//MIT, 2014-2017, WinterDev
 using System;
 using System.Collections.Generic;
-using PixelFarm.DrawingGL;
 
 using PixelFarm.Agg;
+using PixelFarm.Drawing;
+using PixelFarm.DrawingGL;
 
 namespace Mini
 {

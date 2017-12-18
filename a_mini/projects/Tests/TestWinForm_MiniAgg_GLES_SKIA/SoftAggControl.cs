@@ -3,8 +3,9 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+
 using PixelFarm.Agg;
-using PixelFarm.Agg.Imaging;
+using PixelFarm.Agg.Imaging; 
 using PixelFarm.Drawing.Fonts;
 
 namespace Mini
@@ -16,7 +17,7 @@ namespace Mini
         int myWidth = 800;
         int myHeight = 600;
         GdiBitmapBackBuffer bitmapBackBuffer;
-        CanvasPainter painter;
+        PixelFarm.Drawing.CanvasPainter painter;
         bool _useGdiPlusOutput;
         bool _gdiAntiAlias;
         Graphics thisGfx;//for output
@@ -69,7 +70,7 @@ namespace Mini
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
                 //TODO: review text printer here again***
-                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter,YourImplementation.BootStrapWinGdi.GetFontLoader());
+                VxsTextPrinter textPrinter = new VxsTextPrinter(aggPainter, YourImplementation.BootStrapWinGdi.GetFontLoader());
                 aggPainter.TextPrinter = textPrinter;
                 painter = aggPainter;
             }

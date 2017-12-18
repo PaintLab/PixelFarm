@@ -33,7 +33,7 @@ namespace PixelFarm.Agg.Sample_Draw
             set;
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
         {
             var aggPainter = p as PixelFarm.Agg.AggCanvasPainter;
             if (aggPainter == null)

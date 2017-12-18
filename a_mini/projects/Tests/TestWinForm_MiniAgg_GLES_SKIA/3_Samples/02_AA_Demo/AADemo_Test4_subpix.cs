@@ -199,7 +199,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             set;
         }
 
-        void RunSampleA(CanvasPainter p)
+        void RunSampleA(PixelFarm.Drawing.CanvasPainter p)
         {
 
             //1. create simple vertical line to test agg's lcd rendernig technique
@@ -241,7 +241,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             p.DrawImage(glyphImg, 0, 50);
         }
 
-        void RunSampleB(CanvasPainter p)
+        void RunSampleB(PixelFarm.Drawing.CanvasPainter p)
         {
             //version 2:
             //1. create simple vertical line to test agg's lcd rendernig technique
@@ -263,7 +263,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             p.DrawImage(glyphImg, 0, 50);
             //--------------- 
         }
-        void RunSampleC(CanvasPainter p)
+        void RunSampleC(PixelFarm.Drawing.CanvasPainter p)
         {
             //version 3:  
             p.Clear(PixelFarm.Drawing.Color.White);
@@ -282,7 +282,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             return degree * (180d / Math.PI);
         }
 
-        void RunSampleD(CanvasPainter p)
+        void RunSampleD(PixelFarm.Drawing.CanvasPainter p)
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
@@ -306,7 +306,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
             //}
         }
-        void RunSampleE(CanvasPainter p)
+        void RunSampleE(PixelFarm.Drawing.CanvasPainter p)
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
@@ -333,7 +333,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
             //}
         }
-        void RunSampleF(CanvasPainter p)
+        void RunSampleF(PixelFarm.Drawing.CanvasPainter p)
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
@@ -367,7 +367,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
         {
             //specific for agg
 
