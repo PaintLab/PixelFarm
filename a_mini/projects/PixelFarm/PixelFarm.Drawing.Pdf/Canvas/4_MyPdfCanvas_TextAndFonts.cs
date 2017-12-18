@@ -2,7 +2,7 @@
 
 namespace PixelFarm.Drawing.Pdf
 {
-    partial class MyGdiPlusCanvas
+    partial class MyPdfCanvas
     {
         RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;

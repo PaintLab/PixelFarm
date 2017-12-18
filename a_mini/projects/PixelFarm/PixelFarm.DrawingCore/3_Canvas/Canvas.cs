@@ -3,8 +3,27 @@
 
 namespace PixelFarm.Drawing
 {
+
     public abstract class Canvas
     {
+
+        //------------------------------
+        //this class provides canvas interface for drawing
+        //with 'screen' coordinate system
+        //y axis points down
+        //x axis points to the right
+        //(0,0) is on left-upper corner
+        //-------------------------------
+        //who implement this class
+        //1. PixelFarm.Drawing.WinGdi.MyGdiPlusCanvas (for win32,legacy)
+        //2. Agg's 
+        //3. PixelFarm.Drawing.GLES2.MyGLCanvas  (for GLES2)
+        //4. PixelFarm.Drawing.Pdf.MyPdfCanvas (future)
+        //5. PixelFarm.Drawing.Skia.MySkia Canvas (not complete)
+        //------------------------------
+        //who use this interface
+        //the HtmlRenderer
+        //------------------------------
 
 #if DEBUG
         public static int dbug_canvasCount = 0;
