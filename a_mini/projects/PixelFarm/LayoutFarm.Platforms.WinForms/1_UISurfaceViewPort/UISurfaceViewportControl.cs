@@ -13,6 +13,7 @@ namespace LayoutFarm.UI
         RootGraphic rootgfx;
         ITopWindowEventRoot topWinEventRoot;
         InnerViewportKind innerViewportKind;
+        private Panel panel1;
         List<Form> subForms = new List<Form>();
 
 
@@ -79,15 +80,18 @@ namespace LayoutFarm.UI
                         view.Height = 1200;
                         openGLSurfaceView = view;
                         //view.Dock = DockStyle.Fill;
-                        this.Controls.Add(view);
+                        //this.Controls.Add(view);
+                        this.panel1.Controls.Add(view);
+                            
                         //--------------------------------------- 
                         view.Bind(bridge);
                         this.winBridge = bridge;
                         //--------------------------------------- 
-                        view.SetGLPaintHandler(HandleGLPaint);
+                        view.SetGLPaintHandler(null);
                         hh1 = view.Handle; //force real window handle creation
                         view.MakeCurrent();
-                        //int max = Math.Max(this.Width, this.Height);
+
+
                         int max = Math.Max(view.Width, view.Height);
                         canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
                         //---------------
@@ -115,8 +119,7 @@ namespace LayoutFarm.UI
                         canvasPainter.TextPrinter = printer;
 
                         //
-
-                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLCanvas(canvasPainter, view.Width, view.Height);
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLCanvas(canvasPainter, canvas2d.CanvasWidth, canvas2d.CanvasHeight);
                         bridge.SetCanvas(myGLCanvas1);
 #endif
                     }
@@ -153,12 +156,27 @@ namespace LayoutFarm.UI
         }
         void InitializeComponent()
         {
+            this.panel1 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.Gray;
+            this.panel1.Location = new System.Drawing.Point(4, 4);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(851, 486);
+            this.panel1.TabIndex = 0;
+            // 
+            // UISurfaceViewportControl
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.Size = new System.Drawing.Size(387, 277);
+            this.Controls.Add(this.panel1);
+            this.Name = "UISurfaceViewportControl";
+            this.Size = new System.Drawing.Size(863, 498);
             this.ResumeLayout(false);
+
         }
         protected override void OnLoad(EventArgs e)
         {
