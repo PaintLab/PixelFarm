@@ -360,7 +360,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(pix_format, flip_y);
-    app.caption("AGG Example. Image Transformations with Resampling");
+    app.caption(L"AGG Example. Image Transformations with Resampling");
 
     const char* img_name = "spheres";
     if(argc >= 2) img_name = argv[1];

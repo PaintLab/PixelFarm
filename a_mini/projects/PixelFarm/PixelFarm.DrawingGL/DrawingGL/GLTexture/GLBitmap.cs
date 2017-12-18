@@ -2,7 +2,6 @@
 
 using System;
 using OpenTK.Graphics.ES20;
-using PixelFarm.Drawing;
 
 namespace PixelFarm.DrawingGL
 {
@@ -175,7 +174,23 @@ namespace PixelFarm.DrawingGL
                 GL.DeleteTextures(1, ref textureId);
             }
         }
+        public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
+        {
+            if (rawIntBuffer != null)
+            {
 
+            }
+            else if (rawBuffer != null)
+            {
+                byte[] newBuff = new byte[rawBuffer.Length];
+                Buffer.BlockCopy(rawBuffer, 0, newBuff, 0, rawBuffer.Length);
+                buffRequest.OutputBuffer = newBuff;
+            }
+            else
+            {
+
+            }
+        }
 #if DEBUG
 
         public readonly int dbugId = dbugIdTotal++;

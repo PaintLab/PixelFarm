@@ -1,15 +1,14 @@
 ﻿//MIT, 2014-2017, WinterDev
 
-
+using System;
 namespace PixelFarm.Drawing
 {
-    public abstract class Image : System.IDisposable
+
+    public abstract class Image : IDisposable
     {
         public abstract void Dispose();
         public abstract int Width { get; }
         public abstract int Height { get; }
-
-
         public Size Size
         {
             get { return new Size(this.Width, this.Height); }
@@ -18,15 +17,55 @@ namespace PixelFarm.Drawing
         public abstract int ReferenceX { get; }
         public abstract int ReferenceY { get; }
 
+        public abstract void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest);
+
         //--------
-        System.IDisposable innerImage;
-        public static System.IDisposable GetCacheInnerImage(Image img)
+        WeakReference innerImage;
+        public static object GetCacheInnerImage(Image img)
         {
-            return img.innerImage;
+            if (img.innerImage != null && img.innerImage.IsAlive)
+            {
+                return img.innerImage.Target;
+            }
+            return null;
         }
-        public static void SetCacheInnerImage(Image img, System.IDisposable innerImage)
+        public static void ClearCache(Image img)
         {
-            img.innerImage = innerImage;
+            if (img != null)
+            {
+                img.innerImage = null;
+            }
+        }
+        public static void SetCacheInnerImage(Image img, object o)
+        {
+            img.innerImage = new WeakReference(o);
+        }
+
+
+
+
+        //----------------------------
+        public enum RequestType
+        {
+            Rent,
+            Copy
+        }
+        public struct ImgBufferRequestArgs
+        {
+            public ImgBufferRequestArgs(int requestPixelFormat, RequestType reqType)
+            {
+                this.RequestType = reqType;
+                this.RequestPixelFormat = requestPixelFormat;
+                this.OutputBuffer = null;
+                this.IsInvertedImage = true;
+            }
+            public bool IsInvertedImage { get; set; }
+            public int RequestPixelFormat { get; private set; }
+            public RequestType RequestType { get; private set; }
+
+            public byte[] OutputBuffer { get; set; }
+
         }
     }
+
 }

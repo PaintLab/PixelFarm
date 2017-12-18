@@ -8,27 +8,58 @@ namespace Mini
     static class Program
     {
 
+
+        static unsafe void LookAsIntArray(IntPtr array)
+        {
+            int* a = (int*)array;
+            int data = *a;
+            byte R = (byte)(data & 0xff);
+            byte G = (byte)((data >> 8) & 0xff);
+            byte B = (byte)((data >> 16) & 0xff);
+            byte A = (byte)((data >> 24) & 0xff);
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
+            byte[] bb = new byte[] { 0/*R*/, 1/*G*/, 2/*B*/, 3/*A*/ };
+            bool isLittleEnd = BitConverter.IsLittleEndian;
+
+            int data = BitConverter.ToInt32(bb, 0);
+
+            byte R = (byte)(data & 0xff);
+            byte G = (byte)((data >> 8) & 0xff);
+            byte B = (byte)((data >> 16) & 0xff);
+            byte A = (byte)((data >> 24) & 0xff);
+            //---------------------------------------------
+
+            unsafe
+            {
+                fixed (byte* h = &bb[0])
+                {
+                    LookAsIntArray((IntPtr)h);
+                }
+            }
+
+            RootDemoPath.Path = @"..\Data";
+#if GL_ENABLE
+            YourImplementation.BootStrapOpenGLES2.SetupDefaultValues();
+#endif
+            //you can use your font loader
+            YourImplementation.BootStrapWinGdi.SetupDefaultValues();
+            //default text breaker, this bridge between              
+
 
             //---------------------------------------------------
             //register image loader
             Mini.DemoHelper.RegisterImageLoader(LoadImage);
             //----------------------------
-            OpenTK.Toolkit.Init();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            RootDemoPath.Path = @"..\Data";
-            //you can use your font loader
-            PixelFarm.Drawing.WinGdi.WinGdiPlusPlatform.SetFontLoader(YourImplementation.BootStrapWinGdi.GetFontLoader());
-#if GL_ENABLE
-            //PixelFarm.Drawing.GLES2.GLES2Platform.SetFontLoader(YourImplementation.BootStrapOpenGLES2.myFontLoader);
-#endif
-
             Application.Run(new FormDev());
         }
         static PixelFarm.Agg.ActualImage LoadImage(string filename)

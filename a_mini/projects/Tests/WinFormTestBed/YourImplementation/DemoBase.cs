@@ -33,23 +33,17 @@ namespace LayoutFarm
             get { return ""; }
         }
     }
+
     sealed class DemoBitmap : Image
     {
         int width;
         int height;
-
-        byte[] rawImageBuffer;
-        public DemoBitmap(int w, int h, byte[] rawImageBuffer, bool isInvertedImg = false)
-        {
-            this.width = w;
-            this.height = h;
-            this.rawImageBuffer = rawImageBuffer;
-        }
-
+        System.Drawing.Bitmap innerImage;
         public DemoBitmap(int w, int h, System.Drawing.Bitmap innerImage)
         {
             this.width = w;
             this.height = h;
+            this.innerImage = innerImage;
             SetCacheInnerImage(this, innerImage);
         }
         public override int Width
@@ -64,6 +58,21 @@ namespace LayoutFarm
         public override void Dispose()
         {
         }
+        public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
+        {
+            var bmpData = innerImage.LockBits(new System.Drawing.Rectangle(0, 0, width, height),
+             System.Drawing.Imaging.ImageLockMode.ReadOnly,
+             System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+
+            int size = bmpData.Stride * bmpData.Height;
+            byte[] newBuff = new byte[size];
+            System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, newBuff, 0, size);
+            innerImage.UnlockBits(bmpData);
+
+            buffRequest.OutputBuffer = newBuff;
+        }
+
         public override bool IsReferenceImage
         {
             get { return false; }
@@ -76,10 +85,7 @@ namespace LayoutFarm
         {
             get { return 0; }
         }
-        public byte[] GetRawImageBuffer()
-        {
-            return rawImageBuffer;
-        }
+
     }
 
 

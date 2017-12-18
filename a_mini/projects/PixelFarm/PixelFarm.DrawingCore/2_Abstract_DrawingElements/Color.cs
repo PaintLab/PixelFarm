@@ -63,48 +63,49 @@
 using System;
 namespace PixelFarm.Drawing
 {
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
     public struct Color
     {
-        byte r, g, b, a;
+        byte _r, _g, _b, _a;
         public Color(byte a, byte r, byte g, byte b)
         {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-            this.a = a;
+            this._r = r;
+            this._g = g;
+            this._b = b;
+            this._a = a;
         }
         public Color(byte r, byte g, byte b)
         {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-            this.a = 255;
+            this._r = r;
+            this._g = g;
+            this._b = b;
+            this._a = 255;
         }
         public byte R
         {
-            get { return this.r; }
+            get { return this._r; }
         }
         public byte G
         {
-            get { return this.g; }
+            get { return this._g; }
         }
         public byte B
         {
-            get { return this.b; }
+            get { return this._b; }
         }
         public byte A
         {
-            get { return this.a; }
+            get { return this._a; }
         }
         public byte alpha
         {
-            get { return this.a; }
-            set { this.a = value; }
+            get { return this._a; }
+
         }
 
-        public byte red { get { return this.r; } set { this.r = value; } }
-        public byte green { get { return this.g; } set { this.g = value; } }
-        public byte blue { get { return this.b; } set { this.b = value; } }
+        public byte red { get { return this._r; } }
+        public byte green { get { return this._g; } }
+        public byte blue { get { return this._b; } }
 
 
         public static Color FromArgb(int a, Color c)
@@ -128,14 +129,17 @@ namespace PixelFarm.Drawing
             if (obj is Color)
             {
                 Color c = (Color)obj;
-                return c.a == this.a &&
-                    c.b == this.b &&
-                    c.r == this.r &&
-                    c.g == this.g;
+                return c._a == this._a &&
+                    c._b == this._b &&
+                    c._r == this._r &&
+                    c._g == this._g;
             }
             return false;
         }
-
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
         public static readonly Color Empty = new Color(0, 0, 0, 0);
         public static readonly Color Transparent = new Color(0, 255, 255, 255);
         public static readonly Color White = new Color(255, 255, 255, 255);
@@ -151,48 +155,45 @@ namespace PixelFarm.Drawing
         public static readonly Color DeepPink = new Color(0xFF, 0xFF, 0x14, 0x93);
         public static readonly Color Magenta = new Color(0xFF, 0xFF, 0, 0xFF);
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+
         public static bool operator ==(Color c1, Color c2)
         {
-            return (uint)((c1.a << 24) | (c1.r << 16) | (c1.g << 8) | (c1.b)) ==
-                   (uint)((c2.a << 24) | (c2.r << 16) | (c2.g << 8) | (c2.b));
+            return (uint)((c1._a << 24) | (c1._r << 16) | (c1._g << 8) | (c1._b)) ==
+                   (uint)((c2._a << 24) | (c2._r << 16) | (c2._g << 8) | (c2._b));
         }
         public static bool operator !=(Color c1, Color c2)
         {
-            return (uint)((c1.a << 24) | (c1.r << 16) | (c1.g << 8) | (c1.b)) !=
-                  (uint)((c2.a << 24) | (c2.r << 16) | (c2.g << 8) | (c2.b));
+            return (uint)((c1._a << 24) | (c1._r << 16) | (c1._g << 8) | (c1._b)) !=
+                  (uint)((c2._a << 24) | (c2._r << 16) | (c2._g << 8) | (c2._b));
         }
-        public uint ToARGB()
+        public int ToARGB()
         {
-            return (uint)((this.a << 24) | (this.r << 16) | (this.g << 8) | this.b);
+            return ((this._a << 24) | (this._r << 16) | (this._g << 8) | this._b);
         }
         public uint ToABGR()
         {
-            return (uint)((this.a << 24) | (this.b << 16) | (this.g << 8) | this.r);
-        } 
+            return (uint)((this._a << 24) | (this._b << 16) | (this._g << 8) | this._r);
+        }
         
         public byte Red0To255
         {
-            get { return r; }
+            get { return _r; }
         }
         public byte Green0To255
         {
-            get { return g; }
+            get { return _g; }
         }
         public byte Blue0To255
         {
-            get { return b; }
+            get { return _b; }
         }
         public byte Alpha0To255
         {
-            get { return a; }
+            get { return _a; }
         }
 
-     
-       
+
+
 
         public Color CreateGradient(Color another, float colorDistanceRatio)
         {
@@ -213,26 +214,47 @@ namespace PixelFarm.Drawing
             return new Color(a, r, g, b);
         }
 
-        static public Color operator +(Color A, Color B)
+        public static Color operator +(Color A, Color B)
         {
-            byte r = (byte)((A.r + B.r) > 255 ? 255 : (A.r + B.r));
-            byte g = (byte)((A.g + B.g) > 255 ? 255 : (A.g + B.g));
-            byte b = (byte)((A.b + B.b) > 255 ? 255 : (A.b + B.b));
-            byte a = (byte)((A.a + B.a) > 255 ? 255 : (A.a + B.a));
+            byte r = (byte)((A._r + B._r) > 255 ? 255 : (A._r + B._r));
+            byte g = (byte)((A._g + B._g) > 255 ? 255 : (A._g + B._g));
+            byte b = (byte)((A._b + B._b) > 255 ? 255 : (A._b + B._b));
+            byte a = (byte)((A._a + B._a) > 255 ? 255 : (A._a + B._a));
             return new Color(a, r, g, b);
         }
 
-        static public Color operator -(Color A, Color B)
+        public static Color operator -(Color A, Color B)
         {
-            byte red = (byte)((A.r - B.r) < 0 ? 0 : (A.r - B.r));
-            byte green = (byte)((A.g - B.g) < 0 ? 0 : (A.g - B.g));
-            byte blue = (byte)((A.b - B.b) < 0 ? 0 : (A.b - B.b));
-            byte alpha = (byte)((A.a - B.a) < 0 ? 0 : (A.a - B.a));
+            byte red = (byte)((A._r - B._r) < 0 ? 0 : (A._r - B._r));
+            byte green = (byte)((A._g - B._g) < 0 ? 0 : (A._g - B._g));
+            byte blue = (byte)((A._b - B._b) < 0 ? 0 : (A._b - B._b));
+            byte alpha = (byte)((A._a - B._a) < 0 ? 0 : (A._a - B._a));
             return new Color(alpha, red, green, blue);
         }
 
-        
-
+        /// <summary>
+        /// rgb= original rgb
+        /// alpha= (byte)((color.alpha * (cover) + 255) >> 8);
+        /// </summary>
+        /// <param name="cover"></param>
+        /// <returns></returns>
+        public Color NewFromChangeCoverage(int cover)
+        {
+            return new Color(
+                (byte)((_a * cover + 255) >> 8),
+                _r, _g, _b);
+        }
+        /// <summary>
+        /// new color from changing the alpha value
+        /// </summary>
+        /// <param name="alpha"></param>
+        /// <returns></returns>
+        public Color NewFromChangeAlpha(byte alpha)
+        {
+            return new Color(
+                 alpha,
+                _r, _g, _b);
+        }
         //public void AddColor(ColorRGBA c, int cover)
         //{
         //    int cr, cg, cb, ca;
@@ -277,11 +299,11 @@ namespace PixelFarm.Drawing
             return new Color(255, (byte)((v >> 16) & 0xFF), (byte)((v >> 8) & 0xFF), ((byte)(v & 0xFF)));
         }
 
-       
+
 #if DEBUG
         public override string ToString()
         {
-            return "r:" + this.r + ",g:" + this.g + ",b:" + this.b + ",a:" + this.a;
+            return "r:" + this._r + ",g:" + this._g + ",b:" + this._b + ",a:" + this._a;
         }
 #endif
     }

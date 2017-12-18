@@ -98,7 +98,7 @@
     <Compile Include="2_Bridge_WinForm\TopWindowBridgeWinForm_dbug.cs" />
     <Compile Include="4_GdiPlus\3_MyTopWindowBridgeGdiPlus.cs" />
     <Compile Include="2_GLES2\3_MyTopWindowBridgeOpenGL.cs" />
-    <Compile Include="5_Skia\3_MyTopWindowBridgeSkia.cs" />
+    <Compile Include="4_Skia\3_MyTopWindowBridgeSkia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -158,7 +158,11 @@
       <Name>Typography.TextServices</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="1_UISurfaceViewport\UISurfaceViewportControl.resx">
+      <DependentUpon>UISurfaceViewportControl.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

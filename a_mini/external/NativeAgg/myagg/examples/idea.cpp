@@ -29,7 +29,7 @@ struct path_attributes
     agg::rgba8 fill_color;
     agg::rgba8 stroke_color;
     double     stroke_width;
-	PM_REMOVE
+	/*PM_REMOVE*/
     path_attributes() {}
     path_attributes(unsigned idx, 
                     const agg::rgba8& fill,
@@ -350,7 +350,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(pix_format, flip_y);
-    app.caption("AGG Example. Idea");
+    app.caption(L"AGG Example. Idea");
 
     if(app.init(250, 280, agg::window_resize))
     {

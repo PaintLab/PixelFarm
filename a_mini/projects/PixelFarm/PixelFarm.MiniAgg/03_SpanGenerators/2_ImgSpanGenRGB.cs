@@ -27,8 +27,7 @@
 //----------------------------------------------------------------------------
 
 using System;
-using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
-using img_filter_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgFilterConst;
+using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst; 
 namespace PixelFarm.Agg.Imaging
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
@@ -58,13 +57,19 @@ namespace PixelFarm.Agg.Imaging
             int y_lr = y_hr >> img_subpix_const.SHIFT;
             int bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
             byte[] srcBuff = srcRW.GetBuffer();
-            Drawing.Color color = Drawing.Color.White;
+            //Drawing.Color color = Drawing.Color.White;
             do
             {
-                color.blue = srcBuff[bufferIndex++];
-                color.green = srcBuff[bufferIndex++];
-                color.red = srcBuff[bufferIndex++];
-                outputColors[startIndex++] = color;
+                //color.blue = srcBuff[bufferIndex++];
+                //color.green = srcBuff[bufferIndex++];
+                //color.red = srcBuff[bufferIndex++];
+
+                //TODO: review, use CO (color order)
+                int b = srcBuff[bufferIndex++]; //B
+                int g = srcBuff[bufferIndex++]; //G
+                int r = srcBuff[bufferIndex++]; //R
+
+                outputColors[startIndex++] = Drawing.Color.FromArgb(255, r, g, b);
             } while (--len != 0);
         }
     }
@@ -247,10 +252,18 @@ namespace PixelFarm.Agg.Imaging
                         }
                     }
 
-                    outputColors[startIndex].red = (byte)accColor0;
-                    outputColors[startIndex].green = (byte)accColor1;
-                    outputColors[startIndex].blue = (byte)accColor2;
-                    outputColors[startIndex].alpha = (byte)sourceAlpha;
+                    //outputColors[startIndex].red = (byte)accColor0;
+                    //outputColors[startIndex].green = (byte)accColor1;
+                    //outputColors[startIndex].blue = (byte)accColor2;
+                    //outputColors[startIndex].alpha = (byte)sourceAlpha;
+
+                    outputColors[startIndex] = PixelFarm.Drawing.Color.FromArgb(
+                    (byte)sourceAlpha,
+                    (byte)accColor0,
+                    (byte)accColor1,
+                    (byte)accColor2
+                    );
+
                     startIndex++;
                     spanInterpolator.Next();
                 } while (--len != 0);

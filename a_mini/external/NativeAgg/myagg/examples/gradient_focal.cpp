@@ -245,7 +245,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(pix_format, flip_y);
-    app.caption("AGG Example. PDF linear and radial gradients");
+    app.caption(L"AGG Example. PDF linear and radial gradients");
 
     if(app.init(600, 400, agg::window_resize))
     {

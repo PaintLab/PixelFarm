@@ -1,5 +1,4 @@
-﻿#region Header
-//
+﻿//
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Assembly Infos.
 //
@@ -14,7 +13,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 
 using System.Reflection;
 using System.Runtime.CompilerServices;

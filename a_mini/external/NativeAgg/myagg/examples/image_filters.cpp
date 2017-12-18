@@ -389,7 +389,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(pix_format, flip_y);
-    app.caption("Image transformation filters comparison");
+    app.caption(L"Image transformation filters comparison");
 
     const char* img_name = "spheres";
     if(argc >= 2) img_name = argv[1];

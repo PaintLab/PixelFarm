@@ -58,6 +58,7 @@ namespace PixelFarm.Agg
          float controlX1, float controlY1,
          float controlX2, float controlY2);
         //------------------------------------------------------- 
+        
         public abstract void DrawImage(ActualImage actualImage, double x, double y);
         public abstract void DrawImage(ActualImage actualImage, params Transform.AffinePlan[] affinePlans);
         public abstract void DoFilterBlurStack(RectInt area, int r);

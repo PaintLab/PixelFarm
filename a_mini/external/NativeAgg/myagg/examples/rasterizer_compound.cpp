@@ -289,7 +289,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgra32, flip_y);
-    app.caption("AGG Example. Compound Rasterizer -- Geometry Flattening");
+    app.caption(L"AGG Example. Compound Rasterizer -- Geometry Flattening");
 
     if(app.init(440, 330, 0))
     {

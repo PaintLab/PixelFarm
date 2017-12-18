@@ -160,7 +160,7 @@ namespace PixelFarm.Agg.Sample_Blur2
             //{
             //    s2 = shadow_persp.TransformToVxs(m_pathVxs);
             //}
-            p.FillColor = AggColorExtensions.Make(0.2f, 0.3f, 0f);
+            p.FillColor = ColorEx.Make(0.2f, 0.3f, 0f);
             p.Fill(s2);
             //---------------------------------------------------------------------------------------------------------
             //shadow 

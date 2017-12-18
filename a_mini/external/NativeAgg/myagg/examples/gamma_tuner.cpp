@@ -226,7 +226,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(pix_format, flip_y);
-    app.caption("AGG Example. Gamma Tuner");
+    app.caption(L"AGG Example. Gamma Tuner");
 
     if(app.init(500, 500, 0))
     {

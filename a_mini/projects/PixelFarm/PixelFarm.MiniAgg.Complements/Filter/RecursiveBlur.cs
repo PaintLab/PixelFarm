@@ -547,9 +547,16 @@ namespace PixelFarm.Agg.Imaging
 
         public override void ToPix(ref Color c)
         {
-            c.red = (byte)AggMath.uround(r);
-            c.green = (byte)AggMath.uround(g);
-            c.blue = (byte)AggMath.uround(b);
+            //c.red = (byte)AggMath.uround(r);
+            //c.green = (byte)AggMath.uround(g);
+            //c.blue = (byte)AggMath.uround(b);
+
+            c = new Color(c.alpha,
+                (byte)AggMath.uround(r),
+                (byte)AggMath.uround(g),
+                (byte)AggMath.uround(b)
+                );
+
         }
     }
 
@@ -580,10 +587,12 @@ namespace PixelFarm.Agg.Imaging
 
         public override void ToPix(ref Color c)
         {
-            c.red = (byte)AggMath.uround(r);
-            c.green = (byte)AggMath.uround(g);
-            c.blue = (byte)AggMath.uround(b);
-            c.alpha = (byte)AggMath.uround(a);
+            c = new Color(
+                (byte)AggMath.uround(a),
+                (byte)AggMath.uround(r),
+                (byte)AggMath.uround(g),
+                (byte)AggMath.uround(b)
+                );
         }
     }
 
@@ -608,7 +617,11 @@ namespace PixelFarm.Agg.Imaging
 
         public override void ToPix(ref Color c)
         {
-            c.red = (byte)AggMath.uround(r);
+            c = new Color(c.A,
+                (byte)AggMath.uround(r),
+                c.G,
+                c.B
+                );
         }
     }
 }

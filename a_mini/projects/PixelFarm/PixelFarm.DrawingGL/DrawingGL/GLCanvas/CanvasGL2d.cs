@@ -28,8 +28,8 @@ namespace PixelFarm.DrawingGL
 
         int canvasOriginX = 0;
         int canvasOriginY = 0;
-        int canvasW;
-        int canvasH;
+        int _canvasW;
+        int _canvasH;
 
         MyMat4 orthoView;
         MyMat4 flipVerticalView;
@@ -42,13 +42,20 @@ namespace PixelFarm.DrawingGL
 
         internal CanvasGL2d(int canvasW, int canvasH)
         {
-            this.canvasW = canvasW;
-            this.canvasH = canvasH;
-            ////setup viewport size
+            //-------------
+            //y axis points upward (like other OpenGL)
+            //x axis points to right.
+            //please NOTE: left lower corner of the canvas is (0,0)
+            //-------------
+
+            this._canvasW = canvasW;
+            this._canvasH = canvasH;
+            //setup viewport size,
+            //we need W:H ratio= 1:1 , square viewport
             int max = Math.Max(canvasW, canvasH);
-            ////square viewport 
-            orthoView = MyMat4.ortho(0, max, 0, max, 0, 1);
-            flipVerticalView = MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -max, 0));
+            orthoView = MyMat4.ortho(0, max, 0, max, 0, 1); //this make our viewport W:H =1:1
+
+            flipVerticalView = MyMat4.scale(1, -1) * MyMat4.translate(new OpenTK.Vector3(0, -canvasH, 0));
             orthoAndFlip = orthoView * flipVerticalView;
             //-----------------------------------------------------------------------
             shaderRes = new CanvasToShaderSharedResource();
@@ -91,7 +98,14 @@ namespace PixelFarm.DrawingGL
             //-------------------------------------------------------------------------------
             GL.Viewport(0, 0, canvasW, canvasH);
         }
-
+        public int CanvasWidth
+        {
+            get { return _canvasW; }
+        }
+        public int CanvasHeight
+        {
+            get { return _canvasH; }
+        }
         bool _flipY;
         public bool FlipY
         {
@@ -236,15 +250,15 @@ namespace PixelFarm.DrawingGL
                 gdiImgTextureShader.RenderSubImage(bmp, srcLeft, srcTop, srcW, srcH, targetLeft, targetTop);
             }
         }
-        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop)
+        public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle srcRect, float targetLeft, float targetTop)
         {
             if (bmp.IsBigEndianPixel)
             {
-                glesTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                glesTextureShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
             }
             else
             {
-                gdiImgTextureShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+                gdiImgTextureShader.RenderSubImage(bmp, srcRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, targetLeft, targetTop);
             }
         }
         public void DrawSubImage(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
@@ -639,7 +653,7 @@ namespace PixelFarm.DrawingGL
                             else
                             {
                                 if ((tessArea = f.GetAreaTess(this.tessTool)) != null)
-                                {   
+                                {
                                     //draw area
                                     basicFillShader.FillTriangles(tessArea, f.TessAreaVertexCount, color);
                                     //draw smooth border
@@ -845,7 +859,7 @@ namespace PixelFarm.DrawingGL
         {
             //int originalW = 800;
             //set new viewport
-            GL.Viewport(x, y, canvasW, canvasH);
+            GL.Viewport(x, y, _canvasW, _canvasH);
             //GL.MatrixMode(MatrixMode.Projection);
             //GL.LoadIdentity();
             //GL.Ortho(0, originalW, 0, originalW, 0.0, 100.0);

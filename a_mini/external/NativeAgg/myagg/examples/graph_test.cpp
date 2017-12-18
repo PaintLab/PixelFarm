@@ -911,7 +911,7 @@ public:
 int agg_main(int argc, char* argv[])
 {
     the_application app(agg::pix_format_bgr24, flip_y);
-    app.caption("AGG Example. Line Join");
+    app.caption(L"AGG Example. Line Join");
 
     if(app.init(600+100, 500+30, agg::window_resize))
     {

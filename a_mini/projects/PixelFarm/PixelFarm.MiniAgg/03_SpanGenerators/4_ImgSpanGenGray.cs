@@ -52,10 +52,17 @@ namespace PixelFarm.Agg.Imaging
                 {
                     do
                     {
-                        outputColors[startIndex].red = pSource[bufferIndex];
-                        outputColors[startIndex].green = pSource[bufferIndex];
-                        outputColors[startIndex].blue = pSource[bufferIndex];
-                        outputColors[startIndex].alpha = 255;
+                        //outputColors[startIndex].red = pSource[bufferIndex];
+                        //outputColors[startIndex].green = pSource[bufferIndex];
+                        //outputColors[startIndex].blue = pSource[bufferIndex];
+                        //outputColors[startIndex].alpha = 255;
+
+                        byte grayValue = pSource[bufferIndex];
+                        outputColors[startIndex] = Drawing.Color.FromArgb(255,
+                           grayValue,
+                           grayValue,
+                           grayValue);
+
                         startIndex++;
                         bufferIndex += bytesBetweenPixelsInclusive;
                     } while (--len != 0);

@@ -1,4 +1,5 @@
-﻿#region Header
+﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+//
 //
 //   Project:           WriteableBitmapEx - WriteableBitmap extensions
 //   Description:       Collection of internal anti-aliasing helper methods for the WriteableBitmap class.
@@ -14,7 +15,6 @@
 //
 //   This code is open source. Please read the License.txt for details. No worries, we won't sue you! ;)
 //
-#endregion
 using System;
 
 #if NETFX_CORE
@@ -39,10 +39,10 @@ namespace System.Windows.Media.Imaging
         private static readonly int[] leftEdgeX = new int[8192];
         private static readonly int[] rightEdgeX = new int[8192];
 
-        private static void AAWidthLine(int width, int height, BitmapContext context, float x1, float y1, float x2, float y2, float lineWidth, Int32 color)
+        private static void AAWidthLine(int width, int height, BitmapContext context, float x1, float y1, float x2, float y2, float lineWidth, Int32 color, Rect? clipRect = null)
         {
             // Perform cohen-sutherland clipping if either point is out of the viewport
-            if (!CohenSutherlandLineClip(new Rect(0, 0, width, height), ref x1, ref y1, ref x2, ref y2)) return;
+            if (!CohenSutherlandLineClip(clipRect ?? new Rect(0, 0, width, height), ref x1, ref y1, ref x2, ref y2)) return;
 
             if (lineWidth <= 0) return;
 
@@ -122,7 +122,7 @@ namespace System.Windows.Media.Imaging
                 if (y2 < 0) return;
 
                 if (y1 >= height) return;
-                if (y2 >= height) x2 = height - 1;
+                if (y2 >= height) y2 = height - 1;
 
                 if (x1 >= width || y2 < 0) return;
 
