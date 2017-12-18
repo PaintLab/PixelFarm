@@ -174,10 +174,7 @@ namespace PixelFarm.Drawing
         {
             return (uint)((this._a << 24) | (this._b << 16) | (this._g << 8) | this._r);
         }
-        //public int ToABGRi()
-        //{
-        //    return ((this._a << 24) | (this._b << 16) | (this._g << 8) | this._r);
-        //}
+        
         public byte Red0To255
         {
             get { return _r; }

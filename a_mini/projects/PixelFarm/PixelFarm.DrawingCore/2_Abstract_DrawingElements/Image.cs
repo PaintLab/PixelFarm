@@ -57,8 +57,9 @@ namespace PixelFarm.Drawing
                 this.RequestType = reqType;
                 this.RequestPixelFormat = requestPixelFormat;
                 this.OutputBuffer = null;
-               
+                this.IsInvertedImage = true;
             }
+            public bool IsInvertedImage { get; set; }
             public int RequestPixelFormat { get; private set; }
             public RequestType RequestType { get; private set; }
 

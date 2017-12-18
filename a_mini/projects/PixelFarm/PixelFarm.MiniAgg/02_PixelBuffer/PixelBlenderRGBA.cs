@@ -276,7 +276,8 @@ namespace PixelFarm.Agg.Imaging
                                 header2++;//move next
                                 count--;
                             }
-                            //  
+
+                            //now count is even number
                             while (count > 0)
                             {
                                 //now count is even number
@@ -459,11 +460,25 @@ namespace PixelFarm.Agg.Imaging
         /// <param name="sourceColor"></param>
         public void CopyPixel(byte[] buffer, int bufferOffset, Color sourceColor)
         {
-            buffer[bufferOffset + CO.R] = sourceColor.red;
-            buffer[bufferOffset + CO.G] = sourceColor.green;
-            buffer[bufferOffset + CO.B] = sourceColor.blue;
-            buffer[bufferOffset + CO.A] = sourceColor.alpha;
-            bufferOffset += 4;
+            //version2 
+            unsafe
+            {
+                unchecked
+                {
+                    fixed (byte* ptr_byte = &buffer[bufferOffset])
+                    {
+                        //TODO: consider use memcpy() impl***
+                        int* ptr = (int*)(IntPtr)ptr_byte;
+                        *ptr = sourceColor.ToARGB();
+                    }
+                }
+            }
+            //version 1
+            //            buffer[bufferOffset + CO.R] = sourceColor.red;
+            //buffer[bufferOffset + CO.G] = sourceColor.green;
+            //buffer[bufferOffset + CO.B] = sourceColor.blue;
+            //buffer[bufferOffset + CO.A] = sourceColor.alpha;
+            //bufferOffset += 4;
         }
         public Color PixelToColorRGBA(byte[] buffer, int bufferOffset)
         {

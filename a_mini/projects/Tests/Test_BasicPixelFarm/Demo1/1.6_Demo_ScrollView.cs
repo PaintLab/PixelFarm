@@ -12,7 +12,7 @@ namespace LayoutFarm
         protected override void OnStartDemo(SampleViewport viewport)
         {
             //AddScrollView1(viewport, 0, 0);
-            AddScrollView2(viewport, 250, 0);
+            AddScrollView2(viewport, 10, 0);
         }
 
         void AddScrollView1(SampleViewport viewport, int x, int y)
@@ -64,9 +64,9 @@ namespace LayoutFarm
         }
         void AddScrollView2(SampleViewport viewport, int x, int y)
         {
-            var panel = new LayoutFarm.CustomWidgets.SimpleBox(800, 600);
+            var panel = new LayoutFarm.CustomWidgets.SimpleBox(800, 1000);
             panel.NeedClipArea = true;
-            panel.SetLocation(x + 30, y + 30);
+            panel.SetLocation(x + 10, y + 30);
             panel.BackColor = Color.LightGray;
             panel.ContentLayoutKind = CustomWidgets.BoxContentLayoutKind.VerticalStack;
             viewport.AddContent(panel);
@@ -82,12 +82,11 @@ namespace LayoutFarm
             }
             //select only
             int lastY = 0;
-            for (int i = 0; i < fileNames.Length; ++i) //5 imgs
+            ImageBinder binder = viewport.GetImageBinder(fileNames[2]);
+
+            for (int i = 0; i < fileNames.Length * 4; ++i) //5 imgs
             {
                 var imgbox = new LayoutFarm.CustomWidgets.ImageBox(36, 400);
-                ImageBinder binder = viewport.GetImageBinder(fileNames[i]);
-
-
                 imgbox.ImageBinder = binder;
                 imgbox.BackColor = Color.OrangeRed;
                 imgbox.SetLocation(0, lastY);

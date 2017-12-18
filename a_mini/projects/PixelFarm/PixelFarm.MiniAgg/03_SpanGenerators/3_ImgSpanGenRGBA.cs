@@ -61,15 +61,52 @@ namespace PixelFarm.Agg.Imaging
             byte[] srcBuffer = srcRW.GetBuffer();
             unsafe
             {
-                fixed (byte* pSource = srcBuffer)
+                fixed (byte* pSource = &srcBuffer[bufferIndex])
                 {
+                    int* src_ptr = (int*)pSource;
                     do
                     {
-                        outputColors[startIndex++] = *(Drawing.Color*)&(pSource[bufferIndex]);
-                        bufferIndex += 4;
+                        int src_value = *src_ptr;
+                        //separate each component
+                        byte a = (byte)((src_value >> 24) & 0xff);
+                        byte r = (byte)((src_value >> 16) & 0xff);
+                        byte g = (byte)((src_value >> 8) & 0xff);
+                        byte b = (byte)((src_value) & 0xff);
+
+                        //TODO: review here, color from source buffer
+                        //should be in 'pre-multiplied' format.
+                        //so it should be converted to 'straight' color by call something like ..'FromPreMult()' 
+
+                        outputColors[startIndex++] = Drawing.Color.FromArgb(a, r, g, b);
+
+                        src_ptr++;//move next
                     } while (--len != 0);
                 }
             }
+
+
+
+            //version 1 , incorrect
+            //ISpanInterpolator spanInterpolator = Interpolator;
+            //spanInterpolator.Begin(x + dx, y + dy, len);
+            //int x_hr;
+            //int y_hr;
+            //spanInterpolator.GetCoord(out x_hr, out y_hr);
+            //int x_lr = x_hr >> img_subpix_const.SHIFT;
+            //int y_lr = y_hr >> img_subpix_const.SHIFT;
+            //int bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
+            //byte[] srcBuffer = srcRW.GetBuffer();
+            //unsafe
+            //{
+            //    fixed (byte* pSource = srcBuffer)
+            //    {
+            //        do
+            //        {
+            //            outputColors[startIndex++] = *(Drawing.Color*)&(pSource[bufferIndex]);
+            //            bufferIndex += 4;
+            //        } while (--len != 0);
+            //    }
+            //}
         }
     }
 
