@@ -18,13 +18,18 @@
 // 
 // Class to output the vertex source of a string as a run of glyphs.
 //----------------------------------------------------------------------------
- 
+
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing
 {
 
     public abstract class CanvasPainter
     {
+        //who implement this class
+        //1. AggCanvasPainter
+        //2. GdiPlushCanvasPainter
+        //3.
+
 
         public abstract float OriginX { get; }
         public abstract float OriginY { get; }

@@ -11,7 +11,7 @@ using PixelFarm.Drawing.Fonts;
 
 namespace Mini
 {
-   
+
     public partial class SoftAggControl : UserControl
     {
         bool isMouseDown;
@@ -19,7 +19,7 @@ namespace Mini
         int myWidth = 800;
         int myHeight = 600;
         GdiBitmapBackBuffer bitmapBackBuffer;
-        CanvasPainter painter;
+        PixelFarm.Drawing.CanvasPainter painter;
 
         bool _useGdiPlusOutput;
         bool _gdiAntiAlias;

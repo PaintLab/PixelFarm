@@ -33,16 +33,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
-      <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
-      <Name>PixelFarm.DrawingCanvas</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.DrawingCore\PixelFarm.DrawingCore.csproj">
-      <Project>{fde310c7-9c58-47f9-a6af-3f518613bc4b}</Project>
-      <Name>PixelFarm.DrawingCore</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggCanvasPainter.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggCanvasPainter.cs</Link>
     </Compile>
@@ -275,6 +265,15 @@
       <Link>3.1_DrawingCanvas.MiniAgg\09_ImgFilters\InternalBrightnessAndContrastAdjustment.cs</Link>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
+      <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
+      <Name>PixelFarm.DrawingCanvas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.DrawingCore\PixelFarm.DrawingCore.csproj">
+      <Project>{fde310c7-9c58-47f9-a6af-3f518613bc4b}</Project>
+      <Name>PixelFarm.DrawingCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

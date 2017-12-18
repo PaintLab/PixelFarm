@@ -7,7 +7,7 @@ using PixelFarm.Agg.Transform;
 namespace PixelFarm.Drawing.Pdf
 {
 
-    public class GdiPlusCanvasPainter : CanvasPainter
+    public class PdfCanvasPainter : CanvasPainter
     {
         //System.Drawing.Graphics _gfx;
         //System.Drawing.Bitmap _gfxBmp;
@@ -30,7 +30,7 @@ namespace PixelFarm.Drawing.Pdf
 
         SmoothingMode _smoothingMode;
 
-        public GdiPlusCanvasPainter()
+        public PdfCanvasPainter()
         {
         }
 
@@ -354,7 +354,7 @@ namespace PixelFarm.Drawing.Pdf
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {
-            return new WinGdiRenderVxFormattedString(textspan);
+            return new PdfRenderVxFormattedString(textspan);
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
