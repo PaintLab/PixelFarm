@@ -48,7 +48,7 @@ namespace Mini
                 //canvasPainter = new GLCanvasPainter(canvas2d, max, max);
 
                 //canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(w, h);
-                glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max);
+                glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, w, h);
                 canvasPainter = new GLPainter(glsf);
 
                 //create text printer for opengl 

@@ -92,21 +92,31 @@ namespace PixelFarm.Agg
                 {
                     case VertexCmd.NoMore:
                         break;
-
                     case VertexCmd.Close:
-                    case VertexCmd.CloseAndEndFigure:
-
-
                         if (i < j)
                         {
-                            //strkgen.AddVertex(startX, startY, VertexCmd.LineTo);
-                            strkgen.AddVertex(startX, startY, VertexCmd.Close);
+                            //close command
+                            strkgen.Close();
                             strkgen.WriteTo(vxs);
                             strkgen.Reset();
                         }
-                        strkgen.AddVertex(x, y, cmd);
-                        //end this polygon 
+                        else
+                        {
 
+                        }
+                        break;
+                    case VertexCmd.CloseAndEndFigure:
+                        if (i < j)
+                        {
+                            //close command
+                            strkgen.Close();
+                            strkgen.WriteTo(vxs);
+                            strkgen.Reset();
+                        }
+                        else
+                        {
+
+                        }
                         break;
                     case VertexCmd.LineTo:
                     case VertexCmd.P2c://user must flatten the curve before do stroke

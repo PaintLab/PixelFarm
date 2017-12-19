@@ -258,9 +258,26 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawImage(Image actualImage, double x, double y)
         {
+            //GLBitmap glBmp = ResolveForGLBitmap(actualImage);
+            //if (glBmp != null)
+            //{
+            //    _glsf.DrawImage(glBmp, (float)x, (float)y);
+            //}
+
+
             GLBitmap glBmp = ResolveForGLBitmap(actualImage);
-            if (glBmp != null)
+            if (glBmp == null) return;
+
+            if (this._orientation == DrawBoardOrientation.LeftTop)
             {
+                //place left upper corner at specific x y
+
+                _glsf.DrawImage(glBmp, (float)x, _glsf.ViewportHeight - (float)y);
+            }
+            else
+            {
+                //left-bottom as original
+                //place left-lower of the img at specific (x,y)
                 _glsf.DrawImage(glBmp, (float)x, (float)y);
             }
         }
