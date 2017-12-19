@@ -118,7 +118,6 @@ namespace PixelFarm.Agg
         }
 
         VertexStorePool _vxsPool = new VertexStorePool();
-
         VertexStore GetFreeVxs()
         {
             return _vxsPool.GetFreeVxs();
@@ -127,6 +126,8 @@ namespace PixelFarm.Agg
         {
             _vxsPool.Release(ref vxs);
         }
+
+
 
         public override void FillCircle(double x, double y, double radius)
         {
@@ -189,8 +190,17 @@ namespace PixelFarm.Agg
             }
             else
             {
-                int  this.Height;
+                //left-top
+                int h = this.Height;
 
+                _lineGen.Clear();
+                _lineGen.MoveTo(x1, h - y1);
+                _lineGen.LineTo(x2, h - y2);
+                 
+
+                var v1 = GetFreeVxs();
+                _aggsx.Render(stroke.MakeVxs(_lineGen.Vxs, v1), this.strokeColor);
+                ReleaseVxs(ref v1);
             }
 
 
