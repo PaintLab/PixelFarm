@@ -34,7 +34,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             set
             {
-                painter1.StrokeColor = this.strokeColor = value;
+                _painter.StrokeColor = this.strokeColor = value;
             }
         }
         public override float StrokeWidth
@@ -45,7 +45,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             set
             {
-                painter1.StrokeWidth = this.strokeWidth = value;
+                _painter.StrokeWidth = this.strokeWidth = value;
             }
         }
 
@@ -61,7 +61,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void Clear(PixelFarm.Drawing.Color c)
         {
-            painter1.Clear(c);
+            _painter.Clear(c);
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {
@@ -113,15 +113,15 @@ namespace PixelFarm.Drawing.GLES2
         //}
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
-            painter1.Line(x1, this.Height - y1, x2, this.Height - y2);
+            _painter.Line(x1, this.Height - y1, x2, this.Height - y2);
         }
         public override void DrawRectangle(float left, float top, float width, float height)
         {
-            painter1.Rectangle(left, this.Height - (top + height), left + width, this.Height - top);
+            _painter.Rectangle(left, this.Height - (top + height), left + width, this.Height - top);
         }
         public override void FillRectangle(float left, float top, float width, float height)
         {
-            painter1.FillRectangle(left, this.Height - (top + height), left + width, this.Height - top);
+            _painter.FillRectangle(left, this.Height - (top + height), left + width, this.Height - top);
         }
 
         /// <summary>
@@ -135,11 +135,11 @@ namespace PixelFarm.Drawing.GLES2
         {
             get
             {
-                return painter1.SmoothingMode;
+                return _painter.SmoothingMode;
             }
             set
             {
-                painter1.SmoothingMode = value;
+                _painter.SmoothingMode = value;
             }
         }
         /// <summary>
@@ -154,7 +154,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                painter1.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, this.Height - destRect.Top);
+                _painter.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, this.Height - destRect.Top);
             }
         }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
@@ -216,7 +216,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                painter1.Canvas.DrawImage(glbmp, destRect.X, this.Height - destRect.Y, destRect.Width, destRect.Height);
+                _painter.Canvas.DrawImage(glbmp, destRect.X, this.Height - destRect.Y, destRect.Width, destRect.Height);
             }
 
         }

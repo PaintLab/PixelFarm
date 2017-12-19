@@ -10,8 +10,8 @@ namespace PixelFarm.Drawing.GLES2
 
     public partial class MyGLDrawBoard : DrawBoard, IDisposable
     {
-        
-        GLPainter painter1;
+
+        GLPainter _painter;
         bool isDisposed;
         Stack<Rectangle> clipRectStack = new Stack<Rectangle>();
         Rectangle currentClipRect;
@@ -23,7 +23,7 @@ namespace PixelFarm.Drawing.GLES2
         {
             //----------------
             //set painter first
-            this.painter1 = painter;
+            this._painter = painter;
             //----------------
             this._left = 0; //default start at 0,0
             this._top = 0;
@@ -39,6 +39,11 @@ namespace PixelFarm.Drawing.GLES2
             dbug_canvasCount += 1;
 #endif
             this.StrokeWidth = 1;
+        }
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _painter.Orientation; }
+            set { _painter.Orientation = value; }
         }
 
         public override string ToString()
@@ -77,7 +82,7 @@ namespace PixelFarm.Drawing.GLES2
 
         void ClearPreviousStoredValues()
         {
-            painter1.SetOrigin(0, 0);
+            _painter.SetOrigin(0, 0);
 
             this.canvasOriginX = 0;
             this.canvasOriginY = 0;

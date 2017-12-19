@@ -36,14 +36,22 @@ namespace PixelFarm.Agg
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 10;
         SmoothingMode _smoothingMode;
-
+        DrawBoardOrientation _orientation;
         public AggPainter(AggRenderSurface graphic2d)
         {
+            //original AggRenderSurface orientation is LeftBottom,left-lower corner is (0,0)
+            
+            _orientation = DrawBoardOrientation.LeftTop;
             this.gx = graphic2d;
             this.sclineRas = gx.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
             this.scline = graphic2d.ScanlinePacked8;
-            this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap; 
+            this.sclineRasToBmp = graphic2d.ScanlineRasToDestBitmap;
+        }
+        public DrawBoardOrientation Orientation
+        {
+            get { return this._orientation; }
+            set { this._orientation = value; }
         }
         public AggRenderSurface Graphics
         {

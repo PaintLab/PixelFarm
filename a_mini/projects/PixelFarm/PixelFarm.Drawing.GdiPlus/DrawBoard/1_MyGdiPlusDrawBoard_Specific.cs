@@ -40,10 +40,12 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Rectangle currentClipRect;
         //-------------------------------
 
+        DrawBoardOrientation _orientation = DrawBoardOrientation.LeftTop;
         public MyGdiPlusDrawBoard(int left, int top, int width, int height)
             : this(0, 0, left, top, width, height)
         {
         }
+
         internal MyGdiPlusDrawBoard(
             int horizontalPageNum,
             int verticalPageNum,
@@ -74,6 +76,12 @@ namespace PixelFarm.Drawing.WinGdi
             internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
 
             this.StrokeWidth = 1;
+        }
+
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _orientation; }
+            set { _orientation = value; }
         }
         void CreateGraphicsFromNativeHdc(int width, int height)
         {

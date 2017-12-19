@@ -19,6 +19,7 @@ namespace PixelFarm.Drawing.Skia
         SKPaint fill;
         SKPaint stroke;
         SKPaint textFill;
+        DrawBoardOrientation _orientation;
 
         public MySkiaDrawBoard(
             int horizontalPageNum,
@@ -28,7 +29,7 @@ namespace PixelFarm.Drawing.Skia
             int height)
         {
 
-
+            _orientation = DrawBoardOrientation.LeftTop;
 #if DEBUG
             debug_canvas_id = dbug_canvasCount + 1;
             dbug_canvasCount += 1;
@@ -51,7 +52,11 @@ namespace PixelFarm.Drawing.Skia
         {
             get { return this.skBitmap; }
         }
-
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _orientation; }
+            set { _orientation = value; }
+        }
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
 
@@ -67,7 +72,7 @@ namespace PixelFarm.Drawing.Skia
             textFill = new SKPaint();
             textFill.IsAntialias = true;
             //---------------------------------------            
-              
+
             this.CurrentFont = new RequestFont("tahoma", 14);
             this.CurrentTextColor = Color.Black;
             //---------------------------------------

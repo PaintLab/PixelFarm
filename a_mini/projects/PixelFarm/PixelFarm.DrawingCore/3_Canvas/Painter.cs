@@ -33,7 +33,7 @@ namespace PixelFarm.Drawing
         //2. GdiPlusPainter wraps ...
         //3. GLPainter wraps GLRenderSurface
         //4. SkiaPainter wrap  SkCanvas
-         
+
 
         public abstract float OriginX { get; }
         public abstract float OriginY { get; }

@@ -25,20 +25,30 @@ namespace PixelFarm.Agg
 {
     public class AggDrawBoard : DrawBoard
     {
-        //this class wrap agg painter functionality
-
+        //this class wrap agg painter functionality 
 
         ActualImage _rawAggImage;
         AggRenderSurface _renderSurface;
         AggPainter _aggPainter;
+
         public AggDrawBoard(int width, int height)
         {
+
+         
             //1. 
             _rawAggImage = new ActualImage(width, height, PixelFormat.ARGB32);
             //2. 
             _renderSurface = new AggRenderSurface(_rawAggImage);
             //3. 
             _aggPainter = new AggPainter(_renderSurface);
+        }
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _aggPainter.Orientation; }
+            set
+            {
+                _aggPainter.Orientation = value;
+            }
         }
         public override SmoothingMode SmoothingMode
         {

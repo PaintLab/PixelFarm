@@ -33,7 +33,7 @@ namespace PixelFarm.Drawing
         public abstract void dbug_DrawRuler(int x);
         public abstract void dbug_DrawCrossRect(Color color, Rectangle rect);
 #endif
-
+        public abstract DrawBoardOrientation Orientation { get; set; }
         public abstract void CloseCanvas();
 
         ////////////////////////////////////////////////////////////////////////////
@@ -113,7 +113,7 @@ namespace PixelFarm.Drawing
         Invalid = -1,
         None = 3
     }
-    public enum CanvasOrientation
+    public enum DrawBoardOrientation : byte
     {
         LeftTop,
         LeftBottom,

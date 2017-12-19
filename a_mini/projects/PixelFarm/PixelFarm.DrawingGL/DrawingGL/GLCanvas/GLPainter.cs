@@ -27,8 +27,10 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         InternalGraphicsPathBuilder _igfxPathBuilder;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
+        DrawBoardOrientation _orientation;
         public GLPainter(GLRenderSurface canvas)
         {
+            _orientation = DrawBoardOrientation.LeftTop; //normal nature of the GL
             _glsf = canvas;
             _width = canvas.CanvasWidth;
             _height = canvas.CanvasHeight;
@@ -39,6 +41,12 @@ namespace PixelFarm.DrawingGL
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
         }
+        public DrawBoardOrientation Orientation
+        {
+            get { return _orientation; }
+            set { _orientation = value; }
+        }
+
         public bool UseVertexBufferObjectForRenderVx { get; set; }
         public override void SetOrigin(float ox, float oy)
         {
