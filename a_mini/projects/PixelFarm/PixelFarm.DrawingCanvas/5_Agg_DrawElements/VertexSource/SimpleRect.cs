@@ -55,7 +55,18 @@ namespace PixelFarm.Agg.VertexSource
             if (left > right) { bounds.Left = right; bounds.Right = left; }
             if (bottom > top) { bounds.Bottom = top; bounds.Top = bottom; }
         }
-
+        public void Offset(double dx, double dy)
+        {
+            bounds.Offset(dx, dy);
+        }
+        public double Height
+        {
+            get { return bounds.Height; }
+        }
+        public double Width
+        {
+            get { return bounds.Width; }
+        }
         public VertexStore MakeVxs(VertexStore output)
         {
             PathWriter m_LinesToDraw = new PathWriter(output);
