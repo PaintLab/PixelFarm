@@ -52,7 +52,7 @@ namespace OpenTkEssTest
             _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
             _glsf.ClearColorBuffer();
             painter.FillColor = PixelFarm.Drawing.Color.Black;
-            painter.FillRectLBWH(0, 0, 150, 150);
+            painter.FillRectangle(0, 0, 150, 150);
             GLBitmap glBmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");
             var textureBrush = new TextureBrush(glBmp);
             painter.FillRenderVx(textureBrush, polygon1);
@@ -62,10 +62,10 @@ namespace OpenTkEssTest
               new PointF(400, 100), Color.White);
             //fill polygon with gradient brush  
             painter.FillColor = Color.Yellow;
-            painter.FillRectLBWH(200, 0, 150, 150);
+            painter.FillRectangle(200, 0, 150, 150);
             painter.FillRenderVx(linearGrBrush2, polygon2);
             painter.FillColor = Color.Black;
-            painter.FillRectLBWH(400, 0, 150, 150);
+            painter.FillRectangle(400, 0, 150, 150);
             //-------------------------------------------------------------------------  
             //another  ...                 
             painter.FillRenderVx(linearGrBrush2, polygon3);

@@ -284,23 +284,23 @@ namespace PixelFarm.Agg
             _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
-        public override void FillRectLBWH(double left, double bottom, double width, double height)
-        {
-            double right = left + width;
-            double top = bottom + height;
-            if (right < left || top < bottom)
-            {
-#if DEBUG
-                throw new ArgumentException();
-#else
-                return;
-#endif
-            }
-            _simpleRectVxsGen.SetRect(left, bottom, right, top);
-            var v1 = GetFreeVxs();
-            _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
-            ReleaseVxs(ref v1);
-        }
+//        public override void FillRectLBWH(double left, double bottom, double width, double height)
+//        {
+//            double right = left + width;
+//            double top = bottom + height;
+//            if (right < left || top < bottom)
+//            {
+//#if DEBUG
+//                throw new ArgumentException();
+//#else
+//                return;
+//#endif
+//            }
+//            _simpleRectVxsGen.SetRect(left, bottom, right, top);
+//            var v1 = GetFreeVxs();
+//            _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
+//            ReleaseVxs(ref v1);
+//        }
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
             if (roundRect == null)

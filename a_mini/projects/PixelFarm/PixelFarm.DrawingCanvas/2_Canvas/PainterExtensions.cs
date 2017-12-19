@@ -57,7 +57,7 @@ namespace PixelFarm.Agg
         {
             Color prevColor = p.FillColor;
             p.FillColor = color;
-            p.FillRectLBWH(left, bottom, width, height);
+            p.FillRectangle(left, bottom - height, width, height);
             p.FillColor = prevColor;
         }
         public static void Fill(this Painter p, VertexStoreSnap snap, Color color)

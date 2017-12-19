@@ -468,10 +468,10 @@ namespace PixelFarm.DrawingGL
             FillRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
         }
 
-        public override void FillRectLBWH(double left, double bottom, double width, double height)
-        {
-            FillRect((float)left, (float)bottom, (float)width, (float)height);
-        }
+        //public override void FillRectLBWH(double left, double bottom, double width, double height)
+        //{
+        //    FillRect((float)left, (float)bottom, (float)width, (float)height);
+        //}
 
         public override void FillRenderVx(Brush brush, RenderVx renderVx)
         {

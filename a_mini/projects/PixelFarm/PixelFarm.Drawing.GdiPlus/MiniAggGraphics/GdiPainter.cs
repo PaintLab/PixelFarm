@@ -500,10 +500,10 @@ namespace PixelFarm.Drawing.WinGdi
             //     System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
         }
 
-        public override void FillRectLBWH(double left, double bottom, double width, double height)
-        {
-            _gfx.FillRectangle(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
-        }
+        //public override void FillRectLBWH(double left, double bottom, double width, double height)
+        //{
+        //    _gfx.FillRectangle(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
+        //}
 
         VertexStorePool _vxsPool = new VertexStorePool();
         VertexStore GetFreeVxs()

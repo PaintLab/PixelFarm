@@ -422,13 +422,13 @@ namespace PixelFarm.Drawing.Skia
                 _fill);
         }
 
-        public override void FillRectLBWH(double left, double bottom, double width, double height)
-        {
+        //public override void FillRectLBWH(double left, double bottom, double width, double height)
+        //{
 
-            _skCanvas.DrawRect(
-              new SKRect((float)left, (float)(bottom - height), (float)(left + width), (float)bottom),
-                _fill);
-        }
+        //    _skCanvas.DrawRect(
+        //      new SKRect((float)left, (float)(bottom - height), (float)(left + width), (float)bottom),
+        //        _fill);
+        //}
 
         VertexStorePool _vxsPool = new VertexStorePool();
         VertexStore GetFreeVxs()
