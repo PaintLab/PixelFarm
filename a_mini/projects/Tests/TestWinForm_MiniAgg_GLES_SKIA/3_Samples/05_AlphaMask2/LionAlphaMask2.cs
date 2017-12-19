@@ -234,7 +234,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             //----------------------------------------------------
             return bmp;
         }
-        void DrawWithWinGdi(GdiPlusCanvasPainter p)
+        void DrawWithWinGdi(GdiPainter p)
         {
             int w = 800, h = 600;
             p.Clear(Drawing.Color.White);
@@ -319,26 +319,26 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             resultBmp.UnlockBits(resultBmpData);
             return resultBmp;
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
-            if (p is GdiPlusCanvasPainter)
+            if (p is GdiPainter)
             {
-                DrawWithWinGdi((GdiPlusCanvasPainter)p);
+                DrawWithWinGdi((GdiPainter)p);
                 return;
             }
-            AggCanvasPainter p2 = (AggCanvasPainter)p;
-            Graphics2D gx = p2.Graphics;
-            var widgetsSubImage = gx.DestImage;
-            var scline = gx.ScanlinePacked8;
+            AggPainter p2 = (AggPainter)p;
+            AggRenderSurface aggRdsf = p2.RenderSurface;
+            var widgetsSubImage = aggRdsf.DestImage;
+            var scline = aggRdsf.ScanlinePacked8;
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
             //change value ***
             if (isMaskSliderValueChanged)
             {
-                generate_alpha_mask(gx.ScanlineRasToDestBitmap, gx.ScanlinePacked8, gx.ScanlineRasterizer, width, height);
+                generate_alpha_mask(aggRdsf.ScanlineRasToDestBitmap, aggRdsf.ScanlinePacked8, aggRdsf.ScanlineRasterizer, width, height);
                 this.isMaskSliderValueChanged = false;
             }
-            var rasterizer = gx.ScanlineRasterizer;
+            var rasterizer = aggRdsf.ScanlineRasterizer;
             rasterizer.SetClipBox(0, 0, width, height);
             //alphaMaskImageBuffer.AttachBuffer(alphaByteArray, 0, width, height, width, 8, 1);
 
@@ -358,7 +358,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                     AffinePlan.Translate(width / 2, height / 2));
             clippingProxy.Clear(Drawing.Color.White);
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
             // draw a background to show how the mask is working better
             int rect_w = 30;
             var v1 = GetFreeVxs();

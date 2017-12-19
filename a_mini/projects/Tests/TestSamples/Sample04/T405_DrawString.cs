@@ -19,7 +19,7 @@ namespace OpenTkEssTest
         {
 
         }
-        protected override void OnPainterReady(CanvasPainter painter)
+        protected override void OnPainterReady(Painter painter)
         {
             font1 = new PixelFarm.Drawing.RequestFont("tahoma", 10);
             
@@ -29,7 +29,7 @@ namespace OpenTkEssTest
             painter.UseSubPixelRendering = true;
             painter.CurrentFont = font1;
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             //canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
             //canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
@@ -124,7 +124,7 @@ namespace OpenTkEssTest
         {
 
         }
-        protected override void OnPainterReady(CanvasPainter painter)
+        protected override void OnPainterReady(Painter painter)
         {
             font1 = new PixelFarm.Drawing.RequestFont("tahoma", 11); 
             font2 = new PixelFarm.Drawing.RequestFont("tahoma", 16); 
@@ -134,7 +134,7 @@ namespace OpenTkEssTest
         }
         RenderVxFormattedString _strRenderVx_1;
         RenderVxFormattedString _strRenderVx_2;
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
 
             //painter.DrawString("hello world!", 100, 100);            

@@ -5,6 +5,7 @@
 // it still follows the originall agg function names.  I have been cleaning these up over time
 // and intend to do much more refactoring of these things over the long term.
 
+using PixelFarm.Drawing;
 using PixelFarm.Agg.VertexSource;
 using PixelFarm.VectorMath;
 using PixelFarm.Agg.Transform;
@@ -21,7 +22,7 @@ namespace PixelFarm.Agg.Sample_Draw
         {
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             p.Clear(Drawing.Color.White);
             //g.UseSubPixelRendering = true; 
@@ -45,7 +46,7 @@ namespace PixelFarm.Agg.Sample_Draw
         {
 
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             int width = 800;
             int height = 600;

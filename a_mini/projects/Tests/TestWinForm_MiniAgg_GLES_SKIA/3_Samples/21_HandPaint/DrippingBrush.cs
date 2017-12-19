@@ -13,12 +13,12 @@ namespace PixelFarm.Agg.Samples
     {
         Point latestMousePoint;
         List<MyBrushPath> myBrushPathList = new List<MyBrushPath>();
-        CanvasPainter p;
+        PixelFarm.Drawing.Painter p;
         MyBrushPath currentBrushPath;
         public override void Init()
         {
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
             p.FillColor = Drawing.Color.Black;

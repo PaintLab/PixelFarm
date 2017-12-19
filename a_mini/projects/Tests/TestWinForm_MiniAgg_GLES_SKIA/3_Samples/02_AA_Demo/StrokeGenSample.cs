@@ -7,6 +7,7 @@
 
 
 using PixelFarm.Agg.VertexSource;
+using PixelFarm.Drawing;
 using Mini;
 
 namespace PixelFarm.Agg.Sample_Draw
@@ -47,9 +48,9 @@ namespace PixelFarm.Agg.Sample_Draw
         {
             get; set;
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            var aggPainter = p as PixelFarm.Agg.AggCanvasPainter;
+            var aggPainter = p as PixelFarm.Agg.AggPainter;
             if (aggPainter == null)
             {
                 return;
@@ -75,7 +76,7 @@ namespace PixelFarm.Agg.Sample_Draw
                     break;
             }
         }
-        void DrawB(PixelFarm.Agg.AggCanvasPainter aggPainter)
+        void DrawB(PixelFarm.Agg.AggPainter aggPainter)
         {
 
             aggPainter.Clear(PixelFarm.Drawing.Color.White);
@@ -150,7 +151,7 @@ namespace PixelFarm.Agg.Sample_Draw
             }
             //aggPainter.Draw(newvxs);
         }
-        void DrawA(PixelFarm.Agg.AggCanvasPainter aggPainter)
+        void DrawA(PixelFarm.Agg.AggPainter aggPainter)
         {
 
             aggPainter.Clear(PixelFarm.Drawing.Color.White);
@@ -220,7 +221,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
 
         LineDashGenerator lineDashGen;
-        void DrawC(PixelFarm.Agg.AggCanvasPainter aggPainter)
+        void DrawC(PixelFarm.Agg.AggPainter aggPainter)
         {
 
             aggPainter.Clear(PixelFarm.Drawing.Color.White);
@@ -254,7 +255,7 @@ namespace PixelFarm.Agg.Sample_Draw
             aggPainter.Draw(vxs);
             aggPainter.LineDashGen = null;
         }
-        void DrawD(CanvasPainter painter)
+        void DrawD(PixelFarm.Drawing.Painter painter)
         {
             PathWriter ps = new PathWriter();
             painter.Clear(PixelFarm.Drawing.Color.White);
@@ -280,7 +281,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //p.Fill(ps.Vxs, PixelFarm.Drawing.Color.Black);
             painter.Draw(ps.Vxs, PixelFarm.Drawing.Color.Red);
         }
-        void DrawE(CanvasPainter painter)
+        void DrawE(PixelFarm.Drawing.Painter painter)
         {
             PathWriter ps = new PathWriter();
             painter.Clear(PixelFarm.Drawing.Color.White);

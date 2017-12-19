@@ -33,31 +33,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
-      <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
-      <Name>PixelFarm.DrawingCanvas</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PixelFarm.DrawingCore\PixelFarm.DrawingCore.csproj">
-      <Project>{fde310c7-9c58-47f9-a6af-3f518613bc4b}</Project>
-      <Name>PixelFarm.DrawingCore</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggCanvasPainter.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggCanvasPainter.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggRenderVx.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggRenderVx.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\Canvas2dExtension.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\Canvas2dExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\dbugVertexSourceIO.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\dbugVertexSourceIO.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\LineDashGenerator.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\LineDashGenerator.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\BorderDouble.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\BorderDouble.cs</Link>
     </Compile>
@@ -91,6 +66,21 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\AggPainter.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\AggPainter.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\AggRenderVx.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\AggRenderVx.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\Canvas2dExtension.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\Canvas2dExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\dbugVertexSourceIO.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\dbugVertexSourceIO.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\LineDashGenerator.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\LineDashGenerator.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\Filter\BrightnessAndContrastAdjustment.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\Filter\BrightnessAndContrastAdjustment.cs</Link>
     </Compile>
@@ -121,14 +111,11 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\Image\Transposer.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\Image\Transposer.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\00_Context\Graphics2D.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\Graphics2D.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\00_Context\AggRenderSurface.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\AggRenderSurface.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\00_Context\ImageGraphics2D.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\ImageGraphics2D.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\00_Context\ImageGraphics2D_RenderImages.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\ImageGraphics2D_RenderImages.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg\00_Context\AggRenderSurface_RenderImages.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\AggRenderSurface_RenderImages.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\ChildImage.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ChildImage.cs</Link>
@@ -278,6 +265,15 @@
       <Link>3.1_DrawingCanvas.MiniAgg\09_ImgFilters\InternalBrightnessAndContrastAdjustment.cs</Link>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\PixelFarm.DrawingCanvas\PixelFarm.DrawingCanvas.csproj">
+      <Project>{0cc424d5-20ac-4849-993d-3a720dbae94f}</Project>
+      <Name>PixelFarm.DrawingCanvas</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.DrawingCore\PixelFarm.DrawingCore.csproj">
+      <Project>{fde310c7-9c58-47f9-a6af-3f518613bc4b}</Project>
+      <Name>PixelFarm.DrawingCore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

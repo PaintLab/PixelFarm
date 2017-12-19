@@ -17,7 +17,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.VertexSource
 {
 

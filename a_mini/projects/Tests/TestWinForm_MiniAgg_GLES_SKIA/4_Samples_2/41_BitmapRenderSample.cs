@@ -28,7 +28,7 @@ The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies, 
 either expressed or implied, of the FreeBSD Project.
 */
-
+using PixelFarm.Drawing;
 using PixelFarm.Agg.Transform;
 using PixelFarm.Agg.Imaging;
 using Mini;
@@ -64,7 +64,7 @@ namespace PixelFarm.Agg.Sample_Images
         }
 
         AffinePlan[] affinePlan1 = new[] { AffinePlan.Translate(0, 200) }; //test
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             p.Clear(Drawing.Color.White);
             p.DrawImage(actualImage, 0, 200);

@@ -14,7 +14,7 @@ namespace TestSkia1
         }
         DemoBase exampleBase;
         SkiaBackend selectedBackend;
-        SkiaCanvasPainter painter;
+        SkiaPainter painter;
         public FormSkia1()
         {
             InitializeComponent();
@@ -22,7 +22,7 @@ namespace TestSkia1
             canvas.PaintSurface += Canvas_PaintSurface;
             glControl.Visible = true;
             glControl.PaintSurface += GlControl_PaintSurface;
-            painter = new SkiaCanvasPainter(canvas.Width, canvas.Height);
+            painter = new SkiaPainter(canvas.Width, canvas.Height);
             painter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.AntiAlias;
 
         }

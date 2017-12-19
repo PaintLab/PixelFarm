@@ -15,7 +15,7 @@
 
 namespace PixelFarm.Drawing.WinGdi
 {
-    partial class MyGdiPlusCanvas
+    partial class MyGdiPlusDrawBoard
     {
         int left;
         int top;
@@ -40,11 +40,11 @@ namespace PixelFarm.Drawing.WinGdi
             this.canvasOriginY = y;
         }
 
-        public override int CanvasOriginX
+        public override int OriginX
         {
             get { return this.canvasOriginX; }
         }
-        public override int CanvasOriginY
+        public override int OriginY
         {
             get { return this.canvasOriginY; }
         }

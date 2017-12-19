@@ -61,15 +61,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\SkiaGraphicsPlatform.cs" />
-    <Compile Include="Canvas\1_MySkiaCanvas_Specific.cs" />
-    <Compile Include="Canvas\2_MySkiaCanvas_CoordinateAndClip.cs" />
-    <Compile Include="Canvas\3_MySkiaCanvas_DrawGraphics.cs" />
-    <Compile Include="Canvas\4_MySkiaCanvas_TextAndFonts.cs" />
-    <Compile Include="Canvas\Conv.cs" />
+    <Compile Include="DrawBoard\1_MySkiaDrawBoard_Specific.cs" />
+    <Compile Include="DrawBoard\2_MySkiaDrawBoard_CoordinateAndClip.cs" />
+    <Compile Include="DrawBoard\3_MySkiaDrawBoard_DrawGraphics.cs" />
+    <Compile Include="DrawBoard\4_MySkiaDrawBoard_TextAndFonts.cs" />
+    <Compile Include="DrawBoard\Conv.cs" />
     <Compile Include="Implementation\BitmapHelper.cs" />
-    <Compile Include="MiniAggGraphics\SkiaCanvasPainter.cs" />
-    <Compile Include="MiniAggGraphics\SkiaRenderVx.cs" />
-    <Compile Include="MiniAggGraphics\VxsHelper.cs" />
+    <Compile Include="Painter\SkiaCanvasPainter.cs" />
+    <Compile Include="Painter\SkiaRenderVx.cs" />
+    <Compile Include="Painter\VxsHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

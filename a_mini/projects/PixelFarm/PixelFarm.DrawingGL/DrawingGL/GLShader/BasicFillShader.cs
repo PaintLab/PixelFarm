@@ -9,8 +9,8 @@ namespace PixelFarm.DrawingGL
         ShaderVtxAttrib2f a_position;
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
-        public BasicFillShader(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public BasicFillShader(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
             //----------------
             //vertex shader source
@@ -59,10 +59,10 @@ namespace PixelFarm.DrawingGL
         void CheckViewMatrix()
         {
             int version = 0;
-            if (orthoviewVersion != (version = _canvasShareResource.OrthoViewVersion))
+            if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
             {
                 orthoviewVersion = version;
-                u_matrix.SetData(_canvasShareResource.OrthoView.data);
+                u_matrix.SetData(_shareRes.OrthoView.data);
             }
         }
         //--------------------------------------------

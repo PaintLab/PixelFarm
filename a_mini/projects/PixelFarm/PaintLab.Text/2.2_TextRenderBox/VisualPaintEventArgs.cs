@@ -6,14 +6,14 @@ namespace LayoutFarm.Text
 {
     public class VisualPaintEventArgs : EventArgs
     {
-        public Canvas canvas;
+        public DrawBoard canvas;
         public Rectangle updateArea;
-        public VisualPaintEventArgs(Canvas canvas, Rectangle updateArea)
+        public VisualPaintEventArgs(DrawBoard canvas, Rectangle updateArea)
         {
             this.canvas = canvas;
             this.updateArea = updateArea;
         }
-        public Canvas Canvas
+        public DrawBoard Canvas
         {
             get
             {

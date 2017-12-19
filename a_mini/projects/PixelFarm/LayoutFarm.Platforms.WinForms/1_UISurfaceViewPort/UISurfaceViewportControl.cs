@@ -33,8 +33,8 @@ namespace LayoutFarm.UI
 #if GL_ENABLE
         IntPtr hh1;
         OpenGL.GpuOpenGLSurfaceView openGLSurfaceView;
-        CanvasGL2d canvas2d;
-        GLCanvasPainter canvasPainter;
+        GLRenderSurface _glsf;
+        GLPainter canvasPainter;
 #endif
         void HandleGLPaint(object sender, System.EventArgs e)
         {
@@ -95,11 +95,11 @@ namespace LayoutFarm.UI
 
 
                         int max = Math.Max(view.Width, view.Height);
-                        canvas2d = PixelFarm.Drawing.GLES2.GLES2Platform.CreateCanvasGL2d(max, max);
+                        _glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max);
                         //---------------
                         //canvas2d.FlipY = true;//
                         //---------------
-                        canvasPainter = new GLCanvasPainter(canvas2d);
+                        canvasPainter = new GLPainter(_glsf);
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------
@@ -121,7 +121,7 @@ namespace LayoutFarm.UI
                         canvasPainter.TextPrinter = printer;
 
                         //
-                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLCanvas(canvasPainter, canvas2d.CanvasWidth, canvas2d.CanvasHeight);
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(canvasPainter, _glsf.CanvasWidth, _glsf.CanvasHeight);
                         bridge.SetCanvas(myGLCanvas1);
 #endif
                     }

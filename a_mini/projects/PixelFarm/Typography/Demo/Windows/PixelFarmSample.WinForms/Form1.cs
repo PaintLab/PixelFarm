@@ -7,6 +7,7 @@ using System.IO;
 using System.Windows.Forms;
 
 using PixelFarm.Agg;
+using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 
 using Typography.OpenFont;
@@ -19,8 +20,8 @@ namespace SampleWinForms
     public partial class Form1 : Form
     {
         Graphics g;
-        AggCanvasPainter painter;
-        ImageGraphics2D imgGfx2d;
+        AggPainter painter;
+        AggRenderSurface imgGfx2d;
         ActualImage destImg;
         Bitmap winBmp;
 
@@ -112,8 +113,8 @@ namespace SampleWinForms
             if (g == null)
             {
                 destImg = new ActualImage(800, 600, PixelFormat.ARGB32);
-                imgGfx2d = new ImageGraphics2D(destImg); //no platform
-                painter = new AggCanvasPainter(imgGfx2d);
+                imgGfx2d = new AggRenderSurface(destImg); //no platform
+                painter = new AggPainter(imgGfx2d);
                 winBmp = new Bitmap(destImg.Width, destImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 g = this.CreateGraphics();
 
@@ -182,8 +183,8 @@ namespace SampleWinForms
 
                         //copy from Agg's memory buffer to gdi 
                         PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
-                        g.Clear(Color.White);
-                        g.DrawImage(winBmp, new Point(10, 0));
+                        g.Clear(System.Drawing.Color.White);
+                        g.DrawImage(winBmp, new System.Drawing.Point(10, 0));
 
                     }
                     break;
@@ -232,8 +233,8 @@ namespace SampleWinForms
                     PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
                     //--------------- 
                     //7. just render our bitmap
-                    g.Clear(Color.White);
-                    g.DrawImage(winBmp, new Point(30, 100));
+                    g.Clear(System.Drawing.Color.White);
+                    g.DrawImage(winBmp, new System.Drawing.Point(30, 100));
 
                 });
                 debugGlyphVisualizer.VisualizeInfoView = vinfo;
@@ -283,8 +284,8 @@ namespace SampleWinForms
             PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
             //--------------- 
             //7. just render our bitmap
-            g.Clear(Color.White);
-            g.DrawImage(winBmp, new Point(30, 100));
+            g.Clear(System.Drawing.Color.White);
+            g.DrawImage(winBmp, new System.Drawing.Point(30, 100));
             //g.DrawRectangle(Pens.White, new System.Drawing.Rectangle(30, 20, winBmp.Width, winBmp.Height));
         }
 
@@ -329,11 +330,11 @@ namespace SampleWinForms
             PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);
             //--------------- 
             //7. just render our bitmap
-            g.Clear(Color.White);
-            g.DrawImage(winBmp, new Point(30, 20));
+            g.Clear(System.Drawing.Color.White);
+            g.DrawImage(winBmp, new System.Drawing.Point(30, 20));
         }
 
-        void RenderGrids(int width, int height, int sqSize, CanvasPainter p)
+        void RenderGrids(int width, int height, int sqSize, PixelFarm.Drawing.Painter p)
         {
             //render grid 
             p.FillColor = PixelFarm.Drawing.Color.Gray;
@@ -455,7 +456,7 @@ namespace SampleWinForms
                 atlasBuilder.SaveFontInfo("d:\\WImageTest\\a_info.xml");
             }
         }
-         
+
         static void CreateSampleMsdfImg(GlyphContourBuilder tx, string outputFile)
         {
             //sample
@@ -528,7 +529,7 @@ namespace SampleWinForms
                 atlasBuilder.SaveFontInfo("d:\\WImageTest\\a_info.xml");
             }
         }
-        
-      
+
+
     }
 }

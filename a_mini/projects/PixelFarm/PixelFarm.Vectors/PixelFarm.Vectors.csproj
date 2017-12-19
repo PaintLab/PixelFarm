@@ -163,6 +163,7 @@
     <Compile Include="3_Transform\2_Bilinear.cs" />
     <Compile Include="3_Transform\3_Perspective.cs" />
     <Compile Include="3_Transform\4_SimulEqGeneral.cs" />
+    <Compile Include="3_Transform\AffinePlan.cs" />
     <Compile Include="3_Transform\ICoordTransformer.cs" />
     <Compile Include="3_Transform\1_Affine.cs" />
     <Compile Include="3_Transform\Viewport.cs" />

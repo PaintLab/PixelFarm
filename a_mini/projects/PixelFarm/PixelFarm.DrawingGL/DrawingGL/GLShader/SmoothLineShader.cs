@@ -10,8 +10,8 @@ namespace PixelFarm.DrawingGL
         ShaderUniformMatrix4 u_matrix;
         ShaderUniformVar4 u_solidColor;
         ShaderUniformVar1 u_linewidth;
-        public SmoothLineShader(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public SmoothLineShader(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
             string vs = @"                   
             attribute vec4 a_position;  
@@ -93,10 +93,10 @@ namespace PixelFarm.DrawingGL
         void CheckViewMatrix()
         {
             int version = 0;
-            if (orthoviewVersion != (version = _canvasShareResource.OrthoViewVersion))
+            if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
             {
                 orthoviewVersion = version;
-                u_matrix.SetData(_canvasShareResource.OrthoView.data);
+                u_matrix.SetData(_shareRes.OrthoView.data);
             }
         }
 
@@ -107,7 +107,7 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
             //--------------------
-            _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
+            _shareRes.AssignStrokeColorToVar(u_solidColor);
             unsafe
             {
                 float rad1 = (float)Math.Atan2(
@@ -131,7 +131,7 @@ namespace PixelFarm.DrawingGL
            
             //because original stroke width is the width of both side of
             //the line, but u_linewidth is the half of the strokeWidth
-            u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
+            u_linewidth.SetValue(_shareRes._strokeWidth / 2f);
             GL.DrawArrays(BeginMode.TriangleStrip, 0, 4);
         }
         public void DrawTriangleStrips(MultiPartTessResult multipartTessResult)
@@ -143,8 +143,8 @@ namespace PixelFarm.DrawingGL
             SetCurrent();
             CheckViewMatrix();
 
-            _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
-            u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
+            _shareRes.AssignStrokeColorToVar(u_solidColor);
+            u_linewidth.SetValue(_shareRes._strokeWidth / 2f);
             //
             a_position.LoadPureV4f(coords);
             //because original stroke width is the width of both side of
@@ -166,10 +166,10 @@ namespace PixelFarm.DrawingGL
             //--------------------
             u_solidColor.SetValue((float)color.R / 255f, (float)color.G / 255f, (float)color.B / 255f, (float)color.A / 255f);
 
-            _canvasShareResource.AssignStrokeColorToVar(u_solidColor);
+            _shareRes.AssignStrokeColorToVar(u_solidColor);
             //because original stroke width is the width of both side of
             //the line, but u_linewidth is the half of the strokeWidth
-            u_linewidth.SetValue(_canvasShareResource._strokeWidth / 2f);
+            u_linewidth.SetValue(_shareRes._strokeWidth / 2f);
             //--------------------
             VertexBufferObject borderVBO = multipartTessResult.GetBorderVBO();
             borderVBO.Bind();
