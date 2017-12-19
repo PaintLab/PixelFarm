@@ -37,8 +37,8 @@ namespace Mini
             lstBackEndRenderer.Items.Add(RenderBackendChoice.PureAgg); //pure software renderer with MiniAgg
             lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);
             lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES2);
-            lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
-            lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaGLBackend);
+            //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
+            //lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaGLBackend);
             lstBackEndRenderer.SelectedIndex = 0;//set default 
             lstBackEndRenderer.DoubleClick += (s, e) => listBox1_DoubleClick(null, EventArgs.Empty);
         }
