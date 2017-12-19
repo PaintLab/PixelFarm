@@ -21,8 +21,6 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
-using PixelFarm.Agg.Transform;
 namespace PixelFarm.Agg
 {
     public class AggDrawBoard : DrawBoard
