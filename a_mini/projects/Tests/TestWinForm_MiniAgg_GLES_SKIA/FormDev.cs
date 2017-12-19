@@ -40,88 +40,90 @@ namespace Mini
             lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
             lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaGLBackend);
             lstBackEndRenderer.SelectedIndex = 0;//set default 
+            lstBackEndRenderer.DoubleClick += (s, e) => listBox1_DoubleClick(null, EventArgs.Empty);
         }
-
-
-
 
         void listBox1_DoubleClick(object sender, EventArgs e)
         {
             //load sample form
             ExampleAndDesc exAndDesc = this.listBox1.SelectedItem as ExampleAndDesc;
-            if (exAndDesc != null)
+            if (exAndDesc == null)
             {
-                switch ((RenderBackendChoice)lstBackEndRenderer.SelectedItem)
-                {
-                    case RenderBackendChoice.PureAgg:
-                        {
-                            FormTestBed testBed = new FormTestBed();
-                            testBed.WindowState = FormWindowState.Maximized;
-                            testBed.UseGdiPlusOutput = false;
-                            testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
-                            testBed.Show();
-                            testBed.LoadExample(exAndDesc);
-                        }
-                        break;
-                    case RenderBackendChoice.GdiPlus:
-                        {
-                            FormTestBed testBed = new FormTestBed();
-                            testBed.WindowState = FormWindowState.Maximized;
-                            testBed.UseGdiPlusOutput = true;
-                            testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
-                            testBed.Show();
-                            testBed.LoadExample(exAndDesc);
-                        }
-                        break;
-                    case RenderBackendChoice.OpenGLES2:
-                        {
-                            //create demo
-                            DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
-                            if (exBase == null)
-                            {
-                                return;
-                            }
-
-                            //create form
-                            FormGLTest formGLTest = new FormGLTest();
-                            formGLTest.Text = exAndDesc.ToString();
-                            formGLTest.Show();
-                            //---------------------- 
-                            //get target control that used to present the example
-                            OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
-                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
-                            glbaseDemo.LoadGLControl(control);
-                            glbaseDemo.LoadSample(exBase);
-                            //----------------------
-                            formGLTest.FormClosing += (s2, e2) =>
-                            {
-                                glbaseDemo.CloseDemo();
-                            };
-
-                            formGLTest.WindowState = FormWindowState.Maximized;
-                        }
-                        break;
-                    case RenderBackendChoice.SkiaMemoryBackend:
-                        {
-                            TestSkia1.FormSkia1 formSkia = new TestSkia1.FormSkia1();
-                            formSkia.SelectBackend(TestSkia1.FormSkia1.SkiaBackend.Memory);
-                            formSkia.Show();
-                            formSkia.LoadExample(exAndDesc);
-                        }
-                        break;
-                    case RenderBackendChoice.SkiaGLBackend:
-                        {
-                            TestSkia1.FormSkia1 formSkia = new TestSkia1.FormSkia1();
-                            formSkia.SelectBackend(TestSkia1.FormSkia1.SkiaBackend.GLES);
-                            formSkia.Show();
-                            formSkia.LoadExample(exAndDesc);
-                        }
-                        break;
-                    default:
-                        throw new NotSupportedException();
-                }
-
+                return; //early exit
             }
+            //
+            //
+            switch ((RenderBackendChoice)lstBackEndRenderer.SelectedItem)
+            {
+                case RenderBackendChoice.PureAgg:
+                    {
+                        FormTestBed testBed = new FormTestBed();
+                        testBed.WindowState = FormWindowState.Maximized;
+                        testBed.UseGdiPlusOutput = false;
+                        testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
+                        testBed.Show();
+                        testBed.LoadExample(exAndDesc);
+                    }
+                    break;
+                case RenderBackendChoice.GdiPlus:
+                    {
+                        FormTestBed testBed = new FormTestBed();
+                        testBed.WindowState = FormWindowState.Maximized;
+                        testBed.UseGdiPlusOutput = true;
+                        testBed.UseGdiAntiAlias = chkGdiAntiAlias.Checked;
+                        testBed.Show();
+                        testBed.LoadExample(exAndDesc);
+                    }
+                    break;
+                case RenderBackendChoice.OpenGLES2:
+                    {
+                        //create demo
+                        DemoBase exBase = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
+                        if (exBase == null)
+                        {
+                            return;
+                        }
+
+                        //create form
+                        FormGLTest formGLTest = new FormGLTest();
+                        formGLTest.Text = exAndDesc.ToString();
+                        formGLTest.Show();
+                        //---------------------- 
+                        //get target control that used to present the example
+                        OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
+                        GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                        glbaseDemo.LoadGLControl(control);
+                        glbaseDemo.LoadSample(exBase);
+                        //----------------------
+                        formGLTest.FormClosing += (s2, e2) =>
+                        {
+                            glbaseDemo.CloseDemo();
+                        };
+
+                        formGLTest.WindowState = FormWindowState.Maximized;
+                    }
+                    break;
+                case RenderBackendChoice.SkiaMemoryBackend:
+                    {
+                        TestSkia1.FormSkia1 formSkia = new TestSkia1.FormSkia1();
+                        formSkia.SelectBackend(TestSkia1.FormSkia1.SkiaBackend.Memory);
+                        formSkia.Show();
+                        formSkia.LoadExample(exAndDesc);
+                    }
+                    break;
+                case RenderBackendChoice.SkiaGLBackend:
+                    {
+                        TestSkia1.FormSkia1 formSkia = new TestSkia1.FormSkia1();
+                        formSkia.SelectBackend(TestSkia1.FormSkia1.SkiaBackend.GLES);
+                        formSkia.Show();
+                        formSkia.LoadExample(exAndDesc);
+                    }
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+
+
         }
 
 
