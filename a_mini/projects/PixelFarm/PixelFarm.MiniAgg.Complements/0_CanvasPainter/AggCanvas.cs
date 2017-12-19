@@ -53,9 +53,9 @@ namespace PixelFarm.Agg
 
         public override Rectangle Rect => throw new NotImplementedException();
 
-        public override int CanvasOriginX => throw new NotImplementedException();
+        public override int OriginX => throw new NotImplementedException();
 
-        public override int CanvasOriginY => throw new NotImplementedException();
+        public override int OriginY => throw new NotImplementedException();
 
         public override Rectangle CurrentClipRect => throw new NotImplementedException();
 

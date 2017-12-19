@@ -8,7 +8,7 @@ namespace PixelFarm.Drawing
     {
 
         //------------------------------
-        //this class provides basic canvas interface for drawing
+        //this class provides basic DrawBoard (canvas) interface for drawing
         //with 'screen' coordinate system
         //y axis points down
         //x axis points to the right
@@ -61,8 +61,8 @@ namespace PixelFarm.Drawing
 
         public abstract Rectangle Rect { get; }
 
-        public abstract int CanvasOriginX { get; }
-        public abstract int CanvasOriginY { get; }
+        public abstract int OriginX { get; }
+        public abstract int OriginY { get; }
         public abstract void SetCanvasOrigin(int x, int y);
 
         //---------------------------------------------------------------------
@@ -82,12 +82,12 @@ namespace PixelFarm.Drawing
         //-------------------------------------------------------
         //rects 
         public abstract void FillRectangle(float left, float top, float width, float height);
-        public abstract void DrawRectangle(float left, float top, float width, float height); 
+        public abstract void DrawRectangle(float left, float top, float width, float height);
         //------------------------------------------------------- 
         //path,  polygons,ellipse spline,contour,   
-        public abstract void FillPath(GraphicsPath gfxPath); 
+        public abstract void FillPath(GraphicsPath gfxPath);
         public abstract void DrawPath(GraphicsPath gfxPath);
-        public abstract void FillPolygon(PointF[] points); 
+        public abstract void FillPolygon(PointF[] points);
         //-------------------------------------------------------  
         //images
         public abstract void DrawImage(Image image, RectangleF dest, RectangleF src);
@@ -132,7 +132,7 @@ namespace PixelFarm.Drawing
         public static void OffsetCanvasOrigin(this DrawBoard canvas, int dx, int dy)
         {
             //TODO: review offset function
-            canvas.SetCanvasOrigin(canvas.CanvasOriginX + dx, canvas.CanvasOriginY + dy);
+            canvas.SetCanvasOrigin(canvas.OriginX + dx, canvas.OriginY + dy);
         }
         public static void OffsetCanvasOriginX(this DrawBoard canvas, int dx)
         {
