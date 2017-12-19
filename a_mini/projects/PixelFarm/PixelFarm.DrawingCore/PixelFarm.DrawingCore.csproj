@@ -57,13 +57,13 @@
     <Compile Include="2_Abstract_DrawingElements\GraphicsPath.cs" />
     <Compile Include="2_Abstract_DrawingElements\Image.cs" />
     <Compile Include="2_Abstract_DrawingElements\Region.cs" />
-    <Compile Include="3_Canvas\0_VertexCommandAndOrientation.cs" />
-    <Compile Include="3_Canvas\1_VertexStore.cs" />
-    <Compile Include="3_Canvas\2_VertexStoreSnap.cs" />
-    <Compile Include="3_Canvas\Canvas.cs" />
-    <Compile Include="3_Canvas\CanvasPainter.cs" />
-    <Compile Include="3_Canvas\RenderVx.cs" />
-    <Compile Include="3_Canvas\RequestFont.cs" />
+    <Compile Include="3_DrawBoard\0_VertexCommandAndOrientation.cs" />
+    <Compile Include="3_DrawBoard\1_VertexStore.cs" />
+    <Compile Include="3_DrawBoard\2_VertexStoreSnap.cs" />
+    <Compile Include="3_DrawBoard\DrawBoard.cs" />
+    <Compile Include="3_DrawBoard\Painter.cs" />
+    <Compile Include="3_DrawBoard\RenderVx.cs" />
+    <Compile Include="3_DrawBoard\RequestFont.cs" />
     <Compile Include="ExtensionAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

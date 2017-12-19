@@ -148,25 +148,25 @@
     <Compile Include="..\PixelFarm.DrawingCore\2_Abstract_DrawingElements\Region.cs">
       <Link>1_DrawingCore\2_Abstract_DrawingElements\Region.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\0_VertexCommandAndOrientation.cs">
+    <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\0_VertexCommandAndOrientation.cs">
       <Link>1_DrawingCore\3_Canvas\0_VertexCommandAndOrientation.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\1_VertexStore.cs">
+    <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\1_VertexStore.cs">
       <Link>1_DrawingCore\3_Canvas\1_VertexStore.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\2_VertexStoreSnap.cs">
+    <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\2_VertexStoreSnap.cs">
       <Link>1_DrawingCore\3_Canvas\2_VertexStoreSnap.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\Canvas.cs">
-      <Link>1_DrawingCore\3_Canvas\Canvas.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\DrawBoard.cs">
+      <Link>1_DrawingCore\3_Canvas\DrawBoard.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\CanvasPainter.cs">
-      <Link>1_DrawingCore\3_Canvas\CanvasPainter.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\Painter.cs">
+      <Link>1_DrawingCore\3_Canvas\Painter.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\RenderVx.cs">
+    <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\RenderVx.cs">
       <Link>1_DrawingCore\3_Canvas\RenderVx.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\RequestFont.cs">
+    <Compile Include="..\PixelFarm.DrawingCore\3_DrawBoard\RequestFont.cs">
       <Link>1_DrawingCore\3_Canvas\RequestFont.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
