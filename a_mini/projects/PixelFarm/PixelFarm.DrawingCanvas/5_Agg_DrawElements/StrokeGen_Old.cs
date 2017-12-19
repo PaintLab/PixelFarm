@@ -50,7 +50,7 @@ namespace PixelFarm.Agg
 
 
         StrokeMath m_stroker;
-        MultipartVerextDistanceList multipartVertexDistanceList = new MultipartVerextDistanceList();
+        MultipartVertexDistanceList multipartVertexDistanceList = new MultipartVertexDistanceList();
         VertexStore m_out_vertices;
         double m_shorten;
         bool m_closed;
@@ -148,7 +148,7 @@ namespace PixelFarm.Agg
             int currentRangeIndex = 0;
             double x = 0, y = 0;
             //int n = 0;
-            for (;;)
+            for (; ; )
             {
                 VertexCmd cmd = GetNextVertex(out x, out y);
                 if (cmd == VertexCmd.NoMore)
@@ -365,7 +365,7 @@ namespace PixelFarm.Agg
         }
     }
 
-    class MultipartVerextDistanceList
+    class MultipartVertexDistanceList
     {
         class Range
         {
@@ -394,6 +394,10 @@ namespace PixelFarm.Agg
         Range _range;
         Vertex2d _latest = new Vertex2d();
         int _rangeIndex = 0;
+        public MultipartVertexDistanceList()
+        {
+
+        }
         public void AddMoveTo(double x, double y)
         {
             //TODO: review here
