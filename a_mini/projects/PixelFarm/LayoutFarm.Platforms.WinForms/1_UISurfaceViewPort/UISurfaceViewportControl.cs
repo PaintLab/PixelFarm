@@ -121,7 +121,7 @@ namespace LayoutFarm.UI
                         canvasPainter.TextPrinter = printer;
 
                         //
-                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLCanvas(canvasPainter, _glsf.CanvasWidth, _glsf.CanvasHeight);
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(canvasPainter, _glsf.CanvasWidth, _glsf.CanvasHeight);
                         bridge.SetCanvas(myGLCanvas1);
 #endif
                     }

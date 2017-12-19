@@ -1,26 +1,50 @@
-﻿//MIT, 2014-2017, WinterDev
+﻿//BSD, 2014-2017, WinterDev
+//ArthurHub  , Jose Manuel Menendez Poo
+
+// "Therefore those skilled at the unorthodox
+// are infinite as heaven and earth,
+// inexhaustible as the great rivers.
+// When they come to an end,
+// they begin again,
+// like the days and months;
+// they die and are reborn,
+// like the four seasons."
+// 
+// - Sun Tsu,
+// "The Art of War"
+
 using System;
 using System.Collections.Generic;
-using SkiaSharp;
-namespace PixelFarm.Drawing.Skia
+using Win32;
+namespace PixelFarm.Drawing.WinGdi
 {
-    public partial class MySkiaCanvas : DrawBoard, IDisposable
+    public partial class MyGdiPlusDrawBoard : DrawBoard, IDisposable
     {
         int pageNumFlags;
         int pageFlags;
         bool isDisposed;
         //-------------------------------
-        Stack<SKRect> clipRectStack = new Stack<SKRect>();
-        SKRect currentClipRect;
-        //----------------------------
+        NativeWin32MemoryDc win32MemDc;
+        //-------------------------------
 
-        SKCanvas skCanvas;
-        SKBitmap skBitmap;
-        SKPaint fill;
-        SKPaint stroke;
-        SKPaint textFill;
+        IntPtr originalHdc = IntPtr.Zero;
+        System.Drawing.Graphics gx;
 
-        public MySkiaCanvas(
+        //-------------------------------
+        Stack<System.Drawing.Rectangle> clipRectStack = new Stack<System.Drawing.Rectangle>();
+        //-------------------------------
+
+        System.Drawing.Color currentTextColor = System.Drawing.Color.Black;
+        System.Drawing.Pen internalPen;
+        System.Drawing.SolidBrush internalSolidBrush;
+        System.Drawing.Rectangle currentClipRect;
+        //-------------------------------
+
+        public MyGdiPlusDrawBoard(int left, int top, int width, int height)
+            : this(0, 0, left, top, width, height)
+        {
+        }
+        internal MyGdiPlusDrawBoard(
             int horizontalPageNum,
             int verticalPageNum,
             int left, int top,
@@ -34,49 +58,42 @@ namespace PixelFarm.Drawing.Skia
             dbug_canvasCount += 1;
 #endif
 
-
             this.pageNumFlags = (horizontalPageNum << 8) | verticalPageNum;
             //2. dimension
             this.left = left;
             this.top = top;
             this.right = left + width;
             this.bottom = top + height;
+            currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
 
-            currentClipRect = new SKRect(0, 0, width, height);
             CreateGraphicsFromNativeHdc(width, height);
+            this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
+            //-------------------------------------------------------     
+            //managed object
+            internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
+            internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
 
             this.StrokeWidth = 1;
         }
-        public SKBitmap BackBmp
-        {
-            get { return this.skBitmap; }
-        }
-
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
+            win32MemDc = new NativeWin32MemoryDc(width, height, true);
+            win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
+            win32MemDc.SetBackTransparent(true);
+            win32MemDc.SetClipRect(0, 0, width, height);
 
-            skBitmap = new SKBitmap(width, height);
-            skCanvas = new SKCanvas(skBitmap);
-            //
-            stroke = new SKPaint();
-            stroke.IsStroke = true;
-            //
-            fill = new SKPaint();
-            fill.IsStroke = false;
-            //
-            textFill = new SKPaint();
-            textFill.IsAntialias = true;
-            //---------------------------------------            
-              
+            this.originalHdc = win32MemDc.DC;
+            //--------------
+            //set default font and default text color
             this.CurrentFont = new RequestFont("tahoma", 14);
             this.CurrentTextColor = Color.Black;
-            //---------------------------------------
+            //--------------
+
         }
 #if DEBUG
         public override string ToString()
         {
-            return "";
-            //return "visible_clip" + this.gx.VisibleClipBounds.ToString();
+            return "visible_clip" + this.gx.VisibleClipBounds.ToString();
         }
 #endif
 
@@ -86,12 +103,13 @@ namespace PixelFarm.Drawing.Skia
             {
                 return;
             }
-            //if (win32MemDc != null)
-            //{
-            //    win32MemDc.Dispose();
-            //    win32MemDc = null;
-            //}
+            if (win32MemDc != null)
+            {
+                win32MemDc.Dispose();
+                win32MemDc = null;
+            }
             isDisposed = true;
+
             ReleaseUnManagedResource();
         }
         /// <summary>
@@ -107,9 +125,7 @@ namespace PixelFarm.Drawing.Skia
         }
         void ClearPreviousStoredValues()
         {
-
-            //this.gx.RenderingOrigin = new System.Drawing.Point(0, 0);
-
+            this.gx.RenderingOrigin = new System.Drawing.Point(0, 0);
             this.canvasOriginX = 0;
             this.canvasOriginY = 0;
             this.clipRectStack.Clear();
@@ -117,15 +133,15 @@ namespace PixelFarm.Drawing.Skia
 
         void ReleaseUnManagedResource()
         {
-            //if (win32MemDc != null)
-            //{
-            //    win32MemDc.Dispose();
-            //    win32MemDc = null;
-            //    originalHdc = IntPtr.Zero;
-            //}
+            if (win32MemDc != null)
+            {
+                win32MemDc.Dispose();
+                win32MemDc = null;
+                originalHdc = IntPtr.Zero;
+            }
 
             clipRectStack.Clear();
-            currentClipRect = new SKRect(0, 0, this.Width, this.Height);
+            currentClipRect = new System.Drawing.Rectangle(0, 0, this.Width, this.Height);
 #if DEBUG
 
             debug_releaseCount++;
@@ -138,9 +154,9 @@ namespace PixelFarm.Drawing.Skia
             int w = this.Width;
             int h = this.Height;
             this.ClearPreviousStoredValues();
-            currentClipRect = new SKRect(0, 0, w, h);
-            //win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
-            //win32MemDc.SetClipRect(0, 0, w, h);
+            currentClipRect = new System.Drawing.Rectangle(0, 0, w, h);
+            win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
+            win32MemDc.SetClipRect(0, 0, w, h);
             left = hPageNum * w;
             top = vPageNum * h;
             right = left + w;
@@ -152,9 +168,9 @@ namespace PixelFarm.Drawing.Skia
             this.ReleaseUnManagedResource();
             this.ClearPreviousStoredValues();
 
-            currentClipRect = new SKRect(0, 0, newWidth, newHeight);
+            currentClipRect = new System.Drawing.Rectangle(0, 0, newWidth, newHeight);
             CreateGraphicsFromNativeHdc(newWidth, newHeight);
-            //this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
+            this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
 
 
             left = hPageNum * newWidth;
@@ -211,21 +227,21 @@ namespace PixelFarm.Drawing.Skia
         const int CANVAS_UNUSED = 1 << (1 - 1);
         const int CANVAS_DIMEN_CHANGED = 1 << (2 - 1);
 
-        //static System.Drawing.PointF[] ConvPointFArray(PointF[] points)
-        //{
-        //    int j = points.Length;
-        //    System.Drawing.PointF[] outputPoints = new System.Drawing.PointF[j];
-        //    for (int i = j - 1; i >= 0; --i)
-        //    {
-        //        outputPoints[i] = points[i].ToPointF();
-        //    }
-        //    return outputPoints;
-        //}
+        static System.Drawing.PointF[] ConvPointFArray(PointF[] points)
+        {
+            int j = points.Length;
+            System.Drawing.PointF[] outputPoints = new System.Drawing.PointF[j];
+            for (int i = j - 1; i >= 0; --i)
+            {
+                outputPoints[i] = points[i].ToPointF();
+            }
+            return outputPoints;
+        }
 
-        //static SKColor ConvColor(Color c)
-        //{
-        //    return new SKColor(c.R, c.G, c.B, c.A);
-        //}
+        static System.Drawing.Color ConvColor(Color c)
+        {
+            return System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
+        }
 
 
 

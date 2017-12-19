@@ -22,7 +22,7 @@ namespace PixelFarm.Drawing.Skia
         }
     }
 
-    partial class MySkiaCanvas
+    partial class MySkiaDrawBoard
     {
         Brush _currentBrush;
         float strokeWidth = 1f;

@@ -8,7 +8,7 @@ namespace PixelFarm.Drawing.GLES2
 
 
 
-    public partial class MyGLCanvas : DrawBoard, IDisposable
+    public partial class MyGLDrawBoard : DrawBoard, IDisposable
     {
         
         GLPainter painter1;
@@ -16,7 +16,7 @@ namespace PixelFarm.Drawing.GLES2
         Stack<Rectangle> clipRectStack = new Stack<Rectangle>();
         Rectangle currentClipRect;
         Brush _currentBrush;
-        public MyGLCanvas(
+        public MyGLDrawBoard(
            GLPainter painter, //*** we wrap around GLCanvasPainter *** 
            int width,
            int height)

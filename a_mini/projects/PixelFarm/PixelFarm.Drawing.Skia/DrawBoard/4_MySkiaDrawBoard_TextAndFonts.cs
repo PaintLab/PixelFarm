@@ -2,7 +2,7 @@
 using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
 {
-    partial class MySkiaCanvas
+    partial class MySkiaDrawBoard
     {
         RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;

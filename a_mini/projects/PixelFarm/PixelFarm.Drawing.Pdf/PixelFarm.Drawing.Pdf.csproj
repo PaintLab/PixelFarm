@@ -35,10 +35,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\WinGdiPlusPlatform.cs" />
-    <Compile Include="Canvas\1_MyPdfCanvas_Specific.cs" />
-    <Compile Include="Canvas\2_MyPdfCanvas_CoordinateAndClip.cs" />
-    <Compile Include="Canvas\3_MyPdfCanvas_DrawGraphics.cs" />
-    <Compile Include="Canvas\4_MyPdfCanvas_TextAndFonts.cs" />
+    <Compile Include="Canvas\1_MyPdfDrawBoard_Specific.cs" />
+    <Compile Include="Canvas\2_MyPdfDrawBoard_CoordinateAndClip.cs" />
+    <Compile Include="Canvas\3_MyPdfDrawBoard_DrawGraphics.cs" />
+    <Compile Include="Canvas\4_MyPdfDrawBoard_TextAndFonts.cs" />
     <Compile Include="Canvas\Conv.cs" />
     <Compile Include="Painter\PdfPainter.cs" />
     <Compile Include="Painter\PdfRenderVx.cs" />

@@ -133,10 +133,16 @@ namespace PixelFarm.Agg
             {
                 throw new NotImplementedException();
             }
-
         }
 
-        public override RequestFont CurrentFont { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public override RequestFont CurrentFont
+        {
+            get { return _aggPainter.CurrentFont; }
+            set
+            {
+                _aggPainter.CurrentFont = value;
+            }
+        }
         public override Color CurrentTextColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public override void Clear(Color c)
