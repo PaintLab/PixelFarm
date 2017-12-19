@@ -78,6 +78,7 @@ namespace PixelFarm.Drawing
         //vertext store/snap/rendervx
         public abstract void Fill(VertexStoreSnap snap);
         public abstract void Fill(VertexStore vxs);
+
         public abstract void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath);
         public abstract void Draw(VertexStore vxs);
         public abstract void Draw(VertexStoreSnap vxs);
