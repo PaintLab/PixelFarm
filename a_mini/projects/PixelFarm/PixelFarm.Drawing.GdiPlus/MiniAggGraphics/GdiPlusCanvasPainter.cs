@@ -370,8 +370,8 @@ namespace PixelFarm.Drawing.WinGdi
             else
             {
                 this._gfx.DrawImage(bmp, new System.Drawing.Point((int)x, (int)y));
-            } 
-           
+            }
+
         }
         public override void DrawImage(Image img, double x, double y)
         {
@@ -483,8 +483,28 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
-            _gfx.FillRectangle(_currentFillBrush,
-                System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+            ////use current brush and font
+            //_gfx.ResetTransform();
+            //_gfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly  
+            ////------------
+            //_gfx.FillRectangle(_currentFillBrush,
+            //    System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+            ///*_gfx.DrawString(text,
+            //    _latestWinGdiPlusFont.InnerFont,
+            //    _currentFillBrush,
+            //    new System.Drawing.PointF((float)x, (float)y));
+            //*/
+            ////------------
+            ////restore back
+            //_gfx.ResetTransform();//again
+            //_gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
+            //_gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly                
+
+
+
+            _gfx.FillRectangle(_currentFillBrush, (float)left, (float)top, (float)(right - left), (float)(top - bottom));
+
+            //     System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
         }
 
         public override void FillRectLBWH(double left, double bottom, double width, double height)

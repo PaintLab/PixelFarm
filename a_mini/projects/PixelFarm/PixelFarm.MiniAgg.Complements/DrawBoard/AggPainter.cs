@@ -223,7 +223,7 @@ namespace PixelFarm.Agg
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
             //
-            _aggRdsf.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), this.fillColor);
+            _aggRdsf.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), this.strokeColor);
             //
             ReleaseVxs(ref v1);
             ReleaseVxs(ref v2);
