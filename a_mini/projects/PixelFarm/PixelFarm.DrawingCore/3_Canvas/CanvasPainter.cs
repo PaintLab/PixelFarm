@@ -25,7 +25,12 @@ namespace PixelFarm.Drawing
 
     public abstract class Painter
     {
-
+        //who implement this class
+        //1. AggPainter 
+        //2. GdiPlusPainter 
+        //3. GLPainter 
+        //4. SkiaPainter
+        //5. PdfPainter
 
 
         public abstract float OriginX { get; }
