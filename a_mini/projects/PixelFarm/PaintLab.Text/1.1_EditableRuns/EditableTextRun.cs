@@ -273,7 +273,7 @@ namespace LayoutFarm.Text
         const int SAME_FONT_DIFF_TEXT_COLOR = 1;
         const int DIFF_FONT_SAME_TEXT_COLOR = 2;
         const int DIFF_FONT_DIFF_TEXT_COLOR = 3;
-        static int EvaluateFontAndTextColor(IDrawBoard canvas, TextSpanStyle spanStyle)
+        static int EvaluateFontAndTextColor(DrawBoard canvas, TextSpanStyle spanStyle)
         {
             var font = spanStyle.FontInfo;
             var color = spanStyle.FontColor;
@@ -309,7 +309,7 @@ namespace LayoutFarm.Text
                 return !this.SpanStyle.IsEmpty();
             }
         }
-        public override void CustomDrawToThisCanvas(IDrawBoard canvas, Rectangle updateArea)
+        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             int bWidth = this.Width;
             int bHeight = this.Height;

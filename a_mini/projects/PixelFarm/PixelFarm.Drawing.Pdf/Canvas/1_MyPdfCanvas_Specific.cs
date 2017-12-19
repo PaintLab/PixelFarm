@@ -2,7 +2,7 @@
 using System;
 namespace PixelFarm.Drawing.Pdf
 {
-    public partial class MyPdfCanvas : IDrawBoard, IDisposable
+    public partial class MyPdfCanvas : DrawBoard, IDisposable
     {
         int pageNumFlags;
         int pageFlags;

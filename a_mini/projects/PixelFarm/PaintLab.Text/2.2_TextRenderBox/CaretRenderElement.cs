@@ -10,14 +10,14 @@ namespace LayoutFarm.Text
             : base(g, w, h)
         {
         }
-        public override void CustomDrawToThisCanvas(IDrawBoard canvas, Rectangle updateArea)
+        public override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
         }
         public override void ResetRootGraphics(RootGraphic rootgfx)
         {
             DirectSetRootGraphics(this, rootgfx);
         }
-        internal void DrawCaret(IDrawBoard canvas, int x, int y)
+        internal void DrawCaret(DrawBoard canvas, int x, int y)
         {
             canvas.FillRectangle(Color.Black, x, y, this.Width, this.Height);
         }

@@ -165,7 +165,7 @@ namespace LayoutFarm.Text
                 return startPoint;
             }
         }
-        public void Draw(IDrawBoard destPage, Rectangle updateArea)
+        public void Draw(DrawBoard destPage, Rectangle updateArea)
         {
             if (IsOnTheSameLine)
             {

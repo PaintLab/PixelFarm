@@ -20,7 +20,7 @@ namespace LayoutFarm.Text
             get { return this.scrollRelation; }
             set { this.scrollRelation = value; }
         }
-        protected override void DrawBoxContent(IDrawBoard canvas, Rectangle updateArea)
+        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             var enterFont = canvas.CurrentFont;
             canvas.CurrentFont = this.CurrentTextSpanStyle.FontInfo;

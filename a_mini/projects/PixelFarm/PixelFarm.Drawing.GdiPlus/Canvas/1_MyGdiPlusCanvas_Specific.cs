@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
-    public partial class MyGdiPlusCanvas : IDrawBoard, IDisposable
+    public partial class MyGdiPlusCanvas : DrawBoard, IDisposable
     {
         int pageNumFlags;
         int pageFlags;

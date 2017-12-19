@@ -104,11 +104,11 @@ namespace LayoutFarm
         }
 
 
-        public void dbug_AddDrawElement(RenderElement visualElement, IDrawBoard currentCanvas)
+        public void dbug_AddDrawElement(RenderElement visualElement, DrawBoard currentCanvas)
         {
             dbug_AddDrawElement(visualElement, currentCanvas, null);
         }
-        public void dbug_AddDrawElement(RenderElement visualElement, IDrawBoard currentCanvas, string additionalMsg)
+        public void dbug_AddDrawElement(RenderElement visualElement, DrawBoard currentCanvas, string additionalMsg)
         {
             StringBuilder stBuilder = new StringBuilder();
             stBuilder.Append(new string('.', dbug_drawLevel));

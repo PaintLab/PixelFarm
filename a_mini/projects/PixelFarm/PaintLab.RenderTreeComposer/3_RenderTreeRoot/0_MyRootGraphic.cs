@@ -245,7 +245,7 @@ namespace LayoutFarm.UI
             this.TopWindowRenderBox.dbug_DumpVisualProps(writer);
             writer.Add(new dbugLayoutMsg(this.TopWindowRenderBox, "FINISH"));
         }
-        public void dbugShowRenderPart(IDrawBoard canvasPage, Rectangle updateArea)
+        public void dbugShowRenderPart(DrawBoard canvasPage, Rectangle updateArea)
         {
             RootGraphic visualroot = this;
             if (visualroot.dbug_ShowRootUpdateArea)

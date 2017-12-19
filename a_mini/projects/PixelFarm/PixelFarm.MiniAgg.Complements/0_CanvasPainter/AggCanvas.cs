@@ -25,7 +25,7 @@ using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.Transform;
 namespace PixelFarm.Agg
 {
-    public class AggCanvas : IDrawBoard
+    public class AggCanvas : DrawBoard
     {
 
         public AggCanvas()

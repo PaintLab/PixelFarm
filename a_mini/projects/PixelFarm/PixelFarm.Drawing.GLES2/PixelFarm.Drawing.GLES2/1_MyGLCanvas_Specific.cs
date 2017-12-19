@@ -8,7 +8,7 @@ namespace PixelFarm.Drawing.GLES2
 
 
 
-    public partial class MyGLCanvas : IDrawBoard, IDisposable
+    public partial class MyGLCanvas : DrawBoard, IDisposable
     {
         
         GLPainter painter1;

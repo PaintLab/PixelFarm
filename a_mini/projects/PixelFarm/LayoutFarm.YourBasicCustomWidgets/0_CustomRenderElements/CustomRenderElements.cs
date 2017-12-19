@@ -27,7 +27,7 @@ namespace LayoutFarm.CustomWidgets
                 }
             }
         }
-        protected override void DrawBoxContent(IDrawBoard canvas, Rectangle updateArea)
+        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
 #if DEBUG
             if (this.dbugBreak)

@@ -4,7 +4,7 @@
 namespace PixelFarm.Drawing
 {
 
-    public abstract class IDrawBoard
+    public abstract class DrawBoard
     {
 
         //------------------------------
@@ -129,17 +129,17 @@ namespace PixelFarm.Drawing
     public static class CanvasExtensionMethods
     {
 
-        public static void OffsetCanvasOrigin(this IDrawBoard canvas, int dx, int dy)
+        public static void OffsetCanvasOrigin(this DrawBoard canvas, int dx, int dy)
         {
             //TODO: review offset function
             canvas.SetCanvasOrigin(canvas.CanvasOriginX + dx, canvas.CanvasOriginY + dy);
         }
-        public static void OffsetCanvasOriginX(this IDrawBoard canvas, int dx)
+        public static void OffsetCanvasOriginX(this DrawBoard canvas, int dx)
         {
             //TODO: review offset function
             canvas.OffsetCanvasOrigin(dx, 0);
         }
-        public static void OffsetCanvasOriginY(this IDrawBoard canvas, int dy)
+        public static void OffsetCanvasOriginY(this DrawBoard canvas, int dy)
         {
             //TODO: review offset function
             canvas.OffsetCanvasOrigin(0, dy);
@@ -151,7 +151,7 @@ namespace PixelFarm.Drawing
         /// <param name="canvas"></param>
         /// <param name="brush"></param>
         /// <param name="points"></param>
-        public static void FillRectangle(this IDrawBoard canvas, Brush brush, PointF[] points)
+        public static void FillRectangle(this DrawBoard canvas, Brush brush, PointF[] points)
         {
             Brush temp = canvas.CurrentBrush; //save
             PointF p0 = points[0];
@@ -159,37 +159,37 @@ namespace PixelFarm.Drawing
             canvas.FillRectangle(p0.X, p0.Y, p1.X, p1.Y);
             canvas.CurrentBrush = temp; //restore
         }
-        public static void FillRectangle(this IDrawBoard canvas, Brush brush, float left, float top, float width, float height)
+        public static void FillRectangle(this DrawBoard canvas, Brush brush, float left, float top, float width, float height)
         {
             Brush temp = canvas.CurrentBrush; //save 
             canvas.FillRectangle(left, top, width, height);
             canvas.CurrentBrush = temp; //restore
         }
-        public static void FillRectangle(this IDrawBoard canvas, Color color, float left, float top, float width, float height)
+        public static void FillRectangle(this DrawBoard canvas, Color color, float left, float top, float width, float height)
         {
             Brush temp = canvas.CurrentBrush; //save 
             canvas.FillRectangle(left, top, width, height);
             canvas.CurrentBrush = temp; //restore
         }
 
-        public static void DrawRectangle(this IDrawBoard canvas, Color color, float left, float top, float width, float height)
+        public static void DrawRectangle(this DrawBoard canvas, Color color, float left, float top, float width, float height)
         {
             Brush temp = canvas.CurrentBrush; //save 
             canvas.DrawRectangle(left, top, width, height);
             canvas.CurrentBrush = temp; //restore
         }
 
-        public static void FillPolygon(this IDrawBoard canvas, Brush brush, PointF[] points)
+        public static void FillPolygon(this DrawBoard canvas, Brush brush, PointF[] points)
         {
             Brush temp = canvas.CurrentBrush; //save 
             canvas.FillPolygon(points);
             canvas.CurrentBrush = temp; //restore
         }
-        public static void FillPath(this IDrawBoard canvas, Color color, GraphicsPath gfxPath)
+        public static void FillPath(this DrawBoard canvas, Color color, GraphicsPath gfxPath)
         {
 
         }
-        public static void FillPath(this IDrawBoard canvas, Brush brush, GraphicsPath gfxPath)
+        public static void FillPath(this DrawBoard canvas, Brush brush, GraphicsPath gfxPath)
         {
 
         }

@@ -27,7 +27,7 @@ namespace LayoutFarm.CustomWidgets
         {
             gridLayer.GetCell(r, c).ContentElement = ui.GetPrimaryRenderElement(this.Root);
         }
-        protected override void DrawBoxContent(IDrawBoard canvas, Rectangle updateArea)
+        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
 #if DEBUG
             //if (this.dbugBreak)
