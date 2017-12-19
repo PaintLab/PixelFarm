@@ -157,8 +157,8 @@
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\2_VertexStoreSnap.cs">
       <Link>1_DrawingCore\3_Canvas\2_VertexStoreSnap.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\Canvas.cs">
-      <Link>1_DrawingCore\3_Canvas\Canvas.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\DrawBoard.cs">
+      <Link>1_DrawingCore\3_Canvas\DrawBoard.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\Painter.cs">
       <Link>1_DrawingCore\3_Canvas\Painter.cs</Link>

@@ -25,39 +25,116 @@ using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.Transform;
 namespace PixelFarm.Agg
 {
-    public class AggCanvas : DrawBoard
+    public class AggDrawBoard : DrawBoard
     {
+        //this class wrap agg painter functionality
 
-        public AggCanvas()
+
+        ActualImage _rawAggImage;
+        AggRenderSurface _renderSurface;
+        AggPainter _aggPainter;
+        public AggDrawBoard(int width, int height)
+        {
+            //1. 
+            _rawAggImage = new ActualImage(width, height, PixelFormat.ARGB32);
+            //2. 
+            _renderSurface = new AggRenderSurface(_rawAggImage);
+            //3. 
+            _aggPainter = new AggPainter(_renderSurface);
+        }
+        public override SmoothingMode SmoothingMode
+        {
+            get { return _aggPainter.SmoothingMode; }
+            set
+            {
+                _aggPainter.SmoothingMode = value;
+            }
+        }
+        public override float StrokeWidth
+        {
+            get { return (float)_aggPainter.StrokeWidth; }
+            set
+            {
+                _aggPainter.StrokeWidth = value;
+            }
+        }
+        public override Color StrokeColor
+        {
+            get
+            {
+                return _aggPainter.StrokeColor;
+            }
+            set
+            {
+                _aggPainter.StrokeColor = value;
+            }
+        }
+        public override Brush CurrentBrush
         {
 
+            get { throw new NotSupportedException(); }
+            set { throw new NotSupportedException(); }
+
         }
-        public override SmoothingMode SmoothingMode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public override float StrokeWidth { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public override Color StrokeColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public override Brush CurrentBrush { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public override Rectangle InvalidateArea => throw new NotImplementedException();
+        public override Rectangle InvalidateArea
+        {
+            get
+            {
+                throw new NotImplementedException();
 
-        public override int Top => throw new NotImplementedException();
+            }
+        }
 
-        public override int Left => throw new NotImplementedException();
+        public override int Top
+        {
+            get { return 0; }
+        }
+        public override int Left
+        {
+            get { return 0; }
+        }
 
-        public override int Width => throw new NotImplementedException();
+        public override int Width { get { return _rawAggImage.Width; } }
+        public override int Height { get { return _rawAggImage.Height; } }
+        public override int Bottom { get { return _rawAggImage.Height; } }
+        public override int Right { get { return _rawAggImage.Width; } }
 
-        public override int Height => throw new NotImplementedException();
+        public override Rectangle Rect
+        {
+            get
+            {
+                return new Rectangle(0, 0, Width, Height);
+            }
+        }
 
-        public override int Bottom => throw new NotImplementedException();
+        public override int OriginX
+        {
+            get
+            {
+                //this loss the data
+                return (int)_aggPainter.OriginX;
+            }
+        }
 
-        public override int Right => throw new NotImplementedException();
 
-        public override Rectangle Rect => throw new NotImplementedException();
+        public override int OriginY
+        {
+            get
+            {
+                //this loss the data
+                return (int)_aggPainter.OriginY;
+            }
+        }
 
-        public override int OriginX => throw new NotImplementedException();
+        public override Rectangle CurrentClipRect
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
 
-        public override int OriginY => throw new NotImplementedException();
-
-        public override Rectangle CurrentClipRect => throw new NotImplementedException();
+        }
 
         public override RequestFont CurrentFont { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public override Color CurrentTextColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
