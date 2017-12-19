@@ -47,7 +47,7 @@ namespace PixelFarm.Agg.Samples
             //lionFill.AutoFlipY = true;           
         }
 
-        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
             lionFill.Draw(p);

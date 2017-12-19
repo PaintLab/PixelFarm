@@ -10,7 +10,7 @@ using PixelFarm.Agg.VertexSource;
 
 namespace PixelFarm.DrawingGL
 {
-    public sealed class GLCanvasPainter : CanvasPainter
+    public sealed class GLPainter : Painter
     {
         GLRenderSurface _glsf;
         int _width;
@@ -27,8 +27,10 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         InternalGraphicsPathBuilder _igfxPathBuilder;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
-        public GLCanvasPainter(GLRenderSurface canvas)
+        DrawBoardOrientation _orientation;
+        public GLPainter(GLRenderSurface canvas)
         {
+            _orientation = DrawBoardOrientation.LeftTop; //normal nature of the GL
             _glsf = canvas;
             _width = canvas.CanvasWidth;
             _height = canvas.CanvasHeight;
@@ -39,6 +41,12 @@ namespace PixelFarm.DrawingGL
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
         }
+        public DrawBoardOrientation Orientation
+        {
+            get { return _orientation; }
+            set { _orientation = value; }
+        }
+
         public bool UseVertexBufferObjectForRenderVx { get; set; }
         public override void SetOrigin(float ox, float oy)
         {
@@ -255,6 +263,16 @@ namespace PixelFarm.DrawingGL
             if (glBmp != null)
             {
                 _glsf.DrawImage(glBmp, (float)x, (float)y);
+
+                //if (this._orientation == DrawBoardOrientation.LeftTop)
+                //{
+                //    //in this mode we place the left-top of the image to the (x,y)                                          
+                //    _glsf.DrawImage(glBmp, (float)x, (float)(this.Height - (y + actualImage.Height)));
+                //}
+                //else
+                //{
+                //    _glsf.DrawImage(glBmp, (float)x, (float)y);
+                //}
             }
         }
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)

@@ -1,26 +1,39 @@
-﻿//MIT, 2014-2017, WinterDev
+﻿//BSD, 2014-2017, WinterDev 
 using System;
-using System.Collections.Generic;
-using SkiaSharp;
-namespace PixelFarm.Drawing.Skia
+namespace PixelFarm.Drawing.Pdf
 {
-    public partial class MySkiaCanvas : Canvas, IDisposable
+    public partial class MyPdfDrawBoard : DrawBoard, IDisposable
     {
         int pageNumFlags;
         int pageFlags;
         bool isDisposed;
+        Brush _currentBrush;
         //-------------------------------
-        Stack<SKRect> clipRectStack = new Stack<SKRect>();
-        SKRect currentClipRect;
-        //----------------------------
+        //NativeWin32MemoryDc win32MemDc;
+        //-------------------------------
 
-        SKCanvas skCanvas;
-        SKBitmap skBitmap;
-        SKPaint fill;
-        SKPaint stroke;
-        SKPaint textFill;
+        IntPtr originalHdc = IntPtr.Zero;
+        //System.Drawing.Graphics gx; 
+        ////-------------------------------
+        //Stack<System.Drawing.Rectangle> clipRectStack = new Stack<System.Drawing.Rectangle>();
+        ////------------------------------- 
+        //System.Drawing.Color currentTextColor = System.Drawing.Color.Black;
+        //System.Drawing.Pen internalPen;
+        //System.Drawing.SolidBrush internalSolidBrush;
+        //System.Drawing.Rectangle currentClipRect;
+        ////-------------------------------
 
-        public MySkiaCanvas(
+        DrawBoardOrientation _orientation;
+        public MyPdfDrawBoard(int left, int top, int width, int height)
+            : this(0, 0, left, top, width, height)
+        {
+        }
+        public override DrawBoardOrientation Orientation
+        {
+            get { return this._orientation; }
+            set { _orientation = value; }
+        }
+        internal MyPdfDrawBoard(
             int horizontalPageNum,
             int verticalPageNum,
             int left, int top,
@@ -34,43 +47,45 @@ namespace PixelFarm.Drawing.Skia
             dbug_canvasCount += 1;
 #endif
 
+            //this.pageNumFlags = (horizontalPageNum << 8) | verticalPageNum;
+            ////2. dimension
+            //this.left = left;
+            //this.top = top;
+            //this.right = left + width;
+            //this.bottom = top + height;
+            //currentClipRect = new System.Drawing.Rectangle(0, 0, width, height);
 
-            this.pageNumFlags = (horizontalPageNum << 8) | verticalPageNum;
-            //2. dimension
-            this.left = left;
-            this.top = top;
-            this.right = left + width;
-            this.bottom = top + height;
-
-            currentClipRect = new SKRect(0, 0, width, height);
-            CreateGraphicsFromNativeHdc(width, height);
+            //CreateGraphicsFromNativeHdc(width, height);
+            //this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
+            ////-------------------------------------------------------     
+            ////managed object
+            //internalPen = new System.Drawing.Pen(System.Drawing.Color.Black);
+            //internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
 
             this.StrokeWidth = 1;
         }
-        public SKBitmap BackBmp
-        {
-            get { return this.skBitmap; }
-        }
-
         void CreateGraphicsFromNativeHdc(int width, int height)
         {
+            //win32MemDc = new NativeWin32MemoryDc(width, height, true);
+            //win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
+            //win32MemDc.SetBackTransparent(true);
+            //win32MemDc.SetClipRect(0, 0, width, height);
 
-            skBitmap = new SKBitmap(width, height);
-            skCanvas = new SKCanvas(skBitmap);
-            //
-            stroke = new SKPaint();
-            stroke.IsStroke = true;
-            //
-            fill = new SKPaint();
-            fill.IsStroke = false;
-            //
-            textFill = new SKPaint();
-            textFill.IsAntialias = true;
-            //---------------------------------------            
-              
+            //this.originalHdc = win32MemDc.DC;
+            //--------------
+            //set default font and default text color
             this.CurrentFont = new RequestFont("tahoma", 14);
             this.CurrentTextColor = Color.Black;
-            //---------------------------------------
+            //--------------
+
+        }
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                _currentBrush = value;
+            }
         }
 #if DEBUG
         public override string ToString()
@@ -79,19 +94,32 @@ namespace PixelFarm.Drawing.Skia
             //return "visible_clip" + this.gx.VisibleClipBounds.ToString();
         }
 #endif
+        public override void DrawRectangle(float left, float top, float width, float height)
+        {
+
+        }
+        public override void FillPath(GraphicsPath gfxPath)
+        {
+
+        }
+        public override void FillPolygon(PointF[] points)
+        {
+
+        }
 
         public override void CloseCanvas()
         {
-            if (isDisposed)
-            {
-                return;
-            }
+            //if (isDisposed)
+            //{
+            //    return;
+            //}
             //if (win32MemDc != null)
             //{
             //    win32MemDc.Dispose();
             //    win32MemDc = null;
             //}
-            isDisposed = true;
+            //isDisposed = true;
+
             ReleaseUnManagedResource();
         }
         /// <summary>
@@ -107,12 +135,10 @@ namespace PixelFarm.Drawing.Skia
         }
         void ClearPreviousStoredValues()
         {
-
             //this.gx.RenderingOrigin = new System.Drawing.Point(0, 0);
-
-            this.canvasOriginX = 0;
-            this.canvasOriginY = 0;
-            this.clipRectStack.Clear();
+            //this.canvasOriginX = 0;
+            //this.canvasOriginY = 0;
+            //this.clipRectStack.Clear();
         }
 
         void ReleaseUnManagedResource()
@@ -124,8 +150,8 @@ namespace PixelFarm.Drawing.Skia
             //    originalHdc = IntPtr.Zero;
             //}
 
-            clipRectStack.Clear();
-            currentClipRect = new SKRect(0, 0, this.Width, this.Height);
+            //clipRectStack.Clear();
+            //currentClipRect = new System.Drawing.Rectangle(0, 0, this.Width, this.Height);
 #if DEBUG
 
             debug_releaseCount++;
@@ -134,33 +160,33 @@ namespace PixelFarm.Drawing.Skia
 
         public void Reuse(int hPageNum, int vPageNum)
         {
-            this.pageNumFlags = (hPageNum << 8) | vPageNum;
-            int w = this.Width;
-            int h = this.Height;
-            this.ClearPreviousStoredValues();
-            currentClipRect = new SKRect(0, 0, w, h);
+            //this.pageNumFlags = (hPageNum << 8) | vPageNum;
+            //int w = this.Width;
+            //int h = this.Height;
+            //this.ClearPreviousStoredValues();
+            //currentClipRect = new System.Drawing.Rectangle(0, 0, w, h);
             //win32MemDc.PatBlt(NativeWin32MemoryDc.PatBltColor.White);
             //win32MemDc.SetClipRect(0, 0, w, h);
-            left = hPageNum * w;
-            top = vPageNum * h;
-            right = left + w;
-            bottom = top + h;
+            //left = hPageNum * w;
+            //top = vPageNum * h;
+            //right = left + w;
+            //bottom = top + h;
         }
         public void Reset(int hPageNum, int vPageNum, int newWidth, int newHeight)
         {
-            this.pageNumFlags = (hPageNum << 8) | vPageNum;
-            this.ReleaseUnManagedResource();
-            this.ClearPreviousStoredValues();
+            //this.pageNumFlags = (hPageNum << 8) | vPageNum;
+            //this.ReleaseUnManagedResource();
+            //this.ClearPreviousStoredValues();
 
-            currentClipRect = new SKRect(0, 0, newWidth, newHeight);
-            CreateGraphicsFromNativeHdc(newWidth, newHeight);
+            //currentClipRect = new System.Drawing.Rectangle(0, 0, newWidth, newHeight);
+            //CreateGraphicsFromNativeHdc(newWidth, newHeight);
             //this.gx = System.Drawing.Graphics.FromHdc(win32MemDc.DC);
 
 
-            left = hPageNum * newWidth;
-            top = vPageNum * newHeight;
-            right = left + newWidth;
-            bottom = top + newHeight;
+            //left = hPageNum * newWidth;
+            //top = vPageNum * newHeight;
+            //right = left + newWidth;
+            //bottom = top + newHeight;
 #if DEBUG
             debug_resetCount++;
 #endif
@@ -222,9 +248,9 @@ namespace PixelFarm.Drawing.Skia
         //    return outputPoints;
         //}
 
-        //static SKColor ConvColor(Color c)
+        //static System.Drawing.Color ConvColor(Color c)
         //{
-        //    return new SKColor(c.R, c.G, c.B, c.A);
+        //    return System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
         //}
 
 

@@ -11,10 +11,10 @@ namespace OpenTkEssTest
     public class T105_Stencil : DemoBase
     {
         GLRenderSurface _glsf;
-        GLCanvasPainter painter;
+        GLPainter painter;
         PixelFarm.Drawing.RenderVx stencilPolygon;
         PixelFarm.Drawing.RenderVx rectPolygon;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
             this._glsf = glsf;
             this.painter = painter;

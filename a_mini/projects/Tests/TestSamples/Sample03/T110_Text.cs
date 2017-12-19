@@ -10,8 +10,8 @@ namespace OpenTkEssTest
     public class T110_DrawText : DemoBase
     {
         GLRenderSurface _glsf;
-        GLCanvasPainter painter;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
+        GLPainter painter;
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
             this._glsf = glsf;
             this.painter = painter; 

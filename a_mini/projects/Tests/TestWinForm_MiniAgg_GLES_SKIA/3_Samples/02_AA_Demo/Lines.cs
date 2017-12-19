@@ -31,16 +31,16 @@ namespace PixelFarm.Agg.Sample_Draw
             set;
         }
 
-        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            var aggPainter = p as PixelFarm.Agg.AggCanvasPainter;
+            var aggPainter = p as PixelFarm.Agg.AggPainter;
             if (aggPainter == null)
             {
                 return;
             }
             Draw(aggPainter);
         }
-        void Draw(PixelFarm.Agg.AggCanvasPainter aggPainter)
+        void Draw(PixelFarm.Agg.AggPainter aggPainter)
         {
 
             aggPainter.Clear(PixelFarm.Drawing.Color.White);

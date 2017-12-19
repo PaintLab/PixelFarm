@@ -17,7 +17,7 @@
 using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
-    partial class MyGdiPlusCanvas
+    partial class MyGdiPlusDrawBoard
     {
         RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;

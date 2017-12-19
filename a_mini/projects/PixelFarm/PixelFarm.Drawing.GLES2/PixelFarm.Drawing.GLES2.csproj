@@ -44,11 +44,11 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\Es2Utils\MiniShaderProgram.cs">
       <Link>DrawingGL\Es2Utils\MiniShaderProgram.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\GLCanvasPainter.cs">
-      <Link>DrawingGL\GLCanvas\GLCanvasPainter.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\GLGradientColorProvider.cs">
       <Link>DrawingGL\GLCanvas\GLGradientColorProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\GLPainter.cs">
+      <Link>DrawingGL\GLCanvas\GLPainter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLCanvas\GLRenderSurface.cs">
       <Link>DrawingGL\GLCanvas\GLRenderSurface.cs</Link>
@@ -120,10 +120,10 @@
       <Link>DrawingGL\GLTexture\TextureAtlas.cs</Link>
     </Compile>
     <Compile Include="0_Start\GLES2Platform.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\1_MyGLCanvas_Specific.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\2_MyGLCanvas_CoordinateAndClip.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\3_MyGLCanvas_DrawGraphics.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\4_MyGLCanvas_TextAndFonts.cs" />
+    <Compile Include="DrawBoard\1_MyGLDrawBoard_Specific.cs" />
+    <Compile Include="DrawBoard\2_MyGLDrawBoard_CoordinateAndClip.cs" />
+    <Compile Include="DrawBoard\3_MyGLDrawBoard_DrawGraphics.cs" />
+    <Compile Include="DrawBoard\4_MyGLDrawBoard_TextAndFonts.cs" />
     <Compile Include="0_Start\GLES2PlatformFontMx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

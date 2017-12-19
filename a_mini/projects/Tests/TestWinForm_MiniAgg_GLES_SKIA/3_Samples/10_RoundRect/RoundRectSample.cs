@@ -102,11 +102,11 @@ namespace PixelFarm.Agg.Sample_RoundRect
             get;
             set;
         }
-        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             //-----------------------------------------------------------------
             //control
-            PixelFarm.Drawing.CanvasPainter painter = p;
+            PixelFarm.Drawing.Painter painter = p;
             painter.Clear(this.WhiteOnBlack ? Drawing.Color.Black : Drawing.Color.White);
             painter.FillColor = Drawing.Color.FromArgb(127, 127, 127);
             painter.FillCircle(m_x[0], m_y[0], 3); //left-bottom control box
@@ -114,16 +114,16 @@ namespace PixelFarm.Agg.Sample_RoundRect
             //-----------------------------------------------------------------
 
             double d = this.SubPixelOffset;
-            AggCanvasPainter p2 = p as AggCanvasPainter;
+            AggPainter p2 = p as AggPainter;
             IPixelBlender prevBlender = null;
-            AggRenderSurface gx = null;
+            AggRenderSurface rdsf = null;
             if (p2 != null)
             {
                 //for agg only
-                gx = p2.Graphics;
-                prevBlender = gx.PixelBlender;
+                rdsf = p2.RenderSurface;
+                prevBlender = rdsf.PixelBlender;
                 //change gamma blender
-                gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
+                rdsf.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
             }
 
             if (this.FillRoundRect)
@@ -146,9 +146,9 @@ namespace PixelFarm.Agg.Sample_RoundRect
                     m_y[1] + d,
                     this.Radius);
             }
-            if (gx != null)
+            if (rdsf != null)
             {
-                gx.PixelBlender = prevBlender;
+                rdsf.PixelBlender = prevBlender;
             }
         }
 

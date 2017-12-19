@@ -13,7 +13,7 @@ namespace Mini
         OpenTK.MyGLControl glControl;
         IntPtr hh1;
         GLRenderSurface _glsf;
-        GLCanvasPainter canvasPainter;
+        GLPainter canvasPainter;
 
         public void LoadGLControl(OpenTK.MyGLControl glControl)
         {
@@ -46,7 +46,7 @@ namespace Mini
                 int max = Math.Max(glControl.Width, glControl.Height);
                 _glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max);
                 _glsf.SmoothMode = SmoothMode.Smooth;//set anti-alias  
-                canvasPainter = new GLCanvasPainter(_glsf);
+                canvasPainter = new GLPainter(_glsf);
                 //create text printer for opengl 
                 //----------------------
                 //1. win gdi based

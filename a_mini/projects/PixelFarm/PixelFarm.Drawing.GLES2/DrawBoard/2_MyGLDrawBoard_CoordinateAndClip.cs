@@ -16,7 +16,7 @@
 using System;
 namespace PixelFarm.Drawing.GLES2
 {
-    partial class MyGLCanvas
+    partial class MyGLDrawBoard
     {
         int _left;
         int _top;
@@ -32,7 +32,7 @@ namespace PixelFarm.Drawing.GLES2
         public override void SetCanvasOrigin(int x, int y)
         {
 
-            painter1.SetOrigin(x, -y);
+            _painter.SetOrigin(x, -y);
             //----------- 
             int total_dx = x - canvasOriginX;
             int total_dy = y - canvasOriginY;
@@ -43,18 +43,18 @@ namespace PixelFarm.Drawing.GLES2
             this.canvasOriginY = y;
         }
 
-        public override int CanvasOriginX
+        public override int OriginX
         {
             get { return this.canvasOriginX; }
         }
-        public override int CanvasOriginY
+        public override int OriginY
         {
             get { return this.canvasOriginY; }
         }
         public override void SetClipRect(Rectangle rect, CombineMode combineMode = CombineMode.Replace)
         {
             //TODO: reivew clip combine mode
-            painter1.SetClipBox(rect.Left, rect.Bottom, rect.Right, rect.Top);
+            _painter.SetClipBox(rect.Left, rect.Bottom, rect.Right, rect.Top);
         }
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
@@ -84,7 +84,7 @@ namespace PixelFarm.Drawing.GLES2
             if (clipRectStack.Count > 0)
             {
                 currentClipRect = clipRectStack.Pop();
-                painter1.SetClipBox(currentClipRect.Left, currentClipRect.Top, currentClipRect.Right, currentClipRect.Bottom);
+                _painter.SetClipBox(currentClipRect.Left, currentClipRect.Top, currentClipRect.Right, currentClipRect.Bottom);
                 //gx.SetClip(currentClipRect);
             }
         }

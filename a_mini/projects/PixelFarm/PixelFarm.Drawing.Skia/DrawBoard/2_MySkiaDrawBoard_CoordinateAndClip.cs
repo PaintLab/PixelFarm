@@ -1,21 +1,9 @@
-﻿//BSD, 2014-2017, WinterDev
-//ArthurHub  , Jose Manuel Menendez Poo
+﻿//MIT, 2014-2017, WinterDev
 
-// "Therefore those skilled at the unorthodox
-// are infinite as heaven and earth,
-// inexhaustible as the great rivers.
-// When they come to an end,
-// they begin again,
-// like the days and months;
-// they die and are reborn,
-// like the four seasons."
-// 
-// - Sun Tsu,
-// "The Art of War"
-
-namespace PixelFarm.Drawing.WinGdi
+using SkiaSharp;
+namespace PixelFarm.Drawing.Skia
 {
-    partial class MyGdiPlusCanvas
+    partial class MySkiaDrawBoard
     {
         int left;
         int top;
@@ -33,18 +21,19 @@ namespace PixelFarm.Drawing.WinGdi
             //----------- 
             int total_dx = x - canvasOriginX;
             int total_dy = y - canvasOriginY;
-            this.gx.TranslateTransform(total_dx, total_dy);
+
+            skCanvas.Translate(total_dx, total_dy);
             //clip rect move to another direction***
             this.currentClipRect.Offset(-total_dx, -total_dy);
             this.canvasOriginX = x;
             this.canvasOriginY = y;
         }
 
-        public override int CanvasOriginX
+        public override int OriginX
         {
             get { return this.canvasOriginX; }
         }
-        public override int CanvasOriginY
+        public override int OriginY
         {
             get { return this.canvasOriginY; }
         }
@@ -57,12 +46,15 @@ namespace PixelFarm.Drawing.WinGdi
         /// <param name="combineMode">Member of the <see cref="T:System.Drawing.Drawing2D.CombineMode"/> enumeration that specifies the combining operation to use. </param>
         public override void SetClipRect(Rectangle rect, CombineMode combineMode = CombineMode.Replace)
         {
+            skCanvas.ClipRect(this.currentClipRect = new SkiaSharp.SKRect(
+                rect.Left, rect.Top,
+                rect.Right, rect.Bottom));
 
-            gx.SetClip(
-               this.currentClipRect = new System.Drawing.Rectangle(
-                    rect.X, rect.Y,
-                    rect.Width, rect.Height),
-                    (System.Drawing.Drawing2D.CombineMode)combineMode);
+            //gx.SetClip(
+            //   this.currentClipRect = new System.Drawing.Rectangle(
+            //        rect.X, rect.Y,
+            //        rect.Width, rect.Height),
+            //        (System.Drawing.Drawing2D.CombineMode)combineMode);
         }
         public bool IntersectsWith(Rectangle clientRect)
         {
@@ -72,10 +64,14 @@ namespace PixelFarm.Drawing.WinGdi
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
             this.clipRectStack.Push(currentClipRect);
-            System.Drawing.Rectangle intersectResult =
-                  System.Drawing.Rectangle.Intersect(
-                  System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
-                  new System.Drawing.Rectangle(0, 0, width, height));
+            //System.Drawing.Rectangle intersectResult =
+            //      System.Drawing.Rectangle.Intersect(
+            //      System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
+            //      new System.Drawing.Rectangle(0, 0, width, height));
+            SKRect intersectResult = SKRect.Intersect(
+                new SKRect(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
+                new SKRect(0, 0, width, height));
+
             currentClipRect = intersectResult;
             if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
             {
@@ -85,7 +81,7 @@ namespace PixelFarm.Drawing.WinGdi
             else
             {
                 updateArea = Conv.ToRect(intersectResult);
-                gx.SetClip(intersectResult);
+                //skCanvas.ClipRect(intersectResult);
                 return true;
             }
         }
@@ -93,9 +89,8 @@ namespace PixelFarm.Drawing.WinGdi
         {
             if (clipRectStack.Count > 0)
             {
-
                 currentClipRect = clipRectStack.Pop();
-                gx.SetClip(currentClipRect);
+                //skCanvas.ClipRect(currentClipRect);
             }
         }
 

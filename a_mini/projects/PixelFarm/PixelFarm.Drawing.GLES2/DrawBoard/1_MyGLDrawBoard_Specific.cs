@@ -8,22 +8,22 @@ namespace PixelFarm.Drawing.GLES2
 
 
 
-    public partial class MyGLCanvas : Canvas, IDisposable
+    public partial class MyGLDrawBoard : DrawBoard, IDisposable
     {
 
-        GLCanvasPainter painter1;
+        GLPainter _painter;
         bool isDisposed;
         Stack<Rectangle> clipRectStack = new Stack<Rectangle>();
         Rectangle currentClipRect;
-
-        public MyGLCanvas(
-           GLCanvasPainter painter, //*** we wrap around GLCanvasPainter *** 
+        Brush _currentBrush;
+        public MyGLDrawBoard(
+           GLPainter painter, //*** we wrap around GLCanvasPainter *** 
            int width,
            int height)
         {
             //----------------
             //set painter first
-            this.painter1 = painter;
+            this._painter = painter;
             //----------------
             this._left = 0; //default start at 0,0
             this._top = 0;
@@ -40,12 +40,24 @@ namespace PixelFarm.Drawing.GLES2
 #endif
             this.StrokeWidth = 1;
         }
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _painter.Orientation; }
+            set { _painter.Orientation = value; }
+        }
 
         public override string ToString()
         {
             return "visible_clip?";
         }
-
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                this._currentBrush = value;
+            }
+        }
         public override void CloseCanvas()
         {
             if (isDisposed)
@@ -70,7 +82,7 @@ namespace PixelFarm.Drawing.GLES2
 
         void ClearPreviousStoredValues()
         {
-            painter1.SetOrigin(0, 0);
+            _painter.SetOrigin(0, 0);
 
             this.canvasOriginX = 0;
             this.canvasOriginY = 0;

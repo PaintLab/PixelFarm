@@ -180,7 +180,7 @@ namespace LayoutFarm
             }
         }
 
-        void debug_RecordPostDrawInfo(Canvas canvasPage)
+        void debug_RecordPostDrawInfo(DrawBoard canvasPage)
         {
             if (dbugVRoot.dbug_ShowElementOutline)
             {
@@ -340,7 +340,7 @@ namespace LayoutFarm
         //temp
         static object dbugInitObject;
 #if DEBUG
-        public void dbugShowRenderPart(Canvas canvasPage, Rectangle updateArea)
+        public void dbugShowRenderPart(DrawBoard canvasPage, Rectangle updateArea)
         {
             RootGraphic visualroot = this.dbugVRoot;
             if (visualroot.dbug_ShowRootUpdateArea)

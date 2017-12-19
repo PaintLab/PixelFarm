@@ -2,7 +2,7 @@
 
 namespace PixelFarm.Drawing.Pdf
 {
-    partial class MyPdfCanvas
+    partial class MyPdfDrawBoard
     {
         int left;
         int top;
@@ -27,11 +27,11 @@ namespace PixelFarm.Drawing.Pdf
             //this.canvasOriginY = y;
         }
 
-        public override int CanvasOriginX
+        public override int OriginX
         {
             get { return this.canvasOriginX; }
         }
-        public override int CanvasOriginY
+        public override int OriginY
         {
             get { return this.canvasOriginY; }
         }

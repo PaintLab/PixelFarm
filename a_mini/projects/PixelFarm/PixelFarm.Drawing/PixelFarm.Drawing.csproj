@@ -157,11 +157,11 @@
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\2_VertexStoreSnap.cs">
       <Link>1_DrawingCore\3_Canvas\2_VertexStoreSnap.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\Canvas.cs">
-      <Link>1_DrawingCore\3_Canvas\Canvas.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\DrawBoard.cs">
+      <Link>1_DrawingCore\3_Canvas\DrawBoard.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\CanvasPainter.cs">
-      <Link>1_DrawingCore\3_Canvas\CanvasPainter.cs</Link>
+    <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\Painter.cs">
+      <Link>1_DrawingCore\3_Canvas\Painter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.DrawingCore\3_Canvas\RenderVx.cs">
       <Link>1_DrawingCore\3_Canvas\RenderVx.cs</Link>
@@ -172,20 +172,23 @@
     <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
       <Link>1_DrawingCore\ExtensionAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggCanvasPainter.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggCanvasPainter.cs</Link>
+    <Compile Include="..\pixelfarm.miniagg.complements\0_drawboard\AggDrawBoard.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_DrawBoard\AggDrawBoard.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggRenderVx.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggRenderVx.cs</Link>
+    <Compile Include="..\pixelfarm.miniagg.complements\0_drawboard\AggRenderVx.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_DrawBoard\AggRenderVx.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\Canvas2dExtension.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\Canvas2dExtension.cs</Link>
+    <Compile Include="..\pixelfarm.miniagg.complements\0_drawboard\Canvas2dExtension.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_DrawBoard\Canvas2dExtension.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\dbugVertexSourceIO.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\dbugVertexSourceIO.cs</Link>
+    <Compile Include="..\pixelfarm.miniagg.complements\0_drawboard\dbugVertexSourceIO.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_DrawBoard\dbugVertexSourceIO.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\LineDashGenerator.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\LineDashGenerator.cs</Link>
+    <Compile Include="..\pixelfarm.miniagg.complements\0_drawboard\LineDashGenerator.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_DrawBoard\LineDashGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\pixelfarm.miniagg.complements\0_painter\AggPainter.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_Painter\AggPainter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\BorderDouble.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\BorderDouble.cs</Link>

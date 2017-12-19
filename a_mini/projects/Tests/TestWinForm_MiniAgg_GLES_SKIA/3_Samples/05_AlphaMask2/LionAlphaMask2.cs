@@ -319,26 +319,26 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             resultBmp.UnlockBits(resultBmpData);
             return resultBmp;
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             if (p is GdiPlusCanvasPainter)
             {
                 DrawWithWinGdi((GdiPlusCanvasPainter)p);
                 return;
             }
-            AggCanvasPainter p2 = (AggCanvasPainter)p;
-            AggRenderSurface gx = p2.Graphics;
-            var widgetsSubImage = gx.DestImage;
-            var scline = gx.ScanlinePacked8;
+            AggPainter p2 = (AggPainter)p;
+            AggRenderSurface rdsf = p2.RenderSurface;
+            var widgetsSubImage = rdsf.DestImage;
+            var scline = rdsf.ScanlinePacked8;
             int width = (int)widgetsSubImage.Width;
             int height = (int)widgetsSubImage.Height;
             //change value ***
             if (isMaskSliderValueChanged)
             {
-                generate_alpha_mask(gx.ScanlineRasToDestBitmap, gx.ScanlinePacked8, gx.ScanlineRasterizer, width, height);
+                generate_alpha_mask(rdsf.ScanlineRasToDestBitmap, rdsf.ScanlinePacked8, rdsf.ScanlineRasterizer, width, height);
                 this.isMaskSliderValueChanged = false;
             }
-            var rasterizer = gx.ScanlineRasterizer;
+            var rasterizer = rdsf.ScanlineRasterizer;
             rasterizer.SetClipBox(0, 0, width, height);
             //alphaMaskImageBuffer.AttachBuffer(alphaByteArray, 0, width, height, width, 8, 1);
 
@@ -358,7 +358,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
                     AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                     AffinePlan.Translate(width / 2, height / 2));
             clippingProxy.Clear(Drawing.Color.White);
-            ScanlineRasToDestBitmapRenderer sclineRasToBmp = gx.ScanlineRasToDestBitmap;
+            ScanlineRasToDestBitmapRenderer sclineRasToBmp = rdsf.ScanlineRasToDestBitmap;
             // draw a background to show how the mask is working better
             int rect_w = 30;
             var v1 = GetFreeVxs();

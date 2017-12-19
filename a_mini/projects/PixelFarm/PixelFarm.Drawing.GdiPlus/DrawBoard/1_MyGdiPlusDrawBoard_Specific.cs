@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
-    public partial class MyGdiPlusCanvas : Canvas, IDisposable
+    public partial class MyGdiPlusDrawBoard : DrawBoard, IDisposable
     {
         int pageNumFlags;
         int pageFlags;
@@ -40,11 +40,13 @@ namespace PixelFarm.Drawing.WinGdi
         System.Drawing.Rectangle currentClipRect;
         //-------------------------------
 
-        public MyGdiPlusCanvas(int left, int top, int width, int height)
+        DrawBoardOrientation _orientation = DrawBoardOrientation.LeftTop;
+        public MyGdiPlusDrawBoard(int left, int top, int width, int height)
             : this(0, 0, left, top, width, height)
         {
         }
-        internal MyGdiPlusCanvas(
+
+        internal MyGdiPlusDrawBoard(
             int horizontalPageNum,
             int verticalPageNum,
             int left, int top,
@@ -74,6 +76,12 @@ namespace PixelFarm.Drawing.WinGdi
             internalSolidBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
 
             this.StrokeWidth = 1;
+        }
+
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _orientation; }
+            set { _orientation = value; }
         }
         void CreateGraphicsFromNativeHdc(int width, int height)
         {

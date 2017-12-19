@@ -64,7 +64,7 @@ namespace PixelFarm.Agg.Sample_FloodFill
             set;
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             p.DrawImage(imageToFillOn, imgOffsetX, imgOffsetY);
         }

@@ -15,12 +15,12 @@ namespace OpenTkEssTest
         GLRenderSurface _glsf;
         SpriteShape lionShape;
         VertexStore lionVxs;
-        GLCanvasPainter painter;
+        GLPainter painter;
         List<RenderVx> lionRenderVxList = new List<RenderVx>();
         int tmpDrawVersion = 0;
         MultiPartTessResult multipartTessResult;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
             this._glsf = glsf;
             this.painter = painter;

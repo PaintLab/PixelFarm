@@ -77,7 +77,7 @@ namespace PixelFarm.Agg.UI
         }
 
 
-        public virtual void OnDraw(CanvasPainter p) { }
+        public virtual void OnDraw(Painter p) { }
 
         public virtual void OnMouseDown(MouseEventArgs mouseEvent)
         {
