@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
-    partial class MyGdiPlusCanvas
+    partial class MyGdiPlusDrawBoard
     {
         float strokeWidth = 1f;
         Color fillSolidColor = Color.Transparent;

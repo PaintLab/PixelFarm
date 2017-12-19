@@ -31,7 +31,7 @@ namespace PixelFarm.Agg
             int destIndex, byte[] source,
             int sourceIndex, int count)
         {
-            AggBuffMx.MemCopy(dest, destIndex, source, sourceIndex, count);
+            NaitveMemMx.MemCopy(dest, destIndex, source, sourceIndex, count);
         } 
         public static void memmove(byte[] dest, int destIndex, byte[] source, int sourceIndex, int Count)
         {
@@ -47,11 +47,11 @@ namespace PixelFarm.Agg
         } 
         public static void memset(byte[] dest, int destIndex, byte byteValue, int count)
         {
-            AggBuffMx.MemSet(dest, destIndex, byteValue, count);
+            NaitveMemMx.MemSet(dest, destIndex, byteValue, count);
         }
         public static void MemClear(Byte[] dest, int destIndex, int count)
         {
-            AggBuffMx.MemSet(dest, destIndex, 0, count);
+            NaitveMemMx.MemSet(dest, destIndex, 0, count);
         }
     }
 }

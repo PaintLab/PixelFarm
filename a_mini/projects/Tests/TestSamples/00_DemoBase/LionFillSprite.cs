@@ -1,5 +1,6 @@
 ﻿using System;
 using PixelFarm.Agg.Transform;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
     public class LionFillSprite : BasicSprite
@@ -43,7 +44,7 @@ namespace PixelFarm.Agg
             return result;
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             if (myvxs == null)
             {

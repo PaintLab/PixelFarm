@@ -62,7 +62,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
             get;
             set;
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             p.Clear(Color.White);
             if (BackgroundColor.Alpha0To255 > 0)
@@ -74,7 +74,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
         }
 
 
-        void render_gpc(CanvasPainter p)
+        void render_gpc(Painter p)
         {
             switch (this.PolygonSet)
             {
@@ -329,7 +329,7 @@ namespace PixelFarm.Agg.Sample_PolygonClipping
         }
 
 
-        void CreateAndRenderCombined(CanvasPainter p, VertexStoreSnap ps1, VertexStoreSnap ps2)
+        void CreateAndRenderCombined(Painter p, VertexStoreSnap ps1, VertexStoreSnap ps2)
         {
             List<VertexStore> combined = null;
             switch (this.OpOption)

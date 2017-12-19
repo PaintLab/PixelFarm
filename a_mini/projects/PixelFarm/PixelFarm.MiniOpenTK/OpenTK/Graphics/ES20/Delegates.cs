@@ -34,6 +34,9 @@ namespace OpenTK.Graphics.ES20
 
     partial class GL
     {
+        /// <summary>
+        /// field name of Delegates type must be perserved
+        /// </summary>
         internal static partial class Delegates
         {
             [System.Security.SuppressUnmanagedCodeSecurity()]

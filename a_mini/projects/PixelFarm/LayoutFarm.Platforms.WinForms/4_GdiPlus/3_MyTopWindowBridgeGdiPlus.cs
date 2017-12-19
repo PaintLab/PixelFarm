@@ -70,7 +70,7 @@ namespace LayoutFarm.UI.GdiPlus
 
         }
 
-        public void PrintToCanvas(PixelFarm.Drawing.WinGdi.MyGdiPlusCanvas canvas)
+        public void PrintToCanvas(PixelFarm.Drawing.WinGdi.MyGdiPlusDrawBoard canvas)
         {
             this.gdiPlusViewport.PaintMe(canvas);
         }

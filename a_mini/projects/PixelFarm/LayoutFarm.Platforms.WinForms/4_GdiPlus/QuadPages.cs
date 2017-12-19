@@ -6,10 +6,10 @@ namespace PixelFarm.Drawing.WinGdi
 {
     class QuadPages
     {
-        MyGdiPlusCanvas pageA;
-        MyGdiPlusCanvas pageB;
-        MyGdiPlusCanvas pageC;
-        MyGdiPlusCanvas pageD;
+        MyGdiPlusDrawBoard pageA;
+        MyGdiPlusDrawBoard pageB;
+        MyGdiPlusDrawBoard pageC;
+        MyGdiPlusDrawBoard pageD;
         CanvasCollection physicalCanvasCollection;
         public QuadPages(
             int cachedPageNum,
@@ -160,7 +160,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        static void UpdateAllArea(MyGdiPlusCanvas mycanvas, IRenderElement topWindowRenderBox)
+        static void UpdateAllArea(MyGdiPlusDrawBoard mycanvas, IRenderElement topWindowRenderBox)
         {
             mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
             Rectangle rect = mycanvas.Rect;
@@ -174,7 +174,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
 
-        static void UpdateInvalidArea(MyGdiPlusCanvas mycanvas, IRenderElement rootElement)
+        static void UpdateInvalidArea(MyGdiPlusDrawBoard mycanvas, IRenderElement rootElement)
         {
             mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
             Rectangle rect = mycanvas.InvalidateArea;

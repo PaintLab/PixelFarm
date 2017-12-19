@@ -2,6 +2,7 @@
 //MatterHackers
 
 using System;
+using PixelFarm.Drawing;
 using PixelFarm.Agg.Imaging;
 using Mini;
 namespace PixelFarm.Agg
@@ -28,21 +29,21 @@ namespace PixelFarm.Agg
             set;
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             //specific for agg
-            if (!(p is AggCanvasPainter))
+            if (!(p is AggPainter))
             {
                 return;
             }
 
 
-            AggCanvasPainter p2 = (AggCanvasPainter)p;
-            Graphics2D graphics2D = p2.Graphics;
-            if (graphics2D.DestImage != null)
+            AggPainter p2 = (AggPainter)p;
+            AggRenderSurface aggRdsf = p2.RenderSurface;
+            if (aggRdsf.DestImage != null)
             {
-                IImageReaderWriter backBuffer = graphics2D.DestImage;
-                IPixelBlender currentPixelBlender = graphics2D.PixelBlender;
+                IImageReaderWriter backBuffer = aggRdsf.DestImage;
+                IPixelBlender currentPixelBlender = aggRdsf.PixelBlender;
                 int distBetween = backBuffer.BytesBetweenPixelsInclusive;
                 //use different pixel blender 
                 var redImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.R, 8);
@@ -52,14 +53,14 @@ namespace PixelFarm.Agg
                 ClipProxyImage clippingProxyRed = new ClipProxyImage(redImageBuffer);
                 ClipProxyImage clippingProxyGreen = new ClipProxyImage(greenImageBuffer);
                 ClipProxyImage clippingProxyBlue = new ClipProxyImage(blueImageBuffer);
-                ScanlineRasterizer sclineRas = graphics2D.ScanlineRasterizer;
-                ScanlinePacked8 scline = graphics2D.ScanlinePacked8;
+                ScanlineRasterizer sclineRas = aggRdsf.ScanlineRasterizer;
+                ScanlinePacked8 scline = aggRdsf.ScanlinePacked8;
                 Drawing.Color clearColor = this.UseBlackBlackground ? Drawing.Color.FromArgb(0, 0, 0) : Drawing.Color.FromArgb(255, 255, 255);
                 clippingProxy.Clear(clearColor);
                 Drawing.Color fillColor = this.UseBlackBlackground ?
                     new Drawing.Color((byte)(this.AlphaValue), 255, 255, 255) :
                     new Drawing.Color((byte)(this.AlphaValue), 0, 0, 0);
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
                 VertexSource.Ellipse er = new PixelFarm.Agg.VertexSource.Ellipse(Width / 2 - 0.87 * 50, Height / 2 - 0.5 * 50, 100, 100, 100);
                 //
                 var v1 = GetFreeVxs();

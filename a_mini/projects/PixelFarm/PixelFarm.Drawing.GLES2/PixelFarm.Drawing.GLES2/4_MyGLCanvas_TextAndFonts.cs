@@ -15,7 +15,7 @@
 
 namespace PixelFarm.Drawing.GLES2
 {
-    partial class MyGLCanvas
+    partial class MyGLDrawBoard
     {
         //TODO: review drawstring again ***
         Color _currentTextColor;

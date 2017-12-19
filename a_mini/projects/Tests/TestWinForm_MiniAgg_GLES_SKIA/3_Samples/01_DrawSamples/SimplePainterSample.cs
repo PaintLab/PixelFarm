@@ -17,7 +17,7 @@ namespace PixelFarm.Agg.SimplePainter
         {
 
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
 
             p.Clear(Drawing.Color.White);

@@ -16,7 +16,7 @@
 using System;
 namespace PixelFarm.Drawing.GLES2
 {
-    partial class MyGLCanvas
+    partial class MyGLDrawBoard
     {
         int _left;
         int _top;
@@ -43,11 +43,11 @@ namespace PixelFarm.Drawing.GLES2
             this.canvasOriginY = y;
         }
 
-        public override int CanvasOriginX
+        public override int OriginX
         {
             get { return this.canvasOriginX; }
         }
-        public override int CanvasOriginY
+        public override int OriginY
         {
             get { return this.canvasOriginY; }
         }

@@ -30,6 +30,7 @@ either expressed or implied, of the FreeBSD Project.
 */
 
 using System;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
     public abstract class BasicSprite
@@ -42,7 +43,7 @@ namespace PixelFarm.Agg
         public int Height { get; set; }
 
      
-        public virtual void Draw(CanvasPainter p)
+        public virtual void Draw(PixelFarm.Drawing.Painter p)
         {
         }
         protected void UpdateTransform(double width, double height, double x, double y)

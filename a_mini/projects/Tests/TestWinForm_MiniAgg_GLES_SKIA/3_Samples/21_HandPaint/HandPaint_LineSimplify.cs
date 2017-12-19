@@ -3,8 +3,10 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg.Imaging;
+ 
 using PixelFarm.VectorMath;
 using Mini;
+
 using burningmime.curves; //for curve fit
 namespace PixelFarm.Agg.Samples
 {
@@ -15,7 +17,7 @@ namespace PixelFarm.Agg.Samples
         Point latestMousePoint;
         List<List<Point>> pointSets = new List<List<Point>>();
         List<List<Point>> simplifiedPointSets = new List<List<Point>>();
-        CanvasPainter p;
+        PixelFarm.Drawing.Painter p;
         List<Point> currentPointSet;// = new List<Point>();//current point list
         List<CubicBezier> cubicCurves = new List<CubicBezier>();
         public override void Init()
@@ -51,7 +53,7 @@ namespace PixelFarm.Agg.Samples
             currentPointSet = testPoints;
             CreateFitCurves();
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
             var plistCount = pointSets.Count;
@@ -88,13 +90,13 @@ namespace PixelFarm.Agg.Samples
             //}
         }
 
-        static void FillPoint(Vector2 v, CanvasPainter p)
+        static void FillPoint(Vector2 v, PixelFarm.Drawing.Painter p)
         {
             p.FillRectangle(
                   v.x, v.y,
                   v.x + 3, v.y + 3);
         }
-        static void DrawLineSet(CanvasPainter p, List<Point> contPoints)
+        static void DrawLineSet(PixelFarm.Drawing.Painter p, List<Point> contPoints)
         {
             int pcount = contPoints.Count;
             for (int i = 1; i < pcount; ++i)

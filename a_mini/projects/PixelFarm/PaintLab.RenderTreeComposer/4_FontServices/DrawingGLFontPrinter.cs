@@ -20,15 +20,15 @@ namespace PixelFarm.DrawingGL
     public class AggTextSpanPrinter : ITextPrinter
     {
         ActualImage actualImage;
-        ImageGraphics2D imgGfx2d;
-        AggCanvasPainter _aggPainter;
+        AggRenderSurface imgGfx2d;
+        AggPainter _aggPainter;
         VxsTextPrinter textPrinter;
         int bmpWidth;
         int bmpHeight;
-        CanvasGL2d canvas;
-        GLCanvasPainter canvasPainter;
+        GLRenderSurface _glsf;
+        GLPainter canvasPainter;
 
-        public AggTextSpanPrinter(GLCanvasPainter canvasPainter, int w, int h)
+        public AggTextSpanPrinter(GLPainter canvasPainter, int w, int h)
         {
             //this class print long text into agg canvas
             //then copy pixel buffer from aff canvas to gl-bmp
@@ -37,13 +37,13 @@ namespace PixelFarm.DrawingGL
 
             //TODO: review here
             this.canvasPainter = canvasPainter;
-            this.canvas = canvasPainter.Canvas;
+            this._glsf = canvasPainter.Canvas;
             bmpWidth = w;
             bmpHeight = h;
             actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32);
 
-            imgGfx2d = new ImageGraphics2D(actualImage);
-            _aggPainter = new AggCanvasPainter(imgGfx2d);
+            imgGfx2d = new AggRenderSurface(actualImage);
+            _aggPainter = new AggPainter(imgGfx2d);
             _aggPainter.FillColor = Color.Black;
             _aggPainter.StrokeColor = Color.Black;
 
@@ -101,7 +101,7 @@ namespace PixelFarm.DrawingGL
                 GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
                 glBmp.IsInvert = false;
                 //TODO: review font height
-                canvas.DrawGlyphImageWithSubPixelRenderingTechnique(glBmp, (float)x, (float)y + 40);
+                _glsf.DrawGlyphImageWithSubPixelRenderingTechnique(glBmp, (float)x, (float)y + 40);
                 glBmp.Dispose();
             }
             else
@@ -117,7 +117,7 @@ namespace PixelFarm.DrawingGL
                 GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
                 glBmp.IsInvert = false;
                 //TODO: review font height
-                canvas.DrawGlyphImage(glBmp, (float)x, (float)y + 40);
+                _glsf.DrawGlyphImage(glBmp, (float)x, (float)y + 40);
                 glBmp.Dispose();
             }
 
@@ -183,9 +183,10 @@ namespace PixelFarm.DrawingGL
         GLBitmapCache<SimpleFontAtlas> _loadedGlyphs;
 
         //--------
+        GLRenderSurface _glsf;
+
         GlyphLayout _glyphLayout = new GlyphLayout();
-        CanvasGL2d canvas2d;
-        GLCanvasPainter painter;
+        GLPainter painter;
         SimpleFontAtlas simpleFontAtlas;
         Typography.TextServices.IFontLoader _fontLoader;
         GLBitmap _glBmp;
@@ -193,11 +194,11 @@ namespace PixelFarm.DrawingGL
 
 
         ScriptLang _defaultScriptLang = ScriptLangs.Latin;//review here again
-        public GLBmpGlyphTextPrinter(GLCanvasPainter painter, IFontLoader fontLoader)
+        public GLBmpGlyphTextPrinter(GLPainter painter, IFontLoader fontLoader)
         {
             //create text printer for use with canvas painter 
             this.painter = painter;
-            this.canvas2d = painter.Canvas;
+            this._glsf = painter.Canvas;
             //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
             //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer;
 
@@ -219,7 +220,7 @@ namespace PixelFarm.DrawingGL
         public void ChangeFillColor(Color color)
         {
             //called by owner painter   
-            canvas2d.FontFillColor = color;
+            _glsf.FontFillColor = color;
         }
         public void ChangeStrokeColor(Color strokeColor)
         {
@@ -334,7 +335,7 @@ namespace PixelFarm.DrawingGL
                 {
                     case Typography.Rendering.TextureKind.Msdf:
 
-                        canvas2d.DrawSubImageWithMsdf(_glBmp,
+                        _glsf.DrawSubImageWithMsdf(_glBmp,
                             ref srcRect,
                             g_x,
                             g_y,
@@ -343,7 +344,7 @@ namespace PixelFarm.DrawingGL
                         break;
                     case Typography.Rendering.TextureKind.AggGrayScale:
 
-                        canvas2d.DrawSubImage(_glBmp,
+                        _glsf.DrawSubImage(_glBmp,
                          ref srcRect,
                             g_x,
                             g_y,
@@ -352,7 +353,7 @@ namespace PixelFarm.DrawingGL
                         break;
                     case Typography.Rendering.TextureKind.AggSubPixel:
 
-                        canvas2d.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
+                        _glsf.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
                              ref srcRect,
                              g_x,
                              g_y,
@@ -405,7 +406,7 @@ namespace PixelFarm.DrawingGL
                 {
                     case Typography.Rendering.TextureKind.Msdf:
 
-                        canvas2d.DrawSubImageWithMsdf(_glBmp,
+                        _glsf.DrawSubImageWithMsdf(_glBmp,
                             ref srcRect,
                             g_x,
                             g_y,
@@ -414,7 +415,7 @@ namespace PixelFarm.DrawingGL
                         break;
                     case Typography.Rendering.TextureKind.AggGrayScale:
 
-                        canvas2d.DrawSubImage(_glBmp,
+                        _glsf.DrawSubImage(_glBmp,
                          ref srcRect,
                             g_x,
                             g_y,
@@ -422,7 +423,7 @@ namespace PixelFarm.DrawingGL
 
                         break;
                     case Typography.Rendering.TextureKind.AggSubPixel:
-                        canvas2d.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
+                        _glsf.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
                                 ref srcRect,
                                 g_x,
                                 g_y,

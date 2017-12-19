@@ -31,7 +31,7 @@ namespace Mini.WinForms
                 PixelFarm.Drawing.Color[] colors = spriteShape.Colors;
                 for (int i = 0; i < j; ++i)
                 {
-                    VxsHelper.FillVxsSnap(g, new VertexStoreSnap(myvxs, pathList[i]), colors[i]);
+                    VxsHelper.FillVxsSnap(g, new PixelFarm.Drawing.VertexStoreSnap(myvxs, pathList[i]), colors[i]);
                 }
                 g.TranslateTransform(-offsetX, -offSetY);
             }
@@ -65,11 +65,11 @@ namespace Mini.WinForms
             _latest_mouseY = y;
             base.OnMouseDown(x, y);
         }
-        internal override VertexStore GetVxs()
+        internal override PixelFarm.Drawing.VertexStore GetVxs()
         {
             return null;
         }
-        internal override void SetVxs(VertexStore vxs)
+        internal override void SetVxs(PixelFarm.Drawing.VertexStore vxs)
         {
         }
         public override bool HitTest(int x, int y)
@@ -77,7 +77,7 @@ namespace Mini.WinForms
             if (!validBoundingRect)
             {
                 var spriteShape = lionFill.GetSpriteShape();
-                PixelFarm.Agg.BoundingRect.GetBoundingRect(new PixelFarm.Agg.VertexStoreSnap(spriteShape.Path.Vxs), ref boundingRect);
+                PixelFarm.Agg.BoundingRect.GetBoundingRect(new PixelFarm.Drawing.VertexStoreSnap(spriteShape.Path.Vxs), ref boundingRect);
                 validBoundingRect = true;
             }
             if (this.boundingRect.Contains(x, y))

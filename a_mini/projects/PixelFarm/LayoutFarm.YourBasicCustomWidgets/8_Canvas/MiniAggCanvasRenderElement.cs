@@ -7,8 +7,8 @@ namespace LayoutFarm.CustomWidgets
 {
     public class MiniAggCanvasRenderElement : RenderBoxBase, IDisposable
     {
-        Graphics2D gfx2d;
-        CanvasPainter painter;
+        AggRenderSurface gfx2d;
+        Painter painter;
         bool needUpdate;
         ActualImage actualImage;
         Image bmp;
@@ -18,8 +18,8 @@ namespace LayoutFarm.CustomWidgets
         {
 
             this.actualImage = new ActualImage(width, height, PixelFarm.Agg.PixelFormat.ARGB32);
-            this.gfx2d = Graphics2D.CreateFromImage(actualImage);
-            this.painter = new AggCanvasPainter((ImageGraphics2D)gfx2d);
+            this.gfx2d = new AggRenderSurface(actualImage);
+            this.painter = new AggPainter((AggRenderSurface)gfx2d);
             needUpdate = true;
             this.BackColor = Color.White;
         }
@@ -31,7 +31,7 @@ namespace LayoutFarm.CustomWidgets
             get;
             set;
         }
-        protected override void DrawBoxContent(Canvas canvas, Rectangle updateArea)
+        protected override void DrawBoxContent(DrawBoard canvas, Rectangle updateArea)
         {
             // canvas.FillRectangle(Color.White, 0, 0, this.Width, this.Height);
             if (needUpdate)
@@ -87,7 +87,7 @@ namespace LayoutFarm.CustomWidgets
         }
 
 
-        public CanvasPainter Painter
+        public Painter Painter
         {
             get
             {

@@ -17,11 +17,11 @@ namespace PixelFarm.Agg.Sample_Gradient
         {
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            if (p is AggCanvasPainter)
+            if (p is AggPainter)
             {
-                var p2 = (AggCanvasPainter)p;
+                var p2 = (AggPainter)p;
                 p.FillColor = Drawing.Color.Red;
                 p.FillRectangle(0, 70, 150, 120);
                 //------------------------------------------- 

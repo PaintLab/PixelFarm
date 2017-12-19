@@ -11,7 +11,7 @@ namespace LayoutFarm.UI.Skia
     class SkiaCanvasViewport : CanvasViewport
     {
 
-        PixelFarm.Drawing.Skia.MySkiaCanvas mySkCanvas;
+        PixelFarm.Drawing.Skia.MySkiaDrawBoard mySkCanvas;
         //TODO: review here again
         int internalSizeW = 800;
         int internalSizwH = 600;
@@ -23,7 +23,7 @@ namespace LayoutFarm.UI.Skia
         {
 
             this.CalculateCanvasPages();
-            mySkCanvas = new PixelFarm.Drawing.Skia.MySkiaCanvas(0, 0, 0, 0, internalSizeW, internalSizwH);
+            mySkCanvas = new PixelFarm.Drawing.Skia.MySkiaDrawBoard(0, 0, 0, 0, internalSizeW, internalSizwH);
             memdc = new Win32.NativeWin32MemoryDc(internalSizeW, internalSizwH);
 
         }
@@ -56,7 +56,7 @@ namespace LayoutFarm.UI.Skia
             this.FullMode = true;
         }
 
-        static void UpdateAllArea(PixelFarm.Drawing.Skia.MySkiaCanvas mycanvas, IRenderElement topWindowRenderBox)
+        static void UpdateAllArea(PixelFarm.Drawing.Skia.MySkiaDrawBoard mycanvas, IRenderElement topWindowRenderBox)
         {
             mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);
             Rectangle rect = mycanvas.Rect;

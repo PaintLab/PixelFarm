@@ -43,7 +43,7 @@ namespace LayoutFarm
         }
 
 
-        public sealed override void CustomDrawToThisCanvas(Canvas canvas, Rectangle updateArea)
+        public sealed override void CustomDrawToThisCanvas(DrawBoard canvas, Rectangle updateArea)
         {
             canvas.OffsetCanvasOrigin(-myviewportX, -myviewportY);
             updateArea.Offset(myviewportX, myviewportY);
@@ -198,12 +198,12 @@ namespace LayoutFarm
 
 
 
-        protected abstract void DrawBoxContent(Canvas canvas, Rectangle updateArea);
+        protected abstract void DrawBoxContent(DrawBoard canvas, Rectangle updateArea);
         protected bool HasDefaultLayer
         {
             get { return this.defaultLayer != null; }
         }
-        protected void DrawDefaultLayer(Canvas canvas, ref Rectangle updateArea)
+        protected void DrawDefaultLayer(DrawBoard canvas, ref Rectangle updateArea)
         {
             if (this.defaultLayer != null)
             {

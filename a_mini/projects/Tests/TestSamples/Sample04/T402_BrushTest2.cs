@@ -13,21 +13,21 @@ namespace OpenTkEssTest
     [Info("T402_BrushTest2")]
     public class T402_BrushTest2 : DemoBase
     {
-        CanvasGL2d canvas2d;
-        GLCanvasPainter painter;
+        GLRenderSurface _glsf;
+        GLPainter painter;
         RenderVx glyph_vx;
         LinearGradientBrush linearGrBrush2;
-        PixelFarm.Agg.VertexStoreSnap tempSnap1;
+        VertexStoreSnap tempSnap1;
         //  PixelFarm.Drawing.Fonts.SvgFontStore svgFontStore = new PixelFarm.Drawing.Fonts.SvgFontStore();
-        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
-            this.canvas2d = canvasGL;
+            this._glsf = glsf;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
 
-            
+
             InstalledFontCollection collection = new InstalledFontCollection();
             collection.LoadSystemFonts();
             InstalledFont tahomaFont = collection.GetFont("tahoma", InstalledFontStyle.Normal);
@@ -56,7 +56,7 @@ namespace OpenTkEssTest
             //var curveFlattener = new CurveFlattener();
             //var m_pathVxs2 = curveFlattener.MakeVxs(m_pathVxs);
 
-            glyph_vx = painter.CreateRenderVx(tempSnap1 = new PixelFarm.Agg.VertexStoreSnap(glyph.flattenVxs));
+            glyph_vx = painter.CreateRenderVx(tempSnap1 = new PixelFarm.Drawing.VertexStoreSnap(glyph.flattenVxs));
 
             linearGrBrush2 = new LinearGradientBrush(
                new PointF(0, 0), Color.Red,
@@ -115,13 +115,13 @@ namespace OpenTkEssTest
         //}
         protected override void DemoClosing()
         {
-            canvas2d.Dispose();
+            _glsf.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            canvas2d.ClearColorBuffer();
+            _glsf.SmoothMode = SmoothMode.Smooth;
+            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsf.ClearColorBuffer();
             painter.FillColor = PixelFarm.Drawing.Color.Black;
             //painter.FillRectLBWH(0, 0, 150, 150);
             //GLBitmap glBmp = LoadTexture("..\\logo-dark.jpg");

@@ -25,7 +25,7 @@
 // PostScript and PDF technology for software developers.
 // 
 //----------------------------------------------------------------------------
-
+#if DEBUG
 using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
 using img_filter_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgFilterConst;
 namespace PixelFarm.Agg.Imaging
@@ -137,3 +137,6 @@ namespace PixelFarm.Agg.Imaging
         }
     }
 }
+
+
+#endif

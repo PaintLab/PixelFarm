@@ -27,17 +27,18 @@
 //----------------------------------------------------------------------------
 
 using System;
-using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst; 
+using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
 namespace PixelFarm.Agg.Imaging
 {
+#if DEBUG
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
-    class ImgSpanGenRGB_NNStepXby1 : ImgSpanGen
+    class dbugImgSpanGenRGB_NNStepXby1 : ImgSpanGen
     {
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
         ImageReaderWriterBase srcRW;
-        public ImgSpanGenRGB_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
+        public dbugImgSpanGenRGB_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
             : base(spanInterpolator)
         {
             this.srcRW = (ImageReaderWriterBase)src;
@@ -48,6 +49,7 @@ namespace PixelFarm.Agg.Imaging
         }
         public override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
+
             ISpanInterpolator spanInterpolator = Interpolator;
             spanInterpolator.Begin(x + dx, y + dy, len);
             int x_hr;
@@ -56,21 +58,56 @@ namespace PixelFarm.Agg.Imaging
             int x_lr = x_hr >> img_subpix_const.SHIFT;
             int y_lr = y_hr >> img_subpix_const.SHIFT;
             int bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
-            byte[] srcBuff = srcRW.GetBuffer();
-            //Drawing.Color color = Drawing.Color.White;
-            do
+            byte[] srcBuffer = srcRW.GetBuffer();
+            unsafe
             {
-                //color.blue = srcBuff[bufferIndex++];
-                //color.green = srcBuff[bufferIndex++];
-                //color.red = srcBuff[bufferIndex++];
+                fixed (byte* pSource = &srcBuffer[bufferIndex])
+                {
+                    int* src_ptr = (int*)pSource;
+                    do
+                    {
+                        int src_value = *src_ptr;
+                        //separate each component
+                        byte a = (byte)((src_value >> 24) & 0xff);
+                        byte r = (byte)((src_value >> 16) & 0xff);
+                        byte g = (byte)((src_value >> 8) & 0xff);
+                        byte b = (byte)((src_value) & 0xff);
 
-                //TODO: review, use CO (color order)
-                int b = srcBuff[bufferIndex++]; //B
-                int g = srcBuff[bufferIndex++]; //G
-                int r = srcBuff[bufferIndex++]; //R
+                        //TODO: review here, color from source buffer
+                        //should be in 'pre-multiplied' format.
+                        //so it should be converted to 'straight' color by call something like ..'FromPreMult()' 
 
-                outputColors[startIndex++] = Drawing.Color.FromArgb(255, r, g, b);
-            } while (--len != 0);
+                        outputColors[startIndex++] = Drawing.Color.FromArgb(a, r, g, b);
+
+                        src_ptr++;//move next
+                    } while (--len != 0);
+                }
+            }
+
+
+            //ISpanInterpolator spanInterpolator = Interpolator;
+            //spanInterpolator.Begin(x + dx, y + dy, len);
+            //int x_hr;
+            //int y_hr;
+            //spanInterpolator.GetCoord(out x_hr, out y_hr);
+            //int x_lr = x_hr >> img_subpix_const.SHIFT;
+            //int y_lr = y_hr >> img_subpix_const.SHIFT;
+            //int bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
+            //byte[] srcBuff = srcRW.GetBuffer();
+            ////Drawing.Color color = Drawing.Color.White;
+            //do
+            //{
+            //    ////color.blue = srcBuff[bufferIndex++];
+            //    ////color.green = srcBuff[bufferIndex++];
+            //    ////color.red = srcBuff[bufferIndex++];
+
+            //    ////TODO: review, use CO (color order)
+            //    //int b = srcBuff[bufferIndex++]; //B
+            //    //int g = srcBuff[bufferIndex++]; //G
+            //    //int r = srcBuff[bufferIndex++]; //R
+
+            //    outputColors[startIndex++] = Drawing.Color.FromArgb(255, r, g, b);
+            //} while (--len != 0);
         }
     }
 
@@ -78,7 +115,7 @@ namespace PixelFarm.Agg.Imaging
 
 
     //=====================================span_image_filter_rgb_bilinear_clip
-    class ImgSpanGenRGB_BilinearClip : ImgSpanGen
+    class dbugImgSpanGenRGB_BilinearClip : ImgSpanGen
     {
         Drawing.Color m_bgcolor;
         const int BASE_SHIFT = 8;
@@ -86,7 +123,7 @@ namespace PixelFarm.Agg.Imaging
         const int BASE_MASK = BASE_SCALE - 1;
         ImageReaderWriterBase srcRW;
         //--------------------------------------------------------------------
-        public ImgSpanGenRGB_BilinearClip(IImageReaderWriter src,
+        public dbugImgSpanGenRGB_BilinearClip(IImageReaderWriter src,
                                           Drawing.Color back_color,
                                           ISpanInterpolator inter)
             : base(inter)
@@ -282,4 +319,5 @@ namespace PixelFarm.Agg.Imaging
             }
         }
     }
+#endif
 }
