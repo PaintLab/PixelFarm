@@ -6,7 +6,7 @@ namespace LayoutFarm.UI.OpenGL
 {
     class OpenGLCanvasViewport : CanvasViewport
     {
-        Canvas canvas;
+        IDrawBoard canvas;
         bool isClosed;
         public OpenGLCanvasViewport(RootGraphic root,
             Size viewportSize, int cachedPageNum)
@@ -29,7 +29,7 @@ namespace LayoutFarm.UI.OpenGL
         {
         }
 
-        public void SetCanvas(Canvas canvas)
+        public void SetCanvas(IDrawBoard canvas)
         {
             this.canvas = canvas;
 
@@ -148,7 +148,7 @@ namespace LayoutFarm.UI.OpenGL
 #endif
         }
 
-        static void UpdateAllArea(Canvas mycanvas, IRenderElement topWindowRenderBox)
+        static void UpdateAllArea(IDrawBoard mycanvas, IRenderElement topWindowRenderBox)
         {
 
             mycanvas.OffsetCanvasOrigin(-mycanvas.Left, -mycanvas.Top);

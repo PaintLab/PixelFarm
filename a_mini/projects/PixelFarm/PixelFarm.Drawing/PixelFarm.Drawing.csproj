@@ -172,8 +172,11 @@
     <Compile Include="..\PixelFarm.DrawingCore\ExtensionAttribute.cs">
       <Link>1_DrawingCore\ExtensionAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggCanvasPainter.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggCanvasPainter.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggCanvas.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggCanvas.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggPainter.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggPainter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggRenderVx.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggRenderVx.cs</Link>

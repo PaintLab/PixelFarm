@@ -49,7 +49,7 @@ namespace LayoutFarm.CustomWidgets
                 _font = value;
             }
         }
-        public override void CustomDrawToThisCanvas(Canvas canvas, Rectangle updateArea)
+        public override void CustomDrawToThisCanvas(IDrawBoard canvas, Rectangle updateArea)
         {
             if (this.textBuffer != null)
             {

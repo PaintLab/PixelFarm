@@ -91,7 +91,7 @@ namespace LayoutFarm.Text
             }
         }
 
-        public override void DrawChildContent(Canvas canvas, Rectangle updateArea)
+        public override void DrawChildContent(IDrawBoard canvas, Rectangle updateArea)
         {
             if ((layerFlags & IS_LAYER_HIDDEN) != 0)
             {

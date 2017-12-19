@@ -7,6 +7,9 @@ using PixelFarm.Agg.VertexSource;
 
 namespace PixelFarm.Agg
 {
+    /// <summary>
+    /// painter for AggRenderSurface
+    /// </summary>
     public class AggPainter : Painter
     {
         AggRenderSurface gx;

@@ -344,8 +344,8 @@ namespace LayoutFarm
 
         //==============================================================
         //render...
-        public abstract void CustomDrawToThisCanvas(Canvas canvas, Rectangle updateArea);
-        public void DrawToThisCanvas(Canvas canvas, Rectangle updateArea)
+        public abstract void CustomDrawToThisCanvas(IDrawBoard canvas, Rectangle updateArea);
+        public void DrawToThisCanvas(IDrawBoard canvas, Rectangle updateArea)
         {
             if ((propFlags & RenderElementConst.HIDDEN) == RenderElementConst.HIDDEN)
             {

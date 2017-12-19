@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="0_CanvasPainter\AggCanvas.cs" />
-    <Compile Include="0_CanvasPainter\AggCanvasPainter.cs" />
+    <Compile Include="0_CanvasPainter\AggPainter.cs" />
     <Compile Include="0_CanvasPainter\AggRenderVx.cs" />
     <Compile Include="0_CanvasPainter\Canvas2dExtension.cs" />
     <Compile Include="0_CanvasPainter\dbugVertexSourceIO.cs" />
