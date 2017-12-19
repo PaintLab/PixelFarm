@@ -9,22 +9,31 @@ namespace PixelFarm.Agg
 {
     public class AggPainter : Painter
     {
-        AggRenderSurface _aggsx;
-        Stroke stroke;
-        Color fillColor;
-        Color strokeColor;
+        AggRenderSurface _aggsx; //target rendering surface
+        //low-level rasterizer
         ScanlinePacked8 scline;
         ScanlineRasterizer sclineRas;
         /// <summary>
         /// scanline rasterizer to bitmap
         /// </summary>
         ScanlineRasToDestBitmapRenderer sclineRasToBmp;
+
+        //--------------------
+        //pen 
+        Stroke stroke;
+        Color strokeColor;
+        //--------------------
+        //brush
+        Color fillColor;
+        //--------------------
+        //image processing,
         FilterMan filterMan = new FilterMan();
+
+        //font
         RequestFont currentFont;
         //-------------
-        //tools
-        //-------------
-        SimpleRect simpleRect = new SimpleRect();
+        //vector generators for various object
+        SimpleRect _simpleRectVxsGen = new SimpleRect();
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
         RoundedRect roundRect = null;
@@ -196,7 +205,7 @@ namespace PixelFarm.Agg
                 _lineGen.Clear();
                 _lineGen.MoveTo(x1, h - y1);
                 _lineGen.LineTo(x2, h - y2);
-                 
+
 
                 var v1 = GetFreeVxs();
                 _aggsx.Render(stroke.MakeVxs(_lineGen.Vxs, v1), this.strokeColor);
@@ -236,11 +245,22 @@ namespace PixelFarm.Agg
 
         public override void Rectangle(double left, double bottom, double right, double top)
         {
-            simpleRect.SetRect(left + .5, bottom + .5, right - .5, top - .5);
+
+            if (this._orientation == DrawBoardOrientation.LeftBottom)
+            {
+                _simpleRectVxsGen.SetRect(left + .5, bottom + .5, right - .5, top - .5);
+            }
+            else
+            {
+                int height = this.Height;
+                _simpleRectVxsGen.SetRect(left + .5, height - bottom + .5, right - .5, height - top - .5);
+            }
+
+            //----------------
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
             //
-            _aggsx.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), this.strokeColor);
+            _aggsx.Render(stroke.MakeVxs(_simpleRectVxsGen.MakeVxs(v1), v2), this.strokeColor);
             //
             ReleaseVxs(ref v1);
             ReleaseVxs(ref v2);
@@ -250,11 +270,17 @@ namespace PixelFarm.Agg
         {
             if (right < left || top < bottom)
             {
+#if DEBUG
                 throw new ArgumentException();
+#else
+                return;
+#endif
             }
-            simpleRect.SetRect(left, bottom, right, top);
+
+
+            _simpleRectVxsGen.SetRect(left, bottom, right, top);
             var v1 = GetFreeVxs();
-            _aggsx.Render(simpleRect.MakeVertexSnap(v1), this.fillColor);
+            _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
         public override void FillRectLBWH(double left, double bottom, double width, double height)
@@ -263,11 +289,15 @@ namespace PixelFarm.Agg
             double top = bottom + height;
             if (right < left || top < bottom)
             {
+#if DEBUG
                 throw new ArgumentException();
+#else
+                return;
+#endif
             }
-            simpleRect.SetRect(left, bottom, right, top);
+            _simpleRectVxsGen.SetRect(left, bottom, right, top);
             var v1 = GetFreeVxs();
-            _aggsx.Render(simpleRect.MakeVertexSnap(v1), this.fillColor);
+            _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
