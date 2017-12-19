@@ -47,37 +47,14 @@ namespace PixelFarm.Agg
             //width and height must >0 
             this.width = width;
             this.height = height;
-            switch (this.pixelFormat = format)
-            {
-                case PixelFormat.ARGB32:
-                    {
-                        this.bitDepth = 32;
-                        this.stride = width * (32 / 8);
-                        this.pixelBuffer = new byte[stride * height];
-                    }
-                    break;
-                case PixelFormat.GrayScale8:
-                    {
-                        this.bitDepth = 8; //bit per pixel
-                        int bytesPerPixel = (bitDepth + 7) / 8;
-                        this.stride = 4 * ((width * bytesPerPixel + 3) / 4);
-                        this.pixelBuffer = new byte[stride * height];
-                    }
-                    break;
-                case PixelFormat.RGB24:
-                    {
-                        this.bitDepth = 24; //bit per pixel
-                        int bytesPerPixel = (bitDepth + 7) / 8;
-                        this.stride = 4 * ((width * bytesPerPixel + 3) / 4);
-                        this.pixelBuffer = new byte[stride * height];
-                    }
-                    break;
-                default:
-                    throw new NotSupportedException();
-            }
-        }
-
-
+            int bytesPerPixel;
+            this.stride = CalculateStride(width,
+                this.pixelFormat = format,
+                out bitDepth,
+                out bytesPerPixel);
+            //alloc mem
+            this.pixelBuffer = new byte[stride * height]; 
+        } 
         public override void Dispose()
         {
 
@@ -208,39 +185,5 @@ namespace PixelFarm.Agg
                     throw new NotSupportedException();
             }
         }
-
-
-
-        //class MyBitmapData : PixelFarm.Drawing.BitmapData, IDisposable
-        //{
-        //    System.Runtime.InteropServices.GCHandle _gcHandle;
-        //    byte[] pixelBuffer;
-        //    unsafe byte* arrayHeader;
-        //    public MyBitmapData(byte[] pixelBuffer)
-        //    {
-        //        this.pixelBuffer = pixelBuffer;
-        //        _gcHandle = System.Runtime.InteropServices.GCHandle.Alloc(this.pixelBuffer);
-        //        unsafe
-        //        {
-        //            fixed (byte* h = &pixelBuffer[0])
-        //            {
-        //                this.arrayHeader = h;
-        //            }
-        //        }
-        //    }
-        //    public void Dispose()
-        //    {
-        //        _gcHandle.Free();
-        //        pixelBuffer = null;
-        //    }
-        //    public override IntPtr Scan0
-        //    {
-        //        get
-        //        {
-        //            return _gcHandle.AddrOfPinnedObject();
-        //        }
-        //    }
-        //}
-
     }
 }

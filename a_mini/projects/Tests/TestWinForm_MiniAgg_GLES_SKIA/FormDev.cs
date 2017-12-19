@@ -32,13 +32,14 @@ namespace Mini
         }
         void LoadRenderBackendChoices()
         {
-            cmbRenderBackend.Items.Clear();
-            cmbRenderBackend.Items.Add(RenderBackendChoice.PureAgg); //pure software renderer with MiniAgg
-            cmbRenderBackend.Items.Add(RenderBackendChoice.GdiPlus);
-            cmbRenderBackend.Items.Add(RenderBackendChoice.OpenGLES2);
-            cmbRenderBackend.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
-            cmbRenderBackend.Items.Add(RenderBackendChoice.SkiaGLBackend);
-            cmbRenderBackend.SelectedIndex = 0;//set default 
+
+            lstBackEndRenderer.Items.Clear();
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.PureAgg); //pure software renderer with MiniAgg
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.GdiPlus);
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.OpenGLES2);
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaMemoryBackend);
+            lstBackEndRenderer.Items.Add(RenderBackendChoice.SkiaGLBackend);
+            lstBackEndRenderer.SelectedIndex = 0;//set default 
         }
 
 
@@ -50,7 +51,7 @@ namespace Mini
             ExampleAndDesc exAndDesc = this.listBox1.SelectedItem as ExampleAndDesc;
             if (exAndDesc != null)
             {
-                switch ((RenderBackendChoice)cmbRenderBackend.SelectedItem)
+                switch ((RenderBackendChoice)lstBackEndRenderer.SelectedItem)
                 {
                     case RenderBackendChoice.PureAgg:
                         {

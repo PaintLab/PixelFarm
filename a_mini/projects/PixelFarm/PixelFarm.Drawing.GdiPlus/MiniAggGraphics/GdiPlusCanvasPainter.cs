@@ -40,10 +40,10 @@ namespace PixelFarm.Drawing.WinGdi
 
             _gfx = System.Drawing.Graphics.FromImage(_gfxBmp);
 
-            //credit:
-            //http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
-            _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
-            _gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly            
+            ////credit:
+            ////http://stackoverflow.com/questions/1485745/flip-coordinates-when-drawing-to-control
+            //_gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
+            //_gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly            
 
             _currentFillBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
             _currentPen = new System.Drawing.Pen(System.Drawing.Color.Black);
@@ -330,14 +330,8 @@ namespace PixelFarm.Drawing.WinGdi
                 //copy data to bitmap
                 //bgra  
                 var bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                byte[] acutalBuffer = ActualImage.GetBuffer(actualImage);
-                var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp.PixelFormat);
-                System.Runtime.InteropServices.Marshal.Copy(acutalBuffer, 0, bmpData.Scan0, acutalBuffer.Length);
-                bmp.UnlockBits(bmpData);
-
-
+                Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(actualImage, bmp);
                 Image.SetCacheInnerImage(actualImage, bmp);
-
                 return bmp;
                 //GLBitmap glBmp = null;
                 //if (image is ActualImage)
@@ -391,13 +385,12 @@ namespace PixelFarm.Drawing.WinGdi
                             {
                                 if (this._orientation == DrawBoardOrientation.LeftTop)
                                 {
-                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, this.Height - (int)y - img.Height));
+                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
                                 }
                                 else
                                 {
-                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
+                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)(this.Height - y - img.Height)));
                                 }
-
                             }
                         }
                         break;
@@ -417,23 +410,23 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public override void DrawString(string text, double x, double y)
         {
-            //use current brush and font
-            _gfx.ResetTransform();
-            _gfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly   
+            ////use current brush and font
+            //_gfx.ResetTransform();
+            //_gfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly   
 
-            //draw with native win32
-            //------------
+            ////draw with native win32
+            ////------------
 
-            /*_gfx.DrawString(text,
-                _latestWinGdiPlusFont.InnerFont,
-                _currentFillBrush,
-                new System.Drawing.PointF((float)x, (float)y));
-            */
-            //------------
-            //restore back
-            _gfx.ResetTransform();//again
-            _gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
-            _gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly                
+            ///*_gfx.DrawString(text,
+            //    _latestWinGdiPlusFont.InnerFont,
+            //    _currentFillBrush,
+            //    new System.Drawing.PointF((float)x, (float)y));
+            //*/
+            ////------------
+            ////restore back
+            //_gfx.ResetTransform();//again
+            //_gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
+            //_gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly                
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
         {
