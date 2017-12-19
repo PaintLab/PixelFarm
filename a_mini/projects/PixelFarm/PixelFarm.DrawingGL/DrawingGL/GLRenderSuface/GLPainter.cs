@@ -39,6 +39,13 @@ namespace PixelFarm.DrawingGL
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
         }
+        DrawBoardOrientation _orientation;
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _orientation; }
+            set
+            { _orientation = value; }
+        }
         public bool UseVertexBufferObjectForRenderVx { get; set; }
         public override void SetOrigin(float ox, float oy)
         {

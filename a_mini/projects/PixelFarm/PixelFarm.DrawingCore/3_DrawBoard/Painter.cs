@@ -49,6 +49,7 @@ namespace PixelFarm.Drawing
         public abstract Color StrokeColor { get; set; }
         //-------------------------------------------------------
         public abstract void Clear(Color color);
+        public abstract DrawBoardOrientation Orientation { get; set; }
 
         public abstract void FillCircle(double x, double y, double radius);
         public abstract void FillEllipse(double left, double bottom, double right, double top);

@@ -51,7 +51,13 @@ namespace PixelFarm.Drawing.WinGdi
             //
             _bmpStore = new BufferBitmapStore(_width, _height);
         }
-
+        DrawBoardOrientation _orientation;
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _orientation; }
+            set
+            { _orientation = value; }
+        }
         public override float OriginX
         {
             get

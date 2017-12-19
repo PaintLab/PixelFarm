@@ -38,6 +38,13 @@ namespace PixelFarm.Drawing.Skia
             get { return _skCanvas; }
             set { _skCanvas = value; }
         }
+        DrawBoardOrientation _orientation;
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _orientation; }
+            set
+            { _orientation = value; }
+        }
         public override float OriginX
         {
             get

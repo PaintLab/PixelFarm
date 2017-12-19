@@ -42,6 +42,13 @@ namespace PixelFarm.Agg
             this.scline = aggRdsf.ScanlinePacked8;
             this.sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
         }
+        DrawBoardOrientation _orientation;
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _orientation; }
+            set
+            { _orientation = value; }
+        }
         public AggRenderSurface RenderSurface
         {
             get { return this._aggRdsf; }
