@@ -6,7 +6,7 @@ using PixelFarm.Agg.Transform;
 
 namespace PixelFarm.Drawing.WinGdi
 {
-    public class GdiPlusCanvasPainter : Painter
+    public class GdiPainter : Painter
     {
         System.Drawing.Graphics _gfx;
         System.Drawing.Bitmap _gfxBmp;
@@ -29,7 +29,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         SmoothingMode _smoothingMode;
 
-        public GdiPlusCanvasPainter(System.Drawing.Bitmap gfxBmp)
+        public GdiPainter(System.Drawing.Bitmap gfxBmp)
         {
 
 
@@ -51,7 +51,13 @@ namespace PixelFarm.Drawing.WinGdi
             //
             _bmpStore = new BufferBitmapStore(_width, _height);
         }
-
+        DrawBoardOrientation _orientation;
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _orientation; }
+            set
+            { _orientation = value; }
+        }
         public override float OriginX
         {
             get

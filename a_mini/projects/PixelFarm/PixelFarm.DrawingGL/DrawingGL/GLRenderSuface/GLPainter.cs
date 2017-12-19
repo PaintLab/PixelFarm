@@ -27,10 +27,8 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         InternalGraphicsPathBuilder _igfxPathBuilder;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
-        DrawBoardOrientation _orientation;
         public GLPainter(GLRenderSurface canvas)
         {
-            _orientation = DrawBoardOrientation.LeftTop; //normal nature of the GL
             _glsf = canvas;
             _width = canvas.CanvasWidth;
             _height = canvas.CanvasHeight;
@@ -41,12 +39,13 @@ namespace PixelFarm.DrawingGL
             //tools
             _igfxPathBuilder = InternalGraphicsPathBuilder.CreateNew();
         }
-        public DrawBoardOrientation Orientation
+        DrawBoardOrientation _orientation;
+        public override DrawBoardOrientation Orientation
         {
             get { return _orientation; }
-            set { _orientation = value; }
+            set
+            { _orientation = value; }
         }
-
         public bool UseVertexBufferObjectForRenderVx { get; set; }
         public override void SetOrigin(float ox, float oy)
         {
@@ -263,16 +262,6 @@ namespace PixelFarm.DrawingGL
             if (glBmp != null)
             {
                 _glsf.DrawImage(glBmp, (float)x, (float)y);
-
-                //if (this._orientation == DrawBoardOrientation.LeftTop)
-                //{
-                //    //in this mode we place the left-top of the image to the (x,y)                                          
-                //    _glsf.DrawImage(glBmp, (float)x, (float)(this.Height - (y + actualImage.Height)));
-                //}
-                //else
-                //{
-                //    _glsf.DrawImage(glBmp, (float)x, (float)y);
-                //}
             }
         }
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
@@ -296,14 +285,14 @@ namespace PixelFarm.DrawingGL
         {
             get
             {
-                return _glsf.CanvasOriginX;
+                return _glsf.OriginX;
             }
         }
         public override float OriginY
         {
             get
             {
-                return _glsf.CanvasOriginY;
+                return _glsf.OriginY;
             }
         }
         public override void DrawString(string text, double x, double y)

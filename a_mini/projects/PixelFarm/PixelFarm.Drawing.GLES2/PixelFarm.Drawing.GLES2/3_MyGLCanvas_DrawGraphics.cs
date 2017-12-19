@@ -34,7 +34,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             set
             {
-                _painter.StrokeColor = this.strokeColor = value;
+                painter1.StrokeColor = this.strokeColor = value;
             }
         }
         public override float StrokeWidth
@@ -45,7 +45,7 @@ namespace PixelFarm.Drawing.GLES2
             }
             set
             {
-                _painter.StrokeWidth = this.strokeWidth = value;
+                painter1.StrokeWidth = this.strokeWidth = value;
             }
         }
 
@@ -61,68 +61,61 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void Clear(PixelFarm.Drawing.Color c)
         {
-            _painter.Clear(c);
+            painter1.Clear(c);
         }
         public override void DrawPath(GraphicsPath gfxPath)
         {
             throw new MyGLCanvasException();
             //gx.DrawPath(internalPen, gfxPath.InnerPath as System.Drawing.Drawing2D.GraphicsPath);
         }
-        //public override void FillRectangle(Brush brush, float left, float top, float width, float height)
-        //{
+        public override void FillRectangle(Brush brush, float left, float top, float width, float height)
+        {
 
-        //    switch (brush.BrushKind)
-        //    {
-        //        case BrushKind.Solid:
-        //            {
-        //                //use default solid brush
-        //                SolidBrush solidBrush = (SolidBrush)brush;
-        //                painter1.FillRectangle(
-        //                    left, this.Height - (top + height),
-        //                    left + width, this.Height - top,
-        //                    solidBrush.Color);
+            switch (brush.BrushKind)
+            {
+                case BrushKind.Solid:
+                    {
+                        //use default solid brush
+                        SolidBrush solidBrush = (SolidBrush)brush;
+                        painter1.FillRectangle(
+                            left, this.Height - (top + height),
+                            left + width, this.Height - top,
+                            solidBrush.Color);
 
-        //            }
-        //            break;
-        //        case BrushKind.LinearGradient:
-        //            {
-        //                throw new MyGLCanvasException();
-        //            }
-        //            break;
-        //        case BrushKind.GeometryGradient:
-        //            {
-        //            }
-        //            break;
-        //        case BrushKind.CircularGraident:
-        //            {
-        //            }
-        //            break;
-        //        case BrushKind.Texture:
-        //            {
-        //            }
-        //            break;
-        //    }
-        //}
-        //public override void FillRectangle(Color color, float left, float top, float width, float height)
-        //{
-        //    painter1.FillRectangle(left, this.Height - (top + height), left + width, this.Height - top, color);
-        //}
-        //public override void DrawRectangle(Color color, float left, float top, float width, float height)
-        //{
-        //    painter1.Rectangle(left, this.Height - (top + height), left + width, this.Height - top, color);
-        //}
+                    }
+                    break;
+                case BrushKind.LinearGradient:
+                    {
+                        throw new MyGLCanvasException();
+                    }
+                    break;
+                case BrushKind.GeometryGradient:
+                    {
+                    }
+                    break;
+                case BrushKind.CircularGraident:
+                    {
+                    }
+                    break;
+                case BrushKind.Texture:
+                    {
+                    }
+                    break;
+            }
+        }
+        public override void FillRectangle(Color color, float left, float top, float width, float height)
+        {
+            painter1.FillRectangle(left, this.Height - (top + height), left + width, this.Height - top, color);
+        }
+        public override void DrawRectangle(Color color, float left, float top, float width, float height)
+        {
+            painter1.Rectangle(left, this.Height - (top + height), left + width, this.Height - top, color);
+        }
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
-            _painter.Line(x1, this.Height - y1, x2, this.Height - y2);
+            painter1.Line(x1, this.Height - y1, x2, this.Height - y2);
         }
-        public override void DrawRectangle(float left, float top, float width, float height)
-        {
-            _painter.Rectangle(left, this.Height - (top + height), left + width, this.Height - top);
-        }
-        public override void FillRectangle(float left, float top, float width, float height)
-        {
-            _painter.FillRectangle(left, this.Height - (top + height), left + width, this.Height - top);
-        }
+
 
         /// <summary>
         /// Gets or sets the rendering quality for this <see cref="T:System.Drawing.Graphics"/>.
@@ -135,11 +128,11 @@ namespace PixelFarm.Drawing.GLES2
         {
             get
             {
-                return _painter.SmoothingMode;
+                return painter1.SmoothingMode;
             }
             set
             {
-                _painter.SmoothingMode = value;
+                painter1.SmoothingMode = value;
             }
         }
         /// <summary>
@@ -154,7 +147,7 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                _painter.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, this.Height - destRect.Top);
+                painter1.Canvas.DrawSubImage(glbmp, destRect.Left, srcRect.Top, srcRect.Width, srcRect.Height, destRect.Left, this.Height - destRect.Top);
             }
         }
         public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
@@ -216,11 +209,11 @@ namespace PixelFarm.Drawing.GLES2
             DrawingGL.GLBitmap glbmp = ResolveForGLBitmap(image);
             if (glbmp != null)
             {
-                _painter.Canvas.DrawImage(glbmp, destRect.X, this.Height - destRect.Y, destRect.Width, destRect.Height);
+                painter1.Canvas.DrawImage(glbmp, destRect.X, this.Height - destRect.Y, destRect.Width, destRect.Height);
             }
 
         }
-        public override void FillPath(GraphicsPath gfxPath)
+        public override void FillPath(Color color, GraphicsPath gfxPath)
         {
             throw new MyGLCanvasException();
             //solid color
@@ -230,56 +223,56 @@ namespace PixelFarm.Drawing.GLES2
             //    gfxPath.InnerPath as System.Drawing.Drawing2D.GraphicsPath);
             //internalSolidBrush.Color = prevColor;
         }
-        ///// <summary>
-        ///// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
-        ///// </summary>
-        ///// <param name="brush"><see cref="T:System.Drawing.Brush"/> that determines the characteristics of the fill. </param><param name="path"><see cref="T:System.Drawing.Drawing2D.GraphicsPath"/> that represents the path to fill. </param><exception cref="T:System.ArgumentNullException"><paramref name="brush"/> is null.-or-<paramref name="path"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
-        //public override void FillPath(GraphicsPath path)
-        //{
-        //    throw new MyGLCanvasException();
-        //    //switch (brush.BrushKind)
-        //    //{
-        //    //    case BrushKind.Solid:
-        //    //        {
-        //    //            SolidBrush solidBrush = (SolidBrush)brush;
-        //    //            var prevColor = internalSolidBrush.Color;
-        //    //            internalSolidBrush.Color = ConvColor(solidBrush.Color);
-        //    //            gx.FillPath(internalSolidBrush,
-        //    //                path.InnerPath as System.Drawing.Drawing2D.GraphicsPath);
-        //    //            internalSolidBrush.Color = prevColor;
-        //    //        }
-        //    //        break;
-        //    //    case BrushKind.LinearGradient:
-        //    //        {
-        //    //            LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
-        //    //            var prevColor = internalSolidBrush.Color;
-        //    //            internalSolidBrush.Color = ConvColor(solidBrush.Color);
-        //    //            gx.FillPath(internalSolidBrush,
-        //    //                path.InnerPath as System.Drawing.Drawing2D.GraphicsPath);
-        //    //            internalSolidBrush.Color = prevColor;
-        //    //        }
-        //    //        break;
-        //    //    default:
-        //    //        {
-        //    //        }
-        //    //        break;
-        //    //}
-        //}
+        /// <summary>
+        /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
+        /// </summary>
+        /// <param name="brush"><see cref="T:System.Drawing.Brush"/> that determines the characteristics of the fill. </param><param name="path"><see cref="T:System.Drawing.Drawing2D.GraphicsPath"/> that represents the path to fill. </param><exception cref="T:System.ArgumentNullException"><paramref name="brush"/> is null.-or-<paramref name="path"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
+        public override void FillPath(Brush brush, GraphicsPath path)
+        {
+            throw new MyGLCanvasException();
+            //switch (brush.BrushKind)
+            //{
+            //    case BrushKind.Solid:
+            //        {
+            //            SolidBrush solidBrush = (SolidBrush)brush;
+            //            var prevColor = internalSolidBrush.Color;
+            //            internalSolidBrush.Color = ConvColor(solidBrush.Color);
+            //            gx.FillPath(internalSolidBrush,
+            //                path.InnerPath as System.Drawing.Drawing2D.GraphicsPath);
+            //            internalSolidBrush.Color = prevColor;
+            //        }
+            //        break;
+            //    case BrushKind.LinearGradient:
+            //        {
+            //            LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
+            //            var prevColor = internalSolidBrush.Color;
+            //            internalSolidBrush.Color = ConvColor(solidBrush.Color);
+            //            gx.FillPath(internalSolidBrush,
+            //                path.InnerPath as System.Drawing.Drawing2D.GraphicsPath);
+            //            internalSolidBrush.Color = prevColor;
+            //        }
+            //        break;
+            //    default:
+            //        {
+            //        }
+            //        break;
+            //}
+        }
 
-        public override void FillPolygon( PointF[] points)
+        public override void FillPolygon(Brush brush, PointF[] points)
         {
             throw new MyGLCanvasException();
             //var pps = ConvPointFArray(points);
             ////use internal solid color            
             //gx.FillPolygon(brush.InnerBrush as System.Drawing.Brush, pps);
         }
-        //public override void FillPolygon(Color color, PointF[] points)
-        //{
-        //    throw new MyGLCanvasException();
-        //    //var pps = ConvPointFArray(points);
-        //    //internalSolidBrush.Color = ConvColor(color);
-        //    //gx.FillPolygon(this.internalSolidBrush, pps);
-        //}
+        public override void FillPolygon(Color color, PointF[] points)
+        {
+            throw new MyGLCanvasException();
+            //var pps = ConvPointFArray(points);
+            //internalSolidBrush.Color = ConvColor(color);
+            //gx.FillPolygon(this.internalSolidBrush, pps);
+        }
 
         ////==========================================================
         //public override void CopyFrom(Canvas sourceCanvas, int logicalSrcX, int logicalSrcY, Rectangle destArea)

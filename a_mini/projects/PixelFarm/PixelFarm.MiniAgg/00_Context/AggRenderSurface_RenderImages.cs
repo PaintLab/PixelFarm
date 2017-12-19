@@ -33,9 +33,6 @@ namespace PixelFarm.Agg
             get { return this.sclineRasToBmp.ScanlineRenderMode == ScanlineRenderMode.SubPixelRendering; }
             set { this.sclineRasToBmp.ScanlineRenderMode = value ? ScanlineRenderMode.SubPixelRendering : ScanlineRenderMode.Default; }
         }
-      
-
-
         static Affine BuildImageBoundsPath(
             int srcW, int srcH,
             VertexStore drawImageRectPath,

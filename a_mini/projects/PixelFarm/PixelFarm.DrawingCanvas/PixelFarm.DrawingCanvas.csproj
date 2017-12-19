@@ -236,7 +236,7 @@
     <Compile Include="..\tesselate\Tesselator.cs">
       <Link>1_Vectors\6_Tesselate\Tesselator.cs</Link>
     </Compile>
-    <Compile Include="2_Canvas\CanvasPainterExtensions.cs" />
+    <Compile Include="2_Canvas\PainterExtensions.cs" />
     <Compile Include="2_Canvas\ColorEx.cs" />
     <Compile Include="6_Typography\ITextPrinter.cs" />
     <Compile Include="3_Agg_PixelBuffer\ActualImage.cs" />

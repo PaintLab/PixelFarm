@@ -34,12 +34,11 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="0_DrawBoard\AggDrawBoard.cs" />
-    <Compile Include="0_Painter\AggPainter.cs" />
-    <Compile Include="0_DrawBoard\AggRenderVx.cs" />
-    <Compile Include="0_DrawBoard\Canvas2dExtension.cs" />
-    <Compile Include="0_DrawBoard\dbugVertexSourceIO.cs" />
-    <Compile Include="0_DrawBoard\LineDashGenerator.cs" />
+    <Compile Include="DrawBoard\AggPainter.cs" />
+    <Compile Include="DrawBoard\AggRenderVx.cs" />
+    <Compile Include="DrawBoard\Canvas2dExtension.cs" />
+    <Compile Include="DrawBoard\dbugVertexSourceIO.cs" />
+    <Compile Include="DrawBoard\LineDashGenerator.cs" />
     <Compile Include="1_Base\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
     <Compile Include="Image\FilterMan.cs" />

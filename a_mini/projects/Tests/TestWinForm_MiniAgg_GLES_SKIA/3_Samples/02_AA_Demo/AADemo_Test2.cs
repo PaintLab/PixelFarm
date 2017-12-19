@@ -93,23 +93,23 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             if (p is PixelFarm.Agg.AggPainter)
             {
                 PixelFarm.Agg.AggPainter p2 = (PixelFarm.Agg.AggPainter)p;
-                AggRenderSurface rdsf = p2.RenderSurface;
-                var childImage = ImageHelper.CreateChildImage(rdsf.DestImage, rdsf.GetClippingRect());
+                AggRenderSurface aggRdsf = p2.RenderSurface;
+                var childImage = ImageHelper.CreateChildImage(aggRdsf.DestImage, aggRdsf.GetClippingRect());
                 //IRecieveBlenderByte rasterBlender = new BlenderBGRA(); 
                 var rasterGamma = new ChildImage(childImage, new PixelBlenderGammaBGRA(this.GammaValue));
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(childImage);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);
-                var rasterizer = rdsf.ScanlineRasterizer;
+                var rasterizer = aggRdsf.ScanlineRasterizer;
                 var sl = new ScanlineUnpacked8();
                 int size_mul = this.PixelSize;
-                var sclineToBmpEn2 = new CustomScanlineRasToBmp_EnlargedV2(size_mul, rdsf.DestActualImage);
+                var sclineToBmpEn2 = new CustomScanlineRasToBmp_EnlargedV2(size_mul, aggRdsf.DestActualImage);
                 rasterizer.Reset();
                 rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
                 rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
                 rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
                 sclineToBmpEn2.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = rdsf.ScanlineRasToDestBitmap;
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
                 sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //-----------------------------------------------------------------------------------------------------------
                 rasterizer.ResetGamma(new GammaNone());

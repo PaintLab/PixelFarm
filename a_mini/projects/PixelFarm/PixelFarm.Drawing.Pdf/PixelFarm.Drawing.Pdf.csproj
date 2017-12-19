@@ -40,7 +40,7 @@
     <Compile Include="DrawBoard\3_MyPdfDrawBoard_DrawGraphics.cs" />
     <Compile Include="DrawBoard\4_MyPdfDrawBoard_TextAndFonts.cs" />
     <Compile Include="DrawBoard\Conv.cs" />
-    <Compile Include="Painter\PdfPainter.cs" />
+    <Compile Include="Painter\PdfCanvasPainter.cs" />
     <Compile Include="Painter\PdfRenderVx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

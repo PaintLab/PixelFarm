@@ -67,7 +67,7 @@
     <Compile Include="DrawBoard\4_MySkiaDrawBoard_TextAndFonts.cs" />
     <Compile Include="DrawBoard\Conv.cs" />
     <Compile Include="Implementation\BitmapHelper.cs" />
-    <Compile Include="Painter\SkiaPainter.cs" />
+    <Compile Include="Painter\SkiaCanvasPainter.cs" />
     <Compile Include="Painter\SkiaRenderVx.cs" />
     <Compile Include="Painter\VxsHelper.cs" />
   </ItemGroup>

@@ -7,12 +7,9 @@ using PixelFarm.Agg.VertexSource;
 
 namespace PixelFarm.Agg
 {
-    /// <summary>
-    /// painter for AggRenderSurface
-    /// </summary>
     public class AggPainter : Painter
     {
-        AggRenderSurface aggRenderSf;
+        AggRenderSurface _aggRdsf;
         Stroke stroke;
         Color fillColor;
         Color strokeColor;
@@ -36,40 +33,47 @@ namespace PixelFarm.Agg
         LineDashGenerator _lineDashGen;
         int ellipseGenNSteps = 10;
         SmoothingMode _smoothingMode;
-        DrawBoardOrientation _orientation;
-        public AggPainter(AggRenderSurface renderSf)
+
+        public AggPainter(AggRenderSurface aggRdsf)
         {
-            //original AggRenderSurface orientation is LeftBottom,left-lower corner is (0,0) 
-            _orientation = DrawBoardOrientation.LeftTop;
-            this.aggRenderSf = renderSf;
-            this.sclineRas = aggRenderSf.ScanlineRasterizer;
+            this._aggRdsf = aggRdsf;
+            this.sclineRas = _aggRdsf.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
-            this.scline = renderSf.ScanlinePacked8;
-            this.sclineRasToBmp = renderSf.ScanlineRasToDestBitmap;
+            this.scline = aggRdsf.ScanlinePacked8;
+            this.sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
         }
-        public DrawBoardOrientation Orientation
+        DrawBoardOrientation _orientation;
+        public override DrawBoardOrientation Orientation
         {
-            get { return this._orientation; }
-            set { this._orientation = value; }
+            get { return _orientation; }
+            set
+            { _orientation = value; }
         }
         public AggRenderSurface RenderSurface
         {
-            get { return this.aggRenderSf; }
+            get { return this._aggRdsf; }
         }
         public override int Width
         {
             get
             {
-                return aggRenderSf.Width;
+                //TODO: review here
+                //                return 800;
+                return _aggRdsf.Width;
             }
         }
         public override int Height
         {
-            get { return aggRenderSf.Height; }
+            //TODO: review here
+            get
+            {
+                //return 600;
+                return _aggRdsf.Height;
+            }
         }
         public override void Clear(Color color)
         {
-            aggRenderSf.Clear(color);
+            _aggRdsf.Clear(color);
         }
         public override float OriginX
         {
@@ -98,26 +102,25 @@ namespace PixelFarm.Agg
                     case Drawing.SmoothingMode.AntiAlias:
                         //TODO: review here
                         //anti alias != lcd technique 
-                        aggRenderSf.UseSubPixelRendering = true;
+                        _aggRdsf.UseSubPixelRendering = true;
                         break;
                     case Drawing.SmoothingMode.HighSpeed:
                     default:
-                        aggRenderSf.UseSubPixelRendering = false;
+                        _aggRdsf.UseSubPixelRendering = false;
                         break;
                 }
             }
         }
         public override RectInt ClipBox
         {
-            get { return this.aggRenderSf.GetClippingRect(); }
-            set { this.aggRenderSf.SetClippingRect(value); }
+            get { return this._aggRdsf.GetClippingRect(); }
+            set { this._aggRdsf.SetClippingRect(value); }
         }
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
-            this.aggRenderSf.SetClippingRect(new RectInt(x1, y1, x2, y2));
+            this._aggRdsf.SetClippingRect(new RectInt(x1, y1, x2, y2));
         }
-
-
+         
         VertexStorePool _vxsPool = new VertexStorePool();
 
         VertexStore GetFreeVxs()
@@ -133,7 +136,7 @@ namespace PixelFarm.Agg
         {
             ellipse.Reset(x, y, radius, radius);
             var v1 = GetFreeVxs();
-            aggRenderSf.Render(ellipse.MakeVxs(v1), this.fillColor);
+            _aggRdsf.Render(ellipse.MakeVxs(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
 
@@ -145,7 +148,7 @@ namespace PixelFarm.Agg
                           (top - bottom) * 0.5,
                            ellipseGenNSteps);
             var v1 = GetFreeVxs();
-            aggRenderSf.Render(ellipse.MakeVxs(v1), this.fillColor);
+            _aggRdsf.Render(ellipse.MakeVxs(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
         public override void Draw(VertexStoreSnap vxs)
@@ -161,7 +164,7 @@ namespace PixelFarm.Agg
                           ellipseGenNSteps);
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
-            aggRenderSf.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.fillColor);
+            _aggRdsf.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.fillColor);
             ReleaseVxs(ref v1);
             ReleaseVxs(ref v2);
         }
@@ -181,7 +184,7 @@ namespace PixelFarm.Agg
             lines.MoveTo(x1, y1);
             lines.LineTo(x2, y2);
             var v1 = GetFreeVxs();
-            aggRenderSf.Render(stroke.MakeVxs(lines.Vxs, v1), this.strokeColor);
+            _aggRdsf.Render(stroke.MakeVxs(lines.Vxs, v1), this.strokeColor);
             ReleaseVxs(ref v1);
 
         }
@@ -196,7 +199,7 @@ namespace PixelFarm.Agg
             {
                 //no line dash
                 var v1 = GetFreeVxs();
-                aggRenderSf.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
+                _aggRdsf.Render(stroke.MakeVxs(vxs, v1), this.strokeColor);
                 ReleaseVxs(ref v1);
             }
             else
@@ -205,7 +208,7 @@ namespace PixelFarm.Agg
                 var v2 = GetFreeVxs();
                 _lineDashGen.CreateDash(vxs, v1);
                 stroke.MakeVxs(v1, v2);
-                aggRenderSf.Render(v2, this.strokeColor);
+                _aggRdsf.Render(v2, this.strokeColor);
 
                 ReleaseVxs(ref v1);
                 ReleaseVxs(ref v2);
@@ -220,7 +223,7 @@ namespace PixelFarm.Agg
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
             //
-            aggRenderSf.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), this.fillColor);
+            _aggRdsf.Render(stroke.MakeVxs(simpleRect.MakeVxs(v1), v2), this.fillColor);
             //
             ReleaseVxs(ref v1);
             ReleaseVxs(ref v2);
@@ -234,7 +237,7 @@ namespace PixelFarm.Agg
             }
             simpleRect.SetRect(left, bottom, right, top);
             var v1 = GetFreeVxs();
-            aggRenderSf.Render(simpleRect.MakeVertexSnap(v1), this.fillColor);
+            _aggRdsf.Render(simpleRect.MakeVertexSnap(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
         public override void FillRectLBWH(double left, double bottom, double width, double height)
@@ -247,7 +250,7 @@ namespace PixelFarm.Agg
             }
             simpleRect.SetRect(left, bottom, right, top);
             var v1 = GetFreeVxs();
-            aggRenderSf.Render(simpleRect.MakeVertexSnap(v1), this.fillColor);
+            _aggRdsf.Render(simpleRect.MakeVertexSnap(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
@@ -361,7 +364,7 @@ namespace PixelFarm.Agg
         public override void Fill(VertexStoreSnap snap)
         {
             sclineRas.AddPath(snap);
-            sclineRasToBmp.RenderWithColor(this.aggRenderSf.DestImage, sclineRas, scline, fillColor);
+            sclineRasToBmp.RenderWithColor(this._aggRdsf.DestImage, sclineRas, scline, fillColor);
         }
         /// <summary>
         /// fill vxs, we do NOT store vxs
@@ -370,7 +373,7 @@ namespace PixelFarm.Agg
         public override void Fill(VertexStore vxs)
         {
             sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithColor(this.aggRenderSf.DestImage, sclineRas, scline, fillColor);
+            sclineRasToBmp.RenderWithColor(this._aggRdsf.DestImage, sclineRas, scline, fillColor);
         }
 
 
@@ -409,7 +412,7 @@ namespace PixelFarm.Agg
         }
         public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
         {
-            sclineRasToBmp.RenderSolidAllPaths(this.aggRenderSf.DestImage,
+            sclineRasToBmp.RenderSolidAllPaths(this._aggRdsf.DestImage,
                 this.sclineRas,
                 this.scline,
                 vxs,
@@ -425,7 +428,7 @@ namespace PixelFarm.Agg
         public void Fill(VertexStore vxs, ISpanGenerator spanGen)
         {
             this.sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithSpan(this.aggRenderSf.DestImage, sclineRas, scline, spanGen);
+            sclineRasToBmp.RenderWithSpan(this._aggRdsf.DestImage, sclineRas, scline, spanGen);
         }
         public override void DrawImage(Image img, double x, double y)
         {
@@ -433,15 +436,7 @@ namespace PixelFarm.Agg
             if (img is ActualImage)
             {
                 this.sharedImageWriterReader.ReloadImage((ActualImage)img);
-                if (this._orientation == DrawBoardOrientation.LeftTop)
-                {
-                    //in this mode we place the left-top of the image to the (x,y)                     
-                    this.aggRenderSf.Render(this.sharedImageWriterReader, x, this.Height - (y + img.Height));
-                }
-                else
-                {
-                    this.aggRenderSf.Render(this.sharedImageWriterReader, x, y);
-                }
+                this._aggRdsf.Render(this.sharedImageWriterReader, x, y);
             }
             else
             {
@@ -454,7 +449,7 @@ namespace PixelFarm.Agg
             if (img is ActualImage)
             {
                 this.sharedImageWriterReader.ReloadImage((ActualImage)img);
-                this.aggRenderSf.Render(sharedImageWriterReader, affinePlans);
+                this._aggRdsf.Render(sharedImageWriterReader, affinePlans);
             }
             else
             {
@@ -470,13 +465,13 @@ namespace PixelFarm.Agg
         /// <param name="area"></param>
         public override void DoFilterBlurStack(RectInt area, int r)
         {
-            ChildImage img = new ChildImage(this.aggRenderSf.DestImage, aggRenderSf.PixelBlender,
+            ChildImage img = new ChildImage(this._aggRdsf.DestImage, _aggRdsf.PixelBlender,
                 area.Left, area.Bottom, area.Right, area.Top);
             filterMan.DoStackBlur(img, r);
         }
         public override void DoFilterBlurRecursive(RectInt area, int r)
         {
-            ChildImage img = new ChildImage(this.aggRenderSf.DestImage, aggRenderSf.PixelBlender,
+            ChildImage img = new ChildImage(this._aggRdsf.DestImage, _aggRdsf.PixelBlender,
                 area.Left, area.Bottom, area.Right, area.Top);
             filterMan.DoRecursiveBlur(img, r);
         }
@@ -496,7 +491,7 @@ namespace PixelFarm.Agg
             //
             sclineRas.Reset();
             sclineRas.AddPath(v2);
-            sclineRasToBmp.RenderWithColor(this.aggRenderSf.DestImage, sclineRas, scline, this.strokeColor);
+            sclineRasToBmp.RenderWithColor(this._aggRdsf.DestImage, sclineRas, scline, this.strokeColor);
             ReleaseVxs(ref v1);
             ReleaseVxs(ref v2);
         }

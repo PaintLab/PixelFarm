@@ -25,21 +25,12 @@ namespace PixelFarm.Drawing
 
     public abstract class Painter
     {
-        //this class try to wrap an underlying 'Graphics' object.
-        //this class try to provide more func than basic canvas class
-        //
-        //
-        //coordinate system depends on Drawboard Orientation value
-        //1) LeftTop or
-        //2) LeftBottom
-        //
-
-
         //who implement this class
-        //1. AggPainter wraps AggRenderSurface
-        //2. GdiPlusPainter wraps ...
-        //3. GLPainter wraps GLRenderSurface
-        //4. SkiaPainter wrap  SkCanvas
+        //1. AggPainter 
+        //2. GdiPlusPainter 
+        //3. GLPainter 
+        //4. SkiaPainter
+        //5. PdfPainter
 
 
         public abstract float OriginX { get; }
@@ -58,6 +49,7 @@ namespace PixelFarm.Drawing
         public abstract Color StrokeColor { get; set; }
         //-------------------------------------------------------
         public abstract void Clear(Color color);
+        public abstract DrawBoardOrientation Orientation { get; set; }
 
         public abstract void FillCircle(double x, double y, double radius);
         public abstract void FillEllipse(double left, double bottom, double right, double top);
@@ -70,10 +62,9 @@ namespace PixelFarm.Drawing
         public abstract void FillRectLBWH(double left, double bottom, double width, double height);
         public abstract void FillRoundRectangle(double left, double bottom, double right, double top, double radius);
         public abstract void DrawRoundRect(double left, double bottom, double right, double top, double radius);
-        public abstract void DrawBezierCurve(
-             float startX, float startY, float endX, float endY,
-             float controlX1, float controlY1,
-             float controlX2, float controlY2);
+        public abstract void DrawBezierCurve(float startX, float startY, float endX, float endY,
+         float controlX1, float controlY1,
+         float controlX2, float controlY2);
         //------------------------------------------------------- 
 
         public abstract void DrawImage(Image actualImage, double x, double y);

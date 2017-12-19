@@ -22,7 +22,7 @@
 using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
-    public static class CanvasPainterExtensions
+    public static class PainterExtensions
     {
 
         public static void Line(this Painter p, double x1, double y1, double x2, double y2, Color color)

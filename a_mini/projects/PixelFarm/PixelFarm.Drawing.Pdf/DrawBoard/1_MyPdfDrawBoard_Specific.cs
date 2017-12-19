@@ -7,7 +7,6 @@ namespace PixelFarm.Drawing.Pdf
         int pageNumFlags;
         int pageFlags;
         bool isDisposed;
-        Brush _currentBrush;
         //-------------------------------
         //NativeWin32MemoryDc win32MemDc;
         //-------------------------------
@@ -23,15 +22,9 @@ namespace PixelFarm.Drawing.Pdf
         //System.Drawing.Rectangle currentClipRect;
         ////-------------------------------
 
-        DrawBoardOrientation _orientation;
         public MyPdfDrawBoard(int left, int top, int width, int height)
             : this(0, 0, left, top, width, height)
         {
-        }
-        public override DrawBoardOrientation Orientation
-        {
-            get { return this._orientation; }
-            set { _orientation = value; }
         }
         internal MyPdfDrawBoard(
             int horizontalPageNum,
@@ -79,14 +72,6 @@ namespace PixelFarm.Drawing.Pdf
             //--------------
 
         }
-        public override Brush CurrentBrush
-        {
-            get { return _currentBrush; }
-            set
-            {
-                _currentBrush = value;
-            }
-        }
 #if DEBUG
         public override string ToString()
         {
@@ -94,18 +79,6 @@ namespace PixelFarm.Drawing.Pdf
             //return "visible_clip" + this.gx.VisibleClipBounds.ToString();
         }
 #endif
-        public override void DrawRectangle(float left, float top, float width, float height)
-        {
-
-        }
-        public override void FillPath(GraphicsPath gfxPath)
-        {
-
-        }
-        public override void FillPolygon(PointF[] points)
-        {
-
-        }
 
         public override void CloseCanvas()
         {

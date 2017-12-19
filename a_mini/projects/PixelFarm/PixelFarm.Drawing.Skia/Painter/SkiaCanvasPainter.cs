@@ -1,39 +1,50 @@
-﻿//MIT, 2016-2017, WinterDev
-
+﻿//MIT, 2016-2017, WinterDev 
 using System;
 using PixelFarm.Agg;
 using PixelFarm.Agg.Transform;
-
-namespace PixelFarm.Drawing.Pdf
+using SkiaSharp;
+namespace PixelFarm.Drawing.Skia
 {
 
-    public class PdfPainter : Painter
+    public class SkiaPainter : Painter
     {
-        //System.Drawing.Graphics _gfx;
-        //System.Drawing.Bitmap _gfxBmp;
-
-        //System.Drawing.SolidBrush _currentFillBrush;
-        //System.Drawing.Pen _currentPen;
-        //
         RectInt _clipBox;
         Color _fillColor;
         Color _strokeColor;
-        int _width, _height;
         double _strokeWidth;
         bool _useSubPixelRendering;
-        //BufferBitmapStore _bmpStore;
         RequestFont _currentFont;
 
-
+        int _height;
+        int _width;
         Agg.VertexSource.RoundedRect roundRect;
-
-
         SmoothingMode _smoothingMode;
-
-        public PdfPainter()
+        //-----------------------
+        SKCanvas _skCanvas;
+        SKPaint _fill;
+        SKPaint _stroke;
+        //-----------------------
+        public SkiaPainter(int w, int h)
         {
-        }
 
+            _fill = new SKPaint();
+            _stroke = new SKPaint();
+            _stroke.IsStroke = true;
+            _width = w;
+            _height = h;
+        }
+        public SKCanvas Canvas
+        {
+            get { return _skCanvas; }
+            set { _skCanvas = value; }
+        }
+        DrawBoardOrientation _orientation;
+        public override DrawBoardOrientation Orientation
+        {
+            get { return _orientation; }
+            set
+            { _orientation = value; }
+        }
         public override float OriginX
         {
             get
@@ -52,6 +63,7 @@ namespace PixelFarm.Drawing.Pdf
         {
             throw new NotImplementedException();
         }
+        static bool defaultAntiAlias = false;
         public override SmoothingMode SmoothingMode
         {
             get
@@ -62,27 +74,16 @@ namespace PixelFarm.Drawing.Pdf
             {
                 switch (_smoothingMode = value)
                 {
-                    case Drawing.SmoothingMode.AntiAlias:
-                        //_gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    case SmoothingMode.AntiAlias:
+                        _fill.IsAntialias = _stroke.IsAntialias = true;
                         break;
-                    case Drawing.SmoothingMode.HighSpeed:
-                        //_gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
-                        break;
-                    case Drawing.SmoothingMode.HighQuality:
-                        //_gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-                        break;
-                    case Drawing.SmoothingMode.Default:
                     default:
-                        //_gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+                        _fill.IsAntialias = _stroke.IsAntialias = defaultAntiAlias;
                         break;
                 }
             }
         }
-        //public System.Drawing.Drawing2D.CompositingMode CompositingMode
-        //{
-        //    get { return _gfx.CompositingMode; }
-        //    set { _gfx.CompositingMode = value; }
-        //}
+
         public override void Draw(VertexStoreSnap vxs)
         {
             this.Fill(vxs);
@@ -96,6 +97,7 @@ namespace PixelFarm.Drawing.Pdf
             set
             {
                 _clipBox = value;
+                //set clip rect to canvas ***
             }
         }
 
@@ -109,8 +111,6 @@ namespace PixelFarm.Drawing.Pdf
             set
             {
                 _currentFont = value;
-                throw new System.NotSupportedException();
-                //_winGdiFont = WinGdiFontSystem.GetWinGdiFont(value);
             }
         }
         public override Color FillColor
@@ -121,8 +121,7 @@ namespace PixelFarm.Drawing.Pdf
             }
             set
             {
-                _fillColor = value;
-                //_currentFillBrush.Color = VxsHelper.ToDrawingColor(value);
+                _fill.Color = ConvToSkColor(_fillColor = value);
             }
         }
 
@@ -133,7 +132,10 @@ namespace PixelFarm.Drawing.Pdf
                 return _height;
             }
         }
-
+        static SKColor ConvToSkColor(PixelFarm.Drawing.Color c)
+        {
+            return new SKColor(c.R, c.G, c.B, c.A);
+        }
         public override Color StrokeColor
         {
             get
@@ -142,8 +144,7 @@ namespace PixelFarm.Drawing.Pdf
             }
             set
             {
-                _strokeColor = value;
-                //_currentPen.Color = VxsHelper.ToDrawingColor(value);
+                _stroke.Color = ConvToSkColor(_strokeColor = value);
             }
         }
         public override double StrokeWidth
@@ -154,8 +155,7 @@ namespace PixelFarm.Drawing.Pdf
             }
             set
             {
-                _strokeWidth = value;
-                //_currentPen.Width = (float)value;
+                _stroke.StrokeWidth = (float)(_strokeWidth = value);
             }
         }
 
@@ -181,7 +181,8 @@ namespace PixelFarm.Drawing.Pdf
 
         public override void Clear(Color color)
         {
-            //_gfx.Clear(VxsHelper.ToDrawingColor(color));
+
+            _skCanvas.Clear(ConvToSkColor(color));
         }
         public override void DoFilterBlurRecursive(RectInt area, int r)
         {
@@ -247,20 +248,24 @@ namespace PixelFarm.Drawing.Pdf
         }
         public override void Draw(VertexStore vxs)
         {
-            //VxsHelper.DrawVxsSnap(_gfx, new VertexStoreSnap(vxs), _strokeColor);
+            VxsHelper.DrawVxsSnap(_skCanvas, new VertexStoreSnap(vxs), _stroke);
         }
         public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
         {
-            //_gfx.DrawBezier(_currentPen,
-            //     startX, startY,
-            //     controlX1, controlY1,
-            //     controlX2, controlY2,
-            //     endX, endY);
+            using (SKPath p = new SKPath())
+            {
+                p.MoveTo(startX, startY);
+                p.CubicTo(controlX1, controlY1,
+                    controlY1, controlY2,
+                    endX, endY);
+                _skCanvas.DrawPath(p, _stroke);
+            }
         }
 
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
             //1. create special graphics 
+            throw new NotSupportedException();
             //using (System.Drawing.Bitmap srcBmp = CreateBmpBRGA(actualImage))
             //{
             //    var bmp = _bmpStore.GetFreeBmp();
@@ -286,57 +291,70 @@ namespace PixelFarm.Drawing.Pdf
             //    _bmpStore.RelaseBmp(bmp);
             //}
         }
-
-        //static System.Drawing.Bitmap CreateBmpBRGA(ActualImage actualImage)
-        //{
-        //    int w = actualImage.Width;
-        //    int h = actualImage.Height;
-        //    //copy data to bitmap
-        //    //bgra  
-        //    var bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-        //    byte[] acutalBuffer = ActualImage.GetBuffer(actualImage);
-        //    var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp.PixelFormat);
-        //    System.Runtime.InteropServices.Marshal.Copy(acutalBuffer, 0, bmpData.Scan0, acutalBuffer.Length);
-        //    bmp.UnlockBits(bmpData);
-        //    return bmp;
-        //}
-        //public void DrawImage(System.Drawing.Bitmap bmp, float x, float y)
-        //{
-        //    _gfx.DrawImage(bmp, x, y);
-        //}
-        public override void DrawImage(Image actualImage, double x, double y)
+        public override void DrawImage(Image img, double x, double y)
         {
-            ////create Gdi bitmap from actual image
-            //int w = actualImage.Width;
-            //int h = actualImage.Height;
-            //switch (actualImage.PixelFormat)
-            //{
-            //    case Agg.PixelFormat.ARGB32:
-            //        {
-            //            //copy data from acutal buffer to internal representation bitmap
-            //            using (var bmp = CreateBmpBRGA(actualImage))
-            //            {
-            //                this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
-            //            }
-            //        }
-            //        break;
-            //    case Agg.PixelFormat.RGB24:
-            //        {
-            //        }
-            //        break;
-            //    case Agg.PixelFormat.GrayScale8:
-            //        {
-            //        }
-            //        break;
-            //    default:
-            //        throw new NotSupportedException();
-            //}
+            if (img is ActualImage)
+            {
+                ActualImage actualImage = (ActualImage)img;
+                //create Gdi bitmap from actual image
+                int w = actualImage.Width;
+                int h = actualImage.Height;
+                switch (actualImage.PixelFormat)
+                {
+                    case Agg.PixelFormat.ARGB32:
+                        {
+
+                            using (SKBitmap newBmp = new SKBitmap(actualImage.Width, actualImage.Height))
+                            {
+                                newBmp.LockPixels();
+                                byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
+                                System.Runtime.InteropServices.Marshal.Copy(
+                                actualImgBuffer,
+                                0,
+                                newBmp.GetPixels(),
+                                 actualImgBuffer.Length);
+                                newBmp.UnlockPixels();
+                            }
+                            //newBmp.internalBmp.LockPixels();
+                            //byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
+
+                            //System.Runtime.InteropServices.Marshal.Copy(
+                            //     actualImgBuffer,
+                            //     0,
+                            //      newBmp.internalBmp.GetPixels(),
+                            //      actualImgBuffer.Length);
+
+                            //newBmp.internalBmp.UnlockPixels();
+                            //return newBmp;
+
+                            //copy data from acutal buffer to internal representation bitmap
+                            //using (MySkBmp bmp = MySkBmp.CopyFrom(actualImage))
+                            //{
+                            //    _skCanvas.DrawBitmap(bmp.internalBmp, (float)x, (float)y);
+                            //}
+                        }
+                        break;
+                    case Agg.PixelFormat.RGB24:
+                        {
+                        }
+                        break;
+                    case Agg.PixelFormat.GrayScale8:
+                        {
+                        }
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
         }
         public override void DrawString(string text, double x, double y)
         {
-            ////use current brush and font
-            //_gfx.ResetTransform();
-            //_gfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly   
+            //use current brush and font
+            _skCanvas.DrawText(text, (float)x, (float)y, _stroke);
+
+            //_skCanvas.ResetMatrix();
+            //_skCanvas.Translate(0.0F, (float)Height);// Translate the drawing area accordingly   
+
 
             ////draw with native win32
             ////------------
@@ -348,17 +366,18 @@ namespace PixelFarm.Drawing.Pdf
             //*/
             ////------------
             ////restore back
-            //_gfx.ResetTransform();//again
-            //_gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
-            //_gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly                
-        }
-        public override RenderVxFormattedString CreateRenderVx(string textspan)
-        {
-            return new PdfRenderVxFormattedString(textspan);
+            //_skCanvas.ResetMatrix();//again
+            //_skCanvas.Scale(1f, -1f);// Flip the Y-Axis
+            //_skCanvas.Translate(0.0F, -(float)Height);// Translate the drawing area accordingly                             
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            throw new NotImplementedException();
+            //TODO: review here again 
+            _skCanvas.DrawText(renderVx.OriginalString, (float)x, (float)y, _stroke);
+        }
+        public override RenderVxFormattedString CreateRenderVx(string textspan)
+        {
+            return new SkiaRenerVxFormattedString(textspan);
         }
         /// <summary>
         /// we do NOT store snap/vxs
@@ -366,7 +385,7 @@ namespace PixelFarm.Drawing.Pdf
         /// <param name="vxs"></param>
         public override void Fill(VertexStore vxs)
         {
-            // VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs), _fillColor);
+            VxsHelper.FillVxsSnap(_skCanvas, new VertexStoreSnap(vxs), _fill);
         }
         /// <summary>
         /// we do NOT store snap/vxs
@@ -374,39 +393,41 @@ namespace PixelFarm.Drawing.Pdf
         /// <param name="snap"></param>
         public override void Fill(VertexStoreSnap snap)
         {
-            // VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
+            VxsHelper.FillVxsSnap(_skCanvas, snap, _fill);
         }
         public override void FillCircle(double x, double y, double radius)
         {
-            //  _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
+            _skCanvas.DrawCircle((float)x, (float)y, (float)radius, _fill);
         }
 
-        //public override void FillCircle(double x, double y, double radius, Drawing.Color color)
-        //{
-        //    var prevColor = _currentFillBrush.Color;
-        //    _currentFillBrush.Color = VxsHelper.ToDrawingColor(color);
-        //    _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
-        //    _currentFillBrush.Color = prevColor;
-        //}
+
 
         public override void FillEllipse(double left, double bottom, double right, double top)
         {
-            //_gfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+            _skCanvas.DrawOval(
+                new SKRect((float)left, (float)top, (float)right, (float)bottom),
+                _fill);
         }
         public override void DrawEllipse(double left, double bottom, double right, double top)
         {
-            //_gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+            _skCanvas.DrawOval(
+              new SKRect((float)left, (float)top, (float)right, (float)bottom),
+              _stroke);
         }
-
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
-            //_gfx.FillRectangle(_currentFillBrush,
-            //    System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+
+            _skCanvas.DrawRect(
+              new SKRect((float)left, (float)top, (float)right, (float)bottom),
+                _fill);
         }
 
         public override void FillRectLBWH(double left, double bottom, double width, double height)
         {
-            //_gfx.FillRectangle(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
+
+            _skCanvas.DrawRect(
+              new SKRect((float)left, (float)(bottom - height), (float)(left + width), (float)bottom),
+                _fill);
         }
 
         VertexStorePool _vxsPool = new VertexStorePool();
@@ -454,54 +475,53 @@ namespace PixelFarm.Drawing.Pdf
             this.Fill(roundRect.MakeVxs(v1));
             ReleaseVxs(ref v1);
         }
-
-
-
         public override void Line(double x1, double y1, double x2, double y2)
         {
-            //_gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
+            _skCanvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2, _stroke);
         }
 
         public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
         {
-            //for (int i = 0; i < numPath; ++i)
-            //{
-            //    VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
-            //}
+            var prevColor = FillColor;
+            for (int i = 0; i < numPath; ++i)
+            {
+                _fill.Color = ConvToSkColor(colors[i]);
+                VxsHelper.FillVxsSnap(_skCanvas, new VertexStoreSnap(vxs, pathIndexs[i]), _fill);
+            }
+            FillColor = prevColor;
         }
 
         public override void Rectangle(double left, double bottom, double right, double top)
         {
-            //_gfx.DrawRectangle(_currentPen, (float)left, (float)top, (float)(right - left), (float)(top - bottom));
+            _skCanvas.DrawLine((float)left, (float)top, (float)right, (float)bottom, _stroke);
         }
 
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
-            //_gfx.SetClip(new System.Drawing.Rectangle(x1, y1, x2 - x1, y2 - y1));
+            _skCanvas.ClipRect(new SKRect(x1, y1, x2, y2));
         }
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
-            throw new NotSupportedException();
-            //var renderVx = new WinGdiRenderVx(snap);
-            //renderVx.path = VxsHelper.CreateGraphicsPath(snap);
-            //return renderVx;
+            var renderVx = new WinGdiRenderVx(snap);
+            renderVx.path = VxsHelper.CreateGraphicsPath(snap);
+            return renderVx;
         }
+
         public override void FillRenderVx(Brush brush, RenderVx renderVx)
         {
-            ////TODO: review brush implementation here
-            //WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
-            //VxsHelper.FillPath(_gfx, wRenderVx.path, this.FillColor);
+            //TODO: review brush implementation here
+            WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
+            VxsHelper.FillPath(_skCanvas, wRenderVx.path, _fill);
         }
         public override void DrawRenderVx(RenderVx renderVx)
         {
-            //WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
-            //VxsHelper.DrawPath(_gfx, wRenderVx.path, this._strokeColor);
+            WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
+            VxsHelper.DrawPath(_skCanvas, wRenderVx.path, _stroke);
         }
         public override void FillRenderVx(RenderVx renderVx)
         {
-            //WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
-            //VxsHelper.FillPath(_gfx, wRenderVx.path, this.FillColor);
+            WinGdiRenderVx wRenderVx = (WinGdiRenderVx)renderVx;
+            VxsHelper.FillPath(_skCanvas, wRenderVx.path, _fill);
         }
-
     }
 }

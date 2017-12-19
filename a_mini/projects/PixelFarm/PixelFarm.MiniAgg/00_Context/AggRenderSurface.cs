@@ -60,10 +60,10 @@ namespace PixelFarm.Agg
             this.sclineRas.SetClipBox(this.clipBox);
             this.sclinePack8 = new ScanlinePacked8();
             this.currentBlender = this.pixBlenderRGBA32 = new PixelBlenderBGRA();
-
         }
-        public int Width { get { return this.destWidth; } }
-        public int Height { get { return this.destHeight; } }
+
+        public int Width { get { return destWidth; } }
+        public int Height { get { return destHeight; } }
 
         public ScanlineRasterizer ScanlineRasterizer
         {

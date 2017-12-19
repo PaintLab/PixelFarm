@@ -23,11 +23,11 @@ namespace PixelFarm.Drawing.GLES2
         {
             get
             {
-                return _painter.CurrentFont;
+                return painter1.CurrentFont;
             }
             set
             {
-                _painter.CurrentFont = value;
+                painter1.CurrentFont = value;
             }
         }
         /// <summary>
@@ -43,30 +43,30 @@ namespace PixelFarm.Drawing.GLES2
             {
                 this._currentTextColor = value;
                 //set this to 
-                _painter.TextPrinter.ChangeFillColor(value);
+                painter1.TextPrinter.ChangeFillColor(value);
             }
         }
         public override void DrawText(char[] buffer, int x, int y)
         {
-            var prevColor = _painter.FillColor;
-            _painter.FillColor = PixelFarm.Drawing.Color.Black;
-            _painter.TextPrinter.DrawString(buffer, 0, buffer.Length, x, this.Height - y);
-            _painter.FillColor = prevColor;
+            var prevColor = painter1.FillColor;
+            painter1.FillColor = PixelFarm.Drawing.Color.Black;
+            painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, x, this.Height - y);
+            painter1.FillColor = prevColor;
         }
         public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
-            var prevColor = _painter.FillColor;
-            _painter.FillColor = PixelFarm.Drawing.Color.Black;
-            _painter.TextPrinter.DrawString(buffer, 0, buffer.Length, logicalTextBox.X, this.Height - logicalTextBox.Y);
-            _painter.FillColor = prevColor;
+            var prevColor = painter1.FillColor;
+            painter1.FillColor = PixelFarm.Drawing.Color.Black;
+            painter1.TextPrinter.DrawString(buffer, 0, buffer.Length, logicalTextBox.X, this.Height - logicalTextBox.Y);
+            painter1.FillColor = prevColor;
         }
         public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
             //TODO: review again
-            var prevColor = _painter.FillColor;
-            _painter.FillColor = PixelFarm.Drawing.Color.Black;
-            _painter.TextPrinter.DrawString(str, startAt, len, logicalTextBox.X, this.Height - logicalTextBox.Y);
-            _painter.FillColor = prevColor;
+            var prevColor = painter1.FillColor;
+            painter1.FillColor = PixelFarm.Drawing.Color.Black;
+            painter1.TextPrinter.DrawString(str, startAt, len, logicalTextBox.X, this.Height - logicalTextBox.Y);
+            painter1.FillColor = prevColor;
             //TODO: review here
             //painter1.FillRectangle(0, 0, 20, 20, Color.Red);
 
