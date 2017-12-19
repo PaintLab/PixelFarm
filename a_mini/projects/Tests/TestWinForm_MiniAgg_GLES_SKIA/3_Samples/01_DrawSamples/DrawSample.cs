@@ -35,6 +35,22 @@ namespace PixelFarm.Agg.Sample_Draw
         }
     }
 
+    [Info(OrderCode = "01")]
+    public class DrawSample05 : DemoBase
+    {
+        public override void Init()
+        {
+        }
+
+        public override void Draw(Painter p)
+        {
+            p.Clear(Drawing.Color.White);
+            p.StrokeColor = Color.Red;
+            p.Line(0, 0, 100, 100);
+            p.Line(200, 100, 250, 200);
+        }
+    }
+
 
     [Info(OrderCode = "01")]
     [Info("from MatterHackers' Agg DrawAndSave")]
