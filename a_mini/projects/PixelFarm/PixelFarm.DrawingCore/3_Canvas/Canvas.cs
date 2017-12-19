@@ -4,7 +4,7 @@
 namespace PixelFarm.Drawing
 {
 
-    public abstract class Canvas
+    public abstract class DrawBoard
     {
 
         //------------------------------
@@ -61,13 +61,13 @@ namespace PixelFarm.Drawing
 
         public abstract Rectangle Rect { get; }
 
-        public abstract int CanvasOriginX { get; }
-        public abstract int CanvasOriginY { get; }
+        public abstract int OriginX { get; }
+        public abstract int OriginY { get; }
         public abstract void SetCanvasOrigin(int x, int y);
         public void OffsetCanvasOrigin(int dx, int dy)
         {
             //TODO: review offset function
-            this.SetCanvasOrigin(this.CanvasOriginX + dx, this.CanvasOriginY + dy);
+            this.SetCanvasOrigin(this.OriginX + dx, this.OriginY + dy);
         }
         public void OffsetCanvasOriginX(int dx)
         {

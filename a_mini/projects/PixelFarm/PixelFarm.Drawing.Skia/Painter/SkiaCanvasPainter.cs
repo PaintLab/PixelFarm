@@ -6,7 +6,7 @@ using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
 {
 
-    public class SkiaCanvasPainter : CanvasPainter
+    public class SkiaPainter : Painter
     {
         RectInt _clipBox;
         Color _fillColor;
@@ -24,7 +24,7 @@ namespace PixelFarm.Drawing.Skia
         SKPaint _fill;
         SKPaint _stroke;
         //-----------------------
-        public SkiaCanvasPainter(int w, int h)
+        public SkiaPainter(int w, int h)
         {
 
             _fill = new SKPaint();

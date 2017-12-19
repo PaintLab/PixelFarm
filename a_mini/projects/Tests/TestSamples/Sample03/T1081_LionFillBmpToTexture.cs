@@ -23,15 +23,15 @@ namespace OpenTkEssTest
 
         ActualImage aggImage;
         AggRenderSurface imgGfx2d;
-        AggCanvasPainter aggPainter;
+        AggPainter aggPainter;
 
         //---------------------------
         GLRenderSurface _glsf;
         SpriteShape lionShape;
-        GLCanvasPainter painter;
+        GLPainter painter;
 
         GLBitmap glBmp;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
             this._glsf = glsf;
             this.painter = painter;
@@ -44,7 +44,7 @@ namespace OpenTkEssTest
             //-------------
             aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
             imgGfx2d = new AggRenderSurface(aggImage);
-            aggPainter = new AggCanvasPainter(imgGfx2d);
+            aggPainter = new AggPainter(imgGfx2d);
 
 
             DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
@@ -55,7 +55,7 @@ namespace OpenTkEssTest
         {
             _glsf.Dispose();
         }
-        static void DrawLion(CanvasPainter p, SpriteShape shape, VertexStore myvxs)
+        static void DrawLion(Painter p, SpriteShape shape, VertexStore myvxs)
         {
             int j = shape.NumPaths;
             int[] pathList = shape.PathIndexList;

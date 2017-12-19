@@ -29,16 +29,16 @@ namespace PixelFarm.Agg
             set;
         }
 
-        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             //specific for agg
-            if (!(p is AggCanvasPainter))
+            if (!(p is AggPainter))
             {
                 return;
             }
 
 
-            AggCanvasPainter p2 = (AggCanvasPainter)p;
+            AggPainter p2 = (AggPainter)p;
             AggRenderSurface graphics2D = p2.Graphics;
             if (graphics2D.DestImage != null)
             {

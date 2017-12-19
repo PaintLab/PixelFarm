@@ -15,8 +15,8 @@ namespace OpenTkEssTest
         GLRenderSurface _glsf;
         SpriteShape lionShape;
         VertexStore lionVxs;
-        GLCanvasPainter painter;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
+        GLPainter painter;
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
             this._glsf = glsf;
             this.painter = painter;

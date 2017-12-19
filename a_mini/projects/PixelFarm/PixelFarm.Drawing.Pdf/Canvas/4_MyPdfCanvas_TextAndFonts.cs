@@ -2,7 +2,7 @@
 
 namespace PixelFarm.Drawing.Pdf
 {
-    partial class MyPdfCanvas
+    partial class MyPdfDrawBoard
     {
         RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;

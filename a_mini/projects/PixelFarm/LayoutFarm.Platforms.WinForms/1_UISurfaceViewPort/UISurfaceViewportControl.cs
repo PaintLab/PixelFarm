@@ -34,7 +34,7 @@ namespace LayoutFarm.UI
         IntPtr hh1;
         OpenGL.GpuOpenGLSurfaceView openGLSurfaceView;
         GLRenderSurface _glsf;
-        GLCanvasPainter canvasPainter;
+        GLPainter canvasPainter;
 #endif
         void HandleGLPaint(object sender, System.EventArgs e)
         {
@@ -99,7 +99,7 @@ namespace LayoutFarm.UI
                         //---------------
                         //canvas2d.FlipY = true;//
                         //---------------
-                        canvasPainter = new GLCanvasPainter(_glsf);
+                        canvasPainter = new GLPainter(_glsf);
 
                         //canvasPainter.SmoothingMode = PixelFarm.Drawing.SmoothingMode.HighQuality;
                         //----------------------
@@ -121,7 +121,7 @@ namespace LayoutFarm.UI
                         canvasPainter.TextPrinter = printer;
 
                         //
-                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLCanvas(canvasPainter, _glsf.CanvasWidth, _glsf.CanvasHeight);
+                        var myGLCanvas1 = new PixelFarm.Drawing.GLES2.MyGLDrawBoard(canvasPainter, _glsf.CanvasWidth, _glsf.CanvasHeight);
                         bridge.SetCanvas(myGLCanvas1);
 #endif
                     }

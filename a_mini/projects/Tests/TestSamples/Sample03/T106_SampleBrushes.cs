@@ -11,12 +11,12 @@ namespace OpenTkEssTest
     public class T106_SampleBrushes : DemoBase
     {
         GLRenderSurface _glsf;
-        GLCanvasPainter painter;
+        GLPainter painter;
         RenderVx polygon1;
         RenderVx polygon2;
         RenderVx polygon3;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
             this._glsf = glsf;
             this.painter = painter;

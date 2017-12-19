@@ -849,11 +849,11 @@ namespace PixelFarm.DrawingGL
             }
         }
 
-        public int CanvasOriginX
+        public int OriginX
         {
             get { return this.canvasOriginX; }
         }
-        public int CanvasOriginY
+        public int OriginY
         {
             get { return this.canvasOriginY; }
         }

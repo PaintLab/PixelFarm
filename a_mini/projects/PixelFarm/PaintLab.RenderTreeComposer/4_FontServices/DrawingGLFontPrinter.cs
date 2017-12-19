@@ -21,14 +21,14 @@ namespace PixelFarm.DrawingGL
     {
         ActualImage actualImage;
         AggRenderSurface imgGfx2d;
-        AggCanvasPainter _aggPainter;
+        AggPainter _aggPainter;
         VxsTextPrinter textPrinter;
         int bmpWidth;
         int bmpHeight;
         GLRenderSurface _glsf;
-        GLCanvasPainter canvasPainter;
+        GLPainter canvasPainter;
 
-        public AggTextSpanPrinter(GLCanvasPainter canvasPainter, int w, int h)
+        public AggTextSpanPrinter(GLPainter canvasPainter, int w, int h)
         {
             //this class print long text into agg canvas
             //then copy pixel buffer from aff canvas to gl-bmp
@@ -43,7 +43,7 @@ namespace PixelFarm.DrawingGL
             actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32);
 
             imgGfx2d = new AggRenderSurface(actualImage);
-            _aggPainter = new AggCanvasPainter(imgGfx2d);
+            _aggPainter = new AggPainter(imgGfx2d);
             _aggPainter.FillColor = Color.Black;
             _aggPainter.StrokeColor = Color.Black;
 
@@ -186,7 +186,7 @@ namespace PixelFarm.DrawingGL
         GLRenderSurface _glsf;
 
         GlyphLayout _glyphLayout = new GlyphLayout();
-        GLCanvasPainter painter;
+        GLPainter painter;
         SimpleFontAtlas simpleFontAtlas;
         Typography.TextServices.IFontLoader _fontLoader;
         GLBitmap _glBmp;
@@ -194,7 +194,7 @@ namespace PixelFarm.DrawingGL
 
 
         ScriptLang _defaultScriptLang = ScriptLangs.Latin;//review here again
-        public GLBmpGlyphTextPrinter(GLCanvasPainter painter, IFontLoader fontLoader)
+        public GLBmpGlyphTextPrinter(GLPainter painter, IFontLoader fontLoader)
         {
             //create text printer for use with canvas painter 
             this.painter = painter;

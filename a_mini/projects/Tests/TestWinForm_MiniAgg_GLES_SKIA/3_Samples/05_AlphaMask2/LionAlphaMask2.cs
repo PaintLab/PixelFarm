@@ -234,7 +234,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             //----------------------------------------------------
             return bmp;
         }
-        void DrawWithWinGdi(GdiPlusCanvasPainter p)
+        void DrawWithWinGdi(GdiPainter p)
         {
             int w = 800, h = 600;
             p.Clear(Drawing.Color.White);
@@ -319,14 +319,14 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             resultBmp.UnlockBits(resultBmpData);
             return resultBmp;
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
-            if (p is GdiPlusCanvasPainter)
+            if (p is GdiPainter)
             {
-                DrawWithWinGdi((GdiPlusCanvasPainter)p);
+                DrawWithWinGdi((GdiPainter)p);
                 return;
             }
-            AggCanvasPainter p2 = (AggCanvasPainter)p;
+            AggPainter p2 = (AggPainter)p;
             AggRenderSurface gx = p2.Graphics;
             var widgetsSubImage = gx.DestImage;
             var scline = gx.ScanlinePacked8;

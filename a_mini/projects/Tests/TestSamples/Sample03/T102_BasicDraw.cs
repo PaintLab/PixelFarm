@@ -10,10 +10,10 @@ namespace OpenTkEssTest
     public class T102_BasicDraw : DemoBase
     {
         GLRenderSurface _glsf;
-        GLCanvasPainter painter;
+        GLPainter painter;
         PixelFarm.Drawing.RenderVx polygon1;
         PixelFarm.Drawing.RenderVx polygon2;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
             this._glsf = glsf;
             this.painter = painter;

@@ -62,7 +62,7 @@ namespace LayoutFarm.UI.WinNeutral
             get;
             set;
         }
-        public void SetupCanvas(PixelFarm.Drawing.Canvas canvas)
+        public void SetupCanvas(PixelFarm.Drawing.DrawBoard canvas)
         {
             bridge.SetupCanvas(canvas);
         }

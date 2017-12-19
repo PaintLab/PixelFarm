@@ -23,7 +23,7 @@ namespace LayoutFarm.UI.OpenGL
         {
 
         }
-        public void SetupCanvas(Canvas canvas)
+        public void SetupCanvas(DrawBoard canvas)
         {
 
             openGLViewport.SetCanvas(canvas);

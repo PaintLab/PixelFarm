@@ -14,11 +14,11 @@ namespace OpenTkEssTest
         GLRenderSurface _glsf;
         bool resInit;
         GLBitmap msdf_bmp;
-        GLCanvasPainter painter;
+        GLPainter painter;
         PixelFarm.Agg.ActualImage totalImg;
         SimpleFontAtlas fontAtlas;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
             this._glsf = glsf;
             this.painter = painter;

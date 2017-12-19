@@ -60,9 +60,9 @@ namespace PixelFarm.Agg.Sample_Perspective
             quadPolygonControl.AddYN(3, dy);
         }
         bool didInit = false;
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
-            CanvasPainter painter = p;
+            Painter painter = p;
             if (!didInit)
             {
                 didInit = true;

@@ -37,7 +37,7 @@ namespace LayoutFarm.CustomWidgets
             return canvasRenderElement;
         }
 
-        public PixelFarm.Drawing.CanvasPainter Painter
+        public PixelFarm.Drawing.Painter Painter
         {
             get { return this.canvasRenderElement.Painter; }
         }

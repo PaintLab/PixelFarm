@@ -10,7 +10,7 @@ using PixelFarm.Agg.VertexSource;
 
 namespace PixelFarm.DrawingGL
 {
-    public sealed class GLCanvasPainter : CanvasPainter
+    public sealed class GLPainter : Painter
     {
         GLRenderSurface _glsf;
         int _width;
@@ -27,7 +27,7 @@ namespace PixelFarm.DrawingGL
         ITextPrinter _textPrinter;
         InternalGraphicsPathBuilder _igfxPathBuilder;
         SmoothingMode _smoothingMode; //smoothing mode of this  painter
-        public GLCanvasPainter(GLRenderSurface canvas)
+        public GLPainter(GLRenderSurface canvas)
         {
             _glsf = canvas;
             _width = canvas.CanvasWidth;
@@ -278,14 +278,14 @@ namespace PixelFarm.DrawingGL
         {
             get
             {
-                return _glsf.CanvasOriginX;
+                return _glsf.OriginX;
             }
         }
         public override float OriginY
         {
             get
             {
-                return _glsf.CanvasOriginY;
+                return _glsf.OriginY;
             }
         }
         public override void DrawString(string text, double x, double y)

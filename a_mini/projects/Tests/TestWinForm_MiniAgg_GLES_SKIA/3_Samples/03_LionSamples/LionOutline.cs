@@ -52,7 +52,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
             lionFill = new LionOutlineSprite();
         }
 
-        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             lionFill.Draw(p);
 
@@ -116,7 +116,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
             get;
             set;
         }
-        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             int strokeWidth = 1;
             int width = p.Width;
@@ -129,7 +129,7 @@ namespace PixelFarm.Agg.Sample_LionOutline
                    AffinePlan.Skew(skewX / 1000.0, skewY / 1000.0),
                    AffinePlan.Translate(width / 2, height / 2));
 
-            var p1 = p as AggCanvasPainter;
+            var p1 = p as AggPainter;
             if (p1 == null)
             {
                 int j = lionShape.NumPaths;

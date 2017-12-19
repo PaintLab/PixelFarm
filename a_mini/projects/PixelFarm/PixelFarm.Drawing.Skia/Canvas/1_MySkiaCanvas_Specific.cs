@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
 {
-    public partial class MySkiaCanvas : Canvas, IDisposable
+    public partial class MySkiaDrawBoard : DrawBoard, IDisposable
     {
         int pageNumFlags;
         int pageFlags;
@@ -20,7 +20,7 @@ namespace PixelFarm.Drawing.Skia
         SKPaint stroke;
         SKPaint textFill;
 
-        public MySkiaCanvas(
+        public MySkiaDrawBoard(
             int horizontalPageNum,
             int verticalPageNum,
             int left, int top,

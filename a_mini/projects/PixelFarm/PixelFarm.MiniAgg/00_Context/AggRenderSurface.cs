@@ -62,6 +62,8 @@ namespace PixelFarm.Agg
             this.currentBlender = this.pixBlenderRGBA32 = new PixelBlenderBGRA();
         }
 
+        public int Width { get { return destWidth; } }
+        public int Height { get { return destHeight; } }
 
         public ScanlineRasterizer ScanlineRasterizer
         {

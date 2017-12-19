@@ -237,13 +237,13 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             set;
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(Painter p)
         {
             //specific for agg
 
-            if (p is PixelFarm.Agg.AggCanvasPainter)
+            if (p is PixelFarm.Agg.AggPainter)
             {
-                var p2 = (PixelFarm.Agg.AggCanvasPainter)p;
+                var p2 = (PixelFarm.Agg.AggPainter)p;
                 AggRenderSurface gx = p2.Graphics;
                 var widgetsSubImage = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
                 gx.UseSubPixelRendering = false;

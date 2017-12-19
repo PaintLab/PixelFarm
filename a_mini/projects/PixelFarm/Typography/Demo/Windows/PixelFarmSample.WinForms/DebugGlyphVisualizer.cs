@@ -43,11 +43,11 @@ namespace SampleWinForms.UI
         float _sizeInPoint;
         GlyphPathBuilder builder;
         VertexStorePool _vxsPool = new VertexStorePool();
-        PixelFarm.Drawing.CanvasPainter painter;
+        PixelFarm.Drawing.Painter painter;
         float _pxscale;
         HintTechnique _latestHint;
         char _testChar;
-        public PixelFarm.Drawing.CanvasPainter CanvasPainter { get { return painter; } set { painter = value; } }
+        public PixelFarm.Drawing.Painter CanvasPainter { get { return painter; } set { painter = value; } }
         public void SetFont(Typeface typeface, float sizeInPoint)
         {
             _typeface = typeface;
@@ -210,7 +210,7 @@ namespace SampleWinForms.UI
         public bool DrawEdgeMidPoint { get; set; }
 
 #if DEBUG
-        void DrawPointKind(PixelFarm.Drawing.CanvasPainter painter, GlyphPoint point)
+        void DrawPointKind(PixelFarm.Drawing.Painter painter, GlyphPoint point)
         {
             if (!DrawGlyphPoint) { return; }
 
@@ -229,7 +229,7 @@ namespace SampleWinForms.UI
             }
         }
 
-        void DrawEdge(PixelFarm.Drawing.CanvasPainter painter, EdgeLine edge)
+        void DrawEdge(PixelFarm.Drawing.Painter painter, EdgeLine edge)
         {
             if (edge.IsOutside)
             {
@@ -369,7 +369,7 @@ namespace SampleWinForms.UI
 
             }
         }
-        void DrawPerpendicularEdgeControlPoints(PixelFarm.Drawing.CanvasPainter painter, OutsideEdgeLine internalEdgeLine)
+        void DrawPerpendicularEdgeControlPoints(PixelFarm.Drawing.Painter painter, OutsideEdgeLine internalEdgeLine)
         {
 
             //Vector2 regen0 = edge._newRegen0 * _pxscale;
@@ -439,7 +439,7 @@ namespace SampleWinForms.UI
                 //painter.FillRectLBWH(midpoint.X, midpoint.Y, 5, 5, PixelFarm.Drawing.Color.White);
             }
         }
-        void DrawBoneJoint(PixelFarm.Drawing.CanvasPainter painter, GlyphBoneJoint joint)
+        void DrawBoneJoint(PixelFarm.Drawing.Painter painter, GlyphBoneJoint joint)
         {
             //-------------- 
             EdgeLine p_contactEdge = joint.dbugGetEdge_P();

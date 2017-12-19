@@ -3,7 +3,7 @@
 using System;
 namespace PixelFarm.Drawing.Pdf
 {
-    partial class MyPdfCanvas
+    partial class MyPdfDrawBoard
     {
         float strokeWidth = 1f;
         Color fillSolidColor = Color.Transparent;

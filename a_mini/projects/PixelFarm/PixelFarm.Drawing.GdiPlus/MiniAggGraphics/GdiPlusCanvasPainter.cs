@@ -6,7 +6,7 @@ using PixelFarm.Agg.Transform;
 
 namespace PixelFarm.Drawing.WinGdi
 {
-    public class GdiPlusCanvasPainter : CanvasPainter
+    public class GdiPainter : Painter
     {
         System.Drawing.Graphics _gfx;
         System.Drawing.Bitmap _gfxBmp;
@@ -29,7 +29,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         SmoothingMode _smoothingMode;
 
-        public GdiPlusCanvasPainter(System.Drawing.Bitmap gfxBmp)
+        public GdiPainter(System.Drawing.Bitmap gfxBmp)
         {
 
 

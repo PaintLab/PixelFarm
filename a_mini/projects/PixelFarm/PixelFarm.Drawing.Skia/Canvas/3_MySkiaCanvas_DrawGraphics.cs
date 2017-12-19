@@ -22,7 +22,7 @@ namespace PixelFarm.Drawing.Skia
         }
     }
 
-    partial class MySkiaCanvas
+    partial class MySkiaDrawBoard
     {
         float strokeWidth = 1f;
         Color fillSolidColor = Color.Transparent;

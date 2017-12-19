@@ -3,7 +3,7 @@
 using SkiaSharp;
 namespace PixelFarm.Drawing.Skia
 {
-    partial class MySkiaCanvas
+    partial class MySkiaDrawBoard
     {
         int left;
         int top;
@@ -29,11 +29,11 @@ namespace PixelFarm.Drawing.Skia
             this.canvasOriginY = y;
         }
 
-        public override int CanvasOriginX
+        public override int OriginX
         {
             get { return this.canvasOriginX; }
         }
-        public override int CanvasOriginY
+        public override int OriginY
         {
             get { return this.canvasOriginY; }
         }

@@ -45,7 +45,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
             lionFill = new LionFill();
         }
 
-        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             lionFill.OnDraw(p);
         }
@@ -138,7 +138,7 @@ namespace PixelFarm.Agg.Sample_LionFill_Test
             vxStorage = null;
             return result;
         }
-        public override void OnDraw(PixelFarm.Drawing.CanvasPainter p)
+        public override void OnDraw(PixelFarm.Drawing.Painter p)
         {
             //freeze to bitmap ?
 

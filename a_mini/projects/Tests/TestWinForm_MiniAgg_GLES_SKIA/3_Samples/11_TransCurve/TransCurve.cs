@@ -112,7 +112,7 @@ namespace PixelFarm.Agg.Sample_TransCurve
         {
         }
 
-        public override void Draw(PixelFarm.Drawing.CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
             m_poly.OnDraw(p);

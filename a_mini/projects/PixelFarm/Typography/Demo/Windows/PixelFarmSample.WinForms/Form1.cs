@@ -20,7 +20,7 @@ namespace SampleWinForms
     public partial class Form1 : Form
     {
         Graphics g;
-        AggCanvasPainter painter;
+        AggPainter painter;
         AggRenderSurface imgGfx2d;
         ActualImage destImg;
         Bitmap winBmp;
@@ -114,7 +114,7 @@ namespace SampleWinForms
             {
                 destImg = new ActualImage(800, 600, PixelFormat.ARGB32);
                 imgGfx2d = new AggRenderSurface(destImg); //no platform
-                painter = new AggCanvasPainter(imgGfx2d);
+                painter = new AggPainter(imgGfx2d);
                 winBmp = new Bitmap(destImg.Width, destImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 g = this.CreateGraphics();
 
@@ -334,7 +334,7 @@ namespace SampleWinForms
             g.DrawImage(winBmp, new System.Drawing.Point(30, 20));
         }
 
-        void RenderGrids(int width, int height, int sqSize, PixelFarm.Drawing.CanvasPainter p)
+        void RenderGrids(int width, int height, int sqSize, PixelFarm.Drawing.Painter p)
         {
             //render grid 
             p.FillColor = PixelFarm.Drawing.Color.Gray;

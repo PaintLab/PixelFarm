@@ -43,7 +43,7 @@ namespace PixelFarm.Agg
         public int Height { get; set; }
 
      
-        public virtual void Draw(PixelFarm.Drawing.CanvasPainter p)
+        public virtual void Draw(PixelFarm.Drawing.Painter p)
         {
         }
         protected void UpdateTransform(double width, double height, double x, double y)

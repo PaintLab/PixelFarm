@@ -2,7 +2,7 @@
 using System;
 namespace PixelFarm.Drawing.Pdf
 {
-    public partial class MyPdfCanvas : Canvas, IDisposable
+    public partial class MyPdfDrawBoard : DrawBoard, IDisposable
     {
         int pageNumFlags;
         int pageFlags;
@@ -22,11 +22,11 @@ namespace PixelFarm.Drawing.Pdf
         //System.Drawing.Rectangle currentClipRect;
         ////-------------------------------
 
-        public MyPdfCanvas(int left, int top, int width, int height)
+        public MyPdfDrawBoard(int left, int top, int width, int height)
             : this(0, 0, left, top, width, height)
         {
         }
-        internal MyPdfCanvas(
+        internal MyPdfDrawBoard(
             int horizontalPageNum,
             int verticalPageNum,
             int left, int top,
