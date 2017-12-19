@@ -116,14 +116,14 @@ namespace PixelFarm.Agg.Sample_RoundRect
             double d = this.SubPixelOffset;
             AggPainter p2 = p as AggPainter;
             IPixelBlender prevBlender = null;
-            AggRenderSurface gx = null;
+            AggRenderSurface rdsf = null;
             if (p2 != null)
             {
                 //for agg only
-                gx = p2.Graphics;
-                prevBlender = gx.PixelBlender;
+                rdsf = p2.RenderSurface;
+                prevBlender = rdsf.PixelBlender;
                 //change gamma blender
-                gx.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
+                rdsf.PixelBlender = new PixelBlenderGammaBGRA(this.Gamma);
             }
 
             if (this.FillRoundRect)
@@ -146,9 +146,9 @@ namespace PixelFarm.Agg.Sample_RoundRect
                     m_y[1] + d,
                     this.Radius);
             }
-            if (gx != null)
+            if (rdsf != null)
             {
-                gx.PixelBlender = prevBlender;
+                rdsf.PixelBlender = prevBlender;
             }
         }
 

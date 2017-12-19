@@ -73,9 +73,9 @@ namespace PixelFarm.Agg.Sample_Gouraud
             if (painter == null) { return; }
 
             //
-            AggRenderSurface gx = painter.Graphics;
+            AggRenderSurface rdsf = painter.RenderSurface;
             SpanGenGouraudRGBA gouraudSpanGen = new SpanGenGouraudRGBA();
-            gx.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma));
+            rdsf.ScanlineRasterizer.ResetGamma(new GammaLinear(0.0f, this.LinearGamma));
             double d = this.DilationValue;
             // Six triangles
 

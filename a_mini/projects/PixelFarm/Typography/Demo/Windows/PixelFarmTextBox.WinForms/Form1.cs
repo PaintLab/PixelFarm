@@ -207,7 +207,7 @@ namespace PixelFarmTextBox.WinForms
             //----------
 
             //use this util to copy image from Agg actual image to System.Drawing.Bitmap 
-            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(painter.Graphics.DestActualImage, winBmp);
+            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(painter.RenderSurface.DestActualImage, winBmp);
             //----------------
             //copy from Agg's memory buffer to gdi 
             //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);

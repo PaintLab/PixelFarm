@@ -39,7 +39,7 @@ namespace PixelFarm.Agg
 
 
             AggPainter p2 = (AggPainter)p;
-            AggRenderSurface graphics2D = p2.Graphics;
+            AggRenderSurface graphics2D = p2.RenderSurface;
             if (graphics2D.DestImage != null)
             {
                 IImageReaderWriter backBuffer = graphics2D.DestImage;

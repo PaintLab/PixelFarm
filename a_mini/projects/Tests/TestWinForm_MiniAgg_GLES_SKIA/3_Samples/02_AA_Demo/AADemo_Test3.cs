@@ -244,7 +244,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             if (p is PixelFarm.Agg.AggPainter)
             {
                 var p2 = (PixelFarm.Agg.AggPainter)p;
-                AggRenderSurface gx = p2.Graphics;
+                AggRenderSurface gx = p2.RenderSurface;
                 var widgetsSubImage = ImageHelper.CreateChildImage(gx.DestImage, gx.GetClippingRect());
                 gx.UseSubPixelRendering = false;
                 IPixelBlender NormalBlender = new PixelBlenderBGRA();
