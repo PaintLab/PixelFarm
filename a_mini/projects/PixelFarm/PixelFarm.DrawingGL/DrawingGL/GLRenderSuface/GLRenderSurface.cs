@@ -101,6 +101,26 @@ namespace PixelFarm.DrawingGL
             //-------------------------------------------------------------------------------
             GL.Viewport(0, 0, width, height);
         }
+
+
+        int _vwWidth = 0;
+        int _vwHeight = 0;
+
+        public void SetViewport(int width, int height)
+        {
+            //when change, need to recalcate?
+            _vwWidth = width;
+            _vwHeight = height;
+        }
+        public int ViewportWidth
+        {
+            get { return _vwWidth; }
+        }
+        public int ViewportHeight
+        {
+            get { return _vwHeight; }
+        }
+
         public int CanvasWidth
         {
             get { return _width; }

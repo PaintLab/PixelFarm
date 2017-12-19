@@ -1,4 +1,7 @@
-﻿using System;
+﻿//MIT, 2009-2015, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+//MIT, 2017, WinterDev
+
+using System;
 namespace PixelFarm.DrawingBuffer
 {
     public abstract class GeneralTransform

@@ -311,23 +311,67 @@ namespace PixelFarm.Drawing.WinGdi
             //    _bmpStore.RelaseBmp(bmp);
             //}
         }
-
-        static System.Drawing.Bitmap CreateBmpBRGA(ActualImage actualImage)
+        static System.Drawing.Bitmap ResolveForActualBitmap(ActualImage actualImage)
         {
-            int w = actualImage.Width;
-            int h = actualImage.Height;
-            //copy data to bitmap
-            //bgra  
-            var bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            byte[] acutalBuffer = ActualImage.GetBuffer(actualImage);
-            var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp.PixelFormat);
-            System.Runtime.InteropServices.Marshal.Copy(acutalBuffer, 0, bmpData.Scan0, acutalBuffer.Length);
-            bmp.UnlockBits(bmpData);
-            return bmp;
+            var cacheBmp = Image.GetCacheInnerImage(actualImage) as System.Drawing.Bitmap;
+            if (cacheBmp != null)
+            {
+                return cacheBmp;
+            }
+            else
+            {
+                //no cached gdi image 
+                //so we create a new one
+                //and cache it for later use
+
+
+                int w = actualImage.Width;
+                int h = actualImage.Height;
+                //copy data to bitmap
+                //bgra  
+                var bmp = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                byte[] acutalBuffer = ActualImage.GetBuffer(actualImage);
+                var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadOnly, bmp.PixelFormat);
+                System.Runtime.InteropServices.Marshal.Copy(acutalBuffer, 0, bmpData.Scan0, acutalBuffer.Length);
+                bmp.UnlockBits(bmpData);
+
+
+                Image.SetCacheInnerImage(actualImage, bmp);
+
+                return bmp;
+                //GLBitmap glBmp = null;
+                //if (image is ActualImage)
+                //{
+                //    ActualImage actualImage = (ActualImage)image;
+                //    glBmp = new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
+                //}
+                //else
+                //{
+                //    //TODO: review here
+                //    //we should create 'borrow' method ? => send direct exact ptr to img buffer 
+                //    //for now, create a new one -- after we copy we, don't use it 
+                //    var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
+                //    image.RequestInternalBuffer(ref req);
+                //    byte[] copy = req.OutputBuffer;
+                //    glBmp = new GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
+                //}
+
+                //Image.SetCacheInnerImage(image, glBmp);
+                //return glBmp;
+            }
         }
+
         public void DrawImage(System.Drawing.Bitmap bmp, float x, float y)
         {
-            _gfx.DrawImage(bmp, x, y);
+            if (this._orientation == DrawBoardOrientation.LeftTop)
+            {
+                this._gfx.DrawImage(bmp, new System.Drawing.Point((int)x, this.Height - (int)y - bmp.Height));
+            }
+            else
+            {
+                this._gfx.DrawImage(bmp, new System.Drawing.Point((int)x, (int)y));
+            }
+
         }
         public override void DrawImage(Image img, double x, double y)
         {
@@ -335,16 +379,25 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 ActualImage actualImage = (ActualImage)img;
                 //create Gdi bitmap from actual image
-                int w = actualImage.Width;
-                int h = actualImage.Height;
+                //int w = actualImage.Width;
+                //int h = actualImage.Height;
                 switch (actualImage.PixelFormat)
                 {
                     case Agg.PixelFormat.ARGB32:
                         {
                             //copy data from acutal buffer to internal representation bitmap
-                            using (var bmp = CreateBmpBRGA(actualImage))
+                            var bmp = ResolveForActualBitmap(actualImage);
+                            if (bmp != null)
                             {
-                                this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
+                                if (this._orientation == DrawBoardOrientation.LeftTop)
+                                {
+                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, this.Height - (int)y - img.Height));
+                                }
+                                else
+                                {
+                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
+                                }
+
                             }
                         }
                         break;
@@ -360,7 +413,7 @@ namespace PixelFarm.Drawing.WinGdi
                         throw new NotSupportedException();
                 }
             }
-            
+
         }
         public override void DrawString(string text, double x, double y)
         {
@@ -430,8 +483,28 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override void FillRectangle(double left, double bottom, double right, double top)
         {
-            _gfx.FillRectangle(_currentFillBrush,
-                System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+            ////use current brush and font
+            //_gfx.ResetTransform();
+            //_gfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly  
+            ////------------
+            //_gfx.FillRectangle(_currentFillBrush,
+            //    System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+            ///*_gfx.DrawString(text,
+            //    _latestWinGdiPlusFont.InnerFont,
+            //    _currentFillBrush,
+            //    new System.Drawing.PointF((float)x, (float)y));
+            //*/
+            ////------------
+            ////restore back
+            //_gfx.ResetTransform();//again
+            //_gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
+            //_gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly                
+
+
+
+            _gfx.FillRectangle(_currentFillBrush, (float)left, (float)top, (float)(right - left), (float)(top - bottom));
+
+            //     System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
         }
 
         public override void FillRectLBWH(double left, double bottom, double width, double height)

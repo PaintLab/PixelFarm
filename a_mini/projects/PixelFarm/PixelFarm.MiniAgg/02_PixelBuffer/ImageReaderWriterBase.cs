@@ -23,12 +23,15 @@ using PixelFarm.Drawing;
 using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
 {
-
+    /// <summary>
+    /// base class for access(read/write) pixel buffer
+    /// </summary>
     public abstract class ImageReaderWriterBase : IImageReaderWriter
     {
         const int BASE_MASK = 255;
         //--------------------------------------------
-        //look up table
+        //look up table , for random access to specific point of image buffer
+        //we pre-calculate the offset of each row and column
         int[] yTableArray;
         int[] xTableArray;
         //--------------------------------------------
@@ -36,20 +39,33 @@ namespace PixelFarm.Agg
 
         //--------------------------------------------
         // Pointer to first pixel depending on strideInBytes and image position
-        protected int bufferFirstPixel;
+        protected int startBufferPixelAt;
         int width;  // in pixels
         int height; // in pixels
-        int strideInBytes; // Number of bytes per row. Can be < 0
+        int strideInBytes; // Number of bytes per row,  Can be < 0
         int m_DistanceInBytesBetweenPixelsInclusive;
         int bitDepth;
-        IPixelBlender recieveBlender;
+
+        /// <summary>
+        /// blender for destination image buffer, in this version we support 32 bits ARGB and 8 bits gray-scale
+        /// </summary>
+        IPixelBlender recieveBlender;//blender to the target surface
         //-------------------------------------------- 
         public byte[] GetBuffer()
         {
             return m_ByteBuffer;
         }
+        /// <summary>
+        /// attach image buffer and its information to the reader
+        /// </summary>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="bitsPerPixel"></param>
+        /// <param name="imgbuffer"></param>
+        /// <param name="recieveBlender"></param>
         protected void Attach(int width, int height, int bitsPerPixel, byte[] imgbuffer, IPixelBlender recieveBlender)
         {
+
 
             if (width <= 0 || height <= 0)
             {
@@ -59,24 +75,44 @@ namespace PixelFarm.Agg
             {
                 throw new Exception("Unsupported bits per pixel.");
             }
+            //
+            //
 
-            this.bitDepth = bitsPerPixel;
             int bytesPerPixel = (bitDepth + 7) / 8;
             int stride = 4 * ((width * bytesPerPixel + 3) / 4);
-            //-------------------------------------------------------------------------------------------
+            //
             SetDimmensionAndFormat(width, height, stride, bitsPerPixel, bitsPerPixel / 8);
-            this.m_ByteBuffer = imgbuffer;
             SetUpLookupTables();
-            if (yTableArray.Length != height
-                || xTableArray.Length != width)
-            {
-                throw new Exception("The yTable and xTable should be allocated correctly at this point. Figure out what happend."); // LBB, don't fix this if you don't understand what it's trying to do.
-            }
-            //--------------------------
+            //
             SetRecieveBlender(recieveBlender);
+            //
+            this.m_ByteBuffer = imgbuffer;
         }
 
+        protected void SetDimmensionAndFormat(int width, int height,
+           int strideInBytes,
+           int bitDepth,
+           int distanceInBytesBetweenPixelsInclusive)
+        {
+            this.width = width;
+            this.height = height;
+            this.strideInBytes = strideInBytes;
+            this.bitDepth = bitDepth;
 
+            if (distanceInBytesBetweenPixelsInclusive > 4)
+            {
+                throw new System.Exception("It looks like you are passing bits per pixel rather than distance in bytes.");
+            }
+            if (distanceInBytesBetweenPixelsInclusive < (bitDepth / 8))
+            {
+                throw new Exception("You do not have enough room between pixels to support your bit depth.");
+            }
+            m_DistanceInBytesBetweenPixelsInclusive = distanceInBytesBetweenPixelsInclusive;
+            if (strideInBytes < distanceInBytesBetweenPixelsInclusive * width)
+            {
+                throw new Exception("You do not have enough strideInBytes to hold the width and pixel distance you have described.");
+            }
+        }
 
         void CopyFromNoClipping(IImageReaderWriter sourceImage, RectInt clippedSourceImageRect, int destXOffset, int destYOffset)
         {
@@ -110,6 +146,7 @@ namespace PixelFarm.Agg
                         {
                             case 32:
                                 {
+                                    //TODO: review here, this may not correct
                                     int numPixelsToCopy = clippedSourceImageRect.Width;
                                     for (int i = clippedSourceImageRect.Bottom; i < clippedSourceImageRect.Top; i++)
                                     {
@@ -197,11 +234,18 @@ namespace PixelFarm.Agg
             return new RectInt(0, 0, this.width, this.height);
         }
 
+        /// <summary>
+        /// get blender of destination image buffer
+        /// </summary>
+        /// <returns></returns>
         public IPixelBlender GetRecieveBlender()
         {
             return recieveBlender;
         }
-
+        /// <summary>
+        /// set pixel blender for destination image buffer
+        /// </summary>
+        /// <param name="value"></param>
         public void SetRecieveBlender(IPixelBlender value)
         {
             if (BitDepth != 0 && value != null && value.NumPixelBits != BitDepth)
@@ -245,38 +289,30 @@ namespace PixelFarm.Agg
                     }
                 }
             }
+
+
+            if (yTableArray.Length != height
+              || xTableArray.Length != width)
+            {
+                // LBB, don't fix this if you don't understand what it's trying to do.
+                throw new Exception("The yTable and xTable should be allocated correctly at this point. Figure out what happend.");
+            }
+
         }
 
 
 
-        protected void SetDimmensionAndFormat(int width, int height,
-            int strideInBytes,
-            int bitDepth,
-            int distanceInBytesBetweenPixelsInclusive)
-        {
-            this.width = width;
-            this.height = height;
-            this.strideInBytes = strideInBytes;
-            this.bitDepth = bitDepth;
-            if (distanceInBytesBetweenPixelsInclusive > 4)
-            {
-                throw new System.Exception("It looks like you are passing bits per pixel rather than distance in bytes.");
-            }
-            if (distanceInBytesBetweenPixelsInclusive < (bitDepth / 8))
-            {
-                throw new Exception("You do not have enough room between pixels to support your bit depth.");
-            }
-            m_DistanceInBytesBetweenPixelsInclusive = distanceInBytesBetweenPixelsInclusive;
-            if (strideInBytes < distanceInBytesBetweenPixelsInclusive * width)
-            {
-                throw new Exception("You do not have enough strideInBytes to hold the width and pixel distance you have described.");
-            }
-        }
+
 
 
 
         public static void CopySubBufferToInt32Array(ImageReaderWriterBase buff, int mx, int my, int w, int h, int[] buffer)
         {
+            //TODO: review here, 
+            //check pixel format for an image buffer before use
+            //if mBuffer is not 32 bits ARGB => this may not correct
+
+
             int i = 0;
             byte[] mBuffer = buff.m_ByteBuffer;
             for (int y = my; y < h; ++y)
@@ -284,11 +320,12 @@ namespace PixelFarm.Agg
                 int xbufferOffset = buff.GetBufferOffsetXY(0, y);
                 for (int x = mx; x < w; ++x)
                 {
-                    //rgba 
+                    //A R G B
                     byte r = mBuffer[xbufferOffset + 2];
                     byte g = mBuffer[xbufferOffset + 1];
                     byte b = mBuffer[xbufferOffset];
                     xbufferOffset += 4;
+                    //
                     buffer[i] = b | (g << 8) | (r << 16);
                     i++;
                 }
@@ -300,7 +337,7 @@ namespace PixelFarm.Agg
         }
         public int GetBufferOffsetXY(int x, int y)
         {
-            return bufferFirstPixel + yTableArray[y] + xTableArray[x];
+            return startBufferPixelAt + yTableArray[y] + xTableArray[x];
         }
         public void SetPixel(int x, int y, Color color)
         {

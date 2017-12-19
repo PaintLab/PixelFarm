@@ -44,7 +44,7 @@ namespace Mini
                 //if demo not create canvas and painter
                 //the we create for it
                 int max = Math.Max(glControl.Width, glControl.Height);
-                _glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max);
+                _glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, glControl.Width, glControl.Height);
                 _glsf.SmoothMode = SmoothMode.Smooth;//set anti-alias  
                 canvasPainter = new GLPainter(_glsf);
                 //create text printer for opengl 

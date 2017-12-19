@@ -95,7 +95,7 @@ namespace LayoutFarm.UI
 
 
                         int max = Math.Max(view.Width, view.Height);
-                        _glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max);
+                        _glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, view.Width, view.Height);
                         //---------------
                         //canvas2d.FlipY = true;//
                         //---------------
