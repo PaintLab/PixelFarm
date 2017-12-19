@@ -92,19 +92,36 @@ namespace PixelFarm.Agg
                 {
                     case VertexCmd.NoMore:
                         break;
-
                     case VertexCmd.Close:
-                    case VertexCmd.CloseAndEndFigure:
-
-
                         if (i < j)
                         {
                             //strkgen.AddVertex(startX, startY, VertexCmd.LineTo);
+                            //close command
                             strkgen.AddVertex(startX, startY, VertexCmd.Close);
                             strkgen.WriteTo(vxs);
                             strkgen.Reset();
                         }
-                        strkgen.AddVertex(x, y, cmd);
+                        else
+                        {
+
+                        }
+                        //strkgen.AddVertex(x, y, cmd);
+                        //end this polygon  
+                        break;
+                    case VertexCmd.CloseAndEndFigure:
+                        if (i < j)
+                        {
+                            //strkgen.AddVertex(startX, startY, VertexCmd.LineTo);
+                            //close command
+                            strkgen.AddVertex(startX, startY, VertexCmd.CloseAndEndFigure);
+                            strkgen.WriteTo(vxs);
+                            strkgen.Reset();
+                        }
+                        else
+                        {
+
+                        }
+                        //strkgen.AddVertex(x, y, cmd);
                         //end this polygon 
 
                         break;

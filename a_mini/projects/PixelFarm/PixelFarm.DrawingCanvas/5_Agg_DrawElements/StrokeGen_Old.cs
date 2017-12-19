@@ -50,7 +50,7 @@ namespace PixelFarm.Agg
 
 
         StrokeMath m_stroker;
-        MultipartVertexDistanceList multipartVertexDistanceList = new MultipartVertexDistanceList();
+        MultiPartsVertexList multipartVertexDistanceList = new MultiPartsVertexList();
         VertexStore m_out_vertices;
         double m_shorten;
         bool m_closed;
@@ -133,7 +133,8 @@ namespace PixelFarm.Agg
                     break;
                 case VertexCmd.Close:
                 case VertexCmd.CloseAndEndFigure:
-                    //m_closed = true;
+                    //  m_closed = true;
+                    multipartVertexDistanceList.Close();
                     break;
                 default:
                     multipartVertexDistanceList.AddVertex(new Vertex2d(x, y));
@@ -365,8 +366,10 @@ namespace PixelFarm.Agg
         }
     }
 
-    class MultipartVertexDistanceList
+    class MultiPartsVertexList
     {
+
+
         class Range
         {
             public int beginAt;
@@ -389,13 +392,46 @@ namespace PixelFarm.Agg
                 this.len = endAt - beginAt;
             }
         }
+
+
+        Vertex2d _latestVertex = new Vertex2d();
+
         List<Vertex2d> _vertextDistanceList = new List<Vertex2d>();
-        List<Range> _ranges = new List<Range>();
-        Range _range;
-        Vertex2d _latest = new Vertex2d();
-        int _rangeIndex = 0;
-        public MultipartVertexDistanceList()
+        List<Range> _ranges = new List<Range>(); //prev ranges
+
+        Range _latestRange; //current range (before each close)
+        int _rangeIndex = 0;//point to reading index in to _ranges List
+
+        double _latestMoveToX;
+        double _latestMoveToY;
+
+        public MultiPartsVertexList()
         {
+
+        }
+        public void AddVertex(Vertex2d val)
+        {
+            int count = _latestRange.Count;
+            if (count == 0)
+            {
+                _vertextDistanceList.Add(_latestVertex = val);
+                _latestRange.SetLen(count + 1);
+            }
+            else
+            {
+                //Ensure that the new one is not duplicate with the last one
+                if (!_latestVertex.IsEqual(val))
+                {
+                    _latestRange.SetLen(count + 1);
+                    _vertextDistanceList.Add(_latestVertex = val);
+                }
+            }
+
+        }
+        public void Close()
+        {
+            //close current range
+            AddVertex(new Vertex2d(_latestMoveToX, _latestMoveToY));
 
         }
         public void AddMoveTo(double x, double y)
@@ -405,17 +441,20 @@ namespace PixelFarm.Agg
             if (_ranges.Count > 0)
             {
                 _ranges[_ranges.Count - 1].SetEndAt(_vertextDistanceList.Count);
-            }
+            }  
 
-            _ranges.Add(_range = new Range(_vertextDistanceList.Count));
+            //start new range with x and y
+            _ranges.Add(_latestRange = new Range(_vertextDistanceList.Count));
             AddVertex(new Agg.Vertex2d(x, y));
+            _latestMoveToX = x;
+            _latestMoveToY = y;
         }
 
         public int RangeIndex { get { return this._rangeIndex; } }
         public void SetRangeIndex(int index)
         {
             this._rangeIndex = index;
-            _range = _ranges[index];
+            _latestRange = _ranges[index];
         }
         public int RangeCount
         {
@@ -425,62 +464,41 @@ namespace PixelFarm.Agg
         {
             get
             {
-                return (_range == null) ? 0 : _range.len;
+                return (_latestRange == null) ? 0 : _latestRange.len;
             }
         }
-        public void AddLineTo(double x, double y)
-        {
-            AddVertex(new Agg.Vertex2d(x, y));
-        }
-        public void AddVertex(Vertex2d val)
-        {
-            int count = _range.Count;
-            //Ensure that the new one is not duplicate with the last one
-            switch (count)
-            {
-                case 0:
-                    _vertextDistanceList.Add(_latest = val);
-                    _range.SetLen(count + 1);
-                    break;
-                default:
-                    if (!_latest.IsEqual(val))
-                    {
-                        _range.SetLen(count + 1);
-                        _vertextDistanceList.Add(_latest = val);
-                    }
-                    break;
-            }
-        }
+
+
         public void Clear()
         {
             _ranges.Clear();
             _vertextDistanceList.Clear();
-            _latest = new Agg.Vertex2d();
+            _latestVertex = new Agg.Vertex2d();
             _rangeIndex = 0;
-            _range = null;
+            _latestRange = null;
         }
         public void Rewind()
         {
             _rangeIndex = 0;
             if (_ranges.Count > 0)
             {
-                _range = _ranges[_rangeIndex];
+                _latestRange = _ranges[_rangeIndex];
             }
         }
 
-        public void ReplaceLast(Vertex2d val)
-        {
-            _vertextDistanceList.RemoveAt(_vertextDistanceList.Count - 1);
-            AddVertex(val);
-        }
+        //public void ReplaceLast(Vertex2d val)
+        //{
+        //    _vertextDistanceList.RemoveAt(_vertextDistanceList.Count - 1);
+        //    AddVertex(val);
+        //}
         public void GetTripleVertices(int idx, out Vertex2d prev, out Vertex2d cur, out Vertex2d next)
         {
             //we want 3 vertices
-            if (idx > 0 && idx + 2 <= _range.Count)
+            if (idx > 0 && idx + 2 <= _latestRange.Count)
             {
-                prev = _vertextDistanceList[_range.beginAt + idx - 1];
-                cur = _vertextDistanceList[_range.beginAt + idx];
-                next = _vertextDistanceList[_range.beginAt + idx + 1];
+                prev = _vertextDistanceList[_latestRange.beginAt + idx - 1];
+                cur = _vertextDistanceList[_latestRange.beginAt + idx];
+                next = _vertextDistanceList[_latestRange.beginAt + idx + 1];
 
             }
             else
@@ -490,14 +508,14 @@ namespace PixelFarm.Agg
         }
         public void GetFirst2(out Vertex2d first, out Vertex2d second)
         {
-            first = _vertextDistanceList[_range.beginAt];
-            second = _vertextDistanceList[_range.beginAt + 1];
+            first = _vertextDistanceList[_latestRange.beginAt];
+            second = _vertextDistanceList[_latestRange.beginAt + 1];
 
         }
         public void GetLast2(out Vertex2d beforeLast, out Vertex2d last)
         {
-            beforeLast = _vertextDistanceList[_range.beginAt + _range.len - 2];
-            last = _vertextDistanceList[_range.beginAt + _range.len - 1];
+            beforeLast = _vertextDistanceList[_latestRange.beginAt + _latestRange.len - 2];
+            last = _vertextDistanceList[_latestRange.beginAt + _latestRange.len - 1];
 
         }
     }
