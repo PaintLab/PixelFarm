@@ -560,7 +560,7 @@ namespace PixelFarm.Drawing.WinGdi
 
 
 
-        public override void Line(double x1, double y1, double x2, double y2)
+        public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
         }
@@ -573,7 +573,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        public override void Rectangle(double left, double bottom, double right, double top)
+        public override void DrawRectangle(double left, double bottom, double right, double top)
         {
             _gfx.DrawRectangle(_currentPen, (float)left, (float)top, (float)(right - left), (float)(top - bottom));
         }

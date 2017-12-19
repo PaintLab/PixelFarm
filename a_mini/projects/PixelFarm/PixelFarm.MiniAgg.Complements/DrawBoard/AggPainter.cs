@@ -184,7 +184,7 @@ namespace PixelFarm.Agg
         /// <param name="x2"></param>
         /// <param name="y2"></param>
         /// <param name="color"></param>
-        public override void Line(double x1, double y1, double x2, double y2)
+        public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             //coordinate system
             if (_orientation == DrawBoardOrientation.LeftBottom)
@@ -243,16 +243,17 @@ namespace PixelFarm.Agg
         }
 
 
-        public override void Rectangle(double left, double bottom, double right, double top)
+        public override void DrawRectangle(double left, double top, double width, double height)
         {
 
+            double right = left + width;
+            double bottom = top - height;
             if (this._orientation == DrawBoardOrientation.LeftBottom)
             {
                 _simpleRectVxsGen.SetRect(left + .5, bottom + .5, right - .5, top - .5);
             }
             else
             {
-                int height = this.Height;
                 _simpleRectVxsGen.SetRect(left + .5, height - bottom + .5, right - .5, height - top - .5);
             }
 

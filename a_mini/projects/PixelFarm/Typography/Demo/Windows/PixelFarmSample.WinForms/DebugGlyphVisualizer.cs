@@ -324,7 +324,7 @@ namespace SampleWinForms.UI
                 }
                 else
                 {
-                    painter.Line(edge.PX * scale, edge.PY * scale, edge.QX * scale, edge.QY * scale);
+                    painter.DrawLine(edge.PX * scale, edge.PY * scale, edge.QX * scale, edge.QY * scale);
                 }
 
                 {

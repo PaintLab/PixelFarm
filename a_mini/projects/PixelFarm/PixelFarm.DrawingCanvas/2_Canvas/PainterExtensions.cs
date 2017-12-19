@@ -29,14 +29,14 @@ namespace PixelFarm.Agg
         {
             Color prevColor = p.StrokeColor;
             p.StrokeColor = color;
-            p.Line(x1, y1, x2, y2);
+            p.DrawLine(x1, y1, x2, y2);
             p.StrokeColor = prevColor;
         }
         public static void Rectangle(this Painter p, double left, double bottom, double right, double top, Color color)
         {
             Color prevColor = p.StrokeColor;
             p.StrokeColor = color;
-            p.Rectangle(left, bottom, right, top);
+            p.DrawRectangle(left, bottom, right, top);
             p.StrokeColor = prevColor;
         }
         public static void FillCircle(this Painter p, double x, double y, double radius, Color color)

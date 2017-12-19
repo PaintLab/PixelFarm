@@ -113,7 +113,7 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
-            painter1.Line(x1, this.Height - y1, x2, this.Height - y2);
+            painter1.DrawLine(x1, this.Height - y1, x2, this.Height - y2);
         }
 
 

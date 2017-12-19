@@ -527,7 +527,7 @@ namespace PixelFarm.DrawingGL
             this.Fill(roundRect.MakeVxs(v1));
             ReleaseVxs(ref v1);
         }
-        public override void Line(double x1, double y1, double x2, double y2)
+        public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _glsf.StrokeColor = _strokeColor;
             _glsf.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
@@ -544,10 +544,15 @@ namespace PixelFarm.DrawingGL
                         new VertexStoreSnap(vxs, pathIndexs[i])));
             }
         }
-        public override void Rectangle(double left, double bottom, double right, double top)
+        public override void DrawRectangle(double left, double top, double width, double height)
         {
+            //double right = left + width;
+            //double bottom = top - height;
+
             //draw rectangle
-            _glsf.DrawRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
+            //_glsf.DrawRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
+            //_glsf.DrawRect((float)left, (float)bottom, (float)(width), (float)(height));
+            _glsf.DrawRect((float)left, (float)top, (float)(width), (float)(height));
         }
 
         public override void SetClipBox(int x1, int y1, int x2, int y2)

@@ -105,7 +105,7 @@ namespace LayoutFarm
                 {
                     var p0 = pointList[i - 1];
                     var p1 = pointList[i];
-                    p.Line(
+                    p.DrawLine(
                         p0.X, p0.Y,
                         p1.X, p1.Y);
                 }

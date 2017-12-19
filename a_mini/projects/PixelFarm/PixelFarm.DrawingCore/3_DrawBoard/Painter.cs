@@ -50,14 +50,16 @@ namespace PixelFarm.Drawing
         //-------------------------------------------------------
         public abstract void Clear(Color color);
         public abstract DrawBoardOrientation Orientation { get; set; }
+        public abstract void DrawLine(double x1, double y1, double x2, double y2);
+
+        public abstract void DrawRectangle(double left, double top, double width, double height);
+
 
         public abstract void FillCircle(double x, double y, double radius);
         public abstract void FillEllipse(double left, double bottom, double right, double top);
         public abstract void DrawEllipse(double left, double bottom, double right, double top);
 
 
-        public abstract void Line(double x1, double y1, double x2, double y2);
-        public abstract void Rectangle(double left, double bottom, double right, double top);
         public abstract void FillRectangle(double left, double bottom, double right, double top);
         public abstract void FillRectLBWH(double left, double bottom, double width, double height);
         public abstract void FillRoundRectangle(double left, double bottom, double right, double top, double radius);
