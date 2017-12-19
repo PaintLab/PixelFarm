@@ -23,8 +23,8 @@ namespace PixelFarmTextBox.WinForms
     public partial class Form1 : Form
     {
         Graphics g;
-        AggCanvasPainter painter;
-        ImageGraphics2D imgGfx2d;
+        AggPainter painter;
+        AggRenderSurface imgGfx2d;
         ActualImage destImg;
         Bitmap winBmp;
 
@@ -67,8 +67,8 @@ namespace PixelFarmTextBox.WinForms
             //but you can create another text printer that specific to text textbox control
 
             destImg = new ActualImage(800, 600, PixelFormat.ARGB32);
-            imgGfx2d = new ImageGraphics2D(destImg); //no platform
-            painter = new AggCanvasPainter(imgGfx2d);
+            imgGfx2d = new AggRenderSurface(destImg); //no platform
+            painter = new AggPainter(imgGfx2d);
             winBmp = new Bitmap(destImg.Width, destImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             g = this.sampleTextBox1.CreateGraphics();
 
@@ -207,7 +207,7 @@ namespace PixelFarmTextBox.WinForms
             //----------
 
             //use this util to copy image from Agg actual image to System.Drawing.Bitmap 
-            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(painter.Graphics.DestActualImage, winBmp);
+            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(painter.RenderSurface.DestActualImage, winBmp);
             //----------------
             //copy from Agg's memory buffer to gdi 
             //PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(destImg, winBmp);

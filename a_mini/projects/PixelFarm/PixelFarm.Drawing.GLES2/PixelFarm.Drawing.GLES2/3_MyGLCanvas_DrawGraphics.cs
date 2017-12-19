@@ -18,7 +18,7 @@ using PixelFarm.Agg;
 namespace PixelFarm.Drawing.GLES2
 {
 
-    partial class MyGLCanvas
+    partial class MyGLDrawBoard
     {
         class MyGLCanvasException : Exception { }
 

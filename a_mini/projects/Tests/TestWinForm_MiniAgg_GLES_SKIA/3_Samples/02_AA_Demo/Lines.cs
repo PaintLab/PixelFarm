@@ -6,9 +6,7 @@
 // and intend to do much more refactoring of these things over the long term.
 
 using PixelFarm.Agg.VertexSource;
-using PixelFarm.VectorMath;
-using PixelFarm.Agg.Transform;
-
+using PixelFarm.Drawing;
 using Mini;
 
 namespace PixelFarm.Agg.Sample_Draw
@@ -33,19 +31,19 @@ namespace PixelFarm.Agg.Sample_Draw
             set;
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            var aggPainter = p as PixelFarm.Agg.AggCanvasPainter;
+            var aggPainter = p as PixelFarm.Agg.AggPainter;
             if (aggPainter == null)
             {
                 return;
             }
             Draw(aggPainter);
         }
-        void Draw(PixelFarm.Agg.AggCanvasPainter aggPainter)
+        void Draw(PixelFarm.Agg.AggPainter aggPainter)
         {
 
-            aggPainter.Clear(PixelFarm.Drawing.Color.White);            
+            aggPainter.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
             aggPainter.StrokeColor = PixelFarm.Drawing.Color.Black;
             aggPainter.StrokeWidth = 30.0f;
@@ -53,7 +51,7 @@ namespace PixelFarm.Agg.Sample_Draw
             //
             VertexStore vxs = new VertexStore();
             PathWriter writer = new PathWriter(vxs);
-            
+
             writer.MoveTo(20, 0);
             writer.LineTo(100, 100);
             writer.LineTo(20, 200);

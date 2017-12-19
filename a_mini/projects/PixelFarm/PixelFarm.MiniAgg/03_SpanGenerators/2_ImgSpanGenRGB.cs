@@ -32,13 +32,13 @@ namespace PixelFarm.Agg.Imaging
 {
 #if DEBUG
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
-    class ImgSpanGenRGB_NNStepXby1 : ImgSpanGen
+    class dbugImgSpanGenRGB_NNStepXby1 : ImgSpanGen
     {
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);
         const int BASE_MASK = BASE_SCALE - 1;
         ImageReaderWriterBase srcRW;
-        public ImgSpanGenRGB_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
+        public dbugImgSpanGenRGB_NNStepXby1(IImageReaderWriter src, ISpanInterpolator spanInterpolator)
             : base(spanInterpolator)
         {
             this.srcRW = (ImageReaderWriterBase)src;
@@ -115,7 +115,7 @@ namespace PixelFarm.Agg.Imaging
 
 
     //=====================================span_image_filter_rgb_bilinear_clip
-    class ImgSpanGenRGB_BilinearClip : ImgSpanGen
+    class dbugImgSpanGenRGB_BilinearClip : ImgSpanGen
     {
         Drawing.Color m_bgcolor;
         const int BASE_SHIFT = 8;
@@ -123,7 +123,7 @@ namespace PixelFarm.Agg.Imaging
         const int BASE_MASK = BASE_SCALE - 1;
         ImageReaderWriterBase srcRW;
         //--------------------------------------------------------------------
-        public ImgSpanGenRGB_BilinearClip(IImageReaderWriter src,
+        public dbugImgSpanGenRGB_BilinearClip(IImageReaderWriter src,
                                           Drawing.Color back_color,
                                           ISpanInterpolator inter)
             : base(inter)

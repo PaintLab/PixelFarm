@@ -11,8 +11,8 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar4 _u_color;
         ShaderUniformVar1 _u_buffer;
         ShaderUniformVar1 _u_gamma;
-        public SingleChannelSdf(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public SingleChannelSdf(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
             //credit: https://www.mapbox.com/blog/text-signed-distance-fields/
             string vs = @"
@@ -66,8 +66,8 @@ namespace PixelFarm.DrawingGL
     {
 
         ShaderUniformVar4 _fgColor;
-        public MultiChannelSdf(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public MultiChannelSdf(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
             //credit: https://github.com/Chlumsky/msdfgen 
 
@@ -130,8 +130,8 @@ namespace PixelFarm.DrawingGL
     {
         ShaderUniformVar4 _bgColor;
         ShaderUniformVar4 _fgColor;
-        public MultiChannelSubPixelRenderingSdf(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public MultiChannelSubPixelRenderingSdf(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
             BuildProgramV1();
             //BuildProgramV2();

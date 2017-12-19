@@ -21,7 +21,7 @@
 // classes conv_curve
 //
 //----------------------------------------------------------------------------
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.VertexSource
 {
     //---------------------------------------------------------------conv_curve

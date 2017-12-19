@@ -41,12 +41,12 @@ namespace PixelFarm.Agg.Samples
     {
         Point latestMousePoint;
         List<List<Point>> pointSets = new List<List<Point>>();
-        CanvasPainter p;
+        PixelFarm.Drawing.Painter p;
         List<Point> currentPointSet;// = new List<Point>();//current point list 
         public override void Init()
         {
         }
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             p.Clear(Drawing.Color.White);
             var plistCount = pointSets.Count;

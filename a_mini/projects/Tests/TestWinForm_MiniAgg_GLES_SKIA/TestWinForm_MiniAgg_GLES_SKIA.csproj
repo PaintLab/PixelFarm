@@ -236,7 +236,7 @@
       <Name>PixelFarm.Drawing.GdiPlus</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
-      <Project>{E1E89B3B-B529-4B17-B7ED-4C70CC8475EB}</Project>
+      <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
       <Name>PixelFarm.Drawing.GLES2</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj">

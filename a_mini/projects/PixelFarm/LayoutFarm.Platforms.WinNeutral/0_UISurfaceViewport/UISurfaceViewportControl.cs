@@ -62,7 +62,7 @@ namespace LayoutFarm.UI.WinNeutral
             get;
             set;
         }
-        public void SetupCanvas(PixelFarm.Drawing.Canvas canvas)
+        public void SetupCanvas(PixelFarm.Drawing.DrawBoard canvas)
         {
             bridge.SetupCanvas(canvas);
         }
@@ -139,9 +139,9 @@ namespace LayoutFarm.UI.WinNeutral
         {
             this.winBridge.OnHostControlLoaded();
         }
-        public void PaintMe(PixelFarm.DrawingGL.CanvasGL2d canvasGL2d)
+        public void PaintMe(PixelFarm.DrawingGL.GLRenderSurface glsf)
         {
-            canvasGL2d.DrawLine(0, 0, 100, 100);
+            glsf.DrawLine(0, 0, 100, 100);
             //this.winBridge.PaintToOutputWindow();
         }
         public void PaintMe()

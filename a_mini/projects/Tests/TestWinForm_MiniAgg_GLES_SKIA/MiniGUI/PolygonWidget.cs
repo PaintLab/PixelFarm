@@ -522,7 +522,7 @@ namespace PixelFarm.Agg.UI
             set { this.m_color = value; }
         }
 
-        public override void OnDraw(CanvasPainter p)
+        public override void OnDraw(Painter p)
         {
             p.FillColor = LineColor;
             var v1 = GetFreeVxs();
