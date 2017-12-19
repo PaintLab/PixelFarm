@@ -67,7 +67,8 @@ namespace PixelFarm.Agg.Sample_Images
         public override void Draw(Painter p)
         {
             p.Clear(Drawing.Color.White);
-            p.DrawImage(actualImage, 0, 200);
+            p.DrawImage(actualImage, 0, 0);
+            p.DrawImage(actualImage, 10, 10);
             //p.DrawImage(actualImage, affinePlan1);
             //p.DrawImage(actualImage, affinePlans);
             //p.DrawImage(actualImage, 100,200);

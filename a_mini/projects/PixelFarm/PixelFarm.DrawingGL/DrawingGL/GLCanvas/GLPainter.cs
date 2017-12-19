@@ -263,6 +263,16 @@ namespace PixelFarm.DrawingGL
             if (glBmp != null)
             {
                 _glsf.DrawImage(glBmp, (float)x, (float)y);
+
+                //if (this._orientation == DrawBoardOrientation.LeftTop)
+                //{
+                //    //in this mode we place the left-top of the image to the (x,y)                                          
+                //    _glsf.DrawImage(glBmp, (float)x, (float)(this.Height - (y + actualImage.Height)));
+                //}
+                //else
+                //{
+                //    _glsf.DrawImage(glBmp, (float)x, (float)y);
+                //}
             }
         }
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)

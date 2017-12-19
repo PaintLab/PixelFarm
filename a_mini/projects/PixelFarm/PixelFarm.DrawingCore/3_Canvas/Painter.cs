@@ -27,6 +27,13 @@ namespace PixelFarm.Drawing
     {
         //this class try to wrap an underlying 'Graphics' object.
         //this class try to provide more func than basic canvas class
+        //
+        //
+        //coordinate system depends on Drawboard Orientation value
+        //1) LeftTop or
+        //2) LeftBottom
+        //
+
 
         //who implement this class
         //1. AggPainter wraps AggRenderSurface
