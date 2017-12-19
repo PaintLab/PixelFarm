@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-
-using PixelFarm.Agg;
+using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
 namespace Mini.WinForms
 {
@@ -41,7 +40,7 @@ namespace Mini.WinForms
     {
         PixelFarm.VectorMath.Point _latestMousePoint;
         PixelFarm.Agg.Samples.MyBrushPath _myBrushPath;
-        GraphicsPath _latestBrushPathCache = null;
+        System.Drawing.Drawing2D.GraphicsPath _latestBrushPathCache = null;
         List<System.Drawing.Point> _points = new List<System.Drawing.Point>();
         public MyDrawingBrushController()
         {
@@ -64,7 +63,7 @@ namespace Mini.WinForms
             if (_latestBrushPathCache != null)
             {
                 PixelFarm.Drawing.Color brushColor = _myBrushPath.FillColor;
-                using (SolidBrush br = new SolidBrush(System.Drawing.Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
+                using (var br = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
                 {
                     g.FillPath(br, _latestBrushPathCache);
                 }
@@ -76,7 +75,7 @@ namespace Mini.WinForms
                 //create new path  
                 _latestBrushPathCache = PixelFarm.Drawing.WinGdi.VxsHelper.CreateGraphicsPath(_myBrushPath.Vxs);
                 PixelFarm.Drawing.Color brushColor = _myBrushPath.FillColor;
-                using (SolidBrush br = new SolidBrush(System.Drawing.Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
+                using (var br = new System.Drawing.SolidBrush(System.Drawing.Color.FromArgb(brushColor.alpha, brushColor.red, brushColor.green, brushColor.blue)))
                 {
                     g.FillPath(br, _latestBrushPathCache);
                 }
@@ -160,7 +159,7 @@ namespace Mini.WinForms
             }
             _latestBrushPathCache = null;
         }
-        public Color PathFillColor
+        public System.Drawing.Color PathFillColor
         {
             get
             {

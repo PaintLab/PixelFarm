@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.Agg.VertexSource;
+using PixelFarm.Drawing;
 using PixelFarm.VectorMath;
 
 namespace PixelFarm.Agg
@@ -47,7 +48,8 @@ namespace PixelFarm.Agg
             vertexData.command = VertexCmd.MoveTo;
             vertexData.x = ellipse.originX + ellipse.radiusX;
             vertexData.y = ellipse.originY;
-            yield return vertexData;
+            yield return vertexData; // move to cmd
+            //
             int numSteps = ellipse.NumSteps;
             double anglePerStep = MathHelper.Tau / numSteps;
             double angle = 0;
@@ -62,7 +64,7 @@ namespace PixelFarm.Agg
                 for (int i = 1; i < numSteps; i++)
                 {
                     angle += anglePerStep;
-                    vertexData.x = orgX + Math.Cos(MathHelper.Tau - angle) * orgY;
+                    vertexData.x = orgX + Math.Cos(MathHelper.Tau - angle) * radX;
                     vertexData.y = orgY + Math.Sin(MathHelper.Tau - angle) * radY;
                     yield return vertexData;
                 }
@@ -72,7 +74,7 @@ namespace PixelFarm.Agg
                 for (int i = 1; i < numSteps; i++)
                 {
                     angle += anglePerStep;
-                    vertexData.x = orgX + Math.Cos(angle) * orgY;
+                    vertexData.x = orgX + Math.Cos(angle) * radX;
                     vertexData.y = orgY + Math.Sin(angle) * radY;
                     yield return vertexData;
                 }

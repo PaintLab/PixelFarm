@@ -11,8 +11,8 @@ namespace SampleWinForms.UI
         Graphics g;
         VxsTextPrinter _printer;
         ActualImage destImg;
-        ImageGraphics2D imgGfx2d;
-        AggCanvasPainter p;
+        AggRenderSurface imgGfx2d;
+        AggPainter p;
         Bitmap winBmp;
         VisualLine _visualLine;
          
@@ -25,8 +25,8 @@ namespace SampleWinForms.UI
             g = hostControlGraphics;
             //
             destImg = new ActualImage(400, 300, PixelFormat.ARGB32);
-            imgGfx2d = new ImageGraphics2D(destImg); //no platform
-            p = new AggCanvasPainter(imgGfx2d);
+            imgGfx2d = new AggRenderSurface(destImg); //no platform
+            p = new AggPainter(imgGfx2d);
             winBmp = new Bitmap(400, 300, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
             _printer = new VxsTextPrinter(p, null);
@@ -66,7 +66,7 @@ namespace SampleWinForms.UI
 
             //6. use this util to copy image from Agg actual image to System.Drawing.Bitmap
 
-            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(p.Graphics.DestActualImage, winBmp);
+            PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(p.RenderSurface.DestActualImage, winBmp);
             //--------------- 
             //7. just render our bitmap
             g.Clear(Color.White);

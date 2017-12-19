@@ -22,18 +22,18 @@ namespace OpenTkEssTest
         //---------------------------
 
         ActualImage aggImage;
-        ImageGraphics2D imgGfx2d;
-        AggCanvasPainter aggPainter;
+        AggRenderSurface imgGfx2d;
+        AggPainter aggPainter;
 
         //---------------------------
-        CanvasGL2d canvas2d;
+        GLRenderSurface _glsf;
         SpriteShape lionShape;
-        GLCanvasPainter painter;
+        GLPainter painter;
 
         GLBitmap glBmp;
-        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
-            this.canvas2d = canvasGL;
+            this._glsf = glsf;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -43,8 +43,8 @@ namespace OpenTkEssTest
             RectD lionBounds = lionShape.Bounds;
             //-------------
             aggImage = new ActualImage((int)lionBounds.Width, (int)lionBounds.Height, PixelFarm.Agg.PixelFormat.ARGB32);
-            imgGfx2d = new ImageGraphics2D(aggImage);
-            aggPainter = new AggCanvasPainter(imgGfx2d);
+            imgGfx2d = new AggRenderSurface(aggImage);
+            aggPainter = new AggPainter(imgGfx2d);
 
 
             DrawLion(aggPainter, lionShape, lionShape.Path.Vxs);
@@ -53,9 +53,9 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            canvas2d.Dispose();
+            _glsf.Dispose();
         }
-        static void DrawLion(CanvasPainter p, SpriteShape shape, VertexStore myvxs)
+        static void DrawLion(Painter p, SpriteShape shape, VertexStore myvxs)
         {
             int j = shape.NumPaths;
             int[] pathList = shape.PathIndexList;
@@ -68,11 +68,11 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            canvas2d.ClearColorBuffer();
+            _glsf.SmoothMode = SmoothMode.Smooth;
+            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsf.ClearColorBuffer();
             //-------------------------------
-            canvas2d.DrawImage(glBmp, 0, 600);
+            _glsf.DrawImage(glBmp, 0, 600);
             SwapBuffers();
         }
     }

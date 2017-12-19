@@ -19,6 +19,7 @@
 //----------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
     public static class VertexStoreBuilder

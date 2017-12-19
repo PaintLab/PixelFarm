@@ -1,5 +1,7 @@
 ﻿//MIT, 2017, WinterDev 
 using System;
+using PixelFarm.Drawing;
+using PixelFarm.Agg;
 using Mini;
 namespace PixelFarm.Agg.Sample_AADemoTest4
 {
@@ -199,14 +201,14 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             set;
         }
 
-        void RunSampleA(CanvasPainter p)
+        void RunSampleA(PixelFarm.Drawing.Painter p)
         {
 
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
             ActualImage glyphImg = new ActualImage(100, 100, PixelFormat.ARGB32);
-            ImageGraphics2D glyph2d = new ImageGraphics2D(glyphImg);
-            AggCanvasPainter painter = new AggCanvasPainter(glyph2d);
+            AggRenderSurface glyph2d = new AggRenderSurface(glyphImg);
+            AggPainter painter = new AggPainter(glyph2d);
 
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f * 3;
@@ -235,20 +237,20 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             byte[] expanedGreyScaleBuffer = CreateNewExpandedLcdGrayScale(glyphGreyScale, glyphImg.Width, glyphImg.Height, out newGreyImgStride);
 
             //blend lcd 
-            var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
-            Blend(aggPainer.Graphics.DestActualImage, expanedGreyScaleBuffer, newGreyImgStride, glyphImg.Height);
+            var aggPainer = (PixelFarm.Agg.AggPainter)p;
+            Blend(aggPainer.RenderSurface.DestActualImage, expanedGreyScaleBuffer, newGreyImgStride, glyphImg.Height);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
         }
 
-        void RunSampleB(CanvasPainter p)
+        void RunSampleB(PixelFarm.Drawing.Painter p)
         {
             //version 2:
             //1. create simple vertical line to test agg's lcd rendernig technique
             //create gray-scale actual image
             ActualImage glyphImg = new ActualImage(100, 100, PixelFormat.ARGB32);
-            ImageGraphics2D glyph2d = new ImageGraphics2D(glyphImg);
-            AggCanvasPainter painter = new AggCanvasPainter(glyph2d);
+            AggRenderSurface glyph2d = new AggRenderSurface(glyphImg);
+            AggPainter painter = new AggPainter(glyph2d);
             //
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f;
@@ -257,13 +259,13 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //clear surface bg
             p.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
-            var aggPainer = (PixelFarm.Agg.AggCanvasPainter)p;
-            BlendWithLcdTechnique(aggPainer.Graphics.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);
+            var aggPainer = (PixelFarm.Agg.AggPainter)p;
+            BlendWithLcdTechnique(aggPainer.RenderSurface.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
             //--------------- 
         }
-        void RunSampleC(CanvasPainter p)
+        void RunSampleC(PixelFarm.Drawing.Painter p)
         {
             //version 3:  
             p.Clear(PixelFarm.Drawing.Color.White);
@@ -282,7 +284,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             return degree * (180d / Math.PI);
         }
 
-        void RunSampleD(CanvasPainter p)
+        void RunSampleD(PixelFarm.Drawing.Painter p)
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
@@ -306,7 +308,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
             //}
         }
-        void RunSampleE(CanvasPainter p)
+        void RunSampleE(PixelFarm.Drawing.Painter p)
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
@@ -333,7 +335,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
             //}
         }
-        void RunSampleF(CanvasPainter p)
+        void RunSampleF(PixelFarm.Drawing.Painter p)
         {
             //version 4: 
             p.Clear(PixelFarm.Drawing.Color.White);
@@ -367,11 +369,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
             //specific for agg
 
-            if (!(p is PixelFarm.Agg.AggCanvasPainter))
+            if (!(p is PixelFarm.Agg.AggPainter))
             {
                 return;
             }

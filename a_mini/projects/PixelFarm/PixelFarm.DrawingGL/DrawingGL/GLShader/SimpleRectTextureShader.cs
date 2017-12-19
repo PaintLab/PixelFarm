@@ -10,8 +10,8 @@ namespace PixelFarm.DrawingGL
         protected ShaderUniformMatrix4 u_matrix;
         protected ShaderUniformVar1 s_texture;
         protected static readonly ushort[] indices = new ushort[] { 0, 1, 2, 3 };
-        public SimpleRectTextureShader(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public SimpleRectTextureShader(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
         }
 
@@ -19,10 +19,10 @@ namespace PixelFarm.DrawingGL
         protected void CheckViewMatrix()
         {
             int version = 0;
-            if (orthoviewVersion != (version = _canvasShareResource.OrthoViewVersion))
+            if (orthoviewVersion != (version = _shareRes.OrthoViewVersion))
             {
                 orthoviewVersion = version;
-                u_matrix.SetData(_canvasShareResource.OrthoView.data);
+                u_matrix.SetData(_shareRes.OrthoView.data);
             }
         }
 
@@ -246,8 +246,8 @@ namespace PixelFarm.DrawingGL
 
     class GdiImageTextureShader : SimpleRectTextureShader
     {
-        public GdiImageTextureShader(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public GdiImageTextureShader(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
             //--------------------------------------------------------------------------
             string vs = @"
@@ -281,8 +281,8 @@ namespace PixelFarm.DrawingGL
 
     class OpenGLESTextureShader : SimpleRectTextureShader
     {
-        public OpenGLESTextureShader(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public OpenGLESTextureShader(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
             //--------------------------------------------------------------------------
             string vs = @"
@@ -313,8 +313,8 @@ namespace PixelFarm.DrawingGL
 
     class GdiImageTextureWithWhiteTransparentShader : SimpleRectTextureShader
     {
-        public GdiImageTextureWithWhiteTransparentShader(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public GdiImageTextureWithWhiteTransparentShader(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
             string vs = @"
                 attribute vec4 a_position;
@@ -358,8 +358,8 @@ namespace PixelFarm.DrawingGL
         ShaderUniformVar1 _isBigEndian;
         ShaderUniformVar1 _c_intensity;
         ShaderUniformVar4 _d_color; //drawing color
-        public ImageTextureWithSubPixelRenderingShader(CanvasToShaderSharedResource canvasShareResource)
-            : base(canvasShareResource)
+        public ImageTextureWithSubPixelRenderingShader(ShaderSharedResource shareRes)
+            : base(shareRes)
         {
 
             string vs = @"

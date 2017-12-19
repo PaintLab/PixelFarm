@@ -16,21 +16,21 @@ namespace LayoutFarm.UI.OpenGL
         bool isInitGLControl;
         OpenGLCanvasViewport openGLViewport;
         UISurfaceViewportControl windowControl;
-        CanvasGL2d canvas2d;
+        GLRenderSurface canvas2d;
 
         public MyTopWindowBridgeOpenGL(RootGraphic root, ITopWindowEventRoot topWinEventRoot)
             : base(root, topWinEventRoot)
         {
 
         }
-        public void SetupCanvas(Canvas canvas)
+        public void SetupCanvas(DrawBoard canvas)
         {
 
             openGLViewport.SetCanvas(canvas);
         }
         void HandleGLPaint(object sender, System.EventArgs e)
         {
-            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
+            canvas2d.SmoothMode = SmoothMode.Smooth;
             canvas2d.StrokeColor = PixelFarm.Drawing.Color.Black;
             canvas2d.ClearColorBuffer();
             //example

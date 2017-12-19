@@ -22,8 +22,8 @@ namespace SampleWinForms.UI
         TreeNode _bonesNode;
         TreeNode _glyphEdgesNode;
         //
-        VertexStore _orgVxs;
-        VertexStore _flattenVxs;
+        PixelFarm.Drawing.VertexStore _orgVxs;
+        PixelFarm.Drawing.VertexStore _flattenVxs;
 
 
         List<EdgeLine> _edgeLines = new List<EdgeLine>();
@@ -371,7 +371,7 @@ namespace SampleWinForms.UI
             //}
             _glyphEdgesNode.Nodes.Add(nodeEdge);
         }
-        public void ShowFlatternBorderInfo(VertexStore vxs)
+        public void ShowFlatternBorderInfo(PixelFarm.Drawing.VertexStore vxs)
         {
             if (!_clearInfoView) { return; }
             _flattenVxsNode.Nodes.Clear();
@@ -391,7 +391,7 @@ namespace SampleWinForms.UI
             }
             _treeView.ResumeLayout();
         }
-        public void ShowOrgBorderInfo(VertexStore vxs)
+        public void ShowOrgBorderInfo(PixelFarm.Drawing.VertexStore vxs)
         {
             if (!_clearInfoView) { return; }
             _orgCmds.Nodes.Clear();

@@ -1,9 +1,10 @@
 ﻿//MIT, 2014-2017, WinterDev
 using System;
 using System.Collections.Generic;
-using PixelFarm.DrawingGL;
 
 using PixelFarm.Agg;
+using PixelFarm.Drawing;
+using PixelFarm.DrawingGL;
 
 namespace Mini
 {
@@ -24,9 +25,9 @@ namespace Mini
         GLSwapBufferDelegate _swapBufferDelegate;
         GetGLControlDisplay _getGLControlDisplay;
         GetGLSurface _getGLSurface;
-        GLCanvasPainter _painter;
-
-        public virtual void Draw(CanvasPainter p) { }
+        GLPainter _painter;
+        
+        public virtual void Draw(Painter p) { }
         public void CloseDemo()
         {
             DemoClosing();
@@ -65,26 +66,26 @@ namespace Mini
 
         //----------------------------------------------------
         //for GL
-        public virtual void BuildCustomDemoGLContext(out CanvasGL2d canvasGL, out GLCanvasPainter painter)
+        public virtual void BuildCustomDemoGLContext(out GLRenderSurface glsf, out GLPainter painter)
         {
-            canvasGL = null;
+            glsf = null;
             painter = null;
         }
-        public static void InvokeGLContextReady(DemoBase demo, CanvasGL2d canvasGL, GLCanvasPainter painter)
+        public static void InvokeGLContextReady(DemoBase demo, GLRenderSurface glsf, GLPainter painter)
         {
             demo._painter = painter;
-            demo.OnGLContextReady(canvasGL, painter);
+            demo.OnGLSurfaceReady(glsf, painter);
             demo.OnReadyForInitGLShaderProgram();
         }
-        public static void InvokePainterReady(DemoBase demo, CanvasPainter painter)
+        public static void InvokePainterReady(DemoBase demo, Painter painter)
         {
             demo.OnPainterReady(painter);
         }
-        protected virtual void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected virtual void OnGLSurfaceReady(GLRenderSurface canvasGL, GLPainter painter)
         {
 
         }
-        protected virtual void OnPainterReady(CanvasPainter painter)
+        protected virtual void OnPainterReady(Painter painter)
         {
 
         }

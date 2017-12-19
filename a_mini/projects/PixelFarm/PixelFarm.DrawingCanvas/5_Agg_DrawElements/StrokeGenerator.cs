@@ -21,27 +21,13 @@
 using System;
 using System.Collections.Generic;
 using PixelFarm.VectorMath;
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg
 {
     static class MyMath
     {
 
-        /// <summary>
-        /// Convert degrees to radians
-        /// </summary>
-        /// <param name="degrees">An angle in degrees</param>
-        /// <returns>The angle expressed in radians</returns>
-        public static double DegreesToRadians(double degrees)
-        {
 
-            return degrees * System.Math.PI / 180.0f;
-        }
-        public static double RadToDegrees(double rad)
-        {
-
-            return rad * (180.0f / System.Math.PI);
-        }
         public static bool MinDistanceFirst(Vector2 baseVec, Vector2 compare0, Vector2 compare1)
         {
             return (SquareDistance(baseVec, compare0) < SquareDistance(baseVec, compare1)) ? true : false;
@@ -52,30 +38,6 @@ namespace PixelFarm.Agg
             double xdiff = v1.X - v0.X;
             double ydiff = v1.Y - v0.Y;
             return (xdiff * xdiff) + (ydiff * ydiff);
-        }
-        public static int Min(double v0, double v1, double v2)
-        {
-            //find min of 3
-            unsafe
-            {
-                double* doubleArr = stackalloc double[3];
-                doubleArr[0] = v0;
-                doubleArr[1] = v1;
-                doubleArr[2] = v2;
-
-                double min = double.MaxValue;
-                int foundAt = 0;
-                for (int i = 0; i < 3; ++i)
-                {
-                    if (doubleArr[i] < min)
-                    {
-                        foundAt = i;
-                        min = doubleArr[i];
-                    }
-                }
-                return foundAt;
-            }
-
         }
 
         /// <summary>
@@ -429,7 +391,7 @@ namespace PixelFarm.Agg
     class LineStrokeGenerator
     {
 
-        LineJoiner _lineJoiner; 
+        LineJoiner _lineJoiner;
         double latest_moveto_x;
         double latest_moveto_y;
         double positiveSide;
@@ -647,7 +609,7 @@ namespace PixelFarm.Agg
 
             positiveSideVectors.Clear();
             negativeSideVectors.Clear();
-             
+
             bool has_some_results = false;
             for (int i = 0; i < cmdCount; ++i)
             {
@@ -852,7 +814,7 @@ namespace PixelFarm.Agg
                         double c_y = (y0 + y1) / 2;
                         Vector2 delta = new Vector2(x0 - c_x, y0 - c_y);
                         ArcGenerator.GenerateArcNew(outputVectors,
-                                     c_x, c_y, delta, MyMath.DegreesToRadians(180));
+                                     c_x, c_y, delta, AggMath.deg2rad(180));
                     }
                     break;
             }
@@ -881,7 +843,7 @@ namespace PixelFarm.Agg
                         double c_y = (y0 + y1) / 2;
                         Vector2 delta = new Vector2(x1 - c_x, y1 - c_y);
                         ArcGenerator.GenerateArcNew(outputVectors,
-                                     c_x, c_y, delta, MyMath.DegreesToRadians(180));
+                                     c_x, c_y, delta, AggMath.deg2rad(180));
                     }
                     break;
             }
@@ -901,7 +863,7 @@ namespace PixelFarm.Agg
 
             //TODO: review here ***
             int nsteps = 4;
-            double eachStep = MyMath.RadToDegrees(sweepAngleRad) / nsteps;
+            double eachStep = AggMath.rad2deg(sweepAngleRad) / nsteps;
             double angle = 0;
             for (int i = 0; i < nsteps; ++i)
             {

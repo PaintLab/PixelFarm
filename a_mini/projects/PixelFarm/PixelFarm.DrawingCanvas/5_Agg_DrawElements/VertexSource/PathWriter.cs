@@ -19,6 +19,7 @@
 //----------------------------------------------------------------------------
 
 using PixelFarm.VectorMath;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.VertexSource
 {
 
@@ -123,6 +124,10 @@ namespace PixelFarm.Agg.VertexSource
             c2 = new Vector2();
             latestSVGPathCmd = SvgPathCommand.MoveTo;
             figureCount = 0;
+        }
+        public void NewVxs()
+        {
+            myvxs = new VertexStore();
         }
         public void ClearAndStartNewVxs(VertexStore newVxsOutput)
         {

@@ -5,21 +5,21 @@ namespace PixelFarm.DrawingGL
 {
     abstract class ShaderBase
     {
-        protected readonly CanvasToShaderSharedResource _canvasShareResource;
+        protected readonly ShaderSharedResource _shareRes;
         protected readonly MiniShaderProgram shaderProgram = new MiniShaderProgram();
-        public ShaderBase(CanvasToShaderSharedResource canvasShareResource)
+        public ShaderBase(ShaderSharedResource shareRes)
         {
-            _canvasShareResource = canvasShareResource;
+            _shareRes = shareRes;
         }
         /// <summary>
         /// set as current shader
         /// </summary>
         protected void SetCurrent()
         {
-            if (_canvasShareResource._currentShader != this)
+            if (_shareRes._currentShader != this)
             {
                 shaderProgram.UseProgram();
-                _canvasShareResource._currentShader = this;
+                _shareRes._currentShader = this;
                 this.OnSwithToThisShader();
             }
         }

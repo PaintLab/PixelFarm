@@ -11,30 +11,30 @@ namespace OpenTkEssTest
     [Info("T111_FrameBuffer")]
     public class T111_FrameBuffer : DemoBase
     {
-        CanvasGL2d canvas2d;
-        GLCanvasPainter painter;
+        GLRenderSurface _glsf;
+        GLPainter painter;
         FrameBuffer frameBuffer;
         bool isInit;
-        protected override void OnGLContextReady(CanvasGL2d canvasGL, GLCanvasPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
         {
-            this.canvas2d = canvasGL;
+            this._glsf = glsf;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
             int max = Math.Max(this.Width, this.Height);
-            frameBuffer = canvas2d.CreateFrameBuffer(max, max);
+            frameBuffer = _glsf.CreateFrameBuffer(max, max);
         }
         protected override void DemoClosing()
         {
-            canvas2d.Dispose();
+            _glsf.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            canvas2d.SmoothMode = CanvasSmoothMode.Smooth;
-            canvas2d.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            canvas2d.Clear(PixelFarm.Drawing.Color.White);
-            canvas2d.ClearColorBuffer();
+            _glsf.SmoothMode = SmoothMode.Smooth;
+            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsf.Clear(PixelFarm.Drawing.Color.White);
+            _glsf.ClearColorBuffer();
             //-------------------------------
             if (!isInit)
             {
@@ -61,11 +61,11 @@ namespace OpenTkEssTest
 
                 GLBitmap bmp = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
                 bmp.IsBigEndianPixel = true;
-                canvas2d.DrawImage(bmp, 15, 300);
+                _glsf.DrawImage(bmp, 15, 300);
             }
             else
             {
-                canvas2d.Clear(PixelFarm.Drawing.Color.Blue);
+                _glsf.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
             SwapBuffers();

@@ -191,9 +191,6 @@
     <Compile Include="..\pixelfarm.vectors\2_geometry\RectD.cs">
       <Link>1_Vectors\2_Geometry\RectD.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.vectors\2_geometry\RectInt.cs">
-      <Link>1_Vectors\2_Geometry\RectInt.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.vectors\3_transform\1_Affine.cs">
       <Link>1_Vectors\3_Transform\1_Affine.cs</Link>
     </Compile>
@@ -239,15 +236,12 @@
     <Compile Include="..\tesselate\Tesselator.cs">
       <Link>1_Vectors\6_Tesselate\Tesselator.cs</Link>
     </Compile>
+    <Compile Include="2_Canvas\PainterExtensions.cs" />
     <Compile Include="2_Canvas\ColorEx.cs" />
-    <Compile Include="2_Canvas\CanvasPainter.cs" />
     <Compile Include="6_Typography\ITextPrinter.cs" />
     <Compile Include="3_Agg_PixelBuffer\ActualImage.cs" />
     <Compile Include="3_Agg_PixelBuffer\AggMemMx.cs" />
-    <Compile Include="0_BufferMx\AggBuffMx.cs" />
-    <Compile Include="4_Agg_Vertex\0_VertexCommandAndOrientation.cs" />
-    <Compile Include="4_Agg_Vertex\1_VertexStore.cs" />
-    <Compile Include="4_Agg_Vertex\2_VertexStoreSnap.cs" />
+    <Compile Include="0_BufferMx\NativeMemMx.cs" />
     <Compile Include="4_Agg_Vertex\VertexHitTester.cs" />
     <Compile Include="4_Agg_Vertex\VertexStoreExtensions.cs" />
     <Compile Include="4_Agg_Vertex\VertexStoreTransformExtensions.cs" />

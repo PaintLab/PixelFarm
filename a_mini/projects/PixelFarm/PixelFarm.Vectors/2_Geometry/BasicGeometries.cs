@@ -20,6 +20,7 @@ namespace PixelFarm.Drawing
             get { return this._x; }
             set { this._x = value; }
         }
+        
         public int Y
         {
             get { return this._y; }
@@ -46,6 +47,10 @@ namespace PixelFarm.Drawing
         {
             return base.GetHashCode();
         }
+
+       
+        public int x { get { return this._x; } } //temp
+        public int y { get { return this._y; } } //temp
         public static readonly Point Empty = new Point();
 #if DEBUG
         public override string ToString()

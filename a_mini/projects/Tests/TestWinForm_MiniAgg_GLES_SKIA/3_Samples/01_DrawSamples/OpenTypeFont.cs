@@ -15,7 +15,7 @@ using PixelFarm.Drawing.Fonts;
 using Typography.OpenFont;
 using Typography.Contours;
 using Typography.TextServices;
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.Sample_Draw
 {
     [Info(OrderCode = "01")]
@@ -116,9 +116,9 @@ namespace PixelFarm.Agg.Sample_Draw
             set;
         }
 
-        public override void Draw(CanvasPainter p)
+        public override void Draw(PixelFarm.Drawing.Painter p)
         {
-            AggCanvasPainter aggPainter = (AggCanvasPainter)p;
+            AggPainter aggPainter = (AggPainter)p;
 
             //---------------- 
             //5. use PixelFarm's Agg to render to bitmap...

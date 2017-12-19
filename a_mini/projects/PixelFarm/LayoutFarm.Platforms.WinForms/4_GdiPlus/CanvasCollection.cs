@@ -5,7 +5,7 @@ namespace PixelFarm.Drawing.WinGdi
 {
     class CanvasCollection
     {
-        List<MyGdiPlusCanvas> cachePages;
+        List<MyGdiPlusDrawBoard> cachePages;
         int numOfCachePages;
         int eachPageWidth;
         int eachPageHeight;
@@ -20,7 +20,7 @@ namespace PixelFarm.Drawing.WinGdi
             {
                 eachPageHeight = 1;
             }
-            cachePages = new List<MyGdiPlusCanvas>(numOfCachePages);
+            cachePages = new List<MyGdiPlusDrawBoard>(numOfCachePages);
             this.eachPageWidth = eachPageWidth;
             this.eachPageHeight = eachPageHeight;
             this.numOfCachePages = numOfCachePages;
@@ -51,12 +51,12 @@ namespace PixelFarm.Drawing.WinGdi
                 }
             }
         }
-        public MyGdiPlusCanvas GetCanvasPage(int hPageNum, int vPageNum)
+        public MyGdiPlusDrawBoard GetCanvasPage(int hPageNum, int vPageNum)
         {
             int j = cachePages.Count;
             for (int i = j - 1; i > -1; i--)
             {
-                MyGdiPlusCanvas page = cachePages[i];
+                MyGdiPlusDrawBoard page = cachePages[i];
                 if (page.IsPageNumber(hPageNum, vPageNum))
                 {
                     cachePages.RemoveAt(i);
@@ -71,7 +71,7 @@ namespace PixelFarm.Drawing.WinGdi
 
             if (j >= numOfCachePages)
             {
-                MyGdiPlusCanvas page = cachePages[0];
+                MyGdiPlusDrawBoard page = cachePages[0];
                 cachePages.RemoveAt(0);
                 page.IsUnused = false;
                 if (page.DimensionInvalid)
@@ -89,7 +89,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
             else
             {
-                return new MyGdiPlusCanvas(0, 0, eachPageWidth, eachPageHeight);
+                return new MyGdiPlusDrawBoard(0, 0, eachPageWidth, eachPageHeight);
                 //return (MyGdiPlusCanvas)LayoutFarm.UI.GdiPlus.MyWinGdiPortal.P.CreateCanvas(
                 //     0, 0, eachPageWidth, eachPageHeight);
 
@@ -103,14 +103,14 @@ namespace PixelFarm.Drawing.WinGdi
                 //    eachPageHeight);
             }
         }
-        public void ReleasePage(MyGdiPlusCanvas page)
+        public void ReleasePage(MyGdiPlusDrawBoard page)
         {
             page.IsUnused = true;
             cachePages.Add(page);
         }
         public void Dispose()
         {
-            foreach (MyGdiPlusCanvas canvas in cachePages)
+            foreach (MyGdiPlusDrawBoard canvas in cachePages)
             {
                 canvas.CloseCanvas();
             }

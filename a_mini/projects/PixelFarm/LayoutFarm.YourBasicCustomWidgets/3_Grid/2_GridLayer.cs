@@ -580,7 +580,7 @@ namespace LayoutFarm.UI
 #endif
 
 
-        public override void DrawChildContent(Canvas canvas, Rectangle updateArea)
+        public override void DrawChildContent(DrawBoard canvas, Rectangle updateArea)
         {
             //GridCell leftTopGridItem = GetGridItemByPosition(updateArea.Left, updateArea.Top);
             //if (leftTopGridItem == null)

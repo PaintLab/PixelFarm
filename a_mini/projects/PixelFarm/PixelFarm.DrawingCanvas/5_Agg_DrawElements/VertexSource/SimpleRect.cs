@@ -21,7 +21,7 @@
 // Rounded rectangle vertex generator
 //
 //----------------------------------------------------------------------------
-
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.VertexSource
 {
     //------------------------------------------------------------rounded_rect
@@ -31,6 +31,8 @@ namespace PixelFarm.Agg.VertexSource
     public class SimpleRect
     {
         RectD bounds;
+        PathWriter _reusablePathWriter = new PathWriter();
+
         public SimpleRect()
         {
         }
@@ -55,17 +57,29 @@ namespace PixelFarm.Agg.VertexSource
             if (left > right) { bounds.Left = right; bounds.Right = left; }
             if (bottom > top) { bounds.Bottom = top; bounds.Top = bottom; }
         }
-
+        public void Offset(double dx, double dy)
+        {
+            bounds.Offset(dx, dy);
+        }
+        public double Height
+        {
+            get { return bounds.Height; }
+        }
+        public double Width
+        {
+            get { return bounds.Width; }
+        }
         public VertexStore MakeVxs(VertexStore output)
         {
-            PathWriter m_LinesToDraw = new PathWriter(output);
-            m_LinesToDraw.Clear();
-            m_LinesToDraw.MoveTo(bounds.Left, bounds.Bottom);
-            m_LinesToDraw.LineTo(bounds.Right, bounds.Bottom);
-            m_LinesToDraw.LineTo(bounds.Right, bounds.Top);
-            m_LinesToDraw.LineTo(bounds.Left, bounds.Top);
-            m_LinesToDraw.CloseFigure();
-            return m_LinesToDraw.Vxs;
+            
+            _reusablePathWriter.Clear();
+            _reusablePathWriter.NewVxs();
+            _reusablePathWriter.MoveTo(bounds.Left, bounds.Bottom);
+            _reusablePathWriter.LineTo(bounds.Right, bounds.Bottom);
+            _reusablePathWriter.LineTo(bounds.Right, bounds.Top);
+            _reusablePathWriter.LineTo(bounds.Left, bounds.Top);
+            _reusablePathWriter.CloseFigure();
+            return _reusablePathWriter.Vxs;
         }
         public VertexStoreSnap MakeVertexSnap(VertexStore output)
         {

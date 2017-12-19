@@ -70,7 +70,7 @@ namespace LayoutFarm.RenderBoxes
             }
         }
 
-        public override void DrawChildContent(Canvas canvasPage, Rectangle updateArea)
+        public override void DrawChildContent(DrawBoard canvasPage, Rectangle updateArea)
         {
             if ((layerFlags & IS_LAYER_HIDDEN) != 0)
             {

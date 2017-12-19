@@ -1,5 +1,6 @@
 ﻿//MIT, 2014-2017, WinterDev
 using PixelFarm.Agg;
+using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 using System;
 using System.Numerics;
@@ -42,11 +43,11 @@ namespace SampleWinForms.UI
         float _sizeInPoint;
         GlyphPathBuilder builder;
         VertexStorePool _vxsPool = new VertexStorePool();
-        CanvasPainter painter;
+        PixelFarm.Drawing.Painter painter;
         float _pxscale;
         HintTechnique _latestHint;
         char _testChar;
-        public CanvasPainter CanvasPainter { get { return painter; } set { painter = value; } }
+        public PixelFarm.Drawing.Painter CanvasPainter { get { return painter; } set { painter = value; } }
         public void SetFont(Typeface typeface, float sizeInPoint)
         {
             _typeface = typeface;
@@ -104,7 +105,7 @@ namespace SampleWinForms.UI
             var ps = txToVxs1.dbugGetPathWriter();
             _infoView.ShowOrgBorderInfo(ps.Vxs);
 #endif
-            VertexStore vxs = new VertexStore();
+            PixelFarm.Drawing.VertexStore vxs = new PixelFarm.Drawing.VertexStore();
 
             txToVxs1.WriteOutput(vxs, _vxsPool);
             //----------------------------------------------------
@@ -116,7 +117,7 @@ namespace SampleWinForms.UI
             painter.Clear(PixelFarm.Drawing.Color.White);
 
             RectD bounds = new RectD();
-            BoundingRect.GetBoundingRect(new VertexStoreSnap(vxs), ref bounds);
+            BoundingRect.GetBoundingRect(new PixelFarm.Drawing.VertexStoreSnap(vxs), ref bounds);
             //----------------------------------------------------
             float scale = _typeface.CalculateScaleToPixelFromPointSize(_sizeInPoint);
             _pxscale = scale;
@@ -209,7 +210,7 @@ namespace SampleWinForms.UI
         public bool DrawEdgeMidPoint { get; set; }
 
 #if DEBUG
-        void DrawPointKind(CanvasPainter painter, GlyphPoint point)
+        void DrawPointKind(PixelFarm.Drawing.Painter painter, GlyphPoint point)
         {
             if (!DrawGlyphPoint) { return; }
 
@@ -228,7 +229,7 @@ namespace SampleWinForms.UI
             }
         }
 
-        void DrawEdge(CanvasPainter painter, EdgeLine edge)
+        void DrawEdge(PixelFarm.Drawing.Painter painter, EdgeLine edge)
         {
             if (edge.IsOutside)
             {
@@ -368,7 +369,7 @@ namespace SampleWinForms.UI
 
             }
         }
-        void DrawPerpendicularEdgeControlPoints(CanvasPainter painter, OutsideEdgeLine internalEdgeLine)
+        void DrawPerpendicularEdgeControlPoints(PixelFarm.Drawing.Painter painter, OutsideEdgeLine internalEdgeLine)
         {
 
             //Vector2 regen0 = edge._newRegen0 * _pxscale;
@@ -438,7 +439,7 @@ namespace SampleWinForms.UI
                 //painter.FillRectLBWH(midpoint.X, midpoint.Y, 5, 5, PixelFarm.Drawing.Color.White);
             }
         }
-        void DrawBoneJoint(CanvasPainter painter, GlyphBoneJoint joint)
+        void DrawBoneJoint(PixelFarm.Drawing.Painter painter, GlyphBoneJoint joint)
         {
             //-------------- 
             EdgeLine p_contactEdge = joint.dbugGetEdge_P();

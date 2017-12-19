@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using ClipperLib;
+using PixelFarm.Drawing;
 namespace PixelFarm.Agg.VertexSource
 {
     public enum VxsClipperType : byte

@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Imaging
 {
     public class ChildImage : ImageReaderWriterBase
     {
-        int bufferOffset; // the beggining of the image in this buffer 
+
         public ChildImage(IImageReaderWriter image,
             int bufferOffsetToFirstPixel,
             int width,
@@ -85,6 +85,7 @@ namespace PixelFarm.Agg.Imaging
             SetDimmensionAndFormat(width, height, strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
             SetBuffer(buffer, bufferOffset);
+             
         }
 
         void Attach(IImageReaderWriter sourceImage,
@@ -132,11 +133,11 @@ namespace PixelFarm.Agg.Imaging
                 throw new Exception("Your buffer does not have enough room it it for your height and strideInBytes.");
             }
             this.m_ByteBuffer = byteBuffer;
-            this.bufferOffset = bufferFirstPixel = bufferOffset;
+            startBufferPixelAt = bufferOffset;
             if (strideInBytes < 0)
             {
                 int addAmount = -((height - 1) * strideInBytes);
-                bufferFirstPixel = addAmount + bufferOffset;
+                startBufferPixelAt = addAmount + bufferOffset;
             }
             SetUpLookupTables();
         }

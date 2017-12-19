@@ -254,6 +254,12 @@ namespace OpenTK.Platform.X11
     partial class Glx
     {
 
+        protected override void SetupDelegatesAndCoreTypes(out Type delegatesClass, out Type coreClass)
+        {
+            delegatesClass = typeof(Delegates);
+            coreClass = null;
+        }
+
         [DllImport(Library, EntryPoint = "glXIsDirect")]
         public static extern bool IsDirect(IntPtr dpy, IntPtr context);
         [DllImport(Library, EntryPoint = "glXQueryExtension")]
