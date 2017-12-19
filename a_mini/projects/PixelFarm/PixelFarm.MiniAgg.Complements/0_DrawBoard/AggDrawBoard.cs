@@ -154,7 +154,7 @@ namespace PixelFarm.Agg
         {
             throw new NotImplementedException();
         }
-
+#if DEBUG
         public override void dbug_DrawCrossRect(Color color, Rectangle rect)
         {
             throw new NotImplementedException();
@@ -164,7 +164,7 @@ namespace PixelFarm.Agg
         {
             throw new NotImplementedException();
         }
-
+#endif
         public override void DrawImage(Image image, RectangleF dest, RectangleF src)
         {
             throw new NotImplementedException();
