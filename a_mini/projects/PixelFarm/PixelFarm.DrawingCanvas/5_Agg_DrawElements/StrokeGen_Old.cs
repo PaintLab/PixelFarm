@@ -371,8 +371,7 @@ namespace PixelFarm.Agg
 
     class MultiPartsVertexList
     {
-
-
+        //TODO make this struct
         class Range
         {
             public int beginAt;
@@ -443,6 +442,7 @@ namespace PixelFarm.Agg
             //1. stop current range
             if (_ranges.Count > 0)
             {
+                //update end of latest range
                 _ranges[_ranges.Count - 1].SetEndAt(_vertextDistanceList.Count);
             }
 
