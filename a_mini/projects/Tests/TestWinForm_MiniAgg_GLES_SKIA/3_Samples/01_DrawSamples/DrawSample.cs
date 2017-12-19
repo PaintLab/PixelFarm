@@ -66,11 +66,10 @@ namespace PixelFarm.Agg.Sample_Draw
         {
             int width = 800;
             int height = 600;
-            //clear the image to white
-            //g.Clear(ColorRGBA.White);
+            //clear the image to white         
             // draw a circle
             p.Clear(Drawing.Color.White);
-            Ellipse ellipsePro = new Ellipse(0, 0, 100, 50);
+            Ellipse ellipseVxsGen = new Ellipse(0, 0, 100, 50);
             for (double angleDegrees = 0; angleDegrees < 180; angleDegrees += 22.5)
             {
                 var mat = Affine.NewMatix(
@@ -80,7 +79,8 @@ namespace PixelFarm.Agg.Sample_Draw
                 var v1 = GetFreeVxs();
                 var v2 = GetFreeVxs();
                 var v3 = GetFreeVxs();
-                mat.TransformToVxs(ellipsePro.MakeVxs(v1), v2);
+                mat.TransformToVxs(ellipseVxsGen.MakeVxs(v1), v2);
+                
                 p.FillColor = Drawing.Color.Yellow;
                 p.Fill(v2);
                 //------------------------------------
