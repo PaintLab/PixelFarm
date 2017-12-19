@@ -125,6 +125,10 @@ namespace PixelFarm.Agg.VertexSource
             latestSVGPathCmd = SvgPathCommand.MoveTo;
             figureCount = 0;
         }
+        public void NewVxs()
+        {
+            myvxs = new VertexStore();
+        }
         public void ClearAndStartNewVxs(VertexStore newVxsOutput)
         {
 

@@ -71,6 +71,10 @@ namespace PixelFarm.Agg.Sample_Images
             p.DrawImage(actualImage, 50, 100);
             p.DrawImage(actualImage, 100, 200);
 
+            p.FillColor = Color.Red;
+            p.StrokeColor = Color.Green;
+            p.FillRectangle(0, 0, 100, 5);
+            p.Rectangle(10, 20, 100, 30);
             //p.DrawImage(actualImage, affinePlan1);
             //p.DrawImage(actualImage, affinePlans);
             //p.DrawImage(actualImage, 100,200);
