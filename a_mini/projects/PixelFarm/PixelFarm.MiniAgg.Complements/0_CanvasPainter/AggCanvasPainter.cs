@@ -42,7 +42,7 @@ namespace PixelFarm.Agg
             this.scline = aggRdsf.ScanlinePacked8;
             this.sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
         }
-        public AggRenderSurface Graphics
+        public AggRenderSurface RenderSurface
         {
             get { return this._aggRdsf; }
         }

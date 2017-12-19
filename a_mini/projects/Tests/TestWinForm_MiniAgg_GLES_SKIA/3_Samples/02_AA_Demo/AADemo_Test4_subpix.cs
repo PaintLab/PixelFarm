@@ -238,7 +238,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
 
             //blend lcd 
             var aggPainer = (PixelFarm.Agg.AggPainter)p;
-            Blend(aggPainer.Graphics.DestActualImage, expanedGreyScaleBuffer, newGreyImgStride, glyphImg.Height);
+            Blend(aggPainer.RenderSurface.DestActualImage, expanedGreyScaleBuffer, newGreyImgStride, glyphImg.Height);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
         }
@@ -260,7 +260,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             p.Clear(PixelFarm.Drawing.Color.White);
             //--------------------------
             var aggPainer = (PixelFarm.Agg.AggPainter)p;
-            BlendWithLcdTechnique(aggPainer.Graphics.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);
+            BlendWithLcdTechnique(aggPainer.RenderSurface.DestActualImage, glyphImg, PixelFarm.Drawing.Color.Black);
             //--------------- 
             p.DrawImage(glyphImg, 0, 50);
             //--------------- 

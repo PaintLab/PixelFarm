@@ -151,12 +151,12 @@ namespace PixelFarm.Agg.Sample_LionOutline
             }
 
             //-----------------------
-            AggRenderSurface graphics2D = p1.Graphics;
+            AggRenderSurface aggRdsf = p1.RenderSurface;
             //var widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
             //int width = widgetsSubImage.Width;
             //int height = widgetsSubImage.Height; 
 
-            ChildImage widgetsSubImage = ImageHelper.CreateChildImage(graphics2D.DestImage, graphics2D.GetClippingRect());
+            ChildImage widgetsSubImage = ImageHelper.CreateChildImage(aggRdsf.DestImage, aggRdsf.GetClippingRect());
             ChildImage clippedSubImage = new ChildImage(widgetsSubImage, new PixelBlenderBGRA());
             ClipProxyImage imageClippingProxy = new ClipProxyImage(clippedSubImage);
             imageClippingProxy.Clear(PixelFarm.Drawing.Color.White);
@@ -164,17 +164,17 @@ namespace PixelFarm.Agg.Sample_LionOutline
 
             if (RenderAsScanline)
             {
-                var rasterizer = graphics2D.ScanlineRasterizer;
+                var rasterizer = aggRdsf.ScanlineRasterizer;
                 rasterizer.SetClipBox(0, 0, width, height);
                 //Stroke stroke = new Stroke(strokeWidth);
                 //stroke.LineJoin = LineJoin.Round;
                 var vxs = GetFreeVxs();
                 affTx.TransformToVxs(lionShape.Path.Vxs, vxs);
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = graphics2D.ScanlineRasToDestBitmap;
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
                 sclineRasToBmp.RenderSolidAllPaths(
                     imageClippingProxy,
                     rasterizer,
-                    graphics2D.ScanlinePacked8,
+                    aggRdsf.ScanlinePacked8,
                     vxs,
                     lionShape.Colors,
                     lionShape.PathIndexList,
