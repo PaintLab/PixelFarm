@@ -8,7 +8,7 @@ namespace PixelFarm.Drawing
     {
 
         //------------------------------
-        //this class provides canvas interface for drawing
+        //this class provides basic canvas interface for drawing
         //with 'screen' coordinate system
         //y axis points down
         //x axis points to the right
@@ -41,7 +41,7 @@ namespace PixelFarm.Drawing
         public abstract SmoothingMode SmoothingMode { get; set; }
         public abstract float StrokeWidth { get; set; }
         public abstract Color StrokeColor { get; set; }
-
+        public abstract Brush CurrentBrush { get; set; }
 
         ////////////////////////////////////////////////////////////////////////////
         //states
@@ -64,21 +64,7 @@ namespace PixelFarm.Drawing
         public abstract int CanvasOriginX { get; }
         public abstract int CanvasOriginY { get; }
         public abstract void SetCanvasOrigin(int x, int y);
-        public void OffsetCanvasOrigin(int dx, int dy)
-        {
-            //TODO: review offset function
-            this.SetCanvasOrigin(this.CanvasOriginX + dx, this.CanvasOriginY + dy);
-        }
-        public void OffsetCanvasOriginX(int dx)
-        {
-            //TODO: review offset function
-            this.OffsetCanvasOrigin(dx, 0);
-        }
-        public void OffsetCanvasOriginY(int dy)
-        {
-            //TODO: review offset function
-            this.OffsetCanvasOrigin(0, dy);
-        }
+
         //---------------------------------------------------------------------
         //clip area
         public abstract bool PushClipAreaRect(int width, int height, ref Rectangle updateArea);
@@ -91,21 +77,17 @@ namespace PixelFarm.Drawing
         public abstract void RenderTo(System.IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea);
         //------------------------------------------------------- 
 
-        //lines         
+
         public abstract void DrawLine(float x1, float y1, float x2, float y2);
         //-------------------------------------------------------
         //rects 
-
-        public abstract void FillRectangle(Color color, float left, float top, float width, float height);
-        public abstract void FillRectangle(Brush brush, float left, float top, float width, float height);
-        public abstract void DrawRectangle(Color color, float left, float top, float width, float height);
+        public abstract void FillRectangle(float left, float top, float width, float height);
+        public abstract void DrawRectangle(float left, float top, float width, float height); 
         //------------------------------------------------------- 
         //path,  polygons,ellipse spline,contour,   
-        public abstract void FillPath(Color color, GraphicsPath gfxPath);
-        public abstract void FillPath(Brush brush, GraphicsPath gfxPath);
+        public abstract void FillPath(GraphicsPath gfxPath); 
         public abstract void DrawPath(GraphicsPath gfxPath);
-        public abstract void FillPolygon(Brush brush, PointF[] points);
-        public abstract void FillPolygon(Color color, PointF[] points);
+        public abstract void FillPolygon(PointF[] points); 
         //-------------------------------------------------------  
         //images
         public abstract void DrawImage(Image image, RectangleF dest, RectangleF src);
@@ -143,4 +125,75 @@ namespace PixelFarm.Drawing
         HardwareWithSoftwareFallback
     }
     public delegate void CanvasInvalidateDelegate(Rectangle paintArea);
+
+    public static class CanvasExtensionMethods
+    {
+
+        public static void OffsetCanvasOrigin(this Canvas canvas, int dx, int dy)
+        {
+            //TODO: review offset function
+            canvas.SetCanvasOrigin(canvas.CanvasOriginX + dx, canvas.CanvasOriginY + dy);
+        }
+        public static void OffsetCanvasOriginX(this Canvas canvas, int dx)
+        {
+            //TODO: review offset function
+            canvas.OffsetCanvasOrigin(dx, 0);
+        }
+        public static void OffsetCanvasOriginY(this Canvas canvas, int dy)
+        {
+            //TODO: review offset function
+            canvas.OffsetCanvasOrigin(0, dy);
+        }
+
+        /// <summary>
+        /// fill rectangle with specific brush
+        /// </summary>
+        /// <param name="canvas"></param>
+        /// <param name="brush"></param>
+        /// <param name="points"></param>
+        public static void FillRectangle(this Canvas canvas, Brush brush, PointF[] points)
+        {
+            Brush temp = canvas.CurrentBrush; //save
+            PointF p0 = points[0];
+            PointF p1 = points[1];
+            canvas.FillRectangle(p0.X, p0.Y, p1.X, p1.Y);
+            canvas.CurrentBrush = temp; //restore
+        }
+        public static void FillRectangle(this Canvas canvas, Brush brush, float left, float top, float width, float height)
+        {
+            Brush temp = canvas.CurrentBrush; //save 
+            canvas.FillRectangle(left, top, width, height);
+            canvas.CurrentBrush = temp; //restore
+        }
+        public static void FillRectangle(this Canvas canvas, Color color, float left, float top, float width, float height)
+        {
+            Brush temp = canvas.CurrentBrush; //save 
+            canvas.FillRectangle(left, top, width, height);
+            canvas.CurrentBrush = temp; //restore
+        }
+
+        public static void DrawRectangle(this Canvas canvas, Color color, float left, float top, float width, float height)
+        {
+            Brush temp = canvas.CurrentBrush; //save 
+            canvas.DrawRectangle(left, top, width, height);
+            canvas.CurrentBrush = temp; //restore
+        }
+
+        public static void FillPolygon(this Canvas canvas, Brush brush, PointF[] points)
+        {
+            Brush temp = canvas.CurrentBrush; //save 
+            canvas.FillPolygon(points);
+            canvas.CurrentBrush = temp; //restore
+        }
+        public static void FillPath(this Canvas canvas, Color color, GraphicsPath gfxPath)
+        {
+
+        }
+        public static void FillPath(this Canvas canvas, Brush brush, GraphicsPath gfxPath)
+        {
+
+        }
+
+
+    }
 }

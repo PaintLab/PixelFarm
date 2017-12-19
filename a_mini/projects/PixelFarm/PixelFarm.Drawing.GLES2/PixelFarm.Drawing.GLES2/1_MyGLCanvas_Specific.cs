@@ -10,12 +10,12 @@ namespace PixelFarm.Drawing.GLES2
 
     public partial class MyGLCanvas : Canvas, IDisposable
     {
-
+        
         GLPainter painter1;
         bool isDisposed;
         Stack<Rectangle> clipRectStack = new Stack<Rectangle>();
         Rectangle currentClipRect;
-
+        Brush _currentBrush;
         public MyGLCanvas(
            GLPainter painter, //*** we wrap around GLCanvasPainter *** 
            int width,
@@ -45,7 +45,14 @@ namespace PixelFarm.Drawing.GLES2
         {
             return "visible_clip?";
         }
-
+        public override Brush CurrentBrush
+        {
+            get { return _currentBrush; }
+            set
+            {
+                this._currentBrush = value;
+            }
+        }
         public override void CloseCanvas()
         {
             if (isDisposed)

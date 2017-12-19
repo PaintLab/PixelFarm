@@ -25,12 +25,15 @@ namespace PixelFarm.Drawing
 
     public abstract class Painter
     {
+        //this class try to wrap an underlying 'Graphics' object.
+        //this class try to provide more func than basic canvas class
+
         //who implement this class
-        //1. AggCanvasPainter
-        //2. GdiPlushCanvasPainter
-        //3. GLCanvasPainter
-        //4. SkiaCanvasPainter
-        //5. PdfCanvasPainter
+        //1. AggPainter wraps AggRenderSurface
+        //2. GdiPlusPainter wraps ...
+        //3. GLPainter wraps GLRenderSurface
+        //4. SkiaPainter wrap  SkCanvas
+         
 
         public abstract float OriginX { get; }
         public abstract float OriginY { get; }
@@ -60,9 +63,10 @@ namespace PixelFarm.Drawing
         public abstract void FillRectLBWH(double left, double bottom, double width, double height);
         public abstract void FillRoundRectangle(double left, double bottom, double right, double top, double radius);
         public abstract void DrawRoundRect(double left, double bottom, double right, double top, double radius);
-        public abstract void DrawBezierCurve(float startX, float startY, float endX, float endY,
-         float controlX1, float controlY1,
-         float controlX2, float controlY2);
+        public abstract void DrawBezierCurve(
+             float startX, float startY, float endX, float endY,
+             float controlX1, float controlY1,
+             float controlX2, float controlY2);
         //------------------------------------------------------- 
 
         public abstract void DrawImage(Image actualImage, double x, double y);

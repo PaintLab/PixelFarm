@@ -24,6 +24,7 @@ namespace PixelFarm.Drawing.Skia
 
     partial class MySkiaCanvas
     {
+        Brush _currentBrush;
         float strokeWidth = 1f;
         Color fillSolidColor = Color.Transparent;
         Color strokeColor = Color.Black;
@@ -75,85 +76,122 @@ namespace PixelFarm.Drawing.Skia
                 skCanvas.DrawPath(p, stroke);
             }
         }
-        public override void FillRectangle(Brush brush, float left, float top, float width, float height)
+        //public override void FillRectangle(Brush brush, float left, float top, float width, float height)
+        //{
+
+        //    switch (brush.BrushKind)
+        //    {
+        //        case BrushKind.Solid:
+        //            {
+        //                //use default solid brush
+
+        //                SolidBrush solidBrush = (SolidBrush)brush;
+        //                var prevColor = fill.Color;
+        //                fill.Color = Conv1.ConvToColor(solidBrush.Color);
+        //                skCanvas.DrawRect(
+        //                    SKRect.Create(left, top, width, height),
+        //                    fill);
+        //                fill.Color = prevColor;
+        //            }
+        //            break;
+        //        case BrushKind.LinearGradient:
+        //            {
+        //                //not - support
+
+        //                //draw with gradient
+        //                //LinearGradientBrush linearBrush = (LinearGradientBrush)brush;
+        //                //var colors = linearBrush.GetColors();
+        //                //var points = linearBrush.GetStopPoints();
+        //                //using (var linearGradBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
+        //                //     points[0].ToPointF(),
+        //                //     points[1].ToPointF(),
+        //                //     ConvColor(colors[0]),
+        //                //     ConvColor(colors[1])))
+        //                //{
+        //                //    gx.FillRectangle(linearGradBrush, left, top, width, height);
+        //                //}
+        //            }
+        //            break;
+        //        case BrushKind.GeometryGradient:
+        //            {
+        //            }
+        //            break;
+        //        case BrushKind.CircularGraident:
+        //            {
+        //            }
+        //            break;
+        //        case BrushKind.Texture:
+        //            {
+        //            }
+        //            break;
+        //    }
+        //}
+        public override Brush CurrentBrush
         {
-
-            switch (brush.BrushKind)
+            get { return _currentBrush; }
+            set
             {
-                case BrushKind.Solid:
-                    {
-                        //use default solid brush
-
-                        SolidBrush solidBrush = (SolidBrush)brush;
-                        var prevColor = fill.Color;
-                        fill.Color = Conv1.ConvToColor(solidBrush.Color);
-                        skCanvas.DrawRect(
-                            SKRect.Create(left, top, width, height),
-                            fill);
-                        fill.Color = prevColor;
-                    }
-                    break;
-                case BrushKind.LinearGradient:
-                    {
-                        //not - support
-
-                        //draw with gradient
-                        //LinearGradientBrush linearBrush = (LinearGradientBrush)brush;
-                        //var colors = linearBrush.GetColors();
-                        //var points = linearBrush.GetStopPoints();
-                        //using (var linearGradBrush = new System.Drawing.Drawing2D.LinearGradientBrush(
-                        //     points[0].ToPointF(),
-                        //     points[1].ToPointF(),
-                        //     ConvColor(colors[0]),
-                        //     ConvColor(colors[1])))
-                        //{
-                        //    gx.FillRectangle(linearGradBrush, left, top, width, height);
-                        //}
-                    }
-                    break;
-                case BrushKind.GeometryGradient:
-                    {
-                    }
-                    break;
-                case BrushKind.CircularGraident:
-                    {
-                    }
-                    break;
-                case BrushKind.Texture:
-                    {
-                    }
-                    break;
+                _currentBrush = value;
             }
         }
-        public override void FillRectangle(Color color, float left, float top, float width, float height)
+        public override void FillRectangle(float left, float top, float width, float height)
         {
-            //var prevColor = gx.SolidBrushColor;
-            //gx.SolidBrushColor = color;
-            //gx.FillRectLTRB(left, top, left + width, top + height);
-            //gx.SolidBrushColor = prevColor;
-
-            var prevColor = fill.Color;
-            fill.Color = Conv1.ConvToColor(color);
-            skCanvas.DrawRect(
-                SKRect.Create(left, top, width, height),
-                fill);
-            fill.Color = prevColor;
-
+            throw new NotImplementedException();
         }
-        public override void DrawRectangle(Color color, float left, float top, float width, float height)
+        public override void DrawRectangle(float left, float top, float width, float height)
         {
-            //var prevColor = gx.PenColor;
-            //gx.PenColor = color;
-            //gx.DrawRectLTRB(left, top, left + width, top + height);
-            //gx.PenColor = prevColor;
-
-            var prevColor = stroke.Color;
-            stroke.Color = Conv1.ConvToColor(color);
-            skCanvas.DrawRect(
-                SKRect.Create(left, top, width, height),
-                stroke);
-            stroke.Color = prevColor;
+            throw new NotImplementedException();
         }
+        public override void FillPath(GraphicsPath gfxPath)
+        {
+            throw new NotImplementedException();
+        }
+        public override void FillPolygon(PointF[] points)
+        {
+            throw new NotImplementedException();
+        }
+        //    using (SKPath path = CreatePolygon(points))
+        //    {
+        //        var prevColor = fill.Color;
+        //        fill.Color = Conv1.ConvToColor(color);
+        //        skCanvas.DrawPath(path, fill);
+        //        fill.Color = prevColor;
+        //    }
+        //    //var prevColor = gx.SolidBrushColor;
+        //    //gx.SolidBrushColor = color;
+        //    //gx.FillPolygon(gx.SolidBrushColor, points);
+        //    //gx.SolidBrushColor = prevColor; 
+        //create polygon path
+
+        //public override void FillRectangle(Color color, float left, float top, float width, float height)
+        //{
+        //    //var prevColor = gx.SolidBrushColor;
+        //    //gx.SolidBrushColor = color;
+        //    //gx.FillRectLTRB(left, top, left + width, top + height);
+        //    //gx.SolidBrushColor = prevColor;
+
+        //    var prevColor = fill.Color;
+        //    fill.Color = Conv1.ConvToColor(color);
+        //    skCanvas.DrawRect(
+        //        SKRect.Create(left, top, width, height),
+        //        fill);
+        //    fill.Color = prevColor;
+
+        //}
+        //public override void DrawRectangle(Color color, float left, float top, float width, float height)
+        //{
+        //    //var prevColor = gx.PenColor;
+        //    //gx.PenColor = color;
+        //    //gx.DrawRectLTRB(left, top, left + width, top + height);
+        //    //gx.PenColor = prevColor;
+
+        //    var prevColor = stroke.Color;
+        //    stroke.Color = Conv1.ConvToColor(color);
+        //    skCanvas.DrawRect(
+        //        SKRect.Create(left, top, width, height),
+        //        stroke);
+        //    stroke.Color = prevColor;
+        //}
 
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {
@@ -306,53 +344,53 @@ namespace PixelFarm.Drawing.Skia
                     new SKRect(destRect.Left, destRect.Top, destRect.Right, destRect.Bottom));
             }
         }
-        public override void FillPath(Color color, GraphicsPath gfxPath)
-        {
-            //solid color
-            //internalSolidBrush.Color = ConvColor(color);
-            SKPath innerPath = ResolveGraphicsPath(gfxPath);
-            skCanvas.DrawPath(innerPath, fill);
-        }
-        /// <summary>
-        /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
-        /// </summary>
-        /// <param name="brush"><see cref="T:System.Drawing.Brush"/> that determines the characteristics of the fill. </param><param name="path"><see cref="T:System.Drawing.Drawing2D.GraphicsPath"/> that represents the path to fill. </param><exception cref="T:System.ArgumentNullException"><paramref name="brush"/> is null.-or-<paramref name="path"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
-        public override void FillPath(Brush brush, GraphicsPath path)
-        {
-            throw new NotSupportedException();
+        //public override void FillPath(Color color, GraphicsPath gfxPath)
+        //{
+        //    //solid color
+        //    //internalSolidBrush.Color = ConvColor(color);
+        //    SKPath innerPath = ResolveGraphicsPath(gfxPath);
+        //    skCanvas.DrawPath(innerPath, fill);
+        //}
+        ///// <summary>
+        ///// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
+        ///// </summary>
+        ///// <param name="brush"><see cref="T:System.Drawing.Brush"/> that determines the characteristics of the fill. </param><param name="path"><see cref="T:System.Drawing.Drawing2D.GraphicsPath"/> that represents the path to fill. </param><exception cref="T:System.ArgumentNullException"><paramref name="brush"/> is null.-or-<paramref name="path"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
+        //public override void FillPath(Brush brush, GraphicsPath path)
+        //{
+        //    throw new NotSupportedException();
 
-            switch (brush.BrushKind)
-            {
-                case BrushKind.Solid:
-                    {
-                        //SolidBrush solidBrush = (SolidBrush)brush;
-                        //var prevColor = internalSolidBrush.Color;
-                        //internalSolidBrush.Color = ConvColor(solidBrush.Color);
-                        ////
-                        //System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
-                        //gx.FillPath(internalSolidBrush, innerPath);
-                        ////
-                        //internalSolidBrush.Color = prevColor;
-                    }
-                    break;
-                case BrushKind.LinearGradient:
-                    {
-                        //LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
-                        //var prevColor = internalSolidBrush.Color;
-                        //internalSolidBrush.Color = ConvColor(solidBrush.Color);
-                        ////
-                        //System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
-                        //gx.FillPath(internalSolidBrush, innerPath);
-                        ////
-                        //internalSolidBrush.Color = prevColor;
-                    }
-                    break;
-                default:
-                    {
-                    }
-                    break;
-            }
-        }
+        //    switch (brush.BrushKind)
+        //    {
+        //        case BrushKind.Solid:
+        //            {
+        //                //SolidBrush solidBrush = (SolidBrush)brush;
+        //                //var prevColor = internalSolidBrush.Color;
+        //                //internalSolidBrush.Color = ConvColor(solidBrush.Color);
+        //                ////
+        //                //System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
+        //                //gx.FillPath(internalSolidBrush, innerPath);
+        //                ////
+        //                //internalSolidBrush.Color = prevColor;
+        //            }
+        //            break;
+        //        case BrushKind.LinearGradient:
+        //            {
+        //                //LinearGradientBrush solidBrush = (LinearGradientBrush)brush;
+        //                //var prevColor = internalSolidBrush.Color;
+        //                //internalSolidBrush.Color = ConvColor(solidBrush.Color);
+        //                ////
+        //                //System.Drawing.Drawing2D.GraphicsPath innerPath = ResolveGraphicsPath(path);
+        //                //gx.FillPath(internalSolidBrush, innerPath);
+        //                ////
+        //                //internalSolidBrush.Color = prevColor;
+        //            }
+        //            break;
+        //        default:
+        //            {
+        //            }
+        //            break;
+        //    }
+        //}
         static SkiaSharp.SKPath ResolveGraphicsPath(GraphicsPath path)
         {
             //convert from graphics path to internal presentation
@@ -443,44 +481,32 @@ namespace PixelFarm.Drawing.Skia
 
             return innerPath;
         }
-        public override void FillPolygon(Brush brush, PointF[] points)
-        {
-            //create polygon path
-            if (brush is SolidBrush)
-            {
-                SolidBrush b = (SolidBrush)brush;
-                var prevColor = b.Color;
+        //public override void FillPolygon(Brush brush, PointF[] points)
+        //{     
+        //    if (brush is SolidBrush)
+        //    {
+        //        SolidBrush b = (SolidBrush)brush;
+        //        var prevColor = b.Color;
 
 
-                //var prevColor = gx.SolidBrushColor;
-                //gx.SolidBrushColor = ((SolidBrush)brush).Color;
-                //gx.FillPolygon(gx.SolidBrushColor, points);
-                //gx.SolidBrushColor = prevColor;
-            }
-            else
-            {
-                throw new NotSupportedException();
-            }
+        //        //var prevColor = gx.SolidBrushColor;
+        //        //gx.SolidBrushColor = ((SolidBrush)brush).Color;
+        //        //gx.FillPolygon(gx.SolidBrushColor, points);
+        //        //gx.SolidBrushColor = prevColor;
+        //    }
+        //    else
+        //    {
+        //        throw new NotSupportedException();
+        //    }
 
-            //var pps = ConvPointFArray(points);
-            ////use internal solid color            
-            //gx.FillPolygon(brush.InnerBrush as System.Drawing.Brush, pps);
-        }
-        public override void FillPolygon(Color color, PointF[] points)
-        {
-            using (SKPath path = CreatePolygon(points))
-            {
-                var prevColor = fill.Color;
-                fill.Color = Conv1.ConvToColor(color);
-                skCanvas.DrawPath(path, fill);
-                fill.Color = prevColor;
-            }
-            //var prevColor = gx.SolidBrushColor;
-            //gx.SolidBrushColor = color;
-            //gx.FillPolygon(gx.SolidBrushColor, points);
-            //gx.SolidBrushColor = prevColor;
-
-        }
+        //    //var pps = ConvPointFArray(points);
+        //    ////use internal solid color            
+        //    //gx.FillPolygon(brush.InnerBrush as System.Drawing.Brush, pps);
+        //}
+        //public override void FillPolygon(Color color, PointF[] points)
+        //{
+  
+        //}
         static SkiaSharp.SKPath CreatePolygon(PixelFarm.Drawing.PointF[] points)
         {
             SkiaSharp.SKPath p = new SkiaSharp.SKPath();
