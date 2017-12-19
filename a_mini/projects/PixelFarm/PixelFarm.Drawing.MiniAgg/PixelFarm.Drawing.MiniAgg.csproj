@@ -33,21 +33,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggCanvasPainter.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggCanvasPainter.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\AggRenderVx.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\AggRenderVx.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\Canvas2dExtension.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\Canvas2dExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\dbugVertexSourceIO.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\dbugVertexSourceIO.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\0_CanvasPainter\LineDashGenerator.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\0_CanvasPainter\LineDashGenerator.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\BorderDouble.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\BorderDouble.cs</Link>
     </Compile>
@@ -80,6 +65,21 @@
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\AggPainter.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\AggPainter.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\AggRenderVx.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\AggRenderVx.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\Canvas2dExtension.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\Canvas2dExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\dbugVertexSourceIO.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\dbugVertexSourceIO.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\LineDashGenerator.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\LineDashGenerator.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\Filter\BrightnessAndContrastAdjustment.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\Filter\BrightnessAndContrastAdjustment.cs</Link>
