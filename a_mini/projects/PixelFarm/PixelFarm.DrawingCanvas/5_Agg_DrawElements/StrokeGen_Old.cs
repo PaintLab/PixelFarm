@@ -120,7 +120,10 @@ namespace PixelFarm.Agg
             multipartVertexDistanceList.Clear();
             m_closed = false;
             m_status = Status.Init;
-
+        }
+        public void Close()
+        {
+            multipartVertexDistanceList.Close();
         }
         public void AddVertex(double x, double y, VertexCmd cmd)
         {
@@ -441,7 +444,7 @@ namespace PixelFarm.Agg
             if (_ranges.Count > 0)
             {
                 _ranges[_ranges.Count - 1].SetEndAt(_vertextDistanceList.Count);
-            }  
+            }
 
             //start new range with x and y
             _ranges.Add(_latestRange = new Range(_vertextDistanceList.Count));

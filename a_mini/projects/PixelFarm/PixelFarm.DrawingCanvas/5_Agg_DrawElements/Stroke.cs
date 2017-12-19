@@ -95,9 +95,8 @@ namespace PixelFarm.Agg
                     case VertexCmd.Close:
                         if (i < j)
                         {
-                            //strkgen.AddVertex(startX, startY, VertexCmd.LineTo);
                             //close command
-                            strkgen.AddVertex(startX, startY, VertexCmd.Close);
+                            strkgen.Close();
                             strkgen.WriteTo(vxs);
                             strkgen.Reset();
                         }
@@ -105,15 +104,12 @@ namespace PixelFarm.Agg
                         {
 
                         }
-                        //strkgen.AddVertex(x, y, cmd);
-                        //end this polygon  
                         break;
                     case VertexCmd.CloseAndEndFigure:
                         if (i < j)
                         {
-                            //strkgen.AddVertex(startX, startY, VertexCmd.LineTo);
                             //close command
-                            strkgen.AddVertex(startX, startY, VertexCmd.CloseAndEndFigure);
+                            strkgen.Close();
                             strkgen.WriteTo(vxs);
                             strkgen.Reset();
                         }
@@ -121,9 +117,6 @@ namespace PixelFarm.Agg
                         {
 
                         }
-                        //strkgen.AddVertex(x, y, cmd);
-                        //end this polygon 
-
                         break;
                     case VertexCmd.LineTo:
                     case VertexCmd.P2c://user must flatten the curve before do stroke
