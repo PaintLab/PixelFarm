@@ -120,7 +120,7 @@ namespace PixelFarm.Agg
         {
             this._aggRdsf.SetClippingRect(new RectInt(x1, y1, x2, y2));
         }
-         
+
         VertexStorePool _vxsPool = new VertexStorePool();
 
         VertexStore GetFreeVxs()
@@ -436,7 +436,19 @@ namespace PixelFarm.Agg
             if (img is ActualImage)
             {
                 this.sharedImageWriterReader.ReloadImage((ActualImage)img);
-                this._aggRdsf.Render(this.sharedImageWriterReader, x, y);
+                if (this._orientation == DrawBoardOrientation.LeftTop)
+                {
+                    //place left upper corner at specific x y
+                    this._aggRdsf.Render(this.sharedImageWriterReader, x, this.Height - (y + img.Height));
+
+                }
+                else
+                {
+                    //left-bottom as original
+                    //place left-lower of the img at specific (x,y)
+                    this._aggRdsf.Render(this.sharedImageWriterReader, x, y);
+                }
+
             }
             else
             {
