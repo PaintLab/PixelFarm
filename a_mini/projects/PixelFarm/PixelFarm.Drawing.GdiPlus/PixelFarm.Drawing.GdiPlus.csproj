@@ -63,6 +63,10 @@
     <Compile Include="DrawBoard\3_MyGdiPlusDrawBoard_DrawGraphics.cs" />
     <Compile Include="DrawBoard\4_MyGdiPlusDrawBoard_TextAndFonts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RenderSurface\1_MyGdiPlusDrawBoard_Specific.cs" />
+    <Compile Include="RenderSurface\2_MyGdiPlusDrawBoard_CoordinateAndClip.cs" />
+    <Compile Include="RenderSurface\3_MyGdiPlusDrawBoard_DrawGraphics.cs" />
+    <Compile Include="RenderSurface\4_MyGdiPlusDrawBoard_TextAndFonts.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
