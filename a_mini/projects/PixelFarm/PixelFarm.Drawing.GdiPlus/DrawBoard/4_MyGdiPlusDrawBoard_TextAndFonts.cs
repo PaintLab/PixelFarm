@@ -34,7 +34,7 @@ namespace PixelFarm.Drawing.WinGdi
             //1.
             win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
             //2.
-            NativeTextWin32.TextOut(win32MemDc.DC, CanvasOrgX + x, CanvasOrgY + y, buffer, buffer.Length);
+            NativeTextWin32.TextOut(win32MemDc.DC, canvasOriginX + x, canvasOriginY + y, buffer, buffer.Length);
             //3
             win32MemDc.ClearClipRect();
         }
@@ -48,7 +48,7 @@ namespace PixelFarm.Drawing.WinGdi
             //2.
             win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
             //3.
-            NativeTextWin32.TextOut(win32MemDc.DC, CanvasOrgX + logicalTextBox.X, CanvasOrgY + logicalTextBox.Y, buffer, buffer.Length);
+            NativeTextWin32.TextOut(win32MemDc.DC, canvasOriginX + logicalTextBox.X, canvasOriginY + logicalTextBox.Y, buffer, buffer.Length);
             //4.
             win32MemDc.ClearClipRect();
 

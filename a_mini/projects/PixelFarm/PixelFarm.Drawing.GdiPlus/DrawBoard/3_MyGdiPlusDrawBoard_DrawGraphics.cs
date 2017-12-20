@@ -50,11 +50,11 @@ namespace PixelFarm.Drawing.WinGdi
         public override void RenderTo(IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea)
         {
 
-            MyWin32.SetViewportOrgEx(win32MemDc.DC, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
+            MyWin32.SetViewportOrgEx(win32MemDc.DC, canvasOriginX, canvasOriginY, IntPtr.Zero);
             MyWin32.BitBlt(
                 destHdc, destArea.X, destArea.Y, destArea.Width, destArea.Height, //dest
                 win32MemDc.DC, sourceX, sourceY, MyWin32.SRCCOPY); //src
-            MyWin32.SetViewportOrgEx(win32MemDc.DC, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
+            MyWin32.SetViewportOrgEx(win32MemDc.DC, -canvasOriginX, -canvasOriginY, IntPtr.Zero);
 
         }
         public override void Clear(PixelFarm.Drawing.Color c)

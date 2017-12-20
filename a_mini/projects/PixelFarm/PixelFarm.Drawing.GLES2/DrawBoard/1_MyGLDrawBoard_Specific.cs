@@ -17,7 +17,7 @@ namespace PixelFarm.Drawing.GLES2
         Rectangle currentClipRect;
 
         public MyGLDrawBoard(
-           GLPainter painter, //*** we wrap around GLCanvasPainter *** 
+           GLPainter painter, //*** we wrap around GLPainter *** 
            int width,
            int height)
         {
@@ -87,23 +87,11 @@ namespace PixelFarm.Drawing.GLES2
 #endif
         }
 
-        int CanvasOrgX { get { return (int)this.canvasOriginX; } }
-        int CanvasOrgY { get { return (int)this.canvasOriginY; } }
-
-
-        ////=====================================
-        ////static 
-        //static readonly int[] _charFit = new int[1];
-        //static readonly int[] _charFitWidth = new int[1000];
-
-        //debug
 #if DEBUG
         static class dbugCounter
         {
             public static int dbugDrawStringCount;
         }
-
-
         public override void dbug_DrawRuler(int x)
         {
             int canvas_top = this._top;

@@ -18,6 +18,9 @@ using System.Collections.Generic;
 using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
+
+
+
     public partial class MyGdiPlusDrawBoard : DrawBoard, IDisposable
     {
         int pageNumFlags;
@@ -203,8 +206,8 @@ namespace PixelFarm.Drawing.WinGdi
                 }
             }
         }
-        int CanvasOrgX { get { return (int)this.canvasOriginX; } }
-        int CanvasOrgY { get { return (int)this.canvasOriginY; } }
+        //int CanvasOrgX { get { return (int)this.canvasOriginX; } }
+        //int CanvasOrgY { get { return (int)this.canvasOriginY; } }
         public bool DimensionInvalid
         {
             get
