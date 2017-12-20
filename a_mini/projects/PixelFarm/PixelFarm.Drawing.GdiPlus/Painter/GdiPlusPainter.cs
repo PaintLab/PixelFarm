@@ -6,7 +6,7 @@ using PixelFarm.Agg.Transform;
 
 namespace PixelFarm.Drawing.WinGdi
 {
-    public class GdiPainter : Painter
+    public class GdiPlusPainter : Painter
     {
         System.Drawing.Graphics _gfx;
         System.Drawing.Bitmap _gfxBmp;
@@ -24,12 +24,10 @@ namespace PixelFarm.Drawing.WinGdi
         RequestFont _currentFont;
         WinGdiFont _winGdiFont;
 
-        Agg.VertexSource.RoundedRect roundRect;
-
-
+    
         SmoothingMode _smoothingMode;
 
-        public GdiPainter(System.Drawing.Bitmap gfxBmp)
+        public GdiPlusPainter(System.Drawing.Bitmap gfxBmp)
         {
 
 
@@ -272,14 +270,14 @@ namespace PixelFarm.Drawing.WinGdi
         {
             VxsHelper.DrawVxsSnap(_gfx, new VertexStoreSnap(vxs), _strokeColor);
         }
-        public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
-        {
-            _gfx.DrawBezier(_currentPen,
-                 startX, startY,
-                 controlX1, controlY1,
-                 controlX2, controlY2,
-                 endX, endY);
-        }
+        //public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
+        //{
+        //    _gfx.DrawBezier(_currentPen,
+        //         startX, startY,
+        //         controlX1, controlY1,
+        //         controlX2, controlY2,
+        //         endX, endY);
+        //}
 
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
@@ -367,7 +365,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
 
         }
-        public override void DrawImage(Image img, double x, double y)
+        public override void DrawImage(Image img, double left, double top)
         {
             if (img is ActualImage)
             {
@@ -385,11 +383,11 @@ namespace PixelFarm.Drawing.WinGdi
                             {
                                 if (this._orientation == DrawBoardOrientation.LeftTop)
                                 {
-                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
+                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)left, (int)top));
                                 }
                                 else
                                 {
-                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)(this.Height - y - img.Height)));
+                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)left, (int)(this.Height - top - img.Height)));
                                 }
                             }
                         }
@@ -465,13 +463,13 @@ namespace PixelFarm.Drawing.WinGdi
         //    _currentFillBrush.Color = prevColor;
         //}
 
-        public override void FillEllipse(double left, double bottom, double right, double top)
+        public override void FillEllipse(double left, double top, double width, double height)
         {
-            _gfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+            _gfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)width, (float)height));
         }
-        public override void DrawEllipse(double left, double bottom, double right, double top)
+        public override void DrawEllipse(double left, double top, double width, double height)
         {
-            _gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+            _gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)width, (float)height));
         }
 
 
@@ -490,41 +488,41 @@ namespace PixelFarm.Drawing.WinGdi
         {
             _vxsPool.Release(ref vxs);
         }
-        public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
+        //public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
+        //{
+        //    if (roundRect == null)
+        //    {
+        //        roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
+        //        roundRect.NormalizeRadius();
+        //    }
+        //    else
+        //    {
+        //        roundRect.SetRect(left, bottom, right, top);
+        //        roundRect.SetRadius(radius);
+        //        roundRect.NormalizeRadius();
+        //    }
 
-            var v1 = GetFreeVxs();
-            this.Draw(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
-        public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
-            var v1 = GetFreeVxs();
-            this.Fill(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
+        //    var v1 = GetFreeVxs();
+        //    this.Draw(roundRect.MakeVxs(v1));
+        //    ReleaseVxs(ref v1);
+        //}
+        //public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
+        //{
+        //    if (roundRect == null)
+        //    {
+        //        roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
+        //        roundRect.NormalizeRadius();
+        //    }
+        //    else
+        //    {
+        //        roundRect.SetRect(left, bottom, right, top);
+        //        roundRect.SetRadius(radius);
+        //        roundRect.NormalizeRadius();
+        //    }
+        //    var v1 = GetFreeVxs();
+        //    this.Fill(roundRect.MakeVxs(v1));
+        //    ReleaseVxs(ref v1);
+        //}
 
 
 
@@ -546,7 +544,7 @@ namespace PixelFarm.Drawing.WinGdi
             _gfx.DrawRectangle(_currentPen, (float)left, (float)top, (float)width, (float)height);
         }
         public override void FillRect(double left, double top, double width, double height)
-        { 
+        {
             _gfx.FillRectangle(_currentFillBrush, (float)left, (float)top, (float)width, (float)height);
 
         }

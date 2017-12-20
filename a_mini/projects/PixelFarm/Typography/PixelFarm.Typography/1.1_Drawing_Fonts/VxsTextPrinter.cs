@@ -19,7 +19,7 @@ namespace PixelFarm.Drawing.Fonts
         /// <summary>
         /// target canvas
         /// </summary>
-        Painter canvasPainter;
+        Painter _painter;
         IFontLoader _fontLoader;
         RequestFont _reqFont;
         //----------------------------------------------------------- 
@@ -32,9 +32,9 @@ namespace PixelFarm.Drawing.Fonts
         Dictionary<InstalledFont, Typeface> _cachedTypefaces = new Dictionary<InstalledFont, Typeface>();
         //-----------------------------------------------------------
 
-        public VxsTextPrinter(Painter canvasPainter, IFontLoader fontLoader)
+        public VxsTextPrinter(Painter painter, IFontLoader fontLoader)
         {
-            this.canvasPainter = canvasPainter;
+            this._painter = painter;
             this._fontLoader = fontLoader;
 
             _glyphMeshStore = new GlyphMeshStore();
@@ -44,8 +44,13 @@ namespace PixelFarm.Drawing.Fonts
             //
             _glyphLayout.PxScaleLayout = _pxScaleEngine; //assign the pxscale-layout-engine to main glyphLayout engine
 
+            this.PositionTechnique = PositionTechnique.OpenFont;
         }
-        public Painter TargetCanvasPainter { get; set; }
+        public Painter TargetCanvasPainter
+        {
+            get { return _painter; }
+            set { _painter = value; }
+        }
         bool TryGetTypeface(InstalledFont instFont, out Typeface found)
         {
             return _cachedTypefaces.TryGetValue(instFont, out found);
@@ -175,7 +180,7 @@ namespace PixelFarm.Drawing.Fonts
             if (this._reqFont == null)
             {
                 //this.ScriptLang = canvasPainter.CurrentFont.GetOpenFontScriptLang();
-                ChangeFont(canvasPainter.CurrentFont);
+                ChangeFont(_painter.CurrentFont);
             }
 
             //2.1              
@@ -192,8 +197,8 @@ namespace PixelFarm.Drawing.Fonts
 
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
-            float ox = canvasPainter.OriginX;
-            float oy = canvasPainter.OriginY;
+            float ox = _painter.OriginX;
+            float oy = _painter.OriginY;
 
             //1. update some props.. 
             //2. update current type face
@@ -226,15 +231,15 @@ namespace PixelFarm.Drawing.Fonts
                 g_x = (float)(glyphPlan.x * scale + x);
                 g_y = (float)glyphPlan.y * scale;
 
-                canvasPainter.SetOrigin(g_x, g_y);
-                canvasPainter.Fill(vxs);
+                _painter.SetOrigin(g_x, g_y);
+                _painter.Fill(vxs);
             }
             //restore prev origin
-            canvasPainter.SetOrigin(ox, oy);
+            _painter.SetOrigin(ox, oy);
         }
         public override void DrawFromGlyphPlans(GlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
         {
-            Painter canvasPainter = this.TargetCanvasPainter;
+            Painter painter = this.TargetCanvasPainter;
             //Typeface typeface = _glyphPathBuilder.Typeface;
             //3. layout glyphs with selected layout technique
             //TODO: review this again, we should use pixel?
@@ -244,8 +249,8 @@ namespace PixelFarm.Drawing.Fonts
 
 
             //4. render each glyph 
-            float ox = canvasPainter.OriginX;
-            float oy = canvasPainter.OriginY;
+            float ox = painter.OriginX;
+            float oy = painter.OriginY;
             int endBefore = startAt + len;
 
             Typography.OpenFont.Tables.COLR colrTable = _currentTypeface.COLRTable;
@@ -271,9 +276,9 @@ namespace PixelFarm.Drawing.Fonts
                     GlyphPlan glyphPlan = glyphPlanList[i];
                     g_x = glyphPlan.ExactX + x;
                     g_y = glyphPlan.ExactY + y;
-                    canvasPainter.SetOrigin(g_x, g_y);
+                    painter.SetOrigin(g_x, g_y);
                     //-----------------------------------   
-                    canvasPainter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
+                    painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                 }
             }
             else
@@ -281,14 +286,14 @@ namespace PixelFarm.Drawing.Fonts
                 //-------------    
                 //this glyph has color information
                 //-------------
-                Color originalFillColor = canvasPainter.FillColor;
+                Color originalFillColor = painter.FillColor;
 
                 for (int i = startAt; i < endBefore; ++i)
                 {
                     GlyphPlan glyphPlan = glyphPlanList[i];
                     g_x = glyphPlan.ExactX + x;
                     g_y = glyphPlan.ExactY + y;
-                    canvasPainter.SetOrigin(g_x, g_y);
+                    painter.SetOrigin(g_x, g_y);
                     //-----------------------------------  
                     ushort colorLayerStart;
                     if (colrTable.LayerIndices.TryGetValue(glyphPlan.glyphIndex, out colorLayerStart))
@@ -306,8 +311,8 @@ namespace PixelFarm.Drawing.Fonts
                                 cpalTable.Palettes[palette] + colrTable.GlyphPalettes[c], //index
                                 out r, out g, out b, out a);
                             //-----------  
-                            canvasPainter.FillColor = new Color(r, g, b);//? a component
-                            canvasPainter.Fill(_glyphMeshStore.GetGlyphMesh(gIndex));
+                            painter.FillColor = new Color(r, g, b);//? a component
+                            painter.Fill(_glyphMeshStore.GetGlyphMesh(gIndex));
                         }
                     }
                     else
@@ -317,30 +322,24 @@ namespace PixelFarm.Drawing.Fonts
                         //PERFORMANCE revisit here 
                         //if we have create a vxs we can cache it for later use?
                         //----------------------------------- 
-                        canvasPainter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
+                        painter.Fill(_glyphMeshStore.GetGlyphMesh(glyphPlan.glyphIndex));
                     }
                 }
-                canvasPainter.FillColor = originalFillColor; //restore color
+                painter.FillColor = originalFillColor; //restore color
             }
             //restore prev origin
-            canvasPainter.SetOrigin(ox, oy);
+            painter.SetOrigin(ox, oy);
         }
 
         public void DrawString(char[] text, int startAt, int len, double x, double y)
         {
-            UpdateGlyphLayoutSettings();
-            _outputGlyphPlans.Clear();
-
-            //
-            float pxscale = _currentTypeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPoints);
-            _glyphLayout.GenerateGlyphPlans(text, startAt, len, _outputGlyphPlans, null);
-            //-----
-            //we (fine) adjust horizontal fit here
-
-            //-----
-            DrawFromGlyphPlans(_outputGlyphPlans, (float)x, (float)y);
+            InternalDrawString(text, startAt, len, (float)x, (float)y);
         }
         public override void DrawString(char[] textBuffer, int startAt, int len, float x, float y)
+        {
+            InternalDrawString(textBuffer, startAt, len, x, y);
+        }
+        void InternalDrawString(char[] textBuffer, int startAt, int len, float x, float y)
         {
             UpdateGlyphLayoutSettings();
             _outputGlyphPlans.Clear();

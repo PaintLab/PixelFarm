@@ -10,15 +10,15 @@ namespace OpenTkEssTest
     [Info("T106_SampleBrushes")]
     public class T106_SampleBrushes : DemoBase
     {
-        GLRenderSurface _glsf;
+        GLRenderSurface _glsx;
         GLPainter painter;
         RenderVx polygon1;
         RenderVx polygon2;
         RenderVx polygon3;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsf = glsf;
+            this._glsx = glsx;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -44,13 +44,13 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsf.Dispose();
+            _glsx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsf.SmoothMode = SmoothMode.Smooth;
-            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsf.ClearColorBuffer();
+            _glsx.SmoothMode = SmoothMode.Smooth;
+            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsx.ClearColorBuffer();
             painter.FillColor = PixelFarm.Drawing.Color.Black;
             painter.FillRect(0, 0, 150, 150);
             GLBitmap glBmp = DemoHelper.LoadTexture(RootDemoPath.Path + @"\logo-dark.jpg");

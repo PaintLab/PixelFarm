@@ -44,13 +44,8 @@ namespace PixelFarm.Agg.Sample_Images
         {
             //actualImage2 = LoadImage(RootDemoPath.Path + "\\plain01.png");
             actualImage = LoadImage(RootDemoPath.Path + "\\02.jpg");
-           
-            affinePlans = new AffinePlan[] {
-                AffinePlan.Translate(50, 50) };
+            affinePlans = new AffinePlan[] { AffinePlan.Translate(50, 50) };
         }
-
-    
-
         static ActualImage LoadImage(string filename)
         {
             //read sample image

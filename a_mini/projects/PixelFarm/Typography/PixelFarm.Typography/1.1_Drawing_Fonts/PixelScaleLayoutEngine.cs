@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
- 
+
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Fonts;
 
@@ -188,7 +188,7 @@ namespace Typography.Contours
         float _fontSizeInPoints;
         public PixelScaleLayoutEngine()
         {
-            UseWithLcdSubPixelRenderingTechnique = true;//default
+            //UseWithLcdSubPixelRenderingTechnique = true;//default
         }
 
         public GlyphMeshStore HintedFontStore

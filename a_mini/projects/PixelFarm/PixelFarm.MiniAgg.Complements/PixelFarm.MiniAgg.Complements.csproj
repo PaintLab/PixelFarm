@@ -34,6 +34,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="RenderSurface\AggRenderSurface.cs" />
+    <Compile Include="RenderSurface\AggRenderSurface_RenderImages.cs" />
     <Compile Include="DrawBoard\AggPainter.cs" />
     <Compile Include="DrawBoard\AggRenderVx.cs" />
     <Compile Include="DrawBoard\Canvas2dExtension.cs" />
@@ -41,22 +43,22 @@
     <Compile Include="DrawBoard\LineDashGenerator.cs" />
     <Compile Include="1_Base\ScanlineRasToDestBitmapRendererExtension.cs" />
     <Compile Include="2_SpanGenerators\SpanGradient_GradientValueCalculators.cs" />
-    <Compile Include="Image\FilterMan.cs" />
+    <Compile Include="4_Image\FilterMan.cs" />
     <Compile Include="1_Base\PixelBlenderRGB.cs" />
     <Compile Include="1_Base\Queue.cs" />
     <Compile Include="1_Base\BorderDouble.cs" />
     <Compile Include="1_Base\GammaFuntions.cs" />
     <Compile Include="1_Base\ClipProxyImage.cs" />
     <Compile Include="1_Base\ProxyImage.cs" />
-    <Compile Include="Filter\ImageFilters.cs" />
-    <Compile Include="Filter\PatternFilterBilnearColorRGBA.cs" />
-    <Compile Include="Image\AlphaMask.cs" />
+    <Compile Include="3_Filter\ImageFilters.cs" />
+    <Compile Include="3_Filter\PatternFilterBilnearColorRGBA.cs" />
+    <Compile Include="4_Image\AlphaMask.cs" />
     <Compile Include="2_SpanGenerators\SpanGradient.cs" />
-    <Compile Include="Image\AlphaMaskAdaptor.cs" />
-    <Compile Include="Image\FloodFiller.cs" />
-    <Compile Include="Filter\RecursiveBlur.cs" />
-    <Compile Include="Filter\StackBlur.cs" />
-    <Compile Include="Image\Transposer.cs" />
+    <Compile Include="4_Image\AlphaMaskAdaptor.cs" />
+    <Compile Include="4_Image\FloodFiller.cs" />
+    <Compile Include="3_Filter\RecursiveBlur.cs" />
+    <Compile Include="3_Filter\StackBlur.cs" />
+    <Compile Include="4_Image\Transposer.cs" />
     <Compile Include="2_SpanGenerators\SpanGenGouraud.cs" />
     <Compile Include="2_SpanGenerators\SpanGenGouraudRGBA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

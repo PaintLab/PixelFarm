@@ -19,9 +19,9 @@ namespace PixelFarm.Drawing.GLES2
         {
             //the canvas may need some init modules
             //so we start the canvass internaly here
-            var rdsf = new GLRenderSurface(w, h);
-            rdsf.SetViewport(viewportW, viewportH);
-            return rdsf;
+            var glsx = new GLRenderSurface(w, h);
+            glsx.SetViewport(viewportW, viewportH);
+            return glsx;
         }
 
         public static void SetFontLoader(IFontLoader fontLoader)

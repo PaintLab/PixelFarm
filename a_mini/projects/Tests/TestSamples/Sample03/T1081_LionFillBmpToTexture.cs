@@ -26,14 +26,14 @@ namespace OpenTkEssTest
         AggPainter aggPainter;
 
         //---------------------------
-        GLRenderSurface _glsf;
+        GLRenderSurface _glsx;
         SpriteShape lionShape;
         GLPainter painter;
 
         GLBitmap glBmp;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsf = glsf;
+            this._glsx = glsx;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -53,7 +53,7 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsf.Dispose();
+            _glsx.Dispose();
         }
         static void DrawLion(Painter p, SpriteShape shape, VertexStore myvxs)
         {
@@ -68,11 +68,11 @@ namespace OpenTkEssTest
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsf.SmoothMode = SmoothMode.Smooth;
-            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsf.ClearColorBuffer();
+            _glsx.SmoothMode = SmoothMode.Smooth;
+            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsx.ClearColorBuffer();
             //-------------------------------
-            _glsf.DrawImage(glBmp, 0, 600);
+            _glsx.DrawImage(glBmp, 0, 600);
             SwapBuffers();
         }
     }

@@ -250,17 +250,17 @@ namespace PixelFarm.Drawing.Skia
         {
             VxsHelper.DrawVxsSnap(_skCanvas, new VertexStoreSnap(vxs), _stroke);
         }
-        public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
-        {
-            using (SKPath p = new SKPath())
-            {
-                p.MoveTo(startX, startY);
-                p.CubicTo(controlX1, controlY1,
-                    controlY1, controlY2,
-                    endX, endY);
-                _skCanvas.DrawPath(p, _stroke);
-            }
-        }
+        //public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
+        //{
+        //    using (SKPath p = new SKPath())
+        //    {
+        //        p.MoveTo(startX, startY);
+        //        p.CubicTo(controlX1, controlY1,
+        //            controlY1, controlY2,
+        //            endX, endY);
+        //        _skCanvas.DrawPath(p, _stroke);
+        //    }
+        //}
 
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
@@ -291,7 +291,7 @@ namespace PixelFarm.Drawing.Skia
             //    _bmpStore.RelaseBmp(bmp);
             //}
         }
-        public override void DrawImage(Image img, double x, double y)
+        public override void DrawImage(Image img, double left, double top)
         {
             if (img is ActualImage)
             {
@@ -402,23 +402,23 @@ namespace PixelFarm.Drawing.Skia
 
 
 
-        public override void FillEllipse(double left, double bottom, double right, double top)
+        public override void FillEllipse(double left, double top, double width, double height)
         {
             _skCanvas.DrawOval(
-                new SKRect((float)left, (float)top, (float)right, (float)bottom),
+                new SKRect((float)left, (float)top, (float)(left + width), (float)(top + height)),
                 _fill);
         }
-        public override void DrawEllipse(double left, double bottom, double right, double top)
+        public override void DrawEllipse(double left, double top, double width, double height)
         {
             _skCanvas.DrawOval(
-              new SKRect((float)left, (float)top, (float)right, (float)bottom),
+             new SKRect((float)left, (float)top, (float)(left + width), (float)(top + height)),
               _stroke);
         }
-        public override void FillRect(double left, double bottom, double right, double top)
+        public override void FillRect(double left, double top, double width, double height)
         {
 
             _skCanvas.DrawRect(
-              new SKRect((float)left, (float)top, (float)right, (float)bottom),
+               new SKRect((float)left, (float)top, (float)(left + width), (float)(top + height)),
                 _fill);
         }
 
@@ -440,41 +440,41 @@ namespace PixelFarm.Drawing.Skia
         {
             _vxsPool.Release(ref vxs);
         }
-        public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
+        //public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
+        //{
+        //    if (roundRect == null)
+        //    {
+        //        roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
+        //        roundRect.NormalizeRadius();
+        //    }
+        //    else
+        //    {
+        //        roundRect.SetRect(left, bottom, right, top);
+        //        roundRect.SetRadius(radius);
+        //        roundRect.NormalizeRadius();
+        //    }
 
-            var v1 = GetFreeVxs();
-            this.Draw(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
-        public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
-            var v1 = GetFreeVxs();
-            this.Fill(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
+        //    var v1 = GetFreeVxs();
+        //    this.Draw(roundRect.MakeVxs(v1));
+        //    ReleaseVxs(ref v1);
+        //}
+        //public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
+        //{
+        //    if (roundRect == null)
+        //    {
+        //        roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
+        //        roundRect.NormalizeRadius();
+        //    }
+        //    else
+        //    {
+        //        roundRect.SetRect(left, bottom, right, top);
+        //        roundRect.SetRadius(radius);
+        //        roundRect.NormalizeRadius();
+        //    }
+        //    var v1 = GetFreeVxs();
+        //    this.Fill(roundRect.MakeVxs(v1));
+        //    ReleaseVxs(ref v1);
+        //}
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _skCanvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2, _stroke);

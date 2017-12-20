@@ -39,13 +39,13 @@ namespace PixelFarm.Agg
             p.DrawRect(left, top, width, height);
             p.StrokeColor = prevColor;
         }
-        public static void DrawCircle(this Painter p, double x, double y, double radius)
+        public static void DrawCircle(this Painter p, double centerX, double centerY, double radius)
         {
-            p.DrawEllipse(x - radius, y - radius, x + radius, y + radius);
+            p.DrawEllipse(centerX - radius, centerY - radius, radius + radius, radius + radius);
         }
-        public static void FillCircle(this Painter p, double x, double y, double radius)
+        public static void FillCircle(this Painter p, double centerX, double centerY, double radius)
         {
-            p.FillEllipse(x - radius, y - radius, x + radius, y + radius);
+            p.FillEllipse(centerX - radius, centerY - radius, radius + radius, radius + radius);
         }
         public static void FillCircle(this Painter p, double x, double y, double radius, Color color)
         {
@@ -61,7 +61,7 @@ namespace PixelFarm.Agg
             p.FillRect(left, top, width, height);
             p.FillColor = prevColor;
         }
-        
+
         public static void Fill(this Painter p, VertexStoreSnap snap, Color color)
         {
             Color prevColor = p.FillColor;
