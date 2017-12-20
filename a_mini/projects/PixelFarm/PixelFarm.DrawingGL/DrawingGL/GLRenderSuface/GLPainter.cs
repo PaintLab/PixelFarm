@@ -13,20 +13,30 @@ namespace PixelFarm.DrawingGL
     public sealed class GLPainter : Painter
     {
         GLRenderSurface _glsx;
+        SmoothingMode _smoothingMode; //smoothing mode of this  painter
+
         int _width;
         int _height;
+
         Color _fillColor;
         Color _strokeColor;
         RectInt _clipBox;
 
+
+        InternalGraphicsPathBuilder _igfxPathBuilder;
+
+        //agg's vertex generators
+        Stroke _aggStroke = new Stroke(1);
+        Ellipse ellipse = new Ellipse();
         RoundedRect roundRect;
         Arc _arcTool;
-        Ellipse ellipse = new Ellipse();
-        Stroke _aggStroke = new Stroke(1);
+
+        //fonts
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
-        InternalGraphicsPathBuilder _igfxPathBuilder;
-        SmoothingMode _smoothingMode; //smoothing mode of this  painter
+
+
+
         public GLPainter(GLRenderSurface glsx)
         {
             _glsx = glsx;
@@ -155,6 +165,7 @@ namespace PixelFarm.DrawingGL
             set
             {
                 _glsx.StrokeWidth = (float)value;
+                _aggStroke.Width = (float)value;
             }
         }
 
@@ -308,7 +319,7 @@ namespace PixelFarm.DrawingGL
             //_aggsx.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.strokeColor);
             //ReleaseVxs(ref v1);
             //ReleaseVxs(ref v2);
-             
+
 
 
             double x = (left + right) / 2;
@@ -326,13 +337,18 @@ namespace PixelFarm.DrawingGL
             ellipse.Reset(x, y, rx, ry);
             VertexStore vxs = ellipse.MakeVxs(GetFreeVxs());
             VertexStore v3 = _aggStroke.MakeVxs(vxs, GetFreeVxs());
+            //***
+            //we fill the stroke's path
+            _glsx.FillGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(v3));
 
-            _glsx.DrawGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(v3));
             ReleaseVxs(ref vxs);
             ReleaseVxs(ref v3);
         }
         public override void FillEllipse(double left, double bottom, double right, double top)
         {
+            //version 2:
+            //agg's ellipse tools with smooth border
+
             double x = (left + right) / 2;
             double y = (bottom + top) / 2;
             double rx = Math.Abs(right - x);
@@ -344,65 +360,81 @@ namespace PixelFarm.DrawingGL
             }
 
             ellipse.Reset(x, y, rx, ry);
-            var v1 = GetFreeVxs();
-            ellipse.MakeVxs(v1);
-            //other mode
-            int n = v1.Count;
-            //make triangular fan*** 
+            VertexStore vxs = ellipse.MakeVxs(GetFreeVxs());
+            //***
+            //we fill  
+            _glsx.FillGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(vxs));
+            ReleaseVxs(ref vxs);
 
-            float[] coords = new float[(n * 2) + 4];
-            int i = 0;
-            int nn = 0;
-            int npoints = 0;
-            double vx, vy;
-            //center
-            coords[nn++] = (float)x;
-            coords[nn++] = (float)y;
-            npoints++;
-            var cmd = v1.GetVertex(i, out vx, out vy);
-            while (i < n)
-            {
-                switch (cmd)
-                {
-                    case VertexCmd.MoveTo:
-                        {
-                            coords[nn++] = (float)vx;
-                            coords[nn++] = (float)vy;
-                            npoints++;
-                        }
-                        break;
-                    case VertexCmd.LineTo:
-                        {
-                            coords[nn++] = (float)vx;
-                            coords[nn++] = (float)vy;
-                            npoints++;
-                        }
-                        break;
-                    case VertexCmd.NoMore:
-                        {
-                        }
-                        break;
-                    default:
-                        {
-                        }
-                        break;
-                }
-                i++;
-                cmd = v1.GetVertex(i, out vx, out vy);
-            }
+            //-------------------------------------------------------------
+            //
+            //version 1,just triangular fans, no smooth border
 
+            //double x = (left + right) / 2;
+            //double y = (bottom + top) / 2;
+            //double rx = Math.Abs(right - x);
+            //double ry = Math.Abs(top - y);
 
-            //close circle
-            coords[nn++] = coords[2];
-            coords[nn++] = coords[3];
-            npoints++;
-            //----------------------------------------------
-            _glsx.FillTriangleFan(_fillColor, coords, npoints);
-            ReleaseVxs(ref v1);
+            //if (this._orientation == DrawBoardOrientation.LeftTop)
+            //{
+            //    y = _glsx.ViewportHeight - y; //set new y
+            //}
 
-            //----------------------------------------------
-            //need smooth border?
+            //ellipse.Reset(x, y, rx, ry);
+            //var v1 = GetFreeVxs();
+            //ellipse.MakeVxs(v1);
+            ////other mode
+            //int n = v1.Count;
+            ////make triangular fan*** 
 
+            //float[] coords = new float[(n * 2) + 4];
+            //int i = 0;
+            //int nn = 0;
+            //int npoints = 0;
+            //double vx, vy;
+            ////center
+            //coords[nn++] = (float)x;
+            //coords[nn++] = (float)y;
+            //npoints++;
+            //var cmd = v1.GetVertex(i, out vx, out vy);
+            //while (i < n)
+            //{
+            //    switch (cmd)
+            //    {
+            //        case VertexCmd.MoveTo:
+            //            {
+            //                coords[nn++] = (float)vx;
+            //                coords[nn++] = (float)vy;
+            //                npoints++;
+            //            }
+            //            break;
+            //        case VertexCmd.LineTo:
+            //            {
+            //                coords[nn++] = (float)vx;
+            //                coords[nn++] = (float)vy;
+            //                npoints++;
+            //            }
+            //            break;
+            //        case VertexCmd.NoMore:
+            //            {
+            //            }
+            //            break;
+            //        default:
+            //            {
+            //            }
+            //            break;
+            //    }
+            //    i++;
+            //    cmd = v1.GetVertex(i, out vx, out vy);
+            //} 
+            ////close circle
+            //coords[nn++] = coords[2];
+            //coords[nn++] = coords[3];
+            //npoints++;
+            ////----------------------------------------------
+            //_glsx.FillTriangleFan(_fillColor, coords, npoints);
+            //ReleaseVxs(ref v1);
+            ////---------------------------------------------- 
         }
 
 
@@ -1056,8 +1088,7 @@ namespace PixelFarm.DrawingGL
                                 xylist.Add((float)prevMoveToY);
                                 prevX = prevMoveToX;
                                 prevY = prevMoveToY;
-                                //
-
+                                // 
                                 Figure newfig = new Figure(xylist.ToArray());
                                 newfig.SupportVertexBuffer = buildForRenderVx;
                                 figures.Add(newfig);
@@ -1073,6 +1104,13 @@ namespace PixelFarm.DrawingGL
                     }
                 }
                 EXIT_LOOP:
+
+                if (figures.Count == 0)
+                {
+                    Figure newfig = new Figure(xylist.ToArray());
+                    newfig.SupportVertexBuffer = buildForRenderVx;
+                    figures.Add(newfig);
+                }
                 return new InternalGraphicsPath(figures);
             }
 
