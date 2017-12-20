@@ -40,7 +40,7 @@ namespace PixelFarm.Agg
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
         LineDashGenerator _lineDashGen;
-        int ellipseGenNSteps = 10;
+        int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
 
         public AggPainter(AggRenderSurface aggRdsf)
@@ -138,43 +138,20 @@ namespace PixelFarm.Agg
 
 
 
-        public override void FillCircle(double x, double y, double radius)
-        {
-            ellipse.Reset(x, y, radius, radius);
-            var v1 = GetFreeVxs();
-            _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
-            ReleaseVxs(ref v1);
-        }
+        //public override void FillCircle(double x, double y, double radius)
+        //{
+        //    ellipse.Reset(x, y, radius, radius);
+        //    var v1 = GetFreeVxs();
+        //    _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
+        //    ReleaseVxs(ref v1);
+        //}
 
-        public override void FillEllipse(double left, double bottom, double right, double top)
-        {
-            ellipse.Reset((left + right) * 0.5,
-                          (bottom + top) * 0.5,
-                          (right - left) * 0.5,
-                          (top - bottom) * 0.5,
-                           ellipseGenNSteps);
-            var v1 = GetFreeVxs();
-            _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
-            ReleaseVxs(ref v1);
-        }
+      
         public override void Draw(VertexStoreSnap vxs)
         {
             this.Fill(vxs);
         }
-        public override void DrawEllipse(double left, double bottom, double right, double top)
-        {
-            ellipse.Reset((left + right) * 0.5,
-                         (bottom + top) * 0.5,
-                         (right - left) * 0.5,
-                         (top - bottom) * 0.5,
-                          ellipseGenNSteps);
-            var v1 = GetFreeVxs();
-            var v2 = GetFreeVxs();
-            _aggsx.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.fillColor);
-            ReleaseVxs(ref v1);
-            ReleaseVxs(ref v2);
-        }
-
+       
 
         /// <summary>
         /// draw line
@@ -184,7 +161,7 @@ namespace PixelFarm.Agg
         /// <param name="x2"></param>
         /// <param name="y2"></param>
         /// <param name="color"></param>
-        public override void Line(double x1, double y1, double x2, double y2)
+        public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             //coordinate system
             if (_orientation == DrawBoardOrientation.LeftBottom)
@@ -239,23 +216,24 @@ namespace PixelFarm.Agg
                 ReleaseVxs(ref v1);
                 ReleaseVxs(ref v2);
             }
-
         }
 
-
-        public override void Rectangle(double left, double bottom, double right, double top)
+        public override void DrawRect(double left, double top, double width, double height)
         {
+
+            double right = left + width;
+            double bottom = top - height;
 
             if (this._orientation == DrawBoardOrientation.LeftBottom)
             {
-                _simpleRectVxsGen.SetRect(left + .5, bottom + .5, right - .5, top - .5);
+                _simpleRectVxsGen.SetRect(left + 0.5, bottom + 0.5, right - 0.5, top - 0.5);
             }
             else
             {
-                int height = this.Height;
-                _simpleRectVxsGen.SetRect(left + .5, height - bottom + .5, right - .5, height - top - .5);
+                int canvasH = this.Height;
+                //_simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5), right - 0.5, canvasH - (top - 0.5));
+                _simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
             }
-
             //----------------
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
@@ -266,27 +244,48 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v2);
         }
 
-        public override void FillRectangle(double left, double bottom, double right, double top)
+        public override void DrawEllipse(double left, double bottom, double right, double top)
         {
-            if (right < left || top < bottom)
+            double ox = (left + right) * 0.5;
+            double oy = (left + right) * 0.5;
+            if (this._orientation == DrawBoardOrientation.LeftTop)
             {
-#if DEBUG
-                throw new ArgumentException();
-#else
-                return;
-#endif
+                //modified
+                oy = this.Height - oy;
             }
-
-
-            _simpleRectVxsGen.SetRect(left, bottom, right, top);
+            ellipse.Reset(ox,
+                          oy,
+                         (right - left) * 0.5,
+                         (top - bottom) * 0.5,
+                          ellipseGenNSteps);
             var v1 = GetFreeVxs();
-            _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
+            var v2 = GetFreeVxs();
+            _aggsx.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.strokeColor);
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
+        }
+        public override void FillEllipse(double left, double bottom, double right, double top)
+        {
+            double ox = (left + right) * 0.5;
+            double oy = (left + right) * 0.5;
+            if (this._orientation == DrawBoardOrientation.LeftTop)
+            {
+                //modified
+                oy = this.Height - oy;
+            }
+            ellipse.Reset(ox,
+                          oy,
+                          (right - left) * 0.5,
+                          (top - bottom) * 0.5,
+                           ellipseGenNSteps);
+            var v1 = GetFreeVxs();
+            _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
-        public override void FillRectLBWH(double left, double bottom, double width, double height)
+        public override void FillRect(double left, double top, double width, double height)
         {
             double right = left + width;
-            double top = bottom + height;
+            double bottom = top - height;
             if (right < left || top < bottom)
             {
 #if DEBUG
@@ -295,7 +294,19 @@ namespace PixelFarm.Agg
                 return;
 #endif
             }
-            _simpleRectVxsGen.SetRect(left, bottom, right, top);
+
+
+
+            if (this._orientation == DrawBoardOrientation.LeftBottom)
+            {
+                _simpleRectVxsGen.SetRect(left + 0.5, bottom + 0.5, right - 0.5, top - 0.5);
+            }
+            else
+            {
+                int canvasH = this.Height;
+                _simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
+            }
+
             var v1 = GetFreeVxs();
             _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
             ReleaseVxs(ref v1);

@@ -23,7 +23,7 @@ namespace PixelFarm.Agg.Sample_Gradient
             {
                 var p2 = (AggPainter)p;
                 p.FillColor = Drawing.Color.Red;
-                p.FillRectangle(0, 70, 150, 120);
+                p.FillRect(0, 70, 150, 120);
                 //------------------------------------------- 
                 var innerGradient = new Gradients.GvcRadial();
                 SpanInterpolatorLinear linerInterpolator = new SpanInterpolatorLinear(Affine.IdentityMatrix);

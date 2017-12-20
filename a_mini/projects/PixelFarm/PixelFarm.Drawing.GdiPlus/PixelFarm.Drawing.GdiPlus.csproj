@@ -55,7 +55,7 @@
     <Compile Include="Implementation\BitmapHelper.cs" />
     <Compile Include="Implementation\Region.cs" />
     <Compile Include="MiniAggGraphics\BufferBitmapStore.cs" />
-    <Compile Include="MiniAggGraphics\GdiPlusCanvasPainter.cs" />
+    <Compile Include="MiniAggGraphics\GdiPainter.cs" />
     <Compile Include="MiniAggGraphics\GdiPlusRenderVx.cs" />
     <Compile Include="MiniAggGraphics\VxsHelper.cs" />
     <Compile Include="Canvas\1_MyGdiPlusCanvas_Specific.cs" />

@@ -89,7 +89,7 @@ namespace Mini
             _glsf.ClearColorBuffer();
             //example
             canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
-            canvasPainter.FillRectLBWH(20, 20, 150, 150);
+            canvasPainter.FillRect(20, 20, 150, 150);
             //load bmp image 
             //------------------------------------------------------------------------- 
             if (demobase != null)

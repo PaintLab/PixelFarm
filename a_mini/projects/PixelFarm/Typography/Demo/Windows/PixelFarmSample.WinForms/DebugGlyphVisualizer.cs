@@ -80,7 +80,7 @@ namespace SampleWinForms.UI
         }
         public void DrawMarker(float x, float y, PixelFarm.Drawing.Color color, float sizeInPx = 8)
         {
-            painter.FillRectLBWH(x, y, sizeInPx, sizeInPx, color);
+            painter.FillRect(x, y, sizeInPx, sizeInPx, color);
         }
         public float GlyphEdgeOffset { get; set; }
         public void RenderChar(char testChar, HintTechnique hint)
@@ -167,7 +167,7 @@ namespace SampleWinForms.UI
                 int markOnVertexNo = _infoView.DebugMarkVertexCommand;
                 double x, y;
                 vxs.GetVertex(markOnVertexNo, out x, out y);
-                painter.FillRectLBWH(x, y, 4, 4, PixelFarm.Drawing.Color.Red);
+                painter.FillRect(x, y, 4, 4, PixelFarm.Drawing.Color.Red);
                 //--------------
                 _infoView.ShowFlatternBorderInfo(vxs);
                 //--------------
@@ -223,7 +223,7 @@ namespace SampleWinForms.UI
                 case PointKind.LineStart:
                 case PointKind.LineStop:
 
-                    painter.FillRectLBWH(point.OX * _pxscale, point.OY * _pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
+                    painter.FillRect(point.OX * _pxscale, point.OY * _pxscale, 5, 5, PixelFarm.Drawing.Color.Red);
 
                     break;
             }
@@ -324,7 +324,7 @@ namespace SampleWinForms.UI
                 }
                 else
                 {
-                    painter.Line(edge.PX * scale, edge.PY * scale, edge.QX * scale, edge.QY * scale);
+                    painter.DrawLine(edge.PX * scale, edge.PY * scale, edge.QX * scale, edge.QY * scale);
                 }
 
                 {
@@ -445,7 +445,7 @@ namespace SampleWinForms.UI
             EdgeLine p_contactEdge = joint.dbugGetEdge_P();
             //mid point
             Vector2 jointPos = joint.OriginalJointPos * _pxscale;//scaled joint pos
-            painter.FillRectLBWH(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);
+            painter.FillRect(jointPos.X, jointPos.Y, 4, 4, PixelFarm.Drawing.Color.Yellow);
             if (joint.TipEdgeP != null)
             {
                 EdgeLine tipEdge = joint.TipEdgeP;
@@ -456,14 +456,14 @@ namespace SampleWinForms.UI
                    jointPos.X, jointPos.Y,
                    p_x, p_y,
                    PixelFarm.Drawing.Color.White);
-                painter.FillRectLBWH(p_x, p_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
+                painter.FillRect(p_x, p_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
 
                 //
                 painter.Line(
                     jointPos.X, jointPos.Y,
                     q_x, q_y,
                     PixelFarm.Drawing.Color.White);
-                painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
+                painter.FillRect(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
             }
             if (joint.TipEdgeQ != null)
             {
@@ -475,14 +475,14 @@ namespace SampleWinForms.UI
                    jointPos.X, jointPos.Y,
                    p_x, p_y,
                    PixelFarm.Drawing.Color.White);
-                painter.FillRectLBWH(p_x, p_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
+                painter.FillRect(p_x, p_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
 
                 //
                 painter.Line(
                     jointPos.X, jointPos.Y,
                     q_x, q_y,
                     PixelFarm.Drawing.Color.White);
-                painter.FillRectLBWH(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
+                painter.FillRect(q_x, q_y, 3, 3, PixelFarm.Drawing.Color.Green); //marker
             }
 
         }
@@ -548,7 +548,7 @@ namespace SampleWinForms.UI
             if (boneIndex == 0)
             {
                 //for first bone 
-                painter.FillRectLBWH(_branchHeadPos.X * pxscale, _branchHeadPos.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.DeepPink);
+                painter.FillRect(_branchHeadPos.X * pxscale, _branchHeadPos.Y * pxscale, 5, 5, PixelFarm.Drawing.Color.DeepPink);
             }
             if (!valid)
             {
@@ -593,8 +593,8 @@ namespace SampleWinForms.UI
                 qx * pxscale, qy * pxscale,
                 PixelFarm.Drawing.Color.Red);
             ///small yellow marker at p and q point of centroid
-            painter.FillRectLBWH(px * pxscale, py * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
-            painter.FillRectLBWH(qx * pxscale, qy * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
+            painter.FillRect(px * pxscale, py * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
+            painter.FillRect(qx * pxscale, qy * pxscale, 2, 2, PixelFarm.Drawing.Color.Yellow);
         }
         protected override void OnCentroidLineTip_P(double px, double py, double tip_px, double tip_py)
         {
@@ -626,7 +626,7 @@ namespace SampleWinForms.UI
             if (DrawEndLineHub)
             {
                 //line hub cebter
-                painter.FillRectLBWH(centerX * _pxscale, centerY * _pxscale, 7, 7,
+                painter.FillRect(centerX * _pxscale, centerY * _pxscale, 7, 7,
                        PixelFarm.Drawing.Color.White);
                 //this line hub is connected with other line hub at joint
                 if (joint != null)
