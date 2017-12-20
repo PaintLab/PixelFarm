@@ -21,7 +21,7 @@ namespace PixelFarm.Drawing.WinGdi
 
 
 
-    partial class GdiPlusRenderSurface : IDisposable
+    public partial class GdiPlusRenderSurface : IDisposable
     {
 
         bool isDisposed;
@@ -174,7 +174,7 @@ namespace PixelFarm.Drawing.WinGdi
             debug_resetCount++;
 #endif
         }
-        
+
 
         const int CANVAS_UNUSED = 1 << (1 - 1);
         const int CANVAS_DIMEN_CHANGED = 1 << (2 - 1);
