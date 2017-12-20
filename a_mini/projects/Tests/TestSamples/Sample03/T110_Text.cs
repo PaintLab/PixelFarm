@@ -9,11 +9,11 @@ namespace OpenTkEssTest
     [Info("T110_DrawText")]
     public class T110_DrawText : DemoBase
     {
-        GLRenderSurface _glsf;
+        GLRenderSurface _glsx;
         GLPainter painter;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsf = glsf;
+            this._glsx = glsx;
             this.painter = painter; 
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -21,14 +21,14 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsf.Dispose();
+            _glsx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsf.SmoothMode = SmoothMode.Smooth;
-            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsf.ClearColorBuffer();
-            _glsf.Clear(PixelFarm.Drawing.Color.Red);
+            _glsx.SmoothMode = SmoothMode.Smooth;
+            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsx.ClearColorBuffer();
+            _glsx.Clear(PixelFarm.Drawing.Color.Red);
 
             //-------------------------------
             painter.FillColor = PixelFarm.Drawing.Color.Black;

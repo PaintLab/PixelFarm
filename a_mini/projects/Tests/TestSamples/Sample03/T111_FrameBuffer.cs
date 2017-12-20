@@ -11,30 +11,30 @@ namespace OpenTkEssTest
     [Info("T111_FrameBuffer")]
     public class T111_FrameBuffer : DemoBase
     {
-        GLRenderSurface _glsf;
+        GLRenderSurface _glsx;
         GLPainter painter;
         FrameBuffer frameBuffer;
         bool isInit;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsf = glsf;
+            this._glsx = glsx;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
         {
             int max = Math.Max(this.Width, this.Height);
-            frameBuffer = _glsf.CreateFrameBuffer(max, max);
+            frameBuffer = _glsx.CreateFrameBuffer(max, max);
         }
         protected override void DemoClosing()
         {
-            _glsf.Dispose();
+            _glsx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsf.SmoothMode = SmoothMode.Smooth;
-            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsf.Clear(PixelFarm.Drawing.Color.White);
-            _glsf.ClearColorBuffer();
+            _glsx.SmoothMode = SmoothMode.Smooth;
+            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsx.Clear(PixelFarm.Drawing.Color.White);
+            _glsx.ClearColorBuffer();
             //-------------------------------
             if (!isInit)
             {
@@ -61,11 +61,11 @@ namespace OpenTkEssTest
 
                 GLBitmap bmp = new GLBitmap(frameBuffer.TextureId, frameBuffer.Width, frameBuffer.Height);
                 bmp.IsBigEndianPixel = true;
-                _glsf.DrawImage(bmp, 15, 300);
+                _glsx.DrawImage(bmp, 15, 300);
             }
             else
             {
-                _glsf.Clear(PixelFarm.Drawing.Color.Blue);
+                _glsx.Clear(PixelFarm.Drawing.Color.Blue);
             }
             //-------------------------------
             SwapBuffers();

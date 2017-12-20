@@ -12,7 +12,7 @@ namespace OpenTkEssTest
     [Info("T109_LionFillWithRenderVx")]
     public class T109_LionFillWithRenderVx : DemoBase
     {
-        GLRenderSurface _glsf;
+        GLRenderSurface _glsx;
         SpriteShape lionShape;
         VertexStore lionVxs;
         GLPainter painter;
@@ -20,9 +20,9 @@ namespace OpenTkEssTest
         int tmpDrawVersion = 0;
         MultiPartTessResult multipartTessResult;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsf = glsf;
+            this._glsx = glsx;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -74,13 +74,13 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsf.Dispose();
+            _glsx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsf.SmoothMode = SmoothMode.Smooth;
-            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsf.ClearColorBuffer();
+            _glsx.SmoothMode = SmoothMode.Smooth;
+            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsx.ClearColorBuffer();
             //-------------------------------
             if (tmpDrawVersion == 2)
             {
@@ -91,7 +91,7 @@ namespace OpenTkEssTest
                     int j = multipartTessResult.PartCount;
                     for (int i = 0; i < j; ++i)
                     {
-                        _glsf.FillRenderVx(colors[i], multipartTessResult, i);
+                        _glsx.FillRenderVx(colors[i], multipartTessResult, i);
                     }
                 }
 
@@ -102,7 +102,7 @@ namespace OpenTkEssTest
                 Color[] colors = lionShape.Colors;
                 for (int i = 0; i < j; ++i)
                 {
-                    _glsf.FillRenderVx(colors[i], lionRenderVxList[i]);
+                    _glsx.FillRenderVx(colors[i], lionRenderVxList[i]);
                 }
             }
             //-------------------------------

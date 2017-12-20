@@ -29,14 +29,14 @@ namespace TestGlfw
     }
     class GlfwSkia : GlfwAppBase
     {
-        static PixelFarm.DrawingGL.GLRenderSurface _glsf;
+        static PixelFarm.DrawingGL.GLRenderSurface _glsx;
         static MyNativeRGBA32BitsImage myImg;
         public GlfwSkia()
         {
             int ww_w = 800;
             int ww_h = 600;
             int max = Math.Max(ww_w, ww_h);
-            _glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, ww_w, ww_h);
+            _glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, ww_w, ww_h);
 
         }
         public override void UpdateViewContent(FormRenderUpdateEventArgs formRenderUpdateEventArgs)
@@ -63,7 +63,7 @@ namespace TestGlfw
             }
 
             var glBmp = new PixelFarm.DrawingGL.GLBitmap(w, h, myImg.Scan0);
-            _glsf.DrawImage(glBmp, 0, 600);
+            _glsx.DrawImage(glBmp, 0, 600);
             glBmp.Dispose();
         }
         static void DrawWithSkia(SKCanvas canvas)

@@ -11,16 +11,16 @@ namespace OpenTkEssTest
     [Info("T404_FontAtlas")]
     public class T404_FontAtlas : DemoBase
     {
-        GLRenderSurface _glsf;
+        GLRenderSurface _glsx;
         bool resInit;
         GLBitmap msdf_bmp;
         GLPainter painter;
         PixelFarm.Agg.ActualImage totalImg;
         SimpleFontAtlas fontAtlas;
 
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsf = glsf;
+            this._glsx = glsx;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -44,13 +44,13 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsf.Dispose();
+            _glsx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
-            _glsf.SmoothMode = SmoothMode.Smooth;
-            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsf.ClearColorBuffer();
+            _glsx.SmoothMode = SmoothMode.Smooth;
+            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsx.ClearColorBuffer();
             if (!resInit)
             {
                 // msdf_bmp = LoadTexture(@"..\msdf_75.png");
@@ -74,14 +74,14 @@ namespace OpenTkEssTest
             fontAtlas.TryGetGlyphDataByCodePoint(codepoint[0], out glyphData);
             PixelFarm.Drawing.Rectangle r = ConvToRect(glyphData.Rect);
             //canvas2d.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
-            _glsf.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
+            _glsx.DrawSubImageWithMsdf(msdf_bmp, ref r, 100, 500);
 
             fontAtlas.TryGetGlyphDataByCodePoint(codepoint[1], out glyphData);
             PixelFarm.Drawing.Rectangle r2 = ConvToRect(glyphData.Rect);
-            _glsf.DrawSubImageWithMsdf(msdf_bmp, ref r2, 100 + r.Width - 10, 500);
+            _glsx.DrawSubImageWithMsdf(msdf_bmp, ref r2, 100 + r.Width - 10, 500);
 
             //full image
-            _glsf.DrawImage(msdf_bmp, 100, 300);
+            _glsx.DrawImage(msdf_bmp, 100, 300);
             SwapBuffers();
         }
         static PixelFarm.Drawing.Rectangle ConvToRect(Rectangle r)
