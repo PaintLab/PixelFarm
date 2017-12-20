@@ -62,7 +62,7 @@ namespace OpenTkEssTest
                 //  p.DrawString(test_str, i * 10, i * 10);
                 float x_pos = xpos2;
                 float y_pos = i * 20;
-                p.FillRectangle(x_pos, y_pos, x_pos + 5, y_pos + 5);
+                p.FillRect(x_pos, y_pos, x_pos + 5, y_pos + 5);
             }
 
             p.FillColor = PixelFarm.Drawing.Color.Black;
@@ -156,7 +156,7 @@ namespace OpenTkEssTest
                 //  p.DrawString(test_str, i * 10, i * 10);
                 float x_pos = i * 20;
                 float y_pos = i * 20;
-                p.FillRectangle(x_pos, y_pos, x_pos + 5, y_pos + 5);
+                p.FillRect(x_pos, y_pos, x_pos + 5, y_pos + 5);
             }
             p.FillColor = PixelFarm.Drawing.Color.Black;
 

@@ -270,8 +270,7 @@ namespace PixelFarm.DrawingGL
 
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
-                //place left upper corner at specific x y
-
+                //place left upper corner at specific x y 
                 _glsf.DrawImage(glBmp, (float)x, _glsf.ViewportHeight - (float)y);
             }
             else
@@ -280,6 +279,34 @@ namespace PixelFarm.DrawingGL
                 //place left-lower of the img at specific (x,y)
                 _glsf.DrawImage(glBmp, (float)x, (float)y);
             }
+        }
+        float[] rect_coords = new float[8];
+        public override void FillRect(double left, double top, double width, double height)
+        {
+            if (_orientation == DrawBoardOrientation.LeftBottom)
+            {
+                CreateRectTessCoordsTriStrip((float)left, (float)(top - height), (float)width, (float)height, rect_coords);
+            }
+            else
+            {
+                int canvasH = _glsf.ViewportHeight;
+                CreateRectTessCoordsTriStrip((float)left, canvasH - (float)(top + height), (float)width, (float)height, rect_coords);
+            }
+            _glsf.FillTriangleStrip(_fillColor, rect_coords, 4);
+        }
+        public override void DrawRect(double left, double top, double width, double height)
+        {
+            if (_orientation == DrawBoardOrientation.LeftBottom)
+            {
+                _glsf.DrawRect((float)left, (float)top, (float)width, (float)height);
+
+            }
+            else
+            {
+                int canvasH = _glsf.ViewportHeight;
+                _glsf.DrawRect((float)left + 0.5f, canvasH - (float)(top + height + 0.5f), (float)width, (float)height);
+            }
+
         }
         public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
         {
@@ -463,15 +490,7 @@ namespace PixelFarm.DrawingGL
             _glsf.FillTriangleFan(_fillColor, coords, npoints);
             ReleaseVxs(ref v1);
         }
-        public override void FillRectangle(double left, double bottom, double right, double top)
-        {
-            FillRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
-        }
 
-        //public override void FillRectLBWH(double left, double bottom, double width, double height)
-        //{
-        //    FillRect((float)left, (float)bottom, (float)width, (float)height);
-        //}
 
         public override void FillRenderVx(Brush brush, RenderVx renderVx)
         {
@@ -487,13 +506,15 @@ namespace PixelFarm.DrawingGL
         }
 
 
-
-        void FillRect(float x, float y, float w, float h)
-        {
-            float[] coords = CreateRectTessCoordsTriStrip(x, y, w, h);
-            _glsf.FillTriangleStrip(_fillColor, coords, 4);
-        }
-        static float[] CreateRectTessCoordsTriStrip(float x, float y, float w, float h)
+        /// <summary>
+        /// create rect tess for openGL
+        /// </summary>
+        /// <param name="x">left</param>
+        /// <param name="y">bottom</param>
+        /// <param name="w">width</param>
+        /// <param name="h">height</param>
+        /// <param name="output"></param>
+        static void CreateRectTessCoordsTriStrip(float x, float y, float w, float h, float[] output)
         {
             //float x0 = x;
             //float y0 = y + h;
@@ -503,12 +524,12 @@ namespace PixelFarm.DrawingGL
             //float y2 = y + h;
             //float x3 = x + w;
             //float y3 = y;
-            return new float[]{
-               x,y + h,
-               x,y,
-               x + w, y + h,
-               x + w, y,
-            };
+            output[0] = x; output[1] = y + h;
+            output[2] = x; output[3] = y;
+            output[4] = x + w; output[5] = y + h;
+            output[6] = x + w; output[7] = y;
+
+
         }
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
@@ -544,16 +565,8 @@ namespace PixelFarm.DrawingGL
                         new VertexStoreSnap(vxs, pathIndexs[i])));
             }
         }
-        public override void DrawRectangle(double left, double top, double width, double height)
-        {
-            //double right = left + width;
-            //double bottom = top - height;
 
-            //draw rectangle
-            //_glsf.DrawRect((float)left, (float)bottom, (float)(right - left), (float)(top - bottom));
-            //_glsf.DrawRect((float)left, (float)bottom, (float)(width), (float)(height));
-            _glsf.DrawRect((float)left, (float)top, (float)(width), (float)(height));
-        }
+
 
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {

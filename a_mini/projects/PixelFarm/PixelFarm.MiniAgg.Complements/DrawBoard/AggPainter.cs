@@ -239,24 +239,24 @@ namespace PixelFarm.Agg
                 ReleaseVxs(ref v1);
                 ReleaseVxs(ref v2);
             }
-
         }
 
-
-        public override void DrawRectangle(double left, double top, double width, double height)
+        public override void DrawRect(double left, double top, double width, double height)
         {
 
             double right = left + width;
             double bottom = top - height;
+
             if (this._orientation == DrawBoardOrientation.LeftBottom)
             {
-                _simpleRectVxsGen.SetRect(left + .5, bottom + .5, right - .5, top - .5);
+                _simpleRectVxsGen.SetRect(left + 0.5, bottom + 0.5, right - 0.5, top - 0.5);
             }
             else
             {
-                _simpleRectVxsGen.SetRect(left + .5, height - bottom + .5, right - .5, height - top - .5);
+                int canvasH = this.Height;
+                //_simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5), right - 0.5, canvasH - (top - 0.5));
+                _simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
             }
-
             //----------------
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
@@ -267,8 +267,10 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v2);
         }
 
-        public override void FillRectangle(double left, double bottom, double right, double top)
+        public override void FillRect(double left, double top, double width, double height)
         {
+            double right = left + width;
+            double bottom = top - height;
             if (right < left || top < bottom)
             {
 #if DEBUG
@@ -279,28 +281,21 @@ namespace PixelFarm.Agg
             }
 
 
-            _simpleRectVxsGen.SetRect(left, bottom, right, top);
+
+            if (this._orientation == DrawBoardOrientation.LeftBottom)
+            {
+                _simpleRectVxsGen.SetRect(left + 0.5, bottom + 0.5, right - 0.5, top - 0.5);
+            }
+            else
+            {
+                int canvasH = this.Height;
+                _simpleRectVxsGen.SetRect(left + 0.5, canvasH - (bottom + 0.5 + height), right - 0.5, canvasH - (top - 0.5 + height));
+            }
+
             var v1 = GetFreeVxs();
             _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
-//        public override void FillRectLBWH(double left, double bottom, double width, double height)
-//        {
-//            double right = left + width;
-//            double top = bottom + height;
-//            if (right < left || top < bottom)
-//            {
-//#if DEBUG
-//                throw new ArgumentException();
-//#else
-//                return;
-//#endif
-//            }
-//            _simpleRectVxsGen.SetRect(left, bottom, right, top);
-//            var v1 = GetFreeVxs();
-//            _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
-//            ReleaseVxs(ref v1);
-//        }
         public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
         {
             if (roundRect == null)

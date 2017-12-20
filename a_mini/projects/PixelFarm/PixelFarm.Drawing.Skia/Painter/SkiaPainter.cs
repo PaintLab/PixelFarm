@@ -414,7 +414,7 @@ namespace PixelFarm.Drawing.Skia
               new SKRect((float)left, (float)top, (float)right, (float)bottom),
               _stroke);
         }
-        public override void FillRectangle(double left, double bottom, double right, double top)
+        public override void FillRect(double left, double bottom, double right, double top)
         {
 
             _skCanvas.DrawRect(
@@ -491,7 +491,7 @@ namespace PixelFarm.Drawing.Skia
             FillColor = prevColor;
         }
 
-        public override void DrawRectangle(double left, double bottom, double right, double top)
+        public override void DrawRect(double left, double bottom, double right, double top)
         {
             _skCanvas.DrawLine((float)left, (float)top, (float)right, (float)bottom, _stroke);
         }

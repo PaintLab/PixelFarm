@@ -92,7 +92,7 @@ namespace PixelFarm.Agg.Samples
 
         static void FillPoint(Vector2 v, PixelFarm.Drawing.Painter p)
         {
-            p.FillRectangle(
+            p.FillRect(
                   v.x, v.y,
                   v.x + 3, v.y + 3);
         }

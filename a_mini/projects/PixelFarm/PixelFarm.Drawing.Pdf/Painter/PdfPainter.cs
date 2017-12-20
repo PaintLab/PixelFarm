@@ -405,7 +405,7 @@ namespace PixelFarm.Drawing.Pdf
             //_gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
         }
 
-        public override void FillRectangle(double left, double bottom, double right, double top)
+        public override void FillRect(double left, double bottom, double right, double top)
         {
             //_gfx.FillRectangle(_currentFillBrush,
             //    System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
@@ -473,7 +473,7 @@ namespace PixelFarm.Drawing.Pdf
             //}
         }
 
-        public override void DrawRectangle(double left, double bottom, double right, double top)
+        public override void DrawRect(double left, double bottom, double right, double top)
         {
             //_gfx.DrawRectangle(_currentPen, (float)left, (float)top, (float)(right - left), (float)(top - bottom));
         }

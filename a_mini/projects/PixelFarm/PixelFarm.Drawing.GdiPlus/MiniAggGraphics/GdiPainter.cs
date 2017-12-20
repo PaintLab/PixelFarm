@@ -474,31 +474,6 @@ namespace PixelFarm.Drawing.WinGdi
             _gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
         }
 
-        public override void FillRectangle(double left, double bottom, double right, double top)
-        {
-            ////use current brush and font
-            //_gfx.ResetTransform();
-            //_gfx.TranslateTransform(0.0F, (float)Height);// Translate the drawing area accordingly  
-            ////------------
-            //_gfx.FillRectangle(_currentFillBrush,
-            //    System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
-            ///*_gfx.DrawString(text,
-            //    _latestWinGdiPlusFont.InnerFont,
-            //    _currentFillBrush,
-            //    new System.Drawing.PointF((float)x, (float)y));
-            //*/
-            ////------------
-            ////restore back
-            //_gfx.ResetTransform();//again
-            //_gfx.ScaleTransform(1.0F, -1.0F);// Flip the Y-Axis
-            //_gfx.TranslateTransform(0.0F, -(float)Height);// Translate the drawing area accordingly                
-
-
-
-            _gfx.FillRectangle(_currentFillBrush, (float)left, (float)top, (float)(right - left), (float)(top - bottom));
-
-            //     System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
-        }
 
         //public override void FillRectLBWH(double left, double bottom, double width, double height)
         //{
@@ -566,9 +541,14 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        public override void DrawRectangle(double left, double bottom, double right, double top)
+        public override void DrawRect(double left, double top, double width, double height)
         {
-            _gfx.DrawRectangle(_currentPen, (float)left, (float)top, (float)(right - left), (float)(top - bottom));
+            _gfx.DrawRectangle(_currentPen, (float)left, (float)top, (float)width, (float)height);
+        }
+        public override void FillRect(double left, double top, double width, double height)
+        { 
+            _gfx.FillRectangle(_currentFillBrush, (float)left, (float)top, (float)width, (float)height);
+
         }
 
         public override void SetClipBox(int x1, int y1, int x2, int y2)
