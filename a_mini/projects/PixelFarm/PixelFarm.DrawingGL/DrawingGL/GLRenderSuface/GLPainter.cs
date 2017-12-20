@@ -28,7 +28,7 @@ namespace PixelFarm.DrawingGL
         //agg's vertex generators
         Stroke _aggStroke = new Stroke(1);
         Ellipse ellipse = new Ellipse();
-         
+
         Arc _arcTool;
 
         //fonts
@@ -211,7 +211,7 @@ namespace PixelFarm.DrawingGL
                 _igfxPathBuilder.CreateGraphicsPath(vxs));
         }
 
-     
+
         DrawingGL.GLBitmap ResolveForGLBitmap(Image image)
         {
             var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
@@ -439,7 +439,7 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-     
+
         public override float OriginX
         {
             get
@@ -502,7 +502,7 @@ namespace PixelFarm.DrawingGL
              );
         }
 
-         
+
 
         public override void FillRenderVx(Brush brush, RenderVx renderVx)
         {
@@ -543,11 +543,22 @@ namespace PixelFarm.DrawingGL
 
 
         }
-         
+
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _glsx.StrokeColor = _strokeColor;
-            _glsx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            if (this._orientation == DrawBoardOrientation.LeftBottom)
+            {
+                //as OpenGL original
+                _glsx.DrawLine((float)x1, (float)y1, (float)x2, (float)y2);
+            }
+            else
+            {
+                int h = _glsx.ViewportHeight;
+                _glsx.DrawLine((float)x1, h - (float)y1, (float)x2, h- (float)y2);
+            }
+
+
         }
 
         public override void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath)
@@ -560,7 +571,7 @@ namespace PixelFarm.DrawingGL
                     _igfxPathBuilder.CreateGraphicsPath(
                         new VertexStoreSnap(vxs, pathIndexs[i])));
             }
-        } 
+        }
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
         }
@@ -1081,6 +1092,6 @@ namespace PixelFarm.DrawingGL
                     multipartTessResult.EndBorderPart();
                 }
             }
-        } 
+        }
     }
 }

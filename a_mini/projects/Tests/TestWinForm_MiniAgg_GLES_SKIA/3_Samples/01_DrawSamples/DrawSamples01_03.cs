@@ -47,15 +47,11 @@ namespace PixelFarm.Agg.Sample_Draw
         {
             p.Clear(Drawing.Color.White);
             p.StrokeColor = Color.Red;
+
             //lines
             p.DrawLine(0, 0, 100, 100);
             p.DrawLine(200, 100, 250, 200);
-
             p.DrawRect(10, 10, 20, 30);
-         
-
-            
-             
         }
     }
 
