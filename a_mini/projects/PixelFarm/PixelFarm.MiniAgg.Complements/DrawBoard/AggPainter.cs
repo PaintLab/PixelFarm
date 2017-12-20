@@ -36,7 +36,7 @@ namespace PixelFarm.Agg
         SimpleRect _simpleRectVxsGen = new SimpleRect();
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
-        RoundedRect roundRect = null;
+
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
         LineDashGenerator _lineDashGen;
@@ -135,23 +135,11 @@ namespace PixelFarm.Agg
         {
             _vxsPool.Release(ref vxs);
         }
-
-
-
-        //public override void FillCircle(double x, double y, double radius)
-        //{
-        //    ellipse.Reset(x, y, radius, radius);
-        //    var v1 = GetFreeVxs();
-        //    _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
-        //    ReleaseVxs(ref v1);
-        //}
-
-      
         public override void Draw(VertexStoreSnap vxs)
         {
             this.Fill(vxs);
         }
-       
+
 
         /// <summary>
         /// draw line
@@ -244,30 +232,30 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v2);
         }
 
-        public override void DrawEllipse(double left, double bottom, double right, double top)
+        public override void DrawEllipse(double left, double top, double width, double height)
         {
-            double ox = (left + right) * 0.5;
-            double oy = (left + right) * 0.5;
+            double ox = (left + width / 2);
+            double oy = (top + height / 2);
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
                 //modified
                 oy = this.Height - oy;
             }
             ellipse.Reset(ox,
-                          oy,
-                         (right - left) * 0.5,
-                         (top - bottom) * 0.5,
-                          ellipseGenNSteps);
+                         oy,
+                         width / 2,
+                         height / 2,
+                         ellipseGenNSteps);
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
             _aggsx.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.strokeColor);
             ReleaseVxs(ref v1);
             ReleaseVxs(ref v2);
         }
-        public override void FillEllipse(double left, double bottom, double right, double top)
+        public override void FillEllipse(double left, double top, double width, double height)
         {
-            double ox = (left + right) * 0.5;
-            double oy = (left + right) * 0.5;
+            double ox = (left + width / 2);
+            double oy = (top + height / 2);
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
                 //modified
@@ -275,9 +263,9 @@ namespace PixelFarm.Agg
             }
             ellipse.Reset(ox,
                           oy,
-                          (right - left) * 0.5,
-                          (top - bottom) * 0.5,
-                           ellipseGenNSteps);
+                          width / 2,
+                          height / 2,
+                          ellipseGenNSteps);
             var v1 = GetFreeVxs();
             _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
             ReleaseVxs(ref v1);
@@ -311,40 +299,6 @@ namespace PixelFarm.Agg
             _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
-        public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
-            var v1 = GetFreeVxs();
-            this.Fill(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
-        public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
-            var v1 = GetFreeVxs();
-            this.Draw(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
 
         public override RequestFont CurrentFont
         {
@@ -373,7 +327,15 @@ namespace PixelFarm.Agg
             //TODO: review drawing string  with agg here   
             if (_textPrinter != null)
             {
-                _textPrinter.DrawString(text, x, y);
+                if (this._orientation == DrawBoardOrientation.LeftBottom)
+                {
+                    _textPrinter.DrawString(text, x, y);
+                }
+                else
+                {
+                    _textPrinter.DrawString(text, x, this.Height - y);
+                }
+
             }
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
@@ -488,7 +450,7 @@ namespace PixelFarm.Agg
             this.sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithSpan(this._aggsx.DestImage, sclineRas, scline, spanGen);
         }
-        public override void DrawImage(Image img, double x, double y)
+        public override void DrawImage(Image img, double left, double top)
         {
             //check image caching system
             if (img is ActualImage)
@@ -497,14 +459,14 @@ namespace PixelFarm.Agg
                 if (this._orientation == DrawBoardOrientation.LeftTop)
                 {
                     //place left upper corner at specific x y
-                    this._aggsx.Render(this.sharedImageWriterReader, x, this.Height - (y + img.Height));
+                    this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
 
                 }
                 else
                 {
                     //left-bottom as original
                     //place left-lower of the img at specific (x,y)
-                    this._aggsx.Render(this.sharedImageWriterReader, x, y);
+                    this._aggsx.Render(this.sharedImageWriterReader, left, top);
                 }
 
             }
@@ -545,27 +507,6 @@ namespace PixelFarm.Agg
                 area.Left, area.Bottom, area.Right, area.Top);
             filterMan.DoRecursiveBlur(img, r);
         }
-        //---------------- 
-        public override void DrawBezierCurve(float startX, float startY, float endX, float endY,
-           float controlX1, float controlY1,
-           float controlX2, float controlY2)
-        {
-            var v1 = GetFreeVxs();
-            VertexSourceExtensions.CreateBezierVxs4(v1,
-                new PixelFarm.VectorMath.Vector2(startX, startY),
-                new PixelFarm.VectorMath.Vector2(endX, endY),
-                new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
-                new PixelFarm.VectorMath.Vector2(controlX2, controlY2));
-            //
-            var v2 = this.stroke.MakeVxs(v1, GetFreeVxs());
-            //
-            sclineRas.Reset();
-            sclineRas.AddPath(v2);
-            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, this.strokeColor);
-            ReleaseVxs(ref v1);
-            ReleaseVxs(ref v2);
-        }
-
 
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
@@ -614,8 +555,6 @@ namespace PixelFarm.Agg
                 stroke.LineCap = value;
             }
         }
-
-        //--------------------------------------------------
         public LineDashGenerator LineDashGen
         {
             get { return this._lineDashGen; }

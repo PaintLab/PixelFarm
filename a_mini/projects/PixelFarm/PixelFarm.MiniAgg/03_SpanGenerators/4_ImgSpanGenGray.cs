@@ -18,7 +18,7 @@ using img_subpix_const = PixelFarm.Agg.ImageFilterLookUpTable.ImgSubPixConst;
 namespace PixelFarm.Agg.Imaging
 {
     // it should be easy to write a 90 rotating or mirroring filter too. LBB 2012/01/14
-    class ImgSpanGenGray_NNStepXby1 : ImgSpanGen
+    public class ImgSpanGenGray_NNStepXby1 : ImgSpanGen
     {
         const int BASE_SHIFT = 8;
         const int BASE_SCALE = (int)(1 << BASE_SHIFT);

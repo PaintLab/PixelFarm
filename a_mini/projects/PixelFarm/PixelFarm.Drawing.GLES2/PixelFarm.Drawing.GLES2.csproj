@@ -44,42 +44,6 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\Es2Utils\MiniShaderProgram.cs">
       <Link>DrawingGL\Es2Utils\MiniShaderProgram.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\GLGradientColorProvider.cs">
-      <Link>DrawingGL\GLCanvas\GLGradientColorProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\GLPainter.cs">
-      <Link>DrawingGL\GLCanvas\GLPainter.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\GLRenderSurface.cs">
-      <Link>DrawingGL\GLCanvas\GLRenderSurface.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\ImageFillStyle.cs">
-      <Link>DrawingGL\GLCanvas\ImageFillStyle.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\InternalGraphicsPath.cs">
-      <Link>DrawingGL\GLCanvas\InternalGraphicsPath.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\ShaderSharedResource.cs">
-      <Link>DrawingGL\GLCanvas\ShaderSharedResource.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\SmoothMode.cs">
-      <Link>DrawingGL\GLCanvas\SmoothMode.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\SvgArc.cs">
-      <Link>DrawingGL\GLCanvas\SvgArc.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\TessListener.cs">
-      <Link>DrawingGL\GLCanvas\TessListener.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\TextureFontStore.cs">
-      <Link>DrawingGL\GLCanvas\TextureFontStore.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\VertexBufferObject.cs">
-      <Link>DrawingGL\GLCanvas\VertexBufferObject.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLRenderSuface\VertexPositionColor.cs">
-      <Link>DrawingGL\GLCanvas\VertexPositionColor.cs</Link>
-    </Compile>
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLShader\BasicFillShader.cs">
       <Link>DrawingGL\GLShader\BasicFillShader.cs</Link>
     </Compile>
@@ -119,11 +83,45 @@
     <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\GLTexture\TextureAtlas.cs">
       <Link>DrawingGL\GLTexture\TextureAtlas.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLGradientColorProvider.cs">
+      <Link>DrawingGL\RenderSurface\GLGradientColorProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\GLRenderSurface.cs">
+      <Link>DrawingGL\RenderSurface\GLRenderSurface.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\ImageFillStyle.cs">
+      <Link>DrawingGL\RenderSurface\ImageFillStyle.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\InternalGraphicsPath.cs">
+      <Link>DrawingGL\RenderSurface\InternalGraphicsPath.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\ShaderSharedResource.cs">
+      <Link>DrawingGL\RenderSurface\ShaderSharedResource.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\SmoothMode.cs">
+      <Link>DrawingGL\RenderSurface\SmoothMode.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\SvgArc.cs">
+      <Link>DrawingGL\RenderSurface\SvgArc.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TessListener.cs">
+      <Link>DrawingGL\RenderSurface\TessListener.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\TextureFontStore.cs">
+      <Link>DrawingGL\RenderSurface\TextureFontStore.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexBufferObject.cs">
+      <Link>DrawingGL\RenderSurface\VertexBufferObject.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.DrawingGL\DrawingGL\RenderSuface\VertexPositionColor.cs">
+      <Link>DrawingGL\RenderSurface\VertexPositionColor.cs</Link>
+    </Compile>
     <Compile Include="0_Start\GLES2Platform.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\1_MyGLCanvas_Specific.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\2_MyGLCanvas_CoordinateAndClip.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\3_MyGLCanvas_DrawGraphics.cs" />
-    <Compile Include="PixelFarm.Drawing.GLES2\4_MyGLCanvas_TextAndFonts.cs" />
+    <Compile Include="Painter\GLPainter.cs" />
+    <Compile Include="DrawBoard\1_MyGLDrawBoard_Specific.cs" />
+    <Compile Include="DrawBoard\2_MyGLDrawBoard_CoordinateAndClip.cs" />
+    <Compile Include="DrawBoard\3_MyGLDrawBoard_DrawGraphics.cs" />
+    <Compile Include="DrawBoard\4_MyGLDrawBoard_TextAndFonts.cs" />
     <Compile Include="0_Start\GLES2PlatformFontMx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

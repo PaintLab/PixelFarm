@@ -25,7 +25,7 @@ namespace PixelFarm.DrawingGL
         VxsTextPrinter textPrinter;
         int bmpWidth;
         int bmpHeight;
-        GLRenderSurface _glsf;
+        GLRenderSurface _glsx;
         GLPainter canvasPainter;
 
         public AggTextSpanPrinter(GLPainter canvasPainter, int w, int h)
@@ -37,7 +37,7 @@ namespace PixelFarm.DrawingGL
 
             //TODO: review here
             this.canvasPainter = canvasPainter;
-            this._glsf = canvasPainter.Canvas;
+            this._glsx = canvasPainter.Canvas;
             bmpWidth = w;
             bmpHeight = h;
             actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32);
@@ -101,7 +101,7 @@ namespace PixelFarm.DrawingGL
                 GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
                 glBmp.IsInvert = false;
                 //TODO: review font height
-                _glsf.DrawGlyphImageWithSubPixelRenderingTechnique(glBmp, (float)x, (float)y + 40);
+                _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(glBmp, (float)x, (float)y + 40);
                 glBmp.Dispose();
             }
             else
@@ -117,7 +117,7 @@ namespace PixelFarm.DrawingGL
                 GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
                 glBmp.IsInvert = false;
                 //TODO: review font height
-                _glsf.DrawGlyphImage(glBmp, (float)x, (float)y + 40);
+                _glsx.DrawGlyphImage(glBmp, (float)x, (float)y + 40);
                 glBmp.Dispose();
             }
 
@@ -183,7 +183,7 @@ namespace PixelFarm.DrawingGL
         GLBitmapCache<SimpleFontAtlas> _loadedGlyphs;
 
         //--------
-        GLRenderSurface _glsf;
+        GLRenderSurface _glsx;
 
         GlyphLayout _glyphLayout = new GlyphLayout();
         GLPainter painter;
@@ -198,7 +198,7 @@ namespace PixelFarm.DrawingGL
         {
             //create text printer for use with canvas painter 
             this.painter = painter;
-            this._glsf = painter.Canvas;
+            this._glsx = painter.Canvas;
             //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
             //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer;
 
@@ -220,7 +220,7 @@ namespace PixelFarm.DrawingGL
         public void ChangeFillColor(Color color)
         {
             //called by owner painter   
-            _glsf.FontFillColor = color;
+            _glsx.FontFillColor = color;
         }
         public void ChangeStrokeColor(Color strokeColor)
         {
@@ -335,7 +335,7 @@ namespace PixelFarm.DrawingGL
                 {
                     case Typography.Rendering.TextureKind.Msdf:
 
-                        _glsf.DrawSubImageWithMsdf(_glBmp,
+                        _glsx.DrawSubImageWithMsdf(_glBmp,
                             ref srcRect,
                             g_x,
                             g_y,
@@ -344,7 +344,7 @@ namespace PixelFarm.DrawingGL
                         break;
                     case Typography.Rendering.TextureKind.AggGrayScale:
 
-                        _glsf.DrawSubImage(_glBmp,
+                        _glsx.DrawSubImage(_glBmp,
                          ref srcRect,
                             g_x,
                             g_y,
@@ -353,7 +353,7 @@ namespace PixelFarm.DrawingGL
                         break;
                     case Typography.Rendering.TextureKind.AggSubPixel:
 
-                        _glsf.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
+                        _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
                              ref srcRect,
                              g_x,
                              g_y,
@@ -406,7 +406,7 @@ namespace PixelFarm.DrawingGL
                 {
                     case Typography.Rendering.TextureKind.Msdf:
 
-                        _glsf.DrawSubImageWithMsdf(_glBmp,
+                        _glsx.DrawSubImageWithMsdf(_glBmp,
                             ref srcRect,
                             g_x,
                             g_y,
@@ -415,7 +415,7 @@ namespace PixelFarm.DrawingGL
                         break;
                     case Typography.Rendering.TextureKind.AggGrayScale:
 
-                        _glsf.DrawSubImage(_glBmp,
+                        _glsx.DrawSubImage(_glBmp,
                          ref srcRect,
                             g_x,
                             g_y,
@@ -423,7 +423,7 @@ namespace PixelFarm.DrawingGL
 
                         break;
                     case Typography.Rendering.TextureKind.AggSubPixel:
-                        _glsf.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
+                        _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
                                 ref srcRect,
                                 g_x,
                                 g_y,

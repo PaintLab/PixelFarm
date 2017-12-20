@@ -36,17 +36,16 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DrawingGL\GLRenderSuface\GLRenderSurface.cs" />
-    <Compile Include="DrawingGL\GLRenderSuface\SmoothMode.cs" />
-    <Compile Include="DrawingGL\GLRenderSuface\ShaderSharedResource.cs" />
-    <Compile Include="DrawingGL\GLRenderSuface\GLPainter.cs" />
-    <Compile Include="DrawingGL\GLRenderSuface\GLGradientColorProvider.cs" />
-    <Compile Include="DrawingGL\GLRenderSuface\ImageFillStyle.cs" />
-    <Compile Include="DrawingGL\GLRenderSuface\InternalGraphicsPath.cs" />
-    <Compile Include="DrawingGL\GLRenderSuface\SvgArc.cs" />
-    <Compile Include="DrawingGL\GLRenderSuface\TessListener.cs" />
-    <Compile Include="DrawingGL\GLRenderSuface\VertexBufferObject.cs" />
-    <Compile Include="DrawingGL\GLRenderSuface\VertexPositionColor.cs" />
+    <Compile Include="DrawingGL\RenderSuface\GLRenderSurface.cs" />
+    <Compile Include="DrawingGL\RenderSuface\SmoothMode.cs" />
+    <Compile Include="DrawingGL\RenderSuface\ShaderSharedResource.cs" />
+    <Compile Include="DrawingGL\RenderSuface\GLGradientColorProvider.cs" />
+    <Compile Include="DrawingGL\RenderSuface\ImageFillStyle.cs" />
+    <Compile Include="DrawingGL\RenderSuface\InternalGraphicsPath.cs" />
+    <Compile Include="DrawingGL\RenderSuface\SvgArc.cs" />
+    <Compile Include="DrawingGL\RenderSuface\TessListener.cs" />
+    <Compile Include="DrawingGL\RenderSuface\VertexBufferObject.cs" />
+    <Compile Include="DrawingGL\RenderSuface\VertexPositionColor.cs" />
     <Compile Include="DrawingGL\GLShader\BasicFillShader.cs" />
     <Compile Include="DrawingGL\GLShader\FilterEffectShaders.cs" />
     <Compile Include="DrawingGL\GLShader\InvertAlphaLineSmoothShader.cs" />

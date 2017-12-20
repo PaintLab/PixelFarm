@@ -12,14 +12,14 @@ namespace OpenTkEssTest
     [Info("T115_VBO_01")]
     public class T115_VBO_01 : DemoBase
     {
-        GLRenderSurface _glsf;
+        GLRenderSurface _glsx;
         GLPainter painter;
         PixelFarm.Drawing.RenderVx polygon1, polygon2, polygon3;
         bool isInit;
         bool frameBufferNeedUpdate;
-        protected override void OnGLSurfaceReady(GLRenderSurface glsf, GLPainter painter)
+        protected override void OnGLSurfaceReady(GLRenderSurface glsx, GLPainter painter)
         {
-            this._glsf = glsf;
+            this._glsx = glsx;
             this.painter = painter;
         }
         protected override void OnReadyForInitGLShaderProgram()
@@ -49,21 +49,21 @@ namespace OpenTkEssTest
         }
         protected override void DemoClosing()
         {
-            _glsf.Dispose();
+            _glsx.Dispose();
         }
         protected override void OnGLRender(object sender, EventArgs args)
         {
 
-            _glsf.SmoothMode = SmoothMode.Smooth;
-            _glsf.StrokeColor = PixelFarm.Drawing.Color.Blue;
-            _glsf.Clear(PixelFarm.Drawing.Color.White);
-            _glsf.ClearColorBuffer();
+            _glsx.SmoothMode = SmoothMode.Smooth;
+            _glsx.StrokeColor = PixelFarm.Drawing.Color.Blue;
+            _glsx.Clear(PixelFarm.Drawing.Color.White);
+            _glsx.ClearColorBuffer();
             //-------------------------------
             if (!isInit)
             {
                 isInit = true;
             }
-            _glsf.Clear(PixelFarm.Drawing.Color.Blue);
+            _glsx.Clear(PixelFarm.Drawing.Color.Blue);
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2;
             //-------------------------------

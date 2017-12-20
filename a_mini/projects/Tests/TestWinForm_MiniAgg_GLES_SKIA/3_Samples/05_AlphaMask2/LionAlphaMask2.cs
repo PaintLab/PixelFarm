@@ -234,7 +234,7 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
             //----------------------------------------------------
             return bmp;
         }
-        void DrawWithWinGdi(GdiPainter p)
+        void DrawWithWinGdi(GdiPlusPainter p)
         {
             int w = 800, h = 600;
             p.Clear(Drawing.Color.White);
@@ -321,9 +321,9 @@ namespace PixelFarm.Agg.Sample_LionAlphaMask2
         }
         public override void Draw(Painter p)
         {
-            if (p is GdiPainter)
+            if (p is GdiPlusPainter)
             {
-                DrawWithWinGdi((GdiPainter)p);
+                DrawWithWinGdi((GdiPlusPainter)p);
                 return;
             }
             AggPainter p2 = (AggPainter)p;

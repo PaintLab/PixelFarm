@@ -12,7 +12,7 @@ namespace Mini
         DemoBase demobase;
         OpenTK.MyGLControl glControl;
         IntPtr hh1;
-        GLRenderSurface _glsf;
+        GLRenderSurface _glsx;
         GLPainter canvasPainter;
 
         public void LoadGLControl(OpenTK.MyGLControl glControl)
@@ -37,16 +37,16 @@ namespace Mini
             hh1 = glControl.Handle; //ensure that contrl handler is created
             glControl.MakeCurrent();
 
-            demobase.BuildCustomDemoGLContext(out this._glsf, out this.canvasPainter);
+            demobase.BuildCustomDemoGLContext(out this._glsx, out this.canvasPainter);
             //
-            if (this._glsf == null)
+            if (this._glsx == null)
             {
                 //if demo not create canvas and painter
                 //the we create for it
                 int max = Math.Max(glControl.Width, glControl.Height);
-                _glsf = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, glControl.Width, glControl.Height);
-                _glsf.SmoothMode = SmoothMode.Smooth;//set anti-alias  
-                canvasPainter = new GLPainter(_glsf);
+                _glsx = PixelFarm.Drawing.GLES2.GLES2Platform.CreateGLRenderSurface(max, max, glControl.Width, glControl.Height);
+                _glsx.SmoothMode = SmoothMode.Smooth;//set anti-alias  
+                canvasPainter = new GLPainter(_glsx);
                 //create text printer for opengl 
                 //----------------------
                 //1. win gdi based
@@ -79,14 +79,14 @@ namespace Mini
             {
                 demobase.InvokeGLPaint();
             });
-            DemoBase.InvokeGLContextReady(demobase, this._glsf, this.canvasPainter);
+            DemoBase.InvokeGLContextReady(demobase, this._glsx, this.canvasPainter);
             DemoBase.InvokePainterReady(demobase, this.canvasPainter);
         }
         void HandleGLPaint(object sender, System.EventArgs e)
         {
-            _glsf.SmoothMode = SmoothMode.Smooth;
-            _glsf.StrokeColor = PixelFarm.Drawing.Color.Black;
-            _glsf.ClearColorBuffer();
+            _glsx.SmoothMode = SmoothMode.Smooth;
+            _glsx.StrokeColor = PixelFarm.Drawing.Color.Black;
+            _glsx.ClearColorBuffer();
             //example
             canvasPainter.FillColor = PixelFarm.Drawing.Color.Black;
             canvasPainter.FillRect(20, 20, 150, 150);
