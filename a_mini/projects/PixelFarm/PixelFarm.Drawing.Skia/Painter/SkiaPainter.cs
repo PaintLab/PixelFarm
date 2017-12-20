@@ -402,23 +402,23 @@ namespace PixelFarm.Drawing.Skia
 
 
 
-        public override void FillEllipse(double left, double bottom, double right, double top)
+        public override void FillEllipse(double left, double top, double width, double height)
         {
             _skCanvas.DrawOval(
-                new SKRect((float)left, (float)top, (float)right, (float)bottom),
+                new SKRect((float)left, (float)top, (float)(left + width), (float)(top + height)),
                 _fill);
         }
-        public override void DrawEllipse(double left, double bottom, double right, double top)
+        public override void DrawEllipse(double left, double top, double width, double height)
         {
             _skCanvas.DrawOval(
-              new SKRect((float)left, (float)top, (float)right, (float)bottom),
+             new SKRect((float)left, (float)top, (float)(left + width), (float)(top + height)),
               _stroke);
         }
-        public override void FillRect(double left, double bottom, double right, double top)
+        public override void FillRect(double left, double top, double width, double height)
         {
 
             _skCanvas.DrawRect(
-              new SKRect((float)left, (float)top, (float)right, (float)bottom),
+               new SKRect((float)left, (float)top, (float)(left + width), (float)(top + height)),
                 _fill);
         }
 

@@ -396,19 +396,18 @@ namespace PixelFarm.Drawing.Pdf
         //    _currentFillBrush.Color = prevColor;
         //}
 
-        public override void FillEllipse(double left, double bottom, double right, double top)
+        public override void FillEllipse(double left, double top, double width, double height)
         {
-            //_gfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+            
         }
-        public override void DrawEllipse(double left, double bottom, double right, double top)
+        public override void DrawEllipse(double left, double top, double width, double height)
         {
-            //_gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+        
         }
 
-        public override void FillRect(double left, double bottom, double right, double top)
+        public override void FillRect(double left, double top, double width, double height)
         {
-            //_gfx.FillRectangle(_currentFillBrush,
-            //    System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
+            
         }
 
         

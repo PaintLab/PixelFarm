@@ -146,12 +146,12 @@ namespace PixelFarm.Agg
         //    ReleaseVxs(ref v1);
         //}
 
-      
+
         public override void Draw(VertexStoreSnap vxs)
         {
             this.Fill(vxs);
         }
-       
+
 
         /// <summary>
         /// draw line
@@ -244,30 +244,30 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v2);
         }
 
-        public override void DrawEllipse(double left, double bottom, double right, double top)
+        public override void DrawEllipse(double left, double top, double width, double height)
         {
-            double ox = (left + right) * 0.5;
-            double oy = (left + right) * 0.5;
+            double ox = (left + width / 2);
+            double oy = (top + height / 2);
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
                 //modified
                 oy = this.Height - oy;
             }
             ellipse.Reset(ox,
-                          oy,
-                         (right - left) * 0.5,
-                         (top - bottom) * 0.5,
-                          ellipseGenNSteps);
+                         oy,
+                         width / 2,
+                         height / 2,
+                         ellipseGenNSteps);
             var v1 = GetFreeVxs();
             var v2 = GetFreeVxs();
             _aggsx.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.strokeColor);
             ReleaseVxs(ref v1);
             ReleaseVxs(ref v2);
         }
-        public override void FillEllipse(double left, double bottom, double right, double top)
+        public override void FillEllipse(double left, double top, double width, double height)
         {
-            double ox = (left + right) * 0.5;
-            double oy = (left + right) * 0.5;
+            double ox = (left + width / 2);
+            double oy = (top + height / 2);
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
                 //modified
@@ -275,9 +275,9 @@ namespace PixelFarm.Agg
             }
             ellipse.Reset(ox,
                           oy,
-                          (right - left) * 0.5,
-                          (top - bottom) * 0.5,
-                           ellipseGenNSteps);
+                          width / 2,
+                          height / 2,
+                          ellipseGenNSteps);
             var v1 = GetFreeVxs();
             _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
             ReleaseVxs(ref v1);

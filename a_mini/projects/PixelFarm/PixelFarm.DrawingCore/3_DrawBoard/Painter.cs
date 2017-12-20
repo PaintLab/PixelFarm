@@ -58,14 +58,15 @@ namespace PixelFarm.Drawing
         public abstract void DrawRect(double left, double top, double width, double height);
         public abstract void FillRect(double left, double top, double width, double height);
         //
-        public abstract void FillEllipse(double left, double bottom, double right, double top);
-        public abstract void DrawEllipse(double left, double bottom, double right, double top);
+        public abstract void FillEllipse(double left, double top, double width, double height);
+        public abstract void DrawEllipse(double left, double top, double width, double height);
         //
         public abstract void FillRoundRectangle(double left, double bottom, double right, double top, double radius);
         public abstract void DrawRoundRect(double left, double bottom, double right, double top, double radius);
-        public abstract void DrawBezierCurve(float startX, float startY, float endX, float endY,
-         float controlX1, float controlY1,
-         float controlX2, float controlY2);
+        public abstract void DrawBezierCurve(
+            float startX, float startY, float endX, float endY,
+            float controlX1, float controlY1,
+            float controlX2, float controlY2);
         //------------------------------------------------------- 
 
         public abstract void DrawImage(Image actualImage, double left, double top);

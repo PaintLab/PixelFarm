@@ -299,7 +299,7 @@ namespace PixelFarm.DrawingGL
             }
             _glsx.FillTriangleStrip(_fillColor, rect_coords, 4);
         }
-        public override void DrawEllipse(double left, double bottom, double right, double top)
+        public override void DrawEllipse(double left, double top, double width, double height)
         {
 
             //double ox = (left + right) * 0.5;
@@ -322,10 +322,10 @@ namespace PixelFarm.DrawingGL
 
 
 
-            double x = (left + right) / 2;
-            double y = (bottom + top) / 2;
-            double rx = Math.Abs(right - x);
-            double ry = Math.Abs(top - y);
+            double x = (left + width / 2);
+            double y = (top + height / 2);
+            double rx = Math.Abs(width / 2);
+            double ry = Math.Abs(height / 2);
 
 
 
@@ -344,15 +344,17 @@ namespace PixelFarm.DrawingGL
             ReleaseVxs(ref vxs);
             ReleaseVxs(ref v3);
         }
-        public override void FillEllipse(double left, double bottom, double right, double top)
+        public override void FillEllipse(double left, double top, double width, double height)
         {
             //version 2:
             //agg's ellipse tools with smooth border
 
-            double x = (left + right) / 2;
-            double y = (bottom + top) / 2;
-            double rx = Math.Abs(right - x);
-            double ry = Math.Abs(top - y);
+            double x = (left + width / 2);
+            double y = (top + height / 2);
+            double rx = Math.Abs(width / 2);
+            double ry = Math.Abs(height / 2);
+
+
 
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
@@ -641,9 +643,9 @@ namespace PixelFarm.DrawingGL
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
         }
-        public void DrawCircle(float x, float y, double radius)
+        public void DrawCircle(float centerX, float centerY, double radius)
         {
-            DrawEllipse(x - radius, y - radius, x + radius, y + radius);
+            DrawEllipse(centerX - radius, centerY - radius, radius + radius, radius + radius);
         }
         public void FillCircle(float x, float y, double radius)
         {

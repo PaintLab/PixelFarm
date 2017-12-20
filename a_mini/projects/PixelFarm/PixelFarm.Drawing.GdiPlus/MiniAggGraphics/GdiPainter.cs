@@ -465,13 +465,13 @@ namespace PixelFarm.Drawing.WinGdi
         //    _currentFillBrush.Color = prevColor;
         //}
 
-        public override void FillEllipse(double left, double bottom, double right, double top)
+        public override void FillEllipse(double left, double top, double width, double height)
         {
-            _gfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+            _gfx.FillEllipse(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)top, (float)width, (float)height));
         }
-        public override void DrawEllipse(double left, double bottom, double right, double top)
+        public override void DrawEllipse(double left, double top, double width, double height)
         {
-            _gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
+            _gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)width, (float)height));
         }
 
 
@@ -546,7 +546,7 @@ namespace PixelFarm.Drawing.WinGdi
             _gfx.DrawRectangle(_currentPen, (float)left, (float)top, (float)width, (float)height);
         }
         public override void FillRect(double left, double top, double width, double height)
-        { 
+        {
             _gfx.FillRectangle(_currentFillBrush, (float)left, (float)top, (float)width, (float)height);
 
         }
