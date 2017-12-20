@@ -6,11 +6,15 @@ using PixelFarm.Agg.Transform;
 
 namespace PixelFarm.Drawing.WinGdi
 {
-
     public class GdiPlusPainter : Painter
     {
 
-       
+        GdiPlusRenderSurface _renderSurface;
+        public GdiPlusPainter()
+        {
+
+
+        }
         public System.Drawing.Drawing2D.CompositingMode CompositingMode { get; set; }
 
         public override float OriginX => throw new NotImplementedException();
@@ -156,6 +160,7 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
     }
+
     //public class GdiPlusPainter : Painter
     //{
 
