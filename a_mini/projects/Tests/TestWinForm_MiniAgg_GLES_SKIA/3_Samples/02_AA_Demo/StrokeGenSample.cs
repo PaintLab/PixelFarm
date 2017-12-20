@@ -142,7 +142,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
                         break;
                     case VertexCmd.LineTo:
-                        aggPainter.Line(px, py, x, y);
+                        aggPainter.DrawLine(px, py, x, y);
 
                         break;
                 }

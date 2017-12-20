@@ -383,10 +383,10 @@ namespace PixelFarm.Drawing.Pdf
         {
             // VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
         }
-        public override void FillCircle(double x, double y, double radius)
-        {
-            //  _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
-        }
+        //public override void FillCircle(double x, double y, double radius)
+        //{
+        //    //  _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
+        //}
 
         //public override void FillCircle(double x, double y, double radius, Drawing.Color color)
         //{
@@ -405,17 +405,13 @@ namespace PixelFarm.Drawing.Pdf
             //_gfx.DrawEllipse(_currentPen, new System.Drawing.RectangleF((float)left, (float)top, (float)(right - left), (float)(bottom - top)));
         }
 
-        public override void FillRectangle(double left, double bottom, double right, double top)
+        public override void FillRect(double left, double bottom, double right, double top)
         {
             //_gfx.FillRectangle(_currentFillBrush,
             //    System.Drawing.RectangleF.FromLTRB((float)left, (float)top, (float)right, (float)bottom));
         }
 
-        public override void FillRectLBWH(double left, double bottom, double width, double height)
-        {
-            //_gfx.FillRectangle(_currentFillBrush, new System.Drawing.RectangleF((float)left, (float)(bottom - height), (float)width, (float)height));
-        }
-
+        
         VertexStorePool _vxsPool = new VertexStorePool();
         VertexStore GetFreeVxs()
         {
@@ -464,7 +460,7 @@ namespace PixelFarm.Drawing.Pdf
 
 
 
-        public override void Line(double x1, double y1, double x2, double y2)
+        public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             //_gfx.DrawLine(_currentPen, new System.Drawing.PointF((float)x1, (float)y1), new System.Drawing.PointF((float)x2, (float)y2));
         }
@@ -477,7 +473,7 @@ namespace PixelFarm.Drawing.Pdf
             //}
         }
 
-        public override void Rectangle(double left, double bottom, double right, double top)
+        public override void DrawRect(double left, double bottom, double right, double top)
         {
             //_gfx.DrawRectangle(_currentPen, (float)left, (float)top, (float)(right - left), (float)(top - bottom));
         }

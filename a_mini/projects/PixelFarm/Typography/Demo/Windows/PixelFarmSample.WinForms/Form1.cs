@@ -345,7 +345,7 @@ namespace SampleWinForms
             {
                 for (int x = 0; x < width;)
                 {
-                    p.FillRectLBWH(x, y, pointW, pointW);
+                    p.FillRect(x, y, pointW, pointW);
                     x += sqSize;
                 }
                 y += sqSize;

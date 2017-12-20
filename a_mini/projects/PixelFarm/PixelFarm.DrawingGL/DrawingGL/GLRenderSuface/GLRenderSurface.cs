@@ -850,6 +850,17 @@ namespace PixelFarm.DrawingGL
         }
         //-------------------------------------------------------------------------------
 
+        /// <summary>
+        /// reuseable rect coord
+        /// </summary>
+        float[] _rectCoords = new float[8];
+        /// <summary>
+        /// draw rect in OpenGL coord 
+        /// </summary>
+        /// <param name="x">left</param>
+        /// <param name="y">bottom</param>
+        /// <param name="w">width</param>
+        /// <param name="h">height</param>
         public void DrawRect(float x, float y, float w, float h)
         {
             switch (this.SmoothMode)
@@ -857,8 +868,11 @@ namespace PixelFarm.DrawingGL
                 case SmoothMode.Smooth:
                     {
                         int borderTriAngleCount;
+                        CreatePolyLineRectCoords(x, y, w, h, _rectCoords);
                         float[] triangles = smoothBorderBuilder.BuildSmoothBorders(
-                            CreatePolyLineRectCoords(x, y, w, h), out borderTriAngleCount);
+                            _rectCoords,
+                            out borderTriAngleCount);
+
                         smoothLineShader.DrawTriangleStrips(triangles, borderTriAngleCount);
                     }
                     break;
@@ -902,16 +916,17 @@ namespace PixelFarm.DrawingGL
             GL.Scissor(x, y, w, h);
         }
 
-        static float[] CreatePolyLineRectCoords(
-               float x, float y, float w, float h)
+        static void CreatePolyLineRectCoords(
+               float x, float y, float w, float h, float[] output8)
         {
-            return new float[]
-            {
-                x,y,
-                x+w,y,
-                x+w,y+h,
-                x,y+h
-            };
+            //GL coordinate
+            //(0,0) is on left-lower corner
+
+            output8[0] = x; output8[1] = y; //left, bottom
+            output8[2] = x + w; output8[3] = y; //right, bottom
+            output8[4] = x + w; output8[5] = y + h; //right, top
+            output8[6] = x; output8[7] = y + h;//left,top
+
         }
 
         internal TessTool GetTessTool() { return tessTool; }

@@ -26,12 +26,12 @@ namespace PixelFarm.Agg.SimplePainter
             p.FillColor = Drawing.Color.Blue;
             p.FillCircle(50, 50, 30);
             p.StrokeColor = Drawing.Color.FromArgb(20, 200, 200);
-            p.Line(10, 100, 520, 50);
+            p.DrawLine(10, 100, 520, 50);
             //// draw a filled box
-            p.FillRectangle(60, 260, 200, 280, Drawing.Color.Yellow);
+            p.FillRect(60, 260, 200, 280, Drawing.Color.Yellow);
 
             // and an outline around it
-            p.Rectangle(60, 260, 200, 280, Drawing.Color.Magenta);
+            p.DrawRectangle(60, 260, 200, 280, Drawing.Color.Magenta);
             p.DrawString("A Simple Example", 20, 400);
             p.DrawString("A Simple Example2", 300, 350);
             p.DrawString("A Simple Example3", 300, 300);

@@ -213,7 +213,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f * 3;
             int x = 10, y = 10;
-            painter.Line(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
+            painter.DrawLine(x * 3, 0, y * 3, 20); //scale horizontal 3 times, 
             int lineLen = 4;
 
 
@@ -254,7 +254,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //
             painter.StrokeColor = PixelFarm.Drawing.Color.Black;
             painter.StrokeWidth = 2.0f;
-            painter.Line(2, 0, 3, 15);//not need to scale3                        
+            painter.DrawLine(2, 0, 3, 15);//not need to scale3                        
             //
             //clear surface bg
             p.Clear(PixelFarm.Drawing.Color.White);
@@ -273,7 +273,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 1.0f;
             p.UseSubPixelRendering = this.EnableSubPix;
-            p.Line(0, 1, 15, 20);
+            p.DrawLine(0, 1, 15, 20);
         }
         static double DegToRad(double degree)
         {
@@ -299,7 +299,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int y = 30;
             for (int i = 0; i < 360; i += 15)
             {
-                p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+                p.DrawLine(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
                 y += 5;
             }
             //y += 10;
@@ -322,7 +322,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int x = 30;
             int y = 30;
             p.FillColor = PixelFarm.Drawing.Color.Black;
-            p.FillRectLBWH(0, 0, 1, 1);
+            p.FillRect(0, 0, 1, 1);
 
             //for (int i = 0; i < 360; i += 30)
             //{

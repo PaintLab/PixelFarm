@@ -22,7 +22,10 @@
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing
 {
-
+    /// <summary>
+    /// this class provides drawing method on specific surface,
+    /// (0,0) is on left-lower corner for every implementaion
+    /// </summary>
     public abstract class Painter
     {
         //who implement this class
@@ -36,30 +39,28 @@ namespace PixelFarm.Drawing
         public abstract float OriginX { get; }
         public abstract float OriginY { get; }
         public abstract void SetOrigin(float ox, float oy);
-        //-------------------------------------------------------
+        //
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract RectInt ClipBox { get; set; }
         public abstract void SetClipBox(int x1, int y1, int x2, int y2);
-        //-------------------------------------------------------
+        //
         public abstract double StrokeWidth { get; set; }
         public abstract SmoothingMode SmoothingMode { get; set; }
         public abstract bool UseSubPixelRendering { get; set; }
         public abstract Color FillColor { get; set; }
         public abstract Color StrokeColor { get; set; }
-        //-------------------------------------------------------
+        //
         public abstract void Clear(Color color);
         public abstract DrawBoardOrientation Orientation { get; set; }
-
-        public abstract void FillCircle(double x, double y, double radius);
+        public abstract void DrawLine(double x1, double y1, double x2, double y2);
+        // 
+        public abstract void DrawRect(double left, double top, double width, double height);
+        public abstract void FillRect(double left, double top, double width, double height);
+        //
         public abstract void FillEllipse(double left, double bottom, double right, double top);
         public abstract void DrawEllipse(double left, double bottom, double right, double top);
 
-
-        public abstract void Line(double x1, double y1, double x2, double y2);
-        public abstract void Rectangle(double left, double bottom, double right, double top);
-        public abstract void FillRectangle(double left, double bottom, double right, double top);
-        public abstract void FillRectLBWH(double left, double bottom, double width, double height);
         public abstract void FillRoundRectangle(double left, double bottom, double right, double top, double radius);
         public abstract void DrawRoundRect(double left, double bottom, double right, double top, double radius);
         public abstract void DrawBezierCurve(float startX, float startY, float endX, float endY,

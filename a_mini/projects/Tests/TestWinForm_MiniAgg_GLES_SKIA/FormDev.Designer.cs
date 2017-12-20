@@ -38,9 +38,9 @@
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.cmdTestNativeLib = new System.Windows.Forms.Button();
-            this.cmbRenderBackend = new System.Windows.Forms.ComboBox();
             this.cmdSignedDistance = new System.Windows.Forms.Button();
             this.cmdTestColorBlend = new System.Windows.Forms.Button();
+            this.lstBackEndRenderer = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -150,15 +150,6 @@
             this.cmdTestNativeLib.UseVisualStyleBackColor = true;
             this.cmdTestNativeLib.Click += new System.EventHandler(this.cmdTestNativeLib_Click);
             // 
-            // cmbRenderBackend
-            // 
-            this.cmbRenderBackend.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbRenderBackend.FormattingEnabled = true;
-            this.cmbRenderBackend.Location = new System.Drawing.Point(252, 12);
-            this.cmbRenderBackend.Name = "cmbRenderBackend";
-            this.cmbRenderBackend.Size = new System.Drawing.Size(246, 21);
-            this.cmbRenderBackend.TabIndex = 13;
-            // 
             // cmdSignedDistance
             // 
             this.cmdSignedDistance.Location = new System.Drawing.Point(252, 527);
@@ -179,14 +170,22 @@
             this.cmdTestColorBlend.UseVisualStyleBackColor = true;
             this.cmdTestColorBlend.Click += new System.EventHandler(this.cmdTestColorBlend_Click);
             // 
+            // lstBackEndRenderer
+            // 
+            this.lstBackEndRenderer.FormattingEnabled = true;
+            this.lstBackEndRenderer.Location = new System.Drawing.Point(12, 455);
+            this.lstBackEndRenderer.Name = "lstBackEndRenderer";
+            this.lstBackEndRenderer.Size = new System.Drawing.Size(234, 121);
+            this.lstBackEndRenderer.TabIndex = 16;
+            // 
             // FormDev
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(738, 588);
+            this.Controls.Add(this.lstBackEndRenderer);
             this.Controls.Add(this.cmdTestColorBlend);
             this.Controls.Add(this.cmdSignedDistance);
-            this.Controls.Add(this.cmbRenderBackend);
             this.Controls.Add(this.cmdTestNativeLib);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
@@ -218,8 +217,8 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button cmdTestNativeLib;
-        private System.Windows.Forms.ComboBox cmbRenderBackend;
         private System.Windows.Forms.Button cmdSignedDistance;
         private System.Windows.Forms.Button cmdTestColorBlend;
+        private System.Windows.Forms.ListBox lstBackEndRenderer;
     }
 }

@@ -87,7 +87,7 @@ namespace PixelFarm.Agg.SimplePainter
             //--------------------------------------------------- 
             p.UseSubPixelRendering = true;
             p.StrokeColor = Drawing.Color.Black;
-            p.Line(0, 200, 800, 200);
+            p.DrawLine(0, 200, 800, 200);
             p.FillColor = Drawing.Color.Black;
             p.CurrentFont = font2;
             p.DrawString(test_str, 80, 100);
