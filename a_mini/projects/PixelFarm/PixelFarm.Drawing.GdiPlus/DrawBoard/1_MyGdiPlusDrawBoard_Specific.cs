@@ -206,8 +206,7 @@ namespace PixelFarm.Drawing.WinGdi
                 }
             }
         }
-        //int CanvasOrgX { get { return (int)this.canvasOriginX; } }
-        //int CanvasOrgY { get { return (int)this.canvasOriginY; } }
+    
         public bool DimensionInvalid
         {
             get

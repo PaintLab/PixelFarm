@@ -64,21 +64,7 @@ namespace PixelFarm.Drawing
         public abstract int OriginX { get; }
         public abstract int OriginY { get; }
         public abstract void SetCanvasOrigin(int x, int y);
-        public void OffsetCanvasOrigin(int dx, int dy)
-        {
-            //TODO: review offset function
-            this.SetCanvasOrigin(this.OriginX + dx, this.OriginY + dy);
-        }
-        public void OffsetCanvasOriginX(int dx)
-        {
-            //TODO: review offset function
-            this.OffsetCanvasOrigin(dx, 0);
-        }
-        public void OffsetCanvasOriginY(int dy)
-        {
-            //TODO: review offset function
-            this.OffsetCanvasOrigin(0, dy);
-        }
+
         //---------------------------------------------------------------------
         //clip area
         public abstract bool PushClipAreaRect(int width, int height, ref Rectangle updateArea);
@@ -143,4 +129,26 @@ namespace PixelFarm.Drawing
         HardwareWithSoftwareFallback
     }
     public delegate void CanvasInvalidateDelegate(Rectangle paintArea);
+
+    public static class DrawBoardExtensionMethods
+    {
+        public static void OffsetCanvasOrigin(this DrawBoard drawBoard, int dx, int dy)
+        {
+            //TODO: review offset function
+            drawBoard.SetCanvasOrigin(drawBoard.OriginX + dx, drawBoard.OriginY + dy);
+        }
+        public static void OffsetCanvasOriginX(this DrawBoard drawBoard, int dx)
+        {
+            //TODO: review offset function
+            drawBoard.OffsetCanvasOrigin(dx, 0);
+        }
+        public static void OffsetCanvasOriginY(this DrawBoard drawBoard, int dy)
+        {
+            //TODO: review offset function
+            drawBoard.OffsetCanvasOrigin(0, dy);
+        }
+    }
 }
+
+
+
