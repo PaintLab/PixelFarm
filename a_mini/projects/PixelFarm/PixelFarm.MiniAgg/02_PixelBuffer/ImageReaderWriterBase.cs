@@ -78,7 +78,7 @@ namespace PixelFarm.Agg
             //
             //
 
-            int bytesPerPixel = (bitDepth + 7) / 8;
+            int bytesPerPixel = (bitsPerPixel + 7) / 8;
             int stride = 4 * ((width * bytesPerPixel + 3) / 4);
             //
             SetDimmensionAndFormat(width, height, stride, bitsPerPixel, bitsPerPixel / 8);
