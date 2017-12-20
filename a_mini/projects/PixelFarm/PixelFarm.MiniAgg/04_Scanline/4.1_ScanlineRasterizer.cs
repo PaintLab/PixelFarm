@@ -132,7 +132,7 @@ namespace PixelFarm.Agg
         }
         //--------------------------
 
-        internal void SetClipBox(RectInt clippingRect)
+        public void SetClipBox(RectInt clippingRect)
         {
             SetClipBox(clippingRect.Left, clippingRect.Bottom, clippingRect.Right, clippingRect.Top);
         }

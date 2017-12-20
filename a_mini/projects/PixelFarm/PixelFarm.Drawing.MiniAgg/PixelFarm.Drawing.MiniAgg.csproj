@@ -66,6 +66,36 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\2_SpanGenerators\SpanGradient_GradientValueCalculators.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\3_Filter\BrightnessAndContrastAdjustment.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\BrightnessAndContrastAdjustment.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\3_Filter\ImageFilters.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\ImageFilters.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\3_Filter\PatternFilterBilnearColorRGBA.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\PatternFilterBilnearColorRGBA.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\3_Filter\RecursiveBlur.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\RecursiveBlur.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\3_Filter\StackBlur.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\StackBlur.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\AlphaMask.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\AlphaMask.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\AlphaMaskAdaptor.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\AlphaMaskAdaptor.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\FilterMan.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\FilterMan.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\FloodFiller.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\FloodFiller.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\4_Image\Transposer.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\4_Image\Transposer.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\AggPainter.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\AggPainter.cs</Link>
     </Compile>
@@ -81,41 +111,11 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\DrawBoard\LineDashGenerator.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\DrawBoard\LineDashGenerator.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\Filter\BrightnessAndContrastAdjustment.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\Filter\BrightnessAndContrastAdjustment.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\RenderSurface\AggRenderSurface.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\RenderSurface\AggRenderSurface.cs</Link>
     </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\Filter\ImageFilters.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\Filter\ImageFilters.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\Filter\PatternFilterBilnearColorRGBA.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\Filter\PatternFilterBilnearColorRGBA.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\Filter\RecursiveBlur.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\Filter\RecursiveBlur.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\Filter\StackBlur.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\Filter\StackBlur.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\Image\AlphaMask.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\Image\AlphaMask.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\Image\AlphaMaskAdaptor.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\Image\AlphaMaskAdaptor.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\Image\FilterMan.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\Image\FilterMan.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\Image\FloodFiller.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\Image\FloodFiller.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg.Complements\Image\Transposer.cs">
-      <Link>3.2_DrawingCanvas.MiniAgg.Complement\Image\Transposer.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\00_Context\AggRenderSurface.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\AggRenderSurface.cs</Link>
-    </Compile>
-    <Compile Include="..\PixelFarm.MiniAgg\00_Context\AggRenderSurface_RenderImages.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\00_Context\AggRenderSurface_RenderImages.cs</Link>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\RenderSurface\AggRenderSurface_RenderImages.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\RenderSurface\AggRenderSurface_RenderImages.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\ChildImage.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ChildImage.cs</Link>
