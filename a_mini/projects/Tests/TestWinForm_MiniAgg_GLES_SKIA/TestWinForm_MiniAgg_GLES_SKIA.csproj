@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="0_Start\GLDemoContextWinForm.cs" />
-    <Compile Include="3_Samples\01_DrawSamples\DrawSample.cs" />
+    <Compile Include="3_Samples\01_DrawSamples\DrawSamples01_03.cs" />
     <Compile Include="3_Samples\02_AA_Demo\Lines.cs" />
     <Compile Include="3_Samples\01_DrawSamples\OpenTypeFont.cs" />
     <Compile Include="3_Samples\01_DrawSamples\SimplePainterGlyphSample.cs" />

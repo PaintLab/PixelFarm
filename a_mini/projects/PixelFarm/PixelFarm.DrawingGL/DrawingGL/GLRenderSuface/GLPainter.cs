@@ -258,12 +258,6 @@ namespace PixelFarm.DrawingGL
         }
         public override void DrawImage(Image actualImage, double x, double y)
         {
-            //GLBitmap glBmp = ResolveForGLBitmap(actualImage);
-            //if (glBmp != null)
-            //{
-            //    _glsf.DrawImage(glBmp, (float)x, (float)y);
-            //}
-
 
             GLBitmap glBmp = ResolveForGLBitmap(actualImage);
             if (glBmp == null) return;
