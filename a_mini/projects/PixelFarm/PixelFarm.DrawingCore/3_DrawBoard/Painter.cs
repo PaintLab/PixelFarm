@@ -57,7 +57,7 @@ namespace PixelFarm.Drawing
         // 
         public abstract void DrawRect(double left, double top, double width, double height);
         public abstract void FillRect(double left, double top, double width, double height);
-
+        //
         public abstract void FillEllipse(double left, double bottom, double right, double top);
         public abstract void DrawEllipse(double left, double bottom, double right, double top);
 

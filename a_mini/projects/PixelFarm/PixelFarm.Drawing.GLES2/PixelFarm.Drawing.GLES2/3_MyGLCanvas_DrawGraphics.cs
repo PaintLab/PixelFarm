@@ -77,9 +77,9 @@ namespace PixelFarm.Drawing.GLES2
                     {
                         //use default solid brush
                         SolidBrush solidBrush = (SolidBrush)brush;
-                        painter1.FillRectangle(
-                            left, this.Height - (top + height),
-                            left + width, this.Height - top,
+                        painter1.FillRect(
+                            left, top,
+                            width, height,
                             solidBrush.Color);
 
                     }
@@ -105,11 +105,11 @@ namespace PixelFarm.Drawing.GLES2
         }
         public override void FillRectangle(Color color, float left, float top, float width, float height)
         {
-            painter1.FillRectangle(left, this.Height - (top + height), left + width, this.Height - top, color);
+            painter1.FillRect(left, top, width, height, color);
         }
         public override void DrawRectangle(Color color, float left, float top, float width, float height)
         {
-            painter1.Rectangle(left, this.Height - (top + height), left + width, this.Height - top, color);
+            painter1.DrawRectangle(left, this.Height - (top + height), left + width, this.Height - top, color);
         }
         public override void DrawLine(float x1, float y1, float x2, float y2)
         {

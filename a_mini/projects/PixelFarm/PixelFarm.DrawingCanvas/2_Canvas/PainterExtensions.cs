@@ -32,11 +32,11 @@ namespace PixelFarm.Agg
             p.DrawLine(x1, y1, x2, y2);
             p.StrokeColor = prevColor;
         }
-        public static void Rectangle(this Painter p, double left, double bottom, double right, double top, Color color)
+        public static void DrawRectangle(this Painter p, double left, double top, double width, double height, Color color)
         {
             Color prevColor = p.StrokeColor;
             p.StrokeColor = color;
-            p.DrawRect(left, bottom, right, top);
+            p.DrawRect(left, top, width, height);
             p.StrokeColor = prevColor;
         }
         public static void DrawCircle(this Painter p, double x, double y, double radius)
@@ -54,20 +54,14 @@ namespace PixelFarm.Agg
             p.FillCircle(x, y, radius);
             p.FillColor = prevColor;
         }
-        public static void FillRectangle(this Painter p, double left, double top, double width, double height, Color color)
+        public static void FillRect(this Painter p, double left, double top, double width, double height, Color color)
         {
             Color prevColor = p.FillColor;
             p.FillColor = color;
             p.FillRect(left, top, width, height);
             p.FillColor = prevColor;
         }
-        public static void FillRectLBWH(this Painter p, double left, double bottom, double width, double height, Color color)
-        {
-            Color prevColor = p.FillColor;
-            p.FillColor = color;
-            p.FillRect(left, bottom - height, width, height);
-            p.FillColor = prevColor;
-        }
+        
         public static void Fill(this Painter p, VertexStoreSnap snap, Color color)
         {
             Color prevColor = p.FillColor;
