@@ -395,10 +395,10 @@ namespace PixelFarm.Drawing.Skia
         {
             VxsHelper.FillVxsSnap(_skCanvas, snap, _fill);
         }
-        public override void FillCircle(double x, double y, double radius)
-        {
-            _skCanvas.DrawCircle((float)x, (float)y, (float)radius, _fill);
-        }
+        //public override void FillCircle(double x, double y, double radius)
+        //{
+        //    _skCanvas.DrawCircle((float)x, (float)y, (float)radius, _fill);
+        //}
 
 
 

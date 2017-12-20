@@ -288,6 +288,103 @@ namespace PixelFarm.DrawingGL
             }
             _glsf.FillTriangleStrip(_fillColor, rect_coords, 4);
         }
+        public override void DrawEllipse(double left, double bottom, double right, double top)
+        {
+            double x = (left + right) / 2;
+            double y = (bottom + top) / 2;
+            double rx = Math.Abs(right - x);
+            double ry = Math.Abs(top - y);
+
+
+
+            if (this._orientation == DrawBoardOrientation.LeftTop)
+            {
+                y = _glsf.ViewportHeight - y; //set new y
+            }
+
+            ellipse.Reset(x, y, rx, ry);
+            VertexStore vxs = ellipse.MakeVxs(GetFreeVxs());
+            VertexStore v3 = _aggStroke.MakeVxs(vxs, GetFreeVxs());
+
+            _glsf.DrawGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(v3));
+            ReleaseVxs(ref vxs);
+            ReleaseVxs(ref v3);
+        }
+        public override void FillEllipse(double left, double bottom, double right, double top)
+        {
+            double x = (left + right) / 2;
+            double y = (bottom + top) / 2;
+            double rx = Math.Abs(right - x);
+            double ry = Math.Abs(top - y);
+
+            if (this._orientation == DrawBoardOrientation.LeftTop)
+            {
+                y = _glsf.ViewportHeight - y; //set new y
+            }
+
+            ellipse.Reset(x, y, rx, ry);
+            var v1 = GetFreeVxs();
+            ellipse.MakeVxs(v1);
+            //other mode
+            int n = v1.Count;
+            //make triangular fan*** 
+
+            float[] coords = new float[(n * 2) + 4];
+            int i = 0;
+            int nn = 0;
+            int npoints = 0;
+            double vx, vy;
+            //center
+            coords[nn++] = (float)x;
+            coords[nn++] = (float)y;
+            npoints++;
+            var cmd = v1.GetVertex(i, out vx, out vy);
+            while (i < n)
+            {
+                switch (cmd)
+                {
+                    case VertexCmd.MoveTo:
+                        {
+                            coords[nn++] = (float)vx;
+                            coords[nn++] = (float)vy;
+                            npoints++;
+                        }
+                        break;
+                    case VertexCmd.LineTo:
+                        {
+                            coords[nn++] = (float)vx;
+                            coords[nn++] = (float)vy;
+                            npoints++;
+                        }
+                        break;
+                    case VertexCmd.NoMore:
+                        {
+                        }
+                        break;
+                    default:
+                        {
+                        }
+                        break;
+                }
+                i++;
+                cmd = v1.GetVertex(i, out vx, out vy);
+            }
+
+
+            //close circle
+            coords[nn++] = coords[2];
+            coords[nn++] = coords[3];
+            npoints++;
+            //----------------------------------------------
+            _glsf.FillTriangleFan(_fillColor, coords, npoints);
+            ReleaseVxs(ref v1);
+
+            //----------------------------------------------
+            //need smooth border?
+
+        }
+
+
         public override void DrawRect(double left, double top, double width, double height)
         {
             if (_orientation == DrawBoardOrientation.LeftBottom)
@@ -381,10 +478,10 @@ namespace PixelFarm.DrawingGL
              );
         }
 
-        public override void FillCircle(double x, double y, double radius)
-        {
-            FillEllipse(x - radius, y - radius, x + radius, y + radius);
-        }
+        //public override void FillCircle(double x, double y, double radius)
+        //{
+        //    FillEllipse(x - radius, y - radius, x + radius, y + radius);
+        //}
 
         public void FillRoundRect(Color color, float x, float y, float w, float h, float rx, float ry)
         {
@@ -410,80 +507,6 @@ namespace PixelFarm.DrawingGL
             ReleaseVxs(ref v1);
         }
 
-        public override void DrawEllipse(double left, double bottom, double right, double top)
-        {
-            double x = (left + right) / 2;
-            double y = (bottom + top) / 2;
-            double rx = Math.Abs(right - x);
-            double ry = Math.Abs(top - y);
-            ellipse.Reset(x, y, rx, ry);
-            VertexStore vxs = ellipse.MakeVxs(GetFreeVxs());
-            _glsf.DrawGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(vxs));
-            ReleaseVxs(ref vxs);
-        }
-        public override void FillEllipse(double left, double bottom, double right, double top)
-        {
-            double x = (left + right) / 2;
-            double y = (bottom + top) / 2;
-            double rx = Math.Abs(right - x);
-            double ry = Math.Abs(top - y);
-            ellipse.Reset(x, y, rx, ry);
-            var v1 = GetFreeVxs();
-            ellipse.MakeVxs(v1);
-            //other mode
-            int n = v1.Count;
-            //make triangular fan*** 
-
-            float[] coords = new float[(n * 2) + 4];
-            int i = 0;
-            int nn = 0;
-            int npoints = 0;
-            double vx, vy;
-            //center
-            coords[nn++] = (float)x;
-            coords[nn++] = (float)y;
-            npoints++;
-            var cmd = v1.GetVertex(i, out vx, out vy);
-            while (i < n)
-            {
-                switch (cmd)
-                {
-                    case VertexCmd.MoveTo:
-                        {
-                            coords[nn++] = (float)vx;
-                            coords[nn++] = (float)vy;
-                            npoints++;
-                        }
-                        break;
-                    case VertexCmd.LineTo:
-                        {
-                            coords[nn++] = (float)vx;
-                            coords[nn++] = (float)vy;
-                            npoints++;
-                        }
-                        break;
-                    case VertexCmd.NoMore:
-                        {
-                        }
-                        break;
-                    default:
-                        {
-                        }
-                        break;
-                }
-                i++;
-                cmd = v1.GetVertex(i, out vx, out vy);
-            }
-
-
-            //close circle
-            coords[nn++] = coords[2];
-            coords[nn++] = coords[3];
-            npoints++;
-            //----------------------------------------------
-            _glsf.FillTriangleFan(_fillColor, coords, npoints);
-            ReleaseVxs(ref v1);
-        }
 
 
         public override void FillRenderVx(Brush brush, RenderVx renderVx)
@@ -568,6 +591,10 @@ namespace PixelFarm.DrawingGL
         public void DrawCircle(float x, float y, double radius)
         {
             DrawEllipse(x - radius, y - radius, x + radius, y + radius);
+        }
+        public void FillCircle(float x, float y, double radius)
+        {
+            FillEllipse(x - radius, y - radius, x + radius, y + radius);
         }
         //-----------------------------------------------------------------------------------------------------------------
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)

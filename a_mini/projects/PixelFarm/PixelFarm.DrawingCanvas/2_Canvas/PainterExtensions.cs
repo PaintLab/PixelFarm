@@ -39,6 +39,14 @@ namespace PixelFarm.Agg
             p.DrawRect(left, bottom, right, top);
             p.StrokeColor = prevColor;
         }
+        public static void DrawCircle(this Painter p, double x, double y, double radius)
+        {
+            p.DrawEllipse(x - radius, y - radius, x + radius, y + radius);
+        }
+        public static void FillCircle(this Painter p, double x, double y, double radius)
+        {
+            p.FillEllipse(x - radius, y - radius, x + radius, y + radius);
+        }
         public static void FillCircle(this Painter p, double x, double y, double radius, Color color)
         {
             Color prevColor = p.FillColor;

@@ -69,15 +69,22 @@ namespace PixelFarm.Agg.Sample_Images
         public override void Draw(Painter p)
         {
             p.Clear(Drawing.Color.White);
-            p.DrawImage(actualImage, 10, 0);
-            p.DrawImage(actualImage, 50, 100);
-            p.DrawImage(actualImage, 100, 200);
+            //p.DrawImage(actualImage, 10, 0);
+            //p.DrawImage(actualImage, 50, 100);
+            //p.DrawImage(actualImage, 100, 200);
 
             p.FillColor = Color.Red;
             p.FillRect(0, 0, 100, 5);
             //
             p.StrokeColor = Color.Green;
             p.DrawRect(0, 0, 100, 5);
+
+
+            // 
+            p.FillColor = Drawing.Color.Blue;
+            p.FillCircle(50, 50, 30);
+            p.DrawCircle(50, 50, 35);
+
             //p.DrawImage(actualImage, affinePlan1);
             //p.DrawImage(actualImage, affinePlans);
             //p.DrawImage(actualImage, 100,200);

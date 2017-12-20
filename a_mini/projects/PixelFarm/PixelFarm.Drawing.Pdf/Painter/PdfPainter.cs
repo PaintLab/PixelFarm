@@ -383,10 +383,10 @@ namespace PixelFarm.Drawing.Pdf
         {
             // VxsHelper.FillVxsSnap(_gfx, snap, _fillColor);
         }
-        public override void FillCircle(double x, double y, double radius)
-        {
-            //  _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
-        }
+        //public override void FillCircle(double x, double y, double radius)
+        //{
+        //    //  _gfx.FillEllipse(_currentFillBrush, (float)x, (float)y, (float)(radius + radius), (float)(radius + radius));
+        //}
 
         //public override void FillCircle(double x, double y, double radius, Drawing.Color color)
         //{

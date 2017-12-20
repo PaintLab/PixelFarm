@@ -40,7 +40,7 @@ namespace PixelFarm.Agg
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
         LineDashGenerator _lineDashGen;
-        int ellipseGenNSteps = 10;
+        int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
 
         public AggPainter(AggRenderSurface aggRdsf)
@@ -138,43 +138,20 @@ namespace PixelFarm.Agg
 
 
 
-        public override void FillCircle(double x, double y, double radius)
-        {
-            ellipse.Reset(x, y, radius, radius);
-            var v1 = GetFreeVxs();
-            _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
-            ReleaseVxs(ref v1);
-        }
+        //public override void FillCircle(double x, double y, double radius)
+        //{
+        //    ellipse.Reset(x, y, radius, radius);
+        //    var v1 = GetFreeVxs();
+        //    _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
+        //    ReleaseVxs(ref v1);
+        //}
 
-        public override void FillEllipse(double left, double bottom, double right, double top)
-        {
-            ellipse.Reset((left + right) * 0.5,
-                          (bottom + top) * 0.5,
-                          (right - left) * 0.5,
-                          (top - bottom) * 0.5,
-                           ellipseGenNSteps);
-            var v1 = GetFreeVxs();
-            _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
-            ReleaseVxs(ref v1);
-        }
+      
         public override void Draw(VertexStoreSnap vxs)
         {
             this.Fill(vxs);
         }
-        public override void DrawEllipse(double left, double bottom, double right, double top)
-        {
-            ellipse.Reset((left + right) * 0.5,
-                         (bottom + top) * 0.5,
-                         (right - left) * 0.5,
-                         (top - bottom) * 0.5,
-                          ellipseGenNSteps);
-            var v1 = GetFreeVxs();
-            var v2 = GetFreeVxs();
-            _aggsx.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.fillColor);
-            ReleaseVxs(ref v1);
-            ReleaseVxs(ref v2);
-        }
-
+       
 
         /// <summary>
         /// draw line
@@ -267,6 +244,44 @@ namespace PixelFarm.Agg
             ReleaseVxs(ref v2);
         }
 
+        public override void DrawEllipse(double left, double bottom, double right, double top)
+        {
+            double ox = (left + right) * 0.5;
+            double oy = (left + right) * 0.5;
+            if (this._orientation == DrawBoardOrientation.LeftTop)
+            {
+                //modified
+                oy = this.Height - oy;
+            }
+            ellipse.Reset(ox,
+                          oy,
+                         (right - left) * 0.5,
+                         (top - bottom) * 0.5,
+                          ellipseGenNSteps);
+            var v1 = GetFreeVxs();
+            var v2 = GetFreeVxs();
+            _aggsx.Render(stroke.MakeVxs(ellipse.MakeVxs(v1), v2), this.strokeColor);
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
+        }
+        public override void FillEllipse(double left, double bottom, double right, double top)
+        {
+            double ox = (left + right) * 0.5;
+            double oy = (left + right) * 0.5;
+            if (this._orientation == DrawBoardOrientation.LeftTop)
+            {
+                //modified
+                oy = this.Height - oy;
+            }
+            ellipse.Reset(ox,
+                          oy,
+                          (right - left) * 0.5,
+                          (top - bottom) * 0.5,
+                           ellipseGenNSteps);
+            var v1 = GetFreeVxs();
+            _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
+            ReleaseVxs(ref v1);
+        }
         public override void FillRect(double left, double top, double width, double height)
         {
             double right = left + width;

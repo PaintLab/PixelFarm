@@ -22,7 +22,10 @@
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing
 {
-
+    /// <summary>
+    /// this class provides drawing method on specific surface,
+    /// (0,0) is on left-lower corner for every implementaion
+    /// </summary>
     public abstract class Painter
     {
         //who implement this class
@@ -55,10 +58,8 @@ namespace PixelFarm.Drawing
         public abstract void DrawRect(double left, double top, double width, double height);
         public abstract void FillRect(double left, double top, double width, double height);
 
-        public abstract void FillCircle(double x, double y, double radius);
         public abstract void FillEllipse(double left, double bottom, double right, double top);
         public abstract void DrawEllipse(double left, double bottom, double right, double top);
-        
 
         public abstract void FillRoundRectangle(double left, double bottom, double right, double top, double radius);
         public abstract void DrawRoundRect(double left, double bottom, double right, double top, double radius);

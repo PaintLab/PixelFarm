@@ -52,6 +52,9 @@ namespace PixelFarm.Agg.Sample_Draw
             p.DrawLine(200, 100, 250, 200);
 
             p.DrawRect(10, 10, 20, 30);
+         
+
+            
              
         }
     }

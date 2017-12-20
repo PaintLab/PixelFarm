@@ -120,11 +120,14 @@ namespace OpenTK
         /// unique objects, but all instances of ES10.GL should return the same object.</remarks>
         protected abstract object SyncRoot { get; }
 
+       
+
         public void LoadEntryPoints()
         {
             // Using reflection is more than 3 times faster than directly loading delegates on the first
             // run, probably due to code generation overhead. Subsequent runs are faster with direct loading
             // than with reflection, but the first time is more significant.
+             
 
             int supported = 0;
             FieldInfo[] delegates = DelegatesClass.GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
