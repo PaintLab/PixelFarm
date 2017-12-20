@@ -24,7 +24,9 @@ namespace Mini
         bool _useGdiPlusOutput;
         bool _gdiAntiAlias;
         Graphics thisGfx;//for output
-        Bitmap bufferBmp = null;
+        PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface sx;
+
+        //Bitmap bufferBmp = null;
         System.Drawing.Rectangle bufferBmpRect;
         public SoftAggControl()
         {
@@ -47,7 +49,7 @@ namespace Mini
 
 
 
-        
+
         void SoftAggControl_Load(object sender, EventArgs e)
         {
             if (_useGdiPlusOutput)
@@ -62,13 +64,11 @@ namespace Mini
                 // dimensions the same size as the drawing surface of Form1. 
                 thisGfx = this.CreateGraphics();  //for render to output
                 bufferBmpRect = this.DisplayRectangle;
-                bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
-
-                
-                 var gdiPlusCanvasPainter = new PixelFarm.Drawing.WinGdi.GdiPlusPainter(bufferBmp);
+                //bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
 
 
-
+                sx = new PixelFarm.Drawing.WinGdi.GdiPlusRenderSurface(0, 0, bufferBmpRect.Width, bufferBmpRect.Height);
+                var gdiPlusCanvasPainter = new PixelFarm.Drawing.WinGdi.GdiPlusPainter(sx);
 
                 gdiPlusCanvasPainter.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
                 painter = gdiPlusCanvasPainter;
@@ -178,7 +178,12 @@ namespace Mini
             }
             else
             {
-                UpdateOutput();
+                exampleBase.Draw(painter);
+                Graphics g = e.Graphics;
+                IntPtr displayDC = g.GetHdc();
+                 
+                sx.RenderTo(displayDC, 0, 0, new PixelFarm.Drawing.Rectangle(0, 0, bufferBmpRect.Width, bufferBmpRect.Height));
+                g.ReleaseHdc(displayDC);
             }
             base.OnPaint(e);
         }
@@ -187,8 +192,9 @@ namespace Mini
             exampleBase.Draw(painter);
             if (_useGdiPlusOutput)
             {
-                //_myBuffGfx.Render();
-                thisGfx.DrawImageUnscaledAndClipped(bufferBmp, bufferBmpRect);
+                IntPtr destHdc = thisGfx.GetHdc();
+                sx.RenderTo(destHdc, 0, 0, new PixelFarm.Drawing.Rectangle(0, 0, bufferBmpRect.Width, bufferBmpRect.Height));
+                thisGfx.ReleaseHdc(destHdc);
             }
         }
     }

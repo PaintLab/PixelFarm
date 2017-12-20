@@ -19,7 +19,7 @@ using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
 
-    
+
     public partial class GdiPlusRenderSurface : IDisposable
     {
 
@@ -29,7 +29,7 @@ namespace PixelFarm.Drawing.WinGdi
         //-------------------------------
 
         IntPtr originalHdc = IntPtr.Zero;
-        System.Drawing.Graphics gx;
+        internal System.Drawing.Graphics gx;
 
         //-------------------------------
         Stack<System.Drawing.Rectangle> clipRectStack = new Stack<System.Drawing.Rectangle>();
@@ -43,13 +43,10 @@ namespace PixelFarm.Drawing.WinGdi
 
         public GdiPlusRenderSurface(int left, int top, int width, int height)
         {
-
-
 #if DEBUG
             debug_canvas_id = dbug_canvasCount + 1;
             dbug_canvasCount += 1;
 #endif
-
 
             //2. dimension
             this.left = left;
@@ -88,6 +85,9 @@ namespace PixelFarm.Drawing.WinGdi
             return "visible_clip" + this.gx.VisibleClipBounds.ToString();
         }
 #endif
+
+
+
 
         public void CloseCanvas()
         {
@@ -189,7 +189,7 @@ namespace PixelFarm.Drawing.WinGdi
             return outputPoints;
         }
 
-        static System.Drawing.Color ConvColor(Color c)
+        internal static System.Drawing.Color ConvColor(Color c)
         {
             return System.Drawing.Color.FromArgb(c.A, c.R, c.G, c.B);
         }
@@ -247,12 +247,14 @@ namespace PixelFarm.Drawing.WinGdi
         public int debug_canvas_id = 0;
 
 #endif
+
+
     }
 
 
     //--------------------------------------------
 
-
+    //coordinate
     partial class GdiPlusRenderSurface
     {
         int left;
@@ -431,6 +433,7 @@ namespace PixelFarm.Drawing.WinGdi
     }
 
     //--------------------------------------------
+    //drawing
     partial class GdiPlusRenderSurface
     {
         float strokeWidth = 1f;
@@ -873,7 +876,7 @@ namespace PixelFarm.Drawing.WinGdi
     }
 
     //--------------------------------------------
-
+    //text and font
     partial class GdiPlusRenderSurface
     {
         RequestFont currentTextFont = null;
