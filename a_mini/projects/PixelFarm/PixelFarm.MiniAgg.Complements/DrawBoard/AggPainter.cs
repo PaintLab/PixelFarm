@@ -36,7 +36,7 @@ namespace PixelFarm.Agg
         SimpleRect _simpleRectVxsGen = new SimpleRect();
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
-        RoundedRect roundRect = null;
+        
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
         LineDashGenerator _lineDashGen;
@@ -134,19 +134,7 @@ namespace PixelFarm.Agg
         void ReleaseVxs(ref VertexStore vxs)
         {
             _vxsPool.Release(ref vxs);
-        }
-
-
-
-        //public override void FillCircle(double x, double y, double radius)
-        //{
-        //    ellipse.Reset(x, y, radius, radius);
-        //    var v1 = GetFreeVxs();
-        //    _aggsx.Render(ellipse.MakeVxs(v1), this.fillColor);
-        //    ReleaseVxs(ref v1);
-        //}
-
-
+        } 
         public override void Draw(VertexStoreSnap vxs)
         {
             this.Fill(vxs);
@@ -311,41 +299,7 @@ namespace PixelFarm.Agg
             _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
-        public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
-            var v1 = GetFreeVxs();
-            this.Fill(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
-        public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
-            var v1 = GetFreeVxs();
-            this.Draw(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
-
+      
         public override RequestFont CurrentFont
         {
             get
@@ -545,28 +499,7 @@ namespace PixelFarm.Agg
                 area.Left, area.Bottom, area.Right, area.Top);
             filterMan.DoRecursiveBlur(img, r);
         }
-        //---------------- 
-        public override void DrawBezierCurve(float startX, float startY, float endX, float endY,
-           float controlX1, float controlY1,
-           float controlX2, float controlY2)
-        {
-            var v1 = GetFreeVxs();
-            VertexSourceExtensions.CreateBezierVxs4(v1,
-                new PixelFarm.VectorMath.Vector2(startX, startY),
-                new PixelFarm.VectorMath.Vector2(endX, endY),
-                new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
-                new PixelFarm.VectorMath.Vector2(controlX2, controlY2));
-            //
-            var v2 = this.stroke.MakeVxs(v1, GetFreeVxs());
-            //
-            sclineRas.Reset();
-            sclineRas.AddPath(v2);
-            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, this.strokeColor);
-            ReleaseVxs(ref v1);
-            ReleaseVxs(ref v2);
-        }
-
-
+ 
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
             return new AggRenderVx(snap);
@@ -613,9 +546,7 @@ namespace PixelFarm.Agg
             {
                 stroke.LineCap = value;
             }
-        }
-
-        //--------------------------------------------------
+        } 
         public LineDashGenerator LineDashGen
         {
             get { return this._lineDashGen; }

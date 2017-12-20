@@ -28,7 +28,7 @@ namespace PixelFarm.DrawingGL
         //agg's vertex generators
         Stroke _aggStroke = new Stroke(1);
         Ellipse ellipse = new Ellipse();
-        RoundedRect roundRect;
+         
         Arc _arcTool;
 
         //fonts
@@ -211,22 +211,7 @@ namespace PixelFarm.DrawingGL
                 _igfxPathBuilder.CreateGraphicsPath(vxs));
         }
 
-        public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
-        {
-            var v1 = GetFreeVxs();
-            VertexSourceExtensions.CreateBezierVxs4(v1,
-                new PixelFarm.VectorMath.Vector2(startX, startY),
-                new PixelFarm.VectorMath.Vector2(endX, endY),
-                new PixelFarm.VectorMath.Vector2(controlX1, controlY1),
-                new PixelFarm.VectorMath.Vector2(controlY2, controlY2));
-            _aggStroke.Width = this.StrokeWidth;
-
-            var v2 = GetFreeVxs();
-            _glsx.DrawGfxPath(_glsx.StrokeColor,
-                _igfxPathBuilder.CreateGraphicsPath(_aggStroke.MakeVxs(v1, v2)));
-            ReleaseVxs(ref v2);
-            ReleaseVxs(ref v1);
-        }
+     
         DrawingGL.GLBitmap ResolveForGLBitmap(Image image)
         {
             var cacheBmp = Image.GetCacheInnerImage(image) as DrawingGL.GLBitmap;
@@ -454,23 +439,7 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-        public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
-            var v1 = GetFreeVxs();
-            this.Draw(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
+     
         public override float OriginX
         {
             get
@@ -533,36 +502,7 @@ namespace PixelFarm.DrawingGL
              );
         }
 
-        //public override void FillCircle(double x, double y, double radius)
-        //{
-        //    FillEllipse(x - radius, y - radius, x + radius, y + radius);
-        //}
-
-        public void FillRoundRect(Color color, float x, float y, float w, float h, float rx, float ry)
-        {
-            roundRect.SetRect(x, y, x + w, y + h);
-            roundRect.SetRadius(rx, ry);
-            //create round rect vxs
-
-            var vxs = roundRect.MakeVxs(GetFreeVxs());
-            _glsx.FillGfxPath(_fillColor, _igfxPathBuilder.CreateGraphicsPath(vxs));
-            ReleaseVxs(ref vxs);
-        }
-        public void DrawRoundRect(float x, float y, float w, float h, float rx, float ry)
-        {
-            roundRect.SetRect(x, y, x + w, y + h);
-            roundRect.SetRadius(rx, ry);
-            _aggStroke.Width = this.StrokeWidth;
-
-            var v1 = GetFreeVxs();
-            var v2 = GetFreeVxs();
-            _aggStroke.MakeVxs(roundRect.MakeVxs(v1), v2);
-            _glsx.DrawGfxPath(_strokeColor, _igfxPathBuilder.CreateGraphicsPath(v2));
-            ReleaseVxs(ref v2);
-            ReleaseVxs(ref v1);
-        }
-
-
+         
 
         public override void FillRenderVx(Brush brush, RenderVx renderVx)
         {
@@ -603,23 +543,7 @@ namespace PixelFarm.DrawingGL
 
 
         }
-        public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
-            var v1 = GetFreeVxs();
-            this.Fill(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
+         
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _glsx.StrokeColor = _strokeColor;
@@ -636,10 +560,7 @@ namespace PixelFarm.DrawingGL
                     _igfxPathBuilder.CreateGraphicsPath(
                         new VertexStoreSnap(vxs, pathIndexs[i])));
             }
-        }
-
-
-
+        } 
         public override void SetClipBox(int x1, int y1, int x2, int y2)
         {
         }
@@ -1160,7 +1081,6 @@ namespace PixelFarm.DrawingGL
                     multipartTessResult.EndBorderPart();
                 }
             }
-        }
-
+        } 
     }
 }

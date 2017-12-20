@@ -256,14 +256,14 @@ namespace PixelFarm.Drawing.Pdf
         {
             //VxsHelper.DrawVxsSnap(_gfx, new VertexStoreSnap(vxs), _strokeColor);
         }
-        public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
-        {
-            //_gfx.DrawBezier(_currentPen,
-            //     startX, startY,
-            //     controlX1, controlY1,
-            //     controlX2, controlY2,
-            //     endX, endY);
-        }
+        //public override void DrawBezierCurve(float startX, float startY, float endX, float endY, float controlX1, float controlY1, float controlX2, float controlY2)
+        //{
+        //    //_gfx.DrawBezier(_currentPen,
+        //    //     startX, startY,
+        //    //     controlX1, controlY1,
+        //    //     controlX2, controlY2,
+        //    //     endX, endY);
+        //}
 
         public override void DrawImage(Image actualImage, params AffinePlan[] affinePlans)
         {
@@ -398,19 +398,19 @@ namespace PixelFarm.Drawing.Pdf
 
         public override void FillEllipse(double left, double top, double width, double height)
         {
-            
+
         }
         public override void DrawEllipse(double left, double top, double width, double height)
         {
-        
+
         }
 
         public override void FillRect(double left, double top, double width, double height)
         {
-            
+
         }
 
-        
+
         VertexStorePool _vxsPool = new VertexStorePool();
         VertexStore GetFreeVxs()
         {
@@ -421,41 +421,41 @@ namespace PixelFarm.Drawing.Pdf
         {
             _vxsPool.Release(ref vxs);
         }
-        public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
+        //public override void DrawRoundRect(double left, double bottom, double right, double top, double radius)
+        //{
+        //    if (roundRect == null)
+        //    {
+        //        roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
+        //        roundRect.NormalizeRadius();
+        //    }
+        //    else
+        //    {
+        //        roundRect.SetRect(left, bottom, right, top);
+        //        roundRect.SetRadius(radius);
+        //        roundRect.NormalizeRadius();
+        //    }
 
-            var v1 = GetFreeVxs();
-            this.Draw(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
-        public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
-        {
-            if (roundRect == null)
-            {
-                roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
-                roundRect.NormalizeRadius();
-            }
-            else
-            {
-                roundRect.SetRect(left, bottom, right, top);
-                roundRect.SetRadius(radius);
-                roundRect.NormalizeRadius();
-            }
-            var v1 = GetFreeVxs();
-            this.Fill(roundRect.MakeVxs(v1));
-            ReleaseVxs(ref v1);
-        }
+        //    var v1 = GetFreeVxs();
+        //    this.Draw(roundRect.MakeVxs(v1));
+        //    ReleaseVxs(ref v1);
+        //}
+        //public override void FillRoundRectangle(double left, double bottom, double right, double top, double radius)
+        //{
+        //    if (roundRect == null)
+        //    {
+        //        roundRect = new PixelFarm.Agg.VertexSource.RoundedRect(left, bottom, right, top, radius);
+        //        roundRect.NormalizeRadius();
+        //    }
+        //    else
+        //    {
+        //        roundRect.SetRect(left, bottom, right, top);
+        //        roundRect.SetRadius(radius);
+        //        roundRect.NormalizeRadius();
+        //    }
+        //    var v1 = GetFreeVxs();
+        //    this.Fill(roundRect.MakeVxs(v1));
+        //    ReleaseVxs(ref v1);
+        //}
 
 
 
