@@ -18,13 +18,13 @@ using System.Collections.Generic;
 using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
-    partial class MyGdiPlusDrawBoard
+    partial class GdiPlusRenderSurface
     {
         float strokeWidth = 1f;
         Color fillSolidColor = Color.Transparent;
         Color strokeColor = Color.Black;
         //==========================================================
-        public override Color StrokeColor
+        public Color StrokeColor
         {
             get
             {
@@ -35,7 +35,7 @@ namespace PixelFarm.Drawing.WinGdi
                 this.internalPen.Color = ConvColor(this.strokeColor = value);
             }
         }
-        public override float StrokeWidth
+        public float StrokeWidth
         {
             get
             {
@@ -47,17 +47,17 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
 
-        public override void RenderTo(IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea)
+        public void RenderTo(IntPtr destHdc, int sourceX, int sourceY, Rectangle destArea)
         {
 
-            MyWin32.SetViewportOrgEx(win32MemDc.DC, CanvasOrgX, CanvasOrgY, IntPtr.Zero);
+            MyWin32.SetViewportOrgEx(win32MemDc.DC, canvasOriginX, canvasOriginY, IntPtr.Zero);
             MyWin32.BitBlt(
                 destHdc, destArea.X, destArea.Y, destArea.Width, destArea.Height, //dest
                 win32MemDc.DC, sourceX, sourceY, MyWin32.SRCCOPY); //src
-            MyWin32.SetViewportOrgEx(win32MemDc.DC, -CanvasOrgX, -CanvasOrgY, IntPtr.Zero);
+            MyWin32.SetViewportOrgEx(win32MemDc.DC, -canvasOriginX, -canvasOriginY, IntPtr.Zero);
 
         }
-        public override void Clear(PixelFarm.Drawing.Color c)
+        public void Clear(PixelFarm.Drawing.Color c)
         {
 
             gx.Clear(System.Drawing.Color.FromArgb(
@@ -65,14 +65,14 @@ namespace PixelFarm.Drawing.WinGdi
                 c.R,
                 c.G,
                 c.B));
-        } 
-        public override void DrawPath(GraphicsPath gfxPath)
-        {
-            gx.DrawPath(internalPen, ResolveGraphicsPath(gfxPath)); 
         }
-        public override void FillRectangle(Brush brush, float left, float top, float width, float height)
+        public void DrawPath(GraphicsPath gfxPath)
         {
-            
+            gx.DrawPath(internalPen, ResolveGraphicsPath(gfxPath));
+        }
+        public void FillRectangle(Brush brush, float left, float top, float width, float height)
+        {
+
             switch (brush.BrushKind)
             {
                 case BrushKind.Solid:
@@ -115,7 +115,7 @@ namespace PixelFarm.Drawing.WinGdi
                     break;
             }
         }
-        public override void FillRectangle(Color color, float left, float top, float width, float height)
+        public void FillRectangle(Color color, float left, float top, float width, float height)
         {
 
             internalSolidBrush.Color = ConvColor(color);
@@ -123,14 +123,14 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
 
-        public override void DrawRectangle(Color color, float left, float top, float width, float height)
+        public void DrawRectangle(Color color, float left, float top, float width, float height)
         {
 
             internalPen.Color = ConvColor(color);
             gx.DrawRectangle(internalPen, left, top, width, height);
         }
 
-        public override void DrawLine(float x1, float y1, float x2, float y2)
+        public void DrawLine(float x1, float y1, float x2, float y2)
         {
 
             gx.DrawLine(internalPen, x1, y1, x2, y2);
@@ -169,7 +169,7 @@ namespace PixelFarm.Drawing.WinGdi
         /// One of the <see cref="T:System.Drawing.Drawing2D.SmoothingMode"/> values.
         /// </returns>
         /// <PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
-        public override SmoothingMode SmoothingMode
+        public SmoothingMode SmoothingMode
         {
             get
             {
@@ -222,7 +222,7 @@ namespace PixelFarm.Drawing.WinGdi
         /// <param name="destRect"><see cref="T:System.Drawing.RectangleF"/> structure that specifies the location and size of the drawn image. The image is scaled to fit the rectangle. </param>
         /// <param name="srcRect"><see cref="T:System.Drawing.RectangleF"/> structure that specifies the portion of the <paramref name="image"/> object to draw. </param>
         /// <exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception>
-        public override void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
+        public void DrawImage(Image image, RectangleF destRect, RectangleF srcRect)
         {
 
             gx.DrawImage(ResolveInnerBmp(image),
@@ -230,7 +230,7 @@ namespace PixelFarm.Drawing.WinGdi
                 srcRect.ToRectF(),
                 System.Drawing.GraphicsUnit.Pixel);
         }
-        public override void DrawImages(Image image, RectangleF[] destAndSrcPairs)
+        public void DrawImages(Image image, RectangleF[] destAndSrcPairs)
         {
 
             int j = destAndSrcPairs.Length;
@@ -243,7 +243,7 @@ namespace PixelFarm.Drawing.WinGdi
                 }
                 //loop draw
                 var inner = ResolveInnerBmp(image);
-                for (int i = 0; i < j; )
+                for (int i = 0; i < j;)
                 {
                     gx.DrawImage(inner,
                         destAndSrcPairs[i].ToRectF(),
@@ -257,7 +257,7 @@ namespace PixelFarm.Drawing.WinGdi
         /// Draws the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
         /// </summary>
         /// <param name="image"><see cref="T:System.Drawing.Image"/> to draw. </param><param name="destRect"><see cref="T:System.Drawing.Rectangle"/> structure that specifies the location and size of the drawn image. </param><exception cref="T:System.ArgumentNullException"><paramref name="image"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
-        public override void DrawImage(Image image, RectangleF destRect)
+        public void DrawImage(Image image, RectangleF destRect)
         {
 
             System.Drawing.Bitmap inner = ResolveInnerBmp(image);
@@ -275,7 +275,7 @@ namespace PixelFarm.Drawing.WinGdi
                 gx.DrawImage(inner, destRect.ToRectF());
             }
         }
-        public override void FillPath(Color color, GraphicsPath gfxPath)
+        public void FillPath(Color color, GraphicsPath gfxPath)
         {
 
             //solid color
@@ -289,7 +289,7 @@ namespace PixelFarm.Drawing.WinGdi
         /// Fills the interior of a <see cref="T:System.Drawing.Drawing2D.GraphicsPath"/>.
         /// </summary>
         /// <param name="brush"><see cref="T:System.Drawing.Brush"/> that determines the characteristics of the fill. </param><param name="path"><see cref="T:System.Drawing.Drawing2D.GraphicsPath"/> that represents the path to fill. </param><exception cref="T:System.ArgumentNullException"><paramref name="brush"/> is null.-or-<paramref name="path"/> is null.</exception><PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/></PermissionSet>
-        public override void FillPath(Brush brush, GraphicsPath path)
+        public void FillPath(Brush brush, GraphicsPath path)
         {
 
             switch (brush.BrushKind)
@@ -405,14 +405,14 @@ namespace PixelFarm.Drawing.WinGdi
 
             return innerPath;
         }
-        public override void FillPolygon(Brush brush, PointF[] points)
+        public void FillPolygon(Brush brush, PointF[] points)
         {
 
             var pps = ConvPointFArray(points);
             //use internal solid color            
             gx.FillPolygon(brush.InnerBrush as System.Drawing.Brush, pps);
         }
-        public override void FillPolygon(Color color, PointF[] points)
+        public void FillPolygon(Color color, PointF[] points)
         {
 
             var pps = ConvPointFArray(points);

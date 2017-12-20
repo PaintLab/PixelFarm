@@ -17,7 +17,7 @@
 using Win32;
 namespace PixelFarm.Drawing.WinGdi
 {
-    partial class MyGdiPlusDrawBoard
+    partial class GdiPlusRenderSurface
     {
         RequestFont currentTextFont = null;
         Color mycurrentTextColor = Color.Black;
@@ -26,7 +26,7 @@ namespace PixelFarm.Drawing.WinGdi
         //    WinGdiFont winFont = WinGdiFontSystem.GetWinGdiFont(f);
         //    return winFont.GetGlyph(c).horiz_adv_x >> 6;
         //}
-        public override void DrawText(char[] buffer, int x, int y)
+        public void DrawText(char[] buffer, int x, int y)
         {
 
             var clipRect = currentClipRect;
@@ -34,11 +34,11 @@ namespace PixelFarm.Drawing.WinGdi
             //1.
             win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
             //2.
-            NativeTextWin32.TextOut(win32MemDc.DC, CanvasOrgX + x, CanvasOrgY + y, buffer, buffer.Length);
+            NativeTextWin32.TextOut(win32MemDc.DC, canvasOriginX + x, canvasOriginY + y, buffer, buffer.Length);
             //3
             win32MemDc.ClearClipRect();
         }
-        public override void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
+        public void DrawText(char[] buffer, Rectangle logicalTextBox, int textAlignment)
         {
 
 
@@ -48,13 +48,13 @@ namespace PixelFarm.Drawing.WinGdi
             //2.
             win32MemDc.SetClipRect(clipRect.Left, clipRect.Top, clipRect.Width, clipRect.Height);
             //3.
-            NativeTextWin32.TextOut(win32MemDc.DC, CanvasOrgX + logicalTextBox.X, CanvasOrgY + logicalTextBox.Y, buffer, buffer.Length);
+            NativeTextWin32.TextOut(win32MemDc.DC, canvasOriginX + logicalTextBox.X, canvasOriginY + logicalTextBox.Y, buffer, buffer.Length);
             //4.
             win32MemDc.ClearClipRect();
 
 
         }
-        public override void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
+        public void DrawText(char[] str, int startAt, int len, Rectangle logicalTextBox, int textAlignment)
         {
             //this is the most common used function for text drawing
             //return;
@@ -137,7 +137,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
         }
         //====================================================
-        public override RequestFont CurrentFont
+        public   RequestFont CurrentFont
         {
             get
             {
@@ -150,7 +150,7 @@ namespace PixelFarm.Drawing.WinGdi
                 win32MemDc.SetFont(WinGdiFontSystem.GetWinGdiFont(value).CachedHFont());
             }
         }
-        public override Color CurrentTextColor
+        public   Color CurrentTextColor
         {
             get
             {
