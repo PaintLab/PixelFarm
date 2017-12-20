@@ -15,7 +15,7 @@
 
 namespace PixelFarm.Drawing.WinGdi
 {
-    partial class MyGdiPlusDrawBoard
+    partial class GdiPlusDrawBoard
     {
         int left;
         int top;
@@ -29,13 +29,11 @@ namespace PixelFarm.Drawing.WinGdi
         //--------------------------------------------------------------------
         public override void SetCanvasOrigin(int x, int y)
         {
-
+            _gdigsx.SetCanvasOrigin(x, y);
             //----------- 
             int total_dx = x - canvasOriginX;
             int total_dy = y - canvasOriginY;
-            this.gx.TranslateTransform(total_dx, total_dy);
-            //clip rect move to another direction***
-            this.currentClipRect.Offset(-total_dx, -total_dy);
+
             this.canvasOriginX = x;
             this.canvasOriginY = y;
         }
@@ -57,12 +55,7 @@ namespace PixelFarm.Drawing.WinGdi
         /// <param name="combineMode">Member of the <see cref="T:System.Drawing.Drawing2D.CombineMode"/> enumeration that specifies the combining operation to use. </param>
         public override void SetClipRect(Rectangle rect, CombineMode combineMode = CombineMode.Replace)
         {
-
-            gx.SetClip(
-               this.currentClipRect = new System.Drawing.Rectangle(
-                    rect.X, rect.Y,
-                    rect.Width, rect.Height),
-                    (System.Drawing.Drawing2D.CombineMode)combineMode);
+            _gdigsx.SetClipRect(rect, combineMode);
         }
         public bool IntersectsWith(Rectangle clientRect)
         {
@@ -71,41 +64,17 @@ namespace PixelFarm.Drawing.WinGdi
 
         public override bool PushClipAreaRect(int width, int height, ref Rectangle updateArea)
         {
-            this.clipRectStack.Push(currentClipRect);
-            System.Drawing.Rectangle intersectResult =
-                  System.Drawing.Rectangle.Intersect(
-                  System.Drawing.Rectangle.FromLTRB(updateArea.Left, updateArea.Top, updateArea.Right, updateArea.Bottom),
-                  new System.Drawing.Rectangle(0, 0, width, height));
-            currentClipRect = intersectResult;
-            if (intersectResult.Width <= 0 || intersectResult.Height <= 0)
-            {
-                //not intersec?
-                return false;
-            }
-            else
-            {
-                updateArea = Conv.ToRect(intersectResult);
-                gx.SetClip(intersectResult);
-                return true;
-            }
+            return _gdigsx.PushClipAreaRect(width, height, ref updateArea);
         }
         public override void PopClipAreaRect()
         {
-            if (clipRectStack.Count > 0)
-            {
-
-                currentClipRect = clipRectStack.Pop();
-                gx.SetClip(currentClipRect);
-            }
+            _gdigsx.PopClipAreaRect();
         }
-
-
-
         public override Rectangle CurrentClipRect
         {
             get
             {
-                return currentClipRect.ToRect();
+                return _gdigsx.CurrentClipRect;
             }
         }
 

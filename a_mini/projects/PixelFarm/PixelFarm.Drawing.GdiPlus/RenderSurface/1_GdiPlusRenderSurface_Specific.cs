@@ -23,8 +23,7 @@ namespace PixelFarm.Drawing.WinGdi
 
     partial class GdiPlusRenderSurface : IDisposable
     {
-        int pageNumFlags;
-        int pageFlags;
+
         bool isDisposed;
         //-------------------------------
         NativeWin32MemoryDc win32MemDc;
@@ -44,15 +43,6 @@ namespace PixelFarm.Drawing.WinGdi
         //-------------------------------
 
         public GdiPlusRenderSurface(int left, int top, int width, int height)
-            : this(0, 0, left, top, width, height)
-        {
-        }
-        internal GdiPlusRenderSurface(
-            int horizontalPageNum,
-            int verticalPageNum,
-            int left, int top,
-            int width,
-            int height)
         {
 
 
@@ -61,7 +51,7 @@ namespace PixelFarm.Drawing.WinGdi
             dbug_canvasCount += 1;
 #endif
 
-            this.pageNumFlags = (horizontalPageNum << 8) | verticalPageNum;
+
             //2. dimension
             this.left = left;
             this.top = top;
@@ -126,7 +116,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
             this.CloseCanvas();
         }
-        void ClearPreviousStoredValues()
+        internal void ClearPreviousStoredValues()
         {
             this.gx.RenderingOrigin = new System.Drawing.Point(0, 0);
             this.canvasOriginX = 0;
@@ -134,7 +124,7 @@ namespace PixelFarm.Drawing.WinGdi
             this.clipRectStack.Clear();
         }
 
-        void ReleaseUnManagedResource()
+        internal void ReleaseUnManagedResource()
         {
             if (win32MemDc != null)
             {
@@ -153,7 +143,7 @@ namespace PixelFarm.Drawing.WinGdi
 
         public void Reuse(int hPageNum, int vPageNum)
         {
-            this.pageNumFlags = (hPageNum << 8) | vPageNum;
+
             int w = this.Width;
             int h = this.Height;
             this.ClearPreviousStoredValues();
@@ -167,7 +157,7 @@ namespace PixelFarm.Drawing.WinGdi
         }
         public void Reset(int hPageNum, int vPageNum, int newWidth, int newHeight)
         {
-            this.pageNumFlags = (hPageNum << 8) | vPageNum;
+
             this.ReleaseUnManagedResource();
             this.ClearPreviousStoredValues();
 
@@ -184,47 +174,7 @@ namespace PixelFarm.Drawing.WinGdi
             debug_resetCount++;
 #endif
         }
-        public bool IsPageNumber(int hPageNum, int vPageNum)
-        {
-            return pageNumFlags == ((hPageNum << 8) | vPageNum);
-        }
-        public bool IsUnused
-        {
-            get
-            {
-                return (pageFlags & CANVAS_UNUSED) != 0;
-            }
-            set
-            {
-                if (value)
-                {
-                    pageFlags |= CANVAS_UNUSED;
-                }
-                else
-                {
-                    pageFlags &= ~CANVAS_UNUSED;
-                }
-            }
-        }
-
-        public bool DimensionInvalid
-        {
-            get
-            {
-                return (pageFlags & CANVAS_DIMEN_CHANGED) != 0;
-            }
-            set
-            {
-                if (value)
-                {
-                    pageFlags |= CANVAS_DIMEN_CHANGED;
-                }
-                else
-                {
-                    pageFlags &= ~CANVAS_DIMEN_CHANGED;
-                }
-            }
-        }
+        
 
         const int CANVAS_UNUSED = 1 << (1 - 1);
         const int CANVAS_DIMEN_CHANGED = 1 << (2 - 1);

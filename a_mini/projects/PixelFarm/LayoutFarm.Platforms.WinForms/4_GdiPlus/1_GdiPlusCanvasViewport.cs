@@ -108,7 +108,7 @@ namespace LayoutFarm.UI.GdiPlus
         }
 
 
-        public void PaintMe(MyGdiPlusDrawBoard mycanvas)
+        public void PaintMe(GdiPlusDrawBoard mycanvas)
         {
             if (this.IsClosed) { return; }
             //------------------------------------ 
