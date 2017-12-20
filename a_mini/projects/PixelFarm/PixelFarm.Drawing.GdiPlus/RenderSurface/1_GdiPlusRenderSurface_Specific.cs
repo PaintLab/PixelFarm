@@ -23,7 +23,7 @@ namespace PixelFarm.Drawing.WinGdi
 
     public partial class GdiPlusRenderSurface : IDisposable
     {
-
+         
         bool isDisposed;
         //-------------------------------
         NativeWin32MemoryDc win32MemDc;

@@ -45,6 +45,9 @@ namespace Mini
             set { _gdiAntiAlias = value; }
         }
 
+
+
+        
         void SoftAggControl_Load(object sender, EventArgs e)
         {
             if (_useGdiPlusOutput)
@@ -60,7 +63,13 @@ namespace Mini
                 thisGfx = this.CreateGraphics();  //for render to output
                 bufferBmpRect = this.DisplayRectangle;
                 bufferBmp = new Bitmap(bufferBmpRect.Width, bufferBmpRect.Height);
-                var gdiPlusCanvasPainter = new PixelFarm.Drawing.WinGdi.GdiPlusPainter(bufferBmp);
+
+                
+                 var gdiPlusCanvasPainter = new PixelFarm.Drawing.WinGdi.GdiPlusPainter(bufferBmp);
+
+
+
+
                 gdiPlusCanvasPainter.SmoothingMode = _gdiAntiAlias ? PixelFarm.Drawing.SmoothingMode.AntiAlias : PixelFarm.Drawing.SmoothingMode.HighSpeed;
                 painter = gdiPlusCanvasPainter;
                 painter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
