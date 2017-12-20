@@ -24,9 +24,7 @@ namespace PixelFarm.Drawing.WinGdi
         RequestFont _currentFont;
         WinGdiFont _winGdiFont;
 
-        Agg.VertexSource.RoundedRect roundRect;
-
-
+    
         SmoothingMode _smoothingMode;
 
         public GdiPainter(System.Drawing.Bitmap gfxBmp)
