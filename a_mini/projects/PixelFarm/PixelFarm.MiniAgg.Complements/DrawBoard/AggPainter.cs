@@ -488,7 +488,7 @@ namespace PixelFarm.Agg
             this.sclineRas.AddPath(vxs);
             sclineRasToBmp.RenderWithSpan(this._aggsx.DestImage, sclineRas, scline, spanGen);
         }
-        public override void DrawImage(Image img, double x, double y)
+        public override void DrawImage(Image img, double left, double top)
         {
             //check image caching system
             if (img is ActualImage)
@@ -497,14 +497,14 @@ namespace PixelFarm.Agg
                 if (this._orientation == DrawBoardOrientation.LeftTop)
                 {
                     //place left upper corner at specific x y
-                    this._aggsx.Render(this.sharedImageWriterReader, x, this.Height - (y + img.Height));
+                    this._aggsx.Render(this.sharedImageWriterReader, left, this.Height - (top + img.Height));
 
                 }
                 else
                 {
                     //left-bottom as original
                     //place left-lower of the img at specific (x,y)
-                    this._aggsx.Render(this.sharedImageWriterReader, x, y);
+                    this._aggsx.Render(this.sharedImageWriterReader, left, top);
                 }
 
             }

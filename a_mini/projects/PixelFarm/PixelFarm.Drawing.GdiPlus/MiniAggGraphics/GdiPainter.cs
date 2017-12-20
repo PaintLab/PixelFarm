@@ -367,7 +367,7 @@ namespace PixelFarm.Drawing.WinGdi
             }
 
         }
-        public override void DrawImage(Image img, double x, double y)
+        public override void DrawImage(Image img, double left, double top)
         {
             if (img is ActualImage)
             {
@@ -385,11 +385,11 @@ namespace PixelFarm.Drawing.WinGdi
                             {
                                 if (this._orientation == DrawBoardOrientation.LeftTop)
                                 {
-                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)y));
+                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)left, (int)top));
                                 }
                                 else
                                 {
-                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)x, (int)(this.Height - y - img.Height)));
+                                    this._gfx.DrawImageUnscaled(bmp, new System.Drawing.Point((int)left, (int)(this.Height - top - img.Height)));
                                 }
                             }
                         }

@@ -311,7 +311,7 @@ namespace PixelFarm.Drawing.Pdf
         //{
         //    _gfx.DrawImage(bmp, x, y);
         //}
-        public override void DrawImage(Image actualImage, double x, double y)
+        public override void DrawImage(Image actualImage, double left, double top)
         {
             ////create Gdi bitmap from actual image
             //int w = actualImage.Width;

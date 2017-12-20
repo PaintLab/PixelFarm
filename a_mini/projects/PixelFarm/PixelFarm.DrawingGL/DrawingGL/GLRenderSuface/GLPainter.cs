@@ -267,7 +267,7 @@ namespace PixelFarm.DrawingGL
             }
 
         }
-        public override void DrawImage(Image actualImage, double x, double y)
+        public override void DrawImage(Image actualImage, double left, double top)
         {
 
             GLBitmap glBmp = ResolveForGLBitmap(actualImage);
@@ -276,13 +276,13 @@ namespace PixelFarm.DrawingGL
             if (this._orientation == DrawBoardOrientation.LeftTop)
             {
                 //place left upper corner at specific x y 
-                _glsx.DrawImage(glBmp, (float)x, _glsx.ViewportHeight - (float)y);
+                _glsx.DrawImage(glBmp, (float)left, _glsx.ViewportHeight - (float)top);
             }
             else
             {
                 //left-bottom as original
                 //place left-lower of the img at specific (x,y)
-                _glsx.DrawImage(glBmp, (float)x, (float)y);
+                _glsx.DrawImage(glBmp, (float)left, (float)top);
             }
         }
         float[] rect_coords = new float[8];

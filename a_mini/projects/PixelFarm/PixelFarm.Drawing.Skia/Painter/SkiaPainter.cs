@@ -291,7 +291,7 @@ namespace PixelFarm.Drawing.Skia
             //    _bmpStore.RelaseBmp(bmp);
             //}
         }
-        public override void DrawImage(Image img, double x, double y)
+        public override void DrawImage(Image img, double left, double top)
         {
             if (img is ActualImage)
             {
