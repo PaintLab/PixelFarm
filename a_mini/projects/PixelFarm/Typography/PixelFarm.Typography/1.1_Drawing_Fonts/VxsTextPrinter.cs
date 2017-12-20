@@ -160,7 +160,7 @@ namespace PixelFarm.Drawing.Fonts
             Painter p = this.TargetCanvasPainter;
             PixelFarm.Drawing.Color prevColor = p.StrokeColor;
             p.StrokeColor = PixelFarm.Drawing.Color.Red;
-            p.Line(x, y, x, y + this.FontAscendingPx);
+            p.DrawLine(x, y, x, y + this.FontAscendingPx);
             p.StrokeColor = prevColor;
 
         }

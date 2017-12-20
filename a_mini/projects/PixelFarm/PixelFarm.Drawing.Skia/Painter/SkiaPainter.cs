@@ -395,10 +395,10 @@ namespace PixelFarm.Drawing.Skia
         {
             VxsHelper.FillVxsSnap(_skCanvas, snap, _fill);
         }
-        public override void FillCircle(double x, double y, double radius)
-        {
-            _skCanvas.DrawCircle((float)x, (float)y, (float)radius, _fill);
-        }
+        //public override void FillCircle(double x, double y, double radius)
+        //{
+        //    _skCanvas.DrawCircle((float)x, (float)y, (float)radius, _fill);
+        //}
 
 
 
@@ -414,7 +414,7 @@ namespace PixelFarm.Drawing.Skia
               new SKRect((float)left, (float)top, (float)right, (float)bottom),
               _stroke);
         }
-        public override void FillRectangle(double left, double bottom, double right, double top)
+        public override void FillRect(double left, double bottom, double right, double top)
         {
 
             _skCanvas.DrawRect(
@@ -422,13 +422,13 @@ namespace PixelFarm.Drawing.Skia
                 _fill);
         }
 
-        public override void FillRectLBWH(double left, double bottom, double width, double height)
-        {
+        //public override void FillRectLBWH(double left, double bottom, double width, double height)
+        //{
 
-            _skCanvas.DrawRect(
-              new SKRect((float)left, (float)(bottom - height), (float)(left + width), (float)bottom),
-                _fill);
-        }
+        //    _skCanvas.DrawRect(
+        //      new SKRect((float)left, (float)(bottom - height), (float)(left + width), (float)bottom),
+        //        _fill);
+        //}
 
         VertexStorePool _vxsPool = new VertexStorePool();
         VertexStore GetFreeVxs()
@@ -475,7 +475,7 @@ namespace PixelFarm.Drawing.Skia
             this.Fill(roundRect.MakeVxs(v1));
             ReleaseVxs(ref v1);
         }
-        public override void Line(double x1, double y1, double x2, double y2)
+        public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             _skCanvas.DrawLine((float)x1, (float)y1, (float)x2, (float)y2, _stroke);
         }
@@ -491,7 +491,7 @@ namespace PixelFarm.Drawing.Skia
             FillColor = prevColor;
         }
 
-        public override void Rectangle(double left, double bottom, double right, double top)
+        public override void DrawRect(double left, double bottom, double right, double top)
         {
             _skCanvas.DrawLine((float)left, (float)top, (float)right, (float)bottom, _stroke);
         }

@@ -40,7 +40,7 @@ namespace PixelFarm.Agg.Samples
                     {
                         var p0 = contPoints[i - 1];
                         var p1 = contPoints[i];
-                        p.Line(p0.x, p0.y, p1.x, p1.y);
+                        p.DrawLine(p0.x, p0.y, p1.x, p1.y);
                     }
                 }
             }

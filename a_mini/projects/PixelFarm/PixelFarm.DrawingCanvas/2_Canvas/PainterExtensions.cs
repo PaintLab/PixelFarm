@@ -29,15 +29,23 @@ namespace PixelFarm.Agg
         {
             Color prevColor = p.StrokeColor;
             p.StrokeColor = color;
-            p.Line(x1, y1, x2, y2);
+            p.DrawLine(x1, y1, x2, y2);
             p.StrokeColor = prevColor;
         }
-        public static void Rectangle(this Painter p, double left, double bottom, double right, double top, Color color)
+        public static void DrawRectangle(this Painter p, double left, double top, double width, double height, Color color)
         {
             Color prevColor = p.StrokeColor;
             p.StrokeColor = color;
-            p.Rectangle(left, bottom, right, top);
+            p.DrawRect(left, top, width, height);
             p.StrokeColor = prevColor;
+        }
+        public static void DrawCircle(this Painter p, double x, double y, double radius)
+        {
+            p.DrawEllipse(x - radius, y - radius, x + radius, y + radius);
+        }
+        public static void FillCircle(this Painter p, double x, double y, double radius)
+        {
+            p.FillEllipse(x - radius, y - radius, x + radius, y + radius);
         }
         public static void FillCircle(this Painter p, double x, double y, double radius, Color color)
         {
@@ -46,20 +54,14 @@ namespace PixelFarm.Agg
             p.FillCircle(x, y, radius);
             p.FillColor = prevColor;
         }
-        public static void FillRectangle(this Painter p, double left, double bottom, double right, double top, Color color)
+        public static void FillRect(this Painter p, double left, double top, double width, double height, Color color)
         {
             Color prevColor = p.FillColor;
             p.FillColor = color;
-            p.FillRectangle(left, bottom, right, top);
+            p.FillRect(left, top, width, height);
             p.FillColor = prevColor;
         }
-        public static void FillRectLBWH(this Painter p, double left, double bottom, double width, double height, Color color)
-        {
-            Color prevColor = p.FillColor;
-            p.FillColor = color;
-            p.FillRectLBWH(left, bottom, width, height);
-            p.FillColor = prevColor;
-        }
+        
         public static void Fill(this Painter p, VertexStoreSnap snap, Color color)
         {
             Color prevColor = p.FillColor;

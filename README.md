@@ -81,6 +81,8 @@ BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geo
 
 BSD, 2007-2014, Lars Brubaker, agg-sharp, from  https://github.com/MatterHackers/agg-sharp
 
+MIT, 2009-2015, Bill Reiss, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+
 ZLIB, 2015, burningmine, CurveUtils.
 
 Boost, 2010-2014, Angus Johnson, Clipper.

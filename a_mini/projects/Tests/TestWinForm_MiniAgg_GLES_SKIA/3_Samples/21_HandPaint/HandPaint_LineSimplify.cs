@@ -92,7 +92,7 @@ namespace PixelFarm.Agg.Samples
 
         static void FillPoint(Vector2 v, PixelFarm.Drawing.Painter p)
         {
-            p.FillRectangle(
+            p.FillRect(
                   v.x, v.y,
                   v.x + 3, v.y + 3);
         }
@@ -103,7 +103,7 @@ namespace PixelFarm.Agg.Samples
             {
                 var p0 = contPoints[i - 1];
                 var p1 = contPoints[i];
-                p.Line(p0.x, p0.y, p1.x, p1.y);
+                p.DrawLine(p0.x, p0.y, p1.x, p1.y);
             }
         }
         public override void MouseDrag(int x, int y)
