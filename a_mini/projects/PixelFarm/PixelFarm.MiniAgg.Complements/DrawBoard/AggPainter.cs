@@ -36,7 +36,7 @@ namespace PixelFarm.Agg
         SimpleRect _simpleRectVxsGen = new SimpleRect();
         Ellipse ellipse = new Ellipse();
         PathWriter _lineGen = new PathWriter();
-        
+
         MyImageReaderWriter sharedImageWriterReader = new MyImageReaderWriter();
 
         LineDashGenerator _lineDashGen;
@@ -134,7 +134,7 @@ namespace PixelFarm.Agg
         void ReleaseVxs(ref VertexStore vxs)
         {
             _vxsPool.Release(ref vxs);
-        } 
+        }
         public override void Draw(VertexStoreSnap vxs)
         {
             this.Fill(vxs);
@@ -299,7 +299,7 @@ namespace PixelFarm.Agg
             _aggsx.Render(_simpleRectVxsGen.MakeVertexSnap(v1), this.fillColor);
             ReleaseVxs(ref v1);
         }
-      
+
         public override RequestFont CurrentFont
         {
             get
@@ -327,7 +327,15 @@ namespace PixelFarm.Agg
             //TODO: review drawing string  with agg here   
             if (_textPrinter != null)
             {
-                _textPrinter.DrawString(text, x, y);
+                if (this._orientation == DrawBoardOrientation.LeftBottom)
+                {
+                    _textPrinter.DrawString(text, x, y);
+                }
+                else
+                {
+                    _textPrinter.DrawString(text, x, this.Height - y);
+                }
+
             }
         }
         public override void DrawString(RenderVxFormattedString renderVx, double x, double y)
@@ -499,7 +507,7 @@ namespace PixelFarm.Agg
                 area.Left, area.Bottom, area.Right, area.Top);
             filterMan.DoRecursiveBlur(img, r);
         }
- 
+
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
             return new AggRenderVx(snap);
@@ -546,7 +554,7 @@ namespace PixelFarm.Agg
             {
                 stroke.LineCap = value;
             }
-        } 
+        }
         public LineDashGenerator LineDashGen
         {
             get { return this._lineDashGen; }
