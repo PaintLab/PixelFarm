@@ -44,7 +44,11 @@ namespace OpenTK.Platform.Egl
                 throw new ArgumentNullException("mode");
             if (window == null)
                 throw new ArgumentNullException("window");
-            EglContext shared = (EglContext)sharedContext;
+
+            //EglContext shared = (EglContext)sharedContext; //old version
+            EglContext shared = sharedContext as EglContext;
+
+
             int dummy_major, dummy_minor;
             if (!Egl.Initialize(window.Display, out dummy_major, out dummy_minor))
                 throw new GraphicsContextException(String.Format("Failed to initialize EGL, error {0}.", Egl.GetError()));
