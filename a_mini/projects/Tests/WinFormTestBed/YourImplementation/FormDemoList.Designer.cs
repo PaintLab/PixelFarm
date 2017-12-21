@@ -21,8 +21,8 @@
             this.lstDemoList = new System.Windows.Forms.ListBox();
             this._samplesTreeView = new System.Windows.Forms.TreeView();
             this.chkShowFormPrint = new System.Windows.Forms.CheckBox();
-            this.cmbPlatformSelector = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.lstPlatformSelectors = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // chkShowLayoutInspector
@@ -38,24 +38,24 @@
             // 
             // lstHtmlTestFiles
             // 
-            this.lstHtmlTestFiles.Location = new System.Drawing.Point(432, 448);
+            this.lstHtmlTestFiles.Location = new System.Drawing.Point(558, 448);
             this.lstHtmlTestFiles.Name = "lstHtmlTestFiles";
-            this.lstHtmlTestFiles.Size = new System.Drawing.Size(387, 69);
+            this.lstHtmlTestFiles.Size = new System.Drawing.Size(261, 69);
             this.lstHtmlTestFiles.TabIndex = 11;
             // 
             // lstDemoList
             // 
             this.lstDemoList.FormattingEnabled = true;
-            this.lstDemoList.Location = new System.Drawing.Point(13, 43);
+            this.lstDemoList.Location = new System.Drawing.Point(136, 43);
             this.lstDemoList.Name = "lstDemoList";
-            this.lstDemoList.Size = new System.Drawing.Size(388, 472);
+            this.lstDemoList.Size = new System.Drawing.Size(416, 472);
             this.lstDemoList.TabIndex = 15;
             // 
             // _samplesTreeView
             // 
-            this._samplesTreeView.Location = new System.Drawing.Point(432, 43);
+            this._samplesTreeView.Location = new System.Drawing.Point(558, 43);
             this._samplesTreeView.Name = "_samplesTreeView";
-            this._samplesTreeView.Size = new System.Drawing.Size(387, 399);
+            this._samplesTreeView.Size = new System.Drawing.Size(261, 399);
             this._samplesTreeView.TabIndex = 17;
             // 
             // chkShowFormPrint
@@ -69,15 +69,6 @@
             this.chkShowFormPrint.UseVisualStyleBackColor = true;
             this.chkShowFormPrint.CheckedChanged += new System.EventHandler(this.chkShowFormPrint_CheckedChanged);
             // 
-            // cmbPlatformSelector
-            // 
-            this.cmbPlatformSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbPlatformSelector.FormattingEnabled = true;
-            this.cmbPlatformSelector.Location = new System.Drawing.Point(316, 5);
-            this.cmbPlatformSelector.Name = "cmbPlatformSelector";
-            this.cmbPlatformSelector.Size = new System.Drawing.Size(265, 21);
-            this.cmbPlatformSelector.TabIndex = 19;
-            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(587, 2);
@@ -88,13 +79,21 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // lstPlatformSelectors
+            // 
+            this.lstPlatformSelectors.FormattingEnabled = true;
+            this.lstPlatformSelectors.Location = new System.Drawing.Point(12, 43);
+            this.lstPlatformSelectors.Name = "lstPlatformSelectors";
+            this.lstPlatformSelectors.Size = new System.Drawing.Size(115, 173);
+            this.lstPlatformSelectors.TabIndex = 22;
+            // 
             // FormDemoList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(858, 529);
+            this.Controls.Add(this.lstPlatformSelectors);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.cmbPlatformSelector);
             this.Controls.Add(this.chkShowFormPrint);
             this.Controls.Add(this._samplesTreeView);
             this.Controls.Add(this.lstDemoList);
@@ -113,8 +112,8 @@
         private System.Windows.Forms.ListBox lstDemoList;
         private System.Windows.Forms.TreeView _samplesTreeView;
         private System.Windows.Forms.CheckBox chkShowFormPrint;
-        private System.Windows.Forms.ComboBox cmbPlatformSelector;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListBox lstPlatformSelectors;
     }
 }
 

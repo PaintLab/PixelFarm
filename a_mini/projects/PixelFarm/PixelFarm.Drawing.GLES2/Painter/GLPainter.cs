@@ -458,7 +458,17 @@ namespace PixelFarm.DrawingGL
         {
             if (_textPrinter != null)
             {
-                _textPrinter.DrawString(text, x, y);
+                if (_orientation == DrawBoardOrientation.LeftBottom)
+                {
+                    _textPrinter.DrawString(text, x, y);
+                }
+                else
+                {
+                    int canvasH = _glsx.ViewportHeight;
+                    _textPrinter.DrawString(text, x, canvasH - y);
+
+                }
+
             }
         }
         public override RenderVxFormattedString CreateRenderVx(string textspan)
@@ -555,7 +565,7 @@ namespace PixelFarm.DrawingGL
             else
             {
                 int h = _glsx.ViewportHeight;
-                _glsx.DrawLine((float)x1, h - (float)y1, (float)x2, h- (float)y2);
+                _glsx.DrawLine((float)x1, h - (float)y1, (float)x2, h - (float)y2);
             }
 
 
