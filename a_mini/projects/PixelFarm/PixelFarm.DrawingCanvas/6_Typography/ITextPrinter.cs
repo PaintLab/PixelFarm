@@ -38,7 +38,7 @@ namespace PixelFarm.Drawing
     /// </summary>
     public interface ITextPrinter
     {
-
+        bool StartDrawOnLeftTop { get; set; }
         void DrawString(char[] text, int startAt, int len, double x, double y);
         /// <summary>
         /// render from RenderVxFormattedString object to specific pos
