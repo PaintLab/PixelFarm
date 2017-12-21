@@ -120,6 +120,7 @@ namespace Mini
                         formGLTest.WindowState = FormWindowState.Maximized;
                     }
                     break;
+#if SKIA_ENABLE
                 case RenderBackendChoice.SkiaMemoryBackend:
                     {
                         TestSkia1.FormSkia1 formSkia = new TestSkia1.FormSkia1();
@@ -136,6 +137,7 @@ namespace Mini
                         formSkia.LoadExample(exAndDesc);
                     }
                     break;
+#endif
                 default:
                     throw new NotSupportedException();
             }
