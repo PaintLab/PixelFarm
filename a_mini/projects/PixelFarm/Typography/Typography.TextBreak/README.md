@@ -1,2 +1,0 @@
-# TextBreaker
-TextBreaker in C#
