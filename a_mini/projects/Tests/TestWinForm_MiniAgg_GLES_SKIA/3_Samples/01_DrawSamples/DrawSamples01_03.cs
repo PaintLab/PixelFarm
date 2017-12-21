@@ -28,9 +28,9 @@ namespace PixelFarm.Agg.Sample_Draw
             //g.UseSubPixelRendering = true; 
             string teststr = "ABCDE abcd 1230 Hello!";
             p.FillColor = PixelFarm.Drawing.Color.Black;
-            p.StrokeColor = Color.Red;
-            p.DrawString(teststr, 300, 400);
+            p.StrokeColor = Color.Red; 
             p.DrawLine(0, 400, 800, 400);
+            p.DrawString(teststr, 300, 400);
 
             //g.UseSubPixelRendering = false;
             //g.DrawString(teststr, 300, 422, 22);
