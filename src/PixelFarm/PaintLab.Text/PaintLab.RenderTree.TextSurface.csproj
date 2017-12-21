@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E6078FC1-3AE0-4E33-AE7C-75E7AAAC7A02}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PaintLab.RenderTree.TextSurface</RootNamespace>
+    <AssemblyName>PaintLab.RenderTree.TextSurface</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="1.1_EditableRuns\EditableRun.cs" />
+    <Compile Include="1.1_EditableRuns\EditableRunCharLocation.cs" />
+    <Compile Include="1.1_EditableRuns\EditableTextRun.cs" />
+    <Compile Include="1.1_EditableRuns\SolidTextRun.cs" />
+    <Compile Include="1.1_EditableRuns\TextSpanSytle.cs" />
+    <Compile Include="1.1_EditableRuns\VisualPointInfo.cs" />
+    <Compile Include="1.1_EditableRuns\VisualSelectionRange.cs" />
+    <Compile Include="1.2_Lines\0_EditableTextLine.cs" />
+    <Compile Include="1.2_Lines\1_EditableTextLine_CORE_Collection.cs" />
+    <Compile Include="1.2_Lines\2_EditableTextLine_PRIVATE_CollectionFeatures2.cs" />
+    <Compile Include="1.2_Lines\3_EditableTextLine_PUBLIC_CollectionFeatures.cs" />
+    <Compile Include="1.2_Lines\4_EditableTextLine_ArrangeAndResizingMechanism.cs" />
+    <Compile Include="1.2_Lines\6_EditableTextLine_Advanced.cs" />
+    <Compile Include="1.2_Lines\debugActivityRecorder.cs" />
+    <Compile Include="1.2_Lines\TextLineReaderWriter.cs" />
+    <Compile Include="1.3_Layer\1_EditableTextFlowLayer.cs" />
+    <Compile Include="1.3_Layer\1_EditableTextFlowLayer_CORE_Collection.cs" />
+    <Compile Include="2.1_MultiLineController\DocumentActions.cs" />
+    <Compile Include="2.1_MultiLineController\TextLayerController.cs" />
+    <Compile Include="2.1_MultiLineController\TextLayerController.KeyboardFunctions.cs" />
+    <Compile Include="2.1_MultiLineController\TextLayerController.TextFunctions.cs" />
+    <Compile Include="2.1_MultiLineController\TextSurfaceEventListener.cs" />
+    <Compile Include="2.2_TextRenderBox\CaretRenderElement.cs" />
+    <Compile Include="2.2_TextRenderBox\CustomRenderSurface.cs" />
+    <Compile Include="2.2_TextRenderBox\GlobalCaretController.cs" />
+    <Compile Include="2.2_TextRenderBox\RenderSurfaceScrollRelation.cs" />
+    <Compile Include="2.2_TextRenderBox\StyleHelper.cs" />
+    <Compile Include="2.2_TextRenderBox\TextEditRenderBox.BaseFunctions.cs" />
+    <Compile Include="2.2_TextRenderBox\TextEditRenderBox.cs" />
+    <Compile Include="2.2_TextRenderBox\TextEditRenderBox.TextSurfaceFuntions.cs" />
+    <Compile Include="2.2_TextRenderBox\VisualPaintEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PaintLab.PlatformBridge\PaintLab.PlatformBridge.csproj">
+      <Project>{465cb0ff-c9fa-4371-ad10-51c6dff537b8}</Project>
+      <Name>PaintLab.PlatformBridge</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PaintLab.RenderTree\PaintLab.RenderTree.csproj">
+      <Project>{20048075-a2f3-4b97-b3c6-bea794429741}</Project>
+      <Name>PaintLab.RenderTree</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

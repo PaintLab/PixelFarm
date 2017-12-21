@@ -1,0 +1,79 @@
+﻿//BSD, 2014-2017, WinterDev
+//MatterHackers 
+
+using System;
+using PixelFarm.Drawing;
+using PixelFarm.Agg.Imaging;
+using PixelFarm.Agg.VertexSource;
+using PixelFarm.VectorMath;
+using PixelFarm.Drawing.Fonts;
+using Mini;
+
+namespace PixelFarm.Agg.Sample_FloodFill
+{
+    [Info(OrderCode = "09")]
+    [Info(DemoCategory.Bitmap, "Demonstration of a flood filling algorithm.")]
+    public class FloodFillDemo : DemoBase
+    {
+        ActualImage imageToFillOn;
+
+        int imgOffsetX = 20;
+        int imgOffsetY = 60;
+
+        public FloodFillDemo()
+        {
+            BackgroundColor = Color.White;
+            imageToFillOn = new ActualImage(400, 300, PixelFormat.ARGB32);
+            AggRenderSurface imageToFillGraphics = new AggRenderSurface(imageToFillOn);
+            imageToFillGraphics.Clear(Color.White);
+            //imageToFillGraphics.DrawString("Click to fill", 20, 30);
+            imageToFillGraphics.Circle(new Vector2(200, 150), 35, Color.Black);
+            imageToFillGraphics.Circle(new Vector2(200, 150), 30, Color.Green);
+            imageToFillGraphics.Rectangle(20, 50, 210, 280, Color.Black);
+            imageToFillGraphics.Rectangle(imageToFillOn.Bounds, Color.Blue);
+            Random rand = new Random();
+
+            var stroke1 = new Stroke(1);
+            var v1 = GetFreeVxs();
+            var v2 = GetFreeVxs();
+            for (int i = 0; i < 20; i++)
+            {
+                Ellipse elipse = new Ellipse(rand.Next(imageToFillOn.Width), rand.Next(imageToFillOn.Height), rand.Next(10, 60), rand.Next(10, 60));
+                imageToFillGraphics.Render(stroke1.MakeVxs(elipse.MakeVxs(v1), v2), Color.Black);
+            }
+            ReleaseVxs(ref v1);
+            ReleaseVxs(ref v2);
+            this.PixelSize = 32;
+            this.Gamma = 1;
+        }
+        [DemoConfig(MinValue = 8, MaxValue = 100)]
+        public int PixelSize
+        {
+            get;
+            set;
+        }
+        [DemoConfig(MaxValue = 3)]
+        public double Gamma
+        {
+            get;
+            set;
+        }
+        public Color BackgroundColor
+        {
+            get;
+            set;
+        }
+
+        public override void Draw(Painter p)
+        {
+            p.DrawImage(imageToFillOn, imgOffsetX, imgOffsetY);
+        }
+        public override void MouseDown(int mx, int my, bool isRightButton)
+        {
+            int x = mx - imgOffsetX;
+            int y = my - imgOffsetY;
+            FloodFill filler = new FloodFill(Color.Red);
+            filler.Fill(imageToFillOn, x, y);
+        }
+    }
+}
