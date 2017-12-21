@@ -61,7 +61,7 @@ namespace PixelFarm.Drawing
         public abstract void FillEllipse(double left, double top, double width, double height);
         public abstract void DrawEllipse(double left, double top, double width, double height);
         //
-         
+
         //public abstract void DrawBezierCurve(
         //    float startX, float startY, float endX, float endY,
         //    float controlX1, float controlY1,
@@ -80,6 +80,7 @@ namespace PixelFarm.Drawing
         public abstract void Fill(VertexStoreSnap snap);
         public abstract void Fill(VertexStore vxs);
 
+        //TODO: remove paint series, 
         public abstract void PaintSeries(VertexStore vxs, Color[] colors, int[] pathIndexs, int numPath);
         public abstract void Draw(VertexStore vxs);
         public abstract void Draw(VertexStoreSnap vxs);

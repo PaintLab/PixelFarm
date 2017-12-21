@@ -53,6 +53,7 @@ namespace PixelFarm.DrawingGL
             textPrinter = new VxsTextPrinter(_aggPainter, openFontStore);
             _aggPainter.TextPrinter = textPrinter;
         }
+        public bool StartDrawOnLeftTop { get; set; }
         public Typography.Contours.HintTechnique HintTechnique
         {
             get { return textPrinter.HintTechnique; }
@@ -101,7 +102,11 @@ namespace PixelFarm.DrawingGL
                 GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
                 glBmp.IsInvert = false;
                 //TODO: review font height
-                _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(glBmp, (float)x, (float)y + 40);
+                if (StartDrawOnLeftTop)
+                {
+                    y -= textPrinter.FontLineSpacingPx;
+                }
+                _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(glBmp, (float)x, (float)y);
                 glBmp.Dispose();
             }
             else
@@ -113,9 +118,7 @@ namespace PixelFarm.DrawingGL
 
                 //2. print text span into Agg Canvas
                 textPrinter.StartDrawOnLeftTop = false;
-                textPrinter.DrawString(text, startAt, len, 0, 0);
-               
-
+                textPrinter.DrawString(text, startAt, len, 0, 0); 
                 //------------------------------------------------------
                 //debug save image from agg's buffer
 #if DEBUG
@@ -131,8 +134,14 @@ namespace PixelFarm.DrawingGL
                 //------------------------------------------------------
                 GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
                 glBmp.IsInvert = false;
-                //TODO: review font height
-                _glsx.DrawGlyphImage(glBmp, (float)x, (float)y + 40);
+                //TODO: review font height 
+                if (StartDrawOnLeftTop)
+                {
+                    y -= textPrinter.FontLineSpacingPx;
+                }
+                _glsx.DrawGlyphImage(glBmp, (float)x, (float)y);
+
+
                 glBmp.Dispose();
             }
         }
@@ -241,7 +250,7 @@ namespace PixelFarm.DrawingGL
             //TODO: implementation here
 
         }
-
+        public bool StartDrawOnLeftTop { get; set; }
         public void ChangeFont(RequestFont font)
         {
             //from request font
