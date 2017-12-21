@@ -49,7 +49,7 @@
             this.cmdBuild.Name = "cmdBuild";
             this.cmdBuild.Size = new System.Drawing.Size(85, 34);
             this.cmdBuild.TabIndex = 0;
-            this.cmdBuild.Text = "Build";
+            this.cmdBuild.Text = "TEST";
             this.cmdBuild.UseVisualStyleBackColor = true;
             this.cmdBuild.Click += new System.EventHandler(this.cmdBuild_Click);
             // 
@@ -197,7 +197,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.cmdBuild);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Test Only";
             this.ResumeLayout(false);
 
         }

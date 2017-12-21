@@ -43,7 +43,6 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Render!";
             this.button1.UseVisualStyleBackColor = true;
-             
             // 
             // txtInputChar
             // 
@@ -58,7 +57,7 @@
             // 
             this.cmdBuildMsdfTexture.Location = new System.Drawing.Point(1260, 27);
             this.cmdBuildMsdfTexture.Name = "cmdBuildMsdfTexture";
-            this.cmdBuildMsdfTexture.Size = new System.Drawing.Size(121, 28);
+            this.cmdBuildMsdfTexture.Size = new System.Drawing.Size(121, 45);
             this.cmdBuildMsdfTexture.TabIndex = 22;
             this.cmdBuildMsdfTexture.Text = "Make MsdfTexture";
             this.cmdBuildMsdfTexture.UseVisualStyleBackColor = true;
@@ -101,7 +100,6 @@
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
-            
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -22,12 +22,12 @@ namespace Typography.TextServices
         public string FontSubFamily { get; internal set; }
         public string FontPath { get; internal set; }
 
-#if DEBUG
+
         public override string ToString()
         {
             return FontName + " " + FontSubFamily;
         }
-#endif
+
     }
 
 
