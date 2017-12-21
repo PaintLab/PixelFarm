@@ -108,11 +108,26 @@ namespace PixelFarm.DrawingGL
             {
 
                 //1. clear prev drawing result
-                _aggPainter.Clear(Drawing.Color.FromArgb(0, 0, 0, 0));
+                _aggPainter.Clear(Drawing.Color.White);
+                _aggPainter.StrokeColor = Color.Black;
+
                 //2. print text span into Agg Canvas
+                textPrinter.StartDrawOnLeftTop = false;
                 textPrinter.DrawString(text, startAt, len, 0, 0);
+               
+
+                //------------------------------------------------------
+                //debug save image from agg's buffer
+#if DEBUG
+                //actualImage.dbugSaveToPngFile("d:\\WImageTest\\aa1.png");
+#endif
+                //------------------------------------------------------
+
                 //3.copy to gl bitmap
                 byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImage);
+                //------------------------------------------------------
+                //debug save image from agg's buffer
+
                 //------------------------------------------------------
                 GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
                 glBmp.IsInvert = false;
@@ -120,7 +135,6 @@ namespace PixelFarm.DrawingGL
                 _glsx.DrawGlyphImage(glBmp, (float)x, (float)y + 40);
                 glBmp.Dispose();
             }
-
         }
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] text, int start, int len)
         {
