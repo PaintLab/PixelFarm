@@ -34,6 +34,7 @@ namespace PixelFarm.DrawingGL
             InitFont("tahoma", 14);
             memdc.SetTextColor(0);
         }
+        public bool StartDrawOnLeftTop { get; set; }
         public void ChangeFont(RequestFont font)
         {
 

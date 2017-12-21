@@ -13,10 +13,11 @@ namespace LayoutFarm.Dev
             InitializeComponent();
             this.Load += new EventHandler(Form1_Load);
             //------
-            this.cmbPlatformSelector.Items.Add(InnerViewportKind.GdiPlus);
-            this.cmbPlatformSelector.Items.Add(InnerViewportKind.GL);
-            this.cmbPlatformSelector.Items.Add(InnerViewportKind.Skia);
-            this.cmbPlatformSelector.SelectedIndex = 0;//set default
+
+            this.lstPlatformSelectors.Items.Add(InnerViewportKind.GdiPlus);
+            this.lstPlatformSelectors.Items.Add(InnerViewportKind.GL);
+            this.lstPlatformSelectors.Items.Add(InnerViewportKind.Skia);
+            this.lstPlatformSelectors.SelectedIndex = 0;//set default
 
 
         }
@@ -26,10 +27,11 @@ namespace LayoutFarm.Dev
         }
         void Form1_Load(object sender, EventArgs e)
         {
-            this.lstDemoList.DoubleClick += new EventHandler(lstDemoList_DoubleClick);
-        }
+            this.lstDemoList.DoubleClick += (s1, e1) => RunSelectedDemo();
+            this.lstPlatformSelectors.DoubleClick += (s1, e1) => RunSelectedDemo();
 
-        void lstDemoList_DoubleClick(object sender, EventArgs e)
+        }
+        void RunSelectedDemo()
         {
             //load demo sample
             DemoInfo selectedDemoInfo = this.lstDemoList.SelectedItem as DemoInfo;
@@ -59,6 +61,7 @@ namespace LayoutFarm.Dev
             //viewport.PaintMe();
             //ShowFormLayoutInspector(viewport); 
         }
+
 
         LayoutFarm.UI.UISurfaceViewportControl _latestviewport;
         Form _latest_formCanvas;
@@ -133,7 +136,7 @@ namespace LayoutFarm.Dev
         {
 
             //1. select view port kind
-            InnerViewportKind innerViewportKind = (InnerViewportKind)cmbPlatformSelector.SelectedItem;
+            InnerViewportKind innerViewportKind = (InnerViewportKind)lstPlatformSelectors.SelectedItem;
 
             var workingArea = Screen.PrimaryScreen.WorkingArea;
 

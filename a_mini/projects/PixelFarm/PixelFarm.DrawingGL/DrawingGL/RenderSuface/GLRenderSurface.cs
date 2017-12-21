@@ -226,7 +226,14 @@ namespace PixelFarm.DrawingGL
             {
                 case SmoothMode.Smooth:
                     {
-                        this.smoothLineShader.DrawLine(x1, y1, x2, y2);
+                        if (y1 == y2)
+                        {
+                            this.basicFillShader.DrawLine(x1, y1, x2, y2, StrokeColor);
+                        }
+                        else
+                        {
+                            this.smoothLineShader.DrawLine(x1, y1, x2, y2);
+                        }
                     }
                     break;
                 default:
