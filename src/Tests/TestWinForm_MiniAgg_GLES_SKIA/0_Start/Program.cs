@@ -51,7 +51,18 @@ namespace Mini
             //you can use your font loader
             YourImplementation.BootStrapWinGdi.SetupDefaultValues();
             //default text breaker, this bridge between              
+#if DEBUG
+            PixelFarm.Agg.ActualImage.InstallImageSaveToFileService((PixelFarm.Agg.ActualImage img, string filename) =>
+            {
 
+                using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(img.Width, img.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+                {
+                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(img, newBmp);
+                    //save
+                    newBmp.Save(filename);
+                }
+            });
+#endif
 
             //---------------------------------------------------
             //register image loader
