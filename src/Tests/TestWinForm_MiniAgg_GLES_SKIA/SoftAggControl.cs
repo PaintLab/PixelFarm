@@ -76,8 +76,8 @@ namespace Mini
             }
             else
             {
-                AggRenderSurface imgGfx2d = Initialize(myWidth, myHeight, 32);
-                AggPainter aggPainter = new AggPainter(imgGfx2d);
+                AggRenderSurface aggsx = Initialize(myWidth, myHeight, 32);
+                AggPainter aggPainter = new AggPainter(aggsx);
                 //set text printer for agg canvas painter
                 aggPainter.CurrentFont = new PixelFarm.Drawing.RequestFont("tahoma", 14);
 
