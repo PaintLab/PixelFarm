@@ -108,6 +108,7 @@ namespace PixelFarm.Drawing.Fonts
             }
 
             this.Typeface = foundTypeface;
+            this.FontSizeInPoints = font.SizeInPoints;
         }
         public void ChangeFillColor(Color fontColor)
         {
