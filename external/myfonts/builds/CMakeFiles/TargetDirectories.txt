@@ -1,0 +1,4 @@
+D:/zzshare/zz2/freetype-2.5.3/builds/CMakeFiles/ALL_BUILD.dir
+D:/zzshare/zz2/freetype-2.5.3/builds/CMakeFiles/ZERO_CHECK.dir
+D:/zzshare/zz2/freetype-2.5.3/builds/CMakeFiles/dist.dir
+D:/zzshare/zz2/freetype-2.5.3/builds/CMakeFiles/freetype.dir
