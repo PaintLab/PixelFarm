@@ -53,8 +53,8 @@ namespace PixelFarm.Agg
                 out bitDepth,
                 out bytesPerPixel);
             //alloc mem
-            this.pixelBuffer = new byte[stride * height]; 
-        } 
+            this.pixelBuffer = new byte[stride * height];
+        }
         public override void Dispose()
         {
 
@@ -185,5 +185,23 @@ namespace PixelFarm.Agg
                     throw new NotSupportedException();
             }
         }
+
+
+        //
+#if DEBUG
+        static SaveToPngFileDelegate s_saveToPngFileDel;
+        public void dbugSaveToPngFile(string filename)
+        {
+            if (s_saveToPngFileDel != null)
+            {
+                s_saveToPngFileDel(this, filename);
+            }
+        }
+        public delegate void SaveToPngFileDelegate(ActualImage img, string filename);
+        public static void InstallImageSaveToFileService(SaveToPngFileDelegate saveToPngFileDelegate)
+        {
+            s_saveToPngFileDel = saveToPngFileDelegate;
+        }
+#endif
     }
 }

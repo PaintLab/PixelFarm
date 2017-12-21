@@ -32,8 +32,14 @@ namespace PixelFarm.Drawing.Fonts
         Dictionary<InstalledFont, Typeface> _cachedTypefaces = new Dictionary<InstalledFont, Typeface>();
         //-----------------------------------------------------------
 
+
+
         public VxsTextPrinter(Painter painter, IFontLoader fontLoader)
         {
+
+
+            StartDrawOnLeftTop = true;
+            //
             this._painter = painter;
             this._fontLoader = fontLoader;
 
@@ -43,13 +49,24 @@ namespace PixelFarm.Drawing.Fonts
             _pxScaleEngine.HintedFontStore = _glyphMeshStore;//share _glyphMeshStore with pixel-scale-layout-engine
             //
             _glyphLayout.PxScaleLayout = _pxScaleEngine; //assign the pxscale-layout-engine to main glyphLayout engine
-
             this.PositionTechnique = PositionTechnique.OpenFont;
+
         }
+        /// <summary>
+        /// start draw on 'left-top' of a given area box
+        /// </summary>
+        public bool StartDrawOnLeftTop { get; set; }
+
         public Painter TargetCanvasPainter
         {
-            get { return _painter; }
-            set { _painter = value; }
+            get
+            {
+                return _painter;
+            }
+            set
+            {
+                _painter = value;
+            }
         }
         bool TryGetTypeface(InstalledFont instFont, out Typeface found)
         {
@@ -237,9 +254,20 @@ namespace PixelFarm.Drawing.Fonts
             //restore prev origin
             _painter.SetOrigin(ox, oy);
         }
+
         public override void DrawFromGlyphPlans(GlyphPlanList glyphPlanList, int startAt, int len, float x, float y)
         {
+
+
             Painter painter = this.TargetCanvasPainter;
+
+            if (StartDrawOnLeftTop)
+            {
+                //offset y down
+                y -= this.FontLineSpacingPx;
+            }
+
+
             //Typeface typeface = _glyphPathBuilder.Typeface;
             //3. layout glyphs with selected layout technique
             //TODO: review this again, we should use pixel?

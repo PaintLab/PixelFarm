@@ -333,6 +333,10 @@ namespace PixelFarm.Agg
                 }
                 else
                 {
+                    //from current point size 
+                    //we need line height of current font size
+                    //then we will start on 'base line'
+                    
                     _textPrinter.DrawString(text, x, this.Height - y);
                 }
 
