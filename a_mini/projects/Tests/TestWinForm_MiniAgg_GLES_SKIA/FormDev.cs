@@ -91,14 +91,31 @@ namespace Mini
                         //---------------------- 
                         //get target control that used to present the example
                         OpenTK.MyGLControl control = formGLTest.InitMiniGLControl(800, 600);
-                        GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
-                        glbaseDemo.LoadGLControl(control);
-                        glbaseDemo.LoadSample(exBase);
-                        //----------------------
-                        formGLTest.FormClosing += (s2, e2) =>
+
                         {
-                            glbaseDemo.CloseDemo();
-                        };
+                            GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                            glbaseDemo.LoadGLControl(control);
+                            glbaseDemo.LoadSample(exBase);
+                            //----------------------
+                            formGLTest.FormClosing += (s2, e2) =>
+                            {
+                                glbaseDemo.CloseDemo();
+                            };
+                        }
+                        //{
+                        //    //test another example 
+                        //    DemoBase exBase2 = Activator.CreateInstance(exAndDesc.Type) as DemoBase;
+                        //    OpenTK.MyGLControl control2 = formGLTest.InitMiniGLControl2(400, 300);
+                        //    GLDemoContextWinForm glbaseDemo = new GLDemoContextWinForm();
+                        //    glbaseDemo.LoadGLControl(control2);
+                        //    glbaseDemo.LoadSample(exBase2);
+                        //    //----------------------
+                        //    formGLTest.FormClosing += (s2, e2) =>
+                        //    {
+                        //        glbaseDemo.CloseDemo();
+                        //    };
+                        //}
+
 
                         formGLTest.WindowState = FormWindowState.Maximized;
                     }
