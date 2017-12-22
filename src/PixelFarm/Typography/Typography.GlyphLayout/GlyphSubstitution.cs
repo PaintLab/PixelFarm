@@ -221,8 +221,11 @@ namespace Typography.TextLayout
             }
 
             //-----------
-            var gsub = new GlyphSubstitution(typeface, scLang.shortname);
-            gsub.CollectAdditionalSubstitutionGlyphIndices(outputGlyphIndexList);
+            if (typeface.GSUBTable != null)
+            {
+                var gsub = new GlyphSubstitution(typeface, scLang.shortname);
+                gsub.CollectAdditionalSubstitutionGlyphIndices(outputGlyphIndexList);
+            }
         }
 
     }
