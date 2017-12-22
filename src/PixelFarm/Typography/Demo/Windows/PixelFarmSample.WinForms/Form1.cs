@@ -61,7 +61,7 @@ namespace SampleWinForms
 
             this.Load += new EventHandler(Form1_Load);
             txtInputChar.TextChanged += (s, e) => UpdateRenderOutput();
-            button1.Click += (s, e) => UpdateRenderOutput();
+
 
             //----------------
             //string inputstr = "ก้า";
@@ -390,7 +390,8 @@ namespace SampleWinForms
 
             //samples...
             //1. create texture from specific glyph index range
-            string sampleFontFile = "../../../TestFonts/tahoma.ttf";
+            string sampleFontFile = _basicOptions.Typeface.Filename;
+            //string sampleFontFile = "../../../TestFonts/tahoma.ttf";
             //CreateSampleMsdfTextureFont(
             //    sampleFontFile,
             //    18,
@@ -406,14 +407,14 @@ namespace SampleWinForms
                sampleFontFile,
                18,
                chars.ToCharArray(), //eg. ABCD
-               "d:\\WImageTest\\sample_msdf1.png");
+               "d:\\WImageTest\\glyph_gen\\sample_msdf1_" + Path.GetFileNameWithoutExtension(sampleFontFile) + ".png");
 
-            CreateSampleTextureFontFromScriptLangs(
-               TextureKind.Msdf,
-               sampleFontFile,
-               18,
-               new[] { ScriptLangs.Latin, ScriptLangs.Thai },
-               "d:\\WImageTest\\sample_msdf2.png");
+            //CreateSampleTextureFontFromScriptLangs(
+            //   TextureKind.Msdf,
+            //   sampleFontFile,
+            //   18,
+            //   new[] { ScriptLangs.Latin, ScriptLangs.Thai },
+            //   "d:\\WImageTest\\sample_msdf2_" + Path.GetFileNameWithoutExtension(sampleFontFile) + ".png");
 
             //---------------------------------------------------------
             ////3.
@@ -620,24 +621,32 @@ namespace SampleWinForms
         private void button2_Click(object sender, EventArgs e)
         {
             //create a simple stencil texture font
-
-            string sampleFontFile = "../../../TestFonts/tahoma.ttf";
+            string sampleFontFile = _basicOptions.Typeface.Filename;
+            //string sampleFontFile = "../../../TestFonts/tahoma.ttf";
             string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/?=(){}[]%@#^$&|.";
             CreateSampleTextureFontFromInputChars(
                TextureKind.AlphaChannel,
                sampleFontFile,
                18,
                chars.ToCharArray(), //eg. ABCD
-               "d:\\WImageTest\\sample_stencil.png");
+               "d:\\WImageTest\\sample_stencil1_" + System.IO.Path.GetFileNameWithoutExtension(sampleFontFile) + ".png");
             //
             CreateSampleTextureFontFromScriptLangs(
               TextureKind.AlphaChannel,
               sampleFontFile,
               18,
               new[] { ScriptLangs.Latin },
-              "d:\\WImageTest\\sample_stencil.png");
+              "d:\\WImageTest\\sample_stencil2_" + System.IO.Path.GetFileNameWithoutExtension(sampleFontFile) + ".png");
 
         }
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            UpdateRenderOutput();
+        }
+
+
         //static void CreateSampleMsdfTextureFont(string fontfile, float sizeInPoint, ushort startGlyphIndex, ushort endGlyphIndex, string outputFile)
         //{
         //    //sample

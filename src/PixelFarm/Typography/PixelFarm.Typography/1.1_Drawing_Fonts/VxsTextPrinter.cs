@@ -101,6 +101,7 @@ namespace PixelFarm.Drawing.Fonts
                 {
                     var reader = new OpenFontReader();
                     foundTypeface = reader.Read(fs);
+                    foundTypeface.Filename = installedFont.FontPath;
                 }
                 RegisterTypeface(installedFont, foundTypeface);
             }

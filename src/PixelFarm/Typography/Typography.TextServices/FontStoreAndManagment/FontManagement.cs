@@ -147,6 +147,7 @@ namespace Typography.TextServices
                 {
                     var reader = new OpenFontReader();
                     typeface = reader.Read(fs);
+                    typeface.Filename = installedFont.FontPath;
                 }
                 return _loadedTypefaces[installedFont] = typeface;
             }
