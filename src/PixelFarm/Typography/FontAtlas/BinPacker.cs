@@ -146,8 +146,8 @@ namespace Typography.Rendering
         bool SplitFreeNode(BinPackRect freeNode, BinPackRect usedNode)
         {
             // test if the rects even intersect
-            var insideX = usedNode.X < freeNode.Right && usedNode.Right > freeNode.X;
-            var insideY = usedNode.Y < freeNode.Bottom && usedNode.Bottom > freeNode.Y;
+            bool insideX = usedNode.X < freeNode.Right && usedNode.Right > freeNode.X;
+            bool insideY = usedNode.Y < freeNode.Bottom && usedNode.Bottom > freeNode.Y;
             if (!insideX || !insideY)
                 return false;
 
@@ -164,7 +164,7 @@ namespace Typography.Rendering
                 // new node at the bottom side of the used node
                 if (usedNode.Bottom < freeNode.Bottom)
                 {
-                    var newNode = freeNode;
+                    BinPackRect newNode = freeNode;
                     newNode.Y = usedNode.Bottom;
                     newNode.Height = freeNode.Bottom - usedNode.Bottom;
                     freeList.Add(newNode);
@@ -176,7 +176,7 @@ namespace Typography.Rendering
                 // new node at the left side of the used node
                 if (usedNode.X > freeNode.X && usedNode.X < freeNode.Right)
                 {
-                    var newNode = freeNode;
+                    BinPackRect newNode = freeNode;
                     newNode.Width = usedNode.X - newNode.X;
                     freeList.Add(newNode);
                 }

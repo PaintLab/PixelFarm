@@ -148,7 +148,12 @@ namespace Typography.OpenFont
         {
             get { return _nameEntry.FontSubFamily; }
         }
-
+        /// <summary>
+        /// look up glyph index from input codepoint
+        /// </summary>
+        /// <param name="codepoint"></param>
+        /// <param name="nextCodepoint"></param>
+        /// <returns></returns>
         public ushort LookupIndex(int codepoint, int nextCodepoint = 0)
         {
             return CmapTable.LookupIndex(codepoint, nextCodepoint);

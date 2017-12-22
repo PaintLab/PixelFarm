@@ -4,7 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 
 using PixelFarm.Agg;
-using Typography.OpenFont; 
+using Typography.OpenFont;
 
 using Typography.Contours;
 using Typography.Rendering;
@@ -193,13 +193,12 @@ namespace PixelFarm.Drawing.Fonts
                 //build glyph 
                 builder.BuildFromGlyphIndex(gindex, -1); //use original glyph size (assign -1)
                 var glyphToContour = new GlyphContourBuilder();
-                
+
 
                 //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
                 builder.ReadShapes(glyphToContour);
                 genParams.shapeScale = 1f / 64; //we scale later (as original C++ code use 1/64)
                 GlyphImage glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, genParams);
-
                 atlasBuilder.AddGlyph(gindex, glyphImg);
 
 
@@ -268,7 +267,7 @@ namespace PixelFarm.Drawing.Fonts
                 //
                 //create new one
                 var glyphVxs = new VertexStore();
-                txToVxs.WriteOutput(glyphVxs, vxsPool);
+                txToVxs.WriteOutput(glyphVxs);
                 //find bound
 
 
@@ -372,14 +371,12 @@ namespace PixelFarm.Drawing.Fonts
                 //build glyph
 
                 builder.BuildFromGlyphIndex(gindex, sizeInPoint);
-
-
                 var txToVxs = new GlyphTranslatorToVxs();
                 builder.ReadShapes(txToVxs);
                 //
                 //create new one
                 var glyphVxs = new VertexStore();
-                txToVxs.WriteOutput(glyphVxs, vxsPool);
+                txToVxs.WriteOutput(glyphVxs);
                 //find bound
 
                 //-------------------------------------------- 
