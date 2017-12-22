@@ -239,7 +239,8 @@ namespace Typography.OpenFont.Tables
                     foreach (ushort glyphIndex in CoverageTable.GetExpandedValueIter())
                     {
                         //2. add substitution glyph
-                        outputAssocGlyphs.Add((ushort)(glyphIndex + SubstituteGlyphs[glyphIndex]));
+                        int foundAt = CoverageTable.FindPosition(glyphIndex);
+                        outputAssocGlyphs.Add((ushort)(glyphIndex + SubstituteGlyphs[foundAt]));
                     }
                 }
 
@@ -1050,8 +1051,14 @@ namespace Typography.OpenFont.Tables
                 }
                 public override void CollectAssociatedSubtitutionGlyphs(List<ushort> outputAssocGlyphs)
                 {
-                    //not need to add anything here
-                    //because, other lookup table will add it. (see DoSubstitutionAt() above)                     
+                    foreach (SubstLookupRecord lookupRecord in SubstLookupRecords)
+                    {
+                        ushort replaceAt = lookupRecord.sequenceIndex;
+                        ushort lookupIndex = lookupRecord.lookupListIndex;
+
+                        LookupTable anotherLookup = OwnerGSub.LookupList[lookupIndex];
+                        anotherLookup.CollectAssociatedSubstitutionGlyph(outputAssocGlyphs);
+                    }
                 }
             }
 
