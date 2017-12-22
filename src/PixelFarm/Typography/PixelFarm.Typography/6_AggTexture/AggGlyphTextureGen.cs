@@ -65,11 +65,10 @@ namespace Typography.Rendering
             //-------------------------------------------- 
             //create glyph img 
 
-            bool useLcdFontEffect = false;
-
+            bool useLcdFontEffect = true;
             if (useLcdFontEffect)
             {
-                w *= 4;
+                w *= 3;
             }
 
             ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
@@ -87,13 +86,26 @@ namespace Typography.Rendering
             //-------------------------------------------- 
             painter.Fill(glyphVxs);
             //-------------------------------------------- 
-            var glyphImage = new GlyphImage(w, h);
-            glyphImage.TextureOffsetX = dx;
-            glyphImage.TextureOffsetY = dy;
-            glyphImage.SetImageBuffer(ActualImage.CopyImgBuffer(img), false);
-            //copy data from agg canvas to glyph image
+            if (useLcdFontEffect)
+            {
 
-            return glyphImage;
+                var glyphImage = new GlyphImage(w / 3, h);
+                glyphImage.TextureOffsetX = dx;
+                glyphImage.TextureOffsetY = dy;
+                glyphImage.SetImageBuffer(ActualImageExtensions.CopyImgBuffer(img, w / 3), false);
+                //copy data from agg canvas to glyph image 
+                return glyphImage;
+            }
+            else
+            {
+                var glyphImage = new GlyphImage(w, h);
+                glyphImage.TextureOffsetX = dx;
+                glyphImage.TextureOffsetY = dy;
+                glyphImage.SetImageBuffer(ActualImage.CopyImgBuffer(img), false);
+                //copy data from agg canvas to glyph image 
+                return glyphImage;
+            }
+
         }
     }
 }
