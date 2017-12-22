@@ -150,13 +150,14 @@ namespace Typography.TextLayout
         /// collect all associate glyph index of specific input lang
         /// </summary>
         /// <param name="outputGlyphIndex"></param>
-        public void CollectAllAssociatedGlyphIndex(List<ushort> outputGlyphIndex)
+        public void CollectAllAssociatedGlyphIndex(List<ushort> outputGlyphIndices)
         {
             if (_mustRebuildTables)
             {
                 RebuildTables();
                 _mustRebuildTables = false;
             }
+
 
             UnicodeLangBits[] foundScLangBits;
             if (ScriptLangs.TryGenUnicodeLangBitsArray(this.Lang, out foundScLangBits))
@@ -171,22 +172,21 @@ namespace Typography.TextLayout
                         if (glyghIndex > 0)
                         {
                             //add this glyph index
-                            outputGlyphIndex.Add(glyghIndex);
+                            outputGlyphIndices.Add(glyghIndex);
                         }
                     }
                 }
             }
             //-------------
-            //add some glyphs that also need by substitution process
-
+            //add some glyphs that also need by substitution process 
             List<ushort> assocSubtitutionGlyphs = new List<ushort>();
             foreach (GSUB.LookupTable subLk in _lookupTables)
             {
                 subLk.CollectAssociatedSubstitutionGlyph(assocSubtitutionGlyphs);
             }
-            //make all glyphs unique
-
-
+            //
+            //WARN :not ensure glyph unique at this stage
+            //please do it in later state
         }
     }
 
