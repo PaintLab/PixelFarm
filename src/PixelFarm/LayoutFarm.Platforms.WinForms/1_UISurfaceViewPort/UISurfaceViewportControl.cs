@@ -119,7 +119,7 @@ namespace LayoutFarm.UI
 
                         //3
                         var openFontStore = new Typography.TextServices.OpenFontStore();
-                        var printer = new GLBmpGlyphTextPrinter(canvasPainter, openFontStore);
+                        var printer = new GLBitmapGlyphTextPrinter(canvasPainter, openFontStore);
                         canvasPainter.TextPrinter = printer;
 
                         //

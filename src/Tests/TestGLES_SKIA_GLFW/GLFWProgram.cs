@@ -151,7 +151,7 @@ namespace TestGlfw
                 {
 
 
-                    var printer = new PixelFarm.DrawingGL.GLBmpGlyphTextPrinter(
+                    var printer = new PixelFarm.DrawingGL.GLBitmapGlyphTextPrinter(
                         painter,
                         s_fontstore);
                     painter.TextPrinter = printer;

@@ -41,7 +41,7 @@ namespace PixelFarm.DrawingGL
             bmpWidth = w;
             bmpHeight = h;
 
-            _actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32); 
+            _actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32);
             _aggsx = new AggRenderSurface(_actualImage);
             _aggPainter = new AggPainter(_aggsx);
             _aggPainter.FillColor = Color.Black;
@@ -200,7 +200,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    public class GLBmpGlyphTextPrinter : ITextPrinter, IDisposable
+    public class GLBitmapGlyphTextPrinter : ITextPrinter, IDisposable
     {
 
         GLBitmapCache<SimpleFontAtlas> _loadedGlyphs;
@@ -217,7 +217,7 @@ namespace PixelFarm.DrawingGL
 
 
         ScriptLang _defaultScriptLang = ScriptLangs.Latin;//review here again
-        public GLBmpGlyphTextPrinter(GLPainter painter, IFontLoader fontLoader)
+        public GLBitmapGlyphTextPrinter(GLPainter painter, IFontLoader fontLoader)
         {
             //create text printer for use with canvas painter 
             this.painter = painter;
