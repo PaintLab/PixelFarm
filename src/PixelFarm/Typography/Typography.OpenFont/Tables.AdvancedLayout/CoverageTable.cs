@@ -8,9 +8,12 @@ namespace Typography.OpenFont.Tables
     // https://www.microsoft.com/typography/otspec/chapter2.htm
     abstract class CoverageTable
     {
-        public abstract int FindPosition(ushort glyphIndex);
-        public abstract IEnumerable<ushort> GetExpandedGlyphsIter();    
+        public abstract int FindPosition(ushort glyphIndex); 
+        public abstract IEnumerable<ushort> GetExpandedValueIter();
 
+#if DEBUG
+
+#endif
         public class CoverageFmt1 : CoverageTable
         {
             public static CoverageFmt1 CreateFrom(BinaryReader reader)
@@ -33,9 +36,9 @@ namespace Typography.OpenFont.Tables
                 int n = Array.BinarySearch(_orderedGlyphIdList, glyphIndex);
                 return n < 0 ? -1 : n;
             }
-            public override IEnumerable<ushort> GetExpandedGlyphsIter() { return _orderedGlyphIdList; }
+            public override IEnumerable<ushort> GetExpandedValueIter() { return _orderedGlyphIdList; }
+            
 #if DEBUG
-
 
             public override string ToString()
             {
@@ -67,7 +70,17 @@ namespace Typography.OpenFont.Tables
                 }
                 return _coverageIndices[n] + glyphIndex - _startIndices[n];
             }
-
+             
+            public override IEnumerable<ushort> GetExpandedValueIter()
+            {
+                for (int i = 0; i < RangeCount; ++i)
+                {
+                    for (ushort n = _startIndices[i]; n <= _endIndices[i]; ++n)
+                    {
+                        yield return n;
+                    }
+                }
+            }
             public static CoverageFmt2 CreateFrom(BinaryReader reader)
             {
                 // CoverageFormat2 table: Range of glyphs
@@ -100,19 +113,9 @@ namespace Typography.OpenFont.Tables
                     _coverageIndices = coverageIndices
                 };
             }
-            public override IEnumerable<ushort> GetExpandedGlyphsIter()
-            {
-                for (int i = 0; i < RangeCount; ++i)
-                {
-                    for (ushort n = _startIndices[i]; n <= _endIndices[i]; ++n)
-                    {
-                        yield return n;
-                    }
-                }
-            }
+
 #if DEBUG
-
-
+           
             public override string ToString()
             {
                 List<string> stringList = new List<string>();
