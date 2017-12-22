@@ -107,7 +107,7 @@ namespace SampleWinForms.UI
 #endif
             PixelFarm.Drawing.VertexStore vxs = new PixelFarm.Drawing.VertexStore();
 
-            txToVxs1.WriteOutput(vxs, _vxsPool);
+            txToVxs1.WriteOutput(vxs);
             //----------------------------------------------------
 
             //----------------------------------------------------

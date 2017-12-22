@@ -162,7 +162,7 @@ namespace Typography.Contours
                 {
                     dynamicOutline.GenerateOutput(_tovxs, pxscale);
                     glyphMeshData.vxsStore = new VertexStore();
-                    _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+                    _tovxs.WriteOutput(glyphMeshData.vxsStore);
                 }
                 else
                 {
@@ -171,7 +171,7 @@ namespace Typography.Contours
                     _currentGlyphBuilder.ReadShapes(_tovxs);
                     //TODO: review here,
                     //float pxScale = _glyphPathBuilder.GetPixelScale(); 
-                    _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+                    _tovxs.WriteOutput(glyphMeshData.vxsStore);
                 }
 
 

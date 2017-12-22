@@ -36,8 +36,6 @@ namespace PixelFarm.Drawing.Fonts
 
         public VxsTextPrinter(Painter painter, IFontLoader fontLoader)
         {
-
-
             StartDrawOnLeftTop = true;
             //
             this._painter = painter;
@@ -166,7 +164,7 @@ namespace PixelFarm.Drawing.Fonts
 
             //1. update some props.. 
             //2. update current type face
-            UpdateTypefaceAndGlyphBuilder();
+            UpdateGlyphLayoutSettings();
             Typeface typeface = _currentTypeface;// _glyphPathBuilder.Typeface;
             //3. layout glyphs with selected layout technique
             //TODO: review this again, we should use pixel?
@@ -187,12 +185,7 @@ namespace PixelFarm.Drawing.Fonts
             p.StrokeColor = prevColor;
 
         }
-
-        void UpdateTypefaceAndGlyphBuilder()
-        {
-            //1. update _glyphPathBuilder for current typeface
-            UpdateGlyphLayoutSettings();
-        }
+         
         public void UpdateGlyphLayoutSettings()
         {
             if (this._reqFont == null)
@@ -213,6 +206,16 @@ namespace PixelFarm.Drawing.Fonts
             //color...
         }
 
+        /// <summary>
+        /// draw specfic glyph with current settings, at specific position
+        /// </summary>
+        /// <param name="glyph"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void DrawGlyph(Glyph glyph, double x, double y)
+        {
+            
+        }
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
             float ox = _painter.OriginX;
@@ -220,7 +223,7 @@ namespace PixelFarm.Drawing.Fonts
 
             //1. update some props.. 
             //2. update current type face
-            UpdateTypefaceAndGlyphBuilder();
+            UpdateGlyphLayoutSettings();
             _glyphMeshStore.SetFont(_currentTypeface, this.FontSizeInPoints);
             //3. layout glyphs with selected layout technique
             //TODO: review this again, we should use pixel? 

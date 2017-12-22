@@ -19,8 +19,8 @@ namespace PixelFarm.DrawingGL
 
     public class AggTextSpanPrinter : ITextPrinter
     {
-        ActualImage actualImage;
-        AggRenderSurface imgGfx2d;
+        ActualImage _actualImage;
+        AggRenderSurface _aggsx;
         AggPainter _aggPainter;
         VxsTextPrinter textPrinter;
         int bmpWidth;
@@ -40,10 +40,10 @@ namespace PixelFarm.DrawingGL
             this._glsx = canvasPainter.Canvas;
             bmpWidth = w;
             bmpHeight = h;
-            actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32);
 
-            imgGfx2d = new AggRenderSurface(actualImage);
-            _aggPainter = new AggPainter(imgGfx2d);
+            _actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32); 
+            _aggsx = new AggRenderSurface(_actualImage);
+            _aggPainter = new AggPainter(_aggsx);
             _aggPainter.FillColor = Color.Black;
             _aggPainter.StrokeColor = Color.Black;
 
@@ -97,7 +97,7 @@ namespace PixelFarm.DrawingGL
                 //2. print text span into Agg Canvas
                 textPrinter.DrawString(text, startAt, len, 0, 0);
                 //3.copy to gl bitmap
-                byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImage);
+                byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
                 GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
                 glBmp.IsInvert = false;
@@ -118,7 +118,7 @@ namespace PixelFarm.DrawingGL
 
                 //2. print text span into Agg Canvas
                 textPrinter.StartDrawOnLeftTop = false;
-                textPrinter.DrawString(text, startAt, len, 0, 0); 
+                textPrinter.DrawString(text, startAt, len, 0, 0);
                 //------------------------------------------------------
                 //debug save image from agg's buffer
 #if DEBUG
@@ -127,7 +127,7 @@ namespace PixelFarm.DrawingGL
                 //------------------------------------------------------
 
                 //3.copy to gl bitmap
-                byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImage);
+                byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
                 //debug save image from agg's buffer
 

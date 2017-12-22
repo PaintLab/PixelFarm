@@ -362,7 +362,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 PixelFarm.Drawing.Fonts.GlyphTranslatorToVxs tovxs = new Drawing.Fonts.GlyphTranslatorToVxs();
                 builder.ReadShapes(tovxs);
                 VertexStore vxs = new VertexStore();
-                tovxs.WriteOutput(vxs, pool);
+                tovxs.WriteOutput(vxs);
                 p.Fill(vxs);
             }
             //p.FillRectangle(0, 0, 20, 20);

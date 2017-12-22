@@ -82,7 +82,7 @@ namespace PixelFarm.Agg.Sample_Draw
             var txToVxs = new GlyphTranslatorToVxs();
             builder.ReadShapes(txToVxs);
             VertexStore v0 = _vxsPool.GetFreeVxs();
-            txToVxs.WriteOutput(v0, _vxsPool);
+            txToVxs.WriteOutput(v0 );
             var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                  //translate
                  new PixelFarm.Agg.Transform.AffinePlan(
