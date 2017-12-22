@@ -145,5 +145,53 @@ namespace Typography.TextLayout
                 }
             }
         }
+
+        /// <summary>
+        /// collect all associate glyph index of specific input lang
+        /// </summary>
+        /// <param name="outputGlyphIndex"></param>
+        public void CollectAllAssociatedGlyphIndex(List<ushort> outputGlyphIndex)
+        {
+            if (_mustRebuildTables)
+            {
+                RebuildTables();
+                _mustRebuildTables = false;
+            }
+
+            UnicodeLangBits[] foundScLangBits;
+            if (ScriptLangs.TryGenUnicodeLangBitsArray(this.Lang, out foundScLangBits))
+            {
+                foreach (UnicodeLangBits unicodeLangBits in foundScLangBits)
+                {
+                    UnicodeRangeInfo rngInfo = unicodeLangBits.ToUnicodeRangeInfo();
+                    int endAt = rngInfo.EndAt;
+                    for (int codePoint = rngInfo.StartAt; codePoint <= endAt; ++codePoint)
+                    {
+                        ushort glyghIndex = _typeface.LookupIndex(codePoint);
+                        if (glyghIndex > 0)
+                        {
+                            //add this glyph index
+                            outputGlyphIndex.Add(glyghIndex);
+                        }
+                    }
+                }
+            }
+            //-------------
+            //add some glyphs that also need by substitution process
+
+
+        }
+    }
+
+
+    public static class TypefaceExtensions
+    {
+        public static void CollectAllAssociateGlyphIndex(this Typeface typeface, ScriptLang scLang, List<ushort> outputGlyphIndexList)
+        {
+            var gsub = new GlyphSubstitution(typeface, scLang.shortname);
+            gsub.CollectAllAssociatedGlyphIndex(outputGlyphIndexList);
+        }
     }
 }
+
+
