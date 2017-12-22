@@ -165,6 +165,11 @@ namespace SampleWinForms
                         selectedTextPrinter.HintTechnique = _glyphRenderOptions.HintTechnique;
                         selectedTextPrinter.EnableLigature = _glyphRenderOptions.EnableLigature;
 
+
+                        glyphTextureBitmapGenUserControl1.SelectedTypeface = _basicOptions.Typeface;
+                        glyphTextureBitmapGenUserControl1.SelectedScriptLangs.Clear();
+                        glyphTextureBitmapGenUserControl1.SelectedScriptLangs.Add(_basicOptions.ScriptLang);
+
                         //test print 3 lines
 #if DEBUG
                         GlyphDynamicOutline.dbugTestNewGridFitting = _contourAnalysisOpts.EnableGridFit;
@@ -644,6 +649,11 @@ namespace SampleWinForms
         private void button1_Click(object sender, EventArgs e)
         {
             UpdateRenderOutput();
+        }
+
+        private void glyphTextureBitmapGenUserControl1_Load(object sender, EventArgs e)
+        {
+
         }
 
 

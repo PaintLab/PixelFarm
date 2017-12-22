@@ -43,6 +43,12 @@
     <Compile Include="BasicFontOptionsUserControl.Designer.cs">
       <DependentUpon>BasicFontOptionsUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="GlyphTextureBitmapGenUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GlyphTextureBitmapGenUserControl.Designer.cs">
+      <DependentUpon>GlyphTextureBitmapGenUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="GlyphContourAnalysisOptions.cs" />
     <Compile Include="GlyphContourAnalysisOptionsUserControl.cs">
       <SubType>UserControl</SubType>
@@ -98,6 +104,9 @@
     <EmbeddedResource Include="BasicFontOptionsUserControl.resx">
       <DependentUpon>BasicFontOptionsUserControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GlyphTextureBitmapGenUserControl.resx">
+      <DependentUpon>GlyphTextureBitmapGenUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GlyphContourAnalysisOptionsUserControl.resx">
       <DependentUpon>GlyphContourAnalysisOptionsUserControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -107,6 +116,9 @@
     <EmbeddedResource Include="GlyphRenderOptionsUserControl.resx">
       <DependentUpon>GlyphRenderOptionsUserControl.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GlyphTextureBitmapGenController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
