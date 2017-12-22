@@ -548,7 +548,7 @@ namespace SampleWinForms
             MsdfGenParams msdfGenParams = new MsdfGenParams();
             //
             AggGlyphTextureGen aggTextureGen = new AggGlyphTextureGen();
-
+            float pxscale = typeface.CalculateScaleToPixelFromPointSize(sizeInPoint);
             int j = glyphIndices.Length;
             for (int i = 0; i < j; ++i)
             {
@@ -566,9 +566,8 @@ namespace SampleWinForms
                 }
                 else
                 {
-                    //create alpha channel texture                     
-
-                    glyphImg = aggTextureGen.CreateGlyphImage(builder, typeface.CalculateScaleToPixelFromPointSize(sizeInPoint));
+                    //create alpha channel texture                      
+                    glyphImg = aggTextureGen.CreateGlyphImage(builder, pxscale);
                 }
                 atlasBuilder.AddGlyph(gindex, glyphImg);
                 int w = glyphImg.Width;
@@ -629,8 +628,14 @@ namespace SampleWinForms
                sampleFontFile,
                18,
                chars.ToCharArray(), //eg. ABCD
-               "d:\\WImageTest\\sample_msdf1.png");
-
+               "d:\\WImageTest\\sample_stencil.png");
+            //
+            CreateSampleTextureFontFromScriptLangs(
+              TextureKind.AlphaChannel,
+              sampleFontFile,
+              18,
+              new[] { ScriptLangs.Latin },
+              "d:\\WImageTest\\sample_stencil.png");
 
         }
         //static void CreateSampleMsdfTextureFont(string fontfile, float sizeInPoint, ushort startGlyphIndex, ushort endGlyphIndex, string outputFile)

@@ -52,16 +52,26 @@ namespace Typography.Rendering
             ////translate to positive quadrant 
             double dx = (bounds.Left < 0) ? -bounds.Left : 0;
             double dy = (bounds.Bottom < 0) ? -bounds.Bottom : 0;
-            w = w * 4; 
+
             if (dx != 0 || dy != 0)
             {
                 Affine transformMat = Affine.NewTranslation(dx, dy);
                 VertexStore vxs2 = new VertexStore();
                 glyphVxs.TranslateToNewVxs(dx, dy, vxs2);
                 glyphVxs = vxs2;
+                w = (int)Math.Ceiling(w + dx);
+                h = (int)Math.Ceiling(h + dy);
             }
             //-------------------------------------------- 
             //create glyph img 
+
+            bool useLcdFontEffect = false;
+
+            if (useLcdFontEffect)
+            {
+                w *= 4;
+            }
+
             ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
             AggRenderSurface aggsx = new AggRenderSurface(img);
             AggPainter painter = new AggPainter(aggsx);
@@ -70,9 +80,8 @@ namespace Typography.Rendering
             painter.FillColor = Color.White;
             painter.StrokeColor = Color.White;
             //--------------------------------------------  
-
-            painter.UseSubPixelRendering = true;
-            //--------------------------------------------  
+            painter.UseSubPixelRendering = useLcdFontEffect;
+            //------------------------------------- -------  
 
 
             //-------------------------------------------- 
