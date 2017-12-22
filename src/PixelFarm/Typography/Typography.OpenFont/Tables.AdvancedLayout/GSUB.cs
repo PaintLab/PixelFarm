@@ -372,7 +372,7 @@ namespace Typography.OpenFont.Tables
                     //Coverage table containing the indices of glyphs with alternative forms(Coverage),
                     int iscovered = this.CoverageTable.FindPosition(glyphIndices[pos]);
                     //this.CoverageTable.FindPosition()
-                    // Console.WriteLine("lksubtable3 is not  implemented");
+                    Utils.WarnUnimplemented("Lookup Subtable Type 3");
                     return false;
                 }
             }
