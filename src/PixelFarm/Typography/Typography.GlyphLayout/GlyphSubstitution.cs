@@ -179,6 +179,13 @@ namespace Typography.TextLayout
             //-------------
             //add some glyphs that also need by substitution process
 
+            List<ushort> assocSubtitutionGlyphs = new List<ushort>();
+            foreach (GSUB.LookupTable subLk in _lookupTables)
+            {
+                subLk.CollectAssociatedSubstitutionGlyph(assocSubtitutionGlyphs);
+            }
+            //make all glyphs unique
+
 
         }
     }
