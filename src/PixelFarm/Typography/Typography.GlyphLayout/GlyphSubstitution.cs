@@ -150,32 +150,12 @@ namespace Typography.TextLayout
         /// collect all associate glyph index of specific input lang
         /// </summary>
         /// <param name="outputGlyphIndex"></param>
-        public void CollectAllAssociatedGlyphIndex(List<ushort> outputGlyphIndices)
+        public void CollectAdditionalSubstitutionGlyphIndices(List<ushort> outputGlyphIndices)
         {
             if (_mustRebuildTables)
             {
                 RebuildTables();
                 _mustRebuildTables = false;
-            }
-
-
-            UnicodeLangBits[] foundScLangBits;
-            if (ScriptLangs.TryGenUnicodeLangBitsArray(this.Lang, out foundScLangBits))
-            {
-                foreach (UnicodeLangBits unicodeLangBits in foundScLangBits)
-                {
-                    UnicodeRangeInfo rngInfo = unicodeLangBits.ToUnicodeRangeInfo();
-                    int endAt = rngInfo.EndAt;
-                    for (int codePoint = rngInfo.StartAt; codePoint <= endAt; ++codePoint)
-                    {
-                        ushort glyghIndex = _typeface.LookupIndex(codePoint);
-                        if (glyghIndex > 0)
-                        {
-                            //add this glyph index
-                            outputGlyphIndices.Add(glyghIndex);
-                        }
-                    }
-                }
             }
             //-------------
             //add some glyphs that also need by substitution process 
@@ -193,11 +173,58 @@ namespace Typography.TextLayout
 
     public static class TypefaceExtensions
     {
-        public static void CollectAllAssociateGlyphIndex(this Typeface typeface, ScriptLang scLang, List<ushort> outputGlyphIndexList)
+
+        static UnicodeLangBits[] FilterOnlySelectedRange(UnicodeLangBits[] inputRanges, UnicodeLangBits[] userSpecificRanges)
         {
-            var gsub = new GlyphSubstitution(typeface, scLang.shortname);
-            gsub.CollectAllAssociatedGlyphIndex(outputGlyphIndexList);
+            List<UnicodeLangBits> selectedRanges = new List<UnicodeLangBits>();
+            foreach (UnicodeLangBits range in inputRanges)
+            {
+                int foundAt = System.Array.IndexOf(userSpecificRanges, range);
+                if (foundAt > 0)
+                {
+                    selectedRanges.Add(range);
+                }
+            }
+            return selectedRanges.ToArray();
         }
+        public static void CollectAllAssociateGlyphIndex(this Typeface typeface, List<ushort> outputGlyphIndexList, ScriptLang scLang, UnicodeLangBits[] selectedRangs = null)
+        {
+            //-----------
+            //general glyph index in the unicode range
+
+            //if user dose not specific the unicode lanf bit ranges
+            //the we try to select it ourself. 
+            UnicodeLangBits[] unicodeLangBitsRanges;
+            if (ScriptLangs.TryGenUnicodeLangBitsArray(scLang.shortname, out unicodeLangBitsRanges))
+            {
+                //one lang may contains may ranges
+                if (selectedRangs != null)
+                {
+                    //select only in range 
+                    unicodeLangBitsRanges = FilterOnlySelectedRange(unicodeLangBitsRanges, selectedRangs);
+                }
+
+                foreach (UnicodeLangBits unicodeLangBits in unicodeLangBitsRanges)
+                {
+                    UnicodeRangeInfo rngInfo = unicodeLangBits.ToUnicodeRangeInfo();
+                    int endAt = rngInfo.EndAt;
+                    for (int codePoint = rngInfo.StartAt; codePoint <= endAt; ++codePoint)
+                    {
+                        ushort glyghIndex = typeface.LookupIndex(codePoint);
+                        if (glyghIndex > 0)
+                        {
+                            //add this glyph index
+                            outputGlyphIndexList.Add(glyghIndex);
+                        }
+                    }
+                }
+            }
+
+            //-----------
+            var gsub = new GlyphSubstitution(typeface, scLang.shortname);
+            gsub.CollectAdditionalSubstitutionGlyphIndices(outputGlyphIndexList);
+        }
+
     }
 }
 
