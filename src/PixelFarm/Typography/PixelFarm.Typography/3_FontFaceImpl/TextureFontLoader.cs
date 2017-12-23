@@ -36,7 +36,8 @@ namespace PixelFarm.Drawing.Fonts
             SimpleFontAtlasBuilder atlas1 = null;
 
             GlyphTextureBitmapGenerator.CreateTextureFontFromScriptLangs(
-                typeface, creationParams.originalFontSizeInPoint,
+                typeface, 
+                creationParams.originalFontSizeInPoint,
                 creationParams.textureKind,
                 creationParams.scriptLangs,
                 (glyphIndex, glyphImage, outputAtlas) =>

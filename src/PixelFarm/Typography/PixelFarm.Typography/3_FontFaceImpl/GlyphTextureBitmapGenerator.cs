@@ -90,6 +90,7 @@ namespace PixelFarm.Drawing.Fonts
             builder.UseTrueTypeInstructions = true;
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
+            atlasBuilder.SetAtlasInfo(textureKind, sizeInPoint);
             MsdfGenParams msdfGenParams = new MsdfGenParams();
             //
             AggGlyphTextureGen aggTextureGen = new AggGlyphTextureGen();
