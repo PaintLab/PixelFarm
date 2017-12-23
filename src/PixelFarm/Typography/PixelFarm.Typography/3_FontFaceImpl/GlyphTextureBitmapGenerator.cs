@@ -91,9 +91,22 @@ namespace PixelFarm.Drawing.Fonts
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
             atlasBuilder.SetAtlasInfo(textureKind, sizeInPoint);
-            MsdfGenParams msdfGenParams = new MsdfGenParams();
+            //-------------------------------------------------------------
+
             //
-            AggGlyphTextureGen aggTextureGen = new AggGlyphTextureGen();
+            MsdfGenParams msdfGenParams = null;
+            AggGlyphTextureGen aggTextureGen = null;
+
+            if (textureKind == TextureKind.Msdf)
+            {
+                msdfGenParams = new MsdfGenParams();
+            }
+            else
+            {
+                aggTextureGen = new AggGlyphTextureGen();
+            }
+
+
             float pxscale = typeface.CalculateScaleToPixelFromPointSize(sizeInPoint);
             int j = glyphIndices.Length;
             for (int i = 0; i < j; ++i)

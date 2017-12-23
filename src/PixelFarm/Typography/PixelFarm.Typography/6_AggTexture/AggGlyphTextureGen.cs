@@ -53,23 +53,26 @@ namespace Typography.Rendering
             double dx = (bounds.Left < 0) ? -bounds.Left : 0;
             double dy = (bounds.Bottom < 0) ? -bounds.Bottom : 0;
 
-            if (dx != 0 || dy != 0)
-            {
-                Affine transformMat = Affine.NewTranslation(dx, dy);
-                VertexStore vxs2 = new VertexStore();
-                glyphVxs.TranslateToNewVxs(dx, dy, vxs2);
-                glyphVxs = vxs2;
-                w = (int)Math.Ceiling(w + dx);
-                h = (int)Math.Ceiling(h + dy);
-            }
+            //we need some borders
+            int horizontal_margin = 1; //'margin'
+            int vertical_margin = 1;
+
+
+            VertexStore vxs2 = new VertexStore();
+            glyphVxs.TranslateToNewVxs(dx + horizontal_margin, dy + vertical_margin, vxs2);
+            glyphVxs = vxs2;
+            w = (int)Math.Ceiling(w + dx + horizontal_margin * 2);
+            h = (int)Math.Ceiling(h + dy + vertical_margin * 2);
+
             //-------------------------------------------- 
-            //create glyph img 
-
-
+            //create glyph img  
             if (useLcdFontEffect)
             {
                 w *= 3;
             }
+
+
+
 
             ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
             AggRenderSurface aggsx = new AggRenderSurface(img);
