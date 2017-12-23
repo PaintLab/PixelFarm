@@ -39,7 +39,7 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
-        public static void CreateSampleTextureFontFromScriptLangs(
+        public static void CreateTextureFontFromScriptLangs(
             Typeface typeface, float sizeInPoint,
             TextureKind textureKind,
             ScriptLang[] scLangs,
@@ -54,10 +54,10 @@ namespace PixelFarm.Drawing.Fonts
             }
             //
 
-            CreateSampleTextureFontFromGlyphIndices(typeface, sizeInPoint, textureKind, GetUniqueGlyphIndexList(outputGlyphIndexList), onFinishTotal);
+            CreateTextureFontFromGlyphIndices(typeface, sizeInPoint, textureKind, GetUniqueGlyphIndexList(outputGlyphIndexList), onFinishTotal);
 
         }
-        public static void CreateSampleTextureFontFromInputChars(
+        public static void CreateTextureFontFromInputChars(
             Typeface typeface, float sizeInPoint,
             TextureKind textureKind,
             char[] chars, OnEachFinishTotal onFinishTotal)
@@ -72,10 +72,10 @@ namespace PixelFarm.Drawing.Fonts
                 i++;
             }
 
-            CreateSampleTextureFontFromGlyphIndices(typeface, sizeInPoint, textureKind, GetUniqueGlyphIndexList(glyphIndices), onFinishTotal);
+            CreateTextureFontFromGlyphIndices(typeface, sizeInPoint, textureKind, GetUniqueGlyphIndexList(glyphIndices), onFinishTotal);
         }
 
-        public static void CreateSampleTextureFontFromGlyphIndices(
+        public static void CreateTextureFontFromGlyphIndices(
             Typeface typeface, float sizeInPoint,
             TextureKind textureKind,
             ushort[] glyphIndices, OnEachFinishTotal onFinishTotal)

@@ -33,7 +33,7 @@ namespace PixelFarm.DrawingGL
         //TODO: review here again
 
         public static ActualFont GetTextureFontAtlasOrCreateNew(
-            LayoutFarm.OpenFontTextService fontService, 
+            LayoutFarm.OpenFontTextService fontService,
             RequestFont font,
             out SimpleFontAtlas fontAtlas)
         {
@@ -53,7 +53,7 @@ namespace PixelFarm.DrawingGL
             if (!s_cachedFontAtlas.TryGetValue(key, out found))
             {
                 //if not, then create the new one 
-             
+
                 //ptimize here
                 //TODO: review
                 TextureFontCreationParams creationParams = new TextureFontCreationParams();
@@ -61,10 +61,10 @@ namespace PixelFarm.DrawingGL
                 //creationParams.scriptLang = scLang;
                 //creationParams.writeDirection = WriteDirection.LTR;//default 
                 //TODO: review here, langBits can be created with scriptLang ?
-                creationParams.langBits = new Typography.OpenFont.UnicodeLangBits[]
+                creationParams.scriptLangs = new ScriptLang[]
                 {
-                    Typography.OpenFont.UnicodeLangBits.BasicLatin,//0-127 
-                    Typography.OpenFont.UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
+                    Typography.OpenFont.ScriptLangs.Latin,
+                    Typography.OpenFont.ScriptLangs.Thai //eg. Thai, for test with complex script, you can change to your own
                 };
                 //
                 creationParams.textureKind = PixelFarm.Drawing.Fonts.TextureKind.StencilGreyScale;

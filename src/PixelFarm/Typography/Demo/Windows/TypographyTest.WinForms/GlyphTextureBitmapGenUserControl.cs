@@ -190,7 +190,7 @@ namespace TypographyTest.WinForms
             string bitmapImgSaveFileName = "d:\\WImageTest\\sample_" + selectedTextureKind + "_" +
                System.IO.Path.GetFileNameWithoutExtension(sampleFontFile);
 
-            GlyphTextureBitmapGenerator.CreateSampleTextureFontFromScriptLangs(
+            GlyphTextureBitmapGenerator.CreateTextureFontFromScriptLangs(
                _typeface,
                18,
                selectedTextureKind,
@@ -243,7 +243,7 @@ namespace TypographyTest.WinForms
             //
             TextureKind selectedTextureKind = (TextureKind)lstTextureType.SelectedItem;
             char[] chars = this.textBox1.Text.ToCharArray();
-            GlyphTextureBitmapGenerator.CreateSampleTextureFontFromInputChars(
+            GlyphTextureBitmapGenerator.CreateTextureFontFromInputChars(
                _typeface,
                18,
                selectedTextureKind,
