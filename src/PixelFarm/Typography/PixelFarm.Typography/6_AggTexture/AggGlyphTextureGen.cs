@@ -22,7 +22,7 @@ namespace Typography.Rendering
         {
 
         }
-        public GlyphImage CreateGlyphImage(GlyphPathBuilder builder, float pxscale)
+        public GlyphImage CreateGlyphImage(GlyphPathBuilder builder, bool useLcdFontEffect, float pxscale)
         {
             //1. create  
 
@@ -65,7 +65,7 @@ namespace Typography.Rendering
             //-------------------------------------------- 
             //create glyph img 
 
-            bool useLcdFontEffect = true;
+
             if (useLcdFontEffect)
             {
                 w *= 3;
@@ -75,9 +75,9 @@ namespace Typography.Rendering
             AggRenderSurface aggsx = new AggRenderSurface(img);
             AggPainter painter = new AggPainter(aggsx);
             //we use white glyph on black bg for this texture                
-            painter.Clear(Color.Black); //fill with black
-            painter.FillColor = Color.White;
-            painter.StrokeColor = Color.White;
+            painter.Clear(Color.Empty); //fill with black
+            painter.FillColor = Color.Black;
+            painter.StrokeColor = Color.Black;
             //--------------------------------------------  
             painter.UseSubPixelRendering = useLcdFontEffect;
             //------------------------------------- -------  

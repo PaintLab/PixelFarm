@@ -184,7 +184,7 @@ namespace PixelFarm.Agg
                 byte[] pixelBuffer = ActualImage.GetBuffer(img);
                 fixed (byte* header = &pixelBuffer[0])
                 {
-                    System.Runtime.InteropServices.Marshal.Copy((IntPtr)header, buff2, 0, buff2.Length);
+                    System.Runtime.InteropServices.Marshal.Copy((IntPtr)header, buff2, 0, buff2.Length);//length in bytes
                 }
             }
 
@@ -192,26 +192,64 @@ namespace PixelFarm.Agg
         }
 
         //
-#if DEBUG
-        static SaveToPngFileDelegate s_saveToPngFileDel;
-        public void dbugSaveToPngFile(string filename)
+
+        public static void SaveImgBufferToPngFile(byte[] imgBuffer, int stride, int width, int height, string filename)
         {
             if (s_saveToPngFileDel != null)
             {
-                s_saveToPngFileDel(this, filename);
+                unsafe
+                {
+                    fixed (byte* head = &imgBuffer[0])
+                    {
+                        s_saveToPngFileDel((IntPtr)head, stride, width, height, filename);
+                    }
+                }
+
             }
         }
-        public delegate void SaveToPngFileDelegate(ActualImage img, string filename);
+        public static void SaveImgBufferToPngFile(int[] imgBuffer, int stride, int width, int height, string filename)
+        {
+            if (s_saveToPngFileDel != null)
+            {
+                unsafe
+                {
+                    fixed (int* head = &imgBuffer[0])
+                    {
+                        s_saveToPngFileDel((IntPtr)head, stride, width, height, filename);
+                    }
+                }
+
+            }
+        }
+        static SaveToPngFileDelegate s_saveToPngFileDel;
+        public delegate void SaveToPngFileDelegate(IntPtr imgBuffer, int stride, int width, int height, string filename);
+
+        public static bool HasDefaultSavePngToFileDelegate()
+        {
+            return s_saveToPngFileDel != null;
+        }
+
+
         public static void InstallImageSaveToFileService(SaveToPngFileDelegate saveToPngFileDelegate)
         {
             s_saveToPngFileDel = saveToPngFileDelegate;
         }
+#if DEBUG
+
+        public void dbugSaveToPngFile(string filename)
+        {
+            SaveImgBufferToPngFile(this.pixelBuffer, this.stride, this.width, this.height, filename);
+        }
+
 #endif
     }
 
 
     public static class ActualImageExtensions
     {
+
+
+
         public static int[] CopyImgBuffer(ActualImage img, int width)
         {
             //calculate stride for the width
@@ -224,7 +262,7 @@ namespace PixelFarm.Agg
             unsafe
             {
                 byte[] srcBuffer = ActualImage.GetBuffer(img);
-              
+
                 int srcIndex = 0;
 
                 int srcStride = img.Stride;

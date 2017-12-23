@@ -31,7 +31,7 @@ namespace Typography.TextServices
         float _fontSizeInPts;
         ScriptLang _defaultScriptLang;
         TypefaceStore typefaceStore;
-
+        ScriptLang scLang;
 
         //GlyphPlanList userGlyphPlanList;
         //List<UserCharToGlyphIndexMap> userCharToGlyphMapList;
@@ -57,7 +57,7 @@ namespace Typography.TextServices
             {
                 scLang = Typography.OpenFont.ScriptLangs.GetRegisteredScriptLangFromLanguageName(langFullName);
                 SetDefaultScriptLang(scLang);
-                SetCurrentScriptLang(scLang);
+                CurrentScriptLang = scLang;
                 return true;
             }
 
@@ -66,12 +66,13 @@ namespace Typography.TextServices
         }
         public void SetDefaultScriptLang(ScriptLang scLang)
         {
-            _defaultScriptLang = scLang;
+            this.scLang = _defaultScriptLang = scLang;
         }
-        public void SetCurrentScriptLang(ScriptLang scLang)
-        {
-            _glyphLayout.ScriptLang = scLang;
 
+        public ScriptLang CurrentScriptLang
+        {
+            get { return scLang; }
+            set { this.scLang = _glyphLayout.ScriptLang = value; }
         }
 
         public void SetCurrentFont(Typeface typeface, float fontSizeInPts)
@@ -111,7 +112,7 @@ namespace Typography.TextServices
             return _currentShapingContext.Layout(_glyphLayout, buffer, start, len);
         }
 
-         
+
         internal void ClearAllRegisteredShapingContext()
         {
             _registerShapingContexts.Clear();

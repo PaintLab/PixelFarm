@@ -32,6 +32,7 @@
             this.cmdMakeFromSelectedString = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.cmdMakeFromScriptLangs = new System.Windows.Forms.Button();
+            this.chkCompactGlyphSpace = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lstTextureType
@@ -69,10 +70,23 @@
             this.cmdMakeFromScriptLangs.UseVisualStyleBackColor = true;
             this.cmdMakeFromScriptLangs.Click += new System.EventHandler(this.cmdMakeFromScriptLangs_Click);
             // 
+            // chkCompactGlyphSpace
+            // 
+            this.chkCompactGlyphSpace.AutoSize = true;
+            this.chkCompactGlyphSpace.Checked = true;
+            this.chkCompactGlyphSpace.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkCompactGlyphSpace.Location = new System.Drawing.Point(143, 55);
+            this.chkCompactGlyphSpace.Name = "chkCompactGlyphSpace";
+            this.chkCompactGlyphSpace.Size = new System.Drawing.Size(132, 17);
+            this.chkCompactGlyphSpace.TabIndex = 4;
+            this.chkCompactGlyphSpace.Text = "Compact Glyph Space";
+            this.chkCompactGlyphSpace.UseVisualStyleBackColor = true;
+            // 
             // GlyphTextureBitmapGenUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkCompactGlyphSpace);
             this.Controls.Add(this.cmdMakeFromScriptLangs);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.cmdMakeFromSelectedString);
@@ -91,5 +105,6 @@
         private System.Windows.Forms.Button cmdMakeFromSelectedString;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button cmdMakeFromScriptLangs;
+        private System.Windows.Forms.CheckBox chkCompactGlyphSpace;
     }
 }

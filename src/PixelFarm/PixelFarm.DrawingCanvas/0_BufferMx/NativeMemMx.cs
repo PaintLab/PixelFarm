@@ -42,5 +42,9 @@ namespace PixelFarm.Agg
                 }
             }
         }
+        public static unsafe void MemCopy(byte* head_dest, byte* head_src, int len)
+        {
+            memcpy(head_dest, head_src, len);
+        }
     }
 }

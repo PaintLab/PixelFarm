@@ -117,9 +117,8 @@ namespace LayoutFarm.UI
                         //printer.UseSubPixelRendering = true;
                         //canvasPainter.TextPrinter = printer;
 
-                        //3
-                        var openFontStore = new Typography.TextServices.OpenFontStore();
-                        var printer = new GLBitmapGlyphTextPrinter(canvasPainter, openFontStore);
+                        //3 
+                        var printer = new GLBitmapGlyphTextPrinter(canvasPainter);
                         canvasPainter.TextPrinter = printer;
 
                         //
