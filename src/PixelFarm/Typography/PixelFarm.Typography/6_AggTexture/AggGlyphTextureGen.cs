@@ -6,9 +6,6 @@ using Typography.Contours;
 using PixelFarm.Drawing;
 using PixelFarm.Agg;
 using PixelFarm.Drawing.Fonts;
-using Typography.TextServices;
-using PixelFarm;
-using PixelFarm.Agg.Transform;
 
 namespace Typography.Rendering
 {
@@ -20,8 +17,13 @@ namespace Typography.Rendering
 
         public AggGlyphTextureGen()
         {
-
+            BackGroundColor = Color.Black;
+            GlyphColor = Color.White;
         }
+
+        public Color BackGroundColor { get; set; }
+        public Color GlyphColor { get; set; }
+
         public GlyphImage CreateGlyphImage(GlyphPathBuilder builder, bool useLcdFontEffect, float pxscale)
         {
             //1. create  
@@ -54,15 +56,19 @@ namespace Typography.Rendering
             double dy = (bounds.Bottom < 0) ? -bounds.Bottom : 0;
 
             //we need some borders
-            int horizontal_margin = 1; //'margin'
-            int vertical_margin = 1;
+            int horizontal_margin = 1; //'margin' 1px
+            int vertical_margin = 1; //margin 1 px
 
+            dx += horizontal_margin; //+ left margin
+            dy += vertical_margin; //+ top margin
 
             VertexStore vxs2 = new VertexStore();
-            glyphVxs.TranslateToNewVxs(dx + horizontal_margin, dy + vertical_margin, vxs2);
+            glyphVxs.TranslateToNewVxs(dx, dy, vxs2);
             glyphVxs = vxs2;
-            w = (int)Math.Ceiling(w + dx + horizontal_margin * 2);
-            h = (int)Math.Ceiling(h + dy + vertical_margin * 2);
+
+            //
+            w = (int)Math.Ceiling(dx + w + horizontal_margin); //+right margin
+            h = (int)Math.Ceiling(dy + h + vertical_margin); //+bottom margin
 
             //-------------------------------------------- 
             //create glyph img  
@@ -72,22 +78,16 @@ namespace Typography.Rendering
             }
 
 
-
-
             ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
             AggRenderSurface aggsx = new AggRenderSurface(img);
             AggPainter painter = new AggPainter(aggsx);
-            //we use white glyph on black bg for this texture                
-            painter.Clear(Color.Empty); //fill with black
-            painter.FillColor = Color.Black;
-            painter.StrokeColor = Color.Black;
-            //--------------------------------------------  
             painter.UseSubPixelRendering = useLcdFontEffect;
-            //------------------------------------- -------  
 
-
-            //-------------------------------------------- 
+            //we use white glyph on black bg for this texture                
+            painter.Clear(BackGroundColor);
+            painter.FillColor = GlyphColor;
             painter.Fill(glyphVxs);
+
             //-------------------------------------------- 
             if (useLcdFontEffect)
             {
