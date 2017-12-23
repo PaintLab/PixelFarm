@@ -16,7 +16,9 @@ namespace Typography.Rendering
         public SimpleFontAtlasBuilder()
         {
             CompactGlyphSpace = true;
+            MaxAtlasWidth = 800;
         }
+        public int MaxAtlasWidth { get; set; }
         public bool CompactGlyphSpace { get; set; }
         public TextureKind TextureKind { get; private set; }
         public float FontSizeInPoints { get; private set; }
@@ -46,7 +48,7 @@ namespace Typography.Rendering
             }
 
 
-            int totalMaxLim = 800;
+            int totalMaxLim = MaxAtlasWidth;
             int maxRowHeight = 0;
             int currentY = 0;
             int currentX = 0;
@@ -210,20 +212,7 @@ namespace Typography.Rendering
                 }
                 root.AppendChild(gElem);
             }
-            //if (embededGlyphsImage)
-            //{
-            //    XmlElement glyphImgElem = xmldoc.CreateElement("msdf_img");
-            //    glyphImgElem.SetAttribute("w", latestGenGlyphImage.Width.ToString());
-            //    glyphImgElem.SetAttribute("h", latestGenGlyphImage.Height.ToString());
-            //    int[] imgBuffer = latestGenGlyphImage.GetImageBuffer();
-            //    glyphImgElem.SetAttribute("buff_len", (imgBuffer.Length * 4).ToString());
-            //    //----------------------------------------------------------------------
-            //    glyphImgElem.AppendChild(
-            //        xmldoc.CreateTextNode(ConvertToBase64(imgBuffer)));
-            //    //----------------------------------------------------------------------
-            //    root.AppendChild(glyphImgElem);
-            //    latestGenGlyphImage.GetImageBuffer();
-            //}
+
             xmldoc.Save(filename);
         }
 
