@@ -199,7 +199,7 @@ namespace TypographyTest.WinForms
                {
                    if (atlasBuilder != null)
                    {
-
+                       atlasBuilder.CompactGlyphSpace = chkCompactGlyphSpace.Checked;
                        GlyphImage glyphImg2 = atlasBuilder.BuildSingleImage();
                        SaveImgBufferToFile(glyphImg2, bitmapImgSaveFileName + ".png");
                        atlasBuilder.SaveFontInfo(bitmapImgSaveFileName + ".xml");
@@ -252,6 +252,7 @@ namespace TypographyTest.WinForms
               {
                   if (atlasBuilder != null)
                   {
+                      atlasBuilder.CompactGlyphSpace = chkCompactGlyphSpace.Checked;
                       GlyphImage glyphImg2 = atlasBuilder.BuildSingleImage();
                       SaveImgBufferToFile(glyphImg2, bitmapImgSaveFileName + ".png");
                       atlasBuilder.SaveFontInfo(bitmapImgSaveFileName + ".xml");
