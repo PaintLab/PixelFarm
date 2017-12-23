@@ -90,7 +90,9 @@ namespace Typography.TextServices
             }
 
             _currentTypeface = _glyphLayout.Typeface = typeface;
-            _glyphLayout.FontSizeInPoints = _fontSizeInPts = fontSizeInPts;
+            _fontSizeInPts = fontSizeInPts;
+
+            //_glyphLayout.FontSizeInPoints = _fontSizeInPts = fontSizeInPts;
         }
         public Typeface GetTypeface(string name, InstalledFontStyle installedFontStyle)
         {
@@ -366,15 +368,15 @@ namespace Typography.TextServices
             int hashValue = CalculateHash(buffer, startAt, len);
             if (!seqCol.TryGetCacheGlyphPlanSeq(hashValue, out planSeq))
             {
-                //not found then create glyph plan seq
-                bool useOutputScale = glyphLayout.UsePxScaleOnReadOutput;
+                ////not found then create glyph plan seq
+                //bool useOutputScale = glyphLayout.UsePxScaleOnReadOutput;
 
-                //save 
+                ////save 
                 //some font may have 'special' glyph x,y at some font size(eg. for subpixel-rendering position)
                 //but in general we store the new glyph plan seq with unscale glyph pos
-                glyphLayout.UsePxScaleOnReadOutput = false;
+                //glyphLayout.UsePxScaleOnReadOutput = false;
                 planSeq = CreateGlyphPlanSeq(glyphLayout, buffer, startAt, len);
-                glyphLayout.UsePxScaleOnReadOutput = useOutputScale;//restore
+                //glyphLayout.UsePxScaleOnReadOutput = useOutputScale;//restore
                 seqCol.Register(hashValue, planSeq);
             }
             //---

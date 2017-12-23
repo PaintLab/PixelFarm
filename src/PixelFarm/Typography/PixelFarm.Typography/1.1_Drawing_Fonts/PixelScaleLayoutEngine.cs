@@ -184,7 +184,7 @@ namespace Typography.Contours
     class PixelScaleLayoutEngine : IPixelScaleLayout
     {
         Typeface _typeface;
-        GlyphMeshStore _hintedFontStore;
+        GlyphMeshStore _glyphMeshStore;
         float _fontSizeInPoints;
         public PixelScaleLayoutEngine()
         {
@@ -193,10 +193,10 @@ namespace Typography.Contours
 
         public GlyphMeshStore HintedFontStore
         {
-            get { return _hintedFontStore; }
+            get { return _glyphMeshStore; }
             set
             {
-                _hintedFontStore = value;
+                _glyphMeshStore = value;
             }
         }
 
@@ -389,7 +389,7 @@ namespace Typography.Contours
             //
             //at this state, we need exact info at this specific pxscale
             //
-            _hintedFontStore.SetFont(_typeface, this._fontSizeInPoints);
+            _glyphMeshStore.SetFont(_typeface, this._fontSizeInPoints);
             FineABC current_ABC = new FineABC();
             FineABC prev_ABC = new FineABC();
 
@@ -397,7 +397,7 @@ namespace Typography.Contours
             {
                 short offsetX, offsetY, advW; //all from pen-pos
                 ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
-                GlyphControlParameters controlPars = _hintedFontStore.GetControlPars(glyphIndex);
+                GlyphControlParameters controlPars = _glyphMeshStore.GetControlPars(glyphIndex);
                 current_ABC.SetData(pxscale, controlPars, offsetX, offsetY, (ushort)advW);
                 //-------------------------------------------------------------
 

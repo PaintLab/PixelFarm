@@ -110,7 +110,7 @@ namespace SampleWinForms
             _glyphLayout.ScriptLang = this.ScriptLang;
             _glyphLayout.PositionTechnique = this.PositionTechnique;
             _glyphLayout.EnableLigature = this.EnableLigature;
-            _glyphLayout.FontSizeInPoints = this.FontSizeInPoints;
+            //_glyphLayout.FontSizeInPoints = this.FontSizeInPoints;
         }
         void UpdateVisualOutputSettings()
         {

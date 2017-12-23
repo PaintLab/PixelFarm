@@ -18,6 +18,22 @@ namespace Typography.Rendering
 
         public abstract Typography.TextLayout.GlyphLayout GlyphLayoutMan { get; }
         public abstract Typography.OpenFont.Typeface Typeface { get; set; }
+
+        public virtual void GenerateGlyphPlan(
+                  char[] textBuffer,
+                  int startAt,
+                  int len,
+                  GlyphPlanList outputGlyphPlanList,
+                  List<UserCharToGlyphIndexMap> charToGlyphMapList)
+        {
+
+            throw new System.NotSupportedException();
+            //_printer.GlyphLayoutMan.FontSizeInPoints = _printer.FontSizeInPoints;
+            GlyphLayoutMan.GenerateGlyphPlans(textBuffer, 0, textBuffer.Length, outputGlyphPlanList, charToGlyphMapList);
+            //then scale it
+
+        }
+
         public bool FillBackground { get; set; }
         public bool DrawOutline { get; set; }
         public float FontAscendingPx { get; set; }

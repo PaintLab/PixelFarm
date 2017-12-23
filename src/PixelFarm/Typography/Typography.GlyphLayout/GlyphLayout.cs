@@ -21,9 +21,9 @@ namespace Typography.TextLayout
             this.ExactY = exactY;
             this.AdvanceX = exactAdvX;
         }
-        public float AdvanceX { get; private set; }
-        public float ExactY { get; private set; }
-        public float ExactX { get; private set; }
+        public float AdvanceX { get; set; }
+        public float ExactY { get; set; }
+        public float ExactX { get; set; }
 
         public float ExactRight { get { return ExactX + AdvanceX; } }
         public bool AdvanceMoveForward { get { return this.AdvanceX > 0; } }
@@ -146,7 +146,7 @@ namespace Typography.TextLayout
         GlyphSubstitution _gsub;
         GlyphSetPosition _gpos;
         bool _needPlanUpdate;
-        IPixelScaleLayout _pxscaleLayout;
+        //IPixelScaleLayout _pxscaleLayout;
 
         internal GlyphIndexList _inputGlyphs = new GlyphIndexList();
         internal GlyphPosStream _glyphPositions = new GlyphPosStream();
@@ -159,17 +159,22 @@ namespace Typography.TextLayout
             EnableComposition = true;
             ScriptLang = ScriptLangs.Latin;
         }
-
-        public float FontSizeInPoints { get; set; }
-        public float PixelScale
+        public IGlyphPositions ResultUnscaledGlyphPositions
         {
-            get
-            {
-                //to pixel scale from size in point
-                if (_typeface == null) return 1;
-                return _typeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPoints);
-            }
+            get { return _glyphPositions; }
         }
+
+        //public float FontSizeInPoints { get; set; }
+        //public float PixelScale
+        //{
+        //    get
+        //    {
+        //        //to pixel scale from size in point
+        //        if (_typeface == null) return 1;
+        //        return _typeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPoints);
+        //    }
+        //}
+
         public PositionTechnique PositionTechnique { get; set; }
         public ScriptLang ScriptLang
         {
@@ -198,18 +203,20 @@ namespace Typography.TextLayout
                 }
             }
         }
-        public IPixelScaleLayout PxScaleLayout
-        {
-            get { return _pxscaleLayout; }
-            set
-            {
-                _pxscaleLayout = value;
-            }
-        }
-        /// <summary>
-        /// when read output, please scale to pixel unitd
-        /// </summary>
-        public bool UsePxScaleOnReadOutput { get; set; }
+
+
+        //public IPixelScaleLayout PxScaleLayout
+        //{
+        //    get { return _pxscaleLayout; }
+        //    set
+        //    {
+        //        _pxscaleLayout = value;
+        //    }
+        //}
+        ///// <summary>
+        ///// when read output, please scale to pixel unitd
+        ///// </summary>
+        //public bool UsePxScaleOnReadOutput { get; set; }
 
         /// <summary>
         /// reusable codepoint list buffer
@@ -363,8 +370,12 @@ namespace Typography.TextLayout
         /// <param name="outputGlyphPlanList"></param>
         public static void ReadOutput(this GlyphLayout glyphLayout, List<UserCharToGlyphIndexMap> outputGlyphPlanList)
         {
+            //TODO: review here
+
             outputGlyphPlanList.AddRange(glyphLayout._inputGlyphs._mapUserCharToGlyphIndices);
         }
+
+
         /// <summary>
         /// read latest layout output into outputGlyphPlanList
         /// </summary>
@@ -372,61 +383,26 @@ namespace Typography.TextLayout
         {
             GlyphPosStream glyphPositions = glyphLayout._glyphPositions; //from opentype's layout result, 
             int finalGlyphCount = glyphPositions.Count;
-            //------------------------ 
-            if (!glyphLayout.UsePxScaleOnReadOutput)
+            //------------------------------
+            //use original size, design unit
+            //default scale 
+            double cx = 0;
+            short cy = 0;
+            for (int i = 0; i < finalGlyphCount; ++i)
             {
-                //use original size, design unit
-                //default scale 
-                double cx = 0;
-                short cy = 0;
-                for (int i = 0; i < finalGlyphCount; ++i)
-                {
-                    GlyphPos glyph_pos = glyphPositions[i];
-                    float advW = glyph_pos.advanceW * 1;
-                    float exact_x = (float)(cx + glyph_pos.OffsetX * 1);
-                    float exact_y = (float)(cy + glyph_pos.OffsetY * 1);
+                GlyphPos glyph_pos = glyphPositions[i];
+                float advW = glyph_pos.advanceW * 1;
+                float exact_x = (float)(cx + glyph_pos.OffsetX * 1);
+                float exact_y = (float)(cy + glyph_pos.OffsetY * 1);
 
-                    outputGlyphPlanList.Append(new GlyphPlan(
-                        glyph_pos.glyphIndex,
-                        exact_x,
-                        exact_y,
-                        advW));
-                    cx += advW;
-                }
-                return;
-            }
-
-            //
-            IPixelScaleLayout pxscaleLayout = glyphLayout.PxScaleLayout;
-            if (pxscaleLayout != null)
-            {
-                //use custom pixel scale layout engine  
-                pxscaleLayout.SetFont(glyphLayout.Typeface, glyphLayout.FontSizeInPoints);
-                pxscaleLayout.Layout(glyphPositions, outputGlyphPlanList);
-            }
-            else
-            {
-                //default scale
-                float pxscale = glyphLayout.PixelScale;
-                double cx = 0;
-                short cy = 0;
-                for (int i = 0; i < finalGlyphCount; ++i)
-                {
-                    GlyphPos glyph_pos = glyphPositions[i];
-                    float advW = glyph_pos.advanceW * pxscale;
-                    float exact_x = (float)(cx + glyph_pos.OffsetX * pxscale);
-                    float exact_y = (float)(cy + glyph_pos.OffsetY * pxscale);
-
-                    outputGlyphPlanList.Append(new GlyphPlan(
-                        glyph_pos.glyphIndex,
-                        exact_x,
-                        exact_y,
-                        advW));
-                    cx += advW;
-                }
+                outputGlyphPlanList.Append(new GlyphPlan(
+                    glyph_pos.glyphIndex,
+                    exact_x,
+                    exact_y,
+                    advW));
+                cx += advW;
             }
         }
-
         public static void Layout(this GlyphLayout glyphLayout, Typeface typeface, char[] str, int startAt, int len, GlyphPlanList outputGlyphList)
         {
             glyphLayout.Typeface = typeface;
