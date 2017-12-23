@@ -22,7 +22,7 @@ namespace Typography.Rendering
         {
 
         }
-        public GlyphImage CreateGlyphImage(GlyphPathBuilder builder, float pxscale)
+        public GlyphImage CreateGlyphImage(GlyphPathBuilder builder, bool useLcdFontEffect, float pxscale)
         {
             //1. create  
 
@@ -65,7 +65,7 @@ namespace Typography.Rendering
             //-------------------------------------------- 
             //create glyph img 
 
-            bool useLcdFontEffect = true;
+            
             if (useLcdFontEffect)
             {
                 w *= 3;

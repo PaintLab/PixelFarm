@@ -31,16 +31,20 @@ namespace PixelFarm.DrawingGL
         static Dictionary<FontTextureKey, TextureAtlasCache> s_cachedFontAtlas = new Dictionary<FontTextureKey, TextureAtlasCache>();
 
         //TODO: review here again
-        static ScriptLang scLang = ScriptLangs.Latin;
+
         public static ActualFont GetTextureFontAtlasOrCreateNew(
-            IFontLoader fontLoader,
+            LayoutFarm.OpenFontTextService fontService, 
             RequestFont font,
             out SimpleFontAtlas fontAtlas)
         {
+            //1. resolve for actual typeface
+            Typeface typeface = fontService.ResolveTypeface(font);
+            //2. 
+
             //check if we have created this font
             var key = new FontTextureKey();
             key.fontName = font.Name;
-            key.scriptLang = scLang.shortname;
+            //key.scriptLang = scLang.shortname;
             key.sizeInPoint = font.SizeInPoints;
             key.fontStyle = font.Style;
             //------------------------
@@ -49,13 +53,13 @@ namespace PixelFarm.DrawingGL
             if (!s_cachedFontAtlas.TryGetValue(key, out found))
             {
                 //if not, then create the new one 
-                string fontfile = fontLoader.GetFont(font.Name, font.Style.ConvToInstalledFontStyle()).FontPath;
+             
                 //ptimize here
                 //TODO: review
                 TextureFontCreationParams creationParams = new TextureFontCreationParams();
                 creationParams.originalFontSizeInPoint = font.SizeInPoints;
-                creationParams.scriptLang = scLang;
-                creationParams.writeDirection = WriteDirection.LTR;//default 
+                //creationParams.scriptLang = scLang;
+                //creationParams.writeDirection = WriteDirection.LTR;//default 
                 //TODO: review here, langBits can be created with scriptLang ?
                 creationParams.langBits = new Typography.OpenFont.UnicodeLangBits[]
                 {
@@ -63,7 +67,7 @@ namespace PixelFarm.DrawingGL
                     Typography.OpenFont.UnicodeLangBits.Thai //eg. Thai, for test with complex script, you can change to your own
                 };
                 //
-                creationParams.textureKind = Typography.Rendering.TextureKind.AggSubPixel;
+                creationParams.textureKind = PixelFarm.Drawing.Fonts.TextureKind.StencilGreyScale;
                 if (font.SizeInPoints >= 4 && font.SizeInPoints <= 14)
                 {
                     //creationParams.hintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction;
@@ -72,7 +76,7 @@ namespace PixelFarm.DrawingGL
 
                 }
                 //
-                ff = TextureFontLoader.LoadFont(fontfile, creationParams, out fontAtlas);
+                ff = TextureFontLoader.LoadFont(typeface, creationParams, out fontAtlas);
 
 
                 //cache it 

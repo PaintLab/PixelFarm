@@ -45,6 +45,10 @@ namespace LayoutFarm
             //_shapingServices.SetCurrentScriptLang(scLang);
             //--------------- 
         }
+        public ScriptLang CurrentScriptLang
+        {
+            get { return _typographyTxtServices.CurrentScriptLang; }
+        }
         public void CalculateGlyphAdvancePos(char[] str, int startAt, int len, RequestFont font, int[] outputGlyphAdvances, out int outputTotalW, out int outputLineHeight)
         {
             CalculateGlyphAdvancePos(this.BreakToLineSegments(str, startAt, len), font, outputGlyphAdvances, out outputTotalW, out outputLineHeight);
@@ -75,7 +79,7 @@ namespace LayoutFarm
 
                 //get each segment
                 MyLineSegment lineSeg = mylineSegs.GetSegment(i);
-                _typographyTxtServices.SetCurrentScriptLang(lineSeg.scriptLang);
+                _typographyTxtServices.CurrentScriptLang = lineSeg.scriptLang;
                 _typographyTxtServices.SetCurrentFont(typeface, font.SizeInPoints);
                 //
                 //CACHING ...., reduce number of GSUB/GPOS
@@ -103,7 +107,7 @@ namespace LayoutFarm
 
 
 
-        Typeface ResolveTypeface(RequestFont font)
+        public Typeface ResolveTypeface(RequestFont font)
         {
             //from user's request font
             //resolve to actual Typeface

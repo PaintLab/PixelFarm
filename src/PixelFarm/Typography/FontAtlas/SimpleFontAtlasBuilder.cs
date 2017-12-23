@@ -7,18 +7,12 @@ using PixelFarm.Drawing.Fonts;
 using Typography.Contours;
 
 namespace Typography.Rendering
-{
-    public enum TextureKind
-    {
-        AggGrayScale,
-        AggSubPixel,
-        Msdf
-    }
+{   
     public class SimpleFontAtlasBuilder
     {
         GlyphImage latestGenGlyphImage;
         Dictionary<int, CacheGlyph> glyphs = new Dictionary<int, CacheGlyph>();
-        public TextureKind TextureKind { get; private set; }
+        public  PixelFarm.Drawing.Fonts.TextureKind  TextureKind { get; private set; }
         public float FontSizeInPoints { get; private set; }
         public void AddGlyph(int codePoint, GlyphImage img)
         {
@@ -144,17 +138,17 @@ namespace Typography.Rendering
                 gElem.SetAttribute("borderXY",
                     g.borderX + " " + g.borderY
                     );
-                var mat = g.glyphMatrix;
-                gElem.SetAttribute("mat",
-                    mat.advanceX + " " + mat.advanceY + " " +
-                    mat.bboxXmin + " " + mat.bboxXmax + " " +
-                    mat.bboxYmin + " " + mat.bboxYmax + " " +
-                    mat.img_width + " " + mat.img_height + " " +
-                    mat.img_horiAdvance + " " + mat.img_horiBearingX + " " +
-                    mat.img_horiBearingY + " " +
-                    //-----------------------------
-                    mat.img_vertAdvance + " " +
-                    mat.img_vertBearingX + " " + mat.img_vertBearingY);
+                //var mat = g.glyphMatrix;
+                //gElem.SetAttribute("mat",
+                //    mat.advanceX + " " + mat.advanceY + " " +
+                //    mat.bboxXmin + " " + mat.bboxXmax + " " +
+                //    mat.bboxYmin + " " + mat.bboxYmax + " " +
+                //    mat.img_width + " " + mat.img_height + " " +
+                //    mat.img_horiAdvance + " " + mat.img_horiBearingX + " " +
+                //    mat.img_horiBearingY + " " +
+                //    //-----------------------------
+                //    mat.img_vertAdvance + " " +
+                //    mat.img_vertBearingX + " " + mat.img_vertBearingY);
 
                 if (g.character > 50)
                 {
@@ -184,23 +178,23 @@ namespace Typography.Rendering
             SimpleFontAtlas simpleFontAtlas = new SimpleFontAtlas();
             simpleFontAtlas.TextureKind = this.TextureKind;
             simpleFontAtlas.OriginalFontSizePts = this.FontSizeInPoints;
-            foreach (CacheGlyph cacheGlyph in glyphs.Values)
-            {
-                //convert char to hex
-                string unicode = ("0x" + ((int)cacheGlyph.character).ToString("X"));//code point
-                Rectangle area = cacheGlyph.area;
-                TextureFontGlyphData glyphData = new TextureFontGlyphData();
-                area.Y += area.Height;//*** 
+            //foreach (CacheGlyph cacheGlyph in glyphs.Values)
+            //{
+            //    //convert char to hex
+            //    string unicode = ("0x" + ((int)cacheGlyph.character).ToString("X"));//code point
+            //    Rectangle area = cacheGlyph.area;
+            //    TextureFontGlyphData glyphData = new TextureFontGlyphData();
+            //    area.Y += area.Height;//*** 
 
-                //set font matrix to glyph font data
-                glyphData.Rect = Rectangle.FromLTRB(area.X, area.Top, area.Right, area.Bottom);
-                glyphData.AdvanceY = cacheGlyph.glyphMatrix.advanceY;
-                glyphData.ImgWidth = cacheGlyph.img.Width;
-                glyphData.TextureXOffset = cacheGlyph.img.TextureOffsetX;
-                glyphData.TextureYOffset = cacheGlyph.img.TextureOffsetY;
+            //    //set font matrix to glyph font data
+            //    glyphData.Rect = Rectangle.FromLTRB(area.X, area.Top, area.Right, area.Bottom);
+            //    glyphData.AdvanceY = cacheGlyph.glyphMatrix.advanceY;
+            //    glyphData.ImgWidth = cacheGlyph.img.Width;
+            //    glyphData.TextureXOffset = cacheGlyph.img.TextureOffsetX;
+            //    glyphData.TextureYOffset = cacheGlyph.img.TextureOffsetY;
 
-                simpleFontAtlas.AddGlyph(cacheGlyph.codePoint, glyphData);
-            }
+            //    simpleFontAtlas.AddGlyph(cacheGlyph.codePoint, glyphData);
+            //}
 
             return simpleFontAtlas;
         }

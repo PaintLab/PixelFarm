@@ -17,47 +17,14 @@ namespace PixelFarm.Drawing.Fonts
     {
         public ScriptLang scriptLang;
         public TextureKind textureKind;
-        public WriteDirection writeDirection;
         public float originalFontSizeInPoint;
         public UnicodeLangBits[] langBits;
         public HintTechnique hintTechnique;
     }
-    public enum WriteDirection
-    {
-        Unknown,
-        /// <summary>
-        /// left-to-right
-        /// </summary>
-        LTR = 4,
-        /// <summary>
-        /// right-to-right
-        /// </summary>
-        RTL,
-        /// <summary>
-        /// top-to-bottom
-        /// </summary>
-        TTB,
-        /// <summary>
-        /// bottom-to-top
-        /// </summary>
-        BTT
-    }
+
     public static class TextureFontLoader
     {
 
-
-        public static FontFace LoadFont(
-            string fontfile,
-            TextureFontCreationParams creationParams,
-            out SimpleFontAtlas fontAtlas)
-        {
-            using (FileStream fs = new FileStream(fontfile, FileMode.Open, FileAccess.Read))
-            {
-                var reader = new OpenFontReader();
-                Typeface typeface = reader.Read(fs);
-                return LoadFont(typeface, creationParams, out fontAtlas);
-            }
-        }
 
         public static FontFace LoadFont(
             Typeface typeface,
@@ -73,7 +40,7 @@ namespace PixelFarm.Drawing.Fonts
             switch (creationParams.textureKind)
             {
                 default: throw new System.NotSupportedException();
-                case TextureKind.AggSubPixel:
+                case TextureKind.StencilLcdEffect:
                     atlas1 = CreateAggSubPixelRenderingTextureFont(
                            typeface,
                            creationParams.originalFontSizeInPoint,
@@ -81,7 +48,7 @@ namespace PixelFarm.Drawing.Fonts
                            GetGlyphIndexIter(typeface, creationParams.langBits)
                            );
                     break;
-                case TextureKind.AggGrayScale:
+                case TextureKind.StencilGreyScale:
                     atlas1 = CreateAggTextureFont(
                            typeface,
                            creationParams.originalFontSizeInPoint,
@@ -109,7 +76,7 @@ namespace PixelFarm.Drawing.Fonts
             //SimpleFontAtlas fontAtlas = atlasBuilder.LoadFontInfo(xmlFontFileInfo);
             //glyphImg = atlasBuilder.BuildSingleImage(); //we can create a new glyph or load from prebuilt file
             //fontAtlas.TotalGlyph = glyphImg; 
-
+            ActualImage.SaveImgBufferToPngFile(glyphImg2.GetImageBuffer(), glyphImg2.Width * 4, glyphImg2.Width, glyphImg2.Height, "d:\\WImageTest\\total.png");
             return openFont;
             //var textureFontFace = new TextureFontFace(openFont, fontAtlas);
             //return textureFontFace;
@@ -253,7 +220,7 @@ namespace PixelFarm.Drawing.Fonts
             builder.SetHintTechnique(hintTech);
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
-            atlasBuilder.SetAtlasInfo(TextureKind.AggGrayScale, sizeInPoint);
+            atlasBuilder.SetAtlasInfo(TextureKind.StencilGreyScale, sizeInPoint);
             VertexStorePool vxsPool = new VertexStorePool();
             //create agg cavnas
 
@@ -268,9 +235,7 @@ namespace PixelFarm.Drawing.Fonts
                 //create new one
                 var glyphVxs = new VertexStore();
                 txToVxs.WriteOutput(glyphVxs);
-                //find bound
-
-
+                //find bound 
                 RectD bounds = new Agg.RectD();
                 BoundingRect.GetBoundingRect(new VertexStoreSnap(glyphVxs), ref bounds);
 
@@ -299,18 +264,22 @@ namespace PixelFarm.Drawing.Fonts
                 //-------------------------------------------- 
                 //create glyph img 
                 ActualImage img = new Agg.ActualImage(w, h, PixelFormat.ARGB32);
-                AggRenderSurface imgCanvas2d = new Agg.AggRenderSurface(img);
-                AggPainter painter = new Agg.AggPainter(imgCanvas2d);
+                AggRenderSurface aggsx = new Agg.AggRenderSurface(img);
+                AggPainter painter = new Agg.AggPainter(aggsx);
                 painter.FillColor = Color.Black;
-                painter.StrokeColor = Color.Black;
+                painter.StrokeColor = Color.White;
                 painter.Fill(glyphVxs);
                 //-------------------------------------------- 
                 var glyphImage = new GlyphImage(w, h);
                 glyphImage.TextureOffsetX = dx;
                 glyphImage.TextureOffsetY = dy;
+
                 glyphImage.SetImageBuffer(ActualImage.CopyImgBuffer(img), false);
                 //copy data from agg canvas to glyph image
                 atlasBuilder.AddGlyph(gindex, glyphImage);
+
+                ActualImage.SaveImgBufferToPngFile(glyphImage.GetImageBuffer(),
+                    img.Stride, img.Width, img.Height, "d:\\WImageTest\\glyph_gen\\" + gindex + ".png");
 
                 //int[] buffer = glyphImage.GetImageBuffer();
                 //using (var bmp = new System.Drawing.Bitmap(glyphImage.Width, glyphImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
@@ -362,7 +331,7 @@ namespace PixelFarm.Drawing.Fonts
             builder.SetHintTechnique(hintTech);
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
-            atlasBuilder.SetAtlasInfo(TextureKind.AggSubPixel, sizeInPoint);
+            atlasBuilder.SetAtlasInfo(TextureKind.StencilLcdEffect, sizeInPoint);
             VertexStorePool vxsPool = new VertexStorePool();
             //create agg cavnas
 
@@ -457,6 +426,17 @@ namespace PixelFarm.Drawing.Fonts
 
             return atlasBuilder;
         }
+
+
+
+
+
+
+
+
+
+
+
         //static SimpleFontAtlasBuilder CreateSampleMsdfTextureFont(string fontfile,
         //    float sizeInPoint, UnicodeRangeInfo[] ranges)
         //{
