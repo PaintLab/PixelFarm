@@ -109,7 +109,7 @@ namespace PixelFarm.Drawing.Fonts
                             var glyphToContour = new GlyphContourBuilder();
                             //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
                             builder.ReadShapes(glyphToContour);
-                            msdfGenParams.shapeScale = 1f / 64;
+                            msdfGenParams.shapeScale = 1f / 64; //as original
                             glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, msdfGenParams);
                         }
                         break;

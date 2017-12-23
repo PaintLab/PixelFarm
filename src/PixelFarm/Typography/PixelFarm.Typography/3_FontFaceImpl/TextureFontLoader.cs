@@ -33,30 +33,31 @@ namespace PixelFarm.Drawing.Fonts
             //1. read font info
             NOpenFontFace openFont = (NOpenFontFace)OpenFontLoader.LoadFont(typeface);
             //------------------------
-            SimpleFontAtlasBuilder atlas1 = null;
+            SimpleFontAtlasBuilder atlasBuilder = null;
 
             GlyphTextureBitmapGenerator.CreateTextureFontFromScriptLangs(
-                typeface, 
+                typeface,
                 creationParams.originalFontSizeInPoint,
                 creationParams.textureKind,
                 creationParams.scriptLangs,
-                (glyphIndex, glyphImage, outputAtlas) =>
+                (glyphIndex, glyphImage, outputAtlasBuilder) =>
                 {
-                    if (outputAtlas != null)
+                    if (outputAtlasBuilder != null)
                     {
                         //finish
-                        atlas1 = outputAtlas;
+                        atlasBuilder = outputAtlasBuilder;
                     }
                 }
-             ); 
+             );
 
-            GlyphImage glyphImg2 = atlas1.BuildSingleImage();
-            fontAtlas = atlas1.CreateSimpleFontAtlas();
+            GlyphImage glyphImg2 = atlasBuilder.BuildSingleImage();
+            //create atlas
+            fontAtlas = atlasBuilder.CreateSimpleFontAtlas();
             fontAtlas.TotalGlyph = glyphImg2;
-             
+
             //save for debug
             ActualImage.SaveImgBufferToPngFile(glyphImg2.GetImageBuffer(), glyphImg2.Width * 4, glyphImg2.Width, glyphImg2.Height, "d:\\WImageTest\\total.png");
-            return openFont; 
+            return openFont;
         }
         //static IEnumerable<ushort> GetGlyphIndexIter(Typeface typeface, params UnicodeLangBits[] rangeBits)
         //{
