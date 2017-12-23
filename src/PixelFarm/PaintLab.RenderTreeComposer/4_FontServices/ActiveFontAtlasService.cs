@@ -67,7 +67,7 @@ namespace PixelFarm.DrawingGL
                 if (font.SizeInPoints >= 4 && font.SizeInPoints <= 14)
                 {
                     //creationParams.hintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction;
-                    creationParams.hintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction_VerticalOnly;
+                    //creationParams.hintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction_VerticalOnly;
                     //creationParams.hintTechnique = Typography.Contours.HintTechnique.CustomAutoFit;
 
                 }

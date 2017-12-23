@@ -131,7 +131,14 @@ namespace LayoutFarm
         public float MeasureWhitespace(RequestFont f)
         {
             throw new NotImplementedException();
-        } 
+        }
+
+        public GlyphPlanSequence CreateGlyphPlanSeq(TextBuffer textBuffer, int startAt, int len, RequestFont font)
+        {
+            Typeface typeface = ResolveTypeface(font);
+            _typographyTxtServices.SetCurrentFont(typeface, font.SizeInPoints);
+            return _typographyTxtServices.LayoutText(textBuffer, startAt, len);
+        }
         public Size MeasureString(char[] str, int startAt, int len, RequestFont font)
         {
             Typeface typeface = ResolveTypeface(font);

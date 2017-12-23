@@ -59,15 +59,15 @@ namespace Mini
                 //canvasPainter.TextPrinter = printer;
                 //----------------------
                 //3. agg texture based font texture
-                
-                var printer = new AggTextSpanPrinter(canvasPainter, glControl.Width, 20);
-                canvasPainter.TextPrinter = printer;
+
+                //var printer = new AggTextSpanPrinter(canvasPainter, glControl.Width, 20);
+                //canvasPainter.TextPrinter = printer;
                 //----------------------
                 //4. texture atlas based font texture 
                 //------------
                 //resolve request font 
-                //var printer = new GLBmpGlyphTextPrinter(canvasPainter, YourImplementation.BootStrapOpenGLES2.myFontLoader);
-                //canvasPainter.TextPrinter = printer;
+                var printer = new GLBitmapGlyphTextPrinter(canvasPainter);
+                canvasPainter.TextPrinter = printer;
 
                 //var openFontStore = new Typography.TextServices.OpenFontStore();
                 //var printer = new GLBmpGlyphTextPrinter(canvasPainter, openFontStore);
