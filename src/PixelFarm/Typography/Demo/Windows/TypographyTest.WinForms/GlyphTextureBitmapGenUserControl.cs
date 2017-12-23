@@ -6,17 +6,18 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
+using PixelFarm.Drawing.Fonts;
 namespace TypographyTest.WinForms
 {
     public partial class GlyphTextureBitmapGenUserControl : UserControl
     {
-        GlyphTextureBitmapGenController _glyphTextureBitmapController;
+        GlyphTextureBitmapGenerator _glyphTextureBitmapController;
         Typography.OpenFont.Typeface _typeface;
 
         public GlyphTextureBitmapGenUserControl()
         {
             InitializeComponent();
-            _glyphTextureBitmapController = new GlyphTextureBitmapGenController();
+            _glyphTextureBitmapController = new GlyphTextureBitmapGenerator();
             SelectedScriptLangs = new List<Typography.OpenFont.ScriptLang>();
         }
         public Typography.OpenFont.Typeface SelectedTypeface
@@ -31,7 +32,8 @@ namespace TypographyTest.WinForms
 
         private void GenGlyphBitmapTextureUserControl_Load(object sender, EventArgs e)
         {
-            lstTextureType.Items.Add(TextureKind.Stencil);
+            lstTextureType.Items.Add(TextureKind.StencilGreyScale);
+            lstTextureType.Items.Add(TextureKind.StencilLcdEffect);
             lstTextureType.Items.Add(TextureKind.Msdf);
             lstTextureType.SelectedIndex = 0;
 
@@ -58,7 +60,7 @@ namespace TypographyTest.WinForms
 
             TextureKind selectedTextureKind = (TextureKind)lstTextureType.SelectedItem;
             char[] chars = this.textBox1.Text.ToCharArray();
-            GlyphTextureBitmapGenController.CreateSampleTextureFontFromScriptLangs(
+            GlyphTextureBitmapGenerator.CreateSampleTextureFontFromScriptLangs(
                _typeface,
                18,
                selectedTextureKind,
@@ -81,7 +83,7 @@ namespace TypographyTest.WinForms
             //
             TextureKind selectedTextureKind = (TextureKind)lstTextureType.SelectedItem;
             char[] chars = this.textBox1.Text.ToCharArray();
-            GlyphTextureBitmapGenController.CreateSampleTextureFontFromInputChars(
+            GlyphTextureBitmapGenerator.CreateSampleTextureFontFromInputChars(
                _typeface,
                18,
                selectedTextureKind,
