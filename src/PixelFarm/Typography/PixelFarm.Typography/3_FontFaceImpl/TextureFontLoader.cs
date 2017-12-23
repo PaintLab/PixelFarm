@@ -53,6 +53,7 @@ namespace PixelFarm.Drawing.Fonts
             fontAtlas = atlas1.CreateSimpleFontAtlas();
             fontAtlas.TotalGlyph = glyphImg2;
              
+            //save for debug
             ActualImage.SaveImgBufferToPngFile(glyphImg2.GetImageBuffer(), glyphImg2.Width * 4, glyphImg2.Width, glyphImg2.Height, "d:\\WImageTest\\total.png");
             return openFont; 
         }
