@@ -68,7 +68,7 @@ namespace Typography.TextLayout
             }
         }
 
-        
+
 
     }
     public enum PositionTechnique
@@ -128,6 +128,12 @@ namespace Typography.TextLayout
         }
     }
 
+
+
+
+
+
+
     /// <summary>
     /// text span's glyph layout engine
     /// </summary>
@@ -177,10 +183,6 @@ namespace Typography.TextLayout
                 _scriptLang = value;
             }
         }
-        /// <summary>
-        /// when read output, please scale to pixel unitd
-        /// </summary>
-        public bool UsePxScaleOnReadOutput { get; set; }
 
         public bool EnableLigature { get; set; }
         public bool EnableComposition { get; set; }
@@ -204,11 +206,16 @@ namespace Typography.TextLayout
                 _pxscaleLayout = value;
             }
         }
+        /// <summary>
+        /// when read output, please scale to pixel unitd
+        /// </summary>
+        public bool UsePxScaleOnReadOutput { get; set; }
 
         /// <summary>
         /// reusable codepoint list buffer
         /// </summary>
-        List<int> _codepoints = new List<int>();//not thread-safe***
+        List<int> _codepoints = new List<int>();//not thread-safe*** 
+
         /// <summary>
         /// do glyph shaping and glyph out
         /// </summary>
@@ -325,29 +332,30 @@ namespace Typography.TextLayout
     }
 
 
-    public delegate void GlyphReadOutputDelegate(int index, GlyphPlan glyphPlan);
+
 
     public static class GlyphLayoutExtensions
     {
 
-        public static float SnapToFitInteger(float value)
+#if DEBUG
+        public static float dbugSnapToFitInteger(float value)
         {
             int floor_value = (int)value;
             return (value - floor_value >= (1f / 2f)) ? floor_value + 1 : floor_value;
         }
-        public static float SnapHalf(float value)
+        public static float dbugSnapHalf(float value)
         {
             int floor_value = (int)value;
             //round to int 0, 0.5,1.0
             return (value - floor_value >= (2f / 3f)) ? floor_value + 1 : //else->
                    (value - floor_value >= (1f / 3f)) ? floor_value + 0.5f : floor_value;
         }
-        static int SnapUpper(float value)
+        static int dbugSnapUpper(float value)
         {
             int floor_value = (int)value;
             return floor_value + 1;
         }
-
+#endif
         /// <summary>
         /// read latest layout output into outputGlyphPlanList
         /// </summary>
@@ -418,59 +426,7 @@ namespace Typography.TextLayout
                 }
             }
         }
-        /// <summary>
-        /// read latest layout output
-        /// </summary>
-        /// <param name="glyphLayout"></param>
-        /// <param name="readDel"></param>
-        public static void ReadOutput(this GlyphLayout glyphLayout, GlyphReadOutputDelegate readDel)
-        {
-            throw new NotSupportedException();
 
-            //Typeface typeface = glyphLayout.Typeface;
-            //List<GlyphPos> glyphPositions = glyphLayout._glyphPositions;
-            ////3.read back
-            //int finalGlyphCount = glyphPositions.Count;
-            //int cx = 0;
-            //short cy = 0;
-
-            //PositionTechnique posTech = glyphLayout.PositionTechnique;
-            //ushort prev_index = 0;
-            //for (int i = 0; i < finalGlyphCount; ++i)
-            //{
-
-            //    GlyphPos glyphPos = glyphPositions[i];
-            //    //----------------------------------   
-            //    switch (posTech)
-            //    {
-            //        default: throw new NotSupportedException();
-            //        case PositionTechnique.None:
-            //            readDel(i, new GlyphPlan(glyphPos.glyphIndex, cx, cy, glyphPos.AdvWidth));
-            //            break;
-            //        case PositionTechnique.OpenFont:
-            //            readDel(i, new GlyphPlan(
-            //                glyphPos.glyphIndex,
-            //                cx + glyphPos.xoffset,
-            //                (short)(cy + glyphPos.yoffset),
-            //                glyphPos.AdvWidth));
-            //            break;
-            //        case PositionTechnique.Kerning:
-
-            //            if (i > 0)
-            //            {
-            //                cx += typeface.GetKernDistance(prev_index, glyphPos.glyphIndex);
-            //            }
-            //            readDel(i, new GlyphPlan(
-            //                 prev_index = glyphPos.glyphIndex,
-            //               cx,
-            //               cy,
-            //               glyphPos.AdvWidth));
-
-            //            break;
-            //    }
-            //    cx += glyphPos.AdvWidth;
-            //}
-        }
         public static void Layout(this GlyphLayout glyphLayout, Typeface typeface, char[] str, int startAt, int len, GlyphPlanList outputGlyphList)
         {
             glyphLayout.Typeface = typeface;
@@ -506,17 +462,17 @@ namespace Typography.TextLayout
                 int startAt,
                 int len, out MeasuredStringBox strBox, float scale)
         {
-            //TODO: consider extension method
+
             GlyphPlanList outputGlyphPlans = glyphLayout._myGlyphPlans;
             outputGlyphPlans.Clear();
             glyphLayout.Layout(textBuffer, startAt, len, outputGlyphPlans);
 
             //
             int j = outputGlyphPlans.Count;
-            Typeface currentTypeface = glyphLayout.Typeface; 
+            Typeface currentTypeface = glyphLayout.Typeface;
             if (j == 0)
             {
-                //not scale
+
 
                 strBox = new MeasuredStringBox(0,
                     currentTypeface.Ascender * scale,

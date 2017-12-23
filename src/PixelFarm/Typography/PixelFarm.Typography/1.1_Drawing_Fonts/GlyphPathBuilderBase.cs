@@ -1,7 +1,6 @@
 ﻿//MIT, 2016-2017, WinterDev
 
 using Typography.OpenFont;
-using Typography.Rendering;
 
 namespace Typography.Contours
 {
@@ -56,9 +55,7 @@ namespace Typography.Contours
         public void BuildFromGlyphIndex(ushort glyphIndex, float sizeInPoints)
         {
             //
-            Glyph glyph = _typeface.GetGlyphByIndex(glyphIndex);
-
-
+            Glyph glyph = _typeface.GetGlyphByIndex(glyphIndex); 
             this._outputGlyphPoints = glyph.GlyphPoints;
             this._outputContours = glyph.EndPoints;
 
