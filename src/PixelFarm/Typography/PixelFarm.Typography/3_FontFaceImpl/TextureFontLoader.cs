@@ -50,15 +50,15 @@ namespace PixelFarm.Drawing.Fonts
                 }
              );
 
-            GlyphImage glyphImg2 = atlasBuilder.BuildSingleImage();
+            GlyphImage totalGlyphsImg = atlasBuilder.BuildSingleImage();
             //create atlas
             fontAtlas = atlasBuilder.CreateSimpleFontAtlas();
-            fontAtlas.TotalGlyph = glyphImg2;
+            fontAtlas.TotalGlyph = totalGlyphsImg;
 
             //save for debug
 
 #if DEBUG
-            ActualImage.SaveImgBufferToPngFile(glyphImg2.GetImageBuffer(), glyphImg2.Width * 4, glyphImg2.Width, glyphImg2.Height, "d:\\WImageTest\\total.png");
+            ActualImage.SaveImgBufferToPngFile(totalGlyphsImg.GetImageBuffer(), totalGlyphsImg.Width * 4, totalGlyphsImg.Width, totalGlyphsImg.Height, "d:\\WImageTest\\total.png");
 #endif
             return openFont;
         }

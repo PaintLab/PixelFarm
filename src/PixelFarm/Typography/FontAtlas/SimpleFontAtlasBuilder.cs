@@ -37,6 +37,7 @@ namespace Typography.Rendering
             this.TextureKind = textureKind;
             this.FontSizeInPoints = fontSizeInPts;
         }
+
         public GlyphImage BuildSingleImage()
         {
             //1. add to list 

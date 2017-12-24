@@ -215,6 +215,8 @@ namespace PixelFarm.DrawingGL
         GLBitmap _glBmp;
         RequestFont font;
 
+        TextureKind _currentTextureKind;
+
         LayoutFarm.OpenFontTextService _textServices = new LayoutFarm.OpenFontTextService();
         public GLBitmapGlyphTextPrinter(GLPainter painter)
         {
@@ -224,12 +226,13 @@ namespace PixelFarm.DrawingGL
 
             this.painter = painter;
             this._glsx = painter.Canvas;
-            //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
-            //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer;
+            //_currentTextureKind = TextureKind.StencilGreyScale;
+            _currentTextureKind = TextureKind.StencilLcdEffect;
 
+            //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
+            //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer; 
 
             ChangeFont(painter.CurrentFont);
-
             _loadedGlyphs = new GLBitmapCache<SimpleFontAtlas>(atlas =>
             {
                 //create new one
@@ -260,7 +263,10 @@ namespace PixelFarm.DrawingGL
             this.font = font;
 
             SimpleFontAtlas foundFontAtlas;
-            ActualFont fontImp = ActiveFontAtlasService.GetTextureFontAtlasOrCreateNew(_textServices, font, out foundFontAtlas);
+            ActualFont fontImp = ActiveFontAtlasService.GetTextureFontAtlasOrCreateNew(_textServices, 
+                font, _currentTextureKind,
+                out foundFontAtlas);
+
             if (foundFontAtlas != this.simpleFontAtlas)
             {
                 //change to another font atlas
@@ -306,7 +312,7 @@ namespace PixelFarm.DrawingGL
 
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
-            int j = buffer.Length; 
+            int j = buffer.Length;
             TextBuffer textBuffer = new TextBuffer(buffer);
             int outputLineH = 40; //test
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBuffer, startAt, len, font);
@@ -316,7 +322,7 @@ namespace PixelFarm.DrawingGL
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= outputLineH; 
+            y -= outputLineH;
             EnsureLoadGLBmp();
             // 
             float scaleFromTexture = _finalTextureScale;
