@@ -41,7 +41,7 @@ namespace TypographyTest.WinForms
             lstTextureType.Items.Add(TextureKind.StencilGreyScale);
             lstTextureType.Items.Add(TextureKind.StencilLcdEffect);
             lstTextureType.Items.Add(TextureKind.Msdf);
-            lstTextureType.SelectedIndex = 0; 
+            lstTextureType.SelectedIndex = 0;
             this.textBox1.Text = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/?=(){}[]%@#^$&|.";
 
         }
@@ -188,6 +188,8 @@ namespace TypographyTest.WinForms
             string bitmapImgSaveFileName = "d:\\WImageTest\\sample_" + selectedTextureKind + "_" +
                System.IO.Path.GetFileNameWithoutExtension(sampleFontFile);
 
+            bool saveEachGlyphSeparatly = chkSaveEachGlyph.Checked;
+
             GlyphTextureBitmapGenerator.CreateTextureFontFromScriptLangs(
                _typeface,
                FontSizeInPoints,
@@ -205,8 +207,13 @@ namespace TypographyTest.WinForms
                    }
                    else
                    {
+
                        //save each glyph
-                       //SaveImgBufferToFile(glyphImg, bitmapImgSaveFileName + "_" + gindex + ".png");
+                       if (saveEachGlyphSeparatly)
+                       {
+                           SaveImgBufferToFile(glyphImg, bitmapImgSaveFileName + "_" + gindex + ".png");
+                       }
+
                    }
                });
         }
@@ -237,9 +244,14 @@ namespace TypographyTest.WinForms
                 return;
             }
 
-            string bitmapImgSaveFileName = _typeface.Filename ?? "";
-            //
+            string sampleFontFile = _typeface.Filename ?? "";
+
             TextureKind selectedTextureKind = (TextureKind)lstTextureType.SelectedItem;
+            string bitmapImgSaveFileName = "d:\\WImageTest\\sample_" + selectedTextureKind + "_" +
+              System.IO.Path.GetFileNameWithoutExtension(sampleFontFile);
+
+            //
+            bool saveEachGlyphSeparatly = chkSaveEachGlyph.Checked;
             char[] chars = this.textBox1.Text.ToCharArray();
             GlyphTextureBitmapGenerator.CreateTextureFontFromInputChars(
                _typeface,
@@ -259,7 +271,10 @@ namespace TypographyTest.WinForms
                   else
                   {
                       //save each glyph
-                      //SaveImgBufferToFile(glyphImg, bitmapImgSaveFileName + "_" + gindex + ".png");
+                      if (saveEachGlyphSeparatly)
+                      {
+                          SaveImgBufferToFile(glyphImg, bitmapImgSaveFileName + "_" + gindex + ".png");
+                      }
                   }
               });
         }
