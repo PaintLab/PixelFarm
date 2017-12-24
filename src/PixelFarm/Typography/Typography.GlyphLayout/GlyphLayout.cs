@@ -353,8 +353,9 @@ namespace Typography.TextLayout
         /// <param name="glyphPositions"></param>
         /// <param name="pxscale"></param>
         /// <param name="outputGlyphPlanList"></param>
-        public static void GenerateGlyphPlan(IGlyphPositions glyphPositions, 
+        public static void GenerateGlyphPlan(IGlyphPositions glyphPositions,
             float pxscale,
+            bool snapToGrid,
             GlyphPlanList outputGlyphPlanList)
         {
             //user can implement this with some 'PixelScaleEngine'
@@ -372,6 +373,15 @@ namespace Typography.TextLayout
                 ushort glyphIndex = glyphPositions.GetGlyph(i, out offsetX, out offsetY, out advW);
 
                 float s_advW = advW * pxscale;
+
+                if (snapToGrid)
+                {
+                    //TEST, 
+                    //if you want to snap each glyph to grid (1px or 0.5px) by ROUNDING
+                    //we can do it here,this produces a predictable caret position result
+                    //
+                    s_advW += (int)Math.Round(s_advW);
+                }
                 float exact_x = (float)(cx + offsetX * pxscale);
                 float exact_y = (float)(cy + offsetY * pxscale);
 
@@ -380,10 +390,11 @@ namespace Typography.TextLayout
                     exact_x,
                     exact_y,
                     advW));
-                cx += s_advW;
-            } 
+                cx += s_advW;                
+                 
+            }
         }
-         
+
     }
 
     /// <summary>

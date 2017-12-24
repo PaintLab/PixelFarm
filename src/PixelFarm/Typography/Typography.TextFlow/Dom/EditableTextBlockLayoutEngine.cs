@@ -108,7 +108,7 @@ namespace Typography.TextLayout
             //we calculate span size 
             //resolve each font style 
 
-            //_glyphLayout.FontSizeInPoints = FontSizeInPts; //
+            
             _glyphLayout.EnableComposition = true;
             _glyphLayout.EnableLigature = true;
 

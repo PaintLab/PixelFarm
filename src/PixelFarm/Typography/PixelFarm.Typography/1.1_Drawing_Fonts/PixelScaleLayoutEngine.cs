@@ -340,7 +340,7 @@ namespace Typography.Contours
 #endif
         }
 
-    
+
         public void Layout(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList)
         {
 
@@ -348,7 +348,7 @@ namespace Typography.Contours
             if (!UseWithLcdSubPixelRenderingTechnique)
             {
                 //layout without fit to alignment direction
-                GlyphLayoutExtensions.GenerateGlyphPlan(posStream, pxscale, outputGlyphPlanList);
+                GlyphLayoutExtensions.GenerateGlyphPlan(posStream, pxscale, false, outputGlyphPlanList);
                 return; //early exit
             }
             //------------------------------

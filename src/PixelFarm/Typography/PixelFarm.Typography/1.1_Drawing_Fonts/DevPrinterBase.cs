@@ -27,11 +27,10 @@ namespace Typography.Rendering
                   List<UserCharToGlyphIndexMap> charToGlyphMapList)
         {
 
-            throw new System.NotSupportedException();
-            //_printer.GlyphLayoutMan.FontSizeInPoints = _printer.FontSizeInPoints;
-            //GlyphLayoutMan.GenerateGlyphPlans(textBuffer, 0, textBuffer.Length, outputGlyphPlanList, charToGlyphMapList);
-            //then scale it
-
+            this.GlyphLayoutMan.Layout(textBuffer, startAt, len);
+            GlyphLayoutExtensions.GenerateGlyphPlan(this.GlyphLayoutMan.ResultUnscaledGlyphPositions,
+                this.Typeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPoints),
+                false, outputGlyphPlanList); 
         }
 
         public bool FillBackground { get; set; }
@@ -104,7 +103,7 @@ namespace Typography.Rendering
             DrawFromGlyphPlans(glyphPlanList, 0, glyphPlanList.Count, x, y);
         }
 
-        
+
     }
 
 }
