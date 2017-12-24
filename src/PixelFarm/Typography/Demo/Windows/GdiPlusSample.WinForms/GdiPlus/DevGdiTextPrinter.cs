@@ -99,9 +99,21 @@ namespace SampleWinForms
         GlyphPlanList _outputGlyphPlans = new GlyphPlanList();//for internal use
         public override void DrawString(char[] textBuffer, int startAt, int len, float x, float y)
         {
+            //1. update
             UpdateGlyphLayoutSettings();
+
+            //2. unscale layout, in design unit
+            this._glyphLayout.Layout(textBuffer, startAt, len);
+
+            //3. scale  to specific font size
             _outputGlyphPlans.Clear();
-            this._glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _outputGlyphPlans, null);
+
+            GlyphLayoutExtensions.GenerateGlyphPlan(
+                _glyphLayout.ResultUnscaledGlyphPositions,
+                _currentTypeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPoints),
+                false,
+                _outputGlyphPlans);
+
             DrawFromGlyphPlans(_outputGlyphPlans, x, y);
         }
         public void UpdateGlyphLayoutSettings()
@@ -110,7 +122,7 @@ namespace SampleWinForms
             _glyphLayout.ScriptLang = this.ScriptLang;
             _glyphLayout.PositionTechnique = this.PositionTechnique;
             _glyphLayout.EnableLigature = this.EnableLigature;
-            _glyphLayout.FontSizeInPoints = this.FontSizeInPoints;
+
         }
         void UpdateVisualOutputSettings()
         {

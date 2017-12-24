@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,7 +33,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -43,6 +43,12 @@
     </Compile>
     <Compile Include="BasicFontOptionsUserControl.Designer.cs">
       <DependentUpon>BasicFontOptionsUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GlyphTextureBitmapGenUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GlyphTextureBitmapGenUserControl.Designer.cs">
+      <DependentUpon>GlyphTextureBitmapGenUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="GlyphContourAnalysisOptions.cs" />
     <Compile Include="GlyphContourAnalysisOptionsUserControl.cs">
@@ -70,6 +76,10 @@
     <Compile Include="TypefaceChangedEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c6807d05-09be-4313-9f8b-bd2d51c55819}</Project>
       <Name>Typography.GlyphLayout</Name>
@@ -82,6 +92,14 @@
       <Project>{540a2ea6-dae3-4625-8951-b2c3118603a4}</Project>
       <Name>PixelFarm.Typography</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Typography.Contours\Typography.Contours.csproj">
+      <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
+      <Name>Typography.Contours</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Typography.MsdfGen\Typography.MsdfGen.csproj">
+      <Project>{8f69ab8d-174a-4912-9328-cae8eda5564b}</Project>
+      <Name>Typography.MsdfGen</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Typography.TextServices\Typography.TextServices.csproj">
       <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
       <Name>Typography.TextServices</Name>
@@ -90,6 +108,9 @@
   <ItemGroup>
     <EmbeddedResource Include="BasicFontOptionsUserControl.resx">
       <DependentUpon>BasicFontOptionsUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GlyphTextureBitmapGenUserControl.resx">
+      <DependentUpon>GlyphTextureBitmapGenUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GlyphContourAnalysisOptionsUserControl.resx">
       <DependentUpon>GlyphContourAnalysisOptionsUserControl.cs</DependentUpon>

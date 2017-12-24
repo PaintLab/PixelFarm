@@ -64,10 +64,9 @@ namespace PixelFarm.Drawing.Fonts
         /// <summary>
         /// write output to vxs
         /// </summary>
-        /// <param name="output"></param>
-        /// <param name="vxsPool"></param>
+        /// <param name="output"></param> 
         /// <param name="scale"></param>
-        public void WriteOutput(VertexStore output, VertexStorePool vxsPool, float scale = 1)
+        public void WriteOutput(VertexStore output, float scale = 1)
         {
             if (scale == 1)
             {
@@ -75,15 +74,14 @@ namespace PixelFarm.Drawing.Fonts
             }
             else
             {
-                //float scale = TypeFace.CalculateFromPointToPixelScale(SizeInPoints);
                 var mat = PixelFarm.Agg.Transform.Affine.NewMatix(
                     new PixelFarm.Agg.Transform.AffinePlan(
                         PixelFarm.Agg.Transform.AffineMatrixCommand.Scale, scale, scale));
                 //transform -> flatten ->output
-                //TODO: review here again***d
-                //VertexStore tmpVxs = vxsPool.GetFreeVxs();
-                curveFlattener.MakeVxs(ps.Vxs, output);
-                // vxsPool.Release(ref tmpVxs);
+                //TODO: review here again***
+                VertexStore tmpVxs = new VertexStore();
+                curveFlattener.MakeVxs(ps.Vxs, tmpVxs);
+                mat.TransformToVxs(tmpVxs, output);
             }
         }
     }

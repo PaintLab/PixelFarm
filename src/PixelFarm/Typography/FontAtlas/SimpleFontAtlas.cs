@@ -8,7 +8,12 @@ using Typography.Rendering;
 
 namespace PixelFarm.Drawing.Fonts
 {
-
+    public enum TextureKind
+    {
+        Msdf,
+        StencilGreyScale,
+        StencilLcdEffect,
+    }
     public class SimpleFontAtlas
     {
         GlyphImage totalGlyphImage;

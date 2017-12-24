@@ -1,7 +1,6 @@
 ﻿//MIT, 2016-2017, WinterDev
 
 using Typography.OpenFont;
-using Typography.Rendering;
 
 namespace Typography.Contours
 {
@@ -22,7 +21,7 @@ namespace Typography.Contours
         /// </summary>
         float _recentPixelScale;
         bool _useInterpreter;
-        
+
         public GlyphPathBuilderBase(Typeface typeface)
         {
             _typeface = typeface;
@@ -56,9 +55,7 @@ namespace Typography.Contours
         public void BuildFromGlyphIndex(ushort glyphIndex, float sizeInPoints)
         {
             //
-            Glyph glyph = _typeface.GetGlyphByIndex(glyphIndex);
-
-
+            Glyph glyph = _typeface.GetGlyphByIndex(glyphIndex); 
             this._outputGlyphPoints = glyph.GlyphPoints;
             this._outputContours = glyph.EndPoints;
 
@@ -76,6 +73,28 @@ namespace Typography.Contours
             }
             //-------------------------------------
             FitCurrentGlyph(glyphIndex, glyph);
+        }
+        public void BuildFromGlyph(Glyph glyph, float sizeInPoints)
+        {
+
+            this._outputGlyphPoints = glyph.GlyphPoints;
+            this._outputContours = glyph.EndPoints;
+            if ((RecentFontSizeInPixels = Typeface.ConvPointsToPixels(sizeInPoints)) < 0)
+            {
+                //convert to pixel size
+                //if size< 0 then set _recentPixelScale = 1;
+                //mean that no scaling at all, we use original point value
+                _recentPixelScale = 1;
+            }
+            else
+            {
+                _recentPixelScale = Typeface.CalculateScaleToPixel(RecentFontSizeInPixels);
+                IsSizeChanged = true;
+            }
+            //-------------------------------------
+            //optional ...
+            //FitCurrentGlyph(glyphIndex, glyph);
+
         }
         protected bool IsSizeChanged { get; set; }
         protected float RecentFontSizeInPixels { get; private set; }

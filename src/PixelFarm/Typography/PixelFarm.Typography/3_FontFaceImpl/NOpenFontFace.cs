@@ -192,7 +192,7 @@ namespace PixelFarm.Drawing.Fonts
             //
             //create new one
             found = new VertexStore();
-            txToVxs.WriteOutput(found, vxsPool);
+            txToVxs.WriteOutput(found);
             glyphVxs.Add(codepoint, found);
             return found;
         }

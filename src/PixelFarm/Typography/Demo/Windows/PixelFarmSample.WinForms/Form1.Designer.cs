@@ -30,20 +30,22 @@
             this.button1 = new System.Windows.Forms.Button();
             this.txtInputChar = new System.Windows.Forms.TextBox();
             this.cmdBuildMsdfTexture = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.glyphContourAnalysisOptionsUserControl1 = new TypographyTest.WinForms.GlyphContourAnalysisOptionsUserControl();
             this.glyphRenderOptionsUserControl1 = new TypographyTest.WinForms.GlyphRenderOptionsUserControl();
             this.openFontOptions1 = new TypographyTest.WinForms.BasicFontOptionsUserControl();
+            this.glyphTextureBitmapGenUserControl1 = new TypographyTest.WinForms.GlyphTextureBitmapGenUserControl();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(436, 11);
+            this.button1.Location = new System.Drawing.Point(390, 12);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(81, 37);
             this.button1.TabIndex = 0;
             this.button1.Text = "Render!";
             this.button1.UseVisualStyleBackColor = true;
-             
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // txtInputChar
             // 
@@ -56,18 +58,28 @@
             // 
             // cmdBuildMsdfTexture
             // 
-            this.cmdBuildMsdfTexture.Location = new System.Drawing.Point(1260, 27);
+            this.cmdBuildMsdfTexture.Location = new System.Drawing.Point(693, 8);
             this.cmdBuildMsdfTexture.Name = "cmdBuildMsdfTexture";
-            this.cmdBuildMsdfTexture.Size = new System.Drawing.Size(121, 28);
+            this.cmdBuildMsdfTexture.Size = new System.Drawing.Size(203, 45);
             this.cmdBuildMsdfTexture.TabIndex = 22;
-            this.cmdBuildMsdfTexture.Text = "Make MsdfTexture";
+            this.cmdBuildMsdfTexture.Text = "Make MsdfTexture Font";
             this.cmdBuildMsdfTexture.UseVisualStyleBackColor = true;
             this.cmdBuildMsdfTexture.Click += new System.EventHandler(this.cmdBuildMsdfTexture_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(902, 4);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(203, 45);
+            this.button2.TabIndex = 70;
+            this.button2.Text = "Make Stencil TextureFont";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // glyphContourAnalysisOptionsUserControl1
             // 
             this.glyphContourAnalysisOptionsUserControl1.BackColor = System.Drawing.Color.White;
-            this.glyphContourAnalysisOptionsUserControl1.Location = new System.Drawing.Point(772, 164);
+            this.glyphContourAnalysisOptionsUserControl1.Location = new System.Drawing.Point(682, 222);
             this.glyphContourAnalysisOptionsUserControl1.Name = "glyphContourAnalysisOptionsUserControl1";
             this.glyphContourAnalysisOptionsUserControl1.Size = new System.Drawing.Size(488, 607);
             this.glyphContourAnalysisOptionsUserControl1.TabIndex = 69;
@@ -75,7 +87,7 @@
             // glyphRenderOptionsUserControl1
             // 
             this.glyphRenderOptionsUserControl1.BackColor = System.Drawing.Color.White;
-            this.glyphRenderOptionsUserControl1.Location = new System.Drawing.Point(772, 12);
+            this.glyphRenderOptionsUserControl1.Location = new System.Drawing.Point(682, 70);
             this.glyphRenderOptionsUserControl1.Name = "glyphRenderOptionsUserControl1";
             this.glyphRenderOptionsUserControl1.Size = new System.Drawing.Size(261, 146);
             this.glyphRenderOptionsUserControl1.TabIndex = 68;
@@ -83,16 +95,27 @@
             // openFontOptions1
             // 
             this.openFontOptions1.BackColor = System.Drawing.Color.White;
-            this.openFontOptions1.Location = new System.Drawing.Point(567, 12);
+            this.openFontOptions1.Location = new System.Drawing.Point(477, 11);
             this.openFontOptions1.Name = "openFontOptions1";
             this.openFontOptions1.Size = new System.Drawing.Size(199, 428);
             this.openFontOptions1.TabIndex = 67;
+            // 
+            // glyphTextureBitmapGenUserControl1
+            // 
+            this.glyphTextureBitmapGenUserControl1.Location = new System.Drawing.Point(949, 55);
+            this.glyphTextureBitmapGenUserControl1.Name = "glyphTextureBitmapGenUserControl1";
+            this.glyphTextureBitmapGenUserControl1.SelectedTypeface = null;
+            this.glyphTextureBitmapGenUserControl1.Size = new System.Drawing.Size(549, 154);
+            this.glyphTextureBitmapGenUserControl1.TabIndex = 71;
+            this.glyphTextureBitmapGenUserControl1.Load += new System.EventHandler(this.glyphTextureBitmapGenUserControl1_Load);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1393, 857);
+            this.ClientSize = new System.Drawing.Size(1504, 857);
+            this.Controls.Add(this.glyphTextureBitmapGenUserControl1);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.glyphContourAnalysisOptionsUserControl1);
             this.Controls.Add(this.glyphRenderOptionsUserControl1);
             this.Controls.Add(this.openFontOptions1);
@@ -101,7 +124,6 @@
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
-            
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -114,6 +136,8 @@
         private TypographyTest.WinForms.BasicFontOptionsUserControl openFontOptions1;
         private TypographyTest.WinForms.GlyphRenderOptionsUserControl glyphRenderOptionsUserControl1;
         private TypographyTest.WinForms.GlyphContourAnalysisOptionsUserControl glyphContourAnalysisOptionsUserControl1;
+        private System.Windows.Forms.Button button2;
+        private TypographyTest.WinForms.GlyphTextureBitmapGenUserControl glyphTextureBitmapGenUserControl1;
     }
 }
 

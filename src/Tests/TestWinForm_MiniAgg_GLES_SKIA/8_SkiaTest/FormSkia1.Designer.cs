@@ -1,4 +1,5 @@
-﻿namespace TestSkia1
+﻿#if SKIA_ENABLE
+namespace TestSkia1
 {
     partial class FormSkia1
     {
@@ -67,3 +68,4 @@
     }
 }
 
+#endif

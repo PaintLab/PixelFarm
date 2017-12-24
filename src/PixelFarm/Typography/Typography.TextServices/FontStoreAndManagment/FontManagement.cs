@@ -22,12 +22,12 @@ namespace Typography.TextServices
         public string FontSubFamily { get; internal set; }
         public string FontPath { get; internal set; }
 
-#if DEBUG
+
         public override string ToString()
         {
             return FontName + " " + FontSubFamily;
         }
-#endif
+
     }
 
 
@@ -147,6 +147,7 @@ namespace Typography.TextServices
                 {
                     var reader = new OpenFontReader();
                     typeface = reader.Read(fs);
+                    typeface.Filename = installedFont.FontPath;
                 }
                 return _loadedTypefaces[installedFont] = typeface;
             }

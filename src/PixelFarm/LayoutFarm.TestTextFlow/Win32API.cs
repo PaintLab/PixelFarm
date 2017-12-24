@@ -717,6 +717,9 @@ namespace Win32
                          x, y, width, height);
         }
     }
+
+
+    [System.Security.SuppressUnmanagedCodeSecurity]
     public class NativeTextWin32
     {
 
