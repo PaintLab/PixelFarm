@@ -17,14 +17,15 @@ namespace Typography.Rendering
 
         public AggGlyphTextureGen()
         {
-            BackGroundColor = Color.Black;
-            GlyphColor = Color.White;
+            BackGroundColor = Color.Transparent;
+            GlyphColor = Color.Black;
         }
 
         public Color BackGroundColor { get; set; }
         public Color GlyphColor { get; set; }
+        public TextureKind TextureKind { get; set; }
 
-        public GlyphImage CreateGlyphImage(GlyphPathBuilder builder, bool useLcdFontEffect, float pxscale)
+        public GlyphImage CreateGlyphImage(GlyphPathBuilder builder, float pxscale)
         {
             //1. create  
 
@@ -72,35 +73,57 @@ namespace Typography.Rendering
 
             //-------------------------------------------- 
             //create glyph img  
-            if (useLcdFontEffect)
-            {
-                w *= 3;
-            }
 
-
-            ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
-            AggRenderSurface aggsx = new AggRenderSurface(img);
-            AggPainter painter = new AggPainter(aggsx);
-            painter.UseSubPixelRendering = useLcdFontEffect;
-
-            //we use white glyph on black bg for this texture                
-            painter.Clear(BackGroundColor);
-            painter.FillColor = GlyphColor;
-            painter.Fill(glyphVxs);
-
-            //-------------------------------------------- 
-            if (useLcdFontEffect)
+            if (TextureKind == TextureKind.StencilLcdEffect)
             {
 
+                w *= 3;// *** x3 than normal
+
+                ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
+                AggRenderSurface aggsx = new AggRenderSurface(img);
+                AggPainter painter = new AggPainter(aggsx);
+                painter.UseSubPixelRendering = true;
+
+
+                //we use white glyph on black bg for this texture                
+                painter.Clear(Color.Black);
+                painter.FillColor = Color.White;
+                painter.Fill(glyphVxs);
+
+                //
                 var glyphImage = new GlyphImage(w / 3, h);
                 glyphImage.TextureOffsetX = dx;
                 glyphImage.TextureOffsetY = dy;
                 glyphImage.SetImageBuffer(ActualImageExtensions.CopyImgBuffer(img, w / 3), false);
                 //copy data from agg canvas to glyph image 
                 return glyphImage;
+
             }
             else
             {
+
+
+                ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
+                AggRenderSurface aggsx = new AggRenderSurface(img);
+                AggPainter painter = new AggPainter(aggsx);
+                painter.UseSubPixelRendering = false;
+
+
+                if (TextureKind == TextureKind.StencilGreyScale)
+                {
+                    painter.Clear(Color.Empty);
+                    painter.FillColor = Color.Black;
+                }
+                else
+                {
+                    painter.Clear(BackGroundColor);
+                    painter.FillColor = this.GlyphColor;
+                }
+
+
+                painter.Fill(glyphVxs);
+                //
+
                 var glyphImage = new GlyphImage(w, h);
                 glyphImage.TextureOffsetX = dx;
                 glyphImage.TextureOffsetY = dy;
@@ -108,6 +131,7 @@ namespace Typography.Rendering
                 //copy data from agg canvas to glyph image 
                 return glyphImage;
             }
+
 
         }
     }

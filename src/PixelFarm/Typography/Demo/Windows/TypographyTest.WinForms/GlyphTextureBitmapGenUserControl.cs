@@ -1,7 +1,6 @@
 ﻿//MIT, 2017, WinterDev
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -41,7 +40,7 @@ namespace TypographyTest.WinForms
             lstTextureType.Items.Add(TextureKind.StencilGreyScale);
             lstTextureType.Items.Add(TextureKind.StencilLcdEffect);
             lstTextureType.Items.Add(TextureKind.Msdf);
-            lstTextureType.SelectedIndex = 0; 
+            lstTextureType.SelectedIndex = 0;
             this.textBox1.Text = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/?=(){}[]%@#^$&|.";
 
         }
@@ -188,7 +187,9 @@ namespace TypographyTest.WinForms
             string bitmapImgSaveFileName = "d:\\WImageTest\\sample_" + selectedTextureKind + "_" +
                System.IO.Path.GetFileNameWithoutExtension(sampleFontFile);
 
-            GlyphTextureBitmapGenerator.CreateTextureFontFromScriptLangs(
+            bool saveEachGlyphSeparatly = chkSaveEachGlyph.Checked;
+            var textureGen = new GlyphTextureBitmapGenerator();
+            textureGen.CreateTextureFontFromScriptLangs(
                _typeface,
                FontSizeInPoints,
                selectedTextureKind,
@@ -198,18 +199,69 @@ namespace TypographyTest.WinForms
                    if (atlasBuilder != null)
                    {
                        atlasBuilder.CompactGlyphSpace = chkCompactGlyphSpace.Checked;
-                       GlyphImage glyphImg2 = atlasBuilder.BuildSingleImage();
-                       SaveImgBufferToFile(glyphImg2, bitmapImgSaveFileName + ".png");
+                       GlyphImage totalGlyphs = atlasBuilder.BuildSingleImage();
+                       SaveImgBufferToFile(totalGlyphs, bitmapImgSaveFileName + ".png");
                        atlasBuilder.SaveFontInfo(bitmapImgSaveFileName + ".xml");
                        MessageBox.Show("glyph gen " + bitmapImgSaveFileName);
                    }
                    else
                    {
+
                        //save each glyph
-                       //SaveImgBufferToFile(glyphImg, bitmapImgSaveFileName + "_" + gindex + ".png");
+                       if (saveEachGlyphSeparatly)
+                       {
+                           SaveImgBufferToFile(glyphImg, bitmapImgSaveFileName + "_" + gindex + ".png");
+                       }
+
                    }
                });
         }
+
+        private void cmdMakeFromSelectedString_Click(object sender, EventArgs e)
+        {
+            //create a simple stencil texture font
+
+            //string sampleFontFile = "../../../TestFonts/tahoma.ttf";
+            if (this.textBox1.Text == null || _typeface == null)
+            {
+                return;
+            }
+
+            string sampleFontFile = _typeface.Filename ?? "";
+
+            TextureKind selectedTextureKind = (TextureKind)lstTextureType.SelectedItem;
+            string bitmapImgSaveFileName = "d:\\WImageTest\\sample_" + selectedTextureKind + "_" +
+              System.IO.Path.GetFileNameWithoutExtension(sampleFontFile);
+
+            var textureGen = new GlyphTextureBitmapGenerator();
+            bool saveEachGlyphSeparatly = chkSaveEachGlyph.Checked;
+            char[] chars = this.textBox1.Text.ToCharArray();
+            textureGen.CreateTextureFontFromInputChars(
+               _typeface,
+               FontSizeInPoints,
+               selectedTextureKind,
+               chars, //eg. ABCD
+              (gindex, glyphImg, atlasBuilder) =>
+              {
+                  if (atlasBuilder != null)
+                  {
+                      atlasBuilder.CompactGlyphSpace = chkCompactGlyphSpace.Checked;
+                      GlyphImage totalGlyphs = atlasBuilder.BuildSingleImage();
+                      SaveImgBufferToFile(totalGlyphs, bitmapImgSaveFileName + ".png");
+                      atlasBuilder.SaveFontInfo(bitmapImgSaveFileName + ".xml");
+                      MessageBox.Show("glyph gen " + bitmapImgSaveFileName);
+                  }
+                  else
+                  {
+                      //save each glyph
+                      if (saveEachGlyphSeparatly)
+                      {
+                          SaveImgBufferToFile(glyphImg, bitmapImgSaveFileName + "_" + gindex + ".png");
+                      }
+                  }
+              });
+        }
+
         static void SaveImgBufferToFile(GlyphImage glyphImg, string filename)
         {
             int[] intBuffer = glyphImg.GetImageBuffer();
@@ -226,42 +278,6 @@ namespace TypographyTest.WinForms
                 newBmp.Save(filename);
             }
 
-        }
-        private void cmdMakeFromSelectedString_Click(object sender, EventArgs e)
-        {
-            //create a simple stencil texture font
-
-            //string sampleFontFile = "../../../TestFonts/tahoma.ttf";
-            if (this.textBox1.Text == null || _typeface == null)
-            {
-                return;
-            }
-
-            string bitmapImgSaveFileName = _typeface.Filename ?? "";
-            //
-            TextureKind selectedTextureKind = (TextureKind)lstTextureType.SelectedItem;
-            char[] chars = this.textBox1.Text.ToCharArray();
-            GlyphTextureBitmapGenerator.CreateTextureFontFromInputChars(
-               _typeface,
-               FontSizeInPoints,
-               selectedTextureKind,
-               chars, //eg. ABCD
-              (gindex, glyphImg, atlasBuilder) =>
-              {
-                  if (atlasBuilder != null)
-                  {
-                      atlasBuilder.CompactGlyphSpace = chkCompactGlyphSpace.Checked;
-                      GlyphImage glyphImg2 = atlasBuilder.BuildSingleImage();
-                      SaveImgBufferToFile(glyphImg2, bitmapImgSaveFileName + ".png");
-                      atlasBuilder.SaveFontInfo(bitmapImgSaveFileName + ".xml");
-                      MessageBox.Show("glyph gen " + bitmapImgSaveFileName);
-                  }
-                  else
-                  {
-                      //save each glyph
-                      //SaveImgBufferToFile(glyphImg, bitmapImgSaveFileName + "_" + gindex + ".png");
-                  }
-              });
         }
     }
 }
