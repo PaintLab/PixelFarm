@@ -33,6 +33,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.cmdMakeFromScriptLangs = new System.Windows.Forms.Button();
             this.chkCompactGlyphSpace = new System.Windows.Forms.CheckBox();
+            this.chkSaveEachGlyph = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lstTextureType
@@ -57,7 +58,7 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(3, 78);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(220, 20);
+            this.textBox1.Size = new System.Drawing.Size(178, 20);
             this.textBox1.TabIndex = 2;
             // 
             // cmdMakeFromScriptLangs
@@ -75,24 +76,35 @@
             this.chkCompactGlyphSpace.AutoSize = true;
             this.chkCompactGlyphSpace.Checked = true;
             this.chkCompactGlyphSpace.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkCompactGlyphSpace.Location = new System.Drawing.Point(143, 55);
+            this.chkCompactGlyphSpace.Location = new System.Drawing.Point(195, 55);
             this.chkCompactGlyphSpace.Name = "chkCompactGlyphSpace";
             this.chkCompactGlyphSpace.Size = new System.Drawing.Size(132, 17);
             this.chkCompactGlyphSpace.TabIndex = 4;
             this.chkCompactGlyphSpace.Text = "Compact Glyph Space";
             this.chkCompactGlyphSpace.UseVisualStyleBackColor = true;
             // 
+            // chkSaveEachGlyph
+            // 
+            this.chkSaveEachGlyph.AutoSize = true;
+            this.chkSaveEachGlyph.Location = new System.Drawing.Point(195, 78);
+            this.chkSaveEachGlyph.Name = "chkSaveEachGlyph";
+            this.chkSaveEachGlyph.Size = new System.Drawing.Size(106, 17);
+            this.chkSaveEachGlyph.TabIndex = 5;
+            this.chkSaveEachGlyph.Text = "Save each glyph";
+            this.chkSaveEachGlyph.UseVisualStyleBackColor = true;
+            // 
             // GlyphTextureBitmapGenUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.chkSaveEachGlyph);
             this.Controls.Add(this.chkCompactGlyphSpace);
             this.Controls.Add(this.cmdMakeFromScriptLangs);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.cmdMakeFromSelectedString);
             this.Controls.Add(this.lstTextureType);
             this.Name = "GlyphTextureBitmapGenUserControl";
-            this.Size = new System.Drawing.Size(309, 142);
+            this.Size = new System.Drawing.Size(327, 142);
             this.Load += new System.EventHandler(this.GenGlyphBitmapTextureUserControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -106,5 +118,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button cmdMakeFromScriptLangs;
         private System.Windows.Forms.CheckBox chkCompactGlyphSpace;
+        private System.Windows.Forms.CheckBox chkSaveEachGlyph;
     }
 }

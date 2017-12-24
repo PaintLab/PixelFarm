@@ -72,14 +72,19 @@ namespace Typography.Rendering
 
             //-------------------------------------------- 
             //create glyph img  
-            ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
-            AggRenderSurface aggsx = new AggRenderSurface(img);
-            AggPainter painter = new AggPainter(aggsx);
-            painter.UseSubPixelRendering = useLcdFontEffect;
+
 
             if (useLcdFontEffect)
-            {
-                w *= 3;
+            {   
+
+                w *= 3;// *** x3 than normal
+
+                ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
+                AggRenderSurface aggsx = new AggRenderSurface(img);
+                AggPainter painter = new AggPainter(aggsx);
+                painter.UseSubPixelRendering = true;
+
+
                 //we use white glyph on black bg for this texture                
                 painter.Clear(Color.Black);
                 painter.FillColor = Color.White;
@@ -96,6 +101,11 @@ namespace Typography.Rendering
             }
             else
             {
+                ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
+                AggRenderSurface aggsx = new AggRenderSurface(img);
+                AggPainter painter = new AggPainter(aggsx);
+                painter.UseSubPixelRendering = false;
+
                 painter.Clear(BackGroundColor);
                 painter.FillColor = GlyphColor;
                 painter.Fill(glyphVxs);
@@ -107,8 +117,8 @@ namespace Typography.Rendering
                 glyphImage.SetImageBuffer(ActualImage.CopyImgBuffer(img), false);
                 //copy data from agg canvas to glyph image 
                 return glyphImage;
-            } 
-             
+            }
+
 
         }
     }
