@@ -306,17 +306,7 @@ namespace PixelFarm.DrawingGL
 
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
-            int j = buffer.Length;
-            //resolve font from painter?  
-
-
-            //int[] outputGlyphAdvances = new int[j];
-
-            //int outputTotalW, outputLineH;
-            //_opentFontTextService.CalculateGlyphAdvancePos(buffer, startAt, len,
-            //    this.font, outputGlyphAdvances, out outputTotalW, out outputLineH);
-
-            //_textServices.SetCurrentFont(typ)
+            int j = buffer.Length; 
             TextBuffer textBuffer = new TextBuffer(buffer);
             int outputLineH = 40; //test
             GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBuffer, startAt, len, font);
@@ -326,9 +316,7 @@ namespace PixelFarm.DrawingGL
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= outputLineH;
-
-
+            y -= outputLineH; 
             EnsureLoadGLBmp();
             // 
             float scaleFromTexture = _finalTextureScale;
