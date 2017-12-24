@@ -90,7 +90,9 @@ namespace Typography.TextServices
             }
 
             _currentTypeface = _glyphLayout.Typeface = typeface;
-            _glyphLayout.FontSizeInPoints = _fontSizeInPts = fontSizeInPts;
+            _fontSizeInPts = fontSizeInPts;
+
+            //_glyphLayout.FontSizeInPoints = _fontSizeInPts = fontSizeInPts;
         }
         public Typeface GetTypeface(string name, InstalledFontStyle installedFontStyle)
         {
@@ -181,6 +183,7 @@ namespace Typography.TextServices
 
         }
 
+        GlyphPlanList _reusableGlyphPlanList = new GlyphPlanList();
         List<MeasuredStringBox> _reusableMeasureBoxList = new List<MeasuredStringBox>();
         public void MeasureString(char[] str, int startAt, int len, out int w, out int h)
         {
@@ -193,7 +196,7 @@ namespace Typography.TextServices
             }
             _reusableMeasureBoxList.Clear(); //reset 
 
-            float scale = _currentTypeface.CalculateScaleToPixelFromPointSize(_fontSizeInPts);
+            float pxscale = _currentTypeface.CalculateScaleToPixelFromPointSize(_fontSizeInPts);
             //NOET:at this moment, simple operation
             //may not be simple...  
             //-------------------
@@ -210,11 +213,119 @@ namespace Typography.TextServices
             foreach (BreakSpan breakSpan in BreakToLineSegments(str, startAt, len))
             {
 
-                MeasuredStringBox result;
+
                 //measure string at specific px scale 
-                _glyphLayout.MeasureString(str, breakSpan.startAt, breakSpan.len, out result, scale);
+                _glyphLayout.Layout(str, breakSpan.startAt, breakSpan.len);
+                //
+                _reusableGlyphPlanList.Clear();
+                GlyphLayoutExtensions.GenerateGlyphPlan(_glyphLayout.ResultUnscaledGlyphPositions, pxscale, _reusableGlyphPlanList);
+                //measure string size
+
+                var result = new MeasuredStringBox(
+                    _reusableGlyphPlanList.AccumAdvanceX * pxscale,
+                    _currentTypeface.Ascender * pxscale,
+                    _currentTypeface.Descender * pxscale,
+                    _currentTypeface.LineGap * pxscale,
+                     Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(_currentTypeface) * pxscale);
+                //
                 ConcatMeasureBox(ref accumW, ref accumH, ref result);
 
+                //public static void MeasureString(
+                //        this GlyphLayout glyphLayout,
+                //        char[] textBuffer,
+                //        int startAt,
+                //        int len, out MeasuredStringBox strBox, float scale)
+                //{
+                //    throw new NotSupportedException();
+                //    //GlyphPlanList outputGlyphPlans = glyphLayout._myGlyphPlans;
+                //    //outputGlyphPlans.Clear();
+                //    //glyphLayout.Layout(textBuffer, startAt, len, outputGlyphPlans);
+
+                //    ////
+                //    //int j = outputGlyphPlans.Count;
+                //    //Typeface currentTypeface = glyphLayout.Typeface;
+                //    //if (j == 0)
+                //    //{
+
+
+                //    //    strBox = new 
+                //public static void MeasureString(
+                //        this GlyphLayout glyphLayout,
+                //        char[] textBuffer,
+                //        int startAt,
+                //        int len, out MeasuredStringBox strBox, float scale)
+                //{
+                //    throw new NotSupportedException();
+                //    //GlyphPlanList outputGlyphPlans = glyphLayout._myGlyphPlans;
+                //    //outputGlyphPlans.Clear();
+                //    //glyphLayout.Layout(textBuffer, startAt, len, outputGlyphPlans);
+
+                //    ////
+                //    //int j = outputGlyphPlans.Count;
+                //    //Typeface currentTypeface = glyphLayout.Typeface;
+                //    //if (j == 0)
+                //    //{
+
+
+                //    //    strBox = new MeasuredStringBox(0,
+                //    //        currentTypeface.Ascender * scale,
+                //    //        currentTypeface.Descender * scale,
+                //    //        currentTypeface.LineGap * scale,
+                //    //        Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface) * scale);
+
+                //    //}
+                //    //else
+                //    //{
+                //    //    //TEST, 
+                //    //    //if you want to snap each glyph to grid (1px or 0.5px) by ROUNDING
+                //    //    //we can do it here,this produces a predictable caret position result
+                //    //    //
+
+                //    //    int accumW = 0;
+                //    //    for (int i = 0; i < j; ++i)
+                //    //    {
+                //    //        GlyphPlan glyphPlan = outputGlyphPlans[i];
+                //    //        float scaleW = glyphPlan.AdvanceX * scale;
+                //    //        //select proper integer version
+                //    //        accumW += (int)Math.Round(scaleW);
+                //    //    }
+
+                //    //    strBox = new MeasuredStringBox(accumW,
+                //    //            currentTypeface.Ascender * scale,
+                //    //            currentTypeface.Descender * scale,
+                //    //            currentTypeface.LineGap * scale,
+                //    //            Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface) * scale);
+                //    //}
+                //}(0,
+                //    //        currentTypeface.Ascender * scale,
+                //    //        currentTypeface.Descender * scale,
+                //    //        currentTypeface.LineGap * scale,
+                //    //        Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface) * scale);
+
+                //    //}
+                //    //else
+                //    //{
+                //    //    //TEST, 
+                //    //    //if you want to snap each glyph to grid (1px or 0.5px) by ROUNDING
+                //    //    //we can do it here,this produces a predictable caret position result
+                //    //    //
+
+                //    //    int accumW = 0;
+                //    //    for (int i = 0; i < j; ++i)
+                //    //    {
+                //    //        GlyphPlan glyphPlan = outputGlyphPlans[i];
+                //    //        float scaleW = glyphPlan.AdvanceX * scale;
+                //    //        //select proper integer version
+                //    //        accumW += (int)Math.Round(scaleW);
+                //    //    }
+
+                //    //    strBox = new MeasuredStringBox(accumW,
+                //    //            currentTypeface.Ascender * scale,
+                //    //            currentTypeface.Descender * scale,
+                //    //            currentTypeface.LineGap * scale,
+                //    //            Typography.OpenFont.Extensions.TypefaceExtensions.CalculateRecommendLineSpacing(currentTypeface) * scale);
+                //    //}
+                //}  
             }
 
             w = (int)System.Math.Round(accumW);
@@ -335,7 +446,7 @@ namespace Typography.TextServices
                 startAt,
                 len);
 
-            glyphLayout.ReadOutput(planList);
+            //glyphLayout.ReadOutput(planList);
 
             int post_count = planList.Count;
             return new GlyphPlanSequence(_glyphPlanBuffer, pre_count, post_count - pre_count);
@@ -362,18 +473,19 @@ namespace Typography.TextServices
 
             GlyphPlanSequence planSeq = GlyphPlanSequence.Empty;
 
-
             GlyphPlanSeqCollection seqCol = _glyphPlanSeqSet.GetSeqCollectionOrCreateIfNotExist(len);
             int hashValue = CalculateHash(buffer, startAt, len);
             if (!seqCol.TryGetCacheGlyphPlanSeq(hashValue, out planSeq))
             {
-                //not found then create glyph plan seq
-                bool useOutputScale = glyphLayout.UsePxScaleOnReadOutput;//save 
-                                                                         //some font may have 'special' glyph x,y at some font size(eg. for subpixel-rendering position)
-                                                                         //but in general we store the new glyph plan seq with unscale glyph pos
-                glyphLayout.UsePxScaleOnReadOutput = false;
+                ////not found then create glyph plan seq
+                //bool useOutputScale = glyphLayout.UsePxScaleOnReadOutput;
+
+                ////save 
+                //some font may have 'special' glyph x,y at some font size(eg. for subpixel-rendering position)
+                //but in general we store the new glyph plan seq with unscale glyph pos
+                //glyphLayout.UsePxScaleOnReadOutput = false;
                 planSeq = CreateGlyphPlanSeq(glyphLayout, buffer, startAt, len);
-                glyphLayout.UsePxScaleOnReadOutput = useOutputScale;//restore
+                //glyphLayout.UsePxScaleOnReadOutput = useOutputScale;//restore
                 seqCol.Register(hashValue, planSeq);
             }
             //---
