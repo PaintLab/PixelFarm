@@ -15,6 +15,7 @@ namespace PixelFarm.DrawingGL
         InvertAlphaLineSmoothShader invertAlphaFragmentShader;
         BasicFillShader basicFillShader;
         RectFillShader rectFillShader;
+        GlyphImageStecilShader glyphStencilShader;
         GdiImageTextureShader gdiImgTextureShader;
         GdiImageTextureWithWhiteTransparentShader gdiImgTextureWithWhiteTransparentShader;
         ImageTextureWithSubPixelRenderingShader textureSubPixRendering;
@@ -69,6 +70,7 @@ namespace PixelFarm.DrawingGL
             rectFillShader = new RectFillShader(_shareRes);
             gdiImgTextureShader = new GdiImageTextureShader(_shareRes);
             gdiImgTextureWithWhiteTransparentShader = new GdiImageTextureWithWhiteTransparentShader(_shareRes);
+            glyphStencilShader = new GlyphImageStecilShader(_shareRes);
             textureSubPixRendering = new ImageTextureWithSubPixelRenderingShader(_shareRes);
             blurShader = new BlurShader(_shareRes);
             glesTextureShader = new OpenGLESTextureShader(_shareRes);
@@ -348,16 +350,7 @@ namespace PixelFarm.DrawingGL
                 gdiImgTextureShader.Render(bmp, x, y, w, h);
             }
         }
-        /// <summary>
-        /// draw glyph image with transparent
-        /// </summary>
-        /// <param name="bmp"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        public void DrawGlyphImage(GLBitmap bmp, float x, float y)
-        {
-            this.gdiImgTextureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
-        }
+
         /// <summary>
         /// draw glyph image with transparent
         /// </summary>
@@ -370,6 +363,32 @@ namespace PixelFarm.DrawingGL
             DrawGlyphImageWithSubPixelRenderingTechnique(bmp, ref r, x, y, 1);
         }
         public PixelFarm.Drawing.Color FontFillColor { get; set; }
+
+
+        /// <summary>
+        /// draw glyph image with transparent
+        /// </summary>
+        /// <param name="bmp"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void DrawGlyphImage(GLBitmap bmp, float x, float y)
+        {
+            this.gdiImgTextureWithWhiteTransparentShader.Render(bmp, x, y, bmp.Width, bmp.Height);
+        }
+        public void DrawGlyphImageWithStecil(GLBitmap bmp, ref PixelFarm.Drawing.Rectangle r, float targetLeft, float targetTop, float scale)
+        {
+            glyphStencilShader.SetColor(this.FontFillColor);
+            if (bmp.IsBigEndianPixel)
+            {
+                
+                glyphStencilShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+            }
+            else
+            {
+                glyphStencilShader.RenderSubImage(bmp, r.Left, r.Top, r.Width, r.Height, targetLeft, targetTop);
+            }
+        }
+
         public void DrawGlyphImageWithSubPixelRenderingTechnique(
             GLBitmap bmp,
             ref PixelFarm.Drawing.Rectangle r,
@@ -391,6 +410,8 @@ namespace PixelFarm.DrawingGL
                 //-------------------------
                 //draw a serie of image***
                 //-------------------------
+
+                //TODO: review performance here ***
 
                 //1. B , cyan result
                 GL.ColorMask(false, false, true, false);

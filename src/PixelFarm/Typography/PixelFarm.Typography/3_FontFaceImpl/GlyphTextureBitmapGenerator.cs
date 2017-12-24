@@ -39,7 +39,12 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
-        public static void CreateTextureFontFromScriptLangs(
+        public GlyphTextureBitmapGenerator()
+        {
+            UseTrueTypeInstruction = true;
+        }
+        public bool UseTrueTypeInstruction { get; set; }
+        public void CreateTextureFontFromScriptLangs(
             Typeface typeface, float sizeInPoint,
             TextureKind textureKind,
             ScriptLang[] scLangs,
@@ -57,7 +62,7 @@ namespace PixelFarm.Drawing.Fonts
             CreateTextureFontFromGlyphIndices(typeface, sizeInPoint, textureKind, GetUniqueGlyphIndexList(outputGlyphIndexList), onFinishTotal);
 
         }
-        public static void CreateTextureFontFromInputChars(
+        public void CreateTextureFontFromInputChars(
             Typeface typeface, float sizeInPoint,
             TextureKind textureKind,
             char[] chars, OnEachFinishTotal onFinishTotal)
@@ -75,10 +80,11 @@ namespace PixelFarm.Drawing.Fonts
             CreateTextureFontFromGlyphIndices(typeface, sizeInPoint, textureKind, GetUniqueGlyphIndexList(glyphIndices), onFinishTotal);
         }
 
-        public static void CreateTextureFontFromGlyphIndices(
-            Typeface typeface, float sizeInPoint,
-            TextureKind textureKind,
-            ushort[] glyphIndices, OnEachFinishTotal onFinishTotal)
+        void CreateTextureFontFromGlyphIndices(
+              Typeface typeface,
+              float sizeInPoint,
+              TextureKind textureKind,
+              ushort[] glyphIndices, OnEachFinishTotal onFinishTotal)
         {
             if (onFinishTotal == null)
             {
@@ -87,7 +93,7 @@ namespace PixelFarm.Drawing.Fonts
             //sample: create sample msdf texture 
             //-------------------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
-            builder.UseTrueTypeInstructions = true;
+            builder.UseTrueTypeInstructions = this.UseTrueTypeInstruction;
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
             atlasBuilder.SetAtlasInfo(textureKind, sizeInPoint);
@@ -115,30 +121,21 @@ namespace PixelFarm.Drawing.Fonts
                 ushort gindex = glyphIndices[i];
                 builder.BuildFromGlyphIndex(gindex, -1);
                 GlyphImage glyphImg = null;
-                switch (textureKind)
+                if(textureKind == TextureKind.Msdf)
                 {
-                    case TextureKind.Msdf:
-                        {
-                            var glyphToContour = new GlyphContourBuilder();
-                            //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
-                            builder.ReadShapes(glyphToContour);
-                            msdfGenParams.shapeScale = 1f / 64; //as original
-                            glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, msdfGenParams);
-                        }
-                        break;
-                    case TextureKind.StencilGreyScale:
-                        {
-                            //create alpha channel texture                      
-                            glyphImg = aggTextureGen.CreateGlyphImage(builder, false, pxscale);
-                        }
-                        break;
-                    case TextureKind.StencilLcdEffect:
-                        {
-                            //create alpha channel texture                      
-                            glyphImg = aggTextureGen.CreateGlyphImage(builder, true, pxscale);
-                        }
-                        break;
+                    var glyphToContour = new GlyphContourBuilder();
+                    //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
+                    builder.ReadShapes(glyphToContour);
+                    msdfGenParams.shapeScale = 1f / 64; //as original
+                    glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, msdfGenParams);
                 }
+                else
+                {
+                    //create alpha channel texture                      
+                    aggTextureGen.TextureKind = textureKind;
+                    glyphImg = aggTextureGen.CreateGlyphImage(builder, pxscale);
+                }
+                //
 
                 atlasBuilder.AddGlyph(gindex, glyphImg);
                 onFinishTotal(gindex, glyphImg, null);
