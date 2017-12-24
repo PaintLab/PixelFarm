@@ -16,6 +16,7 @@ namespace Typography.TextLayout
         List<EditableTextLine> _lines = new List<EditableTextLine>();
 
         GlyphLayout _glyphLayout;
+
         public EditableTextBlockLayoutEngine()
         {
             _textBlockLexer = new TextBlockLexer();
@@ -117,6 +118,11 @@ namespace Typography.TextLayout
             GlyphPlanBuffer glyphPlanBuffer = new GlyphPlanBuffer(outputGlyphPlan);
             Typeface selectedTypeface = this.DefaultTypeface;
 
+
+            //
+            float pxscale = selectedTypeface.CalculateScaleToPixelFromPointSize(this.FontSizeInPts);
+
+
             for (int i = 0; i < lineCount; ++i)
             {
                 EditableTextLine line = _lines[i];
@@ -137,9 +143,14 @@ namespace Typography.TextLayout
                     char[] rawBuffer = buffer.UnsafeGetInternalBuffer();
 
                     int preCount = outputGlyphPlan.Count;
-                    _glyphLayout.Layout(selectedTypeface, rawBuffer, tt.StartAt, tt.Len, outputGlyphPlan);
+                    _glyphLayout.Typeface = selectedTypeface;
+                    _glyphLayout.Layout(rawBuffer, tt.StartAt, tt.Len);
+
+                    //use pixel-scale-layout-engine to scale to specific font size
+                    //or scale it manually
 
                     int postCount = outputGlyphPlan.Count;
+
 
                     //
                     tt.SetGlyphPlanSeq(new GlyphPlanSequence(glyphPlanBuffer, preCount, postCount - preCount));

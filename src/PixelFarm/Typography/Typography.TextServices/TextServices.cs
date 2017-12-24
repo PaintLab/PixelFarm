@@ -214,8 +214,8 @@ namespace Typography.TextServices
 
                 MeasuredStringBox result;
                 //measure string at specific px scale 
-                _glyphLayout.MeasureString(str, breakSpan.startAt, breakSpan.len, out result, scale);
-                ConcatMeasureBox(ref accumW, ref accumH, ref result);
+               // _glyphLayout.MeasureString(str, breakSpan.startAt, breakSpan.len, out result, scale);
+                //ConcatMeasureBox(ref accumW, ref accumH, ref result);
 
             }
 
@@ -337,7 +337,7 @@ namespace Typography.TextServices
                 startAt,
                 len);
 
-            glyphLayout.ReadOutput(planList);
+            //glyphLayout.ReadOutput(planList);
 
             int post_count = planList.Count;
             return new GlyphPlanSequence(_glyphPlanBuffer, pre_count, post_count - pre_count);

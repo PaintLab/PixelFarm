@@ -340,46 +340,19 @@ namespace Typography.Contours
 #endif
         }
 
-
-
-        void LayoutWithoutHorizontalFitAlign(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList)
-        {
-            //the default OpenFont layout without fit-to-writing alignment
-            int finalGlyphCount = posStream.Count;
-            float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
-            double cx = 0;
-            short cy = 0;
-
-            for (int i = 0; i < finalGlyphCount; ++i)
-            {
-                short offsetX, offsetY, advW; //all from pen-pos
-                ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
-
-                float s_advW = advW * pxscale;
-                float exact_x = (float)(cx + offsetX * pxscale);
-                float exact_y = (float)(cy + offsetY * pxscale);
-
-                outputGlyphPlanList.Append(new GlyphPlan(
-                   glyphIndex,
-                    exact_x,
-                    exact_y,
-                    advW));
-                cx += s_advW;
-            }
-        }
-
+    
         public void Layout(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList)
         {
 
+            float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
             if (!UseWithLcdSubPixelRenderingTechnique)
             {
                 //layout without fit to alignment direction
-                LayoutWithoutHorizontalFitAlign(posStream, outputGlyphPlanList);
+                GlyphLayoutExtensions.GenerateGlyphPlan(posStream, pxscale, outputGlyphPlanList);
                 return; //early exit
             }
             //------------------------------
             int finalGlyphCount = posStream.Count;
-            float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
 #if DEBUG
             float dbug_onepx = 1 / pxscale;
 #endif

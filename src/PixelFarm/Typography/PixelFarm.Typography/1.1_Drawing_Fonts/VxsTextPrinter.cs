@@ -167,11 +167,13 @@ namespace PixelFarm.Drawing.Fonts
             //1. update some props.. 
             //2. update current type face
             UpdateGlyphLayoutSettings();
-            Typeface typeface = _currentTypeface;// _glyphPathBuilder.Typeface;
-
-
+            Typeface typeface = _currentTypeface;// _glyphPathBuilder.Typeface;            
+            _glyphLayout.Typeface = typeface;
+            _glyphLayout.Layout(text, startAt, len);
+            //
+            //3. scale from design unit to specific font size
             _outputGlyphPlans.Clear();
-            _glyphLayout.Layout(typeface, text, startAt, len, _outputGlyphPlans);
+            _pxScaleEngine.Layout(_glyphLayout.ResultUnscaledGlyphPositions, _outputGlyphPlans);
             TextPrinterHelper.CopyGlyphPlans(renderVx, _outputGlyphPlans, this._currentFontSizePxScale);
         }
 
@@ -385,62 +387,33 @@ namespace PixelFarm.Drawing.Fonts
             InternalDrawString(textBuffer, startAt, len, x, y);
         }
 
-        GlyphPlanList _unscaledGlyphPlanList = new GlyphPlanList();
 
         void InternalDrawString(char[] textBuffer, int startAt, int len, float x, float y)
         {
             UpdateGlyphLayoutSettings();
-            _unscaledGlyphPlanList.Clear();
-            //              
-            _glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _unscaledGlyphPlanList, null);
+            //unscale layout, with design unit scale
+            _glyphLayout.Layout(textBuffer, startAt, len);
             //
-
+            //
+            _outputGlyphPlans.Clear();
+            //
             if (this._pxScaleEngine != null)
             {
-                ////use custom pixel scale layout engine   
-                _outputGlyphPlans.Clear();
+                //scale to specific font size 
                 _pxScaleEngine.Layout(_glyphLayout.ResultUnscaledGlyphPositions, _outputGlyphPlans);
-
             }
             else
             {
 
                 //no custom engine
-                //then use default scale 
-                float pxscale = this._currentFontSizePxScale;
-                //double cx = 0;
-                //short cy = 0;
+                //then use default scale  
+                GlyphLayoutExtensions.GenerateGlyphPlan(
+                    _glyphLayout.ResultUnscaledGlyphPositions,
+                    _currentFontSizePxScale,
+                    _outputGlyphPlans);
 
-                int finalGlyphCount = _unscaledGlyphPlanList.Count;
-                for (int i = 0; i < finalGlyphCount; ++i)
-                {
-                    //glyph plan is struct,
-                    //so this is copy-by-value
-                    GlyphPlan glyphPlan = _unscaledGlyphPlanList[i];
-                    glyphPlan.AdvanceX *= pxscale;
-                    glyphPlan.ExactX *= pxscale;
-                    glyphPlan.ExactY *= pxscale;
-
-                    //GlyphPos glyph_pos = glyphPositions[i];
-                    //float advW = glyph_pos.advanceW * pxscale;
-                    //float exact_x = (float)(cx + glyph_pos.OffsetX * pxscale);
-                    //float exact_y = (float)(cy + glyph_pos.OffsetY * pxscale);
-                    _outputGlyphPlans.Append(glyphPlan);
-
-                    //outputGlyphPlanList.Append(new GlyphPlan(
-                    //    glyph_pos.glyphIndex,
-                    //    exact_x,
-                    //    exact_y,
-                    //    advW));
-                    //cx += advW;
-                }
             }
 
-            //-----
-            //we (fine) adjust horizontal fit here
-            //this step we need grid fitting information
-
-            //-----
             DrawFromGlyphPlans(_outputGlyphPlans, x, y);
         }
 
