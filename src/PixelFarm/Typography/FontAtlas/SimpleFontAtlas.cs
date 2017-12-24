@@ -13,6 +13,7 @@ namespace PixelFarm.Drawing.Fonts
         Msdf,
         StencilGreyScale,
         StencilLcdEffect,
+        Bitmap,
     }
     public class SimpleFontAtlas
     {

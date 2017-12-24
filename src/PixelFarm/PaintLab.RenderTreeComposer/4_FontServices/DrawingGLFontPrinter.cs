@@ -227,8 +227,11 @@ namespace PixelFarm.DrawingGL
             this.painter = painter;
             this._glsx = painter.Canvas;
             _currentTextureKind = TextureKind.StencilGreyScale;
+
             //_currentTextureKind = TextureKind.StencilLcdEffect;
             //_currentTextureKind = TextureKind.Msdf;
+
+
             //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
             //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer; 
 
@@ -267,16 +270,16 @@ namespace PixelFarm.DrawingGL
             //TODO: review here, langBits can be created with scriptLang ?
             creationParams.scriptLangs = new ScriptLang[]
             {
-                Typography.OpenFont.ScriptLangs.Latin,
-                Typography.OpenFont.ScriptLangs.Thai //eg. Thai, for test with complex script, you can change to your own
+                ScriptLangs.Latin,
+                ScriptLangs.Thai //eg. Thai, for test with complex script, you can change to your own
             };
             //
             creationParams.textureKind = _currentTextureKind;
 
 
             SimpleFontAtlas foundFontAtlas;
-            ActualFont fontImp = ActiveFontAtlasService.GetTextureFontAtlasOrCreateNew(_textServices, 
-                font, 
+            ActualFont fontImp = ActiveFontAtlasService.GetTextureFontAtlasOrCreateNew(_textServices,
+                font,
                 creationParams,
                 out foundFontAtlas);
 
@@ -325,6 +328,9 @@ namespace PixelFarm.DrawingGL
 
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
+
+            _glsx.FontFillColor = painter.FillColor;
+
             int j = buffer.Length;
             TextBuffer textBuffer = new TextBuffer(buffer);
             int outputLineH = 40; //test
@@ -388,12 +394,20 @@ namespace PixelFarm.DrawingGL
                         break;
                     case TextureKind.StencilGreyScale:
 
-                        _glsx.DrawSubImage(_glBmp,
+                        //stencil gray scale with fill-color
+                        _glsx.DrawGlyphImageWithStecil(_glBmp,
                          ref srcRect,
                             g_x,
                             g_y,
                             scaleFromTexture);
 
+                        break;
+                    case TextureKind.Bitmap:
+                        _glsx.DrawSubImage(_glBmp,
+                         ref srcRect,
+                            g_x,
+                            g_y,
+                            scaleFromTexture);
                         break;
                     case TextureKind.StencilLcdEffect:
 
@@ -459,12 +473,20 @@ namespace PixelFarm.DrawingGL
                         break;
                     case TextureKind.StencilGreyScale:
 
-                        _glsx.DrawSubImage(_glBmp,
+                        //stencil gray scale with fill-color
+                        _glsx.DrawGlyphImageWithStecil(_glBmp,
                          ref srcRect,
                             g_x,
                             g_y,
                             scaleFromTexture);
 
+                        break;
+                    case TextureKind.Bitmap:
+                        _glsx.DrawSubImage(_glBmp,
+                         ref srcRect,
+                            g_x,
+                            g_y,
+                            scaleFromTexture);
                         break;
                     case TextureKind.StencilLcdEffect:
                         _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,

@@ -17,14 +17,15 @@ namespace Typography.Rendering
 
         public AggGlyphTextureGen()
         {
-            BackGroundColor = Color.Black;
-            GlyphColor = Color.White;
+            BackGroundColor = Color.Transparent;
+            GlyphColor = Color.Black;
         }
 
         public Color BackGroundColor { get; set; }
         public Color GlyphColor { get; set; }
+        public TextureKind TextureKind { get; set; }
 
-        public GlyphImage CreateGlyphImage(GlyphPathBuilder builder, bool useLcdFontEffect, float pxscale)
+        public GlyphImage CreateGlyphImage(GlyphPathBuilder builder, float pxscale)
         {
             //1. create  
 
@@ -73,9 +74,8 @@ namespace Typography.Rendering
             //-------------------------------------------- 
             //create glyph img  
 
-
-            if (useLcdFontEffect)
-            {   
+            if (TextureKind == TextureKind.StencilLcdEffect)
+            {
 
                 w *= 3;// *** x3 than normal
 
@@ -101,13 +101,26 @@ namespace Typography.Rendering
             }
             else
             {
+
+
                 ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);
                 AggRenderSurface aggsx = new AggRenderSurface(img);
                 AggPainter painter = new AggPainter(aggsx);
                 painter.UseSubPixelRendering = false;
 
-                painter.Clear(BackGroundColor);
-                painter.FillColor = GlyphColor;
+
+                if (TextureKind == TextureKind.StencilGreyScale)
+                {
+                    painter.Clear(Color.Empty);
+                    painter.FillColor = Color.Black;
+                }
+                else
+                {
+                    painter.Clear(BackGroundColor);
+                    painter.FillColor = this.GlyphColor;
+                }
+
+
                 painter.Fill(glyphVxs);
                 //
 

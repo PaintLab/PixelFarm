@@ -121,30 +121,21 @@ namespace PixelFarm.Drawing.Fonts
                 ushort gindex = glyphIndices[i];
                 builder.BuildFromGlyphIndex(gindex, -1);
                 GlyphImage glyphImg = null;
-                switch (textureKind)
+                if(textureKind == TextureKind.Msdf)
                 {
-                    case TextureKind.Msdf:
-                        {
-                            var glyphToContour = new GlyphContourBuilder();
-                            //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
-                            builder.ReadShapes(glyphToContour);
-                            msdfGenParams.shapeScale = 1f / 64; //as original
-                            glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, msdfGenParams);
-                        }
-                        break;
-                    case TextureKind.StencilGreyScale:
-                        {
-                            //create alpha channel texture                      
-                            glyphImg = aggTextureGen.CreateGlyphImage(builder, false, pxscale);
-                        }
-                        break;
-                    case TextureKind.StencilLcdEffect:
-                        {
-                            //create alpha channel texture                      
-                            glyphImg = aggTextureGen.CreateGlyphImage(builder, true, pxscale);
-                        }
-                        break;
+                    var glyphToContour = new GlyphContourBuilder();
+                    //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
+                    builder.ReadShapes(glyphToContour);
+                    msdfGenParams.shapeScale = 1f / 64; //as original
+                    glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, msdfGenParams);
                 }
+                else
+                {
+                    //create alpha channel texture                      
+                    aggTextureGen.TextureKind = textureKind;
+                    glyphImg = aggTextureGen.CreateGlyphImage(builder, pxscale);
+                }
+                //
 
                 atlasBuilder.AddGlyph(gindex, glyphImg);
                 onFinishTotal(gindex, glyphImg, null);
