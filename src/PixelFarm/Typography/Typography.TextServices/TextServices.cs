@@ -187,9 +187,7 @@ namespace Typography.TextServices
         List<MeasuredStringBox> _reusableMeasureBoxList = new List<MeasuredStringBox>();
         public void MeasureString(char[] str, int startAt, int len, out int w, out int h)
         {
-            //measure string
-
-
+            //measure string 
             if (str.Length < 1)
             {
                 w = h = 0;
@@ -353,8 +351,7 @@ namespace Typography.TextServices
                 startAt,
                 len);
 
-            //glyphLayout.ReadOutput(planList);
-
+           
             int post_count = planList.Count;
             return new GlyphPlanSequence(_glyphPlanBuffer, pre_count, post_count - pre_count);
         }
@@ -374,8 +371,7 @@ namespace Typography.TextServices
             if (len > _glyphPlanSeqSet.MaxCacheLen)
             {
                 //layout string is too long to be cache
-                //it need to split into small buffer
-
+                //it need to split into small buffer 
             }
 
             GlyphPlanSequence planSeq = GlyphPlanSequence.Empty;
@@ -396,10 +392,7 @@ namespace Typography.TextServices
                 seqCol.Register(hashValue, planSeq);
             }
             //---
-            //on unscale font=> we use original 
-
-
-
+            //on unscale font=> we use original  
             return planSeq;
         }
     }
