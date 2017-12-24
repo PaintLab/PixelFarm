@@ -410,6 +410,7 @@ namespace PixelFarm.Drawing.Fonts
                 GlyphLayoutExtensions.GenerateGlyphPlan(
                     _glyphLayout.ResultUnscaledGlyphPositions,
                     _currentFontSizePxScale,
+                    false,
                     _outputGlyphPlans);
 
             }
