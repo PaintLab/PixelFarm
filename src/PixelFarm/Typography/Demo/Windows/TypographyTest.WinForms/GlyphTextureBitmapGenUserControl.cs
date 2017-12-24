@@ -41,9 +41,7 @@ namespace TypographyTest.WinForms
             lstTextureType.Items.Add(TextureKind.StencilGreyScale);
             lstTextureType.Items.Add(TextureKind.StencilLcdEffect);
             lstTextureType.Items.Add(TextureKind.Msdf);
-            lstTextureType.SelectedIndex = 0;
-
-            //
+            lstTextureType.SelectedIndex = 0; 
             this.textBox1.Text = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/?=(){}[]%@#^$&|.";
 
         }
@@ -192,7 +190,7 @@ namespace TypographyTest.WinForms
 
             GlyphTextureBitmapGenerator.CreateTextureFontFromScriptLangs(
                _typeface,
-               18,
+               FontSizeInPoints,
                selectedTextureKind,
                SelectedScriptLangs.ToArray(),
                (gindex, glyphImg, atlasBuilder) =>
@@ -245,7 +243,7 @@ namespace TypographyTest.WinForms
             char[] chars = this.textBox1.Text.ToCharArray();
             GlyphTextureBitmapGenerator.CreateTextureFontFromInputChars(
                _typeface,
-               18,
+               FontSizeInPoints,
                selectedTextureKind,
                chars, //eg. ABCD
               (gindex, glyphImg, atlasBuilder) =>

@@ -32,7 +32,7 @@ namespace PixelFarm.Drawing.Fonts
         Dictionary<InstalledFont, Typeface> _cachedTypefaces = new Dictionary<InstalledFont, Typeface>();
         //-----------------------------------------------------------
 
-
+        float _currentFontSizePxScale;
 
         public VxsTextPrinter(Painter painter, IFontLoader fontLoader)
         {
@@ -46,7 +46,7 @@ namespace PixelFarm.Drawing.Fonts
             _pxScaleEngine = new PixelScaleLayoutEngine();
             _pxScaleEngine.HintedFontStore = _glyphMeshStore;//share _glyphMeshStore with pixel-scale-layout-engine
             //
-            _glyphLayout.PxScaleLayout = _pxScaleEngine; //assign the pxscale-layout-engine to main glyphLayout engine
+            //_glyphLayout.PxScaleLayout = _pxScaleEngine; //assign the pxscale-layout-engine to main glyphLayout engine
             this.PositionTechnique = PositionTechnique.OpenFont;
 
         }
@@ -108,6 +108,7 @@ namespace PixelFarm.Drawing.Fonts
 
             this.Typeface = foundTypeface;
             this.FontSizeInPoints = font.SizeInPoints;
+
         }
         public void ChangeFillColor(Color fontColor)
         {
@@ -166,14 +167,14 @@ namespace PixelFarm.Drawing.Fonts
             //1. update some props.. 
             //2. update current type face
             UpdateGlyphLayoutSettings();
-            Typeface typeface = _currentTypeface;// _glyphPathBuilder.Typeface;
-            //3. layout glyphs with selected layout technique
-            //TODO: review this again, we should use pixel?
-
-            float pxscale = typeface.CalculateScaleToPixelFromPointSize(FontSizeInPoints);
+            Typeface typeface = _currentTypeface;// _glyphPathBuilder.Typeface;            
+            _glyphLayout.Typeface = typeface;
+            _glyphLayout.Layout(text, startAt, len);
+            //
+            //3. scale from design unit to specific font size
             _outputGlyphPlans.Clear();
-            _glyphLayout.Layout(typeface, text, startAt, len, _outputGlyphPlans);
-            TextPrinterHelper.CopyGlyphPlans(renderVx, _outputGlyphPlans, pxscale);
+            _pxScaleEngine.Layout(_glyphLayout.ResultUnscaledGlyphPositions, _outputGlyphPlans);
+            TextPrinterHelper.CopyGlyphPlans(renderVx, _outputGlyphPlans, this._currentFontSizePxScale);
         }
 
         public override void DrawCaret(float x, float y)
@@ -186,7 +187,7 @@ namespace PixelFarm.Drawing.Fonts
             p.StrokeColor = prevColor;
 
         }
-         
+
         public void UpdateGlyphLayoutSettings()
         {
             if (this._reqFont == null)
@@ -202,7 +203,20 @@ namespace PixelFarm.Drawing.Fonts
             _glyphLayout.ScriptLang = this.ScriptLang;
             _glyphLayout.PositionTechnique = this.PositionTechnique;
             _glyphLayout.EnableLigature = this.EnableLigature;
-            _glyphLayout.UsePxScaleOnReadOutput = true;
+
+            _currentFontSizePxScale = Typeface.CalculateScaleToPixelFromPointSize(FontSizeInPoints);
+
+            //2.3
+            if (_pxScaleEngine != null)
+            {
+                _pxScaleEngine.SetFont(this.Typeface, this.FontSizeInPoints);
+            }
+            //3. layout glyphs with selected layout technique
+            //TODO: review this again, we should use pixel?
+
+
+
+
             //3.
             //color...
         }
@@ -215,10 +229,11 @@ namespace PixelFarm.Drawing.Fonts
         /// <param name="y"></param>
         public void DrawGlyph(Glyph glyph, double x, double y)
         {
-            
+            //TODO...
         }
         public void DrawString(RenderVxFormattedString renderVx, double x, double y)
         {
+            //TODO: review here
             float ox = _painter.OriginX;
             float oy = _painter.OriginY;
 
@@ -290,8 +305,7 @@ namespace PixelFarm.Drawing.Fonts
             Typography.OpenFont.Tables.CPAL cpalTable = _currentTypeface.CPALTable;
             bool hasColorGlyphs = (colrTable != null) && (cpalTable != null);
 
-            //---------------------------------------------------
-
+            //--------------------------------------------------- 
             _glyphMeshStore.SetFont(_currentTypeface, fontSizePoint);
             //---------------------------------------------------
 
@@ -372,19 +386,34 @@ namespace PixelFarm.Drawing.Fonts
         {
             InternalDrawString(textBuffer, startAt, len, x, y);
         }
+
+
         void InternalDrawString(char[] textBuffer, int startAt, int len, float x, float y)
         {
             UpdateGlyphLayoutSettings();
+            //unscale layout, with design unit scale
+            _glyphLayout.Layout(textBuffer, startAt, len);
+            //
+            //
             _outputGlyphPlans.Clear();
-            //             
-            _glyphLayout.FontSizeInPoints = this.FontSizeInPoints;
-            _glyphLayout.GenerateGlyphPlans(textBuffer, startAt, len, _outputGlyphPlans, null);
+            //
+            if (this._pxScaleEngine != null)
+            {
+                //scale to specific font size 
+                _pxScaleEngine.Layout(_glyphLayout.ResultUnscaledGlyphPositions, _outputGlyphPlans);
+            }
+            else
+            {
 
-            //-----
-            //we (fine) adjust horizontal fit here
-            //this step we need grid fitting information
+                //no custom engine
+                //then use default scale  
+                GlyphLayoutExtensions.GenerateGlyphPlan(
+                    _glyphLayout.ResultUnscaledGlyphPositions,
+                    _currentFontSizePxScale,
+                    _outputGlyphPlans);
 
-            //-----
+            }
+
             DrawFromGlyphPlans(_outputGlyphPlans, x, y);
         }
 
