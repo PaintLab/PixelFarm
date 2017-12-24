@@ -49,7 +49,7 @@
             this.cmdBuild.Name = "cmdBuild";
             this.cmdBuild.Size = new System.Drawing.Size(85, 34);
             this.cmdBuild.TabIndex = 0;
-            this.cmdBuild.Text = "Build";
+            this.cmdBuild.Text = "TEST";
             this.cmdBuild.UseVisualStyleBackColor = true;
             this.cmdBuild.Click += new System.EventHandler(this.cmdBuild_Click);
             // 
@@ -57,7 +57,7 @@
             // 
             this.panel1.Location = new System.Drawing.Point(22, 53);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(588, 555);
+            this.panel1.Size = new System.Drawing.Size(588, 391);
             this.panel1.TabIndex = 1;
             // 
             // button1
@@ -124,7 +124,7 @@
             // 
             this.panel2.Location = new System.Drawing.Point(616, 53);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(588, 555);
+            this.panel2.Size = new System.Drawing.Size(588, 391);
             this.panel2.TabIndex = 2;
             // 
             // button7
@@ -197,7 +197,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.cmdBuild);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Test Only";
             this.ResumeLayout(false);
 
         }

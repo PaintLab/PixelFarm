@@ -162,7 +162,7 @@ namespace Typography.Contours
                 {
                     dynamicOutline.GenerateOutput(_tovxs, pxscale);
                     glyphMeshData.vxsStore = new VertexStore();
-                    _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+                    _tovxs.WriteOutput(glyphMeshData.vxsStore);
                 }
                 else
                 {
@@ -171,7 +171,7 @@ namespace Typography.Contours
                     _currentGlyphBuilder.ReadShapes(_tovxs);
                     //TODO: review here,
                     //float pxScale = _glyphPathBuilder.GetPixelScale(); 
-                    _tovxs.WriteOutput(glyphMeshData.vxsStore, _vxsPool);
+                    _tovxs.WriteOutput(glyphMeshData.vxsStore);
                 }
 
 
@@ -184,7 +184,7 @@ namespace Typography.Contours
     class PixelScaleLayoutEngine : IPixelScaleLayout
     {
         Typeface _typeface;
-        GlyphMeshStore _hintedFontStore;
+        GlyphMeshStore _glyphMeshStore;
         float _fontSizeInPoints;
         public PixelScaleLayoutEngine()
         {
@@ -193,10 +193,10 @@ namespace Typography.Contours
 
         public GlyphMeshStore HintedFontStore
         {
-            get { return _hintedFontStore; }
+            get { return _glyphMeshStore; }
             set
             {
-                _hintedFontStore = value;
+                _glyphMeshStore = value;
             }
         }
 
@@ -340,46 +340,19 @@ namespace Typography.Contours
 #endif
         }
 
-
-
-        void LayoutWithoutHorizontalFitAlign(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList)
-        {
-            //the default OpenFont layout without fit-to-writing alignment
-            int finalGlyphCount = posStream.Count;
-            float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
-            double cx = 0;
-            short cy = 0;
-
-            for (int i = 0; i < finalGlyphCount; ++i)
-            {
-                short offsetX, offsetY, advW; //all from pen-pos
-                ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
-
-                float s_advW = advW * pxscale;
-                float exact_x = (float)(cx + offsetX * pxscale);
-                float exact_y = (float)(cy + offsetY * pxscale);
-
-                outputGlyphPlanList.Append(new GlyphPlan(
-                   glyphIndex,
-                    exact_x,
-                    exact_y,
-                    advW));
-                cx += s_advW;
-            }
-        }
-
+    
         public void Layout(IGlyphPositions posStream, GlyphPlanList outputGlyphPlanList)
         {
 
+            float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
             if (!UseWithLcdSubPixelRenderingTechnique)
             {
                 //layout without fit to alignment direction
-                LayoutWithoutHorizontalFitAlign(posStream, outputGlyphPlanList);
+                GlyphLayoutExtensions.GenerateGlyphPlan(posStream, pxscale, outputGlyphPlanList);
                 return; //early exit
             }
             //------------------------------
             int finalGlyphCount = posStream.Count;
-            float pxscale = _typeface.CalculateScaleToPixelFromPointSize(this._fontSizeInPoints);
 #if DEBUG
             float dbug_onepx = 1 / pxscale;
 #endif
@@ -389,7 +362,7 @@ namespace Typography.Contours
             //
             //at this state, we need exact info at this specific pxscale
             //
-            _hintedFontStore.SetFont(_typeface, this._fontSizeInPoints);
+            _glyphMeshStore.SetFont(_typeface, this._fontSizeInPoints);
             FineABC current_ABC = new FineABC();
             FineABC prev_ABC = new FineABC();
 
@@ -397,7 +370,7 @@ namespace Typography.Contours
             {
                 short offsetX, offsetY, advW; //all from pen-pos
                 ushort glyphIndex = posStream.GetGlyph(i, out offsetX, out offsetY, out advW);
-                GlyphControlParameters controlPars = _hintedFontStore.GetControlPars(glyphIndex);
+                GlyphControlParameters controlPars = _glyphMeshStore.GetControlPars(glyphIndex);
                 current_ABC.SetData(pxscale, controlPars, offsetX, offsetY, (ushort)advW);
                 //-------------------------------------------------------------
 

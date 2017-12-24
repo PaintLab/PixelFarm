@@ -16,21 +16,7 @@ namespace YourImplementation
             //
             s_initInit = true;
             //
-            //
-#if DEBUG
-            PixelFarm.Agg.ActualImage.InstallImageSaveToFileService((PixelFarm.Agg.ActualImage img, string filename) =>
-            {
-
-                using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(img.Width, img.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-                {
-                    PixelFarm.Agg.Imaging.BitmapHelper.CopyToGdiPlusBitmapSameSize(img, newBmp);
-                    //save
-                    newBmp.Save(filename);
-                }
-            });
-#endif
-             
-            //
+            // 
             OpenTK.Toolkit.Init();
             //use common font loader
             //user can create and use other font-loader

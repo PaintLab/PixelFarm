@@ -19,7 +19,6 @@
 //----------------------------------------------------------------------------
 
 using System;
-using PixelFarm.Drawing;
 
 namespace PixelFarm.Agg
 {
@@ -95,20 +94,7 @@ namespace PixelFarm.Agg
         {
             return img.pixelBuffer;
         }
-        public static int[] CopyImgBuffer(ActualImage img)
-        {
 
-            int[] buff2 = new int[img.width * img.height];
-            unsafe
-            {
-                fixed (byte* header = &img.pixelBuffer[0])
-                {
-                    System.Runtime.InteropServices.Marshal.Copy((IntPtr)header, buff2, 0, buff2.Length);
-                }
-            }
-
-            return buff2;
-        }
         public static ActualImage CreateFromBuffer(int width, int height, PixelFormat format, int[] buffer)
         {
             if (format != PixelFormat.ARGB32)
@@ -156,7 +142,11 @@ namespace PixelFarm.Agg
         }
 
 
-
+        public static int CalculateStride(int width, PixelFormat format)
+        {
+            int bitDepth, bytesPerPixel;
+            return CalculateStride(width, format, out bitDepth, out bytesPerPixel);
+        }
         public static int CalculateStride(int width, PixelFormat format, out int bitDepth, out int bytesPerPixel)
         {
             //stride calcuation helper
@@ -185,23 +175,110 @@ namespace PixelFarm.Agg
                     throw new NotSupportedException();
             }
         }
+        public static int[] CopyImgBuffer(ActualImage img)
+        {
 
+            int[] buff2 = new int[img.Width * img.Height];
+            unsafe
+            {
+                byte[] pixelBuffer = ActualImage.GetBuffer(img);
+                fixed (byte* header = &pixelBuffer[0])
+                {
+                    System.Runtime.InteropServices.Marshal.Copy((IntPtr)header, buff2, 0, buff2.Length);//length in bytes
+                }
+            }
+
+            return buff2;
+        }
 
         //
-#if DEBUG
-        static SaveToPngFileDelegate s_saveToPngFileDel;
-        public void dbugSaveToPngFile(string filename)
+
+        public static void SaveImgBufferToPngFile(byte[] imgBuffer, int stride, int width, int height, string filename)
         {
             if (s_saveToPngFileDel != null)
             {
-                s_saveToPngFileDel(this, filename);
+                unsafe
+                {
+                    fixed (byte* head = &imgBuffer[0])
+                    {
+                        s_saveToPngFileDel((IntPtr)head, stride, width, height, filename);
+                    }
+                }
+
             }
         }
-        public delegate void SaveToPngFileDelegate(ActualImage img, string filename);
+        public static void SaveImgBufferToPngFile(int[] imgBuffer, int stride, int width, int height, string filename)
+        {
+            if (s_saveToPngFileDel != null)
+            {
+                unsafe
+                {
+                    fixed (int* head = &imgBuffer[0])
+                    {
+                        s_saveToPngFileDel((IntPtr)head, stride, width, height, filename);
+                    }
+                }
+
+            }
+        }
+        static SaveToPngFileDelegate s_saveToPngFileDel;
+        public delegate void SaveToPngFileDelegate(IntPtr imgBuffer, int stride, int width, int height, string filename);
+
+        public static bool HasDefaultSavePngToFileDelegate()
+        {
+            return s_saveToPngFileDel != null;
+        }
+
+
         public static void InstallImageSaveToFileService(SaveToPngFileDelegate saveToPngFileDelegate)
         {
             s_saveToPngFileDel = saveToPngFileDelegate;
         }
+#if DEBUG
+
+        public void dbugSaveToPngFile(string filename)
+        {
+            SaveImgBufferToPngFile(this.pixelBuffer, this.stride, this.width, this.height, filename);
+        }
+
 #endif
+    }
+
+
+    public static class ActualImageExtensions
+    {
+
+
+
+        public static int[] CopyImgBuffer(ActualImage img, int width)
+        {
+            //calculate stride for the width
+
+            int destStride = ActualImage.CalculateStride(width, PixelFormat.ARGB32);
+            int h = img.Height;
+            int newBmpW = destStride / 4;
+
+            int[] buff2 = new int[newBmpW * img.Height];
+            unsafe
+            {
+                byte[] srcBuffer = ActualImage.GetBuffer(img);
+
+                int srcIndex = 0;
+
+                int srcStride = img.Stride;
+                fixed (int* destHead = &buff2[0])
+                {
+                    byte* destHead2 = (byte*)destHead;
+                    for (int line = 0; line < h; ++line)
+                    {
+                        System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
+                        srcIndex += srcStride;
+                        destHead2 += destStride;
+                    }
+                }
+            }
+
+            return buff2;
+        }
     }
 }

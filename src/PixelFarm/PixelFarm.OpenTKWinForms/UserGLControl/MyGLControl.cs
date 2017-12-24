@@ -60,19 +60,7 @@ namespace OpenTK
                     glPaintHandler(this, e);
                 }
                 SwapBuffers();
-            }
-
-            //------------------------------------------
-            //if (!this.DesignMode)
-            //{
-            //    MakeCurrent();
-            //    GL.Clear(ClearBufferMask.ColorBufferBit);
-            //    if (glPaintHandler != null)
-            //    {
-            //        glPaintHandler(this, e);
-            //    }
-            //    SwapBuffers();
-            //}
+            } 
         }
 
     }

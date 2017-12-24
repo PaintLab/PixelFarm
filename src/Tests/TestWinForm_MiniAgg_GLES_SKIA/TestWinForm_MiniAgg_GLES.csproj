@@ -80,9 +80,7 @@
     <Compile Include="7_GLES2Test\FormGLTest.Designer.cs">
       <DependentUpon>FormGLTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="8_SkiaTest\FormSkia1.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="8_SkiaTest\FormSkia1.cs" />
     <Compile Include="8_SkiaTest\FormSkia1.Designer.cs">
       <DependentUpon>FormSkia1.cs</DependentUpon>
     </Compile>
@@ -238,10 +236,6 @@
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.GLES2\PixelFarm.Drawing.GLES2.csproj">
       <Project>{e1e89b3b-b529-4b17-b7ed-4c70cc8475eb}</Project>
       <Name>PixelFarm.Drawing.GLES2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing.Skia\PixelFarm.Drawing.Skia.csproj">
-      <Project>{9450c9fb-5a70-4e47-bec3-b0a98a9c7d15}</Project>
-      <Name>PixelFarm.Drawing.Skia</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PixelFarm\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
       <Project>{51d63482-5697-4b16-8401-506965624657}</Project>

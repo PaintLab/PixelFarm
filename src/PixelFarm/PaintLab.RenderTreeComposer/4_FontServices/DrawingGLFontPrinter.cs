@@ -19,8 +19,8 @@ namespace PixelFarm.DrawingGL
 
     public class AggTextSpanPrinter : ITextPrinter
     {
-        ActualImage actualImage;
-        AggRenderSurface imgGfx2d;
+        ActualImage _actualImage;
+        AggRenderSurface _aggsx;
         AggPainter _aggPainter;
         VxsTextPrinter textPrinter;
         int bmpWidth;
@@ -40,10 +40,10 @@ namespace PixelFarm.DrawingGL
             this._glsx = canvasPainter.Canvas;
             bmpWidth = w;
             bmpHeight = h;
-            actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32);
 
-            imgGfx2d = new AggRenderSurface(actualImage);
-            _aggPainter = new AggPainter(imgGfx2d);
+            _actualImage = new ActualImage(bmpWidth, bmpHeight, PixelFormat.ARGB32);
+            _aggsx = new AggRenderSurface(_actualImage);
+            _aggPainter = new AggPainter(_aggsx);
             _aggPainter.FillColor = Color.Black;
             _aggPainter.StrokeColor = Color.Black;
 
@@ -97,7 +97,7 @@ namespace PixelFarm.DrawingGL
                 //2. print text span into Agg Canvas
                 textPrinter.DrawString(text, startAt, len, 0, 0);
                 //3.copy to gl bitmap
-                byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImage);
+                byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
                 GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
                 glBmp.IsInvert = false;
@@ -118,7 +118,7 @@ namespace PixelFarm.DrawingGL
 
                 //2. print text span into Agg Canvas
                 textPrinter.StartDrawOnLeftTop = false;
-                textPrinter.DrawString(text, startAt, len, 0, 0); 
+                textPrinter.DrawString(text, startAt, len, 0, 0);
                 //------------------------------------------------------
                 //debug save image from agg's buffer
 #if DEBUG
@@ -127,7 +127,7 @@ namespace PixelFarm.DrawingGL
                 //------------------------------------------------------
 
                 //3.copy to gl bitmap
-                byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImage);
+                byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
                 //debug save image from agg's buffer
 
@@ -200,7 +200,7 @@ namespace PixelFarm.DrawingGL
     }
 
 
-    public class GLBmpGlyphTextPrinter : ITextPrinter, IDisposable
+    public class GLBitmapGlyphTextPrinter : ITextPrinter, IDisposable
     {
 
         GLBitmapCache<SimpleFontAtlas> _loadedGlyphs;
@@ -208,26 +208,27 @@ namespace PixelFarm.DrawingGL
         //--------
         GLRenderSurface _glsx;
 
-        GlyphLayout _glyphLayout = new GlyphLayout();
+
         GLPainter painter;
         SimpleFontAtlas simpleFontAtlas;
-        Typography.TextServices.IFontLoader _fontLoader;
+
         GLBitmap _glBmp;
         RequestFont font;
 
-
-        ScriptLang _defaultScriptLang = ScriptLangs.Latin;//review here again
-        public GLBmpGlyphTextPrinter(GLPainter painter, IFontLoader fontLoader)
+        LayoutFarm.OpenFontTextService _textServices = new LayoutFarm.OpenFontTextService();
+        public GLBitmapGlyphTextPrinter(GLPainter painter)
         {
+
             //create text printer for use with canvas painter 
+            //use typography font service?
+
             this.painter = painter;
             this._glsx = painter.Canvas;
             //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
             //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer;
 
-            _fontLoader = fontLoader;
+
             ChangeFont(painter.CurrentFont);
-            this._glyphLayout.ScriptLang = ScriptLangConv.GetOpenFontScriptLang(_defaultScriptLang.shortname);
 
             _loadedGlyphs = new GLBitmapCache<SimpleFontAtlas>(atlas =>
             {
@@ -257,10 +258,9 @@ namespace PixelFarm.DrawingGL
             //we resolve it to actual font
 
             this.font = font;
-            this._glyphLayout.ScriptLang = ScriptLangConv.GetOpenFontScriptLang(_defaultScriptLang.shortname);
 
             SimpleFontAtlas foundFontAtlas;
-            ActualFont fontImp = ActiveFontAtlasService.GetTextureFontAtlasOrCreateNew(_fontLoader, font, out foundFontAtlas);
+            ActualFont fontImp = ActiveFontAtlasService.GetTextureFontAtlasOrCreateNew(_textServices, font, out foundFontAtlas);
             if (foundFontAtlas != this.simpleFontAtlas)
             {
                 //change to another font atlas
@@ -291,11 +291,10 @@ namespace PixelFarm.DrawingGL
         }
 
 
-        //-----------
-        GlyphPlanList glyphPlans = new GlyphPlanList();
+
         Typography.OpenFont.Typeface _typeface;
         float _finalTextureScale = 1;
-        //-----------
+
 
         void EnsureLoadGLBmp()
         {
@@ -307,25 +306,34 @@ namespace PixelFarm.DrawingGL
 
         public void DrawString(char[] buffer, int startAt, int len, double x, double y)
         {
-
-
             int j = buffer.Length;
             //resolve font from painter?  
-            glyphPlans.Clear();
-            _glyphLayout.Layout(_typeface, buffer, startAt, len, glyphPlans);
-            float scale = _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
 
+
+            //int[] outputGlyphAdvances = new int[j];
+
+            //int outputTotalW, outputLineH;
+            //_opentFontTextService.CalculateGlyphAdvancePos(buffer, startAt, len,
+            //    this.font, outputGlyphAdvances, out outputTotalW, out outputLineH);
+
+            //_textServices.SetCurrentFont(typ)
+            TextBuffer textBuffer = new TextBuffer(buffer);
+            int outputLineH = 40; //test
+            GlyphPlanSequence glyphPlanSeq = _textServices.CreateGlyphPlanSeq(textBuffer, startAt, len, font);
+
+            float scale = _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
             //--------------------------
             //TODO:
             //if (x,y) is left top
             //we need to adjust y again
-            y -= (_typeface.Ascender - _typeface.Descender + _typeface.LineGap) * scale;
+            y -= outputLineH;
 
-            int n = glyphPlans.Count;
+
             EnsureLoadGLBmp();
             // 
             float scaleFromTexture = _finalTextureScale;
-            Typography.Rendering.TextureKind textureKind = simpleFontAtlas.TextureKind;
+            TextureKind textureKind = simpleFontAtlas.TextureKind;
+
             //--------------------------
 
             //TODO: review render steps 
@@ -339,9 +347,13 @@ namespace PixelFarm.DrawingGL
             float g_x = 0;
             float g_y = 0;
             int baseY = (int)Math.Round(y);
-            for (int i = 0; i < n; ++i)
+            int n = glyphPlanSeq.len;
+            int endBefore = glyphPlanSeq.startAt + n;
+            for (int i = glyphPlanSeq.startAt; i < endBefore; ++i)
             {
-                GlyphPlan glyph = glyphPlans[i];
+                GlyphPlanList glyphPlanList = GlyphPlanSequence.UnsafeGetInteralGlyphPlanList(glyphPlanSeq);
+                GlyphPlan glyph = glyphPlanList[i];
+
                 Typography.Rendering.TextureFontGlyphData glyphData;
                 if (!simpleFontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
                 {
@@ -352,11 +364,13 @@ namespace PixelFarm.DrawingGL
                 //TODO: review precise height in float
                 //-------------------------------------- 
                 PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
+                g_x = (float)(x + (glyph.ExactX * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
+                g_y = (float)(y + (glyph.ExactY * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
 
 
                 switch (textureKind)
                 {
-                    case Typography.Rendering.TextureKind.Msdf:
+                    case TextureKind.Msdf:
 
                         _glsx.DrawSubImageWithMsdf(_glBmp,
                             ref srcRect,
@@ -365,7 +379,7 @@ namespace PixelFarm.DrawingGL
                             scaleFromTexture);
 
                         break;
-                    case Typography.Rendering.TextureKind.AggGrayScale:
+                    case TextureKind.StencilGreyScale:
 
                         _glsx.DrawSubImage(_glBmp,
                          ref srcRect,
@@ -374,7 +388,7 @@ namespace PixelFarm.DrawingGL
                             scaleFromTexture);
 
                         break;
-                    case Typography.Rendering.TextureKind.AggSubPixel:
+                    case TextureKind.StencilLcdEffect:
 
                         _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
                              ref srcRect,
@@ -398,7 +412,7 @@ namespace PixelFarm.DrawingGL
 
             float scaleFromTexture = _finalTextureScale;
 
-            Typography.Rendering.TextureKind textureKind = simpleFontAtlas.TextureKind;
+            TextureKind textureKind = simpleFontAtlas.TextureKind;
             float g_x = 0;
             float g_y = 0;
             int baseY = (int)Math.Round(y);
@@ -427,7 +441,7 @@ namespace PixelFarm.DrawingGL
 
                 switch (textureKind)
                 {
-                    case Typography.Rendering.TextureKind.Msdf:
+                    case TextureKind.Msdf:
 
                         _glsx.DrawSubImageWithMsdf(_glBmp,
                             ref srcRect,
@@ -436,7 +450,7 @@ namespace PixelFarm.DrawingGL
                             scaleFromTexture);
 
                         break;
-                    case Typography.Rendering.TextureKind.AggGrayScale:
+                    case TextureKind.StencilGreyScale:
 
                         _glsx.DrawSubImage(_glBmp,
                          ref srcRect,
@@ -445,7 +459,7 @@ namespace PixelFarm.DrawingGL
                             scaleFromTexture);
 
                         break;
-                    case Typography.Rendering.TextureKind.AggSubPixel:
+                    case TextureKind.StencilLcdEffect:
                         _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
                                 ref srcRect,
                                 g_x,
@@ -459,13 +473,280 @@ namespace PixelFarm.DrawingGL
 
         public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
         {
-            glyphPlans.Clear();
-            _glyphLayout.Layout(_typeface, buffer, startAt, len, glyphPlans);
 
-            TextPrinterHelper.CopyGlyphPlans(renderVx, glyphPlans, _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
+            //TextPrinterHelper.CopyGlyphPlans(renderVx, glyphPlans, _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
         }
     }
 
+
+    //public class GLBitmapGlyphTextPrinter2 : ITextPrinter, IDisposable
+    //{
+
+    //    GLBitmapCache<SimpleFontAtlas> _loadedGlyphs;
+
+    //    //--------
+    //    GLRenderSurface _glsx;
+
+    //    GlyphLayout _glyphLayout = new GlyphLayout();
+    //    GLPainter painter;
+    //    SimpleFontAtlas simpleFontAtlas;
+    //    Typography.TextServices.IFontLoader _fontLoader;
+    //    GLBitmap _glBmp;
+    //    RequestFont font;
+    //    TextServices textServices = new TextServices();
+    //    public GLBitmapGlyphTextPrinter2(GLPainter painter, IFontLoader fontLoader)
+    //    {
+
+    //        //create text printer for use with canvas painter 
+    //        //use typography font service?
+
+
+
+    //        this.painter = painter;
+    //        this._glsx = painter.Canvas;
+    //        //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
+    //        //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer;
+
+    //        _fontLoader = fontLoader;
+    //        ChangeFont(painter.CurrentFont);
+    //        this._glyphLayout.ScriptLang = ScriptLangConv.GetOpenFontScriptLang(_defaultScriptLang.shortname);
+
+    //        _loadedGlyphs = new GLBitmapCache<SimpleFontAtlas>(atlas =>
+    //        {
+    //            //create new one
+    //            Typography.Rendering.GlyphImage totalGlyphImg = atlas.TotalGlyph;
+    //            //load to glbmp 
+    //            GLBitmap found = new GLBitmap(totalGlyphImg.Width, totalGlyphImg.Height, totalGlyphImg.GetImageBuffer(), false);
+    //            found.IsInvert = false;
+    //            return found;
+    //        });
+
+    //    }
+    //    public void ChangeFillColor(Color color)
+    //    {
+    //        //called by owner painter   
+    //        _glsx.FontFillColor = color;
+    //    }
+    //    public void ChangeStrokeColor(Color strokeColor)
+    //    {
+    //        //TODO: implementation here
+
+    //    }
+    //    public bool StartDrawOnLeftTop { get; set; }
+    //    public void ChangeFont(RequestFont font)
+    //    {
+    //        //from request font
+    //        //we resolve it to actual font
+
+    //        this.font = font;
+    //        this._glyphLayout.ScriptLang = ScriptLangConv.GetOpenFontScriptLang(_defaultScriptLang.shortname);
+
+    //        SimpleFontAtlas foundFontAtlas;
+    //        ActualFont fontImp = ActiveFontAtlasService.GetTextureFontAtlasOrCreateNew(_fontLoader, font, out foundFontAtlas);
+    //        if (foundFontAtlas != this.simpleFontAtlas)
+    //        {
+    //            //change to another font atlas
+    //            _glBmp = null;
+    //            this.simpleFontAtlas = foundFontAtlas;
+    //        }
+
+    //        _typeface = (Typography.OpenFont.Typeface)fontImp.FontFace.GetInternalTypeface();
+    //        float srcTextureScale = _typeface.CalculateScaleToPixelFromPointSize(simpleFontAtlas.OriginalFontSizePts);
+    //        //scale at request
+    //        float targetTextureScale = _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+    //        _finalTextureScale = targetTextureScale / srcTextureScale;
+    //    }
+    //    public void Dispose()
+    //    {
+    //        _loadedGlyphs.Clear();
+
+    //        if (_glBmp != null)
+    //        {
+    //            _glBmp.Dispose();
+    //            _glBmp = null;
+    //        }
+    //    }
+    //    static PixelFarm.Drawing.Rectangle ConvToRect(Typography.Contours.Rectangle r)
+    //    {
+    //        //TODO: review here
+    //        return PixelFarm.Drawing.Rectangle.FromLTRB(r.Left, r.Top, r.Right, r.Bottom);
+    //    }
+
+
+    //    //-----------
+    //    GlyphPlanList glyphPlans = new GlyphPlanList();
+    //    Typography.OpenFont.Typeface _typeface;
+    //    float _finalTextureScale = 1;
+    //    //-----------
+
+    //    void EnsureLoadGLBmp()
+    //    {
+    //        if (_glBmp == null)
+    //        {
+    //            _glBmp = _loadedGlyphs.GetOrCreateNewOne(simpleFontAtlas);
+    //        }
+    //    }
+
+    //    public void DrawString(char[] buffer, int startAt, int len, double x, double y)
+    //    {
+
+
+    //        int j = buffer.Length;
+    //        //resolve font from painter?  
+    //        glyphPlans.Clear();
+    //        _glyphLayout.Layout(_typeface, buffer, startAt, len, glyphPlans);
+    //        float scale = _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints);
+
+    //        //--------------------------
+    //        //TODO:
+    //        //if (x,y) is left top
+    //        //we need to adjust y again
+    //        y -= (_typeface.Ascender - _typeface.Descender + _typeface.LineGap) * scale;
+
+    //        int n = glyphPlans.Count;
+    //        EnsureLoadGLBmp();
+    //        // 
+    //        float scaleFromTexture = _finalTextureScale;
+    //        Typography.Rendering.TextureKind textureKind = simpleFontAtlas.TextureKind;
+    //        //--------------------------
+
+    //        //TODO: review render steps 
+    //        //NOTE:
+    //        // -glyphData.TextureXOffset => restore to original pos
+    //        // -glyphData.TextureYOffset => restore to original pos
+    //        // ideal_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture);
+    //        // ideal_y = (float)(y + (glyph.y * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
+    //        //--------------------------
+
+    //        float g_x = 0;
+    //        float g_y = 0;
+    //        int baseY = (int)Math.Round(y);
+    //        for (int i = 0; i < n; ++i)
+    //        {
+    //            GlyphPlan glyph = glyphPlans[i];
+    //            Typography.Rendering.TextureFontGlyphData glyphData;
+    //            if (!simpleFontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
+    //            {
+    //                //if no glyph data, we should render a missing glyph ***
+    //                continue;
+    //            }
+    //            //--------------------------------------
+    //            //TODO: review precise height in float
+    //            //-------------------------------------- 
+    //            PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
+
+
+    //            switch (textureKind)
+    //            {
+    //                case Typography.Rendering.TextureKind.Msdf:
+
+    //                    _glsx.DrawSubImageWithMsdf(_glBmp,
+    //                        ref srcRect,
+    //                        g_x,
+    //                        g_y,
+    //                        scaleFromTexture);
+
+    //                    break;
+    //                case Typography.Rendering.TextureKind.AggGrayScale:
+
+    //                    _glsx.DrawSubImage(_glBmp,
+    //                     ref srcRect,
+    //                        g_x,
+    //                        g_y,
+    //                        scaleFromTexture);
+
+    //                    break;
+    //                case Typography.Rendering.TextureKind.AggSubPixel:
+
+    //                    _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
+    //                         ref srcRect,
+    //                         g_x,
+    //                         g_y,
+    //                         scaleFromTexture);
+
+    //                    break;
+    //            }
+    //        }
+    //    }
+    //    public void DrawString(RenderVxFormattedString renderVx, double x, double y)
+    //    {
+    //        RenderVxGlyphPlan[] glyphPlans = renderVx.glyphList;
+    //        int n = glyphPlans.Length;
+    //        EnsureLoadGLBmp();
+
+    //        //PERF:
+    //        //TODO: review here, can we cache the glbmp for later use
+    //        //not to create it every time 
+
+    //        float scaleFromTexture = _finalTextureScale;
+
+    //        Typography.Rendering.TextureKind textureKind = simpleFontAtlas.TextureKind;
+    //        float g_x = 0;
+    //        float g_y = 0;
+    //        int baseY = (int)Math.Round(y);
+    //        float scale = 1;
+
+    //        for (int i = 0; i < n; ++i)
+    //        {
+    //            //PERF:
+    //            //TODO: 
+    //            //render a set of glyph instead of one glyph per time ***
+    //            RenderVxGlyphPlan glyph = glyphPlans[i];
+    //            Typography.Rendering.TextureFontGlyphData glyphData;
+    //            if (!simpleFontAtlas.TryGetGlyphDataByCodePoint(glyph.glyphIndex, out glyphData))
+    //            {
+    //                //if no glyph data, we should render a missing glyph ***
+
+    //                continue;
+    //            }
+    //            //--------------------------------------
+    //            //TODO: review precise height in float
+    //            //-------------------------------------- 
+    //            PixelFarm.Drawing.Rectangle srcRect = ConvToRect(glyphData.Rect);
+    //            //--------------------------
+    //            g_x = (float)(x + (glyph.x * scale - glyphData.TextureXOffset) * scaleFromTexture); //ideal x
+    //            g_y = (float)((glyph.y * scale - glyphData.TextureYOffset + srcRect.Height) * scaleFromTexture);
+
+    //            switch (textureKind)
+    //            {
+    //                case Typography.Rendering.TextureKind.Msdf:
+
+    //                    _glsx.DrawSubImageWithMsdf(_glBmp,
+    //                        ref srcRect,
+    //                        g_x,
+    //                        g_y,
+    //                        scaleFromTexture);
+
+    //                    break;
+    //                case Typography.Rendering.TextureKind.AggGrayScale:
+
+    //                    _glsx.DrawSubImage(_glBmp,
+    //                     ref srcRect,
+    //                        g_x,
+    //                        g_y,
+    //                        scaleFromTexture);
+
+    //                    break;
+    //                case Typography.Rendering.TextureKind.AggSubPixel:
+    //                    _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(_glBmp,
+    //                            ref srcRect,
+    //                            g_x,
+    //                            g_y,
+    //                            scaleFromTexture);
+    //                    break;
+    //            }
+
+    //        }
+    //    }
+
+    //    public void PrepareStringForRenderVx(RenderVxFormattedString renderVx, char[] buffer, int startAt, int len)
+    //    {
+    //        glyphPlans.Clear();
+    //        _glyphLayout.Layout(_typeface, buffer, startAt, len, glyphPlans);
+
+    //        TextPrinterHelper.CopyGlyphPlans(renderVx, glyphPlans, _typeface.CalculateScaleToPixelFromPointSize(font.SizeInPoints));
+    //    }
+    //}
 }
 
 

@@ -55,6 +55,7 @@ namespace OpenTK.Platform.Windows
     using UINT_PTR = System.UIntPtr;
     using TIMERPROC = Functions.TimerProc;
 
+ 
     /// \internal
     /// <summary>
     /// For internal use by OpenTK only!
@@ -89,8 +90,7 @@ namespace OpenTK.Platform.Windows
         internal static readonly int WindowInfoSize;
     }
 
-
-
+    [System.Security.SuppressUnmanagedCodeSecurity] 
     internal static class Functions
     {
 

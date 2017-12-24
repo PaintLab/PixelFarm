@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
-using SkiaSharp;
+
 using Mini;
+#if SKIA_ENABLE
+
 using PixelFarm.Drawing.Skia;
+using SkiaSharp;
+
 namespace TestSkia1
 {
     partial class FormSkia1 : Form
@@ -47,7 +51,7 @@ namespace TestSkia1
             if (exampleBase != null)
             {
                 painter.Canvas = e.Surface.Canvas;
-                exampleBase.Draw(painter); 
+                exampleBase.Draw(painter);
             }
 
         }
@@ -89,3 +93,5 @@ namespace TestSkia1
 
     }
 }
+
+#endif

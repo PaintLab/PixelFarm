@@ -11,8 +11,7 @@ namespace PixelFarm.Drawing.Fonts
         {
             //read font file 
             //TODO:...
-            //set shape engine ***  
-
+            //set shape engine ***   
             var openFont = new NOpenFontFace(typeface, typeface.Name, typeface.Filename);
             return openFont;
         }
