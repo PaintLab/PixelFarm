@@ -56,7 +56,10 @@ namespace PixelFarm.Drawing.Fonts
             fontAtlas.TotalGlyph = glyphImg2;
 
             //save for debug
+
+#if DEBUG
             ActualImage.SaveImgBufferToPngFile(glyphImg2.GetImageBuffer(), glyphImg2.Width * 4, glyphImg2.Width, glyphImg2.Height, "d:\\WImageTest\\total.png");
+#endif
             return openFont;
         }
         //static IEnumerable<ushort> GetGlyphIndexIter(Typeface typeface, params UnicodeLangBits[] rangeBits)
