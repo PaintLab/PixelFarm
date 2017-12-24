@@ -226,9 +226,9 @@ namespace PixelFarm.DrawingGL
 
             this.painter = painter;
             this._glsx = painter.Canvas;
-            //_currentTextureKind = TextureKind.StencilGreyScale;
-            _currentTextureKind = TextureKind.StencilLcdEffect;
-
+            _currentTextureKind = TextureKind.StencilGreyScale;
+            //_currentTextureKind = TextureKind.StencilLcdEffect;
+            //_currentTextureKind = TextureKind.Msdf;
             //GlyphPosPixelSnapX = GlyphPosPixelSnapKind.Integer;
             //GlyphPosPixelSnapY = GlyphPosPixelSnapKind.Integer; 
 
@@ -262,9 +262,22 @@ namespace PixelFarm.DrawingGL
 
             this.font = font;
 
+            TextureFontCreationParams creationParams = new TextureFontCreationParams();
+            creationParams.originalFontSizeInPoint = font.SizeInPoints;
+            //TODO: review here, langBits can be created with scriptLang ?
+            creationParams.scriptLangs = new ScriptLang[]
+            {
+                Typography.OpenFont.ScriptLangs.Latin,
+                Typography.OpenFont.ScriptLangs.Thai //eg. Thai, for test with complex script, you can change to your own
+            };
+            //
+            creationParams.textureKind = _currentTextureKind;
+
+
             SimpleFontAtlas foundFontAtlas;
             ActualFont fontImp = ActiveFontAtlasService.GetTextureFontAtlasOrCreateNew(_textServices, 
-                font, _currentTextureKind,
+                font, 
+                creationParams,
                 out foundFontAtlas);
 
             if (foundFontAtlas != this.simpleFontAtlas)

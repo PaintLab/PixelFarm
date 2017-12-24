@@ -39,7 +39,12 @@ namespace PixelFarm.Drawing.Fonts
         }
 
 
-        public static void CreateTextureFontFromScriptLangs(
+        public GlyphTextureBitmapGenerator()
+        {
+            UseTrueTypeInstruction = true;
+        }
+        public bool UseTrueTypeInstruction { get; set; }
+        public void CreateTextureFontFromScriptLangs(
             Typeface typeface, float sizeInPoint,
             TextureKind textureKind,
             ScriptLang[] scLangs,
@@ -57,7 +62,7 @@ namespace PixelFarm.Drawing.Fonts
             CreateTextureFontFromGlyphIndices(typeface, sizeInPoint, textureKind, GetUniqueGlyphIndexList(outputGlyphIndexList), onFinishTotal);
 
         }
-        public static void CreateTextureFontFromInputChars(
+        public void CreateTextureFontFromInputChars(
             Typeface typeface, float sizeInPoint,
             TextureKind textureKind,
             char[] chars, OnEachFinishTotal onFinishTotal)
@@ -75,10 +80,11 @@ namespace PixelFarm.Drawing.Fonts
             CreateTextureFontFromGlyphIndices(typeface, sizeInPoint, textureKind, GetUniqueGlyphIndexList(glyphIndices), onFinishTotal);
         }
 
-        public static void CreateTextureFontFromGlyphIndices(
-            Typeface typeface, float sizeInPoint,
-            TextureKind textureKind,
-            ushort[] glyphIndices, OnEachFinishTotal onFinishTotal)
+        void CreateTextureFontFromGlyphIndices(
+              Typeface typeface,
+              float sizeInPoint,
+              TextureKind textureKind,
+              ushort[] glyphIndices, OnEachFinishTotal onFinishTotal)
         {
             if (onFinishTotal == null)
             {
@@ -87,7 +93,7 @@ namespace PixelFarm.Drawing.Fonts
             //sample: create sample msdf texture 
             //-------------------------------------------------------------
             var builder = new GlyphPathBuilder(typeface);
-            builder.UseTrueTypeInstructions = true;
+            builder.UseTrueTypeInstructions = this.UseTrueTypeInstruction;
             //-------------------------------------------------------------
             var atlasBuilder = new SimpleFontAtlasBuilder();
             atlasBuilder.SetAtlasInfo(textureKind, sizeInPoint);

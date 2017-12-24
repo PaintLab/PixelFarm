@@ -1,7 +1,6 @@
 ﻿//MIT, 2017, WinterDev
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 
@@ -189,8 +188,8 @@ namespace TypographyTest.WinForms
                System.IO.Path.GetFileNameWithoutExtension(sampleFontFile);
 
             bool saveEachGlyphSeparatly = chkSaveEachGlyph.Checked;
-
-            GlyphTextureBitmapGenerator.CreateTextureFontFromScriptLangs(
+            var textureGen = new GlyphTextureBitmapGenerator();
+            textureGen.CreateTextureFontFromScriptLangs(
                _typeface,
                FontSizeInPoints,
                selectedTextureKind,
@@ -200,8 +199,8 @@ namespace TypographyTest.WinForms
                    if (atlasBuilder != null)
                    {
                        atlasBuilder.CompactGlyphSpace = chkCompactGlyphSpace.Checked;
-                       GlyphImage glyphImg2 = atlasBuilder.BuildSingleImage();
-                       SaveImgBufferToFile(glyphImg2, bitmapImgSaveFileName + ".png");
+                       GlyphImage totalGlyphs = atlasBuilder.BuildSingleImage();
+                       SaveImgBufferToFile(totalGlyphs, bitmapImgSaveFileName + ".png");
                        atlasBuilder.SaveFontInfo(bitmapImgSaveFileName + ".xml");
                        MessageBox.Show("glyph gen " + bitmapImgSaveFileName);
                    }
@@ -217,23 +216,7 @@ namespace TypographyTest.WinForms
                    }
                });
         }
-        static void SaveImgBufferToFile(GlyphImage glyphImg, string filename)
-        {
-            int[] intBuffer = glyphImg.GetImageBuffer();
-            using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(glyphImg.Width, glyphImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-            {
-                unsafe
-                {
-                    fixed (int* head = &intBuffer[0])
-                    {
-                        CopyToGdiPlusBitmapSameSize((IntPtr)head, newBmp);
-                    }
-                }
-                //save
-                newBmp.Save(filename);
-            }
 
-        }
         private void cmdMakeFromSelectedString_Click(object sender, EventArgs e)
         {
             //create a simple stencil texture font
@@ -250,10 +233,10 @@ namespace TypographyTest.WinForms
             string bitmapImgSaveFileName = "d:\\WImageTest\\sample_" + selectedTextureKind + "_" +
               System.IO.Path.GetFileNameWithoutExtension(sampleFontFile);
 
-            //
+            var textureGen = new GlyphTextureBitmapGenerator();
             bool saveEachGlyphSeparatly = chkSaveEachGlyph.Checked;
             char[] chars = this.textBox1.Text.ToCharArray();
-            GlyphTextureBitmapGenerator.CreateTextureFontFromInputChars(
+            textureGen.CreateTextureFontFromInputChars(
                _typeface,
                FontSizeInPoints,
                selectedTextureKind,
@@ -263,8 +246,8 @@ namespace TypographyTest.WinForms
                   if (atlasBuilder != null)
                   {
                       atlasBuilder.CompactGlyphSpace = chkCompactGlyphSpace.Checked;
-                      GlyphImage glyphImg2 = atlasBuilder.BuildSingleImage();
-                      SaveImgBufferToFile(glyphImg2, bitmapImgSaveFileName + ".png");
+                      GlyphImage totalGlyphs = atlasBuilder.BuildSingleImage();
+                      SaveImgBufferToFile(totalGlyphs, bitmapImgSaveFileName + ".png");
                       atlasBuilder.SaveFontInfo(bitmapImgSaveFileName + ".xml");
                       MessageBox.Show("glyph gen " + bitmapImgSaveFileName);
                   }
@@ -277,6 +260,24 @@ namespace TypographyTest.WinForms
                       }
                   }
               });
+        }
+
+        static void SaveImgBufferToFile(GlyphImage glyphImg, string filename)
+        {
+            int[] intBuffer = glyphImg.GetImageBuffer();
+            using (System.Drawing.Bitmap newBmp = new System.Drawing.Bitmap(glyphImg.Width, glyphImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+            {
+                unsafe
+                {
+                    fixed (int* head = &intBuffer[0])
+                    {
+                        CopyToGdiPlusBitmapSameSize((IntPtr)head, newBmp);
+                    }
+                }
+                //save
+                newBmp.Save(filename);
+            }
+
         }
     }
 }

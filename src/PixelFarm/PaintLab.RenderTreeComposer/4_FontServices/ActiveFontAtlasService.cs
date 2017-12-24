@@ -35,7 +35,7 @@ namespace PixelFarm.DrawingGL
         public static ActualFont GetTextureFontAtlasOrCreateNew(
             LayoutFarm.OpenFontTextService fontService,
             RequestFont font,
-            TextureKind textureKind,
+            TextureFontCreationParams creationParams,
             out SimpleFontAtlas fontAtlas)
         {
             //1. resolve for actual typeface
@@ -45,7 +45,7 @@ namespace PixelFarm.DrawingGL
             //check if we have created this font
             var key = new FontTextureKey();
             key.fontName = font.Name;
-            key.textureKind = textureKind;
+            key.textureKind = creationParams.textureKind;
             key.sizeInPoint = font.SizeInPoints;
             key.fontStyle = font.Style;
             //------------------------
@@ -56,17 +56,8 @@ namespace PixelFarm.DrawingGL
                 //if not, then create the new one 
 
                 //optimize here
-                //TODO: review
-                TextureFontCreationParams creationParams = new TextureFontCreationParams();
-                creationParams.originalFontSizeInPoint = font.SizeInPoints;
-                //TODO: review here, langBits can be created with scriptLang ?
-                creationParams.scriptLangs = new ScriptLang[]
-                {
-                    Typography.OpenFont.ScriptLangs.Latin,
-                    Typography.OpenFont.ScriptLangs.Thai //eg. Thai, for test with complex script, you can change to your own
-                };
-                //
-                creationParams.textureKind = textureKind;
+                //TODO: review 
+
                 if (font.SizeInPoints >= 4 && font.SizeInPoints <= 14)
                 {
                     //creationParams.hintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction;
