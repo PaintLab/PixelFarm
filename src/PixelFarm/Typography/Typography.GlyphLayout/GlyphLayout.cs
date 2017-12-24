@@ -67,10 +67,11 @@ namespace Typography.TextLayout
                 return _glyphPlans.Count;
             }
         }
-
-
-
+        
     }
+
+
+
     public enum PositionTechnique
     {
         None,

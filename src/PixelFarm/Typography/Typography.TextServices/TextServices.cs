@@ -342,16 +342,19 @@ namespace Typography.TextServices
         }
         GlyphPlanSequence CreateGlyphPlanSeq(GlyphLayout glyphLayout, TextBuffer buffer, int startAt, int len)
         {
-            GlyphPlanList planList = GlyphPlanBuffer.UnsafeGetGlyphPlanList(_glyphPlanBuffer);
-            int pre_count = planList.Count;
+            //1. layout
             glyphLayout.Typeface = _typeface;
             glyphLayout.ScriptLang = _scLang;
             glyphLayout.Layout(
                 TextBuffer.UnsafeGetCharBuffer(buffer),
                 startAt,
                 len);
+            //2. 
+            GlyphPlanList planList = GlyphPlanBuffer.UnsafeGetGlyphPlanList(_glyphPlanBuffer);
+            int pre_count = planList.Count;
+            //create glyph plan, UnScaled version
+            GlyphLayoutExtensions.GenerateGlyphPlan(glyphLayout.ResultUnscaledGlyphPositions, 1, false, planList);
 
-           
             int post_count = planList.Count;
             return new GlyphPlanSequence(_glyphPlanBuffer, pre_count, post_count - pre_count);
         }
@@ -380,15 +383,12 @@ namespace Typography.TextServices
             int hashValue = CalculateHash(buffer, startAt, len);
             if (!seqCol.TryGetCacheGlyphPlanSeq(hashValue, out planSeq))
             {
-                ////not found then create glyph plan seq
-                //bool useOutputScale = glyphLayout.UsePxScaleOnReadOutput;
-
+                ////not found then create glyph plan seq 
                 ////save 
                 //some font may have 'special' glyph x,y at some font size(eg. for subpixel-rendering position)
-                //but in general we store the new glyph plan seq with unscale glyph pos
-                //glyphLayout.UsePxScaleOnReadOutput = false;
+                //but in general we store the new glyph plan seq with unscale glyph pos 
                 planSeq = CreateGlyphPlanSeq(glyphLayout, buffer, startAt, len);
-                //glyphLayout.UsePxScaleOnReadOutput = useOutputScale;//restore
+
                 seqCol.Register(hashValue, planSeq);
             }
             //---

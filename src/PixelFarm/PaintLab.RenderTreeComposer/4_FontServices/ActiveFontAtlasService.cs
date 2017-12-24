@@ -19,7 +19,7 @@ namespace PixelFarm.DrawingGL
             public float sizeInPoint;
             public string fontName;
             public FontStyle fontStyle;
-            public string scriptLang;
+            public TextureKind textureKind;
         }
 
         struct TextureAtlasCache
@@ -35,6 +35,7 @@ namespace PixelFarm.DrawingGL
         public static ActualFont GetTextureFontAtlasOrCreateNew(
             LayoutFarm.OpenFontTextService fontService,
             RequestFont font,
+            TextureFontCreationParams creationParams,
             out SimpleFontAtlas fontAtlas)
         {
             //1. resolve for actual typeface
@@ -44,30 +45,19 @@ namespace PixelFarm.DrawingGL
             //check if we have created this font
             var key = new FontTextureKey();
             key.fontName = font.Name;
-            //key.scriptLang = scLang.shortname;
+            key.textureKind = creationParams.textureKind;
             key.sizeInPoint = font.SizeInPoints;
             key.fontStyle = font.Style;
             //------------------------
             TextureAtlasCache found;
-            FontFace ff = null;
+            FontFace fontface = null;
             if (!s_cachedFontAtlas.TryGetValue(key, out found))
             {
                 //if not, then create the new one 
 
-                //ptimize here
-                //TODO: review
-                TextureFontCreationParams creationParams = new TextureFontCreationParams();
-                creationParams.originalFontSizeInPoint = font.SizeInPoints;
-                //creationParams.scriptLang = scLang;
-                //creationParams.writeDirection = WriteDirection.LTR;//default 
-                //TODO: review here, langBits can be created with scriptLang ?
-                creationParams.scriptLangs = new ScriptLang[]
-                {
-                    Typography.OpenFont.ScriptLangs.Latin,
-                    Typography.OpenFont.ScriptLangs.Thai //eg. Thai, for test with complex script, you can change to your own
-                };
-                //
-                creationParams.textureKind = PixelFarm.Drawing.Fonts.TextureKind.StencilGreyScale;
+                //optimize here
+                //TODO: review 
+
                 if (font.SizeInPoints >= 4 && font.SizeInPoints <= 14)
                 {
                     //creationParams.hintTechnique = Typography.Contours.HintTechnique.TrueTypeInstruction;
@@ -76,19 +66,19 @@ namespace PixelFarm.DrawingGL
 
                 }
                 //
-                ff = TextureFontLoader.LoadFont(typeface, creationParams, out fontAtlas);
+                fontface = TextureFontLoader.LoadFont(typeface, creationParams, out fontAtlas);
 
 
                 //cache it 
                 var textureAtlasCache = new TextureAtlasCache();
-                textureAtlasCache.fontFace = ff;
+                textureAtlasCache.fontFace = fontface;
                 textureAtlasCache.atlas = fontAtlas;
                 s_cachedFontAtlas.Add(key, textureAtlasCache);
-                return ff.GetFontAtPointSize(font.SizeInPoints);
+                return fontface.GetFontAtPointSize(font.SizeInPoints);
             }
             fontAtlas = found.atlas;
-            ff = found.fontFace;
-            return ff.GetFontAtPointSize(font.SizeInPoints);
+            fontface = found.fontFace;
+            return fontface.GetFontAtPointSize(font.SizeInPoints);
         }
 
     }
