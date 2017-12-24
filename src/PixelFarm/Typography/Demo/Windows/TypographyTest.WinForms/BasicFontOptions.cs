@@ -88,7 +88,7 @@ namespace TypographyTest
                 _typefaceChanged = false;
                 //
                 if (value == null) return;
-                var selected_typeface = _typefaceStore.GetTypeface(value);
+                Typeface selected_typeface = _typefaceStore.GetTypeface(value);
                 if (selected_typeface != this._selectedTypeface)
                 {
                     _typefaceChanged = true;

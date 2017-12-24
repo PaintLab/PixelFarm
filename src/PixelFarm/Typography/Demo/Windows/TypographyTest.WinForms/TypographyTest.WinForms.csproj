@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,6 +43,12 @@
     </Compile>
     <Compile Include="BasicFontOptionsUserControl.Designer.cs">
       <DependentUpon>BasicFontOptionsUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GlyphTextureBitmapGenUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GlyphTextureBitmapGenUserControl.Designer.cs">
+      <DependentUpon>GlyphTextureBitmapGenUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="GlyphContourAnalysisOptions.cs" />
     <Compile Include="GlyphContourAnalysisOptionsUserControl.cs">
@@ -69,6 +76,10 @@
     <Compile Include="TypefaceChangedEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\PixelFarm.Drawing\PixelFarm.Drawing.csproj">
+      <Project>{51d63482-5697-4b16-8401-506965624657}</Project>
+      <Name>PixelFarm.Drawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Build\N20\Typography.GlyphLayout\Typography.GlyphLayout.csproj">
       <Project>{c6807d05-09be-4313-9f8b-bd2d51c55819}</Project>
       <Name>Typography.GlyphLayout</Name>
@@ -97,6 +108,9 @@
   <ItemGroup>
     <EmbeddedResource Include="BasicFontOptionsUserControl.resx">
       <DependentUpon>BasicFontOptionsUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GlyphTextureBitmapGenUserControl.resx">
+      <DependentUpon>GlyphTextureBitmapGenUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GlyphContourAnalysisOptionsUserControl.resx">
       <DependentUpon>GlyphContourAnalysisOptionsUserControl.cs</DependentUpon>

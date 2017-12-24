@@ -268,6 +268,7 @@ namespace Typography.OpenFont
         internal void LoadOpenFontLayoutInfo(GDEF gdefTable, GSUB gsubTable, GPOS gposTable, BASE baseTable, COLR colrTable, CPAL cpalTable)
         {
 
+
             //***
             this.GDEFTable = gdefTable;
             this.GSUBTable = gsubTable;

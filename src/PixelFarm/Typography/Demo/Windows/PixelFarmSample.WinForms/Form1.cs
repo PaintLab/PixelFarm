@@ -61,7 +61,7 @@ namespace SampleWinForms
 
             this.Load += new EventHandler(Form1_Load);
             txtInputChar.TextChanged += (s, e) => UpdateRenderOutput();
-            button1.Click += (s, e) => UpdateRenderOutput();
+
 
             //----------------
             //string inputstr = "ก้า";
@@ -164,6 +164,12 @@ namespace SampleWinForms
 
                         selectedTextPrinter.HintTechnique = _glyphRenderOptions.HintTechnique;
                         selectedTextPrinter.EnableLigature = _glyphRenderOptions.EnableLigature;
+
+
+                        glyphTextureBitmapGenUserControl1.SelectedTypeface = _basicOptions.Typeface;
+                        glyphTextureBitmapGenUserControl1.FontSizeInPoints = _basicOptions.FontSizeInPoints;
+                        glyphTextureBitmapGenUserControl1.SelectedScriptLangs.Clear();
+                        glyphTextureBitmapGenUserControl1.SelectedScriptLangs.Add(_basicOptions.ScriptLang);
 
                         //test print 3 lines
 #if DEBUG
@@ -380,223 +386,219 @@ namespace SampleWinForms
         private void cmdBuildMsdfTexture_Click(object sender, EventArgs e)
         {
 
-            //UnicodeRangeInfo latin1 = UnicodeLangBits.BasicLatin.ToUnicodeRangeInfo();
-            //UnicodeRangeInfo latinSupplement = UnicodeLangBits.Latin1Supplement.ToUnicodeRangeInfo(); 
-            //List<char> unicodeRanges = CreateCharList(new[] {
-            //        UnicodeLangBits.BasicLatin.ToUnicodeRangeInfo(),
-            //        UnicodeLangBits.Thai.ToUnicodeRangeInfo()
-            //    }
-            //);
+            ////UnicodeRangeInfo latin1 = UnicodeLangBits.BasicLatin.ToUnicodeRangeInfo();
+            ////UnicodeRangeInfo latinSupplement = UnicodeLangBits.Latin1Supplement.ToUnicodeRangeInfo(); 
+            ////List<char> unicodeRanges = CreateCharList(new[] {
+            ////        UnicodeLangBits.BasicLatin.ToUnicodeRangeInfo(),
+            ////        UnicodeLangBits.Thai.ToUnicodeRangeInfo()
+            ////    }
+            ////);
 
-            //samples...
-            //1. create texture from specific glyph index range
-            string sampleFontFile = "../../../TestFonts/tahoma.ttf";
-            //CreateSampleMsdfTextureFont(
-            //    sampleFontFile,
-            //    18,
-            //    0,
-            //    255,
-            //    "d:\\WImageTest\\sample_msdf.png");
-            //---------------------------------------------------------
-            //2. for debug, create from some unicode chars
-            //
-            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/?=(){}[]%@#^$&|.";
-            CreateSampleTextureFontFromInputChars(
-               TextureKind.Msdf,
-               sampleFontFile,
-               18,
-               chars.ToCharArray(), //eg. ABCD
-               "d:\\WImageTest\\sample_msdf1.png");
-
-            CreateSampleTextureFontFromScriptLangs(
-               TextureKind.Msdf,
-               sampleFontFile,
-               18,
-               new[] { ScriptLangs.Latin, ScriptLangs.Thai },
-               "d:\\WImageTest\\sample_msdf2.png");
-
-            //---------------------------------------------------------
-            ////3.
-            //GlyphTranslatorToContour tx = new GlyphTranslatorToContour();
-            //tx.BeginRead(1);
-            ////tx.MoveTo(10, 10);
-            ////tx.LineTo(25, 25);
-            ////tx.LineTo(15, 10);
-            //tx.MoveTo(3.84f, 0);
-            //tx.LineTo(1.64f, 0);
-            //tx.LineTo(1.64f, 18.23f);
-            //tx.LineTo(3.84f, 18.23f);
-            //tx.CloseContour();
-            //tx.EndRead();
+            ////samples...
+            ////1. create texture from specific glyph index range
+            //string sampleFontFile = _basicOptions.Typeface.Filename;
+            ////string sampleFontFile = "../../../TestFonts/tahoma.ttf";
+            ////CreateSampleMsdfTextureFont(
+            ////    sampleFontFile,
+            ////    18,
+            ////    0,
+            ////    255,
+            ////    "d:\\WImageTest\\sample_msdf.png");
+            ////---------------------------------------------------------
+            ////2. for debug, create from some unicode chars
             ////
-            //CreateSampleMsdfImg(tx, "d:\\WImageTest\\tx_contour2.bmp");
+            //string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/?=(){}[]%@#^$&|.";
+            //CreateSampleTextureFontFromInputChars(
+            //   TextureKind.Msdf,
+            //   sampleFontFile,
+            //   18,
+            //   chars.ToCharArray(), //eg. ABCD
+            //   "d:\\WImageTest\\glyph_gen\\sample_msdf1_" + Path.GetFileNameWithoutExtension(sampleFontFile) + ".png");
+
+            ////CreateSampleTextureFontFromScriptLangs(
+            ////   TextureKind.Msdf,
+            ////   sampleFontFile,
+            ////   18,
+            ////   new[] { ScriptLangs.Latin, ScriptLangs.Thai },
+            ////   "d:\\WImageTest\\sample_msdf2_" + Path.GetFileNameWithoutExtension(sampleFontFile) + ".png");
+
+            ////---------------------------------------------------------
+            //////3.
+            ////GlyphTranslatorToContour tx = new GlyphTranslatorToContour();
+            ////tx.BeginRead(1);
+            //////tx.MoveTo(10, 10);
+            //////tx.LineTo(25, 25);
+            //////tx.LineTo(15, 10);
+            ////tx.MoveTo(3.84f, 0);
+            ////tx.LineTo(1.64f, 0);
+            ////tx.LineTo(1.64f, 18.23f);
+            ////tx.LineTo(3.84f, 18.23f);
+            ////tx.CloseContour();
+            ////tx.EndRead();
+            //////
+            ////CreateSampleMsdfImg(tx, "d:\\WImageTest\\tx_contour2.bmp");
 
         }
 
 
 
-        static ushort[] GetUniqueGlyphIndexList(List<ushort> inputGlyphIndexList)
-        {
-            Dictionary<ushort, bool> uniqueGlyphIndices = new Dictionary<ushort, bool>(inputGlyphIndexList.Count);
-            foreach (ushort glyphIndex in inputGlyphIndexList)
-            {
-                if (!uniqueGlyphIndices.ContainsKey(glyphIndex))
-                {
-                    uniqueGlyphIndices.Add(glyphIndex, true);
-                }
-            }
-            //
-            ushort[] uniqueGlyphIndexArray = new ushort[uniqueGlyphIndices.Count];
-            int i = 0;
-            foreach (ushort glyphIndex in uniqueGlyphIndices.Keys)
-            {
-                uniqueGlyphIndexArray[i] = glyphIndex;
-                i++;
-            }
-            return uniqueGlyphIndexArray;
-        }
+        //static ushort[] GetUniqueGlyphIndexList(List<ushort> inputGlyphIndexList)
+        //{
+        //    Dictionary<ushort, bool> uniqueGlyphIndices = new Dictionary<ushort, bool>(inputGlyphIndexList.Count);
+        //    foreach (ushort glyphIndex in inputGlyphIndexList)
+        //    {
+        //        if (!uniqueGlyphIndices.ContainsKey(glyphIndex))
+        //        {
+        //            uniqueGlyphIndices.Add(glyphIndex, true);
+        //        }
+        //    }
+        //    //
+        //    ushort[] uniqueGlyphIndexArray = new ushort[uniqueGlyphIndices.Count];
+        //    int i = 0;
+        //    foreach (ushort glyphIndex in uniqueGlyphIndices.Keys)
+        //    {
+        //        uniqueGlyphIndexArray[i] = glyphIndex;
+        //        i++;
+        //    }
+        //    return uniqueGlyphIndexArray;
+        //}
 
-        enum TextureKind
-        {
-            Msdf,
-            AlphaChannel
-        }
-        static void CreateSampleTextureFontFromScriptLangs(
-            TextureKind textureKind,
-            string fontfile, float sizeInPoint,
-            ScriptLang[] scLangs, string outputFile)
-        {
+        //static void CreateSampleTextureFontFromScriptLangs(
+        //    TextureKind textureKind,
+        //    string fontfile, float sizeInPoint,
+        //    ScriptLang[] scLangs, string outputFile)
+        //{
 
-            //sample
-            var reader = new OpenFontReader();
-            //we need to collect a substituion glyph so we use glyph layout to collect
-            //associate glyph index 
-            using (var fs = new FileStream(fontfile, FileMode.Open))
-            {
-                //1. read typeface from font file
-                Typeface typeface = reader.Read(fs);
-                //2. find associated glyph index base on input script langs
-                List<ushort> outputGlyphIndexList = new List<ushort>();
-                //
-                foreach (ScriptLang scLang in scLangs)
-                {
-                    typeface.CollectAllAssociateGlyphIndex(outputGlyphIndexList, scLang);
-                }
-                //
-                ushort[] allAssocGlyphIndices = GetUniqueGlyphIndexList(outputGlyphIndexList);
-                CreateSampleTextureFontFromGlyphIndices(textureKind, typeface, sizeInPoint, allAssocGlyphIndices, outputFile);
-            }
-        }
-        static void CreateSampleTextureFontFromGlyphIndices(
-           TextureKind textureKind,
-           string fontfile, float sizeInPoint,
-           ushort[] glyphIndices, string outputFile)
-        {
-            //sample
-            var reader = new OpenFontReader();
-            //we need to collect a substituion glyph so we use glyph layout to collect
-            //associate glyph index 
-            using (var fs = new FileStream(fontfile, FileMode.Open))
-            {
-                //1. read typeface from font file
-                Typeface typeface = reader.Read(fs);
-                //2.
-                CreateSampleTextureFontFromGlyphIndices(textureKind, typeface, sizeInPoint, glyphIndices, outputFile);
-            }
-        }
-        static void CreateSampleTextureFontFromInputChars(
-            TextureKind textureKind,
-            string fontfile, float sizeInPoint,
-            char[] chars, string outputFile)
-        {
-            //sample
-            var reader = new OpenFontReader();
-            //we need to collect a substituion glyph so we use glyph layout to collect
-            //associate glyph index 
-            using (var fs = new FileStream(fontfile, FileMode.Open))
-            {
-                //1. read typeface from font file
-                Typeface typeface = reader.Read(fs);
-                //2.
+        //    //sample
+        //    var reader = new OpenFontReader();
+        //    //we need to collect a substituion glyph so we use glyph layout to collect
+        //    //associate glyph index 
+        //    using (var fs = new FileStream(fontfile, FileMode.Open))
+        //    {
+        //        //1. read typeface from font file
+        //        Typeface typeface = reader.Read(fs);
+        //        //2. find associated glyph index base on input script langs
+        //        List<ushort> outputGlyphIndexList = new List<ushort>();
+        //        //
+        //        foreach (ScriptLang scLang in scLangs)
+        //        {
+        //            typeface.CollectAllAssociateGlyphIndex(outputGlyphIndexList, scLang);
+        //        }
+        //        //
+        //        ushort[] allAssocGlyphIndices = GetUniqueGlyphIndexList(outputGlyphIndexList);
+        //        CreateSampleTextureFontFromGlyphIndices(textureKind, typeface, sizeInPoint, allAssocGlyphIndices, outputFile);
+        //    }
+        //}
+        //static void CreateSampleTextureFontFromGlyphIndices(
+        //   TextureKind textureKind,
+        //   string fontfile, float sizeInPoint,
+        //   ushort[] glyphIndices, string outputFile)
+        //{
+        //    //sample
+        //    var reader = new OpenFontReader();
+        //    //we need to collect a substituion glyph so we use glyph layout to collect
+        //    //associate glyph index 
+        //    using (var fs = new FileStream(fontfile, FileMode.Open))
+        //    {
+        //        //1. read typeface from font file
+        //        Typeface typeface = reader.Read(fs);
+        //        //2.
+        //        CreateSampleTextureFontFromGlyphIndices(textureKind, typeface, sizeInPoint, glyphIndices, outputFile);
+        //    }
+        //}
+        //static void CreateSampleTextureFontFromInputChars(
+        //    TextureKind textureKind,
+        //    string fontfile, float sizeInPoint,
+        //    char[] chars, string outputFile)
+        //{
+        //    //sample
+        //    var reader = new OpenFontReader();
+        //    //we need to collect a substituion glyph so we use glyph layout to collect
+        //    //associate glyph index 
+        //    using (var fs = new FileStream(fontfile, FileMode.Open))
+        //    {
+        //        //1. read typeface from font file
+        //        Typeface typeface = reader.Read(fs);
+        //        //2.
 
-                //convert input chars into glyphIndex
-                ushort[] glyphIndices = new ushort[chars.Length];
-                int i = 0;
-                foreach (char ch in chars)
-                {
-                    glyphIndices[i] = typeface.LookupIndex(ch);
-                    i++;
-                }
+        //        //convert input chars into glyphIndex
+        //        ushort[] glyphIndices = new ushort[chars.Length];
+        //        int i = 0;
+        //        foreach (char ch in chars)
+        //        {
+        //            glyphIndices[i] = typeface.LookupIndex(ch);
+        //            i++;
+        //        }
 
-                CreateSampleTextureFontFromGlyphIndices(textureKind, typeface, sizeInPoint, glyphIndices, outputFile);
-            }
+        //        CreateSampleTextureFontFromGlyphIndices(textureKind, typeface, sizeInPoint, glyphIndices, outputFile);
+        //    }
 
-        }
+        //}
 
-        static void CreateSampleTextureFontFromGlyphIndices(
-          TextureKind textureKind,
-          Typeface typeface, float sizeInPoint,
-          ushort[] glyphIndices, string outputFile)
-        {
+        //static void CreateSampleTextureFontFromGlyphIndices(
+        //  TextureKind textureKind,
+        //  Typeface typeface, float sizeInPoint,
+        //  ushort[] glyphIndices, string outputFile)
+        //{
 
-            //sample: create sample msdf texture 
-            //-------------------------------------------------------------
-            var builder = new GlyphPathBuilder(typeface);
-            builder.UseTrueTypeInstructions = true;
-            //-------------------------------------------------------------
-            var atlasBuilder = new SimpleFontAtlasBuilder();
-            MsdfGenParams msdfGenParams = new MsdfGenParams();
-            //
-            AggGlyphTextureGen aggTextureGen = new AggGlyphTextureGen();
-            float pxscale = typeface.CalculateScaleToPixelFromPointSize(sizeInPoint);
-            int j = glyphIndices.Length;
-            for (int i = 0; i < j; ++i)
-            {
-                //build glyph
-                ushort gindex = glyphIndices[i];
-                builder.BuildFromGlyphIndex(gindex, -1);
-                GlyphImage glyphImg = null;
-                if (textureKind == TextureKind.Msdf)
-                {
-                    var glyphToContour = new GlyphContourBuilder();
-                    //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
-                    builder.ReadShapes(glyphToContour);
-                    msdfGenParams.shapeScale = 1f / 64;
-                    glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, msdfGenParams);
-                }
-                else
-                {
-                    //create alpha channel texture                      
-                    glyphImg = aggTextureGen.CreateGlyphImage(builder, pxscale);
-                }
-                atlasBuilder.AddGlyph(gindex, glyphImg);
-                int w = glyphImg.Width;
-                int h = glyphImg.Height;
+        //    //sample: create sample msdf texture 
+        //    //-------------------------------------------------------------
+        //    var builder = new GlyphPathBuilder(typeface);
+        //    builder.UseTrueTypeInstructions = true;
+        //    //-------------------------------------------------------------
+        //    var atlasBuilder = new SimpleFontAtlasBuilder();
+        //    MsdfGenParams msdfGenParams = new MsdfGenParams();
+        //    //
+        //    AggGlyphTextureGen aggTextureGen = new AggGlyphTextureGen();
+        //    float pxscale = typeface.CalculateScaleToPixelFromPointSize(sizeInPoint);
+        //    int j = glyphIndices.Length;
+        //    for (int i = 0; i < j; ++i)
+        //    {
+        //        //build glyph
+        //        ushort gindex = glyphIndices[i];
+        //        builder.BuildFromGlyphIndex(gindex, -1);
+        //        GlyphImage glyphImg = null;
+        //        if (textureKind == TextureKind.Msdf)
+        //        {
+        //            var glyphToContour = new GlyphContourBuilder();
+        //            //glyphToContour.Read(builder.GetOutputPoints(), builder.GetOutputContours());
+        //            builder.ReadShapes(glyphToContour);
+        //            msdfGenParams.shapeScale = 1f / 64;
+        //            glyphImg = MsdfGlyphGen.CreateMsdfImage(glyphToContour, msdfGenParams);
+        //        }
+        //        else
+        //        {
+        //            //create alpha channel texture                      
+        //            glyphImg = aggTextureGen.CreateGlyphImage(builder, pxscale);
+        //        }
+        //        atlasBuilder.AddGlyph(gindex, glyphImg);
+        //        int w = glyphImg.Width;
+        //        int h = glyphImg.Height;
 
-                using (Bitmap bmp = new Bitmap(glyphImg.Width, glyphImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-                {
-                    var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
-                    int[] imgBuffer = glyphImg.GetImageBuffer();
-                    System.Runtime.InteropServices.Marshal.Copy(imgBuffer, 0, bmpdata.Scan0, imgBuffer.Length);
-                    bmp.UnlockBits(bmpdata);
-                    bmp.Save("d:\\WImageTest\\glyph_gen\\a001_alpha_" + ((int)gindex) + ".png");
-                }
-            }
+        //        using (Bitmap bmp = new Bitmap(glyphImg.Width, glyphImg.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+        //        {
+        //            var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+        //            int[] imgBuffer = glyphImg.GetImageBuffer();
+        //            System.Runtime.InteropServices.Marshal.Copy(imgBuffer, 0, bmpdata.Scan0, imgBuffer.Length);
+        //            bmp.UnlockBits(bmpdata);
+        //            bmp.Save("d:\\WImageTest\\glyph_gen\\a001_alpha_" + ((int)gindex) + ".png");
+        //        }
+        //    }
 
-            var glyphImg2 = atlasBuilder.BuildSingleImage();
-            using (Bitmap bmp = new Bitmap(glyphImg2.Width, glyphImg2.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
-            {
-                var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, glyphImg2.Width, glyphImg2.Height),
-                    System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
-                int[] intBuffer = glyphImg2.GetImageBuffer();
+        //    var glyphImg2 = atlasBuilder.BuildSingleImage();
+        //    using (Bitmap bmp = new Bitmap(glyphImg2.Width, glyphImg2.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
+        //    {
+        //        var bmpdata = bmp.LockBits(new System.Drawing.Rectangle(0, 0, glyphImg2.Width, glyphImg2.Height),
+        //            System.Drawing.Imaging.ImageLockMode.ReadWrite, bmp.PixelFormat);
+        //        int[] intBuffer = glyphImg2.GetImageBuffer();
 
-                System.Runtime.InteropServices.Marshal.Copy(intBuffer, 0, bmpdata.Scan0, intBuffer.Length);
-                bmp.UnlockBits(bmpdata);
-                bmp.Save(outputFile);
-            }
-            atlasBuilder.SaveFontInfo(outputFile + ".xml");
+        //        System.Runtime.InteropServices.Marshal.Copy(intBuffer, 0, bmpdata.Scan0, intBuffer.Length);
+        //        bmp.UnlockBits(bmpdata);
+        //        bmp.Save(outputFile);
+        //    }
+        //    atlasBuilder.SaveFontInfo(outputFile + ".xml");
 
-        }
+        //}
 
         static void CreateSampleMsdfImg(GlyphContourBuilder tx, string outputFile)
         {
@@ -619,25 +621,38 @@ namespace SampleWinForms
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //create a simple stencil texture font
-
-            string sampleFontFile = "../../../TestFonts/tahoma.ttf";
-            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/?=(){}[]%@#^$&|.";
-            CreateSampleTextureFontFromInputChars(
-               TextureKind.AlphaChannel,
-               sampleFontFile,
-               18,
-               chars.ToCharArray(), //eg. ABCD
-               "d:\\WImageTest\\sample_stencil.png");
-            //
-            CreateSampleTextureFontFromScriptLangs(
-              TextureKind.AlphaChannel,
-              sampleFontFile,
-              18,
-              new[] { ScriptLangs.Latin },
-              "d:\\WImageTest\\sample_stencil.png");
+            ////create a simple stencil texture font
+            //string sampleFontFile = _basicOptions.Typeface.Filename;
+            ////string sampleFontFile = "../../../TestFonts/tahoma.ttf";
+            //string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-*/?=(){}[]%@#^$&|.";
+            //CreateSampleTextureFontFromInputChars(
+            //   TextureKind.StencilGreyScale,
+            //   sampleFontFile,
+            //   18,
+            //   chars.ToCharArray(), //eg. ABCD
+            //   "d:\\WImageTest\\sample_stencil1_" + System.IO.Path.GetFileNameWithoutExtension(sampleFontFile) + ".png");
+            ////
+            //CreateSampleTextureFontFromScriptLangs(
+            //  TextureKind.StencilGreyScale,
+            //  sampleFontFile,
+            //  18,
+            //  new[] { ScriptLangs.Latin },
+            //  "d:\\WImageTest\\sample_stencil2_" + System.IO.Path.GetFileNameWithoutExtension(sampleFontFile) + ".png");
 
         }
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            UpdateRenderOutput();
+        }
+
+        private void glyphTextureBitmapGenUserControl1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
         //static void CreateSampleMsdfTextureFont(string fontfile, float sizeInPoint, ushort startGlyphIndex, ushort endGlyphIndex, string outputFile)
         //{
         //    //sample
