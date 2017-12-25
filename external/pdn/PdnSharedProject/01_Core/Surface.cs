@@ -131,37 +131,7 @@ namespace PaintDotNet
                 return this.stride;
             }
         }
-
-        ///// <summary>
-        ///// Gets the size, in pixels, of this Surface.
-        ///// </summary>
-        ///// <remarks>
-        ///// This is a convenience function that creates a new Size instance based
-        ///// on the values of the Width and Height properties.
-        ///// This property will never throw an ObjectDisposedException.
-        ///// </remarks>
-        //public override Size Size
-        //{
-        //    get
-        //    {
-        //        return new Size(this.width, this.height);
-        //    }
-        //}
-
-        /// <summary>
-        /// Gets the GDI+ PixelFormat of this Surface.
-        /// </summary>
-        /// <remarks>
-        /// This property always returns PixelFormat.Format32bppArgb.
-        /// This property will never throw an ObjectDisposedException.
-        /// </remarks>
-        public PixelFormat PixelFormat
-        {
-            get
-            {
-                return PixelFormat.Format32bppArgb;
-            }
-        }
+ 
 
         /// <summary>
         /// Gets the bounds of this Surface, in pixels.

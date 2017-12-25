@@ -187,21 +187,7 @@ namespace PaintDotNet
                 return (int)Bgra;
             }
         }
-
-        /// <summary>
-        /// Gets the equivalent GDI+ PixelFormat.
-        /// </summary>
-        /// <remarks>
-        /// This property always returns PixelFormat.Format32bppArgb.
-        /// </remarks>
-        public static PixelFormat PixelFormat
-        {
-            get
-            {
-                return PixelFormat.Format32bppArgb;
-            }
-        }
-
+ 
         /// <summary>
         /// Returns a new ColorBgra with the same color values but with a new alpha component value.
         /// </summary>
@@ -209,25 +195,7 @@ namespace PaintDotNet
         {
             return ColorBgra.FromBgra(B, G, R, newA);
         }
-
-        ///// <summary>
-        ///// Creates a new ColorBgra instance with the given color and alpha values.
-        ///// </summary>
-        //[Obsolete ("Use FromBgra() instead (make sure to swap the order of your b and r parameters)")]
-        //public static ColorBgra FromRgba(byte r, byte g, byte b, byte a)
-        //{
-        //    return FromBgra(b, g, r, a);
-        //}
-
-        ///// <summary>
-        ///// Creates a new ColorBgra instance with the given color values, and 255 for alpha.
-        ///// </summary>
-        //[Obsolete ("Use FromBgr() instead (make sure to swap the order of your b and r parameters)")]
-        //public static ColorBgra FromRgb(byte r, byte g, byte b)
-        //{
-        //    return FromBgr(b, g, r);
-        //}
-
+        
         /// <summary>
         /// Creates a new ColorBgra instance with the given color and alpha values.
         /// </summary>
