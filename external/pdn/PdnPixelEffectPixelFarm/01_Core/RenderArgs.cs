@@ -32,8 +32,8 @@ namespace PaintDotNet
         : IDisposable
     {
         private Surface surface;
-        private Bitmap bitmap;
-        private Graphics graphics;
+        //private Bitmap bitmap;
+        //private Graphics graphics;
         private bool disposed = false;
 
         /// <summary>
@@ -52,26 +52,26 @@ namespace PaintDotNet
             }
         }
 
-        /// <summary>
-        /// Gets a Bitmap reference that aliases the Surface.
-        /// </summary>
-        public Bitmap Bitmap
-        {
-            get
-            {
-                if (this.disposed)
-                {
-                    throw new ObjectDisposedException("RenderArgs");
-                }
+        ///// <summary>
+        ///// Gets a Bitmap reference that aliases the Surface.
+        ///// </summary>
+        //public Bitmap Bitmap
+        //{
+        //    get
+        //    {
+        //        if (this.disposed)
+        //        {
+        //            throw new ObjectDisposedException("RenderArgs");
+        //        }
 
-                if (this.bitmap == null)
-                {
-                    this.bitmap = surface.CreateAliasedBitmap();
-                }
+        //        if (this.bitmap == null)
+        //        {
+        //            this.bitmap = surface.CreateAliasedBitmap();
+        //        }
 
-                return this.bitmap;
-            }
-        }
+        //        return this.bitmap;
+        //    }
+        //}
 
         /// <summary>
         /// Retrieves a Graphics instance that can be used to draw on to the Surface.
@@ -80,24 +80,24 @@ namespace PaintDotNet
         /// Use of this object is not thread-safe. You must wrap retrieval and consumption of this 
         /// property with a critical section.
         /// </remarks>
-        public Graphics Graphics
-        {
-            get
-            {
-                throw new StillNotPortedException();
-                //if (this.disposed)
-                //{
-                //    throw new ObjectDisposedException("RenderArgs");
-                //}
+        //public Graphics Graphics
+        //{
+        //    get
+        //    {
+        //        throw new StillNotPortedException();
+        //        //if (this.disposed)
+        //        //{
+        //        //    throw new ObjectDisposedException("RenderArgs");
+        //        //}
 
-                //if (this.graphics == null)
-                //{
-                //    this.graphics = Graphics.FromImage(Bitmap);
-                //}
+        //        //if (this.graphics == null)
+        //        //{
+        //        //    this.graphics = Graphics.FromImage(Bitmap);
+        //        //}
 
-                //return this.graphics;
-            }
-        }
+        //        //return this.graphics;
+        //    }
+        //}
 
         /// <summary>
         /// Gets the size of the associated Surface object.
@@ -185,8 +185,8 @@ namespace PaintDotNet
         public RenderArgs(Surface surface)
         {
             this.surface = surface;
-            this.bitmap = null;
-            this.graphics = null;
+            //this.bitmap = null;
+            //this.graphics = null;
         }
 
         ~RenderArgs()
@@ -215,17 +215,17 @@ namespace PaintDotNet
 
                 if (disposing)
                 {
-                    if (this.graphics != null)
-                    {
-                        this.graphics.Dispose();
-                        this.graphics = null;
-                    }
+                    //if (this.graphics != null)
+                    //{
+                    //    this.graphics.Dispose();
+                    //    this.graphics = null;
+                    //}
 
-                    if (this.bitmap != null)
-                    {
-                        this.bitmap.Dispose();
-                        this.bitmap = null;
-                    }
+                    //if (this.bitmap != null)
+                    //{
+                    //    this.bitmap.Dispose();
+                    //    this.bitmap = null;
+                    //}
                 }
             }
         }

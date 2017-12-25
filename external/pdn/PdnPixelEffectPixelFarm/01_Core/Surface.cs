@@ -910,56 +910,56 @@ namespace PaintDotNet
         }
 
 
-        /// <summary>
-        /// Creates a new Surface and copies the pixels from a Bitmap to it.
-        /// </summary>
-        /// <param name="bitmap">The Bitmap to duplicate.</param>
-        /// <returns>A new Surface that is the same size as the given Bitmap and that has the same pixel values.</returns>
-        public static Surface CopyFromBitmap(Bitmap bitmap)
-        {
-            throw new StillNotPortedException();
-            //Surface surface = new Surface(bitmap.Width, bitmap.Height);
-            //BitmapData bd = bitmap.LockBits(surface.Bounds, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+        ///// <summary>
+        ///// Creates a new Surface and copies the pixels from a Bitmap to it.
+        ///// </summary>
+        ///// <param name="bitmap">The Bitmap to duplicate.</param>
+        ///// <returns>A new Surface that is the same size as the given Bitmap and that has the same pixel values.</returns>
+        //public static Surface CopyFromBitmap(Bitmap bitmap)
+        //{
+        //    throw new StillNotPortedException();
+        //    //Surface surface = new Surface(bitmap.Width, bitmap.Height);
+        //    //BitmapData bd = bitmap.LockBits(surface.Bounds, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
-            //unsafe
-            //{
-            //    for (int y = 0; y < bd.Height; ++y)
-            //    {
-            //        PlatformMemory.Copy((void*)surface.GetRowAddress(y),
-            //           (byte*)bd.Scan0.ToPointer() + (y * bd.Stride), (ulong)bd.Width * ColorBgra.SizeOf);
-            //    }
-            //}
+        //    //unsafe
+        //    //{
+        //    //    for (int y = 0; y < bd.Height; ++y)
+        //    //    {
+        //    //        PlatformMemory.Copy((void*)surface.GetRowAddress(y),
+        //    //           (byte*)bd.Scan0.ToPointer() + (y * bd.Stride), (ulong)bd.Width * ColorBgra.SizeOf);
+        //    //    }
+        //    //}
 
-            //bitmap.UnlockBits(bd);
-            //return surface;
-        }
-        public Bitmap CreateAliasedBitmap(Rectangle bounds, bool alpha)
-        {
-            throw new StillNotPortedException();
-            //if (disposed)
-            //{
-            //    throw new ObjectDisposedException("Surface");
-            //}
+        //    //bitmap.UnlockBits(bd);
+        //    //return surface;
+        //}
+        //public Bitmap CreateAliasedBitmap(Rectangle bounds, bool alpha)
+        //{
+        //    throw new StillNotPortedException();
+        //    //if (disposed)
+        //    //{
+        //    //    throw new ObjectDisposedException("Surface");
+        //    //}
 
-            //if (bounds.IsEmpty)
-            //{
-            //    throw new ArgumentOutOfRangeException();
-            //}
+        //    //if (bounds.IsEmpty)
+        //    //{
+        //    //    throw new ArgumentOutOfRangeException();
+        //    //}
 
-            //Rectangle clipped = Rectangle.Intersect(this.Bounds, bounds);
+        //    //Rectangle clipped = Rectangle.Intersect(this.Bounds, bounds);
 
-            //if (clipped != bounds)
-            //{
-            //    throw new ArgumentOutOfRangeException();
-            //}
+        //    //if (clipped != bounds)
+        //    //{
+        //    //    throw new ArgumentOutOfRangeException();
+        //    //}
 
-            //unsafe
-            //{
-            //    return new Bitmap(bounds.Width, bounds.Height, stride, alpha ? this.PixelFormat : PixelFormat.Format32bppRgb,
-            //        new IntPtr((void*)((byte*)scan0.VoidStar + GetPointByteOffsetUnchecked(bounds.X, bounds.Y))));
-            //}
+        //    //unsafe
+        //    //{
+        //    //    return new Bitmap(bounds.Width, bounds.Height, stride, alpha ? this.PixelFormat : PixelFormat.Format32bppRgb,
+        //    //        new IntPtr((void*)((byte*)scan0.VoidStar + GetPointByteOffsetUnchecked(bounds.X, bounds.Y))));
+        //    //}
 
-        }
+        //}
         /// <summary>
         /// Copies the contents of the given surface to the upper left corner of this surface.
         /// </summary>
@@ -1044,23 +1044,23 @@ namespace PaintDotNet
         {
             get { return new Size(this.Width, this.Height); }
         }
-        /// <summary>
-        /// Helper function. Same as calling CreateAliasedBounds(Bounds).
-        /// </summary>
-        /// <returns>A GDI+ Bitmap that aliases the entire Surface.</returns>
-        public Bitmap CreateAliasedBitmap()
-        {
-            return CreateAliasedBitmap(this.Bounds);
-        }
+        ///// <summary>
+        ///// Helper function. Same as calling CreateAliasedBounds(Bounds).
+        ///// </summary>
+        ///// <returns>A GDI+ Bitmap that aliases the entire Surface.</returns>
+        //public Bitmap CreateAliasedBitmap()
+        //{
+        //    return CreateAliasedBitmap(this.Bounds);
+        //}
 
-        /// <summary>
-        /// Helper function. Same as calling CreateAliasedBounds(bounds, true).
-        /// </summary>
-        /// <returns>A GDI+ Bitmap that aliases the entire Surface.</returns>
-        public Bitmap CreateAliasedBitmap(Rectangle bounds)
-        {
-            return CreateAliasedBitmap(bounds, true);
-        }
+        ///// <summary>
+        ///// Helper function. Same as calling CreateAliasedBounds(bounds, true).
+        ///// </summary>
+        ///// <returns>A GDI+ Bitmap that aliases the entire Surface.</returns>
+        //public Bitmap CreateAliasedBitmap(Rectangle bounds)
+        //{
+        //    return CreateAliasedBitmap(bounds, true);
+        //}
         /// <summary>
         /// Copies the contents of the given surface to the upper left of this surface.
         /// </summary>

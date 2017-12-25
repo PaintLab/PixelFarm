@@ -7,10 +7,10 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 
-//using PaintDotNet.SystemLayer;
+
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Drawing.Drawing2D;
+
 
 namespace PaintDotNet
 {
@@ -36,7 +36,7 @@ namespace PaintDotNet
                 return color;
             }
 
-            public unsafe override void Apply(ColorBgra *dst, ColorBgra *src, int length)
+            public unsafe override void Apply(ColorBgra* dst, ColorBgra* src, int length)
             {
                 PlatformMemory.Copy(dst, src, (ulong)length * (ulong)sizeof(ColorBgra));
             }
@@ -276,14 +276,14 @@ namespace PaintDotNet
                 int saturation = GetSaturation(color);
 
                 // The higher the difference between the other colors, the more red it is
-                int difference = color.R - Math.Max(color.B,color.G);
+                int difference = color.R - Math.Max(color.B, color.G);
 
                 // If it is within tolerence, and the saturation is high
-                if ((difference > tolerence) && (saturation > 100)) 
+                if ((difference > tolerence) && (saturation > 100))
                 {
                     double i = 255.0 * color.GetIntensity();
                     byte ib = (byte)(i * setSaturation); // adjust the red color for user inputted saturation
-                    return ColorBgra.FromBgra((byte)color.B,(byte)color.G, ib, color.A);
+                    return ColorBgra.FromBgra((byte)color.B, (byte)color.G, ib, color.A);
                 }
                 else
                 {
@@ -298,9 +298,9 @@ namespace PaintDotNet
                 double max;
                 double delta;
 
-                double r = (double) color.R / 255;
-                double g = (double) color.G / 255;
-                double b = (double) color.B / 255;
+                double r = (double)color.R / 255;
+                double g = (double)color.G / 255;
+                double b = (double)color.B / 255;
 
                 double s;
 
@@ -308,20 +308,20 @@ namespace PaintDotNet
                 max = Math.Max(Math.Max(r, g), b);
                 delta = max - min;
 
-                if (max == 0 || delta == 0) 
+                if (max == 0 || delta == 0)
                 {
                     // R, G, and B must be 0, or all the same.
                     // In this case, S is 0, and H is undefined.
                     // Using H = 0 is as good as any...
                     s = 0;
-                } 
+                }
                 else
                 {
                     s = delta / max;
                 }
 
                 return (int)(s * 255);
-            }               
+            }
         }
 
         /// <summary>
@@ -402,7 +402,7 @@ namespace PaintDotNet
             public byte[] Curve = new byte[256];
 
             public LuminosityCurve()
-            {    
+            {
                 for (int i = 0; i < 256; ++i)
                 {
                     Curve[i] = (byte)i;
@@ -473,7 +473,7 @@ namespace PaintDotNet
 
             public override void Apply(Surface dst, Point dstOffset, Surface src, Point srcOffset, int scanLength)
             {
-                base.Apply (dst, dstOffset, src, srcOffset, scanLength);
+                base.Apply(dst, dstOffset, src, srcOffset, scanLength);
             }
         }
 
@@ -483,16 +483,16 @@ namespace PaintDotNet
               ICloneable
         {
             private ColorBgra colorInLow;
-            public ColorBgra ColorInLow 
+            public ColorBgra ColorInLow
             {
-                get 
+                get
                 {
-                    return colorInLow; 
+                    return colorInLow;
                 }
 
-                set 
+                set
                 {
-                    if (value.R == 255) 
+                    if (value.R == 255)
                     {
                         value.R = 254;
                     }
@@ -507,17 +507,17 @@ namespace PaintDotNet
                         value.B = 254;
                     }
 
-                    if (colorInHigh.R < value.R + 1) 
+                    if (colorInHigh.R < value.R + 1)
                     {
                         colorInHigh.R = (byte)(value.R + 1);
                     }
 
-                    if (colorInHigh.G < value.G + 1) 
+                    if (colorInHigh.G < value.G + 1)
                     {
                         colorInHigh.G = (byte)(value.R + 1);
                     }
 
-                    if (colorInHigh.B < value.B + 1) 
+                    if (colorInHigh.B < value.B + 1)
                     {
                         colorInHigh.B = (byte)(value.R + 1);
                     }
@@ -528,22 +528,22 @@ namespace PaintDotNet
             }
 
             private ColorBgra colorInHigh;
-            public ColorBgra ColorInHigh 
+            public ColorBgra ColorInHigh
             {
-                get 
+                get
                 {
                     return colorInHigh;
                 }
 
-                set 
+                set
                 {
-                    if (value.R == 0) 
+                    if (value.R == 0)
                     {
                         value.R = 1;
                     }
 
                     if (value.G == 0)
-                    { 
+                    {
                         value.G = 1;
                     }
 
@@ -552,17 +552,17 @@ namespace PaintDotNet
                         value.B = 1;
                     }
 
-                    if (colorInLow.R > value.R - 1) 
+                    if (colorInLow.R > value.R - 1)
                     {
                         colorInLow.R = (byte)(value.R - 1);
                     }
 
-                    if (colorInLow.G > value.G - 1) 
+                    if (colorInLow.G > value.G - 1)
                     {
                         colorInLow.G = (byte)(value.R - 1);
                     }
 
-                    if (colorInLow.B > value.B - 1) 
+                    if (colorInLow.B > value.B - 1)
                     {
                         colorInLow.B = (byte)(value.R - 1);
                     }
@@ -573,16 +573,16 @@ namespace PaintDotNet
             }
 
             private ColorBgra colorOutLow;
-            public ColorBgra ColorOutLow 
+            public ColorBgra ColorOutLow
             {
-                get 
+                get
                 {
                     return colorOutLow;
                 }
 
-                set 
+                set
                 {
-                    if (value.R == 255) 
+                    if (value.R == 255)
                     {
                         value.R = 254;
                     }
@@ -597,17 +597,17 @@ namespace PaintDotNet
                         value.B = 254;
                     }
 
-                    if (colorOutHigh.R < value.R + 1) 
+                    if (colorOutHigh.R < value.R + 1)
                     {
                         colorOutHigh.R = (byte)(value.R + 1);
                     }
 
-                    if (colorOutHigh.G < value.G + 1) 
+                    if (colorOutHigh.G < value.G + 1)
                     {
                         colorOutHigh.G = (byte)(value.G + 1);
                     }
 
-                    if (colorOutHigh.B < value.B + 1) 
+                    if (colorOutHigh.B < value.B + 1)
                     {
                         colorOutHigh.B = (byte)(value.B + 1);
                     }
@@ -618,22 +618,22 @@ namespace PaintDotNet
             }
 
             private ColorBgra colorOutHigh;
-            public ColorBgra ColorOutHigh 
+            public ColorBgra ColorOutHigh
             {
-                get 
+                get
                 {
                     return colorOutHigh;
                 }
 
-                set 
+                set
                 {
-                    if (value.R == 0) 
+                    if (value.R == 0)
                     {
                         value.R = 1;
                     }
 
                     if (value.G == 0)
-                    { 
+                    {
                         value.G = 1;
                     }
 
@@ -642,30 +642,30 @@ namespace PaintDotNet
                         value.B = 1;
                     }
 
-                    if (colorOutLow.R > value.R - 1) 
+                    if (colorOutLow.R > value.R - 1)
                     {
                         colorOutLow.R = (byte)(value.R - 1);
                     }
 
-                    if (colorOutLow.G > value.G - 1) 
+                    if (colorOutLow.G > value.G - 1)
                     {
                         colorOutLow.G = (byte)(value.G - 1);
                     }
 
-                    if (colorOutLow.B > value.B - 1) 
+                    if (colorOutLow.B > value.B - 1)
                     {
                         colorOutLow.B = (byte)(value.B - 1);
                     }
 
                     colorOutHigh = value;
                     UpdateLookupTable();
-                }       
-            }               
-                        
+                }
+            }
+
             private float[] gamma = new float[3];
-            public float GetGamma(int index) 
-            {               
-                if (index < 0 || index >= 3) 
+            public float GetGamma(int index)
+            {
+                if (index < 0 || index >= 3)
                 {
                     throw new ArgumentOutOfRangeException("index", index, "Index must be between 0 and 2");
                 }
@@ -673,9 +673,9 @@ namespace PaintDotNet
                 return gamma[index];
             }
 
-            public void SetGamma(int index, float val) 
+            public void SetGamma(int index, float val)
             {
-                if (index < 0 || index >= 3) 
+                if (index < 0 || index >= 3)
                 {
                     throw new ArgumentOutOfRangeException("index", index, "Index must be between 0 and 2");
                 }
@@ -686,7 +686,7 @@ namespace PaintDotNet
 
             public bool isValid = true;
 
-            public static Level AutoFromLoMdHi(ColorBgra lo, ColorBgra md, ColorBgra hi) 
+            public static Level AutoFromLoMdHi(ColorBgra lo, ColorBgra md, ColorBgra hi)
             {
                 float[] gamma = new float[3];
 
@@ -705,9 +705,9 @@ namespace PaintDotNet
                 return new Level(lo, hi, gamma, ColorBgra.FromColor(Color.Black), ColorBgra.FromColor(Color.White));
             }
 
-            private void UpdateLookupTable() 
+            private void UpdateLookupTable()
             {
-                for (int i = 0; i < 3; i++) 
+                for (int i = 0; i < 3; i++)
                 {
                     if (colorOutHigh[i] < colorOutLow[i] ||
                         colorInHigh[i] <= colorInLow[i] ||
@@ -717,7 +717,7 @@ namespace PaintDotNet
                         return;
                     }
 
-                    for (int j = 0; j < 256; j++) 
+                    for (int j = 0; j < 256; j++)
                     {
                         ColorBgra col = Apply(j, j, j);
                         CurveB[j] = col.B;
@@ -727,7 +727,7 @@ namespace PaintDotNet
                 }
             }
 
-            public Level() 
+            public Level()
                 : this(ColorBgra.FromColor(Color.Black),
                        ColorBgra.FromColor(Color.White),
                        new float[] { 1, 1, 1 },
@@ -743,7 +743,7 @@ namespace PaintDotNet
                 colorOutLow = out_lo;
                 colorOutHigh = out_hi;
 
-                if (gamma.Length != 3) 
+                if (gamma.Length != 3)
                 {
                     throw new ArgumentException("gamma", "gamma must be a float[3]");
                 }
@@ -752,12 +752,12 @@ namespace PaintDotNet
                 UpdateLookupTable();
             }
 
-            public ColorBgra Apply(float r, float g, float b) 
+            public ColorBgra Apply(float r, float g, float b)
             {
                 ColorBgra ret = new ColorBgra();
                 float[] input = new float[] { b, g, r };
 
-                for (int i = 0; i < 3; i++) 
+                for (int i = 0; i < 3; i++)
                 {
                     float v = (input[i] - colorInLow[i]);
 
@@ -781,19 +781,19 @@ namespace PaintDotNet
                 return ret;
             }
 
-            public void UnApply(ColorBgra after, float[] beforeOut, float[] slopesOut) 
+            public void UnApply(ColorBgra after, float[] beforeOut, float[] slopesOut)
             {
-                if (beforeOut.Length != 3) 
+                if (beforeOut.Length != 3)
                 {
                     throw new ArgumentException("before must be a float[3]", "before");
                 }
 
-                if (slopesOut.Length != 3) 
+                if (slopesOut.Length != 3)
                 {
                     throw new ArgumentException("slopes must be a float[3]", "slopes");
                 }
 
-                for (int i = 0; i < 3; i++) 
+                for (int i = 0; i < 3; i++)
                 {
                     beforeOut[i] = colorInLow[i] + (colorInHigh[i] - colorInLow[i]) *
                         (float)Math.Pow((float)(after[i] - colorOutLow[i]) / (colorOutHigh[i] - colorOutLow[i]), 1 / gamma[i]);
@@ -801,7 +801,7 @@ namespace PaintDotNet
                     slopesOut[i] = (float)(colorInHigh[i] - colorInLow[i]) / ((colorOutHigh[i] - colorOutLow[i]) * gamma[i]) *
                         (float)Math.Pow((float)(after[i] - colorOutLow[i]) / (colorOutHigh[i] - colorOutLow[i]), 1 / gamma[i] - 1);
 
-                    if (float.IsInfinity(slopesOut[i]) || float.IsNaN(slopesOut[i])) 
+                    if (float.IsInfinity(slopesOut[i]) || float.IsNaN(slopesOut[i]))
                     {
                         slopesOut[i] = 0;
                     }
@@ -846,7 +846,7 @@ namespace PaintDotNet
                     blendOp = new UnaryPixelOps.BlendConstant(ColorBgra.FromBgra(0, 0, 0, (byte)((-lightness * 255) / 100)));
                 }
             }
-            
+
             public override ColorBgra Apply(ColorBgra color)
             {
                 //adjust saturation
@@ -864,7 +864,7 @@ namespace PaintDotNet
                 {
                     hue += 360;
                 }
-                        
+
                 while (hue > 360)
                 {
                     hue -= 360;
@@ -875,7 +875,7 @@ namespace PaintDotNet
                 ColorBgra newColor = ColorBgra.FromColor(hsvColor.ToColor());
                 newColor = blendOp.Apply(newColor);
                 newColor.A = color.A;
-                
+
                 return newColor;
             }
         }

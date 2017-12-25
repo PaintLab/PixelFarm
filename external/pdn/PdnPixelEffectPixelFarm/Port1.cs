@@ -4,98 +4,89 @@ using System.Runtime.InteropServices;
 namespace PixelFarm.Drawing
 {
     public class StillNotPortedException : Exception { }
-    namespace Imaging
-    {
-        class Y { }
-    }
-    public enum FontStyle
-    {
-    }
-    public class ColorMatrix
-    {
-        public ColorMatrix(float[][] identity)
-        {
 
-        }
-    }
-    public enum WarpMode
-    {
+    //public enum FontStyle
+    //{
+    //}
 
-    }
-    public class Vector<T>
-    {
+    //public enum WarpMode
+    //{
 
-    }
-    public class RegionData { }
-    public class Font
-    {
-        public Font(string name, float size, FontStyle style)
-        {
+    //}
+    //public class Vector<T>
+    //{
 
-        }
-    }
-    public class PropertyItem { }
-    namespace Drawing2D
-    {
-        class Y { }
+    //}
+    //public class RegionData { }
+    //public class Font
+    //{
+    //    public Font(string name, float size, FontStyle style)
+    //    {
 
-        public class Region : IDisposable
-        {
-            public void Dispose() { }
-            public Region() { }
-            public Region(GraphicsPath path)
-            {
+    //    }
+    //}
+    //public class PropertyItem { }
+    //namespace Drawing2D
+    //{
+    //    class Y { }
 
-            }
-            public Region Clone()
-            {
-                throw new StillNotPortedException();
-            }
+    //    //public class Region : IDisposable
+    //    //{
+    //    //    public void Dispose() { }
+    //    //    public Region() { }
+    //    //    public Region(GraphicsPath path)
+    //    //    {
 
-            public Region(Rectangle rect)
-            {
+    //    //    }
+    //    //    public Region Clone()
+    //    //    {
+    //    //        throw new StillNotPortedException();
+    //    //    }
 
-            }
+    //    //    public Region(Rectangle rect)
+    //    //    {
 
-            public Region(RectangleF rectF)
-            {
+    //    //    }
 
-            }
+    //    //    public Region(RectangleF rectF)
+    //    //    {
 
-            public Region(RegionData regionData)
-            {
+    //    //    }
 
-            }
-        }
-    }
-    public enum CombineMode
-    {
-        Complement,
-        Intersect,
-        Replace,
-        Xor,
-        Exclude,
-        Union,
-    }
-    public class Icon { }
-    public class Image { }
-    public class Bitmap : Image, IDisposable
-    {
-        public void Dispose() { }
-    }
-    public class Matrix : IDisposable
-    {
-        public Matrix() { }
-        public void Reset() { }
-        public void Dispose() { }
-        public void Translate(float x, float y) { }
-    }
-    public class Graphics : IDisposable
-    {
-        public void Dispose() { }
-    }
-    public class FontFamily { }
-    public class StringFormat { }
+    //    //    public Region(RegionData regionData)
+    //    //    {
+
+    //    //    }
+    //    //}
+    //}
+    //public enum CombineMode
+    //{
+    //    Complement,
+    //    Intersect,
+    //    Replace,
+    //    Xor,
+    //    Exclude,
+    //    Union,
+    //}
+    //public class Icon { }
+    //public class Image { }
+    //public class Bitmap : Image, IDisposable
+    //{
+    //    public void Dispose() { }
+    //}
+    //public class Matrix : IDisposable
+    //{
+    //    public Matrix() { }
+    //    public void Reset() { }
+    //    public void Dispose() { }
+    //    public void Translate(float x, float y) { }
+    //}
+    //public class Graphics : IDisposable
+    //{
+    //    public void Dispose() { }
+    //}
+    //public class FontFamily { }
+    //public class StringFormat { }
 
 
     //[System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
@@ -1125,466 +1116,466 @@ namespace PixelFarm.Drawing
     {
         Format32bppArgb
     }
-    public enum FillMode
-    {
-        Winding,
-    }
-    public class PathData
-    {
-
-    }
-    public class Brush : IDisposable
-    {
-        public void Dispose() { }
-    }
-    public class Pen : IDisposable
-    {
-        public void Dispose() { }
-    }
-    public class GraphicsPath : IDisposable
-    {
-        public GraphicsPath() { }
-        public GraphicsPath(FillMode fillmode)
-        {
-            this.FillMode = fillmode;
-        }
-        public GraphicsPath(PointF[] points, byte[] types, FillMode fillMode)
-        {
-            this.PathPoints = points;
-            this.PathTypes = types;
-            this.FillMode = fillMode;
-        }
-        public GraphicsPath(Point[] points, byte[] types, FillMode fillMode)
-        {
-
-            this.PathTypes = types;
-            this.FillMode = fillMode;
-        }
-        public GraphicsPath(Point[] points, byte[] types)
-        {
-
-            this.PathTypes = types;
-            this.PathTypes = types;
-        }
-        public GraphicsPath(PointF[] points, byte[] types)
-        {
-            this.PathPoints = points;
-            this.PathTypes = types;
-        }
-        public GraphicsPath Clone()
-        {
-            throw new NotSupportedException();
-        }
-        public void AddBezier(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
-        {
-
-        }
-        public void CloseAllFigures()
-        {
-
-        }
-        public void Flatten()
-        {
-
-        }
-        public RectangleF GetBounds()
-        {
-            throw new NotSupportedException();
-        }
-
-        public RectangleF GetBounds(Matrix matrix)
-        {
-            throw new NotSupportedException();
-        }
+    //public enum FillMode
+    //{
+    //    Winding,
+    //}
+    //public class PathData
+    //{
+
+    //}
+    //public class Brush : IDisposable
+    //{
+    //    public void Dispose() { }
+    //}
+    //public class Pen : IDisposable
+    //{
+    //    public void Dispose() { }
+    //}
+    //public class GraphicsPath : IDisposable
+    //{
+    //    public GraphicsPath() { }
+    //    public GraphicsPath(FillMode fillmode)
+    //    {
+    //        this.FillMode = fillmode;
+    //    }
+    //    public GraphicsPath(PointF[] points, byte[] types, FillMode fillMode)
+    //    {
+    //        this.PathPoints = points;
+    //        this.PathTypes = types;
+    //        this.FillMode = fillMode;
+    //    }
+    //    public GraphicsPath(Point[] points, byte[] types, FillMode fillMode)
+    //    {
+
+    //        this.PathTypes = types;
+    //        this.FillMode = fillMode;
+    //    }
+    //    public GraphicsPath(Point[] points, byte[] types)
+    //    {
+
+    //        this.PathTypes = types;
+    //        this.PathTypes = types;
+    //    }
+    //    public GraphicsPath(PointF[] points, byte[] types)
+    //    {
+    //        this.PathPoints = points;
+    //        this.PathTypes = types;
+    //    }
+    //    public GraphicsPath Clone()
+    //    {
+    //        throw new NotSupportedException();
+    //    }
+    //    public void AddBezier(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
+    //    {
+
+    //    }
+    //    public void CloseAllFigures()
+    //    {
+
+    //    }
+    //    public void Flatten()
+    //    {
+
+    //    }
+    //    public RectangleF GetBounds()
+    //    {
+    //        throw new NotSupportedException();
+    //    }
+
+    //    public RectangleF GetBounds(Matrix matrix)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public RectangleF GetBounds(Matrix matrix, Pen pen)
-        {
-            throw new NotSupportedException();
-        }
+    //    public RectangleF GetBounds(Matrix matrix, Pen pen)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public PointF GetLastPoint()
-        {
-            throw new NotSupportedException();
-        }
-        public void Flatten(Matrix matrix)
-        {
+    //    public PointF GetLastPoint()
+    //    {
+    //        throw new NotSupportedException();
+    //    }
+    //    public void Flatten(Matrix matrix)
+    //    {
 
-        }
+    //    }
 
-        public void Flatten(Matrix matrix, float flatness)
-        {
+    //    public void Flatten(Matrix matrix, float flatness)
+    //    {
 
-        }
+    //    }
 
-        public void CloseFigure()
-        {
-        }
-        public void AddBezier(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
-        {
+    //    public void CloseFigure()
+    //    {
+    //    }
+    //    public void AddBezier(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
+    //    {
 
-        }
+    //    }
 
-        public void AddBeziers(Point[] points)
-        {
+    //    public void AddBeziers(Point[] points)
+    //    {
 
-        }
+    //    }
 
-        public void AddBeziers(PointF[] points)
-        {
+    //    public void AddBeziers(PointF[] points)
+    //    {
 
-        }
+    //    }
 
-        public void AddClosedCurve(Point[] points)
-        {
+    //    public void AddClosedCurve(Point[] points)
+    //    {
 
-        }
+    //    }
 
-        public void AddClosedCurve(PointF[] points)
-        {
+    //    public void AddClosedCurve(PointF[] points)
+    //    {
 
-        }
+    //    }
 
-        public void AddClosedCurve(Point[] points, float tension)
-        {
+    //    public void AddClosedCurve(Point[] points, float tension)
+    //    {
 
-        }
+    //    }
 
-        public void AddClosedCurve(PointF[] points, float tension)
-        {
+    //    public void AddClosedCurve(PointF[] points, float tension)
+    //    {
 
-        }
+    //    }
 
-        public void AddCurve(Point[] points)
-        {
+    //    public void AddCurve(Point[] points)
+    //    {
 
-        }
+    //    }
 
-        public void AddCurve(PointF[] points)
-        {
+    //    public void AddCurve(PointF[] points)
+    //    {
 
-        }
+    //    }
 
-        public void AddCurve(Point[] points, float tension)
-        {
+    //    public void AddCurve(Point[] points, float tension)
+    //    {
 
-        }
+    //    }
 
-        public void AddCurve(PointF[] points, float tension)
-        {
+    //    public void AddCurve(PointF[] points, float tension)
+    //    {
 
-        }
+    //    }
 
-        public void AddCurve(Point[] points, int offset, int numberOfSegments, float tension)
-        {
+    //    public void AddCurve(Point[] points, int offset, int numberOfSegments, float tension)
+    //    {
 
-        }
+    //    }
 
-        public void AddCurve(PointF[] points, int offset, int numberOfSegments, float tension)
-        {
+    //    public void AddCurve(PointF[] points, int offset, int numberOfSegments, float tension)
+    //    {
 
-        }
+    //    }
 
-        public void AddEllipse(Rectangle rect)
-        {
+    //    public void AddEllipse(Rectangle rect)
+    //    {
 
-        }
+    //    }
 
-        public void AddEllipse(RectangleF rectF)
-        {
+    //    public void AddEllipse(RectangleF rectF)
+    //    {
 
-        }
+    //    }
 
-        public void AddEllipse(int x, int y, int width, int height)
-        {
+    //    public void AddEllipse(int x, int y, int width, int height)
+    //    {
 
-        }
+    //    }
 
-        public void AddEllipse(float x, float y, float width, float height)
-        {
+    //    public void AddEllipse(float x, float y, float width, float height)
+    //    {
 
-        }
+    //    }
 
-        public void AddLine(Point pt1, Point pt2)
-        {
-        }
+    //    public void AddLine(Point pt1, Point pt2)
+    //    {
+    //    }
 
-        public void AddLine(PointF pt1, PointF pt2)
-        {
+    //    public void AddLine(PointF pt1, PointF pt2)
+    //    {
 
-        }
+    //    }
 
-        public void AddLine(int x1, int y1, int x2, int y2)
-        {
+    //    public void AddLine(int x1, int y1, int x2, int y2)
+    //    {
 
-        }
-        public void AddLines(Point[] points)
-        {
-        }
+    //    }
+    //    public void AddLines(Point[] points)
+    //    {
+    //    }
 
-        public void AddLines(PointF[] points)
-        {
-        }
-        public void AddLine(float x1, float y1, float x2, float y2)
-        {
+    //    public void AddLines(PointF[] points)
+    //    {
+    //    }
+    //    public void AddLine(float x1, float y1, float x2, float y2)
+    //    {
 
-        }
-        public void AddPath(GraphicsPath addingPath, bool connect)
-        {
+    //    }
+    //    public void AddPath(GraphicsPath addingPath, bool connect)
+    //    {
 
-        }
+    //    }
 
-        public void AddPie(Rectangle rect, float startAngle, float sweepAngle)
-        {
+    //    public void AddPie(Rectangle rect, float startAngle, float sweepAngle)
+    //    {
 
-        }
+    //    }
 
-        public void AddPie(int x, int y, int width, int height, float startAngle, float sweepAngle)
-        {
+    //    public void AddPie(int x, int y, int width, int height, float startAngle, float sweepAngle)
+    //    {
 
-        }
+    //    }
 
-        public void AddPie(float x, float y, float width, float height, float startAngle, float sweepAngle)
-        {
+    //    public void AddPie(float x, float y, float width, float height, float startAngle, float sweepAngle)
+    //    {
 
-        }
+    //    }
 
-        public void AddPolygon(Point[] points)
-        {
+    //    public void AddPolygon(Point[] points)
+    //    {
 
-        }
-        public void AddPolygon(PointF[] points)
-        {
+    //    }
+    //    public void AddPolygon(PointF[] points)
+    //    {
 
-        }
-        public void AddBezire(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
-        {
+    //    }
+    //    public void AddBezire(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
+    //    {
 
-        }
-        public void AddBezier(PointF pt1, PointF pt2, PointF pt3, PointF pt4)
-        {
-        }
-        public void AddBezier(Point pt1, Point pt2, Point pt3, Point pt4)
-        {
-        }
-        public void AddArc(float x, float y, float width, float height, float startAngle, float sweepAngle)
-        {
+    //    }
+    //    public void AddBezier(PointF pt1, PointF pt2, PointF pt3, PointF pt4)
+    //    {
+    //    }
+    //    public void AddBezier(Point pt1, Point pt2, Point pt3, Point pt4)
+    //    {
+    //    }
+    //    public void AddArc(float x, float y, float width, float height, float startAngle, float sweepAngle)
+    //    {
 
-        }
-        public void AddArc(int x, int y, int width, int height, float startAngle, float sweepAngle)
-        {
+    //    }
+    //    public void AddArc(int x, int y, int width, int height, float startAngle, float sweepAngle)
+    //    {
 
-        }
-        public void AddArc(Rectangle rect, float startAngle, float sweepAngle)
-        {
+    //    }
+    //    public void AddArc(Rectangle rect, float startAngle, float sweepAngle)
+    //    {
 
-        }
+    //    }
 
-        public void AddArc(RectangleF rectF, float startAngle, float sweepAngle)
-        {
+    //    public void AddArc(RectangleF rectF, float startAngle, float sweepAngle)
+    //    {
 
-        }
+    //    }
 
-        public void AddArc(PointF[] points)
-        {
+    //    public void AddArc(PointF[] points)
+    //    {
 
-        }
-        public void AddArc(Point[] points)
-        {
+    //    }
+    //    public void AddArc(Point[] points)
+    //    {
 
-        }
-        public void AddBezier(PointF[] points)
-        {
+    //    }
+    //    public void AddBezier(PointF[] points)
+    //    {
 
-        }
-        public void AddRectangle(Rectangle rect)
-        {
+    //    }
+    //    public void AddRectangle(Rectangle rect)
+    //    {
 
-        }
+    //    }
 
-        public void AddRectangle(RectangleF rectF)
-        {
+    //    public void AddRectangle(RectangleF rectF)
+    //    {
 
-        }
+    //    }
 
-        public void AddRectangles(Rectangle[] rects)
-        {
+    //    public void AddRectangles(Rectangle[] rects)
+    //    {
 
-        }
+    //    }
 
-        public void AddRectangles(RectangleF[] rectsF)
-        {
+    //    public void AddRectangles(RectangleF[] rectsF)
+    //    {
 
-        }
+    //    }
 
-        public void AddString(string s, FontFamily family, int style, float emSize, Point origin, StringFormat format)
-        {
+    //    public void AddString(string s, FontFamily family, int style, float emSize, Point origin, StringFormat format)
+    //    {
 
-        }
+    //    }
 
-        public void AddString(string s, FontFamily family, int style, float emSize, PointF origin, StringFormat format)
-        {
+    //    public void AddString(string s, FontFamily family, int style, float emSize, PointF origin, StringFormat format)
+    //    {
 
-        }
+    //    }
 
-        public void AddString(string s, FontFamily family, int style, float emSize, Rectangle layoutRect, StringFormat format)
-        {
+    //    public void AddString(string s, FontFamily family, int style, float emSize, Rectangle layoutRect, StringFormat format)
+    //    {
 
-        }
+    //    }
 
-        public void AddString(string s, FontFamily family, int style, float emSize, RectangleF layoutRect, StringFormat format)
-        {
+    //    public void AddString(string s, FontFamily family, int style, float emSize, RectangleF layoutRect, StringFormat format)
+    //    {
 
-        }
+    //    }
 
-        public void ClearMarkers()
-        {
+    //    public void ClearMarkers()
+    //    {
 
-        }
-        public bool IsOutlineVisible(Point point, Pen pen)
-        {
-            throw new NotSupportedException();
-        }
+    //    }
+    //    public bool IsOutlineVisible(Point point, Pen pen)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsOutlineVisible(PointF point, Pen pen)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsOutlineVisible(PointF point, Pen pen)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsOutlineVisible(int x, int y, Pen pen)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsOutlineVisible(int x, int y, Pen pen)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsOutlineVisible(Point point, Pen pen, Graphics g)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsOutlineVisible(Point point, Pen pen, Graphics g)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsOutlineVisible(PointF point, Pen pen, Graphics g)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsOutlineVisible(PointF point, Pen pen, Graphics g)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsOutlineVisible(float x, float y, Pen pen)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsOutlineVisible(float x, float y, Pen pen)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsOutlineVisible(int x, int y, Pen pen, Graphics g)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsOutlineVisible(int x, int y, Pen pen, Graphics g)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsOutlineVisible(float x, float y, Pen pen, Graphics g)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsOutlineVisible(float x, float y, Pen pen, Graphics g)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsVisible(Point point)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsVisible(Point point)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsVisible(PointF point)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsVisible(PointF point)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsVisible(int x, int y)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsVisible(int x, int y)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsVisible(Point point, Graphics g)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsVisible(Point point, Graphics g)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsVisible(PointF point, Graphics g)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsVisible(PointF point, Graphics g)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsVisible(float x, float y)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsVisible(float x, float y)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsVisible(int x, int y, Graphics g)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsVisible(int x, int y, Graphics g)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public bool IsVisible(float x, float y, Graphics g)
-        {
-            throw new NotSupportedException();
-        }
+    //    public bool IsVisible(float x, float y, Graphics g)
+    //    {
+    //        throw new NotSupportedException();
+    //    }
 
-        public void Reset()
-        {
+    //    public void Reset()
+    //    {
 
-        }
+    //    }
 
-        public void Reverse()
-        {
+    //    public void Reverse()
+    //    {
 
-        }
+    //    }
 
-        public void SetMarkers()
-        {
-        }
+    //    public void SetMarkers()
+    //    {
+    //    }
 
-        public void StartFigure()
-        {
-        }
+    //    public void StartFigure()
+    //    {
+    //    }
 
-        public void Transform(Matrix matrix)
-        {
+    //    public void Transform(Matrix matrix)
+    //    {
 
-        }
+    //    }
 
-        public void Warp(PointF[] destPoints, RectangleF srcRect)
-        {
+    //    public void Warp(PointF[] destPoints, RectangleF srcRect)
+    //    {
 
-        }
+    //    }
 
-        public void Warp(PointF[] destPoints, RectangleF srcRect, Matrix matrix)
-        {
+    //    public void Warp(PointF[] destPoints, RectangleF srcRect, Matrix matrix)
+    //    {
 
-        }
+    //    }
 
-        public void Warp(PointF[] destPoints, RectangleF srcRect, Matrix matrix, WarpMode warpMode)
-        {
+    //    public void Warp(PointF[] destPoints, RectangleF srcRect, Matrix matrix, WarpMode warpMode)
+    //    {
 
-        }
+    //    }
 
-        public void Warp(PointF[] destPoints, RectangleF srcRect, Matrix matrix, WarpMode warpMode, float flatness)
-        {
+    //    public void Warp(PointF[] destPoints, RectangleF srcRect, Matrix matrix, WarpMode warpMode, float flatness)
+    //    {
 
-        }
+    //    }
 
-        public void Widen(Pen pen)
-        {
+    //    public void Widen(Pen pen)
+    //    {
 
-        }
+    //    }
 
-        public void Widen(Pen pen, Matrix matrix)
-        {
+    //    public void Widen(Pen pen, Matrix matrix)
+    //    {
 
-        }
+    //    }
 
-        public void Widen(Pen pen, Matrix matrix, float flatness)
-        {
+    //    public void Widen(Pen pen, Matrix matrix, float flatness)
+    //    {
 
-        }
-        public void Dispose() { }
-        public FillMode FillMode { get; set; }
-        public int PointCount { get; set; }
-        public PointF[] PathPoints { get; set; }
-        public byte[] PathTypes { get; set; }
-        public PathData PathData { get; set; }
+    //    }
+    //    public void Dispose() { }
+    //    public FillMode FillMode { get; set; }
+    //    public int PointCount { get; set; }
+    //    public PointF[] PathPoints { get; set; }
+    //    public byte[] PathTypes { get; set; }
+    //    public PathData PathData { get; set; }
 
-    }
+    //}
     public struct RectangleF
     {
         float x, y, width, height;

@@ -120,69 +120,69 @@ namespace PaintDotNet
             return (attrs.Length != 0);
         }
 
-        public static void DrawDropShadow1px(Graphics g, Rectangle rect)
-        {
-            throw new StillNotPortedException();
+        //public static void DrawDropShadow1px(Graphics g, Rectangle rect)
+        //{
+        //    throw new StillNotPortedException();
 
-            //Brush b0 = new SolidBrush(Color.FromArgb(15, Color.Black));
-            //Brush b1 = new SolidBrush(Color.FromArgb(47, Color.Black));
-            //Pen p2 = new Pen(Color.FromArgb(63, Color.Black));
+        //    //Brush b0 = new SolidBrush(Color.FromArgb(15, Color.Black));
+        //    //Brush b1 = new SolidBrush(Color.FromArgb(47, Color.Black));
+        //    //Pen p2 = new Pen(Color.FromArgb(63, Color.Black));
 
-            //g.FillRectangle(b0, rect.Left, rect.Top, 1, 1);
-            //g.FillRectangle(b1, rect.Left + 1, rect.Top, 1, 1);
-            //g.FillRectangle(b1, rect.Left, rect.Top + 1, 1, 1);
+        //    //g.FillRectangle(b0, rect.Left, rect.Top, 1, 1);
+        //    //g.FillRectangle(b1, rect.Left + 1, rect.Top, 1, 1);
+        //    //g.FillRectangle(b1, rect.Left, rect.Top + 1, 1, 1);
 
-            //g.FillRectangle(b0, rect.Right - 1, rect.Top, 1, 1);
-            //g.FillRectangle(b1, rect.Right - 2, rect.Top, 1, 1);
-            //g.FillRectangle(b1, rect.Right - 1, rect.Top + 1, 1, 1);
+        //    //g.FillRectangle(b0, rect.Right - 1, rect.Top, 1, 1);
+        //    //g.FillRectangle(b1, rect.Right - 2, rect.Top, 1, 1);
+        //    //g.FillRectangle(b1, rect.Right - 1, rect.Top + 1, 1, 1);
 
-            //g.FillRectangle(b0, rect.Left, rect.Bottom - 1, 1, 1);
-            //g.FillRectangle(b1, rect.Left + 1, rect.Bottom - 1, 1, 1);
-            //g.FillRectangle(b1, rect.Left, rect.Bottom - 2, 1, 1);
+        //    //g.FillRectangle(b0, rect.Left, rect.Bottom - 1, 1, 1);
+        //    //g.FillRectangle(b1, rect.Left + 1, rect.Bottom - 1, 1, 1);
+        //    //g.FillRectangle(b1, rect.Left, rect.Bottom - 2, 1, 1);
 
-            //g.FillRectangle(b0, rect.Right - 1, rect.Bottom - 1, 1, 1);
-            //g.FillRectangle(b1, rect.Right - 2, rect.Bottom - 1, 1, 1);
-            //g.FillRectangle(b1, rect.Right - 1, rect.Bottom - 2, 1, 1);
+        //    //g.FillRectangle(b0, rect.Right - 1, rect.Bottom - 1, 1, 1);
+        //    //g.FillRectangle(b1, rect.Right - 2, rect.Bottom - 1, 1, 1);
+        //    //g.FillRectangle(b1, rect.Right - 1, rect.Bottom - 2, 1, 1);
 
-            //g.DrawLine(p2, rect.Left + 2, rect.Top, rect.Right - 3, rect.Top);
-            //g.DrawLine(p2, rect.Left, rect.Top + 2, rect.Left, rect.Bottom - 3);
-            //g.DrawLine(p2, rect.Left + 2, rect.Bottom - 1, rect.Right - 3, rect.Bottom - 1);
-            //g.DrawLine(p2, rect.Right - 1, rect.Top + 2, rect.Right - 1, rect.Bottom - 3);
+        //    //g.DrawLine(p2, rect.Left + 2, rect.Top, rect.Right - 3, rect.Top);
+        //    //g.DrawLine(p2, rect.Left, rect.Top + 2, rect.Left, rect.Bottom - 3);
+        //    //g.DrawLine(p2, rect.Left + 2, rect.Bottom - 1, rect.Right - 3, rect.Bottom - 1);
+        //    //g.DrawLine(p2, rect.Right - 1, rect.Top + 2, rect.Right - 1, rect.Bottom - 3);
 
-            //b0.Dispose();
-            //b0 = null;
-            //b1.Dispose();
-            //b1 = null;
-            //p2.Dispose();
-            //p2 = null;
-        }
+        //    //b0.Dispose();
+        //    //b0 = null;
+        //    //b1.Dispose();
+        //    //b1 = null;
+        //    //p2.Dispose();
+        //    //p2 = null;
+        //}
 
 
 
-        public static void DrawColorRectangle(Graphics g, Rectangle rect, Color color, bool drawBorder)
-        {
-            throw new StillNotPortedException();
+        //public static void DrawColorRectangle(Graphics g, Rectangle rect, Color color, bool drawBorder)
+        //{
+        //    throw new StillNotPortedException();
 
-            //int inflateAmt = drawBorder ? -2 : 0;
-            //Rectangle colorRectangle = Rectangle.Inflate(rect, inflateAmt, inflateAmt);
-            //Brush colorBrush = new LinearGradientBrush(colorRectangle, Color.FromArgb(255, color), color, 90.0f, false);
-            //HatchBrush backgroundBrush = new HatchBrush(HatchStyle.LargeCheckerBoard, Color.FromArgb(191, 191, 191), Color.FromArgb(255, 255, 255));
+        //    //int inflateAmt = drawBorder ? -2 : 0;
+        //    //Rectangle colorRectangle = Rectangle.Inflate(rect, inflateAmt, inflateAmt);
+        //    //Brush colorBrush = new LinearGradientBrush(colorRectangle, Color.FromArgb(255, color), color, 90.0f, false);
+        //    //HatchBrush backgroundBrush = new HatchBrush(HatchStyle.LargeCheckerBoard, Color.FromArgb(191, 191, 191), Color.FromArgb(255, 255, 255));
 
-            //if (drawBorder)
-            //{
-            //    g.DrawRectangle(Pens.Black, rect.Left, rect.Top, rect.Width - 1, rect.Height - 1);
-            //    g.DrawRectangle(Pens.White, rect.Left + 1, rect.Top + 1, rect.Width - 3, rect.Height - 3);
-            //}
+        //    //if (drawBorder)
+        //    //{
+        //    //    g.DrawRectangle(Pens.Black, rect.Left, rect.Top, rect.Width - 1, rect.Height - 1);
+        //    //    g.DrawRectangle(Pens.White, rect.Left + 1, rect.Top + 1, rect.Width - 3, rect.Height - 3);
+        //    //}
 
-            //PixelOffsetMode oldPOM = g.PixelOffsetMode;
-            //g.PixelOffsetMode = PixelOffsetMode.Half;
-            //g.FillRectangle(backgroundBrush, colorRectangle);
-            //g.FillRectangle(colorBrush, colorRectangle);
-            //g.PixelOffsetMode = oldPOM;
+        //    //PixelOffsetMode oldPOM = g.PixelOffsetMode;
+        //    //g.PixelOffsetMode = PixelOffsetMode.Half;
+        //    //g.FillRectangle(backgroundBrush, colorRectangle);
+        //    //g.FillRectangle(colorBrush, colorRectangle);
+        //    //g.PixelOffsetMode = oldPOM;
 
-            //backgroundBrush.Dispose();
-            //colorBrush.Dispose();
-        }
+        //    //backgroundBrush.Dispose();
+        //    //colorBrush.Dispose();
+        //}
 
         public static Size ComputeThumbnailSize(Size originalSize, int maxEdgeLength)
         {
@@ -209,40 +209,40 @@ namespace PaintDotNet
 
 
 
-        public static Font CreateFont(string name, float size, FontStyle style)
-        {
-            throw new StillNotPortedException();
-            //Font returnFont;
+        //public static Font CreateFont(string name, float size, FontStyle style)
+        //{
+        //    throw new StillNotPortedException();
+        //    //Font returnFont;
 
-            //try
-            //{
-            //    returnFont = new Font(name, size, style);
-            //}
+        //    //try
+        //    //{
+        //    //    returnFont = new Font(name, size, style);
+        //    //}
 
-            //catch (Exception)
-            //{
-            //    returnFont = new Font(FontFamily.GenericSansSerif, size);
-            //}
+        //    //catch (Exception)
+        //    //{
+        //    //    returnFont = new Font(FontFamily.GenericSansSerif, size);
+        //    //}
 
-            //return returnFont;
-        }
+        //    //return returnFont;
+        //}
 
-        public static Font CreateFont(string name, float size, string backupName, float backupSize, FontStyle style)
-        {
-            Font returnFont;
+        //public static Font CreateFont(string name, float size, string backupName, float backupSize, FontStyle style)
+        //{
+        //    Font returnFont;
 
-            try
-            {
-                returnFont = new Font(name, size, style);
-            }
+        //    try
+        //    {
+        //        returnFont = new Font(name, size, style);
+        //    }
 
-            catch (Exception)
-            {
-                returnFont = CreateFont(backupName, backupSize, style);
-            }
+        //    catch (Exception)
+        //    {
+        //        returnFont = CreateFont(backupName, backupSize, style);
+        //    }
 
-            return returnFont;
-        }
+        //    return returnFont;
+        //}
 
         public static readonly Color TransparentKey = Color.FromArgb(192, 192, 192);
 
@@ -315,31 +315,31 @@ namespace PaintDotNet
             return (string)pi.GetValue(null, null);
         }
 
-        public static readonly float[][] Identity5x5F = new float[][] {
-                                                                          new float[] { 1, 0, 0, 0, 0 },
-                                                                          new float[] { 0, 1, 0, 0, 0 },
-                                                                          new float[] { 0, 0, 1, 0, 0 },
-                                                                          new float[] { 0, 0, 0, 1, 0 },
-                                                                          new float[] { 0, 0, 0, 0, 1 }
-                                                                      };
+        //public static readonly float[][] Identity5x5F = new float[][] {
+        //                                                                  new float[] { 1, 0, 0, 0, 0 },
+        //                                                                  new float[] { 0, 1, 0, 0, 0 },
+        //                                                                  new float[] { 0, 0, 1, 0, 0 },
+        //                                                                  new float[] { 0, 0, 0, 1, 0 },
+        //                                                                  new float[] { 0, 0, 0, 0, 1 }
+        //                                                              };
 
-        public static readonly ColorMatrix IdentityColorMatrix = new ColorMatrix(Identity5x5F);
+ 
 
-        [ThreadStatic]
-        private static Matrix identityMatrix = null;
-        public static Matrix IdentityMatrix
-        {
-            get
-            {
-                if (identityMatrix == null)
-                {
-                    identityMatrix = new Matrix();
-                    identityMatrix.Reset();
-                }
+        //[ThreadStatic]
+        //private static Matrix identityMatrix = null;
+        //public static Matrix IdentityMatrix
+        //{
+        //    get
+        //    {
+        //        if (identityMatrix == null)
+        //        {
+        //            identityMatrix = new Matrix();
+        //            identityMatrix.Reset();
+        //        }
 
-                return identityMatrix;
-            }
-        }
+        //        return identityMatrix;
+        //    }
+        //}
 
         /// <summary>
         /// Rounds an integer to the smallest power of 2 that is greater
@@ -450,68 +450,68 @@ namespace PaintDotNet
         }
 
 
-        public static Icon ImageToIcon(Image image)
-        {
-            return ImageToIcon(image, PixelUtils.TransparentKey);
-        }
+        //public static Icon ImageToIcon(Image image)
+        //{
+        //    return ImageToIcon(image, PixelUtils.TransparentKey);
+        //}
 
-        public static Icon ImageToIcon(Image image, bool disposeImage)
-        {
-            return ImageToIcon(image, PixelUtils.TransparentKey, disposeImage);
-        }
+        //public static Icon ImageToIcon(Image image, bool disposeImage)
+        //{
+        //    return ImageToIcon(image, PixelUtils.TransparentKey, disposeImage);
+        //}
 
-        public static Icon ImageToIcon(Image image, Color seeThru)
-        {
-            return ImageToIcon(image, seeThru, false);
-        }
+        //public static Icon ImageToIcon(Image image, Color seeThru)
+        //{
+        //    return ImageToIcon(image, seeThru, false);
+        //}
 
-        /// <summary>
-        /// Converts an Image to an Icon.
-        /// </summary>
-        /// <param name="image">The Image to convert to an icon. Must be an appropriate icon size (32x32, 16x16, etc).</param>
-        /// <param name="seeThru">The color that will be treated as transparent in the icon.</param>
-        /// <param name="disposeImage">Whether or not to dispose the passed-in Image.</param>
-        /// <returns>An Icon representation of the Image.</returns>
-        public static Icon ImageToIcon(Image image, Color seeThru, bool disposeImage)
-        {
-            throw new NotSupportedException();
-            //Bitmap bitmap = new Bitmap(image);
+        ///// <summary>
+        ///// Converts an Image to an Icon.
+        ///// </summary>
+        ///// <param name="image">The Image to convert to an icon. Must be an appropriate icon size (32x32, 16x16, etc).</param>
+        ///// <param name="seeThru">The color that will be treated as transparent in the icon.</param>
+        ///// <param name="disposeImage">Whether or not to dispose the passed-in Image.</param>
+        ///// <returns>An Icon representation of the Image.</returns>
+        //public static Icon ImageToIcon(Image image, Color seeThru, bool disposeImage)
+        //{
+        //    throw new NotSupportedException();
+        //    //Bitmap bitmap = new Bitmap(image);
 
-            //for (int y = 0; y < bitmap.Height; ++y)
-            //{
-            //    for (int x = 0; x < bitmap.Width; ++x)
-            //    {
-            //        if (bitmap.GetPixel(x, y) == seeThru)
-            //        {
-            //            bitmap.SetPixel(x, y, Color.FromArgb(0));
-            //        }
-            //    }
-            //}
+        //    //for (int y = 0; y < bitmap.Height; ++y)
+        //    //{
+        //    //    for (int x = 0; x < bitmap.Width; ++x)
+        //    //    {
+        //    //        if (bitmap.GetPixel(x, y) == seeThru)
+        //    //        {
+        //    //            bitmap.SetPixel(x, y, Color.FromArgb(0));
+        //    //        }
+        //    //    }
+        //    //}
 
-            //Icon icon = Icon.FromHandle(bitmap.GetHicon());
-            //bitmap.Dispose();
+        //    //Icon icon = Icon.FromHandle(bitmap.GetHicon());
+        //    //bitmap.Dispose();
 
-            //if (disposeImage)
-            //{
-            //    image.Dispose();
-            //}
+        //    //if (disposeImage)
+        //    //{
+        //    //    image.Dispose();
+        //    //}
 
-            //return icon;
-        }
+        //    //return icon;
+        //}
 
-        public static Icon BitmapToIcon(Bitmap bitmap, bool disposeBitmap)
-        {
-            throw new NotSupportedException();
+        //public static Icon BitmapToIcon(Bitmap bitmap, bool disposeBitmap)
+        //{
+        //    throw new NotSupportedException();
 
-            //Icon icon = Icon.FromHandle(bitmap.GetHicon());
+        //    //Icon icon = Icon.FromHandle(bitmap.GetHicon());
 
-            //if (disposeBitmap)
-            //{
-            //    bitmap.Dispose();
-            //}
+        //    //if (disposeBitmap)
+        //    //{
+        //    //    bitmap.Dispose();
+        //    //}
 
-            //return icon;
-        }
+        //    //return icon;
+        //}
 
         //public static Icon SurfaceToIcon(Surface surface, bool disposeSurface)
         //{
@@ -975,30 +975,30 @@ namespace PaintDotNet
             return new BinaryFormatter().Deserialize(stream);
         }
 
-        [Obsolete("Use rect.Contains() instead", true)]
-        public static bool IsPointInRectangle(Point pt, Rectangle rect)
-        {
-            return rect.Contains(pt);
-        }
+        //[Obsolete("Use rect.Contains() instead", true)]
+        //public static bool IsPointInRectangle(Point pt, Rectangle rect)
+        //{
+        //    return rect.Contains(pt);
+        //}
 
-        [Obsolete("Use rect.Contains() instead", true)]
-        public static bool IsPointInRectangle(int x, int y, Rectangle rect)
-        {
-            return rect.Contains(x, y);
-        }
+        //[Obsolete("Use rect.Contains() instead", true)]
+        //public static bool IsPointInRectangle(int x, int y, Rectangle rect)
+        //{
+        //    return rect.Contains(x, y);
+        //}
 
-        public static Bitmap FullCloneBitmap(Bitmap cloneMe)
-        {
-            throw new StillNotPortedException();
-            //Bitmap bitmap = new Bitmap(cloneMe.Width, cloneMe.Height, cloneMe.PixelFormat);
+        //public static Bitmap FullCloneBitmap(Bitmap cloneMe)
+        //{
+        //    throw new StillNotPortedException();
+        //    //Bitmap bitmap = new Bitmap(cloneMe.Width, cloneMe.Height, cloneMe.PixelFormat);
 
-            //using (Graphics g = Graphics.FromImage(bitmap))
-            //{
-            //    g.DrawImage(cloneMe, 0, 0, cloneMe.Width, cloneMe.Height);
-            //}
+        //    //using (Graphics g = Graphics.FromImage(bitmap))
+        //    //{
+        //    //    g.DrawImage(cloneMe, 0, 0, cloneMe.Width, cloneMe.Height);
+        //    //}
 
-            //return bitmap;
-        }
+        //    //return bitmap;
+        //}
 
         ///// <summary>
         ///// Allows you to find the bounding box for a Region object without requiring
@@ -2283,22 +2283,22 @@ namespace PaintDotNet
             return scans;
         }
 
-        public static PointF TransformOnePoint(Matrix matrix, PointF ptF)
-        {
-            throw new StillNotPortedException();
-            //PointF[] ptFs = new PointF[1] { ptF };
-            //matrix.TransformPoints(ptFs);
-            //return ptFs[0];
-        }
+        //public static PointF TransformOnePoint(Matrix matrix, PointF ptF)
+        //{
+        //    throw new StillNotPortedException();
+        //    //PointF[] ptFs = new PointF[1] { ptF };
+        //    //matrix.TransformPoints(ptFs);
+        //    //return ptFs[0];
+        //}
 
-        public static PointF TransformOneVector(Matrix matrix, PointF ptF)
-        {
-            throw new StillNotPortedException();
+        //public static PointF TransformOneVector(Matrix matrix, PointF ptF)
+        //{
+        //    throw new StillNotPortedException();
 
-            //PointF[] ptFs = new PointF[1] { ptF };
-            //matrix.TransformVectors(ptFs);
-            //return ptFs[0];
-        }
+        //    //PointF[] ptFs = new PointF[1] { ptF };
+        //    //matrix.TransformVectors(ptFs);
+        //    //return ptFs[0];
+        //}
 
         public static PointF NormalizeVector(PointF vecF)
         {
@@ -2372,44 +2372,44 @@ namespace PaintDotNet
             return new PointF(-v.X, -v.Y);
         }
 
-        public static float GetAngleOfTransform(Matrix matrix)
-        {
-            throw new StillNotPortedException();
+        //public static float GetAngleOfTransform(Matrix matrix)
+        //{
+        //    throw new StillNotPortedException();
 
-            //PointF[] pts = new PointF[] { new PointF(1.0f, 0.0f) };
-            //matrix.TransformVectors(pts);
-            //double atan2 = Math.Atan2(pts[0].Y, pts[0].X);
-            //double angle = atan2 * (180.0f / Math.PI);
+        //    //PointF[] pts = new PointF[] { new PointF(1.0f, 0.0f) };
+        //    //matrix.TransformVectors(pts);
+        //    //double atan2 = Math.Atan2(pts[0].Y, pts[0].X);
+        //    //double angle = atan2 * (180.0f / Math.PI);
 
-            //return (float)angle;
-        }
+        //    //return (float)angle;
+        //}
 
-        public static bool IsTransformFlipped(Matrix matrix)
-        {
-            PointF ptX = new PointF(1.0f, 0.0f);
-            PointF ptXT = PixelUtils.TransformOneVector(matrix, ptX);
-            double atan2X = Math.Atan2(ptXT.Y, ptXT.X);
-            double angleX = atan2X * (180.0 / Math.PI);
+        //public static bool IsTransformFlipped(Matrix matrix)
+        //{
+        //    PointF ptX = new PointF(1.0f, 0.0f);
+        //    PointF ptXT = PixelUtils.TransformOneVector(matrix, ptX);
+        //    double atan2X = Math.Atan2(ptXT.Y, ptXT.X);
+        //    double angleX = atan2X * (180.0 / Math.PI);
 
-            PointF ptY = new PointF(0.0f, 1.0f);
-            PointF ptYT = PixelUtils.TransformOneVector(matrix, ptY);
-            double atan2Y = Math.Atan2(ptYT.Y, ptYT.X);
-            double angleY = (atan2Y * (180.0 / Math.PI)) - 90.0;
+        //    PointF ptY = new PointF(0.0f, 1.0f);
+        //    PointF ptYT = PixelUtils.TransformOneVector(matrix, ptY);
+        //    double atan2Y = Math.Atan2(ptYT.Y, ptYT.X);
+        //    double angleY = (atan2Y * (180.0 / Math.PI)) - 90.0;
 
-            while (angleX < 0)
-            {
-                angleX += 360;
-            }
+        //    while (angleX < 0)
+        //    {
+        //        angleX += 360;
+        //    }
 
-            while (angleY < 0)
-            {
-                angleY += 360;
-            }
+        //    while (angleY < 0)
+        //    {
+        //        angleY += 360;
+        //    }
 
-            double angleDelta = Math.Abs(angleX - angleY);
+        //    double angleDelta = Math.Abs(angleX - angleY);
 
-            return angleDelta > 1.0 && angleDelta < 359.0;
-        }
+        //    return angleDelta > 1.0 && angleDelta < 359.0;
+        //}
 
         /// <summary>
         /// Calculates the dot product of two vectors.
