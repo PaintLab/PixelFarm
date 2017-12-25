@@ -13,11 +13,8 @@
 // warranty, and with no claim as to its suitability for any purpose.
 //
 //----------------------------------------------------------------------------
-//
-// Class StringPrinter.cs
-// 
-// Class to output the vertex source of a string as a run of glyphs.
-//----------------------------------------------------------------------------
+ 
+ 
 
 using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg

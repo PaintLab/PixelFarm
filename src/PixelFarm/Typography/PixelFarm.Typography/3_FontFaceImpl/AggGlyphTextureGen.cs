@@ -63,19 +63,20 @@ namespace Typography.Rendering
             dx += horizontal_margin; //+ left margin
             dy += vertical_margin; //+ top margin
 
-            VertexStore vxs2 = new VertexStore();
-            glyphVxs.TranslateToNewVxs(dx, dy, vxs2);
-            glyphVxs = vxs2;
-
-            //
-            w = (int)Math.Ceiling(dx + w + horizontal_margin); //+right margin
-            h = (int)Math.Ceiling(dy + h + vertical_margin); //+bottom margin
 
             //-------------------------------------------- 
             //create glyph img  
 
             if (TextureKind == TextureKind.StencilLcdEffect)
             {
+                VertexStore vxs2 = new VertexStore();
+                glyphVxs.TranslateToNewVxs(dx + 0.33f, dy, vxs2);
+                glyphVxs = vxs2;
+
+                //
+                w = (int)Math.Ceiling(dx + w + horizontal_margin); //+right margin
+                h = (int)Math.Ceiling(dy + h + vertical_margin); //+bottom margin
+
 
                 w *= 3;// *** x3 than normal
 
@@ -89,6 +90,10 @@ namespace Typography.Rendering
                 painter.Clear(Color.Black);
                 painter.FillColor = Color.White;
                 painter.Fill(glyphVxs);
+                //apply sharpen filter
+                 
+                PixelFarm.Agg.Imaging.ImageFilterHamming
+
 
                 //
                 var glyphImage = new GlyphImage(w / 3, h);
@@ -101,6 +106,13 @@ namespace Typography.Rendering
             }
             else
             {
+                VertexStore vxs2 = new VertexStore();
+                glyphVxs.TranslateToNewVxs(dx, dy, vxs2);
+                glyphVxs = vxs2;
+
+                //
+                w = (int)Math.Ceiling(dx + w + horizontal_margin); //+right margin
+                h = (int)Math.Ceiling(dy + h + vertical_margin); //+bottom margin
 
 
                 ActualImage img = new ActualImage(w, h, PixelFormat.ARGB32);

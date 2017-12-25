@@ -406,7 +406,7 @@ namespace PixelFarm.DrawingGL
                 textureSubPixRendering.LoadGLBitmap(bmp);
                 textureSubPixRendering.IsBigEndian = bmp.IsBigEndianPixel;
                 textureSubPixRendering.SetColor(this.FontFillColor);
-                textureSubPixRendering.SetIntensity(1.15f);
+                textureSubPixRendering.SetIntensity(1f);
                 //-------------------------
                 //draw a serie of image***
                 //-------------------------

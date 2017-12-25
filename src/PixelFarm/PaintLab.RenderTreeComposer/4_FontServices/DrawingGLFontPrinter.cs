@@ -24,7 +24,7 @@ namespace PixelFarm.DrawingGL
         ActualImage _actualImage;
         AggRenderSurface _aggsx;
         AggPainter _aggPainter;
-        VxsTextPrinter textPrinter;
+        VxsTextPrinter _vxsTextPrinter;
         int bmpWidth;
         int bmpHeight;
         GLRenderSurface _glsx;
@@ -52,14 +52,14 @@ namespace PixelFarm.DrawingGL
             //set default1
             _aggPainter.CurrentFont = canvasPainter.CurrentFont;
             var openFontStore = new Typography.TextServices.OpenFontStore();
-            textPrinter = new VxsTextPrinter(_aggPainter, openFontStore);
-            _aggPainter.TextPrinter = textPrinter;
+            _vxsTextPrinter = new VxsTextPrinter(_aggPainter, openFontStore);
+            _aggPainter.TextPrinter = _vxsTextPrinter;
         }
         public bool StartDrawOnLeftTop { get; set; }
         public Typography.Contours.HintTechnique HintTechnique
         {
-            get { return textPrinter.HintTechnique; }
-            set { textPrinter.HintTechnique = value; }
+            get { return _vxsTextPrinter.HintTechnique; }
+            set { _vxsTextPrinter.HintTechnique = value; }
         }
         public bool UseSubPixelRendering
         {
@@ -97,7 +97,7 @@ namespace PixelFarm.DrawingGL
                 //aggPainter.Clear(Drawing.Color.White);
                 //aggPainter.Clear(Drawing.Color.FromArgb(0, 0, 0, 0));
                 //2. print text span into Agg Canvas
-                textPrinter.DrawString(text, startAt, len, 0, 0);
+                _vxsTextPrinter.DrawString(text, startAt, len, 0, 0);
                 //3.copy to gl bitmap
                 byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
@@ -106,7 +106,7 @@ namespace PixelFarm.DrawingGL
                 //TODO: review font height
                 if (StartDrawOnLeftTop)
                 {
-                    y -= textPrinter.FontLineSpacingPx;
+                    y -= _vxsTextPrinter.FontLineSpacingPx;
                 }
                 _glsx.DrawGlyphImageWithSubPixelRenderingTechnique(glBmp, (float)x, (float)y);
                 glBmp.Dispose();
@@ -119,8 +119,10 @@ namespace PixelFarm.DrawingGL
                 _aggPainter.StrokeColor = Color.Black;
 
                 //2. print text span into Agg Canvas
-                textPrinter.StartDrawOnLeftTop = false;
-                textPrinter.DrawString(text, startAt, len, 0, 0);
+                _vxsTextPrinter.StartDrawOnLeftTop = false;
+
+                float dyOffset = _vxsTextPrinter.FontDescedingPx;
+                _vxsTextPrinter.DrawString(text, startAt, len, 0, -dyOffset);
                 //------------------------------------------------------
                 //debug save image from agg's buffer
 #if DEBUG
@@ -137,13 +139,11 @@ namespace PixelFarm.DrawingGL
                 GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
                 glBmp.IsInvert = false;
                 //TODO: review font height 
-                if (StartDrawOnLeftTop)
-                {
-                    y -= textPrinter.FontLineSpacingPx;
-                }
-                _glsx.DrawGlyphImage(glBmp, (float)x, (float)y);
-
-
+                //if (StartDrawOnLeftTop)
+                //{
+                y += _vxsTextPrinter.FontLineSpacingPx;
+                //}
+                _glsx.DrawGlyphImage(glBmp, (float)x, (float)y + dyOffset);
                 glBmp.Dispose();
             }
         }
@@ -229,9 +229,10 @@ namespace PixelFarm.DrawingGL
 
             this.painter = painter;
             this._glsx = painter.Canvas;
-            _currentTextureKind = TextureKind.Msdf;
+            //_currentTextureKind = TextureKind.Msdf;
 
-            //_currentTextureKind = TextureKind.StencilLcdEffect;
+            //_currentTextureKind = TextureKind.StencilGreyScale;
+            _currentTextureKind = TextureKind.StencilLcdEffect;
             //_currentTextureKind = TextureKind.Msdf;
 
 
@@ -394,7 +395,7 @@ namespace PixelFarm.DrawingGL
                 //for sharp glyph
                 //we adjust g_x,g_y to integer value                
                 g_x = (float)Math.Round(g_x);
-                g_y = (float)Math.Round(g_y);
+                g_y = (float)Math.Floor(g_y);
 
                 switch (textureKind)
                 {
