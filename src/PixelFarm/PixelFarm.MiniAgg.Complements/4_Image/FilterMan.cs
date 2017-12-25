@@ -13,8 +13,8 @@
 // warranty, and with no claim as to its suitability for any purpose.
 //
 //----------------------------------------------------------------------------
- 
- 
+
+
 
 using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
@@ -30,6 +30,7 @@ namespace PixelFarm.Agg
     {
         StackBlur stackBlur;
         RecursiveBlur m_recursive_blur;
+        SharpenFilterARGB sharpen;
         public void DoStackBlur(ImageReaderWriterBase readerWriter, int radius)
         {
             if (stackBlur == null)
@@ -46,5 +47,15 @@ namespace PixelFarm.Agg
             }
             m_recursive_blur.Blur(readerWriter, radius);
         }
+        public void DoSharpen(ImageReaderWriterBase readerWriter, int radius)
+        {
+            if (sharpen == null)
+            {
+                sharpen = new SharpenFilterARGB();
+            }
+            sharpen.Sharpen(readerWriter, radius);
+
+        }
+
     }
 }

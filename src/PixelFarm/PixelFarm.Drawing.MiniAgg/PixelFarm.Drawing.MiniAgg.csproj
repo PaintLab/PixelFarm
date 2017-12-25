@@ -78,6 +78,9 @@
     <Compile Include="..\PixelFarm.MiniAgg.Complements\3_Filter\RecursiveBlur.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\RecursiveBlur.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\3_Filter\SharpenFilter.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\SharpenFilter.cs</Link>
+    </Compile>
     <Compile Include="..\PixelFarm.MiniAgg.Complements\3_Filter\StackBlur.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\3_Filter\StackBlur.cs</Link>
     </Compile>

@@ -55,6 +55,8 @@ namespace PixelFarm.Agg
         {
             return m_ByteBuffer;
         }
+        public abstract void ReplaceBuffer(byte[] newbuffer);
+
         /// <summary>
         /// attach image buffer and its information to the reader
         /// </summary>
@@ -668,7 +670,10 @@ namespace PixelFarm.Agg
         public MyImageReaderWriter()
         {
         }
-
+        public override void ReplaceBuffer(byte[] newbuffer)
+        {
+            ActualImage.ReplaceBuffer(actualImage, newbuffer);
+        }
         /// <summary>
         /// load image to the reader/writer
         /// </summary>

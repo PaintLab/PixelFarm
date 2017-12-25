@@ -94,7 +94,10 @@ namespace PixelFarm.Agg
         {
             return img.pixelBuffer;
         }
-
+        public static void ReplaceBuffer(ActualImage img, byte[] pixelBuffer)
+        {
+            img.pixelBuffer = pixelBuffer;
+        }
         public static ActualImage CreateFromBuffer(int width, int height, PixelFormat format, int[] buffer)
         {
             if (format != PixelFormat.ARGB32)
@@ -218,7 +221,6 @@ namespace PixelFarm.Agg
                         s_saveToPngFileDel((IntPtr)head, stride, width, height, filename);
                     }
                 }
-
             }
         }
         static SaveToPngFileDelegate s_saveToPngFileDel;

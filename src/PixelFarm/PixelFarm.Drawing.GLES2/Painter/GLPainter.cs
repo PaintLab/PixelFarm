@@ -201,6 +201,11 @@ namespace PixelFarm.DrawingGL
         public override void DoFilterBlurStack(RectInt area, int r)
         {
         }
+        public override void DoFilter(RectInt area, int r)
+        {
+            //TODO: implement this
+
+        }
         /// <summary>
         /// we do NOT store vxs
         /// </summary>

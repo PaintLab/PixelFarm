@@ -91,10 +91,9 @@ namespace Typography.Rendering
                 painter.FillColor = Color.White;
                 painter.Fill(glyphVxs);
                 //apply sharpen filter
-                 
-                PixelFarm.Agg.Imaging.ImageFilterHamming
 
-
+               // painter.DoFilter(new RectInt(0, h, w, 0), 2);
+                
                 //
                 var glyphImage = new GlyphImage(w / 3, h);
                 glyphImage.TextureOffsetX = dx;

@@ -34,6 +34,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="3_Filter\SharpenFilter.cs" />
     <Compile Include="RenderSurface\AggRenderSurface.cs" />
     <Compile Include="RenderSurface\AggRenderSurface_RenderImages.cs" />
     <Compile Include="DrawBoard\AggPainter.cs" />

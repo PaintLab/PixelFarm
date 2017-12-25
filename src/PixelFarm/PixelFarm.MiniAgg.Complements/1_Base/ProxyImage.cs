@@ -28,7 +28,10 @@ namespace PixelFarm.Agg.Imaging
         {
             this.linkedImage = linkedImage;
         }
-
+        public void ReplaceBuffer(byte[] newbuffer)
+        {
+            throw new System.NotSupportedException();
+        }
         public virtual int Width
         {
             get
@@ -49,6 +52,7 @@ namespace PixelFarm.Agg.Imaging
         {
             get { return linkedImage.Stride; }
         }
+
 
 
         public virtual RectInt GetBounds()
@@ -138,9 +142,13 @@ namespace PixelFarm.Agg.Imaging
 
         public byte[] GetBuffer()
         {
+            //TODO: review here, this may not correct 
             return linkedImage.GetBuffer();
         }
-
+        public void ReplaceBuffer()
+        {
+            throw new System.NotSupportedException();
+        }
         public int GetBufferOffsetXY(int x, int y)
         {
             return linkedImage.GetBufferOffsetXY(x, y);
