@@ -9,13 +9,13 @@
 
 using System;
 using PixelFarm.Drawing;
-using System.Threading;
 
-namespace PaintDotNet
+
+namespace PixelFarm.Drawing
 {
- 
 
-    [Serializable]
+
+    
     public unsafe abstract class PixelOp
         : IPixelOp
     {

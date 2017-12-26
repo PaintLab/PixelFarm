@@ -9,7 +9,7 @@
 
 using System;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     /// <summary>
     /// Abstract base class that all "user" blend ops derive from.
@@ -18,7 +18,7 @@ namespace PaintDotNet
     /// 
     /// See UserBlendOps.cs for guidelines on implementation.
     /// </summary>
-    [Serializable]
+    
     public abstract class UserBlendOp
         : BinaryPixelOp
     {

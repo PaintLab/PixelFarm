@@ -38,7 +38,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PaintDotNet.Effects
+namespace PixelFarm.Drawing.Effects
 {
     internal static class PerlinNoise2D
     {

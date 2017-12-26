@@ -10,20 +10,20 @@
 using System;
 using PixelFarm.Drawing;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     /// <summary>
     /// Defines a way to operate on a pixel, or a region of pixels, in a binary fashion.
     /// That is, it is a simple function F that takes two parameters and returns a
     /// result of the form: c = F(a, b)
     /// </summary>
-    [Serializable]
+
     public unsafe abstract class BinaryPixelOp
         : PixelOp
     {
         public abstract ColorBgra Apply(ColorBgra lhs, ColorBgra rhs);
 
-        public unsafe virtual void Apply(ColorBgra *dst, ColorBgra *lhs, ColorBgra *rhs, int length)
+        public unsafe virtual void Apply(ColorBgra* dst, ColorBgra* lhs, ColorBgra* rhs, int length)
         {
             unsafe
             {
@@ -48,9 +48,9 @@ namespace PaintDotNet
         /// <param name="rhs">The Surface to read pixels from for the rhs parameter given to the method <b>ColorBgra Apply(ColorBgra, ColorBgra)</b></param>
         /// <param name="rhsOffset">The pixel offset that defines the upper-left of the rectangle-of-interest for the rhs Surface.</param>
         /// <param name="roiSize">The size of the rectangles-of-interest for all Surfaces.</param>
-        public void Apply(Surface dst, Point dstOffset, 
+        public void Apply(Surface dst, Point dstOffset,
                           Surface lhs, Point lhsOffset,
-                          Surface rhs, Point rhsOffset, 
+                          Surface rhs, Point rhsOffset,
                           Size roiSize)
         {
             // Bounds checking only enabled in Debug builds.
@@ -91,16 +91,16 @@ namespace PaintDotNet
             {
                 for (int row = 0; row < height; ++row)
                 {
-                    ColorBgra *dstPtr = dst.GetPointAddress(dstOffset.X, dstOffset.Y + row);
-                    ColorBgra *lhsPtr = lhs.GetPointAddress(lhsOffset.X, lhsOffset.Y + row);
-                    ColorBgra *rhsPtr = rhs.GetPointAddress(rhsOffset.X, rhsOffset.Y + row);
+                    ColorBgra* dstPtr = dst.GetPointAddress(dstOffset.X, dstOffset.Y + row);
+                    ColorBgra* lhsPtr = lhs.GetPointAddress(lhsOffset.X, lhsOffset.Y + row);
+                    ColorBgra* rhsPtr = rhs.GetPointAddress(rhsOffset.X, rhsOffset.Y + row);
 
                     Apply(dstPtr, lhsPtr, rhsPtr, width);
                 }
             }
         }
 
-        public unsafe override void Apply(ColorBgra *dst, ColorBgra *src, int length)
+        public unsafe override void Apply(ColorBgra* dst, ColorBgra* src, int length)
         {
             unsafe
             {
@@ -130,8 +130,8 @@ namespace PaintDotNet
             {
                 for (int y = 0; y < dst.Height; ++y)
                 {
-                    ColorBgra *dstPtr = dst.GetRowAddressUnchecked(y);
-                    ColorBgra *srcPtr = src.GetRowAddressUnchecked(y);
+                    ColorBgra* dstPtr = dst.GetRowAddressUnchecked(y);
+                    ColorBgra* srcPtr = src.GetRowAddressUnchecked(y);
                     Apply(dstPtr, srcPtr, dst.Width);
                 }
             }
@@ -153,9 +153,9 @@ namespace PaintDotNet
             {
                 for (int y = 0; y < dst.Height; ++y)
                 {
-                    ColorBgra *dstPtr = dst.GetRowAddressUnchecked(y);
-                    ColorBgra *lhsPtr = lhs.GetRowAddressUnchecked(y);
-                    ColorBgra *rhsPtr = rhs.GetRowAddressUnchecked(y);
+                    ColorBgra* dstPtr = dst.GetRowAddressUnchecked(y);
+                    ColorBgra* lhsPtr = lhs.GetRowAddressUnchecked(y);
+                    ColorBgra* rhsPtr = rhs.GetRowAddressUnchecked(y);
 
                     Apply(dstPtr, lhsPtr, rhsPtr, dst.Width);
                 }

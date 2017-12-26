@@ -7,11 +7,11 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 
-//using PaintDotNet.SystemLayer;
+//using using PixelFarm.Drawing.SystemLayer;
 using System;
 using PixelFarm.Drawing;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     /// <summary>
     /// Provides a set of standard BinaryPixelOps.
@@ -22,18 +22,7 @@ namespace PaintDotNet
         {
         }
 
-        // This is provided solely for data file format compatibility
-        [Obsolete("User UserBlendOps.NormalBlendOp instead", true)]
-        [Serializable]
-        public class AlphaBlend
-            : BinaryPixelOp
-        {
-            public override ColorBgra Apply(ColorBgra lhs, ColorBgra rhs)
-            {
-                return lhs;
-            }
-        }
-
+        
         /// <summary>
         /// F(lhs, rhs) = rhs.A + lhs.R,g,b
         /// </summary>
@@ -63,7 +52,7 @@ namespace PaintDotNet
         /// <summary>
         /// result(lhs,rhs) = rhs
         /// </summary>
-        [Serializable]
+        
         public class AssignFromRhs
             : BinaryPixelOp
         {
@@ -90,7 +79,7 @@ namespace PaintDotNet
         /// <summary>
         /// result(lhs,rhs) = lhs
         /// </summary>
-        [Serializable]
+        
         public class AssignFromLhs
             : BinaryPixelOp
         {
@@ -104,7 +93,7 @@ namespace PaintDotNet
             }
         }
 
-        [Serializable]
+        
         public class Swap
             : BinaryPixelOp
         {

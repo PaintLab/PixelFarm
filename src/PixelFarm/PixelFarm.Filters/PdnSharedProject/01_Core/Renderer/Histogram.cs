@@ -10,7 +10,7 @@
 using System;
 using PixelFarm.Drawing;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     /// <summary>
     /// Histogram is used to calculate a histogram for a surface (in a selection,

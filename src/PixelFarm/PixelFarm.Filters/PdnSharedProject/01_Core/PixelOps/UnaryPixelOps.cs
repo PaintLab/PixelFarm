@@ -12,7 +12,7 @@ using System;
 using PixelFarm.Drawing;
 
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     /// <summary>
     /// Provides a set of standard UnaryPixelOps.
@@ -27,7 +27,7 @@ namespace PaintDotNet
         /// Passes through the given color value.
         /// result(color) = color
         /// </summary>
-        [Serializable]
+        
         public class Identity
             : UnaryPixelOp
         {
@@ -50,7 +50,7 @@ namespace PaintDotNet
         /// <summary>
         /// Always returns a constant color.
         /// </summary>
-        [Serializable]
+        
         public class Constant
             : UnaryPixelOp
         {
@@ -90,7 +90,7 @@ namespace PaintDotNet
         /// <summary>
         /// Blends pixels with the specified constant color.
         /// </summary>
-        [Serializable]
+        
         public class BlendConstant
             : UnaryPixelOp
         {
@@ -119,7 +119,7 @@ namespace PaintDotNet
         /// Used to set a given channel of a pixel to a given, predefined color.
         /// Useful if you want to set only the alpha value of a given region.
         /// </summary>
-        [Serializable]
+        
         public class SetChannel
             : UnaryPixelOp
         {
@@ -169,7 +169,7 @@ namespace PaintDotNet
         /// occupying the 8 most-significant-bits of a ColorBgra instance.
         /// By the way, we use addition instead of bitwise-OR because an addition can be
         /// perform very fast (0.5 cycles) on a Pentium 4.</remarks>
-        [Serializable]
+        
         public class SetAlphaChannel
             : UnaryPixelOp
         {
@@ -210,7 +210,7 @@ namespace PaintDotNet
         /// <summary>
         /// Specialization of SetAlphaChannel that always sets alpha to 255.
         /// </summary>
-        [Serializable]
+        
         public class SetAlphaChannelTo255
             : UnaryPixelOp
         {
@@ -244,7 +244,7 @@ namespace PaintDotNet
         /// <summary>
         /// Inverts a pixel's color, and passes through the alpha component.
         /// </summary>
-        [Serializable]
+        
         public class Invert
             : UnaryPixelOp
         {
@@ -257,7 +257,7 @@ namespace PaintDotNet
         /// <summary>
         /// If the color is within the red tolerance, remove it
         /// </summary>
-        [Serializable]
+        
         public class RedEyeRemove
             : UnaryPixelOp
         {
@@ -327,7 +327,7 @@ namespace PaintDotNet
         /// <summary>
         /// Inverts a pixel's color and its alpha component.
         /// </summary>
-        [Serializable]
+        
         public class InvertWithAlpha
             : UnaryPixelOp
         {
@@ -341,7 +341,7 @@ namespace PaintDotNet
         /// Averages the input color's red, green, and blue channels. The alpha component
         /// is unaffected.
         /// </summary>
-        [Serializable]
+        
         public class AverageChannels
             : UnaryPixelOp
         {
@@ -352,7 +352,7 @@ namespace PaintDotNet
             }
         }
 
-        [Serializable]
+        
         public class Desaturate
             : UnaryPixelOp
         {
@@ -395,7 +395,7 @@ namespace PaintDotNet
             }
         }
 
-        [Serializable]
+        
         public class LuminosityCurve
             : UnaryPixelOp
         {
@@ -422,7 +422,7 @@ namespace PaintDotNet
             }
         }
 
-        [Serializable]
+        
         public class ChannelCurve
             : UnaryPixelOp
         {
@@ -477,7 +477,7 @@ namespace PaintDotNet
             }
         }
 
-        [Serializable]
+        
         public class Level
             : ChannelCurve,
               ICloneable
@@ -820,7 +820,7 @@ namespace PaintDotNet
             }
         }
 
-        [Serializable]
+        
         public class HueSaturationLightness
             : UnaryPixelOp
         {

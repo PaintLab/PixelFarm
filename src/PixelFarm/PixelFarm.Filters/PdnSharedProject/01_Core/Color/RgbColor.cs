@@ -10,7 +10,7 @@
 using System;
 using PixelFarm.Drawing;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     /// <summary>
     /// Adapted from: 
@@ -20,7 +20,7 @@ namespace PaintDotNet
     /// This class is only used by the ColorsForm and ColorWheel. Nothing else in this program
     /// should be using it!
     /// </summary>
-    [Serializable]
+    
     public struct RgbColor
     {
         // All values are between 0 and 255.

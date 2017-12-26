@@ -30,7 +30,7 @@
 // THE SOFTWARE. 
 //
 
-namespace PaintDotNet.Effects
+namespace PixelFarm.Drawing.Effects
 {
     public enum WarpEdgeBehavior
     {

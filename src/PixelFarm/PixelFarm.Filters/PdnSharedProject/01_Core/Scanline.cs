@@ -10,7 +10,7 @@
 using System;
 using PixelFarm.Drawing;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     public struct Scanline
     {
@@ -49,7 +49,7 @@ namespace PaintDotNet
                 return length.GetHashCode() + x.GetHashCode() + y.GetHashCode();
             }
         }
-        
+
         public override bool Equals(object obj)
         {
             if (obj is Scanline)
@@ -63,12 +63,12 @@ namespace PaintDotNet
             }
         }
 
-        public static bool operator== (Scanline lhs, Scanline rhs)
+        public static bool operator ==(Scanline lhs, Scanline rhs)
         {
             return lhs.x == rhs.x && lhs.y == rhs.y && lhs.length == rhs.length;
         }
 
-        public static bool operator!= (Scanline lhs, Scanline rhs)
+        public static bool operator !=(Scanline lhs, Scanline rhs)
         {
             return !(lhs == rhs);
         }

@@ -9,22 +9,21 @@
 
 using System;
 using PixelFarm.Drawing;
-using System.Threading;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     /// <summary>
     /// Defines a way to operate on a pixel, or a region of pixels, in a unary fashion.
     /// That is, it is a simple function F that takes one parameter and returns a
     /// result of the form: d = F(c)
     /// </summary>
-    [Serializable]
+
     public unsafe abstract class UnaryPixelOp
         : PixelOp
     {
         public abstract ColorBgra Apply(ColorBgra color);
 
-        public unsafe override void Apply(ColorBgra *dst, ColorBgra *src, int length)
+        public unsafe override void Apply(ColorBgra* dst, ColorBgra* src, int length)
         {
             unsafe
             {
@@ -55,7 +54,7 @@ namespace PaintDotNet
         {
             for (int y = rect.Top; y < rect.Bottom; ++y)
             {
-                ColorBgra *ptr = surface.GetPointAddress(rect.Left, y);
+                ColorBgra* ptr = surface.GetPointAddress(rect.Left, y);
                 Apply(ptr, rect.Width);
             }
         }
@@ -133,8 +132,8 @@ namespace PaintDotNet
         {
             for (int y = roi.Top; y < roi.Bottom; ++y)
             {
-                ColorBgra *dstPtr = dst.GetPointAddress(roi.Left, y);
-                ColorBgra *srcPtr = src.GetPointAddress(roi.Left, y);
+                ColorBgra* dstPtr = dst.GetPointAddress(roi.Left, y);
+                ColorBgra* srcPtr = src.GetPointAddress(roi.Left, y);
                 Apply(dstPtr, srcPtr, roi.Width);
             }
         }

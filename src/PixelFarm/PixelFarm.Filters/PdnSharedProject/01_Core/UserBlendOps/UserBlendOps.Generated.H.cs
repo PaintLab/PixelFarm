@@ -148,7 +148,7 @@
 //#define APPLY_OPACITY_ADAPTER(a, r) { r = ApplyOpacity(a); }
 
 //#define DEFINE_OP(NAME, PROTECTION, F, h, j) \
-//        [Serializable] \
+//         \
 //        PROTECTION sealed class NAME##BlendOp \
 //            : UserBlendOp \
 //        { \
@@ -307,7 +307,7 @@
 //    r = ((A) ^ (B)); \
 //}
 
-//namespace PaintDotNet
+//namespace PixelFarm.Drawing
 //{
 //    partial class UserBlendOps
 //    {

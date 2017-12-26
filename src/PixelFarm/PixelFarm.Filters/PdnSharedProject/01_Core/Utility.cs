@@ -16,7 +16,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     /// <summary>
     /// Defines miscellaneous constants and static functions.
@@ -113,77 +113,6 @@ namespace PaintDotNet
                 }
             }
         }
-
-        public static bool IsObsolete(Type type, bool inherit)
-        {
-            object[] attrs = type.GetCustomAttributes(typeof(ObsoleteAttribute), inherit);
-            return (attrs.Length != 0);
-        }
-
-        //public static void DrawDropShadow1px(Graphics g, Rectangle rect)
-        //{
-        //    throw new StillNotPortedException();
-
-        //    //Brush b0 = new SolidBrush(Color.FromArgb(15, Color.Black));
-        //    //Brush b1 = new SolidBrush(Color.FromArgb(47, Color.Black));
-        //    //Pen p2 = new Pen(Color.FromArgb(63, Color.Black));
-
-        //    //g.FillRectangle(b0, rect.Left, rect.Top, 1, 1);
-        //    //g.FillRectangle(b1, rect.Left + 1, rect.Top, 1, 1);
-        //    //g.FillRectangle(b1, rect.Left, rect.Top + 1, 1, 1);
-
-        //    //g.FillRectangle(b0, rect.Right - 1, rect.Top, 1, 1);
-        //    //g.FillRectangle(b1, rect.Right - 2, rect.Top, 1, 1);
-        //    //g.FillRectangle(b1, rect.Right - 1, rect.Top + 1, 1, 1);
-
-        //    //g.FillRectangle(b0, rect.Left, rect.Bottom - 1, 1, 1);
-        //    //g.FillRectangle(b1, rect.Left + 1, rect.Bottom - 1, 1, 1);
-        //    //g.FillRectangle(b1, rect.Left, rect.Bottom - 2, 1, 1);
-
-        //    //g.FillRectangle(b0, rect.Right - 1, rect.Bottom - 1, 1, 1);
-        //    //g.FillRectangle(b1, rect.Right - 2, rect.Bottom - 1, 1, 1);
-        //    //g.FillRectangle(b1, rect.Right - 1, rect.Bottom - 2, 1, 1);
-
-        //    //g.DrawLine(p2, rect.Left + 2, rect.Top, rect.Right - 3, rect.Top);
-        //    //g.DrawLine(p2, rect.Left, rect.Top + 2, rect.Left, rect.Bottom - 3);
-        //    //g.DrawLine(p2, rect.Left + 2, rect.Bottom - 1, rect.Right - 3, rect.Bottom - 1);
-        //    //g.DrawLine(p2, rect.Right - 1, rect.Top + 2, rect.Right - 1, rect.Bottom - 3);
-
-        //    //b0.Dispose();
-        //    //b0 = null;
-        //    //b1.Dispose();
-        //    //b1 = null;
-        //    //p2.Dispose();
-        //    //p2 = null;
-        //}
-
-
-
-        //public static void DrawColorRectangle(Graphics g, Rectangle rect, Color color, bool drawBorder)
-        //{
-        //    throw new StillNotPortedException();
-
-        //    //int inflateAmt = drawBorder ? -2 : 0;
-        //    //Rectangle colorRectangle = Rectangle.Inflate(rect, inflateAmt, inflateAmt);
-        //    //Brush colorBrush = new LinearGradientBrush(colorRectangle, Color.FromArgb(255, color), color, 90.0f, false);
-        //    //HatchBrush backgroundBrush = new HatchBrush(HatchStyle.LargeCheckerBoard, Color.FromArgb(191, 191, 191), Color.FromArgb(255, 255, 255));
-
-        //    //if (drawBorder)
-        //    //{
-        //    //    g.DrawRectangle(Pens.Black, rect.Left, rect.Top, rect.Width - 1, rect.Height - 1);
-        //    //    g.DrawRectangle(Pens.White, rect.Left + 1, rect.Top + 1, rect.Width - 3, rect.Height - 3);
-        //    //}
-
-        //    //PixelOffsetMode oldPOM = g.PixelOffsetMode;
-        //    //g.PixelOffsetMode = PixelOffsetMode.Half;
-        //    //g.FillRectangle(backgroundBrush, colorRectangle);
-        //    //g.FillRectangle(colorBrush, colorRectangle);
-        //    //g.PixelOffsetMode = oldPOM;
-
-        //    //backgroundBrush.Dispose();
-        //    //colorBrush.Dispose();
-        //}
-
         public static Size ComputeThumbnailSize(Size originalSize, int maxEdgeLength)
         {
             Size thumbSize;
@@ -206,43 +135,6 @@ namespace PaintDotNet
 
             return thumbSize;
         }
-
-
-
-        //public static Font CreateFont(string name, float size, FontStyle style)
-        //{
-        //    throw new StillNotPortedException();
-        //    //Font returnFont;
-
-        //    //try
-        //    //{
-        //    //    returnFont = new Font(name, size, style);
-        //    //}
-
-        //    //catch (Exception)
-        //    //{
-        //    //    returnFont = new Font(FontFamily.GenericSansSerif, size);
-        //    //}
-
-        //    //return returnFont;
-        //}
-
-        //public static Font CreateFont(string name, float size, string backupName, float backupSize, FontStyle style)
-        //{
-        //    Font returnFont;
-
-        //    try
-        //    {
-        //        returnFont = new Font(name, size, style);
-        //    }
-
-        //    catch (Exception)
-        //    {
-        //        returnFont = CreateFont(backupName, backupSize, style);
-        //    }
-
-        //    return returnFont;
-        //}
 
         public static readonly Color TransparentKey = Color.FromArgb(192, 192, 192);
 
@@ -315,31 +207,6 @@ namespace PaintDotNet
             return (string)pi.GetValue(null, null);
         }
 
-        //public static readonly float[][] Identity5x5F = new float[][] {
-        //                                                                  new float[] { 1, 0, 0, 0, 0 },
-        //                                                                  new float[] { 0, 1, 0, 0, 0 },
-        //                                                                  new float[] { 0, 0, 1, 0, 0 },
-        //                                                                  new float[] { 0, 0, 0, 1, 0 },
-        //                                                                  new float[] { 0, 0, 0, 0, 1 }
-        //                                                              };
-
- 
-
-        //[ThreadStatic]
-        //private static Matrix identityMatrix = null;
-        //public static Matrix IdentityMatrix
-        //{
-        //    get
-        //    {
-        //        if (identityMatrix == null)
-        //        {
-        //            identityMatrix = new Matrix();
-        //            identityMatrix.Reset();
-        //        }
-
-        //        return identityMatrix;
-        //    }
-        //}
 
         /// <summary>
         /// Rounds an integer to the smallest power of 2 that is greater
@@ -975,44 +842,6 @@ namespace PaintDotNet
             return new BinaryFormatter().Deserialize(stream);
         }
 
-        //[Obsolete("Use rect.Contains() instead", true)]
-        //public static bool IsPointInRectangle(Point pt, Rectangle rect)
-        //{
-        //    return rect.Contains(pt);
-        //}
-
-        //[Obsolete("Use rect.Contains() instead", true)]
-        //public static bool IsPointInRectangle(int x, int y, Rectangle rect)
-        //{
-        //    return rect.Contains(x, y);
-        //}
-
-        //public static Bitmap FullCloneBitmap(Bitmap cloneMe)
-        //{
-        //    throw new StillNotPortedException();
-        //    //Bitmap bitmap = new Bitmap(cloneMe.Width, cloneMe.Height, cloneMe.PixelFormat);
-
-        //    //using (Graphics g = Graphics.FromImage(bitmap))
-        //    //{
-        //    //    g.DrawImage(cloneMe, 0, 0, cloneMe.Width, cloneMe.Height);
-        //    //}
-
-        //    //return bitmap;
-        //}
-
-        ///// <summary>
-        ///// Allows you to find the bounding box for a Region object without requiring
-        ///// the presence of a Graphics object.
-        ///// (Region.GetBounds takes a Graphics instance as its only parameter.)
-        ///// </summary>
-        ///// <param name="region">The region you want to find a bounding box for.</param>
-        ///// <returns>A RectangleF structure that surrounds the Region.</returns>
-        //public static Rectangle GetRegionBounds(PdnRegion region)
-        //{
-        //    Rectangle[] rects = region.GetRegionScansReadOnlyInt();
-        //    return GetRegionBounds(rects, 0, rects.Length);
-        //}
-
         /// <summary>
         /// Allows you to find the bounding box for a "region" that is described as an
         /// array of bounding boxes.
@@ -1407,8 +1236,8 @@ namespace PaintDotNet
             return rects;
         }
 
-         
-         
+
+
 
         /// <summary>
         /// The Sutherland-Hodgman clipping alrogithm.
@@ -1826,49 +1655,6 @@ namespace PaintDotNet
             return diffSq / 3;
         }
 
-        //public static DialogResult ShowDialog(Form showMe, IWin32Window owner)
-        //{
-        //    DialogResult dr;
-
-        //    if (showMe is PdnBaseForm)
-        //    {
-        //        PdnBaseForm showMe2 = (PdnBaseForm)showMe;
-        //        double oldOpacity = showMe2.Opacity;
-        //        showMe2.Opacity = 0.9;
-        //        dr = showMe2.ShowDialog(owner);
-        //        showMe2.Opacity = oldOpacity;
-        //    }
-        //    else
-        //    {
-        //        double oldOpacity = showMe.Opacity;
-        //        showMe.Opacity = 0.9;
-        //        dr = showMe.ShowDialog(owner);
-        //        showMe.Opacity = oldOpacity;
-        //    }
-
-        //    Control control = owner as Control;
-        //    if (control != null)
-        //    {
-        //        Form form = control.FindForm();
-
-        //        if (form != null)
-        //        {
-        //            form.Activate();
-        //        }
-
-        //        control.Update();
-        //    }
-
-        //    return dr;
-        //}
-
-        //public static void ShowHelp(Control parent)
-        //{
-        //    string helpFileUrlFormat = PdnResources.GetString("HelpFile.Url.Format");
-        //    string baseSiteUrl = InvariantStrings.WebsiteUrl;
-        //    string helpFileUrl = string.Format(helpFileUrlFormat, baseSiteUrl);
-        //    PdnInfo.OpenUrl(parent, helpFileUrl);
-        //}
 
         /// <summary>
         /// Reads a 16-bit unsigned integer from a Stream in little-endian format.
@@ -2259,22 +2045,6 @@ namespace PaintDotNet
             return scans;
         }
 
-        //public static PointF TransformOnePoint(Matrix matrix, PointF ptF)
-        //{
-        //    throw new StillNotPortedException();
-        //    //PointF[] ptFs = new PointF[1] { ptF };
-        //    //matrix.TransformPoints(ptFs);
-        //    //return ptFs[0];
-        //}
-
-        //public static PointF TransformOneVector(Matrix matrix, PointF ptF)
-        //{
-        //    throw new StillNotPortedException();
-
-        //    //PointF[] ptFs = new PointF[1] { ptF };
-        //    //matrix.TransformVectors(ptFs);
-        //    //return ptFs[0];
-        //}
 
         public static PointF NormalizeVector(PointF vecF)
         {
@@ -2466,62 +2236,6 @@ namespace PaintDotNet
             b = t;
         }
 
-        //private static byte[] DownloadSmallFile(Uri uri, WebProxy proxy)
-        //{
-        //    WebRequest request = WebRequest.Create(uri);
-
-        //    if (proxy != null)
-        //    {
-        //        request.Proxy = proxy;
-        //    }
-
-        //    request.Timeout = 5000;
-        //    WebResponse response = request.GetResponse();
-        //    Stream stream = response.GetResponseStream();
-
-        //    try
-        //    {
-        //        byte[] buffer = new byte[8192];
-        //        int offset = 0;
-
-        //        while (offset < buffer.Length)
-        //        {
-        //            int bytesRead = stream.Read(buffer, offset, buffer.Length - offset);
-
-        //            if (bytesRead == 0)
-        //            {
-        //                byte[] smallerBuffer = new byte[offset + bytesRead];
-
-        //                for (int i = 0; i < offset + bytesRead; ++i)
-        //                {
-        //                    smallerBuffer[i] = buffer[i];
-        //                }
-
-        //                buffer = smallerBuffer;
-        //            }
-
-        //            offset += bytesRead;
-        //        }
-
-        //        return buffer;
-        //    }
-
-        //    finally
-        //    {
-        //        if (stream != null)
-        //        {
-        //            stream.Close();
-        //            stream = null;
-        //        }
-
-        //        if (response != null)
-        //        {
-        //            response.Close();
-        //            response = null;
-        //        }
-        //    }
-        //}
-
         public static T[] RepeatArray<T>(T[] array, int repeatCount)
         {
             T[] returnArray = new T[repeatCount * array.Length];
@@ -2537,160 +2251,6 @@ namespace PaintDotNet
 
             return returnArray;
         }
-
-        ///// <summary>
-        ///// Downloads a small file (max 8192 bytes) and returns it as a byte array.
-        ///// </summary>
-        ///// <returns>The contents of the file if downloaded successfully.</returns>
-        //public static byte[] DownloadSmallFile(Uri uri)
-        //{
-        //    byte[] bytes = null;
-        //    Exception exception = null;
-        //    WebProxy[] proxiesPre = Network.GetProxyList();
-        //    WebProxy[] proxies = RepeatArray(proxiesPre, 2); // see bug #1942
-
-        //    foreach (WebProxy proxy in proxies)
-        //    {
-        //        try
-        //        {
-        //            bytes = DownloadSmallFile(uri, proxy);
-        //            exception = null;
-        //        }
-
-        //        catch (Exception ex)
-        //        {
-        //            exception = ex;
-        //            bytes = null;
-        //        }
-
-        //        if (bytes != null)
-        //        {
-        //            break;
-        //        }
-        //    }
-
-        //    if (exception != null)
-        //    {
-        //        WebException we = exception as WebException;
-
-        //        if (we != null)
-        //        {
-        //            throw new WebException(null, we, we.Status, we.Response);
-        //        }
-        //        else
-        //        {
-        //            throw new ApplicationException("An exception occurred while trying to download '" + uri.ToString() + "'", exception);
-        //        }
-        //    }
-
-        //    return bytes;
-        //}
-
-        //private static void DownloadFile(Uri uri, Stream output, WebProxy proxy, ProgressEventHandler progressCallback)
-        //{
-        //    WebRequest request = WebRequest.Create(uri);
-
-        //    if (proxy != null)
-        //    {
-        //        request.Proxy = proxy;
-        //    }
-
-        //    request.Timeout = 5000;
-        //    WebResponse response = request.GetResponse();
-        //    Stream stream = null;
-        //    SiphonStream siphonOutputStream = null;
-
-        //    try
-        //    {
-        //        stream = response.GetResponseStream();
-        //        siphonOutputStream = new SiphonStream(output, 1024); // monitor the completion of writes to 'output'
-
-        //        siphonOutputStream.IOFinished +=
-        //            delegate(object sender, IOEventArgs e)
-        //            {
-        //                if (progressCallback != null)
-        //                {
-        //                    double percent = 100.0 * Utility.Clamp(((double)e.Position / (double)response.ContentLength), 0, 100);
-        //                    progressCallback(uri, new ProgressEventArgs(percent));
-        //                }
-        //            };
-
-        //        Utility.CopyStream(stream, siphonOutputStream, 128 * 1024 * 1024); // cap at 128mb
-        //        siphonOutputStream.Flush();
-        //    }
-
-        //    finally
-        //    {
-        //        if (siphonOutputStream != null)
-        //        {
-        //            siphonOutputStream.Close();
-        //            siphonOutputStream = null;
-        //        }
-
-        //        if (stream != null)
-        //        {
-        //            stream.Close();
-        //            stream = null;
-        //        }
-
-        //        if (response != null)
-        //        {
-        //            response.Close();
-        //            response = null;
-        //        }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Download a file (max 128MB) and saves it to the given Stream.
-        ///// </summary>
-        //public static void DownloadFile(Uri uri, Stream output, ProgressEventHandler progressCallback)
-        //{
-        //    long startPosition = output.Position;
-        //    Exception exception = null;
-        //    WebProxy[] proxies = Network.GetProxyList();
-
-        //    foreach (WebProxy proxy in proxies)
-        //    {
-        //        bool success = false;
-
-        //        try
-        //        {
-        //            DownloadFile(uri, output, proxy, progressCallback);
-        //            exception = null;
-        //            success = true;
-        //        }
-
-        //        catch (Exception ex)
-        //        {
-        //            exception = ex;
-        //        }
-
-        //        // If the output stream was written to, then we know
-        //        // that we were either successful in downloading the
-        //        // file, or there was an error unrelated to using the
-        //        // proxy (maybe they unplugged the network cable, who
-        //        // knows!)
-        //        if (output.Position != startPosition || success)
-        //        {
-        //            break;
-        //        }
-        //    }
-
-        //    if (exception != null)
-        //    {
-        //        WebException we = exception as WebException;
-
-        //        if (we != null)
-        //        {
-        //            throw new WebException(null, we, we.Status, we.Response);
-        //        }
-        //        else
-        //        {
-        //            throw new ApplicationException("An exception occurred while trying to download '" + uri.ToString() + "'", exception);
-        //        }
-        //    }
-        //}
 
         public static byte FastScaleByteByByte(byte a, byte b)
         {

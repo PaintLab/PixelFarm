@@ -11,7 +11,7 @@
 using System;
 using PixelFarm.Drawing;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
 
     public class MemHolder
@@ -70,7 +70,7 @@ namespace PaintDotNet
     /// and still have the ability to use GDI+ for drawing and rendering where
     /// appropriate.
     /// </summary>
-    [Serializable]
+    
     public sealed class Surface : IDisposable
     {
 
@@ -610,11 +610,6 @@ namespace PaintDotNet
             return x >= 0 && x < Width;
         }
 
-        //[Obsolete("Use GetBilinearSampleWrapped(float, float) instead")]
-        //public ColorBgra GetBilinearSample(float x, float y, bool wrap)
-        //{
-        //    return GetBilinearSampleWrapped(x, y);
-        //}
 
         public ColorBgra GetBilinearSampleWrapped(float x, float y)
         {
@@ -696,11 +691,6 @@ namespace PaintDotNet
             }
         }
 
-        //[Obsolete("Use GetBilinearSample(float, float) instead")]
-        //public unsafe ColorBgra GetBilinearSample2(float x, float y)
-        //{
-        //    return GetBilinearSample(x, y);
-        //}
 
         public unsafe ColorBgra GetBilinearSample(float x, float y)
         {
@@ -770,11 +760,6 @@ namespace PaintDotNet
             }
         }
 
-        //[Obsolete("Use GetBilinearSampleClamped(float, float) instead")]
-        //public unsafe ColorBgra GetBilinearSample2Clamped(float x, float y)
-        //{
-        //    return GetBilinearSampleClamped(x, y);
-        //}
 
         public unsafe ColorBgra GetBilinearSampleClamped(float x, float y)
         {
@@ -1270,13 +1255,7 @@ namespace PaintDotNet
         {
             new UnaryPixelOps.Constant(color).Apply(this, this.Bounds);
         }
-
-        [Obsolete("Use Clear(Rectangle, ColorBgra) instead")]
-        public void Clear(ColorBgra color, Rectangle rect)
-        {
-            Clear(rect, color);
-        }
-
+         
         /// <summary>
         /// Clears the given rectangular region within the surface to the given color value.
         /// </summary>
@@ -1293,15 +1272,7 @@ namespace PaintDotNet
 
             new UnaryPixelOps.Constant(color).Apply(this, rect);
         }
-
-        //public void Clear(PdnRegion region, ColorBgra color)
-        //{
-        //    foreach (Rectangle rect in region.GetRegionScansReadOnlyInt())
-        //    {
-        //        Clear(rect, color);
-        //    }
-        //}
-
+         
         public void ClearWithCheckboardPattern()
         {
             unsafe
@@ -1992,29 +1963,7 @@ namespace PaintDotNet
                     throw new Exception("algorithm");
             }
         }
-
-        //private MemoryBlock GetRootMemoryBlock(MemoryBlock block)
-        //{
-        //    MemoryBlock p = block;
-
-        //    while (p.Parent != null)
-        //    {
-        //        p = p.Parent;
-        //    }
-
-        //    return p;
-        //}
-
-        //public void GetDrawBitmapInfo(out IntPtr bitmapHandle, out Point childOffset, out Size parentSize)
-        //{
-        //    MemoryBlock rootBlock = GetRootMemoryBlock(this.scan0);
-        //    long childOffsetBytes = this.scan0.Pointer.ToInt64() - rootBlock.Pointer.ToInt64();
-        //    int childY = (int)(childOffsetBytes / this.stride);
-        //    int childX = (int)((childOffsetBytes - (childY * this.stride)) / ColorBgra.SizeOf);
-        //    childOffset = new Point(childX, childY);
-        //    parentSize = new Size(this.stride / ColorBgra.SizeOf, childY + this.height);
-        //    bitmapHandle = rootBlock.BitmapHandle;
-        //}
+         
 
         /// <summary>
         /// Releases all resources held by this Surface object.

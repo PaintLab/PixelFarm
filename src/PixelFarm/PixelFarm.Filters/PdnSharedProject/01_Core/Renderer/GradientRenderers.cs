@@ -10,7 +10,7 @@
 using System;
 using PixelFarm.Drawing;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     public static class GradientRenderers
     {

@@ -34,12 +34,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. 
 */
 
-using PaintDotNet;
+ 
 using System;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
 
-namespace PaintDotNet.Effects
+namespace PixelFarm.Drawing.Effects
 {
     public class InkSketchRenderer : EffectRendererBase
     {

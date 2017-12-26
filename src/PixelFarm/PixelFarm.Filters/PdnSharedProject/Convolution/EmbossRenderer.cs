@@ -9,7 +9,7 @@
 using System;
 using PixelFarm.Drawing;
 
-namespace PaintDotNet.Effects
+namespace PixelFarm.Drawing.Effects
 {
     public class EmbossRenderer : EffectRendererBase
     {

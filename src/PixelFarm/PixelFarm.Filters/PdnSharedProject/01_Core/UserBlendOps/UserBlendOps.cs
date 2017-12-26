@@ -12,7 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     /// <summary>
     /// This class contains all the render ops that can be used by the user

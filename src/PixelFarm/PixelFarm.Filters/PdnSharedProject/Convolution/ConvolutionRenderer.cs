@@ -10,7 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using PixelFarm.Drawing;
-namespace PaintDotNet.Effects
+namespace PixelFarm.Drawing.Effects
 {
     class ConvolutionRenderer
     {

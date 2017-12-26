@@ -7,18 +7,18 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 
-using System; 
-using PixelFarm.Drawing; 
+using System;
+using PixelFarm.Drawing;
 using System.Runtime.InteropServices;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     /// <summary>
     /// This is our pixel format that we will work with. It is always 32-bits / 4-bytes and is
     /// always laid out in BGRA order.
     /// Generally used with the Surface class.
     /// </summary>
-    [Serializable]
+    
     [StructLayout(LayoutKind.Explicit)]
     public struct ColorBgra
     {
@@ -187,7 +187,7 @@ namespace PaintDotNet
                 return (int)Bgra;
             }
         }
- 
+
         /// <summary>
         /// Returns a new ColorBgra with the same color values but with a new alpha component value.
         /// </summary>
@@ -195,7 +195,7 @@ namespace PaintDotNet
         {
             return ColorBgra.FromBgra(B, G, R, newA);
         }
-        
+
         /// <summary>
         /// Creates a new ColorBgra instance with the given color and alpha values.
         /// </summary>
@@ -685,6 +685,6 @@ namespace PaintDotNet
                 return ColorBgra.FromBgra(255, 0, 0, 255);
             }
         }
-   
+
     }
 }

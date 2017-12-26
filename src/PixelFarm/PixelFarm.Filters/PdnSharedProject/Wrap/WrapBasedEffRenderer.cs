@@ -31,7 +31,7 @@
 //
 
 using PixelFarm.Drawing;
-namespace PaintDotNet.Effects
+namespace PixelFarm.Drawing.Effects
 {
     public abstract class WrapBasedRenderer : EffectRendererBase
     {
