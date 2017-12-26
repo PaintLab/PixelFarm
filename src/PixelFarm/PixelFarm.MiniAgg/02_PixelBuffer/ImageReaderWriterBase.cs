@@ -55,15 +55,15 @@ namespace PixelFarm.Agg
         {
             return m_ByteBuffer;
         }
-
+        protected void SetBufferToNull()
+        {
+            this.m_ByteBuffer = null;
+        }
         protected void SetBuffer(byte[] byteBuffer)
         {
             m_ByteBuffer = byteBuffer;
         }
-        public TempMemPtr GetPixelBuffer()
-        {
-            return new TempMemPtr(m_ByteBuffer);
-        }
+        
 
         public abstract void ReplaceBuffer(byte[] newbuffer);
 
@@ -106,10 +106,7 @@ namespace PixelFarm.Agg
             //
             this.m_ByteBuffer = imgbuffer;
         }
-        protected void SetBufferToNull()
-        {
-            this.m_ByteBuffer = null;
-        }
+       
 
         protected void SetDimmensionAndFormat(int width, int height,
            int strideInBytes,
@@ -392,6 +389,9 @@ namespace PixelFarm.Agg
             //-------------------------------------------------
 
             int len = x2 - x1 + 1;
+
+
+
             byte[] buffer = GetBuffer();
             int bufferOffset = GetBufferOffsetXY(x1, y);
             int alpha = (((int)(sourceColor.A) * (cover + 1)) >> 8);
@@ -411,6 +411,8 @@ namespace PixelFarm.Agg
                 }
                 while (--len != 0);
             }
+            
+
         }
 
         public void BlendVL(int x, int y1, int y2, Color sourceColor, byte cover)
