@@ -9,10 +9,13 @@ namespace PixelFarm.Drawing.WinGdi
     public class GdiPlusPainter : Painter
     {
 
+
         System.Drawing.Pen _currentPen;
         System.Drawing.SolidBrush _currentFillBrush;
 
         GdiPlusRenderSurface _renderSurface;
+
+   
         public GdiPlusPainter(GdiPlusRenderSurface renderSurface)
         {
             this._renderSurface = renderSurface;
@@ -25,6 +28,14 @@ namespace PixelFarm.Drawing.WinGdi
         {
             get { return _renderSurface.gx.CompositingMode; }
             set { _renderSurface.gx.CompositingMode = value; }
+        }
+
+
+        RenderQualtity _renderQuality;
+        public override RenderQualtity RenderQuality
+        {
+            get { return _renderQuality; }
+            set { _renderQuality = value; }
         }
 
         public override float OriginX
@@ -240,12 +251,12 @@ namespace PixelFarm.Drawing.WinGdi
             throw new NotImplementedException();
         }
         public override void Draw(VertexStore vxs)
-        { 
-            
+        {
+
             //        for (int i = 0; i < numPath; ++i)
-          //        {
-          //            VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
-          //        }
+            //        {
+            //            VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
+            //        }
             throw new NotImplementedException();
         }
 
@@ -439,15 +450,15 @@ namespace PixelFarm.Drawing.WinGdi
         }
 
         public override void Fill(VertexStoreSnap snap)
-        {  
-            VxsHelper.FillVxsSnap(_renderSurface.gx, snap, _fillColor); 
+        {
+            VxsHelper.FillVxsSnap(_renderSurface.gx, snap, _fillColor);
         }
 
         public override void Fill(VertexStore vxs)
         {
-            
+
             VxsHelper.DrawVxsSnap(_renderSurface.gx, new VertexStoreSnap(vxs), _strokeColor);
-            
+
         }
 
         public override void FillEllipse(double left, double top, double width, double height)
@@ -513,8 +524,8 @@ namespace PixelFarm.Drawing.WinGdi
 
     }
 
-     
-     
-      
+
+
+
 
 }

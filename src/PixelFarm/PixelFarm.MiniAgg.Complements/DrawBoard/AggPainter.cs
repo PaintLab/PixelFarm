@@ -2,8 +2,8 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.VertexSource;
+using PixelFarm.DrawingBuffer;
 
 namespace PixelFarm.Agg
 {
@@ -93,6 +93,13 @@ namespace PixelFarm.Agg
             sclineRas.OffsetOriginX = x;
             sclineRas.OffsetOriginY = y;
         }
+        RenderQualtity _renderQuality;
+        public override RenderQualtity RenderQuality
+        {
+            get { return _renderQuality; }
+            set { _renderQuality = value; }
+        }
+
         public override SmoothingMode SmoothingMode
         {
             get
@@ -152,6 +159,12 @@ namespace PixelFarm.Agg
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             //coordinate system
+            if (this.RenderQuality == RenderQualtity.Fast)
+            {
+                //BitmapBuffer bmpBuffer= new BitmapBuffer()
+                //BitmapBufferExtensions.DrawLine()
+            }
+
             if (_orientation == DrawBoardOrientation.LeftBottom)
             {
                 //as original

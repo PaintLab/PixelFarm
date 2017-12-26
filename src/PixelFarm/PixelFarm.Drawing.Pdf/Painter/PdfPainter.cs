@@ -48,6 +48,13 @@ namespace PixelFarm.Drawing.Pdf
                 throw new NotImplementedException();
             }
         }
+        RenderQualtity _renderQuality;
+        public override RenderQualtity RenderQuality
+        {
+            get { return _renderQuality; }
+            set { _renderQuality = value; }
+        }
+
         public override float OriginY
         {
             get

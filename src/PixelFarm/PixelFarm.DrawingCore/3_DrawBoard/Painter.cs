@@ -23,9 +23,9 @@ using PixelFarm.Agg;
 namespace PixelFarm.Drawing
 {
 
-    
+
     /// <summary>
-    /// this class provides drawing method on specific surface,
+    /// this class provides drawing method on specific drawboard,
     /// (0,0) is on left-lower corner for every implementaion
     /// </summary>
     public abstract class Painter
@@ -41,7 +41,8 @@ namespace PixelFarm.Drawing
         public abstract float OriginX { get; }
         public abstract float OriginY { get; }
         public abstract void SetOrigin(float ox, float oy);
-        //
+        public abstract RenderQualtity RenderQuality { get; set; }
+
         public abstract int Width { get; }
         public abstract int Height { get; }
         public abstract RectInt ClipBox { get; set; }

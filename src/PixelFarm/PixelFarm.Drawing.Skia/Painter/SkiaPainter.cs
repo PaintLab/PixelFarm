@@ -38,6 +38,13 @@ namespace PixelFarm.Drawing.Skia
             get { return _skCanvas; }
             set { _skCanvas = value; }
         }
+        RenderQualtity _renderQuality;
+        public override RenderQualtity RenderQuality
+        {
+            get { return _renderQuality; }
+            set { _renderQuality = value; }
+        }
+
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
         {
