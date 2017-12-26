@@ -53,8 +53,7 @@ namespace PixelFarm.Agg
             {
                 sharpen = new SharpenFilterARGB();
             }
-            sharpen.Sharpen(readerWriter, radius);
-
+            sharpen.Sharpen(readerWriter, radius); 
         }
 
     }

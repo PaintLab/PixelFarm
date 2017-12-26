@@ -780,7 +780,20 @@
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\01_Core\Color\" />
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\01_Core\PixelOps\" />
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\01_Core\Renderer\" />
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\01_Core\UserBlendOps\" />
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\Blur\" />
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\Convolution\" />
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\Histogram\" />
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\Levels\" />
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\Material\" />
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\Others\" />
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\PixelOps\" />
+    <Folder Include="3.2_DrawingCanvas.MiniAgg.Complement\101_FilterFx\Wrap\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
