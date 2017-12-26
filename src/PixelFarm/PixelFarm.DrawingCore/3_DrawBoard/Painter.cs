@@ -72,6 +72,7 @@ namespace PixelFarm.Drawing
         public abstract void DrawImage(Image actualImage, params Agg.Transform.AffinePlan[] affinePlans);
         public abstract void DoFilterBlurStack(RectInt area, int r);
         public abstract void DoFilterBlurRecursive(RectInt area, int r);
+        public abstract void DoFilter(RectInt area, int r);
         //-------------------------------------------------------
 
 

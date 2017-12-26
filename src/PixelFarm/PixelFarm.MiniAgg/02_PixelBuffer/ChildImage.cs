@@ -38,6 +38,7 @@ namespace PixelFarm.Agg.Imaging
                 image.BitDepth,
                 image.BytesBetweenPixelsInclusive);
         }
+
         public ChildImage(byte[] buffer,
             int bufferOffsetToFirstPixel,
             int width,
@@ -71,7 +72,14 @@ namespace PixelFarm.Agg.Imaging
             SetRecieveBlender(blender);
             Attach(image, x1, y1, x2, y2);
         }
-
+        public override void ReplaceBuffer(byte[] newbuffer)
+        {
+            if (_sourceImage != null)
+            {
+                _sourceImage.ReplaceBuffer(newbuffer);
+            }
+          
+        }
 
         void AttachBuffer(byte[] buffer,
           int bufferOffset,
@@ -85,15 +93,17 @@ namespace PixelFarm.Agg.Imaging
             SetDimmensionAndFormat(width, height, strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
             SetBuffer(buffer, bufferOffset);
-             
+
         }
 
+        IImageReaderWriter _sourceImage;
         void Attach(IImageReaderWriter sourceImage,
           IPixelBlender recieveBlender,
           int distanceBetweenPixelsInclusive,
           int bufferOffset,
           int bitsPerPixel)
         {
+            _sourceImage = sourceImage;
             SetDimmensionAndFormat(sourceImage.Width,
                 sourceImage.Height,
                 sourceImage.Stride,
@@ -106,6 +116,7 @@ namespace PixelFarm.Agg.Imaging
         }
         bool Attach(IImageReaderWriter sourceImage, int x1, int y1, int x2, int y2)
         {
+            _sourceImage = sourceImage;
             m_ByteBuffer = null;
             if (x1 > x2 || y1 > y2)
             {

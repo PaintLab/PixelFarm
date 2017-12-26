@@ -246,6 +246,12 @@ namespace PixelFarm.Drawing.Skia
             ////--------------------------------
             //backupBmp.UnlockBits(bmpdata);
         }
+
+        public override void DoFilter(RectInt area, int r)
+        {
+
+        }
+
         public override void Draw(VertexStore vxs)
         {
             VxsHelper.DrawVxsSnap(_skCanvas, new VertexStoreSnap(vxs), _stroke);
