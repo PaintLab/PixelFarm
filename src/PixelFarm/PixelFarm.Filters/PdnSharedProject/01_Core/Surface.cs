@@ -9,7 +9,7 @@
 
 
 using System;
-using PixelFarm.Drawing; 
+using PixelFarm.Drawing;
 
 namespace PaintDotNet
 {
@@ -17,14 +17,26 @@ namespace PaintDotNet
     public class MemHolder
     {
         unsafe int* memAddress;
-        public MemHolder(IntPtr ptr)
+        int len; //len of int32 array
+
+
+        /// <param name="ptr">ptr to int32*</param>
+        /// <param name="len">length of this int32[]</param>
+        public MemHolder(IntPtr ptr, int len)
         {
+            this.len = len;
             unsafe
             {
                 this.memAddress = (int*)ptr;
             }
         }
-
+        /// <summary>
+        /// len of int32[] array
+        /// </summary>
+        internal int Length
+        {
+            get { return len; }
+        }
         internal IntPtr Ptr
         {
             get
@@ -34,6 +46,21 @@ namespace PaintDotNet
                     return (IntPtr)memAddress;
                 }
             }
+        }
+
+
+        public MemHolder CreateSubMem(int startOffset, int len)
+        {
+            if (startOffset >= 0 && len <= this.len)
+            {
+                unsafe
+                {
+                    return new MemHolder(
+                        (IntPtr)(memAddress + startOffset),
+                        len);
+                }
+            }
+            return null;
         }
     }
     /// <summary>
@@ -131,7 +158,7 @@ namespace PaintDotNet
                 return this.stride;
             }
         }
- 
+
 
         /// <summary>
         /// Gets the bounds of this Surface, in pixels.
@@ -202,7 +229,15 @@ namespace PaintDotNet
 
         public Surface CreateWindow(int x, int y, int windowWidth, int windowHeight)
         {
-            throw new StillNotPortedException();
+
+            //find start point
+            //1. windowWidth in 'pixel' unit 
+            //2. we use only 32 bit version of the pixel
+            //   so stride = pixelWidth *4
+            //---------------------
+
+
+
             //if (disposed)
             //{
             //    throw new ObjectDisposedException("Surface");
@@ -213,15 +248,22 @@ namespace PaintDotNet
             //    throw new ArgumentOutOfRangeException("windowHeight", "must be greater than zero");
             //}
 
-            //Rectangle original = this.Bounds;
-            //Rectangle sub = new Rectangle(x, y, windowWidth, windowHeight);
-            //Rectangle clipped = Rectangle.Intersect(original, sub);
+            Rectangle original = this.Bounds;
+            Rectangle sub = new Rectangle(x, y, windowWidth, windowHeight);
+            Rectangle clipped = Rectangle.Intersect(original, sub);
 
-            //if (clipped != sub)
-            //{
-            //    throw new ArgumentOutOfRangeException("bounds", new Rectangle(x, y, windowWidth, windowHeight),
-            //        "bounds parameters must be a subset of this Surface's bounds");
-            //}
+            if (clipped != sub)
+            {
+                throw new ArgumentOutOfRangeException("bounds", new Rectangle(x, y, windowWidth, windowHeight),
+                    "bounds parameters must be a subset of this Surface's bounds");
+            }
+
+            int startPos = (windowWidth * y) + x;
+            int endPos = (windowWidth * (y + windowHeight)) + (x + windowWidth);
+            //also check if 
+            MemHolder newMemHolder = this.memHolder.CreateSubMem(startPos, endPos - startPos + 1);
+            return new Surface(windowWidth * 4, windowWidth, windowHeight, newMemHolder);
+
 
             //long offset = ((long)stride * (long)y) + ((long)ColorBgra.SizeOf * (long)x);
             //long length = ((windowHeight - 1) * (long)stride) + (long)windowWidth * (long)ColorBgra.SizeOf;
@@ -940,39 +982,39 @@ namespace PaintDotNet
         /// </remarks>
         public void CopySurface(Surface source)
         {
-            throw new StillNotPortedException();
 
-            //Surface ss = (Surface)source;
-            //if (disposed)
-            //{
-            //    throw new ObjectDisposedException("Surface");
-            //}
 
-            //if (this.stride == ss.stride &&
-            //    (this.width * ColorBgra.SizeOf) == this.stride &&
-            //    this.width == ss.width &&
-            //    this.height == ss.height)
-            //{
-            //    unsafe
-            //    {
-            //        PlatformMemory.Copy(this.scan0.VoidStar,
-            //                    ss.scan0.VoidStar,
-            //                    ((ulong)(height - 1) * (ulong)stride) + ((ulong)width * (ulong)ColorBgra.SizeOf));
-            //    }
-            //}
-            //else
-            //{
-            //    int copyWidth = Math.Min(width, ss.width);
-            //    int copyHeight = Math.Min(height, ss.height);
+            Surface ss = (Surface)source;
+            if (disposed)
+            {
+                throw new ObjectDisposedException("Surface");
+            }
 
-            //    unsafe
-            //    {
-            //        for (int y = 0; y < copyHeight; ++y)
-            //        {
-            //            PlatformMemory.Copy(GetRowAddressUnchecked(y), source.GetRowAddressUnchecked(y), (ulong)copyWidth * (ulong)ColorBgra.SizeOf);
-            //        }
-            //    }
-            //}
+            if (this.stride == ss.stride &&
+                (this.width * ColorBgra.SizeOf) == this.stride &&
+                this.width == ss.width &&
+                this.height == ss.height)
+            {
+                unsafe
+                {
+                    PlatformMemory.Copy((byte*)source.memHolder.Ptr,
+                               (void*)ss.memHolder.Ptr,
+                                ((ulong)(height - 1) * (ulong)stride) + ((ulong)width * (ulong)ColorBgra.SizeOf));
+                }
+            }
+            else
+            {
+                int copyWidth = Math.Min(width, ss.width);
+                int copyHeight = Math.Min(height, ss.height);
+
+                unsafe
+                {
+                    for (int y = 0; y < copyHeight; ++y)
+                    {
+                        PlatformMemory.Copy(GetRowAddressUnchecked(y), source.GetRowAddressUnchecked(y), (ulong)copyWidth * (ulong)ColorBgra.SizeOf);
+                    }
+                }
+            }
         }
 
         /// <summary>

@@ -1407,32 +1407,8 @@ namespace PaintDotNet
             return rects;
         }
 
-        public static Point[] TruncatePoints(PointF[] pointsF)
-        {
-            throw new StillNotPortedException();
-
-            //Point[] points = new Point[pointsF.Length];
-
-            //for (int i = 0; i < pointsF.Length; ++i)
-            //{
-            //    points[i] = Point.Truncate(pointsF[i]);
-            //}
-
-            //return points;
-        }
-
-        public static Point[] RoundPoints(PointF[] pointsF)
-        {
-            throw new StillNotPortedException();
-            //Point[] points = new Point[pointsF.Length];
-
-            //for (int i = 0; i < pointsF.Length; ++i)
-            //{
-            //    points[i] = Point.Round(pointsF[i]);
-            //}
-
-            //return points;
-        }
+         
+         
 
         /// <summary>
         /// The Sutherland-Hodgman clipping alrogithm.

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
- 
+
 namespace System
 {
     [System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class
@@ -72,7 +72,7 @@ namespace System
         //}
         public static unsafe void Copy(void* dstPtr, void* srcPtr, ulong len)
         {
-            platformMem.CopyImpl(dstPtr, srcPtr, len);
+            NaitveMemMx.memcpy((byte*)dstPtr, (byte*)srcPtr, (int)len);
         }
         public static void Free(IntPtr hmem)
         {

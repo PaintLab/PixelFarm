@@ -32,9 +32,10 @@ namespace TestPdnEffect
             int w = bmp.Width;
             int h = bmp.Height;
             int stride = bmpData.Stride;
-            int[] srcBmpBuffer = new int[w * h];
+            int bufferLen = w * h;
+            int[] srcBmpBuffer = new int[bufferLen]; 
+            int[] destBmpBuffer = new int[bufferLen];
 
-            int[] destBmpBuffer = new int[w * h];
             System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, srcBmpBuffer, 0, srcBmpBuffer.Length);
             bmp.UnlockBits(bmpData);
             //
@@ -43,10 +44,10 @@ namespace TestPdnEffect
                 fixed (int* srcBmpH = &srcBmpBuffer[0])
                 fixed (int* destBmpH = &destBmpBuffer[0])
                 {
-                    MemHolder srcMemHolder = new MemHolder((IntPtr)srcBmpH);
+                    MemHolder srcMemHolder = new MemHolder((IntPtr)srcBmpH, bufferLen);
                     Surface srcSurface = new Surface(stride, w, h, srcMemHolder);
 
-                    MemHolder destMemHolder = new MemHolder((IntPtr)destBmpH);
+                    MemHolder destMemHolder = new MemHolder((IntPtr)destBmpH, bufferLen);
                     Surface destSurface = new Surface(stride, w, h, destMemHolder);
 
                     //

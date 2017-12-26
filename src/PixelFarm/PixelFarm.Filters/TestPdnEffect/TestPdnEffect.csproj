@@ -69,9 +69,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PdnPixelEffectPixelFarm\PdnPixelEffectPixelFarm.csproj">
+    <ProjectReference Include="..\PdnPixelEffectPixelFarm\PixelFarm.FilterFx.csproj">
       <Project>{9a7db6ea-7f85-4420-9e42-f0f277524fb7}</Project>
-      <Name>PdnPixelEffectPixelFarm</Name>
+      <Name>PixelFarm.FilterFx</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
