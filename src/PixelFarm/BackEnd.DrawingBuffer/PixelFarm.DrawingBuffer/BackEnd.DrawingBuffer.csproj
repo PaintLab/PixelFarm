@@ -48,8 +48,8 @@
     <Compile Include="BitmapBufferExtensions\TransformationExtensions.cs" />
     <Compile Include="BitmapContext.cs" />
     <Compile Include="BitmapBufferFactory.cs" />
-    <Compile Include="NativeMethods.cs" />
-    <Compile Include="Porting\porting.cs" />
+    <Compile Include="00_Porting\NativeMethods.cs" />
+    <Compile Include="00_Porting\porting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
