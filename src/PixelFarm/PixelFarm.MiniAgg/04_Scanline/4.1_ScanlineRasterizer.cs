@@ -166,11 +166,11 @@ namespace PixelFarm.Agg
             get { return this.m_filling_rule; }
             set { this.m_filling_rule = value; }
         }
-        bool AutoClose
-        {
-            get { return m_auto_close; }
-            set { this.m_auto_close = value; }
-        }
+        //bool AutoClose
+        //{
+        //    get { return m_auto_close; }
+        //    set { this.m_auto_close = value; }
+        //}
         //--------------------------------------------------------------------
         public void ResetGamma(IGammaFunction gamma_function)
         {

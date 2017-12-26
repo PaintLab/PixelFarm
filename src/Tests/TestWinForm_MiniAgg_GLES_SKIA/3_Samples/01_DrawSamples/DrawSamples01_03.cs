@@ -30,8 +30,8 @@ namespace PixelFarm.Agg.Sample_Draw
             p.FillColor = Color.Black;
             p.CurrentFont = new RequestFont("tahoma", 10);
             p.StrokeColor = Color.Red;
-            p.DrawLine(0, 400, 800, 400);
-            p.DrawString(teststr, 10, 400);
+           // p.DrawLine(0, 400, 800, 400);
+            p.DrawString(teststr, 300, 400);
 
             //g.UseSubPixelRendering = false;
             //g.DrawString(teststr, 300, 422, 22);
