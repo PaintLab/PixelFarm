@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{259EEF4D-832A-472B-B4DD-0C56F4AF39A8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PdnCorePixelFarm</RootNamespace>
+    <AssemblyName>PdnCorePixelFarm</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Color\ColorBgra.cs" />
+    <Compile Include="Color\HsvColor.cs" />
+    <Compile Include="Color\RgbColor.cs" />
+    <Compile Include="Core\BitVector2D.cs" />
+    <Compile Include="Core\BitVector2DSurfaceAdapter.cs" />
+    <Compile Include="Core\IBitVector2D.cs" />
+    <Compile Include="Core\ISurfaceDraw.cs" />
+    <Compile Include="Core\MemoryBlock.cs" />
+    <Compile Include="Core\NullGraphics.cs" />
+    <Compile Include="Core\PdnGraphics.cs" />
+    <Compile Include="Core\PdnGraphicsPath.cs" />
+    <Compile Include="Core\PdnRegion.cs" />
+    <Compile Include="Core\RenderArgs.cs" />
+    <Compile Include="Core\ResamplingAlgorithm.cs" />
+    <Compile Include="Core\Scanline.cs" />
+    <Compile Include="Core\SplineInterpolator.cs" />
+    <Compile Include="Core\Surface.cs" />
+    <Compile Include="Core\Utility.cs" />
+    <Compile Include="GpcWrapper\NativeConstants.cs" />
+    <Compile Include="GpcWrapper\NativeMethods.cs" />
+    <Compile Include="GpcWrapper\NativeStructs.cs" />
+    <Compile Include="GpcWrapper\Polygon.cs" />
+    <Compile Include="GpcWrapper\Vertex.cs" />
+    <Compile Include="GpcWrapper\VertexList.cs" />
+    <Compile Include="MeasurementUnit.cs" />
+    <Compile Include="Natives\NativeConstants.cs" />
+    <Compile Include="Natives\NativeErrors.cs" />
+    <Compile Include="Natives\NativeMethods.cs" />
+    <Compile Include="Natives\NativeStructs.cs" />
+    <Compile Include="Natives\PropertyItem2.cs" />
+    <Compile Include="Natives\SafeNativeMethods.cs" />
+    <Compile Include="PixelOps\BinaryPixelOp.cs" />
+    <Compile Include="PixelOps\BinaryPixelOps.cs" />
+    <Compile Include="PixelOps\IPixelOp.cs" />
+    <Compile Include="PixelOps\PixelOp.cs" />
+    <Compile Include="PixelOps\UnaryPixelOp.cs" />
+    <Compile Include="PixelOps\UnaryPixelOps.cs" />
+    <Compile Include="port\Port1.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderer\GradientRenderer.cs" />
+    <Compile Include="Renderer\GradientRenderers.cs" />
+    <Compile Include="Renderer\Histogram.cs" />
+    <Compile Include="Renderer\HistogramLuminosity.cs" />
+    <Compile Include="Renderer\HistogramRGB.cs" />
+    <Compile Include="Threading\ThreadPool.cs" />
+    <Compile Include="Threading\WaitableCounter.cs" />
+    <Compile Include="Threading\WaitHandleArray.cs" />
+    <Compile Include="UserBlend\PdnResources.cs" />
+    <Compile Include="UserBlend\ResItems.cs" />
+    <Compile Include="UserBlend\UserBlendOp.cs" />
+    <Compile Include="UserBlend\UserBlendOps.cs" />
+    <Compile Include="UserBlend\UserBlendOps.Generated.cs" />
+    <None Include="UserBlend\UserBlendOps.Generated.H.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Natives\PropertyItem.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

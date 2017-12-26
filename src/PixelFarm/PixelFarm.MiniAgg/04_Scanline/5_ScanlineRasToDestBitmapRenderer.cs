@@ -35,6 +35,8 @@ namespace PixelFarm.Agg
         /// grey scale 4, 1/9 lcd lookup table
         /// </summary> 
         static readonly LcdDistributionLut s_g9_3_2_1 = LcdDistributionLut.EasyLut(255, 3, 2, 1);
+        static readonly LcdDistributionLut s_g_4_2_1 = LcdDistributionLut.EasyLut(64, 4f / 8, 2f / 8, 1f / 8);
+        static readonly LcdDistributionLut s_g_4_3_1 = LcdDistributionLut.EasyLut(64, 4f / 8, 3f / 8, 1f / 8);
         //---------------------------------
         //Mixim's:
         // Try to play with different coefficients for the primary,
@@ -48,7 +50,7 @@ namespace PixelFarm.Agg
         /// grey scale 4, 1/8 lcd lookup table
         /// </summary>
         //static readonly LcdDistributionLut s_g8_4_2_1 = new LcdDistributionLut(LcdDistributionLut.GrayLevels.Gray64, 4f / 8f, 2f / 8f, 0.0001f / 8f);
-        static readonly LcdDistributionLut s_g8_4_2_1 = new LcdDistributionLut(255, 4f / 8f, 2f / 8f, 1f / 8f);
+        //static readonly LcdDistributionLut s_g8_4_2_1 = new LcdDistributionLut(255, 4f / 8f, 2f / 8f, 1f / 8f);
         Color _color;
         const int BASE_MASK = 255;
         //in this case EXISTING_A (existing alpha always 0) 
@@ -70,11 +72,9 @@ namespace PixelFarm.Agg
         internal ScanlineSubPixelRasterizer()
         {
             //default
-            _currentLcdLut = s_g9_3_2_1;
-            //
-            //I try adjust color distribution with img filter
-            //set contrast =0 => disable this filter
-            //_brightnessAndContrast.Contrast = 30;
+            //_currentLcdLut = s_g9_3_2_1;
+            _currentLcdLut = s_g_4_3_1;
+
         }
         public LcdDistributionLut LcdLut
         {

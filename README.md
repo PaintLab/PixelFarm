@@ -81,8 +81,6 @@ BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geo
 
 BSD, 2007-2014, Lars Brubaker, agg-sharp, from  https://github.com/MatterHackers/agg-sharp
 
-MIT, 2009-2015, Bill Reiss, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
-
 ZLIB, 2015, burningmine, CurveUtils.
 
 Boost, 2010-2014, Angus Johnson, Clipper.
@@ -90,6 +88,14 @@ Boost, 2010-2014, Angus Johnson, Clipper.
 BSD, 2009-2010, Poly2Tri Contributors, from https://github.com/PaintLab/poly2tri-cs
 
 SGI, 2000, Eric Veach, Tesselate.
+
+**Image Processing**
+
+BSD, 2002-2005, Maxim Shemanarev, from http://www.antigrain.com , Anti-Grain Geometry - Version 2.4,
+
+MIT, 2009-2015, Bill Reiss, Rene Schulte and WriteableBitmapEx Contributors, https://github.com/teichgraf/WriteableBitmapEx
+
+MIT, 2008, dotPDN LLC, Rick Brewster, Chris Crosetto, Tom Jackson, Michael Kelsey, Brandon Ortiz, Craig Taylor, Chris Trevino, and Luke Walker., from OpenPDN v 3.36 (Paint.NET), https://github.com/rivy/OpenPDN
 
 **Font**
 

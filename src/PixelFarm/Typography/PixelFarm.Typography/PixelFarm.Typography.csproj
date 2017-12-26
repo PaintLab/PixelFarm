@@ -52,10 +52,6 @@
       <Project>{e4a1c3c3-1c1c-4e11-a2e6-a1fafd6652c7}</Project>
       <Name>Typography.Contours</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Typography.MsdfGen\Typography.MsdfGen.csproj">
-      <Project>{8f69ab8d-174a-4912-9328-cae8eda5564b}</Project>
-      <Name>Typography.MsdfGen</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Typography.TextServices\Typography.TextServices.csproj">
       <Project>{912580d0-46a0-4d32-9c8b-c2a9d4903857}</Project>
       <Name>Typography.TextServices</Name>
@@ -116,7 +112,7 @@
     <Compile Include="1.1_Drawing_Fonts\VxsTextPrinter.cs" />
     <Compile Include="3_FontFaceImpl\ScriptLangConv.cs" />
     <Compile Include="3_FontFaceImpl\TextureFontLoader.cs" />
-    <Compile Include="6_AggTexture\AggGlyphTextureGen.cs" />
+    <Compile Include="3_FontFaceImpl\AggGlyphTextureGen.cs" />
     <Compile Include="1.1_Drawing_Fonts\GlyphPathBuilderBase.cs" />
     <Compile Include="1.1_Drawing_Fonts\FontStyleExtensions.cs" />
     <Compile Include="1.3_DrawingFonts\ActualFont.cs" />

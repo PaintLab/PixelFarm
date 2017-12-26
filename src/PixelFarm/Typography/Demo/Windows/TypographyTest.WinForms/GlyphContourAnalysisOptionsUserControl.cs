@@ -122,6 +122,7 @@ namespace TypographyTest.WinForms
             _options.UseHorizontalFitAlignment = chkUseHorizontalFitAlign.Checked;
             _options.WriteFitOutputToConsole = chkWriteFitOutputToConsole.Checked;
             _options.DrawRegenerationOutline = chkDrawRegenerateOutline.Checked;
+            _options.SetupPrinterLayoutForLcdSubPix = chkSetPrinterLayoutForLcdSubPix.Checked;
 
             //
             _options.EdgeOffset = (float)lstEdgeOffset.SelectedItem;

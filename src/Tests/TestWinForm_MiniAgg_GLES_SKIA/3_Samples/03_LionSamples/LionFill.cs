@@ -54,9 +54,17 @@ namespace PixelFarm.Agg.Samples
         }
         public override void MouseDrag(int x, int y)
         {
-            lionFill.Move(x, y); 
+            lionFill.Move(x, y);
         }
 
+        [DemoConfig(MaxValue = 20)]
+        public int SharpRadius
+        {
+            //test
+            get { return lionFill.SharpenRadius; }
+            set { lionFill.SharpenRadius = value; }
+
+        }
         [DemoConfig(MaxValue = 255)]
         public int AlphaValue
         {
