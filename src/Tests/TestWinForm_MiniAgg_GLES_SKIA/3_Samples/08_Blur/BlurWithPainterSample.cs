@@ -139,6 +139,10 @@ namespace PixelFarm.Agg.Sample_Blur2
                    x, y,
                    1));
         }
+
+        Drawing.Effects.ImgFilterStackBlur imgFilterBlurStack = new Drawing.Effects.ImgFilterStackBlur();
+        Drawing.Effects.ImgFilterRecursiveBlur imgFilterGaussianBlur = new Drawing.Effects.ImgFilterRecursiveBlur();
+
         public override void Draw(Painter p)
         {
             //create painter             
@@ -189,12 +193,21 @@ namespace PixelFarm.Agg.Sample_Blur2
             stopwatch.Stop();
             stopwatch.Reset();
             stopwatch.Start();
+
             if (BlurMethod != BlurMethod.ChannelBlur)
             {
                 // Create a new pixel renderer and attach it to the main one as a child image. 
                 // It returns true if the attachment succeeded. It fails if the rectangle 
                 // (bbox) is fully clipped.
                 //------------------ 
+
+
+
+                //------------------ 
+                //create filter specfication
+                //it will be resolve later by the platform similar to request font
+                //------------------ 
+
 
                 if (boundRect.Clip(new RectInt(0, 0, p.Width - 1, p.Height - 1)))
                 {
@@ -210,8 +223,8 @@ namespace PixelFarm.Agg.Sample_Blur2
                                 // Faster, but bore specific. 
                                 // Works only for 8 bits per channel and only with radii <= 254.
                                 //------------------
-                                //p.DoFilterBlurStack(boundRect, m_radius);
-                                p.DoFilterBlurStack(new RectInt(0, 0, Width, Height), m_radius);
+                                //p.DoFilterBlurStack(boundRect, m_radius); 
+                                p.ApplyFilter(imgFilterBlurStack); 
                             }
                             break;
                         default:
@@ -219,7 +232,7 @@ namespace PixelFarm.Agg.Sample_Blur2
                                 // but still constant time of radius. Very sensitive
                                 // to precision, doubles are must here.
                                 //------------------
-                                p.DoFilterBlurRecursive(boundRect, m_radius);
+                                p.ApplyFilter(imgFilterGaussianBlur);
                             }
                             break;
                     }

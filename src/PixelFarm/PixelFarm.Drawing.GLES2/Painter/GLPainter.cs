@@ -194,17 +194,9 @@ namespace PixelFarm.DrawingGL
         {
             _glsx.Clear(color);
         }
-        public override void DoFilterBlurRecursive(RectInt area, int r)
+        public override void ApplyFilter(ImageFilter imgFilter)
         {
-            //filter with glsl
-        }
-        public override void DoFilterBlurStack(RectInt area, int r)
-        {
-        }
-        public override void DoFilter(RectInt area, int r)
-        {
-            //TODO: implement this
-
+            throw new NotImplementedException();
         }
         /// <summary>
         /// we do NOT store vxs

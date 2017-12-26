@@ -108,6 +108,19 @@ namespace PixelFarm.Drawing
         //-------------------------------------------------------
     }
 
+    /// <summary>
+    /// image filter specification
+    /// </summary>
+    public abstract class ImageFilter
+    {
+        public abstract ImageFilterName Name { get; }
+    }
+    public enum ImageFilterName
+    {
+        StackBlur,
+        RecursiveBlur,
+        Sharpen,
+    }
     public enum SmoothingMode
     {
         AntiAlias = 4,

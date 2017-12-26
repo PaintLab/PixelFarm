@@ -24,6 +24,7 @@ namespace PixelFarm.Agg.Sample_Draw
 
         public override void Draw(Painter p)
         {
+
             p.Clear(Drawing.Color.White);
             p.UseSubPixelRendering = true;
             string teststr = "ABCDE pqyt 1230";

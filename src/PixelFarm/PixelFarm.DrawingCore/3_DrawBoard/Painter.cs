@@ -22,6 +22,8 @@
 using PixelFarm.Agg;
 namespace PixelFarm.Drawing
 {
+
+    
     /// <summary>
     /// this class provides drawing method on specific surface,
     /// (0,0) is on left-lower corner for every implementaion
@@ -70,9 +72,12 @@ namespace PixelFarm.Drawing
 
         public abstract void DrawImage(Image actualImage, double left, double top);
         public abstract void DrawImage(Image actualImage, params Agg.Transform.AffinePlan[] affinePlans);
-        public abstract void DoFilterBlurStack(RectInt area, int r);
-        public abstract void DoFilterBlurRecursive(RectInt area, int r);
-        public abstract void DoFilter(RectInt area, int r);
+
+        public abstract void ApplyFilter(ImageFilter imgFilter);
+
+        //public abstract void DoFilterBlurStack(RectInt area, int r);
+        //public abstract void DoFilterBlurRecursive(RectInt area, int r);
+        //public abstract void DoFilter(RectInt area, int r);
         //-------------------------------------------------------
 
 
