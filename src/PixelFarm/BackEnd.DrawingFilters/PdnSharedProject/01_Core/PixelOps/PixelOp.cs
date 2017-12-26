@@ -8,11 +8,10 @@
 /////////////////////////////////////////////////////////////////////////////////
 //Apache2, 2017, WinterDev
 using System;
-namespace PixelFarm.Drawing
-{
 
 
-
+namespace PixelFarm.Drawing.DrawingBuffer
+{   
     public unsafe abstract class PixelOp
         : IPixelOp
     {

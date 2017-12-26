@@ -7,6 +7,7 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 //Apache2, 2017, WinterDev
+using PixelFarm.Drawing.DrawingBuffer;
 namespace PixelFarm.Drawing.Effects
 {
 

@@ -9,7 +9,7 @@
 
 //Apache2, 2017, WinterDev
 
-namespace PixelFarm.Drawing
+namespace PixelFarm.Drawing.DrawingBuffer
 {
     /// <summary>
     /// Abstract base class that all "user" blend ops derive from.

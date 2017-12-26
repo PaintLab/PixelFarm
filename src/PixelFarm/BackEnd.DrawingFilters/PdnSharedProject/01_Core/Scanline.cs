@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 //Apache2, 2017, WinterDev
-namespace PixelFarm.Drawing
+namespace PixelFarm.Drawing.DrawingBuffer
 {
     public struct Scanline
     {

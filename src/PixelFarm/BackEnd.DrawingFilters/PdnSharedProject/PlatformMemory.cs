@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 //Apache2, 2017, WinterDev
+using PixelFarm.Drawing.DrawingBuffer;
 namespace System
 {
     [System.Security.SuppressUnmanagedCodeSecurity] //apply this to all native methods in this class
