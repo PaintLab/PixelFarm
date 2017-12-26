@@ -336,7 +336,7 @@ namespace PixelFarm.Agg
                     //from current point size 
                     //we need line height of current font size
                     //then we will start on 'base line'
-                    
+
                     _textPrinter.DrawString(text, x, this.Height - y);
                 }
 
@@ -511,7 +511,12 @@ namespace PixelFarm.Agg
                 area.Left, area.Bottom, area.Right, area.Top);
             filterMan.DoRecursiveBlur(img, r);
         }
-
+        public override void DoFilter(RectInt area, int r)
+        {
+            ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
+              area.Left, area.Top, area.Right, area.Bottom);
+            filterMan.DoSharpen(img, r);
+        }
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {
             return new AggRenderVx(snap);

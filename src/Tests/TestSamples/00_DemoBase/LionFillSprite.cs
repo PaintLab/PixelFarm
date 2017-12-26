@@ -21,6 +21,12 @@ namespace PixelFarm.Agg
             get;
             set;
         }
+        public int SharpenRadius
+        {
+            get;
+            set;
+        }
+
         public byte AlphaValue
         {
             get { return this.alpha; }
@@ -84,9 +90,13 @@ namespace PixelFarm.Agg
                 {
                     p.FillColor = colors[i];
                     p.Fill(new VertexStoreSnap(myvxs, pathList[i]));
-
                 }
-
+            }
+            //test 
+            if (SharpenRadius > 0)
+            {
+                p.DoFilter(new RectInt(0, p.Height, p.Width, 0), 2);
+                //PixelFarm.Agg.Imaging.SharpenFilterARGB.Sharpen()
             }
         }
 

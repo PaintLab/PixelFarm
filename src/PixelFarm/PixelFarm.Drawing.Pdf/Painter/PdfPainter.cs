@@ -194,6 +194,10 @@ namespace PixelFarm.Drawing.Pdf
         {
             //TODO: implement this
         }
+        public override void DoFilter(RectInt area, int r)
+        {
+             
+        }
         public override void DoFilterBlurStack(RectInt area, int r)
         {
             //since area is Windows coord

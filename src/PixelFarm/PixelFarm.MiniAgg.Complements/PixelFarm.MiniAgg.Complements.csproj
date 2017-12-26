@@ -34,6 +34,188 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\color\ColorBgra.cs">
+      <Link>101_FilterFx\01_Core\Color\ColorBgra.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\color\HsvColor.cs">
+      <Link>101_FilterFx\01_Core\Color\HsvColor.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\color\RgbColor.cs">
+      <Link>101_FilterFx\01_Core\Color\RgbColor.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\PdnResources.cs">
+      <Link>101_FilterFx\01_Core\PdnResources.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\pixelops\BinaryPixelOp.cs">
+      <Link>101_FilterFx\01_Core\PixelOps\BinaryPixelOp.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\pixelops\BinaryPixelOps.cs">
+      <Link>101_FilterFx\01_Core\PixelOps\BinaryPixelOps.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\pixelops\IPixelOp.cs">
+      <Link>101_FilterFx\01_Core\PixelOps\IPixelOp.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\pixelops\PixelOp.cs">
+      <Link>101_FilterFx\01_Core\PixelOps\PixelOp.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\pixelops\UnaryPixelOp.cs">
+      <Link>101_FilterFx\01_Core\PixelOps\UnaryPixelOp.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\pixelops\UnaryPixelOps.cs">
+      <Link>101_FilterFx\01_Core\PixelOps\UnaryPixelOps.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\RenderArgs.cs">
+      <Link>101_FilterFx\01_Core\RenderArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\renderer\GradientRenderer.cs">
+      <Link>101_FilterFx\01_Core\Renderer\GradientRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\renderer\GradientRenderers.cs">
+      <Link>101_FilterFx\01_Core\Renderer\GradientRenderers.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\renderer\Histogram.cs">
+      <Link>101_FilterFx\01_Core\Renderer\Histogram.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\renderer\HistogramLuminosity.cs">
+      <Link>101_FilterFx\01_Core\Renderer\HistogramLuminosity.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\renderer\HistogramRGB.cs">
+      <Link>101_FilterFx\01_Core\Renderer\HistogramRGB.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\ResamplingAlgorithm.cs">
+      <Link>101_FilterFx\01_Core\ResamplingAlgorithm.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\Scanline.cs">
+      <Link>101_FilterFx\01_Core\Scanline.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\Surface.cs">
+      <Link>101_FilterFx\01_Core\Surface.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\userblendops\UserBlendOp.cs">
+      <Link>101_FilterFx\01_Core\UserBlendOps\UserBlendOp.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\userblendops\UserBlendOps.cs">
+      <Link>101_FilterFx\01_Core\UserBlendOps\UserBlendOps.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\userblendops\UserBlendOps.Generated.cs">
+      <Link>101_FilterFx\01_Core\UserBlendOps\UserBlendOps.Generated.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\userblendops\UserBlendOps.Generated.H.cs">
+      <Link>101_FilterFx\01_Core\UserBlendOps\UserBlendOps.Generated.H.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\Utility.cs">
+      <Link>101_FilterFx\01_Core\Utility.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\blur\BrightnessAndContrastRenderer.cs">
+      <Link>101_FilterFx\Blur\BrightnessAndContrastRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\blur\MotionBlurRenderer.cs">
+      <Link>101_FilterFx\Blur\MotionBlurRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\blur\ZoomBlurEffRenderer.cs">
+      <Link>101_FilterFx\Blur\ZoomBlurEffRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\convolution\ColorDiffEffect.cs">
+      <Link>101_FilterFx\Convolution\ColorDiffEffect.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\convolution\ConvolutionRenderer.cs">
+      <Link>101_FilterFx\Convolution\ConvolutionRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\convolution\EdgeDetectRenderer.cs">
+      <Link>101_FilterFx\Convolution\EdgeDetectRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\convolution\EmbossRenderer.cs">
+      <Link>101_FilterFx\Convolution\EmbossRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\convolution\GaussainBlurRenderer.cs">
+      <Link>101_FilterFx\Convolution\GaussainBlurRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\convolution\ReliefEffectRenderer.cs">
+      <Link>101_FilterFx\Convolution\ReliefEffectRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\EffectRendererBase.cs">
+      <Link>101_FilterFx\EffectRendererBase.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\histogram\HistogramRenderer.cs">
+      <Link>101_FilterFx\Histogram\HistogramRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\histogram\MedianRenderer.cs">
+      <Link>101_FilterFx\Histogram\MedianRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\histogram\OutlineRenderer.cs">
+      <Link>101_FilterFx\Histogram\OutlineRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\histogram\ReduceNoiseRenderer.cs">
+      <Link>101_FilterFx\Histogram\ReduceNoiseRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\histogram\SharpenRenderer.cs">
+      <Link>101_FilterFx\Histogram\SharpenRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\histogram\UnfocusRenderer.cs">
+      <Link>101_FilterFx\Histogram\UnfocusRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\levels\AutoLevelRenderer.cs">
+      <Link>101_FilterFx\Levels\AutoLevelRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\levels\SepiaRenderer.cs">
+      <Link>101_FilterFx\Levels\SepiaRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\material\BlugeEffectRenderer.cs">
+      <Link>101_FilterFx\Material\BlugeEffectRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\material\CloudEffect.cs">
+      <Link>101_FilterFx\Material\CloudEffect.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\material\GlowRenderer.cs">
+      <Link>101_FilterFx\Material\GlowRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\material\OilPaintRenderer.cs">
+      <Link>101_FilterFx\Material\OilPaintRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\material\PencilSketchRenderer.cs">
+      <Link>101_FilterFx\Material\PencilSketchRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\material\TileRenderer.cs">
+      <Link>101_FilterFx\Material\TileRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\material\TwistRenderer.cs">
+      <Link>101_FilterFx\Material\TwistRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\others\InkSketchRenderer.cs">
+      <Link>101_FilterFx\Others\InkSketchRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\others\JulianFractalRenderer.cs">
+      <Link>101_FilterFx\Others\JulianFractalRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\others\PerlinNoise2D.cs">
+      <Link>101_FilterFx\Others\PerlinNoise2D.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\others\RotateAndZoomRenderer.cs">
+      <Link>101_FilterFx\Others\RotateAndZoomRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\pixelops\HueAndSatRenderer.cs">
+      <Link>101_FilterFx\PixelOps\HueAndSatRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\pixelops\InvertColorRenderer.cs">
+      <Link>101_FilterFx\PixelOps\InvertColorRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\pixelops\PosterizeRenderer.cs">
+      <Link>101_FilterFx\PixelOps\PosterizeRenderer.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingFilters\PdnSharedProject\PlatformMemory.cs">
+      <Link>101_FilterFx\PlatformMemory.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\wrap\PolarInversionEffect.cs">
+      <Link>101_FilterFx\Wrap\PolarInversionEffect.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\wrap\WarpEdgeBehavior.cs">
+      <Link>101_FilterFx\Wrap\WarpEdgeBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingfilters\pdnsharedproject\wrap\WrapBasedEffRenderer.cs">
+      <Link>101_FilterFx\Wrap\WrapBasedEffRenderer.cs</Link>
+    </Compile>
+    <Compile Include="3_Filter\InternalBrightnessAndContrastAdjustment.cs" />
+    <Compile Include="3_Filter\SharpenFilter.cs" />
     <Compile Include="RenderSurface\AggRenderSurface.cs" />
     <Compile Include="RenderSurface\AggRenderSurface_RenderImages.cs" />
     <Compile Include="DrawBoard\AggPainter.cs" />

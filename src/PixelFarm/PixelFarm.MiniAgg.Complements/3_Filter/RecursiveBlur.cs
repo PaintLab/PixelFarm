@@ -390,6 +390,10 @@ namespace PixelFarm.Agg.Imaging
             int width = img.Width;
             int w4 = img.Width * 4;
             int height = img.Height;
+
+            //TODO: review here again
+            //need to copy ?
+
             int[] srcBuffer = new int[width * height];
             ImageReaderWriterBase.CopySubBufferToInt32Array(img, 0, 0, width, height, srcBuffer);
             StackBlurARGB.FastBlur32ARGB(srcBuffer, srcBuffer, img.Width, img.Height, radius);

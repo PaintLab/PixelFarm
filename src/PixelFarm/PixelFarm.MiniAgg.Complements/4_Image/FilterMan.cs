@@ -13,11 +13,8 @@
 // warranty, and with no claim as to its suitability for any purpose.
 //
 //----------------------------------------------------------------------------
-//
-// Class StringPrinter.cs
-// 
-// Class to output the vertex source of a string as a run of glyphs.
-//----------------------------------------------------------------------------
+
+
 
 using PixelFarm.Agg.Imaging;
 namespace PixelFarm.Agg
@@ -33,6 +30,9 @@ namespace PixelFarm.Agg
     {
         StackBlur stackBlur;
         RecursiveBlur m_recursive_blur;
+
+        ShapenFilterPdn pdnSharpen;
+
         public void DoStackBlur(ImageReaderWriterBase readerWriter, int radius)
         {
             if (stackBlur == null)
@@ -49,5 +49,14 @@ namespace PixelFarm.Agg
             }
             m_recursive_blur.Blur(readerWriter, radius);
         }
+        public void DoSharpen(ImageReaderWriterBase readerWriter, int radius)
+        {
+            if (pdnSharpen == null)
+            {
+                pdnSharpen = new ShapenFilterPdn();
+            }
+            pdnSharpen.Sharpen(readerWriter, radius);
+        }
+
     }
 }
