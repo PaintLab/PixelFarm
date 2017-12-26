@@ -11,7 +11,7 @@ namespace PixelFarm.Agg.Imaging
     {
         public void Sharpen(IImageReaderWriter img, double radius)
         {
-            return;
+           
             byte[] buffer = img.GetBuffer();
             byte[] output = new byte[buffer.Length];
             //byte[] output2 = new byte[buffer.Length];

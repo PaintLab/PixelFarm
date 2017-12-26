@@ -119,7 +119,10 @@ namespace PixelFarm.Agg
             int imageHeight = destImage.Height;
             pixelsChecked = new bool[destImage.Width * destImage.Height];
             int startColorBufferOffset = destImage.GetBufferOffsetXY(x, y);
-            fillRule.SetStartColor(Drawing.Color.FromArgb(destImage.GetBuffer()[startColorBufferOffset + 2], destImage.GetBuffer()[startColorBufferOffset + 1], destImage.GetBuffer()[startColorBufferOffset]));
+            fillRule.SetStartColor(Drawing.Color.FromArgb(
+                destBuffer[startColorBufferOffset + 2],
+                destBuffer[startColorBufferOffset + 1],
+                destBuffer[startColorBufferOffset]));
             LinearFill(x, y);
             while (ranges.Count > 0)
             {
