@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 
   
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     static class BlendResources
     { 

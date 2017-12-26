@@ -6,8 +6,8 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-using PaintDotNet;
-using PaintDotNet.Effects;
+using PixelFarm.Drawing;
+using PixelFarm.Drawing.Effects;
 
 namespace TestPdnEffect
 {
@@ -26,14 +26,14 @@ namespace TestPdnEffect
 
             Bitmap bmp = new Bitmap("d:\\WImageTest\\lion1.png");
 
-            var bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
+            var bmpData = bmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
             System.Drawing.Imaging.ImageLockMode.ReadOnly,
             System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             int w = bmp.Width;
             int h = bmp.Height;
             int stride = bmpData.Stride;
             int bufferLen = w * h;
-            int[] srcBmpBuffer = new int[bufferLen]; 
+            int[] srcBmpBuffer = new int[bufferLen];
             int[] destBmpBuffer = new int[bufferLen];
 
             System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, srcBmpBuffer, 0, srcBmpBuffer.Length);
@@ -71,7 +71,7 @@ namespace TestPdnEffect
 
             //save to output
             Bitmap outputBmp = new Bitmap(bmp.Width, bmp.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            var bmpData2 = outputBmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
+            var bmpData2 = outputBmp.LockBits(new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height),
                 System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             System.Runtime.InteropServices.Marshal.Copy(destBmpBuffer, 0, bmpData2.Scan0, destBmpBuffer.Length);
             outputBmp.UnlockBits(bmpData2);

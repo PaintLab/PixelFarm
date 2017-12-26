@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 using System;
 using PixelFarm.Drawing;
-namespace PaintDotNet.Effects
+namespace PixelFarm.Drawing.Effects
 {
     public class RotateAndZoomRenderer
     {
@@ -188,7 +188,7 @@ namespace PaintDotNet.Effects
                                     }
                                     else
                                     {
-                                        *dstPtr = PaintDotNet.UserBlendOps.NormalBlendOp.ApplyStatic(*srcPtr, c);
+                                        *dstPtr = PixelFarm.Drawing.UserBlendOps.NormalBlendOp.ApplyStatic(*srcPtr, c);
                                     }
                                 }
                             }

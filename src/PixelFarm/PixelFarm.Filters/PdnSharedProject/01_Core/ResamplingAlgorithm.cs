@@ -9,7 +9,7 @@
 
 using System;
 
-namespace PaintDotNet
+namespace PixelFarm.Drawing
 {
     public enum ResamplingAlgorithm
     {
