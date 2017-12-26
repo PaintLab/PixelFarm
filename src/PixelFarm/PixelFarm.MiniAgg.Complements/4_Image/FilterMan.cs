@@ -30,7 +30,9 @@ namespace PixelFarm.Agg
     {
         StackBlur stackBlur;
         RecursiveBlur m_recursive_blur;
-        SharpenFilterARGB sharpen;
+
+        ShapenFilterPdn pdnSharpen;
+
         public void DoStackBlur(ImageReaderWriterBase readerWriter, int radius)
         {
             if (stackBlur == null)
@@ -49,12 +51,11 @@ namespace PixelFarm.Agg
         }
         public void DoSharpen(ImageReaderWriterBase readerWriter, int radius)
         {
-            if (sharpen == null)
+            if (pdnSharpen == null)
             {
-                sharpen = new SharpenFilterARGB();
+                pdnSharpen = new ShapenFilterPdn();
             }
-            sharpen.Sharpen(readerWriter, radius);
-
+            pdnSharpen.Sharpen(readerWriter, radius);
         }
 
     }

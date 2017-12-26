@@ -203,7 +203,7 @@
       <Link>101_FilterFx\PixelOps\PosterizeRenderer.cs</Link>
     </Compile>
     <Compile Include="..\BackEnd.DrawingFilters\PdnSharedProject\PlatformMemory.cs">
-      <Link>9_FilterFx\PlatformMemory.cs</Link>
+      <Link>101_FilterFx\PlatformMemory.cs</Link>
     </Compile>
     <Compile Include="..\backend.drawingfilters\pdnsharedproject\wrap\PolarInversionEffect.cs">
       <Link>101_FilterFx\Wrap\PolarInversionEffect.cs</Link>

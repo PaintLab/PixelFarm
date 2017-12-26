@@ -92,8 +92,8 @@ namespace Typography.Rendering
                 painter.Fill(glyphVxs);
                 //apply sharpen filter
 
-               // painter.DoFilter(new RectInt(0, h, w, 0), 2);
-                
+                //painter.DoFilter(new RectInt(0, h, w, 0), 2);
+                painter.DoFilter(new RectInt(0, h, w, 0), 2);
                 //
                 var glyphImage = new GlyphImage(w / 3, h);
                 glyphImage.TextureOffsetX = dx;
