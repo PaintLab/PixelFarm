@@ -34,6 +34,45 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBuffer.cs">
+      <Link>100_DrawingBufferExt\BitmapBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\AntialiasingExtensions.cs">
+      <Link>100_DrawingBufferExt\AntialiasingExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\BaseExtensions.cs">
+      <Link>100_DrawingBufferExt\BaseExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\BlitExtensions.cs">
+      <Link>100_DrawingBufferExt\BlitExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\ConvertExtensions.cs">
+      <Link>100_DrawingBufferExt\ConvertExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\FillExtensions.cs">
+      <Link>100_DrawingBufferExt\FillExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\FilterExtensions.cs">
+      <Link>100_DrawingBufferExt\FilterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\LineExtensions.cs">
+      <Link>100_DrawingBufferExt\LineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\ShapeExtensions.cs">
+      <Link>100_DrawingBufferExt\ShapeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\SplineExtensions.cs">
+      <Link>100_DrawingBufferExt\SplineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferExtensions\TransformationExtensions.cs">
+      <Link>100_DrawingBufferExt\TransformationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapBufferFactory.cs">
+      <Link>100_DrawingBufferExt\BitmapBufferFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapContext.cs">
+      <Link>100_DrawingBufferExt\BitmapContext.cs</Link>
+    </Compile>
     <Compile Include="02_PixelBuffer\ChildImage.cs" />
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="02_PixelBuffer\ColorRGBAf.cs" />
@@ -94,6 +133,12 @@
       <Project>{fde310c7-9c58-47f9-a6af-3f518613bc4b}</Project>
       <Name>PixelFarm.DrawingCore</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="101_FilterFx\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
