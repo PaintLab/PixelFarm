@@ -78,7 +78,7 @@ namespace PixelFarm.Agg.Imaging
             {
                 _sourceImage.ReplaceBuffer(newbuffer);
             }
-          
+
         }
 
         void AttachBuffer(byte[] buffer,
@@ -89,7 +89,8 @@ namespace PixelFarm.Agg.Imaging
           int bitDepth,
           int distanceInBytesBetweenPixelsInclusive)
         {
-            m_ByteBuffer = null;
+
+            SetBufferToNull();
             SetDimmensionAndFormat(width, height, strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
             SetBuffer(buffer, bufferOffset);
@@ -117,7 +118,7 @@ namespace PixelFarm.Agg.Imaging
         bool Attach(IImageReaderWriter sourceImage, int x1, int y1, int x2, int y2)
         {
             _sourceImage = sourceImage;
-            m_ByteBuffer = null;
+            SetBufferToNull();
             if (x1 > x2 || y1 > y2)
             {
                 throw new Exception("You need to have your x1 and y1 be the lower left corner of your sub image.");
@@ -143,7 +144,8 @@ namespace PixelFarm.Agg.Imaging
             {
                 throw new Exception("Your buffer does not have enough room it it for your height and strideInBytes.");
             }
-            this.m_ByteBuffer = byteBuffer;
+
+            SetBuffer(byteBuffer);
             startBufferPixelAt = bufferOffset;
             if (strideInBytes < 0)
             {

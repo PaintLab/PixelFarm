@@ -140,6 +140,7 @@ namespace PixelFarm.Agg.Imaging
             ISpanInterpolator spanInterpolator = base.Interpolator;
             int bufferIndex;
             byte[] srcBuffer = srcRW.GetBuffer();
+            //TODO: review here
             if (spanInterpolator.GetType() == typeof(PixelFarm.Agg.Transform.SpanInterpolatorLinear)
              && ((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.Agg.Transform.Affine)
              && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity())

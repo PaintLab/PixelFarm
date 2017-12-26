@@ -35,7 +35,7 @@ namespace PixelFarm.Agg
         int[] yTableArray;
         int[] xTableArray;
         //--------------------------------------------
-        protected byte[] m_ByteBuffer;
+        byte[] m_ByteBuffer;
 
         //--------------------------------------------
         // Pointer to first pixel depending on strideInBytes and image position
@@ -55,6 +55,16 @@ namespace PixelFarm.Agg
         {
             return m_ByteBuffer;
         }
+
+        protected void SetBuffer(byte[] byteBuffer)
+        {
+            m_ByteBuffer = byteBuffer;
+        }
+        public TempMemPtr GetPixelBuffer()
+        {
+            return new TempMemPtr(m_ByteBuffer);
+        }
+
         public abstract void ReplaceBuffer(byte[] newbuffer);
 
         /// <summary>
@@ -95,6 +105,10 @@ namespace PixelFarm.Agg
             SetRecieveBlender(recieveBlender);
             //
             this.m_ByteBuffer = imgbuffer;
+        }
+        protected void SetBufferToNull()
+        {
+            this.m_ByteBuffer = null;
         }
 
         protected void SetDimmensionAndFormat(int width, int height,
