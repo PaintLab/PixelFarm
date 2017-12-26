@@ -65,9 +65,6 @@ namespace PixelFarm.Agg
         SingleLineBuffer _grayScaleLine = new SingleLineBuffer();
         LcdDistributionLut _currentLcdLut = null;
 
-        ////----------------
-        //InternalBrightnessAndContrastAdjustment _brightnessAndContrast = new InternalBrightnessAndContrastAdjustment();
-
 
         internal ScanlineSubPixelRasterizer()
         {
@@ -84,17 +81,7 @@ namespace PixelFarm.Agg
                 _currentLcdLut = value;
             }
         }
-        //public int ContrastAdjustmentValue
-        //{
-        //    get { return _brightnessAndContrast.Contrast; }
-        //    set { _brightnessAndContrast.Contrast = value; }
 
-        //}
-        //public int BrightnessAdjustmentValue
-        //{
-        //    get { return _brightnessAndContrast.Brightness; }
-        //    set { _brightnessAndContrast.Brightness = value; } 
-        //}
 
         public void RenderScanlines(
             IImageReaderWriter dest,
@@ -107,11 +94,15 @@ namespace PixelFarm.Agg
             int dbugMinScanlineCount = 0;
 #endif
             //----------------------------------------------------------------------------
+            //TEST, apply filter to a scanline here?
             //_brightnessAndContrast.UpdateIfNeed(); //update values if need
             //----------------------------------------------------------------------------
-
+            //
+            //IMPORTANT
             //1. ensure single line buffer width
-            _grayScaleLine.EnsureLineStride(dest.Width + 4);
+            //since to src width is extended 3 times => so we must ensure that our single gray-scale line buffer is wider enough
+            //
+            _grayScaleLine.EnsureLineStride(dest.Width * 3 + 4);
             //2. setup vars
             byte[] dest_buffer = dest.GetBuffer();
             int dest_stride = this._destImgStride = dest.Stride;

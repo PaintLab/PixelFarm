@@ -22,7 +22,7 @@
 
 //#include "agg_clip_liang_barsky.h"
 
- 
+
 namespace PixelFarm.Agg
 {
     partial class ScanlineRasterizer
@@ -46,17 +46,49 @@ namespace PixelFarm.Agg
             {
                 return clipBox;
             }
+
             public void SetClipBox(int x1, int y1, int x2, int y2)
             {
                 clipBox = new RectInt(x1, y1, x2, y2);
                 clipBox.Normalize();
                 m_clipping = true;
             }
+
+
+            bool _isInSubPixelExpandWidthMode = false; //default
+
+            /// <summary>
+            /// when we render in subpixel rendering, we extend a row length 3 times (expand RGB)
+            /// </summary>
+            /// <param name="value"></param>
+            public void SetClipBoxForSubPixelRenderering(bool value)
+            {
+                //-----------------------------------------------------------------------------
+                //if we don't want to expand our img buffer 3 times (larger than normal)
+                //we should use this method to extend only a cliper box's width x3                 
+                //-----------------------------------------------------------------------------
+
+                //special method for our need
+                if (value != _isInSubPixelExpandWidthMode)
+                {
+                    //changed
+                    if (value)
+                    {
+                        clipBox = new RectInt(clipBox.Left, clipBox.Bottom, clipBox.Left + (clipBox.Width * 3), clipBox.Height);
+                    }
+                    else
+                    {
+                        //set back
+                        clipBox = new RectInt(clipBox.Left, clipBox.Bottom, clipBox.Left + (clipBox.Width / 3), clipBox.Height);
+                    }
+                    _isInSubPixelExpandWidthMode = value;
+                }
+            }
+
             public void ResetClipping()
             {
                 m_clipping = false;
             }
-
             public void MoveTo(int x1, int y1)
             {
                 m_x1 = x1;
