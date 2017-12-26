@@ -30,7 +30,7 @@
 // THE SOFTWARE. 
 //
 
-
+//Apache2, 2017, WinterDev
 namespace PixelFarm.Drawing.Effects
 {
     public abstract class WrapBasedRenderer : EffectRendererBase

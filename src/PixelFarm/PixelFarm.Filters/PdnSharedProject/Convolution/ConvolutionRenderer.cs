@@ -6,7 +6,9 @@
 // details.                                                                    //
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
+//Apache2, 2017, WinterDev
 using System;
+using System.Collections;
 namespace PixelFarm.Drawing.Effects
 {
     class ConvolutionRenderer

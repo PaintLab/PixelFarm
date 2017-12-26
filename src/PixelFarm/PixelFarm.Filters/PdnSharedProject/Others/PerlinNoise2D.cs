@@ -33,7 +33,7 @@
 // Parts adapted to 2D from perlin's reference 3D implementation
 // http://mrl.nyu.edu/~perlin/noise/
 
-
+//Apache2, 2017, WinterDev
 using System;
 
 namespace PixelFarm.Drawing.Effects

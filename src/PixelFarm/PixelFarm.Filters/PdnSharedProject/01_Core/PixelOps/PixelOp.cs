@@ -6,7 +6,7 @@
 // details.                                                                    //
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
-
+//Apache2, 2017, WinterDev
 using System;
 namespace PixelFarm.Drawing
 {

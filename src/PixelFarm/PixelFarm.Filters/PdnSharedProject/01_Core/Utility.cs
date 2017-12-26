@@ -7,14 +7,14 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 
+//Apache2, 2017, WinterDev
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using PixelFarm.Drawing;
+
 using System.IO;
 
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 namespace PixelFarm.Drawing
 {
@@ -832,15 +832,15 @@ namespace PixelFarm.Drawing
             return reversed;
         }
 
-        public static void SerializeObjectToStream(object graph, Stream stream)
-        {
-            new BinaryFormatter().Serialize(stream, graph);
-        }
+        //public static void SerializeObjectToStream(object graph, Stream stream)
+        //{
+        //    new BinaryFormatter().Serialize(stream, graph);
+        //}
 
-        public static object DeserializeObjectFromStream(Stream stream)
-        {
-            return new BinaryFormatter().Deserialize(stream);
-        }
+        //public static object DeserializeObjectFromStream(Stream stream)
+        //{
+        //    return new BinaryFormatter().Deserialize(stream);
+        //}
 
         /// <summary>
         /// Allows you to find the bounding box for a "region" that is described as an

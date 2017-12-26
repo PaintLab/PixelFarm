@@ -6,7 +6,7 @@
 // details.                                                                    //
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
-
+//Apache2, 2017, WinterDev
 namespace PixelFarm.Drawing.Effects
 {
     public class PosterizeRenderer : EffectRendererBase

@@ -6,7 +6,7 @@
 // details.                                                                    //
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
-using System;
+//Apache2, 2017, WinterDev
 namespace PixelFarm.Drawing.Effects
 {
     public class GlowRenderer : EffectRendererBase

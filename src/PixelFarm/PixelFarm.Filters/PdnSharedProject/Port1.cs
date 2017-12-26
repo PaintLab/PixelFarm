@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-
+//Apache2, 2017, WinterDev
 namespace PixelFarm.Drawing
 {
 
@@ -1585,7 +1585,7 @@ namespace PixelFarm.Drawing
     }
 }
 
-
+ 
 //for .NET 2.0 
 namespace System
 {

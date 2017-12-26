@@ -7,7 +7,7 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 
-
+//Apache2, 2017, WinterDev
 namespace PixelFarm.Drawing
 {
     public enum ResamplingAlgorithm
