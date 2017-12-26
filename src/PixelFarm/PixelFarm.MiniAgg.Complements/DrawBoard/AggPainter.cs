@@ -43,13 +43,13 @@ namespace PixelFarm.Agg
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
 
-        public AggPainter(AggRenderSurface aggRdsf)
+        public AggPainter(AggRenderSurface aggsx)
         {
-            this._aggsx = aggRdsf;
+            this._aggsx = aggsx;
             this.sclineRas = _aggsx.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
-            this.scline = aggRdsf.ScanlinePacked8;
-            this.sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
+            this.scline = aggsx.ScanlinePacked8;
+            this.sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
         }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
@@ -161,7 +161,8 @@ namespace PixelFarm.Agg
             //coordinate system
             if (this.RenderQuality == RenderQualtity.Fast)
             {
-                //BitmapBuffer bmpBuffer= new BitmapBuffer()
+
+                BitmapBuffer bmpBuffer= new BitmapBuffer()
                 //BitmapBufferExtensions.DrawLine()
             }
 
