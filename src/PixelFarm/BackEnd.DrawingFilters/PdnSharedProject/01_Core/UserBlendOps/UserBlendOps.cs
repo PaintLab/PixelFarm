@@ -51,10 +51,10 @@ namespace PixelFarm.Drawing
             return types.ToArray();
         }
 
-        public static string GetBlendOpFriendlyName(Type opType)
-        {
-            return PixelUtils.GetStaticName(opType);
-        }
+        //public static string GetBlendOpFriendlyName(Type opType)
+        //{
+        //    return PixelUtils.GetStaticName(opType);
+        //}
 
         public static UserBlendOp CreateBlendOp(Type opType)
         {

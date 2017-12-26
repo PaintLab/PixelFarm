@@ -1,8 +1,12 @@
-﻿using System;
+﻿//Apache2, 2017, WinterDev
+//this file is not merged on merged project.
+//
+using System;
 using System.Runtime.InteropServices;
-//Apache2, 2017, WinterDev
+
 namespace PixelFarm.Drawing
 {
+    
 
     public class StillNotPortedException : Exception { }
 
