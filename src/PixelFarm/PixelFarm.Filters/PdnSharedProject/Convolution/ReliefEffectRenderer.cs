@@ -7,7 +7,7 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 using System;
-using PixelFarm.Drawing;
+ 
 namespace PixelFarm.Drawing.Effects
 {
     public class ReliefEffectRenderer : ColorDiffEffectRenderer

@@ -30,7 +30,7 @@
 // THE SOFTWARE. 
 //
 
-using PixelFarm.Drawing;
+
 namespace PixelFarm.Drawing.Effects
 {
     public abstract class WrapBasedRenderer : EffectRendererBase
@@ -64,7 +64,7 @@ namespace PixelFarm.Drawing.Effects
             this.defaultRadius = defaultRadius;
             this.defaultRadius2 = defaultRadius2;
             this.defaultRadiusR = defaultRadiusR;
-            
+
         }
         public double Width { get { return width; } }
         public double Height { get { return height; } }

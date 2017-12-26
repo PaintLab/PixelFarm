@@ -35,8 +35,6 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PixelFarm.Drawing.Effects
 {
@@ -50,7 +48,7 @@ namespace PixelFarm.Drawing.Effects
 
         private static readonly int[] permuteLookup;
 
-        private static readonly int[] permutationTable = 
+        private static readonly int[] permutationTable =
             new int[]
             {
                 151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 7,
@@ -129,7 +127,7 @@ namespace PixelFarm.Drawing.Effects
                 if (amplitude < 0.001)
                 {
                     break;
-                }                
+                }
 
                 // setup for next octave
                 frequency += frequency;
@@ -137,7 +135,7 @@ namespace PixelFarm.Drawing.Effects
 
                 // offset the coordinates by prime numbers, with prime difference.
                 // reduces correlation between octaves.
-                x = xr + 499; 
+                x = xr + 499;
                 y = yr + 506;
             }
 
@@ -158,9 +156,9 @@ namespace PixelFarm.Drawing.Effects
             return (((h & 1) == 0) ? u : -u) + (((h & 2) == 0) ? v : -v);
         }
 
-        private static double Lerp(double a, double b, double t) 
-        { 
-            return a + t * (b - a); 
+        private static double Lerp(double a, double b, double t)
+        {
+            return a + t * (b - a);
         }
 
         private static double Noise(double x, double y, byte seed)
@@ -168,11 +166,11 @@ namespace PixelFarm.Drawing.Effects
             double xf = Math.Floor(x);
             double yf = Math.Floor(y);
 
-            int ix = (int)xf & 255; 
+            int ix = (int)xf & 255;
             int iy = (int)yf & 255;
 
-            x -= xf; 
-            y -= yf; 
+            x -= xf;
+            y -= yf;
 
             double u = Fade(x);
             double v = Fade(y);

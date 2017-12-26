@@ -6,8 +6,8 @@
 // details.                                                                    //
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
-using System;
-using PixelFarm.Drawing;
+
+
 namespace PixelFarm.Drawing.Effects
 {
     public class SepiaRenderer : EffectRendererBase

@@ -9,7 +9,6 @@
 
 
 using System;
-using PixelFarm.Drawing;
 
 namespace PixelFarm.Drawing
 {
@@ -70,7 +69,7 @@ namespace PixelFarm.Drawing
     /// and still have the ability to use GDI+ for drawing and rendering where
     /// appropriate.
     /// </summary>
-    
+
     public sealed class Surface : IDisposable
     {
 
@@ -1255,7 +1254,7 @@ namespace PixelFarm.Drawing
         {
             new UnaryPixelOps.Constant(color).Apply(this, this.Bounds);
         }
-         
+
         /// <summary>
         /// Clears the given rectangular region within the surface to the given color value.
         /// </summary>
@@ -1272,7 +1271,7 @@ namespace PixelFarm.Drawing
 
             new UnaryPixelOps.Constant(color).Apply(this, rect);
         }
-         
+
         public void ClearWithCheckboardPattern()
         {
             unsafe
@@ -1963,7 +1962,7 @@ namespace PixelFarm.Drawing
                     throw new Exception("algorithm");
             }
         }
-         
+
 
         /// <summary>
         /// Releases all resources held by this Surface object.

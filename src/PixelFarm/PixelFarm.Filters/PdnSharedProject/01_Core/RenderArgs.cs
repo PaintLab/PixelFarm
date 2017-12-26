@@ -8,7 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using PixelFarm.Drawing;
 
 namespace PixelFarm.Drawing
 {
@@ -136,7 +135,7 @@ namespace PixelFarm.Drawing
                 return this.Surface.Size;
             }
         }
-        
+
         /// <summary>
         /// Gets the width of the associated Surface object.
         /// </summary>

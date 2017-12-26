@@ -8,7 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using PixelFarm.Drawing;
 
 namespace PixelFarm.Drawing
 {
@@ -17,7 +16,7 @@ namespace PixelFarm.Drawing
     /// if desired). This can then be used to retrieve percentile, average, peak,
     /// and distribution information.
     /// </summary>
-    public sealed class HistogramLuminosity 
+    public sealed class HistogramLuminosity
         : Histogram
     {
         public HistogramLuminosity()
@@ -26,13 +25,13 @@ namespace PixelFarm.Drawing
             this.visualColors = new ColorBgra[] { ColorBgra.Black };
         }
 
-        public override ColorBgra GetMeanColor() 
+        public override ColorBgra GetMeanColor()
         {
             float[] mean = GetMean();
             return ColorBgra.FromBgr((byte)(mean[0] + 0.5f), (byte)(mean[0] + 0.5f), (byte)(mean[0] + 0.5f));
         }
 
-        public override ColorBgra GetPercentileColor(float fraction) 
+        public override ColorBgra GetPercentileColor(float fraction)
         {
             int[] perc = GetPercentile(fraction);
             return ColorBgra.FromBgr((byte)(perc[0]), (byte)(perc[0]), (byte)(perc[0]));
@@ -54,7 +53,7 @@ namespace PixelFarm.Drawing
             }
         }
 
-        public UnaryPixelOps.Level MakeLevelsAuto() 
+        public UnaryPixelOps.Level MakeLevelsAuto()
         {
             ColorBgra lo, md, hi;
 

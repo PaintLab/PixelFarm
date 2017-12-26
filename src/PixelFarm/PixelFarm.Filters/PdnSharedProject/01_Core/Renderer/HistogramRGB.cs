@@ -8,8 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using PixelFarm.Drawing;
-
 namespace PixelFarm.Drawing
 {
     /// <summary>
@@ -17,26 +15,26 @@ namespace PixelFarm.Drawing
     /// if desired). This can then be used to retrieve percentile, average, peak,
     /// and distribution information.
     /// </summary>
-    public sealed class HistogramRgb 
+    public sealed class HistogramRgb
         : Histogram
     {
         public HistogramRgb()
             : base(3, 256)
         {
-            visualColors = new ColorBgra[]{     
+            visualColors = new ColorBgra[]{
                                               ColorBgra.Blue,
                                               ColorBgra.Green,
                                               ColorBgra.Red
                                           };
         }
 
-        public override ColorBgra GetMeanColor() 
+        public override ColorBgra GetMeanColor()
         {
             float[] mean = GetMean();
             return ColorBgra.FromBgr((byte)(mean[0] + 0.5f), (byte)(mean[1] + 0.5f), (byte)(mean[2] + 0.5f));
         }
 
-        public override ColorBgra GetPercentileColor(float fraction) 
+        public override ColorBgra GetPercentileColor(float fraction)
         {
             int[] perc = GetPercentile(fraction);
 
@@ -64,7 +62,7 @@ namespace PixelFarm.Drawing
 
         public void SetFromLeveledHistogram(HistogramRgb inputHistogram, UnaryPixelOps.Level upo)
         {
-            if (inputHistogram == null || upo == null) 
+            if (inputHistogram == null || upo == null)
             {
                 return;
             }
@@ -89,11 +87,11 @@ namespace PixelFarm.Drawing
                         || after[c] < upo.ColorOutLow[c]
                         || (int)Math.Floor(before[c]) < 0
                         || (int)Math.Ceiling(before[c]) > 255
-                        || float.IsNaN(before[c])) 
+                        || float.IsNaN(before[c]))
                     {
                         channelHistogramOutput[v] = 0;
                     }
-                    else if (before[c] <= upo.ColorInLow[c]) 
+                    else if (before[c] <= upo.ColorInLow[c])
                     {
                         channelHistogramOutput[v] = 0;
 
@@ -101,7 +99,7 @@ namespace PixelFarm.Drawing
                         {
                             channelHistogramOutput[v] += channelHistogramInput[i];
                         }
-                    } 
+                    }
                     else if (before[c] >= upo.ColorInHigh[c])
                     {
                         channelHistogramOutput[v] = 0;
@@ -124,7 +122,7 @@ namespace PixelFarm.Drawing
             OnHistogramUpdated();
         }
 
-        public UnaryPixelOps.Level MakeLevelsAuto() 
+        public UnaryPixelOps.Level MakeLevelsAuto()
         {
             ColorBgra lo = GetPercentileColor(0.005f);
             ColorBgra md = GetMeanColor();

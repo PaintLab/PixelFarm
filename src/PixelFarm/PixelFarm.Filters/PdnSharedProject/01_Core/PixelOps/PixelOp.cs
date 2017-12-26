@@ -8,14 +8,11 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using PixelFarm.Drawing;
-
-
 namespace PixelFarm.Drawing
 {
 
 
-    
+
     public unsafe abstract class PixelOp
         : IPixelOp
     {

@@ -8,8 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using PixelFarm.Drawing;
-
 namespace PixelFarm.Drawing
 {
     public static class GradientRenderers

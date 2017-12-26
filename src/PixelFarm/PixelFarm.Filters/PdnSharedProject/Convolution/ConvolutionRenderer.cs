@@ -7,9 +7,6 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using PixelFarm.Drawing;
 namespace PixelFarm.Drawing.Effects
 {
     class ConvolutionRenderer

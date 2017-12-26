@@ -7,7 +7,7 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 using System;
-using PixelFarm.Drawing;
+ 
 namespace PixelFarm.Drawing.Effects
 {
     public class EdgeDetectRenderer : ColorDiffEffectRenderer
@@ -16,7 +16,7 @@ namespace PixelFarm.Drawing.Effects
         public double Angle
         {
             get { return angle; }
-        } 
+        }
         public void SetAngle(double a)
         {
             this.angle = a;

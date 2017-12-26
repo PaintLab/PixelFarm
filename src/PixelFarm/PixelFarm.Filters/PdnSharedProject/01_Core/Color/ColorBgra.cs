@@ -8,7 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using PixelFarm.Drawing;
 using System.Runtime.InteropServices;
 
 namespace PixelFarm.Drawing
@@ -18,7 +17,7 @@ namespace PixelFarm.Drawing
     /// always laid out in BGRA order.
     /// Generally used with the Surface class.
     /// </summary>
-    
+
     [StructLayout(LayoutKind.Explicit)]
     public struct ColorBgra
     {

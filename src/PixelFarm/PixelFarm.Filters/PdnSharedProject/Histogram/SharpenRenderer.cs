@@ -6,8 +6,7 @@
 // details.                                                                    //
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
-using System;
-using PixelFarm.Drawing;
+
 namespace PixelFarm.Drawing.Effects
 {
     public class SharpenRenderer : HistogramRenderer
@@ -21,7 +20,7 @@ namespace PixelFarm.Drawing.Effects
                 amount = value;
             }
         }
-        public override  void Render(Surface src, Surface dest, Rectangle[] rois, int startIndex, int length)
+        public override void Render(Surface src, Surface dest, Rectangle[] rois, int startIndex, int length)
         {
             foreach (Rectangle rect in rois)
             {

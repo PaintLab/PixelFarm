@@ -8,10 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 
-using System;
-using PixelFarm.Drawing;
-
-
+using System; 
 namespace PixelFarm.Drawing
 {
     /// <summary>

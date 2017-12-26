@@ -7,9 +7,8 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 
-//using using PixelFarm.Drawing.SystemLayer;
+
 using System;
-using PixelFarm.Drawing;
 
 namespace PixelFarm.Drawing
 {
@@ -22,7 +21,7 @@ namespace PixelFarm.Drawing
         {
         }
 
-        
+
         /// <summary>
         /// F(lhs, rhs) = rhs.A + lhs.R,g,b
         /// </summary>
@@ -52,7 +51,7 @@ namespace PixelFarm.Drawing
         /// <summary>
         /// result(lhs,rhs) = rhs
         /// </summary>
-        
+
         public class AssignFromRhs
             : BinaryPixelOp
         {
@@ -79,7 +78,7 @@ namespace PixelFarm.Drawing
         /// <summary>
         /// result(lhs,rhs) = lhs
         /// </summary>
-        
+
         public class AssignFromLhs
             : BinaryPixelOp
         {
@@ -93,7 +92,7 @@ namespace PixelFarm.Drawing
             }
         }
 
-        
+
         public class Swap
             : BinaryPixelOp
         {

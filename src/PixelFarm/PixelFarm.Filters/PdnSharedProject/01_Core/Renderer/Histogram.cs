@@ -8,7 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using PixelFarm.Drawing;
 
 namespace PixelFarm.Drawing
 {
@@ -40,7 +39,7 @@ namespace PixelFarm.Drawing
                 }
             }
         }
-     
+
         public int Channels
         {
             get
@@ -48,7 +47,7 @@ namespace PixelFarm.Drawing
                 return this.histogram.Length;
             }
         }
-     
+
         public int Entries
         {
             get
@@ -82,12 +81,12 @@ namespace PixelFarm.Drawing
             return visualColors[channel];
         }
 
-        public long GetOccurrences(int channel, int val) 
+        public long GetOccurrences(int channel, int val)
         {
             return histogram[channel][val];
         }
 
-        public long GetMax() 
+        public long GetMax()
         {
             long max = -1;
 
@@ -101,7 +100,7 @@ namespace PixelFarm.Drawing
                     }
                 }
             }
-            
+
             return max;
         }
 
@@ -120,7 +119,7 @@ namespace PixelFarm.Drawing
             return max;
         }
 
-        public float[] GetMean() 
+        public float[] GetMean()
         {
             float[] ret = new float[Channels];
 
@@ -149,7 +148,7 @@ namespace PixelFarm.Drawing
             return ret;
         }
 
-        public int[] GetPercentile(float fraction) 
+        public int[] GetPercentile(float fraction)
         {
             int[] ret = new int[Channels];
 
@@ -159,7 +158,7 @@ namespace PixelFarm.Drawing
                 long integral = 0;
                 long sum = 0;
 
-                for (int j = 0; j < channelHistogram.Length; j++) 
+                for (int j = 0; j < channelHistogram.Length; j++)
                 {
                     sum += channelHistogram[j];
                 }
@@ -168,7 +167,7 @@ namespace PixelFarm.Drawing
                 {
                     integral += channelHistogram[j];
 
-                    if (integral > sum * fraction) 
+                    if (integral > sum * fraction)
                     {
                         ret[channel] = j;
                         break;
