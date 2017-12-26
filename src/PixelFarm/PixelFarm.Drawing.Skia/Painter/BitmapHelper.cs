@@ -20,7 +20,7 @@ namespace PixelFarm.Drawing.Skia
             System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
                hBmpScan0, rawBuffer.Length);
         }
-         
+
         /////////////////////////////////////////////////////////////////////////////////////
 
         public static void CopyToGdiPlusBitmapSameSize(
@@ -38,7 +38,7 @@ namespace PixelFarm.Drawing.Skia
                 //{
                 int h = skBmp.Height;
                 int w = skBmp.Width;
-                
+
 
                 //BitmapData bitmapData1 = bitmap.LockBits(
                 //          new Rectangle(0, 0,
@@ -49,25 +49,29 @@ namespace PixelFarm.Drawing.Skia
                 skBmp.LockPixels();
                 IntPtr scan0 = skBmp.GetPixels();
                 int stride = actualImage.Stride;
-                byte[] srcBuffer = ActualImage.GetBuffer(actualImage);
+                //byte[] srcBuffer = ActualImage.GetBuffer(actualImage);
                 unsafe
                 {
-                    fixed (byte* bufferH = &srcBuffer[0])
+                    TempMemPtr srcBufferPtr = ActualImage.GetBufferPtr(actualImage);
+                    //fixed (byte* bufferH = &srcBuffer[0])
+                    byte* bufferH = (byte*)srcBufferPtr.Ptr;
                     {
                         byte* target = (byte*)scan0;
                         int startRowAt = ((h - 1) * stride);
                         for (int y = h; y > 0; --y)
                         {
                             //byte* src = bufferH + ((y - 1) * stride);
-                            System.Runtime.InteropServices.Marshal.Copy(
-                               srcBuffer,//src
-                               startRowAt,
-                               (IntPtr)target,
-                               stride);
+                            //System.Runtime.InteropServices.Marshal.Copy(
+                            //   srcBuffer,//src
+                            //   startRowAt,
+                            //   (IntPtr)target,
+                            //   stride);
+                            AggMemMx.memcpy(target, bufferH + startRowAt, stride);
                             startRowAt -= stride;
                             target += stride;
                         }
                     }
+                    srcBufferPtr.Release();
                 }
                 skBmp.UnlockPixels();
                 //}

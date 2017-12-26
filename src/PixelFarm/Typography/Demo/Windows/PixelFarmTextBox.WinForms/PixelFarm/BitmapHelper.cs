@@ -19,9 +19,15 @@ namespace PixelFarm.Agg.Imaging
            IntPtr hBmpScan0)
         {
             //1st, fast
-            byte[] rawBuffer = ActualImage.GetBuffer(actualImage);
-            System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
-               hBmpScan0, rawBuffer.Length);
+            //byte[] rawBuffer = ActualImage.GetBuffer(actualImage);
+            TempMemPtr memPtr = ActualImage.GetBufferPtr(actualImage);
+            //System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
+            //   hBmpScan0, rawBuffer.Length);
+            unsafe
+            {
+                AggMemMx.memcpy((byte*)hBmpScan0, (byte*)memPtr.Ptr, actualImage.Stride * actualImage.Height);
+            }
+            memPtr.Release();
         }
 
 
@@ -51,26 +57,31 @@ namespace PixelFarm.Agg.Imaging
                               bitmap.PixelFormat);
                 IntPtr scan0 = bitmapData1.Scan0;
                 int stride = bitmapData1.Stride;
-                byte[] srcBuffer = ActualImage.GetBuffer(actualImage);
+                //byte[] srcBuffer = ActualImage.GetBuffer(actualImage);
+                TempMemPtr srcMemPtr = ActualImage.GetBufferPtr(actualImage);
                 unsafe
                 {
-                    fixed (byte* bufferH = &srcBuffer[0])
+                    //fixed (byte* bufferH = &srcBuffer[0])
+                    byte* bufferH = (byte*)srcMemPtr.Ptr;
                     {
                         byte* target = (byte*)scan0;
                         int startRowAt = ((h - 1) * stride);
                         for (int y = h; y > 0; --y)
                         {
                             //byte* src = bufferH + ((y - 1) * stride);
-                            System.Runtime.InteropServices.Marshal.Copy(
-                               srcBuffer,//src
-                               startRowAt,
-                               (IntPtr)target,
-                               stride);
+                            //System.Runtime.InteropServices.Marshal.Copy(
+                            //   srcBuffer,//src
+                            //   startRowAt,
+                            //   (IntPtr)target,
+                            //   stride);
+
+                            AggMemMx.memcpy(target, bufferH + startRowAt, stride);
                             startRowAt -= stride;
                             target += stride;
                         }
                     }
                 }
+                srcMemPtr.Release();
                 bitmap.UnlockBits(bitmapData1);
                 //}
                 //sss.Stop();
@@ -151,7 +162,8 @@ namespace PixelFarm.Agg.Imaging
         {
             int h = windowsBitmap.Height;
             int w = windowsBitmap.Width;
-            byte[] targetBuffer = ActualImage.GetBuffer(actualImage);
+            //byte[] targetBuffer = ActualImage.GetBuffer(actualImage);
+
             BitmapData bitmapData1 = windowsBitmap.LockBits(
                       new Rectangle(0, 0,
                           w,
@@ -166,16 +178,21 @@ namespace PixelFarm.Agg.Imaging
 
             unsafe
             {
+                TempMemPtr targetPtr = ActualImage.GetBufferPtr(actualImage);
                 //target 
+
                 int startRowAt = ((h - 1) * stride);
                 byte* src = (byte*)scan0;
+
+                byte* targetBuffer = (byte*)targetPtr.Ptr;
                 for (int y = h; y > 0; --y)
                 {
                     // byte* target = targetH + ((y - 1) * stride);
 
-                    System.Runtime.InteropServices.Marshal.Copy(
-                          (IntPtr)src,//src
-                          targetBuffer, startRowAt, stride);
+                    //System.Runtime.InteropServices.Marshal.Copy(
+                    //      (IntPtr)src,//src
+                    //      targetBuffer, startRowAt, stride);
+                    AggMemMx.memcpy(targetBuffer + startRowAt, src, stride);
                     startRowAt -= stride;
                     src += stride;
                 }

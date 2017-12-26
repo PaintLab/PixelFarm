@@ -32,47 +32,48 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int height = img.Height;
             //56 level grey scale buffer
 
-            byte[] srcImgBuffer = ActualImage.GetBuffer(img);
+
+            TempMemPtr srcMemPtr = ActualImage.GetBufferPtr(img);
+
             int greyScaleBufferLen = imgW * height;
             byte[] greyScaleBuffer = new byte[greyScaleBufferLen];
-
-            //for (int i = greyScaleBufferLen - 1; i >= 0; --i)
-            //{
-            //    greyScaleBuffer[i] = 64;
-            //}
-
 
             int destIndex = 0;
             int srcImgIndex = 0;
             int srcImgStride = img.Stride;
-
-            for (int y = 0; y < height; ++y)
+            unsafe
             {
-                srcImgIndex = srcImgStride * y;
-                destIndex = imgW * y;
-                for (int x = 0; x < imgW; ++x)
+                byte* srcImgBuffer = (byte*)srcMemPtr.Ptr;
+                for (int y = 0; y < height; ++y)
                 {
-                    byte r = srcImgBuffer[srcImgIndex];
-                    byte g = srcImgBuffer[srcImgIndex + 1];
-                    byte b = srcImgBuffer[srcImgIndex + 2];
-                    byte a = srcImgBuffer[srcImgIndex + 3];
-                    if (r != 0 || g != 0 || b != 0)
+                    srcImgIndex = srcImgStride * y;
+                    destIndex = imgW * y;
+                    for (int x = 0; x < imgW; ++x)
                     {
+                        byte r = srcImgBuffer[srcImgIndex];
+                        byte g = srcImgBuffer[srcImgIndex + 1];
+                        byte b = srcImgBuffer[srcImgIndex + 2];
+                        byte a = srcImgBuffer[srcImgIndex + 3];
+                        if (r != 0 || g != 0 || b != 0)
+                        {
+                        }
+                        if (a != 255)
+                        {
+
+                        }
+                        //skip alpha
+                        //byte greyScaleValue =
+                        //    (byte)((0.333f * (float)r) + (0.5f * (float)g) + (0.1666f * (float)b));
+
+                        greyScaleBuffer[destIndex] = (byte)(((a + 1) / 256f) * 64f);
+
+                        destIndex++;
+                        srcImgIndex += 4;
                     }
-                    if (a != 255)
-                    {
-
-                    }
-                    //skip alpha
-                    //byte greyScaleValue =
-                    //    (byte)((0.333f * (float)r) + (0.5f * (float)g) + (0.1666f * (float)b));
-
-                    greyScaleBuffer[destIndex] = (byte)(((a + 1) / 256f) * 64f);
-
-                    destIndex++;
-                    srcImgIndex += 4;
                 }
             }
+
+            srcMemPtr.Release();
             return greyScaleBuffer;
         }
         void Blend(ActualImage destImg, byte[] greyBuff, int greyBufferWidth, int greyBufferHeight)
@@ -97,7 +98,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             };
             //-------------------------
             //destination
-            byte[] destImgBuffer = ActualImage.GetBuffer(destImg);
+
+            TempMemPtr memPtr = ActualImage.GetBufferPtr(destImg);
             //start pixel
             int destImgIndex = (x * 4) + (destImg.Stride * y);
             //start img src
@@ -105,42 +107,38 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int colorIndex = 0;
             int round = 0;
             byte color_a = color.alpha;
-            while (width > 3)
+            unsafe
             {
-                //try
-                //{
+                byte* destImgBuffer = (byte*)memPtr.Ptr;
+                while (width > 3)
+                {
+                    int a0 = expandGreyBuffer[srcImgIndex] * color_a;
+                    int a1 = expandGreyBuffer[srcImgIndex + 1] * color_a;
+                    int a2 = expandGreyBuffer[srcImgIndex + 2] * color_a;
 
-                int a0 = expandGreyBuffer[srcImgIndex] * color_a;
-                int a1 = expandGreyBuffer[srcImgIndex + 1] * color_a;
-                int a2 = expandGreyBuffer[srcImgIndex + 2] * color_a;
+                    byte ec0 = destImgBuffer[destImgIndex];//existing color
+                    byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
+                    byte ec2 = destImgBuffer[destImgIndex + 2];//existing color 
+                                                               //------------------------------------------------------
+                                                               //please note that we swap a2 and a0 on the fly****
+                                                               //------------------------------------------------------
+                    byte n0 = (byte)((((rgb[colorIndex] - ec0) * a2) + (ec0 << 16)) >> 16);
+                    byte n1 = (byte)((((rgb[colorIndex + 1] - ec1) * a1) + (ec1 << 16)) >> 16);
+                    byte n2 = (byte)((((rgb[colorIndex + 2] - ec2) * a0) + (ec2 << 16)) >> 16);
 
-                byte ec0 = destImgBuffer[destImgIndex];//existing color
-                byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
-                byte ec2 = destImgBuffer[destImgIndex + 2];//existing color
+                    destImgBuffer[destImgIndex] = n0;
+                    destImgBuffer[destImgIndex + 1] = n1;
+                    destImgBuffer[destImgIndex + 2] = n2;
 
-                //------------------------------------------------------
-                //please note that we swap a2 and a0 on the fly****
-                //------------------------------------------------------
-                byte n0 = (byte)((((rgb[colorIndex] - ec0) * a2) + (ec0 << 16)) >> 16);
-                byte n1 = (byte)((((rgb[colorIndex + 1] - ec1) * a1) + (ec1 << 16)) >> 16);
-                byte n2 = (byte)((((rgb[colorIndex + 2] - ec2) * a0) + (ec2 << 16)) >> 16);
-
-                destImgBuffer[destImgIndex] = n0;
-                destImgBuffer[destImgIndex + 1] = n1;
-                destImgBuffer[destImgIndex + 2] = n2;
-
-                destImgIndex += 4;
-                round = 0;
-                colorIndex = 0;
-                srcImgIndex += 3;
-                width -= 3;
-
-                //}
-                //catch (Exception ex)
-                //{
-
-                //}
+                    destImgIndex += 4;
+                    round = 0;
+                    colorIndex = 0;
+                    srcImgIndex += 3;
+                    width -= 3;
+                }
+                memPtr.Release();
             }
+
         }
 
 

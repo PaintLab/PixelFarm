@@ -64,6 +64,14 @@ namespace PixelFarm.DrawingGL
             this.width = w;
             this.height = h;
         }
+
+        public GLBitmap(PixelFarm.Agg.ActualImage actualImg)
+        {
+            this.width = actualImg.Width;
+            this.height = actualImg.Height;
+            this.rawBuffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImg);
+        }
+
         public bool IsBigEndianPixel { get; set; }
 
         public bool IsInvert

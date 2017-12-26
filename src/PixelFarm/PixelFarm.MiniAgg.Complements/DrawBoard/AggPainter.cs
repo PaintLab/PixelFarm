@@ -162,8 +162,7 @@ namespace PixelFarm.Agg
             if (this.RenderQuality == RenderQualtity.Fast)
             {
 
-                BitmapBuffer bmpBuffer= new BitmapBuffer()
-                //BitmapBufferExtensions.DrawLine()
+                //BitmapBufferExtensions.DrawLine()         
             }
 
             if (_orientation == DrawBoardOrientation.LeftBottom)
