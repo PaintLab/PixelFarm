@@ -397,7 +397,14 @@ namespace PixelFarm.Agg
         public override void Fill(VertexStore vxs)
         {
             sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+            try
+            {
+                sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
 
@@ -421,9 +428,7 @@ namespace PixelFarm.Agg
                     this.sclineRasToBmp.ScanlineRenderMode = ScanlineRenderMode.Default;
                 }
             }
-        }
-
-
+        } 
         public override Color FillColor
         {
             get { return fillColor; }
