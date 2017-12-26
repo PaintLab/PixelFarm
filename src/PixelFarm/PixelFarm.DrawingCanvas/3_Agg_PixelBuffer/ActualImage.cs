@@ -34,13 +34,16 @@ namespace PixelFarm.Agg
 
     public struct TempMemPtr
     {
-        byte[] buffer;
+
         System.Runtime.InteropServices.GCHandle handle1;
         internal TempMemPtr(byte[] buffer)
         {
-            this.buffer = buffer;
             handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
-        } 
+        }
+        internal TempMemPtr(int[] buffer)
+        {
+            handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
+        }
         public IntPtr Ptr
         {
             get
