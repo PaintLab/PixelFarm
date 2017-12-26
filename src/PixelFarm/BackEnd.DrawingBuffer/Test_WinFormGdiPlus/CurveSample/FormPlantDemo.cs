@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 
 using WinFormGdiPlus.PlantDemo;
-using  PixelFarm.DrawingBuffer;
+using PixelFarm.DrawingBuffer;
 
 namespace WinFormGdiPlus
 {
@@ -158,9 +158,7 @@ namespace WinFormGdiPlus
 
         private void Draw(BitmapBuffer writeableBmp)
         {
-
-
-            if (this.points != null && writeableBmp != null)
+            if (this.points != null)
             {
                 ReloadRandomPoints();
                 // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block

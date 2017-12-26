@@ -17,7 +17,7 @@
 
 using System;
 using System.Collections.Generic;
-using  PixelFarm.DrawingBuffer;
+using PixelFarm.DrawingBuffer;
 namespace WinFormGdiPlus.PlantDemo
 {
 
@@ -345,18 +345,17 @@ namespace WinFormGdiPlus.PlantDemo
 
         public void Draw(BitmapBuffer writeableBmp)
         {
-            if (writeableBmp != null)
+
+            // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
+            using (writeableBmp.GetBitmapContext())
             {
-                // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
-                using (writeableBmp.GetBitmapContext())
-                {
-                    writeableBmp.Clear();
-                    Draw(writeableBmp, this.Root);
+                writeableBmp.Clear();
+                Draw(writeableBmp, this.Root);
 #if SILVERLIGHT
                writeableBmp.Invalidate();
 #endif
-                }
             }
+
         }
 
         private void Draw(BitmapBuffer writeableBmp, Branch branch)

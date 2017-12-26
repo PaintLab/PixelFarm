@@ -37,12 +37,12 @@ namespace WinFormGdiPlus
             _bmpdata = _bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height),
                 System.Drawing.Imaging.ImageLockMode.ReadWrite,
                 System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            _writeableBitmap = null;
+            _writeableBitmap = PixelFarm.DrawingBuffer.BitmapBuffer.Empty;
             bufferLenInBytes = 0;
         }
         public PixelFarm.DrawingBuffer.BitmapBuffer GetWritableBitmap()
         {
-            if (_writeableBitmap != null) return _writeableBitmap;
+            if (!_writeableBitmap.IsEmpty) return _writeableBitmap;
             //
             //create
             bufferLenInBytes = _bmpdata.Stride * _bmpdata.Height;
@@ -61,7 +61,7 @@ namespace WinFormGdiPlus
         {
             //write back
 
-            if (_writeableBitmap == null) return;
+            if (_writeableBitmap.IsEmpty) return;
 
             //write data back
             System.Runtime.InteropServices.Marshal.Copy(_writeableBitmap.Pixels,
