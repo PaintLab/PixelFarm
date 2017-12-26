@@ -8,8 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 //Apache2, 2017, WinterDev
 using System;
-
-namespace PixelFarm.Drawing
+namespace PixelFarm.Drawing.DrawingBuffer
 {
     /// <summary>
     /// Defines a way to operate on a pixel, or a region of pixels, in a binary fashion.

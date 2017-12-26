@@ -9,6 +9,9 @@
 //Apache2, 2017, WinterDev
 using System;
 using System.Collections;
+
+using PixelFarm.Drawing.DrawingBuffer;
+
 namespace PixelFarm.Drawing.Effects
 {
     class ConvolutionRenderer

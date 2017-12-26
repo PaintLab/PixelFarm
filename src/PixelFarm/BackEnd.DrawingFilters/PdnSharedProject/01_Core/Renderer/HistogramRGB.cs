@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 //Apache2, 2017, WinterDev
 using System;
-namespace PixelFarm.Drawing
+namespace PixelFarm.Drawing.DrawingBuffer
 {
     /// <summary>
     /// Histogram is used to calculate a histogram for a surface (in a selection,

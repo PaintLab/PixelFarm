@@ -1,6 +1,7 @@
 ﻿using System;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Effects;
+using PixelFarm.Drawing.DrawingBuffer;
 namespace PixelFarm.Agg.Imaging
 {
     /// <summary>

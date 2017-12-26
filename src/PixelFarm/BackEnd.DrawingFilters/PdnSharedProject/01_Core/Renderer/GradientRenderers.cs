@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 //Apache2, 2017, WinterDev
 using System;
-namespace PixelFarm.Drawing
+namespace PixelFarm.Drawing.DrawingBuffer
 {
     public static class GradientRenderers
     {

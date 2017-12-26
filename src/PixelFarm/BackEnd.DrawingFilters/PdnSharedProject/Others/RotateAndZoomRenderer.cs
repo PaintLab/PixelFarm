@@ -8,6 +8,9 @@
 /////////////////////////////////////////////////////////////////////////////////
 //Apache2, 2017, WinterDev
 using System;
+
+using PixelFarm.Drawing.DrawingBuffer;
+
 namespace PixelFarm.Drawing.Effects
 {
     public class RotateAndZoomRenderer
@@ -188,7 +191,7 @@ namespace PixelFarm.Drawing.Effects
                                     }
                                     else
                                     {
-                                        *dstPtr = PixelFarm.Drawing.UserBlendOps.NormalBlendOp.ApplyStatic(*srcPtr, c);
+                                        *dstPtr = PixelFarm.Drawing.DrawingBuffer.UserBlendOps.NormalBlendOp.ApplyStatic(*srcPtr, c);
                                     }
                                 }
                             }

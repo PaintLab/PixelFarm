@@ -13,10 +13,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using System.IO;
-
-using System.Reflection;
 using System.Text;
-namespace PixelFarm.Drawing
+
+namespace PixelFarm.Drawing.DrawingBuffer
 {
     /// <summary>
     /// Defines miscellaneous constants and static functions.
@@ -742,7 +741,7 @@ namespace PixelFarm.Drawing
 
             return reversed;
         }
-         
+
         /// <summary>
         /// Allows you to find the bounding box for a "region" that is described as an
         /// array of bounding boxes.
@@ -932,7 +931,7 @@ namespace PixelFarm.Drawing
 
             return ((centerA.X - centerB.X) * (centerA.X - centerB.X)) +
                 ((centerA.Y - centerB.Y) * (centerA.Y - centerB.Y));
-        } 
+        }
         public static Rectangle[] SimplifyRegion(Rectangle[] rects, int complexity)
         {
             if (complexity == 0 || rects.Length < complexity)

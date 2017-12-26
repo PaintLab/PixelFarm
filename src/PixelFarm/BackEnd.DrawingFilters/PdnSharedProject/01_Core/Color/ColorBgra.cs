@@ -11,7 +11,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace PixelFarm.Drawing
+namespace PixelFarm.Drawing.DrawingBuffer
 {
     /// <summary>
     /// This is our pixel format that we will work with. It is always 32-bits / 4-bytes and is

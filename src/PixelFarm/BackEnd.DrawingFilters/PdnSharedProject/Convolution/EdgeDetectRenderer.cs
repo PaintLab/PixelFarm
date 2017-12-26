@@ -7,7 +7,10 @@
 // .                                                                           //
 /////////////////////////////////////////////////////////////////////////////////
 //Apache2, 2017, WinterDev
-using System; 
+using System;
+
+using PixelFarm.Drawing.DrawingBuffer;
+
 namespace PixelFarm.Drawing.Effects
 {
     public class EdgeDetectRenderer : ColorDiffEffectRenderer
