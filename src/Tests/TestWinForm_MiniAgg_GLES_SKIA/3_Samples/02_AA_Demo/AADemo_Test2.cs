@@ -90,9 +90,9 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
         public override void Draw(Painter p)
         {
             //this specific for agg
-            if (p is PixelFarm.Agg.AggPainter)
+            if (p is AggPainter)
             {
-                PixelFarm.Agg.AggPainter p2 = (PixelFarm.Agg.AggPainter)p;
+                AggPainter p2 = (AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
                 SubImageRW subImg = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
                 //IRecieveBlenderByte rasterBlender = new BlenderBGRA(); 
@@ -100,7 +100,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(subImg);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);
-                var rasterizer = aggsx.ScanlineRasterizer;
+                ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
                 var sl = new ScanlineUnpacked8();
                 int size_mul = this.PixelSize;
                 var sclineToBmpEn2 = new CustomScanlineRasToBmp_EnlargedV2(size_mul, aggsx.DestActualImage);
