@@ -61,7 +61,7 @@ namespace PixelFarm.Agg.Lines
         IPatternFilter m_filter;
         int m_dilation;
         int m_dilation_hr;
-        ChildImage m_buf;
+        SubImageRW m_buf;
         byte[] m_data = null;
         int m_DataSizeInBytes = 0;
         int m_width;
@@ -90,6 +90,7 @@ namespace PixelFarm.Agg.Lines
         }
         ~LineImagePattern()
         {
+            //TODO: review here, remove finalizer
             if (m_DataSizeInBytes > 0)
             {
                 m_data = null;
@@ -147,7 +148,7 @@ namespace PixelFarm.Agg.Lines
             }
 
 
-            m_buf = new ChildImage(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
+            m_buf = new SubImageRW(m_data, 0, bufferWidth, bufferHeight, bufferWidth * bytesPerPixel, src.BitDepth, bytesPerPixel);
             byte[] destBuffer = m_buf.GetBuffer();
             byte[] srcBuffer = src.GetBuffer();
             // copy the image into the middle of the dest

@@ -93,23 +93,23 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
             if (p is PixelFarm.Agg.AggPainter)
             {
                 PixelFarm.Agg.AggPainter p2 = (PixelFarm.Agg.AggPainter)p;
-                AggRenderSurface aggRdsf = p2.RenderSurface;
-                var childImage = ImageHelper.CreateChildImage(aggRdsf.DestImage, aggRdsf.GetClippingRect());
+                AggRenderSurface aggsx = p2.RenderSurface;
+                SubImageRW subImg = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
                 //IRecieveBlenderByte rasterBlender = new BlenderBGRA(); 
-                var rasterGamma = new ChildImage(childImage, new PixelBlenderGammaBGRA(this.GammaValue));
-                ClipProxyImage clippingProxyNormal = new ClipProxyImage(childImage);
+                SubImageRW rasterGamma = new SubImageRW(subImg, new PixelBlenderGammaBGRA(this.GammaValue));
+                ClipProxyImage clippingProxyNormal = new ClipProxyImage(subImg);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);
-                var rasterizer = aggRdsf.ScanlineRasterizer;
+                var rasterizer = aggsx.ScanlineRasterizer;
                 var sl = new ScanlineUnpacked8();
                 int size_mul = this.PixelSize;
-                var sclineToBmpEn2 = new CustomScanlineRasToBmp_EnlargedV2(size_mul, aggRdsf.DestActualImage);
+                var sclineToBmpEn2 = new CustomScanlineRasToBmp_EnlargedV2(size_mul, aggsx.DestActualImage);
                 rasterizer.Reset();
                 rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
                 rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
                 rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
                 sclineToBmpEn2.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
-                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
+                ScanlineRasToDestBitmapRenderer sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
                 sclineRasToBmp.RenderWithColor(clippingProxyGamma, rasterizer, sl, Color.Black);
                 //-----------------------------------------------------------------------------------------------------------
                 rasterizer.ResetGamma(new GammaNone());

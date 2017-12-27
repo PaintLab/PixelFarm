@@ -21,10 +21,12 @@
 using System;
 namespace PixelFarm.Agg.Imaging
 {
-    public class ChildImage : ImageReaderWriterBase
+    /// <summary>
+    /// sub-image reader /writer
+    /// </summary>
+    public class SubImageRW : ImageReaderWriterBase
     {
-
-        public ChildImage(IImageReaderWriter image,
+        public SubImageRW(IImageReaderWriter image,
             int bufferOffsetToFirstPixel,
             int width,
             int height)
@@ -39,7 +41,7 @@ namespace PixelFarm.Agg.Imaging
                 image.BytesBetweenPixelsInclusive);
         }
 
-        public ChildImage(byte[] buffer,
+        public SubImageRW(byte[] buffer,
             int bufferOffsetToFirstPixel,
             int width,
             int height,
@@ -54,7 +56,7 @@ namespace PixelFarm.Agg.Imaging
                 strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
         }
-        public ChildImage(IImageReaderWriter image,
+        public SubImageRW(IImageReaderWriter image,
             IPixelBlender blender,
             int distanceBetweenPixelsInclusive,
             int bufferOffset,
@@ -63,11 +65,11 @@ namespace PixelFarm.Agg.Imaging
             SetRecieveBlender(blender);
             Attach(image, blender, distanceBetweenPixelsInclusive, bufferOffset, bitsPerPixel);
         }
-        public ChildImage(IImageReaderWriter image, IPixelBlender blender)
+        public SubImageRW(IImageReaderWriter image, IPixelBlender blender)
         {
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
         }
-        public ChildImage(IImageReaderWriter image, IPixelBlender blender, int x1, int y1, int x2, int y2)
+        public SubImageRW(IImageReaderWriter image, IPixelBlender blender, int x1, int y1, int x2, int y2)
         {
             SetRecieveBlender(blender);
             Attach(image, x1, y1, x2, y2);
@@ -149,6 +151,8 @@ namespace PixelFarm.Agg.Imaging
             startBufferPixelAt = bufferOffset;
             if (strideInBytes < 0)
             {
+                //TODO: review here
+
                 int addAmount = -((height - 1) * strideInBytes);
                 startBufferPixelAt = addAmount + bufferOffset;
             }

@@ -33,7 +33,7 @@ namespace PixelFarm.Agg.Imaging
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
         }
-        public override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
+        public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
             int bytesBetweenPixelsInclusive = srcRW.BytesBetweenPixelsInclusive;
             ISpanInterpolator spanInterpolator = Interpolator;

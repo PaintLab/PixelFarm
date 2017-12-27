@@ -718,6 +718,7 @@ namespace PixelFarm.Agg.Imaging
         static Dictionary<float, GammaLookUpTable> gammaTablePool = new Dictionary<float, GammaLookUpTable>();
         public PixelBlenderGammaBGRA(float gammaValue)
         {
+            //TODO: review caching here
             GammaLookUpTable found;
             if (!gammaTablePool.TryGetValue(gammaValue, out found))
             {

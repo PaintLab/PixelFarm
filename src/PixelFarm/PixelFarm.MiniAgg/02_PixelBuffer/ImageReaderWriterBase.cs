@@ -55,6 +55,12 @@ namespace PixelFarm.Agg
         {
             return m_ByteBuffer;
         }
+
+        public TempMemPtr GetBufferPtr()
+        {
+            return new TempMemPtr(m_ByteBuffer);
+        }
+
         protected void SetBufferToNull()
         {
             this.m_ByteBuffer = null;
@@ -63,7 +69,7 @@ namespace PixelFarm.Agg
         {
             m_ByteBuffer = byteBuffer;
         }
-        
+
 
         public abstract void ReplaceBuffer(byte[] newbuffer);
 
@@ -106,7 +112,7 @@ namespace PixelFarm.Agg
             //
             this.m_ByteBuffer = imgbuffer;
         }
-       
+
 
         protected void SetDimmensionAndFormat(int width, int height,
            int strideInBytes,
@@ -411,7 +417,7 @@ namespace PixelFarm.Agg
                 }
                 while (--len != 0);
             }
-            
+
 
         }
 

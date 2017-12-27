@@ -34,16 +34,24 @@ namespace PixelFarm.Agg
 
     public struct TempMemPtr
     {
-
+        int _lenInBytes; //in bytes
         System.Runtime.InteropServices.GCHandle handle1;
         public TempMemPtr(byte[] buffer)
         {
             handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
+            this._lenInBytes = buffer.Length;
         }
-        public TempMemPtr(int[] buffer)
+        public TempMemPtr(int[] buffer) //in element count
         {
             handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
+            this._lenInBytes = buffer.Length * 4;
         }
+
+        public int LengthInBytes
+        {
+            get { return _lenInBytes; }
+        }
+
         public IntPtr Ptr
         {
             get
@@ -55,6 +63,11 @@ namespace PixelFarm.Agg
         {
             this.handle1.Free();
         }
+        public unsafe byte* BytePtr
+        {
+            get { return (byte*)handle1.AddrOfPinnedObject(); }
+        }
+
     }
     public sealed class ActualImage : PixelFarm.Drawing.Image
     {

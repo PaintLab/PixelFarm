@@ -47,7 +47,7 @@ namespace PixelFarm.Agg.Imaging
                 throw new NotSupportedException("The source is expected to be 32 bit.");
             }
         }
-        public override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
+        public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
 
             ISpanInterpolator spanInterpolator = Interpolator;
@@ -137,7 +137,7 @@ namespace PixelFarm.Agg.Imaging
             get { return this.m_bgcolor; }
             set { this.m_bgcolor = value; }
         }
-        public override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
+        public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = base.Interpolator;
             spanInterpolator.Begin(x + base.dx, y + base.dy, len);

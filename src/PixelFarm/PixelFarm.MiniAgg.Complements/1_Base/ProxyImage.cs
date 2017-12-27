@@ -145,6 +145,10 @@ namespace PixelFarm.Agg.Imaging
             //TODO: review here, this may not correct 
             return linkedImage.GetBuffer();
         }
+        public TempMemPtr GetBufferPtr()
+        {
+            return linkedImage.GetBufferPtr();
+        }
         public void ReplaceBuffer()
         {
             throw new System.NotSupportedException();

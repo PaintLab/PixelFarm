@@ -48,7 +48,7 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        public override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
+        public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = Interpolator;
             spanInterpolator.Begin(x + dx, y + dy, len);
@@ -135,7 +135,7 @@ namespace PixelFarm.Agg.Imaging
             set { this.m_bgcolor = value; }
         }
 
-        public override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
+        public sealed override void GenerateColors(Drawing.Color[] outputColors, int startIndex, int x, int y, int len)
         {
             ISpanInterpolator spanInterpolator = base.Interpolator;
             int bufferIndex;

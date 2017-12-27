@@ -28,22 +28,22 @@ namespace PixelFarm.Agg.Imaging
         /// It will modify the original main image when you draw to it.
         /// </summary>
         /// <param name="parentImage"></param>
-        /// <param name="childImageBounds"></param>
+        /// <param name="subImgBounds"></param>
         /// <returns></returns>
-        public static ChildImage CreateChildImage(IImageReaderWriter parentImage, RectInt childImageBounds)
+        public static SubImageRW CreateSubImgRW(IImageReaderWriter parentImage, RectInt subImgBounds)
         {
-            if (childImageBounds.Left < 0 || childImageBounds.Bottom < 0 || childImageBounds.Right > parentImage.Width || childImageBounds.Top > parentImage.Height
-                || childImageBounds.Left >= childImageBounds.Right || childImageBounds.Bottom >= childImageBounds.Top)
+            if (subImgBounds.Left < 0 || subImgBounds.Bottom < 0 || subImgBounds.Right > parentImage.Width || subImgBounds.Top > parentImage.Height
+                || subImgBounds.Left >= subImgBounds.Right || subImgBounds.Bottom >= subImgBounds.Top)
             {
                 throw new ArgumentException("The subImageBounds must be on the image and valid.");
             }
 
-            int left = Math.Max(0, childImageBounds.Left);
-            int bottom = Math.Max(0, childImageBounds.Bottom);
-            int width = Math.Min(parentImage.Width - left, childImageBounds.Width);
-            int height = Math.Min(parentImage.Height - bottom, childImageBounds.Height);
+            int left = Math.Max(0, subImgBounds.Left);
+            int bottom = Math.Max(0, subImgBounds.Bottom);
+            int width = Math.Min(parentImage.Width - left, subImgBounds.Width);
+            int height = Math.Min(parentImage.Height - bottom, subImgBounds.Height);
             int bufferOffsetToFirstPixel = parentImage.GetBufferOffsetXY(left, bottom);
-            return new ChildImage(parentImage, bufferOffsetToFirstPixel, width, height);
+            return new SubImageRW(parentImage, bufferOffsetToFirstPixel, width, height);
         }
     }
 }
