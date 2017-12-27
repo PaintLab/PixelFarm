@@ -27,13 +27,13 @@ namespace PixelFarm.Agg.Imaging
     public class SubImageRW : ImageReaderWriterBase
     {
         public SubImageRW(IImageReaderWriter image,
-            int bufferOffsetToFirstPixel,
+            int arrayOffset32,
             int width,
             int height)
         {
             SetRecieveBlender(image.GetRecieveBlender());
             AttachBuffer(image.GetInt32Buffer(),
-                bufferOffsetToFirstPixel,
+                arrayOffset32,
                 width,
                 height,
                 image.Stride,
@@ -42,7 +42,7 @@ namespace PixelFarm.Agg.Imaging
         }
 
         public SubImageRW(int[] buffer,
-            int bufferOffsetToFirstPixel,
+            int arrayOffset32,
             int width,
             int height,
             int strideInBytes,
@@ -50,7 +50,7 @@ namespace PixelFarm.Agg.Imaging
             int distanceInBytesBetweenPixelsInclusive)
         {
             AttachBuffer(buffer,
-                bufferOffsetToFirstPixel,
+                arrayOffset32,
                 width,
                 height,
                 strideInBytes, bitDepth,
@@ -59,11 +59,11 @@ namespace PixelFarm.Agg.Imaging
         public SubImageRW(IImageReaderWriter image,
             IPixelBlender blender,
             int distanceBetweenPixelsInclusive,
-            int bufferOffset,
+            int arrayOffset32,
             int bitsPerPixel)
         {
             SetRecieveBlender(blender);
-            Attach(image, blender, distanceBetweenPixelsInclusive, bufferOffset, bitsPerPixel);
+            Attach(image, blender, distanceBetweenPixelsInclusive, arrayOffset32, bitsPerPixel);
         }
         public SubImageRW(IImageReaderWriter image, IPixelBlender blender)
         {
@@ -84,7 +84,7 @@ namespace PixelFarm.Agg.Imaging
         }
 
         void AttachBuffer(int[] buffer,
-          int bufferOffset,
+          int elemOffset,
           int width,
           int height,
           int strideInBytes,
@@ -95,7 +95,7 @@ namespace PixelFarm.Agg.Imaging
             SetBufferToNull();
             SetDimmensionAndFormat(width, height, strideInBytes, bitDepth,
                 distanceInBytesBetweenPixelsInclusive);
-            SetBuffer(buffer, bufferOffset);
+            SetBuffer(buffer, elemOffset);
 
         }
 
@@ -103,7 +103,7 @@ namespace PixelFarm.Agg.Imaging
         void Attach(IImageReaderWriter sourceImage,
           IPixelBlender recieveBlender,
           int distanceBetweenPixelsInclusive,
-          int bufferOffset,
+          int arrayElemOffset,
           int bitsPerPixel)
         {
             _sourceImage = sourceImage;
@@ -112,9 +112,10 @@ namespace PixelFarm.Agg.Imaging
                 sourceImage.Stride,
                 bitsPerPixel,
                 distanceBetweenPixelsInclusive);
-            int offset = sourceImage.GetByteBufferOffsetXY(0, 0);
+
+            int srcOffset32 = sourceImage.GetByteBufferOffsetXY(0, 0) / 4;
             int[] buffer = sourceImage.GetInt32Buffer();
-            SetBuffer(buffer, offset + bufferOffset);
+            SetBuffer(buffer, srcOffset32 + arrayElemOffset);
             SetRecieveBlender(recieveBlender);
         }
         //bool Attach(IImageReaderWriter sourceImage, int x1, int y1, int x2, int y2)
