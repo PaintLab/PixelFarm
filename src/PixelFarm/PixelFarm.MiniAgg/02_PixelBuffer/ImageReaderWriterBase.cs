@@ -36,7 +36,7 @@ namespace PixelFarm.Agg
         int[] xTableArray;
         //--------------------------------------------
         byte[] m_ByteBuffer;
-
+        // int[] raw_buffre32;
         //--------------------------------------------
         // Pointer to first pixel depending on strideInBytes and image position
         protected int startBufferPixelAt;
@@ -398,7 +398,6 @@ namespace PixelFarm.Agg
             int len = x2 - x1 + 1;
 
 
-
             byte[] buffer = GetBuffer();
             int bufferOffset = GetBufferOffsetXY(x1, y);
             int alpha = (((int)(sourceColor.A) * (cover + 1)) >> 8);
@@ -418,6 +417,27 @@ namespace PixelFarm.Agg
                 }
                 while (--len != 0);
             }
+
+
+            //byte[] buffer = GetBuffer();
+            //int bufferOffset = GetBufferOffsetXY(x1, y);
+            //int alpha = (((int)(sourceColor.A) * (cover + 1)) >> 8);
+            //if (alpha == BASE_MASK)
+            //{
+            //    //full
+            //    _recvBlender32.CopyPixels(buffer, bufferOffset, sourceColor, len);
+            //}
+            //else
+            //{
+            //    Color c2 = Color.FromArgb(alpha, sourceColor);
+            //    do
+            //    {
+            //        //copy pixel-by-pixel
+            //        _recvBlender32.BlendPixel(buffer, bufferOffset, c2);
+            //        bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+            //    }
+            //    while (--len != 0);
+            //}
 
 
         }
@@ -665,25 +685,25 @@ namespace PixelFarm.Agg
         //        }
 
 
-//        static void CopyOrBlend_BasedOnAlpha(IPixelBlender recieveBlender,
-//        byte[] destBuffer,
-//        int bufferOffset,
-//        Color sourceColor)
-//        {
-//            //if (sourceColor.m_A != 0)
-//            {
-//#if false // we blend regardless of the alpha so that we can get Light Opacity working (used this way we have addative and faster blending in one blender) LBB
-//                if (sourceColor.m_A == base_mask)
-//                {
-//                    Blender.CopyPixel(pDestBuffer, sourceColor);
-//                }
-//                else
-//#endif
-//                {
-//                    recieveBlender.BlendPixel(destBuffer, bufferOffset, sourceColor);
-//                }
-//            }
-//        }
+        //        static void CopyOrBlend_BasedOnAlpha(IPixelBlender recieveBlender,
+        //        byte[] destBuffer,
+        //        int bufferOffset,
+        //        Color sourceColor)
+        //        {
+        //            //if (sourceColor.m_A != 0)
+        //            {
+        //#if false // we blend regardless of the alpha so that we can get Light Opacity working (used this way we have addative and faster blending in one blender) LBB
+        //                if (sourceColor.m_A == base_mask)
+        //                {
+        //                    Blender.CopyPixel(pDestBuffer, sourceColor);
+        //                }
+        //                else
+        //#endif
+        //                {
+        //                    recieveBlender.BlendPixel(destBuffer, bufferOffset, sourceColor);
+        //                }
+        //            }
+        //        }
 
         //        static unsafe void CopyOrBlend32_BasedOnAlphaAndCover(IPixelBlender recieveBlender, int[] destBuffer, int arrayElemOffset, Color sourceColor, int cover)
         //        {
