@@ -69,11 +69,11 @@ namespace PixelFarm.Agg.Imaging
         {
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
         }
-        public SubImageRW(IImageReaderWriter image, IPixelBlender blender, int x1, int y1, int x2, int y2)
-        {
-            SetRecieveBlender(blender);
-            Attach(image, x1, y1, x2, y2);
-        }
+        //public SubImageRW(IImageReaderWriter image, IPixelBlender blender, int x1, int y1, int x2, int y2)
+        //{
+        //    SetRecieveBlender(blender);
+        //    Attach(image, x1, y1, x2, y2);
+        //}
         public override void ReplaceBuffer(int[] newbuffer)
         {
             if (_sourceImage != null)
@@ -117,26 +117,26 @@ namespace PixelFarm.Agg.Imaging
             SetBuffer(buffer, offset + bufferOffset);
             SetRecieveBlender(recieveBlender);
         }
-        bool Attach(IImageReaderWriter sourceImage, int x1, int y1, int x2, int y2)
-        {
-            _sourceImage = sourceImage;
-            SetBufferToNull();
-            if (x1 > x2 || y1 > y2)
-            {
-                throw new Exception("You need to have your x1 and y1 be the lower left corner of your sub image.");
-            }
-            RectInt boundsRect = new RectInt(x1, y1, x2, y2);
-            if (boundsRect.Clip(new RectInt(0, 0, sourceImage.Width - 1, sourceImage.Height - 1)))
-            {
-                SetDimmensionAndFormat(boundsRect.Width, boundsRect.Height, sourceImage.Stride, sourceImage.BitDepth, sourceImage.BytesBetweenPixelsInclusive);
-                int bufferOffset = sourceImage.GetByteBufferOffsetXY(boundsRect.Left, boundsRect.Bottom) / 4;
-                int[] buffer = sourceImage.GetInt32Buffer();
-                SetBuffer(buffer, bufferOffset);
-                return true;
-            }
+        //bool Attach(IImageReaderWriter sourceImage, int x1, int y1, int x2, int y2)
+        //{
+        //    _sourceImage = sourceImage;
+        //    SetBufferToNull();
+        //    if (x1 > x2 || y1 > y2)
+        //    {
+        //        throw new Exception("You need to have your x1 and y1 be the lower left corner of your sub image.");
+        //    }
+        //    RectInt boundsRect = new RectInt(x1, y1, x2, y2);
+        //    if (boundsRect.Clip(new RectInt(0, 0, sourceImage.Width - 1, sourceImage.Height - 1)))
+        //    {
+        //        SetDimmensionAndFormat(boundsRect.Width, boundsRect.Height, sourceImage.Stride, sourceImage.BitDepth, sourceImage.BytesBetweenPixelsInclusive);
+        //        int bufferOffset = sourceImage.GetByteBufferOffsetXY(boundsRect.Left, boundsRect.Bottom) / 4;
+        //        int[] buffer = sourceImage.GetInt32Buffer();
+        //        SetBuffer(buffer, bufferOffset);
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
         void SetBuffer(int[] int32Buffer, int arrayElemOffset)
         {

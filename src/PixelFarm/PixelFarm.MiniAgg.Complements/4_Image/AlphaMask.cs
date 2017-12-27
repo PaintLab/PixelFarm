@@ -57,17 +57,15 @@ namespace PixelFarm.Agg
         //--------------------------------------------------------------------
         public byte pixel(int x, int y)
         {
-            int bufferIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
-            //byte[] buffer = m_rbuf.GetBuffer();
+
             unsafe
             {
+                int bufferIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
                 TempMemPtr tmpMem = m_rbuf.GetBufferPtr();
                 byte value = *((byte*)tmpMem.Ptr + bufferIndex);
                 tmpMem.Release();
                 return value;
             }
-
-            //return buffer[bufferIndex];
         }
 
         //--------------------------------------------------------------------
@@ -120,15 +118,22 @@ namespace PixelFarm.Agg
 
         public void combine_hspan(int x, int y, byte[] covers, int coversIndex, int count)
         {
-            int maskIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
-            byte[] mask = m_rbuf.GetBuffer();
-            do
+            unsafe
             {
-                covers[coversIndex] = (byte)((255 + (covers[coversIndex]) * mask[maskIndex]) >> 8);
-                coversIndex++;
-                maskIndex++;
+                int maskIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
+                TempMemPtr maskPtr = m_rbuf.GetBufferPtr();
+
+                byte* mask = (byte*)maskPtr.Ptr;
+                do
+                {
+                    covers[coversIndex] = (byte)((255 + (covers[coversIndex]) * mask[maskIndex]) >> 8);
+                    coversIndex++;
+                    maskIndex++;
+                }
+                while (--count != 0);
+                maskPtr.Release();
             }
-            while (--count != 0);
+
         }
 
         public void fill_vspan(int x, int y, byte[] buffer, int bufferIndex, int num_pix)
@@ -188,10 +193,18 @@ namespace PixelFarm.Agg
                     && (uint)y < (uint)m_rbuf.Height)
                 {
 
+                    unsafe
+                    {
+                        int bufferIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
+                        TempMemPtr tmpMem = m_rbuf.GetBufferPtr();
+                        byte value = *((byte*)tmpMem.Ptr + bufferIndex);
+                        tmpMem.Release();
+                        return value;
+                    }
 
-                    int bufferIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
-                    byte[] buffer = m_rbuf.GetBuffer();
-                    return buffer[bufferIndex];
+                    //int bufferIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
+                    //byte[] buffer = m_rbuf.GetBuffer();
+                    //return buffer[bufferIndex];
                 }
             }
 
@@ -301,12 +314,19 @@ namespace PixelFarm.Agg
             }
 
             int maskIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
-            byte[] mask = m_rbuf.GetBuffer();
-            do
+            unsafe
             {
-                covers[coversIndex++] = mask[maskIndex++];
+                TempMemPtr maskPtr = m_rbuf.GetBufferPtr();
+                byte* mask = (byte*)maskPtr.Ptr;
+                do
+                {
+                    covers[coversIndex++] = mask[maskIndex++];
+                }
+                while (--count != 0);
+
+                maskPtr.Release();
             }
-            while (--count != 0);
+
         }
 
         public void combine_hspan(int x, int y, byte[] buffer, int bufferIndex, int num_pix)
@@ -348,10 +368,11 @@ namespace PixelFarm.Agg
             }
 
             int maskIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
-            byte[] mask = m_rbuf.GetBuffer();
+
             unsafe
             {
-                fixed (byte* maskHead = &mask[maskIndex])
+                TempMemPtr maskPtr = m_rbuf.GetBufferPtr();
+                byte* maskHead = (byte*)maskPtr.Ptr;
                 fixed (byte* coverHead = &covers[coversIndex])
                 {
                     byte* c_mask_index = maskHead;
@@ -364,6 +385,7 @@ namespace PixelFarm.Agg
                     }
                     while (--count != 0);
                 }
+                maskPtr.Release();
             }
         }
 

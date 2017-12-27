@@ -45,10 +45,11 @@ namespace PixelFarm.Agg.Imaging
             int y_lr = y_hr >> img_subpix_const.SHIFT;
             int bufferIndex;
             bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
-            byte[] srcBuff = srcRW.GetBuffer();
+
             unsafe
             {
-                fixed (byte* pSource = srcBuff)
+                TempMemPtr srcBuffPtr = srcRW.GetBufferPtr();
+                byte* pSource = (byte*)srcBuffPtr.Ptr;
                 {
                     do
                     {
@@ -67,6 +68,7 @@ namespace PixelFarm.Agg.Imaging
                         bufferIndex += bytesBetweenPixelsInclusive;
                     } while (--len != 0);
                 }
+                srcBuffPtr.Release();
             }
         }
     }

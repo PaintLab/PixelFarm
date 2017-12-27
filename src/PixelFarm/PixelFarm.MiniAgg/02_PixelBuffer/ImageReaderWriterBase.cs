@@ -157,15 +157,27 @@ namespace PixelFarm.Agg
             {
                 int lengthInBytes = clippedSourceImageRect.Width * BytesBetweenPixelsInclusive;
                 int sourceOffset = sourceImage.GetByteBufferOffsetXY(clippedSourceImageRect.Left, clippedSourceImageRect.Bottom);
-                byte[] sourceBuffer = sourceImage.GetBuffer();
-                byte[] destBuffer = GetBuffer();
-                int destOffset = GetByteBufferOffsetXY(clippedSourceImageRect.Left + destXOffset, clippedSourceImageRect.Bottom + destYOffset);
-                for (int i = 0; i < clippedSourceImageRect.Height; i++)
+
+                unsafe
                 {
-                    AggMemMx.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
-                    sourceOffset += sourceImage.Stride;
-                    destOffset += Stride;
+
+                    TempMemPtr memPtr = sourceImage.GetBufferPtr();
+                    TempMemPtr destPtr = this.GetBufferPtr();
+
+                    byte* sourceBuffer = (byte*)memPtr.Ptr;
+                    byte* destBuffer = (byte*)destPtr.Ptr;
+                    int destOffset = GetByteBufferOffsetXY(clippedSourceImageRect.Left + destXOffset, clippedSourceImageRect.Bottom + destYOffset);
+                    for (int i = 0; i < clippedSourceImageRect.Height; i++)
+                    {                         
+                        AggMemMx.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
+                        sourceOffset += sourceImage.Stride;
+                        destOffset += Stride;
+                    }
+
+                    memPtr.Release();
+                    destPtr.Release();
                 }
+
             }
             else
             {
@@ -405,15 +417,16 @@ namespace PixelFarm.Agg
         }
         public Color GetPixel(int x, int y)
         {
-            return _recvBlender32.PixelToColorRGBA(raw_buffer32, GetByteBufferOffsetXY(x, y) / 4);
+            return _recvBlender32.PixelToColorRGBA(raw_buffer32, GetBufferOffsetXY32(x, y));
         }
         public int GetByteBufferOffsetXY(int x, int y)
         {
-            return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
+            return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x]) * 4;
+
         }
         public int GetBufferOffsetXY32(int x, int y)
         {
-            return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x])  ;
+            return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
         }
         public void SetPixel(int x, int y, Color color)
         {
@@ -581,7 +594,7 @@ namespace PixelFarm.Agg
                 unchecked
                 {
                     //int bufferOffset = GetBufferOffsetXY(x, y);
-                    int bufferOffset32 = GetByteBufferOffsetXY(x, y) / 4;
+                    int bufferOffset32 = GetBufferOffsetXY32(x, y);
                     //do
                     //{
                     //    //byte oldAlpha = sourceColor.A;
@@ -631,7 +644,7 @@ namespace PixelFarm.Agg
 
         public void CopyColorHSpan(int x, int y, int len, Color[] colors, int colorsIndex)
         {
-            int bufferOffset32 = GetByteBufferOffsetXY(x, y) / 4;
+            int bufferOffset32 = GetBufferOffsetXY32(x, y);
             do
             {
                 _recvBlender32.CopyPixel(raw_buffer32, bufferOffset32, colors[colorsIndex]);
@@ -653,7 +666,7 @@ namespace PixelFarm.Agg
             //}
             //while (--len != 0);
             //
-            int bufferOffset32 = GetByteBufferOffsetXY(x, y) / 4;
+            int bufferOffset32 = GetBufferOffsetXY32(x, y);
             int actualW = strideInBytes / 4;
             do
             {
@@ -667,7 +680,7 @@ namespace PixelFarm.Agg
         public void BlendColorHSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
             //int bufferOffset = GetBufferOffsetXY(x, y);
-            int bufferOffset32 = GetByteBufferOffsetXY(x, y) / 4;
+            int bufferOffset32 = GetBufferOffsetXY32(x, y);
             //_recvBlender32.BlendPixels(m_ByteBuffer, bufferOffset, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
             _recvBlender32.BlendPixels(raw_buffer32, bufferOffset32, colors, colorsIndex, covers, coversIndex, firstCoverForAll, len);
         }
@@ -675,7 +688,7 @@ namespace PixelFarm.Agg
         public void BlendColorVSpan(int x, int y, int len, Color[] colors, int colorsIndex, byte[] covers, int coversIndex, bool firstCoverForAll)
         {
             //int bufferOffset = GetBufferOffsetXY(x, y);
-            int bufferOffset32 = GetByteBufferOffsetXY(x, y) / 4;
+            int bufferOffset32 = GetBufferOffsetXY32(x, y);
             int scanWidthBytes = System.Math.Abs(Stride);
             if (!firstCoverForAll)
             {

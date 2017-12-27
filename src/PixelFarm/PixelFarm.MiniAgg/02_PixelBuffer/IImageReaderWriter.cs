@@ -30,6 +30,7 @@ namespace PixelFarm.Agg
         RectInt GetBounds();
 
         int GetByteBufferOffsetXY(int x, int y);
+
         int Stride { get; }
         int BytesBetweenPixelsInclusive { get; }
 

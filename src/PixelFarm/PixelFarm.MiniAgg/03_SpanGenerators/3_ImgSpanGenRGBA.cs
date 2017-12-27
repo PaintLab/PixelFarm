@@ -58,10 +58,11 @@ namespace PixelFarm.Agg.Imaging
             int x_lr = x_hr >> img_subpix_const.SHIFT;
             int y_lr = y_hr >> img_subpix_const.SHIFT;
             int bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
-            byte[] srcBuffer = srcRW.GetBuffer();
+
             unsafe
             {
-                fixed (byte* pSource = &srcBuffer[bufferIndex])
+                TempMemPtr srcBufferPtr = srcRW.GetBufferPtr();
+                byte* pSource = (byte*)srcBufferPtr.Ptr;
                 {
                     int* src_ptr = (int*)pSource;
                     do
@@ -293,7 +294,7 @@ namespace PixelFarm.Agg.Imaging
                                     if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                                     {
                                         BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
-                                            srcRW.GetBuffer(),
+                                            srcBuffer,
                                             srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
                                             weight);
                                     }
@@ -314,7 +315,7 @@ namespace PixelFarm.Agg.Imaging
                                     if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                                     {
                                         BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
-                                            srcRW.GetBuffer(),
+                                            srcBuffer,
                                             srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
                                             weight);
                                     }
@@ -334,7 +335,7 @@ namespace PixelFarm.Agg.Imaging
                                     if ((uint)x_lr <= (uint)maxx && (uint)y_lr <= (uint)maxy)
                                     {
                                         BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
-                                           srcRW.GetBuffer(),
+                                           srcBuffer,
                                            srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
                                            weight);
                                     }
@@ -372,11 +373,12 @@ namespace PixelFarm.Agg.Imaging
             }
         }
 
-        static void BlendInFilterPixel(ref int accColor0, ref int accColor1, ref int accColor2, ref int accColor3,
-            byte[] srcBuffer, int bufferIndex, int weight)
+        static unsafe void BlendInFilterPixel(ref int accColor0, ref int accColor1, ref int accColor2, ref int accColor3,
+            byte* srcBuffer, int bufferIndex, int weight)
         {
             unchecked
             {
+
                 accColor0 += weight * srcBuffer[bufferIndex + CO.R];
                 accColor1 += weight * srcBuffer[bufferIndex + CO.G];
                 accColor2 += weight * srcBuffer[bufferIndex + CO.B];
