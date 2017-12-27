@@ -76,7 +76,7 @@ namespace PixelFarm.Agg
         int stride;
         int bitDepth;
         PixelFormat pixelFormat;
-        byte[] pixelBuffer;
+        int[] pixelBuffer;
 
         public ActualImage(int width, int height, PixelFormat format)
         {
@@ -89,7 +89,8 @@ namespace PixelFarm.Agg
                 out bitDepth,
                 out bytesPerPixel);
             //alloc mem
-            this.pixelBuffer = new byte[stride * height];
+
+            this.pixelBuffer = new int[width * height];
         }
         public override void Dispose()
         {
@@ -132,11 +133,12 @@ namespace PixelFarm.Agg
             return tmp;
         }
 
-        public static byte[] GetBuffer(ActualImage img)
+        public static int[] GetBuffer(ActualImage img)
         {
             return img.pixelBuffer;
         }
-        public static void ReplaceBuffer(ActualImage img, byte[] pixelBuffer)
+       
+        public static void ReplaceBuffer(ActualImage img, int[] pixelBuffer)
         {
             img.pixelBuffer = pixelBuffer;
         }
@@ -150,30 +152,30 @@ namespace PixelFarm.Agg
             var img = new ActualImage(width, height, format);
             unsafe
             {
-                fixed (byte* header = &img.pixelBuffer[0])
+                fixed (int* header = &img.pixelBuffer[0])
                 {
                     System.Runtime.InteropServices.Marshal.Copy(buffer, 0, (IntPtr)header, buffer.Length);
                 }
             }
             return img;
         }
-        public static ActualImage CreateFromBuffer(int width, int height, PixelFormat format, byte[] buffer)
-        {
-            if (format != PixelFormat.ARGB32 && format != PixelFormat.RGB24)
-            {
-                throw new NotSupportedException();
-            }
-            //
-            var img = new ActualImage(width, height, format);
-            unsafe
-            {
-                fixed (byte* header = &img.pixelBuffer[0])
-                {
-                    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, (IntPtr)header, buffer.Length);
-                }
-            }
-            return img;
-        }
+        //public static ActualImage CreateFromBuffer(int width, int height, PixelFormat format, byte[] buffer)
+        //{
+        //    if (format != PixelFormat.ARGB32 && format != PixelFormat.RGB24)
+        //    {
+        //        throw new NotSupportedException();
+        //    }
+        //    //
+        //    var img = new ActualImage(width, height, format);
+        //    unsafe
+        //    {
+        //        fixed (byte* header = &img.pixelBuffer[0])
+        //        {
+        //            System.Runtime.InteropServices.Marshal.Copy(buffer, 0, (IntPtr)header, buffer.Length);
+        //        }
+        //    }
+        //    return img;
+        //}
 
         public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
         {
@@ -181,9 +183,9 @@ namespace PixelFarm.Agg
             {
                 throw new NotSupportedException();
             }
-            byte[] newBuff = new byte[this.pixelBuffer.Length];
+            int[] newBuff = new int[this.pixelBuffer.Length];
             Buffer.BlockCopy(this.pixelBuffer, 0, newBuff, 0, newBuff.Length);
-            buffRequest.OutputBuffer = newBuff;
+            buffRequest.OutputBuffer32 = newBuff;
         }
 
 

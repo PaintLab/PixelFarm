@@ -75,21 +75,22 @@ namespace PixelFarm.Agg.Imaging
             return "b:" + b + ",g:" + g + ",r:" + r + ",a:" + a;
         }
     }
-    public class BufferReader4
+    struct BufferReader4
     {
         //matrix four ,four reader
-        byte[] buffer;
+        unsafe byte* buffer;
         int stride;
         int width;
         int height;
         int cX;
         int cY;
-        public BufferReader4(byte[] buffer, int stride, int width, int height)
+        unsafe public BufferReader4(byte* buffer, int stride, int width, int height)
         {
             this.buffer = buffer;
             this.stride = stride;
             this.width = width;
             this.height = height;
+            cX = cY = 0;             
         }
         public void SetStartPixel(int x, int y)
         {
@@ -100,11 +101,14 @@ namespace PixelFarm.Agg.Imaging
         public MyColor ReadOnePixel()
         {
             int byteIndex = ((cY * stride) + cX * 4);
-            byte b = buffer[byteIndex];
-            byte g = buffer[byteIndex + 1];
-            byte r = buffer[byteIndex + 2];
-            byte a = buffer[byteIndex + 3];
-            return new MyColor(r, g, b, a);
+            unsafe
+            {
+                byte b = buffer[byteIndex];
+                byte g = buffer[byteIndex + 1];
+                byte r = buffer[byteIndex + 2];
+                byte a = buffer[byteIndex + 3];
+                return new MyColor(r, g, b, a);
+            }
         }
         public void Read4(MyColor[] outputBuffer)
         {
@@ -112,37 +116,41 @@ namespace PixelFarm.Agg.Imaging
             int m = 0;
             int tmpY = this.cY;
             int byteIndex = ((tmpY * stride) + cX * 4);
-            b = buffer[byteIndex];
-            g = buffer[byteIndex + 1];
-            r = buffer[byteIndex + 2];
-            a = buffer[byteIndex + 3];
-            outputBuffer[m] = new MyColor(r, g, b, a);
-            byteIndex += 4;
-            //-----------------------------------
-            b = buffer[byteIndex];
-            g = buffer[byteIndex + 1];
-            r = buffer[byteIndex + 2];
-            a = buffer[byteIndex + 3];
-            outputBuffer[m + 1] = new MyColor(r, g, b, a);
-            byteIndex += 4;
-            //------------------------------------
-            //newline
-            tmpY++;
-            byteIndex = (tmpY * stride) + (cX * 4);
-            //------------------------------------
-            b = buffer[byteIndex];
-            g = buffer[byteIndex + 1];
-            r = buffer[byteIndex + 2];
-            a = buffer[byteIndex + 3];
-            outputBuffer[m + 2] = new MyColor(r, g, b, a);
-            byteIndex += 4;
-            //------------------------------------
-            b = buffer[byteIndex];
-            g = buffer[byteIndex + 1];
-            r = buffer[byteIndex + 2];
-            a = buffer[byteIndex + 3];
-            outputBuffer[m + 3] = new MyColor(r, g, b, a);
-            byteIndex += 4;
+            unsafe
+            {
+                b = buffer[byteIndex];
+                g = buffer[byteIndex + 1];
+                r = buffer[byteIndex + 2];
+                a = buffer[byteIndex + 3];
+                outputBuffer[m] = new MyColor(r, g, b, a);
+                byteIndex += 4;
+                //-----------------------------------
+                b = buffer[byteIndex];
+                g = buffer[byteIndex + 1];
+                r = buffer[byteIndex + 2];
+                a = buffer[byteIndex + 3];
+                outputBuffer[m + 1] = new MyColor(r, g, b, a);
+                byteIndex += 4;
+                //------------------------------------
+                //newline
+                tmpY++;
+                byteIndex = (tmpY * stride) + (cX * 4);
+                //------------------------------------
+                b = buffer[byteIndex];
+                g = buffer[byteIndex + 1];
+                r = buffer[byteIndex + 2];
+                a = buffer[byteIndex + 3];
+                outputBuffer[m + 2] = new MyColor(r, g, b, a);
+                byteIndex += 4;
+                //------------------------------------
+                b = buffer[byteIndex];
+                g = buffer[byteIndex + 1];
+                r = buffer[byteIndex + 2];
+                a = buffer[byteIndex + 3];
+                outputBuffer[m + 3] = new MyColor(r, g, b, a);
+                byteIndex += 4;
+            }
+
         }
         public void Read16(MyColor[] outputBuffer)
         {
@@ -153,47 +161,50 @@ namespace PixelFarm.Agg.Imaging
             int tmpY = this.cY - 1;
             int byteIndex = ((tmpY * stride) + cX * 4);
             byteIndex -= 4;//step back
-            //-------------------------------------------------             
-            for (int n = 0; n < 4; ++n)
-            {
-                //0
-                b = buffer[byteIndex];
-                g = buffer[byteIndex + 1];
-                r = buffer[byteIndex + 2];
-                a = buffer[byteIndex + 3];
-                outputBuffer[m] = new MyColor(r, g, b, a);
-                byteIndex += 4;
-                //------------------------------------------------
-                //1
-                b = buffer[byteIndex];
-                g = buffer[byteIndex + 1];
-                r = buffer[byteIndex + 2];
-                a = buffer[byteIndex + 3];
-                outputBuffer[m + 1] = new MyColor(r, g, b, a);
-                byteIndex += 4;
-                //------------------------------------------------
-                //2
-                b = buffer[byteIndex];
-                g = buffer[byteIndex + 1];
-                r = buffer[byteIndex + 2];
-                a = buffer[byteIndex + 3];
-                outputBuffer[m + 2] = new MyColor(r, g, b, a);
-                byteIndex += 4;
-                //------------------------------------------------
-                //3
-                b = buffer[byteIndex];
-                g = buffer[byteIndex + 1];
-                r = buffer[byteIndex + 2];
-                a = buffer[byteIndex + 3];
-                outputBuffer[m + 3] = new MyColor(r, g, b, a);
-                byteIndex += 4;
-                //------------------------------------------------
-                m += 4;
-                //go next row
-                tmpY++;
-                byteIndex = (tmpY * stride) + (cX * 4);
-                byteIndex -= 4;
+            unsafe
+            {  //-------------------------------------------------             
+                for (int n = 0; n < 4; ++n)
+                {
+                    //0
+                    b = buffer[byteIndex];
+                    g = buffer[byteIndex + 1];
+                    r = buffer[byteIndex + 2];
+                    a = buffer[byteIndex + 3];
+                    outputBuffer[m] = new MyColor(r, g, b, a);
+                    byteIndex += 4;
+                    //------------------------------------------------
+                    //1
+                    b = buffer[byteIndex];
+                    g = buffer[byteIndex + 1];
+                    r = buffer[byteIndex + 2];
+                    a = buffer[byteIndex + 3];
+                    outputBuffer[m + 1] = new MyColor(r, g, b, a);
+                    byteIndex += 4;
+                    //------------------------------------------------
+                    //2
+                    b = buffer[byteIndex];
+                    g = buffer[byteIndex + 1];
+                    r = buffer[byteIndex + 2];
+                    a = buffer[byteIndex + 3];
+                    outputBuffer[m + 2] = new MyColor(r, g, b, a);
+                    byteIndex += 4;
+                    //------------------------------------------------
+                    //3
+                    b = buffer[byteIndex];
+                    g = buffer[byteIndex + 1];
+                    r = buffer[byteIndex + 2];
+                    a = buffer[byteIndex + 3];
+                    outputBuffer[m + 3] = new MyColor(r, g, b, a);
+                    byteIndex += 4;
+                    //------------------------------------------------
+                    m += 4;
+                    //go next row
+                    tmpY++;
+                    byteIndex = (tmpY * stride) + (cX * 4);
+                    byteIndex -= 4;
+                }
             }
+
         }
         public void MoveNext()
         {

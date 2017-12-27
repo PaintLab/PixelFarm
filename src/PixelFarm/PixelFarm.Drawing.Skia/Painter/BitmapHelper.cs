@@ -16,7 +16,7 @@ namespace PixelFarm.Drawing.Skia
            IntPtr hBmpScan0)
         {
             //1st, fast
-            byte[] rawBuffer = ActualImage.GetBuffer(actualImage);
+            int[] rawBuffer = ActualImage.GetBuffer(actualImage);
             System.Runtime.InteropServices.Marshal.Copy(rawBuffer, 0,
                hBmpScan0, rawBuffer.Length);
         }

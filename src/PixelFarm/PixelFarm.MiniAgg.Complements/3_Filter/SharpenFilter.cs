@@ -20,9 +20,9 @@ namespace PixelFarm.Agg.Imaging
                 //byte[] output2 = new byte[buffer.Length]; 
 
                 TempMemPtr bufferPtr = img.GetBufferPtr();
-                byte[] output = new byte[bufferPtr.LengthInBytes]; //TODO: review here again
+                int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
 
-                fixed (byte* outputPtr = &output[0])
+                fixed (int* outputPtr = &output[0])
                 {
                     byte* srcBuffer = (byte*)bufferPtr.Ptr;
                     int* srcBuffer1 = (int*)srcBuffer;

@@ -32,8 +32,8 @@ namespace PixelFarm.Agg.Imaging
             int height)
         {
             SetRecieveBlender(image.GetRecieveBlender());
-            AttachBuffer(image.GetBuffer(),
-               bufferOffsetToFirstPixel,
+            AttachBuffer(image.GetInt32Buffer(),
+                bufferOffsetToFirstPixel,
                 width,
                 height,
                 image.Stride,
@@ -41,7 +41,7 @@ namespace PixelFarm.Agg.Imaging
                 image.BytesBetweenPixelsInclusive);
         }
 
-        public SubImageRW(byte[] buffer,
+        public SubImageRW(int[] buffer,
             int bufferOffsetToFirstPixel,
             int width,
             int height,
@@ -69,12 +69,12 @@ namespace PixelFarm.Agg.Imaging
         {
             Attach(image, blender, image.BytesBetweenPixelsInclusive, 0, image.BitDepth);
         }
-        public SubImageRW(IImageReaderWriter image, IPixelBlender blender, int x1, int y1, int x2, int y2)
-        {
-            SetRecieveBlender(blender);
-            Attach(image, x1, y1, x2, y2);
-        }
-        public override void ReplaceBuffer(byte[] newbuffer)
+        //public SubImageRW(IImageReaderWriter image, IPixelBlender blender, int x1, int y1, int x2, int y2)
+        //{
+        //    SetRecieveBlender(blender);
+        //    Attach(image, x1, y1, x2, y2);
+        //}
+        public override void ReplaceBuffer(int[] newbuffer)
         {
             if (_sourceImage != null)
             {
@@ -83,7 +83,7 @@ namespace PixelFarm.Agg.Imaging
 
         }
 
-        void AttachBuffer(byte[] buffer,
+        void AttachBuffer(int[] buffer,
           int bufferOffset,
           int width,
           int height,
@@ -112,49 +112,49 @@ namespace PixelFarm.Agg.Imaging
                 sourceImage.Stride,
                 bitsPerPixel,
                 distanceBetweenPixelsInclusive);
-            int offset = sourceImage.GetBufferOffsetXY(0, 0);
-            byte[] buffer = sourceImage.GetBuffer();
+            int offset = sourceImage.GetByteBufferOffsetXY(0, 0);
+            int[] buffer = sourceImage.GetInt32Buffer();
             SetBuffer(buffer, offset + bufferOffset);
             SetRecieveBlender(recieveBlender);
         }
-        bool Attach(IImageReaderWriter sourceImage, int x1, int y1, int x2, int y2)
-        {
-            _sourceImage = sourceImage;
-            SetBufferToNull();
-            if (x1 > x2 || y1 > y2)
-            {
-                throw new Exception("You need to have your x1 and y1 be the lower left corner of your sub image.");
-            }
-            RectInt boundsRect = new RectInt(x1, y1, x2, y2);
-            if (boundsRect.Clip(new RectInt(0, 0, sourceImage.Width - 1, sourceImage.Height - 1)))
-            {
-                SetDimmensionAndFormat(boundsRect.Width, boundsRect.Height, sourceImage.Stride, sourceImage.BitDepth, sourceImage.BytesBetweenPixelsInclusive);
-                int bufferOffset = sourceImage.GetBufferOffsetXY(boundsRect.Left, boundsRect.Bottom);
-                byte[] buffer = sourceImage.GetBuffer();
-                SetBuffer(buffer, bufferOffset);
-                return true;
-            }
+        //bool Attach(IImageReaderWriter sourceImage, int x1, int y1, int x2, int y2)
+        //{
+        //    _sourceImage = sourceImage;
+        //    SetBufferToNull();
+        //    if (x1 > x2 || y1 > y2)
+        //    {
+        //        throw new Exception("You need to have your x1 and y1 be the lower left corner of your sub image.");
+        //    }
+        //    RectInt boundsRect = new RectInt(x1, y1, x2, y2);
+        //    if (boundsRect.Clip(new RectInt(0, 0, sourceImage.Width - 1, sourceImage.Height - 1)))
+        //    {
+        //        SetDimmensionAndFormat(boundsRect.Width, boundsRect.Height, sourceImage.Stride, sourceImage.BitDepth, sourceImage.BytesBetweenPixelsInclusive);
+        //        int bufferOffset = sourceImage.GetByteBufferOffsetXY(boundsRect.Left, boundsRect.Bottom) / 4;
+        //        int[] buffer = sourceImage.GetInt32Buffer();
+        //        SetBuffer(buffer, bufferOffset);
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
-        void SetBuffer(byte[] byteBuffer, int bufferOffset)
+        void SetBuffer(int[] int32Buffer, int arrayElemOffset)
         {
             int height = this.Height;
-            int strideInBytes = this.Stride;
-            if (byteBuffer.Length < height * strideInBytes)
+
+            if (int32Buffer.Length < height * Width)
             {
                 throw new Exception("Your buffer does not have enough room it it for your height and strideInBytes.");
             }
 
-            SetBuffer(byteBuffer);
-            startBufferPixelAt = bufferOffset;
-            if (strideInBytes < 0)
-            {
-                //TODO: review here
+            SetBuffer(int32Buffer);
+            int32ArrayStartPixelAt = arrayElemOffset;
 
-                int addAmount = -((height - 1) * strideInBytes);
-                startBufferPixelAt = addAmount + bufferOffset;
+            if (this.Stride < 0) //stride in bytes
+            {
+                //TODO: review here 
+                int addAmount = -((height - 1) * Width);
+                int32ArrayStartPixelAt = addAmount + arrayElemOffset;
             }
             SetUpLookupTables();
         }

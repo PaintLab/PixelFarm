@@ -37,12 +37,25 @@ namespace PixelFarm.Agg
         {
             NaitveMemMx.MemCopy(dest, src, len);
         }
-        public static void memmove(byte[] dest, int destIndex, byte[] source, int sourceIndex, int Count)
+        public static void memmove(byte[] dest, int destIndex, byte[] source, int sourceIndex, int count)
         {
             if (source != dest
                 || destIndex < sourceIndex)
             {
-                memcpy(dest, destIndex, source, sourceIndex, Count);
+                memcpy(dest, destIndex, source, sourceIndex, count);
+            }
+            else
+            {
+                throw new Exception("this code needs to be tested");
+            }
+        }
+        public static unsafe void memmove(byte* dest, int destIndex, byte* source, int sourceIndex, int count)
+        {
+            if (source != dest
+                || destIndex < sourceIndex)
+            {
+                NaitveMemMx.memcpy(dest + destIndex, source + sourceIndex, count);
+                // memcpy(dest, destIndex, source, sourceIndex, Count);
             }
             else
             {
