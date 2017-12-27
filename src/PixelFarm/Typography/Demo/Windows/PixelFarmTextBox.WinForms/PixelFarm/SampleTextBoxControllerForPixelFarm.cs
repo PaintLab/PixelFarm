@@ -11,7 +11,7 @@ namespace SampleWinForms.UI
         Graphics g;
         VxsTextPrinter _printer;
         ActualImage destImg;
-        AggRenderSurface imgGfx2d;
+        AggRenderSurface _aggsx;
         AggPainter p;
         Bitmap winBmp;
         VisualLine _visualLine;
@@ -25,8 +25,8 @@ namespace SampleWinForms.UI
             g = hostControlGraphics;
             //
             destImg = new ActualImage(400, 300, PixelFormat.ARGB32);
-            imgGfx2d = new AggRenderSurface(destImg); //no platform
-            p = new AggPainter(imgGfx2d);
+            _aggsx = new AggRenderSurface(destImg); //no platform
+            p = new AggPainter(_aggsx);
             winBmp = new Bitmap(400, 300, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
             _printer = new VxsTextPrinter(p, null);
