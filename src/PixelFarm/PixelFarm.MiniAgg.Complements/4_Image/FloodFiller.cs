@@ -19,32 +19,40 @@ namespace PixelFarm.Agg
                 this.startColor = startColor;
             }
 
-            public virtual void SetPixel(byte[] destBuffer, int bufferOffset)
+            public unsafe void SetPixel(int* dest)
             {
-                destBuffer[bufferOffset] = fillColor.blue;
-                destBuffer[bufferOffset + 1] = fillColor.green;
-                destBuffer[bufferOffset + 2] = fillColor.red;
+                //*dest = (fillColor.red << 16) | (fillColor.green << 8) | (fillColor.blue);
+                *dest = (fillColor.blue << 16) | (fillColor.green << 8) | (fillColor.red);
             }
 
-            public abstract bool CheckPixel(byte[] destBuffer, int bufferOffset);
+            public abstract bool CheckPixel(int pixelValue32);
         }
 
-        class ExactMatch : FillingRule
+        sealed class ExactMatch : FillingRule
         {
             public ExactMatch(Color fillColor)
                 : base(fillColor)
             {
             }
 
-            public override bool CheckPixel(byte[] destBuffer, int bufferOffset)
+            public override bool CheckPixel(int pixelValue32)
             {
-                return (destBuffer[bufferOffset] == startColor.red) &&
-                    (destBuffer[bufferOffset + 1] == startColor.green) &&
-                    (destBuffer[bufferOffset + 2] == startColor.blue);
+                //ARGB
+                int r = ((pixelValue32 >> (CO.R * 8)) & 0xff);//16
+                int g = ((pixelValue32 >> (CO.G * 8)) & 0xff);//8
+                int b = ((pixelValue32 >> (CO.B * 8)) & 0xff);//0
+
+                return r == startColor.red &&
+                       g == startColor.green &&
+                       b == startColor.blue;
+
+                //return (destBuffer[bufferOffset] == startColor.red) &&
+                //    (destBuffer[bufferOffset + 1] == startColor.green) &&
+                //    (destBuffer[bufferOffset + 2] == startColor.blue);
             }
         }
 
-        class ToleranceMatch : FillingRule
+        sealed class ToleranceMatch : FillingRule
         {
             int tolerance0To255;
             public ToleranceMatch(Color fillColor, int tolerance0To255)
@@ -53,11 +61,22 @@ namespace PixelFarm.Agg
                 this.tolerance0To255 = tolerance0To255;
             }
 
-            public override bool CheckPixel(byte[] destBuffer, int bufferOffset)
+            public override bool CheckPixel(int pixelValue32)
             {
-                return (destBuffer[bufferOffset] >= (startColor.red - tolerance0To255)) && destBuffer[bufferOffset] <= (startColor.red + tolerance0To255) &&
-                    (destBuffer[bufferOffset + 1] >= (startColor.green - tolerance0To255)) && destBuffer[bufferOffset + 1] <= (startColor.green + tolerance0To255) &&
-                    (destBuffer[bufferOffset + 2] >= (startColor.blue - tolerance0To255)) && destBuffer[bufferOffset + 2] <= (startColor.blue + tolerance0To255);
+                //ARGB
+                int r = ((pixelValue32 >> (CO.R * 8)) & 0xff);
+                int g = ((pixelValue32 >> (CO.G * 8)) & 0xff);
+                int b = ((pixelValue32 >> (CO.B * 8)) & 0xff);
+
+
+                return (r >= (startColor.red - tolerance0To255)) && (r <= (startColor.red + tolerance0To255)) &&
+                       (g >= (startColor.green - tolerance0To255)) && (r <= (startColor.green + tolerance0To255)) &&
+                       (b >= (startColor.blue - tolerance0To255)) && (r <= (startColor.blue + tolerance0To255));
+
+
+                //return (destBuffer[bufferOffset] >= (startColor.red - tolerance0To255)) && destBuffer[bufferOffset] <= (startColor.red + tolerance0To255) &&
+                //    (destBuffer[bufferOffset + 1] >= (startColor.green - tolerance0To255)) && destBuffer[bufferOffset + 1] <= (startColor.green + tolerance0To255) &&
+                //    (destBuffer[bufferOffset + 2] >= (startColor.blue - tolerance0To255)) && destBuffer[bufferOffset + 2] <= (startColor.blue + tolerance0To255);
             }
         }
 
@@ -74,12 +93,16 @@ namespace PixelFarm.Agg
             }
         }
 
-        ImageReaderWriterBase destImage;
-        protected int imageStride = 0;
-        protected byte[] destBuffer = null;
+
+        int imageWidth;
+        int imageHeight;
+
+
         protected bool[] pixelsChecked;
         FillingRule fillRule;
         Queue<Range> ranges = new Queue<Range>(9);
+
+
         public FloodFill(Color fillColor)
         {
             fillRule = new ExactMatch(fillColor);
@@ -98,101 +121,129 @@ namespace PixelFarm.Agg
         }
         public void Fill(ActualImage img, int x, int y)
         {
+            //reuse this? 
             var imgReadWrite = new MyImageReaderWriter();
             imgReadWrite.ReloadImage(img);
+
             Fill(imgReadWrite, x, y);
         }
+
+
+        ImageReaderWriterBase _destImgRW;
+
         public void Fill(ImageReaderWriterBase bufferToFillOn, int x, int y)
         {
+            y -= imageHeight;
             unchecked // this way we can overflow the uint on negative and get a big number
             {
-                if ((uint)x > bufferToFillOn.Width || (uint)y > bufferToFillOn.Height)
+                if ((uint)x >= bufferToFillOn.Width || (uint)y >= bufferToFillOn.Height)
                 {
                     return;
                 }
             }
+            _destImgRW = bufferToFillOn;
+            TempMemPtr destBufferPtr = bufferToFillOn.GetBufferPtr();
 
-            destImage = bufferToFillOn;
-            imageStride = destImage.Stride;
-            destBuffer = destImage.GetBuffer();
-            int imageWidth = destImage.Width;
-            int imageHeight = destImage.Height;
-            pixelsChecked = new bool[destImage.Width * destImage.Height];
-            int startColorBufferOffset = destImage.GetByteBufferOffsetXY(x, y);
-            fillRule.SetStartColor(Drawing.Color.FromArgb(
-                destBuffer[startColorBufferOffset + 2],
-                destBuffer[startColorBufferOffset + 1],
-                destBuffer[startColorBufferOffset]));
-            LinearFill(x, y);
-            while (ranges.Count > 0)
+           
+
+            unsafe
             {
-                Range range = ranges.Dequeue();
-                int downY = range.y - 1;
-                int upY = range.y + 1;
-                int downPixelOffset = (imageWidth * (range.y - 1)) + range.startX;
-                int upPixelOffset = (imageWidth * (range.y + 1)) + range.startX;
-                for (int rangeX = range.startX; rangeX <= range.endX; rangeX++)
-                {
-                    if (range.y > 0)
-                    {
-                        if (!pixelsChecked[downPixelOffset])
-                        {
-                            int bufferOffset = destImage.GetByteBufferOffsetXY(rangeX, downY);
-                            if (fillRule.CheckPixel(destBuffer, bufferOffset))
-                            {
-                                LinearFill(rangeX, downY);
-                            }
-                        }
-                    }
+                imageWidth = bufferToFillOn.Width;
+                imageHeight = bufferToFillOn.Height;
+                //reset new buffer, clear mem?
+                pixelsChecked = new bool[imageWidth * imageHeight];
 
-                    if (range.y < (imageHeight - 1))
+                int* destBuffer = (int*)destBufferPtr.Ptr;
+                int startColorBufferOffset = bufferToFillOn.GetBufferOffsetXY32(x, y);
+
+                int start_color = *(destBuffer + startColorBufferOffset);
+
+                fillRule.SetStartColor(Drawing.Color.FromArgb(
+                    (start_color >> 16) & 0xff,
+                    (start_color >> 8) & 0xff,
+                    (start_color) & 0xff));
+
+
+                LinearFill(destBuffer, x, y);
+
+                while (ranges.Count > 0)
+                {
+                    Range range = ranges.Dequeue();
+                    int downY = range.y - 1;
+                    int upY = range.y + 1;
+                    int downPixelOffset = (imageWidth * (range.y - 1)) + range.startX;
+                    int upPixelOffset = (imageWidth * (range.y + 1)) + range.startX;
+                    for (int rangeX = range.startX; rangeX <= range.endX; rangeX++)
                     {
-                        if (!pixelsChecked[upPixelOffset])
+                        if (range.y > 0)
                         {
-                            int bufferOffset = destImage.GetByteBufferOffsetXY(rangeX, upY);
-                            if (fillRule.CheckPixel(destBuffer, bufferOffset))
+                            if (!pixelsChecked[downPixelOffset])
                             {
-                                LinearFill(rangeX, upY);
+                                int bufferOffset = bufferToFillOn.GetBufferOffsetXY32(rangeX, downY);
+
+                                if (fillRule.CheckPixel(*(destBuffer + bufferOffset)))
+                                {
+                                    LinearFill(destBuffer, rangeX, downY);
+                                }
                             }
                         }
+
+                        if (range.y < (imageHeight - 1))
+                        {
+                            if (!pixelsChecked[upPixelOffset])
+                            {
+                                int bufferOffset = bufferToFillOn.GetBufferOffsetXY32(rangeX, upY);
+                                if (fillRule.CheckPixel(*(destBuffer + bufferOffset)))
+                                {
+                                    LinearFill(destBuffer, rangeX, upY);
+                                }
+                            }
+                        }
+                        upPixelOffset++;
+                        downPixelOffset++;
                     }
-                    upPixelOffset++;
-                    downPixelOffset++;
                 }
             }
+            destBufferPtr.Release();
         }
 
-        void LinearFill(int x, int y)
+        /// <summary>
+        /// fill to left side and right side of the line
+        /// </summary>
+        /// <param name="destBuffer"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        unsafe void LinearFill(int* destBuffer, int x, int y)
         {
-            int bytesPerPixel = destImage.BytesBetweenPixelsInclusive;
-            int imageWidth = destImage.Width;
+
             int leftFillX = x;
-            int bufferOffset = destImage.GetByteBufferOffsetXY(x, y);
+            int bufferOffset = _destImgRW.GetBufferOffsetXY32(x, y);
             int pixelOffset = (imageWidth * y) + x;
             while (true)
             {
-                fillRule.SetPixel(destBuffer, bufferOffset);
+                fillRule.SetPixel(destBuffer + bufferOffset);
                 pixelsChecked[pixelOffset] = true;
                 leftFillX--;
                 pixelOffset--;
-                bufferOffset -= bytesPerPixel;
-                if (leftFillX <= 0 || (pixelsChecked[pixelOffset]) || !fillRule.CheckPixel(destBuffer, bufferOffset))
+                bufferOffset--;
+                if (leftFillX <= 0 || (pixelsChecked[pixelOffset]) || !fillRule.CheckPixel(*(destBuffer + bufferOffset)))
                 {
                     break;
                 }
             }
             leftFillX++;
+            //
             int rightFillX = x;
-            bufferOffset = destImage.GetByteBufferOffsetXY(x, y);
+            bufferOffset = _destImgRW.GetBufferOffsetXY32(x, y);
             pixelOffset = (imageWidth * y) + x;
             while (true)
             {
-                fillRule.SetPixel(destBuffer, bufferOffset);
+                fillRule.SetPixel(destBuffer + bufferOffset);
                 pixelsChecked[pixelOffset] = true;
                 rightFillX++;
                 pixelOffset++;
-                bufferOffset += bytesPerPixel;
-                if (rightFillX >= imageWidth || pixelsChecked[pixelOffset] || !fillRule.CheckPixel(destBuffer, bufferOffset))
+                bufferOffset++;
+                if (rightFillX >= imageWidth || pixelsChecked[pixelOffset] || !fillRule.CheckPixel(*(destBuffer + bufferOffset)))
                 {
                     break;
                 }

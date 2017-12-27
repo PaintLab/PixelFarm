@@ -47,7 +47,7 @@ namespace PixelFarm.Agg
         int bitDepth;
 
         ///// <summary>
-        ///// blender for destination image buffer, in this version we support 32 bits ARGB and 8 bits gray-scale
+        ///// blender for destination image buffer, in this version we support 32 bits ARGB 
         ///// </summary>
         //IPixelBlender recieveBlender;//blender to the target surface
         PixelBlenderBGRA _recvBlender32;
@@ -168,7 +168,7 @@ namespace PixelFarm.Agg
                     byte* destBuffer = (byte*)destPtr.Ptr;
                     int destOffset = GetByteBufferOffsetXY(clippedSourceImageRect.Left + destXOffset, clippedSourceImageRect.Bottom + destYOffset);
                     for (int i = 0; i < clippedSourceImageRect.Height; i++)
-                    {                         
+                    {
                         AggMemMx.memmove(destBuffer, destOffset, sourceBuffer, sourceOffset, lengthInBytes);
                         sourceOffset += sourceImage.Stride;
                         destOffset += Stride;
@@ -562,7 +562,7 @@ namespace PixelFarm.Agg
             int colorAlpha = sourceColor.alpha;
             if (colorAlpha != 0)
             {
-                //byte[] buffer = GetBuffer();
+
                 int[] buffer = this.GetInt32Buffer();
                 int bufferOffset32 = GetBufferOffsetXY32(x, y);
                 do
@@ -581,8 +581,6 @@ namespace PixelFarm.Agg
                     coversIndex++;
                 }
                 while (--len != 0);
-
-                //bufferPtr.Release();
             }
         }
 
@@ -694,13 +692,13 @@ namespace PixelFarm.Agg
             {
                 unsafe
                 {
-                    fixed (int* head = &raw_buffer32[bufferOffset32])
+                    fixed (int* head = &raw_buffer32[0])
                     {
-                        int* hptr = (int*)head;
+
                         int actualWidth = scanWidthBytes / 4;
                         do
                         {
-                            CopyOrBlend32_BasedOnAlphaAndCover(_recvBlender32, hptr, bufferOffset32, colors[colorsIndex], covers[coversIndex++]);
+                            CopyOrBlend32_BasedOnAlphaAndCover(_recvBlender32, head, bufferOffset32, colors[colorsIndex], covers[coversIndex++]);
 
                             //bufferOffset += actualWidth;
                             bufferOffset32++;
@@ -738,9 +736,9 @@ namespace PixelFarm.Agg
                 {
                     unsafe
                     {
-                        fixed (int* byteptr = &raw_buffer32[0])
+                        fixed (int* head = &raw_buffer32[0])
                         {
-                            int* head = (int*)byteptr;
+
                             int actualWidth = scanWidthBytes / 4;
                             do
                             {
