@@ -135,6 +135,7 @@ namespace PixelFarm.Drawing.GLES2
                 painter1.SmoothingMode = value;
             }
         }
+        
         /// <summary>
         /// Draws the specified portion of the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
         /// </summary>

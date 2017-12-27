@@ -34,7 +34,7 @@ namespace PixelFarm.DrawingGL
         //fonts
         RequestFont _requestFont;
         ITextPrinter _textPrinter;
-
+        RenderQualtity _renderQuality;
 
 
         public GLPainter(GLRenderSurface glsx)
@@ -62,7 +62,11 @@ namespace PixelFarm.DrawingGL
             _glsx.SetCanvasOrigin((int)ox, (int)oy);
         }
         public GLRenderSurface Canvas { get { return this._glsx; } }
-
+        public override RenderQualtity RenderQuality
+        {
+            get { return _renderQuality; }
+            set { _renderQuality = value; }
+        }
         public override RequestFont CurrentFont
         {
             get
@@ -194,17 +198,9 @@ namespace PixelFarm.DrawingGL
         {
             _glsx.Clear(color);
         }
-        public override void DoFilterBlurRecursive(RectInt area, int r)
+        public override void ApplyFilter(ImageFilter imgFilter)
         {
-            //filter with glsl
-        }
-        public override void DoFilterBlurStack(RectInt area, int r)
-        {
-        }
-        public override void DoFilter(RectInt area, int r)
-        {
-            //TODO: implement this
-
+            throw new NotImplementedException();
         }
         /// <summary>
         /// we do NOT store vxs

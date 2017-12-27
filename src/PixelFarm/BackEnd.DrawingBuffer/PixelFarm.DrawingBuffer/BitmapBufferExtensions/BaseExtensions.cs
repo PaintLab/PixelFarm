@@ -105,73 +105,73 @@ namespace PixelFarm.DrawingBuffer
 
 
 #if DEBUG
-        /// <summary>
-        /// Applies the given function to all the pixels of the bitmap in 
-        /// order to set their color.
-        /// </summary>
-        /// <param name="bmp">The WriteableBitmap.</param>
-        /// <param name="func">The function to apply. With parameters x, y and a color as a result</param>
-        public static void dbugForEach(this BitmapBuffer bmp, Func<int, int, ColorInt> func)
-        {
-            using (var context = bmp.GetBitmapContext())
-            {
-                int[] pixels = context.Pixels;
-                int w = context.Width;
-                int h = context.Height;
-                int index = 0;
+        ///// <summary>
+        ///// Applies the given function to all the pixels of the bitmap in 
+        ///// order to set their color.
+        ///// </summary>
+        ///// <param name="bmp">The WriteableBitmap.</param>
+        ///// <param name="func">The function to apply. With parameters x, y and a color as a result</param>
+        //public static void dbugForEach(this BitmapBuffer bmp, Func<int, int, ColorInt> func)
+        //{
+        //    using (var context = bmp.GetBitmapContext())
+        //    {
+        //        int[] pixels = context.Pixels;
+        //        int w = context.Width;
+        //        int h = context.Height;
+        //        int index = 0;
 
-                for (int y = 0; y < h; y++)
-                {
-                    for (int x = 0; x < w; x++)
-                    {
-                        pixels[index++] = func(x, y).ToPreMultAlphaColor();
-                    }
-                }
-            }
-        }
+        //        for (int y = 0; y < h; y++)
+        //        {
+        //            for (int x = 0; x < w; x++)
+        //            {
+        //                pixels[index++] = func(x, y).ToPreMultAlphaColor();
+        //            }
+        //        }
+        //    }
+        //}
 
-        /// <summary>
-        /// Applies the given function to all the pixels of the bitmap in 
-        /// order to set their color.
-        /// </summary>
-        /// <param name="bmp">The WriteableBitmap.</param>
-        /// <param name="func">The function to apply. With parameters x, y, source color and a color as a result</param>
-        public static void dbugForEach(this BitmapBuffer bmp, Func<int, int, ColorInt, ColorInt> func)
-        {
-            using (var context = bmp.GetBitmapContext())
-            {
-                int[] pixels = context.Pixels;
-                int w = context.Width;
-                int h = context.Height;
-                int index = 0;
+        ///// <summary>
+        ///// Applies the given function to all the pixels of the bitmap in 
+        ///// order to set their color.
+        ///// </summary>
+        ///// <param name="bmp">The WriteableBitmap.</param>
+        ///// <param name="func">The function to apply. With parameters x, y, source color and a color as a result</param>
+        //public static void dbugForEach(this BitmapBuffer bmp, Func<int, int, ColorInt, ColorInt> func)
+        //{
+        //    using (var context = bmp.GetBitmapContext())
+        //    {
+        //        int[] pixels = context.Pixels;
+        //        int w = context.Width;
+        //        int h = context.Height;
+        //        int index = 0;
 
-                for (int y = 0; y < h; y++)
-                {
-                    for (int x = 0; x < w; x++)
-                    {
-                        int c = pixels[index];
+        //        for (int y = 0; y < h; y++)
+        //        {
+        //            for (int x = 0; x < w; x++)
+        //            {
+        //                int c = pixels[index];
 
-                        // Premultiplied Alpha!
-                        byte a = (byte)(c >> 24);
-                        // Prevent division by zero
-                        int ai = a;
-                        if (ai == 0)
-                        {
-                            ai = 1;
-                        }
-                        // Scale inverse alpha to use cheap integer mul bit shift
-                        ai = ((255 << 8) / ai);
-                        ColorInt srcColor = ColorInt.FromArgb(a,
-                                                      (byte)((((c >> 16) & 0xFF) * ai) >> 8),
-                                                      (byte)((((c >> 8) & 0xFF) * ai) >> 8),
-                                                      (byte)((((c & 0xFF) * ai) >> 8)));
+        //                // Premultiplied Alpha!
+        //                byte a = (byte)(c >> 24);
+        //                // Prevent division by zero
+        //                int ai = a;
+        //                if (ai == 0)
+        //                {
+        //                    ai = 1;
+        //                }
+        //                // Scale inverse alpha to use cheap integer mul bit shift
+        //                ai = ((255 << 8) / ai);
+        //                ColorInt srcColor = ColorInt.FromArgb(a,
+        //                                              (byte)((((c >> 16) & 0xFF) * ai) >> 8),
+        //                                              (byte)((((c >> 8) & 0xFF) * ai) >> 8),
+        //                                              (byte)((((c & 0xFF) * ai) >> 8)));
 
 
-                        pixels[index++] = func(x, y, srcColor).ToPreMultAlphaColor();
-                    }
-                }
-            }
-        }
+        //                pixels[index++] = func(x, y, srcColor).ToPreMultAlphaColor();
+        //            }
+        //        }
+        //    }
+        //}
 
 
         /// <summary>

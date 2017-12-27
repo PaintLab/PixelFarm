@@ -24,13 +24,17 @@ namespace PixelFarm.Agg.Sample_Draw
 
         public override void Draw(Painter p)
         {
+
             p.Clear(Drawing.Color.White);
             p.UseSubPixelRendering = true;
             string teststr = "ABCDE pqyt 1230";
             p.FillColor = Color.Black;
             p.CurrentFont = new RequestFont("tahoma", 10);
             p.StrokeColor = Color.Red;
+
+            p.RenderQuality = RenderQualtity.Fast;
             p.DrawLine(0, 400, 800, 400);
+            p.DrawLine(0, 400, 800, 500);
             p.DrawString(teststr, 300, 400);
 
             //g.UseSubPixelRendering = false;

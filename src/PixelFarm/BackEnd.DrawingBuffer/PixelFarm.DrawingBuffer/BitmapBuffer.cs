@@ -272,8 +272,11 @@ namespace PixelFarm.DrawingBuffer
         public static ColorInt Red = ColorInt.FromArgb(255, 255, 0, 0);
         public static ColorInt Blue = ColorInt.FromArgb(255, 0, 0, 255);
     }
-    public class BitmapBuffer
+
+    public struct BitmapBuffer
     {
+        public static readonly BitmapBuffer Empty = new BitmapBuffer();
+
         //in this version , only 32 bits 
         public BitmapBuffer(int w, int h)
         {
@@ -293,5 +296,7 @@ namespace PixelFarm.DrawingBuffer
         /// pre-multiplied alpha color pixels
         /// </summary>
         public int[] Pixels { get; private set; }
+
+        public bool IsEmpty { get { return Pixels == null; } }
     }
 }

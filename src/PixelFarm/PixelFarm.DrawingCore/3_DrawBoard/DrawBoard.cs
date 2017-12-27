@@ -41,7 +41,7 @@ namespace PixelFarm.Drawing
         public abstract SmoothingMode SmoothingMode { get; set; }
         public abstract float StrokeWidth { get; set; }
         public abstract Color StrokeColor { get; set; }
-
+        
 
         ////////////////////////////////////////////////////////////////////////////
         //states
@@ -108,6 +108,26 @@ namespace PixelFarm.Drawing
         //-------------------------------------------------------
     }
 
+
+    public enum RenderQualtity
+    {
+        Fast,
+        HighQuality
+    }
+
+    /// <summary>
+    /// image filter specification
+    /// </summary>
+    public abstract class ImageFilter
+    {
+        public abstract ImageFilterName Name { get; }
+    }
+    public enum ImageFilterName
+    {
+        StackBlur,
+        RecursiveBlur,
+        Sharpen,
+    }
     public enum SmoothingMode
     {
         AntiAlias = 4,
