@@ -106,8 +106,17 @@ namespace PixelFarm.Agg
             Closed
         }
 
-        public ScanlineRasterizer()
+
+        int _renderSurfaceW;
+        int _renderSurfaceH;
+        bool _filpY;
+
+        public ScanlineRasterizer(int w, int h, bool flipY = true)
         {
+            this._renderSurfaceW = w;
+            this._renderSurfaceH = h;
+            this._filpY = flipY;
+
             m_cellAARas = new CellAARasterizer();
             m_vectorClipper = new VectorClipper(m_cellAARas);
             m_filling_rule = FillingRule.NonZero;
@@ -309,28 +318,63 @@ namespace PixelFarm.Agg
 
             if (ExtendX3ForSubPixelRendering)
             {
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+                if (this._filpY)
                 {
+                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+                    {
 #if DEBUG
-                    dbugVertexCount++;
+                        dbugVertexCount++;
 #endif
-                    //---------------------------------------------
-                    //NOTE: we scale horizontal 3 times.
-                    //subpixel renderer will shrink it to 1 
-                    //---------------------------------------------
-                    AddVertex(cmd, (x + offsetOrgX) * 3, y + offsetOrgY);
+                        //---------------------------------------------
+                        //NOTE: we scale horizontal 3 times.
+                        //subpixel renderer will shrink it to 1 
+                        //---------------------------------------------
+
+                        AddVertex(cmd, (x + offsetOrgX) * 3, _renderSurfaceH - (y + offsetOrgY));
+                    }
                 }
+                else
+                {
+                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+                    {
+#if DEBUG
+                        dbugVertexCount++;
+#endif
+                        //---------------------------------------------
+                        //NOTE: we scale horizontal 3 times.
+                        //subpixel renderer will shrink it to 1 
+                        //---------------------------------------------
+
+                        AddVertex(cmd, (x + offsetOrgX) * 3, (y + offsetOrgY));
+                    }
+                }
+
             }
             else
             {
-                while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+                if (this._filpY)
                 {
+                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+                    {
 #if DEBUG
-                    dbugVertexCount++;
+                        dbugVertexCount++;
 #endif
 
-                    AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
+                        AddVertex(cmd, x + offsetOrgX, _renderSurfaceH - (y + offsetOrgY));
+                    }
                 }
+                else
+                {
+                    while ((cmd = snapIter.GetNextVertex(out x, out y)) != VertexCmd.NoMore)
+                    {
+#if DEBUG
+                        dbugVertexCount++;
+#endif
+
+                        AddVertex(cmd, x + offsetOrgX, y + offsetOrgY);
+                    }
+                }
+
             }
 
 
