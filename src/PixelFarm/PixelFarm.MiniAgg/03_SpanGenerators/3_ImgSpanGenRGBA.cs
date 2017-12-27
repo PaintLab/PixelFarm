@@ -83,6 +83,7 @@ namespace PixelFarm.Agg.Imaging
                         src_ptr++;//move next
                     } while (--len != 0);
                 }
+                srcBufferPtr.Release();
             }
 
 

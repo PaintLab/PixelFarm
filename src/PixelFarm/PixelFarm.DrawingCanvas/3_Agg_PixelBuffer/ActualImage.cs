@@ -36,11 +36,11 @@ namespace PixelFarm.Agg
     {
         int _lenInBytes; //in bytes
         System.Runtime.InteropServices.GCHandle handle1;
-        public TempMemPtr(byte[] buffer)
-        {
-            handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
-            this._lenInBytes = buffer.Length;
-        }
+        //public TempMemPtr(byte[] buffer)
+        //{
+        //    handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
+        //    this._lenInBytes = buffer.Length;
+        //}
         public TempMemPtr(int[] buffer) //in element count
         {
             handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
