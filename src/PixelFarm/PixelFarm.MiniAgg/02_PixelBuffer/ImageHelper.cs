@@ -43,7 +43,7 @@ namespace PixelFarm.Agg.Imaging
             int width = Math.Min(parentImage.Width - left, subImgBounds.Width);
             int height = Math.Min(parentImage.Height - bottom, subImgBounds.Height);
             int bufferOffsetToFirstPixel = parentImage.GetByteBufferOffsetXY(left, bottom);
-            return new SubImageRW(parentImage, bufferOffsetToFirstPixel, width, height);
+            return new SubImageRW(parentImage, bufferOffsetToFirstPixel / 4, width, height);
         }
     }
 }
