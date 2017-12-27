@@ -484,9 +484,6 @@
     <Compile Include="..\pixelfarm.miniagg.complements\rendersurface\AggRenderSurface_RenderImages.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\RenderSurface\AggRenderSurface_RenderImages.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ChildImage.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ChildImage.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ColorOrder.cs</Link>
     </Compile>
@@ -510,6 +507,9 @@
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\PixelBlenderRGBA.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\SubImageRW.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\SubImageRW.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\03_spangenerators\0_ISpanGenerator.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\0_ISpanGenerator.cs</Link>

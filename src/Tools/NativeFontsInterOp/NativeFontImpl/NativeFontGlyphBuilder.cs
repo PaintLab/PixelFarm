@@ -53,23 +53,36 @@ namespace PixelFarm.Drawing.Fonts
             //convert to 32bpp
             //make gray value as alpha channel color value
             ActualImage actualImage = new ActualImage(w, h, Agg.PixelFormat.ARGB32);
-            byte[] newBmp32Buffer = ActualImage.GetBuffer(actualImage);
+
+
+            TempMemPtr memPtr = ActualImage.GetBufferPtr(actualImage);
+            //byte[] newBmp32Buffer = ActualImage.GetBuffer(actualImage);
             int src_p = 0;
             int target_p = 0;
-            for (int r = 0; r < h; ++r)
+            unsafe
             {
-                for (int c = 0; c < w; ++c)
+                byte* newBmp32Buffer = (byte*)memPtr.Ptr;
+                for (int r = 0; r < h; ++r)
                 {
-                    byte srcColor = buff[src_p + c];
-                    //expand to 4 channel
-                    newBmp32Buffer[target_p] = 0;
-                    newBmp32Buffer[target_p + 1] = 0;
-                    newBmp32Buffer[target_p + 2] = 0;
-                    newBmp32Buffer[target_p + 3] = srcColor; //A
-                    target_p += 4;
+                    for (int c = 0; c < w; ++c)
+                    {
+                        byte srcColor = buff[src_p + c];
+                        //expand to 4 channel 
+
+                        newBmp32Buffer[target_p] = 0;
+                        newBmp32Buffer[target_p + 1] = 0;
+                        newBmp32Buffer[target_p + 2] = 0;
+                        newBmp32Buffer[target_p + 3] = srcColor; //A
+
+                        target_p += 4;
+                    }
+                    src_p += stride;
                 }
-                src_p += stride;
             }
+            memPtr.Release();
+
+
+
             fontGlyph.glyphImage32 = actualImage;
         }
 

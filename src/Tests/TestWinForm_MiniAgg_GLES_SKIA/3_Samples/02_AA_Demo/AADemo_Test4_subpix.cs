@@ -32,47 +32,48 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int height = img.Height;
             //56 level grey scale buffer
 
-            byte[] srcImgBuffer = ActualImage.GetBuffer(img);
+
+            TempMemPtr srcMemPtr = ActualImage.GetBufferPtr(img);
+
             int greyScaleBufferLen = imgW * height;
             byte[] greyScaleBuffer = new byte[greyScaleBufferLen];
-
-            //for (int i = greyScaleBufferLen - 1; i >= 0; --i)
-            //{
-            //    greyScaleBuffer[i] = 64;
-            //}
-
 
             int destIndex = 0;
             int srcImgIndex = 0;
             int srcImgStride = img.Stride;
-
-            for (int y = 0; y < height; ++y)
+            unsafe
             {
-                srcImgIndex = srcImgStride * y;
-                destIndex = imgW * y;
-                for (int x = 0; x < imgW; ++x)
+                byte* srcImgBuffer = (byte*)srcMemPtr.Ptr;
+                for (int y = 0; y < height; ++y)
                 {
-                    byte r = srcImgBuffer[srcImgIndex];
-                    byte g = srcImgBuffer[srcImgIndex + 1];
-                    byte b = srcImgBuffer[srcImgIndex + 2];
-                    byte a = srcImgBuffer[srcImgIndex + 3];
-                    if (r != 0 || g != 0 || b != 0)
+                    srcImgIndex = srcImgStride * y;
+                    destIndex = imgW * y;
+                    for (int x = 0; x < imgW; ++x)
                     {
+                        byte r = srcImgBuffer[srcImgIndex];
+                        byte g = srcImgBuffer[srcImgIndex + 1];
+                        byte b = srcImgBuffer[srcImgIndex + 2];
+                        byte a = srcImgBuffer[srcImgIndex + 3];
+                        if (r != 0 || g != 0 || b != 0)
+                        {
+                        }
+                        if (a != 255)
+                        {
+
+                        }
+                        //skip alpha
+                        //byte greyScaleValue =
+                        //    (byte)((0.333f * (float)r) + (0.5f * (float)g) + (0.1666f * (float)b));
+
+                        greyScaleBuffer[destIndex] = (byte)(((a + 1) / 256f) * 64f);
+
+                        destIndex++;
+                        srcImgIndex += 4;
                     }
-                    if (a != 255)
-                    {
-
-                    }
-                    //skip alpha
-                    //byte greyScaleValue =
-                    //    (byte)((0.333f * (float)r) + (0.5f * (float)g) + (0.1666f * (float)b));
-
-                    greyScaleBuffer[destIndex] = (byte)(((a + 1) / 256f) * 64f);
-
-                    destIndex++;
-                    srcImgIndex += 4;
                 }
             }
+
+            srcMemPtr.Release();
             return greyScaleBuffer;
         }
         void Blend(ActualImage destImg, byte[] greyBuff, int greyBufferWidth, int greyBufferHeight)
@@ -97,7 +98,8 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             };
             //-------------------------
             //destination
-            byte[] destImgBuffer = ActualImage.GetBuffer(destImg);
+
+            TempMemPtr memPtr = ActualImage.GetBufferPtr(destImg);
             //start pixel
             int destImgIndex = (x * 4) + (destImg.Stride * y);
             //start img src
@@ -105,42 +107,38 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             int colorIndex = 0;
             int round = 0;
             byte color_a = color.alpha;
-            while (width > 3)
+            unsafe
             {
-                //try
-                //{
+                byte* destImgBuffer = (byte*)memPtr.Ptr;
+                while (width > 3)
+                {
+                    int a0 = expandGreyBuffer[srcImgIndex] * color_a;
+                    int a1 = expandGreyBuffer[srcImgIndex + 1] * color_a;
+                    int a2 = expandGreyBuffer[srcImgIndex + 2] * color_a;
 
-                int a0 = expandGreyBuffer[srcImgIndex] * color_a;
-                int a1 = expandGreyBuffer[srcImgIndex + 1] * color_a;
-                int a2 = expandGreyBuffer[srcImgIndex + 2] * color_a;
+                    byte ec0 = destImgBuffer[destImgIndex];//existing color
+                    byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
+                    byte ec2 = destImgBuffer[destImgIndex + 2];//existing color 
+                                                               //------------------------------------------------------
+                                                               //please note that we swap a2 and a0 on the fly****
+                                                               //------------------------------------------------------
+                    byte n0 = (byte)((((rgb[colorIndex] - ec0) * a2) + (ec0 << 16)) >> 16);
+                    byte n1 = (byte)((((rgb[colorIndex + 1] - ec1) * a1) + (ec1 << 16)) >> 16);
+                    byte n2 = (byte)((((rgb[colorIndex + 2] - ec2) * a0) + (ec2 << 16)) >> 16);
 
-                byte ec0 = destImgBuffer[destImgIndex];//existing color
-                byte ec1 = destImgBuffer[destImgIndex + 1];//existing color
-                byte ec2 = destImgBuffer[destImgIndex + 2];//existing color
+                    destImgBuffer[destImgIndex] = n0;
+                    destImgBuffer[destImgIndex + 1] = n1;
+                    destImgBuffer[destImgIndex + 2] = n2;
 
-                //------------------------------------------------------
-                //please note that we swap a2 and a0 on the fly****
-                //------------------------------------------------------
-                byte n0 = (byte)((((rgb[colorIndex] - ec0) * a2) + (ec0 << 16)) >> 16);
-                byte n1 = (byte)((((rgb[colorIndex + 1] - ec1) * a1) + (ec1 << 16)) >> 16);
-                byte n2 = (byte)((((rgb[colorIndex + 2] - ec2) * a0) + (ec2 << 16)) >> 16);
-
-                destImgBuffer[destImgIndex] = n0;
-                destImgBuffer[destImgIndex + 1] = n1;
-                destImgBuffer[destImgIndex + 2] = n2;
-
-                destImgIndex += 4;
-                round = 0;
-                colorIndex = 0;
-                srcImgIndex += 3;
-                width -= 3;
-
-                //}
-                //catch (Exception ex)
-                //{
-
-                //}
+                    destImgIndex += 4;
+                    round = 0;
+                    colorIndex = 0;
+                    srcImgIndex += 3;
+                    width -= 3;
+                }
+                memPtr.Release();
             }
+
         }
 
 
@@ -343,7 +341,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
-            //p.Line(2, 0, 10, 15);
+            p.DrawLine(2, 0, 10, 15);
 
             int lineLen = 10;
             int x = 30;
@@ -365,7 +363,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 tovxs.WriteOutput(vxs);
                 p.Fill(vxs);
             }
-            //p.FillRectangle(0, 0, 20, 20);
+            p.FillRect(0, 0, 20, 20);
 
         }
 
@@ -406,102 +404,102 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
         static LcdDistributionLut g8_4_2_1 = new LcdDistributionLut(64, 4 / 8f, 2 / 8f, 1 / 8f);
         void BlendWithLcdTechnique(ActualImage destImg, ActualImage glyphImg, PixelFarm.Drawing.Color color)
         {
-            var g8Lut = g8_4_2_1;
-            var forwardBuffer = new ScanlineSubPixelRasterizer.TempForwardAccumBuffer();
-            int glyphH = glyphImg.Height;
-            int glyphW = glyphImg.Width;
-            byte[] glyphBuffer = ActualImage.GetBuffer(glyphImg);
-            int srcIndex = 0;
-            int srcStride = glyphImg.Stride;
-            byte[] destImgBuffer = ActualImage.GetBuffer(destImg);
-            //start pixel
-            int destImgIndex = 0;
-            int destX = 0;
-            byte[] rgb = new byte[]{
-                color.R,
-                color.G,
-                color.B
-            };
+            //var g8Lut = g8_4_2_1;
+            //var forwardBuffer = new ScanlineSubPixelRasterizer.TempForwardAccumBuffer();
+            //int glyphH = glyphImg.Height;
+            //int glyphW = glyphImg.Width;
+            //byte[] glyphBuffer = ActualImage.GetBuffer(glyphImg);
+            //int srcIndex = 0;
+            //int srcStride = glyphImg.Stride;
+            //byte[] destImgBuffer = ActualImage.GetBuffer(destImg);
+            ////start pixel
+            //int destImgIndex = 0;
+            //int destX = 0;
+            //byte[] rgb = new byte[]{
+            //    color.R,
+            //    color.G,
+            //    color.B
+            //};
 
-            byte color_a = color.alpha;
+            //byte color_a = color.alpha;
 
-            for (int y = 0; y < glyphH; ++y)
-            {
-                srcIndex = srcStride * y;
-                destImgIndex = (destImg.Stride * y) + (destX * 4); //4 color component
-                int i = 0;
-                int round = 0;
-                forwardBuffer.Reset();
-                byte e0 = 0;
-                int prev_a = 0;
+            //for (int y = 0; y < glyphH; ++y)
+            //{
+            //    srcIndex = srcStride * y;
+            //    destImgIndex = (destImg.Stride * y) + (destX * 4); //4 color component
+            //    int i = 0;
+            //    int round = 0;
+            //    forwardBuffer.Reset();
+            //    byte e0 = 0;
+            //    int prev_a = 0;
 
-                for (int x = 0; x < glyphW; ++x)
-                {
-                    //1.
-                    //read 1 pixel (4 bytes, 4 color components)
-                    byte r = glyphBuffer[srcIndex];
-                    byte g = glyphBuffer[srcIndex + 1];
-                    byte b = glyphBuffer[srcIndex + 2];
-                    byte a = glyphBuffer[srcIndex + 3];
-
-
-                    //2.
-                    //convert to grey scale and convert to 65 level grey scale value 
-                    byte greyScaleValue = g8Lut.Convert255ToLevel(a);
-
-                    for (int n = 0; n < 3; ++n)
-                    {
-
-                        forwardBuffer.WriteAccumAndReadBack(
-                         g8Lut.TertiaryFromLevel(greyScaleValue),
-                         g8Lut.SecondaryFromLevel(greyScaleValue),
-                         g8Lut.PrimaryFromLevel(greyScaleValue), out e0);
-
-                        //5. blend this pixel to dest image (expand to 5 (sub)pixel)                          
-                        BlendPixel(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                    }
-                    //------------------------------------------------------------
-                    prev_a = a;
-                    srcIndex += 4;
-                }
-                //---------
-                //when finish each line
-                //we must draw extened 4 pixels
-                //---------
-
-                {
+            //    for (int x = 0; x < glyphW; ++x)
+            //    {
+            //        //1.
+            //        //read 1 pixel (4 bytes, 4 color components)
+            //        byte r = glyphBuffer[srcIndex];
+            //        byte g = glyphBuffer[srcIndex + 1];
+            //        byte b = glyphBuffer[srcIndex + 2];
+            //        byte a = glyphBuffer[srcIndex + 3];
 
 
-                    byte e1, e2, e3, e4;
-                    forwardBuffer.ReadRemaining4(out e1, out e2, out e3, out e4);
-                    int remainingEnergy = Math.Min(srcStride, 4);
-                    switch (remainingEnergy)
-                    {
-                        default: throw new NotSupportedException();
-                        case 4:
-                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            BlendPixel(e4 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            break;
-                        case 3:
-                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            break;
-                        case 2:
-                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            break;
-                        case 1:
-                            BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
-                            break;
-                        case 0:
-                            //nothing
-                            break;
-                    }
-                }
-            }
+            //        //2.
+            //        //convert to grey scale and convert to 65 level grey scale value 
+            //        byte greyScaleValue = g8Lut.Convert255ToLevel(a);
+
+            //        for (int n = 0; n < 3; ++n)
+            //        {
+
+            //            forwardBuffer.WriteAccumAndReadBack(
+            //             g8Lut.TertiaryFromLevel(greyScaleValue),
+            //             g8Lut.SecondaryFromLevel(greyScaleValue),
+            //             g8Lut.PrimaryFromLevel(greyScaleValue), out e0);
+
+            //            //5. blend this pixel to dest image (expand to 5 (sub)pixel)                          
+            //            BlendPixel(e0 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+            //        }
+            //        //------------------------------------------------------------
+            //        prev_a = a;
+            //        srcIndex += 4;
+            //    }
+            //    //---------
+            //    //when finish each line
+            //    //we must draw extened 4 pixels
+            //    //---------
+
+            //    {
+
+
+            //        byte e1, e2, e3, e4;
+            //        forwardBuffer.ReadRemaining4(out e1, out e2, out e3, out e4);
+            //        int remainingEnergy = Math.Min(srcStride, 4);
+            //        switch (remainingEnergy)
+            //        {
+            //            default: throw new NotSupportedException();
+            //            case 4:
+            //                BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+            //                BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+            //                BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+            //                BlendPixel(e4 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+            //                break;
+            //            case 3:
+            //                BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+            //                BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+            //                BlendPixel(e3 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+            //                break;
+            //            case 2:
+            //                BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+            //                BlendPixel(e2 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+            //                break;
+            //            case 1:
+            //                BlendPixel(e1 * color_a, rgb, ref i, destImgBuffer, ref destImgIndex, ref round);
+            //                break;
+            //            case 0:
+            //                //nothing
+            //                break;
+            //        }
+            //    }
+            //}
         }
 
         static void BlendPixel(int a0, byte[] rgb, ref int color_index, byte[] destImgBuffer, ref int destImgIndex, ref int round)

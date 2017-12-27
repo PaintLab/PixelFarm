@@ -116,7 +116,7 @@ namespace TestGlfw
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
                 PixelFarm.Agg.PixelFormat.ARGB32,
-                extendedImg.Pixels
+                extendedImg.Pixels32
                 );
             //the imgtools load data as BigEndian
             actualImg.IsBigEndian = true;
@@ -222,7 +222,7 @@ namespace TestGlfw
                 extendedImg.PixelWidth,
                 extendedImg.PixelHeight,
                 PixelFarm.Agg.PixelFormat.ARGB32,
-                extendedImg.Pixels
+                extendedImg.Pixels32
                 );
             //the imgtools load data as BigEndian
             actualImg.IsBigEndian = true;

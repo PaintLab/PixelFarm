@@ -18,7 +18,7 @@ namespace PixelFarm.DrawingGL
         }
         public override IntPtr GetRawBufferHead()
         {
-            byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(image);
+            int[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(image);
             this.handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
             return this.handle.AddrOfPinnedObject();
         }

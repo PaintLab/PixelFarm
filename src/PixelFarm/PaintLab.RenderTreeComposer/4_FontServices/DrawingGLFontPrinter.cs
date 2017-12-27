@@ -99,9 +99,9 @@ namespace PixelFarm.DrawingGL
                 //2. print text span into Agg Canvas
                 _vxsTextPrinter.DrawString(text, startAt, len, 0, 0);
                 //3.copy to gl bitmap
-                byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
+                //byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
-                GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
+                GLBitmap glBmp = new GLBitmap(_actualImage);
                 glBmp.IsInvert = false;
                 //TODO: review font height
                 if (StartDrawOnLeftTop)
@@ -131,12 +131,13 @@ namespace PixelFarm.DrawingGL
                 //------------------------------------------------------
 
                 //3.copy to gl bitmap
-                byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
+                //byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(_actualImage);
                 //------------------------------------------------------
-                //debug save image from agg's buffer
+                //debug save image from agg's buffer 
 
                 //------------------------------------------------------
-                GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
+                //GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, true);
+                GLBitmap glBmp = new GLBitmap(_actualImage);
                 glBmp.IsInvert = false;
                 //TODO: review font height 
                 //if (StartDrawOnLeftTop)

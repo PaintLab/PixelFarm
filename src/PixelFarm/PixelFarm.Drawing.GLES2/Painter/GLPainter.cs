@@ -226,7 +226,7 @@ namespace PixelFarm.DrawingGL
                 if (image is ActualImage)
                 {
                     ActualImage actualImage = (ActualImage)image;
-                    glBmp = new GLBitmap(actualImage.Width, actualImage.Height, ActualImage.GetBuffer(actualImage), false);
+                    glBmp = new GLBitmap(actualImage);
                 }
                 else
                 {
@@ -235,7 +235,7 @@ namespace PixelFarm.DrawingGL
                     //for now, create a new one -- after we copy we, don't use it 
                     var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
                     image.RequestInternalBuffer(ref req);
-                    byte[] copy = req.OutputBuffer;
+                    int[] copy = req.OutputBuffer32;
                     glBmp = new GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
                 }
 

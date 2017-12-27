@@ -19,7 +19,13 @@ namespace ImageTools
                 return _pixels;
             }
         }
-
+        public int[] Pixels32
+        {
+            get
+            {   //Contract.Ensures(!IsFilled || Contract.Result<byte[]>() != null);
+                throw new NotSupportedException();
+            }
+        }
         int _pixelHeight;
         public int PixelHeight
         {
