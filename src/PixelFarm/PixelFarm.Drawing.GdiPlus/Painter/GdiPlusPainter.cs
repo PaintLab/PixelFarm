@@ -257,7 +257,7 @@ namespace PixelFarm.Drawing.WinGdi
             //        {
             //            VxsHelper.FillVxsSnap(_gfx, new VertexStoreSnap(vxs, pathIndexs[i]), colors[i]);
             //        }
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
         }
 
         public override void Draw(VertexStoreSnap vxs)

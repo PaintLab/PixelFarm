@@ -50,7 +50,7 @@ namespace PixelFarm.Agg
             this.destImageReaderWriter = new MyImageReaderWriter();
             this.destImageReaderWriter.ReloadImage(destImage);
             //
-            this.sclineRas = new ScanlineRasterizer();
+            this.sclineRas = new ScanlineRasterizer(destImage.Width, destImage.Height);
             this.sclineRasToBmp = new ScanlineRasToDestBitmapRenderer();
             //
             this.destWidth = destImage.Width;
