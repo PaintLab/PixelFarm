@@ -271,6 +271,7 @@ namespace PixelFarm.Agg.UI
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
             ParentToChildTransform.InverseTransform(ref x, ref y);
+            //ParentToChildTransform.Transform(ref x, ref y);
             for (int i = 0; i < m_num_points; i++)
             {
                 //check if the testpoint is in the area of a control point.
@@ -333,6 +334,7 @@ namespace PixelFarm.Agg.UI
             double x = mouseEvent.X;
             double y = mouseEvent.Y;
             ParentToChildTransform.InverseTransform(ref x, ref y);
+            //ParentToChildTransform.Transform(ref x, ref y);
             if (m_node == (int)(m_num_points))
             {
                 dx = x - m_dx;
