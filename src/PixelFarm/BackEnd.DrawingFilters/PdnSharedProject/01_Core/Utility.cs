@@ -13,10 +13,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using System.IO;
-
-using System.Reflection;
 using System.Text;
-namespace PixelFarm.Drawing
+
+namespace PixelFarm.Drawing.DrawingBuffer
 {
     /// <summary>
     /// Defines miscellaneous constants and static functions.
@@ -196,16 +195,6 @@ namespace PixelFarm.Drawing
             }
         }
 
-        public static long TicksToMs(long ticks)
-        {
-            return ticks / 10000;
-        }
-
-        public static string GetStaticName(Type type)
-        {
-            PropertyInfo pi = type.GetProperty("StaticName", BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty);
-            return (string)pi.GetValue(null, null);
-        }
 
 
         /// <summary>
@@ -315,85 +304,6 @@ namespace PixelFarm.Drawing
 
             return sum;
         }
-
-
-        //public static Icon ImageToIcon(Image image)
-        //{
-        //    return ImageToIcon(image, PixelUtils.TransparentKey);
-        //}
-
-        //public static Icon ImageToIcon(Image image, bool disposeImage)
-        //{
-        //    return ImageToIcon(image, PixelUtils.TransparentKey, disposeImage);
-        //}
-
-        //public static Icon ImageToIcon(Image image, Color seeThru)
-        //{
-        //    return ImageToIcon(image, seeThru, false);
-        //}
-
-        ///// <summary>
-        ///// Converts an Image to an Icon.
-        ///// </summary>
-        ///// <param name="image">The Image to convert to an icon. Must be an appropriate icon size (32x32, 16x16, etc).</param>
-        ///// <param name="seeThru">The color that will be treated as transparent in the icon.</param>
-        ///// <param name="disposeImage">Whether or not to dispose the passed-in Image.</param>
-        ///// <returns>An Icon representation of the Image.</returns>
-        //public static Icon ImageToIcon(Image image, Color seeThru, bool disposeImage)
-        //{
-        //    throw new NotSupportedException();
-        //    //Bitmap bitmap = new Bitmap(image);
-
-        //    //for (int y = 0; y < bitmap.Height; ++y)
-        //    //{
-        //    //    for (int x = 0; x < bitmap.Width; ++x)
-        //    //    {
-        //    //        if (bitmap.GetPixel(x, y) == seeThru)
-        //    //        {
-        //    //            bitmap.SetPixel(x, y, Color.FromArgb(0));
-        //    //        }
-        //    //    }
-        //    //}
-
-        //    //Icon icon = Icon.FromHandle(bitmap.GetHicon());
-        //    //bitmap.Dispose();
-
-        //    //if (disposeImage)
-        //    //{
-        //    //    image.Dispose();
-        //    //}
-
-        //    //return icon;
-        //}
-
-        //public static Icon BitmapToIcon(Bitmap bitmap, bool disposeBitmap)
-        //{
-        //    throw new NotSupportedException();
-
-        //    //Icon icon = Icon.FromHandle(bitmap.GetHicon());
-
-        //    //if (disposeBitmap)
-        //    //{
-        //    //    bitmap.Dispose();
-        //    //}
-
-        //    //return icon;
-        //}
-
-        //public static Icon SurfaceToIcon(Surface surface, bool disposeSurface)
-        //{
-        //    Bitmap bitmap = surface.CreateAliasedBitmap();
-        //    Icon icon = Icon.FromHandle(bitmap.GetHicon());
-
-        //    bitmap.Dispose();
-
-        //    if (disposeSurface)
-        //    {
-        //        surface.Dispose();
-        //    }
-
-        //    return icon;
-        //}
 
         public static Point GetRectangleCenter(Rectangle rect)
         {
@@ -832,16 +742,6 @@ namespace PixelFarm.Drawing
             return reversed;
         }
 
-        //public static void SerializeObjectToStream(object graph, Stream stream)
-        //{
-        //    new BinaryFormatter().Serialize(stream, graph);
-        //}
-
-        //public static object DeserializeObjectFromStream(Stream stream)
-        //{
-        //    return new BinaryFormatter().Deserialize(stream);
-        //}
-
         /// <summary>
         /// Allows you to find the bounding box for a "region" that is described as an
         /// array of bounding boxes.
@@ -1032,19 +932,6 @@ namespace PixelFarm.Drawing
             return ((centerA.X - centerB.X) * (centerA.X - centerB.X)) +
                 ((centerA.Y - centerB.Y) * (centerA.Y - centerB.Y));
         }
-
-        ///// <summary>
-        ///// Simplifies a Region into N number of bounding boxes.
-        ///// </summary>
-        ///// <param name="region">The Region to simplify.</param>
-        ///// <param name="complexity">The maximum number of bounding boxes to return, or 0 for however many are necessary (equivalent to using Region.GetRegionScans).</param>
-        ///// <returns></returns>
-        //public static Rectangle[] SimplifyRegion(PdnRegion region, int complexity)
-        //{
-        //    Rectangle[] rects = region.GetRegionScansReadOnlyInt();
-        //    return SimplifyRegion(rects, complexity);
-        //}
-
         public static Rectangle[] SimplifyRegion(Rectangle[] rects, int complexity)
         {
             if (complexity == 0 || rects.Length < complexity)
@@ -1500,10 +1387,6 @@ namespace PixelFarm.Drawing
             return coords;
         }
 
-        public static long GetTimeMs()
-        {
-            return PixelUtils.TicksToMs(DateTime.Now.Ticks);
-        }
 
         /// <summary>
         /// Returns the Distance between two points

@@ -73,7 +73,7 @@
     <Compile Include="..\BackEnd.DrawingBuffer\PixelFarm.DrawingBuffer\BitmapContext.cs">
       <Link>100_DrawingBufferExt\BitmapContext.cs</Link>
     </Compile>
-    <Compile Include="02_PixelBuffer\ChildImage.cs" />
+    <Compile Include="02_PixelBuffer\SubImageRW.cs" />
     <Compile Include="02_PixelBuffer\ColorOrder.cs" />
     <Compile Include="02_PixelBuffer\ColorRGBAf.cs" />
     <Compile Include="02_PixelBuffer\PixelBlenderGray.cs" />

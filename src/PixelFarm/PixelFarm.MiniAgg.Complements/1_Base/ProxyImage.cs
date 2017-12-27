@@ -28,7 +28,7 @@ namespace PixelFarm.Agg.Imaging
         {
             this.linkedImage = linkedImage;
         }
-        public void ReplaceBuffer(byte[] newbuffer)
+        public void ReplaceBuffer(int[] newbuffer)
         {
             throw new System.NotSupportedException();
         }
@@ -145,13 +145,22 @@ namespace PixelFarm.Agg.Imaging
             //TODO: review here, this may not correct 
             return linkedImage.GetBuffer();
         }
+        public int[] GetInt32Buffer()
+        {
+            //TODO: review here, this may not correct 
+            return linkedImage.GetInt32Buffer();
+        }
+        public TempMemPtr GetBufferPtr()
+        {
+            return linkedImage.GetBufferPtr();
+        }
         public void ReplaceBuffer()
         {
             throw new System.NotSupportedException();
         }
-        public int GetBufferOffsetXY(int x, int y)
+        public int GetByteBufferOffsetXY(int x, int y)
         {
-            return linkedImage.GetBufferOffsetXY(x, y);
+            return linkedImage.GetByteBufferOffsetXY(x, y);
         }
 
 

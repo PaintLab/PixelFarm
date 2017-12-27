@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace PixelFarm.Drawing
+namespace PixelFarm.Drawing.DrawingBuffer
 {
     /// <summary>
     /// This class contains all the render ops that can be used by the user
@@ -51,10 +51,10 @@ namespace PixelFarm.Drawing
             return types.ToArray();
         }
 
-        public static string GetBlendOpFriendlyName(Type opType)
-        {
-            return PixelUtils.GetStaticName(opType);
-        }
+        //public static string GetBlendOpFriendlyName(Type opType)
+        //{
+        //    return PixelUtils.GetStaticName(opType);
+        //}
 
         public static UserBlendOp CreateBlendOp(Type opType)
         {

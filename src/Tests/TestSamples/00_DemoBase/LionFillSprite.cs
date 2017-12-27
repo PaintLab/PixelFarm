@@ -95,7 +95,7 @@ namespace PixelFarm.Agg
             //test 
             if (SharpenRadius > 0)
             {
-                p.DoFilter(new RectInt(0, p.Height, p.Width, 0), 2);
+                //p.DoFilter(new RectInt(0, p.Height, p.Width, 0), 2);
                 //PixelFarm.Agg.Imaging.SharpenFilterARGB.Sharpen()
             }
         }

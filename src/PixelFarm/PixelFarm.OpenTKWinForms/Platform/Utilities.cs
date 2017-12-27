@@ -34,6 +34,7 @@ namespace OpenTK.Platform
             get { return throw_on_error; }
             set
             {
+                //TODO: REVIEW HERE
                 if (value && !throw_on_error)
                 {
                     Type.GetType("System.Windows.Forms.XplatUIX11, System.Windows.Forms")

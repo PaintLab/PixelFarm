@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-using  PixelFarm.DrawingBuffer;
+using PixelFarm.DrawingBuffer;
 namespace WinFormGdiPlus
 {
     public partial class FormFill : Form
@@ -97,27 +97,26 @@ namespace WinFormGdiPlus
         private void DrawStaticShapes(BitmapBuffer writeableBmp)
         {
             // HideShapeCountText();
-            if (writeableBmp != null)
+
+            // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
+            using (writeableBmp.GetBitmapContext())
             {
-                // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
-                using (writeableBmp.GetBitmapContext())
-                {
-                    // Init some size vars
-                    int w = writeableBmp.PixelWidth;
-                    int h = writeableBmp.PixelHeight;
-                    int w3 = w / 3;
-                    int h3 = h / 3;
-                    int w6 = w3 >> 1;
-                    int h6 = h3 >> 1;
-                    int w12 = w6 >> 1;
-                    int h12 = h6 >> 1;
+                // Init some size vars
+                int w = writeableBmp.PixelWidth;
+                int h = writeableBmp.PixelHeight;
+                int w3 = w / 3;
+                int h3 = h / 3;
+                int w6 = w3 >> 1;
+                int h6 = h3 >> 1;
+                int w12 = w6 >> 1;
+                int h12 = h6 >> 1;
 
-                    // Clear 
-                    writeableBmp.Clear();
+                // Clear 
+                writeableBmp.Clear();
 
-                    // Fill closed concave polygon
-                    var p = new int[]
-                                {
+                // Fill closed concave polygon
+                var p = new int[]
+                            {
                                     w12 >> 1, h12,
                                     w6, h3 - (h12 >> 1),
                                     w3 - (w12 >> 1), h12,
@@ -125,12 +124,12 @@ namespace WinFormGdiPlus
                                     w6, h6 + h12,
                                     w12, h12,
                                     w12 >> 1, h12,
-                                };
-                    writeableBmp.FillPolygonsEvenOdd(new[] { p }, GetRandomColor());
+                            };
+                writeableBmp.FillPolygonsEvenOdd(new[] { p }, GetRandomColor());
 
-                    // Fill closed convex polygon
-                    p = new int[]
-                            {
+                // Fill closed convex polygon
+                p = new int[]
+                        {
                                 w3 + w6, h12 >> 1,
                                 w3 + w6 + w12, h12,
                                 w3 + w6 + w12, h6 + h12,
@@ -138,59 +137,59 @@ namespace WinFormGdiPlus
                                 w3 + w12, h6 + h12,
                                 w3 + w12, h12,
                                 w3 + w6, h12 >> 1,
-                            };
-                    writeableBmp.FillPolygon(p, GetRandomColor());
+                        };
+                writeableBmp.FillPolygon(p, GetRandomColor());
 
-                    // Fill Triangle + Quad
-                    writeableBmp.FillTriangle(2 * w3 + w6, h12 >> 1, 2 * w3 + w6 + w12, h6 + h12, 2 * w3 + w12, h6 + h12,
-                                              GetRandomColor());
-                    writeableBmp.FillQuad(w6, h3 + (h12 >> 1), w6 + w12, h3 + h6, w6, h3 + h6 + h12 + (h12 >> 1), w12,
-                                          h3 + h6, GetRandomColor());
+                // Fill Triangle + Quad
+                writeableBmp.FillTriangle(2 * w3 + w6, h12 >> 1, 2 * w3 + w6 + w12, h6 + h12, 2 * w3 + w12, h6 + h12,
+                                          GetRandomColor());
+                writeableBmp.FillQuad(w6, h3 + (h12 >> 1), w6 + w12, h3 + h6, w6, h3 + h6 + h12 + (h12 >> 1), w12,
+                                      h3 + h6, GetRandomColor());
 
-                    // Fill Ellipses
-                    writeableBmp.FillEllipse(rand.Next(w3, w3 + w6), rand.Next(h3, h3 + h6), rand.Next(w3 + w6, 2 * w3),
-                                             rand.Next(h3 + h6, 2 * h3), GetRandomColor());
-                    writeableBmp.FillEllipseCentered(2 * w3 + w6, h3 + h6, w12, h12, GetRandomColor());
+                // Fill Ellipses
+                writeableBmp.FillEllipse(rand.Next(w3, w3 + w6), rand.Next(h3, h3 + h6), rand.Next(w3 + w6, 2 * w3),
+                                         rand.Next(h3 + h6, 2 * h3), GetRandomColor());
+                writeableBmp.FillEllipseCentered(2 * w3 + w6, h3 + h6, w12, h12, GetRandomColor());
 
-                    // Fill closed Cardinal Spline curve
-                    p = new int[]
-                            {
+                // Fill closed Cardinal Spline curve
+                p = new int[]
+                        {
                                 w12 >> 1, 2*h3 + h12,
                                 w6, h - (h12 >> 1),
                                 w3 - (w12 >> 1), 2*h3 + h12,
                                 w6 + w12, 2*h3 + h12,
                                 w6, 2*h3 + (h12 >> 1),
                                 w12, 2*h3 + h12,
-                            };
-                    writeableBmp.FillCurveClosed(p, 0.5f, GetRandomColor());
+                        };
+                writeableBmp.FillCurveClosed(p, 0.5f, GetRandomColor());
 
-                    // Fill closed Beziér curve
-                    p = new int[]
-                            {
+                // Fill closed Beziér curve
+                p = new int[]
+                        {
                                 w3 + w12, 2*h3 + h6 + h12,
                                 w3 + w6 + (w12 >> 1), 2*h3,
                                 w3 + w6 + w12 + (w12 >> 1), 2*h3,
                                 w3 + w6 + w12, 2*h3 + h6 + h12,
-                            };
-                    writeableBmp.FillBeziers(p, GetRandomColor());
+                        };
+                writeableBmp.FillBeziers(p, GetRandomColor());
 
-                    // Fill Rectangle
-                    writeableBmp.FillRectangle(rand.Next(2 * w3, 2 * w3 + w6), rand.Next(2 * h3, 2 * h3 + h6),
-                                               rand.Next(2 * w3 + w6, w), rand.Next(2 * h3 + h6, h), GetRandomColor());
-                    // Fill another rectangle with alpha blending
-                    writeableBmp.FillRectangle(rand.Next(2 * w3, 2 * w3 + w6), rand.Next(2 * h3, 2 * h3 + h6),
-                           rand.Next(2 * w3 + w6, w), rand.Next(2 * h3 + h6, h), GetRandomColor(), true);
+                // Fill Rectangle
+                writeableBmp.FillRectangle(rand.Next(2 * w3, 2 * w3 + w6), rand.Next(2 * h3, 2 * h3 + h6),
+                                           rand.Next(2 * w3 + w6, w), rand.Next(2 * h3 + h6, h), GetRandomColor());
+                // Fill another rectangle with alpha blending
+                writeableBmp.FillRectangle(rand.Next(2 * w3, 2 * w3 + w6), rand.Next(2 * h3, 2 * h3 + h6),
+                       rand.Next(2 * w3 + w6, w), rand.Next(2 * h3 + h6, h), GetRandomColor(), true);
 
-                    PixelFarm.DrawingBuffer.ColorInt black = PixelFarm.DrawingBuffer.ColorInt.FromArgb(255, 0, 0, 0);
-                    // Draw Grid
-                    writeableBmp.DrawLine(0, h3, w, h3, Colors.Black);
-                    writeableBmp.DrawLine(0, 2 * h3, w, 2 * h3, Colors.Black);
-                    writeableBmp.DrawLine(w3, 0, w3, h, Colors.Black);
-                    writeableBmp.DrawLine(2 * w3, 0, 2 * w3, h, Colors.Black);
+                PixelFarm.DrawingBuffer.ColorInt black = PixelFarm.DrawingBuffer.ColorInt.FromArgb(255, 0, 0, 0);
+                // Draw Grid
+                writeableBmp.DrawLine(0, h3, w, h3, Colors.Black);
+                writeableBmp.DrawLine(0, 2 * h3, w, 2 * h3, Colors.Black);
+                writeableBmp.DrawLine(w3, 0, w3, h, Colors.Black);
+                writeableBmp.DrawLine(2 * w3, 0, 2 * w3, h, Colors.Black);
 
-                    // Invalidates on exit of Using block
-                }
+                // Invalidates on exit of Using block
             }
+
         }
 
 
@@ -250,8 +249,7 @@ namespace WinFormGdiPlus
 
         private void DrawFillDemo(BitmapBuffer writeableBmp)
         {
-            if (writeableBmp == null)
-                return;
+            
 
             // Wrap updates in a GetContext call, to prevent invalidation and nested locking/unlocking during this block
             using (writeableBmp.GetBitmapContext())

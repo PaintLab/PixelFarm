@@ -9,7 +9,7 @@
 //Apache2, 2017, WinterDev
 using System;
 
-namespace PixelFarm.Drawing
+namespace PixelFarm.Drawing.DrawingBuffer
 {
     /// <summary>
     /// Encapsulates the arguments passed to a Render function.

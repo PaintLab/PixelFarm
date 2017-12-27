@@ -23,7 +23,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using  PixelFarm.DrawingBuffer;
+using PixelFarm.DrawingBuffer;
 namespace WinFormGdiPlus
 {
     public partial class FormShape : Form
@@ -107,8 +107,7 @@ namespace WinFormGdiPlus
         /// </summary>
         private void DrawEllipsesFlower(BitmapBuffer writeableBmp)
         {
-            if (writeableBmp == null)
-                return;
+
 
             // Init some size vars
             int w = writeableBmp.PixelWidth - 2;

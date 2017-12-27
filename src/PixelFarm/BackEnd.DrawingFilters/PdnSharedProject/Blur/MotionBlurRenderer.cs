@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////////
 //Apache2, 2017, WinterDev
 using System;
+using PixelFarm.Drawing.DrawingBuffer;
 namespace PixelFarm.Drawing.Effects
 {
 

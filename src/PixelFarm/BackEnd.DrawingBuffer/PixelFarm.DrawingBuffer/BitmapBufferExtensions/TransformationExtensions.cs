@@ -305,7 +305,7 @@ namespace PixelFarm.DrawingBuffer
                 int h = context.Height;
                 int[] p = context.Pixels;
                 int i = 0;
-                BitmapBuffer result = null;
+                BitmapBuffer result;
                 angle %= 360;
 
                 if (angle > 0 && angle <= 90)
@@ -555,12 +555,12 @@ namespace PixelFarm.DrawingBuffer
                 int h = context.Height;
                 int[] p = context.Pixels;
                 int i = 0;
-                BitmapBuffer result = null;
+                BitmapBuffer result = BitmapBufferFactory.New(w, h);
 
                 if (flipMode == FlipMode.Horizontal)
                 {
-                    result = BitmapBufferFactory.New(w, h);
-                    using (var destContext = result.GetBitmapContext())
+
+                    using (BitmapContext destContext = result.GetBitmapContext())
                     {
                         int[] rp = destContext.Pixels;
                         for (int y = h - 1; y >= 0; y--)
@@ -576,8 +576,8 @@ namespace PixelFarm.DrawingBuffer
                 }
                 else if (flipMode == FlipMode.Vertical)
                 {
-                    result = BitmapBufferFactory.New(w, h);
-                    using (var destContext = result.GetBitmapContext())
+
+                    using (BitmapContext destContext = result.GetBitmapContext())
                     {
                         int[] rp = destContext.Pixels;
                         for (int y = 0; y < h; y++)

@@ -37,7 +37,7 @@ using PixelFarm.Drawing;
 
 namespace PixelFarm.Agg
 {
-    
+
     //==================================================rasterizer_scanline_aa
     // Polygon rasterizer that is used to render filled polygons with 
     // high-quality Anti-Aliasing. Internally, by default, the class uses 
@@ -166,11 +166,11 @@ namespace PixelFarm.Agg
             get { return this.m_filling_rule; }
             set { this.m_filling_rule = value; }
         }
-        bool AutoClose
-        {
-            get { return m_auto_close; }
-            set { this.m_auto_close = value; }
-        }
+        //bool AutoClose
+        //{
+        //    get { return m_auto_close; }
+        //    set { this.m_auto_close = value; }
+        //}
         //--------------------------------------------------------------------
         public void ResetGamma(IGammaFunction gamma_function)
         {
@@ -264,7 +264,25 @@ namespace PixelFarm.Agg
 
             this.AddPath(new VertexStoreSnap(vxs));
         }
-        public bool ExtendX3ForSubPixelRendering { get; set; }
+
+        bool _extendX3ForSubPixelRendering;
+        public bool ExtendX3ForSubPixelRendering
+        {
+            get { return _extendX3ForSubPixelRendering; }
+            set
+            {
+                _extendX3ForSubPixelRendering = value;
+                if (value)
+                {
+                    //expand to 3 times
+                    m_vectorClipper.SetClipBoxForSubPixelRenderering(true);
+                }
+                else
+                {
+                    m_vectorClipper.SetClipBoxForSubPixelRenderering(false);
+                }
+            }
+        }
         /// <summary>
         /// we do NOT store snap ***
         /// </summary>
@@ -438,7 +456,7 @@ namespace PixelFarm.Agg
         //--------------------------------------------------------------------
         internal bool SweepScanline(Scanline scline)
         {
-            for (;;)
+            for (; ; )
             {
                 if (m_scan_y > m_cellAARas.MaxY)
                 {

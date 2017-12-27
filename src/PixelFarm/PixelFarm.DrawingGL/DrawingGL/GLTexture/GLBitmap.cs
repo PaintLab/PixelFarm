@@ -19,7 +19,7 @@ namespace PixelFarm.DrawingGL
         int textureId;
         int width;
         int height;
-        byte[] rawBuffer;
+
         int[] rawIntBuffer;
         //PixelFarm.Drawing.Imaging.NativeImage bmp;
         IntPtr nativeImgMem;
@@ -30,13 +30,13 @@ namespace PixelFarm.DrawingGL
         {
             isLittleEndian = BitConverter.IsLittleEndian;
         }
-        public GLBitmap(int w, int h, byte[] rawBuffer, bool isInvertImage)
-        {
-            this.width = w;
-            this.height = h;
-            this.rawBuffer = rawBuffer;
-            this.isInvertImage = isInvertImage;
-        }
+        //public GLBitmap(int w, int h, byte[] rawBuffer, bool isInvertImage)
+        //{
+        //    this.width = w;
+        //    this.height = h;
+        //    this.rawBuffer = rawBuffer;
+        //    this.isInvertImage = isInvertImage;
+        //}
         public GLBitmap(int w, int h, int[] rawIntBuffer, bool isInvertImage)
         {
             this.width = w;
@@ -64,6 +64,14 @@ namespace PixelFarm.DrawingGL
             this.width = w;
             this.height = h;
         }
+
+        public GLBitmap(PixelFarm.Agg.ActualImage actualImg)
+        {
+            this.width = actualImg.Width;
+            this.height = actualImg.Height;
+            this.rawIntBuffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImg);
+        }
+
         public bool IsBigEndianPixel { get; set; }
 
         public bool IsInvert
@@ -112,21 +120,21 @@ namespace PixelFarm.DrawingGL
                           PixelFormat.Rgba, // 
                           PixelType.UnsignedByte, nativeImgMem);
                 }
-                else if (this.rawBuffer != null)
-                {
-                    unsafe
-                    {
-                        //ES20 dose not have BGRA 
-                        //so in little-endian machine we need to convert 
-                        fixed (byte* bmpScan0 = &this.rawBuffer[0])
-                        {
-                            GL.TexImage2D(TextureTarget.Texture2D, 0,
-                            PixelInternalFormat.Rgba, this.width, this.height, 0,
-                            PixelFormat.Rgba, // 
-                            PixelType.UnsignedByte, (IntPtr)bmpScan0);
-                        }
-                    }
-                }
+                //else if (this.rawBuffer != null)
+                //{
+                //    unsafe
+                //    {
+                //        //ES20 dose not have BGRA 
+                //        //so in little-endian machine we need to convert 
+                //        fixed (byte* bmpScan0 = &this.rawBuffer[0])
+                //        {
+                //            GL.TexImage2D(TextureTarget.Texture2D, 0,
+                //            PixelInternalFormat.Rgba, this.width, this.height, 0,
+                //            PixelFormat.Rgba, // 
+                //            PixelType.UnsignedByte, (IntPtr)bmpScan0);
+                //        }
+                //    }
+                //}
                 else if (this.rawIntBuffer != null)
                 {
                     unsafe
@@ -178,14 +186,16 @@ namespace PixelFarm.DrawingGL
         {
             if (rawIntBuffer != null)
             {
-
+                int[] newBuff = new int[rawIntBuffer.Length];
+                Buffer.BlockCopy(rawIntBuffer, 0, rawIntBuffer, 0, newBuff.Length);
+                buffRequest.OutputBuffer32 = newBuff;
             }
-            else if (rawBuffer != null)
-            {
-                byte[] newBuff = new byte[rawBuffer.Length];
-                Buffer.BlockCopy(rawBuffer, 0, newBuff, 0, rawBuffer.Length);
-                buffRequest.OutputBuffer = newBuff;
-            }
+            //else if (rawBuffer != null)
+            //{
+            //    byte[] newBuff = new byte[rawBuffer.Length];
+            //    Buffer.BlockCopy(rawBuffer, 0, newBuff, 0, rawBuffer.Length);
+            //    buffRequest.OutputBuffer = newBuff;
+            //}
             else
             {
 

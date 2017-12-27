@@ -1,6 +1,7 @@
 ﻿using System;
 using PixelFarm.Drawing;
 using PixelFarm.Drawing.Effects;
+using PixelFarm.Drawing.DrawingBuffer;
 namespace PixelFarm.Agg.Imaging
 {
     /// <summary>
@@ -10,25 +11,30 @@ namespace PixelFarm.Agg.Imaging
     {
         public void Sharpen(IImageReaderWriter img, double radius)
         {
-            return;
-            byte[] buffer = img.GetBuffer();
-            byte[] output = new byte[buffer.Length];
-            //byte[] output2 = new byte[buffer.Length];
+
+
             unsafe
             {
-                fixed (byte* outputPtr = &output[0])
-                fixed (byte* srcBuffer = &buffer[0])
+
+                //byte[] buffer = img.GetBuffer();
+                //byte[] output2 = new byte[buffer.Length]; 
+
+                TempMemPtr bufferPtr = img.GetBufferPtr();
+                int[] output = new int[bufferPtr.LengthInBytes / 4]; //TODO: review here again
+
+                fixed (int* outputPtr = &output[0])
                 {
+                    byte* srcBuffer = (byte*)bufferPtr.Ptr;
                     int* srcBuffer1 = (int*)srcBuffer;
                     int* outputBuffer1 = (int*)outputPtr;
                     int stride = img.Stride;
                     int w = img.Width;
                     int h = img.Height;
 
-                    MemHolder srcMemHolder = new MemHolder((IntPtr)srcBuffer1, buffer.Length / 4);//
+                    MemHolder srcMemHolder = new MemHolder((IntPtr)srcBuffer1, bufferPtr.LengthInBytes / 4);//
                     Surface srcSurface = new Surface(stride, w, h, srcMemHolder);
                     //
-                    MemHolder destMemHolder = new MemHolder((IntPtr)outputPtr, buffer.Length / 4);
+                    MemHolder destMemHolder = new MemHolder((IntPtr)outputPtr, bufferPtr.LengthInBytes / 4);
                     Surface destSurface = new Surface(stride, w, h, destMemHolder);
                     //
                     SharpenRenderer shRenderer1 = new SharpenRenderer();
@@ -37,6 +43,8 @@ namespace PixelFarm.Agg.Imaging
                             new PixelFarm.Drawing.Rectangle(0,0,w,h)
                     }, 0, 1);
                 }
+
+                bufferPtr.Release();
                 //ActualImage.SaveImgBufferToPngFile(output, img.Stride, img.Width + 1, img.Height + 1, "d:\\WImageTest\\test_1.png");
                 img.ReplaceBuffer(output);
             }

@@ -34,6 +34,45 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\BitmapBuffer.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\BitmapBuffer.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\AntialiasingExtensions.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\AntialiasingExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\BaseExtensions.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\BaseExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\BlitExtensions.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\BlitExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\ConvertExtensions.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\ConvertExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\FillExtensions.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\FillExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\FilterExtensions.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\FilterExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\LineExtensions.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\LineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\ShapeExtensions.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\ShapeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\SplineExtensions.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\SplineExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\bitmapbufferextensions\TransformationExtensions.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\TransformationExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\BitmapBufferFactory.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\BitmapBufferFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\backend.drawingbuffer\pixelfarm.drawingbuffer\BitmapContext.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\100_DrawingBufferExt\BitmapContext.cs</Link>
+    </Compile>
     <Compile Include="..\backend.drawingfilters\pdnsharedproject\01_core\color\ColorBgra.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\9_FilterFx\Core\Color\ColorBgra.cs</Link>
     </Compile>
@@ -361,6 +400,9 @@
     <Compile Include="..\pixelfarm.miniagg.complements\1_base\GammaFuntions.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\GammaFuntions.cs</Link>
     </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg.Complements\1_Base\ImgFilters.cs">
+      <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\ImgFilters.cs</Link>
+    </Compile>
     <Compile Include="..\pixelfarm.miniagg.complements\1_base\PixelBlenderRGB.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\1_Base\PixelBlenderRGB.cs</Link>
     </Compile>
@@ -442,9 +484,6 @@
     <Compile Include="..\pixelfarm.miniagg.complements\rendersurface\AggRenderSurface_RenderImages.cs">
       <Link>3.2_DrawingCanvas.MiniAgg.Complement\RenderSurface\AggRenderSurface_RenderImages.cs</Link>
     </Compile>
-    <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ChildImage.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ChildImage.cs</Link>
-    </Compile>
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\ColorOrder.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\ColorOrder.cs</Link>
     </Compile>
@@ -468,6 +507,9 @@
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\02_pixelbuffer\PixelBlenderRGBA.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\PixelBlenderRGBA.cs</Link>
+    </Compile>
+    <Compile Include="..\PixelFarm.MiniAgg\02_PixelBuffer\SubImageRW.cs">
+      <Link>3.1_DrawingCanvas.MiniAgg\02_PixelBuffer\SubImageRW.cs</Link>
     </Compile>
     <Compile Include="..\pixelfarm.miniagg\03_spangenerators\0_ISpanGenerator.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\03_SpanGenerators\0_ISpanGenerator.cs</Link>
@@ -572,7 +614,7 @@
       <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\FilterRGBImageSpanGen.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\08_ImageResampling\IImageFilter.cs">
-      <Link>3.1_DrawingCanvas.MiniAgg\08_ImageSampling\IImageFilter.cs</Link>
+      <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\IImageFilter.cs</Link>
     </Compile>
     <Compile Include="..\PixelFarm.MiniAgg\08_ImageResampling\ImageFilterLookupTable.cs">
       <Link>3.1_DrawingCanvas.MiniAgg\08_ImageResampling\ImageFilterLookupTable.cs</Link>

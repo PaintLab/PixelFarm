@@ -214,6 +214,7 @@
     <Compile Include="..\backend.drawingfilters\pdnsharedproject\wrap\WrapBasedEffRenderer.cs">
       <Link>101_FilterFx\Wrap\WrapBasedEffRenderer.cs</Link>
     </Compile>
+    <Compile Include="1_Base\ImgFilters.cs" />
     <Compile Include="3_Filter\InternalBrightnessAndContrastAdjustment.cs" />
     <Compile Include="3_Filter\SharpenFilter.cs" />
     <Compile Include="RenderSurface\AggRenderSurface.cs" />

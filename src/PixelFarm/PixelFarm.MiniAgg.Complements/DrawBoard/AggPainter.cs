@@ -2,8 +2,8 @@
 
 using System;
 using PixelFarm.Drawing;
-using PixelFarm.Agg.Imaging;
 using PixelFarm.Agg.VertexSource;
+using PixelFarm.DrawingBuffer;
 
 namespace PixelFarm.Agg
 {
@@ -43,13 +43,13 @@ namespace PixelFarm.Agg
         int ellipseGenNSteps = 20;
         SmoothingMode _smoothingMode;
 
-        public AggPainter(AggRenderSurface aggRdsf)
+        public AggPainter(AggRenderSurface aggsx)
         {
-            this._aggsx = aggRdsf;
+            this._aggsx = aggsx;
             this.sclineRas = _aggsx.ScanlineRasterizer;
             this.stroke = new Stroke(1);//default
-            this.scline = aggRdsf.ScanlinePacked8;
-            this.sclineRasToBmp = aggRdsf.ScanlineRasToDestBitmap;
+            this.scline = aggsx.ScanlinePacked8;
+            this.sclineRasToBmp = aggsx.ScanlineRasToDestBitmap;
         }
         DrawBoardOrientation _orientation;
         public override DrawBoardOrientation Orientation
@@ -93,6 +93,13 @@ namespace PixelFarm.Agg
             sclineRas.OffsetOriginX = x;
             sclineRas.OffsetOriginY = y;
         }
+        RenderQualtity _renderQuality;
+        public override RenderQualtity RenderQuality
+        {
+            get { return _renderQuality; }
+            set { _renderQuality = value; }
+        }
+
         public override SmoothingMode SmoothingMode
         {
             get
@@ -152,6 +159,12 @@ namespace PixelFarm.Agg
         public override void DrawLine(double x1, double y1, double x2, double y2)
         {
             //coordinate system
+            if (this.RenderQuality == RenderQualtity.Fast)
+            {
+
+                //BitmapBufferExtensions.DrawLine()         
+            }
+
             if (_orientation == DrawBoardOrientation.LeftBottom)
             {
                 //as original
@@ -397,7 +410,14 @@ namespace PixelFarm.Agg
         public override void Fill(VertexStore vxs)
         {
             sclineRas.AddPath(vxs);
-            sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+            try
+            {
+                sclineRasToBmp.RenderWithColor(this._aggsx.DestImage, sclineRas, scline, fillColor);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
 
@@ -422,8 +442,6 @@ namespace PixelFarm.Agg
                 }
             }
         }
-
-
         public override Color FillColor
         {
             get { return fillColor; }
@@ -493,29 +511,38 @@ namespace PixelFarm.Agg
             }
         }
 
-        //----------------------
-        /// <summary>
-        /// do filter at specific area
-        /// </summary>
-        /// <param name="filter"></param>
-        /// <param name="area"></param>
-        public override void DoFilterBlurStack(RectInt area, int r)
+        ////----------------------
+        ///// <summary>
+        ///// do filter at specific area
+        ///// </summary>
+        ///// <param name="filter"></param>
+        ///// <param name="area"></param>
+        //public override void DoFilterBlurStack(RectInt area, int r)
+        //{
+        //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
+        //        area.Left, area.Bottom, area.Right, area.Top);
+        //    filterMan.DoStackBlur(img, r);
+        //}
+        //public override void DoFilterBlurRecursive(RectInt area, int r)
+        //{
+        //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
+        //        area.Left, area.Bottom, area.Right, area.Top);
+        //    filterMan.DoRecursiveBlur(img, r);
+        //}
+        //public override void DoFilter(RectInt area, int r)
+        //{
+        //    ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
+        //      area.Left, area.Top, area.Right, area.Bottom);
+        //    filterMan.DoSharpen(img, r);
+        //}
+        public override void ApplyFilter(ImageFilter imgFilter)
         {
-            ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
-                area.Left, area.Bottom, area.Right, area.Top);
-            filterMan.DoStackBlur(img, r);
-        }
-        public override void DoFilterBlurRecursive(RectInt area, int r)
-        {
-            ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
-                area.Left, area.Bottom, area.Right, area.Top);
-            filterMan.DoRecursiveBlur(img, r);
-        }
-        public override void DoFilter(RectInt area, int r)
-        {
-            ChildImage img = new ChildImage(this._aggsx.DestImage, _aggsx.PixelBlender,
-              area.Left, area.Top, area.Right, area.Bottom);
-            filterMan.DoSharpen(img, r);
+            //TODO: implement this
+            //resolve internal img filter
+            //switch (imgFilter.Name)
+            //{
+
+            //} 
         }
         public override RenderVx CreateRenderVx(VertexStoreSnap snap)
         {

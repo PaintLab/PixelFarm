@@ -135,6 +135,7 @@ namespace PixelFarm.Drawing.GLES2
                 painter1.SmoothingMode = value;
             }
         }
+
         /// <summary>
         /// Draws the specified portion of the specified <see cref="T:System.Drawing.Image"/> at the specified location and with the specified size.
         /// </summary>
@@ -192,8 +193,7 @@ namespace PixelFarm.Drawing.GLES2
 
                 var req = new Image.ImgBufferRequestArgs(32, Image.RequestType.Copy);
                 image.RequestInternalBuffer(ref req);
-                byte[] copy = req.OutputBuffer;
-                var glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, copy, req.IsInvertedImage);
+                var glBmp = new DrawingGL.GLBitmap(image.Width, image.Height, req.OutputBuffer32, req.IsInvertedImage);
                 Image.SetCacheInnerImage(image, glBmp);
                 return glBmp;
             }
