@@ -632,7 +632,7 @@ namespace PixelFarm.Agg
 
                             _recvBlender32.BlendPixel32(raw_buffer32, bufferOffset32, newcolor);
                         }
-                        bufferOffset32 += scanWidthBytes;
+                        bufferOffset32 += actualW;
                         //sourceColor.alpha = oldAlpha;
                     }
                     while (--len != 0);
