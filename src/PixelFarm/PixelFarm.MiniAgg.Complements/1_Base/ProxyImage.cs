@@ -158,9 +158,9 @@ namespace PixelFarm.Agg.Imaging
         {
             throw new System.NotSupportedException();
         }
-        public int GetBufferOffsetXY(int x, int y)
+        public int GetByteBufferOffsetXY(int x, int y)
         {
-            return linkedImage.GetBufferOffsetXY(x, y);
+            return linkedImage.GetByteBufferOffsetXY(x, y);
         }
 
 

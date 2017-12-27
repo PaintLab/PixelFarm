@@ -57,7 +57,7 @@ namespace PixelFarm.Agg.Imaging
             spanInterpolator.GetCoord(out x_hr, out y_hr);
             int x_lr = x_hr >> img_subpix_const.SHIFT;
             int y_lr = y_hr >> img_subpix_const.SHIFT;
-            int bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
+            int bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
             byte[] srcBuffer = srcRW.GetBuffer();
             unsafe
             {
@@ -150,7 +150,7 @@ namespace PixelFarm.Agg.Imaging
                  && ((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer.GetType() == typeof(PixelFarm.Agg.Transform.Affine)
                  && ((PixelFarm.Agg.Transform.Affine)((PixelFarm.Agg.Transform.SpanInterpolatorLinear)spanInterpolator).Transformer).IsIdentity())
                 {
-                    bufferIndex = srcRW.GetBufferOffsetXY(x, y);
+                    bufferIndex = srcRW.GetByteBufferOffsetXY(x, y);
                     //unsafe
                     {
 #if true
@@ -217,7 +217,7 @@ namespace PixelFarm.Agg.Imaging
                             accColor3 = (int)img_subpix_const.SCALE * (int)img_subpix_const.SCALE / 2;
                             x_hr &= (int)img_subpix_const.MASK;
                             y_hr &= (int)img_subpix_const.MASK;
-                            bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
+                            bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
                             weight = (((int)img_subpix_const.SCALE - x_hr) *
                                      ((int)img_subpix_const.SCALE - y_hr));
                             if (weight > BASE_MASK)
@@ -242,7 +242,7 @@ namespace PixelFarm.Agg.Imaging
                             if (weight > BASE_MASK)
                             {
                                 ++y_lr;
-                                bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
+                                bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
                                 accColor0 += weight * srcBuffer[bufferIndex + CO.R];
                                 accColor1 += weight * srcBuffer[bufferIndex + CO.G];
                                 accColor2 += weight * srcBuffer[bufferIndex + CO.B];
@@ -294,7 +294,7 @@ namespace PixelFarm.Agg.Imaging
                                     {
                                         BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                             srcRW.GetBuffer(),
-                                            srcRW.GetBufferOffsetXY(x_lr, y_lr),
+                                            srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
                                             weight);
                                     }
                                     else
@@ -315,7 +315,7 @@ namespace PixelFarm.Agg.Imaging
                                     {
                                         BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                             srcRW.GetBuffer(),
-                                            srcRW.GetBufferOffsetXY(x_lr, y_lr),
+                                            srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
                                             weight);
                                     }
                                     else
@@ -335,7 +335,7 @@ namespace PixelFarm.Agg.Imaging
                                     {
                                         BlendInFilterPixel(ref accColor0, ref accColor1, ref accColor2, ref accColor3,
                                            srcRW.GetBuffer(),
-                                           srcRW.GetBufferOffsetXY(x_lr, y_lr),
+                                           srcRW.GetByteBufferOffsetXY(x_lr, y_lr),
                                            weight);
                                     }
                                     else

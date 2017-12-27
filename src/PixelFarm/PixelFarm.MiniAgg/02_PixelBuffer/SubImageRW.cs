@@ -112,7 +112,7 @@ namespace PixelFarm.Agg.Imaging
                 sourceImage.Stride,
                 bitsPerPixel,
                 distanceBetweenPixelsInclusive);
-            int offset = sourceImage.GetBufferOffsetXY(0, 0);
+            int offset = sourceImage.GetByteBufferOffsetXY(0, 0);
             int[] buffer = sourceImage.GetInt32Buffer();
             SetBuffer(buffer, offset + bufferOffset);
             SetRecieveBlender(recieveBlender);
@@ -129,7 +129,7 @@ namespace PixelFarm.Agg.Imaging
             if (boundsRect.Clip(new RectInt(0, 0, sourceImage.Width - 1, sourceImage.Height - 1)))
             {
                 SetDimmensionAndFormat(boundsRect.Width, boundsRect.Height, sourceImage.Stride, sourceImage.BitDepth, sourceImage.BytesBetweenPixelsInclusive);
-                int bufferOffset = sourceImage.GetBufferOffsetXY(boundsRect.Left, boundsRect.Bottom) / 4;
+                int bufferOffset = sourceImage.GetByteBufferOffsetXY(boundsRect.Left, boundsRect.Bottom) / 4;
                 int[] buffer = sourceImage.GetInt32Buffer();
                 SetBuffer(buffer, bufferOffset);
                 return true;

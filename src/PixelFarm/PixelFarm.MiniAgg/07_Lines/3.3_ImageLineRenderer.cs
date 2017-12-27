@@ -156,8 +156,8 @@ namespace PixelFarm.Agg.Lines
             {
                 for (int x = 0; x < m_width; x++)
                 {
-                    int sourceOffset = src.GetBufferOffsetXY(x, y);
-                    int destOffset = m_buf.GetBufferOffsetXY(m_dilation, y + m_dilation);
+                    int sourceOffset = src.GetByteBufferOffsetXY(x, y);
+                    int destOffset = m_buf.GetByteBufferOffsetXY(m_dilation, y + m_dilation);
                     for (int channel = 0; channel < bytesPerPixel; channel++)
                     {
                         destBuffer[destOffset++] = srcBuffer[sourceOffset++];
@@ -168,10 +168,10 @@ namespace PixelFarm.Agg.Lines
             // copy the first two pixels form the end into the begining and from the begining into the end
             for (int y = 0; y < m_height; y++)
             {
-                int s1Offset = src.GetBufferOffsetXY(0, y);
-                int d1Offset = m_buf.GetBufferOffsetXY(m_dilation + m_width, y);
-                int s2Offset = src.GetBufferOffsetXY(m_width - m_dilation, y);
-                int d2Offset = m_buf.GetBufferOffsetXY(0, y);
+                int s1Offset = src.GetByteBufferOffsetXY(0, y);
+                int d1Offset = m_buf.GetByteBufferOffsetXY(m_dilation + m_width, y);
+                int s2Offset = src.GetByteBufferOffsetXY(m_width - m_dilation, y);
+                int d2Offset = m_buf.GetByteBufferOffsetXY(0, y);
                 for (int x = 0; x < m_dilation; x++)
                 {
                     for (int channel = 0; channel < bytesPerPixel; channel++)

@@ -44,7 +44,7 @@ namespace PixelFarm.Agg.Imaging
             int x_lr = x_hr >> img_subpix_const.SHIFT;
             int y_lr = y_hr >> img_subpix_const.SHIFT;
             int bufferIndex;
-            bufferIndex = srcRW.GetBufferOffsetXY(x_lr, y_lr);
+            bufferIndex = srcRW.GetByteBufferOffsetXY(x_lr, y_lr);
             byte[] srcBuff = srcRW.GetBuffer();
             unsafe
             {

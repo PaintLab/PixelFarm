@@ -57,7 +57,7 @@ namespace PixelFarm.Agg
         //--------------------------------------------------------------------
         public byte pixel(int x, int y)
         {
-            int bufferIndex = m_rbuf.GetBufferOffsetXY(x, y);
+            int bufferIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
             //byte[] buffer = m_rbuf.GetBuffer();
             unsafe
             {
@@ -97,7 +97,7 @@ namespace PixelFarm.Agg
 
         public void combine_hspanFullCover(int x, int y, byte[] covers, int coversIndex, int count)
         {
-            int maskIndex = m_rbuf.GetBufferOffsetXY(x, y);
+            int maskIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
             unsafe
             {
                 TempMemPtr memPtr = m_rbuf.GetBufferPtr();
@@ -120,7 +120,7 @@ namespace PixelFarm.Agg
 
         public void combine_hspan(int x, int y, byte[] covers, int coversIndex, int count)
         {
-            int maskIndex = m_rbuf.GetBufferOffsetXY(x, y);
+            int maskIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
             byte[] mask = m_rbuf.GetBuffer();
             do
             {
@@ -189,7 +189,7 @@ namespace PixelFarm.Agg
                 {
 
 
-                    int bufferIndex = m_rbuf.GetBufferOffsetXY(x, y);
+                    int bufferIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
                     byte[] buffer = m_rbuf.GetBuffer();
                     return buffer[bufferIndex];
                 }
@@ -300,7 +300,7 @@ namespace PixelFarm.Agg
                 AggMemMx.MemClear(covers, coversIndex + count, rest);
             }
 
-            int maskIndex = m_rbuf.GetBufferOffsetXY(x, y);
+            int maskIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
             byte[] mask = m_rbuf.GetBuffer();
             do
             {
@@ -347,7 +347,7 @@ namespace PixelFarm.Agg
                 AggMemMx.MemClear(covers, coversIndex + count, rest);
             }
 
-            int maskIndex = m_rbuf.GetBufferOffsetXY(x, y);
+            int maskIndex = m_rbuf.GetByteBufferOffsetXY(x, y);
             byte[] mask = m_rbuf.GetBuffer();
             unsafe
             {
