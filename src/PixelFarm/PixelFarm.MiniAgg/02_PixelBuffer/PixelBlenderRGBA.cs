@@ -126,8 +126,17 @@ namespace PixelFarm.Agg.Imaging
         //straight.G = premultiplied.G  * ((1/straight.A) * 255);
         //straight.B = premultiplied.B  * ((1/straight.A) * 255);
         //straight.A = premultiplied.A;
-
-
+ 
+        //public void BlendPixel(int[] buffer, int arrayOffset, Color sourceColor)
+        //{
+        //    unsafe
+        //    {
+        //        fixed (int* head = &buffer[arrayOffset])
+        //        {
+        //            Blend32PixelInternal(head, sourceColor);
+        //        }
+        //    }
+        //}
 
         public void BlendPixel(byte[] buffer, int bufferOffset, Color sourceColor)
         {
@@ -201,7 +210,7 @@ namespace PixelFarm.Agg.Imaging
             }
 
         }
-        static unsafe void Blend32PixelInternal(int* ptr, Color sc)
+        internal static unsafe void Blend32PixelInternal(int* ptr, Color sc)
         {
             unchecked
             {
@@ -376,6 +385,46 @@ namespace PixelFarm.Agg.Imaging
                 while (--count != 0);
             }
         }
+
+        public void CopyPixels(int[] buffer, int arrayOffset, Color sourceColor, int count)
+        {
+            unsafe
+            {
+                unchecked
+                {
+                    fixed (int* ptr_byte = &buffer[arrayOffset])
+                    {
+                        //TODO: consider use memcpy() impl***
+                        int* ptr = (int*)(IntPtr)ptr_byte;
+                        int argb = sourceColor.ToARGB();
+
+                        //---------
+                        if ((count % 2) != 0)
+                        {
+                            *ptr = argb;
+                            ptr++; //move next
+                            count--;
+                        }
+
+                        while (count > 0)
+                        {
+                            //-----------
+                            //1.
+                            *ptr = argb;
+                            ptr++; //move next
+                            count--;
+                            //-----------
+                            //2
+                            *ptr = argb;
+                            ptr++; //move next
+                            count--;
+                        }
+
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// direct set source color to destination buffer
         /// </summary>
@@ -448,6 +497,22 @@ namespace PixelFarm.Agg.Imaging
                             count--;
                         }
 
+                    }
+                }
+            }
+        }
+
+
+        public void CopyPixel(int[] buffer, int arrayOffset, Color sourceColor)
+        {
+            unsafe
+            {
+                unchecked
+                {
+                    fixed (int* ptr = &buffer[arrayOffset])
+                    {
+                        //TODO: consider use memcpy() impl*** 
+                        *ptr = sourceColor.ToARGB();
                     }
                 }
             }
