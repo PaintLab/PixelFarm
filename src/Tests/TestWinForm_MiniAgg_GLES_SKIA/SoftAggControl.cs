@@ -119,7 +119,8 @@ namespace Mini
         protected override void OnMouseDown(MouseEventArgs e)
         {
             this.isMouseDown = true;
-            exampleBase.MouseDown(e.X, myHeight - e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
+            //exampleBase.MouseDown(e.X, myHeight - e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
+            exampleBase.MouseDown(e.X, e.Y, e.Button == System.Windows.Forms.MouseButtons.Right);
             base.OnMouseDown(e);
             if (!_useGdiPlusOutput)
             {
@@ -133,7 +134,8 @@ namespace Mini
         protected override void OnMouseUp(MouseEventArgs e)
         {
             this.isMouseDown = false;
-            exampleBase.MouseUp(e.X, myHeight - e.Y);
+            //exampleBase.MouseUp(e.X, myHeight - e.Y);
+            exampleBase.MouseUp(e.X, e.Y);
             base.OnMouseUp(e);
             if (!_useGdiPlusOutput)
             {
@@ -148,7 +150,8 @@ namespace Mini
         {
             if (this.isMouseDown)
             {
-                exampleBase.MouseDrag(e.X, myHeight - e.Y);
+                //exampleBase.MouseDrag(e.X, myHeight - e.Y);
+                exampleBase.MouseDrag(e.X, e.Y);
                 if (!_useGdiPlusOutput)
                 {
                     Invalidate();
@@ -181,7 +184,7 @@ namespace Mini
                 exampleBase.Draw(painter);
                 Graphics g = e.Graphics;
                 IntPtr displayDC = g.GetHdc();
-                 
+
                 sx.RenderTo(displayDC, 0, 0, new PixelFarm.Drawing.Rectangle(0, 0, bufferBmpRect.Width, bufferBmpRect.Height));
                 g.ReleaseHdc(displayDC);
             }

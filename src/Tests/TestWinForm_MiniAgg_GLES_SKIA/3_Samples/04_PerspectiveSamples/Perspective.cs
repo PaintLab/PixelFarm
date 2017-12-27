@@ -24,6 +24,7 @@ namespace PixelFarm.Agg.Sample_Perspective
         {
             lionShape = new SpriteShape();
             lionShape.ParseLion();
+            
             quadPolygonControl = new PixelFarm.Agg.UI.PolygonEditWidget(4, 5.0);
             quadPolygonControl.SetXN(0, lionShape.Bounds.Left);
             quadPolygonControl.SetYN(0, lionShape.Bounds.Top);

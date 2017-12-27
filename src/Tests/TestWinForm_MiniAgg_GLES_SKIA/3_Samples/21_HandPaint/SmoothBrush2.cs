@@ -130,7 +130,8 @@ namespace PixelFarm.Agg.Samples
                                         //cut each path
                                         var lastPath = myBrushPathList[i];
                                         //do path clip***
-                                        List<VertexStore> paths = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(new VertexStoreSnap(lastPath.Vxs),
+                                        List<VertexStore> paths = PixelFarm.Agg.VertexSource.VxsClipper.CombinePaths(
+                                                new VertexStoreSnap(lastPath.Vxs),
                                                 new VertexStoreSnap(currentBrushPath.Vxs), VertexSource.VxsClipperType.Difference,
                                                 true);
 
