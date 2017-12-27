@@ -105,6 +105,10 @@ namespace PixelFarm.Agg.Sample_AADemoTest2
                 int size_mul = this.PixelSize;
                 var sclineToBmpEn2 = new CustomScanlineRasToBmp_EnlargedV2(size_mul, aggsx.DestActualImage);
                 rasterizer.Reset();
+
+
+                //design for internal use only
+
                 rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
                 rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
                 rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);

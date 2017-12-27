@@ -243,12 +243,12 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
 
             if (p is PixelFarm.Agg.AggPainter)
             {
-               
+
 
                 var p2 = (PixelFarm.Agg.AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
                 ScanlineRasterizer rasterizer = aggsx.ScanlineRasterizer;
-                
+
 
                 var widgetsSubImage = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
                 aggsx.UseSubPixelRendering = false;
@@ -258,11 +258,14 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);
-               
+
                 ScanlineUnpacked8 sl = new ScanlineUnpacked8();
                 int size_mul = (int)this.PixelSize;
                 CustomScanlineRasToBmp_EnlargedSubPixelRendering ren_en = new CustomScanlineRasToBmp_EnlargedSubPixelRendering(size_mul, aggsx.DestActualImage);
                 rasterizer.Reset();
+
+                //design for internal use only
+
                 rasterizer.MoveTo(m_x[0] / size_mul, m_y[0] / size_mul);
                 rasterizer.LineTo(m_x[1] / size_mul, m_y[1] / size_mul);
                 rasterizer.LineTo(m_x[2] / size_mul, m_y[2] / size_mul);
