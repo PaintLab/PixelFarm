@@ -109,13 +109,13 @@ namespace PixelFarm.Agg
 
         int _renderSurfaceW;
         int _renderSurfaceH;
-        bool _filpY;
+        bool _flipY;
 
         public ScanlineRasterizer(int w, int h)
         {
             this._renderSurfaceW = w;
             this._renderSurfaceH = h;
-            _filpY = false;
+            _flipY = true;
 
             m_cellAARas = new CellAARasterizer();
             m_vectorClipper = new VectorClipper(m_cellAARas);
@@ -131,8 +131,8 @@ namespace PixelFarm.Agg
         }
         public bool FlipY
         {
-            get { return _filpY; }
-            set { _filpY = value; }
+            get { return _flipY; }
+            set { _flipY = value; }
         }
         //--------------------------------------------------------------------
         public void Reset()
@@ -323,7 +323,7 @@ namespace PixelFarm.Agg
             if (ExtendX3ForSubPixelRendering)
             {
 
-                if (_filpY)
+                if (_flipY)
                 {
                     //my extension
                     offsetOrgY = _renderSurfaceH - offsetOrgY;
@@ -360,7 +360,7 @@ namespace PixelFarm.Agg
             }
             else
             {
-                if (_filpY)
+                if (_flipY)
                 {
                     //my extension
                     offsetOrgY = _renderSurfaceH - offsetOrgY;
