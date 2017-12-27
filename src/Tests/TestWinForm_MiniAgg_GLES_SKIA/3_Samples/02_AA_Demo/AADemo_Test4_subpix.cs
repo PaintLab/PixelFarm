@@ -314,7 +314,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
-            //p.Line(2, 0, 10, 15);
+            p.DrawLine(2, 0, 10, 15);
 
             int lineLen = 10;
             int x = 30;
@@ -322,16 +322,16 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             p.FillColor = PixelFarm.Drawing.Color.Black;
             p.FillRect(0, 0, 1, 1);
 
-            //for (int i = 0; i < 360; i += 30)
-            //{
-            //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+            for (int i = 0; i < 360; i += 30)
+            {
+                p.DrawLine(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
 
-            //}
-            //y += 10;
-            //for (int i = 0; i < 360; i += 360)
-            //{
-            //    p.Line(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
-            //}
+            }
+            y += 10;
+            for (int i = 0; i < 360; i += 360)
+            {
+                p.DrawLine(x, y, x + lineLen * Math.Cos(DegToRad(i)), y + lineLen * Math.Sin(DegToRad(i)));
+            }
         }
         void RunSampleF(PixelFarm.Drawing.Painter p)
         {
@@ -341,7 +341,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             //--------------------------
             p.StrokeColor = PixelFarm.Drawing.Color.Black;
             p.StrokeWidth = 2.0f;
-            //p.Line(2, 0, 10, 15);
+            p.DrawLine(2, 0, 10, 15);
 
             int lineLen = 10;
             int x = 30;
@@ -349,7 +349,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
             p.FillColor = PixelFarm.Drawing.Color.Black;
 
             VertexStorePool pool = new VertexStorePool();
-            using (System.IO.FileStream fs = new System.IO.FileStream("d:\\WImageTest\\tahoma.ttf", System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            using (System.IO.FileStream fs = new System.IO.FileStream("c:\\Windows\\Fonts\\tahoma.ttf", System.IO.FileMode.Open, System.IO.FileAccess.Read))
             {
                 Typography.OpenFont.OpenFontReader reader = new Typography.OpenFont.OpenFontReader();
                 Typography.OpenFont.Typeface typeface = reader.Read(fs);
@@ -363,7 +363,7 @@ namespace PixelFarm.Agg.Sample_AADemoTest4
                 tovxs.WriteOutput(vxs);
                 p.Fill(vxs);
             }
-            //p.FillRectangle(0, 0, 20, 20);
+            p.FillRect(0, 0, 20, 20);
 
         }
 
