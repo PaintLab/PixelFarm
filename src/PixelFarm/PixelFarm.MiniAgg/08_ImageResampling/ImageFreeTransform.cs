@@ -276,7 +276,7 @@ namespace PixelFarm.Agg.Imaging
             }
             return destCB;
         }
-        ActualImage GetTransformedBicubicInterpolation()
+        unsafe ActualImage GetTransformedBicubicInterpolation()
         {
             //4 points sampling
             //weight between four point
@@ -292,7 +292,10 @@ namespace PixelFarm.Agg.Imaging
             var bc_vec = this.BC;
             var cd_vec = this.CD;
             var da_vec = this.DA;
-            byte[] buffer = srcCB.GetBuffer();
+
+
+            TempMemPtr bufferPtr = srcCB.GetBufferPtr();
+            byte* buffer = (byte*)bufferPtr.Ptr;
             int stride = srcCB.Stride;
             int bmpWidth = srcCB.Width;
             int bmpHeight = srcCB.Height;
@@ -360,6 +363,8 @@ namespace PixelFarm.Agg.Imaging
                 // startLine += stride2;
                 //targetPixelIndex = startLine;
             }
+
+            bufferPtr.Release();
             //------------------------
             //System.Runtime.InteropServices.Marshal.Copy(
             //outputBuffer, 0,

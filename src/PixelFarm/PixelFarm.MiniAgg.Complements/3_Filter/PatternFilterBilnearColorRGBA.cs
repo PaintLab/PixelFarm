@@ -45,32 +45,56 @@ namespace PixelFarm.Agg
             x &= LineAA.SUBPIXEL_MARK;
             y &= LineAA.SUBPIXEL_MARK;
             int sourceOffset;
-            byte[] ptr = sourceImage.GetBuffer();
-            sourceOffset = sourceImage.GetBufferOffsetXY(x_lr, y_lr);
+            int[] ptr = sourceImage.GetBuffer32();
+            sourceOffset = sourceImage.GetBufferOffsetXY32(x_lr, y_lr);
             weight = (LineAA.SUBPIXEL_SCALE - x) *
                      (LineAA.SUBPIXEL_SCALE - y);
-            r += weight * ptr[sourceOffset + CO.R];
-            g += weight * ptr[sourceOffset + CO.G];
-            b += weight * ptr[sourceOffset + CO.B];
-            a += weight * ptr[sourceOffset + CO.A];
-            sourceOffset += sourceImage.BytesBetweenPixelsInclusive;
+            //
+            int ptr_v = ptr[sourceOffset];
+            r += weight * ((ptr_v >> (CO.R * 8) & 0xff));// ptr[sourceOffset + CO.R];
+            g += weight * ((ptr_v >> (CO.G * 8) & 0xff)); //ptr[sourceOffset + CO.G];
+            b += weight * ((ptr_v >> (CO.B * 8) & 0xff)); //ptr[sourceOffset + CO.B];
+            a += weight * ((ptr_v >> (CO.A * 8) & 0xff)); //ptr[sourceOffset + CO.A];
+            //
+            sourceOffset += 1;// sourceImage.BytesBetweenPixelsInclusive;
             weight = x * (LineAA.SUBPIXEL_SCALE - y);
-            r += weight * ptr[sourceOffset + CO.R];
-            g += weight * ptr[sourceOffset + CO.G];
-            b += weight * ptr[sourceOffset + CO.B];
-            a += weight * ptr[sourceOffset + CO.A];
-            sourceOffset = sourceImage.GetBufferOffsetXY(x_lr, y_lr + 1);
+            //r += weight * ptr[sourceOffset + CO.R];
+            //g += weight * ptr[sourceOffset + CO.G];
+            //b += weight * ptr[sourceOffset + CO.B];
+            //a += weight * ptr[sourceOffset + CO.A];
+            ptr_v = ptr[sourceOffset];
+            r += weight * ((ptr_v >> (CO.R * 8) & 0xff));// ptr[sourceOffset + CO.R];
+            g += weight * ((ptr_v >> (CO.G * 8) & 0xff)); //ptr[sourceOffset + CO.G];
+            b += weight * ((ptr_v >> (CO.B * 8) & 0xff)); //ptr[sourceOffset + CO.B];
+            a += weight * ((ptr_v >> (CO.A * 8) & 0xff)); //ptr[sourceOffset + CO.A];
+
+            //
+            sourceOffset = sourceImage.GetBufferOffsetXY32(x_lr, y_lr + 1);
             weight = (LineAA.SUBPIXEL_SCALE - x) * y;
-            r += weight * ptr[sourceOffset + CO.R];
-            g += weight * ptr[sourceOffset + CO.G];
-            b += weight * ptr[sourceOffset + CO.B];
-            a += weight * ptr[sourceOffset + CO.A];
-            sourceOffset += sourceImage.BytesBetweenPixelsInclusive;
+            //r += weight * ptr[sourceOffset + CO.R];
+            //g += weight * ptr[sourceOffset + CO.G];
+            //b += weight * ptr[sourceOffset + CO.B];
+            //a += weight * ptr[sourceOffset + CO.A];
+            ptr_v = ptr[sourceOffset];
+            r += weight * ((ptr_v >> (CO.R * 8) & 0xff));// ptr[sourceOffset + CO.R];
+            g += weight * ((ptr_v >> (CO.G * 8) & 0xff)); //ptr[sourceOffset + CO.G];
+            b += weight * ((ptr_v >> (CO.B * 8) & 0xff)); //ptr[sourceOffset + CO.B];
+            a += weight * ((ptr_v >> (CO.A * 8) & 0xff)); //ptr[sourceOffset + CO.A];
+            //
+            sourceOffset += 1;// sourceImage.BytesBetweenPixelsInclusive;
             weight = x * y;
-            r += weight * ptr[sourceOffset + CO.R];
-            g += weight * ptr[sourceOffset + CO.G];
-            b += weight * ptr[sourceOffset + CO.B];
-            a += weight * ptr[sourceOffset + CO.A];
+            //r += weight * ptr[sourceOffset + CO.R];
+            //g += weight * ptr[sourceOffset + CO.G];
+            //b += weight * ptr[sourceOffset + CO.B];
+            //a += weight * ptr[sourceOffset + CO.A];
+
+            ptr_v = ptr[sourceOffset];
+            r += weight * ((ptr_v >> (CO.R * 8) & 0xff));// ptr[sourceOffset + CO.R];
+            g += weight * ((ptr_v >> (CO.G * 8) & 0xff)); //ptr[sourceOffset + CO.G];
+            b += weight * ((ptr_v >> (CO.B * 8) & 0xff)); //ptr[sourceOffset + CO.B];
+            a += weight * ((ptr_v >> (CO.A * 8) & 0xff)); //ptr[sourceOffset + CO.A];
+
+
             //destBuffer[destBufferOffset].red = (byte)(r >> LineAA.SUBPIXEL_SHIFT * 2);
             //destBuffer[destBufferOffset].green = (byte)(g >> LineAA.SUBPIXEL_SHIFT * 2);
             //destBuffer[destBufferOffset].blue = (byte)(b >> LineAA.SUBPIXEL_SHIFT * 2);

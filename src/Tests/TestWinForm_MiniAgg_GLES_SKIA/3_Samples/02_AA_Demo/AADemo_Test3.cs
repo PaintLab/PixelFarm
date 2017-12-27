@@ -245,11 +245,11 @@ namespace PixelFarm.Agg.Sample_AADemoTest3
             {
                 var p2 = (PixelFarm.Agg.AggPainter)p;
                 AggRenderSurface aggsx = p2.RenderSurface;
-                var widgetsSubImage = ImageHelper.CreateChildImage(aggsx.DestImage, aggsx.GetClippingRect());
+                var widgetsSubImage = ImageHelper.CreateSubImgRW(aggsx.DestImage, aggsx.GetClippingRect());
                 aggsx.UseSubPixelRendering = false;
                 IPixelBlender NormalBlender = new PixelBlenderBGRA();
                 IPixelBlender GammaBlender = new PixelBlenderGammaBGRA(this.GammaValue);
-                var rasterGamma = new ChildImage(widgetsSubImage, GammaBlender);
+                var rasterGamma = new SubImageRW(widgetsSubImage, GammaBlender);
                 ClipProxyImage clippingProxyNormal = new ClipProxyImage(widgetsSubImage);
                 ClipProxyImage clippingProxyGamma = new ClipProxyImage(rasterGamma);
                 clippingProxyNormal.Clear(Color.White);

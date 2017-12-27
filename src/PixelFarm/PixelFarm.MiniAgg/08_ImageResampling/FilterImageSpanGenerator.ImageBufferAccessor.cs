@@ -76,7 +76,7 @@ namespace PixelFarm.Agg.Imaging
                     }
                 }
 
-                bufferByteOffset = imgRW.GetBufferOffsetXY(x, y);
+                bufferByteOffset = imgRW.GetByteBufferOffsetXY(x, y);
                 return imgRW.GetBuffer();
             }
 
@@ -89,7 +89,7 @@ namespace PixelFarm.Agg.Imaging
                     if ((uint)y < (uint)m_src_height
                         && x >= 0 && x + len <= (int)m_src_width)
                     {
-                        bufferOffset = imgRW.GetBufferOffsetXY(x, y);
+                        bufferOffset = imgRW.GetByteBufferOffsetXY(x, y);
                         m_buffer = imgRW.GetBuffer();
                         m_currentBufferOffset = bufferOffset;
                         return m_buffer;
@@ -122,7 +122,7 @@ namespace PixelFarm.Agg.Imaging
                 if (m_currentBufferOffset != -1
                     && (uint)m_y < (uint)imgRW.Height)
                 {
-                    m_currentBufferOffset = imgRW.GetBufferOffsetXY(m_x, m_y);
+                    m_currentBufferOffset = imgRW.GetByteBufferOffsetXY(m_x, m_y);
                     imgRW.GetBuffer();
                     bufferOffset = m_currentBufferOffset; ;
                     return m_buffer;

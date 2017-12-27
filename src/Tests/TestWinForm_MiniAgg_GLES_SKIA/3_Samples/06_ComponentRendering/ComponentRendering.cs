@@ -46,9 +46,9 @@ namespace PixelFarm.Agg
                 IPixelBlender currentPixelBlender = aggRdsf.PixelBlender;
                 int distBetween = backBuffer.BytesBetweenPixelsInclusive;
                 //use different pixel blender 
-                var redImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.R, 8);
-                var greenImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.G, 8);
-                var blueImageBuffer = new ChildImage(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.B, 8);
+                var redImageBuffer = new SubImageRW(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.R, 8);
+                var greenImageBuffer = new SubImageRW(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.G, 8);
+                var blueImageBuffer = new SubImageRW(backBuffer, new PixelBlenderGray(distBetween), distBetween, CO.B, 8);
                 ClipProxyImage clippingProxy = new ClipProxyImage(backBuffer);
                 ClipProxyImage clippingProxyRed = new ClipProxyImage(redImageBuffer);
                 ClipProxyImage clippingProxyGreen = new ClipProxyImage(greenImageBuffer);

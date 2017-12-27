@@ -118,8 +118,11 @@ namespace PixelFarm.Agg
             int imageWidth = destImage.Width;
             int imageHeight = destImage.Height;
             pixelsChecked = new bool[destImage.Width * destImage.Height];
-            int startColorBufferOffset = destImage.GetBufferOffsetXY(x, y);
-            fillRule.SetStartColor(Drawing.Color.FromArgb(destImage.GetBuffer()[startColorBufferOffset + 2], destImage.GetBuffer()[startColorBufferOffset + 1], destImage.GetBuffer()[startColorBufferOffset]));
+            int startColorBufferOffset = destImage.GetByteBufferOffsetXY(x, y);
+            fillRule.SetStartColor(Drawing.Color.FromArgb(
+                destBuffer[startColorBufferOffset + 2],
+                destBuffer[startColorBufferOffset + 1],
+                destBuffer[startColorBufferOffset]));
             LinearFill(x, y);
             while (ranges.Count > 0)
             {
@@ -134,7 +137,7 @@ namespace PixelFarm.Agg
                     {
                         if (!pixelsChecked[downPixelOffset])
                         {
-                            int bufferOffset = destImage.GetBufferOffsetXY(rangeX, downY);
+                            int bufferOffset = destImage.GetByteBufferOffsetXY(rangeX, downY);
                             if (fillRule.CheckPixel(destBuffer, bufferOffset))
                             {
                                 LinearFill(rangeX, downY);
@@ -146,7 +149,7 @@ namespace PixelFarm.Agg
                     {
                         if (!pixelsChecked[upPixelOffset])
                         {
-                            int bufferOffset = destImage.GetBufferOffsetXY(rangeX, upY);
+                            int bufferOffset = destImage.GetByteBufferOffsetXY(rangeX, upY);
                             if (fillRule.CheckPixel(destBuffer, bufferOffset))
                             {
                                 LinearFill(rangeX, upY);
@@ -164,7 +167,7 @@ namespace PixelFarm.Agg
             int bytesPerPixel = destImage.BytesBetweenPixelsInclusive;
             int imageWidth = destImage.Width;
             int leftFillX = x;
-            int bufferOffset = destImage.GetBufferOffsetXY(x, y);
+            int bufferOffset = destImage.GetByteBufferOffsetXY(x, y);
             int pixelOffset = (imageWidth * y) + x;
             while (true)
             {
@@ -180,7 +183,7 @@ namespace PixelFarm.Agg
             }
             leftFillX++;
             int rightFillX = x;
-            bufferOffset = destImage.GetBufferOffsetXY(x, y);
+            bufferOffset = destImage.GetByteBufferOffsetXY(x, y);
             pixelOffset = (imageWidth * y) + x;
             while (true)
             {

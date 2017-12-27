@@ -65,12 +65,12 @@ namespace LayoutFarm
              System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
 
-            int size = bmpData.Stride * bmpData.Height;
-            byte[] newBuff = new byte[size];
+            int size = bmpData.Width * bmpData.Height;
+            int[] newBuff = new int[size];
             System.Runtime.InteropServices.Marshal.Copy(bmpData.Scan0, newBuff, 0, size);
             innerImage.UnlockBits(bmpData);
 
-            buffRequest.OutputBuffer = newBuff;
+            buffRequest.OutputBuffer32 = newBuff;
         }
 
         public override bool IsReferenceImage

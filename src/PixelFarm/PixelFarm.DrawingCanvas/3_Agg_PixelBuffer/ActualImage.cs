@@ -32,6 +32,43 @@ namespace PixelFarm.Agg
         GrayScale8,
     }
 
+    public struct TempMemPtr
+    {
+        int _lenInBytes; //in bytes
+        System.Runtime.InteropServices.GCHandle handle1;
+        public TempMemPtr(byte[] buffer)
+        {
+            handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
+            this._lenInBytes = buffer.Length;
+        }
+        public TempMemPtr(int[] buffer) //in element count
+        {
+            handle1 = System.Runtime.InteropServices.GCHandle.Alloc(buffer, System.Runtime.InteropServices.GCHandleType.Pinned);
+            this._lenInBytes = buffer.Length * 4;
+        }
+
+        public int LengthInBytes
+        {
+            get { return _lenInBytes; }
+        }
+
+        public IntPtr Ptr
+        {
+            get
+            {
+                return handle1.AddrOfPinnedObject();
+            }
+        }
+        public void Release()
+        {
+            this.handle1.Free();
+        }
+        public unsafe byte* BytePtr
+        {
+            get { return (byte*)handle1.AddrOfPinnedObject(); }
+        }
+
+    }
     public sealed class ActualImage : PixelFarm.Drawing.Image
     {
         int width;
@@ -39,7 +76,7 @@ namespace PixelFarm.Agg
         int stride;
         int bitDepth;
         PixelFormat pixelFormat;
-        byte[] pixelBuffer;
+        int[] pixelBuffer;
 
         public ActualImage(int width, int height, PixelFormat format)
         {
@@ -52,7 +89,8 @@ namespace PixelFarm.Agg
                 out bitDepth,
                 out bytesPerPixel);
             //alloc mem
-            this.pixelBuffer = new byte[stride * height];
+
+            this.pixelBuffer = new int[width * height];
         }
         public override void Dispose()
         {
@@ -89,12 +127,18 @@ namespace PixelFarm.Agg
         public bool IsBigEndian { get; set; }
 
 
+        public static TempMemPtr GetBufferPtr(ActualImage img)
+        {
+            TempMemPtr tmp = new TempMemPtr(img.pixelBuffer);
+            return tmp;
+        }
 
-        public static byte[] GetBuffer(ActualImage img)
+        public static int[] GetBuffer(ActualImage img)
         {
             return img.pixelBuffer;
         }
-        public static void ReplaceBuffer(ActualImage img, byte[] pixelBuffer)
+       
+        public static void ReplaceBuffer(ActualImage img, int[] pixelBuffer)
         {
             img.pixelBuffer = pixelBuffer;
         }
@@ -108,30 +152,30 @@ namespace PixelFarm.Agg
             var img = new ActualImage(width, height, format);
             unsafe
             {
-                fixed (byte* header = &img.pixelBuffer[0])
+                fixed (int* header = &img.pixelBuffer[0])
                 {
                     System.Runtime.InteropServices.Marshal.Copy(buffer, 0, (IntPtr)header, buffer.Length);
                 }
             }
             return img;
         }
-        public static ActualImage CreateFromBuffer(int width, int height, PixelFormat format, byte[] buffer)
-        {
-            if (format != PixelFormat.ARGB32 && format != PixelFormat.RGB24)
-            {
-                throw new NotSupportedException();
-            }
-            //
-            var img = new ActualImage(width, height, format);
-            unsafe
-            {
-                fixed (byte* header = &img.pixelBuffer[0])
-                {
-                    System.Runtime.InteropServices.Marshal.Copy(buffer, 0, (IntPtr)header, buffer.Length);
-                }
-            }
-            return img;
-        }
+        //public static ActualImage CreateFromBuffer(int width, int height, PixelFormat format, byte[] buffer)
+        //{
+        //    if (format != PixelFormat.ARGB32 && format != PixelFormat.RGB24)
+        //    {
+        //        throw new NotSupportedException();
+        //    }
+        //    //
+        //    var img = new ActualImage(width, height, format);
+        //    unsafe
+        //    {
+        //        fixed (byte* header = &img.pixelBuffer[0])
+        //        {
+        //            System.Runtime.InteropServices.Marshal.Copy(buffer, 0, (IntPtr)header, buffer.Length);
+        //        }
+        //    }
+        //    return img;
+        //}
 
         public override void RequestInternalBuffer(ref ImgBufferRequestArgs buffRequest)
         {
@@ -139,9 +183,9 @@ namespace PixelFarm.Agg
             {
                 throw new NotSupportedException();
             }
-            byte[] newBuff = new byte[this.pixelBuffer.Length];
+            int[] newBuff = new int[this.pixelBuffer.Length];
             Buffer.BlockCopy(this.pixelBuffer, 0, newBuff, 0, newBuff.Length);
-            buffRequest.OutputBuffer = newBuff;
+            buffRequest.OutputBuffer32 = newBuff;
         }
 
 
@@ -184,11 +228,14 @@ namespace PixelFarm.Agg
             int[] buff2 = new int[img.Width * img.Height];
             unsafe
             {
-                byte[] pixelBuffer = ActualImage.GetBuffer(img);
-                fixed (byte* header = &pixelBuffer[0])
+                //byte[] pixelBuffer = ActualImage.GetBuffer(img);
+                TempMemPtr pixBuffer = ActualImage.GetBufferPtr(img);
+                //fixed (byte* header = &pixelBuffer[0])
+                byte* header = (byte*)pixBuffer.Ptr;
                 {
                     System.Runtime.InteropServices.Marshal.Copy((IntPtr)header, buff2, 0, buff2.Length);//length in bytes
                 }
+                pixBuffer.Release();
             }
 
             return buff2;
@@ -263,21 +310,23 @@ namespace PixelFarm.Agg
             int[] buff2 = new int[newBmpW * img.Height];
             unsafe
             {
-                byte[] srcBuffer = ActualImage.GetBuffer(img);
 
+                TempMemPtr srcBufferPtr = ActualImage.GetBufferPtr(img);
+                byte* srcBuffer = (byte*)srcBufferPtr.Ptr;
                 int srcIndex = 0;
-
                 int srcStride = img.Stride;
                 fixed (int* destHead = &buff2[0])
                 {
                     byte* destHead2 = (byte*)destHead;
                     for (int line = 0; line < h; ++line)
                     {
-                        System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
+                        //System.Runtime.InteropServices.Marshal.Copy(srcBuffer, srcIndex, (IntPtr)destHead2, destStride);
+                        NaitveMemMx.memcpy((byte*)destHead2, srcBuffer + srcIndex, destStride);
                         srcIndex += srcStride;
                         destHead2 += destStride;
                     }
                 }
+                srcBufferPtr.Release();
             }
 
             return buff2;

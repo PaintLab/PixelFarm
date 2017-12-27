@@ -324,12 +324,19 @@ namespace PixelFarm.Drawing.Skia
                             using (SKBitmap newBmp = new SKBitmap(actualImage.Width, actualImage.Height))
                             {
                                 newBmp.LockPixels();
-                                byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
-                                System.Runtime.InteropServices.Marshal.Copy(
-                                actualImgBuffer,
-                                0,
-                                newBmp.GetPixels(),
-                                 actualImgBuffer.Length);
+                                //byte[] actualImgBuffer = ActualImage.GetBuffer(actualImage);
+                                TempMemPtr bufferPtr = ActualImage.GetBufferPtr(actualImage);
+                                unsafe
+                                {
+                                    byte* actualImgH = (byte*)bufferPtr.Ptr;
+                                    AggMemMx.memcpy((byte*)newBmp.GetPixels(), actualImgH, actualImage.Stride * actualImage.Height);
+                                    //System.Runtime.InteropServices.Marshal.Copy(
+                                    //    actualImgBuffer,
+                                    //    0,
+                                    //    newBmp.GetPixels(),
+                                    //    actualImgBuffer.Length); 
+                                }
+                                bufferPtr.Release();
                                 newBmp.UnlockPixels();
                             }
                             //newBmp.internalBmp.LockPixels();

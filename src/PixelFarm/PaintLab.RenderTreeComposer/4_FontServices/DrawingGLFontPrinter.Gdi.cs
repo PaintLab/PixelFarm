@@ -98,11 +98,11 @@ namespace PixelFarm.DrawingGL
             //------------------------------------------------------
             //copy bmp from specific bmp area 
             //and convert to GLBmp   
-            byte[] buffer = PixelFarm.Agg.ActualImage.GetBuffer(actualImg);
+            Agg.TempMemPtr buffer = PixelFarm.Agg.ActualImage.GetBufferPtr(actualImg);
             unsafe
             {
                 byte* header = (byte*)memdc.PPVBits;
-                fixed (byte* dest0 = &buffer[0])
+                byte* dest0 = (byte*)buffer.Ptr;
                 {
                     byte* dest = dest0;
                     byte* rowHead = header;
@@ -128,8 +128,10 @@ namespace PixelFarm.DrawingGL
                     }
                 }
             }
+            buffer.Release();
+
             //------------------------------------------------------
-            GLBitmap glBmp = new GLBitmap(bmpWidth, bmpHeight, buffer, false);
+            GLBitmap glBmp = new GLBitmap(actualImg);
             _glsx.DrawImage(glBmp, (float)x, (float)y);
             glBmp.Dispose();
         }

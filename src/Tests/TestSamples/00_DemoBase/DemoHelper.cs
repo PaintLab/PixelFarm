@@ -122,10 +122,7 @@ namespace Mini
         }
         public static PixelFarm.DrawingGL.GLBitmap LoadTexture(PixelFarm.Agg.ActualImage actualImg)
         {
-            return new PixelFarm.DrawingGL.GLBitmap(
-                actualImg.Width,
-                actualImg.Height,
-                PixelFarm.Agg.ActualImage.GetBuffer(actualImg), false)
+            return new PixelFarm.DrawingGL.GLBitmap(actualImg)
             { IsBigEndianPixel = actualImg.IsBigEndian };
 
         }
