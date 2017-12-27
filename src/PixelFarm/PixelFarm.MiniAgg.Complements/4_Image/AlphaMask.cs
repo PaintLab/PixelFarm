@@ -58,8 +58,16 @@ namespace PixelFarm.Agg
         public byte pixel(int x, int y)
         {
             int bufferIndex = m_rbuf.GetBufferOffsetXY(x, y);
-            byte[] buffer = m_rbuf.GetBuffer();
-            return buffer[bufferIndex];
+            //byte[] buffer = m_rbuf.GetBuffer();
+            unsafe
+            {
+                TempMemPtr tmpMem = m_rbuf.GetBufferPtr();
+                byte value = *((byte*)tmpMem.Ptr + bufferIndex);
+                tmpMem.Release();
+                return value;
+            }
+
+            //return buffer[bufferIndex];
         }
 
         //--------------------------------------------------------------------
@@ -90,12 +98,24 @@ namespace PixelFarm.Agg
         public void combine_hspanFullCover(int x, int y, byte[] covers, int coversIndex, int count)
         {
             int maskIndex = m_rbuf.GetBufferOffsetXY(x, y);
-            byte[] mask = m_rbuf.GetBuffer();
-            do
+            unsafe
             {
-                covers[coversIndex++] = mask[maskIndex++];
+                TempMemPtr memPtr = m_rbuf.GetBufferPtr();
+                byte* m = ((byte*)memPtr.Ptr + maskIndex);
+                do
+                {
+                    covers[coversIndex++] = *m;//[maskIndex++];
+                    m++; //move to next
+                }
+                while (--count != 0);
+                memPtr.Release();
             }
-            while (--count != 0);
+            //byte[] mask = m_rbuf.GetBuffer();
+            //do
+            //{
+            //    covers[coversIndex++] = mask[maskIndex++];
+            //}
+            //while (--count != 0);
         }
 
         public void combine_hspan(int x, int y, byte[] covers, int coversIndex, int count)

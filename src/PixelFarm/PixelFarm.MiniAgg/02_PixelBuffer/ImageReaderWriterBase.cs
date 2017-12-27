@@ -182,17 +182,32 @@ namespace PixelFarm.Agg
                                     for (int i = clippedSourceImageRect.Bottom; i < clippedSourceImageRect.Top; i++)
                                     {
                                         int sourceOffset = sourceImage.GetBufferOffsetXY(clippedSourceImageRect.Left, clippedSourceImageRect.Bottom + i);
-                                        byte[] sourceBuffer = sourceImage.GetBuffer();
-                                        byte[] destBuffer = GetBuffer();
-                                        int destOffset = GetBufferOffsetXY(clippedSourceImageRect.Left + destXOffset,
+
+                                        //byte[] sourceBuffer = sourceImage.GetBuffer();
+                                        //byte[] destBuffer = GetBuffer();
+
+                                        TempMemPtr srcMemPtr = sourceImage.GetBufferPtr();
+                                        TempMemPtr destBufferPtr = this.GetBufferPtr();
+
+                                        int destOffset = GetBufferOffsetXY(
+                                            clippedSourceImageRect.Left + destXOffset,
                                             clippedSourceImageRect.Bottom + i + destYOffset);
-                                        for (int x = 0; x < numPixelsToCopy; x++)
+                                        unsafe
                                         {
-                                            destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
-                                            destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
-                                            destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
-                                            destBuffer[destOffset++] = 255;
+                                            byte* destBuffer = (byte*)destBufferPtr.Ptr;
+                                            byte* sourceBuffer = (byte*)srcMemPtr.Ptr;
+                                            for (int x = 0; x < numPixelsToCopy; x++)
+                                            {
+                                                destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
+                                                destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
+                                                destBuffer[destOffset++] = sourceBuffer[sourceOffset++];
+                                                destBuffer[destOffset++] = 255;
+                                            }
                                         }
+
+
+                                        srcMemPtr.Release();
+                                        destBufferPtr.Release();
                                     }
                                 }
                                 break;
@@ -398,7 +413,7 @@ namespace PixelFarm.Agg
         }
         public int GetBufferOffsetXY32(int x, int y)
         {
-            return int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x];
+            return (int32ArrayStartPixelAt + yTableArray[y] + xTableArray[x])  ;
         }
         public void SetPixel(int x, int y, Color color)
         {
@@ -432,8 +447,8 @@ namespace PixelFarm.Agg
             int len = x2 - x1 + 1;
 
 
-            byte[] buffer = GetBuffer();
-            int bufferOffset = GetBufferOffsetXY(x1, y);
+            int[] buffer = this.GetBuffer32();
+            int bufferOffset = GetBufferOffsetXY32(x1, y);
             int alpha = (((int)(sourceColor.A) * (cover + 1)) >> 8);
             if (alpha == BASE_MASK)
             {
@@ -446,8 +461,9 @@ namespace PixelFarm.Agg
                 do
                 {
                     //copy pixel-by-pixel
-                    _recvBlender32.BlendPixel(buffer, bufferOffset, c2);
-                    bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                    _recvBlender32.BlendPixel32(buffer, bufferOffset, c2);
+                    //bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                    bufferOffset++;
                 }
                 while (--len != 0);
             }
@@ -533,23 +549,27 @@ namespace PixelFarm.Agg
             int colorAlpha = sourceColor.alpha;
             if (colorAlpha != 0)
             {
-                byte[] buffer = GetBuffer();
-                int bufferOffset = GetBufferOffsetXY(x, y);
+                //byte[] buffer = GetBuffer();
+                int[] buffer = this.GetInt32Buffer();
+                int bufferOffset32 = GetBufferOffsetXY32(x, y);
                 do
                 {
                     int alpha = ((colorAlpha) * ((covers[coversIndex]) + 1)) >> 8;
                     if (alpha == BASE_MASK)
                     {
-                        _recvBlender32.CopyPixel(buffer, bufferOffset, sourceColor);
+                        _recvBlender32.CopyPixel(buffer, bufferOffset32, sourceColor);
                     }
                     else
                     {
-                        _recvBlender32.BlendPixel(buffer, bufferOffset, Color.FromArgb(alpha, sourceColor));
+                        _recvBlender32.BlendPixel32(buffer, bufferOffset32, Color.FromArgb(alpha, sourceColor));
                     }
-                    bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                    //bufferOffset += m_DistanceInBytesBetweenPixelsInclusive;
+                    bufferOffset32++;
                     coversIndex++;
                 }
                 while (--len != 0);
+
+                //bufferPtr.Release();
             }
         }
 
